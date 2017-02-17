@@ -1,0 +1,25 @@
+# == Schema Information
+#
+# Table name: inds
+#
+#  ind_id                   :integer          not null, primary key
+#  name                     :text
+#  unit                     :text
+#  on_map                   :integer
+#  tooltip                  :boolean
+#  place_factsheet          :boolean
+#  actor_factsheet          :boolean
+#  place_factsheet_tabular  :boolean
+#  actor_factsheet_tabular  :boolean
+#  place_factsheet_temporal :boolean
+#  actor_factsheet_temporal :boolean
+#  frontend_name            :text
+#
+
+class Ind < ActiveRecord::Base
+
+  self.primary_key = :ind_id
+
+  has_many :flow_inds, :class_name => 'FlowInd', :foreign_key => :ind_id
+  has_many :node_inds, :class_name => 'NodeInd', :foreign_key => :ind_id
+end
