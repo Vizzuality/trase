@@ -3,6 +3,10 @@ class ApplicationController < ActionController::Base
 
   before_action :load_context, only: [:index]
 
+  rescue_from ActionController::ParameterMissing do |exception|
+    render json: { :error => exception.message }, :status => 500
+  end
+
   private
   def load_context
     country_name = params[:country]
