@@ -25,16 +25,11 @@ test:
 
 staging:
   <<: *default
-  database: trase_staging
-  host: localhost
+  username: <%= ENV.fetch("POSTGRES_USERNAME") { "postgres" } %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD") {} %>
+  database: <%= ENV.fetch("POSTGRES_DATABASE") {} %>
+  host: <%= ENV.fetch("POSTGRES_DATABASE") { "localhost" } %>
   port: 5432
-  username: <%= ENV.fetch('trase_DATABASE_USER') {} %>
-  password: <%= ENV.fetch("trase_DATABASE_PASSWORD") {} %>
 
 production:
-  <<: *default
-  database: trase_prod
-  username: <%= ENV.fetch("POSTGRES_USERNAME") { "postgres" } %>
-  host: <%= ENV.fetch("POSTGRES_PORT_5432_TCP_ADDR") { "localhost" } %>
-  port: <%= ENV.fetch("POSTGRES_PORT_5432_TCP_PORT") { 5432 } %>
-  password: <%= ENV.fetch("POSTGRES_PASSWORD") {} %>
+  <<: *staging
