@@ -23,7 +23,7 @@ test:
   <<: *default
   database: trase_test
 
-staging:
+staging: &staging
   <<: *default
   username: <%= ENV.fetch("POSTGRES_USERNAME") { "postgres" } %>
   password: <%= ENV.fetch("POSTGRES_PASSWORD") {} %>
