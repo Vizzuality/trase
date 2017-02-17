@@ -28,7 +28,7 @@ staging: &staging
   username: <%= ENV.fetch("POSTGRES_USERNAME") { "postgres" } %>
   password: <%= ENV.fetch("POSTGRES_PASSWORD") {} %>
   database: <%= ENV.fetch("POSTGRES_DATABASE") {} %>
-  host: <%= ENV.fetch("POSTGRES_DATABASE") { "localhost" } %>
+  host: <%= ENV.fetch("POSTGRES_HOSTNAME") { "localhost" } %>
   port: 5432
 
 production:
