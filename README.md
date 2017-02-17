@@ -1,24 +1,14 @@
-# README
+# TRASE API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+API for the new TRASE functionalities
 
-Things you may want to cover:
+## Requirements
 
-* Ruby version
+This project uses:
+- Ruby 2.4.0
+- Rails 5.0
+- PostgreSQL 9.x + `intarray` extension
 
-* System dependencies
+## Deployment
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+We use Capistrano as a deployment tool.Refer to its documentation for more info
