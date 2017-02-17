@@ -2,13 +2,13 @@
 #
 # Table name: commodities
 #
-#  com_id :integer          not null, primary key
-#  name   :text
+#  commodity_id :integer          not null, primary key
+#  name         :text
 #
 
 class Commodity < ActiveRecord::Base
 
-  self.primary_key = :com_id
+  self.primary_key = :commodity_id
 
-  has_many :flows, :class_name => 'Flow', :foreign_key => :com_id
+  has_many :contexts, :class_name => 'Context', :foreign_key => :commodity_id
 end

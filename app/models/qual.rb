@@ -4,7 +4,6 @@
 #
 #  qual_id                  :integer          not null, primary key
 #  name                     :text
-#  on_map                   :integer
 #  tooltip                  :boolean
 #  place_factsheet          :boolean
 #  actor_factsheet          :boolean

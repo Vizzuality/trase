@@ -5,21 +5,36 @@
 #   gem 'sqlite3'
 #
 default: &default
-  adapter: sqlite3
-  pool: 5
-  timeout: 5000
+  adapter: postgresql
+  encoding: unicode
+  username: postgres
+  host: localhost
+  port: 5432
+  password:
 
 development:
   <<: *default
-  database: db/development.sqlite3
+  database: trase_new
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: db/test.sqlite3
+  database: trase_test
+
+staging:
+  <<: *default
+  database: trase_staging
+  host: localhost
+  port: 5432
+  username: <%= ENV.fetch('trase_DATABASE_USER') {} %>
+  password: <%= ENV.fetch("trase_DATABASE_PASSWORD") {} %>
 
 production:
   <<: *default
-  database: db/production.sqlite3
+  database: trase_prod
+  username: <%= ENV.fetch("POSTGRES_USERNAME") { "postgres" } %>
+  host: <%= ENV.fetch("POSTGRES_PORT_5432_TCP_ADDR") { "localhost" } %>
+  port: <%= ENV.fetch("POSTGRES_PORT_5432_TCP_PORT") { 5432 } %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD") {} %>

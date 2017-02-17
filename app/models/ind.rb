@@ -5,7 +5,7 @@
 #  ind_id                   :integer          not null, primary key
 #  name                     :text
 #  unit                     :text
-#  on_map                   :integer
+#  unit_type                :text
 #  tooltip                  :boolean
 #  place_factsheet          :boolean
 #  actor_factsheet          :boolean

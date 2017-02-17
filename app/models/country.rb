@@ -11,5 +11,5 @@ class Country < ActiveRecord::Base
 
   self.primary_key = :country_id
 
-  has_many :flows, :class_name => 'Flow', :foreign_key => :country_id
+  has_many :contexts, :class_name => 'Context', :foreign_key => :country_id
 end
