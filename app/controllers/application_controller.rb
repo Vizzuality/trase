@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
-  before_action :load_context, only: [:index, :get_columns]
+  before_action :load_context, except: [:get_contexts]
 
   rescue_from ActionController::ParameterMissing do |exception|
     render json: { :error => exception.message }, :status => 500
