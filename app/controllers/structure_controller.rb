@@ -3,12 +3,12 @@ class StructureController < ApplicationController
 
     result = NodeType
                  .joins(:context_nodes)
-                 .select('node_types.node_type_id, column_position as position, node_types.node_type as name')
+                 .select('node_types.node_type_id, column_position as position, column_group as group, node_types.node_type as name, is_default')
                  .where('context_nodes.context_id = :context_id', context_id: @context.id)
-                 .order('context_nodes.column_position DESC')
+                 .order('context_nodes.column_position ASC')
 
 
-    render json: result, each_serializer: GetColumnsSerializer
+    render json: result, root: 'data', each_serializer: GetColumnsSerializer
   end
 
   def get_contexts
@@ -19,6 +19,6 @@ class StructureController < ApplicationController
                  .joins(:commodity)
                  .all()
 
-    render json: result, each_serializer: GetContextsSerializer
+    render json: result, root: 'data', each_serializer: GetContextsSerializer
   end
 end

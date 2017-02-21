@@ -14,6 +14,6 @@ class NodesController < ApplicationController
                          .where('flow_nodes.node_id IS NOT NULL OR substring(geo_id from 1 for 2) = :country_code OR nodes.name = \'OTHER\' ', country_code: 'BR')
                          .all()
 
-    render json: matching_nodes, each_serializer: GetAllNodesSerializer
+    render json: matching_nodes, root: 'data', each_serializer: GetAllNodesSerializer
   end
 end

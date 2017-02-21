@@ -1,3 +1,3 @@
 class GetColumnsSerializer < ActiveModel::Serializer
-  attributes :id, :position, :name
+  attributes :id, :name, :position, :group, :is_default
 end
