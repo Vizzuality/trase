@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :load_context, except: [:get_contexts]
+  before_action :set_caching_headers
 
   rescue_from ActionController::ParameterMissing do |exception|
     render json: { :error => exception.message }, :status => 500
@@ -22,5 +23,9 @@ class ApplicationController < ActionController::Base
 
     @country = @context.country
     @commodity = @context.commodity
+  end
+
+  def set_caching_headers
+    expires_in 2.hours, :public => true
   end
 end
