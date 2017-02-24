@@ -81,8 +81,14 @@ ActiveRecord::Schema.define(version: 20170217085928) do
     t.integer "attribute_id"
     t.string  "attribute_type", limit: 5
     t.integer "context_id"
-    t.text    "group_name"
     t.integer "position"
+    t.float   "bucket_3",                 array: true
+    t.float   "bucket_5",                 array: true
+    t.integer "layer_group_id"
+  end
+
+  create_table "layer_group", force: :cascade do |t|
+    t.text "name"
   end
 
   create_table "node_inds", id: false, force: :cascade do |t|

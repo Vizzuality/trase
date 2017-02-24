@@ -6,8 +6,10 @@
 #  attribute_id   :integer
 #  attribute_type :string(5)
 #  context_id     :integer
-#  group_name     :text
 #  position       :integer
+#  bucket_3       :float            is an Array
+#  bucket_5       :float            is an Array
+#  layer_group_id :integer
 #
 
 class Layer < ActiveRecord::Base
