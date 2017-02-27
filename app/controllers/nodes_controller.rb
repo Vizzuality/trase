@@ -3,6 +3,11 @@ class NodesController < ApplicationController
     flow_nodes = Flow.select('distinct(unnest(path)) as node_id')
                      .where('flows.context_id = :context_id', context_id: @context.id)
 
+    node_type_ids = NodeType
+                        .joins(:context_nodes)
+                        .select('node_types.node_type_id')
+                        .where('context_nodes.context_id = :context_id', context_id: @context.id)
+
     matching_nodes = Node
                          .select('
                            nodes.node_id, nodes.name, geo_id, nodes.node_type_id as column_id,
@@ -12,6 +17,7 @@ class NodesController < ApplicationController
                          .joins(:node_type)
                          .joins("LEFT OUTER JOIN (#{flow_nodes.to_sql}) flow_nodes ON flow_nodes.node_id = nodes.node_id")
                          .where('flow_nodes.node_id IS NOT NULL OR substring(geo_id from 1 for 2) = :country_code OR nodes.name = \'OTHER\' ', country_code: 'BR')
+                         .where('nodes.node_type_id IN (:node_type_ids)', node_type_ids: node_type_ids)
                          .all()
 
     render json: matching_nodes, root: 'data', each_serializer: GetAllNodesSerializer
