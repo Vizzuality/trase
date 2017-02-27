@@ -3,7 +3,8 @@ class GeoIdController < ApplicationController
   def index
     node_id = params[:node_id]
     target_column_id = params[:target_column_id].to_i
-    years = params[:year]
+    # years = params[:year]
+    years = [2015]
 
     raise ActionController::ParameterMissing, 'Required node_id missing' if node_id.nil?
     raise ActionController::ParameterMissing, 'Required target_column missing' if target_column_id.nil?
