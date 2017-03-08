@@ -8,6 +8,8 @@ end
 
 gem 'rails', '~> 5.0.2'
 gem 'pg', '~> 0.18'
+# Scenic adds methods to ActiveRecord::Migration to create and manage database views in Rails.
+gem 'scenic'
 gem 'puma', '~> 3.0'
 
 gem 'dotenv-rails', '~> 2.1'
