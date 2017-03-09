@@ -1,8 +1,8 @@
 class FlowDownloadQueryBuilder
   attr_reader :query
 
-  def initialize(params)
-    @query = MaterializedFlow.select(select_columns)
+  def initialize(context_id, params)
+    @query = MaterializedFlow.select(select_columns).where(context_id: context_id)
     if params[:years].present?
       @query = @query.where(year: params[:years])
     end

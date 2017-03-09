@@ -1,6 +1,6 @@
 class DownloadController < ApplicationController
   def index
-    query = FlowDownloadQueryBuilder.new(params).query
+    query = FlowDownloadQueryBuilder.new(@context.id, params).query
 
     respond_to do |format|
       format.csv {
