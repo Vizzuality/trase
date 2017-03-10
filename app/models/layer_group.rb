@@ -8,8 +8,8 @@
 #
 
 class LayerGroup < ActiveRecord::Base
-  self.table_name = 'layer_group'
+    self.table_name = 'layer_group'
 
 
-  has_many :layers, :class_name => 'Layer'
+    has_many :layers, :class_name => 'Layer'
 end

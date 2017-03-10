@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
                      .first
     end
 
-    raise ActionController::ParameterMissing, 'The provided country/commodity combination could not be found' if @country.nil?
+    raise ActionController::ParameterMissing, 'The provided country/commodity combination could not be found' if @context.nil?
 
     @country = @context.country
     @commodity = @context.commodity

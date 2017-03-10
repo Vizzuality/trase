@@ -10,6 +10,7 @@
 class FlowQual < ActiveRecord::Base
 
 
-  belongs_to :flow, :class_name => 'Flow', :foreign_key => :flow_id
-  belongs_to :qual, :class_name => 'Qual', :foreign_key => :qual_id
+
+    belongs_to :qual, :class_name => 'Qual', :foreign_key => :qual_id
+    belongs_to :flow, :class_name => 'Flow', :foreign_key => :flow_id
 end

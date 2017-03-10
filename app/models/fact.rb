@@ -12,6 +12,6 @@
 class Fact < ActiveRecord::Base
 
 
-  self.inheritance_column = :ruby_type
-  belongs_to :context, :class_name => 'Context', :foreign_key => :context_id
+    self.inheritance_column = :ruby_type
+    belongs_to :context, :class_name => 'Context', :foreign_key => :context_id
 end
