@@ -14,10 +14,21 @@ class StructureController < ApplicationController
   def get_contexts
 
     result = Context
-                 .select('context.id, countries.name as country_name, commodities.name as commodity_name, years')
+                 .select('context.id, context.is_default, countries.name as country_name, commodities.name as commodity_name, years, default_year')
                  .joins(:country)
                  .joins(:commodity)
                  .all()
+    
+    result.values = {
+        macro_geo: [1, 2, 3, 4, 5, 6],
+        years: [2014, 2015],
+        years_default: [2015],
+        resize_by: %w[volume land_use fob soy_deforestation],
+        resize_by_disabled: %w[land_based_emissions],
+        resize_by_default: 'volume',
+        recolor_by: %w[biome forest_500 zero_deforestation water_scarcity smallholders],
+        recolor_by_disabled: %w[car]
+    }
 
     render json: result, root: 'data', each_serializer: GetContextsSerializer
   end
