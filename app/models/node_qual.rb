@@ -11,6 +11,7 @@
 class NodeQual < ActiveRecord::Base
 
 
-  belongs_to :node, :class_name => 'Node', :foreign_key => :node_id
-  belongs_to :qual, :class_name => 'Qual', :foreign_key => :qual_id
+
+    belongs_to :qual, :class_name => 'Qual', :foreign_key => :qual_id
+    belongs_to :node, :class_name => 'Node', :foreign_key => :node_id
 end

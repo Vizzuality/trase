@@ -14,9 +14,7 @@ class StructureController < ApplicationController
   def get_contexts
 
     result = Context
-                 .select('context.id, countries.name as country_name, commodities.name as commodity_name, years')
-                 .joins(:country)
-                 .joins(:commodity)
+                 .eager_load(:country, :commodity, :context_resize_bies, :context_recolor_bies, context_filter_bies: [node_type: [:nodes]])
                  .all()
 
     render json: result, root: 'data', each_serializer: GetContextsSerializer
