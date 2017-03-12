@@ -5,6 +5,7 @@
 #  id           :integer          not null, primary key
 #  context_id   :integer
 #  node_type_id :integer
+#  position     :integer
 #
 
 class ContextFilterBy < ActiveRecord::Base

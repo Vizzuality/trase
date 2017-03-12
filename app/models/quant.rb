@@ -23,6 +23,6 @@ class Quant < ActiveRecord::Base
     has_many :node_quants, :class_name => 'NodeQuant', :foreign_key => :quant_id
     has_many :flow_quants, :class_name => 'FlowQuant', :foreign_key => :quant_id
     has_many :layers, as: :layer_attribute
-    has_many :context_recolour_bies, as: :recolour_attribute
+    has_many :context_recolor_bies, as: :recolor_attribute
     has_many :context_resize_bies, as: :resize_attribute
 end

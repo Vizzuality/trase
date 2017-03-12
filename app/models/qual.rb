@@ -21,6 +21,6 @@ class Qual < ActiveRecord::Base
     has_many :node_quals, :class_name => 'NodeQual', :foreign_key => :qual_id
     has_many :flow_quals, :class_name => 'FlowQual', :foreign_key => :qual_id
     has_many :layers, as: :layer_attribute
-    has_many :context_recolour_bies, as: :recolour_attribute
+    has_many :context_recolor_bies, as: :recolor_attribute
     has_many :context_resize_bies, as: :resize_attribute
 end

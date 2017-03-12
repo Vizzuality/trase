@@ -23,6 +23,6 @@ class Ind < ActiveRecord::Base
     has_many :node_inds, :class_name => 'NodeInd', :foreign_key => :ind_id
     has_many :flow_inds, :class_name => 'FlowInd', :foreign_key => :ind_id
     has_many :layers, as: :layer_attribute
-    has_many :context_recolour_bies, as: :recolour_attribute
+    has_many :context_recolor_bies, as: :recolor_attribute
     has_many :context_resize_bies, as: :resize_attribute
 end

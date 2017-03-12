@@ -5,6 +5,9 @@
 #  country_id :integer          not null, primary key
 #  name       :text
 #  iso2       :text
+#  latitude   :float
+#  longitude  :float
+#  zoom       :integer
 #
 
 class Country < ActiveRecord::Base
