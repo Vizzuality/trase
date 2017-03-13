@@ -12,3 +12,10 @@ This project uses:
 ## Deployment
 
 We use Capistrano as a deployment tool.Refer to its documentation for more info
+
+## Test
+
+```
+RAILS_ENV=test bundle exec rake db:schema:load
+bundle exec rspec spec
+```
