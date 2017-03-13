@@ -1,12 +1,22 @@
 class NodesController < ApplicationController
   def get_all_nodes
+
+    context_id = params[:context_id]
+
+    if (not context_id.nil?)
+      context = Context.find(context_id)
+    end
+
     flow_nodes = Flow.select('distinct(unnest(path)) as node_id')
-                     .where('flows.context_id = :context_id', context_id: @context.id)
 
     node_type_ids = NodeType
                         .joins(:context_nodes)
                         .select('node_types.node_type_id')
-                        .where('context_nodes.context_id = :context_id', context_id: @context.id)
+
+    if (context)
+      flow_nodes.where('flows.context_id = :context_id', context_id: context.id)
+      node_type_ids.where('context_nodes.context_id = :context_id', context_id: context.id)
+    end
 
     matching_nodes = Node
                          .select('
