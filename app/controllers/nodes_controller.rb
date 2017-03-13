@@ -3,7 +3,7 @@ class NodesController < ApplicationController
 
     context_id = params[:context_id]
 
-    if (not context_id.nil?)
+    if context_id.present?
       context = Context.find(context_id)
     end
 
@@ -14,8 +14,8 @@ class NodesController < ApplicationController
                         .select('node_types.node_type_id')
 
     if (context)
-      flow_nodes.where('flows.context_id = :context_id', context_id: context.id)
-      node_type_ids.where('context_nodes.context_id = :context_id', context_id: context.id)
+      flow_nodes = flow_nodes.where('flows.context_id = :context_id', context_id: context.id)
+      node_type_ids = node_type_ids.where('context_nodes.context_id = :context_id', context_id: context.id)
     end
 
     matching_nodes = Node
