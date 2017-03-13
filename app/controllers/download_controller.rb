@@ -16,7 +16,9 @@ class DownloadController < ApplicationController
           disposition: "attachment; filename=#{params[:country]}_#{params[:commodity]}.csv"
       }
       format.json {
-        render json: query
+        send_data query.to_json,
+          type: 'text/json; charset=utf-8',
+          disposition: "attachment; filename=#{params[:country]}_#{params[:commodity]}.json"
       }
     end
   end
