@@ -1,4 +1,6 @@
 class DownloadController < ApplicationController
+  before_action :set_separator, only: :index
+
   def index
     query = FlowDownloadQueryBuilder.new(@context.id, params).query
 
@@ -7,7 +9,7 @@ class DownloadController < ApplicationController
         csv = PgCsv.new(
           sql: query.to_sql,
           header: true,
-          delimiter: ',',
+          delimiter: @separator,
           encoding: 'UTF8',
           type: :plain
         )
@@ -20,6 +22,16 @@ class DownloadController < ApplicationController
           type: 'text/json; charset=utf-8',
           disposition: "attachment; filename=#{params[:country]}_#{params[:commodity]}.json"
       }
+    end
+  end
+
+  private
+
+  def set_separator
+    @separator = if params[:separator].present? && params[:separator] == 'semicolon'
+      ';'
+    else
+      ','
     end
   end
 end
