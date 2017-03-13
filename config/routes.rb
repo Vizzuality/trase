@@ -9,5 +9,6 @@ Rails.application.routes.draw do
   get '/get_columns', to: 'structure#get_columns'
   get '/get_contexts', to: 'structure#get_contexts'
   get '/get_all_nodes', to: 'nodes#get_all_nodes'
+  get '/get_place_node_attributes', to: 'place_factsheet#place_data'
 
 end
