@@ -1,5 +1,5 @@
 class GetContextsSerializer < ActiveModel::Serializer
-  attributes :id, :is_default, :years, :default_year, :country_id, :commodity_id
+  attributes :id, :is_default, :is_disabled, :years, :default_year, :country_id, :commodity_id
 
   has_many :context_recolor_bies, serializer: RecolorBySerializer, key: :recolor_by
   has_many :context_resize_bies, serializer: ResizeBySerializer, key: :resize_by
