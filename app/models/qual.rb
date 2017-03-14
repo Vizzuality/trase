@@ -23,4 +23,5 @@ class Qual < ActiveRecord::Base
     has_many :layers, as: :layer_attribute
     has_many :context_recolor_bies, as: :recolor_attribute
     has_many :context_resize_bies, as: :resize_attribute
+    has_many :context_indicators, as: :indicator
 end

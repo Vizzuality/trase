@@ -45,6 +45,17 @@ COMMENT ON EXTENSION intarray IS 'functions, operators, and index support for 1-
 SET search_path = public, pg_catalog;
 
 --
+-- Name: attribute_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE attribute_type AS ENUM (
+    'Quant',
+    'Qual',
+    'Ind'
+);
+
+
+--
 -- Name: idx(anyarray, anyelement); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -166,6 +177,38 @@ CREATE SEQUENCE context_id_seq
 --
 
 ALTER SEQUENCE context_id_seq OWNED BY context.id;
+
+
+--
+-- Name: context_indicators; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE context_indicators (
+    id integer NOT NULL,
+    context_id integer NOT NULL,
+    indicator_attribute_id integer NOT NULL,
+    indicator_attribute_type attribute_type NOT NULL,
+    "position" integer NOT NULL
+);
+
+
+--
+-- Name: context_indicators_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE context_indicators_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: context_indicators_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE context_indicators_id_seq OWNED BY context_indicators.id;
 
 
 --
@@ -780,6 +823,13 @@ ALTER TABLE ONLY context_filter_by ALTER COLUMN id SET DEFAULT nextval('context_
 
 
 --
+-- Name: context_indicators id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY context_indicators ALTER COLUMN id SET DEFAULT nextval('context_indicators_id_seq'::regclass);
+
+
+--
 -- Name: context_nodes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -892,6 +942,14 @@ ALTER TABLE ONLY commodities
 
 ALTER TABLE ONLY context_filter_by
     ADD CONSTRAINT context_filter_by_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: context_indicators context_indicators_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY context_indicators
+    ADD CONSTRAINT context_indicators_pkey PRIMARY KEY (id);
 
 
 --
@@ -1015,6 +1073,13 @@ ALTER TABLE ONLY schema_migrations
 
 
 --
+-- Name: context_indicators_indicator_attribute_type_indicator_attri_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX context_indicators_indicator_attribute_type_indicator_attri_idx ON context_indicators USING btree (indicator_attribute_type, indicator_attribute_id, context_id);
+
+
+--
 -- Name: index_materialized_flows_on_country_node_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1079,6 +1144,14 @@ ALTER TABLE ONLY context_filter_by
 
 ALTER TABLE ONLY context_filter_by
     ADD CONSTRAINT context_filter_by_node_types_node_type_id_fk FOREIGN KEY (node_type_id) REFERENCES node_types(node_type_id);
+
+
+--
+-- Name: context_indicators context_indicators_context_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY context_indicators
+    ADD CONSTRAINT context_indicators_context_id_fk FOREIGN KEY (context_id) REFERENCES context(id);
 
 
 --
