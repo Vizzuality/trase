@@ -31,5 +31,7 @@ module TraseNewApi
         'Access-Control-Allow-Origin' => '*',
         'Access-Control-Request-Method' => %w{GET POST OPTIONS}.join(",")
     }
+
+    config.active_record.schema_format = :sql
   end
 end
