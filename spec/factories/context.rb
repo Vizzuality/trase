@@ -9,4 +9,10 @@ FactoryGirl.define do
     node_type
     column_position 0
   end
+
+  factory :context_indicator do
+    context
+    association :indicator, factory: :quant
+    position 0
+  end
 end
