@@ -24,6 +24,28 @@ ActiveRecord::Schema.define(version: 20170217085928) do
     t.integer "country_id"
     t.integer "commodity_id"
     t.integer "years",        array: true
+    t.boolean "is_disabled"
+  end
+
+# Could not dump table "context_factsheet_attribute" because of following StandardError
+#   Unknown type 'attribute_type' for column 'attribute_type'
+
+  create_table "context_filter_by", force: :cascade do |t|
+    t.integer "context_id"
+    t.integer "node_type_id"
+    t.integer "position"
+  end
+
+# Could not dump table "context_indicators" because of following StandardError
+#   Unknown type 'attribute_type' for column 'indicator_attribute_type'
+
+# Could not dump table "context_layer" because of following StandardError
+#   Unknown type 'attribute_type' for column 'layer_attribute_type'
+
+  create_table "context_layer_group", force: :cascade do |t|
+    t.text    "name"
+    t.integer "position"
+    t.integer "context_id"
   end
 
   create_table "context_nodes", force: :cascade do |t|
@@ -34,9 +56,18 @@ ActiveRecord::Schema.define(version: 20170217085928) do
     t.integer "node_type_id"
   end
 
+# Could not dump table "context_recolor_by" because of following StandardError
+#   Unknown type 'attribute_type' for column 'recolor_attribute_type'
+
+# Could not dump table "context_resize_by" because of following StandardError
+#   Unknown type 'attribute_type' for column 'resize_attribute_type'
+
   create_table "countries", primary_key: "country_id", force: :cascade do |t|
-    t.text "name"
-    t.text "iso2"
+    t.text    "name"
+    t.text    "iso2"
+    t.float   "latitude"
+    t.float   "longitude"
+    t.integer "zoom"
   end
 
   create_table "flow_inds", id: false, force: :cascade do |t|
@@ -67,28 +98,14 @@ ActiveRecord::Schema.define(version: 20170217085928) do
     t.text    "name"
     t.text    "unit"
     t.text    "unit_type"
-    t.boolean "tooltip"
+    t.text    "tooltip"
+    t.text    "frontend_name"
     t.boolean "place_factsheet"
     t.boolean "actor_factsheet"
     t.boolean "place_factsheet_tabular"
     t.boolean "actor_factsheet_tabular"
     t.boolean "place_factsheet_temporal"
     t.boolean "actor_factsheet_temporal"
-    t.text    "frontend_name"
-  end
-
-  create_table "layer", force: :cascade do |t|
-    t.integer "attribute_id"
-    t.string  "attribute_type", limit: 5
-    t.integer "context_id"
-    t.integer "position"
-    t.float   "bucket_3",                 array: true
-    t.float   "bucket_5",                 array: true
-    t.integer "layer_group_id"
-  end
-
-  create_table "layer_group", force: :cascade do |t|
-    t.text "name"
   end
 
   create_table "node_inds", id: false, force: :cascade do |t|
@@ -125,34 +142,43 @@ ActiveRecord::Schema.define(version: 20170217085928) do
 
   create_table "quals", primary_key: "qual_id", force: :cascade do |t|
     t.text    "name"
-    t.boolean "tooltip"
+    t.text    "tooltip"
+    t.text    "frontend_name"
     t.boolean "place_factsheet"
     t.boolean "actor_factsheet"
     t.boolean "place_factsheet_tabular"
     t.boolean "actor_factsheet_tabular"
     t.boolean "place_factsheet_temporal"
     t.boolean "actor_factsheet_temporal"
-    t.text    "frontend_name"
   end
 
   create_table "quants", primary_key: "quant_id", force: :cascade do |t|
     t.text    "name"
     t.text    "unit"
     t.text    "unit_type"
-    t.boolean "tooltip"
+    t.text    "tooltip"
+    t.text    "frontend_name"
     t.boolean "place_factsheet"
     t.boolean "actor_factsheet"
     t.boolean "place_factsheet_tabular"
     t.boolean "actor_factsheet_tabular"
     t.boolean "place_factsheet_temporal"
     t.boolean "actor_factsheet_temporal"
-    t.text    "frontend_name"
   end
 
   add_foreign_key "context", "commodities", primary_key: "commodity_id", name: "context_commodity_id_fkey"
   add_foreign_key "context", "countries", primary_key: "country_id", name: "context_country_id_fkey"
+  add_foreign_key "context_factsheet_attribute", "context", name: "context_factsheet_attribute_context_id_fkey"
+  add_foreign_key "context_filter_by", "context", name: "context_filter_by_context_id_fkey"
+  add_foreign_key "context_filter_by", "node_types", primary_key: "node_type_id", name: "context_filter_by_node_type_id_fkey"
+  add_foreign_key "context_indicators", "context", name: "context_indicators_context_id_fkey"
+  add_foreign_key "context_layer", "context", name: "context_layer_context_id_fkey"
+  add_foreign_key "context_layer", "context_layer_group", name: "context_layer_context_layer_group_id_fkey"
+  add_foreign_key "context_layer_group", "context", name: "context_layer_group_context_id_fkey"
   add_foreign_key "context_nodes", "context", name: "context_nodes_context_id_fkey"
   add_foreign_key "context_nodes", "node_types", primary_key: "node_type_id", name: "context_nodes_node_type_id_fkey"
+  add_foreign_key "context_recolor_by", "context", name: "context_recolor_by_context_id_fkey"
+  add_foreign_key "context_resize_by", "context", name: "context_resize_by_context_id_fkey"
   add_foreign_key "flow_inds", "flows", primary_key: "flow_id", name: "flow_inds_flow_id_fkey"
   add_foreign_key "flow_inds", "inds", primary_key: "ind_id", name: "flow_inds_ind_id_fkey"
   add_foreign_key "flow_quals", "flows", primary_key: "flow_id", name: "flow_quals_flow_id_fkey"
@@ -160,7 +186,6 @@ ActiveRecord::Schema.define(version: 20170217085928) do
   add_foreign_key "flow_quants", "flows", primary_key: "flow_id", name: "flow_quants_flow_id_fkey"
   add_foreign_key "flow_quants", "quants", primary_key: "quant_id", name: "flow_quants_quant_id_fkey"
   add_foreign_key "flows", "context", name: "flows_context_id_fkey"
-  add_foreign_key "layer", "context", name: "layer_context_id_fkey"
   add_foreign_key "node_inds", "inds", primary_key: "ind_id", name: "node_inds_ind_id_fkey"
   add_foreign_key "node_inds", "nodes", primary_key: "node_id", name: "node_inds_node_id_fkey"
   add_foreign_key "node_quals", "nodes", primary_key: "node_id", name: "node_quals_node_id_fkey"
