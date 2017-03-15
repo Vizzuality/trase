@@ -6,8 +6,12 @@ git_source(:github) do |repo_name|
 end
 
 
-gem 'rails', '~> 5.0.1'
+gem 'rails', '~> 5.0.2'
 gem 'pg', '~> 0.18'
+# Scenic adds methods to ActiveRecord::Migration to create and manage database views in Rails.
+gem 'scenic'
+# Fast Ruby PG csv export. Uses pg function 'copy to csv'.
+gem 'pg_csv'
 gem 'puma', '~> 3.0'
 
 gem 'dotenv-rails', '~> 2.1'
@@ -32,6 +36,12 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
+end
+
+group :development, :test do
+  gem 'rspec-rails', '~> 3.5'
+  gem 'rails-controller-testing'
+  gem 'factory_girl_rails'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
