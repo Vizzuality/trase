@@ -124,9 +124,42 @@ CREATE TABLE context (
     country_id integer,
     commodity_id integer,
     years integer[],
+    is_disabled boolean,
     is_default boolean,
     default_year integer
 );
+
+
+--
+-- Name: context_factsheet_attribute; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE context_factsheet_attribute (
+    id integer NOT NULL,
+    attribute_id integer NOT NULL,
+    attribute_type attribute_type,
+    context_id integer NOT NULL,
+    factsheet_type character varying(10) NOT NULL
+);
+
+
+--
+-- Name: context_factsheet_attribute_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE context_factsheet_attribute_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: context_factsheet_attribute_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE context_factsheet_attribute_id_seq OWNED BY context_factsheet_attribute.id;
 
 
 --
@@ -212,6 +245,73 @@ ALTER SEQUENCE context_indicators_id_seq OWNED BY context_indicators.id;
 
 
 --
+-- Name: context_layer; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE context_layer (
+    id integer NOT NULL,
+    layer_attribute_id integer NOT NULL,
+    layer_attribute_type attribute_type,
+    context_id integer,
+    "position" integer,
+    bucket_3 double precision[],
+    bucket_5 double precision[],
+    context_layer_group_id integer,
+    is_default boolean DEFAULT false
+);
+
+
+--
+-- Name: context_layer_group; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE context_layer_group (
+    id integer NOT NULL,
+    name text,
+    "position" integer,
+    context_id integer
+);
+
+
+--
+-- Name: context_layer_group_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE context_layer_group_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: context_layer_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE context_layer_group_id_seq OWNED BY context_layer_group.id;
+
+
+--
+-- Name: context_layer_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE context_layer_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: context_layer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE context_layer_id_seq OWNED BY context_layer.id;
+
+
+--
 -- Name: context_nodes; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -251,8 +351,8 @@ ALTER SEQUENCE context_nodes_id_seq OWNED BY context_nodes.id;
 CREATE TABLE context_recolor_by (
     id integer NOT NULL,
     context_id integer,
-    recolor_attribute_id integer,
-    recolor_attribute_type character varying(5),
+    recolor_attribute_id integer NOT NULL,
+    recolor_attribute_type attribute_type,
     is_default boolean,
     is_disabled boolean,
     group_number integer DEFAULT 1,
@@ -266,10 +366,10 @@ CREATE TABLE context_recolor_by (
 
 
 --
--- Name: context_recolour_by_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: context_recolor_by_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE context_recolour_by_id_seq
+CREATE SEQUENCE context_recolor_by_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -278,10 +378,10 @@ CREATE SEQUENCE context_recolour_by_id_seq
 
 
 --
--- Name: context_recolour_by_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: context_recolor_by_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE context_recolour_by_id_seq OWNED BY context_recolor_by.id;
+ALTER SEQUENCE context_recolor_by_id_seq OWNED BY context_recolor_by.id;
 
 
 --
@@ -293,8 +393,8 @@ CREATE TABLE context_resize_by (
     context_id integer,
     is_default boolean,
     is_disabled boolean,
-    resize_attribute_id integer,
-    resize_attribute_type character varying(5),
+    resize_attribute_id integer NOT NULL,
+    resize_attribute_type attribute_type,
     group_number integer DEFAULT 1,
     "position" integer
 );
@@ -350,38 +450,6 @@ CREATE SEQUENCE countries_country_id_seq
 --
 
 ALTER SEQUENCE countries_country_id_seq OWNED BY countries.country_id;
-
-
---
--- Name: facts; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE facts (
-    id integer NOT NULL,
-    attribute_id integer NOT NULL,
-    attribute_type character varying(5) NOT NULL,
-    context_id integer NOT NULL,
-    type character varying(10) NOT NULL
-);
-
-
---
--- Name: facts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE facts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: facts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE facts_id_seq OWNED BY facts.id;
 
 
 --
@@ -457,14 +525,15 @@ CREATE TABLE inds (
     name text,
     unit text,
     unit_type text,
-    tooltip boolean,
+    tooltip_text text,
+    frontend_name text,
     place_factsheet boolean,
     actor_factsheet boolean,
     place_factsheet_tabular boolean,
     actor_factsheet_tabular boolean,
     place_factsheet_temporal boolean,
     actor_factsheet_temporal boolean,
-    frontend_name text
+    tooltip boolean
 );
 
 
@@ -485,72 +554,6 @@ CREATE SEQUENCE inds_ind_id_seq
 --
 
 ALTER SEQUENCE inds_ind_id_seq OWNED BY inds.ind_id;
-
-
---
--- Name: layer; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE layer (
-    id integer NOT NULL,
-    layer_attribute_id integer,
-    layer_attribute_type character varying(5),
-    context_id integer,
-    "position" integer,
-    bucket_3 double precision[],
-    bucket_5 double precision[],
-    layer_group_id integer,
-    is_default boolean DEFAULT false
-);
-
-
---
--- Name: layer_group; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE layer_group (
-    id integer NOT NULL,
-    name text,
-    "position" integer
-);
-
-
---
--- Name: layer_group_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE layer_group_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: layer_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE layer_group_id_seq OWNED BY layer_group.id;
-
-
---
--- Name: layer_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE layer_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: layer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE layer_id_seq OWNED BY layer.id;
 
 
 --
@@ -585,14 +588,15 @@ CREATE TABLE quants (
     name text,
     unit text,
     unit_type text,
-    tooltip boolean,
+    tooltip_text text,
+    frontend_name text,
     place_factsheet boolean,
     actor_factsheet boolean,
     place_factsheet_tabular boolean,
     actor_factsheet_tabular boolean,
     place_factsheet_temporal boolean,
     actor_factsheet_temporal boolean,
-    frontend_name text
+    tooltip boolean
 );
 
 
@@ -743,14 +747,15 @@ ALTER SEQUENCE nodes_node_id_seq OWNED BY nodes.node_id;
 CREATE TABLE quals (
     qual_id integer NOT NULL,
     name text,
-    tooltip boolean,
+    tooltip_text text,
+    frontend_name text,
     place_factsheet boolean,
     actor_factsheet boolean,
     place_factsheet_tabular boolean,
     actor_factsheet_tabular boolean,
     place_factsheet_temporal boolean,
     actor_factsheet_temporal boolean,
-    frontend_name text
+    tooltip boolean
 );
 
 
@@ -816,6 +821,13 @@ ALTER TABLE ONLY context ALTER COLUMN id SET DEFAULT nextval('context_id_seq'::r
 
 
 --
+-- Name: context_factsheet_attribute id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY context_factsheet_attribute ALTER COLUMN id SET DEFAULT nextval('context_factsheet_attribute_id_seq'::regclass);
+
+
+--
 -- Name: context_filter_by id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -830,6 +842,20 @@ ALTER TABLE ONLY context_indicators ALTER COLUMN id SET DEFAULT nextval('context
 
 
 --
+-- Name: context_layer id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY context_layer ALTER COLUMN id SET DEFAULT nextval('context_layer_id_seq'::regclass);
+
+
+--
+-- Name: context_layer_group id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY context_layer_group ALTER COLUMN id SET DEFAULT nextval('context_layer_group_id_seq'::regclass);
+
+
+--
 -- Name: context_nodes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -840,7 +866,7 @@ ALTER TABLE ONLY context_nodes ALTER COLUMN id SET DEFAULT nextval('context_node
 -- Name: context_recolor_by id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY context_recolor_by ALTER COLUMN id SET DEFAULT nextval('context_recolour_by_id_seq'::regclass);
+ALTER TABLE ONLY context_recolor_by ALTER COLUMN id SET DEFAULT nextval('context_recolor_by_id_seq'::regclass);
 
 
 --
@@ -858,13 +884,6 @@ ALTER TABLE ONLY countries ALTER COLUMN country_id SET DEFAULT nextval('countrie
 
 
 --
--- Name: facts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY facts ALTER COLUMN id SET DEFAULT nextval('facts_id_seq'::regclass);
-
-
---
 -- Name: flows flow_id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -876,20 +895,6 @@ ALTER TABLE ONLY flows ALTER COLUMN flow_id SET DEFAULT nextval('flows_flow_id_s
 --
 
 ALTER TABLE ONLY inds ALTER COLUMN ind_id SET DEFAULT nextval('inds_ind_id_seq'::regclass);
-
-
---
--- Name: layer id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY layer ALTER COLUMN id SET DEFAULT nextval('layer_id_seq'::regclass);
-
-
---
--- Name: layer_group id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY layer_group ALTER COLUMN id SET DEFAULT nextval('layer_group_id_seq'::regclass);
 
 
 --
@@ -937,6 +942,14 @@ ALTER TABLE ONLY commodities
 
 
 --
+-- Name: context_factsheet_attribute context_factsheet_attribute_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY context_factsheet_attribute
+    ADD CONSTRAINT context_factsheet_attribute_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: context_filter_by context_filter_by_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -950,6 +963,14 @@ ALTER TABLE ONLY context_filter_by
 
 ALTER TABLE ONLY context_indicators
     ADD CONSTRAINT context_indicators_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: context_layer_group context_layer_group_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY context_layer_group
+    ADD CONSTRAINT context_layer_group_pkey PRIMARY KEY (id);
 
 
 --
@@ -969,11 +990,11 @@ ALTER TABLE ONLY context
 
 
 --
--- Name: context_recolor_by context_recolour_by_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: context_recolor_by context_recolor_by_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY context_recolor_by
-    ADD CONSTRAINT context_recolour_by_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT context_recolor_by_pkey PRIMARY KEY (id);
 
 
 --
@@ -993,14 +1014,6 @@ ALTER TABLE ONLY countries
 
 
 --
--- Name: facts facts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY facts
-    ADD CONSTRAINT facts_pkey PRIMARY KEY (id);
-
-
---
 -- Name: flows flows_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1014,22 +1027,6 @@ ALTER TABLE ONLY flows
 
 ALTER TABLE ONLY inds
     ADD CONSTRAINT inds_pkey PRIMARY KEY (ind_id);
-
-
---
--- Name: layer_group layer_group_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY layer_group
-    ADD CONSTRAINT layer_group_pkey PRIMARY KEY (id);
-
-
---
--- Name: layer layer_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY layer
-    ADD CONSTRAINT layer_pkey PRIMARY KEY (id);
 
 
 --
@@ -1131,27 +1128,59 @@ ALTER TABLE ONLY context
 
 
 --
--- Name: context_filter_by context_filter_by_context_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: context_factsheet_attribute context_factsheet_attribute_context_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY context_factsheet_attribute
+    ADD CONSTRAINT context_factsheet_attribute_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
+
+
+--
+-- Name: context_filter_by context_filter_by_context_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY context_filter_by
-    ADD CONSTRAINT context_filter_by_context_id_fk FOREIGN KEY (context_id) REFERENCES context(id);
+    ADD CONSTRAINT context_filter_by_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
 
 
 --
--- Name: context_filter_by context_filter_by_node_types_node_type_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: context_filter_by context_filter_by_node_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY context_filter_by
-    ADD CONSTRAINT context_filter_by_node_types_node_type_id_fk FOREIGN KEY (node_type_id) REFERENCES node_types(node_type_id);
+    ADD CONSTRAINT context_filter_by_node_type_id_fkey FOREIGN KEY (node_type_id) REFERENCES node_types(node_type_id);
 
 
 --
--- Name: context_indicators context_indicators_context_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: context_indicators context_indicators_context_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY context_indicators
-    ADD CONSTRAINT context_indicators_context_id_fk FOREIGN KEY (context_id) REFERENCES context(id);
+    ADD CONSTRAINT context_indicators_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
+
+
+--
+-- Name: context_layer context_layer_context_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY context_layer
+    ADD CONSTRAINT context_layer_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
+
+
+--
+-- Name: context_layer context_layer_context_layer_group_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY context_layer
+    ADD CONSTRAINT context_layer_context_layer_group_id_fkey FOREIGN KEY (context_layer_group_id) REFERENCES context_layer_group(id);
+
+
+--
+-- Name: context_layer_group context_layer_group_context_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY context_layer_group
+    ADD CONSTRAINT context_layer_group_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
 
 
 --
@@ -1171,27 +1200,19 @@ ALTER TABLE ONLY context_nodes
 
 
 --
--- Name: context_recolor_by context_recolour_by_context_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: context_recolor_by context_recolor_by_context_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY context_recolor_by
-    ADD CONSTRAINT context_recolour_by_context_id_fk FOREIGN KEY (context_id) REFERENCES context(id);
+    ADD CONSTRAINT context_recolor_by_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
 
 
 --
--- Name: context_resize_by context_resize_by_context_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: context_resize_by context_resize_by_context_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY context_resize_by
-    ADD CONSTRAINT context_resize_by_context_id_fk FOREIGN KEY (context_id) REFERENCES context(id);
-
-
---
--- Name: facts facts_context_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY facts
-    ADD CONSTRAINT facts_context_id_fk FOREIGN KEY (context_id) REFERENCES context(id);
+    ADD CONSTRAINT context_resize_by_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
 
 
 --
@@ -1248,22 +1269,6 @@ ALTER TABLE ONLY flow_quants
 
 ALTER TABLE ONLY flows
     ADD CONSTRAINT flows_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
-
-
---
--- Name: layer layer_context_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY layer
-    ADD CONSTRAINT layer_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
-
-
---
--- Name: layer layer_layer_group_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY layer
-    ADD CONSTRAINT layer_layer_group_id_fk FOREIGN KEY (layer_group_id) REFERENCES layer_group(id);
 
 
 --
