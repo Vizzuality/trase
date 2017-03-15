@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
-  before_action :load_context, except: [:get_contexts]
+  before_action :load_context, except: [:get_contexts, :get_all_nodes]
   before_action :set_caching_headers
 
   rescue_from ActionController::ParameterMissing do |exception|
