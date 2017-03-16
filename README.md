@@ -1,6 +1,8 @@
 # TRASE API
 
-API for the new TRASE functionalities
+[![Build Status](https://travis-ci.org/Vizzuality/trase-api.svg?branch=master)](https://travis-ci.org/Vizzuality/trase-api)
+
+API for the new [Trase](http://trase.earth) functionalities
 
 ## Requirements
 
@@ -11,7 +13,7 @@ This project uses:
 
 ## Deployment
 
-We use Capistrano as a deployment tool.Refer to its documentation for more info
+We use Capistrano as a deployment tool. Refer to its documentation for more info
 
 ## Test
 
