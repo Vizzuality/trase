@@ -2,15 +2,15 @@
 #
 # Table name: context_layer
 #
-#  id                   :integer          not null, primary key
-#  layer_attribute_id   :integer
-#  layer_attribute_type :string(5)
-#  context_id           :integer
-#  position             :integer
-#  bucket_3             :float            is an Array
-#  bucket_5             :float            is an Array
-#  context_layer_group_id       :integer
-#  is_default           :boolean          default("false")
+#  id                     :integer          not null
+#  layer_attribute_id     :integer          not null
+#  layer_attribute_type   :enum
+#  context_id             :integer
+#  position               :integer
+#  bucket_3               :float            is an Array
+#  bucket_5               :float            is an Array
+#  context_layer_group_id :integer
+#  is_default             :boolean          default("false")
 #
 
 class ContextLayer < ActiveRecord::Base

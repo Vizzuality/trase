@@ -2,11 +2,13 @@
 #
 # Table name: nodes
 #
-#  node_id      :integer          not null, primary key
-#  geo_id       :text
-#  main_node_id :integer
-#  name         :text
-#  node_type_id :integer
+#  node_id                 :integer          not null, primary key
+#  geo_id                  :text
+#  main_node_id            :integer
+#  name                    :text
+#  node_type_id            :integer
+#  is_domestic_consumption :boolean
+#  is_unknown              :boolean
 #
 
 class Node < ActiveRecord::Base
