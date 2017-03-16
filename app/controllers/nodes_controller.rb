@@ -20,7 +20,7 @@ class NodesController < ApplicationController
 
     matching_nodes = Node
                          .select('
-                           nodes.node_id, nodes.name, geo_id, nodes.node_type_id as column_id,
+                           nodes.node_id, nodes.name, geo_id, nodes.node_type_id as column_id, nodes.is_domestic_consumption, nodes.is_unknown,
                            node_types.node_type as type,
                            CASE WHEN flow_nodes.node_id IS NOT NULL OR nodes.name = \'OTHER\' THEN true ELSE false END as has_flows
                          ')

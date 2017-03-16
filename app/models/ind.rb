@@ -6,14 +6,15 @@
 #  name                     :text
 #  unit                     :text
 #  unit_type                :text
-#  tooltip                  :boolean
+#  tooltip_text             :text
+#  frontend_name            :text
 #  place_factsheet          :boolean
 #  actor_factsheet          :boolean
 #  place_factsheet_tabular  :boolean
 #  actor_factsheet_tabular  :boolean
 #  place_factsheet_temporal :boolean
 #  actor_factsheet_temporal :boolean
-#  frontend_name            :text
+#  tooltip                  :boolean
 #
 
 class Ind < ActiveRecord::Base

@@ -6,6 +6,7 @@
 #  country_id   :integer
 #  commodity_id :integer
 #  years        :integer          is an Array
+#  is_disabled  :boolean
 #  is_default   :boolean
 #  default_year :integer
 #

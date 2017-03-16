@@ -4,8 +4,8 @@
 #
 #  id                     :integer          not null, primary key
 #  context_id             :integer
-#  recolor_attribute_id   :integer
-#  recolor_attribute_type :string(5)
+#  recolor_attribute_id   :integer          not null
+#  recolor_attribute_type :enum
 #  is_default             :boolean
 #  is_disabled            :boolean
 #  group_number           :integer          default("1")

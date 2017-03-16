@@ -6,8 +6,8 @@
 #  context_id            :integer
 #  is_default            :boolean
 #  is_disabled           :boolean
-#  resize_attribute_id   :integer
-#  resize_attribute_type :string(5)
+#  resize_attribute_id   :integer          not null
+#  resize_attribute_type :enum
 #  group_number          :integer          default("1")
 #  position              :integer
 #

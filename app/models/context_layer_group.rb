@@ -2,9 +2,10 @@
 #
 # Table name: context_layer_group
 #
-#  id       :integer          not null, primary key
-#  name     :text
-#  position :integer
+#  id         :integer          not null, primary key
+#  name       :text
+#  position   :integer
+#  context_id :integer
 #
 
 class ContextLayerGroup < ActiveRecord::Base
