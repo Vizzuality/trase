@@ -3,9 +3,6 @@ require 'rails_helper'
 RSpec.describe DownloadController, type: :controller do
   include_context "two flows"
   describe "GET index" do
-    before(:all) do
-      context = Context.first
-    end
     before(:each) do
       MaterializedFlow.refresh
     end

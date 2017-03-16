@@ -2,9 +2,6 @@ require 'rails_helper'
 
 RSpec.describe IndicatorsController, type: :controller do
   include_context "brazil soy indicators"
-  before(:all) do
-    context = Context.first
-  end
   describe "GET index" do
     it "assigns indicators relevant to the given context" do
       get :index, params: { context_id: context.id }

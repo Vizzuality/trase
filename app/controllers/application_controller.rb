@@ -14,10 +14,7 @@ class ApplicationController < ActionController::Base
 
     if context_id.present?
       @context = Context.find(context_id)
-
-      raise ActionController::ParameterMissing, 'The provided context could not be found' if @context.nil?
     else
-
       raise ActionController::ParameterMissing, 'Required context_id missing'
     end
   end
