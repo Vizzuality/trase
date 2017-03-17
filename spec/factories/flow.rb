@@ -5,9 +5,21 @@ FactoryGirl.define do
     path []
   end
 
+  factory :flow_ind do
+    flow
+    ind
+    value 10
+  end
+
   factory :flow_quant do
     flow
     quant
     value 10
+  end
+
+  factory :flow_qual do
+    flow
+    qual
+    value 'yes'
   end
 end

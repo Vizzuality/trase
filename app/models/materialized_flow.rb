@@ -22,6 +22,8 @@
 
 class MaterializedFlow < ApplicationRecord
   def self.refresh
+    Scenic.database.refresh_materialized_view(:flow_indicators, concurrently: false)
+    Scenic.database.refresh_materialized_view(:node_flows, concurrently: false)
     Scenic.database.refresh_materialized_view(table_name, concurrently: false)
   end
 end
