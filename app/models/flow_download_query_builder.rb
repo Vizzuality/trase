@@ -4,7 +4,7 @@ class FlowDownloadQueryBuilder
     @query = MaterializedFlow.where(context_id: context_id)
     @query = @query.where(
       'node_type IS NULL OR node_type IN (?)',
-      [NodeType::STATE, NodeType::BIOME, NodeType::MUNICIPALITY]
+      [NodeTypeName::STATE, NodeTypeName::BIOME, NodeTypeName::MUNICIPALITY]
     )
     if params[:years].present?
       @query = @query.where(year: params[:years])
