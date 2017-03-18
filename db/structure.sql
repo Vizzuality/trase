@@ -42,6 +42,20 @@ CREATE EXTENSION IF NOT EXISTS intarray WITH SCHEMA public;
 COMMENT ON EXTENSION intarray IS 'functions, operators, and index support for 1-D arrays of integers';
 
 
+--
+-- Name: tablefunc; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS tablefunc WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION tablefunc; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION tablefunc IS 'functions that manipulate whole tables, including crosstab';
+
+
 SET search_path = public, pg_catalog;
 
 --
@@ -124,42 +138,9 @@ CREATE TABLE context (
     country_id integer,
     commodity_id integer,
     years integer[],
-    is_disabled boolean,
     is_default boolean,
     default_year integer
 );
-
-
---
--- Name: context_factsheet_attribute; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE context_factsheet_attribute (
-    id integer NOT NULL,
-    attribute_id integer NOT NULL,
-    attribute_type attribute_type,
-    context_id integer NOT NULL,
-    factsheet_type character varying(10) NOT NULL
-);
-
-
---
--- Name: context_factsheet_attribute_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE context_factsheet_attribute_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: context_factsheet_attribute_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE context_factsheet_attribute_id_seq OWNED BY context_factsheet_attribute.id;
 
 
 --
@@ -245,73 +226,6 @@ ALTER SEQUENCE context_indicators_id_seq OWNED BY context_indicators.id;
 
 
 --
--- Name: context_layer; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE context_layer (
-    id integer NOT NULL,
-    layer_attribute_id integer NOT NULL,
-    layer_attribute_type attribute_type,
-    context_id integer,
-    "position" integer,
-    bucket_3 double precision[],
-    bucket_5 double precision[],
-    context_layer_group_id integer,
-    is_default boolean DEFAULT false
-);
-
-
---
--- Name: context_layer_group; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE context_layer_group (
-    id integer NOT NULL,
-    name text,
-    "position" integer,
-    context_id integer
-);
-
-
---
--- Name: context_layer_group_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE context_layer_group_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: context_layer_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE context_layer_group_id_seq OWNED BY context_layer_group.id;
-
-
---
--- Name: context_layer_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE context_layer_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: context_layer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE context_layer_id_seq OWNED BY context_layer.id;
-
-
---
 -- Name: context_nodes; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -351,8 +265,8 @@ ALTER SEQUENCE context_nodes_id_seq OWNED BY context_nodes.id;
 CREATE TABLE context_recolor_by (
     id integer NOT NULL,
     context_id integer,
-    recolor_attribute_id integer NOT NULL,
-    recolor_attribute_type attribute_type,
+    recolor_attribute_id integer,
+    recolor_attribute_type character varying(5),
     is_default boolean,
     is_disabled boolean,
     group_number integer DEFAULT 1,
@@ -366,10 +280,10 @@ CREATE TABLE context_recolor_by (
 
 
 --
--- Name: context_recolor_by_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: context_recolour_by_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE context_recolor_by_id_seq
+CREATE SEQUENCE context_recolour_by_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -378,10 +292,10 @@ CREATE SEQUENCE context_recolor_by_id_seq
 
 
 --
--- Name: context_recolor_by_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: context_recolour_by_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE context_recolor_by_id_seq OWNED BY context_recolor_by.id;
+ALTER SEQUENCE context_recolour_by_id_seq OWNED BY context_recolor_by.id;
 
 
 --
@@ -393,8 +307,8 @@ CREATE TABLE context_resize_by (
     context_id integer,
     is_default boolean,
     is_disabled boolean,
-    resize_attribute_id integer NOT NULL,
-    resize_attribute_type attribute_type,
+    resize_attribute_id integer,
+    resize_attribute_type character varying(5),
     group_number integer DEFAULT 1,
     "position" integer
 );
@@ -453,6 +367,38 @@ ALTER SEQUENCE countries_country_id_seq OWNED BY countries.country_id;
 
 
 --
+-- Name: facts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE facts (
+    id integer NOT NULL,
+    attribute_id integer NOT NULL,
+    attribute_type character varying(5) NOT NULL,
+    context_id integer NOT NULL,
+    type character varying(10) NOT NULL
+);
+
+
+--
+-- Name: facts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE facts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: facts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE facts_id_seq OWNED BY facts.id;
+
+
+--
 -- Name: flow_inds; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -483,6 +429,120 @@ CREATE TABLE flow_quants (
     quant_id integer,
     value double precision
 );
+
+
+--
+-- Name: inds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE inds (
+    ind_id integer NOT NULL,
+    name text,
+    unit text,
+    unit_type text,
+    tooltip boolean,
+    place_factsheet boolean,
+    actor_factsheet boolean,
+    place_factsheet_tabular boolean,
+    actor_factsheet_tabular boolean,
+    place_factsheet_temporal boolean,
+    actor_factsheet_temporal boolean,
+    frontend_name text
+);
+
+
+--
+-- Name: quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE quals (
+    qual_id integer NOT NULL,
+    name text,
+    tooltip boolean,
+    place_factsheet boolean,
+    actor_factsheet boolean,
+    place_factsheet_tabular boolean,
+    actor_factsheet_tabular boolean,
+    place_factsheet_temporal boolean,
+    actor_factsheet_temporal boolean,
+    frontend_name text
+);
+
+
+--
+-- Name: quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE quants (
+    quant_id integer NOT NULL,
+    name text,
+    unit text,
+    unit_type text,
+    tooltip boolean,
+    place_factsheet boolean,
+    actor_factsheet boolean,
+    place_factsheet_tabular boolean,
+    actor_factsheet_tabular boolean,
+    place_factsheet_temporal boolean,
+    actor_factsheet_temporal boolean,
+    frontend_name text
+);
+
+
+--
+-- Name: flow_indicators; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW flow_indicators AS
+ SELECT f.flow_id,
+    f.qual_id AS indicator_id,
+    'Qual'::text AS indicator_type,
+    NULL::double precision AS numeric_value,
+        CASE
+            WHEN (lower(f.value) = 'yes'::text) THEN true
+            WHEN (lower(f.value) = 'no'::text) THEN false
+            ELSE NULL::boolean
+        END AS boolean_value,
+    q.name,
+    NULL::text AS unit,
+    q.name AS name_with_unit
+   FROM (flow_quals f
+     JOIN quals q ON ((f.qual_id = q.qual_id)))
+  WHERE (q.name = 'ZERO_DEFORESTATION'::text)
+  GROUP BY f.flow_id, f.qual_id, f.value, q.name
+UNION ALL
+ SELECT f.flow_id,
+    f.ind_id AS indicator_id,
+    'Ind'::text AS indicator_type,
+    f.value AS numeric_value,
+    NULL::boolean AS boolean_value,
+    i.name,
+    i.unit,
+        CASE
+            WHEN (i.unit IS NULL) THEN i.name
+            ELSE (((i.name || ' ('::text) || i.unit) || ')'::text)
+        END AS name_with_unit
+   FROM (flow_inds f
+     JOIN inds i ON ((f.ind_id = i.ind_id)))
+  WHERE (i.name = ANY (ARRAY['BIODIVERSITY'::text, 'FOREST_500'::text, 'SMALLHOLDERS'::text, 'WATER_SCARCITY'::text, 'COMPLIANCE_FOREST_CODE'::text]))
+  GROUP BY f.flow_id, f.ind_id, f.value, i.name, i.unit
+UNION ALL
+ SELECT f.flow_id,
+    f.quant_id AS indicator_id,
+    'Quant'::text AS indicator_type,
+    f.value AS numeric_value,
+    NULL::boolean AS boolean_value,
+    q.name,
+    q.unit,
+        CASE
+            WHEN (q.unit IS NULL) THEN q.name
+            ELSE (((q.name || ' ('::text) || q.unit) || ')'::text)
+        END AS name_with_unit
+   FROM (flow_quants f
+     JOIN quants q ON ((f.quant_id = q.quant_id)))
+  WHERE (q.name = ANY (ARRAY['AGROSATELITE_SOY_DEFOR_'::text, 'GHG'::text, 'POTENTIAL_SOY_RELATED_DEFOR'::text, 'SOY_'::text, 'TOTAL_DEFOR_RATE'::text]))
+  GROUP BY f.flow_id, f.quant_id, f.value, q.name, q.unit
+  WITH NO DATA;
 
 
 --
@@ -517,27 +577,6 @@ ALTER SEQUENCE flows_flow_id_seq OWNED BY flows.flow_id;
 
 
 --
--- Name: inds; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE inds (
-    ind_id integer NOT NULL,
-    name text,
-    unit text,
-    unit_type text,
-    tooltip_text text,
-    frontend_name text,
-    place_factsheet boolean,
-    actor_factsheet boolean,
-    place_factsheet_tabular boolean,
-    actor_factsheet_tabular boolean,
-    place_factsheet_temporal boolean,
-    actor_factsheet_temporal boolean,
-    tooltip boolean
-);
-
-
---
 -- Name: inds_ind_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -554,6 +593,72 @@ CREATE SEQUENCE inds_ind_id_seq
 --
 
 ALTER SEQUENCE inds_ind_id_seq OWNED BY inds.ind_id;
+
+
+--
+-- Name: layer; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE layer (
+    id integer NOT NULL,
+    layer_attribute_id integer,
+    layer_attribute_type character varying(5),
+    context_id integer,
+    "position" integer,
+    bucket_3 double precision[],
+    bucket_5 double precision[],
+    layer_group_id integer,
+    is_default boolean DEFAULT false
+);
+
+
+--
+-- Name: layer_group; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE layer_group (
+    id integer NOT NULL,
+    name text,
+    "position" integer
+);
+
+
+--
+-- Name: layer_group_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE layer_group_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: layer_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE layer_group_id_seq OWNED BY layer_group.id;
+
+
+--
+-- Name: layer_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE layer_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: layer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE layer_id_seq OWNED BY layer.id;
 
 
 --
@@ -580,24 +685,31 @@ CREATE TABLE nodes (
 
 
 --
--- Name: quants; Type: TABLE; Schema: public; Owner: -
+-- Name: node_flows; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
-CREATE TABLE quants (
-    quant_id integer NOT NULL,
-    name text,
-    unit text,
-    unit_type text,
-    tooltip_text text,
-    frontend_name text,
-    place_factsheet boolean,
-    actor_factsheet boolean,
-    place_factsheet_tabular boolean,
-    actor_factsheet_tabular boolean,
-    place_factsheet_temporal boolean,
-    actor_factsheet_temporal boolean,
-    tooltip boolean
-);
+CREATE MATERIALIZED VIEW node_flows AS
+ SELECT f.node_id,
+    n.geo_id,
+        CASE
+            WHEN (nt.node_type = ANY (ARRAY['STATE'::text, 'BIOME'::text])) THEN upper(n.name)
+            ELSE initcap(n.name)
+        END AS name,
+    nt.node_type,
+    f.flow_id,
+    f.year,
+    f.context_id
+   FROM ((( SELECT flows.flow_id,
+            flows.year,
+            a.node_id,
+            a."position",
+            flows.context_id
+           FROM flows,
+            LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) f
+     JOIN nodes n ON ((n.node_id = f.node_id)))
+     JOIN node_types nt ON ((nt.node_type_id = n.node_type_id)))
+  WHERE (nt.node_type = ANY (ARRAY['STATE'::text, 'BIOME'::text, 'MUNICIPALITY'::text, 'EXPORTER'::text, 'IMPORTER'::text, 'COUNTRY'::text]))
+  WITH NO DATA;
 
 
 --
@@ -605,64 +717,102 @@ CREATE TABLE quants (
 --
 
 CREATE MATERIALIZED VIEW materialized_flows AS
- WITH normalized_flows AS (
-         SELECT f_1.flow_id,
-            f_1.year,
-            f_1.node_id,
-            f_1."position",
-            f_1.context_id,
-            cn.node_type_id,
-            cn.node_type
-           FROM (( SELECT flows.flow_id,
-                    flows.year,
-                    a.node_id,
-                    a."position",
-                    flows.context_id
-                   FROM flows,
-                    LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) f_1
-             JOIN ( SELECT context_nodes.context_id,
-                    context_nodes.column_position,
-                    context_nodes.node_type_id,
-                    node_types.node_type
-                   FROM (context_nodes
-                     JOIN node_types ON ((node_types.node_type_id = context_nodes.node_type_id)))) cn ON (((f_1."position" = (cn.column_position + 1)) AND (f_1.context_id = cn.context_id))))
+ WITH aggregated_flows AS (
+         SELECT f.context_id,
+            f.node_type,
+            f.name AS node,
+            f.node_id,
+            f.geo_id,
+            f_ex.node_id AS exporter_node_id,
+            f_ex.name AS exporter_node,
+            f_im.node_id AS importer_node_id,
+            f_im.name AS importer_node,
+            f_ctry.node_id AS country_node_id,
+            f_ctry.name AS country_node,
+            f.year,
+            fi.indicator_type,
+            fi.indicator_id,
+            fi.name AS indicator,
+            fi.name_with_unit AS indicator_with_unit,
+            bool_and(fi.boolean_value) AS bool_and,
+            sum(fi.numeric_value) AS sum
+           FROM ((((node_flows f
+             JOIN node_flows f_ex ON (((f_ex.node_type = 'EXPORTER'::text) AND (f.flow_id = f_ex.flow_id))))
+             JOIN node_flows f_im ON (((f_im.node_type = 'IMPORTER'::text) AND (f.flow_id = f_im.flow_id))))
+             JOIN node_flows f_ctry ON (((f_ctry.node_type = 'COUNTRY'::text) AND (f.flow_id = f_ctry.flow_id))))
+             JOIN flow_indicators fi ON ((f.flow_id = fi.flow_id)))
+          GROUP BY f.context_id, f.year, f.node_id, f.node_type, f.name, f.geo_id, f_ex.node_id, f_ex.name, f_im.node_id, f_im.name, f_ctry.node_id, f_ctry.name, fi.indicator_type, fi.indicator_id, fi.name, fi.name_with_unit
+        ), with_totals AS (
+         SELECT aggregated_flows.context_id,
+            NULL::text AS node_type,
+            'TOTAL'::text AS node,
+            NULL::integer AS node_id,
+            NULL::text AS geo_id,
+            aggregated_flows.exporter_node_id,
+            aggregated_flows.exporter_node,
+            aggregated_flows.importer_node_id,
+            aggregated_flows.importer_node,
+            aggregated_flows.country_node_id,
+            aggregated_flows.country_node,
+            aggregated_flows.year,
+            aggregated_flows.indicator_type,
+            aggregated_flows.indicator_id,
+            aggregated_flows.indicator_with_unit,
+                CASE
+                    WHEN ((aggregated_flows.indicator_type = 'Qual'::text) AND bool_and(aggregated_flows.bool_and)) THEN 'yes'::text
+                    WHEN ((aggregated_flows.indicator_type = 'Qual'::text) AND (NOT bool_and(aggregated_flows.bool_and))) THEN 'no'::text
+                    ELSE (sum(aggregated_flows.sum))::text
+                END AS total
+           FROM aggregated_flows
+          WHERE (aggregated_flows.node_type = 'STATE'::text)
+          GROUP BY aggregated_flows.context_id, aggregated_flows.exporter_node_id, aggregated_flows.exporter_node, aggregated_flows.importer_node_id, aggregated_flows.importer_node, aggregated_flows.country_node_id, aggregated_flows.country_node, aggregated_flows.year, aggregated_flows.indicator_type, aggregated_flows.indicator_id, aggregated_flows.indicator_with_unit
+        UNION ALL
+         SELECT aggregated_flows.context_id,
+            aggregated_flows.node_type,
+            aggregated_flows.node,
+            aggregated_flows.node_id,
+            aggregated_flows.geo_id,
+            aggregated_flows.exporter_node_id,
+            aggregated_flows.exporter_node,
+            aggregated_flows.importer_node_id,
+            aggregated_flows.importer_node,
+            aggregated_flows.country_node_id,
+            aggregated_flows.country_node,
+            aggregated_flows.year,
+            aggregated_flows.indicator_type,
+            aggregated_flows.indicator_id,
+            aggregated_flows.indicator_with_unit,
+                CASE
+                    WHEN ((aggregated_flows.indicator_type = 'Qual'::text) AND aggregated_flows.bool_and) THEN 'yes'::text
+                    WHEN ((aggregated_flows.indicator_type = 'Qual'::text) AND (NOT aggregated_flows.bool_and)) THEN 'no'::text
+                    ELSE (aggregated_flows.sum)::text
+                END AS total
+           FROM aggregated_flows
         )
- SELECT f.flow_id,
-    f.context_id,
-    f.year,
-    f.node_id,
-    f.node_type,
-        CASE
-            WHEN (f.node_type = ANY (ARRAY['STATE'::text, 'BIOME'::text])) THEN upper(n.name)
-            ELSE initcap(n.name)
-        END AS node,
-    n.geo_id,
-    f_ex.node_id AS exporter_node_id,
-    n_ex.name AS exporter_node,
-    f_im.node_id AS importer_node_id,
-    n_im.name AS importer_node,
-    f_ctry.node_id AS country_node_id,
-    n_ctry.name AS country_node,
-    q.quant_id,
-    (((q.name || ' ('::text) || q.unit) || ')'::text) AS name,
-    fq.value
-   FROM (((((((((normalized_flows f
-     JOIN nodes n ON ((n.node_id = f.node_id)))
-     JOIN normalized_flows f_ex ON (((f.flow_id = f_ex.flow_id) AND (f_ex.node_type = 'EXPORTER'::text))))
-     JOIN nodes n_ex ON ((f_ex.node_id = n_ex.node_id)))
-     JOIN normalized_flows f_im ON (((f.flow_id = f_im.flow_id) AND (f_im.node_type = 'IMPORTER'::text))))
-     JOIN nodes n_im ON ((n_im.node_id = f_im.node_id)))
-     JOIN normalized_flows f_ctry ON (((f.flow_id = f_ctry.flow_id) AND (f_ctry.node_type = 'COUNTRY'::text))))
-     JOIN nodes n_ctry ON ((n_ctry.node_id = f_ctry.node_id)))
-     JOIN flow_quants fq ON ((f.flow_id = fq.flow_id)))
-     JOIN quants q ON ((fq.quant_id = q.quant_id)))
-  WHERE (f.node_type = ANY (ARRAY['STATE'::text, 'BIOME'::text, 'MUNICIPALITY'::text]))
+ SELECT with_totals.context_id,
+    with_totals.node_type,
+    with_totals.node,
+    with_totals.node_id,
+    with_totals.geo_id,
+    with_totals.exporter_node_id,
+    with_totals.exporter_node,
+    with_totals.importer_node_id,
+    with_totals.importer_node,
+    with_totals.country_node_id,
+    with_totals.country_node,
+    with_totals.year,
+    with_totals.indicator_type,
+    with_totals.indicator_id,
+    with_totals.indicator_with_unit,
+    with_totals.total
+   FROM with_totals
   ORDER BY
         CASE
-            WHEN (f.node_type = 'STATE'::text) THEN 1
-            WHEN (f.node_type = 'BIOME'::text) THEN 2
-            ELSE 3
-        END, n_ex.name, n_im.name, n_ctry.name
+            WHEN (with_totals.node_type IS NULL) THEN 1
+            WHEN (with_totals.node_type = 'STATE'::text) THEN 2
+            WHEN (with_totals.node_type = 'BIOME'::text) THEN 3
+            ELSE 4
+        END, with_totals.node, with_totals.exporter_node, with_totals.importer_node, with_totals.country_node, with_totals.indicator_with_unit
   WITH NO DATA;
 
 
@@ -741,25 +891,6 @@ ALTER SEQUENCE nodes_node_id_seq OWNED BY nodes.node_id;
 
 
 --
--- Name: quals; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE quals (
-    qual_id integer NOT NULL,
-    name text,
-    tooltip_text text,
-    frontend_name text,
-    place_factsheet boolean,
-    actor_factsheet boolean,
-    place_factsheet_tabular boolean,
-    actor_factsheet_tabular boolean,
-    place_factsheet_temporal boolean,
-    actor_factsheet_temporal boolean,
-    tooltip boolean
-);
-
-
---
 -- Name: quals_qual_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -821,13 +952,6 @@ ALTER TABLE ONLY context ALTER COLUMN id SET DEFAULT nextval('context_id_seq'::r
 
 
 --
--- Name: context_factsheet_attribute id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY context_factsheet_attribute ALTER COLUMN id SET DEFAULT nextval('context_factsheet_attribute_id_seq'::regclass);
-
-
---
 -- Name: context_filter_by id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -842,20 +966,6 @@ ALTER TABLE ONLY context_indicators ALTER COLUMN id SET DEFAULT nextval('context
 
 
 --
--- Name: context_layer id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY context_layer ALTER COLUMN id SET DEFAULT nextval('context_layer_id_seq'::regclass);
-
-
---
--- Name: context_layer_group id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY context_layer_group ALTER COLUMN id SET DEFAULT nextval('context_layer_group_id_seq'::regclass);
-
-
---
 -- Name: context_nodes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -866,7 +976,7 @@ ALTER TABLE ONLY context_nodes ALTER COLUMN id SET DEFAULT nextval('context_node
 -- Name: context_recolor_by id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY context_recolor_by ALTER COLUMN id SET DEFAULT nextval('context_recolor_by_id_seq'::regclass);
+ALTER TABLE ONLY context_recolor_by ALTER COLUMN id SET DEFAULT nextval('context_recolour_by_id_seq'::regclass);
 
 
 --
@@ -884,6 +994,13 @@ ALTER TABLE ONLY countries ALTER COLUMN country_id SET DEFAULT nextval('countrie
 
 
 --
+-- Name: facts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY facts ALTER COLUMN id SET DEFAULT nextval('facts_id_seq'::regclass);
+
+
+--
 -- Name: flows flow_id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -895,6 +1012,20 @@ ALTER TABLE ONLY flows ALTER COLUMN flow_id SET DEFAULT nextval('flows_flow_id_s
 --
 
 ALTER TABLE ONLY inds ALTER COLUMN ind_id SET DEFAULT nextval('inds_ind_id_seq'::regclass);
+
+
+--
+-- Name: layer id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY layer ALTER COLUMN id SET DEFAULT nextval('layer_id_seq'::regclass);
+
+
+--
+-- Name: layer_group id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY layer_group ALTER COLUMN id SET DEFAULT nextval('layer_group_id_seq'::regclass);
 
 
 --
@@ -942,14 +1073,6 @@ ALTER TABLE ONLY commodities
 
 
 --
--- Name: context_factsheet_attribute context_factsheet_attribute_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY context_factsheet_attribute
-    ADD CONSTRAINT context_factsheet_attribute_pkey PRIMARY KEY (id);
-
-
---
 -- Name: context_filter_by context_filter_by_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -963,14 +1086,6 @@ ALTER TABLE ONLY context_filter_by
 
 ALTER TABLE ONLY context_indicators
     ADD CONSTRAINT context_indicators_pkey PRIMARY KEY (id);
-
-
---
--- Name: context_layer_group context_layer_group_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY context_layer_group
-    ADD CONSTRAINT context_layer_group_pkey PRIMARY KEY (id);
 
 
 --
@@ -990,11 +1105,11 @@ ALTER TABLE ONLY context
 
 
 --
--- Name: context_recolor_by context_recolor_by_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: context_recolor_by context_recolour_by_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY context_recolor_by
-    ADD CONSTRAINT context_recolor_by_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT context_recolour_by_pkey PRIMARY KEY (id);
 
 
 --
@@ -1014,6 +1129,14 @@ ALTER TABLE ONLY countries
 
 
 --
+-- Name: facts facts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY facts
+    ADD CONSTRAINT facts_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: flows flows_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1027,6 +1150,22 @@ ALTER TABLE ONLY flows
 
 ALTER TABLE ONLY inds
     ADD CONSTRAINT inds_pkey PRIMARY KEY (ind_id);
+
+
+--
+-- Name: layer_group layer_group_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY layer_group
+    ADD CONSTRAINT layer_group_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: layer layer_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY layer
+    ADD CONSTRAINT layer_pkey PRIMARY KEY (id);
 
 
 --
@@ -1077,6 +1216,34 @@ CREATE UNIQUE INDEX context_indicators_indicator_attribute_type_indicator_attri_
 
 
 --
+-- Name: index_flow_indicators_on_flow_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_flow_indicators_on_flow_id ON flow_indicators USING btree (flow_id);
+
+
+--
+-- Name: index_flow_inds_on_flow_id_and_ind_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_flow_inds_on_flow_id_and_ind_id ON flow_inds USING btree (flow_id, ind_id);
+
+
+--
+-- Name: index_flow_quals_on_flow_id_and_qual_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_flow_quals_on_flow_id_and_qual_id ON flow_quals USING btree (flow_id, qual_id);
+
+
+--
+-- Name: index_flow_quants_on_flow_id_and_quant_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_flow_quants_on_flow_id_and_quant_id ON flow_quants USING btree (flow_id, quant_id);
+
+
+--
 -- Name: index_materialized_flows_on_country_node_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1098,17 +1265,24 @@ CREATE INDEX index_materialized_flows_on_importer_node_id ON materialized_flows 
 
 
 --
--- Name: index_materialized_flows_on_node_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_materialized_flows_on_indicator_type_and_indicator_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_materialized_flows_on_node_id ON materialized_flows USING btree (node_id);
+CREATE INDEX index_materialized_flows_on_indicator_type_and_indicator_id ON materialized_flows USING btree (indicator_type, indicator_id);
 
 
 --
--- Name: index_materialized_flows_on_quant_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_node_flows_on_node_type_and_flow_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_materialized_flows_on_quant_id ON materialized_flows USING btree (quant_id);
+CREATE INDEX index_node_flows_on_node_type_and_flow_id ON node_flows USING btree (node_type, flow_id);
+
+
+--
+-- Name: index_nodes_on_node_type_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_nodes_on_node_type_id ON nodes USING btree (node_type_id);
 
 
 --
@@ -1128,59 +1302,27 @@ ALTER TABLE ONLY context
 
 
 --
--- Name: context_factsheet_attribute context_factsheet_attribute_context_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY context_factsheet_attribute
-    ADD CONSTRAINT context_factsheet_attribute_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
-
-
---
--- Name: context_filter_by context_filter_by_context_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: context_filter_by context_filter_by_context_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY context_filter_by
-    ADD CONSTRAINT context_filter_by_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
+    ADD CONSTRAINT context_filter_by_context_id_fk FOREIGN KEY (context_id) REFERENCES context(id);
 
 
 --
--- Name: context_filter_by context_filter_by_node_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: context_filter_by context_filter_by_node_types_node_type_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY context_filter_by
-    ADD CONSTRAINT context_filter_by_node_type_id_fkey FOREIGN KEY (node_type_id) REFERENCES node_types(node_type_id);
+    ADD CONSTRAINT context_filter_by_node_types_node_type_id_fk FOREIGN KEY (node_type_id) REFERENCES node_types(node_type_id);
 
 
 --
--- Name: context_indicators context_indicators_context_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: context_indicators context_indicators_context_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY context_indicators
-    ADD CONSTRAINT context_indicators_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
-
-
---
--- Name: context_layer context_layer_context_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY context_layer
-    ADD CONSTRAINT context_layer_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
-
-
---
--- Name: context_layer context_layer_context_layer_group_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY context_layer
-    ADD CONSTRAINT context_layer_context_layer_group_id_fkey FOREIGN KEY (context_layer_group_id) REFERENCES context_layer_group(id);
-
-
---
--- Name: context_layer_group context_layer_group_context_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY context_layer_group
-    ADD CONSTRAINT context_layer_group_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
+    ADD CONSTRAINT context_indicators_context_id_fk FOREIGN KEY (context_id) REFERENCES context(id);
 
 
 --
@@ -1200,19 +1342,27 @@ ALTER TABLE ONLY context_nodes
 
 
 --
--- Name: context_recolor_by context_recolor_by_context_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: context_recolor_by context_recolour_by_context_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY context_recolor_by
-    ADD CONSTRAINT context_recolor_by_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
+    ADD CONSTRAINT context_recolour_by_context_id_fk FOREIGN KEY (context_id) REFERENCES context(id);
 
 
 --
--- Name: context_resize_by context_resize_by_context_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: context_resize_by context_resize_by_context_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY context_resize_by
-    ADD CONSTRAINT context_resize_by_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
+    ADD CONSTRAINT context_resize_by_context_id_fk FOREIGN KEY (context_id) REFERENCES context(id);
+
+
+--
+-- Name: facts facts_context_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY facts
+    ADD CONSTRAINT facts_context_id_fk FOREIGN KEY (context_id) REFERENCES context(id);
 
 
 --
@@ -1269,6 +1419,22 @@ ALTER TABLE ONLY flow_quants
 
 ALTER TABLE ONLY flows
     ADD CONSTRAINT flows_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
+
+
+--
+-- Name: layer layer_context_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY layer
+    ADD CONSTRAINT layer_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
+
+
+--
+-- Name: layer layer_layer_group_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY layer
+    ADD CONSTRAINT layer_layer_group_id_fk FOREIGN KEY (layer_group_id) REFERENCES layer_group(id);
 
 
 --
@@ -1335,6 +1501,13 @@ SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20170217085928'),
-('20170308111306');
+('20170308111306'),
+('20170314095630'),
+('20170314112732'),
+('20170314113737'),
+('20170314115226'),
+('20170314115306'),
+('20170314144055'),
+('20170316135218');
 
 

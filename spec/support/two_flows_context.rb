@@ -1,16 +1,10 @@
 shared_context "two flows" do
   let!(:context){
-    context = FactoryGirl.create(
+    FactoryGirl.create(
       :context,
       country: FactoryGirl.create(:country, name: 'BRAZIL', iso2: 'BR'),
       commodity: FactoryGirl.create(:commodity, name: 'SOY')
     )
-    [
-      biome, state, logistics_hub, municipality, exporter1, port1, importer1, country_of_destination1
-    ].each_with_index do |node, idx|
-      FactoryGirl.create(:context_node, context: context, node_type: node.node_type, column_position: idx)
-    end
-    context
   }
   let(:biome){
     FactoryGirl.create(:biome_node, name: 'AMAZONIA')
@@ -66,13 +60,31 @@ shared_context "two flows" do
       ].map(&:node_id)
     )
   }
-  let(:fob){
-    FactoryGirl.create(:quant, name: 'FOB')
+  let(:total_defor_rate){
+    i = FactoryGirl.create(:quant, name: 'TOTAL_DEFOR_RATE')
+    FactoryGirl.create(:context_indicator, context: context, indicator: i)
+    i
   }
-  let!(:flow1_fob){
-    FactoryGirl.create(:flow_quant, flow: flow1, quant: fob, value: 10)
+  let(:forest_500){
+    i = FactoryGirl.create(:ind, name: 'FOREST_500')
+    FactoryGirl.create(:context_indicator, context: context, indicator: i)
+    i
   }
-  let!(:flow2_fob){
-    FactoryGirl.create(:flow_quant, flow: flow2, quant: fob, value: 20)
+  let(:zero_deforestation){
+    i = FactoryGirl.create(:qual, name: 'ZERO_DEFORESTATION')
+    FactoryGirl.create(:context_indicator, context: context, indicator: i)
+    i
+  }
+  let!(:flow1_total_defor_rate){
+    FactoryGirl.create(:flow_quant, flow: flow1, quant: total_defor_rate, value: 10)
+  }
+  let!(:flow1_forest_500){
+    FactoryGirl.create(:flow_ind, flow: flow1, ind: forest_500, value: 15)
+  }
+  let!(:flow2_total_defor_rate){
+    FactoryGirl.create(:flow_quant, flow: flow2, quant: total_defor_rate, value: 5)
+  }
+  let!(:flow2_zero_deforestation){
+    FactoryGirl.create(:flow_qual, flow: flow2, qual: zero_deforestation, value: 'yes')
   }
 end

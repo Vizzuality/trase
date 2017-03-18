@@ -2,10 +2,15 @@ class DownloadController < ApplicationController
   before_action :set_separator, only: :index
 
   def index
-    query = FlowDownloadQueryBuilder.new(@context.id, params).query
+    qb = FlowDownloadQueryBuilder.new(@context.id, params)
 
     respond_to do |format|
       format.csv {
+        query = if params[:pivot]
+          qb.pivot_query
+        else
+          qb.flat_query
+        end
         csv = PgCsv.new(
           sql: query.to_sql,
           header: true,
@@ -18,7 +23,7 @@ class DownloadController < ApplicationController
           disposition: "attachment; filename=#{@context.country.name}_#{@context.commodity.name}.csv"
       }
       format.json {
-        send_data query.to_json,
+        send_data qb.flat_query.to_json,
           type: 'text/json; charset=utf-8',
           disposition: "attachment; filename=#{@context.country.name}_#{@context.commodity.name}.json"
       }
