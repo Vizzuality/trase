@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :node do
+  factory :node_type do
   end
 end
 
