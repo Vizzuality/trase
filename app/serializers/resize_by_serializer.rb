@@ -8,4 +8,8 @@ class ResizeBySerializer < ActiveModel::Serializer
   attribute :label do
     object.resize_attribute.frontend_name
   end
+
+  attribute :description do
+    object.resize_attribute.tooltip_text
+  end
 end

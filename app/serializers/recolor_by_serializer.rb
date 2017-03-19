@@ -13,6 +13,10 @@ class RecolorBySerializer < ActiveModel::Serializer
     object.recolor_attribute.frontend_name
   end
 
+  attribute :description do
+    object.recolor_attribute.tooltip_text
+  end
+
   attribute :nodes do
     flows = []
     if (object.legend_type.eql? 'qual')
