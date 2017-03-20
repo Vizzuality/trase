@@ -3,7 +3,7 @@ namespace :populate do
   task :context_indicators => [:environment] do
     context_indicators = [
       {
-        type: 'Ind',
+        type: 'Quant',
         country: 'BRAZIL',
         commodity: nil,
         name: 'BIODIVERSITY',
@@ -48,14 +48,14 @@ namespace :populate do
         type: 'Quant',
         country: 'BRAZIL',
         commodity: nil,
-        name: 'GHG',
+        name: 'GHG_',
         position: 8
       },
       {
         type: 'Quant',
         country: 'BRAZIL',
         commodity: nil,
-        name: 'POTENTIAL_SOY_RELATED_DEFOR',
+        name: 'POTENTIAL_SOY_RELATED_DEFOR', # CAUTION name mixup, different name for Paraguay
         position: 6
       },
       {
@@ -66,17 +66,17 @@ namespace :populate do
         position: 4
       },
       {
-        type: 'Quant',
+        type: 'Ind', # CAUTION should be quant but misclassified currently
         country: 'BRAZIL',
         commodity: nil,
-        name: 'TOTAL_DEFOR_RATE',
+        name: 'TOTAL_DEFOR_RATE', # CAUTION name mixup, different name for Paraguay
         position: 5
       },
       {
         type: 'Ind',
         country: 'BRAZIL',
         commodity: nil,
-        name: 'COMPLIANCE_FOREST_CODE',
+        name: 'PROTECTED_DEFICIT_PERC',
         position: 12
       }
     ]
@@ -103,7 +103,7 @@ namespace :populate do
       else
         [Commodity.find_by_name(ci[:commodity]).commodity_id]
       end.compact
-      next nil? if commodity_ids.empty?
+      next nil if commodity_ids.empty?
       puts 'Commodity found'
 
       context_ids = commodity_ids.map do |commodity_id|
@@ -112,6 +112,12 @@ namespace :populate do
       next nil if context_ids.empty?
       puts 'Context found'
       context_ids.map do |context_id|
+        existing = ContextIndicator.where(
+          context_id: context_id,
+          indicator_attribute_type: ci[:type],
+          indicator_attribute_id: indicator_id
+        ).first
+        next nil if existing.present?
         ContextIndicator.new(
           context_id: context_id,
           indicator_attribute_type: ci[:type],
