@@ -6,56 +6,8 @@ shared_context "two flows" do
       commodity: FactoryGirl.create(:commodity, name: 'SOY')
     )
   }
+  include_context "brazil soy nodes"
 
-  let(:biome_node_type){
-    FactoryGirl.create(:node_type, node_type:NodeTypeName::BIOME)
-  }
-  let(:state_node_type){
-    FactoryGirl.create(:node_type, node_type:NodeTypeName::STATE)
-  }
-  let(:logistics_hub_node_type){
-    FactoryGirl.create(:node_type, node_type:NodeTypeName::LOGISTICS_HUB)
-  }
-  let(:municipality_node_type){
-    FactoryGirl.create(:node_type, node_type:NodeTypeName::MUNICIPALITY)
-  }
-  let(:exporter_node_type){
-    FactoryGirl.create(:node_type, node_type:NodeTypeName::EXPORTER)
-  }
-  let(:port_node_type){
-    FactoryGirl.create(:node_type, node_type:NodeTypeName::PORT)
-  }
-  let(:importer_node_type){
-    FactoryGirl.create(:node_type, node_type:NodeTypeName::IMPORTER)
-  }
-  let(:country_node_type){
-    FactoryGirl.create(:node_type, node_type:NodeTypeName::COUNTRY)
-  }
-
-  let(:biome){
-    FactoryGirl.create(:node, name: 'AMAZONIA', node_type: biome_node_type)
-  }
-  let(:state){
-    FactoryGirl.create(:node, name: 'MATO GROSSO', node_type: state_node_type)
-  }
-  let(:logistics_hub){
-    FactoryGirl.create(:node, name: 'CUIABA', node_type: logistics_hub_node_type)
-  }
-  let(:municipality){
-    FactoryGirl.create(:node, name: 'NOVA UBIRATA', node_type: municipality_node_type)
-  }
-  let(:exporter1){
-    FactoryGirl.create(:node, name: 'AFG BRASIL', node_type: exporter_node_type)
-  }
-  let(:port1){
-    FactoryGirl.create(:node, name: 'IMBITUBA', node_type: port_node_type)
-  }
-  let(:importer1){
-    FactoryGirl.create(:node, name: 'UNKNOWN CUSTOMER', node_type: importer_node_type)
-  }
-  let(:country_of_destination1){
-    FactoryGirl.create(:node, name: 'RUSSIAN FEDERATION', node_type: country_node_type)
-  }
   let(:exporter2){
     FactoryGirl.create(:node, name: 'AFG BRASIL', node_type: exporter_node_type)
   }
