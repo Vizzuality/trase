@@ -9,7 +9,7 @@ API for the new [Trase](http://trase.earth) functionalities
 This project uses:
 - Ruby 2.4.0
 - Rails 5.0
-- PostgreSQL 9.x + `intarray` extension
+- PostgreSQL 9.x with `intarray` and `tablefunc` extensions
 
 ## Deployment
 
