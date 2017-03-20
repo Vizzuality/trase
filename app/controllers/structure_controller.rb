@@ -13,10 +13,10 @@ class StructureController < ApplicationController
 
   def get_contexts
 
-    result = Context
+    @contexts = Context
                  .eager_load(:country, :commodity, :context_resize_bies, :context_recolor_bies, context_filter_bies: [node_type: [:nodes]])
                  .all()
 
-    render json: result, root: 'data', each_serializer: GetContextsSerializer
+    render json: @contexts, root: 'data', each_serializer: GetContextsSerializer
   end
 end
