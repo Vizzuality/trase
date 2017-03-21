@@ -22,5 +22,4 @@ FROM (
   FROM flows, LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")
 ) f
 JOIN nodes n ON n.node_id = f.node_id
-JOIN node_types nt ON nt.node_type_id = n.node_type_id
-WHERE nt.node_type IN ('STATE', 'BIOME', 'MUNICIPALITY', 'EXPORTER', 'IMPORTER', 'COUNTRY');
+JOIN node_types nt ON nt.node_type_id = n.node_type_id;

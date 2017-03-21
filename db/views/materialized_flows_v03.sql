@@ -1,7 +1,9 @@
 WITH aggregated_flows AS (
   SELECT
     f.context_id,
-    f.node_type,
+    f.column_group,
+    f.column_position,
+    f.needs_total,
     f.name AS node,
     f.node_id,
     f.geo_id,
@@ -19,16 +21,18 @@ WITH aggregated_flows AS (
     BOOL_AND(fi.boolean_value) AS bool_and,
     SUM(fi.numeric_value) AS sum
   FROM node_flows f
-  JOIN node_flows f_ex ON f_ex.node_type = 'EXPORTER'::text AND f.flow_id = f_ex.flow_id
-  JOIN node_flows f_im ON f_im.node_type = 'IMPORTER'::text AND f.flow_id = f_im.flow_id
-  JOIN node_flows f_ctry ON f_ctry.node_type = 'COUNTRY'::text AND f.flow_id = f_ctry.flow_id
+  JOIN node_flows f_ex ON f_ex.column_group = 1 AND f.flow_id = f_ex.flow_id
+  JOIN node_flows f_im ON f_im.column_group = 2 AND f.flow_id = f_im.flow_id
+  JOIN node_flows f_ctry ON f_ctry.column_group = 3 AND f.flow_id = f_ctry.flow_id
   JOIN flow_indicators fi ON f.flow_id = fi.flow_id
-  WHERE f.node_type IN ('STATE', 'BIOME', 'MUNICIPALITY')
+  WHERE f.column_group = 0
   GROUP BY
     f.context_id,
     f.year,
     f.node_id,
-    f.node_type,
+    f.column_group,
+    f.column_position,
+    f.needs_total,
     f.name,
     f.geo_id,
     f_ex.node_id,
@@ -44,7 +48,8 @@ WITH aggregated_flows AS (
 ), with_totals AS (
   SELECT
     context_id,
-    NULL AS node_type,
+    column_group,
+    column_position,
     'TOTAL' AS node,
     NULL AS node_id,
     NULL AS geo_id,
@@ -64,9 +69,11 @@ WITH aggregated_flows AS (
       ELSE SUM(sum)::TEXT
     END AS total
   FROM aggregated_flows
-  WHERE node_type = 'STATE'
+  WHERE column_group = 0 AND column_position = 0 AND needs_total
   GROUP BY
     context_id,
+    column_group,
+    column_position,
     exporter_node_id,
     exporter_node,
     importer_node_id,
@@ -82,7 +89,8 @@ WITH aggregated_flows AS (
 
   SELECT
     context_id,
-    node_type,
+    column_group,
+    column_position,
     node,
     node_id,
     geo_id,
@@ -104,10 +112,15 @@ WITH aggregated_flows AS (
   FROM aggregated_flows
 )
 SELECT * FROM with_totals
-ORDER BY
+ORDER BY 
   CASE
-  WHEN node_type IS NULL THEN 1
-  WHEN node_type = 'STATE' THEN 2
-  WHEN node_type = 'BIOME' THEN 3
-  ELSE 4
-END, node, exporter_node, importer_node, country_node, indicator_with_unit;
+    WHEN node = 'TOTAL' THEN 0
+    ELSE 1
+  END,
+  column_group,
+  column_position,
+  node,
+  exporter_node,
+  importer_node,
+  country_node,
+  indicator_with_unit;
