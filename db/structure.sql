@@ -360,7 +360,8 @@ CREATE TABLE context_recolor_by (
     legend_color_theme character varying(55),
     interval_count integer,
     min_value character varying(10),
-    max_value character varying(10)
+    max_value character varying(10),
+    divisor double precision
 );
 
 

@@ -19,7 +19,8 @@ shared_context "brazil soy indicators" do
       country: brazil,
       commodity: FactoryGirl.create(:commodity, name: 'BEEF')
     )
-    FactoryGirl.create(:context_indicator, context: context, indicator: fob) 
+    FactoryGirl.create(:context_indicator, context: context, indicator: fob)
+    context
   }
   let(:forest_500){
     FactoryGirl.create(:ind, name: 'FOREST_500')

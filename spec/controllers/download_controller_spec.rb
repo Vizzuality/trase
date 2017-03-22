@@ -12,6 +12,18 @@ RSpec.describe DownloadController, type: :controller do
       expect(response.content_type).to eq("text/csv")
       expect(response.headers["Content-Disposition"]).to eq("attachment; filename=BRAZIL_SOY.csv")
     end
+    it "returns a csv file with pivot" do
+      get :index, params: { context_id: context.id, pivot: 1 }, format: :csv
+      expect(assigns(:context)).to eq(context)
+      expect(response.content_type).to eq("text/csv")
+      expect(response.headers["Content-Disposition"]).to eq("attachment; filename=BRAZIL_SOY.csv")
+    end
+    it "returns a semicolon-delimited csv file" do
+      get :index, params: { context_id: context.id, separator: :semicolon}, format: :csv
+      expect(assigns(:context)).to eq(context)
+      expect(response.content_type).to eq("text/csv")
+      expect(response.headers["Content-Disposition"]).to eq("attachment; filename=BRAZIL_SOY.csv")
+    end
     it "returns a json file" do
       get :index, params: { context_id: context.id }, format: :json
       expect(assigns(:context)).to eq(context)
