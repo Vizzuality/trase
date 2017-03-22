@@ -77,6 +77,8 @@ GEM
     dotenv-rails (2.2.0)
       dotenv (= 2.2.0)
       railties (>= 3.2, < 5.1)
+    enumerate_it (1.4.1)
+      activesupport (>= 3.0.0)
     erubis (2.7.0)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
@@ -205,6 +207,7 @@ DEPENDENCIES
   capistrano-rails
   capistrano-rvm
   dotenv-rails (~> 2.1)
+  enumerate_it (~> 1.4.1)
   factory_girl_rails
   listen (~> 3.0.5)
   pg (~> 0.18)

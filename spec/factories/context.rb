@@ -17,12 +17,6 @@ FactoryGirl.define do
     commodity
   end
 
-  factory :context_node do
-    context
-    node_type
-    column_position 0
-  end
-
   factory :context_indicator do
     context
     association :indicator, factory: :quant
