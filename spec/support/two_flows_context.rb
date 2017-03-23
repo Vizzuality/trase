@@ -1,29 +1,10 @@
 shared_context "two flows" do
   let!(:context){
-    context = FactoryGirl.create(
+    FactoryGirl.create(
       :context,
       country: FactoryGirl.create(:country, name: 'BRAZIL', iso2: 'BR'),
       commodity: FactoryGirl.create(:commodity, name: 'SOY')
     )
-    column_position = 0
-    {
-      0 => [biome, state, logistics_hub, municipality],
-      1 => [exporter1, port1],
-      2 => [importer1],
-      3 => [country_of_destination1]
-    }.each do |column_group, node_list|
-      node_list.each do |node|
-        FactoryGirl.create(
-          :context_node,
-          context: context,
-          node_type: node.node_type,
-          column_position: column_position,
-          column_group: column_group
-        )
-        column_position += 1
-      end
-    end
-    context
   }
   include_context "brazil soy nodes"
 
