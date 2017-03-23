@@ -563,9 +563,9 @@ CREATE MATERIALIZED VIEW flow_indicators AS
     q.name,
     NULL::text AS unit,
     q.name AS name_with_unit
-   FROM (flow_quals f
+   FROM ((flow_quals f
      JOIN quals q ON ((f.qual_id = q.qual_id)))
-  WHERE (q.name = 'ZERO_DEFORESTATION'::text)
+     JOIN context_indicators ci ON (((ci.indicator_attribute_type = 'Qual'::attribute_type) AND (ci.indicator_attribute_id = q.qual_id))))
   GROUP BY f.flow_id, f.qual_id, f.value, q.name
 UNION ALL
  SELECT f.flow_id,
@@ -579,9 +579,9 @@ UNION ALL
             WHEN (i.unit IS NULL) THEN i.name
             ELSE (((i.name || ' ('::text) || i.unit) || ')'::text)
         END AS name_with_unit
-   FROM (flow_inds f
+   FROM ((flow_inds f
      JOIN inds i ON ((f.ind_id = i.ind_id)))
-  WHERE (i.name = ANY (ARRAY['BIODIVERSITY'::text, 'FOREST_500'::text, 'SMALLHOLDERS'::text, 'WATER_SCARCITY'::text, 'COMPLIANCE_FOREST_CODE'::text]))
+     JOIN context_indicators ci ON (((ci.indicator_attribute_type = 'Ind'::attribute_type) AND (ci.indicator_attribute_id = i.ind_id))))
   GROUP BY f.flow_id, f.ind_id, f.value, i.name, i.unit
 UNION ALL
  SELECT f.flow_id,
@@ -595,9 +595,9 @@ UNION ALL
             WHEN (q.unit IS NULL) THEN q.name
             ELSE (((q.name || ' ('::text) || q.unit) || ')'::text)
         END AS name_with_unit
-   FROM (flow_quants f
+   FROM ((flow_quants f
      JOIN quants q ON ((f.quant_id = q.quant_id)))
-  WHERE (q.name = ANY (ARRAY['AGROSATELITE_SOY_DEFOR_'::text, 'GHG'::text, 'POTENTIAL_SOY_RELATED_DEFOR'::text, 'SOY_'::text, 'TOTAL_DEFOR_RATE'::text]))
+     JOIN context_indicators ci ON (((ci.indicator_attribute_type = 'Quant'::attribute_type) AND (ci.indicator_attribute_id = q.quant_id))))
   GROUP BY f.flow_id, f.quant_id, f.value, q.name, q.unit
   WITH NO DATA;
 
@@ -685,10 +685,15 @@ CREATE MATERIALIZED VIEW node_flows AS
  SELECT f.node_id,
     n.geo_id,
         CASE
-            WHEN (nt.node_type = ANY (ARRAY['STATE'::text, 'BIOME'::text])) THEN upper(n.name)
+            WHEN (cn.node_type = ANY (ARRAY['COUNTRY OF PRODUCTION'::text, 'BIOME'::text, 'LOGISTICS HUB'::text, 'STATE'::text])) THEN upper(n.name)
             ELSE initcap(n.name)
         END AS name,
-    nt.node_type,
+        CASE
+            WHEN (cn.node_type = 'COUNTRY OF PRODUCTION'::text) THEN false
+            ELSE true
+        END AS needs_total,
+    cn.column_group,
+    cn.column_position,
     f.flow_id,
     f.year,
     f.context_id
@@ -699,9 +704,14 @@ CREATE MATERIALIZED VIEW node_flows AS
             flows.context_id
            FROM flows,
             LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) f
+     JOIN ( SELECT context_nodes.context_id,
+            context_nodes.column_group,
+            context_nodes.column_position,
+            context_nodes.node_type_id,
+            node_types.node_type
+           FROM (context_nodes
+             JOIN node_types ON ((node_types.node_type_id = context_nodes.node_type_id)))) cn ON (((f."position" = (cn.column_position + 1)) AND (f.context_id = cn.context_id))))
      JOIN nodes n ON ((n.node_id = f.node_id)))
-     JOIN node_types nt ON ((nt.node_type_id = n.node_type_id)))
-  WHERE (nt.node_type = ANY (ARRAY['STATE'::text, 'BIOME'::text, 'MUNICIPALITY'::text, 'EXPORTER'::text, 'IMPORTER'::text, 'COUNTRY'::text]))
   WITH NO DATA;
 
 
@@ -712,7 +722,9 @@ CREATE MATERIALIZED VIEW node_flows AS
 CREATE MATERIALIZED VIEW materialized_flows AS
  WITH aggregated_flows AS (
          SELECT f.context_id,
-            f.node_type,
+            f.column_group,
+            f.column_position,
+            f.needs_total,
             f.name AS node,
             f.node_id,
             f.geo_id,
@@ -730,14 +742,16 @@ CREATE MATERIALIZED VIEW materialized_flows AS
             bool_and(fi.boolean_value) AS bool_and,
             sum(fi.numeric_value) AS sum
            FROM ((((node_flows f
-             JOIN node_flows f_ex ON (((f_ex.node_type = 'EXPORTER'::text) AND (f.flow_id = f_ex.flow_id))))
-             JOIN node_flows f_im ON (((f_im.node_type = 'IMPORTER'::text) AND (f.flow_id = f_im.flow_id))))
-             JOIN node_flows f_ctry ON (((f_ctry.node_type = 'COUNTRY'::text) AND (f.flow_id = f_ctry.flow_id))))
+             JOIN node_flows f_ex ON (((f_ex.column_group = 1) AND (f.flow_id = f_ex.flow_id))))
+             JOIN node_flows f_im ON (((f_im.column_group = 2) AND (f.flow_id = f_im.flow_id))))
+             JOIN node_flows f_ctry ON (((f_ctry.column_group = 3) AND (f.flow_id = f_ctry.flow_id))))
              JOIN flow_indicators fi ON ((f.flow_id = fi.flow_id)))
-          GROUP BY f.context_id, f.year, f.node_id, f.node_type, f.name, f.geo_id, f_ex.node_id, f_ex.name, f_im.node_id, f_im.name, f_ctry.node_id, f_ctry.name, fi.indicator_type, fi.indicator_id, fi.name, fi.name_with_unit
+          WHERE (f.column_group = 0)
+          GROUP BY f.context_id, f.year, f.node_id, f.column_group, f.column_position, f.needs_total, f.name, f.geo_id, f_ex.node_id, f_ex.name, f_im.node_id, f_im.name, f_ctry.node_id, f_ctry.name, fi.indicator_type, fi.indicator_id, fi.name, fi.name_with_unit
         ), with_totals AS (
          SELECT aggregated_flows.context_id,
-            NULL::text AS node_type,
+            aggregated_flows.column_group,
+            aggregated_flows.column_position,
             'TOTAL'::text AS node,
             NULL::integer AS node_id,
             NULL::text AS geo_id,
@@ -757,11 +771,12 @@ CREATE MATERIALIZED VIEW materialized_flows AS
                     ELSE (sum(aggregated_flows.sum))::text
                 END AS total
            FROM aggregated_flows
-          WHERE (aggregated_flows.node_type = 'STATE'::text)
-          GROUP BY aggregated_flows.context_id, aggregated_flows.exporter_node_id, aggregated_flows.exporter_node, aggregated_flows.importer_node_id, aggregated_flows.importer_node, aggregated_flows.country_node_id, aggregated_flows.country_node, aggregated_flows.year, aggregated_flows.indicator_type, aggregated_flows.indicator_id, aggregated_flows.indicator_with_unit
+          WHERE ((aggregated_flows.column_group = 0) AND (aggregated_flows.column_position = 0) AND aggregated_flows.needs_total)
+          GROUP BY aggregated_flows.context_id, aggregated_flows.column_group, aggregated_flows.column_position, aggregated_flows.exporter_node_id, aggregated_flows.exporter_node, aggregated_flows.importer_node_id, aggregated_flows.importer_node, aggregated_flows.country_node_id, aggregated_flows.country_node, aggregated_flows.year, aggregated_flows.indicator_type, aggregated_flows.indicator_id, aggregated_flows.indicator_with_unit
         UNION ALL
          SELECT aggregated_flows.context_id,
-            aggregated_flows.node_type,
+            aggregated_flows.column_group,
+            aggregated_flows.column_position,
             aggregated_flows.node,
             aggregated_flows.node_id,
             aggregated_flows.geo_id,
@@ -783,7 +798,8 @@ CREATE MATERIALIZED VIEW materialized_flows AS
            FROM aggregated_flows
         )
  SELECT with_totals.context_id,
-    with_totals.node_type,
+    with_totals.column_group,
+    with_totals.column_position,
     with_totals.node,
     with_totals.node_id,
     with_totals.geo_id,
@@ -801,11 +817,9 @@ CREATE MATERIALIZED VIEW materialized_flows AS
    FROM with_totals
   ORDER BY
         CASE
-            WHEN (with_totals.node_type IS NULL) THEN 1
-            WHEN (with_totals.node_type = 'STATE'::text) THEN 2
-            WHEN (with_totals.node_type = 'BIOME'::text) THEN 3
-            ELSE 4
-        END, with_totals.node, with_totals.exporter_node, with_totals.importer_node, with_totals.country_node, with_totals.indicator_with_unit
+            WHEN (with_totals.node = 'TOTAL'::text) THEN 0
+            ELSE 1
+        END, with_totals.column_group, with_totals.column_position, with_totals.node, with_totals.exporter_node, with_totals.importer_node, with_totals.country_node, with_totals.indicator_with_unit
   WITH NO DATA;
 
 
@@ -1257,10 +1271,10 @@ CREATE INDEX index_materialized_flows_on_indicator_type_and_indicator_id ON mate
 
 
 --
--- Name: index_node_flows_on_node_type_and_flow_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_node_flows_on_column_group_and_flow_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_node_flows_on_node_type_and_flow_id ON node_flows USING btree (node_type, flow_id);
+CREATE INDEX index_node_flows_on_column_group_and_flow_id ON node_flows USING btree (column_group, flow_id);
 
 
 --
@@ -1499,6 +1513,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170314113737'),
 ('20170314115226'),
 ('20170314115306'),
-('20170316135218');
+('20170316135218'),
+('20170323090506');
 
 
