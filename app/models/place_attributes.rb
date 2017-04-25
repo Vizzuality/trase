@@ -46,6 +46,7 @@ class PlaceAttributes
     end
 
     @data = @data.merge(top_traders)
+    @data = @data.merge(top_consumers)
   end
 
   def result
@@ -81,7 +82,7 @@ class PlaceAttributes
     trader_index = ContextNode.joins(:node_type).
       where(context_id: @context.id).
       where('node_types.node_type' => NodeTypeName::EXPORTER).
-      pluck(:column_position).first
+      pluck(:column_position).first + 1
 
     select_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
@@ -111,16 +112,60 @@ class PlaceAttributes
 
     sum_traders = top_traders.map{ |t| t[:value] }.reduce(0, :+)
 
-    matrix = [
-      [0] + top_traders.map{ |t| t['value'] },
-      top_traders.map{ |t| [t['value']] + Array.new((top_traders.size - 1), 0) }
-    ]
-
     {
       top_traders: {
         actors: top_traders.map{ |t| {id: t['trader_id'], name: t['name'], value: t['value']/sum_traders} },
-        matrix: matrix
+        matrix: [
+          [0] + top_traders.map{ |t| t['value'] },
+          top_traders.map{ |t| [t['value']] + Array.new((top_traders.size - 1), 0) }
+        ]
       }
     }
+  end
+
+  def top_consumers
+    consumer_index = ContextNode.joins(:node_type).
+      where(context_id: @context.id).
+      where('node_types.node_type' => NodeTypeName::COUNTRY).
+      pluck(:column_position).first + 1
+
+    select_clause = ActiveRecord::Base.send(
+      :sanitize_sql_array,
+      ["flows.path[?] AS consumer_id, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, nodes.name AS name",
+      consumer_index]
+    )
+    nodes_join_clause = ActiveRecord::Base.send(
+      :sanitize_sql_array,
+      ["LEFT JOIN nodes ON nodes.node_id = flows.path[?] AND nodes.name not LIKE 'UNKNOWN%'",
+      consumer_index]
+    )
+    group_clause = ActiveRecord::Base.send(
+      :sanitize_sql_array,
+      ["flows.path[?], nodes.name",
+      consumer_index]
+    )
+    top_consumers = Flow.select(select_clause).
+      joins('LEFT JOIN flow_quants ON flows.flow_id = flow_quants.flow_id').
+      joins("JOIN quants ON quants.quant_id = flow_quants.quant_id AND quants.name = 'Volume'").
+      joins(nodes_join_clause).
+      where('flows.context_id' => @context.id).
+      where('? = ANY(path)', @node.id).
+      where(year: @context.default_year).
+      group(group_clause).
+      order('value DESC').
+      limit(10)
+
+    sum_consumers = top_consumers.map{ |t| t[:value] }.reduce(0, :+)
+
+    {
+      top_consumers: {
+        countries: top_consumers.map{ |t| {id: t['consumer_id'], name: t['name'], value: t['value']/sum_consumers} },
+        matrix: [
+          [0] + top_consumers.map{ |t| t['value'] },
+          top_consumers.map{ |t| [t['value']] + Array.new((top_consumers.size - 1), 0) }
+        ]
+      }
+    }
+
   end
 end
