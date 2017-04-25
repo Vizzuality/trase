@@ -41,12 +41,17 @@ class PlaceAttributes
       @data[(node.node_type.node_type.downcase + '_geo_id').to_sym] = node.geo_id
     end
 
+    @place_quals = @node.place_quals
+    @place_quants = @node.place_quants
+    @place_inds = @node.place_inds
+
     if [NodeTypeName::MUNICIPALITY, NodeTypeName::LOGISTICS_HUB].include? @node_type
       @data = @data.merge(municipality_and_logistics_hub_extra_data)
     end
 
     @data = @data.merge(top_traders)
     @data = @data.merge(top_consumers)
+    @data = @data.merge(indicators)
   end
 
   def result
@@ -57,23 +62,20 @@ class PlaceAttributes
 
   def municipality_and_logistics_hub_extra_data
     data = {}
-    place_quals = @node.place_quals
-    place_quants = @node.place_quants
-    place_inds = @node.place_inds
 
-    biome_name = place_quals[NodeTypeName::BIOME]['value']
+    biome_name = @place_quals[NodeTypeName::BIOME]['value']
     biome = Node.biomes.find_by_name(biome_name)
     data[:biome_name] = biome_name
     data[:biome_geo_id] = biome.try(:geo_id)
-    state_name = place_quals[NodeTypeName::STATE]['value']
+    state_name = @place_quals[NodeTypeName::STATE]['value']
     state = Node.states.find_by_name(state_name)
     data[:state_name] = state_name
     data[:state_geo_id] = state.try(:geo_id)
-    if place_quants['AREA_KM2'].present?
-      data[:area] = place_quants['AREA_KM2']['value']
+    if @place_quants['AREA_KM2'].present?
+      data[:area] = @place_quants['AREA_KM2']['value']
     end
-    if place_inds['SOY_AREAPERC'].present?
-      data[:soy_farmland] = place_inds['SOY_AREAPERC']['value']
+    if @place_inds['SOY_AREAPERC'].present?
+      data[:soy_farmland] = @place_inds['SOY_AREAPERC']['value']
     end
     data
   end
@@ -87,6 +89,67 @@ class PlaceAttributes
   def top_consumers
     {
       top_consumers: top_nodes(NodeTypeName::COUNTRY, :countries)
+    }
+  end
+
+  def indicators
+
+    {
+      indicators: [
+        sustainability_indicators
+      ]
+    }
+  end
+
+  def sustainability_indicators
+    included_columns = [
+      {name: 'Soy deforestation (until 2014)', unit: 'ha'},
+      {name: 'Number of environmental embargoes (2015)'},
+      {name: 'Area affected by fires (2013)', unit: 'km2'},
+      {name: 'Cases of forced labor (2014)'},
+      {name: 'Cases of land conflicts (2014)'},
+      {name: 'Biodiversity (loss of amphibian habitat)'},
+      {name: 'Annual deforestation rate (2015)', unit: 'ha'},
+      {name: 'Human development index (2013)'},
+      {name: 'Criticality of water scarcity (2013)'}
+    ]
+
+    sustainability_values =
+      [
+        'AGROSATELITE_SOY_DEFOR_',
+        'EMBARGOES_',
+        'FIRE_KM2_',
+        'SLAVERY',
+        'LAND_CONFL',
+        'BIODIVERSITY'
+      ].map do |name|
+        if @place_quants[name].present?
+          @place_quants[name]['value']
+        else
+          nil
+        end
+      end +
+      [
+        'TOTAL_DEFOR_RATE',
+        'HDI',
+        'WATER_SCARCITY'
+      ].map do |name|
+        if @place_inds[name].present?
+          @place_inds[name]['value']
+        else
+          nil
+        end
+      end
+    {
+      name: 'Key sustainability indicators',
+      included_columns: included_columns,
+      rows: [
+        {
+          name: 'Score',
+          values: sustainability_values
+        }
+        # TODO State ranking
+      ]
     }
   end
 
