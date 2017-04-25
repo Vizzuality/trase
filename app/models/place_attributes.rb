@@ -123,10 +123,15 @@ class PlaceAttributes
 
     sum_traders = top_traders.map{ |t| t[:value] }.reduce(0, :+)
 
+    matrix = [
+      [0] + top_traders.map{ |t| t['value'] },
+      top_traders.map{ |t| [t['value']] + Array.new((top_traders.size - 1), 0) }
+    ]
+
     {
       top_traders: {
         actors: top_traders.map{ |t| {id: t['trader_id'], name: t['name'], value: t['value']/sum_traders} },
-        matrix: [] #TODO
+        matrix: matrix
       }
     }
   end
