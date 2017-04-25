@@ -14,6 +14,8 @@ class PlaceFactsheetController < ApplicationController
 
     node = Node.place_nodes.find(node_id)
 
-    render json: PlaceAttributes.new(context, node).result
+    @result = PlaceAttributes.new(context, node).result
+
+    render json: @result
   end
 end

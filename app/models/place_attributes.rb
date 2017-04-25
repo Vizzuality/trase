@@ -31,16 +31,14 @@ class PlaceAttributes
     #               .joins(node_quants: [:node])
     #               .where('place_factsheet IS TRUE AND place_factsheet_temporal IS TRUE AND nodes.node_id = :node_id', { :node_id => node_id })
 
-    # @single_value_metrics = single_quant_values #+ single_qual_values + single_ind_values
-
     @data = {
       column_name: @node_type,
       country_name: @context.country.name,
       country_geo_id: @context.country.iso2
     }
     ([@node] + @node.ancestors.to_a).each do |node|
-      @data[node.node_type.node_type.downcase + '_name'] = node.name
-      @data[node.node_type.node_type.downcase + '_geo_id'] = node.geo_id
+      @data[(node.node_type.node_type.downcase + '_name').to_sym] = node.name
+      @data[(node.node_type.node_type.downcase + '_geo_id').to_sym] = node.geo_id
     end
 
     if [NodeTypeName::MUNICIPALITY, NodeTypeName::LOGISTICS_HUB].include? @node_type
@@ -48,16 +46,6 @@ class PlaceAttributes
     end
 
     @data = @data.merge(top_traders)
-
-    # @result = {
-    #     data: data,
-    #     type: node.node_type.node_type,
-    #     name: node.name,
-    #     geo_id: node.geo_id,
-    #     single_value_metrics: @single_value_metrics,
-    #     place_quants: node.place_quants
-    #     #temporal_quants: @temporal_quants
-    # }
   end
 
   def result
@@ -74,17 +62,17 @@ class PlaceAttributes
 
     biome_name = place_quals[NodeTypeName::BIOME]['value']
     biome = Node.biomes.find_by_name(biome_name)
-    data['biome_name'] = biome_name
-    data['biome_geo_id'] = biome.try(:geo_id)
+    data[:biome_name] = biome_name
+    data[:biome_geo_id] = biome.try(:geo_id)
     state_name = place_quals[NodeTypeName::STATE]['value']
     state = Node.states.find_by_name(state_name)
-    data['state_name'] = state_name
-    data['state_geo_id'] = state.try(:geo_id)
+    data[:state_name] = state_name
+    data[:state_geo_id] = state.try(:geo_id)
     if place_quants['AREA_KM2'].present?
-      data['area'] = place_quants['AREA_KM2']['value']
+      data[:area] = place_quants['AREA_KM2']['value']
     end
     if place_inds['SOY_AREAPERC'].present?
-      data['soy_farmland'] = place_inds['SOY_AREAPERC']['value']
+      data[:soy_farmland] = place_inds['SOY_AREAPERC']['value']
     end
     data
   end
