@@ -79,72 +79,41 @@ class PlaceAttributes
   end
 
   def top_traders
-    trader_index = ContextNode.joins(:node_type).
-      where(context_id: @context.id).
-      where('node_types.node_type' => NodeTypeName::EXPORTER).
-      pluck(:column_position).first + 1
-
-    select_clause = ActiveRecord::Base.send(
-      :sanitize_sql_array,
-      ["flows.path[?] AS trader_id, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, nodes.name AS name",
-      trader_index]
-    )
-    nodes_join_clause = ActiveRecord::Base.send(
-      :sanitize_sql_array,
-      ["LEFT JOIN nodes ON nodes.node_id = flows.path[?] AND nodes.name not LIKE 'UNKNOWN%'",
-      trader_index]
-    )
-    group_clause = ActiveRecord::Base.send(
-      :sanitize_sql_array,
-      ["flows.path[?], nodes.name",
-      trader_index]
-    )
-    top_traders = Flow.select(select_clause).
-      joins('LEFT JOIN flow_quants ON flows.flow_id = flow_quants.flow_id').
-      joins("JOIN quants ON quants.quant_id = flow_quants.quant_id AND quants.name = 'Volume'").
-      joins(nodes_join_clause).
-      where('flows.context_id' => @context.id).
-      where('? = ANY(path)', @node.id).
-      where(year: @context.default_year).
-      group(group_clause).
-      order('value DESC').
-      limit(10)
-
-    sum_traders = top_traders.map{ |t| t[:value] }.reduce(0, :+)
-
     {
-      top_traders: {
-        actors: top_traders.map{ |t| {id: t['trader_id'], name: t['name'], value: t['value']/sum_traders} },
-        matrix: [
-          [0] + top_traders.map{ |t| t['value'] },
-          top_traders.map{ |t| [t['value']] + Array.new((top_traders.size - 1), 0) }
-        ]
-      }
+      top_traders: top_nodes(NodeTypeName::EXPORTER, :actors)
     }
   end
 
   def top_consumers
-    consumer_index = ContextNode.joins(:node_type).
+    {
+      top_consumers: top_nodes(NodeTypeName::COUNTRY, :countries)
+    }
+  end
+
+  private
+
+  def top_nodes(node_type, node_list_label)
+    node_index = ContextNode.joins(:node_type).
       where(context_id: @context.id).
-      where('node_types.node_type' => NodeTypeName::COUNTRY).
+      where('node_types.node_type' => node_type).
       pluck(:column_position).first + 1
 
     select_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
-      ["flows.path[?] AS consumer_id, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, nodes.name AS name",
-      consumer_index]
+      ["flows.path[?] AS node_id, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, nodes.name AS name",
+      node_index]
     )
     nodes_join_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
       ["LEFT JOIN nodes ON nodes.node_id = flows.path[?] AND nodes.name not LIKE 'UNKNOWN%'",
-      consumer_index]
+      node_index]
     )
     group_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
       ["flows.path[?], nodes.name",
-      consumer_index]
+      node_index]
     )
-    top_consumers = Flow.select(select_clause).
+    top_nodes = Flow.select(select_clause).
       joins('LEFT JOIN flow_quants ON flows.flow_id = flow_quants.flow_id').
       joins("JOIN quants ON quants.quant_id = flow_quants.quant_id AND quants.name = 'Volume'").
       joins(nodes_join_clause).
@@ -155,17 +124,14 @@ class PlaceAttributes
       order('value DESC').
       limit(10)
 
-    sum_consumers = top_consumers.map{ |t| t[:value] }.reduce(0, :+)
+    node_value_sum = top_nodes.map{ |t| t[:value] }.reduce(0, :+)
 
     {
-      top_consumers: {
-        countries: top_consumers.map{ |t| {id: t['consumer_id'], name: t['name'], value: t['value']/sum_consumers} },
-        matrix: [
-          [0] + top_consumers.map{ |t| t['value'] },
-          top_consumers.map{ |t| [t['value']] + Array.new((top_consumers.size - 1), 0) }
-        ]
-      }
+      countries: top_nodes.map{ |t| {id: t['node_id'], name: t['name'], value: t['value']/node_value_sum} },
+      matrix: [
+        [0] + top_nodes.map{ |t| t['value'] },
+        top_nodes.map{ |t| [t['value']] + Array.new((top_nodes.size - 1), 0) }
+      ]
     }
-
   end
 end
