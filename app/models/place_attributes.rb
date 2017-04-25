@@ -96,61 +96,39 @@ class PlaceAttributes
 
     {
       indicators: [
-        sustainability_indicators
+        sustainability_indicators,
+        socioeconomic_indicators
       ]
     }
   end
 
   def sustainability_indicators
-    included_columns = [
-      {name: 'Soy deforestation (until 2014)', unit: 'ha'},
-      {name: 'Number of environmental embargoes (2015)'},
-      {name: 'Area affected by fires (2013)', unit: 'km2'},
-      {name: 'Cases of forced labor (2014)'},
-      {name: 'Cases of land conflicts (2014)'},
-      {name: 'Biodiversity (loss of amphibian habitat)'},
-      {name: 'Annual deforestation rate (2015)', unit: 'ha'},
-      {name: 'Human development index (2013)'},
-      {name: 'Criticality of water scarcity (2013)'}
+    indicators_list = [
+      {name: 'Soy deforestation (until 2014)', unit: 'ha', type: 'quant', backend_name: 'AGROSATELITE_SOY_DEFOR_'},
+      {name: 'Number of environmental embargoes (2015)', type: 'quant', backend_name: 'EMBARGOES_'},
+      {name: 'Area affected by fires (2013)', unit: 'km2', type: 'quant', backend_name: 'FIRE_KM2_'},
+      {name: 'Cases of forced labor (2014)', type: 'quant', backend_name: 'SLAVERY'},
+      {name: 'Cases of land conflicts (2014)', type: 'quant', backend_name: 'LAND_CONFL'},
+      {name: 'Biodiversity (loss of amphibian habitat)', type: 'quant', backend_name: 'BIODIVERSITY'},
+      {name: 'Annual deforestation rate (2015)', unit: 'ha', type: 'ind', backend_name: 'TOTAL_DEFOR_RATE'},
+      {name: 'Human development index (2013)', type: 'ind', backend_name: 'HDI'},
+      {name: 'Criticality of water scarcity (2013)', type: 'ind', backend_name: 'WATER_SCARCITY'}
     ]
 
-    sustainability_values =
-      [
-        'AGROSATELITE_SOY_DEFOR_',
-        'EMBARGOES_',
-        'FIRE_KM2_',
-        'SLAVERY',
-        'LAND_CONFL',
-        'BIODIVERSITY'
-      ].map do |name|
-        if @place_quants[name].present?
-          @place_quants[name]['value']
-        else
-          nil
-        end
-      end +
-      [
-        'TOTAL_DEFOR_RATE',
-        'HDI',
-        'WATER_SCARCITY'
-      ].map do |name|
-        if @place_inds[name].present?
-          @place_inds[name]['value']
-        else
-          nil
-        end
-      end
-    {
-      name: 'Key sustainability indicators',
-      included_columns: included_columns,
-      rows: [
-        {
-          name: 'Score',
-          values: sustainability_values
-        }
-        # TODO State ranking
-      ]
-    }
+    indicators_group(indicators_list, 'Key sustainability indicators')
+  end
+
+  def socioeconomic_indicators
+    indicators_list = [
+      {name: 'Soy production (2015)', unit: 'Tn', type: 'quant', backend_name: 'SOY_TN'},
+      {name: 'Cattle', unit: 'heads', type: 'quant', backend_name: 'CATTLE_HEADS'},
+      {name: 'Soy yield', unit: 'Tn/ha', type: 'ind', backend_name: 'SOY_YIELD'},
+      {name: 'Area soy', unit: '%', type: 'ind', backend_name: 'SOY_AREAPERC'},
+      {name: 'Area maize', unit: '%', type: 'ind', backend_name: 'MAIZE_AREAPERC'},
+      {name: 'Area cotton', unit: '%', type: 'ind', backend_name: 'COTTON_AREAPERC'}
+    ]
+
+    indicators_group(indicators_list, 'Socio-economic indicators')
   end
 
   private
@@ -194,6 +172,36 @@ class PlaceAttributes
       matrix: [
         [0] + top_nodes.map{ |t| t['value'] },
         top_nodes.map{ |t| [t['value']] + Array.new((top_nodes.size - 1), 0) }
+      ]
+    }
+  end
+
+  def indicators_group(list, name)
+    included_columns = list.map{ |i| i.slice(:name, :unit)}
+    values =
+      list.select{ |i| i[:type] == 'quant'}.map do |indicator|
+        if @place_quants[indicator[:backend_name]].present?
+          @place_quants[indicator[:backend_name]]['value']
+        else
+          nil
+        end
+      end +
+      list.select{ |i| i[:type] == 'ind'}.map do |indicator|
+        if @place_inds[indicator[:backend_name]].present?
+          @place_inds[indicator[:backend_name]]['value']
+        else
+          nil
+        end
+      end
+    {
+      name: name,
+      included_columns: included_columns,
+      rows: [
+        {
+          name: 'Score',
+          values: values
+        }
+        # TODO State ranking
       ]
     }
   end
