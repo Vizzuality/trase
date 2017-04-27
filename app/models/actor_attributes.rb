@@ -16,6 +16,7 @@ class ActorAttributes
     end
 
     @data = @data.merge(top_countries)
+    @data = @data.merge(top_sources)
   end
 
   def result
@@ -25,23 +26,39 @@ class ActorAttributes
   end
 
   def top_countries
-    top_volume_countries = TopVolumeNodes.new(@context, @node, NodeTypeName::COUNTRY)
-    top_volume_countries_by_year = top_volume_countries.top_volume_nodes_by_year
-    years = top_volume_countries.years
+    top_nodes_summary(NodeTypeName::COUNTRY, :top_countries)
+  end
 
+  def top_sources
     {
-      top_countries: {
+      top_sources: [NodeTypeName::MUNICIPALITY, NodeTypeName::BIOME, NodeTypeName::STATE].map do |node_type|
+        top_nodes_summary(node_type, node_type.downcase)
+      end
+    }
+  end
+
+  private
+
+  def top_nodes_summary(node_type, node_list_label)
+    top_volume_nodes = TopVolumeNodes.new(@context, @node, node_type)
+    top_volume_nodes_by_year = top_volume_nodes.top_volume_nodes_by_year
+    years = top_volume_nodes.years
+    {
+      node_list_label => {
         included_years: years,
-        lines: top_volume_countries.top_volume_nodes.map do |node|
+        lines: top_volume_nodes.top_volume_nodes.map do |node|
           {
             name: node['name'],
             geo_id: node['geo_id'],
             values: years.map do |year|
-              top_volume_countries_by_year.select { |v| v['node_id'] == node['node_id'] && v['year'] == year }.first['value']
+              top_volume_nodes_by_year.select do |v|
+                v['node_id'] == node['node_id'] && v['year'] == year
+              end.first['value']
             end
           }
         end
       }
     }
+
   end
 end
