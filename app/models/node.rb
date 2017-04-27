@@ -77,6 +77,10 @@ class Node < ActiveRecord::Base
     end]
   end
 
+  def place_temporal_quants
+    node_quants.joins(:quant)# TODO: data update? .where('quants.place_factsheet_temporal' => true)
+  end
+
   def place_inds
     data = node_inds.
       joins(:ind).

@@ -52,6 +52,7 @@ class PlaceAttributes
     @data = @data.merge(top_traders)
     @data = @data.merge(top_consumers)
     @data = @data.merge(indicators)
+    @data = @data.merge(trajectory_deforestation)
   end
 
   def result
@@ -129,6 +130,30 @@ class PlaceAttributes
     ]
 
     indicators_group(indicators_list, 'Socio-economic indicators')
+  end
+
+  def trajectory_deforestation
+    indicators_list = [
+      {name: 'Soy related deforestation', backend_name: 'AGROSATELITE_SOY_DEFOR_'},
+      {name: 'Potential Soy related deforestation', backend_name: 'POTENTIAL_SOY_RELATED_DEFOR'},
+      {name: 'Territorial Deforestation', backend_name: 'DEFORESTATION'}
+    ]
+    data = @node.place_temporal_quants.
+      where('quants.name' => indicators_list.map{ |i| i[:backend_name] }).
+      order('node_quants.year')
+    years = data.distinct.pluck('node_quants.year')
+    {
+      included_years: years,
+      lines: indicators_list.map do |i|
+        values = Hash[data.where('quants.name' => i[:backend_name]).map do |e|
+          [e['year'], e]
+        end]
+        {
+          name: i[:name],
+          values: years.map{ |y| values[y] }
+        }
+      end
+    }
   end
 
   private
