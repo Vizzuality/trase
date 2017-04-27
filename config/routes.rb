@@ -10,5 +10,5 @@ Rails.application.routes.draw do
   get '/get_contexts', to: 'structure#get_contexts'
   get '/get_all_nodes', to: 'nodes#get_all_nodes'
   get '/get_place_node_attributes', to: 'place_factsheet#place_data'
-
+  get '/get_actor_node_attributes', to: 'actor_factsheet#actor_data'
 end

@@ -39,6 +39,15 @@ class Node < ActiveRecord::Base
     )
   }
 
+  scope :actor_nodes, -> {
+    includes(:node_type).
+    where(
+      'node_types.node_type' => [
+        NodeTypeName::IMPORTER, NodeTypeName::EXPORTER
+      ]
+    )
+  }
+
   def ancestors(ancestors_memo=[])
     return ancestors_memo.push(self) if self.parent.nil?
     parent.ancestors(ancestors_memo.push(self))
@@ -57,6 +66,16 @@ class Node < ActiveRecord::Base
     Hash[data.map do |e|
       [e['name'], e]
     end]
+  end
+
+  def actor_quals
+    node_quals.
+      joins(:qual).
+      where('quals.actor_factsheet' => true).
+      select([
+        'quals.name',
+        'node_quals.value'
+      ])
   end
 
   def place_quants
