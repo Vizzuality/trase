@@ -96,6 +96,16 @@ class Node < ActiveRecord::Base
     end]
   end
 
+  def actor_quants
+    node_quants.
+      joins(:quant).
+      where('quants.actor_factsheet' => true).
+      select([
+        'quants.name',
+        'node_quants.value'
+      ])
+  end
+
   def place_temporal_quants
     node_quants.joins(:quant)# TODO: data update? .where('quants.place_factsheet_temporal' => true)
   end
@@ -113,6 +123,16 @@ class Node < ActiveRecord::Base
     Hash[data.map do |e|
       [e['name'], e]
     end]
+  end
+
+  def actor_inds
+    node_inds.
+      joins(:ind).
+      where('inds.actor_factsheet' => true).
+      select([
+        'inds.name',
+        'node_inds.value'
+      ])
   end
 
 end
