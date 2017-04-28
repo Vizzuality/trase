@@ -1,4 +1,4 @@
-class TopVolumeNodes
+class FlowStatsForNode
 
   def initialize(context, node, node_type)
     @context = context

@@ -159,7 +159,7 @@ class PlaceAttributes
   private
 
   def top_nodes_summary(node_type, node_list_label)
-    top_nodes = TopVolumeNodes.new(@context, @node, node_type).top_volume_nodes
+    top_nodes = FlowStatsForNode.new(@context, @node, node_type).top_volume_nodes
     node_value_sum = top_nodes.map{ |t| t[:value] }.reduce(0, :+)
 
     {
