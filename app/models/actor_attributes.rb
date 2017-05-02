@@ -7,12 +7,14 @@ class ActorAttributes
     @data = {
       node_name: @node.name,
       summary: 'data missing',
-      column_name: @node_type,
-      country_name: @context.country.name,
-      country_geo_id: @context.country.iso2
+      column_name: @node_type
     }
     (@node.actor_quals + @node.actor_quants + @node.actor_inds).each do |q|
-      @data[q['name'].downcase] = q['value']
+      if q['name'] == 'SOY_'
+        @data[:total_soy_2015] = q['value'].to_f / 1000 # TODO hack
+      else
+        @data[q['name'].downcase] = q['value']
+      end
     end
 
     @data = @data.merge(top_countries)
@@ -32,10 +34,14 @@ class ActorAttributes
   end
 
   def top_sources
+    result = {
+      included_years: @context.years,
+    }
+    [NodeTypeName::MUNICIPALITY, NodeTypeName::BIOME, NodeTypeName::STATE].each do |node_type|
+      result = result.merge top_nodes_summary(node_type, node_type.downcase)
+    end
     {
-      top_sources: [NodeTypeName::MUNICIPALITY, NodeTypeName::BIOME, NodeTypeName::STATE].map do |node_type|
-        top_nodes_summary(node_type, node_type.downcase)
-      end
+      top_sources: result
     }
   end
 
@@ -52,7 +58,7 @@ class ActorAttributes
 
   def companies_exporting
     y_indicator = {
-      name: 'Soy exported in 2015', unit: 'Tn', type: 'quant', backend_name: 'Volume'
+      name: 'Soy exported in 2015', unit: 'Tn', type: 'quant', backend_name: 'SOY_'
     }
     x_indicators = [
       {name: 'Land use', unit: 'Ha', type: 'quant', backend_name: 'LAND_USE'},
@@ -69,45 +75,47 @@ class ActorAttributes
       ["JOIN nodes ON nodes.node_id = flows.path[?]",
       node_index]
     )
-    group_clause = ActiveRecord::Base.send(
-      :sanitize_sql_array,
-      ["flows.path[?], nodes.name, quants.name",
-      node_index]
-    )
-    puts "PRODUCTION TOTALS"
-    production_totals = Flow.
-      select('nodes.name, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, quants.name AS quant_name').
-      joins(flow_quants: :quant).
-      joins(nodes_join_clause).
+
+    production_totals = Node.
+      select('nodes.node_id AS node_id, nodes.name, sum(CAST(node_quants.value AS DOUBLE PRECISION)) AS value').
+      joins(node_quants: :quant).
       joins('JOIN node_types ON node_types.node_type_id = nodes.node_type_id').
       where('nodes.name NOT LIKE ?', 'UNKNOWN%').
-      where('flows.context_id' => @context.id).
       where('quants.name' => y_indicator[:backend_name]).
       where('node_types.node_type' => NodeTypeName::EXPORTER).
-      group(group_clause)
+      group('nodes.node_id, nodes.name, quants.name')
 
     indicator_totals = Flow.
-      select('nodes.name, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, quants.name AS quant_name').
-      joins(nodes_join_clause).
-      joins('JOIN node_types ON node_types.node_type_id = nodes.node_type_id').
-      joins(flow_quants: :quant).
-      where('nodes.name NOT LIKE ?', 'UNKNOWN%').
-      where('flows.context_id' => @context.id).
-      where('quants.name' => x_indicators.map{ |indicator| indicator[:backend_name] }).
-      where('node_types.node_type' => NodeTypeName::EXPORTER).
-      group(group_clause)
+        select('nodes.node_id AS node_id, nodes.name, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, quants.name AS quant_name').
+        joins(nodes_join_clause).
+        joins('JOIN node_types ON node_types.node_type_id = nodes.node_type_id').
+        joins(flow_quants: :quant).
+        where('nodes.name NOT LIKE ?', 'UNKNOWN%').
+        where('flows.context_id' => @context.id).
+        where('quants.name' => x_indicators.map{ |indicator| indicator[:backend_name] }).
+        where('node_types.node_type' => NodeTypeName::EXPORTER).
+        group('nodes.node_id, nodes.name, quants.name')
+
+    x_indicator_indexes = Hash[x_indicators.map.each_with_index do |indicator, idx|
+      [indicator[:backend_name], idx]
+    end]
+
+    indicator_totals_hash = {}
+    production_totals.each do |total|
+      indicator_totals_hash[total['node_id']] ||= Array.new(x_indicators.size)
+    end
+    indicator_totals.each do |total|
+      indicator_idx = x_indicator_indexes[total['quant_name']]
+      if indicator_totals_hash.key?(total['node_id'])
+        indicator_totals_hash[total['node_id']][indicator_idx] = total['value']
+      end
+    end
 
     exports = production_totals.map do |total|
-      node_id = total['node_id']
       {
         name: total['name'],
-        y: total['value'],
-        x: x_indicators.map do |indicator|
-          indicator_total = indicator_totals.select do |total|
-            total['node_id'] == node_id && total['quant_name'] == indicator[:backend_name]
-          end.first
-          indicator_total && indicator_total['value']
-        end
+        y: total['value'].to_f / 1000, # TODO hack
+        x: indicator_totals_hash[total['node_id']]
       }
     end
 
@@ -125,15 +133,13 @@ class ActorAttributes
   def top_nodes_summary(node_type, node_list_label)
     top_volume_nodes = FlowStatsForNode.new(@context, @node, node_type)
     top_volume_nodes_by_year = top_volume_nodes.top_volume_nodes_by_year
-    years = top_volume_nodes.years
     {
       node_list_label => {
-        included_years: years,
         lines: top_volume_nodes.top_volume_nodes.map do |node|
           {
             name: node['name'],
             geo_id: node['geo_id'],
-            values: years.map do |year|
+            values: @context.years.map do |year|
               top_volume_nodes_by_year.select do |v|
                 v['node_id'] == node['node_id'] && v['year'] == year
               end.first['value']
@@ -198,9 +204,10 @@ class ActorAttributes
       }
     end
     {
-      name: name,
-      included_columns: [{name: node_type.humanize}] + risk_indicators.map{ |indicator| indicator.slice(:name, :unit) },
-      rows: rows
+      node_type.downcase => {
+        included_columns: [{name: node_type.humanize}] + risk_indicators.map{ |indicator| indicator.slice(:name, :unit) },
+        rows: rows
+      }
     }
   end
 end

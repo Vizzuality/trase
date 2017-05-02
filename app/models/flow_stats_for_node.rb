@@ -41,10 +41,6 @@ class FlowStatsForNode
       group(group_clause)
   end
 
-  def years
-    top_volume_nodes_by_year.distinct.pluck(:year)
-  end
-
   def node_totals_for_quants(other_node_id, other_node_type, quant_names)
     other_node_index = node_index(other_node_type)
     nodes_join_clause = ActiveRecord::Base.send(
