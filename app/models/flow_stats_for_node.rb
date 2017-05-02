@@ -102,9 +102,6 @@ class FlowStatsForNode
   end
 
   def node_index(node_type)
-    ContextNode.joins(:node_type).
-      where(context_id: @context.id).
-      where('node_types.node_type' => node_type).
-      pluck(:column_position).first + 1
+    NodeType.node_index_for_type(@context, node_type)
   end
 end

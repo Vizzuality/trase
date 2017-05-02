@@ -18,6 +18,7 @@ class ActorAttributes
     @data = @data.merge(top_countries)
     @data = @data.merge(top_sources)
     @data = @data.merge(sustainability)
+    @data = @data.merge(companies_exporting)
   end
 
   def result
@@ -46,6 +47,76 @@ class ActorAttributes
       ].map do |group|
         sustainability_for_group(group[:name], group[:node_type], group[:is_total])
       end
+    }
+  end
+
+  def companies_exporting
+    y_indicator = {
+      name: 'Soy exported in 2015', unit: 'Tn', type: 'quant', backend_name: 'Volume'
+    }
+    x_indicators = [
+      {name: 'Land use', unit: 'Ha', type: 'quant', backend_name: 'LAND_USE'},
+      {name: 'Territorial Deforestation', unit: 'Ha', type: 'quant', backend_name: 'DEFORESTATION'},
+      {name: 'Potential Soy related deforestation', unit: 'Ha', type: 'quant', backend_name: 'POTENTIAL_SOY_RELATED_DEFOR'},
+      {name: 'Soy related deforestation', unit: 'Ha', type: 'quant', backend_name: 'AGROSATELITE_SOY_DEFOR_'},
+      {name: 'Loss of biodiversity', type: 'quant', backend_name: 'BIODIVERSITY'},
+      {name: 'Land-based emissions', unit: 'Tn', type: 'quant', backend_name: 'GHG_'}
+    ]
+
+    node_index = NodeType.node_index_for_type(@context, NodeTypeName::EXPORTER)
+    nodes_join_clause = ActiveRecord::Base.send(
+      :sanitize_sql_array,
+      ["JOIN nodes ON nodes.node_id = flows.path[?]",
+      node_index]
+    )
+    group_clause = ActiveRecord::Base.send(
+      :sanitize_sql_array,
+      ["flows.path[?], nodes.name, quants.name",
+      node_index]
+    )
+    puts "PRODUCTION TOTALS"
+    production_totals = Flow.
+      select('nodes.name, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, quants.name AS quant_name').
+      joins(flow_quants: :quant).
+      joins(nodes_join_clause).
+      joins('JOIN node_types ON node_types.node_type_id = nodes.node_type_id').
+      where('nodes.name NOT LIKE ?', 'UNKNOWN%').
+      where('flows.context_id' => @context.id).
+      where('quants.name' => y_indicator[:backend_name]).
+      where('node_types.node_type' => NodeTypeName::EXPORTER).
+      group(group_clause)
+
+    indicator_totals = Flow.
+      select('nodes.name, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, quants.name AS quant_name').
+      joins(nodes_join_clause).
+      joins('JOIN node_types ON node_types.node_type_id = nodes.node_type_id').
+      joins(flow_quants: :quant).
+      where('nodes.name NOT LIKE ?', 'UNKNOWN%').
+      where('flows.context_id' => @context.id).
+      where('quants.name' => x_indicators.map{ |indicator| indicator[:backend_name] }).
+      where('node_types.node_type' => NodeTypeName::EXPORTER).
+      group(group_clause)
+
+    exports = production_totals.map do |total|
+      node_id = total['node_id']
+      {
+        name: total['name'],
+        y: total['value'],
+        x: x_indicators.map do |indicator|
+          indicator_total = indicator_totals.select do |total|
+            total['node_id'] == node_id && total['quant_name'] == indicator[:backend_name]
+          end.first
+          indicator_total && indicator_total['value']
+        end
+      }
+    end
+
+    {
+      companies_exporting: {
+        dimension_y: y_indicator.slice(:name, :unit),
+        dimensions_x: x_indicators.map{ |i| i.slice(:name, :unit) },
+        companies: exports
+      }
     }
   end
 

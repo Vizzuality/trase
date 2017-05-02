@@ -48,6 +48,15 @@ class Node < ActiveRecord::Base
     )
   }
 
+  scope :exporters, -> {
+    includes(:node_type).
+    where(
+      'node_types.node_type' => [
+        NodeTypeName::EXPORTER
+      ]
+    )
+  }
+
   def ancestors(ancestors_memo=[])
     return ancestors_memo.push(self) if self.parent.nil?
     parent.ancestors(ancestors_memo.push(self))
