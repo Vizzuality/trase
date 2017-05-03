@@ -1,7 +1,8 @@
 class ActorAttributes
 
-  def initialize(context, node)
+  def initialize(context, year, node)
     @context = context
+    @year = year
     @node = node
     @node_type = @node.node_type.node_type
     @data = {
