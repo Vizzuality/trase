@@ -1,7 +1,8 @@
 class PlaceAttributes
 
-  def initialize(context, node)
+  def initialize(context, year, node)
     @context = context
+    @year = year
     @node = node
     @node_type = @node.node_type.node_type
 
@@ -159,7 +160,7 @@ class PlaceAttributes
   private
 
   def top_nodes_summary(node_type, node_list_label)
-    top_nodes = FlowStatsForNode.new(@context, @node, node_type).top_volume_nodes
+    top_nodes = FlowStatsForNode.new(@context, @year, @node, node_type).top_volume_nodes
     node_value_sum = top_nodes.map{ |t| t[:value] }.reduce(0, :+)
 
     {

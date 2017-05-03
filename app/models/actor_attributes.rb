@@ -132,8 +132,8 @@ class ActorAttributes
   private
 
   def top_nodes_summary(node_type, node_list_label)
-    top_volume_nodes = FlowStatsForNode.new(@context, @node, node_type)
     top_volume_nodes_by_year = top_volume_nodes.top_volume_nodes_by_year
+    top_volume_nodes = FlowStatsForNode.new(@context, @year, @node, node_type)
     {
       node_list_label => {
         lines: top_volume_nodes.top_volume_nodes.map do |node|
@@ -161,9 +161,9 @@ class ActorAttributes
 
   def sustainability_for_group(name, node_type, include_totals)
     group_totals_hash = Hash.new
-    top_nodes_in_group = FlowStatsForNode.new(@context, @node, node_type).top_deforestation_nodes
+    top_nodes_in_group = FlowStatsForNode.new(@context, @year, @node, node_type).top_deforestation_nodes
     rows = top_nodes_in_group.map do |node|
-      top_nodes = FlowStatsForNode.new(@context, @node, @node_type)
+      top_nodes = FlowStatsForNode.new(@context, @year, @node, @node_type)
       totals_per_indicator = top_nodes.node_totals_for_quants(
         node['node_id'], node_type, risk_indicators.map{ |i| i[:backend_name] }
       )

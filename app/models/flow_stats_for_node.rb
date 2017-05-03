@@ -1,7 +1,8 @@
 class FlowStatsForNode
 
-  def initialize(context, node, node_type)
+  def initialize(context, year, node, node_type)
     @context = context
+    @year = year
     @node = node
     @node_type = node_type
     @node_index = node_index(@node_type)
@@ -61,7 +62,7 @@ class FlowStatsForNode
       where('flows.context_id' => @context.id).
       where('? = ANY(path) AND ? = ANY(path)', @node.id, other_node_id).
       where('quants.name' => quant_names).
-      where(year: @context.default_year).
+      where(year: @year).
       group(group_clause)
   end
 
@@ -91,7 +92,7 @@ class FlowStatsForNode
       where('flows.context_id' => @context.id).
       where('? = ANY(path)', @node.id).
       where('quants.name' => quant_name).
-      where(year: @context.default_year).
+      where(year: @year).
       group(group_clause).
       order('value DESC').
       limit(10)
