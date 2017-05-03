@@ -8,6 +8,10 @@ class FlowStatsForNode
     @node_index = node_index(@node_type)
   end
 
+  def all_volume_nodes
+    all_nodes_for_quant('Volume')
+  end
+
   def top_volume_nodes
     top_nodes_for_quant('Volume')
   end
@@ -69,6 +73,10 @@ class FlowStatsForNode
   private
 
   def top_nodes_for_quant(quant_name)
+    all_nodes_for_quant(quant_name).limit(10)
+  end
+
+  def all_nodes_for_quant(quant_name)
     select_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
       ["flows.path[?] AS node_id, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, nodes.name AS name, nodes.geo_id",
@@ -94,8 +102,7 @@ class FlowStatsForNode
       where('quants.name' => quant_name).
       where(year: @year).
       group(group_clause).
-      order('value DESC').
-      limit(10)
+      order('value DESC')
   end
 
   def node_index(node_type)

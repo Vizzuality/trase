@@ -2,7 +2,7 @@ class ActorAttributes
 
   def initialize(context, year, node)
     @context = context
-    @year = year
+    @year = year && year.to_i
     @node = node
     @node_type = @node.node_type.node_type
     @data = {
@@ -31,7 +31,7 @@ class ActorAttributes
   end
 
   def top_countries
-    top_nodes_summary(NodeTypeName::COUNTRY, :top_countries)
+    nodes_by_year_summary(NodeTypeName::COUNTRY, :top_countries)
   end
 
   def top_sources
@@ -39,7 +39,7 @@ class ActorAttributes
       included_years: @context.years,
     }
     [NodeTypeName::MUNICIPALITY, NodeTypeName::BIOME, NodeTypeName::STATE].each do |node_type|
-      result = result.merge top_nodes_summary(node_type, node_type.downcase)
+      result = result.merge nodes_by_year_summary(node_type, node_type.downcase)
     end
     {
       top_sources: result
@@ -131,24 +131,55 @@ class ActorAttributes
 
   private
 
-  def top_nodes_summary(node_type, node_list_label)
+  def nodes_by_year_summary(node_type, node_list_label)
     stats = FlowStatsForNode.new(@context, @year, @node, node_type)
     volume_nodes_by_year = stats.volume_nodes_by_year
-    {
-      node_list_label => {
-        lines: stats.top_volume_nodes.map do |node|
-          {
-            name: node['name'],
-            geo_id: node['geo_id'],
-            values: @context.years.map do |year|
-              volume_nodes_by_year.select do |v|
-                v['node_id'] == node['node_id'] && v['year'] == year
-              end.first['value']
-            end
-          }
+
+    lines = stats.all_volume_nodes.map do |node|
+      {
+        name: node['name'],
+        geo_id: node['geo_id'],
+        values: @context.years.map do |year|
+          year_node = volume_nodes_by_year.select do |v|
+            v['node_id'] == node['node_id'] && v['year'] == year
+          end.first
+          year_node && year_node['value']
         end
       }
+    end
+
+    # add bucket for selected year
+    volume_quant = Quant.find_by_name('SOY_TN') # TODO no bucket for Volume?
+    context_layer = ContextLayer.where(
+      context_id: @context.id, layer_attribute_type: 'Quant', layer_attribute_id: volume_quant.id
+    ).first
+    buckets = context_layer.try(:bucket_5) || [5000,100000,300000,1000000] # TODO bucket_9
+    year_idx = @context.years.index(@year)
+
+    lines.each do |line|
+      value = line[:values][year_idx]
+      line[:value9] = bucket_index_for_value(buckets, value)
+    end
+
+    {
+      node_list_label => {
+        lines: lines
+      }
     }
+  end
+
+  def bucket_index_for_value(buckets, value)
+    prev_bucket = 0
+    bucket = buckets.each_with_index do |bucket, index|
+      if value >= prev_bucket && value < bucket
+        break index
+      end
+    end
+    bucket = if bucket.is_a? Integer
+      bucket + 1
+    else
+      buckets.size + 1 # last bucket
+    end
   end
 
   def risk_indicators
