@@ -132,16 +132,16 @@ class ActorAttributes
   private
 
   def top_nodes_summary(node_type, node_list_label)
-    top_volume_nodes_by_year = top_volume_nodes.top_volume_nodes_by_year
-    top_volume_nodes = FlowStatsForNode.new(@context, @year, @node, node_type)
+    stats = FlowStatsForNode.new(@context, @year, @node, node_type)
+    volume_nodes_by_year = stats.volume_nodes_by_year
     {
       node_list_label => {
-        lines: top_volume_nodes.top_volume_nodes.map do |node|
+        lines: stats.top_volume_nodes.map do |node|
           {
             name: node['name'],
             geo_id: node['geo_id'],
             values: @context.years.map do |year|
-              top_volume_nodes_by_year.select do |v|
+              volume_nodes_by_year.select do |v|
                 v['node_id'] == node['node_id'] && v['year'] == year
               end.first['value']
             end

@@ -16,7 +16,7 @@ class FlowStatsForNode
     top_nodes_for_quant('DEFORESTATION')
   end
 
-  def top_volume_nodes_by_year
+  def volume_nodes_by_year
     select_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
       ["year, flows.path[?] AS node_id, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, nodes.name AS name",
