@@ -18,6 +18,7 @@
 #
 
 class Ind < ActiveRecord::Base
+    include Indicator
 
     self.primary_key = :ind_id
 

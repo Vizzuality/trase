@@ -63,18 +63,26 @@ class Node < ActiveRecord::Base
   end
 
   def place_quals
-    data = node_quals.
-      joins(:qual).
-      where('quals.place_factsheet' => true).
-      where('place_factsheet_temporal IS NULL OR place_factsheet_temporal IS FALSE').
+    node_quals.
+      joins(:qual).merge(Qual.place_non_temporal).
       select([
         'quals.name',
-        'node_quals.value'#,
-        # 'node_quals.year'
+        'node_quals.value'
       ])
-    Hash[data.map do |e|
-      [e['name'], e]
-    end]
+  end
+
+  def temporal_place_quals(year = nil)
+    rel = node_quals.
+      joins(:qual).merge(Qual.place_temporal).
+      select([
+        'quals.name',
+        'node_quals.value',
+        'node_quals.year'
+      ])
+    if year.present?
+      rel = rel.where('node_quals.year' => year)
+    end
+    rel
   end
 
   def actor_quals
@@ -83,26 +91,34 @@ class Node < ActiveRecord::Base
       where('quals.actor_factsheet' => true).
       select([
         'quals.name',
-        'node_quals.value'
+        'node_quals.value',
+        'node_quals.year'
       ])
   end
 
   def place_quants
     data = node_quants.
-      joins(:quant).
-      where('quants.place_factsheet' => true).
-      where('place_factsheet_temporal IS NULL OR place_factsheet_temporal IS FALSE').
+      joins(:quant).merge(Quant.place_non_temporal).
       select([
         'quants.name',
-        # 'quants.unit',
-        # 'quants.unit_type',
-        # 'quants.frontend_name',
-        # 'quants.tooltip_text',
+        'quants.unit',
         'node_quants.value'
       ])
-    Hash[data.map do |e|
-      [e['name'], e]
-    end]
+  end
+
+  def temporal_place_quants(year = nil)
+    rel = node_quants.
+      joins(:quant).merge(Quant.place_temporal).
+      select([
+        'quants.name',
+        'quants.unit',
+        'node_quants.value',
+        'node_quants.year'
+      ])
+    if year.present?
+      rel = rel.where('node_quants.year' => year)
+    end
+    rel
   end
 
   def actor_quants
@@ -115,23 +131,29 @@ class Node < ActiveRecord::Base
       ])
   end
 
-  def place_temporal_quants
-    node_quants.joins(:quant)# TODO: data update? .where('quants.place_factsheet_temporal' => true)
-  end
-
   def place_inds
     data = node_inds.
-      joins(:ind).
-      where('inds.place_factsheet' => true).
-      where('place_factsheet_temporal IS NULL OR place_factsheet_temporal IS FALSE').
+      joins(:ind).merge(Ind.place_non_temporal).
       select([
         'inds.name',
-        'node_inds.value'#,
-        # 'node_inds.year'
+        'inds.unit',
+        'node_inds.value'
       ])
-    Hash[data.map do |e|
-      [e['name'], e]
-    end]
+  end
+
+  def temporal_place_inds(year = nil)
+    rel = node_inds.
+      joins(:ind).merge(Ind.place_temporal).
+      select([
+        'inds.name',
+        'inds.unit',
+        'node_inds.value',
+        'node_inds.year'
+      ])
+    if year.present?
+      rel = rel.where('node_inds.year' => year)
+    end
+    rel
   end
 
   def actor_inds
@@ -140,6 +162,7 @@ class Node < ActiveRecord::Base
       where('inds.actor_factsheet' => true).
       select([
         'inds.name',
+        'inds.unit',
         'node_inds.value'
       ])
   end

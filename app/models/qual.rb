@@ -16,6 +16,7 @@
 #
 
 class Qual < ActiveRecord::Base
+    include Indicator
 
     self.primary_key = :qual_id
 

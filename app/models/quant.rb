@@ -18,6 +18,7 @@
 #
 
 class Quant < ActiveRecord::Base
+    include Indicator
 
     self.primary_key = :quant_id
 

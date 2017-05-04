@@ -6,31 +6,17 @@ class PlaceAttributes
     @node = node
     @node_type = @node.node_type.node_type
 
-    # single_quant_values = NodeQuant
-    #                            .select('quants.name, quants.unit, quants.unit_type, quants.frontend_name, quants.tooltip_text, node_quants.value')
-    #                            .joins(:quant)
-    #                            .joins(:node)
-    #                            .where('place_factsheet IS TRUE AND (place_factsheet_temporal IS NULL OR place_factsheet_temporal IS FALSE) AND nodes.node_id = :node_id', {:node_id => node_id})
-    #                            .as_json
+    @stats = FlowStatsForNode.new(@context, @year, @node, @node_type)
 
-    # single_qual_values = NodeQual
-    #                           .select('quals.name, NULL as unit, NULL as unit_type, quals.frontend_name, quals.tooltip_text, node_quals.value')
-    #                           .joins(:qual)
-    #                           .joins(:node)
-    #                           .where('place_factsheet IS TRUE AND (place_factsheet_temporal IS NULL OR place_factsheet_temporal IS FALSE) AND nodes.node_id = :node_id', {:node_id => node_id})
-    #                           .as_json
-
-    # single_ind_values = NodeInd
-    #                          .select('inds.name, inds.unit, inds.unit_type, inds.frontend_name, inds.tooltip_text, node_inds.value')
-    #                          .joins(:ind)
-    #                          .joins(:node)
-    #                          .where('place_factsheet IS TRUE AND (place_factsheet_temporal IS NULL OR place_factsheet_temporal IS FALSE) AND nodes.node_id = :node_id', {:node_id => node_id})
-    #                          .as_json
-
-    # @temporal_quants = Quant
-    #               .select('quants.name, quants.frontend_name, quants.tooltip_text, quants.quant_id, node_quants.value,  node_quants.year')
-    #               .joins(node_quants: [:node])
-    #               .where('place_factsheet IS TRUE AND place_factsheet_temporal IS TRUE AND nodes.node_id = :node_id', { :node_id => node_id })
+    @place_quals = Hash[(@node.place_quals + @node.temporal_place_quals).map do |e|
+      [e['name'], e]
+    end]
+    @place_quants = Hash[(@node.place_quants + @node.temporal_place_quants(@year)).map do |e|
+      [e['name'], e]
+    end]
+    @place_inds = Hash[(@node.place_inds + @node.temporal_place_inds(@year)).map do |e|
+      [e['name'], e]
+    end]
 
     @data = {
       column_name: @node_type,
@@ -41,10 +27,6 @@ class PlaceAttributes
       @data[(node.node_type.node_type.downcase + '_name').to_sym] = node.name
       @data[(node.node_type.node_type.downcase + '_geo_id').to_sym] = node.geo_id
     end
-
-    @place_quals = @node.place_quals
-    @place_quants = @node.place_quants
-    @place_inds = @node.place_inds
 
     if [NodeTypeName::MUNICIPALITY, NodeTypeName::LOGISTICS_HUB].include? @node_type
       @data = @data.merge(municipality_and_logistics_hub_extra_data)
@@ -159,21 +141,23 @@ class PlaceAttributes
       {name: 'Potential Soy related deforestation', backend_name: 'POTENTIAL_SOY_RELATED_DEFOR'},
       {name: 'Territorial Deforestation', backend_name: 'DEFORESTATION'}
     ]
-    data = @node.place_temporal_quants.
+    data = @node.place_quants.# TODO: should be temporal, deforestation has no temporal data?
       where('quants.name' => indicators_list.map{ |i| i[:backend_name] }).
       order('node_quants.year')
     years = data.distinct.pluck('node_quants.year')
     {
-      included_years: years,
-      lines: indicators_list.map do |i|
-        values = Hash[data.where('quants.name' => i[:backend_name]).map do |e|
-          [e['year'], e]
-        end]
-        {
-          name: i[:name],
-          values: years.map{ |y| values[y] }
-        }
-      end
+      trajectory_deforestation: {
+        included_years: years,
+        lines: indicators_list.map do |i|
+          values = Hash[data.where('quants.name' => i[:backend_name]).map do |e|
+            [e['year'], e]
+          end]
+          {
+            name: i[:name],
+            values: years.map{ |y| values[y] }
+          }
+        end
+      }
     }
   end
 
@@ -215,9 +199,8 @@ class PlaceAttributes
         else
           nil
         end
-      stats = FlowStatsForNode.new(@context, @year, @node, @node_type)
       if @state.present?
-        ranking_scores << stats.state_ranking(@state, indicator[:type], indicator[:backend_name])
+        ranking_scores << @stats.state_ranking(@state, indicator[:type], indicator[:backend_name])
       end
     end
     {
