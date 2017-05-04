@@ -95,10 +95,11 @@ class PlaceAttributes
   end
 
   def indicators
-
     {
       indicators: [
         sustainability_indicators,
+        deforestation_indicators,
+        other_indicators,
         socioeconomic_indicators
       ]
     }
@@ -106,28 +107,47 @@ class PlaceAttributes
 
   def sustainability_indicators
     indicators_list = [
-      {name: 'Soy deforestation (until 2014)', unit: 'ha', type: 'quant', backend_name: 'AGROSATELITE_SOY_DEFOR_'},
-      {name: 'Number of environmental embargoes (2015)', type: 'quant', backend_name: 'EMBARGOES_'},
-      {name: 'Area affected by fires (2013)', unit: 'km2', type: 'quant', backend_name: 'FIRE_KM2_'},
-      {name: 'Cases of forced labor (2014)', type: 'quant', backend_name: 'SLAVERY'},
-      {name: 'Cases of land conflicts (2014)', type: 'quant', backend_name: 'LAND_CONFL'},
-      {name: 'Biodiversity (loss of amphibian habitat)', type: 'quant', backend_name: 'BIODIVERSITY'},
-      {name: 'Annual deforestation rate (2015)', unit: 'ha', type: 'ind', backend_name: 'TOTAL_DEFOR_RATE'},
-      {name: 'Human development index (2013)', type: 'ind', backend_name: 'HDI'},
-      {name: 'Criticality of water scarcity (2013)', type: 'ind', backend_name: 'WATER_SCARCITY'}
+      {type: 'ind', backend_name: 'WATER_SCARCITY'},
+      {type: 'quant', backend_name: 'FIRE_KM2_'},
+      {type: 'quant', backend_name: 'GHG_'}
     ]
 
     indicators_group(indicators_list, 'Key sustainability indicators')
   end
 
+  def deforestation_indicators
+    indicators_list = [
+      {type: 'quant', backend_name: 'AGROSATELITE_SOY_DEFOR_'},
+      {type: 'ind', backend_name: 'TOTAL_DEFOR_RATE'}
+    ]
+
+    indicators_group(indicators_list, 'Deforestation')
+  end
+
+  def other_indicators
+    indicators_list = [
+      {type: 'quant', backend_name: 'BIODIVERSITY'},
+      {type: 'ind', backend_name: 'PERC_INDIGENOUS'},
+      {type: 'ind', backend_name: 'PERC_PROTECTED'},
+      {type: 'quant', backend_name: 'EMBARGOES_'},
+      {type: 'ind', backend_name: 'COMPLIANCE_FOREST_CODE'},
+      {type: 'quant', backend_name: 'PROTECTED'}
+    ]
+
+    indicators_group(indicators_list, 'Other environmental indicators')
+  end
+
   def socioeconomic_indicators
     indicators_list = [
-      {name: 'Soy production (2015)', unit: 'Tn', type: 'quant', backend_name: 'SOY_TN'},
-      {name: 'Cattle', unit: 'heads', type: 'quant', backend_name: 'CATTLE_HEADS'},
-      {name: 'Soy yield', unit: 'Tn/ha', type: 'ind', backend_name: 'SOY_YIELD'},
-      {name: 'Area soy', unit: '%', type: 'ind', backend_name: 'SOY_AREAPERC'},
-      {name: 'Area maize', unit: '%', type: 'ind', backend_name: 'MAIZE_AREAPERC'},
-      {name: 'Area cotton', unit: '%', type: 'ind', backend_name: 'COTTON_AREAPERC'}
+      {type: 'ind', backend_name: 'GDP_CAP'},
+      {type: 'ind', backend_name: 'HDI'},
+      {type: 'ind', backend_name: 'PERC_FARM_GDP'},
+      {type: 'ind', backend_name: 'SMALLHOLDERS'},
+      {type: 'quant', backend_name: 'CATTLE_HEADS'},
+      {type: 'quant', backend_name: 'LAND_CONFL'},
+      {type: 'quant', backend_name: 'POPULATION'},
+      {type: 'quant', backend_name: 'SLAVERY'},
+      {type: 'quant', backend_name: 'SOY_TN'}
     ]
 
     indicators_group(indicators_list, 'Socio-economic indicators')
@@ -173,6 +193,16 @@ class PlaceAttributes
   end
 
   def indicators_group(list, name)
+    # fetch frontend names and units
+    list.each do |indicator|
+      i = indicator[:type].camelize.constantize.find_by_name(indicator[:backend_name])
+      if i.nil?
+        Rails.logger.debug "NOT FOUND " + indicator[:backend_name]
+        next
+      end
+      indicator[:name] = i.frontend_name
+      indicator[:unit] = i.unit
+    end
     included_columns = list.map{ |i| i.slice(:name, :unit)}
     values = []
     ranking_scores = []
