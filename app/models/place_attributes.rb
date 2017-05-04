@@ -70,9 +70,9 @@ class PlaceAttributes
     data[:biome_name] = biome_name
     data[:biome_geo_id] = biome.try(:geo_id)
     state_name = @place_quals[NodeTypeName::STATE]['value']
-    state = Node.states.find_by_name(state_name)
+    @state = Node.states.find_by_name(state_name)
     data[:state_name] = state_name
-    data[:state_geo_id] = state.try(:geo_id)
+    data[:state_geo_id] = @state.try(:geo_id)
     if @place_quants['AREA_KM2'].present?
       data[:area] = @place_quants['AREA_KM2']['value']
     end
@@ -174,30 +174,36 @@ class PlaceAttributes
 
   def indicators_group(list, name)
     included_columns = list.map{ |i| i.slice(:name, :unit)}
-    values =
-      list.select{ |i| i[:type] == 'quant'}.map do |indicator|
-        if @place_quants[indicator[:backend_name]].present?
+    values = []
+    ranking_scores = []
+    list.each do |indicator|
+      values <<
+        if indicator[:type] == 'quant' && @place_quants[indicator[:backend_name]].present?
           @place_quants[indicator[:backend_name]]['value']
-        else
-          nil
-        end
-      end +
-      list.select{ |i| i[:type] == 'ind'}.map do |indicator|
-        if @place_inds[indicator[:backend_name]].present?
+        elsif indicator[:type] == 'ind' && @place_inds[indicator[:backend_name]].present?
           @place_inds[indicator[:backend_name]]['value']
         else
           nil
         end
+      stats = FlowStatsForNode.new(@context, @year, @node, @node_type)
+      if @state.present?
+        ranking_scores << stats.state_ranking(@state, indicator[:type], indicator[:backend_name])
       end
+    end
     {
       name: name,
       included_columns: included_columns,
       rows: [
         {
           name: 'Score',
+          have_unit: true,
           values: values
+        },
+        {
+          name: 'State Ranking',
+          have_unit: false,
+          values: ranking_scores
         }
-        # TODO State ranking
       ]
     }
   end

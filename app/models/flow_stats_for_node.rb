@@ -70,6 +70,34 @@ class FlowStatsForNode
       group(group_clause)
   end
 
+  # Returns the node's ranking across all nodes of same type within given state
+  # for given indicator
+  def state_ranking(state, indicator_type, indicator_name)
+    value_table, dict_table = if indicator_type == 'quant'
+      ['node_quants', 'quants']
+    elsif indicator_type == 'ind'
+      ['node_inds', 'inds']
+    end
+    query = Node.
+      select(
+        'nodes.node_id',
+        "DENSE_RANK() OVER (ORDER BY #{value_table}.value DESC) AS rank"
+      ).
+      where(node_type_id: @node.node_type_id).
+      joins(node_quals: :qual).
+      where('node_quals.value' => state.name, 'quals.name' => 'STATE').
+      joins(value_table => indicator_type).
+      where("#{dict_table}.name" => indicator_name)
+
+    result = Node.from('(' + query.to_sql + ') s').
+      select('s.*').
+      where('s.node_id' => @node.id).
+      order(nil).
+      first
+
+    result && result['rank'] || nil
+  end
+
   private
 
   def top_nodes_for_quant(quant_name)
