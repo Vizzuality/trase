@@ -137,24 +137,40 @@ class PlaceAttributes
 
   def trajectory_deforestation
     indicators_list = [
-      {name: 'Soy related deforestation', backend_name: 'AGROSATELITE_SOY_DEFOR_'},
-      {name: 'Potential Soy related deforestation', backend_name: 'POTENTIAL_SOY_RELATED_DEFOR'},
-      {name: 'Territorial Deforestation', backend_name: 'DEFORESTATION'}
+      {name: 'Potential Soy related deforestation', type: 'ind', backend_name: 'POTENTIAL_SOY_RELATED_DEFOR_ind'},
+      {name: 'Territorial Deforestation', type: 'ind', backend_name: 'TOTAL_DEFOR_RATE'}
     ]
-    data = @node.place_quants.# TODO: should be temporal, deforestation has no temporal data?
-      where('quants.name' => indicators_list.map{ |i| i[:backend_name] }).
-      order('node_quants.year')
-    years = data.distinct.pluck('node_quants.year')
+    min_year, max_year = nil, nil
+    indicators_list.each do |i|
+      min_max = if i[:type] == 'quant'
+        @node.temporal_place_quants.where('quants.name' => i[:backend_name])
+      elsif i[:type] == 'ind'
+        @node.temporal_place_inds.where('inds.name' => i[:backend_name])
+      end.except(:select).select('MIN(year), MAX(year)').first
+      if min_max && min_max['min'].present? && (min_year.nil? || min_max['min'] < min_year)
+        min_year = min_max['min']
+      end
+      if min_max && min_max['max'].present? && (max_year.nil? || min_max['max'] > max_year)
+        max_year = min_max['max']
+      end
+    end
+
+    years = (min_year..max_year).to_a
     {
       trajectory_deforestation: {
         included_years: years,
         lines: indicators_list.map do |i|
-          values = Hash[data.where('quants.name' => i[:backend_name]).map do |e|
+          data = if i[:type] == 'quant'
+            @node.temporal_place_quants.where('quants.name' => i[:backend_name])
+          elsif i[:type] == 'ind'
+            @node.temporal_place_inds.where('inds.name' => i[:backend_name])
+          end
+          values = Hash[data.map do |e|
             [e['year'], e]
           end]
           {
             name: i[:name],
-            values: years.map{ |y| values[y] }
+            values: years.map{ |y| values[y] && values[y]['value'] }
           }
         end
       }
