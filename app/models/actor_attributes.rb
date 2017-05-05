@@ -5,6 +5,9 @@ class ActorAttributes
     @year = year && year.to_i
     @node = node
     @node_type = @node.node_type.node_type
+
+    @stats = FlowStatsForNode.new(@context, @year, @node, @node_type)
+
     @data = {
       node_name: @node.name,
       summary: 'data missing',
@@ -31,15 +34,19 @@ class ActorAttributes
   end
 
   def top_countries
-    nodes_by_year_summary(NodeTypeName::COUNTRY, :top_countries)
+    years = @stats.available_years_for_indicator('quant', 'Volume')
+    result = nodes_by_year_summary(NodeTypeName::COUNTRY, :top_countries, years)
+    result[:top_countries][:included_years] = years
+    result
   end
 
   def top_sources
+    years = @stats.available_years_for_indicator('quant', 'Volume')
     result = {
-      included_years: @context.years,
+      included_years: years,
     }
     [NodeTypeName::MUNICIPALITY, NodeTypeName::BIOME, NodeTypeName::STATE].each do |node_type|
-      result = result.merge nodes_by_year_summary(node_type, node_type.downcase)
+      result = result.merge nodes_by_year_summary(node_type, node_type.downcase, years)
     end
     {
       top_sources: result
@@ -131,7 +138,7 @@ class ActorAttributes
 
   private
 
-  def nodes_by_year_summary(node_type, node_list_label)
+  def nodes_by_year_summary(node_type, node_list_label, years)
     stats = FlowStatsForNode.new(@context, @year, @node, node_type)
     volume_nodes_by_year = stats.volume_nodes_by_year
 
@@ -139,7 +146,7 @@ class ActorAttributes
       {
         name: node['name'],
         geo_id: node['geo_id'],
-        values: @context.years.map do |year|
+        values: years.map do |year|
           year_node = volume_nodes_by_year.select do |v|
             v['node_id'] == node['node_id'] && v['year'] == year
           end.first
@@ -154,7 +161,7 @@ class ActorAttributes
       context_id: @context.id, layer_attribute_type: 'Quant', layer_attribute_id: volume_quant.id
     ).first
     buckets = context_layer.try(:bucket_5) || [5000,100000,300000,1000000] # TODO bucket_9
-    year_idx = @context.years.index(@year)
+    year_idx = years.index(@year)
 
     lines.each do |line|
       value = line[:values][year_idx]
@@ -194,8 +201,7 @@ class ActorAttributes
     group_totals_hash = Hash.new
     top_nodes_in_group = FlowStatsForNode.new(@context, @year, @node, node_type).top_deforestation_nodes
     rows = top_nodes_in_group.map do |node|
-      top_nodes = FlowStatsForNode.new(@context, @year, @node, @node_type)
-      totals_per_indicator = top_nodes.node_totals_for_quants(
+      totals_per_indicator = @stats.node_totals_for_quants(
         node['node_id'], node_type, risk_indicators.map{ |i| i[:backend_name] }
       )
       totals_hash = Hash[totals_per_indicator.map{ |t| [t['name'], t['value']] }]

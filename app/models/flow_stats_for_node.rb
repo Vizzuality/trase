@@ -8,6 +8,16 @@ class FlowStatsForNode
     @node_index = node_index(@node_type)
   end
 
+  def available_years_for_indicator(indicator_type, indicator_name)
+    query = Flow.select(:year).where('? = ANY(flows.path)', @node.id)
+    query = if indicator_type == 'quant'
+      query.joins(flow_quants: :quant).where('quants.name' => indicator_name)
+    elsif indicator_type == 'ind'
+      query.joins(flow_inds: :ind).where('inds.name' => indicator_name)
+    end.order(:year).distinct
+    query.map{ |y| y['year'] }
+  end
+
   def all_volume_nodes
     all_nodes_for_quant('Volume')
   end
