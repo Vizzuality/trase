@@ -52,7 +52,7 @@ class ActorAttributes
         {group_name: 'Municipalities', node_type: NodeTypeName::MUNICIPALITY},
         {group_name: 'Biomes', node_type: NodeTypeName::BIOME, is_total: true}
       ].map do |group|
-        sustainability_for_group(group[:name], group[:node_type], group[:is_total])
+        sustainability_for_group(group[:group_name], group[:node_type], group[:is_total])
       end
     }
   end
@@ -236,10 +236,9 @@ class ActorAttributes
       }
     end
     {
-      node_type.downcase => {
-        included_columns: [{name: node_type.humanize}] + risk_indicators.map{ |indicator| indicator.slice(:name, :unit) },
-        rows: rows
-      }
+      name: name,
+      included_columns: [{name: node_type.humanize}] + risk_indicators.map{ |indicator| indicator.slice(:name, :unit) },
+      rows: rows
     }
   end
 end
