@@ -187,7 +187,7 @@ class PlaceAttributes
       node_list_label => top_nodes.map{ |t| {id: t['node_id'], name: t['name'], value: t['value']/node_value_sum} },
       matrix: [
         [0] + top_nodes.map{ |t| t['value'] },
-        top_nodes.map{ |t| [t['value']] + Array.new((top_nodes.size - 1), 0) }.flatten
+        *top_nodes.map{ |t| [t['value']] + Array.new((top_nodes.size - 1), 0) }
       ]
     }
   end
