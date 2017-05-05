@@ -136,6 +136,7 @@ class ActorAttributes
     exports = production_totals.map do |total|
       {
         name: total['name'],
+        id: total['node_id'],
         y: total['value'].to_f / 1000, # TODO hack
         x: indicator_totals_hash[total['node_id']]
       }
