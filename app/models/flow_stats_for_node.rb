@@ -98,6 +98,38 @@ class FlowStatsForNode
     result && result['rank'] || nil
   end
 
+  def country_ranking(context, indicator_type, indicator_name)
+    value_table, dict_table = if indicator_type == 'quant'
+      ['node_quants', 'quants']
+    elsif indicator_type == 'ind'
+      ['node_inds', 'inds']
+    end
+    flows_join_clause = ActiveRecord::Base.send(
+      :sanitize_sql_array,
+      ["JOIN flows ON nodes.node_id = flows.path[?]",
+      @node_index]
+    )
+    query = Node.
+      select(
+        'nodes.node_id',
+        "DENSE_RANK() OVER (ORDER BY #{value_table}.value DESC) AS rank"
+      ).
+      where(node_type_id: @node.node_type_id).
+      joins(flows_join_clause).
+      where('flows.context_id' => context.id).
+      joins(value_table => indicator_type).
+      where("#{dict_table}.name" => indicator_name).
+      distinct
+
+    result = Node.from('(' + query.to_sql + ') s').
+      select('s.*').
+      where('s.node_id' => @node.id).
+      order(nil).
+      first
+
+    result && result['rank'] || nil #TODO
+  end
+
   private
 
   def top_nodes_for_quant(quant_name)

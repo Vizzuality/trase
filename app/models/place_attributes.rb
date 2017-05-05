@@ -8,7 +8,7 @@ class PlaceAttributes
 
     @stats = FlowStatsForNode.new(@context, @year, @node, @node_type)
 
-    @place_quals = Hash[(@node.place_quals + @node.temporal_place_quals).map do |e|
+    @place_quals = Hash[(@node.place_quals + @node.temporal_place_quals(@year)).map do |e|
       [e['name'], e]
     end]
     @place_quants = Hash[(@node.place_quants + @node.temporal_place_quants(@year)).map do |e|
@@ -36,12 +36,49 @@ class PlaceAttributes
     @data = @data.merge(top_consumers)
     @data = @data.merge(indicators)
     @data = @data.merge(trajectory_deforestation)
+
+    @data[:summary] = summary
   end
 
   def result
     {
       data: @data
     }
+  end
+
+  def summary
+    soy_produced_raw, soy_produced = if (production = @place_quants['SOY_TN'])
+      value = helper.number_with_precision(production['value'], {delimiter: ',', precision: 0})
+      unit = production['unit']
+      [production['value'], "#{value}#{unit}"]
+    end
+    # TODO this value is competely different from example - by order of magnitude (?)
+    soy_area = if (area_perc = @place_inds['SOY_AREAPERC']) && (area = @place_quants['AREA_KM2'])
+      value = helper.number_with_precision(area_perc['value'] * area['value'], {delimiter: ',', precision: 0})
+      unit = 'Ha' # area is in km2
+      "#{value}#{unit}"
+    end
+    percentage_farm = if (perc = @place_inds['PERC_FARM_GDP'])
+      value = perc['value'].round
+      unit = perc['unit']
+      "#{value}#{unit}"
+    end
+    country_ranking = @stats.country_ranking(@context, 'quant', 'SOY_TN').ordinalize
+    state_ranking = @stats.state_ranking(@state, 'quant', 'SOY_TN').ordinalize if @state.present?
+    largest_exporter = (traders = @data[:top_traders][:actors]) && traders[0] && traders[0][:name]
+    # might be unit incompatibility, percentage miniscule?
+    percent_of_exports = helper.number_to_percentage(
+      ((@data[:top_traders][:actors][0][:value] || 0) / soy_produced_raw) * 100, {precision: 0}
+    ) if largest_exporter && soy_produced
+    main_destination = (consumers = @data[:top_consumers][:countries]) && consumers[0] && consumers[0][:name]
+
+    text = <<-EOT
+In #{@year}, #{@node.name.humanize} produced #{soy_produced} of soy occupying a total of #{soy_area} \
+of land. With #{percentage_farm} of the total production, it ranks #{country_ranking} in Brazil in soy \
+production, and #{state_ranking} in the state of Mato Grosso. The largest exporter of soy \
+in #{@node.name.humanize} was #{largest_exporter.humanize}, which accounted for #{percent_of_exports} of the total exports, \
+and the main destination was #{main_destination.humanize}.
+EOT
   end
 
   def municipality_and_logistics_hub_extra_data
@@ -236,4 +273,11 @@ class PlaceAttributes
       ]
     }
   end
+
+  def helper
+    @helper ||= Class.new do
+      include ActionView::Helpers::NumberHelper
+    end.new
+  end
+
 end
