@@ -35,18 +35,32 @@ class ActorAttributes
 
   def top_countries
     years = @stats.available_years_for_indicator('quant', 'Volume')
-    result = nodes_by_year_summary(NodeTypeName::COUNTRY, :top_countries, years)
+    # add bucket for selected year
+    volume_quant = Quant.find_by_name('SOY_TN') # TODO no bucket for Volume?
+    context_layer = ContextLayer.where(
+      context_id: @context.id, layer_attribute_type: 'Quant', layer_attribute_id: volume_quant.id
+    ).first
+    buckets = context_layer.try(:bucket_5) || [5000,100000,300000,1000000] # TODO bucket_9
+    result = nodes_by_year_summary(NodeTypeName::COUNTRY, :top_countries, years, buckets)
     result[:top_countries][:included_years] = years
+    result[:top_countries][:buckets] = buckets
     result
   end
 
   def top_sources
     years = @stats.available_years_for_indicator('quant', 'Volume')
+    # add bucket for selected year
+    volume_quant = Quant.find_by_name('SOY_TN') # TODO no bucket for Volume?
+    context_layer = ContextLayer.where(
+      context_id: @context.id, layer_attribute_type: 'Quant', layer_attribute_id: volume_quant.id
+    ).first
+    buckets = context_layer.try(:bucket_5) || [5000,100000,300000,1000000] # TODO bucket_9
     result = {
       included_years: years,
+      buckets: buckets
     }
     [NodeTypeName::MUNICIPALITY, NodeTypeName::BIOME, NodeTypeName::STATE].each do |node_type|
-      result = result.merge nodes_by_year_summary(node_type, node_type.downcase, years)
+      result = result.merge nodes_by_year_summary(node_type, node_type.downcase, years, buckets)
     end
     {
       top_sources: result
@@ -138,7 +152,7 @@ class ActorAttributes
 
   private
 
-  def nodes_by_year_summary(node_type, node_list_label, years)
+  def nodes_by_year_summary(node_type, node_list_label, years, buckets)
     stats = FlowStatsForNode.new(@context, @year, @node, node_type)
     volume_nodes_by_year = stats.volume_nodes_by_year
 
@@ -155,12 +169,6 @@ class ActorAttributes
       }
     end
 
-    # add bucket for selected year
-    volume_quant = Quant.find_by_name('SOY_TN') # TODO no bucket for Volume?
-    context_layer = ContextLayer.where(
-      context_id: @context.id, layer_attribute_type: 'Quant', layer_attribute_id: volume_quant.id
-    ).first
-    buckets = context_layer.try(:bucket_5) || [5000,100000,300000,1000000] # TODO bucket_9
     year_idx = years.index(@year)
 
     lines.each do |line|
