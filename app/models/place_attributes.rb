@@ -174,14 +174,45 @@ EOT
 
   def trajectory_deforestation
     indicators_list = [
-      {name: 'Potential Soy related deforestation', type: 'ind', backend_name: 'POTENTIAL_SOY_RELATED_DEFOR_ind'},
-      {name: 'Territorial Deforestation', type: 'ind', backend_name: 'TOTAL_DEFOR_RATE'}
+      {
+        name: 'Soy related deforestation',
+        indicator_type: 'quant',
+        backend_name: 'AGROSATELITE_SOY_DEFOR_',
+        legend_name: 'Soy related<br/>deforestation',
+        type: 'area',
+        style: 'area-pink'
+      },
+      {
+        name: 'Potential Soy related deforestation',
+        indicator_type: 'ind',
+        backend_name: 'POTENTIAL_SOY_RELATED_DEFOR_ind',
+        legend_name: 'Potential Soy<br/>related deforestation',
+        type: 'line',
+        style: 'line-dashed-pink'
+      },
+      {
+        name: 'Territorial Deforestation',
+        indicator_type: 'ind',
+        backend_name: 'TOTAL_DEFOR_RATE',
+        legend_name: 'Territorial<br/>Deforestation',
+        type: 'area',
+        style: 'area-black'
+      },
+      {
+        name: 'State Average',
+        indicator_type: 'ind',
+        backend_name: 'TOTAL_DEFOR_RATE',
+        legend_name: 'State<br/>Average',
+        type: 'line',
+        style: 'line-dashed-black',
+        state_average: true
+      }
     ]
     min_year, max_year = nil, nil
     indicators_list.each do |i|
-      min_max = if i[:type] == 'quant'
+      min_max = if i[:indicator_type] == 'quant'
         @node.temporal_place_quants.where('quants.name' => i[:backend_name])
-      elsif i[:type] == 'ind'
+      elsif i[:indicator_type] == 'ind'
         @node.temporal_place_inds.where('inds.name' => i[:backend_name])
       end.except(:select).select('MIN(year), MAX(year)').first
       if min_max && min_max['min'].present? && (min_year.nil? || min_max['min'] < min_year)
@@ -197,16 +228,23 @@ EOT
       trajectory_deforestation: {
         included_years: years,
         lines: indicators_list.map do |i|
-          data = if i[:type] == 'quant'
-            @node.temporal_place_quants.where('quants.name' => i[:backend_name])
-          elsif i[:type] == 'ind'
-            @node.temporal_place_inds.where('inds.name' => i[:backend_name])
+          data = if i[:state_average] && @state.present?
+            @stats.state_average(@state, i[:indicator_type], i[:backend_name])
+          else
+            if i[:indicator_type] == 'quant'
+              @node.temporal_place_quants.where('quants.name' => i[:backend_name])
+            elsif i[:indicator_type] == 'ind'
+              @node.temporal_place_inds.where('inds.name' => i[:backend_name])
+            end
           end
           values = Hash[data.map do |e|
             [e['year'], e]
           end]
           {
             name: i[:name],
+            legend_name: i[:legend_name],
+            type: i[:type],
+            style: i[:style],
             values: years.map{ |y| values[y] && values[y]['value'] }
           }
         end

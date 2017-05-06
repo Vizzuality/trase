@@ -211,4 +211,17 @@ class Node < ActiveRecord::Base
     rel
   end
 
+  def same_type_nodes_in_state_indicator_values(state, indicator_type, indicator_name)
+    value_table, dict_table = if indicator_type == 'quant'
+      ['node_quants', 'quants']
+    elsif indicator_type == 'ind'
+      ['node_inds', 'inds']
+    end
+    query = Node.
+      where(node_type_id: self.node_type_id).
+      joins(node_quals: :qual).
+      where('node_quals.value' => state.name, 'quals.name' => 'STATE').
+      joins(value_table => indicator_type).
+      where("#{dict_table}.name" => indicator_name)
+  end
 end

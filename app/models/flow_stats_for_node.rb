@@ -98,22 +98,20 @@ class FlowStatsForNode
 
   # Returns the node's ranking across all nodes of same type within given state
   # for given indicator
+  # for selected year
   def state_ranking(state, indicator_type, indicator_name)
     value_table, dict_table = if indicator_type == 'quant'
       ['node_quants', 'quants']
     elsif indicator_type == 'ind'
       ['node_inds', 'inds']
     end
-    query = Node.
+    query = @node.
+      same_type_nodes_in_state_indicator_values(state, indicator_type, indicator_name).
       select(
         'nodes.node_id',
         "DENSE_RANK() OVER (ORDER BY #{value_table}.value DESC) AS rank"
       ).
-      where(node_type_id: @node.node_type_id).
-      joins(node_quals: :qual).
-      where('node_quals.value' => state.name, 'quals.name' => 'STATE').
-      joins(value_table => indicator_type).
-      where("#{dict_table}.name" => indicator_name)
+      where("#{value_table}.year" => @year)
 
     result = Node.from('(' + query.to_sql + ') s').
       select('s.*').
@@ -124,6 +122,32 @@ class FlowStatsForNode
     result && result['rank'] || nil
   end
 
+  # Returns the node's average across all nodes of same type within given state
+  # for given indicator
+  # for all years
+  def state_average(state, indicator_type, indicator_name)
+    value_table, dict_table = if indicator_type == 'quant'
+      ['node_quants', 'quants']
+    elsif indicator_type == 'ind'
+      ['node_inds', 'inds']
+    end
+    query = @node.
+      same_type_nodes_in_state_indicator_values(state, indicator_type, indicator_name).
+      select(
+        'nodes.node_id',
+        "#{value_table}.year",
+        "AVG(#{value_table}.value) OVER (PARTITION BY #{value_table}.year) AS value"
+      )
+
+    result = Node.from('(' + query.to_sql + ') s').
+      select('s.*').
+      where('s.node_id' => @node.id).
+      order(nil)
+  end
+
+  # Returns the node's ranking across all nodes of same type within given context country
+  # for given indicator
+  # for selected year
   def country_ranking(context, indicator_type, indicator_name)
     value_table, dict_table = if indicator_type == 'quant'
       ['node_quants', 'quants']
@@ -216,5 +240,4 @@ class FlowStatsForNode
     nodes_of_type_with_flows_of_quant(node_type, quant_name).
       where('flows.path[?] = ?', @node_index, @node.id)
   end
-
 end
