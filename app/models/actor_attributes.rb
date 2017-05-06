@@ -8,16 +8,27 @@ class ActorAttributes
 
     @stats = FlowStatsForNode.new(@context, @year, @node, @node_type)
 
+    @actor_quals = Hash[(@node.actor_quals + @node.temporal_actor_quals(@year)).map do |e|
+      [e['name'], e]
+    end]
+    @actor_quants = Hash[(@node.actor_quants + @node.temporal_actor_quants(@year)).map do |e|
+      [e['name'], e]
+    end]
+    @actor_inds = Hash[(@node.actor_inds + @node.temporal_actor_inds(@year)).map do |e|
+      [e['name'], e]
+    end]
+
     @data = {
       node_name: @node.name,
-      summary: 'data missing',
       column_name: @node_type
     }
-    (@node.actor_quals + @node.actor_quants + @node.actor_inds).each do |q|
-      if q['name'] == 'SOY_'
-        @data[:total_soy_2015] = q['value'].to_f / 1000 # TODO hack
-      else
-        @data[q['name'].downcase] = q['value']
+    [@actor_quals, @actor_quants, @actor_inds].each do |indicator_hash|
+      indicator_hash.each do |name, indicator|
+        if name == 'SOY_'
+          @data[:total_soy_2015] = indicator['value'].to_f / 1000 # TODO hack
+        else
+          @data[name.downcase] = indicator['value']
+        end
       end
     end
 
@@ -25,12 +36,58 @@ class ActorAttributes
     @data = @data.merge(top_sources)
     @data = @data.merge(sustainability)
     @data = @data.merge(companies_exporting)
+
+    @data[:summary] = summary
   end
 
   def result
     {
       data: @data
     }
+  end
+
+  def summary
+    soy_exports = @node.temporal_actor_quants.where('quants.name' => 'SOY_')
+    exports_in_year_raw, exports_in_year = if (e = soy_exports.find{ |e| e['year'] == @year })
+      value = helper.number_with_precision(e['value']/1000, {delimiter: ',', precision: 0})
+      unit = e[unit]
+      [e['value']/1000, "#{value}#{unit}"]
+    end
+    exports_in_previous_year_raw = (e = soy_exports.find{ |e| e['year'] == @year - 1 }) && e['value']
+
+    country_ranking = @stats.country_ranking(@context, 'quant', 'SOY_').ordinalize
+
+    year_idx = @data[:top_countries][:included_years].index(@year)
+    main_destination = @data[:top_countries][:lines].max do |line1, line2|
+      line1[:values][year_idx] <=> line2[:values][year_idx]
+    end
+
+    main_destination_name = main_destination[:name]
+    main_destination_exports = main_destination[:values][year_idx]
+    perc_exports = helper.number_to_percentage((main_destination_exports * 100.0) / exports_in_year_raw, {precision: 0})
+    text = "#{@node.name.humanize} was the #{country_ranking} largest exporter of soy in #{@context.country.name} in #{@year}, accounting for #{exports_in_year} tons."
+    if exports_in_previous_year_raw.present?
+      perc_difference = (exports_in_year_raw - exports_in_previous_year_raw) / exports_in_previous_year_raw
+      difference_from = if perc_difference > 0
+        'a ' + helper.number_to_percentage(perc_difference * 100, {precision: 0}) + ' increase vs'
+      elsif perc_difference < 0
+        'a ' + helper.number_to_percentage(-perc_difference * 100, {precision: 0}) + ' decrease vs'
+      else
+        'no change from'
+      end
+      text += " This is #{difference_from} the previous year."
+    end
+    municipalities_count = @stats.municipalities_count('Volume')
+    source_municipalities_count_raw = @stats.source_municipalities_count('Volume')
+    perc_municipalities = helper.number_to_percentage((source_municipalities_count_raw * 100.0) / municipalities_count, {precision: 0})
+    source_municipalities_count = helper.number_with_precision(source_municipalities_count_raw, {delimiter: ',', precision: 0})
+
+    text += <<-EOT
+ #{@node.name.humanize} sources from #{source_municipalities_count} municipalities, \
+or #{perc_municipalities} of the soy production municipalities. The main destination \
+of the soy exported by #{@node.name.humanize} is #{main_destination_name.humanize}, \
+accounting for #{perc_exports} of the total.
+EOT
   end
 
   def top_countries
@@ -255,5 +312,11 @@ class ActorAttributes
       included_columns: [{name: node_type.humanize}] + risk_indicators.map{ |indicator| indicator.slice(:name, :unit) },
       rows: rows
     }
+  end
+
+  def helper
+    @helper ||= Class.new do
+      include ActionView::Helpers::NumberHelper
+    end.new
   end
 end

@@ -56,6 +56,22 @@ class FlowStatsForNode
       group(group_clause)
   end
 
+  def municipalities_count(quant_name)
+    Flow.from(
+      '(' +
+      nodes_of_type_with_flows_of_quant(NodeTypeName::MUNICIPALITY, quant_name).to_sql +
+      ') s'
+    ).count
+  end
+
+  def source_municipalities_count(quant_name)
+    Flow.from(
+      '(' +
+      nodes_of_type_with_flows_of_quant_into_node(NodeTypeName::MUNICIPALITY, quant_name).to_sql +
+      ') s'
+    ).count
+  end
+
   def node_totals_for_quants(other_node_id, other_node_type, quant_names)
     other_node_index = node_index(other_node_type)
     nodes_join_clause = ActiveRecord::Base.send(
@@ -178,4 +194,27 @@ class FlowStatsForNode
   def node_index(node_type)
     NodeType.node_index_for_type(@context, node_type)
   end
+
+  def nodes_of_type_with_flows_of_quant(node_type, quant_name)
+    other_node_index = node_index(node_type)
+    select_clause = ActiveRecord::Base.send(
+      :sanitize_sql_array,
+      ["flows.path[?] AS node_id", other_node_index]
+    )
+    group_clause = ActiveRecord::Base.send(
+      :sanitize_sql_array,
+      ["flows.path[?]", other_node_index]
+    )
+    Flow.
+      select(select_clause).
+      joins(flow_quants: :quant).
+      where('quants.name' => quant_name).
+      group(group_clause)
+  end
+
+  def nodes_of_type_with_flows_of_quant_into_node(node_type, quant_name)
+    nodes_of_type_with_flows_of_quant(node_type, quant_name).
+      where('flows.path[?] = ?', @node_index, @node.id)
+  end
+
 end

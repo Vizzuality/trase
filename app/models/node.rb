@@ -87,13 +87,28 @@ class Node < ActiveRecord::Base
 
   def actor_quals
     node_quals.
-      joins(:qual).
-      where('quals.actor_factsheet' => true).
+      joins(:qual).merge(Quant.actor_non_temporal).
+      #where('quals.actor_factsheet' => true).
       select([
         'quals.name',
         'node_quals.value',
         'node_quals.year'
       ])
+  end
+
+  def temporal_actor_quals(year = nil)
+    rel = node_quals.
+      joins(:qual).merge(Quant.actor_temporal).
+      #where('quals.actor_factsheet' => true).
+      select([
+        'quals.name',
+        'node_quals.value',
+        'node_quals.year'
+      ])
+    if year.present?
+      rel = rel.where('node_quals.year' => year)
+    end
+    rel
   end
 
   def place_quants
@@ -123,12 +138,27 @@ class Node < ActiveRecord::Base
 
   def actor_quants
     node_quants.
-      joins(:quant).
-      where('quants.actor_factsheet' => true).
+      joins(:quant).merge(Quant.actor_non_temporal).
       select([
         'quants.name',
+        'quants.unit',
         'node_quants.value'
       ])
+  end
+
+  def temporal_actor_quants(year = nil)
+    rel = node_quants.
+      joins(:quant).merge(Quant.actor_temporal).
+      select([
+        'quants.name',
+        'quants.unit',
+        'node_quants.value',
+        'node_quants.year'
+      ])
+    if year.present?
+      rel = rel.where('node_quants.year' => year)
+    end
+    rel
   end
 
   def place_inds
@@ -158,13 +188,27 @@ class Node < ActiveRecord::Base
 
   def actor_inds
     node_inds.
-      joins(:ind).
-      where('inds.actor_factsheet' => true).
+      joins(:ind).merge(Quant.actor_non_temporal).
       select([
         'inds.name',
         'inds.unit',
         'node_inds.value'
       ])
+  end
+
+  def temporal_actor_inds(year = nil)
+    rel = node_inds.
+      joins(:ind).merge(Quant.actor_temporal).
+      select([
+        'inds.name',
+        'inds.unit',
+        'node_inds.value',
+        'node_inds.year'
+      ])
+    if year.present?
+      rel = rel.where('node_inds.year' => year)
+    end
+    rel
   end
 
 end
