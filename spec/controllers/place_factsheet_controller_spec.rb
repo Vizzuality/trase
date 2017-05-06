@@ -17,6 +17,10 @@ RSpec.describe PlaceFactsheetController, type: :controller do
     FactoryGirl.create(:node_qual, qual: qual_state, node: municipality, value: state.name)
   }
 
+  let!(:municipality_total_defor_rate_2015){
+    FactoryGirl.create(:node_ind, ind: total_defor_rate, value: 1000, year: 2015, node: municipality)
+  }
+
   describe 'GET get_place_node_attributes loads basic data' do
     it 'gets basic place data' do
       get :place_data, params: { context_id: context.id, node_id: state.id }

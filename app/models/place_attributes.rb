@@ -63,21 +63,25 @@ class PlaceAttributes
       unit = perc['unit']
       "#{value}#{unit}"
     end
-    country_ranking = @stats.country_ranking(@context, 'quant', 'SOY_TN').ordinalize
-    state_ranking = @stats.state_ranking(@state, 'quant', 'SOY_TN').ordinalize if @state.present?
+    country_ranking = @stats.country_ranking(@context, 'quant', 'SOY_TN')
+    country_ranking.ordinalize! if country_ranking.present?
+    state_ranking = @stats.state_ranking(@state, 'quant', 'SOY_TN') if @state.present?
+    state_ranking.ordinalize! if state_ranking.present?
     largest_exporter = (traders = @data[:top_traders][:actors]) && traders[0] && traders[0][:name]
+    largest_exporter.humanize! if largest_exporter.present?
     # might be unit incompatibility, percentage miniscule?
     percent_of_exports = helper.number_to_percentage(
       ((@data[:top_traders][:actors][0][:value] || 0) / soy_produced_raw) * 100, {precision: 0}
     ) if largest_exporter && soy_produced
     main_destination = (consumers = @data[:top_consumers][:countries]) && consumers[0] && consumers[0][:name]
+    main_destination.humanize! if main_destination.present?
 
     text = <<-EOT
 In #{@year}, #{@node.name.humanize} produced #{soy_produced} of soy occupying a total of #{soy_area} \
 of land. With #{percentage_farm} of the total production, it ranks #{country_ranking} in Brazil in soy \
 production, and #{state_ranking} in the state of Mato Grosso. The largest exporter of soy \
-in #{@node.name.humanize} was #{largest_exporter.humanize}, which accounted for #{percent_of_exports} of the total exports, \
-and the main destination was #{main_destination.humanize}.
+in #{@node.name.humanize} was #{largest_exporter}, which accounted for #{percent_of_exports} of the total exports, \
+and the main destination was #{main_destination}.
 EOT
   end
 
@@ -173,6 +177,11 @@ EOT
   end
 
   def trajectory_deforestation
+    unless @node_type == NodeTypeName::MUNICIPALITY
+      return {
+        trajectory_deforestation: nil
+      }
+    end
     indicators_list = [
       {
         name: 'Soy related deforestation',
