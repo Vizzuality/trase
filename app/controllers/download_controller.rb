@@ -20,12 +20,12 @@ class DownloadController < ApplicationController
         )
         send_data csv.export,
           type: 'text/csv; charset=utf-8; header=present',
-          disposition: "attachment; filename=#{@context.country.name}_#{@context.commodity.name}.csv"
+          disposition: "attachment; filename=#{@context.country.name}_#{@context.commodity.name}_#{DownloadVersion.current_version_symbol}.csv"
       }
       format.json {
         send_data qb.flat_query.to_json,
           type: 'text/json; charset=utf-8',
-          disposition: "attachment; filename=#{@context.country.name}_#{@context.commodity.name}.json"
+          disposition: "attachment; filename=#{@context.country.name}_#{@context.commodity.name}_#{DownloadVersion.current_version_symbol}.json"
       }
     end
   end

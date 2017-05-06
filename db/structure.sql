@@ -453,6 +453,38 @@ ALTER SEQUENCE countries_country_id_seq OWNED BY countries.country_id;
 
 
 --
+-- Name: download_versions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE download_versions (
+    id integer NOT NULL,
+    symbol character varying NOT NULL,
+    current boolean DEFAULT false,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: download_versions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE download_versions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: download_versions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE download_versions_id_seq OWNED BY download_versions.id;
+
+
+--
 -- Name: flow_inds; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1023,6 +1055,13 @@ ALTER TABLE ONLY countries ALTER COLUMN country_id SET DEFAULT nextval('countrie
 
 
 --
+-- Name: download_versions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY download_versions ALTER COLUMN id SET DEFAULT nextval('download_versions_id_seq'::regclass);
+
+
+--
 -- Name: flows flow_id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1153,6 +1192,14 @@ ALTER TABLE ONLY countries
 
 
 --
+-- Name: download_versions download_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY download_versions
+    ADD CONSTRAINT download_versions_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: flows flows_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1213,6 +1260,13 @@ ALTER TABLE ONLY schema_migrations
 --
 
 CREATE UNIQUE INDEX context_indicators_indicator_attribute_type_indicator_attri_idx ON context_indicators USING btree (indicator_attribute_type, indicator_attribute_id, context_id);
+
+
+--
+-- Name: index_download_versions_on_symbol; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_download_versions_on_symbol ON download_versions USING btree (symbol);
 
 
 --
@@ -1516,6 +1570,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170314115306'),
 ('20170316135218'),
 ('20170323090506'),
-('20170323121305');
+('20170323121305'),
+('20170506225529');
 
 
