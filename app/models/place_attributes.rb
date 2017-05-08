@@ -68,13 +68,13 @@ class PlaceAttributes
     state_ranking = @stats.state_ranking(@state, 'quant', 'SOY_TN') if @state.present?
     state_ranking = state_ranking.ordinalize if state_ranking.present?
     largest_exporter = (traders = @data[:top_traders][:actors]) && traders[0] && traders[0][:name]
-    largest_exporter.humanize! if largest_exporter.present?
+    largest_exporter = largest_exporter.humanize if largest_exporter.present?
     # might be unit incompatibility, percentage miniscule?
     percent_of_exports = helper.number_to_percentage(
       ((@data[:top_traders][:actors][0][:value] || 0) / soy_produced_raw) * 100, {precision: 0}
     ) if largest_exporter && soy_produced
     main_destination = (consumers = @data[:top_consumers][:countries]) && consumers[0] && consumers[0][:name]
-    main_destination.humanize! if main_destination.present?
+    main_destination = main_destination.humanize if main_destination.present?
 
     text = <<-EOT
 In #{@year}, #{@node.name.humanize} produced #{soy_produced} of soy occupying a total of #{soy_area} \
