@@ -268,7 +268,8 @@ EOT
     node_value_sum = top_nodes.map{ |t| t[:value] }.reduce(0, :+)
 
     {
-      node_list_label => top_nodes.map{ |t| {id: t['node_id'], name: t['name'], value: t['value']/node_value_sum} },
+      node_list_label => [{id: @node.id, name: @node.name, value: 0}] +
+        top_nodes.map{ |t| {id: t['node_id'], name: t['name'], value: t['value']/node_value_sum} },
       matrix: [
         [0] + top_nodes.map{ |t| t['value'] },
         *top_nodes.map{ |t| [t['value']] + Array.new((top_nodes.size), 0) }
