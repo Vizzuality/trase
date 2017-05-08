@@ -264,7 +264,7 @@ EOT
   private
 
   def top_nodes_summary(node_type, node_list_label)
-    top_nodes = FlowStatsForNode.new(@context, @year, @node, node_type).top_volume_nodes
+    top_nodes = FlowStatsForNode.new(@context, @year, @node, node_type).top_nodes_for_quant('Volume')
     node_value_sum = top_nodes.map{ |t| t[:value] }.reduce(0, :+)
 
     {

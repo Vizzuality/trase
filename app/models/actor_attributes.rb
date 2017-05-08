@@ -214,7 +214,7 @@ EOT
     stats = FlowStatsForNode.new(@context, @year, @node, node_type)
     volume_nodes_by_year = stats.nodes_by_year_for_indicator(indicator_type, indicator_name)
 
-    lines = stats.all_volume_nodes.map do |node|
+    lines = stats.all_nodes_for_quant(indicator_name).map do |node|
       {
         name: node['name'],
         geo_id: node['geo_id'],

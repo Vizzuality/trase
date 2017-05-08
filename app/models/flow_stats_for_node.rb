@@ -18,14 +18,6 @@ class FlowStatsForNode
     query.map{ |y| y['year'] }
   end
 
-  def all_volume_nodes
-    all_nodes_for_quant('Volume')
-  end
-
-  def top_volume_nodes
-    top_nodes_for_quant('Volume')
-  end
-
   def top_deforestation_nodes
     top_nodes_for_quant('DEFORESTATION')
   end
@@ -39,7 +31,7 @@ class FlowStatsForNode
     nodes_join_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
       ["LEFT JOIN nodes ON nodes.node_id = flows.path[?] AND node_id IN (?)",
-      @node_index, top_volume_nodes.map(&:node_id)]
+      @node_index, top_nodes_for_quant(indicator_name).map(&:node_id)]
     )
     group_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
@@ -180,8 +172,6 @@ class FlowStatsForNode
     result && result['rank'] || nil #TODO
   end
 
-  private
-
   def top_nodes_for_quant(quant_name)
     all_nodes_for_quant(quant_name).limit(10)
   end
@@ -214,6 +204,8 @@ class FlowStatsForNode
       group(group_clause).
       order('value DESC')
   end
+
+  private
 
   def node_index(node_type)
     NodeType.node_index_for_type(@context, node_type)
