@@ -30,7 +30,7 @@ class FlowStatsForNode
     top_nodes_for_quant('DEFORESTATION')
   end
 
-  def volume_nodes_by_year
+  def nodes_by_year_for_indicator(indicator_type, indicator_name)
     select_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
       ["year, flows.path[?] AS node_id, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, nodes.name AS name",
@@ -48,11 +48,11 @@ class FlowStatsForNode
     )
     values_per_year = Flow.select(select_clause).
       joins('LEFT JOIN flow_quants ON flows.flow_id = flow_quants.flow_id').
-      joins('LEFT JOIN quants ON quants.quant_id = flow_quants.quant_id').
+      joins('LEFT JOIN quants ON quants.quant_id = flow_quants.quant_id'). # TODO
       joins(nodes_join_clause).
       where('flows.context_id' => @context.id).
       where('? = ANY(path)', @node.id).
-      where('quants.name' => 'Volume').
+      where('quants.name' => indicator_name).
       group(group_clause)
   end
 

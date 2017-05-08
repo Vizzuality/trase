@@ -98,7 +98,7 @@ EOT
       context_id: @context.id, layer_attribute_type: 'Quant', layer_attribute_id: volume_quant.id
     ).first
     buckets = context_layer.try(:bucket_5) || [5000,100000,300000,1000000] # TODO bucket_9
-    result = nodes_by_year_summary(NodeTypeName::COUNTRY, :top_countries, years, buckets)
+    result = nodes_by_year_summary_for_indicator(NodeTypeName::COUNTRY, :top_countries, years, buckets, 'quant', 'Volume')
     result[:top_countries][:included_years] = years
     result[:top_countries][:buckets] = buckets
     result
@@ -117,7 +117,7 @@ EOT
       buckets: buckets
     }
     [NodeTypeName::MUNICIPALITY, NodeTypeName::BIOME, NodeTypeName::STATE].each do |node_type|
-      result = result.merge nodes_by_year_summary(node_type, node_type.downcase, years, buckets)
+      result = result.merge nodes_by_year_summary_for_indicator(node_type, node_type.downcase, years, buckets, 'quant', 'Volume')
     end
     {
       top_sources: result
@@ -210,9 +210,9 @@ EOT
 
   private
 
-  def nodes_by_year_summary(node_type, node_list_label, years, buckets)
+  def nodes_by_year_summary_for_indicator(node_type, node_list_label, years, buckets, indicator_type, indicator_name)
     stats = FlowStatsForNode.new(@context, @year, @node, node_type)
-    volume_nodes_by_year = stats.volume_nodes_by_year
+    volume_nodes_by_year = stats.nodes_by_year_for_indicator(indicator_type, indicator_name)
 
     lines = stats.all_volume_nodes.map do |node|
       {
