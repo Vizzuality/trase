@@ -265,7 +265,8 @@ EOT
 
   def sustainability_for_group(name, node_type, include_totals)
     group_totals_hash = Hash.new
-    top_nodes_in_group = FlowStatsForNode.new(@context, @year, @node, node_type).top_deforestation_nodes
+    top_nodes_in_group = FlowStatsForNode.new(@context, @year, @node, node_type).
+      top_nodes_for_quant('DEFORESTATION')
     rows = top_nodes_in_group.map do |node|
       totals_per_indicator = @stats.node_totals_for_quants(
         node['node_id'], node_type, risk_indicators.map{ |i| i[:backend_name] }

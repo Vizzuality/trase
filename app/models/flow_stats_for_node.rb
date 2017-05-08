@@ -18,14 +18,15 @@ class FlowStatsForNode
     query.map{ |y| y['year'] }
   end
 
-  def top_deforestation_nodes
-    top_nodes_for_quant('DEFORESTATION')
-  end
-
   def nodes_by_year_for_indicator(indicator_type, indicator_name)
+    value_table, dict_table = if indicator_type == 'quant'
+      ['flow_quants', 'quants']
+    elsif indicator_type == 'ind'
+      ['flow_inds', 'inds']
+    end
     select_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
-      ["year, flows.path[?] AS node_id, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, nodes.name AS name",
+      ["year, flows.path[?] AS node_id, sum(CAST(#{value_table}.value AS DOUBLE PRECISION)) AS value, nodes.name AS name",
       @node_index]
     )
     nodes_join_clause = ActiveRecord::Base.send(
@@ -39,12 +40,12 @@ class FlowStatsForNode
       @node_index]
     )
     values_per_year = Flow.select(select_clause).
-      joins('LEFT JOIN flow_quants ON flows.flow_id = flow_quants.flow_id').
-      joins('LEFT JOIN quants ON quants.quant_id = flow_quants.quant_id'). # TODO
+      joins("LEFT JOIN #{value_table} ON flows.flow_id = #{value_table}.flow_id").
+      joins("LEFT JOIN #{dict_table} ON #{dict_table}.#{indicator_type}_id = #{value_table}.#{indicator_type}_id").
       joins(nodes_join_clause).
       where('flows.context_id' => @context.id).
       where('? = ANY(path)', @node.id).
-      where('quants.name' => indicator_name).
+      where("#{dict_table}.name" => indicator_name).
       group(group_clause)
   end
 
