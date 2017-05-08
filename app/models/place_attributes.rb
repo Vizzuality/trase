@@ -64,9 +64,9 @@ class PlaceAttributes
       "#{value}#{unit}"
     end
     country_ranking = @stats.country_ranking(@context, 'quant', 'SOY_TN')
-    country_ranking.ordinalize! if country_ranking.present?
+    country_ranking = country_ranking.ordinalize if country_ranking.present?
     state_ranking = @stats.state_ranking(@state, 'quant', 'SOY_TN') if @state.present?
-    state_ranking.ordinalize! if state_ranking.present?
+    state_ranking = state_ranking.ordinalize if state_ranking.present?
     largest_exporter = (traders = @data[:top_traders][:actors]) && traders[0] && traders[0][:name]
     largest_exporter.humanize! if largest_exporter.present?
     # might be unit incompatibility, percentage miniscule?
