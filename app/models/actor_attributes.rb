@@ -236,7 +236,12 @@ EOT
 
     {
       node_list_label => {
-        lines: lines
+        lines: lines,
+        unit: 't',
+        style: {
+          type: 'line-points',
+          style: 'line-pink-with-points'
+        }
       }
     }
   end
