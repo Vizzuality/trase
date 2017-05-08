@@ -264,16 +264,36 @@ EOT
   private
 
   def top_nodes_summary(node_type, node_list_label)
+    all_municipalities = @node.same_type_nodes_indicator_values('quant', 'SOY_TN').
+      where('nodes.node_id <> ?', @node.id). # do not double count current
+      select(
+        'nodes.node_id',
+        'nodes.name',
+        'SUM(node_quants.value) AS value'
+      ).
+      where("node_quants.year" => @year).
+      group('nodes.node_id, nodes.name').
+      order('value desc')
+
+    top_municipalities = all_municipalities.limit(9)
+    other_municipalities = all_municipalities.
+      where('nodes.node_id NOT IN ?', top_municipalities.map(&:node_id))
+
     top_nodes = FlowStatsForNode.new(@context, @year, @node, node_type).top_nodes_for_quant('Volume')
     node_value_sum = top_nodes.map{ |t| t[:value] }.reduce(0, :+)
+    matrix = [
+      top_nodes.map{ |t| t['value'] }
+    ]
+    top_municipalities.each do |municipality|
+      all_nodes = FlowStatsForNode.new(@context, @year, municipality, node_type).all_nodes_for_quant('Volume')
+      matrix << top_nodes.map{ |t| n = all_nodes.find{ |e| e['node_id'] == t['node_id'] }; n && n['value'] }
+    end
 
-    {
-      node_list_label => [{id: @node.id, name: @node.name, value: 0}] +
+    result = {
+      node_list_label =>
         top_nodes.map{ |t| {id: t['node_id'], name: t['name'], value: t['value']/node_value_sum} },
-      matrix: [
-        [0] + top_nodes.map{ |t| t['value'] },
-        *top_nodes.map{ |t| [t['value']] + Array.new((top_nodes.size), 0) }
-      ]
+      municipalities: [{id: @node.id, name: @node.name}] + top_municipalities.map{ |m| {id: m.id, name: m.name} },
+      matrix: matrix
     }
   end
 
