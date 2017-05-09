@@ -261,9 +261,9 @@ EOT
       end
     end
     bucket = if bucket.is_a? Integer
-      bucket + 1
+      bucket
     else
-      buckets.size + 1 # last bucket
+      buckets.size # last bucket
     end
   end
 
