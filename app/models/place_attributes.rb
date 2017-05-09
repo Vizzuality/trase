@@ -275,18 +275,23 @@ EOT
       group('nodes.node_id, nodes.name').
       order('value desc')
 
-    top_municipalities = all_municipalities.limit(9)
-    other_municipalities = all_municipalities.
-      where('nodes.node_id NOT IN ?', top_municipalities.map(&:node_id))
+    top_municipalities = all_municipalities.limit(10)
+    top_municipalities_count = top_municipalities.all.length
 
     top_nodes = FlowStatsForNode.new(@context, @year, @node, node_type).top_nodes_for_quant('Volume')
     node_value_sum = top_nodes.map{ |t| t[:value] }.reduce(0, :+)
-    matrix = [
-      top_nodes.map{ |t| t['value'] }
-    ]
-    top_municipalities.each do |municipality|
+    matrix_size = top_municipalities_count + top_nodes.size
+    matrix = Array.new(matrix_size){ Array.new(matrix_size){ 0 } }
+    matrix[0] = top_municipalities.map { 0 } + top_nodes.map{ |t| t['value'] }
+
+    top_municipalities.each_with_index do |municipality, m_idx|
       all_nodes = FlowStatsForNode.new(@context, @year, municipality, node_type).all_nodes_for_quant('Volume')
-      matrix << top_nodes.map{ |t| n = all_nodes.find{ |e| e['node_id'] == t['node_id'] }; n && n['value'] }
+      top_nodes.each_with_index do |t, t_idx|
+        n = all_nodes.find{ |e| e['node_id'] == t['node_id'] }
+        value = n && n['value']
+        matrix[m_idx][top_municipalities_count + t_idx] = value
+        matrix[top_municipalities_count + t_idx][m_idx] = value
+      end
     end
 
     result = {
