@@ -18,6 +18,7 @@
 #
 
 class Ind < ActiveRecord::Base
+    include Indicator
 
     self.primary_key = :ind_id
 
@@ -27,4 +28,8 @@ class Ind < ActiveRecord::Base
     has_many :context_recolor_bies, as: :recolor_attribute
     has_many :context_resize_bies, as: :resize_attribute
     has_many :context_indicators, as: :indicator
+
+    scope :place_temporal, -> {
+      where("place_factsheet AND place_factsheet_temporal OR name IN ('POTENTIAL_SOY_RELATED_DEFOR_ind', 'TOTAL_DEFOR_RATE')")
+    }
 end
