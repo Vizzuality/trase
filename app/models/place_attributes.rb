@@ -275,8 +275,8 @@ EOT
       group('nodes.node_id, nodes.name').
       order('value desc')
 
-    top_municipalities = all_municipalities.limit(10)
-    top_municipalities_count = top_municipalities.all.length
+    top_municipalities = [@node] + all_municipalities.limit(9).all
+    top_municipalities_count = top_municipalities.length
 
     top_nodes = FlowStatsForNode.new(@context, @year, @node, node_type).top_nodes_for_quant('Volume')
     node_value_sum = top_nodes.map{ |t| t[:value] }.reduce(0, :+)
@@ -297,7 +297,7 @@ EOT
     result = {
       node_list_label =>
         top_nodes.map{ |t| {id: t['node_id'], name: t['name'], value: t['value']/node_value_sum} },
-      municipalities: [{id: @node.id, name: @node.name}] + top_municipalities.map{ |m| {id: m.id, name: m.name} },
+      municipalities: top_municipalities.map{ |m| {id: m.id, name: m.name} },
       matrix: matrix
     }
   end
