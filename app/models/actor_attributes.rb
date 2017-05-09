@@ -47,6 +47,7 @@ class ActorAttributes
   end
 
   def summary
+    return nil unless @node_type == NodeTypeName::EXPORTER
     soy_exports = @node.temporal_actor_quants.where('quants.name' => 'SOY_')
     exports_in_year_raw, exports_in_year = if (e = soy_exports.find{ |e| e['year'] == @year })
       value = helper.number_with_precision(e['value']/1000, {delimiter: ',', precision: 0})
@@ -58,14 +59,6 @@ class ActorAttributes
     country_ranking = @stats.country_ranking(@context, 'quant', 'SOY_')
     country_ranking = country_ranking.ordinalize if country_ranking
 
-    year_idx = @data[:top_countries][:included_years].index(@year)
-    main_destination = @data[:top_countries][:lines].max do |line1, line2|
-      line1[:values][year_idx] <=> line2[:values][year_idx]
-    end
-
-    main_destination_name = main_destination[:name]
-    main_destination_exports = main_destination[:values][year_idx]
-    perc_exports = helper.number_to_percentage((main_destination_exports * 100.0) / exports_in_year_raw, {precision: 0})
     text = "#{@node.name.humanize} was the #{country_ranking} largest exporter of soy in #{@context.country.name} in #{@year}, accounting for #{exports_in_year} tons."
     if exports_in_previous_year_raw.present?
       perc_difference = (exports_in_year_raw - exports_in_previous_year_raw) / exports_in_previous_year_raw
@@ -85,10 +78,23 @@ class ActorAttributes
 
     text += <<-EOT
  #{@node.name.humanize} sources from #{source_municipalities_count} municipalities, \
-or #{perc_municipalities} of the soy production municipalities. The main destination \
-of the soy exported by #{@node.name.humanize} is #{main_destination_name.humanize}, \
+or #{perc_municipalities} of the soy production municipalities.
+EOT
+
+    year_idx = @data[:top_countries][:included_years].index(@year)
+    main_destination = @data[:top_countries][:lines].max do |line1, line2|
+      line1[:values][year_idx] <=> line2[:values][year_idx]
+    end
+    if main_destination.present?
+      main_destination_name = main_destination[:name]
+      main_destination_exports = main_destination[:values][year_idx]
+      perc_exports = helper.number_to_percentage((main_destination_exports * 100.0) / exports_in_year_raw, {precision: 0})
+       text += <<-EOT
+ The main destination of the soy exported by #{@node.name.humanize} is #{main_destination_name.humanize}, \
 accounting for #{perc_exports} of the total.
 EOT
+    end
+  text
   end
 
   def top_countries
