@@ -20,7 +20,9 @@ class ActorAttributes
 
     @data = {
       node_name: @node.name,
-      column_name: @node_type
+      column_name: @node_type,
+      country_name: @context.country.name,
+      country_geo_id: @context.country.iso2
     }
     [@actor_quals, @actor_quants, @actor_inds].each do |indicator_hash|
       indicator_hash.each do |name, indicator|
