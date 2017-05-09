@@ -55,7 +55,8 @@ class ActorAttributes
     end
     exports_in_previous_year_raw = (e = soy_exports.find{ |e| e['year'] == @year - 1 }) && e['value']
 
-    country_ranking = @stats.country_ranking(@context, 'quant', 'SOY_').ordinalize
+    country_ranking = @stats.country_ranking(@context, 'quant', 'SOY_')
+    country_ranking = country_ranking.ordinalize if country_ranking
 
     year_idx = @data[:top_countries][:included_years].index(@year)
     main_destination = @data[:top_countries][:lines].max do |line1, line2|
