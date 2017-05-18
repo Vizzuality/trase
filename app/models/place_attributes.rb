@@ -88,11 +88,11 @@ EOT
   def municipality_and_logistics_hub_extra_data
     data = {}
 
-    biome_name = @place_quals[NodeTypeName::BIOME]['value']
+    biome_name = @place_quals[NodeTypeName::BIOME] && @place_quals[NodeTypeName::BIOME]['value']
     biome = Node.biomes.find_by_name(biome_name)
     data[:biome_name] = biome_name
     data[:biome_geo_id] = biome.try(:geo_id)
-    state_name = @place_quals[NodeTypeName::STATE]['value']
+    state_name = @place_quals[NodeTypeName::STATE] && @place_quals[NodeTypeName::STATE]['value']
     @state = Node.states.find_by_name(state_name)
     data[:state_name] = state_name
     data[:state_geo_id] = @state.try(:geo_id)
