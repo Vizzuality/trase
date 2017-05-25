@@ -7,14 +7,14 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  username: postgres
-  host: localhost
-  port: 5432
-  password:
+  username: <%= ENV.fetch("POSTGRES_USERNAME") { "postgres" } %>
+  host: <%= ENV.fetch("POSTGRES_HOSTNAME") { "localhost" } %>
+  port: <%= ENV.fetch("POSTGRES_PORT") { "5432" } %>
+  password:  <%= ENV.fetch("POSTGRES_PASSWORD") {} %>
 
 development:
   <<: *default
-  database: trase_new
+  database:  <%= ENV.fetch("POSTGRES_DATABASE") { "trase_dev" } %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -23,13 +23,8 @@ test:
   <<: *default
   database: trase_test
 
-staging: &staging
+staging:
   <<: *default
-  username: <%= ENV.fetch("POSTGRES_USERNAME") { "postgres" } %>
-  password: <%= ENV.fetch("POSTGRES_PASSWORD") {} %>
-  database: <%= ENV.fetch("POSTGRES_DATABASE") {} %>
-  host: <%= ENV.fetch("POSTGRES_HOSTNAME") { "localhost" } %>
-  port: 5432
 
 production:
-  <<: *staging
+  <<: *default
