@@ -706,8 +706,7 @@ CREATE TABLE nodes (
     name text,
     node_type_id integer,
     is_domestic_consumption boolean,
-    is_unknown boolean,
-    parent_id integer
+    is_unknown boolean
 );
 
 
@@ -1573,6 +1572,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170323090506'),
 ('20170323121305'),
 ('20170506225529'),
-('20170526080738');
+('20170526080738'),
+('20170526095950');
 
 
