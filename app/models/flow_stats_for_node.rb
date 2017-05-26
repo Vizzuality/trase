@@ -180,7 +180,7 @@ class FlowStatsForNode
   def all_nodes_for_quant(quant_name)
     select_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
-      ["flows.path[?] AS node_id, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, nodes.name AS name, nodes.geo_id",
+      ["flows.path[?] AS node_id, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, nodes.name AS name, nodes.is_domestic_consumption AS is_domestic_consumption, nodes.geo_id",
       @node_index]
     )
     nodes_join_clause = ActiveRecord::Base.send(
@@ -190,7 +190,7 @@ class FlowStatsForNode
     )
     group_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
-      ["flows.path[?], nodes.name, nodes.geo_id",
+      ["flows.path[?], nodes.name, nodes.geo_id, nodes.is_domestic_consumption",
       @node_index]
     )
     Flow.select(select_clause).
