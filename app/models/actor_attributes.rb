@@ -151,7 +151,7 @@ EOT
     x_indicators = [
       {name: 'Land use', unit: 'Ha', type: 'quant', backend_name: 'LAND_USE'},
       {name: 'Territorial Deforestation', unit: 'Ha', type: 'quant', backend_name: 'DEFORESTATION'},
-      {name: 'Potential Soy related deforestation', unit: 'Ha', type: 'quant', backend_name: 'POTENTIAL_SOY_RELATED_DEFOR'},
+      {name: 'Maximum soy deforestation', unit: 'Ha', type: 'quant', backend_name: 'POTENTIAL_SOY_RELATED_DEFOR'},
       {name: 'Soy related deforestation', unit: 'Ha', type: 'quant', backend_name: 'AGROSATELITE_SOY_DEFOR_'},
       {name: 'Loss of biodiversity', type: 'quant', backend_name: 'BIODIVERSITY'},
       {name: 'Land-based emissions', unit: 'Tn', type: 'quant', backend_name: 'GHG_'}
