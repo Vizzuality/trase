@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.1
--- Dumped by pg_dump version 9.6.1
+-- Dumped from database version 9.6.2
+-- Dumped by pg_dump version 9.6.2
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -690,7 +690,8 @@ ALTER SEQUENCE inds_ind_id_seq OWNED BY inds.ind_id;
 
 CREATE TABLE node_types (
     node_type_id integer NOT NULL,
-    node_type text
+    node_type text,
+    profile_type character varying
 );
 
 
@@ -1571,6 +1572,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170316135218'),
 ('20170323090506'),
 ('20170323121305'),
-('20170506225529');
+('20170506225529'),
+('20170526080738');
 
 
