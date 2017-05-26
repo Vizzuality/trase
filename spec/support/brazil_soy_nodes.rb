@@ -5,13 +5,13 @@ shared_context 'brazil soy nodes' do
     FactoryGirl.create(:node, name: 'MATO GROSSO', node_type: state_node_type)
   }
   let(:biome){
-    FactoryGirl.create(:node, name: 'AMAZONIA', node_type: biome_node_type, parent: state)
+    FactoryGirl.create(:node, name: 'AMAZONIA', node_type: biome_node_type)
   }
   let(:logistics_hub){
-    FactoryGirl.create(:node, name: 'CUIABA', node_type: logistics_hub_node_type, parent: biome)
+    FactoryGirl.create(:node, name: 'CUIABA', node_type: logistics_hub_node_type)
   }
   let(:municipality){
-    FactoryGirl.create(:node, name: 'NOVA UBIRATA', node_type: municipality_node_type, parent: biome)
+    FactoryGirl.create(:node, name: 'NOVA UBIRATA', node_type: municipality_node_type)
   }
   let(:exporter1){
     FactoryGirl.create(:node, name: 'AFG BRASIL', node_type: exporter_node_type)

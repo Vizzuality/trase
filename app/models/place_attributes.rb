@@ -23,10 +23,8 @@ class PlaceAttributes
       country_name: @context.country.name,
       country_geo_id: @context.country.iso2
     }
-    ([@node] + @node.ancestors.to_a).each do |node|
-      @data[(node.node_type.node_type.downcase + '_name').to_sym] = node.name
-      @data[(node.node_type.node_type.downcase + '_geo_id').to_sym] = node.geo_id
-    end
+    @data[(@node.node_type.node_type.downcase + '_name').to_sym] = @node.name
+    @data[(@node.node_type.node_type.downcase + '_geo_id').to_sym] = @node.geo_id
 
     if [NodeTypeName::MUNICIPALITY, NodeTypeName::LOGISTICS_HUB].include? @node_type
       @data = @data.merge(municipality_and_logistics_hub_extra_data)
