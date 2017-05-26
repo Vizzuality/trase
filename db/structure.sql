@@ -361,8 +361,7 @@ CREATE TABLE context_recolor_by (
     legend_color_theme character varying(55),
     interval_count integer,
     min_value character varying(10),
-    max_value character varying(10),
-    divisor double precision
+    max_value character varying(10)
 );
 
 
@@ -1575,6 +1574,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170506225529'),
 ('20170526080738'),
 ('20170526095950'),
-('20170526103500');
+('20170526103500'),
+('20170526131332');
 
 

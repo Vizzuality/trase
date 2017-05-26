@@ -1,5 +1,5 @@
 class RecolorBySerializer < ActiveModel::Serializer
-  attributes :is_default, :is_disabled, :group_number, :position, :legend_type, :legend_color_theme, :interval_count, :min_value, :max_value, :divisor
+  attributes :is_default, :is_disabled, :group_number, :position, :legend_type, :legend_color_theme, :interval_count, :min_value, :max_value
 
   attribute :type do
     object.recolor_attribute_type.downcase
