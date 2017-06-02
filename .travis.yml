@@ -4,7 +4,7 @@ rvm:
 services:
   - postgresql
 addons:
-  postgresql: "9.5"
+  postgresql: "9.4"
 before_install:
   - gem install bundler
   - bundle install
