@@ -7,7 +7,7 @@ rvm:
 services:
   - postgresql
 addons:
-  postgresql: 9.5
+  postgresql: 9.6
 before_script:
   - bundle exec rake db:drop db:create db:structure:load content:db:drop content:db:create content:db:structure:load RAILS_ENV=test
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
