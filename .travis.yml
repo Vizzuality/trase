@@ -8,5 +8,5 @@ addons:
 before_install:
   - gem install bundler
   - bundle install
-  - bundle exec rake db:drop db:create db:structure:load RAILS_ENV=test
+  - bundle exec rake db:create db:structure:load RAILS_ENV=test
 
