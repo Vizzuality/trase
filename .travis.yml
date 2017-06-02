@@ -3,13 +3,13 @@ env:
     - CC_TEST_REPORTER_ID=f0e883a2051d993c1e18e8150d3569be34220ee9ea6d09c5207567b28ef5bfb2
 language: ruby
 rvm:
-  - 2.4.0
+  - 2.4.1
 services:
   - postgresql
 addons:
   postgresql: 9.5
 before_script:
-  - bundle exec rake db:drop db:create db:structure:load RAILS_ENV=test
+  - bundle exec rake db:drop db:create db:structure:load content:db:drop content:db:create content:db:structure:load RAILS_ENV=test
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build

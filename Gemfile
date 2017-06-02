@@ -5,23 +5,20 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails', '~> 5.0.2'
+gem 'rails', '~> 5.1.1'
 gem 'pg', '~> 0.18'
-# Scenic adds methods to ActiveRecord::Migration to create and manage database views in Rails.
 gem 'scenic'
-# Fast Ruby PG csv export. Uses pg function 'copy to csv'.
 gem 'pg_csv'
 gem 'rubyzip'
 gem 'puma', '~> 3.0'
 
-gem 'dotenv-rails', '~> 2.1'
+gem 'dotenv-rails', '~> 2.2'
 
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'enumerate_it', '~> 1.4.1'
 gem 'mailchimp-api', require: 'mailchimp'
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
   gem 'json-diff'
   gem 'csv-diff'
