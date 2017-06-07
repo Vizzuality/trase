@@ -4,18 +4,9 @@ default: &default
   username: <%= ENV.fetch("POSTGRES_USERNAME") { "postgres" } %>
   host: <%= ENV.fetch("POSTGRES_HOSTNAME") { "localhost" } %>
   port: <%= ENV.fetch("POSTGRES_PORT") { "5432" } %>
-  password: <%= ENV.fetch("POSTGRES_PASSWORD") {} %>
-  database: <%= ENV.fetch("POSTGRES_DATABASE") { "trase_dev" } %>
-  schema_search_path: "public"
-
-content_db:
-  adapter: postgresql
-  encoding: unicode
-  database:  <%= ENV.fetch("POSTGRES_CONTENT_DATABASE") { "trase_content" } %>
-  username: <%= ENV.fetch("POSTGRES_USERNAME") { "postgres" } %>
-  host: <%= ENV.fetch("POSTGRES_HOSTNAME") { "localhost" } %>
-  port: <%= ENV.fetch("POSTGRES_PORT") { "5432" } %>
   password:  <%= ENV.fetch("POSTGRES_PASSWORD") {} %>
+  database:  <%= ENV.fetch("POSTGRES_CONTENT_DATABASE") { "trase_content" } %>
+
 
 development:
   <<: *default
@@ -25,7 +16,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: trase_test
+  database: trase_content_test
 
 staging:
   <<: *default

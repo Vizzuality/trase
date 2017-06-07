@@ -30,7 +30,11 @@ append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/syst
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
-# Default value for keep_releases is 5
-# set :keep_releases, 5
+set :keep_releases, 5
 
-set :rvm_ruby_version, '2.4.0'
+namespace :deploy do
+  after :finishing, 'deploy:cleanup'
+  after 'deploy:publishing', 'deploy:restart'
+end
+
+set :rvm_ruby_version, '2.4.1'

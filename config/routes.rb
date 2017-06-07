@@ -5,6 +5,19 @@ Rails.application.routes.draw do
       get '/get_all_nodes', to: 'nodes#get_all_nodes'
     end
     namespace :v2 do
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+      mount Ckeditor::Engine => '/ckeditor'
+      devise_for :users, class_name: 'Content::User'
+      ActiveAdmin.routes(self)
+
+      get '/posts', to: 'content#posts'
+      get '/site_dive/:id', to: 'content#site_dive'
+      get '/tweets', to: 'content#tweets'
+
+      resources :geo_id, only: :index
+      resources :download, only: [:index], as: :download
+      resources :indicators, only: [:index]
+      resources :newsletter_subscriptions, only: [:create]
 
       # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
       resources :download, only: [:index], as: :download
