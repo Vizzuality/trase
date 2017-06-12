@@ -6,6 +6,8 @@ class PlaceAttributes
     @node = node
     @node_type = @node.node_type.node_type
 
+    return if @node.is_unknown? or @node.is_domestic_consumption?
+
     @stats = FlowStatsForNode.new(@context, @year, @node, @node_type)
 
     @place_quals = Hash[(@node.place_quals + @node.temporal_place_quals(@year)).map do |e|
