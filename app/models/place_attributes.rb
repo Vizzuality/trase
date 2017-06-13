@@ -54,11 +54,15 @@ class PlaceAttributes
     end
     # TODO this value is competely different from example - by order of magnitude (?)
     soy_area = if (area_perc = @place_inds['SOY_AREAPERC']) && (area = @place_quants['AREA_KM2'])
+      # SOY_AREA_PERC is not given as decimal, therefore we should divide it by 100;
+      # however, to convert to hectars we should multiply the result by 100.
+      # Therefore, both those operations can be skipped.
       value = helper.number_with_precision(area_perc['value'] * area['value'], {delimiter: ',', precision: 0})
       unit = 'Ha' # area is in km2
       "#{value}#{unit}"
     end
     percentage_farm = if (perc = @place_inds['PERC_FARM_GDP'])
+      # PERC_FARM_GDP is given as decimal
       helper.number_to_percentage(perc['value'] * 100, {delimiter: ',', precision: 0})
     end
     country_ranking = @stats.country_ranking(@context, 'quant', 'SOY_TN')
@@ -98,7 +102,7 @@ EOT
       data[:area] = @place_quants['AREA_KM2']['value']
     end
     if @place_inds['SOY_AREAPERC'].present?
-      data[:soy_farmland] = @place_inds['SOY_AREAPERC']['value']
+      data[:soy_farmland] = @place_inds['SOY_AREAPERC']['value'] / 100
     end
     data
   end
