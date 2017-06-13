@@ -104,7 +104,10 @@ class FlowStatsForNode
         'nodes.node_id',
         "DENSE_RANK() OVER (ORDER BY #{value_table}.value DESC) AS rank"
       ).
-      where("#{value_table}.year" => @year)
+      where(
+        "#{value_table}.year = ? OR NOT COALESCE(#{dict_table}.place_factsheet_temporal, FALSE)",
+        @year
+      )
 
     result = Node.from('(' + query.to_sql + ') s').
       select('s.*').
