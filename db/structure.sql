@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.2
--- Dumped by pg_dump version 9.6.2
+-- Dumped from database version 9.6.3
+-- Dumped by pg_dump version 9.6.3
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -361,7 +361,8 @@ CREATE TABLE context_recolor_by (
     legend_color_theme character varying(55),
     interval_count integer,
     min_value character varying(10),
-    max_value character varying(10)
+    max_value character varying(10),
+    divisor double precision
 );
 
 
@@ -1575,6 +1576,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170526080738'),
 ('20170526095950'),
 ('20170526103500'),
-('20170526131332');
+('20170526131332'),
+('20170613120932');
 
 
