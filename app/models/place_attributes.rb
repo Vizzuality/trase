@@ -59,9 +59,7 @@ class PlaceAttributes
       "#{value}#{unit}"
     end
     percentage_farm = if (perc = @place_inds['PERC_FARM_GDP'])
-      value = perc['value'].round
-      unit = perc['unit']
-      "#{value}#{unit}"
+      helper.number_to_percentage(perc['value'] * 100, {delimiter: ',', precision: 0})
     end
     country_ranking = @stats.country_ranking(@context, 'quant', 'SOY_TN')
     country_ranking = country_ranking.ordinalize if country_ranking.present?
