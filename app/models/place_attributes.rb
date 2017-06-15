@@ -153,7 +153,7 @@ EOT
       {type: 'ind', backend_name: 'PERC_INDIGENOUS'}, # NO MATCH
       {type: 'ind', backend_name: 'PERC_PROTECTED'}, # NO MATCH
       {type: 'quant', backend_name: 'EMBARGOES_'},
-      {type: 'ind', backend_name: 'COMPLIANCE_FOREST_CODE'}, # NO MATCH
+      {type: 'ind', backend_name: 'PROTECTED_DEFICIT_PERC'},
       {type: 'quant', backend_name: 'PROTECTED'} # NO MATCH
     ]
 
