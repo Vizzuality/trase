@@ -12,6 +12,7 @@ gem 'pg', '~> 0.18'
 gem 'scenic'
 # Fast Ruby PG csv export. Uses pg function 'copy to csv'.
 gem 'pg_csv'
+gem 'rubyzip'
 gem 'puma', '~> 3.0'
 
 gem 'dotenv-rails', '~> 2.1'
