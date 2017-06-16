@@ -54,25 +54,32 @@ class PlaceAttributes
     end
     # TODO this value is competely different from example - by order of magnitude (?)
     soy_area = if (area_perc = @place_inds['SOY_AREAPERC']) && (area = @place_quants['AREA_KM2'])
+      # SOY_AREA_PERC is not given as decimal, therefore we should divide it by 100;
+      # however, to convert to hectars we should multiply the result by 100.
+      # Therefore, both those operations can be skipped.
       value = helper.number_with_precision(area_perc['value'] * area['value'], {delimiter: ',', precision: 0})
       unit = 'Ha' # area is in km2
       "#{value}#{unit}"
     end
     percentage_farm = if (perc = @place_inds['PERC_FARM_GDP'])
-      value = perc['value'].round
-      unit = perc['unit']
-      "#{value}#{unit}"
+      # PERC_FARM_GDP is given as decimal
+      helper.number_to_percentage(perc['value'] * 100, {delimiter: ',', precision: 0})
     end
     country_ranking = @stats.country_ranking(@context, 'quant', 'SOY_TN')
     country_ranking = country_ranking.ordinalize if country_ranking.present?
     state_ranking = @stats.state_ranking(@state, 'quant', 'SOY_TN') if @state.present?
     state_ranking = state_ranking.ordinalize if state_ranking.present?
-    largest_exporter = (traders = @data[:top_traders][:actors]) && traders[0] && traders[0][:name]
-    largest_exporter = largest_exporter.humanize if largest_exporter.present?
-    # might be unit incompatibility, percentage miniscule?
-    percent_of_exports = helper.number_to_percentage(
-      ((@data[:top_traders][:actors][0][:value] || 0) / soy_produced_raw) * 100, {precision: 0}
-    ) if largest_exporter && soy_produced
+    largest_exporter = (traders = @data[:top_traders][:actors]) && traders[0]
+    if largest_exporter && largest_exporter[:is_domestic_consumption]
+      largest_exporter = traders && traders[1]
+    end
+    if largest_exporter.present?
+      largest_exporter_name = largest_exporter[:name].try(:humanize)
+      percent_of_exports = helper.number_to_percentage(
+        (largest_exporter[:value] || 0) * 100,
+        {delimiter: ',', precision: 1}
+      )
+    end
     main_destination = (consumers = @data[:top_consumers][:countries]) && consumers[0] && consumers[0][:name]
     main_destination = main_destination.humanize if main_destination.present?
 
@@ -80,7 +87,7 @@ class PlaceAttributes
 In #{@year}, #{@node.name.humanize} produced #{soy_produced} of soy occupying a total of #{soy_area} \
 of land. With #{percentage_farm} of the total production, it ranks #{country_ranking} in Brazil in soy \
 production, and #{state_ranking} in the state of Mato Grosso. The largest exporter of soy \
-in #{@node.name.humanize} was #{largest_exporter}, which accounted for #{percent_of_exports} of the total exports, \
+in #{@node.name.humanize} was #{largest_exporter_name}, which accounted for #{percent_of_exports} of the total exports, \
 and the main destination was #{main_destination}.
 EOT
   end
@@ -100,7 +107,7 @@ EOT
       data[:area] = @place_quants['AREA_KM2']['value']
     end
     if @place_inds['SOY_AREAPERC'].present?
-      data[:soy_farmland] = @place_inds['SOY_AREAPERC']['value']
+      data[:soy_farmland] = @place_inds['SOY_AREAPERC']['value'] / 100
     end
     if @place_quants['SOY_TN'].present?
       data[:soy_production] = @place_quants['SOY_TN']['value']
