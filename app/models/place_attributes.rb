@@ -160,11 +160,11 @@ EOT
   def other_indicators
     indicators_list = [
       {type: 'quant', backend_name: 'BIODIVERSITY'},
-      {type: 'ind', backend_name: 'PERC_INDIGENOUS'},
-      {type: 'ind', backend_name: 'PERC_PROTECTED'},
+      {type: 'ind', backend_name: 'PERC_INDIGENOUS'}, # NO MATCH
+      {type: 'ind', backend_name: 'PERC_PROTECTED'}, # NO MATCH
       {type: 'quant', backend_name: 'EMBARGOES_'},
-      {type: 'ind', backend_name: 'COMPLIANCE_FOREST_CODE'},
-      {type: 'quant', backend_name: 'PROTECTED'}
+      {type: 'ind', backend_name: 'PROTECTED_DEFICIT_PERC'},
+      {type: 'quant', backend_name: 'PROTECTED'} # NO MATCH
     ]
 
     indicators_group(indicators_list, 'Other environmental indicators')
@@ -314,14 +314,16 @@ EOT
 
   def indicators_group(list, name)
     # fetch frontend names and units
-    list.each do |indicator|
+    list = list.select do |indicator|
       i = indicator[:type].camelize.constantize.find_by_name(indicator[:backend_name])
       if i.nil?
         Rails.logger.debug "NOT FOUND " + indicator[:backend_name]
-        next
+        false
+      else
+        indicator[:name] = i.frontend_name
+        indicator[:unit] = i.unit
+        indicator
       end
-      indicator[:name] = i.frontend_name
-      indicator[:unit] = i.unit
     end
     included_columns = list.map{ |i| i.slice(:name, :unit)}
     values = []
