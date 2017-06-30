@@ -692,7 +692,8 @@ ALTER SEQUENCE inds_ind_id_seq OWNED BY inds.ind_id;
 CREATE TABLE node_types (
     node_type_id integer NOT NULL,
     node_type text,
-    profile_type character varying
+    profile_type character varying,
+    is_geo_column boolean
 );
 
 
@@ -1578,6 +1579,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170526103500'),
 ('20170526131332'),
 ('20170613120932'),
-('20170614111428');
+('20170614111428'),
+('20170630134124');
 
 

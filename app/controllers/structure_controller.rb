@@ -3,7 +3,7 @@ class StructureController < ApplicationController
 
     @node_types = NodeType
                  .joins(:context_nodes)
-                 .select('node_types.node_type_id, column_position as position, column_group as group, node_types.node_type as name, is_default')
+                 .select('node_types.node_type_id, column_position as position, column_group as group, node_types.node_type as name, is_default, is_geo_column as is_geo')
                  .where('context_nodes.context_id = :context_id', context_id: @context.id)
                  .order('context_nodes.column_position ASC')
 
