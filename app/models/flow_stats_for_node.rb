@@ -164,7 +164,7 @@ class FlowStatsForNode
       joins(flows_join_clause).
       where('flows.context_id' => context.id).
       joins(value_table => indicator_type).
-      where("#{dict_table}.name" => indicator_name).
+      where("#{dict_table}.name" => indicator_name, "#{value_table}.year" => 2015).
       distinct
 
     result = Node.from('(' + query.to_sql + ') s').
