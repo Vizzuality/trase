@@ -246,6 +246,7 @@ EOT
     {
       trajectory_deforestation: {
         included_years: years,
+        unit: 'Ha',
         lines: indicators_list.map do |i|
           data = if i[:state_average] && @state.present?
             @stats.state_average(@state, i[:indicator_type], i[:backend_name])
