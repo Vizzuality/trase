@@ -176,11 +176,11 @@ class FlowStatsForNode
     result && result['rank'] || nil #TODO
   end
 
-  def top_nodes_for_quant(quant_name)
-    all_nodes_for_quant(quant_name).limit(10)
+  def top_nodes_for_quant(quant_name, include_domestic_consumption = true)
+    all_nodes_for_quant(quant_name, include_domestic_consumption).limit(10)
   end
 
-  def all_nodes_for_quant(quant_name)
+  def all_nodes_for_quant(quant_name, include_domestic_consumption = true)
     select_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
       ["flows.path[?] AS node_id, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, nodes.name AS name, nodes.is_domestic_consumption AS is_domestic_consumption, nodes.geo_id",
@@ -200,7 +200,7 @@ class FlowStatsForNode
       joins('LEFT JOIN flow_quants ON flows.flow_id = flow_quants.flow_id').
       joins('LEFT JOIN quants ON quants.quant_id = flow_quants.quant_id').
       joins(nodes_join_clause).
-      where('nodes.name NOT LIKE ?', 'UNKNOWN%').
+      where('(nodes.is_unknown is NULL OR nodes.is_unknown = false)' + (include_domestic_consumption ? '' : ' AND (nodes.is_domestic_consumption is NULL or nodes.is_domestic_consumption = false)')).
       where('flows.context_id' => @context.id).
       where('? = ANY(path)', @node.id).
       where('quants.name' => quant_name).

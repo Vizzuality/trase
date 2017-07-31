@@ -52,7 +52,7 @@ class PlaceAttributes
       unit = production['unit']
       [production['value'], "#{value}#{unit}"]
     end
-    # TODO this value is competely different from example - by order of magnitude (?)
+    # TODO this value is completely different from example - by order of magnitude (?)
     soy_area = if (area_perc = @place_inds['SOY_AREAPERC']) && (area = @place_quants['AREA_KM2'])
       # SOY_AREA_PERC is not given as decimal, therefore we should divide it by 100;
       # however, to convert to hectars we should multiply the result by 100.
@@ -61,18 +61,16 @@ class PlaceAttributes
       unit = 'Ha' # area is in km2
       "#{value}#{unit}"
     end
-    percentage_farm = if (perc = @place_inds['PERC_FARM_GDP'])
-      # PERC_FARM_GDP is given as decimal
-      helper.number_to_percentage(perc['value'] * 100, {delimiter: ',', precision: 0})
+    perc_total = total_soy_production()
+    percentage_total_production = if (perc = @place_quants['SOY_TN'])
+      helper.number_to_percentage((perc['value'] / perc_total) * 100, {delimiter: ',', precision: 2})
     end
     country_ranking = @stats.country_ranking(@context, 'quant', 'SOY_TN')
     country_ranking = country_ranking.ordinalize if country_ranking.present?
     state_ranking = @stats.state_ranking(@state, 'quant', 'SOY_TN') if @state.present?
     state_ranking = state_ranking.ordinalize if state_ranking.present?
-    largest_exporter = (traders = @data[:top_traders][:actors]) && traders[0]
-    if largest_exporter && largest_exporter[:is_domestic_consumption]
-      largest_exporter = traders && traders[1]
-    end
+
+    largest_exporter = (traders = top_municipality_exporters()) && traders[:actors][0]
     if largest_exporter.present?
       largest_exporter_name = largest_exporter[:name].try(:humanize)
       percent_of_exports = helper.number_to_percentage(
@@ -80,12 +78,13 @@ class PlaceAttributes
         {delimiter: ',', precision: 1}
       )
     end
+
     main_destination = (consumers = @data[:top_consumers][:countries]) && consumers[0] && consumers[0][:name]
     main_destination = main_destination.humanize if main_destination.present?
 
     text = <<-EOT
 In #{@year}, #{@node.name.humanize} produced #{soy_produced} of soy occupying a total of #{soy_area} \
-of land. With #{percentage_farm} of the total production, it ranks #{country_ranking} in Brazil in soy \
+of land. With #{percentage_total_production} of the total production, it ranks #{country_ranking} in Brazil in soy \
 production, and #{state_ranking} in the state of Mato Grosso. The largest exporter of soy \
 in #{@node.name.humanize} was #{largest_exporter_name}, which accounted for #{percent_of_exports} of the total exports, \
 and the main destination was #{main_destination}.
@@ -274,7 +273,18 @@ EOT
 
   private
 
-  def top_nodes_summary(node_type, node_list_label)
+  def total_soy_production
+    NodeQuant.
+        joins(:quant).
+        where('quants.name' => 'SOY_TN', :year => 2015).
+        sum(:value)
+  end
+
+  def top_municipality_exporters
+    top_nodes_summary(NodeTypeName::EXPORTER, :actors, false)
+  end
+
+  def top_nodes_summary(node_type, node_list_label, include_domestic_consumption = true)
     all_municipalities = @node.same_type_nodes_indicator_values('quant', 'SOY_TN').
       where('nodes.node_id <> ?', @node.id). # do not double count current
       select(
@@ -289,7 +299,7 @@ EOT
     top_municipalities = [@node] + all_municipalities.limit(9).all
     top_municipalities_count = top_municipalities.length
 
-    top_nodes = FlowStatsForNode.new(@context, @year, @node, node_type).top_nodes_for_quant('Volume')
+    top_nodes = FlowStatsForNode.new(@context, @year, @node, node_type).top_nodes_for_quant('Volume', include_domestic_consumption)
     node_value_sum = top_nodes.map{ |t| t[:value] }.reduce(0, :+)
     matrix_size = top_municipalities_count + top_nodes.size
     matrix = Array.new(matrix_size){ Array.new(matrix_size){ 0 } }
