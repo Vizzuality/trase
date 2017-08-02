@@ -193,18 +193,18 @@ EOT
     end
     indicators_list = [
       {
-        name: 'Soy related deforestation',
+        name: 'Soy deforestation',
         indicator_type: 'quant',
         backend_name: 'AGROSATELITE_SOY_DEFOR_',
-        legend_name: 'Soy related<br/>deforestation',
+        legend_name: 'Soy deforestation',
         type: 'area',
         style: 'area-pink'
       },
       {
-        name: 'Potential Soy related deforestation',
+        name: 'Maximum soy deforestation',
         indicator_type: 'ind',
         backend_name: 'POTENTIAL_SOY_RELATED_DEFOR_ind',
-        legend_name: 'Potential Soy<br/>related deforestation',
+        legend_name: 'Maximum soy<br/>deforestation',
         type: 'line',
         style: 'line-dashed-pink'
       },
