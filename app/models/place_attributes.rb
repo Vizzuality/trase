@@ -150,7 +150,8 @@ EOT
   def deforestation_indicators
     indicators_list = [
       {type: 'quant', backend_name: 'AGROSATELITE_SOY_DEFOR_'},
-      {type: 'ind', backend_name: 'TOTAL_DEFOR_RATE'}
+      {type: 'ind', backend_name: 'TOTAL_DEFOR_RATE'},
+      {type: 'ind', backend_name: 'POTENTIAL_SOY_RELATED_DEFOR_ind'}
     ]
 
     indicators_group(indicators_list, 'Deforestation')
