@@ -2,8 +2,10 @@
 #
 # Table name: node_types
 #
-#  node_type_id :integer          not null, primary key
-#  node_type    :text
+#  node_type_id  :integer          not null, primary key
+#  node_type     :text
+#  profile_type  :string
+#  is_geo_column :boolean
 #
 
 class NodeType < ActiveRecord::Base
