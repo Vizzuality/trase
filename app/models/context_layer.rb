@@ -11,6 +11,8 @@
 #  bucket_5               :float            is an Array
 #  context_layer_group_id :integer
 #  is_default             :boolean          default("false")
+#  color_scale            :string
+#  years                  :integer          is an Array
 #
 
 class ContextLayer < ActiveRecord::Base

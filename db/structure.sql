@@ -257,7 +257,8 @@ CREATE TABLE context_layer (
     bucket_5 double precision[],
     context_layer_group_id integer,
     is_default boolean DEFAULT false,
-    color_scale character varying
+    color_scale character varying,
+    years integer[]
 );
 
 
@@ -1580,6 +1581,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170526131332'),
 ('20170613120932'),
 ('20170614111428'),
-('20170630134124');
+('20170630134124'),
+('20170821081055');
 
 
