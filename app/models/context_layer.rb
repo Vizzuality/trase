@@ -13,6 +13,7 @@
 #  is_default             :boolean          default("false")
 #  color_scale            :string
 #  years                  :integer          is an Array
+#  aggregate_method       :string
 #
 
 class ContextLayer < ActiveRecord::Base

@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 9.6.3
--- Dumped by pg_dump version 9.6.3
+-- Dumped by pg_dump version 9.6.4
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -258,7 +258,8 @@ CREATE TABLE context_layer (
     context_layer_group_id integer,
     is_default boolean DEFAULT false,
     color_scale character varying,
-    years integer[]
+    years integer[],
+    aggregate_method character varying
 );
 
 
@@ -1582,6 +1583,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170613120932'),
 ('20170614111428'),
 ('20170630134124'),
-('20170821081055');
+('20170821081055'),
+('20170824111857');
 
 
