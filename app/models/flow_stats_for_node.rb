@@ -170,7 +170,7 @@ class FlowStatsForNode
     result = Node.from('(' + query.to_sql + ') s').
       select('s.*').
       where('s.node_id' => @node.id).
-      order(nil).
+      order('rank ASC').
       first
 
     result && result['rank'] || nil #TODO
