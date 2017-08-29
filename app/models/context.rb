@@ -2,13 +2,15 @@
 #
 # Table name: context
 #
-#  id           :integer          not null, primary key
-#  country_id   :integer
-#  commodity_id :integer
-#  years        :integer          is an Array
-#  is_disabled  :boolean
-#  is_default   :boolean
-#  default_year :integer
+#  id                     :integer          not null, primary key
+#  country_id             :integer
+#  commodity_id           :integer
+#  years                  :integer          is an Array
+#  is_disabled            :boolean
+#  is_default             :boolean
+#  default_year           :integer
+#  default_context_layers :string           is an Array
+#  default_basemap        :string
 #
 
 class Context < ActiveRecord::Base

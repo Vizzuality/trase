@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.3
+-- Dumped from database version 9.6.4
 -- Dumped by pg_dump version 9.6.4
 
 SET statement_timeout = 0;
@@ -125,7 +125,9 @@ CREATE TABLE context (
     years integer[],
     is_disabled boolean,
     is_default boolean,
-    default_year integer
+    default_year integer,
+    default_context_layers character varying[],
+    default_basemap character varying
 );
 
 
@@ -1584,6 +1586,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170614111428'),
 ('20170630134124'),
 ('20170821081055'),
-('20170824111857');
+('20170824111857'),
+('20170829074711');
 
 
