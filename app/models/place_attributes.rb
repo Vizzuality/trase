@@ -83,10 +83,10 @@ class PlaceAttributes
     main_destination = main_destination.humanize if main_destination.present?
 
     text = <<-EOT
-In #{@year}, #{@node.name.humanize} produced #{soy_produced} of soy occupying a total of #{soy_area} \
+In #{@year}, #{@node.name.titleize} produced #{soy_produced} of soy occupying a total of #{soy_area} \
 of land. With #{percentage_total_production} of the total production, it ranks #{country_ranking} in Brazil in soy \
-production, and #{state_ranking} in the state of Mato Grosso. The largest exporter of soy \
-in #{@node.name.humanize} was #{largest_exporter_name}, which accounted for #{percent_of_exports} of the total exports, \
+production, and #{state_ranking} in the state of #{@state.name.titleize}. The largest exporter of soy \
+in #{@node.name.titleize} was #{largest_exporter_name}, which accounted for #{percent_of_exports} of the total exports, \
 and the main destination was #{main_destination}.
 EOT
   end
