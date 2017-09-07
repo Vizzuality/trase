@@ -282,8 +282,8 @@ EOT
     top_nodes_in_group = FlowStatsForNode.new(@context, @year, @node, node_type).
       top_nodes_for_quant('DEFORESTATION_V2')
     rows = top_nodes_in_group.map do |node|
-      nodeFoo  = Node.find(node['node_id'])
-      totals_per_indicator = (nodeFoo.actor_quants + nodeFoo.temporal_actor_quants(@year))
+      top_node = Node.find(node['node_id'])
+      totals_per_indicator = (top_node.actor_quants + top_node.temporal_actor_quants(@year))
       totals_hash = Hash[totals_per_indicator.map{ |t| [t['name'], t['value']] }]
       totals_hash.each do |k, v|
         if group_totals_hash[k]
