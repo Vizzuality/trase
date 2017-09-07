@@ -30,9 +30,9 @@ class Quant < ActiveRecord::Base
     has_many :context_indicators, as: :indicator
 
     scope :place_temporal, -> {
-      where("place_factsheet AND place_factsheet_temporal OR name IN ('AGROSATELITE_SOY_DEFOR_')")
+      where("(place_factsheet AND place_factsheet_temporal) OR name IN ('AGROSATELITE_SOY_DEFOR_', 'DEFORESTATION_V2')")
     }
     scope :actor_temporal, -> {
-      where("actor_factsheet AND actor_factsheet_temporal OR name IN ('SOY_')")
+      where("(actor_factsheet AND actor_factsheet_temporal) OR name IN ('SOY_')")
     }
 end
