@@ -142,7 +142,7 @@ EOT
   def sustainability_indicators
     indicators_list = [
       {type: 'ind', backend_name: 'WATER_SCARCITY'},
-      {type: 'quant', backend_name: 'FIRE_KM2_'},
+      {type: 'quant', backend_name: 'FIRES_'},
       {type: 'quant', backend_name: 'GHG_'}
     ]
 
@@ -152,8 +152,8 @@ EOT
   def deforestation_indicators
     indicators_list = [
       {type: 'quant', backend_name: 'AGROSATELITE_SOY_DEFOR_'},
-      {type: 'ind', backend_name: 'TOTAL_DEFOR_RATE'},
-      {type: 'ind', backend_name: 'POTENTIAL_SOY_RELATED_DEFOR_ind'}
+      {type: 'quant', backend_name: 'DEFORESTATION_V2'},
+      {type: 'quant', backend_name: 'POTENTIAL_SOY_DEFORESTATION_V2'}
     ]
 
     indicators_group(indicators_list, 'Deforestation')
@@ -176,7 +176,7 @@ EOT
     indicators_list = [
       {type: 'ind', backend_name: 'GDP_CAP'},
       {type: 'ind', backend_name: 'HDI'},
-      {type: 'ind', backend_name: 'PERC_FARM_GDP'},
+      {type: 'ind', backend_name: 'PERC_FARM_GDP_'},
       {type: 'ind', backend_name: 'SMALLHOLDERS'},
       {type: 'quant', backend_name: 'CATTLE_HEADS'},
       {type: 'quant', backend_name: 'LAND_CONFL'},
@@ -204,25 +204,17 @@ EOT
         style: 'area-pink'
       },
       {
-        name: 'Maximum soy deforestation',
-        indicator_type: 'ind',
-        backend_name: 'POTENTIAL_SOY_RELATED_DEFOR_ind',
-        legend_name: 'Maximum soy<br/>deforestation',
-        type: 'line',
-        style: 'line-dashed-pink'
-      },
-      {
         name: 'Territorial Deforestation',
-        indicator_type: 'ind',
-        backend_name: 'TOTAL_DEFOR_RATE',
+        indicator_type: 'quant',
+        backend_name: 'DEFORESTATION_V2',
         legend_name: 'Territorial<br/>Deforestation',
         type: 'area',
         style: 'area-black'
       },
       {
         name: 'State Average',
-        indicator_type: 'ind',
-        backend_name: 'TOTAL_DEFOR_RATE',
+        indicator_type: 'quant',
+        backend_name: 'DEFORESTATION_V2',
         legend_name: 'State<br/>Average',
         type: 'line',
         style: 'line-dashed-black',
@@ -235,7 +227,9 @@ EOT
         @node.temporal_place_quants.where('quants.name' => i[:backend_name])
       elsif i[:indicator_type] == 'ind'
         @node.temporal_place_inds.where('inds.name' => i[:backend_name])
-      end.except(:select).select('MIN(year), MAX(year)').first
+      end.except(:select).select('MIN(year), MAX(year)')
+
+      min_max = min_max.first
       if min_max && min_max['min'].present? && (min_year.nil? || min_max['min'] < min_year)
         min_year = min_max['min']
       end
@@ -243,6 +237,8 @@ EOT
         max_year = min_max['max']
       end
     end
+
+    return {} unless min_year.present? and max_year.present?
 
     years = (min_year..max_year).to_a
     {

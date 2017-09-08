@@ -150,8 +150,8 @@ EOT
     }
     x_indicators = [
       {name: 'Land use', unit: 'Ha', type: 'quant', backend_name: 'LAND_USE'},
-      {name: 'Territorial Deforestation', unit: 'Ha', type: 'quant', backend_name: 'DEFORESTATION'},
-      {name: 'Maximum soy deforestation', unit: 'Ha', type: 'quant', backend_name: 'POTENTIAL_SOY_RELATED_DEFOR'},
+      {name: 'Territorial Deforestation', unit: 'Ha', type: 'quant', backend_name: 'DEFORESTATION_V2'},
+      {name: 'Maximum soy deforestation', unit: 'Ha', type: 'quant', backend_name: 'POTENTIAL_SOY_DEFORESTATION_V2'},
       {name: 'Soy related deforestation', unit: 'Ha', type: 'quant', backend_name: 'AGROSATELITE_SOY_DEFOR_'},
       {name: 'Loss of biodiversity', type: 'quant', backend_name: 'BIODIVERSITY'},
       {name: 'Land-based emissions', unit: 'Tn', type: 'quant', backend_name: 'GHG_'}
@@ -271,8 +271,8 @@ EOT
 
   def risk_indicators
     [
-      {name: 'Maximum soy deforestation', unit: 'ha', backend_name: 'DEFORESTATION'},
-      {name: 'Soy deforestation', unit: 'ha', backend_name: 'SOY_DEFORESTATION'},
+      {name: 'Maximum soy deforestation', unit: 'ha', backend_name: 'DEFORESTATION_V2'},
+      {name: 'Soy deforestation', unit: 'ha', backend_name: 'AGROSATELITE_SOY_DEFOR_'},
       {name: 'Biodiversity loss', backend_name: 'BIODIVERSITY'}
     ]
   end
@@ -280,11 +280,10 @@ EOT
   def sustainability_for_group(name, node_type, include_totals)
     group_totals_hash = Hash.new
     top_nodes_in_group = FlowStatsForNode.new(@context, @year, @node, node_type).
-      top_nodes_for_quant('DEFORESTATION')
+      top_nodes_for_quant('DEFORESTATION_V2')
     rows = top_nodes_in_group.map do |node|
-      totals_per_indicator = @stats.node_totals_for_quants(
-        node['node_id'], node_type, risk_indicators.map{ |i| i[:backend_name] }
-      )
+      top_node = Node.find(node['node_id'])
+      totals_per_indicator = (top_node.actor_quants + top_node.temporal_actor_quants(@year))
       totals_hash = Hash[totals_per_indicator.map{ |t| [t['name'], t['value']] }]
       totals_hash.each do |k, v|
         if group_totals_hash[k]

@@ -55,7 +55,7 @@ namespace :populate do
         type: 'Quant',
         country: 'BRAZIL',
         commodity: nil,
-        name: 'POTENTIAL_SOY_RELATED_DEFOR', # CAUTION name mixup, different name for Paraguay
+        name: 'POTENTIAL_SOY_DEFORESTATION_V2', # CAUTION name mixup, different name for Paraguay
         position: 6
       },
       {

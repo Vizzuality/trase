@@ -30,6 +30,6 @@ class Ind < ActiveRecord::Base
     has_many :context_indicators, as: :indicator
 
     scope :place_temporal, -> {
-      where("place_factsheet AND place_factsheet_temporal OR name IN ('POTENTIAL_SOY_RELATED_DEFOR_ind', 'TOTAL_DEFOR_RATE')")
+      where('place_factsheet AND place_factsheet_temporal')
     }
 end

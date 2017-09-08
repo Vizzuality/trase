@@ -38,8 +38,8 @@ shared_context "two flows" do
       ].map(&:node_id)
     )
   }
-  let(:total_defor_rate){
-    i = FactoryGirl.create(:quant, name: 'TOTAL_DEFOR_RATE')
+  let(:deforestation_v2){
+    i = FactoryGirl.create(:quant, name: 'DEFORESTATION_V2')
     FactoryGirl.create(:context_indicator, context: context, indicator: i)
     i
   }
@@ -54,13 +54,13 @@ shared_context "two flows" do
     i
   }
   let!(:flow1_total_defor_rate){
-    FactoryGirl.create(:flow_quant, flow: flow1, quant: total_defor_rate, value: 10)
+    FactoryGirl.create(:flow_quant, flow: flow1, quant: deforestation_v2, value: 10)
   }
   let!(:flow1_forest_500){
     FactoryGirl.create(:flow_ind, flow: flow1, ind: forest_500, value: 15)
   }
   let!(:flow2_total_defor_rate){
-    FactoryGirl.create(:flow_quant, flow: flow2, quant: total_defor_rate, value: 5)
+    FactoryGirl.create(:flow_quant, flow: flow2, quant: deforestation_v2, value: 5)
   }
   let!(:flow2_zero_deforestation){
     FactoryGirl.create(:flow_qual, flow: flow2, qual: zero_deforestation, value: 'yes')
