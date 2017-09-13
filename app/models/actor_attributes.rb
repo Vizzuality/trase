@@ -90,11 +90,13 @@ EOT
     if main_destination.present?
       main_destination_name = main_destination[:name]
       main_destination_exports = main_destination[:values][year_idx]
-      perc_exports = helper.number_to_percentage((main_destination_exports * 100.0) / exports_in_year_raw, {precision: 0})
-       text += <<-EOT
+      if main_destination_exports && exports_in_year_raw
+        perc_exports = helper.number_to_percentage((main_destination_exports * 100.0) / exports_in_year_raw, {precision: 0})
+        text += <<-EOT
  The main destination of the soy exported by #{@node.name.humanize} is #{main_destination_name.humanize}, \
 accounting for #{perc_exports} of the total.
 EOT
+      end
     end
   text
   end
