@@ -48,9 +48,6 @@ GEM
     annotate (2.6.5)
       activerecord (>= 2.3.0)
       rake (>= 0.8.7)
-    appsignal (2.1.2)
-      rack
-      thread_safe
     arel (7.1.4)
     builder (3.2.3)
     byebug (9.0.6)
@@ -211,7 +208,6 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   annotate
-  appsignal
   byebug
   capistrano (= 3.7.1)
   capistrano-bundler
@@ -235,4 +231,4 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
 
 BUNDLED WITH
-   1.14.4
+   1.15.1
