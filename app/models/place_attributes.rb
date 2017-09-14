@@ -52,13 +52,9 @@ class PlaceAttributes
       unit = production['unit']
       [production['value'], "#{value}#{unit}"]
     end
-    # TODO this value is completely different from example - by order of magnitude (?)
-    soy_area = if (area_perc = @place_inds['SOY_AREAPERC']) && (area = @place_quants['AREA_KM2'])
-      # SOY_AREA_PERC is not given as decimal, therefore we should divide it by 100;
-      # however, to convert to hectars we should multiply the result by 100.
-      # Therefore, both those operations can be skipped.
-      value = helper.number_with_precision(area_perc['value'] * area['value'], {delimiter: ',', precision: 0})
-      unit = 'Ha' # area is in km2
+    soy_area = if (soy_produced_raw && @place_inds['SOY_YIELD'] && soy_yield_raw = @place_inds['SOY_YIELD']['value'])
+      value = helper.number_with_precision(soy_produced_raw / (soy_yield_raw / 1000), {delimiter: ',', precision: 0})
+      unit = 'Ha' # soy prod in Tn, soy yield in Tn/Ha
       "#{value}#{unit}"
     end
     perc_total = total_soy_production()
