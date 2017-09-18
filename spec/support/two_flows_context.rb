@@ -6,6 +6,7 @@ shared_context "two flows" do
       commodity: FactoryGirl.create(:commodity, name: 'SOY')
     )
   }
+
   include_context "brazil soy nodes"
 
   let(:exporter2){
@@ -26,7 +27,8 @@ shared_context "two flows" do
       context: context,
       path: [
         biome, state, logistics_hub, municipality, exporter1, port1, importer1, country_of_destination1
-      ].map(&:node_id)
+      ].map(&:node_id),
+      year: 2015
     )
   }
   let(:flow2){
@@ -35,32 +37,33 @@ shared_context "two flows" do
       context: context,
       path: [
         biome, state, logistics_hub, municipality, exporter2, port2, importer2, country_of_destination2
-      ].map(&:node_id)
+      ].map(&:node_id),
+      year: 2015
     )
   }
-  let(:deforestation_v2){
-    i = FactoryGirl.create(:quant, name: 'DEFORESTATION_V2')
-    FactoryGirl.create(:context_indicator, context: context, indicator: i)
-    i
+  let(:max_soy_deforestation){
+    FactoryGirl.create(:quant, name: 'POTENTIAL_SOY_DEFORESTATION_V2')
   }
-  let(:forest_500){
-    i = FactoryGirl.create(:ind, name: 'FOREST_500')
-    FactoryGirl.create(:context_indicator, context: context, indicator: i)
-    i
+  let!(:context_max_soy_deforestation) {
+    FactoryGirl.create(
+      :context_indicator, context: context, indicator: max_soy_deforestation,
+      name_in_download: 'MAX_SOY_DEFORESTATION'
+    )
   }
   let(:zero_deforestation){
-    i = FactoryGirl.create(:qual, name: 'ZERO_DEFORESTATION')
-    FactoryGirl.create(:context_indicator, context: context, indicator: i)
-    i
+    FactoryGirl.create(:qual, name: 'ZERO_DEFORESTATION')
   }
-  let!(:flow1_total_defor_rate){
-    FactoryGirl.create(:flow_quant, flow: flow1, quant: deforestation_v2, value: 10)
+  let!(:context_zero_deforestation) {
+    FactoryGirl.create(
+      :context_indicator, context: context, indicator: zero_deforestation,
+      name_in_download: 'ZERO_DEFORESTATION'
+    )
   }
-  let!(:flow1_forest_500){
-    FactoryGirl.create(:flow_ind, flow: flow1, ind: forest_500, value: 15)
+  let!(:flow1_max_soy_deforestation){
+    FactoryGirl.create(:flow_quant, flow: flow1, quant: max_soy_deforestation, value: 10)
   }
-  let!(:flow2_total_defor_rate){
-    FactoryGirl.create(:flow_quant, flow: flow2, quant: deforestation_v2, value: 5)
+  let!(:flow2_max_soy_deforestation){
+    FactoryGirl.create(:flow_quant, flow: flow2, quant: max_soy_deforestation, value: 5)
   }
   let!(:flow2_zero_deforestation){
     FactoryGirl.create(:flow_qual, flow: flow2, qual: zero_deforestation, value: 'yes')

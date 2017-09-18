@@ -41,15 +41,15 @@ class FlowDownloadQueryBuilder
     source = @query.select(pivot_select_columns)
     source_sql = source.to_sql.gsub("'", "''")
     categories = @query.
-      select("indicator_with_unit || ' ' ||  year AS indicator_year").
-      group([:year, :indicator_with_unit]).
-      order([:year, :indicator_with_unit])
+      select('name_in_download').
+      group(:name_in_download).
+      order(:name_in_download)
     categories_sql = categories.to_sql.gsub("'", "''")
-    categories_names_quoted = categories.map{ |c| '"' + c['indicator_year'] + '"' }
+    categories_names_quoted = categories.map{ |c| '"' + c['name_in_download'] + '"' }
     categories_names_with_type = categories_names_quoted.map{ |cn| cn + ' text' }.join(',')
 
     MaterializedFlow.select(
-      ['"Name"', '"Geo code"', '"Exporter"', '"Importer"', '"Country of dest"'] +
+      ['"Year"', '"Municipality"', '"State"', '"Biome"', '"Port"', '"Exporter"', '"Importer"', '"Country"', '"Type"'] +
       categories_names_quoted
     ).from(
     <<-SQL
@@ -59,11 +59,15 @@ class FlowDownloadQueryBuilder
       )
       AS CT(
         row_name INT[],
-        "Name" text,
-        "Geo code" text,
+        "Year" int,
+        "Municipality" text,
+        "State" text,
+        "Biome" text,
+        "Port" text,
         "Exporter" text,
         "Importer" text,
-        "Country of dest" text,
+        "Country" text,
+        "Type" text,
         #{categories_names_with_type}
       )
     SQL
@@ -74,26 +78,33 @@ class FlowDownloadQueryBuilder
 
   def flat_select_columns
     [
-      'node AS "Name"',
-      'geo_id AS "Geo code"',
+      'year AS "Year"',
+      'municipality AS "Municipality"',
+      'state AS "State"',
+      'biome AS "Biome"',
+      'exporter_port_node AS "Port"',
       'exporter_node AS "Exporter"',
       'importer_node AS "Importer"',
-      'country_node AS "Country of dest"',
-      'indicator_with_unit AS "Indicator"',
-      'total AS "Total"',
-      'year AS "Year"'
+      'country_node AS "Country"',
+      "'Soy bean equivalents' AS Type",
+      'name_in_download AS "Indicator"',
+      'total AS "Total"'
     ]
   end
 
   def pivot_select_columns
     [
-      'ARRAY[node_id, exporter_node_id, importer_node_id, country_node_id, indicator_id]::INT[] AS row_name',
-      'node AS "Name"',
-      'geo_id AS "Geo code"',
+      'ARRAY[year, node_id, exporter_node_id, exporter_port_node_id, importer_node_id, country_node_id]::INT[] AS row_name',
+      'year AS "Year"',
+      'municipality AS "Municipality"',
+      'state AS "State"',
+      'biome AS "Biome"',
+     'exporter_port_node AS "Port"',
       'exporter_node AS "Exporter"',
       'importer_node AS "Importer"',
-      'country_node AS "Country of dest"',
-      "indicator_with_unit || ' ' || year",
+      'country_node AS "Country"',
+      "'Soy bean equivalents' AS Type",
+      'name_in_download',
       'total'
     ]
   end
