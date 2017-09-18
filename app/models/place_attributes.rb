@@ -103,12 +103,17 @@ EOT
     if @place_quants['AREA_KM2'].present?
       data[:area] = @place_quants['AREA_KM2']['value']
     end
-    if @place_inds['SOY_AREAPERC'].present?
-      data[:soy_farmland] = @place_inds['SOY_AREAPERC']['value']
-    end
     if @place_quants['SOY_TN'].present?
       data[:soy_production] = @place_quants['SOY_TN']['value']
     end
+    if (data[:soy_production] && @place_inds['SOY_YIELD'] && soy_yield_raw = @place_inds['SOY_YIELD']['value'])
+      value = helper.number_with_precision(data[:soy_production] / (soy_yield_raw / 1000), {delimiter: ',', precision: 0})
+      data[:soy_area] = value
+    end
+    if @place_inds['SOY_AREAPERC'].present?
+      data[:soy_farmland] = @place_inds['SOY_AREAPERC']['value']
+    end
+
     data
   end
 
