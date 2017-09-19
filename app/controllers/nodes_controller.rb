@@ -26,7 +26,7 @@ class NodesController < ApplicationController
                          ')
                          .joins(:node_type)
                          .joins("LEFT OUTER JOIN (#{flow_nodes.to_sql}) flow_nodes ON flow_nodes.node_id = nodes.node_id")
-                         .where('flow_nodes.node_id IS NOT NULL OR substring(geo_id from 1 for 2) = :country_code OR nodes.name = \'OTHER\' ', country_code: 'BR')
+                         .where('flow_nodes.node_id IS NOT NULL OR substring(geo_id from 1 for 2) = :country_code OR nodes.name = \'OTHER\' ', country_code: context.country.iso2)
                          .where('nodes.node_type_id IN (:node_type_ids)', node_type_ids: node_type_ids)
                          .all()
 
