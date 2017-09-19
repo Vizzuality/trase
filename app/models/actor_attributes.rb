@@ -73,7 +73,7 @@ class ActorAttributes
       end
       text += " This is #{difference_from} the previous year."
     end
-    municipalities_count = @stats.municipalities_count('Volume')
+    municipalities_count = @stats.municipalities_count('Volume') # TODO these are all instead of just soy sourcing
     source_municipalities_count_raw = @stats.source_municipalities_count('Volume')
     perc_municipalities = helper.number_to_percentage((source_municipalities_count_raw * 100.0) / municipalities_count, {precision: 0})
     source_municipalities_count = helper.number_with_precision(source_municipalities_count_raw, {delimiter: ',', precision: 0})
@@ -282,7 +282,7 @@ EOT
   def sustainability_for_group(name, node_type, include_totals)
     group_totals_hash = Hash.new
     top_nodes_in_group = FlowStatsForNode.new(@context, @year, @node, node_type).
-      top_nodes_for_quant('DEFORESTATION_V2')
+      top_nodes_for_quant('DEFORESTATION_V2') # TODO should this not be Volume?
     rows = top_nodes_in_group.map do |node|
       top_node = Node.find(node['node_id'])
       totals_per_indicator = (top_node.actor_quants + top_node.temporal_actor_quants(@year))

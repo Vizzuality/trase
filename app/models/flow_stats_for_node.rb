@@ -234,6 +234,6 @@ class FlowStatsForNode
 
   def nodes_of_type_with_flows_of_quant_into_node(node_type, quant_name)
     nodes_of_type_with_flows_of_quant(node_type, quant_name).
-      where('flows.path[?] = ?', @node_index, @node.id)
+      where('flows.path[?] = ?', @node_index, @node.id) # TODO shouldn't this be for particular position in path
   end
 end

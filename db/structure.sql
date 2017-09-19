@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.4
--- Dumped by pg_dump version 9.6.4
+-- Dumped from database version 9.6.1
+-- Dumped by pg_dump version 9.6.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -222,7 +222,8 @@ CREATE TABLE context_indicators (
     context_id integer NOT NULL,
     indicator_attribute_id integer NOT NULL,
     indicator_attribute_type attribute_type NOT NULL,
-    "position" integer NOT NULL
+    "position" integer NOT NULL,
+    name_in_download text
 );
 
 
@@ -599,11 +600,12 @@ CREATE MATERIALIZED VIEW flow_indicators AS
         END AS boolean_value,
     q.name,
     NULL::text AS unit,
-    q.name AS name_with_unit
+    q.name AS name_with_unit,
+    ci.name_in_download
    FROM ((flow_quals f
      JOIN quals q ON ((f.qual_id = q.qual_id)))
      JOIN context_indicators ci ON (((ci.indicator_attribute_type = 'Qual'::attribute_type) AND (ci.indicator_attribute_id = q.qual_id))))
-  GROUP BY f.flow_id, f.qual_id, f.value, q.name
+  GROUP BY f.flow_id, f.qual_id, f.value, q.name, ci.name_in_download
 UNION ALL
  SELECT f.flow_id,
     f.ind_id AS indicator_id,
@@ -615,11 +617,12 @@ UNION ALL
         CASE
             WHEN (i.unit IS NULL) THEN i.name
             ELSE (((i.name || ' ('::text) || i.unit) || ')'::text)
-        END AS name_with_unit
+        END AS name_with_unit,
+    ci.name_in_download
    FROM ((flow_inds f
      JOIN inds i ON ((f.ind_id = i.ind_id)))
      JOIN context_indicators ci ON (((ci.indicator_attribute_type = 'Ind'::attribute_type) AND (ci.indicator_attribute_id = i.ind_id))))
-  GROUP BY f.flow_id, f.ind_id, f.value, i.name, i.unit
+  GROUP BY f.flow_id, f.ind_id, f.value, i.name, i.unit, ci.name_in_download
 UNION ALL
  SELECT f.flow_id,
     f.quant_id AS indicator_id,
@@ -631,11 +634,12 @@ UNION ALL
         CASE
             WHEN (q.unit IS NULL) THEN q.name
             ELSE (((q.name || ' ('::text) || q.unit) || ')'::text)
-        END AS name_with_unit
+        END AS name_with_unit,
+    ci.name_in_download
    FROM ((flow_quants f
      JOIN quants q ON ((f.quant_id = q.quant_id)))
      JOIN context_indicators ci ON (((ci.indicator_attribute_type = 'Quant'::attribute_type) AND (ci.indicator_attribute_id = q.quant_id))))
-  GROUP BY f.flow_id, f.quant_id, f.value, q.name, q.unit
+  GROUP BY f.flow_id, f.quant_id, f.value, q.name, q.unit, ci.name_in_download
   WITH NO DATA;
 
 
@@ -731,6 +735,7 @@ CREATE MATERIALIZED VIEW node_flows AS
             WHEN (cn.node_type = 'COUNTRY OF PRODUCTION'::text) THEN false
             ELSE true
         END AS needs_total,
+    cn.node_type,
     cn.column_group,
     cn.column_position,
     f.flow_id,
@@ -755,6 +760,18 @@ CREATE MATERIALIZED VIEW node_flows AS
 
 
 --
+-- Name: node_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE node_quals (
+    node_id integer,
+    qual_id integer,
+    year smallint,
+    value text
+);
+
+
+--
 -- Name: materialized_flows; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -764,11 +781,15 @@ CREATE MATERIALIZED VIEW materialized_flows AS
             f.column_group,
             f.column_position,
             f.needs_total,
-            f.name AS node,
+            f.name AS municipality,
+            node_state.value AS state,
+            node_biome.value AS biome,
             f.node_id,
             f.geo_id,
             f_ex.node_id AS exporter_node_id,
             f_ex.name AS exporter_node,
+            f_ex_port.node_id AS exporter_port_node_id,
+            f_ex_port.name AS exporter_port_node,
             f_im.node_id AS importer_node_id,
             f_im.name AS importer_node,
             f_ctry.node_id AS country_node_id,
@@ -778,24 +799,36 @@ CREATE MATERIALIZED VIEW materialized_flows AS
             fi.indicator_id,
             fi.name AS indicator,
             fi.name_with_unit AS indicator_with_unit,
+            fi.name_in_download,
             bool_and(fi.boolean_value) AS bool_and,
             sum(fi.numeric_value) AS sum
-           FROM ((((node_flows f
-             JOIN node_flows f_ex ON (((f_ex.column_group = 1) AND (f.flow_id = f_ex.flow_id))))
+           FROM (((((((node_flows f
+             LEFT JOIN node_flows f_ex ON (((f_ex.column_group = 1) AND (f_ex.node_type = 'EXPORTER'::text) AND (f.flow_id = f_ex.flow_id))))
+             LEFT JOIN node_flows f_ex_port ON (((f_ex_port.column_group = 1) AND (f_ex_port.node_type = 'PORT'::text) AND (f.flow_id = f_ex_port.flow_id))))
              JOIN node_flows f_im ON (((f_im.column_group = 2) AND (f.flow_id = f_im.flow_id))))
              JOIN node_flows f_ctry ON (((f_ctry.column_group = 3) AND (f.flow_id = f_ctry.flow_id))))
              JOIN flow_indicators fi ON ((f.flow_id = fi.flow_id)))
-          WHERE (f.column_group = 0)
-          GROUP BY f.context_id, f.year, f.node_id, f.column_group, f.column_position, f.needs_total, f.name, f.geo_id, f_ex.node_id, f_ex.name, f_im.node_id, f_im.name, f_ctry.node_id, f_ctry.name, fi.indicator_type, fi.indicator_id, fi.name, fi.name_with_unit
+             LEFT JOIN node_quals node_state ON (((node_state.node_id = f.node_id) AND (node_state.qual_id IN ( SELECT quals.qual_id
+                   FROM quals
+                  WHERE (quals.name = 'STATE'::text))))))
+             LEFT JOIN node_quals node_biome ON (((node_biome.node_id = f.node_id) AND (node_biome.qual_id IN ( SELECT quals.qual_id
+                   FROM quals
+                  WHERE (quals.name = 'BIOME'::text))))))
+          WHERE (f.node_type = 'MUNICIPALITY'::text)
+          GROUP BY f.context_id, f.year, f.node_type, f.node_id, f.column_group, f.column_position, f.needs_total, f.name, node_state.value, node_biome.value, f.geo_id, f_ex.node_id, f_ex.name, f_ex_port.node_id, f_ex_port.name, f_im.node_id, f_im.name, f_ctry.node_id, f_ctry.name, fi.indicator_type, fi.indicator_id, fi.name, fi.name_with_unit, fi.name_in_download
         ), with_totals AS (
          SELECT aggregated_flows.context_id,
             aggregated_flows.column_group,
             aggregated_flows.column_position,
-            'TOTAL'::text AS node,
+            'TOTAL'::text AS municipality,
+            NULL::text AS state,
+            NULL::text AS biome,
             NULL::integer AS node_id,
             NULL::text AS geo_id,
             aggregated_flows.exporter_node_id,
             aggregated_flows.exporter_node,
+            aggregated_flows.exporter_port_node_id,
+            aggregated_flows.exporter_port_node,
             aggregated_flows.importer_node_id,
             aggregated_flows.importer_node,
             aggregated_flows.country_node_id,
@@ -804,6 +837,7 @@ CREATE MATERIALIZED VIEW materialized_flows AS
             aggregated_flows.indicator_type,
             aggregated_flows.indicator_id,
             aggregated_flows.indicator_with_unit,
+            aggregated_flows.name_in_download,
                 CASE
                     WHEN ((aggregated_flows.indicator_type = 'Qual'::text) AND bool_and(aggregated_flows.bool_and)) THEN 'yes'::text
                     WHEN ((aggregated_flows.indicator_type = 'Qual'::text) AND (NOT bool_and(aggregated_flows.bool_and))) THEN 'no'::text
@@ -811,16 +845,20 @@ CREATE MATERIALIZED VIEW materialized_flows AS
                 END AS total
            FROM aggregated_flows
           WHERE ((aggregated_flows.column_group = 0) AND (aggregated_flows.column_position = 0) AND aggregated_flows.needs_total)
-          GROUP BY aggregated_flows.context_id, aggregated_flows.column_group, aggregated_flows.column_position, aggregated_flows.exporter_node_id, aggregated_flows.exporter_node, aggregated_flows.importer_node_id, aggregated_flows.importer_node, aggregated_flows.country_node_id, aggregated_flows.country_node, aggregated_flows.year, aggregated_flows.indicator_type, aggregated_flows.indicator_id, aggregated_flows.indicator_with_unit
+          GROUP BY aggregated_flows.context_id, aggregated_flows.column_group, aggregated_flows.column_position, aggregated_flows.exporter_node_id, aggregated_flows.exporter_node, aggregated_flows.exporter_port_node_id, aggregated_flows.exporter_port_node, aggregated_flows.importer_node_id, aggregated_flows.importer_node, aggregated_flows.country_node_id, aggregated_flows.country_node, aggregated_flows.year, aggregated_flows.indicator_type, aggregated_flows.indicator_id, aggregated_flows.indicator_with_unit, aggregated_flows.name_in_download
         UNION ALL
          SELECT aggregated_flows.context_id,
             aggregated_flows.column_group,
             aggregated_flows.column_position,
-            aggregated_flows.node,
+            aggregated_flows.municipality,
+            aggregated_flows.state,
+            aggregated_flows.biome,
             aggregated_flows.node_id,
             aggregated_flows.geo_id,
             aggregated_flows.exporter_node_id,
             aggregated_flows.exporter_node,
+            aggregated_flows.exporter_port_node_id,
+            aggregated_flows.exporter_port_node,
             aggregated_flows.importer_node_id,
             aggregated_flows.importer_node,
             aggregated_flows.country_node_id,
@@ -829,6 +867,7 @@ CREATE MATERIALIZED VIEW materialized_flows AS
             aggregated_flows.indicator_type,
             aggregated_flows.indicator_id,
             aggregated_flows.indicator_with_unit,
+            aggregated_flows.name_in_download,
                 CASE
                     WHEN ((aggregated_flows.indicator_type = 'Qual'::text) AND aggregated_flows.bool_and) THEN 'yes'::text
                     WHEN ((aggregated_flows.indicator_type = 'Qual'::text) AND (NOT aggregated_flows.bool_and)) THEN 'no'::text
@@ -839,11 +878,15 @@ CREATE MATERIALIZED VIEW materialized_flows AS
  SELECT with_totals.context_id,
     with_totals.column_group,
     with_totals.column_position,
-    with_totals.node,
+    with_totals.municipality,
+    with_totals.state,
+    with_totals.biome,
     with_totals.node_id,
     with_totals.geo_id,
     with_totals.exporter_node_id,
     with_totals.exporter_node,
+    with_totals.exporter_port_node_id,
+    with_totals.exporter_port_node,
     with_totals.importer_node_id,
     with_totals.importer_node,
     with_totals.country_node_id,
@@ -852,13 +895,14 @@ CREATE MATERIALIZED VIEW materialized_flows AS
     with_totals.indicator_type,
     with_totals.indicator_id,
     with_totals.indicator_with_unit,
+    with_totals.name_in_download,
     with_totals.total
    FROM with_totals
   ORDER BY
         CASE
-            WHEN (with_totals.node = 'TOTAL'::text) THEN 0
+            WHEN (with_totals.municipality = 'TOTAL'::text) THEN 0
             ELSE 1
-        END, with_totals.column_group, with_totals.column_position, with_totals.node, with_totals.exporter_node, with_totals.importer_node, with_totals.country_node, with_totals.indicator_with_unit
+        END, with_totals.column_group, with_totals.column_position, with_totals.municipality, with_totals.state, with_totals.biome, with_totals.exporter_node, with_totals.exporter_port_node, with_totals.importer_node, with_totals.country_node, with_totals.indicator_with_unit, with_totals.name_in_download
   WITH NO DATA;
 
 
@@ -871,18 +915,6 @@ CREATE TABLE node_inds (
     ind_id integer,
     year smallint,
     value double precision
-);
-
-
---
--- Name: node_quals; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE node_quals (
-    node_id integer,
-    qual_id integer,
-    year smallint,
-    value text
 );
 
 
@@ -1587,6 +1619,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170630134124'),
 ('20170821081055'),
 ('20170824111857'),
-('20170829074711');
+('20170829074711'),
+('20170918133625'),
+('20170918134156');
 
 
