@@ -215,7 +215,7 @@ EOT
   def actor_commitments_indicators
     indicators_list = [
       # Soy traded under zero deforestation commitment
-      {type: 'quant', backend_name: 'PERC_SOY_ZD_COMMITMENT'}
+      {type: 'ind', backend_name: 'PERC_SOY_ZD_COMMITMENT'}
     ]
 
     indicators_group(indicators_list, 'Actor commitments')
