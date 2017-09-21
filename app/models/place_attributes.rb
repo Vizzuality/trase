@@ -135,8 +135,7 @@ EOT
         environmental_indicators,
         socioeconomic_indicators,
         agricultural_indicators,
-        territorial_governance_indicators,
-        actor_commitments_indicators,
+        territorial_governance_indicators
         
       ]
     }
@@ -211,17 +210,6 @@ EOT
 
     indicators_group(indicators_list, 'Territorial governance')
   end
-
-  def actor_commitments_indicators
-    indicators_list = [
-      # Soy traded under zero deforestation commitment
-      {type: 'ind', backend_name: 'PERC_SOY_ZD_COMMITMENT'}
-    ]
-
-    indicators_group(indicators_list, 'Actor commitments')
-  end
-
-
 
   def trajectory_deforestation
     unless @node_type == NodeTypeName::MUNICIPALITY
