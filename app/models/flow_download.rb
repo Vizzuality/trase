@@ -28,7 +28,8 @@ class FlowDownload
       header: true,
       delimiter: @separator,
       encoding: 'UTF8',
-      type: :plain
+      type: :plain,
+      logger: Rails.logger
     )
     content = csv.export()
     # NOTE: exporting directly into file raises encoding errors
