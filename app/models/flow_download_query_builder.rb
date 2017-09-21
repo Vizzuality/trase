@@ -46,32 +46,34 @@ class FlowDownloadQueryBuilder
       order(:name_in_download)
     categories_sql = categories.to_sql.gsub("'", "''")
     categories_names_quoted = categories.map{ |c| '"' + c['name_in_download'] + '"' }
-    categories_names_with_type = categories_names_quoted.map{ |cn| cn + ' text' }.join(',')
+    categories_names_with_type = categories_names_quoted.map{ |cn| cn + ' text' }
 
-    MaterializedFlow.select(
-      ['"Year"', '"Municipality"', '"State"', '"Biome"', '"Port"', '"Exporter"', '"Importer"', '"Country"', '"Type"'] +
-      categories_names_quoted
-    ).from(
-    <<-SQL
+    select_columns = [
+      '"Year"', '"Municipality"', '"State"', '"Biome"', '"Port"', '"Exporter"', '"Importer"', '"Country"', '"Type"'
+    ] + categories_names_quoted
+
+    crosstab_columns = [
+      'row_name INT[]',
+      '"Year" int',
+      '"Municipality" text',
+      '"State" text',
+      '"Biome" text',
+      '"Port" text',
+      '"Exporter" text',
+      '"Importer" text',
+      '"Country" text',
+      '"Type" text'
+    ] + categories_names_with_type
+
+    crosstab_sql =<<~SQL
       CROSSTAB(
         '#{source_sql}',
         '#{categories_sql}'
       )
-      AS CT(
-        row_name INT[],
-        "Year" int,
-        "Municipality" text,
-        "State" text,
-        "Biome" text,
-        "Port" text,
-        "Exporter" text,
-        "Importer" text,
-        "Country" text,
-        "Type" text,
-        #{categories_names_with_type}
-      )
+      AS CT(#{crosstab_columns.join(',')})
     SQL
-    )
+
+    MaterializedFlow.select(select_columns).from(crosstab_sql)
   end
 
   private
