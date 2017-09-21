@@ -132,62 +132,96 @@ EOT
   def indicators
     {
       indicators: [
-        sustainability_indicators,
-        deforestation_indicators,
-        other_indicators,
-        socioeconomic_indicators
+        environmental_indicators,
+        socioeconomic_indicators,
+        agricultural_indicators,
+        territorial_governance_indicators,
+        actor_commitments_indicators,
+        
       ]
     }
   end
 
-  def sustainability_indicators
+  def environmental_indicators
     indicators_list = [
-      {type: 'ind', backend_name: 'WATER_SCARCITY'},
-      {type: 'quant', backend_name: 'FIRES_'},
-      {type: 'quant', backend_name: 'GHG_'}
-    ]
-
-    indicators_group(indicators_list, 'Key sustainability indicators')
-  end
-
-  def deforestation_indicators
-    indicators_list = [
-      {type: 'quant', backend_name: 'AGROSATELITE_SOY_DEFOR_'},
+      #Territorial deforestation
       {type: 'quant', backend_name: 'DEFORESTATION_V2'},
-      {type: 'quant', backend_name: 'POTENTIAL_SOY_DEFORESTATION_V2'}
-    ]
-
-    indicators_group(indicators_list, 'Deforestation')
-  end
-
-  def other_indicators
-    indicators_list = [
+      # Maximum soy deforestation
+      {type: 'quant', backend_name: 'POTENTIAL_SOY_DEFORESTATION_V2'},
+      # Soy deforestation (Cerrado only)
+      {type: 'quant', backend_name: 'AGROSATELITE_SOY_DEFOR_'},
+      # Land based CO2 emissions
+      {type: 'quant', backend_name: 'GHG_'},
+      # Water scarcity
+      {type: 'ind', backend_name: 'WATER_SCARCITY'},
+      # Loss of biodiversity habitat
       {type: 'quant', backend_name: 'BIODIVERSITY'},
-      {type: 'ind', backend_name: 'PERC_INDIGENOUS'}, # NO MATCH
-      {type: 'ind', backend_name: 'PERC_PROTECTED'}, # NO MATCH
-      {type: 'quant', backend_name: 'EMBARGOES_'},
-      {type: 'ind', backend_name: 'PROTECTED_DEFICIT_PERC'},
-      {type: 'quant', backend_name: 'PROTECTED'} # NO MATCH
+      # Number of incidences of fire
+      {type: 'quant', backend_name: 'FIRES_'}
     ]
 
-    indicators_group(indicators_list, 'Other environmental indicators')
+    indicators_group(indicators_list, 'Environmental indicators')
   end
 
   def socioeconomic_indicators
     indicators_list = [
-      {type: 'ind', backend_name: 'GDP_CAP'},
+      # Human development index
       {type: 'ind', backend_name: 'HDI'},
+      #GDP per capita
+      {type: 'ind', backend_name: 'GDP_CAP'},
+      # GDP from agriculture
       {type: 'ind', backend_name: 'PERC_FARM_GDP_'},
+      # Smallholder dominance
       {type: 'ind', backend_name: 'SMALLHOLDERS'},
-      {type: 'quant', backend_name: 'CATTLE_HEADS'},
-      {type: 'quant', backend_name: 'LAND_CONFL'},
-      {type: 'quant', backend_name: 'POPULATION'},
+      # Reported cases of forced labour
       {type: 'quant', backend_name: 'SLAVERY'},
-      {type: 'quant', backend_name: 'SOY_TN'}
+      # Reported cases of land conflicts
+      {type: 'quant', backend_name: 'LAND_CONFL'},
+      {type: 'quant', backend_name: 'CATTLE_HEADS'},
+      {type: 'quant', backend_name: 'POPULATION'}
     ]
 
     indicators_group(indicators_list, 'Socio-economic indicators')
   end
+
+  def agricultural_indicators
+    indicators_list = [
+      # Production of soy
+      {type: 'quant', backend_name: 'SOY_TN'},
+      # Soy yield
+      {type: 'ind', backend_name: 'SOY_YIELD'},
+      #Agricultural land used for soy
+      {type: 'ind', backend_name: 'SOY_AREAPERC'}
+    ]
+
+    indicators_group(indicators_list, 'Agricultural indicators')
+  end
+
+  def territorial_governance_indicators
+    indicators_list = [
+      # Permanent protected area deficit
+      {type: 'quant', backend_name: 'APP_DEFICIT_AREA'},
+      # Legal reserve deficit
+      {type: 'quant', backend_name: 'LR_DEFICIT_AREA'},
+      # Forest code deficit
+      {type: 'ind', backend_name: 'PROTECTED_DEFICIT_PERC'},
+      # Number of environmental embargos
+      {type: 'quant', backend_name: 'EMBARGOES_'}
+    ]
+
+    indicators_group(indicators_list, 'Territorial governance')
+  end
+
+  def actor_commitments_indicators
+    indicators_list = [
+      # Soy traded under zero deforestation commitment
+      {type: 'quant', backend_name: 'PERC_SOY_ZD_COMMITMENT'}
+    ]
+
+    indicators_group(indicators_list, 'Actor commitments')
+  end
+
+
 
   def trajectory_deforestation
     unless @node_type == NodeTypeName::MUNICIPALITY
