@@ -22,7 +22,7 @@ shared_context 'brazil context nodes' do
   let!(:municipality_context_node){
     FactoryGirl.create(
       :context_node,
-      context: context, node_type: municipality.node_type, column_position: 3, column_group: 0
+      context: context, node_type: municipality.node_type, column_position: 3, column_group: 0, is_default: true
     )
   }
   let!(:exporter1_context_node){

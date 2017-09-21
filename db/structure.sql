@@ -738,6 +738,7 @@ CREATE MATERIALIZED VIEW node_flows AS
     cn.node_type,
     cn.column_group,
     cn.column_position,
+    cn.is_default,
     f.flow_id,
     f.year,
     f.context_id
@@ -751,6 +752,7 @@ CREATE MATERIALIZED VIEW node_flows AS
      JOIN ( SELECT context_nodes.context_id,
             context_nodes.column_group,
             context_nodes.column_position,
+            context_nodes.is_default,
             context_nodes.node_type_id,
             node_types.node_type
            FROM (context_nodes
@@ -781,7 +783,22 @@ CREATE MATERIALIZED VIEW materialized_flows AS
             f.column_group,
             f.column_position,
             f.needs_total,
-            f.name AS municipality,
+                CASE
+                    WHEN (f.node_type = 'COUNTRY OF PRODUCTION'::text) THEN f.name
+                    ELSE NULL::text
+                END AS country_of_production,
+                CASE
+                    WHEN ((f.node_type = 'PORT'::text) AND (f.column_group = 0)) THEN f.name
+                    ELSE NULL::text
+                END AS port,
+                CASE
+                    WHEN (f.node_type = 'DEPARTMENT'::text) THEN f.name
+                    ELSE NULL::text
+                END AS department,
+                CASE
+                    WHEN (f.node_type = 'MUNICIPALITY'::text) THEN f.name
+                    ELSE NULL::text
+                END AS municipality,
             node_state.value AS state,
             node_biome.value AS biome,
             f.node_id,
@@ -814,12 +831,15 @@ CREATE MATERIALIZED VIEW materialized_flows AS
              LEFT JOIN node_quals node_biome ON (((node_biome.node_id = f.node_id) AND (node_biome.qual_id IN ( SELECT quals.qual_id
                    FROM quals
                   WHERE (quals.name = 'BIOME'::text))))))
-          WHERE (f.node_type = 'MUNICIPALITY'::text)
+          WHERE ((f.column_group = 0) AND f.is_default)
           GROUP BY f.context_id, f.year, f.node_type, f.node_id, f.column_group, f.column_position, f.needs_total, f.name, node_state.value, node_biome.value, f.geo_id, f_ex.node_id, f_ex.name, f_ex_port.node_id, f_ex_port.name, f_im.node_id, f_im.name, f_ctry.node_id, f_ctry.name, fi.indicator_type, fi.indicator_id, fi.name, fi.name_with_unit, fi.name_in_download
         ), with_totals AS (
          SELECT aggregated_flows.context_id,
             aggregated_flows.column_group,
             aggregated_flows.column_position,
+            'TOTAL'::text AS country_of_production,
+            'TOTAL'::text AS port,
+            'TOTAL'::text AS department,
             'TOTAL'::text AS municipality,
             NULL::text AS state,
             NULL::text AS biome,
@@ -844,12 +864,15 @@ CREATE MATERIALIZED VIEW materialized_flows AS
                     ELSE (sum(aggregated_flows.sum))::text
                 END AS total
            FROM aggregated_flows
-          WHERE ((aggregated_flows.column_group = 0) AND (aggregated_flows.column_position = 0) AND aggregated_flows.needs_total)
+          WHERE ((aggregated_flows.column_group = 0) AND aggregated_flows.needs_total)
           GROUP BY aggregated_flows.context_id, aggregated_flows.column_group, aggregated_flows.column_position, aggregated_flows.exporter_node_id, aggregated_flows.exporter_node, aggregated_flows.exporter_port_node_id, aggregated_flows.exporter_port_node, aggregated_flows.importer_node_id, aggregated_flows.importer_node, aggregated_flows.country_node_id, aggregated_flows.country_node, aggregated_flows.year, aggregated_flows.indicator_type, aggregated_flows.indicator_id, aggregated_flows.indicator_with_unit, aggregated_flows.name_in_download
         UNION ALL
          SELECT aggregated_flows.context_id,
             aggregated_flows.column_group,
             aggregated_flows.column_position,
+            aggregated_flows.country_of_production,
+            aggregated_flows.port,
+            aggregated_flows.department,
             aggregated_flows.municipality,
             aggregated_flows.state,
             aggregated_flows.biome,
@@ -878,6 +901,9 @@ CREATE MATERIALIZED VIEW materialized_flows AS
  SELECT with_totals.context_id,
     with_totals.column_group,
     with_totals.column_position,
+    with_totals.country_of_production,
+    with_totals.port,
+    with_totals.department,
     with_totals.municipality,
     with_totals.state,
     with_totals.biome,
@@ -900,7 +926,7 @@ CREATE MATERIALIZED VIEW materialized_flows AS
    FROM with_totals
   ORDER BY
         CASE
-            WHEN (with_totals.municipality = 'TOTAL'::text) THEN 0
+            WHEN ((with_totals.municipality = 'TOTAL'::text) OR (with_totals.department = 'TOTAL'::text) OR (with_totals.port = 'TOTAL'::text)) THEN 0
             ELSE 1
         END, with_totals.column_group, with_totals.column_position, with_totals.municipality, with_totals.state, with_totals.biome, with_totals.exporter_node, with_totals.exporter_port_node, with_totals.importer_node, with_totals.country_node, with_totals.indicator_with_unit, with_totals.name_in_download
   WITH NO DATA;
@@ -1621,6 +1647,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170824111857'),
 ('20170829074711'),
 ('20170918133625'),
-('20170918134156');
+('20170918134156'),
+('20170921125513');
 
 

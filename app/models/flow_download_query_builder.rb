@@ -2,6 +2,7 @@ class FlowDownloadQueryBuilder
 
   def initialize(context_id, params)
     @query = MaterializedFlow.where(context_id: context_id)
+    initialise_group_0_columns(context_id)
     if params[:years].present?
       @query = @query.where(year: params[:years])
     end
@@ -49,15 +50,16 @@ class FlowDownloadQueryBuilder
     categories_names_with_type = categories_names_quoted.map{ |cn| cn + ' text' }
 
     select_columns = [
-      '"Year"', '"Municipality"', '"State"', '"Biome"', '"Port"', '"Exporter"', '"Importer"', '"Country"', '"Type"'
+      '"Year"'
+    ] + @group_0_select_aliases + [
+      '"Port"', '"Exporter"', '"Importer"', '"Country"', '"Type"'
     ] + categories_names_quoted
 
     crosstab_columns = [
       'row_name INT[]',
-      '"Year" int',
-      '"Municipality" text',
-      '"State" text',
-      '"Biome" text',
+      '"Year" int'
+    ] + @group_0_crosstab_columns +
+    [
       '"Port" text',
       '"Exporter" text',
       '"Importer" text',
@@ -78,12 +80,52 @@ class FlowDownloadQueryBuilder
 
   private
 
+  def initialise_group_0_columns(context_id)
+    group_0_node_types = ContextNode.where(context_id: context_id, column_group: 0).
+      joins(:node_type).
+      pluck('node_types.node_type')
+    @group_0_select_columns, @group_0_crosstab_columns, @group_0_select_aliases = if group_0_node_types.include?(NodeTypeName::MUNICIPALITY)
+      [
+        [
+          'municipality AS "Municipality"',
+          'state AS "State"',
+          'biome AS "Biome"'
+        ],
+        [
+          '"Municipality" text',
+          '"State" text',
+          '"Biome" text'
+        ],
+        [
+          '"Municipality"', '"State"', '"Biome"'
+        ]
+      ]
+    elsif group_0_node_types.include?(NodeTypeName::DEPARTMENT)
+      [
+        ['department AS "Department"'],
+        ['"Department" text'],
+        ['"Department"']
+      ]
+    elsif group_0_node_types.include?(NodeTypeName::PORT)
+      [
+        ['port AS "Port-"'],
+        ['"Port-" text'],
+        ['"Port-"']
+      ]
+    else
+      [
+        ['country_of_production AS "Country (prod)"'],
+        ['"Country (prod)" text'],
+        ['"Country (prod)"']
+      ]
+    end
+  end
+
   def flat_select_columns
     [
-      'year AS "Year"',
-      'municipality AS "Municipality"',
-      'state AS "State"',
-      'biome AS "Biome"',
+      'year AS "Year"'
+    ] + @group_0_select_columns +
+    [
       'exporter_port_node AS "Port"',
       'exporter_node AS "Exporter"',
       'importer_node AS "Importer"',
@@ -97,11 +139,10 @@ class FlowDownloadQueryBuilder
   def pivot_select_columns
     [
       'ARRAY[year, node_id, exporter_node_id, exporter_port_node_id, importer_node_id, country_node_id]::INT[] AS row_name',
-      'year AS "Year"',
-      'municipality AS "Municipality"',
-      'state AS "State"',
-      'biome AS "Biome"',
-     'exporter_port_node AS "Port"',
+      'year AS "Year"'
+    ] + @group_0_select_columns +
+    [
+      'exporter_port_node AS "Port"',
       'exporter_node AS "Exporter"',
       'importer_node AS "Importer"',
       'country_node AS "Country"',

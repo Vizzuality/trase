@@ -8,6 +8,8 @@ class NodeTypeName < EnumerateIt::Base
     PORT: 'PORT',
     IMPORTER: 'IMPORTER',
     COUNTRY: 'COUNTRY',
-    TRADER: 'TRADER'
+    TRADER: 'TRADER',
+    DEPARTMENT: 'DEPARTMENT',
+    COUNTRY_OF_PRODUCTION: 'COUNTRY OF PRODUCTION'
   })
 end
