@@ -6,10 +6,11 @@ class FlowStatsForNode
     @node = node
     @node_type = node_type
     @node_index = node_index(@node_type)
+    @self_node_index = node_index(@node.node_type.node_type)
   end
 
   def available_years_for_indicator(indicator_type, indicator_name)
-    query = Flow.select(:year).where('? = ANY(flows.path)', @node.id)
+    query = Flow.select(:year).where('? = flows.path[?]', @node.id, @self_node_index)
     query = if indicator_type == 'quant'
       query.joins(flow_quants: :quant).where('quants.name' => indicator_name)
     elsif indicator_type == 'ind'
@@ -44,7 +45,7 @@ class FlowStatsForNode
       joins("LEFT JOIN #{dict_table} ON #{dict_table}.#{indicator_type}_id = #{value_table}.#{indicator_type}_id").
       joins(nodes_join_clause).
       where('flows.context_id' => @context.id).
-      where('? = ANY(path)', @node.id).
+      where('? = path[?]', @node.id, @self_node_index).
       where("#{dict_table}.name" => indicator_name).
       group(group_clause)
   end
@@ -83,7 +84,7 @@ class FlowStatsForNode
       joins(nodes_join_clause).
       where('nodes.name NOT LIKE ?', 'UNKNOWN%').
       where('flows.context_id' => @context.id).
-      where('? = ANY(path) AND ? = ANY(path)', @node.id, other_node_id).
+      where('? = path[?] AND ? = path[?]', @node.id, @self_node_index, other_node_id, other_node_index).
       where('quants.name' => quant_names).
       where(year: @year).
       group(group_clause)
@@ -202,7 +203,7 @@ class FlowStatsForNode
       joins(nodes_join_clause).
       where('(nodes.is_unknown is NULL OR nodes.is_unknown = false)' + (include_domestic_consumption ? '' : ' AND (nodes.is_domestic_consumption is NULL or nodes.is_domestic_consumption = false)')).
       where('flows.context_id' => @context.id).
-      where('? = ANY(path)', @node.id).
+      where('? = path[?]', @node.id, @self_node_index).
       where('quants.name' => quant_name).
       where(year: @year).
       group(group_clause).
