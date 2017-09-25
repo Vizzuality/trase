@@ -311,6 +311,7 @@ EOT
       where('nodes.node_id <> ?', @node.id). # do not double count current
       select(
         'nodes.node_id',
+        'nodes.node_type_id',
         'nodes.name',
         'SUM(node_quants.value) AS value'
       ).
