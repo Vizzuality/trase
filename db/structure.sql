@@ -601,11 +601,12 @@ CREATE MATERIALIZED VIEW flow_indicators AS
     q.name,
     NULL::text AS unit,
     q.name AS name_with_unit,
-    ci.name_in_download
+    ci.name_in_download,
+    ci.context_id
    FROM ((flow_quals f
      JOIN quals q ON ((f.qual_id = q.qual_id)))
      JOIN context_indicators ci ON (((ci.indicator_attribute_type = 'Qual'::attribute_type) AND (ci.indicator_attribute_id = q.qual_id))))
-  GROUP BY f.flow_id, f.qual_id, f.value, q.name, ci.name_in_download
+  GROUP BY f.flow_id, f.qual_id, f.value, q.name, ci.name_in_download, ci.context_id
 UNION ALL
  SELECT f.flow_id,
     f.ind_id AS indicator_id,
@@ -618,11 +619,12 @@ UNION ALL
             WHEN (i.unit IS NULL) THEN i.name
             ELSE (((i.name || ' ('::text) || i.unit) || ')'::text)
         END AS name_with_unit,
-    ci.name_in_download
+    ci.name_in_download,
+    ci.context_id
    FROM ((flow_inds f
      JOIN inds i ON ((f.ind_id = i.ind_id)))
      JOIN context_indicators ci ON (((ci.indicator_attribute_type = 'Ind'::attribute_type) AND (ci.indicator_attribute_id = i.ind_id))))
-  GROUP BY f.flow_id, f.ind_id, f.value, i.name, i.unit, ci.name_in_download
+  GROUP BY f.flow_id, f.ind_id, f.value, i.name, i.unit, ci.name_in_download, ci.context_id
 UNION ALL
  SELECT f.flow_id,
     f.quant_id AS indicator_id,
@@ -635,11 +637,12 @@ UNION ALL
             WHEN (q.unit IS NULL) THEN q.name
             ELSE (((q.name || ' ('::text) || q.unit) || ')'::text)
         END AS name_with_unit,
-    ci.name_in_download
+    ci.name_in_download,
+    ci.context_id
    FROM ((flow_quants f
      JOIN quants q ON ((f.quant_id = q.quant_id)))
      JOIN context_indicators ci ON (((ci.indicator_attribute_type = 'Quant'::attribute_type) AND (ci.indicator_attribute_id = q.quant_id))))
-  GROUP BY f.flow_id, f.quant_id, f.value, q.name, q.unit, ci.name_in_download
+  GROUP BY f.flow_id, f.quant_id, f.value, q.name, q.unit, ci.name_in_download, ci.context_id
   WITH NO DATA;
 
 
@@ -788,7 +791,7 @@ CREATE MATERIALIZED VIEW materialized_flows AS
                     ELSE NULL::text
                 END AS country_of_production,
                 CASE
-                    WHEN ((f.node_type = 'PORT'::text) AND (f.column_group = 0)) THEN f.name
+                    WHEN (f.node_type = 'PORT'::text) THEN f.name
                     ELSE NULL::text
                 END AS port,
                 CASE
@@ -824,7 +827,7 @@ CREATE MATERIALIZED VIEW materialized_flows AS
              LEFT JOIN node_flows f_ex_port ON (((f_ex_port.column_group = 1) AND (f_ex_port.node_type = 'PORT'::text) AND (f.flow_id = f_ex_port.flow_id))))
              JOIN node_flows f_im ON (((f_im.column_group = 2) AND (f.flow_id = f_im.flow_id))))
              JOIN node_flows f_ctry ON (((f_ctry.column_group = 3) AND (f.flow_id = f_ctry.flow_id))))
-             JOIN flow_indicators fi ON ((f.flow_id = fi.flow_id)))
+             JOIN flow_indicators fi ON (((f.flow_id = fi.flow_id) AND (f.context_id = fi.context_id))))
              LEFT JOIN node_quals node_state ON (((node_state.node_id = f.node_id) AND (node_state.qual_id IN ( SELECT quals.qual_id
                    FROM quals
                   WHERE (quals.name = 'STATE'::text))))))
@@ -1648,6 +1651,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170829074711'),
 ('20170918133625'),
 ('20170918134156'),
-('20170921125513');
+('20170921125513'),
+('20170925102834');
 
 
