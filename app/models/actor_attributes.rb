@@ -56,7 +56,7 @@ class ActorAttributes
       unit = e[unit]
       [e['value']/1000, "#{value}#{unit}"]
     end
-    exports_in_previous_year_raw = (e = soy_exports.find{ |e| e['year'] == @year - 1 }) && e['value']
+    exports_in_previous_year_raw = (e = soy_exports.find{ |e| e['year'] == @year - 1 }) && e['value']/1000
 
     country_ranking = @stats.country_ranking(@context, 'quant', 'SOY_')
     country_ranking = country_ranking.ordinalize if country_ranking
