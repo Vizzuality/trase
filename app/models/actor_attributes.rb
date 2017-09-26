@@ -58,9 +58,13 @@ class ActorAttributes
     exports_in_previous_year_raw = (e = soy_exports.find{ |e| e['year'] == @year - 1 }) && e['value']
 
     country_ranking = @stats.country_ranking(@context, 'quant', 'SOY_')
-    country_ranking = country_ranking.ordinalize if country_ranking
+    country_ranking = if (country_ranking and country_ranking > 1)
+                        country_ranking.ordinalize + ' '
+                      else
+                        ''
+                      end
 
-    text = "#{@node.name.humanize} was the #{country_ranking} largest exporter of soy in #{@context.country.name} in #{@year}, accounting for #{exports_in_year} thousand tons."
+    text = "#{@node.name.humanize} was the #{country_ranking}largest exporter of soy in #{@context.country.name} in #{@year}, accounting for #{exports_in_year} thousand tons."
     if exports_in_previous_year_raw.present?
       perc_difference = (exports_in_year_raw - exports_in_previous_year_raw) / exports_in_previous_year_raw
       difference_from = if perc_difference > 0
