@@ -173,6 +173,7 @@ EOT
       where('quants.name' => y_indicator[:backend_name]).
       where('node_types.node_type' => NodeTypeName::EXPORTER).
       where('(is_domestic_consumption IS NULL OR is_domestic_consumption = false)').
+      where('node_quants.year = 2015'). # replace with actual year value(s)
       group('nodes.node_id, nodes.name, quants.name')
 
     indicator_totals = Flow.
@@ -184,6 +185,7 @@ EOT
         where('flows.context_id' => @context.id).
         where('quants.name' => x_indicators.map{ |indicator| indicator[:backend_name] }).
         where('node_types.node_type' => NodeTypeName::EXPORTER).
+        where('flows.year = 2015'). # replace with actual year value(s)
         group('nodes.node_id, nodes.name, quants.name')
 
     x_indicator_indexes = Hash[x_indicators.map.each_with_index do |indicator, idx|
