@@ -72,7 +72,7 @@ class ActorAttributes
       end
       text += " This is #{difference_from} the previous year."
     end
-    municipalities_count = @stats.municipalities_count('Volume') # TODO these are all instead of just soy sourcing
+    municipalities_count = @stats.municipalities_count('Volume')
     source_municipalities_count_raw = @stats.source_municipalities_count('Volume')
     perc_municipalities = helper.number_to_percentage((source_municipalities_count_raw * 100.0) / municipalities_count, {precision: 0})
     source_municipalities_count = helper.number_with_precision(source_municipalities_count_raw, {delimiter: ',', precision: 0})

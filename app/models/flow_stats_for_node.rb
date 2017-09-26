@@ -231,6 +231,7 @@ class FlowStatsForNode
       select(select_clause).
       joins(flow_quants: :quant).
       where('quants.name' => quant_name).
+      where(context_id: @context.id, year: @year).
       group(group_clause)
   end
 
