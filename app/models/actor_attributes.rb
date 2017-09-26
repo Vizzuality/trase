@@ -173,6 +173,7 @@ EOT
       where('nodes.name NOT LIKE ?', 'UNKNOWN%').
       where('quants.name' => y_indicator[:backend_name]).
       where('node_types.node_type' => NodeTypeName::EXPORTER).
+      where('(is_domestic_consumption IS NULL OR is_domestic_consumption = false)').
       group('nodes.node_id, nodes.name, quants.name')
 
     indicator_totals = Flow.
