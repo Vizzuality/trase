@@ -166,6 +166,7 @@ class FlowStatsForNode
       where('flows.context_id' => context.id).
       joins(value_table => indicator_type).
       where("#{dict_table}.name" => indicator_name, "#{value_table}.year" => 2015).
+      where('(is_domestic_consumption IS NULL OR is_domestic_consumption = false)').
       distinct
 
     result = Node.from('(' + query.to_sql + ') s').
