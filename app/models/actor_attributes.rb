@@ -27,7 +27,7 @@ class ActorAttributes
     [@actor_quals, @actor_quants, @actor_inds].each do |indicator_hash|
       indicator_hash.each do |name, indicator|
         if name == 'SOY_'
-          @data[:total_soy_2015] = indicator['value'].to_f / 1000 # TODO hack
+          @data[:total_soy_2015] = indicator['value'].to_f
         else
           @data[name.downcase] = indicator['value']
         end
@@ -53,15 +53,14 @@ class ActorAttributes
     soy_exports = @node.temporal_actor_quants.where('quants.name' => 'SOY_')
     exports_in_year_raw, exports_in_year = if (e = soy_exports.find{ |e| e['year'] == @year })
       value = helper.number_with_precision(e['value']/1000, {delimiter: ',', precision: 0})
-      unit = e[unit]
-      [e['value']/1000, "#{value}#{unit}"]
+      [e['value'], value]
     end
-    exports_in_previous_year_raw = (e = soy_exports.find{ |e| e['year'] == @year - 1 }) && e['value']/1000
+    exports_in_previous_year_raw = (e = soy_exports.find{ |e| e['year'] == @year - 1 }) && e['value']
 
     country_ranking = @stats.country_ranking(@context, 'quant', 'SOY_')
     country_ranking = country_ranking.ordinalize if country_ranking
 
-    text = "#{@node.name.humanize} was the #{country_ranking} largest exporter of soy in #{@context.country.name} in #{@year}, accounting for #{exports_in_year} tons."
+    text = "#{@node.name.humanize} was the #{country_ranking} largest exporter of soy in #{@context.country.name} in #{@year}, accounting for #{exports_in_year} thousand tons."
     if exports_in_previous_year_raw.present?
       perc_difference = (exports_in_year_raw - exports_in_previous_year_raw) / exports_in_previous_year_raw
       difference_from = if perc_difference > 0
