@@ -50,12 +50,12 @@ class PlaceAttributes
     soy_produced_raw, soy_produced = if (production = @place_quants['SOY_TN'])
       value = helper.number_with_precision(production['value'], {delimiter: ',', precision: 0})
       unit = production['unit']
-      [production['value'], "#{value}#{unit}"]
+      [production['value'], "#{value} #{unit}"]
     end
     soy_area = if (soy_produced_raw && @place_inds['SOY_YIELD'] && soy_yield_raw = @place_inds['SOY_YIELD']['value'])
       value = helper.number_with_precision(soy_produced_raw / (soy_yield_raw / 1000), {delimiter: ',', precision: 0})
       unit = 'Ha' # soy prod in Tn, soy yield in Tn/Ha
-      "#{value}#{unit}"
+      "#{value} #{unit}"
     end
     perc_total = total_soy_production()
     percentage_total_production = if (perc = @place_quants['SOY_TN'])
