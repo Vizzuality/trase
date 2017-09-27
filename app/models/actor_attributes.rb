@@ -288,7 +288,7 @@ EOT
   def sustainability_for_group(name, node_type, include_totals)
     group_totals_hash = Hash.new
     top_nodes_in_group = FlowStatsForNode.new(@context, @year, @node, node_type).
-      top_nodes_for_quant('DEFORESTATION_V2') # TODO should this not be Volume?
+      top_nodes_for_quant('Volume')
     rows = top_nodes_in_group.map do |node|
       top_node = Node.find(node['node_id'])
       totals_per_indicator = (top_node.actor_quants + top_node.temporal_actor_quants(@year))
