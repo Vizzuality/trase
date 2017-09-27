@@ -16,9 +16,13 @@ class PlaceAttributes
     @place_quants = Hash[(@node.place_quants + @node.temporal_place_quants(@year)).map do |e|
       [e['name'], e]
     end]
+    @temporal_place_quants_for_all_years = Hash.new { |h,k| h[k] = [] }
+    @node.temporal_place_quants.each{ |pq| @temporal_place_quants_for_all_years[pq.name] << pq }
     @place_inds = Hash[(@node.place_inds + @node.temporal_place_inds(@year)).map do |e|
       [e['name'], e]
     end]
+    @temporal_place_inds_for_all_years = Hash.new { |h,k| h[k] = [] }
+    @node.temporal_place_inds.each{ |pq| @temporal_place_inds_for_all_years[pq.name] << pq }
 
     @data = {
       column_name: @node_type,
@@ -359,22 +363,33 @@ EOT
         indicator
       end
     end
-    included_columns = list.map{ |i| i.slice(:name, :unit)}
     values = []
     ranking_scores = []
-    list.each do |indicator|
-      values <<
-        if indicator[:type] == 'quant' && @place_quants[indicator[:backend_name]].present?
-          @place_quants[indicator[:backend_name]]['value']
-        elsif indicator[:type] == 'ind' && @place_inds[indicator[:backend_name]].present?
-          @place_inds[indicator[:backend_name]]['value']
-        else
-          nil
+    list.each_with_index do |indicator, idx|
+      values_for_current_year, temporal_values_for_all_years = if indicator[:type] == 'quant'
+        [@place_quants, @temporal_place_quants_for_all_years]
+      elsif indicator[:type] == 'ind'
+        [@place_inds, @temporal_place_inds_for_all_years]
+      else
+        [[], []]
+      end
+      if (value_for_current_year = values_for_current_year[indicator[:backend_name]]).present?
+        value = value_for_current_year['value']
+      else # temporal indicator with no value for selected year
+        value_for_closest_year = temporal_values_for_all_years[indicator[:backend_name]].min_by do |pq|
+          (pq.year - @year).abs
         end
+        if value_for_closest_year.present?
+          value = value_for_closest_year.value
+          list[idx][:year] = value_for_closest_year.year
+        end
+      end
+      values << value
       if @state.present?
-        ranking_scores << @stats.state_ranking(@state, indicator[:type], indicator[:backend_name])
+        ranking_scores << @stats.state_ranking(@state, indicator[:type], indicator[:backend_name], list[idx][:year])
       end
     end
+    included_columns = list.map{ |i| i.slice(:name, :unit, :year)}
     {
       name: name,
       included_columns: included_columns,
