@@ -93,7 +93,8 @@ class FlowStatsForNode
   # Returns the node's ranking across all nodes of same type within given state
   # for given indicator
   # for selected year
-  def state_ranking(state, indicator_type, indicator_name)
+  def state_ranking(state, indicator_type, indicator_name, year = nil)
+    year ||= @year
     value_table, dict_table = if indicator_type == 'quant'
       ['node_quants', 'quants']
     elsif indicator_type == 'ind'
@@ -107,7 +108,7 @@ class FlowStatsForNode
       ).
       where(
         "#{value_table}.year = ? OR NOT COALESCE(#{dict_table}.place_factsheet_temporal, FALSE)",
-        @year
+        year
       )
 
     result = Node.from('(' + query.to_sql + ') s').
