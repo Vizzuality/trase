@@ -14,7 +14,7 @@ class FlowDownload
       ','
     end
     @download_name = "#{@context.country.name}_#{@context.commodity.name}_#{DownloadVersion.current_version_symbol}"
-    query_builder = FlowDownloadQueryBuilder.new(context.id, params)
+    query_builder = FlowDownloadQueryBuilder.new(@context, params)
     @query = if @pivot
       query_builder.pivot_query
     else
