@@ -70,7 +70,7 @@ class FlowStatsForNode
     other_node_index = node_index(other_node_type)
     nodes_join_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
-      ["LEFT JOIN nodes ON nodes.node_id = flows.path[?]",
+      ["JOIN nodes ON nodes.node_id = flows.path[?] AND (NOT is_unknown OR is_unknown IS NULL)",
       other_node_index]
     )
     group_clause = ActiveRecord::Base.send(
@@ -78,14 +78,11 @@ class FlowStatsForNode
       ["flows.path[?], quants.name",
       other_node_index]
     )
-    Flow.select('sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, quants.name').
-      joins('LEFT JOIN flow_quants ON flows.flow_id = flow_quants.flow_id').
-      joins('LEFT JOIN quants ON quants.quant_id = flow_quants.quant_id').
+
+    @node.flow_values(@context, 'quant', quant_names).
+      select("SUM(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, quants.name").
       joins(nodes_join_clause).
-      where('nodes.name NOT LIKE ?', 'UNKNOWN%').
-      where('flows.context_id' => @context.id).
-      where('? = path[?] AND ? = path[?]', @node.id, @self_node_index, other_node_id, other_node_index).
-      where('quants.name' => quant_names).
+      where('? = path[?]', other_node_id, other_node_index).
       where(year: @year).
       group(group_clause)
   end
