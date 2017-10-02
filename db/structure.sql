@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.1
--- Dumped by pg_dump version 9.6.1
+-- Dumped from database version 9.6.5
+-- Dumped by pg_dump version 9.6.5
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -67,6 +67,69 @@ CREATE TYPE attribute_type AS ENUM (
     'Qual',
     'Ind'
 );
+
+
+--
+-- Name: add_soy_(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION add_soy_() RETURNS integer
+    LANGUAGE plpgsql
+    AS $$
+    DECLARE
+      trader_id INTEGER;
+    BEGIN
+      DELETE FROM node_quants WHERE quant_id = 1;
+      FOR trader_id IN SELECT DISTINCT path[6] FROM flows WHERE context_id = 1 UNION SELECT DISTINCT path[7] FROM flows WHERE context_id = 1 LOOP
+        FOR year_ IN 2010..2015 LOOP
+  INSERT INTO node_quants (node_id, quant_id, value, year) VALUES (trader_id, 1, get_trader_sum(trader_id, year_), year_);
+END LOOP;
+      END LOOP;
+      UPDATE node_quants SET value = 0.0 WHERE quant_id = 1 AND value IS NULL;
+      RETURN 1;
+    END;
+  $$;
+
+
+--
+-- Name: fix_zd(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION fix_zd() RETURNS integer
+    LANGUAGE plpgsql
+    AS $$
+    DECLARE trader_id INTEGER;
+    BEGIN
+      DELETE FROM node_quals WHERE qual_id = 1;
+      FOR trader_id IN SELECT DISTINCT path[6] FROM flows WHERE context_id = 1 UNION SELECT DISTINCT path[7] FROM flows WHERE context_id = 1 LOOP
+        INSERT INTO node_quals (node_id, qual_id, value) VALUES (trader_id, 1, 'NO');
+      END LOOP;
+      UPDATE node_quals SET value = 'YES' WHERE qual_id = 1 AND node_id IN (SELECT node_id FROM nodes WHERE name = ANY('{"ADM","AGREX INC","ALGAR AGRO","AMAGGI","BALDO","BUNGE","CARGILL","CGG TRADING","CHS","COAMO","COFCO","CUTRALE","BTG PACTUAL COMMODITIES","BTG PACTUAL COMMODITIES","FIAGRIL","GAVILON","GLENCORE","IMCOPA IMPORTACAO EXPORTACAO E INDUSTRIA DE OLEOS LTDA","LOUIS DREYFUS","MARUBENI","MULTIGRAIN S.A.","NIDERA","NOVAAGRI INFRA-ESTRUTURA DE ARMAZENAGEM E ESCOAMENTO AGRICOLA S.A.","OLAM INTERNATIONAL","OLEOS MENU","TOYOTA TSUSHO CORPORATION","SEARA","SELECTA","SODRUGESTVO PARAGUAY S A","ALIANCA AGRICOLA DO CERRADO S.A","SODRUGESTVO PARAGUAY S A","BTG PACTUAL COMMODITIES"}'));
+      RETURN 1;
+    END;
+  $$;
+
+
+--
+-- Name: get_trader_sum(integer, integer); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION get_trader_sum(trader_id integer, year_ integer) RETURNS double precision
+    LANGUAGE sql
+    AS $$
+    SELECT sum(value)
+    FROM flow_quants
+    WHERE quant_id IN (
+      SELECT quant_id
+      FROM quants
+      WHERE name = 'Volume')
+        AND flow_id IN (
+          SELECT flow_id
+          FROM flows
+          WHERE trader_id = ANY(path)
+            AND year = year_
+            AND context_id = 1); 
+  $$;
 
 
 SET default_tablespace = '';
@@ -262,7 +325,8 @@ CREATE TABLE context_layer (
     is_default boolean DEFAULT false,
     color_scale character varying,
     years integer[],
-    aggregate_method character varying
+    aggregate_method character varying,
+    enabled boolean DEFAULT true NOT NULL
 );
 
 
@@ -1652,6 +1716,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170918133625'),
 ('20170918134156'),
 ('20170921125513'),
-('20170925102834');
+('20170925102834'),
+('20171002102750');
 
 

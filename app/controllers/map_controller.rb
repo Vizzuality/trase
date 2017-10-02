@@ -11,6 +11,7 @@ class MapController < ApplicationController
                      .joins('LEFT JOIN quants ON layer_attribute_type =\'Quant\' AND layer_attribute_id = quants.quant_id')
                      .joins('LEFT JOIN inds ON layer_attribute_type =\'Ind\' AND layer_attribute_id = inds.ind_id')
                      .where('context_layer.context_id = :context_id', context_id: @context.id)
+                     .where('context_layer.enabled = true')
                      .order('context_layer.position ASC')
 
 
