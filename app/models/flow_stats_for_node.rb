@@ -143,7 +143,52 @@ class FlowStatsForNode
       order(nil)
   end
 
+  def country_ranking_from_flows(context, indicator_type, indicator_name)
+    value_table, dict_table = if indicator_type == 'quant'
+      ['flow_quants', 'quants']
+    elsif indicator_type == 'ind'
+      ['flow_inds', 'inds']
+    end
+    select_clause = ActiveRecord::Base.send(
+      :sanitize_sql_array,
+      [
+        'flows.context_id, flows.year, path[?] AS node_id, SUM(flow_quants.value) AS total, DENSE_RANK() OVER (ORDER BY SUM(flow_quants.value) DESC) AS rank',
+        @node_index
+      ]
+    )
+    nodes_join_clause = ActiveRecord::Base.send(
+      :sanitize_sql_array,
+      [
+        'JOIN nodes ON nodes.node_id = flows.path[?] AND (NOT is_unknown OR is_unknown IS NULL) AND (NOT is_domestic_consumption OR is_domestic_consumption IS NULL)',
+        @node_index
+      ]
+    )
+    group_clause = ActiveRecord::Base.send(
+      :sanitize_sql_array,
+      [
+        'flows.context_id, flows.year, path[?]',
+        @node_index
+      ]
+    )
+    query = Flow.select(select_clause).
+      joins("JOIN #{value_table} ON flows.flow_id = #{value_table}.flow_id").
+      joins("JOIN #{dict_table} ON #{dict_table}.#{indicator_type}_id = #{value_table}.#{indicator_type}_id").
+      joins(nodes_join_clause).
+      where("#{dict_table}.name" => indicator_name, 'flows.year' => @year, 'context_id' => context.id).
+      group(group_clause).
+      order('rank')
+
+    result = Node.from('(' + query.to_sql + ') s').
+      select('s.*').
+      where('s.node_id' => @node.id).
+      order('rank ASC').
+      first
+
+    result && result['rank']
+  end
+
   # Returns the node's ranking across all nodes of same type within given context country
+  # for given context TODO: probably no point passing the context in here
   # for given indicator
   # for selected year
   def country_ranking(context, indicator_type, indicator_name)
