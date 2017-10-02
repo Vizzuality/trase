@@ -338,7 +338,7 @@ is #{@main_destination_name.humanize}, accounting for \
 
   def risk_indicators
     [
-      {name: 'Maximum soy deforestation', unit: 'ha', backend_name: 'DEFORESTATION_V2'},
+      {name: 'Maximum soy deforestation', unit: 'ha', backend_name: 'POTENTIAL_SOY_DEFORESTATION_V2'},
       {name: 'Soy deforestation', unit: 'ha', backend_name: 'AGROSATELITE_SOY_DEFOR_'},
       {name: 'Biodiversity loss', backend_name: 'BIODIVERSITY'}
     ]
