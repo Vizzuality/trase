@@ -798,10 +798,6 @@ CREATE MATERIALIZED VIEW node_flows AS
             WHEN (cn.node_type = ANY (ARRAY['COUNTRY OF PRODUCTION'::text, 'BIOME'::text, 'LOGISTICS HUB'::text, 'STATE'::text])) THEN upper(n.name)
             ELSE initcap(n.name)
         END AS name,
-        CASE
-            WHEN (cn.node_type = 'COUNTRY OF PRODUCTION'::text) THEN false
-            ELSE true
-        END AS needs_total,
     cn.node_type,
     cn.column_group,
     cn.column_position,
@@ -845,157 +841,64 @@ CREATE TABLE node_quals (
 --
 
 CREATE MATERIALIZED VIEW materialized_flows AS
- WITH aggregated_flows AS (
-         SELECT f.context_id,
-            f.column_group,
-            f.column_position,
-            f.needs_total,
-                CASE
-                    WHEN (f.node_type = 'COUNTRY OF PRODUCTION'::text) THEN f.name
-                    ELSE NULL::text
-                END AS country_of_production,
-                CASE
-                    WHEN (f.node_type = 'PORT'::text) THEN f.name
-                    ELSE NULL::text
-                END AS port,
-                CASE
-                    WHEN (f.node_type = 'DEPARTMENT'::text) THEN f.name
-                    ELSE NULL::text
-                END AS department,
-                CASE
-                    WHEN (f.node_type = 'MUNICIPALITY'::text) THEN f.name
-                    ELSE NULL::text
-                END AS municipality,
-            node_state.value AS state,
-            node_biome.value AS biome,
-            f.node_id,
-            f.geo_id,
-            f_ex.node_id AS exporter_node_id,
-            f_ex.name AS exporter_node,
-            f_ex_port.node_id AS exporter_port_node_id,
-            f_ex_port.name AS exporter_port_node,
-            f_im.node_id AS importer_node_id,
-            f_im.name AS importer_node,
-            f_ctry.node_id AS country_node_id,
-            f_ctry.name AS country_node,
-            f.year,
-            fi.indicator_type,
-            fi.indicator_id,
-            fi.name AS indicator,
-            fi.name_with_unit AS indicator_with_unit,
-            fi.name_in_download,
-            bool_and(fi.boolean_value) AS bool_and,
-            sum(fi.numeric_value) AS sum
-           FROM (((((((node_flows f
-             LEFT JOIN node_flows f_ex ON (((f_ex.column_group = 1) AND (f_ex.node_type = 'EXPORTER'::text) AND (f.flow_id = f_ex.flow_id))))
-             LEFT JOIN node_flows f_ex_port ON (((f_ex_port.column_group = 1) AND (f_ex_port.node_type = 'PORT'::text) AND (f.flow_id = f_ex_port.flow_id))))
-             JOIN node_flows f_im ON (((f_im.column_group = 2) AND (f.flow_id = f_im.flow_id))))
-             JOIN node_flows f_ctry ON (((f_ctry.column_group = 3) AND (f.flow_id = f_ctry.flow_id))))
-             JOIN flow_indicators fi ON (((f.flow_id = fi.flow_id) AND (f.context_id = fi.context_id))))
-             LEFT JOIN node_quals node_state ON (((node_state.node_id = f.node_id) AND (node_state.qual_id IN ( SELECT quals.qual_id
-                   FROM quals
-                  WHERE (quals.name = 'STATE'::text))))))
-             LEFT JOIN node_quals node_biome ON (((node_biome.node_id = f.node_id) AND (node_biome.qual_id IN ( SELECT quals.qual_id
-                   FROM quals
-                  WHERE (quals.name = 'BIOME'::text))))))
-          WHERE ((f.column_group = 0) AND f.is_default)
-          GROUP BY f.context_id, f.year, f.node_type, f.node_id, f.column_group, f.column_position, f.needs_total, f.name, node_state.value, node_biome.value, f.geo_id, f_ex.node_id, f_ex.name, f_ex_port.node_id, f_ex_port.name, f_im.node_id, f_im.name, f_ctry.node_id, f_ctry.name, fi.indicator_type, fi.indicator_id, fi.name, fi.name_with_unit, fi.name_in_download
-        ), with_totals AS (
-         SELECT aggregated_flows.context_id,
-            aggregated_flows.column_group,
-            aggregated_flows.column_position,
-            'TOTAL'::text AS country_of_production,
-            'TOTAL'::text AS port,
-            'TOTAL'::text AS department,
-            'TOTAL'::text AS municipality,
-            NULL::text AS state,
-            NULL::text AS biome,
-            NULL::integer AS node_id,
-            NULL::text AS geo_id,
-            aggregated_flows.exporter_node_id,
-            aggregated_flows.exporter_node,
-            aggregated_flows.exporter_port_node_id,
-            aggregated_flows.exporter_port_node,
-            aggregated_flows.importer_node_id,
-            aggregated_flows.importer_node,
-            aggregated_flows.country_node_id,
-            aggregated_flows.country_node,
-            aggregated_flows.year,
-            aggregated_flows.indicator_type,
-            aggregated_flows.indicator_id,
-            aggregated_flows.indicator_with_unit,
-            aggregated_flows.name_in_download,
-                CASE
-                    WHEN ((aggregated_flows.indicator_type = 'Qual'::text) AND bool_and(aggregated_flows.bool_and)) THEN 'yes'::text
-                    WHEN ((aggregated_flows.indicator_type = 'Qual'::text) AND (NOT bool_and(aggregated_flows.bool_and))) THEN 'no'::text
-                    ELSE (sum(aggregated_flows.sum))::text
-                END AS total
-           FROM aggregated_flows
-          WHERE ((aggregated_flows.column_group = 0) AND aggregated_flows.needs_total)
-          GROUP BY aggregated_flows.context_id, aggregated_flows.column_group, aggregated_flows.column_position, aggregated_flows.exporter_node_id, aggregated_flows.exporter_node, aggregated_flows.exporter_port_node_id, aggregated_flows.exporter_port_node, aggregated_flows.importer_node_id, aggregated_flows.importer_node, aggregated_flows.country_node_id, aggregated_flows.country_node, aggregated_flows.year, aggregated_flows.indicator_type, aggregated_flows.indicator_id, aggregated_flows.indicator_with_unit, aggregated_flows.name_in_download
-        UNION ALL
-         SELECT aggregated_flows.context_id,
-            aggregated_flows.column_group,
-            aggregated_flows.column_position,
-            aggregated_flows.country_of_production,
-            aggregated_flows.port,
-            aggregated_flows.department,
-            aggregated_flows.municipality,
-            aggregated_flows.state,
-            aggregated_flows.biome,
-            aggregated_flows.node_id,
-            aggregated_flows.geo_id,
-            aggregated_flows.exporter_node_id,
-            aggregated_flows.exporter_node,
-            aggregated_flows.exporter_port_node_id,
-            aggregated_flows.exporter_port_node,
-            aggregated_flows.importer_node_id,
-            aggregated_flows.importer_node,
-            aggregated_flows.country_node_id,
-            aggregated_flows.country_node,
-            aggregated_flows.year,
-            aggregated_flows.indicator_type,
-            aggregated_flows.indicator_id,
-            aggregated_flows.indicator_with_unit,
-            aggregated_flows.name_in_download,
-                CASE
-                    WHEN ((aggregated_flows.indicator_type = 'Qual'::text) AND aggregated_flows.bool_and) THEN 'yes'::text
-                    WHEN ((aggregated_flows.indicator_type = 'Qual'::text) AND (NOT aggregated_flows.bool_and)) THEN 'no'::text
-                    ELSE (aggregated_flows.sum)::text
-                END AS total
-           FROM aggregated_flows
-        )
- SELECT with_totals.context_id,
-    with_totals.column_group,
-    with_totals.column_position,
-    with_totals.country_of_production,
-    with_totals.port,
-    with_totals.department,
-    with_totals.municipality,
-    with_totals.state,
-    with_totals.biome,
-    with_totals.node_id,
-    with_totals.geo_id,
-    with_totals.exporter_node_id,
-    with_totals.exporter_node,
-    with_totals.exporter_port_node_id,
-    with_totals.exporter_port_node,
-    with_totals.importer_node_id,
-    with_totals.importer_node,
-    with_totals.country_node_id,
-    with_totals.country_node,
-    with_totals.year,
-    with_totals.indicator_type,
-    with_totals.indicator_id,
-    with_totals.indicator_with_unit,
-    with_totals.name_in_download,
-    with_totals.total
-   FROM with_totals
-  ORDER BY
+ SELECT f.context_id,
+    f.column_group,
+    f.column_position,
         CASE
-            WHEN ((with_totals.municipality = 'TOTAL'::text) OR (with_totals.department = 'TOTAL'::text) OR (with_totals.port = 'TOTAL'::text)) THEN 0
-            ELSE 1
-        END, with_totals.column_group, with_totals.column_position, with_totals.municipality, with_totals.state, with_totals.biome, with_totals.exporter_node, with_totals.exporter_port_node, with_totals.importer_node, with_totals.country_node, with_totals.indicator_with_unit, with_totals.name_in_download
+            WHEN (f.node_type = 'COUNTRY OF PRODUCTION'::text) THEN f.name
+            ELSE NULL::text
+        END AS country_of_production,
+        CASE
+            WHEN (f.node_type = 'PORT'::text) THEN f.name
+            ELSE NULL::text
+        END AS port,
+        CASE
+            WHEN (f.node_type = 'DEPARTMENT'::text) THEN f.name
+            ELSE NULL::text
+        END AS department,
+        CASE
+            WHEN (f.node_type = 'MUNICIPALITY'::text) THEN f.name
+            ELSE NULL::text
+        END AS municipality,
+    node_state.value AS state,
+    node_biome.value AS biome,
+    f.node_id,
+    f.geo_id,
+    f_ex.node_id AS exporter_node_id,
+    f_ex.name AS exporter_node,
+    f_ex_port.node_id AS exporter_port_node_id,
+    f_ex_port.name AS exporter_port_node,
+    f_im.node_id AS importer_node_id,
+    f_im.name AS importer_node,
+    f_ctry.node_id AS country_node_id,
+    f_ctry.name AS country_node,
+    f.year,
+    fi.indicator_type,
+    fi.indicator_id,
+    fi.name AS indicator,
+    fi.name_with_unit AS indicator_with_unit,
+    fi.name_in_download,
+    bool_and(fi.boolean_value) AS bool_and,
+    sum(fi.numeric_value) AS sum,
+        CASE
+            WHEN ((fi.indicator_type = 'Qual'::text) AND bool_and(fi.boolean_value)) THEN 'yes'::text
+            WHEN ((fi.indicator_type = 'Qual'::text) AND (NOT bool_and(fi.boolean_value))) THEN 'no'::text
+            ELSE (sum(fi.numeric_value))::text
+        END AS total
+   FROM (((((((node_flows f
+     LEFT JOIN node_flows f_ex ON (((f_ex.column_group = 1) AND (f_ex.node_type = 'EXPORTER'::text) AND (f.flow_id = f_ex.flow_id))))
+     LEFT JOIN node_flows f_ex_port ON (((f_ex_port.column_group = 1) AND (f_ex_port.node_type = 'PORT'::text) AND (f.flow_id = f_ex_port.flow_id))))
+     JOIN node_flows f_im ON (((f_im.column_group = 2) AND (f.flow_id = f_im.flow_id))))
+     JOIN node_flows f_ctry ON (((f_ctry.column_group = 3) AND (f.flow_id = f_ctry.flow_id))))
+     JOIN flow_indicators fi ON (((f.flow_id = fi.flow_id) AND (f.context_id = fi.context_id))))
+     LEFT JOIN node_quals node_state ON (((node_state.node_id = f.node_id) AND (node_state.qual_id IN ( SELECT quals.qual_id
+           FROM quals
+          WHERE (quals.name = 'STATE'::text))))))
+     LEFT JOIN node_quals node_biome ON (((node_biome.node_id = f.node_id) AND (node_biome.qual_id IN ( SELECT quals.qual_id
+           FROM quals
+          WHERE (quals.name = 'BIOME'::text))))))
+  WHERE ((f.column_group = 0) AND f.is_default)
+  GROUP BY f.context_id, f.year, f.node_type, f.node_id, f.column_group, f.column_position, f.name, node_state.value, node_biome.value, f.geo_id, f_ex.node_id, f_ex.name, f_ex_port.node_id, f_ex_port.name, f_im.node_id, f_im.name, f_ctry.node_id, f_ctry.name, fi.indicator_type, fi.indicator_id, fi.name, fi.name_with_unit, fi.name_in_download
   WITH NO DATA;
 
 
@@ -1717,6 +1620,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170918134156'),
 ('20170921125513'),
 ('20170925102834'),
+('20170929120908'),
 ('20171002102750');
 
 
