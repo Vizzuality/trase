@@ -1,8 +1,9 @@
 class FlowDownloadQueryBuilder
 
-  def initialize(context_id, params)
-    @query = MaterializedFlow.where(context_id: context_id)
-    initialise_group_0_columns(context_id)
+  def initialize(context, params)
+    @context = context
+    @query = MaterializedFlow.where(context_id: @context.id)
+    initialise_group_0_columns(@context.id)
     if params[:years].present?
       @query = @query.where(year: params[:years])
     end
@@ -130,7 +131,7 @@ class FlowDownloadQueryBuilder
       'exporter_node AS "Exporter"',
       'importer_node AS "Importer"',
       'country_node AS "Country"',
-      "'Soy bean equivalents' AS Type",
+      "'#{commodity_type}' AS Type",
       'name_in_download AS "Indicator"',
       'total AS "Total"'
     ]
@@ -146,10 +147,17 @@ class FlowDownloadQueryBuilder
       'exporter_node AS "Exporter"',
       'importer_node AS "Importer"',
       'country_node AS "Country"',
-      "'Soy bean equivalents' AS Type",
+      "'#{commodity_type}' AS Type",
       'name_in_download',
       'total'
     ]
   end
 
+  def commodity_type
+    if @context.commodity.try(:name) == 'SOY'
+      'Soy bean equivalents'
+    else
+      @context.commodity.try(:name).try(:humanize) || 'UNKNOWN'
+    end
+  end
 end

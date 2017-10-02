@@ -8,7 +8,7 @@ RSpec.describe FlowDownloadQueryBuilder, type: :model do
     end
 
     it "should return all flows when no filter applied" do
-      qb = FlowDownloadQueryBuilder.new(context.id, {})
+      qb = FlowDownloadQueryBuilder.new(context, {})
       expected = [
         [2015, 'TOTAL', nil, nil, 'Imbituba', 'Afg Brasil', 'Unknown Customer', 'Russian Federation', 'MAX_SOY_DEFORESTATION', '10'],
         [2015, 'TOTAL', nil, nil, 'Paranagua', 'Afg Brasil', 'Chinatex Grains & Oils Imp Exp Co', 'China', 'MAX_SOY_DEFORESTATION', '5'],
@@ -24,7 +24,7 @@ RSpec.describe FlowDownloadQueryBuilder, type: :model do
     end
 
     it "should filter rows when filter applied" do
-      qb = FlowDownloadQueryBuilder.new(context.id, {
+      qb = FlowDownloadQueryBuilder.new(context, {
         exporters_ids: [exporter1.id]
       })
       expected = [
