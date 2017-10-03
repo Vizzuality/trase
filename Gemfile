@@ -19,6 +19,7 @@ gem 'dotenv-rails', '~> 2.1'
 
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'enumerate_it', '~> 1.4.1'
+gem 'mailchimp-api', require: 'mailchimp'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
