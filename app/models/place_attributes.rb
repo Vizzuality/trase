@@ -57,7 +57,7 @@ class PlaceAttributes
       [production['value'], "#{value} #{unit}"]
     end
     soy_area = if (soy_produced_raw && @place_inds['SOY_YIELD'] && soy_yield_raw = @place_inds['SOY_YIELD']['value'])
-      value = helper.number_with_precision(soy_produced_raw / (soy_yield_raw / 1000), {delimiter: ',', precision: 0})
+      value = helper.number_with_precision(soy_produced_raw / soy_yield_raw, {delimiter: ',', precision: 0})
       unit = 'Ha' # soy prod in Tn, soy yield in Tn/Ha
       "#{value} #{unit}"
     end
@@ -111,7 +111,7 @@ EOT
       data[:soy_production] = @place_quants['SOY_TN']['value']
     end
     if (data[:soy_production] && @place_inds['SOY_YIELD'] && soy_yield_raw = @place_inds['SOY_YIELD']['value'])
-      value = helper.number_with_precision(data[:soy_production] / (soy_yield_raw / 1000), {delimiter: ',', precision: 0})
+      value = helper.number_with_precision(data[:soy_production] / soy_yield_raw, {delimiter: ',', precision: 0})
       data[:soy_area] = value
     end
     if @place_inds['SOY_AREAPERC'].present?
