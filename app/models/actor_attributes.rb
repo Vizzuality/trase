@@ -92,7 +92,7 @@ class ActorAttributes
 
   def summary_of_total_trade_volume(profile_type)
     initialize_trade_volume_for_summary
-    text = "#{@node.name.humanize} was the #{@trade_total_rank_in_country_formatted}largest #{profile_type} of soy in #{@context.country.name} in #{@year}, accounting for #{@trade_total_current_year_formatted}."
+    text = "#{@node.name.humanize} was the #{@trade_total_rank_in_country_formatted}largest #{profile_type} of soy #{profile_type.casecmp('exporter') == 0 ? 'in' : 'from'} #{@context.country.name} in #{@year}, accounting for #{@trade_total_current_year_formatted}."
     return text unless @trade_total_perc_difference.present?
     difference_from = if @trade_total_perc_difference > 0
       'a ' + helper.number_to_percentage(@trade_total_perc_difference * 100, {precision: 0}) + ' increase vs'
@@ -141,7 +141,7 @@ class ActorAttributes
   def summary_of_destinations(profile_type)
     initialize_destinations_for_summary
     if @perc_exports_formatted
-      " The main destination of the soy #{profile_type}ed by #{@node.name.humanize} \
+      " The main destination of the soy #{profile_type.first(-1)}d by #{@node.name.humanize} \
 is #{@main_destination_name.humanize}, accounting for \
 #{@perc_exports_formatted} of the total."
     else
