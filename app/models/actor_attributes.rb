@@ -364,9 +364,9 @@ is #{@main_destination_name.humanize}, accounting for \
 
   def risk_indicators
     [
+      {name: 'Territorial deforestation', backend_name: 'DEFORESTATION_V2'},
       {name: 'Maximum soy deforestation', unit: 'ha', backend_name: 'POTENTIAL_SOY_DEFORESTATION_V2'},
-      {name: 'Soy deforestation', unit: 'ha', backend_name: 'AGROSATELITE_SOY_DEFOR_'},
-      {name: 'Biodiversity loss', backend_name: 'BIODIVERSITY'}
+      {name: 'Soy deforestation', unit: 'ha', backend_name: 'AGROSATELITE_SOY_DEFOR_'}
     ]
   end
 
@@ -375,8 +375,9 @@ is #{@main_destination_name.humanize}, accounting for \
     top_nodes_in_group = FlowStatsForNode.new(@context, @year, @node, node_type).
       top_nodes_for_quant('Volume')
     rows = top_nodes_in_group.map do |node|
-      top_node = Node.find(node['node_id'])
-      totals_per_indicator = (top_node.actor_quants + top_node.temporal_actor_quants(@year))
+      totals_per_indicator = @stats.node_totals_for_quants(
+        node['node_id'], node_type, risk_indicators.map{ |i| i[:backend_name] }
+      )
       totals_hash = Hash[totals_per_indicator.map{ |t| [t['name'], t['value']] }]
       totals_hash.each do |k, v|
         if group_totals_hash[k]
