@@ -326,9 +326,10 @@ EOT
     top_municipalities = [@node] + all_municipalities.limit(9).all
     top_municipalities_count = top_municipalities.length
 
-    top_nodes = FlowStatsForNode.new(@context, @year, @node, node_type).top_nodes_for_quant('Volume', include_domestic_consumption)
-    node_value_sum = top_nodes.map{ |t| t[:value] }.reduce(0, :+)
-    matrix_size = top_municipalities_count + top_nodes.size
+    node_type_stats = FlowStatsForNode.new(@context, @year, @node, node_type)
+    top_nodes = node_type_stats.top_nodes_for_quant('Volume', include_domestic_consumption)
+    all_nodes_total = node_type_stats.all_nodes_for_quant_total('Volume', include_domestic_consumption)
+    matrix_size = top_municipalities_count + top_nodes.length
     matrix = Array.new(matrix_size){ Array.new(matrix_size){ 0 } }
     matrix[0] = top_municipalities.map { 0 } + top_nodes.map{ |t| t['value'] }
 
@@ -344,7 +345,7 @@ EOT
 
     result = {
       node_list_label =>
-        top_nodes.map{ |t| {id: t['node_id'], name: t['name'], value: t['value']/node_value_sum, is_domestic_consumption: t['is_domestic_consumption']} },
+        top_nodes.map { |t| {id: t['node_id'], name: t['name'], value: t['value']/all_nodes_total, is_domestic_consumption: t['is_domestic_consumption']} },
       municipalities: top_municipalities.map{ |m| {id: m.id, name: m.name} },
       matrix: matrix
     }
