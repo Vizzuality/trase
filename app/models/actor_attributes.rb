@@ -26,11 +26,7 @@ class ActorAttributes
     }
     [@actor_quals, @actor_quants, @actor_inds].each do |indicator_hash|
       indicator_hash.each do |name, indicator|
-        if name == 'SOY_'
-          @data[:total_soy_2015] = indicator['value'].to_f
-        else
-          @data[name.downcase] = indicator['value']
-        end
+        @data[name.downcase] = indicator['value']
       end
     end
 
