@@ -8,11 +8,8 @@ RSpec.describe FlowDownloadQueryBuilder, type: :model do
     end
 
     it "should return all flows when no filter applied" do
-      qb = FlowDownloadQueryBuilder.new(context.id, {})
+      qb = FlowDownloadQueryBuilder.new(context, {})
       expected = [
-        [2015, 'TOTAL', nil, nil, 'Imbituba', 'Afg Brasil', 'Unknown Customer', 'Russian Federation', 'MAX_SOY_DEFORESTATION', '10'],
-        [2015, 'TOTAL', nil, nil, 'Paranagua', 'Afg Brasil', 'Chinatex Grains & Oils Imp Exp Co', 'China', 'MAX_SOY_DEFORESTATION', '5'],
-        [2015, 'TOTAL', nil, nil, 'Paranagua', 'Afg Brasil', 'Chinatex Grains & Oils Imp Exp Co', 'China', 'ZERO_DEFORESTATION', 'yes'],
         [2015, 'Nova Ubirata', 'MATO GROSSO', 'AMAZONIA', 'Imbituba', 'Afg Brasil', 'Unknown Customer', 'Russian Federation', 'MAX_SOY_DEFORESTATION', '10'],
         [2015, 'Nova Ubirata', 'MATO GROSSO', 'AMAZONIA', 'Paranagua', 'Afg Brasil', 'Chinatex Grains & Oils Imp Exp Co', 'China', 'MAX_SOY_DEFORESTATION', '5'],
         [2015, 'Nova Ubirata', 'MATO GROSSO', 'AMAZONIA', 'Paranagua', 'Afg Brasil', 'Chinatex Grains & Oils Imp Exp Co', 'China', 'ZERO_DEFORESTATION', 'yes']
@@ -24,11 +21,10 @@ RSpec.describe FlowDownloadQueryBuilder, type: :model do
     end
 
     it "should filter rows when filter applied" do
-      qb = FlowDownloadQueryBuilder.new(context.id, {
+      qb = FlowDownloadQueryBuilder.new(context, {
         exporters_ids: [exporter1.id]
       })
       expected = [
-        [2015, 'TOTAL', nil, nil, 'Imbituba', 'Afg Brasil', 'Unknown Customer', 'Russian Federation', 'MAX_SOY_DEFORESTATION', '10'],
         [2015, 'Nova Ubirata', 'MATO GROSSO', 'AMAZONIA', 'Imbituba', 'Afg Brasil', 'Unknown Customer', 'Russian Federation', 'MAX_SOY_DEFORESTATION', '10']
       ]
 

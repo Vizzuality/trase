@@ -49,59 +49,118 @@ class ActorAttributes
   end
 
   def summary
-    return nil unless @node_type == NodeTypeName::EXPORTER
-    soy_exports = @node.temporal_actor_quants.where('quants.name' => 'SOY_')
-    exports_in_year_raw, exports_in_year = if (e = soy_exports.find{ |e| e['year'] == @year })
-      value = helper.number_with_precision(e['value']/1000, {delimiter: ',', precision: 0})
-      [e['value'], value]
+    if @node_type == NodeTypeName::EXPORTER
+      exporter_summary
+    else
+      importer_summary
     end
-    exports_in_previous_year_raw = (e = soy_exports.find{ |e| e['year'] == @year - 1 }) && e['value']
+  end
 
-    country_ranking = @stats.country_ranking(@context, 'quant', 'SOY_')
-    country_ranking = if (country_ranking and country_ranking > 1)
-                        country_ranking.ordinalize + ' '
-                      else
-                        ''
-                      end
-
-    text = "#{@node.name.humanize} was the #{country_ranking}largest exporter of soy in #{@context.country.name} in #{@year}, accounting for #{exports_in_year} thousand tons."
-    if exports_in_previous_year_raw.present?
-      perc_difference = (exports_in_year_raw - exports_in_previous_year_raw) / exports_in_previous_year_raw
-      difference_from = if perc_difference > 0
-        'a ' + helper.number_to_percentage(perc_difference * 100, {precision: 0}) + ' increase vs'
-      elsif perc_difference < 0
-        'a ' + helper.number_to_percentage(-perc_difference * 100, {precision: 0}) + ' decrease vs'
-      else
-        'no change from'
-      end
-      text += " This is #{difference_from} the previous year."
+  def initialize_trade_volume_for_summary
+    trade_flows_current_year = @node.flow_values(@context, 'quant', 'Volume').where(year: @year)
+    @trade_total_current_year = trade_flows_current_year.sum('value')
+    @trade_total_current_year_formatted = helper.number_with_precision(
+      @trade_total_current_year/1000, {delimiter: ',', precision: 0}
+    )
+    trade_flows_previous_year = @node.flow_values(@context, 'quant', 'Volume').where(year: @year - 1)
+    @trade_total_previous_year = trade_flows_previous_year.sum('value')
+    if @trade_total_previous_year.present? && @trade_total_previous_year > 0
+      @trade_total_perc_difference = (@trade_total_current_year - @trade_total_previous_year) / @trade_total_previous_year
     end
+    trade_total_rank_in_country = @stats.country_ranking_from_flows(@context, 'quant', 'Volume')
+    if trade_total_rank_in_country && trade_total_rank_in_country > 1
+      @trade_total_rank_in_country_formatted = trade_total_rank_in_country.ordinalize + ' '
+    end
+  end
+
+  def summary_of_total_trade_volume(profile_type)
+    initialize_trade_volume_for_summary
+    text = "#{@node.name.humanize} was the #{@trade_total_rank_in_country_formatted}largest #{profile_type} of soy in #{@context.country.name} in #{@year}, accounting for #{@trade_total_current_year_formatted} thousand tons."
+    return text unless @trade_total_perc_difference.present?
+    difference_from = if @trade_total_perc_difference > 0
+      'a ' + helper.number_to_percentage(@trade_total_perc_difference * 100, {precision: 0}) + ' increase vs'
+    elsif @trade_total_perc_difference < 0
+      'a ' + helper.number_to_percentage(-@trade_total_perc_difference * 100, {precision: 0}) + ' decrease vs'
+    else
+      'no change from'
+    end
+    text + " This is #{difference_from} the previous year."
+  end
+
+  def initialize_sources_for_summary
     municipalities_count = @stats.municipalities_count('Volume')
-    source_municipalities_count_raw = @stats.source_municipalities_count('Volume')
-    perc_municipalities = helper.number_to_percentage((source_municipalities_count_raw * 100.0) / municipalities_count, {precision: 0})
-    source_municipalities_count = helper.number_with_precision(source_municipalities_count_raw, {delimiter: ',', precision: 0})
+    source_municipalities_count = @stats.source_municipalities_count('Volume')
+    @perc_municipalities_formatted = helper.number_to_percentage(
+      (source_municipalities_count * 100.0) / municipalities_count, {precision: 0}
+    )
+    @source_municipalities_count_formatted = helper.number_with_precision(
+      source_municipalities_count, {delimiter: ',', precision: 0}
+    )
+  end
 
-    text += <<-EOT
- #{@node.name.humanize} sources from #{source_municipalities_count} municipalities, \
-or #{perc_municipalities} of the soy production municipalities.
-EOT
+  def summary_of_sources(profile_type)
+    initialize_sources_for_summary
+    " As an #{profile_type}, #{@node.name.humanize} sources from \
+#{@source_municipalities_count_formatted} municipalities, or \
+#{@perc_municipalities_formatted} of the soy production municipalities."
+  end
 
+  def initialize_destinations_for_summary
     year_idx = @data[:top_countries][:included_years].index(@year)
     main_destination = @data[:top_countries][:lines].max do |line1, line2|
       line1[:values][year_idx] <=> line2[:values][year_idx]
     end
     if main_destination.present?
-      main_destination_name = main_destination[:name]
+      @main_destination_name = main_destination[:name]
       main_destination_exports = main_destination[:values][year_idx]
-      if main_destination_exports && exports_in_year_raw
-        perc_exports = helper.number_to_percentage((main_destination_exports * 100.0) / exports_in_year_raw, {precision: 0})
-        text += <<-EOT
- The main destination of the soy exported by #{@node.name.humanize} is #{main_destination_name.humanize}, \
-accounting for #{perc_exports} of the total.
-EOT
+      if main_destination_exports && @trade_total_current_year && @trade_total_current_year > 0
+        @perc_exports_formatted = helper.number_to_percentage(
+          (main_destination_exports * 100.0) / @trade_total_current_year, {precision: 0}
+        )
       end
     end
-  text
+  end
+
+  def summary_of_destinations(profile_type)
+    initialize_destinations_for_summary
+    if @perc_exports_formatted
+      " The main destination of the soy #{profile_type}ed by #{@node.name.humanize} \
+is #{@main_destination_name.humanize}, accounting for \
+#{@perc_exports_formatted} of the total."
+    else
+      ''
+    end
+  end
+
+  def exporter_summary
+# For 1st rank:
+# Bunge was the 1st largest exporter of soy in BRAZIL in 2015, accounting for 11,061,393 tons.
+# As an exporter, Bunge sources from 1,136 municipalities, or 44% of the soy production municipalities.
+# The main destination of the soy exported by Bunge is China, accounting for 50% of the total.
+
+# For all others:
+# Cargill was the 2nd largest exporter of soy in BRAZIL in 2015, accounting for 8,801,294 tons.
+# As an exporter, Cargill sources from 1,224 municipalities, or 48% of the soy production municipalities.
+# The main destination of the soy exported by Cargill is China, accounting for 66% of the total.
+    text = summary_of_total_trade_volume('exporter')
+    text += summary_of_sources('exporter')
+    text += summary_of_destinations('exporter')
+    text
+  end
+
+  def importer_summary
+# Bunge was the 1st largest importer of soy from BRAZIL in 2015, accounting for 11,061,393 tons.
+# As an importer, Bunge sources soy from 1,136 municipalities, or 44% of the soy production municipalities.
+# The main destination of the soy imported by Bunge is China, accounting for 50% of the total.
+
+# For all others:
+# Cargill was the 2nd largest importer of soy from BRAZIL in 2015, accounting for 8,801,294 tons.
+# As an importer, Cargill sources from 1,224 municipalities, or 48% of the soy production municipalities.
+# The main destination of the soy imported by Cargill is China, accounting for 66% of the total.
+    text = summary_of_total_trade_volume('importer')
+    text += summary_of_sources('importer')
+    text += summary_of_destinations('importer')
+    text
   end
 
   def top_countries
