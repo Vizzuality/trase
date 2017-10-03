@@ -3,7 +3,7 @@ class FlowDownloadQueryBuilder
   def initialize(context, params)
     @context = context
     @query = MaterializedFlow.where(context_id: @context.id)
-    initialise_group_0_columns(@context.id)
+    initialize_path_column_names(@context.id)
     if params[:years].present?
       @query = @query.where(year: params[:years])
     end
@@ -51,21 +51,16 @@ class FlowDownloadQueryBuilder
     categories_names_with_type = categories_names_quoted.map{ |cn| cn + ' text' }
 
     select_columns = [
-      '"Year"'
-    ] + @group_0_select_aliases + [
-      '"Port"', '"Exporter"', '"Importer"', '"Country"', '"Type"'
+      '"YEAR"'
+    ] + @path_column_aliases +[
+      '"TYPE"'
     ] + categories_names_quoted
 
     crosstab_columns = [
       'row_name INT[]',
-      '"Year" int'
-    ] + @group_0_crosstab_columns +
-    [
-      '"Port" text',
-      '"Exporter" text',
-      '"Importer" text',
-      '"Country" text',
-      '"Type" text'
+      '"YEAR" int'
+    ] + @path_crosstab_columns + [
+      '"TYPE" text'
     ] + categories_names_with_type
 
     crosstab_sql =<<~SQL
@@ -81,77 +76,29 @@ class FlowDownloadQueryBuilder
 
   private
 
-  def initialise_group_0_columns(context_id)
-    group_0_node_types = ContextNode.where(context_id: context_id, column_group: 0).
-      joins(:node_type).
-      pluck('node_types.node_type')
-    @group_0_select_columns, @group_0_crosstab_columns, @group_0_select_aliases = if group_0_node_types.include?(NodeTypeName::MUNICIPALITY)
-      [
-        [
-          'municipality AS "Municipality"',
-          'state AS "State"',
-          'biome AS "Biome"'
-        ],
-        [
-          '"Municipality" text',
-          '"State" text',
-          '"Biome" text'
-        ],
-        [
-          '"Municipality"', '"State"', '"Biome"'
-        ]
-      ]
-    elsif group_0_node_types.include?(NodeTypeName::DEPARTMENT)
-      [
-        ['department AS "Department"'],
-        ['"Department" text'],
-        ['"Department"']
-      ]
-    elsif group_0_node_types.include?(NodeTypeName::PORT)
-      [
-        ['port AS "Port-"'],
-        ['"Port-" text'],
-        ['"Port-"']
-      ]
-    else
-      [
-        ['country_of_production AS "Country (prod)"'],
-        ['"Country (prod)" text'],
-        ['"Country (prod)"']
-      ]
-    end
-  end
-
   def flat_select_columns
     [
-      'year AS "Year"'
-    ] + @group_0_select_columns +
+      'year AS "YEAR"'
+    ] + @path_columns +
     [
-      'exporter_port_node AS "Port"',
-      'exporter_node AS "Exporter"',
-      'importer_node AS "Importer"',
-      'country_node AS "Country"',
-      "'#{commodity_type}' AS Type",
-      'name_in_download AS "Indicator"',
-      'total AS "Total"'
+      "'#{commodity_type}' AS \"TYPE\"",
+      'name_in_download AS "INDICATOR"',
+      'total AS "TOTAL"'
     ]
   end
 
   def pivot_select_columns
     [
-      'ARRAY[year, node_id, exporter_node_id, exporter_port_node_id, importer_node_id, country_node_id]::INT[] AS row_name',
-      'year AS "Year"'
-    ] + @group_0_select_columns +
+      'ARRAY[' + (['year'] + @path_crosstab_row_name_columns).join(', ') + ']::INT[] AS row_name',
+      'year AS "YEAR"'
+    ] + @path_columns +
     [
-      'exporter_port_node AS "Port"',
-      'exporter_node AS "Exporter"',
-      'importer_node AS "Importer"',
-      'country_node AS "Country"',
-      "'#{commodity_type}' AS Type",
+      "'#{commodity_type}' AS \"TYPE\"",
       'name_in_download',
       'total'
     ]
   end
+
 
   def commodity_type
     if @context.commodity.try(:name) == 'SOY'
@@ -159,5 +106,23 @@ class FlowDownloadQueryBuilder
     else
       @context.commodity.try(:name).try(:humanize) || 'UNKNOWN'
     end
+  end
+
+  def initialize_path_column_names(context_id)
+    context_node_types = ContextNode.
+      select([:column_position, 'node_types.node_type']).
+      where(context_id: context_id).
+      joins(:node_type).
+      order(:column_position)
+    context_column_positions = context_node_types.pluck(:column_position)
+    path_column_names = context_column_positions.map { |p| "name_#{p}" }
+    @path_column_aliases = context_node_types.
+      pluck('node_types.node_type').
+      map{ |nt| "\"#{nt}\""}
+    @path_columns = path_column_names.each_with_index.map do |n, idx|
+      "#{n} AS #{@path_column_aliases[idx]}"
+    end
+    @path_crosstab_columns = @path_column_aliases.map { |a| "#{a} text" }
+    @path_crosstab_row_name_columns = context_column_positions.map { |p| "node_id_#{p}" }
   end
 end

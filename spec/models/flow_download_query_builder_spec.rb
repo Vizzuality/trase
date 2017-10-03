@@ -16,7 +16,7 @@ RSpec.describe FlowDownloadQueryBuilder, type: :model do
       ]
 
       expect(
-        qb.flat_query.map{ |f| [f['Year'], f['Municipality'], f['State'], f['Biome'], f['Port'], f['Exporter'], f['Importer'], f['Country'], f['Indicator'], f['Total' ]] }
+        qb.flat_query.map{ |f| [f['YEAR'], f['MUNICIPALITY'], f['STATE'], f['BIOME'], f['PORT'], f['EXPORTER'], f['IMPORTER'], f['COUNTRY'], f['INDICATOR'], f['TOTAL' ]] }
       ).to match_array(expected)
     end
 
@@ -29,7 +29,7 @@ RSpec.describe FlowDownloadQueryBuilder, type: :model do
       ]
 
       expect(
-        qb.flat_query.map{ |f| [f['Year'], f['Municipality'], f['State'], f['Biome'], f['Port'], f['Exporter'], f['Importer'], f['Country'], f['Indicator'], f['Total' ]] }
+        qb.flat_query.map{ |f| [f['YEAR'], f['MUNICIPALITY'], f['STATE'], f['BIOME'], f['PORT'], f['EXPORTER'], f['IMPORTER'], f['COUNTRY'], f['INDICATOR'], f['TOTAL' ]] }
       ).to match_array(expected)
     end
   end
