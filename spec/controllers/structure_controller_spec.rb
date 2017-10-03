@@ -14,7 +14,7 @@ RSpec.describe StructureController, type: :controller do
     it "assigns node_types" do
       get :get_columns, params: {context_id: context.id}
       expect(assigns(:node_types)).to eq([
-        biome, state, logistics_hub, municipality, exporter1, port1, importer1, country_of_destination1
+        biome, state, municipality, logistics_hub, port1, exporter1, importer1, country_of_destination1
       ].map(&:node_type))
     end
   end

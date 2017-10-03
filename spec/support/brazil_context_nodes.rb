@@ -13,28 +13,28 @@ shared_context 'brazil context nodes' do
       context: context, node_type: state.node_type, column_position: 1, column_group: 0
     )
   }
-  let!(:logistics_hub_context_node){
-    FactoryGirl.create(
-      :context_node,
-      context: context, node_type: logistics_hub.node_type, column_position: 2, column_group: 0
-    )
-  }
   let!(:municipality_context_node){
     FactoryGirl.create(
       :context_node,
-      context: context, node_type: municipality.node_type, column_position: 3, column_group: 0, is_default: true
+      context: context, node_type: municipality.node_type, column_position: 2, column_group: 0, is_default: true
     )
   }
-  let!(:exporter1_context_node){
+  let!(:logistics_hub_context_node){
     FactoryGirl.create(
       :context_node,
-      context: context, node_type: exporter1.node_type, column_position: 4, column_group: 1
+      context: context, node_type: logistics_hub.node_type, column_position: 3, column_group: 0
     )
   }
   let!(:port1_context_node){
     FactoryGirl.create(
       :context_node,
-      context: context, node_type: port1.node_type, column_position: 5, column_group: 1
+      context: context, node_type: port1.node_type, column_position: 4, column_group: 1
+    )
+  }
+  let!(:exporter1_context_node){
+    FactoryGirl.create(
+      :context_node,
+      context: context, node_type: exporter1.node_type, column_position: 5, column_group: 1
     )
   }
   let!(:importer1_context_node){

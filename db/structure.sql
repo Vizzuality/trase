@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.5
--- Dumped by pg_dump version 9.6.5
+-- Dumped from database version 9.6.1
+-- Dumped by pg_dump version 9.6.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -82,7 +82,7 @@ CREATE FUNCTION add_soy_() RETURNS integer
       DELETE FROM node_quants WHERE quant_id = 1;
       FOR trader_id IN SELECT DISTINCT path[6] FROM flows WHERE context_id = 1 UNION SELECT DISTINCT path[7] FROM flows WHERE context_id = 1 LOOP
         FOR year_ IN 2010..2015 LOOP
-  INSERT INTO node_quants (node_id, quant_id, value, year) VALUES (trader_id, 1, get_trader_sum(trader_id, year_), year_);
+          INSERT INTO node_quants (node_id, quant_id, value, year) VALUES (trader_id, 1, get_trader_sum(trader_id, year_), year_);
 END LOOP;
       END LOOP;
       UPDATE node_quants SET value = 0.0 WHERE quant_id = 1 AND value IS NULL;
@@ -127,8 +127,7 @@ CREATE FUNCTION get_trader_sum(trader_id integer, year_ integer) RETURNS double 
           SELECT flow_id
           FROM flows
           WHERE trader_id = ANY(path)
-            AND year = year_
-            AND context_id = 1); 
+            AND year = year_); 
   $$;
 
 
@@ -825,54 +824,48 @@ CREATE MATERIALIZED VIEW node_flows AS
 
 
 --
--- Name: node_quals; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE node_quals (
-    node_id integer,
-    qual_id integer,
-    year smallint,
-    value text
-);
-
-
---
 -- Name: materialized_flows; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
 CREATE MATERIALIZED VIEW materialized_flows AS
- SELECT f.context_id,
-    f.column_group,
-    f.column_position,
+ SELECT f_0.flow_id,
+    f_0.context_id,
+    f_0.year,
+    f_0.name AS name_0,
+    f_1.name AS name_1,
+    f_2.name AS name_2,
+    f_3.name AS name_3,
+    f_4.name AS name_4,
+    f_5.name AS name_5,
+    f_6.name AS name_6,
+    f_7.name AS name_7,
+    f_0.node_id AS node_id_0,
+    f_1.node_id AS node_id_1,
+    f_2.node_id AS node_id_2,
+    f_3.node_id AS node_id_3,
+    f_4.node_id AS node_id_4,
+    f_5.node_id AS node_id_5,
+    f_6.node_id AS node_id_6,
+    f_7.node_id AS node_id_7,
         CASE
-            WHEN (f.node_type = 'COUNTRY OF PRODUCTION'::text) THEN f.name
-            ELSE NULL::text
-        END AS country_of_production,
+            WHEN (f_5.node_type = 'EXPORTER'::text) THEN f_5.node_id
+            WHEN (f_2.node_type = 'EXPORTER'::text) THEN f_2.node_id
+            WHEN (f_2.node_type = 'TRADER'::text) THEN f_2.node_id
+            WHEN (f_1.node_type = 'EXPORTER'::text) THEN f_1.node_id
+            ELSE NULL::integer
+        END AS exporter_node_id,
         CASE
-            WHEN (f.node_type = 'PORT'::text) THEN f.name
-            ELSE NULL::text
-        END AS port,
+            WHEN (f_6.node_type = 'IMPORTER'::text) THEN f_6.node_id
+            WHEN (f_3.node_type = 'IMPORTER'::text) THEN f_3.node_id
+            WHEN (f_2.node_type = 'IMPORTER'::text) THEN f_2.node_id
+            ELSE NULL::integer
+        END AS importer_node_id,
         CASE
-            WHEN (f.node_type = 'DEPARTMENT'::text) THEN f.name
-            ELSE NULL::text
-        END AS department,
-        CASE
-            WHEN (f.node_type = 'MUNICIPALITY'::text) THEN f.name
-            ELSE NULL::text
-        END AS municipality,
-    node_state.value AS state,
-    node_biome.value AS biome,
-    f.node_id,
-    f.geo_id,
-    f_ex.node_id AS exporter_node_id,
-    f_ex.name AS exporter_node,
-    f_ex_port.node_id AS exporter_port_node_id,
-    f_ex_port.name AS exporter_port_node,
-    f_im.node_id AS importer_node_id,
-    f_im.name AS importer_node,
-    f_ctry.node_id AS country_node_id,
-    f_ctry.name AS country_node,
-    f.year,
+            WHEN (f_7.node_type = 'COUNTRY'::text) THEN f_7.node_id
+            WHEN (f_4.node_type = 'COUNTRY'::text) THEN f_4.node_id
+            WHEN (f_3.node_type = 'COUNTRY'::text) THEN f_3.node_id
+            ELSE NULL::integer
+        END AS country_node_id,
     fi.indicator_type,
     fi.indicator_id,
     fi.name AS indicator,
@@ -885,20 +878,17 @@ CREATE MATERIALIZED VIEW materialized_flows AS
             WHEN ((fi.indicator_type = 'Qual'::text) AND (NOT bool_and(fi.boolean_value))) THEN 'no'::text
             ELSE (sum(fi.numeric_value))::text
         END AS total
-   FROM (((((((node_flows f
-     LEFT JOIN node_flows f_ex ON (((f_ex.column_group = 1) AND (f_ex.node_type = 'EXPORTER'::text) AND (f.flow_id = f_ex.flow_id))))
-     LEFT JOIN node_flows f_ex_port ON (((f_ex_port.column_group = 1) AND (f_ex_port.node_type = 'PORT'::text) AND (f.flow_id = f_ex_port.flow_id))))
-     JOIN node_flows f_im ON (((f_im.column_group = 2) AND (f.flow_id = f_im.flow_id))))
-     JOIN node_flows f_ctry ON (((f_ctry.column_group = 3) AND (f.flow_id = f_ctry.flow_id))))
-     JOIN flow_indicators fi ON (((f.flow_id = fi.flow_id) AND (f.context_id = fi.context_id))))
-     LEFT JOIN node_quals node_state ON (((node_state.node_id = f.node_id) AND (node_state.qual_id IN ( SELECT quals.qual_id
-           FROM quals
-          WHERE (quals.name = 'STATE'::text))))))
-     LEFT JOIN node_quals node_biome ON (((node_biome.node_id = f.node_id) AND (node_biome.qual_id IN ( SELECT quals.qual_id
-           FROM quals
-          WHERE (quals.name = 'BIOME'::text))))))
-  WHERE ((f.column_group = 0) AND f.is_default)
-  GROUP BY f.context_id, f.year, f.node_type, f.node_id, f.column_group, f.column_position, f.name, node_state.value, node_biome.value, f.geo_id, f_ex.node_id, f_ex.name, f_ex_port.node_id, f_ex_port.name, f_im.node_id, f_im.name, f_ctry.node_id, f_ctry.name, fi.indicator_type, fi.indicator_id, fi.name, fi.name_with_unit, fi.name_in_download
+   FROM ((((((((node_flows f_0
+     JOIN node_flows f_1 ON (((f_1.flow_id = f_0.flow_id) AND (f_1.column_position = 1))))
+     JOIN node_flows f_2 ON (((f_2.flow_id = f_0.flow_id) AND (f_2.column_position = 2))))
+     JOIN node_flows f_3 ON (((f_3.flow_id = f_0.flow_id) AND (f_3.column_position = 3))))
+     LEFT JOIN node_flows f_4 ON (((f_4.flow_id = f_0.flow_id) AND (f_4.column_position = 4))))
+     LEFT JOIN node_flows f_5 ON (((f_5.flow_id = f_0.flow_id) AND (f_5.column_position = 5))))
+     LEFT JOIN node_flows f_6 ON (((f_6.flow_id = f_0.flow_id) AND (f_6.column_position = 6))))
+     LEFT JOIN node_flows f_7 ON (((f_7.flow_id = f_0.flow_id) AND (f_7.column_position = 7))))
+     JOIN flow_indicators fi ON (((f_0.flow_id = fi.flow_id) AND (f_0.context_id = fi.context_id))))
+  WHERE (f_0.column_position = 0)
+  GROUP BY f_0.flow_id, f_0.context_id, f_0.year, f_0.name, f_0.node_id, f_1.name, f_1.node_id, f_1.node_type, f_2.name, f_2.node_id, f_2.node_type, f_3.name, f_3.node_id, f_3.node_type, f_4.name, f_4.node_id, f_4.node_type, f_5.name, f_5.node_id, f_5.node_type, f_6.name, f_6.node_id, f_6.node_type, f_7.name, f_7.node_id, f_7.node_type, fi.indicator_type, fi.indicator_id, fi.name, fi.name_with_unit, fi.name_in_download
   WITH NO DATA;
 
 
@@ -911,6 +901,18 @@ CREATE TABLE node_inds (
     ind_id integer,
     year smallint,
     value double precision
+);
+
+
+--
+-- Name: node_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE node_quals (
+    node_id integer,
+    qual_id integer,
+    year smallint,
+    value text
 );
 
 
@@ -1360,10 +1362,10 @@ CREATE INDEX index_materialized_flows_on_indicator_type_and_indicator_id ON mate
 
 
 --
--- Name: index_node_flows_on_column_group_and_flow_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_node_flows_on_flow_id_and_column_position; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_node_flows_on_column_group_and_flow_id ON node_flows USING btree (column_group, flow_id);
+CREATE INDEX index_node_flows_on_flow_id_and_column_position ON node_flows USING btree (flow_id, column_position);
 
 
 --
@@ -1621,6 +1623,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170921125513'),
 ('20170925102834'),
 ('20170929120908'),
+('20171002093637'),
 ('20171002102750');
 
 

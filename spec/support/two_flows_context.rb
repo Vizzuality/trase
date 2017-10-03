@@ -26,7 +26,7 @@ shared_context "two flows" do
       :flow,
       context: context,
       path: [
-        biome, state, logistics_hub, municipality, exporter1, port1, importer1, country_of_destination1
+        biome, state, municipality, logistics_hub, port1, exporter1, importer1, country_of_destination1
       ].map(&:node_id),
       year: 2015
     )
@@ -36,7 +36,7 @@ shared_context "two flows" do
       :flow,
       context: context,
       path: [
-        biome, state, logistics_hub, municipality, exporter2, port2, importer2, country_of_destination2
+        biome, state, municipality, logistics_hub, port2, exporter2, importer2, country_of_destination2
       ].map(&:node_id),
       year: 2015
     )
