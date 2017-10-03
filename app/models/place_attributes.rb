@@ -158,9 +158,9 @@ EOT
       # Water scarcity
       {type: 'ind', backend_name: 'WATER_SCARCITY'},
       # Loss of biodiversity habitat
-      {type: 'quant', backend_name: 'BIODIVERSITY'},
-      # Number of incidences of fire
-      {type: 'quant', backend_name: 'FIRES_'}
+      {type: 'quant', backend_name: 'BIODIVERSITY'}
+      # Number of incidences of fire, temporarily disabled
+      # {type: 'quant', backend_name: 'FIRES_'}
     ]
 
     indicators_group(indicators_list, 'Environmental indicators')
