@@ -59,9 +59,26 @@ class ActorAttributes
   def initialize_trade_volume_for_summary
     trade_flows_current_year = @node.flow_values(@context, 'quant', 'Volume').where(year: @year)
     @trade_total_current_year = trade_flows_current_year.sum('value')
+    case
+      when @trade_total_current_year < 1000
+        trade_total_current_year_value = @trade_total_current_year
+        trade_total_current_year_unit = 'tons'
+        trade_total_current_year_precision = 0
+      when @trade_total_current_year < 1000000
+        trade_total_current_year_value = @trade_total_current_year/1000
+        trade_total_current_year_unit = 'thousand tons'
+        trade_total_current_year_precision = 0
+      else
+        trade_total_current_year_value = @trade_total_current_year/1000000
+        trade_total_current_year_unit = 'million tons'
+        trade_total_current_year_precision = 1
+    end
+
     @trade_total_current_year_formatted = helper.number_with_precision(
-      @trade_total_current_year/1000, {delimiter: ',', precision: 0}
-    )
+        trade_total_current_year_value,
+        {delimiter: ',', precision: trade_total_current_year_precision}
+    )+ ' ' + trade_total_current_year_unit
+
     trade_flows_previous_year = @node.flow_values(@context, 'quant', 'Volume').where(year: @year - 1)
     @trade_total_previous_year = trade_flows_previous_year.sum('value')
     if @trade_total_previous_year.present? && @trade_total_previous_year > 0
@@ -75,7 +92,7 @@ class ActorAttributes
 
   def summary_of_total_trade_volume(profile_type)
     initialize_trade_volume_for_summary
-    text = "#{@node.name.humanize} was the #{@trade_total_rank_in_country_formatted}largest #{profile_type} of soy in #{@context.country.name} in #{@year}, accounting for #{@trade_total_current_year_formatted} thousand tons."
+    text = "#{@node.name.humanize} was the #{@trade_total_rank_in_country_formatted}largest #{profile_type} of soy in #{@context.country.name} in #{@year}, accounting for #{@trade_total_current_year_formatted}."
     return text unless @trade_total_perc_difference.present?
     difference_from = if @trade_total_perc_difference > 0
       'a ' + helper.number_to_percentage(@trade_total_perc_difference * 100, {precision: 0}) + ' increase vs'
@@ -134,7 +151,7 @@ is #{@main_destination_name.humanize}, accounting for \
 
   def exporter_summary
 # For 1st rank:
-# Bunge was the 1st largest exporter of soy in BRAZIL in 2015, accounting for 11,061,393 tons.
+# Bunge was the largest exporter of soy in BRAZIL in 2015, accounting for 11,061,393 tons.
 # As an exporter, Bunge sources from 1,136 municipalities, or 44% of the soy production municipalities.
 # The main destination of the soy exported by Bunge is China, accounting for 50% of the total.
 
@@ -209,8 +226,17 @@ is #{@main_destination_name.humanize}, accounting for \
   end
 
   def companies_exporting
+    quant = Quant.find_by(:name => 'SOY_')
+
+    unit = quant.unit
+    value_divisor = 1
+    if (unit.casecmp('tn') == 0)
+      unit = 'Kiloton'
+      value_divisor = 1000
+    end
+
     y_indicator = {
-      name: 'Soy exported in 2015', unit: 'Tn', type: 'quant', backend_name: 'SOY_'
+      name: 'Trade Volume', unit: unit, type: 'quant', backend_name: 'SOY_'
     }
     x_indicators = [
       {name: 'Land use', unit: 'Ha', type: 'quant', backend_name: 'LAND_USE'},
@@ -221,7 +247,7 @@ is #{@main_destination_name.humanize}, accounting for \
       {name: 'Land-based emissions', unit: 'Tn', type: 'quant', backend_name: 'GHG_'}
     ]
 
-    node_index = NodeType.node_index_for_type(@context, NodeTypeName::EXPORTER)
+    node_index = NodeType.node_index_for_type(@context, @node_type)
     nodes_join_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
       ["JOIN nodes ON nodes.node_id = flows.path[?]",
@@ -234,7 +260,7 @@ is #{@main_destination_name.humanize}, accounting for \
       joins('JOIN node_types ON node_types.node_type_id = nodes.node_type_id').
       where('nodes.name NOT LIKE ?', 'UNKNOWN%').
       where('quants.name' => y_indicator[:backend_name]).
-      where('node_types.node_type' => NodeTypeName::EXPORTER).
+      where('node_types.node_type' => @node_type).
       where('(is_domestic_consumption IS NULL OR is_domestic_consumption = false)').
       where('node_quants.year' => @year).
       group('nodes.node_id, nodes.name, quants.name')
@@ -247,7 +273,7 @@ is #{@main_destination_name.humanize}, accounting for \
         where('nodes.name NOT LIKE ?', 'UNKNOWN%').
         where('flows.context_id' => @context.id).
         where('quants.name' => x_indicators.map{ |indicator| indicator[:backend_name] }).
-        where('node_types.node_type' => NodeTypeName::EXPORTER).
+        where('node_types.node_type' => @node_type).
         where('flows.year' => @year).
         group('nodes.node_id, nodes.name, quants.name')
 
@@ -270,13 +296,13 @@ is #{@main_destination_name.humanize}, accounting for \
       {
         name: total['name'],
         id: total['node_id'],
-        y: total['value'].to_f / 1000, # TODO hack
+        y: total['value'].to_f / value_divisor,
         x: indicator_totals_hash[total['node_id']]
       }
     end
 
     {
-      companies_exporting: {
+      companies_sourcing: {
         dimension_y: y_indicator.slice(:name, :unit),
         dimensions_x: x_indicators.map{ |i| i.slice(:name, :unit) },
         companies: exports
