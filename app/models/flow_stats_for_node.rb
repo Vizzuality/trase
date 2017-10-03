@@ -228,6 +228,10 @@ class FlowStatsForNode
     all_nodes_for_quant(quant_name, include_domestic_consumption).limit(10)
   end
 
+  def all_nodes_for_quant_total(quant_name, include_domestic_consumption = true)
+    all_nodes_for_quant(quant_name, include_domestic_consumption).except(:group).except(:select).sum(:value)
+  end
+
   def all_nodes_for_quant(quant_name, include_domestic_consumption = true)
     select_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
