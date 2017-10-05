@@ -104,8 +104,7 @@ class FlowDownloadQueryBuilder
     if @context.commodity.try(:name) == 'SOY'
       'Soy bean equivalents'
     else
-      name = @context.commodity.try(:name).try(:humanize) || 'UNKNOWN'
-      "#{name} equivalents"
+      "#{@context.commodity.try(:name).try(:humanize)} equivalents" || 'UNKNOWN'
     end
   end
 
