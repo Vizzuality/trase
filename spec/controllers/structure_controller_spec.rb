@@ -10,8 +10,8 @@ RSpec.describe StructureController, type: :controller do
       get :get_contexts
       controller_contexts = assigns(:contexts)
       expect(controller_contexts).to match_array([context, another_context])
-      expect(controller_contexts[0].context_resize_bies).to match_array([resize_by_area, resize_by_land_conflicts])
-      expect(controller_contexts[0].context_recolor_bies).to match_array([recolor_by_forest_500, recolor_by_water_scarcity, recolor_by_biome])
+      expect(controller_contexts.find_by("countries.name ILIKE 'Brazil'").context_resize_bies).to match_array([resize_by_area, resize_by_land_conflicts])
+      expect(controller_contexts.find_by("countries.name ILIKE 'Brazil'").context_recolor_bies).to match_array([recolor_by_forest_500, recolor_by_water_scarcity, recolor_by_biome])
     end
   end
 
