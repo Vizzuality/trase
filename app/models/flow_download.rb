@@ -13,7 +13,7 @@ class FlowDownload
     else
       ','
     end
-    @download_name = "#{@context.country.name}_#{@context.commodity.name}_#{DownloadVersion.current_version_symbol}"
+    @download_name = [@context.country.name, @context.commodity.name, DownloadVersion.current_version_symbol(@context)].reject(&:nil?).join('_')
     query_builder = FlowDownloadQueryBuilder.new(@context, params)
     @query = if @pivot
       query_builder.pivot_query
