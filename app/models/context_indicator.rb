@@ -7,6 +7,7 @@
 #  indicator_attribute_id   :integer          not null
 #  indicator_attribute_type :enum             not null
 #  position                 :integer          not null
+#  name_in_download         :text
 #
 
 class ContextIndicator < ApplicationRecord

@@ -14,6 +14,7 @@
 #  color_scale            :string
 #  years                  :integer          is an Array
 #  aggregate_method       :string
+#  enabled                :boolean          default("true"), not null
 #
 
 class ContextLayer < ActiveRecord::Base

@@ -16,6 +16,7 @@
 #  min_value              :string(10)
 #  max_value              :string(10)
 #  divisor                :float
+#  tooltip_text           :text
 #
 
 class ContextRecolorBy < ActiveRecord::Base
