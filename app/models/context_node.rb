@@ -8,6 +8,7 @@
 #  column_position :integer
 #  is_default      :boolean
 #  node_type_id    :integer
+#  profile_type    :string
 #
 
 class ContextNode < ActiveRecord::Base

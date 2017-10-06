@@ -390,7 +390,8 @@ CREATE TABLE context_nodes (
     column_group integer,
     column_position integer,
     is_default boolean,
-    node_type_id integer
+    node_type_id integer,
+    profile_type character varying
 );
 
 
@@ -769,7 +770,6 @@ ALTER SEQUENCE inds_ind_id_seq OWNED BY inds.ind_id;
 CREATE TABLE node_types (
     node_type_id integer NOT NULL,
     node_type text,
-    profile_type character varying,
     is_geo_column boolean
 );
 
@@ -1628,6 +1628,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170929120908'),
 ('20171002093637'),
 ('20171002102750'),
-('20171004102919');
+('20171004102919'),
+('20171006161620');
 
 

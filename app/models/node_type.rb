@@ -4,7 +4,6 @@
 #
 #  node_type_id  :integer          not null, primary key
 #  node_type     :text
-#  profile_type  :string
 #  is_geo_column :boolean
 #
 

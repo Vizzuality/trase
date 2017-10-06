@@ -10,6 +10,7 @@
 #  resize_attribute_type :enum
 #  group_number          :integer          default("1")
 #  position              :integer
+#  tooltip_text          :text
 #
 
 class ContextResizeBy < ActiveRecord::Base
