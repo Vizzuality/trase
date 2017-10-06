@@ -14,7 +14,7 @@ class RecolorBySerializer < ActiveModel::Serializer
   end
 
   attribute :description do
-    object.recolor_attribute.tooltip_text
+    object.tooltip_text
   end
 
   attribute :nodes do

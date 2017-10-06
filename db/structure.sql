@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.1
--- Dumped by pg_dump version 9.6.1
+-- Dumped from database version 9.6.5
+-- Dumped by pg_dump version 9.6.5
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -82,7 +82,7 @@ CREATE FUNCTION add_soy_() RETURNS integer
       DELETE FROM node_quants WHERE quant_id = 1;
       FOR trader_id IN SELECT DISTINCT path[6] FROM flows WHERE context_id = 1 UNION SELECT DISTINCT path[7] FROM flows WHERE context_id = 1 LOOP
         FOR year_ IN 2010..2015 LOOP
-          INSERT INTO node_quants (node_id, quant_id, value, year) VALUES (trader_id, 1, get_trader_sum(trader_id, year_), year_);
+  INSERT INTO node_quants (node_id, quant_id, value, year) VALUES (trader_id, 1, get_trader_sum(trader_id, year_), year_);
 END LOOP;
       END LOOP;
       UPDATE node_quants SET value = 0.0 WHERE quant_id = 1 AND value IS NULL;
@@ -127,7 +127,8 @@ CREATE FUNCTION get_trader_sum(trader_id integer, year_ integer) RETURNS double 
           SELECT flow_id
           FROM flows
           WHERE trader_id = ANY(path)
-            AND year = year_); 
+            AND year = year_
+            AND context_id = 1); 
   $$;
 
 
@@ -430,7 +431,8 @@ CREATE TABLE context_recolor_by (
     interval_count integer,
     min_value character varying(10),
     max_value character varying(10),
-    divisor double precision
+    divisor double precision,
+    tooltip_text text
 );
 
 
@@ -465,7 +467,8 @@ CREATE TABLE context_resize_by (
     resize_attribute_id integer NOT NULL,
     resize_attribute_type attribute_type,
     group_number integer DEFAULT 1,
-    "position" integer
+    "position" integer,
+    tooltip_text text
 );
 
 
@@ -1624,6 +1627,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170925102834'),
 ('20170929120908'),
 ('20171002093637'),
-('20171002102750');
+('20171002102750'),
+('20171004102919');
 
 
