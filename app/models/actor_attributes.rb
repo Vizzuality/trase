@@ -26,11 +26,7 @@ class ActorAttributes
     }
     [@actor_quals, @actor_quants, @actor_inds].each do |indicator_hash|
       indicator_hash.each do |name, indicator|
-        if name == 'SOY_'
-          @data[:total_soy_2015] = indicator['value'].to_f
-        else
-          @data[name.downcase] = indicator['value']
-        end
+        @data[name.downcase] = indicator['value']
       end
     end
 
@@ -226,7 +222,7 @@ is #{@main_destination_name.humanize}, accounting for \
   end
 
   def companies_exporting
-    quant = Quant.find_by(:name => 'SOY_')
+    quant = Quant.find_by(name: 'Volume')
 
     unit = quant.unit
     value_divisor = 1
@@ -236,7 +232,7 @@ is #{@main_destination_name.humanize}, accounting for \
     end
 
     y_indicator = {
-      name: 'Trade Volume', unit: unit, type: 'quant', backend_name: 'SOY_'
+      name: 'Trade Volume', unit: unit, type: 'quant', backend_name: 'Volume'
     }
     x_indicators = [
       {name: 'Land use', unit: 'Ha', type: 'quant', backend_name: 'LAND_USE'},
@@ -250,32 +246,31 @@ is #{@main_destination_name.humanize}, accounting for \
     node_index = NodeType.node_index_for_type(@context, @node_type)
     nodes_join_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
-      ["JOIN nodes ON nodes.node_id = flows.path[?]",
+      ["JOIN nodes ON nodes.node_id = flows.path[?] AND (NOT nodes.is_unknown OR nodes.is_unknown IS NULL) AND (NOT nodes.is_domestic_consumption OR nodes.is_domestic_consumption IS NULL)",
       node_index]
     )
 
-    production_totals = Node.
-      select('nodes.node_id AS node_id, nodes.name, sum(CAST(node_quants.value AS DOUBLE PRECISION)) AS value').
-      joins(node_quants: :quant).
+    production_totals = Flow.
+      select('nodes.node_id AS node_id, nodes.name, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, quants.name AS quant_name').
+      joins(nodes_join_clause).
       joins('JOIN node_types ON node_types.node_type_id = nodes.node_type_id').
-      where('nodes.name NOT LIKE ?', 'UNKNOWN%').
+      joins(flow_quants: :quant).
+      where('flows.context_id' => @context.id).
       where('quants.name' => y_indicator[:backend_name]).
       where('node_types.node_type' => @node_type).
-      where('(is_domestic_consumption IS NULL OR is_domestic_consumption = false)').
-      where('node_quants.year' => @year).
+      where('flows.year' => @year).
       group('nodes.node_id, nodes.name, quants.name')
 
     indicator_totals = Flow.
-        select('nodes.node_id AS node_id, nodes.name, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, quants.name AS quant_name').
-        joins(nodes_join_clause).
-        joins('JOIN node_types ON node_types.node_type_id = nodes.node_type_id').
-        joins(flow_quants: :quant).
-        where('nodes.name NOT LIKE ?', 'UNKNOWN%').
-        where('flows.context_id' => @context.id).
-        where('quants.name' => x_indicators.map{ |indicator| indicator[:backend_name] }).
-        where('node_types.node_type' => @node_type).
-        where('flows.year' => @year).
-        group('nodes.node_id, nodes.name, quants.name')
+      select('nodes.node_id AS node_id, nodes.name, sum(CAST(flow_quants.value AS DOUBLE PRECISION)) AS value, quants.name AS quant_name').
+      joins(nodes_join_clause).
+      joins('JOIN node_types ON node_types.node_type_id = nodes.node_type_id').
+      joins(flow_quants: :quant).
+      where('flows.context_id' => @context.id).
+      where('quants.name' => x_indicators.map{ |indicator| indicator[:backend_name] }).
+      where('node_types.node_type' => @node_type).
+      where('flows.year' => @year).
+      group('nodes.node_id, nodes.name, quants.name')
 
     x_indicator_indexes = Hash[x_indicators.map.each_with_index do |indicator, idx|
       [indicator[:backend_name], idx]
