@@ -534,7 +534,8 @@ CREATE TABLE download_versions (
     symbol character varying NOT NULL,
     current boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    context_id integer
 );
 
 
@@ -1629,6 +1630,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171002093637'),
 ('20171002102750'),
 ('20171004102919'),
-('20171006161620');
+('20171006161620'),
+('20171006171936');
 
 
