@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.5
--- Dumped by pg_dump version 9.6.5
+-- Dumped from database version 9.6.1
+-- Dumped by pg_dump version 9.6.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -13,6 +13,13 @@ SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
+
+--
+-- Name: revamp; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA revamp;
+
 
 --
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
@@ -1631,6 +1638,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171002102750'),
 ('20171004102919'),
 ('20171006161620'),
-('20171006171936');
+('20171006171936'),
+('20171011112259');
 
 
