@@ -10,6 +10,6 @@ class ResizeBySerializer < ActiveModel::Serializer
   end
 
   attribute :description do
-    object.resize_attribute.tooltip_text
+    object.tooltip_text
   end
 end

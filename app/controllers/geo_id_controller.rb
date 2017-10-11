@@ -14,8 +14,14 @@ class GeoIdController < ApplicationController
                       .where(['nodes.node_id IN (:node_id)', {node_id: node_id}])
     min_path_length = min_path_length_query[0].distinct_count
 
-    matching_nodes = Node
-                         .joins('JOIN flows ON nodes.node_id = flows.path[' + Node.sanitize(target_column_id) + ']')
+    node_index = NodeType.node_index_for_id(@context, target_column_id)
+
+    flows_join_clause = ActiveRecord::Base.send(
+      :sanitize_sql_array,
+      ['JOIN flows ON nodes.node_id = flows.path[?]', node_index]
+    )
+
+    matching_nodes = Node.joins(flows_join_clause)
                  .where('context_id = :context_id',
                         context_id: @context.id)
                  .where('icount(ARRAY[:node_id]::int[] & flows.path) >= :min_path_length',

@@ -28,11 +28,4 @@ class Quant < ActiveRecord::Base
     has_many :context_recolor_bies, as: :recolor_attribute
     has_many :context_resize_bies, as: :resize_attribute
     has_many :context_indicators, as: :indicator
-
-    scope :place_temporal, -> {
-      where("place_factsheet AND place_factsheet_temporal OR name IN ('AGROSATELITE_SOY_DEFOR_')")
-    }
-    scope :actor_temporal, -> {
-      where("actor_factsheet AND actor_factsheet_temporal OR name IN ('SOY_')")
-    }
 end

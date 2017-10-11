@@ -226,4 +226,19 @@ class Node < ActiveRecord::Base
       joins(node_quals: :qual).
       where('node_quals.value' => state.name, 'quals.name' => 'STATE')
   end
+
+  def flow_values(context, indicator_type, indicator_name)
+    node_index = NodeType.node_index_for_id(context, self.node_type_id)
+    value_table, dict_table = if indicator_type == 'quant'
+      ['flow_quants', 'quants']
+    elsif indicator_type == 'ind'
+      ['flow_inds', 'inds']
+    end
+    Flow.
+      joins("JOIN #{value_table} ON flows.flow_id = #{value_table}.flow_id").
+      joins("JOIN #{dict_table} ON #{dict_table}.#{indicator_type}_id = #{value_table}.#{indicator_type}_id").
+      where("#{dict_table}.name" => indicator_name).
+      where('path[?] = ?', node_index, self.id).
+      where(context_id: context.id)
+  end
 end

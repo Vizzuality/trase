@@ -48,9 +48,6 @@ GEM
     annotate (2.6.5)
       activerecord (>= 2.3.0)
       rake (>= 0.8.7)
-    appsignal (2.1.2)
-      rack
-      thread_safe
     arel (7.1.4)
     builder (3.2.3)
     byebug (9.0.6)
@@ -84,6 +81,7 @@ GEM
     enumerate_it (1.4.1)
       activesupport (>= 3.0.0)
     erubis (2.7.0)
+    excon (0.59.0)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.5.0)
@@ -106,6 +104,9 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
+    mailchimp-api (2.0.6)
+      excon (>= 0.16.0)
+      json (>= 1.7.7)
     method_source (0.8.2)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
@@ -211,7 +212,6 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   annotate
-  appsignal
   byebug
   capistrano (= 3.7.1)
   capistrano-bundler
@@ -222,6 +222,7 @@ DEPENDENCIES
   enumerate_it (~> 1.4.1)
   factory_girl_rails
   listen (~> 3.0.5)
+  mailchimp-api
   pg (~> 0.18)
   pg_csv
   puma (~> 3.0)
@@ -235,4 +236,4 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
 
 BUNDLED WITH
-   1.14.4
+   1.15.1

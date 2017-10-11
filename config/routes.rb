@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :geo_id, only: :index
   resources :download, only: [:index], as: :download
   resources :indicators, only: [:index]
+  resources :newsletter_subscriptions, only: [:create]
 
   get '/get_map_base_data', to: 'map#index'
   get '/get_linked_geoids', to: 'geo_id#index'

@@ -13,8 +13,8 @@ class FlowDownload
     else
       ','
     end
-    @download_name = "#{@context.country.name}_#{@context.commodity.name}_#{DownloadVersion.current_version_symbol}"
-    query_builder = FlowDownloadQueryBuilder.new(context.id, params)
+    @download_name = [@context.country.name, @context.commodity.name, DownloadVersion.current_version_symbol(@context)].compact.join('_')
+    query_builder = FlowDownloadQueryBuilder.new(@context, params)
     @query = if @pivot
       query_builder.pivot_query
     else
@@ -28,7 +28,8 @@ class FlowDownload
       header: true,
       delimiter: @separator,
       encoding: 'UTF8',
-      type: :plain
+      type: :plain,
+      logger: Rails.logger
     )
     content = csv.export()
     # NOTE: exporting directly into file raises encoding errors

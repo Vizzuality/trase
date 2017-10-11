@@ -16,9 +16,13 @@ class PlaceAttributes
     @place_quants = Hash[(@node.place_quants + @node.temporal_place_quants(@year)).map do |e|
       [e['name'], e]
     end]
+    @temporal_place_quants_for_all_years = Hash.new { |h,k| h[k] = [] }
+    @node.temporal_place_quants.each{ |pq| @temporal_place_quants_for_all_years[pq.name] << pq }
     @place_inds = Hash[(@node.place_inds + @node.temporal_place_inds(@year)).map do |e|
       [e['name'], e]
     end]
+    @temporal_place_inds_for_all_years = Hash.new { |h,k| h[k] = [] }
+    @node.temporal_place_inds.each{ |pq| @temporal_place_inds_for_all_years[pq.name] << pq }
 
     @data = {
       column_name: @node_type,
@@ -50,16 +54,12 @@ class PlaceAttributes
     soy_produced_raw, soy_produced = if (production = @place_quants['SOY_TN'])
       value = helper.number_with_precision(production['value'], {delimiter: ',', precision: 0})
       unit = production['unit']
-      [production['value'], "#{value}#{unit}"]
+      [production['value'], "#{value} #{unit}"]
     end
-    # TODO this value is completely different from example - by order of magnitude (?)
-    soy_area = if (area_perc = @place_inds['SOY_AREAPERC']) && (area = @place_quants['AREA_KM2'])
-      # SOY_AREA_PERC is not given as decimal, therefore we should divide it by 100;
-      # however, to convert to hectars we should multiply the result by 100.
-      # Therefore, both those operations can be skipped.
-      value = helper.number_with_precision(area_perc['value'] * area['value'], {delimiter: ',', precision: 0})
-      unit = 'Ha' # area is in km2
-      "#{value}#{unit}"
+    soy_area = if (soy_produced_raw && @place_inds['SOY_YIELD'] && soy_yield_raw = @place_inds['SOY_YIELD']['value'])
+      value = helper.number_with_precision(soy_produced_raw / soy_yield_raw, {delimiter: ',', precision: 0})
+      unit = 'Ha' # soy prod in Tn, soy yield in Tn/Ha
+      "#{value} #{unit}"
     end
     perc_total = total_soy_production()
     percentage_total_production = if (perc = @place_quants['SOY_TN'])
@@ -82,11 +82,13 @@ class PlaceAttributes
     main_destination = (consumers = @data[:top_consumers][:countries]) && consumers[0] && consumers[0][:name]
     main_destination = main_destination.humanize if main_destination.present?
 
+    stateName = @state.name.titleize if @state.present?
+
     text = <<-EOT
-In #{@year}, #{@node.name.humanize} produced #{soy_produced} of soy occupying a total of #{soy_area} \
+In #{@year}, #{@node.name.titleize} produced #{soy_produced} of soy occupying a total of #{soy_area} \
 of land. With #{percentage_total_production} of the total production, it ranks #{country_ranking} in Brazil in soy \
-production, and #{state_ranking} in the state of Mato Grosso. The largest exporter of soy \
-in #{@node.name.humanize} was #{largest_exporter_name}, which accounted for #{percent_of_exports} of the total exports, \
+production, and #{state_ranking} in the state of #{stateName}. The largest exporter of soy \
+in #{@node.name.titleize} was #{largest_exporter_name}, which accounted for #{percent_of_exports} of the total exports, \
 and the main destination was #{main_destination}.
 EOT
   end
@@ -105,12 +107,17 @@ EOT
     if @place_quants['AREA_KM2'].present?
       data[:area] = @place_quants['AREA_KM2']['value']
     end
-    if @place_inds['SOY_AREAPERC'].present?
-      data[:soy_farmland] = @place_inds['SOY_AREAPERC']['value'] / 100
-    end
     if @place_quants['SOY_TN'].present?
       data[:soy_production] = @place_quants['SOY_TN']['value']
     end
+    if (data[:soy_production] && @place_inds['SOY_YIELD'] && soy_yield_raw = @place_inds['SOY_YIELD']['value'])
+      value = helper.number_with_precision(data[:soy_production] / soy_yield_raw, {delimiter: ',', precision: 0})
+      data[:soy_area] = value
+    end
+    if @place_inds['SOY_AREAPERC'].present?
+      data[:soy_farmland] = @place_inds['SOY_AREAPERC']['value']
+    end
+
     data
   end
 
@@ -129,61 +136,83 @@ EOT
   def indicators
     {
       indicators: [
-        sustainability_indicators,
-        deforestation_indicators,
-        other_indicators,
-        socioeconomic_indicators
+        environmental_indicators,
+        socioeconomic_indicators,
+        agricultural_indicators,
+        territorial_governance_indicators
+        
       ]
     }
   end
 
-  def sustainability_indicators
+  def environmental_indicators
     indicators_list = [
-      {type: 'ind', backend_name: 'WATER_SCARCITY'},
-      {type: 'quant', backend_name: 'FIRE_KM2_'},
-      {type: 'quant', backend_name: 'GHG_'}
-    ]
-
-    indicators_group(indicators_list, 'Key sustainability indicators')
-  end
-
-  def deforestation_indicators
-    indicators_list = [
+      #Territorial deforestation
+      {type: 'quant', backend_name: 'DEFORESTATION_V2'},
+      # Maximum soy deforestation
+      {type: 'quant', backend_name: 'POTENTIAL_SOY_DEFORESTATION_V2'},
+      # Soy deforestation (Cerrado only)
       {type: 'quant', backend_name: 'AGROSATELITE_SOY_DEFOR_'},
-      {type: 'ind', backend_name: 'TOTAL_DEFOR_RATE'},
-      {type: 'ind', backend_name: 'POTENTIAL_SOY_RELATED_DEFOR_ind'}
+      # Land based CO2 emissions
+      {type: 'quant', backend_name: 'GHG_'},
+      # Water scarcity
+      {type: 'ind', backend_name: 'WATER_SCARCITY'},
+      # Loss of biodiversity habitat
+      {type: 'quant', backend_name: 'BIODIVERSITY'}
+      # Number of incidences of fire, temporarily disabled
+      # {type: 'quant', backend_name: 'FIRES_'}
     ]
 
-    indicators_group(indicators_list, 'Deforestation')
-  end
-
-  def other_indicators
-    indicators_list = [
-      {type: 'quant', backend_name: 'BIODIVERSITY'},
-      {type: 'ind', backend_name: 'PERC_INDIGENOUS'}, # NO MATCH
-      {type: 'ind', backend_name: 'PERC_PROTECTED'}, # NO MATCH
-      {type: 'quant', backend_name: 'EMBARGOES_'},
-      {type: 'ind', backend_name: 'PROTECTED_DEFICIT_PERC'},
-      {type: 'quant', backend_name: 'PROTECTED'} # NO MATCH
-    ]
-
-    indicators_group(indicators_list, 'Other environmental indicators')
+    indicators_group(indicators_list, 'Environmental indicators')
   end
 
   def socioeconomic_indicators
     indicators_list = [
-      {type: 'ind', backend_name: 'GDP_CAP'},
+      # Human development index
       {type: 'ind', backend_name: 'HDI'},
-      {type: 'ind', backend_name: 'PERC_FARM_GDP'},
+      #GDP per capita
+      {type: 'ind', backend_name: 'GDP_CAP'},
+      # GDP from agriculture
+      {type: 'ind', backend_name: 'PERC_FARM_GDP_'},
+      # Smallholder dominance
       {type: 'ind', backend_name: 'SMALLHOLDERS'},
-      {type: 'quant', backend_name: 'CATTLE_HEADS'},
-      {type: 'quant', backend_name: 'LAND_CONFL'},
-      {type: 'quant', backend_name: 'POPULATION'},
+      # Reported cases of forced labour
       {type: 'quant', backend_name: 'SLAVERY'},
-      {type: 'quant', backend_name: 'SOY_TN'}
+      # Reported cases of land conflicts
+      {type: 'quant', backend_name: 'LAND_CONFL'},
+      {type: 'quant', backend_name: 'CATTLE_HEADS'},
+      {type: 'quant', backend_name: 'POPULATION'}
     ]
 
     indicators_group(indicators_list, 'Socio-economic indicators')
+  end
+
+  def agricultural_indicators
+    indicators_list = [
+      # Production of soy
+      {type: 'quant', backend_name: 'SOY_TN'},
+      # Soy yield
+      {type: 'ind', backend_name: 'SOY_YIELD'},
+      #Agricultural land used for soy
+      {type: 'ind', backend_name: 'SOY_AREAPERC'}
+    ]
+
+    indicators_group(indicators_list, 'Agricultural indicators')
+  end
+
+  def territorial_governance_indicators
+    indicators_list = [
+      # Permanent protected area deficit
+      {type: 'quant', backend_name: 'APP_DEFICIT_AREA'},
+      # Legal reserve deficit
+      {type: 'quant', backend_name: 'LR_DEFICIT_AREA'},
+      # Forest code deficit
+      {type: 'ind', backend_name: 'PROTECTED_DEFICIT_PERC'},
+      # Number of environmental embargos
+      {type: 'quant', backend_name: 'EMBARGOES_'}
+    ]
+
+    indicators_group(indicators_list, 'Territorial governance')
   end
 
   def trajectory_deforestation
@@ -202,25 +231,17 @@ EOT
         style: 'area-pink'
       },
       {
-        name: 'Maximum soy deforestation',
-        indicator_type: 'ind',
-        backend_name: 'POTENTIAL_SOY_RELATED_DEFOR_ind',
-        legend_name: 'Maximum soy<br/>deforestation',
-        type: 'line',
-        style: 'line-dashed-pink'
-      },
-      {
         name: 'Territorial Deforestation',
-        indicator_type: 'ind',
-        backend_name: 'TOTAL_DEFOR_RATE',
+        indicator_type: 'quant',
+        backend_name: 'DEFORESTATION_V2',
         legend_name: 'Territorial<br/>Deforestation',
         type: 'area',
         style: 'area-black'
       },
       {
         name: 'State Average',
-        indicator_type: 'ind',
-        backend_name: 'TOTAL_DEFOR_RATE',
+        indicator_type: 'quant',
+        backend_name: 'DEFORESTATION_V2',
         legend_name: 'State<br/>Average',
         type: 'line',
         style: 'line-dashed-black',
@@ -233,7 +254,9 @@ EOT
         @node.temporal_place_quants.where('quants.name' => i[:backend_name])
       elsif i[:indicator_type] == 'ind'
         @node.temporal_place_inds.where('inds.name' => i[:backend_name])
-      end.except(:select).select('MIN(year), MAX(year)').first
+      end.except(:select).select('MIN(year), MAX(year)')
+
+      min_max = min_max.first
       if min_max && min_max['min'].present? && (min_year.nil? || min_max['min'] < min_year)
         min_year = min_max['min']
       end
@@ -241,6 +264,8 @@ EOT
         max_year = min_max['max']
       end
     end
+
+    return {} unless min_year.present? and max_year.present?
 
     years = (min_year..max_year).to_a
     {
@@ -290,6 +315,7 @@ EOT
       where('nodes.node_id <> ?', @node.id). # do not double count current
       select(
         'nodes.node_id',
+        'nodes.node_type_id',
         'nodes.name',
         'SUM(node_quants.value) AS value'
       ).
@@ -300,9 +326,10 @@ EOT
     top_municipalities = [@node] + all_municipalities.limit(9).all
     top_municipalities_count = top_municipalities.length
 
-    top_nodes = FlowStatsForNode.new(@context, @year, @node, node_type).top_nodes_for_quant('Volume', include_domestic_consumption)
-    node_value_sum = top_nodes.map{ |t| t[:value] }.reduce(0, :+)
-    matrix_size = top_municipalities_count + top_nodes.size
+    node_type_stats = FlowStatsForNode.new(@context, @year, @node, node_type)
+    top_nodes = node_type_stats.top_nodes_for_quant('Volume', include_domestic_consumption)
+    all_nodes_total = node_type_stats.all_nodes_for_quant_total('Volume', include_domestic_consumption)
+    matrix_size = top_municipalities_count + top_nodes.length
     matrix = Array.new(matrix_size){ Array.new(matrix_size){ 0 } }
     matrix[0] = top_municipalities.map { 0 } + top_nodes.map{ |t| t['value'] }
 
@@ -318,7 +345,7 @@ EOT
 
     result = {
       node_list_label =>
-        top_nodes.map{ |t| {id: t['node_id'], name: t['name'], value: t['value']/node_value_sum, is_domestic_consumption: t['is_domestic_consumption']} },
+        top_nodes.map { |t| {id: t['node_id'], name: t['name'], value: t['value']/all_nodes_total, is_domestic_consumption: t['is_domestic_consumption']} },
       municipalities: top_municipalities.map{ |m| {id: m.id, name: m.name} },
       matrix: matrix
     }
@@ -337,22 +364,33 @@ EOT
         indicator
       end
     end
-    included_columns = list.map{ |i| i.slice(:name, :unit)}
     values = []
     ranking_scores = []
-    list.each do |indicator|
-      values <<
-        if indicator[:type] == 'quant' && @place_quants[indicator[:backend_name]].present?
-          @place_quants[indicator[:backend_name]]['value']
-        elsif indicator[:type] == 'ind' && @place_inds[indicator[:backend_name]].present?
-          @place_inds[indicator[:backend_name]]['value']
-        else
-          nil
+    list.each_with_index do |indicator, idx|
+      values_for_current_year, temporal_values_for_all_years = if indicator[:type] == 'quant'
+        [@place_quants, @temporal_place_quants_for_all_years]
+      elsif indicator[:type] == 'ind'
+        [@place_inds, @temporal_place_inds_for_all_years]
+      else
+        [[], []]
+      end
+      if (value_for_current_year = values_for_current_year[indicator[:backend_name]]).present?
+        value = value_for_current_year['value']
+      else # temporal indicator with no value for selected year
+        value_for_closest_year = temporal_values_for_all_years[indicator[:backend_name]].min_by do |pq|
+          (pq.year - @year).abs
         end
+        if value_for_closest_year.present?
+          value = value_for_closest_year.value
+          list[idx][:year] = value_for_closest_year.year
+        end
+      end
+      values << value
       if @state.present?
-        ranking_scores << @stats.state_ranking(@state, indicator[:type], indicator[:backend_name])
+        ranking_scores << @stats.state_ranking(@state, indicator[:type], indicator[:backend_name], list[idx][:year])
       end
     end
+    included_columns = list.map{ |i| i.slice(:name, :unit, :year)}
     {
       name: name,
       included_columns: included_columns,
