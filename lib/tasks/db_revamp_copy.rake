@@ -8,7 +8,8 @@ namespace :db do
         'contexts',
         'node_types',
         'context_node_types',
-        'nodes'
+        'nodes',
+        'flows'
       ].each do |table|
         copy_data(table)
       end
@@ -88,5 +89,14 @@ def nodes_insert_sql
     COALESCE(is_unknown, FALSE),
     NOW(), NOW()
   FROM public.nodes;
+  SQL
+end
+
+def flows_insert_sql
+  <<-SQL
+  INSERT INTO revamp.flows (id, context_id, year, path, created_at, updated_at)
+  SELECT
+    flow_id, context_id, year, path, NOW(), NOW()
+  FROM public.flows;
   SQL
 end

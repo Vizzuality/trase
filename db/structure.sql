@@ -1169,6 +1169,39 @@ ALTER SEQUENCE countries_id_seq OWNED BY countries.id;
 
 
 --
+-- Name: flows; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE flows (
+    id integer NOT NULL,
+    context_id integer NOT NULL,
+    year smallint NOT NULL,
+    path integer[] DEFAULT '{}'::integer[],
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: flows_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE flows_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: flows_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE flows_id_seq OWNED BY flows.id;
+
+
+--
 -- Name: node_types; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -1393,6 +1426,13 @@ ALTER TABLE ONLY countries ALTER COLUMN id SET DEFAULT nextval('countries_id_seq
 
 
 --
+-- Name: flows id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flows ALTER COLUMN id SET DEFAULT nextval('flows_id_seq'::regclass);
+
+
+--
 -- Name: node_types id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
@@ -1595,6 +1635,14 @@ ALTER TABLE ONLY countries
 
 
 --
+-- Name: flows flows_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flows
+    ADD CONSTRAINT flows_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: node_types node_types_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -1745,6 +1793,27 @@ CREATE UNIQUE INDEX index_contexts_on_country_id_and_commodity_id ON contexts US
 --
 
 CREATE UNIQUE INDEX index_countries_on_iso2 ON countries USING btree (iso2);
+
+
+--
+-- Name: index_flows_on_context_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_flows_on_context_id ON flows USING btree (context_id);
+
+
+--
+-- Name: index_flows_on_context_id_and_year; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_flows_on_context_id_and_year ON flows USING btree (context_id, year);
+
+
+--
+-- Name: index_flows_on_path; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_flows_on_path ON flows USING btree (path);
 
 
 --
@@ -2006,6 +2075,14 @@ ALTER TABLE ONLY nodes
 
 
 --
+-- Name: flows fk_rails_c33db455e5; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flows
+    ADD CONSTRAINT fk_rails_c33db455e5 FOREIGN KEY (context_id) REFERENCES contexts(id);
+
+
+--
 -- Name: contexts fk_rails_d9e59d1113; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -2064,6 +2141,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171011121700'),
 ('20171012103851'),
 ('20171012104354'),
-('20171012110946');
+('20171012110946'),
+('20171012112442');
 
 
