@@ -1024,6 +1024,114 @@ CREATE TABLE schema_migrations (
 );
 
 
+SET search_path = revamp, pg_catalog;
+
+--
+-- Name: commodities; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE commodities (
+    id integer NOT NULL,
+    name text NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: commodities_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE commodities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: commodities_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE commodities_id_seq OWNED BY commodities.id;
+
+
+--
+-- Name: contexts; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE contexts (
+    id integer NOT NULL,
+    country_id integer NOT NULL,
+    commodity_id integer NOT NULL,
+    years integer[] DEFAULT '{}'::integer[],
+    default_year integer,
+    default_context_layers text[] DEFAULT '{}'::text[],
+    default_basemap text,
+    is_disabled boolean DEFAULT false NOT NULL,
+    is_default boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: contexts_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE contexts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: contexts_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE contexts_id_seq OWNED BY contexts.id;
+
+
+--
+-- Name: countries; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE countries (
+    id integer NOT NULL,
+    name text NOT NULL,
+    iso2 text NOT NULL,
+    latitude double precision NOT NULL,
+    longitude double precision NOT NULL,
+    zoom integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: countries_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE countries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: countries_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE countries_id_seq OWNED BY countries.id;
+
+
+SET search_path = public, pg_catalog;
+
 --
 -- Name: commodities commodity_id; Type: DEFAULT; Schema: public; Owner: -
 --
@@ -1149,6 +1257,31 @@ ALTER TABLE ONLY quals ALTER COLUMN qual_id SET DEFAULT nextval('quals_qual_id_s
 
 ALTER TABLE ONLY quants ALTER COLUMN quant_id SET DEFAULT nextval('quants_quant_id_seq'::regclass);
 
+
+SET search_path = revamp, pg_catalog;
+
+--
+-- Name: commodities id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY commodities ALTER COLUMN id SET DEFAULT nextval('commodities_id_seq'::regclass);
+
+
+--
+-- Name: contexts id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY contexts ALTER COLUMN id SET DEFAULT nextval('contexts_id_seq'::regclass);
+
+
+--
+-- Name: countries id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY countries ALTER COLUMN id SET DEFAULT nextval('countries_id_seq'::regclass);
+
+
+SET search_path = public, pg_catalog;
 
 --
 -- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
@@ -1302,6 +1435,34 @@ ALTER TABLE ONLY schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
 
 
+SET search_path = revamp, pg_catalog;
+
+--
+-- Name: commodities commodities_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY commodities
+    ADD CONSTRAINT commodities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: contexts contexts_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY contexts
+    ADD CONSTRAINT contexts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: countries countries_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY countries
+    ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
+
+
+SET search_path = public, pg_catalog;
+
 --
 -- Name: context_indicators_indicator_attribute_type_indicator_attri_idx; Type: INDEX; Schema: public; Owner: -
 --
@@ -1385,6 +1546,38 @@ CREATE INDEX index_node_flows_on_flow_id_and_column_position ON node_flows USING
 
 CREATE INDEX index_nodes_on_node_type_id ON nodes USING btree (node_type_id);
 
+
+SET search_path = revamp, pg_catalog;
+
+--
+-- Name: index_contexts_on_commodity_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_contexts_on_commodity_id ON contexts USING btree (commodity_id);
+
+
+--
+-- Name: index_contexts_on_country_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_contexts_on_country_id ON contexts USING btree (country_id);
+
+
+--
+-- Name: index_contexts_on_country_id_and_commodity_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_contexts_on_country_id_and_commodity_id ON contexts USING btree (country_id, commodity_id);
+
+
+--
+-- Name: index_countries_on_iso2; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_countries_on_iso2 ON countries USING btree (iso2);
+
+
+SET search_path = public, pg_catalog;
 
 --
 -- Name: context context_commodity_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
@@ -1602,6 +1795,24 @@ ALTER TABLE ONLY nodes
     ADD CONSTRAINT nodes_node_type_id_fkey FOREIGN KEY (node_type_id) REFERENCES node_types(node_type_id);
 
 
+SET search_path = revamp, pg_catalog;
+
+--
+-- Name: contexts fk_rails_d9e59d1113; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY contexts
+    ADD CONSTRAINT fk_rails_d9e59d1113 FOREIGN KEY (country_id) REFERENCES countries(id);
+
+
+--
+-- Name: contexts fk_rails_eea78f436e; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY contexts
+    ADD CONSTRAINT fk_rails_eea78f436e FOREIGN KEY (commodity_id) REFERENCES commodities(id);
+
+
 --
 -- PostgreSQL database dump complete
 --
@@ -1639,6 +1850,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171004102919'),
 ('20171006161620'),
 ('20171006171936'),
-('20171011112259');
+('20171011112259'),
+('20171011121102'),
+('20171011121557'),
+('20171011121700');
 
 
