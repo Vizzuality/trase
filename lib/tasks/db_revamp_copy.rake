@@ -9,7 +9,8 @@ namespace :db do
         'node_types',
         'context_node_types',
         'nodes',
-        'flows'
+        'flows',
+        'attributes'
       ].each do |table|
         copy_data(table)
       end
@@ -98,5 +99,16 @@ def flows_insert_sql
   SELECT
     flow_id, context_id, year, path, NOW(), NOW()
   FROM public.flows;
+  SQL
+end
+
+def attributes_insert_sql
+  <<-SQL
+  INSERT INTO revamp.attributes (name, type, unit, unit_type, tooltip, tooltip_text, frontend_name, original_id, created_at, updated_at)
+  SELECT name, 'Quant', unit, unit_type, COALESCE(tooltip, FALSE), tooltip_text, frontend_name, quant_id, NOW(), NOW() FROM public.quants
+  UNION ALL
+  SELECT name, 'Ind', unit, unit_type, COALESCE(tooltip, FALSE), tooltip_text, frontend_name, ind_id, NOW(), NOW() FROM public.inds
+  UNION ALL
+  SELECT name, 'Qual', NULL, NULL, COALESCE(tooltip, FALSE), tooltip_text, frontend_name, qual_id, NOW(), NOW() FROM public.quals;
   SQL
 end

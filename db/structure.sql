@@ -1027,6 +1027,43 @@ CREATE TABLE schema_migrations (
 SET search_path = revamp, pg_catalog;
 
 --
+-- Name: attributes; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE attributes (
+    id integer NOT NULL,
+    name text NOT NULL,
+    type text NOT NULL,
+    unit text,
+    unit_type text,
+    tooltip boolean DEFAULT false NOT NULL,
+    tooltip_text text,
+    frontend_name text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: attributes_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE attributes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE attributes_id_seq OWNED BY attributes.id;
+
+
+--
 -- Name: commodities; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -1398,6 +1435,13 @@ ALTER TABLE ONLY quants ALTER COLUMN quant_id SET DEFAULT nextval('quants_quant_
 SET search_path = revamp, pg_catalog;
 
 --
+-- Name: attributes id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY attributes ALTER COLUMN id SET DEFAULT nextval('attributes_id_seq'::regclass);
+
+
+--
 -- Name: commodities id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
@@ -1603,6 +1647,14 @@ ALTER TABLE ONLY schema_migrations
 SET search_path = revamp, pg_catalog;
 
 --
+-- Name: attributes attributes_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY attributes
+    ADD CONSTRAINT attributes_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: commodities commodities_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -1745,6 +1797,13 @@ CREATE INDEX index_nodes_on_node_type_id ON nodes USING btree (node_type_id);
 
 
 SET search_path = revamp, pg_catalog;
+
+--
+-- Name: index_attributes_on_name; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_attributes_on_name ON attributes USING btree (name);
+
 
 --
 -- Name: index_context_node_types_on_context_id; Type: INDEX; Schema: revamp; Owner: -
@@ -2142,6 +2201,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171012103851'),
 ('20171012104354'),
 ('20171012110946'),
-('20171012112442');
+('20171012112442'),
+('20171012124235');
 
 
