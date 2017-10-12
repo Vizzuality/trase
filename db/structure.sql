@@ -1199,6 +1199,41 @@ CREATE SEQUENCE node_types_id_seq
 ALTER SEQUENCE node_types_id_seq OWNED BY node_types.id;
 
 
+--
+-- Name: nodes; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE nodes (
+    id integer NOT NULL,
+    node_type_id integer NOT NULL,
+    name text NOT NULL,
+    geo_id text,
+    is_domestic_consumption boolean DEFAULT false NOT NULL,
+    is_unknown boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: nodes_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE nodes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: nodes_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE nodes_id_seq OWNED BY nodes.id;
+
+
 SET search_path = public, pg_catalog;
 
 --
@@ -1362,6 +1397,13 @@ ALTER TABLE ONLY countries ALTER COLUMN id SET DEFAULT nextval('countries_id_seq
 --
 
 ALTER TABLE ONLY node_types ALTER COLUMN id SET DEFAULT nextval('node_types_id_seq'::regclass);
+
+
+--
+-- Name: nodes id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY nodes ALTER COLUMN id SET DEFAULT nextval('nodes_id_seq'::regclass);
 
 
 SET search_path = public, pg_catalog;
@@ -1560,6 +1602,14 @@ ALTER TABLE ONLY node_types
     ADD CONSTRAINT node_types_pkey PRIMARY KEY (id);
 
 
+--
+-- Name: nodes nodes_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY nodes
+    ADD CONSTRAINT nodes_pkey PRIMARY KEY (id);
+
+
 SET search_path = public, pg_catalog;
 
 --
@@ -1702,6 +1752,13 @@ CREATE UNIQUE INDEX index_countries_on_iso2 ON countries USING btree (iso2);
 --
 
 CREATE UNIQUE INDEX index_node_types_on_name ON node_types USING btree (name);
+
+
+--
+-- Name: index_nodes_on_node_type_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_nodes_on_node_type_id ON nodes USING btree (node_type_id);
 
 
 SET search_path = public, pg_catalog;
@@ -1941,6 +1998,14 @@ ALTER TABLE ONLY context_node_types
 
 
 --
+-- Name: nodes fk_rails_37e87445f7; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY nodes
+    ADD CONSTRAINT fk_rails_37e87445f7 FOREIGN KEY (node_type_id) REFERENCES node_types(id);
+
+
+--
 -- Name: contexts fk_rails_d9e59d1113; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -1998,6 +2063,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171011121557'),
 ('20171011121700'),
 ('20171012103851'),
-('20171012104354');
+('20171012104354'),
+('20171012110946');
 
 
