@@ -5,7 +5,9 @@ namespace :db do
       [
         'countries',
         'commodities',
-        'contexts'
+        'contexts',
+        'node_types',
+        'context_node_types'
       ].each do |table|
         copy_data(table)
       end
@@ -51,5 +53,27 @@ def contexts_insert_sql
     COALESCE(is_default, FALSE),
     NOW(), NOW()
   FROM public.context;
+  SQL
+end
+
+def node_types_insert_sql
+  <<-SQL
+  INSERT INTO revamp.node_types (id, name, created_at, updated_at)
+  SELECT
+    node_type_id, node_type, NOW(), NOW()
+  FROM public.node_types;
+  SQL
+end
+
+def context_node_types_insert_sql
+  <<-SQL
+  INSERT INTO revamp.context_node_types (id, context_id, node_type_id, column_group, column_position, is_default, is_geo_column, profile_type, created_at, updated_at)
+  SELECT
+    id, context_id, cnt.node_type_id, column_group, column_position,
+    COALESCE(is_default, FALSE),
+    COALESCE(is_geo_column, FALSE),
+    profile_type,
+    NOW(), NOW()
+  FROM public.context_nodes cnt JOIN public.node_types nt ON cnt.node_type_id = nt.node_type_id;
   SQL
 end

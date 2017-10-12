@@ -1058,6 +1058,44 @@ ALTER SEQUENCE commodities_id_seq OWNED BY commodities.id;
 
 
 --
+-- Name: context_node_types; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE context_node_types (
+    id integer NOT NULL,
+    context_id integer NOT NULL,
+    node_type_id integer NOT NULL,
+    column_group integer NOT NULL,
+    column_position integer NOT NULL,
+    is_default boolean DEFAULT false NOT NULL,
+    is_geo_column boolean DEFAULT false NOT NULL,
+    profile_type text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT check_context_node_types_on_profile_type CHECK ((profile_type = ANY (ARRAY['actor'::text, 'place'::text])))
+);
+
+
+--
+-- Name: context_node_types_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE context_node_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: context_node_types_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE context_node_types_id_seq OWNED BY context_node_types.id;
+
+
+--
 -- Name: contexts; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -1128,6 +1166,37 @@ CREATE SEQUENCE countries_id_seq
 --
 
 ALTER SEQUENCE countries_id_seq OWNED BY countries.id;
+
+
+--
+-- Name: node_types; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE node_types (
+    id integer NOT NULL,
+    name text NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: node_types_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE node_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: node_types_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE node_types_id_seq OWNED BY node_types.id;
 
 
 SET search_path = public, pg_catalog;
@@ -1268,6 +1337,13 @@ ALTER TABLE ONLY commodities ALTER COLUMN id SET DEFAULT nextval('commodities_id
 
 
 --
+-- Name: context_node_types id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY context_node_types ALTER COLUMN id SET DEFAULT nextval('context_node_types_id_seq'::regclass);
+
+
+--
 -- Name: contexts id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
@@ -1279,6 +1355,13 @@ ALTER TABLE ONLY contexts ALTER COLUMN id SET DEFAULT nextval('contexts_id_seq':
 --
 
 ALTER TABLE ONLY countries ALTER COLUMN id SET DEFAULT nextval('countries_id_seq'::regclass);
+
+
+--
+-- Name: node_types id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_types ALTER COLUMN id SET DEFAULT nextval('node_types_id_seq'::regclass);
 
 
 SET search_path = public, pg_catalog;
@@ -1446,6 +1529,14 @@ ALTER TABLE ONLY commodities
 
 
 --
+-- Name: context_node_types context_node_types_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY context_node_types
+    ADD CONSTRAINT context_node_types_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: contexts contexts_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -1459,6 +1550,14 @@ ALTER TABLE ONLY contexts
 
 ALTER TABLE ONLY countries
     ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: node_types node_types_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_types
+    ADD CONSTRAINT node_types_pkey PRIMARY KEY (id);
 
 
 SET search_path = public, pg_catalog;
@@ -1550,6 +1649,27 @@ CREATE INDEX index_nodes_on_node_type_id ON nodes USING btree (node_type_id);
 SET search_path = revamp, pg_catalog;
 
 --
+-- Name: index_context_node_types_on_context_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_context_node_types_on_context_id ON context_node_types USING btree (context_id);
+
+
+--
+-- Name: index_context_node_types_on_context_id_and_node_type_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_context_node_types_on_context_id_and_node_type_id ON context_node_types USING btree (context_id, node_type_id);
+
+
+--
+-- Name: index_context_node_types_on_node_type_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_context_node_types_on_node_type_id ON context_node_types USING btree (node_type_id);
+
+
+--
 -- Name: index_contexts_on_commodity_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -1575,6 +1695,13 @@ CREATE UNIQUE INDEX index_contexts_on_country_id_and_commodity_id ON contexts US
 --
 
 CREATE UNIQUE INDEX index_countries_on_iso2 ON countries USING btree (iso2);
+
+
+--
+-- Name: index_node_types_on_name; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_node_types_on_name ON node_types USING btree (name);
 
 
 SET search_path = public, pg_catalog;
@@ -1798,6 +1925,22 @@ ALTER TABLE ONLY nodes
 SET search_path = revamp, pg_catalog;
 
 --
+-- Name: context_node_types fk_rails_15e56acf9a; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY context_node_types
+    ADD CONSTRAINT fk_rails_15e56acf9a FOREIGN KEY (node_type_id) REFERENCES node_types(id);
+
+
+--
+-- Name: context_node_types fk_rails_23d7986b34; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY context_node_types
+    ADD CONSTRAINT fk_rails_23d7986b34 FOREIGN KEY (context_id) REFERENCES contexts(id);
+
+
+--
 -- Name: contexts fk_rails_d9e59d1113; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -1853,6 +1996,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171011112259'),
 ('20171011121102'),
 ('20171011121557'),
-('20171011121700');
+('20171011121700'),
+('20171012103851'),
+('20171012104354');
 
 
