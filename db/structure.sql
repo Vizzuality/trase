@@ -1239,6 +1239,100 @@ ALTER SEQUENCE flows_id_seq OWNED BY flows.id;
 
 
 --
+-- Name: node_attributes; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE node_attributes (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    attribute_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: node_attributes_double_values; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE node_attributes_double_values (
+    id integer NOT NULL,
+    node_attribute_id integer NOT NULL,
+    year integer,
+    value double precision NOT NULL
+);
+
+
+--
+-- Name: node_attributes_double_values_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE node_attributes_double_values_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: node_attributes_double_values_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE node_attributes_double_values_id_seq OWNED BY node_attributes_double_values.id;
+
+
+--
+-- Name: node_attributes_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE node_attributes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: node_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE node_attributes_id_seq OWNED BY node_attributes.id;
+
+
+--
+-- Name: node_attributes_text_values; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE node_attributes_text_values (
+    id integer NOT NULL,
+    node_attribute_id integer NOT NULL,
+    year integer,
+    value text NOT NULL
+);
+
+
+--
+-- Name: node_attributes_text_values_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE node_attributes_text_values_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: node_attributes_text_values_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE node_attributes_text_values_id_seq OWNED BY node_attributes_text_values.id;
+
+
+--
 -- Name: node_types; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -1477,6 +1571,27 @@ ALTER TABLE ONLY flows ALTER COLUMN id SET DEFAULT nextval('flows_id_seq'::regcl
 
 
 --
+-- Name: node_attributes id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_attributes ALTER COLUMN id SET DEFAULT nextval('node_attributes_id_seq'::regclass);
+
+
+--
+-- Name: node_attributes_double_values id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_attributes_double_values ALTER COLUMN id SET DEFAULT nextval('node_attributes_double_values_id_seq'::regclass);
+
+
+--
+-- Name: node_attributes_text_values id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_attributes_text_values ALTER COLUMN id SET DEFAULT nextval('node_attributes_text_values_id_seq'::regclass);
+
+
+--
 -- Name: node_types id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
@@ -1695,6 +1810,30 @@ ALTER TABLE ONLY flows
 
 
 --
+-- Name: node_attributes_double_values node_attributes_double_values_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_attributes_double_values
+    ADD CONSTRAINT node_attributes_double_values_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: node_attributes node_attributes_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_attributes
+    ADD CONSTRAINT node_attributes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: node_attributes_text_values node_attributes_text_values_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_attributes_text_values
+    ADD CONSTRAINT node_attributes_text_values_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: node_types node_types_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -1873,6 +2012,55 @@ CREATE INDEX index_flows_on_context_id_and_year ON flows USING btree (context_id
 --
 
 CREATE INDEX index_flows_on_path ON flows USING btree (path);
+
+
+--
+-- Name: index_node_attributes_double_values_on_id_and_year; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_node_attributes_double_values_on_id_and_year ON node_attributes_double_values USING btree (node_attribute_id, year);
+
+
+--
+-- Name: index_node_attributes_double_values_on_node_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_node_attributes_double_values_on_node_attribute_id ON node_attributes_double_values USING btree (node_attribute_id);
+
+
+--
+-- Name: index_node_attributes_on_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_node_attributes_on_attribute_id ON node_attributes USING btree (attribute_id);
+
+
+--
+-- Name: index_node_attributes_on_node_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_node_attributes_on_node_id ON node_attributes USING btree (node_id);
+
+
+--
+-- Name: index_node_attributes_on_node_id_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_node_attributes_on_node_id_and_attribute_id ON node_attributes USING btree (node_id, attribute_id);
+
+
+--
+-- Name: index_node_attributes_text_values_on_id_and_year; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_node_attributes_text_values_on_id_and_year ON node_attributes_text_values USING btree (node_attribute_id, year);
+
+
+--
+-- Name: index_node_attributes_text_values_on_node_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_node_attributes_text_values_on_node_attribute_id ON node_attributes_text_values USING btree (node_attribute_id);
 
 
 --
@@ -2110,6 +2298,14 @@ ALTER TABLE ONLY nodes
 SET search_path = revamp, pg_catalog;
 
 --
+-- Name: node_attributes fk_rails_15d56765f3; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_attributes
+    ADD CONSTRAINT fk_rails_15d56765f3 FOREIGN KEY (node_id) REFERENCES nodes(id);
+
+
+--
 -- Name: context_node_types fk_rails_15e56acf9a; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -2134,6 +2330,22 @@ ALTER TABLE ONLY nodes
 
 
 --
+-- Name: node_attributes_text_values fk_rails_3bdcee45f6; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_attributes_text_values
+    ADD CONSTRAINT fk_rails_3bdcee45f6 FOREIGN KEY (node_attribute_id) REFERENCES node_attributes(id);
+
+
+--
+-- Name: node_attributes_double_values fk_rails_486c35988d; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_attributes_double_values
+    ADD CONSTRAINT fk_rails_486c35988d FOREIGN KEY (node_attribute_id) REFERENCES node_attributes(id);
+
+
+--
 -- Name: flows fk_rails_c33db455e5; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -2155,6 +2367,14 @@ ALTER TABLE ONLY contexts
 
 ALTER TABLE ONLY contexts
     ADD CONSTRAINT fk_rails_eea78f436e FOREIGN KEY (commodity_id) REFERENCES commodities(id);
+
+
+--
+-- Name: node_attributes fk_rails_ff471c5fdf; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_attributes
+    ADD CONSTRAINT fk_rails_ff471c5fdf FOREIGN KEY (attribute_id) REFERENCES attributes(id);
 
 
 --
@@ -2202,6 +2422,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171012104354'),
 ('20171012110946'),
 ('20171012112442'),
-('20171012124235');
+('20171012124235'),
+('20171012130125');
 
 
