@@ -13,7 +13,8 @@ namespace :db do
         'attributes',
         'map_attribute_groups',
         'map_attributes',
-        'recolor_by_attributes'
+        'recolor_by_attributes',
+        'resize_by_attributes'
       ].each do |table|
         copy_data(table)
       end
@@ -142,5 +143,15 @@ def recolor_by_attributes_insert_sql
     public.context_recolor_by.id, context_id, revamp.attributes.id, group_number, position, legend_type, legend_color_theme, interval_count, min_value, max_value, divisor, public.context_recolor_by.tooltip_text, COALESCE(is_disabled, FALSE), COALESCE(is_default, FALSE), NOW(), NOW()
   FROM public.context_recolor_by
   JOIN revamp.attributes ON public.context_recolor_by.recolor_attribute_type::text = revamp.attributes.type AND public.context_recolor_by.recolor_attribute_id = revamp.attributes.original_id;
+  SQL
+end
+
+def resize_by_attributes_insert_sql
+  <<-SQL
+  INSERT INTO revamp.resize_by_attributes(id, context_id, attribute_id, group_number, position, tooltip_text, is_disabled, is_default, created_at, updated_at)
+  SELECT
+    public.context_resize_by.id, context_id, revamp.attributes.id, group_number, position, public.context_resize_by.tooltip_text, COALESCE(is_disabled, FALSE), COALESCE(is_default, FALSE), NOW(), NOW()
+  FROM public.context_resize_by
+  JOIN revamp.attributes ON public.context_resize_by.resize_attribute_type::text = revamp.attributes.type AND public.context_resize_by.resize_attribute_id = revamp.attributes.original_id;
   SQL
 end
