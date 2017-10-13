@@ -566,6 +566,34 @@ ALTER SEQUENCE download_versions_id_seq OWNED BY download_versions.id;
 
 
 --
+-- Name: flow_attributes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE flow_attributes (
+    id integer NOT NULL
+);
+
+
+--
+-- Name: flow_attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE flow_attributes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: flow_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE flow_attributes_id_seq OWNED BY flow_attributes.id;
+
+
+--
 -- Name: flow_inds; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1485,6 +1513,13 @@ ALTER TABLE ONLY download_versions ALTER COLUMN id SET DEFAULT nextval('download
 
 
 --
+-- Name: flow_attributes id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY flow_attributes ALTER COLUMN id SET DEFAULT nextval('flow_attributes_id_seq'::regclass);
+
+
+--
 -- Name: flows flow_id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1701,6 +1736,14 @@ ALTER TABLE ONLY countries
 
 ALTER TABLE ONLY download_versions
     ADD CONSTRAINT download_versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: flow_attributes flow_attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY flow_attributes
+    ADD CONSTRAINT flow_attributes_pkey PRIMARY KEY (id);
 
 
 --
@@ -2423,6 +2466,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171012110946'),
 ('20171012112442'),
 ('20171012124235'),
-('20171012130125');
+('20171012130125'),
+('20171013081306');
 
 
