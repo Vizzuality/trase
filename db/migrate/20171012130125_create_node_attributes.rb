@@ -15,6 +15,7 @@ class CreateNodeAttributes < ActiveRecord::Migration[5.0]
         t.references :node_attribute, null: false, foreign_key: true, index: true
         t.integer :year
         t.column :value, 'double precision', null: false
+        t.timestamps
       end
 
       add_index :node_attributes_double_values, [:node_attribute_id, :year], unique: true,
@@ -24,6 +25,7 @@ class CreateNodeAttributes < ActiveRecord::Migration[5.0]
         t.references :node_attribute, null: false, foreign_key: true, index: true
         t.integer :year
         t.text :value, null: false
+        t.timestamps
       end
 
       add_index :node_attributes_text_values, [:node_attribute_id, :year], unique: true,
