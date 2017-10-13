@@ -2,6 +2,7 @@ namespace :db do
   namespace :revamp do
     desc 'Copy data from public schema into revamp schema'
     task copy: [:environment] do
+      create_migration_columns
       [
         'countries',
         'commodities',
@@ -11,6 +12,12 @@ namespace :db do
         'nodes',
         'flows',
         'attributes',
+        'node_attributes',
+        'node_attributes_double_values',
+        'node_attributes_text_values',
+        'flow_attributes',
+        'flow_attributes_double_values',
+        'flow_attributes_text_values',
         'map_attribute_groups',
         'map_attributes',
         'recolor_by_attributes',
@@ -19,7 +26,32 @@ namespace :db do
       ].each do |table|
         copy_data(table)
       end
+      drop_migration_columns
     end
+  end
+end
+
+def migration_columns
+  [
+    ['revamp.attributes', 'original_id', 'INTEGER'],
+    ['revamp.node_attributes', 'original_id', 'INTEGER'],
+    ['revamp.flow_attributes', 'original_id', 'INTEGER']
+  ]
+end
+
+def create_migration_columns
+  migration_columns.each do |table_column_type|
+    ActiveRecord::Base.connection.execute(
+      "ALTER TABLE #{table_column_type.first} ADD COLUMN IF NOT EXISTS #{table_column_type.second} #{table_column_type.third}"
+    )
+  end
+end
+
+def drop_migration_columns
+  migration_columns.each do |table_column|
+    ActiveRecord::Base.connection.execute(
+      "ALTER TABLE #{table_column.first} DROP COLUMN IF EXISTS #{table_column.second}"
+    )
   end
 end
 
@@ -115,6 +147,96 @@ def attributes_insert_sql
   SELECT name, 'Ind', unit, unit_type, COALESCE(tooltip, FALSE), tooltip_text, frontend_name, ind_id, NOW(), NOW() FROM public.inds
   UNION ALL
   SELECT name, 'Qual', NULL, NULL, COALESCE(tooltip, FALSE), tooltip_text, frontend_name, qual_id, NOW(), NOW() FROM public.quals;
+  SQL
+end
+
+def node_attributes_insert_sql
+  <<-SQL
+  INSERT INTO revamp.node_attributes (node_id, attribute_id, original_id, created_at, updated_at)
+  SELECT DISTINCT node_id, attributes.id, quant_id, NOW(), NOW()
+  FROM public.node_quants
+  JOIN revamp.attributes ON public.node_quants.quant_id = revamp.attributes.original_id AND revamp.attributes.type = 'Quant'
+  UNION ALL
+  SELECT DISTINCT node_id, attributes.id, ind_id, NOW(), NOW()
+  FROM public.node_inds
+  JOIN revamp.attributes ON public.node_inds.ind_id = revamp.attributes.original_id AND revamp.attributes.type = 'Ind'
+  UNION ALL
+  SELECT DISTINCT node_id, attributes.id, qual_id, NOW(), NOW()
+  FROM public.node_quals
+  JOIN revamp.attributes ON public.node_quals.qual_id = revamp.attributes.original_id AND revamp.attributes.type = 'Qual'
+  SQL
+end
+
+def node_attributes_double_values_insert_sql
+  <<-SQL
+  INSERT INTO revamp.node_attributes_double_values (node_attribute_id, year, value, created_at, updated_at)
+  SELECT node_attributes.id, year, value, NOW(), NOW()
+  FROM public.node_quants
+  JOIN revamp.node_attributes ON public.node_quants.quant_id = revamp.node_attributes.original_id
+  JOIN revamp.attributes ON revamp.node_attributes.attribute_id = attributes.id
+  WHERE revamp.attributes.type = 'Quant'
+  UNION ALL
+  SELECT node_attributes.id, year, value, NOW(), NOW()
+  FROM public.node_inds
+  JOIN revamp.node_attributes ON public.node_inds.ind_id = revamp.node_attributes.original_id
+  JOIN revamp.attributes ON revamp.node_attributes.attribute_id = attributes.id
+  WHERE revamp.attributes.type = 'Ind'
+  SQL
+end
+
+def node_attributes_text_values_insert_sql
+  <<-SQL
+  INSERT INTO revamp.node_attributes_double_values (node_attribute_id, year, value, created_at, updated_at)
+  SELECT node_attributes.id, year, value, NOW(), NOW()
+  FROM public.node_quals
+  JOIN revamp.node_attributes ON public.node_quals.qual_id = revamp.node_attributes.original_id
+  JOIN revamp.attributes ON revamp.node_attributes.attribute_id = attributes.id
+  WHERE revamp.attributes.type = 'Qual'
+  SQL
+end
+
+def flow_attributes_insert_sql
+  <<-SQL
+  INSERT INTO revamp.flow_attributes (flow_id, attribute_id, original_id, created_at, updated_at)
+  SELECT DISTINCT flow_id, attributes.id, quant_id, NOW(), NOW()
+  FROM public.flow_quants
+  JOIN revamp.attributes ON public.flow_quants.quant_id = revamp.attributes.original_id AND revamp.attributes.type = 'Quant'
+  UNION ALL
+  SELECT DISTINCT flow_id, attributes.id, ind_id, NOW(), NOW()
+  FROM public.flow_inds
+  JOIN revamp.attributes ON public.flow_inds.ind_id = revamp.attributes.original_id AND revamp.attributes.type = 'Ind'
+  UNION ALL
+  SELECT DISTINCT flow_id, attributes.id, qual_id, NOW(), NOW()
+  FROM public.flow_quals
+  JOIN revamp.attributes ON public.flow_quals.qual_id = revamp.attributes.original_id AND revamp.attributes.type = 'Qual'
+  SQL
+end
+
+def flow_attributes_double_values_insert_sql
+  <<-SQL
+  INSERT INTO revamp.flow_attributes_double_values (flow_attribute_id, year, value, created_at, updated_at)
+  SELECT flow_attributes.id, year, value, NOW(), NOW()
+  FROM public.flow_quants
+  JOIN revamp.flow_attributes ON public.flow_quants.quant_id = revamp.flow_attributes.original_id
+  JOIN revamp.attributes ON revamp.flow_attributes.attribute_id = attributes.id
+  WHERE revamp.attributes.type = 'Quant'
+  UNION ALL
+  SELECT flow_attributes.id, year, value, NOW(), NOW()
+  FROM public.flow_inds
+  JOIN revamp.flow_attributes ON public.flow_inds.ind_id = revamp.flow_attributes.original_id
+  JOIN revamp.attributes ON revamp.flow_attributes.attribute_id = attributes.id
+  WHERE revamp.attributes.type = 'Ind'
+  SQL
+end
+
+def flow_attributes_text_values_insert_sql
+  <<-SQL
+  INSERT INTO revamp.flow_attributes_double_values (flow_attribute_id, year, value, created_at, updated_at)
+  SELECT flow_attributes.id, year, value, NOW(), NOW()
+  FROM public.flow_quals
+  JOIN revamp.flow_attributes ON public.flow_quals.qual_id = revamp.flow_attributes.original_id
+  JOIN revamp.attributes ON revamp.flow_attributes.attribute_id = attributes.id
+  WHERE revamp.attributes.type = 'Qual'
   SQL
 end
 
