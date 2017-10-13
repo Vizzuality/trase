@@ -29,7 +29,6 @@ class NodesController < ApplicationController
                          .joins('LEFT JOIN context_nodes ON context_nodes.node_type_id = nodes.node_type_id')
                          .where('flow_nodes.node_id IS NOT NULL OR substring(geo_id from 1 for 2) = :country_code OR nodes.name = \'OTHER\' ', country_code: context.country.iso2)
                          .where('nodes.node_type_id IN (:node_type_ids)', node_type_ids: node_type_ids)
-                         .where('nodes.node_type_id IN (:node_type_ids)', node_type_ids: node_type_ids)
                          .where('context_nodes.context_id = :context_id', context_id: context.id)
                          .all()
 
