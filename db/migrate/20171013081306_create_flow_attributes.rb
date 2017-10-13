@@ -15,6 +15,7 @@ class CreateFlowAttributes < ActiveRecord::Migration[5.0]
         t.references :flow_attribute, null: false, foreign_key: true, index: true
         t.integer :year
         t.column :value, 'double precision', null: false
+        t.timestamps
       end
 
       add_index :flow_attributes_double_values, [:flow_attribute_id, :year], unique: true,
@@ -24,6 +25,7 @@ class CreateFlowAttributes < ActiveRecord::Migration[5.0]
         t.references :flow_attribute, null: false, foreign_key: true, index: true
         t.integer :year
         t.text :value, null: false
+        t.timestamps
       end
 
       add_index :flow_attributes_text_values, [:flow_attribute_id, :year], unique: true,

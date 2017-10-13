@@ -566,34 +566,6 @@ ALTER SEQUENCE download_versions_id_seq OWNED BY download_versions.id;
 
 
 --
--- Name: flow_attributes; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE flow_attributes (
-    id integer NOT NULL
-);
-
-
---
--- Name: flow_attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE flow_attributes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: flow_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE flow_attributes_id_seq OWNED BY flow_attributes.id;
-
-
---
 -- Name: flow_inds; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1268,6 +1240,104 @@ ALTER SEQUENCE download_attributes_id_seq OWNED BY download_attributes.id;
 
 
 --
+-- Name: flow_attributes; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE flow_attributes (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    attribute_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: flow_attributes_double_values; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE flow_attributes_double_values (
+    id integer NOT NULL,
+    flow_attribute_id integer NOT NULL,
+    year integer,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: flow_attributes_double_values_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE flow_attributes_double_values_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: flow_attributes_double_values_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE flow_attributes_double_values_id_seq OWNED BY flow_attributes_double_values.id;
+
+
+--
+-- Name: flow_attributes_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE flow_attributes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: flow_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE flow_attributes_id_seq OWNED BY flow_attributes.id;
+
+
+--
+-- Name: flow_attributes_text_values; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE flow_attributes_text_values (
+    id integer NOT NULL,
+    flow_attribute_id integer NOT NULL,
+    year integer,
+    value text NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: flow_attributes_text_values_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE flow_attributes_text_values_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: flow_attributes_text_values_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE flow_attributes_text_values_id_seq OWNED BY flow_attributes_text_values.id;
+
+
+--
 -- Name: flows; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -1394,7 +1464,9 @@ CREATE TABLE node_attributes_double_values (
     id integer NOT NULL,
     node_attribute_id integer NOT NULL,
     year integer,
-    value double precision NOT NULL
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1444,7 +1516,9 @@ CREATE TABLE node_attributes_text_values (
     id integer NOT NULL,
     node_attribute_id integer NOT NULL,
     year integer,
-    value text NOT NULL
+    value text NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1700,13 +1774,6 @@ ALTER TABLE ONLY download_versions ALTER COLUMN id SET DEFAULT nextval('download
 
 
 --
--- Name: flow_attributes id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY flow_attributes ALTER COLUMN id SET DEFAULT nextval('flow_attributes_id_seq'::regclass);
-
-
---
 -- Name: flows flow_id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1790,6 +1857,27 @@ ALTER TABLE ONLY countries ALTER COLUMN id SET DEFAULT nextval('countries_id_seq
 --
 
 ALTER TABLE ONLY download_attributes ALTER COLUMN id SET DEFAULT nextval('download_attributes_id_seq'::regclass);
+
+
+--
+-- Name: flow_attributes id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_attributes ALTER COLUMN id SET DEFAULT nextval('flow_attributes_id_seq'::regclass);
+
+
+--
+-- Name: flow_attributes_double_values id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_attributes_double_values ALTER COLUMN id SET DEFAULT nextval('flow_attributes_double_values_id_seq'::regclass);
+
+
+--
+-- Name: flow_attributes_text_values id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_attributes_text_values ALTER COLUMN id SET DEFAULT nextval('flow_attributes_text_values_id_seq'::regclass);
 
 
 --
@@ -1961,14 +2049,6 @@ ALTER TABLE ONLY download_versions
 
 
 --
--- Name: flow_attributes flow_attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY flow_attributes
-    ADD CONSTRAINT flow_attributes_pkey PRIMARY KEY (id);
-
-
---
 -- Name: flows flows_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2072,6 +2152,30 @@ ALTER TABLE ONLY countries
 
 ALTER TABLE ONLY download_attributes
     ADD CONSTRAINT download_attributes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: flow_attributes_double_values flow_attributes_double_values_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_attributes_double_values
+    ADD CONSTRAINT flow_attributes_double_values_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: flow_attributes flow_attributes_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_attributes
+    ADD CONSTRAINT flow_attributes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: flow_attributes_text_values flow_attributes_text_values_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_attributes_text_values
+    ADD CONSTRAINT flow_attributes_text_values_pkey PRIMARY KEY (id);
 
 
 --
@@ -2317,6 +2421,55 @@ CREATE INDEX index_download_attributes_on_context_id ON download_attributes USIN
 --
 
 CREATE UNIQUE INDEX index_download_attributes_on_context_id_and_position ON download_attributes USING btree (context_id, "position");
+
+
+--
+-- Name: index_flow_attributes_double_values_on_flow_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_flow_attributes_double_values_on_flow_attribute_id ON flow_attributes_double_values USING btree (flow_attribute_id);
+
+
+--
+-- Name: index_flow_attributes_double_values_on_id_and_year; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_flow_attributes_double_values_on_id_and_year ON flow_attributes_double_values USING btree (flow_attribute_id, year);
+
+
+--
+-- Name: index_flow_attributes_on_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_flow_attributes_on_attribute_id ON flow_attributes USING btree (attribute_id);
+
+
+--
+-- Name: index_flow_attributes_on_flow_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_flow_attributes_on_flow_id ON flow_attributes USING btree (flow_id);
+
+
+--
+-- Name: index_flow_attributes_on_flow_id_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_flow_attributes_on_flow_id_and_attribute_id ON flow_attributes USING btree (flow_id, attribute_id);
+
+
+--
+-- Name: index_flow_attributes_text_values_on_flow_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_flow_attributes_text_values_on_flow_attribute_id ON flow_attributes_text_values USING btree (flow_attribute_id);
+
+
+--
+-- Name: index_flow_attributes_text_values_on_id_and_year; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_flow_attributes_text_values_on_id_and_year ON flow_attributes_text_values USING btree (flow_attribute_id, year);
 
 
 --
@@ -2757,6 +2910,14 @@ ALTER TABLE ONLY map_attribute_groups
 
 
 --
+-- Name: flow_attributes_double_values fk_rails_378208afa2; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_attributes_double_values
+    ADD CONSTRAINT fk_rails_378208afa2 FOREIGN KEY (flow_attribute_id) REFERENCES flow_attributes(id);
+
+
+--
 -- Name: nodes fk_rails_37e87445f7; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -2794,6 +2955,14 @@ ALTER TABLE ONLY resize_by_attributes
 
 ALTER TABLE ONLY resize_by_attributes
     ADD CONSTRAINT fk_rails_91f952a39c FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+
+
+--
+-- Name: flow_attributes_text_values fk_rails_a44a298dda; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_attributes_text_values
+    ADD CONSTRAINT fk_rails_a44a298dda FOREIGN KEY (flow_attribute_id) REFERENCES flow_attributes(id);
 
 
 --
@@ -2837,11 +3006,27 @@ ALTER TABLE ONLY contexts
 
 
 --
+-- Name: flow_attributes fk_rails_f34fb033ac; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_attributes
+    ADD CONSTRAINT fk_rails_f34fb033ac FOREIGN KEY (attribute_id) REFERENCES attributes(id);
+
+
+--
 -- Name: map_attributes fk_rails_f85c86caa0; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY map_attributes
     ADD CONSTRAINT fk_rails_f85c86caa0 FOREIGN KEY (map_attribute_group_id) REFERENCES map_attribute_groups(id) ON DELETE CASCADE;
+
+
+--
+-- Name: flow_attributes fk_rails_fc689a826c; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_attributes
+    ADD CONSTRAINT fk_rails_fc689a826c FOREIGN KEY (flow_id) REFERENCES flows(id);
 
 
 --
