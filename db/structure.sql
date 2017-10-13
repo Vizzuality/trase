@@ -1499,6 +1499,49 @@ CREATE SEQUENCE nodes_id_seq
 ALTER SEQUENCE nodes_id_seq OWNED BY nodes.id;
 
 
+--
+-- Name: recolor_by_attributes; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE recolor_by_attributes (
+    id integer NOT NULL,
+    context_id integer NOT NULL,
+    attribute_id integer NOT NULL,
+    group_number integer DEFAULT 1 NOT NULL,
+    "position" integer NOT NULL,
+    legend_type text NOT NULL,
+    legend_color_theme text NOT NULL,
+    interval_count integer,
+    min_value text,
+    max_value text,
+    divisor double precision,
+    tooltip_text text,
+    is_disabled boolean DEFAULT false NOT NULL,
+    is_default boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: recolor_by_attributes_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE recolor_by_attributes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: recolor_by_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE recolor_by_attributes_id_seq OWNED BY recolor_by_attributes.id;
+
+
 SET search_path = public, pg_catalog;
 
 --
@@ -1725,6 +1768,13 @@ ALTER TABLE ONLY node_types ALTER COLUMN id SET DEFAULT nextval('node_types_id_s
 --
 
 ALTER TABLE ONLY nodes ALTER COLUMN id SET DEFAULT nextval('nodes_id_seq'::regclass);
+
+
+--
+-- Name: recolor_by_attributes id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY recolor_by_attributes ALTER COLUMN id SET DEFAULT nextval('recolor_by_attributes_id_seq'::regclass);
 
 
 SET search_path = public, pg_catalog;
@@ -1995,6 +2045,14 @@ ALTER TABLE ONLY nodes
     ADD CONSTRAINT nodes_pkey PRIMARY KEY (id);
 
 
+--
+-- Name: recolor_by_attributes recolor_by_attributes_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY recolor_by_attributes
+    ADD CONSTRAINT recolor_by_attributes_pkey PRIMARY KEY (id);
+
+
 SET search_path = public, pg_catalog;
 
 --
@@ -2258,6 +2316,27 @@ CREATE UNIQUE INDEX index_node_types_on_name ON node_types USING btree (name);
 CREATE INDEX index_nodes_on_node_type_id ON nodes USING btree (node_type_id);
 
 
+--
+-- Name: index_recolor_by_attributes_on_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_recolor_by_attributes_on_attribute_id ON recolor_by_attributes USING btree (attribute_id);
+
+
+--
+-- Name: index_recolor_by_attributes_on_context_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_recolor_by_attributes_on_context_id ON recolor_by_attributes USING btree (context_id);
+
+
+--
+-- Name: index_recolor_by_attributes_on_context_id_group_number_position; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_recolor_by_attributes_on_context_id_group_number_position ON recolor_by_attributes USING btree (context_id, group_number, "position");
+
+
 SET search_path = public, pg_catalog;
 
 --
@@ -2479,6 +2558,22 @@ ALTER TABLE ONLY nodes
 SET search_path = revamp, pg_catalog;
 
 --
+-- Name: recolor_by_attributes fk_rails_03df134fac; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY recolor_by_attributes
+    ADD CONSTRAINT fk_rails_03df134fac FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE;
+
+
+--
+-- Name: recolor_by_attributes fk_rails_15a713c884; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY recolor_by_attributes
+    ADD CONSTRAINT fk_rails_15a713c884 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+
+
+--
 -- Name: node_attributes fk_rails_15d56765f3; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -2631,6 +2726,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171012130125'),
 ('20171013081306'),
 ('20171013094155'),
-('20171013095055');
+('20171013095055'),
+('20171013101825');
 
 

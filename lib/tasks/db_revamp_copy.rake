@@ -12,7 +12,8 @@ namespace :db do
         'flows',
         'attributes',
         'map_attribute_groups',
-        'map_attributes'
+        'map_attributes',
+        'recolor_by_attributes'
       ].each do |table|
         copy_data(table)
       end
@@ -131,5 +132,15 @@ def map_attributes_insert_sql
     public.context_layer.id, context_layer_group_id, revamp.attributes.id, position, bucket_3, bucket_5, color_scale, years, aggregate_method, NOT(COALESCE(enabled, FALSE)), COALESCE(is_default, FALSE), NOW(), NOW()
   FROM public.context_layer
   JOIN revamp.attributes ON public.context_layer.layer_attribute_type::text = revamp.attributes.type AND public.context_layer.layer_attribute_id = revamp.attributes.original_id;
+  SQL
+end
+
+def recolor_by_attributes_insert_sql
+  <<-SQL
+  INSERT INTO revamp.recolor_by_attributes(id, context_id, attribute_id, group_number, position, legend_type, legend_color_theme, interval_count, min_value, max_value, divisor, tooltip_text, is_disabled, is_default, created_at, updated_at)
+  SELECT
+    public.context_recolor_by.id, context_id, revamp.attributes.id, group_number, position, legend_type, legend_color_theme, interval_count, min_value, max_value, divisor, public.context_recolor_by.tooltip_text, COALESCE(is_disabled, FALSE), COALESCE(is_default, FALSE), NOW(), NOW()
+  FROM public.context_recolor_by
+  JOIN revamp.attributes ON public.context_recolor_by.recolor_attribute_type::text = revamp.attributes.type AND public.context_recolor_by.recolor_attribute_id = revamp.attributes.original_id;
   SQL
 end
