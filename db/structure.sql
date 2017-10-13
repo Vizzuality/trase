@@ -1267,6 +1267,39 @@ ALTER SEQUENCE flows_id_seq OWNED BY flows.id;
 
 
 --
+-- Name: map_attribute_groups; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE map_attribute_groups (
+    id integer NOT NULL,
+    context_id integer NOT NULL,
+    name text NOT NULL,
+    "position" integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: map_attribute_groups_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE map_attribute_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: map_attribute_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE map_attribute_groups_id_seq OWNED BY map_attribute_groups.id;
+
+
+--
 -- Name: node_attributes; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -1606,6 +1639,13 @@ ALTER TABLE ONLY flows ALTER COLUMN id SET DEFAULT nextval('flows_id_seq'::regcl
 
 
 --
+-- Name: map_attribute_groups id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY map_attribute_groups ALTER COLUMN id SET DEFAULT nextval('map_attribute_groups_id_seq'::regclass);
+
+
+--
 -- Name: node_attributes id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
@@ -1853,6 +1893,14 @@ ALTER TABLE ONLY flows
 
 
 --
+-- Name: map_attribute_groups map_attribute_groups_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY map_attribute_groups
+    ADD CONSTRAINT map_attribute_groups_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: node_attributes_double_values node_attributes_double_values_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -2055,6 +2103,20 @@ CREATE INDEX index_flows_on_context_id_and_year ON flows USING btree (context_id
 --
 
 CREATE INDEX index_flows_on_path ON flows USING btree (path);
+
+
+--
+-- Name: index_map_attribute_groups_on_context_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_map_attribute_groups_on_context_id ON map_attribute_groups USING btree (context_id);
+
+
+--
+-- Name: index_map_attribute_groups_on_context_id_and_position; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_map_attribute_groups_on_context_id_and_position ON map_attribute_groups USING btree (context_id, "position");
 
 
 --
@@ -2365,6 +2427,14 @@ ALTER TABLE ONLY context_node_types
 
 
 --
+-- Name: map_attribute_groups fk_rails_32f187c0c7; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY map_attribute_groups
+    ADD CONSTRAINT fk_rails_32f187c0c7 FOREIGN KEY (context_id) REFERENCES contexts(id);
+
+
+--
 -- Name: nodes fk_rails_37e87445f7; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -2467,6 +2537,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171012112442'),
 ('20171012124235'),
 ('20171012130125'),
-('20171013081306');
+('20171013081306'),
+('20171013094155');
 
 

@@ -10,7 +10,8 @@ namespace :db do
         'context_node_types',
         'nodes',
         'flows',
-        'attributes'
+        'attributes',
+        'map_attribute_groups'
       ].each do |table|
         copy_data(table)
       end
@@ -110,5 +111,14 @@ def attributes_insert_sql
   SELECT name, 'Ind', unit, unit_type, COALESCE(tooltip, FALSE), tooltip_text, frontend_name, ind_id, NOW(), NOW() FROM public.inds
   UNION ALL
   SELECT name, 'Qual', NULL, NULL, COALESCE(tooltip, FALSE), tooltip_text, frontend_name, qual_id, NOW(), NOW() FROM public.quals;
+  SQL
+end
+
+def map_attribute_groups_insert_sql
+  <<-SQL
+  INSERT INTO revamp.map_attribute_groups(id, context_id, position, name, created_at, updated_at)
+  SELECT
+    id, context_id, position, name, NOW(), NOW()
+  FROM public.context_layer_group;
   SQL
 end
