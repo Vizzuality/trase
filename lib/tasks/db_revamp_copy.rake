@@ -14,7 +14,8 @@ namespace :db do
         'map_attribute_groups',
         'map_attributes',
         'recolor_by_attributes',
-        'resize_by_attributes'
+        'resize_by_attributes',
+        'download_attributes'
       ].each do |table|
         copy_data(table)
       end
@@ -153,5 +154,15 @@ def resize_by_attributes_insert_sql
     public.context_resize_by.id, context_id, revamp.attributes.id, group_number, position, public.context_resize_by.tooltip_text, COALESCE(is_disabled, FALSE), COALESCE(is_default, FALSE), NOW(), NOW()
   FROM public.context_resize_by
   JOIN revamp.attributes ON public.context_resize_by.resize_attribute_type::text = revamp.attributes.type AND public.context_resize_by.resize_attribute_id = revamp.attributes.original_id;
+  SQL
+end
+
+def download_attributes_insert_sql
+  <<-SQL
+  INSERT INTO revamp.download_attributes(id, context_id, attribute_id, position, name_in_download, created_at, updated_at)
+  SELECT
+    public.context_indicators.id, context_id, revamp.attributes.id, position, name_in_download, NOW(), NOW()
+  FROM public.context_indicators
+  JOIN revamp.attributes ON public.context_indicators.indicator_attribute_type::text = revamp.attributes.type AND public.context_indicators.indicator_attribute_id = revamp.attributes.original_id;
   SQL
 end

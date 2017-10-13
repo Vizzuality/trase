@@ -1234,6 +1234,40 @@ ALTER SEQUENCE countries_id_seq OWNED BY countries.id;
 
 
 --
+-- Name: download_attributes; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE download_attributes (
+    id integer NOT NULL,
+    context_id integer NOT NULL,
+    attribute_id integer NOT NULL,
+    "position" integer NOT NULL,
+    name_in_download text NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: download_attributes_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE download_attributes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: download_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE download_attributes_id_seq OWNED BY download_attributes.id;
+
+
+--
 -- Name: flows; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -1752,6 +1786,13 @@ ALTER TABLE ONLY countries ALTER COLUMN id SET DEFAULT nextval('countries_id_seq
 
 
 --
+-- Name: download_attributes id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY download_attributes ALTER COLUMN id SET DEFAULT nextval('download_attributes_id_seq'::regclass);
+
+
+--
 -- Name: flows id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
@@ -2026,6 +2067,14 @@ ALTER TABLE ONLY countries
 
 
 --
+-- Name: download_attributes download_attributes_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY download_attributes
+    ADD CONSTRAINT download_attributes_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: flows flows_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -2247,6 +2296,27 @@ CREATE UNIQUE INDEX index_contexts_on_country_id_and_commodity_id ON contexts US
 --
 
 CREATE UNIQUE INDEX index_countries_on_iso2 ON countries USING btree (iso2);
+
+
+--
+-- Name: index_download_attributes_on_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_download_attributes_on_attribute_id ON download_attributes USING btree (attribute_id);
+
+
+--
+-- Name: index_download_attributes_on_context_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_download_attributes_on_context_id ON download_attributes USING btree (context_id);
+
+
+--
+-- Name: index_download_attributes_on_context_id_and_position; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_download_attributes_on_context_id_and_position ON download_attributes USING btree (context_id, "position");
 
 
 --
@@ -2663,6 +2733,14 @@ ALTER TABLE ONLY context_node_types
 
 
 --
+-- Name: download_attributes fk_rails_163b9bb8d8; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY download_attributes
+    ADD CONSTRAINT fk_rails_163b9bb8d8 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+
+
+--
 -- Name: context_node_types fk_rails_23d7986b34; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -2732,6 +2810,14 @@ ALTER TABLE ONLY flows
 
 ALTER TABLE ONLY map_attributes
     ADD CONSTRAINT fk_rails_d614b2acb9 FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE;
+
+
+--
+-- Name: download_attributes fk_rails_d7d4e62da2; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY download_attributes
+    ADD CONSTRAINT fk_rails_d7d4e62da2 FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -2817,6 +2903,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171013094155'),
 ('20171013095055'),
 ('20171013101825'),
-('20171013103931');
+('20171013103931'),
+('20171013104602');
 
 
