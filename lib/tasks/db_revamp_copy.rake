@@ -11,7 +11,8 @@ namespace :db do
         'nodes',
         'flows',
         'attributes',
-        'map_attribute_groups'
+        'map_attribute_groups',
+        'map_attributes'
       ].each do |table|
         copy_data(table)
       end
@@ -120,5 +121,15 @@ def map_attribute_groups_insert_sql
   SELECT
     id, context_id, position, name, NOW(), NOW()
   FROM public.context_layer_group;
+  SQL
+end
+
+def map_attributes_insert_sql
+  <<-SQL
+  INSERT INTO revamp.map_attributes(id, map_attribute_group_id, attribute_id, position, bucket_3, bucket_5, color_scale, years, aggregate_method, is_disabled, is_default, created_at, updated_at)
+  SELECT
+    public.context_layer.id, context_layer_group_id, revamp.attributes.id, position, bucket_3, bucket_5, color_scale, years, aggregate_method, NOT(COALESCE(enabled, FALSE)), COALESCE(is_default, FALSE), NOW(), NOW()
+  FROM public.context_layer
+  JOIN revamp.attributes ON public.context_layer.layer_attribute_type::text = revamp.attributes.type AND public.context_layer.layer_attribute_id = revamp.attributes.original_id;
   SQL
 end
