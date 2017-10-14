@@ -174,24 +174,24 @@ def node_attributes_double_values_insert_sql
   FROM public.node_quants
   JOIN revamp.node_attributes ON public.node_quants.quant_id = revamp.node_attributes.original_id
   JOIN revamp.attributes ON revamp.node_attributes.attribute_id = attributes.id
-  WHERE revamp.attributes.type = 'Quant'
+  WHERE revamp.attributes.type = 'Quant' and node_attributes.node_id = node_quants.node_id
   UNION ALL
   SELECT node_attributes.id, year, value, NOW(), NOW()
   FROM public.node_inds
   JOIN revamp.node_attributes ON public.node_inds.ind_id = revamp.node_attributes.original_id
   JOIN revamp.attributes ON revamp.node_attributes.attribute_id = attributes.id
-  WHERE revamp.attributes.type = 'Ind'
+  WHERE revamp.attributes.type = 'Ind' and node_attributes.node_id = node_inds.node_id
   SQL
 end
 
 def node_attributes_text_values_insert_sql
   <<-SQL
-  INSERT INTO revamp.node_attributes_double_values (node_attribute_id, year, value, created_at, updated_at)
+  INSERT INTO revamp.node_attributes_text_values (node_attribute_id, year, value, created_at, updated_at)
   SELECT node_attributes.id, year, value, NOW(), NOW()
   FROM public.node_quals
   JOIN revamp.node_attributes ON public.node_quals.qual_id = revamp.node_attributes.original_id
   JOIN revamp.attributes ON revamp.node_attributes.attribute_id = attributes.id
-  WHERE revamp.attributes.type = 'Qual'
+  WHERE revamp.attributes.type = 'Qual' and node_attributes.node_id = node_quals.node_id
   SQL
 end
 
@@ -219,24 +219,27 @@ def flow_attributes_double_values_insert_sql
   FROM public.flow_quants
   JOIN revamp.flow_attributes ON public.flow_quants.quant_id = revamp.flow_attributes.original_id
   JOIN revamp.attributes ON revamp.flow_attributes.attribute_id = attributes.id
-  WHERE revamp.attributes.type = 'Quant'
+  JOIN public.flows ON public.flow_quants.flow_id = public.flows.flow_id
+  WHERE revamp.attributes.type = 'Quant' and flow_attributes.flow_id = flow_quants.flow_id
   UNION ALL
   SELECT flow_attributes.id, year, value, NOW(), NOW()
   FROM public.flow_inds
   JOIN revamp.flow_attributes ON public.flow_inds.ind_id = revamp.flow_attributes.original_id
   JOIN revamp.attributes ON revamp.flow_attributes.attribute_id = attributes.id
-  WHERE revamp.attributes.type = 'Ind'
+  JOIN public.flows ON public.flow_inds.flow_id = public.flows.flow_id
+  WHERE revamp.attributes.type = 'Ind'and flow_attributes.flow_id = flow_inds.flow_id
   SQL
 end
 
 def flow_attributes_text_values_insert_sql
   <<-SQL
-  INSERT INTO revamp.flow_attributes_double_values (flow_attribute_id, year, value, created_at, updated_at)
+  INSERT INTO revamp.flow_attributes_text_values (flow_attribute_id, year, value, created_at, updated_at)
   SELECT flow_attributes.id, year, value, NOW(), NOW()
   FROM public.flow_quals
   JOIN revamp.flow_attributes ON public.flow_quals.qual_id = revamp.flow_attributes.original_id
-  JOIN revamp.attributes ON revamp.flow_attributes.attribute_id = attributes.id
-  WHERE revamp.attributes.type = 'Qual'
+  JOIN revamp.attributes ON revamp.flow_attributes.attribute_id = revamp.attributes.id
+  JOIN public.flows ON public.flow_quals.flow_id = public.flows.flow_id
+  WHERE revamp.attributes.type = 'Qual' and flow_attributes.flow_id = flow_quals.flow_id
   SQL
 end
 
