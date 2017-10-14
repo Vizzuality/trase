@@ -1,4 +1,4 @@
-shared_context "paraguay context" do
+shared_context 'paraguay context' do
   let!(:paraguay_context){
     FactoryGirl.create(
       :context,

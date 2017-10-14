@@ -23,5 +23,8 @@ FactoryGirl.define do
   factory :context_recolor_by do
     is_default false
     is_disabled false
+    legend_color_theme 'mock legend_color_theme'
+    legend_type 'mock legend_type'
+    position 0
   end
 end

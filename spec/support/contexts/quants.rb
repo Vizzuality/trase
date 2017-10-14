@@ -1,4 +1,4 @@
-shared_context 'quants' do
+shared_context "quants" do
   let(:area) {
     FactoryGirl.create(:quant, place_factsheet: true, place_factsheet_temporal: false, name: 'AREA_KM2', unit: 'km2', unit_type: 'area', tooltip_text: 'Municipal area according in Km2', frontend_name: 'Area')
   }
@@ -10,5 +10,8 @@ shared_context 'quants' do
   }
   let(:embargoes) {
     FactoryGirl.create(:quant, place_factsheet: true, place_factsheet_temporal: false, name: 'EMBARGOES_', unit: 'Number', unit_type: 'count', tooltip_text: 'Number of fines and embargos associated with infringements of environmental legislations per municipality', frontend_name: 'Number of environmental embargos (2015)')
+  }
+  let(:fob){
+    FactoryGirl.create(:quant, name: 'FOB')
   }
 end

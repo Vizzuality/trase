@@ -43,6 +43,8 @@ GEM
       i18n (~> 0.7)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    addressable (2.5.2)
+      public_suffix (>= 2.0.2, < 4.0)
     airbrussh (1.1.2)
       sshkit (>= 1.6.1, != 1.7.0)
     annotate (2.6.5)
@@ -92,6 +94,8 @@ GEM
       activesupport (>= 4.1.0)
     i18n (0.8.1)
     json (2.0.3)
+    json-schema (2.8.0)
+      addressable (>= 2.4)
     jsonapi (0.1.1.beta6)
       jsonapi-parser (= 0.1.1.beta3)
       jsonapi-renderer (= 0.1.1.beta1)
@@ -122,6 +126,7 @@ GEM
     pg (0.19.0)
     pg_csv (0.2)
       pg (~> 0.17)
+    public_suffix (3.0.0)
     puma (3.7.0)
     rack (2.0.1)
     rack-test (0.6.3)
@@ -221,6 +226,7 @@ DEPENDENCIES
   dotenv-rails (~> 2.1)
   enumerate_it (~> 1.4.1)
   factory_girl_rails
+  json-schema
   listen (~> 3.0.5)
   mailchimp-api
   pg (~> 0.18)
@@ -236,4 +242,4 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
 
 BUNDLED WITH
-   1.15.1
+   1.15.4
