@@ -9,16 +9,16 @@ shared_context "two flows" do
 
   include_context "brazil soy nodes"
 
-  let(:exporter2){
+  let(:exporter2_node){
     FactoryGirl.create(:node, name: 'AFG BRASIL', node_type: exporter_node_type)
   }
-  let(:port2){
+  let(:port2_node){
     FactoryGirl.create(:node, name: 'PARANAGUA', node_type: port_node_type)
   }
-  let(:importer2){
+  let(:importer2_node){
     FactoryGirl.create(:node, name: 'CHINATEX GRAINS & OILS IMP EXP CO', node_type: importer_node_type)
   }
-  let(:country_of_destination2){
+  let(:country_of_destination2_node){
     FactoryGirl.create(:node, name: 'CHINA', node_type: country_node_type)
   }
   let(:flow1){
@@ -26,7 +26,7 @@ shared_context "two flows" do
       :flow,
       context: context,
       path: [
-        biome, state, municipality, logistics_hub, port1, exporter1, importer1, country_of_destination1
+        biome_node, state_node, municipality_node, logistics_hub_node, port1_node, exporter1_node, importer1_node, country_of_destination1_node
       ].map(&:node_id),
       year: 2015
     )
@@ -36,7 +36,7 @@ shared_context "two flows" do
       :flow,
       context: context,
       path: [
-        biome, state, municipality, logistics_hub, port2, exporter2, importer2, country_of_destination2
+        biome_node, state_node, municipality_node, logistics_hub_node, port2_node, exporter2_node, importer2_node, country_of_destination2_node
       ].map(&:node_id),
       year: 2015
     )
