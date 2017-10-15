@@ -1,4 +1,4 @@
-shared_context "quants" do
+shared_context 'quants' do
   let(:area) {
     FactoryGirl.create(:quant, place_factsheet: true, place_factsheet_temporal: false, name: 'AREA_KM2', unit: 'km2', unit_type: 'area', tooltip_text: 'Municipal area according in Km2', frontend_name: 'Area')
   }
