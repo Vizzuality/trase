@@ -1,4 +1,4 @@
-shared_context "two flows" do
+shared_context 'two flows' do
   let!(:context){
     FactoryGirl.create(
       :context,
@@ -7,7 +7,7 @@ shared_context "two flows" do
     )
   }
 
-  include_context "brazil soy nodes"
+  include_context 'brazil soy nodes'
 
   let(:exporter2_node){
     FactoryGirl.create(:node, name: 'AFG BRASIL', node_type: exporter_node_type)

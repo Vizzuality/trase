@@ -1,26 +1,25 @@
 require 'rails_helper'
 
-RSpec.describe 'Get columns', type: :request do
+RSpec.describe 'Get indicators', type: :request do
   include_context 'brazil soy indicators'
-  include_context 'brazil context nodes'
 
-  describe 'GET /get_columns' do
+  describe 'GET /indicators' do
     it 'requires a context_id' do
-      get '/get_columns'
+      get '/indicators'
 
       expect(@response.status).to eq 500
       expect(JSON.parse(@response.body)).to eq({'error' => 'param is missing or the value is empty: Required context_id missing'})
     end
 
     it 'returns 404 on non-existent context_id' do
-      expect { get '/get_columns', params: {:context_id => context.id - 100} }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { get '/indicators', params: {:context_id => context.id - 100} }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it 'has the correct response structure' do
-      get '/get_columns', params: {:context_id => context.id}
+      get '/indicators', params: {:context_id => context.id}
 
       expect(@response.status).to eq 200
-      expect(@response).to match_response_schema("columns")
+      expect(@response).to match_response_schema("indicators")
     end
   end
 end
