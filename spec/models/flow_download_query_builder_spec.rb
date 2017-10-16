@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe FlowDownloadQueryBuilder, type: :model do
-  include_context "two flows"
+  include_context 'two flows'
   describe :query do
     before(:each) do
       MaterializedFlow.refresh
     end
 
-    it "should return all flows when no filter applied" do
+    it 'should return all flows when no filter applied' do
       qb = FlowDownloadQueryBuilder.new(context, {})
       expected = [
         [2015, 'Nova Ubirata', 'MATO GROSSO', 'AMAZONIA', 'Imbituba', 'Afg Brasil', 'Unknown Customer', 'Russian Federation', 'MAX_SOY_DEFORESTATION', '10'],
@@ -20,9 +20,9 @@ RSpec.describe FlowDownloadQueryBuilder, type: :model do
       ).to match_array(expected)
     end
 
-    it "should filter rows when filter applied" do
+    it 'should filter rows when filter applied' do
       qb = FlowDownloadQueryBuilder.new(context, {
-        exporters_ids: [exporter1.id]
+        exporters_ids: [exporter1_node.id]
       })
       expected = [
         [2015, 'Nova Ubirata', 'MATO GROSSO', 'AMAZONIA', 'Imbituba', 'Afg Brasil', 'Unknown Customer', 'Russian Federation', 'MAX_SOY_DEFORESTATION', '10']

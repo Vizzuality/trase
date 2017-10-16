@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "definitions": {},
+  "id": "http://example.com/example.json",
+  "properties": {
+    "nodes": {
+      "id": "/properties/nodes",
+      "minItems": 1,
+      "items": {
+        "id": "/properties/nodes/items",
+        "properties": {
+          "geoId": {
+            "id": "/properties/nodes/items/properties/geoId",
+            "type": [
+              "string",
+              "null"
+            ]          },
+          "isDomesticConsumption": {
+            "id": "/properties/nodes/items/properties/isDomesticConsumption",
+            "type": "boolean"
+          },
+          "isUnknown": {
+            "id": "/properties/nodes/items/properties/isUnknown",
+            "type": "boolean"
+          },
+          "mainNodeId": {
+            "id": "/properties/nodes/items/properties/mainNodeId",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "name": {
+            "id": "/properties/nodes/items/properties/name",
+            "type": "string"
+          },
+          "nodeId": {
+            "id": "/properties/nodes/items/properties/nodeId",
+            "type": "integer"
+          },
+          "nodeTypeId": {
+            "id": "/properties/nodes/items/properties/nodeTypeId",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "type": "object"
+}

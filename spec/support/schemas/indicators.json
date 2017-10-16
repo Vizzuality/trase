@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "definitions": {},
+  "id": "http://example.com/example.json",
+  "properties": {
+    "indicators": {
+      "id": "/properties/indicators",
+      "minItems": 1,
+      "items": {
+        "id": "/properties/indicators/items",
+        "properties": {
+          "frontendName": {
+            "id": "/properties/indicators/items/properties/frontendName",
+            "type": "string"
+          },
+          "indicatorType": {
+            "id": "/properties/indicators/items/properties/indicatorType",
+            "type": "string"
+          },
+          "name": {
+            "id": "/properties/indicators/items/properties/name",
+            "type": "string"
+          },
+          "tooltip": {
+            "id": "/properties/indicators/items/properties/tooltip",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "unit": {
+            "id": "/properties/indicators/items/properties/unit",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "unitType": {
+            "id": "/properties/indicators/items/properties/unitType",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "type": "object"
+}

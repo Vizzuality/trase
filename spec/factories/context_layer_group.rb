@@ -14,15 +14,7 @@
 #
 
 FactoryGirl.define do
-  factory :context do
-    country
-    commodity
-    years [2010, 2011, 2012, 2013, 2014, 2015]
-  end
-
-  factory :context_indicator do
-    context
-    association :indicator, factory: :quant
+  factory :context_layer_group do
     position 0
   end
 end

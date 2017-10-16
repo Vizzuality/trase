@@ -14,15 +14,11 @@
 #
 
 FactoryGirl.define do
-  factory :context do
-    country
-    commodity
-    years [2010, 2011, 2012, 2013, 2014, 2015]
-  end
-
-  factory :context_indicator do
-    context
-    association :indicator, factory: :quant
+  factory :context_layer do
+    bucket_3 [5, 10]
+    bucket_5 [1, 4, 6, 8]
     position 0
+    color_scale 'blue'
+    enabled true
   end
 end
