@@ -17,6 +17,16 @@ class RecolorBySerializer < ActiveModel::Serializer
     object.tooltip_text
   end
 
+  # TODO: workaround to enforce either true or false. Can be removed once old schema is dropped
+  attribute :is_default do
+    object.is_default.present?
+  end
+
+  # TODO: workaround to enforce either true or false. Can be removed once old schema is dropped
+  attribute :is_disabled do
+    object.is_disabled.present?
+  end
+
   attribute :nodes do
     flows = []
     if (object.legend_type.eql? 'qual')

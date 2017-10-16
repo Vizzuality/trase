@@ -2,12 +2,14 @@ class GeoIdController < ApplicationController
 
   def index
     node_id = params[:node_id]
-    target_column_id = params[:target_column_id].to_i
+    target_column_id = params[:target_column_id]
     years = params[:years]
 
     raise ActionController::ParameterMissing, 'Required node_id missing' if node_id.nil?
-    raise ActionController::ParameterMissing, 'Required target_column missing' if target_column_id.nil?
+    raise ActionController::ParameterMissing, 'Required target_column_id missing' if target_column_id.nil?
     raise ActionController::ParameterMissing, 'Required year missing' if years.nil?
+
+    target_column_id = target_column_id.to_i
 
     min_path_length_query = Node.joins('JOIN node_types ON nodes.node_type_id = node_types.node_type_id')
                       .select('count(distinct node_types.node_type_id) as distinct_count')
@@ -29,7 +31,7 @@ class GeoIdController < ApplicationController
                  .where('flows.year IN (:years)',
                         years: years).group('nodes.node_id')
 
-    render json: matching_nodes
+    render json: matching_nodes, each_serializer: LinkedGeoIdsSerializer
   end
 
 end
