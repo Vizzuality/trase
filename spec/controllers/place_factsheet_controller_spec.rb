@@ -18,7 +18,7 @@ RSpec.describe PlaceFactsheetController, type: :controller do
   }
 
   let!(:municipality_total_defor_rate_2015){
-    FactoryGirl.create(:node_qual, qual: deforestation_v2, value: 1000, year: 2015, node: municipality_node)
+    FactoryGirl.create(:node_quant, quant: deforestation_v2, value: 1000, year: 2015, node: municipality_node)
   }
 
   describe 'GET get_place_node_attributes loads basic data' do
