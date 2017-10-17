@@ -1,4 +1,4 @@
-shared_context 'brazil node types' do
+shared_context 'node types' do
   let(:biome_node_type){
     FactoryGirl.create(:node_type, node_type:NodeTypeName::BIOME)
   }

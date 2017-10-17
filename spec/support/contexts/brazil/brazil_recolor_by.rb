@@ -1,7 +1,7 @@
 shared_context 'brazil recolor by' do
+  include_context 'brazil contexts'
   include_context 'quals'
   include_context 'inds'
-  include_context 'brazil soy indicators'
 
   let!(:recolor_by_forest_500){
     FactoryGirl.create(:context_recolor_by, recolor_attribute: forest_500, tooltip_text: 'forest 500 tooltip text', context: context)
