@@ -18,6 +18,7 @@ class CreateMapAttributes < ActiveRecord::Migration[5.0]
       end
 
       add_index :map_attributes, [:map_attribute_group_id, :position], unique: true
+      add_index :map_attributes, [:map_attribute_group_id, :attribute_id], unique: true
     end
   end
 

@@ -12,6 +12,7 @@ class CreateDownloadAttributes < ActiveRecord::Migration[5.0]
       end
 
       add_index :download_attributes, [:context_id, :position], unique: true
+      add_index :download_attributes, [:context_id, :attribute_id], unique: true
     end
   end
 

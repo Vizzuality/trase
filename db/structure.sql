@@ -2417,6 +2417,13 @@ CREATE INDEX index_download_attributes_on_context_id ON download_attributes USIN
 
 
 --
+-- Name: index_download_attributes_on_context_id_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_download_attributes_on_context_id_and_attribute_id ON download_attributes USING btree (context_id, attribute_id);
+
+
+--
 -- Name: index_download_attributes_on_context_id_and_position; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -2522,6 +2529,13 @@ CREATE INDEX index_map_attributes_on_map_attribute_group_id ON map_attributes US
 
 
 --
+-- Name: index_map_attributes_on_map_attribute_group_id_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_map_attributes_on_map_attribute_group_id_and_attribute_id ON map_attributes USING btree (map_attribute_group_id, attribute_id);
+
+
+--
 -- Name: index_map_attributes_on_map_attribute_group_id_and_position; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -2606,6 +2620,13 @@ CREATE INDEX index_recolor_by_attributes_on_context_id ON recolor_by_attributes 
 
 
 --
+-- Name: index_recolor_by_attributes_on_context_id_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_recolor_by_attributes_on_context_id_and_attribute_id ON recolor_by_attributes USING btree (context_id, attribute_id);
+
+
+--
 -- Name: index_recolor_by_attributes_on_context_id_group_number_position; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -2624,6 +2645,13 @@ CREATE INDEX index_resize_by_attributes_on_attribute_id ON resize_by_attributes 
 --
 
 CREATE INDEX index_resize_by_attributes_on_context_id ON resize_by_attributes USING btree (context_id);
+
+
+--
+-- Name: index_resize_by_attributes_on_context_id_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_resize_by_attributes_on_context_id_and_attribute_id ON resize_by_attributes USING btree (context_id, attribute_id);
 
 
 --

@@ -22,6 +22,7 @@ class CreateRecolorByAttributes < ActiveRecord::Migration[5.0]
 
       add_index :recolor_by_attributes, [:context_id, :group_number, :position], unique: true,
         name: 'index_recolor_by_attributes_on_context_id_group_number_position'
+      add_index :recolor_by_attributes, [:context_id, :attribute_id], unique: true
     end
   end
 
