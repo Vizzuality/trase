@@ -1027,13 +1027,12 @@ CREATE TABLE schema_migrations (
 SET search_path = revamp, pg_catalog;
 
 --
--- Name: attributes; Type: TABLE; Schema: revamp; Owner: -
+-- Name: inds; Type: TABLE; Schema: revamp; Owner: -
 --
 
-CREATE TABLE attributes (
+CREATE TABLE inds (
     id integer NOT NULL,
     name text NOT NULL,
-    type text NOT NULL,
     unit text,
     unit_type text,
     tooltip boolean DEFAULT false NOT NULL,
@@ -1045,22 +1044,93 @@ CREATE TABLE attributes (
 
 
 --
--- Name: attributes_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+-- Name: quals; Type: TABLE; Schema: revamp; Owner: -
 --
 
-CREATE SEQUENCE attributes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+CREATE TABLE quals (
+    id integer NOT NULL,
+    name text NOT NULL,
+    tooltip boolean DEFAULT false NOT NULL,
+    tooltip_text text,
+    frontend_name text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
 
 
 --
--- Name: attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+-- Name: quants; Type: TABLE; Schema: revamp; Owner: -
 --
 
-ALTER SEQUENCE attributes_id_seq OWNED BY attributes.id;
+CREATE TABLE quants (
+    id integer NOT NULL,
+    name text NOT NULL,
+    unit text,
+    unit_type text,
+    tooltip boolean DEFAULT false NOT NULL,
+    tooltip_text text,
+    frontend_name text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: attributes_mv; Type: MATERIALIZED VIEW; Schema: revamp; Owner: -
+--
+
+CREATE MATERIALIZED VIEW attributes_mv AS
+ SELECT row_number() OVER () AS id,
+    s.name,
+    s.type,
+    s.original_id,
+    s.unit,
+    s.unit_type,
+    s.tooltip,
+    s.tooltip_text,
+    s.frontend_name,
+    s.aggregate_method,
+    s.created_at,
+    s.updated_at
+   FROM ( SELECT quants.name,
+            'Quant'::text AS type,
+            quants.id AS original_id,
+            quants.unit,
+            quants.unit_type,
+            quants.tooltip,
+            quants.tooltip_text,
+            quants.frontend_name,
+            'SUM'::text AS aggregate_method,
+            quants.created_at,
+            quants.updated_at
+           FROM quants
+        UNION ALL
+         SELECT inds.name,
+            'Ind'::text,
+            inds.id AS original_id,
+            inds.unit,
+            inds.unit_type,
+            inds.tooltip,
+            inds.tooltip_text,
+            inds.frontend_name,
+            'AVG'::text AS aggregate_method,
+            inds.created_at,
+            inds.updated_at
+           FROM inds
+        UNION ALL
+         SELECT quals.name,
+            'Qual'::text,
+            quals.id AS original_id,
+            NULL::text,
+            NULL::text,
+            quals.tooltip,
+            quals.tooltip_text,
+            quals.frontend_name,
+            NULL::text,
+            quals.created_at,
+            quals.updated_at
+           FROM quals) s
+  WITH NO DATA;
 
 
 --
@@ -1280,7 +1350,6 @@ ALTER SEQUENCE countries_id_seq OWNED BY countries.id;
 CREATE TABLE download_attributes (
     id integer NOT NULL,
     context_id integer NOT NULL,
-    attribute_id integer NOT NULL,
     "position" integer NOT NULL,
     name_in_download text NOT NULL,
     years integer[],
@@ -1309,26 +1378,108 @@ ALTER SEQUENCE download_attributes_id_seq OWNED BY download_attributes.id;
 
 
 --
--- Name: flow_attributes; Type: TABLE; Schema: revamp; Owner: -
+-- Name: download_quals; Type: TABLE; Schema: revamp; Owner: -
 --
 
-CREATE TABLE flow_attributes (
+CREATE TABLE download_quals (
     id integer NOT NULL,
-    flow_id integer NOT NULL,
-    attribute_id integer NOT NULL,
+    download_attribute_id integer NOT NULL,
+    qual_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
 
 
 --
--- Name: flow_attributes_double_values; Type: TABLE; Schema: revamp; Owner: -
+-- Name: download_quants; Type: TABLE; Schema: revamp; Owner: -
 --
 
-CREATE TABLE flow_attributes_double_values (
+CREATE TABLE download_quants (
     id integer NOT NULL,
-    flow_attribute_id integer NOT NULL,
-    year integer,
+    download_attribute_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: download_attributes_mv; Type: MATERIALIZED VIEW; Schema: revamp; Owner: -
+--
+
+CREATE MATERIALIZED VIEW download_attributes_mv AS
+ SELECT da.id,
+    da.context_id,
+    da."position",
+    da.name_in_download,
+    da.years,
+    da.created_at,
+    da.updated_at,
+    a.id AS attribute_id
+   FROM ((download_quants daq
+     JOIN download_attributes da ON ((da.id = daq.download_attribute_id)))
+     JOIN attributes_mv a ON (((a.original_id = daq.quant_id) AND (a.type = 'Quant'::text))))
+UNION ALL
+ SELECT da.id,
+    da.context_id,
+    da."position",
+    da.name_in_download,
+    da.years,
+    da.created_at,
+    da.updated_at,
+    a.id AS attribute_id
+   FROM ((download_quals daq
+     JOIN download_attributes da ON ((da.id = daq.download_attribute_id)))
+     JOIN attributes_mv a ON (((a.original_id = daq.qual_id) AND (a.type = 'Qual'::text))))
+  WITH NO DATA;
+
+
+--
+-- Name: download_quals_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE download_quals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: download_quals_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE download_quals_id_seq OWNED BY download_quals.id;
+
+
+--
+-- Name: download_quants_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE download_quants_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: download_quants_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE download_quants_id_seq OWNED BY download_quants.id;
+
+
+--
+-- Name: flow_inds; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE flow_inds (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    ind_id integer NOT NULL,
     value double precision NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -1336,10 +1487,10 @@ CREATE TABLE flow_attributes_double_values (
 
 
 --
--- Name: flow_attributes_double_values_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+-- Name: flow_inds_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
-CREATE SEQUENCE flow_attributes_double_values_id_seq
+CREATE SEQUENCE flow_inds_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1348,39 +1499,20 @@ CREATE SEQUENCE flow_attributes_double_values_id_seq
 
 
 --
--- Name: flow_attributes_double_values_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+-- Name: flow_inds_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
 --
 
-ALTER SEQUENCE flow_attributes_double_values_id_seq OWNED BY flow_attributes_double_values.id;
-
-
---
--- Name: flow_attributes_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
---
-
-CREATE SEQUENCE flow_attributes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+ALTER SEQUENCE flow_inds_id_seq OWNED BY flow_inds.id;
 
 
 --
--- Name: flow_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+-- Name: flow_quals; Type: TABLE; Schema: revamp; Owner: -
 --
 
-ALTER SEQUENCE flow_attributes_id_seq OWNED BY flow_attributes.id;
-
-
---
--- Name: flow_attributes_text_values; Type: TABLE; Schema: revamp; Owner: -
---
-
-CREATE TABLE flow_attributes_text_values (
+CREATE TABLE flow_quals (
     id integer NOT NULL,
-    flow_attribute_id integer NOT NULL,
-    year integer,
+    flow_id integer NOT NULL,
+    qual_id integer NOT NULL,
     value text NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -1388,10 +1520,10 @@ CREATE TABLE flow_attributes_text_values (
 
 
 --
--- Name: flow_attributes_text_values_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+-- Name: flow_quals_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
-CREATE SEQUENCE flow_attributes_text_values_id_seq
+CREATE SEQUENCE flow_quals_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1400,10 +1532,43 @@ CREATE SEQUENCE flow_attributes_text_values_id_seq
 
 
 --
--- Name: flow_attributes_text_values_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+-- Name: flow_quals_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
 --
 
-ALTER SEQUENCE flow_attributes_text_values_id_seq OWNED BY flow_attributes_text_values.id;
+ALTER SEQUENCE flow_quals_id_seq OWNED BY flow_quals.id;
+
+
+--
+-- Name: flow_quants; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE flow_quants (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: flow_quants_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE flow_quants_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: flow_quants_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE flow_quants_id_seq OWNED BY flow_quants.id;
 
 
 --
@@ -1437,6 +1602,25 @@ CREATE SEQUENCE flows_id_seq
 --
 
 ALTER SEQUENCE flows_id_seq OWNED BY flows.id;
+
+
+--
+-- Name: inds_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE inds_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: inds_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE inds_id_seq OWNED BY inds.id;
 
 
 --
@@ -1479,13 +1663,11 @@ ALTER SEQUENCE map_attribute_groups_id_seq OWNED BY map_attribute_groups.id;
 CREATE TABLE map_attributes (
     id integer NOT NULL,
     map_attribute_group_id integer NOT NULL,
-    attribute_id integer NOT NULL,
     "position" integer NOT NULL,
     bucket_3 double precision[] DEFAULT '{}'::double precision[] NOT NULL,
     bucket_5 double precision[] DEFAULT '{}'::double precision[] NOT NULL,
     color_scale text,
     years integer[],
-    aggregate_method text,
     is_disabled boolean DEFAULT false NOT NULL,
     is_default boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -1513,25 +1695,116 @@ ALTER SEQUENCE map_attributes_id_seq OWNED BY map_attributes.id;
 
 
 --
--- Name: node_attributes; Type: TABLE; Schema: revamp; Owner: -
+-- Name: map_inds; Type: TABLE; Schema: revamp; Owner: -
 --
 
-CREATE TABLE node_attributes (
+CREATE TABLE map_inds (
     id integer NOT NULL,
-    node_id integer NOT NULL,
-    attribute_id integer NOT NULL,
+    map_attribute_id integer NOT NULL,
+    ind_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
 
 
 --
--- Name: node_attributes_double_values; Type: TABLE; Schema: revamp; Owner: -
+-- Name: map_quants; Type: TABLE; Schema: revamp; Owner: -
 --
 
-CREATE TABLE node_attributes_double_values (
+CREATE TABLE map_quants (
     id integer NOT NULL,
-    node_attribute_id integer NOT NULL,
+    map_attribute_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: map_attributes_mv; Type: MATERIALIZED VIEW; Schema: revamp; Owner: -
+--
+
+CREATE MATERIALIZED VIEW map_attributes_mv AS
+ SELECT ma.id,
+    ma.map_attribute_group_id,
+    ma."position",
+    ma.bucket_3,
+    ma.bucket_5,
+    ma.color_scale,
+    ma.years,
+    ma.is_disabled,
+    ma.is_default,
+    ma.created_at,
+    ma.updated_at,
+    a.id AS attribute_id
+   FROM ((map_quants maq
+     JOIN map_attributes ma ON ((ma.id = maq.map_attribute_id)))
+     JOIN attributes_mv a ON (((a.original_id = maq.quant_id) AND (a.type = 'Quant'::text))))
+UNION ALL
+ SELECT ma.id,
+    ma.map_attribute_group_id,
+    ma."position",
+    ma.bucket_3,
+    ma.bucket_5,
+    ma.color_scale,
+    ma.years,
+    ma.is_disabled,
+    ma.is_default,
+    ma.created_at,
+    ma.updated_at,
+    a.id AS attribute_id
+   FROM ((map_inds mai
+     JOIN map_attributes ma ON ((ma.id = mai.map_attribute_id)))
+     JOIN attributes_mv a ON (((a.original_id = mai.ind_id) AND (a.type = 'Ind'::text))))
+  WITH NO DATA;
+
+
+--
+-- Name: map_inds_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE map_inds_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: map_inds_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE map_inds_id_seq OWNED BY map_inds.id;
+
+
+--
+-- Name: map_quants_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE map_quants_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: map_quants_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE map_quants_id_seq OWNED BY map_quants.id;
+
+
+--
+-- Name: node_inds; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE node_inds (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    ind_id integer NOT NULL,
     year integer,
     value double precision NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -1540,10 +1813,10 @@ CREATE TABLE node_attributes_double_values (
 
 
 --
--- Name: node_attributes_double_values_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+-- Name: node_inds_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
-CREATE SEQUENCE node_attributes_double_values_id_seq
+CREATE SEQUENCE node_inds_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1552,38 +1825,20 @@ CREATE SEQUENCE node_attributes_double_values_id_seq
 
 
 --
--- Name: node_attributes_double_values_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+-- Name: node_inds_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
 --
 
-ALTER SEQUENCE node_attributes_double_values_id_seq OWNED BY node_attributes_double_values.id;
-
-
---
--- Name: node_attributes_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
---
-
-CREATE SEQUENCE node_attributes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+ALTER SEQUENCE node_inds_id_seq OWNED BY node_inds.id;
 
 
 --
--- Name: node_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+-- Name: node_quals; Type: TABLE; Schema: revamp; Owner: -
 --
 
-ALTER SEQUENCE node_attributes_id_seq OWNED BY node_attributes.id;
-
-
---
--- Name: node_attributes_text_values; Type: TABLE; Schema: revamp; Owner: -
---
-
-CREATE TABLE node_attributes_text_values (
+CREATE TABLE node_quals (
     id integer NOT NULL,
-    node_attribute_id integer NOT NULL,
+    node_id integer NOT NULL,
+    qual_id integer NOT NULL,
     year integer,
     value text NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -1592,10 +1847,10 @@ CREATE TABLE node_attributes_text_values (
 
 
 --
--- Name: node_attributes_text_values_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+-- Name: node_quals_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
-CREATE SEQUENCE node_attributes_text_values_id_seq
+CREATE SEQUENCE node_quals_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1604,10 +1859,44 @@ CREATE SEQUENCE node_attributes_text_values_id_seq
 
 
 --
--- Name: node_attributes_text_values_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+-- Name: node_quals_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
 --
 
-ALTER SEQUENCE node_attributes_text_values_id_seq OWNED BY node_attributes_text_values.id;
+ALTER SEQUENCE node_quals_id_seq OWNED BY node_quals.id;
+
+
+--
+-- Name: node_quants; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE node_quants (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    year integer,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: node_quants_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE node_quants_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: node_quants_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE node_quants_id_seq OWNED BY node_quants.id;
 
 
 --
@@ -1677,13 +1966,50 @@ ALTER SEQUENCE nodes_id_seq OWNED BY nodes.id;
 
 
 --
+-- Name: quals_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE quals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: quals_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE quals_id_seq OWNED BY quals.id;
+
+
+--
+-- Name: quants_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE quants_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: quants_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE quants_id_seq OWNED BY quants.id;
+
+
+--
 -- Name: recolor_by_attributes; Type: TABLE; Schema: revamp; Owner: -
 --
 
 CREATE TABLE recolor_by_attributes (
     id integer NOT NULL,
     context_id integer NOT NULL,
-    attribute_id integer NOT NULL,
     group_number integer DEFAULT 1 NOT NULL,
     "position" integer NOT NULL,
     legend_type text NOT NULL,
@@ -1721,13 +2047,125 @@ ALTER SEQUENCE recolor_by_attributes_id_seq OWNED BY recolor_by_attributes.id;
 
 
 --
+-- Name: recolor_by_inds; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE recolor_by_inds (
+    id integer NOT NULL,
+    recolor_by_attribute_id integer NOT NULL,
+    ind_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: recolor_by_quals; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE recolor_by_quals (
+    id integer NOT NULL,
+    recolor_by_attribute_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: recolor_by_attributes_mv; Type: MATERIALIZED VIEW; Schema: revamp; Owner: -
+--
+
+CREATE MATERIALIZED VIEW recolor_by_attributes_mv AS
+ SELECT ra.id,
+    ra.context_id,
+    ra.group_number,
+    ra."position",
+    ra.legend_type,
+    ra.legend_color_theme,
+    ra.interval_count,
+    ra.min_value,
+    ra.max_value,
+    ra.divisor,
+    ra.tooltip_text,
+    ra.years,
+    ra.is_disabled,
+    ra.is_default,
+    ra.created_at,
+    ra.updated_at,
+    a.id AS attribute_id
+   FROM ((recolor_by_inds rai
+     JOIN recolor_by_attributes ra ON ((ra.id = rai.recolor_by_attribute_id)))
+     JOIN attributes_mv a ON (((a.original_id = rai.ind_id) AND (a.type = 'Ind'::text))))
+UNION ALL
+ SELECT ra.id,
+    ra.context_id,
+    ra.group_number,
+    ra."position",
+    ra.legend_type,
+    ra.legend_color_theme,
+    ra.interval_count,
+    ra.min_value,
+    ra.max_value,
+    ra.divisor,
+    ra.tooltip_text,
+    ra.years,
+    ra.is_disabled,
+    ra.is_default,
+    ra.created_at,
+    ra.updated_at,
+    a.id AS attribute_id
+   FROM ((recolor_by_quals raq
+     JOIN recolor_by_attributes ra ON ((ra.id = raq.recolor_by_attribute_id)))
+     JOIN attributes_mv a ON (((a.original_id = raq.qual_id) AND (a.type = 'Qual'::text))))
+  WITH NO DATA;
+
+
+--
+-- Name: recolor_by_inds_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE recolor_by_inds_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: recolor_by_inds_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE recolor_by_inds_id_seq OWNED BY recolor_by_inds.id;
+
+
+--
+-- Name: recolor_by_quals_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE recolor_by_quals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: recolor_by_quals_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE recolor_by_quals_id_seq OWNED BY recolor_by_quals.id;
+
+
+--
 -- Name: resize_by_attributes; Type: TABLE; Schema: revamp; Owner: -
 --
 
 CREATE TABLE resize_by_attributes (
     id integer NOT NULL,
     context_id integer NOT NULL,
-    attribute_id integer NOT NULL,
     group_number integer DEFAULT 1 NOT NULL,
     "position" integer NOT NULL,
     tooltip_text text,
@@ -1756,6 +2194,60 @@ CREATE SEQUENCE resize_by_attributes_id_seq
 --
 
 ALTER SEQUENCE resize_by_attributes_id_seq OWNED BY resize_by_attributes.id;
+
+
+--
+-- Name: resize_by_quants; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE resize_by_quants (
+    id integer NOT NULL,
+    resize_by_attribute_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: resize_by_attributes_mv; Type: MATERIALIZED VIEW; Schema: revamp; Owner: -
+--
+
+CREATE MATERIALIZED VIEW resize_by_attributes_mv AS
+ SELECT ra.id,
+    ra.context_id,
+    ra.group_number,
+    ra."position",
+    ra.tooltip_text,
+    ra.years,
+    ra.is_disabled,
+    ra.is_default,
+    ra.created_at,
+    ra.updated_at,
+    a.id AS attribute_id
+   FROM ((resize_by_quants raq
+     JOIN resize_by_attributes ra ON ((ra.id = raq.resize_by_attribute_id)))
+     JOIN attributes_mv a ON (((a.original_id = raq.quant_id) AND (a.type = 'Quant'::text))))
+  WITH NO DATA;
+
+
+--
+-- Name: resize_by_quants_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE resize_by_quants_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: resize_by_quants_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE resize_by_quants_id_seq OWNED BY resize_by_quants.id;
 
 
 SET search_path = public, pg_catalog;
@@ -1889,13 +2381,6 @@ ALTER TABLE ONLY quants ALTER COLUMN quant_id SET DEFAULT nextval('quants_quant_
 SET search_path = revamp, pg_catalog;
 
 --
--- Name: attributes id; Type: DEFAULT; Schema: revamp; Owner: -
---
-
-ALTER TABLE ONLY attributes ALTER COLUMN id SET DEFAULT nextval('attributes_id_seq'::regclass);
-
-
---
 -- Name: carto_layers id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
@@ -1945,24 +2430,38 @@ ALTER TABLE ONLY download_attributes ALTER COLUMN id SET DEFAULT nextval('downlo
 
 
 --
--- Name: flow_attributes id; Type: DEFAULT; Schema: revamp; Owner: -
+-- Name: download_quals id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
-ALTER TABLE ONLY flow_attributes ALTER COLUMN id SET DEFAULT nextval('flow_attributes_id_seq'::regclass);
-
-
---
--- Name: flow_attributes_double_values id; Type: DEFAULT; Schema: revamp; Owner: -
---
-
-ALTER TABLE ONLY flow_attributes_double_values ALTER COLUMN id SET DEFAULT nextval('flow_attributes_double_values_id_seq'::regclass);
+ALTER TABLE ONLY download_quals ALTER COLUMN id SET DEFAULT nextval('download_quals_id_seq'::regclass);
 
 
 --
--- Name: flow_attributes_text_values id; Type: DEFAULT; Schema: revamp; Owner: -
+-- Name: download_quants id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
-ALTER TABLE ONLY flow_attributes_text_values ALTER COLUMN id SET DEFAULT nextval('flow_attributes_text_values_id_seq'::regclass);
+ALTER TABLE ONLY download_quants ALTER COLUMN id SET DEFAULT nextval('download_quants_id_seq'::regclass);
+
+
+--
+-- Name: flow_inds id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_inds ALTER COLUMN id SET DEFAULT nextval('flow_inds_id_seq'::regclass);
+
+
+--
+-- Name: flow_quals id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_quals ALTER COLUMN id SET DEFAULT nextval('flow_quals_id_seq'::regclass);
+
+
+--
+-- Name: flow_quants id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_quants ALTER COLUMN id SET DEFAULT nextval('flow_quants_id_seq'::regclass);
 
 
 --
@@ -1970,6 +2469,13 @@ ALTER TABLE ONLY flow_attributes_text_values ALTER COLUMN id SET DEFAULT nextval
 --
 
 ALTER TABLE ONLY flows ALTER COLUMN id SET DEFAULT nextval('flows_id_seq'::regclass);
+
+
+--
+-- Name: inds id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY inds ALTER COLUMN id SET DEFAULT nextval('inds_id_seq'::regclass);
 
 
 --
@@ -1987,24 +2493,38 @@ ALTER TABLE ONLY map_attributes ALTER COLUMN id SET DEFAULT nextval('map_attribu
 
 
 --
--- Name: node_attributes id; Type: DEFAULT; Schema: revamp; Owner: -
+-- Name: map_inds id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
-ALTER TABLE ONLY node_attributes ALTER COLUMN id SET DEFAULT nextval('node_attributes_id_seq'::regclass);
-
-
---
--- Name: node_attributes_double_values id; Type: DEFAULT; Schema: revamp; Owner: -
---
-
-ALTER TABLE ONLY node_attributes_double_values ALTER COLUMN id SET DEFAULT nextval('node_attributes_double_values_id_seq'::regclass);
+ALTER TABLE ONLY map_inds ALTER COLUMN id SET DEFAULT nextval('map_inds_id_seq'::regclass);
 
 
 --
--- Name: node_attributes_text_values id; Type: DEFAULT; Schema: revamp; Owner: -
+-- Name: map_quants id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
-ALTER TABLE ONLY node_attributes_text_values ALTER COLUMN id SET DEFAULT nextval('node_attributes_text_values_id_seq'::regclass);
+ALTER TABLE ONLY map_quants ALTER COLUMN id SET DEFAULT nextval('map_quants_id_seq'::regclass);
+
+
+--
+-- Name: node_inds id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_inds ALTER COLUMN id SET DEFAULT nextval('node_inds_id_seq'::regclass);
+
+
+--
+-- Name: node_quals id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_quals ALTER COLUMN id SET DEFAULT nextval('node_quals_id_seq'::regclass);
+
+
+--
+-- Name: node_quants id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_quants ALTER COLUMN id SET DEFAULT nextval('node_quants_id_seq'::regclass);
 
 
 --
@@ -2022,6 +2542,20 @@ ALTER TABLE ONLY nodes ALTER COLUMN id SET DEFAULT nextval('nodes_id_seq'::regcl
 
 
 --
+-- Name: quals id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY quals ALTER COLUMN id SET DEFAULT nextval('quals_id_seq'::regclass);
+
+
+--
+-- Name: quants id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY quants ALTER COLUMN id SET DEFAULT nextval('quants_id_seq'::regclass);
+
+
+--
 -- Name: recolor_by_attributes id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
@@ -2029,10 +2563,31 @@ ALTER TABLE ONLY recolor_by_attributes ALTER COLUMN id SET DEFAULT nextval('reco
 
 
 --
+-- Name: recolor_by_inds id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY recolor_by_inds ALTER COLUMN id SET DEFAULT nextval('recolor_by_inds_id_seq'::regclass);
+
+
+--
+-- Name: recolor_by_quals id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY recolor_by_quals ALTER COLUMN id SET DEFAULT nextval('recolor_by_quals_id_seq'::regclass);
+
+
+--
 -- Name: resize_by_attributes id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY resize_by_attributes ALTER COLUMN id SET DEFAULT nextval('resize_by_attributes_id_seq'::regclass);
+
+
+--
+-- Name: resize_by_quants id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY resize_by_quants ALTER COLUMN id SET DEFAULT nextval('resize_by_quants_id_seq'::regclass);
 
 
 SET search_path = public, pg_catalog;
@@ -2192,14 +2747,6 @@ ALTER TABLE ONLY schema_migrations
 SET search_path = revamp, pg_catalog;
 
 --
--- Name: attributes attributes_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
---
-
-ALTER TABLE ONLY attributes
-    ADD CONSTRAINT attributes_pkey PRIMARY KEY (id);
-
-
---
 -- Name: carto_layers carto_layers_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -2256,27 +2803,43 @@ ALTER TABLE ONLY download_attributes
 
 
 --
--- Name: flow_attributes_double_values flow_attributes_double_values_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+-- Name: download_quals download_quals_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
-ALTER TABLE ONLY flow_attributes_double_values
-    ADD CONSTRAINT flow_attributes_double_values_pkey PRIMARY KEY (id);
-
-
---
--- Name: flow_attributes flow_attributes_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
---
-
-ALTER TABLE ONLY flow_attributes
-    ADD CONSTRAINT flow_attributes_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY download_quals
+    ADD CONSTRAINT download_quals_pkey PRIMARY KEY (id);
 
 
 --
--- Name: flow_attributes_text_values flow_attributes_text_values_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+-- Name: download_quants download_quants_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
-ALTER TABLE ONLY flow_attributes_text_values
-    ADD CONSTRAINT flow_attributes_text_values_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY download_quants
+    ADD CONSTRAINT download_quants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: flow_inds flow_inds_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_inds
+    ADD CONSTRAINT flow_inds_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: flow_quals flow_quals_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_quals
+    ADD CONSTRAINT flow_quals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: flow_quants flow_quants_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_quants
+    ADD CONSTRAINT flow_quants_pkey PRIMARY KEY (id);
 
 
 --
@@ -2285,6 +2848,14 @@ ALTER TABLE ONLY flow_attributes_text_values
 
 ALTER TABLE ONLY flows
     ADD CONSTRAINT flows_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: inds inds_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY inds
+    ADD CONSTRAINT inds_pkey PRIMARY KEY (id);
 
 
 --
@@ -2304,27 +2875,43 @@ ALTER TABLE ONLY map_attributes
 
 
 --
--- Name: node_attributes_double_values node_attributes_double_values_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+-- Name: map_inds map_inds_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
-ALTER TABLE ONLY node_attributes_double_values
-    ADD CONSTRAINT node_attributes_double_values_pkey PRIMARY KEY (id);
-
-
---
--- Name: node_attributes node_attributes_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
---
-
-ALTER TABLE ONLY node_attributes
-    ADD CONSTRAINT node_attributes_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY map_inds
+    ADD CONSTRAINT map_inds_pkey PRIMARY KEY (id);
 
 
 --
--- Name: node_attributes_text_values node_attributes_text_values_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+-- Name: map_quants map_quants_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
-ALTER TABLE ONLY node_attributes_text_values
-    ADD CONSTRAINT node_attributes_text_values_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY map_quants
+    ADD CONSTRAINT map_quants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: node_inds node_inds_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_inds
+    ADD CONSTRAINT node_inds_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: node_quals node_quals_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_quals
+    ADD CONSTRAINT node_quals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: node_quants node_quants_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_quants
+    ADD CONSTRAINT node_quants_pkey PRIMARY KEY (id);
 
 
 --
@@ -2344,6 +2931,22 @@ ALTER TABLE ONLY nodes
 
 
 --
+-- Name: quals quals_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY quals
+    ADD CONSTRAINT quals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: quants quants_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY quants
+    ADD CONSTRAINT quants_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: recolor_by_attributes recolor_by_attributes_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -2352,11 +2955,35 @@ ALTER TABLE ONLY recolor_by_attributes
 
 
 --
+-- Name: recolor_by_inds recolor_by_inds_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY recolor_by_inds
+    ADD CONSTRAINT recolor_by_inds_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: recolor_by_quals recolor_by_quals_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY recolor_by_quals
+    ADD CONSTRAINT recolor_by_quals_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: resize_by_attributes resize_by_attributes_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY resize_by_attributes
     ADD CONSTRAINT resize_by_attributes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: resize_by_quants resize_by_quants_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY resize_by_quants
+    ADD CONSTRAINT resize_by_quants_pkey PRIMARY KEY (id);
 
 
 SET search_path = public, pg_catalog;
@@ -2448,10 +3075,17 @@ CREATE INDEX index_nodes_on_node_type_id ON nodes USING btree (node_type_id);
 SET search_path = revamp, pg_catalog;
 
 --
--- Name: index_attributes_on_name; Type: INDEX; Schema: revamp; Owner: -
+-- Name: index_attributes_mv_on_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE UNIQUE INDEX index_attributes_on_name ON attributes USING btree (name);
+CREATE UNIQUE INDEX index_attributes_mv_on_id ON attributes_mv USING btree (id);
+
+
+--
+-- Name: index_attributes_mv_on_name; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_attributes_mv_on_name ON attributes_mv USING btree (name);
 
 
 --
@@ -2539,10 +3173,17 @@ CREATE UNIQUE INDEX index_countries_on_iso2 ON countries USING btree (iso2);
 
 
 --
--- Name: index_download_attributes_on_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+-- Name: index_download_attributes_mv_on_context_id_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE INDEX index_download_attributes_on_attribute_id ON download_attributes USING btree (attribute_id);
+CREATE INDEX index_download_attributes_mv_on_context_id_and_attribute_id ON download_attributes_mv USING btree (context_id, attribute_id);
+
+
+--
+-- Name: index_download_attributes_mv_on_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_download_attributes_mv_on_id ON download_attributes_mv USING btree (id);
 
 
 --
@@ -2553,13 +3194,6 @@ CREATE INDEX index_download_attributes_on_context_id ON download_attributes USIN
 
 
 --
--- Name: index_download_attributes_on_context_id_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_download_attributes_on_context_id_and_attribute_id ON download_attributes USING btree (context_id, attribute_id);
-
-
---
 -- Name: index_download_attributes_on_context_id_and_position; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -2567,52 +3201,108 @@ CREATE UNIQUE INDEX index_download_attributes_on_context_id_and_position ON down
 
 
 --
--- Name: index_flow_attributes_double_values_on_flow_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+-- Name: index_download_quals_on_download_attribute_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE INDEX index_flow_attributes_double_values_on_flow_attribute_id ON flow_attributes_double_values USING btree (flow_attribute_id);
-
-
---
--- Name: index_flow_attributes_double_values_on_id_and_year; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_flow_attributes_double_values_on_id_and_year ON flow_attributes_double_values USING btree (flow_attribute_id, year);
+CREATE INDEX index_download_quals_on_download_attribute_id ON download_quals USING btree (download_attribute_id);
 
 
 --
--- Name: index_flow_attributes_on_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+-- Name: index_download_quals_on_download_attribute_id_and_qual_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE INDEX index_flow_attributes_on_attribute_id ON flow_attributes USING btree (attribute_id);
-
-
---
--- Name: index_flow_attributes_on_flow_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_flow_attributes_on_flow_id ON flow_attributes USING btree (flow_id);
+CREATE UNIQUE INDEX index_download_quals_on_download_attribute_id_and_qual_id ON download_quals USING btree (download_attribute_id, qual_id);
 
 
 --
--- Name: index_flow_attributes_on_flow_id_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+-- Name: index_download_quals_on_qual_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE UNIQUE INDEX index_flow_attributes_on_flow_id_and_attribute_id ON flow_attributes USING btree (flow_id, attribute_id);
-
-
---
--- Name: index_flow_attributes_text_values_on_flow_attribute_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_flow_attributes_text_values_on_flow_attribute_id ON flow_attributes_text_values USING btree (flow_attribute_id);
+CREATE INDEX index_download_quals_on_qual_id ON download_quals USING btree (qual_id);
 
 
 --
--- Name: index_flow_attributes_text_values_on_id_and_year; Type: INDEX; Schema: revamp; Owner: -
+-- Name: index_download_quants_on_download_attribute_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE UNIQUE INDEX index_flow_attributes_text_values_on_id_and_year ON flow_attributes_text_values USING btree (flow_attribute_id, year);
+CREATE INDEX index_download_quants_on_download_attribute_id ON download_quants USING btree (download_attribute_id);
+
+
+--
+-- Name: index_download_quants_on_download_attribute_id_and_quant_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_download_quants_on_download_attribute_id_and_quant_id ON download_quants USING btree (download_attribute_id, quant_id);
+
+
+--
+-- Name: index_download_quants_on_quant_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_download_quants_on_quant_id ON download_quants USING btree (quant_id);
+
+
+--
+-- Name: index_flow_inds_on_flow_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_flow_inds_on_flow_id ON flow_inds USING btree (flow_id);
+
+
+--
+-- Name: index_flow_inds_on_flow_id_and_ind_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_flow_inds_on_flow_id_and_ind_id ON flow_inds USING btree (flow_id, ind_id);
+
+
+--
+-- Name: index_flow_inds_on_ind_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_flow_inds_on_ind_id ON flow_inds USING btree (ind_id);
+
+
+--
+-- Name: index_flow_quals_on_flow_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_flow_quals_on_flow_id ON flow_quals USING btree (flow_id);
+
+
+--
+-- Name: index_flow_quals_on_flow_id_and_qual_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_flow_quals_on_flow_id_and_qual_id ON flow_quals USING btree (flow_id, qual_id);
+
+
+--
+-- Name: index_flow_quals_on_qual_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_flow_quals_on_qual_id ON flow_quals USING btree (qual_id);
+
+
+--
+-- Name: index_flow_quants_on_flow_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_flow_quants_on_flow_id ON flow_quants USING btree (flow_id);
+
+
+--
+-- Name: index_flow_quants_on_flow_id_and_quant_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_flow_quants_on_flow_id_and_quant_id ON flow_quants USING btree (flow_id, quant_id);
+
+
+--
+-- Name: index_flow_quants_on_quant_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_flow_quants_on_quant_id ON flow_quants USING btree (quant_id);
 
 
 --
@@ -2637,6 +3327,13 @@ CREATE INDEX index_flows_on_path ON flows USING btree (path);
 
 
 --
+-- Name: index_inds_on_name; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_inds_on_name ON inds USING btree (name);
+
+
+--
 -- Name: index_map_attribute_groups_on_context_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -2651,10 +3348,17 @@ CREATE UNIQUE INDEX index_map_attribute_groups_on_context_id_and_position ON map
 
 
 --
--- Name: index_map_attributes_on_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+-- Name: index_map_attributes_mv_on_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE INDEX index_map_attributes_on_attribute_id ON map_attributes USING btree (attribute_id);
+CREATE UNIQUE INDEX index_map_attributes_mv_on_id ON map_attributes_mv USING btree (id);
+
+
+--
+-- Name: index_map_attributes_mv_on_map_attribute_group_id_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_map_attributes_mv_on_map_attribute_group_id_attribute_id ON map_attributes_mv USING btree (map_attribute_group_id, attribute_id);
 
 
 --
@@ -2665,13 +3369,6 @@ CREATE INDEX index_map_attributes_on_map_attribute_group_id ON map_attributes US
 
 
 --
--- Name: index_map_attributes_on_map_attribute_group_id_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_map_attributes_on_map_attribute_group_id_and_attribute_id ON map_attributes USING btree (map_attribute_group_id, attribute_id);
-
-
---
 -- Name: index_map_attributes_on_map_attribute_group_id_and_position; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -2679,52 +3376,108 @@ CREATE UNIQUE INDEX index_map_attributes_on_map_attribute_group_id_and_position 
 
 
 --
--- Name: index_node_attributes_double_values_on_id_and_year; Type: INDEX; Schema: revamp; Owner: -
+-- Name: index_map_inds_on_ind_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE UNIQUE INDEX index_node_attributes_double_values_on_id_and_year ON node_attributes_double_values USING btree (node_attribute_id, year);
-
-
---
--- Name: index_node_attributes_double_values_on_node_attribute_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_node_attributes_double_values_on_node_attribute_id ON node_attributes_double_values USING btree (node_attribute_id);
+CREATE INDEX index_map_inds_on_ind_id ON map_inds USING btree (ind_id);
 
 
 --
--- Name: index_node_attributes_on_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+-- Name: index_map_inds_on_map_attribute_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE INDEX index_node_attributes_on_attribute_id ON node_attributes USING btree (attribute_id);
-
-
---
--- Name: index_node_attributes_on_node_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_node_attributes_on_node_id ON node_attributes USING btree (node_id);
+CREATE INDEX index_map_inds_on_map_attribute_id ON map_inds USING btree (map_attribute_id);
 
 
 --
--- Name: index_node_attributes_on_node_id_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+-- Name: index_map_inds_on_map_attribute_id_and_ind_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE UNIQUE INDEX index_node_attributes_on_node_id_and_attribute_id ON node_attributes USING btree (node_id, attribute_id);
-
-
---
--- Name: index_node_attributes_text_values_on_id_and_year; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_node_attributes_text_values_on_id_and_year ON node_attributes_text_values USING btree (node_attribute_id, year);
+CREATE UNIQUE INDEX index_map_inds_on_map_attribute_id_and_ind_id ON map_inds USING btree (map_attribute_id, ind_id);
 
 
 --
--- Name: index_node_attributes_text_values_on_node_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+-- Name: index_map_quants_on_map_attribute_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE INDEX index_node_attributes_text_values_on_node_attribute_id ON node_attributes_text_values USING btree (node_attribute_id);
+CREATE INDEX index_map_quants_on_map_attribute_id ON map_quants USING btree (map_attribute_id);
+
+
+--
+-- Name: index_map_quants_on_map_attribute_id_and_quant_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_map_quants_on_map_attribute_id_and_quant_id ON map_quants USING btree (map_attribute_id, quant_id);
+
+
+--
+-- Name: index_map_quants_on_quant_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_map_quants_on_quant_id ON map_quants USING btree (quant_id);
+
+
+--
+-- Name: index_node_inds_on_ind_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_node_inds_on_ind_id ON node_inds USING btree (ind_id);
+
+
+--
+-- Name: index_node_inds_on_node_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_node_inds_on_node_id ON node_inds USING btree (node_id);
+
+
+--
+-- Name: index_node_inds_on_node_id_and_ind_id_and_year; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_node_inds_on_node_id_and_ind_id_and_year ON node_inds USING btree (node_id, ind_id, year);
+
+
+--
+-- Name: index_node_quals_on_node_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_node_quals_on_node_id ON node_quals USING btree (node_id);
+
+
+--
+-- Name: index_node_quals_on_node_id_and_qual_id_and_year; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_node_quals_on_node_id_and_qual_id_and_year ON node_quals USING btree (node_id, qual_id, year);
+
+
+--
+-- Name: index_node_quals_on_qual_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_node_quals_on_qual_id ON node_quals USING btree (qual_id);
+
+
+--
+-- Name: index_node_quants_on_node_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_node_quants_on_node_id ON node_quants USING btree (node_id);
+
+
+--
+-- Name: index_node_quants_on_node_id_and_quant_id_and_year; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_node_quants_on_node_id_and_quant_id_and_year ON node_quants USING btree (node_id, quant_id, year);
+
+
+--
+-- Name: index_node_quants_on_quant_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_node_quants_on_quant_id ON node_quants USING btree (quant_id);
 
 
 --
@@ -2742,10 +3495,31 @@ CREATE INDEX index_nodes_on_node_type_id ON nodes USING btree (node_type_id);
 
 
 --
--- Name: index_recolor_by_attributes_on_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+-- Name: index_quals_on_name; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE INDEX index_recolor_by_attributes_on_attribute_id ON recolor_by_attributes USING btree (attribute_id);
+CREATE UNIQUE INDEX index_quals_on_name ON quals USING btree (name);
+
+
+--
+-- Name: index_quants_on_name; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_quants_on_name ON quants USING btree (name);
+
+
+--
+-- Name: index_recolor_by_attributes_mv_on_context_id_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_recolor_by_attributes_mv_on_context_id_and_attribute_id ON recolor_by_attributes_mv USING btree (context_id, attribute_id);
+
+
+--
+-- Name: index_recolor_by_attributes_mv_on_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_recolor_by_attributes_mv_on_id ON recolor_by_attributes_mv USING btree (id);
 
 
 --
@@ -2756,13 +3530,6 @@ CREATE INDEX index_recolor_by_attributes_on_context_id ON recolor_by_attributes 
 
 
 --
--- Name: index_recolor_by_attributes_on_context_id_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_recolor_by_attributes_on_context_id_and_attribute_id ON recolor_by_attributes USING btree (context_id, attribute_id);
-
-
---
 -- Name: index_recolor_by_attributes_on_context_id_group_number_position; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -2770,10 +3537,59 @@ CREATE UNIQUE INDEX index_recolor_by_attributes_on_context_id_group_number_posit
 
 
 --
--- Name: index_resize_by_attributes_on_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+-- Name: index_recolor_by_inds_on_ind_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE INDEX index_resize_by_attributes_on_attribute_id ON resize_by_attributes USING btree (attribute_id);
+CREATE INDEX index_recolor_by_inds_on_ind_id ON recolor_by_inds USING btree (ind_id);
+
+
+--
+-- Name: index_recolor_by_inds_on_recolor_by_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_recolor_by_inds_on_recolor_by_attribute_id ON recolor_by_inds USING btree (recolor_by_attribute_id);
+
+
+--
+-- Name: index_recolor_by_inds_on_recolor_by_attribute_id_and_ind_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_recolor_by_inds_on_recolor_by_attribute_id_and_ind_id ON recolor_by_inds USING btree (recolor_by_attribute_id, ind_id);
+
+
+--
+-- Name: index_recolor_by_quals_on_qual_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_recolor_by_quals_on_qual_id ON recolor_by_quals USING btree (qual_id);
+
+
+--
+-- Name: index_recolor_by_quals_on_recolor_by_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_recolor_by_quals_on_recolor_by_attribute_id ON recolor_by_quals USING btree (recolor_by_attribute_id);
+
+
+--
+-- Name: index_recolor_by_quals_on_recolor_by_attribute_id_and_qual_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_recolor_by_quals_on_recolor_by_attribute_id_and_qual_id ON recolor_by_quals USING btree (recolor_by_attribute_id, qual_id);
+
+
+--
+-- Name: index_resize_by_attributes_mv_on_context_id_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_resize_by_attributes_mv_on_context_id_and_attribute_id ON resize_by_attributes_mv USING btree (context_id, attribute_id);
+
+
+--
+-- Name: index_resize_by_attributes_mv_on_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_resize_by_attributes_mv_on_id ON resize_by_attributes_mv USING btree (id);
 
 
 --
@@ -2784,17 +3600,31 @@ CREATE INDEX index_resize_by_attributes_on_context_id ON resize_by_attributes US
 
 
 --
--- Name: index_resize_by_attributes_on_context_id_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_resize_by_attributes_on_context_id_and_attribute_id ON resize_by_attributes USING btree (context_id, attribute_id);
-
-
---
 -- Name: index_resize_by_attributes_on_context_id_group_number_position; Type: INDEX; Schema: revamp; Owner: -
 --
 
 CREATE UNIQUE INDEX index_resize_by_attributes_on_context_id_group_number_position ON resize_by_attributes USING btree (context_id, group_number, "position");
+
+
+--
+-- Name: index_resize_by_quants_on_quant_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_resize_by_quants_on_quant_id ON resize_by_quants USING btree (quant_id);
+
+
+--
+-- Name: index_resize_by_quants_on_resize_by_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_resize_by_quants_on_resize_by_attribute_id ON resize_by_quants USING btree (resize_by_attribute_id);
+
+
+--
+-- Name: index_resize_by_quants_on_resize_by_attribute_id_and_quant_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_resize_by_quants_on_resize_by_attribute_id_and_quant_id ON resize_by_quants USING btree (resize_by_attribute_id, quant_id);
 
 
 SET search_path = public, pg_catalog;
@@ -3018,11 +3848,27 @@ ALTER TABLE ONLY nodes
 SET search_path = revamp, pg_catalog;
 
 --
--- Name: recolor_by_attributes fk_rails_03df134fac; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+-- Name: download_quants fk_rails_05ea4b5d71; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
-ALTER TABLE ONLY recolor_by_attributes
-    ADD CONSTRAINT fk_rails_03df134fac FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY download_quants
+    ADD CONSTRAINT fk_rails_05ea4b5d71 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+
+
+--
+-- Name: flow_inds fk_rails_0a8bdfaf25; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_inds
+    ADD CONSTRAINT fk_rails_0a8bdfaf25 FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
+
+
+--
+-- Name: node_quals fk_rails_14ebb50b5a; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_quals
+    ADD CONSTRAINT fk_rails_14ebb50b5a FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE;
 
 
 --
@@ -3031,14 +3877,6 @@ ALTER TABLE ONLY recolor_by_attributes
 
 ALTER TABLE ONLY recolor_by_attributes
     ADD CONSTRAINT fk_rails_15a713c884 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
-
-
---
--- Name: node_attributes fk_rails_15d56765f3; Type: FK CONSTRAINT; Schema: revamp; Owner: -
---
-
-ALTER TABLE ONLY node_attributes
-    ADD CONSTRAINT fk_rails_15d56765f3 FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE;
 
 
 --
@@ -3058,11 +3896,67 @@ ALTER TABLE ONLY download_attributes
 
 
 --
+-- Name: download_quals fk_rails_1be1712b6c; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY download_quals
+    ADD CONSTRAINT fk_rails_1be1712b6c FOREIGN KEY (download_attribute_id) REFERENCES download_attributes(id) ON DELETE CASCADE;
+
+
+--
+-- Name: flow_inds fk_rails_23d15ab229; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_inds
+    ADD CONSTRAINT fk_rails_23d15ab229 FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+
+
+--
 -- Name: context_node_types fk_rails_23d7986b34; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY context_node_types
     ADD CONSTRAINT fk_rails_23d7986b34 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+
+
+--
+-- Name: resize_by_quants fk_rails_2617a248e4; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY resize_by_quants
+    ADD CONSTRAINT fk_rails_2617a248e4 FOREIGN KEY (resize_by_attribute_id) REFERENCES resize_by_attributes(id) ON DELETE CASCADE;
+
+
+--
+-- Name: node_inds fk_rails_28ea53a9b9; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_inds
+    ADD CONSTRAINT fk_rails_28ea53a9b9 FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+
+
+--
+-- Name: recolor_by_inds fk_rails_2950876b56; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY recolor_by_inds
+    ADD CONSTRAINT fk_rails_2950876b56 FOREIGN KEY (recolor_by_attribute_id) REFERENCES recolor_by_attributes(id) ON DELETE CASCADE;
+
+
+--
+-- Name: flow_quants fk_rails_2dbc0a565f; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_quants
+    ADD CONSTRAINT fk_rails_2dbc0a565f FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
+
+
+--
+-- Name: map_quants fk_rails_308b5b45f7; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY map_quants
+    ADD CONSTRAINT fk_rails_308b5b45f7 FOREIGN KEY (map_attribute_id) REFERENCES map_attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -3074,14 +3968,6 @@ ALTER TABLE ONLY map_attribute_groups
 
 
 --
--- Name: flow_attributes_double_values fk_rails_378208afa2; Type: FK CONSTRAINT; Schema: revamp; Owner: -
---
-
-ALTER TABLE ONLY flow_attributes_double_values
-    ADD CONSTRAINT fk_rails_378208afa2 FOREIGN KEY (flow_attribute_id) REFERENCES flow_attributes(id) ON DELETE CASCADE;
-
-
---
 -- Name: nodes fk_rails_37e87445f7; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -3090,19 +3976,19 @@ ALTER TABLE ONLY nodes
 
 
 --
--- Name: node_attributes_text_values fk_rails_3bdcee45f6; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+-- Name: map_inds fk_rails_49db6b9c1f; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
-ALTER TABLE ONLY node_attributes_text_values
-    ADD CONSTRAINT fk_rails_3bdcee45f6 FOREIGN KEY (node_attribute_id) REFERENCES node_attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY map_inds
+    ADD CONSTRAINT fk_rails_49db6b9c1f FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
 
 
 --
--- Name: node_attributes_double_values fk_rails_486c35988d; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+-- Name: recolor_by_quals fk_rails_5294e7fccd; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
-ALTER TABLE ONLY node_attributes_double_values
-    ADD CONSTRAINT fk_rails_486c35988d FOREIGN KEY (node_attribute_id) REFERENCES node_attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY recolor_by_quals
+    ADD CONSTRAINT fk_rails_5294e7fccd FOREIGN KEY (recolor_by_attribute_id) REFERENCES recolor_by_attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -3114,11 +4000,19 @@ ALTER TABLE ONLY contextual_layers
 
 
 --
--- Name: resize_by_attributes fk_rails_67db11c182; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+-- Name: flow_quals fk_rails_6e55ca4cbc; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
-ALTER TABLE ONLY resize_by_attributes
-    ADD CONSTRAINT fk_rails_67db11c182 FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY flow_quals
+    ADD CONSTRAINT fk_rails_6e55ca4cbc FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
+
+
+--
+-- Name: flow_quals fk_rails_917b9da2b8; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_quals
+    ADD CONSTRAINT fk_rails_917b9da2b8 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
 
 
 --
@@ -3130,6 +4024,22 @@ ALTER TABLE ONLY resize_by_attributes
 
 
 --
+-- Name: recolor_by_inds fk_rails_93051274e4; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY recolor_by_inds
+    ADD CONSTRAINT fk_rails_93051274e4 FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+
+
+--
+-- Name: node_quals fk_rails_962f283611; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_quals
+    ADD CONSTRAINT fk_rails_962f283611 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+
+
+--
 -- Name: carto_layers fk_rails_9b2f0fa157; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -3138,11 +4048,11 @@ ALTER TABLE ONLY carto_layers
 
 
 --
--- Name: flow_attributes_text_values fk_rails_a44a298dda; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+-- Name: flow_quants fk_rails_a48f7b74d0; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
-ALTER TABLE ONLY flow_attributes_text_values
-    ADD CONSTRAINT fk_rails_a44a298dda FOREIGN KEY (flow_attribute_id) REFERENCES flow_attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY flow_quants
+    ADD CONSTRAINT fk_rails_a48f7b74d0 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
 
 
 --
@@ -3154,19 +4064,27 @@ ALTER TABLE ONLY flows
 
 
 --
--- Name: map_attributes fk_rails_d614b2acb9; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+-- Name: resize_by_quants fk_rails_c63dc992e3; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
-ALTER TABLE ONLY map_attributes
-    ADD CONSTRAINT fk_rails_d614b2acb9 FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY resize_by_quants
+    ADD CONSTRAINT fk_rails_c63dc992e3 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
 
 
 --
--- Name: download_attributes fk_rails_d7d4e62da2; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+-- Name: map_inds fk_rails_cac7dc7c14; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
-ALTER TABLE ONLY download_attributes
-    ADD CONSTRAINT fk_rails_d7d4e62da2 FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY map_inds
+    ADD CONSTRAINT fk_rails_cac7dc7c14 FOREIGN KEY (map_attribute_id) REFERENCES map_attributes(id) ON DELETE CASCADE;
+
+
+--
+-- Name: map_quants fk_rails_cc084396cb; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY map_quants
+    ADD CONSTRAINT fk_rails_cc084396cb FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
 
 
 --
@@ -3178,6 +4096,38 @@ ALTER TABLE ONLY contexts
 
 
 --
+-- Name: node_quants fk_rails_dd544b3e59; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_quants
+    ADD CONSTRAINT fk_rails_dd544b3e59 FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE;
+
+
+--
+-- Name: download_quants fk_rails_e3b3c104f3; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY download_quants
+    ADD CONSTRAINT fk_rails_e3b3c104f3 FOREIGN KEY (download_attribute_id) REFERENCES download_attributes(id) ON DELETE CASCADE;
+
+
+--
+-- Name: node_quants fk_rails_e5f4cc54e9; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_quants
+    ADD CONSTRAINT fk_rails_e5f4cc54e9 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+
+
+--
+-- Name: download_quals fk_rails_e8e87251a2; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY download_quals
+    ADD CONSTRAINT fk_rails_e8e87251a2 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+
+
+--
 -- Name: contexts fk_rails_eea78f436e; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -3186,11 +4136,11 @@ ALTER TABLE ONLY contexts
 
 
 --
--- Name: flow_attributes fk_rails_f34fb033ac; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+-- Name: recolor_by_quals fk_rails_f5f36c9f54; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
-ALTER TABLE ONLY flow_attributes
-    ADD CONSTRAINT fk_rails_f34fb033ac FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY recolor_by_quals
+    ADD CONSTRAINT fk_rails_f5f36c9f54 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
 
 
 --
@@ -3202,19 +4152,11 @@ ALTER TABLE ONLY map_attributes
 
 
 --
--- Name: flow_attributes fk_rails_fc689a826c; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+-- Name: node_inds fk_rails_fe29817503; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
-ALTER TABLE ONLY flow_attributes
-    ADD CONSTRAINT fk_rails_fc689a826c FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
-
-
---
--- Name: node_attributes fk_rails_ff471c5fdf; Type: FK CONSTRAINT; Schema: revamp; Owner: -
---
-
-ALTER TABLE ONLY node_attributes
-    ADD CONSTRAINT fk_rails_ff471c5fdf FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY node_inds
+    ADD CONSTRAINT fk_rails_fe29817503 FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE;
 
 
 --

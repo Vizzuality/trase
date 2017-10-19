@@ -5,7 +5,6 @@ class CreateRecolorByAttributes < ActiveRecord::Migration[5.0]
     with_search_path('revamp') do
       create_table :recolor_by_attributes do |t|
         t.references :context, null: false, foreign_key: {on_delete: :cascade}
-        t.references :attribute, null: false, foreign_key: {on_delete: :cascade}
         t.integer :group_number, null: false, default: 1
         t.integer :position, null: false
         t.text :legend_type, null: false
@@ -23,12 +22,34 @@ class CreateRecolorByAttributes < ActiveRecord::Migration[5.0]
 
       add_index :recolor_by_attributes, [:context_id, :group_number, :position], unique: true,
         name: 'index_recolor_by_attributes_on_context_id_group_number_position'
-      add_index :recolor_by_attributes, [:context_id, :attribute_id], unique: true
+
+      create_table :recolor_by_inds do |t|
+        t.references :recolor_by_attribute, null: false, foreign_key: {on_delete: :cascade}
+        t.references :ind, null: false, foreign_key: {on_delete: :cascade}
+        t.timestamps
+      end
+
+      add_index :recolor_by_inds, [:recolor_by_attribute_id, :ind_id], unique: true
+
+      create_table :recolor_by_quals do |t|
+        t.references :recolor_by_attribute, null: false, foreign_key: {on_delete: :cascade}
+        t.references :qual, null: false, foreign_key: {on_delete: :cascade}
+        t.timestamps
+      end
+
+      add_index :recolor_by_quals, [:recolor_by_attribute_id, :qual_id], unique: true
+
+      create_view :recolor_by_attributes_mv, materialized: true
+      add_index :recolor_by_attributes_mv, :id, unique: true
+      add_index :recolor_by_attributes_mv, [:context_id, :attribute_id]
     end
   end
 
   def down
     with_search_path('revamp') do
+      drop_view :recolor_by_attributes_mv, materialized: true
+      drop_table :recolor_by_inds
+      drop_table :recolor_by_quals
       drop_table :recolor_by_attributes
     end
   end

@@ -2,7 +2,6 @@ namespace :db do
   namespace :revamp do
     desc 'Copy data from public schema into revamp schema'
     task copy: [:environment] do
-      create_migration_columns
       [
         'countries',
         'commodities',
@@ -11,48 +10,37 @@ namespace :db do
         'context_node_types',
         'nodes',
         'flows',
-        'attributes',
-        'node_attributes',
-        'node_attributes_double_values',
-        'node_attributes_text_values',
-        'flow_attributes',
-        'flow_attributes_double_values',
-        'flow_attributes_text_values',
+        'quants',
+        'inds',
+        'quals',
+        'node_quants',
+        'node_inds',
+        'node_quals',
+        'flow_quants',
+        'flow_inds',
+        'flow_quals',
         'map_attribute_groups',
         'map_attributes',
+        'map_quants',
+        'map_inds',
         'recolor_by_attributes',
+        'recolor_by_inds',
+        'recolor_by_quals',
         'resize_by_attributes',
-        'download_attributes'
+        'resize_by_quants',
+        'download_attributes',
+        'download_quants',
+        'download_quals'
       ].each do |table|
         copy_data(table)
       end
       populate_contextual_layers
-      drop_migration_columns
+      refresh_materialized_view('attributes_mv')
+      refresh_materialized_view('map_attributes_mv')
+      refresh_materialized_view('recolor_by_attributes_mv')
+      refresh_materialized_view('resize_by_attributes_mv')
+      refresh_materialized_view('download_attributes_mv')
     end
-  end
-end
-
-def migration_columns
-  [
-    ['revamp.attributes', 'original_id', 'INTEGER'],
-    ['revamp.node_attributes', 'original_id', 'INTEGER'],
-    ['revamp.flow_attributes', 'original_id', 'INTEGER']
-  ]
-end
-
-def create_migration_columns
-  migration_columns.each do |table_column_type|
-    ActiveRecord::Base.connection.execute(
-      "ALTER TABLE #{table_column_type.first} ADD COLUMN IF NOT EXISTS #{table_column_type.second} #{table_column_type.third}"
-    )
-  end
-end
-
-def drop_migration_columns
-  migration_columns.each do |table_column|
-    ActiveRecord::Base.connection.execute(
-      "ALTER TABLE #{table_column.first} DROP COLUMN IF EXISTS #{table_column.second}"
-    )
   end
 end
 
@@ -70,6 +58,12 @@ def copy_data(table)
   Rails.logger.debug "#{table}: #{affected_rows} affected rows"
   ActiveRecord::Base.connection.execute(
     "SELECT setval(pg_get_serial_sequence('revamp.#{table}', 'id'), coalesce(max(id),0) + 1, false) FROM revamp.#{table};"
+  )
+end
+
+def refresh_materialized_view(mview)
+  ActiveRecord::Base.connection.execute(
+    "REFRESH MATERIALIZED VIEW revamp.#{mview}"
   )
 end
 
@@ -144,107 +138,72 @@ def flows_insert_sql
   SQL
 end
 
-def attributes_insert_sql
+def quants_insert_sql
   <<-SQL
-  INSERT INTO revamp.attributes (name, type, unit, unit_type, tooltip, tooltip_text, frontend_name, original_id, created_at, updated_at)
-  SELECT name, 'Quant', unit, unit_type, COALESCE(tooltip, FALSE), tooltip_text, frontend_name, quant_id, NOW(), NOW() FROM public.quants
-  UNION ALL
-  SELECT name, 'Ind', unit, unit_type, COALESCE(tooltip, FALSE), tooltip_text, frontend_name, ind_id, NOW(), NOW() FROM public.inds
-  UNION ALL
-  SELECT name, 'Qual', NULL, NULL, COALESCE(tooltip, FALSE), tooltip_text, frontend_name, qual_id, NOW(), NOW() FROM public.quals;
+  INSERT INTO revamp.quants (id, name, unit, unit_type, tooltip, tooltip_text, frontend_name, created_at, updated_at)
+  SELECT quant_id, name, unit, unit_type, COALESCE(tooltip, FALSE), tooltip_text, frontend_name, NOW(), NOW() FROM public.quants
   SQL
 end
 
-def node_attributes_insert_sql
+def inds_insert_sql
   <<-SQL
-  INSERT INTO revamp.node_attributes (node_id, attribute_id, original_id, created_at, updated_at)
-  SELECT DISTINCT node_id, attributes.id, quant_id, NOW(), NOW()
+  INSERT INTO revamp.inds (id, name, unit, unit_type, tooltip, tooltip_text, frontend_name, created_at, updated_at)
+  SELECT ind_id, name, unit, unit_type, COALESCE(tooltip, FALSE), tooltip_text, frontend_name, NOW(), NOW() FROM public.inds
+  SQL
+end
+
+def quals_insert_sql
+  <<-SQL
+  INSERT INTO revamp.quals (id, name, tooltip, tooltip_text, frontend_name, created_at, updated_at)
+  SELECT qual_id, name, COALESCE(tooltip, FALSE), tooltip_text, frontend_name, NOW(), NOW() FROM public.quals
+  SQL
+end
+
+def node_quants_insert_sql
+  <<-SQL
+  INSERT INTO revamp.node_quants (node_id, quant_id, year, value, created_at, updated_at)
+  SELECT DISTINCT node_id, quant_id, year, value, NOW(), NOW()
   FROM public.node_quants
-  JOIN revamp.attributes ON public.node_quants.quant_id = revamp.attributes.original_id AND revamp.attributes.type = 'Quant'
-  UNION ALL
-  SELECT DISTINCT node_id, attributes.id, ind_id, NOW(), NOW()
+  SQL
+end
+
+def node_inds_insert_sql
+  <<-SQL
+  INSERT INTO revamp.node_inds (node_id, ind_id, year, value, created_at, updated_at)
+  SELECT DISTINCT node_id, ind_id, year, value, NOW(), NOW()
   FROM public.node_inds
-  JOIN revamp.attributes ON public.node_inds.ind_id = revamp.attributes.original_id AND revamp.attributes.type = 'Ind'
-  UNION ALL
-  SELECT DISTINCT node_id, attributes.id, qual_id, NOW(), NOW()
+  SQL
+end
+
+def node_quals_insert_sql
+  <<-SQL
+  INSERT INTO revamp.node_quals (node_id, qual_id, year, value, created_at, updated_at)
+  SELECT DISTINCT node_id, qual_id, year, value, NOW(), NOW()
   FROM public.node_quals
-  JOIN revamp.attributes ON public.node_quals.qual_id = revamp.attributes.original_id AND revamp.attributes.type = 'Qual'
   SQL
 end
 
-def node_attributes_double_values_insert_sql
+def flow_quants_insert_sql
   <<-SQL
-  INSERT INTO revamp.node_attributes_double_values (node_attribute_id, year, value, created_at, updated_at)
-  SELECT node_attributes.id, year, value, NOW(), NOW()
-  FROM public.node_quants
-  JOIN revamp.node_attributes ON public.node_quants.quant_id = revamp.node_attributes.original_id
-  JOIN revamp.attributes ON revamp.node_attributes.attribute_id = attributes.id
-  WHERE revamp.attributes.type = 'Quant' and node_attributes.node_id = node_quants.node_id
-  UNION ALL
-  SELECT node_attributes.id, year, value, NOW(), NOW()
-  FROM public.node_inds
-  JOIN revamp.node_attributes ON public.node_inds.ind_id = revamp.node_attributes.original_id
-  JOIN revamp.attributes ON revamp.node_attributes.attribute_id = attributes.id
-  WHERE revamp.attributes.type = 'Ind' and node_attributes.node_id = node_inds.node_id
-  SQL
-end
-
-def node_attributes_text_values_insert_sql
-  <<-SQL
-  INSERT INTO revamp.node_attributes_text_values (node_attribute_id, year, value, created_at, updated_at)
-  SELECT node_attributes.id, year, value, NOW(), NOW()
-  FROM public.node_quals
-  JOIN revamp.node_attributes ON public.node_quals.qual_id = revamp.node_attributes.original_id
-  JOIN revamp.attributes ON revamp.node_attributes.attribute_id = attributes.id
-  WHERE revamp.attributes.type = 'Qual' and node_attributes.node_id = node_quals.node_id
-  SQL
-end
-
-def flow_attributes_insert_sql
-  <<-SQL
-  INSERT INTO revamp.flow_attributes (flow_id, attribute_id, original_id, created_at, updated_at)
-  SELECT DISTINCT flow_id, attributes.id, quant_id, NOW(), NOW()
+  INSERT INTO revamp.flow_quants (flow_id, quant_id, value, created_at, updated_at)
+  SELECT DISTINCT flow_id, quant_id, value, NOW(), NOW()
   FROM public.flow_quants
-  JOIN revamp.attributes ON public.flow_quants.quant_id = revamp.attributes.original_id AND revamp.attributes.type = 'Quant'
-  UNION ALL
-  SELECT DISTINCT flow_id, attributes.id, ind_id, NOW(), NOW()
-  FROM public.flow_inds
-  JOIN revamp.attributes ON public.flow_inds.ind_id = revamp.attributes.original_id AND revamp.attributes.type = 'Ind'
-  UNION ALL
-  SELECT DISTINCT flow_id, attributes.id, qual_id, NOW(), NOW()
-  FROM public.flow_quals
-  JOIN revamp.attributes ON public.flow_quals.qual_id = revamp.attributes.original_id AND revamp.attributes.type = 'Qual'
   SQL
 end
 
-def flow_attributes_double_values_insert_sql
+def flow_inds_insert_sql
   <<-SQL
-  INSERT INTO revamp.flow_attributes_double_values (flow_attribute_id, year, value, created_at, updated_at)
-  SELECT flow_attributes.id, year, value, NOW(), NOW()
-  FROM public.flow_quants
-  JOIN revamp.flow_attributes ON public.flow_quants.quant_id = revamp.flow_attributes.original_id
-  JOIN revamp.attributes ON revamp.flow_attributes.attribute_id = attributes.id
-  JOIN public.flows ON public.flow_quants.flow_id = public.flows.flow_id
-  WHERE revamp.attributes.type = 'Quant' and flow_attributes.flow_id = flow_quants.flow_id
-  UNION ALL
-  SELECT flow_attributes.id, year, value, NOW(), NOW()
+  INSERT INTO revamp.flow_inds (flow_id, ind_id, value, created_at, updated_at)
+  SELECT DISTINCT flow_id, ind_id, value, NOW(), NOW()
   FROM public.flow_inds
-  JOIN revamp.flow_attributes ON public.flow_inds.ind_id = revamp.flow_attributes.original_id
-  JOIN revamp.attributes ON revamp.flow_attributes.attribute_id = attributes.id
-  JOIN public.flows ON public.flow_inds.flow_id = public.flows.flow_id
-  WHERE revamp.attributes.type = 'Ind'and flow_attributes.flow_id = flow_inds.flow_id
   SQL
 end
 
-def flow_attributes_text_values_insert_sql
+def flow_quals_insert_sql
   <<-SQL
-  INSERT INTO revamp.flow_attributes_text_values (flow_attribute_id, year, value, created_at, updated_at)
-  SELECT flow_attributes.id, year, value, NOW(), NOW()
+  INSERT INTO revamp.flow_quals (flow_id, qual_id, value, created_at, updated_at)
+  SELECT DISTINCT flow_id, qual_id, value, NOW(), NOW()
   FROM public.flow_quals
-  JOIN revamp.flow_attributes ON public.flow_quals.qual_id = revamp.flow_attributes.original_id
-  JOIN revamp.attributes ON revamp.flow_attributes.attribute_id = revamp.attributes.id
-  JOIN public.flows ON public.flow_quals.flow_id = public.flows.flow_id
-  WHERE revamp.attributes.type = 'Qual' and flow_attributes.flow_id = flow_quals.flow_id
   SQL
 end
 
@@ -259,11 +218,30 @@ end
 
 def map_attributes_insert_sql
   <<-SQL
-  INSERT INTO revamp.map_attributes(id, map_attribute_group_id, attribute_id, position, bucket_3, bucket_5, color_scale, years, aggregate_method, is_disabled, is_default, created_at, updated_at)
+  INSERT INTO revamp.map_attributes(id, map_attribute_group_id, position, bucket_3, bucket_5, color_scale, years, is_disabled, is_default, created_at, updated_at)
   SELECT
-    public.context_layer.id, context_layer_group_id, revamp.attributes.id, position, bucket_3, bucket_5, color_scale, years, aggregate_method, NOT(COALESCE(enabled, FALSE)), COALESCE(is_default, FALSE), NOW(), NOW()
+    id, context_layer_group_id, position, bucket_3, bucket_5, color_scale, years, NOT(COALESCE(enabled, FALSE)), COALESCE(is_default, FALSE), NOW(), NOW()
   FROM public.context_layer
-  JOIN revamp.attributes ON public.context_layer.layer_attribute_type::text = revamp.attributes.type AND public.context_layer.layer_attribute_id = revamp.attributes.original_id;
+  SQL
+end
+
+def map_quants_insert_sql
+  <<-SQL
+  INSERT INTO revamp.map_quants(map_attribute_id, quant_id, created_at, updated_at)
+  SELECT
+    revamp.map_attributes.id, public.context_layer.layer_attribute_id, NOW(), NOW()
+  FROM public.context_layer
+  JOIN revamp.map_attributes ON public.context_layer.id = revamp.map_attributes.id AND public.context_layer.layer_attribute_type = 'Quant'
+  SQL
+end
+
+def map_inds_insert_sql
+  <<-SQL
+  INSERT INTO revamp.map_inds(map_attribute_id, ind_id, created_at, updated_at)
+  SELECT
+    revamp.map_attributes.id, public.context_layer.layer_attribute_id, NOW(), NOW()
+  FROM public.context_layer
+  JOIN revamp.map_attributes ON public.context_layer.id = revamp.map_attributes.id AND public.context_layer.layer_attribute_type = 'Ind'
   SQL
 end
 
@@ -282,11 +260,30 @@ def recolor_by_attributes_insert_sql
     AND flow_inds_and_quals.attribute_id = context_recolor_by.recolor_attribute_id
     GROUP BY context_recolor_by.id
   )
-  INSERT INTO revamp.recolor_by_attributes(id, context_id, attribute_id, group_number, position, legend_type, legend_color_theme, interval_count, min_value, max_value, divisor, tooltip_text, years, is_disabled, is_default, created_at, updated_at)
+  INSERT INTO revamp.recolor_by_attributes(id, context_id, group_number, position, legend_type, legend_color_theme, interval_count, min_value, max_value, divisor, tooltip_text, years, is_disabled, is_default, created_at, updated_at)
   SELECT
-    context_recolor_by.id, context_id, revamp.attributes.id, group_number, position, legend_type, legend_color_theme, interval_count, min_value, max_value, divisor, context_recolor_by.tooltip_text, years, COALESCE(is_disabled, FALSE), COALESCE(is_default, FALSE), NOW(), NOW()
+    id, context_id, group_number, position, legend_type, legend_color_theme, interval_count, min_value, max_value, divisor, tooltip_text, years, COALESCE(is_disabled, FALSE), COALESCE(is_default, FALSE), NOW(), NOW()
   FROM context_recolor_by_with_years context_recolor_by
-  JOIN revamp.attributes ON context_recolor_by.recolor_attribute_type::text = revamp.attributes.type AND context_recolor_by.recolor_attribute_id = revamp.attributes.original_id;
+  SQL
+end
+
+def recolor_by_inds_insert_sql
+  <<-SQL
+  INSERT INTO revamp.recolor_by_inds(recolor_by_attribute_id, ind_id, created_at, updated_at)
+  SELECT
+    revamp.recolor_by_attributes.id, public.context_recolor_by.recolor_attribute_id, NOW(), NOW()
+  FROM public.context_recolor_by
+  JOIN revamp.recolor_by_attributes ON public.context_recolor_by.id = revamp.recolor_by_attributes.id AND public.context_recolor_by.recolor_attribute_type = 'Ind'
+  SQL
+end
+
+def recolor_by_quals_insert_sql
+  <<-SQL
+  INSERT INTO revamp.recolor_by_quals(recolor_by_attribute_id, qual_id, created_at, updated_at)
+  SELECT
+    revamp.recolor_by_attributes.id, public.context_recolor_by.recolor_attribute_id, NOW(), NOW()
+  FROM public.context_recolor_by
+  JOIN revamp.recolor_by_attributes ON public.context_recolor_by.id = revamp.recolor_by_attributes.id AND public.context_recolor_by.recolor_attribute_type = 'Qual'
   SQL
 end
 
@@ -299,11 +296,20 @@ def resize_by_attributes_insert_sql
     LEFT JOIN flow_quants ON flows.flow_id = flow_quants.flow_id AND flow_quants.quant_id = context_resize_by.resize_attribute_id
     GROUP BY context_resize_by.id
   )
-  INSERT INTO revamp.resize_by_attributes(id, context_id, attribute_id, group_number, position, tooltip_text, years, is_disabled, is_default, created_at, updated_at)
+  INSERT INTO revamp.resize_by_attributes(id, context_id, group_number, position, tooltip_text, years, is_disabled, is_default, created_at, updated_at)
   SELECT
-    context_resize_by.id, context_id, revamp.attributes.id, group_number, position, context_resize_by.tooltip_text, years, COALESCE(is_disabled, FALSE), COALESCE(is_default, FALSE), NOW(), NOW()
+    id, context_id, group_number, position, tooltip_text, years, COALESCE(is_disabled, FALSE), COALESCE(is_default, FALSE), NOW(), NOW()
   FROM context_resize_by_with_years context_resize_by
-  JOIN revamp.attributes ON context_resize_by.resize_attribute_type::text = revamp.attributes.type AND context_resize_by.resize_attribute_id = revamp.attributes.original_id;
+  SQL
+end
+
+def resize_by_quants_insert_sql
+  <<-SQL
+  INSERT INTO revamp.resize_by_quants(resize_by_attribute_id, quant_id, created_at, updated_at)
+  SELECT
+    revamp.resize_by_attributes.id, public.context_resize_by.resize_attribute_id, NOW(), NOW()
+  FROM public.context_resize_by
+  JOIN revamp.resize_by_attributes ON public.context_resize_by.id = revamp.resize_by_attributes.id AND public.context_resize_by.resize_attribute_type = 'Quant'
   SQL
 end
 
@@ -324,11 +330,30 @@ def download_attributes_insert_sql
     AND flow_quants_inds_and_quals.attribute_id = context_indicators.indicator_attribute_id
     GROUP BY context_indicators.id
   )
-  INSERT INTO revamp.download_attributes(id, context_id, attribute_id, position, name_in_download, years, created_at, updated_at)
+  INSERT INTO revamp.download_attributes(id, context_id, position, name_in_download, years, created_at, updated_at)
   SELECT
-    context_indicators.id, context_id, revamp.attributes.id, position, name_in_download, years, NOW(), NOW()
+    id, context_id, position, name_in_download, years, NOW(), NOW()
   FROM context_indicators_with_years context_indicators
-  JOIN revamp.attributes ON context_indicators.indicator_attribute_type::text = revamp.attributes.type AND context_indicators.indicator_attribute_id = revamp.attributes.original_id;
+  SQL
+end
+
+def download_quants_insert_sql
+  <<-SQL
+  INSERT INTO revamp.download_quants(download_attribute_id, quant_id, created_at, updated_at)
+  SELECT
+    revamp.download_attributes.id, public.context_indicators.indicator_attribute_id, NOW(), NOW()
+  FROM public.context_indicators
+  JOIN revamp.download_attributes ON public.context_indicators.id = revamp.download_attributes.id AND public.context_indicators.indicator_attribute_type = 'Quant'
+  SQL
+end
+
+def download_quals_insert_sql
+  <<-SQL
+  INSERT INTO revamp.download_quals(download_attribute_id, qual_id, created_at, updated_at)
+  SELECT
+    revamp.download_attributes.id, public.context_indicators.indicator_attribute_id, NOW(), NOW()
+  FROM public.context_indicators
+  JOIN revamp.download_attributes ON public.context_indicators.id = revamp.download_attributes.id AND public.context_indicators.indicator_attribute_type = 'Qual'
   SQL
 end
 
