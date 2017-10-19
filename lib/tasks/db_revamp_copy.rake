@@ -271,15 +271,15 @@ def recolor_by_attributes_insert_sql
   ), context_recolor_by_with_years AS (
     SELECT context_recolor_by.*, ARRAY_AGG(DISTINCT year ORDER BY year) AS years
     FROM context_recolor_by
-    JOIN flows ON flows.context_id = context_recolor_by.context_id
-    JOIN flow_inds_and_quals ON flows.flow_id = flow_inds_and_quals.flow_id
+    LEFT JOIN flows ON flows.context_id = context_recolor_by.context_id
+    LEFT JOIN flow_inds_and_quals ON flows.flow_id = flow_inds_and_quals.flow_id
     AND flow_inds_and_quals.attribute_type = context_recolor_by.recolor_attribute_type::text
     AND flow_inds_and_quals.attribute_id = context_recolor_by.recolor_attribute_id
     GROUP BY context_recolor_by.id
   )
-  INSERT INTO revamp.recolor_by_attributes(id, context_id, attribute_id, group_number, position, legend_type, legend_color_theme, interval_count, min_value, max_value, divisor, tooltip_text, is_disabled, is_default, created_at, updated_at)
+  INSERT INTO revamp.recolor_by_attributes(id, context_id, attribute_id, group_number, position, legend_type, legend_color_theme, interval_count, min_value, max_value, divisor, tooltip_text, years, is_disabled, is_default, created_at, updated_at)
   SELECT
-    context_recolor_by.id, context_id, revamp.attributes.id, group_number, position, legend_type, legend_color_theme, interval_count, min_value, max_value, divisor, context_recolor_by.tooltip_text, COALESCE(is_disabled, FALSE), COALESCE(is_default, FALSE), NOW(), NOW()
+    context_recolor_by.id, context_id, revamp.attributes.id, group_number, position, legend_type, legend_color_theme, interval_count, min_value, max_value, divisor, context_recolor_by.tooltip_text, years, COALESCE(is_disabled, FALSE), COALESCE(is_default, FALSE), NOW(), NOW()
   FROM context_recolor_by_with_years context_recolor_by
   JOIN revamp.attributes ON context_recolor_by.recolor_attribute_type::text = revamp.attributes.type AND context_recolor_by.recolor_attribute_id = revamp.attributes.original_id;
   SQL
@@ -294,9 +294,9 @@ def resize_by_attributes_insert_sql
     LEFT JOIN flow_quants ON flows.flow_id = flow_quants.flow_id AND flow_quants.quant_id = context_resize_by.resize_attribute_id
     GROUP BY context_resize_by.id
   )
-  INSERT INTO revamp.resize_by_attributes(id, context_id, attribute_id, group_number, position, tooltip_text, is_disabled, is_default, created_at, updated_at)
+  INSERT INTO revamp.resize_by_attributes(id, context_id, attribute_id, group_number, position, tooltip_text, years, is_disabled, is_default, created_at, updated_at)
   SELECT
-    context_resize_by.id, context_id, revamp.attributes.id, group_number, position, context_resize_by.tooltip_text, COALESCE(is_disabled, FALSE), COALESCE(is_default, FALSE), NOW(), NOW()
+    context_resize_by.id, context_id, revamp.attributes.id, group_number, position, context_resize_by.tooltip_text, years, COALESCE(is_disabled, FALSE), COALESCE(is_default, FALSE), NOW(), NOW()
   FROM context_resize_by_with_years context_resize_by
   JOIN revamp.attributes ON context_resize_by.resize_attribute_type::text = revamp.attributes.type AND context_resize_by.resize_attribute_id = revamp.attributes.original_id;
   SQL
