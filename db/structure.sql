@@ -2904,7 +2904,7 @@ ALTER TABLE ONLY recolor_by_attributes
 --
 
 ALTER TABLE ONLY node_attributes
-    ADD CONSTRAINT fk_rails_15d56765f3 FOREIGN KEY (node_id) REFERENCES nodes(id);
+    ADD CONSTRAINT fk_rails_15d56765f3 FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE;
 
 
 --
@@ -2912,7 +2912,7 @@ ALTER TABLE ONLY node_attributes
 --
 
 ALTER TABLE ONLY context_node_types
-    ADD CONSTRAINT fk_rails_15e56acf9a FOREIGN KEY (node_type_id) REFERENCES node_types(id);
+    ADD CONSTRAINT fk_rails_15e56acf9a FOREIGN KEY (node_type_id) REFERENCES node_types(id) ON DELETE CASCADE;
 
 
 --
@@ -2928,7 +2928,7 @@ ALTER TABLE ONLY download_attributes
 --
 
 ALTER TABLE ONLY context_node_types
-    ADD CONSTRAINT fk_rails_23d7986b34 FOREIGN KEY (context_id) REFERENCES contexts(id);
+    ADD CONSTRAINT fk_rails_23d7986b34 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
 
 
 --
@@ -2936,7 +2936,7 @@ ALTER TABLE ONLY context_node_types
 --
 
 ALTER TABLE ONLY map_attribute_groups
-    ADD CONSTRAINT fk_rails_32f187c0c7 FOREIGN KEY (context_id) REFERENCES contexts(id);
+    ADD CONSTRAINT fk_rails_32f187c0c7 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
 
 
 --
@@ -2944,7 +2944,7 @@ ALTER TABLE ONLY map_attribute_groups
 --
 
 ALTER TABLE ONLY flow_attributes_double_values
-    ADD CONSTRAINT fk_rails_378208afa2 FOREIGN KEY (flow_attribute_id) REFERENCES flow_attributes(id);
+    ADD CONSTRAINT fk_rails_378208afa2 FOREIGN KEY (flow_attribute_id) REFERENCES flow_attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -2952,7 +2952,7 @@ ALTER TABLE ONLY flow_attributes_double_values
 --
 
 ALTER TABLE ONLY nodes
-    ADD CONSTRAINT fk_rails_37e87445f7 FOREIGN KEY (node_type_id) REFERENCES node_types(id);
+    ADD CONSTRAINT fk_rails_37e87445f7 FOREIGN KEY (node_type_id) REFERENCES node_types(id) ON DELETE CASCADE;
 
 
 --
@@ -2960,7 +2960,7 @@ ALTER TABLE ONLY nodes
 --
 
 ALTER TABLE ONLY node_attributes_text_values
-    ADD CONSTRAINT fk_rails_3bdcee45f6 FOREIGN KEY (node_attribute_id) REFERENCES node_attributes(id);
+    ADD CONSTRAINT fk_rails_3bdcee45f6 FOREIGN KEY (node_attribute_id) REFERENCES node_attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -2968,7 +2968,7 @@ ALTER TABLE ONLY node_attributes_text_values
 --
 
 ALTER TABLE ONLY node_attributes_double_values
-    ADD CONSTRAINT fk_rails_486c35988d FOREIGN KEY (node_attribute_id) REFERENCES node_attributes(id);
+    ADD CONSTRAINT fk_rails_486c35988d FOREIGN KEY (node_attribute_id) REFERENCES node_attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -2988,11 +2988,19 @@ ALTER TABLE ONLY resize_by_attributes
 
 
 --
+-- Name: carto_layers fk_rails_9b2f0fa157; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY carto_layers
+    ADD CONSTRAINT fk_rails_9b2f0fa157 FOREIGN KEY (contextual_layer_id) REFERENCES contextual_layers(id) ON DELETE CASCADE;
+
+
+--
 -- Name: flow_attributes_text_values fk_rails_a44a298dda; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY flow_attributes_text_values
-    ADD CONSTRAINT fk_rails_a44a298dda FOREIGN KEY (flow_attribute_id) REFERENCES flow_attributes(id);
+    ADD CONSTRAINT fk_rails_a44a298dda FOREIGN KEY (flow_attribute_id) REFERENCES flow_attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -3000,7 +3008,7 @@ ALTER TABLE ONLY flow_attributes_text_values
 --
 
 ALTER TABLE ONLY flows
-    ADD CONSTRAINT fk_rails_c33db455e5 FOREIGN KEY (context_id) REFERENCES contexts(id);
+    ADD CONSTRAINT fk_rails_c33db455e5 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
 
 
 --
@@ -3024,7 +3032,7 @@ ALTER TABLE ONLY download_attributes
 --
 
 ALTER TABLE ONLY contexts
-    ADD CONSTRAINT fk_rails_d9e59d1113 FOREIGN KEY (country_id) REFERENCES countries(id);
+    ADD CONSTRAINT fk_rails_d9e59d1113 FOREIGN KEY (country_id) REFERENCES countries(id) ON DELETE CASCADE;
 
 
 --
@@ -3032,7 +3040,7 @@ ALTER TABLE ONLY contexts
 --
 
 ALTER TABLE ONLY contexts
-    ADD CONSTRAINT fk_rails_eea78f436e FOREIGN KEY (commodity_id) REFERENCES commodities(id);
+    ADD CONSTRAINT fk_rails_eea78f436e FOREIGN KEY (commodity_id) REFERENCES commodities(id) ON DELETE CASCADE;
 
 
 --
@@ -3040,7 +3048,7 @@ ALTER TABLE ONLY contexts
 --
 
 ALTER TABLE ONLY flow_attributes
-    ADD CONSTRAINT fk_rails_f34fb033ac FOREIGN KEY (attribute_id) REFERENCES attributes(id);
+    ADD CONSTRAINT fk_rails_f34fb033ac FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -3056,7 +3064,7 @@ ALTER TABLE ONLY map_attributes
 --
 
 ALTER TABLE ONLY flow_attributes
-    ADD CONSTRAINT fk_rails_fc689a826c FOREIGN KEY (flow_id) REFERENCES flows(id);
+    ADD CONSTRAINT fk_rails_fc689a826c FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
 
 
 --
@@ -3064,7 +3072,7 @@ ALTER TABLE ONLY flow_attributes
 --
 
 ALTER TABLE ONLY node_attributes
-    ADD CONSTRAINT fk_rails_ff471c5fdf FOREIGN KEY (attribute_id) REFERENCES attributes(id);
+    ADD CONSTRAINT fk_rails_ff471c5fdf FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE;
 
 
 --

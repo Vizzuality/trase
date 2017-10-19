@@ -4,7 +4,7 @@ class CreateMapAttributesGroups < ActiveRecord::Migration[5.0]
   def up
     with_search_path('revamp') do
       create_table :map_attribute_groups do |t|
-        t.references :context, null: false, foreign_key: true
+        t.references :context, null: false, foreign_key: {on_delete: :cascade}
         t.text :name, null: false
         t.integer :position, null: false
         t.timestamps

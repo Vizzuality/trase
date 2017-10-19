@@ -4,7 +4,7 @@ class CreateFlows < ActiveRecord::Migration[5.0]
   def up
     with_search_path('revamp') do
       create_table :flows do |t|
-        t.references :context, null: false, foreign_key: true, index: true
+        t.references :context, null: false, foreign_key: {on_delete: :cascade}, index: true
         t.column :year, 'smallint', null: false
         t.integer :path, array: true, default: []
         t.timestamps

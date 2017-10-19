@@ -4,8 +4,8 @@ class CreateContextNodeTypes < ActiveRecord::Migration[5.0]
   def up
     with_search_path('revamp') do
       create_table :context_node_types do |t|
-        t.references :context, null: false, foreign_key: true
-        t.references :node_type, null: false, foreign_key: true
+        t.references :context, null: false, foreign_key: {on_delete: :cascade}
+        t.references :node_type, null: false, foreign_key: {on_delete: :cascade}
         t.integer :column_group, null: false
         t.integer :column_position, null: false
         t.boolean :is_default, null: false, default: false

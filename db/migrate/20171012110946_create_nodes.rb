@@ -4,7 +4,7 @@ class CreateNodes < ActiveRecord::Migration[5.0]
   def up
     with_search_path('revamp') do
       create_table :nodes do |t|
-        t.references :node_type, null: false, foreign_key: true, index: true
+        t.references :node_type, null: false, foreign_key: {on_delete: :cascade}, index: true
         t.text :name, null: false
         t.text :geo_id
         t.boolean :is_domestic_consumption, null: false, default: false

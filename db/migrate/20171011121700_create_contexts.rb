@@ -4,9 +4,9 @@ class CreateContexts < ActiveRecord::Migration[5.0]
   def up
     with_search_path('revamp') do
       create_table :contexts do |t|
-        t.references :country, null: false, foreign_key: true
-        t.references :commodity, null: false, foreign_key: true
         t.integer :years, array: true, default: []
+        t.references :country, null: false, foreign_key: {on_delete: :cascade}
+        t.references :commodity, null: false, foreign_key: {on_delete: :cascade}
         t.integer :default_year
         t.text :default_context_layers, array: true, default: []
         t.text :default_basemap
