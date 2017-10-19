@@ -13,7 +13,7 @@ class CreateNodeTypes < ActiveRecord::Migration[5.0]
 
   def down
     with_search_path('revamp') do
-      drop_table :commodities
+      drop_table :node_types
     end
   end
 end
