@@ -8,7 +8,6 @@ class CreateContexts < ActiveRecord::Migration[5.0]
         t.references :commodity, null: false, foreign_key: {on_delete: :cascade}
         t.integer :years, array: true
         t.integer :default_year
-        t.text :default_context_layers, array: true, default: []
         t.text :default_basemap
         t.boolean :is_disabled, null: false, default: false
         t.boolean :is_default, null: false, default: false

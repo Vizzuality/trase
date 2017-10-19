@@ -1064,6 +1064,39 @@ ALTER SEQUENCE attributes_id_seq OWNED BY attributes.id;
 
 
 --
+-- Name: carto_layers; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE carto_layers (
+    id integer NOT NULL,
+    contextual_layer_id integer NOT NULL,
+    identifier text NOT NULL,
+    years integer[],
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: carto_layers_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE carto_layers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: carto_layers_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE carto_layers_id_seq OWNED BY carto_layers.id;
+
+
+--
 -- Name: commodities; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -1142,7 +1175,6 @@ CREATE TABLE contexts (
     commodity_id integer NOT NULL,
     years integer[],
     default_year integer,
-    default_context_layers text[] DEFAULT '{}'::text[],
     default_basemap text,
     is_disabled boolean DEFAULT false NOT NULL,
     is_default boolean DEFAULT false NOT NULL,
@@ -1168,6 +1200,42 @@ CREATE SEQUENCE contexts_id_seq
 --
 
 ALTER SEQUENCE contexts_id_seq OWNED BY contexts.id;
+
+
+--
+-- Name: contextual_layers; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE contextual_layers (
+    id integer NOT NULL,
+    context_id integer NOT NULL,
+    title text NOT NULL,
+    identifier text NOT NULL,
+    "position" integer NOT NULL,
+    tooltip_text text,
+    is_default boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: contextual_layers_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE contextual_layers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: contextual_layers_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE contextual_layers_id_seq OWNED BY contextual_layers.id;
 
 
 --
@@ -1828,6 +1896,13 @@ ALTER TABLE ONLY attributes ALTER COLUMN id SET DEFAULT nextval('attributes_id_s
 
 
 --
+-- Name: carto_layers id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY carto_layers ALTER COLUMN id SET DEFAULT nextval('carto_layers_id_seq'::regclass);
+
+
+--
 -- Name: commodities id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
@@ -1846,6 +1921,13 @@ ALTER TABLE ONLY context_node_types ALTER COLUMN id SET DEFAULT nextval('context
 --
 
 ALTER TABLE ONLY contexts ALTER COLUMN id SET DEFAULT nextval('contexts_id_seq'::regclass);
+
+
+--
+-- Name: contextual_layers id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY contextual_layers ALTER COLUMN id SET DEFAULT nextval('contextual_layers_id_seq'::regclass);
 
 
 --
@@ -2118,6 +2200,14 @@ ALTER TABLE ONLY attributes
 
 
 --
+-- Name: carto_layers carto_layers_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY carto_layers
+    ADD CONSTRAINT carto_layers_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: commodities commodities_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -2139,6 +2229,14 @@ ALTER TABLE ONLY context_node_types
 
 ALTER TABLE ONLY contexts
     ADD CONSTRAINT contexts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: contextual_layers contextual_layers_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY contextual_layers
+    ADD CONSTRAINT contextual_layers_pkey PRIMARY KEY (id);
 
 
 --
@@ -2357,6 +2455,20 @@ CREATE UNIQUE INDEX index_attributes_on_name ON attributes USING btree (name);
 
 
 --
+-- Name: index_carto_layers_on_contextual_layer_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_carto_layers_on_contextual_layer_id ON carto_layers USING btree (contextual_layer_id);
+
+
+--
+-- Name: index_carto_layers_on_contextual_layer_id_and_identifier; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_carto_layers_on_contextual_layer_id_and_identifier ON carto_layers USING btree (contextual_layer_id, identifier);
+
+
+--
 -- Name: index_context_node_types_on_context_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -2396,6 +2508,27 @@ CREATE INDEX index_contexts_on_country_id ON contexts USING btree (country_id);
 --
 
 CREATE UNIQUE INDEX index_contexts_on_country_id_and_commodity_id ON contexts USING btree (country_id, commodity_id);
+
+
+--
+-- Name: index_contextual_layers_on_context_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_contextual_layers_on_context_id ON contextual_layers USING btree (context_id);
+
+
+--
+-- Name: index_contextual_layers_on_context_id_and_identifier; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_contextual_layers_on_context_id_and_identifier ON contextual_layers USING btree (context_id, identifier);
+
+
+--
+-- Name: index_contextual_layers_on_context_id_and_position; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_contextual_layers_on_context_id_and_position ON contextual_layers USING btree (context_id, "position");
 
 
 --
@@ -2973,6 +3106,14 @@ ALTER TABLE ONLY node_attributes_double_values
 
 
 --
+-- Name: contextual_layers fk_rails_5c2d32b5a7; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY contextual_layers
+    ADD CONSTRAINT fk_rails_5c2d32b5a7 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+
+
+--
 -- Name: resize_by_attributes fk_rails_67db11c182; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -3128,6 +3269,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171013095055'),
 ('20171013101825'),
 ('20171013103931'),
-('20171013104602');
+('20171013104602'),
+('20171018093008');
 
 

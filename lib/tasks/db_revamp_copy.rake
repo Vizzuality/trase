@@ -26,6 +26,7 @@ namespace :db do
       ].each do |table|
         copy_data(table)
       end
+      populate_contextual_layers
       drop_migration_columns
     end
   end
@@ -55,10 +56,14 @@ def drop_migration_columns
   end
 end
 
-def copy_data(table)
+def truncate_table(table)
   ActiveRecord::Base.connection.execute(
     "TRUNCATE revamp.#{table} CASCADE"
   )
+end
+
+def copy_data(table)
+  truncate_table(table)
   affected_rows = ActiveRecord::Base.connection.execute(
     send("#{table}_insert_sql")
   ).cmd_tuples
@@ -86,9 +91,9 @@ end
 
 def contexts_insert_sql
   <<-SQL
-  INSERT INTO revamp.contexts (id, country_id, commodity_id, years, default_year, default_context_layers, default_basemap, is_disabled, is_default, created_at, updated_at)
+  INSERT INTO revamp.contexts (id, country_id, commodity_id, years, default_year, default_basemap, is_disabled, is_default, created_at, updated_at)
   SELECT
-    id, country_id, commodity_id, years, default_year, default_context_layers, default_basemap,
+    id, country_id, commodity_id, years, default_year, default_basemap,
     COALESCE(is_disabled, FALSE),
     COALESCE(is_default, FALSE),
     NOW(), NOW()
@@ -326,3 +331,73 @@ def download_attributes_insert_sql
   JOIN revamp.attributes ON context_indicators.indicator_attribute_type::text = revamp.attributes.type AND context_indicators.indicator_attribute_id = revamp.attributes.original_id;
   SQL
 end
+
+  def populate_contextual_layers
+    truncate_table('contextual_layers')
+    truncate_table('carto_layers')
+    brazil_soy_query = <<-SQL
+      SELECT c.id, default_context_layers
+      FROM context c
+      JOIN revamp.countries ctry ON ctry.id = c.country_id
+      JOIN revamp.commodities comm ON comm.id = c.commodity_id
+      WHERE ctry.iso2 = 'BR' AND comm.name = 'SOY'
+    SQL
+    brazil_soy = ActiveRecord::Base.connection.execute(brazil_soy_query).first
+    return unless brazil_soy.present?
+    @pg_decoder = PG::TextDecoder::Array.new name: "TEXT[]", delimiter: ','
+    brazil_soy_default_context_layers = @pg_decoder.decode(brazil_soy['default_context_layers'])
+
+    brazil_soy_contextual_layers = [
+      {
+        title: 'Land cover',
+        identifier: 'landcover',
+        position: 0,
+        carto_layers: [{identifier: 'landcover'}]
+      },
+      {
+        title: 'Brazil biomes',
+        identifier: 'brazil_biomes',
+        position: 1,
+        is_default: true,
+        carto_layers: [{identifier: 'brazil_biomes'}]
+      },
+      {
+        title: 'Water scarcity',
+        identifier: 'water_scarcity',
+        position: 2,
+        carto_layers: [{identifier: 'water_scarcity'}]
+      },
+      {
+        title: 'Indigenous areas',
+        identifier: 'indigenous_areas',
+        position: 3,
+        carto_layers: [{identifier: 'indigenous_areas'}]
+      },
+      {
+        title: 'Brazil protected areas',
+        identifier: 'brazil_protected',
+        position: 4,
+        carto_layers: [{identifier: 'brazil_protected'}]
+      },
+      {
+        title: 'Deforestation polygons',
+        identifier: 'brazil_defor_alerts',
+        position: 5,
+        carto_layers: [{identifier: 'brazil_defor_alerts'}]
+      }
+    ]
+
+    brazil_soy_contextual_layers.each do |cl|
+      is_default = brazil_soy_default_context_layers.include?(cl[:identifier])
+      inserted_cl = ActiveRecord::Base.connection.execute(
+        "INSERT INTO revamp.contextual_layers (context_id, title, identifier, position, is_default, created_at, updated_at) VALUES (#{brazil_soy['id']}, '#{cl[:title]}', '#{cl[:identifier]}', #{cl[:position]}, #{is_default}, NOW(), NOW()) RETURNING id;"
+      ).first
+      if inserted_cl.present?
+        cl[:carto_layers].each do |clv|
+          ActiveRecord::Base.connection.execute(
+            "INSERT INTO revamp.carto_layers (contextual_layer_id, identifier, created_at, updated_at) VALUES (#{inserted_cl['id']}, '#{clv[:identifier]}', NOW(), NOW())"
+          )
+        end
+      end
+    end
+  end
