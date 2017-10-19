@@ -1215,6 +1215,7 @@ CREATE TABLE download_attributes (
     attribute_id integer NOT NULL,
     "position" integer NOT NULL,
     name_in_download text NOT NULL,
+    years integer[],
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );

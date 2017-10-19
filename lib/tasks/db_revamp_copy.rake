@@ -304,10 +304,25 @@ end
 
 def download_attributes_insert_sql
   <<-SQL
-  INSERT INTO revamp.download_attributes(id, context_id, attribute_id, position, name_in_download, created_at, updated_at)
+  WITH flow_quants_inds_and_quals AS (
+    SELECT 'Quant' AS attribute_type, quant_id AS attribute_id, flow_id FROM flow_quants
+    UNION ALL
+    SELECT 'Ind' AS attribute_type, ind_id AS attribute_id, flow_id FROM flow_inds
+    UNION ALL
+    SELECT 'Qual' AS attribute_type, qual_id AS attribute_id, flow_id FROM flow_quals
+  ), context_indicators_with_years AS (
+    SELECT context_indicators.*, ARRAY_AGG(DISTINCT year ORDER BY year) AS years
+    FROM context_indicators
+    LEFT JOIN flows ON flows.context_id = context_indicators.context_id
+    LEFT JOIN flow_quants_inds_and_quals ON flows.flow_id = flow_quants_inds_and_quals.flow_id
+    AND flow_quants_inds_and_quals.attribute_type = context_indicators.indicator_attribute_type::text
+    AND flow_quants_inds_and_quals.attribute_id = context_indicators.indicator_attribute_id
+    GROUP BY context_indicators.id
+  )
+  INSERT INTO revamp.download_attributes(id, context_id, attribute_id, position, name_in_download, years, created_at, updated_at)
   SELECT
-    public.context_indicators.id, context_id, revamp.attributes.id, position, name_in_download, NOW(), NOW()
-  FROM public.context_indicators
-  JOIN revamp.attributes ON public.context_indicators.indicator_attribute_type::text = revamp.attributes.type AND public.context_indicators.indicator_attribute_id = revamp.attributes.original_id;
+    context_indicators.id, context_id, revamp.attributes.id, position, name_in_download, years, NOW(), NOW()
+  FROM context_indicators_with_years context_indicators
+  JOIN revamp.attributes ON context_indicators.indicator_attribute_type::text = revamp.attributes.type AND context_indicators.indicator_attribute_id = revamp.attributes.original_id;
   SQL
 end

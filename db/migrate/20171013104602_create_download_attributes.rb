@@ -8,6 +8,7 @@ class CreateDownloadAttributes < ActiveRecord::Migration[5.0]
         t.references :attribute, null: false, foreign_key: {on_delete: :cascade}
         t.integer :position, null: false
         t.text :name_in_download, null: false
+        t.integer :years, array: true
         t.timestamps
       end
 
