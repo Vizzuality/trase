@@ -9,7 +9,7 @@ class CreateResizeByAttributes < ActiveRecord::Migration[5.0]
         t.integer :group_number, null: false, default: 1
         t.integer :position, null: false
         t.text :tooltip_text
-        t.integer :years, array: true, default: []
+        t.integer :years, array: true
         t.boolean :is_disabled, null: false, default: false
         t.boolean :is_default, null: false, default: false
         t.timestamps

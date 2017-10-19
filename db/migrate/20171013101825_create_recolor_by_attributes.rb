@@ -15,7 +15,7 @@ class CreateRecolorByAttributes < ActiveRecord::Migration[5.0]
         t.text :max_value
         t.column :divisor, 'double precision'
         t.text :tooltip_text
-        t.integer :years, array: true, default: []
+        t.integer :years, array: true
         t.boolean :is_disabled, null: false, default: false
         t.boolean :is_default, null: false, default: false
         t.timestamps
