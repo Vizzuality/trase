@@ -1173,6 +1173,7 @@ ALTER SEQUENCE carto_layers_id_seq OWNED BY carto_layers.id;
 CREATE TABLE commodities (
     id integer NOT NULL,
     name text NOT NULL,
+    parent_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -3103,6 +3104,13 @@ CREATE UNIQUE INDEX index_carto_layers_on_contextual_layer_id_and_identifier ON 
 
 
 --
+-- Name: index_commodities_on_parent_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_commodities_on_parent_id ON commodities USING btree (parent_id);
+
+
+--
 -- Name: index_context_node_types_on_context_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -4005,6 +4013,14 @@ ALTER TABLE ONLY contextual_layers
 
 ALTER TABLE ONLY flow_quals
     ADD CONSTRAINT fk_rails_6e55ca4cbc FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
+
+
+--
+-- Name: commodities fk_rails_87667fc19d; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY commodities
+    ADD CONSTRAINT fk_rails_87667fc19d FOREIGN KEY (parent_id) REFERENCES commodities(id) ON DELETE CASCADE;
 
 
 --

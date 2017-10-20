@@ -5,6 +5,7 @@ class CreateCommodities < ActiveRecord::Migration[5.0]
     with_search_path('revamp') do
       create_table :commodities do |t|
         t.text :name, null: false
+        t.references :parent, foreign_key: {on_delete: :cascade, to_table: :commodities}, index: true
         t.timestamps
       end
     end
