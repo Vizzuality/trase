@@ -11,4 +11,7 @@ shared_context 'brazil qual values' do
   let!(:embargoes_value){
     FactoryGirl.create(:node_qual, node: municipality_node, qual: zero_deforestation, value: 'Yes')
   }
+  let!(:embargoes_value){
+    FactoryGirl.create(:node_qual, node: municipality_node, qual: zero_deforestation, value: 'Yes')
+  }
 end

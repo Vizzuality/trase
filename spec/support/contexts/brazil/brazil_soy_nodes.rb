@@ -13,10 +13,7 @@ shared_context 'brazil soy nodes' do
     FactoryGirl.create(:node, name: 'CUIABA', node_type: logistics_hub_node_type)
   }
   let!(:municipality_node){
-    m = FactoryGirl.create(:node, name: 'NOVA UBIRATA', node_type: municipality_node_type)
-    FactoryGirl.create(:node_qual, node: m, qual: state, value: 'MATO GROSSO')
-    FactoryGirl.create(:node_qual, node: m, qual: biome, value: 'AMAZONIA')
-    m
+    FactoryGirl.create(:node, name: 'NOVA UBIRATA', node_type: municipality_node_type, geo_id: 'BR5106240')
   }
   let!(:exporter1_node){
     FactoryGirl.create(:node, name: 'AFG BRASIL', node_type: exporter_node_type)

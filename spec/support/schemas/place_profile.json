@@ -1,5 +1,3 @@
-
-
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
   "definitions": {},
@@ -49,8 +47,16 @@
                     "unit": {
                       "id": "/properties/data/properties/indicators/items/properties/included_columns/items/properties/unit",
                       "type": "string"
+                    },
+                    "year": {
+                      "id": "/properties/data/properties/indicators/items/properties/included_columns/items/properties/year",
+                      "type": "integer"
                     }
                   },
+                  "required": [
+                    "name",
+                    "unit"
+                  ],
                   "type": "object"
                 },
                 "type": "array"
@@ -76,16 +82,29 @@
                       "id": "/properties/data/properties/indicators/items/properties/rows/items/properties/values",
                       "items": {
                         "id": "/properties/data/properties/indicators/items/properties/rows/items/properties/values/items",
-                        "type": "null"
+                        "type": [
+                          "number",
+                          "null"
+                        ]
                       },
                       "type": "array"
                     }
                   },
+                  "required": [
+                    "have_unit",
+                    "values",
+                    "name"
+                  ],
                   "type": "object"
                 },
                 "type": "array"
               }
             },
+            "required": [
+              "rows",
+              "included_columns",
+              "name"
+            ],
             "type": "object"
           },
           "type": "array"
@@ -108,7 +127,7 @@
         },
         "soy_production": {
           "id": "/properties/data/properties/soy_production",
-          "type": "integer"
+          "type": "number"
         },
         "state_geo_id": {
           "id": "/properties/data/properties/state_geo_id",
@@ -136,7 +155,7 @@
                   },
                   "is_domestic_consumption": {
                     "id": "/properties/data/properties/top_consumers/properties/countries/items/properties/is_domestic_consumption",
-                    "type": "null"
+                    "type": "boolean"
                   },
                   "name": {
                     "id": "/properties/data/properties/top_consumers/properties/countries/items/properties/name",
@@ -147,6 +166,12 @@
                     "type": "number"
                   }
                 },
+                "required": [
+                  "is_domestic_consumption",
+                  "id",
+                  "value",
+                  "name"
+                ],
                 "type": "object"
               },
               "type": "array"
@@ -157,7 +182,10 @@
                 "id": "/properties/data/properties/top_consumers/properties/matrix/items",
                 "items": {
                   "id": "/properties/data/properties/top_consumers/properties/matrix/items/items",
-                  "type": "integer"
+                  "type": [
+                    "number",
+                    "null"
+                  ]
                 },
                 "type": "array"
               },
@@ -177,11 +205,20 @@
                     "type": "string"
                   }
                 },
+                "required": [
+                  "id",
+                  "name"
+                ],
                 "type": "object"
               },
               "type": "array"
             }
           },
+          "required": [
+            "municipalities",
+            "matrix",
+            "countries"
+          ],
           "type": "object"
         },
         "top_traders": {
@@ -198,7 +235,7 @@
                   },
                   "is_domestic_consumption": {
                     "id": "/properties/data/properties/top_traders/properties/actors/items/properties/is_domestic_consumption",
-                    "type": "null"
+                    "type": "boolean"
                   },
                   "name": {
                     "id": "/properties/data/properties/top_traders/properties/actors/items/properties/name",
@@ -209,6 +246,12 @@
                     "type": "number"
                   }
                 },
+                "required": [
+                  "is_domestic_consumption",
+                  "id",
+                  "value",
+                  "name"
+                ],
                 "type": "object"
               },
               "type": "array"
@@ -219,7 +262,10 @@
                 "id": "/properties/data/properties/top_traders/properties/matrix/items",
                 "items": {
                   "id": "/properties/data/properties/top_traders/properties/matrix/items/items",
-                  "type": "integer"
+                  "type": [
+                    "number",
+                    "null"
+                  ]
                 },
                 "type": "array"
               },
@@ -239,17 +285,47 @@
                     "type": "string"
                   }
                 },
+                "required": [
+                  "id",
+                  "name"
+                ],
                 "type": "object"
               },
               "type": "array"
             }
           },
+          "required": [
+            "municipalities",
+            "actors",
+            "matrix"
+          ],
           "type": "object"
         }
       },
+      "required": [
+        "top_traders",
+        "state_geo_id",
+        "state_name",
+        "area",
+        "biome_name",
+        "soy_production",
+        "top_consumers",
+        "summary",
+        "indicators",
+        "biome_geo_id",
+        "municipality_geo_id",
+        "country_name",
+        "soy_farmland",
+        "municipality_name",
+        "soy_area",
+        "country_geo_id",
+        "column_name"
+      ],
       "type": "object"
     }
   },
+  "required": [
+    "data"
+  ],
   "type": "object"
 }
-

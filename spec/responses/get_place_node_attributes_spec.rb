@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Get place node attributes', type: :request do
+  include_context 'brazil ind values'
+  include_context 'brazil qual values'
   include_context 'brazil quant values'
 
   describe 'GET /get_place_node_attributes' do
@@ -34,11 +36,11 @@ RSpec.describe 'Get place node attributes', type: :request do
       expect { get '/get_place_node_attributes', params: {:context_id => context.id - 100} }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
-    # it 'has the correct response structure' do
-    #   get '/get_place_node_attributes', params: {:context_id => context.id, :node_id => municipality_node.id}
-    #
-    #   expect(@response.status).to eq 200
-    #   expect(@response).to match_response_schema("place_profile")
-    # end
+    it 'has the correct response structure' do
+      get '/get_place_node_attributes', params: {:context_id => context.id, :node_id => municipality_node.id}
+
+      expect(@response.status).to eq 200
+      expect(@response).to match_response_schema("place_profile")
+    end
   end
 end
