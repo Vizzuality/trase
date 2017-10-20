@@ -16,6 +16,8 @@ class CreateDownloadAttributes < ActiveRecord::Migration[5.0]
       create_table :download_quants do |t|
         t.references :download_attribute, null: false, foreign_key: {on_delete: :cascade}
         t.references :quant, null: false, foreign_key: {on_delete: :cascade}
+        t.boolean :is_filter_enabled, null: false, default: false
+        t.column :filter_bands, 'double precision', array: true
         t.timestamps
       end
 
@@ -24,6 +26,7 @@ class CreateDownloadAttributes < ActiveRecord::Migration[5.0]
       create_table :download_quals do |t|
         t.references :download_attribute, null: false, foreign_key: {on_delete: :cascade}
         t.references :qual, null: false, foreign_key: {on_delete: :cascade}
+        t.boolean :is_filter_enabled, null: false, default: false
         t.timestamps
       end
 

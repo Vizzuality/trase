@@ -1386,6 +1386,7 @@ CREATE TABLE download_quals (
     id integer NOT NULL,
     download_attribute_id integer NOT NULL,
     qual_id integer NOT NULL,
+    is_filter_enabled boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1399,6 +1400,8 @@ CREATE TABLE download_quants (
     id integer NOT NULL,
     download_attribute_id integer NOT NULL,
     quant_id integer NOT NULL,
+    is_filter_enabled boolean DEFAULT false NOT NULL,
+    filter_bands double precision[],
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
