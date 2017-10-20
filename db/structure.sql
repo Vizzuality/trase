@@ -2451,6 +2451,38 @@ CREATE SEQUENCE resize_by_quants_id_seq
 ALTER SEQUENCE resize_by_quants_id_seq OWNED BY resize_by_quants.id;
 
 
+--
+-- Name: traders; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE traders (
+    id integer NOT NULL,
+    importer_id integer NOT NULL,
+    exporter_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: traders_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE traders_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: traders_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE traders_id_seq OWNED BY traders.id;
+
+
 SET search_path = public, pg_catalog;
 
 --
@@ -2831,6 +2863,13 @@ ALTER TABLE ONLY resize_by_attributes ALTER COLUMN id SET DEFAULT nextval('resiz
 --
 
 ALTER TABLE ONLY resize_by_quants ALTER COLUMN id SET DEFAULT nextval('resize_by_quants_id_seq'::regclass);
+
+
+--
+-- Name: traders id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY traders ALTER COLUMN id SET DEFAULT nextval('traders_id_seq'::regclass);
 
 
 SET search_path = public, pg_catalog;
@@ -3275,6 +3314,14 @@ ALTER TABLE ONLY resize_by_attributes
 
 ALTER TABLE ONLY resize_by_quants
     ADD CONSTRAINT resize_by_quants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: traders traders_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY traders
+    ADD CONSTRAINT traders_pkey PRIMARY KEY (id);
 
 
 SET search_path = public, pg_catalog;
@@ -4037,6 +4084,20 @@ CREATE INDEX index_resize_by_quants_on_resize_by_attribute_id ON resize_by_quant
 CREATE UNIQUE INDEX index_resize_by_quants_on_resize_by_attribute_id_and_quant_id ON resize_by_quants USING btree (resize_by_attribute_id, quant_id);
 
 
+--
+-- Name: index_traders_on_exporter_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_traders_on_exporter_id ON traders USING btree (exporter_id);
+
+
+--
+-- Name: index_traders_on_importer_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_traders_on_importer_id ON traders USING btree (importer_id);
+
+
 SET search_path = public, pg_catalog;
 
 --
@@ -4450,6 +4511,14 @@ ALTER TABLE ONLY flow_quals
 
 
 --
+-- Name: traders fk_rails_79308a8475; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY traders
+    ADD CONSTRAINT fk_rails_79308a8475 FOREIGN KEY (importer_id) REFERENCES nodes(id) ON DELETE CASCADE;
+
+
+--
 -- Name: charts fk_rails_805a6066ad; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -4650,6 +4719,14 @@ ALTER TABLE ONLY map_attributes
 
 
 --
+-- Name: traders fk_rails_f8b100d54e; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY traders
+    ADD CONSTRAINT fk_rails_f8b100d54e FOREIGN KEY (exporter_id) REFERENCES nodes(id) ON DELETE CASCADE;
+
+
+--
 -- Name: node_inds fk_rails_fe29817503; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -4711,6 +4788,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171013103931'),
 ('20171013104602'),
 ('20171018093008'),
-('20171020091710');
+('20171020091710'),
+('20171020125731');
 
 
