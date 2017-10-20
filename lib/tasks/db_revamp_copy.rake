@@ -35,6 +35,7 @@ namespace :db do
         copy_data(table)
       end
       populate_contextual_layers
+      populate_profiles
       refresh_materialized_view('attributes_mv')
       refresh_materialized_view('map_attributes_mv')
       refresh_materialized_view('recolor_by_attributes_mv')
@@ -106,12 +107,11 @@ end
 
 def context_node_types_insert_sql
   <<-SQL
-  INSERT INTO revamp.context_node_types (id, context_id, node_type_id, column_group, column_position, is_default, is_geo_column, profile_type, created_at, updated_at)
+  INSERT INTO revamp.context_node_types (id, context_id, node_type_id, column_group, column_position, is_default, is_geo_column, created_at, updated_at)
   SELECT
     id, context_id, cnt.node_type_id, column_group, column_position,
     COALESCE(is_default, FALSE),
     COALESCE(is_geo_column, FALSE),
-    profile_type,
     NOW(), NOW()
   FROM public.context_nodes cnt JOIN public.node_types nt ON cnt.node_type_id = nt.node_type_id;
   SQL
@@ -360,14 +360,7 @@ end
   def populate_contextual_layers
     truncate_table('contextual_layers')
     truncate_table('carto_layers')
-    brazil_soy_query = <<-SQL
-      SELECT c.id, default_context_layers
-      FROM context c
-      JOIN revamp.countries ctry ON ctry.id = c.country_id
-      JOIN revamp.commodities comm ON comm.id = c.commodity_id
-      WHERE ctry.iso2 = 'BR' AND comm.name = 'SOY'
-    SQL
-    brazil_soy = ActiveRecord::Base.connection.execute(brazil_soy_query).first
+    brazil_soy = fetch_brazil_soy_context
     return unless brazil_soy.present?
     @pg_decoder = PG::TextDecoder::Array.new name: "TEXT[]", delimiter: ','
     brazil_soy_default_context_layers = @pg_decoder.decode(brazil_soy['default_context_layers'])
@@ -423,6 +416,197 @@ end
             "INSERT INTO revamp.carto_layers (contextual_layer_id, identifier, created_at, updated_at) VALUES (#{inserted_cl['id']}, '#{clv[:identifier]}', NOW(), NOW())"
           )
         end
+      end
+    end
+
+    def populate_profiles
+      truncate_table('profiles')
+      brazil_soy = fetch_brazil_soy_context
+      return unless brazil_soy.present?
+
+      actor_profile = {
+        name: 'actor',
+        charts: [
+          {
+            position: 0, code: 'top_countries', title: 'Top destination countries',
+            attributes: [
+              {position: 0, quant: 'Volume'}
+            ]
+          },
+          {
+            position: 1, code: 'top_sources', title: 'Top sourcing regions',
+            attributes: [
+              {position: 0, quant: 'Volume'}
+            ]
+          },
+          {
+            position: 2, code: 'sustainability', title: 'Deforestation risk associated with top sourcing regions',
+            attributes: [
+              {position: 0, quant: 'DEFORESTATION_V2'},
+              {position: 1, quant: 'POTENTIAL_SOY_DEFORESTATION_V2'},
+              {position: 2, quant: 'AGROSATELITE_SOY_DEFOR_'}
+            ]
+          },
+          {
+            position: 3, code: 'companies_sourcing', title: 'Comparing companies',
+            attributes: [
+              {position: 0, quant: 'LAND_USE'},
+              {position: 1, quant: 'DEFORESTATION_V2'},
+              {position: 2, quant: 'POTENTIAL_SOY_DEFORESTATION_V2'}
+            ]
+          }
+        ]
+      }
+
+      importer_context_node_type = fetch_context_node_type(brazil_soy['id'], NodeTypeName::IMPORTER)
+      exporter_context_node_type = fetch_context_node_type(brazil_soy['id'], NodeTypeName::EXPORTER)
+      [importer_context_node_type, exporter_context_node_type].each do |cnt|
+        inserted_profile = ActiveRecord::Base.connection.execute(
+          "INSERT INTO revamp.profiles (name, context_node_type_id, created_at, updated_at) VALUES ('actor', #{cnt['id']}, NOW(), NOW()) RETURNING id"
+        ).first
+        actor_profile[:charts].each do |chart|
+          insert_chart(inserted_profile['id'], nil, chart)
+        end
+      end
+
+      place_profile = {
+        name: 'place',
+        charts: [
+          {
+            position: 0, code: 'indicators', title: 'Sustainability indicators',
+            charts: [
+              {
+                position:0, code: 'environmental_indicators', title: 'Environmental indicators',
+                attributes: [
+                  {position: 0, quant: 'DEFORESTATION_V2'},
+                  {position: 1, quant: 'POTENTIAL_SOY_DEFORESTATION_V2'},
+                  {position: 2, quant: 'AGROSATELITE_SOY_DEFOR_'},
+                  {position: 3, quant: 'GHG_'},
+                  {position: 4, ind: 'WATER_SCARCITY'},
+                  {position: 5, quant: 'BIODIVERSITY'}
+                ]
+              },
+              {
+                position: 1, code: 'socioeconomic_indicators', title: 'Socio-economic indicators',
+                attributes: [
+                  {position: 0, ind: 'HDI'},
+                  {position: 1, ind: 'GDP_CAP'},
+                  {position: 2, ind: 'PERC_FARM_GDP_'},
+                  {position: 3, ind: 'SMALLHOLDERS'},
+                  {position: 4, quant: 'SLAVERY'},
+                  {position: 5, quant: 'LAND_CONFL'},
+                  {position: 6,quant: 'POPULATION'}
+                ]
+              },
+              {
+                position: 2, code: 'agricultural_indicators', title: 'Agricultural indicators',
+                attributes: [
+                  {position: 0, quant: 'SOY_TN'},
+                  {position: 1, ind: 'SOY_YIELD'},
+                  {position: 2, ind: 'SOY_AREAPERC'}
+                ]
+              },
+              {
+                position: 3, code: 'territorial_governance', title: 'Territorial governance',
+                attributes: [
+                  {position: 0, quant: 'APP_DEFICIT_AREA'},
+                  {position: 1, quant: 'LR_DEFICIT_AREA'},
+                  {position: 2, ind: 'PROTECTED_DEFICIT_PERC'},
+                  {position: 3, quant: 'EMBARGOES_'}
+                ]
+              }
+            ]
+          },
+          {
+            position: 1, code: 'trajectory_deforestation', title: 'Deforestation trajectory',
+            attributes: [
+              {position: 0, quant: 'AGROSATELITE_SOY_DEFOR_'},
+              {position: 1, quant: 'DEFORESTATION_V2'}
+            ]
+          },
+          {
+            position: 2, code: 'top_traders', title: 'Top traders',
+            attributes: [
+              {position: 0, quant: 'Volume'}
+            ]
+          },
+          {
+            position: 3,
+            code: 'top_consumers',
+            title: 'Top importer countries',
+            attributes: [
+              {position: 0, quant: 'Volume'}
+            ]
+          }
+        ]
+      }
+
+      municipality_context_node_type = fetch_context_node_type(brazil_soy['id'], NodeTypeName::MUNICIPALITY)
+      [municipality_context_node_type].each do |cnt|
+        inserted_profile = ActiveRecord::Base.connection.execute(
+          "INSERT INTO revamp.profiles (name, context_node_type_id, created_at, updated_at) VALUES ('place', #{cnt['id']}, NOW(), NOW()) RETURNING id"
+        ).first
+        place_profile[:charts].each do |chart|
+          insert_chart(inserted_profile['id'], nil, chart)
+        end
+      end
+    end
+  end
+
+  def fetch_brazil_soy_context
+    query = <<-SQL
+      SELECT c.id, default_context_layers
+      FROM context c
+      JOIN revamp.countries ctry ON ctry.id = c.country_id
+      JOIN revamp.commodities comm ON comm.id = c.commodity_id
+      WHERE ctry.iso2 = 'BR' AND comm.name = 'SOY'
+    SQL
+    ActiveRecord::Base.connection.execute(query).first
+  end
+
+  def fetch_context_node_type(context_id, name)
+    query = <<-SQL
+    SELECT cn.id
+    FROM context_nodes cn
+    JOIN revamp.node_types nt ON nt.id = cn.node_type_id
+    WHERE context_id = #{context_id} AND nt.name = '#{name}'
+    SQL
+    ActiveRecord::Base.connection.execute(query).first
+  end
+
+  def fetch_quant(name)
+    ActiveRecord::Base.connection.execute("SELECT id FROM revamp.quants WHERE name = '#{name}'").first
+  end
+
+  def fetch_ind(name)
+    ActiveRecord::Base.connection.execute("SELECT id FROM revamp.inds WHERE name = '#{name}'").first
+  end
+
+  def insert_chart(profile_id, parent_chart_id, data)
+    inserted_chart = ActiveRecord::Base.connection.execute(
+      "INSERT INTO revamp.charts (profile_id, parent_id, code, title, position, created_at, updated_at) VALUES (#{profile_id}, #{parent_chart_id || 'NULL'}, '#{data[:code]}', '#{data[:title]}', #{data[:position]}, NOW(), NOW()) RETURNING id"
+    ).first
+    if data[:attributes]
+      data[:attributes].each do |attribute|
+        inserted_chart_attribute = ActiveRecord::Base.connection.execute(
+          "INSERT INTO revamp.chart_attributes (chart_id, position, created_at, updated_at) VALUES (#{inserted_chart['id']}, '#{data[:position]}', NOW(), NOW()) RETURNING id"
+        ).first
+        if attribute[:quant]
+          quant_id = fetch_quant(attribute[:quant])['id']
+          ActiveRecord::Base.connection.execute(
+            "INSERT INTO revamp.chart_quants (chart_attribute_id, quant_id, created_at, updated_at) VALUES (#{inserted_chart_attribute['id']}, '#{quant_id}', NOW(), NOW())"
+          )
+        elsif attribute[:ind]
+          ind_id = fetch_ind(attribute[:ind])['id']
+          ActiveRecord::Base.connection.execute(
+            "INSERT INTO revamp.chart_inds (chart_attribute_id, ind_id, created_at, updated_at) VALUES (#{inserted_chart_attribute['id']}, '#{ind_id}', NOW(), NOW())"
+          )
+        end
+      end
+    end
+    if data[:charts]
+      data[:charts].each do |chart|
+        insert_chart(profile_id, inserted_chart['id'], chart)
       end
     end
   end

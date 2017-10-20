@@ -1167,6 +1167,172 @@ ALTER SEQUENCE carto_layers_id_seq OWNED BY carto_layers.id;
 
 
 --
+-- Name: chart_attributes; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE chart_attributes (
+    id integer NOT NULL,
+    chart_id integer NOT NULL,
+    "position" integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: chart_attributes_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE chart_attributes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: chart_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE chart_attributes_id_seq OWNED BY chart_attributes.id;
+
+
+--
+-- Name: chart_inds; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE chart_inds (
+    id integer NOT NULL,
+    chart_attribute_id integer NOT NULL,
+    ind_id integer NOT NULL,
+    years integer[],
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: chart_inds_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE chart_inds_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: chart_inds_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE chart_inds_id_seq OWNED BY chart_inds.id;
+
+
+--
+-- Name: chart_quals; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE chart_quals (
+    id integer NOT NULL,
+    chart_attribute_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    years integer[],
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: chart_quals_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE chart_quals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: chart_quals_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE chart_quals_id_seq OWNED BY chart_quals.id;
+
+
+--
+-- Name: chart_quants; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE chart_quants (
+    id integer NOT NULL,
+    chart_attribute_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    years integer[],
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: chart_quants_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE chart_quants_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: chart_quants_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE chart_quants_id_seq OWNED BY chart_quants.id;
+
+
+--
+-- Name: charts; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE charts (
+    id integer NOT NULL,
+    profile_id integer NOT NULL,
+    parent_id integer,
+    code text NOT NULL,
+    title text NOT NULL,
+    "position" integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: charts_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE charts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: charts_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE charts_id_seq OWNED BY charts.id;
+
+
+--
 -- Name: commodities; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -1210,10 +1376,8 @@ CREATE TABLE context_node_types (
     column_position integer NOT NULL,
     is_default boolean DEFAULT false NOT NULL,
     is_geo_column boolean DEFAULT false NOT NULL,
-    profile_type text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    CONSTRAINT check_context_node_types_on_profile_type CHECK ((profile_type = ANY (ARRAY['actor'::text, 'place'::text])))
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1970,6 +2134,39 @@ ALTER SEQUENCE nodes_id_seq OWNED BY nodes.id;
 
 
 --
+-- Name: profiles; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE profiles (
+    id integer NOT NULL,
+    context_node_type_id integer NOT NULL,
+    name text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT check_profiles_on_name CHECK ((name = ANY (ARRAY['actor'::text, 'place'::text])))
+);
+
+
+--
+-- Name: profiles_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE profiles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: profiles_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE profiles_id_seq OWNED BY profiles.id;
+
+
+--
 -- Name: quals_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -2392,6 +2589,41 @@ ALTER TABLE ONLY carto_layers ALTER COLUMN id SET DEFAULT nextval('carto_layers_
 
 
 --
+-- Name: chart_attributes id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_attributes ALTER COLUMN id SET DEFAULT nextval('chart_attributes_id_seq'::regclass);
+
+
+--
+-- Name: chart_inds id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_inds ALTER COLUMN id SET DEFAULT nextval('chart_inds_id_seq'::regclass);
+
+
+--
+-- Name: chart_quals id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_quals ALTER COLUMN id SET DEFAULT nextval('chart_quals_id_seq'::regclass);
+
+
+--
+-- Name: chart_quants id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_quants ALTER COLUMN id SET DEFAULT nextval('chart_quants_id_seq'::regclass);
+
+
+--
+-- Name: charts id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY charts ALTER COLUMN id SET DEFAULT nextval('charts_id_seq'::regclass);
+
+
+--
 -- Name: commodities id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
@@ -2543,6 +2775,13 @@ ALTER TABLE ONLY node_types ALTER COLUMN id SET DEFAULT nextval('node_types_id_s
 --
 
 ALTER TABLE ONLY nodes ALTER COLUMN id SET DEFAULT nextval('nodes_id_seq'::regclass);
+
+
+--
+-- Name: profiles id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY profiles ALTER COLUMN id SET DEFAULT nextval('profiles_id_seq'::regclass);
 
 
 --
@@ -2759,6 +2998,46 @@ ALTER TABLE ONLY carto_layers
 
 
 --
+-- Name: chart_attributes chart_attributes_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_attributes
+    ADD CONSTRAINT chart_attributes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chart_inds chart_inds_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_inds
+    ADD CONSTRAINT chart_inds_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chart_quals chart_quals_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_quals
+    ADD CONSTRAINT chart_quals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chart_quants chart_quants_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_quants
+    ADD CONSTRAINT chart_quants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: charts charts_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY charts
+    ADD CONSTRAINT charts_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: commodities commodities_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -2935,6 +3214,14 @@ ALTER TABLE ONLY nodes
 
 
 --
+-- Name: profiles profiles_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY profiles
+    ADD CONSTRAINT profiles_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: quals quals_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -3104,6 +3391,104 @@ CREATE INDEX index_carto_layers_on_contextual_layer_id ON carto_layers USING btr
 --
 
 CREATE UNIQUE INDEX index_carto_layers_on_contextual_layer_id_and_identifier ON carto_layers USING btree (contextual_layer_id, identifier);
+
+
+--
+-- Name: index_chart_attributes_on_chart_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_chart_attributes_on_chart_id ON chart_attributes USING btree (chart_id);
+
+
+--
+-- Name: index_chart_attributes_on_chart_id_and_position; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_chart_attributes_on_chart_id_and_position ON chart_attributes USING btree (chart_id, "position");
+
+
+--
+-- Name: index_chart_inds_on_chart_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_chart_inds_on_chart_attribute_id ON chart_inds USING btree (chart_attribute_id);
+
+
+--
+-- Name: index_chart_inds_on_chart_attribute_id_and_ind_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_chart_inds_on_chart_attribute_id_and_ind_id ON chart_inds USING btree (chart_attribute_id, ind_id);
+
+
+--
+-- Name: index_chart_inds_on_ind_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_chart_inds_on_ind_id ON chart_inds USING btree (ind_id);
+
+
+--
+-- Name: index_chart_quals_on_chart_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_chart_quals_on_chart_attribute_id ON chart_quals USING btree (chart_attribute_id);
+
+
+--
+-- Name: index_chart_quals_on_chart_attribute_id_and_qual_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_chart_quals_on_chart_attribute_id_and_qual_id ON chart_quals USING btree (chart_attribute_id, qual_id);
+
+
+--
+-- Name: index_chart_quals_on_qual_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_chart_quals_on_qual_id ON chart_quals USING btree (qual_id);
+
+
+--
+-- Name: index_chart_quants_on_chart_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_chart_quants_on_chart_attribute_id ON chart_quants USING btree (chart_attribute_id);
+
+
+--
+-- Name: index_chart_quants_on_chart_attribute_id_and_quant_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_chart_quants_on_chart_attribute_id_and_quant_id ON chart_quants USING btree (chart_attribute_id, quant_id);
+
+
+--
+-- Name: index_chart_quants_on_quant_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_chart_quants_on_quant_id ON chart_quants USING btree (quant_id);
+
+
+--
+-- Name: index_charts_on_parent_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_charts_on_parent_id ON charts USING btree (parent_id);
+
+
+--
+-- Name: index_charts_on_profile_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_charts_on_profile_id ON charts USING btree (profile_id);
+
+
+--
+-- Name: index_charts_on_profile_id_and_parent_id_and_position; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_charts_on_profile_id_and_parent_id_and_position ON charts USING btree (profile_id, parent_id, "position");
 
 
 --
@@ -3503,6 +3888,20 @@ CREATE UNIQUE INDEX index_node_types_on_name ON node_types USING btree (name);
 --
 
 CREATE INDEX index_nodes_on_node_type_id ON nodes USING btree (node_type_id);
+
+
+--
+-- Name: index_profiles_on_context_node_type_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_profiles_on_context_node_type_id ON profiles USING btree (context_node_type_id);
+
+
+--
+-- Name: index_profiles_on_context_node_type_id_and_name; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_profiles_on_context_node_type_id_and_name ON profiles USING btree (context_node_type_id, name);
 
 
 --
@@ -3907,6 +4306,14 @@ ALTER TABLE ONLY download_attributes
 
 
 --
+-- Name: chart_attributes fk_rails_18fff2d805; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_attributes
+    ADD CONSTRAINT fk_rails_18fff2d805 FOREIGN KEY (chart_id) REFERENCES charts(id) ON DELETE CASCADE;
+
+
+--
 -- Name: download_quals fk_rails_1be1712b6c; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -3955,6 +4362,14 @@ ALTER TABLE ONLY recolor_by_inds
 
 
 --
+-- Name: chart_inds fk_rails_2c8eebb539; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_inds
+    ADD CONSTRAINT fk_rails_2c8eebb539 FOREIGN KEY (chart_attribute_id) REFERENCES chart_attributes(id) ON DELETE CASCADE;
+
+
+--
 -- Name: flow_quants fk_rails_2dbc0a565f; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -3987,6 +4402,14 @@ ALTER TABLE ONLY nodes
 
 
 --
+-- Name: chart_quals fk_rails_48ef39e784; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_quals
+    ADD CONSTRAINT fk_rails_48ef39e784 FOREIGN KEY (chart_attribute_id) REFERENCES chart_attributes(id) ON DELETE CASCADE;
+
+
+--
 -- Name: map_inds fk_rails_49db6b9c1f; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -4011,11 +4434,27 @@ ALTER TABLE ONLY contextual_layers
 
 
 --
+-- Name: chart_quants fk_rails_69c56caceb; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_quants
+    ADD CONSTRAINT fk_rails_69c56caceb FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+
+
+--
 -- Name: flow_quals fk_rails_6e55ca4cbc; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY flow_quals
     ADD CONSTRAINT fk_rails_6e55ca4cbc FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
+
+
+--
+-- Name: charts fk_rails_805a6066ad; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY charts
+    ADD CONSTRAINT fk_rails_805a6066ad FOREIGN KEY (parent_id) REFERENCES charts(id) ON DELETE CASCADE;
 
 
 --
@@ -4075,6 +4514,30 @@ ALTER TABLE ONLY flow_quants
 
 
 --
+-- Name: charts fk_rails_a7dc6318f9; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY charts
+    ADD CONSTRAINT fk_rails_a7dc6318f9 FOREIGN KEY (profile_id) REFERENCES profiles(id);
+
+
+--
+-- Name: chart_inds fk_rails_b730b06fdc; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_inds
+    ADD CONSTRAINT fk_rails_b730b06fdc FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+
+
+--
+-- Name: chart_quals fk_rails_c1341bce97; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_quals
+    ADD CONSTRAINT fk_rails_c1341bce97 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+
+
+--
 -- Name: flows fk_rails_c33db455e5; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -4099,6 +4562,14 @@ ALTER TABLE ONLY map_inds
 
 
 --
+-- Name: profiles fk_rails_cbc235c3bc; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY profiles
+    ADD CONSTRAINT fk_rails_cbc235c3bc FOREIGN KEY (context_node_type_id) REFERENCES context_node_types(id);
+
+
+--
 -- Name: map_quants fk_rails_cc084396cb; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -4120,6 +4591,14 @@ ALTER TABLE ONLY contexts
 
 ALTER TABLE ONLY node_quants
     ADD CONSTRAINT fk_rails_dd544b3e59 FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE;
+
+
+--
+-- Name: chart_quants fk_rails_dd98c02cd6; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_quants
+    ADD CONSTRAINT fk_rails_dd98c02cd6 FOREIGN KEY (chart_attribute_id) REFERENCES chart_attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -4231,6 +4710,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171013101825'),
 ('20171013103931'),
 ('20171013104602'),
-('20171018093008');
+('20171018093008'),
+('20171020091710');
 
 
