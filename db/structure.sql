@@ -1641,6 +1641,39 @@ ALTER SEQUENCE download_quants_id_seq OWNED BY download_quants.id;
 
 
 --
+-- Name: download_versions; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE download_versions (
+    id integer NOT NULL,
+    context_id integer NOT NULL,
+    symbol character varying NOT NULL,
+    current boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: download_versions_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE download_versions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: download_versions_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE download_versions_id_seq OWNED BY download_versions.id;
+
+
+--
 -- Name: flow_inds; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -2712,6 +2745,13 @@ ALTER TABLE ONLY download_quants ALTER COLUMN id SET DEFAULT nextval('download_q
 
 
 --
+-- Name: download_versions id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY download_versions ALTER COLUMN id SET DEFAULT nextval('download_versions_id_seq'::regclass);
+
+
+--
 -- Name: flow_inds id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
@@ -3138,6 +3178,14 @@ ALTER TABLE ONLY download_quals
 
 ALTER TABLE ONLY download_quants
     ADD CONSTRAINT download_quants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: download_versions download_versions_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY download_versions
+    ADD CONSTRAINT download_versions_pkey PRIMARY KEY (id);
 
 
 --
@@ -3683,6 +3731,20 @@ CREATE UNIQUE INDEX index_download_quants_on_download_attribute_id_and_quant_id 
 --
 
 CREATE INDEX index_download_quants_on_quant_id ON download_quants USING btree (quant_id);
+
+
+--
+-- Name: index_download_versions_on_context_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_download_versions_on_context_id ON download_versions USING btree (context_id);
+
+
+--
+-- Name: index_download_versions_on_context_id_and_symbol; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_download_versions_on_context_id_and_symbol ON download_versions USING btree (context_id, symbol);
 
 
 --
@@ -4463,6 +4525,14 @@ ALTER TABLE ONLY nodes
 
 
 --
+-- Name: download_versions fk_rails_3fcb3b1d94; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY download_versions
+    ADD CONSTRAINT fk_rails_3fcb3b1d94 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+
+
+--
 -- Name: chart_quals fk_rails_48ef39e784; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -4789,6 +4859,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171013104602'),
 ('20171018093008'),
 ('20171020091710'),
-('20171020125731');
+('20171020125731'),
+('20171020133529');
 
 
