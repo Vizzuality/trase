@@ -25,6 +25,6 @@ shared_context 'brazil soy nodes' do
     FactoryGirl.create(:node, name: 'UNKNOWN CUSTOMER', node_type: importer_node_type)
   }
   let!(:country_of_destination1_node){
-    FactoryGirl.create(:node, name: 'RUSSIAN FEDERATION', node_type: country_node_type)
+    FactoryGirl.create(:node, name: 'RUSSIAN FEDERATION', node_type: country_node_type, geo_id: 'CN')
   }
 end

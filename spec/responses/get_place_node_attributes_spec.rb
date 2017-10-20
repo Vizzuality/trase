@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe 'Get place node attributes', type: :request do
-  include_context 'brazil ind values'
-  include_context 'brazil qual values'
-  include_context 'brazil quant values'
+  include_context 'brazil municipality ind values'
+  include_context 'brazil municipality qual values'
+  include_context 'brazil municipality quant values'
 
   describe 'GET /get_place_node_attributes' do
     it 'requires a context_id' do

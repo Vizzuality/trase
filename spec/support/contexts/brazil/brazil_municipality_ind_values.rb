@@ -1,4 +1,4 @@
-shared_context 'brazil ind values' do
+shared_context 'brazil municipality ind values' do
   include_context 'inds'
   include_context 'brazil soy nodes'
 
