@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "additionalProperties": false,
+  "definitions": {},
+  "id": "http://example.com/example.json",
+  "properties": {
+    "data": {
+      "id": "/properties/data",
+      "items": {
+        "additionalProperties": false,
+        "id": "/properties/data/items",
+        "properties": {
+          "columnId": {
+            "id": "/properties/data/items/properties/columnId",
+            "type": "integer"
+          },
+          "geoId": {
+            "id": "/properties/data/items/properties/geoId",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "hasFlows": {
+            "id": "/properties/data/items/properties/hasFlows",
+            "type": "boolean"
+          },
+          "id": {
+            "id": "/properties/data/items/properties/id",
+            "type": "integer"
+          },
+          "isAggregated": {
+            "id": "/properties/data/items/properties/isAggregated",
+            "type": "boolean"
+          },
+          "isDomesticConsumption": {
+            "id": "/properties/data/items/properties/isDomesticConsumption",
+            "type": "null"
+          },
+          "isUnknown": {
+            "id": "/properties/data/items/properties/isUnknown",
+            "type": "null"
+          },
+          "name": {
+            "id": "/properties/data/items/properties/name",
+            "type": "string"
+          },
+          "profileType": {
+            "id": "/properties/data/items/properties/profileType",
+            "type": "null"
+          },
+          "type": {
+            "id": "/properties/data/items/properties/type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "isUnknown",
+          "columnId",
+          "isDomesticConsumption",
+          "id",
+          "isAggregated",
+          "profileType",
+          "hasFlows",
+          "type",
+          "geoId",
+          "name"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "data"
+  ],
+  "type": "object"
+}
