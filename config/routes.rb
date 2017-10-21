@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         resources :columns, only: [:index]
       end
       get '/get_all_nodes', to: 'nodes#get_all_nodes'
+      get '/get_node_attributes', to: 'nodes#node_attributes'
     end
     namespace :v2 do
       resources :geo_id, only: :index
