@@ -180,7 +180,6 @@ EOT
       {type: 'quant', backend_name: 'SLAVERY'},
       # Reported cases of land conflicts
       {type: 'quant', backend_name: 'LAND_CONFL'},
-      {type: 'quant', backend_name: 'CATTLE_HEADS'},
       {type: 'quant', backend_name: 'POPULATION'}
     ]
 
