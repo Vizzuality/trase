@@ -1,0 +1,331 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "definitions": {},
+  "id": "http://example.com/example.json",
+  "properties": {
+    "data": {
+      "id": "/properties/data",
+      "properties": {
+        "area": {
+          "id": "/properties/data/properties/area",
+          "type": "number"
+        },
+        "biome_geo_id": {
+          "id": "/properties/data/properties/biome_geo_id",
+          "type": "string"
+        },
+        "biome_name": {
+          "id": "/properties/data/properties/biome_name",
+          "type": "string"
+        },
+        "column_name": {
+          "id": "/properties/data/properties/column_name",
+          "type": "string"
+        },
+        "country_geo_id": {
+          "id": "/properties/data/properties/country_geo_id",
+          "type": "string"
+        },
+        "country_name": {
+          "id": "/properties/data/properties/country_name",
+          "type": "string"
+        },
+        "indicators": {
+          "id": "/properties/data/properties/indicators",
+          "items": {
+            "id": "/properties/data/properties/indicators/items",
+            "properties": {
+              "included_columns": {
+                "id": "/properties/data/properties/indicators/items/properties/included_columns",
+                "items": {
+                  "id": "/properties/data/properties/indicators/items/properties/included_columns/items",
+                  "properties": {
+                    "name": {
+                      "id": "/properties/data/properties/indicators/items/properties/included_columns/items/properties/name",
+                      "type": "string"
+                    },
+                    "unit": {
+                      "id": "/properties/data/properties/indicators/items/properties/included_columns/items/properties/unit",
+                      "type": "string"
+                    },
+                    "year": {
+                      "id": "/properties/data/properties/indicators/items/properties/included_columns/items/properties/year",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "unit"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "name": {
+                "id": "/properties/data/properties/indicators/items/properties/name",
+                "type": "string"
+              },
+              "rows": {
+                "id": "/properties/data/properties/indicators/items/properties/rows",
+                "items": {
+                  "id": "/properties/data/properties/indicators/items/properties/rows/items",
+                  "properties": {
+                    "have_unit": {
+                      "id": "/properties/data/properties/indicators/items/properties/rows/items/properties/have_unit",
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "id": "/properties/data/properties/indicators/items/properties/rows/items/properties/name",
+                      "type": "string"
+                    },
+                    "values": {
+                      "id": "/properties/data/properties/indicators/items/properties/rows/items/properties/values",
+                      "items": {
+                        "id": "/properties/data/properties/indicators/items/properties/rows/items/properties/values/items",
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "have_unit",
+                    "values",
+                    "name"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "rows",
+              "included_columns",
+              "name"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "municipality_geo_id": {
+          "id": "/properties/data/properties/municipality_geo_id",
+          "type": "string"
+        },
+        "municipality_name": {
+          "id": "/properties/data/properties/municipality_name",
+          "type": "string"
+        },
+        "soy_area": {
+          "id": "/properties/data/properties/soy_area",
+          "type": "string"
+        },
+        "soy_farmland": {
+          "id": "/properties/data/properties/soy_farmland",
+          "type": "number"
+        },
+        "soy_production": {
+          "id": "/properties/data/properties/soy_production",
+          "type": "number"
+        },
+        "state_geo_id": {
+          "id": "/properties/data/properties/state_geo_id",
+          "type": "string"
+        },
+        "state_name": {
+          "id": "/properties/data/properties/state_name",
+          "type": "string"
+        },
+        "summary": {
+          "id": "/properties/data/properties/summary",
+          "type": "string"
+        },
+        "top_consumers": {
+          "id": "/properties/data/properties/top_consumers",
+          "properties": {
+            "countries": {
+              "id": "/properties/data/properties/top_consumers/properties/countries",
+              "items": {
+                "id": "/properties/data/properties/top_consumers/properties/countries/items",
+                "properties": {
+                  "id": {
+                    "id": "/properties/data/properties/top_consumers/properties/countries/items/properties/id",
+                    "type": "integer"
+                  },
+                  "is_domestic_consumption": {
+                    "id": "/properties/data/properties/top_consumers/properties/countries/items/properties/is_domestic_consumption",
+                    "type": "boolean"
+                  },
+                  "name": {
+                    "id": "/properties/data/properties/top_consumers/properties/countries/items/properties/name",
+                    "type": "string"
+                  },
+                  "value": {
+                    "id": "/properties/data/properties/top_consumers/properties/countries/items/properties/value",
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "is_domestic_consumption",
+                  "id",
+                  "value",
+                  "name"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "matrix": {
+              "id": "/properties/data/properties/top_consumers/properties/matrix",
+              "items": {
+                "id": "/properties/data/properties/top_consumers/properties/matrix/items",
+                "items": {
+                  "id": "/properties/data/properties/top_consumers/properties/matrix/items/items",
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "type": "array"
+              },
+              "type": "array"
+            },
+            "municipalities": {
+              "id": "/properties/data/properties/top_consumers/properties/municipalities",
+              "items": {
+                "id": "/properties/data/properties/top_consumers/properties/municipalities/items",
+                "properties": {
+                  "id": {
+                    "id": "/properties/data/properties/top_consumers/properties/municipalities/items/properties/id",
+                    "type": "integer"
+                  },
+                  "name": {
+                    "id": "/properties/data/properties/top_consumers/properties/municipalities/items/properties/name",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "name"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "municipalities",
+            "matrix",
+            "countries"
+          ],
+          "type": "object"
+        },
+        "top_traders": {
+          "id": "/properties/data/properties/top_traders",
+          "properties": {
+            "actors": {
+              "id": "/properties/data/properties/top_traders/properties/actors",
+              "items": {
+                "id": "/properties/data/properties/top_traders/properties/actors/items",
+                "properties": {
+                  "id": {
+                    "id": "/properties/data/properties/top_traders/properties/actors/items/properties/id",
+                    "type": "integer"
+                  },
+                  "is_domestic_consumption": {
+                    "id": "/properties/data/properties/top_traders/properties/actors/items/properties/is_domestic_consumption",
+                    "type": "boolean"
+                  },
+                  "name": {
+                    "id": "/properties/data/properties/top_traders/properties/actors/items/properties/name",
+                    "type": "string"
+                  },
+                  "value": {
+                    "id": "/properties/data/properties/top_traders/properties/actors/items/properties/value",
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "is_domestic_consumption",
+                  "id",
+                  "value",
+                  "name"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "matrix": {
+              "id": "/properties/data/properties/top_traders/properties/matrix",
+              "items": {
+                "id": "/properties/data/properties/top_traders/properties/matrix/items",
+                "items": {
+                  "id": "/properties/data/properties/top_traders/properties/matrix/items/items",
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "type": "array"
+              },
+              "type": "array"
+            },
+            "municipalities": {
+              "id": "/properties/data/properties/top_traders/properties/municipalities",
+              "items": {
+                "id": "/properties/data/properties/top_traders/properties/municipalities/items",
+                "properties": {
+                  "id": {
+                    "id": "/properties/data/properties/top_traders/properties/municipalities/items/properties/id",
+                    "type": "integer"
+                  },
+                  "name": {
+                    "id": "/properties/data/properties/top_traders/properties/municipalities/items/properties/name",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "name"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "municipalities",
+            "actors",
+            "matrix"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "top_traders",
+        "state_geo_id",
+        "state_name",
+        "area",
+        "biome_name",
+        "soy_production",
+        "top_consumers",
+        "summary",
+        "indicators",
+        "biome_geo_id",
+        "municipality_geo_id",
+        "country_name",
+        "soy_farmland",
+        "municipality_name",
+        "soy_area",
+        "country_geo_id",
+        "column_name"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "data"
+  ],
+  "type": "object"
+}

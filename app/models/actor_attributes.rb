@@ -180,6 +180,8 @@ is #{@main_destination_name.humanize}, accounting for \
     years = @stats.available_years_for_indicator('quant', 'Volume')
     # add bucket for selected year
     volume_quant = Quant.find_by_name('SOY_TN') # TODO no bucket for Volume?
+    raise 'Quant SOY_TN not found, but needed to calculate actor\'s top countries' unless volume_quant.present?
+
     context_layer = ContextLayer.where(
       context_id: @context.id, layer_attribute_type: 'Quant', layer_attribute_id: volume_quant.id
     ).first
@@ -194,6 +196,8 @@ is #{@main_destination_name.humanize}, accounting for \
     years = @stats.available_years_for_indicator('quant', 'Volume')
     # add bucket for selected year
     volume_quant = Quant.find_by_name('SOY_TN') # TODO no bucket for Volume?
+    raise 'Quant SOY_TN not found, but needed to calculate actor\'s top sources' unless volume_quant.present?
+
     context_layer = ContextLayer.where(
       context_id: @context.id, layer_attribute_type: 'Quant', layer_attribute_id: volume_quant.id
     ).first
@@ -223,6 +227,7 @@ is #{@main_destination_name.humanize}, accounting for \
 
   def companies_exporting
     quant = Quant.find_by(name: 'Volume')
+    raise 'Quant Volume not found, but needed to calculate actor\'s exporting companies' unless quant.present?
 
     unit = quant.unit
     value_divisor = 1
@@ -414,10 +419,11 @@ is #{@main_destination_name.humanize}, accounting for \
       name: name,
       included_columns:
           [{name: node_type.humanize}] +
-          risk_indicators.map {
-              |indicator| quant = Quant.find_by(name: indicator[:backend_name])
-            {name: indicator.key?(:name) ? indicator[:name] : quant.frontend_name , unit: quant.unit}
-          },
+              risk_indicators.map {
+                  |indicator| quant = Quant.find_by(name: indicator[:backend_name])
+                raise "Missing #{indicator[:backend_name]} Quant necessary to calculate sustainability indicators for actor profile" unless quant.present?
+                {name: indicator.key?(:name) ? indicator[:name] : quant.frontend_name, unit: quant.unit}
+              },
       rows: rows
     }
   end

@@ -1,5 +1,6 @@
 shared_context 'brazil context nodes' do
-  include_context 'brazil node types'
+  include_context 'brazil contexts'
+  include_context 'node types'
 
   let!(:biome_context_node){
     FactoryGirl.create(

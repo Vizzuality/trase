@@ -1,22 +1,14 @@
 class NodesController < ApplicationController
   def get_all_nodes
 
-    context_id = params[:context_id]
-
-    if context_id.present?
-      context = Context.find(context_id)
-    end
-
     flow_nodes = Flow.select('distinct(unnest(path)) as node_id')
 
     node_type_ids = NodeType
                         .joins(:context_nodes)
                         .select('node_types.node_type_id')
 
-    if (context)
-      flow_nodes = flow_nodes.where('flows.context_id = :context_id', context_id: context.id)
-      node_type_ids = node_type_ids.where('context_nodes.context_id = :context_id', context_id: context.id)
-    end
+    flow_nodes = flow_nodes.where('flows.context_id = :context_id', context_id: @context.id)
+    node_type_ids = node_type_ids.where('context_nodes.context_id = :context_id', context_id: @context.id)
 
     matching_nodes = Node
                          .select('
@@ -27,9 +19,9 @@ class NodesController < ApplicationController
                          .joins(:node_type)
                          .joins("LEFT OUTER JOIN (#{flow_nodes.to_sql}) flow_nodes ON flow_nodes.node_id = nodes.node_id")
                          .joins('LEFT JOIN context_nodes ON context_nodes.node_type_id = nodes.node_type_id')
-                         .where('flow_nodes.node_id IS NOT NULL OR substring(geo_id from 1 for 2) = :country_code OR nodes.name = \'OTHER\' ', country_code: context.country.iso2)
+                         .where('flow_nodes.node_id IS NOT NULL OR substring(geo_id from 1 for 2) = :country_code OR nodes.name = \'OTHER\' ', country_code: @context.country.iso2)
                          .where('nodes.node_type_id IN (:node_type_ids)', node_type_ids: node_type_ids)
-                         .where('context_nodes.context_id = :context_id', context_id: context.id)
+                         .where('context_nodes.context_id = :context_id', context_id: @context.id)
                          .all()
 
     render json: matching_nodes, root: 'data', each_serializer: GetAllNodesSerializer

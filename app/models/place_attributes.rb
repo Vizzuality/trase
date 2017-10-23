@@ -344,7 +344,7 @@ EOT
 
     result = {
       node_list_label =>
-        top_nodes.map { |t| {id: t['node_id'], name: t['name'], value: t['value']/all_nodes_total, is_domestic_consumption: t['is_domestic_consumption']} },
+        top_nodes.map { |t| {id: t['node_id'], name: t['name'], value: t['value']/all_nodes_total, is_domestic_consumption: t['is_domestic_consumption'].present?} },
       municipalities: top_municipalities.map{ |m| {id: m.id, name: m.name} },
       matrix: matrix
     }

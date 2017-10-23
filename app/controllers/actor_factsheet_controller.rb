@@ -8,7 +8,11 @@ class ActorFactsheetController < ApplicationController
       Context.find_by(is_default: true)
     end
 
+    raise ActionController::ParameterMissing, 'Required context_id missing' if context.nil?
+
     year = params[:year] || context.default_year
+
+    raise ActionController::ParameterMissing, 'Required year missing' if year.nil?
 
     node_id = params[:node_id]
 

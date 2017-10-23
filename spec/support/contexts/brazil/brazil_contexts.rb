@@ -15,7 +15,9 @@ shared_context 'brazil contexts' do
     FactoryGirl.create(
       :context,
       country: brazil,
-      commodity: FactoryGirl.create(:commodity, name: 'BEEF')
+      commodity: FactoryGirl.create(:commodity, name: 'BEEF'),
+      years: [2014, 2015],
+      default_year: 2015
     )
   }
 end

@@ -1,0 +1,597 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "additionalProperties": false,
+  "definitions": {},
+  "id": "http://example.com/example.json",
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "id": "/properties/data",
+      "properties": {
+        "column_name": {
+          "id": "/properties/data/properties/column_name",
+          "type": "string"
+        },
+        "country_geo_id": {
+          "id": "/properties/data/properties/country_geo_id",
+          "type": "string"
+        },
+        "forest_500": {
+          "id": "/properties/data/properties/forest_500",
+          "type": "number"
+        },
+        "node_name": {
+          "id": "/properties/data/properties/node_name",
+          "type": "string"
+        },
+        "summary": {
+          "id": "/properties/data/properties/summary",
+          "type": "string"
+        },
+        "zero_deforestation": {
+          "id": "/properties/data/properties/zero_deforestation",
+          "type": "string"
+        },
+        "zero_deforestation_link": {
+          "id": "/properties/data/properties/zero_deforestation_link",
+          "type": "string"
+        },
+        "agrosatelite_soy_defor_": {
+          "id": "/properties/data/properties/agrosatelite_soy_defor_",
+          "type": "number"
+        },
+        "country_name": {
+          "id": "/properties/data/properties/country_name",
+          "type": "string"
+        },
+        "rtrs_member": {
+          "id": "/properties/data/properties/rtrs_member",
+          "type": "string"
+        },
+        "soy_": {
+          "id": "/properties/data/properties/soy_",
+          "type": "number"
+        },
+        "supply_change": {
+          "id": "/properties/data/properties/supply_change",
+          "type": "string"
+        },
+        "supply_change_link": {
+          "id": "/properties/data/properties/supply_change_link",
+          "type": "string"
+        },
+        "companies_sourcing": {
+          "additionalProperties": false,
+          "id": "/properties/data/properties/companies_sourcing",
+          "properties": {
+            "companies": {
+              "id": "/properties/data/properties/companies_sourcing/properties/companies",
+              "items": {
+                "additionalProperties": false,
+                "id": "/properties/data/properties/companies_sourcing/properties/companies/items",
+                "properties": {
+                  "id": {
+                    "id": "/properties/data/properties/companies_sourcing/properties/companies/items/properties/id",
+                    "type": "integer"
+                  },
+                  "name": {
+                    "id": "/properties/data/properties/companies_sourcing/properties/companies/items/properties/name",
+                    "type": "string"
+                  },
+                  "x": {
+                    "id": "/properties/data/properties/companies_sourcing/properties/companies/items/properties/x",
+                    "items": {
+                      "id": "/properties/data/properties/companies_sourcing/properties/companies/items/properties/x/items",
+                      "type": "number"
+                    },
+                    "type": "array"
+                  },
+                  "y": {
+                    "id": "/properties/data/properties/companies_sourcing/properties/companies/items/properties/y",
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "y",
+                  "x",
+                  "name",
+                  "id"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "dimension_y": {
+              "additionalProperties": false,
+              "id": "/properties/data/properties/companies_sourcing/properties/dimension_y",
+              "properties": {
+                "name": {
+                  "id": "/properties/data/properties/companies_sourcing/properties/dimension_y/properties/name",
+                  "type": "string"
+                },
+                "unit": {
+                  "id": "/properties/data/properties/companies_sourcing/properties/dimension_y/properties/unit",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "unit"
+              ],
+              "type": "object"
+            },
+            "dimensions_x": {
+              "id": "/properties/data/properties/companies_sourcing/properties/dimensions_x",
+              "items": {
+                "additionalProperties": false,
+                "id": "/properties/data/properties/companies_sourcing/properties/dimensions_x/items",
+                "properties": {
+                  "name": {
+                    "id": "/properties/data/properties/companies_sourcing/properties/dimensions_x/items/properties/name",
+                    "type": "string"
+                  },
+                  "unit": {
+                    "id": "/properties/data/properties/companies_sourcing/properties/dimensions_x/items/properties/unit",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "dimensions_x",
+            "dimension_y",
+            "companies"
+          ],
+          "type": "object"
+        },
+        "top_countries": {
+          "additionalProperties": false,
+          "id": "/properties/data/properties/top_countries",
+          "properties": {
+            "buckets": {
+              "id": "/properties/data/properties/top_countries/properties/buckets",
+              "items": {
+                "id": "/properties/data/properties/top_countries/properties/buckets/items",
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "included_years": {
+              "id": "/properties/data/properties/top_countries/properties/included_years",
+              "items": {
+                "id": "/properties/data/properties/top_countries/properties/included_years/items",
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "lines": {
+              "id": "/properties/data/properties/top_countries/properties/lines",
+              "items": {
+                "additionalProperties": false,
+                "id": "/properties/data/properties/top_countries/properties/lines/items",
+                "properties": {
+                  "geo_id": {
+                    "id": "/properties/data/properties/top_countries/properties/lines/items/properties/geo_id",
+                    "type": "string"
+                  },
+                  "name": {
+                    "id": "/properties/data/properties/top_countries/properties/lines/items/properties/name",
+                    "type": "string"
+                  },
+                  "value9": {
+                    "id": "/properties/data/properties/top_countries/properties/lines/items/properties/value9",
+                    "type": "integer"
+                  },
+                  "values": {
+                    "id": "/properties/data/properties/top_countries/properties/lines/items/properties/values",
+                    "items": {
+                      "id": "/properties/data/properties/top_countries/properties/lines/items/properties/values/items",
+                      "type": "number"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "values",
+                  "name",
+                  "value9",
+                  "geo_id"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "style": {
+              "additionalProperties": false,
+              "id": "/properties/data/properties/top_countries/properties/style",
+              "properties": {
+                "style": {
+                  "id": "/properties/data/properties/top_countries/properties/style/properties/style",
+                  "type": "string"
+                },
+                "type": {
+                  "id": "/properties/data/properties/top_countries/properties/style/properties/type",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "style",
+                "type"
+              ],
+              "type": "object"
+            },
+            "unit": {
+              "id": "/properties/data/properties/top_countries/properties/unit",
+              "type": "string"
+            }
+          },
+          "required": [
+            "included_years",
+            "style",
+            "lines",
+            "buckets",
+            "unit"
+          ],
+          "type": "object"
+        },
+        "top_sources": {
+          "additionalProperties": false,
+          "id": "/properties/data/properties/top_sources",
+          "properties": {
+            "biome": {
+              "additionalProperties": false,
+              "id": "/properties/data/properties/top_sources/properties/biome",
+              "properties": {
+                "lines": {
+                  "id": "/properties/data/properties/top_sources/properties/biome/properties/lines",
+                  "items": {
+                    "additionalProperties": false,
+                    "id": "/properties/data/properties/top_sources/properties/biome/properties/lines/items",
+                    "properties": {
+                      "geo_id": {
+                        "id": "/properties/data/properties/top_sources/properties/biome/properties/lines/items/properties/geo_id",
+                        "type": "string"
+                      },
+                      "name": {
+                        "id": "/properties/data/properties/top_sources/properties/biome/properties/lines/items/properties/name",
+                        "type": "string"
+                      },
+                      "value9": {
+                        "id": "/properties/data/properties/top_sources/properties/biome/properties/lines/items/properties/value9",
+                        "type": "integer"
+                      },
+                      "values": {
+                        "id": "/properties/data/properties/top_sources/properties/biome/properties/lines/items/properties/values",
+                        "items": {
+                          "id": "/properties/data/properties/top_sources/properties/biome/properties/lines/items/properties/values/items",
+                          "type": "number"
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "values",
+                      "name",
+                      "value9",
+                      "geo_id"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "style": {
+                  "additionalProperties": false,
+                  "id": "/properties/data/properties/top_sources/properties/biome/properties/style",
+                  "properties": {
+                    "style": {
+                      "id": "/properties/data/properties/top_sources/properties/biome/properties/style/properties/style",
+                      "type": "string"
+                    },
+                    "type": {
+                      "id": "/properties/data/properties/top_sources/properties/biome/properties/style/properties/type",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "style",
+                    "type"
+                  ],
+                  "type": "object"
+                },
+                "unit": {
+                  "id": "/properties/data/properties/top_sources/properties/biome/properties/unit",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "style",
+                "lines",
+                "unit"
+              ],
+              "type": "object"
+            },
+            "buckets": {
+              "id": "/properties/data/properties/top_sources/properties/buckets",
+              "items": {
+                "id": "/properties/data/properties/top_sources/properties/buckets/items",
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "included_years": {
+              "id": "/properties/data/properties/top_sources/properties/included_years",
+              "items": {
+                "id": "/properties/data/properties/top_sources/properties/included_years/items",
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "municipality": {
+              "additionalProperties": false,
+              "id": "/properties/data/properties/top_sources/properties/municipality",
+              "properties": {
+                "lines": {
+                  "id": "/properties/data/properties/top_sources/properties/municipality/properties/lines",
+                  "items": {
+                    "additionalProperties": false,
+                    "id": "/properties/data/properties/top_sources/properties/municipality/properties/lines/items",
+                    "properties": {
+                      "geo_id": {
+                        "id": "/properties/data/properties/top_sources/properties/municipality/properties/lines/items/properties/geo_id",
+                        "type": "string"
+                      },
+                      "name": {
+                        "id": "/properties/data/properties/top_sources/properties/municipality/properties/lines/items/properties/name",
+                        "type": "string"
+                      },
+                      "value9": {
+                        "id": "/properties/data/properties/top_sources/properties/municipality/properties/lines/items/properties/value9",
+                        "type": "integer"
+                      },
+                      "values": {
+                        "id": "/properties/data/properties/top_sources/properties/municipality/properties/lines/items/properties/values",
+                        "items": {
+                          "id": "/properties/data/properties/top_sources/properties/municipality/properties/lines/items/properties/values/items",
+                          "type": "number"
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "values",
+                      "name",
+                      "value9",
+                      "geo_id"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "style": {
+                  "additionalProperties": false,
+                  "id": "/properties/data/properties/top_sources/properties/municipality/properties/style",
+                  "properties": {
+                    "style": {
+                      "id": "/properties/data/properties/top_sources/properties/municipality/properties/style/properties/style",
+                      "type": "string"
+                    },
+                    "type": {
+                      "id": "/properties/data/properties/top_sources/properties/municipality/properties/style/properties/type",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "style",
+                    "type"
+                  ],
+                  "type": "object"
+                },
+                "unit": {
+                  "id": "/properties/data/properties/top_sources/properties/municipality/properties/unit",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "style",
+                "lines",
+                "unit"
+              ],
+              "type": "object"
+            },
+            "state": {
+              "additionalProperties": false,
+              "id": "/properties/data/properties/top_sources/properties/state",
+              "properties": {
+                "lines": {
+                  "id": "/properties/data/properties/top_sources/properties/state/properties/lines",
+                  "items": {
+                    "additionalProperties": false,
+                    "id": "/properties/data/properties/top_sources/properties/state/properties/lines/items",
+                    "properties": {
+                      "geo_id": {
+                        "id": "/properties/data/properties/top_sources/properties/state/properties/lines/items/properties/geo_id",
+                        "type": "string"
+                      },
+                      "name": {
+                        "id": "/properties/data/properties/top_sources/properties/state/properties/lines/items/properties/name",
+                        "type": "string"
+                      },
+                      "value9": {
+                        "id": "/properties/data/properties/top_sources/properties/state/properties/lines/items/properties/value9",
+                        "type": "integer"
+                      },
+                      "values": {
+                        "id": "/properties/data/properties/top_sources/properties/state/properties/lines/items/properties/values",
+                        "items": {
+                          "id": "/properties/data/properties/top_sources/properties/state/properties/lines/items/properties/values/items",
+                          "type": "number"
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "values",
+                      "name",
+                      "value9",
+                      "geo_id"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "style": {
+                  "additionalProperties": false,
+                  "id": "/properties/data/properties/top_sources/properties/state/properties/style",
+                  "properties": {
+                    "style": {
+                      "id": "/properties/data/properties/top_sources/properties/state/properties/style/properties/style",
+                      "type": "string"
+                    },
+                    "type": {
+                      "id": "/properties/data/properties/top_sources/properties/state/properties/style/properties/type",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "style",
+                    "type"
+                  ],
+                  "type": "object"
+                },
+                "unit": {
+                  "id": "/properties/data/properties/top_sources/properties/state/properties/unit",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "style",
+                "lines",
+                "unit"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "included_years",
+            "buckets",
+            "municipality",
+            "state",
+            "biome"
+          ],
+          "type": "object"
+        },
+        "sustainability": {
+          "id": "/properties/data/properties/sustainability",
+          "items": {
+            "additionalProperties": false,
+            "id": "/properties/data/properties/sustainability/items",
+            "properties": {
+              "included_columns": {
+                "id": "/properties/data/properties/sustainability/items/properties/included_columns",
+                "items": {
+                  "additionalProperties": false,
+                  "id": "/properties/data/properties/sustainability/items/properties/included_columns/items",
+                  "properties": {
+                    "name": {
+                      "id": "/properties/data/properties/sustainability/items/properties/included_columns/items/properties/name",
+                      "type": "string"
+                    },
+                    "unit": {
+                      "id": "/properties/data/properties/sustainability/items/properties/included_columns/items/properties/unit",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "name": {
+                "id": "/properties/data/properties/sustainability/items/properties/name",
+                "type": "string"
+              },
+              "rows": {
+                "id": "/properties/data/properties/sustainability/items/properties/rows",
+                "items": {
+                  "additionalProperties": false,
+                  "id": "/properties/data/properties/sustainability/items/properties/rows/items",
+                  "properties": {
+                    "is_total": {
+                      "type": "boolean"
+                    },
+                    "values": {
+                      "id": "/properties/data/properties/sustainability/items/properties/rows/items/properties/values",
+                      "items": {
+                        "additionalProperties": false,
+                        "id": "/properties/data/properties/sustainability/items/properties/rows/items/properties/values/items",
+                        "properties": {
+                          "id": {
+                            "id": "/properties/data/properties/sustainability/items/properties/rows/items/properties/values/items/properties/id",
+                            "type": "integer"
+                          },
+                          "value": {
+                            "id": "/properties/data/properties/sustainability/items/properties/rows/items/properties/values/items/properties/value",
+                            "type": [
+                              "string",
+                              "number"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "value"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "values"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "rows",
+              "included_columns",
+              "name"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "zero_deforestation",
+        "zero_deforestation_link",
+        "sustainability",
+        "soy_",
+        "node_name",
+        "supply_change",
+        "supply_change_link",
+        "forest_500",
+        "country_name",
+        "rtrs_member",
+        "country_geo_id",
+        "column_name",
+        "agrosatelite_soy_defor_",
+        "summary"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "data"
+  ],
+  "type": "object"
+}

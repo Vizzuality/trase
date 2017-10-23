@@ -1,12 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
+  "additionalProperties": false,
   "definitions": {},
   "id": "http://example.com/example.json",
   "properties": {
     "nodes": {
       "id": "/properties/nodes",
-      "minItems": 1,
       "items": {
+        "additionalProperties": false,
         "id": "/properties/nodes/items",
         "properties": {
           "geoId": {
@@ -14,7 +15,8 @@
             "type": [
               "string",
               "null"
-            ]          },
+            ]
+          },
           "isDomesticConsumption": {
             "id": "/properties/nodes/items/properties/isDomesticConsumption",
             "type": "boolean"
@@ -43,10 +45,23 @@
             "type": "integer"
           }
         },
+        "required": [
+          "name",
+          "nodeTypeId",
+          "mainNodeId",
+          "isDomesticConsumption",
+          "nodeId",
+          "geoId",
+          "isUnknown"
+        ],
         "type": "object"
       },
+      "minItems": 1,
       "type": "array"
     }
   },
+  "required": [
+    "nodes"
+  ],
   "type": "object"
 }

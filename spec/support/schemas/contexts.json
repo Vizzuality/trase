@@ -1,12 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
+  "additionalProperties": false,
   "definitions": {},
   "id": "http://example.com/example.json",
   "properties": {
     "data": {
       "id": "/properties/data",
-      "minItems": 1,
       "items": {
+        "additionalProperties": false,
         "id": "/properties/data/items",
         "properties": {
           "commodityId": {
@@ -38,6 +39,7 @@
               "id": "/properties/data/items/properties/defaultContextLayers/items",
               "type": "string"
             },
+            "minItems": 1,
             "type": [
               "array",
               "null"
@@ -45,14 +47,12 @@
           },
           "defaultYear": {
             "id": "/properties/data/items/properties/defaultYear",
-            "type": [
-              "integer",
-              "null"
-            ]
+            "type": "integer"
           },
           "filterBy": {
             "id": "/properties/data/items/properties/filterBy",
             "items": {
+              "additionalProperties": false,
               "id": "/properties/data/items/properties/filterBy/items",
               "properties": {
                 "name": {
@@ -62,6 +62,7 @@
                 "nodes": {
                   "id": "/properties/data/items/properties/filterBy/items/properties/nodes",
                   "items": {
+                    "additionalProperties": false,
                     "id": "/properties/data/items/properties/filterBy/items/properties/nodes/items",
                     "properties": {
                       "name": {
@@ -73,11 +74,20 @@
                         "type": "integer"
                       }
                     },
+                    "required": [
+                      "nodeId",
+                      "name"
+                    ],
                     "type": "object"
                   },
+                  "minItems": 1,
                   "type": "array"
                 }
               },
+              "required": [
+                "nodes",
+                "name"
+              ],
               "type": "object"
             },
             "type": "array"
@@ -95,6 +105,7 @@
             "type": "boolean"
           },
           "map": {
+            "additionalProperties": false,
             "id": "/properties/data/items/properties/map",
             "properties": {
               "latitude": {
@@ -110,11 +121,17 @@
                 "type": "integer"
               }
             },
+            "required": [
+              "latitude",
+              "zoom",
+              "longitude"
+            ],
             "type": "object"
           },
           "recolorBy": {
             "id": "/properties/data/items/properties/recolorBy",
             "items": {
+              "additionalProperties": false,
               "id": "/properties/data/items/properties/recolorBy/items",
               "properties": {
                 "description": {
@@ -123,7 +140,10 @@
                 },
                 "divisor": {
                   "id": "/properties/data/items/properties/recolorBy/items/properties/divisor",
-                  "type": "null"
+                  "type": [
+                    "null",
+                    "number"
+                  ]
                 },
                 "groupNumber": {
                   "id": "/properties/data/items/properties/recolorBy/items/properties/groupNumber",
@@ -155,11 +175,11 @@
                 },
                 "maxValue": {
                   "id": "/properties/data/items/properties/recolorBy/items/properties/maxValue",
-                  "type": "null"
+                  "type": ["number", "string", "null"]
                 },
                 "minValue": {
                   "id": "/properties/data/items/properties/recolorBy/items/properties/minValue",
-                  "type": "null"
+                  "type": ["number", "string", "null"]
                 },
                 "name": {
                   "id": "/properties/data/items/properties/recolorBy/items/properties/name",
@@ -168,8 +188,8 @@
                 "nodes": {
                   "id": "/properties/data/items/properties/recolorBy/items/properties/nodes",
                   "items": {
-                    "id": "/properties/data/items/properties/recolorBy/items/properties/nodes/items",
-                    "type": "string"
+                    "description": "This accepts anything, as long as it's valid JSON.",
+                    "title": "Empty Object"
                   },
                   "type": "array"
                 },
@@ -182,6 +202,23 @@
                   "type": "string"
                 }
               },
+              "required": [
+                "divisor",
+                "type",
+                "isDisabled",
+                "description",
+                "groupNumber",
+                "intervalCount",
+                "label",
+                "legendType",
+                "position",
+                "maxValue",
+                "legendColorTheme",
+                "minValue",
+                "nodes",
+                "isDefault",
+                "name"
+              ],
               "type": "object"
             },
             "type": "array"
@@ -189,6 +226,7 @@
           "resizeBy": {
             "id": "/properties/data/items/properties/resizeBy",
             "items": {
+              "additionalProperties": false,
               "id": "/properties/data/items/properties/resizeBy/items",
               "properties": {
                 "description": {
@@ -220,6 +258,15 @@
                   "type": "integer"
                 }
               },
+              "required": [
+                "name",
+                "isDisabled",
+                "groupNumber",
+                "label",
+                "position",
+                "isDefault",
+                "description"
+              ],
               "type": "object"
             },
             "type": "array"
@@ -230,13 +277,35 @@
               "id": "/properties/data/items/properties/years/items",
               "type": "integer"
             },
+            "minItems": 1,
             "type": "array"
           }
         },
+        "required": [
+          "recolorBy",
+          "map",
+          "commodityId",
+          "countryId",
+          "defaultYear",
+          "isDisabled",
+          "defaultBasemap",
+          "years",
+          "countryName",
+          "filterBy",
+          "defaultContextLayers",
+          "commodityName",
+          "resizeBy",
+          "id",
+          "isDefault"
+        ],
         "type": "object"
       },
+      "minItems": 1,
       "type": "array"
     }
   },
+  "required": [
+    "data"
+  ],
   "type": "object"
 }
