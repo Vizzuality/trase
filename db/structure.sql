@@ -1045,6 +1045,55 @@ CREATE TABLE inds (
 
 
 --
+-- Name: TABLE inds; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE inds IS 'Attributes classified as inds';
+
+
+--
+-- Name: COLUMN inds.name; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN inds.name IS 'Attribute short name, e.g. FOREST_500; those literals are referred to in code, therefore should not be changed without notice';
+
+
+--
+-- Name: COLUMN inds.display_name; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN inds.display_name IS 'Name of attribute for display';
+
+
+--
+-- Name: COLUMN inds.unit; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN inds.unit IS 'Unit in which values for this attribute are given';
+
+
+--
+-- Name: COLUMN inds.unit_type; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN inds.unit_type IS 'Type of unit, e.g. score. One of restricted set of values.';
+
+
+--
+-- Name: COLUMN inds.tooltip; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN inds.tooltip IS 'TODO';
+
+
+--
+-- Name: COLUMN inds.tooltip_text; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN inds.tooltip_text IS 'Tooltip text';
+
+
+--
 -- Name: quals; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -1057,6 +1106,41 @@ CREATE TABLE quals (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE quals; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE quals IS 'Attributes classified as quals';
+
+
+--
+-- Name: COLUMN quals.name; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN quals.name IS 'Attribute short name, e.g. ZERO_DEFORESTATION; those literals are referred to in code, therefore should not be changed without notice';
+
+
+--
+-- Name: COLUMN quals.display_name; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN quals.display_name IS 'Name of attribute for display';
+
+
+--
+-- Name: COLUMN quals.tooltip; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN quals.tooltip IS 'TODO';
+
+
+--
+-- Name: COLUMN quals.tooltip_text; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN quals.tooltip_text IS 'Tooltip text';
 
 
 --
@@ -1075,6 +1159,55 @@ CREATE TABLE quants (
     updated_at timestamp without time zone NOT NULL,
     CONSTRAINT quants_unit_type_check CHECK ((unit_type = ANY (ARRAY['currency'::text, 'area'::text, 'count'::text, 'volume'::text, 'unitless'::text])))
 );
+
+
+--
+-- Name: TABLE quants; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE quants IS 'Attributes classified as quants';
+
+
+--
+-- Name: COLUMN quants.name; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN quants.name IS 'Attribute short name, e.g. FOB; those literals are referred to in code, therefore should not be changed without notice';
+
+
+--
+-- Name: COLUMN quants.display_name; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN quants.display_name IS 'Name of attribute for display';
+
+
+--
+-- Name: COLUMN quants.unit; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN quants.unit IS 'Unit in which values for this attribute are given';
+
+
+--
+-- Name: COLUMN quants.unit_type; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN quants.unit_type IS 'Type of unit, e.g. count. One of restricted set of values.';
+
+
+--
+-- Name: COLUMN quants.tooltip; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN quants.tooltip IS 'TODO';
+
+
+--
+-- Name: COLUMN quants.tooltip_text; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN quants.tooltip_text IS 'Tooltip text';
 
 
 --
@@ -1150,6 +1283,27 @@ CREATE TABLE carto_layers (
 
 
 --
+-- Name: TABLE carto_layers; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE carto_layers IS 'Year-specific data layers defined in CartoDB used to display contextual layers.';
+
+
+--
+-- Name: COLUMN carto_layers.identifier; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN carto_layers.identifier IS 'Identifier of the CartoDB named map, e.g. brazil_biomes; unique in scope of contextual layer';
+
+
+--
+-- Name: COLUMN carto_layers.years; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN carto_layers.years IS 'Array of years for which to show this carto layer in scope of contextual layer; NULL for all years';
+
+
+--
 -- Name: carto_layers_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -1180,6 +1334,34 @@ CREATE TABLE chart_attributes (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE chart_attributes; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE chart_attributes IS 'Attributes (inds/quals/quants) to display in a chart.';
+
+
+--
+-- Name: COLUMN chart_attributes.chart_id; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN chart_attributes.chart_id IS 'Refence to chart';
+
+
+--
+-- Name: COLUMN chart_attributes."position"; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN chart_attributes."position" IS 'Display order in scope of chart';
+
+
+--
+-- Name: COLUMN chart_attributes.years; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN chart_attributes.years IS 'Array of years for which to show this attribute in scope of chart; NULL for all years';
 
 
 --
@@ -1215,6 +1397,13 @@ CREATE TABLE chart_inds (
 
 
 --
+-- Name: TABLE chart_inds; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE chart_inds IS 'Inds to display in a chart (see chart_attributes.)';
+
+
+--
 -- Name: chart_inds_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -1247,6 +1436,13 @@ CREATE TABLE chart_quals (
 
 
 --
+-- Name: TABLE chart_quals; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE chart_quals IS 'Quals to display in a chart (see chart_attributes.)';
+
+
+--
 -- Name: chart_quals_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -1276,6 +1472,13 @@ CREATE TABLE chart_quants (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE chart_quants; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE chart_quants IS 'Quants to display in a chart (see chart_attributes.)';
 
 
 --
@@ -1314,6 +1517,41 @@ CREATE TABLE charts (
 
 
 --
+-- Name: TABLE charts; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE charts IS 'Charts on profile pages.';
+
+
+--
+-- Name: COLUMN charts.parent_id; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN charts.parent_id IS 'Self-reference to parent used to define complex charts, e.g. table with values in tabs';
+
+
+--
+-- Name: COLUMN charts.identifier; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN charts.identifier IS 'Identifier used to map this chart to a part of code which contains calculation logic';
+
+
+--
+-- Name: COLUMN charts.title; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN charts.title IS 'Title of chart for display';
+
+
+--
+-- Name: COLUMN charts."position"; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN charts."position" IS 'Display order in scope of profile';
+
+
+--
 -- Name: charts_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -1343,6 +1581,27 @@ CREATE TABLE commodities (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE commodities; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE commodities IS 'Commodities in supply chains, such as soy or beef';
+
+
+--
+-- Name: COLUMN commodities.name; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN commodities.name IS 'Commodity name; unique across commodities';
+
+
+--
+-- Name: COLUMN commodities.parent_id; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN commodities.parent_id IS 'Self-reference to parent used to define links between commodities and sub-commodities';
 
 
 --
@@ -1379,6 +1638,41 @@ CREATE TABLE context_node_types (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE context_node_types; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE context_node_types IS 'Node types represented in supply chains per context. The value of column_position is interpreted as position in flows.path.';
+
+
+--
+-- Name: COLUMN context_node_types.column_group; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN context_node_types.column_group IS 'Number of sankey column in which to display nodes of this type';
+
+
+--
+-- Name: COLUMN context_node_types.column_position; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN context_node_types.column_position IS 'Index of node of this type in flows.path';
+
+
+--
+-- Name: COLUMN context_node_types.is_default; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN context_node_types.is_default IS 'When set, show this node type as default (only use for one)';
+
+
+--
+-- Name: COLUMN context_node_types.is_geo_column; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN context_node_types.is_geo_column IS 'When set, show nodes on map';
 
 
 --
@@ -1419,6 +1713,48 @@ CREATE TABLE contexts (
 
 
 --
+-- Name: TABLE contexts; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE contexts IS 'Country-commodity combinations.';
+
+
+--
+-- Name: COLUMN contexts.years; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN contexts.years IS 'Years for which country-commodity data is present; NULL for all years';
+
+
+--
+-- Name: COLUMN contexts.default_year; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN contexts.default_year IS 'Default year for this context';
+
+
+--
+-- Name: COLUMN contexts.default_basemap; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN contexts.default_basemap IS 'Default basemap for this context, e.g. satellite';
+
+
+--
+-- Name: COLUMN contexts.is_disabled; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN contexts.is_disabled IS 'When set, do not show this context';
+
+
+--
+-- Name: COLUMN contexts.is_default; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN contexts.is_default IS 'When set, show this context as default (only use for one)';
+
+
+--
 -- Name: contexts_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -1452,6 +1788,48 @@ CREATE TABLE contextual_layers (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE contextual_layers; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE contextual_layers IS 'Additional layers shown on map coming from CartoDB';
+
+
+--
+-- Name: COLUMN contextual_layers.title; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN contextual_layers.title IS 'Title of layer for display';
+
+
+--
+-- Name: COLUMN contextual_layers.identifier; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN contextual_layers.identifier IS 'Identifier of layer, e.g. brazil_biomes';
+
+
+--
+-- Name: COLUMN contextual_layers."position"; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN contextual_layers."position" IS 'Display order in scope of context';
+
+
+--
+-- Name: COLUMN contextual_layers.tooltip_text; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN contextual_layers.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN contextual_layers.is_default; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN contextual_layers.is_default IS 'When set, show this layer by default';
 
 
 --
@@ -1490,6 +1868,48 @@ CREATE TABLE countries (
 
 
 --
+-- Name: TABLE countries; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE countries IS 'Countries (source)';
+
+
+--
+-- Name: COLUMN countries.name; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN countries.name IS 'Country name';
+
+
+--
+-- Name: COLUMN countries.iso2; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN countries.iso2 IS '2-letter ISO code';
+
+
+--
+-- Name: COLUMN countries.latitude; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN countries.latitude IS 'TODO';
+
+
+--
+-- Name: COLUMN countries.longitude; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN countries.longitude IS 'TODO';
+
+
+--
+-- Name: COLUMN countries.zoom; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN countries.zoom IS 'TODO';
+
+
+--
 -- Name: countries_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -1521,6 +1941,34 @@ CREATE TABLE download_attributes (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE download_attributes; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE download_attributes IS 'Attributes (quals/quants) available for download.';
+
+
+--
+-- Name: COLUMN download_attributes."position"; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN download_attributes."position" IS 'Display order in scope of context';
+
+
+--
+-- Name: COLUMN download_attributes.display_name; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN download_attributes.display_name IS 'Name of attribute for display';
+
+
+--
+-- Name: COLUMN download_attributes.years; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN download_attributes.years IS 'Years for which attribute is present; NULL for all years';
 
 
 --
@@ -1557,6 +2005,20 @@ CREATE TABLE download_quals (
 
 
 --
+-- Name: TABLE download_quals; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE download_quals IS 'Quals to include in downloads (see download_attributes.)';
+
+
+--
+-- Name: COLUMN download_quals.is_filter_enabled; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN download_quals.is_filter_enabled IS 'When set, enable selection of discreet values (advanced filter)';
+
+
+--
 -- Name: download_quants; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -1569,6 +2031,27 @@ CREATE TABLE download_quants (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE download_quants; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE download_quants IS 'Quants to include in downloads (see download_attributes.)';
+
+
+--
+-- Name: COLUMN download_quants.is_filter_enabled; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN download_quants.is_filter_enabled IS 'When set, enable selection of value ranges (advanced filter)';
+
+
+--
+-- Name: COLUMN download_quants.filter_bands; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN download_quants.filter_bands IS 'Array of value ranges to allow filtering by';
 
 
 --
@@ -1655,6 +2138,27 @@ CREATE TABLE download_versions (
 
 
 --
+-- Name: TABLE download_versions; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE download_versions IS 'Versions of data downloads';
+
+
+--
+-- Name: COLUMN download_versions.symbol; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN download_versions.symbol IS 'Version symbol (included in downloaded file name)';
+
+
+--
+-- Name: COLUMN download_versions.is_current; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN download_versions.is_current IS 'When set, use this version symbol for new downloads (only use for one)';
+
+
+--
 -- Name: download_versions_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -1685,6 +2189,20 @@ CREATE TABLE flow_inds (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE flow_inds; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE flow_inds IS 'Values of inds for flow';
+
+
+--
+-- Name: COLUMN flow_inds.value; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN flow_inds.value IS 'Numeric value';
 
 
 --
@@ -1721,6 +2239,20 @@ CREATE TABLE flow_quals (
 
 
 --
+-- Name: TABLE flow_quals; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE flow_quals IS 'Values of quals for flow';
+
+
+--
+-- Name: COLUMN flow_quals.value; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN flow_quals.value IS 'Textual value';
+
+
+--
 -- Name: flow_quals_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -1754,6 +2286,20 @@ CREATE TABLE flow_quants (
 
 
 --
+-- Name: TABLE flow_quants; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE flow_quants IS 'Values of quants for flow';
+
+
+--
+-- Name: COLUMN flow_quants.value; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN flow_quants.value IS 'Numeric value';
+
+
+--
 -- Name: flow_quants_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -1784,6 +2330,27 @@ CREATE TABLE flows (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE flows; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE flows IS 'Flows of commodities through nodes';
+
+
+--
+-- Name: COLUMN flows.year; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN flows.year IS 'Year';
+
+
+--
+-- Name: COLUMN flows.path; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN flows.path IS 'Array of node ids which constitute the supply chain, where position of node in this array is linked to the value of column_position in context_node_types';
 
 
 --
@@ -1839,6 +2406,27 @@ CREATE TABLE map_attribute_groups (
 
 
 --
+-- Name: TABLE map_attribute_groups; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE map_attribute_groups IS 'Groups attributes (inds/quals/quants) to display on map';
+
+
+--
+-- Name: COLUMN map_attribute_groups.name; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attribute_groups.name IS 'Name for display';
+
+
+--
+-- Name: COLUMN map_attribute_groups."position"; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attribute_groups."position" IS 'Display order in scope of context';
+
+
+--
 -- Name: map_attribute_groups_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -1877,6 +2465,62 @@ CREATE TABLE map_attributes (
 
 
 --
+-- Name: TABLE map_attributes; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE map_attributes IS 'Attributes (inds/quants) to display on map';
+
+
+--
+-- Name: COLUMN map_attributes."position"; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes."position" IS 'Display order in scope of group';
+
+
+--
+-- Name: COLUMN map_attributes.bucket_3; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes.bucket_3 IS 'TODO';
+
+
+--
+-- Name: COLUMN map_attributes.bucket_5; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes.bucket_5 IS 'TODO';
+
+
+--
+-- Name: COLUMN map_attributes.color_scale; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes.color_scale IS 'TODO';
+
+
+--
+-- Name: COLUMN map_attributes.years; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes.years IS 'Years for which attribute is present; NULL for all years';
+
+
+--
+-- Name: COLUMN map_attributes.is_disabled; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes.is_disabled IS 'When set, do not show this attribute';
+
+
+--
+-- Name: COLUMN map_attributes.is_default; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes.is_default IS 'When set, show this attribute by default';
+
+
+--
 -- Name: map_attributes_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -1909,6 +2553,13 @@ CREATE TABLE map_inds (
 
 
 --
+-- Name: TABLE map_inds; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE map_inds IS 'Inds to display on map (see map_attributes.)';
+
+
+--
 -- Name: map_quants; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -1919,6 +2570,13 @@ CREATE TABLE map_quants (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE map_quants; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE map_quants IS 'Quants to display on map (see map_attributes.)';
 
 
 --
@@ -2014,6 +2672,27 @@ CREATE TABLE node_inds (
 
 
 --
+-- Name: TABLE node_inds; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE node_inds IS 'Values of inds for node';
+
+
+--
+-- Name: COLUMN node_inds.year; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN node_inds.year IS 'Year; NULL for all years';
+
+
+--
+-- Name: COLUMN node_inds.value; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN node_inds.value IS 'Numeric value';
+
+
+--
 -- Name: node_inds_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -2045,6 +2724,27 @@ CREATE TABLE node_quals (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE node_quals; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE node_quals IS 'Values of quals for node';
+
+
+--
+-- Name: COLUMN node_quals.year; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN node_quals.year IS 'Year; NULL for all years';
+
+
+--
+-- Name: COLUMN node_quals.value; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN node_quals.value IS 'Textual value';
 
 
 --
@@ -2082,6 +2782,27 @@ CREATE TABLE node_quants (
 
 
 --
+-- Name: TABLE node_quants; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE node_quants IS 'Values of quants for node';
+
+
+--
+-- Name: COLUMN node_quants.year; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN node_quants.year IS 'Year; NULL for all years';
+
+
+--
+-- Name: COLUMN node_quants.value; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN node_quants.value IS 'Numeric value';
+
+
+--
 -- Name: node_quants_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -2110,6 +2831,20 @@ CREATE TABLE node_types (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE node_types; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE node_types IS 'List of types of nodes in the system, e.g. MUNICIPALITY or EXPORTER. Important: those literals are referred to in code, therefore should not be changed without notice.';
+
+
+--
+-- Name: COLUMN node_types.name; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN node_types.name IS 'Name of node type, spelt in capital letters; unique across node types';
 
 
 --
@@ -2148,6 +2883,41 @@ CREATE TABLE nodes (
 
 
 --
+-- Name: TABLE nodes; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE nodes IS 'Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains';
+
+
+--
+-- Name: COLUMN nodes.name; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN nodes.name IS 'Name of node';
+
+
+--
+-- Name: COLUMN nodes.geo_id; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN nodes.geo_id IS '2-letter iso code in case of country nodes; other geo identifiers possible for other node types';
+
+
+--
+-- Name: COLUMN nodes.is_domestic_consumption; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN nodes.is_domestic_consumption IS 'When set, assume domestic trade';
+
+
+--
+-- Name: COLUMN nodes.is_unknown; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN nodes.is_unknown IS 'When set, node was not possible to identify';
+
+
+--
 -- Name: nodes_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -2178,6 +2948,20 @@ CREATE TABLE profiles (
     updated_at timestamp without time zone NOT NULL,
     CONSTRAINT profiles_name_check CHECK ((name = ANY (ARRAY['actor'::text, 'place'::text])))
 );
+
+
+--
+-- Name: TABLE profiles; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE profiles IS 'Context-specific profiles';
+
+
+--
+-- Name: COLUMN profiles.name; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN profiles.name IS 'Profile name, either actor or place. One of restricted set of values.';
 
 
 --
@@ -2262,6 +3046,97 @@ CREATE TABLE recolor_by_attributes (
 
 
 --
+-- Name: TABLE recolor_by_attributes; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE recolor_by_attributes IS 'Attributes (inds/quals) available for recoloring.';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.group_number; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN recolor_by_attributes.group_number IS 'TODO';
+
+
+--
+-- Name: COLUMN recolor_by_attributes."position"; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN recolor_by_attributes."position" IS 'Display order in scope of context';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.legend_type; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN recolor_by_attributes.legend_type IS 'TODO';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.legend_color_theme; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN recolor_by_attributes.legend_color_theme IS 'TODO';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.interval_count; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN recolor_by_attributes.interval_count IS 'TODO';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.min_value; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN recolor_by_attributes.min_value IS 'TODO';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.max_value; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN recolor_by_attributes.max_value IS 'TODO';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.divisor; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN recolor_by_attributes.divisor IS 'TODO';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.tooltip_text; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN recolor_by_attributes.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.years; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN recolor_by_attributes.years IS 'Array of years for which to show this attribute in scope of chart; NULL for all years';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.is_disabled; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN recolor_by_attributes.is_disabled IS 'When set, do not show this attribute';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.is_default; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN recolor_by_attributes.is_default IS 'When set, show this attribute by default';
+
+
+--
 -- Name: recolor_by_attributes_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -2294,6 +3169,13 @@ CREATE TABLE recolor_by_inds (
 
 
 --
+-- Name: TABLE recolor_by_inds; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE recolor_by_inds IS 'Inds available for recoloring (see recolor_by_attributes.)';
+
+
+--
 -- Name: recolor_by_quals; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -2304,6 +3186,13 @@ CREATE TABLE recolor_by_quals (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE recolor_by_quals; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE recolor_by_quals IS 'Quals available for recoloring (see recolor_by_attributes.)';
 
 
 --
@@ -2412,6 +3301,55 @@ CREATE TABLE resize_by_attributes (
 
 
 --
+-- Name: TABLE resize_by_attributes; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE resize_by_attributes IS 'Attributes (quants) available for resizing.';
+
+
+--
+-- Name: COLUMN resize_by_attributes.group_number; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN resize_by_attributes.group_number IS 'TODO';
+
+
+--
+-- Name: COLUMN resize_by_attributes."position"; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN resize_by_attributes."position" IS 'Display order in scope of context';
+
+
+--
+-- Name: COLUMN resize_by_attributes.tooltip_text; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN resize_by_attributes.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN resize_by_attributes.years; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN resize_by_attributes.years IS 'Array of years for which to show this attribute in scope of chart; NULL for all years';
+
+
+--
+-- Name: COLUMN resize_by_attributes.is_disabled; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN resize_by_attributes.is_disabled IS 'When set, do not show this attribute';
+
+
+--
+-- Name: COLUMN resize_by_attributes.is_default; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN resize_by_attributes.is_default IS 'When set, show this attribute by default';
+
+
+--
 -- Name: resize_by_attributes_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -2441,6 +3379,13 @@ CREATE TABLE resize_by_quants (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE resize_by_quants; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE resize_by_quants IS 'Quants available for recoloring (see resize_by_attributes.)';
 
 
 --
@@ -2495,6 +3440,13 @@ CREATE TABLE traders (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE traders; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE traders IS 'Links between importer and exporter nodes which represent the same trader';
 
 
 --
