@@ -58,3 +58,19 @@ SELECT relname, seq_scan-idx_scan AS too_much_seq, CASE WHEN seq_scan-idx_scan>0
 `
 SELECT indexrelid::regclass as index, relid::regclass as table, 'DROP INDEX ' || indexrelid::regclass || ';' as drop_statement FROM pg_stat_user_indexes JOIN pg_index USING (indexrelid) WHERE idx_scan = 0 AND indisunique is false;
 `
+
+
+## Database documentation (revamp schema)
+
+The file db/schema_comments.yaml contains documentation of schema objects, which is prepared in a way to easily insert it into the database schema itself using `COMMENT IS` syntax. That is done using a dedicated rake task:
+
+`rake db:revamp:doc:sql`
+
+Note: this rake task also creates a new dump of structure.sql, as comments are part of the schema.
+
+Once comments are in place, it is possible to generate html documentation of the entire schema using an external tool. One os such tools is SchemaSpy, which is an open source java library.
+1. install [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+2. install [Graphviz](http://www.graphviz.org/)
+2. the [SchemaSpy 6.0.0-rc2](http://schemaspy.readthedocs.io/en/latest/index.html) jar file and [PostgreSQL driver](https://jdbc.postgresql.org/download.html) file are already in doc/db
+3. `rake db:revamp:doc:html` (Please note: I added an extra param to SchemaSpy command which is `-renderer :quartz` which helps with running it on macOS Sierra. No idea if it prevents it from running elsewhere.)
+4. output files in `doc/db/html`
