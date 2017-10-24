@@ -9,7 +9,7 @@ class CreateDownloadVersionsRevamp < ActiveRecord::Migration[5.0]
         t.boolean :current, null: false, default: false
         t.timestamps
       end
-      add_index :download_versions, [:context_id, :symbol], unique: true
+      execute 'ALTER TABLE download_versions ADD CONSTRAINT download_versions_context_id_symbol_key UNIQUE (context_id, symbol)'
     end
   end
 

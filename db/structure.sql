@@ -1039,7 +1039,8 @@ CREATE TABLE inds (
     tooltip_text text,
     frontend_name text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT inds_unit_type_check CHECK ((unit_type = ANY (ARRAY['currency'::text, 'ratio'::text, 'score'::text, 'unitless'::text])))
 );
 
 
@@ -1071,7 +1072,8 @@ CREATE TABLE quants (
     tooltip_text text,
     frontend_name text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT quants_unit_type_check CHECK ((unit_type = ANY (ARRAY['currency'::text, 'area'::text, 'count'::text, 'volume'::text, 'unitless'::text])))
 );
 
 
@@ -3069,11 +3071,27 @@ ALTER TABLE ONLY schema_migrations
 SET search_path = revamp, pg_catalog;
 
 --
+-- Name: carto_layers carto_layers_contextual_layer_id_identifier_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY carto_layers
+    ADD CONSTRAINT carto_layers_contextual_layer_id_identifier_key UNIQUE (contextual_layer_id, identifier);
+
+
+--
 -- Name: carto_layers carto_layers_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY carto_layers
     ADD CONSTRAINT carto_layers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chart_attributes chart_attributes_chart_id_position_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_attributes
+    ADD CONSTRAINT chart_attributes_chart_id_position_key UNIQUE (chart_id, "position");
 
 
 --
@@ -3085,6 +3103,14 @@ ALTER TABLE ONLY chart_attributes
 
 
 --
+-- Name: chart_inds chart_inds_chart_attribute_id_ind_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_inds
+    ADD CONSTRAINT chart_inds_chart_attribute_id_ind_id_key UNIQUE (chart_attribute_id, ind_id);
+
+
+--
 -- Name: chart_inds chart_inds_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -3093,11 +3119,27 @@ ALTER TABLE ONLY chart_inds
 
 
 --
+-- Name: chart_quals chart_quals_chart_attribute_id_qual_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_quals
+    ADD CONSTRAINT chart_quals_chart_attribute_id_qual_id_key UNIQUE (chart_attribute_id, qual_id);
+
+
+--
 -- Name: chart_quals chart_quals_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY chart_quals
     ADD CONSTRAINT chart_quals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chart_quants chart_quants_chart_attribute_id_quant_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY chart_quants
+    ADD CONSTRAINT chart_quants_chart_attribute_id_quant_id_key UNIQUE (chart_attribute_id, quant_id);
 
 
 --
@@ -3117,11 +3159,27 @@ ALTER TABLE ONLY charts
 
 
 --
+-- Name: charts charts_profile_id_parent_id_position_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY charts
+    ADD CONSTRAINT charts_profile_id_parent_id_position_key UNIQUE (profile_id, parent_id, "position");
+
+
+--
 -- Name: commodities commodities_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY commodities
     ADD CONSTRAINT commodities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: context_node_types context_node_types_context_id_node_type_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY context_node_types
+    ADD CONSTRAINT context_node_types_context_id_node_type_id_key UNIQUE (context_id, node_type_id);
 
 
 --
@@ -3133,11 +3191,35 @@ ALTER TABLE ONLY context_node_types
 
 
 --
+-- Name: contexts contexts_country_id_commodity_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY contexts
+    ADD CONSTRAINT contexts_country_id_commodity_id_key UNIQUE (country_id, commodity_id);
+
+
+--
 -- Name: contexts contexts_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY contexts
     ADD CONSTRAINT contexts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: contextual_layers contextual_layers_context_id_identifier_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY contextual_layers
+    ADD CONSTRAINT contextual_layers_context_id_identifier_key UNIQUE (context_id, identifier);
+
+
+--
+-- Name: contextual_layers contextual_layers_context_id_position_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY contextual_layers
+    ADD CONSTRAINT contextual_layers_context_id_position_key UNIQUE (context_id, "position");
 
 
 --
@@ -3149,11 +3231,27 @@ ALTER TABLE ONLY contextual_layers
 
 
 --
+-- Name: countries countries_iso2_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY countries
+    ADD CONSTRAINT countries_iso2_key UNIQUE (iso2);
+
+
+--
 -- Name: countries countries_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY countries
     ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: download_attributes download_attributes_context_id_position_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY download_attributes
+    ADD CONSTRAINT download_attributes_context_id_position_key UNIQUE (context_id, "position");
 
 
 --
@@ -3165,11 +3263,27 @@ ALTER TABLE ONLY download_attributes
 
 
 --
+-- Name: download_quals download_quals_download_attribute_id_qual_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY download_quals
+    ADD CONSTRAINT download_quals_download_attribute_id_qual_id_key UNIQUE (download_attribute_id, qual_id);
+
+
+--
 -- Name: download_quals download_quals_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY download_quals
     ADD CONSTRAINT download_quals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: download_quants download_quants_download_attribute_id_quant_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY download_quants
+    ADD CONSTRAINT download_quants_download_attribute_id_quant_id_key UNIQUE (download_attribute_id, quant_id);
 
 
 --
@@ -3181,11 +3295,27 @@ ALTER TABLE ONLY download_quants
 
 
 --
+-- Name: download_versions download_versions_context_id_symbol_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY download_versions
+    ADD CONSTRAINT download_versions_context_id_symbol_key UNIQUE (context_id, symbol);
+
+
+--
 -- Name: download_versions download_versions_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY download_versions
     ADD CONSTRAINT download_versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: flow_inds flow_inds_flow_id_ind_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_inds
+    ADD CONSTRAINT flow_inds_flow_id_ind_id_key UNIQUE (flow_id, ind_id);
 
 
 --
@@ -3197,11 +3327,27 @@ ALTER TABLE ONLY flow_inds
 
 
 --
+-- Name: flow_quals flow_quals_flow_id_qual_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_quals
+    ADD CONSTRAINT flow_quals_flow_id_qual_id_key UNIQUE (flow_id, qual_id);
+
+
+--
 -- Name: flow_quals flow_quals_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY flow_quals
     ADD CONSTRAINT flow_quals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: flow_quants flow_quants_flow_id_quant_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY flow_quants
+    ADD CONSTRAINT flow_quants_flow_id_quant_id_key UNIQUE (flow_id, quant_id);
 
 
 --
@@ -3221,11 +3367,27 @@ ALTER TABLE ONLY flows
 
 
 --
+-- Name: inds inds_name_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY inds
+    ADD CONSTRAINT inds_name_key UNIQUE (name);
+
+
+--
 -- Name: inds inds_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY inds
     ADD CONSTRAINT inds_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: map_attribute_groups map_attribute_groups_context_id_position_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY map_attribute_groups
+    ADD CONSTRAINT map_attribute_groups_context_id_position_key UNIQUE (context_id, "position");
 
 
 --
@@ -3237,11 +3399,27 @@ ALTER TABLE ONLY map_attribute_groups
 
 
 --
+-- Name: map_attributes map_attributes_map_attribute_group_id_position_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY map_attributes
+    ADD CONSTRAINT map_attributes_map_attribute_group_id_position_key UNIQUE (map_attribute_group_id, "position");
+
+
+--
 -- Name: map_attributes map_attributes_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY map_attributes
     ADD CONSTRAINT map_attributes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: map_inds map_inds_map_attribute_id_ind_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY map_inds
+    ADD CONSTRAINT map_inds_map_attribute_id_ind_id_key UNIQUE (map_attribute_id, ind_id);
 
 
 --
@@ -3253,11 +3431,27 @@ ALTER TABLE ONLY map_inds
 
 
 --
+-- Name: map_quants map_quants_map_attribute_id_quant_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY map_quants
+    ADD CONSTRAINT map_quants_map_attribute_id_quant_id_key UNIQUE (map_attribute_id, quant_id);
+
+
+--
 -- Name: map_quants map_quants_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY map_quants
     ADD CONSTRAINT map_quants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: node_inds node_inds_node_id_ind_id_year_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_inds
+    ADD CONSTRAINT node_inds_node_id_ind_id_year_key UNIQUE (node_id, ind_id, year);
 
 
 --
@@ -3269,6 +3463,14 @@ ALTER TABLE ONLY node_inds
 
 
 --
+-- Name: node_quals node_quals_node_id_qual_id_year_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_quals
+    ADD CONSTRAINT node_quals_node_id_qual_id_year_key UNIQUE (node_id, qual_id, year);
+
+
+--
 -- Name: node_quals node_quals_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -3277,11 +3479,27 @@ ALTER TABLE ONLY node_quals
 
 
 --
+-- Name: node_quants node_quants_node_id_quant_id_year_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_quants
+    ADD CONSTRAINT node_quants_node_id_quant_id_year_key UNIQUE (node_id, quant_id, year);
+
+
+--
 -- Name: node_quants node_quants_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY node_quants
     ADD CONSTRAINT node_quants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: node_types node_types_name_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_types
+    ADD CONSTRAINT node_types_name_key UNIQUE (name);
 
 
 --
@@ -3301,11 +3519,27 @@ ALTER TABLE ONLY nodes
 
 
 --
+-- Name: profiles profiles_context_node_type_id_name_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY profiles
+    ADD CONSTRAINT profiles_context_node_type_id_name_key UNIQUE (context_node_type_id, name);
+
+
+--
 -- Name: profiles profiles_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY profiles
     ADD CONSTRAINT profiles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: quals quals_name_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY quals
+    ADD CONSTRAINT quals_name_key UNIQUE (name);
 
 
 --
@@ -3317,11 +3551,27 @@ ALTER TABLE ONLY quals
 
 
 --
+-- Name: quants quants_name_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY quants
+    ADD CONSTRAINT quants_name_key UNIQUE (name);
+
+
+--
 -- Name: quants quants_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY quants
     ADD CONSTRAINT quants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: recolor_by_attributes recolor_by_attributes_context_id_group_number_position_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY recolor_by_attributes
+    ADD CONSTRAINT recolor_by_attributes_context_id_group_number_position_key UNIQUE (context_id, group_number, "position");
 
 
 --
@@ -3341,11 +3591,35 @@ ALTER TABLE ONLY recolor_by_inds
 
 
 --
+-- Name: recolor_by_inds recolor_by_inds_recolor_by_attribute_id_ind_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY recolor_by_inds
+    ADD CONSTRAINT recolor_by_inds_recolor_by_attribute_id_ind_id_key UNIQUE (recolor_by_attribute_id, ind_id);
+
+
+--
 -- Name: recolor_by_quals recolor_by_quals_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
 ALTER TABLE ONLY recolor_by_quals
     ADD CONSTRAINT recolor_by_quals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: recolor_by_quals recolor_by_quals_recolor_by_attribute_id_qual_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY recolor_by_quals
+    ADD CONSTRAINT recolor_by_quals_recolor_by_attribute_id_qual_id_key UNIQUE (recolor_by_attribute_id, qual_id);
+
+
+--
+-- Name: resize_by_attributes resize_by_attributes_context_id_group_number_position_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY resize_by_attributes
+    ADD CONSTRAINT resize_by_attributes_context_id_group_number_position_key UNIQUE (context_id, group_number, "position");
 
 
 --
@@ -3362,6 +3636,22 @@ ALTER TABLE ONLY resize_by_attributes
 
 ALTER TABLE ONLY resize_by_quants
     ADD CONSTRAINT resize_by_quants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: resize_by_quants resize_by_quants_resize_by_attribute_id_quant_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY resize_by_quants
+    ADD CONSTRAINT resize_by_quants_resize_by_attribute_id_quant_id_key UNIQUE (resize_by_attribute_id, quant_id);
+
+
+--
+-- Name: traders traders_exporter_id_importer_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY traders
+    ADD CONSTRAINT traders_exporter_id_importer_id_key UNIQUE (exporter_id, importer_id);
 
 
 --
@@ -3461,17 +3751,59 @@ CREATE INDEX index_nodes_on_node_type_id ON nodes USING btree (node_type_id);
 SET search_path = revamp, pg_catalog;
 
 --
--- Name: index_attributes_mv_on_id; Type: INDEX; Schema: revamp; Owner: -
+-- Name: attributes_mv_name_idx; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE UNIQUE INDEX index_attributes_mv_on_id ON attributes_mv USING btree (id);
+CREATE UNIQUE INDEX attributes_mv_name_idx ON attributes_mv USING btree (name);
 
 
 --
--- Name: index_attributes_mv_on_name; Type: INDEX; Schema: revamp; Owner: -
+-- Name: commodities_parent_id_idx; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE UNIQUE INDEX index_attributes_mv_on_name ON attributes_mv USING btree (name);
+CREATE INDEX commodities_parent_id_idx ON commodities USING btree (parent_id);
+
+
+--
+-- Name: download_attributes_mv_context_id_attribute_id_idx; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX download_attributes_mv_context_id_attribute_id_idx ON download_attributes_mv USING btree (context_id, attribute_id);
+
+
+--
+-- Name: download_attributes_mv_id_idx; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX download_attributes_mv_id_idx ON download_attributes_mv USING btree (id);
+
+
+--
+-- Name: flow_inds_ind_id_idx; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX flow_inds_ind_id_idx ON flow_inds USING btree (ind_id);
+
+
+--
+-- Name: flow_quals_qual_id_idx; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX flow_quals_qual_id_idx ON flow_quals USING btree (qual_id);
+
+
+--
+-- Name: flow_quants_quant_id_idx; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX flow_quants_quant_id_idx ON flow_quants USING btree (quant_id);
+
+
+--
+-- Name: index_attributes_mv_id_idx; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_attributes_mv_id_idx ON attributes_mv USING btree (id);
 
 
 --
@@ -3482,13 +3814,6 @@ CREATE INDEX index_carto_layers_on_contextual_layer_id ON carto_layers USING btr
 
 
 --
--- Name: index_carto_layers_on_contextual_layer_id_and_identifier; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_carto_layers_on_contextual_layer_id_and_identifier ON carto_layers USING btree (contextual_layer_id, identifier);
-
-
---
 -- Name: index_chart_attributes_on_chart_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -3496,24 +3821,10 @@ CREATE INDEX index_chart_attributes_on_chart_id ON chart_attributes USING btree 
 
 
 --
--- Name: index_chart_attributes_on_chart_id_and_position; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_chart_attributes_on_chart_id_and_position ON chart_attributes USING btree (chart_id, "position");
-
-
---
 -- Name: index_chart_inds_on_chart_attribute_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
 CREATE INDEX index_chart_inds_on_chart_attribute_id ON chart_inds USING btree (chart_attribute_id);
-
-
---
--- Name: index_chart_inds_on_chart_attribute_id_and_ind_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_chart_inds_on_chart_attribute_id_and_ind_id ON chart_inds USING btree (chart_attribute_id, ind_id);
 
 
 --
@@ -3531,13 +3842,6 @@ CREATE INDEX index_chart_quals_on_chart_attribute_id ON chart_quals USING btree 
 
 
 --
--- Name: index_chart_quals_on_chart_attribute_id_and_qual_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_chart_quals_on_chart_attribute_id_and_qual_id ON chart_quals USING btree (chart_attribute_id, qual_id);
-
-
---
 -- Name: index_chart_quals_on_qual_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -3549,13 +3853,6 @@ CREATE INDEX index_chart_quals_on_qual_id ON chart_quals USING btree (qual_id);
 --
 
 CREATE INDEX index_chart_quants_on_chart_attribute_id ON chart_quants USING btree (chart_attribute_id);
-
-
---
--- Name: index_chart_quants_on_chart_attribute_id_and_quant_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_chart_quants_on_chart_attribute_id_and_quant_id ON chart_quants USING btree (chart_attribute_id, quant_id);
 
 
 --
@@ -3580,31 +3877,10 @@ CREATE INDEX index_charts_on_profile_id ON charts USING btree (profile_id);
 
 
 --
--- Name: index_charts_on_profile_id_and_parent_id_and_position; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_charts_on_profile_id_and_parent_id_and_position ON charts USING btree (profile_id, parent_id, "position");
-
-
---
--- Name: index_commodities_on_parent_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_commodities_on_parent_id ON commodities USING btree (parent_id);
-
-
---
 -- Name: index_context_node_types_on_context_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
 CREATE INDEX index_context_node_types_on_context_id ON context_node_types USING btree (context_id);
-
-
---
--- Name: index_context_node_types_on_context_id_and_node_type_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_context_node_types_on_context_id_and_node_type_id ON context_node_types USING btree (context_id, node_type_id);
 
 
 --
@@ -3629,52 +3905,10 @@ CREATE INDEX index_contexts_on_country_id ON contexts USING btree (country_id);
 
 
 --
--- Name: index_contexts_on_country_id_and_commodity_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_contexts_on_country_id_and_commodity_id ON contexts USING btree (country_id, commodity_id);
-
-
---
 -- Name: index_contextual_layers_on_context_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
 CREATE INDEX index_contextual_layers_on_context_id ON contextual_layers USING btree (context_id);
-
-
---
--- Name: index_contextual_layers_on_context_id_and_identifier; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_contextual_layers_on_context_id_and_identifier ON contextual_layers USING btree (context_id, identifier);
-
-
---
--- Name: index_contextual_layers_on_context_id_and_position; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_contextual_layers_on_context_id_and_position ON contextual_layers USING btree (context_id, "position");
-
-
---
--- Name: index_countries_on_iso2; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_countries_on_iso2 ON countries USING btree (iso2);
-
-
---
--- Name: index_download_attributes_mv_on_context_id_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_download_attributes_mv_on_context_id_and_attribute_id ON download_attributes_mv USING btree (context_id, attribute_id);
-
-
---
--- Name: index_download_attributes_mv_on_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_download_attributes_mv_on_id ON download_attributes_mv USING btree (id);
 
 
 --
@@ -3685,24 +3919,10 @@ CREATE INDEX index_download_attributes_on_context_id ON download_attributes USIN
 
 
 --
--- Name: index_download_attributes_on_context_id_and_position; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_download_attributes_on_context_id_and_position ON download_attributes USING btree (context_id, "position");
-
-
---
 -- Name: index_download_quals_on_download_attribute_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
 CREATE INDEX index_download_quals_on_download_attribute_id ON download_quals USING btree (download_attribute_id);
-
-
---
--- Name: index_download_quals_on_download_attribute_id_and_qual_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_download_quals_on_download_attribute_id_and_qual_id ON download_quals USING btree (download_attribute_id, qual_id);
 
 
 --
@@ -3720,13 +3940,6 @@ CREATE INDEX index_download_quants_on_download_attribute_id ON download_quants U
 
 
 --
--- Name: index_download_quants_on_download_attribute_id_and_quant_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_download_quants_on_download_attribute_id_and_quant_id ON download_quants USING btree (download_attribute_id, quant_id);
-
-
---
 -- Name: index_download_quants_on_quant_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -3741,31 +3954,10 @@ CREATE INDEX index_download_versions_on_context_id ON download_versions USING bt
 
 
 --
--- Name: index_download_versions_on_context_id_and_symbol; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_download_versions_on_context_id_and_symbol ON download_versions USING btree (context_id, symbol);
-
-
---
 -- Name: index_flow_inds_on_flow_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
 CREATE INDEX index_flow_inds_on_flow_id ON flow_inds USING btree (flow_id);
-
-
---
--- Name: index_flow_inds_on_flow_id_and_ind_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_flow_inds_on_flow_id_and_ind_id ON flow_inds USING btree (flow_id, ind_id);
-
-
---
--- Name: index_flow_inds_on_ind_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_flow_inds_on_ind_id ON flow_inds USING btree (ind_id);
 
 
 --
@@ -3776,38 +3968,10 @@ CREATE INDEX index_flow_quals_on_flow_id ON flow_quals USING btree (flow_id);
 
 
 --
--- Name: index_flow_quals_on_flow_id_and_qual_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_flow_quals_on_flow_id_and_qual_id ON flow_quals USING btree (flow_id, qual_id);
-
-
---
--- Name: index_flow_quals_on_qual_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_flow_quals_on_qual_id ON flow_quals USING btree (qual_id);
-
-
---
 -- Name: index_flow_quants_on_flow_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
 CREATE INDEX index_flow_quants_on_flow_id ON flow_quants USING btree (flow_id);
-
-
---
--- Name: index_flow_quants_on_flow_id_and_quant_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_flow_quants_on_flow_id_and_quant_id ON flow_quants USING btree (flow_id, quant_id);
-
-
---
--- Name: index_flow_quants_on_quant_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_flow_quants_on_quant_id ON flow_quants USING btree (quant_id);
 
 
 --
@@ -3832,13 +3996,6 @@ CREATE INDEX index_flows_on_path ON flows USING btree (path);
 
 
 --
--- Name: index_inds_on_name; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_inds_on_name ON inds USING btree (name);
-
-
---
 -- Name: index_map_attribute_groups_on_context_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -3846,38 +4003,10 @@ CREATE INDEX index_map_attribute_groups_on_context_id ON map_attribute_groups US
 
 
 --
--- Name: index_map_attribute_groups_on_context_id_and_position; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_map_attribute_groups_on_context_id_and_position ON map_attribute_groups USING btree (context_id, "position");
-
-
---
--- Name: index_map_attributes_mv_on_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_map_attributes_mv_on_id ON map_attributes_mv USING btree (id);
-
-
---
--- Name: index_map_attributes_mv_on_map_attribute_group_id_attribute_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_map_attributes_mv_on_map_attribute_group_id_attribute_id ON map_attributes_mv USING btree (map_attribute_group_id, attribute_id);
-
-
---
 -- Name: index_map_attributes_on_map_attribute_group_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
 CREATE INDEX index_map_attributes_on_map_attribute_group_id ON map_attributes USING btree (map_attribute_group_id);
-
-
---
--- Name: index_map_attributes_on_map_attribute_group_id_and_position; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_map_attributes_on_map_attribute_group_id_and_position ON map_attributes USING btree (map_attribute_group_id, "position");
 
 
 --
@@ -3895,24 +4024,10 @@ CREATE INDEX index_map_inds_on_map_attribute_id ON map_inds USING btree (map_att
 
 
 --
--- Name: index_map_inds_on_map_attribute_id_and_ind_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_map_inds_on_map_attribute_id_and_ind_id ON map_inds USING btree (map_attribute_id, ind_id);
-
-
---
 -- Name: index_map_quants_on_map_attribute_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
 CREATE INDEX index_map_quants_on_map_attribute_id ON map_quants USING btree (map_attribute_id);
-
-
---
--- Name: index_map_quants_on_map_attribute_id_and_quant_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_map_quants_on_map_attribute_id_and_quant_id ON map_quants USING btree (map_attribute_id, quant_id);
 
 
 --
@@ -3923,24 +4038,10 @@ CREATE INDEX index_map_quants_on_quant_id ON map_quants USING btree (quant_id);
 
 
 --
--- Name: index_node_inds_on_ind_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_node_inds_on_ind_id ON node_inds USING btree (ind_id);
-
-
---
 -- Name: index_node_inds_on_node_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
 CREATE INDEX index_node_inds_on_node_id ON node_inds USING btree (node_id);
-
-
---
--- Name: index_node_inds_on_node_id_and_ind_id_and_year; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_node_inds_on_node_id_and_ind_id_and_year ON node_inds USING btree (node_id, ind_id, year);
 
 
 --
@@ -3951,52 +4052,10 @@ CREATE INDEX index_node_quals_on_node_id ON node_quals USING btree (node_id);
 
 
 --
--- Name: index_node_quals_on_node_id_and_qual_id_and_year; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_node_quals_on_node_id_and_qual_id_and_year ON node_quals USING btree (node_id, qual_id, year);
-
-
---
--- Name: index_node_quals_on_qual_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_node_quals_on_qual_id ON node_quals USING btree (qual_id);
-
-
---
 -- Name: index_node_quants_on_node_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
 CREATE INDEX index_node_quants_on_node_id ON node_quants USING btree (node_id);
-
-
---
--- Name: index_node_quants_on_node_id_and_quant_id_and_year; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_node_quants_on_node_id_and_quant_id_and_year ON node_quants USING btree (node_id, quant_id, year);
-
-
---
--- Name: index_node_quants_on_quant_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_node_quants_on_quant_id ON node_quants USING btree (quant_id);
-
-
---
--- Name: index_node_types_on_name; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_node_types_on_name ON node_types USING btree (name);
-
-
---
--- Name: index_nodes_on_node_type_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_nodes_on_node_type_id ON nodes USING btree (node_type_id);
 
 
 --
@@ -4007,52 +4066,10 @@ CREATE INDEX index_profiles_on_context_node_type_id ON profiles USING btree (con
 
 
 --
--- Name: index_profiles_on_context_node_type_id_and_name; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_profiles_on_context_node_type_id_and_name ON profiles USING btree (context_node_type_id, name);
-
-
---
--- Name: index_quals_on_name; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_quals_on_name ON quals USING btree (name);
-
-
---
--- Name: index_quants_on_name; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_quants_on_name ON quants USING btree (name);
-
-
---
--- Name: index_recolor_by_attributes_mv_on_context_id_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_recolor_by_attributes_mv_on_context_id_and_attribute_id ON recolor_by_attributes_mv USING btree (context_id, attribute_id);
-
-
---
--- Name: index_recolor_by_attributes_mv_on_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_recolor_by_attributes_mv_on_id ON recolor_by_attributes_mv USING btree (id);
-
-
---
 -- Name: index_recolor_by_attributes_on_context_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
 CREATE INDEX index_recolor_by_attributes_on_context_id ON recolor_by_attributes USING btree (context_id);
-
-
---
--- Name: index_recolor_by_attributes_on_context_id_group_number_position; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_recolor_by_attributes_on_context_id_group_number_position ON recolor_by_attributes USING btree (context_id, group_number, "position");
 
 
 --
@@ -4070,13 +4087,6 @@ CREATE INDEX index_recolor_by_inds_on_recolor_by_attribute_id ON recolor_by_inds
 
 
 --
--- Name: index_recolor_by_inds_on_recolor_by_attribute_id_and_ind_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_recolor_by_inds_on_recolor_by_attribute_id_and_ind_id ON recolor_by_inds USING btree (recolor_by_attribute_id, ind_id);
-
-
---
 -- Name: index_recolor_by_quals_on_qual_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -4091,38 +4101,10 @@ CREATE INDEX index_recolor_by_quals_on_recolor_by_attribute_id ON recolor_by_qua
 
 
 --
--- Name: index_recolor_by_quals_on_recolor_by_attribute_id_and_qual_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_recolor_by_quals_on_recolor_by_attribute_id_and_qual_id ON recolor_by_quals USING btree (recolor_by_attribute_id, qual_id);
-
-
---
--- Name: index_resize_by_attributes_mv_on_context_id_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_resize_by_attributes_mv_on_context_id_and_attribute_id ON resize_by_attributes_mv USING btree (context_id, attribute_id);
-
-
---
--- Name: index_resize_by_attributes_mv_on_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_resize_by_attributes_mv_on_id ON resize_by_attributes_mv USING btree (id);
-
-
---
 -- Name: index_resize_by_attributes_on_context_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
 CREATE INDEX index_resize_by_attributes_on_context_id ON resize_by_attributes USING btree (context_id);
-
-
---
--- Name: index_resize_by_attributes_on_context_id_group_number_position; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_resize_by_attributes_on_context_id_group_number_position ON resize_by_attributes USING btree (context_id, group_number, "position");
 
 
 --
@@ -4140,24 +4122,87 @@ CREATE INDEX index_resize_by_quants_on_resize_by_attribute_id ON resize_by_quant
 
 
 --
--- Name: index_resize_by_quants_on_resize_by_attribute_id_and_quant_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE UNIQUE INDEX index_resize_by_quants_on_resize_by_attribute_id_and_quant_id ON resize_by_quants USING btree (resize_by_attribute_id, quant_id);
-
-
---
 -- Name: index_traders_on_exporter_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE UNIQUE INDEX index_traders_on_exporter_id ON traders USING btree (exporter_id);
+CREATE INDEX index_traders_on_exporter_id ON traders USING btree (exporter_id);
 
 
 --
 -- Name: index_traders_on_importer_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE UNIQUE INDEX index_traders_on_importer_id ON traders USING btree (importer_id);
+CREATE INDEX index_traders_on_importer_id ON traders USING btree (importer_id);
+
+
+--
+-- Name: map_attributes_mv_id_idx; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX map_attributes_mv_id_idx ON map_attributes_mv USING btree (id);
+
+
+--
+-- Name: map_attributes_mv_map_attribute_group_id_attribute_id_idx; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX map_attributes_mv_map_attribute_group_id_attribute_id_idx ON map_attributes_mv USING btree (map_attribute_group_id, attribute_id);
+
+
+--
+-- Name: node_inds_ind_id_idx; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX node_inds_ind_id_idx ON node_inds USING btree (ind_id);
+
+
+--
+-- Name: node_quals_qual_id_idx; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX node_quals_qual_id_idx ON node_quals USING btree (qual_id);
+
+
+--
+-- Name: node_quants_quant_id_idx; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX node_quants_quant_id_idx ON node_quants USING btree (quant_id);
+
+
+--
+-- Name: nodes_node_type_id_idx; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX nodes_node_type_id_idx ON nodes USING btree (node_type_id);
+
+
+--
+-- Name: recolor_by_attributes_mv_context_id_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX recolor_by_attributes_mv_context_id_attribute_id ON recolor_by_attributes_mv USING btree (context_id, attribute_id);
+
+
+--
+-- Name: recolor_by_attributes_mv_id_idx; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX recolor_by_attributes_mv_id_idx ON recolor_by_attributes_mv USING btree (id);
+
+
+--
+-- Name: resize_by_attributes_mv_context_id_attribute_id_idx; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX resize_by_attributes_mv_context_id_attribute_id_idx ON resize_by_attributes_mv USING btree (context_id, attribute_id);
+
+
+--
+-- Name: resize_by_attributes_mv_id_idx; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX resize_by_attributes_mv_id_idx ON resize_by_attributes_mv USING btree (id);
 
 
 SET search_path = public, pg_catalog;

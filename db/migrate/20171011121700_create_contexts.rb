@@ -13,8 +13,7 @@ class CreateContexts < ActiveRecord::Migration[5.0]
         t.boolean :is_default, null: false, default: false
         t.timestamps
       end
-
-      add_index :contexts, [:country_id, :commodity_id], unique: true
+      execute 'ALTER TABLE contexts ADD CONSTRAINT contexts_country_id_commodity_id_key UNIQUE (country_id, commodity_id)'
     end
   end
 

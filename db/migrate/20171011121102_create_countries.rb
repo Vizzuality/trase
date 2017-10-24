@@ -11,7 +11,7 @@ class CreateCountries < ActiveRecord::Migration[5.0]
         t.integer :zoom, null: false
         t.timestamps
       end
-      add_index :countries, :iso2, unique: true
+      execute 'ALTER TABLE countries ADD CONSTRAINT countries_iso2_key UNIQUE (iso2)'
     end
   end
 

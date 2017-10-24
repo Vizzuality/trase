@@ -7,7 +7,7 @@ class CreateNodeTypes < ActiveRecord::Migration[5.0]
         t.text :name, null: false
         t.timestamps
       end
-      add_index :node_types, :name, unique: true
+      execute 'ALTER TABLE node_types ADD CONSTRAINT node_types_name_key UNIQUE (name)'
     end
   end
 

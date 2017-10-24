@@ -13,21 +13,20 @@ class CreateResizeByAttributes < ActiveRecord::Migration[5.0]
         t.boolean :is_default, null: false, default: false
         t.timestamps
       end
-
-      add_index :resize_by_attributes, [:context_id, :group_number, :position], unique: true,
-        name: 'index_resize_by_attributes_on_context_id_group_number_position'
+      execute 'ALTER TABLE resize_by_attributes ADD CONSTRAINT resize_by_attributes_context_id_group_number_position_key UNIQUE (context_id, group_number, position)'
 
       create_table :resize_by_quants do |t|
         t.references :resize_by_attribute, null: false, foreign_key: {on_delete: :cascade}
         t.references :quant, null: false, foreign_key: {on_delete: :cascade}
         t.timestamps
       end
-
-      add_index :resize_by_quants, [:resize_by_attribute_id, :quant_id], unique: true
+      execute 'ALTER TABLE resize_by_quants ADD CONSTRAINT resize_by_quants_resize_by_attribute_id_quant_id_key UNIQUE (resize_by_attribute_id, quant_id)'
 
       create_view :resize_by_attributes_mv, materialized: true
-      add_index :resize_by_attributes_mv, :id, unique: true
-      add_index :resize_by_attributes_mv, [:context_id, :attribute_id]
+      add_index :resize_by_attributes_mv, :id, unique: true,
+        name: 'resize_by_attributes_mv_id_idx'
+      add_index :resize_by_attributes_mv, [:context_id, :attribute_id],
+        name: 'resize_by_attributes_mv_context_id_attribute_id_idx'
     end
   end
 

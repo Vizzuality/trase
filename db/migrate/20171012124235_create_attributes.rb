@@ -12,8 +12,7 @@ class CreateAttributes < ActiveRecord::Migration[5.0]
         t.text :frontend_name
         t.timestamps
       end
-
-      add_index :quants, :name, unique: true
+      execute 'ALTER TABLE quants ADD CONSTRAINT quants_name_key UNIQUE (name)'
 
       create_table :inds do |t|
         t.text :name, null: false
@@ -24,8 +23,7 @@ class CreateAttributes < ActiveRecord::Migration[5.0]
         t.text :frontend_name
         t.timestamps
       end
-
-      add_index :inds, :name, unique: true
+      execute 'ALTER TABLE inds ADD CONSTRAINT inds_name_key UNIQUE (name)'
 
       create_table :quals do |t|
         t.text :name, null: false
@@ -34,13 +32,14 @@ class CreateAttributes < ActiveRecord::Migration[5.0]
         t.text :frontend_name
         t.timestamps
       end
-
-      add_index :quals, :name, unique: true
+      execute 'ALTER TABLE quals ADD CONSTRAINT quals_name_key UNIQUE (name)'
 
       create_view :attributes_mv, materialized: true
 
-      add_index :attributes_mv, :id, unique: true
-      add_index :attributes_mv, :name, unique: true
+      add_index :attributes_mv, :id, unique: true,
+        name: 'index_attributes_mv_id_idx'
+      add_index :attributes_mv, :name, unique: true,
+        name: 'attributes_mv_name_idx'
     end
   end
 

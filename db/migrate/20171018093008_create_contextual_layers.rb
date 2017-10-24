@@ -12,9 +12,8 @@ class CreateContextualLayers < ActiveRecord::Migration[5.0]
         t.boolean :is_default, null: false, default: false
         t.timestamps
       end
-
-      add_index :contextual_layers, [:context_id, :position], unique: true
-      add_index :contextual_layers, [:context_id, :identifier], unique: true
+      execute 'ALTER TABLE contextual_layers ADD CONSTRAINT contextual_layers_context_id_position_key UNIQUE (context_id, position)'
+      execute 'ALTER TABLE contextual_layers ADD CONSTRAINT contextual_layers_context_id_identifier_key UNIQUE (context_id, identifier)'
 
       create_table :carto_layers do |t|
         t.references :contextual_layer, null: false, foreign_key: {on_delete: :cascade}
@@ -22,8 +21,7 @@ class CreateContextualLayers < ActiveRecord::Migration[5.0]
         t.integer :years, array: true
         t.timestamps
       end
-      
-      add_index :carto_layers, [:contextual_layer_id, :identifier], unique: true
+      execute 'ALTER TABLE carto_layers ADD CONSTRAINT carto_layers_contextual_layer_id_identifier_key UNIQUE (contextual_layer_id, identifier)'
     end
   end
 

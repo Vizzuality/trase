@@ -10,8 +10,7 @@ class CreateDownloadAttributes < ActiveRecord::Migration[5.0]
         t.integer :years, array: true
         t.timestamps
       end
-
-      add_index :download_attributes, [:context_id, :position], unique: true
+      execute 'ALTER TABLE download_attributes ADD CONSTRAINT download_attributes_context_id_position_key UNIQUE (context_id, position)'
 
       create_table :download_quants do |t|
         t.references :download_attribute, null: false, foreign_key: {on_delete: :cascade}
@@ -20,8 +19,7 @@ class CreateDownloadAttributes < ActiveRecord::Migration[5.0]
         t.column :filter_bands, 'double precision', array: true
         t.timestamps
       end
-
-      add_index :download_quants, [:download_attribute_id, :quant_id], unique: true
+      execute 'ALTER TABLE download_quants ADD CONSTRAINT download_quants_download_attribute_id_quant_id_key UNIQUE (download_attribute_id, quant_id)'
 
       create_table :download_quals do |t|
         t.references :download_attribute, null: false, foreign_key: {on_delete: :cascade}
@@ -29,12 +27,13 @@ class CreateDownloadAttributes < ActiveRecord::Migration[5.0]
         t.boolean :is_filter_enabled, null: false, default: false
         t.timestamps
       end
-
-      add_index :download_quals, [:download_attribute_id, :qual_id], unique: true
+      execute 'ALTER TABLE download_quals ADD CONSTRAINT download_quals_download_attribute_id_qual_id_key UNIQUE (download_attribute_id, qual_id)'
 
       create_view :download_attributes_mv, materialized: true
-      add_index :download_attributes_mv, :id, unique: true
-      add_index :download_attributes_mv, [:context_id, :attribute_id]
+      add_index :download_attributes_mv, :id, unique: true,
+        name: 'download_attributes_mv_id_idx'
+      add_index :download_attributes_mv, [:context_id, :attribute_id],
+        name: 'download_attributes_mv_context_id_attribute_id_idx'
     end
   end
 

@@ -9,8 +9,7 @@ class CreateMapAttributesGroups < ActiveRecord::Migration[5.0]
         t.integer :position, null: false
         t.timestamps
       end
-
-      add_index :map_attribute_groups, [:context_id, :position], unique: true
+      execute 'ALTER TABLE map_attribute_groups ADD CONSTRAINT map_attribute_groups_context_id_position_key UNIQUE (context_id, position)'
     end
   end
 
