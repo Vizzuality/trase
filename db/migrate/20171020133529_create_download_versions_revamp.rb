@@ -6,7 +6,7 @@ class CreateDownloadVersionsRevamp < ActiveRecord::Migration[5.0]
       create_table :download_versions do |t|
         t.references :context, null: false, foreign_key: {on_delete: :cascade}
         t.string :symbol, null: false
-        t.boolean :current, null: false, default: false
+        t.boolean :is_current, null: false, default: false
         t.timestamps
       end
       execute 'ALTER TABLE download_versions ADD CONSTRAINT download_versions_context_id_symbol_key UNIQUE (context_id, symbol)'

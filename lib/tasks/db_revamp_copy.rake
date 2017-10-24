@@ -140,22 +140,22 @@ end
 
 def quants_insert_sql
   <<-SQL
-  INSERT INTO revamp.quants (id, name, unit, unit_type, tooltip, tooltip_text, frontend_name, created_at, updated_at)
-  SELECT quant_id, name, unit, unit_type, COALESCE(tooltip, FALSE), tooltip_text, frontend_name, NOW(), NOW() FROM public.quants
+  INSERT INTO revamp.quants (id, name, display_name, unit, unit_type, tooltip, tooltip_text, created_at, updated_at)
+  SELECT quant_id, name, COALESCE(frontend_name, name), unit, unit_type, COALESCE(tooltip, FALSE), tooltip_text, NOW(), NOW() FROM public.quants
   SQL
 end
 
 def inds_insert_sql
   <<-SQL
-  INSERT INTO revamp.inds (id, name, unit, unit_type, tooltip, tooltip_text, frontend_name, created_at, updated_at)
-  SELECT ind_id, name, unit, unit_type, COALESCE(tooltip, FALSE), tooltip_text, frontend_name, NOW(), NOW() FROM public.inds
+  INSERT INTO revamp.inds (id, name, display_name, unit, unit_type, tooltip, tooltip_text, created_at, updated_at)
+  SELECT ind_id, name, COALESCE(frontend_name, name), unit, unit_type, COALESCE(tooltip, FALSE), tooltip_text, NOW(), NOW() FROM public.inds
   SQL
 end
 
 def quals_insert_sql
   <<-SQL
-  INSERT INTO revamp.quals (id, name, tooltip, tooltip_text, frontend_name, created_at, updated_at)
-  SELECT qual_id, name, COALESCE(tooltip, FALSE), tooltip_text, frontend_name, NOW(), NOW() FROM public.quals
+  INSERT INTO revamp.quals (id, name, display_name, tooltip, tooltip_text, created_at, updated_at)
+  SELECT qual_id, name, COALESCE(frontend_name, name), COALESCE(tooltip, FALSE), tooltip_text, NOW(), NOW() FROM public.quals
   SQL
 end
 
@@ -330,7 +330,7 @@ def download_attributes_insert_sql
     AND flow_quants_inds_and_quals.attribute_id = context_indicators.indicator_attribute_id
     GROUP BY context_indicators.id
   )
-  INSERT INTO revamp.download_attributes(id, context_id, position, name_in_download, years, created_at, updated_at)
+  INSERT INTO revamp.download_attributes(id, context_id, position, display_name, years, created_at, updated_at)
   SELECT
     id, context_id, position, name_in_download, years, NOW(), NOW()
   FROM context_indicators_with_years context_indicators
@@ -428,19 +428,19 @@ end
         name: 'actor',
         charts: [
           {
-            position: 0, code: 'top_countries', title: 'Top destination countries',
+            position: 0, identifier: 'top_countries', title: 'Top destination countries',
             attributes: [
               {position: 0, quant: 'Volume'}
             ]
           },
           {
-            position: 1, code: 'top_sources', title: 'Top sourcing regions',
+            position: 1, identifier: 'top_sources', title: 'Top sourcing regions',
             attributes: [
               {position: 0, quant: 'Volume'}
             ]
           },
           {
-            position: 2, code: 'sustainability', title: 'Deforestation risk associated with top sourcing regions',
+            position: 2, identifier: 'sustainability', title: 'Deforestation risk associated with top sourcing regions',
             attributes: [
               {position: 0, quant: 'DEFORESTATION_V2'},
               {position: 1, quant: 'POTENTIAL_SOY_DEFORESTATION_V2'},
@@ -448,7 +448,7 @@ end
             ]
           },
           {
-            position: 3, code: 'companies_sourcing', title: 'Comparing companies',
+            position: 3, identifier: 'companies_sourcing', title: 'Comparing companies',
             attributes: [
               {position: 0, quant: 'LAND_USE'},
               {position: 1, quant: 'DEFORESTATION_V2'},
@@ -473,10 +473,10 @@ end
         name: 'place',
         charts: [
           {
-            position: 0, code: 'indicators', title: 'Sustainability indicators',
+            position: 0, identifier: 'indicators', title: 'Sustainability indicators',
             charts: [
               {
-                position:0, code: 'environmental_indicators', title: 'Environmental indicators',
+                position:0, identifier: 'environmental_indicators', title: 'Environmental indicators',
                 attributes: [
                   {position: 0, quant: 'DEFORESTATION_V2'},
                   {position: 1, quant: 'POTENTIAL_SOY_DEFORESTATION_V2'},
@@ -487,7 +487,7 @@ end
                 ]
               },
               {
-                position: 1, code: 'socioeconomic_indicators', title: 'Socio-economic indicators',
+                position: 1, identifier: 'socioeconomic_indicators', title: 'Socio-economic indicators',
                 attributes: [
                   {position: 0, ind: 'HDI'},
                   {position: 1, ind: 'GDP_CAP'},
@@ -499,7 +499,7 @@ end
                 ]
               },
               {
-                position: 2, code: 'agricultural_indicators', title: 'Agricultural indicators',
+                position: 2, identifier: 'agricultural_indicators', title: 'Agricultural indicators',
                 attributes: [
                   {position: 0, quant: 'SOY_TN'},
                   {position: 1, ind: 'SOY_YIELD'},
@@ -507,7 +507,7 @@ end
                 ]
               },
               {
-                position: 3, code: 'territorial_governance', title: 'Territorial governance',
+                position: 3, identifier: 'territorial_governance', title: 'Territorial governance',
                 attributes: [
                   {position: 0, quant: 'APP_DEFICIT_AREA'},
                   {position: 1, quant: 'LR_DEFICIT_AREA'},
@@ -518,22 +518,20 @@ end
             ]
           },
           {
-            position: 1, code: 'trajectory_deforestation', title: 'Deforestation trajectory',
+            position: 1, identifier: 'trajectory_deforestation', title: 'Deforestation trajectory',
             attributes: [
               {position: 0, quant: 'AGROSATELITE_SOY_DEFOR_'},
               {position: 1, quant: 'DEFORESTATION_V2'}
             ]
           },
           {
-            position: 2, code: 'top_traders', title: 'Top traders',
+            position: 2, identifier: 'top_traders', title: 'Top traders',
             attributes: [
               {position: 0, quant: 'Volume'}
             ]
           },
           {
-            position: 3,
-            code: 'top_consumers',
-            title: 'Top importer countries',
+            position: 3, identifier: 'top_consumers', title: 'Top importer countries',
             attributes: [
               {position: 0, quant: 'Volume'}
             ]
@@ -584,22 +582,22 @@ end
 
   def insert_chart(profile_id, parent_chart_id, data)
     inserted_chart = ActiveRecord::Base.connection.execute(
-      "INSERT INTO revamp.charts (profile_id, parent_id, code, title, position, created_at, updated_at) VALUES (#{profile_id}, #{parent_chart_id || 'NULL'}, '#{data[:code]}', '#{data[:title]}', #{data[:position]}, NOW(), NOW()) RETURNING id"
+      "INSERT INTO revamp.charts (profile_id, parent_id, identifier, title, position, created_at, updated_at) VALUES (#{profile_id}, #{parent_chart_id || 'NULL'}, '#{data[:identifier]}', '#{data[:title]}', #{data[:position]}, NOW(), NOW()) RETURNING id"
     ).first
     if data[:attributes]
       data[:attributes].each do |attribute|
         inserted_chart_attribute = ActiveRecord::Base.connection.execute(
-          "INSERT INTO revamp.chart_attributes (chart_id, position, created_at, updated_at) VALUES (#{inserted_chart['id']}, '#{data[:position]}', NOW(), NOW()) RETURNING id"
+          "INSERT INTO revamp.chart_attributes (chart_id, position, created_at, updated_at) VALUES (#{inserted_chart['id']}, #{attribute[:position]}, NOW(), NOW()) RETURNING id"
         ).first
         if attribute[:quant]
           quant_id = fetch_quant(attribute[:quant])['id']
           ActiveRecord::Base.connection.execute(
-            "INSERT INTO revamp.chart_quants (chart_attribute_id, quant_id, created_at, updated_at) VALUES (#{inserted_chart_attribute['id']}, '#{quant_id}', NOW(), NOW())"
+            "INSERT INTO revamp.chart_quants (chart_attribute_id, quant_id, created_at, updated_at) VALUES (#{inserted_chart_attribute['id']}, #{quant_id}, NOW(), NOW())"
           )
         elsif attribute[:ind]
           ind_id = fetch_ind(attribute[:ind])['id']
           ActiveRecord::Base.connection.execute(
-            "INSERT INTO revamp.chart_inds (chart_attribute_id, ind_id, created_at, updated_at) VALUES (#{inserted_chart_attribute['id']}, '#{ind_id}', NOW(), NOW())"
+            "INSERT INTO revamp.chart_inds (chart_attribute_id, ind_id, created_at, updated_at) VALUES (#{inserted_chart_attribute['id']}, #{ind_id}, NOW(), NOW())"
           )
         end
       end

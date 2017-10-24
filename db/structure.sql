@@ -1033,11 +1033,11 @@ SET search_path = revamp, pg_catalog;
 CREATE TABLE inds (
     id integer NOT NULL,
     name text NOT NULL,
+    display_name text NOT NULL,
     unit text,
     unit_type text,
     tooltip boolean DEFAULT false NOT NULL,
     tooltip_text text,
-    frontend_name text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     CONSTRAINT inds_unit_type_check CHECK ((unit_type = ANY (ARRAY['currency'::text, 'ratio'::text, 'score'::text, 'unitless'::text])))
@@ -1051,9 +1051,9 @@ CREATE TABLE inds (
 CREATE TABLE quals (
     id integer NOT NULL,
     name text NOT NULL,
+    display_name text NOT NULL,
     tooltip boolean DEFAULT false NOT NULL,
     tooltip_text text,
-    frontend_name text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1066,11 +1066,11 @@ CREATE TABLE quals (
 CREATE TABLE quants (
     id integer NOT NULL,
     name text NOT NULL,
+    display_name text NOT NULL,
     unit text,
     unit_type text,
     tooltip boolean DEFAULT false NOT NULL,
     tooltip_text text,
-    frontend_name text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     CONSTRAINT quants_unit_type_check CHECK ((unit_type = ANY (ARRAY['currency'::text, 'area'::text, 'count'::text, 'volume'::text, 'unitless'::text])))
@@ -1083,51 +1083,51 @@ CREATE TABLE quants (
 
 CREATE MATERIALIZED VIEW attributes_mv AS
  SELECT row_number() OVER () AS id,
-    s.name,
     s.type,
     s.original_id,
+    s.name,
+    s.display_name,
     s.unit,
     s.unit_type,
     s.tooltip,
     s.tooltip_text,
-    s.frontend_name,
     s.aggregate_method,
     s.created_at,
     s.updated_at
-   FROM ( SELECT quants.name,
-            'Quant'::text AS type,
+   FROM ( SELECT 'Quant'::text AS type,
             quants.id AS original_id,
+            quants.name,
+            quants.display_name,
             quants.unit,
             quants.unit_type,
             quants.tooltip,
             quants.tooltip_text,
-            quants.frontend_name,
             'SUM'::text AS aggregate_method,
             quants.created_at,
             quants.updated_at
            FROM quants
         UNION ALL
-         SELECT inds.name,
-            'Ind'::text,
+         SELECT 'Ind'::text,
             inds.id AS original_id,
+            inds.name,
+            inds.display_name,
             inds.unit,
             inds.unit_type,
             inds.tooltip,
             inds.tooltip_text,
-            inds.frontend_name,
             'AVG'::text AS aggregate_method,
             inds.created_at,
             inds.updated_at
            FROM inds
         UNION ALL
-         SELECT quals.name,
-            'Qual'::text,
+         SELECT 'Qual'::text,
             quals.id AS original_id,
+            quals.name,
+            quals.display_name,
             NULL::text,
             NULL::text,
             quals.tooltip,
             quals.tooltip_text,
-            quals.frontend_name,
             NULL::text,
             quals.created_at,
             quals.updated_at
@@ -1176,6 +1176,7 @@ CREATE TABLE chart_attributes (
     id integer NOT NULL,
     chart_id integer NOT NULL,
     "position" integer,
+    years integer[],
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1208,7 +1209,6 @@ CREATE TABLE chart_inds (
     id integer NOT NULL,
     chart_attribute_id integer NOT NULL,
     ind_id integer NOT NULL,
-    years integer[],
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1241,7 +1241,6 @@ CREATE TABLE chart_quals (
     id integer NOT NULL,
     chart_attribute_id integer NOT NULL,
     qual_id integer NOT NULL,
-    years integer[],
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1274,7 +1273,6 @@ CREATE TABLE chart_quants (
     id integer NOT NULL,
     chart_attribute_id integer NOT NULL,
     quant_id integer NOT NULL,
-    years integer[],
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1307,7 +1305,7 @@ CREATE TABLE charts (
     id integer NOT NULL,
     profile_id integer NOT NULL,
     parent_id integer,
-    code text NOT NULL,
+    identifier text NOT NULL,
     title text NOT NULL,
     "position" integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -1518,7 +1516,7 @@ CREATE TABLE download_attributes (
     id integer NOT NULL,
     context_id integer NOT NULL,
     "position" integer NOT NULL,
-    name_in_download text NOT NULL,
+    display_name text NOT NULL,
     years integer[],
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -1581,7 +1579,7 @@ CREATE MATERIALIZED VIEW download_attributes_mv AS
  SELECT da.id,
     da.context_id,
     da."position",
-    da.name_in_download,
+    da.display_name,
     da.years,
     da.created_at,
     da.updated_at,
@@ -1593,7 +1591,7 @@ UNION ALL
  SELECT da.id,
     da.context_id,
     da."position",
-    da.name_in_download,
+    da.display_name,
     da.years,
     da.created_at,
     da.updated_at,
@@ -1650,7 +1648,7 @@ CREATE TABLE download_versions (
     id integer NOT NULL,
     context_id integer NOT NULL,
     symbol character varying NOT NULL,
-    current boolean DEFAULT false NOT NULL,
+    is_current boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -2178,7 +2176,7 @@ CREATE TABLE profiles (
     name text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    CONSTRAINT check_profiles_on_name CHECK ((name = ANY (ARRAY['actor'::text, 'place'::text])))
+    CONSTRAINT profiles_name_check CHECK ((name = ANY (ARRAY['actor'::text, 'place'::text])))
 );
 
 
@@ -4702,7 +4700,7 @@ ALTER TABLE ONLY flow_quants
 --
 
 ALTER TABLE ONLY charts
-    ADD CONSTRAINT fk_rails_a7dc6318f9 FOREIGN KEY (profile_id) REFERENCES profiles(id);
+    ADD CONSTRAINT fk_rails_a7dc6318f9 FOREIGN KEY (profile_id) REFERENCES profiles(id) ON DELETE CASCADE;
 
 
 --
@@ -4750,7 +4748,7 @@ ALTER TABLE ONLY map_inds
 --
 
 ALTER TABLE ONLY profiles
-    ADD CONSTRAINT fk_rails_cbc235c3bc FOREIGN KEY (context_node_type_id) REFERENCES context_node_types(id);
+    ADD CONSTRAINT fk_rails_cbc235c3bc FOREIGN KEY (context_node_type_id) REFERENCES context_node_types(id) ON DELETE CASCADE;
 
 
 --
