@@ -74,3 +74,4 @@ Once comments are in place, it is possible to generate html documentation of the
 2. the [SchemaSpy 6.0.0-rc2](http://schemaspy.readthedocs.io/en/latest/index.html) jar file and [PostgreSQL driver](https://jdbc.postgresql.org/download.html) file are already in doc/db
 3. `rake db:revamp:doc:html` (Please note: I added an extra param to SchemaSpy command which is `-renderer :quartz` which helps with running it on macOS Sierra. No idea if it prevents it from running elsewhere.)
 4. output files in `doc/db/html`
+5. to update the [GH pages site](https://vizzuality.github.io/trase-api/) all the generated files from `doc/db/html` need to land in the top-level of the `gh-pages` branch. This is currently a manual process, easiest to have the repo checked out twice on local drive to be able to copy between branches (not great and not final.)
