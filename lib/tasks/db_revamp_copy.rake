@@ -30,7 +30,9 @@ namespace :db do
         'resize_by_quants',
         'download_attributes',
         'download_quants',
-        'download_quals'
+        'download_quals',
+        'download_versions',
+        'traders'
       ].each do |table|
         copy_data(table)
       end
@@ -354,6 +356,45 @@ def download_quals_insert_sql
     revamp.download_attributes.id, public.context_indicators.indicator_attribute_id, NOW(), NOW()
   FROM public.context_indicators
   JOIN revamp.download_attributes ON public.context_indicators.id = revamp.download_attributes.id AND public.context_indicators.indicator_attribute_type = 'Qual'
+  SQL
+end
+
+def download_versions_insert_sql
+  <<-SQL
+  INSERT INTO revamp.download_versions(context_id, symbol, is_current, created_at, updated_at)
+  SELECT
+    context_id, symbol, COALESCE(current, FALSE), NOW(), NOW()
+  FROM public.download_versions
+  SQL
+end
+
+def traders_insert_sql
+  <<-SQL
+  WITH exporters AS (
+    SELECT * FROM (
+      SELECT nodes.name, ARRAY_AGG(nodes.id) AS ids
+      FROM revamp.nodes
+      JOIN revamp.node_types ON nodes.node_type_id = node_types.id
+      WHERE node_types.name = 'EXPORTER'
+      GROUP BY nodes.name, node_type_id
+    ) s
+    LEFT JOIN LATERAL UNNEST(ids) WITH ORDINALITY AS f(id, row) ON true
+    WHERE row = 1
+  ), importers AS (
+    SELECT * FROM (
+      SELECT nodes.name, ARRAY_AGG(nodes.id) AS ids
+      FROM revamp.nodes
+      JOIN revamp.node_types ON nodes.node_type_id = node_types.id
+      WHERE node_types.name = 'IMPORTER'
+      GROUP BY nodes.name, node_type_id
+    ) s
+    LEFT JOIN LATERAL UNNEST(ids) WITH ORDINALITY AS f(id, row) ON true
+    WHERE row = 1
+  )
+  INSERT INTO revamp.traders(exporter_id, importer_id, created_at, updated_at)
+  SELECT exporters.id AS exporter_id, importers.id AS importer_id, NOW(), NOW()
+  FROM exporters
+  JOIN importers ON exporters.name = importers.name
   SQL
 end
 
