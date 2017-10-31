@@ -12,6 +12,7 @@
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
+/doc/db/html/**/*
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -22,3 +23,4 @@
 # Ignore Byebug command history file.
 .byebug_history
 .env
+.DS_Store

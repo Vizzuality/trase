@@ -33,5 +33,7 @@ module TraseNewApi
     }
 
     config.active_record.schema_format = :sql
+
+    config.autoload_paths << "#{Rails.root}/lib"
   end
 end
