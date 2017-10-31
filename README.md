@@ -60,18 +60,29 @@ SELECT indexrelid::regclass as index, relid::regclass as table, 'DROP INDEX ' ||
 `
 
 
-## Database documentation (revamp schema)
+## Schema revamp: migration and documentation
 
-The file db/schema_comments.yaml contains documentation of schema objects, which is prepared in a way to easily insert it into the database schema itself using `COMMENT IS` syntax. That is done using a dedicated rake task:
+In the transition period as work on changing the database schema continues, new tables are living in a separate `revamp` schema (~namespace), whereas the default `public` schema still contains the old tables. This means we can work on both schemas as necessary.
 
-`rake db:revamp:doc:sql`
+The base version of the database at this point is:
 
-Note: this rake task also creates a new dump of structure.sql, as comments are part of the schema.
+To migrate the database:
 
-Once comments are in place, it is possible to generate html documentation of the entire schema using an external tool. One os such tools is SchemaSpy, which is an open source java library.
-1. install [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-2. install [Graphviz](http://www.graphviz.org/)
-2. the [SchemaSpy 6.0.0-rc2](http://schemaspy.readthedocs.io/en/latest/index.html) jar file and [PostgreSQL driver](https://jdbc.postgresql.org/download.html) file are already in doc/db
-3. `rake db:revamp:doc:html` (Please note: I added an extra param to SchemaSpy command which is `-renderer :quartz` which helps with running it on macOS Sierra. No idea if it prevents it from running elsewhere.)
-4. output files in `doc/db/html`
-5. to update the [GH pages site](https://vizzuality.github.io/trase-api/) all the generated files from `doc/db/html` need to land in the top-level of the `gh-pages` branch. This is currently a manual process, easiest to have the repo checked out twice on local drive to be able to copy between branches (not great and not final.)
+1. run `bundle exec rake db:migrate` to create revamped database objects
+2. run `bundle exec rake db:revamp:copy` to copy data between old and new structure
+
+Schema documentation is generated directly from the database and requires the following steps:
+
+1. The file `db/schema_comments.yml` contains documentation of schema objects, which is prepared in a way to easily insert it into the database schema itself using `COMMENT IS` syntax. 
+That is done using a dedicated rake task:
+
+    `rake db:revamp:doc:sql`
+
+    Note: this rake task also creates a new dump of structure.sql, as comments are part of the schema.
+2. Once comments are in place, it is possible to generate html documentation of the entire schema using an external tool. One os such tools is SchemaSpy, which is an open source java library.
+    1. install [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+    2. install [Graphviz](http://www.graphviz.org/)
+    3. the [SchemaSpy 6.0.0-rc2](http://schemaspy.readthedocs.io/en/latest/index.html) jar file and [PostgreSQL driver](https://jdbc.postgresql.org/download.html) file are already in doc/db
+    4. `rake db:revamp:doc:html` (Please note: I added an extra param to SchemaSpy command which is `-renderer :quartz` which helps with running it on macOS Sierra. No idea if it prevents it from running elsewhere.)
+    5. output files are in `doc/db/html` 
+3. to update the [GH pages site](https://vizzuality.github.io/trase-api/) all the generated files from `doc/db/html` need to land in the top-level of the `gh-pages` branch. This is currently a manual process, easiest to have the repo checked out twice on local drive to be able to copy between branches (not great and not final.)
