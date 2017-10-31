@@ -417,7 +417,7 @@
             <column ascending="true" name="flow_id"/>
          </index>
       </table>
-      <table name="flow_quals" numRows="1619400" remarks="Values of quals for flow" schema="revamp" type="TABLE">
+      <table name="flow_quals" numRows="1665312" remarks="Values of quals for flow" schema="revamp" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('revamp.flow_quals_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="flow_id" nullable="false" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="fk_rails_6e55ca4cbc" implied="false" onDeleteCascade="true" schema="revamp" table="flows"/>
@@ -679,7 +679,7 @@
             <column ascending="true" name="qual_id"/>
          </index>
       </table>
-      <table name="node_quants" numRows="293688" remarks="Values of quants for node" schema="revamp" type="TABLE">
+      <table name="node_quants" numRows="293694" remarks="Values of quants for node" schema="revamp" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('revamp.node_quants_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="node_id" nullable="false" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="fk_rails_dd544b3e59" implied="false" onDeleteCascade="true" schema="revamp" table="nodes"/>
