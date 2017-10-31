@@ -8,7 +8,7 @@ namespace :db do
     namespace :doc do
       desc 'Update sql comments on schema objects and dump new structure.sql'
       task sql: [:environment] do
-        data = YAML.load(File.open("#{Rails.root}/db/schema_comments.yaml"))
+        data = YAML.load(File.open("#{Rails.root}/db/schema_comments.yml"))
         with_search_path('revamp') do
           data['tables'].each do |table|
             comment_on_table(table['name'], table['comment'])
