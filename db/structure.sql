@@ -1269,6 +1269,34 @@ CREATE MATERIALIZED VIEW attributes_mv AS
 
 
 --
+-- Name: MATERIALIZED VIEW attributes_mv; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW attributes_mv IS 'Materialized view which merges inds, quals and quants.';
+
+
+--
+-- Name: COLUMN attributes_mv.id; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN attributes_mv.id IS 'The unique id is a sequential number which is generated at REFRESH and therefore not fixed.';
+
+
+--
+-- Name: COLUMN attributes_mv.type; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN attributes_mv.type IS 'Type of the original entity (Ind / Qual / Quant)';
+
+
+--
+-- Name: COLUMN attributes_mv.original_id; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN attributes_mv.original_id IS 'Id from the source table (inds / quals / quants)';
+
+
+--
 -- Name: carto_layers; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -2086,6 +2114,20 @@ UNION ALL
 
 
 --
+-- Name: MATERIALIZED VIEW download_attributes_mv; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW download_attributes_mv IS 'Materialized view which merges download_quals and download_quants with download_attributes.';
+
+
+--
+-- Name: COLUMN download_attributes_mv.attribute_id; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN download_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+
+
+--
 -- Name: download_quals_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -2616,6 +2658,20 @@ UNION ALL
      JOIN map_attributes ma ON ((ma.id = mai.map_attribute_id)))
      JOIN attributes_mv a ON (((a.original_id = mai.ind_id) AND (a.type = 'Ind'::text))))
   WITH NO DATA;
+
+
+--
+-- Name: MATERIALIZED VIEW map_attributes_mv; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW map_attributes_mv IS 'Materialized view which merges map_inds and map_quants with map_attributes.';
+
+
+--
+-- Name: COLUMN map_attributes_mv.attribute_id; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
 
 
 --
@@ -3245,6 +3301,20 @@ UNION ALL
 
 
 --
+-- Name: MATERIALIZED VIEW recolor_by_attributes_mv; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW recolor_by_attributes_mv IS 'Materialized view which merges recolor_by_inds and recolor_by_quals with recolor_by_attributes.';
+
+
+--
+-- Name: COLUMN recolor_by_attributes_mv.attribute_id; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN recolor_by_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+
+
+--
 -- Name: recolor_by_inds_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -3408,6 +3478,20 @@ CREATE MATERIALIZED VIEW resize_by_attributes_mv AS
      JOIN resize_by_attributes ra ON ((ra.id = raq.resize_by_attribute_id)))
      JOIN attributes_mv a ON (((a.original_id = raq.quant_id) AND (a.type = 'Quant'::text))))
   WITH NO DATA;
+
+
+--
+-- Name: MATERIALIZED VIEW resize_by_attributes_mv; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW resize_by_attributes_mv IS 'Materialized view which merges resize_by_quants with resize_by_attributes.';
+
+
+--
+-- Name: COLUMN resize_by_attributes_mv.attribute_id; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN resize_by_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
 
 
 --

@@ -19,6 +19,12 @@ namespace :db do
               comment_on_index(index['name'], index['comment'])
             end
           end
+          data['materialized_views'].each do |table|
+            comment_on_materialized_view(table['name'], table['comment'])
+            table['columns'] && table['columns'].each do |column|
+              comment_on_column(table['name'], column['name'], column['comment'] || '')
+            end
+          end
         end
         Rake::Task['db:structure:dump'].invoke
       end
