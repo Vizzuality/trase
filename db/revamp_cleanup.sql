@@ -1,3 +1,8 @@
+-- This is only needed for the schema migration work.
+-- Removes duplicates from the old schema in order to make it possible
+-- to insert into new schema without constraint violation.
+-- TODO: remove once schema migration completed
+
 DELETE FROM node_quants a
 USING (
         SELECT
