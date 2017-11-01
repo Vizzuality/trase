@@ -36,8 +36,11 @@ namespace :gold_master do
 
   task compare_json: [:environment] do
     compare('json') do |gold_master_file, actual_file|
+      gold_master = HashSorter.new(JSON.parse(File.read(gold_master_file))).sort
+      actual = HashSorter.new(JSON.parse(File.read(actual_file))).sort
       diff = JsonDiff.diff(
-        JSON.parse(File.read(gold_master_file)), JSON.parse(File.read(actual_file))
+        gold_master,
+        actual
       )
     end
   end
