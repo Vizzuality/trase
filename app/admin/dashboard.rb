@@ -7,8 +7,8 @@ ActiveAdmin.register_page "Dashboard" do
       column do
         panel "Recent Posts" do
           ul do
-            Post.all.map do |post|
-              li link_to(post.title, admin_post_path(post))
+            Content::Post.all.map do |post|
+              li link_to(post.title, admin_content_post_path(post))
             end
           end
         end

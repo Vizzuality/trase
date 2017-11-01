@@ -8,8 +8,13 @@ default: &default
   database: <%= ENV.fetch("POSTGRES_DATABASE") { "trase_dev" } %>
   schema_search_path: "public"
 
+content:
+  <<: *default
+  database: <%= ENV.fetch("POSTGRES_CONTENT_DATABASE") { "trase_content" } %>
+
 development:
   <<: *default
+
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
