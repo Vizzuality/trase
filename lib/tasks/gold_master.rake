@@ -52,10 +52,11 @@ namespace :gold_master do
         `curl -g "#{actual_url(endpoint, query)}" > #{actual_file}`
         unzip_and_replace_csv(actual_file) if format == 'csv' # because downloads come as zip
         diff = yield(gold_master_file, actual_file)
-        next unless diff.any?
-        puts diff.inspect
-        cleanup
-        exit 1
+        if diff.any?
+          puts diff.inspect
+          cleanup
+          exit 1
+        end
       end
     end
     cleanup
@@ -63,7 +64,7 @@ namespace :gold_master do
   end
 
   def endpoints
-    YAML.safe_load(File.open("#{Rails.root}/spec/support/gold_master_urls.yml"))
+    YAML.load(File.open("#{Rails.root}/spec/support/gold_master_urls.yml"))
   end
 
   def host(version)
