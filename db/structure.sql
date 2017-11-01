@@ -1216,7 +1216,7 @@ COMMENT ON COLUMN quants.tooltip_text IS 'Tooltip text';
 
 CREATE MATERIALIZED VIEW attributes_mv AS
  SELECT row_number() OVER () AS id,
-    s.type,
+    s.original_type,
     s.original_id,
     s.name,
     s.display_name,
@@ -1227,7 +1227,7 @@ CREATE MATERIALIZED VIEW attributes_mv AS
     s.aggregate_method,
     s.created_at,
     s.updated_at
-   FROM ( SELECT 'Quant'::text AS type,
+   FROM ( SELECT 'Quant'::text AS original_type,
             quants.id AS original_id,
             quants.name,
             quants.display_name,
@@ -1241,20 +1241,20 @@ CREATE MATERIALIZED VIEW attributes_mv AS
            FROM quants
         UNION ALL
          SELECT 'Ind'::text,
-            inds.id AS original_id,
+            inds.id,
             inds.name,
             inds.display_name,
             inds.unit,
             inds.unit_type,
             inds.tooltip,
             inds.tooltip_text,
-            'AVG'::text AS aggregate_method,
+            'AVG'::text,
             inds.created_at,
             inds.updated_at
            FROM inds
         UNION ALL
          SELECT 'Qual'::text,
-            quals.id AS original_id,
+            quals.id,
             quals.name,
             quals.display_name,
             NULL::text,
@@ -1283,17 +1283,17 @@ COMMENT ON COLUMN attributes_mv.id IS 'The unique id is a sequential number whic
 
 
 --
--- Name: COLUMN attributes_mv.type; Type: COMMENT; Schema: revamp; Owner: -
+-- Name: COLUMN attributes_mv.original_type; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN attributes_mv.type IS 'Type of the original entity (Ind / Qual / Quant)';
+COMMENT ON COLUMN attributes_mv.original_type IS 'Type of the original entity (Ind / Qual / Quant)';
 
 
 --
 -- Name: COLUMN attributes_mv.original_id; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN attributes_mv.original_id IS 'Id from the source table (inds / quals / quants)';
+COMMENT ON COLUMN attributes_mv.original_id IS 'Id from the original table (inds / quals / quants)';
 
 
 --
@@ -2097,7 +2097,7 @@ CREATE MATERIALIZED VIEW download_attributes_mv AS
     a.id AS attribute_id
    FROM ((download_quants daq
      JOIN download_attributes da ON ((da.id = daq.download_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = daq.quant_id) AND (a.type = 'Quant'::text))))
+     JOIN attributes_mv a ON (((a.original_id = daq.quant_id) AND (a.original_type = 'Quant'::text))))
 UNION ALL
  SELECT da.id,
     da.context_id,
@@ -2109,7 +2109,7 @@ UNION ALL
     a.id AS attribute_id
    FROM ((download_quals daq
      JOIN download_attributes da ON ((da.id = daq.download_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = daq.qual_id) AND (a.type = 'Qual'::text))))
+     JOIN attributes_mv a ON (((a.original_id = daq.qual_id) AND (a.original_type = 'Qual'::text))))
   WITH NO DATA;
 
 
@@ -2640,7 +2640,7 @@ CREATE MATERIALIZED VIEW map_attributes_mv AS
     a.id AS attribute_id
    FROM ((map_quants maq
      JOIN map_attributes ma ON ((ma.id = maq.map_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = maq.quant_id) AND (a.type = 'Quant'::text))))
+     JOIN attributes_mv a ON (((a.original_id = maq.quant_id) AND (a.original_type = 'Quant'::text))))
 UNION ALL
  SELECT ma.id,
     ma.map_attribute_group_id,
@@ -2656,7 +2656,7 @@ UNION ALL
     a.id AS attribute_id
    FROM ((map_inds mai
      JOIN map_attributes ma ON ((ma.id = mai.map_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = mai.ind_id) AND (a.type = 'Ind'::text))))
+     JOIN attributes_mv a ON (((a.original_id = mai.ind_id) AND (a.original_type = 'Ind'::text))))
   WITH NO DATA;
 
 
@@ -3275,7 +3275,7 @@ CREATE MATERIALIZED VIEW recolor_by_attributes_mv AS
     a.id AS attribute_id
    FROM ((recolor_by_inds rai
      JOIN recolor_by_attributes ra ON ((ra.id = rai.recolor_by_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = rai.ind_id) AND (a.type = 'Ind'::text))))
+     JOIN attributes_mv a ON (((a.original_id = rai.ind_id) AND (a.original_type = 'Ind'::text))))
 UNION ALL
  SELECT ra.id,
     ra.context_id,
@@ -3296,7 +3296,7 @@ UNION ALL
     a.id AS attribute_id
    FROM ((recolor_by_quals raq
      JOIN recolor_by_attributes ra ON ((ra.id = raq.recolor_by_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = raq.qual_id) AND (a.type = 'Qual'::text))))
+     JOIN attributes_mv a ON (((a.original_id = raq.qual_id) AND (a.original_type = 'Qual'::text))))
   WITH NO DATA;
 
 
@@ -3476,7 +3476,7 @@ CREATE MATERIALIZED VIEW resize_by_attributes_mv AS
     a.id AS attribute_id
    FROM ((resize_by_quants raq
      JOIN resize_by_attributes ra ON ((ra.id = raq.resize_by_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = raq.quant_id) AND (a.type = 'Quant'::text))))
+     JOIN attributes_mv a ON (((a.original_id = raq.quant_id) AND (a.original_type = 'Quant'::text))))
   WITH NO DATA;
 
 
@@ -5939,6 +5939,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171018093008'),
 ('20171020091710'),
 ('20171020125731'),
-('20171020133529');
+('20171020133529'),
+('20171101111009');
 
 

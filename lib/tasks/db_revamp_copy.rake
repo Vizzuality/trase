@@ -1,5 +1,10 @@
 namespace :db do
   namespace :revamp do
+    desc 'Refresh materialized views'
+    task refresh: [:environment] do
+      refresh_materialized_views
+    end
+
     desc 'Copy data from public schema into revamp schema'
     task copy: [:environment] do
       [
@@ -38,13 +43,17 @@ namespace :db do
       end
       populate_contextual_layers
       populate_profiles
-      refresh_materialized_view('attributes_mv')
-      refresh_materialized_view('map_attributes_mv')
-      refresh_materialized_view('recolor_by_attributes_mv')
-      refresh_materialized_view('resize_by_attributes_mv')
-      refresh_materialized_view('download_attributes_mv')
+      refresh_materialized_views
     end
   end
+end
+
+def refresh_materialized_views
+  refresh_materialized_view('attributes_mv')
+  refresh_materialized_view('map_attributes_mv')
+  refresh_materialized_view('recolor_by_attributes_mv')
+  refresh_materialized_view('resize_by_attributes_mv')
+  refresh_materialized_view('download_attributes_mv')
 end
 
 def truncate_table(table)
