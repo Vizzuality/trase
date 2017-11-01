@@ -10,5 +10,4 @@ class GetColumnsSerializer < ActiveModel::Serializer
   attribute :is_geo do
     object.is_geo.present?
   end
-
 end

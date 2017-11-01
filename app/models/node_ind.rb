@@ -9,9 +9,6 @@
 #
 
 class NodeInd < ActiveRecord::Base
-
-
-
-    belongs_to :ind, :class_name => 'Ind', :foreign_key => :ind_id
-    belongs_to :node, :class_name => 'Node', :foreign_key => :node_id
+  belongs_to :ind, class_name: 'Ind', foreign_key: :ind_id
+  belongs_to :node, class_name: 'Node', foreign_key: :node_id
 end

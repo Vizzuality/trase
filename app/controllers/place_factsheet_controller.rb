@@ -3,9 +3,9 @@ class PlaceFactsheetController < ApplicationController
     context_id = params[:context_id]
 
     context = if context_id.present?
-      Context.find(context_id)
-    else
-      Context.find_by(is_default: true)
+                Context.find(context_id)
+              else
+                Context.find_by(is_default: true)
     end
 
     raise ActionController::ParameterMissing, 'Required context_id missing' if context.nil?

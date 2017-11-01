@@ -2,16 +2,16 @@ shared_context 'brazil municipality qual values' do
   include_context 'quals'
   include_context 'brazil soy nodes'
 
-  let!(:state_value){
+  let!(:state_value) do
     FactoryGirl.create(:node_qual, node: municipality_node, qual: state, value: 'MATO GROSSO')
-  }
-  let!(:biome_value){
+  end
+  let!(:biome_value) do
     FactoryGirl.create(:node_qual, node: municipality_node, qual: biome, value: 'AMAZONIA')
-  }
-  let!(:embargoes_value){
+  end
+  let!(:embargoes_value) do
     FactoryGirl.create(:node_qual, node: municipality_node, qual: zero_deforestation, value: 'Yes')
-  }
-  let!(:embargoes_value){
+  end
+  let!(:embargoes_value) do
     FactoryGirl.create(:node_qual, node: municipality_node, qual: zero_deforestation, value: 'Yes')
-  }
+  end
 end

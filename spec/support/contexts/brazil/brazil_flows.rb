@@ -1,24 +1,24 @@
 shared_context 'brazil flows' do
   include_context 'brazil soy nodes'
 
-  let!(:flow1){
+  let!(:flow1) do
     FactoryGirl.create(
-        :flow,
-        context: context,
-        path: [
-            biome_node, state_node, municipality_node, logistics_hub_node, port1_node, exporter1_node, importer1_node, country_of_destination1_node
-        ].map(&:node_id),
-        year: 2015
+      :flow,
+      context: context,
+      path: [
+        biome_node, state_node, municipality_node, logistics_hub_node, port1_node, exporter1_node, importer1_node, country_of_destination1_node
+      ].map(&:node_id),
+      year: 2015
     )
-  }
-  let!(:flow2){
+  end
+  let!(:flow2) do
     FactoryGirl.create(
-        :flow,
-        context: context,
-        path: [
-            biome_node, state_node, municipality_node, logistics_hub_node, port1_node, exporter1_node, importer1_node, country_of_destination1_node
-        ].map(&:node_id),
-        year: 2015
+      :flow,
+      context: context,
+      path: [
+        biome_node, state_node, municipality_node, logistics_hub_node, port1_node, exporter1_node, importer1_node, country_of_destination1_node
+      ].map(&:node_id),
+      year: 2015
     )
-  }
+  end
 end

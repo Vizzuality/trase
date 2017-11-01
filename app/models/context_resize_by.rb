@@ -14,9 +14,8 @@
 #
 
 class ContextResizeBy < ActiveRecord::Base
-    self.table_name = 'context_resize_by'
+  self.table_name = 'context_resize_by'
 
-
-    belongs_to :context, :class_name => 'Context', :foreign_key => :context_id
-    belongs_to :resize_attribute, polymorphic: true
+  belongs_to :context, class_name: 'Context', foreign_key: :context_id
+  belongs_to :resize_attribute, polymorphic: true
 end

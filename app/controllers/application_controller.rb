@@ -5,10 +5,11 @@ class ApplicationController < ActionController::Base
   before_action :set_caching_headers
 
   rescue_from ActionController::ParameterMissing do |exception|
-    render json: {:error => exception.message}, :status => 500
+    render json: {error: exception.message}, status: 500
   end
 
   private
+
   def load_context
     context_id = params[:context_id]
 
@@ -20,6 +21,6 @@ class ApplicationController < ActionController::Base
   end
 
   def set_caching_headers
-    expires_in 2.hours, :public => true
+    expires_in 2.hours, public: true
   end
 end

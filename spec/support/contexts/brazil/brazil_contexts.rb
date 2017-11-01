@@ -1,8 +1,8 @@
 shared_context 'brazil contexts' do
-  let!(:brazil){
+  let!(:brazil) do
     FactoryGirl.create(:country, name: 'BRAZIL', iso2: 'BR', latitude: 10, longitude: 10, zoom: 4)
-  }
-  let!(:context){
+  end
+  let!(:context) do
     FactoryGirl.create(
       :context,
       country: brazil,
@@ -10,8 +10,8 @@ shared_context 'brazil contexts' do
       years: [2014, 2015],
       default_year: 2015
     )
-  }
-  let!(:another_context){
+  end
+  let!(:another_context) do
     FactoryGirl.create(
       :context,
       country: brazil,
@@ -19,5 +19,5 @@ shared_context 'brazil contexts' do
       years: [2014, 2015],
       default_year: 2015
     )
-  }
+  end
 end

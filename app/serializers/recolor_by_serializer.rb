@@ -29,7 +29,7 @@ class RecolorBySerializer < ActiveModel::Serializer
 
   attribute :nodes do
     flows = []
-    if (object.legend_type.eql? 'qual')
+    if object.legend_type.eql? 'qual'
       FlowQual.distinct.select('value').where('qual_id = ? AND value NOT ILIKE \'UNKNOWN%\'', object.recolor_attribute_id).each do |flow|
         flows.push(flow.value)
       end

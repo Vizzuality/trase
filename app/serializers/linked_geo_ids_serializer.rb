@@ -10,5 +10,4 @@ class LinkedGeoIdsSerializer < ActiveModel::Serializer
   attribute :is_unknown do
     object.is_unknown.present?
   end
-
 end

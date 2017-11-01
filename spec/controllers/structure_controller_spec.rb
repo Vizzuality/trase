@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe StructureController, type: :controller do
-  include_context "brazil soy indicators"
-  include_context "brazil resize by"
-  include_context "brazil recolor by"
+  include_context 'brazil soy indicators'
+  include_context 'brazil resize by'
+  include_context 'brazil recolor by'
 
-  describe "GET get_contexts" do
-    it "assigns contexts" do
+  describe 'GET get_contexts' do
+    it 'assigns contexts' do
       get :get_contexts
       controller_contexts = assigns(:contexts)
       expect(controller_contexts).to match_array([context, another_context])
