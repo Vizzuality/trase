@@ -18,10 +18,9 @@
 #
 
 class ContextLayer < ActiveRecord::Base
-    self.table_name = 'context_layer'
+  self.table_name = 'context_layer'
 
-
-    belongs_to :context_layer_group, :class_name => 'ContextLayerGroup', :foreign_key => :context_layer_group_id
-    belongs_to :context, :class_name => 'Context', :foreign_key => :context_id
-    belongs_to :layer_attribute, polymorphic: true
+  belongs_to :context_layer_group, class_name: 'ContextLayerGroup', foreign_key: :context_layer_group_id
+  belongs_to :context, class_name: 'Context', foreign_key: :context_id
+  belongs_to :layer_attribute, polymorphic: true
 end

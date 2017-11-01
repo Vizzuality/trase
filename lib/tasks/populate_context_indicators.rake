@@ -1,6 +1,5 @@
 namespace :populate do
-
-  task :context_indicators => [:environment] do
+  task context_indicators: [:environment] do
     context_indicators = [
       {
         type: 'Quant',
@@ -28,7 +27,7 @@ namespace :populate do
         country: 'BRAZIL',
         commodity: nil,
         name: 'WATER_SCARCITY',
-        position: 9        
+        position: 9
       },
       {
         type: 'Qual',
@@ -83,12 +82,12 @@ namespace :populate do
     context_indicators.map do |ci|
       puts "#{ci[:name]} (#{ci[:type]})"
       indicator = case ci[:type]
-      when 'Quant'
-        Quant.find_by_name(ci[:name])
-      when 'Qual'
-        Qual.find_by_name(ci[:name])
-      when 'Ind'
-        Ind.find_by_name(ci[:name])
+                  when 'Quant'
+                    Quant.find_by_name(ci[:name])
+                  when 'Qual'
+                    Qual.find_by_name(ci[:name])
+                  when 'Ind'
+                    Ind.find_by_name(ci[:name])
       end
       next nil if indicator.nil?
       puts 'Indicator found'
@@ -99,9 +98,9 @@ namespace :populate do
       puts 'Country found'
 
       commodity_ids = if ci[:commodity].blank?
-        Commodity.pluck(:commodity_id)
-      else
-        [Commodity.find_by_name(ci[:commodity]).commodity_id]
+                        Commodity.pluck(:commodity_id)
+                      else
+                        [Commodity.find_by_name(ci[:commodity]).commodity_id]
       end.compact
       next nil if commodity_ids.empty?
       puts 'Commodity found'
@@ -125,7 +124,6 @@ namespace :populate do
           position: ci[:position]
         )
       end
-    end.flatten.compact.each{ |ci| puts "saving #{ci.inspect}"; ci.save; puts ci.errors.inspect }
+    end.flatten.compact.each { |ci| puts "saving #{ci.inspect}"; ci.save; puts ci.errors.inspect }
   end
-
 end

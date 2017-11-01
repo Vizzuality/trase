@@ -1,23 +1,23 @@
 shared_context 'quals' do
-  let(:state) {
+  let(:state) do
     FactoryGirl.create(:qual, actor_factsheet: false, place_factsheet: true, place_factsheet_temporal: false, name: 'STATE', frontend_name: 'State')
-  }
-  let(:biome) {
+  end
+  let(:biome) do
     FactoryGirl.create(:qual, actor_factsheet: false, place_factsheet: true, place_factsheet_temporal: false, name: 'BIOME', frontend_name: 'Biome')
-  }
-  let(:zero_deforestation) {
+  end
+  let(:zero_deforestation) do
     FactoryGirl.create(:qual, actor_factsheet: true, place_factsheet: false, place_factsheet_temporal: false, name: 'ZERO_DEFORESTATION', frontend_name: 'Zero deforestation commitment (exporters)')
-  }
-  let(:zero_deforestation_link) {
+  end
+  let(:zero_deforestation_link) do
     FactoryGirl.create(:qual, actor_factsheet: true, place_factsheet: false, place_factsheet_temporal: false, name: 'ZERO_DEFORESTATION_LINK')
-  }
-  let(:supply_change) {
+  end
+  let(:supply_change) do
     FactoryGirl.create(:qual, actor_factsheet: true, place_factsheet: false, place_factsheet_temporal: false, name: 'SUPPLY_CHANGE')
-  }
-  let(:supply_change_link) {
+  end
+  let(:supply_change_link) do
     FactoryGirl.create(:qual, actor_factsheet: true, place_factsheet: false, place_factsheet_temporal: false, name: 'SUPPLY_CHANGE_LINK')
-  }
-  let(:rtrs_member) {
+  end
+  let(:rtrs_member) do
     FactoryGirl.create(:qual, actor_factsheet: true, place_factsheet: false, place_factsheet_temporal: false, name: 'RTRS_MEMBER')
-  }
+  end
 end

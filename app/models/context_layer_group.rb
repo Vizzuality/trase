@@ -9,8 +9,7 @@
 #
 
 class ContextLayerGroup < ActiveRecord::Base
-    self.table_name = 'context_layer_group'
+  self.table_name = 'context_layer_group'
 
-
-    has_many :context_layers, :class_name => 'ContextLayer'
+  has_many :context_layers, class_name: 'ContextLayer'
 end

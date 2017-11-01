@@ -18,14 +18,14 @@
 #
 
 class Ind < ActiveRecord::Base
-    include Indicator
+  include Indicator
 
-    self.primary_key = :ind_id
+  self.primary_key = :ind_id
 
-    has_many :node_inds, :class_name => 'NodeInd', :foreign_key => :ind_id
-    has_many :flow_inds, :class_name => 'FlowInd', :foreign_key => :ind_id
-    has_many :layers, as: :layer_attribute
-    has_many :context_recolor_bies, as: :recolor_attribute
-    has_many :context_resize_bies, as: :resize_attribute
-    has_many :context_indicators, as: :indicator
+  has_many :node_inds, class_name: 'NodeInd', foreign_key: :ind_id
+  has_many :flow_inds, class_name: 'FlowInd', foreign_key: :ind_id
+  has_many :layers, as: :layer_attribute
+  has_many :context_recolor_bies, as: :recolor_attribute
+  has_many :context_resize_bies, as: :resize_attribute
+  has_many :context_indicators, as: :indicator
 end

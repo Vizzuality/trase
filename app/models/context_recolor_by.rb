@@ -22,7 +22,6 @@
 class ContextRecolorBy < ActiveRecord::Base
   self.table_name = 'context_recolor_by'
 
-
-  belongs_to :context, :class_name => 'Context', :foreign_key => :context_id
+  belongs_to :context, class_name: 'Context', foreign_key: :context_id
   belongs_to :recolor_attribute, polymorphic: true
 end

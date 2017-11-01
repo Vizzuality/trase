@@ -10,7 +10,7 @@ RSpec.describe 'Get contexts', type: :request do
       get '/get_contexts'
 
       expect(@response.status).to eq 200
-      expect(@response).to match_response_schema("contexts")
+      expect(@response).to match_response_schema('contexts')
     end
   end
 end

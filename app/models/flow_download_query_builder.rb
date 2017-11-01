@@ -1,26 +1,21 @@
 class FlowDownloadQueryBuilder
-
   def initialize(context, params)
     @context = context
     @query = MaterializedFlow.where(context_id: @context.id)
     initialize_path_column_names(@context.id)
-    if params[:years].present?
-      @query = @query.where(year: params[:years])
-    end
+    @query = @query.where(year: params[:years]) if params[:years].present?
     if params[:indicators].present?
       tmp = [Quant, Ind, Qual].map do |indicator_class|
         indicators = indicator_class.where(name: params[:indicators])
         [indicator_class, indicators]
       end
       memo = {query: [], placeholders: []}
-      [Quant, Ind, Qual].inject(memo) do |memo, indicator_class|
+      [Quant, Ind, Qual].each_with_object(memo) do |indicator_class, memo|
         indicators = indicator_class.where(name: params[:indicators])
-        if indicators.any?
-          memo[:query] << "indicator_type = ? AND indicator_id IN (?)"
-          memo[:placeholders] << indicator_class.name
-          memo[:placeholders] << indicators.pluck(indicator_class.name.downcase + '_id')
-        end
-        memo
+        next unless indicators.any?
+        memo[:query] << 'indicator_type = ? AND indicator_id IN (?)'
+        memo[:placeholders] << indicator_class.name
+        memo[:placeholders] << indicators.pluck(indicator_class.name.downcase + '_id')
       end
       @query = @query.where(memo[:query].join(' OR '), *memo[:placeholders])
     end
@@ -47,12 +42,12 @@ class FlowDownloadQueryBuilder
       group(:name_in_download).
       order(:name_in_download)
     categories_sql = categories.to_sql.gsub("'", "''")
-    categories_names_quoted = categories.map{ |c| '"' + c['name_in_download'] + '"' }
-    categories_names_with_type = categories_names_quoted.map{ |cn| cn + ' text' }
+    categories_names_quoted = categories.map { |c| '"' + c['name_in_download'] + '"' }
+    categories_names_with_type = categories_names_quoted.map { |cn| cn + ' text' }
 
     select_columns = [
       '"YEAR"'
-    ] + @path_column_aliases +[
+    ] + @path_column_aliases + [
       '"TYPE"'
     ] + categories_names_quoted
 
@@ -63,7 +58,7 @@ class FlowDownloadQueryBuilder
       '"TYPE" text'
     ] + categories_names_with_type
 
-    crosstab_sql =<<~SQL
+    crosstab_sql = <<~SQL
       CROSSTAB(
         '#{source_sql}',
         '#{categories_sql}'
@@ -80,11 +75,11 @@ class FlowDownloadQueryBuilder
     [
       'year AS "YEAR"'
     ] + @path_columns +
-    [
-      "'#{commodity_type}' AS \"TYPE\"",
-      'name_in_download AS "INDICATOR"',
-      'total AS "TOTAL"'
-    ]
+      [
+        "'#{commodity_type}' AS \"TYPE\"",
+        'name_in_download AS "INDICATOR"',
+        'total AS "TOTAL"'
+      ]
   end
 
   def pivot_select_columns
@@ -92,13 +87,12 @@ class FlowDownloadQueryBuilder
       'ARRAY[' + (['year'] + @path_crosstab_row_name_columns).join(', ') + ']::INT[] AS row_name',
       'year AS "YEAR"'
     ] + @path_columns +
-    [
-      "'#{commodity_type}' AS \"TYPE\"",
-      'name_in_download',
-      'total'
-    ]
+      [
+        "'#{commodity_type}' AS \"TYPE\"",
+        'name_in_download',
+        'total'
+      ]
   end
-
 
   def commodity_type
     if @context.commodity.try(:name) == 'SOY'
@@ -118,7 +112,7 @@ class FlowDownloadQueryBuilder
     path_column_names = context_column_positions.map { |p| "name_#{p}" }
     @path_column_aliases = context_node_types.
       pluck('node_types.node_type').
-      map{ |nt| "\"#{nt}\""}
+      map { |nt| "\"#{nt}\"" }
     @path_columns = path_column_names.each_with_index.map do |n, idx|
       "#{n} AS #{@path_column_aliases[idx]}"
     end

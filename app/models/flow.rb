@@ -9,11 +9,10 @@
 #
 
 class Flow < ActiveRecord::Base
+  self.primary_key = :flow_id
 
-    self.primary_key = :flow_id
-
-    belongs_to :context, :class_name => 'Context', :foreign_key => :context_id
-    has_many :flow_quants, :class_name => 'FlowQuant', :foreign_key => :flow_id
-    has_many :flow_quals, :class_name => 'FlowQual', :foreign_key => :flow_id
-    has_many :flow_inds, :class_name => 'FlowInd', :foreign_key => :flow_id
+  belongs_to :context, class_name: 'Context', foreign_key: :context_id
+  has_many :flow_quants, class_name: 'FlowQuant', foreign_key: :flow_id
+  has_many :flow_quals, class_name: 'FlowQual', foreign_key: :flow_id
+  has_many :flow_inds, class_name: 'FlowInd', foreign_key: :flow_id
 end
