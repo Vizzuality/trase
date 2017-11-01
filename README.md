@@ -58,3 +58,13 @@ SELECT relname, seq_scan-idx_scan AS too_much_seq, CASE WHEN seq_scan-idx_scan>0
 `
 SELECT indexrelid::regclass as index, relid::regclass as table, 'DROP INDEX ' || indexrelid::regclass || ';' as drop_statement FROM pg_stat_user_indexes JOIN pg_index USING (indexrelid) WHERE idx_scan = 0 AND indisunique is false;
 `
+
+
+## Git hooks
+
+This project includes a set of git hooks that you may find useful
+- Run `bundle install` when loading `Gemfile.lock` modifications from remotes
+- Receive a warning when loading `.env.sample` modifications from remotes
+- Run `Rubocop` before commiting
+
+To enable then, simply execute once: `bin/git/init-hooks`
