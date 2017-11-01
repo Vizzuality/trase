@@ -4,11 +4,11 @@ module Api
 
       def posts
         posts = Content::Post.order(:date => 'DESC').where(:state => 1)
-        render json: posts
+        render json: posts, root: 'data', each_serializer: PostSerializer
       end
 
       def site_dive
-        render json: Content::SiteDive.find(params[:id])
+        render json: Content::SiteDive.find(params[:id]), root: 'data', serializer: SiteDiveSerializer
       end
 
       def tweets
