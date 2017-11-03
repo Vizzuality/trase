@@ -59,7 +59,6 @@ SELECT relname, seq_scan-idx_scan AS too_much_seq, CASE WHEN seq_scan-idx_scan>0
 SELECT indexrelid::regclass as index, relid::regclass as table, 'DROP INDEX ' || indexrelid::regclass || ';' as drop_statement FROM pg_stat_user_indexes JOIN pg_index USING (indexrelid) WHERE idx_scan = 0 AND indisunique is false;
 `
 
-
 ## Schema revamp: migration and documentation
 
 In the transition period as work on changing the database schema continues, new tables are living in a separate `revamp` schema (~namespace), whereas the default `public` schema still contains the old tables. This means we can work on both schemas as necessary.
@@ -86,3 +85,12 @@ That is done using a dedicated rake task:
     4. `rake db:revamp:doc:html` (Please note: I added an extra param to SchemaSpy command which is `-renderer :quartz` which helps with running it on macOS Sierra. No idea if it prevents it from running elsewhere.)
     5. output files are in `doc/db/html` 
 3. to update the [GH pages site](https://vizzuality.github.io/trase-api/) all the generated files from `doc/db/html` need to land in the top-level of the `gh-pages` branch. This is currently a manual process, easiest to have the repo checked out twice on local drive to be able to copy between branches (not great and not final.)
+
+## Git hooks
+
+This project includes a set of git hooks that you may find useful
+- Run `bundle install` when loading `Gemfile.lock` modifications from remotes
+- Receive a warning when loading `.env.sample` modifications from remotes
+- Run `Rubocop` before commiting
+
+To enable then, simply execute once: `bin/git/init-hooks`
