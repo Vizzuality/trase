@@ -19,6 +19,10 @@
 !/log/.keep
 !/tmp/.keep
 
+# Ignore gold master responses
+spec/support/gold_master.zip
+spec/support/gold_master/*
+
 # Ignore Byebug command history file.
 .byebug_history
 .env

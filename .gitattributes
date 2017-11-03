@@ -1,1 +1,0 @@
-spec/support/gold_master.zip filter=lfs diff=lfs merge=lfs -text
