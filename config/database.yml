@@ -8,11 +8,6 @@ default: &default
   database: <%= ENV.fetch("POSTGRES_DATABASE") { "trase_dev" } %>
   schema_search_path: "public"
 
-revamp:
-  <<: *default
-  database: trase_revamp
-  schema_search_path: "revamp"
-
 development:
   <<: *default
 
