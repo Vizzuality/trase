@@ -1,0 +1,83 @@
+context_queries: &context_queries
+  queries:
+    - params: context_id=1
+      name: brazil_soy
+    - params: context_id=2
+      name: paraguay_soy
+
+csv:
+  - url: /download.csv
+    name: download
+    version: v2
+    queries:
+    - params: context_id=1
+      name: brazil_soy
+    - params: context_id=1&pivot=1
+      name: brazil_soy_pivot
+    - params: context_id=2
+      name: paraguay_soy
+    - params: context_id=5
+      name: argentina_beef
+    - params: context_id=7
+      name: indonesia_palm_oil
+json:
+  - url: /indicators
+    name: indicators
+    version: v2
+    <<: *context_queries
+  - url: /get_map_base_data
+    name: get_map_base_data
+    version: v2
+    <<: *context_queries
+  - url: /get_linked_geoids
+    name: get_linked_geoids
+    version: v2
+    queries:
+      - params: context_id=1&years[]=2015&node_id[]=440&node_id[]=2759&target_column_id=3
+        name: brazil_soy_sorriso_bunge
+      - params: context_id=2&years[]=2015&node_id[]=587&node_id[]=3415&target_column_id=9
+        name: paraguay_soy_alto_parana_cargill
+  - url: /get_columns
+    name: get_columns
+    version: v2
+    <<: *context_queries
+  - url: /get_contexts
+    name: get_contexts
+    version: v2
+    <<: *context_queries
+  - url: /get_all_nodes
+    name: get_all_nodes
+    version: v2
+    <<: *context_queries
+  - url: /get_place_node_attributes
+    name: get_place_node_attributes
+    version: v2
+    queries:
+      - params: node_id=2759
+        name: sorriso
+      - params: node_id=2262
+        name: querencia
+  - url: /get_actor_node_attributes
+    name: get_actor_node_attributes
+    version: v2
+    queries:
+      - params: node_id=440
+        name: bunge_exporter
+      - params: node_id=588
+        name: cargill_importer
+  - url: /v1/get_nodes
+    name: get_nodes
+    version: v1
+    queries:
+      - params: context_id=1&year_start=2015&year_end=2015
+        name: brazil_soy_2015_2015
+      - params: context_id=2&year_start=2015&year_end=2015
+        name: paraguay_soy_2015_2015
+  - url: /v1/get_flows
+    name: get_flows
+    version: v1
+    queries:
+      - params: context_id=1&year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10
+        name: brazil_soy_2015_2015
+      - params: context_id=2&year_start=2015&year_end=2015&include_columns=9,10,6,8&flow_quant=Volume&n_nodes=10
+        name: paraguay_soy_2015_2015
