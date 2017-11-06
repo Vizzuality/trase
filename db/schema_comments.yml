@@ -37,8 +37,6 @@ tables:
     columns:
       - name: name
         comment: Commodity name; unique across commodities
-      - name: parent_id
-        comment: Self-reference to parent used to define links between commodities and sub-commodities
   - name: context_node_types
     comment: Node types represented in supply chains per context. The value of column_position is interpreted as position in flows.path.
     columns:
