@@ -13,6 +13,6 @@
 class DownloadVersion < ApplicationRecord
   def self.current_version_symbol(context)
     current_version = where(current: true, context_id: context.id).order('created_at DESC').first
-    current_version && current_version.symbol
+    current_version&.symbol
   end
 end

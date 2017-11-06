@@ -5,15 +5,13 @@ require 'zip'
 namespace :gold_master do
   desc 'Record endpoint responses for gold master specs'
   task record: [:environment] do
-    ['csv', 'json'].each do |format|
+    %w[csv json].each do |format|
       endpoints[format].each do |endpoint|
         endpoint['queries'].each do |query|
           gold_master_file = gold_master_file(endpoint, query, format)
           puts gold_master_url(endpoint, query)
           `curl -g "#{gold_master_url(endpoint, query)}" > #{gold_master_file}`
-          if format == 'csv'
-            unzip_and_replace_csv(gold_master_file)
-          end
+          unzip_and_replace_csv(gold_master_file) if format == 'csv'
         end
       end
     end
@@ -45,7 +43,7 @@ namespace :gold_master do
     end
   end
 
-  def compare(format, &diff_block)
+  def compare(format)
     endpoints[format].each do |endpoint|
       endpoint['queries'].each do |query|
         gold_master_file = gold_master_file(endpoint, query, format)
@@ -54,11 +52,10 @@ namespace :gold_master do
         `curl -g "#{actual_url(endpoint, query)}" > #{actual_file}`
         unzip_and_replace_csv(actual_file) if format == 'csv' # because downloads come as zip
         diff = yield(gold_master_file, actual_file)
-        if diff.any?
-          puts diff.inspect
-          cleanup
-          exit 1
-        end
+        next unless diff.any?
+        puts diff.inspect
+        cleanup
+        exit 1
       end
     end
     cleanup
@@ -66,7 +63,7 @@ namespace :gold_master do
   end
 
   def endpoints
-    YAML.load(File.open("#{Rails.root}/spec/support/gold_master_urls.yml"))
+    YAML.safe_load(File.open("#{Rails.root}/spec/support/gold_master_urls.yml"))
   end
 
   def host(version)
@@ -87,7 +84,7 @@ namespace :gold_master do
   def actual_url(endpoint, query)
     actual_url = endpoint['actual_url'] || endpoint['url']
     actual_params = query['actual_params'] || query['params']
-    host('v2') + actual_url + '?' + actual_params # TODO v3 when merged
+    host('v2') + actual_url + '?' + actual_params # TODO: v3 when merged
   end
 
   def gold_master_file(endpoint, query, format)
@@ -130,8 +127,8 @@ namespace :gold_master do
     FileUtils.rm archive, force: true
 
     Zip::File.open(archive, 'w') do |zipfile|
-      Dir["#{src_dir}/**/**"].reject{ |f| f == archive }.each do |file|
-        zipfile.add(file.sub(src_dir + '/',''),file)
+      Dir["#{src_dir}/**/**"].reject { |f| f == archive }.each do |file|
+        zipfile.add(file.sub(src_dir + '/', ''), file)
       end
     end
   end

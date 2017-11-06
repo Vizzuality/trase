@@ -5,6 +5,7 @@ module Api
       before_action :set_caching_headers
 
       private
+
       def load_context
         context_id = params[:context_id]
 

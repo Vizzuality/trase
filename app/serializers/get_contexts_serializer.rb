@@ -11,9 +11,9 @@ class GetContextsSerializer < ActiveModel::Serializer
 
   attribute :map do
     {
-        latitude: object.country.latitude,
-        longitude: object.country.longitude,
-        zoom: object.country.zoom
+      latitude: object.country.latitude,
+      longitude: object.country.longitude,
+      zoom: object.country.zoom
     }
   end
 

@@ -8,6 +8,4 @@
 #
 
 class ColumnGroup < ActiveRecord::Base
-
-
 end

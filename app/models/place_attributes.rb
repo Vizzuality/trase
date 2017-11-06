@@ -1,5 +1,4 @@
 class PlaceAttributes
-
   def initialize(context, year, node)
     @context = context
     @year = year
@@ -16,13 +15,13 @@ class PlaceAttributes
     @place_quants = Hash[(@node.place_quants + @node.temporal_place_quants(@year)).map do |e|
       [e['name'], e]
     end]
-    @temporal_place_quants_for_all_years = Hash.new { |h,k| h[k] = [] }
-    @node.temporal_place_quants.each{ |pq| @temporal_place_quants_for_all_years[pq.name] << pq }
+    @temporal_place_quants_for_all_years = Hash.new { |h, k| h[k] = [] }
+    @node.temporal_place_quants.each { |pq| @temporal_place_quants_for_all_years[pq.name] << pq }
     @place_inds = Hash[(@node.place_inds + @node.temporal_place_inds(@year)).map do |e|
       [e['name'], e]
     end]
-    @temporal_place_inds_for_all_years = Hash.new { |h,k| h[k] = [] }
-    @node.temporal_place_inds.each{ |pq| @temporal_place_inds_for_all_years[pq.name] << pq }
+    @temporal_place_inds_for_all_years = Hash.new { |h, k| h[k] = [] }
+    @node.temporal_place_inds.each { |pq| @temporal_place_inds_for_all_years[pq.name] << pq }
 
     @data = {
       column_name: @node_type,
@@ -52,30 +51,30 @@ class PlaceAttributes
 
   def summary
     soy_produced_raw, soy_produced = if (production = @place_quants['SOY_TN'])
-      value = helper.number_with_precision(production['value'], {delimiter: ',', precision: 0})
-      unit = production['unit']
-      [production['value'], "#{value} #{unit}"]
+                                       value = helper.number_with_precision(production['value'], delimiter: ',', precision: 0)
+                                       unit = production['unit']
+                                       [production['value'], "#{value} #{unit}"]
     end
-    soy_area = if (soy_produced_raw && @place_inds['SOY_YIELD'] && soy_yield_raw = @place_inds['SOY_YIELD']['value'])
-      value = helper.number_with_precision(soy_produced_raw / soy_yield_raw, {delimiter: ',', precision: 0})
-      unit = 'Ha' # soy prod in Tn, soy yield in Tn/Ha
-      "#{value} #{unit}"
+    soy_area = if soy_produced_raw && @place_inds['SOY_YIELD'] && soy_yield_raw = @place_inds['SOY_YIELD']['value']
+                 value = helper.number_with_precision(soy_produced_raw / soy_yield_raw, delimiter: ',', precision: 0)
+                 unit = 'Ha' # soy prod in Tn, soy yield in Tn/Ha
+                 "#{value} #{unit}"
     end
-    perc_total = total_soy_production()
+    perc_total = total_soy_production
     percentage_total_production = if (perc = @place_quants['SOY_TN'])
-      helper.number_to_percentage((perc['value'] / perc_total) * 100, {delimiter: ',', precision: 2})
+                                    helper.number_to_percentage((perc['value'] / perc_total) * 100, delimiter: ',', precision: 2)
     end
     country_ranking = @stats.country_ranking(@context, 'quant', 'SOY_TN')
     country_ranking = country_ranking.ordinalize if country_ranking.present?
     state_ranking = @stats.state_ranking(@state, 'quant', 'SOY_TN') if @state.present?
     state_ranking = state_ranking.ordinalize if state_ranking.present?
 
-    largest_exporter = (traders = top_municipality_exporters()) && traders[:actors][0]
+    largest_exporter = (traders = top_municipality_exporters) && traders[:actors][0]
     if largest_exporter.present?
       largest_exporter_name = largest_exporter[:name].try(:humanize)
       percent_of_exports = helper.number_to_percentage(
         (largest_exporter[:value] || 0) * 100,
-        {delimiter: ',', precision: 1}
+        delimiter: ',', precision: 1
       )
     end
 
@@ -84,12 +83,12 @@ class PlaceAttributes
 
     stateName = @state.name.titleize if @state.present?
 
-    text = <<-EOT
-In #{@year}, #{@node.name.titleize} produced #{soy_produced} of soy occupying a total of #{soy_area} \
-of land. With #{percentage_total_production} of the total production, it ranks #{country_ranking} in Brazil in soy \
-production, and #{state_ranking} in the state of #{stateName}. The largest exporter of soy \
-in #{@node.name.titleize} was #{largest_exporter_name}, which accounted for #{percent_of_exports} of the total exports, \
-and the main destination was #{main_destination}.
+    text = <<~EOT
+      In #{@year}, #{@node.name.titleize} produced #{soy_produced} of soy occupying a total of #{soy_area} \
+      of land. With #{percentage_total_production} of the total production, it ranks #{country_ranking} in Brazil in soy \
+      production, and #{state_ranking} in the state of #{stateName}. The largest exporter of soy \
+      in #{@node.name.titleize} was #{largest_exporter_name}, which accounted for #{percent_of_exports} of the total exports, \
+      and the main destination was #{main_destination}.
 EOT
   end
 
@@ -110,8 +109,8 @@ EOT
     if @place_quants['SOY_TN'].present?
       data[:soy_production] = @place_quants['SOY_TN']['value']
     end
-    if (data[:soy_production] && @place_inds['SOY_YIELD'] && soy_yield_raw = @place_inds['SOY_YIELD']['value'])
-      value = helper.number_with_precision(data[:soy_production] / soy_yield_raw, {delimiter: ',', precision: 0})
+    if data[:soy_production] && @place_inds['SOY_YIELD'] && soy_yield_raw = @place_inds['SOY_YIELD']['value']
+      value = helper.number_with_precision(data[:soy_production] / soy_yield_raw, delimiter: ',', precision: 0)
       data[:soy_area] = value
     end
     if @place_inds['SOY_AREAPERC'].present?
@@ -140,14 +139,14 @@ EOT
         socioeconomic_indicators,
         agricultural_indicators,
         territorial_governance_indicators
-        
+
       ]
     }
   end
 
   def environmental_indicators
     indicators_list = [
-      #Territorial deforestation
+      # Territorial deforestation
       {type: 'quant', backend_name: 'DEFORESTATION_V2'},
       # Maximum soy deforestation
       {type: 'quant', backend_name: 'POTENTIAL_SOY_DEFORESTATION_V2'},
@@ -170,7 +169,7 @@ EOT
     indicators_list = [
       # Human development index
       {type: 'ind', backend_name: 'HDI'},
-      #GDP per capita
+      # GDP per capita
       {type: 'ind', backend_name: 'GDP_CAP'},
       # GDP from agriculture
       {type: 'ind', backend_name: 'PERC_FARM_GDP_'},
@@ -192,7 +191,7 @@ EOT
       {type: 'quant', backend_name: 'SOY_TN'},
       # Soy yield
       {type: 'ind', backend_name: 'SOY_YIELD'},
-      #Agricultural land used for soy
+      # Agricultural land used for soy
       {type: 'ind', backend_name: 'SOY_AREAPERC'}
     ]
 
@@ -247,12 +246,13 @@ EOT
         state_average: true
       }
     ]
-    min_year, max_year = nil, nil
+    min_year = nil
+    max_year = nil
     indicators_list.each do |i|
       min_max = if i[:indicator_type] == 'quant'
-        @node.temporal_place_quants.where('quants.name' => i[:backend_name])
-      elsif i[:indicator_type] == 'ind'
-        @node.temporal_place_inds.where('inds.name' => i[:backend_name])
+                  @node.temporal_place_quants.where('quants.name' => i[:backend_name])
+                elsif i[:indicator_type] == 'ind'
+                  @node.temporal_place_inds.where('inds.name' => i[:backend_name])
       end.except(:select).select('MIN(year), MAX(year)')
 
       min_max = min_max.first
@@ -273,13 +273,13 @@ EOT
         unit: 'Ha',
         lines: indicators_list.map do |i|
           data = if i[:state_average] && @state.present?
-            @stats.state_average(@state, i[:indicator_type], i[:backend_name])
-          else
-            if i[:indicator_type] == 'quant'
-              @node.temporal_place_quants.where('quants.name' => i[:backend_name])
-            elsif i[:indicator_type] == 'ind'
-              @node.temporal_place_inds.where('inds.name' => i[:backend_name])
-            end
+                   @stats.state_average(@state, i[:indicator_type], i[:backend_name])
+                 else
+                   if i[:indicator_type] == 'quant'
+                     @node.temporal_place_quants.where('quants.name' => i[:backend_name])
+                   elsif i[:indicator_type] == 'ind'
+                     @node.temporal_place_inds.where('inds.name' => i[:backend_name])
+                   end
           end
           values = Hash[data.map do |e|
             [e['year'], e]
@@ -289,7 +289,7 @@ EOT
             legend_name: i[:legend_name],
             type: i[:type],
             style: i[:style],
-            values: years.map{ |y| values[y] && values[y]['value'] }
+            values: years.map { |y| values[y] && values[y]['value'] }
           }
         end
       }
@@ -300,9 +300,9 @@ EOT
 
   def total_soy_production
     NodeQuant.
-        joins(:quant).
-        where('quants.name' => 'SOY_TN', :year => 2015).
-        sum(:value)
+      joins(:quant).
+      where('quants.name' => 'SOY_TN', :year => 2015).
+      sum(:value)
   end
 
   def top_municipality_exporters
@@ -318,7 +318,7 @@ EOT
         'nodes.name',
         'SUM(node_quants.value) AS value'
       ).
-      where("node_quants.year" => @year).
+      where('node_quants.year' => @year).
       group('nodes.node_id, nodes.name').
       order('value desc')
 
@@ -329,13 +329,13 @@ EOT
     top_nodes = node_type_stats.top_nodes_for_quant('Volume', include_domestic_consumption)
     all_nodes_total = node_type_stats.all_nodes_for_quant_total('Volume', include_domestic_consumption)
     matrix_size = top_municipalities_count + top_nodes.length
-    matrix = Array.new(matrix_size){ Array.new(matrix_size){ 0 } }
-    matrix[0] = top_municipalities.map { 0 } + top_nodes.map{ |t| t['value'] }
+    matrix = Array.new(matrix_size) { Array.new(matrix_size) { 0 } }
+    matrix[0] = top_municipalities.map { 0 } + top_nodes.map { |t| t['value'] }
 
     top_municipalities.each_with_index do |municipality, m_idx|
       all_nodes = FlowStatsForNode.new(@context, @year, municipality, node_type).all_nodes_for_quant('Volume')
       top_nodes.each_with_index do |t, t_idx|
-        n = all_nodes.find{ |e| e['node_id'] == t['node_id'] }
+        n = all_nodes.find { |e| e['node_id'] == t['node_id'] }
         value = n && n['value']
         matrix[m_idx][top_municipalities_count + t_idx] = value
         matrix[top_municipalities_count + t_idx][m_idx] = value
@@ -344,8 +344,8 @@ EOT
 
     result = {
       node_list_label =>
-        top_nodes.map { |t| {id: t['node_id'], name: t['name'], value: t['value']/all_nodes_total, is_domestic_consumption: t['is_domestic_consumption'].present?} },
-      municipalities: top_municipalities.map{ |m| {id: m.id, name: m.name} },
+        top_nodes.map { |t| {id: t['node_id'], name: t['name'], value: t['value'] / all_nodes_total, is_domestic_consumption: t['is_domestic_consumption'].present?} },
+      municipalities: top_municipalities.map { |m| {id: m.id, name: m.name} },
       matrix: matrix
     }
   end
@@ -355,7 +355,7 @@ EOT
     list = list.select do |indicator|
       i = indicator[:type].camelize.constantize.find_by_name(indicator[:backend_name])
       if i.nil?
-        Rails.logger.debug "NOT FOUND " + indicator[:backend_name]
+        Rails.logger.debug 'NOT FOUND ' + indicator[:backend_name]
         false
       else
         indicator[:name] = i.frontend_name
@@ -367,11 +367,11 @@ EOT
     ranking_scores = []
     list.each_with_index do |indicator, idx|
       values_for_current_year, temporal_values_for_all_years = if indicator[:type] == 'quant'
-        [@place_quants, @temporal_place_quants_for_all_years]
-      elsif indicator[:type] == 'ind'
-        [@place_inds, @temporal_place_inds_for_all_years]
-      else
-        [[], []]
+                                                                 [@place_quants, @temporal_place_quants_for_all_years]
+                                                               elsif indicator[:type] == 'ind'
+                                                                 [@place_inds, @temporal_place_inds_for_all_years]
+                                                               else
+                                                                 [[], []]
       end
       if (value_for_current_year = values_for_current_year[indicator[:backend_name]]).present?
         value = value_for_current_year['value']
@@ -389,7 +389,7 @@ EOT
         ranking_scores << @stats.state_ranking(@state, indicator[:type], indicator[:backend_name], list[idx][:year])
       end
     end
-    included_columns = list.map{ |i| i.slice(:name, :unit, :year)}
+    included_columns = list.map { |i| i.slice(:name, :unit, :year) }
     {
       name: name,
       included_columns: included_columns,
@@ -413,5 +413,4 @@ EOT
       include ActionView::Helpers::NumberHelper
     end.new
   end
-
 end

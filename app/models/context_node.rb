@@ -12,9 +12,6 @@
 #
 
 class ContextNode < ActiveRecord::Base
-
-
-
-    belongs_to :context, :class_name => 'Context', :foreign_key => :context_id
-    belongs_to :node_type, :class_name => 'NodeType', :foreign_key => :node_type_id
+  belongs_to :context, class_name: 'Context', foreign_key: :context_id
+  belongs_to :node_type, class_name: 'NodeType', foreign_key: :node_type_id
 end

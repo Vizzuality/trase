@@ -8,9 +8,6 @@
 #
 
 class FlowQuant < ActiveRecord::Base
-
-
-
-    belongs_to :flow, :class_name => 'Flow', :foreign_key => :flow_id
-    belongs_to :quant, :class_name => 'Quant', :foreign_key => :quant_id
+  belongs_to :flow, class_name: 'Flow', foreign_key: :flow_id
+  belongs_to :quant, class_name: 'Quant', foreign_key: :quant_id
 end

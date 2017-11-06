@@ -9,16 +9,16 @@ class FlowDownload
     @context = context
     @pivot = params[:pivot].present?
     @separator = if params[:separator].present? && params[:separator] == 'semicolon'
-      ';'
-    else
-      ','
+                   ';'
+                 else
+                   ','
     end
     @download_name = [@context.country.name, @context.commodity.name, DownloadVersion.current_version_symbol(@context)].compact.join('_')
     query_builder = FlowDownloadQueryBuilder.new(@context, params)
     @query = if @pivot
-      query_builder.pivot_query
-    else
-      query_builder.flat_query
+               query_builder.pivot_query
+             else
+               query_builder.flat_query
     end
   end
 
@@ -31,7 +31,7 @@ class FlowDownload
       type: :plain,
       logger: Rails.logger
     )
-    content = csv.export()
+    content = csv.export
     # NOTE: exporting directly into file raises encoding errors
     filename = "#{@download_name}.csv"
     tempfile = Tempfile.new(filename)
@@ -41,7 +41,7 @@ class FlowDownload
   end
 
   def zipped_json
-    content = @query.map { |r| r.as_json }
+    content = @query.map(&:as_json)
     filename = "#{@download_name}.json"
     tempfile = Tempfile.new(filename)
     tempfile << content
