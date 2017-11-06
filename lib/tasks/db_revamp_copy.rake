@@ -63,6 +63,7 @@ def truncate_table(table)
 end
 
 def copy_data(table)
+  puts "Copying table #{table}..."
   truncate_table(table)
   affected_rows = ActiveRecord::Base.connection.execute(
     send("#{table}_insert_sql")
