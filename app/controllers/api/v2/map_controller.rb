@@ -1,6 +1,6 @@
 module Api
   module V2
-    class MapController < V2ApplicationController
+    class MapController < ApiController
 
       def index
         dimension_groups = ContextLayerGroup.select('distinct name, context_layer_group.id as id, context_layer_group.position')

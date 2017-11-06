@@ -1,6 +1,6 @@
 module Api
   module V2
-    class DownloadController < V2ApplicationController
+    class DownloadController < ApiController
       def index
         download = FlowDownload.new(@context, params)
 

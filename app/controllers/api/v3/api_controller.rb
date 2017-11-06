@@ -1,6 +1,6 @@
 module Api
   module V3
-    class ApplicationController < ApplicationController
+    class ApiController < ApplicationController
       before_action :load_context, except: [:get_contexts]
       before_action :set_caching_headers
 

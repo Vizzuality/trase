@@ -1,6 +1,6 @@
 module Api
   module V2
-    class ActorFactsheetController < V2ApplicationController
+    class ActorFactsheetController < ApiController
       def actor_data
         context_id = params[:context_id]
 

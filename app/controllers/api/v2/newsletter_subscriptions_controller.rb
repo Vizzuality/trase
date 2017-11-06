@@ -1,6 +1,6 @@
 module Api
   module V2
-    class NewsletterSubscriptionsController < V2ApplicationController
+    class NewsletterSubscriptionsController < ApiController
       skip_before_action :verify_authenticity_token
       skip_before_action :load_context
 

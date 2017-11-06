@@ -1,6 +1,6 @@
 module Api
   module V2
-    class GeoIdController < V2ApplicationController
+    class GeoIdController < ApiController
 
       def index
         node_id = params[:node_id]

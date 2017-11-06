@@ -1,6 +1,6 @@
 module Api
   module V2
-    class PlaceFactsheetController < V2ApplicationController
+    class PlaceFactsheetController < ApiController
       def place_data
         context_id = params[:context_id]
 

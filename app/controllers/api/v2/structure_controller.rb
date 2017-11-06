@@ -1,6 +1,6 @@
 module Api
   module V2
-    class StructureController < V2ApplicationController
+    class StructureController < ApiController
       def get_columns
 
         @node_types = NodeType

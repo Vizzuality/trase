@@ -1,6 +1,6 @@
 module Api
   module V2
-    class IndicatorsController < V2ApplicationController
+    class IndicatorsController < ApiController
 
       def index
         @indicators = ContextIndicator.where(context_id: @context.id).
