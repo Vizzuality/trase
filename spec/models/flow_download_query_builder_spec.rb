@@ -16,20 +16,18 @@ RSpec.describe FlowDownloadQueryBuilder, type: :model do
       ]
 
       expect(
-        qb.flat_query.map{ |f| [f['YEAR'], f['MUNICIPALITY'], f['STATE'], f['BIOME'], f['PORT'], f['EXPORTER'], f['IMPORTER'], f['COUNTRY'], f['INDICATOR'], f['TOTAL' ]] }
+        qb.flat_query.map { |f| [f['YEAR'], f['MUNICIPALITY'], f['STATE'], f['BIOME'], f['PORT'], f['EXPORTER'], f['IMPORTER'], f['COUNTRY'], f['INDICATOR'], f['TOTAL']] }
       ).to match_array(expected)
     end
 
     it 'should filter rows when filter applied' do
-      qb = FlowDownloadQueryBuilder.new(context, {
-        exporters_ids: [exporter1_node.id]
-      })
+      qb = FlowDownloadQueryBuilder.new(context, exporters_ids: [exporter1_node.id])
       expected = [
         [2015, 'Nova Ubirata', 'MATO GROSSO', 'AMAZONIA', 'Imbituba', 'Afg Brasil', 'Unknown Customer', 'Russian Federation', 'MAX_SOY_DEFORESTATION', '10']
       ]
 
       expect(
-        qb.flat_query.map{ |f| [f['YEAR'], f['MUNICIPALITY'], f['STATE'], f['BIOME'], f['PORT'], f['EXPORTER'], f['IMPORTER'], f['COUNTRY'], f['INDICATOR'], f['TOTAL' ]] }
+        qb.flat_query.map { |f| [f['YEAR'], f['MUNICIPALITY'], f['STATE'], f['BIOME'], f['PORT'], f['EXPORTER'], f['IMPORTER'], f['COUNTRY'], f['INDICATOR'], f['TOTAL']] }
       ).to match_array(expected)
     end
   end

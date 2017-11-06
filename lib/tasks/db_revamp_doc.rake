@@ -8,20 +8,20 @@ namespace :db do
     namespace :doc do
       desc 'Update sql comments on schema objects and dump new structure.sql'
       task sql: [:environment] do
-        data = YAML.load(File.open("#{Rails.root}/db/schema_comments.yml"))
+        data = YAML.safe_load(File.open("#{Rails.root}/db/schema_comments.yml"))
         with_search_path('revamp') do
           data['tables'].each do |table|
             comment_on_table(table['name'], table['comment'])
-            table['columns'] && table['columns'].each do |column|
+            table['columns']&.each do |column|
               comment_on_column(table['name'], column['name'], column['comment'] || '')
             end
-            table['indexes'] && table['indexes'].each do |index|
+            table['indexes']&.each do |index|
               comment_on_index(index['name'], index['comment'])
             end
           end
           data['materialized_views'].each do |table|
             comment_on_materialized_view(table['name'], table['comment'])
-            table['columns'] && table['columns'].each do |column|
+            table['columns']&.each do |column|
               comment_on_column(table['name'], column['name'], column['comment'] || '')
             end
           end

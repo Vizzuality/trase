@@ -5,7 +5,7 @@ RSpec.describe Api::V2::IndicatorsController, type: :controller do
 
   describe 'GET index' do
     it 'assigns indicators relevant to the given context' do
-      get :index, params: { context_id: context.id }
+      get :index, params: {context_id: context.id}
       expect(assigns(:context)).to eq(context)
       expect(assigns(:indicators)).to match_array([forest_500, deforestation_v2, zero_deforestation])
     end

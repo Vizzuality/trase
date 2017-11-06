@@ -1,5 +1,4 @@
 class ActorAttributes
-
   def initialize(context, year, node)
     @context = context
     @year = year && year.to_i
@@ -55,25 +54,24 @@ class ActorAttributes
   def initialize_trade_volume_for_summary
     trade_flows_current_year = @node.flow_values(@context, 'quant', 'Volume').where(year: @year)
     @trade_total_current_year = trade_flows_current_year.sum('value')
-    case
-      when @trade_total_current_year < 1000
-        trade_total_current_year_value = @trade_total_current_year
-        trade_total_current_year_unit = 'tons'
-        trade_total_current_year_precision = 0
-      when @trade_total_current_year < 1000000
-        trade_total_current_year_value = @trade_total_current_year/1000
-        trade_total_current_year_unit = 'thousand tons'
-        trade_total_current_year_precision = 0
-      else
-        trade_total_current_year_value = @trade_total_current_year/1000000
-        trade_total_current_year_unit = 'million tons'
-        trade_total_current_year_precision = 1
+    if @trade_total_current_year < 1000
+      trade_total_current_year_value = @trade_total_current_year
+      trade_total_current_year_unit = 'tons'
+      trade_total_current_year_precision = 0
+    elsif @trade_total_current_year < 1_000_000
+      trade_total_current_year_value = @trade_total_current_year / 1000
+      trade_total_current_year_unit = 'thousand tons'
+      trade_total_current_year_precision = 0
+    else
+      trade_total_current_year_value = @trade_total_current_year / 1_000_000
+      trade_total_current_year_unit = 'million tons'
+      trade_total_current_year_precision = 1
     end
 
     @trade_total_current_year_formatted = helper.number_with_precision(
-        trade_total_current_year_value,
-        {delimiter: ',', precision: trade_total_current_year_precision}
-    )+ ' ' + trade_total_current_year_unit
+      trade_total_current_year_value,
+      delimiter: ',', precision: trade_total_current_year_precision
+    ) + ' ' + trade_total_current_year_unit
 
     trade_flows_previous_year = @node.flow_values(@context, 'quant', 'Volume').where(year: @year - 1)
     @trade_total_previous_year = trade_flows_previous_year.sum('value')
@@ -91,11 +89,11 @@ class ActorAttributes
     text = "#{@node.name.humanize} was the #{@trade_total_rank_in_country_formatted}largest #{profile_type} of soy #{profile_type.casecmp('exporter') == 0 ? 'in' : 'from'} #{@context.country.name} in #{@year}, accounting for #{@trade_total_current_year_formatted}."
     return text unless @trade_total_perc_difference.present?
     difference_from = if @trade_total_perc_difference > 0
-      'a ' + helper.number_to_percentage(@trade_total_perc_difference * 100, {precision: 0}) + ' increase vs'
-    elsif @trade_total_perc_difference < 0
-      'a ' + helper.number_to_percentage(-@trade_total_perc_difference * 100, {precision: 0}) + ' decrease vs'
-    else
-      'no change from'
+                        'a ' + helper.number_to_percentage(@trade_total_perc_difference * 100, precision: 0) + ' increase vs'
+                      elsif @trade_total_perc_difference < 0
+                        'a ' + helper.number_to_percentage(-@trade_total_perc_difference * 100, precision: 0) + ' decrease vs'
+                      else
+                        'no change from'
     end
     text + " This is #{difference_from} the previous year."
   end
@@ -104,10 +102,10 @@ class ActorAttributes
     municipalities_count = @stats.municipalities_count('Volume')
     source_municipalities_count = @stats.source_municipalities_count('Volume')
     @perc_municipalities_formatted = helper.number_to_percentage(
-      (source_municipalities_count * 100.0) / municipalities_count, {precision: 0}
+      (source_municipalities_count * 100.0) / municipalities_count, precision: 0
     )
     @source_municipalities_count_formatted = helper.number_with_precision(
-      source_municipalities_count, {delimiter: ',', precision: 0}
+      source_municipalities_count, delimiter: ',', precision: 0
     )
   end
 
@@ -128,7 +126,7 @@ class ActorAttributes
       main_destination_exports = main_destination[:values][year_idx]
       if main_destination_exports && @trade_total_current_year && @trade_total_current_year > 0
         @perc_exports_formatted = helper.number_to_percentage(
-          (main_destination_exports * 100.0) / @trade_total_current_year, {precision: 0}
+          (main_destination_exports * 100.0) / @trade_total_current_year, precision: 0
         )
       end
     end
@@ -146,15 +144,15 @@ is #{@main_destination_name.humanize}, accounting for \
   end
 
   def exporter_summary
-# For 1st rank:
-# Bunge was the largest exporter of soy in BRAZIL in 2015, accounting for 11,061,393 tons.
-# As an exporter, Bunge sources from 1,136 municipalities, or 44% of the soy production municipalities.
-# The main destination of the soy exported by Bunge is China, accounting for 50% of the total.
+    # For 1st rank:
+    # Bunge was the largest exporter of soy in BRAZIL in 2015, accounting for 11,061,393 tons.
+    # As an exporter, Bunge sources from 1,136 municipalities, or 44% of the soy production municipalities.
+    # The main destination of the soy exported by Bunge is China, accounting for 50% of the total.
 
-# For all others:
-# Cargill was the 2nd largest exporter of soy in BRAZIL in 2015, accounting for 8,801,294 tons.
-# As an exporter, Cargill sources from 1,224 municipalities, or 48% of the soy production municipalities.
-# The main destination of the soy exported by Cargill is China, accounting for 66% of the total.
+    # For all others:
+    # Cargill was the 2nd largest exporter of soy in BRAZIL in 2015, accounting for 8,801,294 tons.
+    # As an exporter, Cargill sources from 1,224 municipalities, or 48% of the soy production municipalities.
+    # The main destination of the soy exported by Cargill is China, accounting for 66% of the total.
     text = summary_of_total_trade_volume('exporter')
     text += summary_of_sources('exporter')
     text += summary_of_destinations('exporter')
@@ -162,14 +160,14 @@ is #{@main_destination_name.humanize}, accounting for \
   end
 
   def importer_summary
-# Bunge was the 1st largest importer of soy from BRAZIL in 2015, accounting for 11,061,393 tons.
-# As an importer, Bunge sources soy from 1,136 municipalities, or 44% of the soy production municipalities.
-# The main destination of the soy imported by Bunge is China, accounting for 50% of the total.
+    # Bunge was the 1st largest importer of soy from BRAZIL in 2015, accounting for 11,061,393 tons.
+    # As an importer, Bunge sources soy from 1,136 municipalities, or 44% of the soy production municipalities.
+    # The main destination of the soy imported by Bunge is China, accounting for 50% of the total.
 
-# For all others:
-# Cargill was the 2nd largest importer of soy from BRAZIL in 2015, accounting for 8,801,294 tons.
-# As an importer, Cargill sources from 1,224 municipalities, or 48% of the soy production municipalities.
-# The main destination of the soy imported by Cargill is China, accounting for 66% of the total.
+    # For all others:
+    # Cargill was the 2nd largest importer of soy from BRAZIL in 2015, accounting for 8,801,294 tons.
+    # As an importer, Cargill sources from 1,224 municipalities, or 48% of the soy production municipalities.
+    # The main destination of the soy imported by Cargill is China, accounting for 66% of the total.
     text = summary_of_total_trade_volume('importer')
     text += summary_of_sources('importer')
     text += summary_of_destinations('importer')
@@ -185,7 +183,7 @@ is #{@main_destination_name.humanize}, accounting for \
     context_layer = ContextLayer.where(
       context_id: @context.id, layer_attribute_type: 'Quant', layer_attribute_id: volume_quant.id
     ).first
-    buckets = context_layer.try(:bucket_5) || [5000,100000,300000,1000000] # TODO bucket_9
+    buckets = context_layer.try(:bucket_5) || [5000, 100_000, 300_000, 1_000_000] # TODO: bucket_9
     result = nodes_by_year_summary_for_indicator(NodeTypeName::COUNTRY, :top_countries, years, buckets, 'quant', 'Volume')
     result[:top_countries][:included_years] = years
     result[:top_countries][:buckets] = buckets
@@ -201,7 +199,7 @@ is #{@main_destination_name.humanize}, accounting for \
     context_layer = ContextLayer.where(
       context_id: @context.id, layer_attribute_type: 'Quant', layer_attribute_id: volume_quant.id
     ).first
-    buckets = context_layer.try(:bucket_5) || [5000,100000,300000,1000000] # TODO bucket_9
+    buckets = context_layer.try(:bucket_5) || [5000, 100_000, 300_000, 1_000_000] # TODO: bucket_9
     result = {
       included_years: years,
       buckets: buckets
@@ -231,7 +229,7 @@ is #{@main_destination_name.humanize}, accounting for \
 
     unit = quant.unit
     value_divisor = 1
-    if (unit.casecmp('tn') == 0)
+    if unit.casecmp('tn') == 0
       unit = 'Kiloton'
       value_divisor = 1000
     end
@@ -251,8 +249,8 @@ is #{@main_destination_name.humanize}, accounting for \
     node_index = NodeType.node_index_for_type(@context, @node_type)
     nodes_join_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
-      ["JOIN nodes ON nodes.node_id = flows.path[?] AND (NOT nodes.is_unknown OR nodes.is_unknown IS NULL) AND (NOT nodes.is_domestic_consumption OR nodes.is_domestic_consumption IS NULL)",
-      node_index]
+      ['JOIN nodes ON nodes.node_id = flows.path[?] AND (NOT nodes.is_unknown OR nodes.is_unknown IS NULL) AND (NOT nodes.is_domestic_consumption OR nodes.is_domestic_consumption IS NULL)',
+       node_index]
     )
 
     production_totals = Flow.
@@ -272,7 +270,7 @@ is #{@main_destination_name.humanize}, accounting for \
       joins('JOIN node_types ON node_types.node_type_id = nodes.node_type_id').
       joins(flow_quants: :quant).
       where('flows.context_id' => @context.id).
-      where('quants.name' => x_indicators.map{ |indicator| indicator[:backend_name] }).
+      where('quants.name' => x_indicators.map { |indicator| indicator[:backend_name] }).
       where('node_types.node_type' => @node_type).
       where('flows.year' => @year).
       group('nodes.node_id, nodes.name, quants.name')
@@ -304,7 +302,7 @@ is #{@main_destination_name.humanize}, accounting for \
     {
       companies_sourcing: {
         dimension_y: y_indicator.slice(:name, :unit),
-        dimensions_x: x_indicators.map{ |i| i.slice(:name, :unit) },
+        dimensions_x: x_indicators.map { |i| i.slice(:name, :unit) },
         companies: exports
       }
     }
@@ -351,14 +349,12 @@ is #{@main_destination_name.humanize}, accounting for \
   def bucket_index_for_value(buckets, value)
     prev_bucket = 0
     bucket = buckets.each_with_index do |bucket, index|
-      if value >= prev_bucket && value < bucket
-        break index
-      end
+      break index if value >= prev_bucket && value < bucket
     end
     bucket = if bucket.is_a? Integer
-      bucket
-    else
-      buckets.size # last bucket
+               bucket
+             else
+               buckets.size # last bucket
     end
   end
 
@@ -371,14 +367,14 @@ is #{@main_destination_name.humanize}, accounting for \
   end
 
   def sustainability_for_group(name, node_type, include_totals)
-    group_totals_hash = Hash.new
+    group_totals_hash = {}
     top_nodes_in_group = FlowStatsForNode.new(@context, @year, @node, node_type).
       top_nodes_for_quant('Volume')
     rows = top_nodes_in_group.map do |node|
       totals_per_indicator = @stats.node_totals_for_quants(
-        node['node_id'], node_type, risk_indicators.map{ |i| i[:backend_name] }
+        node['node_id'], node_type, risk_indicators.map { |i| i[:backend_name] }
       )
-      totals_hash = Hash[totals_per_indicator.map{ |t| [t['name'], t['value']] }]
+      totals_hash = Hash[totals_per_indicator.map { |t| [t['name'], t['value']] }]
       totals_hash.each do |k, v|
         if group_totals_hash[k]
           group_totals_hash[k] += v
@@ -394,13 +390,11 @@ is #{@main_destination_name.humanize}, accounting for \
               value: node['name']
             }
           ] +
-          risk_indicators.map do |quant|
-            if totals_hash[quant[:backend_name]]
-              {value: totals_hash[quant[:backend_name]]}
-            else
-              nil
+            risk_indicators.map do |quant|
+              if totals_hash[quant[:backend_name]]
+                {value: totals_hash[quant[:backend_name]]}
+              end
             end
-          end
       }
     end
     if include_totals
@@ -409,8 +403,6 @@ is #{@main_destination_name.humanize}, accounting for \
         values: risk_indicators.map do |quant|
           if group_totals_hash[quant[:backend_name]]
             {value: group_totals_hash[quant[:backend_name]]}
-          else
-            nil
           end
         end
       }
@@ -419,11 +411,11 @@ is #{@main_destination_name.humanize}, accounting for \
       name: name,
       included_columns:
           [{name: node_type.humanize}] +
-              risk_indicators.map {
-                  |indicator| quant = Quant.find_by(name: indicator[:backend_name])
-                raise "Missing #{indicator[:backend_name]} Quant necessary to calculate sustainability indicators for actor profile" unless quant.present?
-                {name: indicator.key?(:name) ? indicator[:name] : quant.frontend_name, unit: quant.unit}
-              },
+            risk_indicators.map do |indicator|
+              quant = Quant.find_by(name: indicator[:backend_name])
+              raise "Missing #{indicator[:backend_name]} Quant necessary to calculate sustainability indicators for actor profile" unless quant.present?
+              {name: indicator.key?(:name) ? indicator[:name] : quant.frontend_name, unit: quant.unit}
+            end,
       rows: rows
     }
   end
