@@ -52,6 +52,8 @@ tables:
         comment: When set, show nodes on map
   - name: contexts
     comment: Country-commodity combinations.
+  - name: context_properties
+    comment: Visualisation properties of a context (one row per context)
     columns:
       - name: years
         comment: Years for which country-commodity data is present; NULL for all years
