@@ -85,6 +85,8 @@ tables:
         comment: Country name
       - name: iso2
         comment: 2-letter ISO code
+  - name: country_properties
+    columns:
       - name: latitude
         comment: TODO
       - name: longitude

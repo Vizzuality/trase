@@ -83,8 +83,16 @@ end
 
 def countries_insert_sql
   <<-SQL
-  INSERT INTO revamp.countries (id, name, iso2, latitude, longitude, zoom, created_at, updated_at)
-  SELECT country_id, name, iso2, latitude, longitude, zoom, NOW(), NOW()
+  INSERT INTO revamp.countries (id, name, iso2, created_at, updated_at)
+  SELECT country_id, name, iso2, NOW(), NOW()
+  FROM public.countries;
+  SQL
+end
+
+def country_properties_insert_sql
+  <<-SQL
+  INSERT INTO revamp.country_properties (country_id, latitude, longitude, zoom, created_at, updated_at)
+  SELECT country_id, latitude, longitude, zoom, NOW(), NOW()
   FROM public.countries;
   SQL
 end
