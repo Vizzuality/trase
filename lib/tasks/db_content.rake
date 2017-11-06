@@ -1,9 +1,7 @@
 task spec: ['content:db:test:prepare']
 
 namespace :content do
-
   namespace :db do |ns|
-
     task :drop do
       Rake::Task['db:drop'].invoke
     end
@@ -65,8 +63,8 @@ namespace :content do
   task :set_custom_config do
     # save current vars
     @original_config = {
-        env_schema: ENV['SCHEMA'],
-        config: Rails.application.config.dup
+      env_schema: ENV['SCHEMA'],
+      config: Rails.application.config.dup
     }
 
     # set config variables for custom database

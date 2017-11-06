@@ -17,8 +17,8 @@ module Content
     validates :page_url, presence: true
 
     def site_dive_url
-      linker = (self.page_url.include?('?') ? '&' : '?')
-      self.page_url + linker + 'story=' + self.id.to_s
+      linker = (page_url.include?('?') ? '&' : '?')
+      page_url + linker + 'story=' + id.to_s
     end
   end
 end

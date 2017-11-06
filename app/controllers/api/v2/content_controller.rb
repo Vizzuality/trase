@@ -1,9 +1,8 @@
 module Api
   module V2
     class ContentController < ApiController
-
       def posts
-        posts = Content::Post.order(:date => 'DESC').where(:state => 1)
+        posts = Content::Post.order(date: 'DESC').where(state: 1)
         render json: posts, root: 'data', each_serializer: PostSerializer
       end
 
@@ -22,7 +21,7 @@ module Api
         end
 
         # render json: client.home_timeline
-        render json: client.home_timeline.map {|tweet| {'text' => tweet.text, 'screen_name' => tweet.user.screen_name, 'created_at' => tweet.created_at}}
+        render json: client.home_timeline.map { |tweet| {'text' => tweet.text, 'screen_name' => tweet.user.screen_name, 'created_at' => tweet.created_at} }
       end
     end
   end

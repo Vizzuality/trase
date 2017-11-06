@@ -33,7 +33,6 @@ gem 'paperclip', '~> 5.0.0'
 gem 'rack-cors', '~> 0.4'
 gem 'twitter', '~> 6.1'
 
-
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'json-diff'
