@@ -1,0 +1,25 @@
+engines:
+  rubocop:
+    enabled: true
+  brakeman:
+    enabled: true
+  bundler-audit:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - ruby:
+  apexmetrics:
+    enabled: true
+  reek:
+    enabled: true
+
+ratings:
+  paths:
+  - app/**
+  - lib/**
+  - "**.rb"
+exclude_paths:
+- spec/**/*
+- "**/vendor/**/*"
