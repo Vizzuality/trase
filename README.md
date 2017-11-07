@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/Vizzuality/trase-api.svg?branch=master)](https://travis-ci.org/Vizzuality/trase-api)
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/5781640656dfed7c4be5/maintainability)](https://codeclimate.com/github/Vizzuality/trase-api/maintainability)
+
+[![Test Coverage](https://api.codeclimate.com/v1/badges/5781640656dfed7c4be5/test_coverage)](https://codeclimate.com/github/Vizzuality/trase-api/test_coverage)
+
 API for the new [Trase](http://trase.earth) functionalities
 
 ## Requirements
