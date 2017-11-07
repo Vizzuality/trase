@@ -85,7 +85,7 @@ namespace :gold_master do
   def actual_url(endpoint, query)
     actual_url = endpoint['actual_url'] || endpoint['url']
     actual_params = query['actual_params'] || query['params']
-    host('v2') + actual_url + '?' + actual_params # TODO: v3 when merged
+    host('v3') + '/api/v3/' + actual_url + '?' + actual_params
   end
 
   def gold_master_file(endpoint, query, format)
