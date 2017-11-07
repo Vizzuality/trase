@@ -1,8 +1,9 @@
 module Api
   module V3
-    class ContextController < V3ApplicationController
-      def get_contexts
+    class ContextController < ApiController
+      skip_before_action :load_context
 
+      def get_contexts
         @contexts = Api::V3::Context
                         .includes(:country, :commodity, :contextual_layers, m_recolor_by_attributes: :m_attribute, m_resize_by_attributes: :m_attribute)
                         .all()
