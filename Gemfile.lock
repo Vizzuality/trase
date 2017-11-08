@@ -126,6 +126,7 @@ GEM
     concurrent-ruby (1.0.5)
     crass (1.0.2)
     csv-diff (0.3.3)
+    database_cleaner (1.5.3)
     devise (4.3.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -400,6 +401,7 @@ DEPENDENCIES
   ckeditor!
   coffee-rails (~> 4.2)
   csv-diff
+  database_cleaner
   devise (~> 4.2)
   dotenv-rails (~> 2.2)
   enumerate_it (~> 1.4.1)
