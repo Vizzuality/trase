@@ -7,6 +7,7 @@ namespace :gold_master do
   task record: [:environment] do
     %w[csv json].each do |format|
       endpoints[format].each do |endpoint|
+        next unless endpoint['v3_ready'] # eliminate those not ready to test
         endpoint['queries'].each do |query|
           gold_master_file = gold_master_file(endpoint, query, format)
           puts gold_master_url(endpoint, query)
@@ -45,6 +46,7 @@ namespace :gold_master do
 
   def compare(format)
     endpoints[format].each do |endpoint|
+      next unless endpoint['v3_ready'] # eliminate those not ready to test
       endpoint['queries'].each do |query|
         gold_master_file = gold_master_file(endpoint, query, format)
         actual_file = actual_file(endpoint, query, format)
@@ -83,9 +85,9 @@ namespace :gold_master do
   end
 
   def actual_url(endpoint, query)
-    actual_url = endpoint['actual_url'] || endpoint['url']
-    actual_params = query['actual_params'] || query['params']
-    host('v3') + '/api/v3/' + actual_url + '?' + actual_params
+    actual_url = endpoint['v3_url'] || endpoint['url']
+    actual_params = query['v3_params'] || query['params']
+    host('v3') + actual_url + '?' + actual_params
   end
 
   def gold_master_file(endpoint, query, format)
