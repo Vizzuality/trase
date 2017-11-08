@@ -60,6 +60,8 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'factory_girl_rails'
   gem 'json-schema'
+  gem 'json-diff'
+  gem 'csv-diff'
 end
 
 group :test do
