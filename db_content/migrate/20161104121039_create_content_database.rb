@@ -1,4 +1,4 @@
-class CreateSiteDives < ActiveRecord::Migration[5.0]
+class CreateContentDatabase < ActiveRecord::Migration[5.0]
   def change
     enable_extension 'plpgsql'
 

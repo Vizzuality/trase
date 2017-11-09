@@ -313,12 +313,6 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (re
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20161025161342'),
-('20161025161734'),
-('20161025184023'),
-('20161025184024'),
-('20161025193352'),
-('20161104115018'),
 ('20161104121039');
 
 
