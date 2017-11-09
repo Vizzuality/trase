@@ -41,13 +41,13 @@ module Api
                 nodes: Api::V3::Node.where(
                   node_type_id: biome_context_node_type.node_type_id
                 ).
-                where(is_unknown: false).
-                where("name NOT LIKE 'OTHER%'").map do |node|
-                  {
-                    name: node.name,
-                    node_id: node.id
-                  }
-                end
+                  where(is_unknown: false).
+                  where("name NOT LIKE 'OTHER%'").map do |node|
+                    {
+                      name: node.name,
+                      node_id: node.id
+                    }
+                  end
               }
             ]
           else

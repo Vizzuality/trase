@@ -35,6 +35,10 @@ gem 'twitter', '~> 6.1'
 
 group :development, :test do
   gem 'byebug', platform: :mri
+  gem 'rspec-rails', '~> 3.5'
+  gem 'rails-controller-testing'
+  gem 'factory_girl_rails'
+  gem 'json-schema'
   gem 'json-diff'
   gem 'csv-diff'
 end
@@ -53,15 +57,6 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
   gem 'rubocop', require: false
-end
-
-group :development, :test do
-  gem 'rspec-rails', '~> 3.5'
-  gem 'rails-controller-testing'
-  gem 'factory_girl_rails'
-  gem 'json-schema'
-  gem 'json-diff'
-  gem 'csv-diff'
 end
 
 group :test do

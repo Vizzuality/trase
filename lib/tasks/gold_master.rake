@@ -59,6 +59,7 @@ namespace :gold_master do
           cleanup
           exit 1
         end
+        puts 'SUCCESS'
       end
     end
     cleanup
@@ -66,7 +67,8 @@ namespace :gold_master do
   end
 
   def endpoints
-    YAML.load(File.open("#{Rails.root}/spec/support/gold_master_urls.yml"))
+    # make sure this follows aliases
+    YAML.safe_load(File.open("#{Rails.root}/spec/support/gold_master_urls.yml"), [], [], true)
   end
 
   def host(version)

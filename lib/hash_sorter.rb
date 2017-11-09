@@ -8,14 +8,13 @@ class HashSorter
   end
 
   def sort_hash(hash)
-    hash.keys.sort.reduce({}) do |seed, key|
+    hash.keys.sort.each_with_object({}) do |key, seed|
       seed[key] = hash[key]
       if seed[key].is_a?(Hash)
         seed[key] = sort_hash(seed[key])
       elsif seed[key].is_a?(Array)
         seed[key] = sort_array(seed[key])
       end
-      seed
     end
   end
 

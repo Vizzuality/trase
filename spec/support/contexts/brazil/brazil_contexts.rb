@@ -1,7 +1,7 @@
 shared_context 'brazil contexts' do
   let!(:brazil) do
     Country.find_by_iso2('BR') ||
-    FactoryGirl.create(:country, name: 'BRAZIL', iso2: 'BR', latitude: 10, longitude: 10, zoom: 4)
+      FactoryGirl.create(:country, name: 'BRAZIL', iso2: 'BR', latitude: 10, longitude: 10, zoom: 4)
   end
   let!(:context) do
     FactoryGirl.create(
