@@ -442,7 +442,7 @@ class SchemaRevamp
     ]
 
     brazil_soy_contextual_layers.each do |cl|
-      is_default = brazil_soy_default_context_layers && brazil_soy_default_context_layers.include?(cl[:identifier]) || false
+      is_default = brazil_soy_default_context_layers&.include?(cl[:identifier]) || false
       inserted_cl = ActiveRecord::Base.connection.execute(
         "INSERT INTO revamp.contextual_layers (context_id, title, identifier, position, is_default, created_at, updated_at) VALUES (#{brazil_soy['id']}, '#{cl[:title]}', '#{cl[:identifier]}', #{cl[:position]}, #{is_default}, NOW(), NOW()) RETURNING id;"
       ).first

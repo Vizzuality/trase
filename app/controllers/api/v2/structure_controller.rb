@@ -1,7 +1,7 @@
 module Api
   module V2
     class StructureController < ApiController
-      def get_columns
+      def columns
         @node_types = NodeType.
           joins(:context_nodes).
           select('node_types.node_type_id, column_position as position, column_group as group, node_types.node_type as name, is_default, is_geo_column as is_geo, context_nodes.profile_type as profile_type').
@@ -11,7 +11,7 @@ module Api
         render json: @node_types, root: 'data', each_serializer: GetColumnsSerializer
       end
 
-      def get_contexts
+      def contexts
         @contexts = Context.
           eager_load(:country, :commodity, :context_resize_bies, :context_recolor_bies, context_filter_bies: [node_type: [:nodes]]).
           all

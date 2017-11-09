@@ -10,7 +10,7 @@ module Api
           ENV['MAILCHIMP_LIST_ID'], email: params[:email]
         )
         render json: response and return
-      rescue => e
+      rescue Error => e
         render json: {error: e.message}
         Rails.logger.error e.message
         e.backtrace.each { |l| Rails.logger.error l }

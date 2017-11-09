@@ -11,12 +11,12 @@ class FlowDownloadQueryBuilder
         [indicator_class, indicators]
       end
       memo = {query: [], placeholders: []}
-      [Quant, Ind, Qual].each_with_object(memo) do |indicator_class, memo|
+      [Quant, Ind, Qual].each_with_object(memo) do |indicator_class, memo_object|
         indicators = indicator_class.where(name: params[:indicators])
         next unless indicators.any?
-        memo[:query] << 'indicator_type = ? AND indicator_id IN (?)'
-        memo[:placeholders] << indicator_class.name
-        memo[:placeholders] << indicators.pluck(indicator_class.name.downcase + '_id')
+        memo_object[:query] << 'indicator_type = ? AND indicator_id IN (?)'
+        memo_object[:placeholders] << indicator_class.name
+        memo_object[:placeholders] << indicators.pluck(indicator_class.name.downcase + '_id')
       end
       @query = @query.where(memo[:query].join(' OR '), *memo[:placeholders])
     end

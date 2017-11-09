@@ -81,12 +81,12 @@ class PlaceAttributes
     main_destination = (consumers = @data[:top_consumers][:countries]) && consumers[0] && consumers[0][:name]
     main_destination = main_destination.humanize if main_destination.present?
 
-    stateName = @state.name.titleize if @state.present?
+    state_name = @state.name.titleize if @state.present?
 
     <<~SUMMARY
       In #{@year}, #{@node.name.titleize} produced #{soy_produced} of soy occupying a total of #{soy_area} \
       of land. With #{percentage_total_production} of the total production, it ranks #{country_ranking} in Brazil in soy \
-      production, and #{state_ranking} in the state of #{stateName}. The largest exporter of soy \
+      production, and #{state_ranking} in the state of #{state_name}. The largest exporter of soy \
       in #{@node.name.titleize} was #{largest_exporter_name}, which accounted for #{percent_of_exports} of the total exports, \
       and the main destination was #{main_destination}.
     SUMMARY
