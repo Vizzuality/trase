@@ -1,16 +1,6 @@
 require_relative 'boot'
 
-require "rails"
-# Pick the frameworks you want:
-require "active_model/railtie"
-require "active_job/railtie"
-require "active_record/railtie"
-require "action_controller/railtie"
-require "action_mailer/railtie"
-require "action_view/railtie"
-require "action_cable/engine"
-# require "sprockets/railtie"
-require "rails/test_unit/railtie"
+require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -26,8 +16,6 @@ module TraseNewApi
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
-    config.api_only = true
-
     config.action_dispatch.default_headers = {
         'Access-Control-Allow-Origin' => '*',
         'Access-Control-Request-Method' => %w{GET POST OPTIONS}.join(",")
@@ -36,5 +24,11 @@ module TraseNewApi
     config.active_record.schema_format = :sql
 
     config.autoload_paths << "#{Rails.root}/lib"
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins '*'
+        resource '*', :headers => :any, :methods => [:get, :post, :options]
+      end
+    end
   end
 end

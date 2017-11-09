@@ -70,9 +70,9 @@ SET search_path = public, pg_catalog;
 --
 
 CREATE TYPE attribute_type AS ENUM (
-    'Quant',
-    'Qual',
-    'Ind'
+  'Quant',
+  'Qual',
+  'Ind'
 );
 
 
@@ -81,21 +81,21 @@ CREATE TYPE attribute_type AS ENUM (
 --
 
 CREATE FUNCTION add_soy_() RETURNS integer
-    LANGUAGE plpgsql
-    AS $$
-    DECLARE
-      trader_id INTEGER;
-    BEGIN
-      DELETE FROM node_quants WHERE quant_id = 1;
-      FOR trader_id IN SELECT DISTINCT path[6] FROM flows WHERE context_id = 1 UNION SELECT DISTINCT path[7] FROM flows WHERE context_id = 1 LOOP
-        FOR year_ IN 2010..2015 LOOP
-  INSERT INTO node_quants (node_id, quant_id, value, year) VALUES (trader_id, 1, get_trader_sum(trader_id, year_), year_);
-END LOOP;
-      END LOOP;
-      UPDATE node_quants SET value = 0.0 WHERE quant_id = 1 AND value IS NULL;
-      RETURN 1;
-    END;
-  $$;
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  trader_id INTEGER;
+BEGIN
+  DELETE FROM node_quants WHERE quant_id = 1;
+  FOR trader_id IN SELECT DISTINCT path[6] FROM flows WHERE context_id = 1 UNION SELECT DISTINCT path[7] FROM flows WHERE context_id = 1 LOOP
+    FOR year_ IN 2010..2015 LOOP
+      INSERT INTO node_quants (node_id, quant_id, value, year) VALUES (trader_id, 1, get_trader_sum(trader_id, year_), year_);
+    END LOOP;
+  END LOOP;
+  UPDATE node_quants SET value = 0.0 WHERE quant_id = 1 AND value IS NULL;
+  RETURN 1;
+END;
+$$;
 
 
 --
@@ -103,18 +103,18 @@ END LOOP;
 --
 
 CREATE FUNCTION fix_zd() RETURNS integer
-    LANGUAGE plpgsql
-    AS $$
-    DECLARE trader_id INTEGER;
-    BEGIN
-      DELETE FROM node_quals WHERE qual_id = 1;
-      FOR trader_id IN SELECT DISTINCT path[6] FROM flows WHERE context_id = 1 UNION SELECT DISTINCT path[7] FROM flows WHERE context_id = 1 LOOP
-        INSERT INTO node_quals (node_id, qual_id, value) VALUES (trader_id, 1, 'NO');
-      END LOOP;
-      UPDATE node_quals SET value = 'YES' WHERE qual_id = 1 AND node_id IN (SELECT node_id FROM nodes WHERE name = ANY('{"ADM","AGREX INC","ALGAR AGRO","AMAGGI","BALDO","BUNGE","CARGILL","CGG TRADING","CHS","COAMO","COFCO","CUTRALE","BTG PACTUAL COMMODITIES","BTG PACTUAL COMMODITIES","FIAGRIL","GAVILON","GLENCORE","IMCOPA IMPORTACAO EXPORTACAO E INDUSTRIA DE OLEOS LTDA","LOUIS DREYFUS","MARUBENI","MULTIGRAIN S.A.","NIDERA","NOVAAGRI INFRA-ESTRUTURA DE ARMAZENAGEM E ESCOAMENTO AGRICOLA S.A.","OLAM INTERNATIONAL","OLEOS MENU","TOYOTA TSUSHO CORPORATION","SEARA","SELECTA","SODRUGESTVO PARAGUAY S A","ALIANCA AGRICOLA DO CERRADO S.A","SODRUGESTVO PARAGUAY S A","BTG PACTUAL COMMODITIES"}'));
-      RETURN 1;
-    END;
-  $$;
+LANGUAGE plpgsql
+AS $$
+DECLARE trader_id INTEGER;
+BEGIN
+  DELETE FROM node_quals WHERE qual_id = 1;
+  FOR trader_id IN SELECT DISTINCT path[6] FROM flows WHERE context_id = 1 UNION SELECT DISTINCT path[7] FROM flows WHERE context_id = 1 LOOP
+    INSERT INTO node_quals (node_id, qual_id, value) VALUES (trader_id, 1, 'NO');
+  END LOOP;
+  UPDATE node_quals SET value = 'YES' WHERE qual_id = 1 AND node_id IN (SELECT node_id FROM nodes WHERE name = ANY('{"ADM","AGREX INC","ALGAR AGRO","AMAGGI","BALDO","BUNGE","CARGILL","CGG TRADING","CHS","COAMO","COFCO","CUTRALE","BTG PACTUAL COMMODITIES","BTG PACTUAL COMMODITIES","FIAGRIL","GAVILON","GLENCORE","IMCOPA IMPORTACAO EXPORTACAO E INDUSTRIA DE OLEOS LTDA","LOUIS DREYFUS","MARUBENI","MULTIGRAIN S.A.","NIDERA","NOVAAGRI INFRA-ESTRUTURA DE ARMAZENAGEM E ESCOAMENTO AGRICOLA S.A.","OLAM INTERNATIONAL","OLEOS MENU","TOYOTA TSUSHO CORPORATION","SEARA","SELECTA","SODRUGESTVO PARAGUAY S A","ALIANCA AGRICOLA DO CERRADO S.A","SODRUGESTVO PARAGUAY S A","BTG PACTUAL COMMODITIES"}'));
+  RETURN 1;
+END;
+$$;
 
 
 --
@@ -122,21 +122,21 @@ CREATE FUNCTION fix_zd() RETURNS integer
 --
 
 CREATE FUNCTION get_trader_sum(trader_id integer, year_ integer) RETURNS double precision
-    LANGUAGE sql
-    AS $$
-    SELECT sum(value)
-    FROM flow_quants
-    WHERE quant_id IN (
-      SELECT quant_id
-      FROM quants
-      WHERE name = 'Volume')
-        AND flow_id IN (
-          SELECT flow_id
-          FROM flows
-          WHERE trader_id = ANY(path)
-            AND year = year_
-            AND context_id = 1); 
-  $$;
+LANGUAGE sql
+AS $$
+SELECT sum(value)
+FROM flow_quants
+WHERE quant_id IN (
+  SELECT quant_id
+  FROM quants
+  WHERE name = 'Volume')
+      AND flow_id IN (
+  SELECT flow_id
+  FROM flows
+  WHERE trader_id = ANY(path)
+        AND year = year_
+        AND context_id = 1);
+$$;
 
 
 SET default_tablespace = '';
@@ -148,10 +148,10 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE ar_internal_metadata (
-    key character varying NOT NULL,
-    value character varying,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  key character varying NOT NULL,
+  value character varying,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -160,8 +160,8 @@ CREATE TABLE ar_internal_metadata (
 --
 
 CREATE TABLE commodities (
-    commodity_id integer NOT NULL,
-    name text
+  commodity_id integer NOT NULL,
+  name text
 );
 
 
@@ -170,11 +170,11 @@ CREATE TABLE commodities (
 --
 
 CREATE SEQUENCE commodities_commodity_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -189,15 +189,15 @@ ALTER SEQUENCE commodities_commodity_id_seq OWNED BY commodities.commodity_id;
 --
 
 CREATE TABLE context (
-    id integer NOT NULL,
-    country_id integer,
-    commodity_id integer,
-    years integer[],
-    is_disabled boolean,
-    is_default boolean,
-    default_year integer,
-    default_context_layers character varying[],
-    default_basemap character varying
+  id integer NOT NULL,
+  country_id integer,
+  commodity_id integer,
+  years integer[],
+  is_disabled boolean,
+  is_default boolean,
+  default_year integer,
+  default_context_layers character varying[],
+  default_basemap character varying
 );
 
 
@@ -206,11 +206,11 @@ CREATE TABLE context (
 --
 
 CREATE TABLE context_factsheet_attribute (
-    id integer NOT NULL,
-    attribute_id integer NOT NULL,
-    attribute_type attribute_type,
-    context_id integer NOT NULL,
-    factsheet_type character varying(10) NOT NULL
+  id integer NOT NULL,
+  attribute_id integer NOT NULL,
+  attribute_type attribute_type,
+  context_id integer NOT NULL,
+  factsheet_type character varying(10) NOT NULL
 );
 
 
@@ -219,11 +219,11 @@ CREATE TABLE context_factsheet_attribute (
 --
 
 CREATE SEQUENCE context_factsheet_attribute_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -238,10 +238,10 @@ ALTER SEQUENCE context_factsheet_attribute_id_seq OWNED BY context_factsheet_att
 --
 
 CREATE TABLE context_filter_by (
-    id integer NOT NULL,
-    context_id integer,
-    node_type_id integer,
-    "position" integer
+  id integer NOT NULL,
+  context_id integer,
+  node_type_id integer,
+  "position" integer
 );
 
 
@@ -250,11 +250,11 @@ CREATE TABLE context_filter_by (
 --
 
 CREATE SEQUENCE context_filter_by_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -269,11 +269,11 @@ ALTER SEQUENCE context_filter_by_id_seq OWNED BY context_filter_by.id;
 --
 
 CREATE SEQUENCE context_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -288,12 +288,12 @@ ALTER SEQUENCE context_id_seq OWNED BY context.id;
 --
 
 CREATE TABLE context_indicators (
-    id integer NOT NULL,
-    context_id integer NOT NULL,
-    indicator_attribute_id integer NOT NULL,
-    indicator_attribute_type attribute_type NOT NULL,
-    "position" integer NOT NULL,
-    name_in_download text
+  id integer NOT NULL,
+  context_id integer NOT NULL,
+  indicator_attribute_id integer NOT NULL,
+  indicator_attribute_type attribute_type NOT NULL,
+  "position" integer NOT NULL,
+  name_in_download text
 );
 
 
@@ -302,11 +302,11 @@ CREATE TABLE context_indicators (
 --
 
 CREATE SEQUENCE context_indicators_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -321,19 +321,19 @@ ALTER SEQUENCE context_indicators_id_seq OWNED BY context_indicators.id;
 --
 
 CREATE TABLE context_layer (
-    id integer NOT NULL,
-    layer_attribute_id integer NOT NULL,
-    layer_attribute_type attribute_type,
-    context_id integer,
-    "position" integer,
-    bucket_3 double precision[],
-    bucket_5 double precision[],
-    context_layer_group_id integer,
-    is_default boolean DEFAULT false,
-    color_scale character varying,
-    years integer[],
-    aggregate_method character varying,
-    enabled boolean DEFAULT true NOT NULL
+  id integer NOT NULL,
+  layer_attribute_id integer NOT NULL,
+  layer_attribute_type attribute_type,
+  context_id integer,
+  "position" integer,
+  bucket_3 double precision[],
+  bucket_5 double precision[],
+  context_layer_group_id integer,
+  is_default boolean DEFAULT false,
+  color_scale character varying,
+  years integer[],
+  aggregate_method character varying,
+  enabled boolean DEFAULT true NOT NULL
 );
 
 
@@ -342,10 +342,10 @@ CREATE TABLE context_layer (
 --
 
 CREATE TABLE context_layer_group (
-    id integer NOT NULL,
-    name text,
-    "position" integer,
-    context_id integer
+  id integer NOT NULL,
+  name text,
+  "position" integer,
+  context_id integer
 );
 
 
@@ -354,11 +354,11 @@ CREATE TABLE context_layer_group (
 --
 
 CREATE SEQUENCE context_layer_group_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -373,11 +373,11 @@ ALTER SEQUENCE context_layer_group_id_seq OWNED BY context_layer_group.id;
 --
 
 CREATE SEQUENCE context_layer_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -392,13 +392,13 @@ ALTER SEQUENCE context_layer_id_seq OWNED BY context_layer.id;
 --
 
 CREATE TABLE context_nodes (
-    id integer NOT NULL,
-    context_id integer,
-    column_group integer,
-    column_position integer,
-    is_default boolean,
-    node_type_id integer,
-    profile_type character varying
+  id integer NOT NULL,
+  context_id integer,
+  column_group integer,
+  column_position integer,
+  is_default boolean,
+  node_type_id integer,
+  profile_type character varying
 );
 
 
@@ -407,11 +407,11 @@ CREATE TABLE context_nodes (
 --
 
 CREATE SEQUENCE context_nodes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -426,21 +426,21 @@ ALTER SEQUENCE context_nodes_id_seq OWNED BY context_nodes.id;
 --
 
 CREATE TABLE context_recolor_by (
-    id integer NOT NULL,
-    context_id integer,
-    recolor_attribute_id integer NOT NULL,
-    recolor_attribute_type attribute_type,
-    is_default boolean,
-    is_disabled boolean,
-    group_number integer DEFAULT 1,
-    "position" integer,
-    legend_type character varying(55),
-    legend_color_theme character varying(55),
-    interval_count integer,
-    min_value character varying(10),
-    max_value character varying(10),
-    divisor double precision,
-    tooltip_text text
+  id integer NOT NULL,
+  context_id integer,
+  recolor_attribute_id integer NOT NULL,
+  recolor_attribute_type attribute_type,
+  is_default boolean,
+  is_disabled boolean,
+  group_number integer DEFAULT 1,
+  "position" integer,
+  legend_type character varying(55),
+  legend_color_theme character varying(55),
+  interval_count integer,
+  min_value character varying(10),
+  max_value character varying(10),
+  divisor double precision,
+  tooltip_text text
 );
 
 
@@ -449,11 +449,11 @@ CREATE TABLE context_recolor_by (
 --
 
 CREATE SEQUENCE context_recolor_by_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -468,15 +468,15 @@ ALTER SEQUENCE context_recolor_by_id_seq OWNED BY context_recolor_by.id;
 --
 
 CREATE TABLE context_resize_by (
-    id integer NOT NULL,
-    context_id integer,
-    is_default boolean,
-    is_disabled boolean,
-    resize_attribute_id integer NOT NULL,
-    resize_attribute_type attribute_type,
-    group_number integer DEFAULT 1,
-    "position" integer,
-    tooltip_text text
+  id integer NOT NULL,
+  context_id integer,
+  is_default boolean,
+  is_disabled boolean,
+  resize_attribute_id integer NOT NULL,
+  resize_attribute_type attribute_type,
+  group_number integer DEFAULT 1,
+  "position" integer,
+  tooltip_text text
 );
 
 
@@ -485,11 +485,11 @@ CREATE TABLE context_resize_by (
 --
 
 CREATE SEQUENCE context_resize_by_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -504,12 +504,12 @@ ALTER SEQUENCE context_resize_by_id_seq OWNED BY context_resize_by.id;
 --
 
 CREATE TABLE countries (
-    country_id integer NOT NULL,
-    name text,
-    iso2 text,
-    latitude double precision,
-    longitude double precision,
-    zoom integer
+  country_id integer NOT NULL,
+  name text,
+  iso2 text,
+  latitude double precision,
+  longitude double precision,
+  zoom integer
 );
 
 
@@ -518,11 +518,11 @@ CREATE TABLE countries (
 --
 
 CREATE SEQUENCE countries_country_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -537,12 +537,12 @@ ALTER SEQUENCE countries_country_id_seq OWNED BY countries.country_id;
 --
 
 CREATE TABLE download_versions (
-    id integer NOT NULL,
-    symbol character varying NOT NULL,
-    current boolean DEFAULT false,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    context_id integer
+  id integer NOT NULL,
+  symbol character varying NOT NULL,
+  current boolean DEFAULT false,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL,
+  context_id integer
 );
 
 
@@ -551,11 +551,11 @@ CREATE TABLE download_versions (
 --
 
 CREATE SEQUENCE download_versions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -570,9 +570,9 @@ ALTER SEQUENCE download_versions_id_seq OWNED BY download_versions.id;
 --
 
 CREATE TABLE flow_inds (
-    flow_id integer,
-    ind_id integer,
-    value double precision
+  flow_id integer,
+  ind_id integer,
+  value double precision
 );
 
 
@@ -581,9 +581,9 @@ CREATE TABLE flow_inds (
 --
 
 CREATE TABLE flow_quals (
-    flow_id integer,
-    qual_id integer,
-    value text
+  flow_id integer,
+  qual_id integer,
+  value text
 );
 
 
@@ -592,9 +592,9 @@ CREATE TABLE flow_quals (
 --
 
 CREATE TABLE flow_quants (
-    flow_id integer,
-    quant_id integer,
-    value double precision
+  flow_id integer,
+  quant_id integer,
+  value double precision
 );
 
 
@@ -603,19 +603,19 @@ CREATE TABLE flow_quants (
 --
 
 CREATE TABLE inds (
-    ind_id integer NOT NULL,
-    name text,
-    unit text,
-    unit_type text,
-    tooltip boolean,
-    tooltip_text text,
-    frontend_name text,
-    place_factsheet boolean,
-    actor_factsheet boolean,
-    place_factsheet_tabular boolean,
-    actor_factsheet_tabular boolean,
-    place_factsheet_temporal boolean,
-    actor_factsheet_temporal boolean
+  ind_id integer NOT NULL,
+  name text,
+  unit text,
+  unit_type text,
+  tooltip boolean,
+  tooltip_text text,
+  frontend_name text,
+  place_factsheet boolean,
+  actor_factsheet boolean,
+  place_factsheet_tabular boolean,
+  actor_factsheet_tabular boolean,
+  place_factsheet_temporal boolean,
+  actor_factsheet_temporal boolean
 );
 
 
@@ -624,17 +624,17 @@ CREATE TABLE inds (
 --
 
 CREATE TABLE quals (
-    qual_id integer NOT NULL,
-    name text,
-    tooltip boolean,
-    tooltip_text text,
-    frontend_name text,
-    place_factsheet boolean,
-    actor_factsheet boolean,
-    place_factsheet_tabular boolean,
-    actor_factsheet_tabular boolean,
-    place_factsheet_temporal boolean,
-    actor_factsheet_temporal boolean
+  qual_id integer NOT NULL,
+  name text,
+  tooltip boolean,
+  tooltip_text text,
+  frontend_name text,
+  place_factsheet boolean,
+  actor_factsheet boolean,
+  place_factsheet_tabular boolean,
+  actor_factsheet_tabular boolean,
+  place_factsheet_temporal boolean,
+  actor_factsheet_temporal boolean
 );
 
 
@@ -643,19 +643,19 @@ CREATE TABLE quals (
 --
 
 CREATE TABLE quants (
-    quant_id integer NOT NULL,
-    name text,
-    unit text,
-    unit_type text,
-    tooltip boolean,
-    tooltip_text text,
-    frontend_name text,
-    place_factsheet boolean,
-    actor_factsheet boolean,
-    place_factsheet_tabular boolean,
-    actor_factsheet_tabular boolean,
-    place_factsheet_temporal boolean,
-    actor_factsheet_temporal boolean
+  quant_id integer NOT NULL,
+  name text,
+  unit text,
+  unit_type text,
+  tooltip boolean,
+  tooltip_text text,
+  frontend_name text,
+  place_factsheet boolean,
+  actor_factsheet boolean,
+  place_factsheet_tabular boolean,
+  actor_factsheet_tabular boolean,
+  place_factsheet_temporal boolean,
+  actor_factsheet_temporal boolean
 );
 
 
@@ -664,61 +664,61 @@ CREATE TABLE quants (
 --
 
 CREATE MATERIALIZED VIEW flow_indicators AS
- SELECT f.flow_id,
+  SELECT f.flow_id,
     f.qual_id AS indicator_id,
     'Qual'::text AS indicator_type,
     NULL::double precision AS numeric_value,
-        CASE
-            WHEN (lower(f.value) = 'yes'::text) THEN true
-            WHEN (lower(f.value) = 'no'::text) THEN false
-            ELSE NULL::boolean
-        END AS boolean_value,
+    CASE
+    WHEN (lower(f.value) = 'yes'::text) THEN true
+    WHEN (lower(f.value) = 'no'::text) THEN false
+    ELSE NULL::boolean
+    END AS boolean_value,
     q.name,
     NULL::text AS unit,
     q.name AS name_with_unit,
     ci.name_in_download,
     ci.context_id
-   FROM ((flow_quals f
-     JOIN quals q ON ((f.qual_id = q.qual_id)))
-     JOIN context_indicators ci ON (((ci.indicator_attribute_type = 'Qual'::attribute_type) AND (ci.indicator_attribute_id = q.qual_id))))
+  FROM ((flow_quals f
+    JOIN quals q ON ((f.qual_id = q.qual_id)))
+    JOIN context_indicators ci ON (((ci.indicator_attribute_type = 'Qual'::attribute_type) AND (ci.indicator_attribute_id = q.qual_id))))
   GROUP BY f.flow_id, f.qual_id, f.value, q.name, ci.name_in_download, ci.context_id
-UNION ALL
- SELECT f.flow_id,
+  UNION ALL
+  SELECT f.flow_id,
     f.ind_id AS indicator_id,
     'Ind'::text AS indicator_type,
     f.value AS numeric_value,
     NULL::boolean AS boolean_value,
     i.name,
     i.unit,
-        CASE
-            WHEN (i.unit IS NULL) THEN i.name
-            ELSE (((i.name || ' ('::text) || i.unit) || ')'::text)
-        END AS name_with_unit,
+    CASE
+    WHEN (i.unit IS NULL) THEN i.name
+    ELSE (((i.name || ' ('::text) || i.unit) || ')'::text)
+    END AS name_with_unit,
     ci.name_in_download,
     ci.context_id
-   FROM ((flow_inds f
-     JOIN inds i ON ((f.ind_id = i.ind_id)))
-     JOIN context_indicators ci ON (((ci.indicator_attribute_type = 'Ind'::attribute_type) AND (ci.indicator_attribute_id = i.ind_id))))
+  FROM ((flow_inds f
+    JOIN inds i ON ((f.ind_id = i.ind_id)))
+    JOIN context_indicators ci ON (((ci.indicator_attribute_type = 'Ind'::attribute_type) AND (ci.indicator_attribute_id = i.ind_id))))
   GROUP BY f.flow_id, f.ind_id, f.value, i.name, i.unit, ci.name_in_download, ci.context_id
-UNION ALL
- SELECT f.flow_id,
+  UNION ALL
+  SELECT f.flow_id,
     f.quant_id AS indicator_id,
     'Quant'::text AS indicator_type,
     f.value AS numeric_value,
     NULL::boolean AS boolean_value,
     q.name,
     q.unit,
-        CASE
-            WHEN (q.unit IS NULL) THEN q.name
-            ELSE (((q.name || ' ('::text) || q.unit) || ')'::text)
-        END AS name_with_unit,
+    CASE
+    WHEN (q.unit IS NULL) THEN q.name
+    ELSE (((q.name || ' ('::text) || q.unit) || ')'::text)
+    END AS name_with_unit,
     ci.name_in_download,
     ci.context_id
-   FROM ((flow_quants f
-     JOIN quants q ON ((f.quant_id = q.quant_id)))
-     JOIN context_indicators ci ON (((ci.indicator_attribute_type = 'Quant'::attribute_type) AND (ci.indicator_attribute_id = q.quant_id))))
+  FROM ((flow_quants f
+    JOIN quants q ON ((f.quant_id = q.quant_id)))
+    JOIN context_indicators ci ON (((ci.indicator_attribute_type = 'Quant'::attribute_type) AND (ci.indicator_attribute_id = q.quant_id))))
   GROUP BY f.flow_id, f.quant_id, f.value, q.name, q.unit, ci.name_in_download, ci.context_id
-  WITH NO DATA;
+WITH NO DATA;
 
 
 --
@@ -726,10 +726,10 @@ UNION ALL
 --
 
 CREATE TABLE flows (
-    flow_id integer NOT NULL,
-    year smallint,
-    path integer[],
-    context_id integer
+  flow_id integer NOT NULL,
+  year smallint,
+  path integer[],
+  context_id integer
 );
 
 
@@ -738,11 +738,11 @@ CREATE TABLE flows (
 --
 
 CREATE SEQUENCE flows_flow_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -757,11 +757,11 @@ ALTER SEQUENCE flows_flow_id_seq OWNED BY flows.flow_id;
 --
 
 CREATE SEQUENCE inds_ind_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -776,9 +776,9 @@ ALTER SEQUENCE inds_ind_id_seq OWNED BY inds.ind_id;
 --
 
 CREATE TABLE node_types (
-    node_type_id integer NOT NULL,
-    node_type text,
-    is_geo_column boolean
+  node_type_id integer NOT NULL,
+  node_type text,
+  is_geo_column boolean
 );
 
 
@@ -787,13 +787,13 @@ CREATE TABLE node_types (
 --
 
 CREATE TABLE nodes (
-    node_id integer NOT NULL,
-    geo_id text,
-    main_node_id integer,
-    name text,
-    node_type_id integer,
-    is_domestic_consumption boolean,
-    is_unknown boolean
+  node_id integer NOT NULL,
+  geo_id text,
+  main_node_id integer,
+  name text,
+  node_type_id integer,
+  is_domestic_consumption boolean,
+  is_unknown boolean
 );
 
 
@@ -802,12 +802,12 @@ CREATE TABLE nodes (
 --
 
 CREATE MATERIALIZED VIEW node_flows AS
- SELECT f.node_id,
+  SELECT f.node_id,
     n.geo_id,
-        CASE
-            WHEN (cn.node_type = ANY (ARRAY['COUNTRY OF PRODUCTION'::text, 'BIOME'::text, 'LOGISTICS HUB'::text, 'STATE'::text])) THEN upper(n.name)
-            ELSE initcap(n.name)
-        END AS name,
+    CASE
+    WHEN (cn.node_type = ANY (ARRAY['COUNTRY OF PRODUCTION'::text, 'BIOME'::text, 'LOGISTICS HUB'::text, 'STATE'::text])) THEN upper(n.name)
+    ELSE initcap(n.name)
+    END AS name,
     cn.node_type,
     cn.column_group,
     cn.column_position,
@@ -815,23 +815,23 @@ CREATE MATERIALIZED VIEW node_flows AS
     f.flow_id,
     f.year,
     f.context_id
-   FROM ((( SELECT flows.flow_id,
-            flows.year,
-            a.node_id,
-            a."position",
-            flows.context_id
+  FROM ((( SELECT flows.flow_id,
+             flows.year,
+             a.node_id,
+             a."position",
+             flows.context_id
            FROM flows,
-            LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) f
-     JOIN ( SELECT context_nodes.context_id,
-            context_nodes.column_group,
-            context_nodes.column_position,
-            context_nodes.is_default,
-            context_nodes.node_type_id,
-            node_types.node_type
+               LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) f
+    JOIN ( SELECT context_nodes.context_id,
+             context_nodes.column_group,
+             context_nodes.column_position,
+             context_nodes.is_default,
+             context_nodes.node_type_id,
+             node_types.node_type
            FROM (context_nodes
              JOIN node_types ON ((node_types.node_type_id = context_nodes.node_type_id)))) cn ON (((f."position" = (cn.column_position + 1)) AND (f.context_id = cn.context_id))))
-     JOIN nodes n ON ((n.node_id = f.node_id)))
-  WITH NO DATA;
+    JOIN nodes n ON ((n.node_id = f.node_id)))
+WITH NO DATA;
 
 
 --
@@ -839,7 +839,7 @@ CREATE MATERIALIZED VIEW node_flows AS
 --
 
 CREATE MATERIALIZED VIEW materialized_flows AS
- SELECT f_0.flow_id,
+  SELECT f_0.flow_id,
     f_0.context_id,
     f_0.year,
     f_0.name AS name_0,
@@ -858,25 +858,25 @@ CREATE MATERIALIZED VIEW materialized_flows AS
     f_5.node_id AS node_id_5,
     f_6.node_id AS node_id_6,
     f_7.node_id AS node_id_7,
-        CASE
-            WHEN (f_5.node_type = 'EXPORTER'::text) THEN f_5.node_id
-            WHEN (f_2.node_type = 'EXPORTER'::text) THEN f_2.node_id
-            WHEN (f_2.node_type = 'TRADER'::text) THEN f_2.node_id
-            WHEN (f_1.node_type = 'EXPORTER'::text) THEN f_1.node_id
-            ELSE NULL::integer
-        END AS exporter_node_id,
-        CASE
-            WHEN (f_6.node_type = 'IMPORTER'::text) THEN f_6.node_id
-            WHEN (f_3.node_type = 'IMPORTER'::text) THEN f_3.node_id
-            WHEN (f_2.node_type = 'IMPORTER'::text) THEN f_2.node_id
-            ELSE NULL::integer
-        END AS importer_node_id,
-        CASE
-            WHEN (f_7.node_type = 'COUNTRY'::text) THEN f_7.node_id
-            WHEN (f_4.node_type = 'COUNTRY'::text) THEN f_4.node_id
-            WHEN (f_3.node_type = 'COUNTRY'::text) THEN f_3.node_id
-            ELSE NULL::integer
-        END AS country_node_id,
+    CASE
+    WHEN (f_5.node_type = 'EXPORTER'::text) THEN f_5.node_id
+    WHEN (f_2.node_type = 'EXPORTER'::text) THEN f_2.node_id
+    WHEN (f_2.node_type = 'TRADER'::text) THEN f_2.node_id
+    WHEN (f_1.node_type = 'EXPORTER'::text) THEN f_1.node_id
+    ELSE NULL::integer
+    END AS exporter_node_id,
+    CASE
+    WHEN (f_6.node_type = 'IMPORTER'::text) THEN f_6.node_id
+    WHEN (f_3.node_type = 'IMPORTER'::text) THEN f_3.node_id
+    WHEN (f_2.node_type = 'IMPORTER'::text) THEN f_2.node_id
+    ELSE NULL::integer
+    END AS importer_node_id,
+    CASE
+    WHEN (f_7.node_type = 'COUNTRY'::text) THEN f_7.node_id
+    WHEN (f_4.node_type = 'COUNTRY'::text) THEN f_4.node_id
+    WHEN (f_3.node_type = 'COUNTRY'::text) THEN f_3.node_id
+    ELSE NULL::integer
+    END AS country_node_id,
     fi.indicator_type,
     fi.indicator_id,
     fi.name AS indicator,
@@ -884,23 +884,23 @@ CREATE MATERIALIZED VIEW materialized_flows AS
     fi.name_in_download,
     bool_and(fi.boolean_value) AS bool_and,
     sum(fi.numeric_value) AS sum,
-        CASE
-            WHEN ((fi.indicator_type = 'Qual'::text) AND bool_and(fi.boolean_value)) THEN 'yes'::text
-            WHEN ((fi.indicator_type = 'Qual'::text) AND (NOT bool_and(fi.boolean_value))) THEN 'no'::text
-            ELSE (sum(fi.numeric_value))::text
-        END AS total
-   FROM ((((((((node_flows f_0
-     JOIN node_flows f_1 ON (((f_1.flow_id = f_0.flow_id) AND (f_1.column_position = 1))))
-     JOIN node_flows f_2 ON (((f_2.flow_id = f_0.flow_id) AND (f_2.column_position = 2))))
-     JOIN node_flows f_3 ON (((f_3.flow_id = f_0.flow_id) AND (f_3.column_position = 3))))
-     LEFT JOIN node_flows f_4 ON (((f_4.flow_id = f_0.flow_id) AND (f_4.column_position = 4))))
-     LEFT JOIN node_flows f_5 ON (((f_5.flow_id = f_0.flow_id) AND (f_5.column_position = 5))))
-     LEFT JOIN node_flows f_6 ON (((f_6.flow_id = f_0.flow_id) AND (f_6.column_position = 6))))
-     LEFT JOIN node_flows f_7 ON (((f_7.flow_id = f_0.flow_id) AND (f_7.column_position = 7))))
-     JOIN flow_indicators fi ON (((f_0.flow_id = fi.flow_id) AND (f_0.context_id = fi.context_id))))
+    CASE
+    WHEN ((fi.indicator_type = 'Qual'::text) AND bool_and(fi.boolean_value)) THEN 'yes'::text
+    WHEN ((fi.indicator_type = 'Qual'::text) AND (NOT bool_and(fi.boolean_value))) THEN 'no'::text
+    ELSE (sum(fi.numeric_value))::text
+    END AS total
+  FROM ((((((((node_flows f_0
+    JOIN node_flows f_1 ON (((f_1.flow_id = f_0.flow_id) AND (f_1.column_position = 1))))
+    JOIN node_flows f_2 ON (((f_2.flow_id = f_0.flow_id) AND (f_2.column_position = 2))))
+    JOIN node_flows f_3 ON (((f_3.flow_id = f_0.flow_id) AND (f_3.column_position = 3))))
+    LEFT JOIN node_flows f_4 ON (((f_4.flow_id = f_0.flow_id) AND (f_4.column_position = 4))))
+    LEFT JOIN node_flows f_5 ON (((f_5.flow_id = f_0.flow_id) AND (f_5.column_position = 5))))
+    LEFT JOIN node_flows f_6 ON (((f_6.flow_id = f_0.flow_id) AND (f_6.column_position = 6))))
+    LEFT JOIN node_flows f_7 ON (((f_7.flow_id = f_0.flow_id) AND (f_7.column_position = 7))))
+    JOIN flow_indicators fi ON (((f_0.flow_id = fi.flow_id) AND (f_0.context_id = fi.context_id))))
   WHERE (f_0.column_position = 0)
   GROUP BY f_0.flow_id, f_0.context_id, f_0.year, f_0.name, f_0.node_id, f_1.name, f_1.node_id, f_1.node_type, f_2.name, f_2.node_id, f_2.node_type, f_3.name, f_3.node_id, f_3.node_type, f_4.name, f_4.node_id, f_4.node_type, f_5.name, f_5.node_id, f_5.node_type, f_6.name, f_6.node_id, f_6.node_type, f_7.name, f_7.node_id, f_7.node_type, fi.indicator_type, fi.indicator_id, fi.name, fi.name_with_unit, fi.name_in_download
-  WITH NO DATA;
+WITH NO DATA;
 
 
 --
@@ -908,10 +908,10 @@ CREATE MATERIALIZED VIEW materialized_flows AS
 --
 
 CREATE TABLE node_inds (
-    node_id integer,
-    ind_id integer,
-    year smallint,
-    value double precision
+  node_id integer,
+  ind_id integer,
+  year smallint,
+  value double precision
 );
 
 
@@ -920,10 +920,10 @@ CREATE TABLE node_inds (
 --
 
 CREATE TABLE node_quals (
-    node_id integer,
-    qual_id integer,
-    year smallint,
-    value text
+  node_id integer,
+  qual_id integer,
+  year smallint,
+  value text
 );
 
 
@@ -932,10 +932,10 @@ CREATE TABLE node_quals (
 --
 
 CREATE TABLE node_quants (
-    node_id integer,
-    quant_id integer,
-    year smallint,
-    value double precision
+  node_id integer,
+  quant_id integer,
+  year smallint,
+  value double precision
 );
 
 
@@ -944,11 +944,11 @@ CREATE TABLE node_quants (
 --
 
 CREATE SEQUENCE node_types_node_type_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -963,11 +963,11 @@ ALTER SEQUENCE node_types_node_type_id_seq OWNED BY node_types.node_type_id;
 --
 
 CREATE SEQUENCE nodes_node_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -982,11 +982,11 @@ ALTER SEQUENCE nodes_node_id_seq OWNED BY nodes.node_id;
 --
 
 CREATE SEQUENCE quals_qual_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -1001,11 +1001,11 @@ ALTER SEQUENCE quals_qual_id_seq OWNED BY quals.qual_id;
 --
 
 CREATE SEQUENCE quants_quant_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -1020,7 +1020,7 @@ ALTER SEQUENCE quants_quant_id_seq OWNED BY quants.quant_id;
 --
 
 CREATE TABLE schema_migrations (
-    version character varying NOT NULL
+  version character varying NOT NULL
 );
 
 
@@ -1031,16 +1031,16 @@ SET search_path = revamp, pg_catalog;
 --
 
 CREATE TABLE inds (
-    id integer NOT NULL,
-    name text NOT NULL,
-    display_name text NOT NULL,
-    unit text,
-    unit_type text,
-    tooltip boolean DEFAULT false NOT NULL,
-    tooltip_text text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    CONSTRAINT inds_unit_type_check CHECK ((unit_type = ANY (ARRAY['currency'::text, 'ratio'::text, 'score'::text, 'unitless'::text])))
+  id integer NOT NULL,
+  name text NOT NULL,
+  display_name text NOT NULL,
+  unit text,
+  unit_type text,
+  tooltip boolean DEFAULT false NOT NULL,
+  tooltip_text text,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL,
+  CONSTRAINT inds_unit_type_check CHECK ((unit_type = ANY (ARRAY['currency'::text, 'ratio'::text, 'score'::text, 'unitless'::text])))
 );
 
 
@@ -1098,13 +1098,13 @@ COMMENT ON COLUMN inds.tooltip_text IS 'Tooltip text';
 --
 
 CREATE TABLE quals (
-    id integer NOT NULL,
-    name text NOT NULL,
-    display_name text NOT NULL,
-    tooltip boolean DEFAULT false NOT NULL,
-    tooltip_text text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  name text NOT NULL,
+  display_name text NOT NULL,
+  tooltip boolean DEFAULT false NOT NULL,
+  tooltip_text text,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1148,16 +1148,16 @@ COMMENT ON COLUMN quals.tooltip_text IS 'Tooltip text';
 --
 
 CREATE TABLE quants (
-    id integer NOT NULL,
-    name text NOT NULL,
-    display_name text NOT NULL,
-    unit text,
-    unit_type text,
-    tooltip boolean DEFAULT false NOT NULL,
-    tooltip_text text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    CONSTRAINT quants_unit_type_check CHECK ((unit_type = ANY (ARRAY['currency'::text, 'area'::text, 'count'::text, 'volume'::text, 'unitless'::text])))
+  id integer NOT NULL,
+  name text NOT NULL,
+  display_name text NOT NULL,
+  unit text,
+  unit_type text,
+  tooltip boolean DEFAULT false NOT NULL,
+  tooltip_text text,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL,
+  CONSTRAINT quants_unit_type_check CHECK ((unit_type = ANY (ARRAY['currency'::text, 'area'::text, 'count'::text, 'volume'::text, 'unitless'::text])))
 );
 
 
@@ -1215,7 +1215,7 @@ COMMENT ON COLUMN quants.tooltip_text IS 'Tooltip text';
 --
 
 CREATE MATERIALIZED VIEW attributes_mv AS
- SELECT row_number() OVER () AS id,
+  SELECT row_number() OVER () AS id,
     s.original_type,
     s.original_id,
     s.name,
@@ -1227,45 +1227,45 @@ CREATE MATERIALIZED VIEW attributes_mv AS
     s.aggregate_method,
     s.created_at,
     s.updated_at
-   FROM ( SELECT 'Quant'::text AS original_type,
-            quants.id AS original_id,
-            quants.name,
-            quants.display_name,
-            quants.unit,
-            quants.unit_type,
-            quants.tooltip,
-            quants.tooltip_text,
-            'SUM'::text AS aggregate_method,
-            quants.created_at,
-            quants.updated_at
-           FROM quants
-        UNION ALL
+  FROM ( SELECT 'Quant'::text AS original_type,
+                quants.id AS original_id,
+           quants.name,
+           quants.display_name,
+           quants.unit,
+           quants.unit_type,
+           quants.tooltip,
+           quants.tooltip_text,
+                'SUM'::text AS aggregate_method,
+           quants.created_at,
+           quants.updated_at
+         FROM quants
+         UNION ALL
          SELECT 'Ind'::text,
-            inds.id,
-            inds.name,
-            inds.display_name,
-            inds.unit,
-            inds.unit_type,
-            inds.tooltip,
-            inds.tooltip_text,
-            'AVG'::text,
-            inds.created_at,
-            inds.updated_at
-           FROM inds
-        UNION ALL
+           inds.id,
+           inds.name,
+           inds.display_name,
+           inds.unit,
+           inds.unit_type,
+           inds.tooltip,
+           inds.tooltip_text,
+           'AVG'::text,
+           inds.created_at,
+           inds.updated_at
+         FROM inds
+         UNION ALL
          SELECT 'Qual'::text,
-            quals.id,
-            quals.name,
-            quals.display_name,
-            NULL::text,
-            NULL::text,
-            quals.tooltip,
-            quals.tooltip_text,
-            NULL::text,
-            quals.created_at,
-            quals.updated_at
-           FROM quals) s
-  WITH NO DATA;
+           quals.id,
+           quals.name,
+           quals.display_name,
+           NULL::text,
+           NULL::text,
+           quals.tooltip,
+           quals.tooltip_text,
+           NULL::text,
+           quals.created_at,
+           quals.updated_at
+         FROM quals) s
+WITH NO DATA;
 
 
 --
@@ -1301,12 +1301,12 @@ COMMENT ON COLUMN attributes_mv.original_id IS 'Id from the original table (inds
 --
 
 CREATE TABLE carto_layers (
-    id integer NOT NULL,
-    contextual_layer_id integer NOT NULL,
-    identifier text NOT NULL,
-    years integer[],
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  contextual_layer_id integer NOT NULL,
+  identifier text NOT NULL,
+  years integer[],
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1336,11 +1336,11 @@ COMMENT ON COLUMN carto_layers.years IS 'Array of years for which to show this c
 --
 
 CREATE SEQUENCE carto_layers_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -1355,12 +1355,12 @@ ALTER SEQUENCE carto_layers_id_seq OWNED BY carto_layers.id;
 --
 
 CREATE TABLE chart_attributes (
-    id integer NOT NULL,
-    chart_id integer NOT NULL,
-    "position" integer,
-    years integer[],
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  chart_id integer NOT NULL,
+  "position" integer,
+  years integer[],
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1397,11 +1397,11 @@ COMMENT ON COLUMN chart_attributes.years IS 'Array of years for which to show th
 --
 
 CREATE SEQUENCE chart_attributes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -1416,11 +1416,11 @@ ALTER SEQUENCE chart_attributes_id_seq OWNED BY chart_attributes.id;
 --
 
 CREATE TABLE chart_inds (
-    id integer NOT NULL,
-    chart_attribute_id integer NOT NULL,
-    ind_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  chart_attribute_id integer NOT NULL,
+  ind_id integer NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1436,11 +1436,11 @@ COMMENT ON TABLE chart_inds IS 'Inds to display in a chart (see chart_attributes
 --
 
 CREATE SEQUENCE chart_inds_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -1455,11 +1455,11 @@ ALTER SEQUENCE chart_inds_id_seq OWNED BY chart_inds.id;
 --
 
 CREATE TABLE chart_quals (
-    id integer NOT NULL,
-    chart_attribute_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  chart_attribute_id integer NOT NULL,
+  qual_id integer NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1475,11 +1475,11 @@ COMMENT ON TABLE chart_quals IS 'Quals to display in a chart (see chart_attribut
 --
 
 CREATE SEQUENCE chart_quals_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -1494,11 +1494,11 @@ ALTER SEQUENCE chart_quals_id_seq OWNED BY chart_quals.id;
 --
 
 CREATE TABLE chart_quants (
-    id integer NOT NULL,
-    chart_attribute_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  chart_attribute_id integer NOT NULL,
+  quant_id integer NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1514,11 +1514,11 @@ COMMENT ON TABLE chart_quants IS 'Quants to display in a chart (see chart_attrib
 --
 
 CREATE SEQUENCE chart_quants_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -1533,14 +1533,14 @@ ALTER SEQUENCE chart_quants_id_seq OWNED BY chart_quants.id;
 --
 
 CREATE TABLE charts (
-    id integer NOT NULL,
-    profile_id integer NOT NULL,
-    parent_id integer,
-    identifier text NOT NULL,
-    title text NOT NULL,
-    "position" integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  profile_id integer NOT NULL,
+  parent_id integer,
+  identifier text NOT NULL,
+  title text NOT NULL,
+  "position" integer NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1584,11 +1584,11 @@ COMMENT ON COLUMN charts."position" IS 'Display order in scope of profile';
 --
 
 CREATE SEQUENCE charts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -1603,11 +1603,11 @@ ALTER SEQUENCE charts_id_seq OWNED BY charts.id;
 --
 
 CREATE TABLE commodities (
-    id integer NOT NULL,
-    name text NOT NULL,
-    parent_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  name text NOT NULL,
+  parent_id integer,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1637,11 +1637,11 @@ COMMENT ON COLUMN commodities.parent_id IS 'Self-reference to parent used to def
 --
 
 CREATE SEQUENCE commodities_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -1656,15 +1656,15 @@ ALTER SEQUENCE commodities_id_seq OWNED BY commodities.id;
 --
 
 CREATE TABLE context_node_types (
-    id integer NOT NULL,
-    context_id integer NOT NULL,
-    node_type_id integer NOT NULL,
-    column_group integer NOT NULL,
-    column_position integer NOT NULL,
-    is_default boolean DEFAULT false NOT NULL,
-    is_geo_column boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  context_id integer NOT NULL,
+  node_type_id integer NOT NULL,
+  column_group integer NOT NULL,
+  column_position integer NOT NULL,
+  is_default boolean DEFAULT false NOT NULL,
+  is_geo_column boolean DEFAULT false NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1708,11 +1708,11 @@ COMMENT ON COLUMN context_node_types.is_geo_column IS 'When set, show nodes on m
 --
 
 CREATE SEQUENCE context_node_types_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -1727,16 +1727,16 @@ ALTER SEQUENCE context_node_types_id_seq OWNED BY context_node_types.id;
 --
 
 CREATE TABLE contexts (
-    id integer NOT NULL,
-    country_id integer NOT NULL,
-    commodity_id integer NOT NULL,
-    years integer[],
-    default_year integer,
-    default_basemap text,
-    is_disabled boolean DEFAULT false NOT NULL,
-    is_default boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  country_id integer NOT NULL,
+  commodity_id integer NOT NULL,
+  years integer[],
+  default_year integer,
+  default_basemap text,
+  is_disabled boolean DEFAULT false NOT NULL,
+  is_default boolean DEFAULT false NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1787,11 +1787,11 @@ COMMENT ON COLUMN contexts.is_default IS 'When set, show this context as default
 --
 
 CREATE SEQUENCE contexts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -1806,15 +1806,15 @@ ALTER SEQUENCE contexts_id_seq OWNED BY contexts.id;
 --
 
 CREATE TABLE contextual_layers (
-    id integer NOT NULL,
-    context_id integer NOT NULL,
-    title text NOT NULL,
-    identifier text NOT NULL,
-    "position" integer NOT NULL,
-    tooltip_text text,
-    is_default boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  context_id integer NOT NULL,
+  title text NOT NULL,
+  identifier text NOT NULL,
+  "position" integer NOT NULL,
+  tooltip_text text,
+  is_default boolean DEFAULT false NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1865,11 +1865,11 @@ COMMENT ON COLUMN contextual_layers.is_default IS 'When set, show this layer by 
 --
 
 CREATE SEQUENCE contextual_layers_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -1884,14 +1884,14 @@ ALTER SEQUENCE contextual_layers_id_seq OWNED BY contextual_layers.id;
 --
 
 CREATE TABLE countries (
-    id integer NOT NULL,
-    name text NOT NULL,
-    iso2 text NOT NULL,
-    latitude double precision NOT NULL,
-    longitude double precision NOT NULL,
-    zoom integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  name text NOT NULL,
+  iso2 text NOT NULL,
+  latitude double precision NOT NULL,
+  longitude double precision NOT NULL,
+  zoom integer NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1942,11 +1942,11 @@ COMMENT ON COLUMN countries.zoom IS 'TODO';
 --
 
 CREATE SEQUENCE countries_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -1961,13 +1961,13 @@ ALTER SEQUENCE countries_id_seq OWNED BY countries.id;
 --
 
 CREATE TABLE download_attributes (
-    id integer NOT NULL,
-    context_id integer NOT NULL,
-    "position" integer NOT NULL,
-    display_name text NOT NULL,
-    years integer[],
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  context_id integer NOT NULL,
+  "position" integer NOT NULL,
+  display_name text NOT NULL,
+  years integer[],
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2004,11 +2004,11 @@ COMMENT ON COLUMN download_attributes.years IS 'Years for which attribute is pre
 --
 
 CREATE SEQUENCE download_attributes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -2023,12 +2023,12 @@ ALTER SEQUENCE download_attributes_id_seq OWNED BY download_attributes.id;
 --
 
 CREATE TABLE download_quals (
-    id integer NOT NULL,
-    download_attribute_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    is_filter_enabled boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  download_attribute_id integer NOT NULL,
+  qual_id integer NOT NULL,
+  is_filter_enabled boolean DEFAULT false NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2051,13 +2051,13 @@ COMMENT ON COLUMN download_quals.is_filter_enabled IS 'When set, enable selectio
 --
 
 CREATE TABLE download_quants (
-    id integer NOT NULL,
-    download_attribute_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    is_filter_enabled boolean DEFAULT false NOT NULL,
-    filter_bands double precision[],
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  download_attribute_id integer NOT NULL,
+  quant_id integer NOT NULL,
+  is_filter_enabled boolean DEFAULT false NOT NULL,
+  filter_bands double precision[],
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2087,7 +2087,7 @@ COMMENT ON COLUMN download_quants.filter_bands IS 'Array of value ranges to allo
 --
 
 CREATE MATERIALIZED VIEW download_attributes_mv AS
- SELECT da.id,
+  SELECT da.id,
     da.context_id,
     da."position",
     da.display_name,
@@ -2095,11 +2095,11 @@ CREATE MATERIALIZED VIEW download_attributes_mv AS
     da.created_at,
     da.updated_at,
     a.id AS attribute_id
-   FROM ((download_quants daq
-     JOIN download_attributes da ON ((da.id = daq.download_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = daq.quant_id) AND (a.original_type = 'Quant'::text))))
-UNION ALL
- SELECT da.id,
+  FROM ((download_quants daq
+    JOIN download_attributes da ON ((da.id = daq.download_attribute_id)))
+    JOIN attributes_mv a ON (((a.original_id = daq.quant_id) AND (a.original_type = 'Quant'::text))))
+  UNION ALL
+  SELECT da.id,
     da.context_id,
     da."position",
     da.display_name,
@@ -2107,10 +2107,10 @@ UNION ALL
     da.created_at,
     da.updated_at,
     a.id AS attribute_id
-   FROM ((download_quals daq
-     JOIN download_attributes da ON ((da.id = daq.download_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = daq.qual_id) AND (a.original_type = 'Qual'::text))))
-  WITH NO DATA;
+  FROM ((download_quals daq
+    JOIN download_attributes da ON ((da.id = daq.download_attribute_id)))
+    JOIN attributes_mv a ON (((a.original_id = daq.qual_id) AND (a.original_type = 'Qual'::text))))
+WITH NO DATA;
 
 
 --
@@ -2132,11 +2132,11 @@ COMMENT ON COLUMN download_attributes_mv.attribute_id IS 'References the unique 
 --
 
 CREATE SEQUENCE download_quals_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -2151,11 +2151,11 @@ ALTER SEQUENCE download_quals_id_seq OWNED BY download_quals.id;
 --
 
 CREATE SEQUENCE download_quants_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -2170,12 +2170,12 @@ ALTER SEQUENCE download_quants_id_seq OWNED BY download_quants.id;
 --
 
 CREATE TABLE download_versions (
-    id integer NOT NULL,
-    context_id integer NOT NULL,
-    symbol character varying NOT NULL,
-    is_current boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  context_id integer NOT NULL,
+  symbol character varying NOT NULL,
+  is_current boolean DEFAULT false NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2205,11 +2205,11 @@ COMMENT ON COLUMN download_versions.is_current IS 'When set, use this version sy
 --
 
 CREATE SEQUENCE download_versions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -2224,12 +2224,12 @@ ALTER SEQUENCE download_versions_id_seq OWNED BY download_versions.id;
 --
 
 CREATE TABLE flow_inds (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    ind_id integer NOT NULL,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  flow_id integer NOT NULL,
+  ind_id integer NOT NULL,
+  value double precision NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2252,11 +2252,11 @@ COMMENT ON COLUMN flow_inds.value IS 'Numeric value';
 --
 
 CREATE SEQUENCE flow_inds_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -2271,12 +2271,12 @@ ALTER SEQUENCE flow_inds_id_seq OWNED BY flow_inds.id;
 --
 
 CREATE TABLE flow_quals (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    value text NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  flow_id integer NOT NULL,
+  qual_id integer NOT NULL,
+  value text NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2299,11 +2299,11 @@ COMMENT ON COLUMN flow_quals.value IS 'Textual value';
 --
 
 CREATE SEQUENCE flow_quals_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -2318,12 +2318,12 @@ ALTER SEQUENCE flow_quals_id_seq OWNED BY flow_quals.id;
 --
 
 CREATE TABLE flow_quants (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  flow_id integer NOT NULL,
+  quant_id integer NOT NULL,
+  value double precision NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2346,11 +2346,11 @@ COMMENT ON COLUMN flow_quants.value IS 'Numeric value';
 --
 
 CREATE SEQUENCE flow_quants_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -2365,12 +2365,12 @@ ALTER SEQUENCE flow_quants_id_seq OWNED BY flow_quants.id;
 --
 
 CREATE TABLE flows (
-    id integer NOT NULL,
-    context_id integer NOT NULL,
-    year smallint NOT NULL,
-    path integer[] DEFAULT '{}'::integer[],
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  context_id integer NOT NULL,
+  year smallint NOT NULL,
+  path integer[] DEFAULT '{}'::integer[],
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2400,11 +2400,11 @@ COMMENT ON COLUMN flows.path IS 'Array of node ids which constitute the supply c
 --
 
 CREATE SEQUENCE flows_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -2419,11 +2419,11 @@ ALTER SEQUENCE flows_id_seq OWNED BY flows.id;
 --
 
 CREATE SEQUENCE inds_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -2438,12 +2438,12 @@ ALTER SEQUENCE inds_id_seq OWNED BY inds.id;
 --
 
 CREATE TABLE map_attribute_groups (
-    id integer NOT NULL,
-    context_id integer NOT NULL,
-    name text NOT NULL,
-    "position" integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  context_id integer NOT NULL,
+  name text NOT NULL,
+  "position" integer NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2473,11 +2473,11 @@ COMMENT ON COLUMN map_attribute_groups."position" IS 'Display order in scope of 
 --
 
 CREATE SEQUENCE map_attribute_groups_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -2492,17 +2492,17 @@ ALTER SEQUENCE map_attribute_groups_id_seq OWNED BY map_attribute_groups.id;
 --
 
 CREATE TABLE map_attributes (
-    id integer NOT NULL,
-    map_attribute_group_id integer NOT NULL,
-    "position" integer NOT NULL,
-    bucket_3 double precision[] DEFAULT '{}'::double precision[] NOT NULL,
-    bucket_5 double precision[] DEFAULT '{}'::double precision[] NOT NULL,
-    color_scale text,
-    years integer[],
-    is_disabled boolean DEFAULT false NOT NULL,
-    is_default boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  map_attribute_group_id integer NOT NULL,
+  "position" integer NOT NULL,
+  bucket_3 double precision[] DEFAULT '{}'::double precision[] NOT NULL,
+  bucket_5 double precision[] DEFAULT '{}'::double precision[] NOT NULL,
+  color_scale text,
+  years integer[],
+  is_disabled boolean DEFAULT false NOT NULL,
+  is_default boolean DEFAULT false NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2567,11 +2567,11 @@ COMMENT ON COLUMN map_attributes.is_default IS 'When set, show this attribute by
 --
 
 CREATE SEQUENCE map_attributes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -2586,11 +2586,11 @@ ALTER SEQUENCE map_attributes_id_seq OWNED BY map_attributes.id;
 --
 
 CREATE TABLE map_inds (
-    id integer NOT NULL,
-    map_attribute_id integer NOT NULL,
-    ind_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  map_attribute_id integer NOT NULL,
+  ind_id integer NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2606,11 +2606,11 @@ COMMENT ON TABLE map_inds IS 'Inds to display on map (see map_attributes.)';
 --
 
 CREATE TABLE map_quants (
-    id integer NOT NULL,
-    map_attribute_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  map_attribute_id integer NOT NULL,
+  quant_id integer NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2626,7 +2626,7 @@ COMMENT ON TABLE map_quants IS 'Quants to display on map (see map_attributes.)';
 --
 
 CREATE MATERIALIZED VIEW map_attributes_mv AS
- SELECT ma.id,
+  SELECT ma.id,
     ma.map_attribute_group_id,
     ma."position",
     ma.bucket_3,
@@ -2638,11 +2638,11 @@ CREATE MATERIALIZED VIEW map_attributes_mv AS
     ma.created_at,
     ma.updated_at,
     a.id AS attribute_id
-   FROM ((map_quants maq
-     JOIN map_attributes ma ON ((ma.id = maq.map_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = maq.quant_id) AND (a.original_type = 'Quant'::text))))
-UNION ALL
- SELECT ma.id,
+  FROM ((map_quants maq
+    JOIN map_attributes ma ON ((ma.id = maq.map_attribute_id)))
+    JOIN attributes_mv a ON (((a.original_id = maq.quant_id) AND (a.original_type = 'Quant'::text))))
+  UNION ALL
+  SELECT ma.id,
     ma.map_attribute_group_id,
     ma."position",
     ma.bucket_3,
@@ -2654,10 +2654,10 @@ UNION ALL
     ma.created_at,
     ma.updated_at,
     a.id AS attribute_id
-   FROM ((map_inds mai
-     JOIN map_attributes ma ON ((ma.id = mai.map_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = mai.ind_id) AND (a.original_type = 'Ind'::text))))
-  WITH NO DATA;
+  FROM ((map_inds mai
+    JOIN map_attributes ma ON ((ma.id = mai.map_attribute_id)))
+    JOIN attributes_mv a ON (((a.original_id = mai.ind_id) AND (a.original_type = 'Ind'::text))))
+WITH NO DATA;
 
 
 --
@@ -2679,11 +2679,11 @@ COMMENT ON COLUMN map_attributes_mv.attribute_id IS 'References the unique id in
 --
 
 CREATE SEQUENCE map_inds_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -2698,11 +2698,11 @@ ALTER SEQUENCE map_inds_id_seq OWNED BY map_inds.id;
 --
 
 CREATE SEQUENCE map_quants_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -2717,13 +2717,13 @@ ALTER SEQUENCE map_quants_id_seq OWNED BY map_quants.id;
 --
 
 CREATE TABLE node_inds (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    ind_id integer NOT NULL,
-    year integer,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  node_id integer NOT NULL,
+  ind_id integer NOT NULL,
+  year integer,
+  value double precision NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2753,11 +2753,11 @@ COMMENT ON COLUMN node_inds.value IS 'Numeric value';
 --
 
 CREATE SEQUENCE node_inds_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -2772,13 +2772,13 @@ ALTER SEQUENCE node_inds_id_seq OWNED BY node_inds.id;
 --
 
 CREATE TABLE node_quals (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    year integer,
-    value text NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  node_id integer NOT NULL,
+  qual_id integer NOT NULL,
+  year integer,
+  value text NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2808,11 +2808,11 @@ COMMENT ON COLUMN node_quals.value IS 'Textual value';
 --
 
 CREATE SEQUENCE node_quals_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -2827,13 +2827,13 @@ ALTER SEQUENCE node_quals_id_seq OWNED BY node_quals.id;
 --
 
 CREATE TABLE node_quants (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    year integer,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  node_id integer NOT NULL,
+  quant_id integer NOT NULL,
+  year integer,
+  value double precision NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2863,11 +2863,11 @@ COMMENT ON COLUMN node_quants.value IS 'Numeric value';
 --
 
 CREATE SEQUENCE node_quants_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -2882,10 +2882,10 @@ ALTER SEQUENCE node_quants_id_seq OWNED BY node_quants.id;
 --
 
 CREATE TABLE node_types (
-    id integer NOT NULL,
-    name text NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  name text NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2908,11 +2908,11 @@ COMMENT ON COLUMN node_types.name IS 'Name of node type, spelt in capital letter
 --
 
 CREATE SEQUENCE node_types_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -2927,14 +2927,14 @@ ALTER SEQUENCE node_types_id_seq OWNED BY node_types.id;
 --
 
 CREATE TABLE nodes (
-    id integer NOT NULL,
-    node_type_id integer NOT NULL,
-    name text NOT NULL,
-    geo_id text,
-    is_domestic_consumption boolean DEFAULT false NOT NULL,
-    is_unknown boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  node_type_id integer NOT NULL,
+  name text NOT NULL,
+  geo_id text,
+  is_domestic_consumption boolean DEFAULT false NOT NULL,
+  is_unknown boolean DEFAULT false NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2978,11 +2978,11 @@ COMMENT ON COLUMN nodes.is_unknown IS 'When set, node was not possible to identi
 --
 
 CREATE SEQUENCE nodes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -2997,12 +2997,12 @@ ALTER SEQUENCE nodes_id_seq OWNED BY nodes.id;
 --
 
 CREATE TABLE profiles (
-    id integer NOT NULL,
-    context_node_type_id integer NOT NULL,
-    name text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    CONSTRAINT profiles_name_check CHECK ((name = ANY (ARRAY['actor'::text, 'place'::text])))
+  id integer NOT NULL,
+  context_node_type_id integer NOT NULL,
+  name text,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL,
+  CONSTRAINT profiles_name_check CHECK ((name = ANY (ARRAY['actor'::text, 'place'::text])))
 );
 
 
@@ -3025,11 +3025,11 @@ COMMENT ON COLUMN profiles.name IS 'Profile name, either actor or place. One of 
 --
 
 CREATE SEQUENCE profiles_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -3044,11 +3044,11 @@ ALTER SEQUENCE profiles_id_seq OWNED BY profiles.id;
 --
 
 CREATE SEQUENCE quals_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -3063,11 +3063,11 @@ ALTER SEQUENCE quals_id_seq OWNED BY quals.id;
 --
 
 CREATE SEQUENCE quants_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -3082,22 +3082,22 @@ ALTER SEQUENCE quants_id_seq OWNED BY quants.id;
 --
 
 CREATE TABLE recolor_by_attributes (
-    id integer NOT NULL,
-    context_id integer NOT NULL,
-    group_number integer DEFAULT 1 NOT NULL,
-    "position" integer NOT NULL,
-    legend_type text NOT NULL,
-    legend_color_theme text NOT NULL,
-    interval_count integer,
-    min_value text,
-    max_value text,
-    divisor double precision,
-    tooltip_text text,
-    years integer[],
-    is_disabled boolean DEFAULT false NOT NULL,
-    is_default boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  context_id integer NOT NULL,
+  group_number integer DEFAULT 1 NOT NULL,
+  "position" integer NOT NULL,
+  legend_type text NOT NULL,
+  legend_color_theme text NOT NULL,
+  interval_count integer,
+  min_value text,
+  max_value text,
+  divisor double precision,
+  tooltip_text text,
+  years integer[],
+  is_disabled boolean DEFAULT false NOT NULL,
+  is_default boolean DEFAULT false NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -3197,11 +3197,11 @@ COMMENT ON COLUMN recolor_by_attributes.is_default IS 'When set, show this attri
 --
 
 CREATE SEQUENCE recolor_by_attributes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -3216,11 +3216,11 @@ ALTER SEQUENCE recolor_by_attributes_id_seq OWNED BY recolor_by_attributes.id;
 --
 
 CREATE TABLE recolor_by_inds (
-    id integer NOT NULL,
-    recolor_by_attribute_id integer NOT NULL,
-    ind_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  recolor_by_attribute_id integer NOT NULL,
+  ind_id integer NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -3236,11 +3236,11 @@ COMMENT ON TABLE recolor_by_inds IS 'Inds available for recoloring (see recolor_
 --
 
 CREATE TABLE recolor_by_quals (
-    id integer NOT NULL,
-    recolor_by_attribute_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  recolor_by_attribute_id integer NOT NULL,
+  qual_id integer NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -3256,7 +3256,7 @@ COMMENT ON TABLE recolor_by_quals IS 'Quals available for recoloring (see recolo
 --
 
 CREATE MATERIALIZED VIEW recolor_by_attributes_mv AS
- SELECT ra.id,
+  SELECT ra.id,
     ra.context_id,
     ra.group_number,
     ra."position",
@@ -3273,11 +3273,11 @@ CREATE MATERIALIZED VIEW recolor_by_attributes_mv AS
     ra.created_at,
     ra.updated_at,
     a.id AS attribute_id
-   FROM ((recolor_by_inds rai
-     JOIN recolor_by_attributes ra ON ((ra.id = rai.recolor_by_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = rai.ind_id) AND (a.original_type = 'Ind'::text))))
-UNION ALL
- SELECT ra.id,
+  FROM ((recolor_by_inds rai
+    JOIN recolor_by_attributes ra ON ((ra.id = rai.recolor_by_attribute_id)))
+    JOIN attributes_mv a ON (((a.original_id = rai.ind_id) AND (a.original_type = 'Ind'::text))))
+  UNION ALL
+  SELECT ra.id,
     ra.context_id,
     ra.group_number,
     ra."position",
@@ -3294,10 +3294,10 @@ UNION ALL
     ra.created_at,
     ra.updated_at,
     a.id AS attribute_id
-   FROM ((recolor_by_quals raq
-     JOIN recolor_by_attributes ra ON ((ra.id = raq.recolor_by_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = raq.qual_id) AND (a.original_type = 'Qual'::text))))
-  WITH NO DATA;
+  FROM ((recolor_by_quals raq
+    JOIN recolor_by_attributes ra ON ((ra.id = raq.recolor_by_attribute_id)))
+    JOIN attributes_mv a ON (((a.original_id = raq.qual_id) AND (a.original_type = 'Qual'::text))))
+WITH NO DATA;
 
 
 --
@@ -3319,11 +3319,11 @@ COMMENT ON COLUMN recolor_by_attributes_mv.attribute_id IS 'References the uniqu
 --
 
 CREATE SEQUENCE recolor_by_inds_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -3338,11 +3338,11 @@ ALTER SEQUENCE recolor_by_inds_id_seq OWNED BY recolor_by_inds.id;
 --
 
 CREATE SEQUENCE recolor_by_quals_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -3357,16 +3357,16 @@ ALTER SEQUENCE recolor_by_quals_id_seq OWNED BY recolor_by_quals.id;
 --
 
 CREATE TABLE resize_by_attributes (
-    id integer NOT NULL,
-    context_id integer NOT NULL,
-    group_number integer DEFAULT 1 NOT NULL,
-    "position" integer NOT NULL,
-    tooltip_text text,
-    years integer[],
-    is_disabled boolean DEFAULT false NOT NULL,
-    is_default boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  context_id integer NOT NULL,
+  group_number integer DEFAULT 1 NOT NULL,
+  "position" integer NOT NULL,
+  tooltip_text text,
+  years integer[],
+  is_disabled boolean DEFAULT false NOT NULL,
+  is_default boolean DEFAULT false NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -3424,11 +3424,11 @@ COMMENT ON COLUMN resize_by_attributes.is_default IS 'When set, show this attrib
 --
 
 CREATE SEQUENCE resize_by_attributes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -3443,11 +3443,11 @@ ALTER SEQUENCE resize_by_attributes_id_seq OWNED BY resize_by_attributes.id;
 --
 
 CREATE TABLE resize_by_quants (
-    id integer NOT NULL,
-    resize_by_attribute_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  resize_by_attribute_id integer NOT NULL,
+  quant_id integer NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -3463,7 +3463,7 @@ COMMENT ON TABLE resize_by_quants IS 'Quants available for recoloring (see resiz
 --
 
 CREATE MATERIALIZED VIEW resize_by_attributes_mv AS
- SELECT ra.id,
+  SELECT ra.id,
     ra.context_id,
     ra.group_number,
     ra."position",
@@ -3474,10 +3474,10 @@ CREATE MATERIALIZED VIEW resize_by_attributes_mv AS
     ra.created_at,
     ra.updated_at,
     a.id AS attribute_id
-   FROM ((resize_by_quants raq
-     JOIN resize_by_attributes ra ON ((ra.id = raq.resize_by_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = raq.quant_id) AND (a.original_type = 'Quant'::text))))
-  WITH NO DATA;
+  FROM ((resize_by_quants raq
+    JOIN resize_by_attributes ra ON ((ra.id = raq.resize_by_attribute_id)))
+    JOIN attributes_mv a ON (((a.original_id = raq.quant_id) AND (a.original_type = 'Quant'::text))))
+WITH NO DATA;
 
 
 --
@@ -3499,11 +3499,11 @@ COMMENT ON COLUMN resize_by_attributes_mv.attribute_id IS 'References the unique
 --
 
 CREATE SEQUENCE resize_by_quants_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -3518,11 +3518,11 @@ ALTER SEQUENCE resize_by_quants_id_seq OWNED BY resize_by_quants.id;
 --
 
 CREATE TABLE traders (
-    id integer NOT NULL,
-    importer_id integer NOT NULL,
-    exporter_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+  id integer NOT NULL,
+  importer_id integer NOT NULL,
+  exporter_id integer NOT NULL,
+  created_at timestamp without time zone NOT NULL,
+  updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -3538,11 +3538,11 @@ COMMENT ON TABLE traders IS 'Links between importer and exporter nodes which rep
 --
 
 CREATE SEQUENCE traders_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 
 --
@@ -3955,7 +3955,7 @@ SET search_path = public, pg_catalog;
 --
 
 ALTER TABLE ONLY ar_internal_metadata
-    ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+  ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
 
 
 --
@@ -3963,7 +3963,7 @@ ALTER TABLE ONLY ar_internal_metadata
 --
 
 ALTER TABLE ONLY commodities
-    ADD CONSTRAINT commodities_pkey PRIMARY KEY (commodity_id);
+  ADD CONSTRAINT commodities_pkey PRIMARY KEY (commodity_id);
 
 
 --
@@ -3971,7 +3971,7 @@ ALTER TABLE ONLY commodities
 --
 
 ALTER TABLE ONLY context_factsheet_attribute
-    ADD CONSTRAINT context_factsheet_attribute_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT context_factsheet_attribute_pkey PRIMARY KEY (id);
 
 
 --
@@ -3979,7 +3979,7 @@ ALTER TABLE ONLY context_factsheet_attribute
 --
 
 ALTER TABLE ONLY context_filter_by
-    ADD CONSTRAINT context_filter_by_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT context_filter_by_pkey PRIMARY KEY (id);
 
 
 --
@@ -3987,7 +3987,7 @@ ALTER TABLE ONLY context_filter_by
 --
 
 ALTER TABLE ONLY context_indicators
-    ADD CONSTRAINT context_indicators_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT context_indicators_pkey PRIMARY KEY (id);
 
 
 --
@@ -3995,7 +3995,7 @@ ALTER TABLE ONLY context_indicators
 --
 
 ALTER TABLE ONLY context_layer_group
-    ADD CONSTRAINT context_layer_group_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT context_layer_group_pkey PRIMARY KEY (id);
 
 
 --
@@ -4003,7 +4003,7 @@ ALTER TABLE ONLY context_layer_group
 --
 
 ALTER TABLE ONLY context_nodes
-    ADD CONSTRAINT context_nodes_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT context_nodes_pkey PRIMARY KEY (id);
 
 
 --
@@ -4011,7 +4011,7 @@ ALTER TABLE ONLY context_nodes
 --
 
 ALTER TABLE ONLY context
-    ADD CONSTRAINT context_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT context_pkey PRIMARY KEY (id);
 
 
 --
@@ -4019,7 +4019,7 @@ ALTER TABLE ONLY context
 --
 
 ALTER TABLE ONLY context_recolor_by
-    ADD CONSTRAINT context_recolor_by_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT context_recolor_by_pkey PRIMARY KEY (id);
 
 
 --
@@ -4027,7 +4027,7 @@ ALTER TABLE ONLY context_recolor_by
 --
 
 ALTER TABLE ONLY context_resize_by
-    ADD CONSTRAINT context_resize_by_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT context_resize_by_pkey PRIMARY KEY (id);
 
 
 --
@@ -4035,7 +4035,7 @@ ALTER TABLE ONLY context_resize_by
 --
 
 ALTER TABLE ONLY countries
-    ADD CONSTRAINT countries_pkey PRIMARY KEY (country_id);
+  ADD CONSTRAINT countries_pkey PRIMARY KEY (country_id);
 
 
 --
@@ -4043,7 +4043,7 @@ ALTER TABLE ONLY countries
 --
 
 ALTER TABLE ONLY download_versions
-    ADD CONSTRAINT download_versions_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT download_versions_pkey PRIMARY KEY (id);
 
 
 --
@@ -4051,7 +4051,7 @@ ALTER TABLE ONLY download_versions
 --
 
 ALTER TABLE ONLY flows
-    ADD CONSTRAINT flows_pkey PRIMARY KEY (flow_id);
+  ADD CONSTRAINT flows_pkey PRIMARY KEY (flow_id);
 
 
 --
@@ -4059,7 +4059,7 @@ ALTER TABLE ONLY flows
 --
 
 ALTER TABLE ONLY inds
-    ADD CONSTRAINT inds_pkey PRIMARY KEY (ind_id);
+  ADD CONSTRAINT inds_pkey PRIMARY KEY (ind_id);
 
 
 --
@@ -4067,7 +4067,7 @@ ALTER TABLE ONLY inds
 --
 
 ALTER TABLE ONLY node_types
-    ADD CONSTRAINT node_types_pkey PRIMARY KEY (node_type_id);
+  ADD CONSTRAINT node_types_pkey PRIMARY KEY (node_type_id);
 
 
 --
@@ -4075,7 +4075,7 @@ ALTER TABLE ONLY node_types
 --
 
 ALTER TABLE ONLY nodes
-    ADD CONSTRAINT nodes_pkey PRIMARY KEY (node_id);
+  ADD CONSTRAINT nodes_pkey PRIMARY KEY (node_id);
 
 
 --
@@ -4083,7 +4083,7 @@ ALTER TABLE ONLY nodes
 --
 
 ALTER TABLE ONLY quals
-    ADD CONSTRAINT quals_pkey PRIMARY KEY (qual_id);
+  ADD CONSTRAINT quals_pkey PRIMARY KEY (qual_id);
 
 
 --
@@ -4091,7 +4091,7 @@ ALTER TABLE ONLY quals
 --
 
 ALTER TABLE ONLY quants
-    ADD CONSTRAINT quants_pkey PRIMARY KEY (quant_id);
+  ADD CONSTRAINT quants_pkey PRIMARY KEY (quant_id);
 
 
 --
@@ -4099,7 +4099,7 @@ ALTER TABLE ONLY quants
 --
 
 ALTER TABLE ONLY schema_migrations
-    ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+  ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
 
 
 SET search_path = revamp, pg_catalog;
@@ -4109,7 +4109,7 @@ SET search_path = revamp, pg_catalog;
 --
 
 ALTER TABLE ONLY carto_layers
-    ADD CONSTRAINT carto_layers_contextual_layer_id_identifier_key UNIQUE (contextual_layer_id, identifier);
+  ADD CONSTRAINT carto_layers_contextual_layer_id_identifier_key UNIQUE (contextual_layer_id, identifier);
 
 
 --
@@ -4117,7 +4117,7 @@ ALTER TABLE ONLY carto_layers
 --
 
 ALTER TABLE ONLY carto_layers
-    ADD CONSTRAINT carto_layers_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT carto_layers_pkey PRIMARY KEY (id);
 
 
 --
@@ -4125,7 +4125,7 @@ ALTER TABLE ONLY carto_layers
 --
 
 ALTER TABLE ONLY chart_attributes
-    ADD CONSTRAINT chart_attributes_chart_id_position_key UNIQUE (chart_id, "position");
+  ADD CONSTRAINT chart_attributes_chart_id_position_key UNIQUE (chart_id, "position");
 
 
 --
@@ -4133,7 +4133,7 @@ ALTER TABLE ONLY chart_attributes
 --
 
 ALTER TABLE ONLY chart_attributes
-    ADD CONSTRAINT chart_attributes_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT chart_attributes_pkey PRIMARY KEY (id);
 
 
 --
@@ -4141,7 +4141,7 @@ ALTER TABLE ONLY chart_attributes
 --
 
 ALTER TABLE ONLY chart_inds
-    ADD CONSTRAINT chart_inds_chart_attribute_id_ind_id_key UNIQUE (chart_attribute_id, ind_id);
+  ADD CONSTRAINT chart_inds_chart_attribute_id_ind_id_key UNIQUE (chart_attribute_id, ind_id);
 
 
 --
@@ -4149,7 +4149,7 @@ ALTER TABLE ONLY chart_inds
 --
 
 ALTER TABLE ONLY chart_inds
-    ADD CONSTRAINT chart_inds_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT chart_inds_pkey PRIMARY KEY (id);
 
 
 --
@@ -4157,7 +4157,7 @@ ALTER TABLE ONLY chart_inds
 --
 
 ALTER TABLE ONLY chart_quals
-    ADD CONSTRAINT chart_quals_chart_attribute_id_qual_id_key UNIQUE (chart_attribute_id, qual_id);
+  ADD CONSTRAINT chart_quals_chart_attribute_id_qual_id_key UNIQUE (chart_attribute_id, qual_id);
 
 
 --
@@ -4165,7 +4165,7 @@ ALTER TABLE ONLY chart_quals
 --
 
 ALTER TABLE ONLY chart_quals
-    ADD CONSTRAINT chart_quals_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT chart_quals_pkey PRIMARY KEY (id);
 
 
 --
@@ -4173,7 +4173,7 @@ ALTER TABLE ONLY chart_quals
 --
 
 ALTER TABLE ONLY chart_quants
-    ADD CONSTRAINT chart_quants_chart_attribute_id_quant_id_key UNIQUE (chart_attribute_id, quant_id);
+  ADD CONSTRAINT chart_quants_chart_attribute_id_quant_id_key UNIQUE (chart_attribute_id, quant_id);
 
 
 --
@@ -4181,7 +4181,7 @@ ALTER TABLE ONLY chart_quants
 --
 
 ALTER TABLE ONLY chart_quants
-    ADD CONSTRAINT chart_quants_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT chart_quants_pkey PRIMARY KEY (id);
 
 
 --
@@ -4189,7 +4189,7 @@ ALTER TABLE ONLY chart_quants
 --
 
 ALTER TABLE ONLY charts
-    ADD CONSTRAINT charts_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT charts_pkey PRIMARY KEY (id);
 
 
 --
@@ -4197,7 +4197,7 @@ ALTER TABLE ONLY charts
 --
 
 ALTER TABLE ONLY charts
-    ADD CONSTRAINT charts_profile_id_parent_id_position_key UNIQUE (profile_id, parent_id, "position");
+  ADD CONSTRAINT charts_profile_id_parent_id_position_key UNIQUE (profile_id, parent_id, "position");
 
 
 --
@@ -4205,7 +4205,7 @@ ALTER TABLE ONLY charts
 --
 
 ALTER TABLE ONLY commodities
-    ADD CONSTRAINT commodities_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT commodities_pkey PRIMARY KEY (id);
 
 
 --
@@ -4213,7 +4213,7 @@ ALTER TABLE ONLY commodities
 --
 
 ALTER TABLE ONLY context_node_types
-    ADD CONSTRAINT context_node_types_context_id_node_type_id_key UNIQUE (context_id, node_type_id);
+  ADD CONSTRAINT context_node_types_context_id_node_type_id_key UNIQUE (context_id, node_type_id);
 
 
 --
@@ -4221,7 +4221,7 @@ ALTER TABLE ONLY context_node_types
 --
 
 ALTER TABLE ONLY context_node_types
-    ADD CONSTRAINT context_node_types_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT context_node_types_pkey PRIMARY KEY (id);
 
 
 --
@@ -4229,7 +4229,7 @@ ALTER TABLE ONLY context_node_types
 --
 
 ALTER TABLE ONLY contexts
-    ADD CONSTRAINT contexts_country_id_commodity_id_key UNIQUE (country_id, commodity_id);
+  ADD CONSTRAINT contexts_country_id_commodity_id_key UNIQUE (country_id, commodity_id);
 
 
 --
@@ -4237,7 +4237,7 @@ ALTER TABLE ONLY contexts
 --
 
 ALTER TABLE ONLY contexts
-    ADD CONSTRAINT contexts_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT contexts_pkey PRIMARY KEY (id);
 
 
 --
@@ -4245,7 +4245,7 @@ ALTER TABLE ONLY contexts
 --
 
 ALTER TABLE ONLY contextual_layers
-    ADD CONSTRAINT contextual_layers_context_id_identifier_key UNIQUE (context_id, identifier);
+  ADD CONSTRAINT contextual_layers_context_id_identifier_key UNIQUE (context_id, identifier);
 
 
 --
@@ -4253,7 +4253,7 @@ ALTER TABLE ONLY contextual_layers
 --
 
 ALTER TABLE ONLY contextual_layers
-    ADD CONSTRAINT contextual_layers_context_id_position_key UNIQUE (context_id, "position");
+  ADD CONSTRAINT contextual_layers_context_id_position_key UNIQUE (context_id, "position");
 
 
 --
@@ -4261,7 +4261,7 @@ ALTER TABLE ONLY contextual_layers
 --
 
 ALTER TABLE ONLY contextual_layers
-    ADD CONSTRAINT contextual_layers_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT contextual_layers_pkey PRIMARY KEY (id);
 
 
 --
@@ -4269,7 +4269,7 @@ ALTER TABLE ONLY contextual_layers
 --
 
 ALTER TABLE ONLY countries
-    ADD CONSTRAINT countries_iso2_key UNIQUE (iso2);
+  ADD CONSTRAINT countries_iso2_key UNIQUE (iso2);
 
 
 --
@@ -4277,7 +4277,7 @@ ALTER TABLE ONLY countries
 --
 
 ALTER TABLE ONLY countries
-    ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
 
 
 --
@@ -4285,7 +4285,7 @@ ALTER TABLE ONLY countries
 --
 
 ALTER TABLE ONLY download_attributes
-    ADD CONSTRAINT download_attributes_context_id_position_key UNIQUE (context_id, "position");
+  ADD CONSTRAINT download_attributes_context_id_position_key UNIQUE (context_id, "position");
 
 
 --
@@ -4293,7 +4293,7 @@ ALTER TABLE ONLY download_attributes
 --
 
 ALTER TABLE ONLY download_attributes
-    ADD CONSTRAINT download_attributes_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT download_attributes_pkey PRIMARY KEY (id);
 
 
 --
@@ -4301,7 +4301,7 @@ ALTER TABLE ONLY download_attributes
 --
 
 ALTER TABLE ONLY download_quals
-    ADD CONSTRAINT download_quals_download_attribute_id_qual_id_key UNIQUE (download_attribute_id, qual_id);
+  ADD CONSTRAINT download_quals_download_attribute_id_qual_id_key UNIQUE (download_attribute_id, qual_id);
 
 
 --
@@ -4309,7 +4309,7 @@ ALTER TABLE ONLY download_quals
 --
 
 ALTER TABLE ONLY download_quals
-    ADD CONSTRAINT download_quals_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT download_quals_pkey PRIMARY KEY (id);
 
 
 --
@@ -4317,7 +4317,7 @@ ALTER TABLE ONLY download_quals
 --
 
 ALTER TABLE ONLY download_quants
-    ADD CONSTRAINT download_quants_download_attribute_id_quant_id_key UNIQUE (download_attribute_id, quant_id);
+  ADD CONSTRAINT download_quants_download_attribute_id_quant_id_key UNIQUE (download_attribute_id, quant_id);
 
 
 --
@@ -4325,7 +4325,7 @@ ALTER TABLE ONLY download_quants
 --
 
 ALTER TABLE ONLY download_quants
-    ADD CONSTRAINT download_quants_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT download_quants_pkey PRIMARY KEY (id);
 
 
 --
@@ -4333,7 +4333,7 @@ ALTER TABLE ONLY download_quants
 --
 
 ALTER TABLE ONLY download_versions
-    ADD CONSTRAINT download_versions_context_id_symbol_key UNIQUE (context_id, symbol);
+  ADD CONSTRAINT download_versions_context_id_symbol_key UNIQUE (context_id, symbol);
 
 
 --
@@ -4341,7 +4341,7 @@ ALTER TABLE ONLY download_versions
 --
 
 ALTER TABLE ONLY download_versions
-    ADD CONSTRAINT download_versions_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT download_versions_pkey PRIMARY KEY (id);
 
 
 --
@@ -4349,7 +4349,7 @@ ALTER TABLE ONLY download_versions
 --
 
 ALTER TABLE ONLY flow_inds
-    ADD CONSTRAINT flow_inds_flow_id_ind_id_key UNIQUE (flow_id, ind_id);
+  ADD CONSTRAINT flow_inds_flow_id_ind_id_key UNIQUE (flow_id, ind_id);
 
 
 --
@@ -4357,7 +4357,7 @@ ALTER TABLE ONLY flow_inds
 --
 
 ALTER TABLE ONLY flow_inds
-    ADD CONSTRAINT flow_inds_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT flow_inds_pkey PRIMARY KEY (id);
 
 
 --
@@ -4365,7 +4365,7 @@ ALTER TABLE ONLY flow_inds
 --
 
 ALTER TABLE ONLY flow_quals
-    ADD CONSTRAINT flow_quals_flow_id_qual_id_key UNIQUE (flow_id, qual_id);
+  ADD CONSTRAINT flow_quals_flow_id_qual_id_key UNIQUE (flow_id, qual_id);
 
 
 --
@@ -4373,7 +4373,7 @@ ALTER TABLE ONLY flow_quals
 --
 
 ALTER TABLE ONLY flow_quals
-    ADD CONSTRAINT flow_quals_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT flow_quals_pkey PRIMARY KEY (id);
 
 
 --
@@ -4381,7 +4381,7 @@ ALTER TABLE ONLY flow_quals
 --
 
 ALTER TABLE ONLY flow_quants
-    ADD CONSTRAINT flow_quants_flow_id_quant_id_key UNIQUE (flow_id, quant_id);
+  ADD CONSTRAINT flow_quants_flow_id_quant_id_key UNIQUE (flow_id, quant_id);
 
 
 --
@@ -4389,7 +4389,7 @@ ALTER TABLE ONLY flow_quants
 --
 
 ALTER TABLE ONLY flow_quants
-    ADD CONSTRAINT flow_quants_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT flow_quants_pkey PRIMARY KEY (id);
 
 
 --
@@ -4397,7 +4397,7 @@ ALTER TABLE ONLY flow_quants
 --
 
 ALTER TABLE ONLY flows
-    ADD CONSTRAINT flows_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT flows_pkey PRIMARY KEY (id);
 
 
 --
@@ -4405,7 +4405,7 @@ ALTER TABLE ONLY flows
 --
 
 ALTER TABLE ONLY inds
-    ADD CONSTRAINT inds_name_key UNIQUE (name);
+  ADD CONSTRAINT inds_name_key UNIQUE (name);
 
 
 --
@@ -4413,7 +4413,7 @@ ALTER TABLE ONLY inds
 --
 
 ALTER TABLE ONLY inds
-    ADD CONSTRAINT inds_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT inds_pkey PRIMARY KEY (id);
 
 
 --
@@ -4421,7 +4421,7 @@ ALTER TABLE ONLY inds
 --
 
 ALTER TABLE ONLY map_attribute_groups
-    ADD CONSTRAINT map_attribute_groups_context_id_position_key UNIQUE (context_id, "position");
+  ADD CONSTRAINT map_attribute_groups_context_id_position_key UNIQUE (context_id, "position");
 
 
 --
@@ -4429,7 +4429,7 @@ ALTER TABLE ONLY map_attribute_groups
 --
 
 ALTER TABLE ONLY map_attribute_groups
-    ADD CONSTRAINT map_attribute_groups_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT map_attribute_groups_pkey PRIMARY KEY (id);
 
 
 --
@@ -4437,7 +4437,7 @@ ALTER TABLE ONLY map_attribute_groups
 --
 
 ALTER TABLE ONLY map_attributes
-    ADD CONSTRAINT map_attributes_map_attribute_group_id_position_key UNIQUE (map_attribute_group_id, "position");
+  ADD CONSTRAINT map_attributes_map_attribute_group_id_position_key UNIQUE (map_attribute_group_id, "position");
 
 
 --
@@ -4445,7 +4445,7 @@ ALTER TABLE ONLY map_attributes
 --
 
 ALTER TABLE ONLY map_attributes
-    ADD CONSTRAINT map_attributes_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT map_attributes_pkey PRIMARY KEY (id);
 
 
 --
@@ -4453,7 +4453,7 @@ ALTER TABLE ONLY map_attributes
 --
 
 ALTER TABLE ONLY map_inds
-    ADD CONSTRAINT map_inds_map_attribute_id_ind_id_key UNIQUE (map_attribute_id, ind_id);
+  ADD CONSTRAINT map_inds_map_attribute_id_ind_id_key UNIQUE (map_attribute_id, ind_id);
 
 
 --
@@ -4461,7 +4461,7 @@ ALTER TABLE ONLY map_inds
 --
 
 ALTER TABLE ONLY map_inds
-    ADD CONSTRAINT map_inds_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT map_inds_pkey PRIMARY KEY (id);
 
 
 --
@@ -4469,7 +4469,7 @@ ALTER TABLE ONLY map_inds
 --
 
 ALTER TABLE ONLY map_quants
-    ADD CONSTRAINT map_quants_map_attribute_id_quant_id_key UNIQUE (map_attribute_id, quant_id);
+  ADD CONSTRAINT map_quants_map_attribute_id_quant_id_key UNIQUE (map_attribute_id, quant_id);
 
 
 --
@@ -4477,7 +4477,7 @@ ALTER TABLE ONLY map_quants
 --
 
 ALTER TABLE ONLY map_quants
-    ADD CONSTRAINT map_quants_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT map_quants_pkey PRIMARY KEY (id);
 
 
 --
@@ -4485,7 +4485,7 @@ ALTER TABLE ONLY map_quants
 --
 
 ALTER TABLE ONLY node_inds
-    ADD CONSTRAINT node_inds_node_id_ind_id_year_key UNIQUE (node_id, ind_id, year);
+  ADD CONSTRAINT node_inds_node_id_ind_id_year_key UNIQUE (node_id, ind_id, year);
 
 
 --
@@ -4493,7 +4493,7 @@ ALTER TABLE ONLY node_inds
 --
 
 ALTER TABLE ONLY node_inds
-    ADD CONSTRAINT node_inds_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT node_inds_pkey PRIMARY KEY (id);
 
 
 --
@@ -4501,7 +4501,7 @@ ALTER TABLE ONLY node_inds
 --
 
 ALTER TABLE ONLY node_quals
-    ADD CONSTRAINT node_quals_node_id_qual_id_year_key UNIQUE (node_id, qual_id, year);
+  ADD CONSTRAINT node_quals_node_id_qual_id_year_key UNIQUE (node_id, qual_id, year);
 
 
 --
@@ -4509,7 +4509,7 @@ ALTER TABLE ONLY node_quals
 --
 
 ALTER TABLE ONLY node_quals
-    ADD CONSTRAINT node_quals_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT node_quals_pkey PRIMARY KEY (id);
 
 
 --
@@ -4517,7 +4517,7 @@ ALTER TABLE ONLY node_quals
 --
 
 ALTER TABLE ONLY node_quants
-    ADD CONSTRAINT node_quants_node_id_quant_id_year_key UNIQUE (node_id, quant_id, year);
+  ADD CONSTRAINT node_quants_node_id_quant_id_year_key UNIQUE (node_id, quant_id, year);
 
 
 --
@@ -4525,7 +4525,7 @@ ALTER TABLE ONLY node_quants
 --
 
 ALTER TABLE ONLY node_quants
-    ADD CONSTRAINT node_quants_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT node_quants_pkey PRIMARY KEY (id);
 
 
 --
@@ -4533,7 +4533,7 @@ ALTER TABLE ONLY node_quants
 --
 
 ALTER TABLE ONLY node_types
-    ADD CONSTRAINT node_types_name_key UNIQUE (name);
+  ADD CONSTRAINT node_types_name_key UNIQUE (name);
 
 
 --
@@ -4541,7 +4541,7 @@ ALTER TABLE ONLY node_types
 --
 
 ALTER TABLE ONLY node_types
-    ADD CONSTRAINT node_types_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT node_types_pkey PRIMARY KEY (id);
 
 
 --
@@ -4549,7 +4549,7 @@ ALTER TABLE ONLY node_types
 --
 
 ALTER TABLE ONLY nodes
-    ADD CONSTRAINT nodes_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT nodes_pkey PRIMARY KEY (id);
 
 
 --
@@ -4557,7 +4557,7 @@ ALTER TABLE ONLY nodes
 --
 
 ALTER TABLE ONLY profiles
-    ADD CONSTRAINT profiles_context_node_type_id_name_key UNIQUE (context_node_type_id, name);
+  ADD CONSTRAINT profiles_context_node_type_id_name_key UNIQUE (context_node_type_id, name);
 
 
 --
@@ -4565,7 +4565,7 @@ ALTER TABLE ONLY profiles
 --
 
 ALTER TABLE ONLY profiles
-    ADD CONSTRAINT profiles_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT profiles_pkey PRIMARY KEY (id);
 
 
 --
@@ -4573,7 +4573,7 @@ ALTER TABLE ONLY profiles
 --
 
 ALTER TABLE ONLY quals
-    ADD CONSTRAINT quals_name_key UNIQUE (name);
+  ADD CONSTRAINT quals_name_key UNIQUE (name);
 
 
 --
@@ -4581,7 +4581,7 @@ ALTER TABLE ONLY quals
 --
 
 ALTER TABLE ONLY quals
-    ADD CONSTRAINT quals_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT quals_pkey PRIMARY KEY (id);
 
 
 --
@@ -4589,7 +4589,7 @@ ALTER TABLE ONLY quals
 --
 
 ALTER TABLE ONLY quants
-    ADD CONSTRAINT quants_name_key UNIQUE (name);
+  ADD CONSTRAINT quants_name_key UNIQUE (name);
 
 
 --
@@ -4597,7 +4597,7 @@ ALTER TABLE ONLY quants
 --
 
 ALTER TABLE ONLY quants
-    ADD CONSTRAINT quants_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT quants_pkey PRIMARY KEY (id);
 
 
 --
@@ -4605,7 +4605,7 @@ ALTER TABLE ONLY quants
 --
 
 ALTER TABLE ONLY recolor_by_attributes
-    ADD CONSTRAINT recolor_by_attributes_context_id_group_number_position_key UNIQUE (context_id, group_number, "position");
+  ADD CONSTRAINT recolor_by_attributes_context_id_group_number_position_key UNIQUE (context_id, group_number, "position");
 
 
 --
@@ -4613,7 +4613,7 @@ ALTER TABLE ONLY recolor_by_attributes
 --
 
 ALTER TABLE ONLY recolor_by_attributes
-    ADD CONSTRAINT recolor_by_attributes_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT recolor_by_attributes_pkey PRIMARY KEY (id);
 
 
 --
@@ -4621,7 +4621,7 @@ ALTER TABLE ONLY recolor_by_attributes
 --
 
 ALTER TABLE ONLY recolor_by_inds
-    ADD CONSTRAINT recolor_by_inds_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT recolor_by_inds_pkey PRIMARY KEY (id);
 
 
 --
@@ -4629,7 +4629,7 @@ ALTER TABLE ONLY recolor_by_inds
 --
 
 ALTER TABLE ONLY recolor_by_inds
-    ADD CONSTRAINT recolor_by_inds_recolor_by_attribute_id_ind_id_key UNIQUE (recolor_by_attribute_id, ind_id);
+  ADD CONSTRAINT recolor_by_inds_recolor_by_attribute_id_ind_id_key UNIQUE (recolor_by_attribute_id, ind_id);
 
 
 --
@@ -4637,7 +4637,7 @@ ALTER TABLE ONLY recolor_by_inds
 --
 
 ALTER TABLE ONLY recolor_by_quals
-    ADD CONSTRAINT recolor_by_quals_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT recolor_by_quals_pkey PRIMARY KEY (id);
 
 
 --
@@ -4645,7 +4645,7 @@ ALTER TABLE ONLY recolor_by_quals
 --
 
 ALTER TABLE ONLY recolor_by_quals
-    ADD CONSTRAINT recolor_by_quals_recolor_by_attribute_id_qual_id_key UNIQUE (recolor_by_attribute_id, qual_id);
+  ADD CONSTRAINT recolor_by_quals_recolor_by_attribute_id_qual_id_key UNIQUE (recolor_by_attribute_id, qual_id);
 
 
 --
@@ -4653,7 +4653,7 @@ ALTER TABLE ONLY recolor_by_quals
 --
 
 ALTER TABLE ONLY resize_by_attributes
-    ADD CONSTRAINT resize_by_attributes_context_id_group_number_position_key UNIQUE (context_id, group_number, "position");
+  ADD CONSTRAINT resize_by_attributes_context_id_group_number_position_key UNIQUE (context_id, group_number, "position");
 
 
 --
@@ -4661,7 +4661,7 @@ ALTER TABLE ONLY resize_by_attributes
 --
 
 ALTER TABLE ONLY resize_by_attributes
-    ADD CONSTRAINT resize_by_attributes_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT resize_by_attributes_pkey PRIMARY KEY (id);
 
 
 --
@@ -4669,7 +4669,7 @@ ALTER TABLE ONLY resize_by_attributes
 --
 
 ALTER TABLE ONLY resize_by_quants
-    ADD CONSTRAINT resize_by_quants_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT resize_by_quants_pkey PRIMARY KEY (id);
 
 
 --
@@ -4677,7 +4677,7 @@ ALTER TABLE ONLY resize_by_quants
 --
 
 ALTER TABLE ONLY resize_by_quants
-    ADD CONSTRAINT resize_by_quants_resize_by_attribute_id_quant_id_key UNIQUE (resize_by_attribute_id, quant_id);
+  ADD CONSTRAINT resize_by_quants_resize_by_attribute_id_quant_id_key UNIQUE (resize_by_attribute_id, quant_id);
 
 
 --
@@ -4685,7 +4685,7 @@ ALTER TABLE ONLY resize_by_quants
 --
 
 ALTER TABLE ONLY traders
-    ADD CONSTRAINT traders_exporter_id_importer_id_key UNIQUE (exporter_id, importer_id);
+  ADD CONSTRAINT traders_exporter_id_importer_id_key UNIQUE (exporter_id, importer_id);
 
 
 --
@@ -4693,7 +4693,7 @@ ALTER TABLE ONLY traders
 --
 
 ALTER TABLE ONLY traders
-    ADD CONSTRAINT traders_pkey PRIMARY KEY (id);
+  ADD CONSTRAINT traders_pkey PRIMARY KEY (id);
 
 
 SET search_path = public, pg_catalog;
@@ -5246,7 +5246,7 @@ SET search_path = public, pg_catalog;
 --
 
 ALTER TABLE ONLY context
-    ADD CONSTRAINT context_commodity_id_fkey FOREIGN KEY (commodity_id) REFERENCES commodities(commodity_id);
+  ADD CONSTRAINT context_commodity_id_fkey FOREIGN KEY (commodity_id) REFERENCES commodities(commodity_id);
 
 
 --
@@ -5254,7 +5254,7 @@ ALTER TABLE ONLY context
 --
 
 ALTER TABLE ONLY context
-    ADD CONSTRAINT context_country_id_fkey FOREIGN KEY (country_id) REFERENCES countries(country_id);
+  ADD CONSTRAINT context_country_id_fkey FOREIGN KEY (country_id) REFERENCES countries(country_id);
 
 
 --
@@ -5262,7 +5262,7 @@ ALTER TABLE ONLY context
 --
 
 ALTER TABLE ONLY context_factsheet_attribute
-    ADD CONSTRAINT context_factsheet_attribute_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
+  ADD CONSTRAINT context_factsheet_attribute_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
 
 
 --
@@ -5270,7 +5270,7 @@ ALTER TABLE ONLY context_factsheet_attribute
 --
 
 ALTER TABLE ONLY context_filter_by
-    ADD CONSTRAINT context_filter_by_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
+  ADD CONSTRAINT context_filter_by_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
 
 
 --
@@ -5278,7 +5278,7 @@ ALTER TABLE ONLY context_filter_by
 --
 
 ALTER TABLE ONLY context_filter_by
-    ADD CONSTRAINT context_filter_by_node_type_id_fkey FOREIGN KEY (node_type_id) REFERENCES node_types(node_type_id);
+  ADD CONSTRAINT context_filter_by_node_type_id_fkey FOREIGN KEY (node_type_id) REFERENCES node_types(node_type_id);
 
 
 --
@@ -5286,7 +5286,7 @@ ALTER TABLE ONLY context_filter_by
 --
 
 ALTER TABLE ONLY context_indicators
-    ADD CONSTRAINT context_indicators_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
+  ADD CONSTRAINT context_indicators_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
 
 
 --
@@ -5294,7 +5294,7 @@ ALTER TABLE ONLY context_indicators
 --
 
 ALTER TABLE ONLY context_layer
-    ADD CONSTRAINT context_layer_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
+  ADD CONSTRAINT context_layer_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
 
 
 --
@@ -5302,7 +5302,7 @@ ALTER TABLE ONLY context_layer
 --
 
 ALTER TABLE ONLY context_layer
-    ADD CONSTRAINT context_layer_context_layer_group_id_fkey FOREIGN KEY (context_layer_group_id) REFERENCES context_layer_group(id);
+  ADD CONSTRAINT context_layer_context_layer_group_id_fkey FOREIGN KEY (context_layer_group_id) REFERENCES context_layer_group(id);
 
 
 --
@@ -5310,7 +5310,7 @@ ALTER TABLE ONLY context_layer
 --
 
 ALTER TABLE ONLY context_layer_group
-    ADD CONSTRAINT context_layer_group_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
+  ADD CONSTRAINT context_layer_group_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
 
 
 --
@@ -5318,7 +5318,7 @@ ALTER TABLE ONLY context_layer_group
 --
 
 ALTER TABLE ONLY context_nodes
-    ADD CONSTRAINT context_nodes_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
+  ADD CONSTRAINT context_nodes_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
 
 
 --
@@ -5326,7 +5326,7 @@ ALTER TABLE ONLY context_nodes
 --
 
 ALTER TABLE ONLY context_nodes
-    ADD CONSTRAINT context_nodes_node_type_id_fkey FOREIGN KEY (node_type_id) REFERENCES node_types(node_type_id);
+  ADD CONSTRAINT context_nodes_node_type_id_fkey FOREIGN KEY (node_type_id) REFERENCES node_types(node_type_id);
 
 
 --
@@ -5334,7 +5334,7 @@ ALTER TABLE ONLY context_nodes
 --
 
 ALTER TABLE ONLY context_recolor_by
-    ADD CONSTRAINT context_recolor_by_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
+  ADD CONSTRAINT context_recolor_by_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
 
 
 --
@@ -5342,7 +5342,7 @@ ALTER TABLE ONLY context_recolor_by
 --
 
 ALTER TABLE ONLY context_resize_by
-    ADD CONSTRAINT context_resize_by_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
+  ADD CONSTRAINT context_resize_by_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
 
 
 --
@@ -5350,7 +5350,7 @@ ALTER TABLE ONLY context_resize_by
 --
 
 ALTER TABLE ONLY flow_inds
-    ADD CONSTRAINT flow_inds_flow_id_fkey FOREIGN KEY (flow_id) REFERENCES flows(flow_id);
+  ADD CONSTRAINT flow_inds_flow_id_fkey FOREIGN KEY (flow_id) REFERENCES flows(flow_id);
 
 
 --
@@ -5358,7 +5358,7 @@ ALTER TABLE ONLY flow_inds
 --
 
 ALTER TABLE ONLY flow_inds
-    ADD CONSTRAINT flow_inds_ind_id_fkey FOREIGN KEY (ind_id) REFERENCES inds(ind_id);
+  ADD CONSTRAINT flow_inds_ind_id_fkey FOREIGN KEY (ind_id) REFERENCES inds(ind_id);
 
 
 --
@@ -5366,7 +5366,7 @@ ALTER TABLE ONLY flow_inds
 --
 
 ALTER TABLE ONLY flow_quals
-    ADD CONSTRAINT flow_quals_flow_id_fkey FOREIGN KEY (flow_id) REFERENCES flows(flow_id);
+  ADD CONSTRAINT flow_quals_flow_id_fkey FOREIGN KEY (flow_id) REFERENCES flows(flow_id);
 
 
 --
@@ -5374,7 +5374,7 @@ ALTER TABLE ONLY flow_quals
 --
 
 ALTER TABLE ONLY flow_quals
-    ADD CONSTRAINT flow_quals_qual_id_fkey FOREIGN KEY (qual_id) REFERENCES quals(qual_id);
+  ADD CONSTRAINT flow_quals_qual_id_fkey FOREIGN KEY (qual_id) REFERENCES quals(qual_id);
 
 
 --
@@ -5382,7 +5382,7 @@ ALTER TABLE ONLY flow_quals
 --
 
 ALTER TABLE ONLY flow_quants
-    ADD CONSTRAINT flow_quants_flow_id_fkey FOREIGN KEY (flow_id) REFERENCES flows(flow_id);
+  ADD CONSTRAINT flow_quants_flow_id_fkey FOREIGN KEY (flow_id) REFERENCES flows(flow_id);
 
 
 --
@@ -5390,7 +5390,7 @@ ALTER TABLE ONLY flow_quants
 --
 
 ALTER TABLE ONLY flow_quants
-    ADD CONSTRAINT flow_quants_quant_id_fkey FOREIGN KEY (quant_id) REFERENCES quants(quant_id);
+  ADD CONSTRAINT flow_quants_quant_id_fkey FOREIGN KEY (quant_id) REFERENCES quants(quant_id);
 
 
 --
@@ -5398,7 +5398,7 @@ ALTER TABLE ONLY flow_quants
 --
 
 ALTER TABLE ONLY flows
-    ADD CONSTRAINT flows_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
+  ADD CONSTRAINT flows_context_id_fkey FOREIGN KEY (context_id) REFERENCES context(id);
 
 
 --
@@ -5406,7 +5406,7 @@ ALTER TABLE ONLY flows
 --
 
 ALTER TABLE ONLY node_inds
-    ADD CONSTRAINT node_inds_ind_id_fkey FOREIGN KEY (ind_id) REFERENCES inds(ind_id);
+  ADD CONSTRAINT node_inds_ind_id_fkey FOREIGN KEY (ind_id) REFERENCES inds(ind_id);
 
 
 --
@@ -5414,7 +5414,7 @@ ALTER TABLE ONLY node_inds
 --
 
 ALTER TABLE ONLY node_inds
-    ADD CONSTRAINT node_inds_node_id_fkey FOREIGN KEY (node_id) REFERENCES nodes(node_id);
+  ADD CONSTRAINT node_inds_node_id_fkey FOREIGN KEY (node_id) REFERENCES nodes(node_id);
 
 
 --
@@ -5422,7 +5422,7 @@ ALTER TABLE ONLY node_inds
 --
 
 ALTER TABLE ONLY node_quals
-    ADD CONSTRAINT node_quals_node_id_fkey FOREIGN KEY (node_id) REFERENCES nodes(node_id);
+  ADD CONSTRAINT node_quals_node_id_fkey FOREIGN KEY (node_id) REFERENCES nodes(node_id);
 
 
 --
@@ -5430,7 +5430,7 @@ ALTER TABLE ONLY node_quals
 --
 
 ALTER TABLE ONLY node_quals
-    ADD CONSTRAINT node_quals_qual_id_fkey FOREIGN KEY (qual_id) REFERENCES quals(qual_id);
+  ADD CONSTRAINT node_quals_qual_id_fkey FOREIGN KEY (qual_id) REFERENCES quals(qual_id);
 
 
 --
@@ -5438,7 +5438,7 @@ ALTER TABLE ONLY node_quals
 --
 
 ALTER TABLE ONLY node_quants
-    ADD CONSTRAINT node_quants_node_id_fkey FOREIGN KEY (node_id) REFERENCES nodes(node_id);
+  ADD CONSTRAINT node_quants_node_id_fkey FOREIGN KEY (node_id) REFERENCES nodes(node_id);
 
 
 --
@@ -5446,7 +5446,7 @@ ALTER TABLE ONLY node_quants
 --
 
 ALTER TABLE ONLY node_quants
-    ADD CONSTRAINT node_quants_quant_id_fkey FOREIGN KEY (quant_id) REFERENCES quants(quant_id);
+  ADD CONSTRAINT node_quants_quant_id_fkey FOREIGN KEY (quant_id) REFERENCES quants(quant_id);
 
 
 --
@@ -5454,7 +5454,7 @@ ALTER TABLE ONLY node_quants
 --
 
 ALTER TABLE ONLY nodes
-    ADD CONSTRAINT nodes_node_type_id_fkey FOREIGN KEY (node_type_id) REFERENCES node_types(node_type_id);
+  ADD CONSTRAINT nodes_node_type_id_fkey FOREIGN KEY (node_type_id) REFERENCES node_types(node_type_id);
 
 
 SET search_path = revamp, pg_catalog;
@@ -5464,7 +5464,7 @@ SET search_path = revamp, pg_catalog;
 --
 
 ALTER TABLE ONLY download_quants
-    ADD CONSTRAINT fk_rails_05ea4b5d71 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_05ea4b5d71 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
 
 
 --
@@ -5472,7 +5472,7 @@ ALTER TABLE ONLY download_quants
 --
 
 ALTER TABLE ONLY flow_inds
-    ADD CONSTRAINT fk_rails_0a8bdfaf25 FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_0a8bdfaf25 FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
 
 
 --
@@ -5480,7 +5480,7 @@ ALTER TABLE ONLY flow_inds
 --
 
 ALTER TABLE ONLY node_quals
-    ADD CONSTRAINT fk_rails_14ebb50b5a FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_14ebb50b5a FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE;
 
 
 --
@@ -5488,7 +5488,7 @@ ALTER TABLE ONLY node_quals
 --
 
 ALTER TABLE ONLY recolor_by_attributes
-    ADD CONSTRAINT fk_rails_15a713c884 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_15a713c884 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
 
 
 --
@@ -5496,7 +5496,7 @@ ALTER TABLE ONLY recolor_by_attributes
 --
 
 ALTER TABLE ONLY context_node_types
-    ADD CONSTRAINT fk_rails_15e56acf9a FOREIGN KEY (node_type_id) REFERENCES node_types(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_15e56acf9a FOREIGN KEY (node_type_id) REFERENCES node_types(id) ON DELETE CASCADE;
 
 
 --
@@ -5504,7 +5504,7 @@ ALTER TABLE ONLY context_node_types
 --
 
 ALTER TABLE ONLY download_attributes
-    ADD CONSTRAINT fk_rails_163b9bb8d8 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_163b9bb8d8 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
 
 
 --
@@ -5512,7 +5512,7 @@ ALTER TABLE ONLY download_attributes
 --
 
 ALTER TABLE ONLY chart_attributes
-    ADD CONSTRAINT fk_rails_18fff2d805 FOREIGN KEY (chart_id) REFERENCES charts(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_18fff2d805 FOREIGN KEY (chart_id) REFERENCES charts(id) ON DELETE CASCADE;
 
 
 --
@@ -5520,7 +5520,7 @@ ALTER TABLE ONLY chart_attributes
 --
 
 ALTER TABLE ONLY download_quals
-    ADD CONSTRAINT fk_rails_1be1712b6c FOREIGN KEY (download_attribute_id) REFERENCES download_attributes(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_1be1712b6c FOREIGN KEY (download_attribute_id) REFERENCES download_attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -5528,7 +5528,7 @@ ALTER TABLE ONLY download_quals
 --
 
 ALTER TABLE ONLY flow_inds
-    ADD CONSTRAINT fk_rails_23d15ab229 FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_23d15ab229 FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
 
 
 --
@@ -5536,7 +5536,7 @@ ALTER TABLE ONLY flow_inds
 --
 
 ALTER TABLE ONLY context_node_types
-    ADD CONSTRAINT fk_rails_23d7986b34 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_23d7986b34 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
 
 
 --
@@ -5544,7 +5544,7 @@ ALTER TABLE ONLY context_node_types
 --
 
 ALTER TABLE ONLY resize_by_quants
-    ADD CONSTRAINT fk_rails_2617a248e4 FOREIGN KEY (resize_by_attribute_id) REFERENCES resize_by_attributes(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_2617a248e4 FOREIGN KEY (resize_by_attribute_id) REFERENCES resize_by_attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -5552,7 +5552,7 @@ ALTER TABLE ONLY resize_by_quants
 --
 
 ALTER TABLE ONLY node_inds
-    ADD CONSTRAINT fk_rails_28ea53a9b9 FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_28ea53a9b9 FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
 
 
 --
@@ -5560,7 +5560,7 @@ ALTER TABLE ONLY node_inds
 --
 
 ALTER TABLE ONLY recolor_by_inds
-    ADD CONSTRAINT fk_rails_2950876b56 FOREIGN KEY (recolor_by_attribute_id) REFERENCES recolor_by_attributes(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_2950876b56 FOREIGN KEY (recolor_by_attribute_id) REFERENCES recolor_by_attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -5568,7 +5568,7 @@ ALTER TABLE ONLY recolor_by_inds
 --
 
 ALTER TABLE ONLY chart_inds
-    ADD CONSTRAINT fk_rails_2c8eebb539 FOREIGN KEY (chart_attribute_id) REFERENCES chart_attributes(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_2c8eebb539 FOREIGN KEY (chart_attribute_id) REFERENCES chart_attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -5576,7 +5576,7 @@ ALTER TABLE ONLY chart_inds
 --
 
 ALTER TABLE ONLY flow_quants
-    ADD CONSTRAINT fk_rails_2dbc0a565f FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_2dbc0a565f FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
 
 
 --
@@ -5584,7 +5584,7 @@ ALTER TABLE ONLY flow_quants
 --
 
 ALTER TABLE ONLY map_quants
-    ADD CONSTRAINT fk_rails_308b5b45f7 FOREIGN KEY (map_attribute_id) REFERENCES map_attributes(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_308b5b45f7 FOREIGN KEY (map_attribute_id) REFERENCES map_attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -5592,7 +5592,7 @@ ALTER TABLE ONLY map_quants
 --
 
 ALTER TABLE ONLY map_attribute_groups
-    ADD CONSTRAINT fk_rails_32f187c0c7 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_32f187c0c7 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
 
 
 --
@@ -5600,7 +5600,7 @@ ALTER TABLE ONLY map_attribute_groups
 --
 
 ALTER TABLE ONLY nodes
-    ADD CONSTRAINT fk_rails_37e87445f7 FOREIGN KEY (node_type_id) REFERENCES node_types(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_37e87445f7 FOREIGN KEY (node_type_id) REFERENCES node_types(id) ON DELETE CASCADE;
 
 
 --
@@ -5608,7 +5608,7 @@ ALTER TABLE ONLY nodes
 --
 
 ALTER TABLE ONLY download_versions
-    ADD CONSTRAINT fk_rails_3fcb3b1d94 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_3fcb3b1d94 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
 
 
 --
@@ -5616,7 +5616,7 @@ ALTER TABLE ONLY download_versions
 --
 
 ALTER TABLE ONLY chart_quals
-    ADD CONSTRAINT fk_rails_48ef39e784 FOREIGN KEY (chart_attribute_id) REFERENCES chart_attributes(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_48ef39e784 FOREIGN KEY (chart_attribute_id) REFERENCES chart_attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -5624,7 +5624,7 @@ ALTER TABLE ONLY chart_quals
 --
 
 ALTER TABLE ONLY map_inds
-    ADD CONSTRAINT fk_rails_49db6b9c1f FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_49db6b9c1f FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
 
 
 --
@@ -5632,7 +5632,7 @@ ALTER TABLE ONLY map_inds
 --
 
 ALTER TABLE ONLY recolor_by_quals
-    ADD CONSTRAINT fk_rails_5294e7fccd FOREIGN KEY (recolor_by_attribute_id) REFERENCES recolor_by_attributes(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_5294e7fccd FOREIGN KEY (recolor_by_attribute_id) REFERENCES recolor_by_attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -5640,7 +5640,7 @@ ALTER TABLE ONLY recolor_by_quals
 --
 
 ALTER TABLE ONLY contextual_layers
-    ADD CONSTRAINT fk_rails_5c2d32b5a7 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_5c2d32b5a7 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
 
 
 --
@@ -5648,7 +5648,7 @@ ALTER TABLE ONLY contextual_layers
 --
 
 ALTER TABLE ONLY chart_quants
-    ADD CONSTRAINT fk_rails_69c56caceb FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_69c56caceb FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
 
 
 --
@@ -5656,7 +5656,7 @@ ALTER TABLE ONLY chart_quants
 --
 
 ALTER TABLE ONLY flow_quals
-    ADD CONSTRAINT fk_rails_6e55ca4cbc FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_6e55ca4cbc FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
 
 
 --
@@ -5664,7 +5664,7 @@ ALTER TABLE ONLY flow_quals
 --
 
 ALTER TABLE ONLY traders
-    ADD CONSTRAINT fk_rails_79308a8475 FOREIGN KEY (importer_id) REFERENCES nodes(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_79308a8475 FOREIGN KEY (importer_id) REFERENCES nodes(id) ON DELETE CASCADE;
 
 
 --
@@ -5672,7 +5672,7 @@ ALTER TABLE ONLY traders
 --
 
 ALTER TABLE ONLY charts
-    ADD CONSTRAINT fk_rails_805a6066ad FOREIGN KEY (parent_id) REFERENCES charts(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_805a6066ad FOREIGN KEY (parent_id) REFERENCES charts(id) ON DELETE CASCADE;
 
 
 --
@@ -5680,7 +5680,7 @@ ALTER TABLE ONLY charts
 --
 
 ALTER TABLE ONLY commodities
-    ADD CONSTRAINT fk_rails_87667fc19d FOREIGN KEY (parent_id) REFERENCES commodities(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_87667fc19d FOREIGN KEY (parent_id) REFERENCES commodities(id) ON DELETE CASCADE;
 
 
 --
@@ -5688,7 +5688,7 @@ ALTER TABLE ONLY commodities
 --
 
 ALTER TABLE ONLY flow_quals
-    ADD CONSTRAINT fk_rails_917b9da2b8 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_917b9da2b8 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
 
 
 --
@@ -5696,7 +5696,7 @@ ALTER TABLE ONLY flow_quals
 --
 
 ALTER TABLE ONLY resize_by_attributes
-    ADD CONSTRAINT fk_rails_91f952a39c FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_91f952a39c FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
 
 
 --
@@ -5704,7 +5704,7 @@ ALTER TABLE ONLY resize_by_attributes
 --
 
 ALTER TABLE ONLY recolor_by_inds
-    ADD CONSTRAINT fk_rails_93051274e4 FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_93051274e4 FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
 
 
 --
@@ -5712,7 +5712,7 @@ ALTER TABLE ONLY recolor_by_inds
 --
 
 ALTER TABLE ONLY node_quals
-    ADD CONSTRAINT fk_rails_962f283611 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_962f283611 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
 
 
 --
@@ -5720,7 +5720,7 @@ ALTER TABLE ONLY node_quals
 --
 
 ALTER TABLE ONLY carto_layers
-    ADD CONSTRAINT fk_rails_9b2f0fa157 FOREIGN KEY (contextual_layer_id) REFERENCES contextual_layers(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_9b2f0fa157 FOREIGN KEY (contextual_layer_id) REFERENCES contextual_layers(id) ON DELETE CASCADE;
 
 
 --
@@ -5728,7 +5728,7 @@ ALTER TABLE ONLY carto_layers
 --
 
 ALTER TABLE ONLY flow_quants
-    ADD CONSTRAINT fk_rails_a48f7b74d0 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_a48f7b74d0 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
 
 
 --
@@ -5736,7 +5736,7 @@ ALTER TABLE ONLY flow_quants
 --
 
 ALTER TABLE ONLY charts
-    ADD CONSTRAINT fk_rails_a7dc6318f9 FOREIGN KEY (profile_id) REFERENCES profiles(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_a7dc6318f9 FOREIGN KEY (profile_id) REFERENCES profiles(id) ON DELETE CASCADE;
 
 
 --
@@ -5744,7 +5744,7 @@ ALTER TABLE ONLY charts
 --
 
 ALTER TABLE ONLY chart_inds
-    ADD CONSTRAINT fk_rails_b730b06fdc FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_b730b06fdc FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
 
 
 --
@@ -5752,7 +5752,7 @@ ALTER TABLE ONLY chart_inds
 --
 
 ALTER TABLE ONLY chart_quals
-    ADD CONSTRAINT fk_rails_c1341bce97 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_c1341bce97 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
 
 
 --
@@ -5760,7 +5760,7 @@ ALTER TABLE ONLY chart_quals
 --
 
 ALTER TABLE ONLY flows
-    ADD CONSTRAINT fk_rails_c33db455e5 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_c33db455e5 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
 
 
 --
@@ -5768,7 +5768,7 @@ ALTER TABLE ONLY flows
 --
 
 ALTER TABLE ONLY resize_by_quants
-    ADD CONSTRAINT fk_rails_c63dc992e3 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_c63dc992e3 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
 
 
 --
@@ -5776,7 +5776,7 @@ ALTER TABLE ONLY resize_by_quants
 --
 
 ALTER TABLE ONLY map_inds
-    ADD CONSTRAINT fk_rails_cac7dc7c14 FOREIGN KEY (map_attribute_id) REFERENCES map_attributes(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_cac7dc7c14 FOREIGN KEY (map_attribute_id) REFERENCES map_attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -5784,7 +5784,7 @@ ALTER TABLE ONLY map_inds
 --
 
 ALTER TABLE ONLY profiles
-    ADD CONSTRAINT fk_rails_cbc235c3bc FOREIGN KEY (context_node_type_id) REFERENCES context_node_types(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_cbc235c3bc FOREIGN KEY (context_node_type_id) REFERENCES context_node_types(id) ON DELETE CASCADE;
 
 
 --
@@ -5792,7 +5792,7 @@ ALTER TABLE ONLY profiles
 --
 
 ALTER TABLE ONLY map_quants
-    ADD CONSTRAINT fk_rails_cc084396cb FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_cc084396cb FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
 
 
 --
@@ -5800,7 +5800,7 @@ ALTER TABLE ONLY map_quants
 --
 
 ALTER TABLE ONLY contexts
-    ADD CONSTRAINT fk_rails_d9e59d1113 FOREIGN KEY (country_id) REFERENCES countries(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_d9e59d1113 FOREIGN KEY (country_id) REFERENCES countries(id) ON DELETE CASCADE;
 
 
 --
@@ -5808,7 +5808,7 @@ ALTER TABLE ONLY contexts
 --
 
 ALTER TABLE ONLY node_quants
-    ADD CONSTRAINT fk_rails_dd544b3e59 FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_dd544b3e59 FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE;
 
 
 --
@@ -5816,7 +5816,7 @@ ALTER TABLE ONLY node_quants
 --
 
 ALTER TABLE ONLY chart_quants
-    ADD CONSTRAINT fk_rails_dd98c02cd6 FOREIGN KEY (chart_attribute_id) REFERENCES chart_attributes(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_dd98c02cd6 FOREIGN KEY (chart_attribute_id) REFERENCES chart_attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -5824,7 +5824,7 @@ ALTER TABLE ONLY chart_quants
 --
 
 ALTER TABLE ONLY download_quants
-    ADD CONSTRAINT fk_rails_e3b3c104f3 FOREIGN KEY (download_attribute_id) REFERENCES download_attributes(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_e3b3c104f3 FOREIGN KEY (download_attribute_id) REFERENCES download_attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -5832,7 +5832,7 @@ ALTER TABLE ONLY download_quants
 --
 
 ALTER TABLE ONLY node_quants
-    ADD CONSTRAINT fk_rails_e5f4cc54e9 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_e5f4cc54e9 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
 
 
 --
@@ -5840,7 +5840,7 @@ ALTER TABLE ONLY node_quants
 --
 
 ALTER TABLE ONLY download_quals
-    ADD CONSTRAINT fk_rails_e8e87251a2 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_e8e87251a2 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
 
 
 --
@@ -5848,7 +5848,7 @@ ALTER TABLE ONLY download_quals
 --
 
 ALTER TABLE ONLY contexts
-    ADD CONSTRAINT fk_rails_eea78f436e FOREIGN KEY (commodity_id) REFERENCES commodities(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_eea78f436e FOREIGN KEY (commodity_id) REFERENCES commodities(id) ON DELETE CASCADE;
 
 
 --
@@ -5856,7 +5856,7 @@ ALTER TABLE ONLY contexts
 --
 
 ALTER TABLE ONLY recolor_by_quals
-    ADD CONSTRAINT fk_rails_f5f36c9f54 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_f5f36c9f54 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
 
 
 --
@@ -5864,7 +5864,7 @@ ALTER TABLE ONLY recolor_by_quals
 --
 
 ALTER TABLE ONLY map_attributes
-    ADD CONSTRAINT fk_rails_f85c86caa0 FOREIGN KEY (map_attribute_group_id) REFERENCES map_attribute_groups(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_f85c86caa0 FOREIGN KEY (map_attribute_group_id) REFERENCES map_attribute_groups(id) ON DELETE CASCADE;
 
 
 --
@@ -5872,7 +5872,7 @@ ALTER TABLE ONLY map_attributes
 --
 
 ALTER TABLE ONLY traders
-    ADD CONSTRAINT fk_rails_f8b100d54e FOREIGN KEY (exporter_id) REFERENCES nodes(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_f8b100d54e FOREIGN KEY (exporter_id) REFERENCES nodes(id) ON DELETE CASCADE;
 
 
 --
@@ -5880,7 +5880,7 @@ ALTER TABLE ONLY traders
 --
 
 ALTER TABLE ONLY node_inds
-    ADD CONSTRAINT fk_rails_fe29817503 FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE;
+  ADD CONSTRAINT fk_rails_fe29817503 FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE;
 
 
 --
@@ -5890,56 +5890,56 @@ ALTER TABLE ONLY node_inds
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20170217085928'),
-('20170308111306'),
-('20170314095630'),
-('20170314113737'),
-('20170314115226'),
-('20170314115306'),
-('20170316135218'),
-('20170323090506'),
-('20170323121305'),
-('20170506225529'),
-('20170526080738'),
-('20170526095950'),
-('20170526103500'),
-('20170526131332'),
-('20170613120932'),
-('20170614111428'),
-('20170630134124'),
-('20170821081055'),
-('20170824111857'),
-('20170829074711'),
-('20170918133625'),
-('20170918134156'),
-('20170921125513'),
-('20170925102834'),
-('20170929120908'),
-('20171002093637'),
-('20171002102750'),
-('20171004102919'),
-('20171006161620'),
-('20171006171936'),
-('20171011112259'),
-('20171011121102'),
-('20171011121557'),
-('20171011121700'),
-('20171012103851'),
-('20171012104354'),
-('20171012110946'),
-('20171012112442'),
-('20171012124235'),
-('20171012130125'),
-('20171013081306'),
-('20171013094155'),
-('20171013095055'),
-('20171013101825'),
-('20171013103931'),
-('20171013104602'),
-('20171018093008'),
-('20171020091710'),
-('20171020125731'),
-('20171020133529'),
-('20171101111009');
+  ('20170217085928'),
+  ('20170308111306'),
+  ('20170314095630'),
+  ('20170314113737'),
+  ('20170314115226'),
+  ('20170314115306'),
+  ('20170316135218'),
+  ('20170323090506'),
+  ('20170323121305'),
+  ('20170506225529'),
+  ('20170526080738'),
+  ('20170526095950'),
+  ('20170526103500'),
+  ('20170526131332'),
+  ('20170613120932'),
+  ('20170614111428'),
+  ('20170630134124'),
+  ('20170821081055'),
+  ('20170824111857'),
+  ('20170829074711'),
+  ('20170918133625'),
+  ('20170918134156'),
+  ('20170921125513'),
+  ('20170925102834'),
+  ('20170929120908'),
+  ('20171002093637'),
+  ('20171002102750'),
+  ('20171004102919'),
+  ('20171006161620'),
+  ('20171006171936'),
+  ('20171011112259'),
+  ('20171011121102'),
+  ('20171011121557'),
+  ('20171011121700'),
+  ('20171012103851'),
+  ('20171012104354'),
+  ('20171012110946'),
+  ('20171012112442'),
+  ('20171012124235'),
+  ('20171012130125'),
+  ('20171013081306'),
+  ('20171013094155'),
+  ('20171013095055'),
+  ('20171013101825'),
+  ('20171013103931'),
+  ('20171013104602'),
+  ('20171018093008'),
+  ('20171020091710'),
+  ('20171020125731'),
+  ('20171020133529'),
+  ('20171101111009');
 
 
