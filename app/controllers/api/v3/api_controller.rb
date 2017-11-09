@@ -1,7 +1,7 @@
 module Api
   module V3
     class ApiController < ApplicationController
-      before_action :load_context, except: [:get_contexts]
+      before_action :load_context
       before_action :set_caching_headers
 
       private
@@ -12,7 +12,8 @@ module Api
         if context_id.present?
           @context = Api::V3::Context.find(context_id)
         else
-          raise ActionController::ParameterMissing, 'Required context_id missing'
+          raise ActionController::ParameterMissing,
+                'Required context_id missing'
         end
       end
     end

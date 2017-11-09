@@ -25,3 +25,4 @@ exclude_paths:
 - "**/vendor/**/*"
 - db/**/*
 - db_content/**/*
+- 'lib/schema_revamp.rb' # excluding because it is a temporary migration script
