@@ -10,15 +10,6 @@ check_run() {
 	echo "$changed_files" | grep --quiet "$1" && eval "$2"
 }
 
-warn_env_update() {
-  echo ""
-	echo "========================================================"
-	echo "================= ENV FILE UPDATED ====================="
-	echo "========================================================"
-	echo ""
-	exit 0
-}
-
 # Example usage
 # In this example it's used to run `npm install` if package.json changed
-check_run .env.sample warn_env_update
+check_run package.json "cd frontend && npm install"

@@ -7,4 +7,4 @@ header() {
 }
 
 header
-npm run lint-js
+cd frontend && npm run lint-js
