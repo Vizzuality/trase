@@ -1,6 +1,9 @@
 shared_context 'api v3 brazil contexts' do
   let!(:api_v3_brazil) do
-    FactoryGirl.create(:api_v3_country, name: 'BRAZIL', iso2: 'BR', latitude: 10, longitude: 10, zoom: 4)
+    FactoryGirl.create(
+      :api_v3_country,
+      name: 'BRAZIL', iso2: 'BR', latitude: 10, longitude: 10, zoom: 4
+    )
   end
   let!(:api_v3_context) do
     FactoryGirl.create(

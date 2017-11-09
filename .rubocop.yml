@@ -24,6 +24,10 @@ Layout/MultilineOperationIndentation:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
 Style/AndOr:
   Enabled: false
 

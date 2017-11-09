@@ -12,7 +12,8 @@ module Api
         if context_id.present?
           @context = Api::V3::Context.find(context_id)
         else
-          raise ActionController::ParameterMissing, 'Required context_id missing'
+          raise ActionController::ParameterMissing,
+                'Required context_id missing'
         end
       end
     end
