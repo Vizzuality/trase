@@ -22,7 +22,7 @@ class HashSorter
     tmp = array.sort do |a, b|
       if a.is_a?(Hash) && b.is_a?(Hash)
         if a.key?('id')
-          next a['id'] <=> b ['id']
+          next a['id'] <=> b['id']
         elsif a.key?('name')
           next a['name'] <=> b['name']
         else

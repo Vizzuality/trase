@@ -5,7 +5,8 @@ class FlowDownloadQueryBuilder
     initialize_path_column_names(@context.id)
     @query = @query.where(year: params[:years]) if params[:years].present?
     if params[:indicators].present?
-      tmp = [Quant, Ind, Qual].map do |indicator_class|
+      # TODO: I highly suspect that this .map block is useless
+      [Quant, Ind, Qual].map do |indicator_class|
         indicators = indicator_class.where(name: params[:indicators])
         [indicator_class, indicators]
       end

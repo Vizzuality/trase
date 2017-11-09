@@ -62,20 +62,13 @@ class Node < ActiveRecord::Base
   def place_quals
     node_quals.
       joins(:qual).merge(Qual.place_non_temporal).
-      select([
-               'quals.name',
-               'node_quals.value'
-             ])
+      select(%w(quals.name node_quals.value))
   end
 
   def temporal_place_quals(year = nil)
     rel = node_quals.
       joins(:qual).merge(Qual.place_temporal).
-      select([
-               'quals.name',
-               'node_quals.value',
-               'node_quals.year'
-             ])
+      select(%w(quals.name node_quals.value node_quals.year))
     rel = rel.where('node_quals.year' => year) if year.present?
     rel
   end
@@ -84,45 +77,28 @@ class Node < ActiveRecord::Base
     node_quals.
       joins(:qual).merge(Quant.actor_non_temporal).
       # where('quals.actor_factsheet' => true).
-      select([
-               'quals.name',
-               'node_quals.value',
-               'node_quals.year'
-             ])
+      select(%w(quals.name node_quals.value node_quals.year))
   end
 
   def temporal_actor_quals(year = nil)
     rel = node_quals.
       joins(:qual).merge(Quant.actor_temporal).
       # where('quals.actor_factsheet' => true).
-      select([
-               'quals.name',
-               'node_quals.value',
-               'node_quals.year'
-             ])
+      select(%w(quals.name node_quals.value node_quals.year))
     rel = rel.where('node_quals.year' => year) if year.present?
     rel
   end
 
   def place_quants
-    data = node_quants.
+    node_quants.
       joins(:quant).merge(Quant.place_non_temporal).
-      select([
-               'quants.name',
-               'quants.unit',
-               'node_quants.value'
-             ])
+      select(%w(quants.name quants.unit node_quants.value))
   end
 
   def temporal_place_quants(year = nil)
     rel = node_quants.
       joins(:quant).merge(Quant.place_temporal).
-      select([
-               'quants.name',
-               'quants.unit',
-               'node_quants.value',
-               'node_quants.year'
-             ])
+      select(%w(quants.name quants.unit node_quants.value node_quants.year))
     rel = rel.where('node_quants.year' => year) if year.present?
     rel
   end
@@ -130,45 +106,27 @@ class Node < ActiveRecord::Base
   def actor_quants
     node_quants.
       joins(:quant).merge(Quant.actor_non_temporal).
-      select([
-               'quants.name',
-               'quants.unit',
-               'node_quants.value'
-             ])
+      select(%w(quants.name quants.unit node_quants.value))
   end
 
   def temporal_actor_quants(year = nil)
     rel = node_quants.
       joins(:quant).merge(Quant.actor_temporal).
-      select([
-               'quants.name',
-               'quants.unit',
-               'node_quants.value',
-               'node_quants.year'
-             ])
+      select(%w(quants.name quants.unit node_quants.value node_quants.year))
     rel = rel.where('node_quants.year' => year) if year.present?
     rel
   end
 
   def place_inds
-    data = node_inds.
+    node_inds.
       joins(:ind).merge(Ind.place_non_temporal).
-      select([
-               'inds.name',
-               'inds.unit',
-               'node_inds.value'
-             ])
+      select(%w(inds.name inds.unit node_inds.value))
   end
 
   def temporal_place_inds(year = nil)
     rel = node_inds.
       joins(:ind).merge(Ind.place_temporal).
-      select([
-               'inds.name',
-               'inds.unit',
-               'node_inds.value',
-               'node_inds.year'
-             ])
+      select(%w(inds.name inds.unit node_inds.value node_inds.year))
     rel = rel.where('node_inds.year' => year) if year.present?
     rel
   end
@@ -176,22 +134,13 @@ class Node < ActiveRecord::Base
   def actor_inds
     node_inds.
       joins(:ind).merge(Quant.actor_non_temporal).
-      select([
-               'inds.name',
-               'inds.unit',
-               'node_inds.value'
-             ])
+      select(%w(inds.name inds.unit node_inds.value))
   end
 
   def temporal_actor_inds(year = nil)
     rel = node_inds.
       joins(:ind).merge(Quant.actor_temporal).
-      select([
-               'inds.name',
-               'inds.unit',
-               'node_inds.value',
-               'node_inds.year'
-             ])
+      select(%w(inds.name inds.unit node_inds.value node_inds.year))
     rel = rel.where('node_inds.year' => year) if year.present?
     rel
   end
@@ -201,8 +150,8 @@ class Node < ActiveRecord::Base
                                 %w[node_quants quants]
                               elsif indicator_type == 'ind'
                                 %w[node_inds inds]
-    end
-    query = Node.
+                              end
+    Node.
       where(node_type_id: node_type_id).
       joins(value_table => indicator_type).
       where("#{dict_table}.name" => indicator_name)
@@ -220,7 +169,7 @@ class Node < ActiveRecord::Base
                                 %w[flow_quants quants]
                               elsif indicator_type == 'ind'
                                 %w[flow_inds inds]
-    end
+                              end
     Flow.
       joins("JOIN #{value_table} ON flows.flow_id = #{value_table}.flow_id").
       joins("JOIN #{dict_table} ON #{dict_table}.#{indicator_type}_id = #{value_table}.#{indicator_type}_id").

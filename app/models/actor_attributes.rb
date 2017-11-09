@@ -94,7 +94,7 @@ class ActorAttributes
                         'a ' + helper.number_to_percentage(-@trade_total_perc_difference * 100, precision: 0) + ' decrease vs'
                       else
                         'no change from'
-    end
+                      end
     text + " This is #{difference_from} the previous year."
   end
 
@@ -351,10 +351,10 @@ is #{@main_destination_name.humanize}, accounting for \
     bucket = buckets.each_with_index do |bucket, index|
       break index if value >= prev_bucket && value < bucket
     end
-    bucket = if bucket.is_a? Integer
-               bucket
-             else
-               buckets.size # last bucket
+    if bucket.is_a? Integer
+      bucket
+    else
+      buckets.size # last bucket
     end
   end
 
