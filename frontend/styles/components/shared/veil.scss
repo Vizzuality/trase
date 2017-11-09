@@ -1,0 +1,19 @@
+@import '../../settings';
+
+.veil {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($charcoal-grey, .7);
+  z-index: $z-veil;
+
+  &.-below-nav {
+    z-index: $z-veil-below-nav;
+  }
+
+  &.-with-menu {
+    top: $nav-height;
+  }
+}

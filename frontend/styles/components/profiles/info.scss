@@ -1,0 +1,29 @@
+@import '../../settings';
+
+.c-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 67px;
+
+  > .legend {
+    color: rgba($charcoal-grey, .6);
+    font-family: $font-family-1;
+    font-size: $font-size-x-regular;
+    letter-spacing: -.6px;
+    text-transform: uppercase;
+    line-height: 1em;
+  }
+
+  > .name {
+    color: $charcoal-grey;
+    font-family: $font-family-2;
+    font-size: $font-size-huge;
+    font-weight: $font-weight-bold;
+    line-height: 1em;
+
+    &.-medium {
+      font-size: $font-size-big;
+    }
+  }
+}

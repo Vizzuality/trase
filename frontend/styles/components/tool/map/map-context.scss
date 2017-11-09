@@ -1,0 +1,26 @@
+@import '../../../settings';
+
+.c-map-context {
+  .c-switcher {
+    width: 29px;
+    height: 12px;
+
+    background-color: rgba($charcoal-grey, .2);
+
+    &::before {
+      left: -3px;
+      width: 16px;
+      height: 16px;
+    }
+
+    &.-enabled {
+      background-color: $medium-pink;
+
+      &::before {
+        right: -3px;
+        left: 0;
+        transform: translate(100%, -50%);
+      }
+    }
+  }
+}

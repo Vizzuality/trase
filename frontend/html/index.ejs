@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%= htmlWebpackPlugin.options.head %>
+</head>
+<body>
+<div class="loading-wrapper">
+  <%= htmlWebpackPlugin.options.icons %>
+  <div class="l-homepage">
+
+    <%= htmlWebpackPlugin.options.nav %>
+
+    <div class="c-homepage">
+
+        <section class="introduction">
+          <article class="row intro-wrapper align-middle">
+            <div class="intro-statement column small-6 js-intro-statement">
+              <div class="trase-logo">
+                <img src="images/logos/new-logo-trase.svg" alt="TRASE"/>
+              </div>
+              <p class="paragraph -white js-text">
+                Trase transforms our understanding of how companies and governments involved in the
+                trade of agricultural commodities are linked to impacts
+                and opportunities for more sustainable production.
+              </p>
+              <div>
+                <a href="/flows.html" class="c-button -big -white -bold btn-explore js-action">explore the tool</a>
+              </div>
+            </div>
+          </article>
+        </section>
+
+      <section class="c-scroll-section -intro-top js-scroll-change">
+        <div class="screenshot-container">
+          <figure class="screenshot -top js-trigger-menu-bg">
+            <div class="video-container">
+              <div class="video" data-type="youtube" data-video-id="JJIzUqTc9nU"></div>
+            </div>
+          </figure>
+
+          <figcaption class="screenshot-caption">
+            Visualise and explore entire commodity supply chains here.
+          </figcaption>
+        </div>
+      </section>
+
+      <section class="c-scroll-section -intro-middle js-scroll-change">
+        <div class="screenshot-container">
+          <figure class="screenshot -middle"></figure>
+          <figcaption class="screenshot-caption">
+            Explore the sourcing patterns of companies with and without zero-deforestation commitments here.
+          </figcaption>
+        </div>
+      </section>
+
+      <section class="c-scroll-section -intro-bottom js-scroll-change">
+        <div class="screenshot-container">
+          <figure class="screenshot -bottom"></figure>
+          <figcaption class="screenshot-caption">
+            Access Trase data portal here.
+          </figcaption>
+        </div>
+      </section>
+
+      <section class="c-scroll-section -content js-content-section">
+        <article class="sliding-content row column">
+          <h3 class="slider-title">What can you do with trase?</h3>
+          <div class="c-posts">
+            <button class="posts-arrow posts-prev js-posts-prev">
+              <svg class="icon icon-arrow-next"><use xlink:href="#icon-arrow-next"/></svg>
+            </button>
+            <div class="js-posts"></div>
+            <button class="posts-arrow posts-next js-posts-next">
+              <svg class="icon icon-arrow-next"><use xlink:href="#icon-arrow-next"/></svg>
+            </button>
+          </div>
+        </article>
+
+        <article class="sliding-content row column js-updates">
+          <h3 class="slider-title">Latest updates</h3>
+          <div class="row c-updates">
+            <div class="update column small-3">
+              <div class="update-title-wrapper">
+                <a href="https://medium.com/trase/for-companies-aiming-for-deforestation-free-supply-chains-8-traps-to-avoid-a1757a991658#.5gedpf801" target="_blank">
+                  <h4 class="update-type">Guest Blog</h4>
+                  <h2 class="update-title">8 traps to avoid for Companies Aiming for Deforestation-Free Supply Chains</h2>
+                </a>
+              </div>
+              <div class="update-image-wrapper">
+                <figure class="update-image -one"></figure>
+              </div>
+            </div>
+            <div class="update column small-3">
+              <div class="update-title-wrapper">
+                <a href="http://e360.yale.edu/features/tracking_commodities_to_save_world_forests_trase" target="_blank">
+                  <h4 class="update-type">TRASE in the media</h4>
+                  <h2 class="update-title">How Tracking Product Sources May Help Save World’s Forests</h2>
+                </a>
+              </div>
+              <div class="update-image-wrapper">
+                <figure class="update-image -two"></figure>
+              </div>
+            </div>
+            <div class="update column small-3">
+              <div class="update-title-wrapper">
+                <a href="https://medium.com/trase/using-big-data-to-track-illegality-in-the-global-timber-trade-664a3c65251e#.xnu707s3q" target="_blank">
+                  <h4 class="update-type">TRASE BLOG</h4>
+                  <h2 class="update-title">Tracking illegal timber with BV Rio and Trase</h2>
+                </a>
+              </div>
+              <div class="update-image-wrapper">
+                <figure class="update-image -three"></figure>
+              </div>
+            </div>
+            <div class="update column small-3">
+              <div class="update-title-wrapper">
+                <a href="https://medium.com/trase/are-zero-deforestation-pledges-slowing-deforestation-without-more-transparency-we-just-dont-know-944123431d38#.esshzcvit" target="_blank">
+                  <h4 class="update-type">Guest Blog</h4>
+                  <h2 class="update-title">Are zero-deforestation pledges slowing deforestation?</h2>
+                </a>
+              </div>
+              <div class="update-image-wrapper">
+                <figure class="update-image -four"></figure>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="sliding-content row column">
+          <h3 class="slider-title">Trase on social media</h3>
+          <div class="c-posts c-tweets">
+            <button class="posts-arrow posts-prev js-tweets-prev">
+              <svg class="icon icon-arrow-next"><use xlink:href="#icon-arrow-next"/></svg>
+            </button>
+            <div class="js-tweets"></div>
+            <button class="posts-arrow posts-next js-tweets-next">
+              <svg class="icon icon-arrow-next"><use xlink:href="#icon-arrow-next"/></svg>
+            </button>
+          </div>
+        </article>
+      </section>
+
+      <a name="newsletter"></a>
+
+      <section class="newsletter">
+        <div class="newsletter-content row align-middle">
+          <form class="column small-6 js-form c-newsletter-form">
+            <label for="newsletter-email" class="newsletter-label">
+              Sign up here to receive news updates about TRASE
+            </label>
+            <div class="newsletter-input-container">
+              <input type="email" name="email" placeholder="email address" id="newsletter-email" required
+                     class="newsletter-email">
+              <button class="js-form-subscribe c-button -charcoal -bold ">Subscribe</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+    </div>
+
+    <%= htmlWebpackPlugin.options.footer %>
+
+  </div>
+</div>
+
+<%= htmlWebpackPlugin.options.scripts %>
+</body>
+</html>

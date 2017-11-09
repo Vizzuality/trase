@@ -1,0 +1,71 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="safari-pinned-tab.svg" color="black">
+<link rel="prefetch" href="/FAQ.html">
+<link rel="prefetch" href="/flows.html">
+<link rel="prefetch" href="/tool.bundle.js">
+<link rel="prefetch" href="/profiles.html">
+<link rel="prefetch" href="/about.html">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@TraseEarth" />
+<meta name="twitter:title" content="<%= title %>">
+<meta name="twitter:description" content="<%= description %>">
+<meta name="twitter:image" content="https://trase.earth/card-image.jpg">
+<meta name="twitter:image:alt" content="TRASE - Transparency for sustainable economies">
+<meta property="og:url" content="https://trase.earth/" />
+<meta property="og:title" content="<%= title %>" />
+<meta property="og:description" content="<%= description %>" />
+<meta property="og:image" content="http://trase.earth/card-image.jpg" />
+<title><%= title %></title>
+<meta name="description" content="<%= description %>">
+<% if (dev) { %>
+<script src="/webpack-dev-server.js"></script>
+<% } %>
+<style>.loading-wrapper { display: none }</style>
+<% if (!dev) { %>
+<!-- Google Analytics start -->
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', <%= GOOGLE_ANALYTICS_KEY ? GOOGLE_ANALYTICS_KEY : '' %>, 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- Google Analytics end -->
+<!-- Crazy Egg start -->
+<script type="text/javascript">
+setTimeout(function(){var a=document.createElement("script");
+var b=document.getElementsByTagName("script")[0];
+a.src=document.location.protocol+"//script.crazyegg.com/pages/scripts/0057/8220.js?"+Math.floor(new Date().getTime()/3600000);
+a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+</script>
+<!-- Crazy Egg end -->
+<!-- User Report start -->
+<script type="text/javascript">
+  window._urq = window._urq || [];
+  _urq.push(['initSite', <%= USER_REPORT_KEY ? USER_REPORT_KEY : '' %>]);
+  (function() {
+    var ur = document.createElement('script'); ur.type = 'text/javascript'; ur.async = true;
+    ur.src = ('https:' == document.location.protocol ? 'https://cdn.userreport.com/userreport.js' : 'http://cdn.userreport.com/userreport.js');
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ur, s);
+  })();
+</script>
+<!-- User Report end -->
+<% } %>

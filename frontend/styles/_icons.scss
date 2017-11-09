@@ -1,0 +1,28 @@
+.icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+
+  &.icon-supply {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+.icon-share {
+  width: 20px;
+  height: 20px;
+}
+
+.icon-legend-arrow {
+  height: 48px;
+  fill: rgba($charcoal-grey, .5);
+}
+
+.icon-arrow-next {
+  height: 34px;
+  width: 18px;
+}

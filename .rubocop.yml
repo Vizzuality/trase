@@ -8,6 +8,7 @@ AllCops:
     - 'config/environments/*'
     - 'config/initializers/*'
     - 'config/*'
+    - 'frontend/node_modules/**/*'
 
 Bundler/OrderedGems:
   Enabled: false

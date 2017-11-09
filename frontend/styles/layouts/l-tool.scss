@@ -1,0 +1,133 @@
+@import '../base';
+@import '../settings';
+
+// todo move this to a page style scss
+body, html {
+  background: $background-white;
+  overflow: hidden;
+}
+
+.l-flows {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  .flows-nav {
+    width: 100%;
+  }
+
+  > .flow-content {
+    position: absolute;
+    top: $nav-height;
+    left: 0;
+    width: calc(100% + #{$layer-map-width});
+    height: calc(100% - #{$nav-height});
+
+    transform: translate(-$layer-map-width, 0);
+    transition: transform .15s $ease-in-out-sine, width .15s $ease-in-out-sine;
+    z-index: $z-above;
+
+    > .tool-loading {
+      display: none;
+      position: absolute;
+      width: calc(100% + #{$layer-map-width});
+      height: 100%;
+    }
+
+    &.-center-map {
+      transform: translate(-376px, 0);
+
+      > .c-sankey,
+      .c-columns-selector,
+      > .c-titlebar {
+        left: 91%;
+      }
+    }
+
+    &.-open {
+      width: 100%;
+      transform: translate(0, 0);
+    }
+
+    > .c-map-sidebar {
+      top: 0;
+      width: 376px;
+      height: 100%;
+      overflow-y: auto;
+      background: $background-white;
+      z-index: $z-above;
+    }
+
+    > .c-map {
+      display: flex;
+      left: $layer-map-width;
+      flex-direction: column;
+      width: 320px;
+      height: 100%;
+
+      transition: width .45s $ease-in-out-sine;
+
+      &.-fullscreen {
+        width: calc(91% - 366px);
+        z-index: $z-above;
+      }
+    }
+
+
+    .c-sankey {
+      top: 48px;
+      left: $map-width + $layer-map-width;
+      width: calc(100% - #{$map-width + $layer-map-width + ($sankey-x-margin * 2)});
+      height: calc(100% - 110px);
+      margin-left: $sankey-x-margin + 5px;
+      transition: left .45s $ease-in-out-sine;
+
+      .sankey-scroll-container {
+        width: 100%;
+        height: 100%;
+
+        &.-detailed {
+          overflow-y: scroll;
+          overflow-x: hidden;
+        }
+
+        .sankey {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+    }
+
+    .c-columns-selector {
+      top: 9px;
+      left: $map-width + $layer-map-width;
+      transition: left .45s $ease-in-out-sine;
+    }
+
+    > .c-titlebar {
+      position: absolute;
+      left: $map-width + $layer-map-width;
+      top: calc(100% - #{$titlebar-height});
+      width: calc(100% - #{$map-width + $layer-map-width});
+      padding-left: 15px;
+      overflow: auto;
+      transition: left .45s $ease-in-out-sine;
+
+      .search {
+        padding-top: 16px;
+      }
+    }
+
+    > .sankey-veil {
+      z-index: $z-base;
+    }
+
+    .sankey-inner-veil {
+      top: 48px;
+      left: $map-width + $layer-map-width;
+    }
+  }
+}

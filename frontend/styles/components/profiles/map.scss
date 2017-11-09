@@ -1,0 +1,29 @@
+@import '../../settings';
+
+.c-locator-map {
+  width: 100%;
+  height: 100%;
+}
+
+.polygon {
+  fill: $charcoal-grey-faded-a-lot;
+  stroke: $egg-shell;
+
+  &.-isCurrent {
+    fill: $medium-pink;
+  }
+
+  &.ch-n-a { fill: $ch-profile-n-a; }
+  &.ch-0 { fill: $ch-profile-red-0; };
+  &.ch-1 { fill: $ch-profile-red-1; };
+  &.ch-2 { fill: $ch-profile-red-2; };
+  &.ch-3 { fill: $ch-profile-red-3; };
+  &.ch-4 { fill: $ch-profile-red-4; };
+  &.ch-5 { fill: $ch-profile-red-5; };
+  &.ch-6 { fill: $ch-profile-red-6; };
+  &.ch-7 { fill: $ch-profile-red-7; };
+
+  &.-outline {
+    stroke: $charcoal-grey-faded;
+  }
+}

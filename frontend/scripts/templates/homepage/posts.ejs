@@ -1,0 +1,20 @@
+<% posts.forEach(function(post) { %>
+  <div class="post">
+    <div class="post-wrapper">
+      <figure class="post-image"
+        <% if (post['image_url']) { %>
+          style="background-image: url('<%= post['image_url'] %>')"
+        <% } %>
+      ></figure>
+      <figcaption>
+        <% if (post['title']) { %>
+          <% if (post['complete_post_url']) {%>
+            <a href="<%= post['complete_post_url']%>" class="post-title"><%= post['title'] %></a>
+          <% } else { %>
+            <%= post['title'] %>
+          <% } %>
+        <% } %>
+      </figcaption>
+    </div>
+  </div>
+<% }) %>

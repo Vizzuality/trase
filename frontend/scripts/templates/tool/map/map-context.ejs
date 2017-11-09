@@ -1,0 +1,9 @@
+<% layers.forEach(function(layer) {%>
+  <li class="map-sidebar-group-item js-map-context-item">
+    <%= layer.title %>
+    <div
+      class="c-switcher"
+      data-layer-slug="<%= layer.id %>">
+    </div>
+  </li>
+<%});%>

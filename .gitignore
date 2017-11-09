@@ -27,4 +27,17 @@ spec/support/gold_master/*
 # Ignore Byebug command history file.
 .byebug_history
 .env
-.DS_Store
+
+frontend/node_modules
+frontend/npm-debug.log
+
+# ENV variables
+frontend/.env*
+!frontend/.env.sample
+
+frontend/public/js
+frontend/dist
+
+frontend/tmp
+
+frontend/gis/cartodb/cartodb-config.json

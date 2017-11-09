@@ -1,0 +1,17 @@
+.l-homepage {
+  background-color: $background-white;
+
+  .c-nav {
+    .nav-link {
+      color: $white;
+    }
+    .nav-submenu {
+      .nav-submenu-item > .nav-link {
+        color: $charcoal-grey;
+      }
+    }
+  }
+  .c-nav-spacer {
+    display: none;
+  }
+}

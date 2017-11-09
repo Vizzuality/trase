@@ -1,0 +1,108 @@
+@import 'settings';
+
+.paragraph {
+  color: $charcoal-grey;
+  font-family: $font-family-2;
+  font-size: $font-size-xx-regular;
+  font-weight: $font-weight-light;
+  letter-spacing: -.1px;
+  line-height: 2;
+
+  & + & {
+    margin: 32px auto 0;
+  }
+
+  &.-gray {
+    color: $gray;
+  }
+
+  &.-white {
+    color: $white;
+  }
+}
+
+a {
+  color: $charcoal-grey;
+  text-decoration: none;
+ }
+
+.title {
+  color: $charcoal-grey;
+  font-family: $font-family-2;
+  line-height: 1.5;
+
+  &.-big {
+    font-size: $font-size-huge;
+  }
+
+  &.-medium {
+    font-size: $font-size-x-big;
+  }
+
+  &.-medium-small {
+    font-size: $font-size-medium;
+  }
+
+  &.-small {
+    font-size: $font-size-x-regular;
+  }
+
+  &.-pink {
+    color: $medium-pink;
+  }
+
+  &.-grey {
+    color: $charcoal-grey;
+  }
+
+  &.-mono-font {
+    font-family: $font-family-1;
+    font-size: $font-size-xx-regular;
+    font-weight: $font-weight-regular;
+    letter-spacing: -1.3px;
+  }
+
+  &.-white {
+    color: $white;
+  }
+}
+
+.-light {
+  font-weight: $font-weight-light;
+}
+
+strong,
+.-bold {
+  font-weight: $font-weight-bold;
+}
+
+.-center {
+  text-align: center;
+}
+
+sup,
+sub {
+  position: relative;
+  font-size: 75%;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -.5em;
+}
+
+sub {
+  bottom: -.25em;
+}
+
+.y-axis {
+  font-family: $font-family-1;
+  font-size: $font-size-x-regular;
+  color: rgba($charcoal-grey, .6);
+}
+
+.content-link {
+  color: $charcoal-grey;
+  font-weight: $font-weight-bold;
+}

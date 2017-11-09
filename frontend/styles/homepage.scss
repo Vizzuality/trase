@@ -1,0 +1,21 @@
+// entry point to homepage styles
+@import
+'base',
+'texts',
+'mixins',
+'foundation',
+
+'layouts/l-homepage',
+
+'components/shared/button',
+
+'components/shared/nav',
+'components/shared/footer',
+'components/shared/selector',
+
+'components/homepage/posts',
+'components/homepage/updates',
+'components/homepage/tweets',
+'components/homepage/homepage',
+'components/homepage/scroll-section',
+'components/homepage/map-risks';
