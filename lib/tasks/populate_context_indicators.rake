@@ -1,85 +1,86 @@
+CONTEXT_INDICATORS = [
+  {
+    type: 'Quant',
+    country: 'BRAZIL',
+    commodity: nil,
+    name: 'BIODIVERSITY',
+    position: 10
+  },
+  {
+    type: 'Ind',
+    country: 'BRAZIL',
+    commodity: nil,
+    name: 'FOREST_500',
+    position: 19
+  },
+  {
+    type: 'Ind',
+    country: 'BRAZIL',
+    commodity: nil,
+    name: 'SMALLHOLDERS',
+    position: 18
+  },
+  {
+    type: 'Ind',
+    country: 'BRAZIL',
+    commodity: nil,
+    name: 'WATER_SCARCITY',
+    position: 9
+  },
+  {
+    type: 'Qual',
+    country: 'BRAZIL',
+    commodity: 'SOY',
+    name: 'ZERO_DEFORESTATION',
+    position: 20
+  },
+  {
+    type: 'Quant',
+    country: 'BRAZIL',
+    commodity: 'SOY',
+    name: 'AGROSATELITE_SOY_DEFOR_',
+    position: 7
+  },
+  {
+    type: 'Quant',
+    country: 'BRAZIL',
+    commodity: nil,
+    name: 'GHG_',
+    position: 8
+  },
+  {
+    type: 'Quant',
+    country: 'BRAZIL',
+    commodity: nil,
+    name: 'POTENTIAL_SOY_DEFORESTATION_V2', # CAUTION name mixup, different name for Paraguay
+    position: 6
+  },
+  {
+    type: 'Quant',
+    country: 'BRAZIL',
+    commodity: 'SOY',
+    name: 'SOY_',
+    position: 4
+  },
+  {
+    type: 'Ind', # CAUTION should be quant but misclassified currently
+    country: 'BRAZIL',
+    commodity: nil,
+    name: 'TOTAL_DEFOR_RATE', # CAUTION name mixup, different name for Paraguay
+    position: 5
+  },
+  {
+    type: 'Ind',
+    country: 'BRAZIL',
+    commodity: nil,
+    name: 'PROTECTED_DEFICIT_PERC',
+    position: 12
+  }
+].freeze
+
 namespace :populate do
   task context_indicators: [:environment] do
-    context_indicators = [
-      {
-        type: 'Quant',
-        country: 'BRAZIL',
-        commodity: nil,
-        name: 'BIODIVERSITY',
-        position: 10
-      },
-      {
-        type: 'Ind',
-        country: 'BRAZIL',
-        commodity: nil,
-        name: 'FOREST_500',
-        position: 19
-      },
-      {
-        type: 'Ind',
-        country: 'BRAZIL',
-        commodity: nil,
-        name: 'SMALLHOLDERS',
-        position: 18
-      },
-      {
-        type: 'Ind',
-        country: 'BRAZIL',
-        commodity: nil,
-        name: 'WATER_SCARCITY',
-        position: 9
-      },
-      {
-        type: 'Qual',
-        country: 'BRAZIL',
-        commodity: 'SOY',
-        name: 'ZERO_DEFORESTATION',
-        position: 20
-      },
-      {
-        type: 'Quant',
-        country: 'BRAZIL',
-        commodity: 'SOY',
-        name: 'AGROSATELITE_SOY_DEFOR_',
-        position: 7
-      },
-      {
-        type: 'Quant',
-        country: 'BRAZIL',
-        commodity: nil,
-        name: 'GHG_',
-        position: 8
-      },
-      {
-        type: 'Quant',
-        country: 'BRAZIL',
-        commodity: nil,
-        name: 'POTENTIAL_SOY_DEFORESTATION_V2', # CAUTION name mixup, different name for Paraguay
-        position: 6
-      },
-      {
-        type: 'Quant',
-        country: 'BRAZIL',
-        commodity: 'SOY',
-        name: 'SOY_',
-        position: 4
-      },
-      {
-        type: 'Ind', # CAUTION should be quant but misclassified currently
-        country: 'BRAZIL',
-        commodity: nil,
-        name: 'TOTAL_DEFOR_RATE', # CAUTION name mixup, different name for Paraguay
-        position: 5
-      },
-      {
-        type: 'Ind',
-        country: 'BRAZIL',
-        commodity: nil,
-        name: 'PROTECTED_DEFICIT_PERC',
-        position: 12
-      }
-    ]
-    context_indicators.map do |ci|
+    mapped_context_indicators = CONTEXT_INDICATORS.map do |ci|
       puts "#{ci[:name]} (#{ci[:type]})"
       indicator = case ci[:type]
                   when 'Quant'
@@ -88,7 +89,7 @@ namespace :populate do
                     Qual.find_by_name(ci[:name])
                   when 'Ind'
                     Ind.find_by_name(ci[:name])
-      end
+                  end
       next nil if indicator.nil?
       puts 'Indicator found'
       indicator_id = indicator.id
@@ -101,7 +102,7 @@ namespace :populate do
                         Commodity.pluck(:commodity_id)
                       else
                         [Commodity.find_by_name(ci[:commodity]).commodity_id]
-      end.compact
+                      end.compact
       next nil if commodity_ids.empty?
       puts 'Commodity found'
 
@@ -124,6 +125,12 @@ namespace :populate do
           position: ci[:position]
         )
       end
-    end.flatten.compact.each { |ci| puts "saving #{ci.inspect}"; ci.save; puts ci.errors.inspect }
+    end
+
+    mapped_context_indicators.flatten.compact.each do |ci|
+      puts "saving #{ci.inspect}"
+      ci.save
+      puts ci.errors.inspect
+    end
   end
 end

@@ -12,14 +12,14 @@ class FlowDownload
                    ';'
                  else
                    ','
-    end
+                 end
     @download_name = [@context.country.name, @context.commodity.name, DownloadVersion.current_version_symbol(@context)].compact.join('_')
     query_builder = FlowDownloadQueryBuilder.new(@context, params)
     @query = if @pivot
                query_builder.pivot_query
              else
                query_builder.flat_query
-    end
+             end
   end
 
   def zipped_csv

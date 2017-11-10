@@ -5,9 +5,9 @@ RSpec.describe Api::V2::StructureController, type: :controller do
   include_context 'brazil resize by'
   include_context 'brazil recolor by'
 
-  describe 'GET get_contexts' do
+  describe 'GET contexts' do
     it 'assigns contexts' do
-      get :get_contexts
+      get :contexts
       controller_contexts = assigns(:contexts)
       expect(controller_contexts).to match_array([context, another_context])
       expect(controller_contexts.find_by("countries.name ILIKE 'Brazil'").context_resize_bies).to match_array([resize_by_area, resize_by_land_conflicts])
@@ -15,10 +15,10 @@ RSpec.describe Api::V2::StructureController, type: :controller do
     end
   end
 
-  describe 'GET get_columns' do
+  describe 'GET columns' do
     include_context 'brazil soy nodes'
     it 'assigns node_types' do
-      get :get_columns, params: {context_id: context.id}
+      get :columns, params: {context_id: context.id}
       expect(assigns(:node_types)).to eq([
         biome_node, state_node, municipality_node, logistics_hub_node, port1_node, exporter1_node, importer1_node, country_of_destination1_node
       ].map(&:node_type))

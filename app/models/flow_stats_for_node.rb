@@ -14,7 +14,7 @@ class FlowStatsForNode
               query.joins(flow_quants: :quant).where('quants.name' => indicator_name)
             elsif indicator_type == 'ind'
               query.joins(flow_inds: :ind).where('inds.name' => indicator_name)
-    end.order(:year).distinct
+            end.order(:year).distinct
     query.map { |y| y['year'] }
   end
 
@@ -23,7 +23,7 @@ class FlowStatsForNode
                                 %w[flow_quants quants]
                               elsif indicator_type == 'ind'
                                 %w[flow_inds inds]
-    end
+                              end
     select_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
       ["year, flows.path[?] AS node_id, sum(CAST(#{value_table}.value AS DOUBLE PRECISION)) AS value, nodes.name AS name",
@@ -39,7 +39,7 @@ class FlowStatsForNode
       ['flows.path[?], nodes.name, year',
        @node_index]
     )
-    values_per_year = Flow.select(select_clause).
+    Flow.select(select_clause).
       joins("LEFT JOIN #{value_table} ON flows.flow_id = #{value_table}.flow_id").
       joins("LEFT JOIN #{dict_table} ON #{dict_table}.#{indicator_type}_id = #{value_table}.#{indicator_type}_id").
       joins(nodes_join_clause).
@@ -52,16 +52,16 @@ class FlowStatsForNode
   def municipalities_count(quant_name)
     Flow.from(
       '(' +
-      nodes_of_type_with_flows_of_quant(NodeTypeName::MUNICIPALITY, quant_name).to_sql +
-      ') s'
+        nodes_of_type_with_flows_of_quant(NodeTypeName::MUNICIPALITY, quant_name).to_sql +
+        ') s'
     ).count
   end
 
   def source_municipalities_count(quant_name)
     Flow.from(
       '(' +
-      nodes_of_type_with_flows_of_quant_into_node(NodeTypeName::MUNICIPALITY, quant_name).to_sql +
-      ') s'
+        nodes_of_type_with_flows_of_quant_into_node(NodeTypeName::MUNICIPALITY, quant_name).to_sql +
+        ') s'
     ).count
   end
 
@@ -95,7 +95,7 @@ class FlowStatsForNode
                                 %w[node_quants quants]
                               elsif indicator_type == 'ind'
                                 %w[node_inds inds]
-    end
+                              end
     query = @node.
       same_type_nodes_in_state_indicator_values(state, indicator_type, indicator_name).
       select(
@@ -120,11 +120,11 @@ class FlowStatsForNode
   # for given indicator
   # for all years
   def state_average(state, indicator_type, indicator_name)
-    value_table, dict_table = if indicator_type == 'quant'
-                                %w[node_quants quants]
-                              elsif indicator_type == 'ind'
-                                %w[node_inds inds]
-    end
+    value_table = if indicator_type == 'quant'
+                    'node_quants'
+                  elsif indicator_type == 'ind'
+                    'node_inds'
+                  end
     query = @node.
       same_type_nodes_in_state_indicator_values(state, indicator_type, indicator_name).
       select(
@@ -133,7 +133,7 @@ class FlowStatsForNode
         "AVG(#{value_table}.value) OVER (PARTITION BY #{value_table}.year) AS value"
       )
 
-    result = Node.from('(' + query.to_sql + ') s').
+    Node.from('(' + query.to_sql + ') s').
       select('s.*').
       where('s.node_id' => @node.id).
       order(nil)
@@ -144,7 +144,7 @@ class FlowStatsForNode
                                 %w[flow_quants quants]
                               elsif indicator_type == 'ind'
                                 %w[flow_inds inds]
-    end
+                              end
     select_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
       [
@@ -192,7 +192,7 @@ class FlowStatsForNode
                                 %w[node_quants quants]
                               elsif indicator_type == 'ind'
                                 %w[node_inds inds]
-    end
+                              end
     flows_join_clause = ActiveRecord::Base.send(
       :sanitize_sql_array,
       ['JOIN flows ON nodes.node_id = flows.path[?]',

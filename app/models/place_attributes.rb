@@ -54,16 +54,16 @@ class PlaceAttributes
                                        value = helper.number_with_precision(production['value'], delimiter: ',', precision: 0)
                                        unit = production['unit']
                                        [production['value'], "#{value} #{unit}"]
-    end
+                                     end
     soy_area = if soy_produced_raw && @place_inds['SOY_YIELD'] && soy_yield_raw = @place_inds['SOY_YIELD']['value']
                  value = helper.number_with_precision(soy_produced_raw / soy_yield_raw, delimiter: ',', precision: 0)
                  unit = 'Ha' # soy prod in Tn, soy yield in Tn/Ha
                  "#{value} #{unit}"
-    end
+               end
     perc_total = total_soy_production
     percentage_total_production = if (perc = @place_quants['SOY_TN'])
                                     helper.number_to_percentage((perc['value'] / perc_total) * 100, delimiter: ',', precision: 2)
-    end
+                                  end
     country_ranking = @stats.country_ranking(@context, 'quant', 'SOY_TN')
     country_ranking = country_ranking.ordinalize if country_ranking.present?
     state_ranking = @stats.state_ranking(@state, 'quant', 'SOY_TN') if @state.present?
@@ -81,15 +81,15 @@ class PlaceAttributes
     main_destination = (consumers = @data[:top_consumers][:countries]) && consumers[0] && consumers[0][:name]
     main_destination = main_destination.humanize if main_destination.present?
 
-    stateName = @state.name.titleize if @state.present?
+    state_name = @state.name.titleize if @state.present?
 
-    text = <<~EOT
+    <<~SUMMARY
       In #{@year}, #{@node.name.titleize} produced #{soy_produced} of soy occupying a total of #{soy_area} \
       of land. With #{percentage_total_production} of the total production, it ranks #{country_ranking} in Brazil in soy \
-      production, and #{state_ranking} in the state of #{stateName}. The largest exporter of soy \
+      production, and #{state_ranking} in the state of #{state_name}. The largest exporter of soy \
       in #{@node.name.titleize} was #{largest_exporter_name}, which accounted for #{percent_of_exports} of the total exports, \
       and the main destination was #{main_destination}.
-EOT
+    SUMMARY
   end
 
   def municipality_and_logistics_hub_extra_data
@@ -253,7 +253,7 @@ EOT
                   @node.temporal_place_quants.where('quants.name' => i[:backend_name])
                 elsif i[:indicator_type] == 'ind'
                   @node.temporal_place_inds.where('inds.name' => i[:backend_name])
-      end.except(:select).select('MIN(year), MAX(year)')
+                end.except(:select).select('MIN(year), MAX(year)')
 
       min_max = min_max.first
       if min_max && min_max['min'].present? && (min_year.nil? || min_max['min'] < min_year)
@@ -274,13 +274,11 @@ EOT
         lines: indicators_list.map do |i|
           data = if i[:state_average] && @state.present?
                    @stats.state_average(@state, i[:indicator_type], i[:backend_name])
-                 else
-                   if i[:indicator_type] == 'quant'
-                     @node.temporal_place_quants.where('quants.name' => i[:backend_name])
-                   elsif i[:indicator_type] == 'ind'
-                     @node.temporal_place_inds.where('inds.name' => i[:backend_name])
-                   end
-          end
+                 elsif i[:indicator_type] == 'quant'
+                   @node.temporal_place_quants.where('quants.name' => i[:backend_name])
+                 elsif i[:indicator_type] == 'ind'
+                   @node.temporal_place_inds.where('inds.name' => i[:backend_name])
+                 end
           values = Hash[data.map do |e|
             [e['year'], e]
           end]
@@ -342,7 +340,7 @@ EOT
       end
     end
 
-    result = {
+    {
       node_list_label =>
         top_nodes.map { |t| {id: t['node_id'], name: t['name'], value: t['value'] / all_nodes_total, is_domestic_consumption: t['is_domestic_consumption'].present?} },
       municipalities: top_municipalities.map { |m| {id: m.id, name: m.name} },
@@ -372,7 +370,7 @@ EOT
                                                                  [@place_inds, @temporal_place_inds_for_all_years]
                                                                else
                                                                  [[], []]
-      end
+                                                               end
       if (value_for_current_year = values_for_current_year[indicator[:backend_name]]).present?
         value = value_for_current_year['value']
       else # temporal indicator with no value for selected year

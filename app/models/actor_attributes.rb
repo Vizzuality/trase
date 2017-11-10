@@ -75,7 +75,7 @@ class ActorAttributes
 
     trade_flows_previous_year = @node.flow_values(@context, 'quant', 'Volume').where(year: @year - 1)
     @trade_total_previous_year = trade_flows_previous_year.sum('value')
-    if @trade_total_previous_year.present? && @trade_total_previous_year > 0
+    if @trade_total_previous_year.present? && @trade_total_previous_year.positive?
       @trade_total_perc_difference = (@trade_total_current_year - @trade_total_previous_year) / @trade_total_previous_year
     end
     trade_total_rank_in_country = @stats.country_ranking_from_flows(@context, 'quant', 'Volume')
@@ -86,15 +86,15 @@ class ActorAttributes
 
   def summary_of_total_trade_volume(profile_type)
     initialize_trade_volume_for_summary
-    text = "#{@node.name.humanize} was the #{@trade_total_rank_in_country_formatted}largest #{profile_type} of soy #{profile_type.casecmp('exporter') == 0 ? 'in' : 'from'} #{@context.country.name} in #{@year}, accounting for #{@trade_total_current_year_formatted}."
+    text = "#{@node.name.humanize} was the #{@trade_total_rank_in_country_formatted}largest #{profile_type} of soy #{profile_type.casecmp('exporter').zero? ? 'in' : 'from'} #{@context.country.name} in #{@year}, accounting for #{@trade_total_current_year_formatted}."
     return text unless @trade_total_perc_difference.present?
-    difference_from = if @trade_total_perc_difference > 0
+    difference_from = if @trade_total_perc_difference.positive?
                         'a ' + helper.number_to_percentage(@trade_total_perc_difference * 100, precision: 0) + ' increase vs'
-                      elsif @trade_total_perc_difference < 0
+                      elsif @trade_total_perc_difference.negative?
                         'a ' + helper.number_to_percentage(-@trade_total_perc_difference * 100, precision: 0) + ' decrease vs'
                       else
                         'no change from'
-    end
+                      end
     text + " This is #{difference_from} the previous year."
   end
 
@@ -124,7 +124,7 @@ class ActorAttributes
     if main_destination.present?
       @main_destination_name = main_destination[:name]
       main_destination_exports = main_destination[:values][year_idx]
-      if main_destination_exports && @trade_total_current_year && @trade_total_current_year > 0
+      if main_destination_exports && @trade_total_current_year && @trade_total_current_year.positive?
         @perc_exports_formatted = helper.number_to_percentage(
           (main_destination_exports * 100.0) / @trade_total_current_year, precision: 0
         )
@@ -229,7 +229,7 @@ is #{@main_destination_name.humanize}, accounting for \
 
     unit = quant.unit
     value_divisor = 1
-    if unit.casecmp('tn') == 0
+    if unit.casecmp('tn').zero?
       unit = 'Kiloton'
       value_divisor = 1000
     end
@@ -348,13 +348,13 @@ is #{@main_destination_name.humanize}, accounting for \
 
   def bucket_index_for_value(buckets, value)
     prev_bucket = 0
-    bucket = buckets.each_with_index do |bucket, index|
-      break index if value >= prev_bucket && value < bucket
+    bucket = buckets.each_with_index do |bucket_value, index|
+      break index if value >= prev_bucket && value < bucket_value
     end
-    bucket = if bucket.is_a? Integer
-               bucket
-             else
-               buckets.size # last bucket
+    if bucket.is_a? Integer
+      bucket
+    else
+      buckets.size # last bucket
     end
   end
 

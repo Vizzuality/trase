@@ -1,7 +1,7 @@
 module Api
   module V2
     class NodesController < ApiController
-      def get_all_nodes
+      def all_nodes
         flow_nodes = Flow.select('distinct(unnest(path)) as node_id')
 
         node_type_ids = NodeType.

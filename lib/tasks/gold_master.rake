@@ -29,7 +29,7 @@ namespace :gold_master do
 
   task compare_csv: [:environment] do
     compare('csv') do |gold_master_file, actual_file|
-      diff = CSVDiff.new(gold_master_file, actual_file)
+      CSVDiff.new(gold_master_file, actual_file)
     end
   end
 
@@ -37,7 +37,7 @@ namespace :gold_master do
     compare('json') do |gold_master_file, actual_file|
       gold_master = HashSorter.new(JSON.parse(File.read(gold_master_file))).sort
       actual = HashSorter.new(JSON.parse(File.read(actual_file))).sort
-      diff = JsonDiff.diff(
+      JsonDiff.diff(
         gold_master,
         actual
       )
