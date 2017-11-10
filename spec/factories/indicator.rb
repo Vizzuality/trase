@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :qual do
     name 'ZERO_DEFORESTATION'
   end

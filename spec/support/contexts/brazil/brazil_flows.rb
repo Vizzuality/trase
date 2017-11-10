@@ -2,7 +2,7 @@ shared_context 'brazil flows' do
   include_context 'brazil soy nodes'
 
   let!(:flow1) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :flow,
       context: context,
       path: [
@@ -12,7 +12,7 @@ shared_context 'brazil flows' do
     )
   end
   let!(:flow2) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :flow,
       context: context,
       path: [

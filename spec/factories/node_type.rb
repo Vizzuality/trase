@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :node_type do
   end
 end

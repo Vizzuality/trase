@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :context_node do
     context
     node_type
