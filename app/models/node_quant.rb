@@ -13,7 +13,7 @@ class NodeQuant < ActiveRecord::Base
   belongs_to :quant, class_name: 'Quant', foreign_key: :quant_id
 
   def self.get_attributes_for_nodes(node_ids, context_id, start_year, end_year)
-    self.select('node_quants.node_id, node_quants.quant_id AS attribute_id, \'Quant\' AS attribute_type, SUM(node_quants.value) as value').
+    select('node_quants.node_id, node_quants.quant_id AS attribute_id, \'Quant\' AS attribute_type, SUM(node_quants.value) as value').
       select('CASE WHEN SUM(node_quants.value) >= context_layer.bucket_3[2] THEN 3 WHEN SUM(node_quants.value) >= context_layer.bucket_3[1] THEN 2 WHEN SUM(node_quants.value) > 0 THEN 1 ELSE 0 END as bucket3').
       select('CASE WHEN SUM(node_quants.value) >= context_layer.bucket_5[4] THEN 5 WHEN SUM(node_quants.value) >= context_layer.bucket_5[3] THEN 4 WHEN SUM(node_quants.value) >= context_layer.bucket_5[2] THEN 3 WHEN SUM(node_quants.value) >= context_layer.bucket_5[1] THEN 2 WHEN SUM(node_quants.value) > 0 THEN 1 ELSE 0 END as bucket5').
       joins('LEFT JOIN context_layer ON context_layer.layer_attribute_id = node_quants.quant_id and context_layer.layer_attribute_type = \'Quant\'').

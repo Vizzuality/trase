@@ -29,7 +29,7 @@ namespace :validate do
 
       reference_node_data = reference_values[api_value.node_id]
 
-      things = reference_node_data['values'].select { |item| api_value.attribute_type.casecmp(item['type']) === 0 && api_value.attribute_id === item['id'] }
+      things = reference_node_data['values'].select { |item| api_value.attribute_type.casecmp(item['type']).zero? && api_value.attribute_id.eql?(item['id']) }
 
       if things.length > 1
         raise "Node #{api_value.node_id} has multiple values for attribute type #{api_value.attribute_type} with attribute id #{api_value.attribute_id}. This should really never happen..."
