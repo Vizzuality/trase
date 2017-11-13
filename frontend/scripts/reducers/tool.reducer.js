@@ -169,8 +169,8 @@ export default function (state = {}, action) {
       newState = Object.assign({}, state, { linksLoading: true });
       break;
 
-    case actions.GET_NODES: {
-      const nodesMeta = action.payload.nodesJSON.data;
+    case actions.GET_NODE_ATTRIBUTES: {
+      const nodesMeta = action.payload.nodesJSON;
 
       const mapDimensionsMeta = action.payload.mapDimensionsMetaJSON;
       const rawMapDimensions = mapDimensionsMeta.dimensions;

@@ -2,7 +2,7 @@ export const GET_CONTEXTS = 'GET_CONTEXTS';
 export const GET_TOOLTIPS = 'GET_TOOLTIPS';
 export const GET_ALL_NODES = 'GET_ALL_NODES';
 export const GET_COLUMNS = 'GET_COLUMNS';
-export const GET_NODES = 'GET_NODES';
+export const GET_NODE_ATTRIBUTES = 'GET_NODE_ATTRIBUTES';
 export const GET_FLOWS = 'GET_FLOWS';
 export const GET_MAP_BASE_DATA = 'GET_MAP_BASE_DATA';
 export const GET_LINKED_GEO_IDS = 'GET_LINKED_GEO_IDS';
@@ -26,7 +26,7 @@ const API_ENDPOINTS = {
   [GET_CONTEXTS]: { api: 2, endpoint: '/get_contexts' },
   [GET_ALL_NODES]: { api: 2, endpoint: '/get_all_nodes' },
   [GET_COLUMNS]: { api: 2, endpoint: '/get_columns' },
-  [GET_NODES]: { api: 1, endpoint: '/get_nodes' },
+  [GET_NODE_ATTRIBUTES]: { api: 2, endpoint: '/get_node_attributes' },
   [GET_FLOWS]: { api: 1, endpoint: '/get_flows' },
   [GET_MAP_BASE_DATA]: { api: 2, endpoint: '/get_map_base_data' },
   [GET_LINKED_GEO_IDS]: { api: 2, endpoint: '/get_linked_geoids' },
