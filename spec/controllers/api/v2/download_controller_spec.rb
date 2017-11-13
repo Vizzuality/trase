@@ -7,7 +7,7 @@ RSpec.describe Api::V2::DownloadController, type: :controller do
   describe 'GET index' do
     before(:each) do
       MaterializedFlow.refresh
-      FactoryGirl.create(:download_version, symbol: 'v1.0', current: true, context_id: context.id)
+      FactoryBot.create(:download_version, symbol: 'v1.0', current: true, context_id: context.id)
     end
     it 'returns a zipped csv file' do
       get :index, params: {context_id: context.id}, format: :csv

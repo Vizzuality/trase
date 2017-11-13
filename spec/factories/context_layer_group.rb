@@ -13,7 +13,7 @@
 #  default_basemap        :string
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :context_layer_group do
     position 0
   end

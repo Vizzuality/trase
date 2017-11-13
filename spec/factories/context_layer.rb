@@ -13,7 +13,7 @@
 #  default_basemap        :string
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :context_layer do
     bucket_3 [5, 10]
     bucket_5 [1, 4, 6, 8]

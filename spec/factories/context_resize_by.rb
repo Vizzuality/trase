@@ -13,7 +13,7 @@
 #  tooltip_text          :text
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :context_resize_by do
     is_default false
     is_disabled false

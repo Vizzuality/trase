@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :node_qual do
     node
     qual

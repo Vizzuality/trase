@@ -3,7 +3,7 @@ shared_context 'api v3 brazil context nodes' do
   include_context 'api v3 node types'
 
   let!(:api_v3_biome_context_node) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_context_node_type,
       context: api_v3_context,
       node_type: api_v3_biome_node_type,
@@ -12,7 +12,7 @@ shared_context 'api v3 brazil context nodes' do
     )
   end
   let!(:api_v3_state_context_node) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_context_node_type,
       context: api_v3_context,
       node_type: api_v3_state_node_type,
@@ -21,7 +21,7 @@ shared_context 'api v3 brazil context nodes' do
     )
   end
   let!(:municipality_context_node) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_context_node_type,
       context: api_v3_context,
       node_type: api_v3_municipality_node_type,
@@ -31,7 +31,7 @@ shared_context 'api v3 brazil context nodes' do
     )
   end
   let!(:api_v3_logistics_hub_context_node) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_context_node_type,
       context: api_v3_context,
       node_type: api_v3_logistics_hub_node_type,
@@ -40,7 +40,7 @@ shared_context 'api v3 brazil context nodes' do
     )
   end
   let!(:api_v3_port1_context_node) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_context_node_type,
       context: api_v3_context,
       node_type: api_v3_port_node_type,
@@ -49,7 +49,7 @@ shared_context 'api v3 brazil context nodes' do
     )
   end
   let!(:api_v3_exporter1_context_node) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_context_node_type,
       context: api_v3_context,
       node_type: api_v3_exporter_node_type,
@@ -58,7 +58,7 @@ shared_context 'api v3 brazil context nodes' do
     )
   end
   let!(:api_v3_importer1_context_node) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_context_node_type,
       context: api_v3_context,
       node_type: api_v3_importer_node_type,
@@ -67,7 +67,7 @@ shared_context 'api v3 brazil context nodes' do
     )
   end
   let!(:country_of_destination1_context_node) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_context_node_type,
       context: api_v3_context,
       node_type: api_v3_country_node_type,

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :flow do
     context
     year 2015

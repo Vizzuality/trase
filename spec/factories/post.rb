@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :post, class: 'Content::Post' do
     image ''
     image_file_name 'image.png'

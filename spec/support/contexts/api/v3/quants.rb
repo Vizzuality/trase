@@ -1,6 +1,6 @@
 shared_context 'api v3 quants' do
   let(:api_v3_area) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_quant,
       name: 'AREA_KM2',
       unit: 'km2',
@@ -10,7 +10,7 @@ shared_context 'api v3 quants' do
     )
   end
   let(:api_v3_land_conflicts) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_quant,
       name: 'LAND_CONFL',
       unit: 'Number',
@@ -20,7 +20,7 @@ shared_context 'api v3 quants' do
     )
   end
   let(:api_v3_force_labour) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_quant,
       name: 'SLAVERY',
       unit: 'Number',
@@ -30,7 +30,7 @@ shared_context 'api v3 quants' do
     )
   end
   let(:api_v3_embargoes) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_quant,
       name: 'EMBARGOES_',
       unit: 'Number',
@@ -40,7 +40,7 @@ shared_context 'api v3 quants' do
     )
   end
   let(:api_v3_fob) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_quant,
       name: 'FOB',
       unit: 'USD',
@@ -49,7 +49,7 @@ shared_context 'api v3 quants' do
     )
   end
   let(:api_v3_deforestation_v2) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_quant,
       name: 'DEFORESTATION_V2',
       unit: 'Ha',
@@ -58,7 +58,7 @@ shared_context 'api v3 quants' do
     )
   end
   let(:api_v3_population) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_quant,
       name: 'POPULATION',
       unit: 'Number',
@@ -67,7 +67,7 @@ shared_context 'api v3 quants' do
     )
   end
   let(:api_v3_soy_tn) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_quant,
       name: 'SOY_TN',
       unit: 'Tn',
@@ -76,7 +76,7 @@ shared_context 'api v3 quants' do
     )
   end
   let(:api_v3_potential_soy_deforestation_v2) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_quant,
       name: 'POTENTIAL_SOY_DEFORESTATION_V2',
       unit: 'Ha',
@@ -85,7 +85,7 @@ shared_context 'api v3 quants' do
     )
   end
   let(:api_v3_soy_) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_quant,
       name: 'SOY_',
       unit: 'Tn',
@@ -94,7 +94,7 @@ shared_context 'api v3 quants' do
     )
   end
   let(:api_v3_agrosatelite_soy_defor_) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_quant,
       name: 'AGROSATELITE_SOY_DEFOR_',
       unit: 'Tn',
@@ -103,7 +103,7 @@ shared_context 'api v3 quants' do
     )
   end
   let(:api_v3_volume) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_quant,
       name: 'Volume',
       unit: 'Tn',
@@ -111,7 +111,7 @@ shared_context 'api v3 quants' do
     )
   end
   let(:api_v3_land_use) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_quant,
       name: 'LAND_USE',
       unit: 'Ha',
@@ -119,7 +119,7 @@ shared_context 'api v3 quants' do
     )
   end
   let(:api_v3_biodiversity) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_quant,
       name: 'BIODIVERSITY',
       unit: 'Unitless',
@@ -127,7 +127,7 @@ shared_context 'api v3 quants' do
     )
   end
   let(:api_v3_ghg_) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :api_v3_quant,
       name: 'GHG_',
       unit: 'Mt/yr',
