@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "includedYears": [2014, 2015, 2016]
+  },
+  "data": [
+    {
+      "name": "Quêrencia",
+      "values": [33, 48, 13]
+    }, {
+      "name": "Campo Novo",
+      "values": [133, 88, 120]
+    }, {
+      "name": "Maracaju",
+      "values": [13, 48, 90]
+    }, {
+      "name": "Barreiras",
+      "values": [3, 10, 20]
+    }
+  ]
+}

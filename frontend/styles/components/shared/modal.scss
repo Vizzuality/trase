@@ -1,0 +1,80 @@
+@import '../../settings';
+
+.c-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 90%;
+  max-width: 690px;
+
+  transform: translate(-50%, -50%);
+
+  z-index: $z-above-veil;
+
+  &.-below-nav {
+    z-index: $z-above-veil-below-nav;
+  }
+
+  > .header {
+    padding: 24px 32px;
+    background-color: $white;
+  }
+
+  > .content {
+    position: relative;
+    min-height: 345px;
+    padding: 16px 16px 90px;
+    background-color: $charcoal-grey;
+
+    color: $white;
+    font-family: $font-family-2;
+    font-size: $font-size-regular;
+    line-height: 1.5;
+
+    p, a, span {
+      line-height: 1.5;
+    }
+
+    a {
+      color: $medium-pink;
+      text-decoration: underline;
+    }
+
+    .c-button {
+      position: absolute;
+      right: 16px;
+      bottom: 16px;
+      color: $charcoal-grey;
+      background-color: $white;
+      font-weight: bold;
+    }
+
+    &.-big {
+      font-size: $font-size-xx-regular;
+    }
+
+    &.-white {
+      background-color: $white;
+      box-shadow: 0 10px 20px 0 rgba(52, 68, 76, .2);
+      color: $charcoal-grey;
+    }
+
+    &.-big-margin {
+      padding: 60px 80px;
+    }
+  }
+}
+
+.-hidden-on-mobile {
+  display: none;
+  @media screen and (min-width: $breakpoint-tablet) {
+    display: block;
+  }
+}
+
+.mobile-warning {
+  display: block;
+  @media screen and (min-width: $breakpoint-tablet) {
+    display: none;
+  }
+}

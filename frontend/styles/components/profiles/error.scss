@@ -1,0 +1,9 @@
+@import '../../settings';
+
+.c-error-message {
+  > .message {
+    color: $medium-pink;
+    font-family: $font-family-1;
+    font-size: $font-size-big;
+  }
+}

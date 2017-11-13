@@ -1,0 +1,752 @@
+{
+  "data": {
+    "summary": "Amaggi was the 5th largest exporter of soy in Brazil in 2015, accounting for 3,917,933 tons. This is a 2% increase vs the previous year. Amaggi sources from 1,258 municipalities, or 23% of the soy production municipalities. The main destination of the soy exported by Amaggi is Russia, accounting for 32% of the total.",
+    "column_name": "IMPORTER",
+    "forest_500": 4.0,
+    "node_name": "CARGILL",
+    "country_geoId": "BR",
+    "country_name": "BRAZIL",
+    "rtrs_member": "YES",
+    "supply_change": "YES",
+    "supply_change_link": "HTTP://SUPPLY-CHANGE.ORG/COMPANY/CARGILL",
+    "top_countries": {
+      "included_years": [
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015
+      ],
+      "lines": [
+        {
+          "name": "China",
+          "geo_id": "BR1702109",
+          "values": [
+            1400000,
+            1600000,
+            1700000,
+            1750000,
+            1900000,
+            1900000
+          ],
+          "value9": 1
+        },
+        {
+          "name": "Thailand",
+          "geo_id": "BR1702109",
+          "values": [
+            900000,
+            700000,
+            700000,
+            1100000,
+            1200000,
+            1300000
+          ],
+          "value9": 2
+        },
+        {
+          "name": "Netherlands",
+          "geo_id": "BR1702109",
+          "values": [
+            100000,
+            700000,
+            1100000,
+            1500000,
+            1600000,
+            1100000
+          ],
+          "value9": 2
+        },
+        {
+          "name": "Spain",
+          "geo_id": "BR1702109",
+          "values": [
+            50000,
+            300000,
+            1100000,
+            500000,
+            100000,
+            1000
+          ],
+          "value9": 3
+        },
+        {
+          "name": "Indonesia",
+          "geo_id": "BR1702109",
+          "values": [
+            600000,
+            100000,
+            500000,
+            700000,
+            1100000,
+            600000
+          ],
+          "value9": 3
+        },
+        {
+          "name": "France",
+          "geo_id": "BR1702109",
+          "values": [
+            600000,
+            100000,
+            500000,
+            700000,
+            1100000,
+            1500000
+          ],
+          "value9": 5
+        },
+        {
+          "name": "United Kingdom",
+          "geo_id": "BR1702109",
+          "values": [
+            600000,
+            100000,
+            500000,
+            700000,
+            1100000,
+            1500000
+          ],
+          "value9": 6
+        },
+        {
+          "name": "India",
+          "geo_id": "BR1702109",
+          "values": [
+            600000,
+            100000,
+            500000,
+            700000,
+            1100000,
+            1500000
+          ],
+          "value9": 7
+        },
+        {
+          "name": "Taiwan",
+          "geo_id": "BR1702109",
+          "values": [
+            600000,
+            100000,
+            500000,
+            700000,
+            1100000,
+            1500000
+          ],
+          "value9": 8
+        },
+        {
+          "name": "Egypt",
+          "geo_id": "BR1702109",
+          "values": [
+            600000,
+            100000,
+            500000,
+            700000,
+            1100000,
+            1500000
+          ],
+          "value9": 8
+        }
+      ],
+      "unit": "t",
+      "style": {
+        "type": "line-points",
+        "style": "line-pink-with-points"
+      },
+      "buckets": [250,250,500,2000,3000]
+    },
+    "top_sources": {
+      "included_years": [
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015
+      ],
+      "municipality": {
+        "lines": [
+          {
+            "id": 2663,
+            "name": "Querência",
+            "geo_id": "BR1702109",
+            "values": [
+              100000,
+              145000,
+              152000,
+              155000,
+              153000,
+              210000
+            ],
+            "value9": 2
+          },
+          {
+            "id": 2299,
+            "name": "Campo Novo",
+            "geo_id": "BR4304002",
+            "values": [
+              145000,
+              110000,
+              105000,
+              150000,
+              152000,
+              151000
+            ],
+            "value9": 1
+          },
+          {
+            "id": 68,
+            "name": "Maracaju",
+            "geo_id": "BR5005400",
+            "values": [
+              20000,
+              60000,
+              90000,
+              115000,
+              120000,
+              95000
+            ],
+            "value9": 6
+          },
+          {
+            "id": 2550,
+            "name": "Barreiras",
+            "geo_id": "BR2903201",
+            "values": [
+              70000,
+              49000,
+              47000,
+              50000,
+              70000,
+              47000
+            ],
+            "value9": 5
+          },
+          {
+            "id": 1915,
+            "name": "Sidrolândia",
+            "geo_id": "BR1702109",
+            "values": [
+              0,
+              25000,
+              35000,
+              15000,
+              30000,
+              20000
+            ],
+            "value9": 8
+          }
+        ],
+        "unit": "t",
+        "style": {
+          "type": "line-points",
+          "style": "line-pink-with-points"
+        }
+      },
+      "biome": {
+        "lines": [
+          {
+            "id": 2663,
+            "name": "Amazonia",
+            "geo_id": "BR1702109",
+            "values": [
+              100000,
+              155000,
+              122000,
+              135000,
+              153000,
+              210000
+            ],
+            "value9": 3
+          },
+          {
+            "id": 2299,
+            "name": "Cerrado",
+            "geo_id":"BR2",
+            "values": [
+              125000,
+              140000,
+              115000,
+              130000,
+              152000,
+              131000
+            ],
+            "value9": 4
+          },
+          {
+            "id": 68,
+            "name": "Caatinga",
+            "geo_id":"BR4",
+            "values": [
+              20000,
+              60000,
+              90000,
+              115000,
+              120000,
+              95000
+            ],
+            "value9": 1
+          },
+          {
+            "id": 2550,
+            "name": "Pantanal",
+            "geo_id":"BR6",
+            "values": [
+              70000,
+              49000,
+              47000,
+              50000,
+              70000,
+              47000
+            ],
+            "value9": 2
+          },
+          {
+            "id": 1915,
+            "name": "Pampa",
+            "geo_id":"BR5",
+            "values": [
+              0,
+              25000,
+              35000,
+              15000,
+              30000,
+              20000
+            ],
+            "value9": 0
+          }
+        ],
+        "unit": "t",
+        "style": {
+          "type": "line-points",
+          "style": "line-pink-with-points"
+        }
+      },
+      "state": {
+        "lines": [
+          {
+            "id": 2663,
+            "name": "Querência",
+            "geo_id":"BR1702109",
+            "values": [
+              100000,
+              145000,
+              152000,
+              155000,
+              153000,
+              210000
+            ],
+            "value9": 1
+          },
+          {
+            "id": 2299,
+            "name": "Campo Novo",
+            "geo_id":"BR4304002",
+            "values": [
+              145000,
+              110000,
+              105000,
+              150000,
+              152000,
+              151000
+            ],
+            "value9": 2
+          },
+          {
+            "id": 68,
+            "name": "Maracaju",
+            "geo_id":"BR5005400",
+            "values": [
+              20000,
+              60000,
+              90000,
+              115000,
+              120000,
+              95000
+            ],
+            "value9": 3
+          },
+          {
+            "id": 2550,
+            "name": "Barreiras",
+            "geo_id":"BR2903201",
+            "values": [
+              70000,
+              49000,
+              47000,
+              50000,
+              70000,
+              47000
+            ],
+            "value9": 4
+          },
+          {
+            "id": 1915,
+            "name": "Sidrolândia",
+            "geo_id":"BR1702109",
+            "values": [
+              0,
+              25000,
+              35000,
+              15000,
+              30000,
+              20000
+            ],
+            "value9": 0
+          }
+        ],
+        "unit": "t",
+        "style": {
+          "type": "line-points",
+          "style": "line-pink-with-points"
+        }
+      },
+      "buckets": [250,250,500,2000,3000]
+    },
+    "total_soy_2015": 8801293,
+    "zero_deforestation": "YES",
+    "zero_deforestation_link": "HTTP://WWW.CARGILL.COM/NEWS/ISSUES/DEFORESTATION/INDEX.JSP",
+    "sustainability": [
+      {
+        "name": "Municipalities",
+        "included_columns": [
+          {
+            "name": "Municipality"
+          },
+          {
+            "name": "Maximum soy deforestation",
+            "unit": "ha"
+          },
+          {
+            "name": "Soy deforestation",
+            "unit": "ha"
+          },
+          {
+            "name": "Biodiversity loss"
+          }
+        ],
+        "rows": [
+          {
+            "values": [
+              {
+                "id": 110,
+                "value": "ALTAMIRA"
+              },
+              {
+                "value": 24893.07
+              },
+              null,
+              null
+            ]
+          },
+          {
+            "values": [
+              {
+                "id": 1932,
+                "value": "NOVO PROGRESSO"
+              },
+              {
+                "value": 13656.5
+              },
+              null,
+              null
+            ]
+          },
+          {
+            "values": [
+              {
+                "id": 2209,
+                "value": "PORTO VELHO"
+              },
+              {
+                "value": 10929.06
+              },
+              null,
+              null
+            ]
+          },
+          {
+            "values": [
+              {
+                "id": 2153,
+                "value": "PLACAS"
+              },
+              {
+                "value": 7171.07
+              },
+              null,
+              null
+            ]
+          },
+          {
+            "values": [
+              {
+                "id": 722,
+                "value": "COCOS"
+              },
+              {
+                "value": 6298.11
+              },
+              null,
+              null
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Biomes",
+        "included_columns": [
+          {
+            "name": "Biome"
+          },
+          {
+            "name": "Maximum soy deforestation",
+            "unit": "ha"
+          },
+          {
+            "name": "Soy deforestation",
+            "unit": "ha"
+          },
+          {
+            "name": "Biodiversity loss"
+          }
+        ],
+        "rows": [
+          {
+            "values": [
+              {
+                "id": 151,
+                "value": "AMAZONIA"
+              },
+              {
+                "value": 90441.07
+              },
+              null,
+              null
+            ]
+          },
+          {
+            "values": [
+              {
+                "id": 457,
+                "value": "CAATINGA"
+              },
+              {
+                "value": 0.33
+              },
+              null,
+              null
+            ]
+          },
+          {
+            "values": [
+              {
+                "id": 652,
+                "value": "CERRADO"
+              },
+              {
+                "value": 39979.38
+              },
+              {
+                "value": 8099.14
+              },
+              null
+            ]
+          },
+          {
+            "values": [
+              {
+                "id": 1700,
+                "value": "MATA ATLANTICA"
+              },
+              {
+                "value": 8.45
+              },
+              null,
+              null
+            ]
+          },
+          {
+            "values": [
+              {
+                "id": 2001,
+                "value": "PAMPA"
+              },
+              {
+                "value": 153.27
+              },
+              null,
+              null
+            ]
+          },
+          {
+            "values": [
+              {
+                "id": 2005,
+                "value": "PANTANAL"
+              },
+              {
+                "value": 81.13
+              },
+              null,
+              null
+            ]
+          },
+          {
+            "isTotal": true,
+            "values": [
+              {
+                "value": "Total"
+              },
+              {
+                "value": 130713.951563184
+              },
+              {
+                "value": 8099.14289900755
+              },
+              {
+                "value": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "companies_exporting": {
+      "dimensions_x": [
+        {
+          "name": "Territorial Deforestation",
+          "unit": "ha"
+        },
+        {
+          "name": "Potential Soy related deforestation",
+          "unit": "ha"
+        },
+        {
+          "name": "Soy related deforestation",
+          "unit": "ha"
+        },
+        {
+          "name": "Loss of biodiversity",
+          "unit": null
+        },
+        {
+          "name": "Land-based emissions",
+          "unit": "Tn"
+        },
+        {
+          "name": "Land use",
+          "unit": "ha"
+        }
+      ],
+      "companies": [
+        {
+          "id": 143,
+          "name": "Amaggi",
+          "y": 1256.788,
+          "x": [
+            4567.688,
+            3467.8,
+            4567.688,
+            3,
+            4567.688,
+            3467.8
+          ]
+        },
+        {
+          "id": 441,
+          "name": "Bunge",
+          "y": 1456.788,
+          "x": [
+            14567.688,
+            13467.8,
+            14567.688,
+            8,
+            14567.688,
+            13467.8
+          ]
+        },
+        {
+          "id": 588,
+          "name": "Cargill",
+          "y": 1556.788,
+          "x": [
+            3567.688,
+            2467.8,
+            3567.688,
+            13,
+            3567.688,
+            2467.8
+          ]
+        },
+        {
+          "id": 31,
+          "name": "ADM",
+          "y": 13206.788,
+          "x": [
+            3477.688,
+            4352.8,
+            2456.688,
+            8,
+            3434.688,
+            5656.8
+          ]
+        },
+        {
+          "id": 31,
+          "name": "ADM",
+          "y": 12316.788,
+          "x": [
+            6567.688,
+            5467.8,
+            6567.688,
+            3,
+            6567.688,
+            5467.8
+          ]
+        },
+        {
+          "id": 31,
+          "name": "ADM",
+          "y": 14863.788,
+          "x": [
+            2258.688,
+            2649.8,
+            5468.688,
+            24,
+            5403.688,
+            8787.8
+          ]
+        },
+        {
+          "id": 31,
+          "name": "ADM",
+          "y": 12332.788,
+          "x": [
+            1923.688,
+            5719.8,
+            2632.688,
+            7,
+            8742.688,
+            4142.8
+          ]
+        },
+        {
+          "id": 31,
+          "name": "ADM",
+          "y": 15486.788,
+          "x": [
+            1545.688,
+            1654.8,
+            1653.688,
+            14,
+            7852.688,
+            6976.8
+          ]
+        }
+      ]
+    }
+  }
+}

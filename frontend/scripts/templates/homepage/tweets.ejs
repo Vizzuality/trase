@@ -1,0 +1,9 @@
+
+<% posts.forEach(function(post) { %>
+  <div class="tweet">
+    <h4 class="tweet-user"><%= post.screen_name %></h4>
+    <p class="tweet-content">
+      <%= post.text %>
+    </p>
+  </div>
+<% }) %>

@@ -1,0 +1,131 @@
+@import '../settings';
+
+.l-profile-actor {
+  position: relative;
+  min-height: calc(100vh - #{$nav-height});
+  padding-top: 44px;
+  background-color: $egg-shell;
+
+  section:nth-of-type(2n-1) {
+    background-color: rgba($white, 0.3);
+  }
+
+  &.-error {
+    position: relative;
+    min-height: calc(100vh - #{$nav-height});
+
+    .c-error-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  .c-overall-info {
+
+    .stat-item .icon {
+      width: 16px;
+      height: 17px;
+    }
+
+    .js-forest-500-score {
+      font-size: 0!important;
+      margin-top: 5px;
+
+      .icon:not(:last-child) {
+        margin-right: 4px;
+      }
+    }
+  }
+
+  .c-anchor-buttons {
+    padding: 49px 0 46px;
+  }
+
+  .c-line {
+    display: flex;
+    align-items: center;
+    // height: 100%;
+  }
+
+  .c-top-map,
+  .c-top-municipalities {
+    padding: 52px 0;
+
+    .title {
+      margin-bottom: 10px;
+    }
+  }
+
+  .c-top-municipalities {
+
+    .js-top-municipalities-title {
+      display: flex;
+
+      span {
+        margin-right: 20px;
+      }
+
+      li {
+        position: relative;
+        opacity: 0.3;
+        cursor: pointer;
+
+        &:not(:last-child) {
+          margin-right: 21px;
+        }
+
+        &.selected {
+          opacity: 1;
+
+          &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 100%;
+            height: 2px;
+            background-color: $medium-pink;
+          }
+        }
+      }
+    }
+
+    .js-top-municipalities-map {
+      height: 400px;
+
+      svg {
+        margin-left: 50px;
+      }
+    }
+  }
+
+  .container-top {
+    display: flex;
+    justify-content: space-between;
+    margin: 56px 0 112px;
+
+    .c-top {
+      width: 40%;
+    }
+
+    .c-top-map {
+      width: 60%;
+    }
+  }
+
+  .title {
+    margin: 0 0 24px;
+
+    font-family: $font-family-1;
+    font-weight: $font-weight-bold;
+    letter-spacing: -.6px;
+    text-transform: uppercase;
+  }
+
+  .municipalities-table,
+  .biome-table {
+    margin: 24px 0 0;
+  }
+}

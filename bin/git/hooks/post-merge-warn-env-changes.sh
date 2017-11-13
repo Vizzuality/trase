@@ -19,6 +19,14 @@ warn_env_update() {
 	exit 0
 }
 
-# Example usage
-# In this example it's used to run `npm install` if package.json changed
+warn_frontend_env_update() {
+  echo ""
+	echo "========================================================"
+	echo "============ FRONTEND ENV FILE UPDATED ================="
+	echo "========================================================"
+	echo ""
+	exit 0
+}
+
 check_run .env.sample warn_env_update
+check_run frontend/.env.sample warn_frontend_env_update

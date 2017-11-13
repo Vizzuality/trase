@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%= htmlWebpackPlugin.options.head %>
+</head>
+<body>
+  <div class="js-node-tooltip c-info-tooltip"></div>
+  <div class="js-sankey-tooltip c-info-tooltip"></div>
+  <div class="loading-wrapper">
+    <%= htmlWebpackPlugin.options.icons %>
+    <div class="l-flows">
+
+      <%= htmlWebpackPlugin.options.search %>
+      <%= htmlWebpackPlugin.options.navtool %>
+
+      <div class="-hidden-on-mobile">
+        <div class="veil js-veil"></div>
+        <div class="c-modal js-modal"></div>
+      </div>
+
+      <div class="mobile-warning">
+        <div class="veil"></div>
+        <div class="c-modal">
+          <div class="content">
+            The TRASE supply chain Tool is not available for mobile devices. We recommend using a screen resolution of at least 1280 by 720 pixels.
+          </div>
+        </div>
+      </div>
+
+      <div class="js-sankey-error is-hidden">
+        <div class="veil -with-menu -below-nav"></div>
+        <div class="c-modal -below-nav">
+          <div class="content">
+            Data is not available for the selected year(s) and "resize by" indicator. Please change year or "resize by" indicator selection.
+          </div>
+        </div>
+      </div>
+
+      <div class="js-tool-content flow-content">
+
+        <div class="js-tool-loading tool-loading">
+          <div class="veil"></div>
+          <div class="c-spinner"></div>
+        </div>
+
+        <div class="js-sankey-veil sankey-veil veil"></div>
+
+        <div class="c-map-sidebar is-absolute">
+          <div class="js-dimensions">
+            <!-- this is rendered by map-dimensions.component -->
+          </div>
+
+          <div class="map-sidebar-group c-map-context js-map-context">
+            <div class="map-sidebar-group-title">
+              Contextual layers
+            </div>
+            <ul class="map-sidebar-group-items js-map-context-items">
+              <!-- this is rendered by map-context.component -->
+            </ul>
+          </div>
+
+          <div class="map-sidebar-group c-map-basemaps">
+            <div class="map-sidebar-group-title">
+              Basemaps
+            </div>
+            <ul class="map-sidebar-group-items js-map-basemaps-items">
+              <!-- this is rendered by map-context.component -->
+            </ul>
+          </div>
+        </div>
+
+        <div class="js-map-container c-map is-absolute">
+          <div id="js-map" class="c-map-leaflet">
+            <div class="js-map-warnings-container c-map-warnings">
+              <svg class="icon">
+                <use xlink:href="#icon-warning"></use>
+              </svg>
+              <span class="js-map-warnings"></span>
+            </div>
+            <div class="btn-map -basemap js-basemap-switcher">
+              <svg class="icon icon-layers"><use xlink:href="#icon-layers"></use></svg>
+            </div>
+          </div>
+          <div class="btn-map -toggle-map js-toggle-map"></div>
+          <div class="c-map-legend js-map-legend">
+            <div class="js-map-legend-context c-map-legend-context"></div>
+            <div class="js-map-legend-choro c-map-legend-choro"></div>
+          </div>
+          <div class="js-map-attribution c-map-attribution">
+            <!-- this is rendered by map.component -->
+          </div>
+        </div>
+
+        <div id="js-columns-selector-react"></div>
+
+        <div class="c-sankey is-absolute js-sankey">
+          <div class="js-sankey-scroll-container sankey-scroll-container">
+            <svg class="js-sankey-canvas sankey">
+              <defs>
+                <pattern id="isAggregatedPattern" x="0" y="0" width="1" height="3" patternUnits="userSpaceOnUse">
+                  <rect x="0" y="0" width="50" height="1" fill="#ddd"/>
+                  <rect x="0" y="1" width="50" height="2" fill="#fff"/>
+                </pattern>
+              </defs>
+              <g class="sankey-container">
+                <g class="sankey-links"></g>
+                <g class="sankey-columns">
+                  <g class="sankey-column">
+                    <g class="sankey-nodes"></g>
+                  </g>
+                  <g class="sankey-column">
+                    <g class="sankey-nodes"></g>
+                  </g>
+                  <g class="sankey-column">
+                    <g class="sankey-nodes"></g>
+                  </g>
+                  <g class="sankey-column">
+                    <g class="sankey-nodes"></g>
+                  </g>
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <div class="expand-button js-expand">
+            <svg class="icon icon-outside-link"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-more-options"></use></svg>
+            <div class="c-node-menu">
+              <ul class="actions">
+                <li class="expand-action js-expand-action" data-collapsed-text="EXPAND SELECTED NODES" data-expanded-text="COLLAPSE SELECTED NODES">
+                  <svg class="icon"><use xlink:href="#icon-more-options"></use></svg>
+                </li>
+                <li class="js-clear">CLEAR SELECTION</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="c-titlebar">
+          <div class="c-nodes-titles js-nodes-titles">
+            <div class="nodes-titles-container js-nodes-titles-container"></div>
+            <div class="c-nodes-clear js-nodes-titles-clear is-hidden">
+              <div class="button icon-button">
+                <svg class="icon"><use xlink:href="#icon-close"></use></svg>
+              </div>
+              <div class="button text-button js-text-button">
+                clear selection
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  <%= htmlWebpackPlugin.options.scripts %>
+
+</body>
+</html>

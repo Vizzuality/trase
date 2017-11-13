@@ -1,0 +1,31 @@
+.c-scroll-section {
+  height: 100vh;
+  width: 100%;
+
+  &.-intro-top {
+    background-image: url('./../public/images/backgrounds/intro-top.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+  }
+
+  &.-intro-middle {
+    background-image: url('./../public/images/backgrounds/intro-middle.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+  }
+
+  &.-intro-bottom {
+    background-image: url('./../public/images/backgrounds/intro-bottom.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+  }
+
+  &.-content {
+    position: relative;
+    height: unset;
+    min-height: 100vh;
+    z-index: $z-above;
+    background: $background-white;
+    padding-bottom: 64px;
+  }
+}

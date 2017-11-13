@@ -1,0 +1,33 @@
+@import '../../settings';
+
+.c-switcher {
+  display: flex;
+  position: relative;
+
+  border-radius: 100px;
+
+  cursor: pointer;
+
+  &::before {
+    display: inline-block;
+
+    position: absolute;
+    top: 50%;
+
+    transform: translate(0, -50%);
+    transition: left .25s linear, transform .25s linear;
+
+    border-radius: 50%;
+    background-color: $white;
+    box-shadow: $box-shadow;
+
+    content: '';
+  }
+
+  &.-enabled {
+    &::before {
+      left: calc(100% - 3px);
+      transform: translate(-100%, -50%);
+    }
+  }
+}

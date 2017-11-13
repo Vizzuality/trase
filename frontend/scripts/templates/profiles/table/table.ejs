@@ -1,0 +1,92 @@
+<table>
+  <% if(type === 't_head_places'){ %>
+    <thead>
+      <tr class="table-row">
+        <th class="header-cell"></th>
+        <% for(var i = 0; i < data['rows'].length; i++) { %>
+          <th class="header-cell _text-align-right"><%= data['rows'][i]['name'] %></th>
+        <% } %>
+      </tr>
+    </thead>
+    <tbody>
+      <% for(var i = 0; i < data['rows'][0]['values'].length; i++){%>
+        <tr class="table-row">
+          <td class="cell-name">
+            <span class="node-name">
+              <%= data['included_columns'][i]['name'] %><% if(data['included_columns'][i]['year'])
+            { %> (<%= data['included_columns'][i]['year'] %>)<% } %>
+              </span>
+          </td>
+          <% for(var j = 0; j < data['rows'].length; j++) { %>
+            <td class="cell-score _text-align-right">
+              <span class="unit" <% if(data['rows'][j]['have_unit']){ %>data-unit="<%= data['included_columns'][i]['unit'] %>"<% } %>>
+                <%= data['rows'][j]['values'][i] %>
+              </span>
+            </td>
+          <% } %>
+        </tr>
+      <% } %>
+    </tbody>
+  <% } else if(type === 't_head_actors'){ %>
+    <thead>
+      <tr class="table-row">
+        <% for(var i = 0; i < data['included_columns'].length; i++) { %>
+          <th class="header-cell <% if(i > 0) { %> _text-align-right <% } %>">
+            <%= data['included_columns'][i]['name'] %>
+          </th>
+        <% } %>
+      </tr>
+    </thead>
+    <tbody>
+      <% for(var i = 0; i < data['rows'].length; i++) { %>
+      <tr class="table-row">
+        <% if (data['rows'][i]['is_total'] === true) { %>
+          <td class="cell-score">
+            <span class="node-name">Total</span>
+          </td>
+        <% } %>
+        <% for(var j = 0; j < data['rows'][i]['values'].length; j++){%>
+          <td class="cell-score <% if (j > 0 || data['rows'][i]['is_total'] === true) { %> _text-align-right <% } %>">
+            <% if (data['rows'][i]['values'][j] !== null) { %>
+              <span class="unit" data-unit="<%= i == 0 ? data['included_columns'][j]['unit'] : null  %>">
+                <%= data['rows'][i]['values'][j]['value'] %>
+                <% if (link !== null && data['rows'][i]['values'][j]['id']) {%>
+                  <a class="node-link" href="<%= link + data['rows'][i]['values'][j]['id'] %>">
+                    <svg class="icon icon-check">
+                      <use xlink:href="#icon-outside-link" />
+                    </svg>
+                  </a>
+                <% } %>
+              </span>
+            <% } else{ %>
+              <span class="unit">N/A</span>
+            <% } %>
+          </td>
+        <% } %>
+      </tr>
+      <% } %>
+    </tbody>
+  <% } else {%>
+    <tbody>
+      <% for(var i = 0; i < data.length; i++) { %>
+        <tr class="table-row">
+          <td class="cell-name">
+            <span class="node-name"><%= i+1 %>.<%= data[i]['name'] %></span>
+            <% if (link !== null) {%>
+            <a class="node-link" href="<%= link + data[i]['id'] %>">
+              <svg class="icon icon-check">
+                  <use xlink:href="#icon-outside-link" />
+              </svg>
+            </a>
+            <% } %>
+          </td>
+          <td class="cell-score _text-align-right">
+            <span class="unit" data-unit="<%= i == 0 ? '%' : null  %>">
+              <%= data[i]['value'] %>
+            </span>
+          </td>
+        </tr>
+      <% } %>
+    </tbody>
+  <% } %>
+</table>

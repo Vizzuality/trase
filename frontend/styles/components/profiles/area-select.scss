@@ -1,0 +1,56 @@
+@import '../../settings';
+
+.c-area-select {
+
+  .c-dropdown {
+
+    &:first-of-type {
+      margin-right: 40px;
+    }
+  }
+
+  .contain-information {
+    margin-top: 20px;
+
+    div {
+      display: inline-block;
+
+      span {
+        display: block;
+      }
+
+      .title-information {
+        font-family: $font-family-1;
+        font-size: $font-size-x-regular;
+        font-weight: $font-weight-bold;
+        letter-spacing: -.6px;
+        line-height: 1.23;
+        text-transform: uppercase;
+      }
+
+      .value-information {
+        display: flex;
+        align-items: center;
+        margin-top: 7px;
+        font-family: $font-family-1;
+        font-size: $font-size-medium;
+        letter-spacing: -1px;
+
+        .star-icon {
+          width: 16px;
+          margin-right: 2px;
+        }
+
+        .icon-check,
+        .icon-no {
+          width: 16px;
+          margin-right: 4px;
+        }
+      }
+
+      &:first-of-type {
+        margin-right: 40px;
+      }
+    }
+  }
+}

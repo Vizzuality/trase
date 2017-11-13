@@ -1,0 +1,27 @@
+@import '../../settings';
+
+.plyr__controls, .plyr__video-wrapper {
+  visibility: hidden;
+  pointer-events: none;
+
+  &.-active {
+    visibility: visible;
+    pointer-events: auto;
+  }
+}
+
+.plyr__play-large {
+  background: $medium-pink;
+  border: 0;
+  padding: 28px;
+  box-shadow: 5px 5px 20px $charcoal-grey-faded-a-lot;
+  cursor: pointer;
+}
+
+.plyr__volume--display, .plyr__progress--played {
+  color: $medium-pink;
+}
+
+.plyr__controls button:hover {
+  background: $medium-pink !important;
+}

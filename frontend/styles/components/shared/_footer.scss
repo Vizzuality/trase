@@ -1,0 +1,162 @@
+@import '../../settings';
+
+.c-footer {
+  position: relative;
+  z-index: $z-above;
+  padding: 48px 0 56px;
+  bottom: 0;
+  background-color: $charcoal-grey;
+
+  .signup .sign-up-link {
+    color: $white;
+  }
+
+  .contain-logos-footer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 56px 0 0;
+
+    @media screen and (min-width: $breakpoint-tablet) {
+      flex-direction: row;
+    }
+
+    > .contain-logos {
+      width: 100%;
+
+      &:not(:first-child) {
+        margin: 24px 0 0;
+      }
+
+      @media screen and (min-width: $breakpoint-tablet) {
+        width: calc(100% / 3);
+        padding: 0 0 0 16px;
+
+        border-left: 1px solid $white;
+
+        &:not(:first-child) {
+          margin: 0;
+        }
+      }
+
+      > .title {
+        margin: 0 0 32px;
+        color: $white;
+      }
+
+      > .logo-list {
+
+        &:not(:first-of-type) {
+          margin: 16px 0 0;
+        }
+
+        > .logo-item {
+          display: inline-block;
+
+          &:not(:first-child) {
+            margin: 0 0 0 16px;
+          }
+
+          @media screen and (min-width: $breakpoint-tablet) {
+            display: block;
+
+            &:not(:first-child) {
+              margin: 16px 0 0;
+            }
+          }
+
+          &.sei-logo > a > img {
+            width: 167px;
+          }
+
+          &.gcp-logo > a > img {
+            width: 112px;
+          }
+
+          &.vizzuality-logo > a > img {
+            width: 116px;
+          }
+
+          &.efi-logo > a > img {
+            width: 64px;
+          }
+        }
+
+        &.-donors {
+
+          @media screen and (min-width: $breakpoint-laptop) {
+            display: flex;
+          }
+
+          > .logo-item {
+
+            &.wwf-logo > a > img {
+              width: 50px;
+            }
+
+            &.gef-logo > a > img {
+              width: 57px;
+            }
+
+            &.eustars-logo > a > img {
+              width: 80px;
+            }
+
+            &.ukaidsv-logo > a > img {
+              width: 48px;
+            }
+
+            &.conservancy-logo > a > img {
+              width: 120px;
+            }
+
+            &.sida-logo > a > img {
+              width: 120px;
+            }
+
+            &.formas-logo > a > img {
+              width: 40px;
+            }
+
+            &.moore-logo > a > img {
+              width: 104px;
+            }
+
+            @media screen and (min-width: $breakpoint-laptop) {
+              display: inline-block;
+
+              &:not(:first-child) {
+                margin: 0 0 0 45px;
+              }
+            }
+          }
+        }
+      }
+
+      > .contain-text {
+        margin: 16px 0 0;
+
+        > p {
+          color: rgba($gray, .5);
+        }
+      }
+    }
+  }
+
+  .contain-link-list {
+    margin-top: 54px;
+
+    .links-list {
+      display: flex;
+      justify-content: center;
+
+      .separator {
+        display: inline-flex;
+        align-items: center;
+        margin: 0 8px;
+
+        color: $gray;
+      }
+    }
+  }
+}

@@ -1,0 +1,56 @@
+@mixin arrow($size, $border-width, $color, $direction) {
+  display: inline-block;
+  width: $size;
+  height: $size;
+  border: $border-width solid $color;
+  content: '';
+
+  @if($direction == 'up') {
+    transform: rotate(45deg);
+    border-right: 0 !important;
+    border-bottom: 0 !important;
+  }
+
+  @if($direction == 'right') {
+    transform: rotate(45deg);
+    border-bottom: 0 !important;
+    border-left: 0 !important;
+  }
+
+  @if($direction == 'down') {
+    transform: rotate(45deg);
+    border-top: 0 !important;
+    border-left: 0 !important;
+  }
+
+  @if($direction == 'left') {
+    transform: rotate(45deg);
+    border-top: 0 !important;
+    border-right: 0 !important;
+  }
+}
+
+@mixin triangle ($size, $color, $direction) {
+  width: 0;
+  height: 0;
+
+  @if($direction == 'left') {
+    border-top: $size solid transparent;
+    border-right: $size solid $color;
+    border-bottom: $size solid transparent;
+  }
+
+  @if($direction == 'right') {
+    border-top: $size solid transparent;
+    border-bottom: $size solid transparent;
+    border-left: $size solid $color;
+  }
+}
+
+@mixin smallcaps () {
+  color: rgba($charcoal-grey, .6);
+  font-family: $font-family-1;
+  font-size: $font-size-small;
+  letter-spacing: -.2px;
+  text-transform: uppercase;
+}

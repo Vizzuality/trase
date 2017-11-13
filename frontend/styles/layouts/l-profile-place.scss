@@ -1,0 +1,96 @@
+@import '../settings';
+
+.l-profile-place {
+  position: relative;
+  min-height: calc(100vh - #{$nav-height});
+  padding-top: 54px;
+  background-color: $egg-shell;
+
+  section:nth-of-type(2n-1) {
+    background-color: rgba($white, 0.3);
+  }
+
+  &.-error {
+    position: relative;
+    min-height: calc(100vh - #{$nav-height});
+
+    .c-error-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  .c-overall-map {
+
+    > .map-list {
+      display: flex;
+    }
+
+    > .map-list > .map-item {
+      display: flex;
+      flex-basis: calc(100% / 3);
+      align-items: center;
+    }
+  }
+
+  .c-overall-info {
+    margin-top: 47px;
+  }
+
+  .c-anchor-buttons {
+    padding: 49px 0 46px;
+  }
+
+  .title {
+    font-family: $font-family-1;
+    font-weight: $font-weight-bold;
+    letter-spacing: -.6px;
+    text-transform: uppercase;
+  }
+
+  .deforestation {
+    padding: 53px 0 51px 0;
+
+    .c-line {
+      margin-top: 15px;
+    }
+  }
+
+  .chords-container {
+    padding: 53px 0 51px 0;
+
+    &.-traders .c-chord {
+      text-align: center;
+    }
+
+    &.-consumers .c-chord {
+      text-align: right;
+
+      .c-chord-legend {
+        left: auto;
+        right: 0;
+        padding-right: 39px;
+        padding-left: 0;
+        text-align: right;
+
+        &:before {
+          left: auto;
+          right: 0;
+        }
+      }
+    }
+
+    .c-top {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+    }
+  }
+
+  .score-table {
+    padding: 54px 0 42px 0;
+  }
+}

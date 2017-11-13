@@ -1,0 +1,9 @@
+<ul class="c-area-table-switcher">
+  <span><%= tabsTitle%></span>
+  <% Object.keys(data).forEach(function (i) { %>
+    <li class="js-multi-table-switcher <%= i === "0" ? 'selected' : null %>" data-table="<%= key + '_' + i %>"><%= data[i].name %></li>
+  <%});%>
+</ul>
+<% Object.keys(data).forEach(function (i) { %>
+  <div class="js-multi-table-container <%= key + '_' + i %> <%= i !== "0" ? 'is-hidden' : null %>"></div>
+<%});%>

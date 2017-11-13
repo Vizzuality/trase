@@ -1,0 +1,522 @@
+{
+  "data": {
+    "summary": "In 2015, Querência exported 560,097 tons of soy occupying a total of 176,131ha of land. With 1% of the total production, it ranks 121st in Brazil in soy production, and 2nd in the state of Mato Grosso. The largest exporter of soy in Querência was Cargill, which accounted for 31% of the total exports, and the main destination was China.",
+    "area": 17786.2,
+    "biome_geo_id": "BR1",
+    "biome_name": "AMAZONIA",
+    "column_name": "MUNICIPALITY",
+    "country_geo_id": "BR",
+    "country_name": "BRAZIL",
+    "farming_GDP": 0.506,
+    "municipality_geo_id": "BR5107065",
+    "municipality_name": "QUERENCIA",
+    "soy_farmland": 0.7340000000000001,
+    "state_geo_id": "BR51",
+    "state_name": "MATO GROSSO",
+    "indicators": [
+      {
+        "name": "Key indicators",
+        "included_columns": [
+          {
+            "name": "Soy deforestation (until 2014)",
+            "unit": "ha"
+          },
+          {
+            "name": "Number of environmental embargoes (2015)"
+          },
+          {
+            "name": "Area affected by fires (2013)",
+            "unit": "km2"
+          },
+          {
+            "name": "Cases of forced labor (2014)"
+          },
+          {
+            "name": "Cases of land conflicts (2014)"
+          },
+          {
+            "name": "Biodiversity (loss of amphibian habitat)"
+          },
+          {
+            "name": "Annual deforestation rate (2015)",
+            "unit": "ha"
+          },
+          {
+            "name": "Human development index (2013)"
+          },
+          {
+            "name": "Criticality of water scarcity (2013)"
+          }
+        ],
+        "rows": [
+          {
+            "name": "Score",
+            "have_unit": true,
+            "values": [
+              null,
+              2.0,
+              29.55,
+              0.0,
+              0.0,
+              null,
+              1840.0,
+              0.69,
+              2.0
+            ]
+          },
+          {
+            "name": "State Ranking",
+            "have_unit": false,
+            "values": [
+              13,
+              27,
+              4,
+              51,
+              70,
+              6,
+              30,
+              45,
+              36
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Deforestation",
+        "included_columns": [
+          {
+            "name": "Soy deforestation (until 2014)",
+            "unit": "ha"
+          },
+          {
+            "name": "Number of environmental embargoes (2015)"
+          },
+          {
+            "name": "Area affected by fires (2013)",
+            "unit": "km2"
+          },
+          {
+            "name": "Cases of forced labor (2014)"
+          },
+          {
+            "name": "Cases of land conflicts (2014)"
+          },
+          {
+            "name": "Biodiversity (loss of amphibian habitat)"
+          },
+          {
+            "name": "Annual deforestation rate (2015)",
+            "unit": "ha"
+          },
+          {
+            "name": "Human development index (2013)"
+          },
+          {
+            "name": "Criticality of water scarcity (2013)"
+          }
+        ],
+        "rows": [
+          {
+            "name": "Score",
+            "have_unit": true,
+            "values": [
+              null,
+              2.0,
+              29.55,
+              0.0,
+              0.0,
+              null,
+              1840.0,
+              0.69,
+              2.0
+            ]
+          },
+          {
+            "name": "State Ranking",
+            "have_unit": false,
+            "values": [
+              13,
+              27,
+              4,
+              51,
+              70,
+              6,
+              30,
+              45,
+              36
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Other environmental indicators",
+        "included_columns": [
+          {
+            "name": "Soy deforestation (until 2014)",
+            "unit": "ha"
+          },
+          {
+            "name": "Number of environmental embargoes (2015)"
+          },
+          {
+            "name": "Area affected by fires (2013)",
+            "unit": "km2"
+          },
+          {
+            "name": "Cases of forced labor (2014)"
+          },
+          {
+            "name": "Cases of land conflicts (2014)"
+          },
+          {
+            "name": "Biodiversity (loss of amphibian habitat)"
+          },
+          {
+            "name": "Annual deforestation rate (2015)",
+            "unit": "ha"
+          },
+          {
+            "name": "Human development index (2013)"
+          },
+          {
+            "name": "Criticality of water scarcity (2013)"
+          }
+        ],
+        "rows": [
+          {
+            "name": "Score",
+            "have_unit": true,
+            "values": [
+              null,
+              2.0,
+              29.55,
+              0.0,
+              0.0,
+              null,
+              1840.0,
+              0.69,
+              2.0
+            ]
+          },
+          {
+            "name": "State Ranking",
+            "have_unit": false,
+            "values": [
+              13,
+              27,
+              4,
+              51,
+              70,
+              6,
+              30,
+              45,
+              36
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Socio-economic indicators",
+        "included_columns": [
+          {
+            "name": "Soy deforestation (until 2014)",
+            "unit": "ha"
+          },
+          {
+            "name": "Number of environmental embargoes (2015)"
+          },
+          {
+            "name": "Area affected by fires (2013)",
+            "unit": "km2"
+          },
+          {
+            "name": "Cases of forced labor (2014)"
+          },
+          {
+            "name": "Cases of land conflicts (2014)"
+          },
+          {
+            "name": "Biodiversity (loss of amphibian habitat)"
+          },
+          {
+            "name": "Annual deforestation rate (2015)",
+            "unit": "ha"
+          },
+          {
+            "name": "Human development index (2013)"
+          },
+          {
+            "name": "Criticality of water scarcity (2013)"
+          }
+        ],
+        "rows": [
+          {
+            "name": "Score",
+            "have_unit": true,
+            "values": [
+              null,
+              2.0,
+              29.55,
+              0.0,
+              0.0,
+              null,
+              1840.0,
+              0.69,
+              2.0
+            ]
+          },
+          {
+            "name": "State Ranking",
+            "have_unit": false,
+            "values": [
+              13,
+              27,
+              4,
+              51,
+              70,
+              6,
+              30,
+              45,
+              36
+            ]
+          }
+        ]
+      }
+    ],
+    "trajectory_deforestation": {
+      "included_years": [
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015
+      ],
+      "lines": [
+        {
+          "name": "Soy related deforestation",
+          "legend_name": "Soy related<br/>deforestation",
+          "type": "area",
+          "style": "area-pink",
+          "values": [
+            70,
+            480,
+            520,
+            505,
+            510,
+            755
+          ]
+        },
+        {
+          "name": "Potential Soy related deforestation",
+          "legend_name": "Potential Soy<br/>related deforestation",
+          "type": "line",
+          "style": "line-dashed-pink",
+          "values": [
+            460,
+            700,
+            765,
+            730,
+            750,
+            1030
+          ]
+        },
+        {
+          "name": "Territorial Deforestation",
+          "legend_name": "Territorial<br/>Deforestation",
+          "type": "area",
+          "style": "area-black",
+          "values": [
+            740,
+            770,
+            780,
+            1125,
+            1100,
+            1300
+          ]
+        },
+        {
+          "name": "State Average",
+          "legend_name": "State<br/>Average",
+          "type": "line",
+          "style": "line-dashed-black",
+          "values": [
+            560,
+            400,
+            465,
+            430,
+            450,
+            630
+          ]
+        }
+      ],
+      "unit": "ha"
+    },
+    "top_consumers": {
+      "municipalities": [
+        {
+          "id":2262,
+          "name":"QUERENCIA"
+        },
+        {
+          "id":2759,
+          "name":"SORRISO"
+        },
+        {
+          "id":2663,
+          "name":"SAPEZAL"
+        }
+      ],
+      "countries": [
+        {
+          "id": 684,
+          "name": "CHINA",
+          "value": 0.45984237105568604
+        },
+        {
+          "id": 15907,
+          "name": "BRAZIL",
+          "value": 0.27508767942374607
+        },
+        {
+          "id": 1158,
+          "name": "GERMANY",
+          "value": 0.06429506856656224
+        }
+      ],
+      "matrix": [
+        [
+          0,
+          0,
+          0,
+          233968.733919099,
+          423343,
+          21231
+        ],
+        [
+          0,
+          0,
+          0,
+          131307.951,
+          311312,
+          61313
+        ],
+        [
+          0,
+          0,
+          0,
+          128541.016191491,
+          3424,
+          2342
+        ],
+        [
+          233968.733919099,
+          131307.951,
+          128541.016191491,
+          0,
+          0,
+          0
+        ],
+        [
+          423343,
+          311312,
+          3424,
+          0,
+          0,
+          0
+        ],
+        [
+          21231,
+          61313,
+          2342,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "top_traders": {
+      "municipalities": [
+        {
+          "id":2262,
+          "name":"QUERENCIA"
+        },
+        {
+          "id":2759,
+          "name":"SORRISO"
+        },
+        {
+          "id":2663,
+          "name":"SAPEZAL"
+        }
+      ],
+      "actors": [
+        {
+          "id": 952,
+          "name": "DOMESTIC CONSUMPTION",
+          "value": 0.2657993045708783
+        },
+        {
+          "id": 142,
+          "name": "AMAGGI",
+          "value": 0.1491719063304207
+        },
+        {
+          "id": 440,
+          "name": "BUNGE",
+          "value": 0.14602854039611193
+        }
+      ],
+      "matrix": [
+        [
+          0,
+          0,
+          0,
+          233968.733919099,
+          423343,
+          21231
+        ],
+        [
+          0,
+          0,
+          0,
+          131307.951,
+          311312,
+          61313
+        ],
+        [
+          0,
+          0,
+          0,
+          128541.016191491,
+          3424,
+          2342
+        ],
+        [
+          233968.733919099,
+          131307.951,
+          128541.016191491,
+          0,
+          0,
+          0
+        ],
+        [
+          423343,
+          311312,
+          3424,
+          0,
+          0,
+          0
+        ],
+        [
+          21231,
+          61313,
+          2342,
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  }
+}

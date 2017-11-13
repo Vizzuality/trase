@@ -1,0 +1,14 @@
+{
+	"title": {
+		"value": ["municipallities", "trade amount", "deforestation", "water scarcity", "conflicts", "fires"],
+		"units": ["", "tons", "ha", "mm/ha", "", ""]
+	},
+	"data": {
+		"municipallities": ["Quêrencia", "Campo Novo", "Maracaju", "Barreiras", "Castro", "Brasnorte", "Brazil"],
+		"trade amount": ["2863", "423143", "3212", "6556", "123", "754", "754"],
+		"deforestation": ["634", "543", "753", "643", "652", "5223", "754"],
+		"water scarcity": ["532", "12", "434", "98", "123", "457", "754"],
+		"conflicts": ["532", "12", "434", "98", "123", "457", "754"],
+		"fires": ["532", "12", "434", "98", "123", "457", "754"]
+	}
+}
