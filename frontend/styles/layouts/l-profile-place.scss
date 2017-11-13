@@ -94,3 +94,9 @@
     padding: 54px 0 42px 0;
   }
 }
+
+.-print {
+  .c-anchor-buttons .row {
+    display: none;
+  }
+}

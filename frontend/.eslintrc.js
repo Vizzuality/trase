@@ -49,6 +49,7 @@ module.exports = {
       DATA_DOWNLOAD_ENABLED: true,
       DATA_FORM_ENDPOINT: true,
       DATA_FORM_ENABLED: true,
+      PDF_DOWNLOAD_URL: true,
       ga: true,
       fetch: true
     },

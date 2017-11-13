@@ -129,3 +129,9 @@
     margin: 24px 0 0;
   }
 }
+
+.-print {
+  .c-anchor-buttons .row {
+    display: none;
+  }
+}

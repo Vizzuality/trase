@@ -54,9 +54,11 @@
               </a>
             </div>
           <% } %>
-          <div class="nav-item js-open-search">
-            <svg class="icon icon-search"><use xlink:href="#icon-search"></use></svg>
-          </div>
+          <% if (page === 'profile-actor' || page === 'profile-place') { %>
+            <div class="nav-item js-download-pdf">
+              <svg class="icon"><use xlink:href="#icon-download-pdf"></use></svg>
+            </div>
+          <% } %>
         </div>
       </nav>
   </div>
