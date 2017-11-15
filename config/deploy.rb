@@ -40,7 +40,7 @@ namespace :deploy do
   after 'deploy:publishing', 'deploy:restart'
 end
 
-namespace :npm do
-  after 'npm:install'
-end
-set :rvm_ruby_version, '2.4.1'
+# namespace :npm do
+#   after 'npm:install'
+# end
+set :rvm_ruby_version, '2.4.2'
