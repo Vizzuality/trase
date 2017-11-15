@@ -32,9 +32,15 @@ append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/syst
 
 set :keep_releases, 5
 
+set :npm_target_path, -> { release_path.join('frontend') } # default not set
+set :npm_flags, ''
+
 namespace :deploy do
   after :finishing, 'deploy:cleanup'
   after 'deploy:publishing', 'deploy:restart'
 end
 
+namespace :npm do
+  after 'npm:install'
+end
 set :rvm_ruby_version, '2.4.1'

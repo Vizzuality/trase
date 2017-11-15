@@ -33,14 +33,15 @@ gem 'paperclip', '~> 5.0.0'
 gem 'rack-cors', '~> 0.4'
 gem 'twitter', '~> 6.1'
 
+gem 'json-diff'
+gem 'csv-diff'
+
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'rspec-rails', '~> 3.5'
   gem 'rails-controller-testing'
   gem 'factory_bot_rails'
   gem 'json-schema'
-  gem 'json-diff'
-  gem 'csv-diff'
 end
 
 group :development do
@@ -56,6 +57,7 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
+  gem 'capistrano-npm'
   gem 'rubocop', require: false
 end
 
