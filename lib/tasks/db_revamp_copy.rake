@@ -138,9 +138,14 @@ end
 
 def context_node_types_insert_sql
   <<-SQL
-  INSERT INTO revamp.context_node_types (id, context_id, node_type_id, column_group, column_position, is_default, is_geo_column, created_at, updated_at)
+  WITH inserted_context_node_types AS (
+    INSERT INTO revamp.context_node_types (id, context_id, node_type_id, created_at, updated_at)
+    SELECT id, context_id, node_type_id, NOW(), NOW()
+    FROM public.context_nodes
+  )
+  INSERT INTO revamp.context_node_type_properties (context_node_type_id, column_group, column_position, is_default, is_geo_column, created_at, updated_at)
   SELECT
-    id, context_id, cnt.node_type_id, column_group, column_position,
+    id, column_group, column_position,
     COALESCE(is_default, FALSE),
     COALESCE(is_geo_column, FALSE),
     NOW(), NOW()

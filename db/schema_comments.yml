@@ -39,6 +39,7 @@ tables:
         comment: Commodity name; unique across commodities
   - name: context_node_types
     comment: Node types represented in supply chains per context. The value of column_position is interpreted as position in flows.path.
+  - name: context_node_type_properties
     columns:
       - name: column_group
         comment: Number of sankey column in which to display nodes of this type

@@ -1218,7 +1218,7 @@ COMMENT ON COLUMN quant_properties.display_name IS 'Name of attribute for displa
 -- Name: COLUMN quant_properties.unit_type; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN quant_properties.unit_type IS 'Type of unit, e.g. score. One of restricted set of values.';
+COMMENT ON COLUMN quant_properties.unit_type IS 'Type of unit, e.g. count. One of restricted set of values.';
 
 
 --
@@ -1717,13 +1717,12 @@ ALTER SEQUENCE commodities_id_seq OWNED BY commodities.id;
 
 
 --
--- Name: context_node_types; Type: TABLE; Schema: revamp; Owner: -
+-- Name: context_node_type_properties; Type: TABLE; Schema: revamp; Owner: -
 --
 
-CREATE TABLE context_node_types (
+CREATE TABLE context_node_type_properties (
     id integer NOT NULL,
-    context_id integer NOT NULL,
-    node_type_id integer NOT NULL,
+    context_node_type_id integer NOT NULL,
     column_group integer NOT NULL,
     column_position integer NOT NULL,
     is_default boolean DEFAULT false NOT NULL,
@@ -1734,38 +1733,70 @@ CREATE TABLE context_node_types (
 
 
 --
+-- Name: COLUMN context_node_type_properties.column_group; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN context_node_type_properties.column_group IS 'Number of sankey column in which to display nodes of this type';
+
+
+--
+-- Name: COLUMN context_node_type_properties.column_position; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN context_node_type_properties.column_position IS 'Index of node of this type in flows.path';
+
+
+--
+-- Name: COLUMN context_node_type_properties.is_default; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN context_node_type_properties.is_default IS 'When set, show this node type as default (only use for one)';
+
+
+--
+-- Name: COLUMN context_node_type_properties.is_geo_column; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN context_node_type_properties.is_geo_column IS 'When set, show nodes on map';
+
+
+--
+-- Name: context_node_type_properties_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE context_node_type_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: context_node_type_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE context_node_type_properties_id_seq OWNED BY context_node_type_properties.id;
+
+
+--
+-- Name: context_node_types; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE context_node_types (
+    id integer NOT NULL,
+    context_id integer NOT NULL,
+    node_type_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: TABLE context_node_types; Type: COMMENT; Schema: revamp; Owner: -
 --
 
 COMMENT ON TABLE context_node_types IS 'Node types represented in supply chains per context. The value of column_position is interpreted as position in flows.path.';
-
-
---
--- Name: COLUMN context_node_types.column_group; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN context_node_types.column_group IS 'Number of sankey column in which to display nodes of this type';
-
-
---
--- Name: COLUMN context_node_types.column_position; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN context_node_types.column_position IS 'Index of node of this type in flows.path';
-
-
---
--- Name: COLUMN context_node_types.is_default; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN context_node_types.is_default IS 'When set, show this node type as default (only use for one)';
-
-
---
--- Name: COLUMN context_node_types.is_geo_column; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN context_node_types.is_geo_column IS 'When set, show nodes on map';
 
 
 --
@@ -3923,6 +3954,13 @@ ALTER TABLE ONLY commodities ALTER COLUMN id SET DEFAULT nextval('commodities_id
 
 
 --
+-- Name: context_node_type_properties id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY context_node_type_properties ALTER COLUMN id SET DEFAULT nextval('context_node_type_properties_id_seq'::regclass);
+
+
+--
 -- Name: context_node_types id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
@@ -4432,6 +4470,22 @@ ALTER TABLE ONLY charts
 
 ALTER TABLE ONLY commodities
     ADD CONSTRAINT commodities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: context_node_type_properties context_node_type_properties_context_node_type_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY context_node_type_properties
+    ADD CONSTRAINT context_node_type_properties_context_node_type_id_key UNIQUE (context_node_type_id);
+
+
+--
+-- Name: context_node_type_properties context_node_type_properties_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY context_node_type_properties
+    ADD CONSTRAINT context_node_type_properties_pkey PRIMARY KEY (id);
 
 
 --
@@ -5207,6 +5261,13 @@ CREATE INDEX index_charts_on_parent_id ON charts USING btree (parent_id);
 --
 
 CREATE INDEX index_charts_on_profile_id ON charts USING btree (profile_id);
+
+
+--
+-- Name: index_context_node_type_properties_on_context_node_type_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_context_node_type_properties_on_context_node_type_id ON context_node_type_properties USING btree (context_node_type_id);
 
 
 --
@@ -6162,6 +6223,14 @@ ALTER TABLE ONLY context_properties
 
 
 --
+-- Name: context_node_type_properties fk_rails_d35e506797; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY context_node_type_properties
+    ADD CONSTRAINT fk_rails_d35e506797 FOREIGN KEY (context_node_type_id) REFERENCES context_node_types(id) ON DELETE CASCADE;
+
+
+--
 -- Name: contexts fk_rails_d9e59d1113; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -6310,6 +6379,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171106114656'),
 ('20171106121710'),
 ('20171106123358'),
-('20171115091532');
+('20171115091532'),
+('20171115144320');
 
 
