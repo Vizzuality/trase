@@ -171,22 +171,37 @@ end
 
 def quants_insert_sql
   <<-SQL
-  INSERT INTO revamp.quants (id, name, display_name, unit, unit_type, tooltip, tooltip_text, created_at, updated_at)
-  SELECT quant_id, name, COALESCE(frontend_name, name), unit, unit_type, COALESCE(tooltip, FALSE), tooltip_text, NOW(), NOW() FROM public.quants
+  WITH inserted_quants AS (
+    INSERT INTO revamp.quants (id, name, unit, created_at, updated_at)
+    SELECT quant_id, name, unit, NOW(), NOW() FROM public.quants
+  )
+  INSERT INTO revamp.quant_properties (quant_id, display_name, unit_type, tooltip_text, is_visible_on_actor_profile, is_visible_on_place_profile, is_temporal_on_actor_profile, is_temporal_on_place_profile, created_at, updated_at)
+  SELECT quant_id, COALESCE(frontend_name, name), unit_type, tooltip_text, COALESCE(actor_factsheet, false), COALESCE(place_factsheet, false), COALESCE(actor_factsheet_temporal, false), COALESCE(place_factsheet_temporal, false), NOW(), NOW()
+  FROM public.quants
   SQL
 end
 
 def inds_insert_sql
   <<-SQL
-  INSERT INTO revamp.inds (id, name, display_name, unit, unit_type, tooltip, tooltip_text, created_at, updated_at)
-  SELECT ind_id, name, COALESCE(frontend_name, name), unit, unit_type, COALESCE(tooltip, FALSE), tooltip_text, NOW(), NOW() FROM public.inds
+  WITH inserted_inds AS (
+    INSERT INTO revamp.inds (id, name, unit, created_at, updated_at)
+    SELECT ind_id, name, unit, NOW(), NOW() FROM public.inds
+  )
+  INSERT INTO revamp.ind_properties (ind_id, display_name, unit_type, tooltip_text, is_visible_on_actor_profile, is_visible_on_place_profile, is_temporal_on_actor_profile, is_temporal_on_place_profile, created_at, updated_at)
+  SELECT ind_id, COALESCE(frontend_name, name), unit_type, tooltip_text, COALESCE(actor_factsheet, false), COALESCE(place_factsheet, false), COALESCE(actor_factsheet_temporal, false), COALESCE(place_factsheet_temporal, false), NOW(), NOW()
+  FROM public.inds
   SQL
 end
 
 def quals_insert_sql
   <<-SQL
-  INSERT INTO revamp.quals (id, name, display_name, tooltip, tooltip_text, created_at, updated_at)
-  SELECT qual_id, name, COALESCE(frontend_name, name), COALESCE(tooltip, FALSE), tooltip_text, NOW(), NOW() FROM public.quals
+  WITH inserted_quals AS (
+    INSERT INTO revamp.quals (id, name, created_at, updated_at)
+    SELECT qual_id, name, NOW(), NOW() FROM public.quals
+  )
+  INSERT INTO revamp.qual_properties (qual_id, display_name, tooltip_text, is_visible_on_actor_profile, is_visible_on_place_profile, is_temporal_on_actor_profile, is_temporal_on_place_profile, created_at, updated_at)
+  SELECT qual_id, COALESCE(frontend_name, name), tooltip_text, COALESCE(actor_factsheet, false), COALESCE(place_factsheet, false), COALESCE(actor_factsheet_temporal, false), COALESCE(place_factsheet_temporal, false), NOW(), NOW()
+  FROM public.quals
   SQL
 end
 

@@ -146,16 +146,22 @@ tables:
     columns:
       - name: name
         comment: Attribute short name, e.g. FOREST_500; those literals are referred to in code, therefore should not be changed without notice
-      - name: display_name
-        comment: Name of attribute for display
       - name: unit
         comment: Unit in which values for this attribute are given
+  - name: ind_properties
+    columns:
+      - name: display_name
+        comment: Name of attribute for display
       - name: unit_type
         comment: Type of unit, e.g. score. One of restricted set of values.
-      - name: tooltip
-        comment: TODO
       - name: tooltip_text
         comment: Tooltip text
+      - name: is_visible_on_place_profile
+        comment: Whether to display this attribute on place profile
+      - name: is_visible_on_actor_profile
+        comment: Whether to display this attribute on actor profile
+      - name: is_temporal_on_place_profile
+      - name: is_temporal_on_actor_profile
   - name: map_attribute_groups
     comment: Groups attributes (inds/quals/quants) to display on map
     columns:
@@ -231,27 +237,39 @@ tables:
     columns:
       - name: name
         comment: Attribute short name, e.g. ZERO_DEFORESTATION; those literals are referred to in code, therefore should not be changed without notice
+  - name: qual_properties
+    columns:
       - name: display_name
         comment: Name of attribute for display
-      - name: tooltip
-        comment: TODO
       - name: tooltip_text
         comment: Tooltip text
+      - name: is_visible_on_place_profile
+        comment: Whether to display this attribute on place profile
+      - name: is_visible_on_actor_profile
+        comment: Whether to display this attribute on actor profile
+      - name: is_temporal_on_place_profile
+      - name: is_temporal_on_actor_profile
   - name: quants
     comment: Attributes classified as quants
     columns:
       - name: name
         comment: Attribute short name, e.g. FOB; those literals are referred to in code, therefore should not be changed without notice
-      - name: display_name
-        comment: Name of attribute for display
       - name: unit
         comment: Unit in which values for this attribute are given
+  - name: quant_properties
+    columns:
+      - name: display_name
+        comment: Name of attribute for display
       - name: unit_type
         comment: Type of unit, e.g. count. One of restricted set of values.
-      - name: tooltip
-        comment: TODO
       - name: tooltip_text
         comment: Tooltip text
+      - name: is_visible_on_place_profile
+        comment: Whether to display this attribute on place profile
+      - name: is_visible_on_actor_profile
+        comment: Whether to display this attribute on actor profile
+      - name: is_temporal_on_place_profile
+      - name: is_temporal_on_actor_profile
   - name: recolor_by_attributes
     comment: Attributes (inds/quals) available for recoloring.
     columns:
