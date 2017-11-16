@@ -224,6 +224,8 @@ tables:
         comment: Name of node
       - name: geo_id
         comment: 2-letter iso code in case of country nodes; other geo identifiers possible for other node types
+      - name: main_id
+        comment: Node identifier from Main DB
       - name: is_domestic_consumption
         comment: When set, assume domestic trade
       - name: is_unknown
@@ -319,8 +321,6 @@ tables:
         comment: When set, show this attribute by default
   - name: resize_by_quants
     comment: Quants available for recoloring (see resize_by_attributes.)
-  - name: traders
-    comment: Links between importer and exporter nodes which represent the same trader
 materialized_views:
   - name: attributes_mv
     comment: Materialized view which merges inds, quals and quants.

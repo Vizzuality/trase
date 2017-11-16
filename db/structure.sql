@@ -3118,7 +3118,8 @@ CREATE TABLE nodes (
     is_domestic_consumption boolean DEFAULT false NOT NULL,
     is_unknown boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    main_id integer
 );
 
 
@@ -3155,6 +3156,13 @@ COMMENT ON COLUMN nodes.is_domestic_consumption IS 'When set, assume domestic tr
 --
 
 COMMENT ON COLUMN nodes.is_unknown IS 'When set, node was not possible to identify';
+
+
+--
+-- Name: COLUMN nodes.main_id; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN nodes.main_id IS 'Node identifier from Main DB';
 
 
 --
@@ -3735,45 +3743,6 @@ CREATE SEQUENCE resize_by_quants_id_seq
 ALTER SEQUENCE resize_by_quants_id_seq OWNED BY resize_by_quants.id;
 
 
---
--- Name: traders; Type: TABLE; Schema: revamp; Owner: -
---
-
-CREATE TABLE traders (
-    id integer NOT NULL,
-    importer_id integer NOT NULL,
-    exporter_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE traders; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON TABLE traders IS 'Links between importer and exporter nodes which represent the same trader';
-
-
---
--- Name: traders_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
---
-
-CREATE SEQUENCE traders_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: traders_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
---
-
-ALTER SEQUENCE traders_id_seq OWNED BY traders.id;
-
-
 SET search_path = public, pg_catalog;
 
 --
@@ -4203,13 +4172,6 @@ ALTER TABLE ONLY resize_by_attributes ALTER COLUMN id SET DEFAULT nextval('resiz
 --
 
 ALTER TABLE ONLY resize_by_quants ALTER COLUMN id SET DEFAULT nextval('resize_by_quants_id_seq'::regclass);
-
-
---
--- Name: traders id; Type: DEFAULT; Schema: revamp; Owner: -
---
-
-ALTER TABLE ONLY traders ALTER COLUMN id SET DEFAULT nextval('traders_id_seq'::regclass);
 
 
 SET search_path = public, pg_catalog;
@@ -5040,22 +5002,6 @@ ALTER TABLE ONLY resize_by_quants
     ADD CONSTRAINT resize_by_quants_resize_by_attribute_id_quant_id_key UNIQUE (resize_by_attribute_id, quant_id);
 
 
---
--- Name: traders traders_exporter_id_importer_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
---
-
-ALTER TABLE ONLY traders
-    ADD CONSTRAINT traders_exporter_id_importer_id_key UNIQUE (exporter_id, importer_id);
-
-
---
--- Name: traders traders_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
---
-
-ALTER TABLE ONLY traders
-    ADD CONSTRAINT traders_pkey PRIMARY KEY (id);
-
-
 SET search_path = public, pg_catalog;
 
 --
@@ -5548,20 +5494,6 @@ CREATE INDEX index_resize_by_quants_on_quant_id ON resize_by_quants USING btree 
 --
 
 CREATE INDEX index_resize_by_quants_on_resize_by_attribute_id ON resize_by_quants USING btree (resize_by_attribute_id);
-
-
---
--- Name: index_traders_on_exporter_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_traders_on_exporter_id ON traders USING btree (exporter_id);
-
-
---
--- Name: index_traders_on_importer_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_traders_on_importer_id ON traders USING btree (importer_id);
 
 
 --
@@ -6079,14 +6011,6 @@ ALTER TABLE ONLY ind_properties
 
 
 --
--- Name: traders fk_rails_79308a8475; Type: FK CONSTRAINT; Schema: revamp; Owner: -
---
-
-ALTER TABLE ONLY traders
-    ADD CONSTRAINT fk_rails_79308a8475 FOREIGN KEY (importer_id) REFERENCES nodes(id) ON DELETE CASCADE;
-
-
---
 -- Name: charts fk_rails_805a6066ad; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -6303,14 +6227,6 @@ ALTER TABLE ONLY map_attributes
 
 
 --
--- Name: traders fk_rails_f8b100d54e; Type: FK CONSTRAINT; Schema: revamp; Owner: -
---
-
-ALTER TABLE ONLY traders
-    ADD CONSTRAINT fk_rails_f8b100d54e FOREIGN KEY (exporter_id) REFERENCES nodes(id) ON DELETE CASCADE;
-
-
---
 -- Name: node_inds fk_rails_fe29817503; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -6380,6 +6296,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171106121710'),
 ('20171106123358'),
 ('20171115091532'),
-('20171115144320');
+('20171115144320'),
+('20171116101949');
 
 
