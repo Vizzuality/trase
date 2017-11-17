@@ -39,25 +39,27 @@ tables:
         comment: Commodity name; unique across commodities
   - name: context_node_types
     comment: Node types represented in supply chains per context. The value of column_position is interpreted as position in flows.path.
+    columns:
+      - name: column_position
+        comment: Index of node of this type in flows.path
   - name: context_node_type_properties
     columns:
       - name: column_group
         comment: Number of sankey column in which to display nodes of this type
-      - name: column_position
-        comment: Index of node of this type in flows.path
       - name: is_default
         comment: When set, show this node type as default (only use for one)
       - name: is_geo_column
         comment: When set, show nodes on map
   - name: contexts
     comment: Country-commodity combinations.
-  - name: context_properties
-    comment: Visualisation properties of a context (one row per context)
     columns:
       - name: years
         comment: Years for which country-commodity data is present; NULL for all years
       - name: default_year
         comment: Default year for this context
+  - name: context_properties
+    comment: Visualisation properties of a context (one row per context)
+    columns:
       - name: default_basemap
         comment: Default basemap for this context, e.g. satellite
       - name: is_disabled

@@ -1724,7 +1724,6 @@ CREATE TABLE context_node_type_properties (
     id integer NOT NULL,
     context_node_type_id integer NOT NULL,
     column_group integer NOT NULL,
-    column_position integer NOT NULL,
     is_default boolean DEFAULT false NOT NULL,
     is_geo_column boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -1737,13 +1736,6 @@ CREATE TABLE context_node_type_properties (
 --
 
 COMMENT ON COLUMN context_node_type_properties.column_group IS 'Number of sankey column in which to display nodes of this type';
-
-
---
--- Name: COLUMN context_node_type_properties.column_position; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN context_node_type_properties.column_position IS 'Index of node of this type in flows.path';
 
 
 --
@@ -1787,6 +1779,7 @@ CREATE TABLE context_node_types (
     id integer NOT NULL,
     context_id integer NOT NULL,
     node_type_id integer NOT NULL,
+    column_position integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1797,6 +1790,13 @@ CREATE TABLE context_node_types (
 --
 
 COMMENT ON TABLE context_node_types IS 'Node types represented in supply chains per context. The value of column_position is interpreted as position in flows.path.';
+
+
+--
+-- Name: COLUMN context_node_types.column_position; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN context_node_types.column_position IS 'Index of node of this type in flows.path';
 
 
 --
@@ -1825,8 +1825,6 @@ ALTER SEQUENCE context_node_types_id_seq OWNED BY context_node_types.id;
 CREATE TABLE context_properties (
     id integer NOT NULL,
     context_id integer NOT NULL,
-    years integer[],
-    default_year integer,
     default_basemap text,
     is_disabled boolean DEFAULT false NOT NULL,
     is_default boolean DEFAULT false NOT NULL,
@@ -1840,20 +1838,6 @@ CREATE TABLE context_properties (
 --
 
 COMMENT ON TABLE context_properties IS 'Visualisation properties of a context (one row per context)';
-
-
---
--- Name: COLUMN context_properties.years; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN context_properties.years IS 'Years for which country-commodity data is present; NULL for all years';
-
-
---
--- Name: COLUMN context_properties.default_year; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN context_properties.default_year IS 'Default year for this context';
 
 
 --
@@ -1904,6 +1888,8 @@ CREATE TABLE contexts (
     id integer NOT NULL,
     country_id integer NOT NULL,
     commodity_id integer NOT NULL,
+    years integer[],
+    default_year integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1914,6 +1900,20 @@ CREATE TABLE contexts (
 --
 
 COMMENT ON TABLE contexts IS 'Country-commodity combinations.';
+
+
+--
+-- Name: COLUMN contexts.years; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN contexts.years IS 'Years for which country-commodity data is present; NULL for all years';
+
+
+--
+-- Name: COLUMN contexts.default_year; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN contexts.default_year IS 'Default year for this context';
 
 
 --

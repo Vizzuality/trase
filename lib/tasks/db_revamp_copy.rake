@@ -11,7 +11,6 @@ namespace :db do
         countries
         commodities
         contexts
-        context_properties
         node_types
         context_node_types
         nodes
@@ -82,14 +81,11 @@ end
 
 def countries_insert_sql
   <<-SQL
-  INSERT INTO revamp.countries (id, name, iso2, created_at, updated_at)
-  SELECT country_id, name, iso2, NOW(), NOW()
-  FROM public.countries;
-  SQL
-end
-
-def country_properties_insert_sql
-  <<-SQL
+  WITH inserted_countries AS (
+    INSERT INTO revamp.countries (id, name, iso2, created_at, updated_at)
+    SELECT country_id, name, iso2, NOW(), NOW()
+    FROM public.countries
+  )
   INSERT INTO revamp.country_properties (country_id, latitude, longitude, zoom, created_at, updated_at)
   SELECT country_id, latitude, longitude, zoom, NOW(), NOW()
   FROM public.countries;
@@ -106,19 +102,16 @@ end
 
 def contexts_insert_sql
   <<-SQL
-  INSERT INTO revamp.contexts (id, country_id, commodity_id, created_at, updated_at)
+    WITH inserted_contexts AS (
+    INSERT INTO revamp.contexts (id, country_id, commodity_id, years, default_year, created_at, updated_at)
+    SELECT
+      id, country_id, commodity_id, years, default_year,
+      NOW(), NOW()
+    FROM public.context
+  )
+  INSERT INTO revamp.context_properties (context_id, default_basemap, is_disabled, is_default, created_at, updated_at)
   SELECT
-    id, country_id, commodity_id,
-    NOW(), NOW()
-  FROM public.context;
-  SQL
-end
-
-def context_properties_insert_sql
-  <<-SQL
-  INSERT INTO revamp.context_properties (context_id, years, default_year, default_basemap, is_disabled, is_default, created_at, updated_at)
-  SELECT
-    id, years, default_year, default_basemap,
+    id, default_basemap,
     COALESCE(is_disabled, FALSE),
     COALESCE(is_default, FALSE),
     NOW(), NOW()
@@ -138,13 +131,13 @@ end
 def context_node_types_insert_sql
   <<-SQL
   WITH inserted_context_node_types AS (
-    INSERT INTO revamp.context_node_types (id, context_id, node_type_id, created_at, updated_at)
-    SELECT id, context_id, node_type_id, NOW(), NOW()
+    INSERT INTO revamp.context_node_types (id, context_id, node_type_id, column_position, created_at, updated_at)
+    SELECT id, context_id, node_type_id, column_position, NOW(), NOW()
     FROM public.context_nodes
   )
-  INSERT INTO revamp.context_node_type_properties (context_node_type_id, column_group, column_position, is_default, is_geo_column, created_at, updated_at)
+  INSERT INTO revamp.context_node_type_properties (context_node_type_id, column_group, is_default, is_geo_column, created_at, updated_at)
   SELECT
-    id, column_group, column_position,
+    id, column_group,
     COALESCE(is_default, FALSE),
     COALESCE(is_geo_column, FALSE),
     NOW(), NOW()
