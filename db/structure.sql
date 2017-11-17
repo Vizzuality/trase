@@ -1089,8 +1089,7 @@ CREATE TABLE inds (
     id integer NOT NULL,
     name text NOT NULL,
     unit text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -1168,8 +1167,7 @@ COMMENT ON COLUMN qual_properties.is_visible_on_actor_profile IS 'Whether to dis
 CREATE TABLE quals (
     id integer NOT NULL,
     name text NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -1250,8 +1248,7 @@ CREATE TABLE quants (
     id integer NOT NULL,
     name text NOT NULL,
     unit text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -1678,8 +1675,7 @@ ALTER SEQUENCE charts_id_seq OWNED BY charts.id;
 CREATE TABLE commodities (
     id integer NOT NULL,
     name text NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -1780,8 +1776,7 @@ CREATE TABLE context_node_types (
     context_id integer NOT NULL,
     node_type_id integer NOT NULL,
     column_position integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -1890,8 +1885,7 @@ CREATE TABLE contexts (
     commodity_id integer NOT NULL,
     years integer[],
     default_year integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -2021,8 +2015,7 @@ CREATE TABLE countries (
     id integer NOT NULL,
     name text NOT NULL,
     iso2 text NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -2339,8 +2332,7 @@ CREATE TABLE download_versions (
     context_id integer NOT NULL,
     symbol character varying NOT NULL,
     is_current boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -2393,8 +2385,7 @@ CREATE TABLE flow_inds (
     flow_id integer NOT NULL,
     ind_id integer NOT NULL,
     value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -2440,8 +2431,7 @@ CREATE TABLE flow_quals (
     flow_id integer NOT NULL,
     qual_id integer NOT NULL,
     value text NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -2487,8 +2477,7 @@ CREATE TABLE flow_quants (
     flow_id integer NOT NULL,
     quant_id integer NOT NULL,
     value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -2534,8 +2523,7 @@ CREATE TABLE flows (
     context_id integer NOT NULL,
     year smallint NOT NULL,
     path integer[] DEFAULT '{}'::integer[],
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -2906,8 +2894,7 @@ CREATE TABLE node_inds (
     ind_id integer NOT NULL,
     year integer,
     value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -2961,8 +2948,7 @@ CREATE TABLE node_quals (
     qual_id integer NOT NULL,
     year integer,
     value text NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -3016,8 +3002,7 @@ CREATE TABLE node_quants (
     quant_id integer NOT NULL,
     year integer,
     value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -3068,8 +3053,7 @@ ALTER SEQUENCE node_quants_id_seq OWNED BY node_quants.id;
 CREATE TABLE node_types (
     id integer NOT NULL,
     name text NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -3118,7 +3102,6 @@ CREATE TABLE nodes (
     is_domestic_consumption boolean DEFAULT false NOT NULL,
     is_unknown boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
     main_id integer
 );
 
@@ -6297,6 +6280,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171106123358'),
 ('20171115091532'),
 ('20171115144320'),
-('20171116101949');
+('20171116101949'),
+('20171117115459');
 
 
