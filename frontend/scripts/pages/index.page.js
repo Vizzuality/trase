@@ -65,7 +65,7 @@ const state = {
 const renderSlider = ({ el, endpoint, perPage, next, prev, template }) => {
   fetch(endpoint)
     .then(response => response.json())
-    .then((data) => template({ posts: data }))
+    .then((posts) => template({ posts: posts.data }))
     .then((slides) => {
       document.querySelector(el).innerHTML = slides;
       new Slider({ selector: el, perPage, next, prev });
