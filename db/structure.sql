@@ -2939,6 +2939,45 @@ ALTER SEQUENCE node_inds_id_seq OWNED BY node_inds.id;
 
 
 --
+-- Name: node_properties; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE node_properties (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    is_domestic_consumption boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: COLUMN node_properties.is_domestic_consumption; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN node_properties.is_domestic_consumption IS 'When set, assume domestic trade';
+
+
+--
+-- Name: node_properties_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE node_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: node_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE node_properties_id_seq OWNED BY node_properties.id;
+
+
+--
 -- Name: node_quals; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -3099,7 +3138,6 @@ CREATE TABLE nodes (
     node_type_id integer NOT NULL,
     name text NOT NULL,
     geo_id text,
-    is_domestic_consumption boolean DEFAULT false NOT NULL,
     is_unknown boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     main_id integer
@@ -3125,13 +3163,6 @@ COMMENT ON COLUMN nodes.name IS 'Name of node';
 --
 
 COMMENT ON COLUMN nodes.geo_id IS '2-letter iso code in case of country nodes; other geo identifiers possible for other node types';
-
-
---
--- Name: COLUMN nodes.is_domestic_consumption; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN nodes.is_domestic_consumption IS 'When set, assume domestic trade';
 
 
 --
@@ -4060,6 +4091,13 @@ ALTER TABLE ONLY node_inds ALTER COLUMN id SET DEFAULT nextval('node_inds_id_seq
 
 
 --
+-- Name: node_properties id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_properties ALTER COLUMN id SET DEFAULT nextval('node_properties_id_seq'::regclass);
+
+
+--
 -- Name: node_quals id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
@@ -4770,6 +4808,22 @@ ALTER TABLE ONLY node_inds
 
 
 --
+-- Name: node_properties node_properties_node_id_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_properties
+    ADD CONSTRAINT node_properties_node_id_key UNIQUE (node_id);
+
+
+--
+-- Name: node_properties node_properties_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_properties
+    ADD CONSTRAINT node_properties_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: node_quals node_quals_node_id_qual_id_year_key; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -5389,6 +5443,13 @@ CREATE INDEX index_node_inds_on_node_id ON node_inds USING btree (node_id);
 
 
 --
+-- Name: index_node_properties_on_node_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_node_properties_on_node_id ON node_properties USING btree (node_id);
+
+
+--
 -- Name: index_node_quals_on_node_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -5946,6 +6007,14 @@ ALTER TABLE ONLY map_inds
 
 
 --
+-- Name: node_properties fk_rails_4dcde982df; Type: FK CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY node_properties
+    ADD CONSTRAINT fk_rails_4dcde982df FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE;
+
+
+--
 -- Name: recolor_by_quals fk_rails_5294e7fccd; Type: FK CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -6281,6 +6350,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171115091532'),
 ('20171115144320'),
 ('20171116101949'),
-('20171117115459');
+('20171117115459'),
+('20171117120322');
 
 

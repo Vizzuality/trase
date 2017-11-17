@@ -228,10 +228,12 @@ tables:
         comment: 2-letter iso code in case of country nodes; other geo identifiers possible for other node types
       - name: main_id
         comment: Node identifier from Main DB
-      - name: is_domestic_consumption
-        comment: When set, assume domestic trade
       - name: is_unknown
         comment: When set, node was not possible to identify
+  - name: node_properties
+    columns:
+      - name: is_domestic_consumption
+        comment: When set, assume domestic trade
   - name: profiles
     comment: Context-specific profiles
     columns:

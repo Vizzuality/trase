@@ -147,12 +147,17 @@ end
 
 def nodes_insert_sql
   <<-SQL
-  INSERT INTO revamp.nodes (id, node_type_id, name, geo_id, main_id, is_domestic_consumption, is_unknown, created_at)
+  WITH inserted_nodes AS (
+    INSERT INTO revamp.nodes (id, node_type_id, name, geo_id, main_id, is_unknown, created_at)
+    SELECT
+      node_id, node_type_id, name, geo_id, main_node_id,
+      COALESCE(is_unknown, FALSE),
+      NOW()
+    FROM public.nodes
+  )
+  INSERT INTO revamp.node_properties (node_id, is_domestic_consumption, created_at, updated_at)
   SELECT
-    node_id, node_type_id, name, geo_id, main_node_id,
-    COALESCE(is_domestic_consumption, FALSE),
-    COALESCE(is_unknown, FALSE),
-    NOW()
+    node_id, COALESCE(is_domestic_consumption, FALSE), NOW(), NOW()
   FROM public.nodes;
   SQL
 end
