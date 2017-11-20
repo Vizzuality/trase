@@ -1,13 +1,13 @@
 // import plyr from 'plyr';
+// import UpdatesTemplate from 'ejs!templates/homepage/updates.ejs';
 import Nav from 'components/shared/nav.component.js';
 import Slider from 'scripts/components/home/slider.component';
 import PostsTemplate from 'ejs!templates/homepage/posts.ejs';
-// import UpdatesTemplate from 'ejs!templates/homepage/updates.ejs';
 import TweetsTemplate from 'ejs!templates/homepage/tweets.ejs';
 import 'styles/homepage.scss';
 import 'node_modules/plyr/src/scss/plyr.scss';
 import 'styles/components/homepage/plyr.scss';
-import { getURLFromParams, POST_SUBSCRIBE_NEWSLETTER } from '../utils/getURLFromParams';
+import { GET_POSTS, GET_TWEETS, POST_SUBSCRIBE_NEWSLETTER, getURLFromParams } from 'utils/getURLFromParams';
 
 const state = {
   activeIndex: 0,
@@ -38,21 +38,15 @@ const state = {
   sliders: [
     {
       el: '.js-posts',
-      endpoint: API_CMS_URL + '/posts',
+      endpoint: getURLFromParams(GET_POSTS),
       template: PostsTemplate,
       perPage: 3,
       next: '.js-posts-next',
       prev: '.js-posts-prev'
     },
-    // {
-    //   el: '.js-updates',
-    //   endpoint: '/updates',
-    //   perPage: 4,
-    //   template: UpdatesTemplate
-    // },
     {
       el: '.js-tweets',
-      endpoint: API_SOCIAL + '/tweets',
+      endpoint: getURLFromParams(GET_TWEETS),
       template: TweetsTemplate,
       perPage: 3,
       next: '.js-tweets-next',
