@@ -51,19 +51,6 @@ function getURLForV2(endpoint, params = {}) {
   }, `${API_V2_URL}${endpoint}?`);
 }
 
-function getURLForContent(endpoint, params = {}) {
-  return Object.keys(params).reduce((prev, current) => {
-    const value = params[current];
-    if (Array.isArray(value)) {
-      const arrUrl = value.reduce((arrPrev, arrCurrent) => {
-        return `${arrPrev}&${current}[]=${arrCurrent}`;
-      }, '');
-      return `${prev}&${arrUrl}`;
-    }
-    return `${prev}&${current}=${params[current]}`;
-  }, `${API_V2_URL}${endpoint}?`);
-}
-
 // builds an URL usable to call the API, using params
 function getURLForV1(endpoint, params = {}) {
   return Object.keys(params).reduce((prev, current) => {
@@ -77,19 +64,6 @@ function getURLForV1(endpoint, params = {}) {
     return `${prev}&${current}=${params[current]}`;
   }, `${API_V1_URL}${endpoint}?`);
 }
-// builds an URL usable to call the API, using params
-function getURLForLocal(endpoint, params = {}) {
-  return Object.keys(params).reduce((prev, current) => {
-    const value = params[current];
-    if (Array.isArray(value)) {
-      const arrUrl = value.reduce((arrPrev, arrCurrent) => {
-        return `${arrPrev}&${current}=${arrCurrent}`;
-      }, '');
-      return `${prev}&${arrUrl}`;
-    }
-    return `${prev}&${current}=${params[current]}`;
-  }, `/${endpoint}?`);
-}
 
 export function getURLFromParams(endpointKey, params = {}, mock = false) {
   const endpointData = API_ENDPOINTS[endpointKey];
@@ -101,9 +75,9 @@ export function getURLFromParams(endpointKey, params = {}, mock = false) {
       case 1:
         return getURLForV1(`/v1${endpointData.endpoint}`, params);
       case 'local':
-        return getURLForLocal(endpointData.endpoint, params);
+        return `/${endpointData.endpoint}`;
       case 'content':
-        return getURLForContent(`/content${endpointData.endpoint}`, params);
+        return `${API_V2_URL}/content${endpointData.endpoint}`;
     }
   } else {
     return endpointData.mock;
