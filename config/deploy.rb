@@ -40,7 +40,19 @@ namespace :deploy do
   after 'deploy:publishing', 'deploy:restart'
 end
 
-# namespace :npm do
-#   after 'npm:install'
-# end
+namespace :npm do
+  after 'npm:install', 'npm:build'
+
+  task :build do
+    on roles fetch(:npm_roles) do
+      within fetch(:npm_target_path, release_path) do
+        with fetch(:npm_env_variables, {}) do
+          upload! "frontend/.env.#{fetch(:stage)}", "#{current_path}/frontend/.env"
+          execute :npm, 'run build'
+        end
+      end
+    end
+  end
+end
+
 set :rvm_ruby_version, '2.4.2'
