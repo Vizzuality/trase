@@ -1,5 +1,5 @@
-require 'search_path_helpers.rb'
-require 'comment_helpers.rb'
+require 'db_helpers/search_path_helpers.rb'
+require 'db_helpers/comment_helpers.rb'
 include SearchPathHelpers
 include CommentHelpers
 

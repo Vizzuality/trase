@@ -1,3 +1,5 @@
+require 'db_helpers/dependent_attribute_views_helpers.rb'
+
 class RenameTypeToOriginalType < ActiveRecord::Migration[5.0]
   include SearchPathHelpers
   include DependentAttributeViewsHelpers
