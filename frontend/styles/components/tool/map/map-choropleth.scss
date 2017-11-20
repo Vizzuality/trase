@@ -16,6 +16,10 @@
       &.-disabled {
         cursor: not-allowed;
       }
+      
+      &.-filteredOut {
+        display: none;
+      }
 
       &.-linked {
         stroke-width: 1.2px;

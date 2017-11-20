@@ -199,7 +199,7 @@ export default class {
     });
 
     let forceZoom = 0;
-    // let hideMain = false;
+
     selectedMapContextualLayersData.forEach((layerData, i) => {
       const contextLayer = (layerData.rasterURL) ? this._createRasterLayer(layerData) : this._createCartoLayer(layerData, i);
       this.contextLayers.push(contextLayer);
@@ -292,29 +292,30 @@ export default class {
   }
 
 
-  setChoropleth({ choropleth, linkedGeoIds, choroplethLegend, defaultMapView }) {
+  setChoropleth({ choropleth, choroplethLegend }) {
     this._setPaneModifier('-noDimensions', choroplethLegend === null);
     if (!this.currentPolygonTypeLayer) {
       return;
     }
     this._setChoropleth(choropleth);
-    if (linkedGeoIds && linkedGeoIds.length) {
-      this.showLinkedGeoIds({ linkedGeoIds, defaultMapView });
-    }
   }
 
   _setChoropleth(choropleth) {
     this.currentPolygonTypeLayer.eachLayer(layer => {
       const choroItem = choropleth[layer.feature.properties.geoid];
-      const classNames = [];
-      layer.disabled = false;
-      if (!layer.feature.properties.hasFlows) {
-        classNames.push('-disabled');
-        layer.disabled = true;
+      layer.disabled = !layer.feature.properties.hasFlows;
+      layer._path.classList.toggle('-disabled', layer.disabled);
+
+      const currentBucketClass = layer._path.getAttribute('data-bucketClass');
+      const newBucketClass = (choroItem) ? choroItem : 'ch-default';
+
+      if (currentBucketClass === null) {
+        layer._path.classList.add(newBucketClass);
+      } else {
+        layer._path.classList.replace(currentBucketClass, newBucketClass);
       }
-      classNames.push((choroItem) ? choroItem : 'ch-default');
-      layer._path.setAttribute('class', classNames.join(' '));
-      layer._path.setAttribute('geoid', layer.feature.properties.geoid);
+
+      layer._path.setAttribute('data-bucketClass', newBucketClass);
     });
 
   }
@@ -357,5 +358,19 @@ export default class {
     setTimeout( () => {
       this.map.invalidateSize(true);
     }, 850);
+  }
+
+  filterByBiome(biome) {
+    if (!this.currentPolygonTypeLayer) {
+      return;
+    }
+    this.currentPolygonTypeLayer.eachLayer(layer => {
+      // use this code when vector layer is ready, see https://github.com/Vizzuality/trase-api/issues/76
+      // const isFilteredOut = (biome.geoId === undefined) ? false : biome.geoId !== layer.feature.properties.biome.geoid;
+      // temporary test code with some arbitrary filtering logic:
+      const isFilteredOut = (biome.geoId === undefined) ? false : layer.feature.properties.geoid.substr(-1) !== '2';
+
+      layer._path.classList.toggle('-filteredOut', isFilteredOut);
+    });
   }
 }
