@@ -163,6 +163,14 @@
 					</td>
 				   </tr>
 				   <tr>
+					<td title="qual_properties.qual_id references quals.id via fk_rails_c8bcede145">
+						<a href='qual_properties.html'>qual_properties</a><span class='relatedKey'>.qual_id</span>
+					</td>
+					<td class="constraint detail">
+						fk_rails_c8bcede145 <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
+					</td>
+				   </tr>
+				   <tr>
 					<td title="recolor_by_quals.qual_id references quals.id via fk_rails_f5f36c9f54">
 						<a href='recolor_by_quals.html'>recolor_by_quals</a><span class='relatedKey'>.qual_id</span>
 					</td>
@@ -196,75 +204,7 @@
 				 <td><p>Attribute short name, e.g. ZERO_DEFORESTATION; those literals are referred to in code, therefore should not be changed without notice</p></td>
 				</tr>
 				<tr>
-				 <td><span id="display_name">display_name</span></td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
-				 </td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>					 
-				 </td>
-				 <td><p>Name of attribute for display</p></td>
-				</tr>
-				<tr>
-				 <td><span id="tooltip">tooltip</span></td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
-				 </td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>					 
-				 </td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
-				 <td><span id="tooltip_text">tooltip_text</span></td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
-				 </td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>					 
-				 </td>
-				 <td><p>Tooltip text</p></td>
-				</tr>
-				<tr>
 				 <td><span id="created_at">created_at</span></td>
-				 <td>timestamp</td>
-				 <td>29,6</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
-				 </td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>					 
-				 </td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td><span id="updated_at">updated_at</span></td>
 				 <td>timestamp</td>
 				 <td>29,6</td>
 				 <td title=''></td>
@@ -282,7 +222,7 @@
 				</tr>
 								</tbody>
 				</table>
-				<p title='7 columns'>Table contained <span id="recordNumber">11</span> rows<p/>
+				<p title='3 columns'>Table contained <span id="recordNumber">11</span> rows<p/>
 			</div>
 		</div>
 		<div class="box box-primary">		
@@ -347,29 +287,31 @@
             <div class="tab-content no-padding">            
 				<div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="chart_quals.html" title="chart_quals" alt="" coords="352,5,536,177">
-<area shape="rect" id="node2" href="quals.html" title="quals" alt="" coords="5,441,287,713">
-<area shape="rect" id="node3" href="download_quals.html" title="download_quals" alt="" coords="334,195,554,367">
-<area shape="rect" id="node4" href="flow_quals.html" title="flow_quals" alt="" coords="357,384,531,556">
-<area shape="rect" id="node5" href="node_quals.html" title="node_quals" alt="" coords="367,573,521,775">
-<area shape="rect" id="node6" href="recolor_by_quals.html" title="recolor_by_quals" alt="" coords="331,792,557,964">
+<area shape="rect" id="node1" href="chart_quals.html" title="chart_quals" alt="" coords="351,5,535,177">
+<area shape="rect" id="node2" href="quals.html" title="quals" alt="" coords="5,535,261,690">
+<area shape="rect" id="node3" href="download_quals.html" title="download_quals" alt="" coords="333,195,553,367">
+<area shape="rect" id="node4" href="flow_quals.html" title="flow_quals" alt="" coords="356,384,529,556">
+<area shape="rect" id="node5" href="node_quals.html" title="node_quals" alt="" coords="366,573,519,775">
+<area shape="rect" id="node6" href="qual_properties.html" title="qual_properties" alt="" coords="305,792,580,935">
+<area shape="rect" id="node7" href="recolor_by_quals.html" title="recolor_by_quals" alt="" coords="329,952,556,1124">
 </map>
 
 					<a name='diagram'><img id='oneDegreeImg' src='../diagrams/quals.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							
 				</div>
 				<div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="chart_quals.html" title="chart_quals" alt="" coords="352,5,536,177">
-<area shape="rect" id="node2" href="chart_attributes.html" title="chart_attributes" alt="" coords="57,37,235,121">
-<area shape="rect" id="node3" href="quals.html" title="quals" alt="" coords="5,439,287,711">
-<area shape="rect" id="node4" href="download_quals.html" title="download_quals" alt="" coords="334,195,554,367">
-<area shape="rect" id="node5" href="download_attributes.html" title="download_attributes" alt="" coords="41,227,251,311">
-<area shape="rect" id="node6" href="flow_quals.html" title="flow_quals" alt="" coords="357,384,531,556">
-<area shape="rect" id="node7" href="flows.html" title="flows" alt="" coords="59,337,233,421">
-<area shape="rect" id="node8" href="node_quals.html" title="node_quals" alt="" coords="367,575,521,776">
-<area shape="rect" id="node9" href="nodes.html" title="nodes" alt="" coords="64,729,228,813">
-<area shape="rect" id="node10" href="recolor_by_quals.html" title="recolor_by_quals" alt="" coords="331,797,557,969">
-<area shape="rect" id="node11" href="recolor_by_attributes.html" title="recolor_by_attributes" alt="" coords="39,831,253,915">
+<area shape="rect" id="node1" href="chart_quals.html" title="chart_quals" alt="" coords="351,5,535,177">
+<area shape="rect" id="node2" href="chart_attributes.html" title="chart_attributes" alt="" coords="44,37,223,121">
+<area shape="rect" id="node3" href="quals.html" title="quals" alt="" coords="5,555,261,710">
+<area shape="rect" id="node4" href="download_quals.html" title="download_quals" alt="" coords="333,195,553,367">
+<area shape="rect" id="node5" href="download_attributes.html" title="download_attributes" alt="" coords="29,227,238,311">
+<area shape="rect" id="node6" href="flow_quals.html" title="flow_quals" alt="" coords="356,384,529,556">
+<area shape="rect" id="node7" href="flows.html" title="flows" alt="" coords="47,416,220,500">
+<area shape="rect" id="node8" href="node_quals.html" title="node_quals" alt="" coords="366,733,519,935">
+<area shape="rect" id="node9" href="nodes.html" title="nodes" alt="" coords="51,765,215,849">
+<area shape="rect" id="node10" href="qual_properties.html" title="qual_properties" alt="" coords="305,573,580,716">
+<area shape="rect" id="node11" href="recolor_by_quals.html" title="recolor_by_quals" alt="" coords="329,952,556,1124">
+<area shape="rect" id="node12" href="recolor_by_attributes.html" title="recolor_by_attributes" alt="" coords="26,984,241,1068">
 </map>
 
 					<a name='diagram'><img id='twodegreesDegreeImg' src='../diagrams/quals.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							

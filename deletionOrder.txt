@@ -1,4 +1,3 @@
-traders
 resize_by_quants
 recolor_by_quals
 recolor_by_inds
@@ -15,7 +14,14 @@ download_quals
 chart_quants
 chart_quals
 chart_inds
+quant_properties
+qual_properties
+node_properties
+ind_properties
 download_versions
+country_properties
+context_properties
+context_node_type_properties
 carto_layers
 resize_by_attributes
 contextual_layers
@@ -31,8 +37,8 @@ profiles
 context_node_types
 contexts
 commodities
-countries
 node_types
+countries
 quals
 inds
 quants

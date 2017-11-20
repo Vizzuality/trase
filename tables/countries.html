@@ -138,6 +138,14 @@
 						fk_rails_d9e59d1113 <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
 					</td>
 				   </tr>
+				   <tr>
+					<td title="country_properties.country_id references countries.id via fk_rails_668b355aa6">
+						<a href='country_properties.html'>country_properties</a><span class='relatedKey'>.country_id</span>
+					</td>
+					<td class="constraint detail">
+						fk_rails_668b355aa6 <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
+					</td>
+				   </tr>
 				  </table>				 
 				 </td>
 				 <td>
@@ -181,75 +189,7 @@
 				 <td><p>2-letter ISO code</p></td>
 				</tr>
 				<tr>
-				 <td><span id="latitude">latitude</span></td>
-				 <td>float8</td>
-				 <td>17,17</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
-				 </td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>					 
-				 </td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
-				 <td><span id="longitude">longitude</span></td>
-				 <td>float8</td>
-				 <td>17,17</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
-				 </td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>					 
-				 </td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
-				 <td><span id="zoom">zoom</span></td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
-				 </td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>					 
-				 </td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
 				 <td><span id="created_at">created_at</span></td>
-				 <td>timestamp</td>
-				 <td>29,6</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
-				 </td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>					 
-				 </td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td><span id="updated_at">updated_at</span></td>
 				 <td>timestamp</td>
 				 <td>29,6</td>
 				 <td title=''></td>
@@ -267,7 +207,7 @@
 				</tr>
 								</tbody>
 				</table>
-				<p title='8 columns'>Table contained <span id="recordNumber">4</span> rows<p/>
+				<p title='4 columns'>Table contained <span id="recordNumber">4</span> rows<p/>
 			</div>
 		</div>
 		<div class="box box-primary">		
@@ -332,25 +272,28 @@
             <div class="tab-content no-padding">            
 				<div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="contexts.html" title="contexts" alt="" coords="311,5,491,177">
-<area shape="rect" id="node2" href="countries.html" title="countries" alt="" coords="5,33,267,334">
+<area shape="rect" id="node1" href="contexts.html" title="contexts" alt="" coords="327,5,484,177">
+<area shape="rect" id="node2" href="countries.html" title="countries" alt="" coords="5,127,261,311">
+<area shape="rect" id="node3" href="country_properties.html" title="country_properties" alt="" coords="305,195,505,337">
 </map>
 
 					<a name='diagram'><img id='oneDegreeImg' src='../diagrams/countries.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							
 				</div>
 				<div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="context_node_types.html" title="context_node_types" alt="" coords="541,5,750,89">
-<area shape="rect" id="node2" href="contexts.html" title="contexts" alt="" coords="311,357,491,529">
-<area shape="rect" id="node3" href="commodities.html" title="commodities" alt="" coords="56,561,216,645">
-<area shape="rect" id="node4" href="countries.html" title="countries" alt="" coords="5,242,267,543">
-<area shape="rect" id="node5" href="contextual_layers.html" title="contextual_layers" alt="" coords="549,107,741,191">
-<area shape="rect" id="node6" href="download_attributes.html" title="download_attributes" alt="" coords="541,208,750,292">
-<area shape="rect" id="node7" href="download_versions.html" title="download_versions" alt="" coords="543,309,747,393">
-<area shape="rect" id="node8" href="flows.html" title="flows" alt="" coords="559,411,732,495">
-<area shape="rect" id="node9" href="map_attribute_groups.html" title="map_attribute_groups" alt="" coords="535,512,756,596">
-<area shape="rect" id="node10" href="recolor_by_attributes.html" title="recolor_by_attributes" alt="" coords="538,613,753,697">
-<area shape="rect" id="node11" href="resize_by_attributes.html" title="resize_by_attributes" alt="" coords="541,715,750,799">
+<area shape="rect" id="node1" href="context_node_types.html" title="context_node_types" alt="" coords="555,5,765,89">
+<area shape="rect" id="node2" href="contexts.html" title="contexts" alt="" coords="327,408,484,580">
+<area shape="rect" id="node4" href="commodities.html" title="commodities" alt="" coords="53,473,213,557">
+<area shape="rect" id="node5" href="countries.html" title="countries" alt="" coords="5,271,261,455">
+<area shape="rect" id="node3" href="context_properties.html" title="context_properties" alt="" coords="561,107,759,191">
+<area shape="rect" id="node6" href="contextual_layers.html" title="contextual_layers" alt="" coords="564,208,756,292">
+<area shape="rect" id="node7" href="country_properties.html" title="country_properties" alt="" coords="305,244,505,387">
+<area shape="rect" id="node8" href="download_attributes.html" title="download_attributes" alt="" coords="555,309,765,393">
+<area shape="rect" id="node9" href="download_versions.html" title="download_versions" alt="" coords="558,411,762,495">
+<area shape="rect" id="node10" href="flows.html" title="flows" alt="" coords="573,512,747,596">
+<area shape="rect" id="node11" href="map_attribute_groups.html" title="map_attribute_groups" alt="" coords="549,613,771,697">
+<area shape="rect" id="node12" href="recolor_by_attributes.html" title="recolor_by_attributes" alt="" coords="553,715,767,799">
+<area shape="rect" id="node13" href="resize_by_attributes.html" title="resize_by_attributes" alt="" coords="555,816,765,900">
 </map>
 
 					<a name='diagram'><img id='twodegreesDegreeImg' src='../diagrams/countries.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							

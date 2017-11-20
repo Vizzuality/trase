@@ -156,25 +156,39 @@
       </table>
       <table name="commodities" numRows="3" remarks="Commodities in supply chains, such as soy or beef" schema="revamp" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('revamp.commodities_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
-            <child column="parent_id" foreignKey="fk_rails_87667fc19d" implied="false" onDeleteCascade="true" schema="revamp" table="commodities"/>
             <child column="commodity_id" foreignKey="fk_rails_eea78f436e" implied="false" onDeleteCascade="true" schema="revamp" table="contexts"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Commodity name; unique across commodities" size="2147483647" type="text"/>
-         <column autoUpdated="false" digits="0" id="2" name="parent_id" nullable="true" remarks="Self-reference to parent used to define links between commodities and sub-commodities" size="10" type="int4">
-            <parent column="id" foreignKey="fk_rails_87667fc19d" implied="false" onDeleteCascade="true" schema="revamp" table="commodities"/>
-         </column>
-         <column autoUpdated="false" digits="6" id="3" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="6" id="4" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="6" id="2" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="commodities_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="commodities_parent_id_idx" unique="false">
-            <column ascending="true" name="parent_id"/>
+      </table>
+      <table name="context_node_type_properties" numRows="33" remarks="" schema="revamp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('revamp.context_node_type_properties_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_node_type_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_d35e506797" implied="false" onDeleteCascade="true" schema="revamp" table="context_node_types"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="column_group" nullable="false" remarks="Number of sankey column in which to display nodes of this type" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="3" name="is_default" nullable="false" remarks="When set, show this node type as default (only use for one)" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="4" name="is_geo_column" nullable="false" remarks="When set, show nodes on map" size="1" type="bool"/>
+         <column autoUpdated="false" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="6" id="6" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="context_node_type_properties_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="context_node_type_properties_context_node_type_id_key" unique="true">
+            <column ascending="true" name="context_node_type_id"/>
+         </index>
+         <index name="index_context_node_type_properties_on_context_node_type_id" unique="false">
+            <column ascending="true" name="context_node_type_id"/>
          </index>
       </table>
       <table name="context_node_types" numRows="33" remarks="Node types represented in supply chains per context. The value of column_position is interpreted as position in flows.path." schema="revamp" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('revamp.context_node_types_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
+            <child column="context_node_type_id" foreignKey="fk_rails_d35e506797" implied="false" onDeleteCascade="true" schema="revamp" table="context_node_type_properties"/>
             <child column="context_node_type_id" foreignKey="fk_rails_cbc235c3bc" implied="false" onDeleteCascade="true" schema="revamp" table="profiles"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="false" remarks="" size="10" type="int4">
@@ -183,12 +197,8 @@
          <column autoUpdated="false" digits="0" id="2" name="node_type_id" nullable="false" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="fk_rails_15e56acf9a" implied="false" onDeleteCascade="true" schema="revamp" table="node_types"/>
          </column>
-         <column autoUpdated="false" digits="0" id="3" name="column_group" nullable="false" remarks="Number of sankey column in which to display nodes of this type" size="10" type="int4"/>
-         <column autoUpdated="false" digits="0" id="4" name="column_position" nullable="false" remarks="Index of node of this type in flows.path" size="10" type="int4"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="is_default" nullable="false" remarks="When set, show this node type as default (only use for one)" size="1" type="bool"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="is_geo_column" nullable="false" remarks="When set, show nodes on map" size="1" type="bool"/>
-         <column autoUpdated="false" digits="6" id="7" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="6" id="8" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="3" name="column_position" nullable="false" remarks="Index of node of this type in flows.path" size="10" type="int4"/>
+         <column autoUpdated="false" digits="6" id="4" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="context_node_types_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -204,9 +214,31 @@
             <column ascending="true" name="node_type_id"/>
          </index>
       </table>
+      <table name="context_properties" numRows="7" remarks="Visualisation properties of a context (one row per context)" schema="revamp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('revamp.context_properties_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_cc3af59ff4" implied="false" onDeleteCascade="true" schema="revamp" table="contexts"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="default_basemap" nullable="true" remarks="Default basemap for this context, e.g. satellite" size="2147483647" type="text"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="3" name="is_disabled" nullable="false" remarks="When set, do not show this context" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="4" name="is_default" nullable="false" remarks="When set, show this context as default (only use for one)" size="1" type="bool"/>
+         <column autoUpdated="false" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="6" id="6" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="context_properties_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="context_properties_context_id_key" unique="true">
+            <column ascending="true" name="context_id"/>
+         </index>
+         <index name="index_context_properties_on_context_id" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
+      </table>
       <table name="contexts" numRows="7" remarks="Country-commodity combinations." schema="revamp" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('revamp.contexts_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="context_id" foreignKey="fk_rails_23d7986b34" implied="false" onDeleteCascade="true" schema="revamp" table="context_node_types"/>
+            <child column="context_id" foreignKey="fk_rails_cc3af59ff4" implied="false" onDeleteCascade="true" schema="revamp" table="context_properties"/>
             <child column="context_id" foreignKey="fk_rails_5c2d32b5a7" implied="false" onDeleteCascade="true" schema="revamp" table="contextual_layers"/>
             <child column="context_id" foreignKey="fk_rails_163b9bb8d8" implied="false" onDeleteCascade="true" schema="revamp" table="download_attributes"/>
             <child column="context_id" foreignKey="fk_rails_3fcb3b1d94" implied="false" onDeleteCascade="true" schema="revamp" table="download_versions"/>
@@ -223,11 +255,7 @@
          </column>
          <column autoUpdated="false" digits="0" id="3" name="years" nullable="true" remarks="Years for which country-commodity data is present; NULL for all years" size="10" type="_int4"/>
          <column autoUpdated="false" digits="0" id="4" name="default_year" nullable="true" remarks="Default year for this context" size="10" type="int4"/>
-         <column autoUpdated="false" digits="0" id="5" name="default_basemap" nullable="true" remarks="Default basemap for this context, e.g. satellite" size="2147483647" type="text"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="is_disabled" nullable="false" remarks="When set, do not show this context" size="1" type="bool"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="7" name="is_default" nullable="false" remarks="When set, show this context as default (only use for one)" size="1" type="bool"/>
-         <column autoUpdated="false" digits="6" id="8" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="6" id="9" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="contexts_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -276,20 +304,38 @@
       <table name="countries" numRows="4" remarks="Countries (source)" schema="revamp" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('revamp.countries_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="country_id" foreignKey="fk_rails_d9e59d1113" implied="false" onDeleteCascade="true" schema="revamp" table="contexts"/>
+            <child column="country_id" foreignKey="fk_rails_668b355aa6" implied="false" onDeleteCascade="true" schema="revamp" table="country_properties"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Country name" size="2147483647" type="text"/>
          <column autoUpdated="false" digits="0" id="2" name="iso2" nullable="false" remarks="2-letter ISO code" size="2147483647" type="text"/>
-         <column autoUpdated="false" digits="17" id="3" name="latitude" nullable="false" remarks="TODO" size="17" type="float8"/>
-         <column autoUpdated="false" digits="17" id="4" name="longitude" nullable="false" remarks="TODO" size="17" type="float8"/>
-         <column autoUpdated="false" digits="0" id="5" name="zoom" nullable="false" remarks="TODO" size="10" type="int4"/>
-         <column autoUpdated="false" digits="6" id="6" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="6" id="7" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="6" id="3" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="countries_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
          <index name="countries_iso2_key" unique="true">
             <column ascending="true" name="iso2"/>
+         </index>
+      </table>
+      <table name="country_properties" numRows="4" remarks="" schema="revamp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('revamp.country_properties_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="country_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_668b355aa6" implied="false" onDeleteCascade="true" schema="revamp" table="countries"/>
+         </column>
+         <column autoUpdated="false" digits="17" id="2" name="latitude" nullable="false" remarks="TODO" size="17" type="float8"/>
+         <column autoUpdated="false" digits="17" id="3" name="longitude" nullable="false" remarks="TODO" size="17" type="float8"/>
+         <column autoUpdated="false" digits="0" id="4" name="zoom" nullable="false" remarks="TODO" size="10" type="int4"/>
+         <column autoUpdated="false" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="6" id="6" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="country_properties_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="country_properties_country_id_key" unique="true">
+            <column ascending="true" name="country_id"/>
+         </index>
+         <index name="index_country_properties_on_country_id" unique="false">
+            <column ascending="true" name="country_id"/>
          </index>
       </table>
       <table name="download_attributes" numRows="18" remarks="Attributes (quals/quants) available for download." schema="revamp" type="TABLE">
@@ -378,7 +424,6 @@
          <column autoUpdated="false" digits="0" id="2" name="symbol" nullable="false" remarks="Version symbol (included in downloaded file name)" size="2147483647" type="varchar"/>
          <column autoUpdated="false" defaultValue="false" digits="0" id="3" name="is_current" nullable="false" remarks="When set, use this version symbol for new downloads (only use for one)" size="1" type="bool"/>
          <column autoUpdated="false" digits="6" id="4" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="6" id="5" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="download_versions_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -401,7 +446,6 @@
          </column>
          <column autoUpdated="false" digits="17" id="3" name="value" nullable="false" remarks="Numeric value" size="17" type="float8"/>
          <column autoUpdated="false" digits="6" id="4" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="6" id="5" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="flow_inds_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -417,7 +461,7 @@
             <column ascending="true" name="flow_id"/>
          </index>
       </table>
-      <table name="flow_quals" numRows="1619400" remarks="Values of quals for flow" schema="revamp" type="TABLE">
+      <table name="flow_quals" numRows="1665312" remarks="Values of quals for flow" schema="revamp" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('revamp.flow_quals_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="flow_id" nullable="false" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="fk_rails_6e55ca4cbc" implied="false" onDeleteCascade="true" schema="revamp" table="flows"/>
@@ -427,7 +471,6 @@
          </column>
          <column autoUpdated="false" digits="0" id="3" name="value" nullable="false" remarks="Textual value" size="2147483647" type="text"/>
          <column autoUpdated="false" digits="6" id="4" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="6" id="5" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="flow_quals_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -453,7 +496,6 @@
          </column>
          <column autoUpdated="false" digits="17" id="3" name="value" nullable="false" remarks="Numeric value" size="17" type="float8"/>
          <column autoUpdated="false" digits="6" id="4" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="6" id="5" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="flow_quants_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -481,7 +523,6 @@
          <column autoUpdated="false" digits="0" id="2" name="year" nullable="false" remarks="Year" size="5" type="int2"/>
          <column autoUpdated="false" defaultValue="'{}'::integer[]" digits="0" id="3" name="path" nullable="true" remarks="Array of node ids which constitute the supply chain, where position of node in this array is linked to the value of column_position in context_node_types" size="10" type="_int4"/>
          <column autoUpdated="false" digits="6" id="4" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="6" id="5" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="flows_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -497,22 +538,43 @@
             <column ascending="true" name="path"/>
          </index>
       </table>
+      <table name="ind_properties" numRows="10" remarks="" schema="revamp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('revamp.ind_properties_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="ind_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_720a88d4b2" implied="false" onDeleteCascade="true" schema="revamp" table="inds"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="display_name" nullable="false" remarks="Name of attribute for display" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="unit_type" nullable="true" remarks="Type of unit, e.g. score. One of restricted set of values." size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="4" name="tooltip_text" nullable="true" remarks="Tooltip text" size="2147483647" type="text"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="is_visible_on_place_profile" nullable="false" remarks="Whether to display this attribute on place profile" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="is_visible_on_actor_profile" nullable="false" remarks="Whether to display this attribute on actor profile" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="7" name="is_temporal_on_place_profile" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="8" name="is_temporal_on_actor_profile" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="6" id="9" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="6" id="10" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="ind_properties_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="ind_properties_ind_id_key" unique="true">
+            <column ascending="true" name="ind_id"/>
+         </index>
+         <index name="index_ind_properties_on_ind_id" unique="false">
+            <column ascending="true" name="ind_id"/>
+         </index>
+      </table>
       <table name="inds" numRows="10" remarks="Attributes classified as inds" schema="revamp" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('revamp.inds_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="ind_id" foreignKey="fk_rails_b730b06fdc" implied="false" onDeleteCascade="true" schema="revamp" table="chart_inds"/>
             <child column="ind_id" foreignKey="fk_rails_23d15ab229" implied="false" onDeleteCascade="true" schema="revamp" table="flow_inds"/>
+            <child column="ind_id" foreignKey="fk_rails_720a88d4b2" implied="false" onDeleteCascade="true" schema="revamp" table="ind_properties"/>
             <child column="ind_id" foreignKey="fk_rails_49db6b9c1f" implied="false" onDeleteCascade="true" schema="revamp" table="map_inds"/>
             <child column="ind_id" foreignKey="fk_rails_28ea53a9b9" implied="false" onDeleteCascade="true" schema="revamp" table="node_inds"/>
             <child column="ind_id" foreignKey="fk_rails_93051274e4" implied="false" onDeleteCascade="true" schema="revamp" table="recolor_by_inds"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Attribute short name, e.g. FOREST_500; those literals are referred to in code, therefore should not be changed without notice" size="2147483647" type="text"/>
-         <column autoUpdated="false" digits="0" id="2" name="display_name" nullable="false" remarks="Name of attribute for display" size="2147483647" type="text"/>
-         <column autoUpdated="false" digits="0" id="3" name="unit" nullable="true" remarks="Unit in which values for this attribute are given" size="2147483647" type="text"/>
-         <column autoUpdated="false" digits="0" id="4" name="unit_type" nullable="true" remarks="Type of unit, e.g. score. One of restricted set of values." size="2147483647" type="text"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="tooltip" nullable="false" remarks="TODO" size="1" type="bool"/>
-         <column autoUpdated="false" digits="0" id="6" name="tooltip_text" nullable="true" remarks="Tooltip text" size="2147483647" type="text"/>
-         <column autoUpdated="false" digits="6" id="7" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="6" id="8" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="2" name="unit" nullable="true" remarks="Unit in which values for this attribute are given" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="3" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="inds_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -634,7 +696,6 @@
          <column autoUpdated="false" digits="0" id="3" name="year" nullable="true" remarks="Year; NULL for all years" size="10" type="int4"/>
          <column autoUpdated="false" digits="17" id="4" name="value" nullable="false" remarks="Numeric value" size="17" type="float8"/>
          <column autoUpdated="false" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="6" id="6" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="node_inds_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -651,6 +712,25 @@
             <column ascending="true" name="year"/>
          </index>
       </table>
+      <table name="node_properties" numRows="18641" remarks="" schema="revamp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('revamp.node_properties_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="node_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_4dcde982df" implied="false" onDeleteCascade="true" schema="revamp" table="nodes"/>
+         </column>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="2" name="is_domestic_consumption" nullable="false" remarks="When set, assume domestic trade" size="1" type="bool"/>
+         <column autoUpdated="false" digits="6" id="3" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="6" id="4" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="node_properties_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="index_node_properties_on_node_id" unique="false">
+            <column ascending="true" name="node_id"/>
+         </index>
+         <index name="node_properties_node_id_key" unique="true">
+            <column ascending="true" name="node_id"/>
+         </index>
+      </table>
       <table name="node_quals" numRows="13975" remarks="Values of quals for node" schema="revamp" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('revamp.node_quals_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="node_id" nullable="false" remarks="" size="10" type="int4">
@@ -662,7 +742,6 @@
          <column autoUpdated="false" digits="0" id="3" name="year" nullable="true" remarks="Year; NULL for all years" size="10" type="int4"/>
          <column autoUpdated="false" digits="0" id="4" name="value" nullable="false" remarks="Textual value" size="2147483647" type="text"/>
          <column autoUpdated="false" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="6" id="6" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="node_quals_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -679,7 +758,7 @@
             <column ascending="true" name="qual_id"/>
          </index>
       </table>
-      <table name="node_quants" numRows="293688" remarks="Values of quants for node" schema="revamp" type="TABLE">
+      <table name="node_quants" numRows="293694" remarks="Values of quants for node" schema="revamp" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('revamp.node_quants_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="node_id" nullable="false" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="fk_rails_dd544b3e59" implied="false" onDeleteCascade="true" schema="revamp" table="nodes"/>
@@ -690,7 +769,6 @@
          <column autoUpdated="false" digits="0" id="3" name="year" nullable="true" remarks="Year; NULL for all years" size="10" type="int4"/>
          <column autoUpdated="false" digits="17" id="4" name="value" nullable="false" remarks="Numeric value" size="17" type="float8"/>
          <column autoUpdated="false" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="6" id="6" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="node_quants_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -714,7 +792,6 @@
          </column>
          <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Name of node type, spelt in capital letters; unique across node types" size="2147483647" type="text"/>
          <column autoUpdated="false" digits="6" id="2" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="6" id="3" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="node_types_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -726,20 +803,18 @@
       <table name="nodes" numRows="18641" remarks="Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains" schema="revamp" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('revamp.nodes_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="node_id" foreignKey="fk_rails_fe29817503" implied="false" onDeleteCascade="true" schema="revamp" table="node_inds"/>
+            <child column="node_id" foreignKey="fk_rails_4dcde982df" implied="false" onDeleteCascade="true" schema="revamp" table="node_properties"/>
             <child column="node_id" foreignKey="fk_rails_14ebb50b5a" implied="false" onDeleteCascade="true" schema="revamp" table="node_quals"/>
             <child column="node_id" foreignKey="fk_rails_dd544b3e59" implied="false" onDeleteCascade="true" schema="revamp" table="node_quants"/>
-            <child column="exporter_id" foreignKey="fk_rails_f8b100d54e" implied="false" onDeleteCascade="true" schema="revamp" table="traders"/>
-            <child column="importer_id" foreignKey="fk_rails_79308a8475" implied="false" onDeleteCascade="true" schema="revamp" table="traders"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="node_type_id" nullable="false" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="fk_rails_37e87445f7" implied="false" onDeleteCascade="true" schema="revamp" table="node_types"/>
          </column>
          <column autoUpdated="false" digits="0" id="2" name="name" nullable="false" remarks="Name of node" size="2147483647" type="text"/>
          <column autoUpdated="false" digits="0" id="3" name="geo_id" nullable="true" remarks="2-letter iso code in case of country nodes; other geo identifiers possible for other node types" size="2147483647" type="text"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="4" name="is_domestic_consumption" nullable="false" remarks="When set, assume domestic trade" size="1" type="bool"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="is_unknown" nullable="false" remarks="When set, node was not possible to identify" size="1" type="bool"/>
-         <column autoUpdated="false" digits="6" id="6" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="6" id="7" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="4" name="is_unknown" nullable="false" remarks="When set, node was not possible to identify" size="1" type="bool"/>
+         <column autoUpdated="false" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="6" name="main_id" nullable="true" remarks="Node identifier from Main DB" size="10" type="int4"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="nodes_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -770,26 +845,72 @@
             <column ascending="true" name="name"/>
          </index>
       </table>
+      <table name="qual_properties" numRows="11" remarks="" schema="revamp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('revamp.qual_properties_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="qual_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_c8bcede145" implied="false" onDeleteCascade="true" schema="revamp" table="quals"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="display_name" nullable="false" remarks="Name of attribute for display" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="tooltip_text" nullable="true" remarks="Tooltip text" size="2147483647" type="text"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="4" name="is_visible_on_place_profile" nullable="false" remarks="Whether to display this attribute on place profile" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="is_visible_on_actor_profile" nullable="false" remarks="Whether to display this attribute on actor profile" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="is_temporal_on_place_profile" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="7" name="is_temporal_on_actor_profile" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="6" id="8" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="6" id="9" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="qual_properties_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="index_qual_properties_on_qual_id" unique="false">
+            <column ascending="true" name="qual_id"/>
+         </index>
+         <index name="qual_properties_qual_id_key" unique="true">
+            <column ascending="true" name="qual_id"/>
+         </index>
+      </table>
       <table name="quals" numRows="11" remarks="Attributes classified as quals" schema="revamp" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('revamp.quals_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="qual_id" foreignKey="fk_rails_c1341bce97" implied="false" onDeleteCascade="true" schema="revamp" table="chart_quals"/>
             <child column="qual_id" foreignKey="fk_rails_e8e87251a2" implied="false" onDeleteCascade="true" schema="revamp" table="download_quals"/>
             <child column="qual_id" foreignKey="fk_rails_917b9da2b8" implied="false" onDeleteCascade="true" schema="revamp" table="flow_quals"/>
             <child column="qual_id" foreignKey="fk_rails_962f283611" implied="false" onDeleteCascade="true" schema="revamp" table="node_quals"/>
+            <child column="qual_id" foreignKey="fk_rails_c8bcede145" implied="false" onDeleteCascade="true" schema="revamp" table="qual_properties"/>
             <child column="qual_id" foreignKey="fk_rails_f5f36c9f54" implied="false" onDeleteCascade="true" schema="revamp" table="recolor_by_quals"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Attribute short name, e.g. ZERO_DEFORESTATION; those literals are referred to in code, therefore should not be changed without notice" size="2147483647" type="text"/>
-         <column autoUpdated="false" digits="0" id="2" name="display_name" nullable="false" remarks="Name of attribute for display" size="2147483647" type="text"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="3" name="tooltip" nullable="false" remarks="TODO" size="1" type="bool"/>
-         <column autoUpdated="false" digits="0" id="4" name="tooltip_text" nullable="true" remarks="Tooltip text" size="2147483647" type="text"/>
-         <column autoUpdated="false" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="6" id="6" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="6" id="2" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="quals_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
          <index name="quals_name_key" unique="true">
             <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="quant_properties" numRows="22" remarks="" schema="revamp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('revamp.quant_properties_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="quant_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_201d91fbef" implied="false" onDeleteCascade="true" schema="revamp" table="quants"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="display_name" nullable="false" remarks="Name of attribute for display" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="unit_type" nullable="true" remarks="Type of unit, e.g. count. One of restricted set of values." size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="4" name="tooltip_text" nullable="true" remarks="Tooltip text" size="2147483647" type="text"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="is_visible_on_place_profile" nullable="false" remarks="Whether to display this attribute on place profile" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="is_visible_on_actor_profile" nullable="false" remarks="Whether to display this attribute on actor profile" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="7" name="is_temporal_on_place_profile" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="8" name="is_temporal_on_actor_profile" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="6" id="9" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="6" id="10" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="quant_properties_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="index_quant_properties_on_quant_id" unique="false">
+            <column ascending="true" name="quant_id"/>
+         </index>
+         <index name="quant_properties_quant_id_key" unique="true">
+            <column ascending="true" name="quant_id"/>
          </index>
       </table>
       <table name="quants" numRows="22" remarks="Attributes classified as quants" schema="revamp" type="TABLE">
@@ -799,16 +920,12 @@
             <child column="quant_id" foreignKey="fk_rails_a48f7b74d0" implied="false" onDeleteCascade="true" schema="revamp" table="flow_quants"/>
             <child column="quant_id" foreignKey="fk_rails_cc084396cb" implied="false" onDeleteCascade="true" schema="revamp" table="map_quants"/>
             <child column="quant_id" foreignKey="fk_rails_e5f4cc54e9" implied="false" onDeleteCascade="true" schema="revamp" table="node_quants"/>
+            <child column="quant_id" foreignKey="fk_rails_201d91fbef" implied="false" onDeleteCascade="true" schema="revamp" table="quant_properties"/>
             <child column="quant_id" foreignKey="fk_rails_c63dc992e3" implied="false" onDeleteCascade="true" schema="revamp" table="resize_by_quants"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Attribute short name, e.g. FOB; those literals are referred to in code, therefore should not be changed without notice" size="2147483647" type="text"/>
-         <column autoUpdated="false" digits="0" id="2" name="display_name" nullable="false" remarks="Name of attribute for display" size="2147483647" type="text"/>
-         <column autoUpdated="false" digits="0" id="3" name="unit" nullable="true" remarks="Unit in which values for this attribute are given" size="2147483647" type="text"/>
-         <column autoUpdated="false" digits="0" id="4" name="unit_type" nullable="true" remarks="Type of unit, e.g. count. One of restricted set of values." size="2147483647" type="text"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="tooltip" nullable="false" remarks="TODO" size="1" type="bool"/>
-         <column autoUpdated="false" digits="0" id="6" name="tooltip_text" nullable="true" remarks="Tooltip text" size="2147483647" type="text"/>
-         <column autoUpdated="false" digits="6" id="7" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="6" id="8" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="2" name="unit" nullable="true" remarks="Unit in which values for this attribute are given" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="3" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="quants_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -953,31 +1070,6 @@
          <index name="resize_by_quants_resize_by_attribute_id_quant_id_key" unique="true">
             <column ascending="true" name="resize_by_attribute_id"/>
             <column ascending="true" name="quant_id"/>
-         </index>
-      </table>
-      <table name="traders" numRows="48" remarks="Links between importer and exporter nodes which represent the same trader" schema="revamp" type="TABLE">
-         <column autoUpdated="true" defaultValue="nextval('revamp.traders_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
-         <column autoUpdated="false" digits="0" id="1" name="importer_id" nullable="false" remarks="" size="10" type="int4">
-            <parent column="id" foreignKey="fk_rails_79308a8475" implied="false" onDeleteCascade="true" schema="revamp" table="nodes"/>
-         </column>
-         <column autoUpdated="false" digits="0" id="2" name="exporter_id" nullable="false" remarks="" size="10" type="int4">
-            <parent column="id" foreignKey="fk_rails_f8b100d54e" implied="false" onDeleteCascade="true" schema="revamp" table="nodes"/>
-         </column>
-         <column autoUpdated="false" digits="6" id="3" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="6" id="4" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
-         <primaryKey column="id" sequenceNumberInPK="1"/>
-         <index name="traders_pkey" unique="true">
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="index_traders_on_exporter_id" unique="false">
-            <column ascending="true" name="exporter_id"/>
-         </index>
-         <index name="index_traders_on_importer_id" unique="false">
-            <column ascending="true" name="importer_id"/>
-         </index>
-         <index name="traders_exporter_id_importer_id_key" unique="true">
-            <column ascending="true" name="exporter_id"/>
-            <column ascending="true" name="importer_id"/>
          </index>
       </table>
    </tables>

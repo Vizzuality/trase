@@ -101,591 +101,8 @@
 				</thead>
 				<tbody>
 				<tr>
-				 <td>node_quants</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.node_quants_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>chart_attributes</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>chart_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Refence to chart</p></td>
-				</tr>
-				<tr>
-				 <td>node_quals</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>charts</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>inds</td>
-				 <td>Table</td>
-				 <td>tooltip</td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
-				 <td>node_quals</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>node_inds</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>year</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Year; NULL for all years</p></td>
-				</tr>
-				<tr>
-				 <td>chart_quals</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_attributes</td>
-				 <td>Table</td>
-				 <td>divisor</td>
-				 <td>float8</td>
-				 <td>17</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
-				 <td>carto_layers</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>identifier</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Identifier of the CartoDB named map, e.g. brazil_biomes; unique in scope of contextual layer</p></td>
-				</tr>
-				<tr>
-				 <td>quals</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>name</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Attribute short name, e.g. ZERO_DEFORESTATION; those literals are referred to in code, therefore should not be changed without notice</p></td>
-				</tr>
-				<tr>
-				 <td>resize_by_attributes</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>group_number</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>1</td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
-				 <td>inds</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>chart_inds</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>chart_attribute_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>quants</td>
-				 <td>Table</td>
-				 <td>unit</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Unit in which values for this attribute are given</p></td>
-				</tr>
-				<tr>
-				 <td>profiles</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>name</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Profile name, either actor or place. One of restricted set of values.</p></td>
-				</tr>
-				<tr>
-				 <td>quants</td>
-				 <td>Table</td>
-				 <td>tooltip_text</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Tooltip text</p></td>
-				</tr>
-				<tr>
-				 <td>context_node_types</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>download_attributes</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>resize_by_quants</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>map_attribute_groups</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.map_attribute_groups_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>contextual_layers</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.contextual_layers_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>contextual_layers</td>
-				 <td>Table</td>
-				 <td>is_default</td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td><p>When set, show this layer by default</p></td>
-				</tr>
-				<tr>
-				 <td>flow_inds</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>download_attributes</td>
-				 <td>Table</td>
-				 <td>years</td>
-				 <td>_int4</td>
-				 <td>10</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Years for which attribute is present; NULL for all years</p></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_inds</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>chart_quals</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.chart_quals_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>context_node_types</td>
-				 <td>Table</td>
-				 <td>is_geo_column</td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td><p>When set, show nodes on map</p></td>
-				</tr>
-				<tr>
-				 <td>map_attributes</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.map_attributes_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>map_attribute_groups</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>countries</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>inds</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>name</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Attribute short name, e.g. FOREST_500; those literals are referred to in code, therefore should not be changed without notice</p></td>
-				</tr>
-				<tr>
-				 <td>flows</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>flow_quals</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.flow_quals_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_attributes</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>group_number</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>1</td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
 				 <td>map_inds</td>
 				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>charts</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.charts_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>download_attributes</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.download_attributes_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>download_versions</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>commodities</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>flow_inds</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>charts</td>
-				 <td>Table</td>
-				 <td>title</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Title of chart for display</p></td>
-				</tr>
-				<tr>
-				 <td>node_inds</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>node_inds</td>
-				 <td>Table</td>
-				 <td>value</td>
-				 <td>float8</td>
-				 <td>17</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Numeric value</p></td>
-				</tr>
-				<tr>
-				 <td>charts</td>
-				 <td>Table</td>
-				 <td>identifier</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Identifier used to map this chart to a part of code which contains calculation logic</p></td>
-				</tr>
-				<tr>
-				 <td>download_versions</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>symbol</td>
-				 <td>varchar</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Version symbol (included in downloaded file name)</p></td>
-				</tr>
-				<tr>
-				 <td>map_quants</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>context_node_types</td>
-				 <td>Table</td>
-				 <td>column_group</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Number of sankey column in which to display nodes of this type</p></td>
-				</tr>
-				<tr>
-				 <td>flows</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>path</td>
-				 <td>_int4</td>
-				 <td>10</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>&#39;{}&#39;::integer[]</td>
-				 <td><p>Array of node ids which constitute the supply chain, where position of node in this array is linked to the value of column_position in context_node_types</p></td>
-				</tr>
-				<tr>
-				 <td>download_quals</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>carto_layers</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.carto_layers_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>map_attributes</td>
-				 <td>Table</td>
-				 <td>color_scale</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
-				 <td>charts</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>profile_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>chart_attributes</td>
-				 <td>Table</td>
 				 <td>updated_at</td>
 				 <td>timestamp</td>
 				 <td>29</td>
@@ -693,402 +110,6 @@
 				 <td title=''></td>
 				 <td>null</td>
 				 <td></td>
-				</tr>
-				<tr>
-				 <td>countries</td>
-				 <td>Table</td>
-				 <td>latitude</td>
-				 <td>float8</td>
-				 <td>17</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_attributes</td>
-				 <td>Table</td>
-				 <td>interval_count</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
-				 <td>chart_attributes</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Display order in scope of chart</p></td>
-				</tr>
-				<tr>
-				 <td>profiles</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.profiles_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>context_node_types</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>profiles</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>download_quals</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>download_attribute_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>nodes</td>
-				 <td>Table</td>
-				 <td>is_unknown</td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td><p>When set, node was not possible to identify</p></td>
-				</tr>
-				<tr>
-				 <td>flow_quals</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>chart_inds</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>map_inds</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>quants</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.quants_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>chart_attributes</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.chart_attributes_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>chart_quals</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>countries</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>flow_quants</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>flow_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>carto_layers</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>contextual_layer_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>chart_quants</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>contextual_layers</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>identifier</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Identifier of layer, e.g. brazil_biomes</p></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_attributes</td>
-				 <td>Table</td>
-				 <td>legend_color_theme</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
-				 <td>charts</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Display order in scope of profile</p></td>
-				</tr>
-				<tr>
-				 <td>download_attributes</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>download_quants</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>charts</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>parent_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Self-reference to parent used to define complex charts, e.g. table with values in tabs</p></td>
-				</tr>
-				<tr>
-				 <td>resize_by_quants</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>resize_by_attribute_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>download_quals</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>nodes</td>
-				 <td>Table</td>
-				 <td>name</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Name of node</p></td>
-				</tr>
-				<tr>
-				 <td>contexts</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>quants</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>name</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Attribute short name, e.g. FOB; those literals are referred to in code, therefore should not be changed without notice</p></td>
-				</tr>
-				<tr>
-				 <td>context_node_types</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.context_node_types_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>commodities</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.commodities_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>map_attribute_groups</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Display order in scope of context</p></td>
-				</tr>
-				<tr>
-				 <td>map_attributes</td>
-				 <td>Table</td>
-				 <td>years</td>
-				 <td>_int4</td>
-				 <td>10</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Years for which attribute is present; NULL for all years</p></td>
-				</tr>
-				<tr>
-				 <td>chart_quants</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>chart_attribute_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>context_node_types</td>
-				 <td>Table</td>
-				 <td>is_default</td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td><p>When set, show this node type as default (only use for one)</p></td>
-				</tr>
-				<tr>
-				 <td>node_quants</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>year</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Year; NULL for all years</p></td>
 				</tr>
 				<tr>
 				 <td>carto_layers</td>
@@ -1102,83 +123,6 @@
 				 <td><p>Array of years for which to show this carto layer in scope of contextual layer; NULL for all years</p></td>
 				</tr>
 				<tr>
-				 <td>node_quants</td>
-				 <td>Table</td>
-				 <td>value</td>
-				 <td>float8</td>
-				 <td>17</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Numeric value</p></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_quals</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_attributes</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Display order in scope of context</p></td>
-				</tr>
-				<tr>
-				 <td>node_types</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.node_types_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>node_types</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>node_quants</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>node_quants</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
 				 <td>flows</td>
 				 <td>Table</td>
 				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_id</td>
@@ -1188,1336 +132,27 @@
 				 <td title=''></td>
 				 <td>null</td>
 				 <td></td>
-				</tr>
-				<tr>
-				 <td>map_attributes</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>map_attribute_group_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>inds</td>
-				 <td>Table</td>
-				 <td>display_name</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Name of attribute for display</p></td>
-				</tr>
-				<tr>
-				 <td>download_quants</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>download_versions</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>quants</td>
-				 <td>Table</td>
-				 <td>tooltip</td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
-				 <td>contexts</td>
-				 <td>Table</td>
-				 <td>is_disabled</td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td><p>When set, do not show this context</p></td>
-				</tr>
-				<tr>
-				 <td>chart_attributes</td>
-				 <td>Table</td>
-				 <td>years</td>
-				 <td>_int4</td>
-				 <td>10</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Array of years for which to show this attribute in scope of chart; NULL for all years</p></td>
-				</tr>
-				<tr>
-				 <td>resize_by_attributes</td>
-				 <td>Table</td>
-				 <td>is_disabled</td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td><p>When set, do not show this attribute</p></td>
-				</tr>
-				<tr>
-				 <td>contextual_layers</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>contexts</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>nodes</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_type_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>countries</td>
-				 <td>Table</td>
-				 <td>longitude</td>
-				 <td>float8</td>
-				 <td>17</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
-				 <td>countries</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>iso2</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>2-letter ISO code</p></td>
-				</tr>
-				<tr>
-				 <td>map_attribute_groups</td>
-				 <td>Table</td>
-				 <td>name</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Name for display</p></td>
-				</tr>
-				<tr>
-				 <td>context_node_types</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_type_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>countries</td>
-				 <td>Table</td>
-				 <td>name</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Country name</p></td>
-				</tr>
-				<tr>
-				 <td>contexts</td>
-				 <td>Table</td>
-				 <td>default_year</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Default year for this context</p></td>
-				</tr>
-				<tr>
-				 <td>node_quals</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>inds</td>
-				 <td>Table</td>
-				 <td>unit_type</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Type of unit, e.g. score. One of restricted set of values.</p></td>
-				</tr>
-				<tr>
-				 <td>countries</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.countries_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>resize_by_attributes</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>carto_layers</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>flow_quants</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>node_quants</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>contextual_layers</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>inds</td>
-				 <td>Table</td>
-				 <td>tooltip_text</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Tooltip text</p></td>
-				</tr>
-				<tr>
-				 <td>contexts</td>
-				 <td>Table</td>
-				 <td>default_basemap</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Default basemap for this context, e.g. satellite</p></td>
-				</tr>
-				<tr>
-				 <td>map_attributes</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Display order in scope of group</p></td>
-				</tr>
-				<tr>
-				 <td>flow_quants</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.flow_quants_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>flow_quants</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>chart_quals</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>node_types</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>node_quals</td>
-				 <td>Table</td>
-				 <td>value</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Textual value</p></td>
-				</tr>
-				<tr>
-				 <td>map_inds</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.map_inds_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>context_node_types</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_inds</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_quals</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.recolor_by_quals_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>flow_inds</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>contexts</td>
-				 <td>Table</td>
-				 <td>years</td>
-				 <td>_int4</td>
-				 <td>10</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Years for which country-commodity data is present; NULL for all years</p></td>
-				</tr>
-				<tr>
-				 <td>traders</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.traders_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>quals</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.quals_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>node_inds</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>flow_inds</td>
-				 <td>Table</td>
-				 <td>value</td>
-				 <td>float8</td>
-				 <td>17</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Numeric value</p></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_attributes</td>
-				 <td>Table</td>
-				 <td>is_default</td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td><p>When set, show this attribute by default</p></td>
-				</tr>
-				<tr>
-				 <td>quants</td>
-				 <td>Table</td>
-				 <td>display_name</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Name of attribute for display</p></td>
-				</tr>
-				<tr>
-				 <td>resize_by_attributes</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Display order in scope of context</p></td>
-				</tr>
-				<tr>
-				 <td>download_versions</td>
-				 <td>Table</td>
-				 <td>is_current</td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td><p>When set, use this version symbol for new downloads (only use for one)</p></td>
-				</tr>
-				<tr>
-				 <td>map_attributes</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>flow_quals</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_attributes</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>map_inds</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>traders</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>nodes</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>map_attributes</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>quants</td>
-				 <td>Table</td>
-				 <td>unit_type</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Type of unit, e.g. count. One of restricted set of values.</p></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_inds</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.recolor_by_inds_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_attributes</td>
-				 <td>Table</td>
-				 <td>years</td>
-				 <td>_int4</td>
-				 <td>10</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Array of years for which to show this attribute in scope of chart; NULL for all years</p></td>
-				</tr>
-				<tr>
-				 <td>map_attributes</td>
-				 <td>Table</td>
-				 <td>is_default</td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td><p>When set, show this attribute by default</p></td>
-				</tr>
-				<tr>
-				 <td>traders</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>exporter_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>resize_by_attributes</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.resize_by_attributes_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>contextual_layers</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Display order in scope of context</p></td>
-				</tr>
-				<tr>
-				 <td>flow_inds</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.flow_inds_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>download_quants</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.download_quants_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>map_quants</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.map_quants_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>chart_attributes</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>flow_quals</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>flow_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>nodes</td>
-				 <td>Table</td>
-				 <td>is_domestic_consumption</td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td><p>When set, assume domestic trade</p></td>
 				</tr>
 				<tr>
 				 <td>charts</td>
 				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_attributes</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>chart_quals</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>chart_attribute_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_attributes</td>
-				 <td>Table</td>
-				 <td>tooltip_text</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Tooltip text</p></td>
-				</tr>
-				<tr>
-				 <td>map_attribute_groups</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>resize_by_attributes</td>
-				 <td>Table</td>
-				 <td>is_default</td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td><p>When set, show this attribute by default</p></td>
-				</tr>
-				<tr>
-				 <td>download_attributes</td>
-				 <td>Table</td>
 				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
 				 <td>int4</td>
 				 <td>10</td>
 				 <td title=''></td>
 				 <td title=''></td>
 				 <td>null</td>
-				 <td><p>Display order in scope of context</p></td>
-				</tr>
-				<tr>
-				 <td>node_quants</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
+				 <td><p>Display order in scope of profile</p></td>
 				</tr>
 				<tr>
 				 <td>contextual_layers</td>
 				 <td>Table</td>
-				 <td>tooltip_text</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Tooltip text</p></td>
-				</tr>
-				<tr>
-				 <td>download_quants</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>download_attribute_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_quals</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_attributes</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.recolor_by_attributes_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>download_quals</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>commodities</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>parent_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Self-reference to parent used to define links between commodities and sub-commodities</p></td>
-				</tr>
-				<tr>
-				 <td>chart_inds</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.chart_inds_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>download_quants</td>
-				 <td>Table</td>
-				 <td>is_filter_enabled</td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td><p>When set, enable selection of value ranges (advanced filter)</p></td>
-				</tr>
-				<tr>
-				 <td>resize_by_attributes</td>
-				 <td>Table</td>
-				 <td>tooltip_text</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Tooltip text</p></td>
-				</tr>
-				<tr>
-				 <td>download_versions</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>contexts</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.contexts_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>node_types</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>name</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Name of node type, spelt in capital letters; unique across node types</p></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_inds</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>quants</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>quals</td>
-				 <td>Table</td>
-				 <td>tooltip</td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_attributes</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>node_quals</td>
-				 <td>Table</td>
 				 <td>created_at</td>
 				 <td>timestamp</td>
 				 <td>29</td>
 				 <td title=''></td>
 				 <td title=''></td>
 				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>map_attributes</td>
-				 <td>Table</td>
-				 <td>bucket_5</td>
-				 <td>_float8</td>
-				 <td>17</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>&#39;{}&#39;::double precision[]</td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_attributes</td>
-				 <td>Table</td>
-				 <td>legend_type</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
-				 <td>flow_quals</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>download_quals</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.download_quals_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>flow_quants</td>
-				 <td>Table</td>
-				 <td>value</td>
-				 <td>float8</td>
-				 <td>17</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Numeric value</p></td>
-				</tr>
-				<tr>
-				 <td>map_attributes</td>
-				 <td>Table</td>
-				 <td>is_disabled</td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td><p>When set, do not show this attribute</p></td>
-				</tr>
-				<tr>
-				 <td>inds</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.inds_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>chart_inds</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>resize_by_attributes</td>
-				 <td>Table</td>
-				 <td>years</td>
-				 <td>_int4</td>
-				 <td>10</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Array of years for which to show this attribute in scope of chart; NULL for all years</p></td>
-				</tr>
-				<tr>
-				 <td>nodes</td>
-				 <td>Table</td>
-				 <td>geo_id</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>2-letter iso code in case of country nodes; other geo identifiers possible for other node types</p></td>
-				</tr>
-				<tr>
-				 <td>nodes</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_attributes</td>
-				 <td>Table</td>
-				 <td>is_disabled</td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td><p>When set, do not show this attribute</p></td>
-				</tr>
-				<tr>
-				 <td>quals</td>
-				 <td>Table</td>
-				 <td>display_name</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Name of attribute for display</p></td>
-				</tr>
-				<tr>
-				 <td>contexts</td>
-				 <td>Table</td>
-				 <td>is_default</td>
-				 <td>bool</td>
-				 <td>1</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>false</td>
-				 <td><p>When set, show this context as default (only use for one)</p></td>
-				</tr>
-				<tr>
-				 <td>flows</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.flows_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>commodities</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>download_versions</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.download_versions_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>download_attributes</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>download_quants</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>resize_by_quants</td>
-				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>resize_by_attributes</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>quals</td>
-				 <td>Table</td>
-				 <td>tooltip_text</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Tooltip text</p></td>
-				</tr>
-				<tr>
-				 <td>node_quals</td>
-				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>year</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Year; NULL for all years</p></td>
-				</tr>
-				<tr>
-				 <td>profiles</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>inds</td>
-				 <td>Table</td>
-				 <td>unit</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>Unit in which values for this attribute are given</p></td>
-				</tr>
-				<tr>
-				 <td>quals</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>node_quals</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.node_quals_id_seq&#39;::regclass)</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>contexts</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>country_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>chart_quants</td>
-				 <td>Table</td>
-				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-				 <td>serial</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.chart_quants_id_seq&#39;::regclass)</td>
 				 <td></td>
 				</tr>
 				<tr>
@@ -2532,18 +167,51 @@
 				 <td><p>When set, enable selection of discreet values (advanced filter)</p></td>
 				</tr>
 				<tr>
-				 <td>flows</td>
+				 <td>context_node_types</td>
 				 <td>Table</td>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>year</td>
-				 <td>int2</td>
-				 <td>5</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_type_id</td>
+				 <td>int4</td>
+				 <td>10</td>
 				 <td title=''></td>
 				 <td title=''></td>
 				 <td>null</td>
-				 <td><p>Year</p></td>
+				 <td></td>
 				</tr>
 				<tr>
-				 <td>inds</td>
+				 <td>recolor_by_quals</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>node_properties</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.node_properties_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_attributes</td>
+				 <td>Table</td>
+				 <td>max_value</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>TODO</p></td>
+				</tr>
+				<tr>
+				 <td>charts</td>
 				 <td>Table</td>
 				 <td>created_at</td>
 				 <td>timestamp</td>
@@ -2554,15 +222,26 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td>context_node_types</td>
+				 <td>node_properties</td>
 				 <td>Table</td>
-				 <td>column_position</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_id</td>
 				 <td>int4</td>
 				 <td>10</td>
 				 <td title=''></td>
 				 <td title=''></td>
 				 <td>null</td>
-				 <td><p>Index of node of this type in flows.path</p></td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>download_attributes</td>
+				 <td>Table</td>
+				 <td>display_name</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Name of attribute for display</p></td>
 				</tr>
 				<tr>
 				 <td>commodities</td>
@@ -2576,9 +255,9 @@
 				 <td><p>Commodity name; unique across commodities</p></td>
 				</tr>
 				<tr>
-				 <td>quals</td>
+				 <td>nodes</td>
 				 <td>Table</td>
-				 <td>updated_at</td>
+				 <td>created_at</td>
 				 <td>timestamp</td>
 				 <td>29</td>
 				 <td title=''></td>
@@ -2587,14 +266,201 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td>nodes</td>
+				 <td>qual_properties</td>
+				 <td>Table</td>
+				 <td>is_temporal_on_actor_profile</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>carto_layers</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>contextual_layer_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>download_versions</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>symbol</td>
+				 <td>varchar</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Version symbol (included in downloaded file name)</p></td>
+				</tr>
+				<tr>
+				 <td>node_quals</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>chart_inds</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>chart_attribute_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>map_attribute_groups</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Display order in scope of context</p></td>
+				</tr>
+				<tr>
+				 <td>country_properties</td>
+				 <td>Table</td>
+				 <td>latitude</td>
+				 <td>float8</td>
+				 <td>17</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>TODO</p></td>
+				</tr>
+				<tr>
+				 <td>quant_properties</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>flow_quants</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>flow_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>qual_properties</td>
+				 <td>Table</td>
+				 <td>display_name</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Name of attribute for display</p></td>
+				</tr>
+				<tr>
+				 <td>flow_inds</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>profiles</td>
 				 <td>Table</td>
 				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
 				 <td>serial</td>
 				 <td>10</td>
 				 <td title=''></td>
 				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.nodes_id_seq&#39;::regclass)</td>
+				 <td>nextval(&#39;revamp.profiles_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>quant_properties</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.quant_properties_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>countries</td>
+				 <td>Table</td>
+				 <td>name</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Country name</p></td>
+				</tr>
+				<tr>
+				 <td>download_quals</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_attributes</td>
+				 <td>Table</td>
+				 <td>legend_color_theme</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>TODO</p></td>
+				</tr>
+				<tr>
+				 <td>contextual_layers</td>
+				 <td>Table</td>
+				 <td>is_default</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>When set, show this layer by default</p></td>
+				</tr>
+				<tr>
+				 <td>qual_properties</td>
+				 <td>Table</td>
+				 <td>is_temporal_on_place_profile</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
 				 <td></td>
 				</tr>
 				<tr>
@@ -2620,22 +486,11 @@
 				 <td><p>Array of value ranges to allow filtering by</p></td>
 				</tr>
 				<tr>
-				 <td>flow_quants</td>
+				 <td>chart_quants</td>
 				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>contextual_layers</td>
-				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_id</td>
-				 <td>int4</td>
-				 <td>10</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
 				 <td title=''></td>
 				 <td title=''></td>
 				 <td>null</td>
@@ -2644,90 +499,35 @@
 				<tr>
 				 <td>quants</td>
 				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>map_quants</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>flows</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>node_inds</td>
-				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td>recolor_by_attributes</td>
-				 <td>Table</td>
-				 <td>min_value</td>
-				 <td>text</td>
-				 <td>2147483647</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
-				 <td>download_attributes</td>
-				 <td>Table</td>
-				 <td>display_name</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>name</td>
 				 <td>text</td>
 				 <td>2147483647</td>
 				 <td title=''></td>
 				 <td title=''></td>
 				 <td>null</td>
-				 <td><p>Name of attribute for display</p></td>
+				 <td><p>Attribute short name, e.g. FOB; those literals are referred to in code, therefore should not be changed without notice</p></td>
 				</tr>
 				<tr>
-				 <td>traders</td>
+				 <td>qual_properties</td>
 				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
 				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.qual_properties_id_seq&#39;::regclass)</td>
 				 <td></td>
 				</tr>
 				<tr>
-				 <td>chart_inds</td>
+				 <td>qual_properties</td>
 				 <td>Table</td>
-				 <td>updated_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
+				 <td>is_visible_on_actor_profile</td>
+				 <td>bool</td>
+				 <td>1</td>
 				 <td title=''></td>
 				 <td title=''></td>
-				 <td>null</td>
-				 <td></td>
+				 <td>false</td>
+				 <td><p>Whether to display this attribute on actor profile</p></td>
 				</tr>
 				<tr>
 				 <td>flow_quals</td>
@@ -2741,18 +541,205 @@
 				 <td><p>Textual value</p></td>
 				</tr>
 				<tr>
-				 <td>recolor_by_attributes</td>
+				 <td>chart_inds</td>
 				 <td>Table</td>
-				 <td>max_value</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>ind_properties</td>
+				 <td>Table</td>
+				 <td>is_temporal_on_actor_profile</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>quant_properties</td>
+				 <td>Table</td>
+				 <td>is_visible_on_actor_profile</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>Whether to display this attribute on actor profile</p></td>
+				</tr>
+				<tr>
+				 <td>download_attributes</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Display order in scope of context</p></td>
+				</tr>
+				<tr>
+				 <td>map_attributes</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Display order in scope of group</p></td>
+				</tr>
+				<tr>
+				 <td>context_node_types</td>
+				 <td>Table</td>
+				 <td>column_position</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Index of node of this type in flows.path</p></td>
+				</tr>
+				<tr>
+				 <td>profiles</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>name</td>
 				 <td>text</td>
 				 <td>2147483647</td>
 				 <td title='nullable'>√</td>
 				 <td title=''></td>
 				 <td>null</td>
+				 <td><p>Profile name, either actor or place. One of restricted set of values.</p></td>
+				</tr>
+				<tr>
+				 <td>map_quants</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>node_quals</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.node_quals_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>context_node_type_properties</td>
+				 <td>Table</td>
+				 <td>column_group</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Number of sankey column in which to display nodes of this type</p></td>
+				</tr>
+				<tr>
+				 <td>country_properties</td>
+				 <td>Table</td>
+				 <td>longitude</td>
+				 <td>float8</td>
+				 <td>17</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
 				 <td><p>TODO</p></td>
 				</tr>
 				<tr>
-				 <td>resize_by_attributes</td>
+				 <td>recolor_by_attributes</td>
+				 <td>Table</td>
+				 <td>years</td>
+				 <td>_int4</td>
+				 <td>10</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Array of years for which to show this attribute in scope of chart; NULL for all years</p></td>
+				</tr>
+				<tr>
+				 <td>map_attributes</td>
+				 <td>Table</td>
+				 <td>bucket_3</td>
+				 <td>_float8</td>
+				 <td>17</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>&#39;{}&#39;::double precision[]</td>
+				 <td><p>TODO</p></td>
+				</tr>
+				<tr>
+				 <td>node_quals</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>year</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Year; NULL for all years</p></td>
+				</tr>
+				<tr>
+				 <td>map_quants</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>country_properties</td>
+				 <td>Table</td>
+				 <td>zoom</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>TODO</p></td>
+				</tr>
+				<tr>
+				 <td>quants</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>quant_properties</td>
+				 <td>Table</td>
+				 <td>unit_type</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Type of unit, e.g. count. One of restricted set of values.</p></td>
+				</tr>
+				<tr>
+				 <td>context_properties</td>
 				 <td>Table</td>
 				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_id</td>
 				 <td>int4</td>
@@ -2763,9 +750,174 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td>map_quants</td>
+				 <td>recolor_by_attributes</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.recolor_by_attributes_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_attributes</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>download_quants</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>download_quals</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>inds</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.inds_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>node_inds</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>chart_inds</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_attributes</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>node_properties</td>
+				 <td>Table</td>
+				 <td>is_domestic_consumption</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>When set, assume domestic trade</p></td>
+				</tr>
+				<tr>
+				 <td>qual_properties</td>
 				 <td>Table</td>
 				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>charts</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>profile_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>chart_quals</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.chart_quals_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>resize_by_attributes</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>node_inds</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>year</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Year; NULL for all years</p></td>
+				</tr>
+				<tr>
+				 <td>profiles</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_node_type_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>quals</td>
+				 <td>Table</td>
+				 <td>created_at</td>
 				 <td>timestamp</td>
 				 <td>29</td>
 				 <td title=''></td>
@@ -2785,20 +937,64 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td>resize_by_quants</td>
+				 <td>context_properties</td>
 				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
+				 <td>is_disabled</td>
+				 <td>bool</td>
+				 <td>1</td>
 				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>When set, do not show this context</p></td>
+				</tr>
+				<tr>
+				 <td>contexts</td>
+				 <td>Table</td>
+				 <td>years</td>
+				 <td>_int4</td>
+				 <td>10</td>
+				 <td title='nullable'>√</td>
 				 <td title=''></td>
 				 <td>null</td>
+				 <td><p>Years for which country-commodity data is present; NULL for all years</p></td>
+				</tr>
+				<tr>
+				 <td>node_quants</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.node_quants_id_seq&#39;::regclass)</td>
 				 <td></td>
 				</tr>
 				<tr>
-				 <td>profiles</td>
+				 <td>recolor_by_inds</td>
 				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_node_type_id</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.recolor_by_inds_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>qual_properties</td>
+				 <td>Table</td>
+				 <td>tooltip_text</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Tooltip text</p></td>
+				</tr>
+				<tr>
+				 <td>node_quants</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_id</td>
 				 <td>int4</td>
 				 <td>10</td>
 				 <td title=''></td>
@@ -2807,73 +1003,106 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td>recolor_by_quals</td>
+				 <td>download_versions</td>
 				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
+				 <td>is_current</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>When set, use this version symbol for new downloads (only use for one)</p></td>
+				</tr>
+				<tr>
+				 <td>ind_properties</td>
+				 <td>Table</td>
+				 <td>is_visible_on_actor_profile</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>Whether to display this attribute on actor profile</p></td>
+				</tr>
+				<tr>
+				 <td>chart_attributes</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>chart_id</td>
 				 <td>int4</td>
 				 <td>10</td>
 				 <td title=''></td>
 				 <td title=''></td>
 				 <td>null</td>
-				 <td></td>
+				 <td><p>Refence to chart</p></td>
 				</tr>
 				<tr>
-				 <td>map_attributes</td>
+				 <td>quant_properties</td>
 				 <td>Table</td>
-				 <td>bucket_3</td>
-				 <td>_float8</td>
-				 <td>17</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>&#39;{}&#39;::double precision[]</td>
-				 <td><p>TODO</p></td>
-				</tr>
-				<tr>
-				 <td>contextual_layers</td>
-				 <td>Table</td>
-				 <td>title</td>
+				 <td>display_name</td>
 				 <td>text</td>
 				 <td>2147483647</td>
 				 <td title=''></td>
 				 <td title=''></td>
 				 <td>null</td>
-				 <td><p>Title of layer for display</p></td>
+				 <td><p>Name of attribute for display</p></td>
 				</tr>
 				<tr>
-				 <td>map_quants</td>
+				 <td>nodes</td>
 				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>map_attribute_id</td>
+				 <td>is_unknown</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>When set, node was not possible to identify</p></td>
+				</tr>
+				<tr>
+				 <td>nodes</td>
+				 <td>Table</td>
+				 <td>main_id</td>
 				 <td>int4</td>
 				 <td>10</td>
-				 <td title=''></td>
+				 <td title='nullable'>√</td>
 				 <td title=''></td>
 				 <td>null</td>
-				 <td></td>
+				 <td><p>Node identifier from Main DB</p></td>
 				</tr>
 				<tr>
-				 <td>carto_layers</td>
+				 <td>quant_properties</td>
 				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
+				 <td>is_temporal_on_actor_profile</td>
+				 <td>bool</td>
+				 <td>1</td>
 				 <td title=''></td>
 				 <td title=''></td>
-				 <td>null</td>
+				 <td>false</td>
 				 <td></td>
 				</tr>
 				<tr>
-				 <td>chart_quants</td>
+				 <td>recolor_by_attributes</td>
 				 <td>Table</td>
-				 <td>created_at</td>
-				 <td>timestamp</td>
-				 <td>29</td>
-				 <td title=''></td>
+				 <td>min_value</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
 				 <td title=''></td>
 				 <td>null</td>
-				 <td></td>
+				 <td><p>TODO</p></td>
 				</tr>
 				<tr>
-				 <td>node_inds</td>
+				 <td>resize_by_attributes</td>
+				 <td>Table</td>
+				 <td>tooltip_text</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Tooltip text</p></td>
+				</tr>
+				<tr>
+				 <td>ind_properties</td>
 				 <td>Table</td>
 				 <td>updated_at</td>
 				 <td>timestamp</td>
@@ -2884,9 +1113,9 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td>traders</td>
+				 <td>recolor_by_inds</td>
 				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>importer_id</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
 				 <td>int4</td>
 				 <td>10</td>
 				 <td title=''></td>
@@ -2895,26 +1124,92 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td>countries</td>
+				 <td>flows</td>
 				 <td>Table</td>
-				 <td>zoom</td>
-				 <td>int4</td>
-				 <td>10</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>year</td>
+				 <td>int2</td>
+				 <td>5</td>
 				 <td title=''></td>
 				 <td title=''></td>
 				 <td>null</td>
-				 <td><p>TODO</p></td>
+				 <td><p>Year</p></td>
 				</tr>
 				<tr>
-				 <td>recolor_by_quals</td>
+				 <td>node_properties</td>
 				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>recolor_by_attribute_id</td>
-				 <td>int4</td>
-				 <td>10</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
 				 <td title=''></td>
 				 <td title=''></td>
 				 <td>null</td>
 				 <td></td>
+				</tr>
+				<tr>
+				 <td>download_quals</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.download_quals_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>quants</td>
+				 <td>Table</td>
+				 <td>unit</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Unit in which values for this attribute are given</p></td>
+				</tr>
+				<tr>
+				 <td>context_node_types</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.context_node_types_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>chart_attributes</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Display order in scope of chart</p></td>
+				</tr>
+				<tr>
+				 <td>context_node_type_properties</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.context_node_type_properties_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>context_properties</td>
+				 <td>Table</td>
+				 <td>is_default</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>When set, show this context as default (only use for one)</p></td>
 				</tr>
 				<tr>
 				 <td>resize_by_quants</td>
@@ -2928,9 +1223,20 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td>contexts</td>
+				 <td>flow_quants</td>
 				 <td>Table</td>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>commodity_id</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.flow_quants_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>country_properties</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>country_id</td>
 				 <td>int4</td>
 				 <td>10</td>
 				 <td title=''></td>
@@ -2939,7 +1245,128 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td>chart_quants</td>
+				 <td>context_node_type_properties</td>
+				 <td>Table</td>
+				 <td>is_default</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>When set, show this node type as default (only use for one)</p></td>
+				</tr>
+				<tr>
+				 <td>context_node_type_properties</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_node_type_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>resize_by_attributes</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>resize_by_quants</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>ind_properties</td>
+				 <td>Table</td>
+				 <td>tooltip_text</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Tooltip text</p></td>
+				</tr>
+				<tr>
+				 <td>resize_by_attributes</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.resize_by_attributes_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>quants</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.quants_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>nodes</td>
+				 <td>Table</td>
+				 <td>geo_id</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>2-letter iso code in case of country nodes; other geo identifiers possible for other node types</p></td>
+				</tr>
+				<tr>
+				 <td>contextual_layers</td>
+				 <td>Table</td>
+				 <td>tooltip_text</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Tooltip text</p></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_attributes</td>
+				 <td>Table</td>
+				 <td>divisor</td>
+				 <td>float8</td>
+				 <td>17</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>TODO</p></td>
+				</tr>
+				<tr>
+				 <td>charts</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>parent_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Self-reference to parent used to define complex charts, e.g. table with values in tabs</p></td>
+				</tr>
+				<tr>
+				 <td>download_quals</td>
 				 <td>Table</td>
 				 <td>updated_at</td>
 				 <td>timestamp</td>
@@ -2950,9 +1377,295 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td>map_inds</td>
+				 <td>flows</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>context_node_types</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>chart_quals</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>resize_by_attributes</td>
+				 <td>Table</td>
+				 <td>years</td>
+				 <td>_int4</td>
+				 <td>10</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Array of years for which to show this attribute in scope of chart; NULL for all years</p></td>
+				</tr>
+				<tr>
+				 <td>ind_properties</td>
+				 <td>Table</td>
+				 <td>is_temporal_on_place_profile</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>map_quants</td>
 				 <td>Table</td>
 				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>map_attribute_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>nodes</td>
+				 <td>Table</td>
+				 <td>name</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Name of node</p></td>
+				</tr>
+				<tr>
+				 <td>context_properties</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>inds</td>
+				 <td>Table</td>
+				 <td>unit</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Unit in which values for this attribute are given</p></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_attributes</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>context_node_type_properties</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>qual_properties</td>
+				 <td>Table</td>
+				 <td>is_visible_on_place_profile</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>Whether to display this attribute on place profile</p></td>
+				</tr>
+				<tr>
+				 <td>map_attributes</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>map_attribute_group_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>download_attributes</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>country_properties</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>node_inds</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_attributes</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>group_number</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>1</td>
+				 <td><p>TODO</p></td>
+				</tr>
+				<tr>
+				 <td>download_quants</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>download_attributes</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.download_attributes_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>chart_attributes</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>quant_properties</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>map_quants</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>quals</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>name</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Attribute short name, e.g. ZERO_DEFORESTATION; those literals are referred to in code, therefore should not be changed without notice</p></td>
+				</tr>
+				<tr>
+				 <td>chart_inds</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>quals</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.quals_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_attributes</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Display order in scope of context</p></td>
+				</tr>
+				<tr>
+				 <td>download_quants</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>download_attribute_id</td>
 				 <td>int4</td>
 				 <td>10</td>
 				 <td title=''></td>
@@ -2972,6 +1685,512 @@
 				 <td></td>
 				</tr>
 				<tr>
+				 <td>ind_properties</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.ind_properties_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_quals</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_attributes</td>
+				 <td>Table</td>
+				 <td>legend_type</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>TODO</p></td>
+				</tr>
+				<tr>
+				 <td>ind_properties</td>
+				 <td>Table</td>
+				 <td>unit_type</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Type of unit, e.g. score. One of restricted set of values.</p></td>
+				</tr>
+				<tr>
+				 <td>context_node_type_properties</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>map_attribute_groups</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>node_properties</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>node_quants</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>year</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Year; NULL for all years</p></td>
+				</tr>
+				<tr>
+				 <td>flow_inds</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>node_quals</td>
+				 <td>Table</td>
+				 <td>value</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Textual value</p></td>
+				</tr>
+				<tr>
+				 <td>context_node_types</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>inds</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>context_properties</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.context_properties_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>resize_by_quants</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>qual_properties</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_quals</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>recolor_by_attribute_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>chart_inds</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.chart_inds_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>carto_layers</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>identifier</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Identifier of the CartoDB named map, e.g. brazil_biomes; unique in scope of contextual layer</p></td>
+				</tr>
+				<tr>
+				 <td>node_inds</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>map_attributes</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.map_attributes_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>chart_quals</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>quant_properties</td>
+				 <td>Table</td>
+				 <td>tooltip_text</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Tooltip text</p></td>
+				</tr>
+				<tr>
+				 <td>node_quants</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>chart_quals</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>resize_by_attributes</td>
+				 <td>Table</td>
+				 <td>is_disabled</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>When set, do not show this attribute</p></td>
+				</tr>
+				<tr>
+				 <td>map_quants</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.map_quants_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>ind_properties</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>inds</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>name</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Attribute short name, e.g. FOREST_500; those literals are referred to in code, therefore should not be changed without notice</p></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_inds</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>flow_quants</td>
+				 <td>Table</td>
+				 <td>value</td>
+				 <td>float8</td>
+				 <td>17</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Numeric value</p></td>
+				</tr>
+				<tr>
+				 <td>charts</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>profiles</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>context_node_type_properties</td>
+				 <td>Table</td>
+				 <td>is_geo_column</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>When set, show nodes on map</p></td>
+				</tr>
+				<tr>
+				 <td>country_properties</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.country_properties_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>map_attribute_groups</td>
+				 <td>Table</td>
+				 <td>name</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Name for display</p></td>
+				</tr>
+				<tr>
+				 <td>commodities</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_attributes</td>
+				 <td>Table</td>
+				 <td>tooltip_text</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Tooltip text</p></td>
+				</tr>
+				<tr>
+				 <td>countries</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>map_attribute_groups</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.map_attribute_groups_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>quant_properties</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>flow_quants</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>contexts</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>country_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>node_inds</td>
+				 <td>Table</td>
+				 <td>value</td>
+				 <td>float8</td>
+				 <td>17</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Numeric value</p></td>
+				</tr>
+				<tr>
+				 <td>map_attributes</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>carto_layers</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_attributes</td>
+				 <td>Table</td>
+				 <td>interval_count</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>TODO</p></td>
+				</tr>
+				<tr>
 				 <td>flow_inds</td>
 				 <td>Table</td>
 				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>flow_id</td>
@@ -2980,6 +2199,952 @@
 				 <td title=''></td>
 				 <td title=''></td>
 				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>flow_quals</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>download_versions</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>flow_quants</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>map_attributes</td>
+				 <td>Table</td>
+				 <td>is_default</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>When set, show this attribute by default</p></td>
+				</tr>
+				<tr>
+				 <td>commodities</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.commodities_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_quals</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.recolor_by_quals_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>ind_properties</td>
+				 <td>Table</td>
+				 <td>is_visible_on_place_profile</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>Whether to display this attribute on place profile</p></td>
+				</tr>
+				<tr>
+				 <td>map_inds</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>node_quants</td>
+				 <td>Table</td>
+				 <td>value</td>
+				 <td>float8</td>
+				 <td>17</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Numeric value</p></td>
+				</tr>
+				<tr>
+				 <td>nodes</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.nodes_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_inds</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>download_attributes</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>flows</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.flows_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>map_attribute_groups</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>quant_properties</td>
+				 <td>Table</td>
+				 <td>is_temporal_on_place_profile</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>download_attributes</td>
+				 <td>Table</td>
+				 <td>years</td>
+				 <td>_int4</td>
+				 <td>10</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Years for which attribute is present; NULL for all years</p></td>
+				</tr>
+				<tr>
+				 <td>ind_properties</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>download_quants</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.download_quants_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>node_types</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>name</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Name of node type, spelt in capital letters; unique across node types</p></td>
+				</tr>
+				<tr>
+				 <td>contexts</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.contexts_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>profiles</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>contextual_layers</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.contextual_layers_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_quals</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>nodes</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_type_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>map_attributes</td>
+				 <td>Table</td>
+				 <td>is_disabled</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>When set, do not show this attribute</p></td>
+				</tr>
+				<tr>
+				 <td>ind_properties</td>
+				 <td>Table</td>
+				 <td>display_name</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Name of attribute for display</p></td>
+				</tr>
+				<tr>
+				 <td>contextual_layers</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>node_quals</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>carto_layers</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.carto_layers_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>map_attributes</td>
+				 <td>Table</td>
+				 <td>bucket_5</td>
+				 <td>_float8</td>
+				 <td>17</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>&#39;{}&#39;::double precision[]</td>
+				 <td><p>TODO</p></td>
+				</tr>
+				<tr>
+				 <td>chart_quants</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>country_properties</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>contexts</td>
+				 <td>Table</td>
+				 <td>default_year</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Default year for this context</p></td>
+				</tr>
+				<tr>
+				 <td>download_quants</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>resize_by_attributes</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>qual_properties</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>countries</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>iso2</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>2-letter ISO code</p></td>
+				</tr>
+				<tr>
+				 <td>map_inds</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>chart_quals</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>chart_attribute_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>resize_by_attributes</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Display order in scope of context</p></td>
+				</tr>
+				<tr>
+				 <td>map_inds</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>map_attribute_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>charts</td>
+				 <td>Table</td>
+				 <td>title</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Title of chart for display</p></td>
+				</tr>
+				<tr>
+				 <td>map_attributes</td>
+				 <td>Table</td>
+				 <td>years</td>
+				 <td>_int4</td>
+				 <td>10</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Years for which attribute is present; NULL for all years</p></td>
+				</tr>
+				<tr>
+				 <td>resize_by_attributes</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>group_number</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>1</td>
+				 <td><p>TODO</p></td>
+				</tr>
+				<tr>
+				 <td>countries</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.countries_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>chart_quants</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.chart_quants_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>quant_properties</td>
+				 <td>Table</td>
+				 <td>is_visible_on_place_profile</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>Whether to display this attribute on place profile</p></td>
+				</tr>
+				<tr>
+				 <td>contextual_layers</td>
+				 <td>Table</td>
+				 <td>title</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Title of layer for display</p></td>
+				</tr>
+				<tr>
+				 <td>charts</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.charts_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>resize_by_quants</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>resize_by_attribute_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>flow_quals</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.flow_quals_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>contextual_layers</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Display order in scope of context</p></td>
+				</tr>
+				<tr>
+				 <td>chart_quants</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>download_attributes</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>flow_inds</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.flow_inds_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>contextual_layers</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>contextual_layers</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>identifier</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Identifier of layer, e.g. brazil_biomes</p></td>
+				</tr>
+				<tr>
+				 <td>node_quals</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>flow_quals</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>flow_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>resize_by_quants</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>map_attributes</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_attributes</td>
+				 <td>Table</td>
+				 <td>is_default</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>When set, show this attribute by default</p></td>
+				</tr>
+				<tr>
+				 <td>context_properties</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>download_versions</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.download_versions_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>download_quals</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>download_attribute_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>charts</td>
+				 <td>Table</td>
+				 <td>identifier</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Identifier used to map this chart to a part of code which contains calculation logic</p></td>
+				</tr>
+				<tr>
+				 <td>flow_quals</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>resize_by_attributes</td>
+				 <td>Table</td>
+				 <td>is_default</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>When set, show this attribute by default</p></td>
+				</tr>
+				<tr>
+				 <td>chart_attributes</td>
+				 <td>Table</td>
+				 <td>years</td>
+				 <td>_int4</td>
+				 <td>10</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Array of years for which to show this attribute in scope of chart; NULL for all years</p></td>
+				</tr>
+				<tr>
+				 <td>contexts</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>commodity_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>node_types</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>flow_inds</td>
+				 <td>Table</td>
+				 <td>value</td>
+				 <td>float8</td>
+				 <td>17</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Numeric value</p></td>
+				</tr>
+				<tr>
+				 <td>context_properties</td>
+				 <td>Table</td>
+				 <td>default_basemap</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>Default basemap for this context, e.g. satellite</p></td>
+				</tr>
+				<tr>
+				 <td>chart_attributes</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>recolor_by_attributes</td>
+				 <td>Table</td>
+				 <td>is_disabled</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>When set, do not show this attribute</p></td>
+				</tr>
+				<tr>
+				 <td>download_quants</td>
+				 <td>Table</td>
+				 <td>is_filter_enabled</td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td><p>When set, enable selection of value ranges (advanced filter)</p></td>
+				</tr>
+				<tr>
+				 <td>contexts</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>node_types</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.node_types_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>node_quants</td>
+				 <td>Table</td>
+				 <td>created_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>carto_layers</td>
+				 <td>Table</td>
+				 <td>updated_at</td>
+				 <td>timestamp</td>
+				 <td>29</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>chart_quants</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>chart_attribute_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>flows</td>
+				 <td>Table</td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>path</td>
+				 <td>_int4</td>
+				 <td>10</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>&#39;{}&#39;::integer[]</td>
+				 <td><p>Array of node ids which constitute the supply chain, where position of node in this array is linked to the value of column_position in context_node_types</p></td>
+				</tr>
+				<tr>
+				 <td>download_versions</td>
+				 <td>Table</td>
+				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_id</td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>map_attributes</td>
+				 <td>Table</td>
+				 <td>color_scale</td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td><p>TODO</p></td>
+				</tr>
+				<tr>
+				 <td>chart_attributes</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.chart_attributes_id_seq&#39;::regclass)</td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td>map_inds</td>
+				 <td>Table</td>
+				 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+				 <td>serial</td>
+				 <td>10</td>
+				 <td title=''></td>
+				 <td title='Automatically updated by the database'>√</td>
+				 <td>nextval(&#39;revamp.map_inds_id_seq&#39;::regclass)</td>
 				 <td></td>
 				</tr>
 								</tbody>
