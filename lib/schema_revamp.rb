@@ -656,7 +656,6 @@ class SchemaRevamp
     refresh_materialized_view('recolor_by_attributes_mv')
     refresh_materialized_view('resize_by_attributes_mv')
     refresh_materialized_view('download_attributes_mv')
-    ActiveRecord::Base.connection.execute('COMMIT')
   end
 
   def refresh_materialized_view(mview)
