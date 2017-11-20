@@ -7,8 +7,8 @@ module Api
         @contexts = Api::V3::Context.
           includes(
             :country, :commodity, :contextual_layers,
-            m_recolor_by_attributes: :m_attribute,
-            m_resize_by_attributes: :m_attribute
+            readonly_recolor_by_attributes: :readonly_attribute,
+            readonly_resize_by_attributes: :readonly_attribute
           ).
           all
 
