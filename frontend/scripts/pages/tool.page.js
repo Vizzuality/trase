@@ -30,6 +30,7 @@ import 'styles/components/shared/dropdown.scss';
 import 'styles/components/tool/map/map-sidebar.scss';
 import 'styles/layouts/l-tool.scss';
 import analyticsMiddleware from 'analytics/tool.analytics.middleware';
+import { GET_SITE_DIVE, getURLFromParams } from 'utils/getURLFromParams';
 
 const objParams = getURLParams(window.location.search);
 
@@ -88,14 +89,14 @@ if (objParams.story) {
 
   const storyId = objParams.story;
 
-  fetch(`${API_STORY_CONTENT}/${storyId}`)
+  fetch(`${getURLFromParams(GET_SITE_DIVE)}/${storyId}`)
     .then(resp => resp.text())
     .then(resp => JSON.parse(resp))
     .then(modalParams => {
       Object.assign(APP_DEFAULT_STATE.app, {
         modal: {
           visibility: true,
-          modalParams
+          modalParams: modalParams.data
         }
       });
 

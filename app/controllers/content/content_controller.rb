@@ -21,8 +21,7 @@ module Content
         config.access_token_secret = ENV['TWITTER_ACCESS_TOKEN_SECRET']
       end
 
-      # render json: client.home_timeline
-      render json: client.home_timeline.map { |tweet| {'text' => tweet.text, 'screen_name' => tweet.user.screen_name, 'created_at' => tweet.created_at} }
+      render json: client.home_timeline, root: 'data', each_serializer: TweetSerializer
     end
   end
 end
