@@ -55,7 +55,7 @@ json:
     name: get_contexts
     version: v2
     v3_ready: true
-    v3_url: /api/v3/get_contexts
+    v3_url: /api/v3/contexts
     <<: *context_queries
   - url: /api/v2/get_all_nodes
     name: get_all_nodes
