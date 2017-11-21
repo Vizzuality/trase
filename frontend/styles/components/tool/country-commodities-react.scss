@@ -1,0 +1,18 @@
+@import '../../settings';
+
+.c-country-commodities {
+
+  .country-commodities-children-container {
+    position: absolute;
+    top: $nav-height;
+  }
+
+  .country-commodities-featured-header {
+    height: 125px;
+    width: 100%;
+    background-color: $white;
+    display: flex;
+    align-items: center;
+    padding: 22px;
+  }
+}

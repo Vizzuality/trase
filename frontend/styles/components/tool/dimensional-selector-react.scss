@@ -1,0 +1,66 @@
+@import '../../settings';
+@import '../nav/basic-dropdown';
+
+.c-dimensional-selector {
+  height: 275px;
+  .dimension-container {
+    display: flex;
+    height: 250px;
+    @extend %dropdown;
+
+    .dimension-list {
+      padding: 5px 0;
+      width: 210px;
+      overflow: auto;
+
+      border-right: 1px solid $pale-grey;
+
+      &:last-child {
+        border: 0;
+      }
+    }
+
+    .dimension-list-item {
+      padding: 10px 25px;
+      font-family: $font-family-2;
+      font-size: $font-size-xx-regular;
+      font-weight: normal;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $manilla;
+      }
+
+      &.-selected {
+        background-color: $manilla;
+      }
+
+      &.-disabled {
+        color: rgba($charcoal-grey, .3);
+        background-color: transparent;
+        cursor: default;
+      }
+
+      &.-capitalize {
+        text-transform: capitalize;
+      }
+    }
+  }
+
+  .dimensional-selector-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 25px;
+    width: 100%;
+    background-color: $background-white;
+
+    .dimensional-selector-footer-text {
+      font-size: $font-size-small;
+      color: $charcoal-grey;
+      letter-spacing: -0.5px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+  }
+}
