@@ -5,8 +5,8 @@ import _ from 'lodash';
 
 const mapStateToProps = (state) => {
   return {
-    nodes: state.tool.nodesDict
-  }
+    nodes: state.tool.nodes
+  };
   // return {
   //   nodes: _.values(state.tool.nodesDict)
   //     .filter(
