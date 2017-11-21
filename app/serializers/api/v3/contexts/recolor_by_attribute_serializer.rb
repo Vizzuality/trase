@@ -1,6 +1,6 @@
 module Api
   module V3
-    module GetContexts
+    module Contexts
       class RecolorByAttributeSerializer < ActiveModel::Serializer
         attributes :is_default, :is_disabled, :group_number, :position,
                    :legend_type, :legend_color_theme, :interval_count,
