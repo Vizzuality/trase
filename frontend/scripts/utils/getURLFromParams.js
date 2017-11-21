@@ -71,7 +71,7 @@ export function getURLFromParams(endpointKey, params = {}, mock = false) {
   if (!mock) {
     switch (endpointData.api) {
       case 2:
-        return getURLForV2(`/api/v2${endpointData.endpoint}`, params);
+        return getURLForV2(`${endpointData.endpoint}`, params);
       case 1:
         return getURLForV1(`/v1${endpointData.endpoint}`, params);
       case 'local':

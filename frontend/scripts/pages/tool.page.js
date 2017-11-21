@@ -15,7 +15,8 @@ import NavContainer from 'containers/tool/nav-tool-react.container';
 import NavComponent from 'components/tool/nav-tool.component';
 import TitlebarContainer from 'containers/tool/titlebar.container';
 import NodesTitlesContainer from 'containers/tool/nodesTitles.container';
-import SearchContainer from 'containers/tool/search.container';
+// import SearchContainer from 'containers/tool/search.container';
+import SearchContainer from 'containers/shared/search-react.container';
 import ModalContainer from 'containers/tool/story-modal.container';
 import TooltipContainer from 'containers/shared/help-tooltip.container';
 import AppReducer from 'reducers/app.reducer';
@@ -56,7 +57,7 @@ const start = () => {
   new MapBasemapsContainer(store);
   new TitlebarContainer(store);
   new NodesTitlesContainer(store);
-  new SearchContainer(store);
+  // new SearchContainer(store);
   new TooltipContainer(store);
   new ModalContainer(store);
 
@@ -65,7 +66,7 @@ const start = () => {
     <Provider store={store}>
       <NavContainer />
     </Provider>,
-    document.getElementById('js-flows-nav-react')
+    document.getElementById('js-tool-nav-react')
   );
   render(
     <Provider store={store}>
@@ -73,6 +74,13 @@ const start = () => {
     </Provider>,
     document.getElementById('js-columns-selector-react')
   );
+  render(
+    <Provider store={store}>
+      <SearchContainer />
+    </Provider>,
+    document.getElementById('js-search-react')
+  );
+
 
 
   store.dispatch(loadDisclaimer());

@@ -16,7 +16,7 @@ export default class {
     this.el = document.querySelector('.c-nav');
 
     this.AppNav = this.el.querySelector('.app-nav');
-    this.FlowsNav = this.el.querySelector('.flows-nav');
+    this.FlowsNav = this.el.querySelector('.tool-nav');
     this.toggleBtn = this.el.querySelector('.js-toggle-menu');
   }
 
