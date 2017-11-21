@@ -1,22 +1,32 @@
 import { connect } from 'preact-redux';
 import Search from 'react-components/shared/search.component.js';
-import _ from 'lodash';
+import { searchNode } from 'actions/tool.actions';
 
+let nodes;
 
 const mapStateToProps = (state) => {
-  return {
-    nodes: state.tool.nodesDict
+  // store nodes at container level to avoid rerendering when filtering... for want of a better solution
+  if (state.tool.nodes !== undefined) {
+    nodes = state.tool.nodes.filter(
+      node => node.hasFlows === true &&
+      node.isAggregated !== true &&
+      node.isUnknown !== true
+    );
   }
-  // return {
-  //   nodes: _.values(state.tool.nodesDict)
-  //     .filter(
-  //       node => node.hasFlows === true &&
-  //       node.isAggregated !== true &&
-  //       node.isUnknown !== true
-  //     )
-  // };
+  return {
+    nodes
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onNodeSelected: (nodeId) => {
+      dispatch(searchNode(nodeId));
+    }
+  };
 };
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Search);
