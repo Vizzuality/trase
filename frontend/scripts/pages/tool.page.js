@@ -15,7 +15,6 @@ import NavContainer from 'containers/tool/nav-tool-react.container';
 import NavComponent from 'components/tool/nav-tool.component';
 import TitlebarContainer from 'containers/tool/titlebar.container';
 import NodesTitlesContainer from 'containers/tool/nodesTitles.container';
-// import SearchContainer from 'containers/tool/search.container';
 import SearchContainer from 'containers/shared/search-react.container';
 import ModalContainer from 'containers/tool/story-modal.container';
 import TooltipContainer from 'containers/shared/help-tooltip.container';
@@ -57,7 +56,6 @@ const start = () => {
   new MapBasemapsContainer(store);
   new TitlebarContainer(store);
   new NodesTitlesContainer(store);
-  // new SearchContainer(store);
   new TooltipContainer(store);
   new ModalContainer(store);
 
