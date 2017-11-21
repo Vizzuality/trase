@@ -1,0 +1,457 @@
+swagger: '2.0'
+info:
+  description: Trase API V3
+  version: 3.0.0
+  title: Trase API
+  termsOfService: 'https://trase.earth/terms-of-use.html'
+  contact:
+    email: info@trase.earth
+  license:
+    name: MIT License
+host: trase.earth
+basePath: /api/v3
+tags:
+  - name: context
+  - name: flow
+  - name: node
+schemes:
+  - https
+paths:
+  /contexts:
+    get:
+      tags:
+        - context
+      summary: ''
+      description: ''
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Context'
+  '/context/{context_id}/columns':
+    get:
+      tags:
+        - context
+      summary: ''
+      description: ''
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          description: ''
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Column'
+  '/context/{context_id}/map_groups':
+    get:
+      tags:
+        - context
+      summary: ''
+      description: ''
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          description: ''
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/MapGroup'
+  '/context/{context_id}/download_attributes':
+    get:
+      tags:
+        - context
+      summary: ''
+      description: ''
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          description: ''
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Attribute'
+  '/context/{context_id}/flows':
+    get:
+      tags:
+        - flow
+      summary: ''
+      description: ''
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          description: ''
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Flow'
+  '/context/{context_id}/nodes':
+    get:
+      tags:
+        - node
+      summary: ''
+      description: ''
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          description: ''
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Node'
+  '/context/{context_id}/nodes/attributes':
+    get:
+      tags:
+        - node
+      summary: ''
+      description: ''
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          description: ''
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NodeAttribute'
+  '/context/{context_id}/nodes/{id}/actor':
+    get:
+      tags:
+        - node
+      summary: ''
+      description: ''
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          description: ''
+          required: true
+          type: integer
+        - name: id
+          in: path
+          description: ''
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Node'
+  '/context/{context_id}/nodes/{id}/place':
+    get:
+      tags:
+        - node
+      summary: ''
+      description: ''
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          description: ''
+          required: true
+          type: integer
+        - name: id
+          in: path
+          description: ''
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Node'
+  '/context/{context_id}/nodes/{id}/linked_nodes':
+    get:
+      tags:
+        - node
+      summary: ''
+      description: ''
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          description: ''
+          required: true
+          type: integer
+        - name: id
+          in: path
+          description: ''
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/LinkedNode'
+  /newsletter_subscriptions:
+    post:
+      tags:
+        - newsletter_subscription
+      responses:
+        '200':
+          description: successful operation
+  /download:
+    get:
+      tags:
+        - download
+      produces:
+        - text/csv
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+definitions:
+  Context:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      isDefault:
+        type: boolean
+      isDisabled:
+        type: boolean
+      years:
+        type: array
+        items:
+          type: integer
+      defaultYear:
+        type: integer
+      countryId:
+        type: integer
+      commodityId:
+        type: integer
+      countryName:
+        type: string
+      commodityName:
+        type: string
+      defaultBasemap:
+        type: string
+      defaultContextLayers:
+        type: array
+        items:
+          type: string
+      map:
+        type: object
+        properties:
+          latitude:
+            type: number
+          longitude:
+            type: number
+          zoom:
+            type: integer
+      recolorBy:
+        type: array
+        items:
+          $ref: '#/definitions/RecolorBy'
+      resizeBy:
+        type: array
+        items:
+          $ref: '#/definitions/ResizeBy'
+      filterBy:
+        type: array
+        items:
+          $ref: '#/definitions/FilterBy'
+  RecolorBy:
+    type: object
+    properties:
+      isDefault:
+        type: boolean
+      isDisabled:
+        type: boolean
+      groupNumber:
+        type: integer
+      position:
+        type: integer
+      legendType:
+        type: string
+      legendColorTheme:
+        type: string
+      intervalCount":
+        type: integer
+      minValue:
+        type: string
+      maxValue:
+        type: string
+      divisor:
+        type: number
+      type:
+        type: string
+        enum:
+          - ind
+          - qual
+          - quant
+      name:
+        type: string
+      label:
+        type: string
+      description:
+        type: string
+      nodes:
+        type: array
+        items:
+          type: string
+  ResizeBy:
+    type: object
+    properties:
+      isDefault:
+        type: boolean
+      isDisabled:
+        type: boolean
+      groupNumber:
+        type: integer
+      position:
+        type: integer
+      name:
+        type: string
+      label:
+        type: string
+      description:
+        type: string
+  FilterBy:
+    type: object
+    properties:
+      name:
+        type: string
+      nodes:
+        type: array
+        items:
+          type: object
+          properties:
+            nodeId:
+              type: integer
+            name:
+              type: string
+  Flow:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+  Node:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+  LinkedNode:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+  NodeAttribute:
+    type: object
+    properties:
+      node_id:
+        type: integer
+        format: int64
+      attribute_id:
+        type: integer
+        format: int64
+      attribute_type:
+        type: string
+        enum:
+          - Ind
+          - Qual
+          - Quant
+  Column:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+  MapGroup:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+  Attribute:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      type:
+        type: string
+  NewsletterSubscription:
+    type: object
+    properties:
+      email:
+        type: string
