@@ -16,10 +16,8 @@
 #  updated_at        :datetime         not null
 #
 module Content
-  module Ckeditor
-    class Asset < Content::Base
-      include Ckeditor::Orm::ActiveRecord::AssetBase
-      include Ckeditor::Backend::Paperclip
-    end
+  class Ckeditor::Asset < Content::Base
+    include Ckeditor::Orm::ActiveRecord::AssetBase
+    include Ckeditor::Backend::Paperclip
   end
 end
