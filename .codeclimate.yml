@@ -14,6 +14,9 @@ engines:
     enabled: true
   reek:
     enabled: true
+    checks:
+      UncommunicativeModuleName:
+        enabled: false
 
 ratings:
   paths:
@@ -26,3 +29,4 @@ exclude_paths:
 - db/**/*
 - db_content/**/*
 - 'lib/schema_revamp.rb' # excluding because it is a temporary migration script
+- 'lib/db_helpers/**/*' # db helpers, mostly temporary
