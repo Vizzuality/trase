@@ -23,20 +23,70 @@ This repository contains two technically independent applications:
 
 While technically independent, the frontend application is heavily dependent on the API spec served by the rails application.
 
-This document addresses each application individually.
-
-# API
-
 ## Requirements
 
 This project uses:
-- Ruby 2.4.0
-- Rails 5.0
-- PostgreSQL 9.x with `intarray` and `tablefunc` extensions
+- Ruby 2.4.2
+- Rails 5.1+
+- Nodejs 8.2+
+- PostgreSQL 9.5+ with `intarray` and `tablefunc` extensions
+- [Bundler](http://bundler.io/)
+
+## Setup
+
+For the API:
+- Make sure you have Ruby and Bundler installed
+- Use Bundler's `bundle install` to install all ruby dependencies
+- Copy `.env.sample` to `.env` and replace the values accordingly. See the API documentation below for more information.
+- You may need to run `rake db:create` and `rake content:db:create` to create the databases, and/or `rake db:migrate` and `rake content:db:migrate` to update its structure. 
+
+You can now use `rails server` to start the API application 
+
+For the frontend application:
+- `cd` into the `frontend` folder
+- Copy `.env.sample` to `.env` and replace the values accordingly. See the frontend application documentation below for more information.
+- Install dependencies using `npm install`
+
+You can start the development server with `npm run dev`
 
 ## Deployment
 
-We use Capistrano as a deployment tool. Refer to its documentation for more info
+We use [Capistrano](http://capistranorb.com/) as a deployment tool, which deploys both API and frontend application simultaneously. 
+To deploy, simply use:
+
+```
+cap <staging|production> deploy
+```
+
+## Git hooks
+
+This project includes a set of git hooks that you may find useful
+- Run `bundle install` when loading `Gemfile.lock` modifications from remotes
+- Run `npm install` when loading `frontend/package.json` modifications from remotes
+- Receive a warning when loading `.env.sample` or `frontend/.env.sample` modifications from remotes
+- Run `Rubocop` and `JS Lint` before committing
+
+To enable then, simply execute once: `bin/git/init-hooks`
+
+
+# API
+
+## Configuration
+
+The project's main configuration values can be set using [environment variables](https://en.wikipedia.org/wiki/Environment_variable)
+
+* SECRET_KEY_BASE: Rails secret key. Use a random value
+* POSTGRES_HOSTNAME: Hostname of your database server
+* POSTGRES_DATABASE: Name of your data database
+* POSTGRES_CONTENT_DATABASE: Name of your content database
+* POSTGRES_USERNAME: Username used to connect to your PostgreSQL server instance
+* POSTGRES_PASSWORD: Password used to connect to your PostgreSQL server instance
+* POSTGRES_PORT: Port used to connect to your PostgreSQL server instance
+* MAILCHIMP_API_KEY: API key for Mailchimp mailing service
+* MAILCHIMP_LIST_ID: List ID for Mailchimp mailing service
+* GOLD_MASTER_HOST_V1:
+* GOLD_MASTER_HOST_V2:
+* GOLD_MASTER_HOST_V3:
 
 ## Test
 
@@ -128,15 +178,6 @@ That is done using a dedicated rake task:
     5. output files are in `doc/db/html` 
 3. to update the [GH pages site](https://vizzuality.github.io/trase-api/) all the generated files from `doc/db/html` need to land in the top-level of the `gh-pages` branch. This is currently a manual process, easiest to have the repo checked out twice on local drive to be able to copy between branches (not great and not final.)
 
-## Git hooks
-
-This project includes a set of git hooks that you may find useful
-- Run `bundle install` when loading `Gemfile.lock` modifications from remotes
-- Receive a warning when loading `.env.sample` modifications from remotes
-- Run `Rubocop` before commiting
-
-To enable then, simply execute once: `bin/git/init-hooks`
-
 # Frontend
 
 The frontend application can be found inside the `frontend` folder. All files mentioned below can be found inside this folder, 
@@ -190,20 +231,6 @@ The project's main configuration values can be set using [environment variables]
 
 If you are using the included development server, you can set those variables in the `.env` file (use the included `.env.sample` as an example)
 
-## Development set up
-
-- Check out the code from [github](github.com/Vizzuality/trase-api)
-- Install dependencies:
-```
-npm i
-```
-- Start the development server:
-```
-npm run dev
-```
-- [http://localhost:8081/](http://localhost:8081/)
-
-
 #### generate vector map layers
 
 Vector layers are generated with one of the two workflows:
@@ -239,22 +266,6 @@ This will use the layers configuration stored in `./gis/cartodb/templates.json`,
 ## Production
 
 Run `npm run build`, it will create a production-ready version of the project in `/dist`.
-
-
-## Deployment
-
-Depending on the environment where you want to deploy, you need to have a `.env.staging` or a `.env.production` file set up.
-
-Then run
-```
-npm run deploy:staging
-```
-or
-```
-npm run deploy:production
-```
-
-This will build using appropriate env file and upload to server using scp.
 
 ## LICENSE
 
