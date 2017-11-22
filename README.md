@@ -236,7 +236,7 @@ This is necessary when context maps stored in CARTO tables need to be updated. A
 
 - Copy CARTO credentials:
 ```
-cp cp ./frontend/gis/cartodb/cartodb-config.sample.json ./frontend/gis/cartodb/cartodb-config.json
+cp ./frontend/gis/cartodb/cartodb-config.sample.json ./frontend/gis/cartodb/cartodb-config.json
 ```
 - Replace api_key value in `cartodb-config.json`
 - To update or instantiate context layers run
