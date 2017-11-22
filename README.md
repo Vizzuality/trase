@@ -1,6 +1,6 @@
 # TRASE
 
-[![Build Status](https://travis-ci.org/Vizzuality/trase-api.svg?branch=master)](https://travis-ci.org/Vizzuality/trase-api)
+[![Build Status](https://travis-ci.org/Vizzuality/trase.svg?branch=master)](https://travis-ci.org/Vizzuality/trase)
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/5781640656dfed7c4be5/maintainability)](https://codeclimate.com/github/Vizzuality/trase-api/maintainability)
 
