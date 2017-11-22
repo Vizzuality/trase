@@ -1,0 +1,70 @@
+@import '../../settings';
+@import '../../mixins';
+
+.autocomplete {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  > * {
+    height: 100%;
+  }
+
+  input {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 2px 15px 0;
+    background: none;
+    font-family: $font-family-1;
+    font-size: $font-size-medium;
+    letter-spacing: -1px;
+    color: $charcoal-grey;
+    outline: none;
+    box-shadow: 0 10px 20px 0 rgba($charcoal-grey, .2);
+    border-radius: 0;
+    z-index: $z-above;
+  }
+
+  .suggestions {
+    position: absolute;
+    min-height: 80%;
+    background: $white;
+    overflow-y: auto;
+    max-height: 345px;
+    width: 100%;
+  }
+
+  .suggestion {
+    position: relative;
+    padding: 14px 15px;
+    cursor: pointer;
+    border-bottom: solid 1px $pale-grey;
+
+    .node-name {
+      position: relative;
+      left: -1px;
+      font-family: $font-family-1;
+      font-size: 17px;
+      letter-spacing: -.5px;
+      color: $charcoal-grey;
+      text-transform: uppercase;
+    }
+
+    .node-type {
+      @include smallcaps;
+      display: block;
+    }
+
+    mark {
+      background: $egg-shell;
+    }
+
+    &:hover,
+    &[aria-selected='true'],
+    &.-highlighted {
+      background: $egg-shell;
+      color: $charcoal-grey;
+    }
+  }
+}
