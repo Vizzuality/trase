@@ -26,7 +26,8 @@ const mapMethodsToState = (state) => ({
     _returnedValue: (state) => {
       return {
         selectedColumnsIds: state.tool.selectedColumnsIds,
-        choropleth: state.tool.choropleth
+        choropleth: state.tool.choropleth,
+        biomeFilter: state.tool.selectedBiomeFilter
       };
     }
   },

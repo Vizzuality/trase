@@ -175,7 +175,7 @@ export default class {
     }
   }
 
-  selectPolygonType({ selectedColumnsIds, choropleth }) {
+  selectPolygonType({ selectedColumnsIds, choropleth, biomeFilter }) {
     if (!this.polygonTypesLayers || !selectedColumnsIds.length) {
       return;
     }
@@ -189,6 +189,10 @@ export default class {
       this.map.addLayer(this.currentPolygonTypeLayer);
       if (choropleth) {
         this._setChoropleth(choropleth);
+      }
+
+      if (biomeFilter) {
+        this.filterByBiome(biomeFilter);
       }
     }
   }
@@ -365,7 +369,7 @@ export default class {
       return;
     }
     this.currentPolygonTypeLayer.eachLayer(layer => {
-      const isFilteredOut = (biome.geoId === undefined) ? false : biome.geoId !== layer.feature.properties.biome_geoid;
+      const isFilteredOut = (biome.geoId === undefined || layer.feature.properties.biome_geoid === undefined) ? false : biome.geoId !== layer.feature.properties.biome_geoid;
       layer._path.classList.toggle('-filteredOut', isFilteredOut);
     });
   }
