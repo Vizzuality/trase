@@ -2,9 +2,9 @@
 
 [![Build Status](https://travis-ci.org/Vizzuality/trase.svg?branch=master)](https://travis-ci.org/Vizzuality/trase)
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/5781640656dfed7c4be5/maintainability)](https://codeclimate.com/github/Vizzuality/trase-api/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/93fec294b49106c35c18/maintainability)](https://codeclimate.com/github/Vizzuality/trase/maintainability)
 
-[![Test Coverage](https://api.codeclimate.com/v1/badges/5781640656dfed7c4be5/test_coverage)](https://codeclimate.com/github/Vizzuality/trase-api/test_coverage)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/93fec294b49106c35c18/test_coverage)](https://codeclimate.com/github/Vizzuality/trase/test_coverage)
 
 Source code for [Trase](http://trase.earth)
 
