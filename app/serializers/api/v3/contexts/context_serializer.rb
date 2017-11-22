@@ -1,13 +1,13 @@
 module Api
   module V3
-    module GetContexts
+    module Contexts
       class ContextSerializer < ActiveModel::Serializer
         attributes :id, :is_default, :is_disabled, :years, :default_year,
                    :country_id, :commodity_id, :default_basemap
 
-        has_many :m_recolor_by_attributes,
+        has_many :readonly_recolor_by_attributes,
                  serializer: RecolorByAttributeSerializer, key: :recolor_by
-        has_many :m_resize_by_attributes,
+        has_many :readonly_resize_by_attributes,
                  serializer: ResizeByAttributeSerializer, key: :resize_by
 
         attribute :country_name do
