@@ -1,5 +1,4 @@
 import { h, Component } from 'preact';
-import groupBy from 'lodash/groupBy';
 import Tooltip from 'react-components/tool/help-tooltip.component';
 import Dropdown from 'react-components/tool/nav/dropdown.component';
 import DimensionalSelector from 'react-components/tool/nav/dimensional-selector.component';
@@ -7,40 +6,28 @@ import 'styles/components/tool/country-commodities-react.scss';
 
 const id = 'country-commodity';
 
-function classifyColumn(classList, { id, label, relation }) {
-  const groups = groupBy(classList.map(c => ({ id: c[id], label: c[label], relation: c[relation] })), 'id');
-  return Object.values(groups).map(group => group.reduce((acc, next) =>
-    Object.assign({}, acc, next, { relation: [...(acc.relation || []), next.relation] }), {})
-  );
-}
-
 export default class CountryCommodity extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      commodities: classifyColumn(props.contexts, {
-        id: 'commodityId',
-        label: 'commodityName',
-        relation: 'countryName'
-      }),
-      countries: classifyColumn(props.contexts, {
-        id: 'countryId',
-        label: 'countryName',
-        relation: 'commodityName'
-      }),
-      options: props.contexts.reduce((acc, context) => {
-        const computedId = `${context.countryId}_${context.commodityId}`;
-        return Object.assign({}, acc, { [computedId]: context });
-      }, {})
-    };
 
     this.selectElement = this.selectElement.bind(this);
   }
 
-  selectElement(key) {
-    const { options } = this.state;
-    const { onSelected, onToggle } = this.props;
+  getFooterText(selected, dimensions) {
+    if (selected.length === dimensions.length) return null;
+    if (selected.length === 1) {
+      const active = selected[0];
+      const order = active.order;
+      const pending = dimensions.find(dimension => dimension.order !== order);
+      return `Select a ${pending.name} for ${active.label}`;
+    }
+    return 'Select Both a country and a commodity';
+  }
+
+  selectElement(tuple) {
+    const { onSelected, onToggle, options, getComputedKey } = this.props;
+    const key = getComputedKey(tuple);
     const selected = options[key];
 
     if (selected) {
@@ -55,9 +42,9 @@ export default class CountryCommodity extends Component {
       tooltips,
       currentDropdown,
       selectedContextCountry,
-      selectedContextCommodity
+      selectedContextCommodity,
+      dimensions
     } = this.props;
-    const { countries, commodities } = this.state;
     return (
       <div class='c-country-commodities nav-item js-dropdown' onClick={() => onToggle(id)}>
         <div class='c-dropdown -capitalize'>
@@ -76,9 +63,9 @@ export default class CountryCommodity extends Component {
                 </div>
               }
               <DimensionalSelector
-                dimensions={[countries, commodities]}
-                footerText='Select Both a country and a commodity'
+                dimensions={dimensions}
                 selectElement={this.selectElement}
+                getFooterText={this.getFooterText}
               />
             </div>
           </Dropdown>
