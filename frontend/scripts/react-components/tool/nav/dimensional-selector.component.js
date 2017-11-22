@@ -64,7 +64,7 @@ export default class DimensionalSelector extends Component {
   }
 
   render() {
-    const { dimensions = [], getFooterText } = this.props;
+    const { dimensions = [], getFooterText, getElement } = this.props;
     const { selectedDimensions } = this.state;
 
     const isActive = (i, el) => {
@@ -90,7 +90,7 @@ export default class DimensionalSelector extends Component {
                           })}
                           onClick={e => this.selectDimension(e, dimensionIndex, el)}
                         >
-                          {el.label.toLowerCase()}
+                          {getElement(el, dimensionIndex)}
                         </li>
                       )
                   }

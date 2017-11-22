@@ -25,6 +25,19 @@ export default class CountryCommodity extends Component {
     return 'Select Both a country and a commodity';
   }
 
+  getElement(el, dimension) {
+    return (
+      <div className='country-commodities-selector-element'>
+        {el.label.toLowerCase()}
+        {el.hasSubnationalData && dimension === 1 &&
+          <div className='data-coverage-info'>
+            Subnational Data
+          </div>
+        }
+      </div>
+    );
+  }
+
   selectElement(tuple) {
     const { onSelected, onToggle, options, getComputedKey } = this.props;
     const key = getComputedKey(tuple);
@@ -66,6 +79,7 @@ export default class CountryCommodity extends Component {
                 dimensions={dimensions}
                 selectElement={this.selectElement}
                 getFooterText={this.getFooterText}
+                getElement={this.getElement}
               />
             </div>
           </Dropdown>
