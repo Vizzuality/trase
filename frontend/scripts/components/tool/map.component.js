@@ -365,11 +365,7 @@ export default class {
       return;
     }
     this.currentPolygonTypeLayer.eachLayer(layer => {
-      // use this code when vector layer is ready, see https://github.com/Vizzuality/trase-api/issues/76
-      // const isFilteredOut = (biome.geoId === undefined) ? false : biome.geoId !== layer.feature.properties.biome.geoid;
-      // temporary test code with some arbitrary filtering logic:
-      const isFilteredOut = (biome.geoId === undefined) ? false : layer.feature.properties.geoid.substr(-1) !== '2';
-
+      const isFilteredOut = (biome.geoId === undefined) ? false : biome.geoId !== layer.feature.properties.biome_geoid;
       layer._path.classList.toggle('-filteredOut', isFilteredOut);
     });
   }

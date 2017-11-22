@@ -4,17 +4,17 @@ BIN='./node_modules/.bin'
 
 mkdir tmp
 
-# ${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, geoid FROM BRAZIL_biomes' > tmp/BRAZIL_BIOME.json
-# ${BIN}/topojson -p --simplify 0.0000001 -o public/vector_layers/BRAZIL_BIOME.topo.json -- tmp/BRAZIL_BIOME.json
-#
-# ${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, geoid FROM BRAZIL_states' > tmp/BRAZIL_STATE.json
-# ${BIN}/topojson -p --simplify 0.0000001 -o public/vector_layers/BRAZIL_STATE.topo.json -- tmp/BRAZIL_STATE.json
-#
-# ${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, geoid, nome FROM BRAZIL_municipalities_1' > tmp/BRAZIL_MUNICIPALITY.json
-# ${BIN}/topojson -p --simplify 0.0000001 -o public/vector_layers/BRAZIL_MUNICIPALITY.topo.json -- tmp/BRAZIL_MUNICIPALITY.json
-#
-# ${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, geoid FROM col_departments' > tmp/COLOMBIA_DEPARTMENT.json
-# ${BIN}/topojson -p --simplify 0.0000001 -o public/vector_layers/COLOMBIA_DEPARTMENT.topo.json -- tmp/COLOMBIA_DEPARTMENT.json
+${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, geoid FROM BRAZIL_biomes' > tmp/BRAZIL_BIOME.json
+${BIN}/topojson -p --simplify 0.0000001 -o public/vector_layers/BRAZIL_BIOME.topo.json -- tmp/BRAZIL_BIOME.json
+
+${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, geoid FROM BRAZIL_states' > tmp/BRAZIL_STATE.json
+${BIN}/topojson -p --simplify 0.0000001 -o public/vector_layers/BRAZIL_STATE.topo.json -- tmp/BRAZIL_STATE.json
+
+${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, geoid, nome FROM BRAZIL_municipalities_1' > tmp/BRAZIL_MUNICIPALITY.json
+${BIN}/topojson -p --simplify 0.0000001 -o public/vector_layers/BRAZIL_MUNICIPALITY.topo.json -- tmp/BRAZIL_MUNICIPALITY.json
+
+${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, geoid FROM col_departments' > tmp/COLOMBIA_DEPARTMENT.json
+${BIN}/topojson -p --simplify 0.0000001 -o public/vector_layers/COLOMBIA_DEPARTMENT.topo.json -- tmp/COLOMBIA_DEPARTMENT.json
 
 rm tmp/PARAGUAY_DEPARTMENT.json
 rm tmp/PARAGUAY_DEPARTMENT_renamed.json
