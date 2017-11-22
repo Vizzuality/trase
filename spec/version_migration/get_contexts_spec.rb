@@ -5,7 +5,7 @@ RSpec.describe 'Get contexts', type: :request do
   include_context 'brazil resize by'
   include_context 'brazil recolor by'
 
-  describe 'GET /api/v2/get_contexts === GET /api/v3/get_contexts ' do
+  describe 'GET /api/v2/get_contexts === GET /api/v3/contexts ' do
     it 'has the correct response structure' do
       SchemaRevamp.new.copy
 
@@ -14,7 +14,7 @@ RSpec.describe 'Get contexts', type: :request do
 
       expect(@response.status).to eq 200
 
-      get '/api/v3/get_contexts'
+      get '/api/v3/contexts'
       expect(@response.status).to eq 200
       v3_response = HashSorter.new(JSON.parse(@response.body)).sort
 

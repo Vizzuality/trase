@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v3 do
-      get '/get_contexts', to: 'contexts#index'
+      resources :contexts, only: [:index]
       get '/get_all_nodes', to: 'nodes#get_all_nodes'
     end
     namespace :v2 do

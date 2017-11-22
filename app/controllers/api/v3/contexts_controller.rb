@@ -13,7 +13,7 @@ module Api
           all
 
         render json: @contexts, root: 'data',
-               each_serializer: Api::V3::GetContexts::ContextSerializer
+               each_serializer: Api::V3::Contexts::ContextSerializer
       end
     end
   end
