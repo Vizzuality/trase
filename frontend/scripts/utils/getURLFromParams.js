@@ -30,56 +30,42 @@ const API_ENDPOINTS = {
   [GET_FLOWS]: { api: 1, endpoint: '/get_flows' },
   [GET_MAP_BASE_DATA]: { api: 2, endpoint: '/get_map_base_data' },
   [GET_LINKED_GEO_IDS]: { api: 2, endpoint: '/get_linked_geoids' },
-  [GET_PLACE_FACTSHEET]: { api: 2, endpoint: '/get_place_node_attributes', mock: 'mocks/v1_get_place_node_attributes.json' },
-  [GET_ACTOR_FACTSHEET]: { api: 2, endpoint: '/get_actor_node_attributes', mock: 'mocks/v1_get_actor_node_attributes.json' },
+  [GET_PLACE_FACTSHEET]: { api: 2, endpoint: '/get_place_node_attributes' },
+  [GET_ACTOR_FACTSHEET]: { api: 2, endpoint: '/get_actor_node_attributes' },
   [GET_INDICATORS]: { api: 2, endpoint: '/indicators' },
   [GET_CSV_DATA_DOWNLOAD_FILE]: { api: 2, endpoint: '/download.csv' },
   [GET_JSON_DATA_DOWNLOAD_FILE]: { api: 2, endpoint: '/download.json' },
   [POST_SUBSCRIBE_NEWSLETTER]: { api: 2, endpoint: '/newsletter_subscriptions' },
 };
 
-function getURLForV2(endpoint, params = {}) {
+const _getEndpointURL = (endpoint, params, baseURL, phpStyleBrackets) => {
+  const brackets = (phpStyleBrackets === true) ? '[]' : '';
   return Object.keys(params).reduce((prev, current) => {
     const value = params[current];
     if (Array.isArray(value)) {
       const arrUrl = value.reduce((arrPrev, arrCurrent) => {
-        return `${arrPrev}&${current}[]=${arrCurrent}`;
+        return `${arrPrev}&${current}${brackets}=${arrCurrent}`;
       }, '');
       return `${prev}&${arrUrl}`;
     }
     return `${prev}&${current}=${params[current]}`;
-  }, `${API_V2_URL}${endpoint}?`);
-}
+  }, `${baseURL}${endpoint}?`);
+};
 
-// builds an URL usable to call the API, using params
-function getURLForV1(endpoint, params = {}) {
-  return Object.keys(params).reduce((prev, current) => {
-    const value = params[current];
-    if (Array.isArray(value)) {
-      const arrUrl = value.reduce((arrPrev, arrCurrent) => {
-        return `${arrPrev}&${current}=${arrCurrent}`;
-      }, '');
-      return `${prev}&${arrUrl}`;
-    }
-    return `${prev}&${current}=${params[current]}`;
-  }, `${API_V1_URL}${endpoint}?`);
-}
+const getURLForV1 = (endpoint, params) => { return _getEndpointURL(endpoint, params, API_V1_URL); };
+const getURLForV2 = (endpoint, params) => { return _getEndpointURL(endpoint, params, API_V2_URL, true); };
 
-export function getURLFromParams(endpointKey, params = {}, mock = false) {
+export const getURLFromParams = (endpointKey, params = {}) => {
   const endpointData = API_ENDPOINTS[endpointKey];
 
-  if (!mock) {
-    switch (endpointData.api) {
-      case 2:
-        return getURLForV2(`/api/v2${endpointData.endpoint}`, params);
-      case 1:
-        return getURLForV1(`/v1${endpointData.endpoint}`, params);
-      case 'local':
-        return `/${endpointData.endpoint}`;
-      case 'content':
-        return `${API_V2_URL}/content${endpointData.endpoint}`;
-    }
-  } else {
-    return endpointData.mock;
+  switch (endpointData.api) {
+    case 2:
+      return getURLForV2(`${endpointData.endpoint}`, params);
+    case 1:
+      return getURLForV1(`/v1${endpointData.endpoint}`, params);
+    case 'local':
+      return `/${endpointData.endpoint}`;
+    case 'content':
+      return `${API_V2_URL}/content${endpointData.endpoint}`;
   }
-}
+};
