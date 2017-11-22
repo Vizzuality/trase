@@ -8,8 +8,6 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const auth = require('./auth');
-
 const rootPath = path.join(process.cwd());
 
 const app = express();
@@ -19,7 +17,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 // parse application/json
 app.use(bodyParser.json());
 // Serving assets from public folder
-app.use(auth);
 app.use(express.static(path.join(rootPath, 'dist')));
 app.use(express.static(path.join(rootPath, 'public')));
 

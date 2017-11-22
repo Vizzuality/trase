@@ -218,7 +218,6 @@ The project's main configuration values can be set using [environment variables]
 
 * PORT: port used by the development web server. defaults to 8081
 * NODE_ENV: environment used by the nodejs tasks
-* AUTH_USER + AUTH_PASSWORD: if set, an auth wall is used by the nodejs development web server
 * API_V1_URL: URL of the data API V1
 * API_V2_URL: URL of the data API V2
 * API_CMS_URL: URL of the homepage stories API
