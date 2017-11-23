@@ -36,13 +36,23 @@
   }
 
   .suggestion {
-    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 14px 15px;
     cursor: pointer;
     border-bottom: solid 1px $pale-grey;
+    overflow: hidden;
+
+    .node-text-container {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      max-width: 600px;
+      height: 56px;
+    }
 
     .node-name {
-      position: relative;
       left: -1px;
       font-family: $font-family-1;
       font-size: 17px;
@@ -56,6 +66,24 @@
       display: block;
     }
 
+    .node-actions-container {
+      display: none;
+
+      button {
+        height: 40px;
+        letter-spacing: -.7px;
+        line-height: .77;
+      }
+
+      * {
+        margin-right: 8px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
     mark {
       background: $egg-shell;
     }
@@ -65,6 +93,10 @@
     &.-highlighted {
       background: $egg-shell;
       color: $charcoal-grey;
+
+      .node-actions-container {
+        display: flex;
+      }
     }
   }
 }

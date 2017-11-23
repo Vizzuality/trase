@@ -31,7 +31,10 @@ export default class Search extends Component {
   }
 
   onSelected(selectedItem) {
-    this.props.onNodeSelected(selectedItem.id);
+    // TODO: implement dual selection, for now just displays importer
+    const parts = selectedItem.id.split('_');
+    const id = parts.length > 1 ? parseInt(parts[0]) : selectedItem.id;
+    this.props.onNodeSelected(id);
     this.onCloseClicked();
   }
 
@@ -57,6 +60,7 @@ export default class Search extends Component {
             inputValue,
             highlightedIndex
           }) => {
+            // stopPropagation is called to avoid calling onOpenClicked.
             return <div onClick={e => e.stopPropagation()}>
               <input {...getInputProps({ placeholder: 'Search a producer, trader or country of import' })} />
               {isOpen ? (
@@ -84,11 +88,21 @@ export default class Search extends Component {
                           key={item.id}
                           class={cx('suggestion', { '-highlighted': row === highlightedIndex })}
                         >
-                          <span class='node-type'>{item.type}</span>
-                          <span class='node-name'>
-                            {nameSegments}
-                          </span>
-
+                          <div class='node-text-container'>
+                            <span class='node-type'>{item.type}</span>
+                            <span class='node-name'>
+                              {nameSegments}
+                            </span>
+                          </div>
+                          <div class='node-actions-container'>
+                            <button class='c-button -charcoal -medium-large'>Add to supply chain</button>
+                            {item.type !== 'EXPORTER' && item.type !== 'MUNICIPALITY' &&
+                              <button class='c-button -transparent-dark -medium-large'>See importer profile</button>
+                            }
+                            {item.type !== 'IMPORTER' && item.type !== 'MUNICIPALITY' &&
+                              <button class='c-button -transparent-dark -medium-large'>See exporter profile</button>
+                            }
+                          </div>
                         </div>
                       );
                     })}

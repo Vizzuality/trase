@@ -1,3 +1,5 @@
+export const ACTORS_COLUMN_IDS = [6, 7];
+
 export const NUM_DECIMALS = {
   // resize by
   'trade volume': 0,

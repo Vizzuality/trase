@@ -30,8 +30,13 @@
   &.-transparent {
     border-color: $medium-pink;
     background-color: transparent;
-
     color: $medium-pink;
+  }
+
+  &.-transparent-dark {
+    border-color: $charcoal-grey-faded;
+    background-color: transparent;
+    color: $charcoal-grey;
   }
 
   &.-gray {
@@ -48,6 +53,10 @@
 
   &.-medium {
     padding: 15px;
+  }
+
+  &.-medium-large {
+    padding: 15px 24px;
   }
 
   &.-big {
