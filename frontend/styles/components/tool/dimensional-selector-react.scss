@@ -2,10 +2,10 @@
 @import '../nav/basic-dropdown';
 
 .c-dimensional-selector {
+  @extend %dropdown;
   height: 275px;
 
   .dimension-container {
-    @extend %dropdown;
     display: flex;
     height: 250px;
 
@@ -13,11 +13,11 @@
       padding: 5px 0;
       width: 210px;
       overflow: auto;
-
       border-right: 1px solid $pale-grey;
+      cursor: default;
 
       &:last-child {
-        border: 0;
+        border-left: 0;
       }
     }
 
@@ -52,10 +52,11 @@
     height: 25px;
     width: 100%;
     background-color: $background-white;
+    cursor: default;
 
     .dimensional-selector-footer-text {
       font-size: $font-size-small;
-      color: $charcoal-grey;
+      color: $charcoal-grey-faded;
       letter-spacing: -.5px;
       text-align: center;
       text-transform: uppercase;
