@@ -37,15 +37,15 @@ tables:
     columns:
       - name: name
         comment: Commodity name; unique across commodities
-      - name: parent_id
-        comment: Self-reference to parent used to define links between commodities and sub-commodities
   - name: context_node_types
     comment: Node types represented in supply chains per context. The value of column_position is interpreted as position in flows.path.
     columns:
-      - name: column_group
-        comment: Number of sankey column in which to display nodes of this type
       - name: column_position
         comment: Index of node of this type in flows.path
+  - name: context_node_type_properties
+    columns:
+      - name: column_group
+        comment: Number of sankey column in which to display nodes of this type
       - name: is_default
         comment: When set, show this node type as default (only use for one)
       - name: is_geo_column
@@ -57,6 +57,9 @@ tables:
         comment: Years for which country-commodity data is present; NULL for all years
       - name: default_year
         comment: Default year for this context
+  - name: context_properties
+    comment: Visualisation properties of a context (one row per context)
+    columns:
       - name: default_basemap
         comment: Default basemap for this context, e.g. satellite
       - name: is_disabled
@@ -83,6 +86,8 @@ tables:
         comment: Country name
       - name: iso2
         comment: 2-letter ISO code
+  - name: country_properties
+    columns:
       - name: latitude
         comment: TODO
       - name: longitude
@@ -144,16 +149,22 @@ tables:
     columns:
       - name: name
         comment: Attribute short name, e.g. FOREST_500; those literals are referred to in code, therefore should not be changed without notice
-      - name: display_name
-        comment: Name of attribute for display
       - name: unit
         comment: Unit in which values for this attribute are given
+  - name: ind_properties
+    columns:
+      - name: display_name
+        comment: Name of attribute for display
       - name: unit_type
         comment: Type of unit, e.g. score. One of restricted set of values.
-      - name: tooltip
-        comment: TODO
       - name: tooltip_text
         comment: Tooltip text
+      - name: is_visible_on_place_profile
+        comment: Whether to display this attribute on place profile
+      - name: is_visible_on_actor_profile
+        comment: Whether to display this attribute on actor profile
+      - name: is_temporal_on_place_profile
+      - name: is_temporal_on_actor_profile
   - name: map_attribute_groups
     comment: Groups attributes (inds/quals/quants) to display on map
     columns:
@@ -215,10 +226,14 @@ tables:
         comment: Name of node
       - name: geo_id
         comment: 2-letter iso code in case of country nodes; other geo identifiers possible for other node types
-      - name: is_domestic_consumption
-        comment: When set, assume domestic trade
+      - name: main_id
+        comment: Node identifier from Main DB
       - name: is_unknown
         comment: When set, node was not possible to identify
+  - name: node_properties
+    columns:
+      - name: is_domestic_consumption
+        comment: When set, assume domestic trade
   - name: profiles
     comment: Context-specific profiles
     columns:
@@ -229,27 +244,39 @@ tables:
     columns:
       - name: name
         comment: Attribute short name, e.g. ZERO_DEFORESTATION; those literals are referred to in code, therefore should not be changed without notice
+  - name: qual_properties
+    columns:
       - name: display_name
         comment: Name of attribute for display
-      - name: tooltip
-        comment: TODO
       - name: tooltip_text
         comment: Tooltip text
+      - name: is_visible_on_place_profile
+        comment: Whether to display this attribute on place profile
+      - name: is_visible_on_actor_profile
+        comment: Whether to display this attribute on actor profile
+      - name: is_temporal_on_place_profile
+      - name: is_temporal_on_actor_profile
   - name: quants
     comment: Attributes classified as quants
     columns:
       - name: name
         comment: Attribute short name, e.g. FOB; those literals are referred to in code, therefore should not be changed without notice
-      - name: display_name
-        comment: Name of attribute for display
       - name: unit
         comment: Unit in which values for this attribute are given
+  - name: quant_properties
+    columns:
+      - name: display_name
+        comment: Name of attribute for display
       - name: unit_type
         comment: Type of unit, e.g. count. One of restricted set of values.
-      - name: tooltip
-        comment: TODO
       - name: tooltip_text
         comment: Tooltip text
+      - name: is_visible_on_place_profile
+        comment: Whether to display this attribute on place profile
+      - name: is_visible_on_actor_profile
+        comment: Whether to display this attribute on actor profile
+      - name: is_temporal_on_place_profile
+      - name: is_temporal_on_actor_profile
   - name: recolor_by_attributes
     comment: Attributes (inds/quals) available for recoloring.
     columns:
@@ -298,8 +325,6 @@ tables:
         comment: When set, show this attribute by default
   - name: resize_by_quants
     comment: Quants available for recoloring (see resize_by_attributes.)
-  - name: traders
-    comment: Links between importer and exporter nodes which represent the same trader
 materialized_views:
   - name: attributes_mv
     comment: Materialized view which merges inds, quals and quants.

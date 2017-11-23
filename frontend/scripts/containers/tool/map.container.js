@@ -26,7 +26,8 @@ const mapMethodsToState = (state) => ({
     _returnedValue: (state) => {
       return {
         selectedColumnsIds: state.tool.selectedColumnsIds,
-        choropleth: state.tool.choropleth
+        choropleth: state.tool.choropleth,
+        biomeFilter: state.tool.selectedBiomeFilter
       };
     }
   },
@@ -54,9 +55,7 @@ const mapMethodsToState = (state) => ({
     _returnedValue: (state) => {
       return {
         choropleth: state.tool.choropleth,
-        linkedGeoIds: state.tool.linkedGeoIds,
-        choroplethLegend: state.tool.choroplethLegend,
-        defaultMapView: state.tool.selectedContext.map
+        choroplethLegend: state.tool.choroplethLegend
       };
     }
   },
@@ -76,7 +75,8 @@ const mapMethodsToState = (state) => ({
   setBasemap: {
     _comparedValue: (state) => getBasemap(state.tool),
     _returnedValue: (state) => getBasemap(state.tool)
-  }
+  },
+  filterByBiome: state.tool.selectedBiomeFilter
 });
 
 const mapViewCallbacksToActions = () => ({

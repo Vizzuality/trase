@@ -1,10 +1,10 @@
 # TRASE
 
-[![Build Status](https://travis-ci.org/Vizzuality/trase-api.svg?branch=master)](https://travis-ci.org/Vizzuality/trase-api)
+[![Build Status](https://travis-ci.org/Vizzuality/trase.svg?branch=master)](https://travis-ci.org/Vizzuality/trase)
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/5781640656dfed7c4be5/maintainability)](https://codeclimate.com/github/Vizzuality/trase-api/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/93fec294b49106c35c18/maintainability)](https://codeclimate.com/github/Vizzuality/trase/maintainability)
 
-[![Test Coverage](https://api.codeclimate.com/v1/badges/5781640656dfed7c4be5/test_coverage)](https://codeclimate.com/github/Vizzuality/trase-api/test_coverage)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/93fec294b49106c35c18/test_coverage)](https://codeclimate.com/github/Vizzuality/trase/test_coverage)
 
 Source code for [Trase](http://trase.earth)
 
@@ -23,20 +23,70 @@ This repository contains two technically independent applications:
 
 While technically independent, the frontend application is heavily dependent on the API spec served by the rails application.
 
-This document addresses each application individually.
-
-# API
-
 ## Requirements
 
 This project uses:
-- Ruby 2.4.0
-- Rails 5.0
-- PostgreSQL 9.x with `intarray` and `tablefunc` extensions
+- Ruby 2.4.2
+- Rails 5.1+
+- Nodejs 8.2+
+- PostgreSQL 9.5+ with `intarray` and `tablefunc` extensions
+- [Bundler](http://bundler.io/)
+
+## Setup
+
+For the API:
+- Make sure you have Ruby and Bundler installed
+- Use Bundler's `bundle install` to install all ruby dependencies
+- Copy `.env.sample` to `.env` and replace the values accordingly. See the API documentation below for more information.
+- You may need to run `rake db:create` and `rake content:db:create` to create the databases, and/or `rake db:migrate` and `rake content:db:migrate` to update its structure.
+
+You can now use `rails server` to start the API application
+
+For the frontend application:
+- `cd` into the `frontend` folder
+- Copy `.env.sample` to `.env` and replace the values accordingly. See the frontend application documentation below for more information.
+- Install dependencies using `npm install`
+
+You can start the development server with `npm run dev`
 
 ## Deployment
 
-We use Capistrano as a deployment tool. Refer to its documentation for more info
+We use [Capistrano](http://capistranorb.com/) as a deployment tool, which deploys both API and frontend application simultaneously.
+To deploy, simply use:
+
+```
+cap <staging|production> deploy
+```
+
+## Git hooks
+
+This project includes a set of git hooks that you may find useful
+- Run `bundle install` when loading `Gemfile.lock` modifications from remotes
+- Run `npm install` when loading `frontend/package.json` modifications from remotes
+- Receive a warning when loading `.env.sample` or `frontend/.env.sample` modifications from remotes
+- Run `Rubocop` and `JS Lint` before committing
+
+To enable then, simply execute once: `bin/git/init-hooks`
+
+
+# API
+
+## Configuration
+
+The project's main configuration values can be set using [environment variables](https://en.wikipedia.org/wiki/Environment_variable)
+
+* SECRET_KEY_BASE: Rails secret key. Use a random value
+* POSTGRES_HOSTNAME: Hostname of your database server
+* POSTGRES_DATABASE: Name of your data database
+* POSTGRES_CONTENT_DATABASE: Name of your content database
+* POSTGRES_USERNAME: Username used to connect to your PostgreSQL server instance
+* POSTGRES_PASSWORD: Password used to connect to your PostgreSQL server instance
+* POSTGRES_PORT: Port used to connect to your PostgreSQL server instance
+* MAILCHIMP_API_KEY: API key for Mailchimp mailing service
+* MAILCHIMP_LIST_ID: List ID for Mailchimp mailing service
+* GOLD_MASTER_HOST_V1:
+* GOLD_MASTER_HOST_V2:
+* GOLD_MASTER_HOST_V3:
 
 ## Test
 
@@ -114,7 +164,7 @@ To migrate the database:
 
 Schema documentation is generated directly from the database and requires the following steps:
 
-1. The file `db/schema_comments.yml` contains documentation of schema objects, which is prepared in a way to easily insert it into the database schema itself using `COMMENT IS` syntax. 
+1. The file `db/schema_comments.yml` contains documentation of schema objects, which is prepared in a way to easily insert it into the database schema itself using `COMMENT IS` syntax.
 That is done using a dedicated rake task:
 
     `rake db:revamp:doc:sql`
@@ -125,21 +175,12 @@ That is done using a dedicated rake task:
     2. install [Graphviz](http://www.graphviz.org/)
     3. the [SchemaSpy 6.0.0-rc2](http://schemaspy.readthedocs.io/en/latest/index.html) jar file and [PostgreSQL driver](https://jdbc.postgresql.org/download.html) file are already in doc/db
     4. `rake db:revamp:doc:html` (Please note: I added an extra param to SchemaSpy command which is `-renderer :quartz` which helps with running it on macOS Sierra. No idea if it prevents it from running elsewhere.)
-    5. output files are in `doc/db/html` 
+    5. output files are in `doc/db/html`
 3. to update the [GH pages site](https://vizzuality.github.io/trase-api/) all the generated files from `doc/db/html` need to land in the top-level of the `gh-pages` branch. This is currently a manual process, easiest to have the repo checked out twice on local drive to be able to copy between branches (not great and not final.)
-
-## Git hooks
-
-This project includes a set of git hooks that you may find useful
-- Run `bundle install` when loading `Gemfile.lock` modifications from remotes
-- Receive a warning when loading `.env.sample` modifications from remotes
-- Run `Rubocop` before commiting
-
-To enable then, simply execute once: `bin/git/init-hooks`
 
 # Frontend
 
-The frontend application can be found inside the `frontend` folder. All files mentioned below can be found inside this folder, 
+The frontend application can be found inside the `frontend` folder. All files mentioned below can be found inside this folder,
 and command instructions should be executed inside the `frontend` folder.
 
 ## About this application
@@ -190,21 +231,12 @@ The project's main configuration values can be set using [environment variables]
 
 If you are using the included development server, you can set those variables in the `.env` file (use the included `.env.sample` as an example)
 
-## Development set up
 
-- Check out the code from [github](github.com/Vizzuality/trase-api)
-- Install dependencies:
-```
-npm i
-```
-- Start the development server:
-```
-npm run dev
-```
-- [http://localhost:8081/](http://localhost:8081/)
+## Tools to generate CARTO maps
 
+### Generate vector map layers
 
-#### generate vector map layers
+This is needed when an update is needed on the map's vector layers, aka TopoJSON files used in the Leaflet map, for instance when adding countries or subnational entities, or when needing an extra column, etc. A CARTO API key is not needed to run this.
 
 Vector layers are generated with one of the two workflows:
 - CARTO (remote DB) -> geoJSON -> topoJSON
@@ -212,49 +244,42 @@ Vector layers are generated with one of the two workflows:
 
 All can be generated by running:
 ```
-./gis/getVectorMaps.sh
+cd frontend
+./gis/vector_maps/getVectorMaps.sh
 ```
 
 All dependencies should be installed by npm install, except ogr2ogr (used for shapefile conversion), which you have to install globally with GDAL.
 
-Generate municipalities by state TopoJSON files (only for Brazil for now) by running:
+#### Generate municipalities by state TopoJSON files (only for Brazil for now)
+
+Those are the maps used by D3 in place profile pages.
+
 ```
+cd frontend
 ./gis/vector_maps/get_brazil_municip_states.js
 ```
 
 
-#### generate CARTO named maps (context layers)
+### generate CARTO named maps (context layers)
+
+This is necessary when context maps stored in CARTO tables need to be updated. A CARTO API key is needed.
 
 - Copy CARTO credentials:
 ```
-cp cp ./gis/cartodb/cartodb-config.sample.json ./gis/cartodb/cartodb-config.json
+cd frontend
+cp ./gis/cartodb/cartodb-config.sample.json ./gis/cartodb/cartodb-config.json
 ```
 - Replace api_key value in `cartodb-config.json`
 - To update or instantiate context layers run
 ```
+cd frontend
 ./gis/getContextMaps.sh
 ```
-This will use the layers configuration stored in `./gis/cartodb/templates.json`, and create a named map for each item init. Then, a JS file to be used by the front-end is created at `scripts/actions/map/context_layers_carto.js`. This file contains the unique name for the created template as well as the layergroupid. The rest of the configuration (legend, title) is located in the constants.
+This will use the layers configuration stored in `frontend/gis/cartodb/templates.json`, to create a named map for each item. Then, a JS file to be used by the front-end is created at `cd frontend/scripts/actions/map/context_layers_carto.js`. This file contains the unique name for the created template as well as the layergroupid. The rest of the configuration (legend, title) is located in the constants.
 
 ## Production
 
 Run `npm run build`, it will create a production-ready version of the project in `/dist`.
-
-
-## Deployment
-
-Depending on the environment where you want to deploy, you need to have a `.env.staging` or a `.env.production` file set up.
-
-Then run
-```
-npm run deploy:staging
-```
-or
-```
-npm run deploy:production
-```
-
-This will build using appropriate env file and upload to server using scp.
 
 ## LICENSE
 

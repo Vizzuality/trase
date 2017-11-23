@@ -1,6 +1,6 @@
 module Api
   module V3
-    module GetContexts
+    module Contexts
       class ContextSerializer < ActiveModel::Serializer
         attributes :id, :is_default, :is_disabled, :years, :default_year,
                    :country_id, :commodity_id, :default_basemap

@@ -12,10 +12,7 @@
     "eslint": "npm run lint-js",
     "lint-js": "eslint -c .eslintrc.js --ext .jsx,.js scripts",
     "lint-sass": "sass-lint -c .sass-lint.yml -v -q 'styles/**/*.scss'",
-    "postinstall": "npm run build",
-    "deploy:staging": "./bin/deploy.sh staging",
-    "deploy:demo": "./bin/deploy.sh demo",
-    "deploy:production": "./bin/deploy.sh production"
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",

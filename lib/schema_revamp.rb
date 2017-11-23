@@ -32,7 +32,6 @@ class SchemaRevamp
       download_quants
       download_quals
       download_versions
-      traders
     ].each do |table|
       copy_data(table)
     end
@@ -67,25 +66,37 @@ class SchemaRevamp
 
   def countries_insert_sql
     <<-SQL
-    INSERT INTO revamp.countries (id, name, iso2, latitude, longitude, zoom, created_at, updated_at)
-    SELECT country_id, name, iso2, latitude, longitude, zoom, NOW(), NOW()
+    WITH inserted_countries AS (
+      INSERT INTO revamp.countries (id, name, iso2, created_at)
+      SELECT country_id, name, iso2, NOW()
+      FROM public.countries
+    )
+    INSERT INTO revamp.country_properties (country_id, latitude, longitude, zoom, created_at, updated_at)
+    SELECT country_id, latitude, longitude, zoom, NOW(), NOW()
     FROM public.countries;
     SQL
   end
 
   def commodities_insert_sql
     <<-SQL
-    INSERT INTO revamp.commodities (id, name, created_at, updated_at)
-    SELECT commodity_id, name, NOW(), NOW()
+    INSERT INTO revamp.commodities (id, name, created_at)
+    SELECT commodity_id, name, NOW()
     FROM public.commodities;
     SQL
   end
 
   def contexts_insert_sql
     <<-SQL
-    INSERT INTO revamp.contexts (id, country_id, commodity_id, years, default_year, default_basemap, is_disabled, is_default, created_at, updated_at)
+    WITH inserted_contexts AS (
+      INSERT INTO revamp.contexts (id, country_id, commodity_id, years, default_year, created_at)
+      SELECT
+        id, country_id, commodity_id, years, default_year,
+        NOW()
+      FROM public.context
+    )
+    INSERT INTO revamp.context_properties (context_id, default_basemap, is_disabled, is_default, created_at, updated_at)
     SELECT
-      id, country_id, commodity_id, years, default_year, default_basemap,
+      id, default_basemap,
       COALESCE(is_disabled, FALSE),
       COALESCE(is_default, FALSE),
       NOW(), NOW()
@@ -95,18 +106,23 @@ class SchemaRevamp
 
   def node_types_insert_sql
     <<-SQL
-    INSERT INTO revamp.node_types (id, name, created_at, updated_at)
+    INSERT INTO revamp.node_types (id, name, created_at)
     SELECT
-      node_type_id, node_type, NOW(), NOW()
+      node_type_id, node_type, NOW()
     FROM public.node_types;
     SQL
   end
 
   def context_node_types_insert_sql
     <<-SQL
-    INSERT INTO revamp.context_node_types (id, context_id, node_type_id, column_group, column_position, is_default, is_geo_column, created_at, updated_at)
+    WITH inserted_context_node_types AS (
+      INSERT INTO revamp.context_node_types (id, context_id, node_type_id, column_position, created_at)
+      SELECT id, context_id, node_type_id, column_position, NOW()
+      FROM public.context_nodes
+    )
+    INSERT INTO revamp.context_node_type_properties (context_node_type_id, column_group, is_default, is_geo_column, created_at, updated_at)
     SELECT
-      id, context_id, cnt.node_type_id, column_group, column_position,
+      id, column_group,
       COALESCE(is_default, FALSE),
       COALESCE(is_geo_column, FALSE),
       NOW(), NOW()
@@ -116,90 +132,110 @@ class SchemaRevamp
 
   def nodes_insert_sql
     <<-SQL
-    INSERT INTO revamp.nodes (id, node_type_id, name, geo_id, is_domestic_consumption, is_unknown, created_at, updated_at)
+    WITH inserted_nodes AS (
+      INSERT INTO revamp.nodes (id, node_type_id, name, geo_id, main_id, is_unknown, created_at)
+      SELECT
+        node_id, node_type_id, name, geo_id, main_node_id,
+        COALESCE(is_unknown, FALSE),
+        NOW()
+      FROM public.nodes
+    )
+    INSERT INTO revamp.node_properties (node_id, is_domestic_consumption, created_at, updated_at)
     SELECT
-      node_id, node_type_id, name, geo_id,
-      COALESCE(is_domestic_consumption, FALSE),
-      COALESCE(is_unknown, FALSE),
-      NOW(), NOW()
+      node_id, COALESCE(is_domestic_consumption, FALSE), NOW(), NOW()
     FROM public.nodes;
     SQL
   end
 
   def flows_insert_sql
     <<-SQL
-    INSERT INTO revamp.flows (id, context_id, year, path, created_at, updated_at)
+    INSERT INTO revamp.flows (id, context_id, year, path, created_at)
     SELECT
-      flow_id, context_id, year, path, NOW(), NOW()
+      flow_id, context_id, year, path, NOW()
     FROM public.flows;
     SQL
   end
 
   def quants_insert_sql
     <<-SQL
-    INSERT INTO revamp.quants (id, name, display_name, unit, unit_type, tooltip, tooltip_text, created_at, updated_at)
-    SELECT quant_id, name, COALESCE(frontend_name, name), unit, unit_type, COALESCE(tooltip, FALSE), tooltip_text, NOW(), NOW() FROM public.quants
+    WITH inserted_quants AS (
+      INSERT INTO revamp.quants (id, name, unit, created_at)
+      SELECT quant_id, name, unit, NOW() FROM public.quants
+    )
+    INSERT INTO revamp.quant_properties (quant_id, display_name, unit_type, tooltip_text, is_visible_on_actor_profile, is_visible_on_place_profile, is_temporal_on_actor_profile, is_temporal_on_place_profile, created_at, updated_at)
+    SELECT quant_id, COALESCE(frontend_name, name), unit_type, tooltip_text, COALESCE(actor_factsheet, false), COALESCE(place_factsheet, false), COALESCE(actor_factsheet_temporal, false), COALESCE(place_factsheet_temporal, false), NOW(), NOW()
+    FROM public.quants
     SQL
   end
 
   def inds_insert_sql
     <<-SQL
-    INSERT INTO revamp.inds (id, name, display_name, unit, unit_type, tooltip, tooltip_text, created_at, updated_at)
-    SELECT ind_id, name, COALESCE(frontend_name, name), unit, unit_type, COALESCE(tooltip, FALSE), tooltip_text, NOW(), NOW() FROM public.inds
+    WITH inserted_inds AS (
+      INSERT INTO revamp.inds (id, name, unit, created_at)
+      SELECT ind_id, name, unit, NOW() FROM public.inds
+    )
+    INSERT INTO revamp.ind_properties (ind_id, display_name, unit_type, tooltip_text, is_visible_on_actor_profile, is_visible_on_place_profile, is_temporal_on_actor_profile, is_temporal_on_place_profile, created_at, updated_at)
+    SELECT ind_id, COALESCE(frontend_name, name), unit_type, tooltip_text, COALESCE(actor_factsheet, false), COALESCE(place_factsheet, false), COALESCE(actor_factsheet_temporal, false), COALESCE(place_factsheet_temporal, false), NOW(), NOW()
+    FROM public.inds
     SQL
   end
 
   def quals_insert_sql
     <<-SQL
-    INSERT INTO revamp.quals (id, name, display_name, tooltip, tooltip_text, created_at, updated_at)
-    SELECT qual_id, name, COALESCE(frontend_name, name), COALESCE(tooltip, FALSE), tooltip_text, NOW(), NOW() FROM public.quals
+    WITH inserted_quals AS (
+      INSERT INTO revamp.quals (id, name, created_at)
+      SELECT qual_id, name, NOW() FROM public.quals
+    )
+    INSERT INTO revamp.qual_properties (qual_id, display_name, tooltip_text, is_visible_on_actor_profile, is_visible_on_place_profile, is_temporal_on_actor_profile, is_temporal_on_place_profile, created_at, updated_at)
+    SELECT qual_id, COALESCE(frontend_name, name), tooltip_text, COALESCE(actor_factsheet, false), COALESCE(place_factsheet, false), COALESCE(actor_factsheet_temporal, false), COALESCE(place_factsheet_temporal, false), NOW(), NOW()
+    FROM public.quals
     SQL
   end
 
   def node_quants_insert_sql
     <<-SQL
-    INSERT INTO revamp.node_quants (node_id, quant_id, year, value, created_at, updated_at)
-    SELECT DISTINCT node_id, quant_id, year, value, NOW(), NOW()
+    INSERT INTO revamp.node_quants (node_id, quant_id, year, value, created_at)
+    SELECT DISTINCT node_id, quant_id, year, value, NOW()
     FROM public.node_quants
     SQL
   end
 
   def node_inds_insert_sql
     <<-SQL
-    INSERT INTO revamp.node_inds (node_id, ind_id, year, value, created_at, updated_at)
-    SELECT DISTINCT node_id, ind_id, year, value, NOW(), NOW()
+    INSERT INTO revamp.node_inds (node_id, ind_id, year, value, created_at)
+    SELECT DISTINCT node_id, ind_id, year, value, NOW()
     FROM public.node_inds
     SQL
   end
 
   def node_quals_insert_sql
     <<-SQL
-    INSERT INTO revamp.node_quals (node_id, qual_id, year, value, created_at, updated_at)
-    SELECT DISTINCT node_id, qual_id, year, value, NOW(), NOW()
+    INSERT INTO revamp.node_quals (node_id, qual_id, year, value, created_at)
+    SELECT DISTINCT node_id, qual_id, year, value, NOW()
     FROM public.node_quals
     SQL
   end
 
   def flow_quants_insert_sql
     <<-SQL
-    INSERT INTO revamp.flow_quants (flow_id, quant_id, value, created_at, updated_at)
-    SELECT DISTINCT flow_id, quant_id, value, NOW(), NOW()
+    INSERT INTO revamp.flow_quants (flow_id, quant_id, value, created_at)
+    SELECT DISTINCT flow_id, quant_id, value, NOW()
     FROM public.flow_quants
     SQL
   end
 
   def flow_inds_insert_sql
     <<-SQL
-    INSERT INTO revamp.flow_inds (flow_id, ind_id, value, created_at, updated_at)
-    SELECT DISTINCT flow_id, ind_id, value, NOW(), NOW()
+    INSERT INTO revamp.flow_inds (flow_id, ind_id, value, created_at)
+    SELECT DISTINCT flow_id, ind_id, value, NOW()
     FROM public.flow_inds
     SQL
   end
 
   def flow_quals_insert_sql
     <<-SQL
-    INSERT INTO revamp.flow_quals (flow_id, qual_id, value, created_at, updated_at)
-    SELECT DISTINCT flow_id, qual_id, value, NOW(), NOW()
+    INSERT INTO revamp.flow_quals (flow_id, qual_id, value, created_at)
+    SELECT DISTINCT flow_id, qual_id, value, NOW()
     FROM public.flow_quals
     SQL
   end
@@ -356,40 +392,10 @@ class SchemaRevamp
 
   def download_versions_insert_sql
     <<-SQL
-    INSERT INTO revamp.download_versions(context_id, symbol, is_current, created_at, updated_at)
+    INSERT INTO revamp.download_versions(context_id, symbol, is_current, created_at)
     SELECT
-      context_id, symbol, COALESCE(current, FALSE), NOW(), NOW()
+      context_id, symbol, COALESCE(current, FALSE), NOW()
     FROM public.download_versions
-    SQL
-  end
-
-  def traders_insert_sql
-    <<-SQL
-    WITH exporters AS (
-      SELECT * FROM (
-        SELECT nodes.name, ARRAY_AGG(nodes.id) AS ids
-        FROM revamp.nodes
-        JOIN revamp.node_types ON nodes.node_type_id = node_types.id
-        WHERE node_types.name = 'EXPORTER'
-        GROUP BY nodes.name, node_type_id
-      ) s
-      LEFT JOIN LATERAL UNNEST(ids) WITH ORDINALITY AS f(id, row) ON true
-      WHERE row = 1
-    ), importers AS (
-      SELECT * FROM (
-        SELECT nodes.name, ARRAY_AGG(nodes.id) AS ids
-        FROM revamp.nodes
-        JOIN revamp.node_types ON nodes.node_type_id = node_types.id
-        WHERE node_types.name = 'IMPORTER'
-        GROUP BY nodes.name, node_type_id
-      ) s
-      LEFT JOIN LATERAL UNNEST(ids) WITH ORDINALITY AS f(id, row) ON true
-      WHERE row = 1
-    )
-    INSERT INTO revamp.traders(exporter_id, importer_id, created_at, updated_at)
-    SELECT exporters.id AS exporter_id, importers.id AS importer_id, NOW(), NOW()
-    FROM exporters
-    JOIN importers ON exporters.name = importers.name
     SQL
   end
 

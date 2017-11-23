@@ -243,7 +243,8 @@ export default function (state = {}, action) {
         selectedBiomeFilter = { value: 'none' };
       } else {
         const currentContext = state.contexts.find(context => context.id === state.selectedContextId);
-        selectedBiomeFilter = currentContext.filterBy[0].nodes.find(filterBy => filterBy.name === action.biomeFilter);
+        selectedBiomeFilter = Object.assign({}, currentContext.filterBy[0].nodes.find(filterBy => filterBy.name === action.biomeFilter));
+        selectedBiomeFilter.geoId = state.nodesDict[selectedBiomeFilter.nodeId].geoId;
       }
       newState = Object.assign({}, state, { selectedBiomeFilter });
       break;

@@ -229,6 +229,14 @@ export function loadNodes() {
       dispatch({
         type: actions.GET_NODES, payload
       });
+      
+      // reselect biome filter to add biome geoid
+      if (getState().tool.selectedBiomeFilter.nodeId !== undefined) {
+        dispatch({
+          type: actions.SELECT_BIOME_FILTER,
+          biomeFilter: getState().tool.selectedBiomeFilter.name
+        });
+      }
 
       const allAvailableMapDimensionsUids = payload.mapDimensionsMetaJSON.dimensions.map(dimension => getNodeMetaUid(dimension.type, dimension.layerAttributeId));
       const selectedMapDimensionsSet = _.compact(selectedMapDimensions);
