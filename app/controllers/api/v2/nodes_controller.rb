@@ -13,7 +13,7 @@ module Api
 
         matching_nodes = Node.
           select('
-                           nodes.node_id, nodes.name, geo_id, nodes.node_type_id as column_id, nodes.is_domestic_consumption, nodes.is_unknown,
+                           nodes.node_id, nodes.main_node_id, nodes.name, geo_id, nodes.node_type_id as column_id, nodes.is_domestic_consumption, nodes.is_unknown,
                            node_types.node_type as type, context_nodes.profile_type as profile_type,
                            CASE WHEN flow_nodes.node_id IS NOT NULL OR nodes.name = \'OTHER\' THEN true ELSE false END as has_flows
                          ').
