@@ -24,6 +24,7 @@ import Map from 'components/profiles/map.component';
 import { getURLParams } from 'utils/stateURL';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
+import swapProfileYear from 'utils/swapProfileYear';
 import smoothScroll from 'utils/smoothScroll';
 import _ from 'lodash';
 import { getURLFromParams, GET_PLACE_FACTSHEET } from '../utils/getURLFromParams';
@@ -32,6 +33,8 @@ const defaults = {
   country: 'Brazil',
   commodity: 'Soy'
 };
+
+let year;
 
 const _build = data => {
   const stateGeoID = data.state_geo_id;
@@ -118,7 +121,7 @@ const _build = data => {
 
   if (data.top_consumers.countries.length) {
     document.querySelector('.js-consumers').classList.toggle('is-hidden', false);
-    
+
     new Chord(
       '.js-chord-consumers',
       data.top_consumers.matrix,
@@ -142,13 +145,6 @@ const _build = data => {
       type: 't_head_places'
     });
   }
-};
-
-const _onSelect = function(value) {
-  // updates dropdown's title with new value
-  this.setTitle(value);
-  // updates default values with incoming ones
-  defaults[this.id] = value;
 };
 
 const _setInfo = (info, nodeId) => {
@@ -192,12 +188,11 @@ const _init = () => {
   const url = window.location.search;
   const urlParams = getURLParams(url);
   const nodeId = urlParams.nodeId;
-
-  const commodityDropdown = new Dropdown('commodity', _onSelect);
+  year = urlParams.year || 2015;
 
   commodityDropdown.setTitle(defaults.commodity);
 
-  const placeFactsheetURL = getURLFromParams(GET_PLACE_FACTSHEET, { node_id: nodeId });
+  const placeFactsheetURL = getURLFromParams(GET_PLACE_FACTSHEET, { node_id: nodeId, year });
 
   fetch(placeFactsheetURL)
     .then((response) => {
@@ -233,6 +228,9 @@ const _init = () => {
 
       _setInfo(info, nodeId);
       _setEventListeners();
+
+      const yearDropdown = new Dropdown('year', swapProfileYear);
+      yearDropdown.setTitle(year);
 
       _build(data);
     });

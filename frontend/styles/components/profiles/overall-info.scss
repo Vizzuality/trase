@@ -24,9 +24,32 @@
 
         &:after {
           content: normal;
+        }
+      }
+    }
+
+    .c-dropdown.-active {
+      cursor: pointer;
+
+      > .dropdown-title {
+        &::after {
+          content: '';
           width: 14px;
           height: 14px;
           border: 3px solid $medium-pink;
+        }
+      }
+
+      > .dropdown-list {
+        color: $charcoal-grey;
+        top: 70px;
+        padding: 14px;
+        font-size: $font-size-medium;
+        font-family: $font-family-2;
+        min-width: 140px;
+
+        > li {
+          padding: 5px 0;
         }
       }
     }
