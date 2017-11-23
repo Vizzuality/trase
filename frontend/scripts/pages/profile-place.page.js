@@ -1,3 +1,5 @@
+import { h, render } from 'preact';
+
 import 'styles/_base.scss';
 import 'styles/_texts.scss';
 import 'styles/_foundation.css';
@@ -18,6 +20,7 @@ import Dropdown from 'components/shared/dropdown.component';
 import Top from 'components/profiles/top.component';
 import Line from 'components/profiles/line.component';
 import Chord from 'components/profiles/chord.component';
+import MiniSankey from 'react-components/profiles/mini-sankey.component';
 import MultiTable from 'components/profiles/multi-table.component';
 import Map from 'components/profiles/map.component';
 
@@ -99,6 +102,63 @@ const _build = data => {
     const elem = document.querySelector('.js-line-title');
     elem.parentNode.parentNode.parentNode.removeChild(elem.parentNode.parentNode);
   }
+
+
+  // query: nodeId, targetColumnId + commodity and year
+  const tradersSankeyData = {
+    name: 'QUERÊNCIA',
+    targetNodes: [{
+      id: 2,
+      name: 'Other',
+      isAggregated: true,
+      height: 0.2,
+      // isDomesticConsumption: null,
+    },{
+      id: 588,
+      name: 'Cargill',
+      isUnknown: null,
+      height: 0.4,
+      profileType: 'actor'
+    },{
+      id: 588,
+      name: 'Hello, I have such a long name I need 3 lines',
+      isUnknown: null,
+      height: 0.2,
+      profileType: 'actor'
+    },{
+      id: 588,
+      name: 'Sometimes, you gotta have more lines',
+      isUnknown: null,
+      height: 0.1,
+      profileType: 'actor'
+    },{
+      id: 588,
+      name: 'Cargill',
+      isUnknown: null,
+      height: 0.029,
+      profileType: 'actor'
+    },{
+      id: 588,
+      name: 'Cargill',
+      isUnknown: null,
+      height: 0.021,
+      profileType: 'actor'
+    },{
+      id: 588,
+      name: 'Im very long but sadly the node hieght is too small',
+      isUnknown: null,
+      height: 0.05,
+      profileType: 'actor'
+    }]
+  };
+
+  render(
+    <MiniSankey
+      data={tradersSankeyData}
+      targetLink='actor'
+    />,
+    document.getElementById('js-traders-sankey')
+  );
 
   if (data.top_traders.actors.length) {
     document.querySelector('.js-traders').classList.toggle('is-hidden', false);
