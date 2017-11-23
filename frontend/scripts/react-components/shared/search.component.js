@@ -35,7 +35,7 @@ export default class Search extends Component {
     this.onCloseClicked();
   }
 
-  render({ nodes }) {
+  render({ nodes = [] }) {
     if (this.state.isOpened === false) {
       return <div onClick={this.onOpenClicked} class='nav-item'>
         <svg class='icon icon-search'><use xlinkHref='#icon-search' /></svg>
@@ -57,7 +57,7 @@ export default class Search extends Component {
             inputValue,
             highlightedIndex
           }) => {
-            return <div>
+            return <div onClick={e => e.stopPropagation()}>
               <input {...getInputProps({ placeholder: 'Search a producer, trader or country of import' })} />
               {isOpen ? (
                 <div class='suggestions'>
@@ -78,7 +78,6 @@ export default class Search extends Component {
                         const segmentStr = item.name.substr(chunk.start, chunk.end - chunk.start);
                         return (chunk.highlight) ? <mark>{segmentStr}</mark> : <span>{segmentStr}</span>;
                       });
-
                       return (
                         <div
                           {...getItemProps({ item })}
