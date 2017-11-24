@@ -10,8 +10,6 @@ module Api
             'actor'
           when 'MUNICIPALITY'
             'place'
-          else
-            nil
           end
         end
       end
