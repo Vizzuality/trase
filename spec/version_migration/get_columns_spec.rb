@@ -1,12 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Get columns', type: :request do
-  # include_context 'brazil soy indicators'
-  # include_context 'brazil resize by'
-  # include_context 'brazil recolor by'
-
-  # include_context 'brazil context nodes'
-
   include_context 'brazil contexts'
 
   describe 'GET /api/v2/get_columns === GET /api/v3/columns ' do
