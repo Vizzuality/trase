@@ -73,6 +73,12 @@
         height: 40px;
         letter-spacing: -.7px;
         line-height: .77;
+
+        &:hover {
+          border-color: transparent;
+          background-color: $charcoal-grey;
+          color: $white;
+        }
       }
 
       * {

@@ -9,18 +9,29 @@ export default class Search extends Component {
   constructor() {
     super();
     this.state = {
-      isOpened: true
+      isOpened: false
     };
     this.onOpenClicked = this.onOpenClicked.bind(this);
     this.onCloseClicked = this.onCloseClicked.bind(this);
     this.onSelected = this.onSelected.bind(this);
+    this.onKeydown = this.onKeydown.bind(this);
+    this.getInputRef = this.getInputRef.bind(this);
+    document.addEventListener('keydown', this.onKeydown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeydown);
+  }
+
+  getInputRef(el) {
+    this.input = el;
   }
 
   onOpenClicked(e) {
     if (e) e.stopPropagation();
     this.setState({
       isOpened: true
-    });
+    }, () => ((this.input && !this.input.focused) && this.input.focus()));
   }
 
   onCloseClicked(e) {
@@ -32,10 +43,27 @@ export default class Search extends Component {
 
   onSelected(selectedItem) {
     // TODO: implement dual selection, for now just displays importer
-    const parts = selectedItem.id.split('_');
+    const parts = (selectedItem.id + '').split('_');
     const id = parts.length > 1 ? parseInt(parts[0]) : selectedItem.id;
     this.props.onNodeSelected(id);
     this.onCloseClicked();
+  }
+
+  onKeydown(e) {
+    e.stopPropagation();
+    const isValidChar = (/^([a-z]|[A-Z]|ñ|Ñ|á|é|í|ó|ú|Á|É|Í|Ó|Ú){1}$/.test(e.key));
+    if (!this.state.isOpened && isValidChar) {
+      this.onOpenClicked();
+    }
+    if (e.key === 'Escape' && this.state.isOpened) {
+      this.onCloseClicked();
+    }
+  }
+
+  navigateToActor(e, item, type) {
+    if (e) e.stopPropagation();
+    const node = item[type.toLowerCase()] || item;
+    window.location = `profile-${node.profileType}.html?nodeId=${node.id}`;
   }
 
   render({ nodes = [] }) {
@@ -62,7 +90,10 @@ export default class Search extends Component {
           }) => {
             // stopPropagation is called to avoid calling onOpenClicked.
             return <div onClick={e => e.stopPropagation()}>
-              <input {...getInputProps({ placeholder: 'Search a producer, trader or country of import' })} />
+              <input
+                {...getInputProps({ placeholder: 'Search a producer, trader or country of import' })}
+                ref={this.getInputRef}
+              />
               {isOpen ? (
                 <div class='suggestions'>
                   {nodes
@@ -95,12 +126,23 @@ export default class Search extends Component {
                             </span>
                           </div>
                           <div class='node-actions-container'>
-                            <button class='c-button -charcoal -medium-large'>Add to supply chain</button>
-                            {item.type !== 'EXPORTER' && item.type !== 'MUNICIPALITY' &&
-                              <button class='c-button -transparent-dark -medium-large'>See importer profile</button>
-                            }
-                            {item.type !== 'IMPORTER' && item.type !== 'MUNICIPALITY' &&
-                              <button class='c-button -transparent-dark -medium-large'>See exporter profile</button>
+                            <button
+                              onClick={() => this.onSelected(item)}
+                              class='c-button -medium-large'
+                            >
+                              Add to supply chain
+                            </button>
+                            {
+                              item.type.split(' & ')
+                                .map(type => (
+                                  <button
+                                    role='link'
+                                    class='c-button -medium-large'
+                                    onClick={e => this.navigateToActor(e, item, type)}
+                                  >
+                                    See {type} profile
+                                  </button>
+                                ))
                             }
                           </div>
                         </div>
