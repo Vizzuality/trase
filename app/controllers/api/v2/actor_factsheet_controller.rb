@@ -12,7 +12,7 @@ module Api
 
         raise ActionController::ParameterMissing, 'Required context_id missing' if context.nil?
 
-        year = params[:year] || context.default_year
+        year = params[:year].to_i || context.default_year
 
         raise ActionController::ParameterMissing, 'Required year missing' if year.nil?
 
