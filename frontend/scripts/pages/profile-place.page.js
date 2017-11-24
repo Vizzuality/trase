@@ -190,8 +190,6 @@ const _init = () => {
   const nodeId = urlParams.nodeId;
   year = urlParams.year || 2015;
 
-  commodityDropdown.setTitle(defaults.commodity);
-
   const placeFactsheetURL = getURLFromParams(GET_PLACE_FACTSHEET, { node_id: nodeId, year });
 
   fetch(placeFactsheetURL)
