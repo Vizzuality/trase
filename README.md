@@ -38,20 +38,20 @@ For the API:
 - Make sure you have Ruby and Bundler installed
 - Use Bundler's `bundle install` to install all ruby dependencies
 - Copy `.env.sample` to `.env` and replace the values accordingly. See the API documentation below for more information.
-- You may need to run `rake db:create` and `rake content:db:create` to create the databases, and/or `rake db:migrate` and `rake content:db:migrate` to update its structure. 
+- You may need to run `rake db:create` and `rake content:db:create` to create the databases, and/or `rake db:migrate` and `rake content:db:migrate` to update its structure.
 
-You can now use `rails server` to start the API application 
+You can now use `rails server` to start the API application
 
 For the frontend application:
 - `cd` into the `frontend` folder
 - Copy `.env.sample` to `.env` and replace the values accordingly. See the frontend application documentation below for more information.
 - Install dependencies using `npm install`
 
-You can start the development server with `npm run dev`
+You can start the development server with `npm start`
 
 ## Deployment
 
-We use [Capistrano](http://capistranorb.com/) as a deployment tool, which deploys both API and frontend application simultaneously. 
+We use [Capistrano](http://capistranorb.com/) as a deployment tool, which deploys both API and frontend application simultaneously.
 To deploy, simply use:
 
 ```
@@ -164,7 +164,7 @@ To migrate the database:
 
 Schema documentation is generated directly from the database and requires the following steps:
 
-1. The file `db/schema_comments.yml` contains documentation of schema objects, which is prepared in a way to easily insert it into the database schema itself using `COMMENT IS` syntax. 
+1. The file `db/schema_comments.yml` contains documentation of schema objects, which is prepared in a way to easily insert it into the database schema itself using `COMMENT IS` syntax.
 That is done using a dedicated rake task:
 
     `rake db:revamp:doc:sql`
@@ -175,12 +175,12 @@ That is done using a dedicated rake task:
     2. install [Graphviz](http://www.graphviz.org/)
     3. the [SchemaSpy 6.0.0-rc2](http://schemaspy.readthedocs.io/en/latest/index.html) jar file and [PostgreSQL driver](https://jdbc.postgresql.org/download.html) file are already in doc/db
     4. `rake db:revamp:doc:html` (Please note: I added an extra param to SchemaSpy command which is `-renderer :quartz` which helps with running it on macOS Sierra. No idea if it prevents it from running elsewhere.)
-    5. output files are in `doc/db/html` 
+    5. output files are in `doc/db/html`
 3. to update the [GH pages site](https://vizzuality.github.io/trase-api/) all the generated files from `doc/db/html` need to land in the top-level of the `gh-pages` branch. This is currently a manual process, easiest to have the repo checked out twice on local drive to be able to copy between branches (not great and not final.)
 
 # Frontend
 
-The frontend application can be found inside the `frontend` folder. All files mentioned below can be found inside this folder, 
+The frontend application can be found inside the `frontend` folder. All files mentioned below can be found inside this folder,
 and command instructions should be executed inside the `frontend` folder.
 
 ## About this application

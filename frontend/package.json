@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npm run webpack:server",
+    "start": "npm run webpack:server",
+    "dev": "npm run start",
     "build": "npm run webpack:prod && cp -a public/. dist/",
     "webpack:prod": "NODE_ENV='production' webpack --config config/webpack.js -p",
     "webpack:server": "webpack-dev-server --inline --port 8081 --host 0.0.0.0 --content-base public/ --config config/webpack.js",
