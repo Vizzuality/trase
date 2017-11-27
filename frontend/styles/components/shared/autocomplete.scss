@@ -6,8 +6,20 @@
   height: 100%;
   position: relative;
 
-  > * {
+  .autocomplete-container {
     height: 100%;
+
+    .autocomplete-bar {
+      display: flex;
+      position: relative;
+      height: 100%;
+      z-index: $z-above;
+      box-shadow: 0 10px 20px 0 rgba($charcoal-grey, .2);
+
+      > .c-nodes-titles {
+        margin: 8px 16px 0;
+      }
+    }
   }
 
   input {
@@ -21,9 +33,7 @@
     letter-spacing: -1px;
     color: $charcoal-grey;
     outline: none;
-    box-shadow: 0 10px 20px 0 rgba($charcoal-grey, .2);
     border-radius: 0;
-    z-index: $z-above;
   }
 
   .suggestions {

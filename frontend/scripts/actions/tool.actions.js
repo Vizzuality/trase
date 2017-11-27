@@ -501,6 +501,12 @@ export function selectNodeFromGeoId(geoId) {
     const nodeId = getNodeIdFromGeoId(geoId, getState().tool.nodesDict, getState().tool.selectedColumnsIds[0]);
 
     // node not in visible Nodes ---> expand node (same behavior as search)
+    dispatch(selectExpandedNode(nodeId));
+  };
+}
+
+export function selectExpandedNode(nodeId) {
+  return (dispatch, getState) => {
     if (!_isNodeVisible(getState, nodeId)) {
       const currentSelectedNodesIds = getState().tool.selectedNodesIds;
       const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, nodeId);

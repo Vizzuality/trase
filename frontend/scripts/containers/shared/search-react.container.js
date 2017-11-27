@@ -1,7 +1,8 @@
+import { bindActionCreators } from 'redux';
 import { connect } from 'preact-redux';
 import groupBy from 'lodash/groupBy';
 import Search from 'react-components/shared/search.component.js';
-import { searchNode } from 'actions/tool.actions';
+import { searchNode, selectExpandedNode } from 'actions/tool.actions';
 import { ACTORS_COLUMN_IDS } from 'constants';
 
 let nodes;
@@ -33,11 +34,10 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    onNodeSelected: (nodeId) => {
-      dispatch(searchNode(nodeId));
-    }
-  };
+  return bindActionCreators({
+    onRowSelected: nodeId => searchNode(nodeId),
+    onAddNode: nodeId => selectExpandedNode(nodeId)
+  }, dispatch);
 };
 
 export default connect(

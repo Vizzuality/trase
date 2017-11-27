@@ -5,7 +5,16 @@ import Downshift from 'downshift/preact';
 import { findAll } from 'highlight-words-core';
 import cx from 'classnames';
 
+import NodeTitleGroup from 'containers/shared/node-title-group-react.container';
+
 export default class Search extends Component {
+
+  static getNodeId(selectedItem) {
+    // TODO: implement dual selection, for now just displays importer
+    const parts = (selectedItem.id + '').split('_');
+    return parts.length > 1 ? parseInt(parts[0]) : selectedItem.id;
+  }
+
   constructor() {
     super();
     this.state = {
@@ -14,6 +23,7 @@ export default class Search extends Component {
     this.onOpenClicked = this.onOpenClicked.bind(this);
     this.onCloseClicked = this.onCloseClicked.bind(this);
     this.onSelected = this.onSelected.bind(this);
+    this.onAddNode = this.onAddNode.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
     this.getInputRef = this.getInputRef.bind(this);
     document.addEventListener('keydown', this.onKeydown);
@@ -42,15 +52,20 @@ export default class Search extends Component {
   }
 
   onSelected(selectedItem) {
-    // TODO: implement dual selection, for now just displays importer
-    const parts = (selectedItem.id + '').split('_');
-    const id = parts.length > 1 ? parseInt(parts[0]) : selectedItem.id;
-    this.props.onNodeSelected(id);
+    const id = Search.getNodeId(selectedItem);
+    this.props.onRowSelected(id);
     this.onCloseClicked();
   }
 
+  onAddNode(e, selectedItem, reset) {
+    if (e) e.stopPropagation();
+    const id = Search.getNodeId(selectedItem);
+    this.props.onAddNode(id);
+    reset();
+    this.input.focus();
+  }
+
   onKeydown(e) {
-    e.stopPropagation();
     const isValidChar = (/^([a-z]|[A-Z]|ñ|Ñ|á|é|í|ó|ú|Á|É|Í|Ó|Ú){1}$/.test(e.key));
     if (!this.state.isOpened && isValidChar) {
       this.onOpenClicked();
@@ -86,14 +101,18 @@ export default class Search extends Component {
             getItemProps,
             isOpen,
             inputValue,
-            highlightedIndex
+            highlightedIndex,
+            reset
           }) => {
             // stopPropagation is called to avoid calling onOpenClicked.
-            return <div onClick={e => e.stopPropagation()}>
-              <input
-                {...getInputProps({ placeholder: 'Search a producer, trader or country of import' })}
-                ref={this.getInputRef}
-              />
+            return <div class='autocomplete-container' onClick={e => e.stopPropagation()}>
+              <div class='autocomplete-bar'>
+                <NodeTitleGroup />
+                <input
+                  {...getInputProps({ placeholder: 'Search a producer, trader or country of import' })}
+                  ref={this.getInputRef}
+                />
+              </div>
               {isOpen ? (
                 <div class='suggestions'>
                   {nodes
@@ -127,7 +146,7 @@ export default class Search extends Component {
                           </div>
                           <div class='node-actions-container'>
                             <button
-                              onClick={() => this.onSelected(item)}
+                              onClick={e => this.onAddNode(e, item, reset)}
                               class='c-button -medium-large'
                             >
                               Add to supply chain
