@@ -116,39 +116,27 @@ const _build = data => {
     },{
       id: 588,
       name: 'Cargill',
-      isUnknown: null,
       height: 0.4,
-      profileType: 'actor'
     },{
       id: 588,
       name: 'Hello, I have such a long name I need 3 lines',
-      isUnknown: null,
       height: 0.2,
-      profileType: 'actor'
     },{
       id: 588,
       name: 'Sometimes, you gotta have more lines',
-      isUnknown: null,
       height: 0.1,
-      profileType: 'actor'
     },{
       id: 588,
       name: 'Cargill',
-      isUnknown: null,
       height: 0.029,
-      profileType: 'actor'
     },{
       id: 588,
       name: 'Cargill',
-      isUnknown: null,
       height: 0.021,
-      profileType: 'actor'
     },{
       id: 588,
       name: 'Im very long but sadly the node hieght is too small',
-      isUnknown: null,
       height: 0.05,
-      profileType: 'actor'
     }]
   };
 
@@ -179,6 +167,41 @@ const _build = data => {
       year
     });
   }
+
+  // query: nodeId, targetColumnId + commodity and year
+  const consumersSankeyData = {
+    name: 'QUERÊNCIA',
+    targetNodes: [{
+      name: 'Others',
+      isAggregated: true,
+      height: 0.2
+    },{
+      name: 'China',
+      height: 0.4,
+    },{
+      name: 'Brazil',
+      height: 0.2,
+    },{
+      name: 'Germany',
+      height: 0.1,
+    },{
+      name: 'South Korea',
+      height: 0.029,
+    },{
+      name: 'Thailand',
+      height: 0.021,
+    },{
+      name: 'Spain',
+      height: 0.05,
+    }]
+  };
+
+  render(
+    <MiniSankey
+      data={consumersSankeyData}
+    />,
+    document.getElementById('js-consumers-sankey')
+  );
 
   if (data.top_consumers.countries.length) {
     document.querySelector('.js-consumers').classList.toggle('is-hidden', false);

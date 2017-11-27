@@ -50,17 +50,17 @@
     text-transform: uppercase;
   }
 
-  .deforestation {
-    padding: 53px 0 51px 0;
+  .deforestation, .chords-container, .mini-sankey-container {
+    padding: 53px 0 51px;
+  }
 
+  .deforestation {
     .c-line {
       margin-top: 15px;
     }
   }
 
   .chords-container {
-    padding: 53px 0 51px 0;
-
     &.-traders .c-chord {
       text-align: center;
     }
