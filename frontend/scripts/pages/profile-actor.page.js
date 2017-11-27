@@ -175,11 +175,11 @@ const _build = (data, nodeId) => {
 
     Map('.js-top-destination-map', {
       topoJSONPath: './vector_layers/WORLD.topo.json',
-      topoJSONRoot: 'WORLD',
+      topoJSONRoot: 'world',
       useRobinsonProjection: true,
       getPolygonClassName: ({ properties }) => {
         const country = data.top_countries.lines
-          .find(c => (properties.name.toUpperCase() === c.name.toUpperCase()));
+          .find(c => (properties.iso2 === c.geo_id));
         let value = 'n-a';
         if (country) value = country.value9 || 'n-a';
         return `-outline ch-${value}`;
