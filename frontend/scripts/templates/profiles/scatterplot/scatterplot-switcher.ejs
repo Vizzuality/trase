@@ -1,5 +1,5 @@
 <% Object.keys(data).forEach(function (i) { %>
-  <li class="js-scatterplot-switcher-item <%= i === "0" ? 'selected' : null %> <%= data[i].unit !== null ? 'unit' : null %>" data-key="<%= i %>">
+  <li class="js-scatterplot-switcher-item tab <%= i === "0" ? 'selected' : null %> <%= data[i].unit !== null ? 'unit' : null %>" data-key="<%= i %>">
     <span data-unit="<%= data[i].unit !== null ? data[i].unit : null %>"><%= data[i].name %></span>
   </li>
 <%});%>

@@ -95,6 +95,7 @@ const config = {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       DATA_FORM_ENDPOINT: JSON.stringify(process.env.DATA_FORM_ENDPOINT),
       DATA_FORM_ENABLED: process.env.DATA_FORM_ENABLED === 'true',
+      PDF_DOWNLOAD_URL: JSON.stringify(process.env.PDF_DOWNLOAD_URL),
     })
   ].concat(pagePlugins),
   output: {
