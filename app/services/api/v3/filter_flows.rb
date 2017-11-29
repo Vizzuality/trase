@@ -15,43 +15,64 @@ module Api
       # limit
       def initialize(context, params)
         @context = context
-        @node_types_ids = params[:node_types_ids] || []
-        if @node_types_ids.is_a?(String)
-          @node_types_ids = @node_types_ids.split(',').map(&:to_i)
+        initialize_params(params)
+        initialize_errors
+      end
+
+      def call
+        initialize_node_types
+        initialize_active_node_types
+        initialize_biome_position
+        initialize_selected_nodes
+        initialize_other_nodes_ids
+        initialize_unknown_nodes
+        if @errors.none?
+          initialize_active_nodes
+          @flows = flows_query.all
         end
-        @recolor_ind_name = params[:recolor_ind_name]
-        @recolor_ind = @recolor_ind_name && Api::V3::Ind.
+        Api::V3::FlowsResult.new(self)
+      end
+
+      private
+
+      def initialize_params(params)
+        @node_types_ids = initialize_int_array_param(params[:node_types_ids])
+        @recolor_ind = params[:recolor_ind_name] && Api::V3::Ind.
           includes(:ind_property).
-          find_by_name(@recolor_ind_name)
-        @recolor_qual_name = params[:recolor_qual_name]
-        @recolor_qual = @recolor_qual_name && Api::V3::Qual.
+          find_by_name(params[:recolor_ind_name])
+        @recolor_qual = params[:recolor_qual_name] && Api::V3::Qual.
           includes(:qual_property).
-          find_by_name(@recolor_qual_name)
-        @resize_quant_name = params[:resize_quant_name]
-        @resize_quant = @resize_quant_name && Api::V3::Quant.
+          find_by_name(params[:recolor_qual_name])
+        @resize_quant = params[:resize_quant_name] && Api::V3::Quant.
           includes(:quant_property).
-          find_by_name(@resize_quant_name)
-        @selected_nodes_ids = params[:selected_nodes_ids] || []
-        if @selected_nodes_ids.is_a?(String)
-          @selected_nodes_ids = @selected_nodes_ids.split(',').map(&:to_i)
-        end
+          find_by_name(params[:resize_quant_name])
+        @selected_nodes_ids = initialize_int_array_param(
+          params[:selected_nodes_ids]
+        )
         @biome_id = params[:biome_id]
         @year_start = params[:year_start]
         @year_end = params[:year_end]
         @limit = params[:limit]&.to_i || 100
-        @errors = []
       end
 
-      def call
+      def initialize_int_array_param(param)
+        ary = param || []
+        ary = ary.split(',').map(&:to_i) if ary.is_a?(String)
+        ary
+      end
+
+      def initialize_errors
+        @errors = []
         @errors << 'Context not given' unless @context
         unless @year_start && @year_end
           @errors << 'Both start and end date not given'
         end
         @errors << 'Resize quant not given' unless @resize_quant
-        if @recolor_ind && @recolor_qual
-          @errors << 'Either ind or qual for recoloring'
-        end
+        return unless @recolor_ind && @recolor_qual
+        @errors << 'Either ind or qual for recoloring'
+      end
 
+      def initialize_node_types
         @node_types = Api::V3::NodeType.
           select(
             [
@@ -65,20 +86,7 @@ module Api
           where('context_node_types.context_id' => @context.id).
           order('context_node_types.column_position ASC')
         @errors << 'No node types for context' unless @node_types.any?
-
-        if @errors.none?
-          initialize_active_node_types
-          initialize_biome_position
-          initialize_selected_nodes
-          initialize_other_nodes_ids
-          initialize_unknown_nodes
-          initialize_active_nodes
-          @flows = flows_query.all
-        end
-        Api::V3::FlowsResult.new(self)
       end
-
-      private
 
       # columns to be displayed on frontend
       # it should be possible to support variable number of columns
