@@ -6,9 +6,13 @@ module Api
       def index
         @flows_result = Api::V3::FilterFlows.new(@context, @filter_params).call
 
-        render json: @flows_result,
-               adapter: :attributes,
-               serializer: Api::V3::Flows::FlowsResultSerializer
+        if @flows_result.errors.any?
+          render json: @flows_result.errors
+        else
+          render json: @flows_result,
+                 adapter: :attributes,
+                 serializer: Api::V3::Flows::FlowsResultSerializer
+        end
       end
 
       private

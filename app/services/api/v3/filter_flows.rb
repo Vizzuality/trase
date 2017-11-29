@@ -1,7 +1,7 @@
 module Api
   module V3
     class FilterFlows
-      attr_reader :errors, :active_nodes, :total_height, :other_nodes_ids,
+      attr_reader :errors, :flows, :active_nodes, :total_height, :other_nodes_ids,
                   :resize_quant, :recolor_ind, :recolor_qual
       # params:
       # node_types_ids - list of node type ids
@@ -66,71 +66,16 @@ module Api
           order('context_node_types.column_position ASC')
         @errors << 'No node types for context' unless @node_types.any?
 
-        return nil if @errors.any?
-
-        initialize_active_node_types
-        initialize_biome_position
-        initialize_selected_nodes
-        initialize_other_nodes_ids
-        initialize_unknown_nodes
-        initialize_active_nodes
-
+        if @errors.none?
+          initialize_active_node_types
+          initialize_biome_position
+          initialize_selected_nodes
+          initialize_other_nodes_ids
+          initialize_unknown_nodes
+          initialize_active_nodes
+          @flows = flows_query.all
+        end
         Api::V3::FlowsResult.new(self)
-      end
-
-      def flows
-        recolor_id, recolor_value_table, recolor_column =
-          if @recolor_ind
-            [@recolor_ind.id, Api::V3::FlowInd.table_name, 'ind_id']
-          elsif @recolor_qual
-            [@recolor_qual.id, Api::V3::FlowQual.table_name, 'qual_id']
-          end
-
-        select_clause_parts = [
-          'flows.id',
-          'ARRAY[' +
-            @active_node_types_positions.map { 'flows.path[?]' }.join(', ') +
-            '] AS path',
-          'flow_quants.value AS quant_value'
-        ]
-
-        if @recolor_ind
-          select_clause_parts << [
-            'flow_inds.value::DOUBLE PRECISION AS ind_value',
-            'NULL::TEXT AS qual_value'
-          ].join(', ')
-        elsif @recolor_qual
-          select_clause_parts << [
-            'NULL::DOUBLE PRECISION AS ind_value',
-            'flow_quals.value::TEXT AS qual_value'
-          ].join(', ')
-        end
-
-        select_clause = ActiveRecord::Base.send(
-          :sanitize_sql_array,
-          [
-            select_clause_parts.join(','),
-            *(@active_node_types_positions.map { |ai| ai + 1 })
-          ]
-        )
-        recolor_join_clause = ActiveRecord::Base.send(
-          :sanitize_sql_array,
-          [
-            "LEFT JOIN #{recolor_value_table} ON \
-            #{recolor_value_table}.flow_id = flows.id \
-            AND #{recolor_value_table}.#{recolor_column} = ?",
-            recolor_id
-          ]
-        )
-
-        query = basic_flows_query.
-          select(select_clause).
-          where('flow_quants.value > 0')
-        if recolor_id
-          query = query.
-            joins(recolor_join_clause)
-        end
-        query
       end
 
       private
@@ -299,6 +244,61 @@ module Api
           group(group_clause).
           order(order_clause)
 
+        query
+      end
+
+      def flows_query
+        recolor_id, recolor_value_table, recolor_column =
+          if @recolor_ind
+            [@recolor_ind.id, Api::V3::FlowInd.table_name, 'ind_id']
+          elsif @recolor_qual
+            [@recolor_qual.id, Api::V3::FlowQual.table_name, 'qual_id']
+          end
+
+        select_clause_parts = [
+          'flows.id',
+          'ARRAY[' +
+            @active_node_types_positions.map { 'flows.path[?]' }.join(', ') +
+            '] AS path',
+          'flow_quants.value AS quant_value'
+        ]
+
+        if @recolor_ind
+          select_clause_parts << [
+            'flow_inds.value::DOUBLE PRECISION AS ind_value',
+            'NULL::TEXT AS qual_value'
+          ].join(', ')
+        elsif @recolor_qual
+          select_clause_parts << [
+            'NULL::DOUBLE PRECISION AS ind_value',
+            'flow_quals.value::TEXT AS qual_value'
+          ].join(', ')
+        end
+
+        select_clause = ActiveRecord::Base.send(
+          :sanitize_sql_array,
+          [
+            select_clause_parts.join(','),
+            *(@active_node_types_positions.map { |ai| ai + 1 })
+          ]
+        )
+        recolor_join_clause = ActiveRecord::Base.send(
+          :sanitize_sql_array,
+          [
+            "LEFT JOIN #{recolor_value_table} ON \
+            #{recolor_value_table}.flow_id = flows.id \
+            AND #{recolor_value_table}.#{recolor_column} = ?",
+            recolor_id
+          ]
+        )
+
+        query = basic_flows_query.
+          select(select_clause).
+          where('flow_quants.value > 0')
+        if recolor_id
+          query = query.
+            joins(recolor_join_clause)
+        end
         query
       end
 

@@ -2,8 +2,11 @@ module Api
   module V3
     class FlowsResult
       include ActiveModel::Serialization
+      attr_reader :errors, :data, :include
 
       def initialize(filter_flows)
+        @errors = filter_flows.errors
+        return if @errors.any?
         @flows = filter_flows.flows
         @active_nodes = filter_flows.active_nodes
         @total_height = filter_flows.total_height
@@ -11,9 +14,11 @@ module Api
         @resize_quant = filter_flows.resize_quant
         @recolor_ind = filter_flows.recolor_ind
         @recolor_qual = filter_flows.recolor_qual
+        initialize_data
+        initialize_include
       end
 
-      def data
+      def initialize_data
         result = {}
         @flows.each do |flow|
           active_path = flow.path.map.with_index do |node_id, i|
@@ -42,15 +47,15 @@ module Api
             result[identifier] = flow_hash
           end
         end
-        result.values.map do |flow_hash|
+        @data = result.values.map do |flow_hash|
           flow_hash[:height] = format('%0.6f', (flow_hash[:quant] / @total_height)).to_f
           flow_hash[:quant] = format('%0.6f', flow_hash[:quant]).to_f
           flow_hash
         end
       end
 
-      def include
-        {
+      def initialize_include
+        @include = {
           node_heights: @active_nodes.map do |node_id, value|
             {
               id: node_id,
