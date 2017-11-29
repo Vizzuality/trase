@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Get columns', type: :request do
   include_context 'brazil contexts'
 
-  describe 'GET /api/v2/get_columns === GET /api/v3/columns ' do
+  describe 'GET /api/v2/get_columns === GET /api/v3/contexts/:id/columns ' do
     it 'has the correct response structure' do
       SchemaRevamp.new.copy
 
@@ -12,7 +12,7 @@ RSpec.describe 'Get columns', type: :request do
 
       expect(@response.status).to eq 200
 
-      get "/api/v3/columns?context_id=#{context.id}"
+      get "/api/v3/contexts/#{context.id}/columns"
       expect(@response.status).to eq 200
       v3_response = HashSorter.new(JSON.parse(@response.body)).sort
 
