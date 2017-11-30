@@ -32,8 +32,8 @@ json:
   - url: /api/v2/get_map_base_data
     name: get_map_base_data
     version: v2
-    v3_ready: false
-    v3_url: /api/v3/get_map_base_data
+    v3_ready: true
+    v3_url: /api/v3/contexts/:context_id/map_groups
     <<: *context_queries
   - url: /api/v2/get_linked_geoids
     name: get_linked_geoids

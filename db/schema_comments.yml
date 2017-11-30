@@ -189,6 +189,18 @@ tables:
         comment: When set, do not show this attribute
       - name: is_default
         comment: When set, show this attribute by default
+      - name: name
+        comment: Display name of the ind/quant
+      - name: attribute_type
+        comment: Type of the attribute (ind/quant)
+      - name: unit
+        comment: Name of the attribute's unit
+      - name: description
+        comment: Attribute's description
+      - name: aggregate_method
+        comment: The method used to aggregate the data
+        name: layer_attribute_id
+        comment: The attribute's original id
   - name: map_inds
     comment: Inds to display on map (see map_attributes.)
   - name: map_quants
