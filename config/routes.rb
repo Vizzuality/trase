@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         resources :columns, only: [:index]
       end
       get '/get_all_nodes', to: 'nodes#get_all_nodes'
+      resources :newsletter_subscriptions, only: [:create]
     end
     namespace :v2 do
       resources :geo_id, only: :index
@@ -25,7 +26,6 @@ Rails.application.routes.draw do
       # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
       resources :download, only: [:index], as: :download
       resources :indicators, only: [:index]
-      resources :newsletter_subscriptions, only: [:create]
 
       get '/get_map_base_data', to: 'map#index'
       get '/get_linked_geoids', to: 'geo_id#index'
