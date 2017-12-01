@@ -507,11 +507,14 @@ export function selectNodeFromGeoId(geoId) {
 
 export function selectExpandedNode(nodeId) {
   return (dispatch, getState) => {
-    if (!_isNodeVisible(getState, nodeId)) {
+    const { tool } = getState();
+    if (tool.selectedNodesIds.length === 1 && tool.selectedNodesIds.includes(nodeId)) {
+      dispatch(resetState());
+    } else {
       // check if we need to swap column
-      const node = getState().tool.nodesDict[nodeId];
+      const node = tool.nodesDict[nodeId];
       const columnGroup = node.columnGroup;
-      const currentColumnAtPos = getState().tool.selectedColumnsIds[columnGroup];
+      const currentColumnAtPos = tool.selectedColumnsIds[columnGroup];
       if (!node) {
         console.warn(`requested node ${nodeId} does not exist in nodesDict`);
         return;
@@ -519,11 +522,10 @@ export function selectExpandedNode(nodeId) {
       if (currentColumnAtPos !== node.columnId) {
         dispatch(selectColumn(columnGroup, node.columnId, false));
       }
+
       const currentSelectedNodesIds = getState().tool.selectedNodesIds;
       const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, nodeId);
       dispatch(toggleNodesExpand(true, selectedNodesIds));
-    } else {
-      dispatch(selectNode(nodeId, false));
     }
   };
 }
@@ -668,4 +670,4 @@ export function toggleMapSidebarGroup(id) {
   };
 }
 
-const _isNodeVisible = (getState, nodeId) => getState().tool.visibleNodes.map(node => node.id).indexOf(nodeId) > -1;
+// const _isNodeVisible = (getState, nodeId) => getState().tool.visibleNodes.map(node => node.id).indexOf(nodeId) > -1;

@@ -5,7 +5,7 @@ import Downshift from 'downshift/preact';
 import { findAll } from 'highlight-words-core';
 import cx from 'classnames';
 
-import { PROFILE_PAGES_WHITELIST } from 'constants';;
+import { PROFILE_PAGES_WHITELIST } from 'constants';
 
 import NodeTitleGroup from 'containers/shared/node-title-group-react.container';
 
@@ -105,7 +105,7 @@ export default class Search extends Component {
       </div>;
     }
 
-    return <div class='c-search'>
+    return (<div class='c-search'>
       <svg class='icon icon-search'><use xlinkHref='#icon-search' /></svg>
       <div class='c-search__veil' onClick={this.onCloseClicked} />
       <div class='autocomplete'>
@@ -166,7 +166,7 @@ export default class Search extends Component {
                               onClick={e => this.onAddNode(e, item, reset)}
                               class='c-button -medium-large'
                             >
-                              Add to supply chain
+                              {item.selected ? 'Remove from' : 'Add to'} supply chain
                             </button>
                             {
                               PROFILE_PAGES_WHITELIST.includes(item.type) && item.type.split(' & ')
@@ -190,6 +190,6 @@ export default class Search extends Component {
           }}
         </Downshift>
       </div>
-    </div>;
+    </div>);
   }
 }

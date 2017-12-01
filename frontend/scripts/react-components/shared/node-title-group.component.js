@@ -9,7 +9,10 @@ export default function NodeTitleGroup({ nodes = [], onClose }) {
     <div class={cx('c-nodes-titles')}>
       {
         nodes.map(node => (
-          <NodeTitle {...node} onClose={() => onClose(node.id)} />
+          <NodeTitle
+            {...node}
+            onClose={() => onClose(node.id)}
+          />
         ))
       }
     </div>
