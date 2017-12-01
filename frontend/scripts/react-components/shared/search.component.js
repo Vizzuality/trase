@@ -15,22 +15,30 @@ export default class Search extends Component {
     return parts.length > 1 ? parseInt(parts[0]) : selectedItem.id;
   }
 
+  static isValidChar(key) {
+    return (/^([a-z]|[A-Z]|ñ|Ñ|á|é|í|ó|ú|Á|É|Í|Ó|Ú){1}$/.test(key));
+  }
+
   constructor() {
     super();
     this.state = {
-      isOpened: false
+      isOpened: false,
+      specialCharPressed: false
     };
     this.onOpenClicked = this.onOpenClicked.bind(this);
     this.onCloseClicked = this.onCloseClicked.bind(this);
     this.onSelected = this.onSelected.bind(this);
     this.onAddNode = this.onAddNode.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
+    this.onKeyup = this.onKeyup.bind(this);
     this.getInputRef = this.getInputRef.bind(this);
     document.addEventListener('keydown', this.onKeydown);
+    document.addEventListener('keyup', this.onKeyup);
   }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onKeydown);
+    document.removeEventListener('keyup', this.onKeyup);
   }
 
   getInputRef(el) {
@@ -66,12 +74,19 @@ export default class Search extends Component {
   }
 
   onKeydown(e) {
-    const isValidChar = (/^([a-z]|[A-Z]|ñ|Ñ|á|é|í|ó|ú|Á|É|Í|Ó|Ú){1}$/.test(e.key));
-    if (!this.state.isOpened && isValidChar) {
+    const { specialCharPressed, isOpened } = this.state;
+    if (!isOpened && Search.isValidChar(e.key) && !specialCharPressed) {
       this.onOpenClicked();
-    }
-    if (e.key === 'Escape' && this.state.isOpened) {
+    } else if (e.key === 'Escape' && isOpened) {
       this.onCloseClicked();
+    } else {
+      this.setState({ specialCharPressed: true });
+    }
+  }
+
+  onKeyup(e) {
+    if (!Search.isValidChar(e.key)) {
+      this.setState({ specialCharPressed: false });
     }
   }
 
