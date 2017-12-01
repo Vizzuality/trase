@@ -42,11 +42,11 @@ const API_ENDPOINTS = {
 function getURLForV3(endpoint, params = {}) {
   if (params.hasOwnProperty('context_id') && endpoint.indexOf('$context_id$') !== -1) {
     endpoint = endpoint.replace('$context_id$', params.context_id);
-    delete params.context_id
+    delete params.context_id;
   }
   if (params.hasOwnProperty('node_id') && endpoint.indexOf('$node_id$') !== -1) {
     endpoint = endpoint.replace('$node_id$', params.node_id);
-    delete params.node_id
+    delete params.node_id;
   }
   return Object.keys(params).reduce((prev, current) => {
     const value = params[current];
