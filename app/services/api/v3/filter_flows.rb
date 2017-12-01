@@ -161,6 +161,9 @@ module Api
         # TODO: think about how to maybe move this out to the result object
         @total_height = active_nodes_by_position.first[1].values.
           reduce(:+)
+
+        @errors << 'No flows found' if @total_height.zero?
+
         @active_nodes = active_nodes_by_position.values.
           reduce(:merge)
       end
