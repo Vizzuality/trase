@@ -463,15 +463,13 @@ function getSelectedNodeIds(currentSelectedNodesIds, changedNodeId) {
 
 export function selectNode(nodeId, isAggregated = false) {
   return (dispatch, getState) => {
+    const { tool } = getState();
     if (isAggregated) {
       dispatch(selectView(true));
+    } else if (tool.areNodesExpanded) {
+      dispatch(selectExpandedNode(nodeId));
     } else {
-      const currentSelectedNodesIds = getState().tool.selectedNodesIds;
-      // we are unselecting the node that is currently expanded: just shrink it and bail
-      if (getState().tool.areNodesExpanded && currentSelectedNodesIds.length === 1 && currentSelectedNodesIds.indexOf(nodeId) > -1) {
-        dispatch(toggleNodesExpand());
-      }
-
+      const currentSelectedNodesIds = tool.selectedNodesIds;
       const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, nodeId);
 
       // send to state the new node selection along with new data, geoIds, etc

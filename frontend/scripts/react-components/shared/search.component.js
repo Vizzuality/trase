@@ -34,6 +34,7 @@ export default class Search extends Component {
     this.onKeydown = this.onKeydown.bind(this);
     this.onKeyup = this.onKeyup.bind(this);
     this.getInputRef = this.getInputRef.bind(this);
+    this.isNodeSelected = this.isNodeSelected.bind(this);
     document.addEventListener('keydown', this.onKeydown);
     document.addEventListener('keyup', this.onKeyup);
   }
@@ -62,8 +63,13 @@ export default class Search extends Component {
   }
 
   onSelected(selectedItem) {
+    if (this.isNodeSelected(selectedItem)) return;
     const id = Search.getNodeId(selectedItem);
-    this.props.onAddNode(id);
+    if (selectedItem.selected) {
+      this.props.onRemoveNode(id);
+    } else {
+      this.props.onAddNode(id);
+    }
     this.onCloseClicked();
   }
 
@@ -90,6 +96,15 @@ export default class Search extends Component {
     if (!Search.isValidChar(e.key)) {
       this.setState({ specialCharPressed: false });
     }
+  }
+
+  isNodeSelected(node) {
+    return [node, node.exporter, node.importer]
+      .filter(n => !!n)
+      .map(n => n.id)
+      .reduce((acc, next) => {
+        return acc || this.props.selectedNodesIds.includes(next);
+      }, false);
   }
 
   navigateToActor(e, item, type) {
@@ -149,6 +164,7 @@ export default class Search extends Component {
                         const segmentStr = item.name.substr(chunk.start, chunk.end - chunk.start);
                         return (chunk.highlight) ? <mark>{segmentStr}</mark> : <span>{segmentStr}</span>;
                       });
+                      const itemSelected = this.isNodeSelected(item);
                       return (
                         <div
                           {...getItemProps({ item })}
@@ -165,8 +181,9 @@ export default class Search extends Component {
                             <button
                               onClick={e => this.onAddNode(e, item, reset)}
                               class='c-button -medium-large'
+                              disabled={itemSelected}
                             >
-                              {item.selected ? 'Remove from' : 'Add to'} supply chain
+                              {itemSelected ? 'Already in' : 'Add to'} supply chain
                             </button>
                             {
                               PROFILE_PAGES_WHITELIST.includes(item.type) && item.type.split(' & ')

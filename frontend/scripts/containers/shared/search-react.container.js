@@ -2,7 +2,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'preact-redux';
 import groupBy from 'lodash/groupBy';
 import Search from 'react-components/shared/search.component.js';
-import { selectExpandedNode } from 'actions/tool.actions';
+import { selectExpandedNode, selectNode } from 'actions/tool.actions';
 import { ACTORS_COLUMN_IDS, IMPORTER_EXPORTER_TYPE } from 'constants';
 
 let searchNodes;
@@ -23,21 +23,23 @@ const mapStateToProps = (state) => {
           id: `${nA.id}_${nB.id}`,
           name: nA.name,
           type: IMPORTER_EXPORTER_TYPE,
-          selected: (selectedNodesIds.includes(nA.id) || selectedNodesIds.includes(nB.id)),
           [nA.type.toLowerCase()]: nA,
           [nB.type.toLowerCase()]: nB
         })
         : nA)
       .concat(allNodes.filter(x => !ACTORS_COLUMN_IDS.includes(x.columnId)));
   }
+
   return {
+    selectedNodesIds,
     nodes: searchNodes
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    onAddNode: nodeId => selectExpandedNode(nodeId)
+    onAddNode: nodeId => selectExpandedNode(nodeId),
+    onRemoveNode: nodeId => selectNode(nodeId)
   }, dispatch);
 };
 

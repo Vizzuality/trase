@@ -8,7 +8,7 @@
     "dev": "npm run webpack:server",
     "build": "npm run webpack:prod && cp -a public/. dist/",
     "webpack:prod": "NODE_ENV='production' webpack --config config/webpack.js -p",
-    "webpack:server": "webpack-dev-server --inline --port 8081 --host 0.0.0.0 --content-base public/ --config config/webpack.js",
+    "webpack:server": "webpack-dev-server --inline --port 3000 --host 0.0.0.0 --content-base public/ --config config/webpack.js",
     "eslint": "npm run lint-js",
     "lint-js": "eslint -c .eslintrc.js --ext .jsx,.js scripts",
     "lint-sass": "sass-lint -c .sass-lint.yml -v -q 'styles/**/*.scss'",

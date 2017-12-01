@@ -1,7 +1,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'preact-redux';
 import NodeTitleGroup from 'react-components/shared/node-title-group.component.js';
-import { selectExpandedNode } from 'actions/tool.actions';
+import { selectNode } from 'actions/tool.actions';
 
 const mapStateToProps = (state) => {
   const { selectedNodesData, recolorGroups } = state.tool;
@@ -17,7 +17,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    onClose: nodeId => selectExpandedNode(nodeId)
+    onClose: nodeId => selectNode(nodeId)
   }, dispatch);
 };
 
