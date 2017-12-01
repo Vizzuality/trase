@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         resources :map_groups, only: [:index]
         resources :columns, only: [:index]
         resources :flows, only: [:index]
+        resources :nodes, only: [:index]
       end
       get '/get_all_nodes', to: 'nodes#get_all_nodes'
       resources :newsletter_subscriptions, only: [:create]
