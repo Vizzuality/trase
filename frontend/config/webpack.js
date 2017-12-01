@@ -92,6 +92,7 @@ const config = {
       API_V1_URL: JSON.stringify(process.env.API_V1_URL),
       DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
       API_V2_URL: JSON.stringify(process.env.API_V2_URL),
+      API_V3_URL: JSON.stringify(process.env.API_V3_URL),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       DATA_FORM_ENDPOINT: JSON.stringify(process.env.DATA_FORM_ENDPOINT),
       DATA_FORM_ENABLED: process.env.DATA_FORM_ENABLED === 'true',

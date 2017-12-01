@@ -220,6 +220,7 @@ The project's main configuration values can be set using [environment variables]
 * NODE_ENV: environment used by the nodejs tasks
 * API_V1_URL: URL of the data API V1
 * API_V2_URL: URL of the data API V2
+* API_V3_URL: URL of the data API V3
 * API_CMS_URL: URL of the homepage stories API
 * API_STORY_CONTENT: URL of the deep dive stories API
 * API_SOCIAL: URL of the tweets API
