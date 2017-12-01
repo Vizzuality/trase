@@ -6,7 +6,7 @@ export default function (nodesDict, nodesMeta, layers) {
   const layersByUID = _.keyBy(layers, 'uid');
   const nodesDictWithMeta = {};
 
-  nodesMeta.forEach(nodeMeta => {
+  nodesMeta.data.forEach(nodeMeta => {
     const nodeId = parseInt(nodeMeta.node_id);
     const nodeWithMeta = nodesDictWithMeta[nodeId] || _.cloneDeep(nodesDict[nodeId]);
 
@@ -14,7 +14,7 @@ export default function (nodesDict, nodesMeta, layers) {
       nodeWithMeta.meta = {};
     }
 
-    const uid = getNodeMetaUid(nodeMeta.attribute_type.toLowerCase(), nodeMeta.attribute_id);
+    const uid = getNodeMetaUid(nodeMeta.attribute_type, nodeMeta.attribute_id);
     const layerByUID = layersByUID[uid];
 
 

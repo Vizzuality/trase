@@ -1,3 +1,5 @@
+# This is a temporary task, remove it ASAP
+
 namespace :validate do
   task get_node_attributes: :environment do
     node_ids = Node.

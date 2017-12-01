@@ -51,7 +51,7 @@ module Api
 
         quant_values = NodeQuant.get_attributes_for_nodes(node_ids, @context.id, start_year, end_year)
 
-        render json: (ind_values + quant_values)
+        render json: {data: ind_values + quant_values}
       end
     end
   end
