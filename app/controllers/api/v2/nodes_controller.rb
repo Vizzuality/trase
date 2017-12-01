@@ -27,6 +27,32 @@ module Api
 
         render json: matching_nodes, root: 'data', each_serializer: GetAllNodesSerializer
       end
+
+      # This is not part of the "official" v2 spec, but rather an attempt at reimplementing + improving
+      # the python's api get_nodes.
+      def node_attributes
+        start_year = params[:start_year].to_i
+        end_year = params[:end_year].to_i
+
+        unless params[:start_year].present?
+          raise ActionController::ParameterMissing, 'Required start_year missing'
+        end
+
+        unless params[:end_year].present?
+          raise ActionController::ParameterMissing, 'Required end_year missing'
+        end
+
+        node_ids = Node.
+          select('node_id').
+          joins('LEFT JOIN context_nodes ON nodes.node_type_id = context_nodes.node_type_id').
+          where('context_nodes.context_id = ?', @context.id)
+
+        ind_values = NodeInd.get_attributes_for_nodes(node_ids, @context.id, start_year, end_year)
+
+        quant_values = NodeQuant.get_attributes_for_nodes(node_ids, @context.id, start_year, end_year)
+
+        render json: {data: ind_values + quant_values}
+      end
     end
   end
 end

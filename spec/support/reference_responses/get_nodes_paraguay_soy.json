@@ -1,0 +1,920 @@
+{
+  "data": [
+    {
+      "id": 3415,
+      "values": [
+        {
+          "id": 31,
+          "rawValue": 725.9,
+          "type": "quant",
+          "value3": 1,
+          "value5": 1
+        },
+        {
+          "id": 34,
+          "rawValue": 2288306.0,
+          "type": "quant",
+          "value3": 3,
+          "value5": 5
+        },
+        {
+          "id": 28,
+          "rawValue": 2.359,
+          "type": "ind",
+          "value3": 2,
+          "value5": 3
+        }
+      ]
+    },
+    {
+      "id": 3418,
+      "values": [
+        {
+          "id": 31,
+          "rawValue": 2689.0,
+          "type": "quant",
+          "value3": 2,
+          "value5": 2
+        },
+        {
+          "id": 34,
+          "rawValue": 493014.0,
+          "type": "quant",
+          "value3": 2,
+          "value5": 4
+        },
+        {
+          "id": 28,
+          "rawValue": 2.77,
+          "type": "ind",
+          "value3": 2,
+          "value5": 3
+        }
+      ]
+    },
+    {
+      "id": 3420,
+      "values": [
+        {
+          "id": 34,
+          "rawValue": 8000.0,
+          "type": "quant",
+          "value3": 1,
+          "value5": 2
+        },
+        {
+          "id": 28,
+          "rawValue": 1.6,
+          "type": "ind",
+          "value3": 2,
+          "value5": 2
+        }
+      ]
+    },
+    {
+      "id": 3425,
+      "values": [
+        {
+          "id": 31,
+          "rawValue": 2966.4,
+          "type": "quant",
+          "value3": 2,
+          "value5": 2
+        },
+        {
+          "id": 34,
+          "rawValue": 1212720.0,
+          "type": "quant",
+          "value3": 3,
+          "value5": 5
+        },
+        {
+          "id": 28,
+          "rawValue": 2.602,
+          "type": "ind",
+          "value3": 2,
+          "value5": 3
+        }
+      ]
+    },
+    {
+      "id": 3426,
+      "values": [
+        {
+          "id": 31,
+          "rawValue": 576.5,
+          "type": "quant",
+          "value3": 1,
+          "value5": 1
+        },
+        {
+          "id": 34,
+          "rawValue": 449534.0,
+          "type": "quant",
+          "value3": 2,
+          "value5": 4
+        },
+        {
+          "id": 28,
+          "rawValue": 2.554,
+          "type": "ind",
+          "value3": 2,
+          "value5": 3
+        }
+      ]
+    },
+    {
+      "id": 3428,
+      "values": [
+        {
+          "id": 31,
+          "rawValue": 3368.2,
+          "type": "quant",
+          "value3": 2,
+          "value5": 2
+        },
+        {
+          "id": 34,
+          "rawValue": 1593284.0,
+          "type": "quant",
+          "value3": 3,
+          "value5": 5
+        },
+        {
+          "id": 28,
+          "rawValue": 2.34,
+          "type": "ind",
+          "value3": 2,
+          "value5": 3
+        }
+      ]
+    },
+    {
+      "id": 3435,
+      "values": [
+        {
+          "id": 31,
+          "rawValue": 1274.1,
+          "type": "quant",
+          "value3": 1,
+          "value5": 1
+        },
+        {
+          "id": 34,
+          "rawValue": 104001.0,
+          "type": "quant",
+          "value3": 2,
+          "value5": 3
+        },
+        {
+          "id": 28,
+          "rawValue": 2.555,
+          "type": "ind",
+          "value3": 2,
+          "value5": 3
+        }
+      ]
+    },
+    {
+      "id": 3455,
+      "values": [
+        {
+          "id": 31,
+          "rawValue": 473.6,
+          "type": "quant",
+          "value3": 1,
+          "value5": 1
+        },
+        {
+          "id": 34,
+          "rawValue": 1737417.0,
+          "type": "quant",
+          "value3": 3,
+          "value5": 5
+        },
+        {
+          "id": 28,
+          "rawValue": 2.749,
+          "type": "ind",
+          "value3": 2,
+          "value5": 3
+        }
+      ]
+    },
+    {
+      "id": 3462,
+      "values": [
+        {
+          "id": 34,
+          "rawValue": 69678.0,
+          "type": "quant",
+          "value3": 1,
+          "value5": 2
+        },
+        {
+          "id": 28,
+          "rawValue": 1.893,
+          "type": "ind",
+          "value3": 2,
+          "value5": 2
+        }
+      ]
+    },
+    {
+      "id": 3473,
+      "values": [
+        {
+          "id": 31,
+          "rawValue": 2240.4,
+          "type": "quant",
+          "value3": 2,
+          "value5": 2
+        },
+        {
+          "id": 34,
+          "rawValue": 864849.0,
+          "type": "quant",
+          "value3": 2,
+          "value5": 4
+        },
+        {
+          "id": 28,
+          "rawValue": 2.538,
+          "type": "ind",
+          "value3": 2,
+          "value5": 3
+        }
+      ]
+    },
+    {
+      "id": 3398,
+      "values": []
+    },
+    {
+      "id": 3416,
+      "values": [
+        {
+          "id": 31,
+          "rawValue": 725.9,
+          "type": "quant",
+          "value3": 1,
+          "value5": 1
+        }
+      ]
+    },
+    {
+      "id": 3419,
+      "values": [
+        {
+          "id": 31,
+          "rawValue": 2689.0,
+          "type": "quant",
+          "value3": 2,
+          "value5": 2
+        }
+      ]
+    },
+    {
+      "id": 3424,
+      "values": [
+        {
+          "id": 31,
+          "rawValue": 2966.4,
+          "type": "quant",
+          "value3": 2,
+          "value5": 2
+        }
+      ]
+    },
+    {
+      "id": 3427,
+      "values": [
+        {
+          "id": 31,
+          "rawValue": 3368.2,
+          "type": "quant",
+          "value3": 2,
+          "value5": 2
+        }
+      ]
+    },
+    {
+      "id": 3429,
+      "values": []
+    },
+    {
+      "id": 3434,
+      "values": [
+        {
+          "id": 31,
+          "rawValue": 1274.1,
+          "type": "quant",
+          "value3": 1,
+          "value5": 1
+        }
+      ]
+    },
+    {
+      "id": 3456,
+      "values": [
+        {
+          "id": 31,
+          "rawValue": 473.6,
+          "type": "quant",
+          "value3": 1,
+          "value5": 1
+        }
+      ]
+    },
+    {
+      "id": 3461,
+      "values": []
+    },
+    {
+      "id": 3465,
+      "values": []
+    },
+    {
+      "id": 3472,
+      "values": [
+        {
+          "id": 31,
+          "rawValue": 2240.4,
+          "type": "quant",
+          "value3": 2,
+          "value5": 2
+        }
+      ]
+    },
+    {
+      "id": 3399,
+      "values": []
+    },
+    {
+      "id": 587,
+      "values": []
+    },
+    {
+      "id": 3400,
+      "values": []
+    },
+    {
+      "id": 3401,
+      "values": []
+    },
+    {
+      "id": 3402,
+      "values": []
+    },
+    {
+      "id": 3403,
+      "values": []
+    },
+    {
+      "id": 3404,
+      "values": []
+    },
+    {
+      "id": 3405,
+      "values": []
+    },
+    {
+      "id": 3406,
+      "values": []
+    },
+    {
+      "id": 3407,
+      "values": []
+    },
+    {
+      "id": 3408,
+      "values": []
+    },
+    {
+      "id": 3409,
+      "values": []
+    },
+    {
+      "id": 3410,
+      "values": []
+    },
+    {
+      "id": 3411,
+      "values": []
+    },
+    {
+      "id": 3412,
+      "values": []
+    },
+    {
+      "id": 3413,
+      "values": []
+    },
+    {
+      "id": 3414,
+      "values": []
+    },
+    {
+      "id": 3417,
+      "values": []
+    },
+    {
+      "id": 3421,
+      "values": []
+    },
+    {
+      "id": 3422,
+      "values": []
+    },
+    {
+      "id": 3423,
+      "values": []
+    },
+    {
+      "id": 3430,
+      "values": []
+    },
+    {
+      "id": 3431,
+      "values": []
+    },
+    {
+      "id": 3432,
+      "values": []
+    },
+    {
+      "id": 3433,
+      "values": []
+    },
+    {
+      "id": 3436,
+      "values": []
+    },
+    {
+      "id": 3437,
+      "values": []
+    },
+    {
+      "id": 3438,
+      "values": []
+    },
+    {
+      "id": 3439,
+      "values": []
+    },
+    {
+      "id": 3440,
+      "values": []
+    },
+    {
+      "id": 3441,
+      "values": []
+    },
+    {
+      "id": 3442,
+      "values": []
+    },
+    {
+      "id": 3443,
+      "values": []
+    },
+    {
+      "id": 3444,
+      "values": []
+    },
+    {
+      "id": 3445,
+      "values": []
+    },
+    {
+      "id": 3446,
+      "values": []
+    },
+    {
+      "id": 3447,
+      "values": []
+    },
+    {
+      "id": 3448,
+      "values": []
+    },
+    {
+      "id": 3449,
+      "values": []
+    },
+    {
+      "id": 3450,
+      "values": []
+    },
+    {
+      "id": 3451,
+      "values": []
+    },
+    {
+      "id": 3452,
+      "values": []
+    },
+    {
+      "id": 3453,
+      "values": []
+    },
+    {
+      "id": 3454,
+      "values": []
+    },
+    {
+      "id": 3457,
+      "values": []
+    },
+    {
+      "id": 3458,
+      "values": []
+    },
+    {
+      "id": 3459,
+      "values": []
+    },
+    {
+      "id": 3460,
+      "values": []
+    },
+    {
+      "id": 3463,
+      "values": []
+    },
+    {
+      "id": 3464,
+      "values": []
+    },
+    {
+      "id": 3466,
+      "values": []
+    },
+    {
+      "id": 3467,
+      "values": []
+    },
+    {
+      "id": 3468,
+      "values": []
+    },
+    {
+      "id": 3469,
+      "values": []
+    },
+    {
+      "id": 3470,
+      "values": []
+    },
+    {
+      "id": 3471,
+      "values": []
+    },
+    {
+      "id": 3474,
+      "values": []
+    },
+    {
+      "id": 3475,
+      "values": []
+    },
+    {
+      "id": 3476,
+      "values": []
+    },
+    {
+      "id": 3477,
+      "values": []
+    },
+    {
+      "id": 3478,
+      "values": []
+    },
+    {
+      "id": 3479,
+      "values": []
+    },
+    {
+      "id": 3480,
+      "values": []
+    },
+    {
+      "id": 3481,
+      "values": []
+    },
+    {
+      "id": 3482,
+      "values": []
+    },
+    {
+      "id": 3483,
+      "values": []
+    },
+    {
+      "id": 3484,
+      "values": []
+    },
+    {
+      "id": 3486,
+      "values": []
+    },
+    {
+      "id": 3487,
+      "values": []
+    },
+    {
+      "id": 3488,
+      "values": []
+    },
+    {
+      "id": 3489,
+      "values": []
+    },
+    {
+      "id": 3490,
+      "values": []
+    },
+    {
+      "id": 3491,
+      "values": []
+    },
+    {
+      "id": 3492,
+      "values": []
+    },
+    {
+      "id": 3493,
+      "values": []
+    },
+    {
+      "id": 3494,
+      "values": []
+    },
+    {
+      "id": 3495,
+      "values": []
+    },
+    {
+      "id": 3496,
+      "values": []
+    },
+    {
+      "id": 6,
+      "values": []
+    },
+    {
+      "id": 96,
+      "values": []
+    },
+    {
+      "id": 230,
+      "values": []
+    },
+    {
+      "id": 290,
+      "values": []
+    },
+    {
+      "id": 424,
+      "values": []
+    },
+    {
+      "id": 683,
+      "values": []
+    },
+    {
+      "id": 732,
+      "values": []
+    },
+    {
+      "id": 840,
+      "values": []
+    },
+    {
+      "id": 842,
+      "values": []
+    },
+    {
+      "id": 914,
+      "values": []
+    },
+    {
+      "id": 976,
+      "values": []
+    },
+    {
+      "id": 981,
+      "values": []
+    },
+    {
+      "id": 1112,
+      "values": []
+    },
+    {
+      "id": 1158,
+      "values": []
+    },
+    {
+      "id": 1160,
+      "values": []
+    },
+    {
+      "id": 1201,
+      "values": []
+    },
+    {
+      "id": 1240,
+      "values": []
+    },
+    {
+      "id": 1324,
+      "values": []
+    },
+    {
+      "id": 1328,
+      "values": []
+    },
+    {
+      "id": 1370,
+      "values": []
+    },
+    {
+      "id": 1376,
+      "values": []
+    },
+    {
+      "id": 1381,
+      "values": []
+    },
+    {
+      "id": 1397,
+      "values": []
+    },
+    {
+      "id": 1474,
+      "values": []
+    },
+    {
+      "id": 1536,
+      "values": []
+    },
+    {
+      "id": 1627,
+      "values": []
+    },
+    {
+      "id": 1635,
+      "values": []
+    },
+    {
+      "id": 1723,
+      "values": []
+    },
+    {
+      "id": 1735,
+      "values": []
+    },
+    {
+      "id": 1797,
+      "values": []
+    },
+    {
+      "id": 1822,
+      "values": []
+    },
+    {
+      "id": 1840,
+      "values": []
+    },
+    {
+      "id": 1847,
+      "values": []
+    },
+    {
+      "id": 1947,
+      "values": []
+    },
+    {
+      "id": 1974,
+      "values": []
+    },
+    {
+      "id": 2097,
+      "values": []
+    },
+    {
+      "id": 2108,
+      "values": []
+    },
+    {
+      "id": 2167,
+      "values": []
+    },
+    {
+      "id": 2213,
+      "values": []
+    },
+    {
+      "id": 2367,
+      "values": []
+    },
+    {
+      "id": 2391,
+      "values": []
+    },
+    {
+      "id": 2692,
+      "values": []
+    },
+    {
+      "id": 2761,
+      "values": []
+    },
+    {
+      "id": 2762,
+      "values": []
+    },
+    {
+      "id": 2766,
+      "values": []
+    },
+    {
+      "id": 2798,
+      "values": []
+    },
+    {
+      "id": 2857,
+      "values": []
+    },
+    {
+      "id": 2916,
+      "values": []
+    },
+    {
+      "id": 2927,
+      "values": []
+    },
+    {
+      "id": 2960,
+      "values": []
+    },
+    {
+      "id": 2961,
+      "values": []
+    },
+    {
+      "id": 2962,
+      "values": []
+    },
+    {
+      "id": 2999,
+      "values": []
+    },
+    {
+      "id": 3031,
+      "values": []
+    },
+    {
+      "id": 3053,
+      "values": []
+    },
+    {
+      "id": 3270,
+      "values": []
+    },
+    {
+      "id": 3296,
+      "values": []
+    },
+    {
+      "id": 3485,
+      "values": []
+    },
+    {
+      "id": 8,
+      "values": []
+    }
+  ],
+  "include": {
+    "includedLayers": [
+      {
+        "id": 31,
+        "name": "Territorial deforestation",
+        "type": "quant",
+        "unit": "Ha"
+      },
+      {
+        "id": 34,
+        "name": "Production of soy",
+        "type": "quant",
+        "unit": "Tn"
+      },
+      {
+        "id": 28,
+        "name": "Soy yield",
+        "type": "ind",
+        "unit": "Tn/ha"
+      }
+    ]
+  }
+}
