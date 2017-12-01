@@ -43,6 +43,9 @@ Style/Documentation:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
+Style/Lambda:
+  Enabled: false
+
 Style/PercentLiteralDelimiters:
   Enabled: false
 
