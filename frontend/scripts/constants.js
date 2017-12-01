@@ -1,5 +1,6 @@
 export const ACTORS_COLUMN_IDS = [6, 7];
-
+export const IMPORTER_EXPORTER_TYPE = 'IMPORTER & EXPORTER';
+export const PROFILE_PAGES_WHITELIST = ['EXPORTER', 'IMPORTER', 'MUNICIPALITY', IMPORTER_EXPORTER_TYPE];
 export const NUM_DECIMALS = {
   // resize by
   'trade volume': 0,

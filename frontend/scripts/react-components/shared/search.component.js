@@ -5,6 +5,8 @@ import Downshift from 'downshift/preact';
 import { findAll } from 'highlight-words-core';
 import cx from 'classnames';
 
+import { PROFILE_PAGES_WHITELIST } from 'constants';;
+
 import NodeTitleGroup from 'containers/shared/node-title-group-react.container';
 
 export default class Search extends Component {
@@ -61,7 +63,7 @@ export default class Search extends Component {
 
   onSelected(selectedItem) {
     const id = Search.getNodeId(selectedItem);
-    this.props.onRowSelected(id);
+    this.props.onAddNode(id);
     this.onCloseClicked();
   }
 
@@ -167,7 +169,7 @@ export default class Search extends Component {
                               Add to supply chain
                             </button>
                             {
-                              item.type.split(' & ')
+                              PROFILE_PAGES_WHITELIST.includes(item.type) && item.type.split(' & ')
                                 .map(type => (
                                   <button
                                     role='link'
