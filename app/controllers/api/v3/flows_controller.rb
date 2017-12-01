@@ -4,14 +4,14 @@ module Api
       before_action :set_filter_params, only: :index
 
       def index
-        @flows_result = Api::V3::FilterFlows.new(@context, @filter_params).call
+        @flows_result = Api::V3::Flows::Filter.new(@context, @filter_params).call
 
         if @flows_result.errors.any?
           render json: @flows_result.errors
         else
           render json: @flows_result,
                  adapter: :attributes,
-                 serializer: Api::V3::Flows::FlowsResultSerializer
+                 serializer: Api::V3::Flows::ResultSerializer
         end
       end
 
