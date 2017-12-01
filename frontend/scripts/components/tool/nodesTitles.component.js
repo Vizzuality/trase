@@ -18,10 +18,10 @@ export default class {
   }
 
   selectNodes(data) {
-    this._update(true, data.nodesData, data.recolorGroups, data.currentQuant);
+    this._update(true, data.nodesData, data.recolorGroups, data.currentQuant, data.selectedYears);
   }
 
-  highlightNode({ isHighlight, nodesData, recolorGroups, coordinates, isMapVisible, currentQuant }) {
+  highlightNode({ isHighlight, nodesData, recolorGroups, coordinates, isMapVisible, currentQuant, selectedYears }) {
     this.tooltip.hide();
     if (nodesData === undefined || !nodesData.length) {
       return;
@@ -31,18 +31,18 @@ export default class {
       this._showTooltip(nodesData, coordinates, currentQuant);
     }
 
-    // TODO nodesData[0] === undefined should never happen, this is a smell form the reducer
+    // TODO nodesData[0] === undefined should never happen, this is a smell from the reducer
     if (nodesData === undefined || nodesData.length === 0 || nodesData[0] === undefined) {
       this.el.classList.add('is-hidden');
     } else {
       if (isMapVisible === false) {
         this.el.classList.remove('is-hidden');
-        this._update(!isHighlight, nodesData, recolorGroups, currentQuant);
+        this._update(!isHighlight, nodesData, recolorGroups, currentQuant, selectedYears);
       }
     }
   }
 
-  _update(isSelect, nodesData, recolorGroups = null, currentQuant) {
+  _update(isSelect, nodesData, recolorGroups = null, currentQuant, selectedYears) {
     this.clear.classList.toggle('is-hidden', !isSelect);
 
     Array.prototype.slice.call(document.querySelectorAll('.js-node-title.-link'), 0).forEach((nodeTitle) => {
@@ -54,6 +54,7 @@ export default class {
     });
 
     const templateData = {
+      year: selectedYears ? selectedYears[0] : null,
       nodes: nodesData.map(node => {
         let renderedQuant;
         if (node.quant !== undefined) {
@@ -97,7 +98,7 @@ export default class {
   }
 
   _onNodeTitleClick(e) {
-    this.callbacks.onProfileLinkClicked(parseInt(e.currentTarget.dataset.nodeId));
+    this.callbacks.onProfileLinkClicked(parseInt(e.currentTarget.dataset.nodeId), parseInt(e.currentTarget.dataset.year));
   }
 
   _onNodeTitleCloseClick(e) {

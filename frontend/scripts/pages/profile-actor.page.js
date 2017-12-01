@@ -141,7 +141,7 @@ const _build = (data, nodeId) => {
 
 
   if (data.top_countries && data.top_countries.lines.length) {
-    document.querySelector('.js-top-map-title').textContent = `Top destination countries of Soy ${verb} by ${_.capitalize(data.node_name)}`;
+    document.querySelector('.js-top-map-title').textContent = `Top destination countries of Soy ${verb} by ${_.capitalize(data.node_name)} in ${year}`;
 
     choroLegend(null, '.js-destination-legend', {
       title: [`Soy ${verb} in ${year}`, '(tonnes)'],
@@ -211,7 +211,8 @@ const _build = (data, nodeId) => {
       data: data.sustainability,
       tabsTitle,
       type: 't_head_actors',
-      target: (item) => { return (item.name === 'Municipalities') ? 'place' : null; }
+      target: (item) => { return (item.name === 'Municipalities') ? 'place' : null; },
+      year
     });
   }
 
@@ -223,6 +224,7 @@ const _build = (data, nodeId) => {
       xDimension: data.companies_sourcing.dimensions_x,
       node: { id: nodeId, name: data.node_name },
       verbGerund,
+      year,
       showTooltipCallback: (company, indicator, x, y) => {
         tooltip.show(x, y,
           company.name,
@@ -262,8 +264,8 @@ const _setInfo = (info, nodeId) => {
   } else {
     document.querySelector('.js-zero-deforestation-commitment [data-value="no"]').classList.remove('is-hidden');
   }
-  document.querySelector('.js-link-map').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true`);
-  document.querySelector('.js-link-supply-chain').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]`);
+  document.querySelector('.js-link-map').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true&isMapVisible=true&selectedYears=[${year},${year}]`);
+  document.querySelector('.js-link-supply-chain').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
   document.querySelector('.js-summary-text').textContent = info.summary ? info.summary : '-';
 };
 
@@ -281,6 +283,7 @@ const _showErrorMessage = () => {
 
 const _setTopSourceSwitcher = (data, verb) => {
   const template = TopSourceTemplate({
+    year,
     verb,
     nodeName: _.capitalize(data.node_name),
     switchers: Object.keys(data.top_sources).filter(key => !(ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)))

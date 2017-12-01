@@ -10,6 +10,7 @@ export default class {
     this.tabsTitle = settings.tabsTitle;
     this.target = settings.target;
     this.key = `table_${new Date().getTime()}`;
+    this.year = settings.year;
 
     this.render();
   }
@@ -34,7 +35,8 @@ export default class {
         el: document.querySelector(`.${this.key}_${i}`),
         data: item,
         type: this.type,
-        target: (_.isFunction(this.target)) ? this.target(item) : this.target
+        target: (_.isFunction(this.target)) ? this.target(item) : this.target,
+        year: this.year
       });
     });
   }

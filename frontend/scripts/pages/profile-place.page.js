@@ -114,8 +114,9 @@ const _build = data => {
       el: document.querySelector('.js-top-trader'),
       data: data.top_traders.actors,
       targetLink: 'actor',
-      title: `Top traders of soy in ${data.municipality_name}`,
-      unit: '%'
+      title: `Top traders of soy in ${data.municipality_name} in ${year}`,
+      unit: '%',
+      year
     });
   }
 
@@ -132,7 +133,7 @@ const _build = data => {
     new Top({
       el: document.querySelector('.js-top-consumer'),
       data: data.top_consumers.countries,
-      title: `Top importer countries of ${formatApostrophe(_.capitalize(data.municipality_name))} soy`,
+      title: `Top importer countries of ${formatApostrophe(_.capitalize(data.municipality_name))} soy in ${year}`,
       unit: '%'
     });
   }
@@ -142,7 +143,8 @@ const _build = data => {
       el: document.querySelector('.js-score-table'),
       data: data.indicators,
       tabsTitle: 'Sustainability indicators:',
-      type: 't_head_places'
+      type: 't_head_places',
+      year
     });
   }
 };
@@ -159,14 +161,14 @@ const _setInfo = (info, nodeId) => {
   document.querySelector('.js-area').innerHTML = info.area !== null ? formatValue(info.area, 'area') : '-';
   document.querySelector('.js-soy-land').innerHTML = (info.soy_area !== null && info.soy_area !== 'NaN') ? formatValue(info.soy_area, 'area') : '-';
   document.querySelector('.js-soy-production').innerHTML = info.soy_production !== null ? formatValue(info.soy_production, 'tons'): '-';
-  document.querySelector('.js-link-map').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true`);
-  document.querySelector('.js-link-supply-chain').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]`);
+  document.querySelector('.js-link-map').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
+  document.querySelector('.js-link-supply-chain').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
   document.querySelector('.js-line-title').innerHTML = info.municipality ? `Deforestation trajectory of ${info.municipality}` : '-';
   document.querySelector('.js-municipality').innerHTML = info.municipality ? info.municipality : '-';
   document.querySelector('.js-link-button-municipality').textContent = formatApostrophe(_.capitalize(info.municipality)) + ' PROFILE';
 
   if (info.soy_production === 0) {
-    info.summary = `${info.municipality} did not produce any soy in 2015`;
+    info.summary = `${info.municipality} did not produce any soy in ${year}`;
   }
   document.querySelector('.js-summary-text').innerHTML = info.summary ? info.summary : '-';
 
