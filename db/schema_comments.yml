@@ -189,18 +189,6 @@ tables:
         comment: When set, do not show this attribute
       - name: is_default
         comment: When set, show this attribute by default
-      - name: name
-        comment: Display name of the ind/quant
-      - name: attribute_type
-        comment: Type of the attribute (ind/quant)
-      - name: unit
-        comment: Name of the attribute's unit
-      - name: description
-        comment: Attribute's description
-      - name: aggregate_method
-        comment: The method used to aggregate the data
-        name: layer_attribute_id
-        comment: The attribute's original id
   - name: map_inds
     comment: Inds to display on map (see map_attributes.)
   - name: map_quants
@@ -357,6 +345,18 @@ materialized_views:
     columns:
       - name: attribute_id
         comment: References the unique id in attributes_mv.
+      - name: name
+        comment: Display name of the ind/quant
+      - name: attribute_type
+        comment: Type of the attribute (ind/quant)
+      - name: unit
+        comment: Name of the attribute''s unit
+      - name: description
+        comment: Attribute''s description
+      - name: aggregate_method
+        comment: The method used to aggregate the data
+        name: layer_attribute_id
+        comment: The attribute''s original id
   - name: recolor_by_attributes_mv
     comment: Materialized view which merges recolor_by_inds and recolor_by_quals with recolor_by_attributes.
     columns:

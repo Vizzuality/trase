@@ -2838,6 +2838,55 @@ UNION ALL
 
 
 --
+-- Name: MATERIALIZED VIEW map_attributes_mv; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW map_attributes_mv IS 'Materialized view which merges map_inds and map_quants with map_attributes.';
+
+
+--
+-- Name: COLUMN map_attributes_mv.attribute_id; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+
+
+--
+-- Name: COLUMN map_attributes_mv.name; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes_mv.name IS 'Display name of the ind/quant';
+
+
+--
+-- Name: COLUMN map_attributes_mv.attribute_type; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes_mv.attribute_type IS 'Type of the attribute (ind/quant)';
+
+
+--
+-- Name: COLUMN map_attributes_mv.unit; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes_mv.unit IS 'Name of the attribute''s unit';
+
+
+--
+-- Name: COLUMN map_attributes_mv.description; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes_mv.description IS 'Attribute''s description';
+
+
+--
+-- Name: COLUMN map_attributes_mv.layer_attribute_id; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes_mv.layer_attribute_id IS 'The attribute''s original id';
+
+
+--
 -- Name: map_inds_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
