@@ -508,6 +508,17 @@ export function selectNodeFromGeoId(geoId) {
 export function selectExpandedNode(nodeId) {
   return (dispatch, getState) => {
     if (!_isNodeVisible(getState, nodeId)) {
+      // check if we need to swap column
+      const node = getState().tool.nodesDict[nodeId];
+      const columnGroup = node.columnGroup;
+      const currentColumnAtPos = getState().tool.selectedColumnsIds[columnGroup];
+      if (!node) {
+        console.warn(`requested node ${nodeId} does not exist in nodesDict`);
+        return;
+      }
+      if (currentColumnAtPos !== node.columnId) {
+        dispatch(selectColumn(columnGroup, node.columnId, false));
+      }
       const currentSelectedNodesIds = getState().tool.selectedNodesIds;
       const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, nodeId);
       dispatch(toggleNodesExpand(true, selectedNodesIds));
@@ -558,32 +569,6 @@ export function toggleNodesExpand(forceExpand = false, forceExpandNodeIds) {
     }
 
     dispatch(loadLinks());
-  };
-}
-
-export function searchNode(nodeId) {
-  return (dispatch, getState) => {
-    if (!_isNodeVisible(getState, nodeId)) {
-
-      // check if we need to swap column
-      const node = getState().tool.nodesDict[nodeId];
-      const columnGroup = node.columnGroup;
-      const currentColumnAtPos = getState().tool.selectedColumnsIds[columnGroup];
-      if (!node) {
-        console.warn(`requested node ${nodeId} does not exist in nodesDict`);
-        return;
-      }
-      if (currentColumnAtPos !== node.columnId) {
-        dispatch(selectColumn(columnGroup, node.columnId, false));
-      }
-      // 1. before: go to detailed mode and select
-      // dispatch(selectView(true));
-      // 2. as per SEI request: go to expanded node
-      dispatch(toggleNodesExpand(true, [nodeId]));
-
-    } else {
-      dispatch(selectNode(nodeId, false));
-    }
   };
 }
 
