@@ -28,6 +28,7 @@ Layout/SpaceInsideHashLiteralBraces:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
+    - 'lib/tasks/**/*'
 
 Style/AndOr:
   Enabled: false

@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     namespace :v3 do
       resources :contexts, only: [:index] do
         resources :columns, only: [:index]
+        resources :flows, only: [:index]
       end
       get '/get_all_nodes', to: 'nodes#get_all_nodes'
       resources :newsletter_subscriptions, only: [:create]
