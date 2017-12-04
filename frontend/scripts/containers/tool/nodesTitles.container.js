@@ -8,7 +8,8 @@ const mapMethodsToState = (state) => ({
   selectNodes: {
     nodesData: state.tool.selectedNodesData,
     recolorGroups: state.tool.recolorGroups,
-    currentQuant: state.tool.currentQuant
+    currentQuant: state.tool.currentQuant,
+    selectedYears: state.tool.selectedYears
   },
   highlightNode: {
     _comparedValue: (state) => state.tool.highlightedNodeData,
@@ -19,7 +20,8 @@ const mapMethodsToState = (state) => ({
         recolorGroups: state.tool.recolorGroups,
         coordinates: state.tool.highlightedNodeCoordinates,
         isMapVisible: state.tool.isMapVisible,
-        currentQuant: state.tool.currentQuant
+        currentQuant: state.tool.currentQuant,
+        selectedYears: state.tool.selectedYears
       };
     }
   }
@@ -27,7 +29,7 @@ const mapMethodsToState = (state) => ({
 
 const mapViewCallbacksToActions = () => ({
   onCloseNodeClicked: (id) => selectNode(id),
-  onProfileLinkClicked: (id) => navigateToProfile(id),
+  onProfileLinkClicked: (id, year) => navigateToProfile(id, year),
   onClearClick: () => resetState()
 });
 

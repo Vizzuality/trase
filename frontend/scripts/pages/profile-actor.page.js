@@ -27,6 +27,7 @@ import { getURLParams } from 'utils/stateURL';
 import smoothScroll from 'utils/smoothScroll';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
+import swapProfileYear from 'utils/swapProfileYear';
 import _ from 'lodash';
 import { getURLFromParams, GET_ACTOR_FACTSHEET } from '../utils/getURLFromParams';
 import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST } from 'constants';
@@ -41,12 +42,8 @@ let print = false;
 
 const tooltip = new Tooltip('.js-infowindow');
 const LINE_MARGINS = { top: 10, right: 100, bottom: 25, left: 50 };
+let year;
 let lineSettings;
-
-const _onSelect = function(value) {
-  this.setTitle(value);
-  defaults[this.id] = value;
-};
 
 const _initSource = (selectedSource, data) => {
   if (data.top_sources === undefined) {
@@ -138,7 +135,7 @@ const _build = (data, nodeId) => {
     _setTopSourceSwitcher(data, verb);
 
     choroLegend(null, '.js-source-legend', {
-      title: [`Soy ${verb} in 2015`, '(tonnes)'],
+      title: [`Soy ${verb} in ${year}`, '(tonnes)'],
       bucket: [[data.top_sources.buckets[0], ...data.top_sources.buckets]]
     });
 
@@ -147,10 +144,10 @@ const _build = (data, nodeId) => {
 
 
   if (data.top_countries && data.top_countries.lines.length) {
-    document.querySelector('.js-top-map-title').textContent = `Top destination countries of Soy ${verb} by ${_.capitalize(data.node_name)}`;
+    document.querySelector('.js-top-map-title').textContent = `Top destination countries of Soy ${verb} by ${_.capitalize(data.node_name)} in ${year}`;
 
     choroLegend(null, '.js-destination-legend', {
-      title: [`Soy ${verb} in 2015`, '(tonnes)'],
+      title: [`Soy ${verb} in ${year}`, '(tonnes)'],
       bucket: [[data.top_countries.buckets[0], ...data.top_countries.buckets]]
     });
 
@@ -210,14 +207,15 @@ const _build = (data, nodeId) => {
   }
 
   if (data.sustainability && data.sustainability.length) {
-    const tabsTitle = `Deforestation risk associated with ${formatApostrophe(data.node_name)} top sourcing regions in 2015:`;
+    const tabsTitle = `Deforestation risk associated with ${formatApostrophe(data.node_name)} top sourcing regions in ${year}:`;
 
     new MultiTable({
       el: document.querySelector('.js-sustainability-table'),
       data: data.sustainability,
       tabsTitle,
       type: 't_head_actors',
-      target: (item) => { return (item.name === 'Municipalities') ? 'place' : null; }
+      target: (item) => { return (item.name === 'Municipalities') ? 'place' : null; },
+      year
     });
   }
 
@@ -229,6 +227,7 @@ const _build = (data, nodeId) => {
       xDimension: data.companies_sourcing.dimensions_x,
       node: { id: nodeId, name: data.node_name },
       verbGerund,
+      year,
       showTooltipCallback: (company, indicator, x, y) => {
         tooltip.show(x, y,
           company.name,
@@ -268,8 +267,8 @@ const _setInfo = (info, nodeId) => {
   } else {
     document.querySelector('.js-zero-deforestation-commitment [data-value="no"]').classList.remove('is-hidden');
   }
-  document.querySelector('.js-link-map').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true`);
-  document.querySelector('.js-link-supply-chain').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]`);
+  document.querySelector('.js-link-map').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true&isMapVisible=true&selectedYears=[${year},${year}]`);
+  document.querySelector('.js-link-supply-chain').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
   document.querySelector('.js-summary-text').textContent = info.summary ? info.summary : '-';
 };
 
@@ -287,6 +286,7 @@ const _showErrorMessage = () => {
 
 const _setTopSourceSwitcher = (data, verb) => {
   const template = TopSourceTemplate({
+    year,
     verb,
     nodeName: _.capitalize(data.node_name),
     switchers: Object.keys(data.top_sources).filter(key => !(ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)))
@@ -319,9 +319,9 @@ const _init = ()  => {
   const url = window.location.search;
   const urlParams = getURLParams(url);
   const nodeId = urlParams.nodeId;
-  const commodity = urlParams.commodity || defaults.commodity;
+  year = urlParams.year || 2015;
 
-  const actorFactsheetURL = getURLFromParams(GET_ACTOR_FACTSHEET, { node_id: nodeId });
+  const actorFactsheetURL = getURLFromParams(GET_ACTOR_FACTSHEET, { node_id: nodeId, year });
 
   fetch(actorFactsheetURL)
     .then((response) => {
@@ -353,8 +353,11 @@ const _init = ()  => {
       _setInfo(info, nodeId);
       _setEventListeners();
 
-      const commodityDropdown = new Dropdown('commodity', _onSelect);
-      commodityDropdown.setTitle(_.capitalize(commodity));
+      const yearDropdown = new Dropdown('year', year => {
+        yearDropdown.setTitle(year);
+        swapProfileYear(year);
+      });
+      yearDropdown.setTitle(year);
 
       _build(data, nodeId);
     });

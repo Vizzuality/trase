@@ -2,7 +2,7 @@
 
 .c-overall-info {
 
-  .dropdown-item {
+  .dropdown-element {
     display: inline-block;
 
     &:not(:last-child) {
@@ -24,10 +24,25 @@
 
         &:after {
           content: normal;
+        }
+      }
+    }
+
+    .c-dropdown.-active {
+      cursor: pointer;
+
+      > .dropdown-title {
+        &::after {
+          content: '';
           width: 14px;
           height: 14px;
           border: 3px solid $medium-pink;
         }
+      }
+
+      > .dropdown-list {
+        top: 100%;
+        min-width: 140px;
       }
     }
   }

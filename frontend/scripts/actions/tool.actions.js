@@ -581,9 +581,9 @@ export function searchNode(nodeId) {
   };
 }
 
-export function navigateToProfile(nodeId) {
+export function navigateToProfile(nodeId, year) {
   return (dispatch, getState) => {
-    const url = getProfileLink(getState().tool.nodesDict[nodeId]);
+    const url = getProfileLink(getState().tool.nodesDict[nodeId], year);
     window.location.href = url;
   };
 }
