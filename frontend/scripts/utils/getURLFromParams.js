@@ -18,17 +18,19 @@ export const GET_POSTS = 'GET_POSTS';
 export const GET_SITE_DIVE = 'GET_SITE_DIVE';
 
 const API_ENDPOINTS = {
+  [GET_CONTEXTS]: { api: 3, endpoint: '/contexts' },
+  [GET_FLOWS]: { api: 3, endpoint: '/contexts/$context_id$/flows' },
+  [GET_COLUMNS]: { api: 3, endpoint: '/contexts/$context_id$/columns' },
+
   [GET_SITE_DIVE]: { api: 'content', endpoint: '/site_dive' },
   [GET_POSTS]: { api: 'content', endpoint: '/posts' },
   [GET_TWEETS]: { api: 'content', endpoint: '/tweets' },
+
   [GET_DISCLAIMER]: { api: 'local', endpoint: 'disclaimer.json' },
   [GET_TOOLTIPS]: { api: 'local', endpoint: 'tooltips.json' },
-  [GET_CONTEXTS]: { api: 2, endpoint: '/get_contexts' },
+
   [GET_ALL_NODES]: { api: 2, endpoint: '/get_all_nodes' },
-  [GET_COLUMNS]: { api: 2, endpoint: '/get_columns' },
   [GET_NODE_ATTRIBUTES]: { api: 2, endpoint: '/get_node_attributes' },
-  [GET_FLOWS]: { api: 1, endpoint: '/get_flows' },
-  // [GET_FLOWS]: { api: 3, endpoint: '/contexts/$context_id$/flows' },
   [GET_MAP_BASE_DATA]: { api: 2, endpoint: '/get_map_base_data' },
   [GET_LINKED_GEO_IDS]: { api: 2, endpoint: '/get_linked_geoids' },
   [GET_PLACE_FACTSHEET]: { api: 2, endpoint: '/get_place_node_attributes', mock: 'mocks/v1_get_place_node_attributes.json' },
