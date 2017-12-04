@@ -118,7 +118,7 @@ export default class Search extends Component {
     window.location = `profile-${node.profileType}.html?nodeId=${node.id}`;
   }
 
-  render({ nodes = [] }) {
+  render({ nodes = [], selectedNodesIds = [] }) {
     if (this.state.isOpened === false) {
       return <div onClick={this.onOpenClicked} class='nav-item'>
         <svg class='icon icon-search'><use xlinkHref='#icon-search' /></svg>
@@ -144,7 +144,11 @@ export default class Search extends Component {
             // stopPropagation is called to avoid calling onOpenClicked.
             return <div class='autocomplete-container' onClick={e => e.stopPropagation()}>
               <div class='autocomplete-bar'>
-                <NodeTitleGroup />
+                <div
+                  style={selectedNodesIds.length > 3 && { overflow: 'auto' }}
+                >
+                  <NodeTitleGroup />
+                </div>
                 <input
                   {...getInputProps({ placeholder: 'Search a producer, trader or country of import' })}
                   ref={this.getInputRef}
