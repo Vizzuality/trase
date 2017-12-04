@@ -50,7 +50,8 @@ function getURLForV3(endpoint, params = {}) {
     endpoint = endpoint.replace('$node_id$', params.node_id);
     delete params.node_id;
   }
-  return Object.keys(params).reduce((prev, current) => {
+
+  const queryParams = Object.keys(params).reduce((prev, current) => {
     const value = params[current];
     if (Array.isArray(value)) {
       const arrUrl = value.reduce((arrPrev, arrCurrent) => {
@@ -59,7 +60,9 @@ function getURLForV3(endpoint, params = {}) {
       return `${prev}&${arrUrl}`;
     }
     return `${prev}&${current}=${params[current]}`;
-  }, `${API_V3_URL}${endpoint}?`);
+  }, '');
+
+  return `${API_V3_URL}${endpoint}` + (queryParams.length > 0 ? `?${queryParams}` : '');
 }
 
 function getURLForV2(endpoint, params = {}) {
