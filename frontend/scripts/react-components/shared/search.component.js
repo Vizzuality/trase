@@ -33,6 +33,7 @@ export default class Search extends Component {
     this.onAddNode = this.onAddNode.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
     this.onKeyup = this.onKeyup.bind(this);
+    this.getDownshiftRef = this.getDownshiftRef.bind(this);
     this.getInputRef = this.getInputRef.bind(this);
     this.isNodeSelected = this.isNodeSelected.bind(this);
     document.addEventListener('keydown', this.onKeydown);
@@ -42,6 +43,10 @@ export default class Search extends Component {
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onKeydown);
     document.removeEventListener('keyup', this.onKeyup);
+  }
+
+  getDownshiftRef(instance) {
+    this.downshift = instance;
   }
 
   getInputRef(el) {
@@ -63,7 +68,7 @@ export default class Search extends Component {
   }
 
   onSelected(selectedItem) {
-    if (this.isNodeSelected(selectedItem)) return;
+    if (this.isNodeSelected(selectedItem)) return this.downshift.clearSelection();
     const id = Search.getNodeId(selectedItem);
     if (selectedItem.selected) {
       this.props.onRemoveNode(id);
@@ -73,11 +78,11 @@ export default class Search extends Component {
     this.onCloseClicked();
   }
 
-  onAddNode(e, selectedItem, reset) {
+  onAddNode(e, selectedItem) {
     if (e) e.stopPropagation();
     const id = Search.getNodeId(selectedItem);
     this.props.onAddNode(id);
-    reset();
+    this.downshift.reset();
     this.input.focus();
   }
 
@@ -127,14 +132,14 @@ export default class Search extends Component {
         <Downshift
           itemToString={i => (i === null ? '' : i.name)}
           onSelect={this.onSelected}
+          ref={this.getDownshiftRef}
         >
           {({
             getInputProps,
             getItemProps,
             isOpen,
             inputValue,
-            highlightedIndex,
-            reset
+            highlightedIndex
           }) => {
             // stopPropagation is called to avoid calling onOpenClicked.
             return <div class='autocomplete-container' onClick={e => e.stopPropagation()}>
@@ -179,7 +184,7 @@ export default class Search extends Component {
                           </div>
                           <div class='node-actions-container'>
                             <button
-                              onClick={e => this.onAddNode(e, item, reset)}
+                              onClick={e => this.onAddNode(e, item)}
                               class='c-button -medium-large'
                               disabled={itemSelected}
                             >
