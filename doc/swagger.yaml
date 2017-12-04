@@ -260,6 +260,18 @@ paths:
     post:
       tags:
         - newsletter_subscription
+      summary: Adds a new email to the subscriptions list
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+                - email
       responses:
         '200':
           description: successful operation

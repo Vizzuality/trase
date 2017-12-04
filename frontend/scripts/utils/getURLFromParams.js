@@ -2,7 +2,7 @@ export const GET_CONTEXTS = 'GET_CONTEXTS';
 export const GET_TOOLTIPS = 'GET_TOOLTIPS';
 export const GET_ALL_NODES = 'GET_ALL_NODES';
 export const GET_COLUMNS = 'GET_COLUMNS';
-export const GET_NODES = 'GET_NODES';
+export const GET_NODE_ATTRIBUTES = 'GET_NODE_ATTRIBUTES';
 export const GET_FLOWS = 'GET_FLOWS';
 export const GET_MAP_BASE_DATA = 'GET_MAP_BASE_DATA';
 export const GET_LINKED_GEO_IDS = 'GET_LINKED_GEO_IDS';
@@ -26,8 +26,9 @@ const API_ENDPOINTS = {
   [GET_CONTEXTS]: { api: 2, endpoint: '/get_contexts' },
   [GET_ALL_NODES]: { api: 2, endpoint: '/get_all_nodes' },
   [GET_COLUMNS]: { api: 2, endpoint: '/get_columns' },
-  [GET_NODES]: { api: 1, endpoint: '/get_nodes' },
+  [GET_NODE_ATTRIBUTES]: { api: 2, endpoint: '/get_node_attributes' },
   [GET_FLOWS]: { api: 1, endpoint: '/get_flows' },
+  // [GET_FLOWS]: { api: 3, endpoint: '/contexts/$context_id$/flows' },
   [GET_MAP_BASE_DATA]: { api: 2, endpoint: '/get_map_base_data' },
   [GET_LINKED_GEO_IDS]: { api: 2, endpoint: '/get_linked_geoids' },
   [GET_PLACE_FACTSHEET]: { api: 2, endpoint: '/get_place_node_attributes', mock: 'mocks/v1_get_place_node_attributes.json' },
@@ -37,6 +38,27 @@ const API_ENDPOINTS = {
   [GET_JSON_DATA_DOWNLOAD_FILE]: { api: 2, endpoint: '/download.json' },
   [POST_SUBSCRIBE_NEWSLETTER]: { api: 2, endpoint: '/newsletter_subscriptions' },
 };
+
+function getURLForV3(endpoint, params = {}) {
+  if (params.hasOwnProperty('context_id') && endpoint.indexOf('$context_id$') !== -1) {
+    endpoint = endpoint.replace('$context_id$', params.context_id);
+    delete params.context_id;
+  }
+  if (params.hasOwnProperty('node_id') && endpoint.indexOf('$node_id$') !== -1) {
+    endpoint = endpoint.replace('$node_id$', params.node_id);
+    delete params.node_id;
+  }
+  return Object.keys(params).reduce((prev, current) => {
+    const value = params[current];
+    if (Array.isArray(value)) {
+      const arrUrl = value.reduce((arrPrev, arrCurrent) => {
+        return `${arrPrev}&${current}[]=${arrCurrent}`;
+      }, '');
+      return `${prev}&${arrUrl}`;
+    }
+    return `${prev}&${current}=${params[current]}`;
+  }, `${API_V3_URL}${endpoint}?`);
+}
 
 function getURLForV2(endpoint, params = {}) {
   return Object.keys(params).reduce((prev, current) => {
@@ -70,6 +92,8 @@ export function getURLFromParams(endpointKey, params = {}, mock = false) {
 
   if (!mock) {
     switch (endpointData.api) {
+      case 3:
+        return getURLForV3(`/api/v3${endpointData.endpoint}`, params);
       case 2:
         return getURLForV2(`/api/v2${endpointData.endpoint}`, params);
       case 1:

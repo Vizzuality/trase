@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import MultiTableTemplate from 'ejs!templates/profiles/table/multi-table.ejs';
 import Table from 'components/profiles/table.component';
+import 'styles/components/shared/tabs.scss';
+
 
 export default class {
   constructor(settings) {
@@ -20,7 +22,7 @@ export default class {
     this.el.innerHTML = template;
 
     this._renderTables();
-    this.el.parentElement.classList.remove('is-hidden');
+    this.el.parentElement.classList.remove('-tab-hidden');
 
     this.switchers = Array.prototype.slice.call(this.el.querySelectorAll('.js-multi-table-switcher'), 0);
     this.singleTables = Array.prototype.slice.call(this.el.querySelectorAll('.js-multi-table-container'), 0);
@@ -49,13 +51,13 @@ export default class {
 
     const selectedTable = selectedSwitch.getAttribute('data-table');
     this.singleTables.forEach(table => {
-      table.classList.add('is-hidden');
+      table.classList.add('-tab-hidden');
     });
     this.switchers.forEach(switcher => {
       switcher.classList.remove('selected');
     });
 
-    this.el.querySelector(`.${selectedTable}`).classList.remove('is-hidden');
+    this.el.querySelector(`.${selectedTable}`).classList.remove('-tab-hidden');
     selectedSwitch.classList.add('selected');
   }
 }

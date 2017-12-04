@@ -15,6 +15,7 @@ gem 'dotenv-rails', '~> 2.2'
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'enumerate_it', '~> 1.4.1'
 gem 'mailchimp-api', require: 'mailchimp'
+gem 'oj'
 
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'

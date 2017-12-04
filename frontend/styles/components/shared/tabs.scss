@@ -1,0 +1,22 @@
+.tab-title {
+  display: none;
+}
+
+.-tab-hidden {
+  display: none;
+}
+
+.-print {
+  .tab {
+    display: none;
+  }
+
+  .tab-title {
+    display: block;
+    margin-top: 20px;
+  }
+
+  .-tab-hidden {
+    display: block;
+  }
+}

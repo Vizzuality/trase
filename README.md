@@ -47,7 +47,7 @@ For the frontend application:
 - Copy `.env.sample` to `.env` and replace the values accordingly. See the frontend application documentation below for more information.
 - Install dependencies using `npm install`
 
-You can start the development server with `npm run dev`
+You can start the development server with `npm start`
 
 ## Deployment
 
@@ -218,9 +218,9 @@ The project's main configuration values can be set using [environment variables]
 
 * PORT: port used by the development web server. defaults to 8081
 * NODE_ENV: environment used by the nodejs tasks
-* AUTH_USER + AUTH_PASSWORD: if set, an auth wall is used by the nodejs development web server
 * API_V1_URL: URL of the data API V1
 * API_V2_URL: URL of the data API V2
+* API_V3_URL: URL of the data API V3
 * API_CMS_URL: URL of the homepage stories API
 * API_STORY_CONTENT: URL of the deep dive stories API
 * API_SOCIAL: URL of the tweets API
@@ -228,6 +228,7 @@ The project's main configuration values can be set using [environment variables]
 * USER_REPORT_KEY: API key for User Report
 * DATA_FORM_ENABLED: enable contact form in Data page
 * DATA_FORM_ENDPOINT: end point to send form values in Data page
+* PDF_DOWNLOAD_URL: end point to download a PDF snapshot of the page 
 
 If you are using the included development server, you can set those variables in the `.env` file (use the included `.env.sample` as an example)
 

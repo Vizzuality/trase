@@ -41,11 +41,13 @@ module.exports = {
       NODE_ENV_DEV: true,
       API_V1_URL: true,
       API_V2_URL: true,
+      API_V3_URL: true,
       GOOGLE_ANALYTICS_KEY: true,
       USER_REPORT_KEY: true,
       DATA_DOWNLOAD_ENABLED: true,
       DATA_FORM_ENDPOINT: true,
       DATA_FORM_ENABLED: true,
+      PDF_DOWNLOAD_URL: true,
       ga: true,
       fetch: true
     },

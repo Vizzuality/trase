@@ -11,8 +11,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v3 do
-      resources :contexts, only: [:index]
+      resources :contexts, only: [:index] do
+        resources :columns, only: [:index]
+      end
       get '/get_all_nodes', to: 'nodes#get_all_nodes'
+      resources :newsletter_subscriptions, only: [:create]
     end
     namespace :v2 do
       resources :geo_id, only: :index
@@ -23,7 +26,6 @@ Rails.application.routes.draw do
       # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
       resources :download, only: [:index], as: :download
       resources :indicators, only: [:index]
-      resources :newsletter_subscriptions, only: [:create]
 
       get '/get_map_base_data', to: 'map#index'
       get '/get_linked_geoids', to: 'geo_id#index'
@@ -32,6 +34,7 @@ Rails.application.routes.draw do
       get '/get_all_nodes', to: 'nodes#all_nodes'
       get '/get_place_node_attributes', to: 'place_factsheet#place_data'
       get '/get_actor_node_attributes', to: 'actor_factsheet#actor_data'
+      get '/get_node_attributes', to: 'nodes#node_attributes'
     end
   end
 end

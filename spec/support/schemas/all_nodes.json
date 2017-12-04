@@ -29,6 +29,10 @@
             "id": "/properties/data/items/properties/id",
             "type": "integer"
           },
+          "mainNodeId": {
+            "id": "/properties/data/items/properties/mainNodeId",
+            "type": ["integer", "null"]
+          },
           "isAggregated": {
             "id": "/properties/data/items/properties/isAggregated",
             "type": "boolean"
@@ -68,6 +72,7 @@
         ],
         "type": "object"
       },
+      "minItems": 1,
       "type": "array"
     }
   },

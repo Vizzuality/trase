@@ -12,6 +12,7 @@ import 'styles/components/profiles/overall-info.scss';
 import 'styles/components/profiles/info.scss';
 import 'styles/components/profiles/link-buttons.scss';
 import 'styles/components/profiles/error.scss';
+import 'styles/components/shared/tabs.scss';
 
 import Nav from 'components/shared/nav.component.js';
 import Dropdown from 'components/shared/dropdown.component';
@@ -36,6 +37,8 @@ const defaults = {
   country: 'Brazil',
   commodity: 'soy'
 };
+
+let print = false;
 
 const tooltip = new Tooltip('.js-infowindow');
 const LINE_MARGINS = { top: 10, right: 100, bottom: 25, left: 50 };
@@ -136,7 +139,7 @@ const _build = (data, nodeId) => {
       bucket: [[data.top_sources.buckets[0], ...data.top_sources.buckets]]
     });
 
-    _initSource('municipality', data);
+    _initSource((print === true) ? 'state' : 'municipality', data);
   }
 
 
@@ -172,11 +175,11 @@ const _build = (data, nodeId) => {
 
     Map('.js-top-destination-map', {
       topoJSONPath: './vector_layers/WORLD.topo.json',
-      topoJSONRoot: 'WORLD',
+      topoJSONRoot: 'world',
       useRobinsonProjection: true,
       getPolygonClassName: ({ properties }) => {
         const country = data.top_countries.lines
-          .find(c => (properties.name.toUpperCase() === c.name.toUpperCase()));
+          .find(c => (properties.iso2 === c.geo_id));
         let value = 'n-a';
         if (country) value = country.value9 || 'n-a';
         return `-outline ch-${value}`;
@@ -359,7 +362,8 @@ const _init = ()  => {
       _build(data, nodeId);
     });
 
-  new Nav();
+  const nav = new Nav();
+  print = nav.print;
 };
 
 _init();
