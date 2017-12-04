@@ -10,7 +10,7 @@ let searchNodes;
 const mapStateToProps = (state) => {
   const { nodes, selectedNodesIds } = state.tool;
   // store nodes at container level to avoid rerendering when filtering... for want of a better solution
-  if (nodes !== undefined && !searchNodes) {
+  if (nodes !== undefined && (!searchNodes || nodes.length !== searchNodes.length)) {
     const allNodes = nodes.filter(
       node => node.hasFlows === true &&
       node.isAggregated !== true &&

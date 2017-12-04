@@ -511,12 +511,14 @@ export function selectExpandedNode(nodeId) {
     } else {
       // check if we need to swap column
       const node = tool.nodesDict[nodeId];
-      const columnGroup = node.columnGroup;
-      const currentColumnAtPos = tool.selectedColumnsIds[columnGroup];
       if (!node) {
         console.warn(`requested node ${nodeId} does not exist in nodesDict`);
         return;
       }
+
+      const columnGroup = node.columnGroup;
+      const currentColumnAtPos = tool.selectedColumnsIds[columnGroup];
+
       if (currentColumnAtPos !== node.columnId) {
         dispatch(selectColumn(columnGroup, node.columnId, false));
       }
