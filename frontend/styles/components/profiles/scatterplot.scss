@@ -112,3 +112,16 @@
     }
   }
 }
+
+.axis-legend-x {
+  display: block;
+}
+
+.-print {
+  .axis-legend-x {
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+}

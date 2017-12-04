@@ -2,17 +2,12 @@
   "name": "trase-frontend",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npm run webpack:server",
+    "start": "webpack-dev-server --inline --port 8081 --host 0.0.0.0 --content-base public/ --config config/webpack.js",
     "build": "npm run webpack:prod && cp -a public/. dist/",
     "webpack:prod": "NODE_ENV='production' webpack --config config/webpack.js -p",
-    "webpack:server": "webpack-dev-server --inline --port 3000 --host 0.0.0.0 --content-base public/ --config config/webpack.js",
-    "eslint": "npm run lint-js",
     "lint-js": "eslint -c .eslintrc.js --ext .jsx,.js scripts",
-    "lint-sass": "sass-lint -c .sass-lint.yml -v -q 'styles/**/*.scss'",
-    "postinstall": "npm run build"
+    "lint-sass": "sass-lint -c .sass-lint.yml -v -q 'styles/**/*.scss'"
   },
   "repository": {
     "type": "git",
@@ -62,7 +57,6 @@
     "d3-geo-projection": "^2.1.0",
     "dotenv": "^2.0.0",
     "downshift": "^1.18.0",
-    "express": "^4.14.0",
     "highlight-words-core": "^1.1.0",
     "leaflet": "^1.0.3",
     "leaflet.utfgrid": "git+https://github.com/danzel/Leaflet.utfgrid.git",

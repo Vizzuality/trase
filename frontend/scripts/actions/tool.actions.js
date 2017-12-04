@@ -16,7 +16,7 @@ import {
   GET_ALL_NODES,
   GET_COLUMNS,
   GET_FLOWS,
-  GET_NODES,
+  GET_NODE_ATTRIBUTES,
   GET_LINKED_GEO_IDS,
   GET_MAP_BASE_DATA,
   GET_CONTEXTS,
@@ -194,11 +194,11 @@ export function loadNodes() {
     });
     const params = {
       context_id: getState().tool.selectedContextId,
-      year_start: getState().tool.selectedYears[0],
-      year_end: getState().tool.selectedYears[1],
+      start_year: getState().tool.selectedYears[0],
+      end_year: getState().tool.selectedYears[1],
     };
 
-    const getNodesURL = getURLFromParams(GET_NODES, params);
+    const getNodesURL = getURLFromParams(GET_NODE_ATTRIBUTES, params);
     const getMapDimensionsMetadataURL = getURLFromParams(GET_MAP_BASE_DATA, params);
     const selectedMapDimensions = getState().tool.selectedMapDimensions;
 
@@ -227,7 +227,7 @@ export function loadNodes() {
       });
 
       dispatch({
-        type: actions.GET_NODES, payload
+        type: actions.GET_NODE_ATTRIBUTES, payload
       });
       
       // reselect biome filter to add biome geoid
