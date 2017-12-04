@@ -2,7 +2,7 @@
 
 .c-overall-info {
 
-  .dropdown-item {
+  .dropdown-element {
     display: inline-block;
 
     &:not(:last-child) {
@@ -41,16 +41,8 @@
       }
 
       > .dropdown-list {
-        color: $charcoal-grey;
-        top: 70px;
-        padding: 14px;
-        font-size: $font-size-medium;
-        font-family: $font-family-2;
+        top: 100%;
         min-width: 140px;
-
-        > li {
-          padding: 5px 0;
-        }
       }
     }
   }
