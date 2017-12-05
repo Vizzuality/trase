@@ -40,12 +40,7 @@ For the API:
 - Copy `.env.sample` to `.env` and replace the values accordingly. See the API documentation below for more information.
 - To setup the development database, first create a database in PostgreSQL and then import a base dump into it
 - Next, run `rake db:migrate` and `rake content:db:migrate` to update its structure
-- only while working on API V3 migration:
-  - run the queries in `db/revamp_cleanup.sql` to remove duplicates from the original database
-  - TEMPORARILY comment out `schema_search_path: "public"` in `config/database.yml`
-  - `bundle exec rake db:revamp:copy` to copy data into the new schema
-  - `bundle exec rake db:revamp:doc:sql`
-  - ideally after running all this you shouldn't have any changes on the structure.sql file, other than PostgreSQL version in some cases
+- only while working on API V3 migration: please follow instructions in "Schema revamp: migration and documentation"
 
 You can now use `rails server` to start the API application
 
@@ -164,10 +159,18 @@ In the transition period as work on changing the database schema continues, new 
 
 The base version of the database at this point is:
 
+
+
+
 To migrate the database:
 
-1. run `bundle exec rake db:migrate` to create revamped database objects
-2. run `bundle exec rake db:revamp:copy` to copy data between old and new structure
+1. TEMPORARILY comment out `schema_search_path: "public"` in `config/database.yml`
+2. run `bundle exec rake db:migrate` to create revamped database objects
+3. run the queries in `db/revamp_cleanup.sql` to remove duplicates from the original database
+4. run `bundle exec rake db:revamp:copy` to copy data between old and new structure
+5. `bundle exec rake db:revamp:doc:sql`
+6. ideally after running all this you shouldn't have any changes on the structure.sql file, other than PostgreSQL version in some cases
+7. you can now uncomment `schema_search_path` in `config/database.yml`
 
 Schema documentation is generated directly from the database and requires the following steps:
 
