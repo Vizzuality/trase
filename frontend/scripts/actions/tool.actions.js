@@ -463,13 +463,15 @@ function getSelectedNodeIds(currentSelectedNodesIds, changedNodeId) {
 
 export function selectNode(nodeId, isAggregated = false) {
   return (dispatch, getState) => {
-    const { tool } = getState();
     if (isAggregated) {
       dispatch(selectView(true));
-    } else if (tool.areNodesExpanded) {
-      dispatch(selectExpandedNode(nodeId));
     } else {
-      const currentSelectedNodesIds = tool.selectedNodesIds;
+      const currentSelectedNodesIds = getState().tool.selectedNodesIds;
+      // we are unselecting the node that is currently expanded: just shrink it and bail
+      if (getState().tool.areNodesExpanded && currentSelectedNodesIds.length === 1 && currentSelectedNodesIds.indexOf(nodeId) > -1) {
+        dispatch(toggleNodesExpand());
+      }
+
       const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, nodeId);
 
       // send to state the new node selection along with new data, geoIds, etc
@@ -505,27 +507,31 @@ export function selectNodeFromGeoId(geoId) {
 
 export function selectExpandedNode(nodeId) {
   return (dispatch, getState) => {
-    const { tool } = getState();
-    if (tool.selectedNodesIds.length === 1 && tool.selectedNodesIds.includes(nodeId)) {
-      dispatch(resetState());
+    if (!_isNodeVisible(getState, nodeId)) {
+      const { tool } = getState();
+      if (tool.selectedNodesIds.length === 1 && tool.selectedNodesIds.includes(nodeId)) {
+        dispatch(resetState());
+      } else {
+        // check if we need to swap column
+        const node = tool.nodesDict[nodeId];
+        if (!node) {
+          console.warn(`requested node ${nodeId} does not exist in nodesDict`);
+          return;
+        }
+
+        const columnGroup = node.columnGroup;
+        const currentColumnAtPos = tool.selectedColumnsIds[columnGroup];
+
+        if (currentColumnAtPos !== node.columnId) {
+          dispatch(selectColumn(columnGroup, node.columnId, false));
+        }
+
+        const currentSelectedNodesIds = getState().tool.selectedNodesIds;
+        const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, nodeId);
+        dispatch(toggleNodesExpand(true, selectedNodesIds));
+      }
     } else {
-      // check if we need to swap column
-      const node = tool.nodesDict[nodeId];
-      if (!node) {
-        console.warn(`requested node ${nodeId} does not exist in nodesDict`);
-        return;
-      }
-
-      const columnGroup = node.columnGroup;
-      const currentColumnAtPos = tool.selectedColumnsIds[columnGroup];
-
-      if (currentColumnAtPos !== node.columnId) {
-        dispatch(selectColumn(columnGroup, node.columnId, false));
-      }
-
-      const currentSelectedNodesIds = getState().tool.selectedNodesIds;
-      const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, nodeId);
-      dispatch(toggleNodesExpand(true, selectedNodesIds));
+      dispatch(selectNode(nodeId, false));
     }
   };
 }
@@ -670,4 +676,4 @@ export function toggleMapSidebarGroup(id) {
   };
 }
 
-// const _isNodeVisible = (getState, nodeId) => getState().tool.visibleNodes.map(node => node.id).indexOf(nodeId) > -1;
+const _isNodeVisible = (getState, nodeId) => getState().tool.visibleNodes.map(node => node.id).indexOf(nodeId) > -1;
