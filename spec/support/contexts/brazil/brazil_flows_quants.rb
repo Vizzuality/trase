@@ -12,36 +12,36 @@ shared_context 'brazil flows quants' do
     FactoryBot.create(:flow_quant, flow: flow1, quant: deforestation_v2, value: 20)
   end
   let!(:flow2_deforestation_v2) do
-    FactoryBot.create(:flow_quant, flow: flow1, quant: deforestation_v2, value: 25)
+    FactoryBot.create(:flow_quant, flow: flow2, quant: deforestation_v2, value: 25)
   end
   let!(:flow1_potential_soy_deforestation_v2) do
     FactoryBot.create(:flow_quant, flow: flow1, quant: potential_soy_deforestation_v2, value: 30)
   end
   let!(:flow2_potential_soy_deforestation_v2) do
-    FactoryBot.create(:flow_quant, flow: flow1, quant: potential_soy_deforestation_v2, value: 35)
+    FactoryBot.create(:flow_quant, flow: flow2, quant: potential_soy_deforestation_v2, value: 35)
   end
   let!(:flow1_agrosatelite_soy_defor_) do
     FactoryBot.create(:flow_quant, flow: flow1, quant: agrosatelite_soy_defor_, value: 40)
   end
   let!(:flow2_agrosatelite_soy_defor_) do
-    FactoryBot.create(:flow_quant, flow: flow1, quant: agrosatelite_soy_defor_, value: 45)
+    FactoryBot.create(:flow_quant, flow: flow2, quant: agrosatelite_soy_defor_, value: 45)
   end
   let!(:flow1_land_use) do
     FactoryBot.create(:flow_quant, flow: flow1, quant: land_use, value: 50)
   end
   let!(:flow2_land_use) do
-    FactoryBot.create(:flow_quant, flow: flow1, quant: land_use, value: 55)
+    FactoryBot.create(:flow_quant, flow: flow2, quant: land_use, value: 55)
   end
   let!(:flow1_biodiversity) do
     FactoryBot.create(:flow_quant, flow: flow1, quant: biodiversity, value: 60)
   end
   let!(:flow2_biodiversity) do
-    FactoryBot.create(:flow_quant, flow: flow1, quant: biodiversity, value: 65)
+    FactoryBot.create(:flow_quant, flow: flow2, quant: biodiversity, value: 65)
   end
   let!(:flow1_ghg_) do
     FactoryBot.create(:flow_quant, flow: flow1, quant: ghg_, value: 70)
   end
   let!(:flow2_ghg_) do
-    FactoryBot.create(:flow_quant, flow: flow1, quant: ghg_, value: 75)
+    FactoryBot.create(:flow_quant, flow: flow2, quant: ghg_, value: 75)
   end
 end

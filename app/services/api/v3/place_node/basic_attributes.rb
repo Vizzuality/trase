@@ -3,119 +3,156 @@ module Api
     module PlaceNode
       class BasicAttributes
         attr_reader :column_name, :country_name, :country_geo_id,
-                    :dynamic_attributes
+                    :municipality_name, :municipality_geo_id,
+                    :logistics_hub_name, :logistics_hub_geo_id,
+                    :state_name, :state_geo_id,
+                    :biome_name, :biome_geo_id,
+                    :area, :soy_production, :soy_area, :soy_farmland
 
-        def initialize(context, node, place_inds, place_quants)
+        def initialize(context, year, node, data)
           @context = context
+          @year = year
           @node = node
-          @place_inds = place_inds
-          @place_quants = place_quants
+          @place_inds = data[:place_inds]
+          @place_quants = data[:place_quants]
+          @soy_production_attribute = data[:soy_production_attribute]
+          @top_exporters = data[:top_exporters]
+          @total_exports = data[:total_exports]
+          @top_consumers = data[:top_consumers]
 
-          node_type_name = @node&.node_type&.name
-          @column_name = node_type_name
+          @node_type_name = @node&.node_type&.name
+          @column_name = @node_type_name
           @country_name = @context&.country&.name
           @country_geo_id = @context&.country&.iso2
 
           @dynamic_attributes = {}
           @dynamic_attributes[
-            (node_type_name.downcase + '_name').to_sym
+            (@node_type_name.split.join('_').downcase + '_name').to_sym
           ] = @node.name
           @dynamic_attributes[
-            (node_type_name.downcase + '_geo_id').to_sym
+            (@node_type_name.split.join('_').downcase + '_geo_id').to_sym
           ] = @node.geo_id
 
-          if [
-            NodeTypeName::MUNICIPALITY, NodeTypeName::LOGISTICS_HUB
-          ].include? @node_type
+          if municipality? || logistics_hub?
             @dynamic_attributes = @dynamic_attributes.merge(
               municipality_and_logistics_hub_attributes
             )
           end
+          @dynamic_attributes.each do |name, value|
+            instance_variable_set("@#{name}", value)
+          end
+        end
+
+        NodeType::PLACES.each do |place_name|
+          define_method("#{place_name.split.join('_').downcase}?") do
+            @node_type_name == place_name
+          end
         end
 
         def summary
-          soy_produced_raw, soy_produced = if (production = @place_quants['SOY_TN'])
-                                             value = helper.number_with_precision(production['value'], delimiter: ',', precision: 0)
-                                             unit = production['unit']
-                                             [production['value'], "#{value} #{unit}"]
-                                           end
-          soy_area = if soy_produced_raw && @place_inds['SOY_YIELD'] && (soy_yield_raw = @place_inds['SOY_YIELD']['value'])
-                       value = helper.number_with_precision(soy_produced_raw / soy_yield_raw, delimiter: ',', precision: 0)
-                       unit = 'Ha' # soy prod in Tn, soy yield in Tn/Ha
-                       "#{value} #{unit}"
-                     end
-          perc_total = total_soy_production
-          percentage_total_production = if (perc = @place_quants['SOY_TN'])
-                                          helper.number_to_percentage((perc['value'] / perc_total) * 100, delimiter: ',', precision: 2)
-                                        end
+          return nil unless municipality? || logistics_hub?
+
+          total_soy_production = Api::V3::NodeQuant.
+            where(quant_id: @soy_production_attribute.id, year: @year).
+            sum(:value)
+
+          percentage_total_production =
+            if @soy_production
+              helper.number_to_percentage(
+                (@soy_production / total_soy_production) * 100,
+                delimiter: ',', precision: 2
+              )
+            end
           country_ranking = CountryRanking.new(@context, @year, @node).
-            position_for_attribute('quant', 'SOY_TN')
-          country_ranking = country_ranking.ordinalize if country_ranking.present?
-          state_ranking = @stats.state_ranking(@state, 'quant', 'SOY_TN') if @state.present?
-          state_ranking = state_ranking.ordinalize if state_ranking.present?
-
-          largest_exporter = (traders = top_municipality_exporters) && traders[:actors][0]
-          if largest_exporter.present?
-            largest_exporter_name = largest_exporter[:name].try(:humanize)
-            percent_of_exports = helper.number_to_percentage(
-              (largest_exporter[:value] || 0) * 100,
-              delimiter: ',', precision: 1
-            )
+            position_for_attribute(@soy_production_attribute)
+          if country_ranking.present?
+            country_ranking = country_ranking.ordinalize
           end
-
-          main_destination = (consumers = @data[:top_consumers][:countries]) && consumers[0] && consumers[0][:name]
-          main_destination = main_destination.humanize if main_destination.present?
-
+          if @state.present?
+            state_ranking = StateRanking.new(@context, @year, @node, @state.name).
+              position_for_attribute(@soy_production_attribute)
+          end
+          state_ranking = state_ranking.ordinalize if state_ranking.present?
           state_name = @state.name.titleize if @state.present?
 
-          <<~SUMMARY
-            In #{@year}, #{@node.name.titleize} produced #{soy_produced} of soy occupying a total of #{soy_area} \
-            of land. With #{percentage_total_production} of the total production, it ranks #{country_ranking} in Brazil in soy \
-            production, and #{state_ranking} in the state of #{state_name}. The largest exporter of soy \
-            in #{@node.name.titleize} was #{largest_exporter_name}, which accounted for #{percent_of_exports} of the total exports, \
-            and the main destination was #{main_destination}.
-          SUMMARY
+          result = "In #{@year}, #{@node.name.titleize} produced \
+#{@soy_production_formatted} #{@soy_production_unit} of soy occupying a total \
+of #{@soy_area_formatted} #{@soy_area_unit} of land. With \
+#{percentage_total_production} of the total production, it ranks \
+#{country_ranking} in Brazil in soy production, and #{state_ranking} in the \
+state of #{state_name}."
+
+          top_exporter = @top_exporters.first
+          if top_exporter.present?
+            top_exporter_name = top_exporter['name']&.titleize
+            if @total_exports.present?
+              percentage_total_exports = helper.number_to_percentage(
+                ((top_exporter[:value] || 0) / @total_exports) * 100,
+                delimiter: ',', precision: 1
+              )
+            end
+          end
+
+          top_consumer = @top_consumers.first
+          top_consumer_name = top_consumer['name']&.titleize if top_consumer
+
+          if top_exporter && percentage_total_exports && top_consumer
+            result << " The largest exporter of soy in #{@node.name.titleize} \
+was #{top_exporter_name}, which accounted for #{percentage_total_exports} of \
+the total exports, and the main destination was #{top_consumer_name}."
+          end
+          result
         end
 
         private
 
         def municipality_and_logistics_hub_attributes
-          @place_quals = Hash[(@node.place_quals + @node.temporal_place_quals(@year)).map do |e|
-            [e['name'], e]
-          end]
+          @place_quals = Hash[
+            (@node.place_quals + @node.temporal_place_quals(@year)).map do |e|
+              [e['name'], e]
+            end
+          ]
 
           data = {}
 
-          biome_name = @place_quals[NodeTypeName::BIOME] && @place_quals[NodeTypeName::BIOME]['value']
-          @biome = Node.biomes.find_by_name(biome_name)
+          biome_name = @place_quals[NodeTypeName::BIOME] &&
+            @place_quals[NodeTypeName::BIOME]['value']
+          @biome = Api::V3::Node.biomes.find_by_name(biome_name)
           data[:biome_name] = biome_name
           data[:biome_geo_id] = @biome&.geo_id
-          state_name = @place_quals[NodeTypeName::STATE] && @place_quals[NodeTypeName::STATE]['value']
-          @state = Node.states.find_by_name(state_name)
+          state_name = @place_quals[NodeTypeName::STATE] &&
+            @place_quals[NodeTypeName::STATE]['value']
+          @state = Api::V3::Node.states.find_by_name(state_name)
           data[:state_name] = state_name
           data[:state_geo_id] = @state&.geo_id
           if @place_quants['AREA_KM2'].present?
             data[:area] = @place_quants['AREA_KM2']['value']
           end
           if @place_quants['SOY_TN'].present?
-            data[:soy_production] = @place_quants['SOY_TN']['value']
+            @soy_production = @place_quants['SOY_TN']['value']
+            @soy_production_formatted = helper.number_with_precision(
+              @soy_production, delimiter: ',', precision: 0
+            )
+            @soy_production_unit = @place_quants['SOY_TN']['unit']
+            data[:soy_production] = @soy_production
           end
-          if data[:soy_production] && @place_inds['SOY_YIELD'] && (soy_yield_raw = @place_inds['SOY_YIELD']['value'])
-            value = helper.number_with_precision(data[:soy_production] / soy_yield_raw, delimiter: ',', precision: 0)
-            data[:soy_area] = value
+          if @place_inds['SOY_YIELD'].present?
+            @soy_yield = @place_inds['SOY_YIELD']['value']
+          end
+          if @soy_production && @soy_yield
+            @soy_area_formatted = helper.number_with_precision(
+              @soy_production / @soy_yield,
+              delimiter: ',', precision: 0
+            )
+            @soy_area_unit = 'Ha' # soy prod in Tn, soy yield in Tn/Ha
+            data[:soy_area] = @soy_area_formatted
           end
           if @place_inds['SOY_AREAPERC'].present?
-            data[:soy_farmland] = @place_inds['SOY_AREAPERC']['value']
+            @soy_farmland = @place_inds['SOY_AREAPERC']['value']
+            data[:soy_farmland] = @soy_farmland
           end
 
           data
-        end
-
-        def total_soy_production
-          NodeQuant.
-            joins(:quant).
-            where('quants.name' => 'SOY_TN', :year => 2015).
-            sum(:value)
         end
 
         def helper

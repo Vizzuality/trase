@@ -7,12 +7,16 @@ module Api
       has_many :node_quals
       has_many :node_quants
 
+      scope :place_nodes, -> {
+        includes(:node_type).where('node_types.name' => NodeType::PLACES)
+      }
+
       scope :biomes, -> {
-        includes(:node_type).where('node_types.node_type' => NodeTypeName::BIOME)
+        includes(:node_type).where('node_types.name' => NodeTypeName::BIOME)
       }
 
       scope :states, -> {
-        includes(:node_type).where('node_types.node_type' => NodeTypeName::STATE)
+        includes(:node_type).where('node_types.name' => NodeTypeName::STATE)
       }
 
       def place_quals

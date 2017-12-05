@@ -76,11 +76,17 @@ json:
   - url: /api/v2/get_place_node_attributes
     name: get_place_node_attributes
     version: v2
-    v3_ready: false
-    v3_url: /api/v3/get_place_node_attributes
+    v3_ready: true
+    v3_url: /api/v3/contexts/1/nodes/2759/place
     queries:
       - params: node_id=2759
         name: sorriso
+  - url: /api/v2/get_place_node_attributes
+    name: get_place_node_attributes
+    version: v2
+    v3_ready: true
+    v3_url: /api/v3/contexts/1/nodes/2262/place
+    queries:
       - params: node_id=2262
         name: querencia
   - url: /api/v2/get_actor_node_attributes

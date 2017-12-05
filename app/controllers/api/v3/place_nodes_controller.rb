@@ -5,13 +5,16 @@ module Api
       before_action :set_year
 
       def show
-        @result = Api::V3::PlaceNode::ResponseBuilder.new(@context, @node, @year).call
+        @result = Api::V3::PlaceNode::ResponseBuilder.new(
+          @context, @node, @year
+        ).call
 
         if @result.errors.any?
           render json: @result.errors
         else
           render json: @result, root: 'data',
-                 serializer: Api::V3::PlaceNode::ResultSerializer
+                 serializer: Api::V3::PlaceNode::ResultSerializer,
+                 key_transform: :underscore # snake_case temporarily
         end
       end
 
@@ -19,7 +22,7 @@ module Api
 
       def load_node
         ensure_required_param_present(:id)
-        @node = Api::V3::Node.find(params[:id])
+        @node = Api::V3::Node.place_nodes.find(params[:id])
       end
     end
   end
