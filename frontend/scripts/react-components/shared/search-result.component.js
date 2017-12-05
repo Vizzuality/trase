@@ -42,8 +42,8 @@ export default class SearchResult extends Component {
             {selected ? 'Already in' : 'Add to'} supply chain
           </button>
           {
-            PROFILE_PAGES_WHITELIST.includes(item.type) && item.type.split(' & ')
-              .map(type => (
+            item.type.split(' & ')
+              .map(type => PROFILE_PAGES_WHITELIST.includes(type) && (
                 <button
                   role='link'
                   class='c-button -medium-large'
@@ -51,7 +51,7 @@ export default class SearchResult extends Component {
                 >
                   See {type} profile
                 </button>
-              ))
+              )).filter(b => !!b)
           }
         </div>
       </div>

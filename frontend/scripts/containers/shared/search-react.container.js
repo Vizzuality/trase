@@ -3,7 +3,6 @@ import { connect } from 'preact-redux';
 import groupBy from 'lodash/groupBy';
 import Search from 'react-components/shared/search.component.js';
 import { selectExpandedNode, selectNode } from 'actions/tool.actions';
-import { ACTORS_COLUMN_IDS, IMPORTER_EXPORTER_TYPE } from 'constants';
 
 let searchNodes;
 
@@ -16,18 +15,16 @@ const mapStateToProps = (state) => {
       node.isAggregated !== true &&
       node.isUnknown !== true
     );
-
-    searchNodes = Object.values(groupBy(allNodes.filter(x => ACTORS_COLUMN_IDS.includes(x.columnId)), 'mainNodeId'))
+    searchNodes = Object.values(groupBy(allNodes, 'mainNodeId'))
       .map(([nA, nB]) => nB ?
         ({
           id: `${nA.id}_${nB.id}`,
           name: nA.name,
-          type: IMPORTER_EXPORTER_TYPE,
+          type: `${nA.type} & ${nB.type}`,
           [nA.type.toLowerCase()]: nA,
           [nB.type.toLowerCase()]: nB
         })
-        : nA)
-      .concat(allNodes.filter(x => !ACTORS_COLUMN_IDS.includes(x.columnId)));
+        : nA);
   }
 
   return {
