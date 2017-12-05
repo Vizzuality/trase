@@ -40,7 +40,9 @@ For the API:
 - Copy `.env.sample` to `.env` and replace the values accordingly. See the API documentation below for more information.
 - To setup the development database, first create a database in PostgreSQL and then import a base dump into it
 - Next, run `rake db:migrate` and `rake content:db:migrate` to update its structure
-- (only while working on API migration) `bundle exec rake db:revamp:copy`
+- only while working on API V3 migration:
+  - run the queries in `db/revamp_cleanup.sql` to remove duplicates from the original database
+  - `bundle exec rake db:revamp:copy` to copy data into the new schema
 
 You can now use `rails server` to start the API application
 
