@@ -2,13 +2,11 @@ import { h, Component } from 'preact';
 import 'styles/components/shared/search.scss';
 import 'styles/components/shared/autocomplete.scss';
 import Downshift from 'downshift/preact';
-import { findAll } from 'highlight-words-core';
-import cx from 'classnames';
 import deburr from 'lodash/deburr';
 
-import { PROFILE_PAGES_WHITELIST } from 'constants';
 
 import NodeTitleGroup from 'containers/shared/node-title-group-react.container';
+import SearchResult from './search-result.component';
 
 export default class Search extends Component {
 
@@ -23,8 +21,8 @@ export default class Search extends Component {
     return (/^([a-z]|[A-Z]){1}$/.test(deburredKey));
   }
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       isOpened: false,
       specialCharPressed: false
@@ -95,13 +93,13 @@ export default class Search extends Component {
     } else if (e.key === 'Escape' && isOpened) {
       this.onCloseClicked();
     } else {
-      this.setState({ specialCharPressed: true });
+      this.setState(state => ({ specialCharPressed: state.specialCharPressed + 1 }));
     }
   }
 
   onKeyup(e) {
     if (!Search.isValidChar(e.key)) {
-      this.setState({ specialCharPressed: false });
+      this.setState(state => ({ specialCharPressed: state.specialCharPressed - 1 }));
     }
   }
 
@@ -156,64 +154,29 @@ export default class Search extends Component {
                   ref={this.getInputRef}
                 />
               </div>
-              {isOpen ? (
+              {isOpen &&
                 <div class='suggestions'>
-                  {nodes
-                    .filter(
-                      i =>
-                        !inputValue ||
-                        i.name.toLowerCase().includes(inputValue.toLowerCase()),
-                    )
-                    .slice(0, 10)
-                    .map((item, row) => {
-                      // get name segments for highlighting typed string
-                      // ie if you type 'ng', you get ['pi', 'ng', 'po', 'ng']
-                      const nameSegments = findAll({
-                        searchWords: [inputValue],
-                        textToHighlight: item.name
-                      }).map((chunk) => {
-                        const segmentStr = item.name.substr(chunk.start, chunk.end - chunk.start);
-                        return (chunk.highlight) ? <mark>{segmentStr}</mark> : <span>{segmentStr}</span>;
-                      });
-                      const itemSelected = this.isNodeSelected(item);
-                      return (
-                        <div
-                          {...getItemProps({ item })}
+                  {
+                    nodes.filter(
+                      i => !inputValue
+                        || i.name.toLowerCase().includes(inputValue.toLowerCase())
+                      )
+                      .slice(0, 10)
+                      .map((item, row) => (
+                        <SearchResult
                           key={item.id}
-                          class={cx('suggestion', { '-highlighted': row === highlightedIndex })}
-                        >
-                          <div class='node-text-container'>
-                            <span class='node-type'>{item.type}</span>
-                            <span class='node-name'>
-                              {nameSegments}
-                            </span>
-                          </div>
-                          <div class='node-actions-container'>
-                            <button
-                              onClick={e => this.onAddNode(e, item)}
-                              class='c-button -medium-large'
-                              disabled={itemSelected}
-                            >
-                              {itemSelected ? 'Already in' : 'Add to'} supply chain
-                            </button>
-                            {
-                              PROFILE_PAGES_WHITELIST.includes(item.type) && item.type.split(' & ')
-                                .map(type => (
-                                  <button
-                                    role='link'
-                                    class='c-button -medium-large'
-                                    onClick={e => this.navigateToActor(e, item, type)}
-                                  >
-                                    See {type} profile
-                                  </button>
-                                ))
-                            }
-                          </div>
-                        </div>
-                      );
-                    })}
+                          value={inputValue}
+                          isHighlighted={row === highlightedIndex}
+                          item={item}
+                          itemProps={getItemProps({ item })}
+                          selected={this.isNodeSelected(item)}
+                          onClickNavigate={this.navigateToActor}
+                          onClickAdd={this.onAddNode}
+                        />
+                      ))
+                  }
                 </div>
-              ) : null}
+              }
             </div>;
           }}
         </Downshift>
