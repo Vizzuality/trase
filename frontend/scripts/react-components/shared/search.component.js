@@ -4,6 +4,7 @@ import 'styles/components/shared/autocomplete.scss';
 import Downshift from 'downshift/preact';
 import { findAll } from 'highlight-words-core';
 import cx from 'classnames';
+import deburr from 'lodash/deburr';
 
 import { PROFILE_PAGES_WHITELIST } from 'constants';
 
@@ -18,7 +19,8 @@ export default class Search extends Component {
   }
 
   static isValidChar(key) {
-    return (/^([a-z]|[A-Z]|ñ|Ñ|á|é|í|ó|ú|Á|É|Í|Ó|Ú){1}$/.test(key));
+    const deburredKey = deburr(key);
+    return (/^([a-z]|[A-Z]){1}$/.test(deburredKey));
   }
 
   constructor() {

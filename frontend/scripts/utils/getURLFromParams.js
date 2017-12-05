@@ -18,17 +18,20 @@ export const GET_POSTS = 'GET_POSTS';
 export const GET_SITE_DIVE = 'GET_SITE_DIVE';
 
 const API_ENDPOINTS = {
+  [GET_CONTEXTS]: { api: 3, endpoint: '/contexts' },
+  [GET_FLOWS]: { api: 1, endpoint: '/get_flows' },
+  // [GET_FLOWS]: { api: 3, endpoint: '/contexts/$context_id$/flows' },
+  [GET_COLUMNS]: { api: 3, endpoint: '/contexts/$context_id$/columns' },
+
   [GET_SITE_DIVE]: { api: 'content', endpoint: '/site_dive' },
   [GET_POSTS]: { api: 'content', endpoint: '/posts' },
   [GET_TWEETS]: { api: 'content', endpoint: '/tweets' },
+
   [GET_DISCLAIMER]: { api: 'local', endpoint: 'disclaimer.json' },
   [GET_TOOLTIPS]: { api: 'local', endpoint: 'tooltips.json' },
-  [GET_CONTEXTS]: { api: 2, endpoint: '/get_contexts' },
+
   [GET_ALL_NODES]: { api: 2, endpoint: '/get_all_nodes' },
-  [GET_COLUMNS]: { api: 2, endpoint: '/get_columns' },
   [GET_NODE_ATTRIBUTES]: { api: 2, endpoint: '/get_node_attributes' },
-  [GET_FLOWS]: { api: 1, endpoint: '/get_flows' },
-  // [GET_FLOWS]: { api: 3, endpoint: '/contexts/$context_id$/flows' },
   [GET_MAP_BASE_DATA]: { api: 2, endpoint: '/get_map_base_data' },
   [GET_LINKED_GEO_IDS]: { api: 2, endpoint: '/get_linked_geoids' },
   [GET_PLACE_FACTSHEET]: { api: 2, endpoint: '/get_place_node_attributes', mock: 'mocks/v1_get_place_node_attributes.json' },
@@ -48,7 +51,8 @@ function getURLForV3(endpoint, params = {}) {
     endpoint = endpoint.replace('$node_id$', params.node_id);
     delete params.node_id;
   }
-  return Object.keys(params).reduce((prev, current) => {
+
+  const queryParams = Object.keys(params).reduce((prev, current) => {
     const value = params[current];
     if (Array.isArray(value)) {
       const arrUrl = value.reduce((arrPrev, arrCurrent) => {
@@ -57,7 +61,9 @@ function getURLForV3(endpoint, params = {}) {
       return `${prev}&${arrUrl}`;
     }
     return `${prev}&${current}=${params[current]}`;
-  }, `${API_V3_URL}${endpoint}?`);
+  }, '');
+
+  return `${API_V3_URL}${endpoint}` + (queryParams.length > 0 ? `?${queryParams}` : '');
 }
 
 function getURLForV2(endpoint, params = {}) {
@@ -95,7 +101,7 @@ export function getURLFromParams(endpointKey, params = {}, mock = false) {
       case 3:
         return getURLForV3(`/api/v3${endpointData.endpoint}`, params);
       case 2:
-        return getURLForV2(`${endpointData.endpoint}`, params);
+        return getURLForV2(`/api/v2${endpointData.endpoint}`, params);
       case 1:
         return getURLForV1(`/v1${endpointData.endpoint}`, params);
       case 'local':
