@@ -42,7 +42,10 @@ For the API:
 - Next, run `rake db:migrate` and `rake content:db:migrate` to update its structure
 - only while working on API V3 migration:
   - run the queries in `db/revamp_cleanup.sql` to remove duplicates from the original database
+  - TEMPORARILY comment out `schema_search_path: "public"` in `config/database.yml`
   - `bundle exec rake db:revamp:copy` to copy data into the new schema
+  - `bundle exec rake db:revamp:doc:sql`
+  - ideally after running all this you shouldn't have any changes on the structure.sql file, other than PostgreSQL version in some cases
 
 You can now use `rails server` to start the API application
 
