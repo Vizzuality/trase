@@ -38,7 +38,9 @@ For the API:
 - Make sure you have Ruby and Bundler installed
 - Use Bundler's `bundle install` to install all ruby dependencies
 - Copy `.env.sample` to `.env` and replace the values accordingly. See the API documentation below for more information.
-- You may need to run `rake db:create` and `rake content:db:create` to create the databases, and/or `rake db:migrate` and `rake content:db:migrate` to update its structure.
+- To setup the development database, first create a database in PostgreSQL and then import a base dump into it
+- Next, run `rake db:migrate` and `rake content:db:migrate` to update its structure
+- (only while working on API migration) `bundle exec rake db:revamp:copy`
 
 You can now use `rails server` to start the API application
 
