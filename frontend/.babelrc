@@ -1,5 +1,11 @@
 {
-  "presets": [ "es2015" ],
+  "presets": [
+    ["env", {
+        "targets": {
+          "browsers": ["> 1%", "last 2 versions", "Firefox ESR", "Safari >= 8"]
+        }
+    }]
+  ],
   "plugins": [
       ["transform-react-jsx", { "pragma":"h" }]
     ]
