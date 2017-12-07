@@ -47,7 +47,7 @@ const pages = {
 };
 
 const templates = {};
-['head', 'search', 'nav', 'navtool', 'footer', 'scripts', 'autocomplete_countries'].forEach(key => {
+['head', 'search', 'nav', 'navtool', 'footer', 'scripts', 'autocomplete_countries', 'feedback'].forEach(key => {
   templates[key] = _.template(fs.readFileSync(`./html/includes/_${key}.ejs`, 'utf8'));
 });
 
@@ -70,6 +70,7 @@ const getPagePlugin = (id, params) => {
     footer: templates.footer(),
     scripts: templates.scripts({ bundle: id }),
     autocomplete_countries: templates.autocomplete_countries({ bundle: id }),
+    feedback: templates.feedback(),
     icons: fs.readFileSync('./html/statics/icons.svg', 'utf8'),
     filename: (params.pageName || id)+'.html',
     template: './html/'+id+'.ejs',
