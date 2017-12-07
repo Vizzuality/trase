@@ -6,10 +6,17 @@ module Api
           where(context_id: @context.id).
           order('position ASC, id ASC')
 
-        dimensions = Api::V3::Readonly::MapAttribute.select('color_scale, id, bucket_3, bucket_5,
-map_attribute_group_id as group_id, is_default, years, name, attribute_type as type, unit, description,
-aggregate_method, layer_attribute_id, map_attribute_group_id as group_id').
-          where(is_disabled: false).
+        dimensions = Api::V3::Readonly::MapAttribute.select("color_scale, \
+#{Api::V3::Readonly::MapAttribute.table_name}.id, bucket_3, bucket_5, \
+map_attribute_group_id as group_id, is_default, years, \
+#{Api::V3::Readonly::MapAttribute.table_name}.name, attribute_type as type, \
+unit, description, aggregate_method, layer_attribute_id, \
+map_attribute_group_id as group_id").
+          joins(:map_attribute_group).
+          where(
+            is_disabled: false,
+            "#{Api::V3::MapAttributeGroup.table_name}.context_id": @context.id
+          ).
           order(position: :asc)
 
         serialized_layer_groups = ActiveModelSerializers::SerializableResource.new(dimension_groups, each_serializer: DimensionGroupSerializer, root: 'dimensionGroups').serializable_hash
