@@ -155,4 +155,36 @@
       }
     }
   }
+
+  .user-report-feedback {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    bottom: 0;
+    right: 0;
+    z-index: 100;
+    height: 50px;
+    width: 150px;
+    background-color: $medium-pink;
+    cursor: pointer;
+    transform: translateX(100px);
+    transition: transform .3s ease-in-out;
+
+    &:hover {
+      transform: translateX(0);
+    }
+
+    .icon {
+      height: 28px;
+      width: 28px;
+      fill: $white;
+    }
+
+    .feedback-label {
+      color: $white;
+      font-weight: $font-weight-bold;
+      margin-right: 10px;
+    }
+  }
 }
