@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v3 do
       resources :contexts, only: [:index] do
+        resources :map_groups, only: [:index]
         resources :columns, only: [:index]
         resources :flows, only: [:index]
       end

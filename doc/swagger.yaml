@@ -546,9 +546,20 @@ definitions:
   Column:
     type: object
     properties:
-      id:
-        type: integer
-        format: int64
+      dimensionGroups:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            name:
+              type: string
+      dimensions:
+        type: array
+        items:
+          $ref: '#/definitions/Dimension'
   MapGroup:
     type: object
     properties:
@@ -570,3 +581,38 @@ definitions:
     properties:
       email:
         type: string
+  Dimension:
+    type: object
+    properties:
+      aggregateMethod:
+        type: string
+      bucket3:
+        type: array
+        items:
+          type: number
+          format: float
+      bucket5:
+        type: array
+        items:
+          type: number
+          format: float
+      colorScale:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+        format: int64
+      is_default:
+        type: boolean
+      layerAttributeId:
+        type: integer
+        format: int64
+      name:
+        type: string
+      unit:
+        type: string
+      years:
+        type: array
+        items:
+          type: integer
