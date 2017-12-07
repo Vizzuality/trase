@@ -7,6 +7,7 @@
     }]
   ],
   "plugins": [
-      ["transform-react-jsx", { "pragma":"h" }]
-    ]
+    ["syntax-dynamic-import"],
+    ["transform-react-jsx", { "pragma":"h" }]
+  ]
 }

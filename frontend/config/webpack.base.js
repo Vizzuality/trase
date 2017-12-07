@@ -1,12 +1,14 @@
 const path = require('path');
+const fs = require('fs');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const autoprefixer = require('autoprefixer');
 
+require('dotenv').config({ silent: true });
+const srcPath = path.join(__dirname, '..', 'scripts');
 
 module.exports = {
-  entry: './scripts/index.js',
+  entry: path.join(srcPath, 'index'),
   output: {
     filename: '[name].bundle.js',
     chunkFilename: '[name].bundle.js',
@@ -15,44 +17,61 @@ module.exports = {
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({ name: 'common' }),
     new CleanWebpackPlugin(['dist']),
-    new HtmlWebpackPlugin()
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: path.resolve(srcPath, 'index.ejs'),
+      inject: 'body',
+      icons: fs.readFileSync('./html/statics/icons.svg', 'utf8'),
+      DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true'
+    }),
+    new webpack.DefinePlugin({
+      NODE_ENV_DEV: process.env.NODE_ENV === 'development',
+      API_V1_URL: JSON.stringify(process.env.API_V1_URL),
+      DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
+      API_V2_URL: JSON.stringify(process.env.API_V2_URL),
+      API_V3_URL: JSON.stringify(process.env.API_V3_URL),
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      DATA_FORM_ENDPOINT: JSON.stringify(process.env.DATA_FORM_ENDPOINT),
+      DATA_FORM_ENABLED: process.env.DATA_FORM_ENABLED === 'true',
+      PDF_DOWNLOAD_URL: JSON.stringify(process.env.PDF_DOWNLOAD_URL),
+    })
   ],
   resolve: {
     alias: {
-      actions: path.resolve(__dirname, '..', 'scripts', 'actions'),
-      analytics: path.resolve(__dirname, '..', 'scripts', 'analytics'),
-      reducers: path.resolve(__dirname, '..', 'scripts', 'reducers'),
-      templates: path.resolve(__dirname, '..', 'scripts', 'reducers'),
-      style: path.resolve(__dirname, 'styles'),
-      components: path.resolve(__dirname, '..', 'scripts', 'components'),
-      'react-components': path.resolve(__dirname, '..', 'scripts', 'react-components'),
-      containers: path.resolve(__dirname, '..', 'scripts', 'containers'),
-      utils: path.resolve(__dirname, '..', 'scripts', 'utils'),
-      constants: path.resolve(__dirname, '..', 'scripts', 'constants'),
-      connect: path.resolve(__dirname, '..', 'scripts', 'connect'),
-      Container: path.resolve(__dirname, '..', 'scripts', 'Container'),
+      html: path.resolve(__dirname, '..', 'html'),
+      actions: path.resolve(srcPath, 'actions'),
+      analytics: path.resolve(srcPath, 'analytics'),
+      reducers: path.resolve(srcPath, 'reducers'),
+      templates: path.resolve(srcPath, 'templates'),
+      styles: path.resolve(__dirname, '..', 'styles'),
+      components: path.resolve(srcPath, 'components'),
+      'react-components': path.resolve(srcPath, 'react-components'),
+      containers: path.resolve(srcPath, 'containers'),
+      utils: path.resolve(srcPath, 'utils'),
+      constants: path.resolve(srcPath, 'constants'),
+      connect: path.resolve(srcPath, 'base', 'connect'),
+      Container: path.resolve(srcPath, 'base', 'Container'),
     }
   },
   module: {
     rules: [
       {
+        test: /\.ejs$/,
+        exclude: /node_modules/,
+        use: ['ejs-loader']
+      },
+      {
         test: /\.js$/,
         exclude: /node_modules/,
         use: ['babel-loader', 'eslint-loader'],
       },
-      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+      { test: /\.css$/, use: ['style-loader', 'css-loader',  'postcss-loader'] },
       {
         test: /\.scss$/,
         use: [
-          'style',
-          'css',
-          'sass',
-          {
-            loader: 'postcss-loader',
-            options: {
-              plugins: [autoprefixer]
-            }
-          }
+          'style-loader',
+          'css-loader',
+          'sass-loader'
         ]
       },
       {
