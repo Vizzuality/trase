@@ -18,6 +18,7 @@ export default class DimensionalSelector extends Component {
     this.selectDimension = this.selectDimension.bind(this);
     this.resetSelection = this.resetSelection.bind(this);
     this.isDisabled = this.isDisabled.bind(this);
+    this.isSelected = this.isSelected.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -37,9 +38,10 @@ export default class DimensionalSelector extends Component {
     }
   }
 
-  selectDimension(e, index, el) {
-    e.stopPropagation();
-    if (this.isDisabled(index, el)) return this.resetSelection(e);
+  selectDimension(e, status, index, el) {
+    console.log(status);
+    if (e) e.stopPropagation();
+    if (['disabled', 'selected'].includes(status)) return this.resetSelection();
     this.setState(state => {
       return {
         selectedDimensions: [...state.selectedDimensions, Object.assign({}, el, { order: index })]
@@ -48,7 +50,7 @@ export default class DimensionalSelector extends Component {
   }
 
   resetSelection(e) {
-    e.stopPropagation();
+    if (e) e.stopPropagation();
     this.setState({ selectedDimensions: [] });
   }
 
@@ -63,13 +65,20 @@ export default class DimensionalSelector extends Component {
     return result;
   }
 
+  isSelected(i, el) {
+    const { selectedDimensions } = this.state;
+    const current = selectedDimensions.find(dimension => dimension.order === i);
+    return current && current.id === el.id;
+  };
+
   render() {
     const { dimensions = [], getFooterText, getElement } = this.props;
     const { selectedDimensions } = this.state;
 
-    const isActive = (i, el) => {
-      const current = selectedDimensions.find(dimension => dimension.order === i);
-      return current && current.id === el.id;
+    const getItemStatus = (i, el) => {
+      if(this.isSelected(i, el)) return 'selected';
+      if (this.isDisabled(i, el)) return 'disabled';
+      return null;
     };
 
     return (
@@ -82,17 +91,15 @@ export default class DimensionalSelector extends Component {
                 <ul class='dimension-list -medium'>
                   {
                     dimension
-                      .map((el) =>
-                        <li
-                          class={classNames('dimension-list-item -capitalize', {
-                            '-disabled': this.isDisabled(dimensionIndex, el),
-                            '-selected': isActive(dimensionIndex, el)
-                          })}
-                          onClick={e => this.selectDimension(e, dimensionIndex, el)}
-                        >
-                          {getElement(el, dimensionIndex)}
-                        </li>
-                      )
+                      .map((el) => (
+                        <DimensionalSelectorItem
+                          index={dimensionIndex}
+                          el={el}
+                          status={getItemStatus(dimensionIndex, el)}
+                          onClick={(e, status) => this.selectDimension(e, status, dimensionIndex, el)}
+                          content={getElement(el, dimensionIndex)}
+                        />
+                      ))
                   }
                 </ul>
               ))
@@ -106,4 +113,17 @@ export default class DimensionalSelector extends Component {
       </div>
     );
   }
+}
+
+function DimensionalSelectorItem({ status, onClick, content }) {
+  return (
+    <li
+      class={classNames('dimension-list-item -capitalize', {
+        [`-${status}`]: status
+      })}
+      onClick={e => onClick(e, status)}
+    >
+      {content}
+    </li>
+  );
 }
