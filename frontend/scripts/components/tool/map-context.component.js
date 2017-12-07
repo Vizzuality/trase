@@ -1,4 +1,4 @@
-import ContextLayersTemplate from 'ejs!templates/tool/map/map-context.ejs';
+import ContextLayersTemplate from 'templates/tool/map/map-context.ejs';
 import 'styles/components/shared/switcher.scss';
 import 'styles/components/tool/map/map-context.scss';
 export default class {

@@ -2,7 +2,7 @@
 import _ from 'lodash';
 import formatValue from 'utils/formatValue';
 
-import TopTemplate from 'ejs!templates/profiles/top.ejs';
+import TopTemplate from 'templates/profiles/top.ejs';
 
 import 'styles/components/profiles/top.scss';
 

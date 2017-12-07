@@ -1,4 +1,4 @@
-import TableTemplate from 'ejs!templates/profiles/table/table.ejs';
+import TableTemplate from 'templates/profiles/table/table.ejs';
 import formatValue from 'utils/formatValue';
 import { UNITLESS_UNITS } from 'constants';
 

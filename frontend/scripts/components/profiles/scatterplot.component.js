@@ -10,7 +10,7 @@ import { scaleLinear as d3_scale_linear } from 'd3-scale';
 import { extent as d3_extent } from 'd3-array';
 import 'd3-transition';
 
-import ScatterplotSwitcherTemplate from 'ejs!templates/profiles/scatterplot/scatterplot-switcher.ejs';
+import ScatterplotSwitcherTemplate from 'templates/profiles/scatterplot/scatterplot-switcher.ejs';
 import 'styles/components/profiles/scatterplot.scss';
 import abbreviateNumber from 'utils/abbreviateNumber';
 
