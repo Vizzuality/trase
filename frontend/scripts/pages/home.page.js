@@ -1,9 +1,9 @@
 // import plyr from 'plyr';
-// import UpdatesTemplate from 'ejs!templates/homepage/updates.ejs';
+// import UpdatesTemplate from 'templates/homepage/updates.ejs';
 import Nav from 'components/shared/nav.component.js';
 import Slider from 'scripts/components/home/slider.component';
-import PostsTemplate from 'ejs!templates/homepage/posts.ejs';
-import TweetsTemplate from 'ejs!templates/homepage/tweets.ejs';
+import PostsTemplate from 'templates/homepage/posts.ejs';
+import TweetsTemplate from 'templates/homepage/tweets.ejs';
 import 'styles/homepage.scss';
 import 'node_modules/plyr/src/scss/plyr.scss';
 import 'styles/components/homepage/plyr.scss';

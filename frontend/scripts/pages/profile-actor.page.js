@@ -31,7 +31,7 @@ import swapProfileYear from 'utils/swapProfileYear';
 import _ from 'lodash';
 import { getURLFromParams, GET_ACTOR_FACTSHEET } from '../utils/getURLFromParams';
 import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST } from 'constants';
-import TopSourceTemplate from 'ejs!templates/profiles/top-source-switcher.ejs';
+import TopSourceTemplate from 'templates/profiles/top-source-switcher.ejs';
 
 const defaults = {
   country: 'Brazil',
