@@ -1,7 +1,5 @@
-/* eslint-env node */
-
 const path = require('path');
-const webpack = require('webpack');
+// const webpack = require('webpack');
 const merge = require('webpack-merge');
 const webpackBaseConfig = require('./webpack.base');
 

@@ -40,7 +40,7 @@
     "find-parent": "^2.0.2",
     "html-webpack-plugin": "^2.22.0",
     "node-sass": "^4.5.3",
-    "postcss-loader": "^0.11.0",
+    "postcss-loader": "^2.0.9",
     "sass-lint": "^1.9.1",
     "sass-loader": "^4.0.0",
     "style-loader": "^0.13.1",

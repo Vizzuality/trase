@@ -1,6 +1,3 @@
-/* eslint-env node */
-
-const path = require('path');
 const merge = require('webpack-merge');
 const webpackBaseConfig = require('./webpack.base');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
