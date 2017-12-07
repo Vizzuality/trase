@@ -39,7 +39,6 @@ export default class DimensionalSelector extends Component {
   }
 
   selectDimension(e, status, index, el) {
-    console.log(status);
     if (e) e.stopPropagation();
     if (['disabled', 'selected'].includes(status)) return this.resetSelection();
     this.setState(state => {
