@@ -1,3 +1,7 @@
+import AboutMarkup from 'html/about.ejs';
+import NavMarkup from 'html/includes/_nav.ejs';
+import FooterMarkup from 'html/includes/_footer.ejs';
+
 import 'styles/about.scss';
 
 import Nav from 'components/shared/nav.component.js';
@@ -57,7 +61,13 @@ const _setEventListeners = () => {
   smoothScroll(anchorItems);
 };
 
-_calculateOffsets();
-_setEventListeners();
-new Nav();
+export const render = (root) => {
+  root.innerHTML = AboutMarkup({
+    nav: NavMarkup({ page: 'about' }),
+    footer: FooterMarkup()
+  });
+  _calculateOffsets();
+  _setEventListeners();
+  new Nav();
+};
 

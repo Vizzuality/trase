@@ -1,3 +1,7 @@
+import FAQMarkup from 'html/FAQ.ejs';
+import NavMarkup from 'html/includes/_nav.ejs';
+import FooterMarkup from 'html/includes/_footer.ejs';
+
 import Nav from 'components/shared/nav.component.js';
 import 'styles/FAQ.scss';
 
@@ -57,8 +61,11 @@ const _setEventListeners = () => {
   smoothScroll(anchorItems);
 };
 
-_calculateOffsets();
-_setEventListeners();
+export const render = (root) => {
+  root.innerHTML = FAQMarkup({ nav: NavMarkup({ page: 'FAQ' }), footer: FooterMarkup() });
+  _calculateOffsets();
+  _setEventListeners();
 
-new Nav();
+  new Nav();
+};
 
