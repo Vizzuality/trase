@@ -1,11 +1,12 @@
 const path = require('path');
-const fs = require('fs');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 require('dotenv').config({ silent: true });
 const srcPath = path.join(__dirname, '..', 'scripts');
+
+const templates = require('./static.templates');
 
 module.exports = {
   entry: path.join(srcPath, 'index'),
@@ -21,8 +22,9 @@ module.exports = {
       filename: 'index.html',
       template: path.resolve(srcPath, 'index.ejs'),
       inject: 'body',
-      icons: fs.readFileSync('./html/statics/icons.svg', 'utf8'),
-      DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true'
+      DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
+      icons: templates.icons,
+      head: templates.head
     }),
     new webpack.DefinePlugin({
       NODE_ENV_DEV: process.env.NODE_ENV === 'development',
