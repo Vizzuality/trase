@@ -2,14 +2,14 @@ module Api
   module V3
     module PlaceNode
       class TopNodesSummary
-        def initialize(context, year, node, data)
+        def initialize(context, year, node)
           @context = context
           @year = year
           @node = node
-          @place_inds = data[:place_inds]
-          @place_quants = data[:place_quants]
-          @volume_attribute = data[:volume_attribute]
-          @soy_production_attribute = data[:soy_production_attribute]
+          @place_quants = Dictionary::PlaceQuants.new(@node, @year)
+          @place_inds = Dictionary::PlaceInds.new(@node, @year)
+          @volume_attribute = Dictionary::Quant.instance.get('Volume')
+          @soy_production_attribute = Dictionary::Quant.instance.get('SOY_TN')
           initialize_top_places(@soy_production_attribute)
         end
 

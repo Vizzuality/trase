@@ -2,11 +2,13 @@ module Api
   module V3
     module PlaceNode
       class TrajectoryDeforestationPlot
-        def initialize(context, year, node, data)
+        def initialize(context, year, node)
           @context = context
           @year = year
           @node = node
-          @state_name = data[:state_name]
+          @place_quals = Dictionary::PlaceQuals.new(@node, @year)
+          state_qual = @place_quals.get(NodeTypeName::STATE)
+          @state_name = state_qual && state_qual['value']
           if @state_name.present?
             @state_ranking = StateRanking.new(@context, @year, @node, @state_name)
           end
@@ -67,27 +69,16 @@ module Api
         end
 
         def initialize_attribute_from_hash(attribute_hash)
-          attribute_class =
+          dictionary =
             if attribute_hash[:attribute_type] == 'quant'
-              Quant
+              Dictionary::Quant.instance
             elsif attribute_hash[:attribute_type] == 'ind'
-              Ind
+              Dictionary::Ind.instance
             end
-          return nil unless attribute_class
-          attribute_type = attribute_hash[:attribute_type]
-          attribute_table = attribute_type.pluralize
-          attribute_property_type = "#{attribute_type}_property"
-          attribute_property_table = attribute_property_type.pluralize
-          attribute = attribute_class.
-            select(
-              :id, :name, "#{attribute_property_table}.display_name", :unit
-            ).
-            joins("JOIN #{attribute_property_table} ON \
-#{attribute_table}.id = #{attribute_property_table}.#{attribute_type}_id").
-            where(name: attribute_hash[:attribute_name]).
-            first
+          return nil unless dictionary
+          attribute = dictionary.get(attribute_hash[:attribute_name])
           if attribute.nil?
-            Rails.logger.debug 'NOT FOUND ' + attribute[:attribute_name]
+            Rails.logger.debug 'NOT FOUND ' + attribute_hash[:attribute_name]
           end
           attribute
         end

@@ -21,56 +21,26 @@ module Api
         end
 
         def call
-          intialize_dictionaries
           @basic_attributes = Api::V3::PlaceNode::BasicAttributes.new(
-            @context, @year, @node,
-            place_inds: @place_inds,
-            place_quants: @place_quants,
-            volume_attribute: @volume_attribute,
-            soy_production_attribute: @soy_production_attribute
+            @context, @year, @node
           )
           top_nodes_summary = Api::V3::PlaceNode::TopNodesSummary.new(
-            @context, @year, @node,
-            place_inds: @place_inds,
-            place_quants: @place_quants,
-            volume_attribute: @volume_attribute,
-            soy_production_attribute: @soy_production_attribute
+            @context, @year, @node
           )
           @top_traders = top_nodes_summary.
             call(:actors, NodeTypeName::EXPORTER, true)
           @top_consumers = top_nodes_summary.
             call(:countries, NodeTypeName::COUNTRY, true)
           @indicators = Api::V3::PlaceNode::IndicatorsTable.new(
-            @context, @year, @node,
-            place_inds: @place_inds,
-            place_quants: @place_quants,
-            state_name: @basic_attributes.state_name
+            @context, @year, @node
           ).call
           @trajectory_deforestation =
             if municipality?
               Api::V3::PlaceNode::TrajectoryDeforestationPlot.new(
-                @context, @year, @node,
-                state_name: @basic_attributes.state_name
+                @context, @year, @node
               ).call
             end
           self
-        end
-
-        private
-
-        def intialize_dictionaries
-          @place_quants = Hash[
-            (@node.place_quants + @node.temporal_place_quants(@year)).map do |e|
-              [e['name'], e]
-            end
-          ]
-          @place_inds = Hash[
-            (@node.place_inds + @node.temporal_place_inds(@year)).map do |e|
-              [e['name'], e]
-            end
-          ]
-          @volume_attribute = Quant.find_by_name('Volume')
-          @soy_production_attribute = Quant.find_by_name('SOY_TN')
         end
       end
     end

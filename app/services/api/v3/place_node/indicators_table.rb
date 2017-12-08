@@ -2,16 +2,18 @@ module Api
   module V3
     module PlaceNode
       class IndicatorsTable
-        def initialize(context, year, node, data)
+        def initialize(context, year, node)
           @context = context
           @year = year
           @node = node
-          @state_name = data[:state_name]
+          @place_quals = Dictionary::PlaceQuals.new(@node, @year)
+          state_qual = @place_quals.get(NodeTypeName::STATE)
+          @state_name = state_qual && state_qual['value']
           if @state_name.present?
             @state_ranking = StateRanking.new(@context, @year, @node, @state_name)
           end
-          @place_inds = data[:place_inds]
-          @place_quants = data[:place_quants]
+          @place_quants = Dictionary::PlaceQuants.new(@node, @year)
+          @place_inds = Dictionary::PlaceInds.new(@node, @year)
         end
 
         def call
@@ -98,7 +100,7 @@ module Api
           values = []
           ranking_scores = []
           attributes.each do |attribute_hash|
-            values_for_current_year =
+            attribute_values =
               if attribute_hash[:attribute].is_a? Api::V3::Quant
                 @place_quants
               elsif attribute_hash[:attribute].is_a? Api::V3::Ind
@@ -106,13 +108,15 @@ module Api
               else
                 []
               end
-            if (value_for_current_year = values_for_current_year[attribute_hash[:attribute_name]]).present?
-              value = value_for_current_year['value']
-            end
+            attribute_value = attribute_values.get(
+              attribute_hash[:attribute_name]
+            )
+            value = attribute_value['value'] if attribute_value
             values << value
-            if @state_ranking.present?
-              ranking_scores << @state_ranking.position_for_attribute(attribute_hash[:attribute])
-            end
+            next unless @state_ranking.present?
+            ranking_scores << @state_ranking.position_for_attribute(
+              attribute_hash[:attribute]
+            )
           end
           included_columns = attributes.map do |attribute_hash|
             {
@@ -152,28 +156,18 @@ module Api
         end
 
         def initialize_attribute_from_hash(attribute_hash)
-          attribute_class =
+          dictionary =
             if attribute_hash[:attribute_type] == 'quant'
-              Quant
+              Dictionary::Quant.instance
             elsif attribute_hash[:attribute_type] == 'ind'
-              Ind
+              Dictionary::Ind.instance
             end
-          return nil unless attribute_class
-          attribute_type = attribute_hash[:attribute_type]
-          attribute_table = attribute_type.pluralize
-          attribute_property_type = "#{attribute_type}_property"
-          attribute_property_table = attribute_property_type.pluralize
-          attribute = attribute_class.
-            select(
-              :id, :name, "#{attribute_property_table}.display_name", :unit
-            ).
-            joins("JOIN #{attribute_property_table} ON \
-#{attribute_table}.id = #{attribute_property_table}.#{attribute_type}_id").
-            where(name: attribute_hash[:attribute_name]).
-            first
+          return nil unless dictionary
+          attribute = dictionary.get(attribute_hash[:attribute_name])
           if attribute.nil?
             Rails.logger.debug 'NOT FOUND ' + attribute_hash[:attribute_name]
           end
+
           attribute
         end
       end

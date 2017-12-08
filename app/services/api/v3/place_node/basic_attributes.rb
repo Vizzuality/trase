@@ -9,14 +9,15 @@ module Api
                     :biome_name, :biome_geo_id,
                     :area, :soy_production, :soy_farmland
 
-        def initialize(context, year, node, data)
+        def initialize(context, year, node)
           @context = context
           @year = year
           @node = node
-          @place_inds = data[:place_inds]
-          @place_quants = data[:place_quants]
-          @volume_attribute = data[:volume_attribute]
-          @soy_production_attribute = data[:soy_production_attribute]
+          @place_quals = Dictionary::PlaceQuals.new(@node, @year)
+          @place_quants = Dictionary::PlaceQuants.new(@node, @year)
+          @place_inds = Dictionary::PlaceInds.new(@node, @year)
+          @volume_attribute = Dictionary::Quant.instance.get('Volume')
+          @soy_production_attribute = Dictionary::Quant.instance.get('SOY_TN')
 
           @node_type_name = @node&.node_type&.name
           @column_name = @node_type_name
@@ -67,36 +68,30 @@ of #{@soy_area_formatted} #{@soy_area_unit} of land."
         end
 
         def initialize_municipality_and_logistics_hub_attributes
-          @place_quals = Hash[
-            (@node.place_quals + @node.temporal_place_quals(@year)).map do |e|
-              [e['name'], e]
-            end
-          ]
-          @biome_name = @place_quals[NodeTypeName::BIOME] &&
-            @place_quals[NodeTypeName::BIOME]['value']
+          biome_qual = @place_quals.get(NodeTypeName::BIOME)
+          @biome_name = biome_qual && biome_qual['value']
           @biome = Api::V3::Node.biomes.find_by_name(biome_name)
           @biome_geo_id = @biome&.geo_id
-          @state_name = @place_quals[NodeTypeName::STATE] &&
-            @place_quals[NodeTypeName::STATE]['value']
+          state_qual = @place_quals.get(NodeTypeName::STATE)
+          @state_name = state_qual && state_qual['value']
           @state = Api::V3::Node.states.find_by_name(state_name)
           @state_geo_id = @state&.geo_id
           initialize_soy_attributes
         end
 
         def initialize_soy_attributes
-          if @place_quants['AREA_KM2'].present?
-            @area = @place_quants['AREA_KM2']['value']
-          end
-          if @place_quants['SOY_TN'].present?
-            @soy_production = @place_quants['SOY_TN']['value']
+          area_quant = @place_quants.get('AREA_KM2')
+          @area = area_quant['value'] if area_quant
+          soy_production_quant = @place_quants.get('SOY_TN')
+          if soy_production_quant
+            @soy_production = soy_production_quant['value']
             @soy_production_formatted = helper.number_with_precision(
               @soy_production, delimiter: ',', precision: 0
             )
-            @soy_production_unit = @place_quants['SOY_TN']['unit']
+            @soy_production_unit = soy_production_quant['unit']
           end
-          if @place_inds['SOY_YIELD'].present?
-            @soy_yield = @place_inds['SOY_YIELD']['value']
-          end
+          soy_yield_ind = @place_inds.get('SOY_YIELD')
+          @soy_yield = soy_yield_ind['value'] if soy_yield_ind
           if @soy_production && @soy_yield
             @soy_area_formatted = helper.number_with_precision(
               @soy_production / @soy_yield,
@@ -104,8 +99,8 @@ of #{@soy_area_formatted} #{@soy_area_unit} of land."
             )
             @soy_area_unit = 'Ha' # soy prod in Tn, soy yield in Tn/Ha
           end
-          return unless @place_inds['SOY_AREAPERC'].present?
-          @soy_farmland = @place_inds['SOY_AREAPERC']['value']
+          soy_farmland_ind = @place_inds.get('SOY_AREAPERC')
+          @soy_farmland = soy_farmland_ind['value'] if soy_farmland_ind
         end
 
         def initialize_top_nodes
