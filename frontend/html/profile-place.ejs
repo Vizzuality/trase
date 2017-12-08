@@ -1,201 +1,191 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <%= htmlWebpackPlugin.options.head %>
-</head>
-<body>
-  <div class="loading-wrapper">
-    <%= htmlWebpackPlugin.options.icons %>
-    <%= htmlWebpackPlugin.options.nav %>
-    <div class="l-profile-place js-profiles">
-      <div class="js-loading">
-        <div class="c-spinner"></div>
-      </div>
-      <div class="js-wrap is-hidden">
-        <div class="c-overall-map">
-          <div class="row">
-            <div class="small-4 columns">
-              <div class="row">
-                <div class="small-6 columns">
-                  <div class="c-locator-map js-map-country"></div>
-                </div>
-                <div class="small-6 columns">
-                  <div class="c-info">
-                    <div class="legend">country</div>
-                    <div class="name -medium js-country-name"> - </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="small-4 columns">
-              <div class="row">
-                <div class="small-3 columns">
-                  <div class="c-locator-map js-map-biome"></div>
-                </div>
-                <div class="small-9 columns">
-                  <div class="c-info">
-                    <div class="legend">biome</div>
-                    <div class="name -medium js-biome-name"> - </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="small-4 columns">
-              <div class="row">
-                <div class="small-3 columns">
-                  <div class="c-locator-map js-map-state"></div>
-                </div>
-                <div class="small-9 columns">
-                  <div class="c-info">
-                    <div class="legend">state</div>
-                    <div class="name -medium js-state-name"> - </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="c-overall-info">
-          <div class="row">
-            <div class="small-3 columns">
-              <div class="c-locator-map js-map-municipality"></div>
-            </div>
-            <div class="small-9 columns">
-              <div class="row">
-                <div class="small-12 columns">
-                  <div class="dropdown-element">
-                    <div class="c-dropdown" data-dropdown="municipality">
-                      <span class="dropdown-label js-legend">-</span>
-                      <span class="js-dropdown-title dropdown-title js-municipality">-</span>
-                      <ul class="js-dropdown-list dropdown-list is-hidden">
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="dropdown-element">
-                    <div class="c-dropdown" data-dropdown="commodity">
-                      <span class="dropdown-label">Commodity</span>
-                      <span class="js-dropdown-title dropdown-title">Soy</span>
-                      <ul class="js-dropdown-list dropdown-list">
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="dropdown-element">
-                    <div class="c-dropdown -active" data-dropdown="year">
-                      <span class="dropdown-label">Year</span>
-                      <span class="js-dropdown-title dropdown-title">2015</span>
-                      <ul class="js-dropdown-list dropdown-list">
-                        <li class="dropdown-item" data-value="2010">2010</li>
-                        <li class="dropdown-item" data-value="2011">2011</li>
-                        <li class="dropdown-item" data-value="2012">2012</li>
-                        <li class="dropdown-item" data-value="2013">2013</li>
-                        <li class="dropdown-item" data-value="2014">2014</li>
-                        <li class="dropdown-item" data-value="2015">2015</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div class="small-12 columns">
-                  <div class="stat-item">
-                    <div class="legend">area</div>
-                    <div class="value js-area">-</div>
-                    <div class="unit">km<sup>2</sup></div>
-                  </div>
-                  <div class="stat-item">
-                    <div class="legend">soy land</div>
-                    <div class="value js-soy-land">-</div>
-                    <div class="unit">Ha</div>
-                  </div>
-                  <div class="stat-item">
-                    <div class="legend">soy production</div>
-                    <div class="value js-soy-production">-</div>
-                    <div class="unit">Tn</div>
-                  </div>
-                </div>
-                <div class="small-12 columns">
-                  <div class="summary js-summary-text"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="c-anchor-buttons">
-          <div class="row">
-            <div class="small-4 columns">
-              <a href="#profile-content-anchor" class="c-link-buttons -with-arrow js-link-profile">
-                <img src="/images/profiles/profile-main-option-1.svg"/>
-                <span class="js-link-button-municipality">-</span>
-              </a>
-            </div>
-            <div class="small-4 columns">
-              <a href="" class="c-link-buttons js-link-map">
-                <img src="/images/profiles/profile-main-option-2.svg"/>
-                PRODUCTION REGIONS
-                <svg class="icon icon-external-link"><use xlink:href="#icon-external-link"></use></svg>
-              </a>
-            </div>
-            <div class="small-4 columns">
-              <a href="" class="c-link-buttons js-link-supply-chain">
-                <img src="/images/profiles/profile-main-option-3.svg"/>
-                SUPPLY CHAIN ACTORS
-                <svg class="icon icon-external-link"><use xlink:href="#icon-external-link"></use></svg>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div id="profile-content-anchor" class="profile-content-anchor"></div>
-
-        <section class="c-area-table score-table">
-          <div class="row">
-            <div class="small-12 columns">
-              <div class="js-score-table">
-                <!-- table content here  -->
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="deforestation">
-          <div class="row">
-            <div class="small-12 columns">
-              <h3 class="title -small js-line-title">-</h3>
-              <div class="axis-legend" style="margin-top: 20px">hectares</div>
-              <div class="js-line c-line"></div>
-              <div class="c-line-legend js-line-legend"></div>
-            </div>
-          </div>
-        </section>
-
-        <section class="js-traders chords-container -traders is-hidden">
-          <div class="row">
-            <div class="small-7 columns js-chord-traders c-chord">
-              <div class="c-chord-legend">Other municipalities<br/>in <span class="js-chord-traders-state-name">-</span></div>
-            </div>
-            <div class="small-4 columns">
-              <div class="c-top js-top-trader"></div>
-            </div>
-          </div>
-        </section>
-
-        <section class="js-consumers chords-container -consumers is-hidden">
-          <div class="row">
-            <div class="small-4 small-offset-1 columns">
-              <div class="c-top js-top-consumer"></div>
-            </div>
-            <div class="small-7 columns js-chord-consumers c-chord">
-              <div class="c-chord-legend">Other municipalities<br/>in <span class="js-chord-consumers-state-name">-</span></div>
-            </div>
-          </div>
-        </section>
-      </div>
-      <div class="c-error-message js-error-message is-hidden">
-        <p class="message">Data not found</p>
-      </div>
+<div class="loading-wrapper">
+  <%= nav %>
+  <div class="l-profile-place js-profiles">
+    <div class="js-loading">
+      <div class="c-spinner"></div>
     </div>
-    <%= htmlWebpackPlugin.options.footer %>
+    <div class="js-wrap is-hidden">
+      <div class="c-overall-map">
+        <div class="row">
+          <div class="small-4 columns">
+            <div class="row">
+              <div class="small-6 columns">
+                <div class="c-locator-map js-map-country"></div>
+              </div>
+              <div class="small-6 columns">
+                <div class="c-info">
+                  <div class="legend">country</div>
+                  <div class="name -medium js-country-name"> - </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="small-4 columns">
+            <div class="row">
+              <div class="small-3 columns">
+                <div class="c-locator-map js-map-biome"></div>
+              </div>
+              <div class="small-9 columns">
+                <div class="c-info">
+                  <div class="legend">biome</div>
+                  <div class="name -medium js-biome-name"> - </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="small-4 columns">
+            <div class="row">
+              <div class="small-3 columns">
+                <div class="c-locator-map js-map-state"></div>
+              </div>
+              <div class="small-9 columns">
+                <div class="c-info">
+                  <div class="legend">state</div>
+                  <div class="name -medium js-state-name"> - </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="c-overall-info">
+        <div class="row">
+          <div class="small-3 columns">
+            <div class="c-locator-map js-map-municipality"></div>
+          </div>
+          <div class="small-9 columns">
+            <div class="row">
+              <div class="small-12 columns">
+                <div class="dropdown-element">
+                  <div class="c-dropdown" data-dropdown="municipality">
+                    <span class="dropdown-label js-legend">-</span>
+                    <span class="js-dropdown-title dropdown-title js-municipality">-</span>
+                    <ul class="js-dropdown-list dropdown-list is-hidden">
+                    </ul>
+                  </div>
+                </div>
+                <div class="dropdown-element">
+                  <div class="c-dropdown" data-dropdown="commodity">
+                    <span class="dropdown-label">Commodity</span>
+                    <span class="js-dropdown-title dropdown-title">Soy</span>
+                    <ul class="js-dropdown-list dropdown-list">
+                    </ul>
+                  </div>
+                </div>
+                <div class="dropdown-element">
+                  <div class="c-dropdown -active" data-dropdown="year">
+                    <span class="dropdown-label">Year</span>
+                    <span class="js-dropdown-title dropdown-title">2015</span>
+                    <ul class="js-dropdown-list dropdown-list">
+                      <li class="dropdown-item" data-value="2010">2010</li>
+                      <li class="dropdown-item" data-value="2011">2011</li>
+                      <li class="dropdown-item" data-value="2012">2012</li>
+                      <li class="dropdown-item" data-value="2013">2013</li>
+                      <li class="dropdown-item" data-value="2014">2014</li>
+                      <li class="dropdown-item" data-value="2015">2015</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="small-12 columns">
+                <div class="stat-item">
+                  <div class="legend">area</div>
+                  <div class="value js-area">-</div>
+                  <div class="unit">km<sup>2</sup></div>
+                </div>
+                <div class="stat-item">
+                  <div class="legend">soy land</div>
+                  <div class="value js-soy-land">-</div>
+                  <div class="unit">Ha</div>
+                </div>
+                <div class="stat-item">
+                  <div class="legend">soy production</div>
+                  <div class="value js-soy-production">-</div>
+                  <div class="unit">Tn</div>
+                </div>
+              </div>
+              <div class="small-12 columns">
+                <div class="summary js-summary-text"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="c-anchor-buttons">
+        <div class="row">
+          <div class="small-4 columns">
+            <a href="#profile-content-anchor" class="c-link-buttons -with-arrow js-link-profile">
+              <img src="/images/profiles/profile-main-option-1.svg"/>
+              <span class="js-link-button-municipality">-</span>
+            </a>
+          </div>
+          <div class="small-4 columns">
+            <a href="" class="c-link-buttons js-link-map">
+              <img src="/images/profiles/profile-main-option-2.svg"/>
+              PRODUCTION REGIONS
+              <svg class="icon icon-external-link"><use xlink:href="#icon-external-link"></use></svg>
+            </a>
+          </div>
+          <div class="small-4 columns">
+            <a href="" class="c-link-buttons js-link-supply-chain">
+              <img src="/images/profiles/profile-main-option-3.svg"/>
+              SUPPLY CHAIN ACTORS
+              <svg class="icon icon-external-link"><use xlink:href="#icon-external-link"></use></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div id="profile-content-anchor" class="profile-content-anchor"></div>
+
+      <section class="c-area-table score-table">
+        <div class="row">
+          <div class="small-12 columns">
+            <div class="js-score-table">
+              <!-- table content here  -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="deforestation">
+        <div class="row">
+          <div class="small-12 columns">
+            <h3 class="title -small js-line-title">-</h3>
+            <div class="axis-legend" style="margin-top: 20px">hectares</div>
+            <div class="js-line c-line"></div>
+            <div class="c-line-legend js-line-legend"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="js-traders chords-container -traders is-hidden">
+        <div class="row">
+          <div class="small-7 columns js-chord-traders c-chord">
+            <div class="c-chord-legend">Other municipalities<br/>in <span class="js-chord-traders-state-name">-</span></div>
+          </div>
+          <div class="small-4 columns">
+            <div class="c-top js-top-trader"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="js-consumers chords-container -consumers is-hidden">
+        <div class="row">
+          <div class="small-4 small-offset-1 columns">
+            <div class="c-top js-top-consumer"></div>
+          </div>
+          <div class="small-7 columns js-chord-consumers c-chord">
+            <div class="c-chord-legend">Other municipalities<br/>in <span class="js-chord-consumers-state-name">-</span></div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="c-error-message js-error-message is-hidden">
+      <p class="message">Data not found</p>
+    </div>
   </div>
-  <%= htmlWebpackPlugin.options.scripts %>
-</body>
-</html>
+  <%= footer %>
+</div>

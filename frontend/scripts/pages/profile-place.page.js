@@ -1,3 +1,7 @@
+import ProfilePlaceMarkup from 'html/profile-place.ejs';
+import NavMarkup from 'html/includes/_nav.ejs';
+import FooterMarkup from 'html/includes/_footer.ejs';
+
 import 'styles/_base.scss';
 import 'styles/_texts.scss';
 import 'styles/_foundation.css';
@@ -186,7 +190,8 @@ const _showErrorMessage = () => {
   el.querySelector('.js-error-message').classList.remove('is-hidden');
 };
 
-const render = () => {
+export const render = (root) => {
+  root.innerHTML = ProfilePlaceMarkup({ nav: NavMarkup({ page: 'profile-place' }), footer: FooterMarkup() });
   const url = window.location.search;
   const urlParams = getURLParams(url);
   const nodeId = urlParams.nodeId;
@@ -238,5 +243,3 @@ const render = () => {
   new Nav();
 
 };
-
-render();
