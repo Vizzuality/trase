@@ -1,37 +1,25 @@
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
+import DataMarkup from 'html/data.ejs';
+import NavMarkup from 'html/includes/_nav.ejs';
+import FooterMarkup from 'html/includes/_footer.ejs';
+import AutocompleteCountriesMarkup from 'html/includes/_autocomplete_countries.ejs';
+
 import DataContentContainer from 'containers/data/data-content.container';
 import Nav from 'components/shared/nav.component.js';
-import DataReducer from 'reducers/data.reducer';
 import { loadContext } from 'actions/data.actions';
-import { DATA_DEFAULT_STATE } from 'constants';
-import analyticsMiddleware from 'analytics/data.analytics.middleware';
 
 import 'styles/data.scss';
 import 'styles/components/shared/veil.scss';
 import 'styles/components/shared/modal.scss';
 
 
-const start = (initialState) => {
-  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
-  var store = createStore(
-    combineReducers({
-      data: DataReducer
-    }),
-    initialState,
-    composeEnhancers(
-      applyMiddleware(analyticsMiddleware, thunk)
-    )
-  );
-
+export const render = (root, store) => {
+  root.innerHTML = DataMarkup({
+    nav: NavMarkup({ page: 'data' }),
+    footer: FooterMarkup(),
+    autocomplete_countries: AutocompleteCountriesMarkup()
+  });
   new DataContentContainer(store);
-
   store.dispatch(loadContext());
+
+  new Nav();
 };
-
-const globalState = Object.assign({}, DATA_DEFAULT_STATE);
-
-start(globalState);
-
-new Nav();

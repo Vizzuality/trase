@@ -1,3 +1,7 @@
+import DataMethodsMarkup from 'html/data-methods.ejs';
+import NavMarkup from 'html/includes/_nav.ejs';
+import FooterMarkup from 'html/includes/_footer.ejs';
+
 import Nav from 'components/shared/nav.component.js';
 import 'styles/data-methods.scss';
 
@@ -57,8 +61,15 @@ const _setEventListeners = () => {
   smoothScroll(anchorItems);
 };
 
-_calculateOffsets();
-_setEventListeners();
+export const render = (root) => {
+  root.innerHTML = DataMethodsMarkup({
+    nav: NavMarkup({ page: 'data-methods' }),
+    footer: FooterMarkup(),
+  });
+  _calculateOffsets();
+  _setEventListeners();
 
-new Nav();
+  new Nav();
+};
+
 
