@@ -7,7 +7,8 @@
     }]
   ],
   "plugins": [
-    ["syntax-dynamic-import"],
+    "syntax-dynamic-import",
+    "transform-object-rest-spread",
     ["transform-react-jsx", { "pragma":"h" }]
   ]
 }

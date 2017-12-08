@@ -16,8 +16,22 @@ import getNodesAtColumns from './helpers/getNodesAtColumns';
 import getNodesColoredBySelection from './helpers/getNodesColoredBySelection';
 import getRecolorGroups from './helpers/getRecolorGroups';
 import { getMapDimensionsWarnings } from './helpers/getMapDimensionsWarnings';
+import { getURLParams, decodeStateFromURL } from 'utils/stateURL';
 
-export default function (state = {}, action) {
+const params = getURLParams(window.location.search); // this is temporary it should load it from location reducer
+const initialState = {
+  selectedNodesIds: [],
+  expandedNodesIds: [],
+  areNodesExpanded: false,
+  detailedView: false,
+  selectedNodesData: [],
+  selectedMapContextualLayers: null,
+  isMapVisible: false,
+  expandedMapSidebarGroupsIds: [],
+  ...decodeStateFromURL(params.state) // also temporary
+};
+
+export default function (state = initialState, action) {
   let newState;
   let updateURLState = true;
   switch (action.type) {

@@ -6,7 +6,11 @@ const initialState = {
   isAppMenuVisible: false,
   tooltipCheck: 0,
   tooltips: [],
-  currentDropdown: null
+  currentDropdown: null,
+  modal: {
+    visibility: false,
+    modalParams: null
+  }
 };
 
 const isSankeyExpanded = (state) => state.isMapLayerVisible !== true && state.isMapVisible !== true;
