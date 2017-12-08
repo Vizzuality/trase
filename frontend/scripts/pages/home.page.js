@@ -139,7 +139,7 @@ const newsletterSubscribe = (e) => {
     });
 };
 
-export const start = (root) => {
+export const render = (root) => {
   root.innerHTML = HomeMarkup({ footer: FooterMarkup(), nav: NavMarkup({ page: 'index' }) });
   const bounds = document.querySelector('.js-trigger-menu-bg').getBoundingClientRect();
   const pageOffset = getPageOffset(bounds);

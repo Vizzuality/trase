@@ -31,7 +31,7 @@ if (process.env.NODE_ENV === 'development' && module.hot) {
   });
 }
 
-import(/* webpackChunkName: "tool" */ './pages/tool.page.js')
+import(/* webpackChunkName: "page" */ './pages/profile-actor.page.js')
   .then((tool) => {
-    tool.start(document.getElementById('app-root-container'), store);
+    tool.render(document.getElementById('app-root-container'), store);
   });

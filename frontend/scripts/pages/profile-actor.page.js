@@ -1,3 +1,7 @@
+import ProfileActorMarkup from 'html/profile-actor.ejs';
+import NavMarkup from 'html/includes/_nav.ejs';
+import FooterMarkup from 'html/includes/_footer.ejs';
+
 import 'styles/_base.scss';
 import 'styles/_texts.scss';
 import 'styles/_foundation.css';
@@ -315,7 +319,8 @@ const _switchTopSource = (e, data) => {
   _initSource(selectedSource, data);
 };
 
-const _init = ()  => {
+export const render = (root)  => {
+  root.innerHTML = ProfileActorMarkup({ nav: NavMarkup({ page: 'profile-actor' }), footer: FooterMarkup() });
   const url = window.location.search;
   const urlParams = getURLParams(url);
   const nodeId = urlParams.nodeId;
@@ -365,5 +370,3 @@ const _init = ()  => {
   const nav = new Nav();
   print = nav.print;
 };
-
-_init();

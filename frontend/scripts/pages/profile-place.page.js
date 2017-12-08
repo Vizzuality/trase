@@ -186,7 +186,7 @@ const _showErrorMessage = () => {
   el.querySelector('.js-error-message').classList.remove('is-hidden');
 };
 
-const _init = () => {
+const render = () => {
   const url = window.location.search;
   const urlParams = getURLParams(url);
   const nodeId = urlParams.nodeId;
@@ -239,4 +239,4 @@ const _init = () => {
 
 };
 
-_init();
+render();

@@ -29,7 +29,7 @@ import 'styles/components/shared/dropdown.scss';
 import 'styles/components/tool/map/map-sidebar.scss';
 import 'styles/layouts/l-tool.scss';
 
-export const start = (root, store) => {
+export const render = (root, store) => {
   root.innerHTML = ToolMarkup({ search: SearchMarkup(), navtool: NavtoolMarkup() });
   new FlowContentContainer(store);
   new SankeyContainer(store);
