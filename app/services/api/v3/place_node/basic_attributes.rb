@@ -25,22 +25,7 @@ module Api
           @country_name = @context&.country&.name
           @country_geo_id = @context&.country&.iso2
 
-          @dynamic_attributes = {}
-          @dynamic_attributes[
-            (@node_type_name.split.join('_').downcase + '_name').to_sym
-          ] = @node.name
-          @dynamic_attributes[
-            (@node_type_name.split.join('_').downcase + '_geo_id').to_sym
-          ] = @node.geo_id
-
-          if municipality? || logistics_hub?
-            @dynamic_attributes = @dynamic_attributes.merge(
-              municipality_and_logistics_hub_attributes
-            )
-          end
-          @dynamic_attributes.each do |name, value|
-            instance_variable_set("@#{name}", value)
-          end
+          initialize_dynamic_attributes
         end
 
         NodeType::PLACES.each do |place_name|
@@ -105,6 +90,25 @@ the total exports, and the main destination was #{top_consumer_name}."
         end
 
         private
+
+        def initialize_dynamic_attributes
+          @dynamic_attributes = {}
+          @dynamic_attributes[
+            (@node_type_name.split.join('_').downcase + '_name').to_sym
+          ] = @node.name
+          @dynamic_attributes[
+            (@node_type_name.split.join('_').downcase + '_geo_id').to_sym
+          ] = @node.geo_id
+
+          if municipality? || logistics_hub?
+            @dynamic_attributes = @dynamic_attributes.merge(
+              municipality_and_logistics_hub_attributes
+            )
+          end
+          @dynamic_attributes.each do |name, value|
+            instance_variable_set("@#{name}", value)
+          end
+        end
 
         def municipality_and_logistics_hub_attributes
           @place_quals = Hash[
