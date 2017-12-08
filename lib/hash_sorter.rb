@@ -38,13 +38,21 @@ class HashSorter
     tmp
   end
 
-  def compare_hashes(a, b)
-    sorting_key = ['id', 'name', %w(path quant ind), %w(path quant)].find do |key|
-      key.is_a?(String) && a.key?(key) ||
-        key.is_a?(Array) && (key - a.keys).empty?
-    end
-    raise 'No sorting key for array: ' + a.inspect unless sorting_key
+  private
 
+  def sorting_key_for_array_of_hashes(a_hash)
+    sorting_key = [
+      'id', 'name', %w(path quant ind), %w(path quant)
+    ].find do |key|
+      key.is_a?(String) && a_hash.key?(key) ||
+        key.is_a?(Array) && (key - a_hash.keys).empty?
+    end
+    raise 'No sorting key for array: ' + a_hash.inspect unless sorting_key
+    sorting_key
+  end
+
+  def compare_hashes(a, b)
+    sorting_key = sorting_key_for_array_of_hashes(a)
     if sorting_key.is_a?(Array)
       sorting_key.map { |e| a[e] || -1 } <=> sorting_key.map { |e| b[e] || -1 }
     else
