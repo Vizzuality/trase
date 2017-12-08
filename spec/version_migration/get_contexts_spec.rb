@@ -4,9 +4,15 @@ RSpec.describe 'Get contexts', type: :request do
   include_context 'brazil soy indicators'
   include_context 'brazil resize by'
   include_context 'brazil recolor by'
+  include_context 'brazil context nodes'
 
   describe 'GET /api/v2/get_contexts === GET /api/v3/contexts ' do
     it 'has the correct response structure' do
+      FactoryBot.create(
+        :context_filter_by,
+        context: context, node_type: biome_node_type
+      )
+
       SchemaRevamp.new.copy
 
       get '/api/v2/get_contexts'
