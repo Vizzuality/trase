@@ -39,41 +39,7 @@ module Api
         def query(attribute, include_domestic_consumption = true)
           attribute_type = attribute.class.name.demodulize.downcase
           value_table = 'flow_' + attribute_type + 's'
-
-          select_clause = ActiveRecord::Base.send(
-            :sanitize_sql_array,
-            [
-              [
-                'flows.path[?] AS node_id',
-                "SUM(#{value_table}.value)::DOUBLE PRECISION AS value",
-                'nodes.name AS name',
-                'node_properties.is_domestic_consumption AS is_domestic_consumption',
-                'nodes.geo_id'
-              ].join(', '),
-              @other_node_index
-            ]
-          )
-          nodes_join_clause = ActiveRecord::Base.send(
-            :sanitize_sql_array,
-            [
-              'JOIN nodes ON nodes.id = flows.path[?]',
-              @other_node_index
-            ]
-          )
-          group_clause = ActiveRecord::Base.send(
-            :sanitize_sql_array,
-            [
-              [
-                'flows.path[?]',
-                'nodes.name',
-                'nodes.geo_id',
-                'node_properties.is_domestic_consumption'
-              ].join(', '),
-              @other_node_index
-            ]
-          )
-
-          query = Flow.select(select_clause).
+          query = Flow.select(select_clause(value_table)).
             joins("JOIN #{value_table} ON flows.id = #{value_table}.flow_id").
             joins(nodes_join_clause).
             joins('JOIN node_properties ON nodes.id = node_properties.node_id').
@@ -86,6 +52,47 @@ module Api
             query = query.where('NOT node_properties.is_domestic_consumption')
           end
           query.group(group_clause)
+        end
+
+        def select_clause(value_table)
+          ActiveRecord::Base.send(
+            :sanitize_sql_array,
+            [
+              [
+                'flows.path[?] AS node_id',
+                "SUM(#{value_table}.value)::DOUBLE PRECISION AS value",
+                'nodes.name AS name',
+                'node_properties.is_domestic_consumption AS is_domestic_consumption',
+                'nodes.geo_id'
+              ].join(', '),
+              @other_node_index
+            ]
+          )
+        end
+
+        def nodes_join_clause
+          ActiveRecord::Base.send(
+            :sanitize_sql_array,
+            [
+              'JOIN nodes ON nodes.id = flows.path[?]',
+              @other_node_index
+            ]
+          )
+        end
+
+        def group_clause
+          ActiveRecord::Base.send(
+            :sanitize_sql_array,
+            [
+              [
+                'flows.path[?]',
+                'nodes.name',
+                'nodes.geo_id',
+                'node_properties.is_domestic_consumption'
+              ].join(', '),
+              @other_node_index
+            ]
+          )
         end
       end
     end
