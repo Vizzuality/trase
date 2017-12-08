@@ -1,12 +1,19 @@
 // import plyr from 'plyr';
+// import 'styles/components/homepage/plyr.scss';
+// import 'node_modules/plyr/src/scss/plyr.scss';
+
 // import UpdatesTemplate from 'templates/homepage/updates.ejs';
+
+import HomeMarkup from 'html/home.ejs';
+import FooterMarkup from 'html/includes/_footer.ejs';
+import NavMarkup from 'html/includes/_nav.ejs';
+
 import Nav from 'components/shared/nav.component.js';
-import Slider from 'scripts/components/home/slider.component';
+import Slider from 'components/home/slider.component';
 import PostsTemplate from 'templates/homepage/posts.ejs';
 import TweetsTemplate from 'templates/homepage/tweets.ejs';
 import 'styles/homepage.scss';
-import 'node_modules/plyr/src/scss/plyr.scss';
-import 'styles/components/homepage/plyr.scss';
+
 import { GET_POSTS, GET_TWEETS, POST_SUBSCRIBE_NEWSLETTER, getURLFromParams } from 'utils/getURLFromParams';
 
 const state = {
@@ -132,7 +139,8 @@ const newsletterSubscribe = (e) => {
     });
 };
 
-const init = () => {
+export const start = (root) => {
+  root.innerHTML = HomeMarkup({ footer: FooterMarkup(), nav: NavMarkup({ page: 'index' }) });
   const bounds = document.querySelector('.js-trigger-menu-bg').getBoundingClientRect();
   const pageOffset = getPageOffset(bounds);
   new Nav({ pageOffset });
@@ -165,5 +173,3 @@ const init = () => {
   window.addEventListener('scroll', scrollIntro);
   document.querySelector('.js-form-subscribe').addEventListener('click', newsletterSubscribe);
 };
-
-init();
