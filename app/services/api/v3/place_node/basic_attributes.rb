@@ -44,55 +44,11 @@ module Api
         def summary
           return nil unless municipality? || logistics_hub?
 
-          total_soy_production = Api::V3::NodeQuant.
-            where(quant_id: @soy_production_attribute.id, year: @year).
-            sum(:value)
-
-          percentage_total_production =
-            if @soy_production
-              helper.number_to_percentage(
-                (@soy_production / total_soy_production) * 100,
-                delimiter: ',', precision: 2
-              )
-            end
-          country_ranking = CountryRanking.new(@context, @year, @node).
-            position_for_attribute(@soy_production_attribute)
-          if country_ranking.present?
-            country_ranking = country_ranking.ordinalize
-          end
-          if @state.present?
-            state_ranking = StateRanking.new(@context, @year, @node, @state.name).
-              position_for_attribute(@soy_production_attribute)
-          end
-          state_ranking = state_ranking.ordinalize if state_ranking.present?
-          state_name = @state.name.titleize if @state.present?
-
           result = "In #{@year}, #{@node.name.titleize} produced \
 #{@soy_production_formatted} #{@soy_production_unit} of soy occupying a total \
-of #{@soy_area_formatted} #{@soy_area_unit} of land. With \
-#{percentage_total_production} of the total production, it ranks \
-#{country_ranking} in Brazil in soy production, and #{state_ranking} in the \
-state of #{state_name}."
-
-          top_exporter = @top_exporters.first
-          if top_exporter.present?
-            top_exporter_name = top_exporter['name']&.titleize
-            if @total_exports.present?
-              percentage_total_exports = helper.number_to_percentage(
-                ((top_exporter[:value] || 0) / @total_exports) * 100,
-                delimiter: ',', precision: 1
-              )
-            end
-          end
-
-          top_consumer = @top_consumers.first
-          top_consumer_name = top_consumer['name']&.titleize if top_consumer
-
-          if top_exporter && percentage_total_exports && top_consumer
-            result << " The largest exporter of soy in #{@node.name.titleize} \
-was #{top_exporter_name}, which accounted for #{percentage_total_exports} of \
-the total exports, and the main destination was #{top_consumer_name}."
-          end
+of #{@soy_area_formatted} #{@soy_area_unit} of land."
+          result << summary_of_production_ranking
+          result << summary_of_top_exporter_and_top_consumer
           result
         end
 
@@ -151,6 +107,59 @@ the total exports, and the main destination was #{top_consumer_name}."
           end
           return unless @place_inds['SOY_AREAPERC'].present?
           @soy_farmland = @place_inds['SOY_AREAPERC']['value']
+        end
+
+        def summary_of_production_ranking
+          total_soy_production = Api::V3::NodeQuant.
+            where(quant_id: @soy_production_attribute.id, year: @year).
+            sum(:value)
+
+          percentage_total_production =
+            if @soy_production
+              helper.number_to_percentage(
+                (@soy_production / total_soy_production) * 100,
+                delimiter: ',', precision: 2
+              )
+            end
+          country_ranking = CountryRanking.new(@context, @year, @node).
+            position_for_attribute(@soy_production_attribute)
+          if country_ranking.present?
+            country_ranking = country_ranking.ordinalize
+          end
+          if @state.present?
+            state_ranking = StateRanking.new(@context, @year, @node, @state.name).
+              position_for_attribute(@soy_production_attribute)
+          end
+          state_ranking = state_ranking.ordinalize if state_ranking.present?
+          state_name = @state.name.titleize if @state.present?
+
+          " With #{percentage_total_production} of the total production, it \
+ranks #{country_ranking} in Brazil in soy production, and #{state_ranking} in \
+the state of #{state_name}."
+        end
+
+        def summary_of_top_exporter_and_top_consumer
+          top_exporter = @top_exporters.first
+          if top_exporter.present?
+            top_exporter_name = top_exporter['name']&.titleize
+            if @total_exports.present?
+              percentage_total_exports = helper.number_to_percentage(
+                ((top_exporter[:value] || 0) / @total_exports) * 100,
+                delimiter: ',', precision: 1
+              )
+            end
+          end
+
+          top_consumer = @top_consumers.first
+          top_consumer_name = top_consumer['name']&.titleize if top_consumer
+
+          if top_exporter && percentage_total_exports && top_consumer
+            " The largest exporter of soy in #{@node.name.titleize} \
+was #{top_exporter_name}, which accounted for #{percentage_total_exports} of \
+the total exports, and the main destination was #{top_consumer_name}."
+          else
+            ''
+          end
         end
 
         def helper
