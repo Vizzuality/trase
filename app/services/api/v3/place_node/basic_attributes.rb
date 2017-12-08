@@ -7,7 +7,7 @@ module Api
                     :logistics_hub_name, :logistics_hub_geo_id,
                     :state_name, :state_geo_id,
                     :biome_name, :biome_geo_id,
-                    :area, :soy_production, :soy_area, :soy_farmland
+                    :area, :soy_production, :soy_farmland
 
         def initialize(context, year, node, data)
           @context = context
@@ -25,6 +25,9 @@ module Api
           @country_name = @context&.country&.name
           @country_geo_id = @context&.country&.iso2
 
+          if municipality? || logistics_hub?
+            initialize_municipality_and_logistics_hub_attributes
+          end
           initialize_dynamic_attributes
         end
 
@@ -32,6 +35,10 @@ module Api
           define_method("#{place_name.split.join('_').downcase}?") do
             @node_type_name == place_name
           end
+        end
+
+        def soy_area
+          @soy_area_formatted
         end
 
         def summary
@@ -99,38 +106,31 @@ the total exports, and the main destination was #{top_consumer_name}."
           @dynamic_attributes[
             (@node_type_name.split.join('_').downcase + '_geo_id').to_sym
           ] = @node.geo_id
-
-          if municipality? || logistics_hub?
-            @dynamic_attributes = @dynamic_attributes.merge(
-              municipality_and_logistics_hub_attributes
-            )
-          end
           @dynamic_attributes.each do |name, value|
             instance_variable_set("@#{name}", value)
           end
         end
 
-        def municipality_and_logistics_hub_attributes
+        def initialize_municipality_and_logistics_hub_attributes
           @place_quals = Hash[
             (@node.place_quals + @node.temporal_place_quals(@year)).map do |e|
               [e['name'], e]
             end
           ]
-
-          data = {}
-
-          biome_name = @place_quals[NodeTypeName::BIOME] &&
+          @biome_name = @place_quals[NodeTypeName::BIOME] &&
             @place_quals[NodeTypeName::BIOME]['value']
           @biome = Api::V3::Node.biomes.find_by_name(biome_name)
-          data[:biome_name] = biome_name
-          data[:biome_geo_id] = @biome&.geo_id
-          state_name = @place_quals[NodeTypeName::STATE] &&
+          @biome_geo_id = @biome&.geo_id
+          @state_name = @place_quals[NodeTypeName::STATE] &&
             @place_quals[NodeTypeName::STATE]['value']
           @state = Api::V3::Node.states.find_by_name(state_name)
-          data[:state_name] = state_name
-          data[:state_geo_id] = @state&.geo_id
+          @state_geo_id = @state&.geo_id
+          initialize_soy_attributes
+        end
+
+        def initialize_soy_attributes
           if @place_quants['AREA_KM2'].present?
-            data[:area] = @place_quants['AREA_KM2']['value']
+            @area = @place_quants['AREA_KM2']['value']
           end
           if @place_quants['SOY_TN'].present?
             @soy_production = @place_quants['SOY_TN']['value']
@@ -138,7 +138,6 @@ the total exports, and the main destination was #{top_consumer_name}."
               @soy_production, delimiter: ',', precision: 0
             )
             @soy_production_unit = @place_quants['SOY_TN']['unit']
-            data[:soy_production] = @soy_production
           end
           if @place_inds['SOY_YIELD'].present?
             @soy_yield = @place_inds['SOY_YIELD']['value']
@@ -149,14 +148,9 @@ the total exports, and the main destination was #{top_consumer_name}."
               delimiter: ',', precision: 0
             )
             @soy_area_unit = 'Ha' # soy prod in Tn, soy yield in Tn/Ha
-            data[:soy_area] = @soy_area_formatted
           end
-          if @place_inds['SOY_AREAPERC'].present?
-            @soy_farmland = @place_inds['SOY_AREAPERC']['value']
-            data[:soy_farmland] = @soy_farmland
-          end
-
-          data
+          return unless @place_inds['SOY_AREAPERC'].present?
+          @soy_farmland = @place_inds['SOY_AREAPERC']['value']
         end
 
         def helper
