@@ -15,10 +15,8 @@ module Api
           @node = node
           @place_inds = data[:place_inds]
           @place_quants = data[:place_quants]
+          @volume_attribute = data[:volume_attribute]
           @soy_production_attribute = data[:soy_production_attribute]
-          @top_exporters = data[:top_exporters]
-          @total_exports = data[:total_exports]
-          @top_consumers = data[:top_consumers]
 
           @node_type_name = @node&.node_type&.name
           @column_name = @node_type_name
@@ -29,6 +27,7 @@ module Api
             initialize_municipality_and_logistics_hub_attributes
           end
           initialize_dynamic_attributes
+          initialize_top_nodes
         end
 
         NodeType::PLACES.each do |place_name|
@@ -107,6 +106,28 @@ of #{@soy_area_formatted} #{@soy_area_unit} of land."
           end
           return unless @place_inds['SOY_AREAPERC'].present?
           @soy_farmland = @place_inds['SOY_AREAPERC']['value']
+        end
+
+        def initialize_top_nodes
+          exporter_top_nodes = Api::V3::PlaceNode::TopNodesList.new(
+            @context, @year, @node,
+            other_node_type_name: NodeTypeName::EXPORTER,
+            place_inds: @place_inds,
+            place_quants: @place_quants
+          )
+          consumer_top_nodes = Api::V3::PlaceNode::TopNodesList.new(
+            @context, @year, @node,
+            other_node_type_name: NodeTypeName::COUNTRY,
+            place_inds: @place_inds,
+            place_quants: @place_quants
+          )
+          @top_exporters = exporter_top_nodes.sorted_list(
+            @volume_attribute, false, 10
+          )
+          @total_exports = exporter_top_nodes.total(@volume_attribute, false)
+          @top_consumers = consumer_top_nodes.sorted_list(
+            @volume_attribute, true, 10
+          )
         end
 
         def summary_of_production_ranking

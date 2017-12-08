@@ -22,51 +22,24 @@ module Api
 
         def call
           intialize_dictionaries
-          @volume_attribute = Quant.find_by_name('Volume')
-          @soy_production_attribute = Quant.find_by_name('SOY_TN')
-          exporter_top_nodes = Api::V3::PlaceNode::TopNodesList.new(
-            @context, @year, @node,
-            other_node_type_name: NodeTypeName::EXPORTER,
-            place_inds: @place_inds,
-            place_quants: @place_quants
-          )
-          top_exporters_list = exporter_top_nodes.sorted_list(
-            @volume_attribute, false, 10
-          )
-          top_exporters_with_domestic_list = exporter_top_nodes.sorted_list(
-            @volume_attribute, true, 10
-          )
-          total_exports = exporter_top_nodes.total(@volume_attribute, false)
-          total_exports_with_domestic = exporter_top_nodes.total(@volume_attribute, true)
-          consumer_top_nodes = Api::V3::PlaceNode::TopNodesList.new(
-            @context, @year, @node,
-            other_node_type_name: NodeTypeName::COUNTRY,
-            place_inds: @place_inds,
-            place_quants: @place_quants
-          )
-          top_consumers_with_domestic_list = consumer_top_nodes.sorted_list(
-            @volume_attribute, true, 10
-          )
-          total_consumption_with_domestic = consumer_top_nodes.total(@volume_attribute, true)
           @basic_attributes = Api::V3::PlaceNode::BasicAttributes.new(
             @context, @year, @node,
             place_inds: @place_inds,
             place_quants: @place_quants,
-            soy_production_attribute: @soy_production_attribute,
-            top_exporters: top_exporters_list,
-            total_exports: total_exports,
-            top_consumers: top_consumers_with_domestic_list
+            volume_attribute: @volume_attribute,
+            soy_production_attribute: @soy_production_attribute
           )
           top_nodes_summary = Api::V3::PlaceNode::TopNodesSummary.new(
             @context, @year, @node,
             place_inds: @place_inds,
             place_quants: @place_quants,
-            volume_attribute: @volume_attribute
+            volume_attribute: @volume_attribute,
+            soy_production_attribute: @soy_production_attribute
           )
           @top_traders = top_nodes_summary.
-            call(:actors, NodeTypeName::EXPORTER, top_exporters_with_domestic_list, total_exports_with_domestic, true)
+            call(:actors, NodeTypeName::EXPORTER, true)
           @top_consumers = top_nodes_summary.
-            call(:countries, NodeTypeName::COUNTRY, top_consumers_with_domestic_list, total_consumption_with_domestic, true)
+            call(:countries, NodeTypeName::COUNTRY, true)
           @indicators = Api::V3::PlaceNode::IndicatorsTable.new(
             @context, @year, @node,
             place_inds: @place_inds,
@@ -96,6 +69,8 @@ module Api
               [e['name'], e]
             end
           ]
+          @volume_attribute = Quant.find_by_name('Volume')
+          @soy_production_attribute = Quant.find_by_name('SOY_TN')
         end
       end
     end
