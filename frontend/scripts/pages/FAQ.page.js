@@ -61,7 +61,7 @@ const _setEventListeners = () => {
   smoothScroll(anchorItems);
 };
 
-export const render = (root) => {
+export const renderPage = (root) => {
   root.innerHTML = FAQMarkup({ nav: NavMarkup({ page: 'FAQ' }), footer: FooterMarkup() });
   _calculateOffsets();
   _setEventListeners();

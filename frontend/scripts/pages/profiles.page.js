@@ -50,7 +50,7 @@ const _setSearch = () => {
     });
 };
 
-export const render = (root) => {
+export const renderPage = (root) => {
   root.innerHTML = ProfilesMarkup({ nav: NavMarkup({ page: 'profiles' }), footer: FooterMarkup() });
   _setSearch();
   new Nav();

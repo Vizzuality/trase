@@ -190,7 +190,7 @@ const _showErrorMessage = () => {
   el.querySelector('.js-error-message').classList.remove('is-hidden');
 };
 
-export const render = (root) => {
+export const renderPage = (root) => {
   root.innerHTML = ProfilePlaceMarkup({ nav: NavMarkup({ page: 'profile-place' }), footer: FooterMarkup() });
   const url = window.location.search;
   const urlParams = getURLParams(url);

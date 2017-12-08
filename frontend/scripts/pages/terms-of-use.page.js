@@ -12,7 +12,7 @@ import 'styles/components/shared/button.scss';
 import 'styles/components/shared/nav.scss';
 import 'styles/components/shared/_footer.scss';
 
-export const render = (root) => {
+export const renderPage = (root) => {
   root.innerHTML = TermsOfUseMarkup({ nav: NavMarkup({ page: 'terms-of-use' }), footer: FooterMarkup() });
   new Nav();
 };

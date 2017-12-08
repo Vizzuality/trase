@@ -319,7 +319,7 @@ const _switchTopSource = (e, data) => {
   _initSource(selectedSource, data);
 };
 
-export const render = (root)  => {
+export const renderPage = (root)  => {
   root.innerHTML = ProfileActorMarkup({ nav: NavMarkup({ page: 'profile-actor' }), footer: FooterMarkup() });
   const url = window.location.search;
   const urlParams = getURLParams(url);

@@ -61,7 +61,7 @@ const _setEventListeners = () => {
   smoothScroll(anchorItems);
 };
 
-export const render = (root) => {
+export const renderPage = (root) => {
   root.innerHTML = AboutMarkup({
     nav: NavMarkup({ page: 'about' }),
     footer: FooterMarkup()
