@@ -25,8 +25,10 @@ module Api
           @volume_attribute = Quant.find_by_name('Volume')
           @soy_production_attribute = Quant.find_by_name('SOY_TN')
           exporter_top_nodes = Api::V3::PlaceNode::TopNodesList.new(
-            @context, @year, @node, NodeTypeName::EXPORTER,
-            @place_inds, @place_quants
+            @context, @year, @node,
+            other_node_type_name: NodeTypeName::EXPORTER,
+            place_inds: @place_inds,
+            place_quants: @place_quants
           )
           top_exporters_list = exporter_top_nodes.sorted_list(
             @volume_attribute, false, 10
@@ -37,8 +39,10 @@ module Api
           total_exports = exporter_top_nodes.total(@volume_attribute, false)
           total_exports_with_domestic = exporter_top_nodes.total(@volume_attribute, true)
           consumer_top_nodes = Api::V3::PlaceNode::TopNodesList.new(
-            @context, @year, @node, NodeTypeName::COUNTRY,
-            @place_inds, @place_quants
+            @context, @year, @node,
+            other_node_type_name: NodeTypeName::COUNTRY,
+            place_inds: @place_inds,
+            place_quants: @place_quants
           )
           top_consumers_with_domestic_list = consumer_top_nodes.sorted_list(
             @volume_attribute, true, 10

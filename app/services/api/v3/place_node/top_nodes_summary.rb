@@ -41,7 +41,10 @@ module Api
 
           @top_places.each_with_index do |place, place_idx|
             all_nodes_for_place = TopNodesList.new(
-              @context, @year, place, node_type, @place_inds, @place_quants
+              @context, @year, place,
+              other_node_type_name: node_type,
+              place_inds: @place_inds,
+              place_quants: @place_quants
             ).unsorted_list(@volume_attribute, include_domestic_consumption, nil)
             top_nodes.each_with_index do |top_node, top_node_idx|
               node = all_nodes_for_place.find { |e| e['node_id'] == top_node['node_id'] }

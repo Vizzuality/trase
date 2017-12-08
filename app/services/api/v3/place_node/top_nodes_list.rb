@@ -2,14 +2,18 @@ module Api
   module V3
     module PlaceNode
       class TopNodesList
-        def initialize(context, year, node, other_node_type_name, place_inds, place_quants)
+        def initialize(context, year, node, data)
           @context = context
           @year = year
           @node = node
-          @self_node_index = Api::V3::NodeType.node_index_for_id(@context, @node.node_type_id)
-          @other_node_index = Api::V3::NodeType.node_index_for_name(@context, other_node_type_name)
-          @place_inds = place_inds
-          @place_quants = place_quants
+          @self_node_index = Api::V3::NodeType.node_index_for_id(
+            @context, @node.node_type_id
+          )
+          @other_node_index = Api::V3::NodeType.node_index_for_name(
+            @context, data[:other_node_type_name]
+          )
+          @place_inds = data[:place_inds]
+          @place_quants = data[:place_quants]
         end
 
         def sorted_list(attribute, include_domestic_consumption = true, limit = 10)
