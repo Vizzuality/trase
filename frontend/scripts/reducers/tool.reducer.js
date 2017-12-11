@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import actions from 'actions';
-import { encodeStateToURL } from 'utils/stateURL';
 import getNodesDict from './helpers/getNodesDict';
 import getVisibleNodes from './helpers/getVisibleNodes';
 import splitVisibleNodesByColumn from './helpers/splitVisibleNodesByColumn';
@@ -16,9 +15,7 @@ import getNodesAtColumns from './helpers/getNodesAtColumns';
 import getNodesColoredBySelection from './helpers/getNodesColoredBySelection';
 import getRecolorGroups from './helpers/getRecolorGroups';
 import { getMapDimensionsWarnings } from './helpers/getMapDimensionsWarnings';
-import { getURLParams, decodeStateFromURL } from 'utils/stateURL';
 
-const params = getURLParams(window.location.search); // this is temporary it should load it from location reducer
 const initialState = {
   selectedNodesIds: [],
   expandedNodesIds: [],
@@ -27,17 +24,15 @@ const initialState = {
   selectedNodesData: [],
   selectedMapContextualLayers: null,
   isMapVisible: false,
-  expandedMapSidebarGroupsIds: [],
-  ...decodeStateFromURL(params.state) // also temporary
+  expandedMapSidebarGroupsIds: []
 };
 
 export default function (state = initialState, action) {
   let newState;
-  let updateURLState = true;
   switch (action.type) {
 
     case actions.LOAD_INITIAL_DATA: {
-      newState = Object.assign({}, state, { initialDataLoading: true });
+      newState = { ...state, initialDataLoading: true, ...action.payload };
       break;
     }
 
@@ -306,9 +301,6 @@ export default function (state = initialState, action) {
     }
 
     case actions.HIGHLIGHT_NODE: {
-      // TODO this prevents spamming browser history, but we should avoid touching it when changed state props are not on th url whitelist (constants.URL_STATE_PROPS)
-      updateURLState = false;
-
       newState = Object.assign({}, state, {
         highlightedNodesIds: action.ids,
         highlightedNodeData: action.data,
@@ -452,10 +444,6 @@ export default function (state = initialState, action) {
     default:
       newState = state;
       break;
-  }
-
-  if (updateURLState) {
-    encodeStateToURL(newState);
   }
 
   return newState;

@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import actions from 'actions';
 
 export const getURLParams = url => {
   const objParams = {};
@@ -105,4 +106,23 @@ export const decodeStateFromURL = urlHash => {
   });
 
   return state;
+};
+
+export const toolUrlStateMiddleware = store => next => action => {
+  if (action.type === actions.HIGHLIGHT_NODE) return next(action);
+  const decoratedAction = { ...action };
+  const urlState = store.getState().location.query; // prev state
+  if (action.type === actions.LOAD_INITIAL_DATA && urlState) {
+    decoratedAction.payload = { ...urlState };
+  }
+  const result = next(decoratedAction);
+  const { location, tool } = store.getState(); // next state
+  if (location.type === 'tool' && action.type !== 'tool' && action.type !== actions.LOAD_INITIAL_DATA) {
+    store.dispatch({
+      type: 'tool',
+      payload: { query: tool },
+      meta: { location: { prev: location.prev } }
+    });
+  }
+  return result;
 };

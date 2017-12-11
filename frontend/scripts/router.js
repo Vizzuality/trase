@@ -1,9 +1,13 @@
 import { connectRoutes, NOT_FOUND } from 'redux-first-router';
+import { encodeStateToURL, decodeStateFromURL } from 'utils/stateURL';
 
-// thunks
-
-// pages
-
+const config = {
+  basename: '/',
+  querySerializer: {
+    stringify: encodeStateToURL,
+    parse: (q) => decodeStateFromURL(q && q.split('state=')[1])
+  }
+};
 
 export const routes = {
   home: {
@@ -51,4 +55,4 @@ export const routes = {
   }
 };
 
-export default connectRoutes(routes, { basename: '/' });
+export default connectRoutes(routes, config);
