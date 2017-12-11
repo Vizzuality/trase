@@ -24,21 +24,21 @@ const state = {
       text: 'Trase transforms our understanding of how companies and governments involved in the trade of agricultural commodities are linked to impacts and opportunities for more sustainable production.',
       action: {
         text: 'explore the tool',
-        href: '/flows.html'
+        href: '/flows'
       }
     },
     {
       text: 'Can companies and governments meet their 2020 sustainability goals? The blanket transparency provided by Trase helps address this question and identify priority actions for achieving success.',
       action: {
         text: 'explore company commitments',
-        href: '/profiles.html'
+        href: '/profiles'
       }
     },
     {
       text: 'The ability to address deforestation and promote sustainability is hampered by poor access to vital information. Trase is committed to free and open access to all the information provided on the platform.',
       action: {
         text: 'download trase data',
-        href: '/data.html'
+        href: '/data'
       }
     }
   ],
