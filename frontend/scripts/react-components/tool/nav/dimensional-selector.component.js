@@ -68,7 +68,7 @@ export default class DimensionalSelector extends Component {
     const { selectedDimensions } = this.state;
     const current = selectedDimensions.find(dimension => dimension.order === i);
     return current && current.id === el.id;
-  };
+  }
 
   render() {
     const { dimensions = [], getFooterText, getElement } = this.props;
