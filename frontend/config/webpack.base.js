@@ -11,8 +11,8 @@ const templates = require('./static.templates');
 module.exports = {
   entry: path.join(srcPath, 'index'),
   output: {
-    filename: '[name].bundle.js',
-    chunkFilename: '[name].bundle.js',
+    filename: '[name].[chunkhash].js',
+    chunkFilename: '[name].[chunkhash].js',
     path: path.resolve(__dirname, '..', 'dist')
   },
   plugins: [
