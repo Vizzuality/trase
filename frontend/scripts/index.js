@@ -32,9 +32,3 @@ import(/* webpackChunkName: "page" */ `./pages/${routesMap[type].page}.page.js`)
   .then((page) => {
     page.renderPage(document.getElementById('app-root-container'), store);
   });
-
-if (process.env.NODE_ENV === 'development' && module.hot) {
-  module.hot.accept(`./pages/${routesMap[type].page}.page.js`, function() {
-    // render();
-  });
-}
