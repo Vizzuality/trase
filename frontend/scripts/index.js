@@ -4,21 +4,22 @@ import router from './router';
 
 import AppReducer from 'reducers/app.reducer';
 import ToolReducer from 'reducers/tool.reducer';
-import analyticsMiddleware from 'analytics/tool.analytics.middleware';
-import { APP_DEFAULT_STATE, TOOL_DEFAULT_STATE } from 'constants';
+import DataReducer from 'reducers/data.reducer';
 
-const initialState = Object.assign({}, TOOL_DEFAULT_STATE, APP_DEFAULT_STATE);
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+import analyticsMiddleware from 'analytics/tool.analytics.middleware';
+
+const composeEnhancers = (process.env.NODE_ENV === 'development' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
 const reducers = combineReducers({
   app: AppReducer,
   tool: ToolReducer,
+  data: DataReducer,
   location: router.reducer
 });
 
 const store = createStore(
   reducers,
-  initialState,
+  undefined,
   composeEnhancers(
     router.enhancer,
     applyMiddleware(analyticsMiddleware, thunk, router.middleware)
@@ -31,7 +32,9 @@ if (process.env.NODE_ENV === 'development' && module.hot) {
   });
 }
 
-import(/* webpackChunkName: "page" */ './pages/profile-actor.page.js')
-  .then((tool) => {
-    tool.render(document.getElementById('app-root-container'), store);
+const { routesMap, type } = store.getState().location;
+
+import(/* webpackChunkName: "page" */ `./pages/${routesMap[type].page}.page.js`)
+  .then((page) => {
+    page.renderPage(document.getElementById('app-root-container'), store);
   });

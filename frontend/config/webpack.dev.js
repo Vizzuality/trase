@@ -9,7 +9,8 @@ module.exports = merge(webpackBaseConfig, {
     contentBase: path.join(__dirname, '..', 'public'),
     port: 8081,
     host: '0.0.0.0',
-    hot: false // enable true when app rendering is setup
+    hot: false, // enable true when app rendering is setup,
+    historyApiFallback: true
   },
   plugins: [
     // new webpack.NamedModulesPlugin(),
