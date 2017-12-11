@@ -253,7 +253,7 @@ paths:
     get:
       tags:
         - node
-      summary: ''
+      summary: 'Data for place profile'
       description: ''
       consumes:
         - application/json
@@ -274,9 +274,11 @@ paths:
         '200':
           description: successful operation
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Node'
+            type: object
+            properties:
+              data:
+                type: object
+                $ref: '#/definitions/PlaceNode'
   '/context/{context_id}/nodes/{id}/linked_nodes':
     get:
       tags:
@@ -616,3 +618,156 @@ definitions:
         type: array
         items:
           type: integer
+  PlaceNode:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          column_name:
+            type: string
+            description: 'e.g. MUNICIPALITY'
+          country_name:
+            type: string
+          country_geo_id:
+            type: string
+            description: 'e.g. BR'
+          summary:
+            type: string
+          municipality_name:
+            type: string
+          municipality_geo_id:
+            type: string
+          state_name:
+            type: string
+          state_geo_id:
+            type: string
+          biome_name:
+            type: string
+          biome_geo_id:
+            type: string
+          area:
+            type: number
+          soy_production:
+            type: number
+          soy_area:
+            type: string
+          soy_farmland:
+            type: number
+          top_traders:
+            type: object
+            properties:
+              actors:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    value:
+                      type: number
+                    is_domestic_consumption:
+                      type: boolean
+              municipalities:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+              matrix:
+                type: array
+                items:
+                  type: array
+                  items:
+                    type: number
+          top_consumers:
+            type: object
+            properties:
+              countries:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    value:
+                      type: number
+                    is_domestic_consumption:
+                      type: boolean
+              municipalities:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+              matrix:
+                type: array
+                items:
+                  type: array
+                  items:
+                    type: number
+          indicators:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                included_columns:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      unit:
+                        type: string
+                rows:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      have_unit:
+                        type: boolean
+                      values:
+                        type: array
+                        items:
+                          type: number
+          trajectory_deforestation:
+            type: object
+            properties:
+              included_years:
+                type: array
+                items:
+                  type: integer
+              unit:
+                type: string
+              lines:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    legend_name:
+                      type: string
+                    type:
+                      type: string
+                    style:
+                      type: string
+                    values:
+                      type: array
+                      items:
+                        type: number
