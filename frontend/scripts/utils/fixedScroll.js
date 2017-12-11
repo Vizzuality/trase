@@ -12,7 +12,7 @@ function calculateOffsets(el) {
   };
 }
 
-function scrollDocument (el, offsets, cutOffsets) {
+function scrollDocument (el, cutOffsets) {
   const scrollTop = window.pageYOffset;
   const elemHeight = el.getBoundingClientRect().height;
   const cutTopPoint = cutOffsets.cutTopOffsets.top;
