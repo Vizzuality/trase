@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Get all_nodes', type: :request do
   include_context 'brazil context nodes'
+  include_context 'brazil flows'
 
   describe 'GET /api/v2/get_all_nodes === GET /api/v3/contexts/:id/nodes' do
     it 'has the correct response structure' do
