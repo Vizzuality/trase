@@ -19,9 +19,9 @@ const _setSearch = () => {
     window.location.href = getProfileLink(node);
   };
 
-  const allNodesURL = getURLFromParams(GET_ALL_NODES);
+  const allNodesURL = getURLFromParams(GET_ALL_NODES, { context_id: 1 });
 
-  fetch(`${allNodesURL}&context_id=1`)
+  fetch(allNodesURL)
     .then(response => response.json())
     .then((result) => {
 
