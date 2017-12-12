@@ -8,7 +8,9 @@ module Api
       has_many :node_quants
 
       scope :place_nodes, -> {
-        includes(:node_type).where('node_types.name' => NodeType::PLACES)
+        includes(:node_type).where(
+          'node_types.name' => Api::V3::NodeType::PLACES
+        )
       }
 
       scope :biomes, -> {
