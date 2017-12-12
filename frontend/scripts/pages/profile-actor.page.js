@@ -28,7 +28,7 @@ import smoothScroll from 'utils/smoothScroll';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
 import swapProfileYear from 'utils/swapProfileYear';
-import _ from 'lodash';
+import capitalize from 'lodash/capitalize';
 import { getURLFromParams, GET_ACTOR_FACTSHEET } from '../utils/getURLFromParams';
 import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST } from 'constants';
 import TopSourceTemplate from 'ejs!templates/profiles/top-source-switcher.ejs';
@@ -144,7 +144,7 @@ const _build = (data, nodeId) => {
 
 
   if (data.top_countries && data.top_countries.lines.length) {
-    document.querySelector('.js-top-map-title').textContent = `Top destination countries of Soy ${verb} by ${_.capitalize(data.node_name)} in ${year}`;
+    document.querySelector('.js-top-map-title').textContent = `Top destination countries of Soy ${verb} by ${capitalize(data.node_name)} in ${year}`;
 
     choroLegend(null, '.js-destination-legend', {
       title: [`Soy ${verb} in ${year}`, '(tonnes)'],
@@ -253,10 +253,10 @@ const _build = (data, nodeId) => {
 };
 
 const _setInfo = (info, nodeId) => {
-  document.querySelector('.js-name').textContent = info.name ? _.capitalize(info.name) : '-';
-  document.querySelector('.js-link-button-name').textContent = formatApostrophe(_.capitalize(info.name)) + ' PROFILE';
+  document.querySelector('.js-name').textContent = info.name ? capitalize(info.name) : '-';
+  document.querySelector('.js-link-button-name').textContent = formatApostrophe(capitalize(info.name)) + ' PROFILE';
   document.querySelector('.js-legend').textContent = info.type || '-';
-  document.querySelector('.js-country').textContent = info.country ? _.capitalize(info.country) : '-';
+  document.querySelector('.js-country').textContent = info.country ? capitalize(info.country) : '-';
   if (info.forest_500 > 0) document.querySelector('.js-forest-500-score .circle-icon[data-value="1"] use').setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
   if (info.forest_500 > 1) document.querySelector('.js-forest-500-score .circle-icon[data-value="2"] use').setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
   if (info.forest_500 > 2) document.querySelector('.js-forest-500-score .circle-icon[data-value="3"] use').setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
@@ -288,7 +288,7 @@ const _setTopSourceSwitcher = (data, verb) => {
   const template = TopSourceTemplate({
     year,
     verb,
-    nodeName: _.capitalize(data.node_name),
+    nodeName: capitalize(data.node_name),
     switchers: Object.keys(data.top_sources).filter(key => !(ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)))
   });
   document.querySelector('.js-top-municipalities-title').innerHTML = template;
