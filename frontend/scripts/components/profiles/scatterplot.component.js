@@ -23,6 +23,7 @@ export default class {
     this.xDimension = settings.xDimension;
     this.node = settings.node;
     this.verbGerund = settings.verbGerund;
+    this.year = settings.year;
     this.showTooltipCallback = settings.showTooltipCallback;
     this.hideTooltipCallback = settings.hideTooltipCallback;
 
@@ -31,7 +32,7 @@ export default class {
   }
 
   _render() {
-    this.titleEl.textContent = `Comparing companies ${this.verbGerund} Soy from Brazil`;
+    this.titleEl.textContent = `Comparing companies ${this.verbGerund} Soy from Brazil in ${this.year}`;
     const margin = { top: 20, right: 13, bottom: 30, left: 29 };
     this.width = this.el.clientWidth - margin.left - margin.right;
     this.height = 377 - margin.top - margin.bottom;
@@ -57,9 +58,6 @@ export default class {
 
         return abbreviateNumber(value, 3);
       });
-
-    const firstTab = this.xDimension[0];
-    document.querySelector('.js-companies-exporting-x-axis').innerHTML = `${firstTab.name} (${firstTab.unit})`;
 
     this.yAxis = d3_axis_left(this.y)
       .ticks(7)

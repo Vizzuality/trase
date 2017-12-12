@@ -184,7 +184,6 @@ GEM
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
     json (2.1.0)
-    json-diff (0.4.1)
     json-schema (2.8.0)
       addressable (>= 2.4)
     jsonapi-renderer (0.1.3)
@@ -412,7 +411,6 @@ DEPENDENCIES
   inherited_resources!
   jbuilder (~> 2.5)
   jquery-rails
-  json-diff
   json-schema
   listen (~> 3.0.5)
   mailchimp-api

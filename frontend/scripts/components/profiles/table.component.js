@@ -10,6 +10,7 @@ export default class {
     this.type = settings.type;
     this.data = settings.data;
     this.target = settings.target;
+    this.year = settings.year;
 
     if (this.target === 'actor') {
       this.link = 'profile-actor.html?nodeId=';
@@ -31,23 +32,36 @@ export default class {
           for (let j = 0; j < this.data.rows[i].values.length; j++) {
             if (this.data.rows[i].values[j] !== null && this.data.rows[i].values[j].hasOwnProperty('value')) {
               // there are string values, this way we avoid parse them.
-              if (typeof this.data.rows[i].values[j].value !== 'number') continue;
-              this.data.rows[i].values[j].value = formatValue(this.data.rows[i].values[j].value, this.data.included_columns[j].name);
+              if (typeof this.data.rows[i].values[j].value !== 'number') {
+                this.data.rows[i].values[j].link = this._getLink(this.target, this.data.rows[i].values[j].id, this.year);
+              } else {
+                this.data.rows[i].values[j].value = formatValue(this.data.rows[i].values[j].value, this.data.included_columns[j].name);
+              }
             }
           }
         }
       }
     }
 
-    if(this.type === 't_head_places') {
-      for(let i = 0; i < this.data.rows.length; i++) {
-        for(let j = 0; j < this.data.rows[i].values.length; j++){
+    if (this.type === 't_head_places') {
+      for (let i = 0; i < this.data.rows.length; i++) {
+        for (let j = 0; j < this.data.rows[i].values.length; j++) {
           this.data.rows[i].values[j] = formatValue(this.data.rows[i].values[j], this.data.included_columns[j].name);
         }
       }
     }
 
     this.render();
+  }
+
+  _getLink(target, id, year) {
+    if (target === 'actor') {
+      return `profile-actor.html?nodeId=${id}&year=${year}`;
+    } else if (target === 'place') {
+      return `profile-place.html?nodeId=${id}&year=${year}`;
+    }
+
+    return null;
   }
 
   render() {

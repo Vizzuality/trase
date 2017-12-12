@@ -1,4 +1,3 @@
-require 'json-diff'
 require 'csv-diff'
 require 'zip'
 
@@ -7,7 +6,6 @@ namespace :gold_master do
   task record: [:environment] do
     %w[csv json].each do |format|
       endpoints[format].each do |endpoint|
-        next unless endpoint['v3_ready'] # eliminate those not ready to test
         endpoint['queries'].each do |query|
           gold_master_file = gold_master_file(endpoint, query, format)
           puts gold_master_url(endpoint, query)
@@ -37,10 +35,17 @@ namespace :gold_master do
     compare('json') do |gold_master_file, actual_file|
       gold_master = HashSorter.new(JSON.parse(File.read(gold_master_file))).sort
       actual = HashSorter.new(JSON.parse(File.read(actual_file))).sort
-      JsonDiff.diff(
-        gold_master,
-        actual
-      )
+      # stores sorted versions for inspection
+      gold_master_file_sorted = actual_file + '.gold_master.sorted'
+      File.open(gold_master_file_sorted, 'w') do |f|
+        f << JSON.pretty_generate(gold_master, indent: '  ')
+      end
+      actual_file_sorted = actual_file + '.sorted'
+      File.open(actual_file_sorted, 'w') do |f|
+        f << JSON.pretty_generate(actual, indent: '  ')
+      end
+      diff = `diff #{gold_master_file_sorted} #{actual_file_sorted}`
+      [diff.presence].compact
     end
   end
 
@@ -55,11 +60,10 @@ namespace :gold_master do
         unzip_and_replace_csv(actual_file) if format == 'csv' # because downloads come as zip
         diff = yield(gold_master_file, actual_file)
         if diff.any?
-          puts diff.inspect
-          cleanup
-          exit 1
+          diff.each { |d| puts d.inspect }
+        else
+          puts 'SUCCESS'
         end
-        puts 'SUCCESS'
       end
     end
     cleanup
@@ -102,7 +106,7 @@ namespace :gold_master do
   end
 
   def file_with_format(dir, format, endpoint, query)
-    dir_with_format = "#{dir}/#{format}"
+    dir_with_format = "#{dir}/#{format}/"
     FileUtils.mkdir_p(dir_with_format, verbose: true) unless File.directory?(dir_with_format)
     "#{dir_with_format}/#{endpoint['name']}_#{query['name']}.#{format}"
   end

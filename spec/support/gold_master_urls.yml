@@ -32,8 +32,8 @@ json:
   - url: /api/v2/get_map_base_data
     name: get_map_base_data
     version: v2
-    v3_ready: false
-    v3_url: /api/v3/get_map_base_data
+    v3_ready: true
+    v3_url: /api/v3/contexts/1/map_groups
     <<: *context_queries
   - url: /api/v2/get_linked_geoids
     name: get_linked_geoids
@@ -70,9 +70,19 @@ json:
   - url: /api/v2/get_all_nodes
     name: get_all_nodes
     version: v2
-    v3_ready: false
-    v3_url: /api/v3/get_all_nodes
-    <<: *context_queries
+    v3_ready: true
+    v3_url: /api/v3/contexts/1/nodes
+    queries:
+      - params: context_id=1
+        name: brazil_soy
+  - url: /api/v2/get_all_nodes
+    name: get_all_nodes
+    version: v2
+    v3_ready: true
+    v3_url: /api/v3/contexts/2/nodes
+    queries:
+      - params: context_id=2
+        name: paraguay_soy
   - url: /api/v2/get_place_node_attributes
     name: get_place_node_attributes
     version: v2
@@ -106,10 +116,28 @@ json:
   - url: /v1/get_flows
     name: get_flows
     version: v1
-    v3_ready: false
-    v3_url: /api/v3/get_flows
+    v3_ready: true
+    v3_url: /api/v3/contexts/1/flows
     queries:
       - params: context_id=1&year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10
         name: brazil_soy_2015_2015
+      - params: context_id=1&year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&biome_filter_id=652
+        name: brazil_soy_2015_2015_biome
+      - params: context_id=1&year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&selected_nodes=587,588
+        name: brazil_soy_2015_2015_expand
+      - params: context_id=1&year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_ind=PROTECTED_DEFICIT_PERC
+        name: brazil_soy_2015_2015_recolor_by_ind
+      - params: context_id=1&year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_qual=ZERO_DEFORESTATION
+        name: brazil_soy_2015_2015_recolor_by_qual
+      - params: context_id=1&year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_ind=PROTECTED_DEFICIT_PERC&biome_filter_id=652&selected_nodes=587,588
+        name: brazil_soy_2015_2015_recolor_by_ind_biome_expand
+      - params: context_id=1&year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_qual=ZERO_DEFORESTATION&biome_filter_id=652&selected_nodes=587,588
+        name: brazil_soy_2015_2015_recolor_by_qual_biome_expand
+  - url: /v1/get_flows
+    name: get_flows
+    version: v1
+    v3_ready: true
+    v3_url: /api/v3/contexts/2/flows
+    queries:
       - params: context_id=2&year_start=2015&year_end=2015&include_columns=9,10,6,8&flow_quant=Volume&n_nodes=10
         name: paraguay_soy_2015_2015

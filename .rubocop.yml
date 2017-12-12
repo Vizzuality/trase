@@ -9,6 +9,7 @@ AllCops:
     - 'config/initializers/*'
     - 'config/*'
     - 'frontend/node_modules/**/*'
+    - lib/schema_revamp.rb
 
 Bundler/OrderedGems:
   Enabled: false
@@ -28,6 +29,7 @@ Layout/SpaceInsideHashLiteralBraces:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
+    - 'lib/tasks/**/*'
 
 Style/AndOr:
   Enabled: false

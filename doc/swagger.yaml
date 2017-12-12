@@ -119,18 +119,67 @@ paths:
           description: ''
           required: true
           type: integer
+        - name: include_columns
+          in: query
+          description: List of node type ids
+          required: true
+          type: array
+          items:
+            type: integer
+        - name: flow_quant
+          in: query
+          description: Name of quant for resizing
+          required: true
+          type: string
+        - name: flow_ind
+          in: query
+          description: Name of ind for recoloring
+          required: false
+          type: string
+        - name: flow_qual
+          in: query
+          description: Name of qual for recoloring
+          required: false
+          type: string
+        - name: selected_nodes
+          in: query
+          description: List of selected node ids
+          required: false
+          type: array
+          items:
+            type: integer
+        - name: biome_filter_id
+          in: query
+          description: Id of biome to filter by
+          required: false
+          type: integer
+        - name: year_start
+          in: query
+          description: Year range start
+          required: true
+          type: integer
+        - name: year_end
+          in: query
+          description: Year range end (defaults to start)
+          required: false
+          type: integer
+        - name: n_nodes
+          in: query
+          description: Number of top nodes (defaults to 100)
+          required: false
+          type: integer
       responses:
         '200':
           description: successful operation
           schema:
             type: array
             items:
-              $ref: '#/definitions/Flow'
+              $ref: '#/definitions/FlowResult'
   '/context/{context_id}/nodes':
     get:
       tags:
         - node
-      summary: ''
+      summary: 'All nodes for a context'
       description: ''
       consumes:
         - application/json
@@ -146,9 +195,12 @@ paths:
         '200':
           description: successful operation
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Node'
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Node'
   '/context/{context_id}/nodes/attributes':
     get:
       tags:
@@ -197,9 +249,12 @@ paths:
         '200':
           description: successful operation
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Node'
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Node'
   '/context/{context_id}/nodes/{id}/place':
     get:
       tags:
@@ -407,18 +462,94 @@ definitions:
               type: integer
             name:
               type: string
-  Flow:
+  FlowResult:
     type: object
     properties:
-      id:
-        type: integer
-        format: int64
+      data:
+        type: array
+        items:
+          type: object
+          properties:
+            path:
+              type: array
+              description: Array of node ids
+              items:
+                type: integer
+            quant:
+              type: number
+            ind:
+              type: number
+            qual:
+              type: string
+            height:
+              type: number
+      include:
+        type: object
+        properties:
+          nodeHeights:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                height:
+                  type: number
+                quant:
+                  type: number
+          quant:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              unit:
+                type: string
+          ind:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              unit:
+                type: string
+          qual:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
   Node:
     type: object
     properties:
       id:
         type: integer
-        format: int64
+      mainNodeId:
+        type: integer
+      name:
+        type: string
+      type:
+        type: string
+        description: 'e.g. BIOME'
+      columnId:
+        type: integer
+        description: 'node type id'
+      geoId:
+        type: string
+        description: 'e.g. BR for Brazil (country), BR1 for Amazonia (biome), BR5107925 for Sorriso (municipality), can be null'
+      isDomesticConsumption:
+        type: boolean
+      isUnknown:
+        type: boolean
+      profileType:
+        type: string
+        description: 'actor or place'
+      isAggregated:
+        type: boolean
+        description: "true for OTHER nodes"
   LinkedNode:
     type: object
     properties:
@@ -443,9 +574,20 @@ definitions:
   Column:
     type: object
     properties:
-      id:
-        type: integer
-        format: int64
+      dimensionGroups:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            name:
+              type: string
+      dimensions:
+        type: array
+        items:
+          $ref: '#/definitions/Dimension'
   MapGroup:
     type: object
     properties:
@@ -467,3 +609,38 @@ definitions:
     properties:
       email:
         type: string
+  Dimension:
+    type: object
+    properties:
+      aggregateMethod:
+        type: string
+      bucket3:
+        type: array
+        items:
+          type: number
+          format: float
+      bucket5:
+        type: array
+        items:
+          type: number
+          format: float
+      colorScale:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+        format: int64
+      is_default:
+        type: boolean
+      layerAttributeId:
+        type: integer
+        format: int64
+      name:
+        type: string
+      unit:
+        type: string
+      years:
+        type: array
+        items:
+          type: integer

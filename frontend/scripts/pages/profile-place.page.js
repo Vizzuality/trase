@@ -24,8 +24,9 @@ import Map from 'components/profiles/map.component';
 import { getURLParams } from 'utils/stateURL';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
+import swapProfileYear from 'utils/swapProfileYear';
 import smoothScroll from 'utils/smoothScroll';
-import _ from 'lodash';
+import capitalize from 'lodash/capitalize';
 import { getURLFromParams, GET_PLACE_FACTSHEET } from '../utils/getURLFromParams';
 
 const defaults = {
@@ -33,9 +34,11 @@ const defaults = {
   commodity: 'Soy'
 };
 
+let year;
+
 const _build = data => {
   const stateGeoID = data.state_geo_id;
-  const countryName = _.capitalize(data.country_name);
+  const countryName = capitalize(data.country_name);
 
   Map('.js-map-country', {
     topoJSONPath: './vector_layers/WORLD.topo.json',
@@ -111,14 +114,15 @@ const _build = data => {
       el: document.querySelector('.js-top-trader'),
       data: data.top_traders.actors,
       targetLink: 'actor',
-      title: `Top traders of soy in ${data.municipality_name}`,
-      unit: '%'
+      title: `Top traders of soy in ${data.municipality_name} in ${year}`,
+      unit: '%',
+      year
     });
   }
 
   if (data.top_consumers.countries.length) {
     document.querySelector('.js-consumers').classList.toggle('is-hidden', false);
-    
+
     new Chord(
       '.js-chord-consumers',
       data.top_consumers.matrix,
@@ -129,7 +133,7 @@ const _build = data => {
     new Top({
       el: document.querySelector('.js-top-consumer'),
       data: data.top_consumers.countries,
-      title: `Top importer countries of ${formatApostrophe(_.capitalize(data.municipality_name))} soy`,
+      title: `Top importer countries of ${formatApostrophe(capitalize(data.municipality_name))} soy in ${year}`,
       unit: '%'
     });
   }
@@ -139,38 +143,31 @@ const _build = data => {
       el: document.querySelector('.js-score-table'),
       data: data.indicators,
       tabsTitle: 'Sustainability indicators:',
-      type: 't_head_places'
+      type: 't_head_places',
+      year
     });
   }
 };
 
-const _onSelect = function(value) {
-  // updates dropdown's title with new value
-  this.setTitle(value);
-  // updates default values with incoming ones
-  defaults[this.id] = value;
-};
-
 const _setInfo = (info, nodeId) => {
-  document.querySelector('.js-country-name').innerHTML = info.country ? _.capitalize(info.country) : '-';
+  document.querySelector('.js-country-name').innerHTML = info.country ? capitalize(info.country) : '-';
   document.querySelector('.js-state-name').innerHTML =
     document.querySelector('.js-chord-traders-state-name').innerHTML =
     document.querySelector('.js-chord-consumers-state-name').innerHTML =
-    info.state ?  _.capitalize(info.state) : '-';
-  document.querySelector('.js-biome-name').innerHTML = info.biome ? _.capitalize(info.biome) : '-';
+    info.state ?  capitalize(info.state) : '-';
+  document.querySelector('.js-biome-name').innerHTML = info.biome ? capitalize(info.biome) : '-';
   document.querySelector('.js-legend').innerHTML = info.type || '-';
-  document.querySelector('.js-municipality').innerHTML = info.municipality ? _.capitalize(info.municipality) : '-';
+  document.querySelector('.js-municipality').innerHTML = info.municipality ? capitalize(info.municipality) : '-';
   document.querySelector('.js-area').innerHTML = info.area !== null ? formatValue(info.area, 'area') : '-';
   document.querySelector('.js-soy-land').innerHTML = (info.soy_area !== null && info.soy_area !== 'NaN') ? formatValue(info.soy_area, 'area') : '-';
   document.querySelector('.js-soy-production').innerHTML = info.soy_production !== null ? formatValue(info.soy_production, 'tons'): '-';
-  document.querySelector('.js-link-map').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true`);
-  document.querySelector('.js-link-supply-chain').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]`);
+  document.querySelector('.js-link-map').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
+  document.querySelector('.js-link-supply-chain').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
   document.querySelector('.js-line-title').innerHTML = info.municipality ? `Deforestation trajectory of ${info.municipality}` : '-';
-  document.querySelector('.js-municipality').innerHTML = info.municipality ? info.municipality : '-';
-  document.querySelector('.js-link-button-municipality').textContent = formatApostrophe(_.capitalize(info.municipality)) + ' PROFILE';
+  document.querySelector('.js-link-button-municipality').textContent = formatApostrophe(capitalize(info.municipality)) + ' PROFILE';
 
   if (info.soy_production === 0) {
-    info.summary = `${info.municipality} did not produce any soy in 2015`;
+    info.summary = `${info.municipality} did not produce any soy in ${year}`;
   }
   document.querySelector('.js-summary-text').innerHTML = info.summary ? info.summary : '-';
 
@@ -192,12 +189,9 @@ const _init = () => {
   const url = window.location.search;
   const urlParams = getURLParams(url);
   const nodeId = urlParams.nodeId;
+  year = urlParams.year || 2015;
 
-  const commodityDropdown = new Dropdown('commodity', _onSelect);
-
-  commodityDropdown.setTitle(defaults.commodity);
-
-  const placeFactsheetURL = getURLFromParams(GET_PLACE_FACTSHEET, { node_id: nodeId });
+  const placeFactsheetURL = getURLFromParams(GET_PLACE_FACTSHEET, { node_id: nodeId, year });
 
   fetch(placeFactsheetURL)
     .then((response) => {
@@ -233,6 +227,9 @@ const _init = () => {
 
       _setInfo(info, nodeId);
       _setEventListeners();
+
+      const yearDropdown = new Dropdown('year', swapProfileYear);
+      yearDropdown.setTitle(year);
 
       _build(data);
     });

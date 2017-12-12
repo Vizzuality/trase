@@ -21,15 +21,20 @@ class HashSorter
   def sort_array(array)
     tmp = array.sort do |a, b|
       if a.is_a?(Hash) && b.is_a?(Hash)
-        if a.key?('id')
-          next a['id'] <=> b['id']
-        elsif a.key?('name')
-          next a['name'] <=> b['name']
-        else
-          puts a.inspect
+        sorting_key = ['id', 'name', %w(path quant ind), %w(path quant)].find do |key|
+          key.is_a?(String) && a.key?(key) ||
+            key.is_a?(Array) && (key - a.keys).empty?
         end
+        raise 'No sorting key for array: ' + a.inspect unless sorting_key
+
+        if sorting_key.is_a?(Array)
+          sorting_key.map { |e| a[e] || -1 } <=> sorting_key.map { |e| b[e] || -1 }
+        else
+          a[sorting_key] <=> b[sorting_key]
+        end
+      else
+        a <=> b
       end
-      a <=> b
     end
     tmp.each_with_index do |elem, idx|
       if elem.is_a?(Hash)

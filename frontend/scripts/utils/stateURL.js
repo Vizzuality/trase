@@ -40,7 +40,8 @@ const URL_STATE_PROPS = [
 
 const URL_PARAMS_PROPS = [
   'isMapVisible',
-  'selectedNodesIds'
+  'selectedNodesIds',
+  'selectedYears'
 ];
 
 const filterStateToURL = state => {
@@ -76,7 +77,6 @@ function _getURLParameterByName(name, url) {
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
-// http://localhost:8081/flows.html?selectedNodesIds=[110]
 export const decodeStateFromURL = urlHash => {
   const state = (urlHash === undefined) ? {} : JSON.parse(atob(urlHash));
 
@@ -89,6 +89,10 @@ export const decodeStateFromURL = urlHash => {
           urlParam = urlParam.replace(/\[|\]/gi, '').split(',').map(nodeId => parseInt(nodeId));
           state.areNodesExpanded = true;
           state.expandedNodesIds = urlParam;
+          break;
+        }
+        case 'selectedYears': {
+          urlParam = urlParam.replace(/\[|\]/gi, '').split(',').map(year => parseInt(year));
           break;
         }
         case 'isMapVisible': {

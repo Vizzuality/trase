@@ -1,8 +1,8 @@
 shared_context 'api v3 brazil contexts' do
   let!(:api_v3_brazil) do
-    FactoryBot.create(
+    Api::V3::Country.find_by_iso2('BR') || FactoryBot.create(
       :api_v3_country,
-      name: 'BRAZIL', iso2: 'BR', latitude: 10, longitude: 10, zoom: 4
+      name: 'BRAZIL', iso2: 'BR'
     )
   end
   let!(:api_v3_context) do
