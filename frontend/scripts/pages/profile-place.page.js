@@ -177,12 +177,16 @@ const _setEventListeners = () => {
   smoothScroll(document.querySelectorAll('.js-link-profile'));
 };
 
-const _showErrorMessage = () => {
+const _showErrorMessage = (message = null) => {
   const el = document.querySelector('.l-profile-place');
   document.querySelector('.js-loading').classList.add('is-hidden');
   el.classList.add('-error');
   el.querySelector('.js-wrap').classList.add('is-hidden');
   el.querySelector('.js-error-message').classList.remove('is-hidden');
+  if (message !== null) {
+    el.querySelector('.js-message').innerHTML = message;
+  }
+
 };
 
 const _init = () => {
@@ -195,14 +199,10 @@ const _init = () => {
 
   fetch(placeFactsheetURL)
     .then((response) => {
-      if (response.status === 404) {
-        _showErrorMessage();
-        return null;
-      }
-
-      if (response.status === 200) {
+      if (response.ok) {
         return response.json();
       }
+      throw new Error(response.statusText);
     })
     .then((result) => {
       if (!result) return;
@@ -232,7 +232,8 @@ const _init = () => {
       yearDropdown.setTitle(year);
 
       _build(data);
-    });
+    })
+    .catch((reason) => _showErrorMessage(reason.message));
 
   new Nav();
 
