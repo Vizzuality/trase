@@ -179,7 +179,7 @@ paths:
     get:
       tags:
         - node
-      summary: ''
+      summary: 'All nodes for a context'
       description: ''
       consumes:
         - application/json
@@ -195,9 +195,12 @@ paths:
         '200':
           description: successful operation
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Node'
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Node'
   '/context/{context_id}/nodes/attributes':
     get:
       tags:
@@ -246,9 +249,12 @@ paths:
         '200':
           description: successful operation
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Node'
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Node'
   '/context/{context_id}/nodes/{id}/place':
     get:
       tags:
@@ -523,7 +529,29 @@ definitions:
     properties:
       id:
         type: integer
-        format: int64
+      mainNodeId:
+        type: integer
+      name:
+        type: string
+      type:
+        type: string
+        description: 'e.g. BIOME'
+      columnId:
+        type: integer
+        description: 'node type id'
+      geoId:
+        type: string
+        description: 'e.g. BR for Brazil (country), BR1 for Amazonia (biome), BR5107925 for Sorriso (municipality), can be null'
+      isDomesticConsumption:
+        type: boolean
+      isUnknown:
+        type: boolean
+      profileType:
+        type: string
+        description: 'actor or place'
+      isAggregated:
+        type: boolean
+        description: "true for OTHER nodes"
   LinkedNode:
     type: object
     properties:

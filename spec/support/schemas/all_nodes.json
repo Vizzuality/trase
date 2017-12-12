@@ -51,7 +51,7 @@
           },
           "profileType": {
             "id": "/properties/data/items/properties/profileType",
-            "type": "null"
+            "type": ["string", "null"]
           },
           "type": {
             "id": "/properties/data/items/properties/type",

@@ -1,26 +1,19 @@
 require 'rails_helper'
 
-RSpec.describe 'Get contexts', type: :request do
-  include_context 'brazil soy indicators'
-  include_context 'brazil resize by'
-  include_context 'brazil recolor by'
+RSpec.describe 'Get all_nodes', type: :request do
   include_context 'brazil context nodes'
+  include_context 'brazil flows'
 
-  describe 'GET /api/v2/get_contexts === GET /api/v3/contexts ' do
+  describe 'GET /api/v2/get_all_nodes === GET /api/v3/contexts/:id/nodes' do
     it 'has the correct response structure' do
-      FactoryBot.create(
-        :context_filter_by,
-        context: context, node_type: biome_node_type
-      )
-
       SchemaRevamp.new.copy
 
-      get '/api/v2/get_contexts'
+      get "/api/v2/get_all_nodes?context_id=#{context.id}"
       v2_response = HashSorter.new(JSON.parse(@response.body)).sort
 
       expect(@response.status).to eq 200
 
-      get '/api/v3/contexts'
+      get "/api/v3/contexts/#{context.id}/nodes"
       expect(@response.status).to eq 200
       v3_response = HashSorter.new(JSON.parse(@response.body)).sort
 

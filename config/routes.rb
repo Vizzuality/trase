@@ -15,11 +15,10 @@ Rails.application.routes.draw do
         resources :map_groups, only: [:index]
         resources :columns, only: [:index]
         resources :flows, only: [:index]
-        resources :nodes do
+        resources :nodes, only: [:index] do
           get :place, on: :member, controller: :place_nodes, action: :show
         end
       end
-      get '/get_all_nodes', to: 'nodes#get_all_nodes'
       resources :newsletter_subscriptions, only: [:create]
     end
     namespace :v2 do

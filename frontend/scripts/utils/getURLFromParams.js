@@ -21,6 +21,7 @@ const API_ENDPOINTS = {
   [GET_CONTEXTS]: { api: 3, endpoint: '/contexts' },
   [GET_FLOWS]: { api: 3, endpoint: '/contexts/$context_id$/flows' },
   [GET_COLUMNS]: { api: 3, endpoint: '/contexts/$context_id$/columns' },
+  [GET_ALL_NODES]: { api: 3, endpoint: '/contexts/$context_id$/nodes' },
 
   [GET_SITE_DIVE]: { api: 'content', endpoint: '/site_dive' },
   [GET_POSTS]: { api: 'content', endpoint: '/posts' },
@@ -29,7 +30,6 @@ const API_ENDPOINTS = {
   [GET_DISCLAIMER]: { api: 'local', endpoint: 'disclaimer.json' },
   [GET_TOOLTIPS]: { api: 'local', endpoint: 'tooltips.json' },
 
-  [GET_ALL_NODES]: { api: 2, endpoint: '/get_all_nodes' },
   [GET_NODE_ATTRIBUTES]: { api: 2, endpoint: '/get_node_attributes' },
   [GET_MAP_BASE_DATA]: { api: 2, endpoint: '/get_map_base_data' },
   [GET_LINKED_GEO_IDS]: { api: 2, endpoint: '/get_linked_geoids' },
@@ -42,7 +42,8 @@ const API_ENDPOINTS = {
   [POST_SUBSCRIBE_NEWSLETTER]: { api: 2, endpoint: '/newsletter_subscriptions' },
 };
 
-function getURLForV3(endpoint, params = {}) {
+function getURLForV3(endpoint, paramsArg = {}) {
+  const params = Object.assign({}, paramsArg);
   if (params.hasOwnProperty('context_id') && endpoint.indexOf('$context_id$') !== -1) {
     endpoint = endpoint.replace('$context_id$', params.context_id);
     delete params.context_id;
