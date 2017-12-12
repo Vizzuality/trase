@@ -1,7 +1,6 @@
 import { h, Component } from 'preact';
 import { findAll } from 'highlight-words-core';
 import cx from 'classnames';
-import { PROFILE_PAGES_WHITELIST } from 'constants';
 
 export default class SearchResult extends Component {
 
@@ -42,8 +41,8 @@ export default class SearchResult extends Component {
             {selected ? 'Already in' : 'Add to'} supply chain
           </button>
           {
-            item.type.split(' & ')
-              .map(type => PROFILE_PAGES_WHITELIST.includes(type) && (
+            item.profileType && item.type.split(' & ')
+              .map(type => (
                 <button
                   role='link'
                   class='c-button -medium-large'
@@ -51,7 +50,7 @@ export default class SearchResult extends Component {
                 >
                   See {type} profile
                 </button>
-              )).filter(b => !!b)
+              ))
           }
         </div>
       </div>

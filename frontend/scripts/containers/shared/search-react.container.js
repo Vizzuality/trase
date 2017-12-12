@@ -21,6 +21,7 @@ const mapStateToProps = (state) => {
           id: `${nA.id}_${nB.id}`,
           name: nA.name,
           type: `${nA.type} & ${nB.type}`,
+          profileType: `${nA.type} & ${nB.type}`,
           [nA.type.toLowerCase()]: nA,
           [nB.type.toLowerCase()]: nB
         })

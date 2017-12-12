@@ -1,4 +1,3 @@
-export const PROFILE_PAGES_WHITELIST = ['EXPORTER', 'IMPORTER', 'MUNICIPALITY'];
 export const NUM_DECIMALS = {
   // resize by
   'trade volume': 0,
