@@ -17,6 +17,8 @@ engines:
     checks:
       UncommunicativeModuleName:
         enabled: false
+      IrresponsibleModule:
+        enabled: false
 
 ratings:
   paths:

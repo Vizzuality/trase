@@ -11,11 +11,11 @@ shared_context 'brazil municipality ind values' do
   end
 
   let!(:gdp_per_capita_value) do
-    FactoryBot.create(:node_ind, node: municipality_node, ind: gdp_per_capita, value: 3421.974, year: 2014)
+    FactoryBot.create(:node_ind, node: municipality_node, ind: gdp_per_capita, value: 3421.974, year: 2015)
   end
 
   let!(:gdp_from_agriculture_value) do
-    FactoryBot.create(:node_ind, node: municipality_node, ind: gdp_from_agriculture, value: 35.8, year: 2013)
+    FactoryBot.create(:node_ind, node: municipality_node, ind: gdp_from_agriculture, value: 35.8, year: 2015)
   end
 
   let!(:smallholder_dominance_value) do

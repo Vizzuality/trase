@@ -324,7 +324,7 @@ const _init = ()  => {
   const nodeId = urlParams.nodeId;
   year = urlParams.year || 2015;
 
-  const actorFactsheetURL = getURLFromParams(GET_ACTOR_FACTSHEET, { node_id: nodeId, year });
+  const actorFactsheetURL = getURLFromParams(GET_ACTOR_FACTSHEET, { context_id: 1, node_id: nodeId, year });
 
   fetch(actorFactsheetURL)
     .then((response) => {
