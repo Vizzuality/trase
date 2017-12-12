@@ -38,6 +38,7 @@ const defaults = {
 };
 
 let year;
+let showMiniSankey;
 
 const _build = data => {
   const stateGeoID = data.state_geo_id;
@@ -103,122 +104,127 @@ const _build = data => {
     elem.parentNode.parentNode.parentNode.removeChild(elem.parentNode.parentNode);
   }
 
+  if (showMiniSankey) {
+    document.querySelectorAll('.mini-sankey-container').forEach((el) => {
+      el.classList.toggle('is-hidden', false);
+    });
 
-  // query: nodeId, targetColumnId + commodity and year
-  const tradersSankeyData = {
-    name: 'QUERÊNCIA',
-    targetNodes: [{
-      id: 2,
-      name: 'Other',
-      isAggregated: true,
-      height: 0.2,
-      // isDomesticConsumption: null,
-    },{
-      id: 588,
-      name: 'Cargill',
-      height: 0.4,
-    },{
-      id: 588,
-      name: 'Hello, I have such a long name I need 3 lines',
-      height: 0.2,
-    },{
-      id: 588,
-      name: 'Sometimes, you gotta have more lines',
-      height: 0.1,
-    },{
-      id: 588,
-      name: 'Cargill',
-      height: 0.029,
-    },{
-      id: 588,
-      name: 'Cargill',
-      height: 0.021,
-    },{
-      id: 588,
-      name: 'Im very long but sadly the node hieght is too small',
-      height: 0.05,
-    }]
-  };
+    // query: nodeId, targetColumnId + commodity and year
+    const tradersSankeyData = {
+      name: 'QUERÊNCIA',
+      targetNodes: [{
+        id: 2,
+        name: 'Other',
+        isAggregated: true,
+        height: 0.2,
+        // isDomesticConsumption: null,
+      },{
+        id: 588,
+        name: 'Cargill',
+        height: 0.4,
+      },{
+        id: 588,
+        name: 'Hello, I have such a long name I need 3 lines',
+        height: 0.2,
+      },{
+        id: 588,
+        name: 'Sometimes, you gotta have more lines',
+        height: 0.1,
+      },{
+        id: 588,
+        name: 'Cargill',
+        height: 0.029,
+      },{
+        id: 588,
+        name: 'Cargill',
+        height: 0.021,
+      },{
+        id: 588,
+        name: 'Im very long but sadly the node hieght is too small',
+        height: 0.05,
+      }]
+    };
 
-  render(
-    <MiniSankey
-      data={tradersSankeyData}
-      targetLink='actor'
-    />,
-    document.getElementById('js-traders-sankey')
-  );
+    // query: nodeId, targetColumnId + commodity and year
+    const consumersSankeyData = {
+      name: 'QUERÊNCIA',
+      targetNodes: [{
+        name: 'Others',
+        isAggregated: true,
+        height: 0.2
+      },{
+        name: 'China',
+        height: 0.4,
+      },{
+        name: 'Brazil',
+        height: 0.2,
+      },{
+        name: 'Germany',
+        height: 0.1,
+      },{
+        name: 'South Korea',
+        height: 0.029,
+      },{
+        name: 'Thailand',
+        height: 0.021,
+      },{
+        name: 'Spain',
+        height: 0.05,
+      }]
+    };
 
-  if (data.top_traders.actors.length) {
-    document.querySelector('.js-traders').classList.toggle('is-hidden', false);
-
-    new Chord(
-      '.js-chord-traders',
-      data.top_traders.matrix,
-      data.top_traders.municipalities,
-      data.top_traders.actors
+    render(
+      <MiniSankey
+        data={tradersSankeyData}
+        targetLink='actor'
+      />,
+      document.getElementById('js-traders-sankey')
     );
 
-    new Top({
-      el: document.querySelector('.js-top-trader'),
-      data: data.top_traders.actors,
-      targetLink: 'actor',
-      title: `Top traders of soy in ${data.municipality_name} in ${year}`,
-      unit: '%',
-      year
-    });
-  }
-
-  // query: nodeId, targetColumnId + commodity and year
-  const consumersSankeyData = {
-    name: 'QUERÊNCIA',
-    targetNodes: [{
-      name: 'Others',
-      isAggregated: true,
-      height: 0.2
-    },{
-      name: 'China',
-      height: 0.4,
-    },{
-      name: 'Brazil',
-      height: 0.2,
-    },{
-      name: 'Germany',
-      height: 0.1,
-    },{
-      name: 'South Korea',
-      height: 0.029,
-    },{
-      name: 'Thailand',
-      height: 0.021,
-    },{
-      name: 'Spain',
-      height: 0.05,
-    }]
-  };
-
-  render(
-    <MiniSankey
-      data={consumersSankeyData}
-    />,
-    document.getElementById('js-consumers-sankey')
-  );
-
-  if (data.top_consumers.countries.length) {
-    document.querySelector('.js-consumers').classList.toggle('is-hidden', false);
-
-    new Chord(
-      '.js-chord-consumers',
-      data.top_consumers.matrix,
-      data.top_consumers.municipalities,
-      data.top_consumers.countries
+    render(
+      <MiniSankey
+        data={consumersSankeyData}
+      />,
+      document.getElementById('js-consumers-sankey')
     );
+  } else {
+    if (data.top_traders.actors.length) {
+      document.querySelector('.js-traders').classList.toggle('is-hidden', false);
 
-    new Top({
-      el: document.querySelector('.js-top-consumer'),
-      data: data.top_consumers.countries,
-      title: `Top importer countries of ${formatApostrophe(capitalize(data.municipality_name))} soy in ${year}`,
-      unit: '%'
-    });
+      new Chord(
+        '.js-chord-traders',
+        data.top_traders.matrix,
+        data.top_traders.municipalities,
+        data.top_traders.actors
+      );
+
+      new Top({
+        el: document.querySelector('.js-top-trader'),
+        data: data.top_traders.actors,
+        targetLink: 'actor',
+        title: `Top traders of soy in ${data.municipality_name} in ${year}`,
+        unit: '%',
+        year
+      });
+    }
+
+    if (data.top_consumers.countries.length) {
+      document.querySelector('.js-consumers').classList.toggle('is-hidden', false);
+
+      new Chord(
+        '.js-chord-consumers',
+        data.top_consumers.matrix,
+        data.top_consumers.municipalities,
+        data.top_consumers.countries
+      );
+
+      new Top({
+        el: document.querySelector('.js-top-consumer'),
+        data: data.top_consumers.countries,
+        title: `Top importer countries of ${formatApostrophe(capitalize(data.municipality_name))} soy in ${year}`,
+        unit: '%'
+      });
+    }
   }
 
   if (data.indicators.length) {
@@ -234,10 +240,7 @@ const _build = data => {
 
 const _setInfo = (info, nodeId) => {
   document.querySelector('.js-country-name').innerHTML = info.country ? capitalize(info.country) : '-';
-  document.querySelector('.js-state-name').innerHTML =
-    document.querySelector('.js-chord-traders-state-name').innerHTML =
-    document.querySelector('.js-chord-consumers-state-name').innerHTML =
-    info.state ?  capitalize(info.state) : '-';
+  document.querySelector('.js-state-name').innerHTML = info.state ? capitalize(info.state) : '-';
   document.querySelector('.js-biome-name').innerHTML = info.biome ? capitalize(info.biome) : '-';
   document.querySelector('.js-legend').innerHTML = info.type || '-';
   document.querySelector('.js-municipality').innerHTML = info.municipality ? capitalize(info.municipality) : '-';
@@ -247,6 +250,8 @@ const _setInfo = (info, nodeId) => {
   document.querySelector('.js-link-map').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
   document.querySelector('.js-link-supply-chain').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
   document.querySelector('.js-line-title').innerHTML = info.municipality ? `Deforestation trajectory of ${info.municipality}` : '-';
+  document.querySelector('.js-traders-title').innerHTML = `Top traders of soy in ${info.municipality} in ${year}`;
+  document.querySelector('.js-consumers-title').innerHTML = `Top importer countries of ${formatApostrophe(capitalize(info.municipality))} soy in ${year}`;
   document.querySelector('.js-link-button-municipality').textContent = formatApostrophe(capitalize(info.municipality)) + ' PROFILE';
 
   if (info.soy_production === 0) {
@@ -273,6 +278,7 @@ const _init = () => {
   const urlParams = getURLParams(url);
   const nodeId = urlParams.nodeId;
   year = urlParams.year || 2015;
+  showMiniSankey = !!urlParams.showMiniSankey || false;
 
   const placeFactsheetURL = getURLFromParams(GET_PLACE_FACTSHEET, { node_id: nodeId, year });
 

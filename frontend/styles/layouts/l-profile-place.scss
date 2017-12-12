@@ -60,36 +60,6 @@
     }
   }
 
-  .chords-container {
-    &.-traders .c-chord {
-      text-align: center;
-    }
-
-    &.-consumers .c-chord {
-      text-align: right;
-
-      .c-chord-legend {
-        left: auto;
-        right: 0;
-        padding-right: 39px;
-        padding-left: 0;
-        text-align: right;
-
-        &:before {
-          left: auto;
-          right: 0;
-        }
-      }
-    }
-
-    .c-top {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      height: 100%;
-    }
-  }
-
   .score-table {
     padding: 54px 0 42px 0;
   }
