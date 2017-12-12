@@ -331,7 +331,7 @@ const _init = ()  => {
       if (response.ok) {
         return response.json();
       }
-      _showErrorMessage(response.statusText);
+      throw new Error(response.statusText);
     })
     .then((result) => {
       if (!result) return;
@@ -360,9 +360,7 @@ const _init = ()  => {
 
       _build(data, nodeId);
     })
-    .catch(
-      (reason) => _showErrorMessage(reason.message)
-    );
+    .catch((reason) => _showErrorMessage(reason.message));
 
   const nav = new Nav();
   print = nav.print;
