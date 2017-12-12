@@ -65,7 +65,7 @@ const _build = data => {
     getPolygonClassName: d => (d.properties.geoid === data.municipality_geo_id) ? '-isCurrent' : ''
   });
 
-  if (data.trajectory_deforestation && data.trajectory_deforestation.lines.length) {
+  if (data.trajectory_deforestation && data.trajectory_deforestation.lines && data.trajectory_deforestation.lines.length) {
 
     // Manually trim time series to 2010 - 2015 as asked here https://basecamp.com/1756858/projects/12498794/todos/324404665
     data.trajectory_deforestation.included_years = data.trajectory_deforestation.included_years.filter(year => {
@@ -191,7 +191,7 @@ const _init = () => {
   const nodeId = urlParams.nodeId;
   year = urlParams.year || 2015;
 
-  const placeFactsheetURL = getURLFromParams(GET_PLACE_FACTSHEET, { node_id: nodeId, year });
+  const placeFactsheetURL = getURLFromParams(GET_PLACE_FACTSHEET, { context_id: 1, node_id: nodeId, year });
 
   fetch(placeFactsheetURL)
     .then((response) => {

@@ -22,6 +22,7 @@ const API_ENDPOINTS = {
   [GET_FLOWS]: { api: 3, endpoint: '/contexts/$context_id$/flows' },
   [GET_COLUMNS]: { api: 3, endpoint: '/contexts/$context_id$/columns' },
   [GET_ALL_NODES]: { api: 3, endpoint: '/contexts/$context_id$/nodes' },
+  [GET_PLACE_FACTSHEET]: { api: 3, endpoint: '/contexts/$context_id$/nodes/$node_id$/place' },
 
   [GET_SITE_DIVE]: { api: 'content', endpoint: '/site_dive' },
   [GET_POSTS]: { api: 'content', endpoint: '/posts' },
@@ -33,8 +34,6 @@ const API_ENDPOINTS = {
   [GET_NODE_ATTRIBUTES]: { api: 2, endpoint: '/get_node_attributes' },
   [GET_MAP_BASE_DATA]: { api: 2, endpoint: '/get_map_base_data' },
   [GET_LINKED_GEO_IDS]: { api: 2, endpoint: '/get_linked_geoids' },
-  [GET_PLACE_FACTSHEET]: { api: 2, endpoint: '/get_place_node_attributes', mock: 'mocks/v1_get_place_node_attributes.json' },
-  //[GET_PLACE_FACTSHEET]: { api: 3, endpoint: '/contexts/$context_id$/nodes/$node_id$/place', mock: 'mocks/v1_get_place_node_attributes.json' },
   [GET_ACTOR_FACTSHEET]: { api: 2, endpoint: '/get_actor_node_attributes', mock: 'mocks/v1_get_actor_node_attributes.json' },
   [GET_INDICATORS]: { api: 2, endpoint: '/indicators' },
   [GET_CSV_DATA_DOWNLOAD_FILE]: { api: 2, endpoint: '/download.csv' },
