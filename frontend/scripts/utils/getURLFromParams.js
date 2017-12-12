@@ -22,14 +22,11 @@ const API_ENDPOINTS = {
   [GET_FLOWS]: { api: 3, endpoint: '/contexts/$context_id$/flows' },
   [GET_COLUMNS]: { api: 3, endpoint: '/contexts/$context_id$/columns' },
   [GET_ALL_NODES]: { api: 3, endpoint: '/contexts/$context_id$/nodes' },
-
   [GET_SITE_DIVE]: { api: 'content', endpoint: '/site_dive' },
   [GET_POSTS]: { api: 'content', endpoint: '/posts' },
   [GET_TWEETS]: { api: 'content', endpoint: '/tweets' },
-
   [GET_DISCLAIMER]: { api: 'local', endpoint: 'disclaimer.json' },
   [GET_TOOLTIPS]: { api: 'local', endpoint: 'tooltips.json' },
-
   [GET_NODE_ATTRIBUTES]: { api: 2, endpoint: '/get_node_attributes' },
   [GET_MAP_BASE_DATA]: { api: 2, endpoint: '/get_map_base_data' },
   [GET_LINKED_GEO_IDS]: { api: 2, endpoint: '/get_linked_geoids' },

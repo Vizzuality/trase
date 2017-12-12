@@ -30,7 +30,6 @@
   &.-transparent {
     border-color: $medium-pink;
     background-color: transparent;
-
     color: $medium-pink;
   }
 
@@ -48,6 +47,10 @@
 
   &.-medium {
     padding: 15px;
+  }
+
+  &.-medium-large {
+    padding: 15px 24px;
   }
 
   &.-big {

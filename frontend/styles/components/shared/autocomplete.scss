@@ -1,0 +1,118 @@
+@import '../../settings';
+@import '../../mixins';
+
+.autocomplete {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  .autocomplete-container {
+    height: 100%;
+
+    .autocomplete-bar {
+      display: flex;
+      position: relative;
+      height: 100%;
+      z-index: $z-above;
+      box-shadow: 0 10px 20px 0 rgba($charcoal-grey, .2);
+
+      .c-nodes-titles {
+        margin: 8px 16px 0;
+      }
+    }
+  }
+
+  input {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 2px 15px 0;
+    background: none;
+    font-family: $font-family-1;
+    font-size: $font-size-medium;
+    letter-spacing: -1px;
+    color: $charcoal-grey;
+    outline: none;
+    border-radius: 0;
+  }
+
+  .suggestions {
+    position: absolute;
+    min-height: 80%;
+    background: $white;
+    overflow-y: auto;
+    max-height: 345px;
+    width: 100%;
+  }
+
+  .suggestion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 15px;
+    cursor: pointer;
+    border-bottom: solid 1px $pale-grey;
+    overflow: hidden;
+
+    .node-text-container {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      max-width: 600px;
+      height: 56px;
+    }
+
+    .node-name {
+      left: -1px;
+      font-family: $font-family-1;
+      font-size: 17px;
+      letter-spacing: -.5px;
+      color: $charcoal-grey;
+      text-transform: uppercase;
+    }
+
+    .node-type {
+      @include smallcaps;
+      display: block;
+    }
+
+    .node-actions-container {
+      display: none;
+
+      button {
+        height: 40px;
+        letter-spacing: -.7px;
+        line-height: .77;
+
+        &:hover {
+          border-color: transparent;
+          background-color: $charcoal-grey;
+          color: $white;
+        }
+      }
+
+      * {
+        margin-right: 8px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
+    mark {
+      background: $egg-shell;
+    }
+
+    &:hover,
+    &[aria-selected='true'],
+    &.-highlighted {
+      background: $egg-shell;
+      color: $charcoal-grey;
+
+      .node-actions-container {
+        display: flex;
+      }
+    }
+  }
+}

@@ -160,7 +160,12 @@ export default function (state = {}, action) {
       const { nodesDict, geoIdsDict } = getNodesDict(rawNodes, columns);
 
       newState = Object.assign({}, state, {
-        columns, nodesDict, geoIdsDict, initialDataLoading: false, selectedColumnsIds
+        columns,
+        nodes: rawNodes,
+        nodesDict,
+        geoIdsDict,
+        initialDataLoading: false,
+        selectedColumnsIds
       });
       break;
     }
