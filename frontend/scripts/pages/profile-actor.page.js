@@ -276,12 +276,15 @@ const _setEventListeners = () => {
   smoothScroll(document.querySelectorAll('.js-link-profile'));
 };
 
-const _showErrorMessage = () => {
+const _showErrorMessage = (message = null) => {
   const el = document.querySelector('.l-profile-actor');
   el.classList.add('-error');
   document.querySelector('.js-loading').classList.add('is-hidden');
   el.querySelector('.js-wrap').classList.add('is-hidden');
   el.querySelector('.js-error-message').classList.remove('is-hidden');
+  if (message !== null) {
+    el.querySelector('.js-message').innerHTML = message;
+  }
 };
 
 const _setTopSourceSwitcher = (data, verb) => {
@@ -325,14 +328,10 @@ const _init = ()  => {
 
   fetch(actorFactsheetURL)
     .then((response) => {
-      if (response.status === 404) {
-        _showErrorMessage();
-        return null;
-      }
-
-      if (response.status === 200) {
+      if (response.ok) {
         return response.json();
       }
+      _showErrorMessage(response.statusText);
     })
     .then((result) => {
       if (!result) return;
@@ -360,7 +359,10 @@ const _init = ()  => {
       yearDropdown.setTitle(year);
 
       _build(data, nodeId);
-    });
+    })
+    .catch(
+      (reason) => _showErrorMessage(reason.message)
+    );
 
   const nav = new Nav();
   print = nav.print;
