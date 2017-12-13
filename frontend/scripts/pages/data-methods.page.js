@@ -53,7 +53,7 @@ const _setEventListeners = (options) => {
   smoothScroll(anchorItems);
 };
 
-export const renderPage = (root) => {
+export const mount = (root) => {
   root.innerHTML = DataMethodsMarkup({
     nav: NavMarkup({ page: 'data-methods' }),
     footer: FooterMarkup(),

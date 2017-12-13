@@ -66,7 +66,7 @@ export function routeSubscriber(store) {
     onRouteChange({ routesMap, type } = {}) {
       import(/* webpackChunkName: "page" */ `./pages/${routesMap[type].page}.page.js`)
         .then((page) => {
-          page.renderPage(document.getElementById('app-root-container'), store);
+          page.mount(document.getElementById('app-root-container'), store);
         });
     }
   }

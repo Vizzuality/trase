@@ -283,7 +283,7 @@ const _showErrorMessage = (message = null) => {
 
 };
 
-export const renderPage = (root) => {
+export const mount = (root) => {
   root.innerHTML = ProfilePlaceMarkup({
     nav: NavMarkup({ page: 'profile-place' }),
     footer: FooterMarkup(),

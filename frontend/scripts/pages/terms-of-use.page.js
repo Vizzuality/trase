@@ -13,7 +13,7 @@ import 'styles/components/shared/button.scss';
 import 'styles/components/shared/nav.scss';
 import 'styles/components/shared/_footer.scss';
 
-export const renderPage = (root) => {
+export const mount = (root) => {
   root.innerHTML = TermsOfUseMarkup({
     nav: NavMarkup({ page: 'terms-of-use' }),
     footer: FooterMarkup(),

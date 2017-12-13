@@ -72,7 +72,7 @@ const _showErrorMessage = (message) => {
   }
 };
 
-export const renderPage = (root) => {
+export const mount = (root) => {
   root.innerHTML = ProfilesMarkup({
     nav: NavMarkup({ page: 'profiles' }),
     footer: FooterMarkup(),

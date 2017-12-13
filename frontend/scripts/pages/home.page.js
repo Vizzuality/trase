@@ -140,7 +140,7 @@ const newsletterSubscribe = (e) => {
     });
 };
 
-export const renderPage = (root) => {
+export const mount = (root) => {
   root.innerHTML = HomeMarkup({
     footer: FooterMarkup(),
     nav: NavMarkup({ page: 'index' }),

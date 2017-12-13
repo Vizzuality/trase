@@ -324,7 +324,7 @@ const _switchTopSource = (e, data) => {
   _initSource(selectedSource, data);
 };
 
-export const renderPage = (root)  => {
+export const mount = (root)  => {
   root.innerHTML = ProfileActorMarkup({
     nav: NavMarkup({ page: 'profile-actor' }),
     footer: FooterMarkup(),

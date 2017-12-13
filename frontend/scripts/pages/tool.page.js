@@ -30,7 +30,7 @@ import 'styles/components/shared/dropdown.scss';
 import 'styles/components/tool/map/map-sidebar.scss';
 import 'styles/layouts/l-tool.scss';
 
-export const renderPage = (root, store) => {
+export const mount = (root, store) => {
   const { query = {} } = store.getState().location;
 
   root.innerHTML = ToolMarkup({

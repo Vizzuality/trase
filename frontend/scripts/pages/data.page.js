@@ -14,7 +14,7 @@ import 'styles/components/shared/veil.scss';
 import 'styles/components/shared/modal.scss';
 
 
-export const renderPage = (root, store) => {
+export const mount = (root, store) => {
   root.innerHTML = DataMarkup({
     nav: NavMarkup({ page: 'data' }),
     footer: FooterMarkup(),
