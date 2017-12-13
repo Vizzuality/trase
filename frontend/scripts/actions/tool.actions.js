@@ -30,6 +30,7 @@ import setGeoJSONMeta from './helpers/setGeoJSONMeta';
 import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
 import getProfileLink from 'utils/getProfileLink';
+import isNodeColumnVisible from 'utils/isNodeColumnVisible';
 
 export function resetState(refilter = true) {
   return (dispatch) => {
@@ -517,18 +518,15 @@ export function selectExpandedNode(param) {
         if (tool.selectedNodesIds.length === 1 && tool.selectedNodesIds.includes(nodeId)) {
           dispatch(resetState());
         } else {
-          // check if we need to swap column
           const node = tool.nodesDict[nodeId];
           if (!node) {
             console.warn(`requested node ${nodeId} does not exist in nodesDict`);
             return;
           }
 
-          const columnGroup = node.columnGroup;
-          const currentColumnAtPos = tool.selectedColumnsIds[columnGroup];
-
-          if (currentColumnAtPos !== node.columnId) {
-            dispatch(selectColumn(columnGroup, node.columnId, false));
+          // check if we need to swap column
+          if (!isNodeColumnVisible(node, tool.selectedColumnsIds)) {
+            dispatch(selectColumn(node.columnGroup, node.columnId, false));
           }
 
           const currentSelectedNodesIds = getState().tool.selectedNodesIds;

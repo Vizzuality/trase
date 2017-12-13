@@ -1,13 +1,37 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'preact-redux';
 import groupBy from 'lodash/groupBy';
+import flatten from 'lodash/flatten';
 import Search from 'react-components/shared/search.component.js';
 import { selectExpandedNode, selectNode } from 'actions/tool.actions';
+import isNodeColumnVisible from 'utils/isNodeColumnVisible';
 
 let searchNodes;
 
+const getNode = (nodes, selectedColumnsIds, nodesDict) => {
+  const [nA, nB] = nodes;
+  if (nB) {
+    if (
+      isNodeColumnVisible(nodesDict[nA.id], selectedColumnsIds) &&
+      isNodeColumnVisible(nodesDict[nB.id], selectedColumnsIds)
+    ) {
+      return ({
+        id: `${nA.id}_${nB.id}`,
+        name: nA.name,
+        type: `${nA.type} & ${nB.type}`,
+        profileType: `${nA.type} & ${nB.type}`,
+        [nA.type.toLowerCase()]: nA,
+        [nB.type.toLowerCase()]: nB
+      });
+    } else {
+      return nodes;
+    }
+  }
+  return nA;
+};
+
 const mapStateToProps = (state) => {
-  const { nodes, selectedNodesIds } = state.tool;
+  const { nodes, selectedNodesIds, selectedColumnsIds, nodesDict } = state.tool;
   // store nodes at container level to avoid rerendering when filtering... for want of a better solution
   if (nodes !== undefined && (!searchNodes || nodes.length !== searchNodes.length)) {
     const allNodes = nodes.filter(
@@ -15,17 +39,8 @@ const mapStateToProps = (state) => {
       node.isAggregated !== true &&
       node.isUnknown !== true
     );
-    searchNodes = Object.values(groupBy(allNodes, 'mainNodeId'))
-      .map(([nA, nB]) => nB ?
-        ({
-          id: `${nA.id}_${nB.id}`,
-          name: nA.name,
-          type: `${nA.type} & ${nB.type}`,
-          profileType: `${nA.type} & ${nB.type}`,
-          [nA.type.toLowerCase()]: nA,
-          [nB.type.toLowerCase()]: nB
-        })
-        : nA);
+    searchNodes = flatten(Object.values(groupBy(allNodes, 'mainNodeId'))
+      .map((groupedNodes) => getNode(groupedNodes, selectedColumnsIds, nodesDict)));
   }
 
   return {
