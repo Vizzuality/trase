@@ -30,6 +30,7 @@ import setGeoJSONMeta from './helpers/setGeoJSONMeta';
 import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
 import getProfileLink from 'utils/getProfileLink';
+import isNodeColumnVisible from 'utils/isNodeColumnVisible';
 
 export function resetState(refilter = true) {
   return (dispatch) => {
@@ -461,30 +462,33 @@ function getSelectedNodeIds(currentSelectedNodesIds, changedNodeId) {
   return selectedNodesIds;
 }
 
-export function selectNode(nodeId, isAggregated = false) {
+export function selectNode(param, isAggregated = false) {
+  const ids = Array.isArray(param) ? param : [param];
   return (dispatch, getState) => {
-    if (isAggregated) {
-      dispatch(selectView(true));
-    } else {
-      const currentSelectedNodesIds = getState().tool.selectedNodesIds;
-      // we are unselecting the node that is currently expanded: just shrink it and bail
-      if (getState().tool.areNodesExpanded && currentSelectedNodesIds.length === 1 && currentSelectedNodesIds.indexOf(nodeId) > -1) {
-        dispatch(toggleNodesExpand());
+    ids.forEach((nodeId) => {
+      if (isAggregated) {
+        dispatch(selectView(true));
+      } else {
+        const currentSelectedNodesIds = getState().tool.selectedNodesIds;
+        // we are unselecting the node that is currently expanded: just shrink it and bail
+        if (getState().tool.areNodesExpanded && currentSelectedNodesIds.length === 1 && currentSelectedNodesIds.indexOf(nodeId) > -1) {
+          dispatch(toggleNodesExpand());
+        }
+
+        const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, nodeId);
+
+        // send to state the new node selection along with new data, geoIds, etc
+        dispatch(updateNodes(selectedNodesIds));
+
+        // refilter links by selected nodes
+        dispatch({
+          type: actions.FILTER_LINKS_BY_NODES
+        });
+
+        // load related geoIds to show on the map
+        dispatch(loadLinkedGeoIDs());
       }
-
-      const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, nodeId);
-
-      // send to state the new node selection along with new data, geoIds, etc
-      dispatch(updateNodes(selectedNodesIds));
-
-      // refilter links by selected nodes
-      dispatch({
-        type: actions.FILTER_LINKS_BY_NODES
-      });
-
-      // load related geoIds to show on the map
-      dispatch(loadLinkedGeoIDs());
-    }
+    });
   };
 }
 
@@ -505,34 +509,34 @@ export function selectNodeFromGeoId(geoId) {
   };
 }
 
-export function selectExpandedNode(nodeId) {
+export function selectExpandedNode(param) {
+  const ids = Array.isArray(param) ? param : [param];
   return (dispatch, getState) => {
-    if (!_isNodeVisible(getState, nodeId)) {
-      const { tool } = getState();
-      if (tool.selectedNodesIds.length === 1 && tool.selectedNodesIds.includes(nodeId)) {
-        dispatch(resetState());
+    ids.forEach((nodeId) => {
+      if (!_isNodeVisible(getState, nodeId)) {
+        const { tool } = getState();
+        if (tool.selectedNodesIds.length === 1 && tool.selectedNodesIds.includes(nodeId)) {
+          dispatch(resetState());
+        } else {
+          const node = tool.nodesDict[nodeId];
+          if (!node) {
+            console.warn(`requested node ${nodeId} does not exist in nodesDict`);
+            return;
+          }
+
+          // check if we need to swap column
+          if (!isNodeColumnVisible(node, tool.selectedColumnsIds)) {
+            dispatch(selectColumn(node.columnGroup, node.columnId, false));
+          }
+
+          const currentSelectedNodesIds = getState().tool.selectedNodesIds;
+          const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, nodeId);
+          dispatch(toggleNodesExpand(true, selectedNodesIds));
+        }
       } else {
-        // check if we need to swap column
-        const node = tool.nodesDict[nodeId];
-        if (!node) {
-          console.warn(`requested node ${nodeId} does not exist in nodesDict`);
-          return;
-        }
-
-        const columnGroup = node.columnGroup;
-        const currentColumnAtPos = tool.selectedColumnsIds[columnGroup];
-
-        if (currentColumnAtPos !== node.columnId) {
-          dispatch(selectColumn(columnGroup, node.columnId, false));
-        }
-
-        const currentSelectedNodesIds = getState().tool.selectedNodesIds;
-        const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, nodeId);
-        dispatch(toggleNodesExpand(true, selectedNodesIds));
+        dispatch(selectNode(nodeId, false));
       }
-    } else {
-      dispatch(selectNode(nodeId, false));
-    }
+    });
   };
 }
 
