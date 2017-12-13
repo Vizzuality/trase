@@ -1,26 +1,21 @@
 import _ from 'lodash';
 import actions from 'actions';
+import qs from 'query-string';
 
-export const getURLParams = url => {
-  const objParams = {};
+export const parse = url => {
+  const params = qs.parse(url);
+  if ('state' in params) {
+    return { ...params, state: decodeStateFromURL(params.state) };
+  }
+  return params;
+};
 
-  // removes '?' character from URL
-  url = url.slice(1);
-
-  // splits every param in the URL to a new array
-  const splitedParams = url.split('&');
-
-  // Loops params creating a new param object
-  splitedParams.forEach((p) => {
-    const param = p.split('=');
-
-    if (param[0]) {
-      objParams[param[0]] = param[1] || null;
-    }
-
-  });
-
-  return objParams;
+export const stringify = ({ state, ...obj }) => {
+  const params = qs.stringify(obj);
+  if (state) {
+    return encodeStateToURL(state) + params;
+  }
+  return params;
 };
 
 const URL_STATE_PROPS = [
@@ -97,7 +92,7 @@ export const decodeStateFromURL = urlHash => {
           break;
         }
         case 'isMapVisible': {
-          urlParam = (urlParam === 'true') ? true : false;
+          urlParam = (urlParam === 'true');
           break;
         }
       }
@@ -110,8 +105,9 @@ export const decodeStateFromURL = urlHash => {
 
 export const toolUrlStateMiddleware = store => next => action => {
   if (action.type === actions.HIGHLIGHT_NODE) return next(action);
+  const prevLocation = store.getState().location;
   const decoratedAction = { ...action };
-  const urlState = store.getState().location.query; // prev state
+  const urlState = prevLocation.query && prevLocation.query.state; // prev state
   if (action.type === actions.LOAD_INITIAL_DATA && urlState) {
     decoratedAction.payload = { ...urlState };
   }
@@ -120,7 +116,7 @@ export const toolUrlStateMiddleware = store => next => action => {
   if (location.type === 'tool' && action.type !== 'tool' && action.type !== actions.LOAD_INITIAL_DATA) {
     store.dispatch({
       type: 'tool',
-      payload: { query: tool },
+      payload: { query: { state: tool } },
       meta: { location: { prev: location.prev } }
     });
   }

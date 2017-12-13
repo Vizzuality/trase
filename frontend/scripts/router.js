@@ -1,11 +1,11 @@
 import { connectRoutes, NOT_FOUND } from 'redux-first-router';
-import { encodeStateToURL, decodeStateFromURL } from 'utils/stateURL';
+import { parse, stringify } from 'utils/stateURL';
 
 const config = {
   basename: '/',
   querySerializer: {
-    stringify: encodeStateToURL,
-    parse: (q) => decodeStateFromURL(q && q.split('state=')[1])
+    parse,
+    stringify
   }
 };
 

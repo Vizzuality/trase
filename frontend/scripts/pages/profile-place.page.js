@@ -30,7 +30,7 @@ import MiniSankey from 'react-components/profiles/mini-sankey.component';
 import MultiTable from 'components/profiles/multi-table.component';
 import Map from 'components/profiles/map.component';
 
-import { getURLParams } from 'utils/stateURL';
+import qs from 'query-string';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
 import swapProfileYear from 'utils/swapProfileYear';
@@ -290,7 +290,7 @@ export const renderPage = (root) => {
     feedback: FeedbackMarkup()
   });
   const url = window.location.search;
-  const urlParams = getURLParams(url);
+  const urlParams = qs.parse(url);
   const nodeId = urlParams.nodeId;
   year = urlParams.year || 2015;
   showMiniSankey = !!urlParams.showMiniSankey || false;

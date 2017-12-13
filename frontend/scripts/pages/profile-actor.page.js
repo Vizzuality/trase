@@ -29,7 +29,7 @@ import Scatterplot from 'components/profiles/scatterplot.component';
 import Tooltip from 'components/shared/info-tooltip.component';
 import choroLegend from 'components/profiles/choro-legend.component';
 
-import { getURLParams } from 'utils/stateURL';
+import qs from 'query-string';
 import smoothScroll from 'utils/smoothScroll';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
@@ -331,7 +331,7 @@ export const renderPage = (root)  => {
     feedback: FeedbackMarkup()
   });
   const url = window.location.search;
-  const urlParams = getURLParams(url);
+  const urlParams = qs.parse(url);
   const nodeId = urlParams.nodeId;
   year = urlParams.year || 2015;
 
