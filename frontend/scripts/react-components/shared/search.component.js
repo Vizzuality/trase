@@ -10,10 +10,12 @@ import SearchResult from './search-result.component';
 
 export default class Search extends Component {
 
-  static getNodeId(selectedItem) {
-    // TODO: implement dual selection, for now just displays importer
+  static getNodeIds(selectedItem) {
     const parts = (selectedItem.id + '').split('_');
-    return parts.length > 1 ? parseInt(parts[0]) : selectedItem.id;
+    if (parts.length > 1) {
+      return [parseInt(parts[0], 10), parseInt(parts[1], 10)];
+    }
+    return [selectedItem.id];
   }
 
   static isValidChar(key) {
@@ -69,19 +71,19 @@ export default class Search extends Component {
 
   onSelected(selectedItem) {
     if (this.isNodeSelected(selectedItem)) return this.downshift.clearSelection();
-    const id = Search.getNodeId(selectedItem);
+    const ids = Search.getNodeIds(selectedItem);
     if (selectedItem.selected) {
-      this.props.onRemoveNode(id);
+      this.props.onRemoveNode(ids);
     } else {
-      this.props.onAddNode(id);
+      this.props.onAddNode(ids);
     }
     this.onCloseClicked();
   }
 
   onAddNode(e, selectedItem) {
     if (e) e.stopPropagation();
-    const id = Search.getNodeId(selectedItem);
-    this.props.onAddNode(id);
+    const ids = Search.getNodeIds(selectedItem);
+    this.props.onAddNode(ids);
     this.downshift.reset();
     this.input.focus();
   }
