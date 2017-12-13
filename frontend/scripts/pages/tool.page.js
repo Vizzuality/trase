@@ -22,7 +22,7 @@ import SearchContainer from 'containers/shared/search-react.container';
 import ModalContainer from 'containers/tool/story-modal.container';
 import TooltipContainer from 'containers/shared/help-tooltip.container';
 
-import { resize, loadDisclaimer } from 'actions/app.actions';
+import { resize, loadDisclaimer, displayStoryModal } from 'actions/app.actions';
 import { loadInitialData } from 'actions/tool.actions';
 import 'styles/components/shared/veil.scss';
 import 'styles/components/shared/spinner.scss';
@@ -31,6 +31,8 @@ import 'styles/components/tool/map/map-sidebar.scss';
 import 'styles/layouts/l-tool.scss';
 
 export const renderPage = (root, store) => {
+  const { query = {} } = store.getState().location;
+
   root.innerHTML = ToolMarkup({
     search: SearchMarkup(),
     navtool: NavtoolMarkup(),
@@ -68,42 +70,18 @@ export const renderPage = (root, store) => {
     document.getElementById('js-search-react')
   );
 
-
-
   store.dispatch(loadDisclaimer());
   store.dispatch(loadInitialData());
+  if (query.story) {
+    store.dispatch(displayStoryModal(query.story));
+  }
+
   store.dispatch(resize());
 
   window.addEventListener('resize', () => {
     store.dispatch(resize());
   });
 };
-
-// if (objParams.story) {
-//   // TODO display loading state while loading service
-//
-//   const storyId = objParams.story;
-//
-//   fetch(`${getURLFromParams(GET_SITE_DIVE)}/${storyId}`)
-//     .then(resp => resp.text())
-//     .then(resp => JSON.parse(resp))
-//     .then(modalParams => {
-//       Object.assign(APP_DEFAULT_STATE.app, {
-//         modal: {
-//           visibility: true,
-//           modalParams: modalParams.data
-//         }
-//       });
-//
-//       start();
-//     })
-//     .catch(() => {
-//       start();
-//     });
-//
-// } else {
-//   start();
-// }
 
 // if (NODE_ENV_DEV === true) {
 //   window.addEventListener('keydown', (event) => {

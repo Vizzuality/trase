@@ -52,6 +52,10 @@ export default function (state = initialState, action) {
       return Object.assign({}, state, { currentDropdown });
     }
 
+    case action.DISPLAY_STORY_MODAL: {
+      return { ...state, modal: action.payload };
+    }
+
     default:
       return state;
   }
