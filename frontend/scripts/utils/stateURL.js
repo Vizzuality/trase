@@ -113,7 +113,13 @@ export const toolUrlStateMiddleware = store => next => action => {
   }
   const result = next(decoratedAction);
   const { location, tool } = store.getState(); // next state
-  if (location.type === 'tool' && action.type !== 'tool' && action.type !== actions.LOAD_INITIAL_DATA) {
+  const conditions = [
+    location.type === 'tool',
+    action.type !== 'tool',
+    action.type !== actions.LOAD_INITIAL_DATA,
+    !_.isEqual(filterStateToURL(tool), urlState)
+  ];
+  if (!conditions.includes(false)) {
     store.dispatch({
       type: 'tool',
       payload: { query: { state: tool } },
