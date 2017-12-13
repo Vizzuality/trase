@@ -6,7 +6,6 @@ default: &default
   port: <%= ENV.fetch("POSTGRES_PORT") { "5432" } %>
   password: <%= ENV.fetch("POSTGRES_PASSWORD") {} %>
   database: <%= ENV.fetch("POSTGRES_DATABASE") { "trase_dev" } %>
- # schema_search_path: "public"
 
 development:
   <<: *default

@@ -3,7 +3,9 @@ module Api
     class BaseModel < ActiveRecord::Base
       self.abstract_class = true
 
-      establish_connection DB_REVAMP
+      def self.table_name_prefix
+        'revamp.'
+      end
     end
   end
 end
