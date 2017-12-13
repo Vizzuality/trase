@@ -1,4 +1,5 @@
 import { connectRoutes, NOT_FOUND } from 'redux-first-router';
+import connect from 'connect';
 import { parse, stringify } from 'utils/stateURL';
 
 const config = {
@@ -9,7 +10,7 @@ const config = {
   }
 };
 
-export const routes = {
+const routes = {
   home: {
     path: '/',
     page: 'home'
@@ -54,5 +55,31 @@ export const routes = {
     path: '/404'
   }
 };
+
+
+export function routeSubscriber(store) {
+  class RouterComponent {
+    onCreated() {
+      this.onRouteChange(store.getState().location);
+    }
+
+    onRouteChange({ routesMap, type } = {}) {
+      import(/* webpackChunkName: "page" */ `./pages/${routesMap[type].page}.page.js`)
+        .then((page) => {
+          page.renderPage(document.getElementById('app-root-container'), store);
+        });
+    }
+  }
+
+  const mapMethodsToState = () => ({
+    onRouteChange: {
+      _comparedValue: state => state.location.type,
+      _returnedValue: state => state.location
+    }
+  });
+  const RouterContainer =  connect(RouterComponent, mapMethodsToState);
+
+  return new RouterContainer(store);
+}
 
 export default connectRoutes(routes, config);

@@ -1,6 +1,6 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import router from './router';
+import router, { routeSubscriber } from './router';
 
 import AppReducer from 'reducers/app.reducer';
 import ToolReducer from 'reducers/tool.reducer';
@@ -28,9 +28,4 @@ const store = createStore(
   )
 );
 
-const { routesMap, type } = store.getState().location;
-
-import(/* webpackChunkName: "page" */ `./pages/${routesMap[type].page}.page.js`)
-  .then((page) => {
-    page.renderPage(document.getElementById('app-root-container'), store);
-  });
+routeSubscriber(store);
