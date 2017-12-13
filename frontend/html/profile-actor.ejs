@@ -140,7 +140,6 @@
             <div class="small-12 columns" style="position: relative">
               <h3 class="js-scatterplot-title title -small">-</h3>
               <div class="js-companies-exporting-y-axis axis-legend"></div>
-              <div class="js-companies-exporting-x-axis axis-legend axis-legend-x"></div>
               <div class="js-companies-exporting"></div>
               <ul class="c-scatterplot-switcher js-scatterplot-switcher"></ul>
             </div>
@@ -149,9 +148,10 @@
 
       </div>
       <div class="c-error-message js-error-message is-hidden">
-        <p class="message">Data not found</p>
+        <p class="message js-message">Data not found</p>
       </div>
     </div>
     <div class="js-infowindow c-info-tooltip is-hidden"></div>
     <%= footer %>
-  </div>
+   <%= feedback %>
+ </div>

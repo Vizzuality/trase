@@ -1,6 +1,6 @@
 <% if (isSelect) { %>
   <% nodes.forEach(function(node, i) { %>
-    <% const color = recolorGroups === null ? -1 : recolorGroups[node.id] %>
+    <% const color = (recolorGroups === null) || !recolorGroups[node.id] ? -1 : recolorGroups[node.id] %>
     <div
       class="js-node-title c-node-title -recolorgroup-<%= color %> <% if (node.hasLink) { %>-link<% } %>"
       data-node-id="<%= node.id %>"

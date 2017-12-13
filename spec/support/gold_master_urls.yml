@@ -32,8 +32,8 @@ json:
   - url: /api/v2/get_map_base_data
     name: get_map_base_data
     version: v2
-    v3_ready: false
-    v3_url: /api/v3/get_map_base_data
+    v3_ready: true
+    v3_url: /api/v3/contexts/1/map_groups
     <<: *context_queries
   - url: /api/v2/get_linked_geoids
     name: get_linked_geoids
@@ -70,17 +70,33 @@ json:
   - url: /api/v2/get_all_nodes
     name: get_all_nodes
     version: v2
-    v3_ready: false
-    v3_url: /api/v3/get_all_nodes
-    <<: *context_queries
+    v3_ready: true
+    v3_url: /api/v3/contexts/1/nodes
+    queries:
+      - params: context_id=1
+        name: brazil_soy
+  - url: /api/v2/get_all_nodes
+    name: get_all_nodes
+    version: v2
+    v3_ready: true
+    v3_url: /api/v3/contexts/2/nodes
+    queries:
+      - params: context_id=2
+        name: paraguay_soy
   - url: /api/v2/get_place_node_attributes
     name: get_place_node_attributes
     version: v2
-    v3_ready: false
-    v3_url: /api/v3/get_place_node_attributes
+    v3_ready: true
+    v3_url: /api/v3/contexts/1/nodes/2759/place
     queries:
       - params: node_id=2759
         name: sorriso
+  - url: /api/v2/get_place_node_attributes
+    name: get_place_node_attributes
+    version: v2
+    v3_ready: true
+    v3_url: /api/v3/contexts/1/nodes/2262/place
+    queries:
       - params: node_id=2262
         name: querencia
   - url: /api/v2/get_actor_node_attributes

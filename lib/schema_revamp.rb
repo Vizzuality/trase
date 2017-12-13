@@ -630,12 +630,16 @@ class SchemaRevamp
         "INSERT INTO revamp.chart_attributes (chart_id, position, created_at, updated_at) VALUES (#{inserted_chart['id']}, #{attribute[:position]}, NOW(), NOW()) RETURNING id"
       ).first
       if attribute[:quant]
-        quant_id = fetch_quant(attribute[:quant])['id']
+        quant = fetch_quant(attribute[:quant])
+        next unless quant
+        quant_id = quant['id']
         ActiveRecord::Base.connection.execute(
           "INSERT INTO revamp.chart_quants (chart_attribute_id, quant_id, created_at, updated_at) VALUES (#{inserted_chart_attribute['id']}, #{quant_id}, NOW(), NOW())"
         )
       elsif attribute[:ind]
-        ind_id = fetch_ind(attribute[:ind])['id']
+        ind = fetch_ind(attribute[:ind])
+        next unless ind
+        ind_id = ind['id']
         ActiveRecord::Base.connection.execute(
           "INSERT INTO revamp.chart_inds (chart_attribute_id, ind_id, created_at, updated_at) VALUES (#{inserted_chart_attribute['id']}, #{ind_id}, NOW(), NOW())"
         )

@@ -1,6 +1,7 @@
 import AboutMarkup from 'html/about.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
 import FooterMarkup from 'html/includes/_footer.ejs';
+import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import 'styles/about.scss';
 
@@ -54,7 +55,8 @@ const _setEventListeners = (options) => {
 export const renderPage = (root) => {
   root.innerHTML = AboutMarkup({
     nav: NavMarkup({ page: 'about' }),
-    footer: FooterMarkup()
+    footer: FooterMarkup(),
+    feedback: FeedbackMarkup()
   });
 
   const options = {

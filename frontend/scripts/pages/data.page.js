@@ -2,6 +2,8 @@ import DataMarkup from 'html/data.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
 import FooterMarkup from 'html/includes/_footer.ejs';
 import AutocompleteCountriesMarkup from 'html/includes/_autocomplete_countries.ejs';
+import FeedbackMarkup from 'html/includes/_feedback.ejs';
+
 
 import DataContentContainer from 'containers/data/data-content.container';
 import Nav from 'components/shared/nav.component.js';
@@ -16,7 +18,8 @@ export const renderPage = (root, store) => {
   root.innerHTML = DataMarkup({
     nav: NavMarkup({ page: 'data' }),
     footer: FooterMarkup(),
-    autocomplete_countries: AutocompleteCountriesMarkup()
+    autocomplete_countries: AutocompleteCountriesMarkup(),
+    feedback: FeedbackMarkup()
   });
   new DataContentContainer(store);
   store.dispatch(loadContext());

@@ -9,11 +9,11 @@ shared_context 'quants' do
   end
   let(:force_labour) do
     Quant.find_by_name('SLAVERY') ||
-      FactoryBot.create(:quant, actor_factsheet: false, place_factsheet: true, place_factsheet_temporal: false, name: 'SLAVERY', unit: 'Number', unit_type: 'count', tooltip_text: 'Number of people involved in lawsuits relating to cases fo forced labor or degrading working conditions', frontend_name: 'Reported cases of forced labour (2014)')
+      FactoryBot.create(:quant, actor_factsheet: false, place_factsheet: true, place_factsheet_temporal: true, name: 'SLAVERY', unit: 'Number', unit_type: 'count', tooltip_text: 'Number of people involved in lawsuits relating to cases fo forced labor or degrading working conditions', frontend_name: 'Reported cases of forced labour (2014)')
   end
   let(:embargoes) do
     Quant.find_by_name('EMBARGOES_') ||
-      FactoryBot.create(:quant, actor_factsheet: false, place_factsheet: true, place_factsheet_temporal: false, name: 'EMBARGOES_', unit: 'Number', unit_type: 'count', tooltip_text: 'Number of fines and embargos associated with infringements of environmental legislations per municipality', frontend_name: 'Number of environmental embargos (2015)')
+      FactoryBot.create(:quant, actor_factsheet: false, place_factsheet: true, place_factsheet_temporal: true, name: 'EMBARGOES_', unit: 'Number', unit_type: 'count', tooltip_text: 'Number of fines and embargos associated with infringements of environmental legislations per municipality', frontend_name: 'Number of environmental embargos (2015)')
   end
   let(:fob) do
     Quant.find_by_name('FOB') ||

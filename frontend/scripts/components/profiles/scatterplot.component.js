@@ -59,9 +59,6 @@ export default class {
         return abbreviateNumber(value, 3);
       });
 
-    const firstTab = this.xDimension[0];
-    document.querySelector('.js-companies-exporting-x-axis').innerHTML = `${firstTab.name} (${firstTab.unit})`;
-
     this.yAxis = d3_axis_left(this.y)
       .ticks(7)
       .tickSize(-this.width, 0)

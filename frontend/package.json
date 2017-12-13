@@ -59,6 +59,8 @@
     "d3": "^4.2.2",
     "d3-geo-projection": "^2.1.0",
     "dotenv": "^2.0.0",
+    "downshift": "^1.18.0",
+    "highlight-words-core": "^1.1.0",
     "leaflet": "^1.0.3",
     "leaflet.utfgrid": "git+https://github.com/danzel/Leaflet.utfgrid.git",
     "lodash": "^4.15.0",

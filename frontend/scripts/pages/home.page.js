@@ -7,6 +7,7 @@
 import HomeMarkup from 'html/home.ejs';
 import FooterMarkup from 'html/includes/_footer.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
+import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import Nav from 'components/shared/nav.component.js';
 import Slider from 'components/home/slider.component';
@@ -140,7 +141,11 @@ const newsletterSubscribe = (e) => {
 };
 
 export const renderPage = (root) => {
-  root.innerHTML = HomeMarkup({ footer: FooterMarkup(), nav: NavMarkup({ page: 'index' }) });
+  root.innerHTML = HomeMarkup({
+    footer: FooterMarkup(),
+    nav: NavMarkup({ page: 'index' }),
+    feedback: FeedbackMarkup()
+  });
   const bounds = document.querySelector('.js-trigger-menu-bg').getBoundingClientRect();
   const pageOffset = getPageOffset(bounds);
   new Nav({ pageOffset });

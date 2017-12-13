@@ -1,10 +1,3 @@
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 9.6.5
--- Dumped by pg_dump version 9.6.5
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -1306,7 +1299,7 @@ CREATE MATERIALIZED VIEW attributes_mv AS
            FROM (quants
              LEFT JOIN quant_properties qp ON ((qp.quant_id = quants.id)))
         UNION ALL
-         SELECT 'Ind'::text,
+         SELECT 'Ind'::text AS text,
             inds.id,
             inds.name,
             ip.display_name,
@@ -1317,22 +1310,22 @@ CREATE MATERIALIZED VIEW attributes_mv AS
             ip.is_visible_on_place_profile,
             ip.is_temporal_on_actor_profile,
             ip.is_temporal_on_place_profile,
-            'AVG'::text
+            'AVG'::text AS text
            FROM (inds
              LEFT JOIN ind_properties ip ON ((ip.ind_id = inds.id)))
         UNION ALL
-         SELECT 'Qual'::text,
+         SELECT 'Qual'::text AS text,
             quals.id,
             quals.name,
             qp.display_name,
-            NULL::text,
-            NULL::text,
+            NULL::text AS text,
+            NULL::text AS text,
             qp.tooltip_text,
             qp.is_visible_on_actor_profile,
             qp.is_visible_on_place_profile,
             qp.is_temporal_on_actor_profile,
             qp.is_temporal_on_place_profile,
-            NULL::text
+            NULL::text AS text
            FROM (quals
              LEFT JOIN qual_properties qp ON ((qp.qual_id = quals.id)))) s
   WITH NO DATA;
@@ -2809,7 +2802,13 @@ CREATE MATERIALIZED VIEW map_attributes_mv AS
     ma.is_default,
     ma.created_at,
     ma.updated_at,
-    a.id AS attribute_id
+    a.id AS attribute_id,
+    a.display_name AS name,
+    'quant'::text AS attribute_type,
+    a.unit,
+    a.tooltip_text AS description,
+    a.aggregate_method,
+    a.original_id AS layer_attribute_id
    FROM ((map_quants maq
      JOIN map_attributes ma ON ((ma.id = maq.map_attribute_id)))
      JOIN attributes_mv a ON (((a.original_id = maq.quant_id) AND (a.original_type = 'Quant'::text))))
@@ -2825,7 +2824,13 @@ UNION ALL
     ma.is_default,
     ma.created_at,
     ma.updated_at,
-    a.id AS attribute_id
+    a.id AS attribute_id,
+    a.display_name AS name,
+    'ind'::text AS attribute_type,
+    a.unit,
+    a.tooltip_text AS description,
+    a.aggregate_method,
+    a.original_id AS layer_attribute_id
    FROM ((map_inds mai
      JOIN map_attributes ma ON ((ma.id = mai.map_attribute_id)))
      JOIN attributes_mv a ON (((a.original_id = mai.ind_id) AND (a.original_type = 'Ind'::text))))
@@ -2844,6 +2849,41 @@ COMMENT ON MATERIALIZED VIEW map_attributes_mv IS 'Materialized view which merge
 --
 
 COMMENT ON COLUMN map_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+
+
+--
+-- Name: COLUMN map_attributes_mv.name; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes_mv.name IS 'Display name of the ind/quant';
+
+
+--
+-- Name: COLUMN map_attributes_mv.attribute_type; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes_mv.attribute_type IS 'Type of the attribute (ind/quant)';
+
+
+--
+-- Name: COLUMN map_attributes_mv.unit; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes_mv.unit IS 'Name of the attribute''s unit';
+
+
+--
+-- Name: COLUMN map_attributes_mv.description; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes_mv.description IS 'Attribute''s description';
+
+
+--
+-- Name: COLUMN map_attributes_mv.layer_attribute_id; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes_mv.layer_attribute_id IS 'The attribute''s original id';
 
 
 --
@@ -6351,6 +6391,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171115144320'),
 ('20171116101949'),
 ('20171117115459'),
-('20171117120322');
+('20171117120322'),
+('20171130103917');
 
 

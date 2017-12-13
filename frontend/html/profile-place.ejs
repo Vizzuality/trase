@@ -161,13 +161,32 @@
         </div>
       </section>
 
-      <section class="js-traders chords-container -traders is-hidden">
-        <div class="row">
-          <div class="small-7 columns js-chord-traders c-chord">
-            <div class="c-chord-legend">Other municipalities<br/>in <span class="js-chord-traders-state-name">-</span></div>
+        <section class="mini-sankey-container is-hidden">
+          <div class="row">
+            <div class="small-12 columns">
+              <h3 class="title -small js-traders-title">-</h3>
+              <div id="js-traders-sankey"></div>
+            </div>
           </div>
-          <div class="small-4 columns">
-            <div class="c-top js-top-trader"></div>
+        </section>
+
+        <section class="mini-sankey-container is-hidden">
+          <div class="row">
+            <div class="small-12 columns">
+              <h3 class="title -small js-consumers-title">-</h3>
+              <div id="js-consumers-sankey"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="js-traders chords-container -traders is-hidden">
+          <div class="row">
+            <div class="small-7 columns js-chord-traders c-chord">
+              <div class="c-chord-legend">Other municipalities<br/>in <span class="js-chord-traders-state-name">-</span></div>
+            </div>
+            <div class="small-4 columns">
+              <div class="c-top js-top-trader"></div>
+            </div>
           </div>
         </div>
       </section>
@@ -177,15 +196,13 @@
           <div class="small-4 small-offset-1 columns">
             <div class="c-top js-top-consumer"></div>
           </div>
-          <div class="small-7 columns js-chord-consumers c-chord">
-            <div class="c-chord-legend">Other municipalities<br/>in <span class="js-chord-consumers-state-name">-</span></div>
-          </div>
-        </div>
-      </section>
-    </div>
-    <div class="c-error-message js-error-message is-hidden">
-      <p class="message">Data not found</p>
+        </section>
+      </div>
+      <div class="c-error-message js-error-message is-hidden">
+        <p class="message js-message">Data not found</p>
+      </div>
     </div>
   </div>
   <%= footer %>
+  <%= feedback %>
 </div>

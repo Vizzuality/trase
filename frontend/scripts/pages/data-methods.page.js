@@ -1,6 +1,8 @@
 import DataMethodsMarkup from 'html/data-methods.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
 import FooterMarkup from 'html/includes/_footer.ejs';
+import FeedbackMarkup from 'html/includes/_feedback.ejs';
+
 
 import Nav from 'components/shared/nav.component.js';
 import 'styles/data-methods.scss';
@@ -55,6 +57,7 @@ export const renderPage = (root) => {
   root.innerHTML = DataMethodsMarkup({
     nav: NavMarkup({ page: 'data-methods' }),
     footer: FooterMarkup(),
+    feedback: FeedbackMarkup()
   });
 
   const options = {

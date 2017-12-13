@@ -71,7 +71,7 @@ class PlaceAttributes
 
     largest_exporter = (traders = top_municipality_exporters) && traders[:actors][0]
     if largest_exporter.present?
-      largest_exporter_name = largest_exporter[:name].try(:humanize)
+      largest_exporter_name = largest_exporter[:name].try(:titleize)
       percent_of_exports = helper.number_to_percentage(
         (largest_exporter[:value] || 0) * 100,
         delimiter: ',', precision: 1
@@ -79,17 +79,15 @@ class PlaceAttributes
     end
 
     main_destination = (consumers = @data[:top_consumers][:countries]) && consumers[0] && consumers[0][:name]
-    main_destination = main_destination.humanize if main_destination.present?
+    main_destination = main_destination.titleize if main_destination.present?
 
     state_name = @state.name.titleize if @state.present?
 
-    <<~SUMMARY
-      In #{@year}, #{@node.name.titleize} produced #{soy_produced} of soy occupying a total of #{soy_area} \
-      of land. With #{percentage_total_production} of the total production, it ranks #{country_ranking} in Brazil in soy \
-      production, and #{state_ranking} in the state of #{state_name}. The largest exporter of soy \
-      in #{@node.name.titleize} was #{largest_exporter_name}, which accounted for #{percent_of_exports} of the total exports, \
-      and the main destination was #{main_destination}.
-    SUMMARY
+    "In #{@year}, #{@node.name.titleize} produced #{soy_produced} of soy occupying a total of #{soy_area} \
+of land. With #{percentage_total_production} of the total production, it ranks #{country_ranking} in Brazil in soy \
+production, and #{state_ranking} in the state of #{state_name}. The largest exporter of soy \
+in #{@node.name.titleize} was #{largest_exporter_name}, which accounted for #{percent_of_exports} of the total exports, \
+and the main destination was #{main_destination}."
   end
 
   def municipality_and_logistics_hub_extra_data
@@ -363,31 +361,23 @@ class PlaceAttributes
     end
     values = []
     ranking_scores = []
-    list.each_with_index do |indicator, idx|
-      values_for_current_year, temporal_values_for_all_years = if indicator[:type] == 'quant'
-                                                                 [@place_quants, @temporal_place_quants_for_all_years]
-                                                               elsif indicator[:type] == 'ind'
-                                                                 [@place_inds, @temporal_place_inds_for_all_years]
-                                                               else
-                                                                 [[], []]
-                                                               end
+    list.each do |indicator|
+      values_for_current_year = if indicator[:type] == 'quant'
+                                  @place_quants
+                                elsif indicator[:type] == 'ind'
+                                  @place_inds
+                                else
+                                  []
+                                end
       if (value_for_current_year = values_for_current_year[indicator[:backend_name]]).present?
         value = value_for_current_year['value']
-      else # temporal indicator with no value for selected year
-        value_for_closest_year = temporal_values_for_all_years[indicator[:backend_name]].min_by do |pq|
-          (pq.year - @year).abs
-        end
-        if value_for_closest_year.present?
-          value = value_for_closest_year.value
-          list[idx][:year] = value_for_closest_year.year
-        end
       end
       values << value
       if @state.present?
-        ranking_scores << @stats.state_ranking(@state, indicator[:type], indicator[:backend_name], list[idx][:year])
+        ranking_scores << @stats.state_ranking(@state, indicator[:type], indicator[:backend_name])
       end
     end
-    included_columns = list.map { |i| i.slice(:name, :unit, :year) }
+    included_columns = list.map { |i| i.slice(:name, :unit) }
     {
       name: name,
       included_columns: included_columns,

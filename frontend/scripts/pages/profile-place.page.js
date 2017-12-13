@@ -1,6 +1,7 @@
 import ProfilePlaceMarkup from 'html/profile-place.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
 import FooterMarkup from 'html/includes/_footer.ejs';
+import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import 'styles/_base.scss';
 import 'styles/_texts.scss';
@@ -17,11 +18,15 @@ import 'styles/components/profiles/link-buttons.scss';
 import 'styles/components/profiles/error.scss';
 import 'styles/components/profiles/map.scss';
 
+import capitalize from 'lodash/capitalize';
+import { h, render } from 'preact';
+
 import Nav from 'components/shared/nav.component.js';
 import Dropdown from 'components/shared/dropdown.component';
 import Top from 'components/profiles/top.component';
 import Line from 'components/profiles/line.component';
 import Chord from 'components/profiles/chord.component';
+import MiniSankey from 'react-components/profiles/mini-sankey.component';
 import MultiTable from 'components/profiles/multi-table.component';
 import Map from 'components/profiles/map.component';
 
@@ -30,7 +35,7 @@ import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
 import swapProfileYear from 'utils/swapProfileYear';
 import smoothScroll from 'utils/smoothScroll';
-import _ from 'lodash';
+
 import { getURLFromParams, GET_PLACE_FACTSHEET } from '../utils/getURLFromParams';
 
 const defaults = {
@@ -39,10 +44,11 @@ const defaults = {
 };
 
 let year;
+let showMiniSankey;
 
 const _build = data => {
   const stateGeoID = data.state_geo_id;
-  const countryName = _.capitalize(data.country_name);
+  const countryName = capitalize(data.country_name);
 
   Map('.js-map-country', {
     topoJSONPath: './vector_layers/WORLD.topo.json',
@@ -69,7 +75,7 @@ const _build = data => {
     getPolygonClassName: d => (d.properties.geoid === data.municipality_geo_id) ? '-isCurrent' : ''
   });
 
-  if (data.trajectory_deforestation && data.trajectory_deforestation.lines.length) {
+  if (data.trajectory_deforestation && data.trajectory_deforestation.lines && data.trajectory_deforestation.lines.length) {
 
     // Manually trim time series to 2010 - 2015 as asked here https://basecamp.com/1756858/projects/12498794/todos/324404665
     data.trajectory_deforestation.included_years = data.trajectory_deforestation.included_years.filter(year => {
@@ -104,42 +110,127 @@ const _build = data => {
     elem.parentNode.parentNode.parentNode.removeChild(elem.parentNode.parentNode);
   }
 
-  if (data.top_traders.actors.length) {
-    document.querySelector('.js-traders').classList.toggle('is-hidden', false);
+  if (showMiniSankey) {
+    document.querySelectorAll('.mini-sankey-container').forEach((el) => {
+      el.classList.toggle('is-hidden', false);
+    });
 
-    new Chord(
-      '.js-chord-traders',
-      data.top_traders.matrix,
-      data.top_traders.municipalities,
-      data.top_traders.actors
+    // query: nodeId, targetColumnId + commodity and year
+    const tradersSankeyData = {
+      name: 'QUERÊNCIA',
+      targetNodes: [{
+        id: 2,
+        name: 'Other',
+        isAggregated: true,
+        height: 0.2,
+        // isDomesticConsumption: null,
+      },{
+        id: 588,
+        name: 'Cargill',
+        height: 0.4,
+      },{
+        id: 588,
+        name: 'Hello, I have such a long name I need 3 lines',
+        height: 0.2,
+      },{
+        id: 588,
+        name: 'Sometimes, you gotta have more lines',
+        height: 0.1,
+      },{
+        id: 588,
+        name: 'Cargill',
+        height: 0.029,
+      },{
+        id: 588,
+        name: 'Cargill',
+        height: 0.021,
+      },{
+        id: 588,
+        name: 'Im very long but sadly the node hieght is too small',
+        height: 0.05,
+      }]
+    };
+
+    // query: nodeId, targetColumnId + commodity and year
+    const consumersSankeyData = {
+      name: 'QUERÊNCIA',
+      targetNodes: [{
+        name: 'Others',
+        isAggregated: true,
+        height: 0.2
+      },{
+        name: 'China',
+        height: 0.4,
+      },{
+        name: 'Brazil',
+        height: 0.2,
+      },{
+        name: 'Germany',
+        height: 0.1,
+      },{
+        name: 'South Korea',
+        height: 0.029,
+      },{
+        name: 'Thailand',
+        height: 0.021,
+      },{
+        name: 'Spain',
+        height: 0.05,
+      }]
+    };
+
+    render(
+      <MiniSankey
+        data={tradersSankeyData}
+        targetLink='actor'
+      />,
+      document.getElementById('js-traders-sankey')
     );
 
-    new Top({
-      el: document.querySelector('.js-top-trader'),
-      data: data.top_traders.actors,
-      targetLink: 'actor',
-      title: `Top traders of soy in ${data.municipality_name} in ${year}`,
-      unit: '%',
-      year
-    });
-  }
-
-  if (data.top_consumers.countries.length) {
-    document.querySelector('.js-consumers').classList.toggle('is-hidden', false);
-
-    new Chord(
-      '.js-chord-consumers',
-      data.top_consumers.matrix,
-      data.top_consumers.municipalities,
-      data.top_consumers.countries
+    render(
+      <MiniSankey
+        data={consumersSankeyData}
+      />,
+      document.getElementById('js-consumers-sankey')
     );
+  } else {
+    if (data.top_traders.actors.length) {
+      document.querySelector('.js-traders').classList.toggle('is-hidden', false);
 
-    new Top({
-      el: document.querySelector('.js-top-consumer'),
-      data: data.top_consumers.countries,
-      title: `Top importer countries of ${formatApostrophe(_.capitalize(data.municipality_name))} soy in ${year}`,
-      unit: '%'
-    });
+      new Chord(
+        '.js-chord-traders',
+        data.top_traders.matrix,
+        data.top_traders.municipalities,
+        data.top_traders.actors
+      );
+
+      new Top({
+        el: document.querySelector('.js-top-trader'),
+        data: data.top_traders.actors,
+        targetLink: 'actor',
+        title: `Top traders of soy in ${data.municipality_name} in ${year}`,
+        unit: '%',
+        year
+      });
+    }
+
+    if (data.top_consumers.countries.length) {
+      document.querySelector('.js-consumers').classList.toggle('is-hidden', false);
+
+      new Chord(
+        '.js-chord-consumers',
+        data.top_consumers.matrix,
+        data.top_consumers.municipalities,
+        data.top_consumers.countries
+      );
+
+      new Top({
+        el: document.querySelector('.js-top-consumer'),
+        data: data.top_consumers.countries,
+        title: `Top importer countries of ${formatApostrophe(capitalize(data.municipality_name))} soy in ${year}`,
+        unit: '%'
+      });
+    }
   }
 
   if (data.indicators.length) {
@@ -154,22 +245,20 @@ const _build = data => {
 };
 
 const _setInfo = (info, nodeId) => {
-  document.querySelector('.js-country-name').innerHTML = info.country ? _.capitalize(info.country) : '-';
-  document.querySelector('.js-state-name').innerHTML =
-    document.querySelector('.js-chord-traders-state-name').innerHTML =
-    document.querySelector('.js-chord-consumers-state-name').innerHTML =
-    info.state ?  _.capitalize(info.state) : '-';
-  document.querySelector('.js-biome-name').innerHTML = info.biome ? _.capitalize(info.biome) : '-';
+  document.querySelector('.js-country-name').innerHTML = info.country ? capitalize(info.country) : '-';
+  document.querySelector('.js-state-name').innerHTML = info.state ? capitalize(info.state) : '-';
+  document.querySelector('.js-biome-name').innerHTML = info.biome ? capitalize(info.biome) : '-';
   document.querySelector('.js-legend').innerHTML = info.type || '-';
-  document.querySelector('.js-municipality').innerHTML = info.municipality ? _.capitalize(info.municipality) : '-';
+  document.querySelector('.js-municipality').innerHTML = info.municipality ? capitalize(info.municipality) : '-';
   document.querySelector('.js-area').innerHTML = info.area !== null ? formatValue(info.area, 'area') : '-';
   document.querySelector('.js-soy-land').innerHTML = (info.soy_area !== null && info.soy_area !== 'NaN') ? formatValue(info.soy_area, 'area') : '-';
   document.querySelector('.js-soy-production').innerHTML = info.soy_production !== null ? formatValue(info.soy_production, 'tons'): '-';
   document.querySelector('.js-link-map').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
   document.querySelector('.js-link-supply-chain').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
   document.querySelector('.js-line-title').innerHTML = info.municipality ? `Deforestation trajectory of ${info.municipality}` : '-';
-  document.querySelector('.js-municipality').innerHTML = info.municipality ? info.municipality : '-';
-  document.querySelector('.js-link-button-municipality').textContent = formatApostrophe(_.capitalize(info.municipality)) + ' PROFILE';
+  document.querySelector('.js-traders-title').innerHTML = `Top traders of soy in ${info.municipality} in ${year}`;
+  document.querySelector('.js-consumers-title').innerHTML = `Top importer countries of ${formatApostrophe(capitalize(info.municipality))} soy in ${year}`;
+  document.querySelector('.js-link-button-municipality').textContent = formatApostrophe(capitalize(info.municipality)) + ' PROFILE';
 
   if (info.soy_production === 0) {
     info.summary = `${info.municipality} did not produce any soy in ${year}`;
@@ -182,33 +271,38 @@ const _setEventListeners = () => {
   smoothScroll(document.querySelectorAll('.js-link-profile'));
 };
 
-const _showErrorMessage = () => {
+const _showErrorMessage = (message = null) => {
   const el = document.querySelector('.l-profile-place');
   document.querySelector('.js-loading').classList.add('is-hidden');
   el.classList.add('-error');
   el.querySelector('.js-wrap').classList.add('is-hidden');
   el.querySelector('.js-error-message').classList.remove('is-hidden');
+  if (message !== null) {
+    el.querySelector('.js-message').innerHTML = message;
+  }
+
 };
 
 export const renderPage = (root) => {
-  root.innerHTML = ProfilePlaceMarkup({ nav: NavMarkup({ page: 'profile-place' }), footer: FooterMarkup() });
+  root.innerHTML = ProfilePlaceMarkup({
+    nav: NavMarkup({ page: 'profile-place' }),
+    footer: FooterMarkup(),
+    feedback: FeedbackMarkup()
+  });
   const url = window.location.search;
   const urlParams = getURLParams(url);
   const nodeId = urlParams.nodeId;
   year = urlParams.year || 2015;
+  showMiniSankey = !!urlParams.showMiniSankey || false;
 
-  const placeFactsheetURL = getURLFromParams(GET_PLACE_FACTSHEET, { node_id: nodeId, year });
+  const placeFactsheetURL = getURLFromParams(GET_PLACE_FACTSHEET, { context_id: 1, node_id: nodeId, year });
 
   fetch(placeFactsheetURL)
     .then((response) => {
-      if (response.status === 404) {
-        _showErrorMessage();
-        return null;
-      }
-
-      if (response.status === 200) {
+      if (response.ok) {
         return response.json();
       }
+      throw new Error(response.statusText);
     })
     .then((result) => {
       if (!result) return;
@@ -238,7 +332,8 @@ export const renderPage = (root) => {
       yearDropdown.setTitle(year);
 
       _build(data);
-    });
+    })
+    .catch((reason) => _showErrorMessage(reason.message));
 
   new Nav();
 

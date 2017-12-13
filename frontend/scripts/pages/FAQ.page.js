@@ -1,6 +1,8 @@
 import FAQMarkup from 'html/FAQ.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
 import FooterMarkup from 'html/includes/_footer.ejs';
+import FeedbackMarkup from 'html/includes/_feedback.ejs';
+
 
 import Nav from 'components/shared/nav.component.js';
 import 'styles/FAQ.scss';
@@ -52,7 +54,11 @@ const _setEventListeners = (options) => {
 };
 
 export const renderPage = (root) => {
-  root.innerHTML = FAQMarkup({ nav: NavMarkup({ page: 'FAQ' }), footer: FooterMarkup() });
+  root.innerHTML = FAQMarkup({
+    nav: NavMarkup({ page: 'FAQ' }),
+    footer: FooterMarkup(),
+    feedback: FeedbackMarkup()
+  });
 
   const options = {
     elems: {

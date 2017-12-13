@@ -4,6 +4,7 @@ import { h, render } from 'preact';
 import ToolMarkup from 'html/tool.ejs';
 import SearchMarkup from 'html/includes/_search.ejs';
 import NavtoolMarkup from 'html/includes/_navtool.ejs';
+import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import FlowContentContainer from 'containers/tool/tool-content.container';
 import SankeyContainer from 'containers/tool/sankey.container';
@@ -17,7 +18,7 @@ import NavContainer from 'containers/tool/nav-tool-react.container';
 import NavComponent from 'components/tool/nav-tool.component';
 import TitlebarContainer from 'containers/tool/titlebar.container';
 import NodesTitlesContainer from 'containers/tool/nodesTitles.container';
-import SearchContainer from 'containers/tool/search.container';
+import SearchContainer from 'containers/shared/search-react.container';
 import ModalContainer from 'containers/tool/story-modal.container';
 import TooltipContainer from 'containers/shared/help-tooltip.container';
 
@@ -30,7 +31,11 @@ import 'styles/components/tool/map/map-sidebar.scss';
 import 'styles/layouts/l-tool.scss';
 
 export const renderPage = (root, store) => {
-  root.innerHTML = ToolMarkup({ search: SearchMarkup(), navtool: NavtoolMarkup() });
+  root.innerHTML = ToolMarkup({
+    search: SearchMarkup(),
+    navtool: NavtoolMarkup(),
+    feedback: FeedbackMarkup()
+  });
   new FlowContentContainer(store);
   new SankeyContainer(store);
   new MapContainer(store);
@@ -40,7 +45,6 @@ export const renderPage = (root, store) => {
   new MapBasemapsContainer(store);
   new TitlebarContainer(store);
   new NodesTitlesContainer(store);
-  new SearchContainer(store);
   new TooltipContainer(store);
   new ModalContainer(store);
 
@@ -49,7 +53,7 @@ export const renderPage = (root, store) => {
     <Provider store={store}>
       <NavContainer />
     </Provider>,
-    document.getElementById('js-flows-nav-react')
+    document.getElementById('js-tool-nav-react')
   );
   render(
     <Provider store={store}>
@@ -57,6 +61,13 @@ export const renderPage = (root, store) => {
     </Provider>,
     document.getElementById('js-columns-selector-react')
   );
+  render(
+    <Provider store={store}>
+      <SearchContainer />
+    </Provider>,
+    document.getElementById('js-search-react')
+  );
+
 
 
   store.dispatch(loadDisclaimer());
