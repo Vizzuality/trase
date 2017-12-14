@@ -9,6 +9,11 @@
 
   > .c-map-leaflet {
     flex: 1 1 100%;
+
+    .leaflet-tile-container {
+      width: 256px;
+      height: 256px;
+    }
   }
 
   > .c-map-legend {
