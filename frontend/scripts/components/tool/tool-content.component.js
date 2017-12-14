@@ -21,7 +21,8 @@ export default class {
   }
 
   _toggleLoading(loading) {
-    document.querySelector('.js-tool-loading').classList.toggle('is-visible', loading);
+    const toolLoading= document.querySelector('.js-tool-loading');
+    if (toolLoading) toolLoading.classList.toggle('is-visible', loading);
   }
 
   toggleMapVisibility(isMapVisible) {

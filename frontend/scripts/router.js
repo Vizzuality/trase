@@ -59,15 +59,33 @@ const routes = {
 
 export function routeSubscriber(store) {
   class RouterComponent {
+    constructor() {
+      this.type = null;
+      this.page = null;
+      this.root = document.getElementById('app-root-container');
+      this.onRouteChange = this.onRouteChange.bind(this);
+      this.resetPage = this.resetPage.bind(this);
+    }
+
     onCreated() {
       this.onRouteChange(store.getState().location);
     }
 
+    resetPage() {
+      if (this.page && this.page.unmount) this.page.unmount();
+      this.root.innerHTML = '';
+    }
+
     onRouteChange({ routesMap, type } = {}) {
-      import(/* webpackChunkName: "page" */ `./pages/${routesMap[type].page}.page.js`)
-        .then((page) => {
-          page.mount(document.getElementById('app-root-container'), store);
-        });
+      if (this.type !== type) {
+        this.resetPage();
+        this.type = type;
+        import(/* webpackChunkName: "page" */ `./pages/${routesMap[this.type].page}.page.js`)
+          .then((page) => {
+            this.page = page;
+            this.page.mount(this.root, store);
+          });
+      }
     }
   }
 

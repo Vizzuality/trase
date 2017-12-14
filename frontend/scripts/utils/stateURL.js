@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import actions from 'actions';
 import qs from 'query-string';
+import { redirect } from 'redux-first-router';
 
 export const parse = url => {
   const params = qs.parse(url);
@@ -120,11 +121,11 @@ export const toolUrlStateMiddleware = store => next => action => {
     !_.isEqual(filterStateToURL(tool), urlState)
   ];
   if (!conditions.includes(false)) {
-    store.dispatch({
+    const action = redirect({
       type: 'tool',
-      payload: { query: { state: tool } },
-      meta: { location: { prev: location.prev } }
+      payload: { query: { state: tool } }
     });
+    store.dispatch(action);
   }
   return result;
 };
