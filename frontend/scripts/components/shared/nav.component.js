@@ -20,11 +20,24 @@ export default class {
     this._setEventListeners();
   }
 
+  onCreated() {
+    this._setNavigationLinks();
+  }
+
   _setEventListeners() {
     document.addEventListener('scroll', () => this._checkBackground());
     if (this.downloadPdfBtn) {
       this.downloadPdfBtn.addEventListener('click', this._downloadPDF);
     }
+  }
+
+  _setNavigationLinks() {
+    const links = [].slice.call(this.el.querySelectorAll('.js-nav-link'));
+    links.forEach(link => {
+      const page = link.getAttribute('data-route');
+      const query = qs.parse(link.getAttribute('data-route-query'));
+      link.addEventListener('click', () => this.callbacks.onLinkClick({ page, query }));
+    });
   }
 
   _checkBackground() {
