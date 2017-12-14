@@ -446,6 +446,12 @@ export default function (state = initialState, action) {
       break;
     }
 
+    case actions.RESET_TOOL_STATE: {
+      const { isMapVisible } = action.payload;
+      newState = { ...initialState, contexts: state.contexts, isMapVisible };
+      break;
+    }
+
     default:
       newState = state;
       break;

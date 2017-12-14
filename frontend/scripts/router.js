@@ -1,6 +1,7 @@
 import { connectRoutes, NOT_FOUND } from 'redux-first-router';
 import connect from 'connect';
 import { parse, stringify } from 'utils/stateURL';
+import actions from 'actions';
 
 const config = {
   basename: '/',
@@ -9,7 +10,12 @@ const config = {
     stringify
   }
 };
-
+const resetTool = (dispatch, getState) => {
+  const { state, isMapVisible } = getState().location.query || {};
+  if (!state) {
+    dispatch({ type: actions.RESET_TOOL_STATE, payload: { isMapVisible } });
+  }
+};
 const routes = {
   home: {
     path: '/',
@@ -17,7 +23,8 @@ const routes = {
   },
   tool: {
     path: '/flows',
-    page: 'tool'
+    page: 'tool',
+    thunk: resetTool
   },
   profiles: {
     path: '/profiles',

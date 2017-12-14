@@ -6,7 +6,7 @@ import { redirect } from 'redux-first-router';
 export const parse = url => {
   const params = qs.parse(url);
   if ('state' in params) {
-    return { ...params, state: decodeStateFromURL(params.state) };
+    return { ...params, state: decodeStateFromURL(params) };
   }
   return params;
 };
@@ -61,29 +61,18 @@ export const encodeStateToURL = state => {
   return encoded;
 };
 
-function _getURLParameterByName(name, url) {
-  if (!url) {
-    url = window.location.href;
-  }
-  name = name.replace(/[\[\]]/g, '\\$&');
-  const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-  const results = regex.exec(url);
-  if (!results) return null;
-  if (!results[2]) return '';
-  return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
+export const decodeStateFromURL = ({ state, ...params }) => {
+  const decoded = (state === undefined) ? {} : JSON.parse(atob(state));
 
-export const decodeStateFromURL = urlHash => {
-  const state = (urlHash === undefined) ? {} : JSON.parse(atob(urlHash));
-
-  return computeStateQueryParams(state);
+  return computeStateQueryParams(decoded, params);
 };
 
-const computeStateQueryParams = state => {
+const computeStateQueryParams = (state, params) => {
+  if (!params) return state;
   const newState = { ...state };
   // if URL contains GET parameters, override hash state prop with it
   URL_PARAMS_PROPS.forEach(prop => {
-    let urlParam = _getURLParameterByName(prop);
+    let urlParam = params[prop] || '';
     if (urlParam) {
       switch (prop) {
         case 'selectedNodesIds': {
@@ -125,7 +114,7 @@ export const toolUrlStateMiddleware = store => next => action => {
     location.type === 'tool',
     action.type !== 'tool',
     action.type !== actions.LOAD_INITIAL_DATA,
-    !_.isEqual(computeStateQueryParams(filterStateToURL(tool)), urlState)
+    !_.isEqual(computeStateQueryParams(filterStateToURL(tool), location.query), urlState)
   ];
   if (!conditions.includes(false)) {
     const action = redirect({
