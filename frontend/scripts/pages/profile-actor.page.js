@@ -38,6 +38,9 @@ import capitalize from 'lodash/capitalize';
 import { getURLFromParams, GET_ACTOR_FACTSHEET } from '../utils/getURLFromParams';
 import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST } from 'constants';
 import TopSourceTemplate from 'templates/profiles/top-source-switcher.ejs';
+import EventManager from 'utils/eventManager';
+
+const evManager = new EventManager();
 
 const defaults = {
   country: 'Brazil',
@@ -304,7 +307,7 @@ const _setTopSourceSwitcher = (data, verb) => {
 
   const switchers = Array.prototype.slice.call(document.querySelectorAll('.js-top-source-switcher'), 0);
   switchers.forEach(switcher => {
-    switcher.addEventListener('click', (e) => _switchTopSource(e, data));
+    evManager.addEventListener(switcher, 'click', (e) => _switchTopSource(e, data));
   });
 };
 

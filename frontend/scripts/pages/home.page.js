@@ -17,6 +17,10 @@ import 'styles/homepage.scss';
 
 import { GET_POSTS, GET_TWEETS, POST_SUBSCRIBE_NEWSLETTER, getURLFromParams } from 'utils/getURLFromParams';
 
+import EventManager from 'utils/eventManager';
+
+const evManager = new EventManager();
+
 const state = {
   activeIndex: 0,
   scrollTop: 0,
@@ -175,6 +179,10 @@ export const mount = (root) => {
   //   });
   // });
 
-  window.addEventListener('scroll', scrollIntro);
-  document.querySelector('.js-form-subscribe').addEventListener('click', newsletterSubscribe);
+  evManager.addEventListener(window, 'scroll', scrollIntro);
+  evManager.addEventListener(document.querySelector('.js-form-subscribe'), 'click', newsletterSubscribe);
+};
+
+export const unmount = () => {
+  evManager.clearEventListeners();
 };

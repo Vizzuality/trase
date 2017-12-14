@@ -29,6 +29,9 @@ import 'styles/components/shared/spinner.scss';
 import 'styles/components/shared/dropdown.scss';
 import 'styles/components/tool/map/map-sidebar.scss';
 import 'styles/layouts/l-tool.scss';
+import EventManager from 'utils/eventManager';
+
+const evManager = new EventManager();
 
 export const mount = (root, store) => {
   const { query = {} } = store.getState().location;
@@ -38,6 +41,7 @@ export const mount = (root, store) => {
     navtool: NavtoolMarkup(),
     feedback: FeedbackMarkup()
   });
+
   new FlowContentContainer(store);
   new SankeyContainer(store);
   new MapContainer(store);
@@ -78,9 +82,11 @@ export const mount = (root, store) => {
 
   store.dispatch(resize());
 
-  window.addEventListener('resize', () => {
-    store.dispatch(resize());
-  });
+  evManager.addEventListener(window, 'resize', () => store.dispatch(resize()));
+};
+
+export const unmount = () => {
+  evManager.clearEventListeners();
 };
 
 // if (NODE_ENV_DEV === true) {

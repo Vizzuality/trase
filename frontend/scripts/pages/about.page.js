@@ -9,6 +9,9 @@ import Nav from 'components/shared/nav.component.js';
 import smoothScroll from 'utils/smoothScroll';
 import { calculateOffsets, scrollDocument } from 'utils/fixedScroll';
 import _ from 'lodash';
+import EventManager from 'utils/eventManager';
+
+const evManager = new EventManager();
 
 const _toggleAnchors = (e, options) => {
   const target = e && e.target.hash;
@@ -41,14 +44,14 @@ const _setEventListeners = (options) => {
   const anchorItems = options.elems.anchorItems;
   const _onScrollThrottle = _.throttle(() => _onScrollDocument(options), 50, { leading: true });
   const _calculateOffsetsThrottle = _.throttle(() => _calculateOffsets(options), 50, { leading: true });
+  const _toggleAnchorHandler = (e) => _toggleAnchors(e, options);
 
-  document.addEventListener('scroll', _onScrollThrottle);
-  window.onresize = _calculateOffsetsThrottle;
+  evManager.addEventListener(document, 'scroll', _onScrollThrottle);
+  evManager.addEventListener(window, 'resize', _calculateOffsetsThrottle);
 
   anchorItems.forEach((anchorItem) => {
-    anchorItem.addEventListener('click', (e) => _toggleAnchors(e, options));
+    evManager.addEventListener(anchorItem, 'click', _toggleAnchorHandler);
   });
-
   smoothScroll(anchorItems);
 };
 
@@ -71,5 +74,9 @@ export const mount = (root) => {
   _calculateOffsets(options);
   _setEventListeners(options);
   new Nav();
+};
+
+export const unmount = () => {
+  evManager.clearEventListeners();
 };
 
