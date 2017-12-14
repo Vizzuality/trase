@@ -14,7 +14,7 @@ export const parse = url => {
 export const stringify = ({ state, ...obj }) => {
   const params = qs.stringify(obj);
   if (state) {
-    return encodeStateToURL(state) + params;
+    return `state=${encodeStateToURL(state)}&${params}`;
   }
   return params;
 };
@@ -58,7 +58,6 @@ const filterStateToURL = state => {
 export const encodeStateToURL = state => {
   const urlProps = JSON.stringify(filterStateToURL(state));
   const encoded = btoa(urlProps);
-  window.history.replaceState({}, 'Title', `?state=${encoded}`);
   return encoded;
 };
 
@@ -77,6 +76,11 @@ function _getURLParameterByName(name, url) {
 export const decodeStateFromURL = urlHash => {
   const state = (urlHash === undefined) ? {} : JSON.parse(atob(urlHash));
 
+  return computeStateQueryParams(state);
+};
+
+const computeStateQueryParams = state => {
+  const newState = { ...state };
   // if URL contains GET parameters, override hash state prop with it
   URL_PARAMS_PROPS.forEach(prop => {
     let urlParam = _getURLParameterByName(prop);
@@ -84,8 +88,8 @@ export const decodeStateFromURL = urlHash => {
       switch (prop) {
         case 'selectedNodesIds': {
           urlParam = urlParam.replace(/\[|\]/gi, '').split(',').map(nodeId => parseInt(nodeId));
-          state.areNodesExpanded = true;
-          state.expandedNodesIds = urlParam;
+          newState.areNodesExpanded = true;
+          newState.expandedNodesIds = urlParam;
           break;
         }
         case 'selectedYears': {
@@ -97,19 +101,22 @@ export const decodeStateFromURL = urlHash => {
           break;
         }
       }
-      state[prop] = urlParam;
+      newState[prop] = urlParam;
     }
   });
-
-  return state;
+  return newState;
 };
 
 export const toolUrlStateMiddleware = store => next => action => {
+  // if highlight action bail
   if (action.type === actions.HIGHLIGHT_NODE) return next(action);
+  // get current query params
   const prevLocation = store.getState().location;
   const decoratedAction = { ...action };
+
   const urlState = prevLocation.query && prevLocation.query.state; // prev state
   if (action.type === actions.LOAD_INITIAL_DATA && urlState) {
+    // rehydrate state
     decoratedAction.payload = { ...urlState };
   }
   const result = next(decoratedAction);
@@ -118,12 +125,12 @@ export const toolUrlStateMiddleware = store => next => action => {
     location.type === 'tool',
     action.type !== 'tool',
     action.type !== actions.LOAD_INITIAL_DATA,
-    !_.isEqual(filterStateToURL(tool), urlState)
+    !_.isEqual(computeStateQueryParams(filterStateToURL(tool)), urlState)
   ];
   if (!conditions.includes(false)) {
     const action = redirect({
       type: 'tool',
-      payload: { query: { state: tool } }
+      payload: { query: { ...location.query, state: tool } }
     });
     store.dispatch(action);
   }
