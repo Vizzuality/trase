@@ -1878,7 +1878,8 @@ CREATE TABLE contexts (
     commodity_id integer NOT NULL,
     years integer[],
     default_year integer,
-    created_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    is_subnational boolean DEFAULT false NOT NULL
 );
 
 
@@ -6392,6 +6393,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171116101949'),
 ('20171117115459'),
 ('20171117120322'),
-('20171130103917');
+('20171130103917'),
+('20171214162643');
 
 
