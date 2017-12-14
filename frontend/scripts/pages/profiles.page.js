@@ -3,7 +3,7 @@ import NavMarkup from 'html/includes/_nav.ejs';
 import FooterMarkup from 'html/includes/_footer.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
-import Nav from 'components/shared/nav.component.js';
+import NavContainer from 'containers/shared/nav.container.js';
 import 'styles/_base.scss';
 import 'styles/_texts.scss';
 import 'styles/_foundation.css';
@@ -72,12 +72,12 @@ const _showErrorMessage = (message) => {
   }
 };
 
-export const mount = (root) => {
+export const mount = (root, store) => {
   root.innerHTML = ProfilesMarkup({
     nav: NavMarkup({ page: 'profiles' }),
     footer: FooterMarkup(),
     feedback: FeedbackMarkup()
   });
   _setSearch();
-  new Nav();
+  new NavContainer(store);
 };

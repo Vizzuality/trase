@@ -5,7 +5,7 @@ import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import 'styles/about.scss';
 
-import Nav from 'components/shared/nav.component.js';
+import NavContainer from 'containers/shared/nav.container.js';
 import smoothScroll from 'utils/smoothScroll';
 import { calculateOffsets, scrollDocument } from 'utils/fixedScroll';
 import _ from 'lodash';
@@ -55,7 +55,7 @@ const _setEventListeners = (options) => {
   smoothScroll(anchorItems);
 };
 
-export const mount = (root) => {
+export const mount = (root, store) => {
   root.innerHTML = AboutMarkup({
     nav: NavMarkup({ page: 'about' }),
     footer: FooterMarkup(),
@@ -73,7 +73,7 @@ export const mount = (root) => {
 
   _calculateOffsets(options);
   _setEventListeners(options);
-  new Nav();
+  new NavContainer(store);
 };
 
 export const unmount = () => {

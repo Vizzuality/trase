@@ -9,7 +9,7 @@ import FooterMarkup from 'html/includes/_footer.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
-import Nav from 'components/shared/nav.component.js';
+import NavContainer from 'containers/shared/nav.container.js';
 import Slider from 'components/home/slider.component';
 import PostsTemplate from 'templates/homepage/posts.ejs';
 import TweetsTemplate from 'templates/homepage/tweets.ejs';
@@ -144,7 +144,7 @@ const newsletterSubscribe = (e) => {
     });
 };
 
-export const mount = (root) => {
+export const mount = (root, store) => {
   root.innerHTML = HomeMarkup({
     footer: FooterMarkup(),
     nav: NavMarkup({ page: 'index' }),
@@ -152,7 +152,7 @@ export const mount = (root) => {
   });
   const bounds = document.querySelector('.js-trigger-menu-bg').getBoundingClientRect();
   const pageOffset = getPageOffset(bounds);
-  new Nav({ pageOffset });
+  new NavContainer(store, { pageOffset });
 
   state.sliders.forEach(renderSlider);
 

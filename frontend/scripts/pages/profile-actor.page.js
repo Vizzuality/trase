@@ -20,7 +20,7 @@ import 'styles/components/profiles/link-buttons.scss';
 import 'styles/components/profiles/error.scss';
 import 'styles/components/shared/tabs.scss';
 
-import Nav from 'components/shared/nav.component.js';
+import NavContainer from 'containers/shared/nav.container.js';
 import Dropdown from 'components/shared/dropdown.component';
 import Map from 'components/profiles/map.component';
 import Line from 'components/profiles/line.component';
@@ -327,7 +327,7 @@ const _switchTopSource = (e, data) => {
   _initSource(selectedSource, data);
 };
 
-export const mount = (root)  => {
+export const mount = (root, store)  => {
   root.innerHTML = ProfileActorMarkup({
     nav: NavMarkup({ page: 'profile-actor' }),
     footer: FooterMarkup(),
@@ -376,6 +376,6 @@ export const mount = (root)  => {
     })
     .catch((reason) => _showErrorMessage(reason.message));
 
-  const nav = new Nav();
+  const nav = new NavContainer(store);
   print = nav.print;
 };

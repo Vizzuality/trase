@@ -4,7 +4,7 @@ import FooterMarkup from 'html/includes/_footer.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 
-import Nav from 'components/shared/nav.component.js';
+import NavContainer from 'containers/shared/nav.container.js';
 import 'styles/data-methods.scss';
 
 import smoothScroll from 'utils/smoothScroll';
@@ -57,7 +57,7 @@ const _setEventListeners = (options) => {
   smoothScroll(anchorItems);
 };
 
-export const mount = (root) => {
+export const mount = (root, store) => {
   root.innerHTML = DataMethodsMarkup({
     nav: NavMarkup({ page: 'data-methods' }),
     footer: FooterMarkup(),
@@ -76,7 +76,7 @@ export const mount = (root) => {
   _calculateOffsets(options);
   _setEventListeners(options);
 
-  new Nav();
+  new NavContainer(store);
 };
 
 export const unmount = () => {

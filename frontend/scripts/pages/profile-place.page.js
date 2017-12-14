@@ -21,7 +21,7 @@ import 'styles/components/profiles/map.scss';
 import capitalize from 'lodash/capitalize';
 import { h, render } from 'preact';
 
-import Nav from 'components/shared/nav.component.js';
+import NavContainer from 'containers/shared/nav.container.js';
 import Dropdown from 'components/shared/dropdown.component';
 import Top from 'components/profiles/top.component';
 import Line from 'components/profiles/line.component';
@@ -283,7 +283,7 @@ const _showErrorMessage = (message = null) => {
 
 };
 
-export const mount = (root) => {
+export const mount = (root, store) => {
   root.innerHTML = ProfilePlaceMarkup({
     nav: NavMarkup({ page: 'profile-place' }),
     footer: FooterMarkup(),
@@ -335,6 +335,6 @@ export const mount = (root) => {
     })
     .catch((reason) => _showErrorMessage(reason.message));
 
-  new Nav();
+  new NavContainer(store);
 
 };

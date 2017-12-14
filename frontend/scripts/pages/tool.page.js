@@ -14,8 +14,8 @@ import MapContextContainer from 'containers/tool/map-context.container';
 import MapLegendContainer from 'containers/tool/map-legend.container';
 import MapBasemapsContainer from 'containers/tool/map-basemaps.container';
 import MapContainer from 'containers/tool/map.container';
-import NavContainer from 'containers/tool/nav-tool-react.container';
-import NavComponent from 'components/tool/nav-tool.component';
+import NavReactContainer from 'containers/tool/nav-tool-react.container';
+import NavContainer from 'containers/tool/nav/nav-tool-navigation.container';
 import TitlebarContainer from 'containers/tool/titlebar.container';
 import NodesTitlesContainer from 'containers/tool/nodesTitles.container';
 import SearchContainer from 'containers/shared/search-react.container';
@@ -54,10 +54,10 @@ export const mount = (root, store) => {
   new TooltipContainer(store);
   new ModalContainer(store);
 
-  new NavComponent();
+  new NavContainer(store);
   render(
     <Provider store={store}>
-      <NavContainer />
+      <NavReactContainer />
     </Provider>,
     document.getElementById('js-tool-nav-react')
   );

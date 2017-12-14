@@ -6,7 +6,7 @@ import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 
 import DataContentContainer from 'containers/data/data-content.container';
-import Nav from 'components/shared/nav.component.js';
+import NavContainer from 'containers/shared/nav.container.js';
 import { loadContext } from 'actions/data.actions';
 
 import 'styles/data.scss';
@@ -24,5 +24,5 @@ export const mount = (root, store) => {
   new DataContentContainer(store);
   store.dispatch(loadContext());
 
-  new Nav();
+  new NavContainer(store);
 };
