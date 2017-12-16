@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import CountryCommodity from 'containers/tool/nav/country-commodity.container';
+import ContextSelector from 'containers/tool/nav/context-selector.container';
 import Filters from 'containers/tool/nav/filters.container';
 import Years from 'containers/tool/nav/years.container';
 import ResizeBy from 'containers/tool/nav/resize-by.container';
@@ -25,7 +25,7 @@ const Nav = ({ tooltips, selectedContext }) => {
           </div>
         </div>
 
-        <CountryCommodity />
+        <ContextSelector />
 
         {hasFilters === true &&
           <Filters />

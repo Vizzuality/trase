@@ -3,7 +3,7 @@ import groupBy from 'lodash/groupBy';
 
 import { toggleDropdown } from 'actions/app.actions';
 import { selectContext } from 'actions/tool.actions';
-import CountryCommodity from 'react-components/tool/nav/country-commodity.component.js';
+import ContextSelector from 'react-components/tool/nav/context-selector.component';
 
 function classifyColumn(classList, { id, label, relation }) {
   const groups = groupBy(classList.map(c => ({ id: c[id], label: c[label], relation: c[relation] })), 'id');
@@ -44,10 +44,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onToggle: (id) => {
+    toggleContextSelectorVisibility: (id) => {
       dispatch(toggleDropdown(id));
     },
-    onSelected: (contextId) => {
+    selectContext: (contextId) => {
       dispatch(selectContext(parseInt(contextId)));
     }
   };
@@ -56,4 +56,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CountryCommodity);
+)(ContextSelector);
