@@ -17,24 +17,13 @@ export default class ContextSelector extends Component {
     };
   }
 
-  static orderDimensions(a, b) {
+  static sortDimensions(a, b) {
     if (a.order < b.order) return -1;
     if (a.order > b.order) return 1;
     return 0;
   }
 
-  selectContext(tuple) {
-    const key = this.props.getComputedKey(tuple);
-    const selected = this.props.options[key];
-
-    if (selected) {
-      this.resetSelection();
-      this.props.selectContext(selected.id);
-      this.props.toggleContextSelectorVisibility();
-    }
-  }
-
-  resetSelection(e) {
+  resetDimensionSelection(e) {
     if (e) e.stopPropagation();
     this.setState({ selectedDimensions: [] });
   }
@@ -42,30 +31,47 @@ export default class ContextSelector extends Component {
 
   selectDimension(e, status, index, el) {
     if (e) e.stopPropagation();
-    if (['disabled', 'selected'].includes(status)) return this.resetSelection();
+    if (['disabled', 'selected'].includes(status)) return this.resetDimensionSelection();
     const selectedDimensions = [...this.state.selectedDimensions, Object.assign({}, el, { order: index })];
     this.setState({
       selectedDimensions
     });
 
-    if (selectedDimensions.length === this.props.dimensions.length) {
-      const selected = selectedDimensions
-        .sort(ContextSelector.orderDimensions)
-        .map(el => el.id);
+    // not all dimensions selected, not ready to select a context, bail
+    if (selectedDimensions.length !== this.props.dimensions.length) return;
 
-      this.selectContext(selected);
+    const selectedDimensionsIds = selectedDimensions
+      .sort(ContextSelector.sortDimensions)
+      .map(el => el.id);
+
+    const key = this.props.getComputedKey(selectedDimensionsIds);
+    const selectedContext = this.props.contexts[key];
+
+    if (selectedContext) {
+      this.resetDimensionSelection();
+      this.props.selectContext(selectedContext.id);
+      this.props.toggleContextSelectorVisibility();
     }
-
   }
 
-  isDisabled(i, el) {
+  isSubnational(i, element) {
     const { selectedDimensions } = this.state;
     if (selectedDimensions.length === 0) return false;
     const currentDimension = selectedDimensions.find(dimension => dimension.order === i);
-    if (currentDimension) return el && currentDimension.id !== el.id;
+    if (currentDimension) return false;
+
+    return selectedDimensions[0].relation[element.label] && selectedDimensions[0].relation[element.label].isSubnational;
+  }
+
+  isDisabled(i, element) {
+    const { selectedDimensions } = this.state;
+    if (selectedDimensions.length === 0) return false;
+    const currentDimension = selectedDimensions.find(dimension => dimension.order === i);
+    if (currentDimension) return element && currentDimension.id !== element.id;
+
     const result = selectedDimensions
-      .map(selected => selected.relation)
-      .reduce((acc, next) => (acc || !next.includes(el.label)), false);
+      .map(selected => Object.keys(selected.relation))
+      .reduce((acc, next) => (acc || !next.includes(element.label)), false);
     return result;
   }
 
@@ -86,11 +92,11 @@ export default class ContextSelector extends Component {
     return 'Select both a country and a commodity';
   }
 
-  renderElement(el, dimension) {
+  renderElement(el, dimension, isSubnational) {
     return (
       <div className='country-commodities-selector-element' >
         {el.label.toLowerCase()}
-        {el.hasSubnationalData && dimension === 1 &&
+        {isSubnational &&
         <div className='data-coverage-info' >
           Subnational Data
         </div >
@@ -108,7 +114,7 @@ export default class ContextSelector extends Component {
       return null;
     };
 
-    return dimensions.sort(ContextSelector.orderDimensions)
+    return dimensions.sort(ContextSelector.sortDimensions)
       .map((dimension) => dimension.elements)
       .map((dimensionElement, dimensionElementIndex) => (
         <ul class='dimension-list -medium' >
@@ -116,6 +122,7 @@ export default class ContextSelector extends Component {
             dimensionElement
               .map((el) => {
                 const status = getItemStatus(dimensionElementIndex, el);
+                const isSubnational = this.isSubnational(dimensionElementIndex, el);
                 return (
                   <li
                     class={classNames('dimension-list-item -capitalize', {
@@ -124,7 +131,7 @@ export default class ContextSelector extends Component {
                     onClick={(e) => this.selectDimension(e, status, dimensionElementIndex, el)
                     }
                   >
-                    {this.renderElement(el, dimensionElementIndex)}
+                    {this.renderElement(el, dimensionElementIndex, isSubnational)}
                   </li >
                 );
               })
@@ -155,12 +162,7 @@ export default class ContextSelector extends Component {
           </span >
           <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={toggleContextSelectorVisibility} >
             <div className='country-commodities-children-container' >
-              {false &&
-              <div className='country-commodities-featured-header' >
-                New subnational Data
-              </div >
-              }
-              <div className='c-dimensional-selector' onClick={this.resetSelection} >
+              <div className='c-dimensional-selector' onClick={this.resetDimensionSelection} >
                 <div className='dimension-container' >
                   {this.renderDimensionList()}
                 </div >
