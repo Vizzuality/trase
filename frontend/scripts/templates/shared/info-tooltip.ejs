@@ -1,14 +1,14 @@
-<div class="js-infowindow-title title"><%= title %></div>
+<div class="js-infowindow-title title" ><%= title %></div >
 <% Object.keys(values).forEach(function (i) { %>
-  <div class="js-infowindow-value-<%= i %> value">
-    <div class="title"><%= values[i].title %></div>
-    <div class="data">
-      <%= values[i].value %>
-      <% if (values[i].unit) { %>
-        <span class="unit">
+<div class="js-infowindow-value-<%= i %> value" >
+    <div class="title" ><%= values[i].title %></div >
+    <div class="data" >
+        <%= values[i].value %>
+        <% if (values[i].unit) { %>
+        <span class="unit" >
           <%= values[i].unit %>
-        </span>
-      <% } %>
-    </div>
-  </div>
-<%});%>
+        </span >
+        <% } %>
+    </div >
+</div >
+<% }); %>

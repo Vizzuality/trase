@@ -8,7 +8,7 @@ const _shortenTitle = (title) => {
   return [title.slice(0, 34), title.slice(-12)].join('(…)');
 };
 
-export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensions, forceEmpty) {
+export default function (selectedMapDimensionsUids, nodesDictWithMeta, mapDimensions, forceEmpty) {
   const uids = _.compact(selectedMapDimensionsUids);
 
   if (!uids.length) {
@@ -30,7 +30,9 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
     selectedMapDimension.colorScale = 'greenred';
   }
 
-  const colors = (isBivariate) ? CHOROPLETH_CLASSES.bidimensional : CHOROPLETH_CLASSES[selectedMapDimension.colorScale || 'red'];
+  const colors = isBivariate
+    ? CHOROPLETH_CLASSES.bidimensional
+    : CHOROPLETH_CLASSES[selectedMapDimension.colorScale || 'red'];
 
   const geoNodes = _.filter(nodesDictWithMeta, node => node.geoId !== undefined && node.geoId !== null && node.isGeo);
   const geoNodesIds = Object.keys(geoNodes);
@@ -40,14 +42,14 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
     colors,
     isBivariate,
     titles: selectedMapDimensions.map(d => _shortenTitle(d.name)),
-    bucket: selectedMapDimensions.map(d => (isBivariate) ? d.bucket3.slice(0) : d.bucket5.slice(0)),
+    bucket: selectedMapDimensions.map(d => ((isBivariate) ? d.bucket3.slice(0) : d.bucket5.slice(0)))
   };
 
   if (forceEmpty === true) {
     return { choropleth, choroplethLegend };
   }
 
-  geoNodesIds.forEach(nodeId => {
+  geoNodesIds.forEach((nodeId) => {
     const node = geoNodes[nodeId];
     let color = 'none';
 
@@ -71,23 +73,22 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
           // use zero class only when both A and B values are zero
           if (valueA === 0 || valueB === 0) {
             color = CHOROPLETH_CLASSES.default;
-          }
-          // in case only one is zero, just ignore and use lowest bucket (Math.max zero)
-          else {
-            colorIndex = (2 - Math.max(0, valueA-1)) * 3 + Math.max(0, valueB-1);
+          } else {
+            // in case only one is zero, just ignore and use lowest bucket (Math.max zero)
+            colorIndex = ((2 - Math.max(0, valueA - 1)) * 3) + Math.max(0, valueB - 1);
             color = colors[colorIndex];
           }
         }
       } else {
         const nodeMeta = node.meta[uid];
         if (!nodeMeta) {
-          color = CHOROPLETH_CLASSES.error_no_metadata_layer;  // no metadata on this node has been found for this layer
+          color = CHOROPLETH_CLASSES.error_no_metadata_layer; // no metadata on this node has been found for this layer
         } else {
           const value = nodeMeta.value5;
           if (value === 0) {
             color = CHOROPLETH_CLASS_ZERO;
           } else {
-            colorIndex = Math.max(0, value-1);
+            colorIndex = Math.max(0, value - 1);
             color = colors[colorIndex];
           }
         }

@@ -1,0 +1,114 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "plugins": [
+    "react"
+  ],
+  "extends": [
+    "airbnb"
+  ],
+  "rules": {
+    "indent": [
+      "warn",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      1,
+      "always"
+    ],
+    "no-console": [
+      1,
+      {
+        "allow": [
+          "warn",
+          "error"
+        ]
+      }
+    ],
+    "comma-dangle": [
+      "error",
+      "never"
+    ],
+    "no-debugger": 1,
+    "object-curly-newline": [
+      "error",
+      {
+        "consistent": true
+      }
+    ],
+    "prefer-destructuring": 0,
+    "no-underscore-dangle": 0,
+    "prefer-const": [
+      "warn",
+      {
+        "destructuring": "any",
+        "ignoreReadBeforeAssign": false
+      }
+    ],
+    "class-methods-use-this": 0,
+    "max-len": [
+      "error",
+      {
+        "ignoreComments": true,
+        "code": 120
+      }
+    ],
+    "no-plusplus": 0,
+    "default-case": 0,
+    "no-param-reassign": 0,
+    "import/no-webpack-loader-syntax": 0,
+    "react/forbid-prop-types": "off",
+    "react/require-default-props": "off",
+    "jsx-a11y/click-events-have-key-events": 0,
+    "function-paren-newline": [
+      "error",
+      "consistent"
+    ],
+    "react/no-array-index-key": "off"
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true,
+      "jsx": true
+    },
+    "sourceType": "module",
+    "allowImportExportEverywhere": true
+  },
+  "globals": {
+    "NODE_ENV_DEV": true,
+    "API_V1_URL": true,
+    "API_V2_URL": true,
+    "API_V3_URL": true,
+    "GOOGLE_ANALYTICS_KEY": true,
+    "USER_REPORT_KEY": true,
+    "DATA_DOWNLOAD_ENABLED": true,
+    "DATA_FORM_ENDPOINT": true,
+    "DATA_FORM_ENABLED": true,
+    "PDF_DOWNLOAD_URL": true,
+    "ga": true,
+    "fetch": true
+  },
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "config/webpack.config.js"
+      }
+    }
+  }
+}

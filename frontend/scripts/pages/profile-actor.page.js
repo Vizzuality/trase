@@ -1,3 +1,4 @@
+/* eslint-disable no-new */
 import ProfileActorMarkup from 'html/profile-actor.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
 import FooterMarkup from 'html/includes/_footer.ejs';
@@ -20,7 +21,7 @@ import 'styles/components/profiles/link-buttons.scss';
 import 'styles/components/profiles/error.scss';
 import 'styles/components/shared/tabs.scss';
 
-import NavContainer from 'containers/shared/nav.container.js';
+import NavContainer from 'containers/shared/nav.container';
 import Dropdown from 'components/shared/dropdown.component';
 import Map from 'components/profiles/map.component';
 import Line from 'components/profiles/line.component';
@@ -35,7 +36,7 @@ import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
 import swapProfileYear from 'utils/swapProfileYear';
 import capitalize from 'lodash/capitalize';
-import { getURLFromParams, GET_ACTOR_FACTSHEET } from '../utils/getURLFromParams';
+import { GET_ACTOR_FACTSHEET, getURLFromParams } from 'utils/getURLFromParams';
 import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST } from 'constants';
 import TopSourceTemplate from 'templates/profiles/top-source-switcher.ejs';
 import EventManager from 'utils/eventManager';
@@ -50,7 +51,9 @@ const defaults = {
 let print = false;
 
 const tooltip = new Tooltip('.js-infowindow');
-const LINE_MARGINS = { top: 10, right: 100, bottom: 25, left: 50 };
+const LINE_MARGINS = {
+  top: 10, right: 100, bottom: 25, left: 50
+};
 let year;
 let lineSettings;
 
@@ -91,7 +94,8 @@ const _initSource = (selectedSource, data) => {
       const title = `${data.node_name} > ${properties.nome.toUpperCase()}`;
 
       if (source) {
-        tooltip.show(x, y,
+        tooltip.show(
+          x, y,
           title,
           [{
             title: 'Trade Volume',
@@ -100,11 +104,41 @@ const _initSource = (selectedSource, data) => {
           }]
         );
       }
-
     },
     hideTooltipCallback: () => {
       tooltip.hide();
     }
+  });
+};
+
+const _switchTopSource = (e, data) => {
+  const selectedSwitch = e && e.currentTarget;
+  if (!selectedSwitch) {
+    return;
+  }
+
+  const selectedSource = selectedSwitch.getAttribute('data-key');
+  const switchers = Array.prototype.slice.call(document.querySelectorAll('.js-top-source-switcher'), 0);
+  switchers.forEach((switcher) => {
+    switcher.classList.remove('selected');
+  });
+  selectedSwitch.classList.add('selected');
+
+  _initSource(selectedSource, data);
+};
+
+const _setTopSourceSwitcher = (data, verb) => {
+  const template = TopSourceTemplate({
+    year,
+    verb,
+    nodeName: capitalize(data.node_name),
+    switchers: Object.keys(data.top_sources).filter(key => !(ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)))
+  });
+  document.querySelector('.js-top-municipalities-title').innerHTML = template;
+
+  const switchers = Array.prototype.slice.call(document.querySelectorAll('.js-top-source-switcher'), 0);
+  switchers.forEach((switcher) => {
+    evManager.addEventListener(switcher, 'click', e => _switchTopSource(e, data));
   });
 };
 
@@ -113,7 +147,9 @@ const _build = (data, nodeId) => {
   const verbGerund = (data.column_name === 'EXPORTER') ? 'exporting' : 'importing';
 
   lineSettings = {
-    margin: { top: 10, right: 100, bottom: 30, left: 94 },
+    margin: {
+      top: 10, right: 100, bottom: 30, left: 94
+    },
     height: 244,
     ticks: {
       yTicks: 6,
@@ -122,10 +158,12 @@ const _build = (data, nodeId) => {
       xTickPadding: 15
     },
     showTooltipCallback: (location, x, y) => {
-      tooltip.show(x, y,
+      tooltip.show(
+        x, y,
         `${location.name.toUpperCase()} > ${data.node_name}, ${location.date.getFullYear()}`,
         [
-          { title: 'Trade volume',
+          {
+            title: 'Trade volume',
             value: formatValue(location.value, 'Trade volume'),
             unit: 'Tons'
           }
@@ -135,9 +173,7 @@ const _build = (data, nodeId) => {
     hideTooltipCallback: () => {
       tooltip.hide();
     },
-    lineClassNameCallback: (lineData, lineDefaultStyle) => {
-      return `${lineDefaultStyle} line-${lineData[0].value9}`;
-    }
+    lineClassNameCallback: (lineData, lineDefaultStyle) => `${lineDefaultStyle} line-${lineData[0].value9}`
   };
 
   if (data.top_sources && data.top_sources.municipality.lines.length) {
@@ -153,7 +189,8 @@ const _build = (data, nodeId) => {
 
 
   if (data.top_countries && data.top_countries.lines.length) {
-    document.querySelector('.js-top-map-title').textContent = `Top destination countries of Soy ${verb} by ${capitalize(data.node_name)} in ${year}`;
+    document.querySelector('.js-top-map-title').textContent =
+      `Top destination countries of Soy ${verb} by ${capitalize(data.node_name)} in ${year}`;
 
     choroLegend(null, '.js-destination-legend', {
       title: [`Soy ${verb} in ${year}`, '(tonnes)'],
@@ -169,17 +206,19 @@ const _build = (data, nodeId) => {
       data.top_countries.included_years,
       Object.assign({}, lineSettings, {
         showTooltipCallback: (location, x, y) => {
-          tooltip.show(x, y,
+          tooltip.show(
+            x, y,
             `${data.node_name} > ${location.name.toUpperCase()}, ${location.date.getFullYear()}`,
             [
-              { title: 'Trade volume',
+              {
+                title: 'Trade volume',
                 value: formatValue(location.value, 'Trade volume'),
                 unit: 'Tons'
               }
             ]
           );
-        },
-      }),
+        }
+      })
     );
 
     Map('.js-top-destination-map', {
@@ -197,9 +236,9 @@ const _build = (data, nodeId) => {
         const country = data.top_countries.lines
           .find(c => (properties.name.toUpperCase() === c.name.toUpperCase()));
         const title = `${properties.name.toUpperCase()} > ${data.node_name}`;
-        if (country)
-        {
-          tooltip.show(x, y,
+        if (country) {
+          tooltip.show(
+            x, y,
             title,
             [{
               title: 'Trade Volume',
@@ -216,20 +255,22 @@ const _build = (data, nodeId) => {
   }
 
   if (data.sustainability && data.sustainability.length) {
-    const tabsTitle = `Deforestation risk associated with ${formatApostrophe(data.node_name)} top sourcing regions in ${year}:`;
+    const tabsTitle =
+      `Deforestation risk associated with ${formatApostrophe(data.node_name)} top sourcing regions in ${year}:`;
 
     new MultiTable({
       el: document.querySelector('.js-sustainability-table'),
       data: data.sustainability,
       tabsTitle,
       type: 't_head_actors',
-      target: (item) => { return (item.name === 'Municipalities') ? 'place' : null; },
+      target: item => (item.name === 'Municipalities' ? 'place' : null),
       year
     });
   }
 
   if (data.companies_sourcing) {
-    document.querySelector('.js-companies-exporting-y-axis').innerHTML = `${data.companies_sourcing.dimension_y.name} (${data.companies_sourcing.dimension_y.unit})`;
+    document.querySelector('.js-companies-exporting-y-axis').innerHTML =
+      `${data.companies_sourcing.dimension_y.name} (${data.companies_sourcing.dimension_y.unit})`;
 
     new Scatterplot('.js-companies-exporting', {
       data: data.companies_sourcing.companies,
@@ -238,7 +279,8 @@ const _build = (data, nodeId) => {
       verbGerund,
       year,
       showTooltipCallback: (company, indicator, x, y) => {
-        tooltip.show(x, y,
+        tooltip.show(
+          x, y,
           company.name,
           [
             {
@@ -263,21 +305,44 @@ const _build = (data, nodeId) => {
 
 const _setInfo = (info, nodeId) => {
   document.querySelector('.js-name').textContent = info.name ? capitalize(info.name) : '-';
-  document.querySelector('.js-link-button-name').textContent = formatApostrophe(capitalize(info.name)) + ' PROFILE';
+  document.querySelector('.js-link-button-name').textContent = `${formatApostrophe(capitalize(info.name))} PROFILE`;
   document.querySelector('.js-legend').textContent = info.type || '-';
   document.querySelector('.js-country').textContent = info.country ? capitalize(info.country) : '-';
-  if (info.forest_500 > 0) document.querySelector('.js-forest-500-score .circle-icon[data-value="1"] use').setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
-  if (info.forest_500 > 1) document.querySelector('.js-forest-500-score .circle-icon[data-value="2"] use').setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
-  if (info.forest_500 > 2) document.querySelector('.js-forest-500-score .circle-icon[data-value="3"] use').setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
-  if (info.forest_500 > 3) document.querySelector('.js-forest-500-score .circle-icon[data-value="4"] use').setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
-  if (info.forest_500 > 4) document.querySelector('.js-forest-500-score .circle-icon[data-value="5"] use').setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
+  if (info.forest_500 > 0) {
+    document.querySelector('.js-forest-500-score .circle-icon[data-value="1"] use')
+      .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
+  }
+  if (info.forest_500 > 1) {
+    document.querySelector('.js-forest-500-score .circle-icon[data-value="2"] use')
+      .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
+  }
+  if (info.forest_500 > 2) {
+    document.querySelector('.js-forest-500-score .circle-icon[data-value="3"] use')
+      .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
+  }
+  if (info.forest_500 > 3) {
+    document.querySelector('.js-forest-500-score .circle-icon[data-value="4"] use')
+      .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
+  }
+  if (info.forest_500 > 4) {
+    document.querySelector('.js-forest-500-score .circle-icon[data-value="5"] use')
+      .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
+  }
   if (info.zero_deforestation === 'YES') {
     document.querySelector('.js-zero-deforestation-commitment [data-value="yes"]').classList.remove('is-hidden');
   } else {
     document.querySelector('.js-zero-deforestation-commitment [data-value="no"]').classList.remove('is-hidden');
   }
-  document.querySelector('.js-link-map').setAttribute('href', `./flows?selectedNodesIds=[${nodeId}]&isMapVisible=true&isMapVisible=true&selectedYears=[${year},${year}]`);
-  document.querySelector('.js-link-supply-chain').setAttribute('href', `./flows?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
+  document.querySelector('.js-link-map')
+    .setAttribute(
+      'href',
+      `./flows?selectedNodesIds=[${nodeId}]&isMapVisible=true&isMapVisible=true&selectedYears=[${year},${year}]`
+    );
+  document.querySelector('.js-link-supply-chain')
+    .setAttribute(
+      'href',
+      `./flows?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`
+    );
   document.querySelector('.js-summary-text').textContent = info.summary ? info.summary : '-';
 };
 
@@ -296,38 +361,7 @@ const _showErrorMessage = (message = null) => {
   }
 };
 
-const _setTopSourceSwitcher = (data, verb) => {
-  const template = TopSourceTemplate({
-    year,
-    verb,
-    nodeName: capitalize(data.node_name),
-    switchers: Object.keys(data.top_sources).filter(key => !(ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)))
-  });
-  document.querySelector('.js-top-municipalities-title').innerHTML = template;
-
-  const switchers = Array.prototype.slice.call(document.querySelectorAll('.js-top-source-switcher'), 0);
-  switchers.forEach(switcher => {
-    evManager.addEventListener(switcher, 'click', (e) => _switchTopSource(e, data));
-  });
-};
-
-const _switchTopSource = (e, data) => {
-  const selectedSwitch = e && e.currentTarget;
-  if (!selectedSwitch) {
-    return;
-  }
-
-  const selectedSource = selectedSwitch.getAttribute('data-key');
-  const switchers = Array.prototype.slice.call(document.querySelectorAll('.js-top-source-switcher'), 0);
-  switchers.forEach(switcher => {
-    switcher.classList.remove('selected');
-  });
-  selectedSwitch.classList.add('selected');
-
-  _initSource(selectedSource, data);
-};
-
-export const mount = (root, store)  => {
+const mount = (root, store) => {
   root.innerHTML = ProfileActorMarkup({
     nav: NavMarkup({ page: 'profile-actor' }),
     footer: FooterMarkup(),
@@ -366,16 +400,18 @@ export const mount = (root, store)  => {
       _setInfo(info, nodeId);
       _setEventListeners();
 
-      const yearDropdown = new Dropdown('year', year => {
-        yearDropdown.setTitle(year);
-        swapProfileYear(year);
+      const yearDropdown = new Dropdown('year', (dropdownYear) => {
+        yearDropdown.setTitle(dropdownYear);
+        swapProfileYear(dropdownYear);
       });
       yearDropdown.setTitle(year);
 
       _build(data, nodeId);
     })
-    .catch((reason) => _showErrorMessage(reason.message));
+    .catch(reason => _showErrorMessage(reason.message));
 
   const nav = new NavContainer(store);
   print = nav.print;
 };
+
+export default { mount };

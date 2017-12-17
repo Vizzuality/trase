@@ -1,3 +1,4 @@
+/* eslint-disable no-new */
 import Tooltip from 'tether-tooltip';
 import 'styles/components/shared/help-tooltip.scss';
 
@@ -13,7 +14,7 @@ export default class {
   _loadTooltip() {
     this.tooltips = Array.prototype.slice.call(document.querySelectorAll('.js-tooltip:not([data-tooltip-load])'), 0);
 
-    this.tooltips.forEach(tooltip => {
+    this.tooltips.forEach((tooltip) => {
       new Tooltip({
         target: tooltip,
         content: tooltip.getAttribute('data-tooltip-text'),

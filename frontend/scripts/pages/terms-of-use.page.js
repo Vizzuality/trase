@@ -1,9 +1,10 @@
+/* eslint-disable no-new */
 import TermsOfUseMarkup from 'html/terms-of-use.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
 import FooterMarkup from 'html/includes/_footer.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
-import NavContainer from 'containers/shared/nav.container.js';
+import NavContainer from 'containers/shared/nav.container';
 import 'styles/_base.scss';
 import 'styles/_texts.scss';
 import 'styles/_foundation.css';
@@ -13,7 +14,7 @@ import 'styles/components/shared/button.scss';
 import 'styles/components/shared/nav.scss';
 import 'styles/components/shared/_footer.scss';
 
-export const mount = (root, store) => {
+const mount = (root, store) => {
   root.innerHTML = TermsOfUseMarkup({
     nav: NavMarkup({ page: 'terms-of-use' }),
     footer: FooterMarkup(),
@@ -21,3 +22,5 @@ export const mount = (root, store) => {
   });
   new NavContainer(store);
 };
+
+export default { mount };

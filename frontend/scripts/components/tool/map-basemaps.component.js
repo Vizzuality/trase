@@ -2,7 +2,6 @@ import BasemapsTemplate from 'templates/tool/map/map-basemaps.ejs';
 import 'styles/components/tool/map/map-basemaps.scss';
 
 export default class {
-
   onCreated() {
     this.el = document.querySelector('.js-map-basemaps-items');
   }
@@ -12,7 +11,7 @@ export default class {
 
     this.basemaps = Array.prototype.slice.call(this.el.querySelectorAll('.js-map-sidebar-group-item'), 0);
     this.basemaps.forEach((basemap) => {
-      basemap.addEventListener('click', (e) => this._onBasemapClicked(e));
+      basemap.addEventListener('click', e => this._onBasemapClicked(e));
     });
   }
 

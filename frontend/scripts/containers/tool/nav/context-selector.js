@@ -1,36 +1,32 @@
-import { connect } from 'preact-redux';
+import { connect } from 'react-redux';
 import groupBy from 'lodash/groupBy';
 
 import { toggleDropdown } from 'actions/app.actions';
 import { selectContext } from 'actions/tool.actions';
-import ContextSelector from 'react-components/tool/nav/context-selector.component';
+import ContextSelector from 'react-components/tool/nav/context-selector';
 
 function classifyColumn(contexts, { id, label, relation }) {
   const groups = groupBy(
-    contexts.map(
-      context => {
-        const group = { id: context[id], label: context[label], relation: {} };
-        const relationKey = context[relation];
-        group.relation[relationKey] = { isSubnational: context.isSubnational };
-        return group;
-      })
+    contexts.map((context) => {
+      const group = { id: context[id], label: context[label], relation: {} };
+      const relationKey = context[relation];
+      group.relation[relationKey] = { isSubnational: context.isSubnational };
+      return group;
+    })
     , 'id'
   );
 
   return Object.values(groups)
-    .map(
-      group => group.reduce(
-        (acc, next) => {
-          const relation = Object.assign({}, acc.relation, next.relation);
-          return Object.assign({}, acc, next, { relation });
-        }
-        , {}
-      )
-    );
+    .map(group => group.reduce(
+      (acc, next) => {
+        const newRelation = Object.assign({}, acc.relation, next.relation);
+        return Object.assign({}, acc, next, { relation: newRelation });
+      }
+      , {}
+    ));
 }
 
 const mapStateToProps = (state) => {
-
   const getComputedKey = keys => keys.join('_');
   const contexts = state.tool.contexts.reduce((acc, context) => {
     const computedId = getComputedKey([context.countryId, context.commodityId]);
@@ -63,16 +59,14 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    toggleContextSelectorVisibility: (id) => {
-      dispatch(toggleDropdown(id));
-    },
-    selectContext: (contextId) => {
-      dispatch(selectContext(parseInt(contextId)));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  toggleContextSelectorVisibility: (id) => {
+    dispatch(toggleDropdown(id));
+  },
+  selectContext: (contextId) => {
+    dispatch(selectContext(parseInt(contextId, 10)));
+  }
+});
 
 export default connect(
   mapStateToProps,

@@ -1,9 +1,10 @@
+require('dotenv').config({ silent: true });
+
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-require('dotenv').config({ silent: true });
 const srcPath = path.join(__dirname, '..', 'scripts');
 
 const templates = require('./static.templates');
@@ -35,7 +36,7 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       DATA_FORM_ENDPOINT: JSON.stringify(process.env.DATA_FORM_ENDPOINT),
       DATA_FORM_ENABLED: process.env.DATA_FORM_ENABLED === 'true',
-      PDF_DOWNLOAD_URL: JSON.stringify(process.env.PDF_DOWNLOAD_URL),
+      PDF_DOWNLOAD_URL: JSON.stringify(process.env.PDF_DOWNLOAD_URL)
     })
   ],
   resolve: {
@@ -52,8 +53,9 @@ module.exports = {
       utils: path.resolve(srcPath, 'utils'),
       constants: path.resolve(srcPath, 'constants'),
       connect: path.resolve(srcPath, 'base', 'connect'),
-      Container: path.resolve(srcPath, 'base', 'Container'),
-    }
+      Container: path.resolve(srcPath, 'base', 'Container')
+    },
+    extensions: ['.js', '.jsx']
   },
   module: {
     rules: [
@@ -63,11 +65,11 @@ module.exports = {
         use: ['ejs-loader']
       },
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: ['babel-loader', 'eslint-loader'],
+        use: ['babel-loader', 'eslint-loader']
       },
-      { test: /\.css$/, use: ['style-loader', 'css-loader',  'postcss-loader'] },
+      { test: /\.css$/, use: ['style-loader', 'css-loader', 'postcss-loader'] },
       {
         test: /\.scss$/,
         use: [

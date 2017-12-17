@@ -1,27 +1,23 @@
-import { connect } from 'preact-redux';
+import { connect } from 'react-redux';
 import { toggleDropdown } from 'actions/app.actions';
 import { selectResizeBy } from 'actions/tool.actions';
-import ResizeBy from 'react-components/tool/nav/resize-by.component.js';
+import ResizeBy from 'react-components/tool/nav/resize-by.component';
 
-const mapStateToProps = (state) => {
-  return {
-    tooltips: state.app.tooltips,
-    currentDropdown: state.app.currentDropdown,
-    selectedResizeBy: state.tool.selectedResizeBy,
-    resizeBys: state.tool.selectedContext.resizeBy,
-  };
-};
+const mapStateToProps = state => ({
+  tooltips: state.app.tooltips,
+  currentDropdown: state.app.currentDropdown,
+  selectedResizeBy: state.tool.selectedResizeBy,
+  resizeBys: state.tool.selectedContext.resizeBy
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onToggle: (id) => {
-      dispatch(toggleDropdown(id));
-    },
-    onSelected: (resizeBy) => {
-      dispatch(selectResizeBy(resizeBy));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  onToggle: (id) => {
+    dispatch(toggleDropdown(id));
+  },
+  onSelected: (resizeBy) => {
+    dispatch(selectResizeBy(resizeBy));
+  }
+});
 
 export default connect(
   mapStateToProps,

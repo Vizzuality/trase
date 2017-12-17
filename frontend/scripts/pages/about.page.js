@@ -1,3 +1,4 @@
+/* eslint-disable no-new */
 import AboutMarkup from 'html/about.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
 import FooterMarkup from 'html/includes/_footer.ejs';
@@ -5,7 +6,7 @@ import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import 'styles/about.scss';
 
-import NavContainer from 'containers/shared/nav.container.js';
+import NavContainer from 'containers/shared/nav.container';
 import smoothScroll from 'utils/smoothScroll';
 import { calculateOffsets, scrollDocument } from 'utils/fixedScroll';
 import _ from 'lodash';
@@ -22,6 +23,13 @@ const _toggleAnchors = (e, options) => {
   });
 };
 
+const _calculateOffsets = (options) => {
+  Object.assign(options, {
+    cutTopOffsets: calculateOffsets(options.elems.cutTop),
+    cutBottomOffsets: calculateOffsets(options.elems.cutBottom)
+  });
+};
+
 const _onScrollDocument = (options) => {
   const el = options.elems.anchorNav;
   const cutOffsets = {
@@ -33,18 +41,11 @@ const _onScrollDocument = (options) => {
   scrollDocument(el, cutOffsets);
 };
 
-const _calculateOffsets = (options) => {
-  Object.assign(options, {
-    cutTopOffsets: calculateOffsets(options.elems.cutTop),
-    cutBottomOffsets: calculateOffsets(options.elems.cutBottom),
-  });
-};
-
 const _setEventListeners = (options) => {
   const anchorItems = options.elems.anchorItems;
   const _onScrollThrottle = _.throttle(() => _onScrollDocument(options), 50, { leading: true });
   const _calculateOffsetsThrottle = _.throttle(() => _calculateOffsets(options), 50, { leading: true });
-  const _toggleAnchorHandler = (e) => _toggleAnchors(e, options);
+  const _toggleAnchorHandler = e => _toggleAnchors(e, options);
 
   evManager.addEventListener(document, 'scroll', _onScrollThrottle);
   evManager.addEventListener(window, 'resize', _calculateOffsetsThrottle);
@@ -55,7 +56,7 @@ const _setEventListeners = (options) => {
   smoothScroll(anchorItems);
 };
 
-export const mount = (root, store) => {
+const mount = (root, store) => {
   root.innerHTML = AboutMarkup({
     nav: NavMarkup({ page: 'about' }),
     footer: FooterMarkup(),
@@ -76,7 +77,8 @@ export const mount = (root, store) => {
   new NavContainer(store);
 };
 
-export const unmount = () => {
+const unmount = () => {
   evManager.clearEventListeners();
 };
 
+export default { mount, unmount };

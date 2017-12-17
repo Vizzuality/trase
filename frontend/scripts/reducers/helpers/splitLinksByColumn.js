@@ -1,9 +1,9 @@
 // break down links into simple src - target binomes
-export default function(rawLinks, nodesDict, selectedRecolorBy) {
+export default function (rawLinks, nodesDict, selectedRecolorBy) {
   const links = [];
-  rawLinks.forEach(link => {
-    var path = link.path;
-    for (var i = 0; i < path.length-1; i++) {
+  rawLinks.forEach((link) => {
+    const path = link.path;
+    for (let i = 0; i < path.length - 1; i++) {
       const sourceNodeId = path[i];
       const targetNodeId = path[i + 1];
       const sourceNode = nodesDict[sourceNodeId];

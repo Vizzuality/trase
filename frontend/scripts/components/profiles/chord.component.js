@@ -1,3 +1,4 @@
+/* eslint-disable camelcase,import/no-extraneous-dependencies */
 import { select as d3_select } from 'd3-selection';
 import { chord as d3_chord, ribbon as d3_ribbon } from 'd3-chord';
 import { descending as d3_descending } from 'd3-array';
@@ -10,24 +11,20 @@ const TYPE_KEY_2 = 'list2';
 
 export default class {
   constructor(className, orgMatrix, list, list2) {
-    const nodes = [].concat(list.map(item => {
-      return {
-        name: item.name,
-        type: TYPE_KEY_1
-      };
-    }), list2.map(item => {
-      return {
-        name: item.name,
-        type: TYPE_KEY_2
-      };
-    }));
+    const nodes = [].concat(list.map(item => ({
+      name: item.name,
+      type: TYPE_KEY_1
+    })), list2.map(item => ({
+      name: item.name,
+      type: TYPE_KEY_2
+    })));
     if (!orgMatrix.length || !nodes.length) {
       return;
     }
 
     document.querySelector(className).classList.remove('is-hidden');
     const nameLimit = 11;
-    const allNames = nodes.map(node => {
+    const allNames = nodes.map((node) => {
       if (node.name.length > nameLimit) {
         node.name = `${node.name.substring(0, nameLimit)}...`;
       }
@@ -44,7 +41,7 @@ export default class {
     const width = elem.clientWidth - margin.left - margin.right;
     const height = elem.clientWidth - margin.top - margin.bottom;
 
-    const outerRadius = Math.min(490, 490) * 0.5 - 40;
+    const outerRadius = (Math.min(490, 490) * 0.5) - 40;
     const innerRadius = outerRadius - 12;
 
     const svg = d3_select(className)
@@ -73,8 +70,9 @@ export default class {
     const group = container.append('g')
       .attr('class', 'groups')
       .selectAll('g')
-      .data((chords) => chords.groups)
-      .enter().append('g');
+      .data(chords => chords.groups)
+      .enter()
+      .append('g');
 
     group.append('path')
       .attr('d', arc)
@@ -83,29 +81,28 @@ export default class {
           return 'arc-current';
         } else if (allNames[i].type === TYPE_KEY_2) {
           return 'arc-active';
-        } else {
-          return 'arc-default';
         }
+        return 'arc-default';
       });
 
     container.append('g')
       .attr('class', 'ribbons')
       .selectAll('path')
-      .data((chords) => chords.filter(chord => chord.source.index === 0))
-      .enter().append('path')
+      .data(chords => chords.filter(filterChord => filterChord.source.index === 0))
+      .enter()
+      .append('path')
       .attr('d', ribbon)
       .attr('class', 'links');
 
     group.append('text')
-      .each(d => {
+      .each((d) => {
         d.angle = (d.startAngle + d.endAngle) / 2;
       })
       .attr('dy', '.35em')
       .attr('class', 'text-legend')
-      .attr('transform', d => {
-        return `rotate(${d.angle * 180 / Math.PI - 90}) translate(${innerRadius + 24}) ${d.angle > Math.PI ? 'rotate(180)' : ''}`;
-      })
-      .style('text-anchor', d => d.angle > Math.PI ? 'end' : null)
-      .text((d, i) => (i === 0 || allNames[i].type === TYPE_KEY_2) ? allNames[i].name : '');
+    // eslint-disable-next-line max-len
+      .attr('transform', d => `rotate(${((d.angle * 180) / Math.PI) - 90}) translate(${innerRadius + 24}) ${d.angle > Math.PI ? 'rotate(180)' : ''}`)
+      .style('text-anchor', d => (d.angle > Math.PI ? 'end' : null))
+      .text((d, i) => ((i === 0 || allNames[i].type === TYPE_KEY_2) ? allNames[i].name : ''));
   }
 }

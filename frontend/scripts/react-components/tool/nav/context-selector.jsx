@@ -1,13 +1,21 @@
-import { h, Component } from 'preact';
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+import React, { Component } from 'react';
 import Tooltip from 'react-components/tool/help-tooltip.component';
 import Dropdown from 'react-components/tool/nav/dropdown.component';
 import 'styles/components/tool/country-commodities-react.scss';
 import 'styles/components/tool/dimensional-selector-react.scss';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 
 const id = 'country-commodity';
 
-export default class ContextSelector extends Component {
+class ContextSelector extends Component {
+  static sortDimensions(a, b) {
+    if (a.order < b.order) return -1;
+    if (a.order > b.order) return 1;
+    return 0;
+  }
 
   constructor(props) {
     super(props);
@@ -22,22 +30,18 @@ export default class ContextSelector extends Component {
     this.renderDimensionList = this.renderDimensionList.bind(this);
   }
 
-  static sortDimensions(a, b) {
-    if (a.order < b.order) return -1;
-    if (a.order > b.order) return 1;
-    return 0;
-  }
-
   resetDimensionSelection(e) {
     if (e) e.stopPropagation();
     this.setState({ selectedDimensions: [] });
   }
 
-
-  selectDimension(e, status, index, el) {
+  selectDimension(e, status, index, element) {
     if (e) e.stopPropagation();
-    if (['disabled', 'selected'].includes(status)) return this.resetDimensionSelection();
-    const selectedDimensions = [...this.state.selectedDimensions, Object.assign({}, el, { order: index })];
+    if (['disabled', 'selected'].includes(status)) {
+      this.resetDimensionSelection();
+      return;
+    }
+    const selectedDimensions = [...this.state.selectedDimensions, Object.assign({}, element, { order: index })];
     this.setState({
       selectedDimensions
     });
@@ -99,10 +103,10 @@ export default class ContextSelector extends Component {
 
   renderElement(el, dimension, isSubnational) {
     return (
-      <div className='country-commodities-selector-element' >
+      <div className="country-commodities-selector-element" >
         {el.label.toLowerCase()}
         {isSubnational &&
-        <div className='data-coverage-info' >
+        <div className="data-coverage-info" >
           Subnational Data
         </div >
         }
@@ -119,21 +123,23 @@ export default class ContextSelector extends Component {
       return null;
     };
 
-    return dimensions.sort(ContextSelector.sortDimensions)
-      .map((dimension) => dimension.elements)
+    return dimensions
+      .sort(ContextSelector.sortDimensions)
+      .map(dimension => dimension.elements)
       .map((dimensionElement, dimensionElementIndex) => (
-        <ul class='dimension-list -medium' >
+        <ul className="dimension-list -medium" key={dimensionElementIndex} >
           {
             dimensionElement
-              .map((el) => {
+              .map((el, index) => {
                 const status = getItemStatus(dimensionElementIndex, el);
                 const isSubnational = this.isSubnational(dimensionElementIndex, el);
                 return (
                   <li
-                    class={classNames('dimension-list-item -capitalize', {
+                    key={index}
+                    className={classNames('dimension-list-item -capitalize', {
                       [`-${status}`]: status
                     })}
-                    onClick={(e) => this.selectDimension(e, status, dimensionElementIndex, el)
+                    onClick={e => this.selectDimension(e, status, dimensionElementIndex, el)
                     }
                   >
                     {this.renderElement(el, dimensionElementIndex, isSubnational)}
@@ -156,23 +162,27 @@ export default class ContextSelector extends Component {
     } = this.props;
 
     return (
-      <div class='c-country-commodities nav-item js-dropdown' onClick={() => toggleContextSelectorVisibility(id)} >
-        <div class='c-dropdown -capitalize' >
-          <span class='dropdown-label' >
+      <div className="c-country-commodities nav-item js-dropdown" onClick={() => toggleContextSelectorVisibility(id)} >
+        <div className="c-dropdown -capitalize" >
+          <span className="dropdown-label" >
             Country - Commodity
             <Tooltip text={tooltips.sankey.nav.context.main} />
           </span >
-          <span class='dropdown-title' >
+          <span className="dropdown-title" >
             {selectedContextCountry.toLowerCase()} - {selectedContextCommodity.toLowerCase()}
           </span >
-          <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={toggleContextSelectorVisibility} >
-            <div className='country-commodities-children-container' >
-              <div className='c-dimensional-selector' onClick={this.resetDimensionSelection} >
-                <div className='dimension-container' >
+          <Dropdown
+            id={id}
+            currentDropdown={currentDropdown}
+            onClickOutside={toggleContextSelectorVisibility}
+          >
+            <div className="country-commodities-children-container" >
+              <div className="c-dimensional-selector" onClick={this.resetDimensionSelection} >
+                <div className="dimension-container" >
                   {this.renderDimensionList()}
                 </div >
-                <div className='dimensional-selector-footer' >
-                  <span className='dimensional-selector-footer-text' >
+                <div className="dimensional-selector-footer" >
+                  <span className="dimensional-selector-footer-text" >
                     {this.renderFooterText(this.state.selectedDimensions, dimensions)}
                   </span >
                 </div >
@@ -184,3 +194,17 @@ export default class ContextSelector extends Component {
     );
   }
 }
+
+ContextSelector.propTypes = {
+  toggleContextSelectorVisibility: PropTypes.func,
+  getComputedKey: PropTypes.func,
+  selectContext: PropTypes.func,
+  tooltips: PropTypes.object,
+  contexts: PropTypes.object,
+  currentDropdown: PropTypes.string,
+  selectedContextCountry: PropTypes.string,
+  selectedContextCommodity: PropTypes.string,
+  dimensions: PropTypes.array
+};
+
+export default ContextSelector;

@@ -7,13 +7,11 @@ import getBasemap, { useDefaultBasemap } from '../helpers/getBasemap';
 const mapMethodsToState = () => ({
   buildBasemaps: BASEMAPS,
   selectBasemap: {
-    _comparedValue: (state) => getBasemap(state.tool),
-    _returnedValue: (state) => {
-      return {
-        basemapId: getBasemap(state.tool),
-        disabled: useDefaultBasemap(state.tool)
-      };
-    }
+    _comparedValue: state => getBasemap(state.tool),
+    _returnedValue: state => ({
+      basemapId: getBasemap(state.tool),
+      disabled: useDefaultBasemap(state.tool)
+    })
   }
 });
 

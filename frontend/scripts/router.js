@@ -19,44 +19,54 @@ const resetTool = (dispatch, getState) => {
 const routes = {
   home: {
     path: '/',
-    page: 'home'
+    page: 'home',
+    extension: 'js'
   },
   tool: {
     path: '/flows',
     page: 'tool',
-    thunk: resetTool
+    thunk: resetTool,
+    extension: 'jsx'
   },
   profiles: {
     path: '/profiles',
-    page: 'profiles'
+    page: 'profiles',
+    extension: 'js'
   },
   profileActor: {
     path: '/profile-actor',
-    page: 'profile-actor'
+    page: 'profile-actor',
+    extension: 'js'
   },
   profilePlace: {
     path: '/profile-place',
-    page: 'profile-place'
+    page: 'profile-place',
+    extension: 'jsx'
   },
   data: {
     path: '/data',
-    page: 'data'
+    page: 'data',
+    extension: 'js'
   },
   about: {
     path: '/about',
-    page: 'about'
+    page: 'about',
+    extension: 'js'
   },
   termsOfUse: {
     path: '/terms-of-use',
-    page: 'terms-of-use'
+    page: 'terms-of-use',
+    extension: 'js'
   },
   dataMethods: {
     path: '/data-methods',
-    page: 'data-methods'
+    page: 'data-methods',
+    extension: 'js'
   },
   faq: {
     path: '/FAQ',
-    page: 'FAQ'
+    page: 'FAQ',
+    extension: 'js'
   },
   [NOT_FOUND]: {
     path: '/404'
@@ -79,7 +89,7 @@ export function routeSubscriber(store) {
     }
 
     resetPage() {
-      if (this.page && this.page.unmount) this.page.unmount();
+      if (this.page && this.page.default.unmount) this.page.default.unmount();
       this.root.innerHTML = '';
     }
 
@@ -87,10 +97,11 @@ export function routeSubscriber(store) {
       if (this.type !== type) {
         this.resetPage();
         this.type = type;
-        import(/* webpackChunkName: "page" */ `./pages/${routesMap[this.type].page}.page.js`)
+        // eslint-disable-next-line space-in-parens,max-len
+        import( /* webpackChunkName: "page" */ `./pages/${routesMap[this.type].page}.page.${routesMap[this.type].extension}`)
           .then((page) => {
             this.page = page;
-            this.page.mount(this.root, store);
+            this.page.default.mount(this.root, store);
           });
       }
     }
@@ -102,7 +113,7 @@ export function routeSubscriber(store) {
       _returnedValue: state => state.location
     }
   });
-  const RouterContainer =  connect(RouterComponent, mapMethodsToState);
+  const RouterContainer = connect(RouterComponent, mapMethodsToState);
 
   return new RouterContainer(store);
 }

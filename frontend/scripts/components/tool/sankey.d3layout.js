@@ -1,10 +1,11 @@
+/* eslint-disable camelcase,import/no-extraneous-dependencies,no-use-before-define */
 import _ from 'lodash';
 import wrapSVGText from 'utils/wrapSVGText';
 import { NUM_COLUMNS, DETAILED_VIEW_MIN_NODE_HEIGHT, DETAILED_VIEW_SCALE } from 'constants';
 import { interpolateNumber as d3_interpolateNumber } from 'd3-interpolate';
 
-const sankeyLayout = function() {
-  const sankeyLayout = {};
+const sankeyLayout = () => {
+  const sankeyLayoutState = {};
 
   // in
   let viewportWidth;
@@ -26,12 +27,12 @@ const sankeyLayout = function() {
   const _labelCharHeight = 16;
   const _labelMaxLines = 3;
 
-  sankeyLayout.setViewportSize = (size) => {
+  sankeyLayoutState.setViewportSize = (size) => {
     viewportWidth = size[0];
     viewportHeight = size[1];
   };
 
-  sankeyLayout.setLinksPayload = (payload) => {
+  sankeyLayoutState.setLinksPayload = (payload) => {
     columns = payload.visibleNodesByColumn;
     links = payload.links;
     detailedView = payload.detailedView;
@@ -39,27 +40,21 @@ const sankeyLayout = function() {
     nodesColoredAtColumn = payload.nodesColoredAtColumn;
   };
 
-  sankeyLayout.columnWidth = _ => {
-    if (!_) return columnWidth;
-    columnWidth = +_;
-    _labelCharsPerLine = Math.floor(columnWidth/_labelCharWidth);
-    return sankeyLayout;
+  sankeyLayoutState.columnWidth = (i) => {
+    if (!i) return columnWidth;
+    columnWidth = +i;
+    _labelCharsPerLine = Math.floor(columnWidth / _labelCharWidth);
+    return sankeyLayoutState;
   };
 
-  sankeyLayout.columns = () => {
-    return columns;
-  };
+  sankeyLayoutState.columns = () => columns;
 
-  sankeyLayout.links = () => {
-    return links;
-  };
+  sankeyLayoutState.links = () => links;
 
-  sankeyLayout.isReady = () => {
-    return viewportWidth && columns && recolorBy;
-  };
+  sankeyLayoutState.isReady = () => viewportWidth && columns && recolorBy;
 
-  sankeyLayout.relayout = () => {
-    if (!sankeyLayout.isReady()) {
+  sankeyLayoutState.relayout = () => {
+    if (!sankeyLayoutState.isReady()) {
       console.warn('not ready');
       return false;
     }
@@ -72,39 +67,32 @@ const sankeyLayout = function() {
   };
 
   // using precomputed dimensions on links objects, this will generate SVG paths for links
-  sankeyLayout.link = function() {
-    function link(d) {
-      var x0 = d.x,
-        x1 = d.x + d.width,
-        xi = d3_interpolateNumber(x0, x1),
-        x2 = xi(.75),
-        x3 = xi(.25),
-        y0 = d.sy + d.renderedHeight / 2,
-        y1 = d.ty + d.renderedHeight / 2;
-      const path = 'M' + x0 + ',' + y0
-           + 'C' + x2 + ',' + y0
-           + ' ' + x3 + ',' + y1
-           + ' ' + x1 + ',' + y1;
-      return path;
-    }
-
-    return link;
+  sankeyLayoutState.link = () => (d) => {
+    const x0 = d.x;
+    const x1 = d.x + d.width;
+    const xi = d3_interpolateNumber(x0, x1);
+    const x2 = xi(0.75);
+    const x3 = xi(0.25);
+    const y0 = d.sy + (d.renderedHeight / 2);
+    const y1 = d.ty + (d.renderedHeight / 2);
+    return `M${x0},${y0
+    }C${x2},${y0
+    } ${x3},${y1
+    } ${x1},${y1}`;
   };
 
-  sankeyLayout.getMaxHeight = () => {
-    return maxHeight;
-  };
+  sankeyLayoutState.getMaxHeight = () => maxHeight;
 
   const _computeNodeCoords = () => {
-    const availableLinkSpace = viewportWidth - NUM_COLUMNS * columnWidth;
-    linksColumnWidth = availableLinkSpace/(NUM_COLUMNS - 1);
+    const availableLinkSpace = viewportWidth - (NUM_COLUMNS * columnWidth);
+    linksColumnWidth = availableLinkSpace / (NUM_COLUMNS - 1);
 
     maxHeight = 0;
 
     columns.forEach((column, i) => {
       column.x = _getColumnX(i);
       let columnY = 0;
-      column.values.forEach(node => {
+      column.values.forEach((node) => {
         node.x = column.x;
         node.y = columnY;
         if (detailedView === true) {
@@ -121,8 +109,8 @@ const sankeyLayout = function() {
   };
 
   const _setNodeLabels = () => {
-    columns.forEach(column => {
-      column.values.forEach(node => {
+    columns.forEach((column) => {
+      column.values.forEach((node) => {
         node.label = wrapSVGText(node.name, node.renderedHeight, _labelCharHeight, _labelCharsPerLine, _labelMaxLines);
       });
     });
@@ -131,12 +119,11 @@ const sankeyLayout = function() {
   // compute links y and y deltas (later used by sankey.link generator)
   // will be called at each relayouting (user clicks nodes, user scrolls, etc)
   const _computeLinksCoords = () => {
-
     // source and target are dicts (nodeIds are keys) containing the cumulated height of all links for each node
-    const stackedHeightsByNodeId = { source:{},target:{} };
+    const stackedHeightsByNodeId = { source: {}, target: {} };
 
     // retrieve node ys to bootstrap stackedHeights
-    links.forEach(link => {
+    links.forEach((link) => {
       const sId = link.sourceNodeId;
       stackedHeightsByNodeId.source[sId] = _getNode(link.sourceColumnPosition, sId).y;
 
@@ -149,7 +136,7 @@ const sankeyLayout = function() {
 
     if (links[0].recolorGroup !== undefined) {
       // get all links of the colored column
-      let coloredColumnLinks = links.filter(link => {
+      let coloredColumnLinks = links.filter((link) => {
         const entry = (nodesColoredAtColumn === 0) ? link.sourceColumnPosition : link.targetColumnPosition;
         return entry === nodesColoredAtColumn;
       });
@@ -185,10 +172,12 @@ const sankeyLayout = function() {
         let recolorBySort;
         if (linkA.recolorBy === null) {
           recolorBySort = 1;
-        } else if  (linkB.recolorBy === null) {
+        } else if (linkB.recolorBy === null) {
           recolorBySort = -1;
         } else {
-          recolorBySort = (recolorBy.type === 'ind') ?  linkA.recolorBy - linkB.recolorBy : linkA.recolorBy.charCodeAt(0) - linkB.recolorBy.charCodeAt(0);
+          recolorBySort = (recolorBy.type === 'ind')
+            ? linkA.recolorBy - linkB.recolorBy
+            : linkA.recolorBy.charCodeAt(0) - linkB.recolorBy.charCodeAt(0);
         }
         return recolorBySort;
       } else if (links[0].recolorGroup !== undefined) {
@@ -201,20 +190,19 @@ const sankeyLayout = function() {
           const recolorGroupsYA = recolorGroupsOrderedByY.indexOf(linkA.recolorGroup);
           const recolorGroupsYB = recolorGroupsOrderedByY.indexOf(linkB.recolorGroup);
           return (recolorGroupsYA === recolorGroupsYB) ? defaultSort : recolorGroupsYA - recolorGroupsYB;
-        } else {
-          if (linkA.targetColumnPosition <= nodesColoredAtColumn) {
-            return tIdAY - tIdBY || sIdAY - sIdBY;
-          } else if (linkA.sourceColumnPosition >= nodesColoredAtColumn) {
-            return sIdAY - sIdBY || tIdAY - tIdBY;
-          }
         }
-        return defaultSort;
-      } else {
+        if (linkA.targetColumnPosition <= nodesColoredAtColumn) {
+          return tIdAY - tIdBY || sIdAY - sIdBY;
+        } else if (linkA.sourceColumnPosition >= nodesColoredAtColumn) {
+          return sIdAY - sIdBY || tIdAY - tIdBY;
+        }
+
         return defaultSort;
       }
+      return defaultSort;
     });
 
-    links.forEach(link => {
+    links.forEach((link) => {
       link.width = linksColumnWidth;
       link.x = columnWidth + _getColumnX(link.sourceColumnPosition);
 
@@ -234,14 +222,14 @@ const sankeyLayout = function() {
     });
   };
 
-  const _getColumnX = (columnIndex) => columnIndex * (columnWidth + linksColumnWidth);
+  const _getColumnX = columnIndex => columnIndex * (columnWidth + linksColumnWidth);
 
   const _getNode = (columnPosition, nodeId) => {
     const column = columns[columnPosition];
     return column.values.find(node => node.id === nodeId);
   };
 
-  return sankeyLayout;
+  return sankeyLayoutState;
 };
 
 export default sankeyLayout;

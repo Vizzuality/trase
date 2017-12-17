@@ -1,15 +1,15 @@
-import { Provider } from 'preact-redux';
-import { h, render } from 'preact';
+/* eslint-disable no-new */
 
 import ToolMarkup from 'html/tool.ejs';
 import SearchMarkup from 'html/includes/_search.ejs';
 import NavtoolMarkup from 'html/includes/_navtool.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
-
+import React from 'react';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
 import FlowContentContainer from 'containers/tool/tool-content.container';
 import SankeyContainer from 'containers/tool/sankey.container';
 import ColumnsSelectorContainer from 'containers/tool/columns-selector-react.container';
-import MapDimensionsContainer from 'containers/tool/map-dimensions.container.js';
 import MapContextContainer from 'containers/tool/map-context.container';
 import MapLegendContainer from 'containers/tool/map-legend.container';
 import MapBasemapsContainer from 'containers/tool/map-basemaps.container';
@@ -22,15 +22,16 @@ import SearchContainer from 'containers/shared/search-react.container';
 import ModalContainer from 'containers/tool/story-modal.container';
 import TooltipContainer from 'containers/shared/help-tooltip.container';
 
-import { resize, loadDisclaimer, displayStoryModal } from 'actions/app.actions';
+import { displayStoryModal, loadDisclaimer, resize } from 'actions/app.actions';
 import { loadInitialData } from 'actions/tool.actions';
+import MapDimensionsContainer from 'containers/tool/map-dimensions.container';
 
 import 'styles/tool.scss';
 import EventManager from 'utils/eventManager';
 
 const evManager = new EventManager();
 
-export const mount = (root, store) => {
+const mount = (root, store) => {
   const { query = {} } = store.getState().location;
 
   root.innerHTML = ToolMarkup({
@@ -53,21 +54,21 @@ export const mount = (root, store) => {
 
   new NavContainer(store);
   render(
-    <Provider store={store}>
+    <Provider store={store} >
       <NavReactContainer />
-    </Provider>,
+    </Provider >,
     document.getElementById('js-tool-nav-react')
   );
   render(
-    <Provider store={store}>
+    <Provider store={store} >
       <ColumnsSelectorContainer />
-    </Provider>,
+    </Provider >,
     document.getElementById('js-columns-selector-react')
   );
   render(
-    <Provider store={store}>
+    <Provider store={store} >
       <SearchContainer />
-    </Provider>,
+    </Provider >,
     document.getElementById('js-search-react')
   );
 
@@ -83,7 +84,7 @@ export const mount = (root, store) => {
   document.querySelector('body').classList.add('-overflow-hidden');
 };
 
-export const unmount = () => {
+const unmount = () => {
   evManager.clearEventListeners();
   document.querySelector('body').classList.remove('-overflow-hidden');
 };
@@ -97,3 +98,5 @@ export const unmount = () => {
 //     }
 //   });
 // }
+
+export default { mount, unmount };

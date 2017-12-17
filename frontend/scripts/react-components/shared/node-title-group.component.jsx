@@ -1,12 +1,13 @@
-import { h } from 'preact';
+import React from 'react';
 import cx from 'classnames';
 
 import 'styles/components/tool/nodesTitles.scss';
 import NodeTitle from 'react-components/shared/node-title.component';
+import PropTypes from 'prop-types';
 
 export default function NodeTitleGroup({ nodes = [], onClose }) {
   return (
-    <div class={cx('c-nodes-titles')}>
+    <div className={cx('c-nodes-titles')} >
       {
         nodes.map(node => (
           <NodeTitle
@@ -15,6 +16,12 @@ export default function NodeTitleGroup({ nodes = [], onClose }) {
           />
         ))
       }
-    </div>
+    </div >
   );
 }
+
+NodeTitleGroup.propTypes = {
+  nodes: PropTypes.array,
+  onClose: PropTypes.func
+};
+

@@ -12,7 +12,7 @@ export default (selector, legend, { title, bucket }) => {
     cssClass: '-horizontal -profile',
     colors: PROFILE_CHOROPLETH_CLASSES,
     bucket,
-    abbreviateNumber: (x, y, index) => (index === 0  ? `<${abbreviateNumber(x, 0)}` : `>${abbreviateNumber(x, 0)}`),
+    abbreviateNumber: (x, y, index) => (index === 0 ? `<${abbreviateNumber(x, 0)}` : `>${abbreviateNumber(x, 0)}`),
     isBivariate: false
   });
 

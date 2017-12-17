@@ -1,23 +1,29 @@
+/* eslint-disable camelcase,import/no-extraneous-dependencies,func-names */
 import _ from 'lodash';
-import { select as d3_select /*, selectAll as d3_selectAll*/ } from 'd3-selection';
-import { event as d3_event } from 'd3-selection';
-import  'd3-transition';
+import { event as d3_event, select as d3_select } from 'd3-selection';
+import 'd3-transition';
 import { DETAILED_VIEW_MIN_LINK_HEIGHT, SANKEY_TRANSITION_TIME } from 'constants';
 import formatValue from 'utils/formatValue';
 import addSVGDropShadowDef from 'utils/addSVGDropShadowDef';
-import sankeyLayout from './sankey.d3layout.js';
+import sankeyLayout from 'components/tool/sankey.d3layout';
 import Tooltip from 'components/shared/info-tooltip.component';
 import 'styles/components/tool/sankey.scss';
 import 'styles/components/tool/node-menu.scss';
 
+const placeNodeText = node => `translate(0,${(-7 + (node.renderedHeight / 2)) - ((node.label.length - 1) * 7)})`;
 
 export default class {
-
   onCreated() {
     this._build();
   }
 
-  resizeViewport({ selectedNodesIds, shouldRepositionExpandButton, selectedRecolorBy, currentQuant, sankeySize }) {
+  resizeViewport({
+    selectedNodesIds,
+    shouldRepositionExpandButton,
+    selectedRecolorBy,
+    currentQuant,
+    sankeySize
+  }) {
     this.layout.setViewportSize(sankeySize);
 
     if (this.layout.relayout()) {
@@ -43,7 +49,7 @@ export default class {
     const relayout = this.layout.relayout();
 
     if (linksPayload.detailedView === true) {
-      this.svg.style('height', this.layout.getMaxHeight() + 'px');
+      this.svg.style('height', `${this.layout.getMaxHeight()}px`);
       this.scrollContainer.addEventListener('scroll', this._onScrollBound);
     }
 
@@ -67,18 +73,9 @@ export default class {
     }
 
     this.sankeyColumns.selectAll('.sankey-node')
-      .classed('-selected', node => {
-        const isSelected = selectedNodesIds.indexOf(node.id) > -1;
-        // if (isSelected) {
-        //   if (node.y < minimumY) {
-        //     minimumY = node.y;
-        //   }
-        // }
-        return isSelected;
-      });
+      .classed('-selected', node => selectedNodesIds.indexOf(node.id) > -1);
 
     if (shouldRepositionExpandButton) this._repositionExpandButton(selectedNodesIds);
-
   }
 
   toggleExpandButton(areNodesExpanded) {
@@ -87,9 +84,7 @@ export default class {
 
   highlightNodes(nodesIds) {
     this.sankeyColumns.selectAll('.sankey-node')
-      .classed('-highlighted', node => {
-        return nodesIds.indexOf(node.id) > -1;
-      });
+      .classed('-highlighted', node => nodesIds.indexOf(node.id) > -1);
   }
 
   _build() {
@@ -104,7 +99,9 @@ export default class {
 
     this.linkTooltip = new Tooltip('.js-sankey-tooltip');
 
-    this.sankeyColumns.on('mouseleave', () => { this._onColumnOut(); } );
+    this.sankeyColumns.on('mouseleave', () => {
+      this._onColumnOut();
+    });
 
     addSVGDropShadowDef(this.svg);
 
@@ -134,7 +131,7 @@ export default class {
         const selectedColumnFirstNode = this.sankeyColumns.selectAll('.sankey-node.-selected')
           .filter(node => node.x === lastSelectedNode.x)
           .data()
-          .reduce((acc, val) => acc.y < val.y ? acc : val);
+          .reduce((acc, val) => (acc.y < val.y ? acc : val));
 
         this.currentExpandButtonY = Math.max(0, selectedColumnFirstNode.y - 12);
         this.expandButtonIsVisible = true;
@@ -148,7 +145,7 @@ export default class {
   }
 
   _repositionExpandButtonScroll() {
-    const y = this.currentExpandButtonY  - this.scrollContainer.scrollTop;
+    const y = this.currentExpandButtonY - this.scrollContainer.scrollTop;
     this.expandButton.style.top = `${y}px`;
     this.expandButton.classList.toggle('-visible', y > -10 && this.expandButtonIsVisible === true);
   }
@@ -167,8 +164,9 @@ export default class {
       if (selectedRecolorBy.divisor) {
         recolorBy = Math.floor(link.recolorBy / selectedRecolorBy.divisor);
       }
-
-      classPath = `${classPath} -recolorby-${_.toLower(selectedRecolorBy.legendType)}-${_.toLower(selectedRecolorBy.legendColorTheme)}-${recolorBy}`;
+      const legendTypeClass = _.toLower(selectedRecolorBy.legendType);
+      const legendColorThemeClass = _.toLower(selectedRecolorBy.legendColorTheme);
+      classPath = `${classPath} -recolorby-${legendTypeClass}-${legendColorThemeClass}-${recolorBy}`;
     } else {
       classPath = `${classPath} -recolorgroup-${link.recolorGroup}`;
     }
@@ -194,9 +192,13 @@ export default class {
       .classed('-is-aggregated', node => node.isAggregated)
       .classed('-is-domestic', node => node.isDomesticConsumption)
       .classed('-is-alone-in-column', node => node.isAloneInColumn)
-      .on('mouseenter', function(node) { that._onNodeOver(d3_select(this), node.id, node.isAggregated); } )
-      .on('mouseleave', () => { this._onNodeOut(); } )
-      .on('click', node => { this.callbacks.onNodeClicked(node.id, node.isAggregated); } );
+      .on('mouseenter', node => that._onNodeOver(d3_select(this), node.id, node.isAggregated))
+      .on('mouseleave', () => {
+        this._onNodeOut();
+      })
+      .on('click', (node) => {
+        this.callbacks.onNodeClicked(node.id, node.isAggregated);
+      });
 
     nodesEnter.append('rect')
       .attr('class', 'sankey-node-rect')
@@ -218,7 +220,6 @@ export default class {
       .attr('height', d => d.renderedHeight);
 
 
-
     this.nodes.exit()
       .remove();
 
@@ -226,10 +227,10 @@ export default class {
     const linksData = this.layout.links();
     const links = this.linksContainer
       .selectAll('path')
-      .data(linksData , link => link.id);
+      .data(linksData, link => link.id);
 
     // update
-    links.attr('class', (link) => {return this._getLinkColor(link, selectedRecolorBy); } ); // apply color from CSS class immediately
+    links.attr('class', link => this._getLinkColor(link, selectedRecolorBy)); // apply color from CSS class immediately
     links.transition()
       .duration(SANKEY_TRANSITION_TIME)
       .attr('stroke-width', d => Math.max(DETAILED_VIEW_MIN_LINK_HEIGHT, d.renderedHeight))
@@ -241,13 +242,17 @@ export default class {
     // enter
     links.enter()
       .append('path')
-      .attr('class', (link) => {return this._getLinkColor(link, selectedRecolorBy); } )
+      .attr('class', link => this._getLinkColor(link, selectedRecolorBy))
       .attr('d', this.layout.link())
-      .on('mouseover', function(link) { that._onLinkOver(link, this); })
-      .on('mouseout', function() {
-        that.linkTooltip.hide();
-        this.classList.remove('-hover');
-      })
+      .on('mouseover',
+        function (link) {
+          that._onLinkOver(link, this);
+        })
+      .on('mouseout',
+        function () {
+          that.linkTooltip.hide();
+          this.classList.remove('-hover');
+        })
       .transition()
       .duration(SANKEY_TRANSITION_TIME)
       .attr('stroke-width', d => Math.max(DETAILED_VIEW_MIN_LINK_HEIGHT, d.renderedHeight));
@@ -258,7 +263,6 @@ export default class {
       .duration(SANKEY_TRANSITION_TIME)
       .attr('stroke-width', 0)
       .remove();
-
   }
 
   _renderTitles(selection) {
@@ -270,7 +274,7 @@ export default class {
       .enter()
       .append('tspan')
       .attr('class', 'sankey-node-label')
-      .attr('x', this.layout.columnWidth()/2)
+      .attr('x', this.layout.columnWidth() / 2)
       .attr('dy', 12)
       .text(d => d);
   }
@@ -316,7 +320,6 @@ export default class {
     }
 
     return `${link.recolorBy}/${this.currentSelectedRecolorBy.maxValue}`;
-
   }
 
   _onColumnOut() {
@@ -325,4 +328,3 @@ export default class {
   }
 }
 
-const placeNodeText = node => `translate(0,${ - 7 + node.renderedHeight/2 - ((node.label.length-1) * 7) })`;

@@ -7,8 +7,8 @@ export const GA_ACTION_WHITELIST = [
     category: 'Sankey',
     action: 'Switch context',
     getPayload: (action, state) => {
-      const context = state.tool.contexts.find(context => context.id === action.payload);
-      return context.countryName + ' ' + context.commodityName;
+      const actionContext = state.tool.contexts.find(context => context.id === action.payload);
+      return `${actionContext.countryName} ${actionContext.commodityName}`;
     }
   },
   {
@@ -45,15 +45,13 @@ export const GA_ACTION_WHITELIST = [
     type: actions.SELECT_VIEW,
     action: 'Select view',
     category: 'Sankey',
-    getPayload: action => (action.detailedView) ? 'detailed' : 'overview'
+    getPayload: action => ((action.detailedView) ? 'detailed' : 'overview')
   },
   {
     type: actions.SELECT_COLUMN,
     category: 'Sankey',
     action: 'Select column',
-    getPayload: (action, state) => {
-      return state.tool.columns.find(col => col.id === action.columnId).name;
-    }
+    getPayload: (action, state) => state.tool.columns.find(col => col.id === action.columnId).name
   },
   {
     type: actions.TOGGLE_MAP,

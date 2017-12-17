@@ -11,7 +11,7 @@ export function trackDownload(params) {
     });
     dispatch({
       type: GA_TRACK_DOWNLOAD_FILE_TYPE,
-      payload: (params.file || '.csv' ) + ' ' + (params.separator || '')
+      payload: `${params.file || '.csv'} ${params.separator || ''}`
     });
     dispatch({
       type: GA_TRACK_DOWNLOAD_OUTPUT_TYPE,
@@ -23,7 +23,7 @@ export function trackDownload(params) {
 export function trackDataDownloadFormLoaded() {
   return (dispatch) => {
     dispatch({
-      type: GA_TRACK_DOWNLOAD_FORM_LOADED,
+      type: GA_TRACK_DOWNLOAD_FORM_LOADED
     });
   };
 }

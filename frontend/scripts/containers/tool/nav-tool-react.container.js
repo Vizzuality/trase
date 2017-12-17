@@ -1,13 +1,9 @@
-import { connect } from 'preact-redux';
-import Nav from 'react-components/tool/nav-tool.component.js';
+import { connect } from 'react-redux';
+import Nav from 'react-components/tool/nav-tool.component';
 
-const mapStateToProps = (state) => {
-  return {
-    tooltips: state.app.tooltips,
-    selectedContext: state.tool.selectedContext
-  };
-};
+const mapStateToProps = state => ({
+  tooltips: state.app.tooltips,
+  selectedContext: state.tool.selectedContext
+});
 
-export default connect(
-  mapStateToProps
-)(Nav);
+export default connect(mapStateToProps)(Nav);

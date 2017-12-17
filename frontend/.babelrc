@@ -4,11 +4,13 @@
         "targets": {
           "browsers": ["> 1%", "last 2 versions", "Firefox ESR", "Safari >= 8"]
         }
-    }]
+    }],
+    "es2015",
+    "react"
   ],
   "plugins": [
     "syntax-dynamic-import",
     "transform-object-rest-spread",
-    ["transform-react-jsx", { "pragma":"h" }]
+    "transform-exponentiation-operator"
   ]
 }
