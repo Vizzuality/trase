@@ -29,7 +29,7 @@ const API_ENDPOINTS = {
   [GET_DISCLAIMER]: { api: 'local', endpoint: 'disclaimer.json' },
   [GET_TOOLTIPS]: { api: 'local', endpoint: 'tooltips.json' },
   [GET_NODE_ATTRIBUTES]: { api: 2, endpoint: '/get_node_attributes' },
-  [GET_MAP_BASE_DATA]: { api: 2, endpoint: '/get_map_base_data' },
+  [GET_MAP_BASE_DATA]: { api: 3, endpoint: '/contexts/$context_id$/map_groups' },
   [GET_LINKED_GEO_IDS]: { api: 2, endpoint: '/get_linked_geoids' },
   [GET_ACTOR_FACTSHEET]: { api: 2, endpoint: '/get_actor_node_attributes', mock: 'mocks/v1_get_actor_node_attributes.json' },
   [GET_INDICATORS]: { api: 2, endpoint: '/indicators' },
