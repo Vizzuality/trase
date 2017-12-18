@@ -24,6 +24,7 @@ module Api
           stats = Api::V3::Profiles::FlowStatsForNodeType.new(
             @context, @year, @node.node_type.name
           )
+
           production_totals = stats.nodes_with_flows_totals(@volume_attribute)
           attribute_totals = stats.nodes_with_flows_totals_for_attributes(
             @attributes.map { |attribute_hash| attribute_hash[:attribute] }
