@@ -277,7 +277,7 @@ const _showErrorMessage = (message = null) => {
   el.classList.add('-error');
   el.querySelector('.js-wrap').classList.add('is-hidden');
   el.querySelector('.js-error-message').classList.remove('is-hidden');
-  if (message !== null) {
+  if (message !== null && message !== '') {
     el.querySelector('.js-message').innerHTML = message;
   }
 
