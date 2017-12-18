@@ -328,7 +328,10 @@ const _switchTopSource = (e, data) => {
 };
 
 export const mount = (root, store)  => {
+  const { query = {} } = store.getState().location;
+
   root.innerHTML = ProfileActorMarkup({
+    printMode: query.print,
     nav: NavMarkup({ page: 'profile-actor' }),
     footer: FooterMarkup(),
     feedback: FeedbackMarkup()
