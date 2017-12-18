@@ -15,6 +15,11 @@ export default class ContextSelector extends Component {
     this.state = {
       selectedDimensions: []
     };
+    this.resetDimensionSelection = this.resetDimensionSelection.bind(this);
+    this.selectDimension = this.selectDimension.bind(this);
+    this.isSubnational = this.isSubnational.bind(this);
+    this.isDisabled = this.isDisabled.bind(this);
+    this.renderDimensionList = this.renderDimensionList.bind(this);
   }
 
   static sortDimensions(a, b) {
