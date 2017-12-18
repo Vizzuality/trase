@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe 'Get contexts', type: :request do
-  include_context 'brazil soy indicators'
-  include_context 'brazil resize by'
-  include_context 'brazil recolor by'
+  include_context 'api v3 brazil soy indicators'
+  include_context 'api v3 brazil resize by'
+  include_context 'api v3 brazil recolor by'
 
   describe 'GET /api/v3/contexts' do
     it 'has the correct response structure' do
