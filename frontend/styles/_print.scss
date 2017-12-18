@@ -1,0 +1,69 @@
+
+.-print { // sass-lint:disable
+  max-width: 22cm;
+  overflow-x: hidden;
+
+  .is-page-break-always {
+    page-break-after: always;
+  }
+
+  .c-nav {
+    display: none;
+  }
+
+  .l-profile-actor,
+  .l-profile-place {
+    padding: 0 30px 30px;
+
+    .c-anchor-buttons .row {
+      display: none;
+    }
+  }
+
+  .l-profile-actor .c-top-municipalities {
+    .js-top-municipalities-map svg {
+      margin-left: 20px;
+    }
+  }
+
+  .c-scatterplot {
+
+    .axis-legend-x {
+      display: block;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
+  }
+
+  .c-area-table {
+    .node-link {
+      display: none;
+    }
+  }
+
+  .tab {
+    display: none;
+  }
+
+  .tab-title {
+    display: block;
+    margin-top: 20px;
+  }
+
+  .-tab-hidden {
+    display: block;
+  }
+
+  .c-overall-info {
+    .c-dropdown {
+      .dropdown-title::after {
+        display: none;
+      }
+    }
+  }
+
+  .user-report-feedback {
+    display: none;
+  }
+}
