@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <%= htmlWebpackPlugin.options.head %>
-</head>
-<body>
 <div class="loading-wrapper">
-  <%= htmlWebpackPlugin.options.icons %>
   <div class="l-homepage">
 
-    <%= htmlWebpackPlugin.options.nav %>
+    <%= nav %>
 
     <div class="c-homepage">
 
@@ -24,7 +17,7 @@
                 and opportunities for more sustainable production.
               </p>
               <div>
-                <a href="/flows.html" class="c-button -big -white -bold btn-explore js-action">explore the tool</a>
+                <a href="/flows" class="c-button -big -white -bold btn-explore js-action">explore the tool</a>
               </div>
             </div>
           </article>
@@ -157,12 +150,7 @@
       </section>
     </div>
 
-    <%= htmlWebpackPlugin.options.footer %>
-
+    <%= footer %>
   </div>
+  <%= feedback %>
 </div>
-
-<%= htmlWebpackPlugin.options.scripts %>
-<%= htmlWebpackPlugin.options.feedback %>
-</body>
-</html>

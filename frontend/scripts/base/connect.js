@@ -8,13 +8,14 @@ import Container from './Container';
 // mapViewEventsToActions: maps component callbacks (ie user events) to redux actions
 // onCreated: called at component instanciation. Use this as a chance to dispatch an action
 export default function(viewClass, mapMethodsToState, mapViewEventsToActions, onCreated) {
-  return store => {
+  return (store, ...ownProps) => {
     return new Container(
       store,
       viewClass,
       mapMethodsToState,
       mapViewEventsToActions,
-      onCreated
+      onCreated,
+      ownProps
     );
   };
 }

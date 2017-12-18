@@ -1,7 +1,8 @@
 import actions from 'actions';
 import {
   getURLFromParams,
-  GET_DISCLAIMER
+  GET_DISCLAIMER,
+  GET_SITE_DIVE
 } from 'utils/getURLFromParams';
 
 export function resize() {
@@ -67,5 +68,35 @@ export function toggleDropdown(dropdownId) {
   return {
     type: actions.TOGGLE_DROPDOWN,
     dropdownId
+  };
+}
+
+export function displayStoryModal(storyId) {
+  return dispatch => {
+    fetch(`${getURLFromParams(GET_SITE_DIVE)}/${storyId}`)
+      .then(resp => {
+        if (resp.ok) return resp.text();
+        throw new Error(resp.statusText);
+      })
+      .then(resp => JSON.parse(resp))
+      .then(({ data }) => {
+        return dispatch({
+          type: actions.DISPLAY_STORY_MODAL,
+          payload: {
+            visibility: false,
+            modalParams: data
+          }
+        });
+      })
+      .catch(err => {
+        console.error(err);
+        return dispatch({
+          type: actions.DISPLAY_STORY_MODAL,
+          payload: {
+            visibility: false,
+            modalParams: null
+          }
+        });
+      });
   };
 }

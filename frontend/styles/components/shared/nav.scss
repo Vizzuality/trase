@@ -262,6 +262,7 @@
     .columns {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       padding-right: 0;
       padding-left: 0;
     }
@@ -285,8 +286,12 @@
       }
     }
 
-    .app-nav {
+    .app-nav-container {
+      display: flex;
+    }
 
+    .app-nav {
+      min-width: calc(100% - 58px);
       .nav-item {
         padding: 0 !important;
       }

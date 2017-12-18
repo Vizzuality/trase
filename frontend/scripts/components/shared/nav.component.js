@@ -1,4 +1,4 @@
-import { getURLParams } from 'utils/stateURL';
+import qs from 'query-string';
 import 'styles/components/shared/nav.scss';
 
 const defaults = { el: '.c-nav', haveSolidBackground: false, pageOffset: 0 };
@@ -10,7 +10,7 @@ export default class {
     this.el = document.querySelector(this.options.el);
     this.downloadPdfBtn = this.el.querySelector('.js-download-pdf');
 
-    const urlParams = getURLParams(window.location.search);
+    const urlParams = qs.parse(window.location.search);
 
     if (urlParams.print === 'true') {
       this.print = true;
@@ -20,11 +20,24 @@ export default class {
     this._setEventListeners();
   }
 
+  onCreated() {
+    this._setNavigationLinks();
+  }
+
   _setEventListeners() {
     document.addEventListener('scroll', () => this._checkBackground());
     if (this.downloadPdfBtn) {
       this.downloadPdfBtn.addEventListener('click', this._downloadPDF);
     }
+  }
+
+  _setNavigationLinks() {
+    const links = [].slice.call(this.el.querySelectorAll('.js-nav-link'));
+    links.forEach(link => {
+      const page = link.getAttribute('data-route');
+      const query = qs.parse(link.getAttribute('data-route-query'));
+      link.addEventListener('click', () => this.callbacks.onLinkClick({ page, query }));
+    });
   }
 
   _checkBackground() {

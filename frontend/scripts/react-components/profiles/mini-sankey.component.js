@@ -36,7 +36,7 @@ export default ({ data, targetLink }) => {
         isAggregated: node.isAggregated,
         lines,
         renderedHeight,
-        link: targetLink ? `/profile-${targetLink}.html?nodeId=${node.id}` : null,
+        link: targetLink ? `/profile-${targetLink}?nodeId=${node.id}` : null,
         pct:`${formatValue(100 * node.height, 'percentage')}%`,
         sy: currentStartNodeY,
         ty: currentEndNodeY

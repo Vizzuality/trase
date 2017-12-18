@@ -1,44 +1,46 @@
 <div class="c-nav">
   <div class="row">
     <div class="small-12 columns">
-      <div class="nav-item js-toggle-menu -no-offset">
-        <div class="burger">
-          <span class="ingredient"></span>
-          <span class="ingredient"></span>
-          <span class="ingredient"></span>
-        </div>
-      </div>
-      <div class="app-nav">
-        <nav>
-          <div class="left-side">
-            <div class="nav-item -no-offset">
-              <a href="/" class="nav-link">HOME</a>
-            </div>
-            <div class="nav-item -selected">
-              <a href="/flows.html" class="nav-link">TOOL</a>
-            </div>
-            <div class="nav-item -has-menu">
-              <a href="/profiles.html" class="nav-link">PROFILES</a>
-            </div>
-            <div class="nav-item -has-menu">
-              <a href="/about.html" class="nav-link">ABOUT</a>
-              <ul class="nav-submenu">
-                <li class="nav-submenu-item">
-                  <a href="/terms-of-use.html" class="nav-link">TERMS OF USE</a>
-                </li>
-                <li class="nav-submenu-item">
-                  <a href="/data-methods.html" class="nav-link">DATA AND METHODS</a>
-                </li>
-                <li class="nav-submenu-item">
-                  <a href="/FAQ.html" class="nav-link">FAQ</a>
-                </li>
-              </ul>
-            </div>
-            <div class="nav-item">
-              <a href="/data.html" class="nav-link">DATA</a>
-            </div>
+      <div class="app-nav-container">
+        <div class="nav-item js-toggle-menu -no-offset">
+          <div class="burger">
+            <span class="ingredient"></span>
+            <span class="ingredient"></span>
+            <span class="ingredient"></span>
           </div>
-        </nav>
+        </div>
+        <div class="app-nav">
+          <nav>
+            <div class="left-side">
+              <div class="nav-item -no-offset">
+                <a data-route="home" class="nav-link js-nav-link">HOME</a>
+              </div>
+              <div class="nav-item -selected">
+                <a data-route="tool" class="nav-link js-nav-link">TOOL</a>
+              </div>
+              <div class="nav-item -has-menu">
+                <a data-route="profiles" class="nav-link js-nav-link">PROFILES</a>
+              </div>
+              <div class="nav-item -has-menu">
+                <a data-route="about" class="nav-link js-nav-link">ABOUT</a>
+                <ul class="nav-submenu">
+                  <li class="nav-submenu-item">
+                    <a data-route="terms-of-use" class="nav-link js-nav-link">TERMS OF USE</a>
+                  </li>
+                  <li class="nav-submenu-item">
+                    <a data-route="data-methods" class="nav-link js-nav-link">DATA AND METHODS</a>
+                  </li>
+                  <li class="nav-submenu-item">
+                    <a data-route="faq" class="nav-link js-nav-link">FAQ</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="nav-item">
+                <a data-route="data" class="nav-link js-nav-link">DATA</a>
+              </div>
+            </div>
+          </nav>
+        </div>
       </div>
       <div class="tool-nav" id="js-tool-nav-react"></div>
       <div id="js-search-react">

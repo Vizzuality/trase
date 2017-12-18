@@ -2,6 +2,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'preact-redux';
 import groupBy from 'lodash/groupBy';
 import flatten from 'lodash/flatten';
+import camelcase from 'lodash/camelCase';
 import Search from 'react-components/shared/search.component.js';
 import { selectExpandedNode, selectNode } from 'actions/tool.actions';
 import isNodeColumnVisible from 'utils/isNodeColumnVisible';
@@ -52,7 +53,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     onAddNode: nodeId => selectExpandedNode(nodeId),
-    onRemoveNode: nodeId => selectNode(nodeId)
+    onRemoveNode: nodeId => selectNode(nodeId),
+    navigateToActor: (profileType, nodeId) => ({
+      type: camelcase(`profile-${profileType}`),
+      payload: { query: { nodeId } }
+    })
   }, dispatch);
 };
 

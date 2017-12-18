@@ -6,7 +6,11 @@ const initialState = {
   isAppMenuVisible: false,
   tooltipCheck: 0,
   tooltips: [],
-  currentDropdown: null
+  currentDropdown: null,
+  modal: {
+    visibility: false,
+    modalParams: null
+  }
 };
 
 const isSankeyExpanded = (state) => state.isMapLayerVisible !== true && state.isMapVisible !== true;
@@ -46,6 +50,10 @@ export default function (state = initialState, action) {
     case actions.TOGGLE_DROPDOWN: {
       const currentDropdown = (action.dropdownId === state.currentDropdown) ? null : action.dropdownId;
       return Object.assign({}, state, { currentDropdown });
+    }
+
+    case action.DISPLAY_STORY_MODAL: {
+      return { ...state, modal: action.payload };
     }
 
     default:

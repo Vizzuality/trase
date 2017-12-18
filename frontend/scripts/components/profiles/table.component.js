@@ -1,4 +1,4 @@
-import TableTemplate from 'ejs!templates/profiles/table/table.ejs';
+import TableTemplate from 'templates/profiles/table/table.ejs';
 import formatValue from 'utils/formatValue';
 import { UNITLESS_UNITS } from 'constants';
 
@@ -13,9 +13,9 @@ export default class {
     this.year = settings.year;
 
     if (this.target === 'actor') {
-      this.link = 'profile-actor.html?nodeId=';
+      this.link = 'profile-actor?nodeId=';
     } else if (this.target === 'place') {
-      this.link = 'profile-place.html?nodeId=';
+      this.link = 'profile-place?nodeId=';
     } else {
       this.link = null;
     }
@@ -56,9 +56,9 @@ export default class {
 
   _getLink(target, id, year) {
     if (target === 'actor') {
-      return `profile-actor.html?nodeId=${id}&year=${year}`;
+      return `profile-actor?nodeId=${id}&year=${year}`;
     } else if (target === 'place') {
-      return `profile-place.html?nodeId=${id}&year=${year}`;
+      return `profile-place?nodeId=${id}&year=${year}`;
     }
 
     return null;

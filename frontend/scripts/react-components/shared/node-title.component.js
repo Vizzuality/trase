@@ -7,7 +7,7 @@ export default function NodeTitle({ columns = [], recolorGroup, onClose }) {
     <div className={cx('c-node-title', `-recolorgroup-${recolorGroup}`)}>
       {
         columns.map(column => (
-          <div className='column'>
+          <div className='node-title-column'>
             <div className='column-title'>{column.title}</div>
             <div className='column-content'>
               {column.content}
@@ -16,7 +16,7 @@ export default function NodeTitle({ columns = [], recolorGroup, onClose }) {
           </div>
         ))
       }
-      <div className='column'>
+      <div className='node-title-column'>
         <div className='column-content' onClick={onClose}>
           <svg class='icon icon-close'>
             <use xlinkHref='#icon-close' />

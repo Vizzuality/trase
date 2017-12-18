@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import TooltipTemplate from 'ejs!templates/shared/info-tooltip.ejs';
+import TooltipTemplate from 'templates/shared/info-tooltip.ejs';
 import 'styles/components/shared/info-tooltip.scss';
 
 export default class {

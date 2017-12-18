@@ -1,11 +1,11 @@
 export default class {
 
-  constructor(store, viewClass, mapMethodsToState, mapViewCallbacksToActions, onCreated) {
+  constructor(store, viewClass, mapMethodsToState, mapViewCallbacksToActions, onCreated, ownProps) {
     // instanciate the component
-    this.view = new viewClass();
+    this.view = new viewClass(ownProps);
 
     // listen to all app state updates
-    store.subscribe(() => this._onStateChange(store.getState()));
+    if (mapMethodsToState) store.subscribe(() => this._onStateChange(store.getState()));
 
     // an internal representation of the state props that this component is interested in
     // used for diffing of these props and app state

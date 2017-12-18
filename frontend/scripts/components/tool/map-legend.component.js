@@ -1,6 +1,6 @@
-import LegendChoroTemplate from 'ejs!templates/tool/map/legend-choro.ejs';
-import LegendContextTemplate from 'ejs!templates/tool/map/legend-context.ejs';
-import 'style/components/tool/map/map-legend.scss';
+import LegendChoroTemplate from 'templates/tool/map/legend-choro.ejs';
+import LegendContextTemplate from 'templates/tool/map/legend-context.ejs';
+import 'styles/components/tool/map/map-legend.scss';
 import abbreviateNumber from 'utils/abbreviateNumber';
 
 export default class {

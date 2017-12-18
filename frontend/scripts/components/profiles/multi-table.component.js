@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import MultiTableTemplate from 'ejs!templates/profiles/table/multi-table.ejs';
+import MultiTableTemplate from 'templates/profiles/table/multi-table.ejs';
 import Table from 'components/profiles/table.component';
 import 'styles/components/shared/tabs.scss';
 

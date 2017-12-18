@@ -4,7 +4,7 @@ import 'styles/_texts.scss';
 import 'styles/components/shared/button.scss';
 import 'styles/components/shared/modal.scss';
 
-import ModalTemplate from 'ejs!templates/shared/modal.ejs';
+import ModalTemplate from 'templates/shared/modal.ejs';
 
 class ModalComponent {
 

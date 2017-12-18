@@ -1,5 +1,5 @@
 import formatValue from 'utils/formatValue';
-import NodeTitleTemplate from 'ejs!templates/tool/nodeTitle.ejs';
+import NodeTitleTemplate from 'templates/tool/nodeTitle.ejs';
 import 'styles/components/tool/nodesTitles.scss';
 import 'styles/components/tool/nodes-clear.scss';
 import Tooltip from 'components/shared/info-tooltip.component';

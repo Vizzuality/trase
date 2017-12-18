@@ -1,20 +1,20 @@
-import Nav from 'components/shared/nav.component.js';
+import FAQMarkup from 'html/FAQ.ejs';
+import NavMarkup from 'html/includes/_nav.ejs';
+import FooterMarkup from 'html/includes/_footer.ejs';
+import FeedbackMarkup from 'html/includes/_feedback.ejs';
+
+
+import NavContainer from 'containers/shared/nav.container.js';
 import 'styles/FAQ.scss';
 
 import smoothScroll from 'utils/smoothScroll';
 import { calculateOffsets, scrollDocument } from 'utils/fixedScroll';
 import _ from 'lodash';
+import EventManager from 'utils/eventManager';
 
-const options = {
-  elems: {
-    anchorNav: document.querySelector('.js-anchor-nav'),
-    anchorItems: document.querySelectorAll('.anchor-item > a'),
-    cutTop: document.querySelector('.cut.-top'),
-    cutBottom: document.querySelector('.cut.-bottom')
-  }
-};
+const evManager = new EventManager();
 
-const _toggleAnchors = (e) => {
+const _toggleAnchors = (e, options) => {
   const target = e && e.target.hash;
   const anchorItems = options.elems.anchorItems;
 
@@ -23,42 +23,62 @@ const _toggleAnchors = (e) => {
   });
 };
 
-const _onScrollDocument = () => {
+const _onScrollDocument = (options) => {
   const el = options.elems.anchorNav;
-  const elemOffsets = options.elemOffsets;
   const cutOffsets = {
     cutTopOffsets: options.cutTopOffsets,
     cutBottomOffsets: options.cutBottomOffsets
   };
 
-  _calculateOffsets();
-  scrollDocument(el, elemOffsets, cutOffsets);
+  _calculateOffsets(options);
+  scrollDocument(el, cutOffsets);
 };
 
-const _calculateOffsets = () => {
+const _calculateOffsets = (options) => {
   Object.assign(options, {
     cutTopOffsets: calculateOffsets(options.elems.cutTop),
     cutBottomOffsets: calculateOffsets(options.elems.cutBottom),
   });
 };
 
-const _setEventListeners = () => {
+const _setEventListeners = (options) => {
   const anchorItems = options.elems.anchorItems;
-  const _onScrollThrottle = _.throttle(_onScrollDocument, 50, { leading: true });
-  const _calculateOffsetsThrottle = _.throttle(_calculateOffsets, 50, { leading: true });
+  const _onScrollThrottle = _.throttle(() => _onScrollDocument(options), 50, { leading: true });
+  const _calculateOffsetsThrottle = _.throttle(() => _calculateOffsets(options), 50, { leading: true });
+  const _toggleAnchorHandler = (e) => _toggleAnchors(e, options);
 
-  document.addEventListener('scroll', _onScrollThrottle);
-  window.onresize = _calculateOffsetsThrottle;
+  evManager.addEventListener(document, 'scroll', _onScrollThrottle);
+  evManager.addEventListener(window, 'resize', _calculateOffsetsThrottle);
 
   anchorItems.forEach((anchorItem) => {
-    anchorItem.addEventListener('click', (e) => _toggleAnchors(e));
+    evManager.addEventListener(anchorItem, 'click', _toggleAnchorHandler);
   });
 
   smoothScroll(anchorItems);
 };
 
-_calculateOffsets();
-_setEventListeners();
+export const mount = (root, store) => {
+  root.innerHTML = FAQMarkup({
+    nav: NavMarkup({ page: 'FAQ' }),
+    footer: FooterMarkup(),
+    feedback: FeedbackMarkup()
+  });
 
-new Nav();
+  const options = {
+    elems: {
+      anchorNav: document.querySelector('.js-anchor-nav'),
+      anchorItems: document.querySelectorAll('.anchor-item > a'),
+      cutTop: document.querySelector('.cut.-top'),
+      cutBottom: document.querySelector('.cut.-bottom')
+    }
+  };
 
+  _calculateOffsets(options);
+  _setEventListeners(options);
+
+  new NavContainer(store);
+};
+
+export const unmount = () => {
+  evManager.clearEventListeners();
+};

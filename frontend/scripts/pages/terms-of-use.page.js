@@ -1,4 +1,9 @@
-import Nav from 'components/shared/nav.component.js';
+import TermsOfUseMarkup from 'html/terms-of-use.ejs';
+import NavMarkup from 'html/includes/_nav.ejs';
+import FooterMarkup from 'html/includes/_footer.ejs';
+import FeedbackMarkup from 'html/includes/_feedback.ejs';
+
+import NavContainer from 'containers/shared/nav.container.js';
 import 'styles/_base.scss';
 import 'styles/_texts.scss';
 import 'styles/_foundation.css';
@@ -8,4 +13,11 @@ import 'styles/components/shared/button.scss';
 import 'styles/components/shared/nav.scss';
 import 'styles/components/shared/_footer.scss';
 
-new Nav();
+export const mount = (root, store) => {
+  root.innerHTML = TermsOfUseMarkup({
+    nav: NavMarkup({ page: 'terms-of-use' }),
+    footer: FooterMarkup(),
+    feedback: FeedbackMarkup()
+  });
+  new NavContainer(store);
+};

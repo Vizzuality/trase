@@ -37,7 +37,9 @@ export default class Search extends Component {
     this.onKeyup = this.onKeyup.bind(this);
     this.getDownshiftRef = this.getDownshiftRef.bind(this);
     this.getInputRef = this.getInputRef.bind(this);
+    this.navigateToActor = this.navigateToActor.bind(this);
     this.isNodeSelected = this.isNodeSelected.bind(this);
+
     document.addEventListener('keydown', this.onKeydown);
     document.addEventListener('keyup', this.onKeyup);
   }
@@ -117,7 +119,7 @@ export default class Search extends Component {
   navigateToActor(e, item, type) {
     if (e) e.stopPropagation();
     const node = item[type.toLowerCase()] || item;
-    window.location = `profile-${node.profileType}.html?nodeId=${node.id}`;
+    this.props.navigateToActor(node.profileType, node.id);
   }
 
   render({ nodes = [], selectedNodesIds = [] }) {

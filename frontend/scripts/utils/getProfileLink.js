@@ -2,5 +2,5 @@
 import { DEFAULT_PROFILE_PAGE_YEAR } from '../constants';
 
 export default (node, year = DEFAULT_PROFILE_PAGE_YEAR) => {
-  return `./profile-${node.profileType}.html?nodeId=${node.id}&year=${year}`;
+  return `./profile-${node.profileType}?nodeId=${node.id}&year=${year}`;
 };

@@ -1,16 +1,11 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <%= htmlWebpackPlugin.options.head %>
-</head>
-<body>
+<div>
   <div class="js-node-tooltip c-info-tooltip"></div>
   <div class="js-sankey-tooltip c-info-tooltip"></div>
   <div class="loading-wrapper">
-    <%= htmlWebpackPlugin.options.icons %>
     <div class="l-tool">
-      <%= htmlWebpackPlugin.options.navtool %>
+
+      <%= search %>
+      <%= navtool %>
 
       <div class="-hidden-on-mobile">
         <div class="veil js-veil"></div>
@@ -147,13 +142,8 @@
             </div>
           </div>
         </div>
-
       </div>
-
     </div>
+    <%= feedback %>
   </div>
-  <%= htmlWebpackPlugin.options.scripts %>
-  <%= htmlWebpackPlugin.options.feedback %>
-
-</body>
-</html>
+</div>

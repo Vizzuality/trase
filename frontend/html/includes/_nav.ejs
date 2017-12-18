@@ -4,37 +4,37 @@
         <div class="left-side">
           <% if (page !== 'index') { %>
             <div class="nav-item">
-              <a href="/" class="nav-link">HOME</a>
+              <a data-route="home" class="nav-link js-nav-link">HOME</a>
             </div>
           <% } %>
           <div class="nav-item -has-menu">
-            <a href="/flows.html" class="nav-link">TOOL</a>
+            <a data-route="tool" class="nav-link js-nav-link">TOOL</a>
             <ul class="nav-submenu">
               <li class="nav-submenu-item">
-                <a href="/flows.html" class="nav-link">SUPPLY CHAIN ACTORS</a>
+                <a data-route="tool" class="nav-link js-nav-link">SUPPLY CHAIN ACTORS</a>
               </li>
               <li class="nav-submenu-item">
-                <a href="/flows.html?isMapVisible=true" class="nav-link">PRODUCTION REGIONS</a>
+                <a data-route="tool" data-route-query="isMapVisible=true" class="nav-link js-nav-link">PRODUCTION REGIONS</a>
               </li>
             </ul>
           </div>
           <div class="<%= page.indexOf('profile') !== -1 ? 'nav-item -selected' : 'nav-item' %>">
-            <a href="/profiles.html" class="nav-link">PROFILES</a>
+            <a data-route="profiles" class="nav-link js-nav-link">PROFILES</a>
           </div>
           <div class="<%= page === 'data' ? 'nav-item -selected' : 'nav-item' %>">
-            <a href="/data.html" class="nav-link">DATA</a>
+            <a data-route="data" class="nav-link js-nav-link">DATA</a>
           </div>
           <div class="<%= page === 'about' ? 'nav-item -selected' : 'nav-item' %> -has-menu">
-            <a href="/about.html" class="nav-link">ABOUT</a>
+            <a data-route="about" class="nav-link js-nav-link">ABOUT</a>
             <ul class="nav-submenu">
               <li class="nav-submenu-item">
-                <a href="/terms-of-use.html" class="nav-link">TERMS OF USE</a>
+                <a data-route="termsOfUse" class="nav-link js-nav-link">TERMS OF USE</a>
               </li>
               <li class="nav-submenu-item">
-                <a href="/data-methods.html" class="nav-link">DATA AND METHODS</a>
+                <a data-route="dataMethods" class="nav-link js-nav-link">DATA AND METHODS</a>
               </li>
               <li class="nav-submenu-item">
-                <a href="/FAQ.html" class="nav-link">FAQ</a>
+                <a data-route="faq" class="nav-link js-nav-link">FAQ</a>
               </li>
             </ul>
           </div>

@@ -1,7 +1,10 @@
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
 import { Provider } from 'preact-redux';
 import { h, render } from 'preact';
+
+import ToolMarkup from 'html/tool.ejs';
+import SearchMarkup from 'html/includes/_search.ejs';
+import NavtoolMarkup from 'html/includes/_navtool.ejs';
+import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import FlowContentContainer from 'containers/tool/tool-content.container';
 import SankeyContainer from 'containers/tool/sankey.container';
@@ -11,41 +14,30 @@ import MapContextContainer from 'containers/tool/map-context.container';
 import MapLegendContainer from 'containers/tool/map-legend.container';
 import MapBasemapsContainer from 'containers/tool/map-basemaps.container';
 import MapContainer from 'containers/tool/map.container';
-import NavContainer from 'containers/tool/nav-tool-react.container';
-import NavComponent from 'components/tool/nav-tool.component';
+import NavReactContainer from 'containers/tool/nav-tool-react.container';
+import NavContainer from 'containers/tool/nav/nav-tool-navigation.container';
 import TitlebarContainer from 'containers/tool/titlebar.container';
 import NodesTitlesContainer from 'containers/tool/nodesTitles.container';
 import SearchContainer from 'containers/shared/search-react.container';
 import ModalContainer from 'containers/tool/story-modal.container';
 import TooltipContainer from 'containers/shared/help-tooltip.container';
-import AppReducer from 'reducers/app.reducer';
-import ToolReducer from 'reducers/tool.reducer';
-import { resize, loadDisclaimer } from 'actions/app.actions';
+
+import { resize, loadDisclaimer, displayStoryModal } from 'actions/app.actions';
 import { loadInitialData } from 'actions/tool.actions';
-import { getURLParams, decodeStateFromURL } from 'utils/stateURL';
-import { APP_DEFAULT_STATE, TOOL_DEFAULT_STATE } from 'constants';
-import 'styles/components/shared/veil.scss';
-import 'styles/components/shared/spinner.scss';
-import 'styles/components/shared/dropdown.scss';
-import 'styles/components/tool/map/map-sidebar.scss';
-import 'styles/layouts/l-tool.scss';
-import analyticsMiddleware from 'analytics/tool.analytics.middleware';
-import { GET_SITE_DIVE, getURLFromParams } from 'utils/getURLFromParams';
 
-const objParams = getURLParams(window.location.search);
+import 'styles/tool.scss';
+import EventManager from 'utils/eventManager';
 
-const start = () => {
-  const newState = decodeStateFromURL(objParams.state);
-  Object.assign(TOOL_DEFAULT_STATE.tool, newState);
+const evManager = new EventManager();
 
-  const initialState = Object.assign({}, TOOL_DEFAULT_STATE, APP_DEFAULT_STATE);
+export const mount = (root, store) => {
+  const { query = {} } = store.getState().location;
 
-  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
-  var store = createStore(combineReducers({
-    app: AppReducer,
-    tool: ToolReducer
-  }), initialState, composeEnhancers(applyMiddleware(analyticsMiddleware, thunk)));
+  root.innerHTML = ToolMarkup({
+    search: SearchMarkup(),
+    navtool: NavtoolMarkup(),
+    feedback: FeedbackMarkup()
+  });
 
   new FlowContentContainer(store);
   new SankeyContainer(store);
@@ -59,10 +51,10 @@ const start = () => {
   new TooltipContainer(store);
   new ModalContainer(store);
 
-  new NavComponent();
+  new NavContainer(store);
   render(
     <Provider store={store}>
-      <NavContainer />
+      <NavReactContainer />
     </Provider>,
     document.getElementById('js-tool-nav-react')
   );
@@ -79,49 +71,29 @@ const start = () => {
     document.getElementById('js-search-react')
   );
 
-
-
   store.dispatch(loadDisclaimer());
   store.dispatch(loadInitialData());
+  if (query.story) {
+    store.dispatch(displayStoryModal(query.story));
+  }
+
   store.dispatch(resize());
 
-  window.addEventListener('resize', () => {
-    store.dispatch(resize());
-  });
+  evManager.addEventListener(window, 'resize', () => store.dispatch(resize()));
+  document.querySelector('body').classList.add('-overflow-hidden');
 };
 
-if (objParams.story) {
-  // TODO display loading state while loading service
+export const unmount = () => {
+  evManager.clearEventListeners();
+  document.querySelector('body').classList.remove('-overflow-hidden');
+};
 
-  const storyId = objParams.story;
-
-  fetch(`${getURLFromParams(GET_SITE_DIVE)}/${storyId}`)
-    .then(resp => resp.text())
-    .then(resp => JSON.parse(resp))
-    .then(modalParams => {
-      Object.assign(APP_DEFAULT_STATE.app, {
-        modal: {
-          visibility: true,
-          modalParams: modalParams.data
-        }
-      });
-
-      start();
-    })
-    .catch(() => {
-      start();
-    });
-
-} else {
-  start();
-}
-
-if (NODE_ENV_DEV === true) {
-  window.addEventListener('keydown', (event) => {
-    if (event.key === 'r' && event.ctrlKey) {
-      // reload without the hash
-      window.location.href = './flows.html';
-      // window.location.href = './flows.html?selectedNodesIds=[1915]';
-    }
-  });
-}
+// if (NODE_ENV_DEV === true) {
+//   window.addEventListener('keydown', (event) => {
+//     if (event.key === 'r' && event.ctrlKey) {
+//       // reload without the hash
+//       window.location.href = './flows';
+//       // window.location.href = './flows?selectedNodesIds=[1915]';
+//     }
+//   });
+// }

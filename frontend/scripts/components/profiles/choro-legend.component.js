@@ -1,5 +1,5 @@
-import LegendChoroTemplate from 'ejs!templates/tool/map/legend-choro.ejs';
-import 'style/components/tool/map/map-legend.scss';
+import LegendChoroTemplate from 'templates/tool/map/legend-choro.ejs';
+import 'styles/components/tool/map/map-legend.scss';
 import { PROFILE_CHOROPLETH_CLASSES } from 'constants';
 import abbreviateNumber from 'utils/abbreviateNumber';
 

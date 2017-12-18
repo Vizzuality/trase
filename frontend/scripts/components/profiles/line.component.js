@@ -19,7 +19,7 @@ import {
 import { format as d3_format } from 'd3-format';
 import { timeFormat as d3_timeFormat } from 'd3-time-format';
 import { LINE_LABEL_HEIGHT } from 'constants';
-import LegendItemTemplate from 'ejs!templates/profiles/legendItem.ejs';
+import LegendItemTemplate from 'templates/profiles/legendItem.ejs';
 import abbreviateNumber from 'utils/abbreviateNumber';
 import 'styles/components/profiles/line.scss';
 

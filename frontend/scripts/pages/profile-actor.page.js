@@ -1,3 +1,9 @@
+import ProfileActorMarkup from 'html/profile-actor.ejs';
+import NavMarkup from 'html/includes/_nav.ejs';
+import FooterMarkup from 'html/includes/_footer.ejs';
+import FeedbackMarkup from 'html/includes/_feedback.ejs';
+
+
 import 'styles/_base.scss';
 import 'styles/_texts.scss';
 import 'styles/_foundation.css';
@@ -14,7 +20,7 @@ import 'styles/components/profiles/link-buttons.scss';
 import 'styles/components/profiles/error.scss';
 import 'styles/components/shared/tabs.scss';
 
-import Nav from 'components/shared/nav.component.js';
+import NavContainer from 'containers/shared/nav.container.js';
 import Dropdown from 'components/shared/dropdown.component';
 import Map from 'components/profiles/map.component';
 import Line from 'components/profiles/line.component';
@@ -23,7 +29,7 @@ import Scatterplot from 'components/profiles/scatterplot.component';
 import Tooltip from 'components/shared/info-tooltip.component';
 import choroLegend from 'components/profiles/choro-legend.component';
 
-import { getURLParams } from 'utils/stateURL';
+import qs from 'query-string';
 import smoothScroll from 'utils/smoothScroll';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
@@ -31,7 +37,10 @@ import swapProfileYear from 'utils/swapProfileYear';
 import capitalize from 'lodash/capitalize';
 import { getURLFromParams, GET_ACTOR_FACTSHEET } from '../utils/getURLFromParams';
 import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST } from 'constants';
-import TopSourceTemplate from 'ejs!templates/profiles/top-source-switcher.ejs';
+import TopSourceTemplate from 'templates/profiles/top-source-switcher.ejs';
+import EventManager from 'utils/eventManager';
+
+const evManager = new EventManager();
 
 const defaults = {
   country: 'Brazil',
@@ -267,8 +276,8 @@ const _setInfo = (info, nodeId) => {
   } else {
     document.querySelector('.js-zero-deforestation-commitment [data-value="no"]').classList.remove('is-hidden');
   }
-  document.querySelector('.js-link-map').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true&isMapVisible=true&selectedYears=[${year},${year}]`);
-  document.querySelector('.js-link-supply-chain').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
+  document.querySelector('.js-link-map').setAttribute('href', `./flows?selectedNodesIds=[${nodeId}]&isMapVisible=true&isMapVisible=true&selectedYears=[${year},${year}]`);
+  document.querySelector('.js-link-supply-chain').setAttribute('href', `./flows?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
   document.querySelector('.js-summary-text').textContent = info.summary ? info.summary : '-';
 };
 
@@ -298,7 +307,7 @@ const _setTopSourceSwitcher = (data, verb) => {
 
   const switchers = Array.prototype.slice.call(document.querySelectorAll('.js-top-source-switcher'), 0);
   switchers.forEach(switcher => {
-    switcher.addEventListener('click', (e) => _switchTopSource(e, data));
+    evManager.addEventListener(switcher, 'click', (e) => _switchTopSource(e, data));
   });
 };
 
@@ -318,9 +327,14 @@ const _switchTopSource = (e, data) => {
   _initSource(selectedSource, data);
 };
 
-const _init = ()  => {
+export const mount = (root, store)  => {
+  root.innerHTML = ProfileActorMarkup({
+    nav: NavMarkup({ page: 'profile-actor' }),
+    footer: FooterMarkup(),
+    feedback: FeedbackMarkup()
+  });
   const url = window.location.search;
-  const urlParams = getURLParams(url);
+  const urlParams = qs.parse(url);
   const nodeId = urlParams.nodeId;
   year = urlParams.year || 2015;
 
@@ -362,8 +376,6 @@ const _init = ()  => {
     })
     .catch((reason) => _showErrorMessage(reason.message));
 
-  const nav = new Nav();
+  const nav = new NavContainer(store);
   print = nav.print;
 };
-
-_init();

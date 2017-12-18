@@ -2,7 +2,7 @@
 import _ from 'lodash';
 import formatValue from 'utils/formatValue';
 
-import TopTemplate from 'ejs!templates/profiles/top.ejs';
+import TopTemplate from 'templates/profiles/top.ejs';
 
 import 'styles/components/profiles/top.scss';
 
@@ -25,7 +25,7 @@ export default class {
       // this verification shouldn't exist. All list must have same data format.
       // Though this is a temporal patch.
       d.value = _.isArray(d.values) ? formatValue(d.values[0] * 100, 'percentage') : formatValue(d.value * 100, 'percentage');
-      d.link = this.targetLink && !d.is_domestic_consumption ? `/profile-${this.targetLink}.html?nodeId=${d.id}&year=${this.year}` : null;
+      d.link = this.targetLink && !d.is_domestic_consumption ? `/profile-${this.targetLink}?nodeId=${d.id}&year=${this.year}` : null;
     });
   }
 

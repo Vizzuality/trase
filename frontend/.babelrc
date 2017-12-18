@@ -1,7 +1,14 @@
 {
-  "presets": [ "es2015" ],
+  "presets": [
+    ["env", {
+        "targets": {
+          "browsers": ["> 1%", "last 2 versions", "Firefox ESR", "Safari >= 8"]
+        }
+    }]
+  ],
   "plugins": [
-      "transform-object-rest-spread",
-      ["transform-react-jsx", { "pragma":"h" }]
-    ]
+    "syntax-dynamic-import",
+    "transform-object-rest-spread",
+    ["transform-react-jsx", { "pragma":"h" }]
+  ]
 }

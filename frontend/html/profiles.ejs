@@ -1,21 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <%= htmlWebpackPlugin.options.head %>
-</head>
-<body>
-  <div class="loading-wrapper">
-    <%= htmlWebpackPlugin.options.icons %>
-    <div class="loading-wrapper"></div>
-    <%= htmlWebpackPlugin.options.nav %>
-    <div class="l-profiles js-profiles">
-      <div class="js-loading">
-        <div class="profiles-veil"></div>
-        <div class="c-spinner"></div>
-      </div>
+<div class="loading-wrapper">
+  <div class="loading-wrapper"></div>
+  <%= nav %>
+  <div class="l-profiles js-profiles">
+    <div class="js-loading">
+      <div class="profiles-veil"></div>
+      <div class="c-spinner"></div>
+    </div>
 
-      <div class="wrap">
-
+    <div class="wrap">
         <div class="container">
           <div class="search-container">
             <div class="c-search js-search">
@@ -24,7 +16,6 @@
               <svg class="icon icon-search"><use xlink:href="#icon-search"></use></svg>
             </div>
           </div>
-
           <div class="explanatory-text">
             <p class="paragraph -center"><strong>Enter the name of a company</strong> for statistics on its links with source municipalities
               (including top-line sustainability indicators) and consumer markets.
@@ -33,15 +24,13 @@
               indicators and statistics on linked traders and consumer markets.
             </p>
           </div>
+          <div class="c-error-message js-error-message is-hidden">
+            <p class="message js-message">Data not found</p>
+          </div>
         </div>
-        <div class="c-error-message js-error-message is-hidden">
-          <p class="message js-message">Data not found</p>
         </div>
-      </div>
     </div>
-    <%= htmlWebpackPlugin.options.footer %>
-    <%= htmlWebpackPlugin.options.scripts %>
-    <%= htmlWebpackPlugin.options.feedback %>
   </div>
-</body>
-</html>
+  <%= footer %>
+  <%= feedback %>
+</div>

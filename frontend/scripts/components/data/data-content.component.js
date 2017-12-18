@@ -1,5 +1,5 @@
-import SelectorItemsTemplate from 'ejs!templates/data/selector-items.ejs';
-import BulkDownloadTemplate from 'ejs!templates/data/bulk-download.ejs';
+import SelectorItemsTemplate from 'templates/data/selector-items.ejs';
+import BulkDownloadTemplate from 'templates/data/bulk-download.ejs';
 import { GET_CSV_DATA_DOWNLOAD_FILE, GET_JSON_DATA_DOWNLOAD_FILE, getURLFromParams } from 'utils/getURLFromParams';
 import _ from 'lodash';
 import { POST_SUBSCRIBE_NEWSLETTER } from '../../utils/getURLFromParams';

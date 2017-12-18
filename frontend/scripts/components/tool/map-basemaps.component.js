@@ -1,4 +1,4 @@
-import BasemapsTemplate from 'ejs!templates/tool/map/map-basemaps.ejs';
+import BasemapsTemplate from 'templates/tool/map/map-basemaps.ejs';
 import 'styles/components/tool/map/map-basemaps.scss';
 
 export default class {

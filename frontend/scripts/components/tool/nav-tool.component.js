@@ -12,6 +12,10 @@ export default class {
     this.setAppMenuVisibility();
   }
 
+  onCreated() {
+    this._setNavigationLinks();
+  }
+
   _setVars() {
     this.el = document.querySelector('.c-nav');
 
@@ -22,6 +26,14 @@ export default class {
 
   _setEventListeners() {
     this.toggleBtn.addEventListener('click', () => this.onToggleMenu());
+  }
+
+  _setNavigationLinks() {
+    const links = [].slice.call(this.AppNav.querySelectorAll('.js-nav-link'));
+    links.forEach(link => {
+      const page = link.getAttribute('data-route');
+      link.addEventListener('click', () => this.callbacks.onLinkClick(page));
+    });
   }
 
   onToggleMenu() {

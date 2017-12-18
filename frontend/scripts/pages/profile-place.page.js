@@ -1,4 +1,7 @@
-import { h, render } from 'preact';
+import ProfilePlaceMarkup from 'html/profile-place.ejs';
+import NavMarkup from 'html/includes/_nav.ejs';
+import FooterMarkup from 'html/includes/_footer.ejs';
+import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import 'styles/_base.scss';
 import 'styles/_texts.scss';
@@ -15,7 +18,10 @@ import 'styles/components/profiles/link-buttons.scss';
 import 'styles/components/profiles/error.scss';
 import 'styles/components/profiles/map.scss';
 
-import Nav from 'components/shared/nav.component.js';
+import capitalize from 'lodash/capitalize';
+import { h, render } from 'preact';
+
+import NavContainer from 'containers/shared/nav.container.js';
 import Dropdown from 'components/shared/dropdown.component';
 import Top from 'components/profiles/top.component';
 import Line from 'components/profiles/line.component';
@@ -24,12 +30,12 @@ import MiniSankey from 'react-components/profiles/mini-sankey.component';
 import MultiTable from 'components/profiles/multi-table.component';
 import Map from 'components/profiles/map.component';
 
-import { getURLParams } from 'utils/stateURL';
+import qs from 'query-string';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
 import swapProfileYear from 'utils/swapProfileYear';
 import smoothScroll from 'utils/smoothScroll';
-import capitalize from 'lodash/capitalize';
+
 import { getURLFromParams, GET_PLACE_FACTSHEET } from '../utils/getURLFromParams';
 
 const defaults = {
@@ -247,8 +253,8 @@ const _setInfo = (info, nodeId) => {
   document.querySelector('.js-area').innerHTML = info.area !== null ? formatValue(info.area, 'area') : '-';
   document.querySelector('.js-soy-land').innerHTML = (info.soy_area !== null && info.soy_area !== 'NaN') ? formatValue(info.soy_area, 'area') : '-';
   document.querySelector('.js-soy-production').innerHTML = info.soy_production !== null ? formatValue(info.soy_production, 'tons'): '-';
-  document.querySelector('.js-link-map').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
-  document.querySelector('.js-link-supply-chain').setAttribute('href', `./flows.html?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
+  document.querySelector('.js-link-map').setAttribute('href', `./flows?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
+  document.querySelector('.js-link-supply-chain').setAttribute('href', `./flows?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
   document.querySelector('.js-line-title').innerHTML = info.municipality ? `Deforestation trajectory of ${info.municipality}` : '-';
   document.querySelector('.js-traders-title').innerHTML = `Top traders of soy in ${info.municipality} in ${year}`;
   document.querySelector('.js-consumers-title').innerHTML = `Top importer countries of ${formatApostrophe(capitalize(info.municipality))} soy in ${year}`;
@@ -277,9 +283,14 @@ const _showErrorMessage = (message = null) => {
 
 };
 
-const _init = () => {
+export const mount = (root, store) => {
+  root.innerHTML = ProfilePlaceMarkup({
+    nav: NavMarkup({ page: 'profile-place' }),
+    footer: FooterMarkup(),
+    feedback: FeedbackMarkup()
+  });
   const url = window.location.search;
-  const urlParams = getURLParams(url);
+  const urlParams = qs.parse(url);
   const nodeId = urlParams.nodeId;
   year = urlParams.year || 2015;
   showMiniSankey = !!urlParams.showMiniSankey || false;
@@ -324,8 +335,6 @@ const _init = () => {
     })
     .catch((reason) => _showErrorMessage(reason.message));
 
-  new Nav();
+  new NavContainer(store);
 
 };
-
-_init();

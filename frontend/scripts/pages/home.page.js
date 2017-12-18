@@ -1,13 +1,25 @@
 // import plyr from 'plyr';
-// import UpdatesTemplate from 'ejs!templates/homepage/updates.ejs';
-import Nav from 'components/shared/nav.component.js';
-import Slider from 'scripts/components/home/slider.component';
-import PostsTemplate from 'ejs!templates/homepage/posts.ejs';
-import TweetsTemplate from 'ejs!templates/homepage/tweets.ejs';
+// import 'styles/components/homepage/plyr.scss';
+// import 'node_modules/plyr/src/scss/plyr.scss';
+
+// import UpdatesTemplate from 'templates/homepage/updates.ejs';
+
+import HomeMarkup from 'html/home.ejs';
+import FooterMarkup from 'html/includes/_footer.ejs';
+import NavMarkup from 'html/includes/_nav.ejs';
+import FeedbackMarkup from 'html/includes/_feedback.ejs';
+
+import NavContainer from 'containers/shared/nav.container.js';
+import Slider from 'components/home/slider.component';
+import PostsTemplate from 'templates/homepage/posts.ejs';
+import TweetsTemplate from 'templates/homepage/tweets.ejs';
 import 'styles/homepage.scss';
-import 'node_modules/plyr/src/scss/plyr.scss';
-import 'styles/components/homepage/plyr.scss';
+
 import { GET_POSTS, GET_TWEETS, POST_SUBSCRIBE_NEWSLETTER, getURLFromParams } from 'utils/getURLFromParams';
+
+import EventManager from 'utils/eventManager';
+
+const evManager = new EventManager();
 
 const state = {
   activeIndex: 0,
@@ -17,21 +29,21 @@ const state = {
       text: 'Trase transforms our understanding of how companies and governments involved in the trade of agricultural commodities are linked to impacts and opportunities for more sustainable production.',
       action: {
         text: 'explore the tool',
-        href: '/flows.html'
+        href: '/flows'
       }
     },
     {
       text: 'Can companies and governments meet their 2020 sustainability goals? The blanket transparency provided by Trase helps address this question and identify priority actions for achieving success.',
       action: {
         text: 'explore company commitments',
-        href: '/profiles.html'
+        href: '/profiles'
       }
     },
     {
       text: 'The ability to address deforestation and promote sustainability is hampered by poor access to vital information. Trase is committed to free and open access to all the information provided on the platform.',
       action: {
         text: 'download trase data',
-        href: '/data.html'
+        href: '/data'
       }
     }
   ],
@@ -132,10 +144,15 @@ const newsletterSubscribe = (e) => {
     });
 };
 
-const init = () => {
+export const mount = (root, store) => {
+  root.innerHTML = HomeMarkup({
+    footer: FooterMarkup(),
+    nav: NavMarkup({ page: 'index' }),
+    feedback: FeedbackMarkup()
+  });
   const bounds = document.querySelector('.js-trigger-menu-bg').getBoundingClientRect();
   const pageOffset = getPageOffset(bounds);
-  new Nav({ pageOffset });
+  new NavContainer(store, { pageOffset });
 
   state.sliders.forEach(renderSlider);
 
@@ -162,8 +179,10 @@ const init = () => {
   //   });
   // });
 
-  window.addEventListener('scroll', scrollIntro);
-  document.querySelector('.js-form-subscribe').addEventListener('click', newsletterSubscribe);
+  evManager.addEventListener(window, 'scroll', scrollIntro);
+  evManager.addEventListener(document.querySelector('.js-form-subscribe'), 'click', newsletterSubscribe);
 };
 
-init();
+export const unmount = () => {
+  evManager.clearEventListeners();
+};
