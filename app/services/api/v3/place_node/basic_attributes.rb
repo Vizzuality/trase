@@ -106,15 +106,11 @@ of #{@soy_area_formatted} #{@soy_area_unit} of land."
         def initialize_top_nodes
           exporter_top_nodes = Api::V3::PlaceNode::TopNodesList.new(
             @context, @year, @node,
-            other_node_type_name: NodeTypeName::EXPORTER,
-            place_inds: @place_inds,
-            place_quants: @place_quants
+            other_node_type_name: NodeTypeName::EXPORTER
           )
           consumer_top_nodes = Api::V3::PlaceNode::TopNodesList.new(
             @context, @year, @node,
-            other_node_type_name: NodeTypeName::COUNTRY,
-            place_inds: @place_inds,
-            place_quants: @place_quants
+            other_node_type_name: NodeTypeName::COUNTRY
           )
           @top_exporters = exporter_top_nodes.sorted_list(
             @volume_attribute, false, 10

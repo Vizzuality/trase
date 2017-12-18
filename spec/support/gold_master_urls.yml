@@ -138,11 +138,17 @@ json:
   - url: /api/v2/get_actor_node_attributes
     name: get_actor_node_attributes
     version: v2
-    v3_ready: false
-    v3_url: /api/v3/get_actor_node_attributes
+    v3_ready: true
+    v3_url: /api/v3/contexts/1/nodes/440/actor
     queries:
       - params: node_id=440
         name: bunge_exporter
+  - url: /api/v2/get_actor_node_attributes
+    name: get_actor_node_attributes
+    version: v2
+    v3_ready: true
+    v3_url: /api/v3/contexts/1/nodes/588/actor
+    queries:
       - params: node_id=588
         name: cargill_importer
   - url: /v1/get_nodes
