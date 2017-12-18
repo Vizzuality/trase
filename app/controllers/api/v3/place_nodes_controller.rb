@@ -9,13 +9,7 @@ module Api
           @context, @node, @year
         ).call
 
-        if @result.errors.any?
-          render json: @result.errors
-        else
-          render json: @result, root: 'data',
-                 serializer: Api::V3::PlaceNode::ResultSerializer,
-                 key_transform: :underscore # snake_case temporarily
-        end
+        render json: {data: @result}
       end
 
       private
