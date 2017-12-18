@@ -13,6 +13,7 @@ module Api
           @actor_quants = Dictionary::ActorQuants.new(@node, @year)
           @actor_inds = Dictionary::ActorInds.new(@node, @year)
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
+          raise 'Quant Volume not found' unless @volume_attribute.present?
 
           @attributes = {
             node_name: @node.name,
