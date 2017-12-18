@@ -420,7 +420,7 @@ export function loadMapContextLayers() {
       return;
     }
 
-    Promise.all(mapContextualLayers.filter(l => l.cartoURL !== null).map(l => fetch(l.cartoURL).then(resp => resp.text()))).then(() => {
+    Promise.all(mapContextualLayers.filter(l => l.cartoURL).map(l => fetch(l.cartoURL).then(resp => resp.text()))).then(() => {
       // we actually don't care about layergroupids because we already have them pregenerated
       // this is just about reinstanciating named maps, you know, because CARTO
       dispatch({
