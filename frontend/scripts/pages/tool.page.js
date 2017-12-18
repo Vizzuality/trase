@@ -24,11 +24,8 @@ import TooltipContainer from 'containers/shared/help-tooltip.container';
 
 import { resize, loadDisclaimer, displayStoryModal } from 'actions/app.actions';
 import { loadInitialData } from 'actions/tool.actions';
-import 'styles/components/shared/veil.scss';
-import 'styles/components/shared/spinner.scss';
-import 'styles/components/shared/dropdown.scss';
-import 'styles/components/tool/map/map-sidebar.scss';
-import 'styles/layouts/l-tool.scss';
+
+import 'styles/tool.scss';
 import EventManager from 'utils/eventManager';
 
 const evManager = new EventManager();
@@ -83,10 +80,12 @@ export const mount = (root, store) => {
   store.dispatch(resize());
 
   evManager.addEventListener(window, 'resize', () => store.dispatch(resize()));
+  document.querySelector('body').classList.add('-overflow-hidden');
 };
 
 export const unmount = () => {
   evManager.clearEventListeners();
+  document.querySelector('body').classList.remove('-overflow-hidden');
 };
 
 // if (NODE_ENV_DEV === true) {
