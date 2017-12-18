@@ -26,41 +26,10 @@ module Api
         end
 
         def nodes_with_flows_into_node_by_year(attribute, node)
-          attribute_type = attribute.class.name.demodulize.downcase
-          flow_values = :"flow_#{attribute_type}s"
           node_index = NodeType.node_index_for_id(@context, node.node_type_id)
-
-          top_nodes = TopNodesList.new(
-            @context, @year, node, other_node_type_name: @node_type_name
-          ).unsorted_list(attribute, false, nil)
-
-          select_clause = ActiveRecord::Base.send(
-            :sanitize_sql_array,
-            [
-              "year, flows.path[?] AS node_id, \
-    SUM(#{flow_values}.value::DOUBLE PRECISION) AS value, nodes.name AS name",
-              @node_index
-            ]
-          )
-          nodes_join_clause = ActiveRecord::Base.send(
-            :sanitize_sql_array,
-            [
-              'JOIN nodes ON nodes.id = flows.path[?] AND nodes.id IN (?)',
-              @node_index, top_nodes.map { |n| n['node_id'] }
-            ]
-          )
-          group_clause = ActiveRecord::Base.send(
-            :sanitize_sql_array,
-            ['flows.path[?], nodes.name, year', @node_index]
-          )
-
-          nodes_with_flows_all_years(attribute).
-            except(:select).
-            except(:group).
-            select(select_clause).
-            joins(nodes_join_clause).
-            group(group_clause).
-            where('flows.path[?] = ?', node_index, node.id)
+          nodes_with_flow_totals_by_year(attribute).
+            where('flows.path[?] = ?', node_index, node.id).
+            where('nodes.id' => top_nodes.map { |n| n['node_id'] })
         end
 
         def nodes_with_flows_totals(attribute)
@@ -112,6 +81,35 @@ module Api
             joins(flow_values).
             where("#{flow_values}.#{attribute_type}_id" => attribute.id).
             where(context_id: @context.id).
+            group(group_clause)
+        end
+
+        def nodes_with_flows_totals_by_year(attribute)
+          attribute_type = attribute.class.name.demodulize.downcase
+          flow_values = :"flow_#{attribute_type}s"
+
+          select_clause = ActiveRecord::Base.send(
+            :sanitize_sql_array,
+            [
+              "flows.path[?] AS node_id, nodes.name AS name, year, \
+    SUM(#{flow_values}.value::DOUBLE PRECISION) AS value",
+              @node_index
+            ]
+          )
+          nodes_join_clause = ActiveRecord::Base.send(
+            :sanitize_sql_array,
+            ['JOIN nodes ON nodes.id = flows.path[?]', @node_index]
+          )
+          group_clause = ActiveRecord::Base.send(
+            :sanitize_sql_array,
+            ['flows.path[?], nodes.name, year', @node_index]
+          )
+
+          nodes_with_flows_all_years(attribute).
+            except(:select).
+            except(:group).
+            select(select_clause).
+            joins(nodes_join_clause).
             group(group_clause)
         end
 
