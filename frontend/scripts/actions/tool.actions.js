@@ -230,9 +230,10 @@ export function loadNodes() {
       dispatch({
         type: actions.GET_NODE_ATTRIBUTES, payload
       });
-      
+
+      const selectedBiomeFilter = getState().tool.selectedBiomeFilter;
       // reselect biome filter to add biome geoid
-      if (getState().tool.selectedBiomeFilter.nodeId !== undefined) {
+      if (selectedBiomeFilter && selectedBiomeFilter.nodeId) {
         dispatch({
           type: actions.SELECT_BIOME_FILTER,
           biomeFilter: getState().tool.selectedBiomeFilter.name

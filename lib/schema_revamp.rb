@@ -1,5 +1,5 @@
 # This is a temporary mechanism that allows us to copy data between the public
-# scherma and the revamp schema as we migrate the code.
+# schema and the revamp schema as we migrate the code.
 class SchemaRevamp
   def copy
     %w[
