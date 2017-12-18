@@ -6,6 +6,10 @@ RSpec.describe 'Get contexts', type: :request do
   include_context 'api v3 brazil recolor by'
 
   describe 'GET /api/v3/contexts' do
+    before(:each) do
+      SchemaRevamp.new.refresh
+    end
+
     it 'has the correct response structure' do
       get '/api/v3/contexts'
 
