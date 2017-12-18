@@ -1,6 +1,6 @@
 module Api
   module V3
-    module PlaceNode
+    module Profiles
       class TopNodesList
         def initialize(context, year, node, data)
           @context = context

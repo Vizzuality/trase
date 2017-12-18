@@ -2,6 +2,8 @@ module Api
   module V3
     module PlaceNode
       class TrajectoryDeforestationPlot
+        include Api::V3::Profiles::AttributesInitializer
+
         def initialize(context, year, node)
           @context = context
           @year = year
@@ -12,7 +14,7 @@ module Api
           if @state_name.present?
             @state_ranking = StateRanking.new(@context, @year, @node, @state_name)
           end
-          initialize_attributes
+          initialize_attributes(attributes_list)
         end
 
         def call
@@ -54,34 +56,6 @@ module Api
         end
 
         private
-
-        def initialize_attributes
-          @attributes = attributes_list.map do |attribute_hash|
-            attribute_hash.merge(
-              attribute: initialize_attribute_from_hash(
-                attribute_hash
-              )
-            )
-          end
-          @attributes = @attributes.select do |attribute_hash|
-            attribute_hash && attribute_hash[:attribute].present?
-          end
-        end
-
-        def initialize_attribute_from_hash(attribute_hash)
-          dictionary =
-            if attribute_hash[:attribute_type] == 'quant'
-              Dictionary::Quant.instance
-            elsif attribute_hash[:attribute_type] == 'ind'
-              Dictionary::Ind.instance
-            end
-          return nil unless dictionary
-          attribute = dictionary.get(attribute_hash[:attribute_name])
-          if attribute.nil?
-            Rails.logger.debug 'NOT FOUND ' + attribute_hash[:attribute_name]
-          end
-          attribute
-        end
 
         def initialize_min_max_year
           min_year = nil

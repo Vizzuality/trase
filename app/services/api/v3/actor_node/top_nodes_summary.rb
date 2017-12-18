@@ -10,13 +10,13 @@ module Api
           raise 'Quant Volume not found' unless @volume_attribute.present?
           @soy_production_attribute = Dictionary::Quant.instance.get('SOY_TN')
           raise 'Quant SOY_TN not found' unless @soy_production_attribute.present?
+          initialize_flow_stats_for_node
         end
 
         # looking for top nodes (destinations and sources) linked to this actor node
         # across years
         def call(node_list_label, node_type)
-          flows_for_node = Api::V3::ActorNode::FlowsForNode.new(@context, @year, @node)
-          years = flows_for_node.available_years_for_attribute(@volume_attribute)
+          years = @flow_stats.available_years_for_attribute(@volume_attribute)
           map_attribute = Api::V3::Readonly::MapAttribute.where(
             context_id: @context.id,
             attribute_type: 'quant',
@@ -44,8 +44,14 @@ module Api
 
         private
 
+        def initialize_flow_stats_for_node
+          @flow_stats = Api::V3::Profiles::FlowStatsForNode.new(
+            @context, @year, @node
+          )
+        end
+
         def initialize_top_nodes(node_type, attribute)
-          top_nodes_list = Api::V3::PlaceNode::TopNodesList.
+          top_nodes_list = Api::V3::Profiles::TopNodesList.
             new(@context, @year, @node, other_node_type_name: node_type)
           @top_nodes = top_nodes_list.sorted_list(attribute, false, nil)
           @top_node_values_by_year = top_nodes_list.

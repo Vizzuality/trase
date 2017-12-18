@@ -18,7 +18,7 @@ module Api
           matrix[0] = @top_places.map { 0 } + @top_nodes.map { |t| t['value'] }
 
           @top_places.each_with_index do |place, place_idx|
-            all_nodes_for_place = TopNodesList.new(
+            all_nodes_for_place = Api::V3::Profiles::TopNodesList.new(
               @context, @year, place, other_node_type_name: node_type
             ).unsorted_list(@volume_attribute, include_domestic_consumption, nil)
             @top_nodes.each_with_index do |top_node, top_node_idx|
@@ -70,7 +70,7 @@ module Api
         end
 
         def initialize_top_nodes(node_type, include_domestic_consumption)
-          top_nodes_list = Api::V3::PlaceNode::TopNodesList.new(
+          top_nodes_list = Api::V3::Profiles::TopNodesList.new(
             @context, @year, @node, other_node_type_name: node_type
           )
           @top_nodes = top_nodes_list.sorted_list(

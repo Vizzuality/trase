@@ -2,7 +2,7 @@ module Api
   module V3
     module ActorNode
       class SustainabilityTable
-        include Profiles::AttributesInitializer
+        include Api::V3::Profiles::AttributesInitializer
 
         def initialize(context, year, node)
           @context = context
@@ -11,6 +11,7 @@ module Api
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
           initialize_attributes(attributes_list)
+          initialize_flow_stats_for_node
         end
 
         def call
@@ -26,8 +27,14 @@ module Api
 
         private
 
+        def initialize_flow_stats_for_node
+          @flow_stats = Api::V3::Profiles::FlowStatsForNode.new(
+            @context, @year, @node
+          )
+        end
+
         def sustainability_for_group(name, node_type, include_totals)
-          top_nodes_list = Api::V3::PlaceNode::TopNodesList.
+          top_nodes_list = Api::V3::Profiles::TopNodesList.
             new(@context, @year, @node, other_node_type_name: node_type)
           top_nodes = top_nodes_list.sorted_list(@volume_attribute, false, 10)
           group_totals_hash = {}
@@ -56,9 +63,8 @@ module Api
         end
 
         def data_row(group_totals_hash, node_type, node)
-          totals_per_attribute = @node.flow_values_totals_for_attributes_into(
-            @context, @year, @attributes.map { |a| a[:attribute] },
-            node_type, node['node_id']
+          totals_per_attribute = @flow_stats.flow_values_totals_for_attributes_into(
+            @attributes.map { |a| a[:attribute] }, node_type, node['node_id']
           )
           totals_hash = Hash[
             totals_per_attribute.map { |t| [t['name'], t['value']] }

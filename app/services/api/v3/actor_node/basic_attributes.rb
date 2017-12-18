@@ -23,6 +23,7 @@ module Api
 
           @attributes = @attributes.merge initialize_dynamic_attributes
           initialize_top_nodes
+          initialize_flow_stats_for_node
           @attributes[:summary] = summary
         end
 
@@ -47,7 +48,7 @@ module Api
         end
 
         def initialize_top_nodes
-          destination_top_nodes = Api::V3::PlaceNode::TopNodesList.new(
+          destination_top_nodes = Api::V3::Profiles::TopNodesList.new(
             @context, @year, @node,
             other_node_type_name: NodeTypeName::COUNTRY,
             place_inds: @place_inds,
@@ -56,6 +57,12 @@ module Api
           @main_destination = destination_top_nodes.sorted_list(
             @volume_attribute, false, 1
           ).first
+        end
+
+        def initialize_flow_stats_for_node
+          @flow_stats = Api::V3::Profiles::FlowStatsForNode.new(
+            @context, @year, @node
+          )
         end
 
         def exporter_summary
@@ -132,8 +139,9 @@ module Api
         end
 
         def initialize_trade_volume_for_summary
-          trade_flows_current_year = @node.
-            flow_values(@context, @year, @volume_attribute)
+          trade_flows_current_year = @flow_stats.flow_values(
+            @year, @volume_attribute
+          )
           @trade_total_current_year = trade_flows_current_year.sum('value')
           if @trade_total_current_year < 1000
             trade_total_current_year_value = @trade_total_current_year
@@ -154,8 +162,8 @@ module Api
             delimiter: ',', precision: trade_total_current_year_precision
           ) + ' ' + trade_total_current_year_unit
 
-          trade_flows_previous_year = @node.
-            flow_values(@context, @year - 1, @volume_attribute)
+          trade_flows_previous_year = @flow_stats.
+            flow_values(@year - 1, @volume_attribute)
           @trade_total_previous_year = trade_flows_previous_year.sum('value')
           if @trade_total_previous_year.present? && @trade_total_previous_year.positive?
             @trade_total_perc_difference = (@trade_total_current_year - @trade_total_previous_year) / @trade_total_previous_year
@@ -168,7 +176,7 @@ module Api
         end
 
         def initialize_sources_for_summary
-          stats = Api::V3::ActorNode::FlowsByNodeType.new(
+          stats = Api::V3::Profiles::FlowStatsForNodeType.new(
             @context, @year, NodeTypeName::MUNICIPALITY
           )
           municipalities_count = stats.nodes_with_flows_count(@volume_attribute)

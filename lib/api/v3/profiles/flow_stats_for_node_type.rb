@@ -1,23 +1,23 @@
 module Api
   module V3
-    module ActorNode
-      class FlowsByNodeType
+    module Profiles
+      class FlowStatsForNodeType
         def initialize(context, year, node_type_name)
           @context = context
           @year = year
           @node_type_name = node_type_name
-          @node_index = NodeType.node_index_for_name(@context, node_type_name)
+          @node_index = Api::V3::NodeType.node_index_for_name(@context, node_type_name)
         end
 
         def nodes_with_flows_count(attribute)
-          Node.from(
+          Api::V3::Node.from(
             '(' + nodes_with_flows(attribute).to_sql + ') s'
           ).count
         end
 
         def nodes_with_flows_into_node_count(attribute, node)
-          node_index = NodeType.node_index_for_id(@context, node.node_type_id)
-          Node.from(
+          node_index = Api::V3::NodeType.node_index_for_id(@context, node.node_type_id)
+          Api::V3::Node.from(
             '(' +
             nodes_with_flows(attribute).
               where('flows.path[?] = ?', node_index, node.id).to_sql +
@@ -30,14 +30,15 @@ module Api
           flow_values = :"flow_#{attribute_type}s"
           node_index = NodeType.node_index_for_id(@context, node.node_type_id)
 
-          top_nodes = Api::V3::PlaceNode::TopNodesList.new(
+          top_nodes = TopNodesList.new(
             @context, @year, node, other_node_type_name: @node_type_name
           ).unsorted_list(attribute, false, nil)
 
           select_clause = ActiveRecord::Base.send(
             :sanitize_sql_array,
             [
-              "year, flows.path[?] AS node_id, SUM(#{flow_values}.value::DOUBLE PRECISION) AS value, nodes.name AS name",
+              "year, flows.path[?] AS node_id, \
+    SUM(#{flow_values}.value::DOUBLE PRECISION) AS value, nodes.name AS name",
               @node_index
             ]
           )
@@ -79,8 +80,8 @@ module Api
           Flow.
             select(
               "nodes.id AS node_id, nodes.name, \
-SUM(#{flow_values}.value::DOUBLE PRECISION) AS value, \
-#{attribute_type}s.name AS attribute_name"
+    SUM(#{flow_values}.value::DOUBLE PRECISION) AS value, \
+    #{attribute_type}s.name AS attribute_name"
             ).
             joins(nodes_join_clause).
             joins('JOIN node_properties ON nodes.id = node_properties.node_id').

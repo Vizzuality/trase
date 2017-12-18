@@ -2,7 +2,7 @@ module Api
   module V3
     module ActorNode
       class ExportingCompaniesPlot
-        include Profiles::AttributesInitializer
+        include Api::V3::Profiles::AttributesInitializer
 
         def initialize(context, year, node)
           @context = context
@@ -21,7 +21,9 @@ module Api
             value_divisor = 1000
           end
 
-          stats = FlowsByNodeType.new(@context, @year, @node.node_type.name)
+          stats = Api::V3::Profiles::FlowStatsForNodeType.new(
+            @context, @year, @node.node_type.name
+          )
           production_totals = stats.nodes_with_flows_totals(@volume_attribute)
           attribute_totals = stats.nodes_with_flows_totals_for_attributes(
             @attributes.map { |attribute_hash| attribute_hash[:attribute] }

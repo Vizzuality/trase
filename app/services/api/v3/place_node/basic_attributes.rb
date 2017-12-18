@@ -104,11 +104,11 @@ of #{@soy_area_formatted} #{@soy_area_unit} of land."
         end
 
         def initialize_top_nodes
-          exporter_top_nodes = Api::V3::PlaceNode::TopNodesList.new(
+          exporter_top_nodes = Api::V3::Profiles::TopNodesList.new(
             @context, @year, @node,
             other_node_type_name: NodeTypeName::EXPORTER
           )
-          consumer_top_nodes = Api::V3::PlaceNode::TopNodesList.new(
+          consumer_top_nodes = Api::V3::Profiles::TopNodesList.new(
             @context, @year, @node,
             other_node_type_name: NodeTypeName::COUNTRY
           )
