@@ -1299,7 +1299,7 @@ CREATE MATERIALIZED VIEW attributes_mv AS
            FROM (quants
              LEFT JOIN quant_properties qp ON ((qp.quant_id = quants.id)))
         UNION ALL
-         SELECT 'Ind'::text AS text,
+         SELECT 'Ind'::text,
             inds.id,
             inds.name,
             ip.display_name,
@@ -1310,22 +1310,22 @@ CREATE MATERIALIZED VIEW attributes_mv AS
             ip.is_visible_on_place_profile,
             ip.is_temporal_on_actor_profile,
             ip.is_temporal_on_place_profile,
-            'AVG'::text AS text
+            'AVG'::text
            FROM (inds
              LEFT JOIN ind_properties ip ON ((ip.ind_id = inds.id)))
         UNION ALL
-         SELECT 'Qual'::text AS text,
+         SELECT 'Qual'::text,
             quals.id,
             quals.name,
             qp.display_name,
-            NULL::text AS text,
-            NULL::text AS text,
+            NULL::text,
+            NULL::text,
             qp.tooltip_text,
             qp.is_visible_on_actor_profile,
             qp.is_visible_on_place_profile,
             qp.is_temporal_on_actor_profile,
             qp.is_temporal_on_place_profile,
-            NULL::text AS text
+            NULL::text
            FROM (quals
              LEFT JOIN qual_properties qp ON ((qp.qual_id = quals.id)))) s
   WITH NO DATA;
@@ -2809,9 +2809,11 @@ CREATE MATERIALIZED VIEW map_attributes_mv AS
     a.unit,
     a.tooltip_text AS description,
     a.aggregate_method,
-    a.original_id AS layer_attribute_id
-   FROM ((map_quants maq
+    a.original_id AS original_attribute_id,
+    mag.context_id
+   FROM (((map_quants maq
      JOIN map_attributes ma ON ((ma.id = maq.map_attribute_id)))
+     JOIN map_attribute_groups mag ON ((mag.id = ma.map_attribute_group_id)))
      JOIN attributes_mv a ON (((a.original_id = maq.quant_id) AND (a.original_type = 'Quant'::text))))
 UNION ALL
  SELECT ma.id,
@@ -2831,9 +2833,11 @@ UNION ALL
     a.unit,
     a.tooltip_text AS description,
     a.aggregate_method,
-    a.original_id AS layer_attribute_id
-   FROM ((map_inds mai
+    a.original_id AS original_attribute_id,
+    mag.context_id
+   FROM (((map_inds mai
      JOIN map_attributes ma ON ((ma.id = mai.map_attribute_id)))
+     JOIN map_attribute_groups mag ON ((mag.id = ma.map_attribute_group_id)))
      JOIN attributes_mv a ON (((a.original_id = mai.ind_id) AND (a.original_type = 'Ind'::text))))
   WITH NO DATA;
 
@@ -2881,10 +2885,24 @@ COMMENT ON COLUMN map_attributes_mv.description IS 'Attribute''s description';
 
 
 --
--- Name: COLUMN map_attributes_mv.layer_attribute_id; Type: COMMENT; Schema: revamp; Owner: -
+-- Name: COLUMN map_attributes_mv.aggregate_method; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes_mv.layer_attribute_id IS 'The attribute''s original id';
+COMMENT ON COLUMN map_attributes_mv.aggregate_method IS 'The method used to aggregate the data';
+
+
+--
+-- Name: COLUMN map_attributes_mv.original_attribute_id; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes_mv.original_attribute_id IS 'The attribute''s original id';
+
+
+--
+-- Name: COLUMN map_attributes_mv.context_id; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN map_attributes_mv.context_id IS 'References the context';
 
 
 --
@@ -5442,6 +5460,13 @@ CREATE INDEX index_map_attribute_groups_on_context_id ON map_attribute_groups US
 
 
 --
+-- Name: index_map_attributes_mv_on_context_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_map_attributes_mv_on_context_id ON map_attributes_mv USING btree (context_id);
+
+
+--
 -- Name: index_map_attributes_on_map_attribute_group_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -5593,6 +5618,13 @@ CREATE UNIQUE INDEX map_attributes_mv_id_idx ON map_attributes_mv USING btree (i
 --
 
 CREATE INDEX map_attributes_mv_map_attribute_group_id_attribute_id_idx ON map_attributes_mv USING btree (map_attribute_group_id, attribute_id);
+
+
+--
+-- Name: map_attributes_mv_original_attribute_id_attribute_type_idx; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX map_attributes_mv_original_attribute_id_attribute_type_idx ON map_attributes_mv USING btree (original_attribute_id, attribute_type);
 
 
 --
@@ -6394,6 +6426,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171117115459'),
 ('20171117120322'),
 ('20171130103917'),
+('20171130135459'),
+('20171212113051'),
 ('20171214162643');
-
-

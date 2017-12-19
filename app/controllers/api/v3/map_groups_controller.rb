@@ -10,7 +10,7 @@ module Api
 #{Api::V3::Readonly::MapAttribute.table_name}.id, bucket_3, bucket_5, \
 map_attribute_group_id as group_id, is_default, years, \
 #{Api::V3::Readonly::MapAttribute.table_name}.name, attribute_type as type, \
-unit, description, aggregate_method, layer_attribute_id, \
+unit, description, aggregate_method, original_attribute_id AS layer_attribute_id, \
 map_attribute_group_id as group_id").
           joins(:map_attribute_group).
           where(
