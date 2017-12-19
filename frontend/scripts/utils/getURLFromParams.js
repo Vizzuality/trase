@@ -22,6 +22,8 @@ const API_ENDPOINTS = {
   [GET_FLOWS]: { api: 3, endpoint: '/contexts/$context_id$/flows' },
   [GET_COLUMNS]: { api: 3, endpoint: '/contexts/$context_id$/columns' },
   [GET_ALL_NODES]: { api: 3, endpoint: '/contexts/$context_id$/nodes' },
+  [GET_NODE_ATTRIBUTES]: { api: 3, endpoint: '/contexts/$context_id$/nodes/attributes' },
+  [GET_MAP_BASE_DATA]: { api: 3, endpoint: '/contexts/$context_id$/map_groups' },
   [GET_PLACE_FACTSHEET]: { api: 3, endpoint: '/contexts/$context_id$/nodes/$node_id$/place' },
   [GET_INDICATORS]: { api: 3, endpoint: '/contexts/$context_id$/download_attributes' },
   [GET_SITE_DIVE]: { api: 'content', endpoint: '/site_dive' },
@@ -29,8 +31,6 @@ const API_ENDPOINTS = {
   [GET_TWEETS]: { api: 'content', endpoint: '/tweets' },
   [GET_DISCLAIMER]: { api: 'local', endpoint: 'disclaimer.json' },
   [GET_TOOLTIPS]: { api: 'local', endpoint: 'tooltips.json' },
-  [GET_NODE_ATTRIBUTES]: { api: 2, endpoint: '/get_node_attributes' },
-  [GET_MAP_BASE_DATA]: { api: 3, endpoint: '/contexts/$context_id$/map_groups' },
   [GET_LINKED_GEO_IDS]: { api: 2, endpoint: '/get_linked_geoids' },
   [GET_ACTOR_FACTSHEET]: {
     api: 2,

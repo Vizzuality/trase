@@ -19,6 +19,9 @@ Rails.application.routes.draw do
           get :place, on: :member, controller: :place_nodes, action: :show
         end
         resources :download_attributes, only: [:index]
+        namespace :nodes do
+          resources :attributes, only: [:index], controller: :nodes_attributes
+        end
       end
       resources :newsletter_subscriptions, only: [:create]
     end

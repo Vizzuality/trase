@@ -209,7 +209,7 @@ paths:
       tags:
         - node
       summary: ''
-      description: ''
+      description: 'Aggregated values of inds and quants for all nodes in context'
       consumes:
         - application/json
       produces:
@@ -218,6 +218,14 @@ paths:
         - name: context_id
           in: path
           description: ''
+          required: true
+          type: integer
+        - name: start_year
+          in: query
+          required: true
+          type: integer
+        - name: end_year
+          in: query
           required: true
           type: integer
       responses:
@@ -592,9 +600,15 @@ definitions:
       attribute_type:
         type: string
         enum:
-          - Ind
-          - Qual
-          - Quant
+          - ind
+          - qual
+          - quant
+      value:
+        type: number
+      bucket3:
+        type: integer
+      bucket5:
+        type: integer
   Column:
     type: object
     properties:
