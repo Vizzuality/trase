@@ -52,8 +52,7 @@ export default class {
 
   _downloadPDF() {
     const pageTitle = encodeURIComponent(document.getElementsByTagName('title')[0].innerText);
-    const currentUrlBase = document.location.href.replace('localhost:8081', 'staging.trase.earth')
-      .replace('?', '.html?');
+    const currentUrlBase = document.location.href.replace('localhost:8081', 'staging.trase.earth');
     const currentUrl = encodeURIComponent(`${currentUrlBase}&print=true`);
     const pdfUrl = `${PDF_DOWNLOAD_URL}?filename=${pageTitle}&url=${currentUrl}`;
     window.open(pdfUrl, '_blank');
