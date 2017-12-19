@@ -64,7 +64,7 @@
                 </div>
               </div>
             </div>
-            <div class="small-7 columns">
+            <div class="small-<%= printMode ? '12' : '7' %> columns">
               <div class="summary js-summary-text"></div>
             </div>
           </div>
@@ -99,10 +99,10 @@
 
         <section class="c-top-map">
           <div class="row">
-            <div class="small-8 columns">
+            <div class="small-<%=printMode ? '6' : '8' %> columns">
               <h3 class="title -small js-top-map-title">-</h3>
             </div>
-            <div class="small-4 columns">
+            <div class="small-<%=printMode ? '6' : '4' %> columns">
               <div class="js-destination-legend"></div>
             </div>
             <div class="small-6 columns">
@@ -112,12 +112,12 @@
           </div>
         </section>
 
-        <section class="c-top-municipalities">
+        <section class="c-top-municipalities is-page-break-always">
           <div class="row">
-            <div class="small-8 columns">
+            <div class="small-<%=printMode ? '6' : '8' %> columns">
               <ul class="title -small js-top-municipalities-title">-</ul>
             </div>
-            <div class="small-4 columns">
+            <div class="small-<%=printMode ? '6' : '4' %> columns">
               <div class="js-source-legend"></div>
             </div>
             <div class="small-7 columns">
@@ -127,7 +127,7 @@
           </div>
         </section>
 
-        <section class="c-area-table">
+        <section class="c-area-table is-page-break-always">
           <div class="row">
             <div class="small-12 columns">
               <div class="js-sustainability-table"></div>

@@ -54,7 +54,7 @@ const _build = (data) => {
 
   Map('.js-map-country', {
     topoJSONPath: './vector_layers/WORLD.topo.json',
-    topoJSONRoot: 'WORLD',
+    topoJSONRoot: 'world',
     getPolygonClassName: d => (d.properties.name === countryName ? '-isCurrent' : ''),
     useRobinsonProjection: true
   });
@@ -294,7 +294,7 @@ const _showErrorMessage = (message = null) => {
   el.classList.add('-error');
   el.querySelector('.js-wrap').classList.add('is-hidden');
   el.querySelector('.js-error-message').classList.remove('is-hidden');
-  if (message !== null) {
+  if (message !== null && message !== '') {
     el.querySelector('.js-message').innerHTML = message;
   }
 };
@@ -322,7 +322,6 @@ export const mount = (root, store) => {
     })
     .then((result) => {
       if (!result) return;
-
       document.querySelector('.js-loading').classList.add('is-hidden');
       document.querySelector('.js-wrap').classList.remove('is-hidden');
 

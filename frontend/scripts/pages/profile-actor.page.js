@@ -356,13 +356,16 @@ const _showErrorMessage = (message = null) => {
   document.querySelector('.js-loading').classList.add('is-hidden');
   el.querySelector('.js-wrap').classList.add('is-hidden');
   el.querySelector('.js-error-message').classList.remove('is-hidden');
-  if (message !== null) {
+  if (message !== null && message !== '') {
     el.querySelector('.js-message').innerHTML = message;
   }
 };
 
 export const mount = (root, store) => {
+  const { query = {} } = store.getState().location;
+
   root.innerHTML = ProfileActorMarkup({
+    printMode: query.print,
     nav: NavMarkup({ page: 'profile-actor' }),
     footer: FooterMarkup(),
     feedback: FeedbackMarkup()
