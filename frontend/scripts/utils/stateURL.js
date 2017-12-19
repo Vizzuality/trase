@@ -50,21 +50,25 @@ const computeStateQueryParams = (state, params) => {
   const newState = { ...state };
   // if URL contains GET parameters, override hash state prop with it
   URL_PARAMS_PROPS.forEach((prop) => {
-    let urlParam = params[prop] || '';
+    let urlParam = params[prop];
     if (urlParam) {
       switch (prop) {
         case 'selectedNodesIds': {
-          urlParam = urlParam.replace(/\[|\]/gi, '').split(',').map(nodeId => parseInt(nodeId, 10));
+          if (Array.isArray(urlParam)) {
+            urlParam = urlParam.map(nodeId => parseInt(nodeId, 10));
+          } else {
+            urlParam = urlParam.replace(/\[|\]/gi, '').split(',').map(nodeId => parseInt(nodeId, 10));
+          }
           newState.areNodesExpanded = true;
           newState.expandedNodesIds = urlParam;
           break;
         }
         case 'selectedYears': {
-          urlParam = urlParam.replace(/\[|\]/gi, '').split(',').map(year => parseInt(year, 10));
-          break;
-        }
-        case 'isMapVisible': {
-          urlParam = (urlParam === 'true');
+          if (Array.isArray(urlParam)) {
+            urlParam = urlParam.map(year => parseInt(year, 10));
+          } else {
+            urlParam = urlParam.replace(/\[|\]/gi, '').split(',').map(year => parseInt(year, 10));
+          }
           break;
         }
       }
@@ -74,47 +78,54 @@ const computeStateQueryParams = (state, params) => {
   return newState;
 };
 
-export const decodeStateFromURL = ({ state, ...params }) => {
-  const decoded = (state === undefined) ? {} : JSON.parse(atob(state));
-
-  return computeStateQueryParams(decoded, params);
-};
+export const decodeStateFromURL = state => ((typeof state === 'undefined') ? {} : JSON.parse(atob(state)));
 
 export const parse = (url) => {
   const params = qs.parse(url);
-  if ('state' in params) {
-    return { ...params, state: decodeStateFromURL(params) };
+  if (params.state) {
+    const state = decodeStateFromURL(params.state);
+    return { ...params, state };
   }
   return params;
 };
 
-export const stringify = ({ state, ...obj }) => {
-  const params = qs.stringify(obj);
-  if (state) {
-    return `state=${encodeStateToURL(state)}&${params}`;
+export const stringify = (params) => {
+  const needsToComputeState = [...URL_PARAMS_PROPS, 'state']
+    .reduce((acc, next) => (typeof params[next] !== 'undefined' || acc), false);
+  if (needsToComputeState) {
+    const state = encodeStateToURL(computeStateQueryParams(params.state, params));
+    // remove all params that are now in the state
+    const result = _.pickBy({ ...params, state }, (v, param) => param !== '' && !URL_PARAMS_PROPS.includes(param));
+    return qs.stringify(result);
   }
-  return params;
+  return qs.stringify(params);
 };
 
 export const toolUrlStateMiddleware = store => next => (action) => {
-  // if highlight action bail
-  if (action.type === actions.HIGHLIGHT_NODE) return next(action);
-  // get current query params
   const prevLocation = store.getState().location;
+  // if highlight action bail
+  if (action.type === actions.HIGHLIGHT_NODE || prevLocation.type !== 'tool') return next(action);
   const decoratedAction = { ...action };
-
-  const urlState = prevLocation.query && prevLocation.query.state; // prev state
-  if (action.type === actions.LOAD_INITIAL_DATA && urlState) {
-    // rehydrate state
-    decoratedAction.payload = { ...urlState };
+  let urlState = null; // prev state
+  if (prevLocation.query && prevLocation.query.state) {
+    // urlState is defined when entering the app with query params set
+    urlState = { ...prevLocation.query.state };
+  } else if (prevLocation.search) {
+    // sometimes prevLocation.search is defined but urlState isn't when navigating from within the app
+    urlState = parse(prevLocation.search).state;
+  }
+  if (action.type === actions.LOAD_INITIAL_DATA && urlState) { // need to rehydrate state
+    decoratedAction.payload = urlState;
   }
   const result = next(decoratedAction);
   const { location, tool } = store.getState(); // next state
+  const newState = computeStateQueryParams(filterStateToURL(tool), location.query);
+  const areNotEqual = !_.isEqual(newState, urlState);
   const conditions = [
     location.type === 'tool',
     action.type !== 'tool',
     action.type !== actions.LOAD_INITIAL_DATA,
-    !_.isEqual(computeStateQueryParams(filterStateToURL(tool), location.query), urlState)
+    areNotEqual
   ];
   if (!conditions.includes(false)) {
     store.dispatch(redirect({
