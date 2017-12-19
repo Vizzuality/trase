@@ -41,7 +41,7 @@ class FlowDownload
   end
 
   def zipped_json
-    content = @query.map(&:as_json)
+    content = @query.to_json
     filename = "#{@download_name}.json"
     tempfile = Tempfile.new(filename)
     tempfile << content

@@ -34,6 +34,15 @@ class HashSorter
     end
   end
 
+  def sorting_key_for_array_of_hashes(a_hash)
+    sorting_key = [
+      'id', 'name', %w(path quant ind), %w(path quant), %w(node_id attribute_type attribute_id), 'TOTAL'
+    ].find do |key|
+      key.is_a?(String) && a_hash.key?(key) ||
+        key.is_a?(Array) && (key - a_hash.keys).empty?
+    end
+  end
+
   def sort_value(value)
     if value.is_a?(Hash)
       sort_hash(value)

@@ -23,6 +23,7 @@ Rails.application.routes.draw do
         namespace :nodes do
           resources :attributes, only: [:index], controller: :nodes_attributes
         end
+        resources :download, only: [:index], as: :download
       end
       resources :newsletter_subscriptions, only: [:create]
     end
