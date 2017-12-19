@@ -4,7 +4,6 @@ export default function (state = {}, action) {
   let newState;
 
   switch (action.type) {
-
     case actions.LOAD_CONTEXTS: {
       newState = Object.assign({}, state, { contexts: action.payload });
       break;

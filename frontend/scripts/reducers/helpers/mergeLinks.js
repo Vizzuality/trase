@@ -1,12 +1,12 @@
 import _ from 'lodash';
 
 // merges same origin / same destination / same qual links
-export default function(links, userecolorGroups) {
+export default function (links, userecolorGroups) {
   const mergedLinks = [];
   const dict = {};
 
-  for (var i = 0; i < links.length; i++) {
-    var link = links[i];
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i];
 
     let key = `${link.sourceNodeId}-${link.targetNodeId}`;
 

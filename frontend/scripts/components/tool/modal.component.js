@@ -7,7 +7,6 @@ import 'styles/components/shared/modal.scss';
 import ModalTemplate from 'templates/shared/modal.ejs';
 
 class ModalComponent {
-
   onCreated() {
     this.state = {
       visibility: false,
@@ -27,11 +26,11 @@ class ModalComponent {
 
     this.veil.addEventListener('click', () => this._toggleVisibility());
     closeButton.addEventListener('click', () => this._toggleVisibility());
-    document.onkeydown = (e) => this._onKeyDown(e);
+    document.onkeydown = e => this._onKeyDown(e);
   }
 
   _onKeyDown(e) {
-    if(e && e.keyCode !== 27) return;
+    if (e && e.keyCode !== 27) return;
 
     if (!this.state.visibility) return;
 
@@ -60,9 +59,7 @@ class ModalComponent {
   }
 
   render() {
-    const modalContent = ModalTemplate({ data: this.state.modalParams });
-
-    this.el.innerHTML = modalContent;
+    this.el.innerHTML = ModalTemplate({ data: this.state.modalParams });
 
     this._setEventListeners();
   }

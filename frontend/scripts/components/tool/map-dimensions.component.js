@@ -1,7 +1,6 @@
 import MapDimensionsTemplate from 'templates/tool/map/map-dimensions.ejs';
 
 export default class {
-
   onCreated() {
     this.el = document.querySelector('.js-dimensions');
   }

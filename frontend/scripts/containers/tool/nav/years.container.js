@@ -1,26 +1,22 @@
-import { connect } from 'preact-redux';
+import { connect } from 'react-redux';
 import { toggleDropdown } from 'actions/app.actions';
 import { selectYears } from 'actions/tool.actions';
-import Years from 'react-components/tool/nav/years.component.js';
+import Years from 'react-components/tool/nav/years.component';
 
-const mapStateToProps = (state) => {
-  return {
-    currentDropdown: state.app.currentDropdown,
-    selectedYears: state.tool.selectedYears,
-    years: state.tool.selectedContext.years,
-  };
-};
+const mapStateToProps = state => ({
+  currentDropdown: state.app.currentDropdown,
+  selectedYears: state.tool.selectedYears,
+  years: state.tool.selectedContext.years
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onToggle: (id) => {
-      dispatch(toggleDropdown(id));
-    },
-    onSelected: (years) => {
-      dispatch(selectYears(years));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  onToggle: (id) => {
+    dispatch(toggleDropdown(id));
+  },
+  onSelected: (years) => {
+    dispatch(selectYears(years));
+  }
+});
 
 export default connect(
   mapStateToProps,

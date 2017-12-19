@@ -1,9 +1,10 @@
+/* eslint-disable no-new */
 import ProfilesMarkup from 'html/profiles.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
 import FooterMarkup from 'html/includes/_footer.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
-import NavContainer from 'containers/shared/nav.container.js';
+import NavContainer from 'containers/shared/nav.container';
 import 'styles/_base.scss';
 import 'styles/_texts.scss';
 import 'styles/_foundation.css';
@@ -15,13 +16,23 @@ import 'styles/components/profiles/error.scss';
 
 import _ from 'lodash';
 
-import Search from 'components/shared/search.component.js';
-import { getURLFromParams, GET_ALL_NODES } from '../utils/getURLFromParams';
+import Search from 'components/shared/search.component';
+import { GET_ALL_NODES, getURLFromParams } from 'utils/getURLFromParams';
 import getProfileLink from 'utils/getProfileLink';
 
-const _setSearch = () => {
+const _showErrorMessage = (message) => {
+  const el = document.querySelector('.l-profiles');
+  el.classList.add('-error');
+  el.querySelector('.js-loading').classList.add('is-hidden');
+  el.querySelector('.container').classList.add('is-hidden');
+  el.querySelector('.js-error-message').classList.remove('is-hidden');
+  if (message !== null) {
+    el.querySelector('.js-message').innerHTML = message;
+  }
+};
 
-  const onNodeSelected = function (node) {
+const _setSearch = () => {
+  const onNodeSelected = (node) => {
     window.location.href = getProfileLink(node);
   };
 
@@ -33,6 +44,7 @@ const _setSearch = () => {
         return response.json();
       }
       _showErrorMessage(response.statusText);
+      return null;
     })
     .then((result) => {
       if (!result) return;
@@ -47,8 +59,7 @@ const _setSearch = () => {
           node.isUnknown !== true &&
           node.isAggregated !== true &&
           node.isDomesticConsumption !== true &&
-          node.profileType !== undefined && node.profileType !== null
-        );
+          node.profileType !== undefined && node.profileType !== null);
 
       search.callbacks = {
         onNodeSelected
@@ -57,19 +68,8 @@ const _setSearch = () => {
       search.loadNodes(nodesArray);
     })
     .catch(
-      (reason) => _showErrorMessage(reason.message)
+      reason => _showErrorMessage(reason.message)
     );
-};
-
-const _showErrorMessage = (message) => {
-  const el = document.querySelector('.l-profiles');
-  el.classList.add('-error');
-  el.querySelector('.js-loading').classList.add('is-hidden');
-  el.querySelector('.container').classList.add('is-hidden');
-  el.querySelector('.js-error-message').classList.remove('is-hidden');
-  if (message !== null) {
-    el.querySelector('.js-message').innerHTML = message;
-  }
 };
 
 export const mount = (root, store) => {
@@ -81,3 +81,4 @@ export const mount = (root, store) => {
   _setSearch();
   new NavContainer(store);
 };
+

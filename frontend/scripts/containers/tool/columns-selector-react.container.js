@@ -1,13 +1,9 @@
-import { connect } from 'preact-redux';
-import ColumnsSelector from 'react-components/tool/columns-selector.component.js';
+import { connect } from 'react-redux';
+import ColumnsSelector from 'react-components/tool/columns-selector.component';
 
-const mapStateToProps = (state) => {
-  return {
-    columns: state.tool.columns,
-    sankeySize: state.app.sankeySize
-  };
-};
+const mapStateToProps = state => ({
+  columns: state.tool.columns,
+  sankeySize: state.app.sankeySize
+});
 
-export default connect(
-  mapStateToProps
-)(ColumnsSelector);
+export default connect(mapStateToProps)(ColumnsSelector);

@@ -1,13 +1,13 @@
 import _ from 'lodash';
-import getNodeMetaUid from './getNodeMetaUid';
 import { UNITLESS_UNITS } from 'constants';
+import getNodeMetaUid from './getNodeMetaUid';
 
 export default function (nodesDict, nodesMeta, layers) {
   const layersByUID = _.keyBy(layers, 'uid');
   const nodesDictWithMeta = {};
 
-  nodesMeta.data.forEach(nodeMeta => {
-    const nodeId = parseInt(nodeMeta.node_id);
+  nodesMeta.data.forEach((nodeMeta) => {
+    const nodeId = parseInt(nodeMeta.node_id, 10);
     const nodeWithMeta = nodesDictWithMeta[nodeId] || _.cloneDeep(nodesDict[nodeId]);
 
     if (!nodeWithMeta.meta) {

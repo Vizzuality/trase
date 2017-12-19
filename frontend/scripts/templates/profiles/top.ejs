@@ -1,20 +1,20 @@
-<h3 class="title -small"><%= title %></h3>
-<ul class="top-list">
-  <% list.forEach(function(item, i) { %>
-    <li class="top-item">
-      <span class="item-name">
-        <span class="node-name"><%= i + 1 %>. <%= item.name %></span>
-        <% if (item.link) { %>
-          <a href="<%= item.link %>" class="outside-link">
-            <svg class="icon icon-outside-link"><use xlink:href="#icon-outside-link"></use></svg>
-          </a>
+<h3 class="title -small" ><%= title %></h3 >
+<ul class="top-list" >
+    <% list.forEach(function(item, i) { %>
+    <li class="top-item" >
+      <span class="item-name" >
+        <span class="node-name" ><%= i + 1 %>. <%= item.name %></span >
+          <% if (item.link) { %>
+          <a href="<%= item.link %>" class="outside-link" >
+            <svg class="icon icon-outside-link" ><use xlink:href="#icon-outside-link" ></use ></svg >
+          </a >
+          <% } %>
+      </span >
+        <% if (unit && i == 0) { %>
+        <span class="item-value" data-unit="<%= unit %>" ><%= item.value %></span >
+        <% } else  { %>
+        <span class="item-value" ><%= item.value %></span >
         <% } %>
-      </span>
-      <% if (unit && i == 0) { %>
-        <span class="item-value" data-unit="<%= unit %>"><%= item.value %></span>
-      <% } else  { %>
-        <span class="item-value" ><%= item.value %></span>
-      <% } %>
-    </li>
-  <% }) %>
-</ul>
+    </li >
+    <% }) %>
+</ul >

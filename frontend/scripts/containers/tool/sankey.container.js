@@ -1,52 +1,58 @@
+/* eslint-disable no-shadow */
 import { selectNode, highlightNode, toggleNodesExpand, resetState } from 'actions/tool.actions';
 import connect from 'connect';
-import Sankey from 'components/tool/sankey.component.js';
+import Sankey from 'components/tool/sankey.component';
 
-const shouldRepositionExpandButton = (expandedNodesIds, selectedNodesIds, areNodesExpanded) => {
-  return areNodesExpanded === false ||
-    expandedNodesIds === undefined ||
-    expandedNodesIds[0] === selectedNodesIds[0];
-};
+const shouldRepositionExpandButton = (expandedNodesIds, selectedNodesIds, areNodesExpanded) =>
+  areNodesExpanded === false ||
+  expandedNodesIds === undefined ||
+  expandedNodesIds[0] === selectedNodesIds[0];
 
 // this maps component methods to app state updates
 // keys correspond to method names, values to state prop path
-const mapMethodsToState = (state) => ({
+const mapMethodsToState = state => ({
   showLoadedLinks: {
-    _comparedValue: (state) => state.tool.links,
-    _returnedValue: (state) => {
-      return {
-        sankeySize: state.app.sankeySize,
-        selectedRecolorBy: state.tool.selectedRecolorBy,
-        currentQuant: state.tool.currentQuant,
-        selectedNodesIds: state.tool.selectedNodesIds,
-        links: state.tool.links,
-        detailedView: state.tool.detailedView,
-        visibleNodesByColumn: state.tool.visibleNodesByColumn,
-        nodesColoredAtColumn: state.tool.nodesColoredAtColumn,
-        shouldRepositionExpandButton: shouldRepositionExpandButton(state.tool.expandedNodesIds, state.tool.selectedNodesIds, state.tool.areNodesExpanded)
-      };
-    }
+    _comparedValue: state => state.tool.links,
+    _returnedValue: state => ({
+      sankeySize: state.app.sankeySize,
+      selectedRecolorBy: state.tool.selectedRecolorBy,
+      currentQuant: state.tool.currentQuant,
+      selectedNodesIds: state.tool.selectedNodesIds,
+      links: state.tool.links,
+      detailedView: state.tool.detailedView,
+      visibleNodesByColumn: state.tool.visibleNodesByColumn,
+      nodesColoredAtColumn: state.tool.nodesColoredAtColumn,
+      shouldRepositionExpandButton: shouldRepositionExpandButton(
+        state.tool.expandedNodesIds,
+        state.tool.selectedNodesIds,
+        state.tool.areNodesExpanded
+      )
+    })
   },
   resizeViewport: {
-    _comparedValue: (state) => state.app.sankeySize,
-    _returnedValue: (state) => {
-      return {
-        sankeySize: state.app.sankeySize,
-        selectedRecolorBy: state.tool.selectedRecolorBy,
-        currentQuant: state.tool.currentQuant,
-        selectedNodesIds: state.tool.selectedNodesIds,
-        shouldRepositionExpandButton: shouldRepositionExpandButton(state.tool.expandedNodesIds, state.tool.selectedNodesIds, state.tool.areNodesExpanded)
-      };
-    }
+    _comparedValue: state => state.app.sankeySize,
+    _returnedValue: state => ({
+      sankeySize: state.app.sankeySize,
+      selectedRecolorBy: state.tool.selectedRecolorBy,
+      currentQuant: state.tool.currentQuant,
+      selectedNodesIds: state.tool.selectedNodesIds,
+      shouldRepositionExpandButton: shouldRepositionExpandButton(
+        state.tool.expandedNodesIds,
+        state.tool.selectedNodesIds,
+        state.tool.areNodesExpanded
+      )
+    })
   },
   selectNodes: {
-    _comparedValue: (state) => state.tool.selectedNodesIds,
-    _returnedValue: (state) => {
-      return {
-        selectedNodesIds: state.tool.selectedNodesIds,
-        shouldRepositionExpandButton: shouldRepositionExpandButton(state.tool.expandedNodesIds, state.tool.selectedNodesIds, state.tool.areNodesExpanded)
-      };
-    }
+    _comparedValue: state => state.tool.selectedNodesIds,
+    _returnedValue: state => ({
+      selectedNodesIds: state.tool.selectedNodesIds,
+      shouldRepositionExpandButton: shouldRepositionExpandButton(
+        state.tool.expandedNodesIds,
+        state.tool.selectedNodesIds,
+        state.tool.areNodesExpanded
+      )
+    })
   },
   toggleExpandButton: state.tool.areNodesExpanded,
   highlightNodes: state.tool.highlightedNodesIds

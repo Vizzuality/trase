@@ -46,10 +46,10 @@ export default class {
       }
     });
 
-    this._bindMultipleEvents(['mouseup', 'touchstart'], window, function(event) {
+    this._bindMultipleEvents(['mouseup', 'touchstart'], window, (event) => {
       if (this.el.contains(event.target)) return;
       this._close();
-    }.bind(this));
+    });
   }
 
   _onlyChild() {
@@ -74,7 +74,6 @@ export default class {
     if (this.hideCurrentSelected === true && this.currentValueTitle) {
       this.currentValueTitle.classList.add('is-hidden');
     }
-
   }
 
   setTitle(text) {
@@ -83,7 +82,7 @@ export default class {
 
   _onTitleClick() {
     const allDropdowns = [].slice.call(document.querySelectorAll('.js-dropdown-list'));
-    allDropdowns.forEach(dropdown => {
+    allDropdowns.forEach((dropdown) => {
       if (dropdown.parentNode.getAttribute('data-dropdown') === this.id) {
         this._toggle();
       } else {

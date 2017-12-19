@@ -55,7 +55,7 @@ a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
   _urq.push(['initSite', <%= USER_REPORT_KEY ? USER_REPORT_KEY : '' %>]);
   (function() {
     var ur = document.createElement('script'); ur.type = 'text/javascript'; ur.async = true;
-    ur.src = ('https:' == document.location.protocol ? 'https://cdn.userreport.com/userreport.js' : 'http://cdn.userreport.com/userreport.js');
+    ur.src = ('https:' === document.location.protocol ? 'https://cdn.userreport.com/userreport.js' : 'http://cdn.userreport.com/userreport.js');
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ur, s);
   })();
 </script>

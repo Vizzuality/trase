@@ -10,17 +10,15 @@ export default class {
     this.closer = document.querySelector('.js-close-search');
 
     this.autocomplete = new Awesomplete(this.input, {
-      data: node => {
-        return {
-          label: node.name.toLowerCase(),
-          value: JSON.stringify({
-            id: node.id,
-            name: node.name.toLowerCase(),
-            columnName: node.type.toLowerCase(),
-            profileType: node.profileType,
-          })
-        };
-      },
+      data: node => ({
+        label: node.name.toLowerCase(),
+        value: JSON.stringify({
+          id: node.id,
+          name: node.name.toLowerCase(),
+          columnName: node.type.toLowerCase(),
+          profileType: node.profileType
+        })
+      }),
       item: (text, input) => {
         let html;
         if (input === '') {
@@ -39,7 +37,7 @@ export default class {
       },
       // sets the value that appear in the input when selecting a list item
       // needs to be overridden because by default it will spit the whole item html
-      replace: text => {
+      replace: (text) => {
         this.input.value = text;
       }
     });
@@ -75,5 +73,4 @@ export default class {
   _closeSearch() {
     this.el.classList.add('is-hidden');
   }
-
 }

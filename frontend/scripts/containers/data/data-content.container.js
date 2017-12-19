@@ -3,7 +3,7 @@ import { loadContextNodes } from 'actions/data.actions';
 import dataContent from 'components/data/data-content.component';
 import { trackDownload, trackDataDownloadFormLoaded } from 'analytics/analytics.actions';
 
-const mapMethodsToState = (state) => ({
+const mapMethodsToState = state => ({
   fillContexts: state.data.contexts,
   fillExporters: state.data.exporters,
   fillConsumptionCountries: state.data.consumptionCountries,

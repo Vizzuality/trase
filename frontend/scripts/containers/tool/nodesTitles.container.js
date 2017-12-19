@@ -1,10 +1,11 @@
+/* eslint-disable no-shadow */
 import { selectNode, navigateToProfile, resetState } from 'actions/tool.actions';
 import connect from 'connect';
-import NodesTitles from 'components/tool/nodesTitles.component.js';
+import NodesTitles from 'components/tool/nodesTitles.component';
 
 // this maps component methods to app state updates
 // keys correspond to method names, values to state prop path
-const mapMethodsToState = (state) => ({
+const mapMethodsToState = state => ({
   selectNodes: {
     nodesData: state.tool.selectedNodesData,
     recolorGroups: state.tool.recolorGroups,
@@ -12,23 +13,23 @@ const mapMethodsToState = (state) => ({
     selectedYears: state.tool.selectedYears
   },
   highlightNode: {
-    _comparedValue: (state) => state.tool.highlightedNodeData,
-    _returnedValue: (state) => {
-      return {
-        nodesData: (state.tool.highlightedNodeData.length === 0) ? state.tool.selectedNodesData : state.tool.highlightedNodeData,
-        isHighlight: state.tool.highlightedNodeData.length > 0,
-        recolorGroups: state.tool.recolorGroups,
-        coordinates: state.tool.highlightedNodeCoordinates,
-        isMapVisible: state.tool.isMapVisible,
-        currentQuant: state.tool.currentQuant,
-        selectedYears: state.tool.selectedYears
-      };
-    }
+    _comparedValue: state => state.tool.highlightedNodeData,
+    _returnedValue: state => ({
+      nodesData: (state.tool.highlightedNodeData.length === 0
+        ? state.tool.selectedNodesData
+        : state.tool.highlightedNodeData),
+      isHighlight: state.tool.highlightedNodeData.length > 0,
+      recolorGroups: state.tool.recolorGroups,
+      coordinates: state.tool.highlightedNodeCoordinates,
+      isMapVisible: state.tool.isMapVisible,
+      currentQuant: state.tool.currentQuant,
+      selectedYears: state.tool.selectedYears
+    })
   }
 });
 
 const mapViewCallbacksToActions = () => ({
-  onCloseNodeClicked: (id) => selectNode(id),
+  onCloseNodeClicked: id => selectNode(id),
   onProfileLinkClicked: (id, year) => navigateToProfile(id, year),
   onClearClick: () => resetState()
 });

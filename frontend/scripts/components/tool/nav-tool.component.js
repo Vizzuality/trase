@@ -30,7 +30,7 @@ export default class {
 
   _setNavigationLinks() {
     const links = [].slice.call(this.AppNav.querySelectorAll('.js-nav-link'));
-    links.forEach(link => {
+    links.forEach((link) => {
       const page = link.getAttribute('data-route');
       link.addEventListener('click', () => this.callbacks.onLinkClick(page));
     });

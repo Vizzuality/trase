@@ -1,8 +1,10 @@
+import {
+  GET_CSV_DATA_DOWNLOAD_FILE, GET_JSON_DATA_DOWNLOAD_FILE, getURLFromParams,
+  POST_SUBSCRIBE_NEWSLETTER
+} from 'utils/getURLFromParams';
 import SelectorItemsTemplate from 'templates/data/selector-items.ejs';
 import BulkDownloadTemplate from 'templates/data/bulk-download.ejs';
-import { GET_CSV_DATA_DOWNLOAD_FILE, GET_JSON_DATA_DOWNLOAD_FILE, getURLFromParams } from 'utils/getURLFromParams';
 import _ from 'lodash';
-import { POST_SUBSCRIBE_NEWSLETTER } from '../../utils/getURLFromParams';
 
 export default class {
   onCreated() {
@@ -64,7 +66,7 @@ export default class {
     });
 
     if (DATA_DOWNLOAD_ENABLED) {
-      this.bulkDownloadsSection.querySelectorAll('.c-bulk-downloads__item').forEach(elem => {
+      this.bulkDownloadsSection.querySelectorAll('.c-bulk-downloads__item').forEach((elem) => {
         elem.classList.remove('-disabled');
         elem.addEventListener('click', () => {
           this.currentDownloadParams = { context_id: elem.getAttribute('data-value'), pivot: 1 };
@@ -94,9 +96,7 @@ export default class {
       group: 'companies',
       noSelfCancel: false
     }))
-      .sort((a, b) => {
-        return a.name.localeCompare(b.name);
-      });
+      .sort((a, b) => a.name.localeCompare(b.name));
     this.selectorCompanies.querySelector('.js-custom-dataset-selector-values').innerHTML = SelectorItemsTemplate({
       items
     });
@@ -110,12 +110,11 @@ export default class {
       group: 'consumption-countries',
       noSelfCancel: false
     }))
-      .sort((a, b) => {
-        return a.name.localeCompare(b.name);
-      });
-    this.selectorConsumptionCountries.querySelector('.js-custom-dataset-selector-values').innerHTML = SelectorItemsTemplate({
-      items
-    });
+      .sort((a, b) => a.name.localeCompare(b.name));
+    this
+      .selectorConsumptionCountries
+      .querySelector('.js-custom-dataset-selector-values')
+      .innerHTML = SelectorItemsTemplate({ items });
     this._setSelectorEvents(this.selectorConsumptionCountries);
   }
 
@@ -126,9 +125,7 @@ export default class {
       group: 'indicators',
       noSelfCancel: false
     }))
-      .sort((a, b) => {
-        return a.name.localeCompare(b.name);
-      });
+      .sort((a, b) => a.name.localeCompare(b.name));
     this.selectorIndicators.querySelector('.js-custom-dataset-selector-values').innerHTML = SelectorItemsTemplate({
       items
     });
@@ -147,19 +144,37 @@ export default class {
       context_id: contextId
     };
 
-    const years = Array.prototype.slice.call(this.selectorYears.querySelector('.js-custom-dataset-selector-values').querySelectorAll('.c-radio-btn.-enabled'), 0);
+    const years = Array.prototype.slice.call(
+      this.selectorYears.querySelector('.js-custom-dataset-selector-values').querySelectorAll('.c-radio-btn.-enabled')
+      , 0
+    );
     if (years.length > 0) {
       params.years = years.map(item => item.getAttribute('value'));
     }
-    const exporters = Array.prototype.slice.call(this.selectorCompanies.querySelector('.js-custom-dataset-selector-values').querySelectorAll('.c-radio-btn.-enabled'), 0);
+    const exporters = Array.prototype.slice.call(
+      this.selectorCompanies
+        .querySelector('.js-custom-dataset-selector-values')
+        .querySelectorAll('.c-radio-btn.-enabled')
+      , 0
+    );
     if (exporters.length > 0) {
       params.exporters_ids = exporters.map(item => item.getAttribute('value'));
     }
-    const consumptionCountries = Array.prototype.slice.call(this.selectorConsumptionCountries.querySelector('.js-custom-dataset-selector-values').querySelectorAll('.c-radio-btn.-enabled'), 0);
+    const consumptionCountries = Array.prototype.slice.call(
+      this.selectorConsumptionCountries
+        .querySelector('.js-custom-dataset-selector-values')
+        .querySelectorAll('.c-radio-btn.-enabled')
+      , 0
+    );
     if (consumptionCountries.length > 0) {
       params.countries_ids = consumptionCountries.map(item => item.getAttribute('value'));
     }
-    const indicators = Array.prototype.slice.call(this.selectorIndicators.querySelector('.js-custom-dataset-selector-values').querySelectorAll('.c-radio-btn.-enabled'), 0);
+    const indicators = Array.prototype.slice.call(
+      this.selectorIndicators
+        .querySelector('.js-custom-dataset-selector-values')
+        .querySelectorAll('.c-radio-btn.-enabled')
+      , 0
+    );
     if (indicators.length > 0) {
       params.indicators = indicators.map(item => item.getAttribute('value'));
     }
@@ -183,7 +198,7 @@ export default class {
 
   _sendForm() {
     const payload = {};
-    for (var i = 0; i < this.form.length; i++) {
+    for (let i = 0; i < this.form.length; i++) {
       const formEl = this.form.elements[i];
       payload[formEl.id] = formEl.value;
     }
@@ -202,13 +217,15 @@ export default class {
     }
 
     // pretty please can I haz your data
-    if (_.values(payload).filter(v => v!== '').length === 1) {
+    if (_.values(payload).filter(v => v !== '').length === 1) {
       this._setFormStatus(true);
       return;
     }
 
     const dataSubmitBody = new FormData();
-    Object.keys(payload).forEach(key => { dataSubmitBody.append(key, payload[key]); });
+    Object.keys(payload).forEach((key) => {
+      dataSubmitBody.append(key, payload[key]);
+    });
 
     fetch(DATA_FORM_ENDPOINT, {
       method: 'POST',
@@ -253,7 +270,10 @@ export default class {
         break;
     }
 
-    this.callbacks.onDownloadTriggered(Object.assign({ file, type: this.currentDownloadType }, params));
+    this.callbacks.onDownloadTriggered(Object.assign({
+      file,
+      type: this.currentDownloadType
+    }, params));
 
     window.open(downloadURL);
   }
@@ -402,7 +422,14 @@ export default class {
 
   _updateSelectAll(selector) {
     const allSelector = selector.querySelector('[value="all"]');
-    if (Array.prototype.slice.call(selector.querySelector('.js-custom-dataset-selector-values').querySelectorAll('.c-radio-btn:not(.-enabled)'), 0).length !== 0) {
+    if (
+      Array.prototype.slice.call(
+        selector
+          .querySelector('.js-custom-dataset-selector-values')
+          .querySelectorAll('.c-radio-btn:not(.-enabled)')
+        , 0
+      ).length !== 0
+    ) {
       allSelector.classList.remove('-enabled');
     } else {
       allSelector.classList.add('-enabled');
@@ -418,7 +445,12 @@ export default class {
   }
 
   _cleanRadios(selector) {
-    const radios = Array.prototype.slice.call(selector.querySelector('.js-custom-dataset-selector-values').querySelectorAll('.c-radio-btn'), 0);
+    const radios = Array.prototype.slice.call(
+      selector
+        .querySelector('.js-custom-dataset-selector-values')
+        .querySelectorAll('.c-radio-btn')
+      , 0
+    );
     radios.forEach((radio) => {
       radio.classList.remove('-enabled');
       radio.closest('li').classList.remove('-selected');
@@ -450,7 +482,10 @@ export default class {
   }
 
   _selectAllRadios(selector) {
-    const radios = Array.prototype.slice.call(selector.querySelector('.js-custom-dataset-selector-values').querySelectorAll('.c-radio-btn:not(.-disabled)'), 0);
+    const radios = Array.prototype.slice.call(
+      selector.querySelector('.js-custom-dataset-selector-values').querySelectorAll('.c-radio-btn:not(.-disabled)')
+      , 0
+    );
     radios.forEach((radio) => {
       radio.classList.add('-enabled');
       radio.closest('li').classList.add('-selected');
@@ -459,7 +494,7 @@ export default class {
 
   _updateCommoditiesSelector(country) {
     const items = this.contexts
-      .filter(context => context.countryId === parseInt(country))
+      .filter(context => context.countryId === parseInt(country, 10))
       .map(context => ({
         id: context.id,
         name: context.commodityName.toLowerCase(),
@@ -474,9 +509,9 @@ export default class {
   }
 
   _updateYearsSelector(contextId) {
-    const context = this.contexts.find(context => context.id === parseInt(contextId));
+    const selectedContext = this.contexts.find(context => context.id === parseInt(contextId, 10));
 
-    const items = context.years.map(year => ({
+    const items = selectedContext.years.map(year => ({
       id: year,
       name: year,
       group: 'year',

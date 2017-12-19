@@ -1,3 +1,5 @@
+/* eslint-disable max-len,no-new */
+
 // import plyr from 'plyr';
 // import 'styles/components/homepage/plyr.scss';
 // import 'node_modules/plyr/src/scss/plyr.scss';
@@ -9,13 +11,13 @@ import FooterMarkup from 'html/includes/_footer.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
-import NavContainer from 'containers/shared/nav.container.js';
+import NavContainer from 'containers/shared/nav.container';
 import Slider from 'components/home/slider.component';
 import PostsTemplate from 'templates/homepage/posts.ejs';
 import TweetsTemplate from 'templates/homepage/tweets.ejs';
 import 'styles/homepage.scss';
 
-import { GET_POSTS, GET_TWEETS, POST_SUBSCRIBE_NEWSLETTER, getURLFromParams } from 'utils/getURLFromParams';
+import { GET_POSTS, GET_TWEETS, getURLFromParams, POST_SUBSCRIBE_NEWSLETTER } from 'utils/getURLFromParams';
 
 import EventManager from 'utils/eventManager';
 
@@ -68,13 +70,17 @@ const state = {
 };
 
 
-const renderSlider = ({ el, endpoint, perPage, next, prev, template }) => {
+const renderSlider = ({
+  el, endpoint, perPage, next, prev, template
+}) => {
   fetch(endpoint)
     .then(response => response.json())
-    .then((posts) => template({ posts: posts.data }))
+    .then(posts => template({ posts: posts.data }))
     .then((slides) => {
       document.querySelector(el).innerHTML = slides;
-      new Slider({ selector: el, perPage, next, prev });
+      new Slider({
+        selector: el, perPage, next, prev
+      });
     });
 };
 
@@ -82,12 +88,12 @@ const getPageOffset = (bounds) => {
   const body = document.querySelector('body').getBoundingClientRect();
   const padding = 65;
   const navHeight = 64;
-  return Math.abs(body.top) + Math.abs(bounds.top) - padding - navHeight;
+  return (Math.abs(body.top) + Math.abs(bounds.top)) - padding - navHeight;
 };
 
 const scrollIntro = () => {
   const sections = document.querySelectorAll('.js-scroll-change');
-  const offsets = Array.prototype.map.call(sections, (section) => section.getBoundingClientRect().top);
+  const offsets = Array.prototype.map.call(sections, section => section.getBoundingClientRect().top);
   const direction = (state.scrollTop < window.scrollY) ? 1 : -1;
   let index = state.activeIndex;
 
@@ -97,7 +103,7 @@ const scrollIntro = () => {
 
   state.scrollTop = window.scrollY;
 
-  if(typeof offsets[index] === 'undefined') return;
+  if (typeof offsets[index] === 'undefined') return;
   if (state.activeIndex !== index) {
     const intro = document.querySelector('.js-intro-statement');
     const { text, action } = state.texts[index];

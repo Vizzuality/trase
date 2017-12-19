@@ -3,22 +3,6 @@ import actions from 'actions';
 import qs from 'query-string';
 import { redirect } from 'redux-first-router';
 
-export const parse = url => {
-  const params = qs.parse(url);
-  if ('state' in params) {
-    return { ...params, state: decodeStateFromURL(params) };
-  }
-  return params;
-};
-
-export const stringify = ({ state, ...obj }) => {
-  const params = qs.stringify(obj);
-  if (state) {
-    return `state=${encodeStateToURL(state)}&${params}`;
-  }
-  return params;
-};
-
 const URL_STATE_PROPS = [
   'selectedContextId',
   'selectedYears',
@@ -41,7 +25,7 @@ const URL_PARAMS_PROPS = [
   'selectedYears'
 ];
 
-const filterStateToURL = state => {
+const filterStateToURL = (state) => {
   if (_.isEmpty(state)) {
     return {};
   }
@@ -55,34 +39,28 @@ const filterStateToURL = state => {
   return stateToSave;
 };
 
-export const encodeStateToURL = state => {
+export const encodeStateToURL = (state) => {
   const urlProps = JSON.stringify(filterStateToURL(state));
   const encoded = btoa(urlProps);
   return encoded;
-};
-
-export const decodeStateFromURL = ({ state, ...params }) => {
-  const decoded = (state === undefined) ? {} : JSON.parse(atob(state));
-
-  return computeStateQueryParams(decoded, params);
 };
 
 const computeStateQueryParams = (state, params) => {
   if (!params) return state;
   const newState = { ...state };
   // if URL contains GET parameters, override hash state prop with it
-  URL_PARAMS_PROPS.forEach(prop => {
+  URL_PARAMS_PROPS.forEach((prop) => {
     let urlParam = params[prop] || '';
     if (urlParam) {
       switch (prop) {
         case 'selectedNodesIds': {
-          urlParam = urlParam.replace(/\[|\]/gi, '').split(',').map(nodeId => parseInt(nodeId));
+          urlParam = urlParam.replace(/\[|\]/gi, '').split(',').map(nodeId => parseInt(nodeId, 10));
           newState.areNodesExpanded = true;
           newState.expandedNodesIds = urlParam;
           break;
         }
         case 'selectedYears': {
-          urlParam = urlParam.replace(/\[|\]/gi, '').split(',').map(year => parseInt(year));
+          urlParam = urlParam.replace(/\[|\]/gi, '').split(',').map(year => parseInt(year, 10));
           break;
         }
         case 'isMapVisible': {
@@ -96,7 +74,29 @@ const computeStateQueryParams = (state, params) => {
   return newState;
 };
 
-export const toolUrlStateMiddleware = store => next => action => {
+export const decodeStateFromURL = ({ state, ...params }) => {
+  const decoded = (state === undefined) ? {} : JSON.parse(atob(state));
+
+  return computeStateQueryParams(decoded, params);
+};
+
+export const parse = (url) => {
+  const params = qs.parse(url);
+  if ('state' in params) {
+    return { ...params, state: decodeStateFromURL(params) };
+  }
+  return params;
+};
+
+export const stringify = ({ state, ...obj }) => {
+  const params = qs.stringify(obj);
+  if (state) {
+    return `state=${encodeStateToURL(state)}&${params}`;
+  }
+  return params;
+};
+
+export const toolUrlStateMiddleware = store => next => (action) => {
   // if highlight action bail
   if (action.type === actions.HIGHLIGHT_NODE) return next(action);
   // get current query params
@@ -117,11 +117,10 @@ export const toolUrlStateMiddleware = store => next => action => {
     !_.isEqual(computeStateQueryParams(filterStateToURL(tool), location.query), urlState)
   ];
   if (!conditions.includes(false)) {
-    const action = redirect({
+    store.dispatch(redirect({
       type: 'tool',
       payload: { query: { ...location.query, state: tool } }
-    });
-    store.dispatch(action);
+    }));
   }
   return result;
 };

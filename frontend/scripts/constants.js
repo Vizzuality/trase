@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 export const NUM_DECIMALS = {
   // resize by
   'trade volume': 0,
@@ -26,9 +27,9 @@ export const NUM_DECIMALS = {
   'reported cases of forced labour (2014)': 0,
   'land conflicts (2014)': 0,
   // generic
-  'area': 0,
-  'percentage': 1,
-  'tons': 0
+  area: 0,
+  percentage: 1,
+  tons: 0
 };
 export const DEFAULT_PROFILE_PAGE_YEAR = 2015;
 
@@ -57,9 +58,9 @@ export const CHOROPLETH_CLASSES = {
   red: ['ch-red-0', 'ch-red-1', 'ch-red-2', 'ch-red-3', 'ch-red-4'],
   blue: ['ch-blue-0', 'ch-blue-1', 'ch-blue-2', 'ch-blue-3', 'ch-blue-4'],
   green: ['recolorby-percentual-yellow-green-0', 'recolorby-percentual-yellow-green-1', 'recolorby-percentual-yellow-green-2', 'recolorby-percentual-yellow-green-3', 'recolorby-percentual-yellow-green-4'],
-  bluered: ['choro-red-blue-toned-down-4','choro-red-blue-toned-down-3','choro-red-blue-toned-down-2','choro-red-blue-toned-down-1','choro-red-blue-toned-down-0'],
-  redblue: ['choro-red-blue-toned-down-0','choro-red-blue-toned-down-1','choro-red-blue-toned-down-2','choro-red-blue-toned-down-3','choro-red-blue-toned-down-4'],
-  greenred: ['choro-red-green-toned-down-4','choro-red-green-toned-down-3','choro-red-green-toned-down-2','choro-red-green-toned-down-1','choro-red-green-toned-down-0'],
+  bluered: ['choro-red-blue-toned-down-4', 'choro-red-blue-toned-down-3', 'choro-red-blue-toned-down-2', 'choro-red-blue-toned-down-1', 'choro-red-blue-toned-down-0'],
+  redblue: ['choro-red-blue-toned-down-0', 'choro-red-blue-toned-down-1', 'choro-red-blue-toned-down-2', 'choro-red-blue-toned-down-3', 'choro-red-blue-toned-down-4'],
+  greenred: ['choro-red-green-toned-down-4', 'choro-red-green-toned-down-3', 'choro-red-green-toned-down-2', 'choro-red-green-toned-down-1', 'choro-red-green-toned-down-0'],
   error_no_metadata: 'ch-no-meta',
   error_no_metadata_for_layer: 'ch-no-meta-layer',
   default: 'ch-default'
@@ -165,7 +166,7 @@ export const BASEMAPS = {
     url: '//{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
     attribution: '&copy;<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>',
     thumbnail: 'images/maps/thumb-basemap-streets.png'
-  },
+  }
 };
 
 export const CONTEXT_LAYERS = [
@@ -173,7 +174,7 @@ export const CONTEXT_LAYERS = [
     id: 'landcover',
     title: 'Land cover',
     rasterURL: 'https://s3-eu-west-1.amazonaws.com/lulc/landcover_brazil_2015/',
-    legend: '<div class="cartodb-legend custom"><ul class="bullets"><li><div class="bullet" style="background:#008156"></div>Forest</li><li><div class="bullet" style="background:#556B2F"></div>Forest plantations</li><li><div class="bullet" style="background:#E1E196"></div>Pastures</li><li><div class="bullet" style="background:#E1A500"></div>Agriculture</li><li><div class="bullet" style="background:#00FFFF"></div>Coastal forest</li><li><div class="bullet" style="background:#00AFFF"></div>Water</li><li><div class="bullet" style="background:#F5F5F3"></div>Other vegetation</li><li><div class="bullet" style="background:#3E3F40"></div>Not observed</li></ul></div>',
+    legend: '<div class="cartodb-legend custom"><ul class="bullets"><li><div class="bullet" style="background:#008156"></div>Forest</li><li><div class="bullet" style="background:#556B2F"></div>Forest plantations</li><li><div class="bullet" style="background:#E1E196"></div>Pastures</li><li><div class="bullet" style="background:#E1A500"></div>Agriculture</li><li><div class="bullet" style="background:#00FFFF"></div>Coastal forest</li><li><div class="bullet" style="background:#00AFFF"></div>Water</li><li><div class="bullet" style="background:#F5F5F3"></div>Other vegetation</li><li><div class="bullet" style="background:#3E3F40"></div>Not observed</li></ul></div>'
   }, {
     id: 'brazil_biomes',
     title: 'Brazil biomes',

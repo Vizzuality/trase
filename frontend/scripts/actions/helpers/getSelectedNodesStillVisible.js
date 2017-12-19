@@ -1,4 +1,4 @@
-export default function(visibleNodes, selectedNodesIds) {
+export default function (visibleNodes, selectedNodesIds) {
   if (selectedNodesIds === undefined) {
     return [];
   }

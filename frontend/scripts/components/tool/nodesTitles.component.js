@@ -21,7 +21,9 @@ export default class {
     this._update(true, data.nodesData, data.recolorGroups, data.currentQuant, data.selectedYears);
   }
 
-  highlightNode({ isHighlight, nodesData, recolorGroups, coordinates, isMapVisible, currentQuant, selectedYears }) {
+  highlightNode({
+    isHighlight, nodesData, recolorGroups, coordinates, isMapVisible, currentQuant, selectedYears
+  }) {
     this.tooltip.hide();
     if (nodesData === undefined || !nodesData.length) {
       return;
@@ -34,11 +36,9 @@ export default class {
     // TODO nodesData[0] === undefined should never happen, this is a smell from the reducer
     if (nodesData === undefined || nodesData.length === 0 || nodesData[0] === undefined) {
       this.el.classList.add('is-hidden');
-    } else {
-      if (isMapVisible === false) {
-        this.el.classList.remove('is-hidden');
-        this._update(!isHighlight, nodesData, recolorGroups, currentQuant, selectedYears);
-      }
+    } else if (isMapVisible === false) {
+      this.el.classList.remove('is-hidden');
+      this._update(!isHighlight, nodesData, recolorGroups, currentQuant, selectedYears);
     }
   }
 
@@ -55,13 +55,13 @@ export default class {
 
     const templateData = {
       year: selectedYears ? selectedYears[0] : null,
-      nodes: nodesData.map(node => {
+      nodes: nodesData.map((node) => {
         let renderedQuant;
         if (node.quant !== undefined) {
           renderedQuant = {
             valueNice: formatValue(node.quant, currentQuant.name),
             unit: currentQuant.unit,
-            name: currentQuant.name,
+            name: currentQuant.name
           };
         }
 
@@ -70,17 +70,20 @@ export default class {
           renderedMetas = node.selectedMetas.map(originalMeta => ({
             valueNice: formatValue(originalMeta.rawValue, originalMeta.name),
             name: originalMeta.name,
-            unit: originalMeta.unit,
+            unit: originalMeta.unit
           }));
         }
 
-        const renderedNode = Object.assign({}, node, {
-          hasLink: node.isUnknown !== true && node.isDomesticConsumption !== true && node.profileType !== undefined && node.profileType !== null,
+        return Object.assign({}, node, {
+          hasLink: (
+            node.isUnknown !== true
+            && node.isDomesticConsumption !== true
+            && node.profileType !== undefined
+            && node.profileType !== null
+          ),
           selectedMetas: renderedMetas,
           renderedQuant
         });
-
-        return renderedNode;
       }),
       isSelect: isSelect || nodesData.length > 1,
       recolorGroups
@@ -98,12 +101,15 @@ export default class {
   }
 
   _onNodeTitleClick(e) {
-    this.callbacks.onProfileLinkClicked(parseInt(e.currentTarget.dataset.nodeId), parseInt(e.currentTarget.dataset.year));
+    this.callbacks.onProfileLinkClicked(
+      parseInt(e.currentTarget.dataset.nodeId, 10),
+      parseInt(e.currentTarget.dataset.year, 10)
+    );
   }
 
   _onNodeTitleCloseClick(e) {
     e.stopPropagation();
-    this.callbacks.onCloseNodeClicked(parseInt(e.currentTarget.dataset.nodeId));
+    this.callbacks.onCloseNodeClicked(parseInt(e.currentTarget.dataset.nodeId, 10));
   }
 
   _showTooltip(nodesData, coordinates, currentQuant) {
@@ -117,13 +123,11 @@ export default class {
 
     // map metas might not be loaded yet
     if (node.selectedMetas !== undefined) {
-      values = node.selectedMetas.map(meta => {
-        return {
-          title: meta.name,
-          unit: meta.unit,
-          value: formatValue(meta.rawValue, meta.name)
-        };
-      }).concat(values);
+      values = node.selectedMetas.map(meta => ({
+        title: meta.name,
+        unit: meta.unit,
+        value: formatValue(meta.rawValue, meta.name)
+      })).concat(values);
     }
 
     // if node is visible in sankey, quant is available

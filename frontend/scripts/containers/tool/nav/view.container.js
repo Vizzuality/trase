@@ -1,26 +1,22 @@
-import { connect } from 'preact-redux';
+import { connect } from 'react-redux';
 import { toggleDropdown } from 'actions/app.actions';
 import { selectView } from 'actions/tool.actions';
-import View from 'react-components/tool/nav/view.component.js';
+import View from 'react-components/tool/nav/view.component';
 
-const mapStateToProps = (state) => {
-  return {
-    tooltips: state.app.tooltips,
-    currentDropdown: state.app.currentDropdown,
-    isDetailedView: state.tool.detailedView
-  };
-};
+const mapStateToProps = state => ({
+  tooltips: state.app.tooltips,
+  currentDropdown: state.app.currentDropdown,
+  isDetailedView: state.tool.detailedView
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onToggle: (id) => {
-      dispatch(toggleDropdown(id));
-    },
-    onSelected: (view) => {
-      dispatch(selectView(view));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  onToggle: (id) => {
+    dispatch(toggleDropdown(id));
+  },
+  onSelected: (view) => {
+    dispatch(selectView(view));
+  }
+});
 
 export default connect(
   mapStateToProps,
