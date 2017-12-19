@@ -5,6 +5,7 @@
   min-height: calc(100vh - #{$nav-height});
   padding-top: 54px;
   background-color: $egg-shell;
+  line-height: 1.5;
 
   section:nth-of-type(2n-1) {
     background-color: rgba($white, 0.3);
@@ -61,7 +62,34 @@
   }
 
   .score-table {
-    padding: 54px 0 42px 0;
+    padding: 54px 0 42px;
+  }
+
+  .-traders .c-chord {
+    text-align: center;
+  }
+
+  .-consumers .c-chord {
+    text-align: right;
+
+    .c-chord-legend {
+      left: auto;
+      right: 0;
+      padding-right: 39px;
+      padding-left: 0;
+      text-align: right;
+
+      &::before {
+        left: auto;
+        right: 0;
+      }
+    }
+  }
+
+  .c-top {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
   }
 }
-

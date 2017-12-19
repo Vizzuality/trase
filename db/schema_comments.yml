@@ -355,8 +355,10 @@ materialized_views:
         comment: Attribute''s description
       - name: aggregate_method
         comment: The method used to aggregate the data
-        name: layer_attribute_id
+      - name: original_attribute_id
         comment: The attribute''s original id
+      - name: context_id
+        comment: References the context
   - name: recolor_by_attributes_mv
     comment: Materialized view which merges recolor_by_inds and recolor_by_quals with recolor_by_attributes.
     columns:
