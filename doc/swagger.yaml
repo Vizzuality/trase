@@ -239,7 +239,7 @@ paths:
     get:
       tags:
         - node
-      summary: ''
+      summary: 'Data for actor profile'
       description: ''
       consumes:
         - application/json
@@ -263,9 +263,8 @@ paths:
             type: object
             properties:
               data:
-                type: array
-                items:
-                  $ref: '#/definitions/Node'
+                type: object
+                $ref: '#/definitions/ActorNode'
   '/context/{context_id}/nodes/{id}/place':
     get:
       tags:
@@ -832,6 +831,229 @@ definitions:
                     style:
                       type: string
                     values:
+                      type: array
+                      items:
+                        type: number
+  ActorNode:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          node_name:
+            type: string
+          column_name:
+            type: string
+          country_name:
+            type: string
+          country_geo_id:
+            type: string
+          zero_deforestation_link:
+            type: string
+          supply_change_link:
+            type: string
+          rtrs_member:
+            type: string
+          zero_deforestation:
+            type: string
+          supply_change:
+            type: string
+          soy_:
+            type: number
+          forest_500:
+            type: number
+          summary:
+            type: string
+          top_countries:
+            type: object
+            properties:
+              included_years:
+                type: array
+                items:
+                  type: integer
+              buckets:
+                type: array
+                items:
+                  type: integer
+              lines:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    geo_id:
+                      type: string
+                    values:
+                      type: array
+                      items:
+                        type: number
+                    value9:
+                      type: number
+              unit:
+                type: string
+              style:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  style:
+                    type: string
+          top_sources:
+            type: object
+            properties:
+              included_years:
+                type: array
+                items:
+                  type: integer
+              buckets:
+                type: array
+                items:
+                  type: integer
+              municipality:
+                type: object
+                properties:
+                  lines:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        geo_id:
+                          type: string
+                        values:
+                          type: array
+                          items:
+                            type: number
+                        value9:
+                          type: number
+                  unit:
+                    type: string
+                  style:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      style:
+                        type: string                  
+              biome:
+                type: object
+                properties:
+                  lines:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        geo_id:
+                          type: string
+                        values:
+                          type: array
+                          items:
+                            type: number
+                        value9:
+                          type: number
+                  unit:
+                    type: string
+                  style:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      style:
+                        type: string 
+              state:
+                type: object
+                properties:
+                  lines:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        geo_id:
+                          type: string
+                        values:
+                          type: array
+                          items:
+                            type: number
+                        value9:
+                          type: number
+                  unit:
+                    type: string
+                  style:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      style:
+                        type: string 
+          sustainability:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                included_columns:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      unit:
+                        type: string
+                rows:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      values:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            value:
+                              type: string
+                            
+                
+          companies_sourcing:
+            type: object
+            properties:
+              dimension_y:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  unit:
+                    type: string
+              dimensions_x:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    unit:
+                      type: string
+              companies:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    id:
+                      type: integer
+                    y:
+                      type: number
+                    x:
                       type: array
                       items:
                         type: number
