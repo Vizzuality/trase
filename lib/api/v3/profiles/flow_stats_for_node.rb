@@ -55,7 +55,7 @@ module Api
         end
 
         def flow_values_for_attributes(year, attributes)
-          node_index = NodeType.node_index_for_id(@context, @node.node_type_id)
+          node_index = Api::V3::NodeType.node_index_for_id(@context, @node.node_type_id)
           attributes_ids = attributes.map(&:id)
           attribute_type = attributes.first&.class&.name&.demodulize&.downcase
           flow_values_table = :"flow_#{attribute_type}s"

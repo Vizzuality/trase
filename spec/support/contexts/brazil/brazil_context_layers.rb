@@ -4,19 +4,21 @@ shared_context 'brazil context layers' do
   include_context 'quants'
 
   let!(:context_layer_group_one) do
-    FactoryBot.create(
-      :context_layer_group,
-      context_id: context.id, name: 'Context layer group one',
-      position: 1
-    )
+    ContextLayer.where(context_id: context.id, position: 1).first ||
+      FactoryBot.create(
+        :context_layer_group,
+        context_id: context.id, name: 'Context layer group one',
+        position: 1
+      )
   end
 
   let!(:context_layer_group_two) do
-    FactoryBot.create(
-      :context_layer_group,
-      context_id: context.id, name: 'Context layer group two',
-      position: 2
-    )
+    ContextLayer.where(context_id: context.id, position: 2).first ||
+      FactoryBot.create(
+        :context_layer_group,
+        context_id: context.id, name: 'Context layer group two',
+        position: 2
+      )
   end
 
   let!(:forest_500_context_layer) do

@@ -107,10 +107,8 @@ module Api
                 @place_quants
               elsif attribute_hash[:attribute].is_a? Api::V3::Ind
                 @place_inds
-              else
-                []
               end
-            attribute_value = attribute_values.get(
+            attribute_value = attribute_values&.get(
               attribute_hash[:attribute_name]
             )
             value = attribute_value['value'] if attribute_value
@@ -122,7 +120,7 @@ module Api
           end
           included_columns = attributes.map do |attribute_hash|
             {
-              name: attribute_hash[:attribute].display_name,
+              name: attribute_hash[:attribute]['display_name'],
               unit: attribute_hash[:attribute].unit
             }
           end

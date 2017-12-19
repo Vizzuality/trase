@@ -2,6 +2,30 @@
 # schema and the revamp schema as we migrate the code.
 class SchemaRevamp
   def copy
+    tables_to_copy.each do |table|
+      copy_data(table)
+    end
+    populate_contextual_layers
+    populate_profiles
+    refresh_materialized_views
+  end
+
+  def refresh
+    refresh_materialized_views
+  end
+
+  def clean
+    (
+      tables_to_copy + properties_tables + tables_to_populate
+    ).each do |table|
+      truncate_table(table)
+    end
+    refresh_materialized_views
+  end
+
+  private
+
+  def tables_to_copy
     %w[
       countries
       commodities
@@ -32,19 +56,28 @@ class SchemaRevamp
       download_quants
       download_quals
       download_versions
-    ].each do |table|
-      copy_data(table)
-    end
-    populate_contextual_layers
-    populate_profiles
-    refresh_materialized_views
+    ]
   end
 
-  def refresh
-    refresh_materialized_views
+  def properties_tables
+    %w[
+      country_properties
+      context_properties
+      context_node_type_properties
+      quant_properties
+      ind_properties
+      qual_properties
+      node_properties
+    ]
   end
 
-  private
+  def tables_to_populate
+    %w[
+      contextual_layers
+      carto_layers
+      profiles
+    ]
+  end
 
   def copy_data(table)
     Rails.logger.debug("Copying table #{table}...") unless Rails.env.test?

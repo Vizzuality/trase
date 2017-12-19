@@ -10,7 +10,9 @@ shared_context 'api v3 inds' do
       FactoryBot.create(
         :api_v3_ind_property,
         ind: i,
-        display_name: 'Forest 500 score'
+        display_name: 'Forest 500 score',
+        is_visible_on_actor_profile: true,
+        is_temporal_on_actor_profile: false
       )
     end
     i
@@ -27,7 +29,9 @@ shared_context 'api v3 inds' do
       FactoryBot.create(
         :api_v3_ind_property,
         ind: i,
-        display_name: 'Water scarcity'
+        display_name: 'Water scarcity',
+        is_visible_on_place_profile: true,
+        is_temporal_on_place_profile: false
       )
     end
     i
@@ -44,7 +48,9 @@ shared_context 'api v3 inds' do
       FactoryBot.create(
         :api_v3_ind_property,
         ind: i,
-        display_name: 'Human development index'
+        display_name: 'Human development index',
+        is_visible_on_place_profile: true,
+        is_temporal_on_place_profile: false
       )
     end
     i
@@ -61,7 +67,9 @@ shared_context 'api v3 inds' do
       FactoryBot.create(
         :api_v3_ind_property,
         ind: i,
-        display_name: 'GDP per capita'
+        display_name: 'GDP per capita',
+        is_visible_on_place_profile: true,
+        is_temporal_on_place_profile: true
       )
     end
     i
@@ -78,7 +86,9 @@ shared_context 'api v3 inds' do
       FactoryBot.create(
         :api_v3_ind_property,
         ind: i,
-        display_name: 'GDP from agriculture'
+        display_name: 'GDP from agriculture',
+        is_visible_on_place_profile: true,
+        is_temporal_on_place_profile: true
       )
     end
     i
@@ -95,7 +105,9 @@ shared_context 'api v3 inds' do
       FactoryBot.create(
         :api_v3_ind_property,
         ind: i,
-        display_name: 'Smallholder dominance'
+        display_name: 'Smallholder dominance',
+        is_visible_on_place_profile: true,
+        is_temporal_on_place_profile: false
       )
     end
     i
@@ -112,7 +124,9 @@ shared_context 'api v3 inds' do
       FactoryBot.create(
         :api_v3_ind_property,
         ind: i,
-        display_name: 'Agricultural land used for soy'
+        display_name: 'Agricultural land used for soy',
+        is_visible_on_place_profile: true,
+        is_temporal_on_place_profile: true
       )
     end
     i
@@ -129,7 +143,9 @@ shared_context 'api v3 inds' do
       FactoryBot.create(
         :api_v3_ind_property,
         ind: i,
-        display_name: 'Soy yield'
+        display_name: 'Soy yield',
+        is_visible_on_place_profile: true,
+        is_temporal_on_place_profile: true
       )
     end
     i

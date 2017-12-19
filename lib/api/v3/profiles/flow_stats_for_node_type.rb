@@ -26,7 +26,7 @@ module Api
         end
 
         def nodes_with_flows_into_node_by_year(attribute, node)
-          node_index = NodeType.node_index_for_id(@context, node.node_type_id)
+          node_index = Api::V3::NodeType.node_index_for_id(@context, node.node_type_id)
           nodes_with_flow_totals_by_year(attribute).
             where('flows.path[?] = ?', node_index, node.id).
             where('nodes.id' => top_nodes.map { |n| n['node_id'] })
@@ -46,7 +46,7 @@ module Api
               'JOIN nodes ON nodes.id = flows.path[?]', @node_index
             ]
           )
-          Flow.
+          Api::V3::Flow.
             select(
               "nodes.id AS node_id, nodes.name, \
     SUM(#{flow_values}.value::DOUBLE PRECISION) AS value, \
@@ -76,7 +76,7 @@ module Api
             :sanitize_sql_array,
             ['flows.path[?]', @node_index]
           )
-          Flow.
+          Api::V3::Flow.
             select(select_clause).
             joins(flow_values).
             where("#{flow_values}.#{attribute_type}_id" => attribute.id).

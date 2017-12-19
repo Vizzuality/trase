@@ -43,7 +43,7 @@ module Api
         def query_all_years(attribute, include_domestic_consumption = true)
           attribute_type = attribute.class.name.demodulize.downcase
           value_table = 'flow_' + attribute_type + 's'
-          query = Flow.select(select_clause(value_table)).
+          query = Api::V3::Flow.select(select_clause(value_table)).
             joins("JOIN #{value_table} ON flows.id = #{value_table}.flow_id").
             joins(nodes_join_clause).
             joins('JOIN node_properties ON nodes.id = node_properties.node_id').
