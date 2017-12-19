@@ -1,15 +1,14 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import router, { routeSubscriber } from './router';
-
 import AppReducer from 'reducers/app.reducer';
 import ToolReducer from 'reducers/tool.reducer';
 import DataReducer from 'reducers/data.reducer';
-
 import analyticsMiddleware from 'analytics/tool.analytics.middleware';
 import { toolUrlStateMiddleware } from 'utils/stateURL';
+import router, { routeSubscriber } from './router';
 
-const composeEnhancers = (process.env.NODE_ENV === 'development' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
+const composeEnhancers =
+  (process.env.NODE_ENV === 'development' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
 
 const reducers = combineReducers({

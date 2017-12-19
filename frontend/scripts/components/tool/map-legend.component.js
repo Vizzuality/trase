@@ -4,10 +4,11 @@ import 'styles/components/tool/map/map-legend.scss';
 import abbreviateNumber from 'utils/abbreviateNumber';
 
 export default class {
-
   onCreated() {
     this.el = document.querySelector('.js-map-legend');
-    this.el.addEventListener('click', () => { this.callbacks.onToggleMapLayerMenu(); });
+    this.el.addEventListener('click', () => {
+      this.callbacks.onToggleMapLayerMenu();
+    });
     this.choro = document.querySelector('.js-map-legend-choro');
     this.context = document.querySelector('.js-map-legend-context');
     this.map = document.querySelector('.c-map');
@@ -20,8 +21,12 @@ export default class {
 
     const zoom = document.querySelector('.leaflet-control-zoom');
     const scale = document.querySelector('.leaflet-control-scale');
-    zoom.addEventListener('mouseenter', () => { scale.classList.toggle('-visible', true); });
-    zoom.addEventListener('mouseleave', () => { scale.classList.toggle('-visible', false); });
+    zoom.addEventListener('mouseenter', () => {
+      scale.classList.toggle('-visible', true);
+    });
+    zoom.addEventListener('mouseleave', () => {
+      scale.classList.toggle('-visible', false);
+    });
   }
 
   updateChoroplethLegend({ choroplethLegend, selectedMapContextualLayersData }) {
@@ -40,7 +45,7 @@ export default class {
     if (this.currentBuckets === undefined) {
       return;
     }
-    for (var i = 0; i < this.currentBuckets.length; i++) {
+    for (let i = 0; i < this.currentBuckets.length; i++) {
       this.currentBuckets[i].classList.toggle('-highlighted', false);
     }
     if (bucketClass === undefined || bucketClass === null) {
@@ -71,7 +76,10 @@ export default class {
   }
 
   _toggleLegend(choroplethLegend, selectedMapContextualLayersData) {
-    if (choroplethLegend === null && (selectedMapContextualLayersData === undefined || !selectedMapContextualLayersData.length)) {
+    if (
+      choroplethLegend === null
+      && (selectedMapContextualLayersData === undefined || !selectedMapContextualLayersData.length)
+    ) {
       this._hideLegend();
     } else {
       this._showLegend();
@@ -95,7 +103,7 @@ export default class {
   _renderChoro(choroplethLegend) {
     const cssClass = (choroplethLegend.isBivariate) ? '-bidimensional' : '-horizontal';
 
-    const html = LegendChoroTemplate({
+    this.choro.innerHTML = LegendChoroTemplate({
       title: choroplethLegend.titles,
       colors: choroplethLegend.colors,
       cssClass,
@@ -104,22 +112,20 @@ export default class {
       abbreviateNumber
     });
 
-    this.choro.innerHTML = html;
     this.currentBuckets = Array.prototype.slice.call(this.choro.getElementsByClassName('bucket'))
-                  .concat(Array.prototype.slice.call(this.choro.getElementsByClassName('bullet')));
+      .concat(Array.prototype.slice.call(this.choro.getElementsByClassName('bullet')));
   }
 
   _renderContext(layers) {
-    const html = LegendContextTemplate({
+    this.context.innerHTML = LegendContextTemplate({
       layers
     });
-    this.context.innerHTML = html;
   }
 
   _updateMapControlsPosition() {
     const mapFooterHeight = this.el.offsetHeight + this.attribution.offsetHeight;
     this.mapControlSwitcher.style.bottom = `${mapFooterHeight + 8}px`;
     this.mapControlZoom.style.bottom = `${mapFooterHeight + 48}px`;
-    this.mapControlScale.style.bottom = `${mapFooterHeight + this.mapControlScale.offsetHeight - 88}px`;
+    this.mapControlScale.style.bottom = `${(mapFooterHeight + this.mapControlScale.offsetHeight) - 88}px`;
   }
 }

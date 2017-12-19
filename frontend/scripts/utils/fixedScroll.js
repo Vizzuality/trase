@@ -2,9 +2,7 @@
 // add as many offsets you need
 function calculateOffsets(el) {
   const absoluteOffsetTop = el.getBoundingClientRect().top;
-  let top = 0;
-
-  top = window.pageYOffset > absoluteOffsetTop ?
+  const top = window.pageYOffset > absoluteOffsetTop ?
     window.pageYOffset + absoluteOffsetTop : window.pageYOffset + Math.abs(absoluteOffsetTop);
 
   return {
@@ -12,7 +10,7 @@ function calculateOffsets(el) {
   };
 }
 
-function scrollDocument (el, cutOffsets) {
+function scrollDocument(el, cutOffsets) {
   const scrollTop = window.pageYOffset;
   const elemHeight = el.getBoundingClientRect().height;
   const cutTopPoint = cutOffsets.cutTopOffsets.top;

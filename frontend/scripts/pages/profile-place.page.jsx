@@ -1,3 +1,6 @@
+/* eslint-disable no-new */
+import React from 'react';
+import { render } from 'react-dom';
 import ProfilePlaceMarkup from 'html/profile-place.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
 import FooterMarkup from 'html/includes/_footer.ejs';
@@ -19,9 +22,8 @@ import 'styles/components/profiles/error.scss';
 import 'styles/components/profiles/map.scss';
 
 import capitalize from 'lodash/capitalize';
-import { h, render } from 'preact';
 
-import NavContainer from 'containers/shared/nav.container.js';
+import NavContainer from 'containers/shared/nav.container';
 import Dropdown from 'components/shared/dropdown.component';
 import Top from 'components/profiles/top.component';
 import Line from 'components/profiles/line.component';
@@ -36,7 +38,7 @@ import formatValue from 'utils/formatValue';
 import swapProfileYear from 'utils/swapProfileYear';
 import smoothScroll from 'utils/smoothScroll';
 
-import { getURLFromParams, GET_PLACE_FACTSHEET } from '../utils/getURLFromParams';
+import { GET_PLACE_FACTSHEET, getURLFromParams } from 'utils/getURLFromParams';
 
 const defaults = {
   country: 'Brazil',
@@ -46,49 +48,53 @@ const defaults = {
 let year;
 let showMiniSankey;
 
-const _build = data => {
+const _build = (data) => {
   const stateGeoID = data.state_geo_id;
   const countryName = capitalize(data.country_name);
 
   Map('.js-map-country', {
     topoJSONPath: './vector_layers/WORLD.topo.json',
-    topoJSONRoot: 'WORLD',
-    getPolygonClassName: d => (d.properties.name === countryName) ? '-isCurrent' : '',
+    topoJSONRoot: 'world',
+    getPolygonClassName: d => (d.properties.name === countryName ? '-isCurrent' : ''),
     useRobinsonProjection: true
   });
 
   Map('.js-map-biome', {
     topoJSONPath: `./vector_layers/${defaults.country.toUpperCase()}_BIOME.topo.json`,
     topoJSONRoot: `${defaults.country.toUpperCase()}_BIOME`,
-    getPolygonClassName: d => (d.properties.geoid === data.biome_geo_id) ? '-isCurrent' : ''
+    getPolygonClassName: d => (d.properties.geoid === data.biome_geo_id ? '-isCurrent' : '')
   });
 
   Map('.js-map-state', {
     topoJSONPath: `./vector_layers/${defaults.country.toUpperCase()}_STATE.topo.json`,
     topoJSONRoot: `${defaults.country.toUpperCase()}_STATE`,
-    getPolygonClassName: d => (d.properties.geoid === stateGeoID) ? '-isCurrent' : ''
+    getPolygonClassName: d => (d.properties.geoid === stateGeoID ? '-isCurrent' : '')
   });
 
   Map('.js-map-municipality', {
-    topoJSONPath: `./vector_layers/municip_states/${defaults.country.toUpperCase().toLowerCase()}/${stateGeoID}.topo.json`,
+    topoJSONPath: `./vector_layers/municip_states/${defaults.country.toLowerCase()}/${stateGeoID}.topo.json`,
     topoJSONRoot: `${defaults.country.toUpperCase()}_${stateGeoID}`,
-    getPolygonClassName: d => (d.properties.geoid === data.municipality_geo_id) ? '-isCurrent' : ''
+    getPolygonClassName: d => (d.properties.geoid === data.municipality_geo_id ? '-isCurrent' : '')
   });
 
-  if (data.trajectory_deforestation && data.trajectory_deforestation.lines && data.trajectory_deforestation.lines.length) {
-
+  if (
+    data.trajectory_deforestation
+    && data.trajectory_deforestation.lines
+    && data.trajectory_deforestation.lines.length
+  ) {
     // Manually trim time series to 2010 - 2015 as asked here https://basecamp.com/1756858/projects/12498794/todos/324404665
-    data.trajectory_deforestation.included_years = data.trajectory_deforestation.included_years.filter(year => {
-      const include = year >= 2010;
-      if (!include) {
-        data.trajectory_deforestation.lines.forEach(line => {
-          if (line.values !== undefined && line.values !== null) {
-            line.values.shift();
-          }
-        });
-      }
-      return include;
-    });
+    data.trajectory_deforestation.included_years =
+      data.trajectory_deforestation.included_years.filter((includedYear) => {
+        const include = includedYear >= 2010;
+        if (!include) {
+          data.trajectory_deforestation.lines.forEach((line) => {
+            if (line.values !== undefined && line.values !== null) {
+              line.values.shift();
+            }
+          });
+        }
+        return include;
+      });
 
     new Line(
       '.js-line',
@@ -122,32 +128,32 @@ const _build = data => {
         id: 2,
         name: 'Other',
         isAggregated: true,
-        height: 0.2,
+        height: 0.2
         // isDomesticConsumption: null,
-      },{
+      }, {
         id: 588,
         name: 'Cargill',
-        height: 0.4,
-      },{
+        height: 0.4
+      }, {
         id: 588,
         name: 'Hello, I have such a long name I need 3 lines',
-        height: 0.2,
-      },{
+        height: 0.2
+      }, {
         id: 588,
         name: 'Sometimes, you gotta have more lines',
-        height: 0.1,
-      },{
+        height: 0.1
+      }, {
         id: 588,
         name: 'Cargill',
-        height: 0.029,
-      },{
+        height: 0.029
+      }, {
         id: 588,
         name: 'Cargill',
-        height: 0.021,
-      },{
+        height: 0.021
+      }, {
         id: 588,
         name: 'Im very long but sadly the node hieght is too small',
-        height: 0.05,
+        height: 0.05
       }]
     };
 
@@ -158,31 +164,31 @@ const _build = data => {
         name: 'Others',
         isAggregated: true,
         height: 0.2
-      },{
+      }, {
         name: 'China',
-        height: 0.4,
-      },{
+        height: 0.4
+      }, {
         name: 'Brazil',
-        height: 0.2,
-      },{
+        height: 0.2
+      }, {
         name: 'Germany',
-        height: 0.1,
-      },{
+        height: 0.1
+      }, {
         name: 'South Korea',
-        height: 0.029,
-      },{
+        height: 0.029
+      }, {
         name: 'Thailand',
-        height: 0.021,
-      },{
+        height: 0.021
+      }, {
         name: 'Spain',
-        height: 0.05,
+        height: 0.05
       }]
     };
 
     render(
       <MiniSankey
         data={tradersSankeyData}
-        targetLink='actor'
+        targetLink="actor"
       />,
       document.getElementById('js-traders-sankey')
     );
@@ -251,20 +257,31 @@ const _setInfo = (info, nodeId) => {
   document.querySelector('.js-legend').innerHTML = info.type || '-';
   document.querySelector('.js-municipality').innerHTML = info.municipality ? capitalize(info.municipality) : '-';
   document.querySelector('.js-area').innerHTML = info.area !== null ? formatValue(info.area, 'area') : '-';
-  document.querySelector('.js-soy-land').innerHTML = (info.soy_area !== null && info.soy_area !== 'NaN') ? formatValue(info.soy_area, 'area') : '-';
-  document.querySelector('.js-soy-production').innerHTML = info.soy_production !== null ? formatValue(info.soy_production, 'tons'): '-';
-  document.querySelector('.js-link-map').setAttribute('href', `./flows?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
-  document.querySelector('.js-link-supply-chain').setAttribute('href', `./flows?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`);
-  document.querySelector('.js-line-title').innerHTML = info.municipality ? `Deforestation trajectory of ${info.municipality}` : '-';
-  document.querySelector('.js-traders-title').innerHTML = `Top traders of soy in ${info.municipality} in ${year}`;
-  document.querySelector('.js-consumers-title').innerHTML = `Top importer countries of ${formatApostrophe(capitalize(info.municipality))} soy in ${year}`;
-  document.querySelector('.js-link-button-municipality').textContent = formatApostrophe(capitalize(info.municipality)) + ' PROFILE';
+  document.querySelector('.js-soy-land').innerHTML =
+    (info.soy_area !== null && info.soy_area !== 'NaN') ? formatValue(info.soy_area, 'area') : '-';
+  document.querySelector('.js-soy-production').innerHTML =
+    info.soy_production !== null ? formatValue(info.soy_production, 'tons') : '-';
+  document.querySelector('.js-link-map').setAttribute(
+    'href',
+    `./flows?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`
+  );
+  document.querySelector('.js-link-supply-chain').setAttribute(
+    'href',
+    `./flows?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`
+  );
+  document.querySelector('.js-line-title').innerHTML =
+    info.municipality ? `Deforestation trajectory of ${info.municipality}` : '-';
+  document.querySelector('.js-traders-title').innerHTML =
+    `Top traders of soy in ${info.municipality} in ${year}`;
+  document.querySelector('.js-consumers-title').innerHTML =
+    `Top importer countries of ${formatApostrophe(capitalize(info.municipality))} soy in ${year}`;
+  document.querySelector('.js-link-button-municipality').textContent =
+    `${formatApostrophe(capitalize(info.municipality))} PROFILE`;
 
   if (info.soy_production === 0) {
     info.summary = `${info.municipality} did not produce any soy in ${year}`;
   }
   document.querySelector('.js-summary-text').innerHTML = info.summary ? info.summary : '-';
-
 };
 
 const _setEventListeners = () => {
@@ -280,7 +297,6 @@ const _showErrorMessage = (message = null) => {
   if (message !== null && message !== '') {
     el.querySelector('.js-message').innerHTML = message;
   }
-
 };
 
 export const mount = (root, store) => {
@@ -306,7 +322,6 @@ export const mount = (root, store) => {
     })
     .then((result) => {
       if (!result) return;
-
       document.querySelector('.js-loading').classList.add('is-hidden');
       document.querySelector('.js-wrap').classList.remove('is-hidden');
 
@@ -333,8 +348,8 @@ export const mount = (root, store) => {
 
       _build(data);
     })
-    .catch((reason) => _showErrorMessage(reason.message));
+    .catch(reason => _showErrorMessage(reason.message));
 
   new NavContainer(store);
-
 };
+

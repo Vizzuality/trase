@@ -1,21 +1,21 @@
-export default function (rawNodes, columns /*, nodesMeta*/) {
+export default function (rawNodes, columns /* , nodesMeta */) {
   // store in node dict for use in getVisibleNodes
 
   const nodesDict = {};
   const geoIdsDict = {};
-  rawNodes.forEach(node => {
+  rawNodes.forEach((node) => {
     const columnId = node.columnId;
-    const column = columns.find(column => column.id === columnId);
+    const matchingColumn = columns.find(column => column.id === columnId);
     const newNode = {
       id: node.id,
-      columnId: parseInt(node.columnId),
-      columnName: column.name,
-      type: column.name,
-      columnGroup: column.group,
-      isDefault: column.isDefault,
-      isGeo: column.isGeo,
+      columnId: parseInt(node.columnId, 10),
+      columnName: matchingColumn.name,
+      type: matchingColumn.name,
+      columnGroup: matchingColumn.group,
+      isDefault: matchingColumn.isDefault,
+      isGeo: matchingColumn.isGeo,
       name: node.name,
-      profileType: column.profileType,
+      profileType: matchingColumn.profileType,
       geoId: node.geoId
     };
 
@@ -35,7 +35,7 @@ export default function (rawNodes, columns /*, nodesMeta*/) {
       newNode.hasFlows = true;
     }
 
-    nodesDict[parseInt(node.id)] = newNode;
+    nodesDict[parseInt(node.id, 10)] = newNode;
     if (node.geoId) {
       geoIdsDict[`${columnId}-${node.geoId}`] = node.id;
     }

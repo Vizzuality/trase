@@ -1,7 +1,9 @@
-import { h, Component } from 'preact';
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+import React, { Component } from 'react';
 import Dropdown from 'react-components/tool/nav/dropdown.component';
-import YearsThumb from './years-thumb.component';
+import YearsThumb from 'react-components/tool/nav/years-thumb.component';
 import 'styles/components/tool/years-slider.scss';
+import PropTypes from 'prop-types';
 
 const YEAR_WIDTH = 40;
 const id = 'years';
@@ -18,13 +20,11 @@ export default class Years extends Component {
     this.setState(this.getState(props));
   }
 
-  getState({ selectedYears, years }) {
-    const left = YEAR_WIDTH * years.indexOf(selectedYears[0]);
-    const right = YEAR_WIDTH * (years.indexOf(selectedYears[1]) + 1);
-    return {
-      left,
-      right
-    };
+  onDropdownUp() {
+    if (this.dragging === true) {
+      return;
+    }
+    this.props.onToggle(id);
   }
 
   onSelectorDown(mouseEvent) {
@@ -48,11 +48,13 @@ export default class Years extends Component {
     this.releaseSelector();
   }
 
-  onDropdownUp() {
-    if (this.dragging === true) {
-      return;
-    }
-    this.props.onToggle(id);
+  getState({ selectedYears, years }) {
+    const left = YEAR_WIDTH * years.indexOf(selectedYears[0]);
+    const right = YEAR_WIDTH * (years.indexOf(selectedYears[1]) + 1);
+    return {
+      left,
+      right
+    };
   }
 
   moveSelector(x) {
@@ -62,8 +64,8 @@ export default class Years extends Component {
     let right;
 
     if (this.currentSelectorThumb === null) {
-      left = x - deltaWidth/2;
-      right = x + deltaWidth/2;
+      left = x - (deltaWidth / 2);
+      right = x + (deltaWidth / 2);
       if (left < 0) {
         left = 0;
         right = deltaWidth;
@@ -99,11 +101,12 @@ export default class Years extends Component {
     this.props.onSelected([this.props.years[leftIndex], this.props.years[rightIndex]]);
   }
 
-  render({ currentDropdown, selectedYears, years }) {
+  render() {
+    const { currentDropdown, selectedYears, years } = this.props;
     this.totalWidth = YEAR_WIDTH * years.length;
     const title = (selectedYears[0] === selectedYears[1]) ?
-      <span>{selectedYears[0]}</span> :
-      <span>{selectedYears[0]}&thinsp;-&thinsp;{selectedYears[1]}</span>;
+      <span >{selectedYears[0]}</span > :
+      <span >{selectedYears[0]}&thinsp;-&thinsp;{selectedYears[1]}</span >;
     const totalWidthStyle = { width: `${this.totalWidth}px` };
     const deltaWidth = this.state.right - this.state.left;
     const selectorWidthStyle = {
@@ -111,39 +114,61 @@ export default class Years extends Component {
       left: `${this.state.left}px`
     };
     return (
-      <div class='nav-item js-dropdown' onMouseUp={() => { this.onDropdownUp(); }}>
-        <div class='c-dropdown'>
-          <span class='dropdown-label'>
-            year{selectedYears[0] !== selectedYears[1] && <span>s</span>}
-          </span>
-          <span class='dropdown-title'>
+      <div
+        className="nav-item js-dropdown"
+        onMouseUp={() => {
+          this.onDropdownUp();
+        }}
+      >
+        <div className="c-dropdown" >
+          <span className="dropdown-label" >
+            year{selectedYears[0] !== selectedYears[1] && <span >s</span >}
+          </span >
+          <span className="dropdown-title" >
             {title}
-          </span>
-          <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={this.props.onToggle}>
-            <div class='dropdown-list'>
-              <div class='c-years-slider' ref={(elem) => { this.slider = elem; }}>
-                <ul class='background' style={totalWidthStyle}>
-                  {years.map(() => <li />)}
-                </ul>
-                <div class='selector'
+          </span >
+          <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={this.props.onToggle} >
+            <div className="dropdown-list" >
+              <div
+                className="c-years-slider"
+                ref={(elem) => {
+                  this.slider = elem;
+                }}
+              >
+                <ul className="background" style={totalWidthStyle} >
+                  {years.map((year, index) => <li key={index} />)}
+                </ul >
+                <div
+                  className="selector"
                   style={selectorWidthStyle}
-                  onMouseDown={(mouseEvent) => { this.onSelectorDown(mouseEvent); }}
+                  onMouseDown={(mouseEvent) => {
+                    this.onSelectorDown(mouseEvent);
+                  }}
                 >
-                  <YearsThumb id='left' />
-                  <YearsThumb id='right' x={deltaWidth} />
-                </div>
-                <ul class='years' style={totalWidthStyle}>
+                  <YearsThumb id="left" />
+                  <YearsThumb id="right" x={deltaWidth} />
+                </div >
+                <ul className="years" style={totalWidthStyle} >
                   {years
-                    .map(year => <li
-                      >
-                      {year}
-                    </li>)}
-                </ul>
-              </div>
-            </div>
-          </Dropdown>
-        </div>
-      </div>
+                    .map((year, index) => (
+                      <li key={index} >
+                        {year}
+                      </li >
+                    ))}
+                </ul >
+              </div >
+            </div >
+          </Dropdown >
+        </div >
+      </div >
     );
   }
 }
+
+Years.propTypes = {
+  onToggle: PropTypes.func,
+  onSelected: PropTypes.func,
+  years: PropTypes.array,
+  currentDropdown: PropTypes.string,
+  selectedYears: PropTypes.array
+};

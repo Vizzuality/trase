@@ -21,5 +21,4 @@ export default (value, dimensionName) => {
     minimumFractionDigits: 0,
     maximumFractionDigits
   });
-
 };

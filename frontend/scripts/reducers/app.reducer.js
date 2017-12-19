@@ -5,7 +5,7 @@ const initialState = {
   isMapLayerVisible: false,
   isAppMenuVisible: false,
   tooltipCheck: 0,
-  tooltips: [],
+  tooltips: {},
   currentDropdown: null,
   modal: {
     visibility: false,
@@ -13,11 +13,10 @@ const initialState = {
   }
 };
 
-const isSankeyExpanded = (state) => state.isMapLayerVisible !== true && state.isMapVisible !== true;
+const isSankeyExpanded = state => state.isMapLayerVisible !== true && state.isMapVisible !== true;
 
 export default function (state = initialState, action) {
   switch (action.type) {
-
     case actions.SET_SANKEY_SIZE:
       if (isSankeyExpanded(state)) {
         return Object.assign({}, state, {
@@ -36,7 +35,8 @@ export default function (state = initialState, action) {
       return Object.assign({}, state, { tooltips: action.payload });
 
     case actions.SHOW_DISCLAIMER: {
-      return Object.assign({}, state,
+      return Object.assign(
+        {}, state,
         {
           modal: {
             visibility: true,
@@ -44,7 +44,8 @@ export default function (state = initialState, action) {
               description: action.disclaimerContent
             }
           }
-        });
+        }
+      );
     }
 
     case actions.TOGGLE_DROPDOWN: {

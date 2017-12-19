@@ -1,10 +1,11 @@
+/* eslint-disable no-new */
 import DataMethodsMarkup from 'html/data-methods.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
 import FooterMarkup from 'html/includes/_footer.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 
-import NavContainer from 'containers/shared/nav.container.js';
+import NavContainer from 'containers/shared/nav.container';
 import 'styles/data-methods.scss';
 
 import smoothScroll from 'utils/smoothScroll';
@@ -23,6 +24,13 @@ const _toggleAnchors = (e, options) => {
   });
 };
 
+const _calculateOffsets = (options) => {
+  Object.assign(options, {
+    cutTopOffsets: calculateOffsets(options.elems.cutTop),
+    cutBottomOffsets: calculateOffsets(options.elems.cutBottom)
+  });
+};
+
 const _onScrollDocument = (options) => {
   const el = options.elems.anchorNav;
   const cutOffsets = {
@@ -34,18 +42,11 @@ const _onScrollDocument = (options) => {
   scrollDocument(el, cutOffsets);
 };
 
-const _calculateOffsets = (options) => {
-  Object.assign(options, {
-    cutTopOffsets: calculateOffsets(options.elems.cutTop),
-    cutBottomOffsets: calculateOffsets(options.elems.cutBottom),
-  });
-};
-
 const _setEventListeners = (options) => {
   const anchorItems = options.elems.anchorItems;
   const _onScrollThrottle = _.throttle(() => _onScrollDocument(options), 50, { leading: true });
   const _calculateOffsetsThrottle = _.throttle(() => _calculateOffsets(options), 50, { leading: true });
-  const _toggleAnchorHandler = (e) => _toggleAnchors(e, options);
+  const _toggleAnchorHandler = e => _toggleAnchors(e, options);
 
   evManager.addEventListener(document, 'scroll', _onScrollThrottle);
   evManager.addEventListener(window, 'resize', _calculateOffsetsThrottle);

@@ -6,7 +6,7 @@ import 'styles/components/shared/tabs.scss';
 
 export default class {
   constructor(settings) {
-    this.el = settings.el; //place to show the table
+    this.el = settings.el; // place to show the table
     this.type = settings.type;
     this.data = settings.data;
     this.tabsTitle = settings.tabsTitle;
@@ -26,13 +26,14 @@ export default class {
 
     this.switchers = Array.prototype.slice.call(this.el.querySelectorAll('.js-multi-table-switcher'), 0);
     this.singleTables = Array.prototype.slice.call(this.el.querySelectorAll('.js-multi-table-container'), 0);
-    this.switchers.forEach(switcher => {
-      switcher.addEventListener('click', (e) => this._switchTable(e));
+    this.switchers.forEach((switcher) => {
+      switcher.addEventListener('click', e => this._switchTable(e));
     });
   }
 
   _renderTables() {
     this.data.forEach((item, i) => {
+      // eslint-disable-next-line no-new
       new Table({
         el: document.querySelector(`.${this.key}_${i}`),
         data: item,
@@ -50,10 +51,10 @@ export default class {
     }
 
     const selectedTable = selectedSwitch.getAttribute('data-table');
-    this.singleTables.forEach(table => {
+    this.singleTables.forEach((table) => {
       table.classList.add('-tab-hidden');
     });
-    this.switchers.forEach(switcher => {
+    this.switchers.forEach((switcher) => {
       switcher.classList.remove('selected');
     });
 

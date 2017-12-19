@@ -31,20 +31,24 @@ const API_ENDPOINTS = {
   [GET_NODE_ATTRIBUTES]: { api: 2, endpoint: '/get_node_attributes' },
   [GET_MAP_BASE_DATA]: { api: 3, endpoint: '/contexts/$context_id$/map_groups' },
   [GET_LINKED_GEO_IDS]: { api: 2, endpoint: '/get_linked_geoids' },
-  [GET_ACTOR_FACTSHEET]: { api: 2, endpoint: '/get_actor_node_attributes', mock: 'mocks/v1_get_actor_node_attributes.json' },
+  [GET_ACTOR_FACTSHEET]: {
+    api: 2,
+    endpoint: '/get_actor_node_attributes',
+    mock: 'mocks/v1_get_actor_node_attributes.json'
+  },
   [GET_INDICATORS]: { api: 2, endpoint: '/indicators' },
   [GET_CSV_DATA_DOWNLOAD_FILE]: { api: 2, endpoint: '/download.csv' },
   [GET_JSON_DATA_DOWNLOAD_FILE]: { api: 2, endpoint: '/download.json' },
-  [POST_SUBSCRIBE_NEWSLETTER]: { api: 2, endpoint: '/newsletter_subscriptions' },
+  [POST_SUBSCRIBE_NEWSLETTER]: { api: 2, endpoint: '/newsletter_subscriptions' }
 };
 
 function getURLForV3(endpoint, paramsArg = {}) {
   const params = Object.assign({}, paramsArg);
-  if (params.hasOwnProperty('context_id') && endpoint.indexOf('$context_id$') !== -1) {
+  if (Object.prototype.hasOwnProperty.call(params, 'context_id') && endpoint.indexOf('$context_id$') !== -1) {
     endpoint = endpoint.replace('$context_id$', params.context_id);
     delete params.context_id;
   }
-  if (params.hasOwnProperty('node_id') && endpoint.indexOf('$node_id$') !== -1) {
+  if (Object.prototype.hasOwnProperty.call(params, 'node_id') && endpoint.indexOf('$node_id$') !== -1) {
     endpoint = endpoint.replace('$node_id$', params.node_id);
     delete params.node_id;
   }
@@ -52,24 +56,20 @@ function getURLForV3(endpoint, paramsArg = {}) {
   const queryParams = Object.keys(params).reduce((prev, current) => {
     const value = params[current];
     if (Array.isArray(value)) {
-      const arrUrl = value.reduce((arrPrev, arrCurrent) => {
-        return `${arrPrev}&${current}[]=${arrCurrent}`;
-      }, '');
+      const arrUrl = value.reduce((arrPrev, arrCurrent) => `${arrPrev}&${current}[]=${arrCurrent}`, '');
       return `${prev}&${arrUrl}`;
     }
     return `${prev}&${current}=${params[current]}`;
   }, '');
 
-  return `${API_V3_URL}${endpoint}` + (queryParams.length > 0 ? `?${queryParams}` : '');
+  return `${API_V3_URL}${endpoint}${queryParams.length > 0 ? `?${queryParams}` : ''}`;
 }
 
 function getURLForV2(endpoint, params = {}) {
   return Object.keys(params).reduce((prev, current) => {
     const value = params[current];
     if (Array.isArray(value)) {
-      const arrUrl = value.reduce((arrPrev, arrCurrent) => {
-        return `${arrPrev}&${current}[]=${arrCurrent}`;
-      }, '');
+      const arrUrl = value.reduce((arrPrev, arrCurrent) => `${arrPrev}&${current}[]=${arrCurrent}`, '');
       return `${prev}&${arrUrl}`;
     }
     return `${prev}&${current}=${params[current]}`;
@@ -81,9 +81,7 @@ function getURLForV1(endpoint, params = {}) {
   return Object.keys(params).reduce((prev, current) => {
     const value = params[current];
     if (Array.isArray(value)) {
-      const arrUrl = value.reduce((arrPrev, arrCurrent) => {
-        return `${arrPrev}&${current}=${arrCurrent}`;
-      }, '');
+      const arrUrl = value.reduce((arrPrev, arrCurrent) => `${arrPrev}&${current}=${arrCurrent}`, '');
       return `${prev}&${arrUrl}`;
     }
     return `${prev}&${current}=${params[current]}`;
@@ -105,6 +103,9 @@ export function getURLFromParams(endpointKey, params = {}, mock = false) {
         return `/${endpointData.endpoint}`;
       case 'content':
         return `${API_V2_URL}/content${endpointData.endpoint}`;
+      default:
+        console.warn('Unmatched route found at router');
+        return null;
     }
   } else {
     return endpointData.mock;

@@ -1,6 +1,4 @@
-
 export default class {
-
   onCreated() {
     this._setVars();
   }
@@ -21,7 +19,7 @@ export default class {
   }
 
   _toggleLoading(loading) {
-    const toolLoading= document.querySelector('.js-tool-loading');
+    const toolLoading = document.querySelector('.js-tool-loading');
     if (toolLoading) toolLoading.classList.toggle('is-visible', loading);
   }
 

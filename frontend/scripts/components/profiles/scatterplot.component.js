@@ -1,11 +1,6 @@
-import {
-  select as d3_select,
-  event as d3_event
-} from 'd3-selection';
-import {
-  axisBottom as d3_axis_bottom,
-  axisLeft as d3_axis_left
-} from 'd3-axis';
+/* eslint-disable camelcase,import/no-extraneous-dependencies */
+import { select as d3_select, event as d3_event } from 'd3-selection';
+import { axisBottom as d3_axis_bottom, axisLeft as d3_axis_left } from 'd3-axis';
 import { scaleLinear as d3_scale_linear } from 'd3-scale';
 import { extent as d3_extent } from 'd3-array';
 import 'd3-transition';
@@ -33,7 +28,9 @@ export default class {
 
   _render() {
     this.titleEl.textContent = `Comparing companies ${this.verbGerund} Soy from Brazil in ${this.year}`;
-    const margin = { top: 20, right: 13, bottom: 30, left: 29 };
+    const margin = {
+      top: 20, right: 13, bottom: 30, left: 29
+    };
     this.width = this.el.clientWidth - margin.left - margin.right;
     this.height = 377 - margin.top - margin.bottom;
     const allYValues = this.data.map(item => item.y);
@@ -63,25 +60,23 @@ export default class {
       .ticks(7)
       .tickSize(-this.width, 0)
       .tickPadding(9)
-      .tickFormat((value) => {
-        return abbreviateNumber(value, 3);
-      });
+      .tickFormat(value => abbreviateNumber(value, 3));
 
     this.svg = d3_select(this.el)
       .append('svg')
       .attr('width', this.width + margin.left + margin.right)
       .attr('height', this.height + margin.top + margin.bottom)
       .append('g')
-      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+      .attr('transform', `translate(${margin.left},${margin.top})`);
 
     this.svg.append('g')
       .attr('class', 'axis axis--x')
-      .attr('transform', 'translate(0,' + this.height + ')')
+      .attr('transform', `translate(0,${this.height})`)
       .call(this.xAxis);
 
     this.svg.append('g')
       .attr('class', 'axis axis-line')
-      .attr('transform', 'translate(0,' + this.height + ')')
+      .attr('transform', `translate(0,${this.height})`)
       .call(d3_axis_bottom(this.x).ticks(0).tickSizeOuter(0));
 
     this.svg.append('g')
@@ -102,22 +97,22 @@ export default class {
       .attr('cy', d => this.y(d.y));
 
     if (this.showTooltipCallback !== undefined) {
-      this.circles.on('mousemove', function(d) {
+      this.circles.on('mousemove', (d) => {
         const selectedSwitcher = document.querySelector('.js-scatterplot-switcher-item.selected span');
 
         this.showTooltipCallback(
           d,
           {
             name: selectedSwitcher.innerHTML,
-            unit: selectedSwitcher.getAttribute('data-unit'),
+            unit: selectedSwitcher.getAttribute('data-unit')
           },
           d3_event.clientX + 10,
           d3_event.clientY + window.scrollY + 10
         );
-      }.bind(this))
-      .on('mouseout', function() {
-        this.hideTooltipCallback();
-      }.bind(this));
+      })
+        .on('mouseout', () => {
+          this.hideTooltipCallback();
+        });
     }
   }
 
@@ -127,8 +122,8 @@ export default class {
     this.switcherEl.innerHTML = ScatterplotSwitcherTemplate({ data: tabs });
 
     this.switchers = Array.prototype.slice.call(this.switcherEl.querySelectorAll('.js-scatterplot-switcher-item'), 0);
-    this.switchers.forEach(switcher => {
-      switcher.addEventListener('click', (e) => this._switchTab(e));
+    this.switchers.forEach((switcher) => {
+      switcher.addEventListener('click', e => this._switchTab(e));
     });
   }
 
@@ -139,7 +134,7 @@ export default class {
     }
 
     const selectedTabKey = selectedSwitch.getAttribute('data-key');
-    this.switchers.forEach(switcher => {
+    this.switchers.forEach((switcher) => {
       switcher.classList.remove('selected');
     });
     selectedSwitch.classList.add('selected');
@@ -162,18 +157,15 @@ export default class {
       .transition()
       .duration(500)
       .call(this.xAxis);
-
   }
 
   _getFormatedData(i) {
-    return this.data.map(item => {
-      return {
-        nodeId: item.id,
-        name: item.name,
-        y: item.y,
-        x: item.x[i]
-      };
-    });
+    return this.data.map(item => ({
+      nodeId: item.id,
+      name: item.name,
+      y: item.y,
+      x: item.x[i]
+    }));
   }
 
   _getCircleClass(d) {

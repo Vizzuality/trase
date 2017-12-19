@@ -1,9 +1,5 @@
 import actions from 'actions';
-import {
-  getURLFromParams,
-  GET_DISCLAIMER,
-  GET_SITE_DIVE
-} from 'utils/getURLFromParams';
+import { GET_DISCLAIMER, GET_SITE_DIVE, getURLFromParams } from 'utils/getURLFromParams';
 
 export function resize() {
   return {
@@ -49,8 +45,8 @@ export function loadDisclaimer() {
     fetch(url)
       .then(resp => resp.text())
       .then(resp => JSON.parse(resp))
-      .then(disclaimer => {
-        if (disclaimerLocal !== null && parseInt(disclaimerLocal) >= disclaimer.version) {
+      .then((disclaimer) => {
+        if (disclaimerLocal !== null && parseInt(disclaimerLocal, 10) >= disclaimer.version) {
           return;
         }
 
@@ -72,23 +68,22 @@ export function toggleDropdown(dropdownId) {
 }
 
 export function displayStoryModal(storyId) {
-  return dispatch => {
+  return (dispatch) => {
     fetch(`${getURLFromParams(GET_SITE_DIVE)}/${storyId}`)
-      .then(resp => {
+      .then((resp) => {
         if (resp.ok) return resp.text();
         throw new Error(resp.statusText);
       })
       .then(resp => JSON.parse(resp))
-      .then(({ data }) => {
-        return dispatch({
+      .then(({ data }) =>
+        dispatch({
           type: actions.DISPLAY_STORY_MODAL,
           payload: {
             visibility: false,
             modalParams: data
           }
-        });
-      })
-      .catch(err => {
+        }))
+      .catch((err) => {
         console.error(err);
         return dispatch({
           type: actions.DISPLAY_STORY_MODAL,

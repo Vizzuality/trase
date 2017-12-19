@@ -1,6 +1,4 @@
-
 export default class EventManager {
-
   constructor() {
     this.events = [];
     this.addEventListener = this.addEventListener.bind(this);

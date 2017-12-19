@@ -1,21 +1,10 @@
+/* eslint-disable camelcase,import/no-extraneous-dependencies */
 import _ from 'lodash';
-import {
-  select as d3_select,
-  event as d3_event
-} from 'd3-selection';
-import {
-  axisBottom as d3_axis_bottom,
-  axisLeft as d3_axis_left
-} from 'd3-axis';
-import {
-  scaleLinear as d3_scale_linear,
-  scaleTime as d3_scale_time
-} from 'd3-scale';
+import { select as d3_select, event as d3_event } from 'd3-selection';
+import { axisBottom as d3_axis_bottom, axisLeft as d3_axis_left } from 'd3-axis';
+import { scaleLinear as d3_scale_linear, scaleTime as d3_scale_time } from 'd3-scale';
 import { extent as d3_extent } from 'd3-array';
-import {
-  line as d3_line,
-  area as d3_area
-} from 'd3-shape';
+import { line as d3_line, area as d3_area } from 'd3-shape';
 import { format as d3_format } from 'd3-format';
 import { timeFormat as d3_timeFormat } from 'd3-time-format';
 import { LINE_LABEL_HEIGHT } from 'constants';
@@ -23,17 +12,45 @@ import LegendItemTemplate from 'templates/profiles/legendItem.ejs';
 import abbreviateNumber from 'utils/abbreviateNumber';
 import 'styles/components/profiles/line.scss';
 
+const prepareData = (xValues, data) => {
+  const continuousValues = xValues.map((year, index) => ({
+    name: data.name,
+    date: new Date(year, 0),
+    value: data.values[index],
+    value9: data.value9
+  }));
+
+  // break down data into discontinuous blocks when data is missing, to avoid
+  // having the impression values is zero while it's actually unknown
+  const discontinuousValues = [[]];
+  continuousValues.forEach((point, i) => {
+    if (i > 0) {
+      const prevPoint = continuousValues[i - 1];
+      if (
+        (prevPoint.value === null && point.value !== null)
+        || (prevPoint.value !== null && point.value === null)
+      ) {
+        discontinuousValues.push([]);
+      }
+    }
+    discontinuousValues[discontinuousValues.length - 1].push(point);
+  });
+
+  // get rid of blocks composed of only nulls
+  return discontinuousValues.filter(points => points.filter(p => p.value !== null).length);
+};
+
 export default class {
   constructor(className, data, xValues, settings) {
     const elem = document.querySelector(className);
     const legend = document.querySelector(`${className}-legend`);
-    const margin = settings.margin;
+    const { margin, ticks } = settings;
     const width = elem.clientWidth - margin.left - margin.right;
     const height = settings.height - margin.top - margin.bottom;
-    const ticks = settings.ticks;
     this.showTooltipCallback = settings.showTooltipCallback;
     this.hideTooltipCallback = settings.hideTooltipCallback;
-    const allYValues = [].concat.apply([], data.lines.map(line => line.values));
+    // const allYValues = [].concat.apply([], data.lines.map(line => line.values));
+    const allYValues = [].concat(...data.lines.map(line => line.values));
 
     elem.innerHTML = '';
     const container = d3_select(elem)
@@ -41,7 +58,7 @@ export default class {
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
       .append('g')
-      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+      .attr('transform', `translate(${margin.left},${margin.top})`);
 
     const x = d3_scale_time()
       .range([0, width])
@@ -71,9 +88,10 @@ export default class {
         const type = typeof data.style !== 'undefined' ? data.style.type : lineData.type;
         const style = typeof data.style !== 'undefined' ? data.style.style : lineData.style;
 
-        let area = null,
-          pathContainers = null;
+        let area = null;
+        let pathContainers = null;
 
+        // eslint-disable-next-line default-case
         switch (type) {
           case 'area':
             area = d3_area()
@@ -82,16 +100,16 @@ export default class {
               .y1(d => y(d.value));
 
             // loop through broken/discontinuous lines
-            lineValuesWithFormat.forEach(points => {
+            lineValuesWithFormat.forEach((points) => {
               container.append('path')
-              .datum(points)
-              .attr('class', style)
-              .attr('d', area);
+                .datum(points)
+                .attr('class', style)
+                .attr('d', area);
 
               container.append('path')
-              .datum(points)
-              .attr('class', `line-${style}`)
-              .attr('d', line);
+                .datum(points)
+                .attr('class', `line-${style}`)
+                .attr('d', line);
             });
             break;
 
@@ -106,7 +124,13 @@ export default class {
           case 'line-points': {
             pathContainers = container.datum(lineValuesWithFormat[0])
               .append('g')
-              .attr('class', d => (_.isFunction(settings.lineClassNameCallback)) ? settings.lineClassNameCallback(d, style) : style);
+              .attr(
+                'class',
+                d => (_.isFunction(settings.lineClassNameCallback)
+                  ? settings.lineClassNameCallback(d, style)
+                  : style
+                )
+              );
 
             pathContainers.selectAll('path')
               .data(d => [d])
@@ -118,9 +142,9 @@ export default class {
               .data(d => [d])
               .enter()
               .append('text')
-              .attr('transform', d => {
+              .attr('transform', (d) => {
                 const last = d.length - 1;
-                const value = d[last].value;
+                const { value } = d[last];
                 let newY = y(value) + 4;
                 if (newY + LINE_LABEL_HEIGHT > lastY) {
                   newY = lastY - LINE_LABEL_HEIGHT;
@@ -138,16 +162,16 @@ export default class {
               .attr('r', 4);
 
             if (this.showTooltipCallback !== undefined) {
-              this.circles.on('mousemove', function(d) {
+              this.circles.on('mousemove', (d) => {
                 this.showTooltipCallback(
                   d,
                   d3_event.clientX + 10,
                   d3_event.clientY + window.scrollY + 10
                 );
-              }.bind(this))
-              .on('mouseout', function() {
-                this.hideTooltipCallback();
-              }.bind(this));
+              })
+                .on('mouseout', () => {
+                  this.hideTooltipCallback();
+                });
             }
             break;
           }
@@ -156,17 +180,17 @@ export default class {
         if (typeof lineData.legend_name !== 'undefined') {
           const legendItemHTML = LegendItemTemplate({
             name: lineData.legend_name,
-            style: style
+            style
           });
 
-          legend.innerHTML = legend.innerHTML + legendItemHTML;
+          legend.innerHTML += legendItemHTML;
         }
       });
 
-    let yTickFormat = null,
-      xTickFormat = null;
+    let yTickFormat = null;
+    let xTickFormat = null;
     if (ticks.yTickFormatType === 'top-location') {
-      yTickFormat = (value) => abbreviateNumber(value, 3);
+      yTickFormat = value => abbreviateNumber(value, 3);
 
       xTickFormat = (value) => {
         const format = d3_timeFormat('%Y');
@@ -205,29 +229,3 @@ export default class {
   }
 }
 
-const prepareData = (xValues, data) => {
-  const continuousValues = xValues.map((year, index) => {
-    return {
-      name: data.name,
-      date: new Date(year, 0),
-      value: data.values[index],
-      value9: data.value9
-    };
-  });
-
-  // break down data into discontinuous blocks when data is missing, to avoid
-  // having the impression values is zero while it's actually unknown
-  const discontinuousValues = [[]];
-  continuousValues.forEach((point, i) => {
-    if (i > 0) {
-      const prevPoint = continuousValues[i - 1];
-      if ((prevPoint.value === null && point.value !== null) || (prevPoint.value !== null && point.value === null)) {
-        discontinuousValues.push([]);
-      }
-    }
-    discontinuousValues[discontinuousValues.length - 1].push(point);
-  });
-
-  // get rid of blocks composed of only nulls
-  return discontinuousValues.filter(points => points.filter(p => p.value !== null).length);
-};
