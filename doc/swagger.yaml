@@ -100,9 +100,12 @@ paths:
         '200':
           description: successful operation
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Attribute'
+            type: object
+            properties:
+              indicators:
+                type: array
+                items:
+                  $ref: '#/definitions/DownloadAttribute'
   '/context/{context_id}/flows':
     get:
       tags:
@@ -206,7 +209,7 @@ paths:
       tags:
         - node
       summary: ''
-      description: ''
+      description: 'Aggregated values of inds and quants for all nodes in context'
       consumes:
         - application/json
       produces:
@@ -215,6 +218,14 @@ paths:
         - name: context_id
           in: path
           description: ''
+          required: true
+          type: integer
+        - name: start_year
+          in: query
+          required: true
+          type: integer
+        - name: end_year
+          in: query
           required: true
           type: integer
       responses:
@@ -450,6 +461,25 @@ definitions:
         type: string
       description:
         type: string
+  DownloadAttribute:
+    type: object
+    properties:
+      name:
+        type: string
+      unit:
+        type: string
+      unitType:
+        type: string
+      frontendName:
+        type: string
+      indicatorType:
+        type: string
+        enum:
+          - Ind
+          - Qual
+          - Quant
+      tooltip:
+        type: boolean
   FilterBy:
     type: object
     properties:
@@ -570,9 +600,15 @@ definitions:
       attribute_type:
         type: string
         enum:
-          - Ind
-          - Qual
-          - Quant
+          - ind
+          - qual
+          - quant
+      value:
+        type: number
+      bucket3:
+        type: integer
+      bucket5:
+        type: integer
   Column:
     type: object
     properties:
