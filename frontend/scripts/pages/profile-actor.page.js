@@ -361,7 +361,7 @@ const _showErrorMessage = (message = null) => {
   }
 };
 
-const mount = (root, store) => {
+export const mount = (root, store) => {
   root.innerHTML = ProfileActorMarkup({
     nav: NavMarkup({ page: 'profile-actor' }),
     footer: FooterMarkup(),
@@ -413,5 +413,3 @@ const mount = (root, store) => {
   const nav = new NavContainer(store);
   print = nav.print;
 };
-
-export default { mount };

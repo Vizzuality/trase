@@ -72,7 +72,7 @@ const _setSearch = () => {
     );
 };
 
-const mount = (root, store) => {
+export const mount = (root, store) => {
   root.innerHTML = ProfilesMarkup({
     nav: NavMarkup({ page: 'profiles' }),
     footer: FooterMarkup(),
@@ -82,4 +82,3 @@ const mount = (root, store) => {
   new NavContainer(store);
 };
 
-export default { mount };

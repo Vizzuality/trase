@@ -14,7 +14,7 @@ import 'styles/components/shared/button.scss';
 import 'styles/components/shared/nav.scss';
 import 'styles/components/shared/_footer.scss';
 
-const mount = (root, store) => {
+export const mount = (root, store) => {
   root.innerHTML = TermsOfUseMarkup({
     nav: NavMarkup({ page: 'terms-of-use' }),
     footer: FooterMarkup(),
@@ -22,5 +22,3 @@ const mount = (root, store) => {
   });
   new NavContainer(store);
 };
-
-export default { mount };

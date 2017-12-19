@@ -89,8 +89,7 @@ export function routeSubscriber(store) {
     }
 
     resetPage() {
-      if (this.page && this.page.default.unmount) this.page.default.unmount();
-      this.root.innerHTML = '';
+      if (this.page && this.page.unmount) this.page.unmount();
     }
 
     onRouteChange({ routesMap, type } = {}) {
@@ -98,10 +97,13 @@ export function routeSubscriber(store) {
         this.resetPage();
         this.type = type;
         // eslint-disable-next-line space-in-parens,max-len
-        import( /* webpackChunkName: "page" */ `./pages/${routesMap[this.type].page}.page.${routesMap[this.type].extension}`)
+        import(
+          /* webpackChunkName: "[request]" */
+          `./pages/${routesMap[this.type].page}.page.${routesMap[this.type].extension}`
+        )
           .then((page) => {
             this.page = page;
-            this.page.default.mount(this.root, store);
+            this.page.mount(this.root, store);
           });
       }
     }

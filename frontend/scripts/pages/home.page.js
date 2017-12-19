@@ -150,7 +150,7 @@ const newsletterSubscribe = (e) => {
     });
 };
 
-const mount = (root, store) => {
+export const mount = (root, store) => {
   root.innerHTML = HomeMarkup({
     footer: FooterMarkup(),
     nav: NavMarkup({ page: 'index' }),
@@ -189,8 +189,6 @@ const mount = (root, store) => {
   evManager.addEventListener(document.querySelector('.js-form-subscribe'), 'click', newsletterSubscribe);
 };
 
-const unmount = () => {
+export const unmount = () => {
   evManager.clearEventListeners();
 };
-
-export default { mount, unmount };

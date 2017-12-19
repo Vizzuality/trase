@@ -31,7 +31,7 @@ import EventManager from 'utils/eventManager';
 
 const evManager = new EventManager();
 
-const mount = (root, store) => {
+export const mount = (root, store) => {
   const { query = {} } = store.getState().location;
 
   root.innerHTML = ToolMarkup({
@@ -84,7 +84,7 @@ const mount = (root, store) => {
   document.querySelector('body').classList.add('-overflow-hidden');
 };
 
-const unmount = () => {
+export const unmount = () => {
   evManager.clearEventListeners();
   document.querySelector('body').classList.remove('-overflow-hidden');
 };
@@ -98,5 +98,3 @@ const unmount = () => {
 //     }
 //   });
 // }
-
-export default { mount, unmount };

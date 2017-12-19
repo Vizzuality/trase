@@ -11,7 +11,7 @@ import 'styles/data.scss';
 import 'styles/components/shared/veil.scss';
 import 'styles/components/shared/modal.scss';
 
-const mount = (root, store) => {
+export const mount = (root, store) => {
   root.innerHTML = DataMarkup({
     nav: NavMarkup({ page: 'data' }),
     footer: FooterMarkup(),
@@ -23,5 +23,3 @@ const mount = (root, store) => {
 
   new NavContainer(store);
 };
-
-export default { mount };

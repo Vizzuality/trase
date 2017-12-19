@@ -299,7 +299,7 @@ const _showErrorMessage = (message = null) => {
   }
 };
 
-const mount = (root, store) => {
+export const mount = (root, store) => {
   root.innerHTML = ProfilePlaceMarkup({
     nav: NavMarkup({ page: 'profile-place' }),
     footer: FooterMarkup(),
@@ -354,4 +354,3 @@ const mount = (root, store) => {
   new NavContainer(store);
 };
 
-export default { mount };

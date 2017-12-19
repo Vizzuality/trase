@@ -56,7 +56,7 @@ const _setEventListeners = (options) => {
   smoothScroll(anchorItems);
 };
 
-const mount = (root, store) => {
+export const mount = (root, store) => {
   root.innerHTML = AboutMarkup({
     nav: NavMarkup({ page: 'about' }),
     footer: FooterMarkup(),
@@ -77,8 +77,6 @@ const mount = (root, store) => {
   new NavContainer(store);
 };
 
-const unmount = () => {
+export const unmount = () => {
   evManager.clearEventListeners();
 };
-
-export default { mount, unmount };

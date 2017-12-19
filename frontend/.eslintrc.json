@@ -78,7 +78,8 @@
       "error",
       "consistent"
     ],
-    "react/no-array-index-key": "off"
+    "react/no-array-index-key": "off",
+    "import/prefer-default-export": 0
   },
   "parser": "babel-eslint",
   "parserOptions": {
