@@ -100,9 +100,12 @@ paths:
         '200':
           description: successful operation
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Attribute'
+            type: object
+            properties:
+              indicators:
+                type: array
+                items:
+                  $ref: '#/definitions/DownloadAttribute'
   '/context/{context_id}/flows':
     get:
       tags:
@@ -450,6 +453,25 @@ definitions:
         type: string
       description:
         type: string
+  DownloadAttribute:
+    type: object
+    properties:
+      name:
+        type: string
+      unit:
+        type: string
+      unitType:
+        type: string
+      frontendName:
+        type: string
+      indicatorType:
+        type: string
+        enum:
+          - Ind
+          - Qual
+          - Quant
+      tooltip:
+        type: boolean
   FilterBy:
     type: object
     properties:
