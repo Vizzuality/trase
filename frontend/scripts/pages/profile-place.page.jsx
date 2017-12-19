@@ -246,7 +246,7 @@ const _build = (data, { year, showMiniSankey }) => {
   }
 };
 
-const _setInfo = (info, { nodeId, year }) => {
+const _setInfo = (info, onLinkClick, { nodeId, year }) => {
   document.querySelector('.js-country-name').innerHTML = info.country ? capitalize(info.country) : '-';
   document.querySelector('.js-state-name').innerHTML = info.state ? capitalize(info.state) : '-';
   document.querySelector('.js-biome-name').innerHTML = info.biome ? capitalize(info.biome) : '-';
@@ -257,13 +257,13 @@ const _setInfo = (info, { nodeId, year }) => {
     (info.soy_area !== null && info.soy_area !== 'NaN') ? formatValue(info.soy_area, 'area') : '-';
   document.querySelector('.js-soy-production').innerHTML =
     info.soy_production !== null ? formatValue(info.soy_production, 'tons') : '-';
-  document.querySelector('.js-link-map').setAttribute(
-    'href',
-    `./flows?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`
+  document.querySelector('.js-link-map').addEventListener(
+    'click',
+    () => onLinkClick('tool', { selectedNodesIds: [nodeId], isMapVisible: true, selectedYears: [year, year] })
   );
-  document.querySelector('.js-link-supply-chain').setAttribute(
-    'href',
-    `./flows?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`
+  document.querySelector('.js-link-supply-chain').addEventListener(
+    'click',
+    () => onLinkClick('tool', { selectedNodesIds: [nodeId], selectedYears: [year, year] })
   );
   document.querySelector('.js-line-title').innerHTML =
     info.municipality ? `Deforestation trajectory of ${info.municipality}` : '-';
@@ -307,6 +307,8 @@ export const mount = (root, store) => {
 
   const placeFactsheetURL = getURLFromParams(GET_PLACE_FACTSHEET, { context_id: 1, node_id: nodeId, year });
 
+  const onLinkClick = (type, params) => store.dispatch({ type, payload: { query: params } });
+
   fetch(placeFactsheetURL)
     .then((response) => {
       if (response.ok) {
@@ -334,7 +336,7 @@ export const mount = (root, store) => {
         summary: data.summary
       };
 
-      _setInfo(info, { nodeId, year });
+      _setInfo(info, onLinkClick, { nodeId, year });
       _setEventListeners();
 
       const yearDropdown = new Dropdown('year', swapProfileYear);

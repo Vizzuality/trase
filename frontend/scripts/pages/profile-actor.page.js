@@ -299,7 +299,7 @@ const _build = (data, { nodeId, year, print }) => {
   }
 };
 
-const _setInfo = (info, { nodeId, year }) => {
+const _setInfo = (info, onLinkClick, { nodeId, year }) => {
   document.querySelector('.js-name').textContent = info.name ? capitalize(info.name) : '-';
   document.querySelector('.js-link-button-name').textContent = `${formatApostrophe(capitalize(info.name))} PROFILE`;
   document.querySelector('.js-legend').textContent = info.type || '-';
@@ -330,14 +330,15 @@ const _setInfo = (info, { nodeId, year }) => {
     document.querySelector('.js-zero-deforestation-commitment [data-value="no"]').classList.remove('is-hidden');
   }
   document.querySelector('.js-link-map')
-    .setAttribute(
-      'href',
-      `./flows?selectedNodesIds=[${nodeId}]&isMapVisible=true&isMapVisible=true&selectedYears=[${year},${year}]`
+    .addEventListener(
+      'click',
+      () => onLinkClick('tool', { selectedNodesIds: [nodeId], isMapVisible: true, selectedYears: [year, year] })
     );
+
   document.querySelector('.js-link-supply-chain')
-    .setAttribute(
-      'href',
-      `./flows?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`
+    .addEventListener(
+      'click',
+      () => onLinkClick('tool', { selectedNodesIds: [nodeId], selectedYears: [year, year] })
     );
   document.querySelector('.js-summary-text').textContent = info.summary ? info.summary : '-';
 };
@@ -370,6 +371,8 @@ export const mount = (root, store) => {
 
   const actorFactsheetURL = getURLFromParams(GET_ACTOR_FACTSHEET, { context_id: 1, node_id: nodeId, year });
 
+  const onLinkClick = (type, params) => store.dispatch({ type, payload: { query: params } });
+
   fetch(actorFactsheetURL)
     .then((response) => {
       if (response.ok) {
@@ -393,7 +396,7 @@ export const mount = (root, store) => {
         summary: data.summary
       };
 
-      _setInfo(info, { nodeId, year });
+      _setInfo(info, onLinkClick, { nodeId, year });
       _setEventListeners();
 
       const yearDropdown = new Dropdown('year', (dropdownYear) => {
