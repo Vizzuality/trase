@@ -11,9 +11,9 @@ const config = {
   }
 };
 const resetTool = (dispatch, getState) => {
-  const { state, isMapVisible } = getState().location.query || {};
+  const { state, ...outOfStateParams } = getState().location.query || {};
   if (!state) {
-    dispatch({ type: actions.RESET_TOOL_STATE, payload: { isMapVisible } });
+    dispatch({ type: actions.RESET_TOOL_STATE, payload: { ...outOfStateParams } });
   }
 };
 const routes = {

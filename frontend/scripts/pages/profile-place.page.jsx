@@ -32,7 +32,6 @@ import MiniSankey from 'react-components/profiles/mini-sankey.component';
 import MultiTable from 'components/profiles/multi-table.component';
 import Map from 'components/profiles/map.component';
 
-import qs from 'query-string';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
 import swapProfileYear from 'utils/swapProfileYear';
@@ -45,10 +44,7 @@ const defaults = {
   commodity: 'Soy'
 };
 
-let year;
-let showMiniSankey;
-
-const _build = (data) => {
+const _build = (data, { year, showMiniSankey }) => {
   const stateGeoID = data.state_geo_id;
   const countryName = capitalize(data.country_name);
 
@@ -250,7 +246,7 @@ const _build = (data) => {
   }
 };
 
-const _setInfo = (info, nodeId) => {
+const _setInfo = (info, { nodeId, year }) => {
   document.querySelector('.js-country-name').innerHTML = info.country ? capitalize(info.country) : '-';
   document.querySelector('.js-state-name').innerHTML = info.state ? capitalize(info.state) : '-';
   document.querySelector('.js-biome-name').innerHTML = info.biome ? capitalize(info.biome) : '-';
@@ -300,16 +296,14 @@ const _showErrorMessage = (message = null) => {
 };
 
 export const mount = (root, store) => {
+  const { query = {} } = store.getState().location;
+  const { nodeId, year = 2015, showMiniSankey = false } = query;
+
   root.innerHTML = ProfilePlaceMarkup({
     nav: NavMarkup({ page: 'profile-place' }),
     footer: FooterMarkup(),
     feedback: FeedbackMarkup()
   });
-  const url = window.location.search;
-  const urlParams = qs.parse(url);
-  const nodeId = urlParams.nodeId;
-  year = urlParams.year || 2015;
-  showMiniSankey = !!urlParams.showMiniSankey || false;
 
   const placeFactsheetURL = getURLFromParams(GET_PLACE_FACTSHEET, { context_id: 1, node_id: nodeId, year });
 
@@ -340,13 +334,13 @@ export const mount = (root, store) => {
         summary: data.summary
       };
 
-      _setInfo(info, nodeId);
+      _setInfo(info, { nodeId, year });
       _setEventListeners();
 
       const yearDropdown = new Dropdown('year', swapProfileYear);
       yearDropdown.setTitle(year);
 
-      _build(data);
+      _build(data, { year, showMiniSankey });
     })
     .catch(reason => _showErrorMessage(reason.message));
 

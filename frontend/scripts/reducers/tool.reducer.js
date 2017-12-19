@@ -493,9 +493,11 @@ export default function (state = initialState, action) {
     }
 
     case actions.RESET_TOOL_STATE: {
-      const { isMapVisible } = action.payload;
+      const { isMapVisible, selectedNodesIds, selectedYears } = action.payload;
       newState = { ...initialState, contexts: state.contexts };
       if (typeof isMapVisible !== 'undefined') newState.isMapVisible = isMapVisible;
+      if (typeof selectedNodesIds !== 'undefined') newState.selectedNodesIds = selectedNodesIds;
+      if (typeof selectedYears !== 'undefined') newState.selectedYears = selectedYears;
       break;
     }
 
