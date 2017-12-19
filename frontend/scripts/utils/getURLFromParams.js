@@ -23,6 +23,7 @@ const API_ENDPOINTS = {
   [GET_COLUMNS]: { api: 3, endpoint: '/contexts/$context_id$/columns' },
   [GET_ALL_NODES]: { api: 3, endpoint: '/contexts/$context_id$/nodes' },
   [GET_PLACE_FACTSHEET]: { api: 3, endpoint: '/contexts/$context_id$/nodes/$node_id$/place' },
+  [GET_INDICATORS]: { api: 3, endpoint: '/contexts/$context_id$/download_attributes' },
   [GET_SITE_DIVE]: { api: 'content', endpoint: '/site_dive' },
   [GET_POSTS]: { api: 'content', endpoint: '/posts' },
   [GET_TWEETS]: { api: 'content', endpoint: '/tweets' },
@@ -36,7 +37,6 @@ const API_ENDPOINTS = {
     endpoint: '/get_actor_node_attributes',
     mock: 'mocks/v1_get_actor_node_attributes.json'
   },
-  [GET_INDICATORS]: { api: 2, endpoint: '/indicators' },
   [GET_CSV_DATA_DOWNLOAD_FILE]: { api: 2, endpoint: '/download.csv' },
   [GET_JSON_DATA_DOWNLOAD_FILE]: { api: 2, endpoint: '/download.json' },
   [POST_SUBSCRIBE_NEWSLETTER]: { api: 2, endpoint: '/newsletter_subscriptions' }
