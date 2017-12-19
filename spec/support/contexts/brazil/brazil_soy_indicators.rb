@@ -1,23 +1,7 @@
 shared_context 'brazil soy indicators' do
-  include_context 'inds'
   include_context 'quals'
   include_context 'quants'
   include_context 'brazil contexts'
-
-  let!(:forest_500_context_indicators) do
-    ContextIndicator.where(
-      context_id: context.id,
-      indicator_attribute_type: forest_500.class.name,
-      indicator_attribute_id: forest_500.id
-    ).first ||
-      FactoryBot.create(
-        :context_indicator,
-        context: context,
-        indicator: forest_500,
-        name_in_download: 'FOREST 500',
-        position: 1
-      )
-  end
 
   let!(:deforestation_v2_context_indicators) do
     ContextIndicator.where(

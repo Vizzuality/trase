@@ -26,9 +26,19 @@ json:
   - url: /api/v2/indicators
     name: indicators
     version: v2
-    v3_ready: false
-    v3_url: /api/v3/indicators
-    <<: *context_queries
+    v3_ready: true
+    v3_url: /api/v3/contexts/1/download_attributes
+    queries:
+      - params: context_id=1
+        name: brazil_soy
+  - url: /api/v2/indicators
+    name: indicators
+    version: v2
+    v3_ready: true
+    v3_url: /api/v3/contexts/2/download_attributes
+    queries:
+      - params: context_id=2
+        name: paraguay_soy
   - url: /api/v2/get_map_base_data
     name: get_map_base_data
     version: v2
