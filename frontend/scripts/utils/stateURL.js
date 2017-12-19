@@ -45,7 +45,7 @@ export const encodeStateToURL = (state) => {
   return encoded;
 };
 
-const computeStateQueryParams = (state, params) => {
+export const computeStateQueryParams = (state, params) => {
   if (!params) return state;
   const newState = { ...state };
   // if URL contains GET parameters, override hash state prop with it
@@ -80,11 +80,17 @@ const computeStateQueryParams = (state, params) => {
 
 export const decodeStateFromURL = state => ((typeof state === 'undefined') ? {} : JSON.parse(atob(state)));
 
+// remove all params that are now in the state
+const removeStateParamsFromQuery = (params, state) => _.pickBy(
+  { ...params, state },
+  (v, param) => param !== '' && !URL_PARAMS_PROPS.includes(param)
+);
+
 export const parse = (url) => {
   const params = qs.parse(url);
   if (params.state) {
     const state = decodeStateFromURL(params.state);
-    return { ...params, state };
+    return removeStateParamsFromQuery(params, state);
   }
   return params;
 };
@@ -94,8 +100,7 @@ export const stringify = (params) => {
     .reduce((acc, next) => (typeof params[next] !== 'undefined' || acc), false);
   if (needsToComputeState) {
     const state = encodeStateToURL(computeStateQueryParams(params.state, params));
-    // remove all params that are now in the state
-    const result = _.pickBy({ ...params, state }, (v, param) => param !== '' && !URL_PARAMS_PROPS.includes(param));
+    const result = removeStateParamsFromQuery(params, state);
     return qs.stringify(result);
   }
   return qs.stringify(params);
@@ -104,7 +109,10 @@ export const stringify = (params) => {
 export const toolUrlStateMiddleware = store => next => (action) => {
   const prevLocation = store.getState().location;
   // if highlight action bail
-  if (action.type === actions.HIGHLIGHT_NODE || prevLocation.type !== 'tool') return next(action);
+  if (
+    [actions.HIGHLIGHT_NODE, actions.TOGGLE_DROPDOWN].includes(action.type) ||
+    prevLocation.type !== 'tool'
+  ) return next(action);
   const decoratedAction = { ...action };
   let urlState = null; // prev state
   if (prevLocation.query && prevLocation.query.state) {
@@ -130,7 +138,7 @@ export const toolUrlStateMiddleware = store => next => (action) => {
   if (!conditions.includes(false)) {
     store.dispatch(redirect({
       type: 'tool',
-      payload: { query: { ...location.query, state: tool } }
+      payload: { query: removeStateParamsFromQuery(location.query, newState) }
     }));
   }
   return result;
