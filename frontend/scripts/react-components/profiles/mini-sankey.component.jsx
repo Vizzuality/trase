@@ -74,8 +74,9 @@ class MiniSankey extends Component {
           </g >
 
           <g transform={`translate(${SANKEY_X_END}, 0)`} >
-            {nodes.map(node => (
+            {nodes.map((node, index) => (
               <g
+                key={index}
                 transform={`translate(0, ${node.ty})`}
                 className={node.link ? 'interactive-node' : null}
                 onClick={node.link ? () => {
@@ -93,14 +94,14 @@ class MiniSankey extends Component {
                 ${(13 + (node.renderedHeight / 2)) - ((TEXT_LINE_HEIGHT * node.lines.length) / 2)})`}
                 >
                   {node.lines.map((line, i) =>
-                    <tspan y={i * TEXT_LINE_HEIGHT} x="0" >{line} </tspan >)}
+                    <tspan key={i} y={i * TEXT_LINE_HEIGHT} x="0" >{line} </tspan >)}
                   <tspan className="pct" >{node.pct}</tspan >
                 </text >
               </g >))}
           </g >
 
           <g transform={`translate(${SANKEY_X_START}, 0)`} >
-            {nodes.map((node) => {
+            {nodes.map((node, index) => {
               const x0 = NODE_WIDTH;
               const x1 = SANKEY_X_END - SANKEY_X_START;
               const xi = d3_interpolateNumber(x0, x1);
@@ -113,6 +114,7 @@ class MiniSankey extends Component {
               } ${x3},${y1
               } ${x1},${y1}`;
               return (<path
+                key={index}
                 d={path}
                 strokeWidth={node.renderedHeight}
                 className={node.isAggregated ? 'link-aggr' : 'link'}
@@ -126,7 +128,7 @@ class MiniSankey extends Component {
 }
 
 MiniSankey.propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.object,
   targetLink: PropTypes.string
 };
 
