@@ -1,6 +1,6 @@
 import { connectRoutes, NOT_FOUND } from 'redux-first-router';
 import connect from 'connect';
-import { parse, stringify } from 'utils/stateURL';
+import { parse, stringify, computeStateQueryParams } from 'utils/stateURL';
 import actions from 'actions';
 
 const config = {
@@ -11,9 +11,10 @@ const config = {
   }
 };
 const resetTool = (dispatch, getState) => {
-  const { state, isMapVisible } = getState().location.query || {};
-  if (!state) {
-    dispatch({ type: actions.RESET_TOOL_STATE, payload: { isMapVisible } });
+  const { query = {} } = getState().location;
+  if (!query.state) {
+    const payload = computeStateQueryParams({}, query);
+    dispatch({ type: actions.RESET_TOOL_STATE, payload });
   }
 };
 const routes = {

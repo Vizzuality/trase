@@ -30,7 +30,6 @@ import Scatterplot from 'components/profiles/scatterplot.component';
 import Tooltip from 'components/shared/info-tooltip.component';
 import choroLegend from 'components/profiles/choro-legend.component';
 
-import qs from 'query-string';
 import smoothScroll from 'utils/smoothScroll';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
@@ -48,13 +47,10 @@ const defaults = {
   commodity: 'soy'
 };
 
-let print = false;
-
 const tooltip = new Tooltip('.js-infowindow');
 const LINE_MARGINS = {
   top: 10, right: 100, bottom: 25, left: 50
 };
-let year;
 let lineSettings;
 
 const _initSource = (selectedSource, data) => {
@@ -127,7 +123,7 @@ const _switchTopSource = (e, data) => {
   _initSource(selectedSource, data);
 };
 
-const _setTopSourceSwitcher = (data, verb) => {
+const _setTopSourceSwitcher = (data, verb, year) => {
   const template = TopSourceTemplate({
     year,
     verb,
@@ -142,7 +138,7 @@ const _setTopSourceSwitcher = (data, verb) => {
   });
 };
 
-const _build = (data, nodeId) => {
+const _build = (data, { nodeId, year, print }) => {
   const verb = (data.column_name === 'EXPORTER') ? 'exported' : 'imported';
   const verbGerund = (data.column_name === 'EXPORTER') ? 'exporting' : 'importing';
 
@@ -177,7 +173,7 @@ const _build = (data, nodeId) => {
   };
 
   if (data.top_sources && data.top_sources.municipality.lines.length) {
-    _setTopSourceSwitcher(data, verb);
+    _setTopSourceSwitcher(data, verb, year);
 
     choroLegend(null, '.js-source-legend', {
       title: [`Soy ${verb} in ${year}`, '(tonnes)'],
@@ -303,7 +299,7 @@ const _build = (data, nodeId) => {
   }
 };
 
-const _setInfo = (info, nodeId) => {
+const _setInfo = (info, onLinkClick, { nodeId, year }) => {
   document.querySelector('.js-name').textContent = info.name ? capitalize(info.name) : '-';
   document.querySelector('.js-link-button-name').textContent = `${formatApostrophe(capitalize(info.name))} PROFILE`;
   document.querySelector('.js-legend').textContent = info.type || '-';
@@ -334,14 +330,15 @@ const _setInfo = (info, nodeId) => {
     document.querySelector('.js-zero-deforestation-commitment [data-value="no"]').classList.remove('is-hidden');
   }
   document.querySelector('.js-link-map')
-    .setAttribute(
-      'href',
-      `./flows?selectedNodesIds=[${nodeId}]&isMapVisible=true&isMapVisible=true&selectedYears=[${year},${year}]`
+    .addEventListener(
+      'click',
+      () => onLinkClick('tool', { selectedNodesIds: [nodeId], isMapVisible: true, selectedYears: [year, year] })
     );
+
   document.querySelector('.js-link-supply-chain')
-    .setAttribute(
-      'href',
-      `./flows?selectedNodesIds=[${nodeId}]&isMapVisible=true&selectedYears=[${year},${year}]`
+    .addEventListener(
+      'click',
+      () => onLinkClick('tool', { selectedNodesIds: [nodeId], selectedYears: [year, year] })
     );
   document.querySelector('.js-summary-text').textContent = info.summary ? info.summary : '-';
 };
@@ -363,19 +360,18 @@ const _showErrorMessage = (message = null) => {
 
 export const mount = (root, store) => {
   const { query = {} } = store.getState().location;
+  const { nodeId, year = 2015, print = false } = query;
 
   root.innerHTML = ProfileActorMarkup({
-    printMode: query.print,
+    printMode: print,
     nav: NavMarkup({ page: 'profile-actor' }),
     footer: FooterMarkup(),
     feedback: FeedbackMarkup()
   });
-  const url = window.location.search;
-  const urlParams = qs.parse(url);
-  const nodeId = urlParams.nodeId;
-  year = urlParams.year || 2015;
 
   const actorFactsheetURL = getURLFromParams(GET_ACTOR_FACTSHEET, { context_id: 1, node_id: nodeId, year });
+
+  const onLinkClick = (type, params) => store.dispatch({ type, payload: { query: params } });
 
   fetch(actorFactsheetURL)
     .then((response) => {
@@ -400,7 +396,7 @@ export const mount = (root, store) => {
         summary: data.summary
       };
 
-      _setInfo(info, nodeId);
+      _setInfo(info, onLinkClick, { nodeId, year });
       _setEventListeners();
 
       const yearDropdown = new Dropdown('year', (dropdownYear) => {
@@ -409,10 +405,9 @@ export const mount = (root, store) => {
       });
       yearDropdown.setTitle(year);
 
-      _build(data, nodeId);
+      _build(data, { nodeId, year });
     })
     .catch(reason => _showErrorMessage(reason.message));
 
-  const nav = new NavContainer(store);
-  print = nav.print;
+  new NavContainer(store);
 };
