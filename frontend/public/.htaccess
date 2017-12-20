@@ -1,0 +1,1 @@
+RewriteRule (.+)\.html$ /$1 [L,R]
