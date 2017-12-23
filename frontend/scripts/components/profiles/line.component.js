@@ -130,8 +130,8 @@ export default class {
               .attr(
                 'class',
                 d => (_.isFunction(settings.lineClassNameCallback)
-                    ? settings.lineClassNameCallback(d, style)
-                    : style
+                  ? settings.lineClassNameCallback(d, style)
+                  : style
                 )
               );
 
