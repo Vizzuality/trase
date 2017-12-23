@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
 <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
-<link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -31,32 +31,44 @@
 <meta property="og:image" content="http://trase.earth/card-image.jpg" />
 <title><%= title %></title>
 <meta name="description" content="<%= description %>">
-<style>.loading-wrapper { display: none }</style>
+<style>.loading-wrapper {
+    display: none
+  }</style>
 <% if (!dev) { %>
 <!-- Google Analytics start -->
 <script>
-window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-ga('create', <%= GOOGLE_ANALYTICS_KEY ? GOOGLE_ANALYTICS_KEY : '' %>, 'auto');
-ga('send', 'pageview');
+  window.ga = window.ga || function () {
+    (ga.q = ga.q || []).push(arguments)
+  };
+  ga.l = +new Date;
+  ga('create', <%= GOOGLE_ANALYTICS_KEY ? GOOGLE_ANALYTICS_KEY : '' %>, 'auto');
+  ga('send', 'pageview');
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
 <!-- Google Analytics end -->
 <!-- Crazy Egg start -->
 <script type="text/javascript">
-setTimeout(function(){var a=document.createElement("script");
-var b=document.getElementsByTagName("script")[0];
-a.src=document.location.protocol+"//script.crazyegg.com/pages/scripts/0057/8220.js?"+Math.floor(new Date().getTime()/3600000);
-a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+  setTimeout(function () {
+    var a = document.createElement("script");
+    var b = document.getElementsByTagName("script")[0];
+    a.src = document.location.protocol + "//script.crazyegg.com/pages/scripts/0057/8220.js?" + Math.floor(new Date().getTime() / 3600000);
+    a.async = true;
+    a.type = "text/javascript";
+    b.parentNode.insertBefore(a, b)
+  }, 1);
 </script>
 <!-- Crazy Egg end -->
 <!-- User Report start -->
 <script type="text/javascript">
   window._urq = window._urq || [];
   _urq.push(['initSite', <%= USER_REPORT_KEY ? USER_REPORT_KEY : '' %>]);
-  (function() {
-    var ur = document.createElement('script'); ur.type = 'text/javascript'; ur.async = true;
+  (function () {
+    var ur = document.createElement('script');
+    ur.type = 'text/javascript';
+    ur.async = true;
     ur.src = ('https:' === document.location.protocol ? 'https://cdn.userreport.com/userreport.js' : 'http://cdn.userreport.com/userreport.js');
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ur, s);
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(ur, s);
   })();
 </script>
 <!-- User Report end -->

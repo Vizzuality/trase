@@ -24,7 +24,7 @@ import 'styles/components/profiles/map.scss';
 import capitalize from 'lodash/capitalize';
 
 import NavContainer from 'containers/shared/nav.container';
-import Dropdown from 'components/shared/dropdown.component';
+import Dropdown from 'react-components/shared/dropdown.component';
 import Top from 'components/profiles/top.component';
 import Line from 'components/profiles/line.component';
 import Chord from 'components/profiles/chord.component';
@@ -34,44 +34,56 @@ import Map from 'components/profiles/map.component';
 
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
-import swapProfileYear from 'utils/swapProfileYear';
 import smoothScroll from 'utils/smoothScroll';
 
 import { GET_PLACE_FACTSHEET, getURLFromParams } from 'utils/getURLFromParams';
+import { DEFAULT_PROFILE_PAGE_YEAR } from '../constants';
 
 const defaults = {
   country: 'Brazil',
   commodity: 'Soy'
 };
 
-const _build = (data, { year, showMiniSankey }) => {
+const _buildMaps = (data) => {
   const stateGeoID = data.state_geo_id;
   const countryName = capitalize(data.country_name);
 
-  Map('.js-map-country', {
-    topoJSONPath: './vector_layers/WORLD.topo.json',
-    topoJSONRoot: 'world',
-    getPolygonClassName: d => (d.properties.name === countryName ? '-isCurrent' : ''),
-    useRobinsonProjection: true
-  });
+  if (document.querySelector('.js-map-country').innerHTML === '') {
+    Map('.js-map-country', {
+      topoJSONPath: './vector_layers/WORLD.topo.json',
+      topoJSONRoot: 'world',
+      getPolygonClassName: d => (d.properties.name === countryName ? '-isCurrent' : ''),
+      useRobinsonProjection: true
+    });
+  }
 
-  Map('.js-map-biome', {
-    topoJSONPath: `./vector_layers/${defaults.country.toUpperCase()}_BIOME.topo.json`,
-    topoJSONRoot: `${defaults.country.toUpperCase()}_BIOME`,
-    getPolygonClassName: d => (d.properties.geoid === data.biome_geo_id ? '-isCurrent' : '')
-  });
+  if (document.querySelector('.js-map-biome').innerHTML === '') {
+    Map('.js-map-biome', {
+      topoJSONPath: `./vector_layers/${defaults.country.toUpperCase()}_BIOME.topo.json`,
+      topoJSONRoot: `${defaults.country.toUpperCase()}_BIOME`,
+      getPolygonClassName: d => (d.properties.geoid === data.biome_geo_id ? '-isCurrent' : '')
+    });
+  }
 
-  Map('.js-map-state', {
-    topoJSONPath: `./vector_layers/${defaults.country.toUpperCase()}_STATE.topo.json`,
-    topoJSONRoot: `${defaults.country.toUpperCase()}_STATE`,
-    getPolygonClassName: d => (d.properties.geoid === stateGeoID ? '-isCurrent' : '')
-  });
+  if (document.querySelector('.js-map-state').innerHTML === '') {
+    Map('.js-map-state', {
+      topoJSONPath: `./vector_layers/${defaults.country.toUpperCase()}_STATE.topo.json`,
+      topoJSONRoot: `${defaults.country.toUpperCase()}_STATE`,
+      getPolygonClassName: d => (d.properties.geoid === stateGeoID ? '-isCurrent' : '')
+    });
+  }
 
-  Map('.js-map-municipality', {
-    topoJSONPath: `./vector_layers/municip_states/${defaults.country.toLowerCase()}/${stateGeoID}.topo.json`,
-    topoJSONRoot: `${defaults.country.toUpperCase()}_${stateGeoID}`,
-    getPolygonClassName: d => (d.properties.geoid === data.municipality_geo_id ? '-isCurrent' : '')
-  });
+  if (document.querySelector('.js-map-municipality').innerHTML === '') {
+    Map('.js-map-municipality', {
+      topoJSONPath: `./vector_layers/municip_states/${defaults.country.toLowerCase()}/${stateGeoID}.topo.json`,
+      topoJSONRoot: `${defaults.country.toUpperCase()}_${stateGeoID}`,
+      getPolygonClassName: d => (d.properties.geoid === data.municipality_geo_id ? '-isCurrent' : '')
+    });
+  }
+};
+
+const _build = (data, { year, showMiniSankey }) => {
+  _buildMaps(data);
 
   if (
     data.trajectory_deforestation
@@ -112,10 +124,11 @@ const _build = (data, { year, showMiniSankey }) => {
     elem.parentNode.parentNode.parentNode.removeChild(elem.parentNode.parentNode);
   }
 
-  if (showMiniSankey) {
-    document.querySelectorAll('.mini-sankey-container').forEach((el) => {
-      el.classList.toggle('is-hidden', false);
-    });
+  if (showMiniSankey === 'true') {
+    document.querySelectorAll('.mini-sankey-container')
+      .forEach((el) => {
+        el.classList.toggle('is-hidden', false);
+      });
 
     // query: nodeId, targetColumnId + commodity and year
     const tradersSankeyData = {
@@ -197,7 +210,9 @@ const _build = (data, { year, showMiniSankey }) => {
     );
   } else {
     if (data.top_traders.actors.length) {
-      document.querySelector('.js-traders').classList.toggle('is-hidden', false);
+      document.querySelector('.js-traders')
+        .classList
+        .toggle('is-hidden', false);
 
       new Chord(
         '.js-chord-traders',
@@ -217,7 +232,9 @@ const _build = (data, { year, showMiniSankey }) => {
     }
 
     if (data.top_consumers.countries.length) {
-      document.querySelector('.js-consumers').classList.toggle('is-hidden', false);
+      document.querySelector('.js-consumers')
+        .classList
+        .toggle('is-hidden', false);
 
       new Chord(
         '.js-chord-consumers',
@@ -246,7 +263,7 @@ const _build = (data, { year, showMiniSankey }) => {
   }
 };
 
-const _setInfo = (info, onLinkClick, { nodeId, year }) => {
+const _setInfo = (store, info, onLinkClick, { nodeId, year }) => {
   document.querySelector('.js-country-name').innerHTML = info.country ? capitalize(info.country) : '-';
   document.querySelector('.js-state-name').innerHTML = info.state ? capitalize(info.state) : '-';
   document.querySelector('.js-biome-name').innerHTML = info.biome ? capitalize(info.biome) : '-';
@@ -257,14 +274,16 @@ const _setInfo = (info, onLinkClick, { nodeId, year }) => {
     (info.soy_area !== null && info.soy_area !== 'NaN') ? formatValue(info.soy_area, 'area') : '-';
   document.querySelector('.js-soy-production').innerHTML =
     info.soy_production !== null ? formatValue(info.soy_production, 'tons') : '-';
-  document.querySelector('.js-link-map').addEventListener(
-    'click',
-    () => onLinkClick('tool', { selectedNodesIds: [nodeId], isMapVisible: true, selectedYears: [year, year] })
-  );
-  document.querySelector('.js-link-supply-chain').addEventListener(
-    'click',
-    () => onLinkClick('tool', { selectedNodesIds: [nodeId], selectedYears: [year, year] })
-  );
+  document.querySelector('.js-link-map')
+    .addEventListener(
+      'click',
+      () => onLinkClick(store, 'tool', { selectedNodesIds: [nodeId], isMapVisible: true, selectedYears: [year, year] })
+    );
+  document.querySelector('.js-link-supply-chain')
+    .addEventListener(
+      'click',
+      () => onLinkClick(store, 'tool', { selectedNodesIds: [nodeId], selectedYears: [year, year] })
+    );
   document.querySelector('.js-line-title').innerHTML =
     info.municipality ? `Deforestation trajectory of ${info.municipality}` : '-';
   document.querySelector('.js-traders-title').innerHTML =
@@ -284,30 +303,57 @@ const _setEventListeners = () => {
   smoothScroll(document.querySelectorAll('.js-link-profile'));
 };
 
+
+const setLoading = (isLoading = true) => {
+  if (isLoading) {
+    document.querySelector('.js-loading')
+      .classList
+      .remove('is-hidden');
+    document.querySelector('.js-wrap')
+      .classList
+      .add('is-hidden');
+  } else {
+    document.querySelector('.js-loading')
+      .classList
+      .add('is-hidden');
+    document.querySelector('.js-wrap')
+      .classList
+      .remove('is-hidden');
+  }
+};
+
 const _showErrorMessage = (message = null) => {
   const el = document.querySelector('.l-profile-place');
-  document.querySelector('.js-loading').classList.add('is-hidden');
+  document.querySelector('.js-loading')
+    .classList
+    .add('is-hidden');
   el.classList.add('-error');
-  el.querySelector('.js-wrap').classList.add('is-hidden');
-  el.querySelector('.js-error-message').classList.remove('is-hidden');
+  el.querySelector('.js-wrap')
+    .classList
+    .add('is-hidden');
+  el.querySelector('.js-error-message')
+    .classList
+    .remove('is-hidden');
   if (message !== null && message !== '') {
     el.querySelector('.js-message').innerHTML = message;
   }
 };
 
-export const mount = (root, store) => {
-  const { query = {} } = store.getState().location;
-  const { nodeId, year = 2015, showMiniSankey = false } = query;
+const onLinkClick = (store, type, params) => store.dispatch({ type, payload: { query: params } });
 
-  root.innerHTML = ProfilePlaceMarkup({
-    nav: NavMarkup({ page: 'profile-place' }),
-    footer: FooterMarkup(),
-    feedback: FeedbackMarkup()
+const _switchYear = (store, nodeId, dropdownYear, showMiniSankey) => {
+  setLoading();
+  // eslint-disable-next-line no-use-before-define
+  _loadData(store, nodeId, dropdownYear, showMiniSankey);
+  store.dispatch({
+    type: 'profilePlace',
+    payload: { query: { nodeId, year: dropdownYear, showMiniSankey } }
   });
+};
 
+const _loadData = (store, nodeId, year, showMiniSankey) => {
   const placeFactsheetURL = getURLFromParams(GET_PLACE_FACTSHEET, { context_id: 1, node_id: nodeId, year });
-
-  const onLinkClick = (type, params) => store.dispatch({ type, payload: { query: params } });
+  setLoading();
 
   fetch(placeFactsheetURL)
     .then((response) => {
@@ -318,8 +364,8 @@ export const mount = (root, store) => {
     })
     .then((result) => {
       if (!result) return;
-      document.querySelector('.js-loading').classList.add('is-hidden');
-      document.querySelector('.js-wrap').classList.remove('is-hidden');
+
+      setLoading(false);
 
       const data = result.data;
 
@@ -336,15 +382,36 @@ export const mount = (root, store) => {
         summary: data.summary
       };
 
-      _setInfo(info, onLinkClick, { nodeId, year });
+      _setInfo(store, info, onLinkClick, { nodeId, year });
       _setEventListeners();
 
-      const yearDropdown = new Dropdown('year', swapProfileYear);
-      yearDropdown.setTitle(year);
+      render(
+        <Dropdown
+          label="Year"
+          value={year}
+          valueList={[2010, 2011, 2012, 2013, 2014, 2015]}
+          onValueSelected={dropdownYear => _switchYear(store, nodeId, dropdownYear, showMiniSankey)}
+        />,
+        document.getElementById('year-dropdown')
+      );
 
       _build(data, { year, showMiniSankey });
     })
     .catch(reason => _showErrorMessage(reason.message));
+};
+
+export const mount = (root, store) => {
+  const { query = {} } = store.getState().location;
+  const { nodeId, year = DEFAULT_PROFILE_PAGE_YEAR, showMiniSankey = false, print = false } = query;
+
+  root.innerHTML = ProfilePlaceMarkup({
+    printMode: print,
+    nav: NavMarkup({ page: 'profile-place' }),
+    footer: FooterMarkup(),
+    feedback: FeedbackMarkup()
+  });
+
+  _loadData(store, nodeId, year, showMiniSankey);
 
   new NavContainer(store);
 };

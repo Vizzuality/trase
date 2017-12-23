@@ -22,7 +22,7 @@ import 'styles/components/profiles/error.scss';
 import 'styles/components/shared/tabs.scss';
 
 import NavContainer from 'containers/shared/nav.container';
-import Dropdown from 'components/shared/dropdown.component';
+import Dropdown from 'react-components/shared/dropdown.component';
 import Map from 'components/profiles/map.component';
 import Line from 'components/profiles/line.component';
 import MultiTable from 'components/profiles/multi-table.component';
@@ -33,12 +33,13 @@ import choroLegend from 'components/profiles/choro-legend.component';
 import smoothScroll from 'utils/smoothScroll';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
-import swapProfileYear from 'utils/swapProfileYear';
 import capitalize from 'lodash/capitalize';
 import { GET_ACTOR_FACTSHEET, getURLFromParams } from 'utils/getURLFromParams';
-import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST } from 'constants';
+import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST, DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
 import TopSourceTemplate from 'templates/profiles/top-source-switcher.ejs';
 import EventManager from 'utils/eventManager';
+import React from 'react';
+import { render } from 'react-dom';
 
 const evManager = new EventManager();
 
@@ -128,7 +129,8 @@ const _setTopSourceSwitcher = (data, verb, year) => {
     year,
     verb,
     nodeName: capitalize(data.node_name),
-    switchers: Object.keys(data.top_sources).filter(key => !(ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)))
+    switchers: Object.keys(data.top_sources)
+      .filter(key => !(ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)))
   });
   document.querySelector('.js-top-municipalities-title').innerHTML = template;
 
@@ -325,9 +327,13 @@ const _setInfo = (info, onLinkClick, { nodeId, year }) => {
       .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
   }
   if (info.zero_deforestation === 'YES') {
-    document.querySelector('.js-zero-deforestation-commitment [data-value="yes"]').classList.remove('is-hidden');
+    document.querySelector('.js-zero-deforestation-commitment [data-value="yes"]')
+      .classList
+      .remove('is-hidden');
   } else {
-    document.querySelector('.js-zero-deforestation-commitment [data-value="no"]').classList.remove('is-hidden');
+    document.querySelector('.js-zero-deforestation-commitment [data-value="no"]')
+      .classList
+      .remove('is-hidden');
   }
   document.querySelector('.js-link-map')
     .addEventListener(
@@ -347,31 +353,56 @@ const _setEventListeners = () => {
   smoothScroll(document.querySelectorAll('.js-link-profile'));
 };
 
+const onLinkClick = (store, type, params) => store.dispatch({ type, payload: { query: params } });
+
+const setLoading = (isLoading = true) => {
+  if (isLoading) {
+    document.querySelector('.js-loading')
+      .classList
+      .remove('is-hidden');
+    document.querySelector('.js-wrap')
+      .classList
+      .add('is-hidden');
+  } else {
+    document.querySelector('.js-loading')
+      .classList
+      .add('is-hidden');
+    document.querySelector('.js-wrap')
+      .classList
+      .remove('is-hidden');
+  }
+};
+
 const _showErrorMessage = (message = null) => {
   const el = document.querySelector('.l-profile-actor');
   el.classList.add('-error');
-  document.querySelector('.js-loading').classList.add('is-hidden');
-  el.querySelector('.js-wrap').classList.add('is-hidden');
-  el.querySelector('.js-error-message').classList.remove('is-hidden');
+  document.querySelector('.js-loading')
+    .classList
+    .add('is-hidden');
+  el.querySelector('.js-wrap')
+    .classList
+    .add('is-hidden');
+  el.querySelector('.js-error-message')
+    .classList
+    .remove('is-hidden');
   if (message !== null && message !== '') {
     el.querySelector('.js-message').innerHTML = message;
   }
 };
 
-export const mount = (root, store) => {
-  const { query = {} } = store.getState().location;
-  const { nodeId, year = 2015, print = false } = query;
-
-  root.innerHTML = ProfileActorMarkup({
-    printMode: print,
-    nav: NavMarkup({ page: 'profile-actor' }),
-    footer: FooterMarkup(),
-    feedback: FeedbackMarkup()
+const _switchYear = (store, nodeId, dropdownYear, showMiniSankey) => {
+  setLoading();
+  // eslint-disable-next-line no-use-before-define
+  _loadData(store, nodeId, dropdownYear, showMiniSankey);
+  store.dispatch({
+    type: 'profileActor',
+    payload: { query: { nodeId, year: dropdownYear, showMiniSankey } }
   });
+};
 
+const _loadData = (store, nodeId, year) => {
   const actorFactsheetURL = getURLFromParams(GET_ACTOR_FACTSHEET, { context_id: 1, node_id: nodeId, year });
-
-  const onLinkClick = (type, params) => store.dispatch({ type, payload: { query: params } });
+  setLoading();
 
   fetch(actorFactsheetURL)
     .then((response) => {
@@ -383,8 +414,7 @@ export const mount = (root, store) => {
     .then((result) => {
       if (!result) return;
 
-      document.querySelector('.js-loading').classList.add('is-hidden');
-      document.querySelector('.js-wrap').classList.remove('is-hidden');
+      setLoading(false);
 
       const data = result.data;
       const info = {
@@ -399,15 +429,33 @@ export const mount = (root, store) => {
       _setInfo(info, onLinkClick, { nodeId, year });
       _setEventListeners();
 
-      const yearDropdown = new Dropdown('year', (dropdownYear) => {
-        yearDropdown.setTitle(dropdownYear);
-        swapProfileYear(dropdownYear);
-      });
-      yearDropdown.setTitle(year);
+      render(
+        <Dropdown
+          label="Year"
+          value={year}
+          valueList={[2010, 2011, 2012, 2013, 2014, 2015]}
+          onValueSelected={dropdownYear => _switchYear(store, nodeId, dropdownYear)}
+        />,
+        document.getElementById('year-dropdown')
+      );
 
       _build(data, { nodeId, year });
     })
     .catch(reason => _showErrorMessage(reason.message));
+};
+
+export const mount = (root, store) => {
+  const { query = {} } = store.getState().location;
+  const { nodeId, year = DEFAULT_PROFILE_PAGE_YEAR, print = false } = query;
+
+  root.innerHTML = ProfileActorMarkup({
+    printMode: print,
+    nav: NavMarkup({ page: 'profile-actor' }),
+    footer: FooterMarkup(),
+    feedback: FeedbackMarkup()
+  });
+
+  _loadData(store, nodeId, year);
 
   new NavContainer(store);
 };

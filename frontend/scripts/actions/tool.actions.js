@@ -17,8 +17,8 @@ import getSelectedNodesStillVisible from 'actions/helpers/getSelectedNodesStillV
 import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
 import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
-import getProfileLink from 'utils/getProfileLink';
 import isNodeColumnVisible from 'utils/isNodeColumnVisible';
+import capitalize from 'lodash/capitalize';
 
 const _reloadLinks = (param, value, type, reloadLinks = true) => (dispatch) => {
   const action = {
@@ -605,7 +605,11 @@ export function toggleNodesExpand(forceExpand = false, forceExpandNodeIds) {
 
 export function navigateToProfile(nodeId, year) {
   return (dispatch, getState) => {
-    window.location.href = getProfileLink(getState().tool.nodesDict[nodeId], year);
+    const node = getState().tool.nodesDict[nodeId];
+    dispatch({
+      type: `profile${capitalize(node.profileType)}`,
+      payload: { query: { nodeId, year } }
+    });
   };
 }
 

@@ -32,6 +32,7 @@ export default class {
     });
 
     const elem = document.querySelector(className);
+    elem.innerHTML = '';
     const margin = {
       top: 0,
       right: 0,

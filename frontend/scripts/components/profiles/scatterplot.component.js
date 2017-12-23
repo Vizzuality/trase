@@ -1,5 +1,5 @@
 /* eslint-disable camelcase,import/no-extraneous-dependencies */
-import { select as d3_select, event as d3_event } from 'd3-selection';
+import { event as d3_event, select as d3_select } from 'd3-selection';
 import { axisBottom as d3_axis_bottom, axisLeft as d3_axis_left } from 'd3-axis';
 import { scaleLinear as d3_scale_linear } from 'd3-scale';
 import { extent as d3_extent } from 'd3-array';
@@ -27,6 +27,7 @@ export default class {
   }
 
   _render() {
+    this.el.innerHTML = '';
     this.titleEl.textContent = `Comparing companies ${this.verbGerund} Soy from Brazil in ${this.year}`;
     const margin = {
       top: 20, right: 13, bottom: 30, left: 29
@@ -77,7 +78,9 @@ export default class {
     this.svg.append('g')
       .attr('class', 'axis axis-line')
       .attr('transform', `translate(0,${this.height})`)
-      .call(d3_axis_bottom(this.x).ticks(0).tickSizeOuter(0));
+      .call(d3_axis_bottom(this.x)
+        .ticks(0)
+        .tickSizeOuter(0));
 
     this.svg.append('g')
       .attr('class', 'axis axis--y')
@@ -85,10 +88,12 @@ export default class {
 
     this.svg.append('g')
       .attr('class', 'axis axis-line')
-      .call(d3_axis_left(this.y).ticks(0).tickSizeOuter(0));
+      .call(d3_axis_left(this.y)
+        .ticks(0)
+        .tickSizeOuter(0));
 
     this.circles = this.svg.selectAll('circle')
-      .data(this._getFormatedData(0))
+      .data(this._getFormattedData(0))
       .enter()
       .append('circle')
       .attr('class', d => this._getCircleClass(d))
@@ -139,7 +144,7 @@ export default class {
     });
     selectedSwitch.classList.add('selected');
 
-    const newData = this._getFormatedData(selectedTabKey);
+    const newData = this._getFormattedData(selectedTabKey);
     const allXValues = newData.map(item => item.x);
     const x = d3_scale_linear()
       .range([0, this.width])
@@ -159,7 +164,7 @@ export default class {
       .call(this.xAxis);
   }
 
-  _getFormatedData(i) {
+  _getFormattedData(i) {
     return this.data.map(item => ({
       nodeId: item.id,
       name: item.name,

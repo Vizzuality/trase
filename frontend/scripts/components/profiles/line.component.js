@@ -1,10 +1,10 @@
 /* eslint-disable camelcase,import/no-extraneous-dependencies */
 import _ from 'lodash';
-import { select as d3_select, event as d3_event } from 'd3-selection';
+import { event as d3_event, select as d3_select } from 'd3-selection';
 import { axisBottom as d3_axis_bottom, axisLeft as d3_axis_left } from 'd3-axis';
 import { scaleLinear as d3_scale_linear, scaleTime as d3_scale_time } from 'd3-scale';
 import { extent as d3_extent } from 'd3-array';
-import { line as d3_line, area as d3_area } from 'd3-shape';
+import { area as d3_area, line as d3_line } from 'd3-shape';
 import { format as d3_format } from 'd3-format';
 import { timeFormat as d3_timeFormat } from 'd3-time-format';
 import { LINE_LABEL_HEIGHT } from 'constants';
@@ -53,6 +53,9 @@ export default class {
     const allYValues = [].concat(...data.lines.map(line => line.values));
 
     elem.innerHTML = '';
+    if (legend) {
+      legend.innerHTML = '';
+    }
     const container = d3_select(elem)
       .append('svg')
       .attr('width', width + margin.left + margin.right)
@@ -127,14 +130,15 @@ export default class {
               .attr(
                 'class',
                 d => (_.isFunction(settings.lineClassNameCallback)
-                  ? settings.lineClassNameCallback(d, style)
-                  : style
+                    ? settings.lineClassNameCallback(d, style)
+                    : style
                 )
               );
 
             pathContainers.selectAll('path')
               .data(d => [d])
-              .enter().append('path')
+              .enter()
+              .append('path')
               .attr('d', line);
 
 
@@ -156,7 +160,8 @@ export default class {
 
             this.circles = pathContainers.selectAll('circle')
               .data(d => d)
-              .enter().append('circle')
+              .enter()
+              .append('circle')
               .attr('cx', d => x(d.date))
               .attr('cy', d => y(d.value))
               .attr('r', 4);
@@ -177,7 +182,7 @@ export default class {
           }
         }
 
-        if (typeof lineData.legend_name !== 'undefined') {
+        if (legend && typeof lineData.legend_name !== 'undefined') {
           const legendItemHTML = LegendItemTemplate({
             name: lineData.legend_name,
             style
