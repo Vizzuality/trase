@@ -25,10 +25,10 @@ import capitalize from 'lodash/capitalize';
 
 import NavContainer from 'containers/shared/nav.container';
 import Dropdown from 'components/shared/dropdown.component';
-import Top from 'components/profiles/top.component';
 import Line from 'components/profiles/line.component';
 import Chord from 'components/profiles/chord.component';
 import MiniSankey from 'react-components/profiles/mini-sankey.component';
+import Top from 'react-components/profiles/top.component';
 import MultiTable from 'components/profiles/multi-table.component';
 import Map from 'components/profiles/map.component';
 
@@ -206,14 +206,16 @@ const _build = (data, { year, showMiniSankey }) => {
         data.top_traders.actors
       );
 
-      new Top({
-        el: document.querySelector('.js-top-trader'),
-        data: data.top_traders.actors,
-        targetLink: 'actor',
-        title: `Top traders of soy in ${data.municipality_name} in ${year}`,
-        unit: '%',
-        year
-      });
+      render(
+        <Top
+          data={data.top_traders.actors}
+          targetLink="actor"
+          title={`Top traders of soy in ${data.municipality_name} in ${year}`}
+          unit="%"
+          year={year}
+        />,
+        document.querySelector('.js-top-trader')
+      );
     }
 
     if (data.top_consumers.countries.length) {
@@ -226,12 +228,14 @@ const _build = (data, { year, showMiniSankey }) => {
         data.top_consumers.countries
       );
 
-      new Top({
-        el: document.querySelector('.js-top-consumer'),
-        data: data.top_consumers.countries,
-        title: `Top importer countries of ${formatApostrophe(capitalize(data.municipality_name))} soy in ${year}`,
-        unit: '%'
-      });
+      render(
+        <Top
+          data={data.top_consumers.countries}
+          title={`Top importer countries of ${formatApostrophe(capitalize(data.municipality_name))} soy in ${year}`}
+          unit="%"
+        />,
+        document.querySelector('.js-top-consumer')
+      );
     }
   }
 
@@ -249,6 +253,8 @@ const _build = (data, { year, showMiniSankey }) => {
 const _setInfo = (info, onLinkClick, { nodeId, year }) => {
   document.querySelector('.js-country-name').innerHTML = info.country ? capitalize(info.country) : '-';
   document.querySelector('.js-state-name').innerHTML = info.state ? capitalize(info.state) : '-';
+  document.querySelector('.js-chord-consumers-state-name').innerHTML = info.state ? info.state : '-';
+  document.querySelector('.js-chord-traders-state-name').innerHTML = info.state ? info.state : '-';
   document.querySelector('.js-biome-name').innerHTML = info.biome ? capitalize(info.biome) : '-';
   document.querySelector('.js-legend').innerHTML = info.type || '-';
   document.querySelector('.js-municipality').innerHTML = info.municipality ? capitalize(info.municipality) : '-';
