@@ -1,6 +1,7 @@
 /* eslint-disable no-new */
 import React from 'react';
 import { render } from 'react-dom';
+import { Provider } from 'react-redux';
 import ProfilePlaceMarkup from 'html/profile-place.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
 import FooterMarkup from 'html/includes/_footer.ejs';
@@ -29,7 +30,7 @@ import Top from 'components/profiles/top.component';
 import Line from 'components/profiles/line.component';
 import Chord from 'components/profiles/chord.component';
 import MiniSankey from 'react-components/profiles/mini-sankey.component';
-import MultiTable from 'components/profiles/multi-table.component';
+import MultiTable from 'react-components/profiles/multi-table.component';
 import Map from 'components/profiles/map.component';
 
 import formatApostrophe from 'utils/formatApostrophe';
@@ -37,7 +38,7 @@ import formatValue from 'utils/formatValue';
 import smoothScroll from 'utils/smoothScroll';
 
 import { GET_PLACE_FACTSHEET, getURLFromParams } from 'utils/getURLFromParams';
-import { DEFAULT_PROFILE_PAGE_YEAR } from '../constants';
+import { DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
 
 const defaults = {
   country: 'Brazil',
@@ -82,7 +83,7 @@ const _buildMaps = (data) => {
   }
 };
 
-const _build = (data, { year, showMiniSankey }) => {
+const _build = (data, { year, showMiniSankey }, store) => {
   _buildMaps(data);
 
   if (
@@ -253,13 +254,18 @@ const _build = (data, { year, showMiniSankey }) => {
   }
 
   if (data.indicators.length) {
-    new MultiTable({
-      el: document.querySelector('.js-score-table'),
-      data: data.indicators,
-      tabsTitle: 'Sustainability indicators:',
-      type: 't_head_places',
-      year
-    });
+    render(
+      <Provider store={store} >
+        <MultiTable
+          data={data.indicators}
+          tabsTitle="Sustainability indicators:"
+          type="t_head_places"
+          target={item => (item.name === 'Municipalities' ? 'profilePlace' : null)}
+          year={year}
+        />
+      </Provider>,
+      document.querySelector('.js-score-table')
+    );
   }
 };
 
@@ -395,14 +401,15 @@ const _loadData = (store, nodeId, year, showMiniSankey) => {
         document.getElementById('year-dropdown')
       );
 
-      _build(data, { year, showMiniSankey });
+      _build(data, { year, showMiniSankey }, store);
     })
     .catch(reason => _showErrorMessage(reason.message));
 };
 
 export const mount = (root, store) => {
   const { query = {} } = store.getState().location;
-  const { nodeId, year = DEFAULT_PROFILE_PAGE_YEAR, showMiniSankey = false, print = false } = query;
+  const { nodeId, showMiniSankey = false, print = false } = query;
+  const year = query.year ? parseInt(query.year, 10) : DEFAULT_PROFILE_PAGE_YEAR;
 
   root.innerHTML = ProfilePlaceMarkup({
     printMode: print,

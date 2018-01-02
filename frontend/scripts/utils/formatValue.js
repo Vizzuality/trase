@@ -5,6 +5,10 @@ export default (value, dimensionName) => {
   if (value === undefined || value === null) {
     return '-';
   }
+  if (typeof value !== 'number') {
+    return value;
+  }
+
   let maximumFractionDigits = NUM_DECIMALS_DEFAULT;
 
   const dimensionNameLower = dimensionName.toLowerCase();

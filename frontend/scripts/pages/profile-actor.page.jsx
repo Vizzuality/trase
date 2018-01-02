@@ -4,7 +4,6 @@ import NavMarkup from 'html/includes/_nav.ejs';
 import FooterMarkup from 'html/includes/_footer.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
-
 import 'styles/_base.scss';
 import 'styles/_texts.scss';
 import 'styles/_foundation.css';
@@ -25,11 +24,10 @@ import NavContainer from 'containers/shared/nav.container';
 import Dropdown from 'react-components/shared/dropdown.component';
 import Map from 'components/profiles/map.component';
 import Line from 'components/profiles/line.component';
-import MultiTable from 'components/profiles/multi-table.component';
+import MultiTable from 'react-components/profiles/multi-table.component';
 import Scatterplot from 'components/profiles/scatterplot.component';
 import Tooltip from 'components/shared/info-tooltip.component';
 import choroLegend from 'components/profiles/choro-legend.component';
-
 import smoothScroll from 'utils/smoothScroll';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
@@ -40,6 +38,7 @@ import TopSourceTemplate from 'templates/profiles/top-source-switcher.ejs';
 import EventManager from 'utils/eventManager';
 import React from 'react';
 import { render } from 'react-dom';
+import { Provider } from 'react-redux';
 
 const evManager = new EventManager();
 
@@ -140,7 +139,7 @@ const _setTopSourceSwitcher = (data, verb, year) => {
   });
 };
 
-const _build = (data, { nodeId, year, print }) => {
+const _build = (data, { nodeId, year, print }, store) => {
   const verb = (data.column_name === 'EXPORTER') ? 'exported' : 'imported';
   const verbGerund = (data.column_name === 'EXPORTER') ? 'exporting' : 'importing';
 
@@ -256,14 +255,18 @@ const _build = (data, { nodeId, year, print }) => {
     const tabsTitle =
       `Deforestation risk associated with ${formatApostrophe(data.node_name)} top sourcing regions in ${year}:`;
 
-    new MultiTable({
-      el: document.querySelector('.js-sustainability-table'),
-      data: data.sustainability,
-      tabsTitle,
-      type: 't_head_actors',
-      target: item => (item.name === 'Municipalities' ? 'place' : null),
-      year
-    });
+    render(
+      <Provider store={store} >
+        <MultiTable
+          data={data.sustainability}
+          tabsTitle={tabsTitle}
+          type="t_head_actors"
+          target={item => (item.name === 'Municipalities' ? 'profilePlace' : null)}
+          year={year}
+        />
+      </Provider>,
+      document.querySelector('.js-sustainability-table')
+    );
   }
 
   if (data.companies_sourcing) {
@@ -439,14 +442,15 @@ const _loadData = (store, nodeId, year) => {
         document.getElementById('year-dropdown')
       );
 
-      _build(data, { nodeId, year });
+      _build(data, { nodeId, year }, store);
     })
     .catch(reason => _showErrorMessage(reason.message));
 };
 
 export const mount = (root, store) => {
   const { query = {} } = store.getState().location;
-  const { nodeId, year = DEFAULT_PROFILE_PAGE_YEAR, print = false } = query;
+  const { nodeId, print = false } = query;
+  const year = query.year ? parseInt(query.year, 10) : DEFAULT_PROFILE_PAGE_YEAR;
 
   root.innerHTML = ProfileActorMarkup({
     printMode: print,
