@@ -22,13 +22,11 @@ class Line extends Component {
   }
 
   componentDidMount() {
-    const { className, data, xValues, settings } = this.props;
-    this.build(className, data, xValues, settings);
+    this.build();
   }
 
   componentDidUpdate() {
-    const { className, data, xValues, settings } = this.props;
-    this.build(className, data, xValues, settings);
+    this.build();
   }
 
   prepareData(xValues, data) {
@@ -59,7 +57,9 @@ class Line extends Component {
     return discontinuousValues.filter(points => points.filter(p => p.value !== null).length);
   }
 
-  build(className, data, xValues, settings) {
+  build() {
+    const { className, data, xValues, settings } = this.props;
+
     const container = document.querySelector(className);
     const elem = document.querySelector(`.${this.key}`);
     // TODO: extract legend logic, as HTML container is not defined in this component

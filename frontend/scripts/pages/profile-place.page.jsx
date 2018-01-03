@@ -28,7 +28,7 @@ import NavContainer from 'containers/shared/nav.container';
 import Dropdown from 'react-components/shared/dropdown.component';
 import Top from 'react-components/profiles/top.component';
 import Line from 'react-components/profiles/line.component';
-import Chord from 'components/profiles/chord.component';
+import Chord from 'react-components/profiles/chord.component';
 import MiniSankey from 'react-components/profiles/mini-sankey.component';
 import MultiTable from 'react-components/profiles/multi-table.component';
 import Map from 'react-components/profiles/map.component';
@@ -250,11 +250,18 @@ const _build = (data, { year, showMiniSankey }, store) => {
         .classList
         .toggle('is-hidden', false);
 
-      new Chord(
-        '.js-chord-traders',
-        data.top_traders.matrix,
-        data.top_traders.municipalities,
-        data.top_traders.actors
+      const tradersChordContainer = document.querySelector('.js-chord-traders-container');
+
+      render(
+        <Chord
+          width={tradersChordContainer.clientWidth}
+          height={tradersChordContainer.clientWidth}
+          orgMatrix={data.top_traders.matrix}
+          list={data.top_traders.municipalities}
+          list2={data.top_traders.actors}
+          name={data.state_name}
+        />,
+        tradersChordContainer
       );
 
       render(
@@ -270,15 +277,22 @@ const _build = (data, { year, showMiniSankey }, store) => {
     }
 
     if (data.top_consumers.countries.length) {
+      const consumersChordContainer = document.querySelector('.js-chord-consumers-container');
+
       document.querySelector('.js-consumers')
         .classList
         .toggle('is-hidden', false);
 
-      new Chord(
-        '.js-chord-consumers',
-        data.top_consumers.matrix,
-        data.top_consumers.municipalities,
-        data.top_consumers.countries
+      render(
+        <Chord
+          width={consumersChordContainer.clientWidth}
+          height={consumersChordContainer.clientWidth}
+          orgMatrix={data.top_consumers.matrix}
+          list={data.top_consumers.municipalities}
+          list2={data.top_consumers.countries}
+          name={data.state_name}
+        />,
+        consumersChordContainer
       );
 
       render(
@@ -311,8 +325,8 @@ const _build = (data, { year, showMiniSankey }, store) => {
 const _setInfo = (store, info, onLinkClick, { nodeId, year }) => {
   document.querySelector('.js-country-name').innerHTML = info.country ? capitalize(info.country) : '-';
   document.querySelector('.js-state-name').innerHTML = info.state ? capitalize(info.state) : '-';
-  document.querySelector('.js-chord-consumers-state-name').innerHTML = info.state ? info.state : '-';
-  document.querySelector('.js-chord-traders-state-name').innerHTML = info.state ? info.state : '-';
+  // document.querySelector('.js-chord-consumers-state-name').innerHTML = info.state ? info.state : '-';
+  // document.querySelector('.js-chord-traders-state-name').innerHTML = info.state ? info.state : '-';
   document.querySelector('.js-biome-name').innerHTML = info.biome ? capitalize(info.biome) : '-';
   document.querySelector('.js-legend').innerHTML = info.type || '-';
   document.querySelector('.js-municipality').innerHTML = info.municipality ? capitalize(info.municipality) : '-';
@@ -444,7 +458,10 @@ const _loadData = (store, nodeId, year, showMiniSankey) => {
 
       _build(data, { year, showMiniSankey }, store);
     })
-    .catch(reason => _showErrorMessage(reason.message));
+    .catch((reason) => {
+      _showErrorMessage(reason.message);
+      console.error(reason);
+    });
 };
 
 export const mount = (root, store) => {
