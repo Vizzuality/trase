@@ -25,7 +25,7 @@ import Dropdown from 'react-components/shared/dropdown.component';
 import Map from 'react-components/profiles/map.component';
 import Line from 'react-components/profiles/line.component';
 import MultiTable from 'react-components/profiles/multi-table.component';
-import Scatterplot from 'components/profiles/scatterplot.component';
+import Scatterplot from 'react-components/profiles/scatterplot.component';
 import Tooltip from 'components/shared/info-tooltip.component';
 import choroLegend from 'components/profiles/choro-legend.component';
 import smoothScroll from 'utils/smoothScroll';
@@ -124,16 +124,6 @@ const _initSource = (selectedSource, data, store) => {
     </Provider>,
     containerElement
   );
-
-  // Map(
-  //   '.js-top-municipalities-map', {
-  //     topoJSONPath,
-  //     topoJSONRoot,
-  //     getPolygonClassName,
-  //     showTooltipCallback,
-  //     hideTooltipCallback: () => { tooltip.hide(); }
-  //   }
-  // );
 };
 
 const _switchTopSource = (e, data, store) => {
@@ -320,34 +310,42 @@ const _build = (data, { nodeId, year, print }, store) => {
     document.querySelector('.js-companies-exporting-y-axis').innerHTML =
       `${data.companies_sourcing.dimension_y.name} (${data.companies_sourcing.dimension_y.unit})`;
 
-    new Scatterplot('.js-companies-exporting', {
-      data: data.companies_sourcing.companies,
-      xDimension: data.companies_sourcing.dimensions_x,
-      node: { id: nodeId, name: data.node_name },
-      verbGerund,
-      year,
-      showTooltipCallback: (company, indicator, x, y) => {
-        tooltip.show(
-          x, y,
-          company.name,
-          [
-            {
-              title: data.companies_sourcing.dimension_y.name,
-              value: formatValue(company.y, data.companies_sourcing.dimension_y.name),
-              unit: data.companies_sourcing.dimension_y.unit
-            },
-            {
-              title: indicator.name,
-              value: formatValue(company.x, indicator.name),
-              unit: indicator.unit
-            }
-          ]
-        );
-      },
-      hideTooltipCallback: () => {
-        tooltip.hide();
-      }
-    });
+    const showTooltipCallback = (company, indicator, x, y) => {
+      tooltip.show(
+        x, y,
+        company.name,
+        [
+          {
+            title: data.companies_sourcing.dimension_y.name,
+            value: formatValue(company.y, data.companies_sourcing.dimension_y.name),
+            unit: data.companies_sourcing.dimension_y.unit
+          },
+          {
+            title: indicator.name,
+            value: formatValue(company.x, indicator.name),
+            unit: indicator.unit
+          }
+        ]
+      );
+    };
+
+    const scatterplotContainerElement = document.querySelector('.js-scatterplot-container');
+
+    render(
+      <Provider store={store} >
+        <Scatterplot
+          width={scatterplotContainerElement.clientWidth}
+          data={data.companies_sourcing.companies}
+          xDimension={data.companies_sourcing.dimensions_x}
+          node={{ id: nodeId, name: data.node_name }}
+          verbGerund={verbGerund}
+          year={year}
+          showTooltipCallback={showTooltipCallback}
+          hideTooltipCallback={() => { tooltip.hide(); }}
+        />
+      </Provider>,
+      scatterplotContainerElement
+    );
   }
 };
 
