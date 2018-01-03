@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 import 'styles/components/profiles/line.scss';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
