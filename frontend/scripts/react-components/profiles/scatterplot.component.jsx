@@ -137,7 +137,7 @@ class Scatterplot extends Component {
     const newData = this._getFormattedData(selectedTabIndex);
     const allXValues = newData.map(item => item.x);
     const x = d3_scale_linear()
-      .range([0, this.props.width])
+      .range([0, this.props.width - this.margins.left - this.margins.right])
       .domain(d3_extent([0, ...allXValues]));
     this.xAxis.scale(x);
 
