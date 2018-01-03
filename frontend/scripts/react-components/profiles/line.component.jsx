@@ -8,7 +8,6 @@ import { area as d3_area, line as d3_line } from 'd3-shape';
 import { format as d3_format } from 'd3-format';
 import { timeFormat as d3_timeFormat } from 'd3-time-format';
 import { LINE_LABEL_HEIGHT } from 'constants';
-import LegendItemTemplate from 'templates/profiles/legendItem.ejs';
 import abbreviateNumber from 'utils/abbreviateNumber';
 import 'styles/components/profiles/line.scss';
 import React, { Component } from 'react';
@@ -62,8 +61,6 @@ class Line extends Component {
 
     const container = document.querySelector(className);
     const elem = document.querySelector(`.${this.key}`);
-    // TODO: extract legend logic, as HTML container is not defined in this component
-    const legend = document.querySelector(`${className}-legend`);
     const { margin, ticks } = settings;
     const width = container.clientWidth - margin.left - margin.right;
     const height = settings.height - margin.top - margin.bottom;
@@ -73,9 +70,6 @@ class Line extends Component {
     const allYValues = [].concat(...data.lines.map(line => line.values));
 
     elem.innerHTML = '';
-    if (legend) {
-      legend.innerHTML = '';
-    }
     const d3Container = d3_select(elem)
       .append('svg')
       .attr('width', width + margin.left + margin.right)
@@ -200,15 +194,6 @@ class Line extends Component {
             }
             break;
           }
-        }
-
-        if (legend && typeof lineData.legend_name !== 'undefined') {
-          const legendItemHTML = LegendItemTemplate({
-            name: lineData.legend_name,
-            style
-          });
-
-          legend.innerHTML += legendItemHTML;
         }
       });
 

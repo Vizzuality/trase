@@ -28,6 +28,7 @@ import NavContainer from 'containers/shared/nav.container';
 import Dropdown from 'react-components/shared/dropdown.component';
 import Top from 'react-components/profiles/top.component';
 import Line from 'react-components/profiles/line.component';
+import LineLegend from 'react-components/profiles/line-legend.component';
 import Chord from 'react-components/profiles/chord.component';
 import MiniSankey from 'react-components/profiles/mini-sankey.component';
 import MultiTable from 'react-components/profiles/multi-table.component';
@@ -134,7 +135,6 @@ const _build = (data, { year, showMiniSankey }, store) => {
         return include;
       });
 
-    // TODO: extract legend logic, as HTML container is not defined in this component
     render(
       <Provider store={store} >
         <Line
@@ -154,6 +154,16 @@ const _build = (data, { year, showMiniSankey }, store) => {
         />
       </Provider>,
       document.querySelector('.js-line')
+    );
+
+    render(
+      <Provider store={store} >
+        <LineLegend
+          data={data.trajectory_deforestation}
+          xValues={data.trajectory_deforestation.included_years}
+        />
+      </Provider>,
+      document.querySelector('.js-line-legend')
     );
   } else {
     const elem = document.querySelector('.js-line-title');
