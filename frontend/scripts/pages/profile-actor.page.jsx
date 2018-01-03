@@ -23,7 +23,7 @@ import 'styles/components/shared/tabs.scss';
 import NavContainer from 'containers/shared/nav.container';
 import Dropdown from 'react-components/shared/dropdown.component';
 import Map from 'components/profiles/map.component';
-import Line from 'components/profiles/line.component';
+import Line from 'react-components/profiles/line.component';
 import MultiTable from 'react-components/profiles/multi-table.component';
 import Scatterplot from 'components/profiles/scatterplot.component';
 import Tooltip from 'components/shared/info-tooltip.component';
@@ -53,7 +53,7 @@ const LINE_MARGINS = {
 };
 let lineSettings;
 
-const _initSource = (selectedSource, data) => {
+const _initSource = (selectedSource, data, store) => {
   if (data.top_sources === undefined) {
     return;
   }
@@ -62,14 +62,21 @@ const _initSource = (selectedSource, data) => {
 
   sourceLines.lines = sourceLines.lines.slice(0, 5);
 
-  new Line(
-    '.js-top-municipalities',
-    sourceLines,
-    data.top_sources.included_years,
-    Object.assign({}, lineSettings, {
-      margin: LINE_MARGINS,
-      height: 244
-    })
+  const settings = Object.assign({}, lineSettings, {
+    margin: LINE_MARGINS,
+    height: 244
+  });
+
+  render(
+    <Provider store={store} >
+      <Line
+        className=".js-top-municipalities"
+        data={sourceLines}
+        xValues={data.top_sources.included_years}
+        settings={settings}
+      />
+    </Provider>,
+    document.querySelector('.js-top-municipalities')
   );
 
   document.querySelector('.js-top-municipalities-map').innerHTML = '';
@@ -107,7 +114,7 @@ const _initSource = (selectedSource, data) => {
   });
 };
 
-const _switchTopSource = (e, data) => {
+const _switchTopSource = (e, data, store) => {
   const selectedSwitch = e && e.currentTarget;
   if (!selectedSwitch) {
     return;
@@ -120,10 +127,10 @@ const _switchTopSource = (e, data) => {
   });
   selectedSwitch.classList.add('selected');
 
-  _initSource(selectedSource, data);
+  _initSource(selectedSource, data, store);
 };
 
-const _setTopSourceSwitcher = (data, verb, year) => {
+const _setTopSourceSwitcher = (data, verb, year, store) => {
   const template = TopSourceTemplate({
     year,
     verb,
@@ -135,7 +142,7 @@ const _setTopSourceSwitcher = (data, verb, year) => {
 
   const switchers = Array.prototype.slice.call(document.querySelectorAll('.js-top-source-switcher'), 0);
   switchers.forEach((switcher) => {
-    evManager.addEventListener(switcher, 'click', e => _switchTopSource(e, data));
+    evManager.addEventListener(switcher, 'click', e => _switchTopSource(e, data, store));
   });
 };
 
@@ -174,14 +181,14 @@ const _build = (data, { nodeId, year, print }, store) => {
   };
 
   if (data.top_sources && data.top_sources.municipality.lines.length) {
-    _setTopSourceSwitcher(data, verb, year);
+    _setTopSourceSwitcher(data, verb, year, store);
 
     choroLegend(null, '.js-source-legend', {
       title: [`Soy ${verb} in ${year}`, '(tonnes)'],
       bucket: [[data.top_sources.buckets[0], ...data.top_sources.buckets]]
     });
 
-    _initSource((print === true) ? 'state' : 'municipality', data);
+    _initSource((print === true) ? 'state' : 'municipality', data, store);
   }
 
 
@@ -197,25 +204,33 @@ const _build = (data, { nodeId, year, print }, store) => {
     const topCountriesLines = Object.assign({}, data.top_countries);
 
     topCountriesLines.lines = topCountriesLines.lines.slice(0, 5);
-    new Line(
-      '.js-top-destination',
-      topCountriesLines,
-      data.top_countries.included_years,
-      Object.assign({}, lineSettings, {
-        showTooltipCallback: (location, x, y) => {
-          tooltip.show(
-            x, y,
-            `${data.node_name} > ${location.name.toUpperCase()}, ${location.date.getFullYear()}`,
-            [
-              {
-                title: 'Trade volume',
-                value: formatValue(location.value, 'Trade volume'),
-                unit: 'Tons'
-              }
-            ]
-          );
-        }
-      })
+
+    const settings = Object.assign({}, lineSettings, {
+      showTooltipCallback: (location, x, y) => {
+        tooltip.show(
+          x, y,
+          `${data.node_name} > ${location.name.toUpperCase()}, ${location.date.getFullYear()}`,
+          [
+            {
+              title: 'Trade volume',
+              value: formatValue(location.value, 'Trade volume'),
+              unit: 'Tons'
+            }
+          ]
+        );
+      }
+    });
+
+    render(
+      <Provider store={store} >
+        <Line
+          className=".js-top-destination"
+          data={topCountriesLines}
+          xValues={data.top_countries.included_years}
+          settings={settings}
+        />
+      </Provider>,
+      document.querySelector('.js-top-destination')
     );
 
     Map('.js-top-destination-map', {

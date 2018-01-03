@@ -27,7 +27,7 @@ import capitalize from 'lodash/capitalize';
 import NavContainer from 'containers/shared/nav.container';
 import Dropdown from 'react-components/shared/dropdown.component';
 import Top from 'components/profiles/top.component';
-import Line from 'components/profiles/line.component';
+import Line from 'react-components/profiles/line.component';
 import Chord from 'components/profiles/chord.component';
 import MiniSankey from 'react-components/profiles/mini-sankey.component';
 import MultiTable from 'react-components/profiles/multi-table.component';
@@ -105,20 +105,26 @@ const _build = (data, { year, showMiniSankey }, store) => {
         return include;
       });
 
-    new Line(
-      '.js-line',
-      data.trajectory_deforestation,
-      data.trajectory_deforestation.included_years,
-      {
-        margin: { top: 0, right: 40, bottom: 30, left: 99 },
-        height: 425,
-        ticks: {
-          yTicks: 7,
-          yTickPadding: 52,
-          yTickFormatType: 'deforestation-trajectory',
-          xTickPadding: 15
-        }
-      }
+    // TODO: extract legend logic, as HTML container is not defined in this component
+    render(
+      <Provider store={store} >
+        <Line
+          className=".js-line"
+          data={data.trajectory_deforestation}
+          xValues={data.trajectory_deforestation.included_years}
+          settings={{
+            margin: { top: 0, right: 40, bottom: 30, left: 99 },
+            height: 425,
+            ticks: {
+              yTicks: 7,
+              yTickPadding: 52,
+              yTickFormatType: 'deforestation-trajectory',
+              xTickPadding: 15
+            }
+          }}
+        />
+      </Provider>,
+      document.querySelector('.js-line')
     );
   } else {
     const elem = document.querySelector('.js-line-title');
