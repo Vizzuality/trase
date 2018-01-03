@@ -22,7 +22,7 @@ import 'styles/components/shared/tabs.scss';
 
 import NavContainer from 'containers/shared/nav.container';
 import Dropdown from 'react-components/shared/dropdown.component';
-import Map from 'components/profiles/map.component';
+import Map from 'react-components/profiles/map.component';
 import Line from 'react-components/profiles/line.component';
 import MultiTable from 'react-components/profiles/multi-table.component';
 import Scatterplot from 'components/profiles/scatterplot.component';
@@ -79,39 +79,61 @@ const _initSource = (selectedSource, data, store) => {
     document.querySelector('.js-top-municipalities')
   );
 
-  document.querySelector('.js-top-municipalities-map').innerHTML = '';
+  // document.querySelector('.js-top-municipalities-map').innerHTML = '';
 
-  Map('.js-top-municipalities-map', {
-    topoJSONPath: `./vector_layers/${defaults.country.toUpperCase()}_${selectedSource.toUpperCase()}.topo.json`,
-    topoJSONRoot: `${defaults.country.toUpperCase()}_${selectedSource.toUpperCase()}`,
-    getPolygonClassName: ({ properties }) => {
-      const source = data.top_sources[selectedSource].lines
-        .find(s => (properties.geoid === s.geo_id));
-      let value = 'n-a';
-      if (source) value = source.value9 || 'n-a';
-      return `-outline ch-${value}`;
-    },
-    showTooltipCallback: ({ properties }, x, y) => {
-      const source = data.top_sources[selectedSource].lines
-        .find(s => (properties.geoid === s.geo_id));
-      const title = `${data.node_name} > ${properties.nome.toUpperCase()}`;
+  const topoJSONPath = `./vector_layers/${defaults.country.toUpperCase()}_${selectedSource.toUpperCase()}.topo.json`;
+  const topoJSONRoot = `${defaults.country.toUpperCase()}_${selectedSource.toUpperCase()}`;
+  const getPolygonClassName = ({ properties }) => {
+    const source = data.top_sources[selectedSource].lines
+      .find(s => (properties.geoid === s.geo_id));
+    let value = 'n-a';
+    if (source) value = source.value9 || 'n-a';
+    return `-outline ch-${value}`;
+  };
+  const showTooltipCallback = ({ properties }, x, y) => {
+    const source = data.top_sources[selectedSource].lines
+      .find(s => (properties.geoid === s.geo_id));
+    const title = `${data.node_name} > ${properties.nome.toUpperCase()}`;
 
-      if (source) {
-        tooltip.show(
-          x, y,
-          title,
-          [{
-            title: 'Trade Volume',
-            value: formatValue(source.values[0], 'Trade volume'),
-            unit: 'Tons'
-          }]
-        );
-      }
-    },
-    hideTooltipCallback: () => {
-      tooltip.hide();
+    if (source) {
+      tooltip.show(
+        x, y,
+        title,
+        [{
+          title: 'Trade Volume',
+          value: formatValue(source.values[0], 'Trade volume'),
+          unit: 'Tons'
+        }]
+      );
     }
-  });
+  };
+
+  const containerElement = document.querySelector('.js-top-municipalities-map');
+
+  render(
+    <Provider store={store} >
+      <Map
+        width={containerElement.clientWidth}
+        height={containerElement.clientHeight}
+        topoJSONPath={topoJSONPath}
+        topoJSONRoot={topoJSONRoot}
+        getPolygonClassName={getPolygonClassName}
+        showTooltipCallback={showTooltipCallback}
+        hideTooltipCallback={() => { tooltip.hide(); }}
+      />
+    </Provider>,
+    containerElement
+  );
+
+  // Map(
+  //   '.js-top-municipalities-map', {
+  //     topoJSONPath,
+  //     topoJSONRoot,
+  //     getPolygonClassName,
+  //     showTooltipCallback,
+  //     hideTooltipCallback: () => { tooltip.hide(); }
+  //   }
+  // );
 };
 
 const _switchTopSource = (e, data, store) => {
@@ -233,37 +255,47 @@ const _build = (data, { nodeId, year, print }, store) => {
       document.querySelector('.js-top-destination')
     );
 
-    Map('.js-top-destination-map', {
-      topoJSONPath: './vector_layers/WORLD.topo.json',
-      topoJSONRoot: 'world',
-      useRobinsonProjection: true,
-      getPolygonClassName: ({ properties }) => {
-        const country = data.top_countries.lines
-          .find(c => (properties.iso2 === c.geo_id));
-        let value = 'n-a';
-        if (country) value = country.value9 || 'n-a';
-        return `-outline ch-${value}`;
-      },
-      showTooltipCallback: ({ properties }, x, y) => {
-        const country = data.top_countries.lines
-          .find(c => (properties.name.toUpperCase() === c.name.toUpperCase()));
-        const title = `${properties.name.toUpperCase()} > ${data.node_name}`;
-        if (country) {
-          tooltip.show(
-            x, y,
-            title,
-            [{
-              title: 'Trade Volume',
-              value: formatValue(country.values[0], 'Trade volume'),
-              unit: 'Tons'
-            }]
-          );
-        }
-      },
-      hideTooltipCallback: () => {
-        tooltip.hide();
+    const getPolygonClassName = ({ properties }) => {
+      const country = data.top_countries.lines
+        .find(c => (properties.iso2 === c.geo_id));
+      let value = 'n-a';
+      if (country) value = country.value9 || 'n-a';
+      return `-outline ch-${value}`;
+    };
+    const showTooltipCallback = ({ properties }, x, y) => {
+      const country = data.top_countries.lines
+        .find(c => (properties.name.toUpperCase() === c.name.toUpperCase()));
+      const title = `${properties.name.toUpperCase()} > ${data.node_name}`;
+      if (country) {
+        tooltip.show(
+          x, y,
+          title,
+          [{
+            title: 'Trade Volume',
+            value: formatValue(country.values[0], 'Trade volume'),
+            unit: 'Tons'
+          }]
+        );
       }
-    });
+    };
+
+    const containerElement = document.querySelector('.js-top-destination-map');
+
+    render(
+      <Provider store={store} >
+        <Map
+          width={containerElement.clientWidth}
+          height={containerElement.clientHeight}
+          topoJSONPath="./vector_layers/WORLD.topo.json"
+          topoJSONRoot="world"
+          useRobinsonProjection
+          getPolygonClassName={getPolygonClassName}
+          showTooltipCallback={showTooltipCallback}
+          hideTooltipCallback={() => { tooltip.hide(); }}
+        />
+      </Provider>,
+      containerElement
+    );
   }
 
   if (data.sustainability && data.sustainability.length) {

@@ -31,7 +31,7 @@ import Line from 'react-components/profiles/line.component';
 import Chord from 'components/profiles/chord.component';
 import MiniSankey from 'react-components/profiles/mini-sankey.component';
 import MultiTable from 'react-components/profiles/multi-table.component';
-import Map from 'components/profiles/map.component';
+import Map from 'react-components/profiles/map.component';
 
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
@@ -45,46 +45,75 @@ const defaults = {
   commodity: 'Soy'
 };
 
-const _buildMaps = (data) => {
+const _buildMaps = (data, store) => {
   const stateGeoID = data.state_geo_id;
   const countryName = capitalize(data.country_name);
 
-  if (document.querySelector('.js-map-country').innerHTML === '') {
-    Map('.js-map-country', {
-      topoJSONPath: './vector_layers/WORLD.topo.json',
-      topoJSONRoot: 'world',
-      getPolygonClassName: d => (d.properties.name === countryName ? '-isCurrent' : ''),
-      useRobinsonProjection: true
-    });
-  }
+  const countryMapContainer = document.querySelector('.js-map-country');
+  const biomeMapContainer = document.querySelector('.js-map-biome');
+  const stateMapContainer = document.querySelector('.js-map-state');
+  const municipalityMapContainer = document.querySelector('.js-map-municipality');
 
-  if (document.querySelector('.js-map-biome').innerHTML === '') {
-    Map('.js-map-biome', {
-      topoJSONPath: `./vector_layers/${defaults.country.toUpperCase()}_BIOME.topo.json`,
-      topoJSONRoot: `${defaults.country.toUpperCase()}_BIOME`,
-      getPolygonClassName: d => (d.properties.geoid === data.biome_geo_id ? '-isCurrent' : '')
-    });
-  }
+  render(
+    <Provider store={store} >
+      <Map
+        width={countryMapContainer.clientWidth}
+        height={countryMapContainer.clientHeight}
+        topoJSONPath="./vector_layers/WORLD.topo.json"
+        topoJSONRoot="world"
+        useRobinsonProjection
+        getPolygonClassName={d => (d.properties.name === countryName ? '-isCurrent' : '')}
+        isStaticComponent
+      />
+    </Provider>,
+    countryMapContainer
+  );
 
-  if (document.querySelector('.js-map-state').innerHTML === '') {
-    Map('.js-map-state', {
-      topoJSONPath: `./vector_layers/${defaults.country.toUpperCase()}_STATE.topo.json`,
-      topoJSONRoot: `${defaults.country.toUpperCase()}_STATE`,
-      getPolygonClassName: d => (d.properties.geoid === stateGeoID ? '-isCurrent' : '')
-    });
-  }
+  render(
+    <Provider store={store} >
+      <Map
+        width={biomeMapContainer.clientWidth}
+        height={biomeMapContainer.clientHeight}
+        topoJSONPath={`./vector_layers/${defaults.country.toUpperCase()}_BIOME.topo.json`}
+        topoJSONRoot={`${defaults.country.toUpperCase()}_BIOME`}
+        getPolygonClassName={d => (d.properties.geoid === data.biome_geo_id ? '-isCurrent' : '')}
+        isStaticComponent
+      />
+    </Provider>,
+    biomeMapContainer
+  );
 
-  if (document.querySelector('.js-map-municipality').innerHTML === '') {
-    Map('.js-map-municipality', {
-      topoJSONPath: `./vector_layers/municip_states/${defaults.country.toLowerCase()}/${stateGeoID}.topo.json`,
-      topoJSONRoot: `${defaults.country.toUpperCase()}_${stateGeoID}`,
-      getPolygonClassName: d => (d.properties.geoid === data.municipality_geo_id ? '-isCurrent' : '')
-    });
-  }
+  render(
+    <Provider store={store} >
+      <Map
+        width={stateMapContainer.clientWidth}
+        height={stateMapContainer.clientHeight}
+        topoJSONPath={`./vector_layers/${defaults.country.toUpperCase()}_STATE.topo.json`}
+        topoJSONRoot={`${defaults.country.toUpperCase()}_STATE`}
+        getPolygonClassName={d => (d.properties.geoid === stateGeoID ? '-isCurrent' : '')}
+        isStaticComponent
+      />
+    </Provider>,
+    stateMapContainer
+  );
+
+  render(
+    <Provider store={store} >
+      <Map
+        width={municipalityMapContainer.clientWidth}
+        height={municipalityMapContainer.clientHeight}
+        topoJSONPath={`./vector_layers/municip_states/${defaults.country.toLowerCase()}/${stateGeoID}.topo.json`}
+        topoJSONRoot={`${defaults.country.toUpperCase()}_${stateGeoID}`}
+        getPolygonClassName={d => (d.properties.geoid === data.municipality_geo_id ? '-isCurrent' : '')}
+        isStaticComponent
+      />
+    </Provider>,
+    municipalityMapContainer
+  );
 };
 
 const _build = (data, { year, showMiniSankey }, store) => {
-  _buildMaps(data);
+  _buildMaps(data, store);
 
   if (
     data.trajectory_deforestation
