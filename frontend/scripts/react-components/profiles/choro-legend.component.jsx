@@ -7,7 +7,7 @@ import classnames from 'classnames';
 
 class ChoroLegend extends Component {
   abbreviateNumber(x, index) {
-    return index === 0 ? `<${abbreviateNumber(x, 0)}` : `>${abbreviateNumber(x, 0)}`
+    return index === 0 ? `<${abbreviateNumber(x, 0)}` : `>${abbreviateNumber(x, 0)}`;
   }
 
   render() {
@@ -28,7 +28,7 @@ class ChoroLegend extends Component {
               <div className={classnames(
                 'bucket',
                 color
-                )}
+              )}
               >
                 {typeof bucket !== 'undefined' && bucket !== null &&
                 <span >{this.abbreviateNumber(bucket[0][index], index)}</span >

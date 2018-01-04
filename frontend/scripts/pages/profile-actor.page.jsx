@@ -34,13 +34,10 @@ import formatValue from 'utils/formatValue';
 import capitalize from 'lodash/capitalize';
 import { GET_ACTOR_FACTSHEET, getURLFromParams } from 'utils/getURLFromParams';
 import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST, DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
-import TopSourceTemplate from 'templates/profiles/top-source-switcher.ejs';
-import EventManager from 'utils/eventManager';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-
-const evManager = new EventManager();
+import TopSourceSwitcher from 'react-components/profiles/top-source-switcher.component';
 
 const defaults = {
   country: 'Brazil',
@@ -126,36 +123,20 @@ const _initSource = (selectedSource, data, store) => {
   );
 };
 
-const _switchTopSource = (e, data, store) => {
-  const selectedSwitch = e && e.currentTarget;
-  if (!selectedSwitch) {
-    return;
-  }
-
-  const selectedSource = selectedSwitch.getAttribute('data-key');
-  const switchers = Array.prototype.slice.call(document.querySelectorAll('.js-top-source-switcher'), 0);
-  switchers.forEach((switcher) => {
-    switcher.classList.remove('selected');
-  });
-  selectedSwitch.classList.add('selected');
-
-  _initSource(selectedSource, data, store);
-};
-
 const _setTopSourceSwitcher = (data, verb, year, store) => {
-  const template = TopSourceTemplate({
-    year,
-    verb,
-    nodeName: capitalize(data.node_name),
-    switchers: Object.keys(data.top_sources)
-      .filter(key => !(ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)))
-  });
-  document.querySelector('.js-top-municipalities-title').innerHTML = template;
-
-  const switchers = Array.prototype.slice.call(document.querySelectorAll('.js-top-source-switcher'), 0);
-  switchers.forEach((switcher) => {
-    evManager.addEventListener(switcher, 'click', e => _switchTopSource(e, data, store));
-  });
+  render(
+    <Provider store={store} >
+      <TopSourceSwitcher
+        year={year}
+        verb={verb}
+        nodeName={capitalize(data.node_name)}
+        switchers={Object.keys(data.top_sources)
+          .filter(key => !(ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)))}
+        onTopSourceSelected={selectedSwitcher => _initSource(selectedSwitcher, data, store)}
+      />
+    </Provider>,
+    document.querySelector('.js-top-municipalities-title-container')
+  );
 };
 
 const _build = (data, { nodeId, year, print }, store) => {
