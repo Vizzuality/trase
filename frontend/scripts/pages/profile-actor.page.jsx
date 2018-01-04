@@ -27,7 +27,7 @@ import Line from 'react-components/profiles/line.component';
 import MultiTable from 'react-components/profiles/multi-table.component';
 import Scatterplot from 'react-components/profiles/scatterplot.component';
 import Tooltip from 'components/shared/info-tooltip.component';
-import choroLegend from 'components/profiles/choro-legend.component';
+import ChoroLegend from 'react-components/profiles/choro-legend.component';
 import smoothScroll from 'utils/smoothScroll';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
@@ -195,10 +195,16 @@ const _build = (data, { nodeId, year, print }, store) => {
   if (data.top_sources && data.top_sources.municipality.lines.length) {
     _setTopSourceSwitcher(data, verb, year, store);
 
-    choroLegend(null, '.js-source-legend', {
-      title: [`Soy ${verb} in ${year}`, '(tonnes)'],
-      bucket: [[data.top_sources.buckets[0], ...data.top_sources.buckets]]
-    });
+
+    render(
+      <Provider store={store} >
+        <ChoroLegend
+          title={[`Soy ${verb} in ${year}`, '(tonnes)']}
+          bucket={[[data.top_sources.buckets[0], ...data.top_sources.buckets]]}
+        />
+      </Provider>,
+      document.querySelector('.js-source-legend')
+    );
 
     _initSource((print === true) ? 'state' : 'municipality', data, store);
   }
@@ -208,10 +214,15 @@ const _build = (data, { nodeId, year, print }, store) => {
     document.querySelector('.js-top-map-title').textContent =
       `Top destination countries of Soy ${verb} by ${capitalize(data.node_name)} in ${year}`;
 
-    choroLegend(null, '.js-destination-legend', {
-      title: [`Soy ${verb} in ${year}`, '(tonnes)'],
-      bucket: [[data.top_countries.buckets[0], ...data.top_countries.buckets]]
-    });
+    render(
+      <Provider store={store} >
+        <ChoroLegend
+          title={[`Soy ${verb} in ${year}`, '(tonnes)']}
+          bucket={[[data.top_countries.buckets[0], ...data.top_countries.buckets]]}
+        />
+      </Provider>,
+      document.querySelector('.js-destination-legend')
+    );
 
     const topCountriesLines = Object.assign({}, data.top_countries);
 
