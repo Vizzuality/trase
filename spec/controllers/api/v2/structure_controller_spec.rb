@@ -10,8 +10,9 @@ RSpec.describe Api::V2::StructureController, type: :controller do
       get :contexts
       controller_contexts = assigns(:contexts)
       expect(controller_contexts).to match_array([context, another_context])
-      expect(controller_contexts.find_by("countries.name ILIKE 'Brazil'").context_resize_bies).to match_array([resize_by_area, resize_by_land_conflicts])
-      expect(controller_contexts.find_by("countries.name ILIKE 'Brazil'").context_recolor_bies).to match_array([recolor_by_forest_500, recolor_by_water_scarcity, recolor_by_biome])
+      brazil_soy_context = controller_contexts.find { |e| e.id == context.id }
+      expect(brazil_soy_context.context_resize_bies).to match_array([resize_by_area, resize_by_land_conflicts])
+      expect(brazil_soy_context.context_recolor_bies).to match_array([recolor_by_forest_500, recolor_by_water_scarcity, recolor_by_biome])
     end
   end
 
