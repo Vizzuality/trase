@@ -170,7 +170,7 @@ module Api
             @trade_total_perc_difference = (@trade_total_current_year - @trade_total_previous_year) / @trade_total_previous_year
           end
 
-          trade_total_rank_in_country = Api::V3::PlaceNode::CountryRanking.new(@context, @year, @node).
+          trade_total_rank_in_country = CountryRanking.new(@context, @year, @node).
             position_for_attribute(@volume_attribute)
           return unless trade_total_rank_in_country && trade_total_rank_in_country > 1
           @trade_total_rank_in_country_formatted = trade_total_rank_in_country.ordinalize + ' '
