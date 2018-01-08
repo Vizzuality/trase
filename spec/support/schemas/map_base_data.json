@@ -36,7 +36,10 @@
         "properties": {
           "aggregateMethod": {
             "id": "/properties/dimensions/items/properties/aggregateMethod",
-            "type": "null"
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "bucket3": {
             "id": "/properties/dimensions/items/properties/bucket3",

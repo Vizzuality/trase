@@ -7,9 +7,13 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
       Api::V3::Readonly::DownloadFlow.refresh
       ActiveRecord::Base.connection.execute('COMMIT')
     end
+    after(:each) do
+      Api::V3::Flow.delete_all # no idea why db cleaner doesn't do that ;(
+    end
 
     it 'should return all flows when no filter applied' do
       qb = Api::V3::Download::FlowDownloadQueryBuilder.new(api_v3_context, {})
+
       expected = [
         [2015, 'Nova Ubirata', 'MATO GROSSO', 'AMAZONIA', 'Imbituba', 'Afg Brasil', 'Unknown Customer', 'Russian Federation', 'DEFORESTATION', '10'],
         [2015, 'Nova Ubirata', 'MATO GROSSO', 'AMAZONIA', 'Paranagua', 'Afg Brasil 2', 'Chinatex Grains & Oils Imp Exp Co', 'China', 'DEFORESTATION', '5'],
@@ -34,6 +38,7 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
 
     it 'should filter rows when filter applied' do
       qb = Api::V3::Download::FlowDownloadQueryBuilder.new(api_v3_context, exporters_ids: [api_v3_exporter1_node.id])
+
       expected = [
         [2015, 'Nova Ubirata', 'MATO GROSSO', 'AMAZONIA', 'Imbituba', 'Afg Brasil', 'Unknown Customer', 'Russian Federation', 'DEFORESTATION', '10']
       ]

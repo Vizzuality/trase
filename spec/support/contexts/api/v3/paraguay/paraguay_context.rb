@@ -15,7 +15,7 @@ shared_context 'api v3 paraguay context' do
       )
   end
 
-  let!(:api_v3_paraguay_context_properties) do
+  let!(:api_v3_paraguay_context_property) do
     Api::V3::ContextProperty.find_by_context_id(api_v3_paraguay_context.id) ||
       FactoryBot.create(
         :api_v3_context_property,

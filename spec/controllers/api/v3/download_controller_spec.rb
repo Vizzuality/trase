@@ -8,12 +8,13 @@ RSpec.describe Api::V3::DownloadController, type: :controller do
     before(:each) do
       Api::V3::Readonly::DownloadFlow.refresh
       ActiveRecord::Base.connection.execute('COMMIT')
-      FactoryBot.create(
-        :api_v3_download_version,
-        symbol: 'v1.0',
-        is_current: true,
-        context_id: api_v3_context.id
-      )
+      Api::V3::DownloadVersion.current_version_symbol(api_v3_context) ||
+        FactoryBot.create(
+          :api_v3_download_version,
+          symbol: 'v1.0',
+          is_current: true,
+          context_id: api_v3_context.id
+        )
     end
     it 'returns a zipped csv file' do
       get :index, params: {context_id: api_v3_context.id}, format: :csv
