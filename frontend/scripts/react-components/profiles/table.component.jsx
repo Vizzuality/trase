@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+
 import formatValue from 'utils/formatValue';
 import { UNITLESS_UNITS } from 'constants';
 import React, { Component } from 'react';

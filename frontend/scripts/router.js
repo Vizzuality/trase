@@ -21,7 +21,7 @@ const routes = {
   home: {
     path: '/',
     page: 'home',
-    extension: 'js'
+    extension: 'jsx'
   },
   tool: {
     path: '/flows',
