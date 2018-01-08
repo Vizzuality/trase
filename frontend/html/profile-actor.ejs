@@ -32,19 +32,7 @@
                   </ul>
                 </div>
               </div>
-              <div class="dropdown-element">
-                <div class="c-dropdown -active" data-dropdown="year">
-                  <span class="dropdown-label">Year</span>
-                  <span class="js-dropdown-title dropdown-title">2015</span>
-                  <ul class="js-dropdown-list dropdown-list">
-                    <li class="dropdown-item" data-value="2010">2010</li>
-                    <li class="dropdown-item" data-value="2011">2011</li>
-                    <li class="dropdown-item" data-value="2012">2012</li>
-                    <li class="dropdown-item" data-value="2013">2013</li>
-                    <li class="dropdown-item" data-value="2014">2014</li>
-                    <li class="dropdown-item" data-value="2015">2015</li>
-                  </ul>
-                </div>
+              <div id="year-dropdown" class="dropdown-element">
               </div>
             </div>
             <div class="small-12 columns">
@@ -79,14 +67,14 @@
               </a>
             </div>
             <div class="small-4 columns">
-              <a href="" class="c-link-buttons js-link-map">
+              <a class="c-link-buttons js-link-map">
                 <img src="/images/profiles/profile-main-option-2.svg"/>
                 PRODUCTION REGIONS
                 <svg class="icon icon-external-link"><use xlink:href="#icon-external-link"></use></svg>
               </a>
             </div>
             <div class="small-4 columns">
-              <a href="" class="c-link-buttons js-link-supply-chain">
+              <a class="c-link-buttons js-link-supply-chain">
                 <img src="/images/profiles/profile-main-option-3.svg"/>
                 SUPPLY CHAIN ACTORS
                 <svg class="icon icon-external-link"><use xlink:href="#icon-external-link"></use></svg>
@@ -103,7 +91,7 @@
               <h3 class="title -small js-top-map-title">-</h3>
             </div>
             <div class="small-<%=printMode ? '6' : '4' %> columns">
-              <div class="js-destination-legend"></div>
+              <div class="js-destination-legend c-map-legend-choro"></div>
             </div>
             <div class="small-6 columns">
               <div class="c-line js-top-destination"></div>
@@ -114,11 +102,10 @@
 
         <section class="c-top-municipalities is-page-break-always">
           <div class="row">
-            <div class="small-<%=printMode ? '6' : '8' %> columns">
-              <ul class="title -small js-top-municipalities-title">-</ul>
+            <div class="js-top-municipalities-title-container small-<%=printMode ? '6' : '8' %> columns">
             </div>
             <div class="small-<%=printMode ? '6' : '4' %> columns">
-              <div class="js-source-legend"></div>
+              <div class="js-source-legend c-map-legend-choro"></div>
             </div>
             <div class="small-7 columns">
               <div class="c-line js-top-municipalities"></div>
@@ -136,7 +123,7 @@
         </section>
 
         <section class="c-scatterplot is-page-break-always">
-          <div class="row">
+          <div class="row js-scatterplot-container">
             <div class="small-12 columns" style="position: relative">
               <h3 class="js-scatterplot-title title -small">-</h3>
               <div class="js-companies-exporting-y-axis axis-legend"></div>

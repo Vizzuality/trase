@@ -5,7 +5,7 @@ shared_context 'brazil flows quants' do
   let!(:flow1_volume) do
     FactoryBot.create(:flow_quant, flow: flow1, quant: volume, value: 10)
   end
-  let!(:flow1_volume) do
+  let!(:flow2_volume) do
     FactoryBot.create(:flow_quant, flow: flow2, quant: volume, value: 15)
   end
   let!(:flow1_deforestation_v2) do

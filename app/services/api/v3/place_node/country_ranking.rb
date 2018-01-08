@@ -14,7 +14,7 @@ module Api
         # for attribute (quant or ind)
         def position_for_attribute(attribute)
           attribute_type = attribute.class.name.demodulize.downcase
-          value_table, dict_table = value_and_dict_tables(attribute_type)
+          value_table = "node_#{attribute_type}s"
 
           flows_join_clause = ActiveRecord::Base.send(
             :sanitize_sql_array,
@@ -29,7 +29,7 @@ module Api
             joins(flows_join_clause).
             where('flows.context_id' => @context.id).
             joins(value_table => {attribute_type => "#{attribute_type}_property"}).
-            where("#{dict_table}.name" => attribute.name).
+            where("#{value_table}.#{attribute_type}_id" => attribute.id).
             where(
               "#{value_table}.year = ? OR NOT COALESCE(#{attribute_type}_properties.is_temporal_on_place_profile, FALSE)",
               @year
@@ -45,16 +45,6 @@ module Api
             first
 
           result && result['rank'] || nil # TODO
-        end
-
-        private
-
-        def value_and_dict_tables(attribute_type)
-          if attribute_type == 'quant'
-            %w[node_quants quants]
-          elsif attribute_type == 'ind'
-            %w[node_inds inds]
-          end
         end
       end
     end

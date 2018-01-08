@@ -1,13 +1,8 @@
 shared_context 'two flows' do
-  let!(:context) do
-    FactoryBot.create(
-      :context,
-      country: FactoryBot.create(:country, name: 'BRAZIL', iso2: 'BR'),
-      commodity: FactoryBot.create(:commodity, name: 'SOY')
-    )
-  end
-
+  include_context 'brazil contexts'
   include_context 'brazil soy nodes'
+  include_context 'quants'
+  include_context 'quals'
 
   let(:exporter2_node) do
     FactoryBot.create(:node, name: 'AFG BRASIL', node_type: exporter_node_type)
@@ -41,17 +36,11 @@ shared_context 'two flows' do
       year: 2015
     )
   end
-  let(:max_soy_deforestation) do
-    FactoryBot.create(:quant, name: 'POTENTIAL_SOY_DEFORESTATION_V2')
-  end
   let!(:context_max_soy_deforestation) do
     FactoryBot.create(
-      :context_indicator, context: context, indicator: max_soy_deforestation,
+      :context_indicator, context: context, indicator: potential_soy_deforestation_v2,
                           name_in_download: 'MAX_SOY_DEFORESTATION'
     )
-  end
-  let(:zero_deforestation) do
-    FactoryBot.create(:qual, name: 'ZERO_DEFORESTATION')
   end
   let!(:context_zero_deforestation) do
     FactoryBot.create(
@@ -60,10 +49,10 @@ shared_context 'two flows' do
     )
   end
   let!(:flow1_max_soy_deforestation) do
-    FactoryBot.create(:flow_quant, flow: flow1, quant: max_soy_deforestation, value: 10)
+    FactoryBot.create(:flow_quant, flow: flow1, quant: potential_soy_deforestation_v2, value: 10)
   end
   let!(:flow2_max_soy_deforestation) do
-    FactoryBot.create(:flow_quant, flow: flow2, quant: max_soy_deforestation, value: 5)
+    FactoryBot.create(:flow_quant, flow: flow2, quant: potential_soy_deforestation_v2, value: 5)
   end
   let!(:flow2_zero_deforestation) do
     FactoryBot.create(:flow_qual, flow: flow2, qual: zero_deforestation, value: 'yes')

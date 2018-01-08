@@ -10,5 +10,7 @@ module Dictionary
     def get(key)
       @dict[key]
     end
+
+    delegate :each, to: :@dict
   end
 end

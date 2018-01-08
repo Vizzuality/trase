@@ -8,7 +8,8 @@ RSpec.describe 'Get place node attributes', type: :request do
 
   describe 'GET /api/v2/get_place_node_attributes === GET /api/v3/contexts/:context_id/nodes/:id/place' do
     it 'has the correct response structure' do
-      SchemaRevamp.new.copy
+      schema_revamp = SchemaRevamp.new
+      schema_revamp.copy
 
       get "/api/v2/get_place_node_attributes?context_id=#{context.id}&year=2015&node_id=#{municipality_node.id}"
       v2_response = HashSorter.new(JSON.parse(@response.body)).sort
@@ -20,6 +21,8 @@ RSpec.describe 'Get place node attributes', type: :request do
       v3_response = HashSorter.new(JSON.parse(@response.body)).sort
 
       expect(v3_response).to eq v2_response
+
+      schema_revamp.clean
     end
   end
 end

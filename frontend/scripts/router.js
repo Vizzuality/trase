@@ -1,6 +1,6 @@
 import { connectRoutes, NOT_FOUND } from 'redux-first-router';
 import connect from 'connect';
-import { parse, stringify } from 'utils/stateURL';
+import { parse, stringify, computeStateQueryParams } from 'utils/stateURL';
 import actions from 'actions';
 
 const config = {
@@ -11,9 +11,10 @@ const config = {
   }
 };
 const resetTool = (dispatch, getState) => {
-  const { state, isMapVisible } = getState().location.query || {};
-  if (!state) {
-    dispatch({ type: actions.RESET_TOOL_STATE, payload: { isMapVisible } });
+  const { query = {} } = getState().location;
+  if (!query.state) {
+    const payload = computeStateQueryParams({}, query);
+    dispatch({ type: actions.RESET_TOOL_STATE, payload });
   }
 };
 const routes = {
@@ -36,7 +37,7 @@ const routes = {
   profileActor: {
     path: '/profile-actor',
     page: 'profile-actor',
-    extension: 'js'
+    extension: 'jsx'
   },
   profilePlace: {
     path: '/profile-place',
@@ -96,7 +97,7 @@ export function routeSubscriber(store) {
       if (this.type !== type) {
         this.resetPage();
         this.type = type;
-        // eslint-disable-next-line space-in-parens,max-len
+        // eslint-disable-next-line space-in-parens
         import(
           /* webpackChunkName: "[request]" */
           `./pages/${routesMap[this.type].page}.page.${routesMap[this.type].extension}`
