@@ -397,7 +397,7 @@ const _setEventListeners = () => {
   smoothScroll(document.querySelectorAll('.js-link-profile'));
 };
 
-const onLinkClick = (store, type, params) => store.dispatch({ type, payload: { query: params } });
+const onLinkClick = store => (type, params) => store.dispatch({ type, payload: { query: params } });
 
 const setLoading = (isLoading = true) => {
   if (isLoading) {
@@ -470,7 +470,7 @@ const _loadData = (store, nodeId, year) => {
         summary: data.summary
       };
 
-      _setInfo(info, onLinkClick, { nodeId, year });
+      _setInfo(info, onLinkClick(store), { nodeId, year });
       _setEventListeners();
 
       render(

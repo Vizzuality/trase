@@ -355,12 +355,12 @@ const _setInfo = (store, info, onLinkClick, { nodeId, year }) => {
   document.querySelector('.js-link-map')
     .addEventListener(
       'click',
-      () => onLinkClick(store, 'tool', { selectedNodesIds: [nodeId], isMapVisible: true, selectedYears: [year, year] })
+      () => onLinkClick('tool', { selectedNodesIds: [nodeId], isMapVisible: true, selectedYears: [year, year] })
     );
   document.querySelector('.js-link-supply-chain')
     .addEventListener(
       'click',
-      () => onLinkClick(store, 'tool', { selectedNodesIds: [nodeId], selectedYears: [year, year] })
+      () => onLinkClick('tool', { selectedNodesIds: [nodeId], selectedYears: [year, year] })
     );
   document.querySelector('.js-line-title').innerHTML =
     info.municipality ? `Deforestation trajectory of ${info.municipality}` : '-';
@@ -417,7 +417,7 @@ const _showErrorMessage = (message = null) => {
   }
 };
 
-const onLinkClick = (store, type, params) => store.dispatch({ type, payload: { query: params } });
+const onLinkClick = store => (type, params) => store.dispatch({ type, payload: { query: params } });
 
 const _switchYear = (store, nodeId, dropdownYear, showMiniSankey) => {
   setLoading();
@@ -460,7 +460,7 @@ const _loadData = (store, nodeId, year, showMiniSankey) => {
         summary: data.summary
       };
 
-      _setInfo(store, info, onLinkClick, { nodeId, year });
+      _setInfo(store, info, onLinkClick(store), { nodeId, year });
       _setEventListeners();
 
       render(
