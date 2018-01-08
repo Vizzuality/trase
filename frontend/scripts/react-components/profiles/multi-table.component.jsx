@@ -10,7 +10,7 @@ class MultiTable extends Component {
   constructor(props) {
     super(props);
 
-    this.key = `table_${new Date().getTime()}`;
+    this.key = `table_${props.id}`;
 
     this.state = {
       selectedTableIndex: 0
@@ -72,6 +72,7 @@ class MultiTable extends Component {
 }
 
 MultiTable.propTypes = {
+  id: PropTypes.string.isRequired,
   tabsTitle: PropTypes.string,
   data: PropTypes.array,
   target: PropTypes.func,
