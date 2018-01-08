@@ -3,7 +3,6 @@ import ProfilesMarkup from 'html/profiles.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
 import FooterMarkup from 'html/includes/_footer.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
-
 import NavContainer from 'containers/shared/nav.container';
 import 'styles/_base.scss';
 import 'styles/_texts.scss';
@@ -13,27 +12,32 @@ import 'styles/components/shared/nav.scss';
 import 'styles/components/shared/spinner.scss';
 import 'styles/components/shared/_footer.scss';
 import 'styles/components/profiles/error.scss';
-
 import _ from 'lodash';
-
 import Search from 'components/shared/search.component';
 import { GET_ALL_NODES, getURLFromParams } from 'utils/getURLFromParams';
-import getProfileLink from 'utils/getProfileLink';
+import { DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
+import capitalize from 'lodash/capitalize';
 
 const _showErrorMessage = (message) => {
   const el = document.querySelector('.l-profiles');
   el.classList.add('-error');
-  el.querySelector('.js-loading').classList.add('is-hidden');
-  el.querySelector('.container').classList.add('is-hidden');
-  el.querySelector('.js-error-message').classList.remove('is-hidden');
+  el.querySelector('.js-loading')
+    .classList
+    .add('is-hidden');
+  el.querySelector('.container')
+    .classList
+    .add('is-hidden');
+  el.querySelector('.js-error-message')
+    .classList
+    .remove('is-hidden');
   if (message !== null) {
     el.querySelector('.js-message').innerHTML = message;
   }
 };
 
-const _setSearch = () => {
+const _setSearch = (goToPage) => {
   const onNodeSelected = (node) => {
-    window.location.href = getProfileLink(node);
+    goToPage(`profile${capitalize(node.profileType)}`, { nodeId: node.id, year: DEFAULT_PROFILE_PAGE_YEAR });
   };
 
   const allNodesURL = getURLFromParams(GET_ALL_NODES, { context_id: 1 });
@@ -49,7 +53,9 @@ const _setSearch = () => {
     .then((result) => {
       if (!result) return;
 
-      document.querySelector('.js-loading').classList.add('is-hidden');
+      document.querySelector('.js-loading')
+        .classList
+        .add('is-hidden');
 
       const search = new Search();
       search.onCreated();
@@ -78,7 +84,10 @@ export const mount = (root, store) => {
     footer: FooterMarkup(),
     feedback: FeedbackMarkup()
   });
-  _setSearch();
+
+  const goToPage = (type, params) => store.dispatch({ type, payload: { query: params } });
+
+  _setSearch(goToPage);
   new NavContainer(store);
 };
 

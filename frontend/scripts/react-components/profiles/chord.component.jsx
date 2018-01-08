@@ -3,14 +3,33 @@ import { select as d3_select } from 'd3-selection';
 import { chord as d3_chord, ribbon as d3_ribbon } from 'd3-chord';
 import { descending as d3_descending } from 'd3-array';
 import { arc as d3_arc } from 'd3-shape';
-
 import 'styles/components/profiles/chord.scss';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 const TYPE_KEY_1 = 'list';
 const TYPE_KEY_2 = 'list2';
 
-export default class {
-  constructor(className, orgMatrix, list, list2) {
+class Chord extends Component {
+  constructor(props) {
+    super(props);
+
+    this.key = `chord_${props.id}`;
+  }
+
+  componentDidMount() {
+    this.build();
+  }
+
+  componentDidUpdate() {
+    this.build();
+  }
+
+  build() {
+    const { orgMatrix, list, list2 } = this.props;
+    const parentWidth = this.props.width;
+    const parentHeight = this.props.height;
+
     const nodes = [].concat(list.map(item => ({
       name: item.name,
       type: TYPE_KEY_1
@@ -22,7 +41,6 @@ export default class {
       return;
     }
 
-    document.querySelector(className).classList.remove('is-hidden');
     const nameLimit = 11;
     const allNames = nodes.map((node) => {
       if (node.name.length > nameLimit) {
@@ -31,23 +49,25 @@ export default class {
       return node;
     });
 
-    const elem = document.querySelector(className);
     const margin = {
       top: 0,
       right: 0,
       bottom: 0,
       left: 0
     };
-    const width = elem.clientWidth - margin.left - margin.right;
-    const height = elem.clientWidth - margin.top - margin.bottom;
+
+    const width = parentWidth - margin.left - margin.right;
+    const height = parentHeight - margin.top - margin.bottom;
 
     const outerRadius = (Math.min(490, 490) * 0.5) - 40;
     const innerRadius = outerRadius - 12;
 
-    const svg = d3_select(className)
-      .append('svg')
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom);
+    const svgElement = document.querySelector(`.${this.key}`);
+    svgElement.innerHTML = '';
+
+    const svg = d3_select(svgElement)
+      .attr('width', parentWidth)
+      .attr('height', parentHeight);
 
     const chord = d3_chord()
       .padAngle(0.05)
@@ -100,9 +120,32 @@ export default class {
       })
       .attr('dy', '.35em')
       .attr('class', 'text-legend')
-    // eslint-disable-next-line max-len
+      // eslint-disable-next-line max-len
       .attr('transform', d => `rotate(${((d.angle * 180) / Math.PI) - 90}) translate(${innerRadius + 24}) ${d.angle > Math.PI ? 'rotate(180)' : ''}`)
       .style('text-anchor', d => (d.angle > Math.PI ? 'end' : null))
       .text((d, i) => ((i === 0 || allNames[i].type === TYPE_KEY_2) ? allNames[i].name : ''));
   }
+
+  render() {
+    return (
+      <div className="c-chord">
+        <svg className={this.key} />
+        <div className="c-chord-legend">
+          Other municipalities<br />in {this.props.name}
+        </div>
+      </div>
+    );
+  }
 }
+
+Chord.propTypes = {
+  id: PropTypes.string.isRequired,
+  width: PropTypes.number,
+  height: PropTypes.number,
+  orgMatrix: PropTypes.array,
+  list: PropTypes.array,
+  list2: PropTypes.array,
+  name: PropTypes.string
+};
+
+export default Chord;

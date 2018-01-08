@@ -37,7 +37,7 @@ const routes = {
   profileActor: {
     path: '/profile-actor',
     page: 'profile-actor',
-    extension: 'js'
+    extension: 'jsx'
   },
   profilePlace: {
     path: '/profile-place',
@@ -97,7 +97,7 @@ export function routeSubscriber(store) {
       if (this.type !== type) {
         this.resetPage();
         this.type = type;
-        // eslint-disable-next-line space-in-parens,max-len
+        // eslint-disable-next-line space-in-parens
         import(
           /* webpackChunkName: "[request]" */
           `./pages/${routesMap[this.type].page}.page.${routesMap[this.type].extension}`

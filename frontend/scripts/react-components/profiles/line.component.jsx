@@ -1,51 +1,68 @@
 /* eslint-disable camelcase,import/no-extraneous-dependencies */
 import _ from 'lodash';
-import { select as d3_select, event as d3_event } from 'd3-selection';
+import { event as d3_event, select as d3_select } from 'd3-selection';
 import { axisBottom as d3_axis_bottom, axisLeft as d3_axis_left } from 'd3-axis';
 import { scaleLinear as d3_scale_linear, scaleTime as d3_scale_time } from 'd3-scale';
 import { extent as d3_extent } from 'd3-array';
-import { line as d3_line, area as d3_area } from 'd3-shape';
+import { area as d3_area, line as d3_line } from 'd3-shape';
 import { format as d3_format } from 'd3-format';
 import { timeFormat as d3_timeFormat } from 'd3-time-format';
 import { LINE_LABEL_HEIGHT } from 'constants';
-import LegendItemTemplate from 'templates/profiles/legendItem.ejs';
 import abbreviateNumber from 'utils/abbreviateNumber';
 import 'styles/components/profiles/line.scss';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-const prepareData = (xValues, data) => {
-  const continuousValues = xValues.map((year, index) => ({
-    name: data.name,
-    date: new Date(year, 0),
-    value: data.values[index],
-    value9: data.value9
-  }));
+class Line extends Component {
+  constructor(props) {
+    super(props);
 
-  // break down data into discontinuous blocks when data is missing, to avoid
-  // having the impression values is zero while it's actually unknown
-  const discontinuousValues = [[]];
-  continuousValues.forEach((point, i) => {
-    if (i > 0) {
-      const prevPoint = continuousValues[i - 1];
-      if (
-        (prevPoint.value === null && point.value !== null)
-        || (prevPoint.value !== null && point.value === null)
-      ) {
-        discontinuousValues.push([]);
+    this.key = `line_${props.id}`;
+  }
+
+  componentDidMount() {
+    this.build();
+  }
+
+  componentDidUpdate() {
+    this.build();
+  }
+
+  prepareData(xValues, data) {
+    const continuousValues = xValues.map((year, index) => ({
+      name: data.name,
+      date: new Date(year, 0),
+      value: data.values[index],
+      value9: data.value9
+    }));
+
+    // break down data into discontinuous blocks when data is missing, to avoid
+    // having the impression values is zero while it's actually unknown
+    const discontinuousValues = [[]];
+    continuousValues.forEach((point, i) => {
+      if (i > 0) {
+        const prevPoint = continuousValues[i - 1];
+        if (
+          (prevPoint.value === null && point.value !== null)
+          || (prevPoint.value !== null && point.value === null)
+        ) {
+          discontinuousValues.push([]);
+        }
       }
-    }
-    discontinuousValues[discontinuousValues.length - 1].push(point);
-  });
+      discontinuousValues[discontinuousValues.length - 1].push(point);
+    });
 
-  // get rid of blocks composed of only nulls
-  return discontinuousValues.filter(points => points.filter(p => p.value !== null).length);
-};
+    // get rid of blocks composed of only nulls
+    return discontinuousValues.filter(points => points.filter(p => p.value !== null).length);
+  }
 
-export default class {
-  constructor(className, data, xValues, settings) {
-    const elem = document.querySelector(className);
-    const legend = document.querySelector(`${className}-legend`);
+  build() {
+    const { className, data, xValues, settings } = this.props;
+
+    const container = document.querySelector(className);
+    const elem = document.querySelector(`.${this.key}`);
     const { margin, ticks } = settings;
-    const width = elem.clientWidth - margin.left - margin.right;
+    const width = container.clientWidth - margin.left - margin.right;
     const height = settings.height - margin.top - margin.bottom;
     this.showTooltipCallback = settings.showTooltipCallback;
     this.hideTooltipCallback = settings.hideTooltipCallback;
@@ -53,7 +70,7 @@ export default class {
     const allYValues = [].concat(...data.lines.map(line => line.values));
 
     elem.innerHTML = '';
-    const container = d3_select(elem)
+    const d3Container = d3_select(elem)
       .append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
@@ -81,7 +98,7 @@ export default class {
       })
       .filter(lineData => lineData.values.filter(v => v !== null).length)
       .forEach((lineData, i) => {
-        const lineValuesWithFormat = prepareData(xValues, lineData);
+        const lineValuesWithFormat = this.prepareData(xValues, lineData);
         const line = d3_line()
           .x(d => x(d.date))
           .y(d => y(d.value));
@@ -101,12 +118,12 @@ export default class {
 
             // loop through broken/discontinuous lines
             lineValuesWithFormat.forEach((points) => {
-              container.append('path')
+              d3Container.append('path')
                 .datum(points)
                 .attr('class', style)
                 .attr('d', area);
 
-              container.append('path')
+              d3Container.append('path')
                 .datum(points)
                 .attr('class', `line-${style}`)
                 .attr('d', line);
@@ -115,14 +132,14 @@ export default class {
 
           // following styles don't care about discontinuous blocks for now and will only render the first one
           case 'line':
-            container.append('path')
+            d3Container.append('path')
               .datum(lineValuesWithFormat[0])
               .attr('class', style)
               .attr('d', line);
             break;
 
           case 'line-points': {
-            pathContainers = container.datum(lineValuesWithFormat[0])
+            pathContainers = d3Container.datum(lineValuesWithFormat[0])
               .append('g')
               .attr(
                 'class',
@@ -134,7 +151,8 @@ export default class {
 
             pathContainers.selectAll('path')
               .data(d => [d])
-              .enter().append('path')
+              .enter()
+              .append('path')
               .attr('d', line);
 
 
@@ -156,7 +174,8 @@ export default class {
 
             this.circles = pathContainers.selectAll('circle')
               .data(d => d)
-              .enter().append('circle')
+              .enter()
+              .append('circle')
               .attr('cx', d => x(d.date))
               .attr('cy', d => y(d.value))
               .attr('r', 4);
@@ -175,15 +194,6 @@ export default class {
             }
             break;
           }
-        }
-
-        if (typeof lineData.legend_name !== 'undefined') {
-          const legendItemHTML = LegendItemTemplate({
-            name: lineData.legend_name,
-            style
-          });
-
-          legend.innerHTML += legendItemHTML;
         }
       });
 
@@ -218,14 +228,32 @@ export default class {
       .tickPadding(ticks.yTickPadding)
       .tickFormat(yTickFormat);
 
-    container.append('g')
+    d3Container.append('g')
       .attr('transform', `translate(0, ${height} )`)
       .attr('class', 'axis axis--x')
       .call(xAxis);
 
-    container.append('g')
+    d3Container.append('g')
       .attr('class', 'axis axis--y axis--deforestation')
       .call(yAxis);
   }
+
+  render() {
+    return (
+      <div
+        className={this.key}
+        width="100%"
+      />
+    );
+  }
 }
 
+Line.propTypes = {
+  id: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  data: PropTypes.object,
+  xValues: PropTypes.array,
+  settings: PropTypes.object
+};
+
+export default Line;
