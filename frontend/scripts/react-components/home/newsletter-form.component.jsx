@@ -31,7 +31,7 @@ class NewsletterForm extends React.PureComponent {
 
   render() {
     return (
-      <section className="newsletter">
+      <section className="c-newsletter">
         <div className="newsletter-content row align-middle">
           <form
             ref={this.getFormRef}

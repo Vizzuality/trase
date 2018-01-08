@@ -27,7 +27,6 @@ function submitForm(email) {
   })
     .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
     .then((data) => {
-      debugger;
       const label = document.querySelector('.newsletter-label');
 
       label.classList.add('-pink');

@@ -1,158 +1,88 @@
+@import '../../settings';
+
 .c-homepage {
-  .introduction {
-    pointer-events: none;
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    z-index: $z-base;
 
-    .intro-wrapper {
-      height: 100%;
+  .splitted {
+    position: relative;
+    height: 550px;
+    background: linear-gradient(to bottom, $egg-shell 0%, $egg-shell 50%, $light-gray 50%, $light-gray 100%);
 
-      .intro-statement {
-        > .paragraph {
-          margin: 17px 0;
-        }
-      }
-
-      > .trase-logo {
-        display: flex;
-        justify-content: center;
-        margin: 0 0 56px;
-      }
-
-      .btn-explore {
-        pointer-events: all;
-        display: inline-block;
-        margin: 32px 0 0;
-        padding: 16px 28px;
-      }
-    }
-  }
-
-  .screenshot-container {
-    position: absolute;
-    height: 100%;
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    left: 50%;
-    overflow: hidden;
-
-    .video-container {
-      margin-top: 20px;  
-    }
-
-    .video {
-      width: 100%;
-      height: 100%;
+    @media only screen and (min-width: 640px) {
+      background: linear-gradient(to right, $egg-shell 0%, $egg-shell 50%, $light-gray 50%, $light-gray 100%);
     }
 
     .screenshot {
-      height: 500px;
-      width: 800px;
-      background-size: cover;
-      border-radius: 4px;
+      position: absolute;
+      height: 60%;
+      width: calc(50% - 60px);
+      bottom: 0;
+      background-position: right bottom;
+      background-repeat: no-repeat;
+      background-size: contain;
 
-      &.-top {
-        background-image: url('./../public/images/backgrounds/app-screenshot-1@2x.jpg');
+      &.-half {
+        right: 0;
+        bottom: 50%;
+        background-image: url('./../public/images/backgrounds/screenshot-half.jpg');
+
+        @media only screen and (min-width: 640px) {
+          right: 50%;
+          bottom: 0;
+        }
       }
 
-      &.-middle {
-        background-image: url('./../public/images/backgrounds/app-screenshot-2@2x.jpg');
-      }
+      &.-end {
+        right: 0;
 
-      &.-bottom {
-        background-image: url('./../public/images/backgrounds/app-screenshot-3@2x.jpg');
-      }
-    }
-
-    .screenshot-caption {
-      font-family: $font-family-1;
-      color: rgba($white, .6);
-      font-size: 14px;
-      line-height: 18px;
-      margin-top: 7px;
-      max-width: 512px;
-    }
-  }
-
-  .sliding-content {
-    padding-top: 65px;
-
-    .slider-title {
-      display: flex;
-      align-items: center;
-      padding-bottom: 65px;
-      color: rgba($charcoal-grey-faded, 0.3);
-      font-family: $font-family-1;
-      font-size: $font-size-x-regular;
-      text-transform: uppercase;
-
-      &::after {
-        content: '';
-        height: 2px;
-        background-color: rgba($charcoal-grey-faded, 0.15);
-        flex: 1;
-        margin-left: 8px;
+        background-image: url('./../public/images/backgrounds/screenshot-end.png');
       }
     }
-  }
 
-  .newsletter {
-    position: relative;
-    z-index: $z-above;
-    height: 160px;
-    width: 100%;
-    background-color: $white;
-
-    > .newsletter-content {
+    .row {
       height: 100%;
+      @media only screen and (min-width: 640px) {
+        height: auto;
+      }
+    }
 
-      form {
-        .newsletter-label {
-          display: inline-block;
-          margin-bottom: 10px;
+    .splitted-column {
+      padding: 42px 16px 0;
+      height: 50%;
 
-          font-family: $font-family-2;
-          font-size: $font-size-xx-regular;
-          color: $charcoal-grey;
+      @media only screen and (min-width: 640px) {
+        padding: 42px 16px;
+        height: auto;
+      }
+
+      @media only screen and (min-width: 1140px) {
+        &:first-child {
+          padding-left: 0;
         }
 
-        .-pink {
-          color: $medium-pink;
-        }
-
-        .newsletter-input-container {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          height: 40px;
-
-          > .newsletter-email {
-            font-family: $font-family-1;
-            border: solid 2px $charcoal-grey;
-            border-radius: 4px;
-            padding: 15px;
-            width: 100%;
-            max-width: 336px;
-            max-height: 100%;
-
-            &::placeholder {
-              text-transform: none;
-            }
-          }
-
-          > .c-button {
-            height: 100%;
-            margin-left: 10px;
-            padding: 0 16px;
-            flex: 1;
-          }
+        &:last-child {
+          padding-right: 0;
         }
       }
+    }
+
+    .splitted-title {
+      font-family: $font-family-1;
+      font-size: 13px;
+      letter-spacing: -.8px;
+      color: $medium-pink;
+      text-transform: uppercase;
+    }
+
+    .splitted-text {
+      font-family: $font-family-2;
+      font-size: 24px;
+      font-weight: 300;
+      line-height: 1.75;
+      color: $charcoal-grey;
+    }
+
+    .second-column {
+      margin-left: 60px;
     }
   }
 }
