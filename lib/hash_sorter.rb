@@ -9,55 +9,49 @@ class HashSorter
 
   def sort_hash(hash)
     hash.keys.sort.each_with_object({}) do |key, seed|
-      seed[key] = hash[key]
-      if seed[key].is_a?(Hash)
-        seed[key] = sort_hash(seed[key])
-      elsif seed[key].is_a?(Array)
-        seed[key] = sort_array(seed[key])
-      end
+      seed[key] = sort_value(hash[key])
     end
   end
 
   def sort_array(array)
-    tmp = array.sort do |a, b|
-      if a.is_a?(Hash) && b.is_a?(Hash)
-        compare_hashes(a, b)
-      elsif a.is_a?(Array) && b.is_a?(Array)
-        compare_arrays(a, b)
-      else
-        compare_scalars(a, b)
-      end
+    tmp = array.map do |element|
+      sort_value(element)
     end
-    tmp.each_with_index do |elem, idx|
-      if elem.is_a?(Hash)
-        tmp[idx] = sort_hash(elem)
-      elsif elem.is_a?(Array)
-        tmp[idx] = sort_array(elem)
-      end
+    tmp.sort do |a, b|
+      compare_value(a, b)
     end
-    tmp
   end
 
   private
 
-  def sorting_key_for_array_of_hashes(a_hash)
-    sorting_key = [
-      'id', 'name', %w(path quant ind), %w(path quant), %w(node_id attribute_type attribute_id)
-    ].find do |key|
-      key.is_a?(String) && a_hash.key?(key) ||
-        key.is_a?(Array) && (key - a_hash.keys).empty?
+  def compare_value(a, b)
+    if a.is_a?(Hash) && b.is_a?(Hash)
+      compare_hashes(a, b)
+    elsif a.is_a?(Array) && b.is_a?(Array)
+      compare_arrays(a, b)
+    else
+      compare_scalars(a, b)
     end
-    raise 'No sorting key for array: ' + a_hash.inspect unless sorting_key
-    sorting_key
+  end
+
+  def sort_value(value)
+    if value.is_a?(Hash)
+      sort_hash(value)
+    elsif value.is_a?(Array)
+      sort_array(value)
+    else
+      value
+    end
   end
 
   def compare_hashes(a, b)
-    sorting_key = sorting_key_for_array_of_hashes(a)
-    if sorting_key.is_a?(Array)
-      sorting_key.map { |e| a[e] || -1 } <=> sorting_key.map { |e| b[e] || -1 }
-    else
-      a[sorting_key] <=> b[sorting_key]
+    sorting_key = a.keys
+    result = -1
+    sorting_key.each do |key|
+      result = nil_aware_compare_hashes(a, b, key)
+      break result unless result.zero?
     end
+    result
   end
 
   def compare_arrays(a, b)
@@ -75,6 +69,18 @@ class HashSorter
       a <=> b
     else
       a ? -1 : 1
+    end
+  end
+
+  def nil_aware_compare_hashes(a, b, sorting_key)
+    if a[sorting_key] && b[sorting_key]
+      compare_value(a[sorting_key], b[sorting_key])
+    elsif a[sorting_key]
+      1
+    elsif b[sorting_key]
+      -1
+    else
+      0
     end
   end
 end

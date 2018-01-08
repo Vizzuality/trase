@@ -37,13 +37,20 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner[:active_record, {connection: DB_REVAMP[:database]}].strategy = :truncation
   end
 
-  config.around(:each) do |example|
-    DatabaseCleaner.cleaning do
-      example.run
-    end
+  config.before(:each) do
+    DatabaseCleaner.start
+    DatabaseCleaner[:active_record, {connection: DB_REVAMP[:database]}].start
+    Dictionary::Quant.instance.reset
+    Dictionary::Qual.instance.reset
+    Dictionary::Ind.instance.reset
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+    DatabaseCleaner[:active_record, {connection: DB_REVAMP[:database]}].clean
   end
 
   # RSpec Rails can automatically mix in different behaviours to your tests

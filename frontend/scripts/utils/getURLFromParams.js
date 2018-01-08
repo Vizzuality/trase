@@ -24,19 +24,23 @@ const API_ENDPOINTS = {
   [GET_ALL_NODES]: { api: 3, endpoint: '/contexts/$context_id$/nodes' },
   [GET_NODE_ATTRIBUTES]: { api: 3, endpoint: '/contexts/$context_id$/nodes/attributes' },
   [GET_MAP_BASE_DATA]: { api: 3, endpoint: '/contexts/$context_id$/map_groups' },
-  [GET_PLACE_FACTSHEET]: { api: 3, endpoint: '/contexts/$context_id$/nodes/$node_id$/place' },
   [GET_INDICATORS]: { api: 3, endpoint: '/contexts/$context_id$/download_attributes' },
+  [GET_PLACE_FACTSHEET]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/nodes/$node_id$/place',
+    mock: 'mocks/v1_get_place_node_attributes.json'
+  },
+  [GET_ACTOR_FACTSHEET]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/nodes/$node_id$/actor',
+    mock: 'mocks/v1_get_actor_node_attributes.json'
+  },
   [GET_SITE_DIVE]: { api: 'content', endpoint: '/site_dive' },
   [GET_POSTS]: { api: 'content', endpoint: '/posts' },
   [GET_TWEETS]: { api: 'content', endpoint: '/tweets' },
   [GET_DISCLAIMER]: { api: 'local', endpoint: 'disclaimer.json' },
   [GET_TOOLTIPS]: { api: 'local', endpoint: 'tooltips.json' },
   [GET_LINKED_GEO_IDS]: { api: 2, endpoint: '/get_linked_geoids' },
-  [GET_ACTOR_FACTSHEET]: {
-    api: 2,
-    endpoint: '/get_actor_node_attributes',
-    mock: 'mocks/v1_get_actor_node_attributes.json'
-  },
   [GET_CSV_DATA_DOWNLOAD_FILE]: { api: 2, endpoint: '/download.csv' },
   [GET_JSON_DATA_DOWNLOAD_FILE]: { api: 2, endpoint: '/download.json' },
   [POST_SUBSCRIBE_NEWSLETTER]: { api: 2, endpoint: '/newsletter_subscriptions' }

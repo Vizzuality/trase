@@ -3,18 +3,13 @@ require 'rails_helper'
 RSpec.describe Api::V2::PlaceFactsheetController, type: :controller do
   include_context 'brazil soy indicators'
   include_context 'brazil soy nodes'
+  include_context 'quals'
 
-  let(:qual_biome) do
-    FactoryBot.create(:qual, name: NodeTypeName::BIOME, place_factsheet: true, place_factsheet_temporal: false)
-  end
-  let(:qual_state) do
-    FactoryBot.create(:qual, name: NodeTypeName::STATE, place_factsheet: true, place_factsheet_temporal: false)
-  end
   let!(:node_qual_biome) do
-    FactoryBot.create(:node_qual, qual: qual_biome, node: municipality_node, value: biome_node.name)
+    FactoryBot.create(:node_qual, qual: biome, node: municipality_node, value: biome_node.name)
   end
   let!(:node_qual_state) do
-    FactoryBot.create(:node_qual, qual: qual_state, node: municipality_node, value: state_node.name)
+    FactoryBot.create(:node_qual, qual: state, node: municipality_node, value: state_node.name)
   end
 
   let!(:municipality_total_defor_rate_2015) do

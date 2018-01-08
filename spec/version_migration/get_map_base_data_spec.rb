@@ -7,7 +7,8 @@ RSpec.describe 'Map Groups', type: :request do
 
   describe 'GET /api/v2/get_map_base_data === GET /api/v3/context/:id/map_groups ' do
     it 'has the correct response structure' do
-      SchemaRevamp.new.copy
+      schema_revamp = SchemaRevamp.new
+      schema_revamp.copy
 
       get "/api/v2/get_map_base_data?context_id=#{context.id}"
       v2_response = HashSorter.new(JSON.parse(@response.body)).sort
@@ -26,6 +27,8 @@ RSpec.describe 'Map Groups', type: :request do
       v3_response['dimensions'].each { |x| x.except!('aggregateMethod') }
 
       expect(v3_response).to eq v2_response
+
+      schema_revamp.clean
     end
   end
 end

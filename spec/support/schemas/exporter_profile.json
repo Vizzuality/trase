@@ -548,7 +548,7 @@
                         "required": [
                           "value"
                         ],
-                        "type": "object"
+                        "type": ["object", "null"]
                       },
                       "type": "array"
                     }

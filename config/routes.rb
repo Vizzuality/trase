@@ -17,6 +17,7 @@ Rails.application.routes.draw do
         resources :flows, only: [:index]
         resources :nodes, only: [:index] do
           get :place, on: :member, controller: :place_nodes, action: :show
+          get :actor, on: :member, controller: :actor_nodes, action: :show
         end
         resources :download_attributes, only: [:index]
         namespace :nodes do

@@ -5,7 +5,8 @@ RSpec.describe 'Get indicators', type: :request do
 
   describe 'GET /api/v2/indicators === GET /api/v3/contexts/:id/download_attributes' do
     it 'has the correct response structure' do
-      SchemaRevamp.new.copy
+      schema_revamp = SchemaRevamp.new
+      schema_revamp.copy
 
       get "/api/v2/indicators?context_id=#{context.id}"
       v2_response = HashSorter.new(JSON.parse(@response.body)).sort
@@ -17,6 +18,8 @@ RSpec.describe 'Get indicators', type: :request do
       v3_response = HashSorter.new(JSON.parse(@response.body)).sort
 
       expect(v3_response).to eq v2_response
+
+      schema_revamp.clean
     end
   end
 end

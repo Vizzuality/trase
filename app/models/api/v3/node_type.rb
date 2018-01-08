@@ -11,6 +11,11 @@ module Api
         NodeTypeName::STATE
       ].freeze
 
+      ACTORS = [
+        NodeTypeName::EXPORTER,
+        NodeTypeName::IMPORTER
+      ].freeze
+
       def self.node_index_for_name(context, node_type_name)
         zero_based_idx = ContextNode.
           joins(:node_type).

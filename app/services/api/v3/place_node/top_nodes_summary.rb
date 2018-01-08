@@ -6,8 +6,6 @@ module Api
           @context = context
           @year = year
           @node = node
-          @place_quants = Dictionary::PlaceQuants.new(@node, @year)
-          @place_inds = Dictionary::PlaceInds.new(@node, @year)
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           @soy_production_attribute = Dictionary::Quant.instance.get('SOY_TN')
           initialize_top_places(@soy_production_attribute)
@@ -20,11 +18,8 @@ module Api
           matrix[0] = @top_places.map { 0 } + @top_nodes.map { |t| t['value'] }
 
           @top_places.each_with_index do |place, place_idx|
-            all_nodes_for_place = TopNodesList.new(
-              @context, @year, place,
-              other_node_type_name: node_type,
-              place_inds: @place_inds,
-              place_quants: @place_quants
+            all_nodes_for_place = Api::V3::Profiles::TopNodesList.new(
+              @context, @year, place, other_node_type_name: node_type
             ).unsorted_list(@volume_attribute, include_domestic_consumption, nil)
             @top_nodes.each_with_index do |top_node, top_node_idx|
               node = all_nodes_for_place.find { |e| e['node_id'] == top_node['node_id'] }
@@ -75,11 +70,8 @@ module Api
         end
 
         def initialize_top_nodes(node_type, include_domestic_consumption)
-          top_nodes_list = Api::V3::PlaceNode::TopNodesList.new(
-            @context, @year, @node,
-            other_node_type_name: node_type,
-            place_inds: @place_inds,
-            place_quants: @place_quants
+          top_nodes_list = Api::V3::Profiles::TopNodesList.new(
+            @context, @year, @node, other_node_type_name: node_type
           )
           @top_nodes = top_nodes_list.sorted_list(
             @volume_attribute, include_domestic_consumption, 10

@@ -13,6 +13,12 @@ module Api
         )
       }
 
+      scope :actor_nodes, -> {
+        includes(:node_type).where(
+          'node_types.name' => Api::V3::NodeType::ACTORS
+        )
+      }
+
       scope :biomes, -> {
         includes(:node_type).where('node_types.name' => NodeTypeName::BIOME)
       }

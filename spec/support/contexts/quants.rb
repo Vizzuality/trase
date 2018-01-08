@@ -57,6 +57,6 @@ shared_context 'quants' do
   end
   let(:ghg_) do
     Quant.find_by_name('GHG_') ||
-      FactoryBot.create(:quant, actor_factsheet: false, place_factsheet: true, place_factsheet_temporal: false, name: 'GHG_', unit: 'Mt/yr', frontend_name: 'Loss of biodiversity habitat')
+      FactoryBot.create(:quant, actor_factsheet: false, place_factsheet: true, place_factsheet_temporal: false, name: 'GHG_', unit: 'Mt/yr', frontend_name: 'Land based CO2 emissions')
   end
 end
