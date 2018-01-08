@@ -6,10 +6,16 @@ import {
 
 export function loadContext() {
   return (dispatch) => {
+    const sortContexts = (a, b) => {
+      if (a.id < b.id) return -1;
+      if (a.id > b.id) return 1;
+      return 0;
+    };
+
     const contextURL = getURLFromParams(GET_CONTEXTS);
 
     fetch(contextURL).then(resp => resp.text()).then((data) => {
-      const payload = JSON.parse(data).data;
+      const payload = JSON.parse(data).data.sort(sortContexts);
 
       dispatch({
         type: actions.LOAD_CONTEXTS, payload
