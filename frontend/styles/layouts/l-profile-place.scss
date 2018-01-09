@@ -8,7 +8,7 @@
   line-height: 1.5;
 
   section:nth-of-type(2n-1) {
-    background-color: rgba($white, 0.3);
+    background-color: rgba($white, .3);
   }
 
   &.-error {
@@ -62,7 +62,7 @@
   }
 
   .score-table {
-    padding: 54px 0 42px 0;
+    padding: 54px 0 42px;
   }
 
   .-traders .c-chord {
@@ -79,18 +79,10 @@
       padding-left: 0;
       text-align: right;
 
-      &:before {
+      &::before {
         left: auto;
         right: 0;
       }
     }
   }
-
-  .c-top {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 100%;
-  }
 }
-

@@ -15,7 +15,7 @@
   .l-profile-place {
     padding: 0 30px 30px;
 
-    .c-anchor-buttons .row {
+    .c-anchor-buttons {
       display: none;
     }
   }
@@ -23,6 +23,12 @@
   .l-profile-actor .c-top-municipalities {
     .js-top-municipalities-map svg {
       margin-left: 20px;
+    }
+  }
+
+  .l-profile-place {
+    .c-area-table.score-table {
+      padding: 27px 0 42px;
     }
   }
 

@@ -327,6 +327,7 @@ const _build = (data, { year, showMiniSankey }, store) => {
     render(
       <Provider store={store} >
         <MultiTable
+          id="sustainability-indicators"
           data={data.indicators}
           tabsTitle="Sustainability indicators:"
           type="t_head_places"
