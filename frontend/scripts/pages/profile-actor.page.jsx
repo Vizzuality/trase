@@ -291,6 +291,7 @@ const _build = (data, { nodeId, year, print }, store) => {
     render(
       <Provider store={store} >
         <MultiTable
+          id="sustainability"
           data={data.sustainability}
           tabsTitle={tabsTitle}
           type="t_head_actors"
