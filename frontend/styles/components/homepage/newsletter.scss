@@ -30,6 +30,7 @@
         height: 40px;
 
         > .newsletter-email {
+          flex-shrink: 0;
           font-family: $font-family-1;
           border: solid 2px $charcoal-grey;
           border-radius: 4px;

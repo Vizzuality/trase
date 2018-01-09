@@ -38,6 +38,8 @@ $breakpoint-tablet:  768px;
 $breakpoint-laptop: 1024px;
 $breakpoint-desktop: 1280px;
 
+$breakpoint-foundation-small: 640px;
+
 
 // Animations
 $ease-in-out-sine: cubic-bezier(.445, .05, .55, .95);
@@ -61,6 +63,7 @@ $z-leaflet-above-panes: 500;
 // colors
 $background-white: #f2f2f2;
 $light-gray: #f6f6f6;
+$gray-text: #515253;
 $black: #000;
 $charcoal-grey: #34444c;
 $charcoal-grey-toned-down: #536269;
@@ -68,6 +71,7 @@ $charcoal-grey-faded: rgba($charcoal-grey, .6);
 $charcoal-grey-faded-a-lot: rgba($charcoal-grey, .2);
 $gray: #DFDFDF;
 $medium-pink: #ea6869;
+$strong-pink: #f65e6e;
 $medium-pink-faded: lighten($medium-pink, 20%);
 $manilla: #ffeb8b;
 $egg-shell: #fff0c2;

@@ -1,0 +1,164 @@
+.c-slider-section {
+  padding: 100px 0 0 60px;
+  overflow: hidden;
+
+  &:first-child {
+    padding-top: 0;
+  }
+
+  &.-small {
+    .slider-wrapper {
+      height: 250px;
+    }
+
+    .slide {
+      height: 250px;
+    }
+  }
+}
+
+.slider-wrapper {
+  position: relative;
+  height: 410px;
+  width: calc(100% - 60px);
+
+  > div {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 20px 0 0 0;
+    overflow: visible !important;
+
+    > div {
+      display: flex;
+      height: 100%;
+    }
+  }
+}
+
+.slide-next,
+.slide-prev {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  background-color: $strong-pink;
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: transparent;
+    border-top: 1.5px solid white;
+    border-right: 1.5px solid white;
+    box-shadow: 0 0 0 lightgray;
+  }
+}
+
+.slide-next {
+  right: 0;
+
+  &::after {
+  transform: translate(-50%, -50%) rotate(45deg)
+  }
+}
+
+.slide-prev {
+  transform: translate(-50%, -50%);
+
+  &::after {
+  transform: translate(-50%, -50%) rotate(-135deg)
+  }
+}
+
+.slide {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 0 0 0 30px;
+  height: 410px;
+  max-width: 345px;
+  background-color: $light-gray;
+
+  .slide-image {
+    height: 240px;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: darken($light-gray, 12%);
+  }
+
+  .slide-content {
+    width: 100%;
+    height: 170px;
+    padding: 20px;
+
+    .slide-title {
+      font-family: $font-family-2;
+      font-size: 20px;
+      font-weight: 300;
+      line-height: 1.6;
+      color: $gray-text;
+      text-transform: capitalize;
+    }
+  }
+
+  .slide-quote {
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+
+    .slide-quote-content {
+      height: calc(100% - 40px);
+      font-family: $font-family-2;
+      font-size: 20px;
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.6;
+      letter-spacing: -0.5px;
+      color: $gray-text;
+    }
+
+    .slide-quote-author {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      height: 40px;
+      width: 100%;
+
+      .quote-author-details {
+        color: $charcoal-grey-faded;
+        font-family: $font-family-1;
+        font-size: 13px;
+        letter-spacing: -0.8px;
+        text-align: right;
+        text-transform: uppercase;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+        overflow: hidden;
+      }
+
+      .quote-author-avatar {
+        flex-shrink: 0;
+        margin: 0 0 0 10px;
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color: darken($light-gray, 12%);
+      }
+    }
+  }
+
+  &:first-child {
+    margin: 0;
+  }
+}

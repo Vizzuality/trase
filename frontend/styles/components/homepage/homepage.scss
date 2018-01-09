@@ -2,12 +2,20 @@
 
 .c-homepage {
 
+  .home-subtitle {
+    font-family: $font-family-1;
+    font-size: 13px;
+    letter-spacing: -.8px;
+    color: $medium-pink;
+    text-transform: uppercase;
+  }
+
   .splitted {
     position: relative;
     height: 550px;
     background: linear-gradient(to bottom, $egg-shell 0%, $egg-shell 50%, $light-gray 50%, $light-gray 100%);
 
-    @media only screen and (min-width: 640px) {
+    @media only screen and (min-width: $breakpoint-foundation-small) {
       background: linear-gradient(to right, $egg-shell 0%, $egg-shell 50%, $light-gray 50%, $light-gray 100%);
     }
 
@@ -25,7 +33,7 @@
         bottom: 50%;
         background-image: url('./../public/images/backgrounds/screenshot-half.jpg');
 
-        @media only screen and (min-width: 640px) {
+        @media only screen and (min-width: $breakpoint-foundation-small) {
           right: 50%;
           bottom: 0;
         }
@@ -40,7 +48,7 @@
 
     .row {
       height: 100%;
-      @media only screen and (min-width: 640px) {
+      @media only screen and (min-width: $breakpoint-foundation-small) {
         height: auto;
       }
     }
@@ -49,7 +57,7 @@
       padding: 42px 16px 0;
       height: 50%;
 
-      @media only screen and (min-width: 640px) {
+      @media only screen and (min-width: $breakpoint-foundation-small) {
         padding: 42px 16px;
         height: auto;
       }
@@ -65,24 +73,25 @@
       }
     }
 
-    .splitted-title {
-      font-family: $font-family-1;
-      font-size: 13px;
-      letter-spacing: -.8px;
-      color: $medium-pink;
-      text-transform: uppercase;
-    }
-
     .splitted-text {
       font-family: $font-family-2;
-      font-size: 24px;
+      font-size: 18px;
       font-weight: 300;
       line-height: 1.75;
       color: $charcoal-grey;
+
+      @media only screen and (min-width: $breakpoint-foundation-small) {
+        font-size: 24px;
+      }
     }
 
     .second-column {
       margin-left: 60px;
     }
+  }
+
+  .sliders {
+    background-color: $white;
+    padding: 60px 0;
   }
 }
