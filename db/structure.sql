@@ -5585,10 +5585,10 @@ CREATE INDEX index_download_quants_on_quant_id ON download_quants USING btree (q
 
 
 --
--- Name: index_download_versions_on_context_id; Type: INDEX; Schema: revamp; Owner: -
+-- Name: index_download_versions_on_context_id_and_is_current; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE INDEX index_download_versions_on_context_id ON download_versions USING btree (context_id);
+CREATE UNIQUE INDEX index_download_versions_on_context_id_and_is_current ON download_versions USING btree (context_id, is_current) WHERE (is_current IS TRUE);
 
 
 --
@@ -6624,6 +6624,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171130135459'),
 ('20171212113051'),
 ('20171214162643'),
-('20171219125633');
+('20171219125633'),
+('20180109085838');
 
 
