@@ -78,12 +78,18 @@ json:
   - url: /api/v2/get_linked_geoids
     name: get_linked_geoids
     version: v2
-    v3_ready: false
-    v3_url: /api/v3/get_linked_geoids
+    v3_ready: true
+    v3_url: /api/v3/contexts/1/linked_nodes
     queries:
-      - params: context_id=1&years[]=2015&node_id[]=440&node_id[]=2759&target_column_id=3
+      - params: context_id=1&years[]=2015&nodes_ids[]=440&nodes_ids[]=2759&target_column_id=3
         name: brazil_soy_sorriso_bunge
-      - params: context_id=2&years[]=2015&node_id[]=587&node_id[]=3415&target_column_id=9
+  - url: /api/v2/get_linked_geoids
+    name: get_linked_geoids
+    version: v2
+    v3_ready: true
+    v3_url: /api/v3/contexts/2/linked_nodes
+    queries:
+      - params: context_id=2&years[]=2015&nodes_ids[]=587&nodes_ids[]=3415&target_column_id=9
         name: paraguay_soy_alto_parana_cargill
   - url: /api/v2/get_columns
     name: get_columns

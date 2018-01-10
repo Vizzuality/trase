@@ -5,7 +5,14 @@ RSpec.describe 'Get linked geo ids', type: :request do
   # include_context 'brazil soy nodes'
   include_context 'two flows'
 
-  before { @valid_params = {context_id: context.id, node_id: exporter1_node.id, years: [2015], target_column_id: municipality_node_type.id} }
+  before do
+    @valid_params = {
+      context_id: context.id,
+      nodes_ids: [exporter1_node.id],
+      years: [2015],
+      target_column_id: municipality_node_type.id
+    }
+  end
 
   describe 'GET /api/v2/get_linked_geoids' do
     it 'requires a context_id' do
@@ -16,10 +23,10 @@ RSpec.describe 'Get linked geo ids', type: :request do
     end
 
     it 'requires node_id' do
-      get '/api/v2/get_linked_geoids', params: @valid_params.reject { |key| key == :node_id }
+      get '/api/v2/get_linked_geoids', params: @valid_params.reject { |key| key == :nodes_ids }
 
       expect(@response.status).to eq 500
-      expect(JSON.parse(@response.body)).to eq('error' => 'param is missing or the value is empty: Required node_id missing')
+      expect(JSON.parse(@response.body)).to eq('error' => 'param is missing or the value is empty: Required nodes_ids missing')
     end
 
     it 'requires target_column_id' do

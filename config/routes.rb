@@ -24,6 +24,7 @@ Rails.application.routes.draw do
           resources :attributes, only: [:index], controller: :nodes_attributes
         end
         resources :download, only: [:index], as: :download
+        resources :linked_nodes, only: [:index], controller: :linked_nodes
       end
       resources :newsletter_subscriptions, only: [:create]
     end

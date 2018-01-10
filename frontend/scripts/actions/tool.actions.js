@@ -630,7 +630,7 @@ export function loadLinkedGeoIDs() {
     const params = {
       context_id: state.tool.selectedContextId,
       years: _.uniq([state.tool.selectedYears[0], state.tool.selectedYears[1]]),
-      node_id: selectedNodesIds,
+      nodes_ids: selectedNodesIds,
       target_column_id: state.tool.selectedColumnsIds[0]
     };
     const url = getURLFromParams(GET_LINKED_GEO_IDS, params);
