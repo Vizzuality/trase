@@ -6,7 +6,7 @@ module Api
       def index
         @contexts = Api::V3::Context.
           includes(
-            :country, :commodity, :context_property, :contextual_layers,
+            :country, :commodity, :context_property,
             readonly_recolor_by_attributes: :readonly_attribute,
             readonly_resize_by_attributes: :readonly_attribute
           ).
