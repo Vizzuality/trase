@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import AppReducer from 'reducers/app.reducer';
 import ToolReducer from 'reducers/tool.reducer';
 import DataReducer from 'reducers/data.reducer';
+import HomeReducer from 'reducers/home.reducer';
 import analyticsMiddleware from 'analytics/tool.analytics.middleware';
 import { toolUrlStateMiddleware } from 'utils/stateURL';
 import router, { routeSubscriber } from './router';
@@ -15,6 +16,7 @@ const reducers = combineReducers({
   app: AppReducer,
   tool: ToolReducer,
   data: DataReducer,
+  home: HomeReducer,
   location: router.reducer
 });
 

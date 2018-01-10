@@ -8,11 +8,11 @@
 
   &.-small {
     .slider-wrapper {
-      height: 250px;
+      height: 300px;
     }
 
     .slide {
-      height: 250px;
+      height: 300px;
     }
   }
 }
@@ -32,6 +32,7 @@
     > div {
       display: flex;
       height: 100%;
+      cursor: auto !important;
     }
   }
 }
@@ -45,6 +46,15 @@
   width: 40px;
   border-radius: 100%;
   background-color: $strong-pink;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darken($strong-pink, 4%);
+  }
+
+  &:active {
+    background-color: $strong-pink;
+  }
 
   &::after {
     content: '';
@@ -81,7 +91,7 @@
   justify-content: center;
   margin: 0 0 0 30px;
   height: 410px;
-  max-width: 345px;
+  max-width: 322px;
   background-color: $light-gray;
 
   .slide-image {
@@ -115,13 +125,18 @@
 
     .slide-quote-content {
       height: calc(100% - 40px);
+      overflow: hidden;
       font-family: $font-family-2;
-      font-size: 20px;
+      font-size: 16px;
       font-weight: 300;
       font-style: italic;
       line-height: 1.6;
       letter-spacing: -0.5px;
       color: $gray-text;
+
+      > a {
+        font-weight: 400;
+      }
     }
 
     .slide-quote-author {

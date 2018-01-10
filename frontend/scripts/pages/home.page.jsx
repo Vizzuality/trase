@@ -7,41 +7,12 @@ import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import React from 'react';
 import { render } from 'react-dom';
-import HomeComponent from 'react-components/home/home.component';
+import { Provider } from 'react-redux';
+import Home from 'containers/home/home.container';
 
 import NavContainer from 'containers/shared/nav.container';
 import 'styles/homepage.scss';
 
-import { getURLFromParams, POST_SUBSCRIBE_NEWSLETTER } from 'utils/getURLFromParams';
-
-// TODO: Move this to redux
-function submitForm(email) {
-  const body = new FormData();
-  body.append('email', email);
-
-  const url = getURLFromParams(POST_SUBSCRIBE_NEWSLETTER);
-
-  fetch(url, {
-    method: 'POST',
-    body
-  })
-    .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
-    .then((data) => {
-      const label = document.querySelector('.newsletter-label');
-
-      label.classList.add('-pink');
-      if ('error' in data) {
-        label.innerHTML = `Error: ${data.error}`;
-      } else if ('email' in data) {
-        label.innerHTML = 'Subscription successful';
-      }
-    })
-    .catch((err) => {
-      const label = document.querySelector('.newsletter-label');
-      label.classList.add('-pink');
-      label.innerHTML = `Error: ${err}`;
-    });
-}
 
 export const mount = (root, store) => {
   root.innerHTML = HomeMarkup({
@@ -51,5 +22,10 @@ export const mount = (root, store) => {
   });
   new NavContainer(store);
 
-  render(<HomeComponent submitForm={submitForm} />, document.getElementById('home-react-root'));
+  render(
+    <Provider store={store} >
+      <Home />
+    </Provider>,
+    document.getElementById('home-react-root')
+  );
 };

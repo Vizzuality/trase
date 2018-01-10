@@ -1,6 +1,7 @@
 @import '../../settings';
 
 .c-homepage {
+  overflow: hidden;
 
   .home-subtitle {
     font-family: $font-family-1;
@@ -14,6 +15,7 @@
     position: relative;
     height: 550px;
     background: linear-gradient(to bottom, $egg-shell 0%, $egg-shell 50%, $light-gray 50%, $light-gray 100%);
+    cursor: pointer;
 
     @media only screen and (min-width: $breakpoint-foundation-small) {
       background: linear-gradient(to right, $egg-shell 0%, $egg-shell 50%, $light-gray 50%, $light-gray 100%);
@@ -22,11 +24,16 @@
     .screenshot {
       position: absolute;
       height: 60%;
-      width: calc(50% - 60px);
+      width: 50%;
       bottom: 0;
       background-position: right bottom;
       background-repeat: no-repeat;
       background-size: contain;
+      pointer-events: none;
+
+      @media only screen and (min-width: $breakpoint-foundation-small) {
+        width: calc(50% - 60px);
+      }
 
       &.-half {
         right: 0;
@@ -48,18 +55,24 @@
 
     .row {
       height: 100%;
-      @media only screen and (min-width: $breakpoint-foundation-small) {
-        height: auto;
-      }
     }
 
-    .splitted-column {
-      padding: 42px 16px 0;
+    .column {
       height: 50%;
 
       @media only screen and (min-width: $breakpoint-foundation-small) {
+        height: 100%;
+      }
+    }
+
+    .splitted-column-wrapper {
+      display: block;
+      height: 100%;
+      width: 100%;
+      padding: 42px 16px 0;
+
+      @media only screen and (min-width: $breakpoint-foundation-small) {
         padding: 42px 16px;
-        height: auto;
       }
 
       @media only screen and (min-width: 1140px) {

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 import React from 'react';
 import PropTypes from 'prop-types';
 import Siema from 'react-siema';
@@ -8,7 +9,8 @@ class SliderSection extends React.PureComponent {
     switch (true) {
       case (window.innerWidth < 640): return 1;
       case (window.innerWidth < 950): return 2;
-      default: return 3;
+      case (window.innerWidth < 1515): return 3;
+      default: return 4;
     }
   }
 
@@ -59,26 +61,27 @@ class SliderSection extends React.PureComponent {
                       <React.Fragment>
                         <figure
                           className="slide-image"
-                          style={{ backgroundImage: slide.image }}
+                          style={{ backgroundImage: `url(${slide.image})` }}
                         />
                         <figcaption className="slide-content">
-                          <h4 className="home-subtitle">{slide.subtitle}</h4>
+                          <h4 className="home-subtitle">{slide.category}</h4>
                           <p className="slide-title">{slide.title}</p>
                         </figcaption>
                       </React.Fragment>
                       :
                       <React.Fragment>
                         <div className="slide-quote">
-                          <p className="slide-quote-content">
-                            &ldquo;{slide.quote}&rdquo;
-                          </p>
+                          <p
+                            className="slide-quote-content"
+                            dangerouslySetInnerHTML={{ __html: `&ldquo;${slide.quote}&rdquo;` }}
+                          />
                           <div className="slide-quote-author">
                             <figcaption className="quote-author-details">
                               {slide.quoteAuthor}
                             </figcaption>
                             <figure
                               className="quote-author-avatar"
-                              style={{ backgroundImage: slide.quoteAvatar }}
+                              style={{ backgroundImage: slide.quoteAvatar && `url(${slide.quoteAvatar})` }}
                             />
                           </div>
                         </div>
@@ -106,7 +109,7 @@ SliderSection.propTypes = {
   slides: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,
-      subtitle: PropTypes.string,
+      category: PropTypes.string,
       image: PropTypes.string,
       quote: PropTypes.string,
       quoteAuthor: PropTypes.string,

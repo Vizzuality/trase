@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
 class NewsletterForm extends React.PureComponent {
   constructor(props) {
@@ -30,6 +31,7 @@ class NewsletterForm extends React.PureComponent {
   }
 
   render() {
+    const { message } = this.props;
     return (
       <section className="c-newsletter">
         <div className="newsletter-content row align-middle">
@@ -39,9 +41,9 @@ class NewsletterForm extends React.PureComponent {
           >
             <label
               htmlFor="newsletter-email"
-              className="newsletter-label"
+              className={cx('newsletter-label', { '-pink': message })}
             >
-              Sign up here to receive news updates about TRASE
+              {message || 'Sign up here to receive news updates about TRASE'}
             </label>
             <div className="newsletter-input-container">
               <input
@@ -68,7 +70,8 @@ class NewsletterForm extends React.PureComponent {
 }
 
 NewsletterForm.propTypes = {
-  submitForm: PropTypes.func.isRequired
+  submitForm: PropTypes.func.isRequired,
+  message: PropTypes.string
 };
 
 export default NewsletterForm;
