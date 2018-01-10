@@ -2280,6 +2280,322 @@ COMMENT ON COLUMN download_attributes_mv.attribute_id IS 'References the unique 
 
 
 --
+-- Name: flow_quals; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE flow_quals (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    value text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE flow_quals; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE flow_quals IS 'Values of quals for flow';
+
+
+--
+-- Name: COLUMN flow_quals.value; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN flow_quals.value IS 'Textual value';
+
+
+--
+-- Name: flow_quants; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE flow_quants (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE flow_quants; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE flow_quants IS 'Values of quants for flow';
+
+
+--
+-- Name: COLUMN flow_quants.value; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN flow_quants.value IS 'Numeric value';
+
+
+--
+-- Name: download_attributes_values_mv; Type: MATERIALIZED VIEW; Schema: revamp; Owner: -
+--
+
+CREATE MATERIALIZED VIEW download_attributes_values_mv AS
+ SELECT f.flow_id,
+    f.qual_id AS attribute_id,
+    'Qual'::text AS attribute_type,
+    NULL::double precision AS numeric_value,
+        CASE
+            WHEN (lower(f.value) = 'yes'::text) THEN true
+            WHEN (lower(f.value) = 'no'::text) THEN false
+            ELSE NULL::boolean
+        END AS boolean_value,
+    q.name,
+    NULL::text AS unit,
+    q.name AS name_with_unit,
+    da.display_name,
+    da.context_id
+   FROM (((flow_quals f
+     JOIN quals q ON ((f.qual_id = q.id)))
+     JOIN download_quals dq ON ((dq.qual_id = q.id)))
+     JOIN download_attributes da ON ((dq.download_attribute_id = da.id)))
+  GROUP BY f.flow_id, f.qual_id, f.value, q.name, da.display_name, da.context_id
+UNION ALL
+ SELECT f.flow_id,
+    f.quant_id AS attribute_id,
+    'Quant'::text AS attribute_type,
+    f.value AS numeric_value,
+    NULL::boolean AS boolean_value,
+    q.name,
+    q.unit,
+        CASE
+            WHEN (q.unit IS NULL) THEN q.name
+            ELSE (((q.name || ' ('::text) || q.unit) || ')'::text)
+        END AS name_with_unit,
+    da.display_name,
+    da.context_id
+   FROM (((flow_quants f
+     JOIN quants q ON ((f.quant_id = q.id)))
+     JOIN download_quants dq ON ((dq.quant_id = q.id)))
+     JOIN download_attributes da ON ((dq.download_attribute_id = da.id)))
+  GROUP BY f.flow_id, f.quant_id, f.value, q.name, q.unit, da.display_name, da.context_id
+  WITH NO DATA;
+
+
+--
+-- Name: flows; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE flows (
+    id integer NOT NULL,
+    context_id integer NOT NULL,
+    year smallint NOT NULL,
+    path integer[] DEFAULT '{}'::integer[],
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE flows; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE flows IS 'Flows of commodities through nodes';
+
+
+--
+-- Name: COLUMN flows.year; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN flows.year IS 'Year';
+
+
+--
+-- Name: COLUMN flows.path; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN flows.path IS 'Array of node ids which constitute the supply chain, where position of node in this array is linked to the value of column_position in context_node_types';
+
+
+--
+-- Name: node_types; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE node_types (
+    id integer NOT NULL,
+    name text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE node_types; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE node_types IS 'List of types of nodes in the system, e.g. MUNICIPALITY or EXPORTER. Important: those literals are referred to in code, therefore should not be changed without notice.';
+
+
+--
+-- Name: COLUMN node_types.name; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN node_types.name IS 'Name of node type, spelt in capital letters; unique across node types';
+
+
+--
+-- Name: nodes; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE nodes (
+    id integer NOT NULL,
+    node_type_id integer NOT NULL,
+    name text NOT NULL,
+    geo_id text,
+    is_unknown boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    main_id integer
+);
+
+
+--
+-- Name: TABLE nodes; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE nodes IS 'Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains';
+
+
+--
+-- Name: COLUMN nodes.name; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN nodes.name IS 'Name of node';
+
+
+--
+-- Name: COLUMN nodes.geo_id; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN nodes.geo_id IS '2-letter iso code in case of country nodes; other geo identifiers possible for other node types';
+
+
+--
+-- Name: COLUMN nodes.is_unknown; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN nodes.is_unknown IS 'When set, node was not possible to identify';
+
+
+--
+-- Name: COLUMN nodes.main_id; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN nodes.main_id IS 'Node identifier from Main DB';
+
+
+--
+-- Name: flow_paths_mv; Type: MATERIALIZED VIEW; Schema: revamp; Owner: -
+--
+
+CREATE MATERIALIZED VIEW flow_paths_mv AS
+ SELECT f.node_id,
+    n.geo_id,
+        CASE
+            WHEN (cn.node_type_name = ANY (ARRAY['COUNTRY OF PRODUCTION'::text, 'BIOME'::text, 'LOGISTICS HUB'::text, 'STATE'::text])) THEN upper(n.name)
+            ELSE initcap(n.name)
+        END AS name,
+    cn.node_type_name,
+    cn.column_group,
+    cn.column_position,
+    cn.is_default,
+    f.id AS flow_id,
+    f.year,
+    f.context_id
+   FROM ((( SELECT flows.id,
+            flows.year,
+            a.node_id,
+            a."position",
+            flows.context_id
+           FROM flows,
+            LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) f
+     JOIN ( SELECT cnt.context_id,
+            cntp.column_group,
+            cnt.column_position,
+            cntp.is_default,
+            cnt.node_type_id,
+            node_types.name AS node_type_name
+           FROM ((context_node_types cnt
+             JOIN node_types ON ((node_types.id = cnt.node_type_id)))
+             LEFT JOIN context_node_type_properties cntp ON ((cnt.id = cntp.context_node_type_id)))) cn ON (((f."position" = (cn.column_position + 1)) AND (f.context_id = cn.context_id))))
+     JOIN nodes n ON ((n.id = f.node_id)))
+  WITH NO DATA;
+
+
+--
+-- Name: download_flows_mv; Type: MATERIALIZED VIEW; Schema: revamp; Owner: -
+--
+
+CREATE MATERIALIZED VIEW download_flows_mv AS
+ SELECT f_0.flow_id AS id,
+    f_0.context_id,
+    f_0.year,
+    f_0.name AS name_0,
+    f_1.name AS name_1,
+    f_2.name AS name_2,
+    f_3.name AS name_3,
+    f_4.name AS name_4,
+    f_5.name AS name_5,
+    f_6.name AS name_6,
+    f_7.name AS name_7,
+    f_0.node_id AS node_id_0,
+    f_1.node_id AS node_id_1,
+    f_2.node_id AS node_id_2,
+    f_3.node_id AS node_id_3,
+    f_4.node_id AS node_id_4,
+    f_5.node_id AS node_id_5,
+    f_6.node_id AS node_id_6,
+    f_7.node_id AS node_id_7,
+        CASE
+            WHEN (f_5.node_type_name = 'EXPORTER'::text) THEN f_5.node_id
+            WHEN (f_2.node_type_name = 'EXPORTER'::text) THEN f_2.node_id
+            WHEN (f_2.node_type_name = 'TRADER'::text) THEN f_2.node_id
+            WHEN (f_1.node_type_name = 'EXPORTER'::text) THEN f_1.node_id
+            ELSE NULL::integer
+        END AS exporter_node_id,
+        CASE
+            WHEN (f_6.node_type_name = 'IMPORTER'::text) THEN f_6.node_id
+            WHEN (f_3.node_type_name = 'IMPORTER'::text) THEN f_3.node_id
+            WHEN (f_2.node_type_name = 'IMPORTER'::text) THEN f_2.node_id
+            ELSE NULL::integer
+        END AS importer_node_id,
+        CASE
+            WHEN (f_7.node_type_name = 'COUNTRY'::text) THEN f_7.node_id
+            WHEN (f_4.node_type_name = 'COUNTRY'::text) THEN f_4.node_id
+            WHEN (f_3.node_type_name = 'COUNTRY'::text) THEN f_3.node_id
+            ELSE NULL::integer
+        END AS country_node_id,
+    fi.attribute_type,
+    fi.attribute_id,
+    fi.name AS attribute_name,
+    fi.name_with_unit AS attribute_name_with_unit,
+    fi.display_name,
+    bool_and(fi.boolean_value) AS bool_and,
+    sum(fi.numeric_value) AS sum,
+        CASE
+            WHEN ((fi.attribute_type = 'Qual'::text) AND bool_and(fi.boolean_value)) THEN 'yes'::text
+            WHEN ((fi.attribute_type = 'Qual'::text) AND (NOT bool_and(fi.boolean_value))) THEN 'no'::text
+            ELSE (sum(fi.numeric_value))::text
+        END AS total
+   FROM ((((((((flow_paths_mv f_0
+     JOIN flow_paths_mv f_1 ON (((f_1.flow_id = f_0.flow_id) AND (f_1.column_position = 1))))
+     JOIN flow_paths_mv f_2 ON (((f_2.flow_id = f_0.flow_id) AND (f_2.column_position = 2))))
+     JOIN flow_paths_mv f_3 ON (((f_3.flow_id = f_0.flow_id) AND (f_3.column_position = 3))))
+     LEFT JOIN flow_paths_mv f_4 ON (((f_4.flow_id = f_0.flow_id) AND (f_4.column_position = 4))))
+     LEFT JOIN flow_paths_mv f_5 ON (((f_5.flow_id = f_0.flow_id) AND (f_5.column_position = 5))))
+     LEFT JOIN flow_paths_mv f_6 ON (((f_6.flow_id = f_0.flow_id) AND (f_6.column_position = 6))))
+     LEFT JOIN flow_paths_mv f_7 ON (((f_7.flow_id = f_0.flow_id) AND (f_7.column_position = 7))))
+     JOIN download_attributes_values_mv fi ON (((f_0.flow_id = fi.flow_id) AND (f_0.context_id = fi.context_id))))
+  WHERE (f_0.column_position = 0)
+  GROUP BY f_0.flow_id, f_0.context_id, f_0.year, f_0.name, f_0.node_id, f_1.name, f_1.node_id, f_1.node_type_name, f_2.name, f_2.node_id, f_2.node_type_name, f_3.name, f_3.node_id, f_3.node_type_name, f_4.name, f_4.node_id, f_4.node_type_name, f_5.name, f_5.node_id, f_5.node_type_name, f_6.name, f_6.node_id, f_6.node_type_name, f_7.name, f_7.node_id, f_7.node_type_name, fi.attribute_type, fi.attribute_id, fi.name, fi.name_with_unit, fi.display_name
+  WITH NO DATA;
+
+
+--
 -- Name: download_quals_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -2417,33 +2733,6 @@ ALTER SEQUENCE flow_inds_id_seq OWNED BY flow_inds.id;
 
 
 --
--- Name: flow_quals; Type: TABLE; Schema: revamp; Owner: -
---
-
-CREATE TABLE flow_quals (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    value text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE flow_quals; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON TABLE flow_quals IS 'Values of quals for flow';
-
-
---
--- Name: COLUMN flow_quals.value; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN flow_quals.value IS 'Textual value';
-
-
---
 -- Name: flow_quals_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -2463,33 +2752,6 @@ ALTER SEQUENCE flow_quals_id_seq OWNED BY flow_quals.id;
 
 
 --
--- Name: flow_quants; Type: TABLE; Schema: revamp; Owner: -
---
-
-CREATE TABLE flow_quants (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE flow_quants; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON TABLE flow_quants IS 'Values of quants for flow';
-
-
---
--- Name: COLUMN flow_quants.value; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN flow_quants.value IS 'Numeric value';
-
-
---
 -- Name: flow_quants_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -2506,40 +2768,6 @@ CREATE SEQUENCE flow_quants_id_seq
 --
 
 ALTER SEQUENCE flow_quants_id_seq OWNED BY flow_quants.id;
-
-
---
--- Name: flows; Type: TABLE; Schema: revamp; Owner: -
---
-
-CREATE TABLE flows (
-    id integer NOT NULL,
-    context_id integer NOT NULL,
-    year smallint NOT NULL,
-    path integer[] DEFAULT '{}'::integer[],
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE flows; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON TABLE flows IS 'Flows of commodities through nodes';
-
-
---
--- Name: COLUMN flows.year; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN flows.year IS 'Year';
-
-
---
--- Name: COLUMN flows.path; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN flows.path IS 'Array of node ids which constitute the supply chain, where position of node in this array is linked to the value of column_position in context_node_types';
 
 
 --
@@ -3145,31 +3373,6 @@ ALTER SEQUENCE node_quants_id_seq OWNED BY node_quants.id;
 
 
 --
--- Name: node_types; Type: TABLE; Schema: revamp; Owner: -
---
-
-CREATE TABLE node_types (
-    id integer NOT NULL,
-    name text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE node_types; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON TABLE node_types IS 'List of types of nodes in the system, e.g. MUNICIPALITY or EXPORTER. Important: those literals are referred to in code, therefore should not be changed without notice.';
-
-
---
--- Name: COLUMN node_types.name; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN node_types.name IS 'Name of node type, spelt in capital letters; unique across node types';
-
-
---
 -- Name: node_types_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -3186,56 +3389,6 @@ CREATE SEQUENCE node_types_id_seq
 --
 
 ALTER SEQUENCE node_types_id_seq OWNED BY node_types.id;
-
-
---
--- Name: nodes; Type: TABLE; Schema: revamp; Owner: -
---
-
-CREATE TABLE nodes (
-    id integer NOT NULL,
-    node_type_id integer NOT NULL,
-    name text NOT NULL,
-    geo_id text,
-    is_unknown boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    main_id integer
-);
-
-
---
--- Name: TABLE nodes; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON TABLE nodes IS 'Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains';
-
-
---
--- Name: COLUMN nodes.name; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN nodes.name IS 'Name of node';
-
-
---
--- Name: COLUMN nodes.geo_id; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN nodes.geo_id IS '2-letter iso code in case of country nodes; other geo identifiers possible for other node types';
-
-
---
--- Name: COLUMN nodes.is_unknown; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN nodes.is_unknown IS 'When set, node was not possible to identify';
-
-
---
--- Name: COLUMN nodes.main_id; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN nodes.main_id IS 'Node identifier from Main DB';
 
 
 --
@@ -5369,6 +5522,41 @@ CREATE INDEX index_download_attributes_on_context_id ON download_attributes USIN
 
 
 --
+-- Name: index_download_attributes_values_mv_on_flow_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_download_attributes_values_mv_on_flow_id ON download_attributes_values_mv USING btree (flow_id);
+
+
+--
+-- Name: index_download_flows_mv_on_attribute_type_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_download_flows_mv_on_attribute_type_and_attribute_id ON download_flows_mv USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: index_download_flows_mv_on_country_node_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_download_flows_mv_on_country_node_id ON download_flows_mv USING btree (country_node_id);
+
+
+--
+-- Name: index_download_flows_mv_on_exporter_node_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_download_flows_mv_on_exporter_node_id ON download_flows_mv USING btree (exporter_node_id);
+
+
+--
+-- Name: index_download_flows_mv_on_importer_node_id; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_download_flows_mv_on_importer_node_id ON download_flows_mv USING btree (importer_node_id);
+
+
+--
 -- Name: index_download_quals_on_download_attribute_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -5397,10 +5585,10 @@ CREATE INDEX index_download_quants_on_quant_id ON download_quants USING btree (q
 
 
 --
--- Name: index_download_versions_on_context_id; Type: INDEX; Schema: revamp; Owner: -
+-- Name: index_download_versions_on_context_id_and_is_current; Type: INDEX; Schema: revamp; Owner: -
 --
 
-CREATE INDEX index_download_versions_on_context_id ON download_versions USING btree (context_id);
+CREATE UNIQUE INDEX index_download_versions_on_context_id_and_is_current ON download_versions USING btree (context_id, is_current) WHERE (is_current IS TRUE);
 
 
 --
@@ -5408,6 +5596,13 @@ CREATE INDEX index_download_versions_on_context_id ON download_versions USING bt
 --
 
 CREATE INDEX index_flow_inds_on_flow_id ON flow_inds USING btree (flow_id);
+
+
+--
+-- Name: index_flow_paths_mv_on_flow_id_and_column_position; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX index_flow_paths_mv_on_flow_id_and_column_position ON flow_paths_mv USING btree (flow_id, column_position);
 
 
 --
@@ -6428,4 +6623,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171130103917'),
 ('20171130135459'),
 ('20171212113051'),
-('20171214162643');
+('20171214162643'),
+('20171219125633'),
+('20180109085838');
+
+

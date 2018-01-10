@@ -35,14 +35,14 @@ const API_ENDPOINTS = {
     endpoint: '/contexts/$context_id$/nodes/$node_id$/actor',
     mock: 'mocks/v1_get_actor_node_attributes.json'
   },
+  [GET_CSV_DATA_DOWNLOAD_FILE]: { api: 3, endpoint: '/contexts/$context_id$/download.csv' },
+  [GET_JSON_DATA_DOWNLOAD_FILE]: { api: 3, endpoint: '/contexts/$context_id$/download.json' },
   [GET_SITE_DIVE]: { api: 'content', endpoint: '/site_dive' },
   [GET_POSTS]: { api: 'content', endpoint: '/posts' },
   [GET_TWEETS]: { api: 'content', endpoint: '/tweets' },
   [GET_DISCLAIMER]: { api: 'local', endpoint: 'disclaimer.json' },
   [GET_TOOLTIPS]: { api: 'local', endpoint: 'tooltips.json' },
   [GET_LINKED_GEO_IDS]: { api: 2, endpoint: '/get_linked_geoids' },
-  [GET_CSV_DATA_DOWNLOAD_FILE]: { api: 2, endpoint: '/download.csv' },
-  [GET_JSON_DATA_DOWNLOAD_FILE]: { api: 2, endpoint: '/download.json' },
   [POST_SUBSCRIBE_NEWSLETTER]: { api: 2, endpoint: '/newsletter_subscriptions' }
 };
 

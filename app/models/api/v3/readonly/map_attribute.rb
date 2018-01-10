@@ -3,7 +3,6 @@ module Api
     module Readonly
       class MapAttribute < BaseModel
         self.table_name = 'revamp.map_attributes_mv'
-        self.primary_key = 'id'
 
         belongs_to :map_attribute_group
 

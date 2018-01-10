@@ -427,7 +427,7 @@ class SchemaRevamp
     <<-SQL
     INSERT INTO revamp.download_versions(context_id, symbol, is_current, created_at)
     SELECT
-      context_id, symbol, COALESCE(current, FALSE), NOW()
+      context_id, symbol, COALESCE(current, FALSE), created_at
     FROM public.download_versions
     SQL
   end
@@ -689,6 +689,9 @@ class SchemaRevamp
     refresh_materialized_view('recolor_by_attributes_mv')
     refresh_materialized_view('resize_by_attributes_mv')
     refresh_materialized_view('download_attributes_mv')
+    refresh_materialized_view('download_attributes_values_mv')
+    refresh_materialized_view('flow_paths_mv')
+    refresh_materialized_view('download_flows_mv')
     ActiveRecord::Base.connection.execute('COMMIT')
   end
 

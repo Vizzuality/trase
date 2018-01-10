@@ -127,7 +127,6 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
     crass (1.0.2)
-    csv-diff (0.3.3)
     database_cleaner (1.6.2)
     devise (4.3.0)
       bcrypt (~> 3.0)
@@ -402,7 +401,6 @@ DEPENDENCIES
   capistrano-rvm
   ckeditor!
   coffee-rails (~> 4.2)
-  csv-diff
   database_cleaner
   devise (~> 4.2)
   dotenv-rails (~> 2.2)

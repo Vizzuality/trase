@@ -1,5 +1,4 @@
-require 'csv-diff'
-require 'zip'
+require 'zipfile'
 
 namespace :gold_master do
   desc 'Record endpoint responses for gold master specs'
@@ -7,27 +6,37 @@ namespace :gold_master do
     %w[csv json].each do |format|
       endpoints[format].each do |endpoint|
         endpoint['queries'].each do |query|
+          downloaded_gold_master_file = gold_master_file(endpoint, query, format, endpoint['compressed'])
           gold_master_file = gold_master_file(endpoint, query, format)
           puts gold_master_url(endpoint, query)
-          `curl -g "#{gold_master_url(endpoint, query)}" > #{gold_master_file}`
-          unzip_and_replace_csv(gold_master_file) if format == 'csv'
+          `curl -g "#{gold_master_url(endpoint, query)}" > #{downloaded_gold_master_file}`
+          if endpoint['compressed']
+            Zipfile.extract_data_file_to_path(downloaded_gold_master_file, gold_master_file, format)
+          end
         end
       end
     end
-    zip_dir(gold_master_dir, gold_master_archive)
-    cleanup
+    Zipfile.zip_dir(gold_master_dir, gold_master_archive)
+    cleanup_gold_master
   end
 
   desc 'Run gold master tests'
-  task test: [:extract_gold_master, :compare_json, :compare_csv]
+  task test: [:extract_gold_master, :cleanup_actual, :compare_csv, :compare_json]
 
   task extract_gold_master: [:environment] do
-    unzip_archive(gold_master_archive, gold_master_dir)
+    Zipfile.unzip_archive(gold_master_archive, gold_master_dir)
   end
 
   task compare_csv: [:environment] do
-    compare('csv') do |gold_master_file, actual_file|
-      CSVDiff.new(gold_master_file, actual_file)
+    compare('csv', true) do |gold_master_file, actual_file|
+      gold_master_file_sorted = actual_file + '.gold_master.sorted'
+      `sort #{gold_master_file} > #{gold_master_file_sorted}`
+      actual_file_sorted = actual_file + '.sorted'
+      `sort #{actual_file} > #{actual_file_sorted}`
+      diff_cmd = "diff #{gold_master_file_sorted} #{actual_file_sorted} > #{actual_file}.diff"
+      puts diff_cmd
+      diff = `#{diff_cmd}`
+      [diff.presence].compact
     end
   end
 
@@ -44,30 +53,38 @@ namespace :gold_master do
       File.open(actual_file_sorted, 'w') do |f|
         f << JSON.pretty_generate(actual, indent: '  ')
       end
-      diff = `diff #{gold_master_file_sorted} #{actual_file_sorted}`
+      diff_cmd = "diff #{gold_master_file_sorted} #{actual_file_sorted} > #{actual_file}.diff"
+      puts diff_cmd
+      diff = `#{diff_cmd}`
       [diff.presence].compact
     end
   end
 
-  def compare(format)
+  task cleanup_actual: [:environment] do
+    FileUtils.rm_rf(actual_dir)
+  end
+
+  def compare(format, compressed = false)
     endpoints[format].each do |endpoint|
       next unless endpoint['v3_ready'] # eliminate those not ready to test
       endpoint['queries'].each do |query|
         gold_master_file = gold_master_file(endpoint, query, format)
+        puts gold_master_file
+        downloaded_file = actual_file(endpoint, query, format, compressed)
         actual_file = actual_file(endpoint, query, format)
-        puts actual_url(endpoint, query)
-        `curl -g "#{actual_url(endpoint, query)}" > #{actual_file}`
-        unzip_and_replace_csv(actual_file) if format == 'csv' # because downloads come as zip
+        `curl -g "#{actual_url(endpoint, query)}" > #{downloaded_file}`
+        if endpoint['compressed']
+          Zipfile.extract_data_file_to_path(downloaded_file, actual_file, format)
+        end
         diff = yield(gold_master_file, actual_file)
         if diff.any?
-          diff.each { |d| puts d.inspect }
+          puts "DIFFERENCES DETECTED, PLEASE INSPECT #{actual_file}.diff"
         else
           puts 'SUCCESS'
         end
       end
     end
-    cleanup
-    exit 0
+    cleanup_gold_master
   end
 
   def endpoints
@@ -96,32 +113,22 @@ namespace :gold_master do
     host('v3') + actual_url + '?' + actual_params
   end
 
-  def gold_master_file(endpoint, query, format)
-    file_with_format(gold_master_dir, format, endpoint, query)
+  def gold_master_file(endpoint, query, format, compressed = false)
+    file_with_format(gold_master_dir, compressed ? 'zip' : format, endpoint, query)
   end
 
-  def actual_file(endpoint, query, format)
-    tmp_dir = "#{Rails.root}/tmp/actual"
-    file_with_format(tmp_dir, format, endpoint, query)
+  def actual_file(endpoint, query, format, compressed = false)
+    file_with_format(actual_dir, compressed ? 'zip' : format, endpoint, query)
   end
 
   def file_with_format(dir, format, endpoint, query)
-    dir_with_format = "#{dir}/#{format}/"
+    dir_with_format = "#{dir}/#{format}"
     FileUtils.mkdir_p(dir_with_format, verbose: true) unless File.directory?(dir_with_format)
     "#{dir_with_format}/#{endpoint['name']}_#{query['name']}.#{format}"
   end
 
-  # take a .zip file saved as .csv, unzip, extract .csv
-  # and save it at original path
-  def unzip_and_replace_csv(file_path)
-    dir = File.dirname(file_path)
-    base = File.basename(file_path)
-    tmp_file_path = File.join(dir, 'tmp_' + base)
-    Zip::File.open(file_path) do |zipfile|
-      entry = zipfile.glob('*.csv').first
-      entry.extract(tmp_file_path)
-    end
-    FileUtils.mv(tmp_file_path, file_path)
+  def actual_dir
+    "#{Rails.root}/tmp/actual"
   end
 
   def gold_master_dir
@@ -132,27 +139,7 @@ namespace :gold_master do
     gold_master_dir + '.zip'
   end
 
-  def zip_dir(src_dir, archive)
-    FileUtils.rm archive, force: true
-
-    Zip::File.open(archive, 'w') do |zipfile|
-      Dir["#{src_dir}/**/**"].reject { |f| f == archive }.each do |file|
-        zipfile.add(file.sub(src_dir + '/', ''), file)
-      end
-    end
-  end
-
-  def unzip_archive(archive, dest_dir)
-    Zip::File.open(archive) do |zip_file|
-      zip_file.each do |f|
-        f_path = File.join(dest_dir, f.name)
-        FileUtils.mkdir_p(File.dirname(f_path))
-        zip_file.extract(f, f_path) unless File.exist?(f_path)
-      end
-    end
-  end
-
-  def cleanup
+  def cleanup_gold_master
     FileUtils.rm_rf(gold_master_dir)
   end
 end
