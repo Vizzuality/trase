@@ -1,4 +1,4 @@
-shared_context 'api v3 brazil context nodes' do
+shared_context 'api v3 brazil context node types' do
   include_context 'api v3 brazil contexts'
   include_context 'api v3 node types'
 

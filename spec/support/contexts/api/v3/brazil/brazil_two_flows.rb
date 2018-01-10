@@ -1,6 +1,6 @@
 shared_context 'api v3 brazil two flows' do
   include_context 'api v3 brazil soy nodes'
-  include_context 'api v3 brazil soy indicators'
+  include_context 'api v3 brazil download attributes'
 
   let(:api_v3_exporter2_node) do
     node = Api::V3::Node.where(

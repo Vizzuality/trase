@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Nodes', type: :request do
-  include_context 'api v3 brazil context nodes'
+  include_context 'api v3 brazil context node types'
   include_context 'api v3 brazil flows'
 
   describe 'GET /api/v3/contexts/:context_id/nodes' do

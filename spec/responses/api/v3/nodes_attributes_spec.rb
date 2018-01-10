@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Nodes attributes', type: :request do
-  include_context 'api v3 brazil context nodes'
-  include_context 'api v3 brazil context layers'
+  include_context 'api v3 brazil context node types'
+  include_context 'api v3 brazil map attributes'
   include_context 'api v3 brazil municipality quant values'
   include_context 'api v3 brazil municipality ind values'
 

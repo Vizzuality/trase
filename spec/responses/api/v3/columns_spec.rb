@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Columns', type: :request do
-  include_context 'api v3 brazil soy indicators'
-  include_context 'api v3 brazil context nodes'
+  include_context 'api v3 brazil download attributes'
+  include_context 'api v3 brazil context node types'
 
   describe 'GET /api/v3/contexts/:context_id/columns' do
     it 'has the correct response structure' do

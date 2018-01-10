@@ -1,7 +1,7 @@
 shared_context 'api v3 brazil soy nodes' do
   include_context 'api v3 node types'
   include_context 'api v3 quals'
-  include_context 'api v3 brazil context nodes'
+  include_context 'api v3 brazil context node types'
 
   let!(:api_v3_state_node) do
     node = Api::V3::Node.where(

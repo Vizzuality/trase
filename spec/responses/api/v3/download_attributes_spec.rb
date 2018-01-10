@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Download Attributes', type: :request do
-  include_context 'api v3 brazil soy indicators'
+  include_context 'api v3 brazil download attributes'
 
   describe 'GET /api/v3/contexts/:context_id/download_attributes' do
     before(:each) do

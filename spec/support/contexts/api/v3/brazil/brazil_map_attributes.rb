@@ -1,4 +1,4 @@
-shared_context 'api v3 brazil context layers' do
+shared_context 'api v3 brazil map attributes' do
   include_context 'api v3 brazil contexts'
   include_context 'api v3 inds'
   include_context 'api v3 quants'
