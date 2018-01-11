@@ -10,6 +10,13 @@ export default class {
 
   buildLayers({ layers, selectedMapContextualLayers }) {
     this.items.innerHTML = ContextLayersTemplate({ layers });
+
+    if (layers.length > 0) {
+      this.el.classList.remove('is-hidden');
+    } else {
+      this.el.classList.add('is-hidden');
+    }
+
     this.switchers = Array.prototype.slice.call(this.items.querySelectorAll('.c-switcher'), 0);
 
     this.switchers.forEach((switcher) => {

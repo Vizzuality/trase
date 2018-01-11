@@ -3,8 +3,8 @@ import actions from 'actions';
 import { feature as topojsonFeature } from 'topojson';
 import _ from 'lodash';
 import {
-  CARTO_NAMED_MAPS_BASE_URL, CONTEXT_LAYERS, CONTEXT_WITH_CONTEXT_LAYERS_IDS, CONTEXT_WITHOUT_MAP_IDS,
-  NUM_NODES_DETAILED, NUM_NODES_EXPANDED, NUM_NODES_SUMMARY, YEARS_DISABLED_NO_AGGR, YEARS_DISABLED_UNAVAILABLE
+  CARTO_NAMED_MAPS_BASE_URL, NUM_NODES_DETAILED, NUM_NODES_EXPANDED,
+  NUM_NODES_SUMMARY, YEARS_DISABLED_NO_AGGR, YEARS_DISABLED_UNAVAILABLE
 } from 'constants';
 import {
   GET_ALL_NODES, GET_COLUMNS, GET_CONTEXTS, GET_FLOWS, GET_LINKED_GEO_IDS, GET_MAP_BASE_DATA,
@@ -170,15 +170,8 @@ export function setContext(contextId, isInitialContextSet = false) {
       });
 
       dispatch(loadLinks());
-
-      if (CONTEXT_WITHOUT_MAP_IDS.indexOf(contextId) === -1) {
-        dispatch(loadNodes());
-        dispatch(loadMapVectorData());
-        dispatch(loadMapContextLayers());
-      } else {
-        dispatch(resetContextLayers());
-        dispatch(resetMapDimensions());
-      }
+      dispatch(loadNodes());
+      dispatch(loadMapVectorData());
     });
   };
 }
@@ -228,7 +221,7 @@ export function loadNodes() {
         }
       });
 
-      this.dispatch(loadMapContextLayers(payload.mapDimensionsMetaJSON.contextualLayers));
+      dispatch(setMapContextLayers(payload.mapDimensionsMetaJSON.contextualLayers));
 
       // dispatch({
       //   type: actions.GET_CONTEXT_LAYERS,
@@ -421,24 +414,19 @@ export function resetContextLayers() {
   };
 }
 
-export function loadMapContextLayers(contextualLayers) {
+export function setMapContextLayers(contextualLayers) {
   return (dispatch, getState) => {
-    // const mapContextualLayers = CONTEXT_LAYERS.map((layer) => {
     const mapContextualLayers = contextualLayers.map((layer) => {
       const contextLayer = Object.assign({}, layer);
-      if (!layer.rasterURL) {
-        const carto = contextLayersCarto[layer.id];
+      if (!layer.rasterUrl) {
+        const carto = contextLayersCarto[layer.identifier];
         contextLayer.cartoURL = `${CARTO_NAMED_MAPS_BASE_URL}${carto.uid}/jsonp?callback=cb`;
         contextLayer.layergroupid = carto.layergroupid;
       }
       return contextLayer;
     });
 
-    // TODO add context layers data on the API side (on get_map_base_data)
-    if (CONTEXT_WITH_CONTEXT_LAYERS_IDS.indexOf(getState().tool.selectedContext.id) === -1) {
-      dispatch(resetContextLayers());
-      return;
-    }
+    resetContextLayers();
 
     Promise
       .all(mapContextualLayers.filter(l => l.cartoURL).map(l => fetch(l.cartoURL).then(resp => resp.text())))
@@ -448,8 +436,6 @@ export function loadMapContextLayers(contextualLayers) {
         dispatch({
           type: actions.GET_CONTEXT_LAYERS, mapContextualLayers
         });
-
-        const contextualLayers = getState().tool.selectedMapContextualLayers;
 
         if (contextualLayers !== undefined && contextualLayers.length) {
           dispatch({
