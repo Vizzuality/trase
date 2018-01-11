@@ -58,6 +58,11 @@ HomeContainer.propTypes = {
 function mapStateToProps(state) {
   const { tweets, posts } = state.home;
   const parsedTweets = tweets.map(tweet => ({
+    id: tweet.id,
+    text: tweet.text,
+    author: tweet.screen_name
+  }));
+  const testimonials = tweets.map(tweet => ({
     quote: tweet.text,
     quoteAuthor: tweet.screen_name
   }));
@@ -66,6 +71,7 @@ function mapStateToProps(state) {
     image: post.image_url
   }));
   return {
+    testimonials,
     tweets: parsedTweets,
     posts: parsedPosts
   };

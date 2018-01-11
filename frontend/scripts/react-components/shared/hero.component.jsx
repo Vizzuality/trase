@@ -1,9 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import TwitterFeed from 'react-components/home/twitter-feed.component';
 
 function Hero(props) {
-  const { className } = props;
+  const { className, closeStoryBox, visitStory, story, tweets } = props;
+  const StoryBox = storyObj => (
+    <div className="story-box">
+      <button className="story-box-close" onClick={closeStoryBox} />
+      <figure className="story-box-image" style={{ backgroundImage: `url(${storyObj.image})` }} />
+      <figcaption className="story-box-content">
+        <p className="story-box-title">{storyObj.title}</p>
+        <button className="story-box-link" onClick={() => visitStory(storyObj)}>See It Here</button>
+      </figcaption>
+    </div>
+  );
+
   return (
     <div className={cx('c-hero', className)}>
       <div className="row align-middle">
@@ -19,18 +31,27 @@ function Hero(props) {
             TRASE in 2’
           </div>
         </div>
-        <div className="layover">
-          <div className="dummy-box">
-            box
+        {story &&
+          <div className="layover">
+            <StoryBox {...story} />
           </div>
-        </div>
+        }
+        {tweets &&
+          <div className="layover">
+            <TwitterFeed tweets={tweets} />
+          </div>
+        }
       </div>
     </div>
   );
 }
 
 Hero.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  closeStoryBox: PropTypes.func,
+  visitStory: PropTypes.func,
+  story: PropTypes.object,
+  tweets: PropTypes.array
 };
 
 export default Hero;

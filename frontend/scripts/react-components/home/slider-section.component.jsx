@@ -9,8 +9,7 @@ class SliderSection extends React.PureComponent {
     switch (true) {
       case (window.innerWidth < 640): return 1;
       case (window.innerWidth < 950): return 2;
-      case (window.innerWidth < 1515): return 3;
-      default: return 4;
+      default: return 3;
     }
   }
 
@@ -45,58 +44,60 @@ class SliderSection extends React.PureComponent {
     const { perPage } = this.state;
     return (
       <div className={cx('c-slider-section', className)}>
-        <h3 className="home-subtitle">{name}</h3>
-        <div className="slider-wrapper">
-          <Siema
-            perPage={perPage}
-            draggable={false}
-            loop={false}
-            ref={this.getSliderRef}
-          >
-            {
-              slides
-                .map(slide => (
-                  <div key={slide.title || slide.quote} className="slide">
-                    {slide.image ?
-                      <React.Fragment>
-                        <figure
-                          className="slide-image"
-                          style={{ backgroundImage: `url(${slide.image})` }}
-                        />
-                        <figcaption className="slide-content">
-                          <h4 className="home-subtitle">{slide.category}</h4>
-                          <p className="slide-title">{slide.title}</p>
-                        </figcaption>
-                      </React.Fragment>
-                      :
-                      <React.Fragment>
-                        <div className="slide-quote">
-                          <p
-                            className="slide-quote-content"
-                            dangerouslySetInnerHTML={{ __html: `&ldquo;${slide.quote}&rdquo;` }}
+        <div className="row column">
+          <h3 className="home-subtitle">{name}</h3>
+          <div className="slider-wrapper">
+            <Siema
+              perPage={perPage}
+              draggable={false}
+              loop={false}
+              ref={this.getSliderRef}
+            >
+              {
+                slides
+                  .map(slide => (
+                    <div key={slide.title || slide.quote} className="slide">
+                      {slide.image ?
+                        <React.Fragment>
+                          <figure
+                            className="slide-image"
+                            style={{ backgroundImage: `url(${slide.image})` }}
                           />
-                          <div className="slide-quote-author">
-                            <figcaption className="quote-author-details">
-                              {slide.quoteAuthor}
-                            </figcaption>
-                            <figure
-                              className="quote-author-avatar"
-                              style={{ backgroundImage: slide.quoteAvatar && `url(${slide.quoteAvatar})` }}
+                          <figcaption className="slide-content">
+                            <h4 className="home-subtitle">{slide.category}</h4>
+                            <p className="slide-title">{slide.title}</p>
+                          </figcaption>
+                        </React.Fragment>
+                        :
+                        <React.Fragment>
+                          <div className="slide-quote">
+                            <p
+                              className="slide-quote-content"
+                              dangerouslySetInnerHTML={{ __html: `&ldquo;${slide.quote}&rdquo;` }}
                             />
+                            <div className="c-author-footer">
+                              <figcaption className="author-details">
+                                {slide.quoteAuthor}
+                              </figcaption>
+                              <figure
+                                className="author-avatar"
+                                style={{ backgroundImage: slide.quoteAvatar && `url(${slide.quoteAvatar})` }}
+                              />
+                            </div>
                           </div>
-                        </div>
-                      </React.Fragment>
-                    }
-                  </div>
-                ))
+                        </React.Fragment>
+                      }
+                    </div>
+                  ))
+              }
+            </Siema>
+            {this.state.currentSlide > 0 &&
+              <button className="slide-prev" onClick={this.onClickPrev} />
             }
-          </Siema>
-          {this.state.currentSlide > 0 &&
-            <button className="slide-prev" onClick={this.onClickPrev} />
-          }
-          {this.state.currentSlide < (slides.length - perPage) &&
-            <button className="slide-next" onClick={this.onClickNext} />
-          }
+            {this.state.currentSlide < (slides.length - perPage) &&
+              <button className="slide-next" onClick={this.onClickNext} />
+            }
+          </div>
         </div>
       </div>
     );

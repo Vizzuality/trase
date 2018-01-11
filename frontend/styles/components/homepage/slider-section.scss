@@ -1,5 +1,5 @@
 .c-slider-section {
-  padding: 100px 0 0 60px;
+  padding: 100px 0 0;
   overflow: hidden;
 
   &:first-child {
@@ -21,6 +21,11 @@
   position: relative;
   height: 410px;
   width: calc(100% - 60px);
+  padding-left: 20px;
+
+  @media only screen and (min-width: 1090px) {
+    padding-left: 0;
+  }
 
   > div {
     display: block;
@@ -136,39 +141,6 @@
 
       > a {
         font-weight: 400;
-      }
-    }
-
-    .slide-quote-author {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      height: 40px;
-      width: 100%;
-
-      .quote-author-details {
-        color: $charcoal-grey-faded;
-        font-family: $font-family-1;
-        font-size: 13px;
-        letter-spacing: -0.8px;
-        text-align: right;
-        text-transform: uppercase;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        display: block;
-        overflow: hidden;
-      }
-
-      .quote-author-avatar {
-        flex-shrink: 0;
-        margin: 0 0 0 10px;
-        width: 40px;
-        height: 40px;
-        border-radius: 100%;
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-color: darken($light-gray, 12%);
       }
     }
   }

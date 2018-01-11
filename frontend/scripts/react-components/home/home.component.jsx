@@ -9,14 +9,19 @@ const slides = Array(12)
   .fill(0)
   .map((zero, index) => ({ image: false, quote: `Lorem Ipsum${index}` }));
 
+// const story = {
+//   title: 'Our 2017 data analysis yearbook was just released!',
+//   image: 'images/mocks/one.jpg'
+// };
+
 function Home(props) {
-  const { message, onSubmitNewsletter, tweets, posts } = props;
+  const { message, onSubmitNewsletter, tweets, posts, testimonials } = props;
   return (
     <div className="c-homepage">
-      <Hero />
+      <Hero tweets={tweets} />
       <div className="splitted">
         <div className="row">
-          <div className="column small-12 medium-6 splitted-column">
+          <div className="column small-12 medium-6">
             <Link to={{ type: 'profiles' }} className="splitted-column-wrapper">
               <h3 className="home-subtitle">Profile</h3>
               <p className="splitted-text">Can companies and governments meet their 2020 sustainability goals?</p>
@@ -38,7 +43,7 @@ function Home(props) {
       <div className="sliders">
         <SliderSection name="News and Insights" slides={slides} />
         <SliderSection name="Features" slides={posts} />
-        <SliderSection className="-small" name="Testimonials" slides={tweets} />
+        <SliderSection className="-small" name="Testimonials" slides={testimonials} />
       </div>
       <NewsletterForm message={message} submitForm={onSubmitNewsletter} />
     </div>
@@ -46,6 +51,7 @@ function Home(props) {
 }
 
 Home.propTypes = {
+  testimonials: PropTypes.array,
   tweets: PropTypes.array,
   posts: PropTypes.array,
   message: PropTypes.string,

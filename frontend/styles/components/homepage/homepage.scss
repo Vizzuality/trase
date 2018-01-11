@@ -63,26 +63,26 @@
       @media only screen and (min-width: $breakpoint-foundation-small) {
         height: 100%;
       }
+
+      @media only screen and (min-width: 1140px) {
+        &:first-child .splitted-column-wrapper {
+          padding-left: 0;
+        }
+
+        &:last-child .splitted-column-wrapper {
+          padding-right: 0;
+        }
+      }
     }
 
     .splitted-column-wrapper {
       display: block;
       height: 100%;
       width: 100%;
-      padding: 42px 16px 0;
+      padding: 42px 0 0;
 
       @media only screen and (min-width: $breakpoint-foundation-small) {
         padding: 42px 16px;
-      }
-
-      @media only screen and (min-width: 1140px) {
-        &:first-child {
-          padding-left: 0;
-        }
-
-        &:last-child {
-          padding-right: 0;
-        }
       }
     }
 
