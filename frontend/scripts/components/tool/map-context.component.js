@@ -17,6 +17,8 @@ export default class {
       this.el.classList.add('is-hidden');
     }
 
+    this.callbacks.onMapDimensionsLoaded();
+
     this.switchers = Array.prototype.slice.call(this.items.querySelectorAll('.c-switcher'), 0);
 
     this.switchers.forEach((switcher) => {

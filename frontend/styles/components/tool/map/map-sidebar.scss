@@ -94,13 +94,7 @@
       }
 
       .actions {
-        // flex: 0 0 40px;
         display: flex;
-        // align-items: center;
-        // justify-content: space-between;
-        svg {
-          margin-right: 6px;
-        }
       }
 
       .c-tooltip {
@@ -171,6 +165,14 @@
               display: none;
             }
           }
+        }
+      }
+    }
+
+    .map-choropeth-layer-item {
+      .actions {
+        .icon-layer-info {
+          margin-right: 6px;
         }
       }
     }

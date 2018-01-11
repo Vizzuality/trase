@@ -223,11 +223,6 @@ export function loadNodes() {
 
       dispatch(setMapContextLayers(payload.mapDimensionsMetaJSON.contextualLayers));
 
-      // dispatch({
-      //   type: actions.GET_CONTEXT_LAYERS,
-      //   mapContextualLayers: payload.mapDimensionsMetaJSON.contextualLayers
-      // });
-
       dispatch({
         type: actions.GET_NODE_ATTRIBUTES, payload
       });
