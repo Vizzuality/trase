@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Get importer node attributes', type: :request do
+RSpec.describe 'Importer profile', type: :request do
   include_context 'api v3 brazil importer quant values'
   include_context 'api v3 brazil importer qual values'
   include_context 'api v3 brazil importer ind values'
@@ -10,7 +10,7 @@ RSpec.describe 'Get importer node attributes', type: :request do
   include_context 'api v3 brazil flows'
   include_context 'api v3 brazil flows quants'
 
-  describe 'GET /api/v3/contexts/:context_id/nodes/:node_id/actor' do
+  describe 'GET /api/v3/contexts/:context_id/nodes/:id/actor' do
     it 'validates node types' do
       expect { get "/api/v3/contexts/#{api_v3_context.id}/nodes/#{api_v3_country_of_destination1_node.id}/actor" }.to raise_error(ActiveRecord::RecordNotFound)
       expect { get "/api/v3/contexts/#{api_v3_context.id}/nodes/#{api_v3_port1_node.id}/actor" }.to raise_error(ActiveRecord::RecordNotFound)
@@ -20,10 +20,6 @@ RSpec.describe 'Get importer node attributes', type: :request do
       expect { get "/api/v3/contexts/#{api_v3_context.id}/nodes/#{api_v3_state_node.id}/actor" }.to raise_error(ActiveRecord::RecordNotFound)
 
       expect { get "/api/v3/contexts/#{api_v3_context.id}/nodes/#{api_v3_importer1_node.id}/actor" }.to_not raise_error
-    end
-
-    it 'returns 404 on non-existent context_id' do
-      expect { get "/api/v3/contexts/#{api_v3_context.id - 100}/nodes/#{api_v3_importer1_node.id}/actor" }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it 'has the correct response structure' do

@@ -1,27 +1,71 @@
 shared_context 'api v3 brazil two flows' do
   include_context 'api v3 brazil soy nodes'
-  include_context 'api v3 brazil soy indicators'
+  include_context 'api v3 brazil download attributes'
 
   let(:api_v3_exporter2_node) do
-    FactoryBot.create(
-      :api_v3_node, name: 'AFG BRASIL 2', node_type: api_v3_exporter_node_type
-    )
+    node = Api::V3::Node.where(
+      name: 'AFG BRASIL 2', node_type_id: api_v3_exporter_node_type.id
+    ).first
+    unless node
+      node = FactoryBot.create(
+        :api_v3_node, name: 'AFG BRASIL 2', node_type: api_v3_exporter_node_type
+      )
+      FactoryBot.create(
+        :api_v3_node_property,
+        node: node
+      )
+    end
+    node
   end
+
   let(:api_v3_port2_node) do
-    FactoryBot.create(
-      :api_v3_node, name: 'PARANAGUA', node_type: api_v3_port_node_type
-    )
+    node = Api::V3::Node.where(
+      name: 'PARANAGUA', node_type_id: api_v3_port_node_type.id
+    ).first
+    unless node
+      node = FactoryBot.create(
+        :api_v3_node, name: 'PARANAGUA', node_type: api_v3_port_node_type
+      )
+      FactoryBot.create(
+        :api_v3_node_property,
+        node: node
+      )
+    end
+    node
   end
+
   let(:api_v3_importer2_node) do
-    FactoryBot.create(
-      :api_v3_node, name: 'CHINATEX GRAINS & OILS IMP EXP CO', node_type: api_v3_importer_node_type
-    )
+    node = Api::V3::Node.where(
+      name: 'CHINATEX GRAINS & OILS IMP EXP CO', node_type_id: api_v3_importer_node_type.id
+    ).first
+    unless node
+      node = FactoryBot.create(
+        :api_v3_node, name: 'CHINATEX GRAINS & OILS IMP EXP CO', node_type: api_v3_importer_node_type
+      )
+      FactoryBot.create(
+        :api_v3_node_property,
+        node: node
+      )
+    end
+    node
   end
+
   let(:api_v3_country_of_destination2_node) do
-    FactoryBot.create(
-      :api_v3_node, name: 'CHINA', node_type: api_v3_country_node_type
-    )
+    node = Api::V3::Node.where(
+      name: 'CHINA', node_type_id: api_v3_country_node_type.id
+    ).first
+    unless node
+      node = FactoryBot.create(
+        :api_v3_node, name: 'CHINA', node_type: api_v3_country_node_type
+      )
+      FactoryBot.create(
+        :api_v3_node_property,
+        node: node
+      )
+    end
+    node
   end
+
   let!(:api_v3_flow1) do
     FactoryBot.create(
       :api_v3_flow,
