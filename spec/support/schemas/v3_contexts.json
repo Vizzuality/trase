@@ -33,18 +33,6 @@
               "null"
             ]
           },
-          "defaultContextLayers": {
-            "id": "/properties/data/items/properties/defaultContextLayers",
-            "items": {
-              "id": "/properties/data/items/properties/defaultContextLayers/items",
-              "type": "string"
-            },
-            "minItems": 1,
-            "type": [
-              "array",
-              "null"
-            ]
-          },
           "defaultYear": {
             "id": "/properties/data/items/properties/defaultYear",
             "type": "integer"
@@ -296,7 +284,6 @@
           "years",
           "countryName",
           "filterBy",
-          "defaultContextLayers",
           "commodityName",
           "resizeBy",
           "id",

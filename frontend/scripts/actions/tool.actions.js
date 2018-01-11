@@ -228,6 +228,13 @@ export function loadNodes() {
         }
       });
 
+      this.dispatch(loadMapContextLayers(payload.mapDimensionsMetaJSON.contextualLayers));
+
+      // dispatch({
+      //   type: actions.GET_CONTEXT_LAYERS,
+      //   mapContextualLayers: payload.mapDimensionsMetaJSON.contextualLayers
+      // });
+
       dispatch({
         type: actions.GET_NODE_ATTRIBUTES, payload
       });
@@ -414,9 +421,10 @@ export function resetContextLayers() {
   };
 }
 
-export function loadMapContextLayers() {
+export function loadMapContextLayers(contextualLayers) {
   return (dispatch, getState) => {
-    const mapContextualLayers = CONTEXT_LAYERS.map((layer) => {
+    // const mapContextualLayers = CONTEXT_LAYERS.map((layer) => {
+    const mapContextualLayers = contextualLayers.map((layer) => {
       const contextLayer = Object.assign({}, layer);
       if (!layer.rasterURL) {
         const carto = contextLayersCarto[layer.id];

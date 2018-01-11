@@ -1,0 +1,309 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "properties": {
+    "dimensionGroups": {
+      "$id": "/properties/dimensionGroups",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$id": "/properties/dimensionGroups/items",
+        "type": "object",
+        "properties": {
+          "id": {
+            "$id": "/properties/dimensionGroups/items/properties/id",
+            "type": "integer",
+            "title": "The Id Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+              3
+            ]
+          },
+          "name": {
+            "$id": "/properties/dimensionGroups/items/properties/name",
+            "type": "string",
+            "title": "The Name Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "Agricultural indicators"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      }
+    },
+    "dimensions": {
+      "$id": "/properties/dimensions",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$id": "/properties/dimensions/items",
+        "type": "object",
+        "properties": {
+          "id": {
+            "$id": "/properties/dimensions/items/properties/id",
+            "type": "integer",
+            "title": "The Id Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+              1811
+            ]
+          },
+          "name": {
+            "$id": "/properties/dimensions/items/properties/name",
+            "type": "string",
+            "title": "The Name Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "Production of soy"
+            ]
+          },
+          "type": {
+            "$id": "/properties/dimensions/items/properties/type",
+            "type": "string",
+            "title": "The Type Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "quant"
+            ]
+          },
+          "bucket3": {
+            "$id": "/properties/dimensions/items/properties/bucket3",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$id": "/properties/dimensions/items/properties/bucket3/items",
+              "type": "integer",
+              "title": "The 0 Schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                100000
+              ]
+            }
+          },
+          "bucket5": {
+            "$id": "/properties/dimensions/items/properties/bucket5",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$id": "/properties/dimensions/items/properties/bucket5/items",
+              "type": "integer",
+              "title": "The 0 Schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                5000
+              ]
+            }
+          },
+          "groupId": {
+            "$id": "/properties/dimensions/items/properties/groupId",
+            "type": "integer",
+            "title": "The Groupid Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+              3
+            ]
+          },
+          "unit": {
+            "$id": "/properties/dimensions/items/properties/unit",
+            "type": "string",
+            "title": "The Unit Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "Tn"
+            ]
+          },
+          "isDefault": {
+            "$id": "/properties/dimensions/items/properties/isDefault",
+            "type": "boolean",
+            "title": "The Isdefault Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": false,
+            "examples": [
+              false
+            ]
+          },
+          "layerAttributeId": {
+            "$id": "/properties/dimensions/items/properties/layerAttributeId",
+            "type": "integer",
+            "title": "The Layerattributeid Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+              34
+            ]
+          },
+          "description": {
+            "$id": "/properties/dimensions/items/properties/description",
+            "type": "string",
+            "title": "The Description Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "Production of soy in Tn."
+            ]
+          },
+          "colorScale": {
+            "$id": "/properties/dimensions/items/properties/colorScale",
+            "type": "string",
+            "title": "The Colorscale Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "blue"
+            ]
+          },
+          "years": {
+            "$id": "/properties/dimensions/items/properties/years",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$id": "/properties/dimensions/items/properties/years/items",
+              "type": "integer",
+              "title": "The 0 Schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                1990
+              ]
+            }
+          },
+          "aggregateMethod": {
+            "$id": "/properties/dimensions/items/properties/aggregateMethod",
+            "type": "string",
+            "title": "The Aggregatemethod Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "SUM"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "bucket3",
+          "bucket5",
+          "groupId",
+          "unit",
+          "isDefault",
+          "layerAttributeId",
+          "description",
+          "colorScale",
+          "years",
+          "aggregateMethod"
+        ]
+      }
+    },
+    "contextualLayers": {
+      "$id": "/properties/contextualLayers",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$id": "/properties/contextualLayers/items",
+        "type": "object",
+        "properties": {
+          "id": {
+            "$id": "/properties/contextualLayers/items/properties/id",
+            "type": "integer",
+            "title": "The Id Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+              10
+            ]
+          },
+          "title": {
+            "$id": "/properties/contextualLayers/items/properties/title",
+            "type": "string",
+            "title": "The Title Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "Land cover"
+            ]
+          },
+          "identifier": {
+            "$id": "/properties/contextualLayers/items/properties/identifier",
+            "type": "string",
+            "title": "The Identifier Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "landcover"
+            ]
+          },
+          "tooltipText": {
+            "$id": "/properties/contextualLayers/items/properties/tooltipText",
+            "type": "null",
+            "title": "The Tooltiptext Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": null,
+            "examples": [
+              null
+            ]
+          },
+          "isDefault": {
+            "$id": "/properties/contextualLayers/items/properties/isDefault",
+            "type": "boolean",
+            "title": "The Isdefault Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": false,
+            "examples": [
+              false
+            ]
+          },
+          "legend": {
+            "$id": "/properties/contextualLayers/items/properties/legend",
+            "type": "string",
+            "title": "The Legend Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "<div class='cartodb-legend custom'><ul class='bullets'><li><div class='bullet' style='background:#008156'></div>Forest</li><li><div class='bullet' style='background:#556B2F'></div>Forest plantations</li><li><div class='bullet' style='background:#E1E196'></div>Pastures</li><li><div class='bullet' style='background:#E1A500'></div>Agriculture</li><li><div class='bullet' style='background:#00FFFF'></div>Coastal forest</li><li><div class='bullet' style='background:#00AFFF'></div>Water</li><li><div class='bullet' style='background:#F5F5F3'></div>Other vegetation</li><li><div class='bullet' style='background:#3E3F40'></div>Not observed</li></ul></div>"
+            ]
+          },
+          "rasterUrl": {
+            "$id": "/properties/contextualLayers/items/properties/rasterUrl",
+            "type": "string",
+            "title": "The Rasterurl Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "https://s3-eu-west-1.amazonaws.com/lulc/landcover_brazil_2015/"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "identifier",
+          "tooltipText",
+          "isDefault",
+          "legend",
+          "rasterUrl"
+        ]
+      }
+    }
+  },
+  "required": [
+    "dimensionGroups",
+    "dimensions",
+    "contextualLayers"
+  ]
+}
