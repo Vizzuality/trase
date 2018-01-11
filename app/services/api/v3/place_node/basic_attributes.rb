@@ -2,43 +2,45 @@ module Api
   module V3
     module PlaceNode
       class BasicAttributes
-        attr_reader :column_name, :country_name, :country_geo_id,
-                    :municipality_name, :municipality_geo_id,
-                    :logistics_hub_name, :logistics_hub_geo_id,
-                    :state_name, :state_geo_id,
-                    :biome_name, :biome_geo_id,
-                    :area, :soy_production, :soy_farmland
+        attr_reader :attributes
 
         def initialize(context, year, node)
           @context = context
           @year = year
           @node = node
+          @node_type_name = @node&.node_type&.name
           @place_quals = Dictionary::PlaceQuals.new(@node, @year)
           @place_quants = Dictionary::PlaceQuants.new(@node, @year)
           @place_inds = Dictionary::PlaceInds.new(@node, @year)
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
+          raise 'Quant Volume not found' unless @volume_attribute.present?
           @soy_production_attribute = Dictionary::Quant.instance.get('SOY_TN')
+          raise 'Quant SOY_TN not found' unless @soy_production_attribute.present?
 
-          @node_type_name = @node&.node_type&.name
-          @column_name = @node_type_name
-          @country_name = @context&.country&.name
-          @country_geo_id = @context&.country&.iso2
+          @attributes = {
+            column_name: @node_type_name,
+            country_name: @context&.country&.name,
+            country_geo_id: @context&.country&.iso2
+          }
 
           if municipality? || logistics_hub?
-            initialize_municipality_and_logistics_hub_attributes
+            @attributes = @attributes.merge(
+              initialize_municipality_and_logistics_hub_attributes
+            ).merge(
+              initialize_soy_attributes
+            )
           end
-          initialize_dynamic_attributes
+          @attributes = @attributes.merge initialize_dynamic_attributes
           initialize_top_nodes
+          @attributes[:summary] = summary
         end
 
-        NodeType::PLACES.each do |place_name|
-          define_method("#{place_name.split.join('_').downcase}?") do
-            @node_type_name == place_name
-          end
+        def municipality?
+          @node_type_name == NodeTypeName::MUNICIPALITY
         end
 
-        def soy_area
-          @soy_area_formatted
+        def logistics_hub?
+          @node_type_name == NodeTypeName::LOGISTICS_HUB
         end
 
         def summary
@@ -55,33 +57,39 @@ of #{@soy_area_formatted} #{@soy_area_unit} of land."
         private
 
         def initialize_dynamic_attributes
-          @dynamic_attributes = {}
-          @dynamic_attributes[
+          dynamic_attributes = {}
+          dynamic_attributes[
             (@node_type_name.split.join('_').downcase + '_name').to_sym
           ] = @node.name
-          @dynamic_attributes[
+          dynamic_attributes[
             (@node_type_name.split.join('_').downcase + '_geo_id').to_sym
           ] = @node.geo_id
-          @dynamic_attributes.each do |name, value|
-            instance_variable_set("@#{name}", value)
-          end
+          dynamic_attributes
         end
 
         def initialize_municipality_and_logistics_hub_attributes
+          attributes = {}
           biome_qual = @place_quals.get(NodeTypeName::BIOME)
-          @biome_name = biome_qual && biome_qual['value']
-          @biome = Api::V3::Node.biomes.find_by_name(biome_name)
-          @biome_geo_id = @biome&.geo_id
+          biome_name = biome_qual && biome_qual['value']
+          if biome_name
+            @biome = Api::V3::Node.biomes.find_by_name(biome_name)
+            attributes[:biome_name] = biome_name
+            attributes[:biome_geo_id] = @biome.geo_id if @biome
+          end
           state_qual = @place_quals.get(NodeTypeName::STATE)
-          @state_name = state_qual && state_qual['value']
-          @state = Api::V3::Node.states.find_by_name(state_name)
-          @state_geo_id = @state&.geo_id
-          initialize_soy_attributes
+          state_name = state_qual && state_qual['value']
+          if state_name
+            @state = Api::V3::Node.states.find_by_name(state_name)
+            attributes[:state_name] = state_name
+            attributes[:state_geo_id] = @state.geo_id if @state
+          end
+          attributes
         end
 
         def initialize_soy_attributes
+          soy_attributes = {}
           area_quant = @place_quants.get('AREA_KM2')
-          @area = area_quant['value'] if area_quant
+          soy_attributes[:area] = area_quant['value'] if area_quant
           soy_production_quant = @place_quants.get('SOY_TN')
           if soy_production_quant
             @soy_production = soy_production_quant['value']
@@ -89,6 +97,7 @@ of #{@soy_area_formatted} #{@soy_area_unit} of land."
               @soy_production, delimiter: ',', precision: 0
             )
             @soy_production_unit = soy_production_quant['unit']
+            soy_attributes[:soy_production] = @soy_production
           end
           soy_yield_ind = @place_inds.get('SOY_YIELD')
           @soy_yield = soy_yield_ind['value'] if soy_yield_ind
@@ -98,9 +107,13 @@ of #{@soy_area_formatted} #{@soy_area_unit} of land."
               delimiter: ',', precision: 0
             )
             @soy_area_unit = 'Ha' # soy prod in Tn, soy yield in Tn/Ha
+            soy_attributes[:soy_area] = @soy_area_formatted
           end
           soy_farmland_ind = @place_inds.get('SOY_AREAPERC')
-          @soy_farmland = soy_farmland_ind['value'] if soy_farmland_ind
+          if soy_farmland_ind
+            soy_attributes[:soy_farmland] = soy_farmland_ind['value']
+          end
+          soy_attributes
         end
 
         def initialize_top_nodes

@@ -7,7 +7,9 @@ module Api
           @year = year
           @node = node
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
+          raise 'Quant Volume not found' unless @volume_attribute.present?
           @soy_production_attribute = Dictionary::Quant.instance.get('SOY_TN')
+          raise 'Quant SOY_TN not found' unless @soy_production_attribute.present?
           initialize_top_places(@soy_production_attribute)
         end
 

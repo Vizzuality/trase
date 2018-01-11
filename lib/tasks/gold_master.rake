@@ -21,7 +21,7 @@ namespace :gold_master do
   end
 
   desc 'Run gold master tests'
-  task test: [:extract_gold_master, :cleanup_actual, :compare_csv, :compare_json]
+  task test: [:extract_gold_master, :cleanup_actual, :compare_csv, :compare_json, :cleanup_gold_master]
 
   task extract_gold_master: [:environment] do
     Zipfile.unzip_archive(gold_master_archive, gold_master_dir)
@@ -64,6 +64,10 @@ namespace :gold_master do
     FileUtils.rm_rf(actual_dir)
   end
 
+  task cleanup_gold_master: [:environment] do
+    cleanup_gold_master
+  end
+
   def compare(format, compressed = false)
     endpoints[format].each do |endpoint|
       next unless endpoint['v3_ready'] # eliminate those not ready to test
@@ -84,7 +88,6 @@ namespace :gold_master do
         end
       end
     end
-    cleanup_gold_master
   end
 
   def endpoints
