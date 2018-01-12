@@ -3,11 +3,8 @@ import DataMethodsMarkup from 'html/data-methods.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
 import FooterMarkup from 'html/includes/_footer.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
-
-
 import NavContainer from 'containers/shared/nav.container';
 import 'styles/data-methods.scss';
-
 import smoothScroll from 'utils/smoothScroll';
 import { calculateOffsets, scrollDocument } from 'utils/fixedScroll';
 import _ from 'lodash';

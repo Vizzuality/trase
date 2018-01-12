@@ -3,8 +3,10 @@ import {
   POST_SUBSCRIBE_NEWSLETTER
 } from 'utils/getURLFromParams';
 import SelectorItemsTemplate from 'templates/data/selector-items.ejs';
-import BulkDownloadTemplate from 'templates/data/bulk-download.ejs';
 import _ from 'lodash';
+import BulkDownloadsBlock from 'react-components/data/bulk-downloads-block.component';
+import React from 'react';
+import { render } from 'react-dom';
 
 export default class {
   onCreated() {
@@ -39,7 +41,7 @@ export default class {
     this.selectorOutputType = this.el.querySelector('.js-custom-dataset-selector-output-type');
     this.selectorFormatting = this.el.querySelector('.js-custom-dataset-selector-formatting');
     this.selectorFile = this.el.querySelector('.js-custom-dataset-selector-file');
-    this.bulkDownloadsSection = document.querySelector('.c-bulk-downloads');
+    this.bulkDownloadsSection = document.querySelector('.c-bulk-downloads-container');
     this.formContainer = document.querySelector('.js-form-container');
     this.formSubmitButton = document.querySelector('.js-form-submit');
     this.form = document.querySelector('.js-form');
@@ -61,24 +63,22 @@ export default class {
       noSelfCancel: true
     }));
 
-    this.bulkDownloadsSection.querySelector('.row').innerHTML = BulkDownloadTemplate({
-      contexts: enabledContexts
-    });
-
-    if (DATA_DOWNLOAD_ENABLED) {
-      this.bulkDownloadsSection.querySelectorAll('.c-bulk-downloads__item').forEach((elem) => {
-        elem.classList.remove('-disabled');
-        elem.addEventListener('click', () => {
-          this.currentDownloadParams = { context_id: elem.getAttribute('data-value'), pivot: 1 };
+    render(
+      <BulkDownloadsBlock
+        contexts={enabledContexts}
+        enabled={DATA_DOWNLOAD_ENABLED}
+        onButtonClicked={(contextId) => {
+          this.currentDownloadParams = { context_id: contextId, pivot: 1 };
           this.currentDownloadType = 'bulk';
           if (DATA_FORM_ENABLED) {
             this._showForm();
           } else {
             this._downloadFile();
           }
-        });
-      });
-    }
+        }}
+      />,
+      this.bulkDownloadsSection
+    );
 
     this.selectorCountries.querySelector('.js-custom-dataset-selector-values').innerHTML = SelectorItemsTemplate({
       items

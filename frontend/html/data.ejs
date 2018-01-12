@@ -1,259 +1,278 @@
- <div class="loading-wrapper">
+<div class="loading-wrapper">
   <%= nav %>
-    <div class="l-data">
-      <% if (DATA_DOWNLOAD_ENABLED === false) { %>
-      <div>
-        <div class="veil -below-nav"></div>
-        <div class="c-modal -below-nav">
-          <div class="content -big">
-            Thank you for your interest in downloading data from trase.earth! Trase is committed to making the data available on the platform publicly available for anyone to access and use. The data portal is currently disactivated whilst we put some finishing touches to its development. We plan to make it live before the end of August, when we will also be releasing the next version of the supply chain map for Brazilian soy exports, covering 2010-2016. <!-- Please do <a href="./#newsletter">subscribe to our newsletter</a> on the home page if you are interested in receiving updates about the development of Trase.-->
-          </div>
+  <div class="l-data">
+    <% if (DATA_DOWNLOAD_ENABLED === false) { %>
+    <div>
+      <div class="veil -below-nav"></div>
+      <div class="c-modal -below-nav">
+        <div class="content -big">
+          Thank you for your interest in downloading data from trase.earth! Trase is committed to making the data
+          available on the platform publicly available for anyone to access and use. The data portal is currently
+          disactivated whilst we put some finishing touches to its development. We plan to make it live before the end
+          of August, when we will also be releasing the next version of the supply chain map for Brazilian soy exports,
+          covering 2010-2016.
+          <!-- Please do <a href="./#newsletter">subscribe to our newsletter</a> on the home page if you are interested in receiving updates about the development of Trase.-->
         </div>
       </div>
-      <% } %>
-      <div class="is-hidden js-form-container">
-        <div class="veil -below-nav js-form-veil"></div>
-        <div class="c-modal -below-nav">
-          <div class="content -white -big-margin">
-            <form class="js-form c-download-form">
-              <p class="description">Thank you for your interest in downloading data from Trase! To help us better understand how the data is currently being used and to improve the platform, we would appreciate if you could tell us a bit about yourself and your work.</p>
-              <p class="missing js-missing is-hidden">We'd love to hear about how you use the data and how we could improve it. Please fill in details below and click on 'submit':</p>
-              <label for="name">
-                Name:
-                <input type="text" placeholder="type name" id="name">
-              </label>
+    </div>
+    <% } %>
+    <div class="is-hidden js-form-container">
+      <div class="veil -below-nav js-form-veil"></div>
+      <div class="c-modal -below-nav">
+        <div class="content -white -big-margin">
+          <form class="js-form c-download-form">
+            <p class="description">Thank you for your interest in downloading data from Trase! To help us better
+              understand how the data is currently being used and to improve the platform, we would appreciate if you
+              could tell us a bit about yourself and your work.</p>
+            <p class="missing js-missing is-hidden">We'd love to hear about how you use the data and how we could
+              improve it. Please fill in details below and click on 'submit':</p>
+            <label for="name">
+              Name:
+              <input type="text" placeholder="type name" id="name">
+            </label>
 
-              <label for="country">
-                Country:
-                <input type="text" placeholder="select or type country..." id="country" list="countriesList">
-                <datalist id="countriesList">
-                  <%= autocomplete_countries %>
-                </datalist>
-              </label>
+            <label for="country">
+              Country:
+              <input type="text" placeholder="select or type country..." id="country" list="countriesList">
+              <datalist id="countriesList">
+                <%= autocomplete_countries %>
+              </datalist>
+            </label>
 
-              <label for="organisation">
-                Organisation name:
-                <input type="text" placeholder="type organisation name" id="organisation">
-              </label>
+            <label for="organisation">
+              Organisation name:
+              <input type="text" placeholder="type organisation name" id="organisation">
+            </label>
 
-              <label for="organisationType">
-                Select or type the option that best describes your organisation:
-                <input type="text" placeholder="select or type..." id="organisationType" list="organisationTypeList">
-                <datalist id="organisationTypeList">
-                  <option>Company</option>
-                  <option>Financial institution</option>
-                  <option>Government agency</option>
-                  <option>Media</option>
-                  <option>Research organisation</option>
-                </datalist>
-              </label>
+            <label for="organisationType">
+              Select or type the option that best describes your organisation:
+              <input type="text" placeholder="select or type..." id="organisationType" list="organisationTypeList">
+              <datalist id="organisationTypeList">
+                <option>Company</option>
+                <option>Financial institution</option>
+                <option>Government agency</option>
+                <option>Media</option>
+                <option>Research organisation</option>
+              </datalist>
+            </label>
 
-              <label for="dataUse">
-                How will you use the data?
-                <input type="text" placeholder="select or type..." id="dataUse" list="dataUseList">
-                <datalist id="dataUseList">
-                  <option>Decision support</option>
-                  <option>Media and outreach</option>
-                  <option>Research</option>
-                </datalist>
-              </label>
+            <label for="dataUse">
+              How will you use the data?
+              <input type="text" placeholder="select or type..." id="dataUse" list="dataUseList">
+              <datalist id="dataUseList">
+                <option>Decision support</option>
+                <option>Media and outreach</option>
+                <option>Research</option>
+              </datalist>
+            </label>
 
-              <label for="comments">
-                Please tell us more about your work and if you are interested in helping improve Trase:
-                <input type="text" placeholder="type comments" id="comments">
-              </label>
+            <label for="comments">
+              Please tell us more about your work and if you are interested in helping improve Trase:
+              <input type="text" placeholder="type comments" id="comments">
+            </label>
 
-              <label for="email">
-                If you would like to sign up for the Trase quarterly newsletter, please provide your email address:
-                <input type="email" placeholder="type email" id="email">
-              </label>
+            <label for="email">
+              If you would like to sign up for the Trase quarterly newsletter, please provide your email address:
+              <input type="email" placeholder="type email" id="email">
+            </label>
 
-              <p class="tos js-tos">
-                <label for="tos_check">
-                  <input type="checkbox" id="tos_check">
-                  * I agree to the <a target="_blank" href="http://trase.earth/terms-of-use">Terms of use</a> (required field).
-                </label>
-              </p>
-              <label class="submit">
-                <div class="download-button js-form-submit">
-                  <div class="form-submit-download">
-                    <svg class="icon icon-download"><use xlink:href="#icon-download"></use></svg>
-                    download data
-                  </div>
-                  <div class="form-submit-submit">
-                    Submit
+            <p class="tos js-tos">
+              <label for="tos_check">
+                <input type="checkbox" id="tos_check">
+                * I agree to the <a target="_blank" href="http://trase.earth/terms-of-use">Terms of use</a> (required
+                field).
+              </label>
+            </p>
+            <label class="submit">
+              <div class="download-button js-form-submit">
+                <div class="form-submit-download">
+                  <svg class="icon icon-download">
+                    <use xlink:href="#icon-download"></use>
+                  </svg>
+                  download data
+                </div>
+                <div class="form-submit-submit">
+                  Submit
+                </div>
+              </div>
+            </label>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="small-12 columns c-bulk-downloads-container">
+      </div>
+        <div class="c-custom-dataset">
+          <div class="c-custom-dataset__title">CREATE A CUSTOM DATASET</div>
+          <div class="row">
+            <div class="small-9 columns">
+              <div class="row">
+                <div class="small-4 columns js-custom-dataset-selector-countries-container">
+                  <div class="c-custom-dataset-selector js-custom-dataset-selector-countries" data-type="value">
+                    <div class="c-custom-dataset-selector__header">PRODUCTION COUNTRIES</div>
+                    <ul class="c-custom-dataset-selector__values js-custom-dataset-selector-values"></ul>
                   </div>
                 </div>
-              </label>
-
-            </form>
-
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="small-12 columns">
-          <div class="c-bulk-downloads">
-            <div class="c-bulk-downloads__title">BULK DOWNLOADS</div>
-            <div class="row">
-            </div>
-          </div>
-          <div class="c-custom-dataset">
-            <div class="c-custom-dataset__title">CREATE A CUSTOM DATASET</div>
-            <div class="row">
-              <div class="small-9 columns">
-                <div class="row">
-                  <div class="small-4 columns">
-                    <div class="c-custom-dataset-selector js-custom-dataset-selector-countries" data-type="value">
-                      <div class="c-custom-dataset-selector__header">PRODUCTION COUNTRIES</div>
-                      <ul class="c-custom-dataset-selector__values js-custom-dataset-selector-values"></ul>
-                    </div>
+                <div class="small-4 columns js-custom-dataset-selector-commodities-container">
+                  <div class="c-custom-dataset-selector js-custom-dataset-selector-commodities -disabled"
+                       data-type="value" data-disabled-text="Please select first a country">
+                    <div class="c-custom-dataset-selector__header">COMMODITIES</div>
+                    <ul class="c-custom-dataset-selector__values js-custom-dataset-selector-values"></ul>
                   </div>
-                  <div class="small-4 columns">
-                    <div class="c-custom-dataset-selector js-custom-dataset-selector-commodities -disabled" data-type="value" data-disabled-text="Please select first a country">
-                      <div class="c-custom-dataset-selector__header">COMMODITIES</div>
-                      <ul class="c-custom-dataset-selector__values js-custom-dataset-selector-values"></ul>
-                    </div>
-                  </div>
-                  <div class="small-4 columns">
-                    <div class="c-custom-dataset-selector js-custom-dataset-selector-years -disabled" data-type="value" data-disabled-text="Please select first a country and commodity">
-                      <div class="c-custom-dataset-selector__header">
-                        YEARS
-                        <ul class="c-custom-dataset-selector__header-options">
-                          <li>
-                            <div class="c-radio-btn -red" data-group="years-all" value="all"></div>
-                          </li>
-                        </ul>
-                      </div>
-                      <ul class="c-custom-dataset-selector__values js-custom-dataset-selector-values">
+                </div>
+                <div class="small-4 columns">
+                  <div class="c-custom-dataset-selector js-custom-dataset-selector-years -disabled" data-type="value"
+                       data-disabled-text="Please select first a country and commodity">
+                    <div class="c-custom-dataset-selector__header">
+                      YEARS
+                      <ul class="c-custom-dataset-selector__header-options">
                         <li>
-                          2016
-                          <div class="c-radio-btn -red" data-group="years" value="2016"></div>
-                        </li>
-                        <li>
-                          2015
-                          <div class="c-radio-btn -red" data-group="years" value="2015"></div>
-                        </li>
-                        <li>
-                          2014
-                          <div class="c-radio-btn -red -disabled" data-group="years" value="2014"></div>
-                        </li>
-                        <li>
-                          2013
-                          <div class="c-radio-btn -red -disabled" data-group="years" value="2013"></div>
-                        </li>
-                        <li>
-                          2012
-                          <div class="c-radio-btn -red -disabled" data-group="years" value="2012"></div>
-                        </li>
-                        <li>
-                          2011
-                          <div class="c-radio-btn -red -disabled" data-group="years" value="2011"></div>
-                        </li>
-                        <li>
-                          2010
-                          <div class="c-radio-btn -red -disabled" data-group="years" value="2010"></div>
+                          <div class="c-radio-btn -red" data-group="years-all" value="all"></div>
                         </li>
                       </ul>
                     </div>
+                    <ul class="c-custom-dataset-selector__values js-custom-dataset-selector-values">
+                      <li>
+                        2016
+                        <div class="c-radio-btn -red" data-group="years" value="2016"></div>
+                      </li>
+                      <li>
+                        2015
+                        <div class="c-radio-btn -red" data-group="years" value="2015"></div>
+                      </li>
+                      <li>
+                        2014
+                        <div class="c-radio-btn -red -disabled" data-group="years" value="2014"></div>
+                      </li>
+                      <li>
+                        2013
+                        <div class="c-radio-btn -red -disabled" data-group="years" value="2013"></div>
+                      </li>
+                      <li>
+                        2012
+                        <div class="c-radio-btn -red -disabled" data-group="years" value="2012"></div>
+                      </li>
+                      <li>
+                        2011
+                        <div class="c-radio-btn -red -disabled" data-group="years" value="2011"></div>
+                      </li>
+                      <li>
+                        2010
+                        <div class="c-radio-btn -red -disabled" data-group="years" value="2010"></div>
+                      </li>
+                    </ul>
                   </div>
-                  <div class="small-4 columns">
-                    <div class="c-custom-dataset-selector js-custom-dataset-selector-companies -disabled" data-type="value" data-disabled-text="Please select first a country and commodity">
-                      <div class="c-custom-dataset-selector__header">
-                        COMPANIES
-                        <ul class="c-custom-dataset-selector__header-options">
-                          <li>
-                            <div class="c-radio-btn -red" data-group="companies-all" value="all"></div>
-                          </li>
-                        </ul>
-                      </div>
-                      <ul class="c-custom-dataset-selector__values js-custom-dataset-selector-values"></ul>
+                </div>
+                <div class="small-4 columns">
+                  <div class="c-custom-dataset-selector js-custom-dataset-selector-companies -disabled"
+                       data-type="value" data-disabled-text="Please select first a country and commodity">
+                    <div class="c-custom-dataset-selector__header">
+                      COMPANIES
+                      <ul class="c-custom-dataset-selector__header-options">
+                        <li>
+                          <div class="c-radio-btn -red" data-group="companies-all" value="all"></div>
+                        </li>
+                      </ul>
                     </div>
+                    <ul class="c-custom-dataset-selector__values js-custom-dataset-selector-values"></ul>
                   </div>
-                  <div class="small-4 columns">
-                    <div class="c-custom-dataset-selector js-custom-dataset-selector-consumption-countries -disabled" data-type="value" data-disabled-text="Please select first a country and commodity">
-                      <div class="c-custom-dataset-selector__header">
-                        CONSUMPTION COUNTRIES
-                        <ul class="c-custom-dataset-selector__header-options">
-                          <li>
-                            <div class="c-radio-btn -red" data-group="consumption-countries-all" value="all"></div>
-                          </li>
-                        </ul>
-                      </div>
-                      <ul class="c-custom-dataset-selector__values js-custom-dataset-selector-values"></ul>
+                </div>
+                <div class="small-4 columns">
+                  <div class="c-custom-dataset-selector js-custom-dataset-selector-consumption-countries -disabled"
+                       data-type="value" data-disabled-text="Please select first a country and commodity">
+                    <div class="c-custom-dataset-selector__header">
+                      CONSUMPTION COUNTRIES
+                      <ul class="c-custom-dataset-selector__header-options">
+                        <li>
+                          <div class="c-radio-btn -red" data-group="consumption-countries-all" value="all"></div>
+                        </li>
+                      </ul>
                     </div>
+                    <ul class="c-custom-dataset-selector__values js-custom-dataset-selector-values"></ul>
                   </div>
-                  <div class="small-4 columns">
-                    <div class="c-custom-dataset-selector js-custom-dataset-selector-indicators -disabled" data-type="value" data-disabled-text="Please select first a country and commodity">
-                      <div class="c-custom-dataset-selector__header">
-                        INDICATORS
-                        <ul class="c-custom-dataset-selector__header-options">
-                          <li>
-                            <div class="c-radio-btn -red" data-group="indicators-all" value="all"></div>
-                          </li>
-                        </ul>
-                      </div>
-                      <ul class="c-custom-dataset-selector__values js-custom-dataset-selector-values"></ul>
+                </div>
+                <div class="small-4 columns">
+                  <div class="c-custom-dataset-selector js-custom-dataset-selector-indicators -disabled"
+                       data-type="value" data-disabled-text="Please select first a country and commodity">
+                    <div class="c-custom-dataset-selector__header">
+                      INDICATORS
+                      <ul class="c-custom-dataset-selector__header-options">
+                        <li>
+                          <div class="c-radio-btn -red" data-group="indicators-all" value="all"></div>
+                        </li>
+                      </ul>
                     </div>
+                    <ul class="c-custom-dataset-selector__values js-custom-dataset-selector-values"></ul>
                   </div>
                 </div>
               </div>
-              <div class="small-3 columns">
-                <div class="c-custom-dataset__format-sidebar">
-                  <div class="c-custom-dataset-selector js-custom-dataset-selector-output-type" data-type="format">
-                    <div class="c-custom-dataset-selector__header">OUTPUT TYPE</div>
-                    <ul class="c-custom-dataset-selector__values js-custom-dataset-selector-values">
-                      <li class="-selected">
-                        Pivot
-                        <div class="c-radio-btn -no-self-cancel -enabled -grey" data-group="output-type" value="pivot"></div>
-                      </li>
-                      <li>
-                        Table
-                        <div class="c-radio-btn -no-self-cancel -grey" data-group="output-type" value="table"></div>
-                      </li>
-                    </ul>
-                  </div>
+            </div>
+            <div class="small-3 columns">
+              <div class="c-custom-dataset__format-sidebar">
+                <div class="c-custom-dataset-selector js-custom-dataset-selector-output-type" data-type="format">
+                  <div class="c-custom-dataset-selector__header">OUTPUT TYPE</div>
+                  <ul class="c-custom-dataset-selector__values js-custom-dataset-selector-values">
+                    <li class="-selected">
+                      Pivot
+                      <div class="c-radio-btn -no-self-cancel -enabled -grey" data-group="output-type"
+                           value="pivot"></div>
+                    </li>
+                    <li>
+                      Table
+                      <div class="c-radio-btn -no-self-cancel -grey" data-group="output-type" value="table"></div>
+                    </li>
+                  </ul>
+                </div>
 
-                  <div class="c-custom-dataset-selector js-custom-dataset-selector-formatting" data-type="format" style="display: none;">
-                    <div class="c-custom-dataset-selector__header">FORMATTING OPTIONS</div>
-                    <ul class="c-custom-dataset-selector__values js-custom-dataset-selector-values">
-                      <li class="-selected">
-                        Location codes
-                        <div class="c-radio-btn -no-self-cancel -enabled -grey" data-group="formatting" value="location-codes"></div>
-                      </li>
-                      <li>
-                        Units
-                        <div class="c-radio-btn -no-self-cancel -grey" data-group="formatting" value="units"></div>
-                      </li>
-                      <li>
-                        Null Values
-                        <div class="c-radio-btn -no-self-cancel -grey" data-group="formatting" value="null"></div>
-                      </li>
-                    </ul>
-                  </div>
+                <div class="c-custom-dataset-selector js-custom-dataset-selector-formatting" data-type="format"
+                     style="display: none;">
+                  <div class="c-custom-dataset-selector__header">FORMATTING OPTIONS</div>
+                  <ul class="c-custom-dataset-selector__values js-custom-dataset-selector-values">
+                    <li class="-selected">
+                      Location codes
+                      <div class="c-radio-btn -no-self-cancel -enabled -grey" data-group="formatting"
+                           value="location-codes"></div>
+                    </li>
+                    <li>
+                      Units
+                      <div class="c-radio-btn -no-self-cancel -grey" data-group="formatting" value="units"></div>
+                    </li>
+                    <li>
+                      Null Values
+                      <div class="c-radio-btn -no-self-cancel -grey" data-group="formatting" value="null"></div>
+                    </li>
+                  </ul>
+                </div>
 
-                  <div class="c-custom-dataset-selector js-custom-dataset-selector-file" data-type="format">
-                    <div class="c-custom-dataset-selector__header">FILE</div>
-                    <ul class="c-custom-dataset-selector__values js-custom-dataset-selector-values">
-                      <li class="-selected">
-                        .csv (comma separated)
-                        <div class="c-radio-btn -no-self-cancel -enabled -grey" data-group="file" value=".csv" data-separator-type="comma"></div>
-                      </li>
-                      <li>
-                        .csv (semicolon separated)
-                        <div class="c-radio-btn -no-self-cancel -grey" data-group="file" value=".csv" data-separator-type="semicolon"></div>
-                      </li>
-                      <li>
-                        .json
-                        <div class="c-radio-btn -no-self-cancel -grey" data-group="file" value=".json" data-separator-type=""></div>
-                      </li>
-                    </ul>
-                  </div>
+                <div class="c-custom-dataset-selector js-custom-dataset-selector-file" data-type="format">
+                  <div class="c-custom-dataset-selector__header">FILE</div>
+                  <ul class="c-custom-dataset-selector__values js-custom-dataset-selector-values">
+                    <li class="-selected">
+                      .csv (comma separated)
+                      <div class="c-radio-btn -no-self-cancel -enabled -grey" data-group="file" value=".csv"
+                           data-separator-type="comma"></div>
+                    </li>
+                    <li>
+                      .csv (semicolon separated)
+                      <div class="c-radio-btn -no-self-cancel -grey" data-group="file" value=".csv"
+                           data-separator-type="semicolon"></div>
+                    </li>
+                    <li>
+                      .json
+                      <div class="c-radio-btn -no-self-cancel -grey" data-group="file" value=".json"
+                           data-separator-type=""></div>
+                    </li>
+                  </ul>
+                </div>
 
-                  <div class="download-button js-custom-dataset-download-button -disabled">
-                    <svg class="icon icon-download"><use xlink:href="#icon-download"></use></svg>
-                    DOWNLOAD DATA
-                  </div>
+                <div class="download-button js-custom-dataset-download-button -disabled">
+                  <svg class="icon icon-download">
+                    <use xlink:href="#icon-download"></use>
+                  </svg>
+                  DOWNLOAD DATA
                 </div>
               </div>
             </div>
@@ -261,6 +280,7 @@
         </div>
       </div>
     </div>
+  </div>
   <%= footer %>
   <%= feedback %>
- </div>
+</div>
