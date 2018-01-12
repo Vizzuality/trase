@@ -189,6 +189,66 @@ That is done using a dedicated rake task:
     5. output files are in `doc/db/html`
 3. to update the [GH pages site](https://vizzuality.github.io/trase-api/) all the generated files from `doc/db/html` need to land in the top-level of the `gh-pages` branch. This is currently a manual process, easiest to have the repo checked out twice on local drive to be able to copy between branches (not great and not final.)
 
+## Data import process
+
+The new data import process was put in place to make it easy to update the Trase database directly from the Main database. The differences between the two databases are as follows:
+- the Main database contains the core data regarding flows, nodes and attributes. It contains more data than what is show on Trase.
+- the Trase database contains a subset of the Main database as well as additional tables which describe how to visualise that data.
+There is overlap between the two databases, which is the core data to be displayed in Trase. These are the tables which hold that data:
+- countries
+- commodities
+- contexts
+- node_types
+- context_node_types
+- download_versions
+- inds
+- quals
+- quants
+- nodes
+- node_inds
+- node_quals
+- node_quants
+- flows
+- flow_inds
+- flow_quals
+- flow_quants
+
+They are sometimes referred to as "blue tables". The remaining tables in the Trase database, which are linked to the blue tables and describe how to visualise data, are referred to as "yellow tables". For example, the blue table `inds` holds basic information about an attribute called `SOY_YIELD` and the yellow table `ind_properties` holds the information about what tooltip to display with that attribute.
+
+The objective of the import process is to copy the blue tables verbatim from Main to Trase overwriting previous content, but to preserve any yellow tables information which remains relevant.
+
+### Connection between the two databases
+
+We expect that it is possible to establish a connection between the Trase and Main databases using a postgres extension `postgres_fdw`. A number of connection properties need to be specified in order for the connection to be established, they need to be defined as environment variables:
+- TRASE_MAIN_HOST=localhost
+- TRASE_MAIN_PORT=5432
+- TRASE_MAIN_DATABASE=trase_core
+- TRASE_MAIN_SCHEMA=trase # this schema in remote database
+- TRASE_MAIN_USER=main_ro # this user defined in remote database with read-only access to trase schema
+- TRASE_MAIN_PASSWORD=
+- TRASE_MAIN_SERVER=trase_main
+
+We assume that there is a separate schema which contains data ready to be imported into Trase, the name is configured as TRASE_MAIN_SCHEMA, e.g. `trase`. We also assume there is a user with read-only privileges for that schema, e.g. `main_ro`.
+
+`GRANT SELECT ON ALL TABLES IN SCHEMA trase TO main_ro`
+
+### Foreign table wrappers
+
+The extension `postgres_fdw` allows us to access tables in the Main database directly within the Trase database. It requires that a number of objects are created in the database:
+- the server (name configured as TRASE_MAIN_SERVER, e.g. `trase_main`)
+- user mappings which allow a user of the Trase database to connect to the Main database as the read-only user
+- definitions of foreign tables
+
+All of these can be created using the following rake task:
+`bundle exec rake db:remote:init`
+
+In case anything changes, this can be re-initialized using:
+`bundle exec rake db:remote:init`
+
+### Import script
+
+# TODO
+
 # Frontend
 
 The frontend application can be found inside the `frontend` folder. All files mentioned below can be found inside this folder,
