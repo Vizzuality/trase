@@ -8,6 +8,13 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: main; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA main;
+
+
+--
 -- Name: revamp; Type: SCHEMA; Schema: -; Owner: -
 --
 
@@ -40,6 +47,20 @@ CREATE EXTENSION IF NOT EXISTS intarray WITH SCHEMA public;
 --
 
 COMMENT ON EXTENSION intarray IS 'functions, operators, and index support for 1-D arrays of integers';
+
+
+--
+-- Name: postgres_fdw; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS postgres_fdw WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION postgres_fdw; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION postgres_fdw IS 'foreign-data wrapper for remote PostgreSQL servers';
 
 
 --
@@ -6638,6 +6659,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180109085838'),
 ('20180110111533'),
 ('20180119094345'),
-('20180126140843');
-
-
+('20180126140843'),
+('20180111085256'),
+('20180111124938');
