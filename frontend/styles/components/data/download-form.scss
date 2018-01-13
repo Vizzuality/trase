@@ -7,16 +7,6 @@
   font-family: $font-family-1;
   font-size: $font-size-x-regular;
 
-  .form-submit-download { display: block; }
-  .form-submit-submit { display: none; }
-
-
-  &.-downloaded {
-    .form-submit-download { display: none; }
-    .form-submit-submit { display: block; }
-    .tos { display: none; }
-  }
-
   .description {
     font-family: $font-family-2;
     flex: 2 0 100%;

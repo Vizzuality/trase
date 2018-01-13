@@ -70,6 +70,7 @@ function getURLForV3(endpoint, paramsArg = {}) {
   const queryParams = Object.keys(params).reduce((prev, current) => {
     const value = params[current];
     if (Array.isArray(value)) {
+      if (value.length === 0) return prev;
       const arrUrl = value.reduce((arrPrev, arrCurrent) => `${arrPrev}&${current}[]=${arrCurrent}`, '');
       return `${prev}&${arrUrl}`;
     }

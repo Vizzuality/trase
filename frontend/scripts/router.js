@@ -57,7 +57,7 @@ const routes = {
   data: {
     path: '/data',
     page: 'data',
-    extension: 'js'
+    extension: 'jsx'
   },
   about: {
     path: '/about',
