@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import TwitterFeed from 'react-components/home/twitter-feed.component';
 
+// old school name: https://en.wikipedia.org/wiki/Hero_image
 function Hero(props) {
   const { className, closeStoryBox, visitStory, story, tweets } = props;
   const StoryBox = storyObj => (

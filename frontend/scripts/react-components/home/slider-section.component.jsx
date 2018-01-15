@@ -16,8 +16,7 @@ class SliderSection extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      currentSlide: 0,
-      perPage: SliderSection.getPerPage()
+      currentSlide: 0
     };
 
     this.getSliderRef = this.getSliderRef.bind(this);
@@ -41,7 +40,7 @@ class SliderSection extends React.PureComponent {
 
   render() {
     const { className, name, slides } = this.props;
-    const { perPage } = this.state;
+    const perPage = SliderSection.getPerPage();
     return (
       <div className={cx('c-slider-section', className)}>
         <div className="row column">

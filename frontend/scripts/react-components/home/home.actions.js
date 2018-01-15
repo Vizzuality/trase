@@ -1,12 +1,12 @@
-import actions from 'actions';
-
 import {
   getURLFromParams,
   GET_TWEETS,
   GET_POSTS
 } from 'utils/getURLFromParams';
 
-export const getSliderContent = type => (dispatch) => {
+export const HOME__SET_CONTENT = 'HOME__SET_CONTENT';
+
+export const getHomeContent = type => (dispatch) => {
   const params = {
     tweets: GET_TWEETS,
     posts: GET_POSTS
@@ -15,7 +15,7 @@ export const getSliderContent = type => (dispatch) => {
   fetch(url)
     .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
     .then(data => dispatch({
-      type: actions.SET_SLIDER_CONTENT,
+      type: HOME__SET_CONTENT,
       payload: { data, type }
     }))
     .catch(err => console.error(err));

@@ -3,7 +3,7 @@ import { select as d3_select, event as d3_event } from 'd3-selection';
 import { json as d3_json } from 'd3-request';
 import { geoPath as d3_geoPath, geoMercator as d3_geoMercator } from 'd3-geo';
 import { geoRobinson as d3_geoRobinson } from 'd3-geo-projection';
-import * as topojson from 'topojson';
+import { feature as topojsonFeature } from 'topojson';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -76,7 +76,7 @@ class Map extends Component {
       .projection(projection);
 
     d3_json(topoJSONPath, (error, topoJSON) => {
-      const features = topojson.feature(topoJSON, topoJSON.objects[topoJSONRoot]);
+      const features = topojsonFeature(topoJSON, topoJSON.objects[topoJSONRoot]);
 
       const polygons = container.selectAll('path')
         .data(features.features)

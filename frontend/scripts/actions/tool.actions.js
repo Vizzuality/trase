@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 import actions from 'actions';
-import * as topojson from 'topojson';
+import { feature as topojsonFeature } from 'topojson';
 import _ from 'lodash';
 import {
   CARTO_NAMED_MAPS_BASE_URL, CONTEXT_LAYERS, CONTEXT_WITH_CONTEXT_LAYERS_IDS, CONTEXT_WITHOUT_MAP_IDS,
@@ -379,7 +379,7 @@ export function loadMapVectorData() {
             }
             const topoJSON = JSON.parse(payload);
             const key = Object.keys(topoJSON.objects)[0];
-            const geoJSON = topojson.feature(topoJSON, topoJSON.objects[key]);
+            const geoJSON = topojsonFeature(topoJSON, topoJSON.objects[key]);
             setGeoJSONMeta(geoJSON, getState().tool.nodesDict, getState().tool.geoIdsDict, geoColumn.id);
             mapVectorData[geoColumn.id].geoJSON = geoJSON;
           });

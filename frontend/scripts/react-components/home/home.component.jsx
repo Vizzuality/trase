@@ -5,17 +5,8 @@ import Hero from 'react-components/shared/hero.component';
 import SliderSection from './slider-section.component';
 import NewsletterForm from './newsletter-form.component';
 
-const slides = Array(12)
-  .fill(0)
-  .map((zero, index) => ({ image: false, quote: `Lorem Ipsum${index}` }));
-
-// const story = {
-//   title: 'Our 2017 data analysis yearbook was just released!',
-//   image: 'images/mocks/one.jpg'
-// };
-
 function Home(props) {
-  const { message, onSubmitNewsletter, tweets, posts, testimonials } = props;
+  const { message, sendSubscriptionEmail, tweets, posts, testimonials, features } = props;
   return (
     <div className="c-homepage">
       <Hero tweets={tweets} />
@@ -41,21 +32,22 @@ function Home(props) {
         <div className="screenshot -end" />
       </div>
       <div className="sliders">
-        <SliderSection name="News and Insights" slides={slides} />
+        <SliderSection name="News and Insights" slides={features} />
         <SliderSection name="Features" slides={posts} />
         <SliderSection className="-small" name="Testimonials" slides={testimonials} />
       </div>
-      <NewsletterForm message={message} submitForm={onSubmitNewsletter} />
+      <NewsletterForm message={message} submitForm={sendSubscriptionEmail} />
     </div>
   );
 }
 
 Home.propTypes = {
+  features: PropTypes.array,
   testimonials: PropTypes.array,
   tweets: PropTypes.array,
   posts: PropTypes.array,
   message: PropTypes.string,
-  onSubmitNewsletter: PropTypes.func.isRequired
+  sendSubscriptionEmail: PropTypes.func.isRequired
 };
 
 export default Home;

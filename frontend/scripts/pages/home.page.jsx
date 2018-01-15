@@ -8,7 +8,7 @@ import FeedbackMarkup from 'html/includes/_feedback.ejs';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import Home from 'containers/home/home.container';
+import Home from 'react-components/home/home.container';
 
 import NavContainer from 'containers/shared/nav.container';
 import 'styles/homepage.scss';
