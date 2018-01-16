@@ -74,7 +74,12 @@ class SliderSection extends React.PureComponent {
                             </div>
                           </div>
                         </React.Fragment> :
-                        <a className="slide-link" href={slide.complete_post_url}>
+                        <a
+                          className="slide-link"
+                          href={slide.completePostUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           <figure
                             className="slide-image"
                             style={{ backgroundImage: `url(${slide.image_url})` }}
