@@ -413,8 +413,8 @@ export function setMapContextLayers(contextualLayers) {
   return (dispatch, getState) => {
     const mapContextualLayers = contextualLayers.map((layer) => {
       const contextLayer = Object.assign({}, layer);
-      if (!layer.rasterUrl) {
-        const carto = contextLayersCarto[layer.identifier];
+      const carto = contextLayersCarto[layer.identifier];
+      if (!layer.rasterUrl && carto) {
         contextLayer.cartoURL = `${CARTO_NAMED_MAPS_BASE_URL}${carto.uid}/jsonp?callback=cb`;
         contextLayer.layergroupid = carto.layergroupid;
       }
@@ -424,22 +424,28 @@ export function setMapContextLayers(contextualLayers) {
     resetContextLayers();
 
     Promise
-      .all(mapContextualLayers.filter(l => l.cartoURL).map(l => fetch(l.cartoURL).then(resp => resp.text())))
+      .all(
+        mapContextualLayers
+        .filter(l => l.cartoURL)
+        .map(l => fetch(l.cartoURL).then(resp => resp.text()))
+      )
       .then(() => {
         // we actually don't care about layergroupids because we already have them pregenerated
         // this is just about reinstanciating named maps, you know, because CARTO
         dispatch({
-          type: actions.GET_CONTEXT_LAYERS, mapContextualLayers
+          type: actions.GET_CONTEXT_LAYERS,
+          mapContextualLayers
         });
 
-        if (contextualLayers !== undefined && contextualLayers.length) {
+        if (typeof contextualLayers !== 'undefined' && contextualLayers.length) {
           dispatch({
-            type: actions.GET_CONTEXT_LAYERS, mapContextualLayers
+            type: actions.GET_CONTEXT_LAYERS,
+            mapContextualLayers
           });
 
           const { selectedMapContextualLayers } = getState().tool;
 
-          if (selectedMapContextualLayers !== undefined && selectedMapContextualLayers.length) {
+          if (typeof selectedMapContextualLayers !== 'undefined' && selectedMapContextualLayers.length) {
             dispatch({
               type: actions.SELECT_CONTEXTUAL_LAYERS,
               contextualLayers: selectedMapContextualLayers
