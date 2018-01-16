@@ -57,7 +57,7 @@ module Api
           ] + categories_names_with_type
 
           crosstab_sql = <<~SQL
-            CROSSTAB(
+            public.CROSSTAB(
               '#{source_sql}',
               '#{categories_sql}'
             )
