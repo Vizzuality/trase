@@ -230,7 +230,7 @@ is #{@main_destination_name.humanize}, accounting for \
     unit = quant.unit
     value_divisor = 1
     if unit.casecmp('tn').zero?
-      unit = 'Kiloton'
+      unit = 'kt'
       value_divisor = 1000
     end
 
@@ -238,12 +238,12 @@ is #{@main_destination_name.humanize}, accounting for \
       name: 'Trade Volume', unit: unit, type: 'quant', backend_name: 'Volume'
     }
     x_indicators = [
-      {name: 'Land use', unit: 'Ha', type: 'quant', backend_name: 'LAND_USE'},
-      {name: 'Territorial Deforestation', unit: 'Ha', type: 'quant', backend_name: 'DEFORESTATION_V2'},
-      {name: 'Maximum soy deforestation', unit: 'Ha', type: 'quant', backend_name: 'POTENTIAL_SOY_DEFORESTATION_V2'},
-      {name: 'Soy related deforestation', unit: 'Ha', type: 'quant', backend_name: 'AGROSATELITE_SOY_DEFOR_'},
+      {name: 'Land use', unit: 'ha', type: 'quant', backend_name: 'LAND_USE'},
+      {name: 'Territorial Deforestation', unit: 'ha', type: 'quant', backend_name: 'DEFORESTATION_V2'},
+      {name: 'Maximum soy deforestation', unit: 'ha', type: 'quant', backend_name: 'POTENTIAL_SOY_DEFORESTATION_V2'},
+      {name: 'Soy related deforestation', unit: 'ha', type: 'quant', backend_name: 'AGROSATELITE_SOY_DEFOR_'},
       {name: 'Loss of biodiversity', type: 'quant', backend_name: 'BIODIVERSITY'},
-      {name: 'Land-based emissions', unit: 'Tn', type: 'quant', backend_name: 'GHG_'}
+      {name: 'Land-based emissions', unit: 't', type: 'quant', backend_name: 'GHG_'}
     ]
 
     node_index = NodeType.node_index_for_type(@context, @node_type)

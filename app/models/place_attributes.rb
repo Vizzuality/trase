@@ -57,7 +57,7 @@ class PlaceAttributes
                                      end
     soy_area = if soy_produced_raw && @place_inds['SOY_YIELD'] && soy_yield_raw = @place_inds['SOY_YIELD']['value']
                  value = helper.number_with_precision(soy_produced_raw / soy_yield_raw, delimiter: ',', precision: 0)
-                 unit = 'Ha' # soy prod in Tn, soy yield in Tn/Ha
+                 unit = 'ha' # soy prod in Tn, soy yield in Tn/Ha
                  "#{value} #{unit}"
                end
     perc_total = total_soy_production
@@ -268,7 +268,7 @@ and the main destination was #{main_destination}."
     {
       trajectory_deforestation: {
         included_years: years,
-        unit: 'Ha',
+        unit: 'ha',
         lines: indicators_list.map do |i|
           data = if i[:state_average] && @state.present?
                    @stats.state_average(@state, i[:indicator_type], i[:backend_name])

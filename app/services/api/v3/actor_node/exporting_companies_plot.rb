@@ -17,7 +17,7 @@ module Api
           unit = @volume_attribute.unit
           value_divisor = 1
           if unit.casecmp('tn').zero?
-            unit = 'Kiloton'
+            unit = 'kt'
             value_divisor = 1000
           end
 
@@ -77,25 +77,25 @@ module Api
           [
             {
               name: 'Land use',
-              unit: 'Ha',
+              unit: 'ha',
               attribute_type: 'quant',
               attribute_name: 'LAND_USE'
             },
             {
               name: 'Territorial Deforestation',
-              unit: 'Ha',
+              unit: 'ha',
               attribute_type: 'quant',
               attribute_name: 'DEFORESTATION_V2'
             },
             {
               name: 'Maximum soy deforestation',
-              unit: 'Ha',
+              unit: 'ha',
               attribute_type: 'quant',
               attribute_name: 'POTENTIAL_SOY_DEFORESTATION_V2'
             },
             {
               name: 'Soy related deforestation',
-              unit: 'Ha',
+              unit: 'ha',
               attribute_type: 'quant',
               attribute_name: 'AGROSATELITE_SOY_DEFOR_'
             },
@@ -106,7 +106,7 @@ module Api
             },
             {
               name: 'Land-based emissions',
-              unit: 'Tn',
+              unit: 't',
               attribute_type: 'quant',
               attribute_name: 'GHG_'
             }

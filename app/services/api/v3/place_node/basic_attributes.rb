@@ -106,7 +106,7 @@ of #{@soy_area_formatted} #{@soy_area_unit} of land."
               @soy_production / @soy_yield,
               delimiter: ',', precision: 0
             )
-            @soy_area_unit = 'Ha' # soy prod in Tn, soy yield in Tn/Ha
+            @soy_area_unit = 'ha' # soy prod in Tn, soy yield in Tn/Ha
             soy_attributes[:soy_area] = @soy_area_formatted
           end
           soy_farmland_ind = @place_inds.get('SOY_AREAPERC')
