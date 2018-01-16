@@ -1,4 +1,6 @@
 {
-  "title": "Our 2017 data analysis yearbook was just released!",
-  "image_url": "images/mocks/one.jpg"
+  "data": {
+    "title": "Our 2017 data analysis yearbook was just released!",
+    "image_url": "images/mocks/one.jpg"
+  }
 }

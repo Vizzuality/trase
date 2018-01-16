@@ -44,7 +44,7 @@ class TwitterFeed extends React.PureComponent {
         <div className="c-twitter-feed">
           {
             tweets.map((tweet, i) => (
-              <Transition key={tweet.id} in={i === current} timeout={300}>
+              <Transition key={i} in={i === current} timeout={300}>
                 {
                   transition => (
                     <div className={cx('tweet-box', `-${transition}`)}>

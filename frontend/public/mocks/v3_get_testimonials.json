@@ -1,14 +1,16 @@
-[
-  {
-    "quote": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
-    "author": "Kristen Kim COMPANY XXX CEO"
-  },
-  {
-    "quote": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
-    "author": "Nathaniel Horton COMPANY XXX CEO"
-  },
-  {
-    "quote": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
-    "author": "Zoe Harvey Research fellow @ LSU"
-  }
-]
+{
+  "data": [
+    {
+      "quote": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
+      "author": "Kristen Kim COMPANY XXX CEO"
+    },
+    {
+      "quote": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
+      "author": "Nathaniel Horton COMPANY XXX CEO"
+    },
+    {
+      "quote": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
+      "author": "Zoe Harvey Research fellow @ LSU"
+    }
+  ]
+}

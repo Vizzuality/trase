@@ -20,7 +20,7 @@ export const getHomeContent = (type, mock) => (dispatch) => {
   const url = getURLFromParams(content.url, undefined, mock);
   fetch(url)
     .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
-    .then(data => (data[''] ? content.defaultValue : data)) // content/twitter may return { "": [] }
+    .then(data => (data[''] ? content.defaultValue : data.data)) // content/twitter may return { "": [] }
     .then(data => dispatch({
       type: HOME__SET_CONTENT,
       payload: { type, data: (data || content.defaultValue) }
