@@ -4,27 +4,15 @@ import { sendSubscriptionEmail } from 'react-components/shared/newsletter/newsle
 import Home from 'react-components/home/home.component';
 
 function mapStateToProps(state) {
-  const { tweets, posts, features } = state.home;
+  const { tweets, posts, features, testimonials, promotedPost } = state.home;
   const { message } = state.newsletter.home;
-  const parsedTweets = tweets.map(tweet => ({
-    id: tweet.id,
-    text: tweet.text,
-    author: tweet.screen_name
-  }));
-  const testimonials = tweets.map(tweet => ({
-    quote: tweet.text,
-    quoteAuthor: tweet.screen_name
-  }));
-  const parsedPosts = posts.map(post => ({
-    title: post.title,
-    image: post.image_url
-  }));
   return {
     message,
+    posts,
     features,
+    promotedPost,
     testimonials,
-    tweets: parsedTweets,
-    posts: parsedPosts
+    tweets: tweets.length > 0 ? tweets : null
   };
 }
 

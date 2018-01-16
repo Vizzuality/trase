@@ -6,10 +6,18 @@ import SliderSection from './slider-section.component';
 import NewsletterForm from './newsletter-form.component';
 
 function Home(props) {
-  const { message, sendSubscriptionEmail, tweets, posts, testimonials, features } = props;
+  const {
+    message,
+    sendSubscriptionEmail,
+    tweets,
+    posts,
+    testimonials,
+    features,
+    promotedPost
+  } = props;
   return (
     <div className="c-homepage">
-      <Hero tweets={tweets} />
+      <Hero story={promotedPost} tweets={tweets} />
       <div className="splitted">
         <div className="row">
           <div className="column small-12 medium-6">
@@ -47,6 +55,7 @@ Home.propTypes = {
   tweets: PropTypes.array,
   posts: PropTypes.array,
   message: PropTypes.string,
+  promotedPost: PropTypes.object,
   sendSubscriptionEmail: PropTypes.func.isRequired
 };
 

@@ -1,7 +1,14 @@
 import { connectRoutes, NOT_FOUND } from 'redux-first-router';
 import connect from 'connect';
 import { parse, stringify } from 'utils/stateURL';
-import { resetToolThunk, getPostsContent, getTweetsContent } from 'react-components/home/home.thunks';
+import {
+  resetToolThunk,
+  getPostsContent,
+  getTweetsContent,
+  getFeaturesContent,
+  getPromotedPostContent,
+  getTestimonialsContent
+} from 'react-components/home/home.thunks';
 
 const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thunk(...params));
 
@@ -18,7 +25,13 @@ const routes = {
     path: '/',
     page: 'home',
     extension: 'jsx',
-    thunk: dispatchThunks(getPostsContent, getTweetsContent)
+    thunk: dispatchThunks(
+      getPostsContent,
+      getTweetsContent,
+      getFeaturesContent,
+      getPromotedPostContent,
+      getTestimonialsContent
+    )
   },
   tool: {
     path: '/flows',

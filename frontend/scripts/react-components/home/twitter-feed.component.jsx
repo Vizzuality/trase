@@ -54,11 +54,11 @@ class TwitterFeed extends React.PureComponent {
                       />
                       <div className="c-author-footer">
                         <p className="author-details">
-                          {tweet.author}
+                          {tweet.screen_name}
                         </p>
                         <div
                           className="author-avatar"
-                          style={{ backgroundImage: tweet.avatar && `url(${tweet.avatar})` }}
+                          style={{ backgroundImage: tweet.image_url && `url(${tweet.image_url})` }}
                         />
                       </div>
                     </div>

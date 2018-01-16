@@ -56,18 +56,7 @@ class SliderSection extends React.PureComponent {
                 slides
                   .map(slide => (
                     <div key={slide.title || slide.quote} className="slide">
-                      {slide.image ?
-                        <React.Fragment>
-                          <figure
-                            className="slide-image"
-                            style={{ backgroundImage: `url(${slide.image})` }}
-                          />
-                          <figcaption className="slide-content">
-                            <h4 className="home-subtitle">{slide.category}</h4>
-                            <p className="slide-title">{slide.title}</p>
-                          </figcaption>
-                        </React.Fragment>
-                        :
+                      {slide.quote ?
                         <React.Fragment>
                           <div className="slide-quote">
                             <p
@@ -76,15 +65,25 @@ class SliderSection extends React.PureComponent {
                             />
                             <div className="c-author-footer">
                               <figcaption className="author-details">
-                                {slide.quoteAuthor}
+                                {slide.author}
                               </figcaption>
                               <figure
                                 className="author-avatar"
-                                style={{ backgroundImage: slide.quoteAvatar && `url(${slide.quoteAvatar})` }}
+                                style={{ backgroundImage: slide.image_url && `url(${slide.image_url})` }}
                               />
                             </div>
                           </div>
-                        </React.Fragment>
+                        </React.Fragment> :
+                        <a className="slide-link" href={slide.complete_post_url}>
+                          <figure
+                            className="slide-image"
+                            style={{ backgroundImage: `url(${slide.image_url})` }}
+                          />
+                          <figcaption className="slide-content">
+                            <h4 className="home-subtitle">{slide.category}</h4>
+                            <p className="slide-title">{slide.title}</p>
+                          </figcaption>
+                        </a>
                       }
                     </div>
                   ))
@@ -110,10 +109,9 @@ SliderSection.propTypes = {
     PropTypes.shape({
       title: PropTypes.string,
       category: PropTypes.string,
-      image: PropTypes.string,
+      image_url: PropTypes.string,
       quote: PropTypes.string,
-      quoteAuthor: PropTypes.string,
-      quoteAvatar: PropTypes.string
+      author: PropTypes.string
     })
   ).isRequired
 };

@@ -11,4 +11,7 @@ export const resetToolThunk = (dispatch, getState) => {
 };
 
 export const getPostsContent = dispatch => dispatch(getHomeContent('posts'));
+export const getFeaturesContent = dispatch => dispatch(getHomeContent('features', true));
+export const getTestimonialsContent = dispatch => dispatch(getHomeContent('testimonials', true));
+export const getPromotedPostContent = dispatch => dispatch(getHomeContent('promotedPost', true));
 export const getTweetsContent = dispatch => dispatch(getHomeContent('tweets'));
