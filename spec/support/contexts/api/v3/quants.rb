@@ -274,7 +274,7 @@ shared_context 'api v3 quants' do
       q = FactoryBot.create(
         :api_v3_quant,
         name: 'GHG_',
-        unit: 'Mt/yr'
+        unit: 'mt/yr'
       )
       FactoryBot.create(
         :api_v3_quant_property,

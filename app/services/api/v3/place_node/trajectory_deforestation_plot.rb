@@ -25,7 +25,7 @@ module Api
           years = (min_year..max_year).to_a
           {
             included_years: years,
-            unit: 'Ha',
+            unit: 'ha',
             lines: @attributes.map do |attribute_hash|
               data =
                 if attribute_hash[:state_average] && @state_ranking

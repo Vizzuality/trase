@@ -100,7 +100,7 @@ const _initSource = (selectedSource, data, store) => {
         [{
           title: 'Trade Volume',
           value: formatValue(source.values[0], 'Trade volume'),
-          unit: 'Tons'
+          unit: 't'
         }]
       );
     }
@@ -164,7 +164,7 @@ const _build = (data, { nodeId, year, print }, store) => {
           {
             title: 'Trade volume',
             value: formatValue(location.value, 'Trade volume'),
-            unit: 'Tons'
+            unit: 't'
           }
         ]
       );
@@ -220,7 +220,7 @@ const _build = (data, { nodeId, year, print }, store) => {
             {
               title: 'Trade volume',
               value: formatValue(location.value, 'Trade volume'),
-              unit: 'Tons'
+              unit: 't'
             }
           ]
         );
@@ -258,7 +258,7 @@ const _build = (data, { nodeId, year, print }, store) => {
           [{
             title: 'Trade Volume',
             value: formatValue(country.values[0], 'Trade volume'),
-            unit: 'Tons'
+            unit: 't'
           }]
         );
       }
