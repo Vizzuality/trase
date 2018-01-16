@@ -77,7 +77,8 @@
   right: 0;
 
   &::after {
-  transform: translate(-50%, -50%) rotate(45deg)
+    transform: translate(-50%, -50%) rotate(45deg);
+    margin-left: -1px;
   }
 }
 
@@ -85,7 +86,8 @@
   transform: translate(-50%, -50%);
 
   &::after {
-  transform: translate(-50%, -50%) rotate(-135deg)
+    transform: translate(-50%, -50%) rotate(-135deg);
+    margin-left: 1px;
   }
 }
 
