@@ -425,10 +425,17 @@ class SchemaRevamp
 
   def download_versions_insert_sql
     <<-SQL
+    WITH current AS (
+      SELECT context_id, MAX(symbol) AS symbol
+      FROM public.download_versions
+      WHERE current
+      GROUP BY context_id
+    )
     INSERT INTO revamp.download_versions(context_id, symbol, is_current, created_at)
     SELECT
-      context_id, symbol, COALESCE(current, FALSE), created_at
+      public.download_versions.context_id, public.download_versions.symbol, COALESCE(current.symbol IS NOT NULL, FALSE), created_at
     FROM public.download_versions
+    LEFT JOIN current ON current.context_id = public.download_versions.context_id AND current.symbol = public.download_versions.symbol;
     SQL
   end
 
