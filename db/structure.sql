@@ -6707,7 +6707,7 @@ SET search_path = revamp, pg_catalog;
 --
 
 ALTER TABLE ONLY download_quants
-    ADD CONSTRAINT fk_rails_05ea4b5d71 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_05ea4b5d71 FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6715,7 +6715,7 @@ ALTER TABLE ONLY download_quants
 --
 
 ALTER TABLE ONLY flow_inds
-    ADD CONSTRAINT fk_rails_0a8bdfaf25 FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_0a8bdfaf25 FOREIGN KEY (flow_id) REFERENCES flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6771,7 +6771,7 @@ ALTER TABLE ONLY download_quals
 --
 
 ALTER TABLE ONLY quant_properties
-    ADD CONSTRAINT fk_rails_201d91fbef FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_201d91fbef FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6779,7 +6779,7 @@ ALTER TABLE ONLY quant_properties
 --
 
 ALTER TABLE ONLY flow_inds
-    ADD CONSTRAINT fk_rails_23d15ab229 FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_23d15ab229 FOREIGN KEY (ind_id) REFERENCES inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6803,7 +6803,7 @@ ALTER TABLE ONLY resize_by_quants
 --
 
 ALTER TABLE ONLY node_inds
-    ADD CONSTRAINT fk_rails_28ea53a9b9 FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_28ea53a9b9 FOREIGN KEY (ind_id) REFERENCES inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6827,7 +6827,7 @@ ALTER TABLE ONLY chart_inds
 --
 
 ALTER TABLE ONLY flow_quants
-    ADD CONSTRAINT fk_rails_2dbc0a565f FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_2dbc0a565f FOREIGN KEY (flow_id) REFERENCES flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6875,7 +6875,7 @@ ALTER TABLE ONLY chart_quals
 --
 
 ALTER TABLE ONLY map_inds
-    ADD CONSTRAINT fk_rails_49db6b9c1f FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_49db6b9c1f FOREIGN KEY (ind_id) REFERENCES inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6907,7 +6907,7 @@ ALTER TABLE ONLY contextual_layers
 --
 
 ALTER TABLE ONLY country_properties
-    ADD CONSTRAINT fk_rails_668b355aa6 FOREIGN KEY (country_id) REFERENCES countries(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_668b355aa6 FOREIGN KEY (country_id) REFERENCES countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6915,7 +6915,7 @@ ALTER TABLE ONLY country_properties
 --
 
 ALTER TABLE ONLY chart_quants
-    ADD CONSTRAINT fk_rails_69c56caceb FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_69c56caceb FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6923,7 +6923,7 @@ ALTER TABLE ONLY chart_quants
 --
 
 ALTER TABLE ONLY flow_quals
-    ADD CONSTRAINT fk_rails_6e55ca4cbc FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_6e55ca4cbc FOREIGN KEY (flow_id) REFERENCES flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6931,7 +6931,7 @@ ALTER TABLE ONLY flow_quals
 --
 
 ALTER TABLE ONLY ind_properties
-    ADD CONSTRAINT fk_rails_720a88d4b2 FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_720a88d4b2 FOREIGN KEY (ind_id) REFERENCES inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6947,7 +6947,7 @@ ALTER TABLE ONLY charts
 --
 
 ALTER TABLE ONLY flow_quals
-    ADD CONSTRAINT fk_rails_917b9da2b8 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_917b9da2b8 FOREIGN KEY (qual_id) REFERENCES quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6963,7 +6963,7 @@ ALTER TABLE ONLY resize_by_attributes
 --
 
 ALTER TABLE ONLY recolor_by_inds
-    ADD CONSTRAINT fk_rails_93051274e4 FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_93051274e4 FOREIGN KEY (ind_id) REFERENCES inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6971,7 +6971,7 @@ ALTER TABLE ONLY recolor_by_inds
 --
 
 ALTER TABLE ONLY node_quals
-    ADD CONSTRAINT fk_rails_962f283611 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_962f283611 FOREIGN KEY (qual_id) REFERENCES quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6987,7 +6987,7 @@ ALTER TABLE ONLY carto_layers
 --
 
 ALTER TABLE ONLY flow_quants
-    ADD CONSTRAINT fk_rails_a48f7b74d0 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_a48f7b74d0 FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7003,7 +7003,7 @@ ALTER TABLE ONLY charts
 --
 
 ALTER TABLE ONLY chart_inds
-    ADD CONSTRAINT fk_rails_b730b06fdc FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_b730b06fdc FOREIGN KEY (ind_id) REFERENCES inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7011,7 +7011,7 @@ ALTER TABLE ONLY chart_inds
 --
 
 ALTER TABLE ONLY chart_quals
-    ADD CONSTRAINT fk_rails_c1341bce97 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_c1341bce97 FOREIGN KEY (qual_id) REFERENCES quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7027,7 +7027,7 @@ ALTER TABLE ONLY flows
 --
 
 ALTER TABLE ONLY resize_by_quants
-    ADD CONSTRAINT fk_rails_c63dc992e3 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_c63dc992e3 FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7035,7 +7035,7 @@ ALTER TABLE ONLY resize_by_quants
 --
 
 ALTER TABLE ONLY qual_properties
-    ADD CONSTRAINT fk_rails_c8bcede145 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_c8bcede145 FOREIGN KEY (qual_id) REFERENCES quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7059,7 +7059,7 @@ ALTER TABLE ONLY profiles
 --
 
 ALTER TABLE ONLY map_quants
-    ADD CONSTRAINT fk_rails_cc084396cb FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_cc084396cb FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7083,7 +7083,7 @@ ALTER TABLE ONLY context_node_type_properties
 --
 
 ALTER TABLE ONLY contexts
-    ADD CONSTRAINT fk_rails_d9e59d1113 FOREIGN KEY (country_id) REFERENCES countries(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_d9e59d1113 FOREIGN KEY (country_id) REFERENCES countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7115,7 +7115,7 @@ ALTER TABLE ONLY download_quants
 --
 
 ALTER TABLE ONLY node_quants
-    ADD CONSTRAINT fk_rails_e5f4cc54e9 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_e5f4cc54e9 FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7123,7 +7123,7 @@ ALTER TABLE ONLY node_quants
 --
 
 ALTER TABLE ONLY download_quals
-    ADD CONSTRAINT fk_rails_e8e87251a2 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_e8e87251a2 FOREIGN KEY (qual_id) REFERENCES quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7131,7 +7131,7 @@ ALTER TABLE ONLY download_quals
 --
 
 ALTER TABLE ONLY contexts
-    ADD CONSTRAINT fk_rails_eea78f436e FOREIGN KEY (commodity_id) REFERENCES commodities(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_eea78f436e FOREIGN KEY (commodity_id) REFERENCES commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7139,7 +7139,7 @@ ALTER TABLE ONLY contexts
 --
 
 ALTER TABLE ONLY recolor_by_quals
-    ADD CONSTRAINT fk_rails_f5f36c9f54 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_f5f36c9f54 FOREIGN KEY (qual_id) REFERENCES quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7234,4 +7234,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180119094345'),
 ('20180126140843'),
 ('20180111085256'),
-('20180111124938');
+('20180111124938'),
+('20180112112907'),
+('20180119094345');
