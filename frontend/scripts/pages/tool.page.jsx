@@ -5,7 +5,7 @@ import SearchMarkup from 'html/includes/_search.ejs';
 import NavtoolMarkup from 'html/includes/_navtool.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 import React from 'react';
-import { render } from 'react-dom';
+import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 import FlowContentContainer from 'containers/tool/tool-content.container';
 import SankeyContainer from 'containers/tool/sankey.container';
@@ -86,6 +86,9 @@ export const mount = (root, store) => {
 
 export const unmount = () => {
   evManager.clearEventListeners();
+  unmountComponentAtNode(document.getElementById('js-tool-nav-react'));
+  unmountComponentAtNode(document.getElementById('js-columns-selector-react'));
+  unmountComponentAtNode(document.getElementById('js-search-react'));
   document.querySelector('body').classList.remove('-overflow-hidden');
 };
 

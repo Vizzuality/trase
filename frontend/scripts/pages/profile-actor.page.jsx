@@ -35,7 +35,7 @@ import capitalize from 'lodash/capitalize';
 import { GET_ACTOR_FACTSHEET, getURLFromParams } from 'utils/getURLFromParams';
 import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST, DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
 import React from 'react';
-import { render } from 'react-dom';
+import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 import TopSourceSwitcher from 'react-components/profiles/top-source-switcher.component';
 
@@ -500,4 +500,18 @@ export const mount = (root, store) => {
   _loadData(store, nodeId, year);
 
   new NavContainer(store);
+};
+
+export const unmount = () => {
+  unmountComponentAtNode(document.querySelector('.js-top-municipalities'));
+  unmountComponentAtNode(document.querySelector('.js-top-municipalities-map'));
+  unmountComponentAtNode(document.querySelector('.js-top-municipalities-title-container'));
+  unmountComponentAtNode(document.querySelector('.js-source-legend'));
+  unmountComponentAtNode(document.querySelector('.js-destination-legend'));
+  unmountComponentAtNode(document.querySelector('.js-top-destination'));
+  unmountComponentAtNode(document.getElementById('year-dropdown'));
+  unmountComponentAtNode(document.querySelector('.js-top-destination-map'));
+  unmountComponentAtNode(document.querySelector('.js-sustainability-table'));
+  unmountComponentAtNode(document.querySelector('.js-scatterplot-container'));
+  unmountComponentAtNode(document.getElementById('year-dropdown'));
 };
