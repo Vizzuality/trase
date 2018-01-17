@@ -4,12 +4,11 @@ import NavMarkup from 'html/includes/_nav.ejs';
 import FooterMarkup from 'html/includes/_footer.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 import NavContainer from 'containers/shared/nav.container';
-import { loadContext } from 'actions/data.actions';
 import 'styles/data.scss';
 import 'styles/components/shared/veil.scss';
 import 'styles/components/shared/modal.scss';
-import DataPortalPage from 'containers/data/data-portal-page.container';
-import { render } from 'react-dom';
+import DataPortalPage from 'react-components/data-portal/data-portal-page.container';
+import { render, unmountComponentAtNode } from 'react-dom';
 import React from 'react';
 import { Provider } from 'react-redux';
 
@@ -27,6 +26,9 @@ export const mount = (root, store) => {
     document.querySelector('.c-container')
   );
 
-  store.dispatch(loadContext());
   new NavContainer(store);
+};
+
+export const unmount = () => {
+  unmountComponentAtNode(document.querySelector('.c-container'));
 };

@@ -10,6 +10,10 @@ import {
   getTestimonialsContent
 } from 'react-components/home/home.thunks';
 
+import {
+  getDataPortalContext
+} from 'react-components/data-portal/data-portal.thunks';
+
 const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thunk(...params));
 
 const config = {
@@ -56,8 +60,9 @@ const routes = {
   },
   data: {
     path: '/data',
-    page: 'data',
-    extension: 'jsx'
+    page: 'data-portal',
+    extension: 'jsx',
+    thunk: dispatchThunks(getDataPortalContext)
   },
   about: {
     path: '/about',

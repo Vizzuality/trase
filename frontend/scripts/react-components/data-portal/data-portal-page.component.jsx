@@ -2,11 +2,11 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import { GET_CSV_DATA_DOWNLOAD_FILE, GET_JSON_DATA_DOWNLOAD_FILE, getURLFromParams } from 'utils/getURLFromParams';
-import BulkDownloadsBlock from 'react-components/data/bulk-downloads-block.component';
-import DownloadSelector from 'react-components/data/download-selector.component';
+import BulkDownloadsBlock from 'react-components/data-portal/bulk-downloads-block.component';
+import DownloadSelector from 'react-components/data-portal/download-selector.component';
 import PropTypes from 'prop-types';
-import DataPortalDisabledMessage from 'react-components/data/data-portal-disabled-message.component';
-import DataPortalForm from 'react-components/data/data-portal-form.component';
+import DataPortalDisabledMessage from 'react-components/data-portal/data-portal-disabled-message.component';
+import DataPortalForm from 'react-components/data-portal/data-portal-form.component';
 import classnames from 'classnames';
 
 class DataContent extends Component {
