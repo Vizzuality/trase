@@ -1,7 +1,16 @@
 import { connectRoutes, NOT_FOUND } from 'redux-first-router';
 import connect from 'connect';
-import { parse, stringify, computeStateQueryParams } from 'utils/stateURL';
-import actions from 'actions';
+import { parse, stringify } from 'utils/stateURL';
+import {
+  resetToolThunk,
+  getPostsContent,
+  getTweetsContent,
+  getFeaturesContent,
+  getPromotedPostContent,
+  getTestimonialsContent
+} from 'react-components/home/home.thunks';
+
+const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thunk(...params));
 
 const config = {
   basename: '/',
@@ -10,24 +19,25 @@ const config = {
     stringify
   }
 };
-const resetTool = (dispatch, getState) => {
-  const { query = {} } = getState().location;
-  if (!query.state) {
-    const payload = computeStateQueryParams({}, query);
-    dispatch({ type: actions.RESET_TOOL_STATE, payload });
-  }
-};
+
 const routes = {
   home: {
     path: '/',
     page: 'home',
-    extension: 'js'
+    extension: 'jsx',
+    thunk: dispatchThunks(
+      getPostsContent,
+      getTweetsContent,
+      getFeaturesContent,
+      getPromotedPostContent,
+      getTestimonialsContent
+    )
   },
   tool: {
     path: '/flows',
     page: 'tool',
-    thunk: resetTool,
-    extension: 'jsx'
+    extension: 'jsx',
+    thunk: dispatchThunks(resetToolThunk)
   },
   profiles: {
     path: '/profiles',

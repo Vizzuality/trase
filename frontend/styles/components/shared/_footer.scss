@@ -5,10 +5,10 @@
   z-index: $z-above;
   padding: 48px 0 56px;
   bottom: 0;
-  background-color: $charcoal-grey;
+  background-color: $light-gray;
 
   .signup .sign-up-link {
-    color: $white;
+    color: $charcoal-grey;
   }
 
   .contain-logos-footer {
@@ -32,8 +32,6 @@
         width: calc(100% / 3);
         padding: 0 0 0 16px;
 
-        border-left: 1px solid $white;
-
         &:not(:first-child) {
           margin: 0;
         }
@@ -41,7 +39,7 @@
 
       > .title {
         margin: 0 0 32px;
-        color: $white;
+        color: $charcoal-grey;
       }
 
       > .logo-list {
@@ -137,7 +135,7 @@
         margin: 16px 0 0;
 
         > p {
-          color: rgba($gray, .5);
+          color: rgba($charcoal-grey, .5);
         }
       }
     }

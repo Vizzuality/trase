@@ -38,9 +38,12 @@ $breakpoint-tablet:  768px;
 $breakpoint-laptop: 1024px;
 $breakpoint-desktop: 1280px;
 
+$breakpoint-foundation-small: 640px;
+
 
 // Animations
 $ease-in-out-sine: cubic-bezier(.445, .05, .55, .95);
+$ease-in-out-cubic: cubic-bezier(0.645, 0.045, 0.355, 1.000);
 
 
 // z-indexes
@@ -60,6 +63,8 @@ $z-leaflet-above-panes: 500;
 
 // colors
 $background-white: #f2f2f2;
+$light-gray: #f6f6f6;
+$gray-text: #515253;
 $black: #000;
 $charcoal-grey: #34444c;
 $charcoal-grey-toned-down: #536269;
@@ -67,6 +72,7 @@ $charcoal-grey-faded: rgba($charcoal-grey, .6);
 $charcoal-grey-faded-a-lot: rgba($charcoal-grey, .2);
 $gray: #DFDFDF;
 $medium-pink: #ea6869;
+$strong-pink: #f65e6e;
 $medium-pink-faded: lighten($medium-pink, 20%);
 $manilla: #ffeb8b;
 $egg-shell: #fff0c2;
@@ -211,49 +217,49 @@ $ch-profile-red-6: $ch-red-4; // #790916;
 $ch-profile-red-7: $ch-red-4; // #4e0008;
 
 $choropleth-colors: (
-  ch-red-0: $ch-red-0,
-  ch-red-1: $ch-red-1,
-  ch-red-2: $ch-red-2,
-  ch-red-3: $ch-red-3,
-  ch-red-4: $ch-red-4,
-  ch-blue-0: $ch-blue-0,
-  ch-blue-1: $ch-blue-1,
-  ch-blue-2: $ch-blue-2,
-  ch-blue-3: $ch-blue-3,
-  ch-blue-4: $ch-blue-4,
-  ch-bi-0-0: $ch-bi-0-0,
-  ch-bi-0-1: $ch-bi-0-1,
-  ch-bi-0-2: $ch-bi-0-2,
-  ch-bi-1-0: $ch-bi-1-0,
-  ch-bi-1-1: $ch-bi-1-1,
-  ch-bi-1-2: $ch-bi-1-2,
-  ch-bi-2-0: $ch-bi-2-0,
-  ch-bi-2-1: $ch-bi-2-1,
-  ch-bi-2-2: $ch-bi-2-2,
-  recolorby-percentual-yellow-green-0: $recolorby-percentual-yellow-green-0,
-  recolorby-percentual-yellow-green-1: $recolorby-percentual-yellow-green-1,
-  recolorby-percentual-yellow-green-2: $recolorby-percentual-yellow-green-2,
-  recolorby-percentual-yellow-green-3: $recolorby-percentual-yellow-green-3,
-  recolorby-percentual-yellow-green-4: $recolorby-percentual-yellow-green-4,
-  recolorby-linear-red-blue-7: $recolorby-linear-red-blue-7,
-  recolorby-linear-red-blue-6: $recolorby-linear-red-blue-6,
-  recolorby-linear-red-blue-5: $recolorby-linear-red-blue-5,
-  recolorby-linear-red-blue-3: $recolorby-linear-red-blue-3,
-  recolorby-linear-red-blue-1: $recolorby-linear-red-blue-1,
-  recolorby-linear-red-blue-0: $recolorby-linear-red-blue-0,
-  choro-red-blue-toned-down-0: $choro-red-blue-toned-down-0,
-  choro-red-blue-toned-down-1: $choro-red-blue-toned-down-1,
-  choro-red-blue-toned-down-2: $choro-red-blue-toned-down-2,
-  choro-red-blue-toned-down-3: $choro-red-blue-toned-down-3,
-  choro-red-blue-toned-down-4: $choro-red-blue-toned-down-4,
-  recolorby-percentual-green-red-0: $recolorby-percentual-green-red-0,
-  recolorby-percentual-green-red-2: $recolorby-percentual-green-red-2,
-  recolorby-percentual-green-red-5: $recolorby-percentual-green-red-5,
-  recolorby-percentual-green-red-8: $recolorby-percentual-green-red-8,
-  recolorby-percentual-green-red-10: $recolorby-percentual-green-red-10,
-  choro-red-green-toned-down-0: $choro-red-green-toned-down-0,
-  choro-red-green-toned-down-1: $choro-red-green-toned-down-1,
-  choro-red-green-toned-down-2: $choro-red-green-toned-down-2,
-  choro-red-green-toned-down-3: $choro-red-green-toned-down-3,
-  choro-red-green-toned-down-4: $choro-red-green-toned-down-4
+        ch-red-0: $ch-red-0,
+        ch-red-1: $ch-red-1,
+        ch-red-2: $ch-red-2,
+        ch-red-3: $ch-red-3,
+        ch-red-4: $ch-red-4,
+        ch-blue-0: $ch-blue-0,
+        ch-blue-1: $ch-blue-1,
+        ch-blue-2: $ch-blue-2,
+        ch-blue-3: $ch-blue-3,
+        ch-blue-4: $ch-blue-4,
+        ch-bi-0-0: $ch-bi-0-0,
+        ch-bi-0-1: $ch-bi-0-1,
+        ch-bi-0-2: $ch-bi-0-2,
+        ch-bi-1-0: $ch-bi-1-0,
+        ch-bi-1-1: $ch-bi-1-1,
+        ch-bi-1-2: $ch-bi-1-2,
+        ch-bi-2-0: $ch-bi-2-0,
+        ch-bi-2-1: $ch-bi-2-1,
+        ch-bi-2-2: $ch-bi-2-2,
+        recolorby-percentual-yellow-green-0: $recolorby-percentual-yellow-green-0,
+        recolorby-percentual-yellow-green-1: $recolorby-percentual-yellow-green-1,
+        recolorby-percentual-yellow-green-2: $recolorby-percentual-yellow-green-2,
+        recolorby-percentual-yellow-green-3: $recolorby-percentual-yellow-green-3,
+        recolorby-percentual-yellow-green-4: $recolorby-percentual-yellow-green-4,
+        recolorby-linear-red-blue-7: $recolorby-linear-red-blue-7,
+        recolorby-linear-red-blue-6: $recolorby-linear-red-blue-6,
+        recolorby-linear-red-blue-5: $recolorby-linear-red-blue-5,
+        recolorby-linear-red-blue-3: $recolorby-linear-red-blue-3,
+        recolorby-linear-red-blue-1: $recolorby-linear-red-blue-1,
+        recolorby-linear-red-blue-0: $recolorby-linear-red-blue-0,
+        choro-red-blue-toned-down-0: $choro-red-blue-toned-down-0,
+        choro-red-blue-toned-down-1: $choro-red-blue-toned-down-1,
+        choro-red-blue-toned-down-2: $choro-red-blue-toned-down-2,
+        choro-red-blue-toned-down-3: $choro-red-blue-toned-down-3,
+        choro-red-blue-toned-down-4: $choro-red-blue-toned-down-4,
+        recolorby-percentual-green-red-0: $recolorby-percentual-green-red-0,
+        recolorby-percentual-green-red-2: $recolorby-percentual-green-red-2,
+        recolorby-percentual-green-red-5: $recolorby-percentual-green-red-5,
+        recolorby-percentual-green-red-8: $recolorby-percentual-green-red-8,
+        recolorby-percentual-green-red-10: $recolorby-percentual-green-red-10,
+        choro-red-green-toned-down-0: $choro-red-green-toned-down-0,
+        choro-red-green-toned-down-1: $choro-red-green-toned-down-1,
+        choro-red-green-toned-down-2: $choro-red-green-toned-down-2,
+        choro-red-green-toned-down-3: $choro-red-green-toned-down-3,
+        choro-red-green-toned-down-4: $choro-red-green-toned-down-4
 )

@@ -1,4 +1,4 @@
-<div class="c-nav">
+<div class="<%= (page === 'index') ? 'c-nav -home' : 'c-nav' %>">
   <div class="row column">
     <nav>
       <div class="left-side">
@@ -66,4 +66,4 @@
     </nav>
   </div>
 </div>
-<div class="c-nav-spacer"></div>
+<div class="<%= (page === 'index') ? 'c-nav-spacer -home' : 'c-nav-spacer' %>"></div>

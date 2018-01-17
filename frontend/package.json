@@ -83,11 +83,12 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
+    "react-siema": "github:sorodrigo/react-siema",
+    "react-transition-group": "^2.2.1",
     "redux": "^3.7.2",
     "redux-first-router": "^0.0.4-rudy",
     "redux-first-router-link": "^1.4.2",
     "redux-thunk": "^2.2.0",
-    "siema": "^1.4.9",
     "tether-tooltip": "^1.2.0",
     "topojson": "^3.0.2"
   },

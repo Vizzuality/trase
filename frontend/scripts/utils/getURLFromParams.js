@@ -16,6 +16,9 @@ export const POST_SUBSCRIBE_NEWSLETTER = 'POST_SUBSCRIBE_NEWSLETTER';
 export const GET_TWEETS = 'GET_TWEETS';
 export const GET_POSTS = 'GET_POSTS';
 export const GET_SITE_DIVE = 'GET_SITE_DIVE';
+export const GET_TESTIMONIALS = 'GET_TESTIMONIALS';
+export const GET_PROMOTED_STORY = 'GET_PROMOTED_STORY';
+export const GET_FEATURES_POSTS = 'GET_FEATURES_POSTS';
 
 const API_ENDPOINTS = {
   [GET_CONTEXTS]: { api: 3, endpoint: '/contexts' },
@@ -43,7 +46,14 @@ const API_ENDPOINTS = {
   [GET_POSTS]: { api: 'content', endpoint: '/posts' },
   [GET_TWEETS]: { api: 'content', endpoint: '/tweets' },
   [GET_DISCLAIMER]: { api: 'local', endpoint: 'disclaimer.json' },
-  [GET_TOOLTIPS]: { api: 'local', endpoint: 'tooltips.json' }
+  [GET_TOOLTIPS]: { api: 'local', endpoint: 'tooltips.json' },
+  [GET_TESTIMONIALS]: { api: 'content', endpoint: '/testimonials', mock: 'mocks/v3_get_testimonials.json' },
+  [GET_PROMOTED_STORY]: { api: 'content', endpoint: '/featured-story', mock: 'mocks/v3_get_promoted_post.json' },
+  [GET_FEATURES_POSTS]: {
+    api: 'content',
+    endpoint: '/posts?category=features',
+    mock: 'mocks/v3_get_features_posts.json'
+  }
 };
 
 function getURLForV3(endpoint, paramsArg = {}) {
