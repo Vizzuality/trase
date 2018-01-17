@@ -7,6 +7,19 @@ module Api
           first
         current_version&.symbol
       end
+
+      def self.import_key
+        [
+          {name: :context_id, sql_type: 'INT'},
+          {name: :symbol, sql_type: 'TEXT'}
+        ]
+      end
+
+      def self.unstable_foreign_keys
+        [
+          {name: :context_id, table_class: Api::V3::Context}
+        ]
+      end
     end
   end
 end

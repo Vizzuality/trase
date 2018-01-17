@@ -19,6 +19,12 @@ module Api
   module V3
     class MapAttribute < BaseModel
       belongs_to :map_attribute_group
+
+      def self.stable_foreign_keys
+        [
+          {name: :map_attribute_group_id, table_class: Api::V3::MapAttributeGroup}
+        ]
+      end
     end
   end
 end

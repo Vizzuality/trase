@@ -32,6 +32,12 @@ module Api
           pluck(:column_position).first
         zero_based_idx && zero_based_idx + 1 || 0
       end
+
+      def self.import_key
+        [
+          {name: :name, sql_type: 'TEXT'}
+        ]
+      end
     end
   end
 end

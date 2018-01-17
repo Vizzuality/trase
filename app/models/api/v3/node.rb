@@ -110,6 +110,20 @@ module Api
         rel = rel.where('node_inds.year' => year) if year.present?
         rel
       end
+
+      def self.import_key
+        [
+          {name: :name, sql_type: 'TEXT'},
+          {name: :main_id, sql_type: 'INT'},
+          {name: :node_type_id, sql_type: 'INT'}
+        ]
+      end
+
+      def self.unstable_foreign_keys
+        [
+          {name: :node_type_id, table_class: Api::V3::NodeType}
+        ]
+      end
     end
   end
 end

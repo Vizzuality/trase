@@ -5,6 +5,12 @@ module Api
 
       has_many :recolor_by_inds
       has_many :recolor_by_quals
+
+      def self.unstable_foreign_keys
+        [
+          {name: :context_id, table_class: Api::V3::Context}
+        ]
+      end
     end
   end
 end
