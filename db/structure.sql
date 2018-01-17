@@ -5264,6 +5264,14 @@ ALTER TABLE ONLY charts
 
 
 --
+-- Name: commodities commodities_name_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY commodities
+    ADD CONSTRAINT commodities_name_key UNIQUE (name);
+
+
+--
 -- Name: commodities commodities_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -7236,4 +7244,5 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180111085256'),
 ('20180111124938'),
 ('20180112112907'),
+('20180116112807'),
 ('20180119094345');
