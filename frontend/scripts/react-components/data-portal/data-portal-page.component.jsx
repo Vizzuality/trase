@@ -88,8 +88,7 @@ class DataContent extends Component {
       case 'commodities': {
         const selectedContext = this.props.contexts.find(elem =>
           elem.isDisabled !== true
-          && elem.countryId === this.state.selectedCountry
-          && elem.commodityId === value);
+          && elem.id === value);
         this.setState({ selectedCommodity: value, selectedContextId: selectedContext.id });
         if (selectedContext) {
           this.props.onContextSelected(selectedContext.id);
