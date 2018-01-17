@@ -1,28 +1,16 @@
 /* eslint-disable no-new */
+
+import ProfilePlaceMarkup from 'html/profile-place.ejs';
+import NavMarkup from 'html/includes/_nav.ejs';
+import FeedbackMarkup from 'html/includes/_feedback.ejs';
+
+import 'styles/profile-place.scss';
+
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
-import ProfilePlaceMarkup from 'html/profile-place.ejs';
-import NavMarkup from 'html/includes/_nav.ejs';
-import FooterMarkup from 'html/includes/_footer.ejs';
-import FeedbackMarkup from 'html/includes/_feedback.ejs';
+import Footer from 'react-components/shared/footer.component';
 
-import 'styles/_base.scss';
-import 'styles/_texts.scss';
-import 'styles/_foundation.css';
-import 'styles/layouts/l-profile-place.scss';
-import 'styles/components/shared/dropdown.scss';
-import 'styles/components/shared/button.scss';
-import 'styles/components/shared/spinner.scss';
-import 'styles/components/shared/nav.scss';
-import 'styles/components/shared/_footer.scss';
-import 'styles/components/profiles/overall-info.scss';
-import 'styles/components/profiles/info.scss';
-import 'styles/components/profiles/link-buttons.scss';
-import 'styles/components/profiles/error.scss';
-import 'styles/components/profiles/map.scss';
-
-import capitalize from 'lodash/capitalize';
 
 import NavContainer from 'containers/shared/nav.container';
 import Dropdown from 'react-components/shared/dropdown.component';
@@ -34,6 +22,7 @@ import MiniSankey from 'react-components/profiles/mini-sankey.component';
 import MultiTable from 'react-components/profiles/multi-table.component';
 import Map from 'react-components/profiles/map.component';
 
+import capitalize from 'lodash/capitalize';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
 import smoothScroll from 'utils/smoothScroll';
@@ -484,9 +473,15 @@ export const mount = (root, store) => {
   root.innerHTML = ProfilePlaceMarkup({
     printMode: print,
     nav: NavMarkup({ page: 'profile-place' }),
-    footer: FooterMarkup(),
     feedback: FeedbackMarkup()
   });
+
+  render(
+    <Provider store={store}>
+      <Footer />
+    </Provider>,
+    document.getElementById('footer')
+  );
 
   _loadData(store, nodeId, year, showMiniSankey);
 
@@ -508,5 +503,6 @@ export const unmount = () => {
   unmountComponentAtNode(document.querySelector('.js-top-consumer'));
   unmountComponentAtNode(document.querySelector('.js-score-table'));
   unmountComponentAtNode(document.getElementById('year-dropdown'));
+  unmountComponentAtNode(document.getElementById('footer'));
 };
 

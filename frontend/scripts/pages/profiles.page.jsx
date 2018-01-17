@@ -1,18 +1,18 @@
 /* eslint-disable no-new */
 import ProfilesMarkup from 'html/profiles.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
-import FooterMarkup from 'html/includes/_footer.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
+
+import 'styles/profiles.scss';
+
+import React from 'react';
+import { render, unmountComponentAtNode } from 'react-dom';
+import { Provider } from 'react-redux';
+import Footer from 'react-components/shared/footer.component';
+
 import NavContainer from 'containers/shared/nav.container';
-import 'styles/_base.scss';
-import 'styles/_texts.scss';
-import 'styles/_foundation.css';
-import 'styles/layouts/l-profiles.scss';
-import 'styles/components/shared/nav.scss';
-import 'styles/components/shared/spinner.scss';
-import 'styles/components/shared/_footer.scss';
-import 'styles/components/profiles/error.scss';
-import _ from 'lodash';
+
+import values from 'lodash/values';
 import Search from 'components/shared/search.component';
 import { GET_ALL_NODES, getURLFromParams } from 'utils/getURLFromParams';
 import { DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
@@ -60,7 +60,7 @@ const _setSearch = (goToPage) => {
       const search = new Search();
       search.onCreated();
 
-      const nodesArray = _.values(result.data)
+      const nodesArray = values(result.data)
         .filter(node =>
           node.isUnknown !== true &&
           node.isAggregated !== true &&
@@ -81,9 +81,15 @@ const _setSearch = (goToPage) => {
 export const mount = (root, store) => {
   root.innerHTML = ProfilesMarkup({
     nav: NavMarkup({ page: 'profiles' }),
-    footer: FooterMarkup(),
     feedback: FeedbackMarkup()
   });
+
+  render(
+    <Provider store={store}>
+      <Footer />
+    </Provider>,
+    document.getElementById('footer')
+  );
 
   const goToPage = (type, params) => store.dispatch({ type, payload: { query: params } });
 
@@ -91,3 +97,6 @@ export const mount = (root, store) => {
   new NavContainer(store);
 };
 
+export const unmount = () => {
+  unmountComponentAtNode(document.getElementById('footer'));
+};
