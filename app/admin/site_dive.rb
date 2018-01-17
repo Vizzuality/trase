@@ -1,4 +1,4 @@
-ActiveAdmin.register Content::SiteDive do
+ActiveAdmin.register Content::SiteDive, as: 'Site Dive' do
   permit_params :title, :page_url, :description
 
   form do |f|

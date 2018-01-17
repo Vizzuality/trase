@@ -101,3 +101,4 @@ Style/Lambda:
 Style/RegexpLiteral:
   Exclude:
     - 'app/models/content/post.rb'
+    - 'app/models/content/testimonial.rb'

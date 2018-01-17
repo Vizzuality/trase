@@ -163,6 +163,43 @@ ALTER SEQUENCE site_dives_id_seq OWNED BY site_dives.id;
 
 
 --
+-- Name: testimonials; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE testimonials (
+    id bigint NOT NULL,
+    quote text,
+    author_name character varying,
+    author_title character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    image_file_name character varying,
+    image_content_type character varying,
+    image_file_size integer,
+    image_updated_at timestamp without time zone
+);
+
+
+--
+-- Name: testimonials_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE testimonials_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: testimonials_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE testimonials_id_seq OWNED BY testimonials.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -224,6 +261,13 @@ ALTER TABLE ONLY site_dives ALTER COLUMN id SET DEFAULT nextval('site_dives_id_s
 
 
 --
+-- Name: testimonials id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY testimonials ALTER COLUMN id SET DEFAULT nextval('testimonials_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -271,6 +315,14 @@ ALTER TABLE ONLY site_dives
 
 
 --
+-- Name: testimonials testimonials_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY testimonials
+    ADD CONSTRAINT testimonials_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -313,6 +365,8 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (re
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20161104121039');
+('20161104121039'),
+('20180117084134'),
+('20180117084618');
 
 

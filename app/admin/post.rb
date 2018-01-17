@@ -1,4 +1,4 @@
-ActiveAdmin.register Content::Post do
+ActiveAdmin.register Content::Post, as: 'Post' do
   permit_params :title, :title_color, :date, :image, :post_url, :state, :description, :highlighted
 
   form do |f|

@@ -1,12 +1,15 @@
 Rails.application.routes.draw do
+  scope path: 'content' do
+    ActiveAdmin.routes(self)
+    devise_for :users, ActiveAdmin::Devise.config.merge(class_name: 'Content::User')
+  end
+
   namespace :content do
     mount Ckeditor::Engine => '/ckeditor'
-    devise_for :users, class_name: 'Content::User'
-    ActiveAdmin.routes(self)
-
     get '/posts', to: 'content#posts'
     get '/site_dive/:id', to: 'content#site_dive'
     get '/tweets', to: 'content#tweets'
+    resources :testimonials, only: [:index]
   end
 
   namespace :api do

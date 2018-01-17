@@ -25,7 +25,7 @@ gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'devise', '~> 4.2'
-gem 'activeadmin', '~> 1.0.0.pre5'
+gem 'activeadmin', '~> 1.2.1'
 gem 'inherited_resources', github: 'activeadmin/inherited_resources'
 
 gem 'ckeditor', git: 'https://github.com/galetahub/ckeditor.git'
