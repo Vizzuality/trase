@@ -125,6 +125,8 @@ const _build = (data, { year, showMiniSankey }, store) => {
     && data.trajectory_deforestation.lines
     && data.trajectory_deforestation.lines.length
   ) {
+    document.querySelector('.deforestation').classList.toggle('is-hidden', false);
+
     // Manually trim time series to 2010 - 2015 as asked here https://basecamp.com/1756858/projects/12498794/todos/324404665
     data.trajectory_deforestation.included_years =
       data.trajectory_deforestation.included_years.filter((includedYear) => {
@@ -171,8 +173,7 @@ const _build = (data, { year, showMiniSankey }, store) => {
       document.querySelector('.js-line-legend')
     );
   } else {
-    const elem = document.querySelector('.js-line-title');
-    elem.parentNode.parentNode.parentNode.removeChild(elem.parentNode.parentNode);
+    document.querySelector('.deforestation').classList.toggle('is-hidden', true);
   }
 
   if (showMiniSankey === 'true') {
