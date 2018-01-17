@@ -3,7 +3,7 @@ module Api
     class ContextualLayer < BaseModel
       belongs_to :context
 
-      has_many :carto_layer
+      has_many :carto_layers
 
       scope :default, -> { where(is_default: true) }
     end

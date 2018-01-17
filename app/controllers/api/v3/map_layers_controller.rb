@@ -5,7 +5,7 @@ module Api
         contextual_layers = Api::V3::ContextualLayer.
           select("title, #{Api::V3::ContextualLayer.table_name}.identifier, tooltip_text, \
                  #{Api::V3::ContextualLayer.table_name}.id, position, is_default, legend, years, raster_url").
-          joins(:carto_layer).
+          joins(:carto_layers).
           where(context_id: @context.id).
           order('position ASC, id ASC')
 
