@@ -1,4 +1,4 @@
-ActiveAdmin.register Content::User do
+ActiveAdmin.register Content::User, as: 'User' do
   permit_params :email, :password, :password_confirmation
 
   index do
