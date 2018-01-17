@@ -18,7 +18,7 @@ class Scatterplot extends Component {
     this.margins = {
       top: 20, right: 13, bottom: 30, left: 29
     };
-    this.key = `scatterplot_${props.id}`;
+    this.key = `scatterplot_${new Date().getTime()}`;
     this.state = {
       selectedTabIndex: 0
     };
@@ -217,7 +217,6 @@ class Scatterplot extends Component {
 }
 
 Scatterplot.propTypes = {
-  id: PropTypes.string.isRequired,
   data: PropTypes.array,
   node: PropTypes.object,
   xDimension: PropTypes.array,

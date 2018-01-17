@@ -11,7 +11,7 @@ class Map extends Component {
   constructor(props) {
     super(props);
 
-    this.key = `map_${props.id}`;
+    this.key = `map_${new Date().getTime()}`;
   }
 
   componentDidMount() {
@@ -121,7 +121,6 @@ class Map extends Component {
 }
 
 Map.propTypes = {
-  id: PropTypes.string.isRequired,
   width: PropTypes.number,
   height: PropTypes.number,
   topoJSONPath: PropTypes.string,

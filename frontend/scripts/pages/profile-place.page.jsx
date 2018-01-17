@@ -58,7 +58,6 @@ const _buildMaps = (data, store) => {
   render(
     <Provider store={store} >
       <Map
-        id="country"
         width={countryMapContainer.clientWidth}
         height={countryMapContainer.clientHeight}
         topoJSONPath="./vector_layers/WORLD.topo.json"
@@ -74,7 +73,6 @@ const _buildMaps = (data, store) => {
   render(
     <Provider store={store} >
       <Map
-        id="biome"
         width={biomeMapContainer.clientWidth}
         height={biomeMapContainer.clientHeight}
         topoJSONPath={`./vector_layers/${defaults.country.toUpperCase()}_BIOME.topo.json`}
@@ -89,7 +87,6 @@ const _buildMaps = (data, store) => {
   render(
     <Provider store={store} >
       <Map
-        id="state"
         width={stateMapContainer.clientWidth}
         height={stateMapContainer.clientHeight}
         topoJSONPath={`./vector_layers/${defaults.country.toUpperCase()}_STATE.topo.json`}
@@ -104,7 +101,6 @@ const _buildMaps = (data, store) => {
   render(
     <Provider store={store} >
       <Map
-        id="municipality"
         width={municipalityMapContainer.clientWidth}
         height={municipalityMapContainer.clientHeight}
         topoJSONPath={`./vector_layers/municip_states/${defaults.country.toLowerCase()}/${stateGeoID}.topo.json`}
@@ -144,7 +140,6 @@ const _build = (data, { year, showMiniSankey }, store) => {
     render(
       <Provider store={store} >
         <Line
-          id="trajectory-deforestation"
           className=".js-line"
           data={data.trajectory_deforestation}
           xValues={data.trajectory_deforestation.included_years}
@@ -270,7 +265,6 @@ const _build = (data, { year, showMiniSankey }, store) => {
 
       render(
         <Chord
-          id="traders"
           width={tradersChordContainer.clientWidth}
           height={tradersChordContainer.clientWidth}
           orgMatrix={data.top_traders.matrix}
@@ -302,7 +296,6 @@ const _build = (data, { year, showMiniSankey }, store) => {
 
       render(
         <Chord
-          id="consumers"
           width={consumersChordContainer.clientWidth}
           height={consumersChordContainer.clientWidth}
           orgMatrix={data.top_consumers.matrix}

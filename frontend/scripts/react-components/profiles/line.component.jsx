@@ -17,7 +17,7 @@ class Line extends Component {
   constructor(props) {
     super(props);
 
-    this.key = `line_${props.id}`;
+    this.key = `line_${new Date().getTime()}`;
   }
 
   componentDidMount() {
@@ -249,7 +249,6 @@ class Line extends Component {
 }
 
 Line.propTypes = {
-  id: PropTypes.string.isRequired,
   className: PropTypes.string,
   data: PropTypes.object,
   xValues: PropTypes.array,

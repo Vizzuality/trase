@@ -14,7 +14,7 @@ class Chord extends Component {
   constructor(props) {
     super(props);
 
-    this.key = `chord_${props.id}`;
+    this.key = `chord_${new Date().getTime()}`;
   }
 
   componentDidMount() {
@@ -139,7 +139,6 @@ class Chord extends Component {
 }
 
 Chord.propTypes = {
-  id: PropTypes.string.isRequired,
   width: PropTypes.number,
   height: PropTypes.number,
   orgMatrix: PropTypes.array,
