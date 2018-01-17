@@ -58,7 +58,9 @@ class TwitterFeed extends React.PureComponent {
                         </p>
                         <div
                           className="author-avatar"
-                          style={{ backgroundImage: tweet.image_url && `url(${tweet.image_url})` }}
+                          style={{
+                            backgroundImage: tweet.profilePictureUrl && `url(${tweet.profilePictureUrl})`
+                          }}
                         />
                       </div>
                     </div>
