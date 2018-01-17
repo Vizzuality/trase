@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import _ from 'lodash';
+import xor from 'lodash/xor';
+import uniqBy from 'lodash/uniqBy';
 import { GET_CSV_DATA_DOWNLOAD_FILE, GET_JSON_DATA_DOWNLOAD_FILE, getURLFromParams } from 'utils/getURLFromParams';
 import BulkDownloadsBlock from 'react-components/data-portal/bulk-downloads-block.component';
 import DownloadSelector from 'react-components/data-portal/download-selector.component';
@@ -96,13 +97,13 @@ class DataContent extends Component {
         break;
       }
       case 'years': {
-        const selectedYears = _.xor(this.state.selectedYears, [value]);
+        const selectedYears = xor(this.state.selectedYears, [value]);
         const selectedContext = this.props.contexts.find(context => context.id === this.state.selectedContextId);
         this.setState({ selectedYears, allYearsSelected: selectedYears.length === selectedContext.years.length });
         break;
       }
       case 'exporters': {
-        const selectedExporters = _.xor(this.state.selectedExporters, [value]);
+        const selectedExporters = xor(this.state.selectedExporters, [value]);
         this.setState({
           selectedExporters,
           allExportersSelected: selectedExporters.length === this.props.exporters.length
@@ -110,20 +111,20 @@ class DataContent extends Component {
         break;
       }
       case 'consumption-countries': {
-        const selectedConsumptionCountries = _.xor(this.state.selectedConsumptionCountries, [value]);
+        const selectedConsumptionCountries = xor(this.state.selectedConsumptionCountries, [value]);
         const allConsumptionCountriesSelected =
           selectedConsumptionCountries.length === this.props.consumptionCountries.length;
         this.setState({ selectedConsumptionCountries, allConsumptionCountriesSelected });
         break;
       }
       case 'indicators': {
-        const selectedIndicators = _.xor(this.state.selectedIndicators, [value]);
+        const selectedIndicators = xor(this.state.selectedIndicators, [value]);
         this.setState({
           selectedIndicators,
           allIndicatorsSelected: selectedIndicators.length === this.props.indicators.length
         });
 
-        this.setState({ selectedIndicators: _.xor(this.state.selectedIndicators, [value]) });
+        this.setState({ selectedIndicators: xor(this.state.selectedIndicators, [value]) });
         break;
       }
     }
@@ -258,7 +259,7 @@ class DataContent extends Component {
 
     const enabledContexts = contexts.filter(elem => elem.isDisabled !== true);
 
-    const countryOptions = _.uniqBy(enabledContexts, context => context.countryId)
+    const countryOptions = uniqBy(enabledContexts, context => context.countryId)
       .map(context => ({
         id: context.countryId,
         name: context.countryName.toLowerCase(),
