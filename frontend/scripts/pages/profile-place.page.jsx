@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import React from 'react';
-import { render } from 'react-dom';
+import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 import ProfilePlaceMarkup from 'html/profile-place.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
@@ -491,5 +491,22 @@ export const mount = (root, store) => {
   _loadData(store, nodeId, year, showMiniSankey);
 
   new NavContainer(store);
+};
+
+export const unmount = () => {
+  unmountComponentAtNode(document.querySelector('.js-map-country'));
+  unmountComponentAtNode(document.querySelector('.js-map-biome'));
+  unmountComponentAtNode(document.querySelector('.js-map-state'));
+  unmountComponentAtNode(document.querySelector('.js-map-municipality'));
+  unmountComponentAtNode(document.querySelector('.js-line'));
+  unmountComponentAtNode(document.querySelector('.js-line-legend'));
+  unmountComponentAtNode(document.querySelector('.js-traders-sankey'));
+  unmountComponentAtNode(document.querySelector('.js-consumers-sankey'));
+  unmountComponentAtNode(document.querySelector('.js-chord-traders-container'));
+  unmountComponentAtNode(document.querySelector('.js-chord-consumers-container'));
+  unmountComponentAtNode(document.querySelector('.js-top-trader'));
+  unmountComponentAtNode(document.querySelector('.js-top-consumer'));
+  unmountComponentAtNode(document.querySelector('.js-score-table'));
+  unmountComponentAtNode(document.getElementById('year-dropdown'));
 };
 

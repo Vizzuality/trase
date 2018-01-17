@@ -6,7 +6,7 @@ import NavMarkup from 'html/includes/_nav.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import React from 'react';
-import { render } from 'react-dom';
+import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 import Home from 'react-components/home/home.container';
 
@@ -28,4 +28,8 @@ export const mount = (root, store) => {
     </Provider>,
     document.getElementById('home-react-root')
   );
+};
+
+export const unmount = () => {
+  unmountComponentAtNode(document.getElementById('home-react-root'));
 };
