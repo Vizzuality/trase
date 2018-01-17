@@ -65,11 +65,12 @@ class SliderSection extends React.PureComponent {
                           />
                           <div className="c-author-footer">
                             <figcaption className="author-details">
-                              {slide.author}
+                              <span>{slide.authorName}</span>
+                              <span>{slide.authorTitle}</span>
                             </figcaption>
                             <figure
                               className="author-avatar"
-                              style={{ backgroundImage: slide.image_url && `url(${slide.image_url})` }}
+                              style={{ backgroundImage: slide.imageUrl && `url(${slide.imageUrl})` }}
                             />
                           </div>
                         </div>
@@ -110,13 +111,20 @@ SliderSection.propTypes = {
   className: PropTypes.string,
   name: PropTypes.string.isRequired,
   slides: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string,
-      category: PropTypes.string,
-      image_url: PropTypes.string,
-      quote: PropTypes.string,
-      author: PropTypes.string
-    })
+    PropTypes.oneOfType([
+      PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        category: PropTypes.string,
+        image_url: PropTypes.string.isRequired,
+        completePostUrl: PropTypes.string
+      }),
+      PropTypes.shape({
+        quote: PropTypes.string.isRequired,
+        authorName: PropTypes.string.isRequired,
+        authorTitle: PropTypes.string.isRequired,
+        imageUrl: PropTypes.string.isRequired
+      })
+    ])
   ).isRequired
 };
 
