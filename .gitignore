@@ -20,6 +20,8 @@
 !/log/.keep
 !/tmp/.keep
 
+/public/system
+
 # Ignore gold master responses
 spec/support/gold_master.zip
 spec/support/gold_master/*
