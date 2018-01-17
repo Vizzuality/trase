@@ -15,7 +15,6 @@
     position: relative;
     height: 550px;
     background: linear-gradient(to bottom, $egg-shell 0%, $egg-shell 50%, $light-gray 50%, $light-gray 100%);
-    cursor: pointer;
 
     @media only screen and (min-width: $breakpoint-foundation-small) {
       background: linear-gradient(to right, $egg-shell 0%, $egg-shell 50%, $light-gray 50%, $light-gray 100%);
@@ -24,32 +23,36 @@
     .screenshot {
       position: absolute;
       height: 60%;
-      width: 50%;
+      width: 100%;
       bottom: 0;
+      right: 0;
       background-position: right bottom;
       background-repeat: no-repeat;
       background-size: contain;
       pointer-events: none;
 
-      @media only screen and (min-width: $breakpoint-foundation-small) {
-        width: calc(50% - 60px);
-      }
-
       &.-half {
-        right: 0;
-        bottom: 50%;
         background-image: url('./../public/images/backgrounds/screenshot-half.jpg');
-
-        @media only screen and (min-width: $breakpoint-foundation-small) {
-          right: 50%;
-          bottom: 0;
-        }
       }
 
       &.-end {
-        right: 0;
-
         background-image: url('./../public/images/backgrounds/screenshot-end.png');
+
+        @media only screen and (min-width: 1058px) {
+          transform: translateX(60px);
+        }
+
+        @media only screen and (min-width: 1177px) {
+          transform: translateX(88px);
+        }
+
+        @media only screen and (min-width: 1280px) {
+          transform: translateX(112px);
+        }
+
+        @media only screen and (min-width: 1281px) {
+          transform: translateX(0);
+        }
       }
     }
 
@@ -59,6 +62,8 @@
 
     .column {
       height: 50%;
+      position: relative;
+      cursor: pointer;
 
       @media only screen and (min-width: $breakpoint-foundation-small) {
         height: 100%;

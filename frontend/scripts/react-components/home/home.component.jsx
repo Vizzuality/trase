@@ -25,6 +25,7 @@ function Home(props) {
               <h3 className="home-subtitle">Profile</h3>
               <p className="splitted-text">Can companies and governments meet their 2020 sustainability goals?</p>
             </Link>
+            <div className="screenshot -half" />
           </div>
           <div className="column small-12 medium-6">
             <Link to={{ type: 'tool' }} className="splitted-column-wrapper">
@@ -34,10 +35,9 @@ function Home(props) {
                 opportunities for a more sustainable production.
               </p>
             </Link>
+            <div className="screenshot -end" />
           </div>
         </div>
-        <div className="screenshot -half" />
-        <div className="screenshot -end" />
       </div>
       <div className="sliders">
         <SliderSection name="News and Insights" slides={features} />

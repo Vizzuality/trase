@@ -42,67 +42,65 @@ class SliderSection extends React.PureComponent {
     const { className, name, slides } = this.props;
     const perPage = SliderSection.getPerPage();
     return (
-      <div className={cx('c-slider-section', className)}>
-        <div className="row column">
-          <h3 className="home-subtitle">{name}</h3>
-          <div className="slider-wrapper">
-            <Siema
-              perPage={perPage}
-              draggable={false}
-              loop={false}
-              ref={this.getSliderRef}
-            >
-              {
-                slides
-                  .map(slide => (
-                    <div key={slide.title || slide.quote} className="slide">
-                      {slide.quote ?
-                        <React.Fragment>
-                          <div className="slide-quote">
-                            <p
-                              className="slide-quote-content"
-                              dangerouslySetInnerHTML={{ __html: `&ldquo;${slide.quote}&rdquo;` }}
-                            />
-                            <div className="c-author-footer">
-                              <figcaption className="author-details">
-                                {slide.author}
-                              </figcaption>
-                              <figure
-                                className="author-avatar"
-                                style={{ backgroundImage: slide.image_url && `url(${slide.image_url})` }}
-                              />
-                            </div>
-                          </div>
-                        </React.Fragment> :
-                        <a
-                          className="slide-link"
-                          href={slide.completePostUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <figure
-                            className="slide-image"
-                            style={{ backgroundImage: `url(${slide.image_url})` }}
+      <section className={cx('c-slider-section', className)}>
+        <div className="row slider-wrapper">
+          <h3 className="home-subtitle column small-12">{name}</h3>
+          <Siema
+            perPage={perPage}
+            draggable={false}
+            loop={false}
+            ref={this.getSliderRef}
+          >
+            {
+              slides
+                .map(slide => (
+                  <div key={slide.title || slide.quote} className="slide column small-12 medium-4">
+                    {slide.quote ?
+                      <React.Fragment>
+                        <div className="slide-quote">
+                          <p
+                            className="slide-quote-content"
+                            dangerouslySetInnerHTML={{ __html: `&ldquo;${slide.quote}&rdquo;` }}
                           />
-                          <figcaption className="slide-content">
-                            <h4 className="home-subtitle">{slide.category}</h4>
-                            <p className="slide-title">{slide.title}</p>
-                          </figcaption>
-                        </a>
-                      }
-                    </div>
-                  ))
-              }
-            </Siema>
-            {this.state.currentSlide > 0 &&
-              <button className="slide-prev" onClick={this.onClickPrev} />
+                          <div className="c-author-footer">
+                            <figcaption className="author-details">
+                              {slide.author}
+                            </figcaption>
+                            <figure
+                              className="author-avatar"
+                              style={{ backgroundImage: slide.image_url && `url(${slide.image_url})` }}
+                            />
+                          </div>
+                        </div>
+                      </React.Fragment> :
+                      <a
+                        className="slide-link"
+                        href={slide.completePostUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <figure
+                          className="slide-image"
+                          style={{ backgroundImage: `url(${slide.image_url})` }}
+                        />
+                        <figcaption className="slide-content">
+                          <h4 className="home-subtitle">{slide.category}</h4>
+                          <p className="slide-title">{slide.title}</p>
+                        </figcaption>
+                      </a>
+                    }
+                  </div>
+                ))
             }
-            {this.state.currentSlide < (slides.length - perPage) &&
-              <button className="slide-next" onClick={this.onClickNext} />
-            }
-          </div>
+          </Siema>
+          {this.state.currentSlide > 0 &&
+            <button className="slide-prev" onClick={this.onClickPrev} />
+          }
+          {this.state.currentSlide < (slides.length - perPage) &&
+            <button className="slide-next" onClick={this.onClickNext} />
+          }
         </div>
-      </div>
+      </section>
     );
   }
 }
