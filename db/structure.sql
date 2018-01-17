@@ -245,6 +245,7 @@ CREATE FOREIGN TABLE contexts (
     commodity_id integer,
     years integer[],
     default_year integer,
+    is_subnational boolean,
     created_at timestamp with time zone
 )
 SERVER trase_main
@@ -266,6 +267,9 @@ ALTER FOREIGN TABLE contexts ALTER COLUMN years OPTIONS (
 );
 ALTER FOREIGN TABLE contexts ALTER COLUMN default_year OPTIONS (
     column_name 'default_year'
+);
+ALTER FOREIGN TABLE contexts ALTER COLUMN is_subnational OPTIONS (
+    column_name 'is_subnational'
 );
 ALTER FOREIGN TABLE contexts ALTER COLUMN created_at OPTIONS (
     column_name 'created_at'
