@@ -41,13 +41,14 @@ class SliderSection extends React.PureComponent {
   render() {
     const { className, name, slides } = this.props;
     const perPage = SliderSection.getPerPage();
+    const smallScreen = perPage === 1;
     return (
       <section className={cx('c-slider-section', className)}>
         <div className="row slider-wrapper">
           <h3 className="home-subtitle column small-12">{name}</h3>
           <Siema
             perPage={perPage}
-            draggable={false}
+            draggable={smallScreen}
             loop={false}
             ref={this.getSliderRef}
           >
@@ -93,10 +94,10 @@ class SliderSection extends React.PureComponent {
                 ))
             }
           </Siema>
-          {this.state.currentSlide > 0 &&
+          {this.state.currentSlide > 0 && !smallScreen &&
             <button className="slide-prev" onClick={this.onClickPrev} />
           }
-          {this.state.currentSlide < (slides.length - perPage) &&
+          {this.state.currentSlide < (slides.length - perPage) && !smallScreen &&
             <button className="slide-next" onClick={this.onClickNext} />
           }
         </div>

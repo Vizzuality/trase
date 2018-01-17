@@ -116,7 +116,7 @@ export function getURLFromParams(endpointKey, params = {}, mock = false) {
       case 'local':
         return `/${endpointData.endpoint}`;
       case 'content':
-        return `//staging.trase.earth/content${endpointData.endpoint}`;
+        return `${API_V2_URL}/content${endpointData.endpoint}`;
       default:
         console.warn('Unmatched route found at router');
         return null;
