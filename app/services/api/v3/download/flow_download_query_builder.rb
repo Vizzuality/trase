@@ -14,7 +14,7 @@ module Api
               next unless indicators.any?
               memo_object[:query] << 'attribute_type = ? AND attribute_id IN (?)'
               memo_object[:placeholders] << indicator_class.name
-              memo_object[:placeholders] << indicators.pluck(indicator_class.name.downcase + '_id')
+              memo_object[:placeholders] << indicators.pluck(:id)
             end
             @query = @query.where(memo[:query].join(' OR '), *memo[:placeholders])
           end
