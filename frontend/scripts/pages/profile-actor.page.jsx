@@ -67,7 +67,6 @@ const _initSource = (selectedSource, data, store) => {
   render(
     <Provider store={store} >
       <Line
-        id="top-municipalities"
         className=".js-top-municipalities"
         data={sourceLines}
         xValues={data.top_sources.included_years}
@@ -111,7 +110,6 @@ const _initSource = (selectedSource, data, store) => {
   render(
     <Provider store={store} >
       <Map
-        id="top-municipalities"
         width={containerElement.clientWidth}
         height={containerElement.clientHeight}
         topoJSONPath={topoJSONPath}
@@ -230,7 +228,6 @@ const _build = (data, { nodeId, year, print }, store) => {
     render(
       <Provider store={store} >
         <Line
-          id="top-destination"
           className=".js-top-destination"
           data={topCountriesLines}
           xValues={data.top_countries.included_years}
@@ -269,7 +266,6 @@ const _build = (data, { nodeId, year, print }, store) => {
     render(
       <Provider store={store} >
         <Map
-          id="top-destination"
           width={containerElement.clientWidth}
           height={containerElement.clientHeight}
           topoJSONPath="./vector_layers/WORLD.topo.json"
