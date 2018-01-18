@@ -10,12 +10,12 @@ const initialState = {
   ],
   posts: [
   /**
-   * { title, title_color, description, date, image_url, highlighted, complete_post_url }
+   * { title, titleColor, description, date, imageUrl, highlighted, completePostUrl }
    */
   ],
   features: [
   /**
-   * { title, title_color, description, date, image_url, highlighted, complete_post_url }
+   * { title, titleColor, description, date, imageUrl, highlighted, completePostUrl }
    */
   ],
   testimonials: [
@@ -25,7 +25,7 @@ const initialState = {
   ],
   promotedPost: null
   /**
-   * { title, title_color, description, date, image_url, highlighted, complete_post_url }
+   * { title, titleColor, description, date, imageUrl, highlighted, completePostUrl }
    */
 };
 

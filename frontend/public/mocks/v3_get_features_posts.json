@@ -2,30 +2,30 @@
   "data": [
     {
       "title": "8 traps to avoid for Companies Aiming for Deforestation-Free Supply Chains",
-      "title_color": "pink",
+      "titleColor": "pink",
       "description": "Lorem ipsum dolor",
       "date": 1516111086780,
-      "image_url": "images/mocks/one.jpg",
+      "imageUrl": "images/mocks/one.jpg",
       "highlighted": false,
-      "complete_post_url": null
+      "completePostUrl": null
     },
     {
       "title": "How Tracking Product Sources May Help Save World’s Forests",
-      "title_color": "pink",
+      "titleColor": "pink",
       "description": "Lorem ipsum dolor",
       "date": 1516111086780,
-      "image_url": "images/mocks/two.jpg",
+      "imageUrl": "images/mocks/two.jpg",
       "highlighted": false,
-      "complete_post_url": null
+      "completePostUrl": null
     },
     {
       "title": "Are zero-deforestation pledges slowing deforestation?",
-      "title_color": "pink",
+      "titleColor": "pink",
       "description": "Lorem ipsum dolor",
       "date": 1516111086780,
-      "image_url": "images/mocks/three.jpg",
+      "imageUrl": "images/mocks/three.jpg",
       "highlighted": false,
-      "complete_post_url": null
+      "completePostUrl": null
     }
   ]
 }

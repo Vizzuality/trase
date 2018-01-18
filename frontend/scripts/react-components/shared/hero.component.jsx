@@ -23,7 +23,7 @@ class Hero extends React.Component {
     const StoryBox = storyObj => (
       <div className="story-box">
         <button className="story-box-close" onClick={this.closeStoryBox} />
-        <figure className="story-box-image" style={{ backgroundImage: `url(${storyObj.image_url})` }} />
+        <figure className="story-box-image" style={{ backgroundImage: `url(${storyObj.imageUrl})` }} />
         <figcaption className="story-box-content">
           <p className="story-box-title">{storyObj.title}</p>
           <button className="story-box-link" onClick={() => visitStory(storyObj)}>See It Here</button>
