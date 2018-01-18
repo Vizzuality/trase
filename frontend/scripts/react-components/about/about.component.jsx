@@ -5,12 +5,42 @@ import Hero from 'react-components/shared/hero.component';
 import Portal from 'react-components/shared/portal.component';
 import NavSidebar from 'react-components/shared/nav-sidebar.component';
 
+const links = [
+  {
+    name: 'About Trase',
+    page: 'about'
+  },
+  {
+    name: 'Terms of Use',
+    page: 'termsOfUse'
+  },
+  {
+    name: 'Data and Methods',
+    page: 'dataMethods'
+  },
+  {
+    name: 'FAQ',
+    page: 'faq'
+  },
+  {
+    name: 'Team',
+    page: 'about'
+  },
+  {
+    name: 'Partners',
+    page: 'about'
+  },
+  {
+    name: 'Funders',
+    page: 'about'
+  }
+];
 function About() {
   return (
     <div className="c-about">
       <Hero className="-read-only" />
       <Portal open>
-        <NavSidebar />
+        <NavSidebar links={links} />
       </Portal>
       <section className="about-content">
         <div className="row">

@@ -22,14 +22,14 @@ function Home(props) {
         <div className="row">
           <div className="column small-12 medium-6">
             <Link to={{ type: 'profiles' }} className="splitted-column-wrapper">
-              <h3 className="home-subtitle">Profile</h3>
+              <h3 className="subtitle">Profile</h3>
               <p className="splitted-text">Can companies and governments meet their 2020 sustainability goals?</p>
             </Link>
             <div className="screenshot -half" />
           </div>
           <div className="column small-12 medium-6">
             <Link to={{ type: 'tool' }} className="splitted-column-wrapper">
-              <h3 className="home-subtitle">Supply Chain</h3>
+              <h3 className="subtitle">Supply Chain</h3>
               <p className="splitted-text">
                 Explore the supply chains and find the impacts and
                 opportunities for a more sustainable production.

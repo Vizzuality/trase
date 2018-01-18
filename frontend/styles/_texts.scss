@@ -79,6 +79,18 @@ a {
   }
 }
 
+.subtitle {
+  font-family: $font-family-1;
+  font-size: 13px;
+  letter-spacing: -0.8px;
+  text-transform: uppercase;
+  color: $strong-pink;
+
+  &.-gray {
+    color: $charcoal-grey-faded;
+  }
+}
+
 .-light {
   font-weight: $font-weight-light;
 }

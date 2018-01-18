@@ -47,7 +47,7 @@ class SliderSection extends React.PureComponent {
     return (
       <section className={cx('c-slider-section', className)}>
         <div className="row slider-wrapper">
-          <h3 className="home-subtitle column small-12">{name}</h3>
+          <h3 className="subtitle column small-12">{name}</h3>
           <Siema
             perPage={perPage}
             draggable={smallScreen}

@@ -26,7 +26,7 @@ class Hero extends React.Component {
         <figure className="story-box-image" style={{ backgroundImage: `url(${storyObj.imageUrl})` }} />
         <figcaption className="story-box-content">
           <p className="story-box-title">{storyObj.title}</p>
-          <button className="story-box-link" onClick={() => visitStory(storyObj)}>See It Here</button>
+          <button className="subtitle story-box-link" onClick={() => visitStory(storyObj)}>See It Here</button>
         </figcaption>
       </div>
     );
