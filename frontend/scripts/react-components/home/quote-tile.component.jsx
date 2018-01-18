@@ -8,24 +8,22 @@ function QuoteTile(props) {
   } = props;
 
   return (
-    <React.Fragment>
-      <div className="slide-quote">
-        <p
-          className="slide-quote-content"
-          dangerouslySetInnerHTML={{ __html: `&ldquo;${slide.quote}&rdquo;` }}
+    <div className="slide-quote">
+      <p
+        className="slide-quote-content"
+        dangerouslySetInnerHTML={{ __html: `&ldquo;${slide.quote}&rdquo;` }}
+      />
+      <div className="c-author-footer">
+        <figcaption className="author-details">
+          <span>{slide.authorName}</span>
+          <span>{slide.authorTitle}</span>
+        </figcaption>
+        <figure
+          className="author-avatar"
+          style={{ backgroundImage: slide.imageUrl && `url(${slide.imageUrl})` }}
         />
-        <div className="c-author-footer">
-          <figcaption className="author-details">
-            <span>{slide.authorName}</span>
-            <span>{slide.authorTitle}</span>
-          </figcaption>
-          <figure
-            className="author-avatar"
-            style={{ backgroundImage: slide.imageUrl && `url(${slide.imageUrl})` }}
-          />
-        </div>
       </div>
-    </React.Fragment>
+    </div>
   );
 }
 
