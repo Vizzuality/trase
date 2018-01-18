@@ -6,7 +6,7 @@ import QuoteTile from 'react-components/home/quote-tile.component';
 import StoryTile from 'react-components/home/story-tile.component';
 
 class SliderSection extends React.PureComponent {
-  static getPerPage() {
+  static getPerPage() { // might seem repetitive but it's still needed.
     switch (true) {
       case (window.innerWidth < 640): return 1;
       case (window.innerWidth < 950): return 2;
@@ -20,6 +20,7 @@ class SliderSection extends React.PureComponent {
       currentSlide: 0
     };
 
+    this.mediaQueries = { 640: 2, 950: 3 }; // undocumented feature { window.innerWidth: perPage }
     this.getSliderRef = this.getSliderRef.bind(this);
     this.onClickPrev = this.onClickPrev.bind(this);
     this.onClickNext = this.onClickNext.bind(this);
@@ -49,7 +50,7 @@ class SliderSection extends React.PureComponent {
         <div className="row slider-wrapper">
           <h3 className="home-subtitle column small-12">{name}</h3>
           <Siema
-            perPage={perPage}
+            perPage={this.mediaQueries}
             draggable={smallScreen}
             loop={false}
             ref={this.getSliderRef}
