@@ -16,7 +16,7 @@ function Home(props) {
     promotedPost
   } = props;
   return (
-    <div className="c-homepage">
+    <React.Fragment>
       <Hero story={promotedPost} tweets={tweets} />
       <div className="splitted">
         <div className="row">
@@ -45,7 +45,7 @@ function Home(props) {
         <SliderSection className="-small" name="Testimonials" slides={testimonials} />
       </div>
       <NewsletterForm message={message} submitForm={sendSubscriptionEmail} />
-    </div>
+    </React.Fragment>
   );
 }
 
