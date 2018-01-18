@@ -58,13 +58,9 @@ class SliderSection extends React.PureComponent {
               slides
                 .map(slide => (
                   <div key={slide.title || slide.quote} className="slide column small-12 medium-4">
-                    {slide.quote ?
-                      <QuoteTile
-                        slide={slide}
-                      /> :
-                      <StoryTile
-                        slide={slide}
-                      />
+                    {slide.quote
+                      ? <QuoteTile slide={slide} />
+                      : <StoryTile slide={slide} />
                     }
                   </div>
                 ))
