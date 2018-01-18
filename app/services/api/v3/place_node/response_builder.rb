@@ -14,13 +14,13 @@ module Api
           @basic_attributes = Api::V3::PlaceNode::BasicAttributes.new(
             @context, @year, @node
           )
-          top_nodes_summary = Api::V3::PlaceNode::TopNodesSummary.new(
+          top_nodes_list = Api::V3::PlaceNode::TopNodesList.new(
             @context, @year, @node
           )
-          top_traders = top_nodes_summary.
-            call(:actors, NodeTypeName::EXPORTER, true)
-          top_consumers = top_nodes_summary.
-            call(:countries, NodeTypeName::COUNTRY, true)
+          top_consumer_actors = top_nodes_list.
+            call(NodeTypeName::EXPORTER, true)
+          top_consumer_countries = top_nodes_list.
+            call(NodeTypeName::COUNTRY, true)
           indicators = Api::V3::PlaceNode::IndicatorsTable.new(
             @context, @year, @node
           ).call
@@ -32,8 +32,8 @@ module Api
             end
 
           @basic_attributes.attributes.
-            merge(top_traders: top_traders).
-            merge(top_consumers: top_consumers).
+            merge(top_consumer_actors: top_consumer_actors).
+            merge(top_consumer_countries: top_consumer_countries).
             merge(indicators: indicators).
             merge(trajectory_deforestation: trajectory_deforestation)
         end

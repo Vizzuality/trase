@@ -38,7 +38,7 @@ export default class Dropdown extends Component {
   }
 
   handleClickOutside(event) {
-    if (this.ref.contains(event.target)) return;
+    if (!this.ref || this.ref.contains(event.target)) return;
     this.close();
   }
 
