@@ -426,8 +426,8 @@ export function setMapContextLayers(contextualLayers) {
     Promise
       .all(
         mapContextualLayers
-        .filter(l => l.cartoURL)
-        .map(l => fetch(l.cartoURL).then(resp => resp.text()))
+          .filter(l => l.cartoURL)
+          .map(l => fetch(l.cartoURL).then(resp => resp.text()))
       )
       .then(() => {
         // we actually don't care about layergroupids because we already have them pregenerated
