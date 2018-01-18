@@ -46,7 +46,7 @@ const routes = {
   profiles: {
     path: '/profiles',
     page: 'profiles',
-    extension: 'js'
+    extension: 'jsx'
   },
   profileActor: {
     path: '/profile-actor',
@@ -67,22 +67,22 @@ const routes = {
   about: {
     path: '/about',
     page: 'about',
-    extension: 'js'
+    extension: 'jsx'
   },
   termsOfUse: {
     path: '/terms-of-use',
     page: 'terms-of-use',
-    extension: 'js'
+    extension: 'jsx'
   },
   dataMethods: {
     path: '/data-methods',
     page: 'data-methods',
-    extension: 'js'
+    extension: 'jsx'
   },
   faq: {
     path: '/FAQ',
     page: 'FAQ',
-    extension: 'js'
+    extension: 'jsx'
   },
   [NOT_FOUND]: {
     path: '/404'

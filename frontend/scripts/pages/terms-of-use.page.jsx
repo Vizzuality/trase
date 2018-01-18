@@ -1,24 +1,33 @@
 /* eslint-disable no-new */
 import TermsOfUseMarkup from 'html/terms-of-use.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
-import FooterMarkup from 'html/includes/_footer.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
+import 'styles/terms-of-use.scss';
+
+import React from 'react';
+import { render, unmountComponentAtNode } from 'react-dom';
+import { Provider } from 'react-redux';
+import Footer from 'react-components/shared/footer.component';
+
 import NavContainer from 'containers/shared/nav.container';
-import 'styles/_base.scss';
-import 'styles/_texts.scss';
-import 'styles/_foundation.css';
-import 'styles/layouts/l-terms-of-use.scss';
-import 'styles/components/shared/dropdown.scss';
-import 'styles/components/shared/button.scss';
-import 'styles/components/shared/nav.scss';
-import 'styles/components/shared/_footer.scss';
 
 export const mount = (root, store) => {
   root.innerHTML = TermsOfUseMarkup({
     nav: NavMarkup({ page: 'terms-of-use' }),
-    footer: FooterMarkup(),
     feedback: FeedbackMarkup()
   });
+
+  render(
+    <Provider store={store}>
+      <Footer />
+    </Provider>,
+    document.getElementById('footer')
+  );
+
   new NavContainer(store);
+};
+
+export const unmount = () => {
+  unmountComponentAtNode(document.getElementById('footer'));
 };

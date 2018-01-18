@@ -1,24 +1,14 @@
 /* eslint-disable no-new */
 import ProfileActorMarkup from 'html/profile-actor.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
-import FooterMarkup from 'html/includes/_footer.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
-import 'styles/_base.scss';
-import 'styles/_texts.scss';
-import 'styles/_foundation.css';
-import 'styles/layouts/l-profile-actor.scss';
-import 'styles/components/shared/button.scss';
-import 'styles/components/shared/spinner.scss';
-import 'styles/components/shared/nav.scss';
-import 'styles/components/shared/_footer.scss';
-import 'styles/components/profiles/area-select.scss';
-import 'styles/components/profiles/map.scss';
-import 'styles/components/profiles/overall-info.scss';
-import 'styles/components/profiles/info.scss';
-import 'styles/components/profiles/link-buttons.scss';
-import 'styles/components/profiles/error.scss';
-import 'styles/components/shared/tabs.scss';
+import 'styles/profile-actor.scss';
+
+import React from 'react';
+import { render, unmountComponentAtNode } from 'react-dom';
+import { Provider } from 'react-redux';
+import Footer from 'react-components/shared/footer.component';
 
 import NavContainer from 'containers/shared/nav.container';
 import Dropdown from 'react-components/shared/dropdown.component';
@@ -34,9 +24,6 @@ import formatValue from 'utils/formatValue';
 import capitalize from 'lodash/capitalize';
 import { GET_ACTOR_FACTSHEET, getURLFromParams } from 'utils/getURLFromParams';
 import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST, DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
-import React from 'react';
-import { render, unmountComponentAtNode } from 'react-dom';
-import { Provider } from 'react-redux';
 import TopSourceSwitcher from 'react-components/profiles/top-source-switcher.component';
 
 const defaults = {
@@ -493,9 +480,15 @@ export const mount = (root, store) => {
   root.innerHTML = ProfileActorMarkup({
     printMode: print,
     nav: NavMarkup({ page: 'profile-actor' }),
-    footer: FooterMarkup(),
     feedback: FeedbackMarkup()
   });
+
+  render(
+    <Provider store={store}>
+      <Footer />
+    </Provider>,
+    document.getElementById('footer')
+  );
 
   _loadData(store, nodeId, year);
 
@@ -514,4 +507,5 @@ export const unmount = () => {
   unmountComponentAtNode(document.querySelector('.js-sustainability-table'));
   unmountComponentAtNode(document.querySelector('.js-scatterplot-container'));
   unmountComponentAtNode(document.getElementById('year-dropdown'));
+  unmountComponentAtNode(document.getElementById('footer'));
 };

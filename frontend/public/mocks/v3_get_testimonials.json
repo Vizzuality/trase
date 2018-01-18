@@ -2,15 +2,27 @@
   "data": [
     {
       "quote": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
-      "author": "Kristen Kim COMPANY XXX CEO"
+      "authorName": "Kristen Kim",
+      "authorTitle": "COMPANY XXX CEO",
+      "imageUrl": "images/mocks/avatar1.jpg"
     },
     {
       "quote": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
-      "author": "Nathaniel Horton COMPANY XXX CEO"
+      "authorName": "Nathaniel Horton",
+      "authorTitle": "COMPANY XXX CEO",
+      "imageUrl": "images/mocks/avatar2.jpg"
     },
     {
       "quote": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
-      "author": "Zoe Harvey Research fellow @ LSU"
+      "authorName": "Zoe Harvey",
+      "authorTitle": "Research fellow @ LSU",
+      "imageUrl": "images/mocks/avatar3.jpg"
+    },
+    {
+      "quote": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
+      "authorName": "Jon Snow",
+      "authorTitle": "Research fellow @ The Wall",
+      "imageUrl": "images/mocks/avatar4.jpg"
     }
   ]
 }

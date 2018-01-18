@@ -1,13 +1,18 @@
 /* eslint-disable no-new */
 import DataMethodsMarkup from 'html/data-methods.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
-import FooterMarkup from 'html/includes/_footer.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
+
+import React from 'react';
+import { render, unmountComponentAtNode } from 'react-dom';
+import { Provider } from 'react-redux';
+import Footer from 'react-components/shared/footer.component';
+
 import NavContainer from 'containers/shared/nav.container';
 import 'styles/data-methods.scss';
 import smoothScroll from 'utils/smoothScroll';
 import { calculateOffsets, scrollDocument } from 'utils/fixedScroll';
-import _ from 'lodash';
+import throttle from 'lodash/throttle';
 import EventManager from 'utils/eventManager';
 
 const evManager = new EventManager();
@@ -41,8 +46,8 @@ const _onScrollDocument = (options) => {
 
 const _setEventListeners = (options) => {
   const anchorItems = options.elems.anchorItems;
-  const _onScrollThrottle = _.throttle(() => _onScrollDocument(options), 50, { leading: true });
-  const _calculateOffsetsThrottle = _.throttle(() => _calculateOffsets(options), 50, { leading: true });
+  const _onScrollThrottle = throttle(() => _onScrollDocument(options), 50, { leading: true });
+  const _calculateOffsetsThrottle = throttle(() => _calculateOffsets(options), 50, { leading: true });
   const _toggleAnchorHandler = e => _toggleAnchors(e, options);
 
   evManager.addEventListener(document, 'scroll', _onScrollThrottle);
@@ -58,9 +63,15 @@ const _setEventListeners = (options) => {
 export const mount = (root, store) => {
   root.innerHTML = DataMethodsMarkup({
     nav: NavMarkup({ page: 'data-methods' }),
-    footer: FooterMarkup(),
     feedback: FeedbackMarkup()
   });
+
+  render(
+    <Provider store={store}>
+      <Footer />
+    </Provider>,
+    document.getElementById('footer')
+  );
 
   const options = {
     elems: {
@@ -79,5 +90,6 @@ export const mount = (root, store) => {
 
 export const unmount = () => {
   evManager.clearEventListeners();
+  unmountComponentAtNode(document.getElementById('footer'));
 };
 

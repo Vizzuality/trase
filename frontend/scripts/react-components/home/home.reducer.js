@@ -20,7 +20,7 @@ const initialState = {
   ],
   testimonials: [
   /**
-   * { quote, author, image_url }
+   * { quote, authorName, authorTitle, imageUrl }
    */
   ],
   promotedPost: null
