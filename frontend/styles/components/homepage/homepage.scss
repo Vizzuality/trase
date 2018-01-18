@@ -31,12 +31,36 @@
       background-size: contain;
       pointer-events: none;
 
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      @media only screen and (min-width: $breakpoint-foundation-small) {
+        &::after {
+          display: none;
+        }
+      }
+
       &.-half {
         background-image: url('./../public/images/backgrounds/screenshot-half.jpg');
+
+        &::after {
+          background-color: rgba($egg-shell, 0.5);
+        }
       }
 
       &.-end {
         background-image: url('./../public/images/backgrounds/screenshot-end.png');
+
+        &::after {
+          background-color: rgba($light-gray, 0.6);
+        }
 
         @media only screen and (min-width: 1058px) {
           transform: translateX(60px);
@@ -65,17 +89,15 @@
       position: relative;
       cursor: pointer;
 
-      @media only screen and (min-width: $breakpoint-foundation-small) {
-        height: 100%;
+      .splitted-column-wrapper {
+        padding: 42px 42px 0 0;
       }
 
-      @media only screen and (min-width: 1140px) {
-        &:first-child .splitted-column-wrapper {
-          padding-left: 0;
-        }
+      @media only screen and (min-width: $breakpoint-foundation-small) {
+        height: 100%;
 
         &:last-child .splitted-column-wrapper {
-          padding-right: 0;
+          padding: 42px 0 0 52px;
         }
       }
     }
@@ -84,27 +106,20 @@
       display: block;
       height: 100%;
       width: 100%;
-      padding: 42px 0 0;
-
-      @media only screen and (min-width: $breakpoint-foundation-small) {
-        padding: 42px 16px;
-      }
     }
 
     .splitted-text {
+      position: relative;
       font-family: $font-family-2;
       font-size: 18px;
       font-weight: 300;
       line-height: 1.75;
       color: $charcoal-grey;
+      z-index: $z-above;
 
       @media only screen and (min-width: $breakpoint-foundation-small) {
         font-size: 24px;
       }
-    }
-
-    .second-column {
-      margin-left: 60px;
     }
   }
 
