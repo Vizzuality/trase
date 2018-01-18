@@ -57,9 +57,11 @@ class SliderSection extends React.PureComponent {
             {
               slides
                 .map(slide => (
-                  <div className="column small-12 medium-4">
+                  <div
+                    key={slide.title || slide.quote}
+                    className="column small-12 medium-4"
+                  >
                     <div
-                      key={slide.title || slide.quote}
                       className={cx('slide', { '-actionable': !slide.quote })}
                     >
                       {slide.quote
