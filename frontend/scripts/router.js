@@ -105,7 +105,7 @@ export function routeSubscriber(store) {
     }
 
     resetPage() {
-      if (this.page && this.page.unmount) this.page.unmount();
+      if (this.page && this.page.unmount) this.page.unmount(root, store);
     }
 
     onRouteChange({ routesMap, type } = {}) {
