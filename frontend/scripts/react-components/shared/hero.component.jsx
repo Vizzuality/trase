@@ -33,7 +33,7 @@ class Hero extends React.Component {
 
     return (
       <div className={cx('c-hero', className)}>
-        <div className="row align-middle">
+        <div className="hero-content row align-middle">
           <div className="column small-12">
             <div className="hero-logo-container">
               <img src="images/logos/new-logo-trase.svg" alt="TRASE" />

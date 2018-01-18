@@ -6,6 +6,13 @@
   background-color: $charcoal-grey;
   z-index: $z-above;
 
+  &.-read-only {
+    height: 400px;
+    .hero-content {
+      display: none;
+    }
+  }
+
   .hero-logo-container {
     width: 210px;
     margin: 0 0 32px;

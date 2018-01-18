@@ -17,7 +17,7 @@ function Home(props) {
   } = props;
   return (
     <div className="c-homepage">
-      <Hero story={promotedPost} tweets={tweets} />
+      <Hero story={promotedPost} tweets={tweets} video />
       <div className="splitted">
         <div className="row">
           <div className="column small-12 medium-6">
