@@ -1,6 +1,5 @@
 .c-slider-section {
   padding: 100px 0 0;
-  overflow: hidden;
 
   &:first-child {
     padding-top: 0;
@@ -88,6 +87,15 @@
   align-items: flex-start;
   justify-content: center;
   height: 410px;
+
+  &.-actionable {
+    transition: box-shadow 350ms ease-out, transform 300ms ease-out, opacity 200ms ease-out;
+
+    &:hover {
+      box-shadow: 0 10px 30px rgba($black, 0.2);
+      transform: translate(0, -4px);
+    }
+  }
 
   .slide-link {
     height: 100%;
