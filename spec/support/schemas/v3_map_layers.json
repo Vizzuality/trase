@@ -83,7 +83,7 @@
             "minItems": 1,
             "items": {
               "$id": "/properties/dimensions/items/properties/bucket3/items",
-              "type": "integer",
+              "type": "number",
               "title": "The 0 Schema",
               "description": "An explanation about the purpose of this instance.",
               "default": 0,
@@ -98,7 +98,7 @@
             "minItems": 1,
             "items": {
               "$id": "/properties/dimensions/items/properties/bucket5/items",
-              "type": "integer",
+              "type": "number",
               "title": "The 0 Schema",
               "description": "An explanation about the purpose of this instance.",
               "default": 0,
@@ -169,7 +169,10 @@
           },
           "years": {
             "$id": "/properties/dimensions/items/properties/years",
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "minItems": 1,
             "items": {
               "$id": "/properties/dimensions/items/properties/years/items",
@@ -250,7 +253,10 @@
           },
           "tooltipText": {
             "$id": "/properties/contextualLayers/items/properties/tooltipText",
-            "type": "null",
+            "type": [
+              "null",
+              "string"
+            ],
             "title": "The Tooltiptext Schema",
             "description": "An explanation about the purpose of this instance.",
             "default": null,
@@ -270,8 +276,10 @@
           },
           "legend": {
             "$id": "/properties/contextualLayers/items/properties/legend",
-            "type": "string",
-            "title": "The Legend Schema",
+            "type": [
+              "null",
+              "string"
+            ],            "title": "The Legend Schema",
             "description": "An explanation about the purpose of this instance.",
             "default": "",
             "examples": [
@@ -280,8 +288,10 @@
           },
           "rasterUrl": {
             "$id": "/properties/contextualLayers/items/properties/rasterUrl",
-            "type": "string",
-            "title": "The Rasterurl Schema",
+            "type": [
+              "null",
+              "string"
+            ],            "title": "The Rasterurl Schema",
             "description": "An explanation about the purpose of this instance.",
             "default": "",
             "examples": [
