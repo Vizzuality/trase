@@ -1,8 +1,9 @@
-/* eslint-disable react/no-danger */
 import React from 'react';
 import PropTypes from 'prop-types';
 import Siema from 'react-siema';
 import cx from 'classnames';
+import QuoteTile from 'react-components/home/quote-tile.component';
+import StoryTile from 'react-components/home/story-tile.component';
 
 class SliderSection extends React.PureComponent {
   static getPerPage() {
@@ -42,6 +43,7 @@ class SliderSection extends React.PureComponent {
     const { className, name, slides } = this.props;
     const perPage = SliderSection.getPerPage();
     const smallScreen = perPage === 1;
+
     return (
       <section className={cx('c-slider-section', className)}>
         <div className="row slider-wrapper">
@@ -57,39 +59,12 @@ class SliderSection extends React.PureComponent {
                 .map(slide => (
                   <div key={slide.title || slide.quote} className="slide column small-12 medium-4">
                     {slide.quote ?
-                      <React.Fragment>
-                        <div className="slide-quote">
-                          <p
-                            className="slide-quote-content"
-                            dangerouslySetInnerHTML={{ __html: `&ldquo;${slide.quote}&rdquo;` }}
-                          />
-                          <div className="c-author-footer">
-                            <figcaption className="author-details">
-                              <span>{slide.authorName}</span>
-                              <span>{slide.authorTitle}</span>
-                            </figcaption>
-                            <figure
-                              className="author-avatar"
-                              style={{ backgroundImage: slide.imageUrl && `url(${slide.imageUrl})` }}
-                            />
-                          </div>
-                        </div>
-                      </React.Fragment> :
-                      <a
-                        className="slide-link"
-                        href={slide.completePostUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <figure
-                          className="slide-image"
-                          style={{ backgroundImage: `url(${slide.image_url})` }}
-                        />
-                        <figcaption className="slide-content">
-                          <h4 className="home-subtitle">{slide.category}</h4>
-                          <p className="slide-title">{slide.title}</p>
-                        </figcaption>
-                      </a>
+                      <QuoteTile
+                        slide={slide}
+                      /> :
+                      <StoryTile
+                        slide={slide}
+                      />
                     }
                   </div>
                 ))
@@ -110,22 +85,7 @@ class SliderSection extends React.PureComponent {
 SliderSection.propTypes = {
   className: PropTypes.string,
   name: PropTypes.string.isRequired,
-  slides: PropTypes.arrayOf(
-    PropTypes.oneOfType([
-      PropTypes.shape({
-        title: PropTypes.string.isRequired,
-        category: PropTypes.string,
-        image_url: PropTypes.string.isRequired,
-        completePostUrl: PropTypes.string
-      }),
-      PropTypes.shape({
-        quote: PropTypes.string.isRequired,
-        authorName: PropTypes.string.isRequired,
-        authorTitle: PropTypes.string.isRequired,
-        imageUrl: PropTypes.string.isRequired
-      })
-    ])
-  ).isRequired
+  slides: PropTypes.array.isRequired
 };
 
 export default SliderSection;
