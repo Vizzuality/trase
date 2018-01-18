@@ -29,11 +29,13 @@ import smoothScroll from 'utils/smoothScroll';
 
 import { GET_PLACE_FACTSHEET, getURLFromParams } from 'utils/getURLFromParams';
 import { DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
+import Tooltip from 'components/shared/info-tooltip.component';
 
 const defaults = {
   country: 'Brazil',
   commodity: 'Soy'
 };
+const tooltip = new Tooltip('.js-infowindow');
 
 const _buildMaps = (data, store) => {
   const stateGeoID = data.state_geo_id;
@@ -169,71 +171,105 @@ const _build = (data, { year, showMiniSankey }, store) => {
     // query: nodeId, targetColumnId + commodity and year
     const tradersSankeyData = {
       name: 'QUERÊNCIA',
+      indicator: 'Trade volume',
+      unit: 't',
       targetNodes: [{
         id: 2,
         name: 'Other',
         isAggregated: true,
-        height: 0.2
-        // isDomesticConsumption: null,
+        height: 0.2,
+        value: 2000
       }, {
         id: 588,
         name: 'Cargill',
-        height: 0.4
+        height: 0.4,
+        value: 4000
       }, {
         id: 588,
         name: 'Hello, I have such a long name I need 3 lines',
-        height: 0.2
+        height: 0.2,
+        value: 2000
       }, {
         id: 588,
         name: 'Sometimes, you gotta have more lines',
-        height: 0.1
+        height: 0.1,
+        value: 1000
       }, {
         id: 588,
         name: 'Cargill',
-        height: 0.029
+        height: 0.029,
+        value: 290
       }, {
         id: 588,
         name: 'Cargill',
-        height: 0.021
+        height: 0.021,
+        value: 210
       }, {
         id: 588,
         name: 'Im very long but sadly the node hieght is too small',
-        height: 0.05
+        height: 0.05,
+        value: 500
       }]
     };
 
     // query: nodeId, targetColumnId + commodity and year
     const consumersSankeyData = {
       name: 'QUERÊNCIA',
+      indicator: 'Trade volume',
+      unit: 't',
       targetNodes: [{
         name: 'Others',
         isAggregated: true,
-        height: 0.2
+        height: 0.2,
+        value: 2000
       }, {
         name: 'China',
-        height: 0.4
+        height: 0.4,
+        value: 4000
       }, {
         name: 'Brazil',
-        height: 0.2
+        height: 0.2,
+        value: 2000
       }, {
         name: 'Germany',
-        height: 0.1
+        height: 0.1,
+        value: 1000
       }, {
         name: 'South Korea',
-        height: 0.029
+        height: 0.029,
+        value: 290
       }, {
         name: 'Thailand',
-        height: 0.021
+        height: 0.021,
+        value: 210
       }, {
         name: 'Spain',
-        height: 0.05
+        height: 0.05,
+        value: 500
       }]
+    };
+
+    const showTooltipCallback = (source, indicator, value, unit, x, y) => {
+      tooltip.show(
+        x, y,
+        source,
+        [
+          {
+            title: indicator,
+            value: formatValue(value, indicator),
+            unit
+          }
+        ]
+      );
     };
 
     render(
       <MiniSankey
         data={tradersSankeyData}
         targetLink="actor"
+        showTooltipCallback={showTooltipCallback}
+        hideTooltipCallback={() => { tooltip.hide(); }}
+
       />,
       document.getElementById('js-traders-sankey')
     );
@@ -241,6 +277,8 @@ const _build = (data, { year, showMiniSankey }, store) => {
     render(
       <MiniSankey
         data={consumersSankeyData}
+        showTooltipCallback={showTooltipCallback}
+        hideTooltipCallback={() => { tooltip.hide(); }}
       />,
       document.getElementById('js-consumers-sankey')
     );
