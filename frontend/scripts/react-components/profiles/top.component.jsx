@@ -14,9 +14,6 @@ class Top extends Component {
       item.value = isArray(item.values)
         ? formatValue(item.values[0] * 100, 'percentage')
         : formatValue(item.value * 100, 'percentage');
-      // item.link = targetLink && !item.is_domestic_consumption
-      //   ? `/profile-${targetLink}?nodeId=${item.id}&year=${this.year}`
-      //   : null;
 
       return (
         <li key={index} className="top-item">
