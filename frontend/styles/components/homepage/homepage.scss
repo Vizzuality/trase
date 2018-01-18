@@ -48,7 +48,7 @@
       }
 
       &.-half {
-        background-image: url('./../public/images/backgrounds/screenshot-half.jpg');
+        background-image: url('./../public/images/backgrounds/screenshot-start.jpg');
 
         &::after {
           background-color: rgba($egg-shell, 0.5);
@@ -56,7 +56,7 @@
       }
 
       &.-end {
-        background-image: url('./../public/images/backgrounds/screenshot-end.png');
+        background-image: url('./../public/images/backgrounds/screenshot-end.jpg');
 
         &::after {
           background-color: rgba($light-gray, 0.6);
