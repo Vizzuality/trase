@@ -18,10 +18,10 @@
       }
 
       .logo-list-container {
-        @media screen and (min-width: 840px) {
+        @media screen and (min-width: 880px) {
           display: flex;
           align-items: center;
-          justify-content: space-around;
+          justify-content: flex-start;
         }
 
         @media screen and (min-width: $breakpoint-foundation-medium) {
@@ -35,13 +35,24 @@
         justify-content: center;
         min-height: 75px;
 
-        @media screen and (min-width: $breakpoint-foundation-medium) {
-          justify-content: flex-start;
-        }
-
         &:not(:first-of-type) {
           margin: 16px 0 0;
         }
+
+        @media screen and (min-width: 880px) {
+          &:not(:first-child) {
+            margin: 0 0 0 35px;
+          }
+        }
+
+        @media screen and (min-width: $breakpoint-foundation-medium) {
+          justify-content: flex-start;
+
+          &:not(:first-child) {
+            margin: 16px 0 0;
+          }
+        }
+
 
         .logo-item {
           display: inline-block;
@@ -50,7 +61,7 @@
             margin: 0 0 0 45px;
           }
 
-          @media screen and (min-width: 840px) {
+          @media screen and (min-width: 880px) {
             &:not(:first-child) {
               margin: 0 0 0 35px;
             }
