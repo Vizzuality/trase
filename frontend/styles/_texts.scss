@@ -89,6 +89,11 @@ a {
   &.-gray {
     color: $charcoal-grey-faded;
   }
+
+  // for overriding scenarios
+  &.-pink {
+    color: $strong-pink;
+  }
 }
 
 .-light {

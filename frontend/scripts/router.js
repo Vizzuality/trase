@@ -65,7 +65,7 @@ const routes = {
     thunk: dispatchThunks(getDataPortalContext)
   },
   about: {
-    path: '/about',
+    path: '/about/:section?',
     page: 'about',
     extension: 'jsx'
   },

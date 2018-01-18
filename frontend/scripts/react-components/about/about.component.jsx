@@ -24,15 +24,24 @@ const links = [
   },
   {
     name: 'Team',
-    page: 'about'
+    page: {
+      type: 'about',
+      payload: { section: 'team' }
+    }
   },
   {
     name: 'Partners',
-    page: 'about'
+    page: {
+      type: 'about',
+      payload: { section: 'partners' }
+    }
   },
   {
     name: 'Funders',
-    page: 'about'
+    page: {
+      type: 'about',
+      payload: { section: 'funders' }
+    }
   }
 ];
 function About() {

@@ -1,9 +1,9 @@
 .c-nav-sidebar {
-  position: fixed;
+  position: absolute;
   top: 240px;
   left: 60px;
   width: 260px;
-  height: 321px;
+  min-height: 321px;
   background-color: #ffffff;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
   z-index: $z-above;
