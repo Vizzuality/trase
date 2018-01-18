@@ -27,6 +27,14 @@
       cursor: auto !important;
     }
   }
+
+  &.-auto-width {
+    > div {
+      > div {
+        width: auto !important;
+      }
+    }
+  }
 }
 
 .slide-next,
