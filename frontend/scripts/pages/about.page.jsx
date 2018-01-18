@@ -4,6 +4,8 @@ import AboutMarkup from 'html/about.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
+import 'styles/about.scss';
+
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
@@ -12,7 +14,6 @@ import About from 'react-components/about/about.component';
 import Footer from 'react-components/shared/footer.component';
 
 import NavContainer from 'containers/shared/nav.container';
-import 'styles/homepage.scss';
 
 
 export const mount = (root, store) => {

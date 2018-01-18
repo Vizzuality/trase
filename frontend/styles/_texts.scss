@@ -1,5 +1,17 @@
 @import 'settings';
 
+.paragraph {
+  color: $charcoal-grey;
+  font-family: $font-family-2;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 2.24;
+
+  & + & {
+    margin: 32px 0 0;
+  }
+}
+
 .paragraph-old {
   color: $charcoal-grey;
   font-family: $font-family-2;
