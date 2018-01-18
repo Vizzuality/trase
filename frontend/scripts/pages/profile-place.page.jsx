@@ -265,13 +265,15 @@ const _build = (data, { year, showMiniSankey }, store) => {
       );
 
       render(
-        <Top
-          data={data.top_traders.actors}
-          targetLink="actor"
-          title={`Top traders of soy in ${data.municipality_name} in ${year}`}
-          unit="%"
-          year={year}
-        />,
+        <Provider store={store}>
+          <Top
+            data={data.top_traders.actors}
+            targetLink="profileActor"
+            title={`Top traders of soy in ${data.municipality_name} in ${year}`}
+            unit="%"
+            year={year}
+          />
+        </Provider>,
         document.querySelector('.js-top-trader')
       );
     }
@@ -296,11 +298,14 @@ const _build = (data, { year, showMiniSankey }, store) => {
       );
 
       render(
-        <Top
-          data={data.top_consumers.countries}
-          title={`Top importer countries of ${formatApostrophe(capitalize(data.municipality_name))} soy in ${year}`}
-          unit="%"
-        />,
+        <Provider store={store}>
+          <Top
+            data={data.top_consumers.countries}
+            title={`Top importer countries of ${formatApostrophe(capitalize(data.municipality_name))} soy in ${year}`}
+            unit="%"
+            year={year}
+          />
+        </Provider>,
         document.querySelector('.js-top-consumer')
       );
     }
@@ -488,17 +493,23 @@ export const mount = (root, store) => {
   new NavContainer(store);
 };
 
-export const unmount = () => {
+export const unmount = (root, store) => {
+  const { query = {} } = store.getState().location;
+  const { showMiniSankey = false } = query;
+
+  if (showMiniSankey) {
+    unmountComponentAtNode(document.querySelector('.js-traders-sankey'));
+    unmountComponentAtNode(document.querySelector('.js-consumers-sankey'));
+  } else {
+    unmountComponentAtNode(document.querySelector('.js-chord-traders-container'));
+    unmountComponentAtNode(document.querySelector('.js-chord-consumers-container'));
+  }
   unmountComponentAtNode(document.querySelector('.js-map-country'));
   unmountComponentAtNode(document.querySelector('.js-map-biome'));
   unmountComponentAtNode(document.querySelector('.js-map-state'));
   unmountComponentAtNode(document.querySelector('.js-map-municipality'));
   unmountComponentAtNode(document.querySelector('.js-line'));
   unmountComponentAtNode(document.querySelector('.js-line-legend'));
-  unmountComponentAtNode(document.querySelector('.js-traders-sankey'));
-  unmountComponentAtNode(document.querySelector('.js-consumers-sankey'));
-  unmountComponentAtNode(document.querySelector('.js-chord-traders-container'));
-  unmountComponentAtNode(document.querySelector('.js-chord-consumers-container'));
   unmountComponentAtNode(document.querySelector('.js-top-trader'));
   unmountComponentAtNode(document.querySelector('.js-top-consumer'));
   unmountComponentAtNode(document.querySelector('.js-score-table'));
