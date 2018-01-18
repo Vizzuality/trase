@@ -1,7 +1,14 @@
 import React from 'react';
-import cx from 'classnames';
-import Link from 'redux-first-router-link';
+import PropTypes from 'prop-types';
 
-class NavSidebar extends React.PureComponent {
-  return ;
+const NavSidebar = props => (
+  <div className="c-nav-sidebar">
+    {props.children}
+  </div>
+);
+
+NavSidebar.propTypes = {
+  children: PropTypes.element
 };
+
+export default NavSidebar;

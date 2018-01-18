@@ -2,11 +2,16 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 // import Link from 'redux-first-router-link';
 import Hero from 'react-components/shared/hero.component';
+import Portal from 'react-components/shared/portal.component';
+import NavSidebar from 'react-components/shared/nav-sidebar.component';
 
 function About() {
   return (
     <div className="c-about">
       <Hero className="-read-only" />
+      <Portal open>
+        <NavSidebar />
+      </Portal>
       <section className="about-content">
         <div className="row">
           <div className="column small-12 medium-6 medium-offset-3">
