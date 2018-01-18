@@ -1,6 +1,5 @@
 .c-slider-section {
   padding: 100px 0 0;
-  overflow: hidden;
 
   &:first-child {
     padding-top: 0;
@@ -93,7 +92,7 @@
     transition: box-shadow 350ms ease-out, transform 300ms ease-out, opacity 200ms ease-out;
 
     &:hover {
-      box-shadow: 0 15px 20px rgba($black, 0.2);
+      box-shadow: 0 10px 30px rgba($black, 0.2);
       transform: translate(0, -4px);
     }
   }
