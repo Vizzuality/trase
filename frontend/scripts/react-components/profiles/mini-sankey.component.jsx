@@ -121,7 +121,7 @@ class MiniSankey extends Component {
                   d={path}
                   strokeWidth={node.renderedHeight}
                   className={node.isAggregated ? 'link-aggr' : 'link'}
-                  onMouseLeave={() => hideTooltipCallback()}
+                  onMouseLeave={hideTooltipCallback}
                   onMouseMove={(event) => {
                     showTooltipCallback(
                       node.name,

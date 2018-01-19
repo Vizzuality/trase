@@ -1,11 +1,11 @@
-import _ from 'lodash';
+import debounce from 'lodash/debounce';
 import TooltipTemplate from 'templates/shared/info-tooltip.ejs';
 import 'styles/components/shared/info-tooltip.scss';
 
 export default class {
   constructor(className) {
     this.className = className;
-    this.hide = _.debounce(this._hide, 100);
+    this.hide = debounce(this._hide.bind(this), 100);
   }
 
   show(x, y, title, values) {

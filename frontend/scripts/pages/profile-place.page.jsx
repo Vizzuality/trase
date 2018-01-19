@@ -45,7 +45,7 @@ const _buildMaps = (data, store) => {
   const municipalityMapContainer = document.querySelector('.js-map-municipality');
 
   render(
-    <Provider store={store} >
+    <Provider store={store}>
       <Map
         width={countryMapContainer.clientWidth}
         height={countryMapContainer.clientHeight}
@@ -60,7 +60,7 @@ const _buildMaps = (data, store) => {
   );
 
   render(
-    <Provider store={store} >
+    <Provider store={store}>
       <Map
         width={biomeMapContainer.clientWidth}
         height={biomeMapContainer.clientHeight}
@@ -74,7 +74,7 @@ const _buildMaps = (data, store) => {
   );
 
   render(
-    <Provider store={store} >
+    <Provider store={store}>
       <Map
         width={stateMapContainer.clientWidth}
         height={stateMapContainer.clientHeight}
@@ -88,7 +88,7 @@ const _buildMaps = (data, store) => {
   );
 
   render(
-    <Provider store={store} >
+    <Provider store={store}>
       <Map
         width={municipalityMapContainer.clientWidth}
         height={municipalityMapContainer.clientHeight}
@@ -110,7 +110,9 @@ const _build = (data, year, onLinkClick, store) => {
     && data.trajectory_deforestation.lines
     && data.trajectory_deforestation.lines.length
   ) {
-    document.querySelector('.deforestation').classList.toggle('is-hidden', false);
+    document.querySelector('.deforestation')
+      .classList
+      .toggle('is-hidden', false);
 
     // Manually trim time series to 2010 - 2015 as asked here https://basecamp.com/1756858/projects/12498794/todos/324404665
     data.trajectory_deforestation.included_years =
@@ -127,7 +129,7 @@ const _build = (data, year, onLinkClick, store) => {
       });
 
     render(
-      <Provider store={store} >
+      <Provider store={store}>
         <Line
           className=".js-line"
           data={data.trajectory_deforestation}
@@ -148,7 +150,7 @@ const _build = (data, year, onLinkClick, store) => {
     );
 
     render(
-      <Provider store={store} >
+      <Provider store={store}>
         <LineLegend
           data={data.trajectory_deforestation}
           xValues={data.trajectory_deforestation.included_years}
@@ -157,15 +159,12 @@ const _build = (data, year, onLinkClick, store) => {
       document.querySelector('.js-line-legend')
     );
   } else {
-    document.querySelector('.deforestation').classList.toggle('is-hidden', true);
+    document.querySelector('.deforestation')
+      .classList
+      .toggle('is-hidden', true);
   }
 
-  document.querySelectorAll('.mini-sankey-container')
-    .forEach((el) => {
-      el.classList.toggle('is-hidden', false);
-    });
-
-  const showTooltipCallback = (source, indicator, value, unit, x, y) => {
+  const showTooltipCallback = (source, indicator, value, unit, x, y) =>
     tooltip.show(
       x, y,
       source,
@@ -177,7 +176,6 @@ const _build = (data, year, onLinkClick, store) => {
         }
       ]
     );
-  };
 
   const topConsumerActorsContainer = document.getElementById('js-traders-sankey-container');
   const topConsumerCountriesContainer = document.getElementById('js-consumers-sankey-container');
@@ -190,7 +188,7 @@ const _build = (data, year, onLinkClick, store) => {
         targetLink="profileActor"
         year={year}
         showTooltipCallback={showTooltipCallback}
-        hideTooltipCallback={() => { tooltip.hide(); }}
+        hideTooltipCallback={tooltip.hide}
         onLinkClick={onLinkClick}
       />,
       document.getElementById('js-traders-sankey')
@@ -207,9 +205,7 @@ const _build = (data, year, onLinkClick, store) => {
         data={data.top_consumer_countries}
         year={year}
         showTooltipCallback={showTooltipCallback}
-        hideTooltipCallback={() => {
-          tooltip.hide();
-        }}
+        hideTooltipCallback={tooltip.hide}
         onLinkClick={onLinkClick}
       />,
       document.getElementById('js-consumers-sankey')
@@ -220,7 +216,7 @@ const _build = (data, year, onLinkClick, store) => {
 
   if (data.indicators.length) {
     render(
-      <Provider store={store} >
+      <Provider store={store}>
         <MultiTable
           id="sustainability-indicators"
           data={data.indicators}
