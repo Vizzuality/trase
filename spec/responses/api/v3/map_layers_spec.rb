@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Map layers', type: :request do
   include_context 'api v3 brazil contextual layers'
+  include_context 'api v3 brazil map attributes'
 
   describe 'GET /api/v3/contexts/:context_id/map_layers' do
     before(:each) do
