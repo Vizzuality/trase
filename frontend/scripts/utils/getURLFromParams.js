@@ -26,7 +26,7 @@ const API_ENDPOINTS = {
   [GET_COLUMNS]: { api: 3, endpoint: '/contexts/$context_id$/columns' },
   [GET_ALL_NODES]: { api: 3, endpoint: '/contexts/$context_id$/nodes' },
   [GET_NODE_ATTRIBUTES]: { api: 3, endpoint: '/contexts/$context_id$/nodes/attributes' },
-  [GET_MAP_BASE_DATA]: { api: 3, endpoint: '/contexts/$context_id$/map_groups' },
+  [GET_MAP_BASE_DATA]: { api: 3, endpoint: '/contexts/$context_id$/map_layers' },
   [GET_INDICATORS]: { api: 3, endpoint: '/contexts/$context_id$/download_attributes' },
   [GET_PLACE_FACTSHEET]: {
     api: 3,

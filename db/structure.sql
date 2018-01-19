@@ -128,7 +128,7 @@ CREATE FUNCTION get_trader_sum(trader_id integer, year_ integer) RETURNS double 
           FROM flows
           WHERE trader_id = ANY(path)
             AND year = year_
-            AND context_id = 1); 
+            AND context_id = 1);
   $$;
 
 
@@ -1369,7 +1369,8 @@ CREATE TABLE carto_layers (
     identifier text NOT NULL,
     years integer[],
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    raster_url character varying
 );
 
 
@@ -1943,7 +1944,8 @@ CREATE TABLE contextual_layers (
     tooltip_text text,
     is_default boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    legend text
 );
 
 
@@ -6633,6 +6635,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171214162643'),
 ('20171219125633'),
 ('20180109085838'),
-('20180119094345');
+('20180119094345'),
+('20180110111533');
 
 

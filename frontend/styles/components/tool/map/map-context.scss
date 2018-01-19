@@ -1,10 +1,18 @@
 @import '../../../settings';
 
-.c-map-context {
+.map-contextual-layer-item {
+  justify-content: space-between;
+
+  .actions {
+    .icon-layer-info {
+      margin-top: -1px;
+      margin-right: 8px;
+    }
+  }
+
   .c-switcher {
     width: 29px;
     height: 12px;
-
     background-color: rgba($charcoal-grey, .2);
 
     &::before {
