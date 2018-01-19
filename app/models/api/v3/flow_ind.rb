@@ -1,6 +1,8 @@
 module Api
   module V3
     class FlowInd < BaseModel
+      include Api::V3::Import::BlueTableHelpers
+
       belongs_to :flow
       belongs_to :ind
 
@@ -11,7 +13,7 @@ module Api
         ]
       end
 
-      def self.unstable_foreign_keys
+      def self.blue_foreign_keys
         [
           {name: :ind_id, table_class: Api::V3::Ind}
         ]

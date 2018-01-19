@@ -1,6 +1,8 @@
 module Api
   module V3
     class DownloadVersion < BaseModel
+      include Api::V3::Import::BlueTableHelpers
+
       def self.current_version_symbol(context)
         current_version = where(is_current: true, context_id: context.id).
           order('created_at DESC').
@@ -15,7 +17,7 @@ module Api
         ]
       end
 
-      def self.unstable_foreign_keys
+      def self.blue_foreign_keys
         [
           {name: :context_id, table_class: Api::V3::Context}
         ]

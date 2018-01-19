@@ -12,9 +12,11 @@
 module Api
   module V3
     class MapAttributeGroup < BaseModel
+      include Api::V3::Import::YellowTableHelpers
+
       has_many :map_attributes
 
-      def self.unstable_foreign_keys
+      def self.blue_foreign_keys
         [
           {name: :context_id, table_class: Api::V3::Context}
         ]

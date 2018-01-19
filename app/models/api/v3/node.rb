@@ -1,6 +1,8 @@
 module Api
   module V3
     class Node < BaseModel
+      include Api::V3::Import::BlueTableHelpers
+
       belongs_to :node_type
       has_one :node_property
       has_many :node_inds
@@ -119,7 +121,7 @@ module Api
         ]
       end
 
-      def self.unstable_foreign_keys
+      def self.blue_foreign_keys
         [
           {name: :node_type_id, table_class: Api::V3::NodeType}
         ]

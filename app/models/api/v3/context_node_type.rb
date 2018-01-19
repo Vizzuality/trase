@@ -1,6 +1,8 @@
 module Api
   module V3
     class ContextNodeType < BaseModel
+      include Api::V3::Import::BlueTableHelpers
+
       belongs_to :node_type
       belongs_to :context
       has_one :context_node_type_property
@@ -13,7 +15,7 @@ module Api
         ]
       end
 
-      def self.unstable_foreign_keys
+      def self.blue_foreign_keys
         [
           {name: :context_id, table_class: Api::V3::Context},
           {name: :node_type_id, table_class: Api::V3::NodeType}

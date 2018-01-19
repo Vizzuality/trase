@@ -1,6 +1,8 @@
 module Api
   module V3
     class Flow < BaseModel
+      include Api::V3::Import::BlueTableHelpers
+
       belongs_to :context
       has_many :flow_inds
       has_many :flow_quals
@@ -8,7 +10,7 @@ module Api
 
       def self.import_key; []; end
 
-      def self.unstable_foreign_keys
+      def self.blue_foreign_keys
         [
           {name: :context_id, table_class: Api::V3::Context}
         ]

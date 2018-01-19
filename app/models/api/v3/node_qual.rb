@@ -1,6 +1,8 @@
 module Api
   module V3
     class NodeQual < BaseModel
+      include Api::V3::Import::BlueTableHelpers
+
       belongs_to :qual
       belongs_to :node
 
@@ -11,7 +13,7 @@ module Api
         ]
       end
 
-      def self.unstable_foreign_keys
+      def self.blue_foreign_keys
         [
           {name: :node_id, table_class: Api::V3::Node},
           {name: :qual_id, table_class: Api::V3::Qual}

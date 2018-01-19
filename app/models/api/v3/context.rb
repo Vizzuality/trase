@@ -1,6 +1,8 @@
 module Api
   module V3
     class Context < BaseModel
+      include Api::V3::Import::BlueTableHelpers
+
       belongs_to :country
       belongs_to :commodity
       has_one :context_property
@@ -23,7 +25,7 @@ module Api
         ]
       end
 
-      def self.unstable_foreign_keys
+      def self.blue_foreign_keys
         [
           {name: :country_id, table_class: Api::V3::Country},
           {name: :commodity_id, table_class: Api::V3::Commodity}
