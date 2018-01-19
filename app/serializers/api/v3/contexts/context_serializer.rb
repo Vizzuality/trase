@@ -27,8 +27,9 @@ module Api
         end
 
         attribute :default_context_layers do
-          identifiers = object.contextual_layers.where(is_default: true).
-            pluck(:identifier)
+          identifiers = object.contextual_layers.
+            select { |cl| cl.is_default == true }.
+            map(&:identifier)
           identifiers.any? ? identifiers : nil
         end
 
