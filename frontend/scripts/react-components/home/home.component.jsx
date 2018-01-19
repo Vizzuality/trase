@@ -2,13 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'redux-first-router-link';
 import Hero from 'react-components/shared/hero.component';
+import NewsletterForm from 'react-components/shared/newsletter/newsletter.container';
 import SliderSection from './slider-section.component';
-import NewsletterForm from './newsletter-form.component';
 
 function Home(props) {
   const {
-    message,
-    sendSubscriptionEmail,
     tweets,
     posts,
     testimonials,
@@ -44,7 +42,7 @@ function Home(props) {
         <SliderSection name="Features" slides={posts} />
         <SliderSection className="-small" name="Testimonials" slides={testimonials} />
       </div>
-      <NewsletterForm message={message} submitForm={sendSubscriptionEmail} />
+      <NewsletterForm />
     </div>
   );
 }
@@ -54,9 +52,7 @@ Home.propTypes = {
   testimonials: PropTypes.array,
   tweets: PropTypes.array,
   posts: PropTypes.array,
-  message: PropTypes.string,
-  promotedPost: PropTypes.object,
-  sendSubscriptionEmail: PropTypes.func.isRequired
+  promotedPost: PropTypes.object
 };
 
 export default Home;

@@ -4,6 +4,7 @@ import React from 'react';
 import Hero from 'react-components/shared/hero.component';
 import Portal from 'react-components/shared/portal.component';
 import NavSidebar from 'react-components/shared/nav-sidebar.component';
+import NewsletterForm from 'react-components/shared/newsletter/newsletter.container';
 
 const links = [
   {
@@ -82,6 +83,7 @@ function About() {
           </div>
         </div>
       </section>
+      <NewsletterForm />
     </div>
   );
 }
