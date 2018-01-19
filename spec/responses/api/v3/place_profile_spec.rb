@@ -4,6 +4,7 @@ RSpec.describe 'Place profile', type: :request do
   include_context 'api v3 brazil municipality ind values'
   include_context 'api v3 brazil municipality qual values'
   include_context 'api v3 brazil municipality quant values'
+  include_context 'api v3 brazil flows quants'
 
   describe 'GET /api/v3/contexts/:context_id/nodes/:id/place' do
     it 'validates node types' do
@@ -22,7 +23,7 @@ RSpec.describe 'Place profile', type: :request do
       get "/api/v3/contexts/#{api_v3_context.id}/nodes/#{api_v3_municipality_node.id}/place"
 
       expect(@response.status).to eq 200
-      expect(@response).to match_response_schema('place_profile')
+      expect(@response).to match_response_schema('v3_place_profile')
     end
   end
 end
