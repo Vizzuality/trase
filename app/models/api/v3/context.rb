@@ -13,6 +13,7 @@ module Api
 
       delegate :is_default, to: :context_property
       delegate :is_disabled, to: :context_property
+      delegate :is_subnational, to: :context_property
       delegate :default_basemap, to: :context_property
     end
   end
