@@ -103,7 +103,7 @@ const _initSource = (selectedSource, data, store) => {
         topoJSONRoot={topoJSONRoot}
         getPolygonClassName={getPolygonClassName}
         showTooltipCallback={showTooltipCallback}
-        hideTooltipCallback={() => { tooltip.hide(); }}
+        hideTooltipCallback={tooltip.hide}
       />
     </Provider>,
     containerElement
@@ -154,9 +154,7 @@ const _build = (data, { nodeId, year, print }, store) => {
         ]
       );
     },
-    hideTooltipCallback: () => {
-      tooltip.hide();
-    },
+    hideTooltipCallback: tooltip.hide,
     lineClassNameCallback: (lineData, lineDefaultStyle) => `${lineDefaultStyle} line-${lineData[0].value9}`
   };
 
@@ -260,7 +258,7 @@ const _build = (data, { nodeId, year, print }, store) => {
           useRobinsonProjection
           getPolygonClassName={getPolygonClassName}
           showTooltipCallback={showTooltipCallback}
-          hideTooltipCallback={() => { tooltip.hide(); }}
+          hideTooltipCallback={tooltip.hide}
         />
       </Provider>,
       containerElement
@@ -321,7 +319,7 @@ const _build = (data, { nodeId, year, print }, store) => {
           verbGerund={verbGerund}
           year={year}
           showTooltipCallback={showTooltipCallback}
-          hideTooltipCallback={() => { tooltip.hide(); }}
+          hideTooltipCallback={tooltip.hide}
         />
       </Provider>,
       scatterplotContainerElement
