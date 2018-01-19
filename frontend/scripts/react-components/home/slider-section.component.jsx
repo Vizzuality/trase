@@ -63,7 +63,7 @@ class SliderSection extends React.PureComponent {
     const { className, name, slides } = this.props;
     const { visiblePages, currentSlide } = this.state;
     const smallScreen = visiblePages === 1;
-    const numColums = (slides.length >= visiblePages && visiblePages < 3) ? 6 : 4;
+    const numColums = (slides.length <= visiblePages && visiblePages < 3) ? 6 : 4;
     return (
       <section className={cx('c-slider-section', className)}>
         <div className={cx('row', 'slider-wrapper', { '-auto-width': (slides.length < visiblePages) })}>
