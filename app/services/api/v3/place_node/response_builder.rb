@@ -14,7 +14,7 @@ module Api
           @basic_attributes = Api::V3::PlaceNode::BasicAttributes.new(
             @context, @year, @node
           )
-          top_nodes_list = Api::V3::PlaceNode::TopNodesList.new(
+          top_nodes_list = Api::V3::PlaceNode::MiniSankey.new(
             @context, @year, @node
           )
           top_consumer_actors = top_nodes_list.

@@ -1,7 +1,7 @@
 module Api
   module V3
     module PlaceNode
-      class TopNodesList
+      class MiniSankey
         def initialize(context, year, node)
           @context = context
           @year = year
