@@ -27,6 +27,14 @@
       cursor: auto !important;
     }
   }
+
+  &.-auto-width {
+    > div {
+      > div {
+        width: auto !important;
+      }
+    }
+  }
 }
 
 .slide-next,
@@ -63,7 +71,7 @@
 
 .slide-next {
   left: 100%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, calc(-50% + 20px));
 
   &::after {
     transform: translate(-50%, -50%) rotate(45deg);
@@ -73,7 +81,7 @@
 
 .slide-prev {
   right: 100%;
-  transform: translate(50%, -50%);
+  transform: translate(50%, calc(-50% + 20px));
 
   &::after {
     transform: translate(-50%, -50%) rotate(-135deg);
