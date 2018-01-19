@@ -179,28 +179,44 @@ const _build = (data, year, onLinkClick, store) => {
     );
   };
 
-  render(
-    <MiniSankey
-      data={data.top_consumer_actors}
-      targetLink="profileActor"
-      year={year}
-      showTooltipCallback={showTooltipCallback}
-      hideTooltipCallback={() => { tooltip.hide(); }}
-      onLinkClick={onLinkClick}
-    />,
-    document.getElementById('js-traders-sankey')
-  );
+  const topConsumerActorsContainer = document.getElementById('js-traders-sankey-container');
+  const topConsumerCountriesContainer = document.getElementById('js-consumers-sankey-container');
 
-  render(
-    <MiniSankey
-      data={data.top_consumer_countries}
-      year={year}
-      showTooltipCallback={showTooltipCallback}
-      hideTooltipCallback={() => { tooltip.hide(); }}
-      onLinkClick={onLinkClick}
-    />,
-    document.getElementById('js-consumers-sankey')
-  );
+  if (data && data.top_consumer_actors.targetNodes.length > 0) {
+    topConsumerActorsContainer.classList.toggle('is-hidden', false);
+    render(
+      <MiniSankey
+        data={data.top_consumer_actors}
+        targetLink="profileActor"
+        year={year}
+        showTooltipCallback={showTooltipCallback}
+        hideTooltipCallback={() => { tooltip.hide(); }}
+        onLinkClick={onLinkClick}
+      />,
+      document.getElementById('js-traders-sankey')
+    );
+  } else {
+    topConsumerActorsContainer.classList.toggle('is-hidden', true);
+  }
+
+  if (data && data.top_consumer_countries.targetNodes.length > 0) {
+    topConsumerCountriesContainer.classList.toggle('is-hidden', false);
+
+    render(
+      <MiniSankey
+        data={data.top_consumer_countries}
+        year={year}
+        showTooltipCallback={showTooltipCallback}
+        hideTooltipCallback={() => {
+          tooltip.hide();
+        }}
+        onLinkClick={onLinkClick}
+      />,
+      document.getElementById('js-consumers-sankey')
+    );
+  } else {
+    topConsumerCountriesContainer.classList.toggle('is-hidden', true);
+  }
 
   if (data.indicators.length) {
     render(
