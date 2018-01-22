@@ -1,8 +1,6 @@
 module Api
   module V3
-    class RecolorByInd < BaseModel
-      include Api::V3::Import::YellowTableHelpers
-
+    class RecolorByInd < YellowTable
       belongs_to :recolor_by_attribute
       belongs_to :ind
 

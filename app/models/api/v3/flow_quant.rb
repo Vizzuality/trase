@@ -1,8 +1,6 @@
 module Api
   module V3
-    class FlowQuant < BaseModel
-      include Api::V3::Import::BlueTableHelpers
-
+    class FlowQuant < BlueTable
       belongs_to :flow
       belongs_to :quant
 

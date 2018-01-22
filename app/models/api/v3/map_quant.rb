@@ -1,8 +1,6 @@
 module Api
   module V3
-    class MapQuant < BaseModel
-      include Api::V3::Import::YellowTableHelpers
-
+    class MapQuant < YellowTable
       belongs_to :map_attribute
       belongs_to :quant
 

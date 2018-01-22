@@ -1,8 +1,6 @@
 module Api
   module V3
-    class ContextNodeType < BaseModel
-      include Api::V3::Import::BlueTableHelpers
-
+    class ContextNodeType < BlueTable
       belongs_to :node_type
       belongs_to :context
       has_one :context_node_type_property

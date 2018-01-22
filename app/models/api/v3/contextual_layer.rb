@@ -1,10 +1,7 @@
 module Api
   module V3
-    class ContextualLayer < BaseModel
-      include Api::V3::Import::YellowTableHelpers
-
+    class ContextualLayer < YellowTable
       belongs_to :context
-
       has_many :carto_layers
 
       scope :default, -> { where(is_default: true) }

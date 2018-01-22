@@ -1,8 +1,6 @@
 module Api
   module V3
-    class MapInd < BaseModel
-      include Api::V3::Import::YellowTableHelpers
-
+    class MapInd < YellowTable
       belongs_to :map_attribute
       belongs_to :ind
 

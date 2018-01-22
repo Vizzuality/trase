@@ -1,8 +1,6 @@
 module Api
   module V3
-    class Country < BaseModel
-      include Api::V3::Import::BlueTableHelpers
-
+    class Country < BlueTable
       has_one :country_property
       has_many :contexts
 

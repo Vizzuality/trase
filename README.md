@@ -257,7 +257,7 @@ Because the server and user mappings definitions may contain sensitive informati
 
 The importer script code is contained in `lib/api/v3/import/importer.rb`. The script goes over tables in a specific order, whereby each table is preceded by all the tables it depends on. Note for the future: for this to continue working as the database grows, cycles in the schema need to be avoided.
 
-Tables are processed differently depending on whether they are "blue" or "yellow". It can be easily recognised which is whych based on the module included in the model: either `Api::V3::Import::BlueTableHelpers` or `Api::V3::Import::YellowTableHelpers`.
+Tables are processed differently depending on whether they are "blue" or "yellow". It can be easily recognised which is whych based on the subclass of the model: either `Api::V3::BlueTable` or `Api::V3::YellowTable`.
 
 In the first step all the tables are backed up, which means different things in case of blue and yellow tables.
 

@@ -1,8 +1,7 @@
 module Api
   module V3
-    class QuantProperty < BaseModel
+    class QuantProperty < YellowTable
       include AttributePropertiesProfileScopes
-      include Api::V3::Import::YellowTableHelpers
 
       belongs_to :quant
 

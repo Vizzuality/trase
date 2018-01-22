@@ -1,8 +1,6 @@
 module Api
   module V3
-    class NodeProperty < BaseModel
-      include Api::V3::Import::YellowTableHelpers
-
+    class NodeProperty < YellowTable
       belongs_to :node
 
       def self.blue_foreign_keys

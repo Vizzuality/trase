@@ -1,8 +1,6 @@
 module Api
   module V3
-    class Flow < BaseModel
-      include Api::V3::Import::BlueTableHelpers
-
+    class Flow < BlueTable
       belongs_to :context
       has_many :flow_inds
       has_many :flow_quals

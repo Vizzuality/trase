@@ -1,8 +1,6 @@
 module Api
   module V3
-    class NodeQuant < BaseModel
-      include Api::V3::Import::BlueTableHelpers
-
+    class NodeQuant < BlueTable
       belongs_to :quant
       belongs_to :node
 

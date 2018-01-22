@@ -1,8 +1,6 @@
 module Api
   module V3
-    class Qual < BaseModel
-      include Api::V3::Import::BlueTableHelpers
-
+    class Qual < BlueTable
       has_one :qual_property
       delegate :display_name, to: :qual_property
 

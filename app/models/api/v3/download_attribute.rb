@@ -1,8 +1,6 @@
 module Api
   module V3
-    class DownloadAttribute < BaseModel
-      include Api::V3::Import::YellowTableHelpers
-
+    class DownloadAttribute < YellowTable
       belongs_to :context
 
       def self.blue_foreign_keys

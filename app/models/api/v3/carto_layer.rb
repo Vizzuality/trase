@@ -1,8 +1,6 @@
 module Api
   module V3
-    class CartoLayer < BaseModel
-      include Api::V3::Import::YellowTableHelpers
-
+    class CartoLayer < YellowTable
       belongs_to :contextual_layer
 
       def self.yellow_foreign_keys

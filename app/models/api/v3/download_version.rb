@@ -1,8 +1,6 @@
 module Api
   module V3
-    class DownloadVersion < BaseModel
-      include Api::V3::Import::BlueTableHelpers
-
+    class DownloadVersion < BlueTable
       def self.current_version_symbol(context)
         current_version = where(is_current: true, context_id: context.id).
           order('created_at DESC').

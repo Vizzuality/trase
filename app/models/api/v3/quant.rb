@@ -1,8 +1,6 @@
 module Api
   module V3
-    class Quant < BaseModel
-      include Api::V3::Import::BlueTableHelpers
-
+    class Quant < BlueTable
       has_one :quant_property
       delegate :display_name, to: :quant_property
 

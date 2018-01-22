@@ -1,8 +1,6 @@
 module Api
   module V3
-    class Ind < BaseModel
-      include Api::V3::Import::BlueTableHelpers
-
+    class Ind < BlueTable
       has_one :ind_property
       delegate :display_name, to: :ind_property
 

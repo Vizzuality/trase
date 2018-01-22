@@ -17,9 +17,7 @@
 
 module Api
   module V3
-    class MapAttribute < BaseModel
-      include Api::V3::Import::YellowTableHelpers
-
+    class MapAttribute < YellowTable
       belongs_to :map_attribute_group
 
       def self.yellow_foreign_keys

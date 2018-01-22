@@ -1,8 +1,6 @@
 module Api
   module V3
-    class ResizeByQuant < BaseModel
-      include Api::V3::Import::YellowTableHelpers
-
+    class ResizeByQuant < YellowTable
       belongs_to :resize_by_attribute
       belongs_to :quant
 

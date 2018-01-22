@@ -1,10 +1,7 @@
 module Api
   module V3
-    class RecolorByAttribute < BaseModel
-      include Api::V3::Import::YellowTableHelpers
-
+    class RecolorByAttribute < YellowTable
       belongs_to :context
-
       has_many :recolor_by_inds
       has_many :recolor_by_quals
 

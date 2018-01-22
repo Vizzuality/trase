@@ -1,8 +1,6 @@
 module Api
   module V3
-    class NodeInd < BaseModel
-      include Api::V3::Import::BlueTableHelpers
-
+    class NodeInd < BlueTable
       belongs_to :ind
       belongs_to :node
 

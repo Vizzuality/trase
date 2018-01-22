@@ -1,8 +1,6 @@
 module Api
   module V3
-    class DownloadQuant < BaseModel
-      include Api::V3::Import::YellowTableHelpers
-
+    class DownloadQuant < YellowTable
       belongs_to :download_attribute
       belongs_to :quant
 

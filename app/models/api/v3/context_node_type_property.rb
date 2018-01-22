@@ -1,8 +1,6 @@
 module Api
   module V3
-    class ContextNodeTypeProperty < BaseModel
-      include Api::V3::Import::YellowTableHelpers
-
+    class ContextNodeTypeProperty < YellowTable
       belongs_to :context_node_type
 
       def self.blue_foreign_keys

@@ -1,8 +1,6 @@
 module Api
   module V3
-    class ChartQuant < BaseModel
-      include Api::V3::Import::YellowTableHelpers
-
+    class ChartQuant < YellowTable
       def self.yellow_foreign_keys
         [
           {name: :chart_attribute_id, table_class: Api::V3::Chart}

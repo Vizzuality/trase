@@ -1,8 +1,6 @@
 module Api
   module V3
-    class FlowInd < BaseModel
-      include Api::V3::Import::BlueTableHelpers
-
+    class FlowInd < BlueTable
       belongs_to :flow
       belongs_to :ind
 
