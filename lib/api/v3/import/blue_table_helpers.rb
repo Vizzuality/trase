@@ -26,7 +26,7 @@ module Api
               blue_fk = blue_foreign_keys.find { |fk| fk[:name] == key[:name] }
               if blue_fk
                 table_alias = "t_#{idx}"
-                joins << <<-SQL
+                joins << <<~SQL
                   JOIN #{blue_fk[:table_class].key_backup_table} #{table_alias}
                   ON #{table_alias}.id = local.#{key[:name]}
                 SQL
@@ -35,10 +35,9 @@ module Api
                 remote_join_condition << "remote.#{key[:name]} = local.#{key[:name]}"
               end
             end
-            query =<<-SQL
+            query = <<~SQL
               CREATE TEMPORARY TABLE #{key_backup_table} AS
-              SELECT
-                remote.id AS new_id, local.id
+              SELECT remote.id AS new_id, local.id
               FROM #{local_table} local
               #{joins&.join(' ')}
               JOIN #{remote_table} remote

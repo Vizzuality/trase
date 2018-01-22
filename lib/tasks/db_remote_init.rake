@@ -43,7 +43,7 @@ namespace :db do
 
     def create_server(server, host, port, database)
       # Define the foreign server
-      query =<<~SQL
+      query = <<~SQL
         CREATE SERVER #{server} FOREIGN DATA WRAPPER postgres_fdw
         OPTIONS (host '#{host}', port '#{port}', dbname '#{database}');
       SQL
@@ -57,7 +57,7 @@ namespace :db do
 
     def create_user_mapping(server, username, password)
       # Create the user mapping (readonly user)
-      query =<<~SQL
+      query = <<~SQL
         CREATE USER MAPPING FOR CURRENT_USER SERVER #{server}
         OPTIONS (user '#{username}', password '#{password}');
       SQL
@@ -70,9 +70,9 @@ namespace :db do
     end
 
     def import_foreign_schema(server, remote_schema, local_schema)
-      query = <<-SQL
-IMPORT FOREIGN SCHEMA #{remote_schema} FROM SERVER #{server}
-INTO #{local_schema};
+      query = <<~SQL
+        IMPORT FOREIGN SCHEMA #{remote_schema} FROM SERVER #{server}
+        INTO #{local_schema};
       SQL
       execute_local_query(query)
     end

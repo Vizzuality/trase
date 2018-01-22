@@ -9,7 +9,7 @@ module Api
         module ClassMethods
           def full_backup
             connection.execute "DROP TABLE IF EXISTS #{full_backup_table}"
-            stmt =<<-SQL
+            stmt = <<~SQL
               CREATE TEMPORARY TABLE #{full_backup_table} AS
               SELECT #{column_names_cs}
               FROM #{table_name}
@@ -19,7 +19,7 @@ module Api
 
           def restore
             update_keys_in_full_backup
-            stmt =<<-SQL
+            stmt = <<~SQL
               TRUNCATE #{table_name} CASCADE;
               INSERT INTO #{table_name}
               (#{column_names_cs})
@@ -47,7 +47,7 @@ module Api
           end
 
           def delete_obsolete_rows(subquery_for_delete, where_conditions)
-            stmt =<<-SQL
+            stmt = <<~SQL
               DELETE FROM #{full_backup_table}
               USING (#{subquery_for_delete}) updated_identifiers
               WHERE #{full_backup_table}.id = updated_identifiers.id
@@ -63,14 +63,14 @@ module Api
             blue_foreign_keys.each.with_index do |fk, idx|
               table_alias = "t_#{idx}"
               select_list << "#{table_alias}.new_id AS new_#{fk[:name]}"
-              joins << <<-SQL
+              joins << <<~SQL
                 LEFT JOIN #{fk[:table_class].key_backup_table} #{table_alias}
                 ON #{table_alias}.id = t.#{fk[:name]}
               SQL
               delete_where_conditions << "new_#{fk[:name]} IS NULL" # no nullable columns
             end
 
-            subquery_for_delete =<<-SQL
+            subquery_for_delete = <<~SQL
               SELECT t.*, #{select_list.join(', ')}
               FROM #{full_backup_table} t
               #{joins.join(' ')}
@@ -85,14 +85,14 @@ module Api
             yellow_foreign_keys.each.with_index do |fk, idx|
               table_alias = "t_#{idx}"
               select_list << "#{table_alias}.id AS new_#{fk[:name]}"
-              joins << <<-SQL
+              joins << <<~SQL
                 LEFT JOIN #{fk[:table_class].table_name} #{table_alias}
                 ON #{table_alias}.id = t.#{fk[:name]}
               SQL
               delete_where_conditions << "new_#{fk[:name]} IS NULL" # no nullable columns
             end
 
-            subquery_for_delete =<<-SQL
+            subquery_for_delete = <<~SQL
               SELECT t.*, #{select_list.join(', ')}
               FROM #{full_backup_table} t
               #{joins.join(' ')}
@@ -107,20 +107,20 @@ module Api
             blue_foreign_keys.each.with_index do |fk, idx|
               table_alias = "t_#{idx}"
               select_list << "#{table_alias}.new_id AS new_#{fk[:name]}"
-              joins << <<-SQL
+              joins << <<~SQL
                 JOIN #{fk[:table_class].key_backup_table} #{table_alias}
                 ON #{table_alias}.id = t.#{fk[:name]}
               SQL
               update_set_expressions << "#{fk[:name]} = updated_identifiers.new_#{fk[:name]}"
             end
 
-            subquery_for_update =<<-SQL
+            subquery_for_update = <<~SQL
               SELECT t.*, #{select_list.join(', ')}
               FROM #{full_backup_table} t
               #{joins.join(' ')}
             SQL
 
-            stmt =<<-SQL
+            stmt = <<~SQL
               UPDATE #{full_backup_table}
               SET #{update_set_expressions.join(', ')}
               FROM (#{subquery_for_update}) updated_identifiers

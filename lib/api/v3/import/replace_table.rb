@@ -5,7 +5,6 @@ module Api
         attr_reader :errors
 
         def initialize(table_class)
-          table = table_class.table_name
           @key_ary = table_class.import_key.map { |key| key[:name] }
           @local_table = table_class.local_table
           @remote_table = table_class.remote_table
@@ -58,14 +57,14 @@ total is #{count_table(@local_table)}"
           result = ActiveRecord::Base.connection.execute(
             "SELECT COUNT(*) FROM (#{subquery}) s"
           )
-          result.getvalue(0,0)
+          result.getvalue(0, 0)
         end
 
         def count_table(table)
           result = ActiveRecord::Base.connection.execute(
             "SELECT COUNT(*) FROM #{table}"
           )
-          result.getvalue(0,0)
+          result.getvalue(0, 0)
         end
       end
     end

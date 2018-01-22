@@ -6,7 +6,8 @@ module Api
         ALL_TABLES = [
           {table_class: Api::V3::Country, yellow_tables: [Api::V3::CountryProperty]},
           {table_class: Api::V3::Commodity},
-          {table_class: Api::V3::Context,
+          {
+            table_class: Api::V3::Context,
             yellow_tables: [
               Api::V3::ContextProperty,
               Api::V3::ContextualLayer,
@@ -16,9 +17,11 @@ module Api
               Api::V3::MapAttribute,
               Api::V3::RecolorByAttribute,
               Api::V3::ResizeByAttribute
-          ]},
+            ]
+          },
           {table_class: Api::V3::NodeType},
-          {table_class: Api::V3::ContextNodeType,
+          {
+            table_class: Api::V3::ContextNodeType,
             yellow_tables: [
               Api::V3::ContextNodeTypeProperty,
               Api::V3::Profile,
@@ -28,7 +31,8 @@ module Api
           },
           {table_class: Api::V3::DownloadVersion},
           {table_class: Api::V3::Node, yellow_tables: [Api::V3::NodeProperty]},
-          {table_class: Api::V3::Ind,
+          {
+            table_class: Api::V3::Ind,
             yellow_tables: [
               Api::V3::IndProperty,
               Api::V3::MapInd,
@@ -37,7 +41,8 @@ module Api
             ]
           },
           {table_class: Api::V3::NodeInd},
-          {table_class: Api::V3::Qual,
+          {
+            table_class: Api::V3::Qual,
             yellow_tables: [
               Api::V3::QualProperty,
               Api::V3::DownloadQual,
@@ -46,7 +51,8 @@ module Api
             ]
           },
           {table_class: Api::V3::NodeQual},
-          {table_class: Api::V3::Quant,
+          {
+            table_class: Api::V3::Quant,
             yellow_tables: [
               Api::V3::QuantProperty,
               Api::V3::DownloadQuant,
@@ -60,7 +66,7 @@ module Api
           {table_class: Api::V3::FlowInd},
           {table_class: Api::V3::FlowQual} # ,
           # {table_class: Api::V3::FlowQuant} # TODO: data fix
-        ]
+        ].freeze
 
         def call
           backup
@@ -87,9 +93,7 @@ module Api
             ReplaceTable.new(table_class).call
 
             # restore dependent yellow tables
-            if yellow_tables
-              yellow_tables.each(&:restore)
-            end
+            yellow_tables.each(&:restore) if yellow_tables
           end
         end
       end
