@@ -14,6 +14,7 @@ import {
 import {
   getPageStaticContent
 } from 'react-components/static-content/static-content.thunks';
+import { getProfileSearchNodes } from 'react-components/profile-search/profile-search.thunks';
 
 const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thunk(...params));
 
@@ -41,9 +42,13 @@ const routes = {
     page: 'tool',
     thunk: dispatchThunks(resetToolThunk)
   },
-  profiles: {
+  profileSearch: {
     path: '/profiles',
-    page: 'profiles',
+    page: 'profile-search',
+    extension: 'jsx',
+    thunk: dispatchThunks(
+      getProfileSearchNodes
+    ),
     nav: {
       className: '-light'
     }

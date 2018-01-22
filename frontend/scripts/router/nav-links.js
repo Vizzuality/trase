@@ -14,7 +14,7 @@ export default {
     },
     {
       name: 'Profiles',
-      page: 'profiles'
+      page: 'profileSearch'
     },
     {
       name: 'Download',
