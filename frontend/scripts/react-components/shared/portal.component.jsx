@@ -6,7 +6,7 @@ class Portal extends React.PureComponent {
   constructor(props) {
     super(props);
     this.root = document.getElementById('app-portal-container');
-    this.el = document.createElement('aside');
+    this.el = document.createElement(props.element);
   }
 
   componentDidMount() {
@@ -18,14 +18,18 @@ class Portal extends React.PureComponent {
   }
 
   render() {
-    const { open, children } = this.props;
-    return open ? ReactDOM.createPortal(children, this.el) : null;
+    const { children } = this.props;
+    return ReactDOM.createPortal(children, this.root);
   }
 }
 
 Portal.propTypes = {
-  open: PropTypes.bool.isRequired,
+  element: PropTypes.string,
   children: PropTypes.node
+};
+
+Portal.defaultProps = {
+  element: 'div'
 };
 
 export default Portal;

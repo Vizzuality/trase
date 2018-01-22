@@ -49,7 +49,7 @@ function About() {
   return (
     <div className="c-about">
       <Hero className="-read-only" />
-      <Portal open>
+      <Portal element="aside">
         <NavSidebar links={links} />
       </Portal>
       <section className="about-content">

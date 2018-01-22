@@ -7,12 +7,12 @@ const NavSidebar = (props) => {
 
   const mapLinksToRouter = link => (
     typeof link.page === 'string'
-      ? ({ ...link, page: { type: link.page } })
+      ? ({ ...link, page: { type: link.page, payload: {} } })
       : link
   );
 
-  const isActive = (match, location, link) => (
-    match || (location.type === link.page.type && !link.page.payload)
+  const isActive = (match, location, link) => console.log(match, location, link) || (
+    (location.type === link.page.type && link.page.payload.section === location.payload.section)
   );
 
   return (
@@ -24,6 +24,7 @@ const NavSidebar = (props) => {
               <li key={link.name} className="nav-sidebar-link-list-item">
                 <NavLink
                   exact
+                  strict
                   to={link.page}
                   className="subtitle -gray"
                   activeClassName="-pink"
