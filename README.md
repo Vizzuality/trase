@@ -221,22 +221,25 @@ The objective of the import process is to copy the blue tables verbatim from Mai
 ### Connection between the two databases
 
 We assume that it is possible to establish a connection between the Trase and Main databases using a postgres extension `postgres_fdw`. A number of connection properties need to be specified in order for the connection to be established, they need to be defined as environment variables:
-- TRASE_MAIN_HOST=localhost
-- TRASE_MAIN_PORT=5432
-- TRASE_MAIN_DATABASE=trase_core
-- TRASE_MAIN_SCHEMA=trase # this schema in remote database
-- TRASE_MAIN_USER=main_ro # this user defined in remote database with read-only access to trase schema
-- TRASE_MAIN_PASSWORD=
-- TRASE_MAIN_SERVER=trase_main
 
-We assume that there is a separate schema which contains data ready to be imported into Trase, the name is configured as TRASE_MAIN_SCHEMA, e.g. `trase`. We also assume there is a user with read-only privileges for that schema, e.g. `main_ro`.
+```
+TRASE_REMOTE_HOST=localhost
+TRASE_REMOTE_PORT=5432
+TRASE_REMOTE_DATABASE=trase_core
+TRASE_REMOTE_SCHEMA=trase # this schema in remote database
+TRASE_REMOTE_USER=main_ro # this user defined in remote database with read-only access to trase schema
+TRASE_REMOTE_PASSWORD=
+TRASE_REMOTE_SERVER=trase_server
+```
+
+We assume that there is a separate schema which contains data ready to be imported into Trase, the name is configured as `TRASE_REMOTE_SCHEMA`, e.g. `trase`. We also assume there is a user with read-only privileges for that schema, e.g. `main_ro`.
 
 `GRANT SELECT ON ALL TABLES IN SCHEMA trase TO main_ro`
 
 ### Foreign table wrappers
 
 The extension `postgres_fdw` allows us to access tables in the Main database directly within the Trase database. It requires that a number of objects are created in the database:
-- the server (name configured as TRASE_MAIN_SERVER, e.g. `trase_main`)
+- the server (name configured as `TRASE_REMOTE_SERVER`, e.g. `trase_server`)
 - user mappings which allow a user of the Trase database to connect to the Main database as the read-only user
 - definitions of foreign tables
 
@@ -245,6 +248,8 @@ All of these can be created using the following rake task:
 
 In case anything changes (e.g. table definitions), this can be re-initialized using:
 `bundle exec rake db:remote:init`
+
+These objects will be created in a schema configured as `TRASE_LOCAL_FDW_SCHEMA`.
 
 ### Import script
 

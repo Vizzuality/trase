@@ -12,7 +12,7 @@ module Api
           end
 
           def remote_table
-            ENV['TRASE_REMOTE_SCHEMA'] + '.' + table_name
+            ENV['TRASE_LOCAL_FDW_SCHEMA'] + '.' + table_name
           end
 
           def key_backup
