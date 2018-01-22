@@ -3,6 +3,7 @@ namespace :db do
     connection_properties = {
       adapter: 'postgresql',
       host: ENV['TRASE_REMOTE_HOST'],
+      port: ENV['TRASE_REMOTE_PORT'],
       username: ENV['TRASE_REMOTE_USER'],
       password: ENV['TRASE_REMOTE_PASSWORD'],
       database: ENV['TRASE_REMOTE_DATABASE'],
@@ -25,7 +26,11 @@ namespace :db do
           connection_properties[:port],
           connection_properties[:database]
         )
-        create_user_mapping(server, connection_properties[:username])
+        create_user_mapping(
+          server,
+          connection_properties[:username],
+          connection_properties[:password]
+        )
         import_foreign_schema(server, ENV['TRASE_REMOTE_SCHEMA'], ENV['TRASE_LOCAL_FDW_SCHEMA'])
       end
     end
@@ -38,9 +43,9 @@ namespace :db do
 
     def create_server(server, host, port, database)
       # Define the foreign server
-      query =<<-SQL
-CREATE SERVER #{server} FOREIGN DATA WRAPPER postgres_fdw
-OPTIONS (host '#{host}', port '#{port}', dbname '#{database}');
+      query =<<~SQL
+        CREATE SERVER #{server} FOREIGN DATA WRAPPER postgres_fdw
+        OPTIONS (host '#{host}', port '#{port}', dbname '#{database}');
       SQL
       execute_local_query(query)
     end
@@ -50,11 +55,11 @@ OPTIONS (host '#{host}', port '#{port}', dbname '#{database}');
       execute_local_query(query)
     end
 
-    def create_user_mapping(server, username)
+    def create_user_mapping(server, username, password)
       # Create the user mapping (readonly user)
-      query =<<-SQL
-CREATE USER MAPPING FOR CURRENT_USER SERVER #{server}
-OPTIONS (user '#{username}');
+      query =<<~SQL
+        CREATE USER MAPPING FOR CURRENT_USER SERVER #{server}
+        OPTIONS (user '#{username}', password '#{password}');
       SQL
       execute_local_query(query)
     end
