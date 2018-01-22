@@ -249,7 +249,9 @@ All of these can be created using the following rake task:
 In case anything changes (e.g. table definitions), this can be re-initialized using:
 `bundle exec rake db:remote:init`
 
-These objects will be created in a schema configured as `TRASE_LOCAL_FDW_SCHEMA`.
+Foreign tables will be created in a schema configured as `TRASE_LOCAL_FDW_SCHEMA`.
+
+Because the server and user mappings definitions may contain sensitive information, I needed a way to remove them from the SQL dump. I wasn't able to find a clean way to do it, so there is a monkey-patched version of `PostgreSQLDatabaseTasks.structure_dump` which removes those definitions from the dump. The idea is that after restoring from the dump, the `init` task needs to be run to establish the required objects for the import script.
 
 ### Import script
 
