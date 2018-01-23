@@ -1,7 +1,11 @@
+require 'db_helpers/search_path_helpers'
+
 module Api
   module V3
     module Import
       class Importer
+        include SearchPathHelpers
+
         # order matters a lot in here
         ALL_TABLES = [
           {table_class: Api::V3::Country, yellow_tables: [Api::V3::CountryProperty]},
@@ -68,9 +72,12 @@ module Api
           # {table_class: Api::V3::FlowQuant} # TODO: data fix
         ].freeze
 
-        def call
-          backup
-          import
+        def call(database_update)
+          @database_update = database_update
+          with_search_path(ENV['TRASE_LOCAL_SCHEMA']) do
+            backup
+            import
+          end
         end
 
         private
@@ -113,6 +120,7 @@ module Api
               @stats[table_class.table_name][:yellow_tables][yellow_table_class.table_name][:after] = yellow_table_cnt
             end
           end
+          @database_update.update_attribute(:stats, @stats)
           @stats
         end
 

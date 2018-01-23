@@ -2154,6 +2154,40 @@ ALTER SEQUENCE country_properties_id_seq OWNED BY country_properties.id;
 
 
 --
+-- Name: database_updates; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE database_updates (
+    id bigint NOT NULL,
+    stats json,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    jid text,
+    status text DEFAULT 'STARTED'::text NOT NULL,
+    CONSTRAINT database_updates_status_check CHECK ((status = ANY (ARRAY['STARTED'::text, 'FINISHED'::text, 'FAILED'::text])))
+);
+
+
+--
+-- Name: database_updates_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE database_updates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: database_updates_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE database_updates_id_seq OWNED BY database_updates.id;
+
+
+--
 -- Name: download_attributes; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -4243,6 +4277,13 @@ ALTER TABLE ONLY country_properties ALTER COLUMN id SET DEFAULT nextval('country
 
 
 --
+-- Name: database_updates id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY database_updates ALTER COLUMN id SET DEFAULT nextval('database_updates_id_seq'::regclass);
+
+
+--
 -- Name: download_attributes id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
@@ -4838,6 +4879,22 @@ ALTER TABLE ONLY country_properties
 
 ALTER TABLE ONLY country_properties
     ADD CONSTRAINT country_properties_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: database_updates database_updates_jid_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY database_updates
+    ADD CONSTRAINT database_updates_jid_key UNIQUE (jid);
+
+
+--
+-- Name: database_updates database_updates_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY database_updates
+    ADD CONSTRAINT database_updates_pkey PRIMARY KEY (id);
 
 
 --
@@ -5565,6 +5622,13 @@ CREATE INDEX index_contextual_layers_on_context_id ON contextual_layers USING bt
 --
 
 CREATE INDEX index_country_properties_on_country_id ON country_properties USING btree (country_id);
+
+
+--
+-- Name: index_database_updates_on_status; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_database_updates_on_status ON database_updates USING btree (status) WHERE (status = 'STARTED'::text);
 
 
 --
@@ -6686,4 +6750,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180111124938'),
 ('20180112112907'),
 ('20180116112807'),
-('20180119094345');
+('20180119094345'),
+('20180123130300'),
+('20180123132607');
+
+
