@@ -10,7 +10,7 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
-import StaticContent from 'react-components/shared/static-content.component';
+import StaticContent from 'react-components/static-content/static-content.container';
 import Footer from 'react-components/shared/footer.component';
 
 import NavContainer from 'containers/shared/nav.container';

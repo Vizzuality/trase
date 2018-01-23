@@ -14,6 +14,10 @@ import {
   getDataPortalContext
 } from 'react-components/data-portal/data-portal.thunks';
 
+import {
+  getPageStaticContent
+} from 'react-components/static-content/static-content.thunks';
+
 const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thunk(...params));
 
 const config = {
@@ -67,7 +71,8 @@ const routes = {
   about: {
     path: '/about/:section?',
     page: 'static-content',
-    extension: 'jsx'
+    extension: 'jsx',
+    thunk: dispatchThunks(getPageStaticContent)
   },
   termsOfUse: {
     path: '/terms-of-use',
