@@ -1,7 +1,7 @@
 import BaseMarkup from 'html/base.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
-import 'styles/profiles.scss';
+import 'styles/profile-search.scss';
 
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';

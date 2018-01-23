@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
+import ProfileSearchBox from 'react-components/profile-search/profile-search-box.container';
 
 const ProfileSearch = (props) => {
   const { nodes, errorMessage } = props;
@@ -24,17 +25,7 @@ const ProfileSearch = (props) => {
         )}
         >
           <div className="search-container">
-            <div className="c-search js-search">
-              <label htmlFor="search-input">Search for</label>
-              <input
-                className="search-input js-search-input"
-                id="search-input"
-                placeholder="trader or production place"
-              />
-              <svg className="icon icon-search">
-                <use xlinkHref="#icon-search" />
-              </svg>
-            </div>
+            <ProfileSearchBox />
           </div>
           <div className="explanatory-text">
             <p className="paragraph -center"><strong>Enter the name of a company</strong> for statistics on its links
