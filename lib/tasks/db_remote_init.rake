@@ -18,7 +18,7 @@ namespace :db do
     end
 
     task init: :check_config do
-      with_search_path(ENV['TRASE_LOCAL_FDW_SCHEMA']) do
+      with_search_path(ENV['TRASE_LOCAL_SCHEMA']) do
         server = ENV['TRASE_REMOTE_SERVER']
         create_server(
           server,
@@ -45,7 +45,7 @@ namespace :db do
       # Define the foreign server
       query = <<~SQL
         CREATE SERVER #{server} FOREIGN DATA WRAPPER postgres_fdw
-        OPTIONS (host '#{host}', port '#{port}', dbname '#{database}');
+        OPTIONS (host '#{host}', port '#{port}', dbname '#{database}', updatable 'false');
       SQL
       execute_local_query(query)
     end
