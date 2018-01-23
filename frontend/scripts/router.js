@@ -93,7 +93,7 @@ const routes = {
 export function routeSubscriber(store) {
   class RouterComponent {
     constructor() {
-      this.type = null;
+      this.filename = null;
       this.page = null;
       this.root = document.getElementById('app-root-container');
       this.onRouteChange = this.onRouteChange.bind(this);
@@ -109,13 +109,14 @@ export function routeSubscriber(store) {
     }
 
     onRouteChange({ routesMap, type } = {}) {
-      if (this.type !== type) {
+      const filename = routesMap[type];
+      if (this.filename !== filename) {
         this.resetPage();
-        this.type = type;
+        this.filename = filename;
         // eslint-disable-next-line space-in-parens
         import(
           /* webpackChunkName: "[request]" */
-          `./pages/${routesMap[this.type].page}.page.${routesMap[this.type].extension}`
+          `./pages/${this.filename.page}.page.${routesMap[type].extension}`
         )
           .then((page) => {
             this.page = page;
