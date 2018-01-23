@@ -18,9 +18,9 @@ module Api
             columns.join(', ')
           end
 
-          private
-
-          def blue_foreign_keys; []; end
+          def blue_foreign_keys
+            []
+          end
         end
       end
     end

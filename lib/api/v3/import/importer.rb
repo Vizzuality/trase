@@ -76,11 +76,23 @@ module Api
         private
 
         def backup
+          @stats = {}
           ALL_TABLES.each do |table|
             table_class = table[:table_class]
             yellow_tables = table[:yellow_tables]
             table_class.key_backup
-            yellow_tables.each(&:full_backup) if yellow_tables
+            @stats[table_class.table_name] = {
+              before: table_class.count,
+              remote: count_table(table_class.remote_table)
+            }
+            if yellow_tables
+              yellow_table_stats = {}
+              yellow_tables.each do |yellow_table_class|
+                yellow_table_class.full_backup
+                yellow_table_stats[yellow_table_class.table_name] = {before: yellow_table_class.count}
+              end
+              @stats[table_class.table_name][:yellow_tables] = yellow_table_stats
+            end
           end
         end
 
@@ -90,11 +102,26 @@ module Api
             yellow_tables = table[:yellow_tables]
 
             # replace data in the blue table
-            ReplaceTable.new(table_class).call
+            blue_table_cnt = ReplaceBlueTable.new(table_class).call
+            @stats[table_class.table_name][:after] = blue_table_cnt
 
-            # restore dependent yellow tables
-            yellow_tables.each(&:restore) if yellow_tables
+            if yellow_tables
+              # restore dependent yellow tables
+              yellow_tables.each do |yellow_table_class|
+                yellow_table_cnt = RestoreYellowTable.new(yellow_table_class).call
+                # yellow_table_stats = yellow_table.restore
+                @stats[table_class.table_name][:yellow_tables][yellow_table_class.table_name][:after] = yellow_table_cnt
+              end
+            end
           end
+          @stats
+        end
+
+        def count_table(table)
+          result = ActiveRecord::Base.connection.execute(
+            "SELECT COUNT(*) FROM #{table}"
+          )
+          result.getvalue(0, 0)
         end
       end
     end
