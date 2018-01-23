@@ -1,6 +1,6 @@
 
 export default {
-  about: [
+  default: [
     {
       name: 'About Trase',
       page: 'about'

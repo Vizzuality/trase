@@ -5,27 +5,34 @@ import remarkReact from 'remark-react';
 import Hero from 'react-components/shared/hero.component';
 import NavSidebar from 'react-components/shared/nav-sidebar.component';
 
-function StaticContent(props) {
-  const { links = [], content = '', children } = props;
-  const MarkdownContainer = p => (<div className="markdown-content">{p.children}</div>);
-  return (
-    <div className="c-static-content">
-      <Hero className="-read-only" />
-      <NavSidebar links={links} />
-      <section className="container">
-        <div className="row">
-          <div className="column small-12 medium-6 medium-offset-3">
-            {content &&
+class StaticContent extends React.Component {
+  shouldComponentUpdate(nextProps) {
+    console.log(nextProps.content);
+    return !!nextProps.content;
+  }
+
+  render() {
+    const { links = [], content = '', children } = this.props;
+    const MarkdownContainer = p => (<div className="markdown-content">{p.children}</div>);
+    return (
+      <div className="c-static-content">
+        <Hero className="-read-only" />
+        <NavSidebar links={links} />
+        <section className="container">
+          <div className="row">
+            <div className="column small-12 medium-6 medium-offset-3">
+              {content &&
               remark()
                 .use(remarkReact, { remarkReactComponents: { div: MarkdownContainer } })
                 .processSync(content).contents
-            }
-            {children}
+              }
+              {children}
+            </div>
           </div>
-        </div>
-      </section>
-    </div>
-  );
+        </section>
+      </div>
+    );
+  }
 }
 
 StaticContent.propTypes = {

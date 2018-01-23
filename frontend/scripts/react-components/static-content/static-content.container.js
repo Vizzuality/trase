@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import StaticContent from './static-content.component';
-import SidebarLinks from './static-content-links';
+import sidebarLinks from './static-content-links';
 import { getStaticContentFilename } from './static-content.actions';
 
 function mapStateToProps(state) {
   const { staticContent, location } = state;
   const filename = getStaticContentFilename(location);
-  const links = SidebarLinks[filename];
+  const links = sidebarLinks[filename] || sidebarLinks.default;
   return {
     content: staticContent.markdown[filename],
     links

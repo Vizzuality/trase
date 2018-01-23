@@ -76,18 +76,21 @@ const routes = {
   },
   termsOfUse: {
     path: '/terms-of-use',
-    page: 'terms-of-use',
-    extension: 'jsx'
+    page: 'static-content',
+    extension: 'jsx',
+    thunk: dispatchThunks(getPageStaticContent)
   },
   dataMethods: {
     path: '/data-methods',
-    page: 'data-methods',
-    extension: 'jsx'
+    page: 'static-content',
+    extension: 'jsx',
+    thunk: dispatchThunks(getPageStaticContent)
   },
   faq: {
     path: '/FAQ',
-    page: 'FAQ',
-    extension: 'jsx'
+    page: 'static-content',
+    extension: 'jsx',
+    thunk: dispatchThunks(getPageStaticContent)
   },
   [NOT_FOUND]: {
     path: '/404'
