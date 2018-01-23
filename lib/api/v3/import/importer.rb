@@ -85,14 +85,14 @@ module Api
               before: table_class.count,
               remote: count_table(table_class.remote_table)
             }
-            if yellow_tables
-              yellow_table_stats = {}
-              yellow_tables.each do |yellow_table_class|
-                yellow_table_class.full_backup
-                yellow_table_stats[yellow_table_class.table_name] = {before: yellow_table_class.count}
-              end
-              @stats[table_class.table_name][:yellow_tables] = yellow_table_stats
+            next unless yellow_tables
+
+            yellow_table_stats = {}
+            yellow_tables.each do |yellow_table_class|
+              yellow_table_class.full_backup
+              yellow_table_stats[yellow_table_class.table_name] = {before: yellow_table_class.count}
             end
+            @stats[table_class.table_name][:yellow_tables] = yellow_table_stats
           end
         end
 
@@ -104,14 +104,13 @@ module Api
             # replace data in the blue table
             blue_table_cnt = ReplaceBlueTable.new(table_class).call
             @stats[table_class.table_name][:after] = blue_table_cnt
+            next unless yellow_tables
 
-            if yellow_tables
-              # restore dependent yellow tables
-              yellow_tables.each do |yellow_table_class|
-                yellow_table_cnt = RestoreYellowTable.new(yellow_table_class).call
-                # yellow_table_stats = yellow_table.restore
-                @stats[table_class.table_name][:yellow_tables][yellow_table_class.table_name][:after] = yellow_table_cnt
-              end
+            # restore dependent yellow tables
+            yellow_tables.each do |yellow_table_class|
+              yellow_table_cnt = RestoreYellowTable.new(yellow_table_class).call
+              # yellow_table_stats = yellow_table.restore
+              @stats[table_class.table_name][:yellow_tables][yellow_table_class.table_name][:after] = yellow_table_cnt
             end
           end
           @stats

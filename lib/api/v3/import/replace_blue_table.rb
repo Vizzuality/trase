@@ -20,7 +20,7 @@ module Api
 
         def replace
           @table_class.connection.execute("TRUNCATE #{@local_table} CASCADE")
-          stmt =<<~SQL
+          stmt = <<~SQL
             INSERT INTO #{@local_table}
             (#{@columns_cs})
             SELECT #{@remote_columns_cs}

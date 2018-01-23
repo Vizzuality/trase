@@ -6,7 +6,9 @@ module Api
       has_many :flow_quals
       has_many :flow_quants
 
-      def self.import_key; []; end
+      def self.import_key
+        []
+      end
 
       def self.blue_foreign_keys
         [
