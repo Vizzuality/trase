@@ -66,7 +66,7 @@ const routes = {
   },
   about: {
     path: '/about/:section?',
-    page: 'about',
+    page: 'static-content',
     extension: 'jsx'
   },
   termsOfUse: {

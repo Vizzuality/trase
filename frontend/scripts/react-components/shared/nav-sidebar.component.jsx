@@ -11,7 +11,7 @@ const NavSidebar = (props) => {
       : link
   );
 
-  const isActive = (match, location, link) => console.log(match, location, link) || (
+  const isActive = (match, location, link) => (
     (location.type === link.page.type && link.page.payload.section === location.payload.section)
   );
 
