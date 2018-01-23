@@ -1,4 +1,4 @@
-import { connectRoutes, NOT_FOUND } from 'redux-first-router';
+import { connectRoutes, NOT_FOUND, replace } from 'redux-first-router';
 import connect from 'connect';
 import { parse, stringify } from 'utils/stateURL';
 import {
@@ -93,7 +93,13 @@ const routes = {
     thunk: dispatchThunks(getPageStaticContent)
   },
   [NOT_FOUND]: {
-    path: '/404'
+    path: '/404',
+    page: 'static-content',
+    extension: 'jsx',
+    thunk: dispatchThunks(
+      () => replace('/404'),
+      getPageStaticContent
+    )
   }
 };
 
