@@ -1,0 +1,49 @@
+.c-static-content {
+
+  .container {
+    padding: 56px 0 132px;
+  }
+
+  .markdown-content {
+
+    h1, h2 {
+      font-family: $font-family-2;
+      line-height: 1.5;
+      margin: 56px 0 16px;
+      color: $charcoal-grey;
+
+      &:first-child {
+        margin: 0 0 16px;
+      }
+    }
+
+    h1 {
+      font-size: 48px;
+    }
+
+    h2 {
+      font-size: 32px;
+    }
+
+    p, li {
+      color: $charcoal-grey;
+      font-family: $font-family-2;
+      font-size: 17px;
+      font-weight: 300;
+      line-height: 2.24;
+
+    &:not(:first-child){
+        margin: 32px 0 0;
+      }
+    }
+
+    ul {
+      margin: 32px 0;
+      padding-left: 24px;
+    }
+
+    a {
+      font-weight: $font-weight-bold;
+    }
+  }
+}

@@ -146,7 +146,7 @@
       color: $gray-text;
 
       > a {
-        font-weight: 400;
+        font-weight: $font-weight-regular;
       }
     }
   }
