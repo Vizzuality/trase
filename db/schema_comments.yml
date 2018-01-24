@@ -329,6 +329,15 @@ tables:
         comment: When set, show this attribute by default
   - name: resize_by_quants
     comment: Quants available for recoloring (see resize_by_attributes.)
+  - name: database_updates
+    comment: Keeping track of database update operations, also used to ensure only one update processed at a time
+    columns:
+      - name: jid
+        comment: Job ID, filled in when update started using a background job processor
+      - name: status
+        comment: STARTED (only one at a time), FINISHED or FAILED
+      - name: stats
+        comment: JSON structure with information on row counts for all tables before / after update
 materialized_views:
   - name: attributes_mv
     comment: Materialized view which merges inds, quals and quants.
@@ -373,3 +382,9 @@ materialized_views:
     columns:
       - name: attribute_id
         comment: References the unique id in attributes_mv.
+  - name: download_attributes_values_mv
+    comment: Downloadable values from flow_inds/quals/quants
+  - name: flow_paths_mv
+    comment: Normalised flows
+  - name: download_flows_mv
+    comment: Combines data from flow_paths_mv and download_attributes_values_mv in a structure that can be directly used to generate data downloads.

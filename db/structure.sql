@@ -2169,6 +2169,34 @@ CREATE TABLE database_updates (
 
 
 --
+-- Name: TABLE database_updates; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE database_updates IS 'Keeping track of database update operations, also used to ensure only one update processed at a time';
+
+
+--
+-- Name: COLUMN database_updates.stats; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN database_updates.stats IS 'JSON structure with information on row counts for all tables before / after update';
+
+
+--
+-- Name: COLUMN database_updates.jid; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN database_updates.jid IS 'Job ID, filled in when update started using a background job processor';
+
+
+--
+-- Name: COLUMN database_updates.status; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN database_updates.status IS 'STARTED (only one at a time), FINISHED or FAILED';
+
+
+--
 -- Name: database_updates_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -2459,6 +2487,13 @@ UNION ALL
 
 
 --
+-- Name: MATERIALIZED VIEW download_attributes_values_mv; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW download_attributes_values_mv IS 'Downloadable values from flow_inds/quals/quants';
+
+
+--
 -- Name: flows; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -2606,6 +2641,13 @@ CREATE MATERIALIZED VIEW flow_paths_mv AS
 
 
 --
+-- Name: MATERIALIZED VIEW flow_paths_mv; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW flow_paths_mv IS 'Normalised flows';
+
+
+--
 -- Name: download_flows_mv; Type: MATERIALIZED VIEW; Schema: revamp; Owner: -
 --
 
@@ -2672,6 +2714,13 @@ CREATE MATERIALIZED VIEW download_flows_mv AS
   WHERE (f_0.column_position = 0)
   GROUP BY f_0.flow_id, f_0.context_id, f_0.year, f_0.name, f_0.node_id, f_1.name, f_1.node_id, f_1.node_type_name, f_2.name, f_2.node_id, f_2.node_type_name, f_3.name, f_3.node_id, f_3.node_type_name, f_4.name, f_4.node_id, f_4.node_type_name, f_5.name, f_5.node_id, f_5.node_type_name, f_6.name, f_6.node_id, f_6.node_type_name, f_7.name, f_7.node_id, f_7.node_type_name, fi.attribute_type, fi.attribute_id, fi.name, fi.name_with_unit, fi.display_name
   WITH NO DATA;
+
+
+--
+-- Name: MATERIALIZED VIEW download_flows_mv; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW download_flows_mv IS 'Combines data from flow_paths_mv and download_attributes_values_mv in a structure that can be directly used to generate data downloads.';
 
 
 --
