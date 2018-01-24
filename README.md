@@ -250,21 +250,21 @@ All of these can be created using the following rake task:
 `bundle exec rake db:remote:init`
 
 In case anything changes (e.g. table definitions), this can be re-initialized using:
-`bundle exec rake db:remote:init`
+`bundle exec rake db:remote:reinit`
 
 Foreign tables will be created in a schema configured as `TRASE_LOCAL_FDW_SCHEMA`.
 
-Because the server and user mappings definitions may contain sensitive information, I needed a way to remove them from the SQL dump. I wasn't able to find a clean way to do it, so there is a monkey-patched version of `PostgreSQLDatabaseTasks.structure_dump` which removes those definitions from the dump. The idea is that after restoring from the dump, the `init` task needs to be run to establish the required objects for the import script.
+*Note to future self: Because the server and user mappings definitions may contain sensitive information, I needed a way to remove them from the SQL dump. I wasn't able to find a clean way to do it, so there is a monkey-patched version of `PostgreSQLDatabaseTasks.structure_dump` which removes those definitions from the dump. The idea is that after restoring from the dump, the `init` task needs to be run to establish the required objects for the import script.*
 
 ### Import script
 
-The importer script code is contained in `lib/api/v3/import/importer.rb`. The script goes over tables in a specific order, whereby each table is preceded by all the tables it depends on. Note for the future: for this to continue working as the database grows, cycles in the schema need to be avoided.
+The importer script code is contained in `lib/api/v3/import/importer.rb`. The script goes over tables in a specific order, whereby each table is preceded by all the tables it depends on. *Note to future self*: for this to continue working as the database grows, cycles in the schema need to be avoided.
 
-Tables are processed differently depending on whether they are "blue" or "yellow". It can be easily recognised which is whych based on the subclass of the model: either `Api::V3::BlueTable` or `Api::V3::YellowTable`.
+Tables are processed differently depending on whether they are "blue" or "yellow". It can be easily recognised which is which based on the subclass of the model: either `Api::V3::BlueTable` or `Api::V3::YellowTable`.
 
 In the first step all the tables are backed up, which means different things in case of blue and yellow tables.
 
-For the blue tables we store a mapping between the old `id` (from local table) and new `id` (from remote table). This is a temporary table with just two columns: `id` and `new_id`. Note for the future: the assumption here is that each of the blue tables has a unique numeric identifier called `id` in both the local and remote table. We assume those identifiers are not stable across data updates, which is why we create a mapping in this step. In order to match the local table to the remote table we use columns specified in `import_key`, which is a method that needs to be defined for each blue table. For example, the import key for the `countries` table contains only the `iso2` column (which has a unique constraint set) and so local and remote can be matched on this column. Sometimes the import key contains foreign keys, for example `contexts` has an `import_key` consisting of `country_id` and `commodity_id`; of course those are unstable foreign keys, so they cannot be used to match rows directly in the remote table; instead, we need to match using the id mapping of both `countries` and `commodities` tables. The script knows to do that based on the list of unstable foreign keys which are called `blue_foreign_keys` and detects if the `import_key` overlaps with `blue_foreign_keys`, requiring a lookup in the mapping. That mapping needs to be available at the time, which is why order of processing blue tables matters.
+For the blue tables we store a mapping between the old `id` (from local table) and new `id` (from remote table). This is a temporary table with just two columns: `id` and `new_id`. *Note to future self: the assumption here is that each of the blue tables has a unique numeric identifier called `id` in both the local and remote table. We assume those identifiers are not stable across data updates, which is why we create a mapping in this step.* In order to match the local table to the remote table we use columns specified in `import_key`, which is a method that needs to be defined for each blue table. For example, the import key for the `countries` table contains only the `iso2` column (which has a unique constraint set) and so local and remote can be matched on this column. Sometimes the import key contains foreign keys, for example `contexts` has an `import_key` consisting of `country_id` and `commodity_id`; of course those are unstable foreign keys, so they cannot be used to match rows directly in the remote table; instead, we need to match using the id mapping of both `countries` and `commodities` tables. The script knows to do that based on the list of unstable foreign keys which are called `blue_foreign_keys` and detects if the `import_key` overlaps with `blue_foreign_keys`, requiring a lookup in the mapping. That mapping needs to be available at the time, which is why order of processing blue tables matters.
 
 For the yellow tables, we simply back up the entire table in a temporary table.
 
@@ -275,7 +275,7 @@ Once all tables are backed up, the import can commence. The import process itera
 For each blue table, truncate the local table and copy the remote table into it. Next, if there are any yellow tables that depend on this blue table, they need to be restored from backup. Restoring consists of the following steps:
 - if there are any obsolete rows in the yellow tables backup, remove them first. To determine which rows are obsolete we match rows on foreign keys, which can be of two types: blue and yellow (depending on which parent table is concerned). The rule is, yellow foreign keys are stable (those ids do not change) and blue foreign keys are unstable. To match obsolete rows by blue foreign keys we need to do a lookup on the mapping table.
 - if there are any blue foreign keys in the yellow table, they need to be resolved in the remaining rows by replacing them with new values from respective mapping tables
-- finally, the yellow table can be restored from backup
+- finally, the yellow table with removed obsolete rows and resolved foreign keys can be restored from backup
 
 To sum up, these are the important helper methods that need to be defined in models for the import process to run correctly:
 - `import_key` - for blue tables only. Used for matching rows from local table with remote. Exception: `flows`. That table does not lend itself very well to matching in this way, which is why the `import_key` is empty. That results with the table being copied without any hope of resolving the old identifiers against the new ones. For now that is not a problem, because we do not have any yellow tables depending on flows. If we have any, this needs to be considered and matching on `context_id`, `year` and `path` implemented.
@@ -286,7 +286,7 @@ To sum up, these are the important helper methods that need to be defined in mod
 
 The importer can be started in two ways:
 - via a rake task: `bundle exec rake db:remote:import`
-- via the admin interface: `/content/admin/databasse_update`
+- via the admin interface: `/content/admin/database_update`
 
 In the first case the importer will run synchronously. In the latter case it will be executed as a background job using sidekiq. For that to work you need redis & sidekiq running. If redis is not already running it can be started using `redis-server`. To start sidekiq in development run `bundle exec sidekiq`. In staging / demo / production starting and stopping sidekiq is handled by capistrano.
 
