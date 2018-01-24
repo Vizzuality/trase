@@ -282,7 +282,15 @@ To sum up, these are the important helper methods that need to be defined in mod
 - `blue_foreign_keys` - for both blue and yellow tables. Used to inform the importer that identifiers needs to be resolved using the mapping tables.
 - `yellow_foreign_keys` - for yellow tables only. Allows the importer to check for any rows that depend on another yellow table and might need removing.
 
-# Running the importer in development
+### Starting the importer
+
+The importer can be started in two ways:
+- via a rake task: `bundle exec rake db:remote:import`
+- via the admin interface: `/content/admin/databasse_update`
+
+In the first case the importer will run synchronously. In the latter case it will be executed as a background job using sidekiq. For that to work you need redis & sidekiq running. If redis is not already running it can be started using `redis-server`. To start sidekiq in development run `bundle exec sidekiq`. In staging / demo / production starting and stopping sidekiq is handled by capistrano.
+
+### Running the importer in development
 
 Only databases configured on staging / demo / production have access to the main database. To run on a development database you need to open a tunnel through a remote host such as staging. In the following commands "database host" means the host on which main database sits, "remote host" means a host which has access to database host and through which we can tunnel the connection.
 
