@@ -110,6 +110,9 @@ GEM
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
+    capistrano-sidekiq (0.10.0)
+      capistrano
+      sidekiq (>= 3.4)
     case_transform (0.2)
       activesupport
     climate_control (0.2.0)
@@ -404,6 +407,7 @@ DEPENDENCIES
   capistrano-passenger
   capistrano-rails
   capistrano-rvm
+  capistrano-sidekiq
   ckeditor!
   coffee-rails (~> 4.2)
   database_cleaner
