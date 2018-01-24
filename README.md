@@ -29,8 +29,9 @@ This project uses:
 - Ruby 2.4.2
 - Rails 5.1+
 - Nodejs 8.2+
-- PostgreSQL 9.5+ with `intarray` and `tablefunc` extensions
+- PostgreSQL 9.5+ with `intarray`, `tablefunc` and `postgres_fdw` extensions
 - [Bundler](http://bundler.io/)
+- redis
 
 ## Setup
 
@@ -263,7 +264,7 @@ Tables are processed differently depending on whether they are "blue" or "yellow
 
 In the first step all the tables are backed up, which means different things in case of blue and yellow tables.
 
-For the blue tables we store a mapping between the old `id` (from local table) and new `id` (from remote table). This is a temporary table with just two columns: `id` and `new_id`. Note for the future: the assumption here is that each of the blue tables has a unique numeric identifier called `id` in both the local and remote table. We assume those identifiers are not stable across data updates, which is why we create a mapping in this step. In order to match the local table to the remote table we use columns specified in `import_key`, which is a method that needs to be defined for each blue table. For example, the import key for the `countries` table contains only the `iso2` column (which has a unique constraint set) and so local and remote can be matched on this column. Sometimes the import key contains foreing keys, for example `contexts` has an `import_key` consisting of `country_id` and `commodity_id`; of course those are unstable foreign keys, so they cannot be used to match rows directly in the remote table; instead, we need to match using the id mapping of both `countries` and `commodities` tables. The script knows to do that based on the list of unstable foreign keys which are called `blue_foreign_keys` and detects if the `import_key` overlaps with `blue_foreign_keys`, requiring a lookup in the mapping. That mapping needs to be available at the time, which is why order of processing blue tables matters.
+For the blue tables we store a mapping between the old `id` (from local table) and new `id` (from remote table). This is a temporary table with just two columns: `id` and `new_id`. Note for the future: the assumption here is that each of the blue tables has a unique numeric identifier called `id` in both the local and remote table. We assume those identifiers are not stable across data updates, which is why we create a mapping in this step. In order to match the local table to the remote table we use columns specified in `import_key`, which is a method that needs to be defined for each blue table. For example, the import key for the `countries` table contains only the `iso2` column (which has a unique constraint set) and so local and remote can be matched on this column. Sometimes the import key contains foreign keys, for example `contexts` has an `import_key` consisting of `country_id` and `commodity_id`; of course those are unstable foreign keys, so they cannot be used to match rows directly in the remote table; instead, we need to match using the id mapping of both `countries` and `commodities` tables. The script knows to do that based on the list of unstable foreign keys which are called `blue_foreign_keys` and detects if the `import_key` overlaps with `blue_foreign_keys`, requiring a lookup in the mapping. That mapping needs to be available at the time, which is why order of processing blue tables matters.
 
 For the yellow tables, we simply back up the entire table in a temporary table.
 
@@ -280,6 +281,20 @@ To sum up, these are the important helper methods that need to be defined in mod
 - `import_key` - for blue tables only. Used for matching rows from local table with remote. Exception: `flows`. That table does not lend itself very well to matching in this way, which is why the `import_key` is empty. That results with the table being copied without any hope of resolving the old identifiers against the new ones. For now that is not a problem, because we do not have any yellow tables depending on flows. If we have any, this needs to be considered and matching on `context_id`, `year` and `path` implemented.
 - `blue_foreign_keys` - for both blue and yellow tables. Used to inform the importer that identifiers needs to be resolved using the mapping tables.
 - `yellow_foreign_keys` - for yellow tables only. Allows the importer to check for any rows that depend on another yellow table and might need removing.
+
+# Running the importer in development
+
+Only databases configured on staging / demo / production have access to the main database. To run on a development database you need to open a tunnel through a remote host such as staging. In the following commands "database host" means the host on which main database sits, "remote host" means a host which has access to database host and through which we can tunnel the connection.
+
+`ssh -L <local database port>:<database host>:<database port> <remote ssh username>@<remote host>`
+
+The "local database port" can be set to any available local port, 5433 is usually fine.
+
+To test the connection try this in another terminal window:
+
+`psql -h 127.0.0.1 -p 5433 -U <database username> <database name>`
+
+When connecting this way you have to set your `TRASE_REMOTE_HOST` to `127.0.0.1` and `TRASE_REMOTE_PORT` to `5433`.
 
 # Frontend
 
