@@ -75,7 +75,7 @@ To enable then, simply execute once: `bin/git/init-hooks`
 
 ## Configuration
 
-The project's main configuration values can be set using [environment variables](https://en.wikipedia.org/wiki/Environment_variable)
+The project's main configuration values can be set using [environment variables](https://en.wikipedia.org/wiki/Environment_variable) in the `.env` file.
 
 * SECRET_KEY_BASE: Rails secret key. Use a random value
 * POSTGRES_HOSTNAME: Hostname of your database server
@@ -90,6 +90,15 @@ The project's main configuration values can be set using [environment variables]
 * GOLD_MASTER_HOST_V1:
 * GOLD_MASTER_HOST_V2:
 * GOLD_MASTER_HOST_V3:
+* TRASE_REMOTE_HOST=localhost
+* TRASE_REMOTE_PORT=5432
+* TRASE_REMOTE_DATABASE=trase
+* TRASE_REMOTE_SCHEMA=trase # this schema in remote database
+* TRASE_REMOTE_USER=main_ro # this user defined in remote database with read-only access to trase schema
+* TRASE_REMOTE_PASSWORD=
+* TRASE_REMOTE_SERVER=trase_server
+* TRASE_LOCAL_FDW_SCHEMA=main # this schema in local database where remote tables are mapped
+* TRASE_LOCAL_SCHEMA=revamp # this schema in local database where target tables are
 
 ## Test
 
@@ -158,20 +167,13 @@ SELECT indexrelid::regclass as index, relid::regclass as table, 'DROP INDEX ' ||
 
 In the transition period as work on changing the database schema continues, new tables are living in a separate `revamp` schema (~namespace), whereas the default `public` schema still contains the old tables. This means we can work on both schemas as necessary.
 
-The base version of the database at this point is:
-
-
-
-
 To migrate the database:
 
-1. TEMPORARILY comment out `schema_search_path: "public"` in `config/database.yml`
-2. run `bundle exec rake db:migrate` to create revamped database objects
-3. run the queries in `db/revamp_cleanup.sql` to remove duplicates from the original database
-4. run `bundle exec rake db:revamp:copy` to copy data between old and new structure
-5. `bundle exec rake db:revamp:doc:sql`
-6. ideally after running all this you shouldn't have any changes on the structure.sql file, other than PostgreSQL version in some cases
-7. you can now uncomment `schema_search_path` in `config/database.yml`
+1. run `bundle exec rake db:migrate` to create revamped database objects
+2. run the queries in `db/revamp_cleanup.sql` to remove duplicates from the original database
+3. run `bundle exec rake db:revamp:copy` to copy data between old and new structure
+4. `bundle exec rake db:revamp:doc:sql`
+5. ideally after running all this you shouldn't have any changes on the structure.sql file, other than PostgreSQL version in some cases
 
 Schema documentation is generated directly from the database and requires the following steps:
 
