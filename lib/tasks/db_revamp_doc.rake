@@ -29,9 +29,30 @@ namespace :db do
         Rake::Task['db:structure:dump'].invoke
       end
 
+      POSTGRESQL_JAR = 'postgresql-42.2.0.jar'.freeze
+      SCHEMA_SPY_JAR = 'schemaspy-6.0.0-rc2.jar'.freeze
+      BLUE_TABLES = %w[
+        countries
+        commodities
+        contexts
+        context_node_types
+        download_versions
+        nodes
+        inds
+        quals
+        quants
+        node_inds
+        node_quals
+        node_quants
+        flow_inds
+        flow_quals
+        flow_quants
+      ].freeze
+
       desc 'Generate html schema documentation'
       task html: [:sql] do
-        exec `cd doc/db; java -jar schemaspy-6.0.0-rc2.jar -renderer :quartz -t pgsql -dp postgresql-42.1.4.jar -db trase_revamp -s revamp -u postgres -host localhost -o ./html`
+        exec `cd doc/db; java -jar #{SCHEMA_SPY_JAR} -t pgsql -dp #{POSTGRESQL_JAR} -db trase_revamp -s revamp -u postgres -host localhost -o ./all_tables`
+        exec `cd doc/db; java -jar #{SCHEMA_SPY_JAR} -t pgsql -dp #{POSTGRESQL_JAR} -db trase_revamp -s revamp -u postgres -host localhost -i "#{BLUE_TABLES.join('|')}" -o ./blue_tables`
       end
     end
   end

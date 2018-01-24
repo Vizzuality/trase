@@ -181,13 +181,13 @@ That is done using a dedicated rake task:
     `rake db:revamp:doc:sql`
 
     Note: this rake task also creates a new dump of structure.sql, as comments are part of the schema.
-2. Once comments are in place, it is possible to generate html documentation of the entire schema using an external tool. One os such tools is SchemaSpy, which is an open source java library.
+2. Once comments are in place, it is possible to generate html documentation of the database schema using an external tool. One os such tools is SchemaSpy, which is an open source java library.
     1. install [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
     2. install [Graphviz](http://www.graphviz.org/)
     3. the [SchemaSpy 6.0.0-rc2](http://schemaspy.readthedocs.io/en/latest/index.html) jar file and [PostgreSQL driver](https://jdbc.postgresql.org/download.html) file are already in doc/db
-    4. `rake db:revamp:doc:html` (Please note: I added an extra param to SchemaSpy command which is `-renderer :quartz` which helps with running it on macOS Sierra. No idea if it prevents it from running elsewhere.)
-    5. output files are in `doc/db/html`
-3. to update the [GH pages site](https://vizzuality.github.io/trase-api/) all the generated files from `doc/db/html` need to land in the top-level of the `gh-pages` branch. This is currently a manual process, easiest to have the repo checked out twice on local drive to be able to copy between branches (not great and not final.)
+    4. `rake db:revamp:doc:html`
+    5. output files are in `doc/db/all_tables` (complete schema) and `doc/db/blue_tables` (only blue tables)
+3. to update the [GH pages site](https://vizzuality.github.io/trase-api/) all the generated files from `doc/db/all_tables` and `doc/db/blue_tables` need to land in the top-level of the `gh-pages` branch. This is currently a manual process, easiest to have the repo checked out twice on local drive to be able to copy between branches (not great and not final.)
 
 ## Data import process
 
