@@ -33,7 +33,7 @@ const NavSidebar = (props) => {
                   {link.name}
                 </NavLink>
               </li>
-          ))
+            ))
         }
       </ul>
     </div>

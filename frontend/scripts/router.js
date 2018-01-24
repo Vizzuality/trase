@@ -25,7 +25,8 @@ const config = {
   querySerializer: {
     parse,
     stringify
-  }
+  },
+  notFoundPath: '/404'
 };
 
 const routes = {
