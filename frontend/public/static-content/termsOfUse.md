@@ -22,7 +22,7 @@ data set for detailed information.
 
 You may not imply that Trase authorises or endorses your use of the data, or use the Trase logo 
 in conjunction with such use. If you would like to use the Trase logo, please contact us at 
-info@trase.earth to request permission.
+[info@trase.earth](mailto:info@trase.earth) to request permission.
 
 
 ## Permissions & licensing
