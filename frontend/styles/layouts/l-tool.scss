@@ -2,10 +2,7 @@
 @import '../settings';
 
 body {
-  &.-overflow-hidden {
-    overflow: hidden;
-    background: $background-white;
-  }
+  background: $background-white;
 }
 
 .l-tool {
