@@ -34,6 +34,8 @@ gem 'paperclip', '~> 5.0.0'
 gem 'rack-cors', '~> 0.4'
 gem 'twitter', '~> 6.1'
 
+gem 'appsignal'
+
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'rspec-rails', '~> 3.5'

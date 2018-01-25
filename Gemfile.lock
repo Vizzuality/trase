@@ -80,6 +80,8 @@ GEM
     annotate (2.7.2)
       activerecord (>= 3.2, < 6.0)
       rake (>= 10.4, < 13.0)
+    appsignal (2.4.3)
+      rack
     arbre (1.1.1)
       activesupport (>= 3.0.0)
     arel (8.0.0)
@@ -385,6 +387,7 @@ DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   activeadmin (~> 1.2.1)
   annotate
+  appsignal
   byebug
   capistrano (= 3.7.1)
   capistrano-bundler
