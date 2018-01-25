@@ -50,6 +50,9 @@ module Api
           @selected_nodes_ids = initialize_int_array_param(
             params[:selected_nodes_ids]
           )
+          @locked_nodes_ids = initialize_int_array_param(
+            params[:locked_nodes_ids]
+          )
           @biome_id = params[:biome_id]
           @year_start = params[:year_start]
           @year_end = params[:year_end]
@@ -58,8 +61,8 @@ module Api
 
         def initialize_int_array_param(param)
           ary = param || []
-          ary = ary.split(',').map(&:to_i) if ary.is_a?(String)
-          ary
+          ary = ary.split(',') if ary.is_a?(String)
+          ary.map(&:to_i)
         end
 
         def initialize_errors
@@ -201,7 +204,7 @@ module Api
         def active_nodes_for_position(flows_through_position, other_node_id)
           result = {other_node_id => 0}
           flows_through_position.each.with_index do |flow, i|
-            if i < @limit
+            if i < @limit || @locked_nodes_ids.include?(flow['node_id'])
               result[flow['node_id']] = flow['total']
             else
               result[other_node_id] += flow['total']
@@ -213,7 +216,7 @@ module Api
         def active_nodes_for_expanded_position(flows_through_position, other_node_id)
           result = {other_node_id => 0}
           flows_through_position.each do |flow|
-            if @selected_nodes_ids.include?(flow['node_id'])
+            if @selected_nodes_ids.include?(flow['node_id']) || @locked_nodes_ids.include?(flow['node_id'])
               result[flow['node_id']] = flow['total']
             else
               result[other_node_id] += flow['total']
