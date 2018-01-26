@@ -65,7 +65,7 @@
   width: 60px;
   position: fixed;
   bottom: 8px;
-  background: $charcoal-grey;
+  background: $white;
   border-radius: 100%;
   box-shadow: rgba($black, 0.3) 0 0 20px;
   cursor: pointer;
@@ -90,10 +90,10 @@
 
 
   .icon {
-    fill: $white;
-    stroke: $white;
-    width: 15px;
-    height: 15px;
+    fill: $charcoal-grey;
+    stroke: $charcoal-grey;
+    width: 17px;
+    height: 17px;
 
     &.icon-menu {
       height: 22px;
