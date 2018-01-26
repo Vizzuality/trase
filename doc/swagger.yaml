@@ -57,7 +57,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Column'
-  '/context/{context_id}/map_groups':
+  '/context/{context_id}/map_layers':
     get:
       tags:
         - context
@@ -611,6 +611,30 @@ definitions:
   Column:
     type: object
     properties:
+      data:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            position:
+              type: string
+            group:
+              type: string
+            isDefault:
+              type: boolean
+            isGeo:
+              type: boolean
+            isChoroplethDisabled:
+              type: boolean
+            profileType:
+              type: string
+  MapGroup:
+    type: object
+    properties:
       dimensionGroups:
         type: array
         items:
@@ -625,12 +649,6 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Dimension'
-  MapGroup:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int64
   Attribute:
     type: object
     properties:
@@ -936,7 +954,7 @@ definitions:
                       type:
                         type: string
                       style:
-                        type: string                  
+                        type: string
               biome:
                 type: object
                 properties:
