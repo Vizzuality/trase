@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import ReactFauxDOM from 'react-faux-dom';
+import { withFauxDOM } from 'react-faux-dom';
 import * as d3 from 'd3';
 import d3Sankey from './sankey';
 import energy from './energy.json';
@@ -8,9 +8,11 @@ import energy from './energy.json';
 d3.sankey = d3Sankey;
 
 class AnimatedFlows extends React.PureComponent {
-  render() {
+  componentDidMount() {
     const width = parseInt(window.innerWidth);
     const height = parseInt(600);
+
+    const component = this;
 
     const sankey = d3.sankey(width)
       .nodeWidth(2)
@@ -24,7 +26,7 @@ class AnimatedFlows extends React.PureComponent {
       .links(energy.links)
       .layout(32);
 
-    const chart = ReactFauxDOM.createElement('div');
+    const chart = this.props.connectFauxDOM('div', 'chart');
     chart.setAttribute('class', 'flowsContainer');
     const svg = d3.select(chart).append("svg")
        .attr("width", width)
@@ -114,6 +116,9 @@ class AnimatedFlows extends React.PureComponent {
 
     function cleanBranches() {
       //cancel all transitions by making a new one
+      if (component.props.isAnimatingFauxDOM()) {
+        component.props.stopAnimatingFauxDOM();
+      }
       gradientLink.transition();
       gradientLink
         .style("opacity", 0)
@@ -121,6 +126,9 @@ class AnimatedFlows extends React.PureComponent {
     }
 
     function animateBranch() {
+      if (!component.props.isAnimatingFauxDOM()) {
+        component.props.animateFauxDOM(10100);
+      }
       const r = Math.floor(Math.random() * (energy.nodes.length + 1));
       const node = energy.nodes[r];
       if (!!node.sourceLinks.length && node.x === 0) {
@@ -131,21 +139,23 @@ class AnimatedFlows extends React.PureComponent {
     }
 
     animateBranch();
+
     setInterval(
       () => {
         cleanBranches();
-        animateBranch()
+        animateBranch();
       },
       10000
     );
+  }
 
-
+  render() {
     return (
       <div className="c-animated-flows">
-        {chart.toReact()}
+        {this.props.chart}
       </div>
     );
   }
 }
 
-export default AnimatedFlows;
+export default withFauxDOM(AnimatedFlows);
