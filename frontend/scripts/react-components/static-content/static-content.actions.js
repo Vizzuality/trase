@@ -1,5 +1,6 @@
 import { NOT_FOUND, redirect } from 'redux-first-router';
 import camelCase from 'lodash/camelCase';
+import { getURLFromParams, GET_MARKDOWN_CONTENT } from 'utils/getURLFromParams';
 
 export const STATIC_CONTENT__SET_MARKDOWN = 'STATIC_CONTENT__SET_MARKDOWN';
 
@@ -15,7 +16,7 @@ export const getStaticContent = () => (dispatch, getState) => {
     typeof staticContent.markdown[filename] === 'undefined' &&
     !notFound
   ) {
-    const url = `/static-content/${filename}.md`;
+    const url = getURLFromParams(GET_MARKDOWN_CONTENT, { filename });
     fetch(url)
       .then(res => (res.ok ? res.text() : Promise.reject(res)))
       .then(content => dispatch({

@@ -4,6 +4,7 @@ import remark from 'remark';
 import remarkReact from 'remark-react';
 import Hero from 'react-components/shared/hero.component';
 import NavSidebar from './nav-sidebar.component';
+import NotFound from './not-found.component';
 
 class StaticContent extends React.PureComponent {
   render() {
@@ -29,16 +30,7 @@ class StaticContent extends React.PureComponent {
             </section>
           </React.Fragment>
         }
-        {notFound &&
-          <section className="not-found">
-            <div className="row column">
-              <p className="not-found-text">
-                Oops! We can&#39;t seem to find the page you are looking for.
-                <span className="emoji" role="img" aria-label="page not found"> 🙈</span>
-              </p>
-            </div>
-          </section>
-        }
+        {notFound && <NotFound />}
       </div>
     );
   }
