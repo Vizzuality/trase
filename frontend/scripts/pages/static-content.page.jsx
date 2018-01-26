@@ -10,6 +10,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
 import StaticContent from 'react-components/static-content/static-content.container';
+import Nav from 'react-components/shared/nav.component';
 import Footer from 'react-components/shared/footer.component';
 
 
@@ -17,6 +18,13 @@ export const mount = (root, store) => {
   root.innerHTML = BaseMarkup({
     feedback: FeedbackMarkup()
   });
+
+  render(
+    <Provider store={store}>
+      <Nav />
+    </Provider>,
+    document.getElementById('nav')
+  );
 
   render(
     <Provider store={store} >
@@ -35,5 +43,6 @@ export const mount = (root, store) => {
 
 export const unmount = () => {
   unmountComponentAtNode(document.getElementById('page-react-root'));
+  unmountComponentAtNode(document.getElementById('nav'));
   unmountComponentAtNode(document.getElementById('footer'));
 };

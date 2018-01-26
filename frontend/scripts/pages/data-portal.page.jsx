@@ -9,6 +9,7 @@ import 'styles/components/shared/modal.scss';
 import { render, unmountComponentAtNode } from 'react-dom';
 import React from 'react';
 import { Provider } from 'react-redux';
+import Nav from 'react-components/shared/nav.component';
 import Footer from 'react-components/shared/footer.component';
 
 import DataPortalPage from 'react-components/data-portal/data-portal-page.container';
@@ -17,6 +18,13 @@ export const mount = (root, store) => {
   root.innerHTML = DataMarkup({
     feedback: FeedbackMarkup()
   });
+
+  render(
+    <Provider store={store}>
+      <Nav />
+    </Provider>,
+    document.getElementById('nav')
+  );
 
   render(
     <Provider store={store}>
@@ -35,5 +43,6 @@ export const mount = (root, store) => {
 
 export const unmount = () => {
   unmountComponentAtNode(document.querySelector('.c-container'));
+  unmountComponentAtNode(document.getElementById('nav'));
   unmountComponentAtNode(document.getElementById('footer'));
 };

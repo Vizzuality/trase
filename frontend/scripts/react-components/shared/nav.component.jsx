@@ -1,6 +1,6 @@
 import React from 'react';
 // import cx from 'classnames';
-import { NavLink } from 'redux-first-router-link';
+import NavLinksList from 'react-components/shared/nav-links-list.component';
 
 const links = [
   {
@@ -26,17 +26,17 @@ const links = [
 ];
 
 const Footer = () => (
-  <div className="row">
+  <div className="row align-justify">
     <div className="column medium-7">
-      {
-        links.map(link => (
-          <NavLink key={link.name}>
-            {link.name}
-          </NavLink>
-        ))
-      }
+      <NavLinksList
+        links={links}
+        listClassName="nav-item-list"
+        itemClassName="nav-item"
+        linkClassName="nav-link"
+        linkActiveClassName="nav-link -active"
+      />
     </div>
-    <div className="column medium-2 medium-offset-2">
+    <div className="column medium-2">
       actions
     </div>
   </div>

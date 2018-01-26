@@ -8,6 +8,7 @@ import 'styles/profile-place.scss';
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
+import Nav from 'react-components/shared/nav.component';
 import Footer from 'react-components/shared/footer.component';
 
 import Dropdown from 'react-components/shared/dropdown.component';
@@ -387,6 +388,13 @@ export const mount = (root, store) => {
     document.getElementById('footer')
   );
 
+  render(
+    <Provider store={store}>
+      <Nav />
+    </Provider>,
+    document.getElementById('nav')
+  );
+
   _loadData(store, nodeId, year);
 };
 
@@ -401,6 +409,7 @@ export const unmount = () => {
   unmountComponentAtNode(document.querySelector('.js-line-legend'));
   unmountComponentAtNode(document.querySelector('.js-score-table'));
   unmountComponentAtNode(document.getElementById('year-dropdown'));
+  unmountComponentAtNode(document.getElementById('nav'));
   unmountComponentAtNode(document.getElementById('footer'));
 };
 

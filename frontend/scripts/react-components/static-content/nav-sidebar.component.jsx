@@ -1,25 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import throttle from 'lodash/throttle';
-import { NavLink } from 'redux-first-router-link';
 import { Transition } from 'react-transition-group';
+import NavLinksList from 'react-components/shared/nav-links-list.component';
 
 class NavSidebar extends React.PureComponent {
-  static mapLinksToRouter(link) {
-    return (
-      typeof link.page === 'string'
-        ? ({ ...link, page: { type: link.page, payload: {} } })
-        : link
-    );
-  }
-
-  static isActive(match, location, link) {
-    return (
-      location.type === link.page.type &&
-      link.page.payload.section === location.payload.section
-    );
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -54,25 +39,13 @@ class NavSidebar extends React.PureComponent {
           transition => (
             <React.Fragment>
               <div className={`c-nav-sidebar -${transition}`}>
-                <ul className="nav-sidebar-link-list">
-                  {
-                    links.map(NavSidebar.mapLinksToRouter)
-                      .map(link => (
-                        <li key={link.name} className="nav-sidebar-link-list-item">
-                          <NavLink
-                            exact
-                            strict
-                            to={link.page}
-                            className="subtitle -gray"
-                            activeClassName="-pink"
-                            isActive={(...params) => NavSidebar.isActive(...params, link)}
-                          >
-                            {link.name}
-                          </NavLink>
-                        </li>
-                      ))
-                  }
-                </ul>
+                <NavLinksList
+                  links={links}
+                  listClassName="nav-sidebar-link-list"
+                  itemClassName="nav-sidebar-link-list-item"
+                  linkClassName="subtitle -gray"
+                  linkActiveClassName="-pink"
+                />
               </div>
               <button
                 className={`sidebar-nav-toggle -${transition}`}

@@ -1,4 +1,4 @@
-import 'styles/components/shared/nav.scss';
+import 'styles/components/shared/nav-tool.scss';
 
 export default class {
   constructor() {
@@ -17,7 +17,7 @@ export default class {
   }
 
   _setVars() {
-    this.el = document.querySelector('.c-nav');
+    this.el = document.querySelector('.c-nav-tool');
 
     this.AppNav = this.el.querySelector('.app-nav');
     this.FlowsNav = this.el.querySelector('.tool-nav');
