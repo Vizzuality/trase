@@ -1,6 +1,5 @@
 /* eslint-disable no-new */
 import ProfilesMarkup from 'html/profiles.ejs';
-import NavMarkup from 'html/includes/_nav.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import 'styles/profiles.scss';
@@ -9,8 +8,6 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 import Footer from 'react-components/shared/footer.component';
-
-import NavContainer from 'containers/shared/nav.container';
 
 import values from 'lodash/values';
 import Search from 'components/shared/search.component';
@@ -80,7 +77,6 @@ const _setSearch = (goToPage) => {
 
 export const mount = (root, store) => {
   root.innerHTML = ProfilesMarkup({
-    nav: NavMarkup({ page: 'profiles' }),
     feedback: FeedbackMarkup()
   });
 
@@ -94,7 +90,6 @@ export const mount = (root, store) => {
   const goToPage = (type, params) => store.dispatch({ type, payload: { query: params } });
 
   _setSearch(goToPage);
-  new NavContainer(store);
 };
 
 export const unmount = () => {

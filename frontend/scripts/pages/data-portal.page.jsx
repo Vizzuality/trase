@@ -1,6 +1,5 @@
 /* eslint-disable no-new */
 import DataMarkup from 'html/data-portal.ejs';
-import NavMarkup from 'html/includes/_nav.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import 'styles/data.scss';
@@ -12,12 +11,10 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import Footer from 'react-components/shared/footer.component';
 
-import NavContainer from 'containers/shared/nav.container';
 import DataPortalPage from 'react-components/data-portal/data-portal-page.container';
 
 export const mount = (root, store) => {
   root.innerHTML = DataMarkup({
-    nav: NavMarkup({ page: 'data' }),
     feedback: FeedbackMarkup()
   });
 
@@ -34,8 +31,6 @@ export const mount = (root, store) => {
     </Provider>,
     document.getElementById('footer')
   );
-
-  new NavContainer(store);
 };
 
 export const unmount = () => {

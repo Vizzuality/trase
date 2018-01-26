@@ -1,7 +1,6 @@
 /* eslint-disable no-new */
 
 import ProfilePlaceMarkup from 'html/profile-place.ejs';
-import NavMarkup from 'html/includes/_nav.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import 'styles/profile-place.scss';
@@ -11,8 +10,6 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 import Footer from 'react-components/shared/footer.component';
 
-
-import NavContainer from 'containers/shared/nav.container';
 import Dropdown from 'react-components/shared/dropdown.component';
 import Line from 'react-components/profiles/line.component';
 import LineLegend from 'react-components/profiles/line-legend.component';
@@ -380,7 +377,6 @@ export const mount = (root, store) => {
 
   root.innerHTML = ProfilePlaceMarkup({
     printMode: print,
-    nav: NavMarkup({ page: 'profile-place' }),
     feedback: FeedbackMarkup()
   });
 
@@ -392,8 +388,6 @@ export const mount = (root, store) => {
   );
 
   _loadData(store, nodeId, year);
-
-  new NavContainer(store);
 };
 
 export const unmount = () => {
