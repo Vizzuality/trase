@@ -17,14 +17,19 @@
 #  image_updated_at   :datetime
 #  highlighted        :boolean          default(FALSE)
 #  title_color        :string
+#  category           :string
 #
 
 module Content
   class Post < Content::Base
+    CATEGORIES = [
+      'NEWS', 'BLOG', 'INSIGHT', 'INFO BRIEF', 'ISSUE BRIEF', 'LONGER READ'
+    ]
     validates :title, presence: true
     validates :date, presence: true
     validates :post_url, presence: true
     validates :description, presence: true
+    validates :category, presence: true, inclusion: CATEGORIES
 
     has_attached_file :image, styles: {small: '320x320>', large: '640x640>'}
     validates_attachment_content_type :image, content_type: /\Aimage\/.*\z/

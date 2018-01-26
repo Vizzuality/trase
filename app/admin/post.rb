@@ -1,5 +1,5 @@
 ActiveAdmin.register Content::Post, as: 'Post' do
-  permit_params :title, :title_color, :date, :image, :post_url, :state, :description, :highlighted
+  permit_params :title, :title_color, :date, :image, :post_url, :category, :state, :description, :highlighted
 
   form do |f|
     f.semantic_errors
@@ -9,6 +9,7 @@ ActiveAdmin.register Content::Post, as: 'Post' do
       input :date, as: :date_select, required: true, label: 'Publishing date'
       input :image, as: :file
       input :post_url, required: true
+      input :category, required: true, as: :select, collection: Content::Post::CATEGORIES
       input :state, as: :boolean, label: 'Published?'
       input :highlighted, as: :boolean, label: 'Highlighted?'
       input :description, as: :ckeditor, label: 'Content'

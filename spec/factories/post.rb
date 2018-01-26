@@ -4,6 +4,7 @@ FactoryBot.define do
     image_file_name 'image.png'
     image_content_type 'image/png'
     image_file_size 1234
+    category 'NEWS'
     state 1
   end
 end

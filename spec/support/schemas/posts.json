@@ -23,7 +23,8 @@
           "date",
           "imageUrl",
           "highlighted",
-          "completePostUrl"
+          "completePostUrl",
+          "category"
         ],
         "properties": {
           "title": {
@@ -53,6 +54,10 @@
           "completePostUrl": {
             "type": "string",
             "$id": "/properties/data/items/properties/completePostUrl"
+          },
+          "category": {
+            "type": "string",
+            "$id": "/properties/data/items/properties/category"
           }
         }
       }

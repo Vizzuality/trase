@@ -20,7 +20,8 @@
 #
 
 class PostSerializer < ActiveModel::Serializer
-  attributes :title, :title_color, :description, :date, :image_url, :highlighted, :complete_post_url
+  attributes :title, :title_color, :description, :date, :image_url, :highlighted, :complete_post_url,
+             :category
 
   def image_url
     return nil unless object.image.exists?
