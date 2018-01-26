@@ -71,37 +71,6 @@ export const PROFILE_CHOROPLETH_CLASSES = ['ch-red-0', 'ch-red-1', 'ch-red-2', '
 export const NODE_SELECTION_LINKS_NUM_COLORS = 10;
 export const SANKEY_TRANSITION_TIME = 1000;
 
-// TODO Things that are hardcoded and shouldn't
-export const CONTEXT_WITHOUT_MAP_IDS = [3, 4, 5, 6];
-export const CONTEXT_WITH_CONTEXT_LAYERS_IDS = [1];
-
-export const APP_DEFAULT_STATE = {
-  app: {
-    modal: {
-      visibility: false,
-      modalParams: null
-    }
-  }
-};
-
-export const TOOL_DEFAULT_STATE = {
-  tool: {
-    selectedNodesIds: [],
-    expandedNodesIds: [],
-    areNodesExpanded: false,
-    detailedView: false,
-    selectedNodesData: [],
-    selectedMapContextualLayers: null,
-    isMapVisible: false,
-    expandedMapSidebarGroupsIds: []
-  }
-};
-
-export const DATA_DEFAULT_STATE = {
-  data: {}
-};
-
-
 // fact sheets
 export const ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST = ['included_years', 'buckets'];
 export const LINE_LABEL_HEIGHT = 12;
@@ -168,38 +137,5 @@ export const BASEMAPS = {
     thumbnail: '/images/maps/thumb-basemap-streets.png'
   }
 };
-
-export const CONTEXT_LAYERS = [
-  {
-    id: 'landcover',
-    title: 'Land cover',
-    rasterURL: 'https://s3-eu-west-1.amazonaws.com/lulc/landcover_brazil_2015/',
-    legend: '<div class="cartodb-legend custom"><ul class="bullets"><li><div class="bullet" style="background:#008156"></div>Forest</li><li><div class="bullet" style="background:#556B2F"></div>Forest plantations</li><li><div class="bullet" style="background:#E1E196"></div>Pastures</li><li><div class="bullet" style="background:#E1A500"></div>Agriculture</li><li><div class="bullet" style="background:#00FFFF"></div>Coastal forest</li><li><div class="bullet" style="background:#00AFFF"></div>Water</li><li><div class="bullet" style="background:#F5F5F3"></div>Other vegetation</li><li><div class="bullet" style="background:#3E3F40"></div>Not observed</li></ul></div>'
-  }, {
-    id: 'brazil_biomes',
-    title: 'Brazil biomes',
-    legend: ''
-  }, {
-    id: 'brazil_states',
-    title: 'Brazil states',
-    legend: ''
-  }, {
-    id: 'water_scarcity',
-    title: 'Water scarcity',
-    legend: '<div class="cartodb-legend choropleth"><ul class="bullets"><li><div class="bullet" style="background:#4575b4"><span>LESS</span></div><div class="bullet" style="background:#91bfdb"></div><div class="bullet" style="background:#e0f3f8"></div><div class="bullet" style="background:#ffffbf"></div><div class="bullet" style="background:#fee090"></div><div class="bullet" style="background:#fc8d59"></div><div class="bullet" style="background:#d73027"><span>MORE</span></div>Water scarcity</li></ul></div>'
-  }, {
-    id: 'indigenous_areas',
-    title: 'Indigenous areas',
-    legend: '<div class=\'cartodb-legend custom\'> <ul class="bullets"><li class="bkg"><div class="bullet" style="background-color:#ECC35F"></div>Indigenous areas</li></ul></div>'
-  }, {
-    id: 'brazil_protected',
-    title: 'Brazil protected areas',
-    legend: '<div class=\'cartodb-legend custom\'> <ul class="bullets"><li class="bkg"><div class="bullet" style="background-color:#B4D84F"></div>Protected areas</li></ul></div>'
-  }, {
-    id: 'brazil_defor_alerts',
-    title: 'Deforestation polygons',
-    legend: '<div class=\'cartodb-legend custom\'><ul class="bullets"><li><div class= "bullet" style= "background:#850200"></div>Deforestation</li></ul></div>'
-  }
-];
 
 export const DEFAULT_BASEMAP_FOR_CHOROPLETH = 'default';

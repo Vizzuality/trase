@@ -17,10 +17,10 @@ module Api
       ].freeze
 
       def self.node_index_for_name(context, node_type_name)
-        zero_based_idx = ContextNode.
+        zero_based_idx = ContextNodeType.
           joins(:node_type).
           where(context_id: context.id).
-          where('node_types.node_type' => node_type_name).
+          where('node_types.name' => node_type_name).
           pluck(:column_position).first
         zero_based_idx && zero_based_idx + 1 || 0
       end

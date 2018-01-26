@@ -26,12 +26,6 @@ module Api
           object.commodity.name
         end
 
-        attribute :default_context_layers do
-          identifiers = object.contextual_layers.where(is_default: true).
-            pluck(:identifier)
-          identifiers.any? ? identifiers : nil
-        end
-
         # TODO: remove once API migration finalised
         attribute :filter_by do
           biome_context_node_type = object.context_node_types.

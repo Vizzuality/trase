@@ -452,7 +452,8 @@ class SchemaRevamp
         title: 'Land cover',
         identifier: 'landcover',
         position: 0,
-        carto_layers: [{identifier: 'landcover'}]
+        carto_layers: [{identifier: 'landcover', raster_url: 'https://s3-eu-west-1.amazonaws.com/lulc/landcover_brazil_2015/'}],
+        legend: '<div class=\'cartodb-legend custom\'><ul class=\'bullets\'><li><div class=\'bullet\' style=\'background:#008156\'></div>Forest</li><li><div class=\'bullet\' style=\'background:#556B2F\'></div>Forest plantations</li><li><div class=\'bullet\' style=\'background:#E1E196\'></div>Pastures</li><li><div class=\'bullet\' style=\'background:#E1A500\'></div>Agriculture</li><li><div class=\'bullet\' style=\'background:#00FFFF\'></div>Coastal forest</li><li><div class=\'bullet\' style=\'background:#00AFFF\'></div>Water</li><li><div class=\'bullet\' style=\'background:#F5F5F3\'></div>Other vegetation</li><li><div class=\'bullet\' style=\'background:#3E3F40\'></div>Not observed</li></ul></div>'
       },
       {
         title: 'Brazil biomes',
@@ -465,37 +466,41 @@ class SchemaRevamp
         title: 'Water scarcity',
         identifier: 'water_scarcity',
         position: 2,
-        carto_layers: [{identifier: 'water_scarcity'}]
+        carto_layers: [{identifier: 'water_scarcity'}],
+        legend: '<div class=\'cartodb-legend choropleth\'><ul class=\'bullets\'><li><div class=\'bullet\' style=\'background:#4575b4\'><span>LESS</span></div><div class=\'bullet\' style=\'background:#91bfdb\'></div><div class=\'bullet\' style=\'background:#e0f3f8\'></div><div class=\'bullet\' style=\'background:#ffffbf\'></div><div class=\'bullet\' style=\'background:#fee090\'></div><div class=\'bullet\' style=\'background:#fc8d59\'></div><div class=\'bullet\' style=\'background:#d73027\'><span>MORE</span></div>Water scarcity</li></ul></div>'
       },
       {
         title: 'Indigenous areas',
         identifier: 'indigenous_areas',
         position: 3,
-        carto_layers: [{identifier: 'indigenous_areas'}]
-      },
+        carto_layers: [{identifier: 'indigenous_areas'}],
+        legend: '<div class=\'cartodb-legend custom\'> <ul class=\'bullets\'><li class=\'bkg\'><div class=\'bullet\' style=\'background-color:#ECC35F\'></div>Indigenous areas</li></ul></div>'
+    },
       {
         title: 'Brazil protected areas',
         identifier: 'brazil_protected',
         position: 4,
-        carto_layers: [{identifier: 'brazil_protected'}]
+        carto_layers: [{identifier: 'brazil_protected'}],
+        legend: '<div class=\'cartodb-legend custom\'> <ul class=\'bullets\'><li class=\'bkg\'><div class=\'bullet\' style=\'background-color:#B4D84F\'></div>Protected areas</li></ul></div>'
       },
       {
         title: 'Deforestation polygons',
         identifier: 'brazil_defor_alerts',
         position: 5,
-        carto_layers: [{identifier: 'brazil_defor_alerts'}]
+        carto_layers: [{identifier: 'brazil_defor_alerts'}],
+        legend: '<div class=\'cartodb-legend custom\'><ul class=\'bullets\'><li><div class= \'bullet\' style= \'background:#850200\'></div>Deforestation</li></ul></div>'
       }
     ]
 
     brazil_soy_contextual_layers.each do |cl|
       is_default = brazil_soy_default_context_layers&.include?(cl[:identifier]) || false
       inserted_cl = ActiveRecord::Base.connection.execute(
-        "INSERT INTO revamp.contextual_layers (context_id, title, identifier, position, is_default, created_at, updated_at) VALUES (#{brazil_soy['id']}, '#{cl[:title]}', '#{cl[:identifier]}', #{cl[:position]}, #{is_default}, NOW(), NOW()) RETURNING id;"
+        "INSERT INTO revamp.contextual_layers (context_id, title, identifier, position, legend, is_default, created_at, updated_at) VALUES (#{brazil_soy['id']}, '#{cl[:title]}', '#{cl[:identifier]}', #{cl[:position]}, #{ActiveRecord::Base.connection.quote(cl[:legend])}, #{is_default}, NOW(), NOW()) RETURNING id;"
       ).first
       next unless inserted_cl.present?
       cl[:carto_layers].each do |clv|
         ActiveRecord::Base.connection.execute(
-          "INSERT INTO revamp.carto_layers (contextual_layer_id, identifier, created_at, updated_at) VALUES (#{inserted_cl['id']}, '#{clv[:identifier]}', NOW(), NOW())"
+          "INSERT INTO revamp.carto_layers (contextual_layer_id, identifier, raster_url, created_at, updated_at) VALUES (#{inserted_cl['id']}, '#{clv[:identifier]}', #{ActiveRecord::Base.connection.quote(clv[:raster_url])}, NOW(), NOW())"
         )
       end
     end

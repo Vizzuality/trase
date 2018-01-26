@@ -1,8 +1,8 @@
+/* eslint-disable jsx-a11y/mouse-events-have-key-events,import/no-extraneous-dependencies */
 import React, { Component } from 'react';
 import 'styles/components/profiles/mini-sankey.scss';
 import formatValue from 'utils/formatValue';
-// eslint-disable-next-line camelcase,import/no-extraneous-dependencies
-import { interpolateNumber as d3_interpolateNumber } from 'd3-interpolate';
+import { interpolateNumber as d3InterpolateNumber } from 'd3-interpolate';
 import wrapSVGText from 'utils/wrapSVGText';
 import PropTypes from 'prop-types';
 
@@ -17,19 +17,14 @@ const SANKEY_X_END = SANKEY_X_START + SANKEY_WIDTH;
 
 class MiniSankey extends Component {
   render() {
-    const { data, targetLink } = this.props;
+    const { data, targetLink, showTooltipCallback, hideTooltipCallback, year, onLinkClick } = this.props;
     const totalHeight = data.targetNodes.reduce((total, node) => total + (node.height * BASE_HEIGHT) + NODE_V_SPACE, 0);
     const startY = (totalHeight / 2) - (BASE_HEIGHT / 2);
 
     let currentStartNodeY = startY;
     let currentEndNodeY = 0;
     const nodes = data.targetNodes
-      .sort((nodeA, nodeB) => {
-        if (nodeA.isAggregated === true || nodeB.isAggregated === true) {
-          return (nodeA.isAggregated === true) ? 1 : -1;
-        }
-        return nodeB.height - nodeA.height;
-      })
+      .sort((nodeA, nodeB) => (nodeB.height - nodeA.height))
       .map((node) => {
         const renderedHeight = BASE_HEIGHT * node.height;
         const lines = wrapSVGText(node.name, Math.max(TEXT_LINE_HEIGHT, renderedHeight), TEXT_LINE_HEIGHT, 18, 3);
@@ -37,13 +32,13 @@ class MiniSankey extends Component {
         const n = {
           id: node.id,
           name: node.name,
-          isAggregated: node.isAggregated,
+          isDomesticConsumption: node.is_domestic_consumption,
           lines,
           renderedHeight,
-          link: targetLink ? `/profile-${targetLink}?nodeId=${node.id}` : null,
           pct: `${formatValue(100 * node.height, 'percentage')}%`,
           sy: currentStartNodeY,
-          ty: currentEndNodeY
+          ty: currentEndNodeY,
+          value: node.value
         };
         currentStartNodeY += n.renderedHeight;
         currentEndNodeY += n.renderedHeight + NODE_V_SPACE;
@@ -51,15 +46,15 @@ class MiniSankey extends Component {
       });
 
     return (
-      <div className="mini-sankey" >
-        <svg style={{ height: totalHeight, width: TOTAL_WIDTH }} >
+      <div className="mini-sankey">
+        <svg style={{ height: totalHeight, width: TOTAL_WIDTH }}>
 
-          <linearGradient id="gradient" x1="0" x2="1" y1="0" y2="0" >
+          <linearGradient id="gradient" x1="0" x2="1" y1="0" y2="0">
             <stop offset="0%" className="gradient-color-start" />
             <stop offset="100%" className="gradient-color-end" />
-          </linearGradient >
+          </linearGradient>
 
-          <g transform={`translate(${SANKEY_X_START}, ${startY})`} >
+          <g transform={`translate(${SANKEY_X_START}, ${startY})`}>
             <rect
               width={NODE_WIDTH}
               height={BASE_HEIGHT}
@@ -70,23 +65,30 @@ class MiniSankey extends Component {
               transform={`translate(-20, ${5 + (BASE_HEIGHT / 2)})`}
             >
               {data.name}
-            </text >
-          </g >
+            </text>
+          </g>
 
-          <g transform={`translate(${SANKEY_X_END}, 0)`} >
+          <g transform={`translate(${SANKEY_X_END}, 0)`}>
             {nodes.map((node, index) => (
               <g
                 key={index}
                 transform={`translate(0, ${node.ty})`}
-                className={node.link ? 'interactive-node' : null}
-                onClick={node.link ? () => {
-                  window.location = node.link;
-                } : null}
+                className={(!node.isDomesticConsumption && targetLink) ? 'interactive-node' : null}
+                onClick={() => {
+                  if (node.isDomesticConsumption || !targetLink) return;
+                  onLinkClick(
+                    targetLink,
+                    {
+                      nodeId: node.id,
+                      year
+                    }
+                  );
+                }}
               >
                 <rect
                   width={NODE_WIDTH}
                   height={node.renderedHeight}
-                  className={node.isAggregated ? 'aggr' : 'end'}
+                  className="end"
                 />
                 <text
                   className="end"
@@ -94,17 +96,17 @@ class MiniSankey extends Component {
                 ${(13 + (node.renderedHeight / 2)) - ((TEXT_LINE_HEIGHT * node.lines.length) / 2)})`}
                 >
                   {node.lines.map((line, i) =>
-                    <tspan key={i} y={i * TEXT_LINE_HEIGHT} x="0" >{line} </tspan >)}
-                  <tspan className="pct" >{node.pct}</tspan >
-                </text >
-              </g >))}
-          </g >
+                    <tspan key={i} y={i * TEXT_LINE_HEIGHT} x="0">{line} </tspan>)}
+                  <tspan className="pct">{node.pct}</tspan>
+                </text>
+              </g>))}
+          </g>
 
-          <g transform={`translate(${SANKEY_X_START}, 0)`} >
+          <g transform={`translate(${SANKEY_X_START}, 0)`}>
             {nodes.map((node, index) => {
               const x0 = NODE_WIDTH;
               const x1 = SANKEY_X_END - SANKEY_X_START;
-              const xi = d3_interpolateNumber(x0, x1);
+              const xi = d3InterpolateNumber(x0, x1);
               const x2 = xi(0.6);
               const x3 = xi(0.4);
               const y0 = node.sy + (node.renderedHeight / 2);
@@ -113,23 +115,40 @@ class MiniSankey extends Component {
               }C${x2},${y0
               } ${x3},${y1
               } ${x1},${y1}`;
-              return (<path
-                key={index}
-                d={path}
-                strokeWidth={node.renderedHeight}
-                className={node.isAggregated ? 'link-aggr' : 'link'}
-              />);
+              return (
+                <path
+                  key={index}
+                  d={path}
+                  strokeWidth={node.renderedHeight}
+                  className={node.isAggregated ? 'link-aggr' : 'link'}
+                  onMouseLeave={hideTooltipCallback}
+                  onMouseMove={(event) => {
+                    showTooltipCallback(
+                      node.name,
+                      data.indicator,
+                      node.value,
+                      data.unit,
+                      event.clientX + 10,
+                      event.clientY + window.scrollY + 10
+                    );
+                  }}
+                />
+              );
             })}
-          </g >
-        </svg >
-      </div >
+          </g>
+        </svg>
+      </div>
     );
   }
 }
 
 MiniSankey.propTypes = {
   data: PropTypes.object,
-  targetLink: PropTypes.string
+  targetLink: PropTypes.string,
+  showTooltipCallback: PropTypes.func,
+  hideTooltipCallback: PropTypes.func,
+  onLinkClick: PropTypes.func,
+  year: PropTypes.number
 };
 
 export default MiniSankey;

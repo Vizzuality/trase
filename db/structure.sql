@@ -128,7 +128,7 @@ CREATE FUNCTION get_trader_sum(trader_id integer, year_ integer) RETURNS double 
           FROM flows
           WHERE trader_id = ANY(path)
             AND year = year_
-            AND context_id = 1); 
+            AND context_id = 1);
   $$;
 
 
@@ -1369,7 +1369,8 @@ CREATE TABLE carto_layers (
     identifier text NOT NULL,
     years integer[],
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    raster_url character varying
 );
 
 
@@ -1817,7 +1818,8 @@ CREATE TABLE context_properties (
     is_disabled boolean DEFAULT false NOT NULL,
     is_default boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    is_subnational boolean DEFAULT false NOT NULL
 );
 
 
@@ -1850,6 +1852,13 @@ COMMENT ON COLUMN context_properties.is_default IS 'When set, show this context 
 
 
 --
+-- Name: COLUMN context_properties.is_subnational; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN context_properties.is_subnational IS 'When set, show indication that sub-national level data is available';
+
+
+--
 -- Name: context_properties_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
 --
 
@@ -1878,8 +1887,7 @@ CREATE TABLE contexts (
     commodity_id integer NOT NULL,
     years integer[],
     default_year integer,
-    created_at timestamp without time zone NOT NULL,
-    is_subnational boolean DEFAULT false NOT NULL
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -1936,7 +1944,8 @@ CREATE TABLE contextual_layers (
     tooltip_text text,
     is_default boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    legend text
 );
 
 
@@ -6625,6 +6634,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171212113051'),
 ('20171214162643'),
 ('20171219125633'),
-('20180109085838');
+('20180109085838'),
+('20180119094345'),
+('20180110111533');
 
 

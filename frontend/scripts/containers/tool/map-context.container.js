@@ -2,6 +2,7 @@
 import connect from 'connect';
 import { selectContextualLayers } from 'actions/tool.actions';
 import mapContext from 'components/tool/map-context.component';
+import { loadTooltip } from 'actions/app.actions';
 
 const mapMethodsToState = state => ({
   buildLayers: {
@@ -15,6 +16,7 @@ const mapMethodsToState = state => ({
 });
 
 const mapViewCallbacksToActions = () => ({
+  onMapDimensionsLoaded: () => loadTooltip(),
   onContextualLayerSelected: layers => selectContextualLayers(layers)
 });
 

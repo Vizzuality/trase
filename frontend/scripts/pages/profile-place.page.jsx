@@ -14,10 +14,8 @@ import Footer from 'react-components/shared/footer.component';
 
 import NavContainer from 'containers/shared/nav.container';
 import Dropdown from 'react-components/shared/dropdown.component';
-import Top from 'react-components/profiles/top.component';
 import Line from 'react-components/profiles/line.component';
 import LineLegend from 'react-components/profiles/line-legend.component';
-import Chord from 'react-components/profiles/chord.component';
 import MiniSankey from 'react-components/profiles/mini-sankey.component';
 import MultiTable from 'react-components/profiles/multi-table.component';
 import Map from 'react-components/profiles/map.component';
@@ -29,11 +27,13 @@ import smoothScroll from 'utils/smoothScroll';
 
 import { GET_PLACE_FACTSHEET, getURLFromParams } from 'utils/getURLFromParams';
 import { DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
+import Tooltip from 'components/shared/info-tooltip.component';
 
 const defaults = {
   country: 'Brazil',
   commodity: 'Soy'
 };
+const tooltip = new Tooltip('.js-infowindow');
 
 const _buildMaps = (data, store) => {
   const stateGeoID = data.state_geo_id;
@@ -45,7 +45,7 @@ const _buildMaps = (data, store) => {
   const municipalityMapContainer = document.querySelector('.js-map-municipality');
 
   render(
-    <Provider store={store} >
+    <Provider store={store}>
       <Map
         width={countryMapContainer.clientWidth}
         height={countryMapContainer.clientHeight}
@@ -60,7 +60,7 @@ const _buildMaps = (data, store) => {
   );
 
   render(
-    <Provider store={store} >
+    <Provider store={store}>
       <Map
         width={biomeMapContainer.clientWidth}
         height={biomeMapContainer.clientHeight}
@@ -74,7 +74,7 @@ const _buildMaps = (data, store) => {
   );
 
   render(
-    <Provider store={store} >
+    <Provider store={store}>
       <Map
         width={stateMapContainer.clientWidth}
         height={stateMapContainer.clientHeight}
@@ -88,7 +88,7 @@ const _buildMaps = (data, store) => {
   );
 
   render(
-    <Provider store={store} >
+    <Provider store={store}>
       <Map
         width={municipalityMapContainer.clientWidth}
         height={municipalityMapContainer.clientHeight}
@@ -102,7 +102,7 @@ const _buildMaps = (data, store) => {
   );
 };
 
-const _build = (data, { year, showMiniSankey }, store) => {
+const _build = (data, year, onLinkClick, store) => {
   _buildMaps(data, store);
 
   if (
@@ -110,7 +110,9 @@ const _build = (data, { year, showMiniSankey }, store) => {
     && data.trajectory_deforestation.lines
     && data.trajectory_deforestation.lines.length
   ) {
-    document.querySelector('.deforestation').classList.toggle('is-hidden', false);
+    document.querySelector('.deforestation')
+      .classList
+      .toggle('is-hidden', false);
 
     // Manually trim time series to 2010 - 2015 as asked here https://basecamp.com/1756858/projects/12498794/todos/324404665
     data.trajectory_deforestation.included_years =
@@ -127,7 +129,7 @@ const _build = (data, { year, showMiniSankey }, store) => {
       });
 
     render(
-      <Provider store={store} >
+      <Provider store={store}>
         <Line
           className=".js-line"
           data={data.trajectory_deforestation}
@@ -148,7 +150,7 @@ const _build = (data, { year, showMiniSankey }, store) => {
     );
 
     render(
-      <Provider store={store} >
+      <Provider store={store}>
         <LineLegend
           data={data.trajectory_deforestation}
           xValues={data.trajectory_deforestation.included_years}
@@ -157,163 +159,64 @@ const _build = (data, { year, showMiniSankey }, store) => {
       document.querySelector('.js-line-legend')
     );
   } else {
-    document.querySelector('.deforestation').classList.toggle('is-hidden', true);
+    document.querySelector('.deforestation')
+      .classList
+      .toggle('is-hidden', true);
   }
 
-  if (showMiniSankey === 'true') {
-    document.querySelectorAll('.mini-sankey-container')
-      .forEach((el) => {
-        el.classList.toggle('is-hidden', false);
-      });
+  const showTooltipCallback = (source, indicator, value, unit, x, y) =>
+    tooltip.show(
+      x, y,
+      source,
+      [
+        {
+          title: indicator,
+          value: formatValue(value, indicator),
+          unit
+        }
+      ]
+    );
 
-    // query: nodeId, targetColumnId + commodity and year
-    const tradersSankeyData = {
-      name: 'QUERÊNCIA',
-      targetNodes: [{
-        id: 2,
-        name: 'Other',
-        isAggregated: true,
-        height: 0.2
-        // isDomesticConsumption: null,
-      }, {
-        id: 588,
-        name: 'Cargill',
-        height: 0.4
-      }, {
-        id: 588,
-        name: 'Hello, I have such a long name I need 3 lines',
-        height: 0.2
-      }, {
-        id: 588,
-        name: 'Sometimes, you gotta have more lines',
-        height: 0.1
-      }, {
-        id: 588,
-        name: 'Cargill',
-        height: 0.029
-      }, {
-        id: 588,
-        name: 'Cargill',
-        height: 0.021
-      }, {
-        id: 588,
-        name: 'Im very long but sadly the node hieght is too small',
-        height: 0.05
-      }]
-    };
+  const topConsumerActorsContainer = document.getElementById('js-traders-sankey-container');
+  const topConsumerCountriesContainer = document.getElementById('js-consumers-sankey-container');
 
-    // query: nodeId, targetColumnId + commodity and year
-    const consumersSankeyData = {
-      name: 'QUERÊNCIA',
-      targetNodes: [{
-        name: 'Others',
-        isAggregated: true,
-        height: 0.2
-      }, {
-        name: 'China',
-        height: 0.4
-      }, {
-        name: 'Brazil',
-        height: 0.2
-      }, {
-        name: 'Germany',
-        height: 0.1
-      }, {
-        name: 'South Korea',
-        height: 0.029
-      }, {
-        name: 'Thailand',
-        height: 0.021
-      }, {
-        name: 'Spain',
-        height: 0.05
-      }]
-    };
-
+  if (data && data.top_consumer_actors.targetNodes.length > 0) {
+    topConsumerActorsContainer.classList.toggle('is-hidden', false);
     render(
       <MiniSankey
-        data={tradersSankeyData}
-        targetLink="actor"
+        data={data.top_consumer_actors}
+        targetLink="profileActor"
+        year={year}
+        showTooltipCallback={showTooltipCallback}
+        hideTooltipCallback={tooltip.hide}
+        onLinkClick={onLinkClick}
       />,
       document.getElementById('js-traders-sankey')
     );
+  } else {
+    topConsumerActorsContainer.classList.toggle('is-hidden', true);
+  }
+
+  if (data && data.top_consumer_countries.targetNodes.length > 0) {
+    topConsumerCountriesContainer.classList.toggle('is-hidden', false);
 
     render(
       <MiniSankey
-        data={consumersSankeyData}
+        data={data.top_consumer_countries}
+        year={year}
+        showTooltipCallback={showTooltipCallback}
+        hideTooltipCallback={tooltip.hide}
+        onLinkClick={onLinkClick}
       />,
       document.getElementById('js-consumers-sankey')
     );
   } else {
-    if (data.top_traders.actors.length) {
-      document.querySelector('.js-traders')
-        .classList
-        .toggle('is-hidden', false);
-
-      const tradersChordContainer = document.querySelector('.js-chord-traders-container');
-
-      render(
-        <Chord
-          width={tradersChordContainer.clientWidth}
-          height={tradersChordContainer.clientWidth}
-          orgMatrix={data.top_traders.matrix}
-          list={data.top_traders.municipalities}
-          list2={data.top_traders.actors}
-          name={data.state_name}
-        />,
-        tradersChordContainer
-      );
-
-      render(
-        <Provider store={store}>
-          <Top
-            data={data.top_traders.actors}
-            targetLink="profileActor"
-            title={`Top traders of soy in ${data.municipality_name} in ${year}`}
-            unit="%"
-            year={year}
-          />
-        </Provider>,
-        document.querySelector('.js-top-trader')
-      );
-    }
-
-    if (data.top_consumers.countries.length) {
-      const consumersChordContainer = document.querySelector('.js-chord-consumers-container');
-
-      document.querySelector('.js-consumers')
-        .classList
-        .toggle('is-hidden', false);
-
-      render(
-        <Chord
-          width={consumersChordContainer.clientWidth}
-          height={consumersChordContainer.clientWidth}
-          orgMatrix={data.top_consumers.matrix}
-          list={data.top_consumers.municipalities}
-          list2={data.top_consumers.countries}
-          name={data.state_name}
-        />,
-        consumersChordContainer
-      );
-
-      render(
-        <Provider store={store}>
-          <Top
-            data={data.top_consumers.countries}
-            title={`Top importer countries of ${formatApostrophe(capitalize(data.municipality_name))} soy in ${year}`}
-            unit="%"
-            year={year}
-          />
-        </Provider>,
-        document.querySelector('.js-top-consumer')
-      );
-    }
+    topConsumerCountriesContainer.classList.toggle('is-hidden', true);
   }
 
   if (data.indicators.length) {
     render(
-      <Provider store={store} >
+      <Provider store={store}>
         <MultiTable
           id="sustainability-indicators"
           data={data.indicators}
@@ -408,17 +311,17 @@ const _showErrorMessage = (message = null) => {
 
 const onLinkClick = store => (type, params) => store.dispatch({ type, payload: { query: params } });
 
-const _switchYear = (store, nodeId, dropdownYear, showMiniSankey) => {
+const _switchYear = (store, nodeId, dropdownYear) => {
   setLoading();
   // eslint-disable-next-line no-use-before-define
-  _loadData(store, nodeId, dropdownYear, showMiniSankey);
+  _loadData(store, nodeId, dropdownYear);
   store.dispatch({
     type: 'profilePlace',
-    payload: { query: { nodeId, year: dropdownYear, showMiniSankey } }
+    payload: { query: { nodeId, year: dropdownYear } }
   });
 };
 
-const _loadData = (store, nodeId, year, showMiniSankey) => {
+const _loadData = (store, nodeId, year) => {
   const placeFactsheetURL = getURLFromParams(GET_PLACE_FACTSHEET, { context_id: 1, node_id: nodeId, year });
   setLoading();
 
@@ -457,12 +360,12 @@ const _loadData = (store, nodeId, year, showMiniSankey) => {
           label="Year"
           value={year}
           valueList={[2010, 2011, 2012, 2013, 2014, 2015]}
-          onValueSelected={dropdownYear => _switchYear(store, nodeId, dropdownYear, showMiniSankey)}
+          onValueSelected={dropdownYear => _switchYear(store, nodeId, dropdownYear)}
         />,
         document.getElementById('year-dropdown')
       );
 
-      _build(data, { year, showMiniSankey }, store);
+      _build(data, year, onLinkClick(store), store);
     })
     .catch((reason) => {
       _showErrorMessage(reason.message);
@@ -472,7 +375,7 @@ const _loadData = (store, nodeId, year, showMiniSankey) => {
 
 export const mount = (root, store) => {
   const { query = {} } = store.getState().location;
-  const { nodeId, showMiniSankey = false, print = false } = query;
+  const { nodeId, print = false } = query;
   const year = query.year ? parseInt(query.year, 10) : DEFAULT_PROFILE_PAGE_YEAR;
 
   root.innerHTML = ProfilePlaceMarkup({
@@ -488,30 +391,20 @@ export const mount = (root, store) => {
     document.getElementById('footer')
   );
 
-  _loadData(store, nodeId, year, showMiniSankey);
+  _loadData(store, nodeId, year);
 
   new NavContainer(store);
 };
 
-export const unmount = (root, store) => {
-  const { query = {} } = store.getState().location;
-  const { showMiniSankey = false } = query;
-
-  if (showMiniSankey) {
-    unmountComponentAtNode(document.querySelector('.js-traders-sankey'));
-    unmountComponentAtNode(document.querySelector('.js-consumers-sankey'));
-  } else {
-    unmountComponentAtNode(document.querySelector('.js-chord-traders-container'));
-    unmountComponentAtNode(document.querySelector('.js-chord-consumers-container'));
-  }
+export const unmount = () => {
+  unmountComponentAtNode(document.getElementById('js-traders-sankey'));
+  unmountComponentAtNode(document.getElementById('js-consumers-sankey'));
   unmountComponentAtNode(document.querySelector('.js-map-country'));
   unmountComponentAtNode(document.querySelector('.js-map-biome'));
   unmountComponentAtNode(document.querySelector('.js-map-state'));
   unmountComponentAtNode(document.querySelector('.js-map-municipality'));
   unmountComponentAtNode(document.querySelector('.js-line'));
   unmountComponentAtNode(document.querySelector('.js-line-legend'));
-  unmountComponentAtNode(document.querySelector('.js-top-trader'));
-  unmountComponentAtNode(document.querySelector('.js-top-consumer'));
   unmountComponentAtNode(document.querySelector('.js-score-table'));
   unmountComponentAtNode(document.getElementById('year-dropdown'));
   unmountComponentAtNode(document.getElementById('footer'));

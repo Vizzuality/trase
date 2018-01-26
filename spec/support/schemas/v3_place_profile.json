@@ -1,0 +1,390 @@
+{
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "properties": {
+    "data": {
+      "$id": "/properties/data",
+      "type": "object",
+      "properties": {
+        "column_name": {
+          "$id": "/properties/data/properties/column_name",
+          "type": "string",
+          "title": "The Column_name Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "MUNICIPALITY"
+          ]
+        },
+        "country_name": {
+          "$id": "/properties/data/properties/country_name",
+          "type": "string",
+          "title": "The Country_name Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "BRAZIL"
+          ]
+        },
+        "country_geo_id": {
+          "$id": "/properties/data/properties/country_geo_id",
+          "type": "string",
+          "title": "The Country_geo_id Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "BR"
+          ]
+        },
+        "biome_name": {
+          "$id": "/properties/data/properties/biome_name",
+          "type": "string",
+          "title": "The Biome_name Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "CAATINGA"
+          ]
+        },
+        "biome_geo_id": {
+          "$id": "/properties/data/properties/biome_geo_id",
+          "type": "string",
+          "title": "The Biome_geo_id Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "BR4"
+          ]
+        },
+        "state_name": {
+          "$id": "/properties/data/properties/state_name",
+          "type": "string",
+          "title": "The State_name Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "PERNAMBUCO"
+          ]
+        },
+        "state_geo_id": {
+          "$id": "/properties/data/properties/state_geo_id",
+          "type": "string",
+          "title": "The State_geo_id Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "BR26"
+          ]
+        },
+        "area": {
+          "$id": "/properties/data/properties/area",
+          "type": "number",
+          "title": "The Area Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            1538.4000244140625
+          ]
+        },
+        "soy_production": {
+          "$id": "/properties/data/properties/soy_production",
+          "type": "number",
+          "title": "The Soy_production Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            0
+          ]
+        },
+        "soy_area": {
+          "$id": "/properties/data/properties/soy_area",
+          "type": "string",
+          "title": "The Soy_area Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "NaN"
+          ]
+        },
+        "soy_farmland": {
+          "$id": "/properties/data/properties/soy_farmland",
+          "type": "number",
+          "title": "The Soy_farmland Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            0
+          ]
+        },
+        "municipality_name": {
+          "$id": "/properties/data/properties/municipality_name",
+          "type": "string",
+          "title": "The Municipality_name Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "SERRITA"
+          ]
+        },
+        "municipality_geo_id": {
+          "$id": "/properties/data/properties/municipality_geo_id",
+          "type": "string",
+          "title": "The Municipality_geo_id Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "BR2614006"
+          ]
+        },
+        "summary": {
+          "$id": "/properties/data/properties/summary",
+          "type": "string",
+          "title": "The Summary Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "In 2015, Serrita produced 0 t of soy occupying a total of NaN ha of land. With 0.00% of the total production, it ranks  in Brazil in soy production, and 1st in the state of Pernambuco."
+          ]
+        },
+        "top_consumer_actors": {
+          "$id": "/properties/data/properties/top_consumer_actors",
+          "type": "object",
+          "properties": {
+            "name": {
+              "$id": "/properties/data/properties/top_consumer_actors/properties/name",
+              "type": "string",
+              "title": "The Name Schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": "",
+              "examples": [
+                "SERRITA"
+              ]
+            },
+            "indicator": {
+              "$id": "/properties/data/properties/top_consumer_actors/properties/indicator",
+              "type": "string",
+              "title": "The Indicator Schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": "",
+              "examples": [
+                "Trade volume"
+              ]
+            },
+            "unit": {
+              "$id": "/properties/data/properties/top_consumer_actors/properties/unit",
+              "type": "string",
+              "title": "The Unit Schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": "",
+              "examples": [
+                "t"
+              ]
+            },
+            "targetNodes": {
+              "$id": "/properties/data/properties/top_consumer_actors/properties/targetNodes",
+              "type": "array",
+              "minItems": 1
+            }
+          },
+          "required": [
+            "name",
+            "indicator",
+            "unit",
+            "targetNodes"
+          ]
+        },
+        "top_consumer_countries": {
+          "$id": "/properties/data/properties/top_consumer_countries",
+          "type": "object",
+          "properties": {
+            "name": {
+              "$id": "/properties/data/properties/top_consumer_countries/properties/name",
+              "type": "string",
+              "title": "The Name Schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": "",
+              "examples": [
+                "SERRITA"
+              ]
+            },
+            "indicator": {
+              "$id": "/properties/data/properties/top_consumer_countries/properties/indicator",
+              "type": "string",
+              "title": "The Indicator Schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": "",
+              "examples": [
+                "Trade volume"
+              ]
+            },
+            "unit": {
+              "$id": "/properties/data/properties/top_consumer_countries/properties/unit",
+              "type": "string",
+              "title": "The Unit Schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": "",
+              "examples": [
+                "t"
+              ]
+            },
+            "targetNodes": {
+              "$id": "/properties/data/properties/top_consumer_countries/properties/targetNodes",
+              "type": "array",
+              "minItems": 1
+            }
+          },
+          "required": [
+            "name",
+            "indicator",
+            "unit",
+            "targetNodes"
+          ]
+        },
+        "indicators": {
+          "$id": "/properties/data/properties/indicators",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$id": "/properties/data/properties/indicators/items",
+            "type": "object",
+            "properties": {
+              "name": {
+                "$id": "/properties/data/properties/indicators/items/properties/name",
+                "type": "string",
+                "title": "The Name Schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": "",
+                "examples": [
+                  "Environmental indicators"
+                ]
+              },
+              "included_columns": {
+                "$id": "/properties/data/properties/indicators/items/properties/included_columns",
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$id": "/properties/data/properties/indicators/items/properties/included_columns/items",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "$id": "/properties/data/properties/indicators/items/properties/included_columns/items/properties/name",
+                      "type": "string",
+                      "title": "The Name Schema",
+                      "description": "An explanation about the purpose of this instance.",
+                      "default": "",
+                      "examples": [
+                        "Territorial deforestation"
+                      ]
+                    },
+                    "unit": {
+                      "$id": "/properties/data/properties/indicators/items/properties/included_columns/items/properties/unit",
+                      "type": "string",
+                      "title": "The Unit Schema",
+                      "description": "An explanation about the purpose of this instance.",
+                      "default": "",
+                      "examples": [
+                        "ha"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "unit"
+                  ]
+                }
+              },
+              "rows": {
+                "$id": "/properties/data/properties/indicators/items/properties/rows",
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$id": "/properties/data/properties/indicators/items/properties/rows/items",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "$id": "/properties/data/properties/indicators/items/properties/rows/items/properties/name",
+                      "type": "string",
+                      "title": "The Name Schema",
+                      "description": "An explanation about the purpose of this instance.",
+                      "default": "",
+                      "examples": [
+                        "Score"
+                      ]
+                    },
+                    "have_unit": {
+                      "$id": "/properties/data/properties/indicators/items/properties/rows/items/properties/have_unit",
+                      "type": "boolean",
+                      "title": "The Have_unit Schema",
+                      "description": "An explanation about the purpose of this instance.",
+                      "default": false,
+                      "examples": [
+                        true
+                      ]
+                    },
+                    "values": {
+                      "$id": "/properties/data/properties/indicators/items/properties/rows/items/properties/values",
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {
+                        "$id": "/properties/data/properties/indicators/items/properties/rows/items/properties/values/items",
+                        "type": [
+                          "null",
+                          "number"
+                        ],
+                        "title": "The 0 Schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": null,
+                        "examples": [
+                          null
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "have_unit",
+                    "values"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "name",
+              "included_columns",
+              "rows"
+            ]
+          }
+        },
+        "trajectory_deforestation": {
+          "$id": "/properties/data/properties/trajectory_deforestation",
+          "type": "object"
+        }
+      },
+      "required": [
+        "column_name",
+        "country_name",
+        "country_geo_id",
+        "biome_name",
+        "biome_geo_id",
+        "state_name",
+        "state_geo_id",
+        "area",
+        "soy_production",
+        "soy_area",
+        "soy_farmland",
+        "municipality_name",
+        "municipality_geo_id",
+        "summary",
+        "top_consumer_actors",
+        "top_consumer_countries",
+        "indicators",
+        "trajectory_deforestation"
+      ]
+    }
+  },
+  "required": [
+    "data"
+  ]
+}

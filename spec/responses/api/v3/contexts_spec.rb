@@ -15,7 +15,7 @@ RSpec.describe 'Get contexts', type: :request do
       get '/api/v3/contexts'
 
       expect(@response.status).to eq 200
-      expect(@response).to match_response_schema('contexts_v3')
+      expect(@response).to match_response_schema('v3_contexts')
     end
   end
 end
