@@ -50,6 +50,8 @@ tables:
         comment: When set, show this node type as default (only use for one)
       - name: is_geo_column
         comment: When set, show nodes on map
+      - name: is_choropleth_disabled
+        comment: When set, do not display the map choropleth
   - name: contexts
     comment: Country-commodity combinations.
     columns:

@@ -1717,7 +1717,8 @@ CREATE TABLE context_node_type_properties (
     is_default boolean DEFAULT false NOT NULL,
     is_geo_column boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    is_choropleth_disabled boolean DEFAULT false NOT NULL
 );
 
 
@@ -6635,7 +6636,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171214162643'),
 ('20171219125633'),
 ('20180109085838'),
+('20180110111533'),
 ('20180119094345'),
-('20180110111533');
+('20180126140843');
 
 
