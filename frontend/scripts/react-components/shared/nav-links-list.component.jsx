@@ -25,16 +25,16 @@ const NavLinksList = (props) => {
       {
         links.map(mapLinksToRouter)
           .map(link => (
-            <li key={link.name} className={itemClassName}>
+            <li key={link.name} className={link.itemClassName || itemClassName}>
               <NavLink
                 exact
                 strict
                 to={link.page}
-                className={linkClassName}
-                activeClassName={linkActiveClassName}
+                className={link.linkClassName || linkClassName}
+                activeClassName={link.linkActiveClassName || linkActiveClassName}
                 isActive={(...params) => isActive(...params, link)}
               >
-                {link.name}
+                {link.children || link.name}
               </NavLink>
             </li>
           ))

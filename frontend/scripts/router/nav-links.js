@@ -1,6 +1,31 @@
 
 export default {
-  default: [
+  nav: [
+    {
+      name: 'Supply Chain',
+      page: 'tool'
+    },
+    {
+      name: 'Map',
+      page: {
+        type: 'tool',
+        payload: { query: { isMapVisible: true } }
+      }
+    },
+    {
+      name: 'Profiles',
+      page: 'profiles'
+    },
+    {
+      name: 'Download',
+      page: 'data'
+    },
+    {
+      name: 'About',
+      page: 'about'
+    }
+  ],
+  navSidebar: [
     {
       name: 'About Trase',
       page: 'about'

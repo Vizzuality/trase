@@ -55,7 +55,8 @@ module.exports = {
       constants: path.resolve(srcPath, 'constants'),
       connect: path.resolve(srcPath, 'base', 'connect'),
       Container: path.resolve(srcPath, 'base', 'Container'),
-      store: path.resolve(srcPath, 'store')
+      store: path.resolve(srcPath, 'store'),
+      router: path.resolve(srcPath, 'router')
     },
     extensions: ['.js', '.jsx']
   },

@@ -60,6 +60,7 @@
 .nav-link {
   padding: 16px 10px;
   color: $white;
+  text-align: center;
   text-transform: uppercase;
 
   &::after {
@@ -79,5 +80,15 @@
       width: 100%;
     }
   }
-}
 
+  &.-logo {
+
+    &::after {
+      content: none;
+    }
+
+    img {
+      width: 60px;
+    }
+  }
+}

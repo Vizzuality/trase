@@ -4,29 +4,6 @@ import cx from 'classnames';
 import throttle from 'lodash/throttle';
 import NavLinksList from 'react-components/shared/nav-links-list.component';
 
-const links = [
-  {
-    name: 'Supply Chain',
-    page: 'tool'
-  },
-  {
-    name: 'Map',
-    page: 'tool'
-  },
-  {
-    name: 'Profiles',
-    page: 'profiles'
-  },
-  {
-    name: 'Download',
-    page: 'data'
-  },
-  {
-    name: 'About',
-    page: 'about'
-  }
-];
-
 class Nav extends React.PureComponent {
   static getDownloadPdfLink() {
     const pageTitle = encodeURIComponent(document.getElementsByTagName('title')[0].innerText);
@@ -64,14 +41,24 @@ class Nav extends React.PureComponent {
   }
 
   render() {
-    const { className, printable } = this.props;
+    const { className, printable, links, showLogo } = this.props;
     const { backgroundVisible } = this.state;
+    const decoratedLinks = showLogo && [
+      {
+        name: 'Home',
+        page: 'home',
+        linkClassName: 'nav-link -logo',
+        linkActiveClassName: 'nav-link -logo',
+        children: <img src="/images/logos/logo-trase-nav.png" alt="trase" />
+      },
+      ...links
+    ];
     return (
       <div className={cx('c-nav', { '-has-background': backgroundVisible }, className)}>
         <div className="row align-justify">
-          <div className="column medium-7">
+          <div className="column medium-8">
             <NavLinksList
-              links={links}
+              links={decoratedLinks || links}
               listClassName="nav-item-list"
               itemClassName="nav-item"
               linkClassName="nav-link"
@@ -100,7 +87,9 @@ class Nav extends React.PureComponent {
 Nav.propTypes = {
   className: PropTypes.string,
   pageOffset: PropTypes.number,
-  printable: PropTypes.bool
+  printable: PropTypes.bool,
+  links: PropTypes.array,
+  showLogo: PropTypes.bool
 };
 
 Nav.defaultProps = {
