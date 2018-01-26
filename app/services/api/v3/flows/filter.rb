@@ -37,7 +37,7 @@ module Api
         private
 
         def initialize_params(params)
-          @node_types_ids = initialize_int_array_param(params[:node_types_ids])
+          @node_types_ids = initialize_int_set_param(params[:node_types_ids])
           @recolor_ind = params[:recolor_ind_name] && Api::V3::Ind.
             includes(:ind_property).
             find_by_name(params[:recolor_ind_name])
@@ -47,10 +47,10 @@ module Api
           @resize_quant = params[:resize_quant_name] && Api::V3::Quant.
             includes(:quant_property).
             find_by_name(params[:resize_quant_name])
-          @selected_nodes_ids = initialize_int_array_param(
+          @selected_nodes_ids = initialize_int_set_param(
             params[:selected_nodes_ids]
           )
-          @locked_nodes_ids = initialize_int_array_param(
+          @locked_nodes_ids = initialize_int_set_param(
             params[:locked_nodes_ids]
           )
           @biome_id = params[:biome_id]
@@ -59,10 +59,10 @@ module Api
           @limit = params[:limit]&.to_i || 100
         end
 
-        def initialize_int_array_param(param)
+        def initialize_int_set_param(param)
           ary = param || []
           ary = ary.split(',') if ary.is_a?(String)
-          ary.map(&:to_i)
+          ary.map(&:to_i).to_set # for fast lookups
         end
 
         def initialize_errors
@@ -122,13 +122,10 @@ module Api
               where('? = ANY(flows.path)', node_id).
               where('year >= ? AND year <= ?', @year_start, @year_end).any?
           end
-
-          @selected_nodes = Node.where(id: @selected_nodes_ids).all
-
-          # filter out nodes which have different node types
-          @selected_nodes = @selected_nodes.select do |node|
-            @node_types_ids.include?(node.node_type_id)
-          end
+          @selected_nodes = Api::V3::Node.where(
+            id: @selected_nodes_ids,
+            node_type_id: @node_types_ids.to_a
+          ).all
 
           @selected_nodes_by_position = @selected_nodes.group_by do |node|
             @active_node_types.find do |nt|
@@ -162,6 +159,7 @@ module Api
             else
               active_nodes_for_expand # expanded mode
             end
+
           # TODO: think about how to maybe move this out to the result object
           @total_height = active_nodes_by_position.first[1].values.
             reduce(:+)
