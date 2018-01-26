@@ -2,7 +2,7 @@
 
 .l-profiles {
   position: relative;
-  min-height: calc(100vh - #{$nav-height});
+  min-height: 100vh;
   padding: 64px 0 96px;
   background-color: $egg-shell;
 

@@ -6,7 +6,9 @@
   width: 100%;
   height: $nav-height;
   font-family: $font-family-1;
+  background-color: transparent;
   z-index: $z-nav;
+  transition: all 150ms ease-in;
 
   .row {
     height: 100%;
@@ -48,6 +50,10 @@
     .nav-link::after {
       width: 100%;
     }
+  }
+
+  .icon-download-pdf {
+    transform: translateY(1px)
   }
 }
 

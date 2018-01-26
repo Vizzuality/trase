@@ -28,6 +28,15 @@ const links = [
 ];
 
 class Nav extends React.PureComponent {
+  static getDownloadPdfLink() {
+    const pageTitle = encodeURIComponent(document.getElementsByTagName('title')[0].innerText);
+    const currentUrlBase = NODE_ENV_DEV
+      ? document.location.href.replace('localhost:8081', 'staging.trase.earth')
+      : document.location.href;
+    const currentUrl = encodeURIComponent(`${currentUrlBase}&print=true`);
+    return `${PDF_DOWNLOAD_URL}?filename=${pageTitle}&url=${currentUrl}`;
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -55,7 +64,7 @@ class Nav extends React.PureComponent {
   }
 
   render() {
-    const { className } = this.props;
+    const { className, printable } = this.props;
     const { backgroundVisible } = this.state;
     return (
       <div className={cx('c-nav', { '-has-background': backgroundVisible }, className)}>
@@ -70,7 +79,17 @@ class Nav extends React.PureComponent {
             />
           </div>
           <div className="column medium-2">
-            actions
+            {printable &&
+              <ul className="nav-item-list">
+                <li className="nav-item">
+                  <a href={Nav.getDownloadPdfLink()} target="_blank" rel="noopener noreferrer">
+                    <svg className="icon icon-download-pdf">
+                      <use xlinkHref="#icon-download-pdf" />
+                    </svg>
+                  </a>
+                </li>
+              </ul>
+            }
           </div>
         </div>
       </div>
@@ -79,8 +98,9 @@ class Nav extends React.PureComponent {
 }
 
 Nav.propTypes = {
+  className: PropTypes.string,
   pageOffset: PropTypes.number,
-  className: PropTypes.string
+  printable: PropTypes.bool
 };
 
 Nav.defaultProps = {

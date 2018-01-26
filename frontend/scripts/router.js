@@ -57,14 +57,16 @@ const routes = {
     path: '/profile-actor',
     page: 'profile-actor',
     nav: {
-      className: '-light'
+      className: '-light',
+      printable: true
     }
   },
   profilePlace: {
     path: '/profile-place',
     page: 'profile-place',
     nav: {
-      className: '-light'
+      className: '-light',
+      printable: true
     }
   },
   data: {
