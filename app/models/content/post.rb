@@ -35,6 +35,7 @@ module Content
     validates_attachment_content_type :image, content_type: /\Aimage\/.*\z/
 
     after_initialize :set_default_date
+    before_save :reset_highlighted_flag
 
     def complete_post_url
       return post_url if post_url.start_with?('http://', 'https://')
@@ -43,6 +44,11 @@ module Content
 
     def set_default_date
       self.date ||= DateTime.now
+    end
+
+    def reset_highlighted_flag
+      return true unless highlighted
+      Content::Post.update_all(highlighted: false)
     end
   end
 end
