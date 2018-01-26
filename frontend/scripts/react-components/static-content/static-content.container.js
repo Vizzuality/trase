@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { NOT_FOUND } from 'redux-first-router';
 import StaticContent from './static-content.component';
-import sidebarLinks from './static-content-links';
+import sidebarLinks from './nav-sidebar-links';
 import { getStaticContentFilename } from './static-content.actions';
 
 function mapStateToProps(state) {
