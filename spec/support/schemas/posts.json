@@ -44,7 +44,7 @@
             "$id": "/properties/data/items/properties/date"
           },
           "imageUrl": {
-            "type": "null",
+            "type": ["string", "null"],
             "$id": "/properties/data/items/properties/imageUrl"
           },
           "highlighted": {

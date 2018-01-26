@@ -1,9 +1,6 @@
 FactoryBot.define do
   factory :post, class: 'Content::Post' do
-    image ''
-    image_file_name 'image.png'
-    image_content_type 'image/png'
-    image_file_size 1234
+    image { File.new("#{Rails.root}/spec/support/fixtures/blank.jpg") }
     category 'NEWS'
     state 1
   end
