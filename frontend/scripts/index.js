@@ -5,6 +5,17 @@ import { toolUrlStateMiddleware } from 'utils/stateURL';
 import router, { routeSubscriber } from './router';
 import * as appReducers from './store';
 
+if (
+  process.env.NODE_ENV !== 'production' &&
+  process.env.PERF_TEST
+) {
+  import('react')
+    .then((React) => {
+      import('why-did-you-update')
+        .then(({ whyDidYouUpdate }) => whyDidYouUpdate(React));
+    });
+}
+
 const composeEnhancers =
   (process.env.NODE_ENV === 'development' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
