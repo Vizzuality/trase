@@ -47,8 +47,8 @@ class Nav extends React.PureComponent {
       {
         name: 'Home',
         page: 'home',
-        linkClassName: 'nav-link -logo',
-        linkActiveClassName: 'nav-link -logo',
+        linkClassName: 'main-nav-link -logo',
+        linkActiveClassName: 'main-nav-link -logo',
         children: <img src="/images/logos/logo-trase-nav.png" alt="trase" />
       },
       ...links
@@ -59,16 +59,16 @@ class Nav extends React.PureComponent {
           <div className="column medium-8">
             <NavLinksList
               links={decoratedLinks || links}
-              listClassName="nav-item-list"
-              itemClassName="nav-item"
-              linkClassName="nav-link"
-              linkActiveClassName="nav-link -active"
+              listClassName="main-nav-item-list"
+              itemClassName="main-nav-item"
+              linkClassName="main-nav-link"
+              linkActiveClassName="main-nav-link -active"
             />
           </div>
           <div className="column medium-2">
             {printable &&
-              <ul className="nav-item-list">
-                <li className="nav-item">
+              <ul className="main-nav-item-list">
+                <li className="main-nav-item">
                   <a href={Nav.getDownloadPdfLink()} target="_blank" rel="noopener noreferrer">
                     <svg className="icon icon-download-pdf">
                       <use xlinkHref="#icon-download-pdf" />

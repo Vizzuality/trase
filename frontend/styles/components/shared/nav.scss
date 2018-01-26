@@ -18,24 +18,24 @@
     background-color: $white;
     box-shadow: 0 10px 20px 0 rgba($charcoal-grey, 0.2);
 
-    .nav-item .nav-link {
+    .main-nav-item .main-nav-link {
       color: $charcoal-grey;
     }
   }
 
   &.-light {
-    .nav-item .nav-link {
+    .main-nav-item .main-nav-link {
       color: $charcoal-grey;
     }
   }
 }
 
-.nav-item-list {
+.main-nav-item-list {
   display: inline-flex;
   height: 100%;
 }
 
-.nav-item {
+.main-nav-item {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -47,7 +47,7 @@
   cursor: pointer;
 
   &:hover {
-    .nav-link::after {
+    .main-nav-link::after {
       width: 100%;
     }
   }
@@ -57,7 +57,7 @@
   }
 }
 
-.nav-link {
+.main-nav-link {
   padding: 16px 10px;
   color: $white;
   text-align: center;
