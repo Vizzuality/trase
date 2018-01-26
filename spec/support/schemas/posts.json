@@ -19,7 +19,6 @@
         "required": [
           "title",
           "titleColor",
-          "description",
           "date",
           "imageUrl",
           "highlighted",
@@ -34,10 +33,6 @@
           "titleColor": {
             "type": "string",
             "$id": "/properties/data/items/properties/titleColor"
-          },
-          "description": {
-            "type": "string",
-            "$id": "/properties/data/items/properties/description"
           },
           "date": {
             "type": "string",

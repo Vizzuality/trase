@@ -20,7 +20,7 @@
 #
 
 class PostSerializer < ActiveModel::Serializer
-  attributes :title, :title_color, :description, :date, :highlighted, :complete_post_url,
+  attributes :title, :title_color, :date, :highlighted, :complete_post_url,
              :category
 
   attribute :image_url do

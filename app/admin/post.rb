@@ -1,5 +1,5 @@
 ActiveAdmin.register Content::Post, as: 'Post' do
-  permit_params :title, :title_color, :date, :image, :post_url, :category, :state, :description, :highlighted
+  permit_params :title, :title_color, :date, :image, :post_url, :category, :state, :highlighted
 
   form do |f|
     f.semantic_errors
@@ -12,7 +12,6 @@ ActiveAdmin.register Content::Post, as: 'Post' do
       input :category, required: true, as: :select, collection: Content::Post::CATEGORIES
       input :state, as: :boolean, label: 'Published?'
       input :highlighted, as: :boolean, label: 'Highlighted?'
-      input :description, as: :ckeditor, label: 'Content'
     end
     f.actions
   end
@@ -30,9 +29,6 @@ ActiveAdmin.register Content::Post, as: 'Post' do
       row(:post_url, style: 'word-break: break-all')
       row('Published?') { |post| status_tag post.state == 1 }
       row('Highlighted?') { |post| status_tag post.highlighted == 1 }
-      row 'Content' do |post|
-        post.description.html_safe
-      end
     end
   end
 

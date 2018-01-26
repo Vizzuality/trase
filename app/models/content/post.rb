@@ -8,7 +8,6 @@
 #  image              :string
 #  post_url           :string
 #  state              :integer
-#  description        :text
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  image_file_name    :string
@@ -28,7 +27,6 @@ module Content
     validates :title, presence: true
     validates :date, presence: true
     validates :post_url, presence: true
-    validates :description, presence: true
     validates :category, presence: true, inclusion: CATEGORIES
 
     has_attached_file :image, styles: {small: '320x320>', large: '640x640>'}
