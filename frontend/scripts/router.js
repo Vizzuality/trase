@@ -33,7 +33,6 @@ const routes = {
   home: {
     path: '/',
     page: 'home',
-    extension: 'jsx',
     thunk: dispatchThunks(
       getPostsContent,
       getTweetsContent,
@@ -45,58 +44,60 @@ const routes = {
   tool: {
     path: '/flows',
     page: 'tool',
-    extension: 'jsx',
     thunk: dispatchThunks(resetToolThunk)
   },
   profiles: {
     path: '/profiles',
     page: 'profiles',
-    extension: 'jsx'
+    nav: {
+      className: '-light'
+    }
   },
   profileActor: {
     path: '/profile-actor',
     page: 'profile-actor',
-    extension: 'jsx'
+    nav: {
+      className: '-light'
+    }
   },
   profilePlace: {
     path: '/profile-place',
     page: 'profile-place',
-    extension: 'jsx'
+    nav: {
+      className: '-light'
+    }
   },
   data: {
     path: '/data',
     page: 'data-portal',
-    extension: 'jsx',
-    thunk: dispatchThunks(getDataPortalContext)
+    thunk: dispatchThunks(getDataPortalContext),
+    nav: {
+      className: '-light'
+    }
   },
   about: {
     path: '/about/:section?',
     page: 'static-content',
-    extension: 'jsx',
     thunk: dispatchThunks(getPageStaticContent)
   },
   termsOfUse: {
     path: '/terms-of-use',
     page: 'static-content',
-    extension: 'jsx',
     thunk: dispatchThunks(getPageStaticContent)
   },
   dataMethods: {
     path: '/data-methods',
     page: 'static-content',
-    extension: 'jsx',
     thunk: dispatchThunks(getPageStaticContent)
   },
   faq: {
     path: '/FAQ',
     page: 'static-content',
-    extension: 'jsx',
     thunk: dispatchThunks(getPageStaticContent)
   },
   [NOT_FOUND]: {
     path: '/404',
     page: 'static-content',
-    extension: 'jsx',
     thunk: dispatchThunks(
       () => replace('/404'),
       getPageStaticContent
@@ -131,7 +132,7 @@ export function routeSubscriber(store) {
         // eslint-disable-next-line space-in-parens
         import(
           /* webpackChunkName: "[request]" */
-          `./pages/${this.filename.page}.page.${routesMap[type].extension}`
+          `./pages/${this.filename.page}.page.jsx`
         )
           .then((page) => {
             this.page = page;

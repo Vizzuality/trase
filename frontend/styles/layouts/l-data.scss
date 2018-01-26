@@ -3,5 +3,5 @@
 .l-data {
   position: relative;
   background-color: $egg-shell;
-  padding-top: 56px;
+  padding-top: 56px + $nav-height;
 }

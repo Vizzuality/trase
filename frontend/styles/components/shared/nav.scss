@@ -11,6 +11,21 @@
   .row {
     height: 100%;
   }
+
+  &.-has-background {
+    background-color: $white;
+    box-shadow: 0 10px 20px 0 rgba($charcoal-grey, 0.2);
+
+    .nav-item .nav-link {
+      color: $charcoal-grey;
+    }
+  }
+
+  &.-light {
+    .nav-item .nav-link {
+      color: $charcoal-grey;
+    }
+  }
 }
 
 .nav-item-list {

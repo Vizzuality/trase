@@ -1,5 +1,5 @@
 /* eslint-disable no-new */
-import DataMarkup from 'html/data-portal.ejs';
+import BaseMarkup from 'html/base.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import 'styles/data.scss';
@@ -9,13 +9,13 @@ import 'styles/components/shared/modal.scss';
 import { render, unmountComponentAtNode } from 'react-dom';
 import React from 'react';
 import { Provider } from 'react-redux';
-import Nav from 'react-components/shared/nav.component';
+import Nav from 'react-components/shared/nav/nav.container';
 import Footer from 'react-components/shared/footer.component';
 
 import DataPortalPage from 'react-components/data-portal/data-portal-page.container';
 
 export const mount = (root, store) => {
-  root.innerHTML = DataMarkup({
+  root.innerHTML = BaseMarkup({
     feedback: FeedbackMarkup()
   });
 
@@ -30,7 +30,7 @@ export const mount = (root, store) => {
     <Provider store={store}>
       <DataPortalPage />
     </Provider>,
-    document.querySelector('.c-container')
+    document.getElementById('page-react-root')
   );
 
   render(
@@ -42,7 +42,7 @@ export const mount = (root, store) => {
 };
 
 export const unmount = () => {
-  unmountComponentAtNode(document.querySelector('.c-container'));
+  unmountComponentAtNode(document.getElementById('page-react-root'));
   unmountComponentAtNode(document.getElementById('nav'));
   unmountComponentAtNode(document.getElementById('footer'));
 };
