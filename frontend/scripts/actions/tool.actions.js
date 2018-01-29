@@ -272,7 +272,8 @@ export function loadLinks() {
       year_start: state.tool.selectedYears[0],
       year_end: state.tool.selectedYears[1],
       include_columns: state.tool.selectedColumnsIds.join(','),
-      flow_quant: state.tool.selectedResizeBy.name
+      flow_quant: state.tool.selectedResizeBy.name,
+      locked_nodes: state.tool.selectedNodesIds
     };
 
     if (state.tool.detailedView === true) {
