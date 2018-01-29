@@ -86,6 +86,7 @@ The project's main configuration values can be set using [environment variables]
 * POSTGRES_PORT: Port used to connect to your PostgreSQL server instance
 * MAILCHIMP_API_KEY: API key for Mailchimp mailing service
 * MAILCHIMP_LIST_ID: List ID for Mailchimp mailing service
+* APPSIGNAL_PUSH_API_KEY: Appsignal API key for tracking exceptions
 * GOLD_MASTER_HOST_V1:
 * GOLD_MASTER_HOST_V2:
 * GOLD_MASTER_HOST_V3:
