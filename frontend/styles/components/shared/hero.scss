@@ -6,6 +6,13 @@
   background-color: $charcoal-grey;
   z-index: $z-above;
 
+  &.-read-only {
+    height: 400px;
+    .hero-content {
+      display: none;
+    }
+  }
+
   .hero-logo-container {
     width: 210px;
     margin: 0 0 32px;
@@ -148,10 +155,6 @@
     }
 
     .story-box-link {
-      color: $strong-pink;
-      font-family: $font-family-1;
-      font-size: 13px;
-      letter-spacing: -0.8px;
       text-align: right;
       cursor: pointer;
     }

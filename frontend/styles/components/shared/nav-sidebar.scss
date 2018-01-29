@@ -1,0 +1,31 @@
+.c-nav-sidebar {
+  position: absolute;
+  top: 240px;
+  left: 60px;
+  width: 260px;
+  min-height: 321px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  z-index: $z-above;
+
+  .nav-sidebar-link-list {
+    height: 100%;
+    padding: 40px;
+  }
+
+  .nav-sidebar-link-list-item {
+    &:not(:first-child) {
+      margin: 25px 0 0;
+    }
+
+    &:only-child {
+      margin: 0;
+    }
+  }
+
+  .nav-sidebar-link {
+    font-family: $font-family-1;
+    font-size: 13px;
+    letter-spacing: -0.8px;
+  }
+}
