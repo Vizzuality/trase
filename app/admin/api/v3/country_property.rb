@@ -1,0 +1,26 @@
+ActiveAdmin.register Api::V3::CountryProperty, as: 'CountryProperty' do
+  menu parent: 'Yellow Tables'
+
+  permit_params :country_id, :latitude, :longitude, :zoom
+
+  form do |f|
+    f.semantic_errors
+    inputs do
+      input :country, as: :select, required: true
+      input :latitude, required: true
+      input :longitude, required: true
+      input :zoom, required: true
+    end
+    f.actions
+  end
+
+  index download_links: false do
+    column('Country') { |property| property.country&.name }
+    column :latitude
+    column :longitude
+    column :zoom
+    actions
+  end
+
+  filter :country
+end
