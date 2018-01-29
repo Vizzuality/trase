@@ -114,27 +114,27 @@ export const BASEMAPS = {
     url: 'https://api.mapbox.com/styles/v1/trasebase/cizi55y2r00122rl65a97ppz1/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJhc2ViYXNlIiwiYSI6ImNpemk1NWdhOTAwMmYyeGw5dXRncHpvZGEifQ.fQ6F9DSqmhLXZs-nKiYvzA',
     labelsUrl: 'https://api.mapbox.com/styles/v1/trasebase/cj8086t6u7ias2sjs820bkw7w/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJhc2ViYXNlIiwiYSI6ImNpemk1NWdhOTAwMmYyeGw5dXRncHpvZGEifQ.fQ6F9DSqmhLXZs-nKiYvzA',
     attribution: '<span>&copy;</span> <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <span>&copy;</span> <a href="https://www.mapbox.com/about/maps/">Mapbox</a>',
-    thumbnail: 'images/maps/thumb-basemap-default.png'
+    thumbnail: '/images/maps/thumb-basemap-default.png'
   },
   satellite: {
     title: 'Satellite',
     url: 'https://api.mapbox.com/styles/v1/trasebase/cj808lpze6d6o2st3yim6eedl/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJhc2ViYXNlIiwiYSI6ImNpemk1NWdhOTAwMmYyeGw5dXRncHpvZGEifQ.fQ6F9DSqmhLXZs-nKiYvzA',
     labelsUrl: 'https://api.mapbox.com/styles/v1/trasebase/cj8ydw4b1ao4q2slhzdmz0izw/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJhc2ViYXNlIiwiYSI6ImNpemk1NWdhOTAwMmYyeGw5dXRncHpvZGEifQ.fQ6F9DSqmhLXZs-nKiYvzA',
     attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">Mapbox</a>, <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>, <a href="https://www.digitalglobe.com/" target="_blank">DigitalGlobe</a>',
-    thumbnail: 'images/maps/thumb-basemap-satellite.jpeg',
+    thumbnail: '/images/maps/thumb-basemap-satellite.jpeg',
     dark: true
   },
   topo: {
     title: 'Topography',
     url: '//{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
     attribution: '&copy;<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy;<a href="http://opentopomap.org">opentopomap.org</a>',
-    thumbnail: 'images/maps/thumb-basemap-topo.png'
+    thumbnail: '/images/maps/thumb-basemap-topo.png'
   },
   streets: {
     title: 'Streets (OSM)',
     url: '//{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
     attribution: '&copy;<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>',
-    thumbnail: 'images/maps/thumb-basemap-streets.png'
+    thumbnail: '/images/maps/thumb-basemap-streets.png'
   }
 };
 

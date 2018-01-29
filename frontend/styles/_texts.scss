@@ -3,6 +3,18 @@
 .paragraph {
   color: $charcoal-grey;
   font-family: $font-family-2;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 2.24;
+
+  & + & {
+    margin: 32px 0 0;
+  }
+}
+
+.paragraph-old {
+  color: $charcoal-grey;
+  font-family: $font-family-2;
   font-size: $font-size-xx-regular;
   font-weight: $font-weight-light;
   letter-spacing: -.1px;
@@ -64,6 +76,23 @@ a {
 
   &.-white {
     color: $white;
+  }
+}
+
+.subtitle {
+  font-family: $font-family-1;
+  font-size: 13px;
+  letter-spacing: -0.8px;
+  text-transform: uppercase;
+  color: $strong-pink;
+
+  &.-gray {
+    color: $charcoal-grey-faded;
+  }
+
+  // for overriding scenarios
+  &.-pink {
+    color: $strong-pink;
   }
 }
 
