@@ -1,7 +1,6 @@
 /* eslint-disable no-new */
 
 import ProfilePlaceMarkup from 'html/profile-place.ejs';
-import NavMarkup from 'html/includes/_nav.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import 'styles/profile-place.scss';
@@ -9,10 +8,9 @@ import 'styles/profile-place.scss';
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
+import Nav from 'react-components/shared/nav/nav.container';
 import Footer from 'react-components/shared/footer.component';
 
-
-import NavContainer from 'containers/shared/nav.container';
 import Dropdown from 'react-components/shared/dropdown.component';
 import Line from 'react-components/profiles/line.component';
 import LineLegend from 'react-components/profiles/line-legend.component';
@@ -380,7 +378,6 @@ export const mount = (root, store) => {
 
   root.innerHTML = ProfilePlaceMarkup({
     printMode: print,
-    nav: NavMarkup({ page: 'profile-place' }),
     feedback: FeedbackMarkup()
   });
 
@@ -391,9 +388,14 @@ export const mount = (root, store) => {
     document.getElementById('footer')
   );
 
-  _loadData(store, nodeId, year);
+  render(
+    <Provider store={store}>
+      <Nav />
+    </Provider>,
+    document.getElementById('nav')
+  );
 
-  new NavContainer(store);
+  _loadData(store, nodeId, year);
 };
 
 export const unmount = () => {
@@ -407,6 +409,7 @@ export const unmount = () => {
   unmountComponentAtNode(document.querySelector('.js-line-legend'));
   unmountComponentAtNode(document.querySelector('.js-score-table'));
   unmountComponentAtNode(document.getElementById('year-dropdown'));
+  unmountComponentAtNode(document.getElementById('nav'));
   unmountComponentAtNode(document.getElementById('footer'));
 };
 

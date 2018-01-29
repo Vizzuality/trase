@@ -14,21 +14,19 @@ class StaticContent extends React.PureComponent {
       <div className="c-static-content">
         <Hero className="-read-only" />
         {!notFound &&
-          <React.Fragment>
-            <NavSidebar links={links} />
-            <section className="container">
-              <div className="row">
-                <div className="column small-12 medium-6 medium-offset-3">
-                  {content &&
-                  remark()
-                    .use(remarkReact, { remarkReactComponents: { div: MarkdownContainer } })
-                    .processSync(content).contents
-                  }
-                  {children}
-                </div>
-              </div>
-            </section>
-          </React.Fragment>
+          <div className="row">
+            <div className="column small-12 medium-3">
+              <NavSidebar links={links} />
+            </div>
+            <article className="column small-12 medium-6 medium-offset-1 container">
+              {content &&
+              remark()
+                .use(remarkReact, { remarkReactComponents: { div: MarkdownContainer } })
+                .processSync(content).contents
+              }
+              {children}
+            </article>
+          </div>
         }
         {notFound && <NotFound />}
       </div>
