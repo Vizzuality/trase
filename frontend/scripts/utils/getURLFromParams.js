@@ -17,8 +17,6 @@ export const GET_TWEETS = 'GET_TWEETS';
 export const GET_POSTS = 'GET_POSTS';
 export const GET_SITE_DIVE = 'GET_SITE_DIVE';
 export const GET_TESTIMONIALS = 'GET_TESTIMONIALS';
-export const GET_PROMOTED_STORY = 'GET_PROMOTED_STORY';
-export const GET_FEATURES_POSTS = 'GET_FEATURES_POSTS';
 export const GET_MARKDOWN_CONTENT = 'GET_MARKDOWN_CONTENT';
 
 const API_ENDPOINTS = {
@@ -49,12 +47,6 @@ const API_ENDPOINTS = {
   [GET_DISCLAIMER]: { api: 'local', endpoint: 'disclaimer.json' },
   [GET_TOOLTIPS]: { api: 'local', endpoint: 'tooltips.json' },
   [GET_TESTIMONIALS]: { api: 'content', endpoint: '/testimonials', mock: 'mocks/v3_get_testimonials.json' },
-  [GET_PROMOTED_STORY]: { api: 'content', endpoint: '/featured-story', mock: 'mocks/v3_get_promoted_post.json' },
-  [GET_FEATURES_POSTS]: {
-    api: 'content',
-    endpoint: '/posts?category=features',
-    mock: 'mocks/v3_get_features_posts.json'
-  },
   [GET_MARKDOWN_CONTENT]: { api: 'markdown', endpoint: 'static-content' }
 };
 

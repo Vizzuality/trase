@@ -8,9 +8,9 @@ import SliderSection from './slider-section.component';
 function Home(props) {
   const {
     tweets,
-    posts,
+    blogPosts,
     testimonials,
-    features,
+    insightsPosts,
     promotedPost
   } = props;
   return (
@@ -39,8 +39,8 @@ function Home(props) {
           </div>
         </div>
         <div className="sliders">
-          <SliderSection name="News and Blogs" slides={features} />
-          <SliderSection name="Insights" slides={posts} />
+          <SliderSection name="News and Blogs" slides={blogPosts} />
+          <SliderSection name="Insights" slides={insightsPosts} />
           <SliderSection className="-small" name="Testimonials" slides={testimonials} />
         </div>
         <NewsletterForm />
@@ -51,10 +51,10 @@ function Home(props) {
 
 
 Home.propTypes = {
-  features: PropTypes.array,
+  insightsPosts: PropTypes.array,
   testimonials: PropTypes.array,
   tweets: PropTypes.array,
-  posts: PropTypes.array,
+  blogPosts: PropTypes.array,
   promotedPost: PropTypes.object
 };
 

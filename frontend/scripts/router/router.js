@@ -4,8 +4,6 @@ import {
   resetToolThunk,
   getPostsContent,
   getTweetsContent,
-  getFeaturesContent,
-  getPromotedPostContent,
   getTestimonialsContent
 } from 'react-components/home/home.thunks';
 
@@ -35,8 +33,6 @@ const routes = {
     thunk: dispatchThunks(
       getPostsContent,
       getTweetsContent,
-      getFeaturesContent,
-      getPromotedPostContent,
       getTestimonialsContent
     )
   },
