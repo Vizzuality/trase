@@ -16,7 +16,7 @@ function Home(props) {
   return (
     <div className="l-homepage">
       <div className="c-homepage">
-        <Hero story={promotedPost} tweets={tweets} video />
+        <Hero story={promotedPost} tweets={tweets} />
         <div className="splitted">
           <div className="row">
             <div className="column small-12 medium-6">
@@ -39,8 +39,8 @@ function Home(props) {
           </div>
         </div>
         <div className="sliders">
-          <SliderSection name="News and Insights" slides={features} />
-          <SliderSection name="Features" slides={posts} />
+          <SliderSection name="News and Blogs" slides={features} />
+          <SliderSection name="Insights" slides={posts} />
           <SliderSection className="-small" name="Testimonials" slides={testimonials} />
         </div>
         <NewsletterForm />
@@ -48,6 +48,7 @@ function Home(props) {
     </div>
   );
 }
+
 
 Home.propTypes = {
   features: PropTypes.array,

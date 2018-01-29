@@ -15,6 +15,14 @@ class SliderSection extends React.PureComponent {
     }
   }
 
+  static getActionName(category) {
+    switch (true) {
+      case (['NEWS', 'BLOG', 'INSIGHT', 'LONGER READ'].includes(category)): return 'Read Story';
+      case (['INFO BRIEF', 'ISSUE BRIEF'].includes(category)): return 'Download document';
+      default: return 'See More';
+    }
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -86,7 +94,10 @@ class SliderSection extends React.PureComponent {
                     >
                       {slide.quote
                         ? <QuoteTile slide={slide} />
-                        : <StoryTile slide={slide} />
+                        : <StoryTile
+                          slide={slide}
+                          action={SliderSection.getActionName(slide.category)}
+                        />
                       }
                     </div>
                   </div>
