@@ -171,6 +171,13 @@ paths:
           description: Number of top nodes (defaults to 100)
           required: false
           type: integer
+        - name: locked_nodes
+          in: query
+          description: Ids of nodes to keep selected even if they are out of range of current selection
+          required: false
+          type: array
+          items:
+            type: integer
       responses:
         '200':
           description: successful operation
