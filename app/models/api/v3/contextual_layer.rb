@@ -12,6 +12,19 @@ module Api
       validates :position, presence: true, uniqueness: {scope: :context}
       validates :is_default, inclusion: { in: [true, false] }
 
+      def self.select_options
+        Api::V3::ContextualLayer.all.map do |layer|
+          [
+            [
+              layer.context&.country&.name,
+              layer.context&.commodity&.name,
+              layer.identifier
+            ].join(' / '),
+            layer.id
+          ]
+        end
+      end
+
       def self.blue_foreign_keys
         [
           {name: :context_id, table_class: Api::V3::Context}
