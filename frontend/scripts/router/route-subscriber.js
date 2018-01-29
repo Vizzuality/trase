@@ -27,7 +27,7 @@ export default function routeSubscriber(store) {
         import(
           /* webpackChunkName: "[request]" */
           `../pages/${this.filename.page}.page.jsx`
-          )
+        )
           .then((page) => {
             this.page = page;
             this.page.mount(this.root, store);
