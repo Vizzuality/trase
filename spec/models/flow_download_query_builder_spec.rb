@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe FlowDownloadQueryBuilder, type: :model do
+  before(:all) { Api::V3::Flow.delete_all } # db clearing doesn't seem to work }
   include_context 'two flows'
   describe :query do
     before(:each) do

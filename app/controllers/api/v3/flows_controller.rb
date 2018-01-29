@@ -24,6 +24,7 @@ module Api
           recolor_qual_name: params[:flow_qual],
           resize_quant_name: params[:flow_quant],
           selected_nodes_ids: params[:selected_nodes],
+          locked_nodes_ids: params[:locked_nodes],
           biome_id: params[:biome_filter_id],
           year_start: params[:year_start],
           year_end: params[:year_end] || params[:year_start],
