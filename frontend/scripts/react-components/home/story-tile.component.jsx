@@ -18,7 +18,7 @@ function StoryTile(props) {
         style={{ backgroundImage: `url(${slide.imageUrl})` }}
       />
       <figcaption className="slide-content">
-        <h4 className="subtitle">{slide.category}</h4>
+        <h4 className="home-subtitle">{slide.category}</h4>
         <p className="slide-title">{slide.title}</p>
       </figcaption>
     </a>

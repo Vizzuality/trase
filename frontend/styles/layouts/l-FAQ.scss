@@ -1,0 +1,42 @@
+
+.l-faq {
+  position: relative;
+  padding: 88px 0 104px ;
+  background-color: $egg-shell;
+
+  > .wrap {
+    position: relative;
+
+    > .c-anchor-list {
+      position: absolute;
+      top: 80px;
+      width: $anchor-list-max-width;
+
+      &.-bottom {
+        position: absolute;
+        top: auto;
+        bottom: 0;
+      }
+    }
+
+    .title {
+      margin: 0 0 16px;
+
+      &:not(:first-child) {
+        margin: 56px 0 16px;
+      }
+    }
+
+    > .content {
+      max-width: $content-max-width;
+      margin: 0 0 0 $content-width;
+
+      h2.-anchor::before {
+        content:"";
+        display:block;
+        height:90px; /* fixed header height*/
+        margin:-90px 0 0; /* negative fixed header height */
+      }
+    }
+  }
+}

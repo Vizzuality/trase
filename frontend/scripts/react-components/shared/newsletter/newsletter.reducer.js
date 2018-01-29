@@ -4,9 +4,6 @@ import { NEWSLETTER__SET_SUBSCRIPTION_MESSAGE } from './newsletter.actions';
 const initialState = {
   home: {
     message: ''
-  },
-  about: {
-    message: ''
   }
 };
 

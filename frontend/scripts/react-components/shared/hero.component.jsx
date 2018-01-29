@@ -26,14 +26,14 @@ class Hero extends React.Component {
         <figure className="story-box-image" style={{ backgroundImage: `url(${storyObj.imageUrl})` }} />
         <figcaption className="story-box-content">
           <p className="story-box-title">{storyObj.title}</p>
-          <button className="subtitle story-box-link" onClick={() => visitStory(storyObj)}>See It Here</button>
+          <button className="story-box-link" onClick={() => visitStory(storyObj)}>See It Here</button>
         </figcaption>
       </div>
     );
 
     return (
       <div className={cx('c-hero', className)}>
-        <div className="hero-content row align-middle">
+        <div className="row align-middle">
           <div className="column small-12">
             <div className="hero-logo-container">
               <img src="images/logos/new-logo-trase.svg" alt="TRASE" />

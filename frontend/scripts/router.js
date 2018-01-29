@@ -1,4 +1,4 @@
-import { connectRoutes, NOT_FOUND, replace } from 'redux-first-router';
+import { connectRoutes, NOT_FOUND } from 'redux-first-router';
 import connect from 'connect';
 import { parse, stringify } from 'utils/stateURL';
 import {
@@ -14,10 +14,6 @@ import {
   getDataPortalContext
 } from 'react-components/data-portal/data-portal.thunks';
 
-import {
-  getPageStaticContent
-} from 'react-components/static-content/static-content.thunks';
-
 const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thunk(...params));
 
 const config = {
@@ -25,8 +21,7 @@ const config = {
   querySerializer: {
     parse,
     stringify
-  },
-  notFoundPath: '/404'
+  }
 };
 
 const routes = {
@@ -70,37 +65,27 @@ const routes = {
     thunk: dispatchThunks(getDataPortalContext)
   },
   about: {
-    path: '/about/:section?',
-    page: 'static-content',
-    extension: 'jsx',
-    thunk: dispatchThunks(getPageStaticContent)
+    path: '/about',
+    page: 'about',
+    extension: 'jsx'
   },
   termsOfUse: {
     path: '/terms-of-use',
-    page: 'static-content',
-    extension: 'jsx',
-    thunk: dispatchThunks(getPageStaticContent)
+    page: 'terms-of-use',
+    extension: 'jsx'
   },
   dataMethods: {
     path: '/data-methods',
-    page: 'static-content',
-    extension: 'jsx',
-    thunk: dispatchThunks(getPageStaticContent)
+    page: 'data-methods',
+    extension: 'jsx'
   },
   faq: {
     path: '/FAQ',
-    page: 'static-content',
-    extension: 'jsx',
-    thunk: dispatchThunks(getPageStaticContent)
+    page: 'FAQ',
+    extension: 'jsx'
   },
   [NOT_FOUND]: {
-    path: '/404',
-    page: 'static-content',
-    extension: 'jsx',
-    thunk: dispatchThunks(
-      () => replace('/404'),
-      getPageStaticContent
-    )
+    path: '/404'
   }
 };
 
@@ -108,7 +93,7 @@ const routes = {
 export function routeSubscriber(store) {
   class RouterComponent {
     constructor() {
-      this.filename = null;
+      this.type = null;
       this.page = null;
       this.root = document.getElementById('app-root-container');
       this.onRouteChange = this.onRouteChange.bind(this);
@@ -124,14 +109,13 @@ export function routeSubscriber(store) {
     }
 
     onRouteChange({ routesMap, type } = {}) {
-      const filename = routesMap[type];
-      if (this.filename !== filename) {
+      if (this.type !== type) {
         this.resetPage();
-        this.filename = filename;
+        this.type = type;
         // eslint-disable-next-line space-in-parens
         import(
           /* webpackChunkName: "[request]" */
-          `./pages/${this.filename.page}.page.${routesMap[type].extension}`
+          `./pages/${routesMap[this.type].page}.page.${routesMap[this.type].extension}`
         )
           .then((page) => {
             this.page = page;

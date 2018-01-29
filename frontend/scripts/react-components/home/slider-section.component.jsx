@@ -67,7 +67,7 @@ class SliderSection extends React.PureComponent {
     return (
       <section className={cx('c-slider-section', className)}>
         <div className={cx('row', 'slider-wrapper', { '-auto-width': (slides.length < visiblePages) })}>
-          <h3 className="subtitle column small-12">{name}</h3>
+          <h3 className="home-subtitle column small-12">{name}</h3>
           <Siema
             perPage={this.mediaQueries}
             draggable={smallScreen}

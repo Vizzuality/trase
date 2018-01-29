@@ -19,7 +19,6 @@ export const GET_SITE_DIVE = 'GET_SITE_DIVE';
 export const GET_TESTIMONIALS = 'GET_TESTIMONIALS';
 export const GET_PROMOTED_STORY = 'GET_PROMOTED_STORY';
 export const GET_FEATURES_POSTS = 'GET_FEATURES_POSTS';
-export const GET_MARKDOWN_CONTENT = 'GET_MARKDOWN_CONTENT';
 
 const API_ENDPOINTS = {
   [GET_CONTEXTS]: { api: 3, endpoint: '/contexts' },
@@ -54,8 +53,7 @@ const API_ENDPOINTS = {
     api: 'content',
     endpoint: '/posts?category=features',
     mock: 'mocks/v3_get_features_posts.json'
-  },
-  [GET_MARKDOWN_CONTENT]: { api: 'markdown', endpoint: 'static-content' }
+  }
 };
 
 function getURLForV3(endpoint, paramsArg = {}) {
@@ -120,8 +118,6 @@ export function getURLFromParams(endpointKey, params = {}, mock = false) {
         return `/${endpointData.endpoint}`;
       case 'content':
         return `${API_V2_URL}/content${endpointData.endpoint}`;
-      case 'markdown':
-        return `/${endpointData.endpoint}/${params.filename}.md`;
       default:
         console.warn('Unmatched route found at router');
         return null;

@@ -1,6 +1,6 @@
 /* eslint-disable max-len,no-new */
 
-import BaseMarkup from 'html/base.ejs';
+import HomeMarkup from 'html/home.ejs';
 import NavMarkup from 'html/includes/_nav.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
@@ -15,7 +15,7 @@ import 'styles/homepage.scss';
 
 
 export const mount = (root, store) => {
-  root.innerHTML = BaseMarkup({
+  root.innerHTML = HomeMarkup({
     nav: NavMarkup({ page: 'index' }),
     feedback: FeedbackMarkup()
   });
@@ -25,7 +25,7 @@ export const mount = (root, store) => {
     <Provider store={store} >
       <Home />
     </Provider>,
-    document.getElementById('page-react-root')
+    document.getElementById('home-react-root')
   );
 
   render(
@@ -37,6 +37,6 @@ export const mount = (root, store) => {
 };
 
 export const unmount = () => {
-  unmountComponentAtNode(document.getElementById('page-react-root'));
+  unmountComponentAtNode(document.getElementById('home-react-root'));
   unmountComponentAtNode(document.getElementById('footer'));
 };
