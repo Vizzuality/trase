@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import groupBy from 'lodash/groupBy';
 import flatten from 'lodash/flatten';
 import camelcase from 'lodash/camelCase';
-import Search from 'react-components/shared/search.component';
+import Search from 'react-components/shared/search/search.component';
 import { selectExpandedNode, selectNode } from 'actions/tool.actions';
 import isNodeColumnVisible from 'utils/isNodeColumnVisible';
 

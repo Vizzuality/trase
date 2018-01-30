@@ -1,6 +1,5 @@
 /* eslint-disable no-new */
 import ProfileActorMarkup from 'html/profile-actor.ejs';
-import NavMarkup from 'html/includes/_nav.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import 'styles/profile-actor.scss';
@@ -8,9 +7,9 @@ import 'styles/profile-actor.scss';
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
+import TopNavBar from 'react-components/shared/nav/top-nav-bar.container';
 import Footer from 'react-components/shared/footer.component';
 
-import NavContainer from 'containers/shared/nav.container';
 import Dropdown from 'react-components/shared/dropdown.component';
 import Map from 'react-components/profiles/map.component';
 import Line from 'react-components/profiles/line.component';
@@ -477,9 +476,15 @@ export const mount = (root, store) => {
 
   root.innerHTML = ProfileActorMarkup({
     printMode: print,
-    nav: NavMarkup({ page: 'profile-actor' }),
     feedback: FeedbackMarkup()
   });
+
+  render(
+    <Provider store={store}>
+      <TopNavBar />
+    </Provider>,
+    document.getElementById('nav')
+  );
 
   render(
     <Provider store={store}>
@@ -489,8 +494,6 @@ export const mount = (root, store) => {
   );
 
   _loadData(store, nodeId, year);
-
-  new NavContainer(store);
 };
 
 export const unmount = () => {
@@ -505,5 +508,6 @@ export const unmount = () => {
   unmountComponentAtNode(document.querySelector('.js-sustainability-table'));
   unmountComponentAtNode(document.querySelector('.js-scatterplot-container'));
   unmountComponentAtNode(document.getElementById('year-dropdown'));
+  unmountComponentAtNode(document.getElementById('nav'));
   unmountComponentAtNode(document.getElementById('footer'));
 };

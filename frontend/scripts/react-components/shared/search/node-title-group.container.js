@@ -1,6 +1,6 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import NodeTitleGroup from 'react-components/shared/node-title-group.component';
+import NodeTitleGroup from 'react-components/shared/search/node-title-group.component';
 import { selectNode } from 'actions/tool.actions';
 
 const mapStateToProps = (state) => {

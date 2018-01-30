@@ -1,5 +1,5 @@
 import React from 'react';
-import ColumnSelector from 'containers/tool/column-selector-react.container';
+import ColumnSelector from 'react-components/tool/column-selector.container';
 import 'styles/components/tool/columns-selector.scss';
 import PropTypes from 'prop-types';
 

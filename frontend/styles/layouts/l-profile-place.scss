@@ -2,8 +2,8 @@
 
 .l-profile-place {
   position: relative;
-  min-height: calc(100vh - #{$nav-height});
-  padding-top: 54px;
+  min-height: 100vh;
+  padding-top: calc(54px + #{$nav-height});
   background-color: $egg-shell;
   line-height: 1.5;
 

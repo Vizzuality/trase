@@ -1,44 +1,67 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NavLink } from 'redux-first-router-link';
+import throttle from 'lodash/throttle';
+import { Transition } from 'react-transition-group';
+import NavLinksList from 'react-components/shared/nav/nav-links-list.component';
 
-const NavSidebar = (props) => {
-  const { links } = props;
+class NavSidebar extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false
+    };
 
-  const mapLinksToRouter = link => (
-    typeof link.page === 'string'
-      ? ({ ...link, page: { type: link.page, payload: {} } })
-      : link
-  );
+    this.onToggleNav = throttle(this.onToggleNav.bind(this), 550);
+  }
 
-  const isActive = (match, location, link) => (
-    (location.type === link.page.type && link.page.payload.section === location.payload.section)
-  );
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.open !== this.state.open) {
+      const body = document.querySelector('body');
+      if (this.state.open) {
+        body.classList.add('-overflow-hidden');
+      } else {
+        body.classList.remove('-overflow-hidden');
+      }
+    }
+  }
 
-  return (
-    <div className="c-nav-sidebar">
-      <ul className="nav-sidebar-link-list">
+  onToggleNav() {
+    this.setState(state => ({ open: !state.open }));
+  }
+
+  render() {
+    const { links } = this.props;
+    const { open } = this.state;
+    const icon = open ? 'icon-close' : 'icon-menu';
+    return (
+      <Transition in={open} timeout={300}>
         {
-          links.map(mapLinksToRouter)
-            .map(link => (
-              <li key={link.name} className="nav-sidebar-link-list-item">
-                <NavLink
-                  exact
-                  strict
-                  to={link.page}
-                  className="subtitle -gray"
-                  activeClassName="-pink"
-                  isActive={(...params) => isActive(...params, link)}
-                >
-                  {link.name}
-                </NavLink>
-              </li>
-            ))
+          transition => (
+            <React.Fragment>
+              <div className={`c-nav-sidebar -${transition}`}>
+                <NavLinksList
+                  links={links}
+                  listClassName="nav-sidebar-link-list"
+                  itemClassName="nav-sidebar-link-list-item"
+                  linkClassName="subtitle -gray"
+                  linkActiveClassName="-pink"
+                />
+              </div>
+              <button
+                className={`sidebar-nav-toggle -${transition}`}
+                onClick={this.onToggleNav}
+              >
+                <svg className={`icon ${icon}`}>
+                  <use xlinkHref={`#${icon}`} />
+                </svg >
+              </button>
+            </React.Fragment>
+          )
         }
-      </ul>
-    </div>
-  );
-};
+      </Transition>
+    );
+  }
+}
 
 NavSidebar.propTypes = {
   links: PropTypes.array

@@ -2,7 +2,7 @@ import React from 'react';
 import cx from 'classnames';
 
 import 'styles/components/tool/nodesTitles.scss';
-import NodeTitle from 'react-components/shared/node-title.component';
+import NodeTitle from 'react-components/shared/search/node-title.component';
 import PropTypes from 'prop-types';
 
 export default function NodeTitleGroup({ nodes = [], onClose }) {

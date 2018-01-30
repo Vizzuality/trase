@@ -2,8 +2,8 @@
 
 .l-profile-actor {
   position: relative;
-  min-height: calc(100vh - #{$nav-height});
-  padding-top: 44px;
+  min-height: 100vh;
+  padding-top: calc(44px + #{$nav-height});
   background-color: $egg-shell;
 
   section:nth-of-type(2n-1) {
@@ -12,7 +12,7 @@
 
   &.-error {
     position: relative;
-    min-height: calc(100vh - #{$nav-height});
+    min-height: 100vh;
 
     .c-error-message {
       position: absolute;

@@ -123,7 +123,7 @@ const sections = [
 ];
 
 const Footer = () => (
-  <React.Fragment>
+  <div className="c-footer">
     <div className="contain-logos-footer row">
       {
         sections.map(({ title, logos, text }) => (
@@ -170,7 +170,7 @@ const Footer = () => (
         </li>
       </ul>
     </div>
-  </React.Fragment>
+  </div>
 );
 
 export default Footer;
