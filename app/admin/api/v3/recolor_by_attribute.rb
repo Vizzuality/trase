@@ -1,0 +1,48 @@
+ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
+  menu parent: 'Yellow Tables'
+
+  permit_params :context_id, :group_number, :position, :legend_type,
+                :legend_color_theme, :interval_count, :min_value, :max_value,
+                :divisor, :tooltip_text, :years_str, :is_disabled, :is_default
+
+  form do |f|
+    f.semantic_errors
+    inputs do
+      input :context, as: :select, required: true,
+        collection: Api::V3::Context.select_options
+      input :group_number, required: true
+      input :position, required: true
+      input :legend_type, required: true, as: :string
+      input :legend_color_theme, required: true, as: :string
+      input :interval_count
+      input :min_value, as: :string
+      input :max_value, as: :string
+      input :divisor
+      input :tooltip_text, as: :string
+      input :years_str, hint: 'Comma-separated list of years', label: 'Years'
+      input :is_disabled, as: :boolean, required: true
+      input :is_default, as: :boolean, required: true
+    end
+    f.actions
+  end
+
+  index do
+    column('Country') { |property| property.context&.country&.name }
+    column('Commodity') { |property| property.context&.commodity&.name }
+    column :group_number
+    column :position
+    column :legend_type
+    column :legend_color_theme
+    column :interval_count
+    column :min_value
+    column :max_value
+    column :divisor
+    column :tooltip_text
+    column :years
+    column :is_disabled
+    column :is_default
+    actions
+  end
+
+  filter :context, collection: -> { Api::V3::Context.select_options }
+end
