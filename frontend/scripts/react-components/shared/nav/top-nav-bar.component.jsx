@@ -41,7 +41,7 @@ class TopNavBar extends React.PureComponent {
   }
 
   render() {
-    const { printable, links, showLogo } = this.props;
+    const { printable, links, showLogo, className } = this.props;
     const { backgroundVisible } = this.state;
     const decoratedLinks = showLogo && [
       {
@@ -54,7 +54,7 @@ class TopNavBar extends React.PureComponent {
       ...links
     ];
     return (
-      <div className={cx('c-nav', { '-has-background': backgroundVisible })}>
+      <div className={cx('c-nav', { '-has-background': backgroundVisible }, className)}>
         <div className="row align-justify">
           <div className="column medium-8">
             <NavLinksList
@@ -85,6 +85,7 @@ class TopNavBar extends React.PureComponent {
 }
 
 TopNavBar.propTypes = {
+  className: PropTypes.string,
   pageOffset: PropTypes.number,
   printable: PropTypes.bool,
   links: PropTypes.array,
