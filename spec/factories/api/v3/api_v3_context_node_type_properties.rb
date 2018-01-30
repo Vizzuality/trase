@@ -4,6 +4,6 @@ FactoryBot.define do
     column_group 0
     is_default false
     is_geo_column true
-    # is_choropleth_disabled false
+    is_choropleth_disabled false
   end
 end

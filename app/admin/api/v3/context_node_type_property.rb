@@ -2,7 +2,7 @@ ActiveAdmin.register Api::V3::ContextNodeTypeProperty, as: 'ContextNodeTypePrope
   menu parent: 'Yellow Tables'
 
   permit_params :context_node_type_id, :column_group, :is_default,
-                :is_geo_column#, :is_choropleth_disabled
+                :is_geo_column, :is_choropleth_disabled
 
   form do |f|
     f.semantic_errors
@@ -12,7 +12,7 @@ ActiveAdmin.register Api::V3::ContextNodeTypeProperty, as: 'ContextNodeTypePrope
       input :column_group, required: true
       input :is_default, as: :boolean, required: true
       input :is_geo_column, as: :boolean, required: true
-      # input :is_choropleth_disabled, as: :boolean, required: true
+      input :is_choropleth_disabled, as: :boolean, required: true
     end
     f.actions
   end
@@ -24,7 +24,7 @@ ActiveAdmin.register Api::V3::ContextNodeTypeProperty, as: 'ContextNodeTypePrope
     column :column_group
     column :is_default
     column :is_geo_column
-    # column :is_choropleth_disabled
+    column :is_choropleth_disabled
     actions
   end
 
