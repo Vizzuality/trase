@@ -18,24 +18,24 @@
     background-color: $white;
     box-shadow: 0 10px 20px 0 rgba($charcoal-grey, 0.2);
 
-    .main-nav-item .main-nav-link {
+    .top-nav-item .top-nav-link {
       color: $charcoal-grey;
     }
   }
 
   &.-light {
-    .main-nav-item .main-nav-link {
+    .top-nav-item .top-nav-link {
       color: $charcoal-grey;
     }
   }
 }
 
-.main-nav-item-list {
+.top-nav-item-list {
   display: inline-flex;
   height: 100%;
 }
 
-.main-nav-item {
+.top-nav-item {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -46,8 +46,16 @@
   letter-spacing: .5px;
   cursor: pointer;
 
+  &:first-child {
+    margin: 0 6px 0 0;
+
+    .top-nav-link {
+      padding: 16px 10px 16px 0;
+    }
+  }
+
   &:hover {
-    .main-nav-link::after {
+    .top-nav-link::after {
       width: 100%;
     }
   }
@@ -57,7 +65,7 @@
   }
 }
 
-.main-nav-link {
+.top-nav-link {
   padding: 16px 10px;
   color: $white;
   text-align: center;

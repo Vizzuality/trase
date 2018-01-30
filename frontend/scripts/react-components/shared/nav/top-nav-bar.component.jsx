@@ -47,8 +47,8 @@ class TopNavBar extends React.PureComponent {
       {
         name: 'Home',
         page: 'home',
-        linkClassName: 'main-nav-link -logo',
-        linkActiveClassName: 'main-nav-link -logo',
+        linkClassName: 'top-nav-link -logo',
+        linkActiveClassName: 'top-nav-link -logo',
         children: <img src="/images/logos/logo-trase-nav.png" alt="trase" />
       },
       ...links
@@ -59,16 +59,16 @@ class TopNavBar extends React.PureComponent {
           <div className="column medium-8">
             <NavLinksList
               links={decoratedLinks || links}
-              listClassName="main-nav-item-list"
-              itemClassName="main-nav-item"
-              linkClassName="main-nav-link"
-              linkActiveClassName="main-nav-link -active"
+              listClassName="top-nav-item-list"
+              itemClassName="top-nav-item"
+              linkClassName="top-nav-link"
+              linkActiveClassName="top-nav-link -active"
             />
           </div>
           <div className="column medium-2">
             {printable &&
-              <ul className="main-nav-item-list">
-                <li className="main-nav-item">
+              <ul className="top-nav-item-list">
+                <li className="top-nav-item">
                   <a href={TopNavBar.getDownloadPdfLink()} target="_blank" rel="noopener noreferrer">
                     <svg className="icon icon-download-pdf">
                       <use xlinkHref="#icon-download-pdf" />
