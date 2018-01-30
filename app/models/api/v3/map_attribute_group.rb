@@ -12,7 +12,12 @@
 module Api
   module V3
     class MapAttributeGroup < YellowTable
+      belongs_to :context
       has_many :map_attributes
+
+      validates :context, presence: true
+      validates :name, presence: true
+      validates :position, presence: true, uniqueness: {scope: :context}
 
       def self.blue_foreign_keys
         [
