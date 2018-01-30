@@ -16,11 +16,10 @@ class SliderSection extends React.PureComponent {
   }
 
   static getActionName(category) {
-    switch (true) {
-      case (['NEWS', 'BLOG', 'INSIGHT', 'LONGER READ'].includes(category)): return 'Read Story';
-      case (['INFO BRIEF', 'ISSUE BRIEF'].includes(category)): return 'Download document';
-      default: return 'See More';
-    }
+     if (['INFO BRIEF', 'ISSUE BRIEF'].includes(category)) {
+       return 'Open document';
+     }
+     return 'See More';
   }
 
   constructor(props) {
