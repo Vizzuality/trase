@@ -68,6 +68,7 @@
     "classnames": "^2.2.5",
     "d3": "^4.12.0",
     "d3-geo-projection": "^2.3.2",
+    "d3-plugins-sankey": "^1.2.1",
     "dotenv": "^4.0.0",
     "downshift": "^1.22.5",
     "find-parent": "^2.0.2",

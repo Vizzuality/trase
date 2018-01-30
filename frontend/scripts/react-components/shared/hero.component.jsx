@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import TwitterFeed from 'react-components/home/twitter-feed.component';
+import AnimatedFlows from 'react-components/animated-flows/animated-flows.component';
 
 // old school name: https://en.wikipedia.org/wiki/Hero_image
 class Hero extends React.Component {
@@ -57,6 +58,7 @@ class Hero extends React.Component {
           </div>
           }
         </div>
+        <AnimatedFlows />
       </div>
     );
   }

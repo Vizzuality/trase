@@ -13,6 +13,10 @@
     }
   }
 
+  .hero-content {
+    z-index: $z-above;
+  }
+
   .hero-logo-container {
     width: 210px;
     margin: 0 0 32px;
