@@ -2,7 +2,12 @@ module Api
   module V3
     class Qual < BlueTable
       has_one :qual_property
+
       delegate :display_name, to: :qual_property
+
+      def self.select_options
+        all.map { |qual| [qual.name, qual.id] }
+      end
 
       def self.import_key
         [
