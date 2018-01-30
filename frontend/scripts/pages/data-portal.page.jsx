@@ -9,7 +9,7 @@ import 'styles/components/shared/modal.scss';
 import { render, unmountComponentAtNode } from 'react-dom';
 import React from 'react';
 import { Provider } from 'react-redux';
-import Nav from 'react-components/shared/nav/nav.container';
+import TopNavBar from 'react-components/shared/nav/top-nav-bar.container';
 import Footer from 'react-components/shared/footer.component';
 
 import DataPortalPage from 'react-components/data-portal/data-portal-page.container';
@@ -21,7 +21,7 @@ export const mount = (root, store) => {
 
   render(
     <Provider store={store}>
-      <Nav />
+      <TopNavBar />
     </Provider>,
     document.getElementById('nav')
   );

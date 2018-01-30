@@ -4,8 +4,8 @@ import 'styles/components/shared/search.scss';
 import 'styles/components/shared/autocomplete.scss';
 import Downshift from 'downshift';
 import deburr from 'lodash/deburr';
-import NodeTitleGroup from 'containers/shared/node-title-group-react.container';
-import SearchResult from 'react-components/shared/search-result.component';
+import NodeTitleGroup from 'react-components/shared/search/node-title-group.container';
+import SearchResult from 'react-components/shared/search/search-result.component';
 import PropTypes from 'prop-types';
 
 export default class Search extends Component {

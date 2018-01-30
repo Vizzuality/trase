@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import throttle from 'lodash/throttle';
-import NavLinksList from 'react-components/shared/nav-links-list.component';
+import NavLinksList from 'react-components/shared/nav/nav-links-list.component';
 
-class Nav extends React.PureComponent {
+class TopNavBar extends React.PureComponent {
   static getDownloadPdfLink() {
     const pageTitle = encodeURIComponent(document.getElementsByTagName('title')[0].innerText);
     const currentUrlBase = NODE_ENV_DEV
@@ -41,7 +41,7 @@ class Nav extends React.PureComponent {
   }
 
   render() {
-    const { className, printable, links, showLogo } = this.props;
+    const { printable, links, showLogo } = this.props;
     const { backgroundVisible } = this.state;
     const decoratedLinks = showLogo && [
       {
@@ -54,7 +54,7 @@ class Nav extends React.PureComponent {
       ...links
     ];
     return (
-      <div className={cx('c-nav', { '-has-background': backgroundVisible }, className)}>
+      <div className={cx('c-nav', { '-has-background': backgroundVisible })}>
         <div className="row align-justify">
           <div className="column medium-8">
             <NavLinksList
@@ -69,7 +69,7 @@ class Nav extends React.PureComponent {
             {printable &&
               <ul className="main-nav-item-list">
                 <li className="main-nav-item">
-                  <a href={Nav.getDownloadPdfLink()} target="_blank" rel="noopener noreferrer">
+                  <a href={TopNavBar.getDownloadPdfLink()} target="_blank" rel="noopener noreferrer">
                     <svg className="icon icon-download-pdf">
                       <use xlinkHref="#icon-download-pdf" />
                     </svg>
@@ -84,16 +84,15 @@ class Nav extends React.PureComponent {
   }
 }
 
-Nav.propTypes = {
-  className: PropTypes.string,
+TopNavBar.propTypes = {
   pageOffset: PropTypes.number,
   printable: PropTypes.bool,
   links: PropTypes.array,
   showLogo: PropTypes.bool
 };
 
-Nav.defaultProps = {
+TopNavBar.defaultProps = {
   pageOffset: 0
 };
 
-export default Nav;
+export default TopNavBar;

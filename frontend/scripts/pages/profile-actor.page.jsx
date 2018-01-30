@@ -7,7 +7,7 @@ import 'styles/profile-actor.scss';
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
-import Nav from 'react-components/shared/nav/nav.container';
+import TopNavBar from 'react-components/shared/nav/top-nav-bar.container';
 import Footer from 'react-components/shared/footer.component';
 
 import Dropdown from 'react-components/shared/dropdown.component';
@@ -481,7 +481,7 @@ export const mount = (root, store) => {
 
   render(
     <Provider store={store}>
-      <Nav />
+      <TopNavBar />
     </Provider>,
     document.getElementById('nav')
   );
