@@ -1,4 +1,4 @@
-shared_context 'api v3 brazil resize by' do
+shared_context 'api v3 brazil resize by attributes' do
   include_context 'api v3 brazil contexts'
   include_context 'api v3 quants'
 

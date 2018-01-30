@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Get contexts', type: :request do
   include_context 'api v3 brazil soy nodes'
   include_context 'api v3 brazil download attributes'
-  include_context 'api v3 brazil resize by'
+  include_context 'api v3 brazil resize by attributes'
   include_context 'api v3 brazil recolor by attributes'
 
   describe 'GET /api/v3/contexts' do
