@@ -3,7 +3,7 @@ import { createReducer } from 'store';
 import {
   SET_PROFILE_SEARCH_ERROR_MESSAGE,
   SET_PROFILE_SEARCH_NODES
-} from 'react-components/profile-search/profile-search.actions';
+} from 'react-components/profile-root/profile-root.actions';
 
 const initialState = {
   nodes: [],

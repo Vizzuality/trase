@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
-import ProfileSearchResult from 'react-components/profile-search/profile-search-result.component';
+import ProfileSearchResult from 'react-components/profile-root/profile-search-result.component';
 
 class ProfileSearchBox extends Component {
   constructor(props) {
@@ -15,18 +15,10 @@ class ProfileSearchBox extends Component {
     this.props.onNodeSelected(selectedItem);
   }
 
-  renderSearchBox({
-    getInputProps,
-    getItemProps,
-    isOpen,
-    inputValue
-  }) {
-    const visibleResults = this.props.nodes
-      .filter(
-        item =>
-          inputValue.length > 1 && item.name.toLowerCase()
-            .includes(inputValue.toLowerCase())
-      );
+  renderSearchBox({ getInputProps, getItemProps, isOpen, inputValue }) {
+    const visibleResults = this.props.nodes.filter(
+      item => inputValue.length > 1 && item.name.toLowerCase().includes(inputValue.toLowerCase())
+    );
     return (
       <div className="c-search">
         <label htmlFor="search-input">Search for</label>
@@ -35,18 +27,21 @@ class ProfileSearchBox extends Component {
           className="search-input"
           id="search-input"
         />
-        {isOpen && visibleResults.length > 1 &&
-        <ul>
-          {visibleResults.slice(0, 10).map(item => (
-            <ProfileSearchResult
-              key={item.id}
-              item={item}
-              searchString={inputValue}
-              itemProps={getItemProps({ item })}
-            />
-          ))}
-        </ul>
-        }
+        {isOpen &&
+          visibleResults.length > 1 && (
+            <ul>
+              {visibleResults
+                .slice(0, 10)
+                .map(item => (
+                  <ProfileSearchResult
+                    key={item.id}
+                    item={item}
+                    searchString={inputValue}
+                    itemProps={getItemProps({ item })}
+                  />
+                ))}
+            </ul>
+          )}
         <svg className="icon icon-search">
           <use xlinkHref="#icon-search" />
         </svg>
@@ -66,7 +61,6 @@ class ProfileSearchBox extends Component {
     );
   }
 }
-
 
 ProfileSearchBox.propTypes = {
   nodes: PropTypes.array.isRequired,

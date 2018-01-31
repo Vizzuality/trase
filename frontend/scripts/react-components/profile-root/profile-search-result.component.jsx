@@ -11,10 +11,8 @@ class ProfileSearchResult extends Component {
   render() {
     const { item, itemProps, searchString } = this.props;
     return (
-      <li
-        {...itemProps}
-      >
-        <span className="node-type" >{item.type}</span>
+      <li {...itemProps}>
+        <span className="node-type">{item.type}</span>
         <span
           className="node-name"
           dangerouslySetInnerHTML={{ __html: this.getHighlightedString(searchString, item.name) }}
@@ -23,7 +21,6 @@ class ProfileSearchResult extends Component {
     );
   }
 }
-
 
 ProfileSearchResult.propTypes = {
   itemProps: PropTypes.object.isRequired,

@@ -1,10 +1,5 @@
-@import '../settings';
 
-.l-profiles {
-  position: relative;
-  min-height: 100vh;
-  padding: 64px 0 96px;
-  background-color: $egg-shell;
+.c-profile-root {
 
   .profiles-veil {
     position: absolute;
@@ -14,16 +9,11 @@
     background-color: rgba($egg-shell, .7);
   }
 
-  &.-error {
-    position: relative;
-    min-height: calc(100vh - #{$nav-height});
-
-    .c-error-message {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
+  .c-error-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   .container {
