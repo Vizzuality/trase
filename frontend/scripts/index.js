@@ -7,7 +7,7 @@ import * as appReducers from './store';
 
 if (
   process.env.NODE_ENV !== 'production' &&
-  process.env.PERF_TEST
+  PERF_TEST
 ) {
   import('react')
     .then((React) => {
