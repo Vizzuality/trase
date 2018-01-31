@@ -2,19 +2,13 @@
 @import '../../mixins';
 
 .c-search {
-  font-family: $font-family-1;
-  position: relative;
-  flex-direction: column;
-  align-items: flex-start;
-  height: auto;
-  color: #34444c;
-  background-color: transparent;
-
-  > label {
-    width: auto;
-    margin: 0 0 0 12px;
-    font-size: $font-size-medium;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: $nav-height;
+  background-color: $white;
+  z-index: $z-search;
 
   > .icon-search {
     position: absolute;
@@ -24,85 +18,84 @@
     margin: auto;
     width: 21px;
     height: 22px;
-
-    top: auto;
-    bottom: 15px;
-    width: 20px;
-    height: 20px;
-    transform: translate(0, 0);
-    fill: $medium-pink;
-
   }
 
-  > input {
-    height: 52px;
-    padding: 12px 10px 6px;
-    font-size: $font-size-medium;
-    border-radius: 4px;
-    box-shadow: none;
+  .awesomplete {
+    width: 100%;
+    height: 100%;
     position: relative;
-    width: 100%;
-    background: none;
-    font-family: $font-family-1;
-    letter-spacing: -1px;
-    color: $charcoal-grey;
-    outline: none;
-    z-index: $z-above;
-    border: 1px solid $medium-pink;
-    margin: 8px 0 0;
-  }
 
-  > ul {
-    width: 100%;
-    background: $white;
-    border: 1px solid rgba($black, .3);
-    position: absolute;
-    border-radius: 0;
-    margin: 0;
-    box-shadow: none;
-    text-shadow: none;
-    transition: none;
-    overflow-y: auto;
-    max-height: 345px;
-
-
-    > li {
+    > input {
       position: relative;
-      padding: 14px 15px;
-      cursor: pointer;
-      border-bottom: solid 1px #dbe0e5;
+      width: 100%;
+      height: 100%;
+      padding: 2px 15px 0 15px;
+      background: none;
+      font-family: $font-family-1;
+      font-size: $font-size-medium;
+      letter-spacing: -1px;
+      color: $charcoal-grey;
+      outline: none;
+      box-shadow: 0 10px 20px 0 rgba($charcoal-grey, 0.2);
+      border-radius: 0;
+      z-index: $z-above;
+    }
 
-      > .node-name {
-        position: relative;
-        left: -1px;
-        font-family: $font-family-1;
-        font-size: 17px;
-        letter-spacing: -0.5px;
-        color: $charcoal-grey;
-        text-transform: uppercase;
-      }
+    > ul {
+      position: absolute;
+      min-height: 80%;
+      border-radius: 0;
+      margin: 0;
+      background: #f8f8f8;
+      border: 0;
+      box-shadow: none;
+      text-shadow: none;
+      transition: none;
+      overflow-y: auto;
+      max-height: 345px;
 
-      > .node-type {
-        @include smallcaps;
-        display: block;
+      &:before {
+        display: none;
       }
     }
   }
 
-  ul > li:hover, ul > li[aria-selected='true'] {
+  .awesomplete > ul > li {
+    position: relative;
+    padding: 14px 15px;
+    cursor: pointer;
+    border-bottom: solid 1px #dbe0e5;
+
+    > .node-name {
+      position: relative;
+      left: -1px;
+      font-family: $font-family-1;
+      font-size: 17px;
+      letter-spacing: -0.5px;
+      color: $charcoal-grey;
+      text-transform: uppercase;
+    }
+
+    > .node-type {
+      @include smallcaps;
+      display: block;
+    }
+  }
+
+  .awesomplete > ul > li:hover, .awesomplete > ul > li[aria-selected='true'] {
     background: $egg-shell;
     color: $charcoal-grey;
   }
 
-  ul > li[aria-selected='true'] {
+  .awesomplete > ul > li[aria-selected='true'] {
     border: 1px solid $charcoal-grey-faded;
   }
 
-  mark {
+  .awesomplete mark {
     background: $egg-shell;
   }
 
-  li:hover mark, ul > li[aria-selected='true'] mark {
+  .awesomplete li:hover mark, .awesomplete > ul > li[aria-selected='true'] mark {
     background: $egg-shell;
   }
 
