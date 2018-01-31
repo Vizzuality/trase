@@ -15,31 +15,29 @@ function Nav({ tooltips, selectedContext }) {
   const hasFilters = selectedContext.filterBy && selectedContext.filterBy.length > 0;
 
   return (
-    <nav >
-      <div className="left-side" >
-        <div className="nav-item -no-offset" >
-          <div className="offset-container js-logo" >
-            <a className="trase-logo" href="/" >
+    <nav>
+      <div className="left-side">
+        <div className="nav-item -no-offset">
+          <div className="offset-container js-logo">
+            <a className="trase-logo" href="/">
               <img src="images/logos/logo-trase-small-beta.svg" alt="TRASE" />
-            </a >
-          </div >
-        </div >
+            </a>
+          </div>
+        </div>
 
         <ContextSelector />
 
-        {hasFilters === true &&
-        <Filters />
-        }
+        {hasFilters === true && <Filters />}
 
         <Years />
-      </div >
+      </div>
 
-      <div className="right-side" >
+      <div className="right-side">
         <ResizeBy />
         <RecolorBy />
         <View />
-      </div >
-    </nav >
+      </div>
+    </nav>
   );
 }
 

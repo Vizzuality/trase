@@ -1,16 +1,16 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import 'styles/components/shared/search.scss';
-import 'styles/components/shared/autocomplete.scss';
+import 'styles/components/shared/tool-search.scss';
+import 'styles/components/shared/tool-search-result.scss';
 import Downshift from 'downshift';
 import deburr from 'lodash/deburr';
-import NodeTitleGroup from 'react-components/shared/search/node-title-group.container';
-import SearchResult from 'react-components/shared/search/search-result.component';
+import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group.container';
+import SearchResult from 'react-components/tool/tool-search/tool-search-result.component';
 import PropTypes from 'prop-types';
 
 export default class Search extends Component {
   static getNodeIds(selectedItem) {
-    const parts = (`${selectedItem.id}`).split('_');
+    const parts = `${selectedItem.id}`.split('_');
     if (parts.length > 1) {
       return [parseInt(parts[0], 10), parseInt(parts[1], 10)];
     }
@@ -19,7 +19,7 @@ export default class Search extends Component {
 
   static isValidChar(key) {
     const deburredKey = deburr(key);
-    return (/^([a-z]|[A-Z]){1}$/.test(deburredKey));
+    return /^([a-z]|[A-Z]){1}$/.test(deburredKey);
   }
 
   constructor(props) {
@@ -50,9 +50,12 @@ export default class Search extends Component {
 
   onOpenClicked(e) {
     if (e) e.stopPropagation();
-    this.setState({
-      isOpened: true
-    }, () => ((this.input && !this.input.focused) && this.input.focus()));
+    this.setState(
+      {
+        isOpened: true
+      },
+      () => this.input && !this.input.focused && this.input.focus()
+    );
   }
 
   onCloseClicked(e) {
@@ -109,7 +112,6 @@ export default class Search extends Component {
     this.input = el;
   }
 
-
   isNodeSelected(node) {
     return [node, node.exporter, node.importer]
       .filter(n => !!n)
@@ -127,70 +129,67 @@ export default class Search extends Component {
     const { nodes = [], selectedNodesIds = [] } = this.props;
     if (this.state.isOpened === false) {
       return (
-        <div onClick={this.onOpenClicked} className="nav-item" >
-          <svg className="icon icon-search" >
+        <div onClick={this.onOpenClicked} className="nav-item">
+          <svg className="icon icon-search">
             <use xlinkHref="#icon-search" />
-          </svg >
-        </div >);
+          </svg>
+        </div>
+      );
     }
 
     return (
-      <div className="c-search" >
-        <svg className="icon icon-search" >
+      <div className="c-tool-search">
+        <svg className="icon icon-search">
           <use xlinkHref="#icon-search" />
-        </svg >
+        </svg>
         <div className="c-search__veil" onClick={this.onCloseClicked} />
-        <div className="autocomplete" >
+        <div className="tool-search-wrapper">
           <Downshift
             itemToString={i => (i === null ? '' : i.name)}
             onSelect={this.onSelected}
             ref={this.getDownshiftRef}
           >
-            {({
-              getInputProps,
-              getItemProps,
-              isOpen,
-              inputValue,
-              highlightedIndex
-            }) => (
-              <div className="autocomplete-container" onClick={e => e.stopPropagation()} >
-                <div className="autocomplete-bar" >
-                  <div
-                    style={{ overflow: selectedNodesIds.length > 3 ? 'auto' : 'inherit' }}
-                  >
+            {({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => (
+              <div className="tool-search-container" onClick={e => e.stopPropagation()}>
+                <div className="tool-search-bar">
+                  <div style={{ overflow: selectedNodesIds.length > 3 ? 'auto' : 'inherit' }}>
                     <NodeTitleGroup />
                   </div>
                   <input
-                    {...getInputProps({ placeholder: 'Search a producer, trader or country of import' })}
+                    {...getInputProps({
+                      placeholder: 'Search a producer, trader or country of import'
+                    })}
                     ref={this.getInputRef}
+                    className="tool-search-bar-input"
                   />
-                </div >
-                {isOpen &&
-                  <div className="suggestions" >
-                    {
-                      nodes.filter(i => !inputValue || i.name.toLowerCase().includes(inputValue.toLowerCase()))
-                        .slice(0, 10)
-                        .map((item, row) => (
-                          <SearchResult
-                            key={item.id + item.type}
-                            value={inputValue}
-                            isHighlighted={row === highlightedIndex}
-                            item={item}
-                            itemProps={getItemProps({ item })}
-                            selected={this.isNodeSelected(item)}
-                            onClickNavigate={this.navigateToActor}
-                            onClickAdd={this.onAddNode}
-                          />
-                        ))
-                    }
+                </div>
+                {isOpen && (
+                  <div className="tool-search-results">
+                    {nodes
+                      .filter(
+                        i => !inputValue || i.name.toLowerCase().includes(inputValue.toLowerCase())
+                      )
+                      .slice(0, 10)
+                      .map((item, row) => (
+                        <SearchResult
+                          key={item.id + item.type}
+                          value={inputValue}
+                          isHighlighted={row === highlightedIndex}
+                          item={item}
+                          itemProps={getItemProps({ item })}
+                          selected={this.isNodeSelected(item)}
+                          onClickNavigate={this.navigateToActor}
+                          onClickAdd={this.onAddNode}
+                        />
+                      ))}
                   </div>
-                }
+                )}
               </div>
-            )
-            }
+            )}
           </Downshift>
         </div>
-      </div>);
+      </div>
+    );
   }
 }
 
@@ -201,4 +200,3 @@ Search.propTypes = {
   onAddNode: PropTypes.func,
   onRemoveNode: PropTypes.func
 };
-

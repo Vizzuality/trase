@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import groupBy from 'lodash/groupBy';
 import flatten from 'lodash/flatten';
 import camelcase from 'lodash/camelCase';
-import Search from 'react-components/shared/search/search.component';
+import Search from 'react-components/tool/tool-search/tool-search.component';
 import { selectExpandedNode, selectNode } from 'actions/tool.actions';
 import isNodeColumnVisible from 'utils/isNodeColumnVisible';
 
@@ -16,32 +16,32 @@ const getNode = (nodes, selectedColumnsIds, nodesDict) => {
       isNodeColumnVisible(nodesDict[nA.id], selectedColumnsIds) &&
       isNodeColumnVisible(nodesDict[nB.id], selectedColumnsIds)
     ) {
-      return ({
+      return {
         id: `${nA.id}_${nB.id}`,
         name: nA.name,
         type: `${nA.type} & ${nB.type}`,
         profileType: `${nA.type} & ${nB.type}`,
         [nA.type.toLowerCase()]: nA,
         [nB.type.toLowerCase()]: nB
-      });
+      };
     }
     return nodes;
   }
   return nA;
 };
 
-const mapStateToProps = (state) => {
-  const {
-    nodes, selectedNodesIds, selectedColumnsIds, nodesDict
-  } = state.tool;
+const mapStateToProps = state => {
+  const { nodes, selectedNodesIds, selectedColumnsIds, nodesDict } = state.tool;
   // store nodes at container level to avoid rerendering when filtering... for want of a better solution
   if (nodes !== undefined && (!searchNodes || nodes.length !== searchNodes.length)) {
-    const allNodes = nodes.filter(node =>
-      node.hasFlows === true
-      && node.isAggregated !== true
-      && node.isUnknown !== true);
-    searchNodes = flatten(Object.values(groupBy(allNodes, 'mainNodeId'))
-      .map(groupedNodes => getNode(groupedNodes, selectedColumnsIds, nodesDict)));
+    const allNodes = nodes.filter(
+      node => node.hasFlows === true && node.isAggregated !== true && node.isUnknown !== true
+    );
+    searchNodes = flatten(
+      Object.values(groupBy(allNodes, 'mainNodeId')).map(groupedNodes =>
+        getNode(groupedNodes, selectedColumnsIds, nodesDict)
+      )
+    );
   }
 
   return {
@@ -50,19 +50,17 @@ const mapStateToProps = (state) => {
   };
 };
 
-
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({
-    onAddNode: nodeId => selectExpandedNode(nodeId),
-    onRemoveNode: nodeId => selectNode(nodeId),
-    navigateToActor: (profileType, nodeId) => ({
-      type: camelcase(`profile-${profileType}`),
-      payload: { query: { nodeId } }
-    })
-  }, dispatch);
+  bindActionCreators(
+    {
+      onAddNode: nodeId => selectExpandedNode(nodeId),
+      onRemoveNode: nodeId => selectNode(nodeId),
+      navigateToActor: (profileType, nodeId) => ({
+        type: camelcase(`profile-${profileType}`),
+        payload: { query: { nodeId } }
+      })
+    },
+    dispatch
+  );
 
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Search);
+export default connect(mapStateToProps, mapDispatchToProps)(Search);
