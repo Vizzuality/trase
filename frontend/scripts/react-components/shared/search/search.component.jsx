@@ -159,7 +159,7 @@ export default class Search extends Component {
                     style={{ overflow: selectedNodesIds.length > 3 ? 'auto' : 'inherit' }}
                   >
                     <NodeTitleGroup />
-                  </div >
+                  </div>
                   <input
                     {...getInputProps({ placeholder: 'Search a producer, trader or country of import' })}
                     ref={this.getInputRef}
@@ -172,7 +172,7 @@ export default class Search extends Component {
                         .slice(0, 10)
                         .map((item, row) => (
                           <SearchResult
-                            key={item.id}
+                            key={item.id + item.type}
                             value={inputValue}
                             isHighlighted={row === highlightedIndex}
                             item={item}
@@ -183,14 +183,14 @@ export default class Search extends Component {
                           />
                         ))
                     }
-                  </div >
+                  </div>
                 }
-              </div >
+              </div>
             )
             }
-          </Downshift >
-        </div >
-      </div >);
+          </Downshift>
+        </div>
+      </div>);
   }
 }
 

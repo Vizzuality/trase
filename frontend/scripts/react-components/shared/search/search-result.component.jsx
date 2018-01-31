@@ -13,7 +13,9 @@ export default class SearchResult extends Component {
     })
       .map((chunk) => {
         const segmentStr = name.substr(chunk.start, chunk.end - chunk.start);
-        return (chunk.highlight) ? <mark >{segmentStr}</mark > : <span >{segmentStr}</span >;
+        return (chunk.highlight)
+          ? <mark key={`marked_${segmentStr}_${name}`}>{segmentStr}</mark>
+          : <span key={`clean${segmentStr}_${name}`}>{segmentStr}</span>;
       });
   }
 
@@ -28,31 +30,31 @@ export default class SearchResult extends Component {
         {...itemProps}
         className={cx('suggestion', { '-highlighted': isHighlighted })}
       >
-        <div className="node-text-container" >
-          <span className="node-type" >{item.type}</span >
-          <span className="node-name" >
+        <div className="node-text-container">
+          <span className="node-type">{item.type}</span>
+          <span className="node-name">
             {nameSegments}
-          </span >
-        </div >
-        <div className="node-actions-container" >
+          </span>
+        </div>
+        <div className="node-actions-container">
           <button
             onClick={e => onClickAdd(e, item)}
             className="c-button -medium-large"
             disabled={selected}
           >
             {selected ? 'Already in' : 'Add to'} supply chain
-          </button >
+          </button>
           {
             item.profileType && item.type.split(' & ')
-              .map((type, key) => (
+              .map(type => (
                 <button
-                  key={key}
+                  key={item.name + type}
                   role="link"
                   className="c-button -medium-large"
                   onClick={e => onClickNavigate(e, item, type)}
                 >
                   See {type} profile
-                </button >
+                </button>
               ))
           }
         </div >
