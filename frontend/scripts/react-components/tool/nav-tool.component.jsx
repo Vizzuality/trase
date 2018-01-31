@@ -6,9 +6,10 @@ import ResizeBy from 'containers/tool/nav/resize-by.container';
 import RecolorBy from 'containers/tool/nav/recolor-by.container';
 import View from 'containers/tool/nav/view.container';
 import PropTypes from 'prop-types';
+import isEmpty from 'lodash/isEmpty';
 
 function Nav({ tooltips, selectedContext }) {
-  if (tooltips === undefined || selectedContext === undefined) {
+  if (isEmpty(tooltips) || isEmpty(selectedContext)) {
     return null;
   }
 

@@ -1,6 +1,6 @@
 import L from 'leaflet';
-import _ from 'lodash';
-// import 'leaflet.utfgrid';
+import isNumber from 'lodash/isNumber';
+import isEmpty from 'lodash/isEmpty';
 // eslint-disable-next-line camelcase
 import turf_bbox from '@turf/bbox';
 import { BASEMAPS, CARTO_BASE_URL, MAP_PANES, MAP_PANES_Z } from 'constants';
@@ -57,10 +57,14 @@ export default class {
   }
 
   setMapView(mapView) {
+    if (isEmpty(mapView)) return;
+
     this.map.setView([mapView.latitude, mapView.longitude], mapView.zoom);
   }
 
   setBasemap(basemapId) {
+    if (isEmpty(basemapId)) return;
+
     if (this.basemap) {
       this.map.removeLayer(this.basemap);
     }
@@ -86,6 +90,8 @@ export default class {
     mapVectorData, currentPolygonType, selectedNodesGeoIds, choropleth, linkedGeoIds, defaultMapView
   }) {
     this.polygonTypesLayers = {};
+
+    if (!mapVectorData) return;
 
     // create geometry layers for all polygonTypes that have their own geometry
     Object.keys(mapVectorData).forEach((polygonTypeId) => {
@@ -227,7 +233,7 @@ export default class {
       this.contextLayers.push(contextLayer);
       this.map.addLayer(contextLayer);
 
-      if (_.isNumber(layerData.forceZoom)) {
+      if (isNumber(layerData.forceZoom)) {
         forceZoom = Math.max(layerData.forceZoom, forceZoom);
       }
     });

@@ -2,9 +2,10 @@ import React from 'react';
 import ColumnSelector from 'react-components/tool/column-selector.container';
 import 'styles/components/tool/columns-selector.scss';
 import PropTypes from 'prop-types';
+import isEmpty from 'lodash/isEmpty';
 
 export default function columnsSelector({ sankeySize, columns }) {
-  if (sankeySize === undefined || columns === undefined) {
+  if (isEmpty(sankeySize) || isEmpty(columns)) {
     return null;
   }
 

@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
+import keyBy from 'lodash/keyBy';
+import groupBy from 'lodash/groupBy';
 import actions from 'actions';
 import getNodesDict from './helpers/getNodesDict';
 import getVisibleNodes from './helpers/getVisibleNodes';
@@ -17,14 +20,58 @@ import getRecolorGroups from './helpers/getRecolorGroups';
 import { getMapDimensionsWarnings } from './helpers/getMapDimensionsWarnings';
 
 const initialState = {
-  selectedNodesIds: [],
-  expandedNodesIds: [],
   areNodesExpanded: false,
+  choropleth: {},
+  choroplethLegend: null,
+  columns: [],
+  contexts: [],
+  currentHighlightedChoroplethBucket: null,
+  currentQuant: null,
   detailedView: false,
-  selectedNodesData: [],
-  selectedMapContextualLayers: null,
+  expandedMapSidebarGroupsIds: [],
+  expandedNodesIds: [],
+  forcedOverview: false,
+  geoIdsDict: [],
+  highlightedGeoIds: [],
+  highlightedNodeCoordinates: [],
+  highlightedNodeData: [],
+  highlightedNodesIds: [],
+  initialDataLoading: false,
   isMapVisible: false,
-  expandedMapSidebarGroupsIds: []
+  linkedGeoIds: [],
+  links: [],
+  linksLoading: false,
+  mapContextualLayers: [],
+  mapDimensions: [],
+  mapDimensionsGroups: [],
+  mapVectorData: null,
+  mapView: null,
+  nodes: [],
+  nodesColoredAtColumn: null,
+  nodesColoredBySelection: null,
+  nodesDict: null,
+  nodesDictWithMeta: [],
+  recolorByNodeIds: [],
+  recolorGroups: [],
+  selectedBiomeFilter: { value: 'none' },
+  selectedColumnsIds: [],
+  selectedContext: null,
+  selectedContextId: null,
+  selectedMapBasemap: null,
+  selectedMapContextualLayers: null,
+  selectedMapDimensions: [null, null],
+  selectedMapDimensionsWarnings: null,
+  selectedNodesColumnsPos: [],
+  selectedNodesData: [],
+  selectedNodesGeoIds: [],
+  selectedNodesIds: [],
+  selectedRecolorBy: { type: 'none', name: 'none' },
+  selectedResizeBy: { type: 'none', name: 'none' },
+  selectedYears: [],
+  unmergedLinks: [],
+  visibleColumns: [],
+  visibleNodes: [],
+  visibleNodesByColumn: []
 };
 
 export default function (state = initialState, action) {
@@ -95,7 +142,7 @@ export default function (state = initialState, action) {
       }
 
       // force state updates on the component
-      const selectedYears = (state.selectedYears)
+      const selectedYears = (!isEmpty(state.selectedYears))
         ? Object.assign([], state.selectedYears)
         : [selectedContext.defaultYear, selectedContext.defaultYear];
       const mapView = (state.mapView) ? Object.assign({}, state.mapView) : selectedContext.map;
@@ -147,7 +194,7 @@ export default function (state = initialState, action) {
       const columns = JSON.parse(action.payload[1]).data;
 
       // context-dependant columns
-      const columnsByGroupObj = _.groupBy(columns, 'group');
+      const columnsByGroupObj = groupBy(columns, 'group');
       const columnsByGroup = [0, 0, 0, 0].map((e, i) => columnsByGroupObj[i]);
 
       const selectedColumnsIds = [];
@@ -248,7 +295,7 @@ export default function (state = initialState, action) {
       const linkedGeoIds = (action.payload && action.payload.nodes && action.payload.nodes.length)
         ? action.payload.nodes.map(node => node.geoId)
         : [];
-      if (_.isEqual(linkedGeoIds, state.linkedGeoIds)) {
+      if (isEqual(linkedGeoIds, state.linkedGeoIds)) {
         newState = state;
         break;
       }
@@ -430,7 +477,7 @@ export default function (state = initialState, action) {
       break;
     }
     case actions.SELECT_CONTEXTUAL_LAYERS: {
-      const mapContextualLayersDict = _.keyBy(state.mapContextualLayers, 'id');
+      const mapContextualLayersDict = keyBy(state.mapContextualLayers, 'id');
       const selectedMapContextualLayersData =
         action.contextualLayers.map(layerSlug => Object.assign({}, mapContextualLayersDict[layerSlug]));
 
