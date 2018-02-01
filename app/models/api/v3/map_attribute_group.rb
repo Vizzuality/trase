@@ -20,7 +20,9 @@ module Api
       validates :position, presence: true, uniqueness: {scope: :context}
 
       def self.select_options
-        Api::V3::MapAttributeGroup.all.map do |group|
+        Api::V3::MapAttributeGroup.includes(
+          context: [:country, :commodity]
+        ).all.map do |group|
           [
             [
               group.context&.country&.name,

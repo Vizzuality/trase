@@ -13,7 +13,9 @@ module Api
       validates :is_default, inclusion: { in: [true, false] }
 
       def self.select_options
-        Api::V3::ContextualLayer.all.map do |layer|
+        Api::V3::ContextualLayer.includes(
+          context: [:country, :commodity]
+        ).all.map do |layer|
           [
             [
               layer.context&.country&.name,

@@ -11,7 +11,9 @@ module Api
       validates :column_position, presence: true
 
       def self.select_options
-        Api::V3::ContextNodeType.all.map do |ctx_nt|
+        Api::V3::ContextNodeType.includes(
+          context: [:country, :commodity]
+        ).all.map do |ctx_nt|
           [
             [
               ctx_nt.context&.country&.name,
