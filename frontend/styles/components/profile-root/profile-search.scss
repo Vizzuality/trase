@@ -1,3 +1,5 @@
+$search-breakpoint-medium: 798px;
+$search-breakpoint-large: 911px;
 .c-profile-search {
 
   .profile-search-bar {
@@ -6,8 +8,8 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 55px;
-    padding: 2px 20px 0;
+    height: 45px;
+    padding: 2px 8px 0;
     background-color: $white;
     box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2);
     z-index: $z-above;
@@ -16,6 +18,16 @@
       height: 20px;
       width: 20px;
       fill: $charcoal-grey;
+      flex: none;
+    }
+
+    @media only screen and (min-width: $search-breakpoint-medium) {
+      padding: 2px 15px 0;
+    }
+
+    @media only screen and (min-width: $search-breakpoint-large) {
+      padding: 2px 20px 0;
+      height: 55px;
     }
   }
 
@@ -24,11 +36,20 @@
     height: 18px;
     padding: 0 5px 0 0;
     font-family: $font-family-1;
-    font-size: 18px;
+    font-size: 12px;
     letter-spacing: -0.8px;
     text-align: left;
     color: $charcoal-grey;
     outline: none;
+    min-width: 0;
+
+    @media only screen and (min-width: $search-breakpoint-medium) {
+      font-size: 16px;
+    }
+
+    @media only screen and (min-width: $search-breakpoint-large) {
+      font-size: 18px;
+    }
   }
 
   .profile-search-results {

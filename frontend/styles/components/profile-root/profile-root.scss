@@ -22,10 +22,10 @@
       flex-shrink: 0;
 
       .title {
-        font-size: $font-size-big;
+        font-size: 24px;
 
         @media only screen and (min-width: $breakpoint-foundation-small) {
-          font-size: $font-size-huge;
+          font-size: 48px;
         }
       }
     }
