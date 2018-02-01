@@ -1110,6 +1110,20 @@ COMMENT ON COLUMN ind_properties.is_visible_on_actor_profile IS 'Whether to disp
 
 
 --
+-- Name: COLUMN ind_properties.is_temporal_on_place_profile; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN ind_properties.is_temporal_on_place_profile IS 'Whether attribute has temporal data on place profile';
+
+
+--
+-- Name: COLUMN ind_properties.is_temporal_on_actor_profile; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN ind_properties.is_temporal_on_actor_profile IS 'Whether attribute has temporal data on actor profile';
+
+
+--
 -- Name: inds; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -1427,7 +1441,14 @@ COMMENT ON COLUMN carto_layers.identifier IS 'Identifier of the CartoDB named ma
 -- Name: COLUMN carto_layers.years; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN carto_layers.years IS 'Array of years for which to show this carto layer in scope of contextual layer; NULL for all years';
+COMMENT ON COLUMN carto_layers.years IS 'Array of years for which to show this carto layer in scope of contextual layer; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN carto_layers.raster_url; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN carto_layers.raster_url IS 'Url of raster layer';
 
 
 --
@@ -1488,7 +1509,7 @@ COMMENT ON COLUMN chart_attributes."position" IS 'Display order in scope of char
 -- Name: COLUMN chart_attributes.years; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN chart_attributes.years IS 'Array of years for which to show this attribute in scope of chart; NULL for all years';
+COMMENT ON COLUMN chart_attributes.years IS 'Array of years for which to show this attribute in scope of chart; empty (NULL) for all years';
 
 
 --
@@ -1761,7 +1782,7 @@ CREATE TABLE context_node_type_properties (
 -- Name: COLUMN context_node_type_properties.column_group; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN context_node_type_properties.column_group IS 'Number of sankey column in which to display nodes of this type';
+COMMENT ON COLUMN context_node_type_properties.column_group IS 'Zero-based number of sankey column in which to display nodes of this type';
 
 
 --
@@ -1776,6 +1797,13 @@ COMMENT ON COLUMN context_node_type_properties.is_default IS 'When set, show thi
 --
 
 COMMENT ON COLUMN context_node_type_properties.is_geo_column IS 'When set, show nodes on map';
+
+
+--
+-- Name: COLUMN context_node_type_properties.is_choropleth_disabled; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN context_node_type_properties.is_choropleth_disabled IS 'When set, do not display the map choropleth';
 
 
 --
@@ -1938,7 +1966,7 @@ COMMENT ON TABLE contexts IS 'Country-commodity combinations.';
 -- Name: COLUMN contexts.years; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN contexts.years IS 'Years for which country-commodity data is present; NULL for all years';
+COMMENT ON COLUMN contexts.years IS 'Years for which country-commodity data is present; empty (NULL) for all years';
 
 
 --
@@ -2025,6 +2053,13 @@ COMMENT ON COLUMN contextual_layers.tooltip_text IS 'Tooltip text';
 --
 
 COMMENT ON COLUMN contextual_layers.is_default IS 'When set, show this layer by default';
+
+
+--
+-- Name: COLUMN contextual_layers.legend; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN contextual_layers.legend IS 'Legend as HTML snippet';
 
 
 --
@@ -2117,21 +2152,21 @@ CREATE TABLE country_properties (
 -- Name: COLUMN country_properties.latitude; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN country_properties.latitude IS 'TODO';
+COMMENT ON COLUMN country_properties.latitude IS 'Country latitide';
 
 
 --
 -- Name: COLUMN country_properties.longitude; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN country_properties.longitude IS 'TODO';
+COMMENT ON COLUMN country_properties.longitude IS 'Country longitude';
 
 
 --
 -- Name: COLUMN country_properties.zoom; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN country_properties.zoom IS 'TODO';
+COMMENT ON COLUMN country_properties.zoom IS 'Zoom level (0-18)';
 
 
 --
@@ -2248,14 +2283,14 @@ COMMENT ON COLUMN download_attributes."position" IS 'Display order in scope of c
 -- Name: COLUMN download_attributes.display_name; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN download_attributes.display_name IS 'Name of attribute for display';
+COMMENT ON COLUMN download_attributes.display_name IS 'Name of attribute for display in downloads';
 
 
 --
 -- Name: COLUMN download_attributes.years; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN download_attributes.years IS 'Years for which attribute is present; NULL for all years';
+COMMENT ON COLUMN download_attributes.years IS 'Years for which attribute is present; empty (NULL) for all years';
 
 
 --
@@ -3046,28 +3081,28 @@ COMMENT ON COLUMN map_attributes."position" IS 'Display order in scope of group'
 -- Name: COLUMN map_attributes.bucket_3; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes.bucket_3 IS 'TODO';
+COMMENT ON COLUMN map_attributes.bucket_3 IS 'Choropleth buckets';
 
 
 --
 -- Name: COLUMN map_attributes.bucket_5; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes.bucket_5 IS 'TODO';
+COMMENT ON COLUMN map_attributes.bucket_5 IS 'Choropleth buckets';
 
 
 --
 -- Name: COLUMN map_attributes.color_scale; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes.color_scale IS 'TODO';
+COMMENT ON COLUMN map_attributes.color_scale IS 'Choropleth colour scale, e.g. blue';
 
 
 --
 -- Name: COLUMN map_attributes.years; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes.years IS 'Years for which attribute is present; NULL for all years';
+COMMENT ON COLUMN map_attributes.years IS 'Years for which attribute is present; empty (NULL) for all years';
 
 
 --
@@ -3324,7 +3359,7 @@ COMMENT ON TABLE node_inds IS 'Values of inds for node';
 -- Name: COLUMN node_inds.year; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN node_inds.year IS 'Year; NULL for all years';
+COMMENT ON COLUMN node_inds.year IS 'Year; empty (NULL) for all years';
 
 
 --
@@ -3417,7 +3452,7 @@ COMMENT ON TABLE node_quals IS 'Values of quals for node';
 -- Name: COLUMN node_quals.year; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN node_quals.year IS 'Year; NULL for all years';
+COMMENT ON COLUMN node_quals.year IS 'Year; empty (NULL) for all years';
 
 
 --
@@ -3471,7 +3506,7 @@ COMMENT ON TABLE node_quants IS 'Values of quants for node';
 -- Name: COLUMN node_quants.year; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN node_quants.year IS 'Year; NULL for all years';
+COMMENT ON COLUMN node_quants.year IS 'Year; empty (NULL) for all years';
 
 
 --
@@ -3696,56 +3731,56 @@ COMMENT ON TABLE recolor_by_attributes IS 'Attributes (inds/quals) available for
 -- Name: COLUMN recolor_by_attributes.group_number; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.group_number IS 'TODO';
+COMMENT ON COLUMN recolor_by_attributes.group_number IS 'Group number';
 
 
 --
 -- Name: COLUMN recolor_by_attributes."position"; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes."position" IS 'Display order in scope of context';
+COMMENT ON COLUMN recolor_by_attributes."position" IS 'Display order in scope of context and group number';
 
 
 --
 -- Name: COLUMN recolor_by_attributes.legend_type; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.legend_type IS 'TODO';
+COMMENT ON COLUMN recolor_by_attributes.legend_type IS 'Type of legend, e.g. linear';
 
 
 --
 -- Name: COLUMN recolor_by_attributes.legend_color_theme; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.legend_color_theme IS 'TODO';
+COMMENT ON COLUMN recolor_by_attributes.legend_color_theme IS 'Color theme of legend, e.g. red-blue';
 
 
 --
 -- Name: COLUMN recolor_by_attributes.interval_count; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.interval_count IS 'TODO';
+COMMENT ON COLUMN recolor_by_attributes.interval_count IS 'For legends with min / max value, number of intervals of the legend';
 
 
 --
 -- Name: COLUMN recolor_by_attributes.min_value; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.min_value IS 'TODO';
+COMMENT ON COLUMN recolor_by_attributes.min_value IS 'Min value for the legend';
 
 
 --
 -- Name: COLUMN recolor_by_attributes.max_value; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.max_value IS 'TODO';
+COMMENT ON COLUMN recolor_by_attributes.max_value IS 'Max value for the legend';
 
 
 --
 -- Name: COLUMN recolor_by_attributes.divisor; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.divisor IS 'TODO';
+COMMENT ON COLUMN recolor_by_attributes.divisor IS 'For percentual legends the step between intervals';
 
 
 --
@@ -3759,7 +3794,7 @@ COMMENT ON COLUMN recolor_by_attributes.tooltip_text IS 'Tooltip text';
 -- Name: COLUMN recolor_by_attributes.years; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.years IS 'Array of years for which to show this attribute in scope of chart; NULL for all years';
+COMMENT ON COLUMN recolor_by_attributes.years IS 'Array of years for which to show this attribute in scope of chart; empty (NULL) for all years';
 
 
 --
@@ -3965,14 +4000,14 @@ COMMENT ON TABLE resize_by_attributes IS 'Attributes (quants) available for resi
 -- Name: COLUMN resize_by_attributes.group_number; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN resize_by_attributes.group_number IS 'TODO';
+COMMENT ON COLUMN resize_by_attributes.group_number IS 'Group number';
 
 
 --
 -- Name: COLUMN resize_by_attributes."position"; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN resize_by_attributes."position" IS 'Display order in scope of context';
+COMMENT ON COLUMN resize_by_attributes."position" IS 'Display order in scope of context and group number';
 
 
 --
@@ -3986,7 +4021,7 @@ COMMENT ON COLUMN resize_by_attributes.tooltip_text IS 'Tooltip text';
 -- Name: COLUMN resize_by_attributes.years; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN resize_by_attributes.years IS 'Array of years for which to show this attribute in scope of chart; NULL for all years';
+COMMENT ON COLUMN resize_by_attributes.years IS 'Array of years for which to show this attribute in scope of chart; empty (NULL) for all years';
 
 
 --
