@@ -2,6 +2,7 @@ module Api
   module V3
     class RecolorByAttribute < YellowTable
       include Api::V3::StringyArray
+      include Api::V3::AssociatedAttributes
 
       LEGEND_TYPE = [
         'qual',
@@ -19,8 +20,8 @@ module Api
         ].freeze
 
       belongs_to :context
-      has_many :recolor_by_inds
-      has_many :recolor_by_quals
+      has_one :recolor_by_ind, autosave: true
+      has_one :recolor_by_qual, autosave: true
 
       validates :context, presence: true
       validates :group_number, presence: true
@@ -29,8 +30,16 @@ module Api
       validates :legend_color_theme, presence: true, inclusion: { in: LEGEND_COLOR_THEME }
       validates :is_disabled, inclusion: { in: [true, false] }
       validates :is_default, inclusion: { in: [true, false] }
+      validates_with OneAssociatedAttributeValidator, {
+        attributes: [:recolor_by_ind, :recolor_by_qual]
+      }
+      validates_with AttributeAssociatedOnceValidator,
+        attribute: :recolor_by_ind, if: :new_recolor_by_ind_given?
+      validates_with AttributeAssociatedOnceValidator,
+        attribute: :recolor_by_qual, if: :new_recolor_by_qual_given?
 
       stringy_array :years
+      manage_associated_attributes [:recolor_by_ind, :recolor_by_qual]
 
       def self.blue_foreign_keys
         [

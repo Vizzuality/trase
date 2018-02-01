@@ -1,13 +1,21 @@
 ActiveAdmin.register Api::V3::MapAttribute, as: 'MapAttribute' do
   menu parent: 'Yellow Tables'
 
+  includes [
+    {map_attribute_group: {context: [:country, :commodity]}},
+    :map_ind,
+    :map_quant
+  ]
+
   permit_params :map_attribute_group_id, :position, :bucket_3_str,
                 :bucket_5_str, :color_scale, :years_str, :is_disabled,
-                :is_default
+                :is_default, :readonly_attribute_id
 
   form do |f|
     f.semantic_errors
     inputs do
+      input :readonly_attribute_id, as: :select, collection: Api::V3::Readonly::Attribute.
+        select_options
       input :map_attribute_group, as: :select, required: true,
         collection: Api::V3::MapAttributeGroup.select_options
       input :position, required: true
@@ -22,6 +30,7 @@ ActiveAdmin.register Api::V3::MapAttribute, as: 'MapAttribute' do
   end
 
   index do
+    column :readonly_attribute_name
     column('Country') { |attribute| attribute.map_attribute_group&.context&.country&.name }
     column('Commodity') { |attribute| attribute.map_attribute_group&.context&.commodity&.name }
     column('MapAttributeGroup') { |attribute| attribute.map_attribute_group&.name }
@@ -33,6 +42,15 @@ ActiveAdmin.register Api::V3::MapAttribute, as: 'MapAttribute' do
     column :is_disabled
     column :is_default
     actions
+  end
+
+  show do
+    attributes_table do
+      row :readonly_attribute_name
+      default_attribute_table_rows.each do |field|
+        row field
+      end
+    end
   end
 
   filter :map_attribute_group, collection: -> { Api::V3::MapAttributeGroup.
