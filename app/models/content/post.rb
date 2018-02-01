@@ -22,7 +22,7 @@ module Content
   class Post < Content::Base
     CATEGORIES = [
       'NEWS', 'BLOG', 'INSIGHT', 'INFO BRIEF', 'ISSUE BRIEF', 'LONGER READ'
-    ]
+    ].freeze
     validates :title, presence: true
     validates :date, presence: true
     validates :post_url, presence: true
