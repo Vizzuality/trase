@@ -4,9 +4,10 @@
     "es6": true,
     "node": true
   },
-  "plugins": ["react"],
-  "extends": ["airbnb", "plugin:prettier/recommended"],
+  "plugins": ["react", "prettier"],
+  "extends": ["airbnb", "prettier"],
   "rules": {
+    "prettier/prettier": "warn",
     "arrow-parens": 0,
     "jsx-a11y/label-has-for": [
       2,

@@ -19,19 +19,16 @@ export default function routeSubscriber(store) {
     }
 
     onRouteChange({ routesMap, type } = {}) {
-      const filename = routesMap[type];
+      const filename = routesMap[type].page;
       if (this.filename !== filename) {
         this.resetPage();
         this.filename = filename;
         // eslint-disable-next-line space-in-parens
-        import(
-          /* webpackChunkName: "[request]" */
-          `../pages/${this.filename.page}.page.jsx`
-        )
-          .then((page) => {
-            this.page = page;
-            this.page.mount(this.root, store);
-          });
+        import(/* webpackChunkName: "[request]" */
+          `../pages/${this.filename}.page.jsx`).then(page => {
+          this.page = page;
+          this.page.mount(this.root, store);
+        });
       }
     }
   }
