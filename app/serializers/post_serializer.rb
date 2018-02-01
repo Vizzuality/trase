@@ -16,11 +16,10 @@
 #  image_file_size    :integer
 #  image_updated_at   :datetime
 #  highlighted        :boolean          default(FALSE)
-#  title_color        :string
 #
 
 class PostSerializer < ActiveModel::Serializer
-  attributes :title, :title_color, :date, :highlighted, :complete_post_url,
+  attributes :title, :date, :highlighted, :complete_post_url,
              :category
 
   attribute :image_url do
