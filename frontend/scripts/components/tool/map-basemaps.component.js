@@ -9,19 +9,21 @@ export default class {
   buildBasemaps(basemaps) {
     this.el.innerHTML = BasemapsTemplate({ basemaps });
 
-    this.basemaps = Array.prototype.slice.call(this.el.querySelectorAll('.js-map-sidebar-group-item'), 0);
-    this.basemaps.forEach((basemap) => {
+    this.basemaps = Array.prototype.slice.call(
+      this.el.querySelectorAll('.js-map-sidebar-group-item'),
+      0
+    );
+    this.basemaps.forEach(basemap => {
       basemap.addEventListener('click', e => this._onBasemapClicked(e));
     });
   }
 
-  selectBasemap({ basemapId, disabled }) {
+  enableBasemapSelection(disabled = false) {
     this.el.classList.toggle('-disabled', disabled);
-    this._setActiveBasemap(basemapId);
   }
 
-  _setActiveBasemap(basemapId) {
-    this.basemaps.forEach((basemap) => {
+  selectBasemap(basemapId) {
+    this.basemaps.forEach(basemap => {
       basemap.classList.toggle('-selected', basemap.getAttribute('data-value') === basemapId);
     });
   }
