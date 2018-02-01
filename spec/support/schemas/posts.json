@@ -18,7 +18,6 @@
         "additionalProperties": false,
         "required": [
           "title",
-          "titleColor",
           "date",
           "imageUrl",
           "highlighted",
@@ -29,10 +28,6 @@
           "title": {
             "type": "string",
             "$id": "/properties/data/items/properties/title"
-          },
-          "titleColor": {
-            "type": "string",
-            "$id": "/properties/data/items/properties/titleColor"
           },
           "date": {
             "type": "string",

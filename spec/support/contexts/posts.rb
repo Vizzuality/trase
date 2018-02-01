@@ -3,7 +3,6 @@ shared_context 'posts' do
     FactoryBot.create(
       :post,
       title: 'Post 1 title',
-      title_color: '#000000',
       date: Time.now,
       highlighted: false,
       post_url: 'https://medium.com/trase/supporting-governments-to-help-eliminate-deforestation-from-international-commodity-trade-6a25348ae0c1',
@@ -14,7 +13,6 @@ shared_context 'posts' do
     FactoryBot.create(
       :post,
       title: 'Post 2 title',
-      title_color: '#000000',
       date: Time.now,
       highlighted: false,
       post_url: 'https://medium.com/trase/supporting-governments-to-help-eliminate-deforestation-from-international-commodity-trade-6a25348ae0c1',
@@ -25,7 +23,6 @@ shared_context 'posts' do
     FactoryBot.create(
       :post,
       title: 'Post 3 title',
-      title_color: '#000000',
       date: Time.now,
       highlighted: false,
       post_url: 'https://medium.com/trase/supporting-governments-to-help-eliminate-deforestation-from-international-commodity-trade-6a25348ae0c1',
