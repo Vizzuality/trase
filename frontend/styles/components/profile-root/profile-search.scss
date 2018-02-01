@@ -1,6 +1,7 @@
 .c-profile-search {
 
   .profile-search-bar {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -9,6 +10,7 @@
     padding: 2px 20px 0;
     background-color: $white;
     box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2);
+    z-index: $z-above;
 
     .icon-search {
       height: 20px;
@@ -27,5 +29,12 @@
     text-align: left;
     color: $charcoal-grey;
     outline: none;
+  }
+
+  .profile-search-results {
+    background: $white;
+    overflow-y: auto;
+    width: 100%;
+    max-height: 345px;
   }
 }

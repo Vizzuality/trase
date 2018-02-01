@@ -1,6 +1,7 @@
 /* eslint-disable react/no-danger */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
 class ProfileSearchResult extends Component {
   getHighlightedString(highlight, string) {
@@ -9,12 +10,15 @@ class ProfileSearchResult extends Component {
   }
 
   render() {
-    const { item, itemProps, searchString } = this.props;
+    const { item, itemProps, searchString, isHighlighted } = this.props;
     return (
-      <li {...itemProps}>
-        <span className="node-type">{item.type}</span>
+      <li
+        {...itemProps}
+        className={cx('c-profile-search-result', { '-highlighted': isHighlighted })}
+      >
+        <span className="profile-search-node-type">{item.type}</span>
         <span
-          className="node-name"
+          className="profile-search-node-name"
           dangerouslySetInnerHTML={{ __html: this.getHighlightedString(searchString, item.name) }}
         />
       </li>
@@ -25,7 +29,8 @@ class ProfileSearchResult extends Component {
 ProfileSearchResult.propTypes = {
   itemProps: PropTypes.object.isRequired,
   item: PropTypes.object.isRequired,
-  searchString: PropTypes.string.isRequired
+  searchString: PropTypes.string.isRequired,
+  isHighlighted: PropTypes.bool.isRequired
 };
 
 export default ProfileSearchResult;

@@ -15,7 +15,7 @@ class ProfileSearch extends Component {
     this.props.onNodeSelected(selectedItem);
   }
 
-  renderSearchBox({ getInputProps, getItemProps, isOpen, inputValue }) {
+  renderSearchBox({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) {
     const visibleResults = this.props.nodes.filter(
       item => inputValue.length > 1 && item.name.toLowerCase().includes(inputValue.toLowerCase())
     );
@@ -33,15 +33,16 @@ class ProfileSearch extends Component {
         </div>
         {isOpen &&
           visibleResults.length > 1 && (
-            <ul>
+            <ul className="profile-search-results">
               {visibleResults
                 .slice(0, 10)
-                .map(item => (
+                .map((item, row) => (
                   <ProfileSearchResult
                     key={item.id}
                     item={item}
                     searchString={inputValue}
                     itemProps={getItemProps({ item })}
+                    isHighlighted={row === highlightedIndex}
                   />
                 ))}
             </ul>
