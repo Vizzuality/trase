@@ -3,6 +3,18 @@ import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import ProfileSearchResult from 'react-components/profile-root/profile-search-result.component';
 
+/**
+ * Dear future developer,
+ * The implementation of this component is fairly similar to the one on the tool page,
+ * however (after exhaustive analysis) we decided against reusing the components.
+ * Why? We're using Downshift to implement the search, this already provides us with all basics and
+ * some other extra goooood stuff. If we we're to make a component for the 3 types of search in
+ * this app, we would need to create a super generic wrapper on top of downshift and 3 specific
+ * components and containers for the use case specific stuff. Yet another abstraction adding
+ * complexity.
+ *
+ * Sometimes keeping it DRY means repeating yourself a little bit.
+ */
 class ProfileSearch extends Component {
   constructor(props) {
     super(props);
