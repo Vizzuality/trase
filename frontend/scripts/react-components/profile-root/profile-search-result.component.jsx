@@ -2,11 +2,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { findAll } from 'highlight-words-core';
 
 class ProfileSearchResult extends Component {
-  getHighlightedString(highlight, string) {
-    const s = highlight.replace(/[-\\^$*+?.()|[\]{}]/g, '\\$&');
-    return `${string.replace(RegExp(s, 'gi'), '<mark>$&</mark>')}`;
+  static getNameSegments(value, name) {
+    // get name segments for highlighting typed string
+    // ie if you type 'ng', you get ['pi', 'ng', 'po', 'ng']
+    return findAll({
+      searchWords: [value],
+      textToHighlight: name
+    }).map(chunk => {
+      const segmentStr = name.substr(chunk.start, chunk.end - chunk.start);
+      return chunk.highlight ? (
+        <mark key={`marked_${segmentStr}_${name}`}>{segmentStr}</mark>
+      ) : (
+        <span key={`clean${segmentStr}_${name}`}>{segmentStr}</span>
+      );
+    });
   }
 
   render() {
@@ -17,10 +29,9 @@ class ProfileSearchResult extends Component {
         className={cx('c-profile-search-result', { '-highlighted': isHighlighted })}
       >
         <span className="profile-search-node-type">{item.type}</span>
-        <span
-          className="profile-search-node-name"
-          dangerouslySetInnerHTML={{ __html: this.getHighlightedString(searchString, item.name) }}
-        />
+        <span className="profile-search-node-name">
+          {ProfileSearchResult.getNameSegments(searchString, item.name)}
+        </span>
       </li>
     );
   }

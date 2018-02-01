@@ -32,7 +32,7 @@ class ProfileSearch extends Component {
           </svg>
         </div>
         {isOpen &&
-          visibleResults.length > 1 && (
+          visibleResults.length > 0 && (
             <ul className="profile-search-results">
               {visibleResults
                 .slice(0, 10)

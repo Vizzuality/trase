@@ -30,8 +30,7 @@ export const loadProfileRootNodes = () => dispatch => {
           node.isUnknown !== true &&
           node.isAggregated !== true &&
           node.isDomesticConsumption !== true &&
-          node.profileType !== undefined &&
-          node.profileType !== null
+          !!node.profileType
       );
 
       dispatch({
