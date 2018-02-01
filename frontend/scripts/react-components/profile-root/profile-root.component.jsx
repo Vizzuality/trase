@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ProfileSearchBox from 'react-components/profile-root/profile-search-box.container';
+import ProfileSearch from 'react-components/profile-root/profile-search.container';
 
 const ProfileRoot = props => {
   const { nodes, errorMessage } = props;
@@ -24,7 +24,7 @@ const ProfileRoot = props => {
                   <h1 className="title">Brazil &ndash; Soy</h1>
                 </div>
               </div>
-              <ProfileSearchBox />
+              <ProfileSearch />
               <p className="profile-root-explanatory-text">
                 Enter the name of a company or production municipality, state or biome for key
                 sustainability indicators and statistics on linked traders and consumer markets.

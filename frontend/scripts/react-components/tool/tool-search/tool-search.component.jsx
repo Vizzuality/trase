@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import 'styles/components/shared/tool-search.scss';
-import 'styles/components/shared/tool-search-result.scss';
+import 'styles/components/tool/tool-search.scss';
+import 'styles/components/tool/tool-search-result.scss';
 import Downshift from 'downshift';
 import deburr from 'lodash/deburr';
 import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group.container';

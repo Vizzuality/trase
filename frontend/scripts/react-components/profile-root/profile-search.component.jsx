@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import ProfileSearchResult from 'react-components/profile-root/profile-search-result.component';
 
-class ProfileSearchBox extends Component {
+class ProfileSearch extends Component {
   constructor(props) {
     super(props);
 
@@ -20,13 +20,17 @@ class ProfileSearchBox extends Component {
       item => inputValue.length > 1 && item.name.toLowerCase().includes(inputValue.toLowerCase())
     );
     return (
-      <div className="c-search">
-        <label htmlFor="search-input">Search for</label>
-        <input
-          {...getInputProps({ placeholder: 'trader or production place' })}
-          className="search-input"
-          id="search-input"
-        />
+      <div className="c-profile-search">
+        <div className="profile-search-bar">
+          <input
+            {...getInputProps({ placeholder: 'Search a company or production place' })}
+            type="search"
+            className="profile-search-input"
+          />
+          <svg className="icon icon-search">
+            <use xlinkHref="#icon-search" />
+          </svg>
+        </div>
         {isOpen &&
           visibleResults.length > 1 && (
             <ul>
@@ -42,9 +46,6 @@ class ProfileSearchBox extends Component {
                 ))}
             </ul>
           )}
-        <svg className="icon icon-search">
-          <use xlinkHref="#icon-search" />
-        </svg>
       </div>
     );
   }
@@ -62,9 +63,9 @@ class ProfileSearchBox extends Component {
   }
 }
 
-ProfileSearchBox.propTypes = {
+ProfileSearch.propTypes = {
   nodes: PropTypes.array.isRequired,
   onNodeSelected: PropTypes.func.isRequired
 };
 
-export default ProfileSearchBox;
+export default ProfileSearch;

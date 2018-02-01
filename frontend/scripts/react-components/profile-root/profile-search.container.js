@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import ProfileSearchBox from 'react-components/profile-root/profile-search-box.component';
+import ProfileSearch from 'react-components/profile-root/profile-search.component';
 import { bindActionCreators } from 'redux';
 import { goToNodeProfilePage } from 'react-components/profile-root/profile-root.actions';
 
@@ -10,11 +10,6 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      onNodeSelected: node => goToNodeProfilePage(node)
-    },
-    dispatch
-  );
+  bindActionCreators({ onNodeSelected: node => goToNodeProfilePage(node) }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileSearchBox);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileSearch);
