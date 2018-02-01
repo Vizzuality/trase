@@ -17,8 +17,14 @@
 
 module Api
   module V3
-    class MapAttribute < BaseModel
+    class MapAttribute < YellowTable
       belongs_to :map_attribute_group
+
+      def self.yellow_foreign_keys
+        [
+          {name: :map_attribute_group_id, table_class: Api::V3::MapAttributeGroup}
+        ]
+      end
     end
   end
 end

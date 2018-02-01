@@ -8,6 +8,13 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: main; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA main;
+
+
+--
 -- Name: revamp; Type: SCHEMA; Schema: -; Owner: -
 --
 
@@ -40,6 +47,20 @@ CREATE EXTENSION IF NOT EXISTS intarray WITH SCHEMA public;
 --
 
 COMMENT ON EXTENSION intarray IS 'functions, operators, and index support for 1-D arrays of integers';
+
+
+--
+-- Name: postgres_fdw; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS postgres_fdw WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION postgres_fdw; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION postgres_fdw IS 'foreign-data wrapper for remote PostgreSQL servers';
 
 
 --
@@ -130,6 +151,20 @@ CREATE FUNCTION get_trader_sum(trader_id integer, year_ integer) RETURNS double 
             AND year = year_
             AND context_id = 1);
   $$;
+
+
+--
+-- Name: trase_server; Type: SERVER; Schema: -; Owner: -
+--
+
+-- suppressed CREATE SERVER
+
+
+--
+-- Name: USER MAPPING postgres SERVER trase_server; Type: USER MAPPING; Schema: -; Owner: -
+--
+
+-- suppressed CREATE USER MAPPING
 
 
 SET default_tablespace = '';
@@ -2119,6 +2154,68 @@ ALTER SEQUENCE country_properties_id_seq OWNED BY country_properties.id;
 
 
 --
+-- Name: database_updates; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE database_updates (
+    id bigint NOT NULL,
+    stats json,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    jid text,
+    status text DEFAULT 'STARTED'::text NOT NULL,
+    CONSTRAINT database_updates_status_check CHECK ((status = ANY (ARRAY['STARTED'::text, 'FINISHED'::text, 'FAILED'::text])))
+);
+
+
+--
+-- Name: TABLE database_updates; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE database_updates IS 'Keeping track of database update operations, also used to ensure only one update processed at a time';
+
+
+--
+-- Name: COLUMN database_updates.stats; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN database_updates.stats IS 'JSON structure with information on row counts for all tables before / after update';
+
+
+--
+-- Name: COLUMN database_updates.jid; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN database_updates.jid IS 'Job ID, filled in when update started using a background job processor';
+
+
+--
+-- Name: COLUMN database_updates.status; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN database_updates.status IS 'STARTED (only one at a time), FINISHED or FAILED';
+
+
+--
+-- Name: database_updates_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE database_updates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: database_updates_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE database_updates_id_seq OWNED BY database_updates.id;
+
+
+--
 -- Name: download_attributes; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -2390,6 +2487,13 @@ UNION ALL
 
 
 --
+-- Name: MATERIALIZED VIEW download_attributes_values_mv; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW download_attributes_values_mv IS 'Downloadable values from flow_inds/quals/quants';
+
+
+--
 -- Name: flows; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -2537,6 +2641,13 @@ CREATE MATERIALIZED VIEW flow_paths_mv AS
 
 
 --
+-- Name: MATERIALIZED VIEW flow_paths_mv; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW flow_paths_mv IS 'Normalised flows';
+
+
+--
 -- Name: download_flows_mv; Type: MATERIALIZED VIEW; Schema: revamp; Owner: -
 --
 
@@ -2603,6 +2714,13 @@ CREATE MATERIALIZED VIEW download_flows_mv AS
   WHERE (f_0.column_position = 0)
   GROUP BY f_0.flow_id, f_0.context_id, f_0.year, f_0.name, f_0.node_id, f_1.name, f_1.node_id, f_1.node_type_name, f_2.name, f_2.node_id, f_2.node_type_name, f_3.name, f_3.node_id, f_3.node_type_name, f_4.name, f_4.node_id, f_4.node_type_name, f_5.name, f_5.node_id, f_5.node_type_name, f_6.name, f_6.node_id, f_6.node_type_name, f_7.name, f_7.node_id, f_7.node_type_name, fi.attribute_type, fi.attribute_id, fi.name, fi.name_with_unit, fi.display_name
   WITH NO DATA;
+
+
+--
+-- Name: MATERIALIZED VIEW download_flows_mv; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW download_flows_mv IS 'Combines data from flow_paths_mv and download_attributes_values_mv in a structure that can be directly used to generate data downloads.';
 
 
 --
@@ -4208,6 +4326,13 @@ ALTER TABLE ONLY country_properties ALTER COLUMN id SET DEFAULT nextval('country
 
 
 --
+-- Name: database_updates id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY database_updates ALTER COLUMN id SET DEFAULT nextval('database_updates_id_seq'::regclass);
+
+
+--
 -- Name: download_attributes id; Type: DEFAULT; Schema: revamp; Owner: -
 --
 
@@ -4670,6 +4795,14 @@ ALTER TABLE ONLY charts
 
 
 --
+-- Name: commodities commodities_name_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY commodities
+    ADD CONSTRAINT commodities_name_key UNIQUE (name);
+
+
+--
 -- Name: commodities commodities_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
 --
 
@@ -4795,6 +4928,22 @@ ALTER TABLE ONLY country_properties
 
 ALTER TABLE ONLY country_properties
     ADD CONSTRAINT country_properties_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: database_updates database_updates_jid_key; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY database_updates
+    ADD CONSTRAINT database_updates_jid_key UNIQUE (jid);
+
+
+--
+-- Name: database_updates database_updates_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY database_updates
+    ADD CONSTRAINT database_updates_pkey PRIMARY KEY (id);
 
 
 --
@@ -5525,6 +5674,13 @@ CREATE INDEX index_country_properties_on_country_id ON country_properties USING 
 
 
 --
+-- Name: index_database_updates_on_status; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE UNIQUE INDEX index_database_updates_on_status ON database_updates USING btree (status) WHERE (status = 'STARTED'::text);
+
+
+--
 -- Name: index_download_attributes_on_context_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -6113,7 +6269,7 @@ SET search_path = revamp, pg_catalog;
 --
 
 ALTER TABLE ONLY download_quants
-    ADD CONSTRAINT fk_rails_05ea4b5d71 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_05ea4b5d71 FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6121,7 +6277,7 @@ ALTER TABLE ONLY download_quants
 --
 
 ALTER TABLE ONLY flow_inds
-    ADD CONSTRAINT fk_rails_0a8bdfaf25 FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_0a8bdfaf25 FOREIGN KEY (flow_id) REFERENCES flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6177,7 +6333,7 @@ ALTER TABLE ONLY download_quals
 --
 
 ALTER TABLE ONLY quant_properties
-    ADD CONSTRAINT fk_rails_201d91fbef FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_201d91fbef FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6185,7 +6341,7 @@ ALTER TABLE ONLY quant_properties
 --
 
 ALTER TABLE ONLY flow_inds
-    ADD CONSTRAINT fk_rails_23d15ab229 FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_23d15ab229 FOREIGN KEY (ind_id) REFERENCES inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6209,7 +6365,7 @@ ALTER TABLE ONLY resize_by_quants
 --
 
 ALTER TABLE ONLY node_inds
-    ADD CONSTRAINT fk_rails_28ea53a9b9 FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_28ea53a9b9 FOREIGN KEY (ind_id) REFERENCES inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6233,7 +6389,7 @@ ALTER TABLE ONLY chart_inds
 --
 
 ALTER TABLE ONLY flow_quants
-    ADD CONSTRAINT fk_rails_2dbc0a565f FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_2dbc0a565f FOREIGN KEY (flow_id) REFERENCES flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6281,7 +6437,7 @@ ALTER TABLE ONLY chart_quals
 --
 
 ALTER TABLE ONLY map_inds
-    ADD CONSTRAINT fk_rails_49db6b9c1f FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_49db6b9c1f FOREIGN KEY (ind_id) REFERENCES inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6313,7 +6469,7 @@ ALTER TABLE ONLY contextual_layers
 --
 
 ALTER TABLE ONLY country_properties
-    ADD CONSTRAINT fk_rails_668b355aa6 FOREIGN KEY (country_id) REFERENCES countries(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_668b355aa6 FOREIGN KEY (country_id) REFERENCES countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6321,7 +6477,7 @@ ALTER TABLE ONLY country_properties
 --
 
 ALTER TABLE ONLY chart_quants
-    ADD CONSTRAINT fk_rails_69c56caceb FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_69c56caceb FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6329,7 +6485,7 @@ ALTER TABLE ONLY chart_quants
 --
 
 ALTER TABLE ONLY flow_quals
-    ADD CONSTRAINT fk_rails_6e55ca4cbc FOREIGN KEY (flow_id) REFERENCES flows(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_6e55ca4cbc FOREIGN KEY (flow_id) REFERENCES flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6337,7 +6493,7 @@ ALTER TABLE ONLY flow_quals
 --
 
 ALTER TABLE ONLY ind_properties
-    ADD CONSTRAINT fk_rails_720a88d4b2 FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_720a88d4b2 FOREIGN KEY (ind_id) REFERENCES inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6353,7 +6509,7 @@ ALTER TABLE ONLY charts
 --
 
 ALTER TABLE ONLY flow_quals
-    ADD CONSTRAINT fk_rails_917b9da2b8 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_917b9da2b8 FOREIGN KEY (qual_id) REFERENCES quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6369,7 +6525,7 @@ ALTER TABLE ONLY resize_by_attributes
 --
 
 ALTER TABLE ONLY recolor_by_inds
-    ADD CONSTRAINT fk_rails_93051274e4 FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_93051274e4 FOREIGN KEY (ind_id) REFERENCES inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6377,7 +6533,7 @@ ALTER TABLE ONLY recolor_by_inds
 --
 
 ALTER TABLE ONLY node_quals
-    ADD CONSTRAINT fk_rails_962f283611 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_962f283611 FOREIGN KEY (qual_id) REFERENCES quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6393,7 +6549,7 @@ ALTER TABLE ONLY carto_layers
 --
 
 ALTER TABLE ONLY flow_quants
-    ADD CONSTRAINT fk_rails_a48f7b74d0 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_a48f7b74d0 FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6409,7 +6565,7 @@ ALTER TABLE ONLY charts
 --
 
 ALTER TABLE ONLY chart_inds
-    ADD CONSTRAINT fk_rails_b730b06fdc FOREIGN KEY (ind_id) REFERENCES inds(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_b730b06fdc FOREIGN KEY (ind_id) REFERENCES inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6417,7 +6573,7 @@ ALTER TABLE ONLY chart_inds
 --
 
 ALTER TABLE ONLY chart_quals
-    ADD CONSTRAINT fk_rails_c1341bce97 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_c1341bce97 FOREIGN KEY (qual_id) REFERENCES quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6433,7 +6589,7 @@ ALTER TABLE ONLY flows
 --
 
 ALTER TABLE ONLY resize_by_quants
-    ADD CONSTRAINT fk_rails_c63dc992e3 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_c63dc992e3 FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6441,7 +6597,7 @@ ALTER TABLE ONLY resize_by_quants
 --
 
 ALTER TABLE ONLY qual_properties
-    ADD CONSTRAINT fk_rails_c8bcede145 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_c8bcede145 FOREIGN KEY (qual_id) REFERENCES quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6465,7 +6621,7 @@ ALTER TABLE ONLY profiles
 --
 
 ALTER TABLE ONLY map_quants
-    ADD CONSTRAINT fk_rails_cc084396cb FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_cc084396cb FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6489,7 +6645,7 @@ ALTER TABLE ONLY context_node_type_properties
 --
 
 ALTER TABLE ONLY contexts
-    ADD CONSTRAINT fk_rails_d9e59d1113 FOREIGN KEY (country_id) REFERENCES countries(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_d9e59d1113 FOREIGN KEY (country_id) REFERENCES countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6521,7 +6677,7 @@ ALTER TABLE ONLY download_quants
 --
 
 ALTER TABLE ONLY node_quants
-    ADD CONSTRAINT fk_rails_e5f4cc54e9 FOREIGN KEY (quant_id) REFERENCES quants(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_e5f4cc54e9 FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6529,7 +6685,7 @@ ALTER TABLE ONLY node_quants
 --
 
 ALTER TABLE ONLY download_quals
-    ADD CONSTRAINT fk_rails_e8e87251a2 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_e8e87251a2 FOREIGN KEY (qual_id) REFERENCES quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6537,7 +6693,7 @@ ALTER TABLE ONLY download_quals
 --
 
 ALTER TABLE ONLY contexts
-    ADD CONSTRAINT fk_rails_eea78f436e FOREIGN KEY (commodity_id) REFERENCES commodities(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_eea78f436e FOREIGN KEY (commodity_id) REFERENCES commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6545,7 +6701,7 @@ ALTER TABLE ONLY contexts
 --
 
 ALTER TABLE ONLY recolor_by_quals
-    ADD CONSTRAINT fk_rails_f5f36c9f54 FOREIGN KEY (qual_id) REFERENCES quals(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_f5f36c9f54 FOREIGN KEY (qual_id) REFERENCES quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -6631,13 +6787,16 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171117115459'),
 ('20171117120322'),
 ('20171130103917'),
-('20171130135459'),
 ('20171212113051'),
 ('20171214162643'),
 ('20171219125633'),
 ('20180109085838'),
 ('20180110111533'),
+('20180111085256'),
+('20180111124938'),
+('20180112112907'),
+('20180116112807'),
 ('20180119094345'),
+('20180123130300'),
+('20180123132607'),
 ('20180126140843');
-
-

@@ -29,8 +29,9 @@ This project uses:
 - Ruby 2.4.2
 - Rails 5.1+
 - Nodejs 8.2+
-- PostgreSQL 9.5+ with `intarray` and `tablefunc` extensions
+- PostgreSQL 9.5+ with `intarray`, `tablefunc` and `postgres_fdw` extensions
 - [Bundler](http://bundler.io/)
+- redis
 
 ## Setup
 
@@ -75,7 +76,7 @@ To enable then, simply execute once: `bin/git/init-hooks`
 
 ## Configuration
 
-The project's main configuration values can be set using [environment variables](https://en.wikipedia.org/wiki/Environment_variable)
+The project's main configuration values can be set using [environment variables](https://en.wikipedia.org/wiki/Environment_variable) in the `.env` file.
 
 * SECRET_KEY_BASE: Rails secret key. Use a random value
 * POSTGRES_HOSTNAME: Hostname of your database server
@@ -90,6 +91,15 @@ The project's main configuration values can be set using [environment variables]
 * GOLD_MASTER_HOST_V1:
 * GOLD_MASTER_HOST_V2:
 * GOLD_MASTER_HOST_V3:
+* TRASE_REMOTE_HOST=localhost
+* TRASE_REMOTE_PORT=5432
+* TRASE_REMOTE_DATABASE=trase
+* TRASE_REMOTE_SCHEMA=trase # this schema in remote database
+* TRASE_REMOTE_USER=main_ro # this user defined in remote database with read-only access to trase schema
+* TRASE_REMOTE_PASSWORD=
+* TRASE_REMOTE_SERVER=trase_server
+* TRASE_LOCAL_FDW_SCHEMA=main # this schema in local database where remote tables are mapped
+* TRASE_LOCAL_SCHEMA=revamp # this schema in local database where target tables are
 
 ## Test
 
@@ -158,20 +168,13 @@ SELECT indexrelid::regclass as index, relid::regclass as table, 'DROP INDEX ' ||
 
 In the transition period as work on changing the database schema continues, new tables are living in a separate `revamp` schema (~namespace), whereas the default `public` schema still contains the old tables. This means we can work on both schemas as necessary.
 
-The base version of the database at this point is:
-
-
-
-
 To migrate the database:
 
-1. TEMPORARILY comment out `schema_search_path: "public"` in `config/database.yml`
-2. run `bundle exec rake db:migrate` to create revamped database objects
-3. run the queries in `db/revamp_cleanup.sql` to remove duplicates from the original database
-4. run `bundle exec rake db:revamp:copy` to copy data between old and new structure
-5. `bundle exec rake db:revamp:doc:sql`
-6. ideally after running all this you shouldn't have any changes on the structure.sql file, other than PostgreSQL version in some cases
-7. you can now uncomment `schema_search_path` in `config/database.yml`
+1. run `bundle exec rake db:migrate` to create revamped database objects
+2. run the queries in `db/revamp_cleanup.sql` to remove duplicates from the original database
+3. run `bundle exec rake db:revamp:copy` to copy data between old and new structure
+4. `bundle exec rake db:revamp:doc:sql`
+5. ideally after running all this you shouldn't have any changes on the structure.sql file, other than PostgreSQL version in some cases
 
 Schema documentation is generated directly from the database and requires the following steps:
 
@@ -181,13 +184,125 @@ That is done using a dedicated rake task:
     `rake db:revamp:doc:sql`
 
     Note: this rake task also creates a new dump of structure.sql, as comments are part of the schema.
-2. Once comments are in place, it is possible to generate html documentation of the entire schema using an external tool. One os such tools is SchemaSpy, which is an open source java library.
+2. Once comments are in place, it is possible to generate html documentation of the database schema using an external tool. One os such tools is SchemaSpy, which is an open source java library.
     1. install [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
     2. install [Graphviz](http://www.graphviz.org/)
     3. the [SchemaSpy 6.0.0-rc2](http://schemaspy.readthedocs.io/en/latest/index.html) jar file and [PostgreSQL driver](https://jdbc.postgresql.org/download.html) file are already in doc/db
-    4. `rake db:revamp:doc:html` (Please note: I added an extra param to SchemaSpy command which is `-renderer :quartz` which helps with running it on macOS Sierra. No idea if it prevents it from running elsewhere.)
-    5. output files are in `doc/db/html`
-3. to update the [GH pages site](https://vizzuality.github.io/trase-api/) all the generated files from `doc/db/html` need to land in the top-level of the `gh-pages` branch. This is currently a manual process, easiest to have the repo checked out twice on local drive to be able to copy between branches (not great and not final.)
+    4. `rake db:revamp:doc:html`
+    5. output files are in `doc/db/all_tables` (complete schema) and `doc/db/blue_tables` (only blue tables)
+3. to update the [GH pages site](https://vizzuality.github.io/trase-api/) all the generated files from `doc/db/all_tables` and `doc/db/blue_tables` need to land in the top-level of the `gh-pages` branch. This is currently a manual process, easiest to have the repo checked out twice on local drive to be able to copy between branches (not great and not final.)
+
+## Data import process
+
+The new data import process was put in place to make it easy to update the Trase database directly from the Main database. The differences between the two databases are as follows:
+- the Main database contains the core data regarding flows, nodes and attributes. It contains more data than what is show on Trase.
+- the Trase database contains a subset of the Main database as well as additional tables which describe how to visualise that data.
+
+There is overlap between the two databases, which is the core data to be displayed in Trase. These are the tables which hold that data:
+- `countries`
+- `commodities`
+- `contexts`
+- `node_types`
+- `context_node_types`
+- `download_versions`
+- `inds`
+- `quals`
+- `quants`
+- `nodes`
+- `node_inds`
+- `node_quals`
+- `node_quants`
+- `flows`
+- `flow_inds`
+- `flow_quals`
+- `flow_quants`
+
+They are referred to as "blue tables". The remaining tables in the Trase database, which are linked to the blue tables and describe how to visualise data, are referred to as "yellow tables". For example, the blue table `inds` holds basic information about an attribute called `SOY_YIELD` and the yellow table `ind_properties` holds the information about what tooltip to display with that attribute.
+
+The objective of the import process is to copy the blue tables verbatim from Main to Trase overwriting previous content, but to preserve any yellow tables information which remains relevant.
+
+### Connection between the two databases
+
+We assume that it is possible to establish a connection between the Trase and Main databases using a postgres extension `postgres_fdw`. A number of connection properties need to be specified in order for the connection to be established, they need to be defined as environment variables:
+
+```
+TRASE_REMOTE_HOST=localhost
+TRASE_REMOTE_PORT=5432
+TRASE_REMOTE_DATABASE=trase_core
+TRASE_REMOTE_SCHEMA=trase # this schema in remote database
+TRASE_REMOTE_USER=main_ro # this user defined in remote database with read-only access to trase schema
+TRASE_REMOTE_PASSWORD=
+TRASE_REMOTE_SERVER=trase_server
+```
+
+We assume that there is a separate schema which contains data ready to be imported into Trase, the name is configured as `TRASE_REMOTE_SCHEMA`, e.g. `trase`. We also assume there is a user with read-only privileges for that schema, e.g. `main_ro`.
+
+`GRANT SELECT ON ALL TABLES IN SCHEMA trase TO main_ro`
+
+### Foreign table wrappers
+
+The extension `postgres_fdw` allows us to access tables in the Main database directly within the Trase database. It requires that a number of objects are created in the database:
+- the server (name configured as `TRASE_REMOTE_SERVER`, e.g. `trase_server`)
+- user mappings which allow a user of the Trase database to connect to the Main database as the read-only user
+- definitions of foreign tables
+
+All of these can be created using the following rake task:
+`bundle exec rake db:remote:init`
+
+In case anything changes (e.g. table definitions), this can be re-initialized using:
+`bundle exec rake db:remote:reinit`
+
+Foreign tables will be created in a schema configured as `TRASE_LOCAL_FDW_SCHEMA`.
+
+*Note to future self: Because the server and user mappings definitions may contain sensitive information, I needed a way to remove them from the SQL dump. I wasn't able to find a clean way to do it, so there is a monkey-patched version of `PostgreSQLDatabaseTasks.structure_dump` which removes those definitions from the dump. The idea is that after restoring from the dump, the `init` task needs to be run to establish the required objects for the import script.*
+
+### Import script
+
+The importer script code is contained in `lib/api/v3/import/importer.rb`. The script goes over tables in a specific order, whereby each table is preceded by all the tables it depends on. *Note to future self*: for this to continue working as the database grows, cycles in the schema need to be avoided.
+
+Tables are processed differently depending on whether they are "blue" or "yellow". It can be easily recognised which is which based on the subclass of the model: either `Api::V3::BlueTable` or `Api::V3::YellowTable`.
+
+In the first step all the tables are backed up, which means different things in case of blue and yellow tables.
+
+For the blue tables we store a mapping between the old `id` (from local table) and new `id` (from remote table). This is a temporary table with just two columns: `id` and `new_id`. *Note to future self: the assumption here is that each of the blue tables has a unique numeric identifier called `id` in both the local and remote table. We assume those identifiers are not stable across data updates, which is why we create a mapping in this step.* In order to match the local table to the remote table we use columns specified in `import_key`, which is a method that needs to be defined for each blue table. For example, the import key for the `countries` table contains only the `iso2` column (which has a unique constraint set) and so local and remote can be matched on this column. Sometimes the import key contains foreign keys, for example `contexts` has an `import_key` consisting of `country_id` and `commodity_id`; of course those are unstable foreign keys, so they cannot be used to match rows directly in the remote table; instead, we need to match using the id mapping of both `countries` and `commodities` tables. The script knows to do that based on the list of unstable foreign keys which are called `blue_foreign_keys` and detects if the `import_key` overlaps with `blue_foreign_keys`, requiring a lookup in the mapping. That mapping needs to be available at the time, which is why order of processing blue tables matters.
+
+For the yellow tables, we simply back up the entire table in a temporary table.
+
+Once all tables are backed up, the import can commence. The import process iterates over blue tables and their respective dependant yellow tables. Consider this chain of dependencies, which shows that yellow tables can also depend on each other and therefore the order in which yellow tables are processed is also relevant:
+
+`contexts` (blue) -> `contextual_layers` (yellow) -> `carto_layers` (yellow)
+
+For each blue table, truncate the local table and copy the remote table into it. Next, if there are any yellow tables that depend on this blue table, they need to be restored from backup. Restoring consists of the following steps:
+- if there are any obsolete rows in the yellow tables backup, remove them first. To determine which rows are obsolete we match rows on foreign keys, which can be of two types: blue and yellow (depending on which parent table is concerned). The rule is, yellow foreign keys are stable (those ids do not change) and blue foreign keys are unstable. To match obsolete rows by blue foreign keys we need to do a lookup on the mapping table.
+- if there are any blue foreign keys in the yellow table, they need to be resolved in the remaining rows by replacing them with new values from respective mapping tables
+- finally, the yellow table with removed obsolete rows and resolved foreign keys can be restored from backup
+
+To sum up, these are the important helper methods that need to be defined in models for the import process to run correctly:
+- `import_key` - for blue tables only. Used for matching rows from local table with remote. Exception: `flows`. That table does not lend itself very well to matching in this way, which is why the `import_key` is empty. That results with the table being copied without any hope of resolving the old identifiers against the new ones. For now that is not a problem, because we do not have any yellow tables depending on flows. If we have any, this needs to be considered and matching on `context_id`, `year` and `path` implemented.
+- `blue_foreign_keys` - for both blue and yellow tables. Used to inform the importer that identifiers needs to be resolved using the mapping tables.
+- `yellow_foreign_keys` - for yellow tables only. Allows the importer to check for any rows that depend on another yellow table and might need removing.
+
+### Starting the importer
+
+The importer can be started in two ways:
+- via a rake task: `bundle exec rake db:remote:import`
+- via the admin interface: `/content/admin/database_update`
+
+In the first case the importer will run synchronously. In the latter case it will be executed as a background job using sidekiq. For that to work you need redis & sidekiq running. If redis is not already running it can be started using `redis-server`. To start sidekiq in development run `bundle exec sidekiq`. In staging / demo / production starting and stopping sidekiq is handled by capistrano.
+
+### Running the importer in development
+
+Only databases configured on staging / demo / production have access to the main database. To run on a development database you need to open a tunnel through a remote host such as staging. In the following commands "database host" means the host on which main database sits, "remote host" means a host which has access to database host and through which we can tunnel the connection.
+
+`ssh -L <local database port>:<database host>:<database port> <remote ssh username>@<remote host>`
+
+The "local database port" can be set to any available local port, 5433 is usually fine.
+
+To test the connection try this in another terminal window:
+
+`psql -h 127.0.0.1 -p 5433 -U <database username> <database name>`
+
+When connecting this way you have to set your `TRASE_REMOTE_HOST` to `127.0.0.1` and `TRASE_REMOTE_PORT` to `5433`.
 
 # Frontend
 

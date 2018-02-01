@@ -1,0 +1,17 @@
+<%= form_tag(admin_database_update_start_path, multipart: true) do %>
+  <% if current_update %>
+    Update in progress
+    <% if current_update.jid %> (JID: <%= current_update.jid %>)<% end %>
+  <% end %>
+  <% if database_updates.any? %>
+    <h3>Previous updates:</h3>
+    <ul>
+      <% database_updates.each do |du| %>
+        <li><%= du.created_at %> status: <%= du.status %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <%= submit_tag 'Start database update', disabled: current_update.present? %>
+  Please note: this will queue an update and return immediately, but the update is likely to take a while.
+<% end %>

@@ -35,6 +35,7 @@ gem 'rack-cors', '~> 0.4'
 gem 'twitter', '~> 6.1'
 
 gem 'appsignal'
+gem 'sidekiq'
 
 group :development, :test do
   gem 'byebug', platform: :mri
@@ -58,6 +59,7 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
   gem 'capistrano-npm'
+  gem 'capistrano-sidekiq'
   gem 'rubocop', require: false
 end
 

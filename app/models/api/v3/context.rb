@@ -1,6 +1,6 @@
 module Api
   module V3
-    class Context < BaseModel
+    class Context < BlueTable
       belongs_to :country
       belongs_to :commodity
       has_one :context_property
@@ -15,6 +15,20 @@ module Api
       delegate :is_disabled, to: :context_property
       delegate :is_subnational, to: :context_property
       delegate :default_basemap, to: :context_property
+
+      def self.import_key
+        [
+          {name: :country_id, sql_type: 'INT'},
+          {name: :commodity_id, sql_type: 'INT'}
+        ]
+      end
+
+      def self.blue_foreign_keys
+        [
+          {name: :country_id, table_class: Api::V3::Country},
+          {name: :commodity_id, table_class: Api::V3::Commodity}
+        ]
+      end
     end
   end
 end

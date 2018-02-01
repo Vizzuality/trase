@@ -2,6 +2,10 @@ Rails.application.routes.draw do
   scope path: 'content' do
     ActiveAdmin.routes(self)
     devise_for :users, ActiveAdmin::Devise.config.merge(class_name: 'Content::User')
+    authenticate :user do
+      require 'sidekiq/web'
+      mount Sidekiq::Web => '/sidekiq'
+    end
   end
 
   namespace :content do
