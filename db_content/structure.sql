@@ -96,7 +96,6 @@ CREATE TABLE posts (
     image_file_size integer,
     image_updated_at timestamp without time zone,
     highlighted boolean DEFAULT false,
-    title_color character varying,
     category text
 );
 
@@ -369,6 +368,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180117084134'),
 ('20180117084618'),
 ('20180126115955'),
-('20180126133509');
+('20180126133509'),
+('20180201134513');
 
 
