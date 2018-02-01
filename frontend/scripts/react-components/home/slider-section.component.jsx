@@ -15,6 +15,13 @@ class SliderSection extends React.PureComponent {
     }
   }
 
+  static getActionName(category) {
+     if (['INFO BRIEF', 'ISSUE BRIEF'].includes(category)) {
+       return 'Open document';
+     }
+     return 'See More';
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -64,6 +71,8 @@ class SliderSection extends React.PureComponent {
     const { visiblePages, currentSlide } = this.state;
     const smallScreen = visiblePages === 1;
     const numColums = (slides.length <= visiblePages && visiblePages < 3) ? 6 : 4;
+
+    if (slides.length === 0) return null;
     return (
       <section className={cx('c-slider-section', className)}>
         <div className={cx('row', 'slider-wrapper', { '-auto-width': (slides.length < visiblePages) })}>
@@ -86,7 +95,10 @@ class SliderSection extends React.PureComponent {
                     >
                       {slide.quote
                         ? <QuoteTile slide={slide} />
-                        : <StoryTile slide={slide} />
+                        : <StoryTile
+                          slide={slide}
+                          action={SliderSection.getActionName(slide.category)}
+                        />
                       }
                     </div>
                   </div>

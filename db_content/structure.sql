@@ -89,7 +89,6 @@ CREATE TABLE posts (
     image character varying,
     post_url character varying,
     state integer,
-    description text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     image_file_name character varying,
@@ -97,7 +96,7 @@ CREATE TABLE posts (
     image_file_size integer,
     image_updated_at timestamp without time zone,
     highlighted boolean DEFAULT false,
-    title_color character varying
+    category text
 );
 
 
@@ -367,6 +366,9 @@ SET search_path TO "$user", public;
 INSERT INTO "schema_migrations" (version) VALUES
 ('20161104121039'),
 ('20180117084134'),
-('20180117084618');
+('20180117084618'),
+('20180126115955'),
+('20180126133509'),
+('20180201134513');
 
 

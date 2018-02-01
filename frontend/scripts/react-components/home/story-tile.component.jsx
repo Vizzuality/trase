@@ -2,26 +2,36 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function StoryTile(props) {
-  const {
-    slide
-  } = props;
+  const { slide, action } = props;
 
   return (
-    <a
-      className="slide-link"
-      href={slide.completePostUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <figure
-        className="slide-image"
-        style={{ backgroundImage: `url(${slide.imageUrl})` }}
-      />
+    <React.Fragment>
+      <a
+        className="slide-link"
+        href={slide.completePostUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <figure
+          className="slide-image"
+          style={{ backgroundImage: `url(${slide.imageUrl})` }}
+        />
+      </a>
       <figcaption className="slide-content">
-        <h4 className="subtitle">{slide.category}</h4>
-        <p className="slide-title">{slide.title}</p>
+        <div className="details-container">
+          <h4 className="subtitle">{slide.category}</h4>
+          <p className="slide-title">{slide.title}</p>
+        </div>
+        <a
+          className="slide-action subtitle -gray"
+          target="_blank"
+          rel="noopener noreferrer"
+          href={slide.completePostUrl}
+        >
+          {action}
+        </a>
       </figcaption>
-    </a>
+    </React.Fragment>
   );
 }
 
@@ -31,7 +41,8 @@ StoryTile.propTypes = {
     category: PropTypes.string,
     imageUrl: PropTypes.string,
     completePostUrl: PropTypes.string
-  }).isRequired
+  }).isRequired,
+  action: PropTypes.string.isRequired
 };
 
 export default StoryTile;

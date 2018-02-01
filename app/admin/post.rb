@@ -1,17 +1,17 @@
 ActiveAdmin.register Content::Post, as: 'Post' do
-  permit_params :title, :title_color, :date, :image, :post_url, :state, :description, :highlighted
+  permit_params :title, :date, :image, :post_url, :category, :state, :highlighted
+  config.sort_order = 'date_desc'
 
   form do |f|
     f.semantic_errors
     inputs do
       input :title, required: true
-      input :title_color, required: false
-      input :date, as: :date_select, required: true, label: 'Publishing date'
+      input :date, as: :date_select, required: true, label: 'Publishing date', hint: 'Content on the site is sorted by publishing date'
       input :image, as: :file
       input :post_url, required: true
-      input :state, as: :boolean, label: 'Published?'
-      input :highlighted, as: :boolean, label: 'Highlighted?'
-      input :description, as: :ckeditor, label: 'Content'
+      input :category, required: true, as: :select, collection: Content::Post::CATEGORIES, hint: "'INSIGHT', 'INFO BRIEF', 'ISSUE BRIEF' and 'LONGER READ' are displayed under the homepage's 'Insights' section, while 'NEWS' and 'BLOG' will be shown under the section with the same name."
+      input :state, as: :boolean, label: 'Published?', hint: 'To be displayed on the website, a post must be published'
+      input :highlighted, as: :boolean, label: 'Highlighted?', hint: "A highlighted post will show over the homepage's top section. Highlighting a post will automatically remove highlighted status from all others, as there can be only one highlighted post at a time"
     end
     f.actions
   end
@@ -19,7 +19,6 @@ ActiveAdmin.register Content::Post, as: 'Post' do
   show do
     attributes_table do
       row :title
-      row :title_color
       row :date do |post|
         post.date.strftime('%d-%m-%Y')
       end
@@ -27,17 +26,16 @@ ActiveAdmin.register Content::Post, as: 'Post' do
         image_tag post.image.url(:small)
       end
       row(:post_url, style: 'word-break: break-all')
+      row(:category)
       row('Published?') { |post| status_tag post.state == 1 }
       row('Highlighted?') { |post| status_tag post.highlighted == 1 }
-      row 'Content' do |post|
-        post.description.html_safe
-      end
     end
   end
 
   index download_links: false do
     column :title
-    column('Date') { |post| post.date.strftime('%d-%m-%Y') }
+    column('Date', sortable: :date) { |post| post.date.strftime('%d-%m-%Y') }
+    column :category
     column('Published?') { |post| status_tag post.state == 1 }
     column('Highlighted?') { |post| status_tag post.highlighted }
     column('URL', &:complete_post_url)
@@ -46,6 +44,7 @@ ActiveAdmin.register Content::Post, as: 'Post' do
 
   filter :title
   filter :data
+  filter :category, as: :select, collection: Content::Post::CATEGORIES
   filter :state, as: :check_boxes, label: 'Published'
   filter :highlighted, as: :check_boxes, label: 'Highlighted?'
 end

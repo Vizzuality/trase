@@ -18,32 +18,23 @@
         "additionalProperties": false,
         "required": [
           "title",
-          "titleColor",
-          "description",
           "date",
           "imageUrl",
           "highlighted",
-          "completePostUrl"
+          "completePostUrl",
+          "category"
         ],
         "properties": {
           "title": {
             "type": "string",
             "$id": "/properties/data/items/properties/title"
           },
-          "titleColor": {
-            "type": "string",
-            "$id": "/properties/data/items/properties/titleColor"
-          },
-          "description": {
-            "type": "string",
-            "$id": "/properties/data/items/properties/description"
-          },
           "date": {
             "type": "string",
             "$id": "/properties/data/items/properties/date"
           },
           "imageUrl": {
-            "type": "null",
+            "type": ["string", "null"],
             "$id": "/properties/data/items/properties/imageUrl"
           },
           "highlighted": {
@@ -53,6 +44,10 @@
           "completePostUrl": {
             "type": "string",
             "$id": "/properties/data/items/properties/completePostUrl"
+          },
+          "category": {
+            "type": "string",
+            "$id": "/properties/data/items/properties/category"
           }
         }
       }
