@@ -28,7 +28,7 @@ ActiveAdmin.register Content::Post, as: 'Post' do
       row(:post_url, style: 'word-break: break-all')
       row(:category)
       row('Published?') { |post| status_tag post.state == 1 }
-      row('Highlighted?') { |post| status_tag post.highlighted == 1 }
+      row('Highlighted?') { |post| status_tag post.highlighted }
     end
   end
 
