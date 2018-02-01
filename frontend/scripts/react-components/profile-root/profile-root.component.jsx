@@ -18,13 +18,17 @@ const ProfileRoot = props => {
         <div className="row column">
           <div className="profile-root-search-container row align-center">
             <div className="column small-6">
-              <ProfileSearchBox />
-              <div className="explanatory-text">
-                <p className="paragraph -center">
-                  Enter the name of a company or production municipality, state or biome for key
-                  sustainability indicators and statistics on linked traders and consumer markets.
-                </p>
+              <div className="profile-root-heading-container">
+                <div className="profile-root-heading-wrapper">
+                  <h2 className="subtitle -gray">Country & Commodity</h2>
+                  <h1 className="title">Brazil &ndash; Soy</h1>
+                </div>
               </div>
+              <ProfileSearchBox />
+              <p className="profile-root-explanatory-text">
+                Enter the name of a company or production municipality, state or biome for key
+                sustainability indicators and statistics on linked traders and consumer markets.
+              </p>
             </div>
           </div>
           <div className="row align-center">
