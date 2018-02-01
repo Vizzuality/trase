@@ -7,7 +7,6 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 import TopNavBar from 'react-components/shared/nav/top-nav-bar.container';
-import Footer from 'react-components/shared/footer.component';
 
 import ProfileRoot from 'react-components/profile-root/profile-root.container';
 
@@ -29,17 +28,9 @@ export const mount = (root, store) => {
     </Provider>,
     document.getElementById('page-react-root')
   );
-
-  render(
-    <Provider store={store}>
-      <Footer />
-    </Provider>,
-    document.getElementById('footer')
-  );
 };
 
 export const unmount = () => {
   unmountComponentAtNode(document.getElementById('nav'));
   unmountComponentAtNode(document.getElementById('page-react-root'));
-  unmountComponentAtNode(document.getElementById('footer'));
 };
