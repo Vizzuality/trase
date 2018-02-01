@@ -32,17 +32,19 @@ const filterStateToURL = (state) => {
 
   const stateToSave = _.pick(state, URL_STATE_PROPS);
 
-  stateToSave.selectedResizeByName = state.selectedResizeBy ? state.selectedResizeBy.name : null;
-  stateToSave.selectedRecolorByName = state.selectedRecolorBy ? state.selectedRecolorBy.name : null;
-  stateToSave.selectedBiomeFilterName = state.selectedBiomeFilter ? state.selectedBiomeFilter.name : null;
+  stateToSave.selectedResizeByName =
+    state.selectedResizeBy ? state.selectedResizeBy.name : state.selectedResizeByName;
+  stateToSave.selectedRecolorByName =
+    state.selectedRecolorBy ? state.selectedRecolorBy.name : state.selectedRecolorByName;
+  stateToSave.selectedBiomeFilterName =
+    state.selectedBiomeFilter ? state.selectedBiomeFilter.name : state.selectedBiomeFilterName;
 
   return stateToSave;
 };
 
 export const encodeStateToURL = (state) => {
   const urlProps = JSON.stringify(filterStateToURL(state));
-  const encoded = btoa(urlProps);
-  return encoded;
+  return btoa(urlProps);
 };
 
 export const computeStateQueryParams = (state, params) => {
@@ -51,29 +53,30 @@ export const computeStateQueryParams = (state, params) => {
   // if URL contains GET parameters, override hash state prop with it
   URL_PARAMS_PROPS.forEach((prop) => {
     let urlParam = params[prop];
-    if (urlParam) {
-      switch (prop) {
-        case 'selectedNodesIds': {
-          if (Array.isArray(urlParam)) {
-            urlParam = urlParam.map(nodeId => parseInt(nodeId, 10));
-          } else {
-            urlParam = urlParam.replace(/\[|\]/gi, '').split(',').map(nodeId => parseInt(nodeId, 10));
-          }
-          newState.areNodesExpanded = true;
-          newState.expandedNodesIds = urlParam;
-          break;
-        }
-        case 'selectedYears': {
-          if (Array.isArray(urlParam)) {
-            urlParam = urlParam.map(year => parseInt(year, 10));
-          } else {
-            urlParam = urlParam.replace(/\[|\]/gi, '').split(',').map(year => parseInt(year, 10));
-          }
-          break;
-        }
-      }
-      newState[prop] = urlParam;
+    if (!urlParam) {
+      return;
     }
+    switch (prop) {
+      case 'selectedNodesIds': {
+        if (Array.isArray(urlParam)) {
+          urlParam = urlParam.map(nodeId => parseInt(nodeId, 10));
+        } else {
+          urlParam = urlParam.replace(/\[|\]/gi, '').split(',').map(nodeId => parseInt(nodeId, 10));
+        }
+        newState.areNodesExpanded = true;
+        newState.expandedNodesIds = urlParam;
+        break;
+      }
+      case 'selectedYears': {
+        if (Array.isArray(urlParam)) {
+          urlParam = urlParam.map(year => parseInt(year, 10));
+        } else {
+          urlParam = urlParam.replace(/\[|\]/gi, '').split(',').map(year => parseInt(year, 10));
+        }
+        break;
+      }
+    }
+    newState[prop] = urlParam;
   });
   return newState;
 };
@@ -112,7 +115,9 @@ export const toolUrlStateMiddleware = store => next => (action) => {
   if (
     [actions.HIGHLIGHT_NODE, actions.TOGGLE_DROPDOWN].includes(action.type) ||
     prevLocation.type !== 'tool'
-  ) return next(action);
+  ) {
+    return next(action);
+  }
   const decoratedAction = { ...action };
   let urlState = null; // prev state
   if (prevLocation.query && prevLocation.query.state) {

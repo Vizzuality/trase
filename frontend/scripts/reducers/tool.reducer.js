@@ -6,7 +6,6 @@ import actions from 'actions';
 import getNodesDict from './helpers/getNodesDict';
 import getVisibleNodes from './helpers/getVisibleNodes';
 import splitVisibleNodesByColumn from './helpers/splitVisibleNodesByColumn';
-import getVisibleColumns from './helpers/getVisibleColumns';
 import splitLinksByColumn from './helpers/splitLinksByColumn';
 import sortVisibleNodes from './helpers/sortVisibleNodes';
 import mergeLinks from './helpers/mergeLinks';
@@ -69,7 +68,6 @@ const initialState = {
   selectedResizeBy: { type: 'none', name: 'none' },
   selectedYears: [],
   unmergedLinks: [],
-  visibleColumns: [],
   visibleNodes: [],
   visibleNodesByColumn: []
 };
@@ -112,14 +110,9 @@ export default function (state = initialState, action) {
         selectedRecolorBy = selectedContext.recolorBy.find(recolorBy => recolorBy.isDefault === true);
       }
 
-      let selectedResizeBy;
-      if (state.selectedResizeByName === 'none') {
-        selectedResizeBy = { type: 'none', name: 'none' };
-      } else {
-        selectedResizeBy = selectedContext.resizeBy.find(resizeBy => resizeBy.name === state.selectedResizeByName);
-        if (!selectedResizeBy) {
-          selectedResizeBy = selectedContext.resizeBy.find(resizeBy => resizeBy.isDefault === true);
-        }
+      let selectedResizeBy = selectedContext.resizeBy.find(resizeBy => resizeBy.name === state.selectedResizeByName);
+      if (!selectedResizeBy) {
+        selectedResizeBy = selectedContext.resizeBy.find(resizeBy => resizeBy.isDefault === true);
       }
 
       let biomeFilter;
@@ -167,6 +160,7 @@ export default function (state = initialState, action) {
       const defaultRecolorBy = selectedContext.recolorBy.find(recolorBy => recolorBy.isDefault === true);
       const defaultResizeBy = selectedContext.resizeBy.find(resizeBy => resizeBy.isDefault === true);
       const defaultFilterBy = selectedContext.filterBy.length && selectedContext.filterBy[0][0];
+
       newState = Object.assign({}, state, {
         selectedContext,
         selectedContextId: contextId,
@@ -275,13 +269,11 @@ export default function (state = initialState, action) {
       let visibleNodesByColumn = splitVisibleNodesByColumn(visibleNodes);
       visibleNodesByColumn = sortVisibleNodes(visibleNodesByColumn);
 
-      const visibleColumns = getVisibleColumns(state.columns, state.selectedColumnsIds);
-
       const unmergedLinks = splitLinksByColumn(rawLinks, state.nodesDict, state.selectedRecolorBy);
       const links = mergeLinks(unmergedLinks);
 
       newState = Object.assign({}, state, {
-        links, unmergedLinks, visibleNodes, visibleNodesByColumn, visibleColumns, currentQuant, linksLoading: false
+        links, unmergedLinks, visibleNodes, visibleNodesByColumn, currentQuant, linksLoading: false
       });
       break;
     }
@@ -332,6 +324,7 @@ export default function (state = initialState, action) {
         selectedRecolorBy = currentContext.recolorBy
           .find(recolorBy => recolorBy.name === action.value && recolorBy.type === action.value_type);
       }
+
       newState = Object.assign({}, state, { selectedRecolorBy });
       break;
     }

@@ -48,7 +48,6 @@ class ResizeBy extends Component {
 
     resizeBys.sort((a, b) => a.position > b.position);
 
-
     const hasZeroOrSingleElement = resizeBys.length <= 1;
 
     return (
