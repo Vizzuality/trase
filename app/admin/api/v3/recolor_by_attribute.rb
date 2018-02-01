@@ -21,8 +21,10 @@ ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
         collection: Api::V3::Context.select_options
       input :group_number, required: true
       input :position, required: true
-      input :legend_type, required: true, as: :string
-      input :legend_color_theme, required: true, as: :string
+      input :legend_type, required: true, as: :select,
+        collection: Api::V3::RecolorByAttribute::LEGEND_TYPE
+      input :legend_color_theme, required: true, as: :select,
+        collection: Api::V3::RecolorByAttribute::LEGEND_COLOR_THEME
       input :interval_count
       input :min_value, as: :string
       input :max_value, as: :string

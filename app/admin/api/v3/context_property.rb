@@ -9,7 +9,8 @@ ActiveAdmin.register Api::V3::ContextProperty, as: 'ContextProperty' do
     inputs do
       input :context, as: :select, required: true,
         collection: Api::V3::Context.select_options
-      input :default_basemap, as: :string
+      input :default_basemap, as: :select,
+        collection: Api::V3::ContextProperty::DEFAULT_BASEMAP
       input :is_disabled, as: :boolean, required: true
       input :is_default, as: :boolean, required: true
       input :is_subnational, as: :boolean, required: true

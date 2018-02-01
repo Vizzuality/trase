@@ -21,7 +21,7 @@ ActiveAdmin.register Api::V3::MapAttribute, as: 'MapAttribute' do
       input :position, required: true
       input :bucket_3_str, hint: 'Comma-separated list of 2 values', label: 'Bucket 3', required: true
       input :bucket_5_str, hint: 'Comma-separated list of 4 values', label: 'Bucket 5', required: true
-      input :color_scale, as: :string
+      input :color_scale, as: :select, collection: Api::V3::MapAttribute::COLOR_SCALE
       input :years_str, hint: 'Comma-separated list of years', label: 'Years'
       input :is_disabled, as: :boolean, required: true
       input :is_default, as: :boolean, required: true

@@ -11,7 +11,8 @@ ActiveAdmin.register Api::V3::IndProperty, as: 'IndProperty' do
       input :ind, as: :select, required: true,
         collection: Api::V3::Ind.select_options
       input :display_name, required: true, as: :string
-      input :unit_type, as: :string
+      input :unit_type, as: :select,
+        collection: Api::V3::IndProperty::UNIT_TYPE
       input :tooltip_text, as: :string
       input :is_visible_on_place_profile, as: :boolean, required: true
       input :is_visible_on_actor_profile, as: :boolean, required: true
