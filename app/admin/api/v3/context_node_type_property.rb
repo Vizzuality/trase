@@ -9,10 +9,15 @@ ActiveAdmin.register Api::V3::ContextNodeTypeProperty, as: 'ContextNodeTypePrope
     inputs do
       input :context_node_type, as: :select, required: true,
         collection: Api::V3::ContextNodeType.select_options
-      input :column_group, required: true
-      input :is_default, as: :boolean, required: true
-      input :is_geo_column, as: :boolean, required: true
-      input :is_choropleth_disabled, as: :boolean, required: true
+      input :column_group, as: :select, required: true,
+        collection: Api::V3::ContextNodeTypeProperty::COLUMN_GROUP,
+        hint: object.class.column_comment('column_group')
+      input :is_default, as: :boolean, required: true,
+        hint: object.class.column_comment('is_default')
+      input :is_geo_column, as: :boolean, required: true,
+        hint: object.class.column_comment('is_geo_column')
+      input :is_choropleth_disabled, as: :boolean, required: true,
+        hint: object.class.column_comment('is_choropleth_disabled')
     end
     f.actions
   end

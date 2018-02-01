@@ -7,9 +7,12 @@ ActiveAdmin.register Api::V3::CountryProperty, as: 'CountryProperty' do
     f.semantic_errors
     inputs do
       input :country, as: :select, required: true
-      input :latitude, required: true
-      input :longitude, required: true
-      input :zoom, required: true
+      input :latitude, required: true,
+        hint: object.class.column_comment('latitude')
+      input :longitude, required: true,
+        hint: object.class.column_comment('longitude')
+      input :zoom, required: true,
+        hint: object.class.column_comment('zoom')
     end
     f.actions
   end

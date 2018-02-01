@@ -15,24 +15,36 @@ ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
   form do |f|
     f.semantic_errors
     inputs do
-      input :readonly_attribute_id, as: :select, collection: Api::V3::Readonly::Attribute.
-        select_options
+      input :readonly_attribute_id, as: :select,
+        collection: Api::V3::Readonly::Attribute.select_options
       input :context, as: :select, required: true,
         collection: Api::V3::Context.select_options
-      input :group_number, required: true
-      input :position, required: true
+      input :group_number, required: true,
+        hint: object.class.column_comment('group_number')
+      input :position, required: true,
+        hint: object.class.column_comment('position')
       input :legend_type, required: true, as: :select,
-        collection: Api::V3::RecolorByAttribute::LEGEND_TYPE
+        collection: Api::V3::RecolorByAttribute::LEGEND_TYPE,
+        hint: object.class.column_comment('legend_type')
       input :legend_color_theme, required: true, as: :select,
-        collection: Api::V3::RecolorByAttribute::LEGEND_COLOR_THEME
-      input :interval_count
-      input :min_value, as: :string
-      input :max_value, as: :string
-      input :divisor
-      input :tooltip_text, as: :string
-      input :years_str, hint: 'Comma-separated list of years', label: 'Years'
-      input :is_disabled, as: :boolean, required: true
-      input :is_default, as: :boolean, required: true
+        collection: Api::V3::RecolorByAttribute::LEGEND_COLOR_THEME,
+        hint: object.class.column_comment('legend_color_theme')
+      input :interval_count,
+        hint: object.class.column_comment('interval_count')
+      input :min_value, as: :string,
+        hint: object.class.column_comment('min_value')
+      input :max_value, as: :string,
+        hint: object.class.column_comment('max_value')
+      input :divisor,
+        hint: object.class.column_comment('divisor')
+      input :tooltip_text, as: :string,
+        hint: object.class.column_comment('tooltip_text')
+      input :years_str, label: 'Years',
+        hint: (object.class.column_comment('years') || '') + ' (comma-separated list)'
+      input :is_disabled, as: :boolean, required: true,
+        hint: object.class.column_comment('is_disabled')
+      input :is_default, as: :boolean, required: true,
+        hint: object.class.column_comment('is_default')
     end
     f.actions
   end

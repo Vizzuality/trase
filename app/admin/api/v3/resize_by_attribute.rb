@@ -16,12 +16,18 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
         select_options
       input :context, as: :select, required: true,
         collection: Api::V3::Context.select_options
-      input :group_number, required: true
-      input :position, required: true
-      input :tooltip_text, as: :string
-      input :years_str, hint: 'Comma-separated list of years', label: 'Years'
-      input :is_disabled, as: :boolean, required: true
-      input :is_default, as: :boolean, required: true
+      input :group_number, required: true,
+        hint: object.class.column_comment('group_number')
+      input :position, required: true,
+        hint: object.class.column_comment('position')
+      input :tooltip_text, as: :string,
+        hint: object.class.column_comment('tooltip_text')
+      input :years_str, label: 'Years',
+        hint: (object.class.column_comment('years') || '') + ' (comma-separated list)'
+      input :is_disabled, as: :boolean, required: true,
+        hint: object.class.column_comment('is_disabled')
+      input :is_default, as: :boolean, required: true,
+        hint: object.class.column_comment('is_default')
     end
     f.actions
   end

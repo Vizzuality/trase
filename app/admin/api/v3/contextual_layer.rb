@@ -9,12 +9,18 @@ ActiveAdmin.register Api::V3::ContextualLayer, as: 'ContextualLayer' do
     inputs do
       input :context, as: :select, required: true,
         collection: Api::V3::Context.select_options
-      input :title, required: true, as: :string
-      input :identifier, required: true, as: :string
-      input :position, required: true
-      input :tooltip_text, as: :string
-      input :legend
-      input :is_default, as: :boolean, required: true
+      input :title, required: true, as: :string,
+        hint: object.class.column_comment('title')
+      input :identifier, required: true, as: :string,
+        hint: object.class.column_comment('identifier')
+      input :position, required: true,
+        hint: object.class.column_comment('position')
+      input :tooltip_text, as: :string,
+        hint: object.class.column_comment('tooltip_text')
+      input :legend,
+        hint: object.class.column_comment('legend')
+      input :is_default, as: :boolean, required: true,
+        hint: object.class.column_comment('is_default')
     end
     f.actions
   end

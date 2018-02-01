@@ -8,7 +8,9 @@ ActiveAdmin.register Api::V3::Profile, as: 'Profile' do
     inputs do
       input :context_node_type, as: :select, required: true,
         collection: Api::V3::ContextNodeType.select_options
-      input :name, as: :string
+      input :name, as: :select,
+        collection: Api::V3::Profile::NAME,
+        hint: object.class.column_comment('name')
     end
     f.actions
   end
