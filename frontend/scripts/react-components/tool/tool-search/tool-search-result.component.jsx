@@ -33,7 +33,7 @@ export default class ToolSearchResult extends Component {
     const nameSegments = ToolSearchResult.getNameSegments(value, item.name);
 
     return (
-      <div {...itemProps} className={cx('c-tool-search-result', { '-highlighted': isHighlighted })}>
+      <li {...itemProps} className={cx('c-tool-search-result', { '-highlighted': isHighlighted })}>
         <div className="tool-search-node-text-container">
           <span className="tool-search-node-type">{item.type}</span>
           <span className="tool-search-node-name">{nameSegments}</span>
@@ -58,7 +58,7 @@ export default class ToolSearchResult extends Component {
               </button>
             ))}
         </div>
-      </div>
+      </li>
     );
   }
 }

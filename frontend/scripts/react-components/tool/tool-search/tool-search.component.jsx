@@ -161,10 +161,11 @@ export default class Search extends Component {
                     })}
                     ref={this.getInputRef}
                     className="tool-search-bar-input"
+                    type="search"
                   />
                 </div>
                 {isOpen && (
-                  <div className="tool-search-results">
+                  <ul className="tool-search-results">
                     {nodes
                       .filter(
                         i => !inputValue || i.name.toLowerCase().includes(inputValue.toLowerCase())
@@ -182,7 +183,7 @@ export default class Search extends Component {
                           onClickAdd={this.onAddNode}
                         />
                       ))}
-                  </div>
+                  </ul>
                 )}
               </div>
             )}
