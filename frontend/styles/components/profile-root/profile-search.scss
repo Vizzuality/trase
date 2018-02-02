@@ -31,8 +31,12 @@ $spinner-height-large: 40px;
     }
 
     &.-loading {
-      .profile-search-input::placeholder {
-        color: $charcoal-grey-faded-a-lot;
+      background-color: $charcoal-grey-faded-a-lot;
+      .profile-search-input {
+        background-color: rgba(0,0,0,0);
+        &::placeholder {
+          color: $charcoal-grey-faded-a-lot;
+        }
       }
     }
 
