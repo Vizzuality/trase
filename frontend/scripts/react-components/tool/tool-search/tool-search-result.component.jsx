@@ -13,9 +13,9 @@ export default class ToolSearchResult extends Component {
     }).map((chunk) => {
       const segmentStr = name.substr(chunk.start, chunk.end - chunk.start);
       return chunk.highlight ? (
-        <mark key={`marked_${segmentStr}_${name}`}>{segmentStr}</mark>
+        <mark key={`marked_${segmentStr}_${name}_${chunk.start}`}>{segmentStr}</mark>
       ) : (
-        <span key={`clean${segmentStr}_${name}`}>{segmentStr}</span>
+        <span key={`clean${segmentStr}_${name}_${chunk.start}`}>{segmentStr}</span>
       );
     });
   }
