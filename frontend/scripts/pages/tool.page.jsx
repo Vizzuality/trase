@@ -18,7 +18,7 @@ import NavReactContainer from 'containers/../react-components/tool/nav-tool.cont
 import NavContainer from 'containers/tool/nav/nav-tool-navigation.container';
 import TitlebarContainer from 'containers/tool/titlebar.container';
 import NodesTitlesContainer from 'containers/tool/nodesTitles.container';
-import SearchContainer from 'react-components/shared/search/search.container';
+import SearchContainer from 'react-components/tool/tool-search/tool-search.container';
 import ModalContainer from 'containers/tool/story-modal.container';
 import TooltipContainer from 'containers/shared/help-tooltip.container';
 
@@ -54,21 +54,21 @@ export const mount = (root, store) => {
 
   new NavContainer(store);
   render(
-    <Provider store={store} >
+    <Provider store={store}>
       <NavReactContainer />
-    </Provider >,
+    </Provider>,
     document.getElementById('js-tool-nav-react')
   );
   render(
-    <Provider store={store} >
+    <Provider store={store}>
       <ColumnsSelectorContainer />
-    </Provider >,
+    </Provider>,
     document.getElementById('js-columns-selector-react')
   );
   render(
-    <Provider store={store} >
+    <Provider store={store}>
       <SearchContainer />
-    </Provider >,
+    </Provider>,
     document.getElementById('js-search-react')
   );
 

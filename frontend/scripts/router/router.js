@@ -7,13 +7,10 @@ import {
   getTestimonialsContent
 } from 'react-components/home/home.thunks';
 
-import {
-  getDataPortalContext
-} from 'react-components/data-portal/data-portal.thunks';
+import { getDataPortalContext } from 'react-components/data-portal/data-portal.thunks';
 
-import {
-  getPageStaticContent
-} from 'react-components/static-content/static-content.thunks';
+import { getPageStaticContent } from 'react-components/static-content/static-content.thunks';
+import { getProfileRootNodes } from 'react-components/profile-root/profile-root.thunks';
 
 const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thunk(...params));
 
@@ -41,9 +38,11 @@ const routes = {
     page: 'tool',
     thunk: dispatchThunks(resetToolThunk)
   },
-  profiles: {
+  profileRoot: {
     path: '/profiles',
-    page: 'profiles',
+    page: 'profile-root',
+    extension: 'jsx',
+    thunk: dispatchThunks(getProfileRootNodes),
     nav: {
       className: '-light'
     }
@@ -95,10 +94,7 @@ const routes = {
   [NOT_FOUND]: {
     path: '/404',
     page: 'static-content',
-    thunk: dispatchThunks(
-      () => replace('/404'),
-      getPageStaticContent
-    )
+    thunk: dispatchThunks(() => replace('/404'), getPageStaticContent)
   }
 };
 

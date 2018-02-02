@@ -9,17 +9,20 @@ import debounce from 'lodash/debounce';
 class SliderSection extends React.PureComponent {
   static getPerPage() { // might seem repetitive but it's still needed.
     switch (true) {
-      case (window.innerWidth < 640): return 1;
-      case (window.innerWidth < 950): return 2;
-      default: return 3;
+      case (window.innerWidth < 640):
+        return 1;
+      case (window.innerWidth < 950):
+        return 2;
+      default:
+        return 3;
     }
   }
 
   static getActionName(category) {
-     if (['INFO BRIEF', 'ISSUE BRIEF'].includes(category)) {
-       return 'Open document';
-     }
-     return 'See More';
+    if (['INFO BRIEF', 'ISSUE BRIEF'].includes(category)) {
+      return 'Open document';
+    }
+    return 'See More';
   }
 
   constructor(props) {
@@ -105,11 +108,9 @@ class SliderSection extends React.PureComponent {
                 ))
             }
           </Siema>
-          {currentSlide > 0 && !smallScreen &&
-            <button className="slide-prev" onClick={this.onClickPrev} />
-          }
+          {currentSlide > 0 && !smallScreen && <button className="slide-prev" onClick={this.onClickPrev} />}
           {currentSlide < (slides.length - visiblePages) && !smallScreen &&
-            <button className="slide-next" onClick={this.onClickNext} />
+          <button className="slide-next" onClick={this.onClickNext} />
           }
         </div>
       </section>

@@ -1,0 +1,73 @@
+@import '../../settings';
+@import '../../mixins';
+
+.c-tool-search-result {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 15px;
+  cursor: pointer;
+  border-bottom: solid 1px $pale-grey;
+  overflow: hidden;
+
+  .tool-search-node-text-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    max-width: 600px;
+    height: 56px;
+  }
+
+  .tool-search-node-name {
+    left: -1px;
+    font-family: $font-family-1;
+    font-size: 17px;
+    letter-spacing: -0.5px;
+    color: $charcoal-grey;
+    text-transform: uppercase;
+  }
+
+  .tool-search-node-type {
+    @include smallcaps;
+    display: block;
+  }
+
+  .tool-search-node-actions-container {
+    display: none;
+
+    button {
+      height: 40px;
+      letter-spacing: -0.7px;
+      line-height: 0.77;
+
+      &:hover {
+        border-color: transparent;
+        background-color: $charcoal-grey;
+        color: $white;
+      }
+    }
+
+    * {
+      margin-right: 8px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  mark {
+    background: $egg-shell;
+  }
+
+  &:hover,
+  &[aria-selected='true'],
+  &.-highlighted {
+    background: $egg-shell;
+    color: $charcoal-grey;
+
+    .tool-search-node-actions-container {
+      display: flex;
+    }
+  }
+}

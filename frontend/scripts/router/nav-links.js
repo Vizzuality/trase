@@ -1,4 +1,3 @@
-
 export default {
   nav: [
     {
@@ -14,7 +13,7 @@ export default {
     },
     {
       name: 'Profiles',
-      page: 'profiles'
+      page: 'profileRoot'
     },
     {
       name: 'Download',

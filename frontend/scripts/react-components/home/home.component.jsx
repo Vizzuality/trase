@@ -20,9 +20,11 @@ function Home(props) {
         <div className="splitted">
           <div className="row">
             <div className="column small-12 medium-6">
-              <Link to={{ type: 'profiles' }} className="splitted-column-wrapper">
+              <Link to={{ type: 'profileRoot' }} className="splitted-column-wrapper">
                 <h3 className="subtitle">Profile</h3>
-                <p className="splitted-text">Can companies and governments meet their 2020 sustainability goals?</p>
+                <p className="splitted-text">
+                  Can companies and governments meet their 2020 sustainability goals?
+                </p>
               </Link>
               <div className="screenshot -half" />
             </div>
@@ -30,8 +32,8 @@ function Home(props) {
               <Link to={{ type: 'tool' }} className="splitted-column-wrapper">
                 <h3 className="subtitle">Supply Chain</h3>
                 <p className="splitted-text">
-                  Explore the supply chains and find the impacts and
-                  opportunities for a more sustainable production.
+                  Explore the supply chains and find the impacts and opportunities for a more
+                  sustainable production.
                 </p>
               </Link>
               <div className="screenshot -end" />

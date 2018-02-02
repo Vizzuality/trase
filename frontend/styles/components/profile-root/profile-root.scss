@@ -1,0 +1,40 @@
+
+.c-profile-root {
+
+  .profile-root-search-container {
+    padding: 90px 0;
+  }
+
+  .profile-root-heading-container {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+
+    .profile-root-heading-wrapper {
+      flex-shrink: 0;
+
+      .title {
+        font-size: 24px;
+
+        @media only screen and (min-width: $breakpoint-foundation-small) {
+          font-size: 48px;
+        }
+      }
+    }
+  }
+
+  .profile-root-explanatory-text {
+    color: $charcoal-grey-faded;
+    font-family: $font-family-2;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.71;
+    text-align: center;
+    margin: 10px 0 0;
+  }
+
+  .profile-root-mock {
+    width: 100%;
+    vertical-align: bottom
+  }
+}
