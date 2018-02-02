@@ -10,7 +10,7 @@ class DatabaseUpdateWorker
   rescue => e
     database_update.update_attribute(:status, Api::V3::DatabaseUpdate::FAILED)
     Rails.logger.error e.message
-    # Appsignal.send_error(e) # TODO: enable when appsignal back in
+    Appsignal.send_error(e)
     return
   end
 end
