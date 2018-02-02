@@ -19,6 +19,8 @@ module Api
       validates :name, presence: true
       validates :position, presence: true, uniqueness: {scope: :context}
 
+      after_commit :refresh_dependencies
+
       def self.select_options
         Api::V3::MapAttributeGroup.includes(
           context: [:country, :commodity]
@@ -38,6 +40,10 @@ module Api
         [
           {name: :context_id, table_class: Api::V3::Context}
         ]
+      end
+
+      def refresh_dependencies
+        Api::V3::Readonly::MapAttribute.refresh
       end
     end
   end

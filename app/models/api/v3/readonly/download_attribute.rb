@@ -1,7 +1,7 @@
 module Api
   module V3
     module Readonly
-      class DownloadAttribute < BaseModel
+      class DownloadAttribute < Api::V3::Readonly::BaseModel
         self.table_name = 'revamp.download_attributes_mv'
         self.primary_key = 'id'
 
@@ -9,7 +9,7 @@ module Api
         belongs_to :readonly_attribute, foreign_key: :attribute_id, class_name: 'Attribute'
 
         def self.refresh
-          ActiveRecord::Base.connection.execute('REFRESH MATERIALIZED VIEW download_attributes_mv')
+          Scenic.database.refresh_materialized_view(table_name, concurrently: false)
         end
       end
     end

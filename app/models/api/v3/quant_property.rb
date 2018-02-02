@@ -21,10 +21,16 @@ module Api
       validates :is_temporal_on_place_profile, inclusion: {in: [true, false]}
       validates :is_temporal_on_actor_profile, inclusion: {in: [true, false]}
 
+      after_commit :refresh_dependencies
+
       def self.blue_foreign_keys
         [
           {name: :quant_id, table_class: Api::V3::Quant}
         ]
+      end
+
+      def refresh_dependencies
+        Api::V3::Readonly::Attribute.refresh
       end
     end
   end

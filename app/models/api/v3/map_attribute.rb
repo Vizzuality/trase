@@ -47,6 +47,8 @@ module Api
       validates_with AttributeAssociatedOnceValidator,
         attribute: :map_quant, scope: :map_attribute_group, if: :new_map_quant_given?
 
+      after_commit :refresh_dependencies
+
       stringy_array :bucket_3
       stringy_array :bucket_5
       stringy_array :years
@@ -56,6 +58,10 @@ module Api
         [
           {name: :map_attribute_group_id, table_class: Api::V3::MapAttributeGroup}
         ]
+      end
+
+      def refresh_dependencies
+        Api::V3::Readonly::MapAttribute.refresh
       end
     end
   end

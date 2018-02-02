@@ -19,6 +19,8 @@ module Api
       validates_with AttributeAssociatedOnceValidator,
         attribute: :download_quant, if: :new_download_quant_given?
 
+      after_commit :refresh_dependencies
+
       stringy_array :years
       manage_associated_attributes [:download_qual, :download_quant]
 
@@ -26,6 +28,10 @@ module Api
         [
           {name: :context_id, table_class: Api::V3::Context}
         ]
+      end
+
+      def refresh_dependencies
+        Api::V3::Readonly::DownloadAttribute.refresh
       end
     end
   end

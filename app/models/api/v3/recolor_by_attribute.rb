@@ -38,6 +38,8 @@ module Api
       validates_with AttributeAssociatedOnceValidator,
         attribute: :recolor_by_qual, if: :new_recolor_by_qual_given?
 
+      after_commit :refresh_dependencies
+
       stringy_array :years
       manage_associated_attributes [:recolor_by_ind, :recolor_by_qual]
 
@@ -45,6 +47,10 @@ module Api
         [
           {name: :context_id, table_class: Api::V3::Context}
         ]
+      end
+
+      def refresh_dependencies
+        Api::V3::Readonly::RecolorByAttribute.refresh
       end
     end
   end
