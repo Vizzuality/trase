@@ -14,24 +14,24 @@ ActiveAdmin.register Api::V3::MapAttribute, as: 'MapAttribute' do
   form do |f|
     f.semantic_errors
     inputs do
-      input :readonly_attribute_id, as: :select, collection: Api::V3::Readonly::Attribute.
-        select_options
+      input :readonly_attribute_id, as: :select,
+            collection: Api::V3::Readonly::Attribute.select_options
       input :map_attribute_group, as: :select, required: true,
-        collection: Api::V3::MapAttributeGroup.select_options
+            collection: Api::V3::MapAttributeGroup.select_options
       input :position, required: true,
-        hint: object.class.column_comment('position')
+            hint: object.class.column_comment('position')
       input :bucket_3_str, label: 'Bucket 3', required: true,
-        hint: (object.class.column_comment('bucket_3') || '') + ' (comma-separated list of 2 values)'
+            hint: (object.class.column_comment('bucket_3') || '') + ' (comma-separated list of 2 values)'
       input :bucket_5_str, label: 'Bucket 5', required: true,
-        hint: (object.class.column_comment('bucket_3') || '') + ' (comma-separated list of 4 values)'
+            hint: (object.class.column_comment('bucket_3') || '') + ' (comma-separated list of 4 values)'
       input :color_scale, as: :select, collection: Api::V3::MapAttribute::COLOR_SCALE,
-        hint: object.class.column_comment('color_scale')
+            hint: object.class.column_comment('color_scale')
       input :years_str, label: 'Years',
-        hint: (object.class.column_comment('years') || '') + ' (comma-separated list)'
+            hint: (object.class.column_comment('years') || '') + ' (comma-separated list)'
       input :is_disabled, as: :boolean, required: true,
-        hint: object.class.column_comment('is_disabled')
+            hint: object.class.column_comment('is_disabled')
       input :is_default, as: :boolean, required: true,
-        hint: object.class.column_comment('is_default')
+            hint: object.class.column_comment('is_default')
     end
     f.actions
   end
@@ -60,6 +60,7 @@ ActiveAdmin.register Api::V3::MapAttribute, as: 'MapAttribute' do
     end
   end
 
-  filter :map_attribute_group, collection: -> { Api::V3::MapAttributeGroup.
-    select_options }
+  filter :map_attribute_group, collection: -> {
+    Api::V3::MapAttributeGroup.select_options
+  }
 end

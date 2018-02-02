@@ -7,16 +7,16 @@ ActiveAdmin.register Api::V3::DownloadAttribute, as: 'DownloadAttribute' do
   form do |f|
     f.semantic_errors
     inputs do
-      input :readonly_attribute_id, as: :select, collection: Api::V3::Readonly::Attribute.
-        select_options
+      input :readonly_attribute_id, as: :select,
+            collection: Api::V3::Readonly::Attribute.select_options
       input :context, as: :select, required: true,
-        collection: Api::V3::Context.select_options
+            collection: Api::V3::Context.select_options
       input :position, required: true,
-        hint: object.class.column_comment('position')
+            hint: object.class.column_comment('position')
       input :display_name, required: true, as: :string,
-        hint: object.class.column_comment('display_name')
+            hint: object.class.column_comment('display_name')
       input :years_str, label: 'Years',
-        hint: (object.class.column_comment('years') || '') + ' (comma-separated list)'
+            hint: (object.class.column_comment('years') || '') + ' (comma-separated list)'
     end
     f.actions
   end

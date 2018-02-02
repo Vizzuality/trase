@@ -7,13 +7,13 @@ ActiveAdmin.register Api::V3::CartoLayer, as: 'CartoLayer' do
     f.semantic_errors
     inputs do
       input :contextual_layer, as: :select, required: true,
-        collection: Api::V3::ContextualLayer.select_options
+            collection: Api::V3::ContextualLayer.select_options
       input :identifier, required: true, as: :string,
-        hint: object.class.column_comment('identifier')
+            hint: object.class.column_comment('identifier')
       input :years_str, label: 'Years',
-        hint: (object.class.column_comment('years') || '') + ' (comma-separated list)'
+            hint: (object.class.column_comment('years') || '') + ' (comma-separated list)'
       input :raster_url,
-        hint: object.class.column_comment('raster_url')
+            hint: object.class.column_comment('raster_url')
     end
     f.actions
   end

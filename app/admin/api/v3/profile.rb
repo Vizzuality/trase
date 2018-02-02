@@ -7,10 +7,10 @@ ActiveAdmin.register Api::V3::Profile, as: 'Profile' do
     f.semantic_errors
     inputs do
       input :context_node_type, as: :select, required: true,
-        collection: Api::V3::ContextNodeType.select_options
+            collection: Api::V3::ContextNodeType.select_options
       input :name, as: :select,
-        collection: Api::V3::Profile::NAME,
-        hint: object.class.column_comment('name')
+            collection: Api::V3::Profile::NAME,
+            hint: object.class.column_comment('name')
     end
     f.actions
   end
@@ -23,6 +23,7 @@ ActiveAdmin.register Api::V3::Profile, as: 'Profile' do
     actions
   end
 
-  filter :context_node_type, collection: -> { Api::V3::ContextNodeType.
-    select_options }
+  filter :context_node_type, collection: -> {
+    Api::V3::ContextNodeType.select_options
+  }
 end
