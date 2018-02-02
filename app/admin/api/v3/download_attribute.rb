@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::DownloadAttribute, as: 'DownloadAttribute' do
-  menu parent: 'Yellow Tables'
+  menu parent: 'Data Download Settings'
 
   permit_params :context_id, :position, :display_name, :years_str,
                 :readonly_attribute_id
@@ -7,24 +7,24 @@ ActiveAdmin.register Api::V3::DownloadAttribute, as: 'DownloadAttribute' do
   form do |f|
     f.semantic_errors
     inputs do
-      input :readonly_attribute_id, as: :select,
-            collection: Api::V3::Readonly::Attribute.select_options
+      input :readonly_attribute_id, as: :select, collection: Api::V3::Readonly::Attribute.
+        select_options, label: 'Property'
       input :context, as: :select, required: true,
-            collection: Api::V3::Context.select_options
+                      collection: Api::V3::Context.select_options
       input :position, required: true,
-            hint: object.class.column_comment('position')
+                       hint: object.class.column_comment('position')
       input :display_name, required: true, as: :string,
-            hint: object.class.column_comment('display_name')
+                           hint: object.class.column_comment('display_name')
       input :years_str, label: 'Years',
-            hint: (object.class.column_comment('years') || '') + ' (comma-separated list)'
+                        hint: (object.class.column_comment('years') || '') + ' (comma-separated list)'
     end
     f.actions
   end
 
   index do
-    column :readonly_attribute_name
-    column('Country') { |property| property.context&.country&.name }
-    column('Commodity') { |property| property.context&.commodity&.name }
+    column('Property', sortable: true, &:readonly_attribute_display_name)
+    column('Country', sortable: true) { |property| property.context&.country&.name }
+    column('Commodity', sortable: true) { |property| property.context&.commodity&.name }
     column :position
     column :display_name
     column :years
@@ -33,10 +33,15 @@ ActiveAdmin.register Api::V3::DownloadAttribute, as: 'DownloadAttribute' do
 
   show do
     attributes_table do
-      row :readonly_attribute_name
-      default_attribute_table_rows.each do |field|
-        row field
-      end
+      row('Property', &:readonly_attribute_display_name)
+      row('Country') { |property| property.context&.country&.name }
+      row('Commodity') { |property| property.context&.commodity&.name }
+
+      row :position
+      row :display_name
+      row :years
+      row :created_at
+      row :updated_at
     end
   end
 

@@ -1,4 +1,6 @@
 ActiveAdmin.register Content::SiteDive, as: 'Site Dive' do
+  menu parent: 'Content'
+
   permit_params :title, :page_url, :description
 
   form do |f|

@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
-  menu parent: 'Yellow Tables'
+  menu parent: 'Sankey Settings'
 
   includes [
     {context: [:country, :commodity]},
@@ -16,51 +16,45 @@ ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
     f.semantic_errors
     inputs do
       input :readonly_attribute_id, as: :select,
-            collection: Api::V3::Readonly::Attribute.select_options
+                                    collection: Api::V3::Readonly::Attribute.select_options,
+                                    label: 'Recolor By Property'
       input :context, as: :select, required: true,
-            collection: Api::V3::Context.select_options
+                      collection: Api::V3::Context.select_options
       input :group_number, required: true,
-            hint: object.class.column_comment('group_number')
+                           hint: object.class.column_comment('group_number')
       input :position, required: true,
-            hint: object.class.column_comment('position')
+                       hint: object.class.column_comment('position')
       input :legend_type, required: true, as: :select,
-            collection: Api::V3::RecolorByAttribute::LEGEND_TYPE,
-            hint: object.class.column_comment('legend_type')
+                          collection: Api::V3::RecolorByAttribute::LEGEND_TYPE,
+                          hint: object.class.column_comment('legend_type')
       input :legend_color_theme, required: true, as: :select,
-            collection: Api::V3::RecolorByAttribute::LEGEND_COLOR_THEME,
-            hint: object.class.column_comment('legend_color_theme')
+                                 collection: Api::V3::RecolorByAttribute::LEGEND_COLOR_THEME,
+                                 hint: object.class.column_comment('legend_color_theme')
       input :interval_count,
             hint: object.class.column_comment('interval_count')
       input :min_value, as: :string,
-            hint: object.class.column_comment('min_value')
+                        hint: object.class.column_comment('min_value')
       input :max_value, as: :string,
-            hint: object.class.column_comment('max_value')
+                        hint: object.class.column_comment('max_value')
       input :divisor,
             hint: object.class.column_comment('divisor')
       input :tooltip_text, as: :string,
-            hint: object.class.column_comment('tooltip_text')
+                           hint: object.class.column_comment('tooltip_text')
       input :years_str, label: 'Years',
-            hint: (object.class.column_comment('years') || '') + ' (comma-separated list)'
+                        hint: (object.class.column_comment('years') || '') + ' (comma-separated list)'
       input :is_disabled, as: :boolean, required: true,
-            hint: object.class.column_comment('is_disabled')
+                          hint: object.class.column_comment('is_disabled')
       input :is_default, as: :boolean, required: true,
-            hint: object.class.column_comment('is_default')
+                         hint: object.class.column_comment('is_default')
     end
     f.actions
   end
 
   index do
-    column :readonly_attribute_name
+    column('Recolor By Property', sortable: true, &:readonly_attribute_display_name)
     column('Country') { |property| property.context&.country&.name }
     column('Commodity') { |property| property.context&.commodity&.name }
-    column :group_number
     column :position
-    column :legend_type
-    column :legend_color_theme
-    column :interval_count
-    column :min_value
-    column :max_value
-    column :divisor
     column :tooltip_text
     column :years
     column :is_disabled
@@ -70,12 +64,28 @@ ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
 
   show do
     attributes_table do
-      row :readonly_attribute_name
-      default_attribute_table_rows.each do |field|
-        row field
-      end
+      row('Country') { |property| property.context&.country&.name }
+      row('Commodity') { |property| property.context&.commodity&.name }
+      row('Recolor By Property', &:readonly_attribute_display_name)
+
+      row :group_number
+      row :position
+      row :legend_type
+      row :legend_color_theme
+      row :interval_count
+      row :min_value
+      row :max_value
+      row :divisor
+      row :tooltip_text
+      row('Years', &:years_str)
+      row :is_disabled
+      row :is_default
+      row :created_at
+      row :updated_at
     end
   end
 
   filter :context, collection: -> { Api::V3::Context.select_options }
+  filter :is_disabled
+  filter :is_default
 end

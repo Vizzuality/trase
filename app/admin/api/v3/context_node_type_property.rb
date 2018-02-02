@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::ContextNodeTypeProperty, as: 'ContextNodeTypeProperty' do
-  menu parent: 'Yellow Tables'
+  menu parent: 'Map Settings'
 
   permit_params :context_node_type_id, :column_group, :is_default,
                 :is_geo_column, :is_choropleth_disabled
@@ -8,24 +8,24 @@ ActiveAdmin.register Api::V3::ContextNodeTypeProperty, as: 'ContextNodeTypePrope
     f.semantic_errors
     inputs do
       input :context_node_type, as: :select, required: true,
-            collection: Api::V3::ContextNodeType.select_options
+                                collection: Api::V3::ContextNodeType.select_options
       input :column_group, as: :select, required: true,
-            collection: Api::V3::ContextNodeTypeProperty::COLUMN_GROUP,
-            hint: object.class.column_comment('column_group')
+                           collection: Api::V3::ContextNodeTypeProperty::COLUMN_GROUP,
+                           hint: object.class.column_comment('column_group')
       input :is_default, as: :boolean, required: true,
-            hint: object.class.column_comment('is_default')
+                         hint: object.class.column_comment('is_default')
       input :is_geo_column, as: :boolean, required: true,
-            hint: object.class.column_comment('is_geo_column')
+                            hint: object.class.column_comment('is_geo_column')
       input :is_choropleth_disabled, as: :boolean, required: true,
-            hint: object.class.column_comment('is_choropleth_disabled')
+                                     hint: object.class.column_comment('is_choropleth_disabled')
     end
     f.actions
   end
 
   index do
-    column('Country') { |property| property.context_node_type&.context&.country&.name }
-    column('Commodity') { |property| property.context_node_type&.context&.commodity&.name }
-    column('Node Type') { |property| property.context_node_type&.node_type&.name }
+    column('Country', sortable: true) { |property| property.context_node_type&.context&.country&.name }
+    column('Commodity', sortable: true) { |property| property.context_node_type&.context&.commodity&.name }
+    column('Node Type', sortable: true) { |property| property.context_node_type&.node_type&.name }
     column :column_group
     column :is_default
     column :is_geo_column
@@ -33,6 +33,28 @@ ActiveAdmin.register Api::V3::ContextNodeTypeProperty, as: 'ContextNodeTypePrope
     actions
   end
 
-  filter :context_node_type, collection: -> { Api::V3::ContextNodeType.
-    select_options }
+  show do
+    attributes_table do
+      row('Country') { |property| property.context_node_type&.context&.country&.name }
+      row('Commodity') { |property| property.context_node_type&.context&.commodity&.name }
+      row('Node Type') { |property| property.context_node_type&.node_type&.name }
+
+      row :column_group
+      row :is_default
+      row :is_geo_column
+      row :is_choropleth_disabled
+      row :created_at
+      row :updated_at
+    end
+  end
+
+  filter :context_node_type, collection: -> {
+    Api::V3::ContextNodeType.
+      select_options
+  }
+
+  filter :context_node_type_context_id, label: 'Context', as: :select, collection: -> {
+    Api::V3::Context.
+      select_options
+  }
 end

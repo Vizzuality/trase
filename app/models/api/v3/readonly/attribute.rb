@@ -6,12 +6,12 @@ module Api
         self.primary_key = 'id'
 
         def self.select_options
-          all.map { |a| [a.name, a.id ] }
+          all.map { |a| [a.display_name, a.id] }
         end
 
         def self.refresh
           super
-          dependents.each { |mv| mv.refresh }
+          dependents.each(&:refresh)
         end
 
         def self.dependents

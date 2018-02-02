@@ -20,7 +20,7 @@ module Api
             [
               layer.context&.country&.name,
               layer.context&.commodity&.name,
-              layer.identifier
+              layer.title
             ].join(' / '),
             layer.id
           ]

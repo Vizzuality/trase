@@ -24,6 +24,10 @@ module Api
         readonly_attribute&.id
       end
 
+      def readonly_attribute_display_name
+        readonly_attribute&.display_name
+      end
+
       def readonly_attribute_name
         readonly_attribute&.name
       end
@@ -68,14 +72,12 @@ module Api
           if readonly_attribute.original_type != attr_type.capitalize
             # delete when saving parent
             send(attr_name)&.mark_for_destruction
+          elsif assoc_obj
+            # update existing associated object with new attribute id
+            assoc_obj.send(:"#{attr_type}_id=", readonly_attribute.original_id)
           else
-            if assoc_obj
-              # update existing associated object with new attribute id
-              assoc_obj.send(:"#{attr_type}_id=", readonly_attribute.original_id)
-            else
-              # build a new associated object (saved with parent)
-              self.send(:"build_#{attr_name}", :"#{attr_type}_id" => readonly_attribute.original_id)
-            end
+            # build a new associated object (saved with parent)
+            send(:"build_#{attr_name}", :"#{attr_type}_id" => readonly_attribute.original_id)
           end
         end
       end

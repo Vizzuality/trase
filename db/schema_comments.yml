@@ -188,17 +188,17 @@ tables:
       - name: position
         comment: Display order in scope of group
       - name: bucket_3
-        comment: Choropleth buckets
+        comment: Choropleth buckets for single dimension choropleth
       - name: bucket_5
-        comment: Choropleth buckets
+        comment: Choropleth buckets for dual dimension choropleth
       - name: color_scale
         comment: Choropleth colour scale, e.g. blue
       - name: years
         comment: Years for which attribute is present; empty (NULL) for all years
       - name: is_disabled
-        comment: When set, do not show this attribute
+        comment: When set, this attribute is not displayed
       - name: is_default
-        comment: When set, show this attribute by default
+        comment: When set, show this attribute by default. A maximum of 2 attributes per context may be set as default.
   - name: map_inds
     comment: Inds to display on map (see map_attributes.)
   - name: map_quants
@@ -291,7 +291,7 @@ tables:
     comment: Attributes (inds/quals) available for recoloring.
     columns:
       - name: group_number
-        comment: Group number
+        comment: Attributes are displayed grouped by their group number, with a separator between groups
       - name: position
         comment: Display order in scope of context and group number
       - name: legend_type
@@ -305,13 +305,13 @@ tables:
       - name: max_value
         comment: Max value for the legend
       - name: divisor
-        comment: For percentual legends the step between intervals
+        comment: Step between intervals for percentual legends
       - name: tooltip_text
         comment: Tooltip text
       - name: years
         comment: Array of years for which to show this attribute in scope of chart; empty (NULL) for all years
       - name: is_disabled
-        comment: When set, do not show this attribute
+        comment: When set, this attribute is not displayed
       - name: is_default
         comment: When set, show this attribute by default
   - name: recolor_by_inds
@@ -330,7 +330,7 @@ tables:
       - name: years
         comment: Array of years for which to show this attribute in scope of chart; empty (NULL) for all years
       - name: is_disabled
-        comment: When set, do not show this attribute
+        comment: When set, this attribute is not displayed
       - name: is_default
         comment: When set, show this attribute by default
   - name: resize_by_quants

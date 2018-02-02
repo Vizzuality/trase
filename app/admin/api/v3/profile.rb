@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::Profile, as: 'Profile' do
-  menu parent: 'Yellow Tables'
+  menu parent: 'Profile Settings'
 
   permit_params :context_node_type_id, :name
 
@@ -7,10 +7,10 @@ ActiveAdmin.register Api::V3::Profile, as: 'Profile' do
     f.semantic_errors
     inputs do
       input :context_node_type, as: :select, required: true,
-            collection: Api::V3::ContextNodeType.select_options
+                                collection: Api::V3::ContextNodeType.select_options
       input :name, as: :select,
-            collection: Api::V3::Profile::NAME,
-            hint: object.class.column_comment('name')
+                   collection: Api::V3::Profile::NAME,
+                   hint: object.class.column_comment('name')
     end
     f.actions
   end
@@ -22,6 +22,22 @@ ActiveAdmin.register Api::V3::Profile, as: 'Profile' do
     column :name
     actions
   end
+
+  show do
+    attributes_table do
+      row('Country') { |property| property.context_node_type&.context&.country&.name }
+      row('Commodity') { |property| property.context_node_type&.context&.commodity&.name }
+      row('Node Type') { |property| property.context_node_type&.node_type&.name }
+      row :name
+      row :created_at
+      row :updated_at
+    end
+  end
+
+  filter :context_node_type, collection: -> {
+    Api::V3::ContextNodeType.
+      select_options
+  }
 
   filter :context_node_type, collection: -> {
     Api::V3::ContextNodeType.select_options
