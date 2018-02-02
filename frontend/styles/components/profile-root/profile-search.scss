@@ -30,6 +30,12 @@ $spinner-height-large: 40px;
       flex: none;
     }
 
+    &.-loading {
+      .profile-search-input::placeholder {
+        color: $charcoal-grey-faded-a-lot;
+      }
+    }
+
     @media only screen and (min-width: $search-breakpoint-medium) {
       padding: 3px 15px 0 0;
     }
@@ -68,7 +74,7 @@ $spinner-height-large: 40px;
     position: relative;
     height: $spinner-height-small;
     width: $spinner-height-small;
-    background-color: white;
+    background-color: transparent;
 
     &::after {
       content: '';

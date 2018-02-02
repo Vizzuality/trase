@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import ProfileSearchResult from 'react-components/profile-root/profile-search-result.component';
+import cx from 'classnames';
 
 /**
  * Dear future developer,
@@ -41,7 +42,7 @@ class ProfileSearch extends Component {
     return (
       <div className="c-profile-search">
         <div
-          className="profile-search-bar"
+          className={cx('profile-search-bar', { '-loading': loading })}
           onClick={this.focusInput}
           role="textbox"
         >
@@ -49,6 +50,7 @@ class ProfileSearch extends Component {
             {...getInputProps({ placeholder: 'Search a company or production place' })}
             type="search"
             className="profile-search-input"
+            disabled={loading}
           />
           {loading ?
             <span className="profile-search-spinner" />
