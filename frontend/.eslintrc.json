@@ -1,19 +1,31 @@
+
 {
   "env": {
     "browser": true,
     "es6": true,
     "node": true
   },
-  "plugins": [
-    "react"
-  ],
-  "extends": [
-    "airbnb"
-  ],
+  "plugins": ["react", "prettier"],
+  "extends": ["airbnb", "prettier"],
   "rules": {
-    "jsx-a11y/anchor-is-valid": [ "error", {
-      "components": [ "a" ]
-    }],
+    "prettier/prettier": "warn",
+    "arrow-parens": 0,
+    "jsx-a11y/label-has-for": [
+      2,
+      {
+        "components": ["Label"],
+        "required": {
+          "every": ["nesting", "id"]
+        },
+        "allowChildren": true
+      }
+    ],
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        "components": ["a"]
+      }
+    ],
     "indent": [
       "warn",
       2,
@@ -21,31 +33,16 @@
         "SwitchCase": 1
       }
     ],
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
-    "quotes": [
-      "error",
-      "single"
-    ],
-    "semi": [
-      1,
-      "always"
-    ],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "single"],
+    "semi": [1, "always"],
     "no-console": [
       1,
       {
-        "allow": [
-          "warn",
-          "error"
-        ]
+        "allow": ["warn", "error"]
       }
     ],
-    "comma-dangle": [
-      "error",
-      "never"
-    ],
+    "comma-dangle": ["error", "never"],
     "no-debugger": 1,
     "object-curly-newline": [
       "error",
@@ -77,10 +74,6 @@
     "react/forbid-prop-types": "off",
     "react/require-default-props": "off",
     "jsx-a11y/click-events-have-key-events": 0,
-    "function-paren-newline": [
-      "error",
-      "consistent"
-    ],
     "react/no-array-index-key": "off",
     "import/prefer-default-export": 0
   },

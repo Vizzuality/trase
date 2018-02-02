@@ -6,12 +6,18 @@
     "start": "webpack-dev-server --config config/webpack.config.dev.js",
     "build": "npm run webpack:prod && cp -a public/. dist/",
     "webpack:prod": "NODE_ENV='production' webpack --config config/webpack.config.prod.js",
-    "lint-js": "eslint -c .eslintrc.json --ext .jsx,.js scripts",
-    "lint-sass": "sass-lint -c .sass-lint.yml -v -q 'styles/**/*.scss'",
+    "lint-js": "eslint -c .eslintrc.json --ext .jsx,.js --fix",
+    "lint-sass": "sass-lint -c .sass-lint.yml -v -q",
+    "prettier": "prettier --config .prettierrc --ignore-path .prettierignore",
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,jsx}": "lint-js"
+    "*.scss": "lint-sass",
+    "*.{js,jsx}": [
+      "prettier",
+      "lint-js",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
@@ -40,10 +46,12 @@
     "ejs-loader": "^0.3.0",
     "eslint": "^4.13.1",
     "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "^2.9.0",
     "eslint-import-resolver-webpack": "^0.8.3",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-prettier": "^2.5.0",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-react": "^7.5.1",
     "eslint-plugin-standard": "^3.0.1",
@@ -53,6 +61,7 @@
     "lint-staged": "^6.0.0",
     "node-sass": "^4.7.2",
     "postcss-loader": "^2.0.9",
+    "prettier": "^1.10.2",
     "sass-lint": "^1.12.1",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.1",
