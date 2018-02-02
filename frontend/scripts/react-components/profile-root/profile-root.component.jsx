@@ -8,13 +8,12 @@ const ProfileRoot = (props) => {
   return (
     <div className="l-profile-root">
       <div className="c-profile-root">
-        {!hasNodes &&
-          !errorMessage && (
-            <React.Fragment>
-              <div className="profile-root-veil" />
-              <div className="c-spinner" />
-            </React.Fragment>
-          )}
+        {!hasNodes && !errorMessage &&
+          <React.Fragment>
+            <div className="profile-root-veil" />
+            <div className="c-spinner" />
+          </React.Fragment>
+        }
         <div className="row column">
           <div className="profile-root-search-container row align-center">
             <div className="column small-6">

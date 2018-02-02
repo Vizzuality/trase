@@ -8,7 +8,7 @@ import ProfileSearchResult from 'react-components/profile-root/profile-search-re
  * The implementation of this component is fairly similar to the one on the tool page,
  * however (after exhaustive analysis) we decided against reusing the components.
  * Why? We're using Downshift to implement the search, this already provides us with all basics and
- * some other extra goooood stuff. If we we're to make a component for the 3 types of search in
+ * some other extra goooood stuff. If we were to make a component for the 3 types of search in
  * this app, we would need to create a super generic wrapper on top of downshift and 3 specific
  * components and containers for the use case specific stuff. Yet another abstraction adding
  * complexity.
@@ -30,7 +30,7 @@ class ProfileSearch extends Component {
   renderSearchBox({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) {
     const visibleResults = this.props.nodes.filter(
       item => inputValue.length > 1 && item.name.toLowerCase().includes(inputValue.toLowerCase())
-    );
+    ).slice(0, 10);
     return (
       <div className="c-profile-search">
         <div className="profile-search-bar">
@@ -47,7 +47,6 @@ class ProfileSearch extends Component {
           visibleResults.length > 0 && (
             <ul className="profile-search-results">
               {visibleResults
-                .slice(0, 10)
                 .map((item, row) => (
                   <ProfileSearchResult
                     key={item.id}
