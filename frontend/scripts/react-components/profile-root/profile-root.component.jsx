@@ -39,6 +39,7 @@ const ProfileRoot = (props) => {
       {errorMessage &&
         <div className="c-error-message -absolute -charcoal">
           <p className="message">Oops! Something went wrong.</p>
+          <p className="message">{errorMessage}</p>
         </div>
       }
     </div>
