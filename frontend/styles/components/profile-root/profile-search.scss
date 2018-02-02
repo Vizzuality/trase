@@ -1,6 +1,8 @@
 $search-breakpoint-medium: 806px;
 $search-breakpoint-large: 911px;
+$search-box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2);
 .c-profile-search {
+  position: relative;
 
   .profile-search-bar {
     position: relative;
@@ -11,8 +13,9 @@ $search-breakpoint-large: 911px;
     height: 45px;
     padding: 2px 8px 0 0;
     background-color: $white;
-    box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2);
+    box-shadow: $search-box-shadow;
     z-index: $z-above;
+    cursor: text;
 
     .icon-search {
       height: 20px;
@@ -56,9 +59,11 @@ $search-breakpoint-large: 911px;
   }
 
   .profile-search-results {
+    position: absolute;
     background: $white;
     overflow-y: auto;
     width: 100%;
     max-height: 345px;
+    box-shadow: $search-box-shadow;
   }
 }

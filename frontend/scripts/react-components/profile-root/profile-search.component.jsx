@@ -1,3 +1,4 @@
+/* eslint-disable  jsx-a11y/interactive-supports-focus */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
@@ -27,13 +28,22 @@ class ProfileSearch extends Component {
     this.props.onNodeSelected(selectedItem);
   }
 
+  focusInput(e) {
+    const input = e.currentTarget.querySelector('input');
+    if (input) input.focus();
+  }
+
   renderSearchBox({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) {
     const visibleResults = this.props.nodes.filter(
       item => inputValue.length > 1 && item.name.toLowerCase().includes(inputValue.toLowerCase())
     ).slice(0, 10);
     return (
       <div className="c-profile-search">
-        <div className="profile-search-bar">
+        <div
+          className="profile-search-bar"
+          onClick={this.focusInput}
+          role="textbox"
+        >
           <input
             {...getInputProps({ placeholder: 'Search a company or production place' })}
             type="search"
