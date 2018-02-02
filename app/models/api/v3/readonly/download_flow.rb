@@ -7,7 +7,6 @@ module Api
 
         def self.refresh
           Scenic.database.refresh_materialized_view('revamp.flow_paths_mv', concurrently: false)
-          Scenic.database.refresh_materialized_view('revamp.download_attributes_values_mv', concurrently: false)
           Scenic.database.refresh_materialized_view(table_name, concurrently: false)
         end
       end

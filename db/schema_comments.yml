@@ -388,8 +388,6 @@ materialized_views:
     columns:
       - name: attribute_id
         comment: References the unique id in attributes_mv.
-  - name: download_attributes_values_mv
-    comment: Downloadable values from flow_inds/quals/quants
   - name: flow_paths_mv
     comment: Normalised flows
   - name: download_flows_mv

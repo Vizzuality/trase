@@ -1348,7 +1348,7 @@ CREATE MATERIALIZED VIEW attributes_mv AS
            FROM (quants
              LEFT JOIN quant_properties qp ON ((qp.quant_id = quants.id)))
         UNION ALL
-         SELECT 'Ind'::text,
+         SELECT 'Ind'::text AS text,
             inds.id,
             inds.name,
             ip.display_name,
@@ -1359,22 +1359,22 @@ CREATE MATERIALIZED VIEW attributes_mv AS
             ip.is_visible_on_place_profile,
             ip.is_temporal_on_actor_profile,
             ip.is_temporal_on_place_profile,
-            'AVG'::text
+            'AVG'::text AS text
            FROM (inds
              LEFT JOIN ind_properties ip ON ((ip.ind_id = inds.id)))
         UNION ALL
-         SELECT 'Qual'::text,
+         SELECT 'Qual'::text AS text,
             quals.id,
             quals.name,
             qp.display_name,
-            NULL::text,
-            NULL::text,
+            NULL::text AS text,
+            NULL::text AS text,
             qp.tooltip_text,
             qp.is_visible_on_actor_profile,
             qp.is_visible_on_place_profile,
             qp.is_temporal_on_actor_profile,
             qp.is_temporal_on_place_profile,
-            NULL::text
+            NULL::text AS text
            FROM (quals
              LEFT JOIN qual_properties qp ON ((qp.qual_id = quals.id)))) s
   WITH NO DATA;
@@ -2422,113 +2422,6 @@ COMMENT ON COLUMN download_attributes_mv.attribute_id IS 'References the unique 
 
 
 --
--- Name: flow_quals; Type: TABLE; Schema: revamp; Owner: -
---
-
-CREATE TABLE flow_quals (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    value text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE flow_quals; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON TABLE flow_quals IS 'Values of quals for flow';
-
-
---
--- Name: COLUMN flow_quals.value; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN flow_quals.value IS 'Textual value';
-
-
---
--- Name: flow_quants; Type: TABLE; Schema: revamp; Owner: -
---
-
-CREATE TABLE flow_quants (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE flow_quants; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON TABLE flow_quants IS 'Values of quants for flow';
-
-
---
--- Name: COLUMN flow_quants.value; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON COLUMN flow_quants.value IS 'Numeric value';
-
-
---
--- Name: download_attributes_values_mv; Type: MATERIALIZED VIEW; Schema: revamp; Owner: -
---
-
-CREATE MATERIALIZED VIEW download_attributes_values_mv AS
- SELECT f.flow_id,
-    f.qual_id AS attribute_id,
-    'Qual'::text AS attribute_type,
-    NULL::double precision AS numeric_value,
-        CASE
-            WHEN (lower(f.value) = 'yes'::text) THEN true
-            WHEN (lower(f.value) = 'no'::text) THEN false
-            ELSE NULL::boolean
-        END AS boolean_value,
-    q.name,
-    NULL::text AS unit,
-    q.name AS name_with_unit,
-    da.display_name,
-    da.context_id
-   FROM (((flow_quals f
-     JOIN quals q ON ((f.qual_id = q.id)))
-     JOIN download_quals dq ON ((dq.qual_id = q.id)))
-     JOIN download_attributes da ON ((dq.download_attribute_id = da.id)))
-  GROUP BY f.flow_id, f.qual_id, f.value, q.name, da.display_name, da.context_id
-UNION ALL
- SELECT f.flow_id,
-    f.quant_id AS attribute_id,
-    'Quant'::text AS attribute_type,
-    f.value AS numeric_value,
-    NULL::boolean AS boolean_value,
-    q.name,
-    q.unit,
-        CASE
-            WHEN (q.unit IS NULL) THEN q.name
-            ELSE (((q.name || ' ('::text) || q.unit) || ')'::text)
-        END AS name_with_unit,
-    da.display_name,
-    da.context_id
-   FROM (((flow_quants f
-     JOIN quants q ON ((f.quant_id = q.id)))
-     JOIN download_quants dq ON ((dq.quant_id = q.id)))
-     JOIN download_attributes da ON ((dq.download_attribute_id = da.id)))
-  GROUP BY f.flow_id, f.quant_id, f.value, q.name, q.unit, da.display_name, da.context_id
-  WITH NO DATA;
-
-
---
--- Name: MATERIALIZED VIEW download_attributes_values_mv; Type: COMMENT; Schema: revamp; Owner: -
---
-
-COMMENT ON MATERIALIZED VIEW download_attributes_values_mv IS 'Downloadable values from flow_inds/quals/quants';
-
-
---
 -- Name: flows; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -2649,9 +2542,7 @@ CREATE MATERIALIZED VIEW flow_paths_mv AS
             ELSE initcap(n.name)
         END AS name,
     cn.node_type_name,
-    cn.column_group,
     cn.column_position,
-    cn.is_default,
     f.id AS flow_id,
     f.year,
     f.context_id
@@ -2663,14 +2554,11 @@ CREATE MATERIALIZED VIEW flow_paths_mv AS
            FROM flows,
             LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) f
      JOIN ( SELECT cnt.context_id,
-            cntp.column_group,
             cnt.column_position,
-            cntp.is_default,
             cnt.node_type_id,
             node_types.name AS node_type_name
-           FROM ((context_node_types cnt
-             JOIN node_types ON ((node_types.id = cnt.node_type_id)))
-             LEFT JOIN context_node_type_properties cntp ON ((cnt.id = cntp.context_node_type_id)))) cn ON (((f."position" = (cn.column_position + 1)) AND (f.context_id = cn.context_id))))
+           FROM (context_node_types cnt
+             JOIN node_types ON ((node_types.id = cnt.node_type_id)))) cn ON (((f."position" = (cn.column_position + 1)) AND (f.context_id = cn.context_id))))
      JOIN nodes n ON ((n.id = f.node_id)))
   WITH NO DATA;
 
@@ -2680,6 +2568,60 @@ CREATE MATERIALIZED VIEW flow_paths_mv AS
 --
 
 COMMENT ON MATERIALIZED VIEW flow_paths_mv IS 'Normalised flows';
+
+
+--
+-- Name: flow_quals; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE flow_quals (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    value text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE flow_quals; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE flow_quals IS 'Values of quals for flow';
+
+
+--
+-- Name: COLUMN flow_quals.value; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN flow_quals.value IS 'Textual value';
+
+
+--
+-- Name: flow_quants; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE flow_quants (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE flow_quants; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE flow_quants IS 'Values of quants for flow';
+
+
+--
+-- Name: COLUMN flow_quants.value; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN flow_quants.value IS 'Numeric value';
 
 
 --
@@ -2745,7 +2687,44 @@ CREATE MATERIALIZED VIEW download_flows_mv AS
      LEFT JOIN flow_paths_mv f_5 ON (((f_5.flow_id = f_0.flow_id) AND (f_5.column_position = 5))))
      LEFT JOIN flow_paths_mv f_6 ON (((f_6.flow_id = f_0.flow_id) AND (f_6.column_position = 6))))
      LEFT JOIN flow_paths_mv f_7 ON (((f_7.flow_id = f_0.flow_id) AND (f_7.column_position = 7))))
-     JOIN download_attributes_values_mv fi ON (((f_0.flow_id = fi.flow_id) AND (f_0.context_id = fi.context_id))))
+     JOIN ( SELECT f.flow_id,
+            f.qual_id AS attribute_id,
+            'Qual'::text AS attribute_type,
+            NULL::double precision AS numeric_value,
+                CASE
+                    WHEN (lower(f.value) = 'yes'::text) THEN true
+                    WHEN (lower(f.value) = 'no'::text) THEN false
+                    ELSE NULL::boolean
+                END AS boolean_value,
+            q.name,
+            NULL::text AS unit,
+            q.name AS name_with_unit,
+            da.display_name,
+            da.context_id
+           FROM (((flow_quals f
+             JOIN quals q ON ((f.qual_id = q.id)))
+             JOIN download_quals dq ON ((dq.qual_id = q.id)))
+             JOIN download_attributes da ON ((dq.download_attribute_id = da.id)))
+          GROUP BY f.flow_id, f.qual_id, f.value, q.name, da.display_name, da.context_id
+        UNION ALL
+         SELECT f.flow_id,
+            f.quant_id,
+            'Quant'::text,
+            f.value,
+            NULL::boolean,
+            q.name,
+            q.unit,
+                CASE
+                    WHEN (q.unit IS NULL) THEN q.name
+                    ELSE (((q.name || ' ('::text) || q.unit) || ')'::text)
+                END AS "case",
+            da.display_name,
+            da.context_id
+           FROM (((flow_quants f
+             JOIN quants q ON ((f.quant_id = q.id)))
+             JOIN download_quants dq ON ((dq.quant_id = q.id)))
+             JOIN download_attributes da ON ((dq.download_attribute_id = da.id)))
+          GROUP BY f.flow_id, f.quant_id, f.value, q.name, q.unit, da.display_name, da.context_id) fi ON (((f_0.flow_id = fi.flow_id) AND (f_0.context_id = fi.context_id))))
   WHERE (f_0.column_position = 0)
   GROUP BY f_0.flow_id, f_0.context_id, f_0.year, f_0.name, f_0.node_id, f_1.name, f_1.node_id, f_1.node_type_name, f_2.name, f_2.node_id, f_2.node_type_name, f_3.name, f_3.node_id, f_3.node_type_name, f_4.name, f_4.node_id, f_4.node_type_name, f_5.name, f_5.node_id, f_5.node_type_name, f_6.name, f_6.node_id, f_6.node_type_name, f_7.name, f_7.node_id, f_7.node_type_name, fi.attribute_type, fi.attribute_id, fi.name, fi.name_with_unit, fi.display_name
   WITH NO DATA;
@@ -5723,13 +5702,6 @@ CREATE INDEX index_download_attributes_on_context_id ON download_attributes USIN
 
 
 --
--- Name: index_download_attributes_values_mv_on_flow_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_download_attributes_values_mv_on_flow_id ON download_attributes_values_mv USING btree (flow_id);
-
-
---
 -- Name: index_download_flows_mv_on_attribute_type_and_attribute_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -6834,4 +6806,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180119094345'),
 ('20180123130300'),
 ('20180123132607'),
-('20180126140843');
+('20180126140843'),
+('20180202093906');
+
+
