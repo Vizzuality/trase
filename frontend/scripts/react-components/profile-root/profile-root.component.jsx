@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ProfileSearch from 'react-components/profile-root/profile-search.container';
 
-const ProfileRoot = (props) => {
+const ProfileRoot = props => {
   const { errorMessage } = props;
   return (
     <div className="l-profile-root">
-      {!errorMessage &&
+      {!errorMessage && (
         <div className="c-profile-root">
           <div className="row column">
             <div className="profile-root-search-container row align-center">
@@ -35,13 +35,13 @@ const ProfileRoot = (props) => {
             </div>
           </div>
         </div>
-      }
-      {errorMessage &&
+      )}
+      {errorMessage && (
         <div className="c-error-message -absolute -charcoal">
           <p className="message">Oops! Something went wrong.</p>
           <p className="message">{errorMessage}</p>
         </div>
-      }
+      )}
     </div>
   );
 };

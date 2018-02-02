@@ -36,9 +36,11 @@ class ProfileSearch extends Component {
 
   renderSearchBox({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) {
     const loading = this.props.nodes.length === 0;
-    const visibleResults = this.props.nodes.filter(
-      item => inputValue.length > 1 && item.name.toLowerCase().includes(inputValue.toLowerCase())
-    ).slice(0, 10);
+    const visibleResults = this.props.nodes
+      .filter(
+        item => inputValue.length > 1 && item.name.toLowerCase().includes(inputValue.toLowerCase())
+      )
+      .slice(0, 10);
     return (
       <div className="c-profile-search">
         <div
@@ -52,27 +54,26 @@ class ProfileSearch extends Component {
             className="profile-search-input"
             disabled={loading}
           />
-          {loading ?
+          {loading ? (
             <span className="profile-search-spinner" />
-            :
+          ) : (
             <svg className="icon icon-search">
               <use xlinkHref="#icon-search" />
             </svg>
-          }
+          )}
         </div>
         {isOpen &&
           visibleResults.length > 0 && (
             <ul className="profile-search-results">
-              {visibleResults
-                .map((item, row) => (
-                  <ProfileSearchResult
-                    key={item.id}
-                    item={item}
-                    searchString={inputValue}
-                    itemProps={getItemProps({ item })}
-                    isHighlighted={row === highlightedIndex}
-                  />
-                ))}
+              {visibleResults.map((item, row) => (
+                <ProfileSearchResult
+                  key={item.id}
+                  item={item}
+                  searchString={inputValue}
+                  itemProps={getItemProps({ item })}
+                  isHighlighted={row === highlightedIndex}
+                />
+              ))}
             </ul>
           )}
       </div>

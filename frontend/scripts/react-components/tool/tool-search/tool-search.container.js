@@ -30,7 +30,7 @@ const getNode = (nodes, selectedColumnsIds, nodesDict) => {
   return nA;
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const { nodes, selectedNodesIds, selectedColumnsIds, nodesDict } = state.tool;
   // store nodes at container level to avoid rerendering when filtering... for want of a better solution
   if (nodes !== undefined && (!searchNodes || nodes.length !== searchNodes.length)) {
@@ -38,11 +38,9 @@ const mapStateToProps = (state) => {
       node => node.hasFlows === true && node.isAggregated !== true && node.isUnknown !== true
     );
     searchNodes = flatten(
-      Object.values(groupBy(allNodes, 'mainNodeId'))
-        .map(
-          groupedNodes =>
-            getNode(groupedNodes, selectedColumnsIds, nodesDict)
-        )
+      Object.values(groupBy(allNodes, 'mainNodeId')).map(groupedNodes =>
+        getNode(groupedNodes, selectedColumnsIds, nodesDict)
+      )
     );
   }
 

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group.component';
 import { selectNode } from 'actions/tool.actions';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const { selectedNodesData, recolorGroups } = state.tool;
   const nodes = selectedNodesData.map(node => ({
     id: node.id,
