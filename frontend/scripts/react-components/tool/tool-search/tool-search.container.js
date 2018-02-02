@@ -1,10 +1,10 @@
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import groupBy from 'lodash/groupBy';
-import flatten from 'lodash/flatten';
-import camelcase from 'lodash/camelCase';
-import Search from 'react-components/tool/tool-search/tool-search.component';
 import { selectExpandedNode, selectNode } from 'actions/tool.actions';
+import camelcase from 'lodash/camelCase';
+import flatten from 'lodash/flatten';
+import groupBy from 'lodash/groupBy';
+import Search from 'react-components/tool/tool-search/tool-search.component';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import isNodeColumnVisible from 'utils/isNodeColumnVisible';
 
 let searchNodes;
@@ -30,7 +30,7 @@ const getNode = (nodes, selectedColumnsIds, nodesDict) => {
   return nA;
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { nodes, selectedNodesIds, selectedColumnsIds, nodesDict } = state.tool;
   // store nodes at container level to avoid rerendering when filtering... for want of a better solution
   if (nodes !== undefined && (!searchNodes || nodes.length !== searchNodes.length)) {
@@ -38,9 +38,11 @@ const mapStateToProps = state => {
       node => node.hasFlows === true && node.isAggregated !== true && node.isUnknown !== true
     );
     searchNodes = flatten(
-      Object.values(groupBy(allNodes, 'mainNodeId')).map(groupedNodes =>
-        getNode(groupedNodes, selectedColumnsIds, nodesDict)
-      )
+      Object.values(groupBy(allNodes, 'mainNodeId'))
+        .map(
+          groupedNodes =>
+            getNode(groupedNodes, selectedColumnsIds, nodesDict)
+        )
     );
   }
 

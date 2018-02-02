@@ -10,7 +10,7 @@ export default class ToolSearchResult extends Component {
     return findAll({
       searchWords: [value],
       textToHighlight: name
-    }).map(chunk => {
+    }).map((chunk) => {
       const segmentStr = name.substr(chunk.start, chunk.end - chunk.start);
       return chunk.highlight ? (
         <mark key={`marked_${segmentStr}_${name}`}>{segmentStr}</mark>

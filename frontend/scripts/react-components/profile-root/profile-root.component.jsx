@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ProfileSearch from 'react-components/profile-root/profile-search.container';
 
-const ProfileRoot = props => {
+const ProfileRoot = (props) => {
   const { nodes, errorMessage } = props;
   const hasNodes = nodes.length > 0;
   return (
