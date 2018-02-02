@@ -38,9 +38,9 @@ module Api
       validates :position, presence: true, uniqueness: {scope: :map_attribute_group}
       validates :bucket_3, presence: true, array_size: {exactly: 2}
       validates :bucket_5, presence: true, array_size: {exactly: 4}
-      validates :is_disabled, inclusion: { in: [true, false] }
-      validates :is_default, inclusion: { in: [true, false] }
-      validates :color_scale, inclusion: { in: COLOR_SCALE, allow_blank: true }
+      validates :is_disabled, inclusion: {in: [true, false]}
+      validates :is_default, inclusion: {in: [true, false]}
+      validates :color_scale, inclusion: {in: COLOR_SCALE, allow_blank: true}
       validates_with OneAssociatedAttributeValidator, {attributes: [:map_ind, :map_quant]}
       validates_with AttributeAssociatedOnceValidator,
         attribute: :map_ind, scope: :map_attribute_group, if: :new_map_ind_given?

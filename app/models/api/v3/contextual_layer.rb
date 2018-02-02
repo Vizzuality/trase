@@ -10,7 +10,7 @@ module Api
       validates :title, presence: true
       validates :identifier, presence: true, uniqueness: {scope: :context}
       validates :position, presence: true, uniqueness: {scope: :context}
-      validates :is_default, inclusion: { in: [true, false] }
+      validates :is_default, inclusion: {in: [true, false]}
 
       def self.select_options
         Api::V3::ContextualLayer.includes(

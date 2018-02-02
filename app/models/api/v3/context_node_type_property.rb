@@ -9,9 +9,9 @@ module Api
 
       validates :context_node_type, presence: true, uniqueness: true
       validates :column_group, presence: true, inclusion: COLUMN_GROUP
-      validates :is_default, inclusion: { in: [true, false] }
-      validates :is_geo_column, inclusion: { in: [true, false] }
-      validates :is_choropleth_disabled, inclusion: { in: [true, false] }
+      validates :is_default, inclusion: {in: [true, false]}
+      validates :is_geo_column, inclusion: {in: [true, false]}
+      validates :is_choropleth_disabled, inclusion: {in: [true, false]}
 
       def self.blue_foreign_keys
         [

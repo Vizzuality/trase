@@ -10,8 +10,8 @@ module Api
       validates :context, presence: true
       validates :group_number, presence: true
       validates :position, presence: true, uniqueness: {scope: [:context, :group_number]}
-      validates :is_disabled, inclusion: { in: [true, false] }
-      validates :is_default, inclusion: { in: [true, false] }
+      validates :is_disabled, inclusion: {in: [true, false]}
+      validates :is_default, inclusion: {in: [true, false]}
       validates_with OneAssociatedAttributeValidator, {
         attributes: [:resize_by_quant]
       }

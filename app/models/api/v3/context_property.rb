@@ -11,10 +11,10 @@ module Api
       belongs_to :context
 
       validates :context, presence: true, uniqueness: true
-      validates :is_disabled, inclusion: { in: [true, false] }
-      validates :is_default, inclusion: { in: [true, false] }
-      validates :is_subnational, inclusion: { in: [true, false] }
-      validates :default_basemap, inclusion: { in: DEFAULT_BASEMAP, allow_blank: true }
+      validates :is_disabled, inclusion: {in: [true, false]}
+      validates :is_default, inclusion: {in: [true, false]}
+      validates :is_subnational, inclusion: {in: [true, false]}
+      validates :default_basemap, inclusion: {in: DEFAULT_BASEMAP, allow_blank: true}
 
       def self.blue_foreign_keys
         [
