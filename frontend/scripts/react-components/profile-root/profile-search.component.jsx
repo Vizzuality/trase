@@ -34,6 +34,7 @@ class ProfileSearch extends Component {
   }
 
   renderSearchBox({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) {
+    const loading = this.props.nodes.length === 0;
     const visibleResults = this.props.nodes.filter(
       item => inputValue.length > 1 && item.name.toLowerCase().includes(inputValue.toLowerCase())
     ).slice(0, 10);
@@ -49,9 +50,13 @@ class ProfileSearch extends Component {
             type="search"
             className="profile-search-input"
           />
-          <svg className="icon icon-search">
-            <use xlinkHref="#icon-search" />
-          </svg>
+          {loading ?
+            <span className="profile-search-spinner" />
+            :
+            <svg className="icon icon-search">
+              <use xlinkHref="#icon-search" />
+            </svg>
+          }
         </div>
         {isOpen &&
           visibleResults.length > 0 && (

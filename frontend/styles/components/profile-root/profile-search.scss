@@ -1,6 +1,12 @@
 $search-breakpoint-medium: 806px;
 $search-breakpoint-large: 911px;
 $search-box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2);
+$search-height-small: 45px;
+$search-height-large: 55px;
+$spinner-height-small: 35px;
+$spinner-height-large: 40px;
+
+
 .c-profile-search {
   position: relative;
 
@@ -10,7 +16,7 @@ $search-box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2)
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 45px;
+    height: $search-height-small;
     padding: 2px 8px 0 0;
     background-color: $white;
     box-shadow: $search-box-shadow;
@@ -25,18 +31,18 @@ $search-box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2)
     }
 
     @media only screen and (min-width: $search-breakpoint-medium) {
-      padding: 2px 15px 0 0;
+      padding: 3px 15px 0 0;
     }
 
     @media only screen and (min-width: $search-breakpoint-large) {
       padding: 2px 20px 0 0;
-      height: 55px;
+      height: $search-height-large;
     }
   }
 
   .profile-search-input {
     flex: 1;
-    height: 35px;
+    height: $search-height-small - 10px;
     padding: 0 5px 0 8px;
     font-family: $font-family-1;
     font-size: 12px;
@@ -53,8 +59,53 @@ $search-box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2)
 
     @media only screen and (min-width: $search-breakpoint-large) {
       font-size: 18px;
-      height: 50px;
+      height: $search-height-large - 5px;
       padding: 0 5px 0 20px;
+    }
+  }
+
+  .profile-search-spinner {
+    position: relative;
+    height: $spinner-height-small;
+    width: $spinner-height-small;
+    background-color: white;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: $spinner-height-small - 25px;
+      left: $spinner-height-small - 25px;
+      border: 2px solid $charcoal-grey;
+      border-radius: 99px;
+      width: $spinner-height-small - 20px;
+      height: $spinner-height-small - 20px;
+      clip: rect(0, 20px, 13px, 0);
+
+      animation: rotate 1s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    @media only screen and (min-width: $search-breakpoint-medium) {
+      height: $spinner-height-large;
+      width: $spinner-height-large;
+
+      &::after {
+        top: $spinner-height-large - 30px;
+        left: $spinner-height-large - 30px;
+        width: $spinner-height-large - 20px;
+        height: $spinner-height-large - 20px;
+      }
+    }
+
+    @keyframes rotate {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
   }
 
@@ -66,4 +117,5 @@ $search-box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2)
     max-height: 345px;
     box-shadow: $search-box-shadow;
   }
+
 }
