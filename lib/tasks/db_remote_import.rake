@@ -11,6 +11,7 @@ namespace :db do
               puts "#{yellow_table} before: #{yellow_table_stats[:before]}, after: #{yellow_table_stats[:after]}"
             end
           end
+          database_update.update_attribute(:status, Api::V3::DatabaseUpdate::FINISHED)
         rescue => e
           database_update.update_attribute(:status, Api::V3::DatabaseUpdate::FAILED)
           Rails.logger.error e.message
