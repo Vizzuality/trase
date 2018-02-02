@@ -31,9 +31,9 @@ $spinner-height-large: 40px;
     }
 
     &.-loading {
-      background-color: $charcoal-grey-faded-a-lot;
+      background-color: $white;
       .profile-search-input {
-        background-color: rgba(0,0,0,0);
+        background-color: $white;
         &::placeholder {
           color: $charcoal-grey-faded-a-lot;
         }
@@ -61,6 +61,10 @@ $spinner-height-large: 40px;
     color: $charcoal-grey;
     outline: none;
     min-width: 0;
+
+    &::placeholder {
+      transition: color 150ms ease-out;
+    }
 
     @media only screen and (min-width: $search-breakpoint-medium) {
       font-size: 16px;
