@@ -22,7 +22,7 @@ const URL_STATE_PROPS = [
 
 const URL_PARAMS_PROPS = ['isMapVisible', 'selectedNodesIds', 'selectedYears'];
 
-const filterStateToURL = state => {
+export const filterStateToURL = state => {
   if (_.isEmpty(state)) {
     return {};
   }
@@ -38,7 +38,6 @@ const filterStateToURL = state => {
   stateToSave.selectedBiomeFilterName = state.selectedBiomeFilter
     ? state.selectedBiomeFilter.name
     : state.selectedBiomeFilterName;
-
   return stateToSave;
 };
 
