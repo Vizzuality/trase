@@ -26,4 +26,10 @@ const homeReducer = {
   }
 };
 
-export default createReducer(initialState, homeReducer);
+const homeReducerTypes = PropTypes => ({
+  tweets: PropTypes.arrayOf(PropTypes.object).isRequired,
+  posts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  testimonials: PropTypes.arrayOf(PropTypes.object).isRequired
+});
+
+export default createReducer(initialState, homeReducer, homeReducerTypes);
