@@ -1,4 +1,6 @@
 ActiveAdmin.register Content::User, as: 'User' do
+  menu priority: 3
+
   permit_params :email, :password, :password_confirmation
 
   index do

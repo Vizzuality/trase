@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::IndProperty, as: 'IndProperty' do
-  menu parent: 'Data Properties'
+  menu parent: 'General Settings'
 
   permit_params :ind_id, :display_name, :unit_type, :tooltip_text,
                 :is_visible_on_place_profile, :is_visible_on_actor_profile,
