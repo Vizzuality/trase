@@ -35,17 +35,22 @@ module Api
       has_one :map_quant, autosave: true
 
       validates :map_attribute_group, presence: true
-      validates :position, presence: true, uniqueness: {scope: :map_attribute_group}
+      validates :position,
+                presence: true,
+                uniqueness: {scope: :map_attribute_group}
       validates :bucket_3, presence: true, array_size: {exactly: 2}
       validates :bucket_5, presence: true, array_size: {exactly: 4}
       validates :is_disabled, inclusion: {in: [true, false]}
       validates :is_default, inclusion: {in: [true, false]}
       validates :color_scale, inclusion: {in: COLOR_SCALE, allow_blank: true}
-      validates_with OneAssociatedAttributeValidator, {attributes: [:map_ind, :map_quant]}
+      validates_with OneAssociatedAttributeValidator,
+                     attributes: [:map_ind, :map_quant]
       validates_with AttributeAssociatedOnceValidator,
-        attribute: :map_ind, scope: :map_attribute_group, if: :new_map_ind_given?
+                     attribute: :map_ind, scope: :map_attribute_group,
+                     if: :new_map_ind_given?
       validates_with AttributeAssociatedOnceValidator,
-        attribute: :map_quant, scope: :map_attribute_group, if: :new_map_quant_given?
+                     attribute: :map_quant, scope: :map_attribute_group,
+                     if: :new_map_quant_given?
 
       after_commit :refresh_dependencies
 

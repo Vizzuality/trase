@@ -25,18 +25,23 @@ module Api
 
       validates :context, presence: true
       validates :group_number, presence: true
-      validates :position, presence: true, uniqueness: {scope: [:context, :group_number]}
+      validates :position,
+                presence: true,
+                uniqueness: {scope: [:context, :group_number]}
       validates :legend_type, presence: true, inclusion: {in: LEGEND_TYPE}
-      validates :legend_color_theme, presence: true, inclusion: {in: LEGEND_COLOR_THEME}
+      validates :legend_color_theme,
+                presence: true,
+                inclusion: {in: LEGEND_COLOR_THEME}
       validates :is_disabled, inclusion: {in: [true, false]}
       validates :is_default, inclusion: {in: [true, false]}
-      validates_with OneAssociatedAttributeValidator, {
-        attributes: [:recolor_by_ind, :recolor_by_qual]
-      }
+      validates_with OneAssociatedAttributeValidator,
+                     attributes: [:recolor_by_ind, :recolor_by_qual]
       validates_with AttributeAssociatedOnceValidator,
-        attribute: :recolor_by_ind, if: :new_recolor_by_ind_given?
+                     attribute: :recolor_by_ind,
+                     if: :new_recolor_by_ind_given?
       validates_with AttributeAssociatedOnceValidator,
-        attribute: :recolor_by_qual, if: :new_recolor_by_qual_given?
+                     attribute: :recolor_by_qual,
+                     if: :new_recolor_by_qual_given?
 
       after_commit :refresh_dependencies
 

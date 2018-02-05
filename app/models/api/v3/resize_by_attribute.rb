@@ -9,14 +9,16 @@ module Api
 
       validates :context, presence: true
       validates :group_number, presence: true
-      validates :position, presence: true, uniqueness: {scope: [:context, :group_number]}
+      validates :position,
+                presence: true,
+                uniqueness: {scope: [:context, :group_number]}
       validates :is_disabled, inclusion: {in: [true, false]}
       validates :is_default, inclusion: {in: [true, false]}
-      validates_with OneAssociatedAttributeValidator, {
-        attributes: [:resize_by_quant]
-      }
+      validates_with OneAssociatedAttributeValidator,
+                     attributes: [:resize_by_quant]
       validates_with AttributeAssociatedOnceValidator,
-        attribute: :resize_by_quant, if: :new_resize_by_quant_given?
+                     attribute: :resize_by_quant,
+                     if: :new_resize_by_quant_given?
 
       after_commit :refresh_dependencies
 

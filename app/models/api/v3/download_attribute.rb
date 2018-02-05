@@ -11,13 +11,12 @@ module Api
       validates :context, presence: true
       validates :position, presence: true, uniqueness: {scope: :context}
       validates :display_name, presence: true
-      validates_with OneAssociatedAttributeValidator, {
-        attributes: [:download_qual, :download_quant]
-      }
+      validates_with OneAssociatedAttributeValidator,
+                     attributes: [:download_qual, :download_quant]
       validates_with AttributeAssociatedOnceValidator,
-        attribute: :download_qual, if: :new_download_qual_given?
+                     attribute: :download_qual, if: :new_download_qual_given?
       validates_with AttributeAssociatedOnceValidator,
-        attribute: :download_quant, if: :new_download_quant_given?
+                     attribute: :download_quant, if: :new_download_quant_given?
 
       after_commit :refresh_dependencies
 
