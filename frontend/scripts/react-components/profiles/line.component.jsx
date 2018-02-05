@@ -43,8 +43,8 @@ class Line extends Component {
       if (i > 0) {
         const prevPoint = continuousValues[i - 1];
         if (
-          (prevPoint.value === null && point.value !== null)
-          || (prevPoint.value !== null && point.value === null)
+          (prevPoint.value === null && point.value !== null) ||
+          (prevPoint.value !== null && point.value === null)
         ) {
           discontinuousValues.push([]);
         }
@@ -117,13 +117,15 @@ class Line extends Component {
               .y1(d => y(d.value));
 
             // loop through broken/discontinuous lines
-            lineValuesWithFormat.forEach((points) => {
-              d3Container.append('path')
+            lineValuesWithFormat.forEach(points => {
+              d3Container
+                .append('path')
                 .datum(points)
                 .attr('class', style)
                 .attr('d', area);
 
-              d3Container.append('path')
+              d3Container
+                .append('path')
                 .datum(points)
                 .attr('class', `line-${style}`)
                 .attr('d', line);
@@ -132,35 +134,38 @@ class Line extends Component {
 
           // following styles don't care about discontinuous blocks for now and will only render the first one
           case 'line':
-            d3Container.append('path')
+            d3Container
+              .append('path')
               .datum(lineValuesWithFormat[0])
               .attr('class', style)
               .attr('d', line);
             break;
 
           case 'line-points': {
-            pathContainers = d3Container.datum(lineValuesWithFormat[0])
+            pathContainers = d3Container
+              .datum(lineValuesWithFormat[0])
               .append('g')
               .attr(
                 'class',
-                d => (_.isFunction(settings.lineClassNameCallback)
-                  ? settings.lineClassNameCallback(d, style)
-                  : style
-                )
+                d =>
+                  _.isFunction(settings.lineClassNameCallback)
+                    ? settings.lineClassNameCallback(d, style)
+                    : style
               );
 
-            pathContainers.selectAll('path')
+            pathContainers
+              .selectAll('path')
               .data(d => [d])
               .enter()
               .append('path')
               .attr('d', line);
 
-
-            pathContainers.selectAll('text')
+            pathContainers
+              .selectAll('text')
               .data(d => [d])
               .enter()
               .append('text')
-              .attr('transform', (d) => {
+              .attr('transform', d => {
                 const last = d.length - 1;
                 const { value } = d[last];
                 let newY = y(value) + 4;
@@ -172,7 +177,8 @@ class Line extends Component {
               })
               .text(d => `${numLines - i}.${_.capitalize(d[0].name)}`);
 
-            this.circles = pathContainers.selectAll('circle')
+            this.circles = pathContainers
+              .selectAll('circle')
               .data(d => d)
               .enter()
               .append('circle')
@@ -181,13 +187,14 @@ class Line extends Component {
               .attr('r', 4);
 
             if (this.showTooltipCallback !== undefined) {
-              this.circles.on('mousemove', (d) => {
-                this.showTooltipCallback(
-                  d,
-                  d3_event.clientX + 10,
-                  d3_event.clientY + window.scrollY + 10
-                );
-              })
+              this.circles
+                .on('mousemove', d => {
+                  this.showTooltipCallback(
+                    d,
+                    d3_event.clientX + 10,
+                    d3_event.clientY + window.scrollY + 10
+                  );
+                })
                 .on('mouseout', () => {
                   this.hideTooltipCallback();
                 });
@@ -202,16 +209,16 @@ class Line extends Component {
     if (ticks.yTickFormatType === 'top-location') {
       yTickFormat = value => abbreviateNumber(value, 3);
 
-      xTickFormat = (value) => {
+      xTickFormat = value => {
         const format = d3_timeFormat('%Y');
         return format(value);
       };
     } else {
-      yTickFormat = (value) => {
+      yTickFormat = value => {
         const format = d3_format('0');
         return format(value);
       };
-      xTickFormat = (value) => {
+      xTickFormat = value => {
         const format = d3_timeFormat('%Y');
         return format(value);
       };
@@ -228,23 +235,20 @@ class Line extends Component {
       .tickPadding(ticks.yTickPadding)
       .tickFormat(yTickFormat);
 
-    d3Container.append('g')
+    d3Container
+      .append('g')
       .attr('transform', `translate(0, ${height} )`)
       .attr('class', 'axis axis--x')
       .call(xAxis);
 
-    d3Container.append('g')
+    d3Container
+      .append('g')
       .attr('class', 'axis axis--y axis--deforestation')
       .call(yAxis);
   }
 
   render() {
-    return (
-      <div
-        className={this.key}
-        width="100%"
-      />
-    );
+    return <div className={this.key} width="100%" />;
   }
 }
 

@@ -29,9 +29,10 @@ export default class {
   _onStateChange(state) {
     // returns a method - state values dictionary
     const methodsToState = this._methodsToState(state);
-    Object.keys(methodsToState).forEach((k) => {
+    Object.keys(methodsToState).forEach(k => {
       const stateValue = methodsToState[k];
-      const comparedValue = (stateValue && stateValue._comparedValue) ? stateValue._comparedValue(state) : stateValue;
+      const comparedValue =
+        stateValue && stateValue._comparedValue ? stateValue._comparedValue(state) : stateValue;
 
       // check if internal _prop differs from new app state value
       if (comparedValue !== undefined && comparedValue !== this._props[k]) {
@@ -39,9 +40,10 @@ export default class {
         this._props[k] = comparedValue;
         // and call the method (k, the dict key) directly on the component
         if (this.view[k]) {
-          const returnedValue = (stateValue && stateValue._returnedValue)
-            ? stateValue._returnedValue(state)
-            : comparedValue;
+          const returnedValue =
+            stateValue && stateValue._returnedValue
+              ? stateValue._returnedValue(state)
+              : comparedValue;
           this.view[k](returnedValue);
         } else {
           console.warn(`trying to call ${k} on view but it doesn't exist`);
@@ -56,7 +58,7 @@ export default class {
     // collect all callbacks names
     const callbackKeys = Object.keys(callbacksToActions);
     const callbacks = {};
-    callbackKeys.forEach((k) => {
+    callbackKeys.forEach(k => {
       // the method set up in the container, which should return an action
       const actionGenerator = callbacksToActions[k];
       // replace dict entry with a function that dispatches the action to the store instead of just returning it

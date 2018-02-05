@@ -49,24 +49,60 @@ export const DETAILED_VIEW_MIN_LINK_HEIGHT = 1;
 export const CHOROPLETH_CLASS_ZERO = 'ch-zero';
 export const CHOROPLETH_CLASSES = {
   bidimensional: [
-    'ch-bi-0-2', 'ch-bi-1-2', 'ch-bi-2-2',
-    'ch-bi-0-1', 'ch-bi-1-1', 'ch-bi-2-1',
-    'ch-bi-0-0', 'ch-bi-1-0', 'ch-bi-2-0'
+    'ch-bi-0-2',
+    'ch-bi-1-2',
+    'ch-bi-2-2',
+    'ch-bi-0-1',
+    'ch-bi-1-1',
+    'ch-bi-2-1',
+    'ch-bi-0-0',
+    'ch-bi-1-0',
+    'ch-bi-2-0'
   ],
   horizontal: ['ch-red-0', 'ch-red-1', 'ch-red-2', 'ch-red-3', 'ch-red-4'],
   vertical: ['ch-blue-0', 'ch-blue-1', 'ch-blue-2', 'ch-blue-3', 'ch-blue-4'],
   red: ['ch-red-0', 'ch-red-1', 'ch-red-2', 'ch-red-3', 'ch-red-4'],
   blue: ['ch-blue-0', 'ch-blue-1', 'ch-blue-2', 'ch-blue-3', 'ch-blue-4'],
-  green: ['recolorby-percentual-yellow-green-0', 'recolorby-percentual-yellow-green-1', 'recolorby-percentual-yellow-green-2', 'recolorby-percentual-yellow-green-3', 'recolorby-percentual-yellow-green-4'],
-  bluered: ['choro-red-blue-toned-down-4', 'choro-red-blue-toned-down-3', 'choro-red-blue-toned-down-2', 'choro-red-blue-toned-down-1', 'choro-red-blue-toned-down-0'],
-  redblue: ['choro-red-blue-toned-down-0', 'choro-red-blue-toned-down-1', 'choro-red-blue-toned-down-2', 'choro-red-blue-toned-down-3', 'choro-red-blue-toned-down-4'],
-  greenred: ['choro-red-green-toned-down-4', 'choro-red-green-toned-down-3', 'choro-red-green-toned-down-2', 'choro-red-green-toned-down-1', 'choro-red-green-toned-down-0'],
+  green: [
+    'recolorby-percentual-yellow-green-0',
+    'recolorby-percentual-yellow-green-1',
+    'recolorby-percentual-yellow-green-2',
+    'recolorby-percentual-yellow-green-3',
+    'recolorby-percentual-yellow-green-4'
+  ],
+  bluered: [
+    'choro-red-blue-toned-down-4',
+    'choro-red-blue-toned-down-3',
+    'choro-red-blue-toned-down-2',
+    'choro-red-blue-toned-down-1',
+    'choro-red-blue-toned-down-0'
+  ],
+  redblue: [
+    'choro-red-blue-toned-down-0',
+    'choro-red-blue-toned-down-1',
+    'choro-red-blue-toned-down-2',
+    'choro-red-blue-toned-down-3',
+    'choro-red-blue-toned-down-4'
+  ],
+  greenred: [
+    'choro-red-green-toned-down-4',
+    'choro-red-green-toned-down-3',
+    'choro-red-green-toned-down-2',
+    'choro-red-green-toned-down-1',
+    'choro-red-green-toned-down-0'
+  ],
   error_no_metadata: 'ch-no-meta',
   error_no_metadata_for_layer: 'ch-no-meta-layer',
   default: 'ch-default'
 };
 
-export const PROFILE_CHOROPLETH_CLASSES = ['ch-red-0', 'ch-red-1', 'ch-red-2', 'ch-red-3', 'ch-red-4'];
+export const PROFILE_CHOROPLETH_CLASSES = [
+  'ch-red-0',
+  'ch-red-1',
+  'ch-red-2',
+  'ch-red-3',
+  'ch-red-4'
+];
 
 export const NODE_SELECTION_LINKS_NUM_COLORS = 10;
 export const SANKEY_TRANSITION_TIME = 1000;
@@ -79,9 +115,9 @@ export const LINE_LABEL_HEIGHT = 12;
 export const CARTO_BASE_URL = 'https://p2cs-sei.carto.com/api/v1/map/';
 export const CARTO_NAMED_MAPS_BASE_URL = 'https://p2cs-sei.carto.com/api/v1/map/named/';
 export const YEARS_DISABLED_WARNINGS = {
-  NO_AGGR_REASON: 'can\'t be displayed over multiple years.',
+  NO_AGGR_REASON: "can't be displayed over multiple years.",
   NO_AGGR_INSTRUCTION: 'Please modify year selection to a single year.',
-  UNAVAILABLE_REASON: 'can\'t be displayed for the selected years.',
+  UNAVAILABLE_REASON: "can't be displayed for the selected years.",
   UNAVAILABLE_INSTRUCTION: 'Please change year selection.',
   THIS_LAYER: 'This layer',
   THAT_LAYER: 'The selected map layer ($layer)',
@@ -111,29 +147,37 @@ export const MAP_PANES_Z = {
 export const BASEMAPS = {
   default: {
     title: 'Default',
-    url: 'https://api.mapbox.com/styles/v1/trasebase/cizi55y2r00122rl65a97ppz1/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJhc2ViYXNlIiwiYSI6ImNpemk1NWdhOTAwMmYyeGw5dXRncHpvZGEifQ.fQ6F9DSqmhLXZs-nKiYvzA',
-    labelsUrl: 'https://api.mapbox.com/styles/v1/trasebase/cj8086t6u7ias2sjs820bkw7w/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJhc2ViYXNlIiwiYSI6ImNpemk1NWdhOTAwMmYyeGw5dXRncHpvZGEifQ.fQ6F9DSqmhLXZs-nKiYvzA',
-    attribution: '<span>&copy;</span> <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <span>&copy;</span> <a href="https://www.mapbox.com/about/maps/">Mapbox</a>',
+    url:
+      'https://api.mapbox.com/styles/v1/trasebase/cizi55y2r00122rl65a97ppz1/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJhc2ViYXNlIiwiYSI6ImNpemk1NWdhOTAwMmYyeGw5dXRncHpvZGEifQ.fQ6F9DSqmhLXZs-nKiYvzA',
+    labelsUrl:
+      'https://api.mapbox.com/styles/v1/trasebase/cj8086t6u7ias2sjs820bkw7w/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJhc2ViYXNlIiwiYSI6ImNpemk1NWdhOTAwMmYyeGw5dXRncHpvZGEifQ.fQ6F9DSqmhLXZs-nKiYvzA',
+    attribution:
+      '<span>&copy;</span> <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <span>&copy;</span> <a href="https://www.mapbox.com/about/maps/">Mapbox</a>',
     thumbnail: '/images/maps/thumb-basemap-default.png'
   },
   satellite: {
     title: 'Satellite',
-    url: 'https://api.mapbox.com/styles/v1/trasebase/cj808lpze6d6o2st3yim6eedl/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJhc2ViYXNlIiwiYSI6ImNpemk1NWdhOTAwMmYyeGw5dXRncHpvZGEifQ.fQ6F9DSqmhLXZs-nKiYvzA',
-    labelsUrl: 'https://api.mapbox.com/styles/v1/trasebase/cj8ydw4b1ao4q2slhzdmz0izw/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJhc2ViYXNlIiwiYSI6ImNpemk1NWdhOTAwMmYyeGw5dXRncHpvZGEifQ.fQ6F9DSqmhLXZs-nKiYvzA',
-    attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">Mapbox</a>, <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>, <a href="https://www.digitalglobe.com/" target="_blank">DigitalGlobe</a>',
+    url:
+      'https://api.mapbox.com/styles/v1/trasebase/cj808lpze6d6o2st3yim6eedl/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJhc2ViYXNlIiwiYSI6ImNpemk1NWdhOTAwMmYyeGw5dXRncHpvZGEifQ.fQ6F9DSqmhLXZs-nKiYvzA',
+    labelsUrl:
+      'https://api.mapbox.com/styles/v1/trasebase/cj8ydw4b1ao4q2slhzdmz0izw/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJhc2ViYXNlIiwiYSI6ImNpemk1NWdhOTAwMmYyeGw5dXRncHpvZGEifQ.fQ6F9DSqmhLXZs-nKiYvzA',
+    attribution:
+      '<a href="https://www.mapbox.com/about/maps/" target="_blank">Mapbox</a>, <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>, <a href="https://www.digitalglobe.com/" target="_blank">DigitalGlobe</a>',
     thumbnail: '/images/maps/thumb-basemap-satellite.jpeg',
     dark: true
   },
   topo: {
     title: 'Topography',
     url: '//{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
-    attribution: '&copy;<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy;<a href="http://opentopomap.org">opentopomap.org</a>',
+    attribution:
+      '&copy;<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy;<a href="http://opentopomap.org">opentopomap.org</a>',
     thumbnail: '/images/maps/thumb-basemap-topo.png'
   },
   streets: {
     title: 'Streets (OSM)',
     url: '//{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
-    attribution: '&copy;<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>',
+    attribution:
+      '&copy;<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>',
     thumbnail: '/images/maps/thumb-basemap-streets.png'
   }
 };

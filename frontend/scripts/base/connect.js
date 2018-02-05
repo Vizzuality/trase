@@ -7,14 +7,7 @@ import Container from './Container';
 // mapMethodsToState: maps component methods to app state updates - keys correspond to method names, values to state prop path
 // mapViewEventsToActions: maps component callbacks (ie user events) to redux actions
 // onCreated: called at component instanciation. Use this as a chance to dispatch an action
-export default function (viewClass, mapMethodsToState, mapViewEventsToActions, onCreated) {
+export default function(viewClass, mapMethodsToState, mapViewEventsToActions, onCreated) {
   return (store, ...ownProps) =>
-    new Container(
-      store,
-      viewClass,
-      mapMethodsToState,
-      mapViewEventsToActions,
-      onCreated,
-      ownProps
-    );
+    new Container(store, viewClass, mapMethodsToState, mapViewEventsToActions, onCreated, ownProps);
 }

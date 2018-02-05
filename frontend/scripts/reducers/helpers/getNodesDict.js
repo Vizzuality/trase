@@ -1,9 +1,9 @@
-export default function (rawNodes, columns /* , nodesMeta */) {
+export default function(rawNodes, columns /* , nodesMeta */) {
   // store in node dict for use in getVisibleNodes
 
   const nodesDict = {};
   const geoIdsDict = {};
-  rawNodes.forEach((node) => {
+  rawNodes.forEach(node => {
     const columnId = node.columnId;
     const matchingColumn = columns.find(column => column.id === columnId);
     const newNode = {

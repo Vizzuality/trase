@@ -3,10 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export default function yearThumb({ id, x }) {
-  const style = (x === undefined) ? null : { left: `${x}px` };
+  const style = x === undefined ? null : { left: `${x}px` };
   return (
-    <svg className="thumb" style={style} data-thumb={id} >
-      <g fill="none" fillRule="evenodd" >
+    <svg className="thumb" style={style} data-thumb={id}>
+      <g fill="none" fillRule="evenodd">
         <rect width="2" height="40" x="3" fill="#EA6869" rx="1" />
         <path
           fill="#EA6869"
@@ -20,8 +20,8 @@ export default function yearThumb({ id, x }) {
           fill="#EA6869"
           d="M4,17 C4.55228475,17 5,16.5522847 5,16 C5,15.4477153 4.55228475,15 4,15 C3.44771525,15 3,15.4477153 3,16 C3,16.5522847 3.44771525,17 4,17 Z M4,21 C4.55228475,21 5,20.5522847 5,20 C5,19.4477153 4.55228475,19 4,19 C3.44771525,19 3,19.4477153 3,20 C3,20.5522847 3.44771525,21 4,21 Z M4,25 C4.55228475,25 5,24.5522847 5,24 C5,23.4477153 4.55228475,23 4,23 C3.44771525,23 3,23.4477153 3,24 C3,24.5522847 3.44771525,25 4,25 Z"
         />
-      </g >
-    </svg >
+      </g>
+    </svg>
   );
 }
 

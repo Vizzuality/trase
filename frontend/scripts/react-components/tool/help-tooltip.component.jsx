@@ -28,15 +28,11 @@ export default class Tooltip extends Component {
         onMouseOver={this.onOverBound}
         onMouseOut={this.onOutBound}
       >
-        <svg className="icon tooltip-react-icon" >
+        <svg className="icon tooltip-react-icon">
           <use xlinkHref="#icon-layer-info" />
-        </svg >
-        {this.state.visible &&
-        <div className="tooltip-react-content" >
-          {text}
-        </div >
-        }
-      </div >
+        </svg>
+        {this.state.visible && <div className="tooltip-react-content">{text}</div>}
+      </div>
     );
   }
 }

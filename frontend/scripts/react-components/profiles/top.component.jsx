@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import isArray from 'lodash/isArray';
 import Link from 'redux-first-router-link';
 
-
 class Top extends Component {
   renderList() {
     const { data, targetLink, year } = this.props;
@@ -18,19 +17,28 @@ class Top extends Component {
       return (
         <li key={index} className="top-item">
           <span className="item-name">
-            <span className="node-name">{index + 1}. {item.name}</span>
-            {this.props.targetLink && !item.is_domestic_consumption &&
-            <Link className="outside-link" to={{ type: targetLink, payload: { query: { nodeId: item.id, year } } }}>
-              <svg className="icon icon-outside-link">
-                <use xlinkHref="#icon-outside-link" />
-              </svg>
-            </Link>}
+            <span className="node-name">
+              {index + 1}. {item.name}
+            </span>
+            {this.props.targetLink &&
+              !item.is_domestic_consumption && (
+                <Link
+                  className="outside-link"
+                  to={{ type: targetLink, payload: { query: { nodeId: item.id, year } } }}
+                >
+                  <svg className="icon icon-outside-link">
+                    <use xlinkHref="#icon-outside-link" />
+                  </svg>
+                </Link>
+              )}
           </span>
-          {(this.props.unit && index === 0) ?
-            <span className="item-value" data-unit={this.props.unit}>{item.value}</span>
-            :
+          {this.props.unit && index === 0 ? (
+            <span className="item-value" data-unit={this.props.unit}>
+              {item.value}
+            </span>
+          ) : (
             <span className="item-value">{item.value}</span>
-          }
+          )}
         </li>
       );
     });
@@ -39,12 +47,8 @@ class Top extends Component {
   render() {
     return (
       <div className="c-top">
-        <h3 className="title -small">
-          {this.props.title}
-        </h3>
-        <ul className="top-list">
-          {this.renderList()}
-        </ul>
+        <h3 className="title -small">{this.props.title}</h3>
+        <ul className="top-list">{this.renderList()}</ul>
       </div>
     );
   }

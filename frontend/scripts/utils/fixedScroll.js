@@ -2,8 +2,10 @@
 // add as many offsets you need
 function calculateOffsets(el) {
   const absoluteOffsetTop = el.getBoundingClientRect().top;
-  const top = window.pageYOffset > absoluteOffsetTop ?
-    window.pageYOffset + absoluteOffsetTop : window.pageYOffset + Math.abs(absoluteOffsetTop);
+  const top =
+    window.pageYOffset > absoluteOffsetTop
+      ? window.pageYOffset + absoluteOffsetTop
+      : window.pageYOffset + Math.abs(absoluteOffsetTop);
 
   return {
     top

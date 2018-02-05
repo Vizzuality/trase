@@ -1,5 +1,5 @@
 export default (geoJSON, nodesDict, geoIdsDict, columnId) => {
-  geoJSON.features.forEach((feature) => {
+  geoJSON.features.forEach(feature => {
     if (feature.properties.GEO_ID !== undefined) {
       feature.properties.geoid = feature.properties.GEO_ID;
     }

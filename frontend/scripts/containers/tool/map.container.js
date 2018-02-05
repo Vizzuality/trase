@@ -21,7 +21,8 @@ const mapMethodsToState = state => ({
     })
   },
   selectPolygonType: {
-    _comparedValue: state => (state.tool.selectedColumnsIds ? state.tool.selectedColumnsIds[0] : undefined),
+    _comparedValue: state =>
+      state.tool.selectedColumnsIds ? state.tool.selectedColumnsIds[0] : undefined,
     _returnedValue: state => ({
       selectedColumnsIds: state.tool.selectedColumnsIds,
       choropleth: state.tool.choropleth,

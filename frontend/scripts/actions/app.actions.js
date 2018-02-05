@@ -8,7 +8,7 @@ export function resize() {
 }
 
 export function toggleMap() {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({
       type: actions.TOGGLE_MAP
     });
@@ -17,7 +17,7 @@ export function toggleMap() {
 }
 
 export function toggleMapLayerMenu() {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({
       type: actions.TOGGLE_MAP_LAYERS_MENU
     });
@@ -38,14 +38,14 @@ export function closeStoryModal() {
 }
 
 export function loadDisclaimer() {
-  return (dispatch) => {
+  return dispatch => {
     const disclaimerLocal = localStorage.getItem('disclaimerVersion');
 
     const url = getURLFromParams(GET_DISCLAIMER);
     fetch(url)
       .then(resp => resp.text())
       .then(resp => JSON.parse(resp))
-      .then((disclaimer) => {
+      .then(disclaimer => {
         if (disclaimerLocal !== null && parseInt(disclaimerLocal, 10) >= disclaimer.version) {
           return;
         }
@@ -68,9 +68,9 @@ export function toggleDropdown(dropdownId) {
 }
 
 export function displayStoryModal(storyId) {
-  return (dispatch) => {
+  return dispatch => {
     fetch(`${getURLFromParams(GET_SITE_DIVE)}/${storyId}`)
-      .then((resp) => {
+      .then(resp => {
         if (resp.ok) return resp.text();
         throw new Error(resp.statusText);
       })
@@ -82,8 +82,9 @@ export function displayStoryModal(storyId) {
             visibility: false,
             modalParams: data
           }
-        }))
-      .catch((err) => {
+        })
+      )
+      .catch(err => {
         console.error(err);
         return dispatch({
           type: actions.DISPLAY_STORY_MODAL,

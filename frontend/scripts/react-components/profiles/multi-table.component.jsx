@@ -31,11 +31,9 @@ class MultiTable extends Component {
           {data.map((elem, index) => (
             <li
               key={index}
-              className={classnames(
-                'js-multi-table-switcher',
-                'tab',
-                { selected: index === this.state.selectedTableIndex }
-              )}
+              className={classnames('js-multi-table-switcher', 'tab', {
+                selected: index === this.state.selectedTableIndex
+              })}
               data-table={`${this.key}_${index}`}
               onClick={() => this._switchTable(index)}
             >
@@ -44,23 +42,17 @@ class MultiTable extends Component {
           ))}
         </ul>
         {data.map((elem, index) => (
-          <div
-            key={index}
-          >
-            <div className="tab-title title">
-              {elem.name}
-            </div>
+          <div key={index}>
+            <div className="tab-title title">{elem.name}</div>
             <div
-              className={classnames(
-                'js-multi-table-container',
-                `${this.key}_${index}`,
-                { '-tab-hidden': index !== this.state.selectedTableIndex }
-              )}
+              className={classnames('js-multi-table-container', `${this.key}_${index}`, {
+                '-tab-hidden': index !== this.state.selectedTableIndex
+              })}
             >
               <Table
                 data={elem}
                 type={type}
-                target={(_.isFunction(target)) ? target(elem) : target}
+                target={_.isFunction(target) ? target(elem) : target}
                 year={year}
               />
             </div>

@@ -1,7 +1,7 @@
 const _setNodesMeta = (nodesDict, linksMeta) => {
   const nodesDictWithMeta = {};
 
-  linksMeta.nodeHeights.forEach((nodeHeight) => {
+  linksMeta.nodeHeights.forEach(nodeHeight => {
     const nodeId = nodeHeight.id;
     const node = Object.assign({}, nodesDict[nodeId]);
     node.height = nodeHeight.height;
@@ -12,15 +12,15 @@ const _setNodesMeta = (nodesDict, linksMeta) => {
   return nodesDictWithMeta;
 };
 
-export default function (links, nodesDict, linksMeta, columnIndexes) {
+export default function(links, nodesDict, linksMeta, columnIndexes) {
   const nodeIdsList = [];
   const nodes = [];
 
   const nodesDictWithMeta = _setNodesMeta(nodesDict, linksMeta);
 
-  links.forEach((link) => {
+  links.forEach(link => {
     const pathNodeIds = link.path;
-    pathNodeIds.forEach((nodeId) => {
+    pathNodeIds.forEach(nodeId => {
       if (nodeIdsList.indexOf(nodeId) === -1) {
         nodeIdsList.push(nodeId);
         const node = nodesDictWithMeta[nodeId];

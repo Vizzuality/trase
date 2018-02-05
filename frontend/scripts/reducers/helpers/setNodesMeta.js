@@ -2,11 +2,11 @@ import _ from 'lodash';
 import { UNITLESS_UNITS } from 'constants';
 import getNodeMetaUid from './getNodeMetaUid';
 
-export default function (nodesDict, nodesMeta, layers) {
+export default function(nodesDict, nodesMeta, layers) {
   const layersByUID = _.keyBy(layers, 'uid');
   const nodesDictWithMeta = {};
 
-  nodesMeta.data.forEach((nodeMeta) => {
+  nodesMeta.data.forEach(nodeMeta => {
     const nodeId = parseInt(nodeMeta.node_id, 10);
     const nodeWithMeta = nodesDictWithMeta[nodeId] || _.cloneDeep(nodesDict[nodeId]);
 
@@ -16,7 +16,6 @@ export default function (nodesDict, nodesMeta, layers) {
 
     const uid = getNodeMetaUid(nodeMeta.attribute_type, nodeMeta.attribute_id);
     const layerByUID = layersByUID[uid];
-
 
     const dimensionMeta = {
       rawValue: nodeMeta.value,

@@ -92,7 +92,9 @@ const _buildMaps = (data, store) => {
         height={municipalityMapContainer.clientHeight}
         topoJSONPath={`./vector_layers/municip_states/${defaults.country.toLowerCase()}/${stateGeoID}.topo.json`}
         topoJSONRoot={`${defaults.country.toUpperCase()}_${stateGeoID}`}
-        getPolygonClassName={d => (d.properties.geoid === data.municipality_geo_id ? '-isCurrent' : '')}
+        getPolygonClassName={d =>
+          d.properties.geoid === data.municipality_geo_id ? '-isCurrent' : ''
+        }
         isStaticComponent
       />
     </Provider>,
@@ -104,27 +106,26 @@ const _build = (data, year, onLinkClick, store) => {
   _buildMaps(data, store);
 
   if (
-    data.trajectory_deforestation
-    && data.trajectory_deforestation.lines
-    && data.trajectory_deforestation.lines.length
+    data.trajectory_deforestation &&
+    data.trajectory_deforestation.lines &&
+    data.trajectory_deforestation.lines.length
   ) {
-    document.querySelector('.deforestation')
-      .classList
-      .toggle('is-hidden', false);
+    document.querySelector('.deforestation').classList.toggle('is-hidden', false);
 
     // Manually trim time series to 2010 - 2015 as asked here https://basecamp.com/1756858/projects/12498794/todos/324404665
-    data.trajectory_deforestation.included_years =
-      data.trajectory_deforestation.included_years.filter((includedYear) => {
+    data.trajectory_deforestation.included_years = data.trajectory_deforestation.included_years.filter(
+      includedYear => {
         const include = includedYear >= 2010;
         if (!include) {
-          data.trajectory_deforestation.lines.forEach((line) => {
+          data.trajectory_deforestation.lines.forEach(line => {
             if (line.values !== undefined && line.values !== null) {
               line.values.shift();
             }
           });
         }
         return include;
-      });
+      }
+    );
 
     render(
       <Provider store={store}>
@@ -157,23 +158,17 @@ const _build = (data, year, onLinkClick, store) => {
       document.querySelector('.js-line-legend')
     );
   } else {
-    document.querySelector('.deforestation')
-      .classList
-      .toggle('is-hidden', true);
+    document.querySelector('.deforestation').classList.toggle('is-hidden', true);
   }
 
   const showTooltipCallback = (source, indicator, value, unit, x, y) =>
-    tooltip.show(
-      x, y,
-      source,
-      [
-        {
-          title: indicator,
-          value: formatValue(value, indicator),
-          unit
-        }
-      ]
-    );
+    tooltip.show(x, y, source, [
+      {
+        title: indicator,
+        value: formatValue(value, indicator),
+        unit
+      }
+    ]);
 
   const topConsumerActorsContainer = document.getElementById('js-traders-sankey-container');
   const topConsumerCountriesContainer = document.getElementById('js-consumers-sankey-container');
@@ -230,36 +225,49 @@ const _build = (data, year, onLinkClick, store) => {
 };
 
 const _setInfo = (store, info, onLinkClick, { nodeId, year }) => {
-  document.querySelector('.js-country-name').innerHTML = info.country ? capitalize(info.country) : '-';
+  document.querySelector('.js-country-name').innerHTML = info.country
+    ? capitalize(info.country)
+    : '-';
   document.querySelector('.js-state-name').innerHTML = info.state ? capitalize(info.state) : '-';
   // document.querySelector('.js-chord-consumers-state-name').innerHTML = info.state ? info.state : '-';
   // document.querySelector('.js-chord-traders-state-name').innerHTML = info.state ? info.state : '-';
   document.querySelector('.js-biome-name').innerHTML = info.biome ? capitalize(info.biome) : '-';
   document.querySelector('.js-legend').innerHTML = info.type || '-';
-  document.querySelector('.js-municipality').innerHTML = info.municipality ? capitalize(info.municipality) : '-';
-  document.querySelector('.js-area').innerHTML = info.area !== null ? formatValue(info.area, 'area') : '-';
+  document.querySelector('.js-municipality').innerHTML = info.municipality
+    ? capitalize(info.municipality)
+    : '-';
+  document.querySelector('.js-area').innerHTML =
+    info.area !== null ? formatValue(info.area, 'area') : '-';
   document.querySelector('.js-soy-land').innerHTML =
-    (info.soy_area !== null && info.soy_area !== 'NaN') ? formatValue(info.soy_area, 'area') : '-';
+    info.soy_area !== null && info.soy_area !== 'NaN' ? formatValue(info.soy_area, 'area') : '-';
   document.querySelector('.js-soy-production').innerHTML =
     info.soy_production !== null ? formatValue(info.soy_production, 'tons') : '-';
-  document.querySelector('.js-link-map')
-    .addEventListener(
-      'click',
-      () => onLinkClick('tool', { selectedNodesIds: [nodeId], isMapVisible: true, selectedYears: [year, year] })
+  document.querySelector('.js-link-map').addEventListener('click', () =>
+    onLinkClick('tool', {
+      selectedNodesIds: [nodeId],
+      isMapVisible: true,
+      selectedYears: [year, year]
+    })
+  );
+  document
+    .querySelector('.js-link-supply-chain')
+    .addEventListener('click', () =>
+      onLinkClick('tool', { selectedNodesIds: [nodeId], selectedYears: [year, year] })
     );
-  document.querySelector('.js-link-supply-chain')
-    .addEventListener(
-      'click',
-      () => onLinkClick('tool', { selectedNodesIds: [nodeId], selectedYears: [year, year] })
-    );
-  document.querySelector('.js-line-title').innerHTML =
-    info.municipality ? `Deforestation trajectory of ${info.municipality}` : '-';
-  document.querySelector('.js-traders-title').innerHTML =
-    `Top traders of soy in ${info.municipality} in ${year}`;
-  document.querySelector('.js-consumers-title').innerHTML =
-    `Top importer countries of ${formatApostrophe(capitalize(info.municipality))} soy in ${year}`;
-  document.querySelector('.js-link-button-municipality').textContent =
-    `${formatApostrophe(capitalize(info.municipality))} PROFILE`;
+  document.querySelector('.js-line-title').innerHTML = info.municipality
+    ? `Deforestation trajectory of ${info.municipality}`
+    : '-';
+  document.querySelector('.js-traders-title').innerHTML = `Top traders of soy in ${
+    info.municipality
+  } in ${year}`;
+  document.querySelector(
+    '.js-consumers-title'
+  ).innerHTML = `Top importer countries of ${formatApostrophe(
+    capitalize(info.municipality)
+  )} soy in ${year}`;
+  document.querySelector('.js-link-button-municipality').textContent = `${formatApostrophe(
+    capitalize(info.municipality)
+  )} PROFILE`;
 
   if (info.soy_production === 0) {
     info.summary = `${info.municipality} did not produce any soy in ${year}`;
@@ -271,37 +279,22 @@ const _setEventListeners = () => {
   smoothScroll(document.querySelectorAll('.js-link-profile'));
 };
 
-
 const setLoading = (isLoading = true) => {
   if (isLoading) {
-    document.querySelector('.js-loading')
-      .classList
-      .remove('is-hidden');
-    document.querySelector('.js-wrap')
-      .classList
-      .add('is-hidden');
+    document.querySelector('.js-loading').classList.remove('is-hidden');
+    document.querySelector('.js-wrap').classList.add('is-hidden');
   } else {
-    document.querySelector('.js-loading')
-      .classList
-      .add('is-hidden');
-    document.querySelector('.js-wrap')
-      .classList
-      .remove('is-hidden');
+    document.querySelector('.js-loading').classList.add('is-hidden');
+    document.querySelector('.js-wrap').classList.remove('is-hidden');
   }
 };
 
 const _showErrorMessage = (message = null) => {
   const el = document.querySelector('.l-profile-place');
-  document.querySelector('.js-loading')
-    .classList
-    .add('is-hidden');
+  document.querySelector('.js-loading').classList.add('is-hidden');
   el.classList.add('-error');
-  el.querySelector('.js-wrap')
-    .classList
-    .add('is-hidden');
-  el.querySelector('.js-error-message')
-    .classList
-    .remove('is-hidden');
+  el.querySelector('.js-wrap').classList.add('is-hidden');
+  el.querySelector('.js-error-message').classList.remove('is-hidden');
   if (message !== null && message !== '') {
     el.querySelector('.js-message').innerHTML = message;
   }
@@ -320,17 +313,21 @@ const _switchYear = (store, nodeId, dropdownYear) => {
 };
 
 const _loadData = (store, nodeId, year) => {
-  const placeFactsheetURL = getURLFromParams(GET_PLACE_FACTSHEET, { context_id: 1, node_id: nodeId, year });
+  const placeFactsheetURL = getURLFromParams(GET_PLACE_FACTSHEET, {
+    context_id: 1,
+    node_id: nodeId,
+    year
+  });
   setLoading();
 
   fetch(placeFactsheetURL)
-    .then((response) => {
+    .then(response => {
       if (response.ok) {
         return response.json();
       }
       throw new Error(response.statusText);
     })
-    .then((result) => {
+    .then(result => {
       if (!result) return;
 
       setLoading(false);
@@ -365,7 +362,7 @@ const _loadData = (store, nodeId, year) => {
 
       _build(data, year, onLinkClick(store), store);
     })
-    .catch((reason) => {
+    .catch(reason => {
       _showErrorMessage(reason.message);
       console.error(reason);
     });
@@ -412,4 +409,3 @@ export const unmount = () => {
   unmountComponentAtNode(document.getElementById('nav'));
   unmountComponentAtNode(document.getElementById('footer'));
 };
-

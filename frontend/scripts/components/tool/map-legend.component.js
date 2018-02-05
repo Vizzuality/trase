@@ -77,8 +77,8 @@ export default class {
 
   _toggleLegend(choroplethLegend, selectedMapContextualLayersData) {
     if (
-      choroplethLegend === null
-      && (selectedMapContextualLayersData === undefined || !selectedMapContextualLayersData.length)
+      choroplethLegend === null &&
+      (selectedMapContextualLayersData === undefined || !selectedMapContextualLayersData.length)
     ) {
       this._hideLegend();
     } else {
@@ -101,7 +101,7 @@ export default class {
   }
 
   _renderChoro(choroplethLegend) {
-    const cssClass = (choroplethLegend.isBivariate) ? '-bidimensional' : '-horizontal';
+    const cssClass = choroplethLegend.isBivariate ? '-bidimensional' : '-horizontal';
 
     this.choro.innerHTML = LegendChoroTemplate({
       title: choroplethLegend.titles,
@@ -112,7 +112,8 @@ export default class {
       abbreviateNumber
     });
 
-    this.currentBuckets = Array.prototype.slice.call(this.choro.getElementsByClassName('bucket'))
+    this.currentBuckets = Array.prototype.slice
+      .call(this.choro.getElementsByClassName('bucket'))
       .concat(Array.prototype.slice.call(this.choro.getElementsByClassName('bullet')));
   }
 
@@ -126,6 +127,8 @@ export default class {
     const mapFooterHeight = this.el.offsetHeight + this.attribution.offsetHeight;
     this.mapControlSwitcher.style.bottom = `${mapFooterHeight + 8}px`;
     this.mapControlZoom.style.bottom = `${mapFooterHeight + 48}px`;
-    this.mapControlScale.style.bottom = `${(mapFooterHeight + this.mapControlScale.offsetHeight) - 88}px`;
+    this.mapControlScale.style.bottom = `${mapFooterHeight +
+      this.mapControlScale.offsetHeight -
+      88}px`;
   }
 }

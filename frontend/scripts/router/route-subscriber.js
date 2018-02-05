@@ -25,8 +25,7 @@ export default function routeSubscriber(store) {
         this.filename = filename;
         // eslint-disable-next-line space-in-parens
         import(/* webpackChunkName: "[request]" */
-          `../pages/${this.filename}.page.jsx`
-        ).then((page) => {
+        `../pages/${this.filename}.page.jsx`).then(page => {
           this.page = page;
           this.page.mount(this.root, store);
         });

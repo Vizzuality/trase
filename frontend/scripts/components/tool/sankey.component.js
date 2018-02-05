@@ -10,7 +10,8 @@ import Tooltip from 'components/shared/info-tooltip.component';
 import 'styles/components/tool/sankey.scss';
 import 'styles/components/tool/node-menu.scss';
 
-const placeNodeText = node => `translate(0,${(-7 + (node.renderedHeight / 2)) - ((node.label.length - 1) * 7)})`;
+const placeNodeText = node =>
+  `translate(0,${-7 + node.renderedHeight / 2 - (node.label.length - 1) * 7})`;
 
 export default class {
   onCreated() {
@@ -72,7 +73,8 @@ export default class {
       return;
     }
 
-    this.sankeyColumns.selectAll('.sankey-node')
+    this.sankeyColumns
+      .selectAll('.sankey-node')
       .classed('-selected', node => selectedNodesIds.indexOf(node.id) > -1);
 
     if (shouldRepositionExpandButton) this._repositionExpandButton(selectedNodesIds);
@@ -83,13 +85,13 @@ export default class {
   }
 
   highlightNodes(nodesIds) {
-    this.sankeyColumns.selectAll('.sankey-node')
+    this.sankeyColumns
+      .selectAll('.sankey-node')
       .classed('-highlighted', node => nodesIds.indexOf(node.id) > -1);
   }
 
   _build() {
-    this.layout = sankeyLayout()
-      .columnWidth(100);
+    this.layout = sankeyLayout().columnWidth(100);
 
     this.el = document.querySelector('.js-sankey');
     this.scrollContainer = document.querySelector('.js-sankey-scroll-container');
@@ -123,12 +125,14 @@ export default class {
     if (nodesIds && nodesIds.length > 0) {
       this.expandButton.classList.add('-visible');
 
-      const lastSelectedNode = this.sankeyColumns.selectAll('.sankey-node')
+      const lastSelectedNode = this.sankeyColumns
+        .selectAll('.sankey-node')
         .filter(node => node.id === nodesIds[0])
         .data()[0];
 
       if (lastSelectedNode) {
-        const selectedColumnFirstNode = this.sankeyColumns.selectAll('.sankey-node.-selected')
+        const selectedColumnFirstNode = this.sankeyColumns
+          .selectAll('.sankey-node.-selected')
           .filter(node => node.x === lastSelectedNode.x)
           .data()
           .reduce((acc, val) => (acc.y < val.y ? acc : val));
@@ -175,17 +179,18 @@ export default class {
   }
 
   _render(selectedRecolorBy, currentQuant) {
-    this.sankeyColumns
-      .data(this.layout.columns());
+    this.sankeyColumns.data(this.layout.columns());
 
     this.sankeyColumns.attr('transform', d => `translate(${d.x},0)`);
 
-    this.nodes = this.sankeyColumns.select('.sankey-nodes')
+    this.nodes = this.sankeyColumns
+      .select('.sankey-nodes')
       .selectAll('g.sankey-node')
       .data(column => column.values, node => node.id);
 
     const that = this;
-    const nodesEnter = this.nodes.enter()
+    const nodesEnter = this.nodes
+      .enter()
       .append('g')
       .attr('class', 'sankey-node')
       .attr('transform', node => `translate(0,${node.y})`)
@@ -196,11 +201,12 @@ export default class {
       .on('mouseleave', () => {
         this._onNodeOut();
       })
-      .on('click', (node) => {
+      .on('click', node => {
         this.callbacks.onNodeClicked(node.id, node.isAggregated);
       });
 
-    nodesEnter.append('rect')
+    nodesEnter
+      .append('rect')
       .attr('class', 'sankey-node-rect')
       .attr('width', this.layout.columnWidth())
       .attr('height', d => d.renderedHeight);
@@ -212,26 +218,22 @@ export default class {
 
     this.nodes.classed('-is-alone-in-column', node => node.isAloneInColumn);
 
-    const nodesUpdate = this.nodes.transition()
+    const nodesUpdate = this.nodes
+      .transition()
       .duration(SANKEY_TRANSITION_TIME)
       .attr('transform', d => `translate(0,${d.y})`);
 
-    nodesUpdate.select('.sankey-node-rect')
-      .attr('height', d => d.renderedHeight);
+    nodesUpdate.select('.sankey-node-rect').attr('height', d => d.renderedHeight);
 
-
-    this.nodes.exit()
-      .remove();
-
+    this.nodes.exit().remove();
 
     const linksData = this.layout.links();
-    const links = this.linksContainer
-      .selectAll('path')
-      .data(linksData, link => link.id);
+    const links = this.linksContainer.selectAll('path').data(linksData, link => link.id);
 
     // update
     links.attr('class', link => this._getLinkColor(link, selectedRecolorBy)); // apply color from CSS class immediately
-    links.transition()
+    links
+      .transition()
       .duration(SANKEY_TRANSITION_TIME)
       .attr('stroke-width', d => Math.max(DETAILED_VIEW_MIN_LINK_HEIGHT, d.renderedHeight))
       .attr('d', this.layout.link());
@@ -240,25 +242,25 @@ export default class {
     this.currentQuant = currentQuant;
 
     // enter
-    links.enter()
+    links
+      .enter()
       .append('path')
       .attr('class', link => this._getLinkColor(link, selectedRecolorBy))
       .attr('d', this.layout.link())
-      .on('mouseover',
-        function (link) {
-          that._onLinkOver(link, this);
-        })
-      .on('mouseout',
-        function () {
-          that.linkTooltip.hide();
-          this.classList.remove('-hover');
-        })
+      .on('mouseover', function(link) {
+        that._onLinkOver(link, this);
+      })
+      .on('mouseout', function() {
+        that.linkTooltip.hide();
+        this.classList.remove('-hover');
+      })
       .transition()
       .duration(SANKEY_TRANSITION_TIME)
       .attr('stroke-width', d => Math.max(DETAILED_VIEW_MIN_LINK_HEIGHT, d.renderedHeight));
 
     // exit
-    links.exit()
+    links
+      .exit()
       .transition()
       .duration(SANKEY_TRANSITION_TIME)
       .attr('stroke-width', 0)
@@ -266,7 +268,8 @@ export default class {
   }
 
   _renderTitles(selection) {
-    selection.append('text')
+    selection
+      .append('text')
       .attr('class', 'sankey-node-labels')
       .attr('transform', placeNodeText)
       .selectAll('tspan')
@@ -289,11 +292,13 @@ export default class {
 
   _onLinkOver(link, linkEl) {
     const title = `${link.sourceNodeName} > ${link.targetNodeName}`;
-    const values = [{
-      title: this.currentQuant.name,
-      unit: this.currentQuant.unit,
-      value: formatValue(link.quant, this.currentQuant.name)
-    }];
+    const values = [
+      {
+        title: this.currentQuant.name,
+        unit: this.currentQuant.unit,
+        value: formatValue(link.quant, this.currentQuant.name)
+      }
+    ];
 
     if (this.currentSelectedRecolorBy && this.currentSelectedRecolorBy.name !== 'none') {
       values.push({
@@ -327,4 +332,3 @@ export default class {
     this.callbacks.onNodeHighlighted();
   }
 }
-

@@ -1,6 +1,6 @@
 import actions from 'actions';
 
-export default function (state = {}, action) {
+export default function(state = {}, action) {
   let newState;
 
   switch (action.type) {

@@ -10,15 +10,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onToggle: (id) => {
+  onToggle: id => {
     dispatch(toggleDropdown(id));
   },
-  onSelected: (view) => {
+  onSelected: view => {
     dispatch(selectView(view));
   }
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(View);
+export default connect(mapStateToProps, mapDispatchToProps)(View);

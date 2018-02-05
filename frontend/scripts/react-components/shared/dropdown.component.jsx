@@ -57,8 +57,10 @@ export default class Dropdown extends Component {
 
     return (
       <div
-        ref={ref => this.ref = ref}
-        className={classnames('c-dropdown', '-active', { '-hide-only-child': valueList.length <= 1 && hideOnlyChild })}
+        ref={ref => (this.ref = ref)}
+        className={classnames('c-dropdown', '-active', {
+          '-hide-only-child': valueList.length <= 1 && hideOnlyChild
+        })}
         data-dropdown="year"
       >
         <span className="dropdown-label">{label}</span>
@@ -71,7 +73,9 @@ export default class Dropdown extends Component {
           {value}
         </span>
         <ul
-          className={classnames('js-dropdown-list', 'dropdown-list', { 'is-hidden': !this.state.isOpen })}
+          className={classnames('js-dropdown-list', 'dropdown-list', {
+            'is-hidden': !this.state.isOpen
+          })}
         >
           {valueList.map((elem, index) => (
             <li
@@ -96,10 +100,7 @@ Dropdown.defaultProps = {
 
 Dropdown.propTypes = {
   label: PropTypes.string,
-  value: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   valueList: PropTypes.array,
   onValueSelected: PropTypes.func,
   hideOnlyChild: PropTypes.bool

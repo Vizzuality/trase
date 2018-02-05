@@ -8,11 +8,11 @@ const getNodeSelectedMeta = (selectedMapDimension, node, selectedResizeByLabel, 
   if (meta && meta.name !== selectedResizeByLabel) {
     return meta;
   } else if (
-    meta
-    && visibleNode
-    && visibleNode.quant
-    && meta.rawValue !== visibleNode.quant
-    && NODE_ENV_DEV === true
+    meta &&
+    visibleNode &&
+    visibleNode.quant &&
+    meta.rawValue !== visibleNode.quant &&
+    NODE_ENV_DEV === true
   ) {
     // See https://basecamp.com/1756858/projects/12498794/todos/312319406
     console.warn(
@@ -35,7 +35,7 @@ const getSelectedNodesData = (
     return [];
   }
 
-  return selectedNodesIds.map((nodeId) => {
+  return selectedNodesIds.map(nodeId => {
     const visibleNode = visibleNodes.find(node => node.id === nodeId);
     let node = {};
 

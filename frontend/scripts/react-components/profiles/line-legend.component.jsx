@@ -15,13 +15,12 @@ class LineLegend extends Component {
       .filter(lineData => lineData.values.filter(v => v !== null).length);
 
     return filteredSortedLines.map((lineData, index) => {
-      const style = typeof this.props.data.style !== 'undefined' ? this.props.data.style.style : lineData.style;
+      const style =
+        typeof this.props.data.style !== 'undefined' ? this.props.data.style.style : lineData.style;
 
       if (typeof lineData.legend_name !== 'undefined') {
         return (
-          <div
-            key={index}
-          >
+          <div key={index}>
             <svg className="icon">
               <use xlinkHref={`#icon-${style}`} />
             </svg>

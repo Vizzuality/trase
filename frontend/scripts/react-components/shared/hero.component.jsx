@@ -24,10 +24,15 @@ class Hero extends React.Component {
     const StoryBox = storyObj => (
       <div className="story-box">
         <button className="story-box-close" onClick={this.closeStoryBox} />
-        <figure className="story-box-image" style={{ backgroundImage: `url(${storyObj.imageUrl})` }} />
+        <figure
+          className="story-box-image"
+          style={{ backgroundImage: `url(${storyObj.imageUrl})` }}
+        />
         <figcaption className="story-box-content">
           <p className="story-box-title">{storyObj.title}</p>
-          <button className="subtitle story-box-link" onClick={() => visitStory(storyObj)}>See It Here</button>
+          <button className="subtitle story-box-link" onClick={() => visitStory(storyObj)}>
+            See It Here
+          </button>
         </figcaption>
       </div>
     );
@@ -39,24 +44,24 @@ class Hero extends React.Component {
             <div className="hero-logo-container">
               <img src="images/logos/new-logo-trase.svg" alt="TRASE" />
             </div>
-            <h1 className="hero-title">
-              Transparent supply chains for sustainable economies
-            </h1>
+            <h1 className="hero-title">Transparent supply chains for sustainable economies</h1>
             <div className="hero-play-container">
               <button className="hero-play-button" />
               TRASE in 2’
             </div>
           </div>
-          {showStory && story &&
-          <div className="layover">
-            <StoryBox {...story} />
-          </div>
-          }
-          {(!showStory || !story) && tweets &&
-          <div className="layover">
-            <TwitterFeed tweets={tweets} />
-          </div>
-          }
+          {showStory &&
+            story && (
+              <div className="layover">
+                <StoryBox {...story} />
+              </div>
+            )}
+          {(!showStory || !story) &&
+            tweets && (
+              <div className="layover">
+                <TwitterFeed tweets={tweets} />
+              </div>
+            )}
         </div>
         <AnimatedFlows />
       </div>
