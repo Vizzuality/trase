@@ -9,22 +9,6 @@
   "rules": {
     "prettier/prettier": "warn",
     "arrow-parens": 0,
-    "jsx-a11y/label-has-for": [
-      2,
-      {
-        "components": ["Label"],
-        "required": {
-          "every": ["nesting", "id"]
-        },
-        "allowChildren": true
-      }
-    ],
-    "jsx-a11y/anchor-is-valid": [
-      "error",
-      {
-        "components": ["a"]
-      }
-    ],
     "linebreak-style": ["error", "unix"],
     "no-console": [
       1,
@@ -47,11 +31,37 @@
     "default-case": 0,
     "no-param-reassign": 0,
     "import/no-webpack-loader-syntax": 0,
-    "react/forbid-prop-types": "off",
-    "react/require-default-props": "off",
+    "import/prefer-default-export": 0,
+    "jsx-a11y/label-has-for": [
+      2,
+      {
+        "components": ["Label"],
+        "required": {
+          "every": ["nesting", "id"]
+        },
+        "allowChildren": true
+      }
+    ],
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        "components": ["a"]
+      }
+    ],
     "jsx-a11y/click-events-have-key-events": 0,
     "react/no-array-index-key": "off",
-    "import/prefer-default-export": 0
+    "react/forbid-prop-types": "off",
+    "react/require-default-props": "off",
+    "react/jsx-closing-bracket-location": 0,
+    "react/jsx-closing-tag-location": 0,
+    "react/jsx-curly-spacing": 0,
+    "react/jsx-equals-spacing": 0,
+    "react/jsx-first-prop-new-line": 0,
+    "react/jsx-indent": 0,
+    "react/jsx-indent-props": 0,
+    "react/jsx-max-props-per-line": 0,
+    "react/jsx-tag-spacing": 0,
+    "react/jsx-wrap-multilines": 0
   },
   "parser": "babel-eslint",
   "parserOptions": {
