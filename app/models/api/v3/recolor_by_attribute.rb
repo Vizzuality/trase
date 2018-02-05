@@ -4,20 +4,20 @@ module Api
       include Api::V3::StringyArray
       include Api::V3::AssociatedAttributes
 
-      LEGEND_TYPE = [
-        'qual',
-        'linear',
-        'stars',
-        'percentual'
-      ].freeze
+      LEGEND_TYPE = %w(
+        qual
+        linear
+        stars
+        percentual
+      ).freeze
 
-      LEGEND_COLOR_THEME = [
-        'thematic',
-        'blue-green',
-        'yellow-green',
-        'red-blue',
-        'yes-no'
-        ].freeze
+      LEGEND_COLOR_THEME = %w(
+        thematic
+        blue-green
+        yellow-green
+        red-blue
+        yes-no
+      ).freeze
 
       belongs_to :context
       has_one :recolor_by_ind, autosave: true

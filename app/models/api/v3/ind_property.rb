@@ -3,12 +3,12 @@ module Api
     class IndProperty < YellowTable
       include AttributePropertiesProfileScopes
 
-      UNIT_TYPE = [
-        'currency',
-        'ratio',
-        'score',
-        'unitless'
-      ].freeze
+      UNIT_TYPE = %w(
+        currency
+        ratio
+        score
+        unitless
+      ).freeze
 
       belongs_to :ind
 

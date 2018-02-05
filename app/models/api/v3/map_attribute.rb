@@ -21,14 +21,14 @@ module Api
       include Api::V3::StringyArray
       include Api::V3::AssociatedAttributes
 
-      COLOR_SCALE = [
-        'bluered',
-        'green',
-        'blue',
-        'red',
-        'redblue',
-        'greenblue'
-        ].freeze
+      COLOR_SCALE = %w(
+        bluered
+        green
+        blue
+        red
+        redblue
+        greenblue
+      ).freeze
 
       belongs_to :map_attribute_group
       has_one :map_ind, autosave: true

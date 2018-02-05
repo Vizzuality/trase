@@ -3,13 +3,13 @@ module Api
     class QuantProperty < YellowTable
       include AttributePropertiesProfileScopes
 
-      UNIT_TYPE = [
-        'currency',
-        'area',
-        'count',
-        'volume',
-        'unitless'
-      ].freeze
+      UNIT_TYPE = %w(
+        currency
+        area
+        count
+        volume
+        unitless
+      ).freeze
 
       belongs_to :quant
 

@@ -1,12 +1,12 @@
 module Api
   module V3
     class ContextProperty < YellowTable
-      DEFAULT_BASEMAP = [
-        'default',
-        'satellite',
-        'topo',
-        'streets'
-      ].freeze
+      DEFAULT_BASEMAP = %w(
+        default
+        satellite
+        topo
+        streets
+      ).freeze
 
       belongs_to :context
 
