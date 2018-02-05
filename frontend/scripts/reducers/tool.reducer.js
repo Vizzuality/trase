@@ -1,9 +1,10 @@
-import _ from 'lodash';
+import isEqual from 'lodash/isEqual';
+import keyBy from 'lodash/keyBy';
+import groupBy from 'lodash/groupBy';
 import actions from 'actions';
 import getNodesDict from './helpers/getNodesDict';
 import getVisibleNodes from './helpers/getVisibleNodes';
 import splitVisibleNodesByColumn from './helpers/splitVisibleNodesByColumn';
-import getVisibleColumns from './helpers/getVisibleColumns';
 import splitLinksByColumn from './helpers/splitLinksByColumn';
 import sortVisibleNodes from './helpers/sortVisibleNodes';
 import mergeLinks from './helpers/mergeLinks';
@@ -17,17 +18,60 @@ import getRecolorGroups from './helpers/getRecolorGroups';
 import { getMapDimensionsWarnings } from './helpers/getMapDimensionsWarnings';
 
 const initialState = {
-  selectedNodesIds: [],
-  expandedNodesIds: [],
   areNodesExpanded: false,
+  choropleth: {},
+  choroplethLegend: null,
+  columns: [],
+  contexts: [],
+  currentHighlightedChoroplethBucket: null,
+  currentQuant: null,
   detailedView: false,
-  selectedNodesData: [],
-  selectedMapContextualLayers: null,
+  expandedMapSidebarGroupsIds: [],
+  expandedNodesIds: [],
+  forcedOverview: false,
+  geoIdsDict: [],
+  highlightedGeoIds: [],
+  highlightedNodeCoordinates: [],
+  highlightedNodeData: [],
+  highlightedNodesIds: [],
+  initialDataLoading: false,
   isMapVisible: false,
-  expandedMapSidebarGroupsIds: []
+  linkedGeoIds: [],
+  links: [],
+  linksLoading: false,
+  mapContextualLayers: [],
+  mapDimensions: [],
+  mapDimensionsGroups: [],
+  mapVectorData: null,
+  mapView: null,
+  nodes: [],
+  nodesColoredAtColumn: null,
+  nodesColoredBySelection: null,
+  nodesDict: null,
+  nodesDictWithMeta: [],
+  recolorByNodeIds: [],
+  recolorGroups: [],
+  selectedBiomeFilter: { value: 'none' },
+  selectedColumnsIds: [],
+  selectedContext: null,
+  selectedContextId: null,
+  selectedMapBasemap: null,
+  selectedMapContextualLayers: null,
+  selectedMapDimensions: [null, null],
+  selectedMapDimensionsWarnings: null,
+  selectedNodesColumnsPos: [],
+  selectedNodesData: [],
+  selectedNodesGeoIds: [],
+  selectedNodesIds: [],
+  selectedRecolorBy: { type: 'none', name: 'none' },
+  selectedResizeBy: { type: 'none', name: 'none' },
+  selectedYears: [],
+  unmergedLinks: [],
+  visibleNodes: [],
+  visibleNodesByColumn: []
 };
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   let newState;
   switch (action.type) {
     case actions.LOAD_INITIAL_DATA: {
@@ -59,33 +103,37 @@ export default function (state = initialState, action) {
         selectedContext = state.contexts.find(context => context.isDefault === true);
       }
 
-      let selectedRecolorBy = selectedContext.recolorBy
-        .find(recolorBy => recolorBy.name === state.selectedRecolorByName);
+      let selectedRecolorBy = selectedContext.recolorBy.find(
+        recolorBy => recolorBy.name === state.selectedRecolorByName
+      );
       if (!selectedRecolorBy) {
-        selectedRecolorBy = selectedContext.recolorBy.find(recolorBy => recolorBy.isDefault === true);
+        selectedRecolorBy = selectedContext.recolorBy.find(
+          recolorBy => recolorBy.isDefault === true
+        );
       }
 
-      let selectedResizeBy;
-      if (state.selectedResizeByName === 'none') {
-        selectedResizeBy = { type: 'none', name: 'none' };
-      } else {
-        selectedResizeBy = selectedContext.resizeBy.find(resizeBy => resizeBy.name === state.selectedResizeByName);
-        if (!selectedResizeBy) {
-          selectedResizeBy = selectedContext.resizeBy.find(resizeBy => resizeBy.isDefault === true);
-        }
+      let selectedResizeBy = selectedContext.resizeBy.find(
+        resizeBy => resizeBy.name === state.selectedResizeByName
+      );
+      if (!selectedResizeBy) {
+        selectedResizeBy = selectedContext.resizeBy.find(resizeBy => resizeBy.isDefault === true);
       }
 
       let biomeFilter;
       if (state.selectedBiomeFilterName === 'none' || !selectedContext.filterBy.length) {
         biomeFilter = { value: 'none' };
       } else {
-        biomeFilter = selectedContext.filterBy[0].nodes
-          .find(filterBy => filterBy.name === state.selectedBiomeFilterName);
+        biomeFilter = selectedContext.filterBy[0].nodes.find(
+          filterBy => filterBy.name === state.selectedBiomeFilterName
+        );
       }
 
       // use current selectedMapContextualLayers, or use the context's default
       let selectedMapContextualLayers = selectedContext.defaultContextLayers || undefined;
-      if (state.selectedMapContextualLayers !== undefined && state.selectedMapContextualLayers !== null) {
+      if (
+        state.selectedMapContextualLayers !== undefined &&
+        state.selectedMapContextualLayers !== null
+      ) {
         selectedMapContextualLayers = state.selectedMapContextualLayers;
       }
 
@@ -95,10 +143,11 @@ export default function (state = initialState, action) {
       }
 
       // force state updates on the component
-      const selectedYears = (state.selectedYears)
-        ? Object.assign([], state.selectedYears)
-        : [selectedContext.defaultYear, selectedContext.defaultYear];
-      const mapView = (state.mapView) ? Object.assign({}, state.mapView) : selectedContext.map;
+      const selectedYears =
+        state.selectedYears.length !== 0
+          ? Object.assign([], state.selectedYears)
+          : [selectedContext.defaultYear, selectedContext.defaultYear];
+      const mapView = state.mapView ? Object.assign({}, state.mapView) : selectedContext.map;
 
       newState = Object.assign({}, state, {
         selectedContext,
@@ -117,9 +166,14 @@ export default function (state = initialState, action) {
     case actions.SET_CONTEXT: {
       const contextId = action.payload;
       const selectedContext = state.contexts.find(context => context.id === contextId);
-      const defaultRecolorBy = selectedContext.recolorBy.find(recolorBy => recolorBy.isDefault === true);
-      const defaultResizeBy = selectedContext.resizeBy.find(resizeBy => resizeBy.isDefault === true);
+      const defaultRecolorBy = selectedContext.recolorBy.find(
+        recolorBy => recolorBy.isDefault === true
+      );
+      const defaultResizeBy = selectedContext.resizeBy.find(
+        resizeBy => resizeBy.isDefault === true
+      );
       const defaultFilterBy = selectedContext.filterBy.length && selectedContext.filterBy[0][0];
+
       newState = Object.assign({}, state, {
         selectedContext,
         selectedContextId: contextId,
@@ -147,7 +201,7 @@ export default function (state = initialState, action) {
       const columns = JSON.parse(action.payload[1]).data;
 
       // context-dependant columns
-      const columnsByGroupObj = _.groupBy(columns, 'group');
+      const columnsByGroupObj = groupBy(columns, 'group');
       const columnsByGroup = [0, 0, 0, 0].map((e, i) => columnsByGroupObj[i]);
 
       const selectedColumnsIds = [];
@@ -157,9 +211,10 @@ export default function (state = initialState, action) {
           selectedColumnsIds.push(defaultColumn);
         } else {
           const currentColumnForGroup = state.selectedColumnsIds[i];
-          const columnId = (group.find(g => g.id === currentColumnForGroup) !== undefined)
-            ? currentColumnForGroup
-            : defaultColumn;
+          const columnId =
+            group.find(g => g.id === currentColumnForGroup) !== undefined
+              ? currentColumnForGroup
+              : defaultColumn;
           selectedColumnsIds.push(columnId);
         }
       });
@@ -203,16 +258,10 @@ export default function (state = initialState, action) {
       // store dimension values in nodesDict as uid: dimensionValue
       const nodesDictWithMeta = setNodesMeta(state.nodesDict, nodesMeta, mapDimensions);
 
-      newState = Object.assign({}, state, { mapDimensions, mapDimensionsGroups, nodesDictWithMeta });
-      break;
-    }
-
-    case actions.RESET_MAP_DIMENSIONS: {
       newState = Object.assign({}, state, {
-        mapDimensions: [],
-        mapDimensionsGroups: [],
-        selectedMapDimensions: [null, null],
-        choroplethLegend: null
+        mapDimensions,
+        mapDimensionsGroups,
+        nodesDictWithMeta
       });
       break;
     }
@@ -223,18 +272,26 @@ export default function (state = initialState, action) {
 
       const currentQuant = linksMeta.quant;
 
-      const visibleNodes = getVisibleNodes(rawLinks, state.nodesDict, linksMeta, state.selectedColumnsIds);
+      const visibleNodes = getVisibleNodes(
+        rawLinks,
+        state.nodesDict,
+        linksMeta,
+        state.selectedColumnsIds
+      );
 
       let visibleNodesByColumn = splitVisibleNodesByColumn(visibleNodes);
       visibleNodesByColumn = sortVisibleNodes(visibleNodesByColumn);
-
-      const visibleColumns = getVisibleColumns(state.columns, state.selectedColumnsIds);
 
       const unmergedLinks = splitLinksByColumn(rawLinks, state.nodesDict, state.selectedRecolorBy);
       const links = mergeLinks(unmergedLinks);
 
       newState = Object.assign({}, state, {
-        links, unmergedLinks, visibleNodes, visibleNodesByColumn, visibleColumns, currentQuant, linksLoading: false
+        links,
+        unmergedLinks,
+        visibleNodes,
+        visibleNodesByColumn,
+        currentQuant,
+        linksLoading: false
       });
       break;
     }
@@ -245,10 +302,11 @@ export default function (state = initialState, action) {
     }
 
     case actions.GET_LINKED_GEOIDS: {
-      const linkedGeoIds = (action.payload && action.payload.nodes && action.payload.nodes.length)
-        ? action.payload.nodes.map(node => node.geoId)
-        : [];
-      if (_.isEqual(linkedGeoIds, state.linkedGeoIds)) {
+      const linkedGeoIds =
+        action.payload && action.payload.nodes && action.payload.nodes.length
+          ? action.payload.nodes.map(node => node.geoId)
+          : [];
+      if (isEqual(linkedGeoIds, state.linkedGeoIds)) {
         newState = state;
         break;
       }
@@ -261,7 +319,9 @@ export default function (state = initialState, action) {
       if (action.biomeFilter === 'none') {
         selectedBiomeFilter = { value: 'none' };
       } else {
-        const currentContext = state.contexts.find(context => context.id === state.selectedContextId);
+        const currentContext = state.contexts.find(
+          context => context.id === state.selectedContextId
+        );
         selectedBiomeFilter = Object.assign(
           {},
           currentContext.filterBy[0].nodes.find(filterBy => filterBy.name === action.biomeFilter)
@@ -281,21 +341,30 @@ export default function (state = initialState, action) {
       if (action.value === 'none') {
         selectedRecolorBy = { name: 'none' };
       } else {
-        const currentContext = state.contexts.find(context => context.id === state.selectedContextId);
-        selectedRecolorBy = currentContext.recolorBy
-          .find(recolorBy => recolorBy.name === action.value && recolorBy.type === action.value_type);
+        const currentContext = state.contexts.find(
+          context => context.id === state.selectedContextId
+        );
+        selectedRecolorBy = currentContext.recolorBy.find(
+          recolorBy => recolorBy.name === action.value && recolorBy.type === action.value_type
+        );
       }
+
       newState = Object.assign({}, state, { selectedRecolorBy });
       break;
     }
     case actions.SELECT_RESIZE_BY: {
       const currentContext = state.contexts.find(context => context.id === state.selectedContextId);
-      const selectedResizeBy = currentContext.resizeBy.find(resizeBy => resizeBy.name === action.resizeBy);
+      const selectedResizeBy = currentContext.resizeBy.find(
+        resizeBy => resizeBy.name === action.resizeBy
+      );
       newState = Object.assign({}, state, { selectedResizeBy });
       break;
     }
     case actions.SELECT_VIEW:
-      newState = Object.assign({}, state, { detailedView: action.detailedView, forcedOverview: action.forcedOverview });
+      newState = Object.assign({}, state, {
+        detailedView: action.detailedView,
+        forcedOverview: action.forcedOverview
+      });
       break;
 
     case actions.SELECT_COLUMN: {
@@ -331,9 +400,14 @@ export default function (state = initialState, action) {
     }
 
     case actions.FILTER_LINKS_BY_NODES: {
-      const selectedNodesAtColumns = getNodesAtColumns(state.selectedNodesIds, state.selectedNodesColumnsPos);
+      const selectedNodesAtColumns = getNodesAtColumns(
+        state.selectedNodesIds,
+        state.selectedNodesColumnsPos
+      );
 
-      const { nodesColoredBySelection, nodesColoredAtColumn } = getNodesColoredBySelection(selectedNodesAtColumns);
+      const { nodesColoredBySelection, nodesColoredAtColumn } = getNodesColoredBySelection(
+        selectedNodesAtColumns
+      );
       const recolorGroups = getRecolorGroups(
         state.nodesColoredBySelection,
         nodesColoredBySelection,
@@ -354,7 +428,10 @@ export default function (state = initialState, action) {
       }
 
       newState = Object.assign({}, state, {
-        links, nodesColoredBySelection, nodesColoredAtColumn, recolorGroups
+        links,
+        nodesColoredBySelection,
+        nodesColoredAtColumn,
+        recolorGroups
       });
       break;
     }
@@ -374,7 +451,7 @@ export default function (state = initialState, action) {
 
       // TODO Remove that when server correctly implements map dimensions meta/choropleth
       // ie it shouldn't return choropleth values in get_nodes over multiple years if metadata says data is unavailable
-      const forceEmptyChoropleth = (state.selectedYears[1] - state.selectedYears[0]) > 0;
+      const forceEmptyChoropleth = state.selectedYears[1] - state.selectedYears[0] > 0;
 
       const { choropleth, choroplethLegend } = getChoropleth(
         selectedMapDimensions,
@@ -382,7 +459,10 @@ export default function (state = initialState, action) {
         state.mapDimensions,
         forceEmptyChoropleth
       );
-      const selectedMapDimensionsWarnings = getMapDimensionsWarnings(state.mapDimensions, selectedMapDimensions);
+      const selectedMapDimensionsWarnings = getMapDimensionsWarnings(
+        state.mapDimensions,
+        selectedMapDimensions
+      );
 
       newState = Object.assign({}, state, {
         selectedMapDimensions,
@@ -412,7 +492,7 @@ export default function (state = initialState, action) {
 
       // TODO Remove that when server correctly implements map dimensions meta/choropleth
       // ie it shouldn't return choropleth values in get_nodes over multiple years if metadata says data is unavailable
-      const forceEmptyChoropleth = (state.selectedYears[1] - state.selectedYears[0]) > 0;
+      const forceEmptyChoropleth = state.selectedYears[1] - state.selectedYears[0] > 0;
 
       const { choropleth, choroplethLegend } = getChoropleth(
         selectedMapDimensions,
@@ -420,7 +500,10 @@ export default function (state = initialState, action) {
         state.mapDimensions,
         forceEmptyChoropleth
       );
-      const selectedMapDimensionsWarnings = getMapDimensionsWarnings(state.mapDimensions, selectedMapDimensions);
+      const selectedMapDimensionsWarnings = getMapDimensionsWarnings(
+        state.mapDimensions,
+        selectedMapDimensions
+      );
       newState = Object.assign({}, state, {
         selectedMapDimensions,
         selectedMapDimensionsWarnings,
@@ -430,12 +513,14 @@ export default function (state = initialState, action) {
       break;
     }
     case actions.SELECT_CONTEXTUAL_LAYERS: {
-      const mapContextualLayersDict = _.keyBy(state.mapContextualLayers, 'id');
-      const selectedMapContextualLayersData =
-        action.contextualLayers.map(layerSlug => Object.assign({}, mapContextualLayersDict[layerSlug]));
+      const mapContextualLayersDict = keyBy(state.mapContextualLayers, 'id');
+      const selectedMapContextualLayersData = action.contextualLayers.map(layerSlug =>
+        Object.assign({}, mapContextualLayersDict[layerSlug])
+      );
 
       newState = Object.assign({}, state, {
-        selectedMapContextualLayers: action.contextualLayers, selectedMapContextualLayersData
+        selectedMapContextualLayers: action.contextualLayers,
+        selectedMapContextualLayersData
       });
       break;
     }
@@ -452,12 +537,12 @@ export default function (state = initialState, action) {
         expandedNodesIds = action.forceExpandNodeIds;
         selectedNodesIds = action.forceExpandNodeIds;
       } else {
-        expandedNodesIds = (state.areNodesExpanded) ? [] : state.selectedNodesIds;
+        expandedNodesIds = state.areNodesExpanded ? [] : state.selectedNodesIds;
         selectedNodesIds = state.selectedNodesIds;
       }
 
       newState = Object.assign({}, state, {
-        areNodesExpanded: (action.forceExpand === true) ? true : !state.areNodesExpanded,
+        areNodesExpanded: action.forceExpand === true ? true : !state.areNodesExpanded,
         selectedNodesIds,
         expandedNodesIds
       });

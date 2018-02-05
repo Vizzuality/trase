@@ -8,7 +8,7 @@ import View from 'containers/tool/nav/view.container';
 import PropTypes from 'prop-types';
 
 function Nav({ tooltips, selectedContext }) {
-  if (tooltips === undefined || selectedContext === undefined) {
+  if (tooltips === undefined || selectedContext === null) {
     return null;
   }
 

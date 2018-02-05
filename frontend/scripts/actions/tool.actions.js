@@ -669,12 +669,6 @@ export function setMapDimensions(uids) {
   };
 }
 
-export function resetMapDimensions() {
-  return {
-    type: actions.RESET_MAP_DIMENSIONS
-  };
-}
-
 export function selectContextualLayers(contextualLayers) {
   return {
     type: actions.SELECT_CONTEXTUAL_LAYERS,
