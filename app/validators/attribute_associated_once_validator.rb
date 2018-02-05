@@ -22,7 +22,7 @@ class AttributeAssociatedOnceValidator < ActiveModel::Validator
         "#{record.class.table_name}.id <> ?", record.id
       )
     end
-    return if existing_assignments.reject { |aa| aa.marked_for_destruction? }.empty?
+    return if existing_assignments.reject(&:marked_for_destruction?).empty?
     record.errors.add(:base, 'attribute can only be listed once per context')
   end
 end
