@@ -64,17 +64,21 @@ module Api
         return unless readonly_attribute
 
         assoc_attr_names_with_types.each do |attr_name, attr_type|
-          assoc_obj = send(attr_name)
-          if readonly_attribute.original_type != attr_type.capitalize
-            # delete when saving parent
-            send(attr_name)&.mark_for_destruction
-          elsif assoc_obj
-            # update existing associated object with new attribute id
-            assoc_obj.send(:"#{attr_type}_id=", readonly_attribute.original_id)
-          else
-            # build a new associated object (saved with parent)
-            send(:"build_#{attr_name}", :"#{attr_type}_id" => readonly_attribute.original_id)
-          end
+          assign_associated_object(readonly_attribute, attr_name, attr_type)
+        end
+      end
+
+      def assign_associated_object(readonly_attribute, attr_name, attr_type)
+        assoc_obj = send(attr_name)
+        if readonly_attribute.original_type != attr_type.capitalize
+          # delete when saving parent
+          send(attr_name)&.mark_for_destruction
+        elsif assoc_obj
+          # update existing associated object with new attribute id
+          assoc_obj.send(:"#{attr_type}_id=", readonly_attribute.original_id)
+        else
+          # build a new associated object (saved with parent)
+          send(:"build_#{attr_name}", :"#{attr_type}_id" => readonly_attribute.original_id)
         end
       end
 
