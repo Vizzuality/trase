@@ -13,6 +13,10 @@ class NewsletterForm extends React.PureComponent {
     this.getFormRef = this.getFormRef.bind(this);
   }
 
+  componentWillUnmount() {
+    this.props.resetForm();
+  }
+
   onClickSubmit(e) {
     e.preventDefault();
     if (this.form.checkValidity()) {
@@ -59,6 +63,7 @@ class NewsletterForm extends React.PureComponent {
 
 NewsletterForm.propTypes = {
   submitForm: PropTypes.func.isRequired,
+  resetForm: PropTypes.func.isRequired,
   message: PropTypes.string
 };
 
