@@ -9,25 +9,24 @@ import NotFound from './not-found.component';
 class StaticContent extends React.PureComponent {
   render() {
     const { links = [], content = '', children, notFound } = this.props;
-    const MarkdownContainer = p => (<div className="markdown-content">{p.children}</div>);
+    const MarkdownContainer = p => <div className="markdown-content">{p.children}</div>;
     return (
       <div className="c-static-content">
         <Hero className="-read-only" />
-        {!notFound &&
+        {!notFound && (
           <div className="row">
             <div className="column small-12 medium-3">
               <NavSidebar links={links} />
             </div>
             <article className="column small-12 medium-6 medium-offset-1 container">
               {content &&
-              remark()
-                .use(remarkReact, { remarkReactComponents: { div: MarkdownContainer } })
-                .processSync(content).contents
-              }
+                remark()
+                  .use(remarkReact, { remarkReactComponents: { div: MarkdownContainer } })
+                  .processSync(content).contents}
               {children}
             </article>
           </div>
-        }
+        )}
         {notFound && <NotFound />}
       </div>
     );

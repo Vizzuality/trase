@@ -9,9 +9,7 @@ const id = 'resize-by';
 
 class ResizeBy extends Component {
   renderResizeByElements() {
-    const {
-      onSelected, currentDropdown, selectedResizeBy, resizeBys
-    } = this.props;
+    const { onSelected, currentDropdown, selectedResizeBy, resizeBys } = this.props;
 
     resizeBys.sort((a, b) => a.position > b.position);
 
@@ -21,7 +19,9 @@ class ResizeBy extends Component {
         .filter(resizeBy => resizeBy.name !== selectedResizeBy.name)
         .forEach((resizeBy, index, currentResizeBys) => {
           if (index > 0 && currentResizeBys[index - 1].groupNumber !== resizeBy.groupNumber) {
-            resizeByElements.push(<li key={`separator-${index}`} className="dropdown-item -separator" />);
+            resizeByElements.push(
+              <li key={`separator-${index}`} className="dropdown-item -separator" />
+            );
           }
           resizeByElements.push(
             <li
@@ -30,10 +30,10 @@ class ResizeBy extends Component {
               onClick={() => onSelected(resizeBy.name)}
             >
               {resizeBy.label.toLowerCase()}
-              {resizeBy.description &&
-              <Tooltip position="bottom right" text={resizeBy.description} />
-              }
-            </li >
+              {resizeBy.description && (
+                <Tooltip position="bottom right" text={resizeBy.description} />
+              )}
+            </li>
           );
         });
     }
@@ -42,9 +42,7 @@ class ResizeBy extends Component {
   }
 
   render() {
-    const {
-      tooltips, onToggle, currentDropdown, selectedResizeBy, resizeBys
-    } = this.props;
+    const { tooltips, onToggle, currentDropdown, selectedResizeBy, resizeBys } = this.props;
 
     resizeBys.sort((a, b) => a.position > b.position);
 
@@ -57,24 +55,29 @@ class ResizeBy extends Component {
           onToggle(id);
         }}
       >
-        <div className={classNames('c-dropdown -small -capitalize', { '-hide-only-child': hasZeroOrSingleElement })} >
-          <span className="dropdown-label" >
+        <div
+          className={classNames('c-dropdown -small -capitalize', {
+            '-hide-only-child': hasZeroOrSingleElement
+          })}
+        >
+          <span className="dropdown-label">
             Resize by
             <Tooltip position="top right" text={tooltips.sankey.nav.resizeBy.main} />
-          </span >
-          <span className="dropdown-title -small" >
-            {selectedResizeBy.label.toLowerCase()}
-          </span >
-          {selectedResizeBy.name && tooltips.sankey.nav.resizeBy[selectedResizeBy.name] &&
-          <Tooltip position="bottom right" floating text={tooltips.sankey.nav.resizeBy[selectedResizeBy.name]} />
-          }
-          <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle} >
-            <ul className="dropdown-list -medium" >
-              {this.renderResizeByElements()}
-            </ul >
-          </Dropdown >
-        </div >
-      </div >
+          </span>
+          <span className="dropdown-title -small">{selectedResizeBy.label.toLowerCase()}</span>
+          {selectedResizeBy.name &&
+            tooltips.sankey.nav.resizeBy[selectedResizeBy.name] && (
+              <Tooltip
+                position="bottom right"
+                floating
+                text={tooltips.sankey.nav.resizeBy[selectedResizeBy.name]}
+              />
+            )}
+          <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
+            <ul className="dropdown-list -medium">{this.renderResizeByElements()}</ul>
+          </Dropdown>
+        </div>
+      </div>
     );
   }
 }
@@ -87,6 +90,5 @@ ResizeBy.propTypes = {
   resizeBys: PropTypes.array,
   tooltips: PropTypes.object
 };
-
 
 export default ResizeBy;

@@ -6,11 +6,9 @@ import PropTypes from 'prop-types';
 
 const id = 'view';
 
-export default function view({
-  onToggle, onSelected, currentDropdown, tooltips, isDetailedView
-}) {
-  const title = (isDetailedView === true) ? 'Complete' : 'Summary';
-  const other = (isDetailedView === true) ? 'Summary' : 'Complete';
+export default function view({ onToggle, onSelected, currentDropdown, tooltips, isDetailedView }) {
+  const title = isDetailedView === true ? 'Complete' : 'Summary';
+  const other = isDetailedView === true ? 'Summary' : 'Complete';
   return (
     <div
       className="nav-item js-dropdown"
@@ -18,26 +16,21 @@ export default function view({
         onToggle(id);
       }}
     >
-      <div className="c-dropdown -small" >
-        <span className="dropdown-label" >
+      <div className="c-dropdown -small">
+        <span className="dropdown-label">
           Change view
           <Tooltip text={tooltips.sankey.nav.view.main} position="top right" />
-        </span >
-        <span className="dropdown-title" >
-          {title}
-        </span >
-        <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle} >
-          <ul className="dropdown-list -right" >
-            <li
-              className="dropdown-item"
-              onClick={() => onSelected(!isDetailedView)}
-            >
+        </span>
+        <span className="dropdown-title">{title}</span>
+        <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
+          <ul className="dropdown-list -right">
+            <li className="dropdown-item" onClick={() => onSelected(!isDetailedView)}>
               {other}
-            </li >
-          </ul >
-        </Dropdown >
-      </div >
-    </div >
+            </li>
+          </ul>
+        </Dropdown>
+      </div>
+    </div>
   );
 }
 

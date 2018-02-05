@@ -25,24 +25,23 @@ class TopSourceSwitcher extends Component {
 
     return (
       <ul className="title -small js-top-municipalities-title">
-        <span >Top sourcing regions of Soy {verb} by {nodeName} in {year}:</span >
+        <span>
+          Top sourcing regions of Soy {verb} by {nodeName} in {year}:
+        </span>
 
         {switchers.map((switcherKey, index) => (
           <li
             key={index}
-            className={classnames(
-              'js-top-source-switcher',
-              'tab',
-              { selected: index === this.state.selectedTopSourceIndex }
-            )}
+            className={classnames('js-top-source-switcher', 'tab', {
+              selected: index === this.state.selectedTopSourceIndex
+            })}
             data-key={switcherKey}
             onClick={() => this.onTopSourceSelected(index)}
           >
             {switcherKey}
-          </li >
+          </li>
         ))}
-      </ul >
-
+      </ul>
     );
   }
 }

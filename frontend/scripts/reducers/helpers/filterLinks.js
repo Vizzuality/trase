@@ -3,15 +3,16 @@ import _ from 'lodash';
 // keep link if path passes test:
 // at each column, path should pass by one of the selected nodes for the column
 // if a column does not have a selected node, path always passes for this column
-const filterPath = (path, nodesAtColumns) => path.every((pathNodeId, columnPosition) => {
-  const selectedNodesAtColumn = nodesAtColumns[columnPosition];
-  if (selectedNodesAtColumn !== undefined) {
-    if (selectedNodesAtColumn.indexOf(pathNodeId) === -1) {
-      return false;
+const filterPath = (path, nodesAtColumns) =>
+  path.every((pathNodeId, columnPosition) => {
+    const selectedNodesAtColumn = nodesAtColumns[columnPosition];
+    if (selectedNodesAtColumn !== undefined) {
+      if (selectedNodesAtColumn.indexOf(pathNodeId) === -1) {
+        return false;
+      }
     }
-  }
-  return true;
-});
+    return true;
+  });
 
 /**
  * filter links using node Ids.
@@ -24,7 +25,7 @@ const filterPath = (path, nodesAtColumns) => path.every((pathNodeId, columnPosit
  * @param  {object} recolorGroups          a hash matching selected node Ids with color Ids (represented by integers)
  * @return {array}                         a copy of the original links object
  */
-export default function (links, selectedNodesAtColumns, nodesColoredBySelection, recolorGroups) {
+export default function(links, selectedNodesAtColumns, nodesColoredBySelection, recolorGroups) {
   const filteredLinks = [];
 
   for (let i = 0, linksLen = links.length; i < linksLen; i++) {

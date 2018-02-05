@@ -14,49 +14,40 @@ class ChoroLegend extends Component {
     const { title, bucket } = this.props;
 
     return (
-      <div className="bucket-container js-bucket-legend -horizontal -profile" >
-        <div className="bucket-names" >
-          <div className="layer-name" >{title[0]}</div >
-          <div className="layer-name" >{title[1]}</div >
-        </div >
-        <ul className="bucket-legend" data-colors="5" >
+      <div className="bucket-container js-bucket-legend -horizontal -profile">
+        <div className="bucket-names">
+          <div className="layer-name">{title[0]}</div>
+          <div className="layer-name">{title[1]}</div>
+        </div>
+        <ul className="bucket-legend" data-colors="5">
           {PROFILE_CHOROPLETH_CLASSES.map((color, index) => (
-            <li
-              className="bucket-item"
-              key={index}
-            >
-              <div className={classnames(
-                'bucket',
-                color
-              )}
-              >
-                {typeof bucket !== 'undefined' && bucket !== null &&
-                <span >{this.abbreviateNumber(bucket[0][index], index)}</span >
-                }
-              </div >
-            </li >
+            <li className="bucket-item" key={index}>
+              <div className={classnames('bucket', color)}>
+                {typeof bucket !== 'undefined' &&
+                  bucket !== null && <span>{this.abbreviateNumber(bucket[0][index], index)}</span>}
+              </div>
+            </li>
           ))}
-        </ul >
+        </ul>
 
-        <svg className="icon icon-bidimensional-legend-arrows" >
+        <svg className="icon icon-bidimensional-legend-arrows">
           <use xlinkHref="#icon-bidimensional-legend-arrows" />
-        </svg >
-        <svg className="icon icon-unidimensional-legend-arrows" >
+        </svg>
+        <svg className="icon icon-unidimensional-legend-arrows">
           <use xlinkHref="#icon-unidimensional-legend-arrows" />
-        </svg >
+        </svg>
 
-        <ul className="bullets" >
-          <li >
+        <ul className="bullets">
+          <li>
             <div className="bullet ch-default" style={{ background: '#ebebeb' }} />
             N/A
-          </li >
-          <li >
+          </li>
+          <li>
             <div className="bullet ch-zero" style={{ background: '#fffff' }} />
             0
-          </li >
-        </ul >
-      </div >
-
+          </li>
+        </ul>
+      </div>
     );
   }
 }

@@ -41,7 +41,10 @@ class ContextSelector extends Component {
       this.resetDimensionSelection();
       return;
     }
-    const selectedDimensions = [...this.state.selectedDimensions, Object.assign({}, element, { order: index })];
+    const selectedDimensions = [
+      ...this.state.selectedDimensions,
+      Object.assign({}, element, { order: index })
+    ];
     this.setState({
       selectedDimensions
     });
@@ -69,7 +72,10 @@ class ContextSelector extends Component {
     const currentDimension = selectedDimensions.find(dimension => dimension.order === i);
     if (currentDimension) return false;
 
-    return selectedDimensions[0].relation[element.label] && selectedDimensions[0].relation[element.label].isSubnational;
+    return (
+      selectedDimensions[0].relation[element.label] &&
+      selectedDimensions[0].relation[element.label].isSubnational
+    );
   }
 
   isDisabled(i, element) {
@@ -80,7 +86,7 @@ class ContextSelector extends Component {
 
     const result = selectedDimensions
       .map(selected => Object.keys(selected.relation))
-      .reduce((acc, next) => (acc || !next.includes(element.label)), false);
+      .reduce((acc, next) => acc || !next.includes(element.label), false);
     return result;
   }
 
@@ -103,14 +109,10 @@ class ContextSelector extends Component {
 
   renderElement(el, dimension, isSubnational) {
     return (
-      <div className="country-commodities-selector-element" >
+      <div className="country-commodities-selector-element">
         {el.label.toLowerCase()}
-        {isSubnational &&
-        <div className="data-coverage-info" >
-          Subnational Data
-        </div >
-        }
-      </div >
+        {isSubnational && <div className="data-coverage-info">Subnational Data</div>}
+      </div>
     );
   }
 
@@ -127,27 +129,23 @@ class ContextSelector extends Component {
       .sort(ContextSelector.sortDimensions)
       .map(dimension => dimension.elements)
       .map((dimensionElement, dimensionElementIndex) => (
-        <ul className="dimension-list -medium" key={dimensionElementIndex} >
-          {
-            dimensionElement
-              .map((el, index) => {
-                const status = getItemStatus(dimensionElementIndex, el);
-                const isSubnational = this.isSubnational(dimensionElementIndex, el);
-                return (
-                  <li
-                    key={index}
-                    className={classNames('dimension-list-item -capitalize', {
-                      [`-${status}`]: status
-                    })}
-                    onClick={e => this.selectDimension(e, status, dimensionElementIndex, el)
-                    }
-                  >
-                    {this.renderElement(el, dimensionElementIndex, isSubnational)}
-                  </li >
-                );
-              })
-          }
-        </ul >
+        <ul className="dimension-list -medium" key={dimensionElementIndex}>
+          {dimensionElement.map((el, index) => {
+            const status = getItemStatus(dimensionElementIndex, el);
+            const isSubnational = this.isSubnational(dimensionElementIndex, el);
+            return (
+              <li
+                key={index}
+                className={classNames('dimension-list-item -capitalize', {
+                  [`-${status}`]: status
+                })}
+                onClick={e => this.selectDimension(e, status, dimensionElementIndex, el)}
+              >
+                {this.renderElement(el, dimensionElementIndex, isSubnational)}
+              </li>
+            );
+          })}
+        </ul>
       ));
   }
 
@@ -162,35 +160,36 @@ class ContextSelector extends Component {
     } = this.props;
 
     return (
-      <div className="c-country-commodities nav-item js-dropdown" onClick={() => toggleContextSelectorVisibility(id)} >
-        <div className="c-dropdown -capitalize" >
-          <span className="dropdown-label" >
+      <div
+        className="c-country-commodities nav-item js-dropdown"
+        onClick={() => toggleContextSelectorVisibility(id)}
+      >
+        <div className="c-dropdown -capitalize">
+          <span className="dropdown-label">
             Country - Commodity
             <Tooltip text={tooltips.sankey.nav.context.main} />
-          </span >
-          <span className="dropdown-title" >
+          </span>
+          <span className="dropdown-title">
             {selectedContextCountry.toLowerCase()} - {selectedContextCommodity.toLowerCase()}
-          </span >
+          </span>
           <Dropdown
             id={id}
             currentDropdown={currentDropdown}
             onClickOutside={toggleContextSelectorVisibility}
           >
-            <div className="country-commodities-children-container" >
-              <div className="c-dimensional-selector" onClick={this.resetDimensionSelection} >
-                <div className="dimension-container" >
-                  {this.renderDimensionList()}
-                </div >
-                <div className="dimensional-selector-footer" >
-                  <span className="dimensional-selector-footer-text" >
+            <div className="country-commodities-children-container">
+              <div className="c-dimensional-selector" onClick={this.resetDimensionSelection}>
+                <div className="dimension-container">{this.renderDimensionList()}</div>
+                <div className="dimensional-selector-footer">
+                  <span className="dimensional-selector-footer-text">
                     {this.renderFooterText(this.state.selectedDimensions, dimensions)}
-                  </span >
-                </div >
-              </div >
-            </div >
-          </Dropdown >
-        </div >
-      </div >
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Dropdown>
+        </div>
+      </div>
     );
   }
 }

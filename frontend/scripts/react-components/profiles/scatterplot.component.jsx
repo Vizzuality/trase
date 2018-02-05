@@ -16,7 +16,10 @@ class Scatterplot extends Component {
     super(props);
 
     this.margins = {
-      top: 20, right: 13, bottom: 30, left: 29
+      top: 20,
+      right: 13,
+      bottom: 30,
+      left: 29
     };
     this.key = `scatterplot_${new Date().getTime()}`;
     this.state = {
@@ -80,29 +83,38 @@ class Scatterplot extends Component {
       .append('g')
       .attr('transform', `translate(${this.margins.left},${this.margins.top})`);
 
-    this.svg.append('g')
+    this.svg
+      .append('g')
       .attr('class', 'axis axis--x')
       .attr('transform', `translate(0,${height})`)
       .call(this.xAxis);
 
-    this.svg.append('g')
+    this.svg
+      .append('g')
       .attr('class', 'axis axis-line')
       .attr('transform', `translate(0,${height})`)
-      .call(d3_axis_bottom(this.x)
-        .ticks(0)
-        .tickSizeOuter(0));
+      .call(
+        d3_axis_bottom(this.x)
+          .ticks(0)
+          .tickSizeOuter(0)
+      );
 
-    this.svg.append('g')
+    this.svg
+      .append('g')
       .attr('class', 'axis axis--y')
       .call(this.yAxis);
 
-    this.svg.append('g')
+    this.svg
+      .append('g')
       .attr('class', 'axis axis-line')
-      .call(d3_axis_left(this.y)
-        .ticks(0)
-        .tickSizeOuter(0));
+      .call(
+        d3_axis_left(this.y)
+          .ticks(0)
+          .tickSizeOuter(0)
+      );
 
-    this.circles = this.svg.selectAll('circle')
+    this.circles = this.svg
+      .selectAll('circle')
       .data(this._getFormattedData(this.state.selectedTabIndex))
       .enter()
       .append('circle')
@@ -112,19 +124,22 @@ class Scatterplot extends Component {
       .attr('cy', d => this.y(d.y));
 
     if (showTooltipCallback !== undefined) {
-      this.circles.on('mousemove', (d) => {
-        const selectedSwitcher = document.querySelector('.js-scatterplot-switcher-item.selected span');
+      this.circles
+        .on('mousemove', d => {
+          const selectedSwitcher = document.querySelector(
+            '.js-scatterplot-switcher-item.selected span'
+          );
 
-        showTooltipCallback(
-          d,
-          {
-            name: selectedSwitcher.innerHTML,
-            unit: selectedSwitcher.getAttribute('data-unit')
-          },
-          d3_event.clientX + 10,
-          d3_event.clientY + window.scrollY + 10
-        );
-      })
+          showTooltipCallback(
+            d,
+            {
+              name: selectedSwitcher.innerHTML,
+              unit: selectedSwitcher.getAttribute('data-unit')
+            },
+            d3_event.clientX + 10,
+            d3_event.clientY + window.scrollY + 10
+          );
+        })
         .on('mouseout', () => {
           hideTooltipCallback();
         });
@@ -146,9 +161,13 @@ class Scatterplot extends Component {
       .transition()
       .duration(700)
       .attr('cx', d => x(d.x))
-      .attr('class', d => (d.x === null ? `${this._getCircleClass(d)} -hidden` : this._getCircleClass(d)));
+      .attr(
+        'class',
+        d => (d.x === null ? `${this._getCircleClass(d)} -hidden` : this._getCircleClass(d))
+      );
 
-    this.svg.select('.axis--x')
+    this.svg
+      .select('.axis--x')
       .transition()
       .duration(500)
       .call(this.xAxis);
@@ -184,11 +203,7 @@ class Scatterplot extends Component {
             data-key={index}
             onClick={() => this._switchTab(index)}
           >
-            <span
-              data-unit={elem.unit !== null ? elem.unit : null}
-            >
-              {elem.name}
-            </span>
+            <span data-unit={elem.unit !== null ? elem.unit : null}>{elem.name}</span>
           </li>
         ))}
       </ul>
@@ -199,15 +214,12 @@ class Scatterplot extends Component {
     const { verbGerund, year } = this.props;
 
     return (
-      <div
-        className="small-12 columns"
-        style={{ position: 'relative' }}
-      >
+      <div className="small-12 columns" style={{ position: 'relative' }}>
         <h3 className="js-scatterplot-title title -small">
           {`Comparing companies ${verbGerund} Soy from Brazil in ${year}`}
         </h3>
         <div className="js-companies-exporting-y-axis axis-legend" />
-        <div className="js-companies-exporting" >
+        <div className="js-companies-exporting">
           <svg className={this.key} />
         </div>
         {this.renderSwitcher()}

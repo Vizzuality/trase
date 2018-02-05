@@ -7,11 +7,12 @@ import StoryTile from 'react-components/home/story-tile.component';
 import debounce from 'lodash/debounce';
 
 class SliderSection extends React.PureComponent {
-  static getPerPage() { // might seem repetitive but it's still needed.
+  static getPerPage() {
+    // might seem repetitive but it's still needed.
     switch (true) {
-      case (window.innerWidth < 640):
+      case window.innerWidth < 640:
         return 1;
-      case (window.innerWidth < 950):
+      case window.innerWidth < 950:
         return 2;
       default:
         return 3;
@@ -38,7 +39,6 @@ class SliderSection extends React.PureComponent {
     this.onClickNext = this.onClickNext.bind(this);
     this.onResize = debounce(this.onResize.bind(this), 300);
   }
-
 
   componentDidMount() {
     window.addEventListener('resize', this.onResize);
@@ -73,12 +73,14 @@ class SliderSection extends React.PureComponent {
     const { className, name, slides } = this.props;
     const { visiblePages, currentSlide } = this.state;
     const smallScreen = visiblePages === 1;
-    const numColums = (slides.length <= visiblePages && visiblePages < 3) ? 6 : 4;
+    const numColums = slides.length <= visiblePages && visiblePages < 3 ? 6 : 4;
 
     if (slides.length === 0) return null;
     return (
       <section className={cx('c-slider-section', className)}>
-        <div className={cx('row', 'slider-wrapper', { '-auto-width': (slides.length < visiblePages) })}>
+        <div
+          className={cx('row', 'slider-wrapper', { '-auto-width': slides.length < visiblePages })}
+        >
           <h3 className="subtitle column small-12">{name}</h3>
           <Siema
             perPage={this.mediaQueries}
@@ -86,32 +88,25 @@ class SliderSection extends React.PureComponent {
             loop={false}
             ref={this.getSliderRef}
           >
-            {
-              slides
-                .map(slide => (
-                  <div
-                    key={slide.title || slide.quote}
-                    className={`column small-12 medium-${numColums}`}
-                  >
-                    <div
-                      className={cx('slide', { '-actionable': !slide.quote })}
-                    >
-                      {slide.quote
-                        ? <QuoteTile slide={slide} />
-                        : <StoryTile
-                          slide={slide}
-                          action={SliderSection.getActionName(slide.category)}
-                        />
-                      }
-                    </div>
-                  </div>
-                ))
-            }
+            {slides.map(slide => (
+              <div
+                key={slide.title || slide.quote}
+                className={`column small-12 medium-${numColums}`}
+              >
+                <div className={cx('slide', { '-actionable': !slide.quote })}>
+                  {slide.quote ? (
+                    <QuoteTile slide={slide} />
+                  ) : (
+                    <StoryTile slide={slide} action={SliderSection.getActionName(slide.category)} />
+                  )}
+                </div>
+              </div>
+            ))}
           </Siema>
-          {currentSlide > 0 && !smallScreen && <button className="slide-prev" onClick={this.onClickPrev} />}
-          {currentSlide < (slides.length - visiblePages) && !smallScreen &&
-          <button className="slide-next" onClick={this.onClickNext} />
-          }
+          {currentSlide > 0 &&
+            !smallScreen && <button className="slide-prev" onClick={this.onClickPrev} />}
+          {currentSlide < slides.length - visiblePages &&
+            !smallScreen && <button className="slide-next" onClick={this.onClickNext} />}
         </div>
       </section>
     );

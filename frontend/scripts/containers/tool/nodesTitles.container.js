@@ -15,9 +15,10 @@ const mapMethodsToState = state => ({
   highlightNode: {
     _comparedValue: state => state.tool.highlightedNodeData,
     _returnedValue: state => ({
-      nodesData: (state.tool.highlightedNodeData.length === 0
-        ? state.tool.selectedNodesData
-        : state.tool.highlightedNodeData),
+      nodesData:
+        state.tool.highlightedNodeData.length === 0
+          ? state.tool.selectedNodesData
+          : state.tool.highlightedNodeData,
       isHighlight: state.tool.highlightedNodeData.length > 0,
       recolorGroups: state.tool.recolorGroups,
       coordinates: state.tool.highlightedNodeCoordinates,

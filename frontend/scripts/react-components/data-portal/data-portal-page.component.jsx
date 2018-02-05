@@ -2,7 +2,11 @@
 import React, { Component } from 'react';
 import xor from 'lodash/xor';
 import uniqBy from 'lodash/uniqBy';
-import { GET_CSV_DATA_DOWNLOAD_FILE, GET_JSON_DATA_DOWNLOAD_FILE, getURLFromParams } from 'utils/getURLFromParams';
+import {
+  GET_CSV_DATA_DOWNLOAD_FILE,
+  GET_JSON_DATA_DOWNLOAD_FILE,
+  getURLFromParams
+} from 'utils/getURLFromParams';
 import BulkDownloadsBlock from 'react-components/data-portal/bulk-downloads-block.component';
 import DownloadSelector from 'react-components/data-portal/download-selector.component';
 import PropTypes from 'prop-types';
@@ -59,7 +63,6 @@ class DataContent extends Component {
     }
   }
 
-
   onBulkDownloadClicked(contextId) {
     if (DATA_FORM_ENABLED) {
       this.setState({
@@ -87,9 +90,9 @@ class DataContent extends Component {
         break;
       }
       case 'commodities': {
-        const selectedContext = this.props.contexts.find(elem =>
-          elem.isDisabled !== true
-          && elem.id === value);
+        const selectedContext = this.props.contexts.find(
+          elem => elem.isDisabled !== true && elem.id === value
+        );
         this.setState({ selectedCommodity: value, selectedContextId: selectedContext.id });
         if (selectedContext) {
           this.props.onContextSelected(selectedContext.id);
@@ -98,8 +101,13 @@ class DataContent extends Component {
       }
       case 'years': {
         const selectedYears = xor(this.state.selectedYears, [value]);
-        const selectedContext = this.props.contexts.find(context => context.id === this.state.selectedContextId);
-        this.setState({ selectedYears, allYearsSelected: selectedYears.length === selectedContext.years.length });
+        const selectedContext = this.props.contexts.find(
+          context => context.id === this.state.selectedContextId
+        );
+        this.setState({
+          selectedYears,
+          allYearsSelected: selectedYears.length === selectedContext.years.length
+        });
         break;
       }
       case 'exporters': {
@@ -139,8 +147,13 @@ class DataContent extends Component {
             allYearsSelected: !this.state.allYearsSelected
           });
         } else {
-          const selectedContext = this.props.contexts.find(context => context.id === this.state.selectedContextId);
-          this.setState({ selectedYears: selectedContext.years, allYearsSelected: !this.state.allYearsSelected });
+          const selectedContext = this.props.contexts.find(
+            context => context.id === this.state.selectedContextId
+          );
+          this.setState({
+            selectedYears: selectedContext.years,
+            allYearsSelected: !this.state.allYearsSelected
+          });
         }
         break;
       }
@@ -202,7 +215,9 @@ class DataContent extends Component {
 
     params.years = this.state.allYearsSelected ? [] : this.state.selectedYears;
     params.exporters_ids = this.state.allExportersSelected ? [] : this.state.selectedExporters;
-    params.countries_ids = this.state.allConsumptionCountriesSelected ? [] : this.state.selectedConsumptionCountries;
+    params.countries_ids = this.state.allConsumptionCountriesSelected
+      ? []
+      : this.state.selectedConsumptionCountries;
     params.indicators = this.state.allIndicatorsSelected ? [] : this.state.selectedIndicators;
 
     if (file === '.csv') {
@@ -221,7 +236,6 @@ class DataContent extends Component {
     this.props.onDataDownloadFormLoaded();
     this.setState({ formVisible: true, downloaded: false });
   }
-
 
   downloadFile(inputParams) {
     const params = inputParams || this.state.currentDownloadParams || this.getDownloadURLParams();
@@ -242,10 +256,15 @@ class DataContent extends Component {
         break;
     }
 
-    this.props.onDownloadTriggered(Object.assign({
-      file,
-      type: this.state.currentDownloadType
-    }, params));
+    this.props.onDownloadTriggered(
+      Object.assign(
+        {
+          file,
+          type: this.state.currentDownloadType
+        },
+        params
+      )
+    );
 
     window.open(downloadURL);
 
@@ -253,19 +272,23 @@ class DataContent extends Component {
   }
 
   render() {
-    const { autoCompleteCountries, contexts, exporters, consumptionCountries, indicators } = this.props;
+    const {
+      autoCompleteCountries,
+      contexts,
+      exporters,
+      consumptionCountries,
+      indicators
+    } = this.props;
 
     const selectedContext = contexts.find(context => context.id === this.state.selectedContextId);
 
     const enabledContexts = contexts.filter(elem => elem.isDisabled !== true);
 
-    const countryOptions = uniqBy(enabledContexts, context => context.countryId)
-      .map(context => ({
-        id: context.countryId,
-        name: context.countryName.toLowerCase(),
-        noSelfCancel: true
-      }));
-
+    const countryOptions = uniqBy(enabledContexts, context => context.countryId).map(context => ({
+      id: context.countryId,
+      name: context.countryName.toLowerCase(),
+      noSelfCancel: true
+    }));
 
     const commodityOptions = contexts
       .filter(context => context.countryId === this.state.selectedCountry)
@@ -284,32 +307,33 @@ class DataContent extends Component {
       }));
     }
 
-    const exporterOptions = exporters.map(exporter => ({
-      id: exporter.id,
-      name: exporter.name.toLowerCase(),
-      noSelfCancel: false
-    }))
+    const exporterOptions = exporters
+      .map(exporter => ({
+        id: exporter.id,
+        name: exporter.name.toLowerCase(),
+        noSelfCancel: false
+      }))
       .sort((a, b) => a.name.localeCompare(b.name));
 
-    const consumptionCountryOptions = consumptionCountries.map(country => ({
-      id: country.id,
-      name: country.name.toLowerCase(),
-      noSelfCancel: false
-    }))
+    const consumptionCountryOptions = consumptionCountries
+      .map(country => ({
+        id: country.id,
+        name: country.name.toLowerCase(),
+        noSelfCancel: false
+      }))
       .sort((a, b) => a.name.localeCompare(b.name));
 
-    const indicatorOptions = indicators.map(indicator => ({
-      id: indicator.name,
-      name: `${indicator.frontendName}${indicator.unit !== null ? `(${indicator.unit})` : ''}`,
-      noSelfCancel: false
-    }))
+    const indicatorOptions = indicators
+      .map(indicator => ({
+        id: indicator.name,
+        name: `${indicator.frontendName}${indicator.unit !== null ? `(${indicator.unit})` : ''}`,
+        noSelfCancel: false
+      }))
       .sort((a, b) => a.name.localeCompare(b.name));
 
     return (
       <div className="l-data">
-        {DATA_DOWNLOAD_ENABLED === false &&
-        <DataPortalDisabledMessage />
-        }
+        {DATA_DOWNLOAD_ENABLED === false && <DataPortalDisabledMessage />}
         <DataPortalForm
           autoCompleteCountries={autoCompleteCountries}
           formVisible={this.state.formVisible}
@@ -355,7 +379,10 @@ class DataContent extends Component {
                         allowMultiple
                         allSelected={this.state.allYearsSelected}
                         options={yearOptions}
-                        enabled={this.state.selectedCountry !== null && this.state.selectedCommodity !== null}
+                        enabled={
+                          this.state.selectedCountry !== null &&
+                          this.state.selectedCommodity !== null
+                        }
                         title="YEARS"
                         type="years"
                         onOptionSelected={this.onClickEventHandler}
@@ -369,7 +396,10 @@ class DataContent extends Component {
                         allowMultiple
                         allSelected={this.state.allExportersSelected}
                         options={exporterOptions}
-                        enabled={this.state.selectedCountry !== null && this.state.selectedCommodity !== null}
+                        enabled={
+                          this.state.selectedCountry !== null &&
+                          this.state.selectedCommodity !== null
+                        }
                         title="COMPANIES"
                         type="exporters"
                         onOptionSelected={this.onClickEventHandler}
@@ -383,7 +413,10 @@ class DataContent extends Component {
                         allowMultiple
                         allSelected={this.state.allConsumptionCountriesSelected}
                         options={consumptionCountryOptions}
-                        enabled={this.state.selectedCountry !== null && this.state.selectedCommodity !== null}
+                        enabled={
+                          this.state.selectedCountry !== null &&
+                          this.state.selectedCommodity !== null
+                        }
                         title="CONSUMPTION COUNTRIES"
                         type="consumption-countries"
                         onOptionSelected={this.onClickEventHandler}
@@ -397,7 +430,10 @@ class DataContent extends Component {
                         allowMultiple
                         allSelected={this.state.allIndicatorsSelected}
                         options={indicatorOptions}
-                        enabled={this.state.selectedCountry !== null && this.state.selectedCommodity !== null}
+                        enabled={
+                          this.state.selectedCountry !== null &&
+                          this.state.selectedCommodity !== null
+                        }
                         title="INDICATORS"
                         type="indicators"
                         onOptionSelected={this.onClickEventHandler}
@@ -410,29 +446,24 @@ class DataContent extends Component {
                 </div>
                 <div className="small-3 columns">
                   <div className="c-custom-dataset__format-sidebar">
-                    <div
-                      className="c-custom-dataset-selector"
-                      data-type="format"
-                    >
+                    <div className="c-custom-dataset-selector" data-type="format">
                       <div className="c-custom-dataset-selector__header">OUTPUT TYPE</div>
                       <ul className="c-custom-dataset-selector__values">
                         <li className="-selected">
                           Pivot
                           <div
-                            className={classnames(
-                              'c-radio-btn -no-self-cancel -grey',
-                              { '-enabled': this.state.outputType === 'pivot' }
-                            )}
+                            className={classnames('c-radio-btn -no-self-cancel -grey', {
+                              '-enabled': this.state.outputType === 'pivot'
+                            })}
                             onClick={() => this.onOutputTypeSelected('pivot')}
                           />
                         </li>
                         <li>
                           Table
                           <div
-                            className={classnames(
-                              'c-radio-btn -no-self-cancel -grey',
-                              { '-enabled': this.state.outputType === 'table' }
-                            )}
+                            className={classnames('c-radio-btn -no-self-cancel -grey', {
+                              '-enabled': this.state.outputType === 'table'
+                            })}
                             onClick={() => this.onOutputTypeSelected('table')}
                           />
                         </li>
@@ -445,52 +476,46 @@ class DataContent extends Component {
                         <li className="-selected">
                           .csv (comma separated)
                           <div
-                            className={classnames(
-                              'c-radio-btn -no-self-cancel -grey',
-                              { '-enabled': this.state.fileExtension === '.csv'
-                                && this.state.fileSeparator === 'comma' }
-                            )}
+                            className={classnames('c-radio-btn -no-self-cancel -grey', {
+                              '-enabled':
+                                this.state.fileExtension === '.csv' &&
+                                this.state.fileSeparator === 'comma'
+                            })}
                             onClick={() => this.onFileFormatSelected('.csv', 'comma')}
                           />
                         </li>
                         <li>
                           .csv (semicolon separated)
                           <div
-                            className={classnames(
-                              'c-radio-btn -no-self-cancel -grey',
-                              {
-                                '-enabled': this.state.fileExtension === '.csv'
-                                && this.state.fileSeparator === 'semicolon'
-                              }
-                            )}
+                            className={classnames('c-radio-btn -no-self-cancel -grey', {
+                              '-enabled':
+                                this.state.fileExtension === '.csv' &&
+                                this.state.fileSeparator === 'semicolon'
+                            })}
                             onClick={() => this.onFileFormatSelected('.csv', 'semicolon')}
-
                           />
                         </li>
                         <li>
                           .json
                           <div
-                            className={classnames(
-                              'c-radio-btn -no-self-cancel -grey',
-                              { '-enabled': this.state.fileExtension === '.json' && this.state.fileSeparator === '' }
-                            )}
+                            className={classnames('c-radio-btn -no-self-cancel -grey', {
+                              '-enabled':
+                                this.state.fileExtension === '.json' &&
+                                this.state.fileSeparator === ''
+                            })}
                             onClick={() => this.onFileFormatSelected('.json', '')}
-
                           />
                         </li>
                       </ul>
                     </div>
 
                     <div
-                      className={classnames(
-                        'download-button',
-                        {
-                          '-disabled':
+                      className={classnames('download-button', {
+                        '-disabled':
                           !DATA_DOWNLOAD_ENABLED ||
                           this.state.selectedCountry === null ||
                           this.state.selectedCommodity === null
-                        }
-                      )}
+                      })}
                       onClick={() => this.onDownloadButtonClicked()}
                     >
                       <svg className="icon icon-download">
@@ -503,7 +528,6 @@ class DataContent extends Component {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     );

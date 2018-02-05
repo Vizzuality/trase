@@ -64,8 +64,8 @@ export default class Years extends Component {
     let right;
 
     if (this.currentSelectorThumb === null) {
-      left = x - (deltaWidth / 2);
-      right = x + (deltaWidth / 2);
+      left = x - deltaWidth / 2;
+      right = x + deltaWidth / 2;
       if (left < 0) {
         left = 0;
         right = deltaWidth;
@@ -104,9 +104,14 @@ export default class Years extends Component {
   render() {
     const { currentDropdown, selectedYears, years } = this.props;
     this.totalWidth = YEAR_WIDTH * years.length;
-    const title = (selectedYears[0] === selectedYears[1]) ?
-      <span >{selectedYears[0]}</span > :
-      <span >{selectedYears[0]}&thinsp;-&thinsp;{selectedYears[1]}</span >;
+    const title =
+      selectedYears[0] === selectedYears[1] ? (
+        <span>{selectedYears[0]}</span>
+      ) : (
+        <span>
+          {selectedYears[0]}&thinsp;-&thinsp;{selectedYears[1]}
+        </span>
+      );
     const totalWidthStyle = { width: `${this.totalWidth}px` };
     const deltaWidth = this.state.right - this.state.left;
     const selectorWidthStyle = {
@@ -120,47 +125,40 @@ export default class Years extends Component {
           this.onDropdownUp();
         }}
       >
-        <div className="c-dropdown" >
-          <span className="dropdown-label" >
-            year{selectedYears[0] !== selectedYears[1] && <span >s</span >}
-          </span >
-          <span className="dropdown-title" >
-            {title}
-          </span >
-          <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={this.props.onToggle} >
-            <div className="dropdown-list" >
+        <div className="c-dropdown">
+          <span className="dropdown-label">
+            year{selectedYears[0] !== selectedYears[1] && <span>s</span>}
+          </span>
+          <span className="dropdown-title">{title}</span>
+          <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={this.props.onToggle}>
+            <div className="dropdown-list">
               <div
                 className="c-years-slider"
-                ref={(elem) => {
+                ref={elem => {
                   this.slider = elem;
                 }}
               >
-                <ul className="background" style={totalWidthStyle} >
+                <ul className="background" style={totalWidthStyle}>
                   {years.map((year, index) => <li key={index} />)}
-                </ul >
+                </ul>
                 <div
                   className="selector"
                   style={selectorWidthStyle}
-                  onMouseDown={(mouseEvent) => {
+                  onMouseDown={mouseEvent => {
                     this.onSelectorDown(mouseEvent);
                   }}
                 >
                   <YearsThumb id="left" />
                   <YearsThumb id="right" x={deltaWidth} />
-                </div >
-                <ul className="years" style={totalWidthStyle} >
-                  {years
-                    .map((year, index) => (
-                      <li key={index} >
-                        {year}
-                      </li >
-                    ))}
-                </ul >
-              </div >
-            </div >
-          </Dropdown >
-        </div >
-      </div >
+                </div>
+                <ul className="years" style={totalWidthStyle}>
+                  {years.map((year, index) => <li key={index}>{year}</li>)}
+                </ul>
+              </div>
+            </div>
+          </Dropdown>
+        </div>
+      </div>
     );
   }
 }

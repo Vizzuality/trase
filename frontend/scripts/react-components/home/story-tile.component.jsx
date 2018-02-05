@@ -12,10 +12,7 @@ function StoryTile(props) {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <figure
-          className="slide-image"
-          style={{ backgroundImage: `url(${slide.imageUrl})` }}
-        />
+        <figure className="slide-image" style={{ backgroundImage: `url(${slide.imageUrl})` }} />
       </a>
       <figcaption className="slide-content">
         <div className="details-container">

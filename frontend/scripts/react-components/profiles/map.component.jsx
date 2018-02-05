@@ -40,8 +40,8 @@ class Map extends Component {
     const bbox = this.getFeaturesBox(featureBounds);
     const scale = 1 / Math.max(bbox.width / width, bbox.height / height);
     const trans = [
-      -((bbox.x + (bbox.width / 2)) * scale) + (width / 2),
-      -((bbox.y + (bbox.height / 2)) * scale) + (height / 2)
+      -((bbox.x + bbox.width / 2) * scale) + width / 2,
+      -((bbox.y + bbox.height / 2) * scale) + height / 2
     ];
 
     return { scale, trans };
@@ -64,21 +64,22 @@ class Map extends Component {
 
     const d3Container = d3_select(elem);
 
-    const svg = d3Container.append('svg')
+    const svg = d3Container
+      .append('svg')
       .attr('width', width)
       .attr('height', height);
 
     const geoParent = svg.append('g');
     const container = geoParent.append('g');
 
-    const projection = (useRobinsonProjection === true) ? d3_geoRobinson() : d3_geoMercator();
-    const path = d3_geoPath()
-      .projection(projection);
+    const projection = useRobinsonProjection === true ? d3_geoRobinson() : d3_geoMercator();
+    const path = d3_geoPath().projection(projection);
 
     d3_json(topoJSONPath, (error, topoJSON) => {
       const features = topojsonFeature(topoJSON, topoJSON.objects[topoJSONRoot]);
 
-      const polygons = container.selectAll('path')
+      const polygons = container
+        .selectAll('path')
         .data(features.features)
         .enter()
         .append('path')
@@ -86,9 +87,10 @@ class Map extends Component {
         .attr('d', path);
 
       if (showTooltipCallback !== undefined) {
-        polygons.on('mousemove', (d) => {
-          showTooltipCallback(d, d3_event.clientX + 10, d3_event.clientY + window.scrollY + 10);
-        })
+        polygons
+          .on('mousemove', d => {
+            showTooltipCallback(d, d3_event.clientX + 10, d3_event.clientY + window.scrollY + 10);
+          })
           .on('mouseout', () => {
             hideTooltipCallback();
           });
@@ -101,22 +103,14 @@ class Map extends Component {
       const featureBounds = path.bounds(collection);
       const { scale, trans } = this.fitGeoInside(featureBounds, width, height);
 
-      container.attr('transform', [
-        `translate(${trans})`,
-        `scale(${scale})`
-      ].join(' '));
+      container.attr('transform', [`translate(${trans})`, `scale(${scale})`].join(' '));
 
-      container.selectAll('path')
-        .style('stroke-width', 0.5 / scale);
+      container.selectAll('path').style('stroke-width', 0.5 / scale);
     });
   }
 
   render() {
-    return (
-      <div
-        className={this.key}
-      />
-    );
+    return <div className={this.key} />;
   }
 }
 

@@ -43,7 +43,7 @@ class DataPortalForm extends Component {
   sendForm() {
     const payload = {};
 
-    this.formFieldWhiteList.forEach((elem) => {
+    this.formFieldWhiteList.forEach(elem => {
       if (this.state[elem] !== '') {
         payload[elem] = this.state[elem];
       }
@@ -68,16 +68,14 @@ class DataPortalForm extends Component {
     }
 
     const dataSubmitBody = new FormData();
-    Object.keys(payload)
-      .forEach((key) => {
-        dataSubmitBody.append(key, payload[key]);
-      });
+    Object.keys(payload).forEach(key => {
+      dataSubmitBody.append(key, payload[key]);
+    });
 
     fetch(DATA_FORM_ENDPOINT, {
       method: 'POST',
       body: dataSubmitBody
     });
-
 
     if (payload.email) {
       const newsletterSubscribeBody = new FormData();
@@ -96,39 +94,26 @@ class DataPortalForm extends Component {
     return (
       <datalist id={id}>
         <option value="">Select country</option>
-        {COUNTRIES.map(elem => (
-          <option key={elem}>{elem}</option>
-        ))}
+        {COUNTRIES.map(elem => <option key={elem}>{elem}</option>)}
       </datalist>
     );
   }
 
   render() {
     return (
-      <div
-        className={classnames(
-          { 'is-hidden': !this.props.formVisible }
-        )}
-      >
-        <div
-          className="veil -below-nav"
-          onClick={this.props.closeForm}
-        />
+      <div className={classnames({ 'is-hidden': !this.props.formVisible })}>
+        <div className="veil -below-nav" onClick={this.props.closeForm} />
         <div className="c-modal -below-nav">
           <div className="content -white -big-margin">
             <form className="c-download-form">
-              <p className="description">Thank you for your interest in downloading data from Trase! To help us better
-                understand how the data is currently being used and to improve the platform, we would appreciate if
-                you could tell us a bit about yourself and your work.
+              <p className="description">
+                Thank you for your interest in downloading data from Trase! To help us better
+                understand how the data is currently being used and to improve the platform, we
+                would appreciate if you could tell us a bit about yourself and your work.
               </p>
-              <p
-                className={classnames(
-                  'missing',
-                  { 'is-hidden': !this.props.downloaded }
-                )}
-              >
-                We&apos;d love to hear about how you use the data and how
-                we could improve it. Please fill in details below and click on &apos;submit&apos;:
+              <p className={classnames('missing', { 'is-hidden': !this.props.downloaded })}>
+                We&apos;d love to hear about how you use the data and how we could improve it.
+                Please fill in details below and click on &apos;submit&apos;:
               </p>
               <label htmlFor="name">
                 Name:
@@ -151,7 +136,6 @@ class DataPortalForm extends Component {
                   value={this.state.country}
                   onChange={event => this.onFieldValueChanged('country', event.target.value)}
                 />
-
                 {this.generateCountryList('countriesList')}
               </label>
 
@@ -174,7 +158,9 @@ class DataPortalForm extends Component {
                   id="organisationType"
                   list="organisationTypeList"
                   value={this.state.organisationType}
-                  onChange={event => this.onFieldValueChanged('organisationType', event.target.value)}
+                  onChange={event =>
+                    this.onFieldValueChanged('organisationType', event.target.value)
+                  }
                 />
                 <datalist id="organisationTypeList">
                   <option>Company</option>
@@ -203,7 +189,8 @@ class DataPortalForm extends Component {
               </label>
 
               <label htmlFor="comments">
-                Please tell us more about your work and if you are interested in helping improve Trase:
+                Please tell us more about your work and if you are interested in helping improve
+                Trase:
                 <input
                   type="text"
                   placeholder="type comments"
@@ -214,7 +201,8 @@ class DataPortalForm extends Component {
               </label>
 
               <label htmlFor="email">
-                If you would like to sign up for the Trase quarterly newsletter, please provide your email address:
+                If you would like to sign up for the Trase quarterly newsletter, please provide your
+                email address:
                 <input
                   type="email"
                   placeholder="type email"
@@ -224,11 +212,12 @@ class DataPortalForm extends Component {
                 />
               </label>
 
-              <p className={classnames(
-                'tos',
-                { '-highlighted': this.state.showTOSWarning },
-                { 'is-hidden': this.props.downloaded }
-              )}
+              <p
+                className={classnames(
+                  'tos',
+                  { '-highlighted': this.state.showTOSWarning },
+                  { 'is-hidden': this.props.downloaded }
+                )}
               >
                 <label htmlFor="tos_check">
                   <input
@@ -244,28 +233,26 @@ class DataPortalForm extends Component {
                     href="http://trase.earth/terms-of-use"
                   >
                     Terms of use
-                  </a> (required field).
+                  </a>{' '}
+                  (required field).
                 </label>
               </p>
               <label className="submit">
-                <div
-                  className="download-button"
-                  onClick={() => this.sendForm()}
-                >
-                  <div className={classnames(
-                    'form-submit-download',
-                    { 'is-hidden': this.props.downloaded }
-                  )}
+                <div className="download-button" onClick={() => this.sendForm()}>
+                  <div
+                    className={classnames('form-submit-download', {
+                      'is-hidden': this.props.downloaded
+                    })}
                   >
                     <svg className="icon icon-download">
                       <use xlinkHref="#icon-download" />
                     </svg>
                     download data
                   </div>
-                  <div className={classnames(
-                    'form-submit-submit',
-                    { 'is-hidden': !this.props.downloaded }
-                  )}
+                  <div
+                    className={classnames('form-submit-submit', {
+                      'is-hidden': !this.props.downloaded
+                    })}
                   >
                     Submit
                   </div>

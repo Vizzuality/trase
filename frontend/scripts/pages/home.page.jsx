@@ -12,7 +12,6 @@ import Footer from 'react-components/shared/footer.component';
 
 import 'styles/homepage.scss';
 
-
 export const mount = (root, store) => {
   root.innerHTML = BaseMarkup({
     feedback: FeedbackMarkup()
@@ -26,7 +25,7 @@ export const mount = (root, store) => {
   );
 
   render(
-    <Provider store={store} >
+    <Provider store={store}>
       <Home />
     </Provider>,
     document.getElementById('page-react-root')

@@ -27,11 +27,7 @@ const routes = {
   home: {
     path: '/',
     page: 'home',
-    thunk: dispatchThunks(
-      getPostsContent,
-      getTweetsContent,
-      getTestimonialsContent
-    )
+    thunk: dispatchThunks(getPostsContent, getTweetsContent, getTestimonialsContent)
   },
   tool: {
     path: '/flows',

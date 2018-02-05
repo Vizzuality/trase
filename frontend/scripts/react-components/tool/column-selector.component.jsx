@@ -16,25 +16,27 @@ function columnSelector({
 }) {
   const id = `column${group}`;
   const columnItems = allColumns.filter(column => column.group === group);
-  const selectedColumnItem = columnItems.filter(column => column.id === selectedColumnsIds[group])[0];
+  const selectedColumnItem = columnItems.filter(
+    column => column.id === selectedColumnsIds[group]
+  )[0];
 
   const hasSingleElement = columnItems.length <= 1;
 
   return (
     <div
-      className={classNames('js-dropdown c-dropdown -column-selector', { '-hide-only-child': hasSingleElement })}
+      className={classNames('js-dropdown c-dropdown -column-selector', {
+        '-hide-only-child': hasSingleElement
+      })}
       onClick={() => {
         onToggle(id);
       }}
     >
-      <span className={classNames('dropdown-title', { '-is-open': currentDropdown === id })} >
+      <span className={classNames('dropdown-title', { '-is-open': currentDropdown === id })}>
         {selectedColumnItem.name}
-      </span >
-      {nodesColoredAtColumn === group &&
-      <RecolorByNodeLegendSummary />
-      }
-      <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle} >
-        <ul className="dropdown-list" >
+      </span>
+      {nodesColoredAtColumn === group && <RecolorByNodeLegendSummary />}
+      <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
+        <ul className="dropdown-list">
           {columnItems.map((columnItem, index) => (
             <li
               key={index}
@@ -42,11 +44,11 @@ function columnSelector({
               onClick={() => onColumnSelected(group, columnItem.id)}
             >
               {columnItem.name}
-            </li >
+            </li>
           ))}
-        </ul >
-      </Dropdown >
-    </div >
+        </ul>
+      </Dropdown>
+    </div>
   );
 }
 

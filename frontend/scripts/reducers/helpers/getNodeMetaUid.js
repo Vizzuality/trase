@@ -1,3 +1,3 @@
-export default function (type, id) {
+export default function(type, id) {
   return `${type}${id}`;
 }

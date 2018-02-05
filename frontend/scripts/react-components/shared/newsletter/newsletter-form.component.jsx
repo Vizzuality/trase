@@ -35,10 +35,7 @@ class NewsletterForm extends React.PureComponent {
     return (
       <section className="c-newsletter">
         <div className="newsletter-content row align-middle">
-          <form
-            ref={this.getFormRef}
-            className="column small-6 js-form c-newsletter-form"
-          >
+          <form ref={this.getFormRef} className="column small-6 js-form c-newsletter-form">
             <label
               htmlFor="newsletter-email"
               className={cx('newsletter-label', { '-pink': message })}
@@ -55,10 +52,7 @@ class NewsletterForm extends React.PureComponent {
                 required
                 className="newsletter-email"
               />
-              <button
-                onClick={this.onClickSubmit}
-                className="c-button -charcoal -bold"
-              >
+              <button onClick={this.onClickSubmit} className="c-button -charcoal -bold">
                 Subscribe
               </button>
             </div>

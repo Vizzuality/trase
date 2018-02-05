@@ -32,7 +32,10 @@ const defaults = {
 
 const tooltip = new Tooltip('.js-infowindow');
 const LINE_MARGINS = {
-  top: 10, right: 100, bottom: 25, left: 50
+  top: 10,
+  right: 100,
+  bottom: 25,
+  left: 50
 };
 let lineSettings;
 
@@ -51,7 +54,7 @@ const _initSource = (selectedSource, data, store) => {
   });
 
   render(
-    <Provider store={store} >
+    <Provider store={store}>
       <Line
         className=".js-top-municipalities"
         data={sourceLines}
@@ -67,34 +70,30 @@ const _initSource = (selectedSource, data, store) => {
   const topoJSONPath = `./vector_layers/${defaults.country.toUpperCase()}_${selectedSource.toUpperCase()}.topo.json`;
   const topoJSONRoot = `${defaults.country.toUpperCase()}_${selectedSource.toUpperCase()}`;
   const getPolygonClassName = ({ properties }) => {
-    const source = data.top_sources[selectedSource].lines
-      .find(s => (properties.geoid === s.geo_id));
+    const source = data.top_sources[selectedSource].lines.find(s => properties.geoid === s.geo_id);
     let value = 'n-a';
     if (source) value = source.value9 || 'n-a';
     return `-outline ch-${value}`;
   };
   const showTooltipCallback = ({ properties }, x, y) => {
-    const source = data.top_sources[selectedSource].lines
-      .find(s => (properties.geoid === s.geo_id));
+    const source = data.top_sources[selectedSource].lines.find(s => properties.geoid === s.geo_id);
     const title = `${data.node_name} > ${properties.nome.toUpperCase()}`;
 
     if (source) {
-      tooltip.show(
-        x, y,
-        title,
-        [{
+      tooltip.show(x, y, title, [
+        {
           title: 'Trade Volume',
           value: formatValue(source.values[0], 'Trade volume'),
           unit: 't'
-        }]
-      );
+        }
+      ]);
     }
   };
 
   const containerElement = document.querySelector('.js-top-municipalities-map');
 
   render(
-    <Provider store={store} >
+    <Provider store={store}>
       <Map
         width={containerElement.clientWidth}
         height={containerElement.clientHeight}
@@ -111,13 +110,14 @@ const _initSource = (selectedSource, data, store) => {
 
 const _setTopSourceSwitcher = (data, verb, year, store) => {
   render(
-    <Provider store={store} >
+    <Provider store={store}>
       <TopSourceSwitcher
         year={year}
         verb={verb}
         nodeName={capitalize(data.node_name)}
-        switchers={Object.keys(data.top_sources)
-          .filter(key => !(ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)))}
+        switchers={Object.keys(data.top_sources).filter(
+          key => !ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)
+        )}
         onTopSourceSelected={selectedSwitcher => _initSource(selectedSwitcher, data, store)}
       />
     </Provider>,
@@ -126,12 +126,15 @@ const _setTopSourceSwitcher = (data, verb, year, store) => {
 };
 
 const _build = (data, { nodeId, year, print }, store) => {
-  const verb = (data.column_name === 'EXPORTER') ? 'exported' : 'imported';
-  const verbGerund = (data.column_name === 'EXPORTER') ? 'exporting' : 'importing';
+  const verb = data.column_name === 'EXPORTER' ? 'exported' : 'imported';
+  const verbGerund = data.column_name === 'EXPORTER' ? 'exporting' : 'importing';
 
   lineSettings = {
     margin: {
-      top: 10, right: 100, bottom: 30, left: 94
+      top: 10,
+      right: 100,
+      bottom: 30,
+      left: 94
     },
     height: 244,
     ticks: {
@@ -142,7 +145,8 @@ const _build = (data, { nodeId, year, print }, store) => {
     },
     showTooltipCallback: (location, x, y) => {
       tooltip.show(
-        x, y,
+        x,
+        y,
         `${location.name.toUpperCase()} > ${data.node_name}, ${location.date.getFullYear()}`,
         [
           {
@@ -154,15 +158,15 @@ const _build = (data, { nodeId, year, print }, store) => {
       );
     },
     hideTooltipCallback: tooltip.hide,
-    lineClassNameCallback: (lineData, lineDefaultStyle) => `${lineDefaultStyle} line-${lineData[0].value9}`
+    lineClassNameCallback: (lineData, lineDefaultStyle) =>
+      `${lineDefaultStyle} line-${lineData[0].value9}`
   };
 
   if (data.top_sources && data.top_sources.municipality.lines.length) {
     _setTopSourceSwitcher(data, verb, year, store);
 
-
     render(
-      <Provider store={store} >
+      <Provider store={store}>
         <ChoroLegend
           title={[`Soy ${verb} in ${year}`, '(tonnes)']}
           bucket={[[data.top_sources.buckets[0], ...data.top_sources.buckets]]}
@@ -171,16 +175,18 @@ const _build = (data, { nodeId, year, print }, store) => {
       document.querySelector('.js-source-legend')
     );
 
-    _initSource((print === true) ? 'state' : 'municipality', data, store);
+    _initSource(print === true ? 'state' : 'municipality', data, store);
   }
 
-
   if (data.top_countries && data.top_countries.lines.length) {
-    document.querySelector('.js-top-map-title').textContent =
-      `Top destination countries of Soy ${verb} by ${capitalize(data.node_name)} in ${year}`;
+    document.querySelector(
+      '.js-top-map-title'
+    ).textContent = `Top destination countries of Soy ${verb} by ${capitalize(
+      data.node_name
+    )} in ${year}`;
 
     render(
-      <Provider store={store} >
+      <Provider store={store}>
         <ChoroLegend
           title={[`Soy ${verb} in ${year}`, '(tonnes)']}
           bucket={[[data.top_countries.buckets[0], ...data.top_countries.buckets]]}
@@ -196,7 +202,8 @@ const _build = (data, { nodeId, year, print }, store) => {
     const settings = Object.assign({}, lineSettings, {
       showTooltipCallback: (location, x, y) => {
         tooltip.show(
-          x, y,
+          x,
+          y,
           `${data.node_name} > ${location.name.toUpperCase()}, ${location.date.getFullYear()}`,
           [
             {
@@ -210,7 +217,7 @@ const _build = (data, { nodeId, year, print }, store) => {
     });
 
     render(
-      <Provider store={store} >
+      <Provider store={store}>
         <Line
           className=".js-top-destination"
           data={topCountriesLines}
@@ -222,33 +229,31 @@ const _build = (data, { nodeId, year, print }, store) => {
     );
 
     const getPolygonClassName = ({ properties }) => {
-      const country = data.top_countries.lines
-        .find(c => (properties.iso2 === c.geo_id));
+      const country = data.top_countries.lines.find(c => properties.iso2 === c.geo_id);
       let value = 'n-a';
       if (country) value = country.value9 || 'n-a';
       return `-outline ch-${value}`;
     };
     const showTooltipCallback = ({ properties }, x, y) => {
-      const country = data.top_countries.lines
-        .find(c => (properties.name.toUpperCase() === c.name.toUpperCase()));
+      const country = data.top_countries.lines.find(
+        c => properties.name.toUpperCase() === c.name.toUpperCase()
+      );
       const title = `${properties.name.toUpperCase()} > ${data.node_name}`;
       if (country) {
-        tooltip.show(
-          x, y,
-          title,
-          [{
+        tooltip.show(x, y, title, [
+          {
             title: 'Trade Volume',
             value: formatValue(country.values[0], 'Trade volume'),
             unit: 't'
-          }]
-        );
+          }
+        ]);
       }
     };
 
     const containerElement = document.querySelector('.js-top-destination-map');
 
     render(
-      <Provider store={store} >
+      <Provider store={store}>
         <Map
           width={containerElement.clientWidth}
           height={containerElement.clientHeight}
@@ -265,11 +270,12 @@ const _build = (data, { nodeId, year, print }, store) => {
   }
 
   if (data.sustainability && data.sustainability.length) {
-    const tabsTitle =
-      `Deforestation risk associated with ${formatApostrophe(data.node_name)} top sourcing regions in ${year}:`;
+    const tabsTitle = `Deforestation risk associated with ${formatApostrophe(
+      data.node_name
+    )} top sourcing regions in ${year}:`;
 
     render(
-      <Provider store={store} >
+      <Provider store={store}>
         <MultiTable
           id="sustainability"
           data={data.sustainability}
@@ -284,32 +290,29 @@ const _build = (data, { nodeId, year, print }, store) => {
   }
 
   if (data.companies_sourcing) {
-    document.querySelector('.js-companies-exporting-y-axis').innerHTML =
-      `${data.companies_sourcing.dimension_y.name} (${data.companies_sourcing.dimension_y.unit})`;
+    document.querySelector('.js-companies-exporting-y-axis').innerHTML = `${
+      data.companies_sourcing.dimension_y.name
+    } (${data.companies_sourcing.dimension_y.unit})`;
 
     const showTooltipCallback = (company, indicator, x, y) => {
-      tooltip.show(
-        x, y,
-        company.name,
-        [
-          {
-            title: data.companies_sourcing.dimension_y.name,
-            value: formatValue(company.y, data.companies_sourcing.dimension_y.name),
-            unit: data.companies_sourcing.dimension_y.unit
-          },
-          {
-            title: indicator.name,
-            value: formatValue(company.x, indicator.name),
-            unit: indicator.unit
-          }
-        ]
-      );
+      tooltip.show(x, y, company.name, [
+        {
+          title: data.companies_sourcing.dimension_y.name,
+          value: formatValue(company.y, data.companies_sourcing.dimension_y.name),
+          unit: data.companies_sourcing.dimension_y.unit
+        },
+        {
+          title: indicator.name,
+          value: formatValue(company.x, indicator.name),
+          unit: indicator.unit
+        }
+      ]);
     };
 
     const scatterplotContainerElement = document.querySelector('.js-scatterplot-container');
 
     render(
-      <Provider store={store} >
+      <Provider store={store}>
         <Scatterplot
           width={scatterplotContainerElement.clientWidth}
           data={data.companies_sourcing.companies}
@@ -328,48 +331,57 @@ const _build = (data, { nodeId, year, print }, store) => {
 
 const _setInfo = (info, onLinkClick, { nodeId, year }) => {
   document.querySelector('.js-name').textContent = info.name ? capitalize(info.name) : '-';
-  document.querySelector('.js-link-button-name').textContent = `${formatApostrophe(capitalize(info.name))} PROFILE`;
+  document.querySelector('.js-link-button-name').textContent = `${formatApostrophe(
+    capitalize(info.name)
+  )} PROFILE`;
   document.querySelector('.js-legend').textContent = info.type || '-';
   document.querySelector('.js-country').textContent = info.country ? capitalize(info.country) : '-';
   if (info.forest_500 > 0) {
-    document.querySelector('.js-forest-500-score .circle-icon[data-value="1"] use')
+    document
+      .querySelector('.js-forest-500-score .circle-icon[data-value="1"] use')
       .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
   }
   if (info.forest_500 > 1) {
-    document.querySelector('.js-forest-500-score .circle-icon[data-value="2"] use')
+    document
+      .querySelector('.js-forest-500-score .circle-icon[data-value="2"] use')
       .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
   }
   if (info.forest_500 > 2) {
-    document.querySelector('.js-forest-500-score .circle-icon[data-value="3"] use')
+    document
+      .querySelector('.js-forest-500-score .circle-icon[data-value="3"] use')
       .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
   }
   if (info.forest_500 > 3) {
-    document.querySelector('.js-forest-500-score .circle-icon[data-value="4"] use')
+    document
+      .querySelector('.js-forest-500-score .circle-icon[data-value="4"] use')
       .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
   }
   if (info.forest_500 > 4) {
-    document.querySelector('.js-forest-500-score .circle-icon[data-value="5"] use')
+    document
+      .querySelector('.js-forest-500-score .circle-icon[data-value="5"] use')
       .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
   }
   if (info.zero_deforestation === 'YES') {
-    document.querySelector('.js-zero-deforestation-commitment [data-value="yes"]')
-      .classList
-      .remove('is-hidden');
+    document
+      .querySelector('.js-zero-deforestation-commitment [data-value="yes"]')
+      .classList.remove('is-hidden');
   } else {
-    document.querySelector('.js-zero-deforestation-commitment [data-value="no"]')
-      .classList
-      .remove('is-hidden');
+    document
+      .querySelector('.js-zero-deforestation-commitment [data-value="no"]')
+      .classList.remove('is-hidden');
   }
-  document.querySelector('.js-link-map')
-    .addEventListener(
-      'click',
-      () => onLinkClick('tool', { selectedNodesIds: [nodeId], isMapVisible: true, selectedYears: [year, year] })
-    );
+  document.querySelector('.js-link-map').addEventListener('click', () =>
+    onLinkClick('tool', {
+      selectedNodesIds: [nodeId],
+      isMapVisible: true,
+      selectedYears: [year, year]
+    })
+  );
 
-  document.querySelector('.js-link-supply-chain')
-    .addEventListener(
-      'click',
-      () => onLinkClick('tool', { selectedNodesIds: [nodeId], selectedYears: [year, year] })
+  document
+    .querySelector('.js-link-supply-chain')
+    .addEventListener('click', () =>
+      onLinkClick('tool', { selectedNodesIds: [nodeId], selectedYears: [year, year] })
     );
   document.querySelector('.js-summary-text').textContent = info.summary ? info.summary : '-';
 };
@@ -382,34 +394,20 @@ const onLinkClick = store => (type, params) => store.dispatch({ type, payload: {
 
 const setLoading = (isLoading = true) => {
   if (isLoading) {
-    document.querySelector('.js-loading')
-      .classList
-      .remove('is-hidden');
-    document.querySelector('.js-wrap')
-      .classList
-      .add('is-hidden');
+    document.querySelector('.js-loading').classList.remove('is-hidden');
+    document.querySelector('.js-wrap').classList.add('is-hidden');
   } else {
-    document.querySelector('.js-loading')
-      .classList
-      .add('is-hidden');
-    document.querySelector('.js-wrap')
-      .classList
-      .remove('is-hidden');
+    document.querySelector('.js-loading').classList.add('is-hidden');
+    document.querySelector('.js-wrap').classList.remove('is-hidden');
   }
 };
 
 const _showErrorMessage = (message = null) => {
   const el = document.querySelector('.l-profile-actor');
   el.classList.add('-error');
-  document.querySelector('.js-loading')
-    .classList
-    .add('is-hidden');
-  el.querySelector('.js-wrap')
-    .classList
-    .add('is-hidden');
-  el.querySelector('.js-error-message')
-    .classList
-    .remove('is-hidden');
+  document.querySelector('.js-loading').classList.add('is-hidden');
+  el.querySelector('.js-wrap').classList.add('is-hidden');
+  el.querySelector('.js-error-message').classList.remove('is-hidden');
   if (message !== null && message !== '') {
     el.querySelector('.js-message').innerHTML = message;
   }
@@ -426,17 +424,21 @@ const _switchYear = (store, nodeId, dropdownYear, showMiniSankey) => {
 };
 
 const _loadData = (store, nodeId, year) => {
-  const actorFactsheetURL = getURLFromParams(GET_ACTOR_FACTSHEET, { context_id: 1, node_id: nodeId, year });
+  const actorFactsheetURL = getURLFromParams(GET_ACTOR_FACTSHEET, {
+    context_id: 1,
+    node_id: nodeId,
+    year
+  });
   setLoading();
 
   fetch(actorFactsheetURL)
-    .then((response) => {
+    .then(response => {
       if (response.ok) {
         return response.json();
       }
       throw new Error(response.statusText);
     })
-    .then((result) => {
+    .then(result => {
       if (!result) return;
 
       setLoading(false);
