@@ -11,7 +11,14 @@ function isActive(match, location, link) {
 }
 
 const NavLinksList = props => {
-  const { links, listClassName, itemClassName, linkClassName, linkActiveClassName } = props;
+  const {
+    links,
+    listClassName,
+    itemClassName,
+    linkClassName,
+    linkActiveClassName,
+    navLinkProps
+  } = props;
 
   return (
     <ul className={listClassName}>
@@ -24,6 +31,7 @@ const NavLinksList = props => {
             className={link.linkClassName || linkClassName}
             activeClassName={link.linkActiveClassName || linkActiveClassName}
             isActive={(...params) => isActive(...params, link)}
+            {...navLinkProps}
           >
             {link.children || link.name}
           </NavLink>
@@ -38,7 +46,8 @@ NavLinksList.propTypes = {
   listClassName: PropTypes.string,
   itemClassName: PropTypes.string,
   linkClassName: PropTypes.string,
-  linkActiveClassName: PropTypes.string
+  linkActiveClassName: PropTypes.string,
+  navLinkProps: PropTypes.object
 };
 
 export default NavLinksList;

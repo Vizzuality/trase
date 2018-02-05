@@ -156,8 +156,11 @@ const Footer = () => (
     <div className="contain-link-list row column">
       <ul className="links-list">
         <li className="link-item">
-          <Link className="title -mono-font" to={{ type: 'termsOfUse' }}>
-            Terms of Service
+          <Link
+            className="title -mono-font"
+            to={{ type: 'about', payload: { section: 'terms-of-use' } }}
+          >
+            Terms of Use
           </Link>
         </li>
         <li className="separator"> · </li>

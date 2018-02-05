@@ -19,7 +19,11 @@ class TopNavBar extends React.PureComponent {
     this.state = {
       backgroundVisible: false
     };
-
+    this.navLinkProps = {
+      exact: false,
+      strict: false,
+      isActive: null
+    };
     this.setBackground = throttle(this.setBackground.bind(this), 300);
     window.addEventListener('scroll', this.setBackground);
   }
@@ -63,6 +67,7 @@ class TopNavBar extends React.PureComponent {
               itemClassName="top-nav-item"
               linkClassName="top-nav-link"
               linkActiveClassName="top-nav-link -active"
+              navLinkProps={this.navLinkProps}
             />
           </div>
           <div className="column medium-2">

@@ -33,6 +33,7 @@ class NavSidebar extends React.PureComponent {
     const { links } = this.props;
     const { open } = this.state;
     const icon = open ? 'icon-close' : 'icon-menu';
+    const navLinkProps = { onClick: open && this.onToggleNav };
     return (
       <Transition in={open} timeout={300}>
         {transition => (
@@ -44,6 +45,7 @@ class NavSidebar extends React.PureComponent {
                 itemClassName="nav-sidebar-link-list-item"
                 linkClassName="subtitle -gray"
                 linkActiveClassName="-pink"
+                navLinkProps={navLinkProps}
               />
             </div>
             <button className={`sidebar-nav-toggle -${transition}`} onClick={this.onToggleNav}>

@@ -26,20 +26,29 @@ export default {
   ],
   navSidebar: [
     {
-      name: 'About Trase',
+      name: 'What is Trase?',
       page: 'about'
     },
     {
-      name: 'Terms of Use',
-      page: 'termsOfUse'
+      name: 'Who is Trase for?',
+      page: {
+        type: 'about',
+        payload: { section: 'who-is-trase-for' }
+      }
     },
     {
-      name: 'Data and Methods',
-      page: 'dataMethods'
+      name: 'How does Trase work?',
+      page: {
+        type: 'about',
+        payload: { section: 'how-does-trase-work' }
+      }
     },
     {
       name: 'FAQ',
-      page: 'faq'
+      page: {
+        type: 'about',
+        payload: { section: 'faq' }
+      }
     },
     {
       name: 'Team',
@@ -60,6 +69,20 @@ export default {
       page: {
         type: 'about',
         payload: { section: 'funders' }
+      }
+    },
+    {
+      name: 'Terms of Use',
+      page: {
+        type: 'about',
+        payload: { section: 'terms-of-use' }
+      }
+    },
+    {
+      name: 'Data and Methods',
+      page: {
+        type: 'about',
+        payload: { section: 'data-methods' }
       }
     }
   ]
