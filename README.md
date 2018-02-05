@@ -354,7 +354,8 @@ The project's main configuration values can be set using [environment variables]
 * USER_REPORT_KEY: API key for User Report
 * DATA_FORM_ENABLED: enable contact form in Data page
 * DATA_FORM_ENDPOINT: end point to send form values in Data page
-* PDF_DOWNLOAD_URL: end point to download a PDF snapshot of the page 
+* PDF_DOWNLOAD_URL: end point to download a PDF snapshot of the page
+* PERF_TEST: when set to true, enables performance evaluation mode. Only supported outside of production environments. See https://github.com/garbles/why-did-you-update for more info.
 
 If you are using the included development server, you can set those variables in the `.env` file (use the included `.env.sample` as an example)
 
