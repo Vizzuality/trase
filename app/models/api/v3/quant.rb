@@ -6,7 +6,7 @@ module Api
       delegate :display_name, to: :quant_property
 
       def self.select_options
-        all.map { |quant| [quant.name, quant.id] }
+        order(:name).map { |quant| [quant.name, quant.id] }
       end
 
       def self.import_key

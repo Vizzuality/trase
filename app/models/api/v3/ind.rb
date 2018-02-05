@@ -6,7 +6,7 @@ module Api
       delegate :display_name, to: :ind_property
 
       def self.select_options
-        all.map { |ind| [ind.name, ind.id] }
+        order(:name).map { |ind| [ind.name, ind.id] }
       end
 
       def self.import_key
