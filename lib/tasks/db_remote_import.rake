@@ -14,6 +14,7 @@ namespace :db do
           database_update.update_attribute(:status, Api::V3::DatabaseUpdate::FINISHED)
         rescue => e
           database_update.update_attribute(:status, Api::V3::DatabaseUpdate::FAILED)
+          database_update.update_attribute(:error, e.message)
           Rails.logger.error e.message
           Appsignal.send_error(e)
         end

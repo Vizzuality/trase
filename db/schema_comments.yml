@@ -344,6 +344,8 @@ tables:
         comment: STARTED (only one at a time), FINISHED or FAILED
       - name: stats
         comment: JSON structure with information on row counts for all tables before / after update
+      - name: error
+        comment: Exception message for failed updates
 materialized_views:
   - name: attributes_mv
     comment: Materialized view which merges inds, quals and quants.

@@ -2499,6 +2499,7 @@ CREATE TABLE database_updates (
     updated_at timestamp without time zone NOT NULL,
     jid text,
     status text DEFAULT 'STARTED'::text NOT NULL,
+    error text,
     CONSTRAINT database_updates_status_check CHECK ((status = ANY (ARRAY['STARTED'::text, 'FINISHED'::text, 'FAILED'::text])))
 );
 
@@ -2529,6 +2530,13 @@ COMMENT ON COLUMN database_updates.jid IS 'Job ID, filled in when update started
 --
 
 COMMENT ON COLUMN database_updates.status IS 'STARTED (only one at a time), FINISHED or FAILED';
+
+
+--
+-- Name: COLUMN database_updates.error; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN database_updates.error IS 'Exception message for failed updates';
 
 
 --
@@ -7279,8 +7287,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180123132607'),
 ('20180126140843'),
 ('20180202093906'),
+('20180205092759'),
 ('20180207133151'),
 ('20180207133331'),
 ('20180212120524');
+
 
 
