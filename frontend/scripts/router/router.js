@@ -72,21 +72,6 @@ const routes = {
     page: 'static-content',
     thunk: dispatchThunks(getPageStaticContent)
   },
-  termsOfUse: {
-    path: '/terms-of-use',
-    page: 'static-content',
-    thunk: dispatchThunks(getPageStaticContent)
-  },
-  dataMethods: {
-    path: '/data-methods',
-    page: 'static-content',
-    thunk: dispatchThunks(getPageStaticContent)
-  },
-  faq: {
-    path: '/FAQ',
-    page: 'static-content',
-    thunk: dispatchThunks(getPageStaticContent)
-  },
   [NOT_FOUND]: {
     path: '/404',
     page: 'static-content',

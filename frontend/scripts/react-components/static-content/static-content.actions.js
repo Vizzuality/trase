@@ -1,11 +1,10 @@
 import { NOT_FOUND, redirect } from 'redux-first-router';
-import camelCase from 'lodash/camelCase';
 import { getURLFromParams, GET_MARKDOWN_CONTENT } from 'utils/getURLFromParams';
 
 export const STATIC_CONTENT__SET_MARKDOWN = 'STATIC_CONTENT__SET_MARKDOWN';
 
-export const getStaticContentFilename = location =>
-  camelCase(`${location.type} ${location.payload.section || ''}`);
+export const getStaticContentFilename = ({ type, payload }) =>
+  `${type}${payload.section ? `/${payload.section}` : ''}`;
 
 export const getStaticContent = () => (dispatch, getState) => {
   const { location, staticContent } = getState();
