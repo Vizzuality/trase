@@ -16,7 +16,7 @@ export default class {
     };
 
     this.map = L.map('js-map', mapOptions);
-    new L.Control.Zoom({ position: 'bottomleft' }).addTo(this.map);
+    new L.Control.Zoom({ position: 'topleft' }).addTo(this.map);
     L.control.scale({ position: 'bottomleft', imperial: false }).addTo(this.map);
 
     const worldBounds = L.latLngBounds(L.latLng(-89, -180), L.latLng(89, 180));
