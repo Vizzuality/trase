@@ -5,11 +5,26 @@
   <% end %>
   <% if database_updates.any? %>
     <h3>Previous updates:</h3>
-    <ul>
-      <% database_updates.each do |du| %>
-        <li><%= du.created_at %> status: <%= du.status %></li>
-      <% end %>
-    </ul>
+    <table>
+      <thead>
+        <th>Started</th>
+        <th>Finished</th>
+        <th>Status</th>
+        <th>Stats (for FINISHED updates)</th>
+        <th>Error (for FAILED updates)</th>
+      </thead>
+      <tbody>
+        <% database_updates.each do |du| %>
+          <tr>
+            <td><%= du.created_at %></td>
+            <td><%= du.updated_at %></td>
+            <td><%= du.status %></td>
+            <td><%= du.stats_to_s %></td>
+            <td><%= du.error %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   <% end %>
 
   <%= submit_tag 'Start database update', disabled: current_update.present? %>
