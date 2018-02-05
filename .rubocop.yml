@@ -38,6 +38,10 @@ Style/BlockComments:
   Exclude:
     - 'spec/spec_helper.rb'
 
+Style/ClassVars:
+  Exclude:
+    - 'app/models/api/v3/base_model.rb'
+
 Style/Documentation:
   Enabled: false
 
