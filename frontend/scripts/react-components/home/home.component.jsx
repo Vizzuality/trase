@@ -35,11 +35,11 @@ function Home(props) {
           </div>
         </div>
         <div className="sliders">
+          <NewsletterForm />
           <SliderSection name="News and Blogs" slides={blogPosts} />
           <SliderSection name="Insights" slides={insightsPosts} />
           <SliderSection className="-small" name="Testimonials" slides={testimonials} />
         </div>
-        <NewsletterForm />
       </div>
     </div>
   );

@@ -1,55 +1,42 @@
 .c-newsletter {
-  position: relative;
-  z-index: $z-above;
-  height: 160px;
   width: 100%;
-  background-color: $white;
-  box-shadow: 0 -1px 0 0 #ebebeb;
+  form {
+    .newsletter-label {
+      position: absolute;
+      top: 0;
+      font-family: $font-family-2;
+      font-size: $font-size-xx-regular;
+      color: $charcoal-grey;
+      transform: translateY(calc(-100% - 8px));
+    }
 
-  > .newsletter-content {
-    height: 100%;
+    .-pink {
+      color: $medium-pink;
+    }
 
-    form {
-      .newsletter-label {
-        display: inline-block;
-        margin-bottom: 10px;
+    .newsletter-input-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 40px;
 
-        font-family: $font-family-2;
-        font-size: $font-size-xx-regular;
-        color: $charcoal-grey;
+      > .newsletter-email {
+        flex: auto;
+        height: 100%;
+        font-family: $font-family-1;
+        border: solid 2px $charcoal-grey;
+        border-radius: 4px;
+
+        &::placeholder {
+          text-transform: none;
+        }
       }
 
-      .-pink {
-        color: $medium-pink;
-      }
-
-      .newsletter-input-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: 40px;
-
-        > .newsletter-email {
-          flex-shrink: 0;
-          font-family: $font-family-1;
-          border: solid 2px $charcoal-grey;
-          border-radius: 4px;
-          padding: 15px;
-          width: 100%;
-          max-width: 336px;
-          max-height: 100%;
-
-          &::placeholder {
-            text-transform: none;
-          }
-        }
-
-        > .c-button {
-          height: 100%;
-          margin-left: 10px;
-          padding: 0 16px;
-          flex: 1;
-        }
+      > .c-button {
+        height: 100%;
+        margin-left: auto;
+        padding: 0 16px;
+        flex: none;
       }
     }
   }

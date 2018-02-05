@@ -118,5 +118,13 @@
   .sliders {
     background-color: $white;
     padding: 60px 0;
+
+    .c-newsletter {
+      transform: translateY(calc(50% - 8px))
+    }
+
+    .c-slider-section:first-of-type {
+      padding: 0;
+    }
   }
 }
