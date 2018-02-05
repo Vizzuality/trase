@@ -33,14 +33,14 @@ export default {
       name: 'Who is Trase for?',
       page: {
         type: 'about',
-        payload: { section: 'termsOfUse' }
+        payload: { section: 'who-is-trase-for' }
       }
     },
     {
       name: 'How does Trase work?',
       page: {
         type: 'about',
-        payload: { section: 'dataMethods' }
+        payload: { section: 'how-does-trase-work' }
       }
     },
     {
@@ -69,6 +69,20 @@ export default {
       page: {
         type: 'about',
         payload: { section: 'funders' }
+      }
+    },
+    {
+      name: 'Terms of Use',
+      page: {
+        type: 'about',
+        payload: { section: 'terms-of-use' }
+      }
+    },
+    {
+      name: 'Data and Methods',
+      page: {
+        type: 'about',
+        payload: { section: 'data-methods' }
       }
     }
   ]

@@ -1,10 +1,11 @@
 import { NOT_FOUND, redirect } from 'redux-first-router';
 import { getURLFromParams, GET_MARKDOWN_CONTENT } from 'utils/getURLFromParams';
+import kebabCase from 'lodash/kebabCase';
 
 export const STATIC_CONTENT__SET_MARKDOWN = 'STATIC_CONTENT__SET_MARKDOWN';
 
 export const getStaticContentFilename = ({ type, payload }) =>
-  `${type}${payload.section ? `/${payload.section}` : ''}`;
+  `${type}${payload.section ? `/${kebabCase(payload.section)}` : ''}`;
 
 export const getStaticContent = () => (dispatch, getState) => {
   const { location, staticContent } = getState();

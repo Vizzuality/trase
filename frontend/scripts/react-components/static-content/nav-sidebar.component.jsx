@@ -44,6 +44,7 @@ class NavSidebar extends React.PureComponent {
                 itemClassName="nav-sidebar-link-list-item"
                 linkClassName="subtitle -gray"
                 linkActiveClassName="-pink"
+                onLinkClick={this.onToggleNav}
               />
             </div>
             <button className={`sidebar-nav-toggle -${transition}`} onClick={this.onToggleNav}>

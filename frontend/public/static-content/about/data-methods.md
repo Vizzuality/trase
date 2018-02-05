@@ -1,4 +1,4 @@
-# Data and methods
+## Data and methods
 The data and methods used in Trase are being improved constantly as we develop better 
 methodologies and identify new data sources. Trase will continue to improve the quality and 
 accuracy of its data, and is committed to communicating these limitations transparently, 
