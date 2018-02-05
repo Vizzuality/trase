@@ -64,6 +64,7 @@ ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
 
   show do
     attributes_table do
+      row :readonly_attribute_display_name
       row('Country') { |property| property.context&.country&.name }
       row('Commodity') { |property| property.context&.commodity&.name }
       row('Recolor By Property', &:readonly_attribute_display_name)

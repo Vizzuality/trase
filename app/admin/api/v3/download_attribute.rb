@@ -33,6 +33,7 @@ ActiveAdmin.register Api::V3::DownloadAttribute, as: 'DownloadAttribute' do
 
   show do
     attributes_table do
+      row :readonly_attribute_display_name
       row('Property', &:readonly_attribute_display_name)
       row('Country') { |property| property.context&.country&.name }
       row('Commodity') { |property| property.context&.commodity&.name }

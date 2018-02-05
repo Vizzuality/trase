@@ -47,6 +47,7 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
 
   show do
     attributes_table do
+      row :readonly_attribute_display_name
       row('Country') { |property| property.context&.country&.name }
       row('Commodity') { |property| property.context&.commodity&.name }
       row('Resize By Property', &:readonly_attribute_display_name)
