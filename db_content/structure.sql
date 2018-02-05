@@ -162,6 +162,42 @@ ALTER SEQUENCE site_dives_id_seq OWNED BY site_dives.id;
 
 
 --
+-- Name: staff_members; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE staff_members (
+    id bigint NOT NULL,
+    name text NOT NULL,
+    bio text,
+    image_file_name character varying,
+    image_content_type character varying,
+    image_file_size integer,
+    image_updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: staff_members_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE staff_members_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: staff_members_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE staff_members_id_seq OWNED BY staff_members.id;
+
+
+--
 -- Name: testimonials; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -260,6 +296,13 @@ ALTER TABLE ONLY site_dives ALTER COLUMN id SET DEFAULT nextval('site_dives_id_s
 
 
 --
+-- Name: staff_members id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY staff_members ALTER COLUMN id SET DEFAULT nextval('staff_members_id_seq'::regclass);
+
+
+--
 -- Name: testimonials id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -311,6 +354,14 @@ ALTER TABLE ONLY schema_migrations
 
 ALTER TABLE ONLY site_dives
     ADD CONSTRAINT site_dives_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: staff_members staff_members_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY staff_members
+    ADD CONSTRAINT staff_members_pkey PRIMARY KEY (id);
 
 
 --
@@ -369,6 +420,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180117084618'),
 ('20180126115955'),
 ('20180126133509'),
-('20180201134513');
+('20180201134513'),
+('20180205130826');
 
 
