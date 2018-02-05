@@ -7,7 +7,7 @@ import wrapSVGText from 'utils/wrapSVGText';
 import PropTypes from 'prop-types';
 
 const BASE_HEIGHT = 400;
-const TOTAL_WIDTH = 1000;
+const TOTAL_WIDTH = 1015;
 const SANKEY_WIDTH = 580;
 const NODE_WIDTH = 10;
 const NODE_V_SPACE = 15;
@@ -16,6 +16,12 @@ const SANKEY_X_START = TOTAL_WIDTH / 2 - SANKEY_WIDTH / 2;
 const SANKEY_X_END = SANKEY_X_START + SANKEY_WIDTH;
 
 class MiniSankey extends Component {
+  static roundHeight(height) {
+    const h = BASE_HEIGHT * height;
+    if (h > 1 || parseInt(h * 10, 10) <= 1) return h;
+    return Math.ceil(h);
+  }
+
   render() {
     const {
       data,
@@ -26,7 +32,7 @@ class MiniSankey extends Component {
       onLinkClick
     } = this.props;
     const totalHeight = data.targetNodes.reduce(
-      (total, node) => total + node.height * BASE_HEIGHT + NODE_V_SPACE,
+      (total, node) => total + Math.ceil(node.height * BASE_HEIGHT) + NODE_V_SPACE,
       0
     );
     const startY = totalHeight / 2 - BASE_HEIGHT / 2;
@@ -34,7 +40,8 @@ class MiniSankey extends Component {
     let currentStartNodeY = startY;
     let currentEndNodeY = 0;
     const nodes = data.targetNodes.sort((nodeA, nodeB) => nodeB.height - nodeA.height).map(node => {
-      const renderedHeight = BASE_HEIGHT * node.height;
+      const renderedHeight = MiniSankey.roundHeight(node.height);
+
       const lines = wrapSVGText(
         node.name,
         Math.max(TEXT_LINE_HEIGHT, renderedHeight),
@@ -42,14 +49,14 @@ class MiniSankey extends Component {
         18,
         3
       );
-
+      const percent = 100 * node.height;
       const n = {
         id: node.id,
         name: node.name,
         isDomesticConsumption: node.is_domestic_consumption,
         lines,
         renderedHeight,
-        pct: `${formatValue(100 * node.height, 'percentage')}%`,
+        pct: `${percent * 10 >= 1 ? formatValue(percent, 'percentage') : '< 0.1'}%`,
         sy: currentStartNodeY,
         ty: currentEndNodeY,
         value: node.value
@@ -115,6 +122,7 @@ class MiniSankey extends Component {
               const y0 = node.sy + node.renderedHeight / 2;
               const y1 = node.ty + node.renderedHeight / 2;
               const path = `M${x0},${y0}C${x2},${y0} ${x3},${y1} ${x1},${y1}`;
+
               return (
                 <path
                   key={index}
