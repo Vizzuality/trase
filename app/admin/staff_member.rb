@@ -9,7 +9,7 @@ ActiveAdmin.register Content::StaffMember, as: 'Staff Member' do
       input :name, required: true, as: :string
       input :image, as: :file
       input :position
-      input :bio
+      input :bio, as: :simplemde_editor
     end
     f.actions
   end

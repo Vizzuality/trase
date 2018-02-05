@@ -59,6 +59,8 @@ GEM
       ransack (~> 1.3)
       sass (~> 3.1)
       sprockets (< 4.1)
+    activeadmin_simplemde (0.2.0)
+      activeadmin (~> 1.0)
     activejob (5.1.4)
       activesupport (= 5.1.4)
       globalid (>= 0.3.6)
@@ -400,6 +402,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   activeadmin (~> 1.2.1)
+  activeadmin_simplemde
   annotate
   appsignal
   byebug
