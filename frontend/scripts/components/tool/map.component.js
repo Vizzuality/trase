@@ -1,6 +1,5 @@
 import L from 'leaflet';
 import isNumber from 'lodash/isNumber';
-import isEmpty from 'lodash/isEmpty';
 // eslint-disable-next-line camelcase
 import turf_bbox from '@turf/bbox';
 import { BASEMAPS, CARTO_BASE_URL, MAP_PANES, MAP_PANES_Z } from 'constants';
@@ -27,13 +26,15 @@ export default class {
     });
 
     this.map.on('layeradd', () => this._updateAttribution());
-    this.map.on('dragend zoomend', () => this.callbacks.onMoveEnd(this.map.getCenter(), this.map.getZoom()));
+    this.map.on('dragend zoomend', () =>
+      this.callbacks.onMoveEnd(this.map.getCenter(), this.map.getZoom())
+    );
     this.map.on('zoomend', () => {
       const z = this.map.getZoom();
       this._setPaneModifier('-high-zoom', z >= 6);
     });
 
-    Object.keys(MAP_PANES).forEach((paneKey) => {
+    Object.keys(MAP_PANES).forEach(paneKey => {
       this.map.createPane(paneKey);
       this.map.getPane(paneKey).style.zIndex = MAP_PANES_Z[paneKey];
     });
@@ -57,13 +58,13 @@ export default class {
   }
 
   setMapView(mapView) {
-    if (isEmpty(mapView)) return;
+    if (mapView === null) return;
 
     this.map.setView([mapView.latitude, mapView.longitude], mapView.zoom);
   }
 
   setBasemap(basemapId) {
-    if (isEmpty(basemapId)) return;
+    if (basemapId === null) return;
 
     if (this.basemap) {
       this.map.removeLayer(this.basemap);
@@ -87,14 +88,19 @@ export default class {
   }
 
   showLoadedMap({
-    mapVectorData, currentPolygonType, selectedNodesGeoIds, choropleth, linkedGeoIds, defaultMapView
+    mapVectorData,
+    currentPolygonType,
+    selectedNodesGeoIds,
+    choropleth,
+    linkedGeoIds,
+    defaultMapView
   }) {
     this.polygonTypesLayers = {};
 
     if (!mapVectorData) return;
 
     // create geometry layers for all polygonTypes that have their own geometry
-    Object.keys(mapVectorData).forEach((polygonTypeId) => {
+    Object.keys(mapVectorData).forEach(polygonTypeId => {
       const polygonType = mapVectorData[polygonTypeId];
       if (polygonType.useGeometryFromColumnId === undefined) {
         this.polygonTypesLayers[polygonTypeId] = this._getPolygonTypeLayer(
@@ -105,10 +111,12 @@ export default class {
     });
 
     // for polygonTypes that don't have their geometry, link to actual geometry layers
-    Object.keys(mapVectorData).forEach((polygonTypeId) => {
+    Object.keys(mapVectorData).forEach(polygonTypeId => {
       const polygonType = mapVectorData[polygonTypeId];
       if (polygonType.useGeometryFromColumnId !== undefined) {
-        this.polygonTypesLayers[polygonTypeId] = this.polygonTypesLayers[polygonType.useGeometryFromColumnId];
+        this.polygonTypesLayers[polygonTypeId] = this.polygonTypesLayers[
+          polygonType.useGeometryFromColumnId
+        ];
       }
     });
 
@@ -127,17 +135,16 @@ export default class {
     }
   }
 
-  selectPolygons({
-    selectedGeoIds,
-    highlightedGeoId,
-    forceDefaultMapView,
-    defaultMapView
-  }) {
+  selectPolygons({ selectedGeoIds, highlightedGeoId, forceDefaultMapView, defaultMapView }) {
     this._outlinePolygons({ selectedGeoIds, highlightedGeoId });
 
     if (forceDefaultMapView === true) {
       this.setMapView(defaultMapView);
-    } else if (this.vectorOutline !== undefined && selectedGeoIds.length && this.currentPolygonTypeLayer) {
+    } else if (
+      this.vectorOutline !== undefined &&
+      selectedGeoIds.length &&
+      this.currentPolygonTypeLayer
+    ) {
       if (!this.currentPolygonTypeLayer.isPoint) {
         this.map.fitBounds(this.vectorOutline.getBounds());
       } else {
@@ -160,7 +167,7 @@ export default class {
       this.map.removeLayer(this.vectorOutline);
     }
 
-    const selectedFeatures = selectedGeoIds.map((selectedGeoId) => {
+    const selectedFeatures = selectedGeoIds.map(selectedGeoId => {
       if (!selectedGeoId) return null;
       const originalPolygon = this.currentPolygonTypeLayer
         .getLayers()
@@ -190,7 +197,7 @@ export default class {
         }
       });
       this.vectorOutline.setStyle(feature => ({
-        className: (feature.properties.geoid === highlightedGeoId) ? '-highlighted' : '-selected'
+        className: feature.properties.geoid === highlightedGeoId ? '-highlighted' : '-selected'
       }));
 
       this.map.addLayer(this.vectorOutline);
@@ -220,14 +227,14 @@ export default class {
   }
 
   loadContextLayers(selectedMapContextualLayersData) {
-    this.contextLayers.forEach((layer) => {
+    this.contextLayers.forEach(layer => {
       this.map.removeLayer(layer);
     });
 
     let forceZoom = 0;
 
     selectedMapContextualLayersData.forEach((layerData, i) => {
-      const contextLayer = (layerData.rasterURL)
+      const contextLayer = layerData.rasterURL
         ? this._createRasterLayer(layerData)
         : this._createCartoLayer(layerData, i);
       this.contextLayers.push(contextLayer);
@@ -291,15 +298,16 @@ export default class {
       style: {
         smoothFactor: 0.9
       },
-      pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
-        pane: MAP_PANES.vectorMain,
-        radius: 6
-      })
+      pointToLayer: (feature, latlng) =>
+        L.circleMarker(latlng, {
+          pane: MAP_PANES.vectorMain,
+          radius: 6
+        })
     });
 
     topoLayer.isPoint = isPoint;
 
-    topoLayer.eachLayer((layer) => {
+    topoLayer.eachLayer(layer => {
       this.polygonFeaturesDict[layer.feature.properties.geoid] = layer;
       const that = this;
       layer.on({
@@ -313,14 +321,17 @@ export default class {
           that.callbacks.onPolygonHighlighted();
         },
         click(event) {
-          if (event.target.disabled || (event.target.classList && event.target.classList.contains('-disabled'))) return;
+          if (
+            event.target.disabled ||
+            (event.target.classList && event.target.classList.contains('-disabled'))
+          )
+            return;
           that.callbacks.onPolygonClicked(this.feature.properties.geoid);
         }
       });
     });
     return topoLayer;
   }
-
 
   setChoropleth({ choropleth, choroplethLegend }) {
     this._setPaneModifier('-noDimensions', choroplethLegend === null);
@@ -331,13 +342,13 @@ export default class {
   }
 
   _setChoropleth(choropleth) {
-    this.currentPolygonTypeLayer.eachLayer((layer) => {
+    this.currentPolygonTypeLayer.eachLayer(layer => {
       const choroItem = choropleth[layer.feature.properties.geoid];
       layer.disabled = !layer.feature.properties.hasFlows;
       layer._path.classList.toggle('-disabled', layer.disabled);
 
       const currentBucketClass = layer._path.getAttribute('data-bucketClass');
-      const newBucketClass = (choroItem) || 'ch-default';
+      const newBucketClass = choroItem || 'ch-default';
 
       if (currentBucketClass === null) {
         layer._path.classList.add(newBucketClass);
@@ -357,7 +368,7 @@ export default class {
     this._setPaneModifier('-linkedActivated', linkedGeoIds.length);
 
     const linkedPolygons = [];
-    this.currentPolygonTypeLayer.eachLayer((layer) => {
+    this.currentPolygonTypeLayer.eachLayer(layer => {
       const isLinked = linkedGeoIds.indexOf(layer.feature.properties.geoid) > -1;
       layer._path.classList.toggle('-linked', isLinked);
       if (isLinked) {
@@ -393,13 +404,11 @@ export default class {
     if (!this.currentPolygonTypeLayer) {
       return;
     }
-    this.currentPolygonTypeLayer.eachLayer((layer) => {
-      const isFilteredOut = (
-        biome.geoId === undefined
-        || layer.feature.properties.biome_geoid === undefined
-      )
-        ? false
-        : biome.geoId !== layer.feature.properties.biome_geoid;
+    this.currentPolygonTypeLayer.eachLayer(layer => {
+      const isFilteredOut =
+        biome.geoId === undefined || layer.feature.properties.biome_geoid === undefined
+          ? false
+          : biome.geoId !== layer.feature.properties.biome_geoid;
       layer._path.classList.toggle('-filteredOut', isFilteredOut);
     });
   }
