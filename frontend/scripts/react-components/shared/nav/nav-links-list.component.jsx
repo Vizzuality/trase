@@ -17,7 +17,7 @@ const NavLinksList = props => {
     itemClassName,
     linkClassName,
     linkActiveClassName,
-    onLinkClick
+    navLinkProps
   } = props;
 
   return (
@@ -31,7 +31,7 @@ const NavLinksList = props => {
             className={link.linkClassName || linkClassName}
             activeClassName={link.linkActiveClassName || linkActiveClassName}
             isActive={(...params) => isActive(...params, link)}
-            onClick={onLinkClick}
+            {...navLinkProps}
           >
             {link.children || link.name}
           </NavLink>
@@ -47,7 +47,7 @@ NavLinksList.propTypes = {
   itemClassName: PropTypes.string,
   linkClassName: PropTypes.string,
   linkActiveClassName: PropTypes.string,
-  onLinkClick: PropTypes.func
+  navLinkProps: PropTypes.object
 };
 
 export default NavLinksList;
