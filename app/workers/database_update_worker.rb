@@ -5,7 +5,9 @@ class DatabaseUpdateWorker
   def perform(database_update_id)
     database_update = Api::V3::DatabaseUpdate.find(database_update_id)
     database_update.update_attributes(jid: self.jid) # make sure validations run here
-    Api::V3::Import::Importer.new.call(database_update)
+    ActiveRecord::Base.transaction do
+      Api::V3::Import::Importer.new.call(database_update)
+    end
     database_update.update_attribute(:status, Api::V3::DatabaseUpdate::FINISHED)
   rescue => e
     database_update.update_attribute(:status, Api::V3::DatabaseUpdate::FAILED)
