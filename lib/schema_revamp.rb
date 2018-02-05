@@ -701,7 +701,6 @@ class SchemaRevamp
     refresh_materialized_view('recolor_by_attributes_mv')
     refresh_materialized_view('resize_by_attributes_mv')
     refresh_materialized_view('download_attributes_mv')
-    refresh_materialized_view('download_attributes_values_mv')
     refresh_materialized_view('flow_paths_mv')
     refresh_materialized_view('download_flows_mv')
     ActiveRecord::Base.connection.execute('COMMIT')

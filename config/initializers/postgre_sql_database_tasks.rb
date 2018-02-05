@@ -49,7 +49,7 @@ module ActiveRecord
         # manually suppressing CREATE SERVER and CREATE USER MAPPING
         # which don't seem to be possible to keep outside the dump otherwise ;(
 
-        puts "Suppressing CREATE SERVER and CREATE USER MAPPING in dump. Please run rake db:revamp:init after restoring."
+        puts "Suppressing CREATE SERVER and CREATE USER MAPPING in dump. Please run rake db:remote:init after restoring."
 
         dump = File.read(filename)
         new_dump = dump.sub(

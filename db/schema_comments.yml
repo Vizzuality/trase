@@ -5,7 +5,9 @@ tables:
       - name: identifier
         comment: Identifier of the CartoDB named map, e.g. brazil_biomes; unique in scope of contextual layer
       - name: years
-        comment: Array of years for which to show this carto layer in scope of contextual layer; NULL for all years
+        comment: Array of years for which to show this carto layer in scope of contextual layer; empty (NULL) for all years
+      - name: raster_url
+        comment: Url of raster layer
   - name: chart_attributes
     comment: Attributes (inds/quals/quants) to display in a chart.
     columns:
@@ -14,7 +16,7 @@ tables:
       - name: position
         comment: Display order in scope of chart
       - name: years
-        comment: Array of years for which to show this attribute in scope of chart; NULL for all years
+        comment: Array of years for which to show this attribute in scope of chart; empty (NULL) for all years
   - name: chart_inds
     comment: Inds to display in a chart (see chart_attributes.)
   - name: chart_quals
@@ -45,7 +47,7 @@ tables:
   - name: context_node_type_properties
     columns:
       - name: column_group
-        comment: Number of sankey column in which to display nodes of this type
+        comment: Zero-based number of sankey column in which to display nodes of this type
       - name: is_default
         comment: When set, show this node type as default (only use for one)
       - name: is_geo_column
@@ -56,7 +58,7 @@ tables:
     comment: Country-commodity combinations.
     columns:
       - name: years
-        comment: Years for which country-commodity data is present; NULL for all years
+        comment: Years for which country-commodity data is present; empty (NULL) for all years
       - name: default_year
         comment: Default year for this context
   - name: context_properties
@@ -79,6 +81,8 @@ tables:
         comment: Identifier of layer, e.g. brazil_biomes
       - name: position
         comment: Display order in scope of context
+      - name: legend
+        comment: Legend as HTML snippet
       - name: tooltip_text
         comment: Tooltip text
       - name: is_default
@@ -93,20 +97,20 @@ tables:
   - name: country_properties
     columns:
       - name: latitude
-        comment: TODO
+        comment: Country latitide
       - name: longitude
-        comment: TODO
+        comment: Country longitude
       - name: zoom
-        comment: TODO
+        comment: Zoom level (0-18)
   - name: download_attributes
     comment: Attributes (quals/quants) available for download.
     columns:
       - name: position
         comment: Display order in scope of context
       - name: display_name
-        comment: Name of attribute for display
+        comment: Name of attribute for display in downloads
       - name: years
-        comment: Years for which attribute is present; NULL for all years
+        comment: Years for which attribute is present; empty (NULL) for all years
   - name: download_quals
     comment: Quals to include in downloads (see download_attributes.)
     columns:
@@ -168,7 +172,9 @@ tables:
       - name: is_visible_on_actor_profile
         comment: Whether to display this attribute on actor profile
       - name: is_temporal_on_place_profile
+        comment: Whether attribute has temporal data on place profile
       - name: is_temporal_on_actor_profile
+        comment: Whether attribute has temporal data on actor profile
   - name: map_attribute_groups
     comment: Groups attributes (inds/quals/quants) to display on map
     columns:
@@ -182,17 +188,17 @@ tables:
       - name: position
         comment: Display order in scope of group
       - name: bucket_3
-        comment: TODO
+        comment: Choropleth buckets for single dimension choropleth
       - name: bucket_5
-        comment: TODO
+        comment: Choropleth buckets for dual dimension choropleth
       - name: color_scale
-        comment: TODO
+        comment: Choropleth colour scale, e.g. blue
       - name: years
-        comment: Years for which attribute is present; NULL for all years
+        comment: Years for which attribute is present; empty (NULL) for all years
       - name: is_disabled
-        comment: When set, do not show this attribute
+        comment: When set, this attribute is not displayed
       - name: is_default
-        comment: When set, show this attribute by default
+        comment: When set, show this attribute by default. A maximum of 2 attributes per context may be set as default.
   - name: map_inds
     comment: Inds to display on map (see map_attributes.)
   - name: map_quants
@@ -201,21 +207,21 @@ tables:
     comment: Values of inds for node
     columns:
       - name: year
-        comment: Year; NULL for all years
+        comment: Year; empty (NULL) for all years
       - name: value
         comment: Numeric value
   - name: node_quals
     comment: Values of quals for node
     columns:
       - name: year
-        comment: Year; NULL for all years
+        comment: Year; empty (NULL) for all years
       - name: value
         comment: Textual value
   - name: node_quants
     comment: Values of quants for node
     columns:
       - name: year
-        comment: Year; NULL for all years
+        comment: Year; empty (NULL) for all years
       - name: value
         comment: Numeric value
   - name: node_types
@@ -285,27 +291,27 @@ tables:
     comment: Attributes (inds/quals) available for recoloring.
     columns:
       - name: group_number
-        comment: TODO
+        comment: Attributes are displayed grouped by their group number, with a separator between groups
       - name: position
-        comment: Display order in scope of context
+        comment: Display order in scope of context and group number
       - name: legend_type
-        comment: TODO
+        comment: Type of legend, e.g. linear
       - name: legend_color_theme
-        comment: TODO
+        comment: Color theme of legend, e.g. red-blue
       - name: interval_count
-        comment: TODO
+        comment: For legends with min / max value, number of intervals of the legend
       - name: min_value
-        comment: TODO
+        comment: Min value for the legend
       - name: max_value
-        comment: TODO
+        comment: Max value for the legend
       - name: divisor
-        comment: TODO
+        comment: Step between intervals for percentual legends
       - name: tooltip_text
         comment: Tooltip text
       - name: years
-        comment: Array of years for which to show this attribute in scope of chart; NULL for all years
+        comment: Array of years for which to show this attribute in scope of chart; empty (NULL) for all years
       - name: is_disabled
-        comment: When set, do not show this attribute
+        comment: When set, this attribute is not displayed
       - name: is_default
         comment: When set, show this attribute by default
   - name: recolor_by_inds
@@ -316,15 +322,15 @@ tables:
     comment: Attributes (quants) available for resizing.
     columns:
       - name: group_number
-        comment: TODO
+        comment: Group number
       - name: position
-        comment: Display order in scope of context
+        comment: Display order in scope of context and group number
       - name: tooltip_text
         comment: Tooltip text
       - name: years
-        comment: Array of years for which to show this attribute in scope of chart; NULL for all years
+        comment: Array of years for which to show this attribute in scope of chart; empty (NULL) for all years
       - name: is_disabled
-        comment: When set, do not show this attribute
+        comment: When set, this attribute is not displayed
       - name: is_default
         comment: When set, show this attribute by default
   - name: resize_by_quants
@@ -382,8 +388,6 @@ materialized_views:
     columns:
       - name: attribute_id
         comment: References the unique id in attributes_mv.
-  - name: download_attributes_values_mv
-    comment: Downloadable values from flow_inds/quals/quants
   - name: flow_paths_mv
     comment: Normalised flows
   - name: download_flows_mv

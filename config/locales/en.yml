@@ -20,4 +20,11 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    errors:
+      models:
+        map_attribute:
+          attributes:
+            array:
+              invalid_size:
+                other: has wrong size, should be %{size}

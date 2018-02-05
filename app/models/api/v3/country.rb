@@ -8,6 +8,9 @@ module Api
       delegate :longitude, to: :country_property
       delegate :zoom, to: :country_property
 
+      validates :name, presence: true
+      validates :iso2, presence: true, uniqueness: true
+
       def self.import_key
         [
           {name: :iso2, sql_type: 'TEXT'}

@@ -1,7 +1,7 @@
 shared_context 'api v3 brazil contextual layers' do
   include_context 'api v3 brazil contexts'
 
-  let!(:api_v3_contextual_layer_water_scarcity) do
+  let!(:api_v3_contextual_layer_landcover) do
     contextual_layer = Api::V3::ContextualLayer.find_by_identifier('landcover')
     unless contextual_layer
       contextual_layer = FactoryBot.create(

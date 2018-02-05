@@ -6,6 +6,25 @@ module Api
       has_one :context_node_type_property
       has_one :profile
 
+      validates :context, presence: true
+      validates :node_type, presence: true, uniqueness: {scope: :context}
+      validates :column_position, presence: true
+
+      def self.select_options
+        Api::V3::ContextNodeType.includes(
+          context: [:country, :commodity]
+        ).all.map do |ctx_nt|
+          [
+            [
+              ctx_nt.context&.country&.name,
+              ctx_nt.context&.commodity&.name,
+              ctx_nt.node_type&.name
+            ].join(' / '),
+            ctx_nt.id
+          ]
+        end
+      end
+
       def self.import_key
         [
           {name: :context_id, sql_type: 'INT'},

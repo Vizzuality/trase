@@ -222,6 +222,17 @@ ActiveAdmin.setup do |config|
   #     end
   #   end
 
+config.namespace :admin do |admin|
+  admin.build_menu do |menu|
+    menu.add label: 'Dashboard', priority: 1
+    menu.add label: 'Content', priority: 2
+    menu.add label: 'General Settings', priority: 5
+    menu.add label: 'Sankey Settings', priority: 6
+    menu.add label: 'Map Settings', priority: 7
+    menu.add label: 'Data Download Settings', priority: 8
+  end
+end
+
   # == Download Links
   #
   # You can disable download links on resource listing pages,
