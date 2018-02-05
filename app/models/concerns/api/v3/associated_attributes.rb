@@ -49,9 +49,7 @@ module Api
       # iterates over declared associated attributes
       # returns the first actual associated attribute found
       def find_readonly_attribute
-        associated_attributes.detect do |attr_name|
-          attr_type = attr_name.to_s.split('_').last
-          next unless attr_type
+        assoc_attr_names_with_types.detect do |attr_name, attr_type|
           # no good way to preload this
           readonly_attribute = Api::V3::Readonly::Attribute.where(
             original_id: send(attr_name)&.send(:"#{attr_type}_id"),
@@ -65,10 +63,8 @@ module Api
       def readonly_attribute=(readonly_attribute)
         return unless readonly_attribute
 
-        associated_attributes.each do |attr_name|
-          attr_type = attr_name.to_s.split('_').last
+        assoc_attr_names_with_types.each do |attr_name, attr_type|
           assoc_obj = send(attr_name)
-          next unless attr_type
           if readonly_attribute.original_type != attr_type.capitalize
             # delete when saving parent
             send(attr_name)&.mark_for_destruction
@@ -79,6 +75,14 @@ module Api
             # build a new associated object (saved with parent)
             send(:"build_#{attr_name}", :"#{attr_type}_id" => readonly_attribute.original_id)
           end
+        end
+      end
+
+      def assoc_attr_names_with_types
+        associated_attributes.map do |attr_name|
+          attr_type = attr_name.to_s.split('_').last
+          raise "Cannot infer type from #{attr_name}" unless attr_type
+          [attr_name, attr_type]
         end
       end
     end
