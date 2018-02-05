@@ -173,6 +173,7 @@ CREATE TABLE staff_members (
     image_content_type character varying,
     image_file_size integer,
     image_updated_at timestamp without time zone,
+    "position" integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
