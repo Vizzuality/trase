@@ -1,8 +1,9 @@
 import { getURLFromParams, POST_SUBSCRIBE_NEWSLETTER } from 'utils/getURLFromParams';
 
 export const NEWSLETTER__SET_SUBSCRIPTION_MESSAGE = 'NEWSLETTER__SET_SUBSCRIPTION_MESSAGE';
+export const NEWSLETTER__RESET_NEWSLETTER = 'NEWSLETTER__RESET_NEWSLETTER';
 
-export const sendSubscriptionEmail = email => (dispatch, getState) => {
+export const sendSubscriptionEmail = email => dispatch => {
   const body = new FormData();
   body.append('email', email);
 
@@ -19,13 +20,17 @@ export const sendSubscriptionEmail = email => (dispatch, getState) => {
     .then(message =>
       dispatch({
         type: NEWSLETTER__SET_SUBSCRIPTION_MESSAGE,
-        payload: { message, page: getState().location.type }
+        payload: { message }
       })
     )
     .catch(error =>
       dispatch({
         type: NEWSLETTER__SET_SUBSCRIPTION_MESSAGE,
-        payload: { message: `Error: ${error}`, page: getState().location.type }
+        payload: { message: `Error: ${error}` }
       })
     );
 };
+
+export const resetNewsletter = () => ({
+  type: NEWSLETTER__RESET_NEWSLETTER
+});

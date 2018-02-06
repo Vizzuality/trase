@@ -1,19 +1,20 @@
 import { createReducer } from 'store';
-import { NEWSLETTER__SET_SUBSCRIPTION_MESSAGE } from './newsletter.actions';
+import {
+  NEWSLETTER__SET_SUBSCRIPTION_MESSAGE,
+  NEWSLETTER__RESET_NEWSLETTER
+} from './newsletter.actions';
 
 const initialState = {
-  home: {
-    message: ''
-  },
-  about: {
-    message: ''
-  }
+  message: ''
 };
 
 const newsletterReducer = {
   [NEWSLETTER__SET_SUBSCRIPTION_MESSAGE](state, action) {
-    const { page, message } = action.payload;
-    return { ...state, [page]: { message } };
+    const { message } = action.payload;
+    return { ...state, message };
+  },
+  [NEWSLETTER__RESET_NEWSLETTER](state) {
+    return { ...state, message: '' };
   }
 };
 
