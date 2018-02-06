@@ -1,4 +1,4 @@
-## How does trase work?
+## How does Trase work?
 
 The data and methods used in Trase are being improved constantly as we develop better 
 methodologies and identify new data sources. Trase will continue to improve the quality and 
