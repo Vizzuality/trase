@@ -265,7 +265,7 @@ export function loadNodes() {
 
       // are all currently selected map dimensions available ?
       if (
-        selectedMapDimensions !== undefined &&
+        selectedMapDimensionsSet.length > 0 &&
         _.difference(selectedMapDimensionsSet, allAvailableMapDimensionsUids).length === 0
       ) {
         dispatch(setMapDimensions(selectedMapDimensions.concat([])));
