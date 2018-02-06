@@ -64,21 +64,24 @@
         </div>
 
         <div class="js-map-container c-map is-absolute">
-          <div id="js-map" class="c-map-leaflet">
-            <div class="js-map-warnings-container c-map-warnings">
+          <div id="js-map" class="c-map-leaflet"></div>
+          <div class="btn-map -toggle-map js-toggle-map"></div>
+          <div class="js-map-warnings-container map-warnings">
+            <div class="warning-wrapper">
               <svg class="icon">
                 <use xlink:href="#icon-warning"></use>
               </svg>
               <span class="js-map-warnings"></span>
             </div>
-            <div class="btn-map -basemap js-basemap-switcher">
+          </div>
+          <div class="c-map-footer">
+            <div class="btn-map -map-layers js-basemap-switcher">
               <svg class="icon icon-layers"><use xlink:href="#icon-layers"></use></svg>
             </div>
-          </div>
-          <div class="btn-map -toggle-map js-toggle-map"></div>
-          <div class="c-map-legend js-map-legend">
-            <div class="js-map-legend-context c-map-legend-context"></div>
-            <div class="js-map-legend-choro c-map-legend-choro"></div>
+            <div class="c-map-legend js-map-legend">
+              <div class="js-map-legend-context c-map-legend-context"></div>
+              <div class="js-map-legend-choro c-map-legend-choro"></div>
+            </div>
           </div>
           <div class="js-map-attribution c-map-attribution">
             <!-- this is rendered by map.component -->
