@@ -46,7 +46,7 @@ class NewsletterForm extends React.PureComponent {
               onInput={this.onFormInput}
               type="email"
               name="email"
-              placeholder="Sign up here to receive updates"
+              placeholder="SIGN UP HERE TO RECEIVE UPDATES"
               id="newsletter-email"
               required
               className="newsletter-email"
