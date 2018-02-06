@@ -1,17 +1,8 @@
 module Content
-  class ContentController < ApplicationController
+  class TweetsController < ApplicationController
     before_action :set_caching_headers
 
-    def posts
-      posts = Content::Post.order(date: 'DESC').where(state: 1)
-      render json: posts, root: 'data', each_serializer: PostSerializer
-    end
-
-    def site_dive
-      render json: Content::SiteDive.find(params[:id]), root: 'data', serializer: SiteDiveSerializer
-    end
-
-    def tweets
+    def index
       render json: [] and return unless ENV['TWITTER_CONSUMER_KEY'].present? and ENV['TWITTER_CONSUMER_SECRET'].present? and ENV['TWITTER_ACCESS_TOKEN'].present? and ENV['TWITTER_ACCESS_TOKEN_SECRET'].present?
 
       client = Twitter::REST::Client.new do |config|
@@ -21,7 +12,8 @@ module Content
         config.access_token_secret = ENV['TWITTER_ACCESS_TOKEN_SECRET']
       end
 
-      render json: client.home_timeline, root: 'data', each_serializer: TweetSerializer
+      render json: client.home_timeline, root: 'data',
+             each_serializer: TweetSerializer
     end
   end
 end

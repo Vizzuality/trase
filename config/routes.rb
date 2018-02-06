@@ -9,10 +9,10 @@ Rails.application.routes.draw do
   end
 
   namespace :content do
-    mount Ckeditor::Engine => '/ckeditor'
-    get '/posts', to: 'content#posts'
-    get '/site_dive/:id', to: 'content#site_dive'
-    get '/tweets', to: 'content#tweets'
+    mount Ckeditor::Engine => '/ckeditor' # TODO: remove if unused
+    resources :posts, only: [:index]
+    resources :site_dives, only: [:show]
+    resources :tweets, only: [:index]
     resources :testimonials, only: [:index]
   end
 
