@@ -144,7 +144,6 @@
         > .newsletter-email {
           flex: auto;
           height: 100%;
-          padding: 0 10px;
           font-family: $font-family-1;
           font-size: 13px;
           letter-spacing: -0.8px;
@@ -154,7 +153,7 @@
           background-color: $light-gray;
           color: $charcoal-grey-faded;
           text-transform: uppercase;
-
+          padding: 1px 10px 0;
           &::placeholder {
             text-transform: none;
           }
