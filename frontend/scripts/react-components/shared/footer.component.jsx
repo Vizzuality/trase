@@ -105,7 +105,8 @@ const sections = [
         },
         {
           className: 'ukaidsv-logo',
-          href: 'https://www.gov.uk/government/organisations/department-for-international-development',
+          href:
+            'https://www.gov.uk/government/organisations/department-for-international-development',
           image: '/images/footer/donors/u-kaidsvg@2x.png',
           alt: 'Department for International Development',
           imageClassName: null
@@ -125,41 +126,41 @@ const sections = [
 const Footer = () => (
   <div className="c-footer">
     <div className="contain-logos-footer row">
-      {
-        sections.map(({ title, logos, text }) => (
-          <div key={title} className={cx('contain-logos', `column small-12 large-${(12 / sections.length)}`)}>
-            <h4 className="title -mono-font">{title}</h4>
-            <div className="logo-list-container">
-              {
-                logos.map((list, listIndex) => (
-                  <ul key={title + listIndex} className="logo-list">
-                    {
-                      list.map(logo => (
-                        <li key={logo.className} className={cx('logo-item', logo.className)}>
-                          <a href={logo.href} target="_blank" rel="noopener noreferrer">
-                            <img src={logo.image} alt={logo.alt} />
-                          </a>
-                        </li>
-                      ))
-                    }
-                  </ul>
-                ))
-              }
-            </div>
-            {text &&
+      {sections.map(({ title, logos, text }) => (
+        <div
+          key={title}
+          className={cx('contain-logos', `column small-12 large-${12 / sections.length}`)}
+        >
+          <h4 className="title -mono-font">{title}</h4>
+          <div className="logo-list-container">
+            {logos.map((list, listIndex) => (
+              <ul key={title + listIndex} className="logo-list">
+                {list.map(logo => (
+                  <li key={logo.className} className={cx('logo-item', logo.className)}>
+                    <a href={logo.href} target="_blank" rel="noopener noreferrer">
+                      <img src={logo.image} alt={logo.alt} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ))}
+          </div>
+          {text && (
             <div className="contain-text">
               <p className="title -mono-font">{text}</p>
             </div>
-            }
-          </div>
-        ))
-      }
+          )}
+        </div>
+      ))}
     </div>
     <div className="contain-link-list row column">
       <ul className="links-list">
         <li className="link-item">
-          <Link className="title -mono-font" to={{ type: 'termsOfUse' }}>
-            Terms of Service
+          <Link
+            className="title -mono-font"
+            to={{ type: 'about', payload: { section: 'terms-of-use' } }}
+          >
+            Terms of Use
           </Link>
         </li>
         <li className="separator"> · </li>

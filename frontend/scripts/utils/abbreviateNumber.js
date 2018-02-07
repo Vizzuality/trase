@@ -13,10 +13,10 @@ export default (number, decPlaces) => {
     if (size <= number) {
       // Here, we multiply by decPlaces, round, and then divide by decPlaces.
       // This gives us nice rounding to a particular decimal place.
-      number = Math.round((number * powDecPlaces) / size) / powDecPlaces;
+      number = Math.round(number * powDecPlaces / size) / powDecPlaces;
 
       // Handle special case where we round up to the next abbreviation
-      if ((number === 1000) && (i < abbrev.length - 1)) {
+      if (number === 1000 && i < abbrev.length - 1) {
         number = 1;
         i++;
       }

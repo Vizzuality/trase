@@ -21,7 +21,7 @@ export default class {
 
     this.switchers = Array.prototype.slice.call(this.items.querySelectorAll('.c-switcher'), 0);
 
-    this.switchers.forEach((switcher) => {
+    this.switchers.forEach(switcher => {
       switcher.addEventListener('click', e => this._onToggleSwitcher(e));
     });
 
@@ -33,17 +33,17 @@ export default class {
       return;
     }
     if (
-      selectedMapContextualLayers !== undefined
-      && selectedMapContextualLayers !== null
-      && selectedMapContextualLayers.length
+      selectedMapContextualLayers !== undefined &&
+      selectedMapContextualLayers !== null &&
+      selectedMapContextualLayers.length
     ) {
       this._setActiveContextualLayers(selectedMapContextualLayers);
     }
   }
 
   _setActiveContextualLayers(selectedMapContextualLayers) {
-    selectedMapContextualLayers.forEach((layerSlug) => {
-      this.switchers.forEach((switcher) => {
+    selectedMapContextualLayers.forEach(layerSlug => {
+      this.switchers.forEach(switcher => {
         if (switcher.getAttribute('data-layer-slug') !== layerSlug) return;
         switcher.closest('.js-map-context-item').classList.add('-selected');
         switcher.classList.add('-enabled');
@@ -65,7 +65,7 @@ export default class {
   _getActivelayers() {
     const activeLayers = [];
 
-    this.switchers.forEach((switcher) => {
+    this.switchers.forEach(switcher => {
       if (!switcher.classList.contains('-enabled')) return;
 
       const layerSlug = switcher.getAttribute('data-layer-slug');

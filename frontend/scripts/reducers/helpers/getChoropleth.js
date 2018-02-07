@@ -1,14 +1,14 @@
 import _ from 'lodash';
 import { CHOROPLETH_CLASSES, CHOROPLETH_CLASS_ZERO } from 'constants';
 
-const _shortenTitle = (title) => {
+const _shortenTitle = title => {
   if (title.length < 50) {
     return title;
   }
   return [title.slice(0, 34), title.slice(-12)].join('(…)');
 };
 
-export default function (selectedMapDimensionsUids, nodesDictWithMeta, mapDimensions, forceEmpty) {
+export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensions, forceEmpty) {
   const uids = _.compact(selectedMapDimensionsUids);
 
   if (!uids.length) {
@@ -18,7 +18,9 @@ export default function (selectedMapDimensionsUids, nodesDictWithMeta, mapDimens
     };
   }
 
-  const selectedMapDimensions = uids.map(uid => mapDimensions.find(dimension => dimension.uid === uid));
+  const selectedMapDimensions = uids.map(uid =>
+    mapDimensions.find(dimension => dimension.uid === uid)
+  );
   const selectedMapDimension = selectedMapDimensions[0];
   const uid = uids[0];
   const uidB = uids[1];
@@ -34,7 +36,10 @@ export default function (selectedMapDimensionsUids, nodesDictWithMeta, mapDimens
     ? CHOROPLETH_CLASSES.bidimensional
     : CHOROPLETH_CLASSES[selectedMapDimension.colorScale || 'red'];
 
-  const geoNodes = _.filter(nodesDictWithMeta, node => node.geoId !== undefined && node.geoId !== null && node.isGeo);
+  const geoNodes = _.filter(
+    nodesDictWithMeta,
+    node => node.geoId !== undefined && node.geoId !== null && node.isGeo
+  );
   const geoNodesIds = Object.keys(geoNodes);
   const choropleth = {};
 
@@ -42,14 +47,14 @@ export default function (selectedMapDimensionsUids, nodesDictWithMeta, mapDimens
     colors,
     isBivariate,
     titles: selectedMapDimensions.map(d => _shortenTitle(d.name)),
-    bucket: selectedMapDimensions.map(d => ((isBivariate) ? d.bucket3.slice(0) : d.bucket5.slice(0)))
+    bucket: selectedMapDimensions.map(d => (isBivariate ? d.bucket3.slice(0) : d.bucket5.slice(0)))
   };
 
   if (forceEmpty === true) {
     return { choropleth, choroplethLegend };
   }
 
-  geoNodesIds.forEach((nodeId) => {
+  geoNodesIds.forEach(nodeId => {
     const node = geoNodes[nodeId];
     let color = 'none';
 
@@ -75,7 +80,7 @@ export default function (selectedMapDimensionsUids, nodesDictWithMeta, mapDimens
             color = CHOROPLETH_CLASSES.default;
           } else {
             // in case only one is zero, just ignore and use lowest bucket (Math.max zero)
-            colorIndex = ((2 - Math.max(0, valueA - 1)) * 3) + Math.max(0, valueB - 1);
+            colorIndex = (2 - Math.max(0, valueA - 1)) * 3 + Math.max(0, valueB - 1);
             color = colors[colorIndex];
           }
         }

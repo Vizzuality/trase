@@ -27,11 +27,7 @@ const routes = {
   home: {
     path: '/',
     page: 'home',
-    thunk: dispatchThunks(
-      getPostsContent,
-      getTweetsContent,
-      getTestimonialsContent
-    )
+    thunk: dispatchThunks(getPostsContent, getTweetsContent, getTestimonialsContent)
   },
   tool: {
     path: '/flows',
@@ -73,21 +69,6 @@ const routes = {
   },
   about: {
     path: '/about/:section?',
-    page: 'static-content',
-    thunk: dispatchThunks(getPageStaticContent)
-  },
-  termsOfUse: {
-    path: '/terms-of-use',
-    page: 'static-content',
-    thunk: dispatchThunks(getPageStaticContent)
-  },
-  dataMethods: {
-    path: '/data-methods',
-    page: 'static-content',
-    thunk: dispatchThunks(getPageStaticContent)
-  },
-  faq: {
-    path: '/FAQ',
     page: 'static-content',
     thunk: dispatchThunks(getPageStaticContent)
   },

@@ -22,7 +22,13 @@ export default class {
   }
 
   highlightNode({
-    isHighlight, nodesData, recolorGroups, coordinates, isMapVisible, currentQuant, selectedYears
+    isHighlight,
+    nodesData,
+    recolorGroups,
+    coordinates,
+    isMapVisible,
+    currentQuant,
+    selectedYears
   }) {
     this.tooltip.hide();
     if (nodesData === undefined || !nodesData.length) {
@@ -45,17 +51,21 @@ export default class {
   _update(isSelect, nodesData, recolorGroups = null, currentQuant, selectedYears) {
     this.clear.classList.toggle('is-hidden', !isSelect);
 
-    Array.prototype.slice.call(document.querySelectorAll('.js-node-title.-link'), 0).forEach((nodeTitle) => {
-      nodeTitle.removeEventListener('click', this._onNodeTitleClick);
-    });
+    Array.prototype.slice
+      .call(document.querySelectorAll('.js-node-title.-link'), 0)
+      .forEach(nodeTitle => {
+        nodeTitle.removeEventListener('click', this._onNodeTitleClick);
+      });
 
-    Array.prototype.slice.call(document.querySelectorAll('.js-node-close'), 0).forEach((closeButton) => {
-      closeButton.removeEventListener('click', this._onNodeTitleCloseClick);
-    });
+    Array.prototype.slice
+      .call(document.querySelectorAll('.js-node-close'), 0)
+      .forEach(closeButton => {
+        closeButton.removeEventListener('click', this._onNodeTitleCloseClick);
+      });
 
     const templateData = {
       year: selectedYears ? selectedYears[0] : null,
-      nodes: nodesData.map((node) => {
+      nodes: nodesData.map(node => {
         let renderedQuant;
         if (node.quant !== undefined) {
           renderedQuant = {
@@ -75,12 +85,11 @@ export default class {
         }
 
         return Object.assign({}, node, {
-          hasLink: (
-            node.isUnknown !== true
-            && node.isDomesticConsumption !== true
-            && node.profileType !== undefined
-            && node.profileType !== null
-          ),
+          hasLink:
+            node.isUnknown !== true &&
+            node.isDomesticConsumption !== true &&
+            node.profileType !== undefined &&
+            node.profileType !== null,
           selectedMetas: renderedMetas,
           renderedQuant
         });
@@ -91,13 +100,17 @@ export default class {
 
     this.container.innerHTML = NodeTitleTemplate(templateData);
 
-    Array.prototype.slice.call(document.querySelectorAll('.js-node-title.-link'), 0).forEach((nodeTitle) => {
-      nodeTitle.addEventListener('click', this._onNodeTitleClickBound);
-    });
+    Array.prototype.slice
+      .call(document.querySelectorAll('.js-node-title.-link'), 0)
+      .forEach(nodeTitle => {
+        nodeTitle.addEventListener('click', this._onNodeTitleClickBound);
+      });
 
-    Array.prototype.slice.call(document.querySelectorAll('.js-node-close'), 0).forEach((closeButton) => {
-      closeButton.addEventListener('click', this._onNodeTitleCloseClickBound);
-    });
+    Array.prototype.slice
+      .call(document.querySelectorAll('.js-node-close'), 0)
+      .forEach(closeButton => {
+        closeButton.addEventListener('click', this._onNodeTitleCloseClickBound);
+      });
   }
 
   _onNodeTitleClick(e) {
@@ -123,11 +136,13 @@ export default class {
 
     // map metas might not be loaded yet
     if (node.selectedMetas !== undefined) {
-      values = node.selectedMetas.map(meta => ({
-        title: meta.name,
-        unit: meta.unit,
-        value: formatValue(meta.rawValue, meta.name)
-      })).concat(values);
+      values = node.selectedMetas
+        .map(meta => ({
+          title: meta.name,
+          unit: meta.unit,
+          value: formatValue(meta.rawValue, meta.name)
+        }))
+        .concat(values);
     }
 
     // if node is visible in sankey, quant is available

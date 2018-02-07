@@ -45,7 +45,7 @@ export const GA_ACTION_WHITELIST = [
     type: actions.SELECT_VIEW,
     action: 'Select view',
     category: 'Sankey',
-    getPayload: action => ((action.detailedView) ? 'detailed' : 'overview')
+    getPayload: action => (action.detailedView ? 'detailed' : 'overview')
   },
   {
     type: actions.SELECT_COLUMN,
@@ -71,10 +71,12 @@ export const GA_ACTION_WHITELIST = [
   }
 ];
 
-const googleAnalyticsMiddleware = store => next => (action) => {
+const googleAnalyticsMiddleware = store => next => action => {
   if (typeof ga !== 'undefined') {
     const state = store.getState();
-    const gaAction = GA_ACTION_WHITELIST.find(whitelistAction => action.type === whitelistAction.type);
+    const gaAction = GA_ACTION_WHITELIST.find(
+      whitelistAction => action.type === whitelistAction.type
+    );
     if (gaAction) {
       const gaEvent = {
         hitType: 'event',

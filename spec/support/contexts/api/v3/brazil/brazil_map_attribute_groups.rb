@@ -1,7 +1,5 @@
 shared_context 'api v3 brazil map attribute groups' do
   include_context 'api v3 brazil contexts'
-  include_context 'api v3 inds'
-  include_context 'api v3 quants'
 
   let!(:api_v3_map_attribute_group1) do
     Api::V3::MapAttributeGroup.where(

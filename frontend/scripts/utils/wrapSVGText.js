@@ -4,7 +4,10 @@ export default (name, height, _labelCharHeight, _labelCharsPerLine, _labelMaxLin
     return '';
   }
   // console.log(name, height, _labelCharHeight, _labelCharsPerLine, _labelMaxLines)
-  const maxLinesForNode = Math.max(1, Math.min(_labelMaxLines, Math.floor(height / _labelCharHeight)));
+  const maxLinesForNode = Math.max(
+    1,
+    Math.min(_labelMaxLines, Math.floor(height / _labelCharHeight))
+  );
   const words = name.split(' ');
   const lines = [];
   let currentLine = '';

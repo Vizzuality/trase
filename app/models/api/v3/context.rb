@@ -16,6 +16,15 @@ module Api
       delegate :is_subnational, to: :context_property
       delegate :default_basemap, to: :context_property
 
+      validates :country, presence: true
+      validates :commodity, presence: true, uniqueness: {scope: :country}
+
+      def self.select_options
+        Api::V3::Context.includes(:country, :commodity).all.map do |ctx|
+          [[ctx.country&.name, ctx.commodity&.name].join(' / '), ctx.id]
+        end
+      end
+
       def self.import_key
         [
           {name: :country_id, sql_type: 'INT'},

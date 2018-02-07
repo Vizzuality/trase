@@ -9,7 +9,7 @@ class DownloadSelector extends Component {
   renderOptions() {
     return this.props.options.map((elem, key) => (
       <li key={key}>
-        <span >{elem.name}</span>
+        <span>{elem.name}</span>
         <div
           className={classnames(
             'c-radio-btn',
@@ -26,33 +26,26 @@ class DownloadSelector extends Component {
   render() {
     return (
       <div
-        className={classnames(
-          'c-custom-dataset-selector',
-          { '-disabled': !this.props.enabled }
-        )}
+        className={classnames('c-custom-dataset-selector', { '-disabled': !this.props.enabled })}
         data-type="value"
         data-disabled-text={this.props.disabledText}
       >
         <div className="c-custom-dataset-selector__header">
           {this.props.title}
-          {this.props.allowMultiple &&
+          {this.props.allowMultiple && (
             <ul className="c-custom-dataset-selector__header-options">
               <li>
                 <div
-                  className={classnames(
-                    'c-radio-btn',
-                    '-red',
-                    { '-enabled': this.props.allSelected }
-                  )}
+                  className={classnames('c-radio-btn', '-red', {
+                    '-enabled': this.props.allSelected
+                  })}
                   onClick={() => this.props.onAllSelected(this.props.type)}
                 />
               </li>
             </ul>
-          }
+          )}
         </div>
-        <ul className="c-custom-dataset-selector__values">
-          {this.renderOptions()}
-        </ul>
+        <ul className="c-custom-dataset-selector__values">{this.renderOptions()}</ul>
       </div>
     );
   }

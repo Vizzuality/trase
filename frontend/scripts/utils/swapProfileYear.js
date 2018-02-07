@@ -1,4 +1,4 @@
-export default (year) => {
+export default year => {
   let search = window.location.search;
   if (search.match('year') !== null) {
     search = search.replace(/year=\d{4}/, `year=${year}`);

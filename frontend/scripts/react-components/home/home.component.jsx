@@ -6,13 +6,7 @@ import NewsletterForm from 'react-components/shared/newsletter/newsletter.contai
 import SliderSection from './slider-section.component';
 
 function Home(props) {
-  const {
-    tweets,
-    blogPosts,
-    testimonials,
-    insightsPosts,
-    promotedPost
-  } = props;
+  const { tweets, blogPosts, testimonials, insightsPosts, promotedPost } = props;
   return (
     <div className="l-homepage">
       <div className="c-homepage">
@@ -41,16 +35,15 @@ function Home(props) {
           </div>
         </div>
         <div className="sliders">
+          <NewsletterForm />
           <SliderSection name="News and Blogs" slides={blogPosts} />
           <SliderSection name="Insights" slides={insightsPosts} />
           <SliderSection className="-small" name="Testimonials" slides={testimonials} />
         </div>
-        <NewsletterForm />
       </div>
     </div>
   );
 }
-
 
 Home.propTypes = {
   insightsPosts: PropTypes.array,

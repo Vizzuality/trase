@@ -18,14 +18,15 @@ class BulkDownloadsBlock extends Component {
           {this.props.contexts.map((context, key) => (
             <div key={key} className="small-4 columns">
               <div
-                className={classnames(
-                  'c-bulk-downloads__item',
-                  { '-disabled': !this.props.enabled }
-                )}
+                className={classnames('c-bulk-downloads__item', {
+                  '-disabled': !this.props.enabled
+                })}
                 data-value="{context.id}"
                 onClick={() => this.onBulkDownloadButtonClicked(context.id)}
               >
-                <span>{context.countryName} - {context.commodityName} (all years)</span>
+                <span>
+                  {context.countryName} - {context.commodityName} (all years)
+                </span>
                 <svg className="icon icon-download">
                   <use xlinkHref="#icon-download" />
                 </svg>

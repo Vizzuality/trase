@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 import React, { Component } from 'react';
 import findParent from 'find-parent';
 import PropTypes from 'prop-types';
@@ -17,7 +18,9 @@ class Dropdown extends Component {
   }
 
   handle(e) {
-    const isInside = this.container.contains(e.target) || findParent.byClassName(e.target, 'js-dropdown') !== undefined;
+    const isInside =
+      this.container.contains(e.target) ||
+      findParent.byClassName(e.target, 'js-dropdown') !== undefined;
 
     if (isInside === false) {
       this.props.onClickOutside(null);
@@ -27,10 +30,13 @@ class Dropdown extends Component {
   render() {
     const { id, currentDropdown } = this.props;
 
-    const children = (currentDropdown !== id) ? null : this.props.children;
+    const children = currentDropdown !== id ? null : this.props.children;
 
-    // eslint-disable-next-line no-return-assign
-    return <div id={id} ref={ref => this.container = ref} >{children}</div >;
+    return (
+      <div id={id} ref={ref => (this.container = ref)}>
+        {children}
+      </div>
+    );
   }
 }
 

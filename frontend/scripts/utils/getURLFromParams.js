@@ -46,17 +46,27 @@ const API_ENDPOINTS = {
   [GET_TWEETS]: { api: 'content', endpoint: '/tweets' },
   [GET_DISCLAIMER]: { api: 'local', endpoint: 'disclaimer.json' },
   [GET_TOOLTIPS]: { api: 'local', endpoint: 'tooltips.json' },
-  [GET_TESTIMONIALS]: { api: 'content', endpoint: '/testimonials', mock: 'mocks/v3_get_testimonials.json' },
+  [GET_TESTIMONIALS]: {
+    api: 'content',
+    endpoint: '/testimonials',
+    mock: 'mocks/v3_get_testimonials.json'
+  },
   [GET_MARKDOWN_CONTENT]: { api: 'markdown', endpoint: 'static-content' }
 };
 
 function getURLForV3(endpoint, paramsArg = {}) {
   const params = Object.assign({}, paramsArg);
-  if (Object.prototype.hasOwnProperty.call(params, 'context_id') && endpoint.indexOf('$context_id$') !== -1) {
+  if (
+    Object.prototype.hasOwnProperty.call(params, 'context_id') &&
+    endpoint.indexOf('$context_id$') !== -1
+  ) {
     endpoint = endpoint.replace('$context_id$', params.context_id);
     delete params.context_id;
   }
-  if (Object.prototype.hasOwnProperty.call(params, 'node_id') && endpoint.indexOf('$node_id$') !== -1) {
+  if (
+    Object.prototype.hasOwnProperty.call(params, 'node_id') &&
+    endpoint.indexOf('$node_id$') !== -1
+  ) {
     endpoint = endpoint.replace('$node_id$', params.node_id);
     delete params.node_id;
   }
@@ -65,7 +75,10 @@ function getURLForV3(endpoint, paramsArg = {}) {
     const value = params[current];
     if (Array.isArray(value)) {
       if (value.length === 0) return prev;
-      const arrUrl = value.reduce((arrPrev, arrCurrent) => `${arrPrev}&${current}[]=${arrCurrent}`, '');
+      const arrUrl = value.reduce(
+        (arrPrev, arrCurrent) => `${arrPrev}&${current}[]=${arrCurrent}`,
+        ''
+      );
       return `${prev}&${arrUrl}`;
     }
     return `${prev}&${current}=${params[current]}`;
@@ -78,7 +91,10 @@ function getURLForV2(endpoint, params = {}) {
   return Object.keys(params).reduce((prev, current) => {
     const value = params[current];
     if (Array.isArray(value)) {
-      const arrUrl = value.reduce((arrPrev, arrCurrent) => `${arrPrev}&${current}[]=${arrCurrent}`, '');
+      const arrUrl = value.reduce(
+        (arrPrev, arrCurrent) => `${arrPrev}&${current}[]=${arrCurrent}`,
+        ''
+      );
       return `${prev}&${arrUrl}`;
     }
     return `${prev}&${current}=${params[current]}`;
@@ -90,7 +106,10 @@ function getURLForV1(endpoint, params = {}) {
   return Object.keys(params).reduce((prev, current) => {
     const value = params[current];
     if (Array.isArray(value)) {
-      const arrUrl = value.reduce((arrPrev, arrCurrent) => `${arrPrev}&${current}=${arrCurrent}`, '');
+      const arrUrl = value.reduce(
+        (arrPrev, arrCurrent) => `${arrPrev}&${current}=${arrCurrent}`,
+        ''
+      );
       return `${prev}&${arrUrl}`;
     }
     return `${prev}&${current}=${params[current]}`;

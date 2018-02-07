@@ -69,19 +69,22 @@ class AnimatedFlows extends React.PureComponent {
         .attr('stroke-dashoffset', totalLength);
     }
 
-    var gradientLink = svg.append('g').selectAll('.gradient-link')
+    var gradientLink = svg
+      .append('g')
+      .selectAll('.gradient-link')
       .data(energy.links)
       .enter()
       .append('path')
       .attr('class', 'gradient-link')
       .attr('d', path)
-      .style('stroke-width', d => (Math.max(1, d.dy)))
-      .sort((a, b) => (b.dy - a.dy))
+      .style('stroke-width', d => Math.max(1, d.dy))
+      .sort((a, b) => b.dy - a.dy)
       .each(setDash)
       .style('stroke', () => {
         var id = 'c-000-to-000';
         if (!svg.select(id).node()) {
-          var gradient = svg.append('defs')
+          var gradient = svg
+            .append('defs')
             .append('linearGradient')
             .attr('id', id)
             .attr('x1', '0%')
@@ -90,12 +93,14 @@ class AnimatedFlows extends React.PureComponent {
             .attr('y2', '0%')
             .attr('spreadMethod', 'pad');
 
-          gradient.append('stop')
+          gradient
+            .append('stop')
             .attr('offset', '0%')
             .attr('stop-color', '#000')
             .attr('stop-opacity', 0.1);
 
-          gradient.append('stop')
+          gradient
+            .append('stop')
             .attr('offset', '100%')
             .attr('stop-color', '#000')
             .attr('stop-opacity', 0.3);
@@ -103,19 +108,21 @@ class AnimatedFlows extends React.PureComponent {
         return `url(#${id})`;
       });
 
-    svg.append('g')
+    svg
+      .append('g')
       .selectAll('.link')
       .data(energy.links)
       .enter()
       .append('path')
       .attr('class', 'link')
       .attr('d', path)
-      .style('stroke-width', d => (Math.max(1, d.dy)))
-      .sort((a, b) => (b.dy - a.dy));
+      .style('stroke-width', d => Math.max(1, d.dy))
+      .sort((a, b) => b.dy - a.dy);
 
     function branchAnimate(nodeData) {
-      var links = svg.selectAll('.gradient-link')
-        .filter(gradientD => (nodeData.sourceLinks.indexOf(gradientD) > -1));
+      var links = svg
+        .selectAll('.gradient-link')
+        .filter(gradientD => nodeData.sourceLinks.indexOf(gradientD) > -1);
       var nextLayerNodeData = [];
       links.each(d => nextLayerNodeData.push(d.target));
 
@@ -127,22 +134,21 @@ class AnimatedFlows extends React.PureComponent {
         .attr('stroke-dashoffset', 0)
         .on('end', () => nextLayerNodeData.forEach(d => branchAnimate(d)));
     }
-    var node = svg.append('g')
+    var node = svg
+      .append('g')
       .selectAll('.node')
       .data(energy.nodes)
       .enter()
       .append('g')
       .attr('class', 'node')
-      .attr('transform', d => (`translate(${d.x}, ${d.y})`));
+      .attr('transform', d => `translate(${d.x}, ${d.y})`);
 
     function cleanBranches() {
       // cancel all transitions by making a new one
       gradientLink.transition();
-      gradientLink
-        .style('opacity', 0)
-        .each(function gradientSetDash(d) {
-          setDash.call(this, d);
-        });
+      gradientLink.style('opacity', 0).each(function gradientSetDash(d) {
+        setDash.call(this, d);
+      });
     }
 
     function animateBranch() {
@@ -155,25 +161,25 @@ class AnimatedFlows extends React.PureComponent {
       }
     }
 
-    node.append('rect')
-      .attr('height', d => (d.dy))
+    node
+      .append('rect')
+      .attr('height', d => d.dy)
       .attr('width', sankey.nodeWidth())
       .style('opacity', 0);
 
     animateBranch();
-    d3_interval(
-      () => {
-        cleanBranches();
-        animateBranch();
-      },
-      10000
-    );
+    d3_interval(() => {
+      cleanBranches();
+      animateBranch();
+    }, 10000);
   }
 
   render() {
     return (
       <div
-        ref={(ref) => { this.container = ref; }}
+        ref={ref => {
+          this.container = ref;
+        }}
         className="c-animated-flows"
       />
     );

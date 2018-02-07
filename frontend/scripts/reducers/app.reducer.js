@@ -15,7 +15,7 @@ const initialState = {
 
 const isSankeyExpanded = state => state.isMapLayerVisible !== true && state.isMapVisible !== true;
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   switch (action.type) {
     case actions.SET_SANKEY_SIZE:
       if (isSankeyExpanded(state)) {
@@ -35,21 +35,19 @@ export default function (state = initialState, action) {
       return Object.assign({}, state, { tooltips: action.payload });
 
     case actions.SHOW_DISCLAIMER: {
-      return Object.assign(
-        {}, state,
-        {
-          modal: {
-            visibility: true,
-            modalParams: {
-              description: action.disclaimerContent
-            }
+      return Object.assign({}, state, {
+        modal: {
+          visibility: true,
+          modalParams: {
+            description: action.disclaimerContent
           }
         }
-      );
+      });
     }
 
     case actions.TOGGLE_DROPDOWN: {
-      const currentDropdown = (action.dropdownId === state.currentDropdown) ? null : action.dropdownId;
+      const currentDropdown =
+        action.dropdownId === state.currentDropdown ? null : action.dropdownId;
       return Object.assign({}, state, { currentDropdown });
     }
 

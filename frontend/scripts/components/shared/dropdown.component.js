@@ -19,7 +19,7 @@ export default class {
   }
 
   _bindMultipleEvents(eventArray, el, fn) {
-    eventArray.forEach((event) => {
+    eventArray.forEach(event => {
       el.addEventListener(event, fn);
     });
   }
@@ -32,28 +32,33 @@ export default class {
       this._onTitleClick();
     });
 
-    this._bindMultipleEvents(['click', 'touchstart'], this.list, (e) => {
+    this._bindMultipleEvents(['click', 'touchstart'], this.list, e => {
       e.preventDefault();
-      if (e.target.getAttribute('data-value') || e.target.parentElement.getAttribute('data-value')) {
-        const dataset = (e.target.getAttribute('data-value')) ? e.target.dataset : e.target.parentElement.dataset;
+      if (
+        e.target.getAttribute('data-value') ||
+        e.target.parentElement.getAttribute('data-value')
+      ) {
+        const dataset = e.target.getAttribute('data-value')
+          ? e.target.dataset
+          : e.target.parentElement.dataset;
         this._onListClick(dataset);
       }
     });
 
-    window.addEventListener('keyup', (event) => {
+    window.addEventListener('keyup', event => {
       if (event.keyCode === 27 && !this.list.classList.contains('is-hidden')) {
         this._close();
       }
     });
 
-    this._bindMultipleEvents(['mouseup', 'touchstart'], window, (event) => {
+    this._bindMultipleEvents(['mouseup', 'touchstart'], window, event => {
       if (this.el.contains(event.target)) return;
       this._close();
     });
   }
 
   _onlyChild() {
-    return (this.list.children.length <= 1);
+    return this.list.children.length <= 1;
   }
 
   selectValue(value) {
@@ -82,7 +87,7 @@ export default class {
 
   _onTitleClick() {
     const allDropdowns = [].slice.call(document.querySelectorAll('.js-dropdown-list'));
-    allDropdowns.forEach((dropdown) => {
+    allDropdowns.forEach(dropdown => {
       if (dropdown.parentNode.getAttribute('data-dropdown') === this.id) {
         this._toggle();
       } else {

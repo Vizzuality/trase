@@ -11,16 +11,13 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onToggle: (id) => {
+  onToggle: id => {
     dispatch(toggleDropdown(id));
   },
-  onSelected: (recolorBy) => {
+  onSelected: recolorBy => {
     recolorBy.value = recolorBy.name;
     dispatch(selectRecolorBy(recolorBy));
   }
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(RecolorBy);
+export default connect(mapStateToProps, mapDispatchToProps)(RecolorBy);

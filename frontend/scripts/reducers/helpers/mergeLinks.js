@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 // merges same origin / same destination / same qual links
-export default function (links, userecolorGroups) {
+export default function(links, userecolorGroups) {
   const mergedLinks = [];
   const dict = {};
 

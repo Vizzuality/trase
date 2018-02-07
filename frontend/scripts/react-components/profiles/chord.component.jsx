@@ -30,19 +30,22 @@ class Chord extends Component {
     const parentWidth = this.props.width;
     const parentHeight = this.props.height;
 
-    const nodes = [].concat(list.map(item => ({
-      name: item.name,
-      type: TYPE_KEY_1
-    })), list2.map(item => ({
-      name: item.name,
-      type: TYPE_KEY_2
-    })));
+    const nodes = [].concat(
+      list.map(item => ({
+        name: item.name,
+        type: TYPE_KEY_1
+      })),
+      list2.map(item => ({
+        name: item.name,
+        type: TYPE_KEY_2
+      }))
+    );
     if (!orgMatrix.length || !nodes.length) {
       return;
     }
 
     const nameLimit = 11;
-    const allNames = nodes.map((node) => {
+    const allNames = nodes.map(node => {
       if (node.name.length > nameLimit) {
         node.name = `${node.name.substring(0, nameLimit)}...`;
       }
@@ -59,7 +62,7 @@ class Chord extends Component {
     const width = parentWidth - margin.left - margin.right;
     const height = parentHeight - margin.top - margin.bottom;
 
-    const outerRadius = (Math.min(490, 490) * 0.5) - 40;
+    const outerRadius = Math.min(490, 490) * 0.5 - 40;
     const innerRadius = outerRadius - 12;
 
     const svgElement = document.querySelector(`.${this.key}`);
@@ -77,24 +80,26 @@ class Chord extends Component {
       .innerRadius(innerRadius)
       .outerRadius(outerRadius);
 
-    const ribbon = d3_ribbon()
-      .radius(innerRadius);
+    const ribbon = d3_ribbon().radius(innerRadius);
 
-    const xTranslate = (width / 2) + margin.left;
-    const yTranslate = (height / 2) + margin.top;
+    const xTranslate = width / 2 + margin.left;
+    const yTranslate = height / 2 + margin.top;
 
-    const container = svg.append('g')
+    const container = svg
+      .append('g')
       .attr('transform', `translate(${xTranslate}, ${yTranslate})`)
       .datum(chord(orgMatrix));
 
-    const group = container.append('g')
+    const group = container
+      .append('g')
       .attr('class', 'groups')
       .selectAll('g')
       .data(chords => chords.groups)
       .enter()
       .append('g');
 
-    group.append('path')
+    group
+      .append('path')
       .attr('d', arc)
       .attr('class', (d, i) => {
         if (i === 0) {
@@ -105,7 +110,8 @@ class Chord extends Component {
         return 'arc-default';
       });
 
-    container.append('g')
+    container
+      .append('g')
       .attr('class', 'ribbons')
       .selectAll('path')
       .data(chords => chords.filter(filterChord => filterChord.source.index === 0))
@@ -114,16 +120,23 @@ class Chord extends Component {
       .attr('d', ribbon)
       .attr('class', 'links');
 
-    group.append('text')
-      .each((d) => {
+    group
+      .append('text')
+      .each(d => {
         d.angle = (d.startAngle + d.endAngle) / 2;
       })
       .attr('dy', '.35em')
       .attr('class', 'text-legend')
       // eslint-disable-next-line max-len
-      .attr('transform', d => `rotate(${((d.angle * 180) / Math.PI) - 90}) translate(${innerRadius + 24}) ${d.angle > Math.PI ? 'rotate(180)' : ''}`)
+      .attr(
+        'transform',
+        d =>
+          `rotate(${d.angle * 180 / Math.PI - 90}) translate(${innerRadius + 24}) ${
+            d.angle > Math.PI ? 'rotate(180)' : ''
+          }`
+      )
       .style('text-anchor', d => (d.angle > Math.PI ? 'end' : null))
-      .text((d, i) => ((i === 0 || allNames[i].type === TYPE_KEY_2) ? allNames[i].name : ''));
+      .text((d, i) => (i === 0 || allNames[i].type === TYPE_KEY_2 ? allNames[i].name : ''));
   }
 
   render() {

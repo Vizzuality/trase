@@ -33,31 +33,28 @@ class NavSidebar extends React.PureComponent {
     const { links } = this.props;
     const { open } = this.state;
     const icon = open ? 'icon-close' : 'icon-menu';
+    const navLinkProps = { onClick: open && this.onToggleNav };
     return (
       <Transition in={open} timeout={300}>
-        {
-          transition => (
-            <React.Fragment>
-              <div className={`c-nav-sidebar -${transition}`}>
-                <NavLinksList
-                  links={links}
-                  listClassName="nav-sidebar-link-list"
-                  itemClassName="nav-sidebar-link-list-item"
-                  linkClassName="subtitle -gray"
-                  linkActiveClassName="-pink"
-                />
-              </div>
-              <button
-                className={`sidebar-nav-toggle -${transition}`}
-                onClick={this.onToggleNav}
-              >
-                <svg className={`icon ${icon}`}>
-                  <use xlinkHref={`#${icon}`} />
-                </svg >
-              </button>
-            </React.Fragment>
-          )
-        }
+        {transition => (
+          <React.Fragment>
+            <div className={`c-nav-sidebar -${transition}`}>
+              <NavLinksList
+                links={links}
+                listClassName="nav-sidebar-link-list"
+                itemClassName="nav-sidebar-link-list-item"
+                linkClassName="subtitle -gray"
+                linkActiveClassName="-pink"
+                navLinkProps={navLinkProps}
+              />
+            </div>
+            <button className={`sidebar-nav-toggle -${transition}`} onClick={this.onToggleNav}>
+              <svg className={`icon ${icon}`}>
+                <use xlinkHref={`#${icon}`} />
+              </svg>
+            </button>
+          </React.Fragment>
+        )}
       </Transition>
     );
   }

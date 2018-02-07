@@ -1,4 +1,4 @@
-shared_context 'api v3 brazil recolor by' do
+shared_context 'api v3 brazil recolor by attributes' do
   include_context 'api v3 brazil contexts'
   include_context 'api v3 quals'
   include_context 'api v3 inds'

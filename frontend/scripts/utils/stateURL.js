@@ -19,30 +19,29 @@ const URL_STATE_PROPS = [
   'selectedMapBasemap'
 ];
 
-const URL_PARAMS_PROPS = [
-  'isMapVisible',
-  'selectedNodesIds',
-  'selectedYears'
-];
+const URL_PARAMS_PROPS = ['isMapVisible', 'selectedNodesIds', 'selectedYears'];
 
-const filterStateToURL = (state) => {
+const filterStateToURL = state => {
   if (_.isEmpty(state)) {
     return {};
   }
 
   const stateToSave = _.pick(state, URL_STATE_PROPS);
 
-  stateToSave.selectedResizeByName =
-    state.selectedResizeBy ? state.selectedResizeBy.name : state.selectedResizeByName;
-  stateToSave.selectedRecolorByName =
-    state.selectedRecolorBy ? state.selectedRecolorBy.name : state.selectedRecolorByName;
-  stateToSave.selectedBiomeFilterName =
-    state.selectedBiomeFilter ? state.selectedBiomeFilter.name : state.selectedBiomeFilterName;
+  stateToSave.selectedResizeByName = state.selectedResizeBy
+    ? state.selectedResizeBy.name
+    : state.selectedResizeByName;
+  stateToSave.selectedRecolorByName = state.selectedRecolorBy
+    ? state.selectedRecolorBy.name
+    : state.selectedRecolorByName;
+  stateToSave.selectedBiomeFilterName = state.selectedBiomeFilter
+    ? state.selectedBiomeFilter.name
+    : state.selectedBiomeFilterName;
 
   return stateToSave;
 };
 
-export const encodeStateToURL = (state) => {
+export const encodeStateToURL = state => {
   const urlProps = JSON.stringify(filterStateToURL(state));
   return btoa(urlProps);
 };
@@ -51,7 +50,7 @@ export const computeStateQueryParams = (state, params) => {
   if (!params) return state;
   const newState = { ...state };
   // if URL contains GET parameters, override hash state prop with it
-  URL_PARAMS_PROPS.forEach((prop) => {
+  URL_PARAMS_PROPS.forEach(prop => {
     let urlParam = params[prop];
     if (!urlParam) {
       return;
@@ -61,7 +60,10 @@ export const computeStateQueryParams = (state, params) => {
         if (Array.isArray(urlParam)) {
           urlParam = urlParam.map(nodeId => parseInt(nodeId, 10));
         } else {
-          urlParam = urlParam.replace(/\[|\]/gi, '').split(',').map(nodeId => parseInt(nodeId, 10));
+          urlParam = urlParam
+            .replace(/\[|\]/gi, '')
+            .split(',')
+            .map(nodeId => parseInt(nodeId, 10));
         }
         newState.areNodesExpanded = true;
         newState.expandedNodesIds = urlParam;
@@ -71,7 +73,10 @@ export const computeStateQueryParams = (state, params) => {
         if (Array.isArray(urlParam)) {
           urlParam = urlParam.map(year => parseInt(year, 10));
         } else {
-          urlParam = urlParam.replace(/\[|\]/gi, '').split(',').map(year => parseInt(year, 10));
+          urlParam = urlParam
+            .replace(/\[|\]/gi, '')
+            .split(',')
+            .map(year => parseInt(year, 10));
         }
         break;
       }
@@ -81,15 +86,14 @@ export const computeStateQueryParams = (state, params) => {
   return newState;
 };
 
-export const decodeStateFromURL = state => ((typeof state === 'undefined') ? {} : JSON.parse(atob(state)));
+export const decodeStateFromURL = state =>
+  typeof state === 'undefined' ? {} : JSON.parse(atob(state));
 
 // remove all params that are now in the state
-const removeStateParamsFromQuery = (params, state) => _.pickBy(
-  { ...params, state },
-  (v, param) => param !== '' && !URL_PARAMS_PROPS.includes(param)
-);
+const removeStateParamsFromQuery = (params, state) =>
+  _.pickBy({ ...params, state }, (v, param) => param !== '' && !URL_PARAMS_PROPS.includes(param));
 
-export const parse = (url) => {
+export const parse = url => {
   const params = qs.parse(url);
   if (params.state) {
     const state = decodeStateFromURL(params.state);
@@ -98,9 +102,11 @@ export const parse = (url) => {
   return params;
 };
 
-export const stringify = (params) => {
-  const needsToComputeState = [...URL_PARAMS_PROPS, 'state']
-    .reduce((acc, next) => (typeof params[next] !== 'undefined' || acc), false);
+export const stringify = params => {
+  const needsToComputeState = [...URL_PARAMS_PROPS, 'state'].reduce(
+    (acc, next) => typeof params[next] !== 'undefined' || acc,
+    false
+  );
   if (needsToComputeState) {
     const state = encodeStateToURL(computeStateQueryParams(params.state, params));
     const result = removeStateParamsFromQuery(params, state);
@@ -109,7 +115,7 @@ export const stringify = (params) => {
   return qs.stringify(params);
 };
 
-export const toolUrlStateMiddleware = store => next => (action) => {
+export const toolUrlStateMiddleware = store => next => action => {
   const prevLocation = store.getState().location;
   // if highlight action bail
   if (
@@ -127,7 +133,8 @@ export const toolUrlStateMiddleware = store => next => (action) => {
     // sometimes prevLocation.search is defined but urlState isn't when navigating from within the app
     urlState = parse(prevLocation.search).state;
   }
-  if (action.type === actions.LOAD_INITIAL_DATA && urlState) { // need to rehydrate state
+  if (action.type === actions.LOAD_INITIAL_DATA && urlState) {
+    // need to rehydrate state
     decoratedAction.payload = urlState;
   }
   const result = next(decoratedAction);
@@ -141,10 +148,12 @@ export const toolUrlStateMiddleware = store => next => (action) => {
     areNotEqual
   ];
   if (!conditions.includes(false)) {
-    store.dispatch(redirect({
-      type: 'tool',
-      payload: { query: removeStateParamsFromQuery(location.query, newState) }
-    }));
+    store.dispatch(
+      redirect({
+        type: 'tool',
+        payload: { query: removeStateParamsFromQuery(location.query, newState) }
+      })
+    );
   }
   return result;
 };

@@ -19,7 +19,11 @@ class TopNavBar extends React.PureComponent {
     this.state = {
       backgroundVisible: false
     };
-
+    this.navLinkProps = {
+      exact: false,
+      strict: false,
+      isActive: null
+    };
     this.setBackground = throttle(this.setBackground.bind(this), 300);
     window.addEventListener('scroll', this.setBackground);
   }
@@ -63,20 +67,25 @@ class TopNavBar extends React.PureComponent {
               itemClassName="top-nav-item"
               linkClassName="top-nav-link"
               linkActiveClassName="top-nav-link -active"
+              navLinkProps={this.navLinkProps}
             />
           </div>
           <div className="column medium-2">
-            {printable &&
+            {printable && (
               <ul className="top-nav-item-list">
                 <li className="top-nav-item">
-                  <a href={TopNavBar.getDownloadPdfLink()} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={TopNavBar.getDownloadPdfLink()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <svg className="icon icon-download-pdf">
                       <use xlinkHref="#icon-download-pdf" />
                     </svg>
                   </a>
                 </li>
               </ul>
-            }
+            )}
           </div>
         </div>
       </div>

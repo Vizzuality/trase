@@ -8,9 +8,7 @@ const id = 'filters';
 
 class Filters extends Component {
   renderOptions() {
-    const {
-      onSelected, selectedFilter, filters
-    } = this.props;
+    const { onSelected, selectedFilter, filters } = this.props;
 
     return [{ value: 'none' }]
       .concat(filters.nodes)
@@ -21,14 +19,13 @@ class Filters extends Component {
           className={classNames('dropdown-item', { '-disabled': node.isDisabled })}
           onClick={() => onSelected(node.name || node.value)}
         >
-          {(node.name !== undefined) ? node.name.toLowerCase() : 'All'}
-        </li >));
+          {node.name !== undefined ? node.name.toLowerCase() : 'All'}
+        </li>
+      ));
   }
 
   render() {
-    const {
-      onToggle, currentDropdown, selectedFilter, filters
-    } = this.props;
+    const { onToggle, currentDropdown, selectedFilter, filters } = this.props;
 
     return (
       <div
@@ -37,22 +34,18 @@ class Filters extends Component {
           onToggle(id);
         }}
       >
-        <div className="c-dropdown -capitalize" >
-          <span className="dropdown-label" >
-            {filters.name.toLowerCase()}
-          </span >
-          <span className="dropdown-title" >
-            {(selectedFilter !== undefined && selectedFilter.name !== undefined)
+        <div className="c-dropdown -capitalize">
+          <span className="dropdown-label">{filters.name.toLowerCase()}</span>
+          <span className="dropdown-title">
+            {selectedFilter !== undefined && selectedFilter.name !== undefined
               ? selectedFilter.name.toLowerCase()
               : 'All'}
-          </span >
-          <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle} >
-            <ul className="dropdown-list -medium" >
-              {this.renderOptions()}
-            </ul >
-          </Dropdown >
-        </div >
-      </div >
+          </span>
+          <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
+            <ul className="dropdown-list -medium">{this.renderOptions()}</ul>
+          </Dropdown>
+        </div>
+      </div>
     );
   }
 }

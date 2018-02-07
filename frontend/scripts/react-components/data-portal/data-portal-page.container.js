@@ -11,13 +11,14 @@ const mapStateToProps = state => ({
   indicators: state.data.indicators
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-  onContextSelected: loadContextNodes,
-  onDownloadTriggered: trackDownload,
-  onDataDownloadFormLoaded: trackDataDownloadFormLoaded
-}, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      onContextSelected: loadContextNodes,
+      onDownloadTriggered: trackDownload,
+      onDataDownloadFormLoaded: trackDataDownloadFormLoaded
+    },
+    dispatch
+  );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DataPortalPage);
+export default connect(mapStateToProps, mapDispatchToProps)(DataPortalPage);

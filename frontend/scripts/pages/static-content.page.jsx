@@ -13,7 +13,6 @@ import StaticContent from 'react-components/static-content/static-content.contai
 import TopNavBar from 'react-components/shared/nav/top-nav-bar.container';
 import Footer from 'react-components/shared/footer.component';
 
-
 export const mount = (root, store) => {
   root.innerHTML = BaseMarkup({
     feedback: FeedbackMarkup()
@@ -27,7 +26,7 @@ export const mount = (root, store) => {
   );
 
   render(
-    <Provider store={store} >
+    <Provider store={store}>
       <StaticContent />
     </Provider>,
     document.getElementById('page-react-root')

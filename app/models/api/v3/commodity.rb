@@ -3,6 +3,8 @@ module Api
     class Commodity < BlueTable
       has_many :contexts
 
+      validates :name, presence: true, uniqueness: true
+
       def self.import_key
         [
           {name: :name, sql_type: 'TEXT'}

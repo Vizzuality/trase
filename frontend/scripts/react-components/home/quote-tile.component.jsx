@@ -3,9 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function QuoteTile(props) {
-  const {
-    slide
-  } = props;
+  const { slide } = props;
 
   return (
     <div className="slide-quote">

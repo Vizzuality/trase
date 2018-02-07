@@ -12,7 +12,7 @@ export default class EventManager {
   }
 
   removeEventListener(target, event) {
-    const toBeRemoved = this.events.find(e => (e.target === target && e.event === event));
+    const toBeRemoved = this.events.find(e => e.target === target && e.event === event);
     toBeRemoved.target.removeEventListener(toBeRemoved.event, toBeRemoved.handler);
   }
 

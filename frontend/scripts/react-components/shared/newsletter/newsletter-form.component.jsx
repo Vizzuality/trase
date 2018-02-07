@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
 
 class NewsletterForm extends React.PureComponent {
   constructor(props) {
@@ -12,6 +11,10 @@ class NewsletterForm extends React.PureComponent {
     this.onClickSubmit = this.onClickSubmit.bind(this);
     this.onFormInput = this.onFormInput.bind(this);
     this.getFormRef = this.getFormRef.bind(this);
+  }
+
+  componentWillUnmount() {
+    this.props.resetForm();
   }
 
   onClickSubmit(e) {
@@ -33,44 +36,34 @@ class NewsletterForm extends React.PureComponent {
   render() {
     const { message } = this.props;
     return (
-      <section className="c-newsletter">
-        <div className="newsletter-content row align-middle">
-          <form
-            ref={this.getFormRef}
-            className="column small-6 js-form c-newsletter-form"
-          >
-            <label
-              htmlFor="newsletter-email"
-              className={cx('newsletter-label', { '-pink': message })}
-            >
-              {message || 'Sign up here to receive news updates about TRASE'}
-            </label>
-            <div className="newsletter-input-container">
-              <input
-                onInput={this.onFormInput}
-                type="email"
-                name="email"
-                placeholder="email address"
-                id="newsletter-email"
-                required
-                className="newsletter-email"
-              />
-              <button
-                onClick={this.onClickSubmit}
-                className="c-button -charcoal -bold"
-              >
-                Subscribe
-              </button>
-            </div>
-          </form>
-        </div>
-      </section>
+      <div className="c-newsletter row align-middle align-right">
+        <form ref={this.getFormRef} className="column small-8 medium-5 large-4">
+          <label htmlFor="newsletter-email" className="newsletter-label -pink">
+            {message}
+          </label>
+          <div className="newsletter-input-container">
+            <input
+              onInput={this.onFormInput}
+              type="email"
+              name="email"
+              placeholder="SIGN UP HERE TO RECEIVE UPDATES"
+              id="newsletter-email"
+              required
+              className="newsletter-email"
+            />
+            <button onClick={this.onClickSubmit} className="c-button -charcoal -bold">
+              Subscribe
+            </button>
+          </div>
+        </form>
+      </div>
     );
   }
 }
 
 NewsletterForm.propTypes = {
   submitForm: PropTypes.func.isRequired,
+  resetForm: PropTypes.func.isRequired,
   message: PropTypes.string
 };
 

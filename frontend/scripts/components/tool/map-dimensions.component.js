@@ -8,14 +8,23 @@ export default class {
   loadMapDimensions({ mapDimensionsGroups, expandedMapSidebarGroupsIds }) {
     this.el.innerHTML = MapDimensionsTemplate({ groups: mapDimensionsGroups });
 
-    this.sidebarGroups = Array.prototype.slice.call(this.el.querySelectorAll('.js-map-sidebar-group'), 0);
-    this.sidebarGroupsTitles = Array.prototype.slice.call(this.el.querySelectorAll('.js-map-sidebar-group-title'), 0);
-    this.sidebarGroupsTitles.forEach((sidebarGroupTitle) => {
+    this.sidebarGroups = Array.prototype.slice.call(
+      this.el.querySelectorAll('.js-map-sidebar-group'),
+      0
+    );
+    this.sidebarGroupsTitles = Array.prototype.slice.call(
+      this.el.querySelectorAll('.js-map-sidebar-group-title'),
+      0
+    );
+    this.sidebarGroupsTitles.forEach(sidebarGroupTitle => {
       sidebarGroupTitle.addEventListener('click', this._onGroupTitleClicked.bind(this));
     });
 
-    this.dimensions = Array.prototype.slice.call(this.el.querySelectorAll('.js-map-sidebar-group-item'), 0);
-    this.dimensions.forEach((dimension) => {
+    this.dimensions = Array.prototype.slice.call(
+      this.el.querySelectorAll('.js-map-sidebar-group-item'),
+      0
+    );
+    this.dimensions.forEach(dimension => {
       dimension.addEventListener('click', this._onDimensionClicked.bind(this));
     });
     this.callbacks.onMapDimensionsLoaded();
@@ -27,7 +36,7 @@ export default class {
       return;
     }
     const isFull = selectedMapDimensions[0] !== null && selectedMapDimensions[1] !== null;
-    this.dimensions.forEach((dimension) => {
+    this.dimensions.forEach(dimension => {
       const uid = dimension.getAttribute('data-dimension-uid');
       const isSelected = selectedMapDimensions.indexOf(uid) !== -1;
       dimension.classList.toggle('-selected', isSelected);
@@ -35,8 +44,11 @@ export default class {
         dimension.classList.toggle('-disabled', isFull);
       }
     });
-    this.sidebarGroups.forEach((sidebarGroup) => {
-      sidebarGroup.classList.toggle('-has-selected-children', sidebarGroup.querySelectorAll('.-selected').length);
+    this.sidebarGroups.forEach(sidebarGroup => {
+      sidebarGroup.classList.toggle(
+        '-has-selected-children',
+        sidebarGroup.querySelectorAll('.-selected').length
+      );
     });
   }
 
@@ -44,7 +56,7 @@ export default class {
     if (this.sidebarGroups === undefined) {
       return;
     }
-    this.sidebarGroups.forEach((sidebarGroup) => {
+    this.sidebarGroups.forEach(sidebarGroup => {
       const id = sidebarGroup.getAttribute('data-group-id');
       sidebarGroup.classList.toggle('-expanded', expandedMapSidebarGroupsIds.indexOf(id) !== -1);
     });

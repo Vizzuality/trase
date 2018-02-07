@@ -10,15 +10,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onToggle: (id) => {
+  onToggle: id => {
     dispatch(toggleDropdown(id));
   },
-  onSelected: (filterNode) => {
+  onSelected: filterNode => {
     dispatch(selectBiomeFilter(filterNode));
   }
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Filters);
+export default connect(mapStateToProps, mapDispatchToProps)(Filters);

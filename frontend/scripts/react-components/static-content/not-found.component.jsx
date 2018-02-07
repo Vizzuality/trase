@@ -6,9 +6,12 @@ const NotFound = ({ emoji, text }) => (
     <div className="row column">
       <p className="not-found-text">
         {text}
-        {emoji &&
-          <span className="emoji" role="img" aria-label="page not found"> {emoji}</span>
-        }
+        {emoji && (
+          <span className="emoji" role="img" aria-label="page not found">
+            {' '}
+            {emoji}
+          </span>
+        )}
       </p>
     </div>
   </section>
@@ -20,7 +23,7 @@ NotFound.propTypes = {
 };
 
 NotFound.defaultProps = {
-  text: 'Oops! We can\'t seem to find the page you are looking for.'
+  text: "Oops! We can't seem to find the page you are looking for."
 };
 
 export default NotFound;

@@ -7,4 +7,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(RecolorByNodeLegendSummary);
-

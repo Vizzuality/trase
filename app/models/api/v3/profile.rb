@@ -1,7 +1,17 @@
 module Api
   module V3
     class Profile < YellowTable
+      NAME = %w(
+        actor
+        place
+      ).freeze
+
       belongs_to :context_node_type
+
+      validates :context_node_type, presence: true
+      validates :name,
+                uniqueness: {scope: :context_node_type},
+                inclusion: NAME
 
       def self.blue_foreign_keys
         [

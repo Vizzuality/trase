@@ -11,7 +11,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onToggle: (id) => {
+  onToggle: id => {
     dispatch(toggleDropdown(id));
   },
   onColumnSelected: (columnIndex, columnId) => {
@@ -19,7 +19,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ColumnSelector);
+export default connect(mapStateToProps, mapDispatchToProps)(ColumnSelector);
