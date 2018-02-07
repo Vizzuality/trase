@@ -26,6 +26,8 @@ module Content
     validates :title, presence: true
     validates :date, presence: true
     validates :post_url, presence: true
+    validates :state, presence: true, inclusion: [0, 1]
+    validates :highlighted, inclusion: {in: [true, false]}
     validates :category, presence: true, inclusion: CATEGORIES
 
     has_attached_file :image, styles: {small: '320x320>', large: '640x640>'}
