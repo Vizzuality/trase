@@ -5,10 +5,10 @@ export function withSidebarNavLayout(Component) {
   function SidebarNavLayoutHOC() {
     return (
       <div className="row">
-        <div className="column small-12 medium-3">
+        <div className="column small-12 medium-4">
           <SidebarNav />
         </div>
-        <article className="column small-12 medium-6 medium-offset-1 container">
+        <article className="column small-12 medium-8 container">
           <Component />
         </article>
       </div>

@@ -1,8 +1,9 @@
 import { NOT_FOUND, redirect } from 'redux-first-router';
-import { getURLFromParams, GET_MARKDOWN_CONTENT_URL } from 'utils/getURLFromParams';
+import { getURLFromParams, GET_MARKDOWN_CONTENT_URL, GET_TEAM_URL } from 'utils/getURLFromParams';
 import kebabCase from 'lodash/kebabCase';
 
 export const STATIC_CONTENT__SET_MARKDOWN = 'STATIC_CONTENT__SET_MARKDOWN';
+export const STATIC_CONTENT__SET_TEAM = 'STATIC_CONTENT__SET_TEAM';
 
 export const getStaticContentFilename = ({ type, payload }) =>
   `${type}${payload.section ? `/${kebabCase(payload.section)}` : ''}`;
@@ -28,4 +29,17 @@ export const getStaticContent = () => (dispatch, getState) => {
         return console.error(err.statusText);
       });
   }
+};
+
+export const getTeamData = mock => dispatch => {
+  const url = getURLFromParams(GET_TEAM_URL, null, mock);
+  fetch(url)
+    .then(res => (res.ok ? res.json() : Promise.reject(res)))
+    .then(({ data }) =>
+      dispatch({
+        type: STATIC_CONTENT__SET_TEAM,
+        payload: { data }
+      })
+    )
+    .catch(err => console.error(err.statusText));
 };

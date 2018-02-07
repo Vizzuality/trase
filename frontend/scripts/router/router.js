@@ -1,7 +1,6 @@
 import { connectRoutes, NOT_FOUND, replace } from 'redux-first-router';
 import { parse, stringify } from 'utils/stateURL';
 import { withSidebarNavLayout } from 'react-components/nav/sidebar-nav/withSidebaNavLayout.hoc';
-import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.container';
 import {
   resetToolThunk,
   getPostsContent,
@@ -9,8 +8,14 @@ import {
   getTestimonialsContent
 } from 'react-components/home/home.thunks';
 import { getDataPortalContext } from 'react-components/data-portal/data-portal.thunks';
-import { getPageStaticContent } from 'react-components/static-content/static-content.thunks';
+import {
+  getPageStaticContent,
+  getTeam
+} from 'react-components/static-content/static-content.thunks';
 import { getProfileRootNodes } from 'react-components/profile-root/profile-root.thunks';
+
+import Team from 'react-components/static-content/team/team.container';
+import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.container';
 
 const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thunk(...params));
 
@@ -70,8 +75,13 @@ const routes = {
   team: {
     path: '/about/team',
     page: 'static-content',
-    thunk: dispatchThunks(getPageStaticContent),
-    component: withSidebarNavLayout(MarkdownRenderer)
+    thunk: dispatchThunks(getTeam),
+    component: withSidebarNavLayout(Team)
+  },
+  teamMember: {
+    path: '/about/team/:member',
+    page: 'static-content',
+    component: withSidebarNavLayout(() => null)
   },
   about: {
     path: '/about/:section?',

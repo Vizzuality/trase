@@ -38,7 +38,7 @@ class SidebarNav extends React.PureComponent {
       <Transition in={open} timeout={300}>
         {transition => (
           <React.Fragment>
-            <div className={`c-nav-sidebar -${transition}`}>
+            <div className={`c-sidebar-nav -${transition}`}>
               <NavLinksList
                 links={links}
                 listClassName="nav-sidebar-link-list"

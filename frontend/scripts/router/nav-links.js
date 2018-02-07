@@ -53,8 +53,7 @@ export default {
     {
       name: 'Team',
       page: {
-        type: 'about',
-        payload: { section: 'team' }
+        type: 'team'
       }
     },
     {

@@ -1,7 +1,16 @@
 .c-static-content {
 
   .container {
-    padding: 56px 0 132px;
+    padding-top: 56px;
+    padding-bottom: 132px;
+
+    > .row {
+      justify-content: center;
+
+      @media only screen and (min-width: 850px) {
+        justify-content: flex-start;
+      }
+    }
   }
 
   .not-found {
