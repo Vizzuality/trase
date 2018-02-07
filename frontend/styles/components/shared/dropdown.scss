@@ -90,7 +90,7 @@
     @extend %dropdown;
     position: absolute;
     top: 0;
-    left: 0;
+    left: -18px;
     padding: 5px 0;
 
     &.-large {

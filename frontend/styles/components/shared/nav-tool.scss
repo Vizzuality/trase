@@ -47,14 +47,6 @@
       }
     }
 
-    &:first-child:not(.-no-offset) {
-      margin-left: -16px;
-    }
-
-    &:last-child {
-      padding-right: 0;
-    }
-
     &.-selected, &:hover {
       > .nav-link::before {
         content: '';
