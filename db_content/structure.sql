@@ -162,6 +162,38 @@ ALTER SEQUENCE site_dives_id_seq OWNED BY site_dives.id;
 
 
 --
+-- Name: staff_groups; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE staff_groups (
+    id bigint NOT NULL,
+    name text NOT NULL,
+    "position" integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: staff_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE staff_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: staff_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE staff_groups_id_seq OWNED BY staff_groups.id;
+
+
+--
 -- Name: staff_members; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -175,7 +207,8 @@ CREATE TABLE staff_members (
     image_file_size integer,
     image_updated_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    staff_group_id bigint NOT NULL
 );
 
 
@@ -297,6 +330,13 @@ ALTER TABLE ONLY site_dives ALTER COLUMN id SET DEFAULT nextval('site_dives_id_s
 
 
 --
+-- Name: staff_groups id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY staff_groups ALTER COLUMN id SET DEFAULT nextval('staff_groups_id_seq'::regclass);
+
+
+--
 -- Name: staff_members id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -358,6 +398,14 @@ ALTER TABLE ONLY site_dives
 
 
 --
+-- Name: staff_groups staff_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY staff_groups
+    ADD CONSTRAINT staff_groups_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: staff_members staff_members_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -396,6 +444,13 @@ CREATE INDEX idx_ckeditor_assetable_type ON ckeditor_assets USING btree (assetab
 
 
 --
+-- Name: index_staff_members_on_staff_group_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_staff_members_on_staff_group_id ON staff_members USING btree (staff_group_id);
+
+
+--
 -- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -422,6 +477,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180126115955'),
 ('20180126133509'),
 ('20180201134513'),
-('20180205130826');
+('20180205130826'),
+('20180207093324');
 
 

@@ -1,11 +1,15 @@
 ActiveAdmin.register Content::StaffMember, as: 'Staff Member' do
   menu parent: 'Content'
 
-  permit_params :name, :image, :position, :bio
+  includes :staff_group
+
+  permit_params :staff_group_id, :name, :image, :position, :bio
 
   form do |f|
     f.semantic_errors
     inputs do
+      input :staff_group, required: true, as: :select,
+            collection: Content::StaffGroup.select_options
       input :name, required: true, as: :string
       input :position, required: true, hint: 'Display order within staff group'
       input :bio, required: true, as: :simplemde_editor,
@@ -17,6 +21,7 @@ ActiveAdmin.register Content::StaffMember, as: 'Staff Member' do
 
   show do
     attributes_table do
+      row('Staff Group') { |member| member.staff_group&.name }
       row :name
       row :position
       row :bio
@@ -27,6 +32,7 @@ ActiveAdmin.register Content::StaffMember, as: 'Staff Member' do
   end
 
   index download_links: false do
+    column('Staff Group') { |member| member.staff_group&.name }
     column :name
     column :position
     column :bio
