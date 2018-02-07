@@ -32,13 +32,13 @@ export default class {
   updateChoroplethLegend({ choroplethLegend, selectedMapContextualLayersData }) {
     this._toggleLegend(choroplethLegend, selectedMapContextualLayersData);
     this._setupChoro(choroplethLegend);
-    this._updateMapControlsPosition();
+    this._updateMapControlsPosition(choroplethLegend);
   }
 
   updateContextLegend({ choroplethLegend, selectedMapContextualLayersData }) {
     this._toggleLegend(choroplethLegend, selectedMapContextualLayersData);
     this._renderContext(selectedMapContextualLayersData);
-    this._updateMapControlsPosition();
+    this._updateMapControlsPosition(choroplethLegend);
   }
 
   highlightChoroplethBucket(bucketClass) {
@@ -88,12 +88,10 @@ export default class {
 
   _showLegend() {
     this.el.classList.remove('-hidden');
-    this.map.classList.add('-have-legend');
   }
 
   _hideLegend() {
     this.el.classList.add('-hidden');
-    this.map.classList.remove('-have-legend');
   }
 
   _cleanChoro() {
@@ -123,12 +121,14 @@ export default class {
     });
   }
 
-  _updateMapControlsPosition() {
-    const mapFooterHeight = this.el.offsetHeight + this.attribution.offsetHeight;
-    this.mapControlSwitcher.style.bottom = `${mapFooterHeight + 8}px`;
-    this.mapControlZoom.style.bottom = `${mapFooterHeight + 48}px`;
-    this.mapControlScale.style.bottom = `${mapFooterHeight +
-      this.mapControlScale.offsetHeight -
-      88}px`;
+  _updateMapControlsPosition(legend) {
+    if (this.mapControlScale) {
+      this.mapControlScale.classList.remove('-bivariate-legend');
+      this.mapControlScale.classList.remove('-simple-legend');
+    }
+    if (legend) {
+      const className = legend.isBivariate ? '-bivariate-legend' : '-simple-legend';
+      if (this.mapControlScale) this.mapControlScale.classList.add(className);
+    }
   }
 }

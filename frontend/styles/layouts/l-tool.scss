@@ -22,6 +22,7 @@ body {
     left: 0;
     width: calc(100% + #{$layer-map-width});
     height: calc(100% - #{$nav-height});
+    overflow: hidden;
 
     transform: translate(-$layer-map-width, 0);
     transition: transform .15s $ease-in-out-sine, width .15s $ease-in-out-sine;
