@@ -32,7 +32,6 @@
     left: 7px;
     top: 0;
     border: 0;
-    box-shadow: $box-shadow;
     margin-bottom: 0;
     margin-left: 0;
 
@@ -54,19 +53,38 @@
       justify-content: flex-end;
       width: 320px;
       margin: 0;
-      padding: 5px 10px 4px;
+      padding: 5px 6px 4px;
       background: $charcoal-grey-faded;
       transform: translateY(-103px);
       transition: transform 300ms;
 
       .leaflet-control-scale-line {
-        margin-right: 42px;
+        position: relative;
         border-width: 1px;
         border-color: $white;
+        border-left: 0;
+        border-right: 0;
         background: transparent;
         color: $white;
         font-family: $font-family-1;
-        font-size: $font-size-small;
+        font-size: 11px;
+        letter-spacing: -1.1px;
+        text-align: right;
+
+        &::before, &::after {
+          content: '';
+          position: absolute;
+          width: 1px;
+          height: 4px;
+          background-color: $white;
+          left: 0;
+          bottom: 0;
+        }
+
+        &::after {
+          left: initial;
+          right: 0;
+        }
       }
 
       &.-simple-legend {
@@ -184,15 +202,15 @@
   position: absolute;
   bottom: 23px;
   z-index: $z-leaflet-above-panes;
-  width: 100%;
+  width: 319px;
 }
 
 .map-warnings {
   position: absolute;
   top: 0;
   width: 100%;
-  min-height: 84px;
   padding: 10px;
+  line-height: 1.35;
   background: $charcoal-grey-faded;
   color: $white;
   font-family: $font-family-2;
