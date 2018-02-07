@@ -25,7 +25,6 @@ export default class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpened: false,
       specialCharPressed: false
     };
     this.onOpenClicked = this.onOpenClicked.bind(this);
@@ -43,6 +42,12 @@ export default class Search extends Component {
     document.addEventListener('keyup', this.onKeyup);
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.input && !prevProps.isSearchOpen && this.props.isSearchOpen) {
+      this.input.focus();
+    }
+  }
+
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onKeydown);
     document.removeEventListener('keyup', this.onKeyup);
@@ -50,19 +55,12 @@ export default class Search extends Component {
 
   onOpenClicked(e) {
     if (e) e.stopPropagation();
-    this.setState(
-      {
-        isOpened: true
-      },
-      () => this.input && !this.input.focused && this.input.focus()
-    );
+    this.props.setSankeySearchVisibility(true);
   }
 
   onCloseClicked(e) {
     if (e) e.stopPropagation();
-    this.setState({
-      isOpened: false
-    });
+    this.props.setSankeySearchVisibility(false);
   }
 
   onSelected(selectedItem) {
@@ -89,7 +87,8 @@ export default class Search extends Component {
 
   onKeydown(e) {
     const { specialCharPressed, isOpened } = this.state;
-    if (!isOpened && Search.isValidChar(e.key) && !specialCharPressed) {
+    const { isSearchOpen } = this.props;
+    if (!isSearchOpen && Search.isValidChar(e.key) && !specialCharPressed) {
       this.onOpenClicked();
     } else if (e.key === 'Escape' && isOpened) {
       this.onCloseClicked();
@@ -126,8 +125,8 @@ export default class Search extends Component {
   }
 
   render() {
-    const { nodes = [], selectedNodesIds = [] } = this.props;
-    if (this.state.isOpened === false) {
+    const { nodes = [], selectedNodesIds = [], isSearchOpen } = this.props;
+    if (isSearchOpen === false) {
       return (
         <div onClick={this.onOpenClicked} className="nav-item">
           <svg className="icon icon-search">
@@ -196,8 +195,10 @@ export default class Search extends Component {
 
 Search.propTypes = {
   navigateToActor: PropTypes.func,
+  setSankeySearchVisibility: PropTypes.func,
   selectedNodesIds: PropTypes.array,
   nodes: PropTypes.array,
+  isSearchOpen: PropTypes.bool,
   onAddNode: PropTypes.func,
   onRemoveNode: PropTypes.func
 };
