@@ -1,16 +1,12 @@
 import { connect } from 'react-redux';
 import { NOT_FOUND } from 'redux-first-router';
-import routerLinks from 'router/nav-links';
 import StaticContent from './static-content.component';
-import { getStaticContentFilename } from './static-content.actions';
 
 function mapStateToProps(state) {
-  const { staticContent, location } = state;
-  const filename = getStaticContentFilename(location);
-  const links = routerLinks[filename] || routerLinks.navSidebar;
+  const { location } = state;
+  const Content = location.routesMap[location.type].component;
   return {
-    content: staticContent.markdown[filename],
-    links,
+    Content,
     notFound: location.type === NOT_FOUND
   };
 }

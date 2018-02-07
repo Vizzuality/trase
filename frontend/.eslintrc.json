@@ -7,6 +7,7 @@
   "plugins": ["react", "prettier"],
   "extends": ["airbnb", "prettier"],
   "rules": {
+    "quotes": ["error", "single", { "avoidEscape": true }],
     "prettier/prettier": "warn",
     "arrow-parens": 0,
     "linebreak-style": ["error", "unix"],

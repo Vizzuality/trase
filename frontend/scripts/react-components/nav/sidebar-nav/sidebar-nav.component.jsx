@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import throttle from 'lodash/throttle';
 import { Transition } from 'react-transition-group';
-import NavLinksList from 'react-components/shared/nav/nav-links-list.component';
+import NavLinksList from 'react-components/nav/nav-links-list.component';
 
-class NavSidebar extends React.PureComponent {
+class SidebarNav extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -60,8 +60,8 @@ class NavSidebar extends React.PureComponent {
   }
 }
 
-NavSidebar.propTypes = {
+SidebarNav.propTypes = {
   links: PropTypes.array
 };
 
-export default NavSidebar;
+export default SidebarNav;

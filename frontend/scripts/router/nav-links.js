@@ -24,7 +24,7 @@ export default {
       page: 'about'
     }
   ],
-  navSidebar: [
+  sidebarNav: [
     {
       name: 'What is Trase?',
       page: 'about'

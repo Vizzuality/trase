@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import throttle from 'lodash/throttle';
-import NavLinksList from 'react-components/shared/nav/nav-links-list.component';
+import NavLinksList from 'react-components/nav/nav-links-list.component';
 
-class TopNavBar extends React.PureComponent {
+class TopNav extends React.PureComponent {
   static getDownloadPdfLink() {
     const pageTitle = encodeURIComponent(document.getElementsByTagName('title')[0].innerText);
     const currentUrlBase = NODE_ENV_DEV
@@ -74,11 +74,7 @@ class TopNavBar extends React.PureComponent {
             {printable && (
               <ul className="top-nav-item-list">
                 <li className="top-nav-item">
-                  <a
-                    href={TopNavBar.getDownloadPdfLink()}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <a href={TopNav.getDownloadPdfLink()} target="_blank" rel="noopener noreferrer">
                     <svg className="icon icon-download-pdf">
                       <use xlinkHref="#icon-download-pdf" />
                     </svg>
@@ -93,7 +89,7 @@ class TopNavBar extends React.PureComponent {
   }
 }
 
-TopNavBar.propTypes = {
+TopNav.propTypes = {
   className: PropTypes.string,
   pageOffset: PropTypes.number,
   printable: PropTypes.bool,
@@ -101,8 +97,8 @@ TopNavBar.propTypes = {
   showLogo: PropTypes.bool
 };
 
-TopNavBar.defaultProps = {
+TopNav.defaultProps = {
   pageOffset: 0
 };
 
-export default TopNavBar;
+export default TopNav;

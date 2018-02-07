@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import routerLinks from 'router/nav-links';
-import TopNavBar from './top-nav-bar.component';
+import TopNav from './top-nav.component';
 
 function mapStateToProps(state) {
   const { type, routesMap } = state.location;
@@ -11,4 +11,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(TopNavBar);
+export default connect(mapStateToProps)(TopNav);

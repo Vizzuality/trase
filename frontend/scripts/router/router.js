@@ -1,14 +1,14 @@
 import { connectRoutes, NOT_FOUND, replace } from 'redux-first-router';
 import { parse, stringify } from 'utils/stateURL';
+import { withSidebarNavLayout } from 'react-components/nav/sidebar-nav/withSidebaNavLayout.hoc';
+import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.container';
 import {
   resetToolThunk,
   getPostsContent,
   getTweetsContent,
   getTestimonialsContent
 } from 'react-components/home/home.thunks';
-
 import { getDataPortalContext } from 'react-components/data-portal/data-portal.thunks';
-
 import { getPageStaticContent } from 'react-components/static-content/static-content.thunks';
 import { getProfileRootNodes } from 'react-components/profile-root/profile-root.thunks';
 
@@ -67,10 +67,17 @@ const routes = {
       className: '-light'
     }
   },
+  team: {
+    path: '/about/team',
+    page: 'static-content',
+    thunk: dispatchThunks(getPageStaticContent),
+    component: withSidebarNavLayout(MarkdownRenderer)
+  },
   about: {
     path: '/about/:section?',
     page: 'static-content',
-    thunk: dispatchThunks(getPageStaticContent)
+    thunk: dispatchThunks(getPageStaticContent),
+    component: withSidebarNavLayout(MarkdownRenderer)
   },
   [NOT_FOUND]: {
     path: '/404',

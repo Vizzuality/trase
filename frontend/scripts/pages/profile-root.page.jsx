@@ -6,7 +6,7 @@ import 'styles/profile-root.scss';
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
-import TopNavBar from 'react-components/shared/nav/top-nav-bar.container';
+import TopNav from 'react-components/nav/top-nav/top-nav.container';
 
 import ProfileRoot from 'react-components/profile-root/profile-root.container';
 
@@ -17,7 +17,7 @@ export const mount = (root, store) => {
 
   render(
     <Provider store={store}>
-      <TopNavBar />
+      <TopNav />
     </Provider>,
     document.getElementById('nav')
   );
