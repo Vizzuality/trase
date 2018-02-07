@@ -77,13 +77,6 @@ export default {
         type: 'about',
         payload: { section: 'terms-of-use' }
       }
-    },
-    {
-      name: 'Data and Methods',
-      page: {
-        type: 'about',
-        payload: { section: 'data-methods' }
-      }
     }
   ]
 };
