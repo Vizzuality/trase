@@ -7,9 +7,10 @@ ActiveAdmin.register Content::StaffMember, as: 'Staff Member' do
     f.semantic_errors
     inputs do
       input :name, required: true, as: :string
+      input :position, required: true, hint: 'Display order within staff group'
+      input :bio, required: true, as: :simplemde_editor,
+            hint: 'Staff member bio formatted in markdown'
       input :image, as: :file
-      input :position
-      input :bio, as: :simplemde_editor
     end
     f.actions
   end
@@ -17,19 +18,16 @@ ActiveAdmin.register Content::StaffMember, as: 'Staff Member' do
   show do
     attributes_table do
       row :name
+      row :position
+      row :bio
       row :image do |member|
         image_tag member.image.url(:small)
       end
-      row :position
-      row(:bio)
     end
   end
 
   index download_links: false do
     column :name
-    column :image do |member|
-      image_tag member.image.url(:small)
-    end
     column :position
     column :bio
     actions
