@@ -1,5 +1,5 @@
 module Content
   class StaffGroupSerializer < ActiveModel::Serializer
-    attributes :name, :bio
+    attributes :name, :position
   end
 end

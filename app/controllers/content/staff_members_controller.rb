@@ -6,7 +6,8 @@ module Content
       @staff_members = Content::StaffMember.order(:name)
       render json: @staff_members,
              root: 'data',
-             each_serializer: Content::StaffMemberSerializer
+             each_serializer: Content::StaffMemberSerializer,
+             meta: Content::StaffGroup.all
     end
   end
 end

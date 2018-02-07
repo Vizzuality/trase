@@ -8,11 +8,15 @@ ActiveAdmin.register Content::StaffMember, as: 'Staff Member' do
   form do |f|
     f.semantic_errors
     inputs do
-      input :staff_group, required: true, as: :select,
+      input :staff_group,
+            required: true,
+            as: :select,
             collection: Content::StaffGroup.select_options
       input :name, required: true, as: :string
       input :position, required: true, hint: 'Display order within staff group'
-      input :bio, required: true, as: :simplemde_editor,
+      input :bio,
+            required: true,
+            as: :simplemde_editor,
             hint: 'Staff member bio formatted in markdown'
       input :image, as: :file
     end
