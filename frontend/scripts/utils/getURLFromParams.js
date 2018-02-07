@@ -1,57 +1,57 @@
-export const GET_CONTEXTS = 'GET_CONTEXTS';
-export const GET_TOOLTIPS = 'GET_TOOLTIPS';
-export const GET_ALL_NODES = 'GET_ALL_NODES';
-export const GET_COLUMNS = 'GET_COLUMNS';
-export const GET_NODE_ATTRIBUTES = 'GET_NODE_ATTRIBUTES';
-export const GET_FLOWS = 'GET_FLOWS';
-export const GET_MAP_BASE_DATA = 'GET_MAP_BASE_DATA';
-export const GET_LINKED_GEO_IDS = 'GET_LINKED_GEO_IDS';
-export const GET_PLACE_FACTSHEET = 'GET_PLACE_FACTSHEET';
-export const GET_ACTOR_FACTSHEET = 'GET_ACTOR_FACTSHEET';
-export const GET_INDICATORS = 'GET_INDICATORS';
-export const GET_JSON_DATA_DOWNLOAD_FILE = 'GET_JSON_DATA_DOWNLOAD_FILE';
-export const GET_CSV_DATA_DOWNLOAD_FILE = 'GET_CSV_DATA_DOWNLOAD_FILE';
-export const GET_DISCLAIMER = 'GET_DISCLAIMER';
-export const POST_SUBSCRIBE_NEWSLETTER = 'POST_SUBSCRIBE_NEWSLETTER';
-export const GET_TWEETS = 'GET_TWEETS';
-export const GET_POSTS = 'GET_POSTS';
-export const GET_SITE_DIVE = 'GET_SITE_DIVE';
-export const GET_TESTIMONIALS = 'GET_TESTIMONIALS';
-export const GET_MARKDOWN_CONTENT = 'GET_MARKDOWN_CONTENT';
+export const GET_CONTEXTS_URL = 'GET_CONTEXTS_URL';
+export const GET_TOOLTIPS_URL = 'GET_TOOLTIPS_URL';
+export const GET_ALL_NODES_URL = 'GET_ALL_NODES_URL';
+export const GET_COLUMNS_URL = 'GET_COLUMNS_URL';
+export const GET_NODE_ATTRIBUTES_URL = 'GET_NODE_ATTRIBUTES_URL';
+export const GET_FLOWS_URL = 'GET_FLOWS_URL';
+export const GET_MAP_BASE_DATA_URL = 'GET_MAP_BASE_DATA_URL';
+export const GET_LINKED_GEO_IDS_URL = 'GET_LINKED_GEO_IDS_URL';
+export const GET_PLACE_FACTSHEET_URL = 'GET_PLACE_FACTSHEET_URL';
+export const GET_ACTOR_FACTSHEET_URL = 'GET_ACTOR_FACTSHEET_URL';
+export const GET_INDICATORS_URL = 'GET_INDICATORS_URL';
+export const GET_JSON_DATA_DOWNLOAD_FILE_URL = 'GET_JSON_DATA_DOWNLOAD_FILE_URL';
+export const GET_CSV_DATA_DOWNLOAD_FILE_URL = 'GET_CSV_DATA_DOWNLOAD_FILE_URL';
+export const GET_DISCLAIMER_URL = 'GET_DISCLAIMER_URL';
+export const POST_SUBSCRIBE_NEWSLETTER_URL = 'POST_SUBSCRIBE_NEWSLETTER_URL';
+export const GET_TWEETS_URL = 'GET_TWEETS_URL';
+export const GET_POSTS_URL = 'GET_POSTS_URL';
+export const GET_SITE_DIVE_URL = 'GET_SITE_DIVE_URL';
+export const GET_TESTIMONIALS_URL = 'GET_TESTIMONIALS_URL';
+export const GET_MARKDOWN_CONTENT_URL = 'GET_MARKDOWN_CONTENT_URL';
 
 const API_ENDPOINTS = {
-  [GET_CONTEXTS]: { api: 3, endpoint: '/contexts' },
-  [GET_FLOWS]: { api: 3, endpoint: '/contexts/$context_id$/flows' },
-  [GET_COLUMNS]: { api: 3, endpoint: '/contexts/$context_id$/columns' },
-  [GET_ALL_NODES]: { api: 3, endpoint: '/contexts/$context_id$/nodes' },
-  [GET_NODE_ATTRIBUTES]: { api: 3, endpoint: '/contexts/$context_id$/nodes/attributes' },
-  [GET_MAP_BASE_DATA]: { api: 3, endpoint: '/contexts/$context_id$/map_layers' },
-  [GET_INDICATORS]: { api: 3, endpoint: '/contexts/$context_id$/download_attributes' },
-  [GET_PLACE_FACTSHEET]: {
+  [GET_CONTEXTS_URL]: { api: 3, endpoint: '/contexts' },
+  [GET_FLOWS_URL]: { api: 3, endpoint: '/contexts/$context_id$/flows' },
+  [GET_COLUMNS_URL]: { api: 3, endpoint: '/contexts/$context_id$/columns' },
+  [GET_ALL_NODES_URL]: { api: 3, endpoint: '/contexts/$context_id$/nodes' },
+  [GET_NODE_ATTRIBUTES_URL]: { api: 3, endpoint: '/contexts/$context_id$/nodes/attributes' },
+  [GET_MAP_BASE_DATA_URL]: { api: 3, endpoint: '/contexts/$context_id$/map_layers' },
+  [GET_INDICATORS_URL]: { api: 3, endpoint: '/contexts/$context_id$/download_attributes' },
+  [GET_PLACE_FACTSHEET_URL]: {
     api: 3,
     endpoint: '/contexts/$context_id$/nodes/$node_id$/place',
     mock: 'mocks/v1_get_place_node_attributes.json'
   },
-  [GET_ACTOR_FACTSHEET]: {
+  [GET_ACTOR_FACTSHEET_URL]: {
     api: 3,
     endpoint: '/contexts/$context_id$/nodes/$node_id$/actor',
     mock: 'mocks/v1_get_actor_node_attributes.json'
   },
-  [GET_CSV_DATA_DOWNLOAD_FILE]: { api: 3, endpoint: '/contexts/$context_id$/download.csv' },
-  [GET_JSON_DATA_DOWNLOAD_FILE]: { api: 3, endpoint: '/contexts/$context_id$/download.json' },
-  [GET_LINKED_GEO_IDS]: { api: 3, endpoint: '/contexts/$context_id$/linked_nodes' },
-  [POST_SUBSCRIBE_NEWSLETTER]: { api: 3, endpoint: '/newsletter_subscriptions' },
-  [GET_SITE_DIVE]: { api: 'content', endpoint: '/site_dives' },
-  [GET_POSTS]: { api: 'content', endpoint: '/posts' },
-  [GET_TWEETS]: { api: 'content', endpoint: '/tweets' },
-  [GET_DISCLAIMER]: { api: 'local', endpoint: 'disclaimer.json' },
-  [GET_TOOLTIPS]: { api: 'local', endpoint: 'tooltips.json' },
-  [GET_TESTIMONIALS]: {
+  [GET_CSV_DATA_DOWNLOAD_FILE_URL]: { api: 3, endpoint: '/contexts/$context_id$/download.csv' },
+  [GET_JSON_DATA_DOWNLOAD_FILE_URL]: { api: 3, endpoint: '/contexts/$context_id$/download.json' },
+  [GET_LINKED_GEO_IDS_URL]: { api: 3, endpoint: '/contexts/$context_id$/linked_nodes' },
+  [POST_SUBSCRIBE_NEWSLETTER_URL]: { api: 3, endpoint: '/newsletter_subscriptions' },
+  [GET_SITE_DIVE_URL]: { api: 'content', endpoint: '/site_dive' },
+  [GET_POSTS_URL]: { api: 'content', endpoint: '/posts' },
+  [GET_TWEETS_URL]: { api: 'content', endpoint: '/tweets' },
+  [GET_DISCLAIMER_URL]: { api: 'local', endpoint: 'disclaimer.json' },
+  [GET_TOOLTIPS_URL]: { api: 'local', endpoint: 'tooltips.json' },
+  [GET_TESTIMONIALS_URL]: {
     api: 'content',
     endpoint: '/testimonials',
     mock: 'mocks/v3_get_testimonials.json'
   },
-  [GET_MARKDOWN_CONTENT]: { api: 'markdown', endpoint: 'static-content' }
+  [GET_MARKDOWN_CONTENT_URL]: { api: 'markdown', endpoint: 'static-content' }
 };
 
 function getURLForV3(endpoint, paramsArg = {}) {

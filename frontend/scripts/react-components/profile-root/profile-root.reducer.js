@@ -10,7 +10,7 @@ const initialState = {
   errorMessage: null
 };
 
-const homeReducer = {
+const profileRootReducer = {
   [SET_PROFILE_SEARCH_NODES](state, action) {
     const { nodes } = action.payload;
     return { ...state, nodes: clone(nodes) };
@@ -21,4 +21,9 @@ const homeReducer = {
   }
 };
 
-export default createReducer(initialState, homeReducer);
+const profileRootReducerTypes = PropTypes => ({
+  nodes: PropTypes.arrayOf(PropTypes.object).isRequired,
+  errorMessage: PropTypes.string
+});
+
+export default createReducer(initialState, profileRootReducer, profileRootReducerTypes);

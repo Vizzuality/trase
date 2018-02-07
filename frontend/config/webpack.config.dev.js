@@ -16,10 +16,8 @@ module.exports = merge(webpackBaseConfig, {
     host: '0.0.0.0',
     historyApiFallback: true
   },
-  plugins: [
-    new webpack.NamedModulesPlugin()
-  ],
+  plugins: [new webpack.NamedModulesPlugin()],
   performance: {
-    hints: 'warning'
+    hints: false
   }
 });

@@ -1,9 +1,21 @@
-import actions from 'actions';
+import { TOGGLE_MAP_LAYERS_MENU } from 'actions/app.actions';
+import {
+  SELECT_BIOME_FILTER,
+  SELECT_COLUMN,
+  SELECT_CONTEXTUAL_LAYERS,
+  SELECT_RECOLOR_BY,
+  SELECT_RESIZE_BY,
+  SELECT_VIEW,
+  SELECT_YEARS,
+  SET_CONTEXT,
+  TOGGLE_MAP,
+  UPDATE_NODE_SELECTION
+} from 'actions/tool.actions';
 import isFunction from 'lodash/isFunction';
 
 export const GA_ACTION_WHITELIST = [
   {
-    type: actions.SET_CONTEXT,
+    type: SET_CONTEXT,
     category: 'Sankey',
     action: 'Switch context',
     getPayload: (action, state) => {
@@ -12,59 +24,59 @@ export const GA_ACTION_WHITELIST = [
     }
   },
   {
-    type: actions.UPDATE_NODE_SELECTION,
+    type: UPDATE_NODE_SELECTION,
     category: 'Sankey',
     action: 'Update node selection',
     getPayload: action => action.data.map(d => d.name).join(',')
   },
   {
-    type: actions.SELECT_BIOME_FILTER,
+    type: SELECT_BIOME_FILTER,
     category: 'Sankey',
     action: 'Update biome filter',
     getPayload: action => action.biomeFilter
   },
   {
-    type: actions.SELECT_YEARS,
+    type: SELECT_YEARS,
     action: 'Select years',
     category: 'Sankey',
     getPayload: action => action.years.join(',')
   },
   {
-    type: actions.SELECT_RECOLOR_BY,
+    type: SELECT_RECOLOR_BY,
     action: 'Select recolor by',
     category: 'Sankey',
     getPayload: action => action.value
   },
   {
-    type: actions.SELECT_RESIZE_BY,
+    type: SELECT_RESIZE_BY,
     action: 'Select resize by',
     category: 'Sankey',
     getPayload: action => action.resizeBy
   },
   {
-    type: actions.SELECT_VIEW,
+    type: SELECT_VIEW,
     action: 'Select view',
     category: 'Sankey',
     getPayload: action => (action.detailedView ? 'detailed' : 'overview')
   },
   {
-    type: actions.SELECT_COLUMN,
+    type: SELECT_COLUMN,
     category: 'Sankey',
     action: 'Select column',
     getPayload: (action, state) => state.tool.columns.find(col => col.id === action.columnId).name
   },
   {
-    type: actions.TOGGLE_MAP,
+    type: TOGGLE_MAP,
     action: 'Toggle map',
     category: 'Sankey'
   },
   {
-    type: actions.TOGGLE_MAP_LAYERS_MENU,
+    type: TOGGLE_MAP_LAYERS_MENU,
     action: 'Toggle map layers menu',
     category: 'Sankey'
   },
   {
-    type: actions.SELECT_CONTEXTUAL_LAYERS,
+    type: SELECT_CONTEXTUAL_LAYERS,
     action: 'Select contextual layers',
     category: 'Sankey',
     getPayload: action => action.contextualLayers.join(', ')

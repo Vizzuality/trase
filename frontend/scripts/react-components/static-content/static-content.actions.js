@@ -1,5 +1,5 @@
 import { NOT_FOUND, redirect } from 'redux-first-router';
-import { getURLFromParams, GET_MARKDOWN_CONTENT } from 'utils/getURLFromParams';
+import { getURLFromParams, GET_MARKDOWN_CONTENT_URL } from 'utils/getURLFromParams';
 import kebabCase from 'lodash/kebabCase';
 
 export const STATIC_CONTENT__SET_MARKDOWN = 'STATIC_CONTENT__SET_MARKDOWN';
@@ -12,7 +12,7 @@ export const getStaticContent = () => (dispatch, getState) => {
   const filename = getStaticContentFilename(location);
   const notFound = location.type === NOT_FOUND;
   if (typeof staticContent.markdown[filename] === 'undefined' && !notFound) {
-    const url = getURLFromParams(GET_MARKDOWN_CONTENT, { filename });
+    const url = getURLFromParams(GET_MARKDOWN_CONTENT_URL, { filename });
     fetch(url)
       .then(res => (res.ok ? res.text() : Promise.reject(res)))
       .then(content =>

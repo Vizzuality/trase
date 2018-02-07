@@ -1,7 +1,8 @@
+import { HIGHLIGHT_NODE, LOAD_INITIAL_DATA } from 'actions/tool.actions';
 import _ from 'lodash';
-import actions from 'actions';
 import qs from 'query-string';
 import { redirect } from 'redux-first-router';
+import { TOGGLE_DROPDOWN } from 'actions/app.actions';
 
 const URL_STATE_PROPS = [
   'selectedContextId',
@@ -118,10 +119,7 @@ export const stringify = params => {
 export const toolUrlStateMiddleware = store => next => action => {
   const prevLocation = store.getState().location;
   // if highlight action bail
-  if (
-    [actions.HIGHLIGHT_NODE, actions.TOGGLE_DROPDOWN].includes(action.type) ||
-    prevLocation.type !== 'tool'
-  ) {
+  if ([HIGHLIGHT_NODE, TOGGLE_DROPDOWN].includes(action.type) || prevLocation.type !== 'tool') {
     return next(action);
   }
   const decoratedAction = { ...action };
@@ -133,7 +131,7 @@ export const toolUrlStateMiddleware = store => next => action => {
     // sometimes prevLocation.search is defined but urlState isn't when navigating from within the app
     urlState = parse(prevLocation.search).state;
   }
-  if (action.type === actions.LOAD_INITIAL_DATA && urlState) {
+  if (action.type === LOAD_INITIAL_DATA && urlState) {
     // need to rehydrate state
     decoratedAction.payload = urlState;
   }
@@ -144,7 +142,7 @@ export const toolUrlStateMiddleware = store => next => action => {
   const conditions = [
     location.type === 'tool',
     action.type !== 'tool',
-    action.type !== actions.LOAD_INITIAL_DATA,
+    action.type !== LOAD_INITIAL_DATA,
     areNotEqual
   ];
   if (!conditions.includes(false)) {

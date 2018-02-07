@@ -1,10 +1,14 @@
-import actions from 'actions';
 import {
   getURLFromParams,
-  GET_CONTEXTS,
-  GET_ALL_NODES,
-  GET_INDICATORS
+  GET_CONTEXTS_URL,
+  GET_ALL_NODES_URL,
+  GET_INDICATORS_URL
 } from 'utils/getURLFromParams';
+
+export const LOAD_CONTEXTS = 'LOAD_CONTEXTS';
+export const LOAD_EXPORTERS = 'LOAD_EXPORTERS';
+export const LOAD_CONSUMPTION_COUNTRIES = 'LOAD_CONSUMPTION_COUNTRIES';
+export const LOAD_INDICATORS = 'LOAD_INDICATORS';
 
 export function loadContext() {
   return dispatch => {
@@ -14,7 +18,7 @@ export function loadContext() {
       return 0;
     };
 
-    const contextURL = getURLFromParams(GET_CONTEXTS);
+    const contextURL = getURLFromParams(GET_CONTEXTS_URL);
 
     fetch(contextURL)
       .then(resp => resp.text())
@@ -22,7 +26,7 @@ export function loadContext() {
         const payload = JSON.parse(data).data.sort(sortContexts);
 
         dispatch({
-          type: actions.LOAD_CONTEXTS,
+          type: LOAD_CONTEXTS,
           payload
         });
       });
@@ -31,8 +35,8 @@ export function loadContext() {
 
 export function loadContextNodes(contextId) {
   return dispatch => {
-    const allNodesURL = getURLFromParams(GET_ALL_NODES, { context_id: contextId });
-    const indicatorsURL = getURLFromParams(GET_INDICATORS, { context_id: contextId });
+    const allNodesURL = getURLFromParams(GET_ALL_NODES_URL, { context_id: contextId });
+    const indicatorsURL = getURLFromParams(GET_INDICATORS_URL, { context_id: contextId });
 
     Promise.all([allNodesURL, indicatorsURL].map(url => fetch(url).then(resp => resp.text()))).then(
       rawPayload => {
@@ -47,17 +51,17 @@ export function loadContextNodes(contextId) {
         const indicators = payload.indicators;
 
         dispatch({
-          type: actions.LOAD_EXPORTERS,
+          type: LOAD_EXPORTERS,
           exporters
         });
 
         dispatch({
-          type: actions.LOAD_CONSUMPTION_COUNTRIES,
+          type: LOAD_CONSUMPTION_COUNTRIES,
           consumptionCountries
         });
 
         dispatch({
-          type: actions.LOAD_INDICATORS,
+          type: LOAD_INDICATORS,
           indicators
         });
       }
