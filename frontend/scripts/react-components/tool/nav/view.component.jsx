@@ -7,8 +7,8 @@ import PropTypes from 'prop-types';
 const id = 'view';
 
 export default function view({ onToggle, onSelected, currentDropdown, tooltips, isDetailedView }) {
-  const title = isDetailedView === true ? 'Complete' : 'Summary';
-  const other = isDetailedView === true ? 'Summary' : 'Complete';
+  const title = isDetailedView === true ? 'All Flows' : 'Summary';
+  const other = isDetailedView === true ? 'Summary' : 'All Flows';
   return (
     <div
       className="nav-item js-dropdown"
@@ -21,9 +21,9 @@ export default function view({ onToggle, onSelected, currentDropdown, tooltips, 
           Change view
           <Tooltip text={tooltips.sankey.nav.view.main} position="top right" />
         </span>
-        <span className="dropdown-title">{title}</span>
+        <span className="dropdown-title -small">{title}</span>
         <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
-          <ul className="dropdown-list -right">
+          <ul className="dropdown-list">
             <li className="dropdown-item" onClick={() => onSelected(!isDetailedView)}>
               {other}
             </li>
