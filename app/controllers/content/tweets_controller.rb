@@ -12,8 +12,9 @@ module Content
         config.access_token_secret = ENV['TWITTER_ACCESS_TOKEN_SECRET']
       end
 
-      render json: client.home_timeline, root: 'data',
-             each_serializer: TweetSerializer
+      render json: client.home_timeline,
+             root: 'data',
+             each_serializer: Content::TweetSerializer
     end
   end
 end

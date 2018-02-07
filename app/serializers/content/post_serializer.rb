@@ -17,12 +17,13 @@
 #  image_updated_at   :datetime
 #  highlighted        :boolean          default(FALSE)
 #
+module Content
+  class PostSerializer < ActiveModel::Serializer
+    attributes :title, :date, :highlighted, :complete_post_url,
+               :category
 
-class PostSerializer < ActiveModel::Serializer
-  attributes :title, :date, :highlighted, :complete_post_url,
-             :category
-
-  attribute :image_url do
-    object.image.url(:small)
+    attribute :image_url do
+      object.image.url(:small)
+    end
   end
 end

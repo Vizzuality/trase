@@ -4,7 +4,9 @@ module Content
 
     def index
       @posts = Content::Post.order(date: 'DESC').where(state: 1)
-      render json: @posts, root: 'data', each_serializer: PostSerializer
+      render json: @posts,
+             root: 'data',
+             each_serializer: Content::PostSerializer
     end
   end
 end
