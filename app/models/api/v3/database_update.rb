@@ -22,6 +22,10 @@ module Api
         str
       end
 
+      def finished_at
+        [FINISHED, FAILED].include?(status) && updated_at || nil
+      end
+
       protected
 
       def started?

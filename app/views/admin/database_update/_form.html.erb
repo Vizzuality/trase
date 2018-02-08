@@ -17,7 +17,7 @@
         <% database_updates.each do |du| %>
           <tr>
             <td><%= du.created_at %></td>
-            <td><%= du.updated_at %></td>
+            <td><%= du.finished_at %></td>
             <td><%= du.status %></td>
             <td><%= du.stats_to_s %></td>
             <td><%= du.error %></td>
