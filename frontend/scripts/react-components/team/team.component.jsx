@@ -18,8 +18,8 @@ const Team = props => {
                 className="c-team-profile-picture"
                 style={{ backgroundImage: `url(${member.smallImageUrl})` }}
               />
-              <h3 className="title -medium">{member.name}</h3>
-              <span className="subtitle -gray">See More</span>
+              <h3 className="team-list-item-title title -medium">{member.name}</h3>
+              <span className="team-list-item-subtitle subtitle -gray">See More</span>
             </Link>
           </div>
         ))}

@@ -4,16 +4,32 @@
   }
   .team-list-item {
     margin: 42px 0 0;
+
+    &:hover {
+      .team-list-item-subtitle {
+        opacity: 1;
+      }
+    }
+  }
+
+  .team-list-item-subtitle {
+    opacity: 0;
+    transition: opacity 300ms ease-in-out;
   }
 }
 
 .c-team-member {
   display: flex;
+
+  .team-member-profile-picture-container {
+    height: 300px;
+    width: 100%;
+    max-width: 260px;
+  }
 }
 
 .c-team-profile-picture {
   height: 260px;
-  max-width: 260px;
   width: 100%;
   background-position: center;
   background-repeat: no-repeat;
