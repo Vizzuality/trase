@@ -54,5 +54,9 @@ Style/Lambda:
 Style/PercentLiteralDelimiters:
   Enabled: false
 
+Style/RegexpLiteral:
+  EnforcedStyle: slashes
+  AllowInnerSlashes: true
+
 Style/SymbolArray:
   EnforcedStyle: brackets
