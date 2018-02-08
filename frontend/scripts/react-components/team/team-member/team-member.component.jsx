@@ -6,8 +6,8 @@ import MarkdownRenderer from 'react-components/static-content/markdown-renderer/
 const TeamMember = props => {
   const { member } = props;
   return (
-    <div className="c-team-member">
-      <div className="team-member-profile-picture-container column small-12 medium-5">
+    <div className="c-team-member row">
+      <div className="team-member-profile-picture-container column small-12 medium-4">
         <Link className="subtitle -gray" to={{ type: 'team' }}>
           SEE ALL TEAM
         </Link>
@@ -16,7 +16,7 @@ const TeamMember = props => {
           style={{ backgroundImage: `url(${member.smallImageUrl})` }}
         />
       </div>
-      <div className="team-member-details column small-3 medium-8">
+      <div className="team-member-details column small-12 medium-8">
         <h2 className="team-member-name title -medium -regular">{member.name}</h2>
         <h3 className="subtitle team-member-group">{member.staffGroup.name}</h3>
         <MarkdownRenderer className="team-member-bio" content={member.bio} />

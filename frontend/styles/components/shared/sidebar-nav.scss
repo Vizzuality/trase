@@ -8,12 +8,12 @@
   background-color: $white;
   z-index: $z-above-hero;
   transform: translate(0, 40px);
-  pointer-events: auto;
   transition: transform 400ms ease, opacity 500ms ease;
 
   &.-entered {
     transform: translate(0, 0);
     opacity: 1;
+    pointer-events: auto;
   }
 
   &.-exiting {
@@ -22,6 +22,7 @@
 
   &.-exited {
     opacity: 0;
+    pointer-events: none;
   }
 
 
@@ -29,7 +30,6 @@
     position: relative;
     width: 100%;
     min-height: 321px;
-    min-width: 250px;
     opacity: 1;
     box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2);
     transform: translateY(-50%);
@@ -37,12 +37,17 @@
 
     &.-exited {
       opacity: 1;
+      pointer-events: auto;
     }
   }
 
   .nav-sidebar-link-list {
     height: 100%;
-    padding: 40px;
+    padding: 20px;
+
+    @media only screen and (min-width: $breakpoint-foundation-medium) {
+      padding: 40px;
+    }
   }
 
   .nav-sidebar-link-list-item {

@@ -19,12 +19,14 @@
 }
 
 .c-team-member {
-  display: flex;
 
   .team-member-profile-picture-container {
-    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 290px;
     width: 100%;
-    max-width: 260px;
   }
 }
 
