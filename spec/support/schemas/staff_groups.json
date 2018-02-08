@@ -1,0 +1,88 @@
+{
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "properties": {
+    "data": {
+      "$id": "/properties/data",
+      "type": "array",
+      "items": {
+        "$id": "/properties/data/items",
+        "type": "object",
+        "properties": {
+          "name": {
+            "$id": "/properties/data/items/properties/name",
+            "type": "string",
+            "title": "The Name Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "Programmers"
+            ]
+          },
+          "position": {
+            "$id": "/properties/data/items/properties/position",
+            "type": "integer",
+            "title": "The Position Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+              1
+            ]
+          },
+          "staffMembers": {
+            "$id": "/properties/data/items/properties/staffMembers",
+            "type": "array",
+            "items": {
+              "$id": "/properties/data/items/properties/staffMembers/items",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "$id": "/properties/data/items/properties/staffMembers/items/properties/name",
+                  "type": "string",
+                  "title": "The Name Schema",
+                  "description": "An explanation about the purpose of this instance.",
+                  "default": "",
+                  "examples": [
+                    "Agnieszka Figiel"
+                  ]
+                },
+                "position": {
+                  "$id": "/properties/data/items/properties/staffMembers/items/properties/position",
+                  "type": "integer",
+                  "title": "The Position Schema",
+                  "description": "An explanation about the purpose of this instance.",
+                  "default": 0,
+                  "examples": [
+                    1
+                  ]
+                },
+                "bio": {
+                  "$id": "/properties/data/items/properties/staffMembers/items/properties/bio",
+                  "type": "string",
+                  "title": "The Bio Schema",
+                  "description": "An explanation about the purpose of this instance.",
+                  "default": "",
+                  "examples": [
+                    "Agnieszka is working on\r\n* this,\r\n* that\r\n* and another."
+                  ]
+                },
+                "smallImageUrl": {
+                  "$id": "/properties/data/items/properties/staffMembers/items/properties/smallImageUrl",
+                  "type": "string",
+                  "title": "The Smallimageurl Schema",
+                  "description": "An explanation about the purpose of this instance.",
+                  "default": "",
+                  "examples": [
+                    "/system/content/staff_members/images/000/000/001/small/profile_square.jpg?1517997942"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

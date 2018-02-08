@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     resources :site_dives, only: [:show]
     resources :tweets, only: [:index]
     resources :testimonials, only: [:index]
-    resources :staff_members, only: [:index]
+    resources :staff_groups, only: [:index]
   end
 
   namespace :api do
