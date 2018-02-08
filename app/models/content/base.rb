@@ -1,7 +1,6 @@
 module Content
   class Base < ActiveRecord::Base
     self.abstract_class = true
-
-    establish_connection DB_CONTENT
+    self.table_name_prefix = 'content.'
   end
 end
