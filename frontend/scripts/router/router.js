@@ -14,7 +14,8 @@ import {
 } from 'react-components/static-content/static-content.thunks';
 import { getProfileRootNodes } from 'react-components/profile-root/profile-root.thunks';
 
-import Team from 'react-components/static-content/team/team.container';
+import Team from 'react-components/team/team.container';
+import TeamMember from 'react-components/team/team-member/team-member.container';
 import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.container';
 
 const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thunk(...params));
@@ -81,7 +82,8 @@ const routes = {
   teamMember: {
     path: '/about/team/:member',
     page: 'static-content',
-    component: withSidebarNavLayout(() => null)
+    thunk: dispatchThunks(getTeam),
+    component: withSidebarNavLayout(TeamMember)
   },
   about: {
     path: '/about/:section?',

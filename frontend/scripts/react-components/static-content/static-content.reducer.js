@@ -9,11 +9,10 @@ const initialState = {
      * { [filename]: content }
      */
   },
-  team: {
-    /**
-     * { [name]: { name, position, bio, smallImageUrl, staffGroup }
-     */
-  }
+  team: null
+  /**
+   * { [name]: { name, position, bio, smallImageUrl, staffGroup }
+   */
 };
 
 const staticContentReducer = {

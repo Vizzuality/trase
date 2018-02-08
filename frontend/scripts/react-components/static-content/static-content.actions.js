@@ -31,15 +31,18 @@ export const getStaticContent = () => (dispatch, getState) => {
   }
 };
 
-export const getTeamData = mock => dispatch => {
-  const url = getURLFromParams(GET_TEAM_URL, null, mock);
-  fetch(url)
-    .then(res => (res.ok ? res.json() : Promise.reject(res)))
-    .then(({ data }) =>
-      dispatch({
-        type: STATIC_CONTENT__SET_TEAM,
-        payload: { data }
-      })
-    )
-    .catch(err => console.error(err.statusText));
+export const getTeamData = mock => (dispatch, getState) => {
+  const { staticContent } = getState();
+  if (!staticContent.team) {
+    const url = getURLFromParams(GET_TEAM_URL, null, mock);
+    fetch(url)
+      .then(res => (res.ok ? res.json() : Promise.reject(res)))
+      .then(({ data }) =>
+        dispatch({
+          type: STATIC_CONTENT__SET_TEAM,
+          payload: { data }
+        })
+      )
+      .catch(err => console.error(err.statusText));
+  }
 };

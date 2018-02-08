@@ -14,7 +14,7 @@
       "position": 1,
       "name": "Josephine Holcomb",
       "bio": "Ullamco esse eiusmod esse in adipisicing duis incididunt ullamco voluptate velit dolore Lorem elit. Eiusmod pariatur incididunt sunt commodo in anim adipisicing officia deserunt non amet tempor nulla amet. Cupidatat consectetur voluptate fugiat nisi non proident anim fugiat id voluptate sit. Id consequat veniam aliqua irure anim ex sit exercitation.\r\n",
-      "smallImageUrl": "/images/mocks/avatar4.jpg",
+      "smallImageUrl": "/images/mocks/avatar1.jpg",
       "staffGroup": {
         "position": 2,
         "name": "Programmers"
@@ -24,7 +24,7 @@
       "position": 2,
       "name": "Patterson Burton",
       "bio": "Aute do eiusmod in commodo laboris nulla duis. Anim sunt incididunt sint est. Nisi veniam id voluptate exercitation.\r\n",
-      "smallImageUrl": "/images/mocks/avatar1.jpg",
+      "smallImageUrl": "/images/mocks/avatar4.jpg",
       "staffGroup": {
         "position": 3,
         "name": "Marketing"
@@ -54,7 +54,7 @@
       "position": 5,
       "name": "Berger Rosario",
       "bio": "Lorem aute ut aliqua esse. Nostrud enim dolore reprehenderit ea ipsum. In commodo et excepteur officia. Duis adipisicing qui esse ea Lorem in id est. Id ex labore eu aute cupidatat excepteur sunt sint amet excepteur Lorem reprehenderit. Nostrud minim sunt adipisicing amet incididunt amet laborum eu eu aute ullamco nostrud. Sunt aliquip ad do irure fugiat.\r\n",
-      "smallImageUrl": "/images/mocks/avatar3.jpg",
+      "smallImageUrl": "/images/mocks/avatar4.jpg",
       "staffGroup": {
         "position": 1,
         "name": "Management"
@@ -64,7 +64,7 @@
       "position": 6,
       "name": "Tessa Gilmore",
       "bio": "Amet ullamco incididunt elit velit cupidatat consequat labore elit veniam est esse pariatur cillum. Nisi reprehenderit laborum amet id sunt elit eu dolor. Elit et nulla anim deserunt tempor aliqua.\r\n",
-      "smallImageUrl": "/images/mocks/avatar3.jpg",
+      "smallImageUrl": "/images/mocks/avatar1.jpg",
       "staffGroup": {
         "position": 2,
         "name": "Programmers"

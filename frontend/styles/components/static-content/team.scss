@@ -1,0 +1,21 @@
+.c-team {
+  .team-list {
+    margin: 0 0 -20px;
+  }
+  .team-list-item {
+    margin: 42px 0 0;
+  }
+}
+
+.c-team-member {
+  display: flex;
+}
+
+.c-team-profile-picture {
+  height: 260px;
+  max-width: 260px;
+  width: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}

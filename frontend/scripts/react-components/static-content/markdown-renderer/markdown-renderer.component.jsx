@@ -2,26 +2,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import remark from 'remark';
 import remarkReact from 'remark-react';
+import cx from 'classnames';
 
 const MarkdownRenderer = props => {
-  const { content } = props;
+  const { content, className } = props;
 
   const MarkdownContainer = p => (
-    <div className="markdown-content small-11 medium-9">{p.children}</div>
+    <div className={cx('markdown-content', className)}>{p.children}</div>
   );
-  return (
-    <div className="row">
-      {
-        remark()
-          .use(remarkReact, { remarkReactComponents: { div: MarkdownContainer } })
-          .processSync(content).contents
-      }
-    </div>
-  );
+  return remark()
+    .use(remarkReact, { remarkReactComponents: { div: MarkdownContainer } })
+    .processSync(content).contents;
 };
 
 MarkdownRenderer.propTypes = {
-  content: PropTypes.string
+  content: PropTypes.string,
+  className: PropTypes.string
+};
+
+MarkdownRenderer.defaultProps = {
+  className: 'small-12 medium-9'
 };
 
 export default MarkdownRenderer;

@@ -3,8 +3,9 @@ import Team from './team.component';
 
 function mapStateToProps(state) {
   const { staticContent } = state;
+  const content = staticContent.team ? Object.values(staticContent.team) : [];
   return {
-    content: Object.values(staticContent.team)
+    content
   };
 }
 
