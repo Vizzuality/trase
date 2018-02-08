@@ -1,10 +1,19 @@
 .c-team {
-  .team-list {
-    margin: 0 0 -20px;
-  }
-  .team-list-item {
-    margin: 42px 0 0;
 
+  .team-group {
+    padding: 40px 0 0;
+
+    &:first-child {
+      padding: 0;
+    }
+  }
+
+  .team-list {
+    padding: 20px 0 0;
+  }
+
+  .team-list-item {
+    flex: 1;
     &:hover {
       .team-list-item-subtitle {
         opacity: 1;
