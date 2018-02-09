@@ -30,12 +30,16 @@
 .c-team-member {
 
   .team-member-profile-picture-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
     height: 290px;
     width: 100%;
+
+    .c-team-profile-picture {
+      margin: 10px 0 0;
+    }
+  }
+
+  .team-member-details {
+    margin: 18px 0 0;
   }
 }
 
@@ -45,4 +49,8 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
+
+  &.-placeholder {
+    background-color: $charcoal-grey-faded-a-lot;
+  }
 }

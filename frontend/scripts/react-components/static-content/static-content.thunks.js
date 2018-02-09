@@ -5,4 +5,4 @@ import {
 
 export const getPageStaticContent = dispatch => dispatch(getStaticContent());
 
-export const getTeam = dispatch => dispatch(getTeamData(true));
+export const getTeam = dispatch => dispatch(getTeamData());

@@ -54,8 +54,8 @@ const API_ENDPOINTS = {
   },
   [GET_MARKDOWN_CONTENT_URL]: { api: 'markdown', endpoint: 'static-content' },
   [GET_TEAM_URL]: {
-    api: 'content',
-    endpoint: '/staff',
+    api: 3,
+    endpoint: '/staff_groups',
     mock: '/mocks/v3_get_team.json'
   }
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import kebabCase from 'lodash/kebabCase';
 import Link from 'redux-first-router-link';
+import cx from 'classnames';
 
 const Team = props => {
   const { groups } = props;
@@ -20,7 +21,9 @@ const Team = props => {
                   <div className="team-list-item">
                     <Link to={{ type: 'teamMember', payload: { member: kebabCase(member.name) } }}>
                       <div
-                        className="c-team-profile-picture"
+                        className={cx('c-team-profile-picture', {
+                          '-placeholder': !member.smallImageUrl
+                        })}
                         style={{ backgroundImage: `url(${member.smallImageUrl})` }}
                       />
                       <h3 className="team-list-item-title title -medium">{member.name}</h3>
