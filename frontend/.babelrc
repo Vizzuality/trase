@@ -28,7 +28,10 @@
             "utils": "./scripts/utils",
             "reducers": "./scripts/reducers",
             "store": "./scripts/store",
-            "react-components": "./scripts/react-components"
+            "components": "./scripts/components",
+            "containers": "./scripts/containers",
+            "constants": "./scripts/constants",
+            "router": "./scripts/router"
           }
         }]
       ]
