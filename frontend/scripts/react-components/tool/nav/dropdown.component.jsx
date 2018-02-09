@@ -33,7 +33,7 @@ class Dropdown extends Component {
     const children = currentDropdown !== id ? null : this.props.children;
 
     return (
-      <div id={id} ref={ref => (this.container = ref)}>
+      <div id={id} ref={ref => (this.container = ref)} className="dropdown-container">
         {children}
       </div>
     );

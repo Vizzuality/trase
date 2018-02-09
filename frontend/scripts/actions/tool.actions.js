@@ -2,7 +2,6 @@
 import { SET_TOOLTIPS } from 'actions/app.actions';
 import { LOAD_CONTEXTS } from 'actions/data.actions';
 import { feature as topojsonFeature } from 'topojson';
-import _ from 'lodash';
 import {
   CARTO_NAMED_MAPS_BASE_URL,
   NUM_NODES_DETAILED,
@@ -31,6 +30,9 @@ import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
 import isNodeColumnVisible from 'utils/isNodeColumnVisible';
 import capitalize from 'lodash/capitalize';
+import difference from 'lodash/difference';
+import compact from 'lodash/compact';
+import uniq from 'lodash/uniq';
 
 export const LOAD_INITIAL_DATA = 'LOAD_INITIAL_DATA';
 export const RESET_SELECTION = 'RESET_SELECTION';
@@ -63,6 +65,7 @@ export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
 export const TOGGLE_MAP_SIDEBAR_GROUP = 'TOGGLE_MAP_SIDEBAR_GROUP';
 export const SHOW_LINKS_ERROR = 'SHOW_LINKS_ERROR';
 export const RESET_TOOL_STATE = 'RESET_TOOL_STATE';
+export const SET_SANKEY_SEARCH_VISIBILITY = 'SET_SANKEY_SEARCH_VISIBILITY';
 
 const _reloadLinks = (param, value, type, reloadLinks = true) => dispatch => {
   const action = {
@@ -294,12 +297,12 @@ export function loadNodes() {
       const allAvailableMapDimensionsUids = payload.mapDimensionsMetaJSON.dimensions.map(
         dimension => getNodeMetaUid(dimension.type, dimension.layerAttributeId)
       );
-      const selectedMapDimensionsSet = _.compact(selectedMapDimensions);
+      const selectedMapDimensionsSet = compact(selectedMapDimensions);
 
       // are all currently selected map dimensions available ?
       if (
         selectedMapDimensionsSet.length > 0 &&
-        _.difference(selectedMapDimensionsSet, allAvailableMapDimensionsUids).length === 0
+        difference(selectedMapDimensionsSet, allAvailableMapDimensionsUids).length === 0
       ) {
         dispatch(setMapDimensions(selectedMapDimensions.concat([])));
       } else {
@@ -547,7 +550,7 @@ export function selectNode(param, isAggregated = false) {
   return (dispatch, getState) => {
     ids.forEach(nodeId => {
       if (isAggregated) {
-        dispatch(selectView(true));
+        dispatch(setSankeySearchVisibility(true));
       } else {
         const currentSelectedNodesIds = getState().tool.selectedNodesIds;
         // we are unselecting the node that is currently expanded: just shrink it and bail
@@ -582,6 +585,14 @@ export function updateNodes(selectedNodesIds) {
     action.type = UPDATE_NODE_SELECTION;
     dispatch(action);
   };
+}
+
+export function setSankeySearchVisibility(searchVisibility) {
+  return dispatch =>
+    dispatch({
+      type: SET_SANKEY_SEARCH_VISIBILITY,
+      searchVisibility
+    });
 }
 
 export function selectNodeFromGeoId(geoId) {
@@ -712,7 +723,7 @@ export function loadLinkedGeoIDs() {
     }
     const params = {
       context_id: state.tool.selectedContextId,
-      years: _.uniq([state.tool.selectedYears[0], state.tool.selectedYears[1]]),
+      years: uniq([state.tool.selectedYears[0], state.tool.selectedYears[1]]),
       nodes_ids: selectedNodesIds,
       target_column_id: state.tool.selectedColumnsIds[0]
     };

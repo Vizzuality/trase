@@ -29,7 +29,8 @@ import {
   TOGGLE_MAP_DIMENSION,
   TOGGLE_MAP_SIDEBAR_GROUP,
   TOGGLE_NODES_EXPAND,
-  UPDATE_NODE_SELECTION
+  UPDATE_NODE_SELECTION,
+  SET_SANKEY_SEARCH_VISIBILITY
 } from 'actions/tool.actions';
 import groupBy from 'lodash/groupBy';
 import isEqual from 'lodash/isEqual';
@@ -69,6 +70,7 @@ const initialState = {
   highlightedNodesIds: [],
   initialDataLoading: false,
   isMapVisible: false,
+  isSearchOpen: false,
   linkedGeoIds: [],
   links: [],
   linksLoading: false,
@@ -551,7 +553,10 @@ const toolReducer = {
     return Object.assign({}, state, { expandedMapSidebarGroupsIds });
   },
   [RESET_TOOL_STATE](state, action) {
-    return { ...initialState, contexts: state.contexts, ...action.payload };
+    return {...initialState, contexts: state.contexts, ...action.payload};
+  },
+  [SET_SANKEY_SEARCH_VISIBILITY](state, action) {
+    return Object.assign({}, state, { isSearchOpen: action.searchVisibility });
   }
 };
 
