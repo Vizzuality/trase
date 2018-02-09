@@ -33,6 +33,7 @@ module Api
               {
                 id: top_node['node_id'],
                 name: top_node['name'],
+                geo_id: top_node['geo_id'],
                 height: top_node['value'] / @all_nodes_total,
                 value: top_node['value']
               }

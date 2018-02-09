@@ -52,7 +52,7 @@
                 "description": "An explanation about the purpose of this instance.",
                 "default": 0,
                 "examples": [
-                  440
+                  684
                 ]
               },
               "name": {
@@ -62,7 +62,17 @@
                 "description": "An explanation about the purpose of this instance.",
                 "default": "",
                 "examples": [
-                  "BUNGE"
+                  "CHINA"
+                ]
+              },
+              "geo_id": {
+                "$id": "/properties/data/properties/targetNodes/items/properties/geo_id",
+                "type": ["string", "null"],
+                "title": "The Geo_id Schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": "",
+                "examples": [
+                  "CN"
                 ]
               },
               "height": {
@@ -72,7 +82,7 @@
                 "description": "An explanation about the purpose of this instance.",
                 "default": 0,
                 "examples": [
-                  0.16515207290649414
+                  0.42445269227027893
                 ]
               },
               "value": {
@@ -82,7 +92,7 @@
                 "description": "An explanation about the purpose of this instance.",
                 "default": 0,
                 "examples": [
-                  11548229
+                  41375772
                 ]
               }
             }
