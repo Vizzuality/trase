@@ -23,7 +23,7 @@ const TeamMember = props => {
         <div className="column small-12 medium-8">
           <div className="team-member-details">
             <h2 className="team-member-name title -medium -regular">{member.name}</h2>
-            <h3 className="subtitle team-member-group">{member.staffGroup.name}</h3>
+            <h3 className="subtitle team-member-group">{member.group}</h3>
             <MarkdownRenderer className="team-member-bio" content={member.bio} />
           </div>
         </div>

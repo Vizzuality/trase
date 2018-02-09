@@ -5,28 +5,28 @@ import Link from 'redux-first-router-link';
 import cx from 'classnames';
 
 const Team = props => {
-  const { groups } = props;
+  const { groups, members } = props;
   return (
     <div className="c-team">
-      {groups.map(content => (
-        <section className="team-group">
-          <h3 className="subtitle">{content[0].staffGroup.name}</h3>
+      {groups.map(group => (
+        <section className="team-group" key={group.name}>
+          <h3 className="subtitle">{group.name}</h3>
           <div className="team-list">
             <div className="row -equal-height">
-              {content.map(member => (
+              {group.staffMembers.map(slug => (
                 <div
-                  key={member.position + member.staffGroup.name}
+                  key={members[slug].position + members[slug].name}
                   className="column small-12 medium-4"
                 >
                   <div className="team-list-item">
-                    <Link to={{ type: 'teamMember', payload: { member: kebabCase(member.name) } }}>
+                    <Link to={{ type: 'teamMember', payload: { member: kebabCase(slug) } }}>
                       <div
                         className={cx('c-team-profile-picture', {
-                          '-placeholder': !member.smallImageUrl
+                          '-placeholder': !members[slug].smallImageUrl
                         })}
-                        style={{ backgroundImage: `url(${member.smallImageUrl})` }}
+                        style={{ backgroundImage: `url(${members[slug].smallImageUrl})` }}
                       />
-                      <h3 className="team-list-item-title title -medium">{member.name}</h3>
+                      <h3 className="team-list-item-title title -medium">{members[slug].name}</h3>
                       <span className="team-list-item-subtitle subtitle -gray">See More</span>
                     </Link>
                   </div>
@@ -42,19 +42,25 @@ const Team = props => {
 
 Team.propTypes = {
   groups: PropTypes.arrayOf(
-    PropTypes.arrayOf(
-      PropTypes.shape({
-        position: PropTypes.number,
-        name: PropTypes.string,
-        bio: PropTypes.string,
-        smallImageUrl: PropTypes.string,
-        staffGroup: PropTypes.shape({
-          position: PropTypes.number,
-          name: PropTypes.string
-        })
-      })
-    )
-  ).isRequired
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      position: PropTypes.number.isRequired,
+      staffMembers: PropTypes.array.isRequired
+    })
+  ),
+  members: PropTypes.objectOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      position: PropTypes.number.isRequired,
+      smallImageUrl: PropTypes.string.isRequired,
+      bio: PropTypes.string.isRequired
+    })
+  )
+};
+
+Team.defaultProps = {
+  groups: [],
+  members: {}
 };
 
 export default Team;

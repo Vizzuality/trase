@@ -32,8 +32,8 @@ export const getStaticContent = () => (dispatch, getState) => {
 };
 
 export const getTeamData = mock => (dispatch, getState) => {
-  const { staticContent } = getState();
-  if (!staticContent.team) {
+  const { groups, members } = getState().staticContent;
+  if (!groups || !members) {
     const url = getURLFromParams(GET_TEAM_URL, null, mock);
     fetch(url)
       .then(res => (res.ok ? res.json() : Promise.reject(res)))
