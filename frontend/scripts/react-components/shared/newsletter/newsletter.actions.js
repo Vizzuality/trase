@@ -1,4 +1,4 @@
-import { getURLFromParams, POST_SUBSCRIBE_NEWSLETTER } from 'utils/getURLFromParams';
+import { getURLFromParams, POST_SUBSCRIBE_NEWSLETTER_URL } from 'utils/getURLFromParams';
 
 export const NEWSLETTER__SET_SUBSCRIPTION_MESSAGE = 'NEWSLETTER__SET_SUBSCRIPTION_MESSAGE';
 export const NEWSLETTER__RESET_NEWSLETTER = 'NEWSLETTER__RESET_NEWSLETTER';
@@ -7,7 +7,7 @@ export const sendSubscriptionEmail = email => dispatch => {
   const body = new FormData();
   body.append('email', email);
 
-  const url = getURLFromParams(POST_SUBSCRIBE_NEWSLETTER);
+  const url = getURLFromParams(POST_SUBSCRIBE_NEWSLETTER_URL);
   return fetch(url, {
     method: 'POST',
     body

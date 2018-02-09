@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import xor from 'lodash/xor';
 import uniqBy from 'lodash/uniqBy';
 import {
-  GET_CSV_DATA_DOWNLOAD_FILE,
-  GET_JSON_DATA_DOWNLOAD_FILE,
+  GET_CSV_DATA_DOWNLOAD_FILE_URL,
+  GET_JSON_DATA_DOWNLOAD_FILE_URL,
   getURLFromParams
 } from 'utils/getURLFromParams';
 import BulkDownloadsBlock from 'react-components/data-portal/bulk-downloads-block.component';
@@ -249,10 +249,10 @@ class DataContent extends Component {
 
     switch (file) {
       case '.json':
-        downloadURL = getURLFromParams(GET_JSON_DATA_DOWNLOAD_FILE, params);
+        downloadURL = getURLFromParams(GET_JSON_DATA_DOWNLOAD_FILE_URL, params);
         break;
       default:
-        downloadURL = getURLFromParams(GET_CSV_DATA_DOWNLOAD_FILE, params);
+        downloadURL = getURLFromParams(GET_CSV_DATA_DOWNLOAD_FILE_URL, params);
         break;
     }
 

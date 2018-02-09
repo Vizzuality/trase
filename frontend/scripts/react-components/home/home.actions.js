@@ -1,12 +1,17 @@
-import { getURLFromParams, GET_TWEETS, GET_POSTS, GET_TESTIMONIALS } from 'utils/getURLFromParams';
+import {
+  getURLFromParams,
+  GET_TWEETS_URL,
+  GET_POSTS_URL,
+  GET_TESTIMONIALS_URL
+} from 'utils/getURLFromParams';
 
 export const HOME__SET_CONTENT = 'HOME__SET_CONTENT';
 
 export const getHomeContent = (type, mock) => dispatch => {
   const content = {
-    posts: { url: GET_POSTS, defaultValue: [] },
-    testimonials: { url: GET_TESTIMONIALS, defaultValue: [] },
-    tweets: { url: GET_TWEETS, defaultValue: [] }
+    posts: { url: GET_POSTS_URL, defaultValue: [] },
+    testimonials: { url: GET_TESTIMONIALS_URL, defaultValue: [] },
+    tweets: { url: GET_TWEETS_URL, defaultValue: [] }
   }[type];
   const url = getURLFromParams(content.url, undefined, mock);
   fetch(url)

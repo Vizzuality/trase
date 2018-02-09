@@ -1,4 +1,13 @@
-import actions from 'actions';
+import {
+  DISPLAY_STORY_MODAL,
+  LOAD_TOOLTIP,
+  SET_SANKEY_SIZE,
+  SET_TOOLTIPS,
+  SHOW_DISCLAIMER,
+  TOGGLE_DROPDOWN,
+  TOGGLE_MAP_LAYERS_MENU
+} from 'actions/app.actions';
+import { createReducer } from 'store';
 
 const initialState = {
   windowSize: [window.innerWidth, window.innerHeight],
@@ -15,47 +24,54 @@ const initialState = {
 
 const isSankeyExpanded = state => state.isMapLayerVisible !== true && state.isMapVisible !== true;
 
-export default function(state = initialState, action) {
-  switch (action.type) {
-    case actions.SET_SANKEY_SIZE:
-      if (isSankeyExpanded(state)) {
-        return Object.assign({}, state, {
-          sankeySize: [window.innerWidth - 392, window.innerHeight - 180]
-        });
-      }
-      return state;
-
-    case actions.TOGGLE_MAP_LAYERS_MENU:
-      return Object.assign({}, state, { isMapLayerVisible: !state.isMapLayerVisible });
-
-    case actions.LOAD_TOOLTIP:
-      return Object.assign({}, state, { tooltipCheck: (state.tooltipCheck || 0) + 1 });
-
-    case actions.SET_TOOLTIPS:
-      return Object.assign({}, state, { tooltips: action.payload });
-
-    case actions.SHOW_DISCLAIMER: {
+const appReducer = {
+  [SET_SANKEY_SIZE](state) {
+    if (isSankeyExpanded(state)) {
       return Object.assign({}, state, {
-        modal: {
-          visibility: true,
-          modalParams: {
-            description: action.disclaimerContent
-          }
-        }
+        sankeySize: [window.innerWidth - 392, window.innerHeight - 180]
       });
     }
-
-    case actions.TOGGLE_DROPDOWN: {
-      const currentDropdown =
-        action.dropdownId === state.currentDropdown ? null : action.dropdownId;
-      return Object.assign({}, state, { currentDropdown });
-    }
-
-    case action.DISPLAY_STORY_MODAL: {
-      return { ...state, modal: action.payload };
-    }
-
-    default:
-      return state;
+    return state;
+  },
+  [TOGGLE_MAP_LAYERS_MENU](state) {
+    return Object.assign({}, state, { isMapLayerVisible: !state.isMapLayerVisible });
+  },
+  [LOAD_TOOLTIP](state) {
+    return Object.assign({}, state, { tooltipCheck: (state.tooltipCheck || 0) + 1 });
+  },
+  [SET_TOOLTIPS](state, action) {
+    return Object.assign({}, state, { tooltips: action.payload });
+  },
+  [SHOW_DISCLAIMER](state, action) {
+    return Object.assign({}, state, {
+      modal: {
+        visibility: true,
+        modalParams: {
+          description: action.disclaimerContent
+        }
+      }
+    });
+  },
+  [TOGGLE_DROPDOWN](state, action) {
+    const currentDropdown = action.dropdownId === state.currentDropdown ? null : action.dropdownId;
+    return Object.assign({}, state, { currentDropdown });
+  },
+  [DISPLAY_STORY_MODAL](state, action) {
+    return { ...state, modal: action.payload };
   }
-}
+};
+
+const appReducerTypes = PropTypes => ({
+  windowSize: PropTypes.arrayOf(PropTypes.number).isRequired,
+  isMapLayerVisible: PropTypes.bool,
+  isAppMenuVisible: PropTypes.bool,
+  tooltipCheck: PropTypes.number,
+  tooltips: PropTypes.object.isRequired,
+  currentDropdown: PropTypes.string,
+  modal: PropTypes.shape({
+    visibility: PropTypes.bool,
+    modalParams: PropTypes.array
+  }).isRequired
+});
+
+export default createReducer(initialState, appReducer, appReducerTypes);

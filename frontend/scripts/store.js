@@ -1,7 +1,14 @@
-export function createReducer(initialState, reducers) {
+import PropTypes from 'prop-types';
+
+export function createReducer(initialState, reducers, getTypes) {
   return function reducer(state = initialState, action) {
-    if (typeof reducers[action.type] === 'undefined') return state;
-    return reducers[action.type](state, action);
+    const reducerMethod = reducers[action.type];
+    const newState = typeof reducerMethod === 'undefined' ? state : reducerMethod(state, action);
+
+    if (getTypes && NODE_ENV_DEV) {
+      PropTypes.checkPropTypes(getTypes(PropTypes), newState, 'reducer prop', getTypes.name);
+    }
+    return newState;
   };
 }
 

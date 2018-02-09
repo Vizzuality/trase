@@ -1,4 +1,4 @@
-import { GET_ALL_NODES, getURLFromParams } from 'utils/getURLFromParams';
+import { GET_ALL_NODES_URL, getURLFromParams } from 'utils/getURLFromParams';
 import values from 'lodash/values';
 import { DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
 import capitalize from 'lodash/capitalize';
@@ -13,7 +13,7 @@ export const goToNodeProfilePage = node => dispatch =>
   });
 
 export const loadProfileRootNodes = () => dispatch => {
-  const allNodesURL = getURLFromParams(GET_ALL_NODES, { context_id: 1 });
+  const allNodesURL = getURLFromParams(GET_ALL_NODES_URL, { context_id: 1 });
 
   fetch(allNodesURL)
     .then(response => {

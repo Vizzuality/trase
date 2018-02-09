@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import { getURLFromParams, POST_SUBSCRIBE_NEWSLETTER } from 'utils/getURLFromParams';
+import { getURLFromParams, POST_SUBSCRIBE_NEWSLETTER_URL } from 'utils/getURLFromParams';
 import classnames from 'classnames';
 import { COUNTRIES } from '../../countries';
 
@@ -81,7 +81,7 @@ class DataPortalForm extends Component {
       const newsletterSubscribeBody = new FormData();
       newsletterSubscribeBody.append('email', payload.email);
 
-      fetch(getURLFromParams(POST_SUBSCRIBE_NEWSLETTER), {
+      fetch(getURLFromParams(POST_SUBSCRIBE_NEWSLETTER_URL), {
         method: 'POST',
         body: newsletterSubscribeBody
       });

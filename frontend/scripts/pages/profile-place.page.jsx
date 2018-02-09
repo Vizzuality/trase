@@ -23,7 +23,7 @@ import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
 import smoothScroll from 'utils/smoothScroll';
 
-import { GET_PLACE_FACTSHEET, getURLFromParams } from 'utils/getURLFromParams';
+import { GET_PLACE_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParams';
 import { DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
 import Tooltip from 'components/shared/info-tooltip.component';
 
@@ -313,7 +313,7 @@ const _switchYear = (store, nodeId, dropdownYear) => {
 };
 
 const _loadData = (store, nodeId, year) => {
-  const placeFactsheetURL = getURLFromParams(GET_PLACE_FACTSHEET, {
+  const placeFactsheetURL = getURLFromParams(GET_PLACE_FACTSHEET_URL, {
     context_id: 1,
     node_id: nodeId,
     year

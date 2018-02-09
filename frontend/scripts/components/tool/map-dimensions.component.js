@@ -57,7 +57,7 @@ export default class {
       return;
     }
     this.sidebarGroups.forEach(sidebarGroup => {
-      const id = sidebarGroup.getAttribute('data-group-id');
+      const id = parseInt(sidebarGroup.getAttribute('data-group-id'), 10);
       sidebarGroup.classList.toggle('-expanded', expandedMapSidebarGroupsIds.indexOf(id) !== -1);
     });
   }

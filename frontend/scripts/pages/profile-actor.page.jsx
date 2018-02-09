@@ -21,7 +21,7 @@ import smoothScroll from 'utils/smoothScroll';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
 import capitalize from 'lodash/capitalize';
-import { GET_ACTOR_FACTSHEET, getURLFromParams } from 'utils/getURLFromParams';
+import { GET_ACTOR_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParams';
 import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST, DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
 import TopSourceSwitcher from 'react-components/profiles/top-source-switcher.component';
 
@@ -424,7 +424,7 @@ const _switchYear = (store, nodeId, dropdownYear, showMiniSankey) => {
 };
 
 const _loadData = (store, nodeId, year) => {
-  const actorFactsheetURL = getURLFromParams(GET_ACTOR_FACTSHEET, {
+  const actorFactsheetURL = getURLFromParams(GET_ACTOR_FACTSHEET_URL, {
     context_id: 1,
     node_id: nodeId,
     year

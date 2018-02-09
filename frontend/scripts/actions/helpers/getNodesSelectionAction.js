@@ -76,11 +76,12 @@ export default (nodesIds, state) => {
     state.selectedResizeBy.label
   );
   const geoIds = data
-    .filter(node => node.isGeo === true && node.geoId !== undefined && node.geoId !== null)
+    .filter(node => node.isGeo === true && typeof node.geoId !== 'undefined' && node.geoId !== null)
     .map(node => node.geoId);
+
   const columnsPos = data.map(node => node.columnGroup);
 
-  if (data.length === 1 && data[0].geoId !== null && state.choropleth !== undefined) {
+  if (data.length === 1 && data[0].geoId !== null && typeof state.choropleth !== 'undefined') {
     choroplethBucket = state.choropleth[data[0].geoId] || 'ch-default';
   }
 
