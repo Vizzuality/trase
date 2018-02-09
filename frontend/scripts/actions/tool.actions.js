@@ -355,7 +355,7 @@ export function loadLinks() {
     }
 
     const selectedBiomeFilter = state.tool.selectedBiomeFilter;
-    if (selectedBiomeFilter && selectedBiomeFilter.name && selectedBiomeFilter.value !== 'none') {
+    if (selectedBiomeFilter && selectedBiomeFilter.name && selectedBiomeFilter.name !== 'none') {
       params.biome_filter_id = selectedBiomeFilter.nodeId;
     }
 

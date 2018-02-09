@@ -24,7 +24,11 @@
         "transform-es2015-modules-commonjs",
         ["module-resolver", {
           "alias": {
-            "actions": "./scripts/actions"
+            "actions": "./scripts/actions",
+            "utils": "./scripts/utils",
+            "reducers": "./scripts/reducers",
+            "store": "./scripts/store",
+            "react-components": "./scripts/react-components"
           }
         }]
       ]
