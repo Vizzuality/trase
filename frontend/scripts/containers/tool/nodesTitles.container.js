@@ -22,7 +22,6 @@ const mapMethodsToState = state => ({
       isHighlight: state.tool.highlightedNodeData.length > 0,
       recolorGroups: state.tool.recolorGroups,
       coordinates: state.tool.highlightedNodeCoordinates,
-      isMapVisible: state.tool.isMapVisible,
       currentQuant: state.tool.currentQuant,
       selectedYears: state.tool.selectedYears
     })
