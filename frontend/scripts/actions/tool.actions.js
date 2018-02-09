@@ -774,7 +774,7 @@ export function selectMapBasemap(selectedMapBasemap) {
 export function toggleMapSidebarGroup(id) {
   return {
     type: TOGGLE_MAP_SIDEBAR_GROUP,
-    id
+    id: parseInt(id, 10)
   };
 }
 

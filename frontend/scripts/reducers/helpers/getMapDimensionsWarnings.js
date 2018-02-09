@@ -8,9 +8,11 @@ const getDimensionWarning = reason => {
 
 const getMapDimensionsWarnings = (mapDimensions, selectedMapDimensionsUids) => {
   const dimensions = mapDimensions.filter(
-    d => selectedMapDimensionsUids.indexOf(d.uid) > -1 && d.disabledYearRangeReason !== undefined
+    d =>
+      selectedMapDimensionsUids.indexOf(d.uid) > -1 &&
+      typeof d.disabledYearRangeReason !== 'undefined'
   );
-  if (!dimensions.length) {
+  if (dimensions.length === 0) {
     return null;
   } else if (
     dimensions.length === 2 &&
