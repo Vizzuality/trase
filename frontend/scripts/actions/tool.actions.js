@@ -1,6 +1,7 @@
 /* eslint-disable no-use-before-define */
 import { SET_TOOLTIPS } from 'actions/app.actions';
 import { LOAD_CONTEXTS } from 'actions/data.actions';
+import { feature as topojsonFeature } from 'topojson';
 import {
   CARTO_NAMED_MAPS_BASE_URL,
   NUM_NODES_DETAILED,
@@ -9,13 +10,6 @@ import {
   YEARS_DISABLED_NO_AGGR,
   YEARS_DISABLED_UNAVAILABLE
 } from 'constants';
-import difference from 'lodash/difference';
-import compact from 'lodash/compact';
-import uniq from 'lodash/uniq';
-import capitalize from 'lodash/capitalize';
-import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
-import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
-import { feature as topojsonFeature } from 'topojson';
 import {
   GET_ALL_NODES_URL,
   GET_COLUMNS_URL,
@@ -27,7 +21,18 @@ import {
   GET_TOOLTIPS_URL,
   getURLFromParams
 } from 'utils/getURLFromParams';
+import contextLayersCarto from 'actions/map/context_layers_carto';
+import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
+import getNodesSelectionAction from 'actions/helpers/getNodesSelectionAction';
+import getSelectedNodesStillVisible from 'actions/helpers/getSelectedNodesStillVisible';
+import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
+import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
+import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
 import isNodeColumnVisible from 'utils/isNodeColumnVisible';
+import capitalize from 'lodash/capitalize';
+import difference from 'lodash/difference';
+import compact from 'lodash/compact';
+import uniq from 'lodash/uniq';
 
 export const LOAD_INITIAL_DATA = 'LOAD_INITIAL_DATA';
 export const RESET_SELECTION = 'RESET_SELECTION';
@@ -585,7 +590,7 @@ export function updateNodes(selectedNodesIds) {
 export function setSankeySearchVisibility(searchVisibility) {
   return dispatch =>
     dispatch({
-      type: actions.SET_SANKEY_SEARCH_VISIBILITY,
+      type: SET_SANKEY_SEARCH_VISIBILITY,
       searchVisibility
     });
 }
