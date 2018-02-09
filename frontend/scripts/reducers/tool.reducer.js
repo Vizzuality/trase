@@ -86,7 +86,7 @@ export const toolInitialState = {
   nodesDictWithMeta: {},
   recolorByNodeIds: [],
   recolorGroups: [],
-  selectedBiomeFilter: { value: 'none' },
+  selectedBiomeFilter: { name: 'none' },
   selectedColumnsIds: [],
   selectedContext: null,
   selectedContextId: null,
