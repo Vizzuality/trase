@@ -51,7 +51,7 @@ import sortVisibleNodes from './helpers/sortVisibleNodes';
 import splitLinksByColumn from './helpers/splitLinksByColumn';
 import splitVisibleNodesByColumn from './helpers/splitVisibleNodesByColumn';
 
-const initialState = {
+export const toolInitialState = {
   areNodesExpanded: false,
   choropleth: {},
   choroplethLegend: null,
@@ -553,7 +553,7 @@ const toolReducer = {
     return Object.assign({}, state, { expandedMapSidebarGroupsIds });
   },
   [RESET_TOOL_STATE](state, action) {
-    return {...initialState, contexts: state.contexts, ...action.payload};
+    return { ...toolInitialState, contexts: state.contexts, ...action.payload };
   },
   [SET_SANKEY_SEARCH_VISIBILITY](state, action) {
     return Object.assign({}, state, { isSearchOpen: action.searchVisibility });
@@ -614,4 +614,4 @@ const toolReducerTypes = PropTypes => ({
   visibleNodesByColumn: PropTypes.arrayOf(PropTypes.object).isRequired
 });
 
-export default createReducer(initialState, toolReducer, toolReducerTypes);
+export default createReducer(toolInitialState, toolReducer, toolReducerTypes);
