@@ -12,7 +12,7 @@ const TeamMember = props => {
         <div className="column small-12 medium-4">
           <div className="team-member-profile-picture-container">
             <Link className="subtitle -gray" to={{ type: 'team' }}>
-              SEE ALL TEAM
+              back to trase team
             </Link>
             <div
               className={cx('c-team-profile-picture', { '-placeholder': !member.smallImageUrl })}
