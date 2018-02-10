@@ -140,7 +140,7 @@ of #{@soy_area_formatted} #{@soy_area_unit} of land."
             sum(:value)
 
           percentage_total_production =
-            if @soy_production
+            if @soy_production && total_soy_production.positive?
               helper.number_to_percentage(
                 (@soy_production / total_soy_production) * 100,
                 delimiter: ',', precision: 2
@@ -158,7 +158,14 @@ of #{@soy_area_formatted} #{@soy_area_unit} of land."
           state_ranking = state_ranking.ordinalize if state_ranking.present?
           state_name = @state.name.titleize if @state.present?
 
-          " With #{percentage_total_production} of the total production, it \
+          text =
+            if percentage_total_production == '0.00%'
+              ' With less than 0.01% '
+            else
+              " With #{percentage_total_production} "
+            end
+
+          text + "of the total production, it \
 ranks #{country_ranking} in Brazil in soy production, and #{state_ranking} in \
 the state of #{state_name}."
         end
