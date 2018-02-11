@@ -16,6 +16,14 @@
     "transform-exponentiation-operator"
   ],
   "env": {
+    "production": {
+      "plugins": [
+        ["transform-react-remove-prop-types", {
+          "mode": "wrap",
+          "ignoreFilenames": ["node_modules"]
+        }]
+      ]
+    },
     "test": {
       "presets": [
         "env",
