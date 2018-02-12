@@ -2,10 +2,11 @@ import { connect } from 'react-redux';
 import Team from './team.component';
 
 function mapStateToProps(state) {
-  const { members, groups } = state.team;
+  const { members, groups, errorMessage } = state.team;
   return {
     groups,
-    members
+    members,
+    errorMessage
   };
 }
 

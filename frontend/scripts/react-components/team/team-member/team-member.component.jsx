@@ -1,11 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import TeamPageMessage from 'react-components/team/team-page-message.component';
 import Link from 'redux-first-router-link';
 import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.component';
 import cx from 'classnames';
 
 const TeamMember = props => {
-  const { member } = props;
+  const { member, errorMessage } = props;
+
+  if (errorMessage !== null) {
+    return (
+      <TeamPageMessage message={`An error occurred while loading the team info: ${errorMessage}`} />
+    );
+  }
+
   return (
     <div className="c-team-member">
       <div className="row">
@@ -33,7 +41,8 @@ const TeamMember = props => {
 };
 
 TeamMember.propTypes = {
-  member: PropTypes.object.isRequired
+  member: PropTypes.object.isRequired,
+  errorMessage: PropTypes.string
 };
 
 export default TeamMember;

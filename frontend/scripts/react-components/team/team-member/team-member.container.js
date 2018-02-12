@@ -5,7 +5,8 @@ function mapStateToProps(state) {
   const { team, location } = state;
   const member = location.payload.member;
   return {
-    member: team.members && team.members[member]
+    member: team.members && team.members[member],
+    errorMessage: team.errorMessage
   };
 }
 

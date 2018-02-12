@@ -2,19 +2,10 @@ import cx from 'classnames';
 import kebabCase from 'lodash/kebabCase';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import TeamPageMessage from 'react-components/team/team-page-message.component';
 import Link from 'redux-first-router-link';
 
 class Team extends Component {
-  renderNoTeamMembersMessage() {
-    return (
-      <section className="not-found">
-        <div className="row column">
-          <p className="not-found-text">No team members found.</p>
-        </div>
-      </section>
-    );
-  }
-
   renderTeamMember(slug) {
     const { members } = this.props;
 
@@ -52,12 +43,19 @@ class Team extends Component {
   }
 
   render() {
-    const { groups } = this.props;
+    const { groups, errorMessage } = this.props;
 
+    if (errorMessage !== null) {
+      return (
+        <TeamPageMessage
+          message={`An error occurred while loading the team info: ${errorMessage}`}
+        />
+      );
+    }
     return (
       groups && (
         <div className="c-team">
-          {groups.length === 0 && this.renderNoTeamMembersMessage()}
+          {groups.length === 0 && <TeamPageMessage message="No team members found." />}
           {groups.map(group => this.renderTeamGroup(group))}
         </div>
       )
@@ -80,7 +78,8 @@ Team.propTypes = {
       smallImageUrl: PropTypes.string.isRequired,
       bio: PropTypes.string.isRequired
     })
-  )
+  ),
+  errorMessage: PropTypes.string
 };
 
 export default Team;
