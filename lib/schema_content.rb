@@ -86,24 +86,42 @@ class SchemaContent
   end
 
   def posts_insert_sql
-    simple_insert(
-      'posts',
-      %w(
-        id
-        title
-        date
-        post_url
-        state
-        highlighted
-        category
-        image_file_name
-        image_content_type
-        image_file_size
-        image_updated_at
-        created_at
-        updated_at
-      )
+    table_name = 'posts'
+    insert_column_names = %w(
+      id
+      title
+      date
+      post_url
+      state
+      highlighted
+      category
+      image_file_name
+      image_content_type
+      image_file_size
+      image_updated_at
+      created_at
+      updated_at
     )
+    select_column_names = [
+      'id',
+      'title',
+      'date',
+      'post_url',
+      'state',
+      'COALESCE(highlighted, FALSE)',
+      "COALESCE(category, 'NEWS')",
+      'image_file_name',
+      'image_content_type',
+      'image_file_size',
+      'image_updated_at',
+      'created_at',
+      'updated_at'
+    ]
+    <<-SQL
+    INSERT INTO content.#{table_name} (#{insert_column_names.join(', ')})
+    SELECT #{select_column_names.join(', ')}
+    FROM content_fdw.#{table_name};
+    SQL
   end
 
   def site_dives_insert_sql
