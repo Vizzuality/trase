@@ -220,6 +220,36 @@ ALTER SEQUENCE ckeditor_assets_id_seq OWNED BY ckeditor_assets.id;
 
 
 --
+-- Name: pages; Type: TABLE; Schema: content; Owner: -
+--
+
+CREATE TABLE pages (
+    id bigint NOT NULL,
+    name text NOT NULL,
+    content text NOT NULL
+);
+
+
+--
+-- Name: pages_id_seq; Type: SEQUENCE; Schema: content; Owner: -
+--
+
+CREATE SEQUENCE pages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: pages_id_seq; Type: SEQUENCE OWNED BY; Schema: content; Owner: -
+--
+
+ALTER SEQUENCE pages_id_seq OWNED BY pages.id;
+
+
+--
 -- Name: posts; Type: TABLE; Schema: content; Owner: -
 --
 
@@ -4391,6 +4421,13 @@ ALTER TABLE ONLY ckeditor_assets ALTER COLUMN id SET DEFAULT nextval('ckeditor_a
 
 
 --
+-- Name: pages id; Type: DEFAULT; Schema: content; Owner: -
+--
+
+ALTER TABLE ONLY pages ALTER COLUMN id SET DEFAULT nextval('pages_id_seq'::regclass);
+
+
+--
 -- Name: posts id; Type: DEFAULT; Schema: content; Owner: -
 --
 
@@ -4885,6 +4922,14 @@ SET search_path = content, pg_catalog;
 
 ALTER TABLE ONLY ckeditor_assets
     ADD CONSTRAINT ckeditor_assets_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pages pages_pkey; Type: CONSTRAINT; Schema: content; Owner: -
+--
+
+ALTER TABLE ONLY pages
+    ADD CONSTRAINT pages_pkey PRIMARY KEY (id);
 
 
 --
@@ -7235,6 +7280,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180126140843'),
 ('20180202093906'),
 ('20180207133151'),
-('20180207133331');
+('20180207133331'),
+('20180212120524');
 
 
