@@ -8,7 +8,9 @@ ActiveAdmin.register Content::Post, as: 'Post' do
     inputs do
       input :title, required: true
       input :date, as: :date_select, required: true, label: 'Publishing date', hint: 'Content on the site is sorted by publishing date'
-      input :image, as: :file
+      input :image, as: :file, :hint => f.object.image.present? \
+        ? image_tag(f.object.image.url(:small))
+        : content_tag(:span, "no cover page yet")
       input :post_url, required: true
       input :category, required: true, as: :select, collection: Content::Post::CATEGORIES, hint: "'INSIGHT', 'INFO BRIEF', 'ISSUE BRIEF' and 'LONGER READ' are displayed under the homepage's 'Insights' section, while 'NEWS' and 'BLOG' will be shown under the section with the same name."
       input :state, as: :boolean, label: 'Published?', hint: 'To be displayed on the website, a post must be published'
