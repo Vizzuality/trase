@@ -5,6 +5,10 @@ export default function(links, userecolorGroups) {
   const mergedLinks = [];
   const dict = {};
 
+  if (typeof links === 'undefined') {
+    return [];
+  }
+
   for (let i = 0; i < links.length; i++) {
     const link = links[i];
 
