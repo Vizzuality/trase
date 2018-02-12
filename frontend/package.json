@@ -5,7 +5,7 @@
   "scripts": {
     "start": "webpack-dev-server --config config/webpack.config.dev.js",
     "build": "npm run webpack:prod && cp -a public/. dist/",
-    "test": "jest --colors",
+    "test": "jest ./scripts --colors",
     "webpack:prod": "NODE_ENV='production' webpack --config config/webpack.config.prod.js",
     "lint-js": "eslint -c .eslintrc.json --ext .jsx,.js --fix",
     "lint-sass": "sass-lint -c .sass-lint.yml -v -q",
