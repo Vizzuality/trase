@@ -2,6 +2,7 @@
 # database and the content schema
 class SchemaContent
   def copy
+    cleanup_fdw
     initialize_fdw
     tables_to_copy.each do |table|
       copy_data(table)
@@ -30,8 +31,8 @@ class SchemaContent
   end
 
   def cleanup_fdw
-    execute_local_query 'DROP SCHEMA content_fdw CASCADE'
-    execute_local_query 'DROP SERVER content_server CASCADE'
+    execute_local_query 'DROP SCHEMA IF EXISTS content_fdw CASCADE'
+    execute_local_query 'DROP SERVER IF EXISTS content_server CASCADE'
   end
 
   def tables_to_copy
