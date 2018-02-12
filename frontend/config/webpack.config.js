@@ -107,13 +107,14 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader']
-      },
-      {
-        test: /\.(jpe?g|png|gif|svg)$/,
-        loader: 'image-webpack-loader',
-        // This will apply the loader before the other ones
-        enforce: 'pre'
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: { minimize: process.env.NODE_ENV === 'production' }
+          },
+          'sass-loader'
+        ]
       },
       {
         test: /\.(jpe?g|png|gif)$/,
