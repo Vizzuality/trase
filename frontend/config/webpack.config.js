@@ -21,7 +21,7 @@ module.exports = {
     publicPath: '/'
   },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({ name: 'common', minChunks: 3 }),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'main', minChunks: 3 }),
     new webpack.optimize.CommonsChunkPlugin({
       // A name of the chunk that will include the dependencies.
       // This name is substituted in place of [name] from step 1
@@ -94,7 +94,17 @@ module.exports = {
         exclude: /node_modules/,
         use: ['babel-loader', 'eslint-loader']
       },
-      { test: /\.css$/, use: ['style-loader', 'css-loader', 'postcss-loader'] },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: { minimize: process.env.NODE_ENV === 'production' }
+          },
+          'postcss-loader'
+        ]
+      },
       {
         test: /\.scss$/,
         use: ['style-loader', 'css-loader', 'sass-loader']
