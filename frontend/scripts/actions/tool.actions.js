@@ -64,11 +64,9 @@ export function resetState(refilter = true) {
 // Resets sankey's params that may lead to no flows being returned from the API
 export function resetSankey() {
   return (dispatch, getState) => {
-    const state = getState();
-    const currentContext = state.tool.contexts.find(
-      context => context.id === state.tool.selectedContextId
-    );
-    const defaultColumns = state.tool.columns.filter(column => column.isDefault);
+    const { contexts, selectedContextId, columns, areNodesExpanded } = getState().tool;
+    const currentContext = contexts.find(context => context.id === selectedContextId);
+    const defaultColumns = columns.filter(column => column.isDefault);
     const defaultResizeBy =
       currentContext && currentContext.resizeBy.find(resizeBy => resizeBy.isDefault);
     const defaultRecolorBy =
@@ -87,7 +85,7 @@ export function resetSankey() {
       });
     });
 
-    if (state.tool.areNodesExpanded === true) {
+    if (areNodesExpanded === true) {
       dispatch({
         type: actions.TOGGLE_NODES_EXPAND
       });

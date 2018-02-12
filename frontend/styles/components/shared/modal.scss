@@ -47,6 +47,8 @@
       color: $charcoal-grey;
       background-color: $white;
       font-weight: bold;
+      padding: 10px;
+      min-width: 100px;
     }
 
     &.-big {
@@ -61,6 +63,10 @@
 
     &.-big-margin {
       padding: 60px 80px;
+    }
+
+    &.-auto-height {
+      min-height: auto;
     }
   }
 }
