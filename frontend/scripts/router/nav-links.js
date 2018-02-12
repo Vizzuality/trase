@@ -24,7 +24,7 @@ export default {
       page: 'about'
     }
   ],
-  navSidebar: [
+  sidebarNav: [
     {
       name: 'What is Trase?',
       page: 'about'
@@ -53,8 +53,7 @@ export default {
     {
       name: 'Team',
       page: {
-        type: 'about',
-        payload: { section: 'team' }
+        type: 'team'
       }
     },
     {

@@ -7,7 +7,11 @@ function mapLinksToRouter(link) {
 }
 
 function isActive(match, location, link) {
-  return location.type === link.page.type && link.page.payload.section === location.payload.section;
+  return (
+    location.type === link.page.type &&
+    (link.page.payload && link.page.payload.section) ===
+      (location.payload && location.payload.section)
+  );
 }
 
 const NavLinksList = props => {

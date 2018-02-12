@@ -1,6 +1,6 @@
-import { NOT_FOUND, redirect } from 'redux-first-router';
-import { getURLFromParams, GET_MARKDOWN_CONTENT_URL } from 'utils/getURLFromParams';
 import kebabCase from 'lodash/kebabCase';
+import { NOT_FOUND, redirect } from 'redux-first-router';
+import { GET_MARKDOWN_CONTENT_URL, getURLFromParams } from 'utils/getURLFromParams';
 
 export const STATIC_CONTENT__SET_MARKDOWN = 'STATIC_CONTENT__SET_MARKDOWN';
 

@@ -1,16 +1,19 @@
+import { getDataPortalContext } from 'react-components/data-portal/data-portal.thunks';
+import {
+  getPostsContent,
+  getTestimonialsContent,
+  getTweetsContent,
+  resetToolThunk
+} from 'react-components/home/home.thunks';
+import { withSidebarNavLayout } from 'react-components/nav/sidebar-nav/withSidebaNavLayout.hoc';
+import { getProfileRootNodes } from 'react-components/profile-root/profile-root.thunks';
+import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.container';
+import { getPageStaticContent } from 'react-components/static-content/static-content.thunks';
+import TeamMember from 'react-components/team/team-member/team-member.container';
+import Team from 'react-components/team/team.container';
+import { getTeam } from 'react-components/team/team.thunks';
 import { connectRoutes, NOT_FOUND, replace } from 'redux-first-router';
 import { parse, stringify } from 'utils/stateURL';
-import {
-  resetToolThunk,
-  getPostsContent,
-  getTweetsContent,
-  getTestimonialsContent
-} from 'react-components/home/home.thunks';
-
-import { getDataPortalContext } from 'react-components/data-portal/data-portal.thunks';
-
-import { getPageStaticContent } from 'react-components/static-content/static-content.thunks';
-import { getProfileRootNodes } from 'react-components/profile-root/profile-root.thunks';
 
 const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thunk(...params));
 
@@ -67,10 +70,23 @@ const routes = {
       className: '-light'
     }
   },
+  team: {
+    path: '/about/team',
+    page: 'static-content',
+    thunk: dispatchThunks(getTeam),
+    component: withSidebarNavLayout(Team)
+  },
+  teamMember: {
+    path: '/about/team/:member',
+    page: 'static-content',
+    thunk: dispatchThunks(getTeam),
+    component: withSidebarNavLayout(TeamMember)
+  },
   about: {
     path: '/about/:section?',
     page: 'static-content',
-    thunk: dispatchThunks(getPageStaticContent)
+    thunk: dispatchThunks(getPageStaticContent),
+    component: withSidebarNavLayout(MarkdownRenderer)
   },
   [NOT_FOUND]: {
     path: '/404',

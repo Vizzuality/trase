@@ -18,6 +18,7 @@ export const GET_POSTS_URL = 'GET_POSTS_URL';
 export const GET_SITE_DIVE_URL = 'GET_SITE_DIVE_URL';
 export const GET_TESTIMONIALS_URL = 'GET_TESTIMONIALS_URL';
 export const GET_MARKDOWN_CONTENT_URL = 'GET_MARKDOWN_CONTENT_URL';
+export const GET_TEAM_URL = 'GET_TEAM_URL';
 
 const API_ENDPOINTS = {
   [GET_CONTEXTS_URL]: { api: 3, endpoint: '/contexts' },
@@ -51,7 +52,12 @@ const API_ENDPOINTS = {
     endpoint: '/testimonials',
     mock: 'mocks/v3_get_testimonials.json'
   },
-  [GET_MARKDOWN_CONTENT_URL]: { api: 'markdown', endpoint: 'static-content' }
+  [GET_MARKDOWN_CONTENT_URL]: { api: 'markdown', endpoint: 'static-content' },
+  [GET_TEAM_URL]: {
+    api: 'content',
+    endpoint: '/staff_groups',
+    mock: '/mocks/v3_get_team.json'
+  }
 };
 
 function getURLForV3(endpoint, paramsArg = {}) {

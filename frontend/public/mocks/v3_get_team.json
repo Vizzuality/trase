@@ -1,0 +1,116 @@
+[
+  {
+    "position": 0,
+    "name": "Business",
+    "staffMembers": [
+      {
+        "position": 0,
+        "name": "Katie Adkins",
+        "bio": "Ut id Lorem sint ullamco minim esse ea id sit sint. Adipisicing magna irure amet enim minim aliqua. Enim tempor adipisicing reprehenderit voluptate ea cupidatat mollit dolore exercitation excepteur amet eu occaecat commodo.\r\n",
+        "smallImageUrl": "/images/mocks/avatar3.jpg"
+      },
+      {
+        "position": 1,
+        "name": "Avery Weeks",
+        "bio": "Dolor ea laboris nulla do reprehenderit pariatur officia. Sunt sit dolor consequat ea excepteur ut consequat consectetur laborum. Elit sit dolore adipisicing elit ipsum. Laboris et proident aute cillum exercitation.\r\n",
+        "smallImageUrl": "/images/mocks/avatar3.jpg"
+      },
+      {
+        "position": 2,
+        "name": "Sandra Dyer",
+        "bio": "Anim velit ex adipisicing et nulla laboris fugiat aliquip. Dolor commodo irure ut reprehenderit incididunt qui adipisicing esse. Irure ea ea quis nisi in. Cillum do sint consequat pariatur do. Pariatur dolore velit ullamco culpa laborum nostrud esse sint nostrud eu proident. Ut culpa adipisicing cillum ut Lorem mollit ut veniam sit deserunt mollit.\r\n",
+        "smallImageUrl": "/images/mocks/avatar1.jpg"
+      },
+      {
+        "position": 3,
+        "name": "Pace Reese",
+        "bio": "Incididunt proident veniam ex aute aliquip voluptate. Consequat ex ea aute consectetur fugiat nisi esse adipisicing dolor. Nisi occaecat duis cillum irure ullamco ea deserunt cupidatat aliquip elit. Commodo minim minim sunt nisi do irure dolore ut laboris mollit aute. Fugiat velit ipsum consequat ea esse irure exercitation aliquip ea ullamco dolore quis dolor ea. Est irure Lorem ea do.\r\n",
+        "smallImageUrl": "/images/mocks/avatar2.jpg"
+      },
+      {
+        "position": 4,
+        "name": "Candice Horn",
+        "bio": "Eiusmod pariatur sunt eiusmod ullamco reprehenderit ad. Reprehenderit mollit non et duis. Laboris consectetur officia Lorem dolor fugiat duis. Ad ipsum deserunt sint deserunt mollit incididunt fugiat in. Excepteur sit incididunt Lorem cillum mollit laboris laborum laboris dolor magna excepteur non. Sit sit aute fugiat aliquip duis consequat laboris magna ullamco.\r\n",
+        "smallImageUrl": "/images/mocks/avatar2.jpg"
+      },
+      {
+        "position": 5,
+        "name": "Jeanette Dean",
+        "bio": "Labore ea id minim aliquip incididunt labore commodo mollit cupidatat deserunt ut veniam eiusmod. Do consectetur aute aliquip dolore velit deserunt id id ad. Eu ullamco sunt labore anim incididunt duis. Qui veniam labore non tempor.\r\n",
+        "smallImageUrl": "/images/mocks/avatar3.jpg"
+      }
+    ]
+  },
+  {
+    "position": 1,
+    "name": "Developers",
+    "staffMembers": [
+      {
+        "position": 0,
+        "name": "Bowen Craig",
+        "bio": "Magna excepteur sit sint esse. Adipisicing reprehenderit aliquip cillum esse culpa. Aliqua occaecat quis nostrud amet consequat dolore nisi excepteur ex aliquip ad ipsum. Velit reprehenderit in aute anim dolor irure anim eiusmod aliquip anim id. Non cillum anim consequat incididunt voluptate laborum nostrud excepteur duis dolor incididunt mollit. Aute pariatur cillum ipsum consequat culpa irure fugiat ullamco occaecat amet. Consequat occaecat in eu ea laboris adipisicing.\r\n",
+        "smallImageUrl": "/images/mocks/avatar1.jpg"
+      },
+      {
+        "position": 1,
+        "name": "Rosanna Williams",
+        "bio": "Labore nisi id do qui ad nostrud ipsum minim minim ut amet cillum. Nostrud amet elit duis esse proident. Ea elit sit qui sunt aute cupidatat excepteur commodo id exercitation sunt. Labore cillum amet dolor ut exercitation aliqua est amet minim. Cillum esse ea enim eu tempor adipisicing commodo laborum reprehenderit amet proident sit cupidatat.\r\n",
+        "smallImageUrl": "/images/mocks/avatar3.jpg"
+      },
+      {
+        "position": 2,
+        "name": "Rachael Holt",
+        "bio": "Ad ullamco excepteur dolor laboris nisi sit dolor proident do et laborum deserunt. Tempor mollit incididunt aliquip quis mollit labore. Amet eiusmod in in irure sint sunt aliqua sunt non ad exercitation. Laboris occaecat magna voluptate minim sint deserunt elit ex anim. Ea officia fugiat adipisicing aliquip nisi mollit consequat exercitation consectetur exercitation occaecat nostrud et aliquip.\r\n",
+        "smallImageUrl": "/images/mocks/avatar3.jpg"
+      },
+      {
+        "position": 3,
+        "name": "Good Briggs",
+        "bio": "Nisi veniam proident officia eiusmod do ullamco aliqua do do sunt reprehenderit consectetur culpa. Dolor tempor nulla exercitation cillum aliquip in aliqua voluptate officia ipsum ad adipisicing. Culpa minim mollit nisi aute ad esse sit excepteur pariatur ut. Consequat excepteur quis fugiat ut culpa deserunt reprehenderit dolore occaecat ex adipisicing tempor. Incididunt nisi aliquip sint ut nulla nisi pariatur dolore enim Lorem id qui eiusmod excepteur.\r\n",
+        "smallImageUrl": "/images/mocks/avatar1.jpg"
+      },
+      {
+        "position": 4,
+        "name": "Francisca Stevens",
+        "bio": "Voluptate duis fugiat adipisicing sunt est adipisicing voluptate enim velit consectetur. Consectetur id exercitation duis fugiat laborum. Dolor culpa ex officia magna mollit ullamco incididunt amet do eu magna fugiat tempor amet. Duis pariatur magna dolore nisi incididunt proident incididunt est. Elit laboris reprehenderit id eiusmod id consectetur aute nisi cupidatat ipsum qui in. Incididunt ea sint incididunt ut veniam ut cillum amet velit in magna qui dolore.\r\n",
+        "smallImageUrl": "/images/mocks/avatar2.jpg"
+      }
+    ]
+  },
+  {
+    "position": 2,
+    "name": "Data",
+    "staffMembers": [
+      {
+        "position": 0,
+        "name": "Tamera Waters",
+        "bio": "Labore amet non qui duis pariatur cillum. Eu sit adipisicing ipsum nisi sunt voluptate aute do nostrud ipsum commodo non consequat. Id esse velit veniam officia ea. Magna cillum nulla elit ex. Mollit proident aliqua duis voluptate amet consequat.\r\n",
+        "smallImageUrl": "/images/mocks/avatar2.jpg"
+      },
+      {
+        "position": 1,
+        "name": "Elsie Griffith",
+        "bio": "Ex tempor excepteur culpa aute amet est id cupidatat sit nostrud exercitation esse. Eu Lorem reprehenderit reprehenderit laborum minim aliqua elit veniam anim nulla deserunt ea cillum. Consectetur eiusmod reprehenderit sit duis adipisicing. Sint fugiat anim esse excepteur est sint laboris irure sint reprehenderit ut. Mollit ut est consequat aliqua deserunt occaecat elit adipisicing irure laboris non officia cillum incididunt.\r\n",
+        "smallImageUrl": "/images/mocks/avatar3.jpg"
+      },
+      {
+        "position": 2,
+        "name": "Evans Cline",
+        "bio": "Aute veniam officia ea consectetur veniam labore ut deserunt non mollit. Ex labore exercitation qui nulla tempor nulla excepteur irure commodo. Non exercitation ipsum do officia magna irure quis deserunt aliqua fugiat. Adipisicing enim ut ut nulla.\r\n",
+        "smallImageUrl": "/images/mocks/avatar4.jpg"
+      },
+      {
+        "position": 3,
+        "name": "Preston Reed",
+        "bio": "Ipsum dolore occaecat sint laboris elit officia et. Ullamco elit mollit officia occaecat ad commodo commodo duis veniam ipsum nulla esse qui. Consequat nulla labore sit reprehenderit quis do Lorem adipisicing ad nulla anim tempor amet fugiat. Deserunt id nulla irure nulla elit reprehenderit id incididunt incididunt reprehenderit pariatur. In aliqua sint do veniam cupidatat irure.\r\n",
+        "smallImageUrl": "/images/mocks/avatar1.jpg"
+      },
+      {
+        "position": 4,
+        "name": "Jackie Graham",
+        "bio": "Esse cupidatat sunt labore sint est adipisicing laboris elit non cupidatat enim laboris. Cupidatat sint non veniam amet nisi nulla ut commodo cillum. Esse officia labore exercitation exercitation non. Sint ullamco elit sint sunt laboris dolore occaecat. Amet voluptate fugiat qui occaecat id ullamco non nostrud et culpa duis et dolore ad. Magna cupidatat proident aliqua magna veniam magna fugiat adipisicing culpa.\r\n",
+        "smallImageUrl": "/images/mocks/avatar1.jpg"
+      }
+    ]
+  }
+]
