@@ -20,9 +20,9 @@ const URL_STATE_PROPS = [
   'selectedMapBasemap'
 ];
 
-const URL_PARAMS_PROPS = ['isMapVisible', 'selectedNodesIds', 'selectedYears'];
+export const URL_PARAMS_PROPS = ['isMapVisible', 'selectedNodesIds', 'selectedYears'];
 
-const filterStateToURL = state => {
+export const filterStateToURL = state => {
   if (_.isEmpty(state)) {
     return {};
   }
@@ -38,7 +38,6 @@ const filterStateToURL = state => {
   stateToSave.selectedBiomeFilterName = state.selectedBiomeFilter
     ? state.selectedBiomeFilter.name
     : state.selectedBiomeFilterName;
-
   return stateToSave;
 };
 
@@ -49,40 +48,48 @@ export const encodeStateToURL = state => {
 
 export const computeStateQueryParams = (state, params) => {
   if (!params) return state;
-  const newState = { ...state };
+  const parsers = {
+    selectedNodesIds(currentState, value) {
+      let selectedNodesIds;
+      if (Array.isArray(value)) {
+        selectedNodesIds = value.map(nodeId => parseInt(nodeId, 10));
+      } else {
+        selectedNodesIds = value
+          .replace(/\[|\]/gi, '')
+          .split(',')
+          .map(nodeId => parseInt(nodeId, 10));
+      }
+      return {
+        ...currentState,
+        areNodesExpanded: true,
+        selectedNodesIds,
+        expandedNodesIds: selectedNodesIds
+      };
+    },
+    selectedYears(currentState, value) {
+      let selectedYears;
+      if (Array.isArray(value)) {
+        selectedYears = value.map(year => parseInt(year, 10));
+      } else {
+        selectedYears = value
+          .replace(/\[|\]/gi, '')
+          .split(',')
+          .map(year => parseInt(year, 10));
+      }
+      return { ...currentState, selectedYears };
+    },
+    default(currentState, value, prop) {
+      return { ...currentState, [prop]: value };
+    }
+  };
+  let newState = { ...state };
   // if URL contains GET parameters, override hash state prop with it
   URL_PARAMS_PROPS.forEach(prop => {
-    let urlParam = params[prop];
-    if (!urlParam) {
-      return;
+    const value = params[prop];
+    const parser = parsers[prop] || parsers.default;
+    if (value) {
+      newState = { ...parser(newState, value, prop) };
     }
-    switch (prop) {
-      case 'selectedNodesIds': {
-        if (Array.isArray(urlParam)) {
-          urlParam = urlParam.map(nodeId => parseInt(nodeId, 10));
-        } else {
-          urlParam = urlParam
-            .replace(/\[|\]/gi, '')
-            .split(',')
-            .map(nodeId => parseInt(nodeId, 10));
-        }
-        newState.areNodesExpanded = true;
-        newState.expandedNodesIds = urlParam;
-        break;
-      }
-      case 'selectedYears': {
-        if (Array.isArray(urlParam)) {
-          urlParam = urlParam.map(year => parseInt(year, 10));
-        } else {
-          urlParam = urlParam
-            .replace(/\[|\]/gi, '')
-            .split(',')
-            .map(year => parseInt(year, 10));
-        }
-        break;
-      }
-    }
-    newState[prop] = urlParam;
   });
   return newState;
 };

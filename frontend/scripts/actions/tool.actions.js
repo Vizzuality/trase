@@ -109,13 +109,13 @@ export function resetSankey() {
       currentContext && currentContext.recolorBy.find(recolorBy => recolorBy.isDefault);
 
     dispatch({
-      type: actions.SELECT_YEARS,
+      type: SELECT_YEARS,
       years: [currentContext.defaultYear, currentContext.defaultYear]
     });
 
     defaultColumns.forEach(defaultColumn => {
       dispatch({
-        type: actions.SELECT_COLUMN,
+        type: SELECT_COLUMN,
         columnIndex: defaultColumn.group,
         columnId: defaultColumn.id
       });
@@ -123,39 +123,39 @@ export function resetSankey() {
 
     if (areNodesExpanded === true) {
       dispatch({
-        type: actions.TOGGLE_NODES_EXPAND
+        type: TOGGLE_NODES_EXPAND
       });
     }
 
     dispatch({
-      type: actions.SELECT_VIEW,
+      type: SELECT_VIEW,
       detailedView: false,
       forcedOverview: true
     });
 
     if (defaultRecolorBy) {
       dispatch({
-        type: actions.SELECT_RECOLOR_BY,
+        type: SELECT_RECOLOR_BY,
         name: defaultRecolorBy[0].name
       });
     } else {
       dispatch({
-        type: actions.SELECT_RECOLOR_BY,
+        type: SELECT_RECOLOR_BY,
         value: 'none',
         value_type: 'none'
       });
     }
 
     dispatch({
-      type: actions.SELECT_RESIZE_BY,
+      type: SELECT_RESIZE_BY,
       resizeBy: defaultResizeBy.name
     });
 
     dispatch({
-      type: actions.RESET_SELECTION
+      type: RESET_SELECTION
     });
     dispatch({
-      type: actions.FILTER_LINKS_BY_NODES
+      type: FILTER_LINKS_BY_NODES
     });
 
     dispatch(loadLinks());
@@ -420,7 +420,7 @@ export function loadLinks() {
     }
 
     const selectedBiomeFilter = state.tool.selectedBiomeFilter;
-    if (selectedBiomeFilter && selectedBiomeFilter.name && selectedBiomeFilter.value !== 'none') {
+    if (selectedBiomeFilter && selectedBiomeFilter.name && selectedBiomeFilter.name !== 'none') {
       params.biome_filter_id = selectedBiomeFilter.nodeId;
     }
 

@@ -409,6 +409,10 @@ This will use the layers configuration stored in `frontend/gis/cartodb/templates
 
 Run `npm run build`, it will create a production-ready version of the project in `/dist`.
 
+## Tests 
+Running `npm test` will launch jest environment and run all tests that match `.test.js` filename inside the `frontend/scripts` folder.
+
+
 ## LICENSE
 
 [MIT](LICENSE)
