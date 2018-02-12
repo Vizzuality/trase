@@ -4,13 +4,16 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const InlineChunkWebpackPlugin = require('html-webpack-inline-chunk-plugin');
 
 const srcPath = path.join(__dirname, '..', 'scripts');
 
 const templates = require('./static.templates');
 
 module.exports = {
-  entry: path.join(srcPath, 'index'),
+  entry: {
+    main: path.join(srcPath, 'index')
+  },
   output: {
     filename: '[name].[chunkhash].js',
     chunkFilename: '[name].[chunkhash].js',
@@ -18,7 +21,22 @@ module.exports = {
     publicPath: '/'
   },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({ name: 'common' }),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'main', minChunks: 3 }),
+    new webpack.optimize.CommonsChunkPlugin({
+      // A name of the chunk that will include the dependencies.
+      // This name is substituted in place of [name] from step 1
+      name: 'vendor',
+
+      // A function that determines which modules to include into this chunk
+      minChunks: module => module.context && module.context.includes('node_modules')
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+
+      // minChunks: Infinity means that no app modules
+      // will be included into this chunk
+      minChunks: Infinity
+    }),
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
       filename: 'index.html',
@@ -27,6 +45,9 @@ module.exports = {
       DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
       icons: templates.icons,
       head: templates.head
+    }),
+    new InlineChunkWebpackPlugin({
+      inlineChunks: ['manifest']
     }),
     new webpack.DefinePlugin({
       NODE_ENV_DEV: process.env.NODE_ENV === 'development',
@@ -73,38 +94,46 @@ module.exports = {
         exclude: /node_modules/,
         use: ['babel-loader', 'eslint-loader']
       },
-      { test: /\.css$/, use: ['style-loader', 'css-loader', 'postcss-loader'] },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: { minimize: process.env.NODE_ENV === 'production' }
+          },
+          'postcss-loader'
+        ]
+      },
       {
         test: /\.scss$/,
         use: [
           'style-loader',
-          'css-loader',
+          {
+            loader: 'css-loader',
+            options: { minimize: process.env.NODE_ENV === 'production' }
+          },
           'sass-loader'
         ]
       },
       {
-        test: /\.png$/,
+        test: /\.(jpe?g|png|gif)$/,
         use: [
           {
             loader: 'url-loader',
             options: {
-              mimetype: 'image/png',
-              limit: 380000
+              limit: 10 * 1024 // inline files smaller than (10240 bytes)
             }
           }
         ]
       },
       {
-        test: /\.jpg$/,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              mimetype: 'image/jpg',
-              limit: 30000
-            }
-          }
-        ]
+        test: /\.svg$/,
+        loader: 'svg-url-loader',
+        options: {
+          limit: 10 * 1024,
+          noquotes: true
+        }
       }
     ]
   }

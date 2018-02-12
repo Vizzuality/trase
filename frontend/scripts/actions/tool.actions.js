@@ -97,6 +97,71 @@ export function resetState(refilter = true) {
   };
 }
 
+// Resets sankey's params that may lead to no flows being returned from the API
+export function resetSankey() {
+  return (dispatch, getState) => {
+    const { contexts, selectedContextId, columns, areNodesExpanded } = getState().tool;
+    const currentContext = contexts.find(context => context.id === selectedContextId);
+    const defaultColumns = columns.filter(column => column.isDefault);
+    const defaultResizeBy =
+      currentContext && currentContext.resizeBy.find(resizeBy => resizeBy.isDefault);
+    const defaultRecolorBy =
+      currentContext && currentContext.recolorBy.find(recolorBy => recolorBy.isDefault);
+
+    dispatch({
+      type: SELECT_YEARS,
+      years: [currentContext.defaultYear, currentContext.defaultYear]
+    });
+
+    defaultColumns.forEach(defaultColumn => {
+      dispatch({
+        type: SELECT_COLUMN,
+        columnIndex: defaultColumn.group,
+        columnId: defaultColumn.id
+      });
+    });
+
+    if (areNodesExpanded === true) {
+      dispatch({
+        type: TOGGLE_NODES_EXPAND
+      });
+    }
+
+    dispatch({
+      type: SELECT_VIEW,
+      detailedView: false,
+      forcedOverview: true
+    });
+
+    if (defaultRecolorBy) {
+      dispatch({
+        type: SELECT_RECOLOR_BY,
+        name: defaultRecolorBy[0].name
+      });
+    } else {
+      dispatch({
+        type: SELECT_RECOLOR_BY,
+        value: 'none',
+        value_type: 'none'
+      });
+    }
+
+    dispatch({
+      type: SELECT_RESIZE_BY,
+      resizeBy: defaultResizeBy.name
+    });
+
+    dispatch({
+      type: RESET_SELECTION
+    });
+    dispatch({
+      type: FILTER_LINKS_BY_NODES
+    });
+
+    dispatch(loadLinks());
+  };
+}
+
 export function selectContext(context) {
   return dispatch => {
     dispatch(setContext(context));
@@ -355,7 +420,7 @@ export function loadLinks() {
     }
 
     const selectedBiomeFilter = state.tool.selectedBiomeFilter;
-    if (selectedBiomeFilter && selectedBiomeFilter.name && selectedBiomeFilter.value !== 'none') {
+    if (selectedBiomeFilter && selectedBiomeFilter.name && selectedBiomeFilter.name !== 'none') {
       params.biome_filter_id = selectedBiomeFilter.nodeId;
     }
 

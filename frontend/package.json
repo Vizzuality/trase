@@ -5,6 +5,7 @@
   "scripts": {
     "start": "webpack-dev-server --config config/webpack.config.dev.js",
     "build": "npm run webpack:prod && cp -a public/. dist/",
+    "test": "jest ./scripts --colors",
     "webpack:prod": "NODE_ENV='production' webpack --config config/webpack.config.prod.js",
     "lint-js": "eslint -c .eslintrc.json --ext .jsx,.js --fix",
     "lint-sass": "sass-lint -c .sass-lint.yml -v -q",
@@ -35,6 +36,7 @@
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.3",
     "babel-loader": "^7.1.2",
+    "babel-plugin-module-resolver": "^3.0.0",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-plugin-transform-exponentiation-operator": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
@@ -51,14 +53,17 @@
     "eslint-import-resolver-webpack": "^0.8.3",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jest": "^21.7.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-prettier": "^2.5.0",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-react": "^7.5.1",
     "eslint-plugin-standard": "^3.0.1",
     "file-loader": "^1.1.6",
+    "html-webpack-inline-chunk-plugin": "^1.1.1",
     "html-webpack-plugin": "^2.30.1",
     "husky": "^0.14.3",
+    "image-webpack-loader": "^4.1.0",
     "lint-staged": "^6.0.0",
     "node-sass": "^4.7.2",
     "postcss-loader": "^2.0.9",
@@ -66,10 +71,15 @@
     "sass-lint": "^1.12.1",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.1",
+    "uglifyjs-webpack-plugin": "^1.1.8",
     "url-loader": "^0.6.2",
     "webpack": "^3.10.0",
+    "webpack-dashboard": "^1.1.1",
     "webpack-dev-server": "^2.9.7",
-    "webpack-merge": "^4.1.1"
+    "webpack-merge": "^4.1.1",
+    "why-did-you-update": "^0.1.0",
+    "babel-jest": "^22.1.0",
+    "jest": "^22.1.4"
   },
   "dependencies": {
     "@turf/bbox": "^5.1.5",
@@ -102,10 +112,19 @@
     "remark": "^9.0.0",
     "remark-react": "^4.0.1",
     "tether-tooltip": "^1.2.0",
-    "topojson": "^3.0.2",
-    "why-did-you-update": "^0.1.0"
+    "topojson": "^3.0.2"
   },
   "engines": {
     "node": "8.2.1"
+  },
+  "jest": {
+    "rootDir": "scripts",
+    "moduleFileExtensions": [
+      "js",
+      "jsx"
+    ],
+    "moduleDirectories": [
+      "node_modules"
+    ]
   }
 }
