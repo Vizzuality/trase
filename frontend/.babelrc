@@ -2,11 +2,9 @@
   "presets": [
     ["env", {
         "targets": {
-          "browsers": ["> 1%", "last 2 versions", "Firefox ESR", "Safari >= 8"],
-          "uglify": true
+          "browsers": ["> 1%", "last 2 versions", "Firefox ESR", "Safari >= 8"]
         },
-      "useBuiltIns": true,
-      "modules": false
+      "useBuiltIns": true
     }],
     "react"
   ],
@@ -16,14 +14,6 @@
     "transform-exponentiation-operator"
   ],
   "env": {
-    "production": {
-      "plugins": [
-        ["transform-react-remove-prop-types", {
-          "mode": "wrap",
-          "ignoreFilenames": ["node_modules"]
-        }]
-      ]
-    },
     "test": {
       "presets": [
         "env",

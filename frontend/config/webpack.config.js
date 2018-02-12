@@ -11,7 +11,9 @@ const srcPath = path.join(__dirname, '..', 'scripts');
 const templates = require('./static.templates');
 
 module.exports = {
-  entry: path.join(srcPath, 'index'),
+  entry: {
+    main: path.join(srcPath, 'index')
+  },
   output: {
     filename: '[name].[chunkhash].js',
     chunkFilename: '[name].[chunkhash].js',

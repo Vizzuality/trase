@@ -8,10 +8,6 @@ module.exports = merge(webpackBaseConfig, {
   plugins: [
     new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.HashedModuleIdsPlugin(),
-    new UglifyJSPlugin({
-      compress: {
-        screw_ie8: true
-      }
-    })
+    new UglifyJSPlugin()
   ]
 });
