@@ -18,9 +18,11 @@ ActiveAdmin.register Content::StaffMember, as: 'Staff Member' do
             required: true,
             as: :simplemde_editor,
             hint: 'Staff member bio formatted in markdown'
-      input :image, as: :file, :hint => f.object.image.present? \
-        ? image_tag(f.object.image.url(:small))
-        : content_tag(:span, "no cover page yet")
+      input :image, as: :file, hint: if f.object.image.present?
+                                       image_tag(f.object.image.url(:small))
+                                     else
+                                       content_tag(:span, 'no image available')
+                                     end
     end
     f.actions
   end

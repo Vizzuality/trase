@@ -2,10 +2,10 @@ import { connect } from 'react-redux';
 import TeamMember from './team-member.component';
 
 function mapStateToProps(state) {
-  const { staticContent, location } = state;
+  const { team, location } = state;
   const member = location.payload.member;
   return {
-    member: staticContent.team.members && staticContent.team.members[member]
+    member: team.members && team.members[member]
   };
 }
 
