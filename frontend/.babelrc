@@ -11,5 +11,31 @@
     "syntax-dynamic-import",
     "transform-object-rest-spread",
     "transform-exponentiation-operator"
-  ]
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        "env",
+        "react"
+      ],
+      "plugins": [
+        "transform-object-rest-spread",
+        "transform-exponentiation-operator",
+        "transform-es2015-modules-commonjs",
+        ["module-resolver", {
+          "alias": {
+            "actions": "./scripts/actions",
+            "utils": "./scripts/utils",
+            "reducers": "./scripts/reducers",
+            "store": "./scripts/store",
+            "components": "./scripts/components",
+            "containers": "./scripts/containers",
+            "constants": "./scripts/constants",
+            "router": "./scripts/router",
+            "react-components": "./scripts/react-components"
+          }
+        }]
+      ]
+    }
+  }
 }
