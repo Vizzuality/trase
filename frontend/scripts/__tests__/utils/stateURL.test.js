@@ -1,4 +1,4 @@
-import { filterStateToURL } from '../../utils/stateURL';
+import { filterStateToURL, computeStateQueryParams } from '../../utils/stateURL';
 import { toolInitialState } from '../../reducers/tool.reducer';
 
 const filteredState = {
@@ -37,5 +37,39 @@ test('filterStateToURL with existing selectedR---By as undefined', () => {
     selectedResizeByName: undefined,
     selectedRecolorByName: undefined,
     selectedBiomeFilterName: undefined
+  });
+});
+
+test('computeStateQueryParams casts array of strings to int', () => {
+  expect(
+    computeStateQueryParams(filteredState, {
+      selectedNodesIds: ['1', '2', '3'],
+      selectedYears: ['2015', '2016'],
+      isMapVisible: true
+    })
+  ).toEqual({
+    ...filteredState,
+    selectedNodesIds: [1, 2, 3],
+    expandedNodesIds: [1, 2, 3],
+    selectedYears: [2015, 2016],
+    isMapVisible: true,
+    areNodesExpanded: true
+  });
+});
+
+test('computeStateQueryParams casts strigified array to int', () => {
+  expect(
+    computeStateQueryParams(filteredState, {
+      selectedNodesIds: '[1, 2, 3]',
+      selectedYears: '[2015, 2016]',
+      isMapVisible: true
+    })
+  ).toEqual({
+    ...filteredState,
+    selectedNodesIds: [1, 2, 3],
+    expandedNodesIds: [1, 2, 3],
+    selectedYears: [2015, 2016],
+    isMapVisible: true,
+    areNodesExpanded: true
   });
 });
