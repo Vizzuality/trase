@@ -1,7 +1,7 @@
 import kebabCase from 'lodash/kebabCase';
 import keyBy from 'lodash/keyBy';
 import sortBy from 'lodash/sortBy';
-import { SET_TEAM_CONTENT, SET_TEAM_ERROR_MESSAGE } from 'react-components/team/team.actions';
+import { TEAM__SET_CONTENT, TEAM__SET_ERROR_MESSAGE } from 'react-components/team/team.actions';
 import { createReducer } from 'store';
 
 const initialState = {
@@ -17,7 +17,7 @@ const initialState = {
 };
 
 const teamReducer = {
-  [SET_TEAM_CONTENT](state, action) {
+  [TEAM__SET_CONTENT](state, action) {
     const { data } = action.payload;
     const slugifyName = m => kebabCase(m.name.split(' '));
     const members = data
@@ -33,7 +33,7 @@ const teamReducer = {
     );
     return { ...state, members, groups };
   },
-  [SET_TEAM_ERROR_MESSAGE](state, action) {
+  [TEAM__SET_ERROR_MESSAGE](state, action) {
     const { errorMessage } = action.payload;
     return { ...state, errorMessage };
   }

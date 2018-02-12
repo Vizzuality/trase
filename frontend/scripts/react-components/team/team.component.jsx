@@ -1,11 +1,11 @@
 import cx from 'classnames';
 import kebabCase from 'lodash/kebabCase';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import TeamPageMessage from 'react-components/team/team-page-message.component';
 import Link from 'redux-first-router-link';
 
-class Team extends Component {
+class Team extends PureComponent {
   renderTeamMember(slug) {
     const { members } = this.props;
 

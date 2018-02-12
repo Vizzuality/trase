@@ -1,8 +1,8 @@
 import kebabCase from 'lodash/kebabCase';
 import { GET_TEAM_URL, getURLFromParams } from 'utils/getURLFromParams';
 
-export const SET_TEAM_CONTENT = 'SET_TEAM_CONTENT';
-export const SET_TEAM_ERROR_MESSAGE = 'SET_TEAM_ERROR_MESSAGE';
+export const TEAM__SET_CONTENT = 'TEAM__SET_CONTENT';
+export const TEAM__SET_ERROR_MESSAGE = 'TEAM__SET_ERROR_MESSAGE';
 
 export const getStaticContentFilename = ({ type, payload }) =>
   `${type}${payload.section ? `/${kebabCase(payload.section)}` : ''}`;
@@ -15,14 +15,14 @@ export const getTeamData = mock => (dispatch, getState) => {
       .then(res => (res.ok ? res.json() : Promise.reject(res)))
       .then(({ data }) =>
         dispatch({
-          type: SET_TEAM_CONTENT,
+          type: TEAM__SET_CONTENT,
           payload: { data }
         })
       )
       .catch(reason => {
         console.error('Error loading team members data', reason);
         dispatch({
-          type: SET_TEAM_ERROR_MESSAGE,
+          type: TEAM__SET_ERROR_MESSAGE,
           payload: { errorMessage: reason.message }
         });
       });
