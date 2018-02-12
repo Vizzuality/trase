@@ -439,6 +439,15 @@ definitions:
             type: number
           zoom:
             type: integer
+      worldMap:
+        type: object
+        properties:
+          mapColumnId:
+            type: integer
+            description: 'Id of column to use as parameter to top nodes for top destination countries (world map)'
+          listColumnId:
+            type: integer
+            description: 'Id of column to use as parameter to top nodes for top exporters (world map - list)'
       recolorBy:
         type: array
         items:

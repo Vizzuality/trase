@@ -8,9 +8,12 @@ module Api
           includes(
             :country, :commodity, :context_property,
             readonly_recolor_by_attributes: :readonly_attribute,
-            readonly_resize_by_attributes: :readonly_attribute
+            readonly_resize_by_attributes: :readonly_attribute,
+            context_node_types: :node_type
           ).
-          all
+          references(:context_property).
+          where('NOT context_properties.is_disabled').
+          select(&:is_visible?)
 
         render json: @contexts, root: 'data',
                each_serializer: Api::V3::Contexts::ContextSerializer
