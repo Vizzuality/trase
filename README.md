@@ -290,20 +290,6 @@ The importer can be started in two ways:
 
 In the first case the importer will run synchronously. In the latter case it will be executed as a background job using sidekiq. For that to work you need redis & sidekiq running. If redis is not already running it can be started using `redis-server`. To start sidekiq in development run `bundle exec sidekiq`. In staging / demo / production starting and stopping sidekiq is handled by capistrano.
 
-### Running the importer in development
-
-Only databases configured on staging / demo / production have access to the main database. To run on a development database you need to open a tunnel through a remote host such as staging. In the following commands "database host" means the host on which main database sits, "remote host" means a host which has access to database host and through which we can tunnel the connection.
-
-`ssh -L <local database port>:<database host>:<database port> <remote ssh username>@<remote host>`
-
-The "local database port" can be set to any available local port, 5433 is usually fine.
-
-To test the connection try this in another terminal window:
-
-`psql -h 127.0.0.1 -p 5433 -U <database username> <database name>`
-
-When connecting this way you have to set your `TRASE_REMOTE_HOST` to `127.0.0.1` and `TRASE_REMOTE_PORT` to `5433`.
-
 # Frontend
 
 The frontend application can be found inside the `frontend` folder. All files mentioned below can be found inside this folder,

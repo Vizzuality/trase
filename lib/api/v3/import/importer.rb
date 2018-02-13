@@ -65,11 +65,11 @@ module Api
               Api::V3::ResizeByQuant
             ]
           },
-          # {table_class: Api::V3::NodeQuant}, # TODO: data fix
+          {table_class: Api::V3::NodeQuant},
           {table_class: Api::V3::Flow},
           {table_class: Api::V3::FlowInd},
-          {table_class: Api::V3::FlowQual} # ,
-          # {table_class: Api::V3::FlowQuant} # TODO: data fix
+          {table_class: Api::V3::FlowQual},
+          {table_class: Api::V3::FlowQuant}
         ].freeze
 
         def call(database_update)
@@ -116,7 +116,6 @@ module Api
             # restore dependent yellow tables
             yellow_tables.each do |yellow_table_class|
               yellow_table_cnt = RestoreYellowTable.new(yellow_table_class).call
-              # yellow_table_stats = yellow_table.restore
               @stats[table_class.table_name][:yellow_tables][yellow_table_class.table_name][:after] = yellow_table_cnt
             end
           end
