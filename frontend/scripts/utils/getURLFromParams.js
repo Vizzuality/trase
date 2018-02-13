@@ -138,7 +138,7 @@ export function getURLFromParams(endpointKey, params = {}, mock = false) {
       case 'content':
         return `${API_V2_URL}/content${endpointData.endpoint}`;
       case 'markdown':
-        return `/${endpointData.endpoint}/${params.filename}.md`;
+        return `${API_V2_URL}/static-content/${params.filename}.md`;
       default:
         console.warn('Unmatched route found at router');
         return null;

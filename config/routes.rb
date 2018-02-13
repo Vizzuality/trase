@@ -9,13 +9,18 @@ Rails.application.routes.draw do
   end
 
   namespace :content do
-    mount Ckeditor::Engine => '/ckeditor' # TODO: remove if unused
+    mount Ckeditor::Engine => '/ckeditor'
     resources :posts, only: [:index]
     resources :site_dives, only: [:show]
     resources :tweets, only: [:index]
     resources :testimonials, only: [:index]
     resources :staff_groups, only: [:index]
   end
+
+  get "static-content/about/:name",
+    controller: 'content/pages',
+    action: :show,
+    defaults: {format: 'md'}
 
   namespace :api do
     namespace :v3 do

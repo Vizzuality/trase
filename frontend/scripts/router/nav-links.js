@@ -21,13 +21,19 @@ export default {
     },
     {
       name: 'About',
-      page: 'about'
+      page: {
+        type: 'about',
+        payload: { section: 'index' }
+      }
     }
   ],
   sidebarNav: [
     {
       name: 'What is Trase?',
-      page: 'about'
+      page: {
+        type: 'about',
+        payload: { section: 'index' }
+      }
     },
     {
       name: 'Who is Trase for?',
