@@ -44,7 +44,8 @@ module.exports = {
       inject: 'body',
       DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
       icons: templates.icons,
-      head: templates.head
+      head: templates.head,
+      TRANSIFEX_API_KEY: process.env.TRANSIFEX_API_KEY
     }),
     new InlineChunkWebpackPlugin({
       inlineChunks: ['manifest']
