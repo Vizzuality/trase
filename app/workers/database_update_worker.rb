@@ -1,6 +1,6 @@
 class DatabaseUpdateWorker
   include Sidekiq::Worker
-  sidekiq_options retry: false
+  sidekiq_options retry: 0, backtrace: true, unique: :until_and_while_executing
 
   def perform(database_update_id)
     database_update = Api::V3::DatabaseUpdate.find(database_update_id)
