@@ -52,7 +52,7 @@ const API_ENDPOINTS = {
     endpoint: '/testimonials',
     mock: 'mocks/v3_get_testimonials.json'
   },
-  [GET_MARKDOWN_CONTENT_URL]: { api: 'markdown', endpoint: 'static-content' },
+  [GET_MARKDOWN_CONTENT_URL]: { api: 'markdown', endpoint: 'content' },
   [GET_TEAM_URL]: {
     api: 'content',
     endpoint: '/staff_groups',
@@ -138,7 +138,7 @@ export function getURLFromParams(endpointKey, params = {}, mock = false) {
       case 'content':
         return `${API_V2_URL}/content${endpointData.endpoint}`;
       case 'markdown':
-        return `${API_V2_URL}/static-content/${params.filename}.md`;
+        return `${API_V2_URL}/content/${params.filename}.md`;
       default:
         console.warn('Unmatched route found at router');
         return null;
