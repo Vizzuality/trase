@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import TwitterFeed from 'react-components/home/twitter-feed.component';
 import AnimatedFlows from 'react-components/animated-flows/animated-flows.component';
+import HomeVideo from 'react-components/home/home-video.component';
 
 // old school name: https://en.wikipedia.org/wiki/Hero_image
 class Hero extends React.Component {
@@ -11,7 +12,27 @@ class Hero extends React.Component {
     this.state = {
       showStory: true
     };
+
+    this.videoEventHandlers = {
+      enterfullscreen: this.onEnterFullScreen,
+      exitfullscreen: this.onExitFullScreen
+    };
+
     this.closeStoryBox = this.closeStoryBox.bind(this);
+  }
+
+  onEnterFullScreen(plyr) {
+    plyr.play();
+  }
+
+  onExitFullScreen(plyr) {
+    plyr.pause();
+  }
+
+  onClickPlay(plyr) {
+    if (plyr.isFullscreen() === false) {
+      plyr.toggleFullscreen();
+    }
   }
 
   closeStoryBox() {
@@ -46,7 +67,11 @@ class Hero extends React.Component {
             </div>
             <h1 className="hero-title">Transparent supply chains for sustainable economies</h1>
             <div className="hero-play-container">
-              <button className="hero-play-button" />
+              <HomeVideo videoId="Rv9hn4IGofM" events={this.videoEventHandlers}>
+                {plyr => (
+                  <button className="hero-play-button" onClick={() => this.onClickPlay(plyr)} />
+                )}
+              </HomeVideo>
               TRASE in 2’
             </div>
           </div>
@@ -73,7 +98,8 @@ Hero.propTypes = {
   className: PropTypes.string,
   visitStory: PropTypes.func,
   story: PropTypes.object,
-  tweets: PropTypes.array
+  tweets: PropTypes.array,
+  onClickPlay: PropTypes.func
 };
 
 Hero.defaultProps = {
