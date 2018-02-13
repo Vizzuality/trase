@@ -129,6 +129,7 @@ class SchemaContent
       'site_dives',
       %w(
         id
+        title
         page_url
         description
         created_at
