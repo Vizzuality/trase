@@ -8,7 +8,7 @@ ActiveAdmin.register Content::SiteDive, as: 'Site Dive' do
     inputs do
       input :title, required: true
       input :page_url, required: true
-      input :description, as: :ckeditor, label: 'Content'
+      input :description, required: true, as: :ckeditor, label: 'Content'
     end
     f.actions
   end

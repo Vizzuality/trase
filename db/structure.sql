@@ -8,6 +8,13 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: content; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA content;
+
+
+--
 -- Name: main; Type: SCHEMA; Schema: -; Owner: -
 --
 
@@ -167,9 +174,272 @@ CREATE FUNCTION get_trader_sum(trader_id integer, year_ integer) RETURNS double 
 -- suppressed CREATE USER MAPPING
 
 
+SET search_path = content, pg_catalog;
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
+
+--
+-- Name: ckeditor_assets; Type: TABLE; Schema: content; Owner: -
+--
+
+CREATE TABLE ckeditor_assets (
+    id integer NOT NULL,
+    data_file_name character varying NOT NULL,
+    data_content_type character varying,
+    data_file_size integer,
+    data_fingerprint character varying,
+    assetable_id integer,
+    assetable_type character varying(30),
+    type character varying(30),
+    width integer,
+    height integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: ckeditor_assets_id_seq; Type: SEQUENCE; Schema: content; Owner: -
+--
+
+CREATE SEQUENCE ckeditor_assets_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ckeditor_assets_id_seq; Type: SEQUENCE OWNED BY; Schema: content; Owner: -
+--
+
+ALTER SEQUENCE ckeditor_assets_id_seq OWNED BY ckeditor_assets.id;
+
+
+--
+-- Name: posts; Type: TABLE; Schema: content; Owner: -
+--
+
+CREATE TABLE posts (
+    id integer NOT NULL,
+    title text NOT NULL,
+    date timestamp without time zone NOT NULL,
+    post_url text NOT NULL,
+    state integer DEFAULT 0 NOT NULL,
+    highlighted boolean DEFAULT false NOT NULL,
+    category text NOT NULL,
+    image_file_name text,
+    image_content_type text,
+    image_file_size integer,
+    image_updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: posts_id_seq; Type: SEQUENCE; Schema: content; Owner: -
+--
+
+CREATE SEQUENCE posts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: posts_id_seq; Type: SEQUENCE OWNED BY; Schema: content; Owner: -
+--
+
+ALTER SEQUENCE posts_id_seq OWNED BY posts.id;
+
+
+--
+-- Name: site_dives; Type: TABLE; Schema: content; Owner: -
+--
+
+CREATE TABLE site_dives (
+    id integer NOT NULL,
+    title text NOT NULL,
+    page_url text NOT NULL,
+    description text NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: site_dives_id_seq; Type: SEQUENCE; Schema: content; Owner: -
+--
+
+CREATE SEQUENCE site_dives_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: site_dives_id_seq; Type: SEQUENCE OWNED BY; Schema: content; Owner: -
+--
+
+ALTER SEQUENCE site_dives_id_seq OWNED BY site_dives.id;
+
+
+--
+-- Name: staff_groups; Type: TABLE; Schema: content; Owner: -
+--
+
+CREATE TABLE staff_groups (
+    id bigint NOT NULL,
+    name text NOT NULL,
+    "position" integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: staff_groups_id_seq; Type: SEQUENCE; Schema: content; Owner: -
+--
+
+CREATE SEQUENCE staff_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: staff_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: content; Owner: -
+--
+
+ALTER SEQUENCE staff_groups_id_seq OWNED BY staff_groups.id;
+
+
+--
+-- Name: staff_members; Type: TABLE; Schema: content; Owner: -
+--
+
+CREATE TABLE staff_members (
+    id bigint NOT NULL,
+    staff_group_id bigint NOT NULL,
+    name text NOT NULL,
+    "position" integer NOT NULL,
+    bio text NOT NULL,
+    image_file_name text,
+    image_content_type text,
+    image_file_size integer,
+    image_updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: staff_members_id_seq; Type: SEQUENCE; Schema: content; Owner: -
+--
+
+CREATE SEQUENCE staff_members_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: staff_members_id_seq; Type: SEQUENCE OWNED BY; Schema: content; Owner: -
+--
+
+ALTER SEQUENCE staff_members_id_seq OWNED BY staff_members.id;
+
+
+--
+-- Name: testimonials; Type: TABLE; Schema: content; Owner: -
+--
+
+CREATE TABLE testimonials (
+    id bigint NOT NULL,
+    quote text NOT NULL,
+    author_name text NOT NULL,
+    author_title text NOT NULL,
+    image_file_name character varying,
+    image_content_type character varying,
+    image_file_size integer,
+    image_updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: testimonials_id_seq; Type: SEQUENCE; Schema: content; Owner: -
+--
+
+CREATE SEQUENCE testimonials_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: testimonials_id_seq; Type: SEQUENCE OWNED BY; Schema: content; Owner: -
+--
+
+ALTER SEQUENCE testimonials_id_seq OWNED BY testimonials.id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: content; Owner: -
+--
+
+CREATE TABLE users (
+    id integer NOT NULL,
+    email character varying DEFAULT ''::character varying NOT NULL,
+    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
+    reset_password_token character varying,
+    reset_password_sent_at timestamp without time zone,
+    remember_created_at timestamp without time zone,
+    sign_in_count integer DEFAULT 0 NOT NULL,
+    current_sign_in_at timestamp without time zone,
+    last_sign_in_at timestamp without time zone,
+    current_sign_in_ip character varying,
+    last_sign_in_ip character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: content; Owner: -
+--
+
+CREATE SEQUENCE users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: content; Owner: -
+--
+
+ALTER SEQUENCE users_id_seq OWNED BY users.id;
+
+
+SET search_path = public, pg_catalog;
 
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
@@ -4111,6 +4381,57 @@ CREATE SEQUENCE resize_by_quants_id_seq
 ALTER SEQUENCE resize_by_quants_id_seq OWNED BY resize_by_quants.id;
 
 
+SET search_path = content, pg_catalog;
+
+--
+-- Name: ckeditor_assets id; Type: DEFAULT; Schema: content; Owner: -
+--
+
+ALTER TABLE ONLY ckeditor_assets ALTER COLUMN id SET DEFAULT nextval('ckeditor_assets_id_seq'::regclass);
+
+
+--
+-- Name: posts id; Type: DEFAULT; Schema: content; Owner: -
+--
+
+ALTER TABLE ONLY posts ALTER COLUMN id SET DEFAULT nextval('posts_id_seq'::regclass);
+
+
+--
+-- Name: site_dives id; Type: DEFAULT; Schema: content; Owner: -
+--
+
+ALTER TABLE ONLY site_dives ALTER COLUMN id SET DEFAULT nextval('site_dives_id_seq'::regclass);
+
+
+--
+-- Name: staff_groups id; Type: DEFAULT; Schema: content; Owner: -
+--
+
+ALTER TABLE ONLY staff_groups ALTER COLUMN id SET DEFAULT nextval('staff_groups_id_seq'::regclass);
+
+
+--
+-- Name: staff_members id; Type: DEFAULT; Schema: content; Owner: -
+--
+
+ALTER TABLE ONLY staff_members ALTER COLUMN id SET DEFAULT nextval('staff_members_id_seq'::regclass);
+
+
+--
+-- Name: testimonials id; Type: DEFAULT; Schema: content; Owner: -
+--
+
+ALTER TABLE ONLY testimonials ALTER COLUMN id SET DEFAULT nextval('testimonials_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: content; Owner: -
+--
+
+ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
 SET search_path = public, pg_catalog;
 
 --
@@ -4554,6 +4875,64 @@ ALTER TABLE ONLY resize_by_attributes ALTER COLUMN id SET DEFAULT nextval('resiz
 --
 
 ALTER TABLE ONLY resize_by_quants ALTER COLUMN id SET DEFAULT nextval('resize_by_quants_id_seq'::regclass);
+
+
+SET search_path = content, pg_catalog;
+
+--
+-- Name: ckeditor_assets ckeditor_assets_pkey; Type: CONSTRAINT; Schema: content; Owner: -
+--
+
+ALTER TABLE ONLY ckeditor_assets
+    ADD CONSTRAINT ckeditor_assets_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: posts posts_pkey; Type: CONSTRAINT; Schema: content; Owner: -
+--
+
+ALTER TABLE ONLY posts
+    ADD CONSTRAINT posts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: site_dives site_dives_pkey; Type: CONSTRAINT; Schema: content; Owner: -
+--
+
+ALTER TABLE ONLY site_dives
+    ADD CONSTRAINT site_dives_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: staff_groups staff_groups_pkey; Type: CONSTRAINT; Schema: content; Owner: -
+--
+
+ALTER TABLE ONLY staff_groups
+    ADD CONSTRAINT staff_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: staff_members staff_members_pkey; Type: CONSTRAINT; Schema: content; Owner: -
+--
+
+ALTER TABLE ONLY staff_members
+    ADD CONSTRAINT staff_members_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: testimonials testimonials_pkey; Type: CONSTRAINT; Schema: content; Owner: -
+--
+
+ALTER TABLE ONLY testimonials
+    ADD CONSTRAINT testimonials_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: content; Owner: -
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
 SET search_path = public, pg_catalog;
@@ -5424,6 +5803,43 @@ ALTER TABLE ONLY resize_by_quants
     ADD CONSTRAINT resize_by_quants_resize_by_attribute_id_quant_id_key UNIQUE (resize_by_attribute_id, quant_id);
 
 
+SET search_path = content, pg_catalog;
+
+--
+-- Name: idx_ckeditor_assetable; Type: INDEX; Schema: content; Owner: -
+--
+
+CREATE INDEX idx_ckeditor_assetable ON ckeditor_assets USING btree (assetable_type, assetable_id);
+
+
+--
+-- Name: idx_ckeditor_assetable_type; Type: INDEX; Schema: content; Owner: -
+--
+
+CREATE INDEX idx_ckeditor_assetable_type ON ckeditor_assets USING btree (assetable_type, type, assetable_id);
+
+
+--
+-- Name: index_staff_members_on_staff_group_id; Type: INDEX; Schema: content; Owner: -
+--
+
+CREATE INDEX index_staff_members_on_staff_group_id ON staff_members USING btree (staff_group_id);
+
+
+--
+-- Name: index_users_on_email; Type: INDEX; Schema: content; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
+
+
+--
+-- Name: index_users_on_reset_password_token; Type: INDEX; Schema: content; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
+
+
 SET search_path = public, pg_catalog;
 
 --
@@ -6049,6 +6465,16 @@ CREATE INDEX resize_by_attributes_mv_context_id_attribute_id_idx ON resize_by_at
 --
 
 CREATE UNIQUE INDEX resize_by_attributes_mv_id_idx ON resize_by_attributes_mv USING btree (id);
+
+
+SET search_path = content, pg_catalog;
+
+--
+-- Name: staff_members fk_rails_6ad8424ffc; Type: FK CONSTRAINT; Schema: content; Owner: -
+--
+
+ALTER TABLE ONLY staff_members
+    ADD CONSTRAINT fk_rails_6ad8424ffc FOREIGN KEY (staff_group_id) REFERENCES staff_groups(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 SET search_path = public, pg_catalog;
@@ -6807,6 +7233,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180123130300'),
 ('20180123132607'),
 ('20180126140843'),
-('20180202093906');
+('20180202093906'),
+('20180207133151'),
+('20180207133331');
 
 

@@ -31,6 +31,6 @@ exclude_paths:
 - spec/**/*
 - "**/vendor/**/*"
 - db/**/*
-- db_content/**/*
 - 'lib/schema_revamp.rb' # excluding because it is a temporary migration script
+- 'lib/schema_content.rb' # excluding because it is a temporary migration script
 - 'lib/db_helpers/**/*' # db helpers, mostly temporary
