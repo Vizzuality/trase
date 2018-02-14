@@ -4,41 +4,64 @@ module Api
       class ResponseBuilder
         attr_reader :top_nodes
 
-        def initialize(context, year, node_type_id, limit = nil)
+        def initialize(context, params)
           @context = context
-          @year = year
-          @node_type_id = node_type_id
-          @limit = limit || 10
-          @volume_attribute = Dictionary::Quant.instance.get('Volume')
-          raise 'Quant Volume not found' unless @volume_attribute.present?
+          initialize_params(params)
         end
 
         def call
-          top_nodes_list = Api::V3::Profiles::TopNodesForContextList.new(
-            @context,
-            @year,
-            other_node_type_id: @node_type_id
-          )
-          @top_nodes = top_nodes_list.
-            sorted_list(@volume_attribute, false, @limit)
-          @all_nodes_total = top_nodes_list.total(
-            @volume_attribute, false
-          )
-
+          initialize_top_nodes
           {
             context_id: @context.id,
             indicator: @volume_attribute.display_name,
             unit: @volume_attribute.unit,
             targetNodes: @top_nodes.map do |top_node|
+              value = top_node['value']
               {
                 id: top_node['node_id'],
                 name: top_node['name'],
                 geo_id: top_node['geo_id'],
-                height: top_node['value'] / @all_nodes_total,
-                value: top_node['value']
+                height: value / @all_nodes_total,
+                value: value
               }
             end
           }
+        end
+
+        private
+
+        def initialize_params(params)
+          @node_type_id = initialize_param(params, :node_type_id)
+          @year_start = initialize_param(params, :year_start)
+          @year_end = initialize_param(params, :year_end)
+          @limit = params[:limit]&.to_i || 10
+
+          @volume_attribute = Dictionary::Quant.instance.get('Volume')
+          raise 'Quant Volume not found' unless @volume_attribute.present?
+        end
+
+        def initialize_param(params, symbol)
+          raise "Parameter #{symbol} missing" unless params.key?(symbol)
+          params[symbol]
+        end
+
+        def initialize_top_nodes
+          top_nodes_list = Api::V3::Profiles::TopNodesForContextList.new(
+            @context,
+            year_start: @year_start,
+            year_end: @year_end,
+            other_node_type_id: @node_type_id
+          )
+          @top_nodes = top_nodes_list.
+            sorted_list(
+              @volume_attribute,
+              include_domestic_consumption: false,
+              limit: @limit
+            )
+          @all_nodes_total = top_nodes_list.total(
+            @volume_attribute,
+            include_domestic_consumption: false
+          )
         end
       end
     end

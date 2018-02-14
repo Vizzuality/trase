@@ -8,8 +8,9 @@ RSpec.describe Api::V3::TopNodes::ResponseBuilder do
     it 'should return top exporters' do
       builder = Api::V3::TopNodes::ResponseBuilder.new(
         api_v3_context,
-        2015,
-        api_v3_exporter_node_type.id
+        node_type_id: api_v3_exporter_node_type.id,
+        year_start: 2015,
+        year_end: 2015
       )
 
       builder.call
@@ -20,8 +21,9 @@ RSpec.describe Api::V3::TopNodes::ResponseBuilder do
     it 'should return top countries' do
       builder = Api::V3::TopNodes::ResponseBuilder.new(
         api_v3_context,
-        2015,
-        api_v3_country_node_type.id
+        node_type_id: api_v3_country_node_type.id,
+        year_start: 2015,
+        year_end: 2015
       )
 
       builder.call

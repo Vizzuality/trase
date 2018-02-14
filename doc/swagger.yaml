@@ -380,9 +380,14 @@ paths:
           description: Node type id
           required: true
           type: integer
-        - name: year
+        - name: year_start
           in: query
-          description: Year
+          description: Start year (defaults to context default year)
+          required: false
+          type: integer
+        - name: year_end
+          in: query
+          description: End year (defaults to start year)
           required: false
           type: integer
         - name: n_nodes

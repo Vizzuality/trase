@@ -50,13 +50,18 @@ module Api
 
         def initialize_top_nodes
           destination_top_nodes = Api::V3::Profiles::TopNodesList.new(
-            @context, @year, @node,
+            @context,
+            @node,
+            year_start: @year,
+            year_end: @year,
             other_node_type_name: NodeTypeName::COUNTRY,
             place_inds: @place_inds,
             place_quants: @place_quants
           )
           @main_destination = destination_top_nodes.sorted_list(
-            @volume_attribute, false, 1
+            @volume_attribute,
+            include_domestic_consumption: false,
+            limit: 1
           ).first
         end
 

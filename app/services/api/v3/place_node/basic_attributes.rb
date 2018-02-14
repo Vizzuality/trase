@@ -118,19 +118,32 @@ of #{@soy_area_formatted} #{@soy_area_unit} of land."
 
         def initialize_top_nodes
           exporter_top_nodes = Api::V3::Profiles::TopNodesList.new(
-            @context, @year, @node,
+            @context,
+            @node,
+            year_start: @year,
+            year_end: @year,
             other_node_type_name: NodeTypeName::EXPORTER
           )
           consumer_top_nodes = Api::V3::Profiles::TopNodesList.new(
-            @context, @year, @node,
+            @context,
+            @node,
+            year_start: @year,
+            year_end: @year,
             other_node_type_name: NodeTypeName::COUNTRY
           )
           @top_exporters = exporter_top_nodes.sorted_list(
-            @volume_attribute, false, 10
+            @volume_attribute,
+            include_domestic_consumption: false,
+            limit: 10
           )
-          @total_exports = exporter_top_nodes.total(@volume_attribute, false)
+          @total_exports = exporter_top_nodes.total(
+            @volume_attribute,
+            include_domestic_consumption: false
+          )
           @top_consumers = consumer_top_nodes.sorted_list(
-            @volume_attribute, true, 10
+            @volume_attribute,
+            include_domestic_consumption: true,
+            limit: 10
           )
         end
 
