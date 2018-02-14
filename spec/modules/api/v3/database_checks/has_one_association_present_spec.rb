@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'modules/api/v3/database_checks/shared_check_examples'
 
 RSpec.describe Api::V3::DatabaseChecks::HasOneAssociationPresent do
   context 'when checking contexts' do
@@ -15,36 +16,14 @@ RSpec.describe Api::V3::DatabaseChecks::HasOneAssociationPresent do
       Api::V3::DatabaseChecks::ReportStatus.new
     }
     context 'when context property missing' do
-      describe :passing? do
-        it "doesn't pass" do
-          expect(check).not_to be_passing
-        end
-      end
-      describe :call do
-        it 'adds an error' do
-          expect {
-            check.call(report_status)
-          }.to change(report_status, :error_count).by(1)
-        end
-      end
+      include_examples 'failing checks'
     end
 
     context 'when context property present' do
       let!(:context_property) {
         FactoryBot.create(:api_v3_context_property, context: context)
       }
-      describe :passing? do
-        it 'passes' do
-          expect(check).to be_passing
-        end
-      end
-      describe :call do
-        it "doesn't add an error" do
-          expect {
-            check.call(report_status)
-          }.not_to change(report_status, :error_count)
-        end
-      end
+      include_examples 'passing checks'
     end
   end
 end
