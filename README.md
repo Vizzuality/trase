@@ -290,6 +290,20 @@ The importer can be started in two ways:
 
 In the first case the importer will run synchronously. In the latter case it will be executed as a background job using sidekiq. For that to work you need redis & sidekiq running. If redis is not already running it can be started using `redis-server`. To start sidekiq in development run `bundle exec sidekiq`. In staging / demo / production starting and stopping sidekiq is handled by capistrano.
 
+### Running the importer in development
+
+Only databases configured on staging / demo / production have access to the main database. To run on a development database you need to open a tunnel through a remote host such as staging. In the following commands "database host" means the host on which main database sits, "remote host" means a host which has access to database host and through which we can tunnel the connection.
+
+`ssh -L <local database port>:<database host>:<database port> <remote ssh username>@<remote host>`
+
+The "local database port" can be set to any available local port, 5433 is usually fine.
+
+To test the connection try this in another terminal window:
+
+`psql -h 127.0.0.1 -p 5433 -U <database username> <database name>`
+
+When connecting this way you have to set your `TRASE_REMOTE_HOST` to `127.0.0.1` and `TRASE_REMOTE_PORT` to `5433`.
+
 # Frontend
 
 The frontend application can be found inside the `frontend` folder. All files mentioned below can be found inside this folder,
@@ -342,6 +356,7 @@ The project's main configuration values can be set using [environment variables]
 * DATA_FORM_ENDPOINT: end point to send form values in Data page
 * PDF_DOWNLOAD_URL: end point to download a PDF snapshot of the page
 * PERF_TEST: when set to true, enables performance evaluation mode. Only supported outside of production environments. See https://github.com/garbles/why-did-you-update for more info.
+* HOME_VIDEO_ID: Youtube video id corresponding to the video of the home page.
 
 If you are using the included development server, you can set those variables in the `.env` file (use the included `.env.sample` as an example)
 
@@ -396,7 +411,7 @@ This will use the layers configuration stored in `frontend/gis/cartodb/templates
 Run `npm run build`, it will create a production-ready version of the project in `/dist`.
 
 ## Tests 
-Running `npm test` will launch jest environment and run all tests that match `.test.js` filename inside the `frontend/scripts` folder.
+Running `npm test` will launch jest testing environment and run all tests that match `*.test.js` filename inside the `frontend/scripts` folder.
 
 
 ## LICENSE

@@ -14,8 +14,7 @@ module.exports = merge(webpackBaseConfig, {
     contentBase: path.join(__dirname, '..', 'public'),
     port: 8081,
     host: '0.0.0.0',
-    historyApiFallback: true,
-    quiet: true
+    historyApiFallback: true
   },
   plugins: [new webpack.NamedModulesPlugin()],
   performance: {
