@@ -31,7 +31,7 @@ This project uses:
 - Nodejs 8.2+
 - PostgreSQL 9.5+ with `intarray`, `tablefunc` and `postgres_fdw` extensions
 - [Bundler](http://bundler.io/)
-- redis
+- redis >= 3
 
 ## Setup
 
@@ -51,6 +51,10 @@ For the frontend application:
 - Install dependencies using `npm install`
 
 You can start the development server with `npm start`
+
+You can start background job processing with:
+- `redis-server`
+- `bundle exec sidekiq`
 
 ## Deployment
 
