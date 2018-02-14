@@ -105,6 +105,26 @@ The project's main configuration values can be set using [environment variables]
 * TRASE_LOCAL_FDW_SCHEMA=main # this schema in local database where remote tables are mapped
 * TRASE_LOCAL_SCHEMA=revamp # this schema in local database where target tables are
 
+## Background jobs
+
+We use sidekiq to process long running jobs in the background.
+
+Currently we're using it for 2 types of database jobs:
+- updating `download_flows_mv`, which takes around 2 minutes and is triggered by updates to a number of "yellow" tables, e.g. downlaod_attributes
+- importing new data from main database, which takes around two hours and is triggered either by clicking a button in the admin tool or running a rake task
+
+In both cases the times might grow as the dataset grows, which is important to keep in mind because the current configuration might need tuning when that happens.
+
+Our use case of sidekiq does not benefit from high concurrency, because both workers need to run one at a time. Therefore, concurrency settings in `config/sidekiq.yml` and `config/initializers/sidekiq.rb` are low to match that and avoid using up resources unnecessarily. Again, if we at any point later add more background jobs with different concurrency characteristics, this may need to be revised.
+
+To ensure only one database job can run at any single time we use `sidekiq-unique-jobs` gem. It works at 2 stages:
+- when adding a job to the queue,
+- when pulling the job from the queue to start execution.
+
+It can be configured to lock execution according to a number of predefined strategies and the one we use is called `:until_and_while_executing`. It works as follows: you can enqueue a duplicate job A' unless job A is already enqueued; A' will not start executing until A is finished, at which point it will be possible to enqueue another job A''. It is also important to understand that the unique locks have an expiration time, which I set to match average execution time. It seems that without this in place it is possible that an enqueued job will start executing too early (after a default timeout of 60 seconds).
+
+In practice this means that if the admin makes 3 updates in a short time frame ( < lock expiration time) to e.g. Download Attributes, normally the `DownloadFlowsRefreshWorker` would be enqueued and executed 3 times, possibly concurrently. With the unique lock in place, it will enqueue the first one and if possible start executing immediately, possibly allowing to enqueue the second one while first one is in progress; the third one will never be enqueued. Once the first one has completed the second one will be executed.
+
 ## Test
 
 ```
