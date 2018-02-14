@@ -78,7 +78,7 @@ class Hero extends React.Component {
             <div className="hero-play-container">
               <HomeVideo
                 ref={this.getVideoRef}
-                videoId="Rv9hn4IGofM"
+                videoId={HOME_VIDEO_ID}
                 events={this.videoEventHandlers}
               />
               <button className="hero-play-button" onClick={this.onClickPlay} />
