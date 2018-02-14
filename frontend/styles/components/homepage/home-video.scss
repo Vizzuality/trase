@@ -1,8 +1,14 @@
 @import '../node_modules/plyr/src/scss/plyr';
 
 .plyr {
-  display: none;
+  visibility: hidden;
+  height: 0;
+  width: 0;
+  min-width: 0;
+
   &.plyr--playing.plyr--fullscreen-active {
-    display: block;
+    visibility: visible;
+    height: 100%;
+    width: 100%;
   }
 }

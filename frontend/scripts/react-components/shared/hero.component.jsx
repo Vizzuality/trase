@@ -14,6 +14,7 @@ class Hero extends React.Component {
     };
 
     this.videoEventHandlers = {
+      pause: this.onPause,
       exitfullscreen: this.onExitFullScreen,
       ended: this.onEnded
     };
@@ -21,6 +22,10 @@ class Hero extends React.Component {
     this.onClickPlay = this.onClickPlay.bind(this);
     this.getVideoRef = this.getVideoRef.bind(this);
     this.closeStoryBox = this.closeStoryBox.bind(this);
+  }
+
+  onPause(plyr) {
+    plyr.toggleFullscreen();
   }
 
   onExitFullScreen(plyr) {
@@ -77,6 +82,7 @@ class Hero extends React.Component {
             <h1 className="hero-title">Transparent supply chains for sustainable economies</h1>
             <div className="hero-play-container">
               <HomeVideo
+                className="c-home-video"
                 ref={this.getVideoRef}
                 videoId={HOME_VIDEO_ID}
                 events={this.videoEventHandlers}
