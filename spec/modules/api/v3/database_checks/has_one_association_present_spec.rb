@@ -13,7 +13,7 @@ RSpec.describe Api::V3::DatabaseChecks::HasOneAssociationPresent do
       )
     }
     let(:report_status) {
-      Api::V3::DatabaseChecks::ReportStatus.new
+      Api::V3::DatabaseChecks::ErrorsList.new
     }
     context 'when context property missing' do
       include_examples 'failing checks'

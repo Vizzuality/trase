@@ -1,16 +1,10 @@
 module Api
   module V3
     module DatabaseChecks
-      class HasOneAssociationPresent
+      class HasOneAssociationPresent < GenericCheck
         def initialize(object, options)
-          @object = object
+          super(object, options)
           @association = options[:association]
-          @link = options[:link]
-        end
-
-        def call(report_status)
-          return if passing?
-          report_status.add_error(error)
         end
 
         def passing?
@@ -20,13 +14,10 @@ module Api
         private
 
         def error
-          {
-            object: @object,
-            type: self.class.name,
+          super.merge({
             message: "#{@association} missing",
-            suggestion: "Please create one at :link",
-            link: @link
-          }
+            suggestion: "Please create one at :link"
+          })
         end
       end
     end

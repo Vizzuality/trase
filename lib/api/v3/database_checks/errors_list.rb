@@ -1,13 +1,12 @@
 module Api
   module V3
     module DatabaseChecks
-      class ReportStatus
+      class ErrorsList
         def initialize
           @errors = []
-          @warnings = []
         end
 
-        def add_error(options)
+        def add(options)
           @errors << options # TODO:
         end
 

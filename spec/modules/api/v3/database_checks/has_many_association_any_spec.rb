@@ -6,7 +6,7 @@ RSpec.describe Api::V3::DatabaseChecks::HasManyAssociationAny do
     FactoryBot.create(:api_v3_context)
   }
   let(:report_status) {
-    Api::V3::DatabaseChecks::ReportStatus.new
+    Api::V3::DatabaseChecks::ErrorsList.new
   }
 
   context 'when checking context resize_by_attributes' do
@@ -43,7 +43,8 @@ RSpec.describe Api::V3::DatabaseChecks::HasManyAssociationAny do
       Api::V3::DatabaseChecks::HasManyAssociationAny.new(
         context,
         association: :profiles,
-        conditions: {'profiles.name' => Api::V3::Profile::ACTOR}
+        conditions: {'profiles.name' => Api::V3::Profile::ACTOR},
+        severity: :warn
       )
     }
 
