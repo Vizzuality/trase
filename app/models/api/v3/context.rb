@@ -10,6 +10,7 @@ module Api
       has_many :readonly_resize_by_attributes, class_name: 'Readonly::ResizeByAttribute'
       has_many :contextual_layers
       has_many :context_node_types
+      has_many :profiles, through: :context_node_types
 
       delegate :is_default, to: :context_property
       delegate :is_disabled, to: :context_property

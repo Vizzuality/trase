@@ -5,6 +5,7 @@ module Api
         def initialize(object, options)
           @object = object
           @association = options[:association]
+          @conditions = options[:conditions]
           @link = options[:link]
         end
 
@@ -14,7 +15,11 @@ module Api
         end
 
         def passing?
-          @object.send(@association).any?
+          tmp = @object.send(@association)
+          if @conditions.present? && @conditions.is_a?(Hash)
+            tmp = tmp.where(@conditions)
+          end
+          tmp.any?
         end
 
         private
@@ -23,7 +28,7 @@ module Api
           {
             object: @object,
             type: self.class.name,
-            message: "#{@association} missing",
+            message: "#{@association} missing #{@conditions}",
             suggestion: "Please create some at :link",
             link: @link
           }

@@ -1,10 +1,10 @@
 module Api
   module V3
     class Profile < YellowTable
-      NAME = %w(
-        actor
-        place
-      ).freeze
+      ACTOR = 'actor'.freeze
+      PLACE = 'place'.freeze
+
+      NAME = [ACTOR, PLACE].freeze
 
       belongs_to :context_node_type
 
