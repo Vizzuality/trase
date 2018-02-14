@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/mouse-events-have-key-events,import/no-extraneous-dependencies */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import 'styles/components/profiles/mini-sankey.scss';
 import formatValue from 'utils/formatValue';
 import { interpolateNumber as d3InterpolateNumber } from 'd3-interpolate';
 import wrapSVGText from 'utils/wrapSVGText';
-import PropTypes from 'prop-types';
+import i18n from 'utils/transifex';
 
 const BASE_HEIGHT = 400;
 const TOTAL_WIDTH = 1015;
@@ -43,7 +44,7 @@ class MiniSankey extends Component {
       const renderedHeight = MiniSankey.roundHeight(node.height);
 
       const lines = wrapSVGText(
-        node.name,
+        i18n(node.name),
         Math.max(TEXT_LINE_HEIGHT, renderedHeight),
         TEXT_LINE_HEIGHT,
         18,

@@ -86,6 +86,7 @@
     "DATA_FORM_ENDPOINT": true,
     "DATA_FORM_ENABLED": true,
     "PDF_DOWNLOAD_URL": true,
+    "TRANSIFEX_API_KEY": true,
     "PERF_TEST": true,
     "ga": true,
     "fetch": true

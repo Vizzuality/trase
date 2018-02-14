@@ -1,8 +1,9 @@
 /* eslint-disable camelcase,import/no-extraneous-dependencies,no-use-before-define */
-import _ from 'lodash';
+import uniqBy from 'lodash/uniqBy';
 import wrapSVGText from 'utils/wrapSVGText';
 import { NUM_COLUMNS, DETAILED_VIEW_MIN_NODE_HEIGHT, DETAILED_VIEW_SCALE } from 'constants';
 import { interpolateNumber as d3_interpolateNumber } from 'd3-interpolate';
+import i18n from 'utils/transifex';
 
 const sankeyLayout = () => {
   const sankeyLayoutState = {};
@@ -112,7 +113,7 @@ const sankeyLayout = () => {
     columns.forEach(column => {
       column.values.forEach(node => {
         node.label = wrapSVGText(
-          node.name,
+          i18n(node.name),
           node.renderedHeight,
           _labelCharHeight,
           _labelCharsPerLine,
@@ -148,7 +149,7 @@ const sankeyLayout = () => {
         return entry === nodesColoredAtColumn;
       });
       // remove duplicates (ie links with same connected node)
-      coloredColumnLinks = _.uniqBy(
+      coloredColumnLinks = uniqBy(
         coloredColumnLinks,
         nodesColoredAtColumn === 0 ? 'sourceNodeId' : 'targetNodeId'
       );

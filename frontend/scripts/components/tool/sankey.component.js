@@ -279,7 +279,7 @@ export default class {
       .attr('class', 'sankey-node-label')
       .attr('x', this.layout.columnWidth() / 2)
       .attr('dy', 12)
-      .text(d => d);
+      .text(d => d && d.toUpperCase());
   }
 
   _onNodeOver(selection, nodeId, isAggregated) {

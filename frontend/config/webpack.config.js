@@ -44,8 +44,7 @@ module.exports = {
       inject: 'body',
       DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
       icons: templates.icons,
-      head: templates.head,
-      TRANSIFEX_API_KEY: process.env.TRANSIFEX_API_KEY
+      head: templates.head
     }),
     new InlineChunkWebpackPlugin({
       inlineChunks: ['manifest']
@@ -60,7 +59,8 @@ module.exports = {
       DATA_FORM_ENDPOINT: JSON.stringify(process.env.DATA_FORM_ENDPOINT),
       DATA_FORM_ENABLED: process.env.DATA_FORM_ENABLED === 'true',
       PDF_DOWNLOAD_URL: JSON.stringify(process.env.PDF_DOWNLOAD_URL),
-      PERF_TEST: process.env.PERF_TEST
+      PERF_TEST: process.env.PERF_TEST,
+      TRANSIFEX_API_KEY: JSON.stringify(process.env.TRANSIFEX_API_KEY)
     })
   ],
   resolve: {
