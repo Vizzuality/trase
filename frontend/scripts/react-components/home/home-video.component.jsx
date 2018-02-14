@@ -32,38 +32,29 @@ class HomeVideo extends React.PureComponent {
     this.selector = el;
   }
 
-  getPlyr() {
-    return Plyr.get(this.selector)[0];
-  }
-
   setupPlyr() {
-    const plyr = Plyr.setup(this.selector, this.props.options)[0];
-    this.addEventListeners(plyr);
+    this.plyr = Plyr.setup(this.selector, this.props.options)[0];
+    this.addEventListeners();
   }
 
-  addEventListeners(plyr) {
+  addEventListeners() {
     const { events } = this.props;
-    entries(events).forEach(([event, handler]) => plyr.on(event, () => handler(plyr)));
+    entries(events).forEach(([event, handler]) => this.plyr.on(event, () => handler(this.plyr)));
   }
 
   destroyPlyr() {
-    this.getPlyr().destroy();
+    this.plyr.destroy();
   }
 
   render() {
-    const { type, videoId, children, className } = this.props;
-    return (
-      <div className={className} ref={this.getRef} data-type={type} data-video-id={videoId}>
-        {children(this.getPlyr())}
-      </div>
-    );
+    const { type, videoId, className } = this.props;
+    return <div className={className} ref={this.getRef} data-type={type} data-video-id={videoId} />;
   }
 }
 
 HomeVideo.propTypes = {
   type: PropTypes.string,
   videoId: PropTypes.string.isRequired,
-  children: PropTypes.func,
   options: PropTypes.object,
   className: PropTypes.string,
   events: PropTypes.object

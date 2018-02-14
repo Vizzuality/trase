@@ -14,25 +14,34 @@ class Hero extends React.Component {
     };
 
     this.videoEventHandlers = {
-      enterfullscreen: this.onEnterFullScreen,
-      exitfullscreen: this.onExitFullScreen
+      exitfullscreen: this.onExitFullScreen,
+      ended: this.onEnded
     };
 
+    this.onClickPlay = this.onClickPlay.bind(this);
+    this.getVideoRef = this.getVideoRef.bind(this);
     this.closeStoryBox = this.closeStoryBox.bind(this);
-  }
-
-  onEnterFullScreen(plyr) {
-    plyr.play();
   }
 
   onExitFullScreen(plyr) {
     plyr.pause();
   }
 
-  onClickPlay(plyr) {
+  onEnded(plyr) {
+    plyr.toggleFullscreen();
+    plyr.restart();
+  }
+
+  onClickPlay() {
+    const { plyr } = this.video;
     if (plyr.isFullscreen() === false) {
+      plyr.play();
       plyr.toggleFullscreen();
     }
+  }
+
+  getVideoRef(ref) {
+    this.video = ref;
   }
 
   closeStoryBox() {
@@ -67,11 +76,12 @@ class Hero extends React.Component {
             </div>
             <h1 className="hero-title">Transparent supply chains for sustainable economies</h1>
             <div className="hero-play-container">
-              <HomeVideo videoId="Rv9hn4IGofM" events={this.videoEventHandlers}>
-                {plyr => (
-                  <button className="hero-play-button" onClick={() => this.onClickPlay(plyr)} />
-                )}
-              </HomeVideo>
+              <HomeVideo
+                ref={this.getVideoRef}
+                videoId="Rv9hn4IGofM"
+                events={this.videoEventHandlers}
+              />
+              <button className="hero-play-button" onClick={this.onClickPlay} />
               TRASE in 2’
             </div>
           </div>

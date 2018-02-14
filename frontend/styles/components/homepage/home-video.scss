@@ -1,0 +1,8 @@
+@import '../node_modules/plyr/src/scss/plyr';
+
+.plyr {
+  display: none;
+  &.plyr--playing.plyr--fullscreen-active {
+    display: block;
+  }
+}
