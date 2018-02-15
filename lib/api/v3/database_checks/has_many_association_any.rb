@@ -1,7 +1,18 @@
+# Checks the presence of at least one associated object via +has_many+
+#   relationship.
+# e.g. check that context has any profiles
+# @note the has_many relationship may be a +has_many :through+
 module Api
   module V3
     module DatabaseChecks
       class HasManyAssociationAny < GenericCheck
+        # @param (see GenericCheck#initialize)
+        # @option options (see GenericCheck#initialize)
+        # @option options [symbol] :association name of has_many association
+        #   e.g. +:profiles+
+        # @option options [Hash] :conditions conditions to pass; you may need
+        #   to provide qualified column names
+        #   e.g. +'profiles.name' => Api::V3::Profile::ACTOR+
         def initialize(object, options)
           super(object, options)
           @association = options[:association]
@@ -19,10 +30,10 @@ module Api
         private
 
         def error
-          super.merge({
+          super.merge(
             message: "#{@association} missing #{@conditions}",
-            suggestion: "Please create some at :link"
-          })
+            suggestion: 'Please create some at :link'
+          )
         end
       end
     end
