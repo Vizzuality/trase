@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import throttle from 'lodash/throttle';
 import NavLinksList from 'react-components/nav/nav-links-list.component';
+import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.component';
 
 class TopNav extends React.PureComponent {
   static getDownloadPdfLink() {
@@ -71,8 +72,11 @@ class TopNav extends React.PureComponent {
             />
           </div>
           <div className="column medium-2">
-            {printable && (
-              <ul className="top-nav-item-list">
+            <ul className="top-nav-item-list">
+              <li className="top-nav-item">
+                <LocaleSelector />
+              </li>
+              {printable && (
                 <li className="top-nav-item">
                   <a href={TopNav.getDownloadPdfLink()} target="_blank" rel="noopener noreferrer">
                     <svg className="icon icon-download-pdf">
@@ -80,8 +84,8 @@ class TopNav extends React.PureComponent {
                     </svg>
                   </a>
                 </li>
-              </ul>
-            )}
+              )}
+            </ul>
           </div>
         </div>
       </div>
