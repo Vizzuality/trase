@@ -1,12 +1,13 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import 'styles/components/tool/tool-search.scss';
-import 'styles/components/tool/tool-search-result.scss';
+import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import deburr from 'lodash/deburr';
+import i18n from 'utils/transifex';
 import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group.container';
 import SearchResult from 'react-components/tool/tool-search/tool-search-result.component';
-import PropTypes from 'prop-types';
+import 'styles/components/tool/tool-search.scss';
+import 'styles/components/tool/tool-search-result.scss';
 
 export default class Search extends Component {
   static getNodeIds(selectedItem) {
@@ -156,7 +157,7 @@ export default class Search extends Component {
                   </div>
                   <input
                     {...getInputProps({
-                      placeholder: 'Search a producer, trader or country of import'
+                      placeholder: i18n('Search a producer, trader or country of import')
                     })}
                     ref={this.getInputRef}
                     className="tool-search-bar-input"
