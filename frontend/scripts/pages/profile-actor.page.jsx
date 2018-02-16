@@ -17,6 +17,8 @@ import MultiTable from 'react-components/profiles/multi-table.component';
 import Scatterplot from 'react-components/profiles/scatterplot.component';
 import Tooltip from 'components/shared/info-tooltip.component';
 import ChoroLegend from 'react-components/profiles/choro-legend.component';
+import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
+
 import smoothScroll from 'utils/smoothScroll';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
@@ -30,6 +32,7 @@ const defaults = {
   commodity: 'soy'
 };
 
+const TranslatedLine = withTranslation(Line);
 const tooltip = new Tooltip('.js-infowindow');
 const LINE_MARGINS = {
   top: 10,
@@ -55,7 +58,7 @@ const _initSource = (selectedSource, data, store) => {
 
   render(
     <Provider store={store}>
-      <Line
+      <TranslatedLine
         className=".js-top-municipalities"
         data={sourceLines}
         xValues={data.top_sources.included_years}
@@ -218,7 +221,7 @@ const _build = (data, { nodeId, year, print }, store) => {
 
     render(
       <Provider store={store}>
-        <Line
+        <TranslatedLine
           className=".js-top-destination"
           data={topCountriesLines}
           xValues={data.top_countries.included_years}

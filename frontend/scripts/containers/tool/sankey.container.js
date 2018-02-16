@@ -40,7 +40,8 @@ const mapMethodsToState = state => ({
         state.tool.expandedNodesIds,
         state.tool.selectedNodesIds,
         state.tool.areNodesExpanded
-      )
+      ),
+      lang: state.location.query && state.location.query.lang
     })
   },
   selectNodes: {

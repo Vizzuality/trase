@@ -60,6 +60,16 @@
   }
 }
 
+.top-nav-item-list-container {
+  display: flex;
+  height: 100%;
+  align-items: center;
+
+  &.-flex-end {
+    justify-content: flex-end;
+  }
+}
+
 .top-nav-item-list {
   display: inline-flex;
   height: 100%;

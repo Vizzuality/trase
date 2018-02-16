@@ -11,6 +11,7 @@ import { Provider } from 'react-redux';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import Footer from 'react-components/shared/footer.component';
 
+import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
 import Dropdown from 'react-components/shared/dropdown.component';
 import Line from 'react-components/profiles/line.component';
 import LineLegend from 'react-components/profiles/line-legend.component';
@@ -32,6 +33,8 @@ const defaults = {
   commodity: 'Soy'
 };
 const tooltip = new Tooltip('.js-infowindow');
+
+const TranslatedMiniSankey = withTranslation(MiniSankey);
 
 const _buildMaps = (data, store) => {
   const stateGeoID = data.state_geo_id;
@@ -176,14 +179,16 @@ const _build = (data, year, onLinkClick, store) => {
   if (data && data.top_consumer_actors.targetNodes.length > 0) {
     topConsumerActorsContainer.classList.toggle('is-hidden', false);
     render(
-      <MiniSankey
-        data={data.top_consumer_actors}
-        targetLink="profileActor"
-        year={year}
-        showTooltipCallback={showTooltipCallback}
-        hideTooltipCallback={tooltip.hide}
-        onLinkClick={onLinkClick}
-      />,
+      <Provider store={store}>
+        <TranslatedMiniSankey
+          data={data.top_consumer_actors}
+          targetLink="profileActor"
+          year={year}
+          showTooltipCallback={showTooltipCallback}
+          hideTooltipCallback={tooltip.hide}
+          onLinkClick={onLinkClick}
+        />
+      </Provider>,
       document.getElementById('js-traders-sankey')
     );
   } else {
@@ -194,13 +199,15 @@ const _build = (data, year, onLinkClick, store) => {
     topConsumerCountriesContainer.classList.toggle('is-hidden', false);
 
     render(
-      <MiniSankey
-        data={data.top_consumer_countries}
-        year={year}
-        showTooltipCallback={showTooltipCallback}
-        hideTooltipCallback={tooltip.hide}
-        onLinkClick={onLinkClick}
-      />,
+      <Provider store={store}>
+        <TranslatedMiniSankey
+          data={data.top_consumer_countries}
+          year={year}
+          showTooltipCallback={showTooltipCallback}
+          hideTooltipCallback={tooltip.hide}
+          onLinkClick={onLinkClick}
+        />
+      </Provider>,
       document.getElementById('js-consumers-sankey')
     );
   } else {

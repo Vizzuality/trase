@@ -62,30 +62,34 @@ class TopNav extends React.PureComponent {
       <div className={cx('c-nav', { '-has-background': backgroundVisible }, className)}>
         <div className="row align-justify">
           <div className="column medium-8">
-            <NavLinksList
-              links={decoratedLinks || links}
-              listClassName="top-nav-item-list"
-              itemClassName="top-nav-item"
-              linkClassName="top-nav-link"
-              linkActiveClassName="top-nav-link -active"
-              navLinkProps={this.navLinkProps}
-            />
+            <div className="top-nav-item-list-container">
+              <NavLinksList
+                links={decoratedLinks || links}
+                listClassName="top-nav-item-list"
+                itemClassName="top-nav-item"
+                linkClassName="top-nav-link"
+                linkActiveClassName="top-nav-link -active"
+                navLinkProps={this.navLinkProps}
+              />
+            </div>
           </div>
           <div className="column medium-2">
-            <ul className="top-nav-item-list">
-              <li className="top-nav-item">
-                <LocaleSelector />
-              </li>
-              {printable && (
+            <div className="top-nav-item-list-container -flex-end">
+              <ul className="top-nav-item-list">
                 <li className="top-nav-item">
-                  <a href={TopNav.getDownloadPdfLink()} target="_blank" rel="noopener noreferrer">
-                    <svg className="icon icon-download-pdf">
-                      <use xlinkHref="#icon-download-pdf" />
-                    </svg>
-                  </a>
+                  <LocaleSelector />
                 </li>
-              )}
-            </ul>
+                {printable && (
+                  <li className="top-nav-item">
+                    <a href={TopNav.getDownloadPdfLink()} target="_blank" rel="noopener noreferrer">
+                      <svg className="icon icon-download-pdf">
+                        <use xlinkHref="#icon-download-pdf" />
+                      </svg>
+                    </a>
+                  </li>
+                )}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
