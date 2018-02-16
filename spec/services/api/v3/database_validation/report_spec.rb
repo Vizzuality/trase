@@ -22,6 +22,9 @@ RSpec.describe Api::V3::DatabaseValidation::Report do
     before(:all) { # TODO: really fix this db cleaning
       Api::V3::Context.delete_all
       Api::V3::NodeType.delete_all
+      Api::V3::Ind.delete_all
+      Api::V3::Qual.delete_all
+      Api::V3::Quant.delete_all
     }
     include_context 'minimum complete configuration'
 

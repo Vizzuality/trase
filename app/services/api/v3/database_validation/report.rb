@@ -1,9 +1,4 @@
-# The following checks are included
-
-# for each ind / qual / quant
-#   check ind/quant/qual_property present
-#   if temporal set check year present, if not set check year absent
-#   check tooltip text present (WARN)
+# Runs database checks and builds a validation report
 module Api
   module V3
     module DatabaseValidation
@@ -48,7 +43,21 @@ module Api
               ).chain
             end
           end
-
+          Api::V3::Ind.all.each do |ind|
+            chain += ChainBuilders::IndChainBuilder.new(
+              ind, @errors_list
+            ).chain
+          end
+          Api::V3::Qual.all.each do |qual|
+            chain += ChainBuilders::QualChainBuilder.new(
+              qual, @errors_list
+            ).chain
+          end
+          Api::V3::Quant.all.each do |quant|
+            chain += ChainBuilders::QuantChainBuilder.new(
+              quant, @errors_list
+            ).chain
+          end
           chain
         end
       end
