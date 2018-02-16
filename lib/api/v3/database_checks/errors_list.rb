@@ -7,11 +7,15 @@ module Api
         end
 
         def add(options)
-          @errors << options # TODO:
+          @errors << options
         end
 
         def error_count
           @errors.count
+        end
+
+        def empty?
+          error_count.zero?
         end
       end
     end
