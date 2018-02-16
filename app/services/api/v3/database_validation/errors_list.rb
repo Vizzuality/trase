@@ -1,6 +1,6 @@
 module Api
   module V3
-    module DatabaseChecks
+    module DatabaseValidation
       class ErrorsList
         def initialize
           @errors = []

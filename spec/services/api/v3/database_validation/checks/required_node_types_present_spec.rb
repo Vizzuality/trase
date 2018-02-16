@@ -1,7 +1,7 @@
 require 'rails_helper'
-require 'modules/api/v3/database_checks/shared_check_examples'
+require 'services/api/v3/database_validation/checks/shared_check_examples'
 
-RSpec.describe Api::V3::DatabaseChecks::RequiredNodeTypesPresent do
+RSpec.describe Api::V3::DatabaseValidation::Checks::RequiredNodeTypesPresent do
   include_context 'api v3 node types'
 
   context 'when checking contexts' do
@@ -9,12 +9,12 @@ RSpec.describe Api::V3::DatabaseChecks::RequiredNodeTypesPresent do
       FactoryBot.create(:api_v3_context)
     }
     let(:check) {
-      Api::V3::DatabaseChecks::RequiredNodeTypesPresent.new(
+      Api::V3::DatabaseValidation::Checks::RequiredNodeTypesPresent.new(
         context
       )
     }
     let(:report_status) {
-      Api::V3::DatabaseChecks::ErrorsList.new
+      Api::V3::DatabaseValidation::ErrorsList.new
     }
     context 'when node types missing' do
       include_examples 'failing checks'

@@ -1,19 +1,19 @@
 require 'rails_helper'
-require 'modules/api/v3/database_checks/shared_check_examples'
+require 'services/api/v3/database_validation/checks/shared_check_examples'
 
-RSpec.describe Api::V3::DatabaseChecks::HasOneAssociationPresent do
+RSpec.describe Api::V3::DatabaseValidation::Checks::HasOneAssociationPresent do
   context 'when checking contexts' do
     let(:context) {
       FactoryBot.create(:api_v3_context)
     }
     let(:check) {
-      Api::V3::DatabaseChecks::HasOneAssociationPresent.new(
+      Api::V3::DatabaseValidation::Checks::HasOneAssociationPresent.new(
         context,
         association: :context_property
       )
     }
     let(:report_status) {
-      Api::V3::DatabaseChecks::ErrorsList.new
+      Api::V3::DatabaseValidation::ErrorsList.new
     }
     context 'when context property missing' do
       include_examples 'failing checks'

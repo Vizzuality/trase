@@ -1,12 +1,12 @@
 require 'rails_helper'
-require 'modules/api/v3/database_checks/shared_check_examples'
+require 'services/api/v3/database_validation/checks/shared_check_examples'
 
-RSpec.describe Api::V3::DatabaseChecks::HasManyAssociationAny do
+RSpec.describe Api::V3::DatabaseValidation::Checks::HasManyAssociationAny do
   let(:context) {
     FactoryBot.create(:api_v3_context)
   }
   let(:report_status) {
-    Api::V3::DatabaseChecks::ErrorsList.new
+    Api::V3::DatabaseValidation::ErrorsList.new
   }
 
   context 'when checking context resize_by_attributes' do
@@ -18,7 +18,7 @@ RSpec.describe Api::V3::DatabaseChecks::HasManyAssociationAny do
     end
 
     let(:check) {
-      Api::V3::DatabaseChecks::HasManyAssociationAny.new(
+      Api::V3::DatabaseValidation::Checks::HasManyAssociationAny.new(
         context,
         association: :resize_by_attributes
       )
@@ -40,7 +40,7 @@ RSpec.describe Api::V3::DatabaseChecks::HasManyAssociationAny do
       FactoryBot.create(:api_v3_context_node_type, context: context)
     }
     let(:check) {
-      Api::V3::DatabaseChecks::HasManyAssociationAny.new(
+      Api::V3::DatabaseValidation::Checks::HasManyAssociationAny.new(
         context,
         association: :profiles,
         conditions: {'profiles.name' => Api::V3::Profile::ACTOR},

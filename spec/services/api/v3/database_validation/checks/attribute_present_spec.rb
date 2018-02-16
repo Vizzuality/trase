@@ -1,7 +1,7 @@
 require 'rails_helper'
-require 'modules/api/v3/database_checks/shared_check_examples'
+require 'services/api/v3/database_validation/checks/shared_check_examples'
 
-RSpec.describe Api::V3::DatabaseChecks::AttributePresent do
+RSpec.describe Api::V3::DatabaseValidation::Checks::AttributePresent do
   context 'when checking resize_by_attributes' do
     before do
       Api::V3::ResizeByAttribute.skip_callback(:commit, :after, :refresh_dependencies)
@@ -15,13 +15,13 @@ RSpec.describe Api::V3::DatabaseChecks::AttributePresent do
       )
     }
     let(:check) {
-      Api::V3::DatabaseChecks::AttributePresent.new(
+      Api::V3::DatabaseValidation::Checks::AttributePresent.new(
         resize_by_attribute,
         attribute: :tooltip_text
       )
     }
     let(:report_status) {
-      Api::V3::DatabaseChecks::ErrorsList.new
+      Api::V3::DatabaseValidation::ErrorsList.new
     }
     context 'when tooltip_text missing' do
       include_examples 'failing checks'

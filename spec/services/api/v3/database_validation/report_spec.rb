@@ -1,4 +1,4 @@
-RSpec.describe Api::V3::DatabaseChecks::Report do
+RSpec.describe Api::V3::DatabaseValidation::Report do
   before do
     Api::V3::DownloadAttribute.skip_callback(:commit, :after, :refresh_dependencies)
     Api::V3::MapAttributeGroup.skip_callback(:commit, :after, :refresh_dependencies)
@@ -15,7 +15,7 @@ RSpec.describe Api::V3::DatabaseChecks::Report do
   end
 
   let(:report) {
-    Api::V3::DatabaseChecks::Report.new
+    Api::V3::DatabaseValidation::Report.new
   }
 
   context 'when configuration complete' do
