@@ -40,8 +40,7 @@ const mapMethodsToState = state => ({
         state.tool.expandedNodesIds,
         state.tool.selectedNodesIds,
         state.tool.areNodesExpanded
-      ),
-      lang: state.location.query && state.location.query.lang
+      )
     })
   },
   selectNodes: {
@@ -56,7 +55,20 @@ const mapMethodsToState = state => ({
     })
   },
   toggleExpandButton: state.tool.areNodesExpanded,
-  highlightNodes: state.tool.highlightedNodesIds
+  highlightNodes: state.tool.highlightedNodesIds,
+  translateNodes: {
+    _comparedValue: state => state.location.query && state.location.query.lang,
+    _returnedValue: state => ({
+      selectedRecolorBy: state.tool.selectedRecolorBy,
+      currentQuant: state.tool.currentQuant,
+      selectedNodesIds: state.tool.selectedNodesIds,
+      shouldRepositionExpandButton: shouldRepositionExpandButton(
+        state.tool.expandedNodesIds,
+        state.tool.selectedNodesIds,
+        state.tool.areNodesExpanded
+      )
+    })
+  }
 });
 
 // maps component callbacks (ie user events) to redux actions

@@ -4,9 +4,11 @@ import ToolMarkup from 'html/tool.ejs';
 import SearchMarkup from 'html/includes/_search.ejs';
 import NavtoolMarkup from 'html/includes/_navtool.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
+
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
+
 import FlowContentContainer from 'containers/tool/tool-content.container';
 import SankeyContainer from 'containers/tool/sankey.container';
 import ColumnsSelectorContainer from 'react-components/tool/columns-selector.container';
@@ -21,6 +23,7 @@ import NodesTitlesContainer from 'containers/tool/nodesTitles.container';
 import SearchContainer from 'react-components/tool/tool-search/tool-search.container';
 import ModalContainer from 'containers/tool/story-modal.container';
 import TooltipContainer from 'containers/shared/help-tooltip.container';
+import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
 
 import { displayStoryModal, loadDisclaimer, resize } from 'actions/app.actions';
 import { loadInitialData } from 'actions/tool.actions';
@@ -64,6 +67,12 @@ export const mount = (root, store) => {
       <ColumnsSelectorContainer />
     </Provider>,
     document.getElementById('js-columns-selector-react')
+  );
+  render(
+    <Provider store={store}>
+      <LocaleSelector />
+    </Provider>,
+    document.getElementById('js-locale-selector-react')
   );
   render(
     <Provider store={store}>

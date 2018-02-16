@@ -6,7 +6,7 @@ import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
 import * as appReducers from './store';
 
-window.liveSettings = {
+window.liveSettings = TRANSIFEX_API_KEY && {
   api_key: TRANSIFEX_API_KEY,
   autocollect: true
 };
