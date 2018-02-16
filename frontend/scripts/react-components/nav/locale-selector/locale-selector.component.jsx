@@ -9,16 +9,25 @@ class LocaleSelector extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      languages: []
+      languages: [],
+      defaultLanguage: null
     };
 
     this.onSelectLang = this.onSelectLang.bind(this);
-    this.getDefaultLanguage = this.getDefaultLanguage.bind(this);
+    this.setDefaultLanguage = this.setDefaultLanguage.bind(this);
     this.setLanguages = this.setLanguages.bind(this);
   }
 
   componentDidMount() {
     this.setLanguages();
+    this.setDefaultLanguage();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { defaultLanguage } = this.state;
+    if (prevState.defaultLanguage === null && defaultLanguage !== null) {
+      this.props.onTranslate(defaultLanguage.code);
+    }
   }
 
   onSelectLang(item, callback) {
@@ -32,13 +41,22 @@ class LocaleSelector extends React.Component {
     callback();
   }
 
-  getDefaultLanguage() {
+  setDefaultLanguage() {
     const { languages } = this.state;
-    if (typeof Transifex !== 'undefined') {
+    const { urlLang } = this.props;
+    let defaultLanguage = null;
+    const urlLanguage = urlLang && languages.find(lang => lang.code === urlLang);
+
+    if (urlLanguage) {
+      defaultLanguage = urlLanguage;
+    } else if (typeof Transifex !== 'undefined') {
       const code = Transifex.live.detectLanguage();
-      return languages.find(lang => lang.code === code) || { code };
+      defaultLanguage = languages.find(lang => lang.code === code) || { code };
+    } else {
+      defaultLanguage = languages.find(lang => lang.source);
     }
-    return languages.find(lang => lang.source);
+
+    this.setState({ defaultLanguage });
   }
 
   setLanguages() {
@@ -49,12 +67,11 @@ class LocaleSelector extends React.Component {
   }
 
   render() {
-    const { languages } = this.state;
-    const defaultLang = this.getDefaultLanguage();
+    const { languages, defaultLanguage } = this.state;
 
     return (
       languages.length > 0 && (
-        <Downshift defaultSelectedItem={defaultLang}>
+        <Downshift defaultSelectedItem={defaultLanguage}>
           {({ getItemProps, isOpen, toggleMenu, selectedItem, getButtonProps }) => (
             <div className={cx('c-locale-selector', { '-open': isOpen })}>
               <button
@@ -93,7 +110,8 @@ class LocaleSelector extends React.Component {
 }
 
 LocaleSelector.propTypes = {
-  onTranslate: PropTypes.func
+  onTranslate: PropTypes.func,
+  urlLang: PropTypes.string
 };
 
 LocaleSelector.defaultProps = {

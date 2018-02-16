@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import throttle from 'lodash/throttle';
 import NavLinksList from 'react-components/nav/nav-links-list.component';
-import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.component';
+import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
 
 class TopNav extends React.PureComponent {
   static getDownloadPdfLink() {
