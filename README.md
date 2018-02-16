@@ -370,7 +370,7 @@ Those are the maps used by D3 in place profile pages.
 
 ```
 cd frontend
-./gis/vector_maps/get_brazil_municip_states.js
+./gis/vector_maps/main.sh
 ```
 
 
