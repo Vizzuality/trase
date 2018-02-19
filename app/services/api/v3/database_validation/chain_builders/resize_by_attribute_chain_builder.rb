@@ -2,7 +2,7 @@
 
 # The following checks are included:
 #   DONE check years match data in flows
-#   check for widows (resize_by_attributes without resize_by_quant)
+#   DONE check for widows (resize_by_attributes without resize_by_quant)
 #   DONE check tooltip text present (WARN)
 module Api
   module V3
@@ -22,6 +22,9 @@ module Api
                    params: [:resize_by_attribute]
                  },
                  severity: :warn
+          checks :has_one_association_present,
+                 association: :resize_by_quant,
+                 link: {method: :admin_resize_by_attributes_path}
         end
       end
     end

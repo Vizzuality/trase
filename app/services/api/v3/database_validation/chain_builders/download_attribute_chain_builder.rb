@@ -2,7 +2,7 @@
 
 # The following checks are included:
 #   DONE check years match data in flows
-#   check for widows (download_attributes without download_qual or download_quant)
+#   DONE check for widows (download_attributes without download_qual or download_quant)
 module Api
   module V3
     module DatabaseValidation
@@ -20,6 +20,9 @@ module Api
                    method: :admin_download_attribute_path,
                    params: [:download_attribute]
                  }
+          checks :has_one_association_variant_present,
+                 associations: [:download_qual, :download_quant],
+                 link: {method: :admin_download_attributes_path}
         end
       end
     end

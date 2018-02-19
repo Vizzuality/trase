@@ -2,7 +2,7 @@
 
 # The following checks are included:
 #   DONE check years match data in flows
-#   check for widows (recolor_by_attributes without recolor_by_ind or recolor_by_qual)
+#   DONE check for widows (recolor_by_attributes without recolor_by_ind or recolor_by_qual)
 #   DONE check tooltip text present (WARN)
 #   if min/max present, check interval present and vice versa (model validation?)
 #   if legend percentual check divisor present (model validation?)
@@ -30,6 +30,9 @@ module Api
                    params: [:recolor_by_attribute]
                  },
                  severity: :warn
+          checks :has_one_association_variant_present,
+                 associations: [:recolor_by_ind, :recolor_by_qual],
+                 link: {method: :admin_recolor_by_attributes_path}
         end
       end
     end
