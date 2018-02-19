@@ -183,3 +183,8 @@ export const BASEMAPS = {
 };
 
 export const DEFAULT_BASEMAP_FOR_CHOROPLETH = 'default';
+
+export const HOME_VIDEO = {
+  en: 'Rv9hn4IGofM',
+  es: 'xjDjIWPwcPU'
+};

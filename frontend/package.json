@@ -102,6 +102,7 @@
     "query-string": "^5.0.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-plyr": "^1.7.0",
     "react-redux": "^5.0.6",
     "react-siema": "github:sorodrigo/react-siema",
     "react-transition-group": "^2.2.1",

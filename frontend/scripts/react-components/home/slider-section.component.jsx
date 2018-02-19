@@ -61,7 +61,7 @@ class SliderSection extends React.PureComponent {
   onResize() {
     this.setState({
       visiblePages: SliderSection.getPerPage(),
-      currentSlide: this.slider.currentSlide
+      currentSlide: this.slider ? this.slider.currentSlide : 0
     });
   }
 
