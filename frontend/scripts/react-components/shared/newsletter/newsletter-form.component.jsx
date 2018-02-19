@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import i18n from 'utils/transifex';
+import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
 
 class NewsletterForm extends React.PureComponent {
   constructor(props) {
@@ -47,7 +48,7 @@ class NewsletterForm extends React.PureComponent {
               onInput={this.onFormInput}
               type="email"
               name="email"
-              placeholder={i18n('Sign up here to receive updates').toUpperCase()}
+              placeholder={i18n('Sign up here to receive updates')}
               id="newsletter-email"
               required
               className="newsletter-email"
@@ -68,4 +69,4 @@ NewsletterForm.propTypes = {
   message: PropTypes.string
 };
 
-export default NewsletterForm;
+export default withTranslation(NewsletterForm);
