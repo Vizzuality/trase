@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import deburr from 'lodash/deburr';
-import i18n from 'utils/transifex';
 import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group.container';
 import SearchResult from 'react-components/tool/tool-search/tool-search-result.component';
 import 'styles/components/tool/tool-search.scss';
@@ -157,7 +156,7 @@ export default class Search extends Component {
                   </div>
                   <input
                     {...getInputProps({
-                      placeholder: i18n('Search a producer, trader or country of import')
+                      placeholder: 'Search a producer, trader or country of import'
                     })}
                     ref={this.getInputRef}
                     className="tool-search-bar-input"

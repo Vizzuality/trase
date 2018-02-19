@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { getURLFromParams, POST_SUBSCRIBE_NEWSLETTER_URL } from 'utils/getURLFromParams';
-import i18n from 'utils/transifex';
 import { COUNTRIES } from '../../countries';
 
 class DataPortalForm extends Component {
@@ -119,7 +118,7 @@ class DataPortalForm extends Component {
                 Name:
                 <input
                   type="text"
-                  placeholder={i18n('type name')}
+                  placeholder="type name"
                   id="name"
                   value={this.state.name}
                   onChange={event => this.onFieldValueChanged('name', event.target.value)}
@@ -130,7 +129,7 @@ class DataPortalForm extends Component {
                 Country:
                 <input
                   type="text"
-                  placeholder={i18n('select or type country...')}
+                  placeholder="select or type country..."
                   id="country"
                   list="countriesList"
                   value={this.state.country}
@@ -143,7 +142,7 @@ class DataPortalForm extends Component {
                 Organisation name:
                 <input
                   type="text"
-                  placeholder={i18n('type organisation name')}
+                  placeholder="type organisation name"
                   id="organisation"
                   value={this.state.organisation}
                   onChange={event => this.onFieldValueChanged('organisation', event.target.value)}
@@ -154,7 +153,7 @@ class DataPortalForm extends Component {
                 Select or type the option that best describes your organisation:
                 <input
                   type="text"
-                  placeholder={i18n('select or type...')}
+                  placeholder="select or type..."
                   id="organisationType"
                   list="organisationTypeList"
                   value={this.state.organisationType}
@@ -175,7 +174,7 @@ class DataPortalForm extends Component {
                 How will you use the data?
                 <input
                   type="text"
-                  placeholder={i18n('select or type...')}
+                  placeholder="select or type..."
                   id="dataUse"
                   list="dataUseList"
                   value={this.state.dataUse}
@@ -193,7 +192,7 @@ class DataPortalForm extends Component {
                 Trase:
                 <input
                   type="text"
-                  placeholder={i18n('type comments')}
+                  placeholder="type comments"
                   id="comments"
                   value={this.state.comments}
                   onChange={event => this.onFieldValueChanged('comments', event.target.value)}
@@ -205,7 +204,7 @@ class DataPortalForm extends Component {
                 email address:
                 <input
                   type="email"
-                  placeholder={i18n('type email')}
+                  placeholder="type email"
                   id="email"
                   value={this.state.email}
                   onChange={event => this.onFieldValueChanged('email', event.target.value)}

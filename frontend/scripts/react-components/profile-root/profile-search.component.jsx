@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import ProfileSearchResult from 'react-components/profile-root/profile-search-result.component';
 import cx from 'classnames';
-import i18n from 'utils/transifex';
 
 /**
  * Dear future developer,
@@ -50,7 +49,7 @@ class ProfileSearch extends PureComponent {
           role="textbox"
         >
           <input
-            {...getInputProps({ placeholder: i18n('Search a company or production place') })}
+            {...getInputProps({ placeholder: 'Search a company or production place' })}
             type="search"
             className="profile-search-input"
             disabled={loading}
