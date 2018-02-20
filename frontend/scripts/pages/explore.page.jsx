@@ -15,7 +15,12 @@ export const mount = (root, store) => {
     feedback: FeedbackMarkup()
   });
 
-  render(<FiltersNav />, document.getElementById('nav'));
+  render(
+    <Provider store={store}>
+      <FiltersNav />
+    </Provider>,
+    document.getElementById('nav')
+  );
 
   render(
     <Provider store={store}>
