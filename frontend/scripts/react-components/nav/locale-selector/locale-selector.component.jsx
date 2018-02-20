@@ -71,7 +71,7 @@ class LocaleSelector extends React.Component {
 
     return (
       languages.length > 0 && (
-        <Downshift defaultSelectedItem={defaultLanguage}>
+        <Downshift defaultSelectedItem={defaultLanguage} itemToString={i => i.code}>
           {({ getItemProps, isOpen, toggleMenu, selectedItem, getButtonProps }) => (
             <div className={cx('c-locale-selector', { '-open': isOpen })}>
               <button
