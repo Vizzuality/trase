@@ -1,6 +1,12 @@
 shared_context 'minimum complete configuration' do
+  let(:country) {
+    FactoryBot.create(:api_v3_country)
+  }
+  let!(:country_property) {
+    FactoryBot.create(:api_v3_country_property, country: country)
+  }
   let(:context) {
-    FactoryBot.create(:api_v3_context)
+    FactoryBot.create(:api_v3_context, country: country)
   }
   let!(:context_property) {
     FactoryBot.create(:api_v3_context_property, context: context)

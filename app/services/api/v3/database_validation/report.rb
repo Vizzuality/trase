@@ -63,6 +63,11 @@ module Api
               quant, @errors_list
             ).chain
           end
+          Api::V3::Country.all.each do |country|
+            chain += ChainBuilders::CountryhainBuilder.new(
+              country, @errors_list
+            ).chain
+          end
           chain
         end
       end

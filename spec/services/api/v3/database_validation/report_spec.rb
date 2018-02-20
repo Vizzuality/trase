@@ -25,6 +25,7 @@ RSpec.describe Api::V3::DatabaseValidation::Report do
       Api::V3::Ind.delete_all
       Api::V3::Qual.delete_all
       Api::V3::Quant.delete_all
+      Api::V3::Country.delete_all
     }
     include_context 'minimum complete configuration'
 
