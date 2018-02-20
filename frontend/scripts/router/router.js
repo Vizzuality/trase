@@ -32,6 +32,10 @@ const routes = {
     page: 'home',
     thunk: dispatchThunks(getPostsContent, getTweetsContent, getTestimonialsContent)
   },
+  explore: {
+    path: '/explore',
+    page: 'explore'
+  },
   tool: {
     path: '/flows',
     page: 'tool',
