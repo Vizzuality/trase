@@ -1,5 +1,3 @@
-/* eslint-disable max-len,no-new */
-
 import BaseMarkup from 'html/base.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
