@@ -25,7 +25,7 @@ class Hero extends React.Component {
   }
 
   onPause(plyr) {
-    plyr.toggleFullscreen();
+    plyr.fullscreen.exit();
   }
 
   onExitFullScreen(plyr) {
@@ -33,15 +33,15 @@ class Hero extends React.Component {
   }
 
   onEnded(plyr) {
-    plyr.toggleFullscreen();
+    plyr.fullscreen.exit();
     plyr.restart();
   }
 
   onClickPlay() {
     const { plyr } = this.video;
-    if (plyr.isFullscreen() === false) {
+    if (plyr.fullscreen.active === false) {
       plyr.play();
-      plyr.toggleFullscreen();
+      plyr.fullscreen.enter();
     }
   }
 
@@ -55,7 +55,7 @@ class Hero extends React.Component {
 
   render() {
     const { showStory } = this.state;
-    const { className, visitStory, story, tweets } = this.props;
+    const { className, visitStory, story, tweets, homeVideo } = this.props;
     const StoryBox = storyObj => (
       <div className="story-box">
         <button className="story-box-close" onClick={this.closeStoryBox} />
@@ -84,11 +84,11 @@ class Hero extends React.Component {
               <HomeVideo
                 className="c-home-video"
                 ref={this.getVideoRef}
-                videoId={HOME_VIDEO_ID}
+                videoId={homeVideo}
                 events={this.videoEventHandlers}
               />
               <button className="hero-play-button" onClick={this.onClickPlay} />
-              TRASE in 2’
+              <span>TRASE in 2’</span>
             </div>
           </div>
           {showStory &&
@@ -115,7 +115,8 @@ Hero.propTypes = {
   visitStory: PropTypes.func,
   story: PropTypes.object,
   tweets: PropTypes.array,
-  onClickPlay: PropTypes.func
+  onClickPlay: PropTypes.func,
+  homeVideo: PropTypes.string
 };
 
 Hero.defaultProps = {

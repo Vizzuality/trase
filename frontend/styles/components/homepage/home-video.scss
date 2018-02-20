@@ -1,4 +1,4 @@
-@import '../node_modules/plyr/src/scss/plyr';
+@import '../node_modules/plyr/src/sass/plyr';
 
 .plyr {
   visibility: hidden;
@@ -6,7 +6,7 @@
   width: 0;
   min-width: 0;
 
-  &.plyr--playing.plyr--fullscreen-active {
+  &.plyr--playing.plyr--fullscreen-enabled {
     visibility: visible;
     height: 100%;
     width: 100%;
