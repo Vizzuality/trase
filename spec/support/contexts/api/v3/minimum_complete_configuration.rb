@@ -102,7 +102,8 @@ shared_context 'minimum complete configuration' do
       :api_v3_recolor_by_attribute,
       context: context,
       years: [2014],
-      tooltip_text: 'text'
+      tooltip_text: 'text',
+      legend_type: 'linear'
     )
   }
   let!(:recolor_by_ind) {
