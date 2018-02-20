@@ -5,6 +5,7 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
+import FiltersNav from 'react-components/nav/filters-nav/filters-nav.component';
 import Explore from 'react-components/explore/explore.component';
 
 import 'styles/explore.scss';
@@ -13,6 +14,8 @@ export const mount = (root, store) => {
   root.innerHTML = BaseMarkup({
     feedback: FeedbackMarkup()
   });
+
+  render(<FiltersNav />, document.getElementById('nav'));
 
   render(
     <Provider store={store}>
