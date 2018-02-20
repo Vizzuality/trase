@@ -1,0 +1,27 @@
+import BaseMarkup from 'html/base.ejs';
+import FeedbackMarkup from 'html/includes/_feedback.ejs';
+
+import React from 'react';
+import { render, unmountComponentAtNode } from 'react-dom';
+import { Provider } from 'react-redux';
+
+import Explore from 'react-components/explore/explore.component';
+
+import 'styles/explore.scss';
+
+export const mount = (root, store) => {
+  root.innerHTML = BaseMarkup({
+    feedback: FeedbackMarkup()
+  });
+
+  render(
+    <Provider store={store}>
+      <Explore />
+    </Provider>,
+    document.getElementById('page-react-root')
+  );
+};
+
+export const unmount = () => {
+  unmountComponentAtNode(document.getElementById('page-react-root'));
+};
