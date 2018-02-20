@@ -10,4 +10,19 @@
   z-index: $z-nav;
   background-color: $white;
   box-shadow: 0 10px 20px 0 rgba($charcoal-grey, 0.2);
+
+  .filters-nav-item {
+    display: inline-flex;
+    position: relative;
+    height: $nav-height;
+    padding: 0 18px;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: .5px;
+    color: $charcoal-grey;
+    border-left: 1px solid $pale-grey;
+    cursor: pointer;
+
+  }
 }

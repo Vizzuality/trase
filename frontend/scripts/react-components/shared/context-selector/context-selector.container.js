@@ -3,7 +3,7 @@ import groupBy from 'lodash/groupBy';
 
 import { toggleDropdown } from 'actions/app.actions';
 import { selectContext } from 'actions/tool.actions';
-import ContextSelector from 'react-components/tool/nav/context-selector';
+import ContextSelector from 'react-components/shared/context-selector/context-selector.component';
 
 function classifyColumn(contexts, { id, label, relation }) {
   const groups = groupBy(

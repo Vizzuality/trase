@@ -1,5 +1,5 @@
 import React from 'react';
-import ContextSelector from 'containers/tool/nav/context-selector';
+import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 import Filters from 'containers/tool/nav/filters.container';
 import Years from 'containers/tool/nav/years.container';
 import ResizeBy from 'containers/tool/nav/resize-by.container';
