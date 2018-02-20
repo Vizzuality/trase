@@ -8,14 +8,18 @@ module Api
           # @option options (see AbstractCheck#initialize)
           # @option options [symbol] :attribute name of attribute
           #   e.g. +:tooltip_text+
+          # @option options [symbol] :on name of the object on which attribute
+          #   is defined, e.g. +ind_property+
           def initialize(object, options)
             super(object, options)
             @attribute = options[:attribute]
+            @on_object = @object.send(options[:on]) if options.key?(:on)
           end
 
           # @return (see AbstractCheck#passing?)
           def passing?
-            @object.send(@attribute).present?
+            return true unless @on_object.present?
+            @on_object.send(@attribute).present?
           end
 
           private

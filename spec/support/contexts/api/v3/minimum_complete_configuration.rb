@@ -6,12 +6,20 @@ shared_context 'minimum complete configuration' do
     FactoryBot.create(:api_v3_context_property, context: context)
   }
   let(:ind) { FactoryBot.create(:api_v3_ind) }
-  let!(:ind_property) { FactoryBot.create(:api_v3_ind_property, ind: ind) }
+  let!(:ind_property) {
+    FactoryBot.create(:api_v3_ind_property, ind: ind, tooltip_text: 'ind text')
+  }
   let(:qual) { FactoryBot.create(:api_v3_qual) }
-  let!(:qual_property) { FactoryBot.create(:api_v3_qual_property, qual: qual) }
+  let!(:qual_property) {
+    FactoryBot.create(
+      :api_v3_qual_property, qual: qual, tooltip_text: 'qual text'
+    )
+  }
   let(:quant) { FactoryBot.create(:api_v3_quant) }
   let!(:quant_property) {
-    FactoryBot.create(:api_v3_quant_property, quant: quant)
+    FactoryBot.create(
+      :api_v3_quant_property, quant: quant, tooltip_text: 'quant text'
+    )
   }
   let(:exporter_node_type) {
     FactoryBot.create(:api_v3_node_type, name: NodeTypeName::EXPORTER)
