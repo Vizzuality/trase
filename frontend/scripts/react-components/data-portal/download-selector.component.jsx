@@ -28,7 +28,6 @@ class DownloadSelector extends Component {
       <div
         className={classnames('c-custom-dataset-selector', { '-disabled': !this.props.enabled })}
         data-type="value"
-        data-disabled-text={this.props.disabledText}
       >
         <div className="c-custom-dataset-selector__header">
           {this.props.title}
@@ -45,6 +44,7 @@ class DownloadSelector extends Component {
             </ul>
           )}
         </div>
+        <span className="c-custom-dataset-selector__disabled-text">{this.props.disabledText}</span>
         <ul className="c-custom-dataset-selector__values">{this.renderOptions()}</ul>
       </div>
     );

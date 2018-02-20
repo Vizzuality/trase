@@ -309,6 +309,53 @@
       visibility: visible;
     }
   }
+
+  .tool-locale-selector {
+
+    .c-locale-selector {
+
+      .locale-selector-selected-item,
+      .locale-selector-menu-item {
+        color: $charcoal-grey;
+        font-family: $font-family-1;
+        font-size: 16px;
+        font-weight: $font-weight-bold;
+        letter-spacing: .5px;
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      .locale-selector-selected-item {
+        &::after {
+          border-top-color: $charcoal-grey;
+        }
+      }
+
+      .locale-selector-menu {
+        background-color: $white;
+        box-shadow: 0 3px 6px 0 rgba($black, 0.16), 0 3px 6px 0 rgba($black, 0.23);
+        top: 100%;
+        margin: 0;
+        width: calc(100% + 36px);
+
+        .locale-selector-menu-item {
+          width: 100%;
+          margin: 0;
+          padding: 10px;
+          opacity: 1;
+          font-weight: $font-weight-regular;
+
+          &:hover {
+            background-color: $manilla;
+          }
+
+          &:not(:first-child) {
+            border-top: solid 1px rgba($charcoal-grey, .2);
+          }
+        }
+      }
+    }
+  }
 }
 
 .c-nav-spacer {

@@ -3,7 +3,7 @@ import isNumber from 'lodash/isNumber';
 // eslint-disable-next-line camelcase
 import turf_bbox from '@turf/bbox';
 import { BASEMAPS, CARTO_BASE_URL, MAP_PANES, MAP_PANES_Z } from 'constants';
-import 'leaflet/dist/leaflet.css';
+import 'styles/components/tool/map/leaflet.css';
 import 'styles/components/tool/map.scss';
 import 'styles/components/tool/map/map-legend.scss';
 import 'styles/components/tool/map/map-choropleth.scss';

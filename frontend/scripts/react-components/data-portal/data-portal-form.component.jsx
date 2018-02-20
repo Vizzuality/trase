@@ -1,9 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-for,jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { getURLFromParams, POST_SUBSCRIBE_NEWSLETTER_URL } from 'utils/getURLFromParams';
-import classnames from 'classnames';
 import { COUNTRIES } from '../../countries';
 
 class DataPortalForm extends Component {
@@ -62,7 +61,7 @@ class DataPortalForm extends Component {
     }
 
     // Check if we have user data, and if not, ask for it
-    if (_.values(payload).filter(v => v !== '').length === 1) {
+    if (Object.values(payload).filter(v => v !== '').length === 1) {
       // this._setFormStatus(true);
       return;
     }
@@ -101,7 +100,7 @@ class DataPortalForm extends Component {
 
   render() {
     return (
-      <div className={classnames({ 'is-hidden': !this.props.formVisible })}>
+      <div className={cx({ 'is-hidden': !this.props.formVisible })}>
         <div className="veil -below-nav" onClick={this.props.closeForm} />
         <div className="c-modal -below-nav">
           <div className="content -white -big-margin">
@@ -111,7 +110,7 @@ class DataPortalForm extends Component {
                 understand how the data is currently being used and to improve the platform, we
                 would appreciate if you could tell us a bit about yourself and your work.
               </p>
-              <p className={classnames('missing', { 'is-hidden': !this.props.downloaded })}>
+              <p className={cx('missing', { 'is-hidden': !this.props.downloaded })}>
                 We&apos;d love to hear about how you use the data and how we could improve it.
                 Please fill in details below and click on &apos;submit&apos;:
               </p>
@@ -213,7 +212,7 @@ class DataPortalForm extends Component {
               </label>
 
               <p
-                className={classnames(
+                className={cx(
                   'tos',
                   { '-highlighted': this.state.showTOSWarning },
                   { 'is-hidden': this.props.downloaded }
@@ -240,7 +239,7 @@ class DataPortalForm extends Component {
               <label className="submit">
                 <div className="download-button" onClick={() => this.sendForm()}>
                   <div
-                    className={classnames('form-submit-download', {
+                    className={cx('form-submit-download', {
                       'is-hidden': this.props.downloaded
                     })}
                   >
@@ -250,7 +249,7 @@ class DataPortalForm extends Component {
                     download data
                   </div>
                   <div
-                    className={classnames('form-submit-submit', {
+                    className={cx('form-submit-submit', {
                       'is-hidden': !this.props.downloaded
                     })}
                   >
