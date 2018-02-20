@@ -35,6 +35,9 @@ module Api
           checks :has_many_association_any,
                  association: :resize_by_attributes,
                  link: {method: :admin_resize_by_attributes_path}
+          checks :has_many_association_any,
+                 association: :contextual_layers,
+                 link: {method: :admin_contextual_layers_path}
         end
       end
     end

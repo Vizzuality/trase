@@ -42,6 +42,11 @@ module Api
                 map_attribute, @errors_list
               ).chain
             end
+            context.contextual_layers.each do |contextual_layer|
+              chain += ChainBuilders::ContextualLayerChainBuilder.new(
+                contextual_layer, @errors_list
+              ).chain
+            end
           end
           Api::V3::Ind.all.each do |ind|
             chain += ChainBuilders::IndChainBuilder.new(

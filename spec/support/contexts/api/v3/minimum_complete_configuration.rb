@@ -157,4 +157,10 @@ shared_context 'minimum complete configuration' do
   let!(:flow_ind_2014) {
     FactoryBot.create(:api_v3_flow_ind, flow: flow_2014, ind: ind)
   }
+  let(:contextual_layer) {
+    FactoryBot.create(:api_v3_contextual_layer, context: context)
+  }
+  let!(:carto_layer) {
+    FactoryBot.create(:api_v3_carto_layer, contextual_layer: contextual_layer)
+  }
 end
