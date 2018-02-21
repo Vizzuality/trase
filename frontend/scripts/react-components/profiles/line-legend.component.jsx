@@ -29,7 +29,9 @@ class LineLegend extends Component {
               <use xlinkHref={`#icon-${style}`} />
             </svg>
             <span dangerouslySetInnerHTML={{ __html: lineData.legend_name }} />
-            <Tooltip text={lineData.legend_name} position="bottom right" />
+            {lineData.legend_tooltip && (
+              <Tooltip text={lineData.legend_tooltip} position="bottom right" />
+            )}
           </div>
         );
       }

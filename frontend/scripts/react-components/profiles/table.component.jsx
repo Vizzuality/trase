@@ -30,6 +30,7 @@ class Table extends Component {
 
   renderPlacesTable() {
     const data = this.props.data;
+    const columns = data.included_columns;
 
     return (
       <tbody>
@@ -37,22 +38,24 @@ class Table extends Component {
           <tr key={valueKey} className="table-row">
             <td className="cell-name">
               <span className="node-name">
-                {data.included_columns[valueKey].name}
-                {data.included_columns[valueKey].year}
+                {columns[valueKey].name}
+                {columns[valueKey].year}
               </span>
-              <Tooltip text={data.included_columns[valueKey].name} position="bottom" />
+              {columns[valueKey].tooltip && (
+                <Tooltip text={columns[valueKey].tooltip} position="bottom" />
+              )}
             </td>
             {data.rows.map((row, rowKey) => (
               <td key={rowKey} className="cell-score _text-align-right">
                 <span
                   className="unit"
                   data-unit={
-                    row.have_unit && !UNITLESS_UNITS.includes(data.included_columns[valueKey].unit)
-                      ? data.included_columns[valueKey].unit
+                    row.have_unit && !UNITLESS_UNITS.includes(columns[valueKey].unit)
+                      ? columns[valueKey].unit
                       : null
                   }
                 >
-                  {formatValue(row.values[valueKey], data.included_columns[valueKey].name)}
+                  {formatValue(row.values[valueKey], columns[valueKey].name)}
                 </span>
               </td>
             ))}
@@ -74,7 +77,7 @@ class Table extends Component {
               className={classnames('header-cell', { '_text-align-right': columnIndex > 0 })}
             >
               {column.name}
-              <Tooltip text={column.name} position="bottom" />
+              {column.tooltip && <Tooltip text={column.tooltip} position="bottom" />}
             </th>
           ))}
         </tr>

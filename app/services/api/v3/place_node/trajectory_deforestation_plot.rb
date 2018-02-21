@@ -47,6 +47,7 @@ module Api
               {
                 name: attribute_hash[:name],
                 legend_name: attribute_hash[:legend_name],
+                legend_tooltip: attribute_hash[:attribute][:tooltip_text],
                 type: attribute_hash[:type],
                 style: attribute_hash[:style],
                 values: years.map { |y| values[y] && values[y]['value'] }

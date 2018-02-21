@@ -121,7 +121,8 @@ module Api
           included_columns = attributes.map do |attribute_hash|
             {
               name: attribute_hash[:attribute]['display_name'],
-              unit: attribute_hash[:attribute].unit
+              unit: attribute_hash[:attribute].unit,
+              tooltip: attribute_hash[:attribute][:tooltip_text]
             }
           end
           {
