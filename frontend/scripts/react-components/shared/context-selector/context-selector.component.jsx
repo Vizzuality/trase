@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import Tooltip from 'react-components/tool/help-tooltip.component';
 import Dropdown from 'react-components/tool/nav/dropdown.component';
 import 'styles/components/tool/country-commodities-react.scss';
 import 'styles/components/tool/dimensional-selector-react.scss';
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
 
 const id = 'country-commodity';
 
@@ -152,7 +152,7 @@ class ContextSelector extends Component {
   render() {
     const {
       toggleContextSelectorVisibility,
-      tooltips,
+      tooltipText,
       currentDropdown,
       selectedContextCountry,
       selectedContextCommodity,
@@ -167,11 +167,14 @@ class ContextSelector extends Component {
         <div className="c-dropdown -capitalize">
           <span className="dropdown-label">
             Country - Commodity
-            <Tooltip text={tooltips.sankey.nav.context.main} />
+            {tooltipText && <Tooltip text={tooltipText} />}
           </span>
-          <span className="dropdown-title">
-            {selectedContextCountry.toLowerCase()} - {selectedContextCommodity.toLowerCase()}
-          </span>
+          {selectedContextCountry &&
+            selectedContextCommodity && (
+              <span className="dropdown-title">
+                {selectedContextCountry.toLowerCase()} - {selectedContextCommodity.toLowerCase()}
+              </span>
+            )}
           <Dropdown
             id={id}
             currentDropdown={currentDropdown}
@@ -198,7 +201,7 @@ ContextSelector.propTypes = {
   toggleContextSelectorVisibility: PropTypes.func,
   getComputedKey: PropTypes.func,
   selectContext: PropTypes.func,
-  tooltips: PropTypes.object,
+  tooltipText: PropTypes.string,
   contexts: PropTypes.object,
   currentDropdown: PropTypes.string,
   selectedContextCountry: PropTypes.string,
