@@ -49,7 +49,7 @@ RSpec.describe Api::V3::DatabaseValidation::Checks::HasManyAssociationAny do
     }
 
     context 'when actor profile missing' do
-      include_examples 'failing checks'
+      include_examples 'failing checks (warnings)'
     end
 
     context 'when actor profile present' do
@@ -60,7 +60,7 @@ RSpec.describe Api::V3::DatabaseValidation::Checks::HasManyAssociationAny do
           name: Api::V3::Profile::ACTOR
         )
       }
-      include_examples 'passing checks'
+      include_examples 'passing checks (warnings)'
     end
   end
 end

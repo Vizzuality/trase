@@ -7,11 +7,18 @@ module Api
         end
 
         def add(options)
-          @errors << options
+          object = options.delete(:object)
+          table = object.class.table_name
+          id = object.id
+          @errors << {table: table, id: id}.merge(options)
         end
 
         def error_count
-          @errors.count
+          @errors.select { |e| e[:severity] != :warn }.count
+        end
+
+        def warning_count
+          @errors.select { |e| e[:severity] == :warn }.count
         end
 
         def empty?
