@@ -10,7 +10,7 @@ module Api
 
         def self.refresh
           Scenic.database.refresh_materialized_view(table_name, concurrently: false)
-          # Api::V3::Readonly::DownloadFlow.refresh_later(skip_flow_paths: true)
+          Api::V3::Readonly::DownloadFlow.refresh_later(skip_flow_paths: true)
         end
       end
     end
