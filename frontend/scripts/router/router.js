@@ -42,7 +42,8 @@ const routes = {
   },
   explore: {
     path: '/explore',
-    page: 'explore'
+    page: 'explore',
+    thunk: dispatchThunks(loadInitialDataTool)
   },
   tool: {
     path: '/flows',
