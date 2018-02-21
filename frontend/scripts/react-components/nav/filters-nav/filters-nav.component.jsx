@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
+import NavLinksList from 'react-components/nav/nav-links-list.component';
 
 class FiltersNav extends React.PureComponent {
   constructor(props) {
@@ -10,14 +11,42 @@ class FiltersNav extends React.PureComponent {
       menuOpen: false
     };
     this.toggleMenu = this.toggleMenu.bind(this);
+    this.renderMenuOpened = this.renderMenuOpened.bind(this);
+    this.renderMenuClosed = this.renderMenuClosed.bind(this);
   }
 
   toggleMenu() {
     this.setState(state => ({ menuOpen: !state.menuOpen }));
   }
 
-  render() {
+  renderMenuOpened() {
+    const { links } = this.props;
+    return (
+      <React.Fragment>
+        <NavLinksList
+          links={links}
+          listClassName="top-nav-item-list"
+          itemClassName="top-nav-item"
+          linkClassName="top-nav-link"
+          linkActiveClassName="top-nav-link -active"
+        />
+      </React.Fragment>
+    );
+  }
+
+  renderMenuClosed() {
     const { children } = this.props;
+    return (
+      <React.Fragment>
+        <div className="filters-nav-item">
+          <ContextSelector />
+        </div>
+        {children}
+      </React.Fragment>
+    );
+  }
+
+  render() {
     const { menuOpen } = this.state;
     return (
       <div className="c-filters-nav">
@@ -28,17 +57,15 @@ class FiltersNav extends React.PureComponent {
             <span className="ingredient" />
           </button>
         </div>
-        <div className="filters-nav-item">
-          <ContextSelector />
-        </div>
-        {children}
+        {menuOpen ? this.renderMenuOpened() : this.renderMenuClosed()}
       </div>
     );
   }
 }
 
 FiltersNav.propTypes = {
-  children: PropTypes.element
+  children: PropTypes.element,
+  links: PropTypes.array
 };
 
 export default FiltersNav;
