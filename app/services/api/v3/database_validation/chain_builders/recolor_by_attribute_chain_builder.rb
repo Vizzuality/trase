@@ -33,6 +33,16 @@ module Api
           checks :has_one_association_variant_present,
                  associations: [:recolor_by_ind, :recolor_by_qual],
                  link: {method: :admin_recolor_by_attributes_path}
+
+          def self.build_chain(context)
+            chain = []
+            context.recolor_by_attributes.each do |recolor_by_attribute|
+              chain += self.new(
+                recolor_by_attribute, @errors_list
+              ).chain
+            end
+            chain
+          end
         end
       end
     end

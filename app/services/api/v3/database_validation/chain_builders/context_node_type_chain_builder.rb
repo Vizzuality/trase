@@ -10,6 +10,16 @@ module Api
           checks :has_one_association_present,
                  association: :context_node_type_property,
                  link: {method: :admin_context_node_type_properties_path}
+
+          def self.build_chain(context)
+            chain = []
+            context.context_node_types.each do |context_node_type|
+              chain += self.new(
+                context_node_type, @errors_list
+              ).chain
+            end
+            chain
+          end
         end
       end
     end

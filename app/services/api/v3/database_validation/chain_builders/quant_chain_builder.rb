@@ -36,6 +36,16 @@ module Api
                    params: [:quant_property]
                  },
                  severity: :warn
+
+          def self.build_chain
+            chain = []
+            Api::V3::Quant.all.each do |quant|
+              chain += self.new(
+                quant, @errors_list
+              ).chain
+            end
+            chain
+          end
         end
       end
     end

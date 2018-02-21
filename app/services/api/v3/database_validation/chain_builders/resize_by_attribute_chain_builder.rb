@@ -25,6 +25,16 @@ module Api
           checks :has_one_association_present,
                  association: :resize_by_quant,
                  link: {method: :admin_resize_by_attributes_path}
+
+          def self.build_chain(context)
+            chain = []
+            context.resize_by_attributes.each do |resize_by_attribute|
+              chain += self.new(
+                resize_by_attribute, @errors_list
+              ).chain
+            end
+            chain
+          end
         end
       end
     end

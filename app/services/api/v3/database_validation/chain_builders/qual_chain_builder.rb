@@ -36,6 +36,16 @@ module Api
                    params: [:qual_property]
                  },
                  severity: :warn
+
+          def self.build_chain
+            chain = []
+            Api::V3::Qual.all.each do |qual|
+              chain += self.new(
+                qual, @errors_list
+              ).chain
+            end
+            chain
+          end
         end
       end
     end

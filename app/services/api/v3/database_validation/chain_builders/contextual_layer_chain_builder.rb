@@ -18,6 +18,16 @@ module Api
                    params: [:contextual_layer]
                  },
                  severity: :warn
+
+          def self.build_chain(context)
+            chain = []
+            context.contextual_layers.each do |contextual_layer|
+              chain += self.new(
+                contextual_layer, @errors_list
+              ).chain
+            end
+            chain
+          end
         end
       end
     end

@@ -23,6 +23,16 @@ module Api
           checks :has_one_association_variant_present,
                  associations: [:map_ind, :map_quant],
                  link: {method: :admin_map_attributes_path}
+
+          def self.build_chain(context)
+            chain = []
+            context.map_attributes.each do |map_attribute|
+              chain += self.new(
+                map_attribute, @errors_list
+              ).chain
+            end
+            chain
+          end
         end
       end
     end

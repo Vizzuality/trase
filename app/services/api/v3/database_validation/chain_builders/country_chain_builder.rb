@@ -10,6 +10,16 @@ module Api
           checks :has_one_association_present,
                  association: :country_property,
                  link: {method: :admin_country_properties_path}
+
+          def self.build_chain
+            chain = []
+            Api::V3::Country.all.each do |country|
+              chain += self.new(
+                country, @errors_list
+              ).chain
+            end
+            chain
+          end
         end
       end
     end

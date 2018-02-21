@@ -23,6 +23,16 @@ module Api
           checks :has_one_association_variant_present,
                  associations: [:download_qual, :download_quant],
                  link: {method: :admin_download_attributes_path}
+
+          def self.build_chain(context)
+            chain = []
+            context.download_attributes.each do |download_attribute|
+              chain += self.new(
+                download_attribute, @errors_list
+              ).chain
+            end
+            chain
+          end
         end
       end
     end

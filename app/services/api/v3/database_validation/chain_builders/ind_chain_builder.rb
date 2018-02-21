@@ -36,6 +36,16 @@ module Api
                    params: [:ind_property]
                  },
                  severity: :warn
+
+          def self.build_chain
+            chain = []
+            Api::V3::Ind.all.each do |ind|
+              chain += self.new(
+                ind, @errors_list
+              ).chain
+            end
+            chain
+          end
         end
       end
     end

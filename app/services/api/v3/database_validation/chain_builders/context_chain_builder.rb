@@ -38,6 +38,20 @@ module Api
           checks :has_many_association_any,
                  association: :contextual_layers,
                  link: {method: :admin_contextual_layers_path}
+
+          def self.build_chain
+            chain = []
+            Api::V3::Context.all.each do |context|
+              chain += self.new(context, @errors_list).chain
+              chain += ContextNodeTypeChainBuilder.build_chain(context)
+              chain += ResizeByAttributeChainBuilder.build_chain(context)
+              chain += RecolorByAttributeChainBuilder.build_chain(context)
+              chain += DownloadAttributeChainBuilder.build_chain(context)
+              chain += MapAttributeChainBuilder.build_chain(context)
+              chain += ContextualLayerChainBuilder.build_chain(context)
+            end
+            chain
+          end
         end
       end
     end
