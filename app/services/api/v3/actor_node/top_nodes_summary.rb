@@ -51,11 +51,24 @@ module Api
         end
 
         def initialize_top_nodes(node_type, attribute)
-          top_nodes_list = Api::V3::Profiles::TopNodesList.
-            new(@context, @year, @node, other_node_type_name: node_type)
-          @top_nodes = top_nodes_list.sorted_list(attribute, false, nil)
+          top_nodes_list = Api::V3::Profiles::TopNodesList.new(
+            @context,
+            @node,
+            year_start: @year,
+            year_end: @year,
+            other_node_type_name: node_type
+          )
+          @top_nodes = top_nodes_list.sorted_list(
+            attribute,
+            include_domestic_consumption: false,
+            limit: nil
+          )
           @top_node_values_by_year = top_nodes_list.
-            unsorted_list_grouped_by_year(attribute, false, nil).all
+            unsorted_list_grouped_by_year(
+              attribute,
+              include_domestic_consumption: false,
+              limit: nil
+            ).all
         end
 
         def nodes_by_year_summary_for_indicator(node_type, years, buckets, attribute)

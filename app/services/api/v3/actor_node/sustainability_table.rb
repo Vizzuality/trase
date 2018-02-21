@@ -34,9 +34,18 @@ module Api
         end
 
         def sustainability_for_group(name, node_type, include_totals)
-          top_nodes_list = Api::V3::Profiles::TopNodesList.
-            new(@context, @year, @node, other_node_type_name: node_type)
-          top_nodes = top_nodes_list.sorted_list(@volume_attribute, false, 10)
+          top_nodes_list = Api::V3::Profiles::TopNodesList.new(
+            @context,
+            @node,
+            year_start: @year,
+            year_end: @year,
+            other_node_type_name: node_type
+          )
+          top_nodes = top_nodes_list.sorted_list(
+            @volume_attribute,
+            include_domestic_consumption: false,
+            limit: 10
+          )
           group_totals_hash = {}
           rows = top_nodes.map do |node|
             data_row(group_totals_hash, node_type, node)

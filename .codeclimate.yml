@@ -21,6 +21,8 @@ engines:
         enabled: false
       IrresponsibleModule:
         enabled: false
+      InstanceVariableAssumption:
+        enabled: false
 
 ratings:
   paths:

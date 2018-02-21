@@ -63,7 +63,7 @@ json:
     name: get_map_base_data
     version: v2
     v3_ready: true
-    v3_url: /api/v3/contexts/1/map_groups
+    v3_url: /api/v3/contexts/1/map_layers
     queries:
       - params: context_id=1
         name: brazil_soy
@@ -71,7 +71,7 @@ json:
     name: get_map_base_data
     version: v2
     v3_ready: true
-    v3_url: /api/v3/contexts/2/map_groups
+    v3_url: /api/v3/contexts/2/map_layers
     queries:
       - params: context_id=2
         name: paraguay_soy

@@ -14,8 +14,16 @@ module Api
           initialize_top_nodes(node_type, include_domestic_consumption)
 
           all_nodes_for_place = Api::V3::Profiles::TopNodesList.new(
-            @context, @year, @node, other_node_type_name: node_type
-          ).unsorted_list(@volume_attribute, include_domestic_consumption, nil)
+            @context,
+            @node,
+            year_start: @year,
+            year_end: @year,
+            other_node_type_name: node_type
+          ).unsorted_list(
+            @volume_attribute,
+            include_domestic_consumption: include_domestic_consumption,
+            limit: nil
+          )
 
           {
             name: @node.name,
@@ -39,12 +47,21 @@ module Api
 
         def initialize_top_nodes(node_type, include_domestic_consumption)
           top_nodes_list = Api::V3::Profiles::TopNodesList.new(
-            @context, @year, @node, other_node_type_name: node_type
+            @context,
+            @node,
+            year_start: @year,
+            year_end: @year,
+            other_node_type_name: node_type
           )
           @top_nodes = top_nodes_list.sorted_list(
-            @volume_attribute, include_domestic_consumption, 10
+            @volume_attribute,
+            include_domestic_consumption: include_domestic_consumption,
+            limit: 10
           )
-          @all_nodes_total = top_nodes_list.total(@volume_attribute, include_domestic_consumption)
+          @all_nodes_total = top_nodes_list.total(
+            @volume_attribute,
+            include_domestic_consumption: include_domestic_consumption
+          )
         end
       end
     end

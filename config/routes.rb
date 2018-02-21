@@ -37,6 +37,7 @@ Rails.application.routes.draw do
         end
         resources :download, only: [:index], as: :download
         resources :linked_nodes, only: [:index], controller: :linked_nodes
+        resources :top_nodes, only: [:index]
       end
       resources :newsletter_subscriptions, only: [:create]
     end

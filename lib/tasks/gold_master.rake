@@ -33,10 +33,7 @@ namespace :gold_master do
       `sort #{gold_master_file} > #{gold_master_file_sorted}`
       actual_file_sorted = actual_file + '.sorted'
       `sort #{actual_file} > #{actual_file_sorted}`
-      diff_cmd = "diff #{gold_master_file_sorted} #{actual_file_sorted} > #{actual_file}.diff"
-      puts diff_cmd
-      diff = `#{diff_cmd}`
-      [diff.presence].compact
+      "diff #{gold_master_file_sorted} #{actual_file_sorted} > #{actual_file}.diff"
     end
   end
 
@@ -53,10 +50,7 @@ namespace :gold_master do
       File.open(actual_file_sorted, 'w') do |f|
         f << JSON.pretty_generate(actual, indent: '  ')
       end
-      diff_cmd = "diff #{gold_master_file_sorted} #{actual_file_sorted} > #{actual_file}.diff"
-      puts diff_cmd
-      diff = `#{diff_cmd}`
-      [diff.presence].compact
+      "diff #{gold_master_file_sorted} #{actual_file_sorted} > #{actual_file}.diff"
     end
   end
 
@@ -76,13 +70,17 @@ namespace :gold_master do
         puts gold_master_file
         downloaded_file = actual_file(endpoint, query, format, compressed)
         actual_file = actual_file(endpoint, query, format)
+        puts actual_url(endpoint, query)
         `curl -g "#{actual_url(endpoint, query)}" > #{downloaded_file}`
         if endpoint['compressed']
           Zipfile.extract_data_file_to_path(downloaded_file, actual_file, format)
         end
-        diff = yield(gold_master_file, actual_file)
-        if diff.any?
-          puts "DIFFERENCES DETECTED, PLEASE INSPECT #{actual_file}.diff"
+        diff_cmd = yield(gold_master_file, actual_file)
+        puts diff_cmd
+        `#{diff_cmd}`
+        diff_file = "#{actual_file}.diff"
+        if File.size(diff_file).positive?
+          puts "DIFFERENCES DETECTED, PLEASE INSPECT #{diff_file}"
         else
           puts 'SUCCESS'
         end
