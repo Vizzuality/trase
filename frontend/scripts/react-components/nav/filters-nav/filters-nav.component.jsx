@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 import NavLinksList from 'react-components/nav/nav-links-list.component';
+import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.component';
 
 class FiltersNav extends React.PureComponent {
   constructor(props) {
@@ -38,10 +39,11 @@ class FiltersNav extends React.PureComponent {
     const { children } = this.props;
     return (
       <React.Fragment>
-        <div className="filters-nav-item">
+        <div className="filters-nav-left-section">
           <ContextSelector />
+          <YearsSelector />
         </div>
-        {children}
+        <div className="filters-nav-right-section">{children}</div>
       </React.Fragment>
     );
   }
