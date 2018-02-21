@@ -38,15 +38,13 @@ module Api
 
           def error_when_none_present
             {
-              message: "#{@associations.join(', ')} missing",
-              suggestion: 'Please create one at :link'
+              message: "#{@associations.join(', ')} missing"
             }
           end
 
           def error_when_more_present
             {
-              message: "More than one of #{@associations.join(', ')} present",
-              suggestion: 'Please remove one one at :link'
+              message: "More than one of #{@associations.join(', ')} present"
             }
           end
         end

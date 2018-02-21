@@ -8,7 +8,9 @@ module Api
         class AbstractCheck
           # @param object [subclass of Api::V3::BaseModel]
           # @param options [Hash]
-          # @option options [symbol] :link optional link included in error suggestion
+          # @option options [symbol] :link optional link to relevant section of
+          #   the admin tool; TODO: ideally this wouldn't need to be passed as
+          #   a param, should be possible to discover the admin link
           # @option options [symbol] :severity either +:error+ (default) or +:warn+
           def initialize(object, options = {})
             @object = object

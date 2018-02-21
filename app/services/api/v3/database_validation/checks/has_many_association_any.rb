@@ -32,8 +32,7 @@ module Api
 
           def error
             super.merge(
-              message: "#{@association} missing #{@conditions}",
-              suggestion: 'Please create some at :link'
+              message: "#{@association} missing #{@conditions}"
             )
           end
         end

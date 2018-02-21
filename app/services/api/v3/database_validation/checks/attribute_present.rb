@@ -26,8 +26,7 @@ module Api
 
           def error
             super.merge(
-              message: "#{@attribute} empty",
-              suggestion: 'Please set it at :link'
+              message: "#{@attribute} empty"
             )
           end
         end

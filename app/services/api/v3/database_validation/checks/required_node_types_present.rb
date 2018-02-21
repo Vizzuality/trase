@@ -21,8 +21,7 @@ module Api
 
           def error
             super.merge(
-              message: "node types missing: #{@missing_node_types.join(', ')}",
-              suggestion: 'Please amend core data'
+              message: "node types missing: #{@missing_node_types.join(', ')}"
             )
           end
         end

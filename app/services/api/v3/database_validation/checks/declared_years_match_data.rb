@@ -50,8 +50,7 @@ module Api
 
           def error
             super.merge(
-              message: "#{@association} years declared differ from available",
-              suggestion: 'Please amend at :link'
+              message: "#{@association} years declared differ from available"
             )
           end
         end
