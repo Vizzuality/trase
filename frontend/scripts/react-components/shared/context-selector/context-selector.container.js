@@ -42,8 +42,11 @@ const mapStateToProps = state => {
     relation: 'commodityName'
   });
 
+  const { tooltips } = state.app;
+
   return {
     contexts,
+    tooltipText: tooltips && tooltips.sankey.nav.main,
     getComputedKey,
     dimensions: [
       { name: 'country', elements: countries, order: 0 },
