@@ -1,14 +1,14 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import Dropdown from 'react-components/tool/nav/dropdown.component';
-import YearsThumb from 'react-components/tool/nav/years-thumb.component';
-import 'styles/components/tool/years-slider.scss';
 import PropTypes from 'prop-types';
+import Dropdown from 'react-components/tool/nav/dropdown.component';
+import YearsThumb from 'react-components/nav/filters-nav/years-selector/years-thumb.component';
+import 'styles/components/tool/years-slider.scss';
 
 const YEAR_WIDTH = 40;
 const id = 'years';
 
-export default class Years extends Component {
+class YearsSelector extends Component {
   constructor(props) {
     super(props);
     this.onSelectorMovedBound = this.onSelectorMoved.bind(this);
@@ -163,10 +163,12 @@ export default class Years extends Component {
   }
 }
 
-Years.propTypes = {
+YearsSelector.propTypes = {
   onToggle: PropTypes.func,
   onSelected: PropTypes.func,
   years: PropTypes.array,
   currentDropdown: PropTypes.string,
   selectedYears: PropTypes.array
 };
+
+export default YearsSelector;

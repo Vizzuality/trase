@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { toggleDropdown } from 'actions/app.actions';
 import { selectYears } from 'actions/tool.actions';
-import Years from 'react-components/tool/nav/years.component';
+import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.component';
 
 const mapStateToProps = state => ({
   currentDropdown: state.app.currentDropdown,
@@ -18,4 +18,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Years);
+export default connect(mapStateToProps, mapDispatchToProps)(YearsSelector);
