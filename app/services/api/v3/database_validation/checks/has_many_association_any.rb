@@ -11,28 +11,20 @@ module Api
           # @option options (see AbstractCheck#initialize)
           # @option options [symbol] :association name of has_many association
           #   e.g. +:profiles+
-          # @option options [Hash] :conditions conditions to pass; you may need
-          #   to provide qualified column names
-          #   e.g. +'profiles.name' => Api::V3::Profile::ACTOR+
           def initialize(object, options)
             super(object, options)
             @association = options[:association]
-            @conditions = options[:conditions]
           end
 
           def passing?
-            tmp = @object.send(@association)
-            if @conditions.present? && @conditions.is_a?(Hash)
-              tmp = tmp.where(@conditions)
-            end
-            tmp.any?
+            @object.send(@association).any?
           end
 
           private
 
           def error
             super.merge(
-              message: "#{@association} missing #{@conditions}"
+              message: "#{@association} missing"
             )
           end
         end

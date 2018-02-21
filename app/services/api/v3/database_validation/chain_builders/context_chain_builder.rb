@@ -13,14 +13,12 @@ module Api
                  association: :context_property,
                  link: {method: :admin_context_properties_path}
           checks :required_node_types_present
-          checks :has_many_association_any,
-                 association: :profiles,
-                 conditions: {'profiles.name' => Api::V3::Profile::ACTOR},
+          checks :has_at_least_one_profile,
+                 profile_type: Api::V3::Profile::ACTOR,
                  link: {method: :admin_profiles_path},
                  severity: :warn
-          checks :has_many_association_any,
-                 association: :profiles,
-                 conditions: {'profiles.name' => Api::V3::Profile::PLACE},
+          checks :has_at_least_one_profile,
+                 profile_type: Api::V3::Profile::PLACE,
                  link: {method: :admin_profiles_path},
                  severity: :warn
           checks :has_many_association_any,
