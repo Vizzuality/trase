@@ -1,7 +1,7 @@
 import React from 'react';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 import Filters from 'containers/tool/nav/filters.container';
-import Years from 'containers/tool/nav/years.container';
+import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
 import ResizeBy from 'containers/tool/nav/resize-by.container';
 import RecolorBy from 'containers/tool/nav/recolor-by.container';
 import View from 'containers/tool/nav/view.container';
@@ -29,7 +29,7 @@ function Nav({ tooltips, selectedContext }) {
 
         {hasFilters === true && <Filters />}
 
-        <Years />
+        <YearsSelector />
       </div>
 
       <div className="right-side">
