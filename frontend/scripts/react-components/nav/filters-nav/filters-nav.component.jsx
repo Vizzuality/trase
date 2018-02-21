@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 import NavLinksList from 'react-components/nav/nav-links-list.component';
-import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.component';
+import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
 
 class FiltersNav extends React.PureComponent {
   constructor(props) {
@@ -36,12 +36,12 @@ class FiltersNav extends React.PureComponent {
   }
 
   renderMenuClosed() {
-    const { children } = this.props;
+    const { children, selectedContext } = this.props;
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
           <ContextSelector />
-          <YearsSelector />
+          {selectedContext && <YearsSelector />}
         </div>
         <div className="filters-nav-right-section">{children}</div>
       </React.Fragment>
@@ -67,7 +67,8 @@ class FiltersNav extends React.PureComponent {
 
 FiltersNav.propTypes = {
   children: PropTypes.element,
-  links: PropTypes.array
+  links: PropTypes.array.isRequired,
+  selectedContext: PropTypes.object
 };
 
 export default FiltersNav;
