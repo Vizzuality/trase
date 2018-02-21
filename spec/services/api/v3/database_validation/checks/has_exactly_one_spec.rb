@@ -1,13 +1,13 @@
 require 'rails_helper'
 require 'services/api/v3/database_validation/checks/shared_check_examples'
 
-RSpec.describe Api::V3::DatabaseValidation::Checks::HasOneAssociationPresent do
+RSpec.describe Api::V3::DatabaseValidation::Checks::HasExactlyOne do
   context 'when checking contexts' do
     let(:context) {
       FactoryBot.create(:api_v3_context)
     }
     let(:check) {
-      Api::V3::DatabaseValidation::Checks::HasOneAssociationPresent.new(
+      Api::V3::DatabaseValidation::Checks::HasExactlyOne.new(
         context,
         association: :context_property
       )

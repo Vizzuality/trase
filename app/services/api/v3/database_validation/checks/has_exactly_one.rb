@@ -7,7 +7,7 @@ module Api
   module V3
     module DatabaseValidation
       module Checks
-        class HasOneAssociationPresent < HasOneAssociationVariantPresent
+        class HasExactlyOne < HasExactlyOneOf
           # @param (see AbstractCheck#initialize)
           # @option options (see AbstractCheck#initialize)
           # @option options [symbol] :association name of +has_one+ association

@@ -22,7 +22,7 @@ module Api
                    params: [:resize_by_attribute]
                  },
                  severity: :warn
-          checks :has_one_association_present,
+          checks :has_exactly_one,
                  association: :resize_by_quant,
                  link: {method: :admin_resize_by_attributes_path}
 

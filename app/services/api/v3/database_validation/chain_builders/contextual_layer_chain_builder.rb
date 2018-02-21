@@ -8,7 +8,7 @@ module Api
     module DatabaseValidation
       module ChainBuilders
         class ContextualLayerChainBuilder < AbstractChainBuilder
-          checks :has_many_association_any,
+          checks :has_at_least_one,
                  association: :carto_layers,
                  link: {method: :admin_carto_layers_path}
           checks :attribute_present,

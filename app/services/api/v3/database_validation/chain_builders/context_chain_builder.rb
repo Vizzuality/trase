@@ -9,7 +9,7 @@ module Api
     module DatabaseValidation
       module ChainBuilders
         class ContextChainBuilder < AbstractChainBuilder
-          checks :has_one_association_present,
+          checks :has_exactly_one,
                  association: :context_property,
                  link: {method: :admin_context_properties_path}
           checks :required_node_types_present
@@ -21,19 +21,19 @@ module Api
                  profile_type: Api::V3::Profile::PLACE,
                  link: {method: :admin_profiles_path},
                  severity: :warn
-          checks :has_many_association_any,
+          checks :has_at_least_one,
                  association: :download_attributes,
                  link: {method: :admin_download_attributes_path}
-          checks :has_many_association_any,
+          checks :has_at_least_one,
                  association: :map_attributes,
                  link: {method: :admin_map_attributes_path}
-          checks :has_many_association_any,
+          checks :has_at_least_one,
                  association: :recolor_by_attributes,
                  link: {method: :admin_recolor_by_attributes_path}
-          checks :has_many_association_any,
+          checks :has_at_least_one,
                  association: :resize_by_attributes,
                  link: {method: :admin_resize_by_attributes_path}
-          checks :has_many_association_any,
+          checks :has_at_least_one,
                  association: :contextual_layers,
                  link: {method: :admin_contextual_layers_path}
 

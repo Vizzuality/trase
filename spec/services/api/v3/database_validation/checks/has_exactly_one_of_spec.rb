@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'services/api/v3/database_validation/checks/shared_check_examples'
 
-RSpec.describe Api::V3::DatabaseValidation::Checks::HasOneAssociationVariantPresent do
+RSpec.describe Api::V3::DatabaseValidation::Checks::HasExactlyOneOf do
   context 'when checking map attributes' do
     before do
       Api::V3::MapAttributeGroup.skip_callback(:commit, :after, :refresh_dependencies)
@@ -16,7 +16,7 @@ RSpec.describe Api::V3::DatabaseValidation::Checks::HasOneAssociationVariantPres
       FactoryBot.create(:api_v3_map_attribute)
     }
     let(:check) {
-      Api::V3::DatabaseValidation::Checks::HasOneAssociationVariantPresent.new(
+      Api::V3::DatabaseValidation::Checks::HasExactlyOneOf.new(
         map_attribute,
         associations: [:map_ind, :map_quant]
       )

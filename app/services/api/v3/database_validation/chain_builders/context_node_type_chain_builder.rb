@@ -7,7 +7,7 @@ module Api
     module DatabaseValidation
       module ChainBuilders
         class ContextNodeTypeChainBuilder < AbstractChainBuilder
-          checks :has_one_association_present,
+          checks :has_exactly_one,
                  association: :context_node_type_property,
                  link: {method: :admin_context_node_type_properties_path}
 

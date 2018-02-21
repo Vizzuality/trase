@@ -9,7 +9,7 @@ module Api
     module DatabaseValidation
       module ChainBuilders
         class IndChainBuilder < AbstractChainBuilder
-          checks :has_one_association_present,
+          checks :has_exactly_one,
                  association: :ind_property,
                  link: {method: :admin_ind_properties_path}
           checks :declared_temporal_matches_data,

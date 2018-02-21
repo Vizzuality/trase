@@ -20,7 +20,7 @@ module Api
                    method: :admin_download_attribute_path,
                    params: [:download_attribute]
                  }
-          checks :has_one_association_variant_present,
+          checks :has_exactly_one_of,
                  associations: [:download_qual, :download_quant],
                  link: {method: :admin_download_attributes_path}
 

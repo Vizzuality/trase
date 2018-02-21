@@ -30,7 +30,7 @@ module Api
                    params: [:recolor_by_attribute]
                  },
                  severity: :warn
-          checks :has_one_association_variant_present,
+          checks :has_exactly_one_of,
                  associations: [:recolor_by_ind, :recolor_by_qual],
                  link: {method: :admin_recolor_by_attributes_path}
 

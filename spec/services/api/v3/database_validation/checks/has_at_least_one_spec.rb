@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'services/api/v3/database_validation/checks/shared_check_examples'
 
-RSpec.describe Api::V3::DatabaseValidation::Checks::HasManyAssociationAny do
+RSpec.describe Api::V3::DatabaseValidation::Checks::HasAtLeastOne do
   let(:context) {
     FactoryBot.create(:api_v3_context)
   }
@@ -18,7 +18,7 @@ RSpec.describe Api::V3::DatabaseValidation::Checks::HasManyAssociationAny do
     end
 
     let(:check) {
-      Api::V3::DatabaseValidation::Checks::HasManyAssociationAny.new(
+      Api::V3::DatabaseValidation::Checks::HasAtLeastOne.new(
         context,
         association: :resize_by_attributes
       )

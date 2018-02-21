@@ -7,7 +7,7 @@ module Api
     module DatabaseValidation
       module ChainBuilders
         class CountryChainBuilder < AbstractChainBuilder
-          checks :has_one_association_present,
+          checks :has_exactly_one,
                  association: :country_property,
                  link: {method: :admin_country_properties_path}
 
