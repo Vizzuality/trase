@@ -23,8 +23,13 @@ module Api
           private
 
           def error
+            message = [
+              'At least one',
+              @association.to_s.singularize,
+              'should be present'
+            ].join(' ')
             super.merge(
-              message: "#{@association} missing"
+              message: message
             )
           end
         end

@@ -27,25 +27,15 @@ module Api
           private
 
           def error
-            error_hash =
-              if @count.zero?
-                error_when_none_present
-              else
-                error_when_more_present
-              end
-            super.merge error_hash
-          end
-
-          def error_when_none_present
-            {
-              message: "#{@associations.join(', ')} missing"
-            }
-          end
-
-          def error_when_more_present
-            {
-              message: "More than one of #{@associations.join(', ')} present"
-            }
+            message = [
+              'Exactly one of',
+              @associations.join(' or '),
+              'should be present',
+              "(#{@count} found)"
+            ].join(' ')
+            super.merge(
+              message: message
+            )
           end
         end
       end
