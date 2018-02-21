@@ -22,13 +22,19 @@ import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
 import capitalize from 'lodash/capitalize';
 import { GET_ACTOR_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParams';
-import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST, DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
+import {
+  ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST,
+  DEFAULT_PROFILE_PAGE_YEAR,
+  TOOLTIPS
+} from 'constants';
 import TopSourceSwitcher from 'react-components/profiles/top-source-switcher.component';
+import HelpTooltip from 'react-components/tool/help-tooltip.component';
 
 const defaults = {
   country: 'Brazil',
   commodity: 'soy'
 };
+const tooltips = TOOLTIPS.pages.profileActor;
 
 const tooltip = new Tooltip('.js-infowindow');
 const LINE_MARGINS = {
@@ -280,6 +286,7 @@ const _build = (data, { nodeId, year, print }, store) => {
           id="sustainability"
           data={data.sustainability}
           tabsTitle={tabsTitle}
+          tabsTitleTooltip={tooltips.deforestationRisk}
           type="t_head_actors"
           target={item => (item.name === 'Municipalities' ? 'profilePlace' : null)}
           year={year}
@@ -482,6 +489,15 @@ export const mount = (root, store) => {
   });
 
   render(
+    <HelpTooltip text={tooltips.zeroDeforestationCommitment} position="bottom" />,
+    document.getElementById('zero-deforestation-tooltip')
+  );
+  render(
+    <HelpTooltip text={tooltips.forest500Score} position="bottom" />,
+    document.getElementById('forest-500-tooltip')
+  );
+
+  render(
     <Provider store={store}>
       <TopNav />
     </Provider>,
@@ -509,6 +525,8 @@ export const unmount = () => {
   unmountComponentAtNode(document.querySelector('.js-top-destination-map'));
   unmountComponentAtNode(document.querySelector('.js-sustainability-table'));
   unmountComponentAtNode(document.querySelector('.js-scatterplot-container'));
+  unmountComponentAtNode(document.getElementById('zero-deforestation-tooltip'));
+  unmountComponentAtNode(document.getElementById('forest-500-tooltip'));
   unmountComponentAtNode(document.getElementById('year-dropdown'));
   unmountComponentAtNode(document.getElementById('nav'));
   unmountComponentAtNode(document.getElementById('footer'));

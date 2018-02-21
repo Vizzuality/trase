@@ -1,12 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-
-import formatValue from 'utils/formatValue';
-import { UNITLESS_UNITS } from 'constants';
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import Link from 'redux-first-router-link';
-import 'styles/components/profiles/area-table.scss';
 import PropTypes from 'prop-types';
+
+import formatValue from 'utils/formatValue';
+import { UNITLESS_UNITS } from 'constants';
+import Tooltip from 'react-components/tool/help-tooltip.component';
+
+import 'styles/components/profiles/area-table.scss';
 
 class Table extends Component {
   renderPlacesTableHeader() {
@@ -38,6 +40,7 @@ class Table extends Component {
                 {data.included_columns[valueKey].name}
                 {data.included_columns[valueKey].year}
               </span>
+              <Tooltip text={data.included_columns[valueKey].name} position="bottom" />
             </td>
             {data.rows.map((row, rowKey) => (
               <td key={rowKey} className="cell-score _text-align-right">
@@ -71,6 +74,7 @@ class Table extends Component {
               className={classnames('header-cell', { '_text-align-right': columnIndex > 0 })}
             >
               {column.name}
+              <Tooltip text={column.name} position="bottom" />
             </th>
           ))}
         </tr>

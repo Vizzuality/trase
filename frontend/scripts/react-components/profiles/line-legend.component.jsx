@@ -1,7 +1,11 @@
 /* eslint-disable react/no-danger */
-import 'styles/components/profiles/line.scss';
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
+import Tooltip from 'react-components/tool/help-tooltip.component';
+
+import 'styles/components/profiles/line.scss';
 
 class LineLegend extends Component {
   render() {
@@ -21,10 +25,11 @@ class LineLegend extends Component {
       if (typeof lineData.legend_name !== 'undefined') {
         return (
           <div key={index}>
-            <svg className="icon">
+            <svg className="icon line-style-icon">
               <use xlinkHref={`#icon-${style}`} />
             </svg>
             <span dangerouslySetInnerHTML={{ __html: lineData.legend_name }} />
+            <Tooltip text={lineData.legend_name} position="bottom right" />
           </div>
         );
       }

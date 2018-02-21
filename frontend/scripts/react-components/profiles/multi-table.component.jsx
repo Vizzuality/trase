@@ -1,10 +1,13 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import _ from 'lodash';
-import 'styles/components/shared/tabs.scss';
 import React, { Component } from 'react';
-import Table from 'react-components/profiles/table.component';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import _ from 'lodash';
+
+import Table from 'react-components/profiles/table.component';
+import Tooltip from 'react-components/tool/help-tooltip.component';
+
+import 'styles/components/shared/tabs.scss';
 
 class MultiTable extends Component {
   constructor(props) {
@@ -22,12 +25,15 @@ class MultiTable extends Component {
   }
 
   render() {
-    const { data, target, type, year, tabsTitle } = this.props;
+    const { data, target, type, year, tabsTitle, tabsTitleTooltip } = this.props;
 
     return (
       <div>
         <ul className="c-area-table-switcher">
-          <span>{tabsTitle}</span>
+          <span>
+            {tabsTitle}
+            {tabsTitleTooltip && <Tooltip position="bottom right" text={tabsTitleTooltip} />}
+          </span>
           {data.map((elem, index) => (
             <li
               key={index}
@@ -65,6 +71,7 @@ class MultiTable extends Component {
 
 MultiTable.propTypes = {
   tabsTitle: PropTypes.string,
+  tabsTitleTooltip: PropTypes.string,
   data: PropTypes.array,
   target: PropTypes.func,
   type: PropTypes.string,
