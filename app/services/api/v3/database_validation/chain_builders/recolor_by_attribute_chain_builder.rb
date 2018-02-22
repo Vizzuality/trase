@@ -37,7 +37,7 @@ module Api
           def self.build_chain(context)
             chain = []
             context.recolor_by_attributes.each do |recolor_by_attribute|
-              chain += self.new(
+              chain += new(
                 recolor_by_attribute, @errors_list
               ).chain
             end

@@ -27,7 +27,7 @@ module Api
           def self.build_chain(context)
             chain = []
             context.download_attributes.each do |download_attribute|
-              chain += self.new(
+              chain += new(
                 download_attribute, @errors_list
               ).chain
             end

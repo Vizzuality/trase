@@ -29,7 +29,7 @@ module Api
           def self.build_chain(context)
             chain = []
             context.resize_by_attributes.each do |resize_by_attribute|
-              chain += self.new(
+              chain += new(
                 resize_by_attribute, @errors_list
               ).chain
             end

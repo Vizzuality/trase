@@ -14,7 +14,7 @@ module Api
           def self.build_chain
             chain = []
             Api::V3::Country.all.each do |country|
-              chain += self.new(
+              chain += new(
                 country, @errors_list
               ).chain
             end

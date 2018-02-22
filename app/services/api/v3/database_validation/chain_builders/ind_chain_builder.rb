@@ -40,7 +40,7 @@ module Api
           def self.build_chain
             chain = []
             Api::V3::Ind.all.each do |ind|
-              chain += self.new(
+              chain += new(
                 ind, @errors_list
               ).chain
             end

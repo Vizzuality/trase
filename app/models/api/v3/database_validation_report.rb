@@ -11,7 +11,7 @@ module Api
       validates :warning_count, presence: true
 
       def status
-        if error_count == 0
+        if error_count.zero?
           SUCCESS
         else
           FAILED

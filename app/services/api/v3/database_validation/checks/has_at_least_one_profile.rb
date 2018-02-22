@@ -9,14 +9,12 @@ module Api
           # @option options [symbol] :profile_type
           def initialize(object, options)
             super(object, options)
-            if Api::V3::Profile::NAME.include? options[:profile_type]
-              @profile_type = options[:profile_type]
-            end
+            @profile_type = options[:profile_type]
           end
 
           def passing?
             tmp = @object.profiles
-            if @profile_type
+            if Api::V3::Profile::NAME.include? @profile_type
               tmp = tmp.where('profiles.name' => @profile_type)
             end
             tmp.any?

@@ -14,13 +14,13 @@ ActiveAdmin.register_page 'Data Validation' do
     @report = Api::V3::DatabaseValidation::Report.new
     @report.call
     redirect_to admin_data_validation_url,
-      notice: 'Database validation completed.'
+                notice: 'Database validation completed.'
   end
 
   page_action :report, method: :get do
     @database_validation = Api::V3::DatabaseValidationReport.find(params[:id])
     filename = "report-#{@database_validation.finished_at}.json"
     send_data JSON.pretty_generate(@database_validation.report),
-      disposition: "attachment; filename=#{filename}"
+              disposition: "attachment; filename=#{filename}"
   end
 end

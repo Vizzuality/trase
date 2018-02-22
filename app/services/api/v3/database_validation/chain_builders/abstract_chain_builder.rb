@@ -24,14 +24,13 @@ module Api
             tmp
           end
 
-          private
-
           # Registers validation to be run for the object
           def self.checks(validation, options = {})
             @validations ||= []
             @validations << {validation: validation, options: options}
           end
 
+          private
 
           def add_model_validations_to_chain(chain)
             chain << Api::V3::DatabaseValidation::Checks::ActiveRecordCheck.new(@object)

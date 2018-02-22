@@ -27,7 +27,7 @@ module Api
           def self.build_chain(context)
             chain = []
             context.map_attributes.each do |map_attribute|
-              chain += self.new(
+              chain += new(
                 map_attribute, @errors_list
               ).chain
             end

@@ -14,7 +14,7 @@ module Api
           def self.build_chain(context)
             chain = []
             context.context_node_types.each do |context_node_type|
-              chain += self.new(
+              chain += new(
                 context_node_type, @errors_list
               ).chain
             end

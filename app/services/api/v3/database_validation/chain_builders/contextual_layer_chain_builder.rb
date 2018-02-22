@@ -22,7 +22,7 @@ module Api
           def self.build_chain(context)
             chain = []
             context.contextual_layers.each do |contextual_layer|
-              chain += self.new(
+              chain += new(
                 contextual_layer, @errors_list
               ).chain
             end

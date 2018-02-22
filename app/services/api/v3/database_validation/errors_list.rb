@@ -16,7 +16,7 @@ module Api
         end
 
         def error_count
-          @errors.select { |e| e[:severity] != :warn }.count
+          @errors.reject { |e| e[:severity] == :warn }.count
         end
 
         def warning_count

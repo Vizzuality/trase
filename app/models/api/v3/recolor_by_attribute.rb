@@ -36,16 +36,16 @@ module Api
       validates :is_default, inclusion: {in: [true, false]}
       validates :interval_count,
                 presence: true,
-                unless: Proc.new { |a| a.min_value.blank? && a.max_value.blank? }
+                unless: proc { |a| a.min_value.blank? && a.max_value.blank? }
       validates :min_value,
                 presence: true,
-                unless: Proc.new { |a| a.interval_count.blank? }
+                unless: proc { |a| a.interval_count.blank? }
       validates :max_value,
                 presence: true,
-                unless: Proc.new { |a| a.interval_count.blank? }
+                unless: proc { |a| a.interval_count.blank? }
       validates :divisor,
                 presence: true,
-                unless: Proc.new { |a| a.legend_type != 'percentual' }
+                unless: proc { |a| a.legend_type != 'percentual' }
       validates_with OneAssociatedAttributeValidator,
                      attributes: [:recolor_by_ind, :recolor_by_qual]
       validates_with AttributeAssociatedOnceValidator,

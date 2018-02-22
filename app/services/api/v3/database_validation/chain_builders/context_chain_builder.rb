@@ -40,7 +40,7 @@ module Api
           def self.build_chain
             chain = []
             Api::V3::Context.all.each do |context|
-              chain += self.new(context, @errors_list).chain
+              chain += new(context, @errors_list).chain
               chain += ContextNodeTypeChainBuilder.build_chain(context)
               chain += ResizeByAttributeChainBuilder.build_chain(context)
               chain += RecolorByAttributeChainBuilder.build_chain(context)
