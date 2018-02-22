@@ -8,7 +8,7 @@ import SearchResult from 'react-components/tool/tool-search/tool-search-result.c
 import 'styles/components/tool/tool-search.scss';
 import 'styles/components/tool/tool-search-result.scss';
 
-export default class Search extends Component {
+export default class ToolSearch extends Component {
   static getNodeIds(selectedItem) {
     const parts = `${selectedItem.id}`.split('_');
     if (parts.length > 1) {
@@ -68,7 +68,7 @@ export default class Search extends Component {
       this.downshift.clearSelection();
       return;
     }
-    const ids = Search.getNodeIds(selectedItem);
+    const ids = ToolSearch.getNodeIds(selectedItem);
     if (selectedItem.selected) {
       this.props.onRemoveNode(ids);
     } else {
@@ -79,7 +79,7 @@ export default class Search extends Component {
 
   onAddNode(e, selectedItem) {
     if (e) e.stopPropagation();
-    const ids = Search.getNodeIds(selectedItem);
+    const ids = ToolSearch.getNodeIds(selectedItem);
     this.props.onAddNode(ids);
     this.downshift.reset();
     this.input.focus();
@@ -88,7 +88,7 @@ export default class Search extends Component {
   onKeydown(e) {
     const { specialCharPressed, isOpened } = this.state;
     const { isSearchOpen } = this.props;
-    if (!isSearchOpen && Search.isValidChar(e.key) && !specialCharPressed) {
+    if (!isSearchOpen && ToolSearch.isValidChar(e.key) && !specialCharPressed) {
       this.onOpenClicked();
     } else if (e.key === 'Escape' && isOpened) {
       this.onCloseClicked();
@@ -98,7 +98,7 @@ export default class Search extends Component {
   }
 
   onKeyup(e) {
-    if (!Search.isValidChar(e.key)) {
+    if (!ToolSearch.isValidChar(e.key)) {
       this.setState(state => ({ specialCharPressed: state.specialCharPressed - 1 }));
     }
   }
@@ -125,10 +125,10 @@ export default class Search extends Component {
   }
 
   render() {
-    const { nodes = [], selectedNodesIds = [], isSearchOpen } = this.props;
+    const { className, nodes = [], selectedNodesIds = [], isSearchOpen } = this.props;
     if (isSearchOpen === false) {
       return (
-        <div onClick={this.onOpenClicked} className="nav-item">
+        <div onClick={this.onOpenClicked} className={className}>
           <svg className="icon icon-search">
             <use xlinkHref="#icon-search" />
           </svg>
@@ -193,7 +193,8 @@ export default class Search extends Component {
   }
 }
 
-Search.propTypes = {
+ToolSearch.propTypes = {
+  className: PropTypes.string,
   navigateToActor: PropTypes.func,
   setSankeySearchVisibility: PropTypes.func,
   selectedNodesIds: PropTypes.array,

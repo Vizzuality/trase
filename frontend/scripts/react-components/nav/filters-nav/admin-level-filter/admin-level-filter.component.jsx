@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions,jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
 import Dropdown from 'react-components/tool/nav/dropdown.component';
-import classNames from 'classnames';
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 
 const id = 'filters';
 
-class Filters extends Component {
+class AdminLevelFilter extends Component {
   renderOptions() {
     const { onSelected, selectedFilter, filters } = this.props;
 
@@ -16,7 +16,7 @@ class Filters extends Component {
       .map((node, index) => (
         <li
           key={index}
-          className={classNames('dropdown-item', { '-disabled': node.isDisabled })}
+          className={cx('dropdown-item', { '-disabled': node.isDisabled })}
           onClick={() => onSelected(node.name || node.value)}
         >
           {node.name !== undefined ? node.name.toLowerCase() : 'All'}
@@ -25,11 +25,11 @@ class Filters extends Component {
   }
 
   render() {
-    const { onToggle, currentDropdown, selectedFilter, filters } = this.props;
+    const { className, onToggle, currentDropdown, selectedFilter, filters } = this.props;
 
     return (
       <div
-        className="nav-item js-dropdown"
+        className={cx('js-dropdown', className)}
         onClick={() => {
           onToggle(id);
         }}
@@ -50,7 +50,8 @@ class Filters extends Component {
   }
 }
 
-Filters.propTypes = {
+AdminLevelFilter.propTypes = {
+  className: PropTypes.string,
   onToggle: PropTypes.func,
   onSelected: PropTypes.func,
   currentDropdown: PropTypes.string,
@@ -58,4 +59,4 @@ Filters.propTypes = {
   filters: PropTypes.object
 };
 
-export default Filters;
+export default AdminLevelFilter;

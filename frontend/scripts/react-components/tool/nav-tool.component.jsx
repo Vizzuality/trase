@@ -1,6 +1,6 @@
 import React from 'react';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
-import Filters from 'containers/tool/nav/filters.container';
+import AdminLevelFilter from 'react-components/nav/filters-nav/admin-level-filter/admin-level-filter.container';
 import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
 import ResizeBySelector from 'react-components/nav/filters-nav/resize-by-selector/resize-by-selector.container';
 import RecolorBySelector from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.container';
@@ -27,7 +27,7 @@ function Nav({ tooltips, selectedContext }) {
 
         <ContextSelector className="nav-item" />
 
-        {hasFilters === true && <Filters />}
+        {hasFilters === true && <AdminLevelFilter className="nav-item" />}
 
         <YearsSelector className="nav-item js-dropdown" />
       </div>

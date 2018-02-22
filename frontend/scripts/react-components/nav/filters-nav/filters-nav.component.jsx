@@ -7,6 +7,9 @@ import YearsSelector from 'react-components/nav/filters-nav/years-selector/years
 import ResizeBySelector from 'react-components/nav/filters-nav/resize-by-selector/resize-by-selector.container';
 import RecolorBySelector from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.container';
 import ViewSelector from 'react-components/nav/filters-nav/view-selector/view-selector.container';
+import ToolSearch from 'react-components/tool/tool-search/tool-search.container';
+import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
+import AdminLevelFilter from 'react-components/nav/filters-nav/admin-level-filter/admin-level-filter.container';
 
 class FiltersNav extends React.PureComponent {
   constructor(props) {
@@ -26,13 +29,23 @@ class FiltersNav extends React.PureComponent {
   renderMenuOpened() {
     const { links } = this.props;
     return (
-      <NavLinksList
-        links={links}
-        listClassName="filters-nav-submenu-list"
-        itemClassName="filters-nav-item"
-        linkClassName="filters-nav-link"
-        linkActiveClassName="filters-nav-link -active"
-      />
+      <React.Fragment>
+        <div className="filters-nav-left-section">
+          <NavLinksList
+            links={links}
+            listClassName="filters-nav-submenu-list"
+            itemClassName="filters-nav-item"
+            linkClassName="filters-nav-link"
+            linkActiveClassName="filters-nav-link -active"
+          />
+        </div>
+        <div className="filters-nav-right-section">
+          <div className="filters-nav-item">
+            <LocaleSelector />
+          </div>
+          <ToolSearch className="filters-nav-item" />
+        </div>
+      </React.Fragment>
     );
   }
 
@@ -42,12 +55,14 @@ class FiltersNav extends React.PureComponent {
       <React.Fragment>
         <div className="filters-nav-left-section">
           <ContextSelector className="filters-nav-item" />
+          <AdminLevelFilter className="filters-nav-item" />
           {selectedContext && <YearsSelector className="filters-nav-item" />}
         </div>
         <div className="filters-nav-right-section">
           <ResizeBySelector className="filters-nav-item" />
           <RecolorBySelector className="filters-nav-item" />
           <ViewSelector className="filters-nav-item" />
+          <ToolSearch className="filters-nav-item" />
           {children}
         </div>
       </React.Fragment>
