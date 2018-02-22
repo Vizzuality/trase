@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import TwitterFeed from 'react-components/home/twitter-feed.component';
 import AnimatedFlows from 'react-components/animated-flows/animated-flows.component';
+import HomeVideo from 'react-components/home/home-video.component';
 
 // old school name: https://en.wikipedia.org/wiki/Hero_image
 class Hero extends React.Component {
@@ -11,7 +12,41 @@ class Hero extends React.Component {
     this.state = {
       showStory: true
     };
+
+    this.videoEventHandlers = {
+      pause: this.onPause,
+      exitfullscreen: this.onExitFullScreen,
+      ended: this.onEnded
+    };
+
+    this.onClickPlay = this.onClickPlay.bind(this);
+    this.getVideoRef = this.getVideoRef.bind(this);
     this.closeStoryBox = this.closeStoryBox.bind(this);
+  }
+
+  onPause(plyr) {
+    plyr.fullscreen.exit();
+  }
+
+  onExitFullScreen(plyr) {
+    plyr.pause();
+  }
+
+  onEnded(plyr) {
+    plyr.fullscreen.exit();
+    plyr.restart();
+  }
+
+  onClickPlay() {
+    const { plyr } = this.video;
+    if (plyr.fullscreen.active === false) {
+      plyr.play();
+      plyr.fullscreen.enter();
+    }
+  }
+
+  getVideoRef(ref) {
+    this.video = ref;
   }
 
   closeStoryBox() {
@@ -20,7 +55,7 @@ class Hero extends React.Component {
 
   render() {
     const { showStory } = this.state;
-    const { className, visitStory, story, tweets } = this.props;
+    const { className, visitStory, story, tweets, homeVideo } = this.props;
     const StoryBox = storyObj => (
       <div className="story-box">
         <button className="story-box-close" onClick={this.closeStoryBox} />
@@ -46,8 +81,14 @@ class Hero extends React.Component {
             </div>
             <h1 className="hero-title">Transparent supply chains for sustainable economies</h1>
             <div className="hero-play-container">
-              <button className="hero-play-button" />
-              TRASE in 2’
+              <HomeVideo
+                className="c-home-video"
+                ref={this.getVideoRef}
+                videoId={homeVideo}
+                events={this.videoEventHandlers}
+              />
+              <button className="hero-play-button" onClick={this.onClickPlay} />
+              <span>TRASE in 2’</span>
             </div>
           </div>
           {showStory &&
@@ -73,7 +114,9 @@ Hero.propTypes = {
   className: PropTypes.string,
   visitStory: PropTypes.func,
   story: PropTypes.object,
-  tweets: PropTypes.array
+  tweets: PropTypes.array,
+  onClickPlay: PropTypes.func,
+  homeVideo: PropTypes.string
 };
 
 Hero.defaultProps = {

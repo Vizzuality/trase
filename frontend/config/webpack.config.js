@@ -60,7 +60,8 @@ module.exports = {
       DATA_FORM_ENABLED: process.env.DATA_FORM_ENABLED === 'true',
       PDF_DOWNLOAD_URL: JSON.stringify(process.env.PDF_DOWNLOAD_URL),
       PERF_TEST: process.env.PERF_TEST,
-      TRANSIFEX_API_KEY: JSON.stringify(process.env.TRANSIFEX_API_KEY)
+      TRANSIFEX_API_KEY: JSON.stringify(process.env.TRANSIFEX_API_KEY),
+      HOME_VIDEO_ID: JSON.stringify(process.env.HOME_VIDEO_ID)
     })
   ],
   resolve: {
