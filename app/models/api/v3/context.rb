@@ -19,6 +19,25 @@ module Api
       validates :country, presence: true
       validates :commodity, presence: true, uniqueness: {scope: :country}
 
+      def is_visible?
+        country.present? &&
+        commodity.present? &&
+        country_context_node_type.present? &&
+        exporter_context_node_type.present?
+      end
+
+      def country_context_node_type
+        context_node_types.find do |cnt|
+          cnt.node_type.name == NodeTypeName::COUNTRY
+        end
+      end
+
+      def exporter_context_node_type
+        context_node_types.find do |cnt|
+          cnt.node_type.name == NodeTypeName::EXPORTER
+        end
+      end
+
       def self.select_options
         Api::V3::Context.includes(:country, :commodity).all.map do |ctx|
           [[ctx.country&.name, ctx.commodity&.name].join(' / '), ctx.id]

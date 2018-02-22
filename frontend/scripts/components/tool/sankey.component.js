@@ -18,19 +18,13 @@ export default class {
     this._build();
   }
 
-  resizeViewport({
-    selectedNodesIds,
-    shouldRepositionExpandButton,
-    selectedRecolorBy,
-    currentQuant,
-    sankeySize
-  }) {
-    this.layout.setViewportSize(sankeySize);
+  translateNodes(relayoutOptions) {
+    this._relayout(relayoutOptions);
+  }
 
-    if (this.layout.relayout()) {
-      this._render(selectedRecolorBy, currentQuant);
-      if (shouldRepositionExpandButton) this._repositionExpandButton(selectedNodesIds);
-    }
+  resizeViewport({ sankeySize, ...relayoutOptions }) {
+    this.layout.setViewportSize(sankeySize);
+    this._relayout(relayoutOptions);
   }
 
   showLoadedLinks(linksPayload) {
@@ -63,10 +57,6 @@ export default class {
     this.selectNodes(linksPayload);
   }
 
-  _onScroll() {
-    this._repositionExpandButtonScroll();
-  }
-
   selectNodes({ selectedNodesIds, shouldRepositionExpandButton }) {
     // let minimumY = Infinity;
     if (!this.layout.isReady()) {
@@ -88,6 +78,17 @@ export default class {
     this.sankeyColumns
       .selectAll('.sankey-node')
       .classed('-highlighted', node => nodesIds.indexOf(node.id) > -1);
+  }
+
+  _relayout({ selectedRecolorBy, currentQuant, shouldRepositionExpandButton, selectedNodesIds }) {
+    if (this.layout.relayout()) {
+      this._render(selectedRecolorBy, currentQuant);
+      if (shouldRepositionExpandButton) this._repositionExpandButton(selectedNodesIds);
+    }
+  }
+
+  _onScroll() {
+    this._repositionExpandButtonScroll();
   }
 
   _build() {
@@ -279,7 +280,7 @@ export default class {
       .attr('class', 'sankey-node-label')
       .attr('x', this.layout.columnWidth() / 2)
       .attr('dy', 12)
-      .text(d => d);
+      .text(d => d && d.toUpperCase());
   }
 
   _onNodeOver(selection, nodeId, isAggregated) {

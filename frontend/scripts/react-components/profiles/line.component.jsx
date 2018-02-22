@@ -1,5 +1,8 @@
 /* eslint-disable camelcase,import/no-extraneous-dependencies */
-import _ from 'lodash';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import isFunction from 'lodash/isFunction';
+import capitalize from 'lodash/capitalize';
 import { event as d3_event, select as d3_select } from 'd3-selection';
 import { axisBottom as d3_axis_bottom, axisLeft as d3_axis_left } from 'd3-axis';
 import { scaleLinear as d3_scale_linear, scaleTime as d3_scale_time } from 'd3-scale';
@@ -9,9 +12,8 @@ import { format as d3_format } from 'd3-format';
 import { timeFormat as d3_timeFormat } from 'd3-time-format';
 import { LINE_LABEL_HEIGHT } from 'constants';
 import abbreviateNumber from 'utils/abbreviateNumber';
+import i18n from 'utils/transifex';
 import 'styles/components/profiles/line.scss';
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 class Line extends Component {
   constructor(props) {
@@ -148,7 +150,7 @@ class Line extends Component {
               .attr(
                 'class',
                 d =>
-                  _.isFunction(settings.lineClassNameCallback)
+                  isFunction(settings.lineClassNameCallback)
                     ? settings.lineClassNameCallback(d, style)
                     : style
               );
@@ -175,7 +177,7 @@ class Line extends Component {
                 lastY = newY;
                 return `translate(${width + 6},${newY})`;
               })
-              .text(d => `${numLines - i}.${_.capitalize(d[0].name)}`);
+              .text(d => `${numLines - i}.${capitalize(i18n(d[0].name))}`);
 
             this.circles = pathContainers
               .selectAll('circle')

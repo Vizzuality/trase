@@ -37,6 +37,7 @@ gem 'twitter', '~> 6.1'
 
 gem 'appsignal'
 gem 'sidekiq'
+gem 'sidekiq-unique-jobs'
 
 group :development, :test do
   gem 'byebug', platform: :mri
