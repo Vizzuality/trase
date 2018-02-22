@@ -1,13 +1,13 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions,jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
-import classNames from 'classnames';
+import cx from 'classnames';
 import Tooltip from 'react-components/tool/help-tooltip.component';
 import Dropdown from 'react-components/tool/nav/dropdown.component';
 import PropTypes from 'prop-types';
 
 const id = 'resize-by';
 
-class ResizeBy extends Component {
+class ResizeBySelector extends Component {
   renderResizeByElements() {
     const { onSelected, currentDropdown, selectedResizeBy, resizeBys } = this.props;
 
@@ -26,7 +26,7 @@ class ResizeBy extends Component {
           resizeByElements.push(
             <li
               key={index}
-              className={classNames('dropdown-item', { '-disabled': resizeBy.isDisabled })}
+              className={cx('dropdown-item', { '-disabled': resizeBy.isDisabled })}
               onClick={() => onSelected(resizeBy.name)}
             >
               {resizeBy.label.toLowerCase()}
@@ -40,21 +40,23 @@ class ResizeBy extends Component {
   }
 
   render() {
-    const { tooltips, onToggle, currentDropdown, selectedResizeBy, resizeBys } = this.props;
+    const {
+      className,
+      tooltips,
+      onToggle,
+      currentDropdown,
+      selectedResizeBy,
+      resizeBys
+    } = this.props;
 
     resizeBys.sort((a, b) => a.position > b.position);
 
     const hasZeroOrSingleElement = resizeBys.length <= 1;
 
     return (
-      <div
-        className="nav-item js-dropdown"
-        onClick={() => {
-          onToggle(id);
-        }}
-      >
+      <div className={cx('js-dropdown', className)} onClick={() => onToggle(id)}>
         <div
-          className={classNames('c-dropdown -small -capitalize', {
+          className={cx('c-dropdown -small -capitalize', {
             '-hide-only-child': hasZeroOrSingleElement
           })}
         >
@@ -80,7 +82,8 @@ class ResizeBy extends Component {
   }
 }
 
-ResizeBy.propTypes = {
+ResizeBySelector.propTypes = {
+  className: PropTypes.string,
   onToggle: PropTypes.func,
   onSelected: PropTypes.func,
   currentDropdown: PropTypes.string,
@@ -89,4 +92,4 @@ ResizeBy.propTypes = {
   tooltips: PropTypes.object
 };
 
-export default ResizeBy;
+export default ResizeBySelector;
