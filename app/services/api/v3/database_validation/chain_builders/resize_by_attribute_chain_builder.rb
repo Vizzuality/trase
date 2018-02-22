@@ -13,13 +13,13 @@ module Api
                  association: :resize_by_quant,
                  link: {
                    method: :admin_resize_by_attribute_path,
-                   params: [:resize_by_attribute]
+                   member: true
                  }
           checks :attribute_present,
                  attribute: :tooltip_text,
                  link: {
                    method: :admin_resize_by_attribute_path,
-                   params: [:resize_by_attribute]
+                   member: true
                  },
                  severity: :warn
           checks :has_exactly_one,

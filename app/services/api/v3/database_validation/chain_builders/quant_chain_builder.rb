@@ -18,7 +18,7 @@ module Api
                  on: :quant_property,
                  link: {
                    method: :admin_quant_property_path,
-                   params: [:quant_property]
+                   member: :quant_property
                  }
           checks :declared_temporal_matches_data,
                  association: :node_quants,
@@ -26,14 +26,14 @@ module Api
                  on: :quant_property,
                  link: {
                    method: :admin_quant_property_path,
-                   params: [:quant_property]
+                   member: :quant_property
                  }
           checks :attribute_present,
                  attribute: :tooltip_text,
                  on: :quant_property,
                  link: {
                    method: :admin_quant_property_path,
-                   params: [:quant_property]
+                   member: :quant_property
                  },
                  severity: :warn
 

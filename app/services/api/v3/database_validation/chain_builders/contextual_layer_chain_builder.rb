@@ -15,7 +15,7 @@ module Api
                  attribute: :tooltip_text,
                  link: {
                    method: :admin_contextual_layer_path,
-                   params: [:contextual_layer]
+                   member: true
                  },
                  severity: :warn
 

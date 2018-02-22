@@ -42,16 +42,25 @@ module Api
                 validation[:validation].to_s.camelize
               )
               options = validation[:options].dup
-              link_options = options.delete(:link)
-              if link_options&.key?(:method)
-                link = url_helpers.send(
-                  link_options[:method],
-                  link_options[:params]
-                )
-                options[:link] = link
-              end
+              link = generate_link(options.delete(:link))
+              options[:link] = link if link.present?
               chain << validation_class.new(@object, options)
             end
+          end
+
+          def generate_link(options)
+            return nil unless options && options.key?(:method)
+            unless options.key?(:member) # collection route
+              return url_helpers.send(options[:method])
+            end
+            member =
+              if options[:member].is_a?(Symbol) &&
+                @object.respond_to?(options[:member])
+                @object.send(options[:member])
+              else
+                @object
+              end
+            link = url_helpers.send(options[:method], member)
           end
         end
       end

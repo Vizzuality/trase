@@ -12,13 +12,13 @@ module Api
                  association: :download_quant,
                  link: {
                    method: :admin_download_attribute_path,
-                   params: [:download_attribute]
+                   member: true
                  }
           checks :declared_years_match_data,
                  association: :download_qual,
                  link: {
                    method: :admin_download_attribute_path,
-                   params: [:download_attribute]
+                   member: true
                  }
           checks :has_exactly_one_of,
                  associations: [:download_qual, :download_quant],

@@ -15,19 +15,19 @@ module Api
                  association: :recolor_by_ind,
                  link: {
                    method: :admin_recolor_by_attribute_path,
-                   params: [:recolor_by_attribute]
+                   member: true
                  }
           checks :declared_years_match_data,
                  association: :recolor_by_qual,
                  link: {
                    method: :admin_recolor_by_attribute_path,
-                   params: [:recolor_by_attribute]
+                   member: true
                  }
           checks :attribute_present,
                  attribute: :tooltip_text,
                  link: {
                    method: :admin_recolor_by_attribute_path,
-                   params: [:recolor_by_attribute]
+                   member: true
                  },
                  severity: :warn
           checks :has_exactly_one_of,

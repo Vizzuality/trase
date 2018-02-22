@@ -18,7 +18,7 @@ module Api
                  on: :ind_property,
                  link: {
                    method: :admin_ind_property_path,
-                   params: [:ind_property]
+                   member: :ind_property
                  }
           checks :declared_temporal_matches_data,
                  association: :node_inds,
@@ -26,14 +26,14 @@ module Api
                  on: :ind_property,
                  link: {
                    method: :admin_ind_property_path,
-                   params: [:ind_property]
+                   member: :ind_property
                  }
           checks :attribute_present,
                  attribute: :tooltip_text,
                  on: :ind_property,
                  link: {
                    method: :admin_ind_property_path,
-                   params: [:ind_property]
+                   member: :ind_property
                  },
                  severity: :warn
 

@@ -18,7 +18,7 @@ module Api
                  on: :qual_property,
                  link: {
                    method: :admin_qual_property_path,
-                   params: [:qual_property]
+                   member: :qual_property
                  }
           checks :declared_temporal_matches_data,
                  association: :node_quals,
@@ -26,14 +26,14 @@ module Api
                  on: :qual_property,
                  link: {
                    method: :admin_qual_property_path,
-                   params: [:qual_property]
+                   member: :qual_property
                  }
           checks :attribute_present,
                  attribute: :tooltip_text,
                  on: :qual_property,
                  link: {
                    method: :admin_qual_property_path,
-                   params: [:qual_property]
+                   member: :qual_property
                  },
                  severity: :warn
 

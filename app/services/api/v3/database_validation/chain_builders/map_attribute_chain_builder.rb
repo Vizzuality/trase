@@ -12,13 +12,13 @@ module Api
                  association: :map_ind,
                  link: {
                    method: :admin_map_attribute_path,
-                   params: [:map_attribute]
+                   member: true
                  }
           checks :declared_years_match_data,
                  association: :map_quant,
                  link: {
                    method: :admin_map_attribute_path,
-                   params: [:map_attribute]
+                   member: true
                  }
           checks :has_exactly_one_of,
                  associations: [:map_ind, :map_quant],
