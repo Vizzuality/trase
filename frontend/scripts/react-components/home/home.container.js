@@ -9,7 +9,7 @@ function mapStateToProps(state) {
   const promotedPost = posts.find(post => post.highlighted);
   const blogPosts = posts.filter(post => !post.highlighted && !INSIGHTS.includes(post.category));
   const insightsPosts = posts.filter(post => !post.highlighted && INSIGHTS.includes(post.category));
-  const homeVideo = HOME_VIDEO[query.lang];
+  const homeVideo = HOME_VIDEO[query.lang] || HOME_VIDEO.en;
   return {
     homeVideo,
     blogPosts,
