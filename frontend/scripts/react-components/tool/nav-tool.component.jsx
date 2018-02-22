@@ -25,11 +25,11 @@ function Nav({ tooltips, selectedContext }) {
           </div>
         </div>
 
-        <ContextSelector />
+        <ContextSelector className="nav-item" />
 
         {hasFilters === true && <Filters />}
 
-        <YearsSelector />
+        <YearsSelector className="nav-item js-dropdown" />
       </div>
 
       <div className="right-side">

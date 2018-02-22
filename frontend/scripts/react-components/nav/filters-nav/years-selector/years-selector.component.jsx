@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dropdown from 'react-components/tool/nav/dropdown.component';
 import YearsThumb from 'react-components/nav/filters-nav/years-selector/years-thumb.component';
+import cx from 'classnames';
 import 'styles/components/tool/years-slider.scss';
 
 const YEAR_WIDTH = 40;
@@ -102,7 +103,7 @@ class YearsSelector extends Component {
   }
 
   render() {
-    const { currentDropdown, selectedYears, years } = this.props;
+    const { className, currentDropdown, selectedYears, years } = this.props;
     this.totalWidth = YEAR_WIDTH * years.length;
     const title =
       selectedYears[0] === selectedYears[1] ? (
@@ -119,12 +120,7 @@ class YearsSelector extends Component {
       left: `${this.state.left}px`
     };
     return (
-      <div
-        className="nav-item js-dropdown"
-        onMouseUp={() => {
-          this.onDropdownUp();
-        }}
-      >
+      <div className={cx('js-dropdown', className)} onMouseUp={() => this.onDropdownUp()}>
         <div className="c-dropdown">
           <span className="dropdown-label">
             year{selectedYears[0] !== selectedYears[1] && <span>s</span>}
@@ -144,9 +140,7 @@ class YearsSelector extends Component {
                 <div
                   className="selector"
                   style={selectorWidthStyle}
-                  onMouseDown={mouseEvent => {
-                    this.onSelectorDown(mouseEvent);
-                  }}
+                  onMouseDown={e => this.onSelectorDown(e)}
                 >
                   <YearsThumb id="left" />
                   <YearsThumb id="right" x={deltaWidth} />
@@ -168,7 +162,8 @@ YearsSelector.propTypes = {
   onSelected: PropTypes.func,
   years: PropTypes.array,
   currentDropdown: PropTypes.string,
-  selectedYears: PropTypes.array
+  selectedYears: PropTypes.array,
+  className: PropTypes.string
 };
 
 export default YearsSelector;

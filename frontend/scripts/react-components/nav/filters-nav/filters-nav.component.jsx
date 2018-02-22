@@ -23,15 +23,13 @@ class FiltersNav extends React.PureComponent {
   renderMenuOpened() {
     const { links } = this.props;
     return (
-      <React.Fragment>
-        <NavLinksList
-          links={links}
-          listClassName="top-nav-item-list"
-          itemClassName="top-nav-item"
-          linkClassName="top-nav-link"
-          linkActiveClassName="top-nav-link -active"
-        />
-      </React.Fragment>
+      <NavLinksList
+        links={links}
+        listClassName="filters-nav-submenu-list"
+        itemClassName="filters-nav-item"
+        linkClassName="filters-nav-link"
+        linkActiveClassName="filters-nav-link -active"
+      />
     );
   }
 
@@ -40,8 +38,8 @@ class FiltersNav extends React.PureComponent {
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
-          <ContextSelector />
-          {selectedContext && <YearsSelector />}
+          <ContextSelector className="filters-nav-item" />
+          {selectedContext && <YearsSelector className="filters-nav-item" />}
         </div>
         <div className="filters-nav-right-section">{children}</div>
       </React.Fragment>
