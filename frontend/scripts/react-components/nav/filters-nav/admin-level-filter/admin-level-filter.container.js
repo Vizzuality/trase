@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { toggleDropdown } from 'actions/app.actions';
 import { selectBiomeFilter } from 'actions/tool.actions';
-import Filters from 'react-components/tool/nav/filters.component';
+import AdminLevelFilter from './admin-level-filter.component';
 
 const mapStateToProps = state => ({
   currentDropdown: state.app.currentDropdown,
@@ -18,4 +18,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Filters);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminLevelFilter);
