@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { toggleDropdown } from 'actions/app.actions';
 import { selectView } from 'actions/tool.actions';
-import View from 'react-components/tool/nav/view.component';
+import ViewSelector from './view-selector.component';
 
 const mapStateToProps = state => ({
   tooltips: state.app.tooltips,
@@ -18,4 +18,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(View);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewSelector);

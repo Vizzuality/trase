@@ -16,6 +16,34 @@
   }
 }
 
+.filters-nav-section-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: calc(100% - 113px);
+}
+
+.filters-nav-left-section,
+.filters-nav-right-section {
+  display: flex;
+  height: 100%;
+}
+
+.filters-nav-left-section {
+  border-right: 1px solid $pale-grey;
+}
+
+.filters-nav-right-section {
+  border-left: 1px solid $pale-grey;
+
+  .filters-nav-item:first-child {
+    border-left: 0;
+  }
+}
+
+
+
 .filters-nav-submenu-list {
   display: flex;
   border-right: 1px solid $pale-grey;
@@ -72,8 +100,4 @@
       content: '';
     }
   }
-}
-
-.filters-nav-left-section {
-  display: flex;
 }

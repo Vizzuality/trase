@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { toggleDropdown } from 'actions/app.actions';
 import { selectRecolorBy } from 'actions/tool.actions';
-import RecolorBy from 'react-components/tool/nav/recolor-by.component';
+import RecolorBySelector from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.component';
 
 const mapStateToProps = state => ({
   tooltips: state.app.tooltips,
@@ -20,4 +20,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(RecolorBy);
+export default connect(mapStateToProps, mapDispatchToProps)(RecolorBySelector);
