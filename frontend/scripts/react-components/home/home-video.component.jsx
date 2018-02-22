@@ -78,7 +78,7 @@ HomeVideo.propTypes = {
 };
 
 HomeVideo.defaultProps = {
-  origin: 'http://0.0.0.0:8081'
+  origin: window.location.origin
 };
 
 export default HomeVideo;

@@ -88,7 +88,6 @@
     "PDF_DOWNLOAD_URL": true,
     "TRANSIFEX_API_KEY": true,
     "PERF_TEST": true,
-    "HOME_VIDEO_ID": true,
     "ga": true,
     "fetch": true
   },
