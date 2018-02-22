@@ -4,7 +4,6 @@ lock '3.7.1'
 set :application, 'trase'
 set :repo_url, 'git@github.com:Vizzuality/trase.git'
 
-
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
@@ -22,7 +21,7 @@ set :deploy_to, '/var/www/trase'
 # set :pty, true
 
 # Default value for :linked_files is []
-append :linked_files, '.env', 'frontend/.env'
+append :linked_files, '.env', 'frontend/.env', 'frontend/dist/robots.txt'
 
 # Default value for linked_dirs is []
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/system', 'vendor/bundle'
