@@ -6,11 +6,11 @@ import NewsletterForm from 'react-components/shared/newsletter/newsletter.contai
 import SliderSection from './slider-section.component';
 
 function Home(props) {
-  const { tweets, blogPosts, testimonials, insightsPosts, promotedPost } = props;
+  const { tweets, blogPosts, testimonials, insightsPosts, promotedPost, homeVideo } = props;
   return (
     <div className="l-homepage">
       <div className="c-homepage">
-        <Hero story={promotedPost} tweets={tweets} />
+        <Hero story={promotedPost} tweets={tweets} homeVideo={homeVideo} />
         <div className="splitted">
           <div className="row">
             <div className="column small-12 medium-6">
@@ -50,7 +50,8 @@ Home.propTypes = {
   testimonials: PropTypes.array,
   tweets: PropTypes.array,
   blogPosts: PropTypes.array,
-  promotedPost: PropTypes.object
+  promotedPost: PropTypes.object,
+  homeVideo: PropTypes.string
 };
 
 export default Home;

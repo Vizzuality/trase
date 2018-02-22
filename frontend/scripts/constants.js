@@ -210,3 +210,8 @@ export const TOOLTIPS = {
     }
   }
 };
+
+export const HOME_VIDEO = {
+  en: 'Rv9hn4IGofM',
+  es: 'xjDjIWPwcPU'
+};

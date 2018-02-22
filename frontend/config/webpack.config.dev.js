@@ -2,10 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const webpackBaseConfig = require('./webpack.config');
-const Dashboard = require('webpack-dashboard');
-const DashboardPlugin = require('webpack-dashboard/plugin');
-
-const dashboard = new Dashboard();
 
 module.exports = merge(webpackBaseConfig, {
   output: {
@@ -18,10 +14,9 @@ module.exports = merge(webpackBaseConfig, {
     contentBase: path.join(__dirname, '..', 'public'),
     port: 8081,
     host: '0.0.0.0',
-    historyApiFallback: true,
-    quiet: true
+    historyApiFallback: true
   },
-  plugins: [new webpack.NamedModulesPlugin(), new DashboardPlugin(dashboard.setData)],
+  plugins: [new webpack.NamedModulesPlugin()],
   performance: {
     hints: false
   }

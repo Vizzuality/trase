@@ -359,6 +359,51 @@ paths:
       responses:
         '200':
           description: successful operation
+  '/context/{context_id}/top_nodes':
+    get:
+      tags:
+        - flow
+      summary: 'Top nodes of given node type per context'
+      description: ''
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          description: ''
+          required: true
+          type: integer
+        - name: column_id
+          in: query
+          description: Node type id
+          required: true
+          type: integer
+        - name: year_start
+          in: query
+          description: Start year (defaults to context default year)
+          required: false
+          type: integer
+        - name: year_end
+          in: query
+          description: End year (defaults to start year)
+          required: false
+          type: integer
+        - name: n_nodes
+          in: query
+          description: Number of top nodes (defaults to 10)
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                $ref: '#/definitions/TopNodes'
 definitions:
   Context:
     type: object
@@ -399,6 +444,15 @@ definitions:
             type: number
           zoom:
             type: integer
+      worldMap:
+        type: object
+        properties:
+          mapColumnId:
+            type: integer
+            description: 'Id of column to use as parameter to top nodes for top destination countries (world map)'
+          listColumnId:
+            type: integer
+            description: 'Id of column to use as parameter to top nodes for top exporters (world map - list)'
       recolorBy:
         type: array
         items:
@@ -1088,3 +1142,30 @@ definitions:
                       type: array
                       items:
                         type: number
+  TopNodes:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          context_id:
+            type: integer
+          indicator:
+            type: string
+            description: 'e.g. Trade volume'
+          unit:
+            type: string
+            description: 'e.g. Tn'
+          target_nods:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                height:
+                  type: number
+                value:
+                  type: number

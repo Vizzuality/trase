@@ -6,4 +6,10 @@ Sidekiq.configure_server do |config|
     du = Api::V3::DatabaseUpdate.where(jid: jid).first
     du&.update_attribute(:status, Api::V3::DatabaseUpdate::FAILED)
   end
+
+  config.redis = {size: 4}
+end
+
+Sidekiq.configure_client do |config|
+  config.redis = {size: 2}
 end

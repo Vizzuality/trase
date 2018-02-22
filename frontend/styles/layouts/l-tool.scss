@@ -16,6 +16,10 @@ body {
     width: 100%;
   }
 
+  .tool-nav-right-column {
+    display: flex;
+  }
+
   > .flow-content {
     position: absolute;
     top: $nav-height;

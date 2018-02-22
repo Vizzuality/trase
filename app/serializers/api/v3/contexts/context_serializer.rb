@@ -52,6 +52,13 @@ module Api
             []
           end
         end
+
+        attribute :world_map do
+          {
+            map_column_id: object.country_context_node_type&.node_type_id,
+            list_column_id: object.exporter_context_node_type&.node_type_id
+          }
+        end
       end
     end
   end

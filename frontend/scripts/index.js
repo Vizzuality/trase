@@ -6,6 +6,11 @@ import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
 import * as appReducers from './store';
 
+window.liveSettings = TRANSIFEX_API_KEY && {
+  api_key: TRANSIFEX_API_KEY,
+  autocollect: true
+};
+
 if (process.env.NODE_ENV !== 'production' && PERF_TEST) {
   import('react').then(React => {
     import('why-did-you-update').then(({ whyDidYouUpdate }) => whyDidYouUpdate(React));

@@ -1,11 +1,12 @@
 /* eslint-disable camelcase,import/no-extraneous-dependencies */
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { select as d3_select } from 'd3-selection';
 import { chord as d3_chord, ribbon as d3_ribbon } from 'd3-chord';
 import { descending as d3_descending } from 'd3-array';
 import { arc as d3_arc } from 'd3-shape';
+import i18n from 'utils/transifex';
 import 'styles/components/profiles/chord.scss';
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 const TYPE_KEY_1 = 'list';
 const TYPE_KEY_2 = 'list2';
@@ -136,7 +137,7 @@ class Chord extends Component {
           }`
       )
       .style('text-anchor', d => (d.angle > Math.PI ? 'end' : null))
-      .text((d, i) => (i === 0 || allNames[i].type === TYPE_KEY_2 ? allNames[i].name : ''));
+      .text((d, i) => (i === 0 || allNames[i].type === TYPE_KEY_2 ? i18n(allNames[i].name) : ''));
   }
 
   render() {

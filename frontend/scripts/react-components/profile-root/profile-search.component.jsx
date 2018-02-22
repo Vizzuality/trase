@@ -1,5 +1,5 @@
 /* eslint-disable  jsx-a11y/interactive-supports-focus */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import ProfileSearchResult from 'react-components/profile-root/profile-search-result.component';
@@ -17,7 +17,7 @@ import cx from 'classnames';
  *
  * Sometimes keeping it DRY means repeating yourself a little bit.
  */
-class ProfileSearch extends Component {
+class ProfileSearch extends PureComponent {
   constructor(props) {
     super(props);
 
