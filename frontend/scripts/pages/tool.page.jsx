@@ -2,7 +2,6 @@
 
 import ToolMarkup from 'html/tool.ejs';
 import SearchMarkup from 'html/includes/_search.ejs';
-import NavtoolMarkup from 'html/includes/_navtool.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import React from 'react';
@@ -16,14 +15,11 @@ import MapContextContainer from 'containers/tool/map-context.container';
 import MapLegendContainer from 'containers/tool/map-legend.container';
 import MapBasemapsContainer from 'containers/tool/map-basemaps.container';
 import MapContainer from 'containers/tool/map.container';
-import NavReactContainer from 'react-components/tool/nav-tool.container';
-import NavContainer from 'containers/tool/nav/nav-tool-navigation.container';
+import NavReactContainer from 'react-components/nav/filters-nav/filters-nav.container';
 import TitlebarContainer from 'containers/tool/titlebar.container';
 import NodesTitlesContainer from 'containers/tool/nodesTitles.container';
-import SearchContainer from 'react-components/tool/tool-search/tool-search.container';
 import ModalContainer from 'containers/tool/story-modal.container';
 import TooltipContainer from 'containers/shared/help-tooltip.container';
-import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
 
 import { resize } from 'actions/app.actions';
 import MapDimensionsContainer from 'containers/tool/map-dimensions.container';
@@ -36,7 +32,6 @@ const evManager = new EventManager();
 export const mount = (root, store) => {
   root.innerHTML = ToolMarkup({
     search: SearchMarkup(),
-    navtool: NavtoolMarkup(),
     feedback: FeedbackMarkup()
   });
 
@@ -52,30 +47,18 @@ export const mount = (root, store) => {
   new TooltipContainer(store);
   new ModalContainer(store);
 
-  new NavContainer(store);
   render(
     <Provider store={store}>
       <NavReactContainer />
     </Provider>,
     document.getElementById('js-tool-nav-react')
   );
+
   render(
     <Provider store={store}>
       <ColumnsSelectorContainer />
     </Provider>,
     document.getElementById('js-columns-selector-react')
-  );
-  render(
-    <Provider store={store}>
-      <LocaleSelector />
-    </Provider>,
-    document.getElementById('js-locale-selector-react')
-  );
-  render(
-    <Provider store={store}>
-      <SearchContainer />
-    </Provider>,
-    document.getElementById('js-search-react')
   );
 
   evManager.addEventListener(window, 'resize', () => store.dispatch(resize()));

@@ -2,7 +2,7 @@ import { selectExpandedNode, selectNode, setSankeySearchVisibility } from 'actio
 import camelcase from 'lodash/camelCase';
 import flatten from 'lodash/flatten';
 import groupBy from 'lodash/groupBy';
-import Search from 'react-components/tool/tool-search/tool-search.component';
+import ToolSearch from 'react-components/tool/tool-search/tool-search.component';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import isNodeColumnVisible from 'utils/isNodeColumnVisible';
@@ -65,4 +65,4 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Search);
+export default connect(mapStateToProps, mapDispatchToProps)(ToolSearch);
