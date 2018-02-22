@@ -2,9 +2,9 @@ import React from 'react';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 import Filters from 'containers/tool/nav/filters.container';
 import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
-import ResizeBy from 'containers/tool/nav/resize-by.container';
-import RecolorBy from 'containers/tool/nav/recolor-by.container';
-import View from 'containers/tool/nav/view.container';
+import ResizeBySelector from 'react-components/nav/filters-nav/resize-by-selector/resize-by-selector.container';
+import RecolorBySelector from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.container';
+import ViewSelector from 'react-components/nav/filters-nav/view-selector/view-selector.container';
 import PropTypes from 'prop-types';
 
 function Nav({ tooltips, selectedContext }) {
@@ -33,9 +33,9 @@ function Nav({ tooltips, selectedContext }) {
       </div>
 
       <div className="right-side">
-        <ResizeBy />
-        <RecolorBy />
-        <View />
+        <ResizeBySelector className="nav-item" />
+        <RecolorBySelector className="nav-item" />
+        <ViewSelector className="nav-item" />
       </div>
     </nav>
   );

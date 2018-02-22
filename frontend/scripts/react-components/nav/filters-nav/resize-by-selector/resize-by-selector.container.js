@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { toggleDropdown } from 'actions/app.actions';
 import { selectResizeBy } from 'actions/tool.actions';
-import ResizeBy from 'react-components/tool/nav/resize-by.component';
+import ResizeBySelector from './resize-by-selector.component';
 
 const mapStateToProps = state => ({
   tooltips: state.app.tooltips,
@@ -19,4 +19,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ResizeBy);
+export default connect(mapStateToProps, mapDispatchToProps)(ResizeBySelector);

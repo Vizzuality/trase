@@ -4,6 +4,9 @@ import cx from 'classnames';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 import NavLinksList from 'react-components/nav/nav-links-list.component';
 import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
+import ResizeBySelector from 'react-components/nav/filters-nav/resize-by-selector/resize-by-selector.container';
+import RecolorBySelector from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.container';
+import ViewSelector from 'react-components/nav/filters-nav/view-selector/view-selector.container';
 
 class FiltersNav extends React.PureComponent {
   constructor(props) {
@@ -41,7 +44,12 @@ class FiltersNav extends React.PureComponent {
           <ContextSelector className="filters-nav-item" />
           {selectedContext && <YearsSelector className="filters-nav-item" />}
         </div>
-        <div className="filters-nav-right-section">{children}</div>
+        <div className="filters-nav-right-section">
+          <ResizeBySelector className="filters-nav-item" />
+          <RecolorBySelector className="filters-nav-item" />
+          <ViewSelector className="filters-nav-item" />
+          {children}
+        </div>
       </React.Fragment>
     );
   }
@@ -57,7 +65,9 @@ class FiltersNav extends React.PureComponent {
             <span className="ingredient" />
           </button>
         </div>
-        {menuOpen ? this.renderMenuOpened() : this.renderMenuClosed()}
+        <div className="filters-nav-section-container">
+          {menuOpen ? this.renderMenuOpened() : this.renderMenuClosed()}
+        </div>
       </div>
     );
   }

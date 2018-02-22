@@ -3,15 +3,23 @@ import React from 'react';
 import Tooltip from 'react-components/tool/help-tooltip.component';
 import Dropdown from 'react-components/tool/nav/dropdown.component';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
 const id = 'view';
 
-export default function view({ onToggle, onSelected, currentDropdown, tooltips, isDetailedView }) {
+function ViewSelector({
+  className,
+  onToggle,
+  onSelected,
+  currentDropdown,
+  tooltips,
+  isDetailedView
+}) {
   const title = isDetailedView === true ? 'All Flows' : 'Summary';
   const other = isDetailedView === true ? 'Summary' : 'All Flows';
   return (
     <div
-      className="nav-item js-dropdown"
+      className={cx('js-dropdown', className)}
       onClick={() => {
         onToggle(id);
       }}
@@ -34,10 +42,13 @@ export default function view({ onToggle, onSelected, currentDropdown, tooltips, 
   );
 }
 
-view.propTypes = {
+ViewSelector.propTypes = {
+  className: PropTypes.string,
   onToggle: PropTypes.func,
   onSelected: PropTypes.func,
   currentDropdown: PropTypes.string,
   tooltips: PropTypes.object,
   isDetailedView: PropTypes.bool
 };
+
+export default ViewSelector;
