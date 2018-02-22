@@ -390,7 +390,7 @@ const _setInfo = (info, onLinkClick, { nodeId, year }) => {
 };
 
 const _setEventListeners = () => {
-  smoothScroll(document.querySelectorAll('.js-link-profile'));
+  smoothScroll([].slice.call(document.querySelectorAll('.js-link-profile')));
 };
 
 const onLinkClick = store => (type, params) => store.dispatch({ type, payload: { query: params } });
