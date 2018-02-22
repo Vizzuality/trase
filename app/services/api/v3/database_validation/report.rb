@@ -16,6 +16,11 @@ module Api
           chain.each do |check|
             check.call(@errors_list)
           end
+          Api::V3::DatabaseValidationReport.create(
+            error_count: @errors_list.error_count,
+            warning_count: @errors_list.warning_count,
+            report: @errors_list.errors
+          )
           @errors_list
         end
 

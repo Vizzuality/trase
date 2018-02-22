@@ -2559,6 +2559,67 @@ ALTER SEQUENCE database_updates_id_seq OWNED BY database_updates.id;
 
 
 --
+-- Name: database_validation_reports; Type: TABLE; Schema: revamp; Owner: -
+--
+
+CREATE TABLE database_validation_reports (
+    id bigint NOT NULL,
+    report json NOT NULL,
+    error_count integer NOT NULL,
+    warning_count integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE database_validation_reports; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON TABLE database_validation_reports IS 'Keeping track of database validation operations';
+
+
+--
+-- Name: COLUMN database_validation_reports.report; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN database_validation_reports.report IS 'JSON structure with validation report';
+
+
+--
+-- Name: COLUMN database_validation_reports.error_count; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN database_validation_reports.error_count IS 'Count of errors detected';
+
+
+--
+-- Name: COLUMN database_validation_reports.warning_count; Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON COLUMN database_validation_reports.warning_count IS 'Count of warnings detected';
+
+
+--
+-- Name: database_validation_reports_id_seq; Type: SEQUENCE; Schema: revamp; Owner: -
+--
+
+CREATE SEQUENCE database_validation_reports_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: database_validation_reports_id_seq; Type: SEQUENCE OWNED BY; Schema: revamp; Owner: -
+--
+
+ALTER SEQUENCE database_validation_reports_id_seq OWNED BY database_validation_reports.id;
+
+
+--
 -- Name: download_attributes; Type: TABLE; Schema: revamp; Owner: -
 --
 
@@ -3368,14 +3429,14 @@ COMMENT ON COLUMN map_attributes."position" IS 'Display order in scope of group'
 -- Name: COLUMN map_attributes.bucket_3; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes.bucket_3 IS 'Choropleth buckets';
+COMMENT ON COLUMN map_attributes.bucket_3 IS 'Choropleth buckets for single dimension choropleth';
 
 
 --
 -- Name: COLUMN map_attributes.bucket_5; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes.bucket_5 IS 'Choropleth buckets';
+COMMENT ON COLUMN map_attributes.bucket_5 IS 'Choropleth buckets for dual dimension choropleth';
 
 
 --
@@ -3396,14 +3457,14 @@ COMMENT ON COLUMN map_attributes.years IS 'Years for which attribute is present;
 -- Name: COLUMN map_attributes.is_disabled; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes.is_disabled IS 'When set, do not show this attribute';
+COMMENT ON COLUMN map_attributes.is_disabled IS 'When set, this attribute is not displayed';
 
 
 --
 -- Name: COLUMN map_attributes.is_default; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes.is_default IS 'When set, show this attribute by default';
+COMMENT ON COLUMN map_attributes.is_default IS 'When set, show this attribute by default. A maximum of 2 attributes per context may be set as default.';
 
 
 --
@@ -4018,7 +4079,7 @@ COMMENT ON TABLE recolor_by_attributes IS 'Attributes (inds/quals) available for
 -- Name: COLUMN recolor_by_attributes.group_number; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.group_number IS 'Group number';
+COMMENT ON COLUMN recolor_by_attributes.group_number IS 'Attributes are displayed grouped by their group number, with a separator between groups';
 
 
 --
@@ -4067,7 +4128,7 @@ COMMENT ON COLUMN recolor_by_attributes.max_value IS 'Max value for the legend';
 -- Name: COLUMN recolor_by_attributes.divisor; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.divisor IS 'For percentual legends the step between intervals';
+COMMENT ON COLUMN recolor_by_attributes.divisor IS 'Step between intervals for percentual legends';
 
 
 --
@@ -4088,7 +4149,7 @@ COMMENT ON COLUMN recolor_by_attributes.years IS 'Array of years for which to sh
 -- Name: COLUMN recolor_by_attributes.is_disabled; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.is_disabled IS 'When set, do not show this attribute';
+COMMENT ON COLUMN recolor_by_attributes.is_disabled IS 'When set, this attribute is not displayed';
 
 
 --
@@ -4315,7 +4376,7 @@ COMMENT ON COLUMN resize_by_attributes.years IS 'Array of years for which to sho
 -- Name: COLUMN resize_by_attributes.is_disabled; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN resize_by_attributes.is_disabled IS 'When set, do not show this attribute';
+COMMENT ON COLUMN resize_by_attributes.is_disabled IS 'When set, this attribute is not displayed';
 
 
 --
@@ -4710,6 +4771,13 @@ ALTER TABLE ONLY country_properties ALTER COLUMN id SET DEFAULT nextval('country
 --
 
 ALTER TABLE ONLY database_updates ALTER COLUMN id SET DEFAULT nextval('database_updates_id_seq'::regclass);
+
+
+--
+-- Name: database_validation_reports id; Type: DEFAULT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY database_validation_reports ALTER COLUMN id SET DEFAULT nextval('database_validation_reports_id_seq'::regclass);
 
 
 --
@@ -5390,6 +5458,14 @@ ALTER TABLE ONLY database_updates
 
 ALTER TABLE ONLY database_updates
     ADD CONSTRAINT database_updates_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: database_validation_reports database_validation_reports_pkey; Type: CONSTRAINT; Schema: revamp; Owner: -
+--
+
+ALTER TABLE ONLY database_validation_reports
+    ADD CONSTRAINT database_validation_reports_pkey PRIMARY KEY (id);
 
 
 --
@@ -7290,7 +7366,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180205092759'),
 ('20180207133151'),
 ('20180207133331'),
-('20180212120524');
+('20180212120524'),
+('20180221144544');
 
 
 

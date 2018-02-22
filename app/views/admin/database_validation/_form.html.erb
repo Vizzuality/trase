@@ -1,0 +1,28 @@
+<%= form_tag(admin_data_validation_start_path, multipart: true) do %>
+  <% if database_validations.any? %>
+    <table class="index_table">
+      <thead>
+        <th class="col" style="width:10%">Started</th>
+        <th class="col" style="width:10%">Finished</th>
+        <th class="col" style="width:5%">Error count</th>
+        <th class="col" style="width:5%">Warning count</th>
+        <th class="col" style="width:5%">Status</th>
+        <th class="col">Report</th>
+      </thead>
+      <tbody>
+        <% database_validations.each do |dv| %>
+          <tr>
+            <td><%= dv.created_at %></td>
+            <td><%= dv.finished_at %></td>
+            <td><%= dv.error_count %></td>
+            <td><%= dv.warning_count %></td>
+            <td><%= dv.status %></td>
+            <td><%= link_to 'Report', admin_data_validation_report_path(id: dv.id) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+  <%= submit_tag 'Start database validation' %>
+<% end %>
