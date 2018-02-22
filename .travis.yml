@@ -17,6 +17,6 @@ before_script:
   - cd frontend; npm install; cd ..
 script:
   - bundle exec rspec spec --fail-fast
-  - cd frontend; npm test
+  - cd frontend; npm test; cd ..
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT

@@ -287,6 +287,19 @@
                       "examples": [
                         "ha"
                       ]
+                    },
+                    "tooltip": {
+                      "$id": "/properties/data/properties/indicators/items/properties/included_columns/items/properties/unit",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "title": "Tooltip text",
+                      "description": "A text for the tooltip",
+                      "default": null,
+                      "examples": [
+                        "Tooltip text"
+                      ]
                     }
                   },
                   "required": [
