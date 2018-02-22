@@ -2,11 +2,11 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import Tooltip from 'react-components/tool/help-tooltip.component';
 import Dropdown from 'react-components/tool/nav/dropdown.component';
-import 'styles/components/tool/country-commodities-react.scss';
-import 'styles/components/tool/dimensional-selector-react.scss';
+import cx from 'classnames';
+import 'styles/components/shared/country-commodities-react.scss';
+import 'styles/components/shared/dimensional-selector-react.scss';
 
 const id = 'country-commodity';
 
@@ -136,7 +136,7 @@ class ContextSelector extends Component {
             return (
               <li
                 key={index}
-                className={classNames('dimension-list-item -capitalize', {
+                className={cx('dimension-list-item -capitalize', {
                   [`-${status}`]: status
                 })}
                 onClick={e => this.selectDimension(e, status, dimensionElementIndex, el)}
@@ -151,6 +151,7 @@ class ContextSelector extends Component {
 
   render() {
     const {
+      className,
       toggleContextSelectorVisibility,
       tooltipText,
       currentDropdown,
@@ -161,7 +162,7 @@ class ContextSelector extends Component {
 
     return (
       <div
-        className="c-country-commodities nav-item js-dropdown"
+        className={cx('c-country-commodities', 'js-dropdown', className)}
         onClick={() => toggleContextSelectorVisibility(id)}
       >
         <div className="c-dropdown -capitalize">
@@ -201,6 +202,7 @@ class ContextSelector extends Component {
 }
 
 ContextSelector.propTypes = {
+  className: PropTypes.string,
   toggleContextSelectorVisibility: PropTypes.func,
   getComputedKey: PropTypes.func,
   selectContext: PropTypes.func,
