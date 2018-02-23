@@ -25,8 +25,9 @@ function classifyColumn(contexts, { id, label, relation }) {
   );
 }
 
-const memoizedClassifyColumn = memoize(classifyColumn, (ctx, params) =>
-  Object.values(params).join('-')
+const memoizedClassifyColumn = memoize(
+  classifyColumn,
+  (ctx, params) => Object.values(params).join('-') + ctx.length
 );
 
 const mapStateToProps = state => {
