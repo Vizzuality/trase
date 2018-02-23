@@ -4,6 +4,7 @@ import groupBy from 'lodash/groupBy';
 import { toggleDropdown } from 'actions/app.actions';
 import { selectContext } from 'actions/tool.actions';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.component';
+import memoize from 'lodash/memoize';
 
 function classifyColumn(contexts, { id, label, relation }) {
   const groups = groupBy(
@@ -23,6 +24,11 @@ function classifyColumn(contexts, { id, label, relation }) {
     }, {})
   );
 }
+
+const memoizedClassifyColumn = memoize(
+  classifyColumn,
+  (ctx, params) => Object.values(params).join('-') + ctx.length
+);
 
 const mapStateToProps = state => {
   const getComputedKey = keys => keys.join('_');
