@@ -16,12 +16,7 @@ import { withSidebarNavLayout } from 'react-components/nav/sidebar-nav/with-side
 import { getProfileRootNodes } from 'react-components/profile-root/profile-root.thunks';
 import { getPageStaticContent } from 'react-components/static-content/static-content.thunks';
 import { getTeam } from 'react-components/team/team.thunks';
-import {
-  loadDisclaimerTool,
-  loadInitialDataTool,
-  resizeSankeyTool,
-  loadStoryModalTool
-} from 'react-components/tool/tool.thunks';
+import { loadInitialDataTool } from 'react-components/tool/tool.thunks';
 
 const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thunk(...params));
 
@@ -48,13 +43,7 @@ const routes = {
   tool: {
     path: '/flows',
     page: 'tool',
-    thunk: dispatchThunks(
-      resetToolThunk,
-      loadDisclaimerTool,
-      loadInitialDataTool,
-      resizeSankeyTool,
-      loadStoryModalTool
-    )
+    thunk: dispatchThunks(resetToolThunk)
   },
   profileRoot: {
     path: '/profiles',
