@@ -21,9 +21,11 @@ const NavLinksList = props => {
     itemClassName,
     linkClassName,
     linkActiveClassName,
-    navLinkProps
+    navLinkProps,
+    isActiveLink
   } = props;
 
+  const checkLink = isActiveLink || isActive;
   return (
     <ul className={listClassName}>
       {links.map(mapLinksToRouter).map(link => (
@@ -34,7 +36,7 @@ const NavLinksList = props => {
             to={link.page}
             className={link.linkClassName || linkClassName}
             activeClassName={link.linkActiveClassName || linkActiveClassName}
-            isActive={(...params) => isActive(...params, link)}
+            isActive={(...params) => checkLink(...params, link)}
             {...navLinkProps}
           >
             {link.children || link.name}
@@ -51,7 +53,8 @@ NavLinksList.propTypes = {
   itemClassName: PropTypes.string,
   linkClassName: PropTypes.string,
   linkActiveClassName: PropTypes.string,
-  navLinkProps: PropTypes.object
+  navLinkProps: PropTypes.object,
+  isActiveLink: PropTypes.func
 };
 
 export default NavLinksList;
