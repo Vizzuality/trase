@@ -1,8 +1,8 @@
 # Prepares checks to be run on map_attribute objects
 
 # The following checks are included:
-#   DONE check years match data in flows
-#   DONE check for widows (map_attributes without map_ind or map_quant)
+#   check years match data in flows
+#   check for widows (map_attributes without map_ind or map_quant)
 module Api
   module V3
     module DatabaseValidation

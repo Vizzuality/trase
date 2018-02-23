@@ -1,9 +1,9 @@
 # Prepares checks to be run on context objects
 
 # The following checks are included:
-#   DONE check +context_property+ present
-#   DONE check +context_node_types+ contain +COUNTRY+ and +EXPORTER+
-#   DONE check any actor / place +profiles+ present (WARN)
+#   check +context_property+ present
+#   check +context_node_types+ contain +COUNTRY+ and +EXPORTER+
+#   check any actor / place +profiles+ present (WARN)
 module Api
   module V3
     module DatabaseValidation

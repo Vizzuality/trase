@@ -1,7 +1,7 @@
 # Prepares checks to be run on country objects
 
 # The following checks are included:
-#   DONE check +country_property+ present
+#   check +country_property+ present
 module Api
   module V3
     module DatabaseValidation
