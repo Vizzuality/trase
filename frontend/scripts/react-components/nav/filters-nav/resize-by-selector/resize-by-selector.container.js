@@ -7,7 +7,7 @@ const mapStateToProps = state => ({
   tooltips: state.app.tooltips,
   currentDropdown: state.app.currentDropdown,
   selectedResizeBy: state.tool.selectedResizeBy,
-  resizeBys: state.tool.selectedContext.resizeBy
+  resizeBys: state.tool.selectedContext && state.tool.selectedContext.resizeBy
 });
 
 const mapDispatchToProps = dispatch => ({
