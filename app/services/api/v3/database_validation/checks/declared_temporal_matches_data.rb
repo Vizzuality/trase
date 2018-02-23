@@ -18,7 +18,7 @@ module Api
             super(object, options)
             @association = options[:association]
             @attribute = options[:attribute]
-            @on_object = @object.send(options[:on]) if options.key?(:on)
+            initialize_on_object(options)
           end
 
           # Checks the node_inds/quals/quants table for year

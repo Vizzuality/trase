@@ -36,6 +36,8 @@ module Api
           checks :has_at_least_one,
                  association: :contextual_layers,
                  link: :index
+          checks :active_record_check, on: :context_property, link: :edit
+
 
           def self.build_chain
             chain = []

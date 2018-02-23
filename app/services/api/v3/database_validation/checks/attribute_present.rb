@@ -13,7 +13,7 @@ module Api
           def initialize(object, options)
             super(object, options)
             @attribute = options[:attribute]
-            @on_object = @object.send(options[:on]) if options.key?(:on)
+            initialize_on_object(options)
           end
 
           # @return (see AbstractCheck#passing?)

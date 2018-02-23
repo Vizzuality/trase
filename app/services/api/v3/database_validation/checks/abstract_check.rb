@@ -34,6 +34,13 @@ module Api
 
           private
 
+          def initialize_on_object(options)
+            return unless options.key?(:on)
+            on_object_name = options[:on]
+            return unless @object.respond_to?(on_object_name)
+            @on_object = @object.send(on_object_name)
+          end
+
           def error
             {
               object: @object,

@@ -10,6 +10,9 @@ module Api
           checks :has_exactly_one,
                  association: :context_node_type_property,
                  link: :index
+          checks :active_record_check,
+                 on: :context_node_type_property,
+                 link: :edit
 
           def self.build_chain(context)
             chain = []

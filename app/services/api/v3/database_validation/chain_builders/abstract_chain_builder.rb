@@ -17,8 +17,7 @@ module Api
           # @returns chain of checks to be run
           def chain
             tmp = []
-            add_registered_validations_to_chain(tmp)
-            add_model_validations_to_chain(tmp)
+            add_validations_to_chain(tmp)
             tmp
           end
 
@@ -30,11 +29,7 @@ module Api
 
           private
 
-          def add_model_validations_to_chain(chain)
-            chain << Api::V3::DatabaseValidation::Checks::ActiveRecordCheck.new(@object)
-          end
-
-          def add_registered_validations_to_chain(chain)
+          def add_validations_to_chain(chain)
             self.class.instance_variable_get('@validations').each do |validation|
               validation_class = Api::V3::DatabaseValidation::Checks.const_get(
                 validation[:validation].to_s.camelize

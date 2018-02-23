@@ -10,6 +10,7 @@ module Api
           checks :has_exactly_one,
                  association: :country_property,
                  link: :index
+          checks :active_record_check, on: :country_property, link: :edit
 
           def self.build_chain
             chain = []

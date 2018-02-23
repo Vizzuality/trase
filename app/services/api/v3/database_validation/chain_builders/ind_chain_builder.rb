@@ -27,6 +27,7 @@ module Api
                  on: :ind_property,
                  link: :edit,
                  severity: :warn
+          checks :active_record_check, on: :ind_property, link: :edit
 
           def self.build_chain
             chain = []

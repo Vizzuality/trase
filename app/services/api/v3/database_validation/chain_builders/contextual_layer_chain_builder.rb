@@ -15,6 +15,7 @@ module Api
                  attribute: :tooltip_text,
                  link: :edit,
                  severity: :warn
+          checks :active_record_check, link: :edit
 
           def self.build_chain(context)
             chain = []
