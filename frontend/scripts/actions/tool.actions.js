@@ -208,6 +208,11 @@ export function selectColumn(columnIndex, columnId, reloadLinks = true) {
     );
     dispatch(updateNodes(selectedNodesIds));
 
+    const selectedColumn = state.tool.columns.find(c => c.id === columnId);
+    if (selectedColumn && selectedColumn.group === 0 && selectedColumn.isChoroplethDisabled) {
+      dispatch(setMapDimensions([null, null]));
+    }
+
     dispatch({
       type: FILTER_LINKS_BY_NODES
     });
