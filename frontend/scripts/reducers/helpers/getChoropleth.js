@@ -47,7 +47,7 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
     colors,
     isBivariate,
     titles: selectedMapDimensions.map(d => _shortenTitle(d.name)),
-    bucket: selectedMapDimensions.map(d => (isBivariate ? d.bucket3.slice(0) : d.bucket5.slice(0)))
+    bucket: selectedMapDimensions.map(d => (isBivariate ? d.dualLayerBuckets.slice(0) : d.singleLayerBuckets.slice(0)))
   };
 
   if (forceEmpty === true) {

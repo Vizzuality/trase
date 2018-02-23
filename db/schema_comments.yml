@@ -187,10 +187,10 @@ tables:
     columns:
       - name: position
         comment: Display order in scope of group
-      - name: bucket_3
-        comment: Choropleth buckets for single dimension choropleth
-      - name: bucket_5
+      - name: dual_layer_buckets
         comment: Choropleth buckets for dual dimension choropleth
+      - name: single_layer_buckets
+        comment: Choropleth buckets for single dimension choropleth
       - name: color_scale
         comment: Choropleth colour scale, e.g. blue
       - name: years

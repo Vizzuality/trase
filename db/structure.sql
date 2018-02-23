@@ -160,6 +160,35 @@ CREATE FUNCTION get_trader_sum(trader_id integer, year_ integer) RETURNS double 
   $$;
 
 
+SET search_path = revamp, pg_catalog;
+
+--
+-- Name: bucket_index(double precision[], double precision); Type: FUNCTION; Schema: revamp; Owner: -
+--
+
+CREATE FUNCTION bucket_index(buckets double precision[], value double precision) RETURNS integer
+    LANGUAGE sql IMMUTABLE
+    AS $$
+
+SELECT CASE WHEN value > 0 THEN idx ELSE 0 END FROM (
+  SELECT COALESCE(hi.idx, lo.idx + 1)::INT AS idx, lo.val AS lo, hi.val AS hi
+  FROM UNNEST(buckets) WITH ORDINALITY AS lo(val, idx)
+  FULL OUTER JOIN UNNEST(buckets) WITH ORDINALITY AS hi(val, idx) ON lo.idx + 1 = hi.idx
+) t
+WHERE
+  value >= t.lo AND value < t.hi AND t.lo IS NOT NULL AND t.hi IS NOT NULL
+  OR value >= t.lo AND t.hi IS NULL
+  OR value < t.hi AND t.lo IS NULL;
+$$;
+
+
+--
+-- Name: FUNCTION bucket_index(buckets double precision[], value double precision); Type: COMMENT; Schema: revamp; Owner: -
+--
+
+COMMENT ON FUNCTION bucket_index(buckets double precision[], value double precision) IS 'Given an n-element array of choropleth buckets and a positive value, returns index of bucket where value falls (1 to n + 1); else returns 0.';
+
+
 --
 -- Name: trase_server; Type: SERVER; Schema: -; Owner: -
 --
@@ -3400,8 +3429,8 @@ CREATE TABLE map_attributes (
     id integer NOT NULL,
     map_attribute_group_id integer NOT NULL,
     "position" integer NOT NULL,
-    bucket_3 double precision[] DEFAULT '{}'::double precision[] NOT NULL,
-    bucket_5 double precision[] DEFAULT '{}'::double precision[] NOT NULL,
+    dual_layer_buckets double precision[] DEFAULT '{}'::double precision[] NOT NULL,
+    single_layer_buckets double precision[] DEFAULT '{}'::double precision[] NOT NULL,
     color_scale text,
     years integer[],
     is_disabled boolean DEFAULT false NOT NULL,
@@ -3426,17 +3455,17 @@ COMMENT ON COLUMN map_attributes."position" IS 'Display order in scope of group'
 
 
 --
--- Name: COLUMN map_attributes.bucket_3; Type: COMMENT; Schema: revamp; Owner: -
+-- Name: COLUMN map_attributes.dual_layer_buckets; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes.bucket_3 IS 'Choropleth buckets for single dimension choropleth';
+COMMENT ON COLUMN map_attributes.dual_layer_buckets IS 'Choropleth buckets for dual dimension choropleth';
 
 
 --
--- Name: COLUMN map_attributes.bucket_5; Type: COMMENT; Schema: revamp; Owner: -
+-- Name: COLUMN map_attributes.single_layer_buckets; Type: COMMENT; Schema: revamp; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes.bucket_5 IS 'Choropleth buckets for dual dimension choropleth';
+COMMENT ON COLUMN map_attributes.single_layer_buckets IS 'Choropleth buckets for single dimension choropleth';
 
 
 --
@@ -3534,8 +3563,8 @@ CREATE MATERIALIZED VIEW map_attributes_mv AS
  SELECT ma.id,
     ma.map_attribute_group_id,
     ma."position",
-    ma.bucket_3,
-    ma.bucket_5,
+    ma.dual_layer_buckets,
+    ma.single_layer_buckets,
     ma.color_scale,
     ma.years,
     ma.is_disabled,
@@ -3558,8 +3587,8 @@ UNION ALL
  SELECT ma.id,
     ma.map_attribute_group_id,
     ma."position",
-    ma.bucket_3,
-    ma.bucket_5,
+    ma.dual_layer_buckets,
+    ma.single_layer_buckets,
     ma.color_scale,
     ma.years,
     ma.is_disabled,
@@ -7367,7 +7396,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180207133151'),
 ('20180207133331'),
 ('20180212120524'),
+<<<<<<< HEAD
 ('20180221144544');
 
+=======
+('20180223141212'),
+('20180226094007');
+>>>>>>> Expanded map buckets & renamed to better reflect purpose
 
 
