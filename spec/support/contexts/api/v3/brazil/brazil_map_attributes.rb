@@ -16,8 +16,8 @@ shared_context 'api v3 brazil map attributes' do
         :api_v3_map_attribute,
         map_attribute_group: api_v3_map_attribute_group1,
         position: 8,
-        bucket_3: [4, 6],
-        bucket_5: [3, 4, 5, 6],
+        dual_layer_buckets: [4, 5, 6],
+        single_layer_buckets: [3, 4, 5, 6],
         color_scale: 'bluered'
       )
       FactoryBot.create(
@@ -41,8 +41,8 @@ shared_context 'api v3 brazil map attributes' do
         :api_v3_map_attribute,
         map_attribute_group: api_v3_map_attribute_group2,
         position: 17,
-        bucket_3: [10_000, 50_000],
-        bucket_5: [10_000, 20_000, 50_000, 100_000],
+        dual_layer_buckets: [10_000, 30_000, 50_000],
+        single_layer_buckets: [10_000, 20_000, 50_000, 100_000],
         color_scale: 'blue'
       )
       FactoryBot.create(
@@ -66,8 +66,8 @@ shared_context 'api v3 brazil map attributes' do
         :api_v3_map_attribute,
         map_attribute_group: api_v3_map_attribute_group1,
         position: 21,
-        bucket_3: [6, 15],
-        bucket_5: [1, 3, 7, 15],
+        dual_layer_buckets: [6, 10, 15],
+        single_layer_buckets: [1, 3, 7, 15],
         color_scale: 'red'
       )
       FactoryBot.create(
@@ -91,8 +91,8 @@ shared_context 'api v3 brazil map attributes' do
         :api_v3_map_attribute,
         map_attribute_group: api_v3_map_attribute_group2,
         position: 20,
-        bucket_3: [2, 5],
-        bucket_5: [1, 2, 4, 5],
+        dual_layer_buckets: [2, 3, 5],
+        single_layer_buckets: [1, 2, 4, 5],
         color_scale: 'red'
       )
       FactoryBot.create(

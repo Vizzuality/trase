@@ -284,7 +284,7 @@ class SchemaRevamp
 
   def map_attributes_insert_sql
     <<-SQL
-    INSERT INTO revamp.map_attributes(id, map_attribute_group_id, position, bucket_3, bucket_5, color_scale, years, is_disabled, is_default, created_at, updated_at)
+    INSERT INTO revamp.map_attributes(id, map_attribute_group_id, position, dual_layer_buckets, single_layer_buckets, color_scale, years, is_disabled, is_default, created_at, updated_at)
     SELECT
       id, context_layer_group_id, position, bucket_3, bucket_5, color_scale, years, NOT(COALESCE(enabled, FALSE)), COALESCE(is_default, FALSE), NOW(), NOW()
     FROM public.context_layer

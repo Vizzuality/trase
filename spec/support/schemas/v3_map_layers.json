@@ -77,12 +77,12 @@
               "quant"
             ]
           },
-          "bucket3": {
-            "$id": "/properties/dimensions/items/properties/bucket3",
+          "dualLayerBuckets": {
+            "$id": "/properties/dimensions/items/properties/dualLayerBuckets",
             "type": "array",
             "minItems": 1,
             "items": {
-              "$id": "/properties/dimensions/items/properties/bucket3/items",
+              "$id": "/properties/dimensions/items/properties/dualLayerBuckets/items",
               "type": "number",
               "title": "The 0 Schema",
               "description": "An explanation about the purpose of this instance.",
@@ -92,12 +92,12 @@
               ]
             }
           },
-          "bucket5": {
-            "$id": "/properties/dimensions/items/properties/bucket5",
+          "singleLayerBuckets": {
+            "$id": "/properties/dimensions/items/properties/singleLayerBuckets",
             "type": "array",
             "minItems": 1,
             "items": {
-              "$id": "/properties/dimensions/items/properties/bucket5/items",
+              "$id": "/properties/dimensions/items/properties/singleLayerBuckets/items",
               "type": "number",
               "title": "The 0 Schema",
               "description": "An explanation about the purpose of this instance.",
@@ -200,8 +200,8 @@
           "id",
           "name",
           "type",
-          "bucket3",
-          "bucket5",
+          "dualLayerBuckets",
+          "singleLayerBuckets",
           "groupId",
           "unit",
           "isDefault",

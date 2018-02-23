@@ -19,8 +19,8 @@ export default function(nodesDict, nodesMeta, layers) {
 
     const dimensionMeta = {
       rawValue: nodeMeta.value,
-      value3: nodeMeta.bucket3,
-      value5: nodeMeta.bucket5,
+      value3: nodeMeta.dualLayerBucket,
+      value5: nodeMeta.singleLayerBucket,
       name: layerByUID.name
     };
 
