@@ -62,6 +62,10 @@ export default class {
     });
   }
 
+  setVisibility(isVisible) {
+    this.el.classList.toggle('is-hidden', !isVisible);
+  }
+
   _onGroupTitleClicked(event) {
     const id = event.currentTarget.parentNode.getAttribute('data-group-id');
     this.callbacks.onToggleGroup(id);

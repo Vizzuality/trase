@@ -1,4 +1,5 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+import { createLogger } from 'redux-logger';
 import thunk from 'redux-thunk';
 import analyticsMiddleware from 'analytics/tool.analytics.middleware';
 import { toolUrlStateMiddleware } from 'utils/stateURL';
@@ -17,6 +18,11 @@ if (process.env.NODE_ENV !== 'production' && PERF_TEST) {
   });
 }
 
+const loggerMiddleware = createLogger({
+  collapsed: true,
+  predicate: () => process.env.NODE_ENV === 'development'
+});
+
 const composeEnhancers =
   (process.env.NODE_ENV === 'development' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
   compose;
@@ -31,7 +37,13 @@ const store = createStore(
   undefined,
   composeEnhancers(
     router.enhancer,
-    applyMiddleware(analyticsMiddleware, thunk, router.middleware, toolUrlStateMiddleware)
+    applyMiddleware(
+      analyticsMiddleware,
+      thunk,
+      router.middleware,
+      toolUrlStateMiddleware,
+      loggerMiddleware
+    )
   )
 );
 
