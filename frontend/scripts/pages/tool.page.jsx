@@ -21,7 +21,12 @@ import NodesTitlesContainer from 'containers/tool/nodesTitles.container';
 import ModalContainer from 'containers/tool/story-modal.container';
 import TooltipContainer from 'containers/shared/help-tooltip.container';
 
-import { resize } from 'actions/app.actions';
+import {
+  loadInitialDataTool,
+  resizeSankeyTool,
+  loadDisclaimerTool,
+  loadStoryModalTool
+} from 'react-components/tool/tool.thunks';
 import MapDimensionsContainer from 'containers/tool/map-dimensions.container';
 
 import 'styles/tool.scss';
@@ -47,6 +52,11 @@ export const mount = (root, store) => {
   new TooltipContainer(store);
   new ModalContainer(store);
 
+  loadDisclaimerTool(store.dispatch);
+  loadInitialDataTool(store.dispatch);
+  loadStoryModalTool(store.dispatch, store.getState);
+  resizeSankeyTool(store.dispatch);
+
   render(
     <Provider store={store}>
       <NavReactContainer />
@@ -61,7 +71,7 @@ export const mount = (root, store) => {
     document.getElementById('js-columns-selector-react')
   );
 
-  evManager.addEventListener(window, 'resize', () => store.dispatch(resize()));
+  evManager.addEventListener(window, 'resize', () => resizeSankeyTool(store.dispatch));
   document.querySelector('body').classList.add('-overflow-hidden');
 };
 
