@@ -13,7 +13,16 @@ const mapMethodsToState = state => ({
     })
   },
   selectMapDimensions: state.tool.selectedMapDimensions,
-  toggleSidebarGroups: state.tool.expandedMapSidebarGroupsIds
+  toggleSidebarGroups: state.tool.expandedMapSidebarGroupsIds,
+  setVisibility: {
+    _comparedValue: state => state.tool.selectedColumnsIds,
+    _returnedValue: state => {
+      const firstColumnId = state.tool.selectedColumnsIds[0];
+      const column = state.tool.columns.find(c => c.id === firstColumnId);
+
+      return column ? !column.isChoroplethDisabled : true;
+    }
+  }
 });
 
 const mapViewCallbacksToActions = () => ({
