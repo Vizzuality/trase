@@ -35,7 +35,8 @@ module Api
             # flow attributes table
             values_class = ('Api::V3::' + "flow_#{attribute_name}".camelize).
               constantize
-            declared_years = @object.years || []
+            return true if @object.years.nil?
+            declared_years = @object.years
             actual_years = values_class.
               select('flows.year').
               joins(:flow).
