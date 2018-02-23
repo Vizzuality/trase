@@ -28,11 +28,11 @@ class MultiTable extends Component {
     const { data, target, type, year, tabsTitle, tabsTitleTooltip } = this.props;
 
     return (
-      <div>
+      <div className="c-multi-table">
         <ul className="c-area-table-switcher">
           <span>
             {tabsTitle}
-            {tabsTitleTooltip && <Tooltip position="bottom right" text={tabsTitleTooltip} />}
+            {tabsTitleTooltip && <Tooltip text={tabsTitleTooltip} />}
           </span>
           {data.map((elem, index) => (
             <li

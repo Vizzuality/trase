@@ -41,9 +41,7 @@ class Table extends Component {
                 {columns[valueKey].name}
                 {columns[valueKey].year}
               </span>
-              {columns[valueKey].tooltip && (
-                <Tooltip text={columns[valueKey].tooltip} position="bottom" />
-              )}
+              {columns[valueKey].tooltip && <Tooltip text={columns[valueKey].tooltip} />}
             </td>
             {data.rows.map((row, rowKey) => (
               <td key={rowKey} className="cell-score _text-align-right">
@@ -77,7 +75,7 @@ class Table extends Component {
               className={classnames('header-cell', { '_text-align-right': columnIndex > 0 })}
             >
               {column.name}
-              {column.tooltip && <Tooltip text={column.tooltip} position="bottom" />}
+              {column.tooltip && <Tooltip text={column.tooltip} />}
             </th>
           ))}
         </tr>
