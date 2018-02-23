@@ -11,30 +11,21 @@ module Api
         class IndChainBuilder < AbstractChainBuilder
           checks :has_exactly_one,
                  association: :ind_property,
-                 link: {method: :admin_ind_properties_path}
+                 link: :index
           checks :declared_temporal_matches_data,
                  association: :node_inds,
                  attribute: :is_temporal_on_actor_profile,
                  on: :ind_property,
-                 link: {
-                   method: :admin_ind_property_path,
-                   member: :ind_property
-                 }
+                 link: :edit
           checks :declared_temporal_matches_data,
                  association: :node_inds,
                  attribute: :is_temporal_on_place_profile,
                  on: :ind_property,
-                 link: {
-                   method: :admin_ind_property_path,
-                   member: :ind_property
-                 }
+                 link: :edit
           checks :attribute_present,
                  attribute: :tooltip_text,
                  on: :ind_property,
-                 link: {
-                   method: :admin_ind_property_path,
-                   member: :ind_property
-                 },
+                 link: :edit,
                  severity: :warn
 
           def self.build_chain

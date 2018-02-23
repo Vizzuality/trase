@@ -11,31 +11,31 @@ module Api
         class ContextChainBuilder < AbstractChainBuilder
           checks :has_exactly_one,
                  association: :context_property,
-                 link: {method: :admin_context_properties_path}
+                 link: :index
           checks :required_node_types_present
           checks :has_at_least_one_profile,
                  profile_type: Api::V3::Profile::ACTOR,
-                 link: {method: :admin_profiles_path},
+                 link: :index,
                  severity: :warn
           checks :has_at_least_one_profile,
                  profile_type: Api::V3::Profile::PLACE,
-                 link: {method: :admin_profiles_path},
+                 link: :index,
                  severity: :warn
           checks :has_at_least_one,
                  association: :download_attributes,
-                 link: {method: :admin_download_attributes_path}
+                 link: :index
           checks :has_at_least_one,
                  association: :map_attributes,
-                 link: {method: :admin_map_attributes_path}
+                 link: :index
           checks :has_at_least_one,
                  association: :recolor_by_attributes,
-                 link: {method: :admin_recolor_by_attributes_path}
+                 link: :index
           checks :has_at_least_one,
                  association: :resize_by_attributes,
-                 link: {method: :admin_resize_by_attributes_path}
+                 link: :index
           checks :has_at_least_one,
                  association: :contextual_layers,
-                 link: {method: :admin_contextual_layers_path}
+                 link: :index
 
           def self.build_chain
             chain = []

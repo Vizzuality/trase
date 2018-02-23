@@ -10,13 +10,10 @@ module Api
         class ContextualLayerChainBuilder < AbstractChainBuilder
           checks :has_at_least_one,
                  association: :carto_layers,
-                 link: {method: :admin_carto_layers_path}
+                 link: :index
           checks :attribute_present,
                  attribute: :tooltip_text,
-                 link: {
-                   method: :admin_contextual_layer_path,
-                   member: true
-                 },
+                 link: :edit,
                  severity: :warn
 
           def self.build_chain(context)

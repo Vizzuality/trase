@@ -13,26 +13,17 @@ module Api
         class RecolorByAttributeChainBuilder < AbstractChainBuilder
           checks :declared_years_match_data,
                  association: :recolor_by_ind,
-                 link: {
-                   method: :admin_recolor_by_attribute_path,
-                   member: true
-                 }
+                 link: :edit
           checks :declared_years_match_data,
                  association: :recolor_by_qual,
-                 link: {
-                   method: :admin_recolor_by_attribute_path,
-                   member: true
-                 }
+                 link: :edit
           checks :attribute_present,
                  attribute: :tooltip_text,
-                 link: {
-                   method: :admin_recolor_by_attribute_path,
-                   member: true
-                 },
+                 link: :edit,
                  severity: :warn
           checks :has_exactly_one_of,
                  associations: [:recolor_by_ind, :recolor_by_qual],
-                 link: {method: :admin_recolor_by_attributes_path}
+                 link: :index
 
           def self.build_chain(context)
             chain = []

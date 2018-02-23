@@ -5,8 +5,6 @@ module Api
     module DatabaseValidation
       module ChainBuilders
         class AbstractChainBuilder
-          delegate :url_helpers, to: 'Rails.application.routes'
-
           # @param object the object to validate
           # @param errors_list [Api::V3::DatabaseValidation::ErrorsList]
           def initialize(object, errors_list)
@@ -41,26 +39,8 @@ module Api
               validation_class = Api::V3::DatabaseValidation::Checks.const_get(
                 validation[:validation].to_s.camelize
               )
-              options = validation[:options].dup
-              link = generate_link(options.delete(:link))
-              options[:link] = link if link.present?
-              chain << validation_class.new(@object, options)
+              chain << validation_class.new(@object, validation[:options])
             end
-          end
-
-          def generate_link(options)
-            return nil unless options && options.key?(:method)
-            unless options.key?(:member) # collection route
-              return url_helpers.send(options[:method])
-            end
-            member =
-              if options[:member].is_a?(Symbol) &&
-                @object.respond_to?(options[:member])
-                @object.send(options[:member])
-              else
-                @object
-              end
-            link = url_helpers.send(options[:method], member)
           end
         end
       end

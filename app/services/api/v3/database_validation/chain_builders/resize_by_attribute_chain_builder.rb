@@ -11,20 +11,14 @@ module Api
         class ResizeByAttributeChainBuilder < AbstractChainBuilder
           checks :declared_years_match_data,
                  association: :resize_by_quant,
-                 link: {
-                   method: :admin_resize_by_attribute_path,
-                   member: true
-                 }
+                 link: :edit
           checks :attribute_present,
                  attribute: :tooltip_text,
-                 link: {
-                   method: :admin_resize_by_attribute_path,
-                   member: true
-                 },
+                 link: :edit,
                  severity: :warn
           checks :has_exactly_one,
                  association: :resize_by_quant,
-                 link: {method: :admin_resize_by_attributes_path}
+                 link: :index
 
           def self.build_chain(context)
             chain = []

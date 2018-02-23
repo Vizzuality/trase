@@ -9,7 +9,7 @@ module Api
         class ContextNodeTypeChainBuilder < AbstractChainBuilder
           checks :has_exactly_one,
                  association: :context_node_type_property,
-                 link: {method: :admin_context_node_type_properties_path}
+                 link: :index
 
           def self.build_chain(context)
             chain = []

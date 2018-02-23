@@ -9,6 +9,7 @@ module Api
           # @option options [symbol] :profile_type
           def initialize(object, options)
             super(object, options)
+            @association = :profiles
             @profile_type = options[:profile_type]
           end
 

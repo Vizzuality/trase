@@ -6,11 +6,11 @@ module Api
     module DatabaseValidation
       module Checks
         class AbstractCheck
+          delegate :url_helpers, to: 'Rails.application.routes'
+
           # @param object [subclass of Api::V3::BaseModel]
           # @param options [Hash]
-          # @option options [symbol] :link optional link to relevant section of
-          #   the admin tool; TODO: ideally this wouldn't need to be passed as
-          #   a param, should be possible to discover the admin link
+          # @option options [symbol] :link optional +:index+ or +:edit+
           # @option options [symbol] :severity either +:error+ (default) or +:warn+
           def initialize(object, options = {})
             @object = object
@@ -38,9 +38,25 @@ module Api
             {
               object: @object,
               type: self.class.name,
-              link: @link,
+              link: generate_link,
               severity: @severity
             }
+          end
+
+          def generate_link
+            return generate_edit_link if @link == :edit
+            return nil unless @link == :index && @association.present?
+            url_helpers.url_for([:admin, @association, only_path: true])
+          end
+
+          def generate_edit_link
+            return nil unless @link == :edit
+            object = @on_object || @object
+            object_class = object.class.name
+            object_name = object_class.demodulize.underscore
+            url_helpers.url_for(
+              [:edit, :admin, object_name, id: object.id, only_path: true]
+            )
           end
         end
       end

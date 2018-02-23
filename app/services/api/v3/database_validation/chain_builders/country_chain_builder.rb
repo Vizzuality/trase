@@ -9,7 +9,7 @@ module Api
         class CountryChainBuilder < AbstractChainBuilder
           checks :has_exactly_one,
                  association: :country_property,
-                 link: {method: :admin_country_properties_path}
+                 link: :index
 
           def self.build_chain
             chain = []

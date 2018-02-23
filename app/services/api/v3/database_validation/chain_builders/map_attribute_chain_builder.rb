@@ -10,19 +10,13 @@ module Api
         class MapAttributeChainBuilder < AbstractChainBuilder
           checks :declared_years_match_data,
                  association: :map_ind,
-                 link: {
-                   method: :admin_map_attribute_path,
-                   member: true
-                 }
+                 link: :edit
           checks :declared_years_match_data,
                  association: :map_quant,
-                 link: {
-                   method: :admin_map_attribute_path,
-                   member: true
-                 }
+                 link: :edit
           checks :has_exactly_one_of,
                  associations: [:map_ind, :map_quant],
-                 link: {method: :admin_map_attributes_path}
+                 link: :index
 
           def self.build_chain(context)
             chain = []

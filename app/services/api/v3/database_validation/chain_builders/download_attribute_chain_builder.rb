@@ -10,19 +10,13 @@ module Api
         class DownloadAttributeChainBuilder < AbstractChainBuilder
           checks :declared_years_match_data,
                  association: :download_quant,
-                 link: {
-                   method: :admin_download_attribute_path,
-                   member: true
-                 }
+                 link: :edit
           checks :declared_years_match_data,
                  association: :download_qual,
-                 link: {
-                   method: :admin_download_attribute_path,
-                   member: true
-                 }
+                 link: :edit
           checks :has_exactly_one_of,
                  associations: [:download_qual, :download_quant],
-                 link: {method: :admin_download_attributes_path}
+                 link: :index
 
           def self.build_chain(context)
             chain = []
