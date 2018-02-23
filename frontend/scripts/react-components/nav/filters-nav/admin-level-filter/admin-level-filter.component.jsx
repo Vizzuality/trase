@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions,jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
-import Dropdown from 'react-components/tool/nav/dropdown.component';
+import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -41,9 +41,9 @@ class AdminLevelFilter extends Component {
               ? selectedFilter.name.toLowerCase()
               : 'All'}
           </span>
-          <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
+          <FiltersDropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
             <ul className="dropdown-list -medium">{this.renderOptions()}</ul>
-          </Dropdown>
+          </FiltersDropdown>
         </div>
       </div>
     );

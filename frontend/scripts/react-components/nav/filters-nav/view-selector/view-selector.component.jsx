@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions,jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import Tooltip from 'react-components/tool/help-tooltip.component';
-import Dropdown from 'react-components/tool/nav/dropdown.component';
+import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
@@ -30,13 +30,13 @@ function ViewSelector({
           <Tooltip text={tooltips.sankey.nav.view.main} position="top right" />
         </span>
         <span className="dropdown-title -small">{title}</span>
-        <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
+        <FiltersDropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
           <ul className="dropdown-list">
             <li className="dropdown-item" onClick={() => onSelected(!isDetailedView)}>
               {other}
             </li>
           </ul>
-        </Dropdown>
+        </FiltersDropdown>
       </div>
     </div>
   );

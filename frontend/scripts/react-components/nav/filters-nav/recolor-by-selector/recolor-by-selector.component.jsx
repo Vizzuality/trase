@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions,jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Tooltip from 'react-components/tool/help-tooltip.component';
+import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
+import RecolorByNodeLegendSummary from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-node-legend-summary/recolor-by-node-legend-summary.container';
 import cx from 'classnames';
 import isNumber from 'lodash/isNumber';
-import Tooltip from 'react-components/tool/help-tooltip.component';
-import Dropdown from 'react-components/tool/nav/dropdown.component';
-import RecolorByNodeLegendSummary from 'containers/tool/nav/recolor-by-node-legend-summary.container';
-import PropTypes from 'prop-types';
 
 const id = 'recolor-by';
 
@@ -152,9 +152,9 @@ class RecolorBySelector extends Component {
                 text={tooltips.sankey.nav.colorBy[selectedRecolorBy.name]}
               />
             )}
-          <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
+          <FiltersDropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
             <ul className="dropdown-list -large">{recolorByElements}</ul>
-          </Dropdown>
+          </FiltersDropdown>
         </div>
         {legendSummary}
       </div>

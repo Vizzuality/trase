@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import cx from 'classnames';
 import Tooltip from 'react-components/tool/help-tooltip.component';
-import Dropdown from 'react-components/tool/nav/dropdown.component';
+import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
 import PropTypes from 'prop-types';
 
 const id = 'resize-by';
@@ -75,9 +75,9 @@ class ResizeBySelector extends Component {
                 text={tooltips.sankey.nav.resizeBy[selectedResizeBy.name]}
               />
             )}
-          <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
+          <FiltersDropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
             <ul className="dropdown-list -medium">{this.renderResizeByElements()}</ul>
-          </Dropdown>
+          </FiltersDropdown>
         </div>
       </div>
     );

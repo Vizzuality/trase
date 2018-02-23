@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Tooltip from 'react-components/tool/help-tooltip.component';
-import Dropdown from 'react-components/tool/nav/dropdown.component';
+import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
 import cx from 'classnames';
 import 'styles/components/shared/country-commodities-react.scss';
 import 'styles/components/shared/dimensional-selector-react.scss';
@@ -176,7 +176,7 @@ class ContextSelector extends Component {
                 {selectedContextCountry.toLowerCase()} - {selectedContextCommodity.toLowerCase()}
               </span>
             )}
-          <Dropdown
+          <FiltersDropdown
             id={id}
             currentDropdown={currentDropdown}
             onClickOutside={toggleContextSelectorVisibility}
@@ -191,7 +191,7 @@ class ContextSelector extends Component {
                 </div>
               </div>
             </div>
-          </Dropdown>
+          </FiltersDropdown>
         </div>
       </div>
     );

@@ -15,11 +15,11 @@ class FiltersNav extends React.PureComponent {
   static isActiveLink(match, location, link) {
     const { type, query = {} } = location;
     const { payload = {}, type: linkType } = link.page;
-    const isActive =
+    return (
       type === linkType &&
       !!(query.state && query.state.isMapVisible) ===
-        !!(payload.query && payload.query.isMapVisible);
-    return isActive;
+        !!(payload.query && payload.query.isMapVisible)
+    );
   }
 
   constructor(props) {
