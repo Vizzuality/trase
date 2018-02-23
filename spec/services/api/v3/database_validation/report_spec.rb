@@ -36,9 +36,12 @@ RSpec.describe Api::V3::DatabaseValidation::Report do
     end
   end
 
-  context 'when configuration incomplete' do
-    let!(:context) {
-      FactoryBot.create(:api_v3_context)
+  context 'when configuration incomplete or incorrect' do
+    let!(:context) { FactoryBot.create(:api_v3_context) }
+    let!(:context_property) {
+      tmp = FactoryBot.create(:api_v3_context_property, context: context)
+      tmp.update_attribute(:default_basemap, :zonk) # skip validations
+      tmp
     }
     let!(:qual) { FactoryBot.create(:api_v3_qual) }
     let!(:quant) { FactoryBot.create(:api_v3_quant) }
