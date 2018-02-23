@@ -12,6 +12,16 @@ import LocaleSelector from 'react-components/nav/locale-selector/locale-selector
 import AdminLevelFilter from 'react-components/nav/filters-nav/admin-level-filter/admin-level-filter.container';
 
 class FiltersNav extends React.PureComponent {
+  static isActiveLink(match, location, link) {
+    const { type, query = {} } = location;
+    const { payload = {}, type: linkType } = link.page;
+    const isActive =
+      type === linkType &&
+      !!(query.state && query.state.isMapVisible) ===
+        !!(payload.query && payload.query.isMapVisible);
+    return isActive;
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -37,6 +47,7 @@ class FiltersNav extends React.PureComponent {
             itemClassName="filters-nav-item"
             linkClassName="filters-nav-link"
             linkActiveClassName="filters-nav-link -active"
+            isActiveLink={FiltersNav.isActiveLink}
           />
         </div>
         <div className="filters-nav-right-section">
@@ -50,20 +61,27 @@ class FiltersNav extends React.PureComponent {
   }
 
   renderMenuClosed() {
-    const { children, selectedContext } = this.props;
+    const { selectedContext } = this.props;
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
           <ContextSelector className="filters-nav-item" />
-          <AdminLevelFilter className="filters-nav-item" />
-          {selectedContext && <YearsSelector className="filters-nav-item" />}
+          {selectedContext && (
+            <React.Fragment>
+              <AdminLevelFilter className="filters-nav-item" />
+              <YearsSelector className="filters-nav-item" />
+            </React.Fragment>
+          )}
         </div>
         <div className="filters-nav-right-section">
-          <ResizeBySelector className="filters-nav-item" />
-          <RecolorBySelector className="filters-nav-item" />
-          <ViewSelector className="filters-nav-item" />
+          {selectedContext && (
+            <React.Fragment>
+              <ResizeBySelector className="filters-nav-item" />
+              <RecolorBySelector className="filters-nav-item" />
+              <ViewSelector className="filters-nav-item" />
+            </React.Fragment>
+          )}
           <ToolSearch className="filters-nav-item" />
-          {children}
         </div>
       </React.Fragment>
     );
@@ -89,7 +107,6 @@ class FiltersNav extends React.PureComponent {
 }
 
 FiltersNav.propTypes = {
-  children: PropTypes.element,
   links: PropTypes.array.isRequired,
   selectedContext: PropTypes.object
 };
