@@ -16,11 +16,11 @@ module Api
         end
 
         def error_count
-          @errors.reject { |e| e[:severity] == :warn }.count
+          @errors.reject { |error| error[:severity] == :warn }.count
         end
 
         def warning_count
-          @errors.select { |e| e[:severity] == :warn }.count
+          @errors.select { |error| error[:severity] == :warn }.count
         end
 
         def empty?

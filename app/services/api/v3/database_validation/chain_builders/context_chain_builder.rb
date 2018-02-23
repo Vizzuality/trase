@@ -38,7 +38,6 @@ module Api
                  link: :index
           checks :active_record_check, on: :context_property, link: :edit
 
-
           def self.build_chain
             chain = []
             Api::V3::Context.all.each do |context|

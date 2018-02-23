@@ -24,6 +24,9 @@ module Api
           # for the attribute in question
           # @return (see AbstractCheck#passing?)
           def passing?
+            declared_years = @object.years
+            return true if declared_years.nil?
+
             # @association is e.g. :resize_by_quant
             associated_object = @object.send(@association)
             return true unless associated_object.present?
@@ -35,8 +38,7 @@ module Api
             # flow attributes table
             values_class = ('Api::V3::' + "flow_#{attribute_name}".camelize).
               constantize
-            return true if @object.years.nil?
-            declared_years = @object.years
+
             actual_years = values_class.
               select('flows.year').
               joins(:flow).

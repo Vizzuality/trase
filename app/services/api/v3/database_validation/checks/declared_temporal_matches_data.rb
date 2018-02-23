@@ -26,11 +26,13 @@ module Api
           def passing?
             return true unless @on_object.present?
             @is_temporal = @on_object.send(@attribute)
+            tmp = @object.send(@association)
             if @is_temporal
-              @object.send(@association).where('year IS NULL').empty?
+              tmp = tmp.where('year IS NULL')
             else
-              @object.send(@association).where('year IS NOT NULL').empty?
+              tmp = tmp.where('year IS NOT NULL')
             end
+            tmp.empty?
           end
 
           private

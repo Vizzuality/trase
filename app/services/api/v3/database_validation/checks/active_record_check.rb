@@ -29,7 +29,7 @@ module Api
 
           # @return (see AbstractCheck#passing?)
           def passing?
-            @validated_object&.valid?
+            @validated_object.valid?
           end
         end
       end
