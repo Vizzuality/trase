@@ -1,14 +1,11 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions,jsx-a11y/no-noninteractive-element-interactions */
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
+import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
 import Tooltip from 'react-components/tool/help-tooltip.component';
-import Dropdown from 'react-components/tool/nav/dropdown.component';
 import 'styles/components/shared/country-commodities-react.scss';
 import 'styles/components/shared/dimensional-selector-react.scss';
-import 'styles/components/tool/country-commodities-react.scss';
-import 'styles/components/tool/dimensional-selector-react.scss';
 
 const id = 'country-commodity';
 
@@ -175,7 +172,13 @@ class ContextSelector extends Component {
           <span className="dropdown-title">
             {selectedContextCountry.toLowerCase()} - {selectedContextCommodity.toLowerCase()}
           </span>
-          <Dropdown
+          {selectedContextCountry &&
+          selectedContextCommodity && (
+            <span className="dropdown-title">
+                {selectedContextCountry.toLowerCase()} - {selectedContextCommodity.toLowerCase()}
+              </span>
+          )}
+          <FiltersDropdown
             id={id}
             currentDropdown={currentDropdown}
             onClickOutside={toggleContextSelectorVisibility}
@@ -190,7 +193,7 @@ class ContextSelector extends Component {
                 </div>
               </div>
             </div>
-          </Dropdown>
+          </FiltersDropdown>
         </div>
       </div>
     );

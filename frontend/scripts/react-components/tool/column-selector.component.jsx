@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions,jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import Dropdown from 'react-components/tool/nav/dropdown.component';
-import RecolorByNodeLegendSummary from 'containers/tool/nav/recolor-by-node-legend-summary.container';
-import classNames from 'classnames';
+import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
+import RecolorByNodeLegendSummary from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-node-legend-summary/recolor-by-node-legend-summary.container';
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 
 function columnSelector({
@@ -24,18 +24,18 @@ function columnSelector({
 
   return (
     <div
-      className={classNames('js-dropdown c-dropdown -column-selector', {
+      className={cx('js-dropdown c-dropdown -column-selector', {
         '-hide-only-child': hasSingleElement
       })}
       onClick={() => {
         onToggle(id);
       }}
     >
-      <span className={classNames('dropdown-title', { '-is-open': currentDropdown === id })}>
+      <span className={cx('dropdown-title', { '-is-open': currentDropdown === id })}>
         {selectedColumnItem.name}
       </span>
       {nodesColoredAtColumn === group && <RecolorByNodeLegendSummary />}
-      <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
+      <FiltersDropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
         <ul className="dropdown-list">
           {columnItems.map((columnItem, index) => (
             <li
@@ -47,7 +47,7 @@ function columnSelector({
             </li>
           ))}
         </ul>
-      </Dropdown>
+      </FiltersDropdown>
     </div>
   );
 }

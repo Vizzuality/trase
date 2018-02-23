@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Dropdown from 'react-components/tool/nav/dropdown.component';
+import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
 import YearsThumb from 'react-components/nav/filters-nav/years-selector/years-thumb.component';
 import cx from 'classnames';
 import 'styles/components/tool/years-slider.scss';
@@ -126,7 +126,11 @@ class YearsSelector extends Component {
             year{selectedYears[0] !== selectedYears[1] && <span>s</span>}
           </span>
           <span className="dropdown-title">{title}</span>
-          <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={this.props.onToggle}>
+          <FiltersDropdown
+            id={id}
+            currentDropdown={currentDropdown}
+            onClickOutside={this.props.onToggle}
+          >
             <div className="dropdown-list">
               <div
                 className="c-years-slider"
@@ -150,7 +154,7 @@ class YearsSelector extends Component {
                 </ul>
               </div>
             </div>
-          </Dropdown>
+          </FiltersDropdown>
         </div>
       </div>
     );
