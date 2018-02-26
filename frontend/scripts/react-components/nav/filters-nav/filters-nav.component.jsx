@@ -38,11 +38,19 @@ class FiltersNav extends React.PureComponent {
 
   renderMenuOpened() {
     const { links } = this.props;
+    const decoratedLinks = [
+      {
+        name: 'Home',
+        page: 'home'
+      },
+      ...links
+    ];
+
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
           <NavLinksList
-            links={links}
+            links={decoratedLinks}
             listClassName="filters-nav-submenu-list"
             itemClassName="filters-nav-item"
             linkClassName="filters-nav-link"
