@@ -1,20 +1,21 @@
 /* eslint-disable jsx-a11y/mouse-events-have-key-events,import/no-extraneous-dependencies */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import 'styles/components/profiles/mini-sankey.scss';
-import formatValue from 'utils/formatValue';
 import { interpolateNumber as d3InterpolateNumber } from 'd3-interpolate';
+
+import formatValue from 'utils/formatValue';
 import wrapSVGText from 'utils/wrapSVGText';
 import i18n from 'utils/transifex';
+import { Responsive } from 'react-components/shared/responsive.hoc';
+
+import 'styles/components/profiles/mini-sankey.scss';
 
 const BASE_HEIGHT = 400;
-const TOTAL_WIDTH = 1015;
-const SANKEY_WIDTH = 580;
+const TEXT_WIDTH_PERCENTAGE = 15;
+const TEXT_MIN_WIDTH = 100;
 const NODE_WIDTH = 10;
 const NODE_V_SPACE = 15;
 const TEXT_LINE_HEIGHT = 16;
-const SANKEY_X_START = TOTAL_WIDTH / 2 - SANKEY_WIDTH / 2;
-const SANKEY_X_END = SANKEY_X_START + SANKEY_WIDTH;
 
 class MiniSankey extends Component {
   static roundHeight(height) {
@@ -26,17 +27,25 @@ class MiniSankey extends Component {
   render() {
     const {
       data,
-      targetLink,
-      showTooltipCallback,
       hideTooltipCallback,
-      year,
-      onLinkClick
+      onLinkClick,
+      showTooltipCallback,
+      targetLink,
+      width,
+      year
     } = this.props;
     const totalHeight = data.targetNodes.reduce(
       (total, node) => total + Math.ceil(node.height * BASE_HEIGHT) + NODE_V_SPACE,
       0
     );
     const startY = totalHeight / 2 - BASE_HEIGHT / 2;
+
+    const leftTextRotate = width < 760 ? '-90' : '0';
+    const rightTextWidth = Math.max(width * TEXT_WIDTH_PERCENTAGE / 100, TEXT_MIN_WIDTH);
+    const leftTextWidth = width < 760 ? 30 : rightTextWidth;
+    const sankeyWidth = width - (leftTextWidth + rightTextWidth);
+    const sankeyXStart = leftTextWidth;
+    const sankeyXEnd = sankeyXStart + sankeyWidth;
 
     let currentStartNodeY = startY;
     let currentEndNodeY = 0;
@@ -69,20 +78,23 @@ class MiniSankey extends Component {
 
     return (
       <div className="mini-sankey">
-        <svg style={{ height: totalHeight, width: TOTAL_WIDTH }}>
+        <svg style={{ height: totalHeight, width }}>
           <linearGradient id="gradient" x1="0" x2="1" y1="0" y2="0">
             <stop offset="0%" className="gradient-color-start" />
             <stop offset="100%" className="gradient-color-end" />
           </linearGradient>
 
-          <g transform={`translate(${SANKEY_X_START}, ${startY})`}>
+          <g transform={`translate(${sankeyXStart}, ${startY})`}>
             <rect width={NODE_WIDTH} height={BASE_HEIGHT} className="start" />
-            <text className="start" transform={`translate(-20, ${5 + BASE_HEIGHT / 2})`}>
+            <text
+              className="start"
+              transform={`translate(-20, ${5 + BASE_HEIGHT / 2}) rotate(${leftTextRotate})`}
+            >
               {data.name}
             </text>
           </g>
 
-          <g transform={`translate(${SANKEY_X_END}, 0)`}>
+          <g transform={`translate(${sankeyXEnd}, 0)`}>
             {nodes.map((node, index) => (
               <g
                 key={index}
@@ -113,10 +125,10 @@ class MiniSankey extends Component {
             ))}
           </g>
 
-          <g transform={`translate(${SANKEY_X_START}, 0)`}>
+          <g transform={`translate(${sankeyXStart}, 0)`}>
             {nodes.map((node, index) => {
               const x0 = NODE_WIDTH;
-              const x1 = SANKEY_X_END - SANKEY_X_START;
+              const x1 = sankeyXEnd - sankeyXStart;
               const xi = d3InterpolateNumber(x0, x1);
               const x2 = xi(0.6);
               const x3 = xi(0.4);
@@ -153,11 +165,12 @@ class MiniSankey extends Component {
 
 MiniSankey.propTypes = {
   data: PropTypes.object,
-  targetLink: PropTypes.string,
-  showTooltipCallback: PropTypes.func,
   hideTooltipCallback: PropTypes.func,
   onLinkClick: PropTypes.func,
+  showTooltipCallback: PropTypes.func,
+  targetLink: PropTypes.string,
+  width: PropTypes.number,
   year: PropTypes.number
 };
 
-export default MiniSankey;
+export default Responsive(MiniSankey);
