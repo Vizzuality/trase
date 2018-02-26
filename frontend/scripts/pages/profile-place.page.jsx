@@ -135,7 +135,6 @@ const _build = (data, year, onLinkClick, store) => {
     render(
       <Provider store={store}>
         <Line
-          className=".js-line"
           data={data.trajectory_deforestation}
           xValues={data.trajectory_deforestation.included_years}
           settings={{

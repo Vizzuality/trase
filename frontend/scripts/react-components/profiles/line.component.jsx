@@ -10,9 +10,12 @@ import { extent as d3_extent } from 'd3-array';
 import { area as d3_area, line as d3_line } from 'd3-shape';
 import { format as d3_format } from 'd3-format';
 import { timeFormat as d3_timeFormat } from 'd3-time-format';
+
 import { LINE_LABEL_HEIGHT } from 'constants';
 import abbreviateNumber from 'utils/abbreviateNumber';
 import i18n from 'utils/transifex';
+import { Responsive } from 'react-components/shared/responsive.hoc';
+
 import 'styles/components/profiles/line.scss';
 
 class Line extends Component {
@@ -59,20 +62,18 @@ class Line extends Component {
   }
 
   build() {
-    const { className, data, xValues, settings } = this.props;
+    const { data, xValues, settings } = this.props;
 
-    const container = document.querySelector(className);
-    const elem = document.querySelector(`.${this.key}`);
     const { margin, ticks } = settings;
-    const width = container.clientWidth - margin.left - margin.right;
+    const width = this.props.width - margin.left - margin.right;
     const height = settings.height - margin.top - margin.bottom;
     this.showTooltipCallback = settings.showTooltipCallback;
     this.hideTooltipCallback = settings.hideTooltipCallback;
     // const allYValues = [].concat.apply([], data.lines.map(line => line.values));
     const allYValues = [].concat(...data.lines.map(line => line.values));
 
-    elem.innerHTML = '';
-    const d3Container = d3_select(elem)
+    this.chart.innerHTML = '';
+    const d3Container = d3_select(this.chart)
       .append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
@@ -250,15 +251,22 @@ class Line extends Component {
   }
 
   render() {
-    return <div className={this.key} width="100%" />;
+    return (
+      <div
+        ref={elem => {
+          this.chart = elem;
+        }}
+        width="100%"
+      />
+    );
   }
 }
 
 Line.propTypes = {
-  className: PropTypes.string,
   data: PropTypes.object,
-  xValues: PropTypes.array,
-  settings: PropTypes.object
+  settings: PropTypes.object,
+  width: PropTypes.number,
+  xValues: PropTypes.array
 };
 
-export default Line;
+export default Responsive(Line);
