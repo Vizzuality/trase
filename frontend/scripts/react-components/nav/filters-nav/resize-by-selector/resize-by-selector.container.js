@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { toggleDropdown } from 'actions/app.actions';
 import { selectResizeBy } from 'actions/tool.actions';
-import ResizeBySelector from './resize-by-selector.component';
+import ResizeBySelector from 'react-components/nav/filters-nav/resize-by-selector/resize-by-selector.component';
 
 const mapStateToProps = state => ({
   tooltips: state.app.tooltips,
