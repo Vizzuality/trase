@@ -169,9 +169,6 @@ class ContextSelector extends Component {
             Country - Commodity
             <Tooltip constraint="window" text={tooltips.sankey.nav.context.main} />
           </span>
-          <span className="dropdown-title">
-            {selectedContextCountry.toLowerCase()} - {selectedContextCommodity.toLowerCase()}
-          </span>
           {selectedContextCountry &&
           selectedContextCommodity && (
             <span className="dropdown-title">
