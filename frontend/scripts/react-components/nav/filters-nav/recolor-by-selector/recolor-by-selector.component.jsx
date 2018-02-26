@@ -66,9 +66,7 @@ class RecolorBySelector extends Component {
       >
         <div className="dropdown-item-title">
           {recolorBy.label}
-          {recolorBy.description && (
-            <Tooltip position="bottom right" text={recolorBy.description} />
-          )}
+          {recolorBy.description && <Tooltip constraint="window" text={recolorBy.description} />}
         </div>
         <div className="dropdown-item-legend-container">
           {recolorBy.minValue && (
@@ -141,13 +139,13 @@ class RecolorBySelector extends Component {
         >
           <span className="dropdown-label">
             Recolour by
-            <Tooltip position="top right" text={tooltips.sankey.nav.colorBy.main} />
+            <Tooltip constraint="window" text={tooltips.sankey.nav.colorBy.main} />
           </span>
           <span className="dropdown-title -small">{selectedRecolorBy.label || 'Selection'}</span>
           {selectedRecolorBy.name &&
             tooltips.sankey.nav.colorBy[selectedRecolorBy.name] && (
               <Tooltip
-                position="bottom right"
+                constraint="window"
                 floating
                 text={tooltips.sankey.nav.colorBy[selectedRecolorBy.name]}
               />

@@ -1,12 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-
-import formatValue from 'utils/formatValue';
-import { UNITLESS_UNITS } from 'constants';
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import Link from 'redux-first-router-link';
-import 'styles/components/profiles/area-table.scss';
 import PropTypes from 'prop-types';
+
+import formatValue from 'utils/formatValue';
+import { UNITLESS_UNITS } from 'constants';
+import Tooltip from 'react-components/tool/help-tooltip.component';
+
+import 'styles/components/profiles/area-table.scss';
 
 class Table extends Component {
   renderPlacesTableHeader() {
@@ -28,6 +30,7 @@ class Table extends Component {
 
   renderPlacesTable() {
     const data = this.props.data;
+    const columns = data.included_columns;
 
     return (
       <tbody>
@@ -35,21 +38,22 @@ class Table extends Component {
           <tr key={valueKey} className="table-row">
             <td className="cell-name">
               <span className="node-name">
-                {data.included_columns[valueKey].name}
-                {data.included_columns[valueKey].year}
+                {columns[valueKey].name}
+                {columns[valueKey].year}
               </span>
+              {columns[valueKey].tooltip && <Tooltip text={columns[valueKey].tooltip} />}
             </td>
             {data.rows.map((row, rowKey) => (
               <td key={rowKey} className="cell-score _text-align-right">
                 <span
                   className="unit"
                   data-unit={
-                    row.have_unit && !UNITLESS_UNITS.includes(data.included_columns[valueKey].unit)
-                      ? data.included_columns[valueKey].unit
+                    row.have_unit && !UNITLESS_UNITS.includes(columns[valueKey].unit)
+                      ? columns[valueKey].unit
                       : null
                   }
                 >
-                  {formatValue(row.values[valueKey], data.included_columns[valueKey].name)}
+                  {formatValue(row.values[valueKey], columns[valueKey].name)}
                 </span>
               </td>
             ))}
@@ -71,6 +75,7 @@ class Table extends Component {
               className={classnames('header-cell', { '_text-align-right': columnIndex > 0 })}
             >
               {column.name}
+              {column.tooltip && <Tooltip text={column.tooltip} />}
             </th>
           ))}
         </tr>

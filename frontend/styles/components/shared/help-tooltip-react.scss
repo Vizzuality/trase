@@ -21,46 +21,41 @@
     font-size: 12px;
     margin-left: 4px;
   }
+}
 
-  .tooltip-react-content {
+.tooltip-react-content {
+  position: relative;
+  top: 5px;
+  width: 300px;
+  z-index: $z-tooltip;
+  background: $charcoal-grey;
+  font-family: $font-family-2;
+  font-size: $font-size-regular;
+  font-weight: 300;
+  line-height: 1.67;
+  color: $white;
+  padding: 16px;
+  box-shadow: 0 10px 20px 0 rgba($charcoal-grey, .2);
+  text-transform: none;
+  text-align: left;
+  pointer-events: none;
+
+  &::before {
+    top: -10px;
+    left: 50%;
+    border: solid transparent;
+    content: ' ';
+    height: 0;
+    width: 0;
     position: absolute;
-    width: 300px;
-    z-index: $z-tooltip;
-    background: $charcoal-grey;
-    font-family: $font-family-2;
-    font-size: $font-size-regular;
-    font-weight: 300;
-    line-height: 1.67;
-    color: $white;
-    padding: 16px;
-    box-shadow: 0 10px 20px 0 rgba($charcoal-grey, .2);
-    text-transform: none;
-    top: 20px;
-    left: -145px;
-
-    &::before {
-      top: -10px;
-      left: 50%;
-      border: solid transparent;
-      content: ' ';
-      height: 0;
-      width: 0;
-      position: absolute;
-      pointer-events: none;
-      border-bottom-color: $charcoal-grey;
-      border-width: 5px;
-    }
-
+    pointer-events: none;
+    border-bottom-color: $charcoal-grey;
+    border-width: 5px;
+    transform: translateX(calc(-50% + 2px));
   }
 
-  &.right {
-    .tooltip-react-content {
-      left: -280px;
+}
 
-      &::before {
-        left: auto;
-        right: 5px;
-      }
-    }
-  }
+.tooltip-element {
+  z-index: $z-tooltip;
 }

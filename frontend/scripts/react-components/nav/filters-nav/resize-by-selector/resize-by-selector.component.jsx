@@ -30,9 +30,7 @@ class ResizeBySelector extends Component {
               onClick={() => onSelected(resizeBy.name)}
             >
               {resizeBy.label.toLowerCase()}
-              {resizeBy.description && (
-                <Tooltip position="bottom right" text={resizeBy.description} />
-              )}
+              {resizeBy.description && <Tooltip constraint="window" text={resizeBy.description} />}
             </li>
           );
         });
@@ -64,13 +62,13 @@ class ResizeBySelector extends Component {
         >
           <span className="dropdown-label">
             Resize by
-            <Tooltip position="top right" text={tooltips.sankey.nav.resizeBy.main} />
+            <Tooltip constraint="window" text={tooltips.sankey.nav.resizeBy.main} />
           </span>
           <span className="dropdown-title -small">{selectedResizeBy.label.toLowerCase()}</span>
           {selectedResizeBy.name &&
             tooltips.sankey.nav.resizeBy[selectedResizeBy.name] && (
               <Tooltip
-                position="bottom right"
+                constraint="window"
                 floating
                 text={tooltips.sankey.nav.resizeBy[selectedResizeBy.name]}
               />

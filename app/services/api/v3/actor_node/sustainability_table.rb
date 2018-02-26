@@ -56,15 +56,10 @@ module Api
             included_columns:
                 [{name: node_type.humanize}] +
                   @attributes.map do |attribute_hash|
-                    attribute_name =
-                      if attribute_hash.key?(:name)
-                        attribute_hash[:name]
-                      else
-                        attribute_hash[:attribute].display_name
-                      end
                     {
-                      name: attribute_name,
-                      unit: attribute_hash[:attribute].unit
+                      name: attribute_hash[:name] || attribute_hash[:attribute].display_name,
+                      unit: attribute_hash[:attribute].unit,
+                      tooltip: attribute_hash[:attribute][:tooltip_text]
                     }
                   end,
             rows: rows

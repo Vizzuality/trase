@@ -27,7 +27,7 @@ function ViewSelector({
       <div className="c-dropdown -small">
         <span className="dropdown-label">
           Change view
-          <Tooltip text={tooltips.sankey.nav.view.main} position="top right" />
+          <Tooltip text={tooltips.sankey.nav.view.main} constraint="window" />
         </span>
         <span className="dropdown-title -small">{title}</span>
         <FiltersDropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>

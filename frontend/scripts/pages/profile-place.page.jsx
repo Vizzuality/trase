@@ -25,13 +25,15 @@ import formatValue from 'utils/formatValue';
 import smoothScroll from 'utils/smoothScroll';
 
 import { GET_PLACE_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParams';
-import { DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
+import { DEFAULT_PROFILE_PAGE_YEAR, TOOLTIPS } from 'constants';
 import Tooltip from 'components/shared/info-tooltip.component';
+import HelpTooltip from 'react-components/tool/help-tooltip.component';
 
 const defaults = {
   country: 'Brazil',
   commodity: 'Soy'
 };
+const tooltips = TOOLTIPS.pages.profilePlace;
 const tooltip = new Tooltip('.js-infowindow');
 
 const TranslatedMiniSankey = withTranslation(MiniSankey);
@@ -386,6 +388,15 @@ export const mount = (root, store) => {
   });
 
   render(
+    <HelpTooltip text={tooltips.soyLand} position="bottom" />,
+    document.getElementById('soy-land-tooltip')
+  );
+  render(
+    <HelpTooltip text={tooltips.soyProduction} position="bottom" />,
+    document.getElementById('soy-production-tooltip')
+  );
+
+  render(
     <Provider store={store}>
       <Footer />
     </Provider>,
@@ -412,6 +423,8 @@ export const unmount = () => {
   unmountComponentAtNode(document.querySelector('.js-line'));
   unmountComponentAtNode(document.querySelector('.js-line-legend'));
   unmountComponentAtNode(document.querySelector('.js-score-table'));
+  unmountComponentAtNode(document.getElementById('soy-land-tooltip'));
+  unmountComponentAtNode(document.getElementById('soy-production-tooltip'));
   unmountComponentAtNode(document.getElementById('year-dropdown'));
   unmountComponentAtNode(document.getElementById('nav'));
   unmountComponentAtNode(document.getElementById('footer'));

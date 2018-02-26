@@ -173,7 +173,7 @@ class ContextSelector extends Component {
           {isContextSelected && (
             <span className="dropdown-label">
               Country - Commodity
-              {tooltipText && <Tooltip text={tooltipText} />}
+              {tooltipText && <Tooltip constraint="window" text={tooltipText} />}
             </span>
           )}
           <span className="dropdown-title">{contextLabel}</span>
