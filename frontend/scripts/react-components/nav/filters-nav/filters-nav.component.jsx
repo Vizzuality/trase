@@ -61,27 +61,31 @@ class FiltersNav extends React.PureComponent {
   }
 
   renderMenuClosed() {
-    const { selectedContext } = this.props;
+    const { selectedContext, isExplore } = this.props;
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
           <ContextSelector className="filters-nav-item" />
           {selectedContext && (
             <React.Fragment>
-              <AdminLevelFilter className="filters-nav-item" />
+              {!isExplore && <AdminLevelFilter className="filters-nav-item" />}
               <YearsSelector className="filters-nav-item" />
             </React.Fragment>
           )}
         </div>
         <div className="filters-nav-right-section">
-          {selectedContext && (
+          {!isExplore && (
             <React.Fragment>
-              <ResizeBySelector className="filters-nav-item" />
-              <RecolorBySelector className="filters-nav-item" />
-              <ViewSelector className="filters-nav-item" />
+              {selectedContext && (
+                <React.Fragment>
+                  <ResizeBySelector className="filters-nav-item" />
+                  <RecolorBySelector className="filters-nav-item" />
+                  <ViewSelector className="filters-nav-item" />
+                </React.Fragment>
+              )}
+              <ToolSearch className="filters-nav-item" />
             </React.Fragment>
           )}
-          <ToolSearch className="filters-nav-item" />
         </div>
       </React.Fragment>
     );
@@ -108,7 +112,8 @@ class FiltersNav extends React.PureComponent {
 
 FiltersNav.propTypes = {
   links: PropTypes.array.isRequired,
-  selectedContext: PropTypes.object
+  selectedContext: PropTypes.object,
+  isExplore: PropTypes.bool
 };
 
 export default FiltersNav;

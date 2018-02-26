@@ -157,25 +157,26 @@ class ContextSelector extends Component {
       currentDropdown,
       selectedContextCountry,
       selectedContextCommodity,
-      dimensions
+      dimensions,
+      defaultContextLabel
     } = this.props;
-
+    const isContextSelected = selectedContextCountry && selectedContextCommodity;
+    const contextLabel = isContextSelected
+      ? `${selectedContextCountry.toLowerCase()} - ${selectedContextCommodity.toLowerCase()}`
+      : defaultContextLabel;
     return (
       <div
         className={cx('c-country-commodities', 'js-dropdown', className)}
         onClick={() => toggleContextSelectorVisibility(id)}
       >
         <div className="c-dropdown -capitalize">
-          <span className="dropdown-label">
-            Country - Commodity
-            {tooltipText && <Tooltip text={tooltipText} />}
-          </span>
-          {selectedContextCountry &&
-            selectedContextCommodity && (
-              <span className="dropdown-title">
-                {selectedContextCountry.toLowerCase()} - {selectedContextCommodity.toLowerCase()}
-              </span>
-            )}
+          {isContextSelected && (
+            <span className="dropdown-label">
+              Country - Commodity
+              {tooltipText && <Tooltip text={tooltipText} />}
+            </span>
+          )}
+          <span className="dropdown-title">{contextLabel}</span>
           <FiltersDropdown
             id={id}
             currentDropdown={currentDropdown}
@@ -208,7 +209,12 @@ ContextSelector.propTypes = {
   currentDropdown: PropTypes.string,
   selectedContextCountry: PropTypes.string,
   selectedContextCommodity: PropTypes.string,
-  dimensions: PropTypes.array
+  dimensions: PropTypes.array,
+  defaultContextLabel: PropTypes.string
+};
+
+ContextSelector.defaultProps = {
+  defaultContextLabel: 'Select a country and commodity'
 };
 
 export default ContextSelector;
