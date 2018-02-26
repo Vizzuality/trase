@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 import NavLinksList from 'react-components/nav/nav-links-list.component';
 import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
@@ -28,12 +27,28 @@ class FiltersNav extends React.PureComponent {
       menuOpen: false
     };
     this.toggleMenu = this.toggleMenu.bind(this);
+    this.renderMenuButton = this.renderMenuButton.bind(this);
     this.renderMenuOpened = this.renderMenuOpened.bind(this);
     this.renderMenuClosed = this.renderMenuClosed.bind(this);
   }
 
   toggleMenu() {
     this.setState(state => ({ menuOpen: !state.menuOpen }));
+  }
+
+  renderMenuButton() {
+    const { menuOpen } = this.state;
+    return menuOpen ? (
+      <button className="c-burger open" onClick={this.toggleMenu}>
+        <span className="ingredient" />
+        <span className="ingredient" />
+        <span className="ingredient" />
+      </button>
+    ) : (
+      <button className="filters-nav-item-logo" onClick={this.toggleMenu}>
+        <img src="/images/logos/logo-trase-small-beta.svg" alt="TRASE" />
+      </button>
+    );
   }
 
   renderMenuOpened() {
@@ -62,7 +77,7 @@ class FiltersNav extends React.PureComponent {
           <div className="filters-nav-item">
             <LocaleSelector />
           </div>
-          <ToolSearch className="filters-nav-item" />
+          <ToolSearch className="filters-nav-item -no-padding" />
         </div>
       </React.Fragment>
     );
@@ -91,7 +106,7 @@ class FiltersNav extends React.PureComponent {
                   <ViewSelector className="filters-nav-item" />
                 </React.Fragment>
               )}
-              <ToolSearch className="filters-nav-item" />
+              <ToolSearch className="filters-nav-item -no-padding" />
             </React.Fragment>
           )}
         </div>
@@ -103,13 +118,7 @@ class FiltersNav extends React.PureComponent {
     const { menuOpen } = this.state;
     return (
       <div className="c-filters-nav">
-        <div className="filters-nav-item">
-          <button className={cx('c-burger', { open: menuOpen })} onClick={this.toggleMenu}>
-            <span className="ingredient" />
-            <span className="ingredient" />
-            <span className="ingredient" />
-          </button>
-        </div>
+        <div className="filters-nav-item -no-padding">{this.renderMenuButton()}</div>
         <div className="filters-nav-section-container">
           {menuOpen ? this.renderMenuOpened() : this.renderMenuClosed()}
         </div>
