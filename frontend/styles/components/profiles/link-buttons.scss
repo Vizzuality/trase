@@ -52,6 +52,10 @@
     left: 0;
     right: 0;
     margin: auto;
+
+    @media screen and (max-width: $breakpoint-foundation-medium) {
+      display: none;
+    }
   }
 
   .icon-external-link {

@@ -34,14 +34,26 @@
       flex-basis: calc(100% / 3);
       align-items: center;
     }
+
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      display: none;
+    }
   }
 
   .c-overall-info {
     margin-top: 47px;
+
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      margin-top: 0;
+    }
   }
 
   .c-anchor-buttons {
     padding: 49px 0 46px;
+
+    .columns {
+      margin-bottom: 10px;
+    }
   }
 
   .title {
