@@ -12,16 +12,20 @@ export function Responsive(WrappedComponent) {
         width: null
       };
 
-      this.setWidth = this.setWidth.bind(this);
+      this.onPageResize = debounce(this.onPageResize.bind(this), DEBOUNCE_WAIT);
     }
 
     componentDidMount() {
-      window.addEventListener('resize', debounce(this.setWidth, DEBOUNCE_WAIT));
+      window.addEventListener('resize', this.onPageResize);
       this.setWidth();
     }
 
     componentWillUnmount() {
-      window.removeEventListener('resize', this.setWidth);
+      window.removeEventListener('resize', this.onPageResize);
+    }
+
+    onPageResize() {
+      this.setWidth();
     }
 
     setWidth() {
