@@ -5,6 +5,7 @@ require File.expand_path('../../config/environment', __FILE__)
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'spec_helper'
 require 'rspec/rails'
+
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -46,6 +47,12 @@ RSpec.configure do |config|
     Dictionary::Quant.instance.reset
     Dictionary::Qual.instance.reset
     Dictionary::Ind.instance.reset
+
+    Sidekiq.configure_client do |config|
+      config.client_middleware do |chain|
+        chain.remove SidekiqUniqueJobs::Client::Middleware
+      end
+    end
   end
 
   config.after(:each) do

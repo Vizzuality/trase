@@ -24,10 +24,14 @@
 
   .c-overall-info {
 
-    .stat-item .icon {
-      width: 16px;
-      height: 17px;
-      margin-top: 5px;
+    .stat-item {
+      .value {
+        .icon {
+          width: 16px;
+          height: 17px;
+          margin-top: 5px;
+        }
+      }
     }
 
     .forest-500-score {
@@ -94,6 +98,7 @@
 
     .js-top-municipalities-map {
       height: 400px;
+      overflow: hidden;
 
       svg {
         margin-left: 50px;
@@ -127,5 +132,20 @@
   .municipalities-table,
   .biome-table {
     margin: 24px 0 0;
+  }
+
+  .tooltip-react {
+    width: 15px;
+    height: 15px;
+
+    .tooltip-react-icon {
+      width: 15px;
+      height: 15px;
+      vertical-align: text-bottom;
+    }
+
+    .tooltip-react-content {
+      top: 22px;
+    }
   }
 }

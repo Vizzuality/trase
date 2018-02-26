@@ -874,6 +874,8 @@ definitions:
                         type: string
                       unit:
                         type: string
+                      tooltip:
+                        type: string
                 rows:
                   type: array
                   items:
@@ -904,6 +906,8 @@ definitions:
                     name:
                       type: string
                     legend_name:
+                      type: string
+                    legend_tooltip:
                       type: string
                     type:
                       type: string
@@ -1042,7 +1046,7 @@ definitions:
                       type:
                         type: string
                       style:
-                        type: string 
+                        type: string
               state:
                 type: object
                 properties:
@@ -1069,7 +1073,7 @@ definitions:
                       type:
                         type: string
                       style:
-                        type: string 
+                        type: string
           sustainability:
             type: array
             items:
@@ -1086,6 +1090,8 @@ definitions:
                         type: string
                       unit:
                         type: string
+                      tooltip:
+                        type: string
                 rows:
                   type: array
                   items:
@@ -1100,8 +1106,8 @@ definitions:
                               type: integer
                             value:
                               type: string
-                            
-                
+
+
           companies_sourcing:
             type: object
             properties:

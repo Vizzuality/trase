@@ -167,7 +167,7 @@ class ContextSelector extends Component {
         <div className="c-dropdown -capitalize">
           <span className="dropdown-label">
             Country - Commodity
-            <Tooltip text={tooltips.sankey.nav.context.main} />
+            <Tooltip constraint="window" text={tooltips.sankey.nav.context.main} />
           </span>
           <span className="dropdown-title">
             {selectedContextCountry.toLowerCase()} - {selectedContextCommodity.toLowerCase()}
