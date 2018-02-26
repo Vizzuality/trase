@@ -34,10 +34,6 @@
       flex-basis: calc(100% / 3);
       align-items: center;
     }
-
-    @media screen and (max-width: $breakpoint-foundation-small) {
-      display: none;
-    }
   }
 
   .c-overall-info {

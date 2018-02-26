@@ -1,7 +1,7 @@
 /* eslint-disable no-return-assign,jsx-a11y/no-static-element-interactions,jsx-a11y/no-noninteractive-element-interactions */
 import 'styles/components/shared/dropdown.scss';
 import React, { Component } from 'react';
-import classnames from 'classnames';
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 
 export default class Dropdown extends Component {
@@ -58,7 +58,7 @@ export default class Dropdown extends Component {
     return (
       <div
         ref={ref => (this.ref = ref)}
-        className={classnames('c-dropdown', '-active', {
+        className={cx('c-dropdown', '-active', {
           '-hide-only-child': valueList.length <= 1 && hideOnlyChild
         })}
         data-dropdown="year"
@@ -73,7 +73,7 @@ export default class Dropdown extends Component {
           {value}
         </span>
         <ul
-          className={classnames('js-dropdown-list', 'dropdown-list', {
+          className={cx('js-dropdown-list', 'dropdown-list', {
             'is-hidden': !this.state.isOpen
           })}
         >

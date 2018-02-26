@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
-import classnames from 'classnames';
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
+import Dropdown from 'react-components/shared/dropdown.component';
 import Table from 'react-components/profiles/table.component';
 import Tooltip from 'react-components/tool/help-tooltip.component';
 
@@ -26,10 +27,12 @@ class MultiTable extends Component {
 
   render() {
     const { data, target, type, year, tabsTitle, tabsTitleTooltip } = this.props;
+    const { selectedTableIndex } = this.state;
+    const indicatorNames = data.map(d => d.name);
 
     return (
       <div className="c-multi-table">
-        <ul className="c-area-table-switcher">
+        <ul className="c-area-table-switcher hide-for-small">
           <span>
             {tabsTitle}
             {tabsTitleTooltip && <Tooltip text={tabsTitleTooltip} />}
@@ -37,8 +40,8 @@ class MultiTable extends Component {
           {data.map((elem, index) => (
             <li
               key={index}
-              className={classnames('js-multi-table-switcher', 'tab', {
-                selected: index === this.state.selectedTableIndex
+              className={cx('js-multi-table-switcher', 'tab', {
+                selected: index === selectedTableIndex
               })}
               data-table={`${this.key}_${index}`}
               onClick={() => this._switchTable(index)}
@@ -47,12 +50,20 @@ class MultiTable extends Component {
             </li>
           ))}
         </ul>
+        <div className="c-area-table-switcher-dropdown show-for-small">
+          <Dropdown
+            label={tabsTitle}
+            value={indicatorNames[selectedTableIndex]}
+            valueList={indicatorNames}
+            onValueSelected={name => this._switchTable(indicatorNames.indexOf(name))}
+          />
+        </div>
         {data.map((elem, index) => (
           <div key={index}>
             <div className="tab-title title">{elem.name}</div>
             <div
-              className={classnames('js-multi-table-container', `${this.key}_${index}`, {
-                '-tab-hidden': index !== this.state.selectedTableIndex
+              className={cx('js-multi-table-container', `${this.key}_${index}`, {
+                '-tab-hidden': index !== selectedTableIndex
               })}
             >
               <Table

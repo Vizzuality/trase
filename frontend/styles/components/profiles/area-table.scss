@@ -26,6 +26,7 @@
         line-height: 1.23;
         text-align: left;
         text-transform: uppercase;
+        vertical-align: middle;
       }
     }
 
@@ -135,6 +136,50 @@
         width: 100%;
         height: 2px;
         background-color: $medium-pink;
+      }
+    }
+  }
+}
+
+.js-multi-table-container {
+  overflow-x: scroll;
+}
+
+.c-area-table-switcher-dropdown {
+  display: inline-block;
+  margin-bottom: 20px;
+
+  .c-dropdown {
+
+    > .dropdown-label {
+      margin-bottom: 0 !important;
+      font-size: $font-size-x-regular;
+      line-height: 1em;
+    }
+
+    > .dropdown-title {
+      font-size: $font-size-x-regular;
+      text-transform: uppercase;
+      padding-right: 20px;
+
+      &:after {
+        content: normal;
+      }
+    }
+
+    &.-active {
+      cursor: pointer;
+
+      > .dropdown-title {
+        &::after {
+          content: '';
+          border: 3px solid $medium-pink;
+        }
+      }
+
+      > .dropdown-list {
+        top: 100%;
+        min-width: 140px;
       }
     }
   }
