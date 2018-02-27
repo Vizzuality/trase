@@ -99,13 +99,14 @@
 
 .c-line-legend {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  margin-top: 19px;
 
   > div {
     display: flex;
     align-items: center;
+    margin-top: 19px;
     margin-right: 43px;
 
     .line-style-icon {
@@ -121,6 +122,10 @@
       line-height: 10px;
       color: $charcoal-grey;
       text-transform: uppercase;
+    }
+
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      margin-right: 20px;
     }
   }
 }

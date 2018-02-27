@@ -217,9 +217,10 @@ class Line extends Component {
         return format(value);
       };
     } else {
-      yTickFormat = value => {
+      yTickFormat = (value, idx, arr) => {
         const format = d3_format('0');
-        return format(value);
+        const isLast = idx === arr.length - 1;
+        return `${format(value)}${isLast ? data.unit : ''}`;
       };
       xTickFormat = value => {
         const format = d3_timeFormat('%Y');

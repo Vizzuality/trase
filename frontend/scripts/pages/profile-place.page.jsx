@@ -130,11 +130,11 @@ const _build = (data, year, onLinkClick, store) => {
           data={data.trajectory_deforestation}
           xValues={data.trajectory_deforestation.included_years}
           settings={{
-            margin: { top: 0, right: 40, bottom: 30, left: 99 },
+            margin: { top: 0, right: 20, bottom: 30, left: 60 },
             height: 425,
             ticks: {
               yTicks: 7,
-              yTickPadding: 52,
+              yTickPadding: 10,
               yTickFormatType: 'deforestation-trajectory',
               xTickPadding: 15
             }

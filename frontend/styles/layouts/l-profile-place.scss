@@ -71,6 +71,13 @@
   }
 
   .deforestation {
+    .c-line-container {
+      @media screen and (max-width: $breakpoint-foundation-small) {
+        margin-left: -1.25rem;
+        margin-right: -1.25rem;
+      }
+    }
+
     .c-line {
       margin-top: 15px;
     }
