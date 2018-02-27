@@ -105,6 +105,7 @@
     "react-plyr": "^1.8.1",
     "react-redux": "^5.0.7",
     "react-siema": "github:sorodrigo/react-siema",
+    "react-simple-maps": "^0.11.1",
     "react-tether": "^0.6.1",
     "react-transition-group": "^2.2.1",
     "redux": "^3.7.2",
