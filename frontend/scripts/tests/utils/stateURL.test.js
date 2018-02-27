@@ -73,3 +73,11 @@ test('computeStateQueryParams casts strigified array to int', () => {
     areNodesExpanded: true
   });
 });
+
+test('computeStateQueryParams isMapVisible equals true, if undefined equals false', () => {
+  const mapIsVisible = { ...filteredState, isMapVisible: true };
+  expect(computeStateQueryParams(mapIsVisible, {})).toEqual({
+    ...filteredState,
+    isMapVisible: undefined
+  });
+});
