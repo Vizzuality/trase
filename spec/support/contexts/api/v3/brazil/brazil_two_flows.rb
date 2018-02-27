@@ -109,6 +109,14 @@ shared_context 'api v3 brazil two flows' do
       value: 10
     )
   end
+  let!(:api_v3_flow1_zero_deforestation) do
+    FactoryBot.create(
+      :api_v3_flow_qual,
+      flow: api_v3_flow1,
+      qual: api_v3_zero_deforestation,
+      value: 'no'
+    )
+  end
   let!(:api_v3_flow2_potential_soy_deforestation_v2) do
     FactoryBot.create(
       :api_v3_flow_quant,
