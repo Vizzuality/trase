@@ -3,7 +3,7 @@ FactoryBot.define do
     association :context, factory: :api_v3_context
     sequence(:group_number) { |n| n }
     sequence(:position) { |n| n }
-    legend_type 'percentual'
+    legend_type 'linear'
     legend_color_theme 'blue-green'
     is_disabled false
     is_default false

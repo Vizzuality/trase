@@ -1,5 +1,5 @@
 ActiveAdmin.register_page 'Database Update' do
-  menu priority: 4
+  menu parent: 'Database'
 
   content do
     current_update = Api::V3::DatabaseUpdate.where(status: Api::V3::DatabaseUpdate::STARTED).first

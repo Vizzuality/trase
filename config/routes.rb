@@ -40,6 +40,8 @@ Rails.application.routes.draw do
         resources :top_nodes, only: [:index]
       end
       resources :newsletter_subscriptions, only: [:create]
+      resource :database_validation, controller: :database_validation,
+                                     only: [:show]
     end
     namespace :v2 do
       resources :geo_id, only: :index
