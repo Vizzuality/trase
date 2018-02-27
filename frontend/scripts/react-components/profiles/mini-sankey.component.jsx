@@ -11,11 +11,12 @@ import { Responsive } from 'react-components/shared/responsive.hoc';
 import 'styles/components/profiles/mini-sankey.scss';
 
 const BASE_HEIGHT = 400;
-const TEXT_WIDTH_PERCENTAGE = 15;
-const TEXT_MIN_WIDTH = 100;
+const TEXT_WIDTH_PERCENTAGE = 20;
 const NODE_WIDTH = 10;
+const NODE_WIDTH_SMALL = 4;
 const NODE_V_SPACE = 15;
 const TEXT_LINE_HEIGHT = 16;
+const MEDIUM_RES = 768;
 
 class MiniSankey extends Component {
   static roundHeight(height) {
@@ -40,9 +41,12 @@ class MiniSankey extends Component {
     );
     const startY = totalHeight / 2 - BASE_HEIGHT / 2;
 
-    const leftTextRotate = width < 760 ? '-90' : '0';
-    const rightTextWidth = Math.max(width * TEXT_WIDTH_PERCENTAGE / 100, TEXT_MIN_WIDTH);
-    const leftTextWidth = width < 760 ? 30 : rightTextWidth;
+    const isSmallResolution = width < MEDIUM_RES;
+    const nodeWidth = isSmallResolution ? NODE_WIDTH_SMALL : NODE_WIDTH;
+    const textMinWidth = isSmallResolution ? 160 : 200;
+    const leftTextRotate = isSmallResolution ? '-90' : '0';
+    const rightTextWidth = Math.max(width * TEXT_WIDTH_PERCENTAGE / 100, textMinWidth);
+    const leftTextWidth = isSmallResolution ? 20 : rightTextWidth;
     const sankeyWidth = width - (leftTextWidth + rightTextWidth);
     const sankeyXStart = leftTextWidth;
     const sankeyXEnd = sankeyXStart + sankeyWidth;
@@ -56,7 +60,7 @@ class MiniSankey extends Component {
         i18n(node.name),
         Math.max(TEXT_LINE_HEIGHT, renderedHeight),
         TEXT_LINE_HEIGHT,
-        18,
+        isSmallResolution ? 12 : 18,
         3
       );
       const percent = 100 * node.height;
@@ -85,10 +89,10 @@ class MiniSankey extends Component {
           </linearGradient>
 
           <g transform={`translate(${sankeyXStart}, ${startY})`}>
-            <rect width={NODE_WIDTH} height={BASE_HEIGHT} className="start" />
+            <rect width={nodeWidth} height={BASE_HEIGHT} className="start" />
             <text
               className="start"
-              transform={`translate(-20, ${5 + BASE_HEIGHT / 2}) rotate(${leftTextRotate})`}
+              transform={`translate(-10, ${5 + BASE_HEIGHT / 2}) rotate(${leftTextRotate})`}
             >
               {data.name}
             </text>
@@ -108,10 +112,10 @@ class MiniSankey extends Component {
                   });
                 }}
               >
-                <rect width={NODE_WIDTH} height={node.renderedHeight} className="end" />
+                <rect width={nodeWidth} height={node.renderedHeight} className="end" />
                 <text
                   className="end"
-                  transform={`translate(20,
+                  transform={`translate(${nodeWidth + 10},
                 ${13 + node.renderedHeight / 2 - TEXT_LINE_HEIGHT * node.lines.length / 2})`}
                 >
                   {node.lines.map((line, i) => (
@@ -127,7 +131,7 @@ class MiniSankey extends Component {
 
           <g transform={`translate(${sankeyXStart}, 0)`}>
             {nodes.map((node, index) => {
-              const x0 = NODE_WIDTH;
+              const x0 = nodeWidth;
               const x1 = sankeyXEnd - sankeyXStart;
               const xi = d3InterpolateNumber(x0, x1);
               const x2 = xi(0.6);
