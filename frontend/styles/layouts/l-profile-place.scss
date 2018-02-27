@@ -47,8 +47,15 @@
   .c-anchor-buttons {
     padding: 49px 0 46px;
 
-    .columns {
+    > .row .columns {
       margin-bottom: 10px;
+    }
+
+    @media screen and (min-width: $breakpoint-foundation-small)
+                  and (max-width: $breakpoint-foundation-medium) {
+      > .row .columns:not(:last-child) {
+        padding-right: 0;
+      }
     }
   }
 

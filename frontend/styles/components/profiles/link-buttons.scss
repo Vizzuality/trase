@@ -23,8 +23,10 @@
       fill: $charcoal-grey;
     }
 
-    &.-with-arrow:after {
-      @include arrow(11px, 1px, $charcoal-grey, 'down');
+    @media screen and (min-width: $breakpoint-foundation-small) {
+      &.-with-arrow:after {
+        @include arrow(11px, 1px, $charcoal-grey, 'down');
+      }
     }
   }
 
@@ -53,7 +55,7 @@
     right: 0;
     margin: auto;
 
-    @media screen and (max-width: $breakpoint-foundation-medium) {
+    @media screen and (max-width: $breakpoint-foundation-small) {
       display: none;
     }
   }
