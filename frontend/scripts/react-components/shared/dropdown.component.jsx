@@ -61,7 +61,6 @@ export default class Dropdown extends Component {
         className={cx('c-dropdown', '-active', {
           '-hide-only-child': valueList.length <= 1 && hideOnlyChild
         })}
-        data-dropdown="year"
       >
         <span className="dropdown-label">{label}</span>
         <span

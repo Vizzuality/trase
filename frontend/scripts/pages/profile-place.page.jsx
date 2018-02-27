@@ -387,11 +387,11 @@ export const mount = (root, store) => {
   });
 
   render(
-    <HelpTooltip text={tooltips.soyLand} position="bottom" />,
+    <HelpTooltip text={tooltips.soyLand} position="bottom right" />,
     document.getElementById('soy-land-tooltip')
   );
   render(
-    <HelpTooltip text={tooltips.soyProduction} position="bottom" />,
+    <HelpTooltip text={tooltips.soyProduction} position="bottom left" />,
     document.getElementById('soy-production-tooltip')
   );
 
