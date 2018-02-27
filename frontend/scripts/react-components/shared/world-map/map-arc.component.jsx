@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-// import { geoLength } from "d3-geo"
+import { interpolateNumber as d3InterpolateNumber } from 'd3-interpolate';
+import { geoLength } from "d3-geo"
 
 class Arc extends Component {
   constructor(props) {
@@ -21,92 +22,95 @@ class Arc extends Component {
   }
   handleMouseEnter(evt) {
     evt.persist();
-    const { onMouseEnter, marker } = this.props;
+    const { onMouseEnter, arc } = this.props;
     this.setState(
       {
         hover: true
       },
-      () => onMouseEnter && onMouseEnter(marker, evt)
+      () => onMouseEnter && onMouseEnter(arc, evt)
     );
   }
   handleMouseMove(evt) {
     evt.persist();
     if (this.state.pressed) return;
-    const { onMouseMove, marker } = this.props;
+    const { onMouseMove, arc } = this.props;
     if (!this.state.hover) {
       this.setState(
         {
           hover: true
         },
-        () => onMouseMove && onMouseMove(marker, evt)
+        () => onMouseMove && onMouseMove(arc, evt)
       );
-    } else if (onMouseMove) onMouseMove(marker, evt);
+    } else if (onMouseMove) onMouseMove(arc, evt);
     else return;
   }
   handleMouseLeave(evt) {
     evt.persist();
-    const { onMouseLeave, marker } = this.props;
+    const { onMouseLeave, arc } = this.props;
     this.setState(
       {
         hover: false
       },
-      () => onMouseLeave && onMouseLeave(marker, evt)
+      () => onMouseLeave && onMouseLeave(arc, evt)
     );
   }
   handleMouseDown(evt) {
     evt.persist();
-    const { onMouseDown, marker } = this.props;
+    const { onMouseDown, arc } = this.props;
     this.setState(
       {
         pressed: true
       },
-      () => onMouseDown && onMouseDown(marker, evt)
+      () => onMouseDown && onMouseDown(arc, evt)
     );
   }
   handleMouseUp(evt) {
     evt.persist();
-    const { onMouseUp, marker } = this.props;
+    const { onMouseUp, arc } = this.props;
     this.setState(
       {
         pressed: false
       },
-      () => onMouseUp && onMouseUp(marker, evt)
+      () => onMouseUp && onMouseUp(arc, evt)
     );
   }
   handleMouseClick(evt) {
     if (!this.props.onClick) return;
     evt.persist();
-    const { onClick, marker, projection } = this.props;
-    return onClick && onClick(marker, projection(marker.coordinates), evt);
+    const { onClick, arc, projection } = this.props;
+    return onClick && onClick(
+      arc,
+      [projection(arc.coordinates.start), projection(arc.coordinates.end)],
+      evt
+    );
   }
   handleFocus(evt) {
     evt.persist();
-    const { onFocus, marker } = this.props;
+    const { onFocus, arc } = this.props;
     this.setState(
       {
         hover: true
       },
-      () => onFocus && onFocus(marker, evt)
+      () => onFocus && onFocus(arc, evt)
     );
   }
   handleBlur(evt) {
     evt.persist();
-    const { onBlur, marker } = this.props;
+    const { onBlur, arc } = this.props;
     this.setState(
       {
         hover: false
       },
-      () => onBlur && onBlur(marker, evt)
+      () => onBlur && onBlur(arc, evt)
     );
   }
   render() {
     const {
       projection,
-      marker,
+      arc,
       style,
       tabable,
       zoom,
-      children,
       preserveMarkerAspect,
       width,
       height
@@ -114,32 +118,57 @@ class Arc extends Component {
 
     const { pressed, hover } = this.state;
 
-    // const scale = preserveMarkerAspect ? ` scale(${1/zoom})` : "";
-    // const translation = projection(marker.coordinates);
+    const scale = preserveMarkerAspect ? ` scale(${1/zoom})` : "";
 
-    // const lineString = {
-    //   "type": "Feature",
-    //   "geometry": {
-    //     "type": "LineString",
-    //     "coordinates": [
-    //       projection.invert([width/2,height/2]),
-    //       marker.coordinates,
-    //     ],
-    //   },
-    // };
-    //
-    // const isHidden = geoLength(lineString) > 1.5708
+    const buildLineString = coordinates => ({
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          projection.invert([width/2,height/2]),
+          coordinates,
+        ],
+      },
+    });
+    const startLineString = buildLineString(arc.coordinates.start);
+    const endLineString = buildLineString(arc.coordinates.end);
+    const isHidden = geoLength(startLineString) > 1.5708 || geoLength(endLineString) > 1.5708;
 
-    const start = projection(marker.coordinatesStart);
-    const end = projection(marker.coordinatesEnd);
+    const start = projection(arc.coordinates.start);
+    const end = projection(arc.coordinates.end);
 
     const x0 = start[0];
     const x1 = end[0];
+    const xi = d3InterpolateNumber(x0, x1);
+    const x2 = xi(0.5);
     const y0 = start[1];
     const y1 = end[1];
-    const path = `M${x0},${y0}L${x1}, ${y1}`;
+    const yi = d3InterpolateNumber(y0, y1);
+    const y2 = yi(0.5);
 
-    return <path d={path} />;
+    const origin = `M${x0},${y0}`;
+    const destination = `${x1},${y1}`;
+    const concave = `${x2},${y0} ${x1},${y2}`;
+    const convex = `${y0},${x2} ${y2},${x1}`;
+    const path = `${origin} C${concave} ${destination}`;
+
+    return (
+      <path
+        className={ `rsm-arc${ pressed ? " rsm-arc--pressed" : "" }${ hover ? " rsm-arc--hover" : "" }` }
+        transform={ `${scale}`}
+        style={ style[isHidden ? "hidden" : (pressed || hover ? (pressed ? "pressed" : "hover") : "default")] }
+        onMouseEnter={ this.handleMouseEnter }
+        onMouseLeave={ this.handleMouseLeave }
+        onMouseDown={ this.handleMouseDown }
+        onMouseUp={ this.handleMouseUp }
+        onClick={ this.handleMouseClick }
+        onMouseMove={ this.handleMouseMove }
+        onFocus={ this.handleFocus }
+        onBlur={ this.handleBlur }
+        tabIndex={ tabable ? 0 : -1 }
+        d={path}
+      />
+    );
   }
 }
 
@@ -149,9 +178,11 @@ Arc.defaultProps = {
     hover: {},
     pressed: {}
   },
-  marker: {
-    coordinatesStart: [0, 0],
-    coordinatesEnd: [-99.14337158203125, 19.435514339097825]
+  arc: {
+    coordinates: {
+      start: [0, 0],
+      end: [-99.1, 19.4]
+    }
   },
   tabable: true,
   preserveMarkerAspect: true
