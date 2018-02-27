@@ -2,30 +2,30 @@ module Api
   module V3
     module Download
       class FlowDownloadQueryBuilder
+        QUAL_OPS = {
+          'eq' => '='
+        }.freeze
+        QUANT_OPS = QUAL_OPS.merge(
+          'lt' => '<',
+          'gt' => '>'
+        ).freeze
+
         def initialize(context, params)
           @context = context
           @query = Api::V3::Readonly::DownloadFlow.where(context_id: @context.id)
           initialize_path_column_names(@context.id)
           @query = @query.where(year: params[:years]) if params[:years].present?
-          if params[:indicators].present?
-            memo = {query: [], placeholders: []}
-            [Quant, Ind, Qual].each_with_object(memo) do |indicator_class, memo_object|
-              indicators = indicator_class.where(name: params[:indicators])
-              next unless indicators.any?
-              memo_object[:query] << 'attribute_type = ? AND attribute_id IN (?)'
-              memo_object[:placeholders] << indicator_class.name
-              memo_object[:placeholders] << indicators.pluck(:id)
-            end
-            @query = @query.where(memo[:query].join(' OR '), *memo[:placeholders])
-          end
           if params[:exporters_ids].present?
             @query = @query.where(exporter_node_id: params[:exporters_ids])
           end
           if params[:importers_ids].present?
             @query = @query.where(importer_node_id: params[:importers_ids])
           end
-          return unless params[:countries_ids].present?
-          @query = @query.where(country_node_id: params[:countries_ids])
+          if params[:countries_ids].present?
+            @query = @query.where(country_node_id: params[:countries_ids])
+          end
+          return unless params[:attrs].present?
+          apply_attribute_filters(params[:attrs])
         end
 
         def flat_query
@@ -122,6 +122,44 @@ module Api
           end
           @path_crosstab_columns = @path_column_aliases.map { |a| "#{a} text" }
           @path_crosstab_row_name_columns = context_column_positions.map { |p| "node_id_#{p}" }
+        end
+
+        def apply_attribute_filters(attrs)
+          conditions = {query_parts: [], parameters: []}
+          attrs.each do |attr_hash|
+            name = attr_hash[:name]
+            next unless name
+            attribute = Dictionary::Quant.instance.get(name) ||
+              Dictionary::Qual.instance.get(name)
+            next unless attribute
+            query_parts, parameters = attribute_filter(
+              attribute, attr_hash[:op], attr_hash[:val]
+            )
+            conditions[:query_parts] << query_parts.join(' AND ')
+            conditions[:parameters] += parameters
+          end
+          @query = @query.where(
+            conditions[:query_parts].join(' OR '), *conditions[:parameters]
+          )
+        end
+
+        def attribute_filter(attribute, op_symbol, val)
+          query_parts = ['attribute_type = ?', 'attribute_id = ?']
+          parameters = [attribute.class.name.demodulize, attribute.id]
+          op_part =
+            if attribute.is_a? Api::V3::Qual
+              op = QUAL_OPS[op_symbol]
+              op && val && "LOWER(total) #{op} LOWER(?)" || nil
+            else
+              op = QUANT_OPS[op_symbol]
+              val = val&.to_f
+              op && val && "sum #{op} ?" || nil
+            end
+          if op_part
+            query_parts << op_part
+            parameters << val
+          end
+          [query_parts, parameters]
         end
       end
     end
