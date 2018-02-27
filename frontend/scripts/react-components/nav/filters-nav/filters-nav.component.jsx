@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
+import { NavLink } from 'redux-first-router-link';
 import NavLinksList from 'react-components/nav/nav-links-list.component';
 import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
 import ResizeBySelector from 'react-components/nav/filters-nav/resize-by-selector/resize-by-selector.container';
@@ -53,24 +54,40 @@ class FiltersNav extends React.PureComponent {
 
   renderMenuOpened() {
     const { links } = this.props;
-    const decoratedLinks = [
-      {
-        name: 'Home',
-        page: 'home'
-      },
-      ...links
-    ];
+    const [supplyChainLink, mapLink, ...restOfLinks] = links;
 
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
+          <ul className="filters-nav-submenu-list">
+            <li className="filters-nav-item">
+              <NavLink exact strict className="filters-nav-link" to={{ type: 'home' }}>
+                home
+              </NavLink>
+            </li>
+            <li className="filters-nav-item">
+              <NavLink
+                exact
+                strict
+                className="filters-nav-link"
+                to={supplyChainLink.page}
+                isActive={(...params) => FiltersNav.isActiveLink(...params, supplyChainLink)}
+              >
+                {supplyChainLink.name}
+              </NavLink>
+            </li>
+            <li className="filters-nav-item">
+              <a className="filters-nav-link" role="button">
+                {mapLink.name}
+              </a>
+            </li>
+          </ul>
           <NavLinksList
-            links={decoratedLinks}
+            links={restOfLinks}
             listClassName="filters-nav-submenu-list"
             itemClassName="filters-nav-item"
             linkClassName="filters-nav-link"
             linkActiveClassName="filters-nav-link -active"
-            isActiveLink={FiltersNav.isActiveLink}
           />
         </div>
         <div className="filters-nav-right-section">
