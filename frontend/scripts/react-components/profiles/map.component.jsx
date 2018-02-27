@@ -6,6 +6,7 @@ import { geoRobinson as d3_geoRobinson } from 'd3-geo-projection';
 import { feature as topojsonFeature } from 'topojson';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Responsive } from 'react-components/shared/responsive.hoc';
 
 class Map extends Component {
   constructor(props) {
@@ -16,10 +17,6 @@ class Map extends Component {
 
   componentDidMount() {
     this.build();
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return !nextProps.isStaticComponent;
   }
 
   componentDidUpdate() {
@@ -122,8 +119,7 @@ Map.propTypes = {
   getPolygonClassName: PropTypes.func,
   showTooltipCallback: PropTypes.func,
   hideTooltipCallback: PropTypes.func,
-  useRobinsonProjection: PropTypes.bool,
-  isStaticComponent: PropTypes.bool
+  useRobinsonProjection: PropTypes.bool
 };
 
-export default Map;
+export default Responsive(Map);

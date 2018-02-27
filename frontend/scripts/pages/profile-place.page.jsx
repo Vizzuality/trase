@@ -50,13 +50,11 @@ const _buildMaps = (data, store) => {
   render(
     <Provider store={store}>
       <Map
-        width={countryMapContainer.clientWidth}
         height={countryMapContainer.clientHeight}
         topoJSONPath="./vector_layers/WORLD.topo.json"
         topoJSONRoot="world"
         useRobinsonProjection
         getPolygonClassName={d => (d.properties.name === countryName ? '-isCurrent' : '')}
-        isStaticComponent
       />
     </Provider>,
     countryMapContainer
@@ -65,12 +63,10 @@ const _buildMaps = (data, store) => {
   render(
     <Provider store={store}>
       <Map
-        width={biomeMapContainer.clientWidth}
         height={biomeMapContainer.clientHeight}
         topoJSONPath={`./vector_layers/${defaults.country.toUpperCase()}_BIOME.topo.json`}
         topoJSONRoot={`${defaults.country.toUpperCase()}_BIOME`}
         getPolygonClassName={d => (d.properties.geoid === data.biome_geo_id ? '-isCurrent' : '')}
-        isStaticComponent
       />
     </Provider>,
     biomeMapContainer
@@ -79,12 +75,10 @@ const _buildMaps = (data, store) => {
   render(
     <Provider store={store}>
       <Map
-        width={stateMapContainer.clientWidth}
         height={stateMapContainer.clientHeight}
         topoJSONPath={`./vector_layers/${defaults.country.toUpperCase()}_STATE.topo.json`}
         topoJSONRoot={`${defaults.country.toUpperCase()}_STATE`}
         getPolygonClassName={d => (d.properties.geoid === stateGeoID ? '-isCurrent' : '')}
-        isStaticComponent
       />
     </Provider>,
     stateMapContainer
@@ -93,14 +87,12 @@ const _buildMaps = (data, store) => {
   render(
     <Provider store={store}>
       <Map
-        width={municipalityMapContainer.clientWidth}
         height={municipalityMapContainer.clientHeight}
         topoJSONPath={`./vector_layers/municip_states/${defaults.country.toLowerCase()}/${stateGeoID}.topo.json`}
         topoJSONRoot={`${defaults.country.toUpperCase()}_${stateGeoID}`}
         getPolygonClassName={d =>
           d.properties.geoid === data.municipality_geo_id ? '-isCurrent' : ''
         }
-        isStaticComponent
       />
     </Provider>,
     municipalityMapContainer
