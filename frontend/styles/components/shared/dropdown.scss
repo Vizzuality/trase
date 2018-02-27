@@ -16,10 +16,17 @@
 
       &::after {
         @include arrow(14px, 3px, $medium-pink, 'down');
-        position: absolute;
-        top: 50%;
-        right: 0;
-        transform: translate(-50%, -50%) rotate(45deg);
+        transform: translate(-50%, -75%) rotate(45deg);
+      }
+
+      @media screen and (max-width: $breakpoint-foundation-small) {
+        padding: 0 25px 0 0;
+        font-size: $font-size-big;
+
+        &::after {
+          @include arrow(10px, 3px, $medium-pink, 'down');
+          transform: translate(-50%, -75%) rotate(45deg);
+        }
       }
     }
   }
@@ -69,7 +76,7 @@
       position: absolute;
       top: 50%;
       right: 0;
-      transform: translate(-50%, -50%) rotate(45deg);
+      transform: translate(-50%, -75%) rotate(45deg);
     }
 
     &.-dimmed {

@@ -14,8 +14,6 @@ class MultiTable extends Component {
   constructor(props) {
     super(props);
 
-    this.key = `table_${new Date().getTime()}`;
-
     this.state = {
       selectedTableIndex: 0
     };
@@ -25,13 +23,13 @@ class MultiTable extends Component {
     this.setState({ selectedTableIndex });
   }
 
-  render() {
-    const { data, target, type, year, tabsTitle, tabsTitleTooltip } = this.props;
+  renderSwitcher() {
+    const { data, tabsTitle, tabsTitleTooltip } = this.props;
     const { selectedTableIndex } = this.state;
     const indicatorNames = data.map(d => d.name);
 
     return (
-      <div className="c-multi-table">
+      <div>
         <ul className="c-area-table-switcher hide-for-small">
           <span>
             {tabsTitle}
@@ -40,17 +38,14 @@ class MultiTable extends Component {
           {data.map((elem, index) => (
             <li
               key={index}
-              className={cx('js-multi-table-switcher', 'tab', {
-                selected: index === selectedTableIndex
-              })}
-              data-table={`${this.key}_${index}`}
+              className={cx('tab', { selected: index === selectedTableIndex })}
               onClick={() => this._switchTable(index)}
             >
               {elem.name}
             </li>
           ))}
         </ul>
-        <div className="c-area-table-switcher-dropdown show-for-small">
+        <div className="c-area-table-dropdown-switcher show-for-small">
           <Dropdown
             label={tabsTitle}
             value={indicatorNames[selectedTableIndex]}
@@ -58,11 +53,22 @@ class MultiTable extends Component {
             onValueSelected={name => this._switchTable(indicatorNames.indexOf(name))}
           />
         </div>
+      </div>
+    );
+  }
+
+  render() {
+    const { data, target, type, year } = this.props;
+    const { selectedTableIndex } = this.state;
+
+    return (
+      <div className="c-multi-table">
+        {this.renderSwitcher()}
         {data.map((elem, index) => (
           <div key={index}>
             <div className="tab-title title">{elem.name}</div>
             <div
-              className={cx('js-multi-table-container', `${this.key}_${index}`, {
+              className={cx('c-area-table-container', {
                 '-tab-hidden': index !== selectedTableIndex
               })}
             >

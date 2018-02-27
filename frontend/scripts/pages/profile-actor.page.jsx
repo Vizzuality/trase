@@ -468,6 +468,7 @@ const _loadData = (store, nodeId, year) => {
 
       render(
         <Dropdown
+          size="big"
           label="Year"
           value={year}
           valueList={[2010, 2011, 2012, 2013, 2014, 2015]}
@@ -492,11 +493,11 @@ export const mount = (root, store) => {
   });
 
   render(
-    <HelpTooltip text={tooltips.zeroDeforestationCommitment} position="bottom" />,
+    <HelpTooltip text={tooltips.zeroDeforestationCommitment} />,
     document.getElementById('zero-deforestation-tooltip')
   );
   render(
-    <HelpTooltip text={tooltips.forest500Score} position="bottom" />,
+    <HelpTooltip text={tooltips.forest500Score} />,
     document.getElementById('forest-500-tooltip')
   );
 

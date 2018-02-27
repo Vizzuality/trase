@@ -361,6 +361,7 @@ const _loadData = (store, nodeId, year) => {
       render(
         <Dropdown
           label="Year"
+          size="big"
           value={year}
           valueList={[2010, 2011, 2012, 2013, 2014, 2015]}
           onValueSelected={dropdownYear => _switchYear(store, nodeId, dropdownYear)}
@@ -386,12 +387,9 @@ export const mount = (root, store) => {
     feedback: FeedbackMarkup()
   });
 
+  render(<HelpTooltip text={tooltips.soyLand} />, document.getElementById('soy-land-tooltip'));
   render(
-    <HelpTooltip text={tooltips.soyLand} position="bottom right" />,
-    document.getElementById('soy-land-tooltip')
-  );
-  render(
-    <HelpTooltip text={tooltips.soyProduction} position="bottom left" />,
+    <HelpTooltip text={tooltips.soyProduction} />,
     document.getElementById('soy-production-tooltip')
   );
 
