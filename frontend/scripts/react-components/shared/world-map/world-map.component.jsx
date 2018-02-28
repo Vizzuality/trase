@@ -45,7 +45,7 @@ class WorldMap extends React.PureComponent {
 
   render() {
     const { flows, origin } = this.props;
-    const isoList = flows.map(f => f.iso);
+    const isoList = flows.map(f => f.geoId);
     return (
       <ComposableMap className="c-world-map">
         <ZoomableGroup>
@@ -57,7 +57,7 @@ class WorldMap extends React.PureComponent {
                   className={cx(
                     'world-map-geography',
                     { '-destination': isoList.includes(geography.properties.iso2) },
-                    { '-origin': origin.iso === geography.properties.iso2 }
+                    { '-origin': origin.geoId === geography.properties.iso2 }
                   )}
                   geography={geography}
                   projection={projection}
@@ -70,6 +70,7 @@ class WorldMap extends React.PureComponent {
           <Markers>
             {flows.map(flow => (
               <Arc
+                key={flow.geoId}
                 className="world-map-arc"
                 arc={{
                   coordinates: {
@@ -85,10 +86,10 @@ class WorldMap extends React.PureComponent {
           </Markers>
           <Annotations>
             {flows.map((flow, i) => (
-              <Annotation key={flow.iso} dx={5} dy={5} subject={flow.coordinates} strokeWidth={0}>
+              <Annotation key={flow.geoId} dx={5} dy={5} subject={flow.coordinates} strokeWidth={0}>
                 <text
                   className={cx('world-map-annotation-text', {
-                    'is-hidden': this.state.active !== flow.iso
+                    'is-hidden': this.state.active !== flow.geoId
                   })}
                 >{`${i + 1}.${flow.name}`}</text>
               </Annotation>

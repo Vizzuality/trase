@@ -6,7 +6,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
 import FiltersNav from 'react-components/nav/filters-nav/filters-nav.container';
-import Explore from 'react-components/explore/explore.component';
+import Explore from 'react-components/explore/explore.container';
 
 import 'styles/explore.scss';
 
