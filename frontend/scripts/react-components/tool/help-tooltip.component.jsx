@@ -1,61 +1,77 @@
 /* eslint-disable jsx-a11y/mouse-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import TetherComponent from 'react-tether';
-import classNames from 'classnames';
+import cx from 'classnames';
+import Tooltip from 'tooltip.js';
+
 import 'styles/components/shared/help-tooltip-react.scss';
 
-export default class Tooltip extends Component {
-  constructor(props) {
-    super(props);
-    this.onOverBound = this.onOver.bind(this);
-    this.onOutBound = this.onOut.bind(this);
-    this.state = { visible: false };
+export default class TooltipComponent extends Component {
+  componentDidMount() {
+    this.initTooltip();
   }
 
-  onOver() {
-    this.setState({ visible: true });
+  componentWillReceiveProps(props) {
+    if (props.text !== this.props.text && this.tooltip) {
+      this.tooltip.updateTitleContent(props.text);
+    }
   }
 
-  onOut() {
-    this.setState({ visible: false });
+  shouldComponentUpdate() {
+    return false;
+  }
+
+  componentWillUnmount() {
+    this.destroyTooltip();
+  }
+
+  initTooltip() {
+    const { position, text } = this.props;
+
+    this.tooltip = new Tooltip(this.element, {
+      title: text,
+      placement: position,
+      container: 'body',
+      offset: '1, 1',
+      popperOptions: {
+        modifiers: {
+          preventOverflow: {
+            boundariesElement: 'window',
+            enabled: true
+          }
+        }
+      }
+    });
+  }
+
+  destroyTooltip() {
+    if (this.tooltip) {
+      this.tooltip.dispose();
+    }
   }
 
   render() {
-    const { text, constraint, floating } = this.props;
     return (
-      <TetherComponent
-        attachment="top center"
-        constraints={[
-          {
-            to: constraint,
-            pin: true,
-            attachment: 'together'
-          }
-        ]}
-        classPrefix="tooltip"
+      <div
+        ref={elem => {
+          this.element = elem;
+        }}
+        className={cx('tooltip-react', this.props.className)}
       >
-        <div
-          className={classNames('tooltip-react', { '-floating': floating })}
-          onMouseOver={this.onOverBound}
-          onMouseOut={this.onOutBound}
-        >
-          <svg className="icon tooltip-react-icon">
-            <use xlinkHref="#icon-layer-info" />
-          </svg>
-        </div>
-        {this.state.visible && <div className="tooltip-react-content">{text}</div>}
-      </TetherComponent>
+        <svg className="icon tooltip-react-icon">
+          <use xlinkHref="#icon-layer-info" />
+        </svg>
+      </div>
     );
   }
 }
 
-Tooltip.propTypes = {
+TooltipComponent.propTypes = {
+  className: PropTypes.string,
   text: PropTypes.string,
-  constraint: PropTypes.string,
-  floating: PropTypes.bool
+  position: PropTypes.string
 };
 
-Tooltip.defaultProps = {
-  constraint: 'scrollParent'
+TooltipComponent.defaultProps = {
+  position: 'bottom'
 };

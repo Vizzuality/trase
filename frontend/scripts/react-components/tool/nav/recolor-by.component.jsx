@@ -138,14 +138,13 @@ class RecolorBy extends Component {
         >
           <span className="dropdown-label">
             Recolour by
-            <Tooltip constraint="window" text={tooltips.sankey.nav.colorBy.main} />
+            <Tooltip text={tooltips.sankey.nav.colorBy.main} />
           </span>
           <span className="dropdown-title -small">{selectedRecolorBy.label || 'Selection'}</span>
           {selectedRecolorBy.name &&
             tooltips.sankey.nav.colorBy[selectedRecolorBy.name] && (
               <Tooltip
-                constraint="window"
-                floating
+                className="recolor-by"
                 text={tooltips.sankey.nav.colorBy[selectedRecolorBy.name]}
               />
             )}
