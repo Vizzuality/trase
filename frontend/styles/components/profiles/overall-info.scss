@@ -4,6 +4,7 @@
 
   .dropdown-element {
     display: inline-block;
+    margin-bottom: 10px;
 
     &:not(:last-child) {
       margin-right: 41px;
@@ -38,11 +39,21 @@
         top: 100%;
       }
     }
+
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      &:first-child {
+        width: 100%;
+      }
+
+      &:not(:last-child) {
+        margin-right: 21px;
+      }
+    }
   }
 
   .stat-item {
     display: inline-block;
-    padding-top: 36px;
+    margin-top: 36px;
     margin-right: 20px;
 
     > .legend {
@@ -68,10 +79,15 @@
       font-family: $font-family-1;
       font-size: $font-size-medium;
     }
+
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      margin-top: 15px;
+    }
   }
 
   .summary {
     margin-top: 24px;
+    margin-bottom: 40px;
     font-family: $font-family-2;
     font-size: $font-size-xx-regular;
     font-weight: 300;

@@ -45,6 +45,13 @@
 
   .c-anchor-buttons {
     padding: 49px 0 46px;
+
+    @media screen and (min-width: $breakpoint-foundation-small)
+                  and (max-width: $breakpoint-foundation-medium) {
+      > .row .columns:not(:last-child) {
+        padding-right: 0;
+      }
+    }
   }
 
   .c-line {
@@ -142,10 +149,6 @@
       width: 15px;
       height: 15px;
       vertical-align: text-bottom;
-    }
-
-    .tooltip-react-content {
-      top: 22px;
     }
   }
 }

@@ -9,7 +9,7 @@
           <div class="row">
             <div class="small-12 columns">
               <div class="dropdown-element">
-                <div class="c-dropdown">
+                <div class="c-dropdown -big">
                   <span class="dropdown-label js-legend">-</span>
                   <span class="dropdown-title js-name">-</span>
                   <ul class="dropdown-list is-hidden">
@@ -17,7 +17,7 @@
                 </div>
               </div>
               <div class="dropdown-element">
-                <div class="c-dropdown">
+                <div class="c-dropdown -big">
                   <span class="dropdown-label">Country</span>
                   <span class="dropdown-title js-country">-</span>
                   <ul class="dropdown-list is-hidden">
@@ -25,7 +25,7 @@
                 </div>
               </div>
               <div class="dropdown-element">
-                <div class="c-dropdown">
+                <div class="c-dropdown -big">
                   <span class="dropdown-label">Commodity</span>
                   <span class="dropdown-title">Soy</span>
                   <ul class="dropdown-list">
@@ -52,13 +52,13 @@
                 </div>
               </div>
             </div>
-            <div class="small-<%= printMode ? '12' : '7' %> columns">
+            <div class="small-12 large-<%=printMode ? '12' : '7' %> columns">
               <div class="summary js-summary-text"></div>
             </div>
           </div>
         </div>
 
-        <div class="c-anchor-buttons">
+        <div class="c-anchor-buttons hide-for-small">
           <div class="row">
             <div class="small-4 columns">
               <a href="#profile-content-anchor" class="c-link-buttons -with-arrow js-link-profile">
@@ -69,14 +69,14 @@
             <div class="small-4 columns">
               <a class="c-link-buttons js-link-map">
                 <img src="/images/profiles/profile-main-option-2.svg"/>
-                PRODUCTION REGIONS
+                <span>PRODUCTION REGIONS</span>
                 <svg class="icon icon-external-link"><use xlink:href="#icon-external-link"></use></svg>
               </a>
             </div>
             <div class="small-4 columns">
               <a class="c-link-buttons js-link-supply-chain">
                 <img src="/images/profiles/profile-main-option-3.svg"/>
-                SUPPLY CHAIN ACTORS
+                <span>SUPPLY CHAIN ACTORS</span>
                 <svg class="icon icon-external-link"><use xlink:href="#icon-external-link"></use></svg>
               </a>
             </div>

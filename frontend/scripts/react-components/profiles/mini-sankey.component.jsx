@@ -177,4 +177,4 @@ MiniSankey.propTypes = {
   year: PropTypes.number
 };
 
-export default Responsive(MiniSankey);
+export default Responsive()(MiniSankey);

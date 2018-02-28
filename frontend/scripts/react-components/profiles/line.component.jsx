@@ -270,4 +270,4 @@ Line.propTypes = {
   xValues: PropTypes.array
 };
 
-export default Responsive(Line);
+export default Responsive()(Line);

@@ -122,4 +122,4 @@ Map.propTypes = {
   useRobinsonProjection: PropTypes.bool
 };
 
-export default Responsive(Map);
+export default Responsive({ refreshEvery: 1000 })(Map);
