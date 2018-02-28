@@ -10,6 +10,7 @@ import abbreviateNumber from 'utils/abbreviateNumber';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { Responsive } from 'react-components/shared/responsive.hoc';
 
 class Scatterplot extends Component {
   constructor(props) {
@@ -32,14 +33,15 @@ class Scatterplot extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    this.build(prevProps.year);
+    const shouldRebuild =
+      prevProps.year !== this.props.year || prevProps.width !== this.props.width;
+
+    if (shouldRebuild) {
+      this.build();
+    }
   }
 
-  build(prevYear = null) {
-    // TODO: this is a very nice hack, that makes sure we only reload the whole chart on year change.
-    // It's needed so that react doesn't trigger a full re-render of the d3 elements, and the transition can be shown
-    if (prevYear && this.props.year === prevYear) return;
-
+  build() {
     const { data, showTooltipCallback, hideTooltipCallback } = this.props;
     const parentWidth = this.props.width;
 
@@ -239,4 +241,4 @@ Scatterplot.propTypes = {
   hideTooltipCallback: PropTypes.func
 };
 
-export default Scatterplot;
+export default Responsive()(Scatterplot);

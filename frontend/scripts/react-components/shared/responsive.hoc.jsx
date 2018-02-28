@@ -41,6 +41,7 @@ export function Responsive({ refreshEvery = DEBOUNCE_WAIT } = {}) {
       render() {
         return (
           <div
+            className="responsive-container"
             ref={elem => {
               this.responsiveContainer = elem;
             }}
