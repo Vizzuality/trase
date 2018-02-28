@@ -79,7 +79,7 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
     end
 
     it 'should filter rows when filter applied' do
-      qb = Api::V3::Download::FlowDownloadQueryBuilder.new(api_v3_context, exporters_ids: [api_v3_exporter1_node.id])
+      qb = Api::V3::Download::FlowDownloadQueryBuilder.new(api_v3_context, e_ids: [api_v3_exporter1_node.id])
 
       expected = [
         flow1_potential_deforestation_row,
@@ -92,7 +92,7 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
     it 'should filter rows using advanced filter' do
       qb = Api::V3::Download::FlowDownloadQueryBuilder.new(
         api_v3_context,
-        attrs: [
+        filters: [
           {name: api_v3_zero_deforestation.name, op: 'eq', val: 'yes'},
           {name: api_v3_deforestation_v2.name, op: 'gt', val: '5'}
         ]

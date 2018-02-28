@@ -10,26 +10,34 @@ module Api
           'gt' => '>'
         ).freeze
 
+        # @param context [Api::V3::Context]
+        # @param params [Hash]
+        # @option params [Array<Integer>] :years
+        # @option params [Array<Integer>] :e_ids exporters ids
+        # @option params [Array<Integer>] :i_ids importers ids
+        # @option params [Array<Integer>] :c_ids countries ids
+        # @option params [Array<Hash>] :filters advanced attribute filters
+        #   e.g. [{"name"=>"ZERO_DEFORESTATION", "op"=>"eq", "val"=>"no"}]
         def initialize(context, params)
           @context = context
           @query = Api::V3::Readonly::DownloadFlow.where(
             context_id: @context.id
           )
           initialize_path_column_names(@context.id)
-          if params[:years].present?
-            @query = @query.where(year: params[:years])
+          if (years = params[:years]).present?
+            @query = @query.where(year: years)
           end
-          if params[:exporters_ids].present?
-            @query = @query.where(exporter_node_id: params[:exporters_ids])
+          if (exporters_ids = params[:e_ids]).present?
+            @query = @query.where(exporter_node_id: exporters_ids)
           end
-          if params[:importers_ids].present?
-            @query = @query.where(importer_node_id: params[:importers_ids])
+          if (importers_ids = params[:i_ids]).present?
+            @query = @query.where(importer_node_id: importers_ids)
           end
-          if params[:countries_ids].present?
-            @query = @query.where(country_node_id: params[:countries_ids])
+          if (countries_ids = params[:c_ids]).present?
+            @query = @query.where(country_node_id: countries_ids)
           end
-          return unless params[:attrs].present?
-          apply_attribute_filters(params[:attrs])
+          return unless (filters = params[:filters]).present?
+          apply_attribute_filters(filters)
         end
 
         def flat_query
