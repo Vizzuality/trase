@@ -7396,12 +7396,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180207133151'),
 ('20180207133331'),
 ('20180212120524'),
-<<<<<<< HEAD
-('20180221144544');
-
-=======
+('20180221144544'),
 ('20180223141212'),
 ('20180226094007');
->>>>>>> Expanded map buckets & renamed to better reflect purpose
 
 
