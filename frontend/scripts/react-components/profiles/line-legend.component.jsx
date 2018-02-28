@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Tooltip from 'react-components/tool/help-tooltip.component';
+import Tooltip from 'react-components/shared/help-tooltip.component';
 
 import 'styles/components/profiles/line.scss';
 

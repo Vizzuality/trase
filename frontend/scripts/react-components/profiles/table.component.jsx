@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import formatValue from 'utils/formatValue';
 import { UNITLESS_UNITS } from 'constants';
-import Tooltip from 'react-components/tool/help-tooltip.component';
+import Tooltip from 'react-components/shared/help-tooltip.component';
 
 import 'styles/components/profiles/area-table.scss';
 

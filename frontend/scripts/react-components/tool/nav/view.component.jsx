@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions,jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import Tooltip from 'react-components/tool/help-tooltip.component';
+import Tooltip from 'react-components/shared/help-tooltip.component';
 import Dropdown from 'react-components/tool/nav/dropdown.component';
 import PropTypes from 'prop-types';
 

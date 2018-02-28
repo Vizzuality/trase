@@ -30,7 +30,7 @@ import {
   TOOLTIPS
 } from 'constants';
 import TopSourceSwitcher from 'react-components/profiles/top-source-switcher.component';
-import HelpTooltip from 'react-components/tool/help-tooltip.component';
+import HelpTooltip from 'react-components/shared/help-tooltip.component';
 
 const defaults = {
   country: 'Brazil',

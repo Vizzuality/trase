@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
-import Tooltip from 'react-components/tool/help-tooltip.component';
+import Tooltip from 'react-components/shared/help-tooltip.component';
 import Dropdown from 'react-components/tool/nav/dropdown.component';
 import 'styles/components/tool/country-commodities-react.scss';
 import 'styles/components/tool/dimensional-selector-react.scss';

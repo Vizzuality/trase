@@ -6,7 +6,7 @@ import _ from 'lodash';
 
 import Dropdown from 'react-components/shared/dropdown.component';
 import Table from 'react-components/profiles/table.component';
-import Tooltip from 'react-components/tool/help-tooltip.component';
+import Tooltip from 'react-components/shared/help-tooltip.component';
 
 import 'styles/components/shared/tabs.scss';
 

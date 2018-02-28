@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import _ from 'lodash';
-import Tooltip from 'react-components/tool/help-tooltip.component';
+import Tooltip from 'react-components/shared/help-tooltip.component';
 import Dropdown from 'react-components/tool/nav/dropdown.component';
 import RecolorByNodeLegendSummary from 'containers/tool/nav/recolor-by-node-legend-summary.container';
 import PropTypes from 'prop-types';

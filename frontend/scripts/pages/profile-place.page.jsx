@@ -27,7 +27,7 @@ import smoothScroll from 'utils/smoothScroll';
 import { GET_PLACE_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParams';
 import { DEFAULT_PROFILE_PAGE_YEAR, TOOLTIPS } from 'constants';
 import Tooltip from 'components/shared/info-tooltip.component';
-import HelpTooltip from 'react-components/tool/help-tooltip.component';
+import HelpTooltip from 'react-components/shared/help-tooltip.component';
 
 const defaults = {
   country: 'Brazil',
