@@ -1,6 +1,6 @@
+/* eslint-disable */
 import React, { Component } from 'react';
-import { interpolateNumber as d3InterpolateNumber } from 'd3-interpolate';
-import { geoLength } from "d3-geo"
+import { geoLength } from 'd3-geo';
 
 class Arc extends Component {
   constructor(props) {
@@ -78,10 +78,9 @@ class Arc extends Component {
     if (!this.props.onClick) return;
     evt.persist();
     const { onClick, arc, projection } = this.props;
-    return onClick && onClick(
-      arc,
-      [projection(arc.coordinates.start), projection(arc.coordinates.end)],
-      evt
+    return (
+      onClick &&
+      onClick(arc, [projection(arc.coordinates.start), projection(arc.coordinates.end)], evt)
     );
   }
   handleFocus(evt) {
@@ -113,22 +112,21 @@ class Arc extends Component {
       zoom,
       preserveMarkerAspect,
       width,
-      height
+      height,
+      buildPath,
+      strokeWidth
     } = this.props;
 
     const { pressed, hover } = this.state;
 
-    const scale = preserveMarkerAspect ? ` scale(${1/zoom})` : "";
+    const scale = preserveMarkerAspect ? ` scale(${1 / zoom})` : '';
 
     const buildLineString = coordinates => ({
-      "type": "Feature",
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          projection.invert([width/2,height/2]),
-          coordinates,
-        ],
-      },
+      type: 'Feature',
+      geometry: {
+        type: 'LineString',
+        coordinates: [projection.invert([width / 2, height / 2]), coordinates]
+      }
     });
     const startLineString = buildLineString(arc.coordinates.start);
     const endLineString = buildLineString(arc.coordinates.end);
@@ -137,36 +135,28 @@ class Arc extends Component {
     const start = projection(arc.coordinates.start);
     const end = projection(arc.coordinates.end);
 
-    const x0 = start[0];
-    const x1 = end[0];
-    const xi = d3InterpolateNumber(x0, x1);
-    const x2 = xi(0.5);
-    const y0 = start[1];
-    const y1 = end[1];
-    const yi = d3InterpolateNumber(y0, y1);
-    const y2 = yi(0.5);
-
-    const origin = `M${x0},${y0}`;
-    const destination = `${x1},${y1}`;
-    const concave = `${x2},${y0} ${x1},${y2}`;
-    const convex = `${y0},${x2} ${y2},${x1}`;
-    const path = `${origin} C${concave} ${destination}`;
+    const path = buildPath ? buildPath(start, end, arc) : `M ${start.join(' ')} L ${end.join(' ')}`;
 
     return (
       <path
-        className={ `rsm-arc${ pressed ? " rsm-arc--pressed" : "" }${ hover ? " rsm-arc--hover" : "" }` }
-        transform={ `${scale}`}
-        style={ style[isHidden ? "hidden" : (pressed || hover ? (pressed ? "pressed" : "hover") : "default")] }
-        onMouseEnter={ this.handleMouseEnter }
-        onMouseLeave={ this.handleMouseLeave }
-        onMouseDown={ this.handleMouseDown }
-        onMouseUp={ this.handleMouseUp }
-        onClick={ this.handleMouseClick }
-        onMouseMove={ this.handleMouseMove }
-        onFocus={ this.handleFocus }
-        onBlur={ this.handleBlur }
-        tabIndex={ tabable ? 0 : -1 }
+        className={`rsm-arc${pressed ? ' rsm-arc--pressed' : ''}${hover ? ' rsm-arc--hover' : ''}`}
+        transform={`${scale}`}
+        style={
+          style[
+            isHidden ? 'hidden' : pressed || hover ? (pressed ? 'pressed' : 'hover') : 'default'
+          ]
+        }
+        onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}
+        onMouseDown={this.handleMouseDown}
+        onMouseUp={this.handleMouseUp}
+        onClick={this.handleMouseClick}
+        onMouseMove={this.handleMouseMove}
+        onFocus={this.handleFocus}
+        onBlur={this.handleBlur}
+        tabIndex={tabable ? 0 : -1}
         d={path}
+        strokeWidth={strokeWidth}
       />
     );
   }
@@ -185,7 +175,8 @@ Arc.defaultProps = {
     }
   },
   tabable: true,
-  preserveMarkerAspect: true
+  preserveMarkerAspect: true,
+  strokeWidth: 1
 };
 
 export default Arc;
