@@ -45,6 +45,10 @@
           font-size: $font-size-xx-regular;
           letter-spacing: -.8px;
           line-height: 2.5;
+
+          @media screen and (max-width: $breakpoint-foundation-small) {
+            font-size: $font-size-x-regular;
+          }
         }
 
         > .cell-name {
@@ -76,6 +80,10 @@
             &:hover {
               fill: $charcoal-grey;
             }
+          }
+
+          @media screen and (max-width: $breakpoint-foundation-small) {
+            line-height: $font-size-x-regular;
           }
         }
 
