@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Tooltip from 'tooltip.js';
 
-import 'styles/components/shared/help-tooltip-react.scss';
+import 'styles/components/shared/help-tooltip.scss';
 
 export default class TooltipComponent extends Component {
   componentDidMount() {

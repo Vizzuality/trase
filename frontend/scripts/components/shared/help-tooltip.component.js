@@ -1,5 +1,5 @@
 /* eslint-disable no-new */
-import Tooltip from 'tether-tooltip';
+import Tooltip from 'tooltip.js';
 import 'styles/components/shared/help-tooltip.scss';
 
 export default class {
@@ -18,13 +18,22 @@ export default class {
     );
 
     this.tooltips.forEach(tooltip => {
-      new Tooltip({
-        target: tooltip,
-        content: tooltip.getAttribute('data-tooltip-text'),
-        classes: 'c-tooltip',
-        position: tooltip.getAttribute('data-tooltip-position') || 'bottom left'
+      new Tooltip(tooltip, {
+        title: tooltip.getAttribute('data-tooltip-text'),
+        placement: tooltip.getAttribute('data-tooltip-position') || 'bottom left',
+        container: 'body',
+        offset: '1, 1',
+        popperOptions: {
+          modifiers: {
+            preventOverflow: {
+              boundariesElement: 'window',
+              enabled: true
+            }
+          }
+        }
       });
 
+      tooltip.classList.add('c-tooltip');
       tooltip.setAttribute('data-tooltip-load', '1');
     });
   }
