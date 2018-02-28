@@ -12,7 +12,7 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
       Api::V3::Flow.delete_all # no idea why db cleaner doesn't do that ;(
     end
 
-    let(:flow1_potential_deforestation_row){
+    let(:flow1_potential_deforestation_row) {
       [
         2015,
         'Nova Ubirata',
@@ -22,10 +22,11 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
         'Afg Brasil',
         'Unknown Customer',
         'Russian Federation',
-        'DEFORESTATION', '10'
-    ]
+        'DEFORESTATION',
+        '10'
+      ]
     }
-    let(:flow1_zero_deforestation_row){
+    let(:flow1_zero_deforestation_row) {
       [
         2015,
         'Nova Ubirata',
@@ -39,7 +40,7 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
         'no'
       ]
     }
-    let(:flow2_potential_deforestation_row){
+    let(:flow2_potential_deforestation_row) {
       [
         2015,
         'Nova Ubirata',
@@ -53,7 +54,7 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
         '5'
       ]
     }
-    let(:flow2_zero_deforestation_row){
+    let(:flow2_zero_deforestation_row) {
       [
         2015,
         'Nova Ubirata',
@@ -99,11 +100,11 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
           {name: api_v3_zero_deforestation.name, op: 'eq', val: 'yes'},
           {name: api_v3_deforestation_v2.name, op: 'gt', val: '5'}
         ]
-    )
+      )
 
       expected = [
         flow1_potential_deforestation_row,
-        flow2_zero_deforestation_row,
+        flow2_zero_deforestation_row
       ]
       actual = query_to_row(qb.flat_query)
       expect(actual).to match_array(expected)

@@ -538,8 +538,28 @@ definitions:
           - Ind
           - Qual
           - Quant
-      tooltip:
-        type: boolean
+      years:
+        type: array
+        items:
+          type: integer
+        description: null when all years
+      filterOptions:
+        type: object
+        properties:
+          ops:
+            type: array
+            items:
+              type: string
+              enum:
+                - eq
+                - gt
+                - lt
+            description: Operators available for advanced filter
+          values:
+            type: array
+            items:
+              type: string
+            description: For quals, enumeration of possible values
   FilterBy:
     type: object
     properties:
