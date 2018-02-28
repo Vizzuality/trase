@@ -53,7 +53,7 @@
 
           > .node-name {
             display: inline-block;
-            max-width: 80%;
+            max-width: 90%;
 
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -81,6 +81,7 @@
 
         > .cell-score  {
           position: relative;
+          min-width: 70px;
 
           > .unit {
 
