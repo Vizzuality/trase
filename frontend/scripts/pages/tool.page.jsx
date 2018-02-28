@@ -33,6 +33,7 @@ import 'styles/tool.scss';
 import EventManager from 'utils/eventManager';
 
 const evManager = new EventManager();
+const containers = [];
 
 export const mount = (root, store) => {
   const { query = {} } = store.getState().location;
@@ -52,7 +53,7 @@ export const mount = (root, store) => {
   new MapBasemapsContainer(store);
   new TitlebarContainer(store);
   new NodesTitlesContainer(store);
-  new TooltipContainer(store);
+  containers.push(new TooltipContainer(store));
   new ModalContainer(store);
 
   new NavContainer(store);
@@ -99,6 +100,7 @@ export const unmount = () => {
   unmountComponentAtNode(document.getElementById('js-columns-selector-react'));
   unmountComponentAtNode(document.getElementById('js-search-react'));
   document.querySelector('body').classList.remove('-overflow-hidden');
+  containers.forEach(container => container.remove());
 };
 
 // if (NODE_ENV_DEV === true) {

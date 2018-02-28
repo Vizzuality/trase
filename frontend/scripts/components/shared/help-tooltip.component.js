@@ -4,7 +4,13 @@ import 'styles/components/shared/help-tooltip.scss';
 
 export default class {
   onCreated() {
+    this.tooltips = [];
     this._loadTooltip();
+  }
+
+  onRemoved() {
+    this.tooltips.forEach(tooltip => tooltip.dispose());
+    this.tooltips = [];
   }
 
   checkTooltip() {
@@ -12,15 +18,15 @@ export default class {
   }
 
   _loadTooltip() {
-    this.tooltips = Array.prototype.slice.call(
+    const tooltipElements = Array.prototype.slice.call(
       document.querySelectorAll('.js-tooltip:not([data-tooltip-load])'),
       0
     );
 
-    this.tooltips.forEach(tooltip => {
-      new Tooltip(tooltip, {
-        title: tooltip.getAttribute('data-tooltip-text'),
-        placement: tooltip.getAttribute('data-tooltip-position') || 'bottom left',
+    tooltipElements.forEach(element => {
+      const tooltip = new Tooltip(element, {
+        title: element.getAttribute('data-tooltip-text'),
+        placement: element.getAttribute('data-tooltip-position') || 'bottom left',
         container: 'body',
         offset: '1, 1',
         popperOptions: {
@@ -33,8 +39,10 @@ export default class {
         }
       });
 
-      tooltip.classList.add('c-tooltip');
-      tooltip.setAttribute('data-tooltip-load', '1');
+      this.tooltips.push(tooltip);
+
+      element.classList.add('c-tooltip');
+      element.setAttribute('data-tooltip-load', '1');
     });
   }
 }
