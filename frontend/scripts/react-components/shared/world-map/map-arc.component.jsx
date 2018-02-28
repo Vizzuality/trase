@@ -105,6 +105,7 @@ class Arc extends Component {
   }
   render() {
     const {
+      className,
       projection,
       arc,
       style,
@@ -139,7 +140,9 @@ class Arc extends Component {
 
     return (
       <path
-        className={`rsm-arc${pressed ? ' rsm-arc--pressed' : ''}${hover ? ' rsm-arc--hover' : ''}`}
+        className={`rsm-arc${pressed ? ' rsm-arc--pressed' : ''}${
+          hover ? ' rsm-arc--hover' : ''
+        } ${className}`}
         transform={`${scale}`}
         style={
           style[

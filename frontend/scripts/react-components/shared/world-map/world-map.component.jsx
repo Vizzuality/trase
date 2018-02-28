@@ -1,80 +1,16 @@
 import React from 'react';
-import { ComposableMap, Geographies, Geography, Markers, ZoomableGroup } from 'react-simple-maps';
-import Arc from './map-arc.component';
-
-const markers = [
-  {
-    markerOffset: -35,
-    name: 'Buenos Aires',
-    coordinates: [-58.3816, -34.6037],
-    curveStyle: 'concave',
-    strokeWidth: 10
-  },
-  {
-    markerOffset: -35,
-    name: 'La Paz',
-    coordinates: [-68.1193, -16.4897],
-    curveStyle: 'concave',
-    strokeWidth: 9
-  },
-  {
-    markerOffset: 15,
-    name: 'Brasilia',
-    coordinates: [-47.8825, -15.7942],
-    curveStyle: 'concave',
-    strokeWidth: 8
-  },
-  { markerOffset: 15, name: 'Santiago', coordinates: [-70.6693, -33.4489], curveStyle: 'concave' },
-  {
-    markerOffset: 15,
-    name: 'Bogota',
-    coordinates: [-74.0721, 4.711],
-    curveStyle: 'convex',
-    strokeWidth: 7
-  },
-  {
-    markerOffset: 15,
-    name: 'Quito',
-    coordinates: [-78.4678, -0.1807],
-    curveStyle: 'concave',
-    strokeWidth: 6
-  },
-  {
-    markerOffset: -35,
-    name: 'Georgetown',
-    coordinates: [-58.1551, 6.8013],
-    curveStyle: 'convex',
-    strokeWidth: 5
-  },
-  {
-    markerOffset: -35,
-    name: 'Asuncion',
-    coordinates: [-57.5759, -25.2637],
-    curveStyle: 'concave',
-    strokeWidth: 4
-  },
-  {
-    markerOffset: 15,
-    name: 'Paramaribo',
-    coordinates: [-55.2038, 5.852],
-    curveStyle: 'convex',
-    strokeWidth: 3
-  },
-  {
-    markerOffset: 15,
-    name: 'Montevideo',
-    coordinates: [-56.1645, -34.9011],
-    curveStyle: 'concave',
-    strokeWidth: 2
-  },
-  {
-    markerOffset: -35,
-    name: 'Caracas',
-    coordinates: [-66.9036, 10.4806],
-    curveStyle: 'convex',
-    strokeWidth: 1
-  }
-];
+import PropTypes from 'prop-types';
+import {
+  ComposableMap,
+  Geographies,
+  Geography,
+  Markers,
+  ZoomableGroup,
+  Annotations,
+  Annotation
+} from 'react-simple-maps';
+import cx from 'classnames';
+import Arc from 'react-components/shared/world-map/map-arc.component';
 
 class WorldMap extends React.PureComponent {
   static buildCurves(start, end, arc) {
@@ -90,38 +26,83 @@ class WorldMap extends React.PureComponent {
     return `M ${start.join(' ')} Q ${curve} ${end.join(' ')}`;
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      active: null
+    };
+    this.onMouseEnterGeography = this.onMouseEnterGeography.bind(this);
+    this.onMouseLeaveGeography = this.onMouseLeaveGeography.bind(this);
+  }
+
+  onMouseEnterGeography(e) {
+    setTimeout(() => this.setState(() => ({ active: e.properties.iso2 })));
+  }
+
+  onMouseLeaveGeography() {
+    this.setState(() => ({ active: null }));
+  }
+
   render() {
+    const { flows, origin } = this.props;
+    const isoList = flows.map(f => f.iso);
     return (
-      <ComposableMap>
+      <ComposableMap className="c-world-map">
         <ZoomableGroup>
-          <Geographies geography="/vector_layers/WORLD.topo.json">
+          <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
             {(geographies, projection) =>
               geographies.map(geography => (
-                <Geography key={geography.id} geography={geography} projection={projection} />
+                <Geography
+                  key={geography.properties.cartodb_id}
+                  className={cx(
+                    'world-map-geography',
+                    { '-destination': isoList.includes(geography.properties.iso2) },
+                    { '-origin': origin.iso === geography.properties.iso2 }
+                  )}
+                  geography={geography}
+                  projection={projection}
+                  onMouseEnter={this.onMouseEnterGeography}
+                  onMouseLeave={this.onMouseLeaveGeography}
+                />
               ))
             }
           </Geographies>
           <Markers>
-            {markers.map(marker => (
+            {flows.map(flow => (
               <Arc
+                className="world-map-arc"
                 arc={{
                   coordinates: {
-                    start: marker.coordinates,
-                    end: [151.2400245666504, -33.93638164139202]
+                    start: flow.coordinates,
+                    end: origin.coordinates
                   },
-                  curveStyle: marker.curveStyle
+                  curveStyle: flow.curveStyle
                 }}
                 buildPath={WorldMap.buildCurves}
-                strokeWidth={marker.strokeWidth}
+                strokeWidth={flow.strokeWidth}
               />
             ))}
           </Markers>
+          <Annotations>
+            {flows.map((flow, i) => (
+              <Annotation key={flow.iso} dx={5} dy={5} subject={flow.coordinates} strokeWidth={0}>
+                <text
+                  className={cx('world-map-annotation-text', {
+                    'is-hidden': this.state.active !== flow.iso
+                  })}
+                >{`${i + 1}.${flow.name}`}</text>
+              </Annotation>
+            ))}
+          </Annotations>
         </ZoomableGroup>
       </ComposableMap>
     );
   }
 }
 
-WorldMap.propTypes = {};
+WorldMap.propTypes = {
+  flows: PropTypes.array.isRequired,
+  origin: PropTypes.object.isRequired
+};
 
 export default WorldMap;
