@@ -43,7 +43,7 @@ class MiniSankey extends Component {
 
     const isSmallResolution = width < MEDIUM_RES;
     const nodeWidth = isSmallResolution ? NODE_WIDTH_SMALL : NODE_WIDTH;
-    const textMinWidth = isSmallResolution ? 160 : 200;
+    const textMinWidth = isSmallResolution ? 130 : 200;
     const leftTextRotate = isSmallResolution ? '-90' : '0';
     const rightTextWidth = Math.max(width * TEXT_WIDTH_PERCENTAGE / 100, textMinWidth);
     const leftTextWidth = isSmallResolution ? 20 : rightTextWidth;
@@ -60,7 +60,7 @@ class MiniSankey extends Component {
         i18n(node.name),
         Math.max(TEXT_LINE_HEIGHT, renderedHeight),
         TEXT_LINE_HEIGHT,
-        isSmallResolution ? 12 : 18,
+        isSmallResolution ? 11 : 18,
         3
       );
       const percent = 100 * node.height;
