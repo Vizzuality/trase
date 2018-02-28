@@ -349,13 +349,52 @@ paths:
       responses:
         '200':
           description: successful operation
-  /download:
+  '/context/{context_id}/download':
     get:
       tags:
-        - download
+        - context
+      summary: 'Download selected flow attributes as csv / json'
       produces:
         - text/csv
         - application/json
+      parameters:
+        - name: context_id
+          in: path
+          description: ''
+          required: true
+          type: integer
+        - name: years
+          description: 'Years'
+          in: query
+          type: array
+          items:
+            type: integer
+        - name: e_ids
+          description: 'Exporters ids'
+          in: query
+          type: array
+          items:
+            type: integer
+        - name: i_ids
+          description: 'Importers ids'
+          in: query
+          type: array
+          items:
+            type: integer
+        - name: c_ids
+          description: 'Countries ids'
+          in: query
+          type: array
+          items:
+            type: integer
+        - name: filters
+          description: 'Filters, e.g. filters[][name]=FOB&filters[][op]=lt&filters[][val]=2'
+          in: query
+          type: array
+          items:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: successful operation
