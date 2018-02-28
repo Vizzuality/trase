@@ -1,27 +1,19 @@
-import React from 'react';
+import cx from 'classnames';
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import PropTypes from 'prop-types';
-import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
-import { NavLink } from 'redux-first-router-link';
-import NavLinksList from 'react-components/nav/nav-links-list.component';
-import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
-import ResizeBySelector from 'react-components/nav/filters-nav/resize-by-selector/resize-by-selector.container';
-import RecolorBySelector from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.container';
-import ViewSelector from 'react-components/nav/filters-nav/view-selector/view-selector.container';
-import ToolSearch from 'react-components/tool/tool-search/tool-search.container';
-import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
+import React from 'react';
 import AdminLevelFilter from 'react-components/nav/filters-nav/admin-level-filter/admin-level-filter.container';
+import RecolorBySelector from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.container';
+import ResizeBySelector from 'react-components/nav/filters-nav/resize-by-selector/resize-by-selector.container';
+import ViewSelector from 'react-components/nav/filters-nav/view-selector/view-selector.container';
+import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
+import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
+import NavLinksList from 'react-components/nav/nav-links-list.component';
+import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
+import ToolSearch from 'react-components/tool/tool-search/tool-search.container';
+import { NavLink } from 'redux-first-router-link';
 
 class FiltersNav extends React.PureComponent {
-  static isActiveLink(match, location, link) {
-    const { type, query = {} } = location;
-    const { payload = {}, type: linkType } = link.page;
-    return (
-      type === linkType &&
-      !!(query.state && query.state.isMapVisible) ===
-        !!(payload.query && payload.query.isMapVisible)
-    );
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -53,7 +45,7 @@ class FiltersNav extends React.PureComponent {
   }
 
   renderMenuOpened() {
-    const { links } = this.props;
+    const { links, openMap, openSankey, isMapVisible } = this.props;
     const [supplyChainLink, mapLink, ...restOfLinks] = links;
 
     return (
@@ -66,20 +58,24 @@ class FiltersNav extends React.PureComponent {
               </NavLink>
             </li>
             <li className="filters-nav-item">
-              <NavLink
-                exact
-                strict
-                className="filters-nav-link"
-                to={supplyChainLink.page}
-                isActive={(...params) => FiltersNav.isActiveLink(...params, supplyChainLink)}
+              <span
+                className={cx('filters-nav-link', {
+                  '-active': !isMapVisible
+                })}
+                onClick={openSankey}
               >
                 {supplyChainLink.name}
-              </NavLink>
+              </span>
             </li>
             <li className="filters-nav-item">
-              <a className="filters-nav-link" role="button">
+              <span
+                className={cx('filters-nav-link', {
+                  '-active': isMapVisible
+                })}
+                onClick={openMap}
+              >
                 {mapLink.name}
-              </a>
+              </span>
             </li>
           </ul>
           <NavLinksList
@@ -142,7 +138,10 @@ class FiltersNav extends React.PureComponent {
 
 FiltersNav.propTypes = {
   links: PropTypes.array.isRequired,
-  selectedContext: PropTypes.object
+  selectedContext: PropTypes.object,
+  isMapVisible: PropTypes.bool,
+  openMap: PropTypes.func,
+  openSankey: PropTypes.func
 };
 
 export default FiltersNav;

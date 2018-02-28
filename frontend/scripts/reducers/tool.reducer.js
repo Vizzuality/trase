@@ -530,8 +530,10 @@ const toolReducer = {
       expandedNodesIds
     });
   },
-  [TOGGLE_MAP](state) {
-    return Object.assign({}, state, { isMapVisible: !state.isMapVisible });
+  [TOGGLE_MAP](state, action) {
+    return Object.assign({}, state, {
+      isMapVisible: action.forceState !== null ? action.forceState : !state.isMapVisible
+    });
   },
   [SAVE_MAP_VIEW](state, action) {
     return Object.assign({}, state, {
