@@ -117,7 +117,8 @@
     "remark": "^9.0.0",
     "remark-react": "^4.0.1",
     "tether-tooltip": "^1.2.0",
-    "topojson": "^3.0.2"
+    "topojson": "^3.0.2",
+    "turf": "^3.0.14"
   },
   "engines": {
     "node": "8.2.1"

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import WorldMap from 'react-components/shared/world-map/world-map.component';
 
 const origin = {
-  coordinates: [-99.133209, 19.432608],
+  coordinates: [-1, 55],
   iso: 'MX'
 };
 
