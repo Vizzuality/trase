@@ -15,7 +15,7 @@ module Api
           ).
           references(:context_property).
           where('NOT context_properties.is_disabled').
-          select(&:is_visible?)
+          select(&:visible?)
 
         render json: @contexts, root: 'data',
                each_serializer: Api::V3::Contexts::ContextSerializer

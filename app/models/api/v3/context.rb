@@ -23,11 +23,11 @@ module Api
       validates :country, presence: true
       validates :commodity, presence: true, uniqueness: {scope: :country}
 
-      def is_visible?
+      def visible?
         country.present? &&
-        commodity.present? &&
-        country_context_node_type.present? &&
-        exporter_context_node_type.present?
+          commodity.present? &&
+          country_context_node_type.present? &&
+          exporter_context_node_type.present?
       end
 
       def country_context_node_type
