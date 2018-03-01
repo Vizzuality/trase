@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import WorldMap from 'react-components/shared/world-map/world-map.component';
+import WorldMap from 'react-components/shared/world-map/world-map.container';
 
 function Explore(props) {
   const { flows, origin } = props;

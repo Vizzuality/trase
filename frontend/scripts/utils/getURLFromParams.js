@@ -19,6 +19,7 @@ export const GET_SITE_DIVE_URL = 'GET_SITE_DIVE_URL';
 export const GET_TESTIMONIALS_URL = 'GET_TESTIMONIALS_URL';
 export const GET_MARKDOWN_CONTENT_URL = 'GET_MARKDOWN_CONTENT_URL';
 export const GET_TEAM_URL = 'GET_TEAM_URL';
+export const GET_TOP_NODES_URL = 'GET_TOP_NODES_URL';
 
 const API_ENDPOINTS = {
   [GET_CONTEXTS_URL]: { api: 3, endpoint: '/contexts' },
@@ -57,7 +58,8 @@ const API_ENDPOINTS = {
     api: 'content',
     endpoint: '/staff_groups',
     mock: '/mocks/v3_get_team.json'
-  }
+  },
+  [GET_TOP_NODES_URL]: { api: 3, endpoint: '/contexts/$context_id$/top_nodes' }
 };
 
 function getURLForV3(endpoint, paramsArg = {}) {

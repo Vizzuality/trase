@@ -220,7 +220,7 @@ ActiveAdmin.setup do |config|
   #     admin.build_menu :default do |menu|
   #       menu.add label: "My Great Website", url: "http://www.mygreatwebsite.com", html_options: { target: :blank }
   #     end
-  #   end
+  # end
 
 config.namespace :admin do |admin|
   admin.build_menu do |menu|

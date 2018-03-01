@@ -1,8 +1,7 @@
 // import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Explore from 'react-components/explore/explore.component';
+import WorldMap from 'react-components/shared/world-map/world-map.component';
 import turf from 'turf';
-import { COUNTRIES_COORDINATES } from 'scripts/countries';
 
 const origin = {
   coordinates: [-99.1351318359375, 19.37334071336406],
@@ -10,20 +9,19 @@ const origin = {
 };
 
 const mapStateToProps = state => {
-  const countries = state.tool.visibleNodesByColumn.find(c => c.columnId === 3);
-  const flows = countries
-    ? countries.values.slice(0, 10).map(country => ({
+  const countries = state.worldMap.flows[state.tool.selectedContextId];
+  const contextFlows = countries
+    ? countries.map((country, index) => ({
         ...country,
-        coordinates: COUNTRIES_COORDINATES[country.geoId],
-        strokeWidth: 5
+        strokeWidth: index
       }))
     : [];
-  const [minX, minY, maxX, maxY] = turf.bbox(turf.lineString(flows.map(f => f.coordinates)));
+  const [minX,, maxX] = turf.bbox(turf.lineString(contextFlows.map(f => f.coordinates)));
   const medianX = (maxX + minX) / 2;
   const isLeft = origin.coordinates[0] > medianX;
   const pointOfControl = isLeft ? maxX : minX;
 
-  const newFlows = flows.map(flow => ({
+  const flows = contextFlows.map(flow => ({
     ...flow,
     curveStyle:
       flow.coordinates[0] > pointOfControl && flow.coordinates[0] > origin.coordinates[0]
@@ -31,9 +29,9 @@ const mapStateToProps = state => {
         : 'convex'
   }));
   return {
-    flows: newFlows,
+    flows,
     origin
   };
 };
 
-export default connect(mapStateToProps)(Explore);
+export default connect(mapStateToProps)(WorldMap);
