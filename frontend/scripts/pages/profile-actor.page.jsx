@@ -301,10 +301,6 @@ const _build = (data, { nodeId, year, print }, store) => {
   }
 
   if (data.companies_sourcing) {
-    document.querySelector('.js-companies-exporting-y-axis').innerHTML = `${
-      data.companies_sourcing.dimension_y.name
-    } (${data.companies_sourcing.dimension_y.unit})`;
-
     const showTooltipCallback = (company, indicator, x, y) => {
       tooltip.show(x, y, company.name, [
         {

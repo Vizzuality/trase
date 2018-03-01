@@ -22,7 +22,6 @@ class Scatterplot extends Component {
       bottom: 30,
       left: 29
     };
-    this.key = `scatterplot_${new Date().getTime()}`;
     this.state = {
       selectedTabIndex: 0
     };
@@ -76,10 +75,9 @@ class Scatterplot extends Component {
       .tickPadding(9)
       .tickFormat(value => abbreviateNumber(value, 3));
 
-    const svgElement = document.querySelector(`.${this.key}`);
-    svgElement.innerHTML = '';
+    this.svgElement.innerHTML = '';
 
-    this.svg = d3_select(svgElement)
+    this.svg = d3_select(this.svgElement)
       .attr('width', parentWidth)
       .attr('height', height + this.margins.top + this.margins.bottom)
       .append('g')
@@ -216,13 +214,17 @@ class Scatterplot extends Component {
     const { verbGerund, year } = this.props;
 
     return (
-      <div className="small-12 columns" style={{ position: 'relative' }}>
+      <div style={{ position: 'relative' }}>
         <h3 className="js-scatterplot-title title -small">
           {`Comparing companies ${verbGerund} Soy from Brazil in ${year}`}
         </h3>
         <div className="js-companies-exporting-y-axis axis-legend" />
         <div className="js-companies-exporting">
-          <svg className={this.key} />
+          <svg
+            ref={el => {
+              this.svgElement = el;
+            }}
+          />
         </div>
         {this.renderSwitcher()}
       </div>
