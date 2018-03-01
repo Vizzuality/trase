@@ -49,15 +49,22 @@ export const DETAILED_VIEW_MIN_LINK_HEIGHT = 1;
 export const CHOROPLETH_CLASS_ZERO = 'ch-zero';
 export const CHOROPLETH_CLASSES = {
   bidimensional: [
+    'ch-bi-0-3',
+    'ch-bi-1-3',
+    'ch-bi-2-3',
+    'ch-bi-3-3',
     'ch-bi-0-2',
     'ch-bi-1-2',
     'ch-bi-2-2',
+    'ch-bi-3-2',
     'ch-bi-0-1',
     'ch-bi-1-1',
     'ch-bi-2-1',
+    'ch-bi-3-1',
     'ch-bi-0-0',
     'ch-bi-1-0',
-    'ch-bi-2-0'
+    'ch-bi-2-0',
+    'ch-bi-3-0'
   ],
   horizontal: ['ch-red-0', 'ch-red-1', 'ch-red-2', 'ch-red-3', 'ch-red-4'],
   vertical: ['ch-blue-0', 'ch-blue-1', 'ch-blue-2', 'ch-blue-3', 'ch-blue-4'],
