@@ -272,7 +272,7 @@
         margin: 4px 0 0;
 
         &[data-colors = '5'] {
-          width: 80%;
+          width: calc(100% - 40px);
         }
       }
 
@@ -288,7 +288,7 @@
       }
 
       .bullets {
-        left: 30px;
+        left: 0;
         bottom: 0;
 
         li {
