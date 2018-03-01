@@ -9,8 +9,8 @@ import 'styles/components/profiles/scatterplot.scss';
 import abbreviateNumber from 'utils/abbreviateNumber';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { Responsive } from 'react-components/shared/responsive.hoc';
+import DropdownTabSwitcher from 'react-components/profiles/dropdown-tab-switcher.component';
 
 class Scatterplot extends Component {
   constructor(props) {
@@ -25,6 +25,8 @@ class Scatterplot extends Component {
     this.state = {
       selectedTabIndex: 0
     };
+
+    this.handleSwitcherIndexChange = this.handleSwitcherIndexChange.bind(this);
   }
 
   componentDidMount() {
@@ -146,7 +148,7 @@ class Scatterplot extends Component {
     }
   }
 
-  _switchTab(selectedTabIndex) {
+  handleSwitcherIndexChange(selectedTabIndex) {
     this.setState({ selectedTabIndex });
 
     const newData = this._getFormattedData(selectedTabIndex);
@@ -186,38 +188,17 @@ class Scatterplot extends Component {
     return d.name.toUpperCase() === this.props.node.name.toUpperCase() ? 'dot current' : 'dot';
   }
 
-  renderSwitcher() {
-    const tabs = this.props.xDimension.filter((x, i) => i < 3);
-
-    return (
-      <ul className="c-scatterplot-switcher js-scatterplot-switcher">
-        {tabs.map((elem, index) => (
-          <li
-            key={index}
-            className={classnames(
-              'js-scatterplot-switcher-item',
-              'tab',
-              { selected: index === this.state.selectedTabIndex },
-              { unit: elem.unit !== null }
-            )}
-            data-key={index}
-            onClick={() => this._switchTab(index)}
-          >
-            <span data-unit={elem.unit !== null ? elem.unit : null}>{elem.name}</span>
-          </li>
-        ))}
-      </ul>
-    );
-  }
-
   render() {
-    const { verbGerund, year } = this.props;
+    const { title, xDimension } = this.props;
+    const tabs = xDimension.filter((x, i) => i < 3).map(e => e.name);
 
     return (
       <div style={{ position: 'relative' }}>
-        <h3 className="js-scatterplot-title title -small">
-          {`Comparing companies ${verbGerund} Soy from Brazil in ${year}`}
-        </h3>
+        <DropdownTabSwitcher
+          title={title}
+          items={tabs}
+          onSelectedIndexChange={this.handleSwitcherIndexChange}
+        />
         <div className="js-companies-exporting-y-axis axis-legend" />
         <div className="js-companies-exporting">
           <svg
@@ -226,17 +207,16 @@ class Scatterplot extends Component {
             }}
           />
         </div>
-        {this.renderSwitcher()}
       </div>
     );
   }
 }
 
 Scatterplot.propTypes = {
+  title: PropTypes.string,
   data: PropTypes.array,
   node: PropTypes.object,
   xDimension: PropTypes.array,
-  verbGerund: PropTypes.string,
   year: PropTypes.number,
   width: PropTypes.number,
   showTooltipCallback: PropTypes.func,

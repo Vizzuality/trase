@@ -17,10 +17,10 @@ class MultiTable extends Component {
       selectedTableIndex: 0
     };
 
-    this.handleSwitcherChange = this.handleSwitcherChange.bind(this);
+    this.handleSwitcherIndexChange = this.handleSwitcherIndexChange.bind(this);
   }
 
-  handleSwitcherChange(selectedTableIndex) {
+  handleSwitcherIndexChange(selectedTableIndex) {
     this.setState({ selectedTableIndex });
   }
 
@@ -35,7 +35,7 @@ class MultiTable extends Component {
           title={tabsTitle}
           titleTooltip={tabsTitleTooltip}
           items={indicatorNames}
-          onSelected={this.handleSwitcherChange}
+          onSelectedIndexChange={this.handleSwitcherIndexChange}
         />
         {data.map((elem, index) => (
           <div key={index}>

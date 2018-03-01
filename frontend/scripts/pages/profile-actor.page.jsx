@@ -120,15 +120,16 @@ const _initSource = (selectedSource, data, store) => {
 const _setTopSourceSwitcher = (data, verb, year, store) => {
   const nodeName = capitalize(data.node_name);
   const title = `Top sourcing regions of Soy ${verb} by ${nodeName} in ${year}:`;
+  const items = Object.keys(data.top_sources).filter(
+    key => !ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)
+  );
 
   render(
     <Provider store={store}>
       <DropdownTabSwitcher
         title={title}
-        items={Object.keys(data.top_sources).filter(
-          key => !ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)
-        )}
-        onSelected={item => _initSource(item, data, store)}
+        items={items}
+        onSelectedIndexChange={index => _initSource(items[index], data, store)}
       />
     </Provider>,
     document.querySelector('.js-top-municipalities-title-container')
@@ -317,15 +318,16 @@ const _build = (data, { nodeId, year, print }, store) => {
     };
 
     const scatterplotContainerElement = document.querySelector('.js-scatterplot-container');
+    const scatterplotTitle = `Comparing companies ${verbGerund} Soy from Brazil in ${year}`;
 
     render(
       <Provider store={store}>
         <Scatterplot
           width={scatterplotContainerElement.clientWidth}
+          title={scatterplotTitle}
           data={data.companies_sourcing.companies}
           xDimension={data.companies_sourcing.dimensions_x}
           node={{ id: nodeId, name: data.node_name }}
-          verbGerund={verbGerund}
           year={year}
           showTooltipCallback={showTooltipCallback}
           hideTooltipCallback={tooltip.hide}

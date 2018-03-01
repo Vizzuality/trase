@@ -19,7 +19,7 @@ class DropdownTabSwitcher extends Component {
   handleSelect(selectedIndex) {
     this.setState({ selectedIndex });
 
-    this.props.onSelected(this.props.items[selectedIndex]);
+    this.props.onSelectedIndexChange(selectedIndex);
   }
 
   render() {
@@ -64,7 +64,7 @@ DropdownTabSwitcher.propTypes = {
   title: PropTypes.string,
   titleTooltip: PropTypes.string,
   items: PropTypes.array,
-  onSelected: PropTypes.func
+  onSelectedIndexChange: PropTypes.func
 };
 
 export default DropdownTabSwitcher;
