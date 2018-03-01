@@ -16,6 +16,7 @@ import { withSidebarNavLayout } from 'react-components/nav/sidebar-nav/with-side
 import { getProfileRootNodes } from 'react-components/profile-root/profile-root.thunks';
 import { getPageStaticContent } from 'react-components/static-content/static-content.thunks';
 import { getTeam } from 'react-components/team/team.thunks';
+import { loadInitialDataExplore } from 'react-components/explore/explore.thunks';
 
 const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thunk(...params));
 
@@ -36,7 +37,8 @@ const routes = {
   },
   explore: {
     path: '/explore',
-    page: 'explore'
+    page: 'explore',
+    thunk: dispatchThunks(loadInitialDataExplore)
   },
   tool: {
     path: '/flows',

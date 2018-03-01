@@ -236,7 +236,7 @@ export function selectYears(years) {
 }
 
 export function loadInitialData() {
-  return (dispatch, getState) => {
+  return dispatch => {
     dispatch({
       type: LOAD_INITIAL_DATA
     });
@@ -244,32 +244,33 @@ export function loadInitialData() {
     const contextURL = getURLFromParams(GET_CONTEXTS_URL);
     const tooltipsURL = getURLFromParams(GET_TOOLTIPS_URL);
 
-    Promise.all([contextURL, tooltipsURL].map(url => fetch(url).then(resp => resp.text()))).then(
-      data => {
-        const tooltipsPayload = JSON.parse(data[1]);
+    return Promise.all(
+      [contextURL, tooltipsURL].map(url => fetch(url).then(resp => resp.text()))
+    ).then(data => {
+      const tooltipsPayload = JSON.parse(data[1]);
 
-        dispatch({
-          type: SET_TOOLTIPS,
-          payload: tooltipsPayload
-        });
+      dispatch({
+        type: SET_TOOLTIPS,
+        payload: tooltipsPayload
+      });
 
-        const contextPayload = JSON.parse(data[0]).data;
-        // load contexts
-        dispatch({
-          type: LOAD_CONTEXTS,
-          payload: contextPayload
-        });
-
-        const state = getState();
-        const defaultContextId =
-          state.tool.selectedContextId ||
-          contextPayload.find(context => context.isDefault === true).id;
-
-        dispatch(setContext(defaultContextId, true));
-      }
-    );
+      const contextPayload = JSON.parse(data[0]).data;
+      // load contexts
+      dispatch({
+        type: LOAD_CONTEXTS,
+        payload: contextPayload
+      });
+      return Promise.resolve();
+    });
   };
 }
+
+export const setDefaultContext = () => (dispatch, getState) => {
+  const { selectedContextId, contexts } = getState().tool;
+  const defaultContextId =
+    selectedContextId || contexts.find(context => context.isDefault === true).id;
+  dispatch(setContext(defaultContextId, true));
+};
 
 export function setContext(contextId, isInitialContextSet = false) {
   return dispatch => {

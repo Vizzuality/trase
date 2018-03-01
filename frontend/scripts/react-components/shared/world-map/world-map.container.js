@@ -1,37 +1,49 @@
-// import { bindActionCreators } from 'redux';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import WorldMap from 'react-components/shared/world-map/world-map.component';
 import turf from 'turf';
+import { COUNTRY_ID_ORIGIN } from 'scripts/countries';
+import { setWorldMapTopNodes } from 'react-components/shared/world-map/world-map.actions';
 
-const origin = {
-  coordinates: [-99.1351318359375, 19.37334071336406],
-  geoId: 'MX'
-};
-
-const mapStateToProps = state => {
-  const countries = state.worldMap.flows[state.tool.selectedContextId];
+const getContextFlows = (countries, origin) => {
   const contextFlows = countries
     ? countries.map((country, index) => ({
         ...country,
         strokeWidth: index
       }))
     : [];
-  const [minX,, maxX] = turf.bbox(turf.lineString(contextFlows.map(f => f.coordinates)));
+  const [minX, , maxX] = turf.bbox(turf.lineString(contextFlows.map(f => f.coordinates)));
   const medianX = (maxX + minX) / 2;
   const isLeft = origin.coordinates[0] > medianX;
   const pointOfControl = isLeft ? maxX : minX;
-
-  const flows = contextFlows.map(flow => ({
+  return contextFlows.map(flow => ({
     ...flow,
     curveStyle:
       flow.coordinates[0] > pointOfControl && flow.coordinates[0] > origin.coordinates[0]
         ? 'concave'
         : 'convex'
   }));
+};
+
+const mapStateToProps = state => {
+  const { selectedContext, selectedContextId } = state.tool;
+  const origin = selectedContext && COUNTRY_ID_ORIGIN[selectedContext.countryId];
+
+  const countries = state.worldMap.flows[selectedContextId];
+  const flows = origin ? getContextFlows(countries, origin) : [];
   return {
     flows,
-    origin
+    origin,
+    selectedContext
   };
 };
 
-export default connect(mapStateToProps)(WorldMap);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      getTopNodes: setWorldMapTopNodes
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(WorldMap);

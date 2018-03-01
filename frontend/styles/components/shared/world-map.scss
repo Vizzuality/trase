@@ -5,13 +5,14 @@
     fill: rgba($charcoal-grey, 0.3);
     stroke: $white;
     outline: 0;
-
-    &.-origin {
-      fill: $strong-pink;
-    }
+    pointer-events: visibleFill;
 
     &.-destination {
       fill: rgba($charcoal-grey, 0.5);
+    }
+
+    &.-origin {
+      fill: $strong-pink;
     }
   }
 
@@ -20,6 +21,7 @@
     stroke: rgba($gray-text, 0.7);
     stroke-linecap: round;
     outline: 0;
+    pointer-events: visibleStroke;
   }
 
   .world-map-annotation-text {

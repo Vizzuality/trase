@@ -35,6 +35,12 @@ class WorldMap extends React.PureComponent {
     this.onMouseLeave = this.onMouseLeave.bind(this);
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.selectedContext !== this.props.selectedContext) {
+      this.props.getTopNodes();
+    }
+  }
+
   onMouseEnter(e) {
     const active = e.properties ? e.properties.iso2 : e.geoId;
     setTimeout(() => this.setState(() => ({ active })));
@@ -58,7 +64,7 @@ class WorldMap extends React.PureComponent {
                   className={cx(
                     'world-map-geography',
                     { '-destination': isoList.includes(geography.properties.iso2) },
-                    { '-origin': origin.geoId === geography.properties.iso2 }
+                    { '-origin': origin && origin.geoId === geography.properties.iso2 }
                   )}
                   geography={geography}
                   projection={projection}
@@ -106,7 +112,9 @@ class WorldMap extends React.PureComponent {
 
 WorldMap.propTypes = {
   flows: PropTypes.array.isRequired,
-  origin: PropTypes.object.isRequired
+  origin: PropTypes.object,
+  selectedContext: PropTypes.object,
+  getTopNodes: PropTypes.func.isRequired
 };
 
 export default WorldMap;
