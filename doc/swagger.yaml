@@ -335,17 +335,14 @@ paths:
       tags:
         - newsletter_subscription
       summary: Adds a new email to the subscriptions list
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-              required:
-                - email
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: email
+          type: string
+          description: Subscriber's email.
+          required: true
       responses:
         '200':
           description: successful operation
