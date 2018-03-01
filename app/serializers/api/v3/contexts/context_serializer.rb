@@ -26,31 +26,10 @@ module Api
           object.commodity.name
         end
 
-        # TODO: remove once API migration finalised
         attribute :filter_by do
-          biome_context_node_type = object.context_node_types.
-            joins(:node_type).
-            where('node_types.name' => NodeTypeName::BIOME).
-            first
-          if biome_context_node_type # Brazil - Soy only
-            [
-              {
-                name: NodeTypeName::BIOME,
-                nodes: Api::V3::Node.where(
-                  node_type_id: biome_context_node_type.node_type_id
-                ).
-                  where(is_unknown: false).
-                  where("name NOT LIKE 'OTHER%'").map do |node|
-                    {
-                      name: node.name,
-                      node_id: node.id
-                    }
-                  end
-              }
-            ]
-          else
-            []
-          end
+          [NodeTypeName::BIOME, NodeTypeName::STATE].map do |node_type_name|
+            node_type_filter node_type_name
+          end.compact
         end
 
         attribute :world_map do
@@ -58,6 +37,34 @@ module Api
             map_column_id: object.country_context_node_type&.node_type_id,
             list_column_id: object.exporter_context_node_type&.node_type_id
           }
+        end
+
+        def node_type_filter(node_type_name)
+          context_node_type = object.context_node_types.find do |cnt|
+            cnt.node_type.name == node_type_name
+          end
+          return nil unless context_node_type
+
+          {
+            name: node_type_name,
+            nodes: nodes_list(context_node_type.node_type_id)
+          }
+        end
+
+        def nodes_list(node_type_id)
+          nodes = Api::V3::Node.
+            select(:id, :name).
+            where(
+              node_type_id: node_type_id,
+              is_unknown: false
+            ).
+            where("nodes.name NOT LIKE 'OTHER%'")
+          nodes.map do |node|
+            {
+              name: node.name,
+              node_id: node.id
+            }
+          end
         end
       end
     end

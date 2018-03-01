@@ -545,6 +545,9 @@ definitions:
     properties:
       name:
         type: string
+        enum:
+          - BIOME
+          - STATE
       nodes:
         type: array
         items:
