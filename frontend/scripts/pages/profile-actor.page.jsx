@@ -74,8 +74,6 @@ const _initSource = (selectedSource, data, store) => {
     document.querySelector('.js-top-municipalities')
   );
 
-  // document.querySelector('.js-top-municipalities-map').innerHTML = '';
-
   const topoJSONPath = `./vector_layers/${defaults.country.toUpperCase()}_${selectedSource.toUpperCase()}.topo.json`;
   const topoJSONRoot = `${defaults.country.toUpperCase()}_${selectedSource.toUpperCase()}`;
   const getPolygonClassName = ({ properties }) => {
@@ -105,7 +103,7 @@ const _initSource = (selectedSource, data, store) => {
     <Provider store={store}>
       <Map
         width={containerElement.clientWidth}
-        height={containerElement.clientHeight}
+        height={400}
         topoJSONPath={topoJSONPath}
         topoJSONRoot={topoJSONRoot}
         getPolygonClassName={getPolygonClassName}
