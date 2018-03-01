@@ -2,6 +2,7 @@ module Api
   module V3
     class Qual < BlueTable
       has_one :qual_property
+      has_many :node_quals
 
       delegate :display_name, to: :qual_property
 

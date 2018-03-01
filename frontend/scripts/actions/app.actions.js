@@ -16,10 +16,11 @@ export function resize() {
   };
 }
 
-export function toggleMap() {
+export function toggleMap(forceState = null) {
   return dispatch => {
     dispatch({
-      type: TOGGLE_MAP
+      type: TOGGLE_MAP,
+      forceState
     });
     dispatch({ type: SET_SANKEY_SIZE });
   };

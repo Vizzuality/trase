@@ -34,6 +34,18 @@ module Api
                 inclusion: {in: LEGEND_COLOR_THEME}
       validates :is_disabled, inclusion: {in: [true, false]}
       validates :is_default, inclusion: {in: [true, false]}
+      validates :interval_count,
+                presence: true,
+                unless: proc { |a| a.min_value.blank? && a.max_value.blank? }
+      validates :min_value,
+                presence: true,
+                unless: proc { |a| a.interval_count.blank? }
+      validates :max_value,
+                presence: true,
+                unless: proc { |a| a.interval_count.blank? }
+      validates :divisor,
+                presence: true,
+                unless: proc { |a| a.legend_type != 'percentual' }
       validates_with OneAssociatedAttributeValidator,
                      attributes: [:recolor_by_ind, :recolor_by_qual]
       validates_with AttributeAssociatedOnceValidator,
