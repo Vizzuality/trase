@@ -2,22 +2,20 @@
 import { connect } from 'react-redux';
 import Explore from 'react-components/explore/explore.component';
 import turf from 'turf';
+import { COUNTRIES_COORDINATES } from 'scripts/countries';
 
 const origin = {
-  coordinates: [-1, 55],
-  iso: 'MX'
+  coordinates: [-99.1351318359375, 19.37334071336406],
+  geoId: 'MX'
 };
 
 const mapStateToProps = state => {
   const countries = state.tool.visibleNodesByColumn.find(c => c.columnId === 3);
   const flows = countries
-    ? countries.values.slice(0, 10).map((country, i) => ({
+    ? countries.values.slice(0, 10).map(country => ({
         ...country,
-        coordinates: [
-          parseFloat(`${i % 2 === 0 ? '-' : ''}1${i}.${i * 4}`, 10),
-          parseFloat(`${i % 2 === 0 ? '' : '-'}4${i}.${i * 3}`, 10)
-        ],
-        strokeWidth: 1
+        coordinates: COUNTRIES_COORDINATES[country.geoId],
+        strokeWidth: 5
       }))
     : [];
   const [minX, minY, maxX, maxY] = turf.bbox(turf.lineString(flows.map(f => f.coordinates)));
@@ -33,7 +31,8 @@ const mapStateToProps = state => {
         : 'convex'
   }));
   return {
-    flows: newFlows
+    flows: newFlows,
+    origin
   };
 };
 

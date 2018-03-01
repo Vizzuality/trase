@@ -31,15 +31,16 @@ class WorldMap extends React.PureComponent {
     this.state = {
       active: null
     };
-    this.onMouseEnterGeography = this.onMouseEnterGeography.bind(this);
-    this.onMouseLeaveGeography = this.onMouseLeaveGeography.bind(this);
+    this.onMouseEnter = this.onMouseEnter.bind(this);
+    this.onMouseLeave = this.onMouseLeave.bind(this);
   }
 
-  onMouseEnterGeography(e) {
-    setTimeout(() => this.setState(() => ({ active: e.properties.iso2 })));
+  onMouseEnter(e) {
+    const active = e.properties ? e.properties.iso2 : e.geoId;
+    setTimeout(() => this.setState(() => ({ active })));
   }
 
-  onMouseLeaveGeography() {
+  onMouseLeave() {
     this.setState(() => ({ active: null }));
   }
 
@@ -61,8 +62,8 @@ class WorldMap extends React.PureComponent {
                   )}
                   geography={geography}
                   projection={projection}
-                  onMouseEnter={this.onMouseEnterGeography}
-                  onMouseLeave={this.onMouseLeaveGeography}
+                  onMouseEnter={this.onMouseEnter}
+                  onMouseLeave={this.onMouseLeave}
                 />
               ))
             }
@@ -73,14 +74,16 @@ class WorldMap extends React.PureComponent {
                 key={flow.geoId}
                 className="world-map-arc"
                 arc={{
+                  ...flow,
                   coordinates: {
                     start: flow.coordinates,
                     end: origin.coordinates
-                  },
-                  curveStyle: flow.curveStyle
+                  }
                 }}
                 buildPath={WorldMap.buildCurves}
                 strokeWidth={flow.strokeWidth}
+                onMouseEnter={this.onMouseEnter}
+                onMouseLeave={this.onMouseLeave}
               />
             ))}
           </Markers>

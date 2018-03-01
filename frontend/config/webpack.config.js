@@ -67,6 +67,7 @@ module.exports = {
   ],
   resolve: {
     alias: {
+      scripts: path.resolve(srcPath),
       html: path.resolve(__dirname, '..', 'html'),
       actions: path.resolve(srcPath, 'actions'),
       analytics: path.resolve(srcPath, 'analytics'),

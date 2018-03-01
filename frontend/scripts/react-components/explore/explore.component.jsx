@@ -2,13 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import WorldMap from 'react-components/shared/world-map/world-map.component';
 
-const origin = {
-  coordinates: [-1, 55],
-  iso: 'MX'
-};
-
 function Explore(props) {
-  const { flows } = props;
+  const { flows, origin } = props;
   return (
     <div className="l-explore">
       <div className="c-explore">
@@ -19,7 +14,8 @@ function Explore(props) {
 }
 
 Explore.propTypes = {
-  flows: PropTypes.array
+  flows: PropTypes.array,
+  origin: PropTypes.object
 };
 
 export default Explore;
