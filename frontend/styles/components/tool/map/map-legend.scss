@@ -149,12 +149,13 @@
     .icon-bidimensional-legend-arrows {
       display: none;
       position: absolute;
-      top: 41px;
-      left: -10px;
+      margin: auto;
+      top: 3px;
+      left: 7px;
       right: 0;
       margin: auto;
-      width: 103px;
-      height: 40px;
+      width: 127px;
+      height: 98px;
     }
 
     &.-horizontal {
@@ -207,8 +208,10 @@
 
       .bucket-legend {
         position: absolute;
+        margin: auto;
         top: 18px;
-        left: 130px;
+        left: 0px;
+        right: 0px;
         width: 65px;
         height: 65px;
         transform: rotateZ(-45deg);
@@ -321,11 +324,11 @@
   .bucket-values {
     position: absolute;
     top: 41px;
-    left: -10px;
+    left: 0;
     right: 0;
     margin: auto;
-    width: 103px;
-    height: 40px;
+    width: 127px;
+    height: 60px;
 
     li {
       position: absolute;
@@ -336,22 +339,32 @@
       color: rgba($charcoal-grey, 0.5);
 
       &:nth-child(1) {
-        bottom: 16px;
-        right: 92px;
+        bottom: 29px;
+        right: 115px;
       }
 
       &:nth-child(2) {
-        bottom: 5px;
-        right: 81px;
+        bottom: 17px;
+        right: 103px;
       }
 
       &:nth-child(3) {
         bottom: 5px;
-        left: 80px;
+        right: 91px;
       }
 
       &:nth-child(4) {
-        bottom: 16px;
+        bottom: 29px;
+        left: 115px;
+      }
+
+      &:nth-child(5) {
+        bottom: 17px;
+        left: 103px;
+      }
+
+      &:nth-child(6) {
+        bottom: 5px;
         left: 91px;
       }
     }
