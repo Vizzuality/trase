@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import groupBy from 'lodash/groupBy';
 import memoize from 'lodash/memoize';
-
 import { toggleDropdown } from 'actions/app.actions';
 import { selectContext } from 'actions/tool.actions';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.component';
@@ -30,8 +29,9 @@ const memoizedClassifyColumn = memoize(
   (ctx, params) => Object.values(params).join('-') + ctx.length
 );
 
+const getComputedKey = keys => keys.join('_');
+
 const mapStateToProps = state => {
-  const getComputedKey = keys => keys.join('_');
   const contexts = state.tool.contexts.reduce((acc, context) => {
     const computedId = getComputedKey([context.countryId, context.commodityId]);
     return Object.assign({}, acc, { [computedId]: context });

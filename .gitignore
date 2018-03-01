@@ -7,6 +7,11 @@
 # Ignore bundler config.
 /.bundle
 
+# Ignore yardoc files
+/.yardopts
+/.yardoc
+/doc/yardoc
+
 /coverage
 
 # Ignore the default SQLite database.

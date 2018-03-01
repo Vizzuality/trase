@@ -6,12 +6,16 @@
 class OneAssociatedAttributeValidator < ActiveModel::Validator
   def validate(record)
     return unless options.key?(:attributes)
+    attributes = options[:attributes]
     count = 0
-    options[:attributes].each do |attr_sym|
+    attributes.each do |attr_sym|
       attribute = record.send(attr_sym)
       count += 1 if attribute.present? && !attribute.marked_for_destruction?
     end
     return if count <= 1
-    record.errors.add(:base, 'can only be associated with one type of attribute')
+    record.errors.add(
+      :base,
+      "can only be associated with one of #{attributes.join(', ')}"
+    )
   end
 end

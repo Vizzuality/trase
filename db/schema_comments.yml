@@ -346,6 +346,15 @@ tables:
         comment: JSON structure with information on row counts for all tables before / after update
       - name: error
         comment: Exception message for failed updates
+  - name: database_validation_reports
+    comment: Keeping track of database validation operations
+    columns:
+      - name: error_count
+        comment: Count of errors detected
+      - name: warning_count
+        comment: Count of warnings detected
+      - name: report
+        comment: JSON structure with validation report
 materialized_views:
   - name: attributes_mv
     comment: Materialized view which merges inds, quals and quants.

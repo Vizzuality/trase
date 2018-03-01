@@ -93,7 +93,7 @@ class RecolorBySelector extends Component {
     if (currentDropdown === 'recolor-by') {
       [
         {
-          label: 'Node selection',
+          label: 'Selection',
           name: 'none',
           description: tooltips.sankey.nav.colorBy.none || ''
         }

@@ -59,7 +59,8 @@ module.exports = {
       DATA_FORM_ENDPOINT: JSON.stringify(process.env.DATA_FORM_ENDPOINT),
       DATA_FORM_ENABLED: process.env.DATA_FORM_ENABLED === 'true',
       PDF_DOWNLOAD_URL: JSON.stringify(process.env.PDF_DOWNLOAD_URL),
-      PERF_TEST: process.env.PERF_TEST,
+      PERF_TEST: process.env.PERF_TEST === 'true',
+      REDUX_LOGGER_ENABLED: process.env.REDUX_LOGGER_ENABLED === 'true',
       TRANSIFEX_API_KEY: JSON.stringify(process.env.TRANSIFEX_API_KEY),
       HOME_VIDEO_ID: JSON.stringify(process.env.HOME_VIDEO_ID)
     })

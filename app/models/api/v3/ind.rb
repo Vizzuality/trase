@@ -2,6 +2,7 @@ module Api
   module V3
     class Ind < BlueTable
       has_one :ind_property
+      has_many :node_inds
 
       delegate :display_name, to: :ind_property
 

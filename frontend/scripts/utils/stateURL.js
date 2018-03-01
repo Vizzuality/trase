@@ -50,6 +50,7 @@ export const computeStateQueryParams = (state, params) => {
   if (!params) return state;
   const parsers = {
     selectedNodesIds(currentState, value) {
+      if (!value) return currentState;
       let selectedNodesIds;
       if (Array.isArray(value)) {
         selectedNodesIds = value.map(nodeId => parseInt(nodeId, 10));
@@ -67,6 +68,7 @@ export const computeStateQueryParams = (state, params) => {
       };
     },
     selectedYears(currentState, value) {
+      if (!value) return currentState;
       let selectedYears;
       if (Array.isArray(value)) {
         selectedYears = value.map(year => parseInt(year, 10));
@@ -87,9 +89,7 @@ export const computeStateQueryParams = (state, params) => {
   URL_PARAMS_PROPS.forEach(prop => {
     const value = params[prop];
     const parser = parsers[prop] || parsers.default;
-    if (value) {
-      newState = { ...parser(newState, value, prop) };
-    }
+    newState = { ...parser(newState, value, prop) };
   });
   return newState;
 };
