@@ -496,6 +496,10 @@ definitions:
           - quant
       name:
         type: string
+      years:
+        type: array
+        items:
+          type: integer
       label:
         type: string
       description:
@@ -517,6 +521,10 @@ definitions:
         type: integer
       name:
         type: string
+      years:
+        type: array
+        items:
+          type: integer
       label:
         type: string
       description:
