@@ -1,8 +1,11 @@
-
 .c-profile-root {
 
   .profile-root-search-container {
     padding: 90px 0;
+
+    @media only screen and (max-width: $breakpoint-foundation-small) {
+      padding: 60px 0;
+    }
   }
 
   .profile-root-heading-container {
@@ -20,6 +23,10 @@
           font-size: 48px;
         }
       }
+    }
+
+    @media only screen and (max-width: $breakpoint-foundation-small) {
+      justify-content: left;
     }
   }
 
