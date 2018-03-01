@@ -1,3 +1,10 @@
+import { connectRoutes, NOT_FOUND, replace } from 'redux-first-router';
+
+import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.container';
+import TeamMember from 'react-components/team/team-member/team-member.container';
+import Team from 'react-components/team/team.container';
+import { parse, stringify } from 'utils/stateURL';
+
 import { getDataPortalContext } from 'react-components/data-portal/data-portal.thunks';
 import {
   getPostsContent,
@@ -7,13 +14,8 @@ import {
 } from 'react-components/home/home.thunks';
 import { withSidebarNavLayout } from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
 import { getProfileRootNodes } from 'react-components/profile-root/profile-root.thunks';
-import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.container';
 import { getPageStaticContent } from 'react-components/static-content/static-content.thunks';
-import TeamMember from 'react-components/team/team-member/team-member.container';
-import Team from 'react-components/team/team.container';
 import { getTeam } from 'react-components/team/team.thunks';
-import { connectRoutes, NOT_FOUND, replace } from 'redux-first-router';
-import { parse, stringify } from 'utils/stateURL';
 
 const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thunk(...params));
 

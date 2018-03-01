@@ -1,14 +1,15 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import Dropdown from 'react-components/tool/nav/dropdown.component';
-import YearsThumb from 'react-components/tool/nav/years-thumb.component';
-import 'styles/components/tool/years-slider.scss';
 import PropTypes from 'prop-types';
+import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
+import YearsThumb from 'react-components/nav/filters-nav/years-selector/years-thumb.component';
+import cx from 'classnames';
+import 'styles/components/tool/years-slider.scss';
 
 const YEAR_WIDTH = 40;
 const id = 'years';
 
-export default class Years extends Component {
+class YearsSelector extends Component {
   constructor(props) {
     super(props);
     this.onSelectorMovedBound = this.onSelectorMoved.bind(this);
@@ -102,7 +103,7 @@ export default class Years extends Component {
   }
 
   render() {
-    const { currentDropdown, selectedYears, years } = this.props;
+    const { className, currentDropdown, selectedYears, years } = this.props;
     this.totalWidth = YEAR_WIDTH * years.length;
     const title =
       selectedYears[0] === selectedYears[1] ? (
@@ -119,18 +120,17 @@ export default class Years extends Component {
       left: `${this.state.left}px`
     };
     return (
-      <div
-        className="nav-item js-dropdown"
-        onMouseUp={() => {
-          this.onDropdownUp();
-        }}
-      >
+      <div className={cx('js-dropdown', className)} onMouseUp={() => this.onDropdownUp()}>
         <div className="c-dropdown">
           <span className="dropdown-label">
             year{selectedYears[0] !== selectedYears[1] && <span>s</span>}
           </span>
           <span className="dropdown-title">{title}</span>
-          <Dropdown id={id} currentDropdown={currentDropdown} onClickOutside={this.props.onToggle}>
+          <FiltersDropdown
+            id={id}
+            currentDropdown={currentDropdown}
+            onClickOutside={this.props.onToggle}
+          >
             <div className="dropdown-list">
               <div
                 className="c-years-slider"
@@ -144,9 +144,7 @@ export default class Years extends Component {
                 <div
                   className="selector"
                   style={selectorWidthStyle}
-                  onMouseDown={mouseEvent => {
-                    this.onSelectorDown(mouseEvent);
-                  }}
+                  onMouseDown={e => this.onSelectorDown(e)}
                 >
                   <YearsThumb id="left" />
                   <YearsThumb id="right" x={deltaWidth} />
@@ -156,17 +154,20 @@ export default class Years extends Component {
                 </ul>
               </div>
             </div>
-          </Dropdown>
+          </FiltersDropdown>
         </div>
       </div>
     );
   }
 }
 
-Years.propTypes = {
+YearsSelector.propTypes = {
   onToggle: PropTypes.func,
   onSelected: PropTypes.func,
   years: PropTypes.array,
   currentDropdown: PropTypes.string,
-  selectedYears: PropTypes.array
+  selectedYears: PropTypes.array,
+  className: PropTypes.string
 };
+
+export default YearsSelector;

@@ -86,17 +86,11 @@
     }
   }
 
-  .dropdown-container {
-    // hack. real solution implies fixing nav tool
-    > * {
-      left: -18px;
-    }
-  }
-
   .dropdown-list {
     @extend %dropdown;
     position: absolute;
     top: 0;
+    left: 0;
     padding: 5px 0;
 
     &.-large {

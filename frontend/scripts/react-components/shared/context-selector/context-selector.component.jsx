@@ -1,12 +1,11 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import React, { Component } from 'react';
-import Tooltip from 'react-components/tool/help-tooltip.component';
-import Dropdown from 'react-components/tool/nav/dropdown.component';
-import 'styles/components/tool/country-commodities-react.scss';
-import 'styles/components/tool/dimensional-selector-react.scss';
-import classNames from 'classnames';
+/* eslint-disable jsx-a11y/no-static-element-interactions,jsx-a11y/no-noninteractive-element-interactions */
+import cx from 'classnames';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
+import Tooltip from 'react-components/tool/help-tooltip.component';
+import 'styles/components/shared/country-commodities-react.scss';
+import 'styles/components/shared/dimensional-selector-react.scss';
 
 const id = 'country-commodity';
 
@@ -136,7 +135,7 @@ class ContextSelector extends Component {
             return (
               <li
                 key={index}
-                className={classNames('dimension-list-item -capitalize', {
+                className={cx('dimension-list-item -capitalize', {
                   [`-${status}`]: status
                 })}
                 onClick={e => this.selectDimension(e, status, dimensionElementIndex, el)}
@@ -151,8 +150,9 @@ class ContextSelector extends Component {
 
   render() {
     const {
+      className,
       toggleContextSelectorVisibility,
-      tooltips,
+      tooltipText,
       currentDropdown,
       selectedContextCountry,
       selectedContextCommodity,
@@ -161,18 +161,21 @@ class ContextSelector extends Component {
 
     return (
       <div
-        className="c-country-commodities nav-item js-dropdown"
+        className={cx('c-country-commodities', 'js-dropdown', className)}
         onClick={() => toggleContextSelectorVisibility(id)}
       >
         <div className="c-dropdown -capitalize">
           <span className="dropdown-label">
             Country - Commodity
-            <Tooltip constraint="window" text={tooltips.sankey.nav.context.main} />
+            {tooltipText && <Tooltip constraint="window" text={tooltipText} />}
           </span>
-          <span className="dropdown-title">
-            {selectedContextCountry.toLowerCase()} - {selectedContextCommodity.toLowerCase()}
-          </span>
-          <Dropdown
+          {selectedContextCountry &&
+            selectedContextCommodity && (
+              <span className="dropdown-title">
+                {selectedContextCountry.toLowerCase()} - {selectedContextCommodity.toLowerCase()}
+              </span>
+            )}
+          <FiltersDropdown
             id={id}
             currentDropdown={currentDropdown}
             onClickOutside={toggleContextSelectorVisibility}
@@ -187,7 +190,7 @@ class ContextSelector extends Component {
                 </div>
               </div>
             </div>
-          </Dropdown>
+          </FiltersDropdown>
         </div>
       </div>
     );
@@ -195,10 +198,11 @@ class ContextSelector extends Component {
 }
 
 ContextSelector.propTypes = {
+  className: PropTypes.string,
   toggleContextSelectorVisibility: PropTypes.func,
   getComputedKey: PropTypes.func,
   selectContext: PropTypes.func,
-  tooltips: PropTypes.object,
+  tooltipText: PropTypes.string,
   contexts: PropTypes.object,
   currentDropdown: PropTypes.string,
   selectedContextCountry: PropTypes.string,

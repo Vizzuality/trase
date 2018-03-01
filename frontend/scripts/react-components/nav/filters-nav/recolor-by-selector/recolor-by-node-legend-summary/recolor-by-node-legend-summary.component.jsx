@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function recolorByNodeLegendSummary({ recolorGroups }) {
+function RecolorByNodeLegendSummary({ recolorGroups }) {
   if (recolorGroups === undefined) {
     return null;
   }
@@ -15,6 +15,8 @@ export default function recolorByNodeLegendSummary({ recolorGroups }) {
   );
 }
 
-recolorByNodeLegendSummary.propTypes = {
+RecolorByNodeLegendSummary.propTypes = {
   recolorGroups: PropTypes.array
 };
+
+export default RecolorByNodeLegendSummary;

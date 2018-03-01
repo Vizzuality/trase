@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import findParent from 'find-parent';
 import PropTypes from 'prop-types';
 
-class Dropdown extends Component {
+class FiltersDropdown extends Component {
   constructor(props) {
     super(props);
     this.handleBound = this.handle.bind(this);
@@ -40,11 +40,11 @@ class Dropdown extends Component {
   }
 }
 
-Dropdown.propTypes = {
+FiltersDropdown.propTypes = {
   children: PropTypes.element,
   id: PropTypes.string,
   currentDropdown: PropTypes.string,
   onClickOutside: PropTypes.func
 };
 
-export default Dropdown;
+export default FiltersDropdown;

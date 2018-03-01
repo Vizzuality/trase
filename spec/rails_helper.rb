@@ -48,8 +48,8 @@ RSpec.configure do |config|
     Dictionary::Qual.instance.reset
     Dictionary::Ind.instance.reset
 
-    Sidekiq.configure_client do |config|
-      config.client_middleware do |chain|
+    Sidekiq.configure_client do |sidekiq_config|
+      sidekiq_config.client_middleware do |chain|
         chain.remove SidekiqUniqueJobs::Client::Middleware
       end
     end

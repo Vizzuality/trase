@@ -3,7 +3,8 @@ import groupBy from 'lodash/groupBy';
 
 import { toggleDropdown } from 'actions/app.actions';
 import { selectContext } from 'actions/tool.actions';
-import ContextSelector from 'react-components/tool/nav/context-selector';
+import ContextSelector from 'react-components/shared/context-selector/context-selector.component';
+import memoize from 'lodash/memoize';
 
 function classifyColumn(contexts, { id, label, relation }) {
   const groups = groupBy(
@@ -24,6 +25,11 @@ function classifyColumn(contexts, { id, label, relation }) {
   );
 }
 
+const memoizedClassifyColumn = memoize(
+  classifyColumn,
+  (ctx, params) => Object.values(params).join('-') + ctx.length
+);
+
 const mapStateToProps = state => {
   const getComputedKey = keys => keys.join('_');
   const contexts = state.tool.contexts.reduce((acc, context) => {
@@ -31,20 +37,25 @@ const mapStateToProps = state => {
     return Object.assign({}, acc, { [computedId]: context });
   }, {});
 
-  const commodities = classifyColumn(state.tool.contexts, {
+  const commodities = memoizedClassifyColumn(state.tool.contexts, {
     id: 'commodityId',
     label: 'commodityName',
     relation: 'countryName'
   });
-  const countries = classifyColumn(state.tool.contexts, {
+  const countries = memoizedClassifyColumn(state.tool.contexts, {
     id: 'countryId',
     label: 'countryName',
     relation: 'commodityName'
   });
 
+  const { tooltips, currentDropdown } = state.app;
+  const { selectedContext } = state.tool;
+
   return {
     contexts,
+    tooltipText: tooltips && tooltips.sankey.nav.main,
     getComputedKey,
+    currentDropdown,
     dimensions: [
       { name: 'country', elements: countries, order: 0 },
       {
@@ -53,10 +64,8 @@ const mapStateToProps = state => {
         order: 1
       }
     ],
-    tooltips: state.app.tooltips,
-    currentDropdown: state.app.currentDropdown,
-    selectedContextCountry: state.tool.selectedContext.countryName,
-    selectedContextCommodity: state.tool.selectedContext.commodityName
+    selectedContextCountry: selectedContext && selectedContext.countryName,
+    selectedContextCommodity: selectedContext && selectedContext.commodityName
   };
 };
 

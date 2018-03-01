@@ -2,7 +2,6 @@
 
 import ToolMarkup from 'html/tool.ejs';
 import SearchMarkup from 'html/includes/_search.ejs';
-import NavtoolMarkup from 'html/includes/_navtool.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import React from 'react';
@@ -16,17 +15,18 @@ import MapContextContainer from 'containers/tool/map-context.container';
 import MapLegendContainer from 'containers/tool/map-legend.container';
 import MapBasemapsContainer from 'containers/tool/map-basemaps.container';
 import MapContainer from 'containers/tool/map.container';
-import NavReactContainer from 'containers/../react-components/tool/nav-tool.container';
-import NavContainer from 'containers/tool/nav/nav-tool-navigation.container';
+import NavReactContainer from 'react-components/nav/filters-nav/filters-nav.container';
 import TitlebarContainer from 'containers/tool/titlebar.container';
 import NodesTitlesContainer from 'containers/tool/nodesTitles.container';
-import SearchContainer from 'react-components/tool/tool-search/tool-search.container';
 import ModalContainer from 'containers/tool/story-modal.container';
 import TooltipContainer from 'containers/shared/help-tooltip.container';
-import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
 
-import { displayStoryModal, loadDisclaimer, resize } from 'actions/app.actions';
-import { loadInitialData } from 'actions/tool.actions';
+import {
+  loadInitialDataTool,
+  resizeSankeyTool,
+  loadDisclaimerTool,
+  loadStoryModalTool
+} from 'react-components/tool/tool.thunks';
 import MapDimensionsContainer from 'containers/tool/map-dimensions.container';
 
 import 'styles/tool.scss';
@@ -35,11 +35,8 @@ import EventManager from 'utils/eventManager';
 const evManager = new EventManager();
 
 export const mount = (root, store) => {
-  const { query = {} } = store.getState().location;
-
   root.innerHTML = ToolMarkup({
     search: SearchMarkup(),
-    navtool: NavtoolMarkup(),
     feedback: FeedbackMarkup()
   });
 
@@ -55,41 +52,26 @@ export const mount = (root, store) => {
   new TooltipContainer(store);
   new ModalContainer(store);
 
-  new NavContainer(store);
+  loadDisclaimerTool(store.dispatch);
+  loadInitialDataTool(store.dispatch);
+  loadStoryModalTool(store.dispatch, store.getState);
+  resizeSankeyTool(store.dispatch);
+
   render(
     <Provider store={store}>
       <NavReactContainer />
     </Provider>,
     document.getElementById('js-tool-nav-react')
   );
+
   render(
     <Provider store={store}>
       <ColumnsSelectorContainer />
     </Provider>,
     document.getElementById('js-columns-selector-react')
   );
-  render(
-    <Provider store={store}>
-      <LocaleSelector />
-    </Provider>,
-    document.getElementById('js-locale-selector-react')
-  );
-  render(
-    <Provider store={store}>
-      <SearchContainer />
-    </Provider>,
-    document.getElementById('js-search-react')
-  );
 
-  store.dispatch(loadDisclaimer());
-  store.dispatch(loadInitialData());
-  if (query.story) {
-    store.dispatch(displayStoryModal(query.story));
-  }
-
-  store.dispatch(resize());
-
-  evManager.addEventListener(window, 'resize', () => store.dispatch(resize()));
+  evManager.addEventListener(window, 'resize', () => resizeSankeyTool(store.dispatch));
   document.querySelector('body').classList.add('-overflow-hidden');
 };
 
@@ -97,7 +79,6 @@ export const unmount = () => {
   evManager.clearEventListeners();
   unmountComponentAtNode(document.getElementById('js-tool-nav-react'));
   unmountComponentAtNode(document.getElementById('js-columns-selector-react'));
-  unmountComponentAtNode(document.getElementById('js-search-react'));
   document.querySelector('body').classList.remove('-overflow-hidden');
 };
 
