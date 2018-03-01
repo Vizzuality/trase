@@ -9,12 +9,6 @@ import PropTypes from 'prop-types';
 import { Responsive } from 'react-components/shared/responsive.hoc';
 
 class Map extends Component {
-  constructor(props) {
-    super(props);
-
-    this.key = `map_${new Date().getTime()}`;
-  }
-
   componentDidMount() {
     this.build();
   }
@@ -56,10 +50,9 @@ class Map extends Component {
       useRobinsonProjection
     } = this.props;
 
-    const elem = document.querySelector(`.${this.key}`);
-    elem.innerHTML = '';
+    this.element.innerHTML = '';
 
-    const d3Container = d3_select(elem);
+    const d3Container = d3_select(this.element);
 
     const svg = d3Container
       .append('svg')
@@ -107,7 +100,13 @@ class Map extends Component {
   }
 
   render() {
-    return <div className={this.key} />;
+    return (
+      <div
+        ref={elem => {
+          this.element = elem;
+        }}
+      />
+    );
   }
 }
 
@@ -122,4 +121,4 @@ Map.propTypes = {
   useRobinsonProjection: PropTypes.bool
 };
 
-export default Responsive({ refreshEvery: 1000 })(Map);
+export default Responsive({ debounceRate: 1000 })(Map);

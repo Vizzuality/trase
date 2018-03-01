@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import debounce from 'lodash/debounce';
 
-const DEBOUNCE_WAIT = 200;
+const DEFAULT_DEBOUNCE_RATE = 200;
 
-export function Responsive({ refreshEvery = DEBOUNCE_WAIT } = {}) {
-  return function ResponsiveWrapper(WrappedComponent) {
+export function Responsive({ debounceRate = DEFAULT_DEBOUNCE_RATE } = {}) {
+  return function ResponsiveEnhancer(WrappedComponent) {
     return class extends Component {
       constructor(props) {
         super(props);
@@ -13,7 +13,7 @@ export function Responsive({ refreshEvery = DEBOUNCE_WAIT } = {}) {
           width: null
         };
 
-        this.onPageResize = debounce(this.onPageResize.bind(this), refreshEvery);
+        this.onPageResize = debounce(this.onPageResize.bind(this), debounceRate);
       }
 
       componentDidMount() {
