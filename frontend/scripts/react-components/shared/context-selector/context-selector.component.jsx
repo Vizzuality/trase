@@ -152,7 +152,7 @@ class ContextSelector extends Component {
     const {
       className,
       toggleContextSelectorVisibility,
-      tooltips,
+      tooltipText,
       currentDropdown,
       selectedContextCountry,
       selectedContextCommodity,
@@ -167,14 +167,14 @@ class ContextSelector extends Component {
         <div className="c-dropdown -capitalize">
           <span className="dropdown-label">
             Country - Commodity
-            <Tooltip constraint="window" text={tooltips.sankey.nav.context.main} />
+            {tooltipText && <Tooltip constraint="window" text={tooltipText} />}
           </span>
           {selectedContextCountry &&
-          selectedContextCommodity && (
-            <span className="dropdown-title">
+            selectedContextCommodity && (
+              <span className="dropdown-title">
                 {selectedContextCountry.toLowerCase()} - {selectedContextCommodity.toLowerCase()}
               </span>
-          )}
+            )}
           <FiltersDropdown
             id={id}
             currentDropdown={currentDropdown}
@@ -202,7 +202,7 @@ ContextSelector.propTypes = {
   toggleContextSelectorVisibility: PropTypes.func,
   getComputedKey: PropTypes.func,
   selectContext: PropTypes.func,
-  tooltips: PropTypes.object,
+  tooltipText: PropTypes.string,
   contexts: PropTypes.object,
   currentDropdown: PropTypes.string,
   selectedContextCountry: PropTypes.string,
