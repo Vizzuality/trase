@@ -29,7 +29,7 @@ import {
   DEFAULT_PROFILE_PAGE_YEAR,
   TOOLTIPS
 } from 'constants';
-import TopSourceSwitcher from 'react-components/profiles/top-source-switcher.component';
+import DropdownTabSwitcher from 'react-components/profiles/dropdown-tab-switcher.component';
 import HelpTooltip from 'react-components/shared/help-tooltip.component';
 
 const defaults = {
@@ -118,16 +118,17 @@ const _initSource = (selectedSource, data, store) => {
 };
 
 const _setTopSourceSwitcher = (data, verb, year, store) => {
+  const nodeName = capitalize(data.node_name);
+  const title = `Top sourcing regions of Soy ${verb} by ${nodeName} in ${year}:`;
+
   render(
     <Provider store={store}>
-      <TopSourceSwitcher
-        year={year}
-        verb={verb}
-        nodeName={capitalize(data.node_name)}
-        switchers={Object.keys(data.top_sources).filter(
+      <DropdownTabSwitcher
+        title={title}
+        items={Object.keys(data.top_sources).filter(
           key => !ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)
         )}
-        onTopSourceSelected={selectedSwitcher => _initSource(selectedSwitcher, data, store)}
+        onSelected={item => _initSource(item, data, store)}
       />
     </Provider>,
     document.querySelector('.js-top-municipalities-title-container')
@@ -143,7 +144,7 @@ const _build = (data, { nodeId, year, print }, store) => {
       top: 10,
       right: 100,
       bottom: 30,
-      left: 94
+      left: 50
     },
     height: 244,
     ticks: {

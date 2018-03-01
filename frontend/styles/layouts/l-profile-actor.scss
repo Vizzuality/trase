@@ -5,6 +5,7 @@
   min-height: 100vh;
   padding-top: calc(44px + #{$nav-height});
   background-color: $egg-shell;
+  line-height: 1.5;
 
   section:nth-of-type(2n-1) {
     background-color: rgba($white, 0.3);
@@ -70,38 +71,6 @@
   }
 
   .c-top-municipalities {
-
-    .js-top-municipalities-title {
-      display: flex;
-
-      span {
-        margin-right: 20px;
-      }
-
-      li {
-        position: relative;
-        opacity: 0.3;
-        cursor: pointer;
-
-        &:not(:last-child) {
-          margin-right: 21px;
-        }
-
-        &.selected {
-          opacity: 1;
-
-          &:before {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            width: 100%;
-            height: 2px;
-            background-color: $medium-pink;
-          }
-        }
-      }
-    }
 
     .js-top-municipalities-map {
       height: 400px;
