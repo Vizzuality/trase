@@ -2,7 +2,7 @@
 @import '../../mixins';
 
 .c-dropdown-tab-switcher {
-  .tabs-switcher {
+  .tab-switcher {
     display: flex;
     margin-bottom: 31px;
     font-family: $font-family-1;
@@ -13,18 +13,14 @@
     color: $charcoal-grey;
     text-transform: uppercase;
 
-    span {
-      margin-right: 20px;
+    li:not(:last-child) {
+      margin-right: 21px;
     }
 
-    li {
+    li:not(.tab-switcher-title) {
       position: relative;
       opacity: 0.3;
       cursor: pointer;
-
-      &:not(:last-child) {
-        margin-right: 21px;
-      }
 
       &.selected {
         opacity: 1;

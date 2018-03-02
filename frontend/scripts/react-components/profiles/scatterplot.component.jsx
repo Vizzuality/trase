@@ -129,7 +129,7 @@ class Scatterplot extends Component {
       this.circles
         .on('mousemove', d => {
           const selectedSwitcher = document.querySelector(
-            '.js-scatterplot-switcher-item.selected span'
+            '.c-scatterplot .tab-switcher li.selected span'
           );
 
           showTooltipCallback(
@@ -190,13 +190,18 @@ class Scatterplot extends Component {
 
   render() {
     const { title, xDimension } = this.props;
-    const tabs = xDimension.filter((x, i) => i < 3).map(e => e.name);
+    const tabs = xDimension.filter((x, i) => i < 3);
+    const itemTabRenderer = (_, index) => {
+      const elem = tabs[index];
+      return <span data-unit={elem.unit !== null ? elem.unit : null}>{elem.name}</span>;
+    };
 
     return (
-      <div style={{ position: 'relative' }}>
+      <div className="c-scatterplot">
         <DropdownTabSwitcher
           title={title}
-          items={tabs}
+          items={tabs.map(e => e.name)}
+          itemTabRenderer={itemTabRenderer}
           onSelectedIndexChange={this.handleSwitcherIndexChange}
         />
         <div className="js-companies-exporting-y-axis axis-legend" />

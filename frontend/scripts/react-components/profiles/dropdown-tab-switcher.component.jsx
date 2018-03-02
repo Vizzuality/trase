@@ -23,16 +23,16 @@ class DropdownTabSwitcher extends Component {
   }
 
   render() {
-    const { items, title, titleTooltip } = this.props;
+    const { items, itemTabRenderer, title, titleTooltip } = this.props;
     const { selectedIndex } = this.state;
 
     return (
       <div className="c-dropdown-tab-switcher">
-        <ul className="tabs-switcher title -small hide-for-small">
-          <span>
+        <ul className="tab-switcher hide-for-small">
+          <li className="tab-switcher-title">
             {title}
             {titleTooltip && <Tooltip text={titleTooltip} />}
-          </span>
+          </li>
 
           {items.map((item, index) => (
             <li
@@ -43,7 +43,7 @@ class DropdownTabSwitcher extends Component {
               data-key={item}
               onClick={() => this.handleSelect(index)}
             >
-              {item}
+              {itemTabRenderer ? itemTabRenderer(item, index) : item}
             </li>
           ))}
         </ul>
@@ -64,6 +64,7 @@ DropdownTabSwitcher.propTypes = {
   title: PropTypes.string,
   titleTooltip: PropTypes.string,
   items: PropTypes.array,
+  itemTabRenderer: PropTypes.func,
   onSelectedIndexChange: PropTypes.func
 };
 

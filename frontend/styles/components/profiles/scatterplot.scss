@@ -1,8 +1,11 @@
 @import '../../settings';
 
-.c-scatterplot {
+.c-scatterplot-container {
   padding: 53px 0 63px 0;
 
+  .c-scatterplot {
+    position: 'relative';
+  }
 
   .title {
     margin-bottom: 23px;
@@ -60,6 +63,19 @@
 
     &.-hidden {
       opacity: 0;
+    }
+  }
+
+  .c-dropdown-tab-switcher {
+    li.selected {
+      span[data-unit]:after {
+        content: '(' attr(data-unit) ')';
+        font-weight: normal;
+        letter-spacing: -1.3px;
+        text-transform: none;
+        color: rgba($charcoal-grey, .5);
+        margin-left: 2px;
+      }
     }
   }
 }
