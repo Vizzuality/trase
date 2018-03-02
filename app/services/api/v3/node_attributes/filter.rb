@@ -25,12 +25,7 @@ module Api
         def attribute_values_query(attribute_type, attribute_node_values_class)
           node_values = attribute_node_values_class.table_name
           attribute_node_values_class.
-            select("#{node_values}.node_id").
-            select("#{node_values}.#{attribute_type}_id AS attribute_id").
-            select("'#{attribute_type}'::TEXT AS attribute_type").
-            select("SUM(#{node_values}.value) AS value").
-            select(bucket_case(node_values, 3)).
-            select(bucket_case(node_values, 5)).
+            select(select_list(attribute_type, node_values)).
             joins("JOIN nodes ON nodes.id = #{node_values}.node_id").
             joins("JOIN context_node_types cnt ON \
 cnt.node_type_id = nodes.node_type_id").
@@ -45,22 +40,30 @@ ma.attribute_type = '#{attribute_type}'").
             group(
               "#{node_values}.node_id",
               "#{node_values}.#{attribute_type}_id",
-              'ma.bucket_3',
-              'ma.bucket_5'
+              'ma.dual_layer_buckets',
+              'ma.single_layer_buckets'
             )
         end
 
-        def bucket_case(node_values, bucket_size)
-          bucket_name = "bucket_#{bucket_size}"
-          bucket_alias = "bucket#{bucket_size}"
-          bucket_case = 'CASE'
-          bucket_size.downto(2) do |n|
-            bucket_case += " WHEN \
-SUM(#{node_values}.value) >= ma.#{bucket_name}[#{n - 1}] THEN #{n}"
-          end
-          bucket_case += " WHEN \
-SUM(#{node_values}.value) > 0 THEN 1 ELSE 0"
-          bucket_case += " END AS #{bucket_alias}"
+        def select_list(attribute_type, node_values)
+          dual_layer_bucket = <<~SQL
+            revamp.BUCKET_INDEX(
+              dual_layer_buckets, SUM(#{node_values}.value)
+            ) AS dual_layer_bucket
+          SQL
+          single_layer_bucket = <<~SQL
+            revamp.BUCKET_INDEX(
+              single_layer_buckets, SUM(#{node_values}.value)
+            ) AS single_layer_bucket
+          SQL
+          [
+            "#{node_values}.node_id",
+            "#{node_values}.#{attribute_type}_id AS attribute_id",
+            "'#{attribute_type}'::TEXT AS attribute_type",
+            "SUM(#{node_values}.value) AS value",
+            dual_layer_bucket,
+            single_layer_bucket
+          ]
         end
       end
     end

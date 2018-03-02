@@ -665,9 +665,9 @@ definitions:
           - quant
       value:
         type: number
-      bucket3:
+      dual_layer_bucket:
         type: integer
-      bucket5:
+      single_layer_bucket:
         type: integer
   Column:
     type: object
@@ -730,12 +730,12 @@ definitions:
     properties:
       aggregateMethod:
         type: string
-      bucket3:
+      dual_layer_buckets:
         type: array
         items:
           type: number
           format: float
-      bucket5:
+      single_layer_buckets:
         type: array
         items:
           type: number

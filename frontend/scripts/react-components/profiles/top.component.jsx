@@ -46,7 +46,7 @@ class Top extends Component {
         );
       })
     ) : (
-      <TopPlaceholder width={450} seed={this.seed} />
+      <TopPlaceholder width={350} seed={this.seed} />
     );
   }
 
@@ -78,7 +78,7 @@ const TopPlaceholder = props => {
             .map((elemRow, index) => (
               <span
                 key={`item-${i}-element-${index}`}
-                className={`placeholder-element -${sizes[getIndex(index)]}`}
+                className={`placeholder-element -${sizes[getIndex(index, 6)]}`}
               />
             ))}
           <svg className="icon icon-outside-link">

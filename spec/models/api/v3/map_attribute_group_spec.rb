@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Api::V3::MapAttributeGroup, type: :model do
+  before do
+    Api::V3::MapAttributeGroup.skip_callback(:commit, :after, :refresh_dependencies)
+  end
+  after do
+    Api::V3::MapAttributeGroup.set_callback(:commit, :after, :refresh_dependencies)
+  end
   include_context 'api v3 brazil map attribute groups'
 
   describe :validate do

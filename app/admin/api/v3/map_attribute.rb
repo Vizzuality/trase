@@ -7,8 +7,8 @@ ActiveAdmin.register Api::V3::MapAttribute, as: 'MapAttribute' do
     :map_quant
   ]
 
-  permit_params :map_attribute_group_id, :position, :bucket_3_str,
-                :bucket_5_str, :color_scale, :years_str, :is_disabled,
+  permit_params :map_attribute_group_id, :position, :dual_layer_buckets_str,
+                :single_layer_buckets_str, :color_scale, :years_str, :is_disabled,
                 :is_default, :readonly_attribute_id
 
   form do |f|
@@ -20,12 +20,16 @@ ActiveAdmin.register Api::V3::MapAttribute, as: 'MapAttribute' do
                                   collection: Api::V3::MapAttributeGroup.select_options
       input :position, required: true,
                        hint: object.class.column_comment('position')
-      input :bucket_3_str, required: true,
-                           hint: (object.class.column_comment('bucket_3') || '') + ' (comma-separated list)',
-                           label: 'Single dimension buckets'
-      input :bucket_5_str, required: true,
-                           hint: (object.class.column_comment('bucket_3') || '') + ' (comma-separated list)',
-                           label: 'Dual dimension buckets'
+      input :single_layer_buckets_str,
+            required: true,
+            hint: (object.class.column_comment('single_layer_buckets') || '') +
+              ' (comma-separated list)',
+            label: 'Single dimension buckets (variable length)'
+      input :dual_layer_buckets_str,
+            required: true,
+            hint: (object.class.column_comment('dual_layer_buckets') || '') +
+              ' (comma-separated list)',
+            label: 'Dual dimension buckets (3 values)'
       input :color_scale, as: :select, collection: Api::V3::MapAttribute::COLOR_SCALE,
                           hint: object.class.column_comment('color_scale')
       input :years_str, label: 'Years',
@@ -57,8 +61,8 @@ ActiveAdmin.register Api::V3::MapAttribute, as: 'MapAttribute' do
       row('Country') { |attr| attr.map_attribute_group&.context&.country&.name }
       row('Commodity') { |attr| attr.map_attribute_group&.context&.commodity&.name }
       row :position
-      row('Single dimension buckets', &:bucket_3_str)
-      row('Dual dimension buckets', &:bucket_5_str)
+      row('Single dimension buckets', &:dual_layer_buckets_str)
+      row('Dual dimension buckets', &:single_layer_buckets_str)
       row :color_scale
       row('Years', &:years_str)
       row :is_disabled

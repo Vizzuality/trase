@@ -149,12 +149,13 @@
     .icon-bidimensional-legend-arrows {
       display: none;
       position: absolute;
-      top: 41px;
-      left: -10px;
+      margin: auto;
+      top: 53px;
+      left: 0px;
       right: 0;
       margin: auto;
-      width: 103px;
-      height: 40px;
+      width: 140px;
+      height: 49px;
     }
 
     &.-horizontal {
@@ -197,7 +198,7 @@
     }
 
     &.-bidimensional {
-      height: 88px;
+      height: 106px;
       padding: 11px 0;
 
       .bucket-names {
@@ -207,17 +208,19 @@
 
       .bucket-legend {
         position: absolute;
+        margin: auto;
         top: 18px;
-        left: 130px;
-        width: 50px;
-        height: 50px;
+        left: 0px;
+        right: 0px;
+        width: 66px;
+        height: 66px;
         transform: rotateZ(-45deg);
         display: flex;
         flex-wrap: wrap;
 
         > .bucket-item {
-          flex-basis: calc(100% / 3);
-          height: calc(100% / 3);
+          flex-basis: calc(100% / 4);
+          height: calc(100% / 4);
         }
       }
 
@@ -321,11 +324,11 @@
   .bucket-values {
     position: absolute;
     top: 41px;
-    left: -10px;
+    left: 0;
     right: 0;
     margin: auto;
-    width: 103px;
-    height: 40px;
+    width: 127px;
+    height: 60px;
 
     li {
       position: absolute;
@@ -336,23 +339,33 @@
       color: rgba($charcoal-grey, 0.5);
 
       &:nth-child(1) {
-        bottom: 16px;
-        right: 92px;
+        bottom: 28px;
+        right: 116px;
       }
 
       &:nth-child(2) {
-        bottom: 5px;
-        right: 81px;
+        bottom: 16px;
+        right: 104px;
       }
 
       &:nth-child(3) {
-        bottom: 5px;
-        left: 80px;
+        bottom: 4px;
+        right: 92px;
       }
 
       &:nth-child(4) {
+        bottom: 28px;
+        left: 116px;
+      }
+
+      &:nth-child(5) {
         bottom: 16px;
-        left: 91px;
+        left: 104px;
+      }
+
+      &:nth-child(6) {
+        bottom: 4px;
+        left: 92px;
       }
     }
   }
