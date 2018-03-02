@@ -156,6 +156,7 @@ class Line extends Component {
           pathContainers = d3Container
             .datum(lineValuesWithFormat[0])
             .append('g')
+            .attr('id', lineData.geo_id)
             .attr(
               'class',
               d =>
@@ -267,6 +268,12 @@ class Line extends Component {
       const last = xValues.length - 1;
       return b.values[last] - a.values[last];
     });
+    const lineOnMouseEnter = lineData => {
+      this.chart.querySelector(`#${lineData.geo_id}`).classList.add('selected');
+    };
+    const lineOnMouseLeave = lineData => {
+      this.chart.querySelector(`#${lineData.geo_id}`).classList.remove('selected');
+    };
 
     return (
       <ul className="line-bottom-legend">
@@ -277,14 +284,18 @@ class Line extends Component {
             : style;
 
           return (
-            <li key={index}>
+            <li
+              key={index}
+              onMouseEnter={() => lineOnMouseEnter(lineData)}
+              onMouseLeave={() => lineOnMouseLeave(lineData)}
+            >
               <svg height="6" width="20" className="line-color">
                 <g className={lineStyle}>
                   <path d="M0 3 20 3" />
                 </g>
               </svg>
               <span>
-                {index + 1}. {capitalize(i18n(lineData.name))}
+                {index + 1}.{capitalize(i18n(lineData.name))}
               </span>
             </li>
           );
