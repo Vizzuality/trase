@@ -17,7 +17,7 @@
       }
 
       > .table-row > .header-cell {
-        padding: 0 0 5px 8px;
+        padding: 0 0 8px;
 
         color: $charcoal-grey;
         font-family: $font-family-1;
@@ -32,6 +32,11 @@
 
         > div {
           display: flex;
+          align-items: center;
+        }
+
+        &:not(:first-child) {
+          padding-left: 10px;
         }
       }
     }
