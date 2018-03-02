@@ -235,35 +235,36 @@ export function selectYears(years) {
   };
 }
 
-export function loadInitialData() {
-  return dispatch => {
+export const loadInitialData = () => (dispatch, getState) => {
+  const { app, tool } = getState();
+  if (app.tooltips !== null && tool.contexts.length > 0) return Promise.resolve();
+
+  dispatch({
+    type: LOAD_INITIAL_DATA
+  });
+
+  const contextURL = getURLFromParams(GET_CONTEXTS_URL);
+  const tooltipsURL = getURLFromParams(GET_TOOLTIPS_URL);
+
+  return Promise.all(
+    [contextURL, tooltipsURL].map(url => fetch(url).then(resp => resp.text()))
+  ).then(data => {
+    const tooltipsPayload = JSON.parse(data[1]);
+
     dispatch({
-      type: LOAD_INITIAL_DATA
+      type: SET_TOOLTIPS,
+      payload: tooltipsPayload
     });
 
-    const contextURL = getURLFromParams(GET_CONTEXTS_URL);
-    const tooltipsURL = getURLFromParams(GET_TOOLTIPS_URL);
-
-    return Promise.all(
-      [contextURL, tooltipsURL].map(url => fetch(url).then(resp => resp.text()))
-    ).then(data => {
-      const tooltipsPayload = JSON.parse(data[1]);
-
-      dispatch({
-        type: SET_TOOLTIPS,
-        payload: tooltipsPayload
-      });
-
-      const contextPayload = JSON.parse(data[0]).data;
-      // load contexts
-      dispatch({
-        type: LOAD_CONTEXTS,
-        payload: contextPayload
-      });
-      return Promise.resolve();
+    const contextPayload = JSON.parse(data[0]).data;
+    // load contexts
+    dispatch({
+      type: LOAD_CONTEXTS,
+      payload: contextPayload
     });
-  };
-}
+    return Promise.resolve();
+  });
+};
 
 export const setDefaultContext = () => (dispatch, getState) => {
   const { selectedContextId, contexts } = getState().tool;

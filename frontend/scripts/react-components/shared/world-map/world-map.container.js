@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import WorldMap from 'react-components/shared/world-map/world-map.component';
 import turf from 'turf';
 import { COUNTRY_ID_ORIGIN } from 'scripts/countries';
-import { setWorldMapTopNodes } from 'react-components/shared/world-map/world-map.actions';
+import { setExploreTopNodes, getTopNodesKey } from 'react-components/explore/explore.actions';
+
+const originCountries = Object.values(COUNTRY_ID_ORIGIN);
 
 const getContextFlows = (countries, origin) => {
   const contextFlows = countries
@@ -29,21 +31,22 @@ const mapStateToProps = state => {
   const { selectedContext, selectedContextId, selectedYears } = state.tool;
   const origin = selectedContext && COUNTRY_ID_ORIGIN[selectedContext.countryId];
 
-  const countries = state.worldMap.flows[`${selectedContextId}_${selectedYears.join('_')}`];
+  const topNodesKey = getTopNodesKey(selectedContextId, 8, ...selectedYears);
+  const countries = state.explore.topNodes[topNodesKey];
   const flows = origin ? getContextFlows(countries, origin) : [];
   return {
     flows,
     origin,
     selectedContext,
     selectedYears,
-    contextCountries: Object.values(COUNTRY_ID_ORIGIN)
+    originCountries
   };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      getTopNodes: setWorldMapTopNodes
+      getTopNodes: () => setExploreTopNodes(8)
     },
     dispatch
   );

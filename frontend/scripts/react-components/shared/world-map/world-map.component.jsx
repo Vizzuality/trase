@@ -58,10 +58,10 @@ class WorldMap extends React.PureComponent {
   }
 
   renderGeographies(geographies, projection) {
-    const { flows, origin, contextCountries } = this.props;
+    const { flows, origin, originCountries } = this.props;
 
     const isDark = iso =>
-      (flows.length > 0 ? flows : contextCountries).map(f => f.geoId).includes(iso);
+      (flows.length > 0 ? flows : originCountries).map(f => f.geoId).includes(iso);
     return geographies.map(
       geography =>
         geography.properties.iso2 !== 'AQ' && (
@@ -124,8 +124,8 @@ class WorldMap extends React.PureComponent {
   }
 
   renderCountriesAnnotations() {
-    const { contextCountries } = this.props;
-    return contextCountries.map(country => {
+    const { originCountries } = this.props;
+    return originCountries.map(country => {
       const { annotationPos = [] } = country;
       return (
         <Annotation
@@ -164,7 +164,7 @@ WorldMap.propTypes = {
   origin: PropTypes.object,
   selectedContext: PropTypes.object,
   selectedYears: PropTypes.array,
-  contextCountries: PropTypes.array,
+  originCountries: PropTypes.array,
   getTopNodes: PropTypes.func.isRequired
 };
 
