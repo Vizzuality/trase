@@ -150,12 +150,12 @@
       display: none;
       position: absolute;
       margin: auto;
-      top: 3px;
-      left: 7px;
+      top: 53px;
+      left: 0px;
       right: 0;
       margin: auto;
-      width: 127px;
-      height: 98px;
+      width: 140px;
+      height: 49px;
     }
 
     &.-horizontal {
@@ -212,8 +212,8 @@
         top: 18px;
         left: 0px;
         right: 0px;
-        width: 65px;
-        height: 65px;
+        width: 66px;
+        height: 66px;
         transform: rotateZ(-45deg);
         display: flex;
         flex-wrap: wrap;
@@ -339,33 +339,33 @@
       color: rgba($charcoal-grey, 0.5);
 
       &:nth-child(1) {
-        bottom: 29px;
-        right: 115px;
+        bottom: 28px;
+        right: 116px;
       }
 
       &:nth-child(2) {
-        bottom: 17px;
-        right: 103px;
+        bottom: 16px;
+        right: 104px;
       }
 
       &:nth-child(3) {
-        bottom: 5px;
-        right: 91px;
+        bottom: 4px;
+        right: 92px;
       }
 
       &:nth-child(4) {
-        bottom: 29px;
-        left: 115px;
+        bottom: 28px;
+        left: 116px;
       }
 
       &:nth-child(5) {
-        bottom: 17px;
-        left: 103px;
+        bottom: 16px;
+        left: 104px;
       }
 
       &:nth-child(6) {
-        bottom: 5px;
-        left: 91px;
+        bottom: 4px;
+        left: 92px;
       }
     }
   }
