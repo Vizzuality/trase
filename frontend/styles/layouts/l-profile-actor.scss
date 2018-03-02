@@ -88,6 +88,13 @@
     }
   }
 
+  .js-top-municipalities, .js-top-destination {
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      margin-left: -1.25rem;
+      margin-right: -1.25rem;
+    }
+  }
+
   .title {
     margin: 0 0 24px;
 

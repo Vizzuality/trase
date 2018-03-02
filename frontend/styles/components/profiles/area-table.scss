@@ -17,7 +17,7 @@
       }
 
       > .table-row > .header-cell {
-        padding: 0 0 8px;
+        padding: 0 0 5px 8px;
 
         color: $charcoal-grey;
         font-family: $font-family-1;
@@ -28,6 +28,11 @@
         text-align: left;
         text-transform: uppercase;
         vertical-align: middle;
+        min-width: 150px;
+
+        > div {
+          display: flex;
+        }
       }
     }
 
@@ -57,7 +62,7 @@
 
           > .node-name {
             display: inline-block;
-            max-width: 90%;
+            max-width: calc(100% - 20px);
 
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -67,15 +72,16 @@
             vertical-align: bottom;
           }
 
-          > .node-link {
+          .node-link {
             display: inline-flex;
             position: absolute;
           }
 
-          > .node-link > .icon {
+          .node-link > .icon {
             margin: 0 0 0 8px;
             cursor: pointer;
             fill: rgba($charcoal-grey, .2);
+            vertical-align: text-bottom;
 
             &:hover {
               fill: $charcoal-grey;
@@ -111,6 +117,8 @@
   }
 
   .c-area-table-container {
-    overflow-x: auto;
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      overflow-x: auto;
+    }
   }
 }
