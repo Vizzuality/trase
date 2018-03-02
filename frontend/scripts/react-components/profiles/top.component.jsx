@@ -2,9 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'redux-first-router-link';
 import formatValue from 'utils/formatValue';
+import fastRandom from 'fast-random';
 import 'styles/components/shared/top.scss';
 
 class Top extends Component {
+  constructor(props) {
+    super(props);
+    this.seed = Math.random();
+  }
+
   renderList() {
     const { data, targetLink, year } = this.props;
     return data.length > 0 ? (
@@ -40,7 +46,7 @@ class Top extends Component {
         );
       })
     ) : (
-      <TopPlaceholder width={450} />
+      <TopPlaceholder width={450} seed={this.seed} />
     );
   }
 
@@ -55,8 +61,9 @@ class Top extends Component {
 }
 
 const TopPlaceholder = props => {
+  const generator = fastRandom(props.seed);
   const sizes = ['small', 'medium', 'big', 'small-2', 'medium-2', 'big-2'];
-  const getIndex = i => parseInt(Math.random() * 100 / (i || 1), 10) % 3;
+  const getIndex = (i, size = 3) => parseInt(generator.nextInt(), 10) % size;
   return Array(10)
     .fill(0)
     .map((row, i) => (
