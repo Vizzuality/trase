@@ -97,6 +97,21 @@
   }
 }
 
+ul.line-bottom-legend {
+  column-count: 2;
+  padding-left: 40px;
+  font-family: $font-family-1;
+  font-size: $font-size-x-regular;
+  font-weight: $font-weight-bold;
+  line-height: 1.15;
+  letter-spacing: -0.6px;
+  color: $charcoal-grey;
+
+  .line-color {
+    margin-right: 5px;
+  }
+}
+
 .c-line-legend {
   display: flex;
   flex-wrap: wrap;

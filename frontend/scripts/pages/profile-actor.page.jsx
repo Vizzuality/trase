@@ -69,6 +69,7 @@ const _initSource = (selectedSource, data, store) => {
         data={sourceLines}
         xValues={data.top_sources.included_years}
         settings={settings}
+        useBottomLegend
       />
     </Provider>,
     document.querySelector('.js-top-municipalities')
@@ -232,6 +233,7 @@ const _build = (data, { nodeId, year, print }, store) => {
           data={topCountriesLines}
           xValues={data.top_countries.included_years}
           settings={settings}
+          useBottomLegend
         />
       </Provider>,
       document.querySelector('.js-top-destination')
