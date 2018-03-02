@@ -10,7 +10,8 @@ export function Responsive({ debounceRate = DEFAULT_DEBOUNCE_RATE } = {}) {
         super(props);
 
         this.state = {
-          width: null
+          width: null,
+          height: null
         };
 
         this.onPageResize = debounce(this.onPageResize.bind(this), debounceRate);
@@ -30,11 +31,13 @@ export function Responsive({ debounceRate = DEFAULT_DEBOUNCE_RATE } = {}) {
       }
 
       setWidth() {
-        const { width } = this.state;
-        const currentWidth = this.responsiveContainer.getBoundingClientRect().width;
+        const { width, height } = this.responsiveContainer.getBoundingClientRect();
 
-        if (width !== currentWidth) {
-          this.setState({ width: currentWidth });
+        if (this.state.width !== width || this.state.height !== height) {
+          this.setState({
+            width,
+            height
+          });
         }
       }
 
@@ -46,7 +49,7 @@ export function Responsive({ debounceRate = DEFAULT_DEBOUNCE_RATE } = {}) {
               this.responsiveContainer = elem;
             }}
           >
-            <WrappedComponent {...this.props} width={this.state.width} />
+            <WrappedComponent {...this.props} width={this.state.width} height={this.state.height} />
           </div>
         );
       }

@@ -52,6 +52,8 @@ class Map extends Component {
 
     this.element.innerHTML = '';
 
+    if (!width || !height) return;
+
     const d3Container = d3_select(this.element);
 
     const svg = d3Container

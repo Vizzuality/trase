@@ -34,6 +34,10 @@
       flex-basis: calc(100% / 3);
       align-items: center;
     }
+
+    .c-locator-map {
+      max-height: 100px;
+    }
   }
 
   .c-overall-info {
@@ -117,5 +121,9 @@
       height: 15px;
       vertical-align: top;
     }
+  }
+
+  .js-map-municipality {
+    height: 250px;
   }
 }
