@@ -35,21 +35,6 @@
         white-space: nowrap;
         overflow: hidden;
       }
-
-      .outside-link {
-        display: inline-flex;
-      }
-
-      .outside-link > .icon-outside-link {
-        margin: 0 0 0 8px;
-
-        cursor: pointer;
-        fill: rgba($charcoal-grey, .2);
-
-        &:hover {
-          fill: $charcoal-grey;
-        }
-      }
     }
 
     .item-value {
@@ -63,6 +48,88 @@
         color: rgba($charcoal-grey, .6);
         content: attr(data-unit);
       }
+    }
+  }
+
+  .outside-link {
+    display: inline-flex;
+  }
+
+  .icon-outside-link {
+    margin: 0 0 0 8px;
+
+    cursor: pointer;
+    fill: rgba($charcoal-grey, .2);
+
+    &:hover {
+      fill: $charcoal-grey;
+    }
+  }
+
+  .placeholder-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &:not(:first-child) {
+      margin-top: 8px;
+    }
+  }
+
+  .placeholder-start {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    .placeholder-element {
+      width: 20px;
+      height: 15px;
+      background-color: rgba($charcoal-grey, 0.8);
+
+      &:not(:last-child) {
+        margin-right: 8px;
+      }
+
+      &.-small {
+        width: 20px;
+      }
+
+      &.-small-2 {
+        width: 35px;
+      }
+
+      &.-medium {
+        width: 40px;
+      }
+
+      &.-medium-2 {
+        width: 50px;
+      }
+
+      &.-big {
+        width: 60px;
+      }
+
+      &.-big-2 {
+        width: 115px;
+      }
+    }
+  }
+
+  .placeholder-end {
+    height: 15px;
+    background-color: rgba($charcoal-grey, .6);
+
+    &.-small {
+      width: 20px;
+    }
+
+    &.-medium {
+      width: 40px;
+    }
+
+    &.-big {
+      width: 60px;
     }
   }
 }
