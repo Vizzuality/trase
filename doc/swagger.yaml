@@ -156,6 +156,11 @@ paths:
           description: Id of biome to filter by
           required: false
           type: integer
+        - name: state_filter_id
+          in: query
+          description: Id of state to filter by
+          required: false
+          type: integer
         - name: year_start
           in: query
           description: Year range start

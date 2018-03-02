@@ -4,16 +4,21 @@ module Api
       class Filter
         attr_reader :errors, :flows, :active_nodes, :total_height, :other_nodes_ids,
                     :resize_quant, :recolor_ind, :recolor_qual
-        # params:
-        # node_types_ids - list of node type ids
-        # resize_quant_name - Quant for resizing
-        # recolor_ind_name / recolor_qual_name - Ind / Qual name for recoloring
-        # (only one of these may be specified, Ind takes precedence)
-        # selected_nodes_ids - list of node ids for expanding.
-        # biome_id - id of biome to filter by
-        # year_start
-        # year_end
-        # limit
+        # @param context [Api::V3::Context]
+        # @param params [Hash]
+        # @option params [Array<Integer>] :node_types_ids list of node type
+        #   ids
+        # @option params [String] :resize_quant_name Quant name for resizing
+        # @option params [String] :recolor_ind_name Ind name for recoloring
+        # @option params [String] :recolor_qual_name Qual name for recoloring
+        #   (either Ind or Qual may be specified, Ind takes precedence)
+        # @option params [Array<Integer>] :selected_nodes_ids list of node
+        #   ids for expanding
+        # @option params [Integer] :biome_id id of biome to filter by
+        # @option params [Integer] :state_id id of state to filter by
+        # @option params [Integer] :year_start
+        # @option params [Integer] :year_end
+        # @option params [Integer] :limit
         def initialize(context, params)
           @context = context
           initialize_params(params)
@@ -118,8 +123,8 @@ module Api
               select('true').
               joins(:flow_quants).
               where('flow_quants.quant_id' => @resize_quant.id).
-              where(context_id: @context.id). # TODO: verify this
-              where('? = ANY(flows.path)', node_id).
+              where(context_id: @context.id).# TODO: verify this
+            where('? = ANY(flows.path)', node_id).
               where('year >= ? AND year <= ?', @year_start, @year_end).any?
           end
           @selected_nodes = Api::V3::Node.where(
