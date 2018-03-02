@@ -1,25 +1,21 @@
 import React, { Component } from 'react';
-import 'styles/components/profiles/top.scss';
-import formatValue from 'utils/formatValue';
 import PropTypes from 'prop-types';
-import isArray from 'lodash/isArray';
 import Link from 'redux-first-router-link';
+import formatValue from 'utils/formatValue';
+import 'styles/components/shared/top.scss';
 
 class Top extends Component {
   renderList() {
     const { data, targetLink, year } = this.props;
-
     return data.map((item, index) => {
-      item.value = isArray(item.values)
+      const itemValue = Array.isArray(item.values)
         ? formatValue(item.values[0] * 100, 'percentage')
         : formatValue(item.value * 100, 'percentage');
 
       return (
         <li key={index} className="top-item">
           <span className="item-name">
-            <span className="node-name">
-              {index + 1}. {item.name}
-            </span>
+            <span className="node-name">{item.name}</span>
             {this.props.targetLink &&
               !item.is_domestic_consumption && (
                 <Link
@@ -32,12 +28,12 @@ class Top extends Component {
                 </Link>
               )}
           </span>
-          {this.props.unit && index === 0 ? (
+          {this.props.unit ? (
             <span className="item-value" data-unit={this.props.unit}>
-              {item.value}
+              {itemValue}
             </span>
           ) : (
-            <span className="item-value">{item.value}</span>
+            <span className="item-value">{itemValue}</span>
           )}
         </li>
       );

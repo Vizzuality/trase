@@ -18,16 +18,24 @@ class Explore extends React.PureComponent {
       <div className="l-explore">
         <div className="c-explore">
           <div className="row">
-            <div className={cx('column', 'small-12', { 'medium-8': showTable })}>
+            <div className={cx('column', 'small-12', { 'medium-7': showTable })}>
               <div className="explore-map-container">
                 <WorldMap className="explore-world-map" />
               </div>
-              {showTable && (
-                <div className="column medium-4">
-                  <Top data={topExporters} title="Top Exporting Companies" year={year} />
-                </div>
-              )}
             </div>
+            {showTable && (
+              <div className="column medium-5">
+                <div className="explore-table-container">
+                  <Top
+                    unit="%"
+                    targetLink="profileActor"
+                    title="Top Exporting Companies"
+                    year={year}
+                    data={topExporters}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -2,11 +2,13 @@
 
 .c-top {
 
-  > .title {
-    margin-bottom: 9px;
+ .title {
+   margin-bottom: 9px;
+   font-family: $font-family-1;
+   text-transform: uppercase;
   }
 
-  > .top-list > .top-item {
+  .top-list > .top-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -15,23 +17,22 @@
       margin-top: 8px;
     }
 
-    > .item-name,
-    > .item-value {
+    .item-name,
+    .item-value {
       color: $charcoal-grey;
       font-family: $font-family-1;
       font-size: $font-size-xx-regular;
       letter-spacing: -.8px;
     }
 
-    > .item-name {
+    .item-name {
       display: flex;
       align-items: center;
       max-width: 85%;
 
-      > .node-name {
+      .node-name {
         text-overflow: ellipsis;
         white-space: nowrap;
-
         overflow: hidden;
       }
 
@@ -51,8 +52,9 @@
       }
     }
 
-    > .item-value {
+    .item-value {
       position: relative;
+      color: rgba($charcoal-grey, .6);
 
       &::after {
         position: absolute;

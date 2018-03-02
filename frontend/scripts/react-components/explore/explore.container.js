@@ -6,19 +6,19 @@ import Explore from './explore.component';
 const mapStateToProps = state => {
   const { selectedContextId, selectedYears } = state.tool;
   const { topNodes } = state.explore;
-  const topNodesKey = getTopNodesKey(selectedContextId, 3, ...selectedYears);
+  const topNodesKey = getTopNodesKey(selectedContextId, 6, ...selectedYears);
   const topExporters = topNodes[topNodesKey] || [];
   return {
     topExporters,
     year: selectedYears[0],
-    showTable: !!selectedContextId
+    showTable: selectedContextId !== null
   };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      getTopExporters: () => setExploreTopNodes(3)
+      getTopExporters: () => setExploreTopNodes(6)
     },
     dispatch
   );
