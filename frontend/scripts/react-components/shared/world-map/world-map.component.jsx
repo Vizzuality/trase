@@ -36,7 +36,10 @@ class WorldMap extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.selectedContext !== this.props.selectedContext) {
+    if (
+      prevProps.selectedContext !== this.props.selectedContext ||
+      prevProps.selectedYears !== this.props.selectedYears
+    ) {
       this.props.getTopNodes();
     }
   }
@@ -95,7 +98,13 @@ class WorldMap extends React.PureComponent {
           </Markers>
           <Annotations>
             {flows.map((flow, i) => (
-              <Annotation key={flow.geoId} dx={5} dy={5} subject={flow.coordinates} strokeWidth={0}>
+              <Annotation
+                key={flow.geoId}
+                dx={flow.curveStyle === 'convex' ? 5 : -5}
+                dy={-5}
+                subject={flow.coordinates}
+                strokeWidth={0}
+              >
                 <text
                   className={cx('world-map-annotation-text', {
                     'is-hidden': this.state.active !== flow.geoId
@@ -114,6 +123,7 @@ WorldMap.propTypes = {
   flows: PropTypes.array.isRequired,
   origin: PropTypes.object,
   selectedContext: PropTypes.object,
+  selectedYears: PropTypes.array,
   getTopNodes: PropTypes.func.isRequired
 };
 

@@ -7,7 +7,7 @@ import { setWorldMapTopNodes } from 'react-components/shared/world-map/world-map
 
 const getContextFlows = (countries, origin) => {
   const contextFlows = countries
-    ? countries.map((country, index) => ({
+    ? countries.filter(country => country.geoId !== origin.geoId).map((country, index) => ({
         ...country,
         strokeWidth: index
       }))
@@ -20,21 +20,22 @@ const getContextFlows = (countries, origin) => {
     ...flow,
     curveStyle:
       flow.coordinates[0] > pointOfControl && flow.coordinates[0] > origin.coordinates[0]
-        ? 'concave'
-        : 'convex'
+        ? 'convex'
+        : 'concave'
   }));
 };
 
 const mapStateToProps = state => {
-  const { selectedContext, selectedContextId } = state.tool;
+  const { selectedContext, selectedContextId, selectedYears } = state.tool;
   const origin = selectedContext && COUNTRY_ID_ORIGIN[selectedContext.countryId];
 
-  const countries = state.worldMap.flows[selectedContextId];
+  const countries = state.worldMap.flows[`${selectedContextId}_${selectedYears.join('_')}`];
   const flows = origin ? getContextFlows(countries, origin) : [];
   return {
     flows,
     origin,
-    selectedContext
+    selectedContext,
+    selectedYears
   };
 };
 
