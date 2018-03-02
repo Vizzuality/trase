@@ -35,7 +35,8 @@ const mapStateToProps = state => {
     flows,
     origin,
     selectedContext,
-    selectedYears
+    selectedYears,
+    contextCountries: Object.values(COUNTRY_ID_ORIGIN)
   };
 };
 

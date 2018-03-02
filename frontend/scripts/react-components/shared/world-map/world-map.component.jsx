@@ -33,6 +33,10 @@ class WorldMap extends React.PureComponent {
     };
     this.onMouseEnter = this.onMouseEnter.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
+    this.renderGeographies = this.renderGeographies.bind(this);
+    this.renderArcs = this.renderArcs.bind(this);
+    this.renderFlowsAnnotations = this.renderFlowsAnnotations.bind(this);
+    this.renderCountriesAnnotations = this.renderCountriesAnnotations.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -53,65 +57,98 @@ class WorldMap extends React.PureComponent {
     this.setState(() => ({ active: null }));
   }
 
-  render() {
+  renderGeographies(geographies, projection) {
+    const { flows, origin, contextCountries } = this.props;
+
+    const isDark = iso =>
+      (flows.length > 0 ? flows : contextCountries).map(f => f.geoId).includes(iso);
+    return geographies.map(geography => (
+      <Geography
+        key={geography.properties.cartodb_id}
+        className={cx(
+          'world-map-geography',
+          { '-dark': isDark(geography.properties.iso2) },
+          { '-pink': origin && origin.geoId === geography.properties.iso2 }
+        )}
+        geography={geography}
+        projection={projection}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+      />
+    ));
+  }
+
+  renderArcs() {
     const { flows, origin } = this.props;
-    const isoList = flows.map(f => f.geoId);
+
+    return flows.map(flow => (
+      <Arc
+        key={flow.geoId}
+        className="world-map-arc"
+        arc={{
+          ...flow,
+          coordinates: {
+            start: flow.coordinates,
+            end: origin.coordinates
+          }
+        }}
+        buildPath={WorldMap.buildCurves}
+        strokeWidth={flow.strokeWidth}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+      />
+    ));
+  }
+
+  renderFlowsAnnotations() {
+    const { flows } = this.props;
+
+    return flows.map((flow, i) => (
+      <Annotation
+        key={flow.geoId}
+        dx={flow.curveStyle === 'convex' ? 5 : -5}
+        dy={-5}
+        subject={flow.coordinates}
+        strokeWidth={0}
+      >
+        <text
+          className={cx('world-map-annotation-text', {
+            'is-hidden': this.state.active !== flow.geoId
+          })}
+        >{`${i + 1}.${flow.name}`}</text>
+      </Annotation>
+    ));
+  }
+
+  renderCountriesAnnotations() {
+    const { contextCountries } = this.props;
+    return contextCountries.map(country => {
+      const { annotationPos = [] } = country;
+      return (
+        <Annotation
+          key={country.geoId}
+          dx={annotationPos[0] || 5}
+          dy={annotationPos[1] || 5}
+          subject={country.coordinates}
+          strokeWidth={1}
+        >
+          <text className="world-map-annotation-text -label">{country.name}</text>
+        </Annotation>
+      );
+    });
+  }
+
+  render() {
+    const { flows } = this.props;
     return (
       <ComposableMap className="c-world-map">
         <ZoomableGroup>
           <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
-            {(geographies, projection) =>
-              geographies.map(geography => (
-                <Geography
-                  key={geography.properties.cartodb_id}
-                  className={cx(
-                    'world-map-geography',
-                    { '-destination': isoList.includes(geography.properties.iso2) },
-                    { '-origin': origin && origin.geoId === geography.properties.iso2 }
-                  )}
-                  geography={geography}
-                  projection={projection}
-                  onMouseEnter={this.onMouseEnter}
-                  onMouseLeave={this.onMouseLeave}
-                />
-              ))
-            }
+            {this.renderGeographies}
           </Geographies>
-          <Markers>
-            {flows.map(flow => (
-              <Arc
-                key={flow.geoId}
-                className="world-map-arc"
-                arc={{
-                  ...flow,
-                  coordinates: {
-                    start: flow.coordinates,
-                    end: origin.coordinates
-                  }
-                }}
-                buildPath={WorldMap.buildCurves}
-                strokeWidth={flow.strokeWidth}
-                onMouseEnter={this.onMouseEnter}
-                onMouseLeave={this.onMouseLeave}
-              />
-            ))}
-          </Markers>
+          <Markers>{this.renderArcs()}</Markers>
           <Annotations>
-            {flows.map((flow, i) => (
-              <Annotation
-                key={flow.geoId}
-                dx={flow.curveStyle === 'convex' ? 5 : -5}
-                dy={-5}
-                subject={flow.coordinates}
-                strokeWidth={0}
-              >
-                <text
-                  className={cx('world-map-annotation-text', {
-                    'is-hidden': this.state.active !== flow.geoId
-                  })}
-                >{`${i + 1}.${flow.name}`}</text>
-              </Annotation>
-            ))}
+            {flows.length > 0 ? this.renderFlowsAnnotations() : this.renderCountriesAnnotations()}
           </Annotations>
         </ZoomableGroup>
       </ComposableMap>
@@ -124,6 +161,7 @@ WorldMap.propTypes = {
   origin: PropTypes.object,
   selectedContext: PropTypes.object,
   selectedYears: PropTypes.array,
+  contextCountries: PropTypes.array,
   getTopNodes: PropTypes.func.isRequired
 };
 

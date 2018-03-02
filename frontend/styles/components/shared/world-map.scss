@@ -7,11 +7,11 @@
     outline: 0;
     pointer-events: visibleFill;
 
-    &.-destination {
+    &.-dark {
       fill: rgba($charcoal-grey, 0.5);
     }
 
-    &.-origin {
+    &.-pink {
       fill: $strong-pink;
     }
   }
@@ -25,12 +25,21 @@
   }
 
   .world-map-annotation-text {
-    font-family: $font-family-1;
     fill: $charcoal-grey;
+    font-family: $font-family-1;
+    font-size: 13px;
+    text-transform: uppercase;
+    text-align: right;
     line-height: 0.64;
     letter-spacing: -0.7px;
-    text-align: right;
-    font-size: 13px;
     pointer-events: none;
+
+    + path {
+      stroke: $charcoal-grey;
+    }
+
+    &.-label {
+      transform: translateY(3px);
+    }
   }
 }

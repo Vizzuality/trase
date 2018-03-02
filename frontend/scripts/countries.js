@@ -450,8 +450,28 @@ export const COUNTRIES_COORDINATES = {
 };
 
 export const COUNTRY_ID_ORIGIN = {
-  1: { coordinates: COUNTRIES_COORDINATES.BR, geoId: 'BR' },
-  2: { coordinates: COUNTRIES_COORDINATES.PY, geoId: 'PY' },
-  3: { coordinates: COUNTRIES_COORDINATES.AR, geoId: 'AR' },
-  4: { coordinates: COUNTRIES_COORDINATES.ID, geoId: 'ID' }
+  1: {
+    coordinates: COUNTRIES_COORDINATES.BR,
+    geoId: 'BR',
+    name: 'Brazil',
+    annotationPos: [20, -0.5]
+  },
+  2: {
+    coordinates: COUNTRIES_COORDINATES.PY,
+    geoId: 'PY',
+    name: 'Paraguay',
+    annotationPos: [-35, -0.5]
+  },
+  3: {
+    coordinates: COUNTRIES_COORDINATES.AR,
+    geoId: 'AR',
+    name: 'Argentina',
+    annotationPos: [20, -0.5]
+  },
+  4: {
+    coordinates: COUNTRIES_COORDINATES.ID,
+    geoId: 'ID',
+    name: 'Indonesia',
+    annotationPos: [-30, -0.5]
+  }
 };
