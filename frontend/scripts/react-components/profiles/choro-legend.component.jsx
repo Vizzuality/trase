@@ -30,13 +30,6 @@ class ChoroLegend extends Component {
           ))}
         </ul>
 
-        <svg className="icon icon-bidimensional-legend-arrows">
-          <use xlinkHref="#icon-bidimensional-legend-arrows" />
-        </svg>
-        <svg className="icon icon-unidimensional-legend-arrows">
-          <use xlinkHref="#icon-unidimensional-legend-arrows" />
-        </svg>
-
         <ul className="bullets">
           <li>
             <div className="bullet ch-default" style={{ background: '#ebebeb' }} />

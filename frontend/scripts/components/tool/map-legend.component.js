@@ -14,8 +14,6 @@ export default class {
     this.map = document.querySelector('.c-map');
     this.attribution = document.querySelector('.js-map-attribution');
     this.mapControlScale = document.querySelector('.leaflet-control-scale');
-    this.mapControlZoom = document.querySelector('.leaflet-control-zoom');
-    this.mapControlSwitcher = document.querySelector('.js-basemap-switcher');
     this.warningsContainer = document.querySelector('.js-map-warnings-container');
     this.warnings = document.querySelector('.js-map-warnings');
 

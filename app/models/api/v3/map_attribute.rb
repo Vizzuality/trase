@@ -5,8 +5,8 @@
 #  id                     :integer          not null
 #  map_attribute_group_id :integer          not null
 #  position               :integer          not null
-#  bucket_3               :float            not null          is an Array
-#  bucket_5               :float            not null          is an Array
+#  dual_layer_buckets               :float            not null          is an Array
+#  single_layer_buckets               :float            not null          is an Array
 #  is_default             :boolean          not null          default("false")
 #  is_disabled            :boolean          not null          default("false")
 #  color_scale            :string
@@ -38,8 +38,8 @@ module Api
       validates :position,
                 presence: true,
                 uniqueness: {scope: :map_attribute_group}
-      validates :bucket_3, presence: true, array_size: {exactly: 2}
-      validates :bucket_5, presence: true, array_size: {exactly: 4}
+      validates :dual_layer_buckets, presence: true, array_size: {exactly: 3}
+      validates :single_layer_buckets, presence: true
       validates :is_disabled, inclusion: {in: [true, false]}
       validates :is_default, inclusion: {in: [true, false]}
       validates :color_scale, inclusion: {in: COLOR_SCALE, allow_blank: true}
@@ -54,8 +54,8 @@ module Api
 
       after_commit :refresh_dependencies
 
-      stringy_array :bucket_3
-      stringy_array :bucket_5
+      stringy_array :dual_layer_buckets
+      stringy_array :single_layer_buckets
       stringy_array :years
       manage_associated_attributes [:map_ind, :map_quant]
 
