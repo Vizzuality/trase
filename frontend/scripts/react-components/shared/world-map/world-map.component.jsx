@@ -62,20 +62,23 @@ class WorldMap extends React.PureComponent {
 
     const isDark = iso =>
       (flows.length > 0 ? flows : contextCountries).map(f => f.geoId).includes(iso);
-    return geographies.map(geography => (
-      <Geography
-        key={geography.properties.cartodb_id}
-        className={cx(
-          'world-map-geography',
-          { '-dark': isDark(geography.properties.iso2) },
-          { '-pink': origin && origin.geoId === geography.properties.iso2 }
-        )}
-        geography={geography}
-        projection={projection}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
-      />
-    ));
+    return geographies.map(
+      geography =>
+        geography.properties.iso2 !== 'AQ' && (
+          <Geography
+            key={geography.properties.cartodb_id}
+            className={cx(
+              'world-map-geography',
+              { '-dark': isDark(geography.properties.iso2) },
+              { '-pink': origin && origin.geoId === geography.properties.iso2 }
+            )}
+            geography={geography}
+            projection={projection}
+            onMouseEnter={this.onMouseEnter}
+            onMouseLeave={this.onMouseLeave}
+          />
+        )
+    );
   }
 
   renderArcs() {
@@ -142,7 +145,7 @@ class WorldMap extends React.PureComponent {
     const { flows } = this.props;
     return (
       <ComposableMap className="c-world-map">
-        <ZoomableGroup>
+        <ZoomableGroup disablePanning>
           <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
             {this.renderGeographies}
           </Geographies>

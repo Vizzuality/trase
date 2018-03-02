@@ -1,6 +1,7 @@
 .l-explore {
   background-color: $light-gray;
-  padding: $nav-height 0 0;
+  margin: $nav-height 0 0;
+  height: calc(100vh - #{$nav-height});
 }
 
 #footer {

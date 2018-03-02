@@ -1,21 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
 
-function Explore(props) {
-  const { flows, origin } = props;
+function Explore() {
   return (
     <div className="l-explore">
       <div className="c-explore">
-        <WorldMap flows={flows} origin={origin} />
+        <div className="row column">
+          <div className="explore-map-container">
+            <WorldMap className="explore-world-map" />
+          </div>
+        </div>
       </div>
     </div>
   );
 }
-
-Explore.propTypes = {
-  flows: PropTypes.array,
-  origin: PropTypes.object
-};
 
 export default Explore;

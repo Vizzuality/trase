@@ -1,4 +1,20 @@
 .c-explore {
+  height: 100%;
   background-color: $light-gray;
-  padding: 120px 90px;
+
+  > div {
+    height: 100%;
+  }
+}
+
+.explore-map-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  > svg {
+    transform: translateY(45px);
+  }
 }
