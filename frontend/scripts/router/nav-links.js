@@ -8,7 +8,7 @@ export default {
       name: 'Map',
       page: {
         type: 'tool',
-        payload: { query: { isMapVisible: true } }
+        payload: { query: { state: { isMapVisible: true } } }
       }
     },
     {

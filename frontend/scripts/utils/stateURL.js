@@ -1,8 +1,8 @@
+import { TOGGLE_DROPDOWN } from 'actions/app.actions';
 import { HIGHLIGHT_NODE, LOAD_INITIAL_DATA } from 'actions/tool.actions';
 import _ from 'lodash';
 import qs from 'query-string';
 import { redirect } from 'redux-first-router';
-import { TOGGLE_DROPDOWN } from 'actions/app.actions';
 
 const URL_STATE_PROPS = [
   'selectedContextId',
@@ -43,14 +43,14 @@ export const filterStateToURL = state => {
 
 export const encodeStateToURL = state => {
   const urlProps = JSON.stringify(filterStateToURL(state));
-  return btoa(urlProps);
+  return USE_PLAIN_URL_STATE ? urlProps : btoa(urlProps);
 };
 
 export const computeStateQueryParams = (state, params) => {
   if (!params) return state;
   const parsers = {
     selectedNodesIds(currentState, value) {
-      if (!value) return currentState;
+      if (!value || value.length === 0) return currentState;
       let selectedNodesIds;
       if (Array.isArray(value)) {
         selectedNodesIds = value.map(nodeId => parseInt(nodeId, 10));
@@ -94,8 +94,12 @@ export const computeStateQueryParams = (state, params) => {
   return newState;
 };
 
-export const decodeStateFromURL = state =>
-  typeof state === 'undefined' ? {} : JSON.parse(atob(state));
+export const decodeStateFromURL = state => {
+  if (typeof state === 'undefined') {
+    return {};
+  }
+  return USE_PLAIN_URL_STATE ? JSON.parse(state) : JSON.parse(atob(state));
+};
 
 // remove all params that are now in the state
 const removeStateParamsFromQuery = (params, state) =>
@@ -116,7 +120,7 @@ export const stringify = params => {
     false
   );
   if (needsToComputeState) {
-    const state = encodeStateToURL(computeStateQueryParams(params.state, params));
+    const state = encodeStateToURL(computeStateQueryParams(params.state, params.state));
     const result = removeStateParamsFromQuery(params, state);
     return qs.stringify(result);
   }
@@ -144,7 +148,8 @@ export const toolUrlStateMiddleware = store => next => action => {
   }
   const result = next(decoratedAction);
   const { location, tool } = store.getState(); // next state
-  const newState = computeStateQueryParams(filterStateToURL(tool), location.query);
+  const paramsState = location.query ? location.query.state : {};
+  const newState = computeStateQueryParams(filterStateToURL(tool), paramsState);
   const areNotEqual = !_.isEqual(newState, urlState);
   const conditions = [
     location.type === 'tool',
