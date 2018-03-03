@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'redux-first-router-link';
+import Placehold from 'react-placehodl';
 import formatValue from 'utils/formatValue';
-import fastRandom from 'fast-random';
 import 'styles/components/shared/top.scss';
 
 class Top extends Component {
   constructor(props) {
     super(props);
     this.seed = Math.random();
+    this.renderList = this.renderList.bind(this);
+    this.renderPlaceholder = this.renderPlaceholder.bind(this);
   }
 
   renderList() {
     const { data, targetLink, year } = this.props;
-    return data.length > 0 ? (
+    return (
       data.map((item, index) => {
         const itemValue = Array.isArray(item.values)
           ? formatValue(item.values[0] * 100, 'percentage')
@@ -45,50 +47,46 @@ class Top extends Component {
           </li>
         );
       })
-    ) : (
-      <TopPlaceholder width={350} seed={this.seed} />
     );
+  }
+
+  renderPlaceholder() {
+    return (
+      <Placehold seed={this.seed} prefix="top-placeholder">
+        {({ getParagraph, getLine }) =>
+          <React.Fragment>
+            <div className="top-placeholder-paragraph">
+            {
+              Array(10).fill(0)
+                .map((line, i) => (
+                  <div key={`line-wrapper-${i}`} className="top-placeholder-line-wrapper">
+                    {getLine(3, 5)}
+                    <svg className="icon icon-outside-link">
+                      <use xlinkHref="#icon-outside-link" />
+                    </svg>
+                  </div>
+                ))
+            }
+            </div>
+            {getParagraph(10, 1, 3)}
+          </React.Fragment>
+        }
+      </Placehold>
+    )
   }
 
   render() {
     return (
       <div className="c-top">
         <h3 className="title -small">{this.props.title}</h3>
-        <ul className="top-list">{this.renderList()}</ul>
+        {this.props.data.length > 0
+          ? <ul className="top-list">{this.renderList()}</ul>
+          : this.renderPlaceholder()
+        }
       </div>
     );
   }
 }
-
-const TopPlaceholder = props => {
-  const generator = fastRandom(props.seed);
-  const sizes = ['small', 'medium', 'big', 'small-2', 'medium-2', 'big-2'];
-  const getIndex = (i, size = 3) => parseInt(generator.nextInt(), 10) % size;
-  return Array(10)
-    .fill(0)
-    .map((row, i) => (
-      <li
-        key={`list-item-${i}`}
-        className="placeholder-list-item"
-        style={{ minWidth: props.width }}
-      >
-        <div className="placeholder-start">
-          {Array(3)
-            .fill(0)
-            .map((elemRow, index) => (
-              <span
-                key={`item-${i}-element-${index}`}
-                className={`placeholder-element -${sizes[getIndex(index, 6)]}`}
-              />
-            ))}
-          <svg className="icon icon-outside-link">
-            <use xlinkHref="#icon-outside-link" />
-          </svg>
-        </div>
-        <div className={`placeholder-end -${sizes[getIndex(i)]}`} />
-      </li>
-    ));
-};
 
 Top.propTypes = {
   data: PropTypes.array.isRequired,
