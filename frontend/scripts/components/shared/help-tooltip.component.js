@@ -26,17 +26,10 @@ export default class {
     tooltipElements.forEach(element => {
       const tooltip = new Tooltip(element, {
         title: element.getAttribute('data-tooltip-text'),
-        placement: element.getAttribute('data-tooltip-position') || 'bottom left',
+        placement: element.getAttribute('data-tooltip-position') || 'bottom-left',
+        boundariesElement: 'window',
         container: 'body',
-        offset: '1, 1',
-        popperOptions: {
-          modifiers: {
-            preventOverflow: {
-              boundariesElement: 'window',
-              enabled: true
-            }
-          }
-        }
+        offset: '1, 1'
       });
 
       this.tooltips.push(tooltip);

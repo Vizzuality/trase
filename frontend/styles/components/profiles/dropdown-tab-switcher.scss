@@ -49,18 +49,24 @@
       }
 
       > .dropdown-title {
-        font-size: $font-size-xx-regular;
+        font-family: $font-family-1;
+        font-size: $font-size-x-regular;
+        letter-spacing: -0.7px;
         text-transform: uppercase;
-        padding-right: 20px;
+        padding-right: 14px;
 
         &::after {
-          @include arrow(8px, 2px, $medium-pink, 'down');
+          @include arrow(6px, 2px, $medium-pink, 'down');
           transform: translate(-50%, -75%) rotate(45deg);
         }
       }
 
       > .dropdown-list {
         .dropdown-item {
+          padding: 10px 15px;
+          font-family: $font-family-1;
+          font-size: $font-size-x-regular;
+          letter-spacing: -0.7px;
           text-transform: uppercase;
         }
       }

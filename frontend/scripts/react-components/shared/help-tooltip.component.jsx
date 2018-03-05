@@ -32,15 +32,8 @@ export default class TooltipComponent extends Component {
       title: text,
       placement: position,
       container: 'body',
-      offset: '1, 1',
-      popperOptions: {
-        modifiers: {
-          preventOverflow: {
-            boundariesElement: 'window',
-            enabled: true
-          }
-        }
-      }
+      boundariesElement: 'window',
+      offset: '1, 1'
     });
   }
 
