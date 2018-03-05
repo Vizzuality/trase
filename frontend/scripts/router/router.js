@@ -16,7 +16,7 @@ import { withSidebarNavLayout } from 'react-components/nav/sidebar-nav/with-side
 import { getProfileRootNodes } from 'react-components/profile-root/profile-root.thunks';
 import { getPageStaticContent } from 'react-components/static-content/static-content.thunks';
 import { getTeam } from 'react-components/team/team.thunks';
-import { loadInitialDataExplore } from 'react-components/explore/explore.thunks';
+import { loadInitialDataExplore, redirectToExplore } from 'react-components/explore/explore.thunks';
 
 const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thunk(...params));
 
@@ -26,7 +26,8 @@ const config = {
     parse,
     stringify
   },
-  notFoundPath: '/404'
+  notFoundPath: '/404',
+  onBeforeChange: (...params) => redirectToExplore(...params)
 };
 
 const routes = {
