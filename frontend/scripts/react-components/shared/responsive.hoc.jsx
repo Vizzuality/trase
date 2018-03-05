@@ -19,7 +19,7 @@ export function Responsive({ debounceRate = DEFAULT_DEBOUNCE_RATE } = {}) {
 
       componentDidMount() {
         window.addEventListener('resize', this.onPageResize);
-        this.setWidth();
+        this.setSize();
       }
 
       componentWillUnmount() {
@@ -27,10 +27,10 @@ export function Responsive({ debounceRate = DEFAULT_DEBOUNCE_RATE } = {}) {
       }
 
       onPageResize() {
-        this.setWidth();
+        this.setSize();
       }
 
-      setWidth() {
+      setSize() {
         const { width, height } = this.responsiveContainer.getBoundingClientRect();
 
         if (this.state.width !== width || this.state.height !== height) {
