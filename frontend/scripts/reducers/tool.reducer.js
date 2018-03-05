@@ -86,7 +86,7 @@ export const toolInitialState = {
   nodesDictWithMeta: {},
   recolorByNodeIds: [],
   recolorGroups: [],
-  selectedBiomeFilter: { name: 'none' },
+  selectedBiomeFilter: { name: 'none', value: 'none' },
   selectedColumnsIds: [],
   selectedContext: null,
   selectedContextId: null,
@@ -146,7 +146,7 @@ const toolReducer = {
     }
 
     let biomeFilter;
-    if (state.selectedBiomeFilterName === 'none' || !selectedContext.filterBy.length) {
+    if (state.selectedBiomeFilterName === 'none' || !selectedContext.filterBy.length > 0) {
       biomeFilter = { value: 'none' };
     } else {
       biomeFilter = selectedContext.filterBy[0].nodes.find(
@@ -181,7 +181,7 @@ const toolReducer = {
       selectedYears,
       selectedRecolorBy: selectedRecolorBy || { type: 'none', name: 'none' },
       selectedResizeBy,
-      selectedBiomeFilter: biomeFilter || { value: 'none' },
+      selectedBiomeFilter: biomeFilter || { value: 'none', name: 'none' },
       selectedMapContextualLayers,
       selectedMapBasemap,
       mapView
@@ -194,7 +194,8 @@ const toolReducer = {
       recolorBy => recolorBy.isDefault === true
     );
     const defaultResizeBy = selectedContext.resizeBy.find(resizeBy => resizeBy.isDefault === true);
-    const defaultFilterBy = selectedContext.filterBy.length && selectedContext.filterBy[0][0];
+    const defaultBiomeFilterBy =
+      selectedContext.filterBy.length > 0 && selectedContext.filterBy[0][0];
 
     return Object.assign({}, state, {
       selectedContext,
@@ -202,7 +203,7 @@ const toolReducer = {
       selectedYears: [selectedContext.defaultYear, selectedContext.defaultYear],
       selectedRecolorBy: defaultRecolorBy || { type: 'none', name: 'none' },
       selectedResizeBy: defaultResizeBy,
-      selectedBiomeFilter: defaultFilterBy,
+      selectedBiomeFilter: defaultBiomeFilterBy,
       selectedMapContextualLayers: selectedContext.defaultContextLayers || undefined,
       selectedMapBasemap: selectedContext.defaultBasemap || 'satellite',
       detailedView: false,
@@ -327,7 +328,7 @@ const toolReducer = {
   [SELECT_BIOME_FILTER](state, action) {
     let selectedBiomeFilter;
     if (action.biomeFilter === 'none') {
-      selectedBiomeFilter = { value: 'none' };
+      selectedBiomeFilter = { value: 'none', name: 'none' };
     } else {
       const currentContext = state.contexts.find(context => context.id === state.selectedContextId);
       selectedBiomeFilter = Object.assign(
