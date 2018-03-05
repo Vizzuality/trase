@@ -31,6 +31,13 @@ Rails.application.routes.draw do
           get :place, on: :member, controller: :place_nodes, action: :show
           get :actor, on: :member, controller: :actor_nodes, action: :show
         end
+        resources :actors do
+          get :basic_attributes
+          get :top_countries
+          get :top_sources
+          get :sustainability
+          get :exporting_companies
+        end
         resources :download_attributes, only: [:index]
         namespace :nodes do
           resources :attributes, only: [:index], controller: :nodes_attributes

@@ -244,6 +244,7 @@ paths:
               $ref: '#/definitions/NodeAttribute'
   '/context/{context_id}/nodes/{id}/actor':
     get:
+      deprecated: true
       tags:
         - node
       summary: 'Data for actor profile'
@@ -263,6 +264,11 @@ paths:
           description: ''
           required: true
           type: integer
+        - name: year
+          in: query
+          type: integer
+          description: 'Defaults to context default year'
+          required: false
       responses:
         '200':
           description: successful operation
@@ -272,6 +278,177 @@ paths:
               data:
                 type: object
                 $ref: '#/definitions/ActorNode'
+
+  '/context/{context_id}/actors/{id}/basic_attributes':
+    get:
+      tags:
+        - node
+        - actor
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          description: ''
+          required: true
+          type: integer
+        - name: id
+          in: path
+          description: ''
+          required: true
+          type: integer
+        - name: year
+          in: query
+          type: integer
+          description: 'Defaults to context default year'
+          required: false
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/definitions/ActorBasicAttributes'
+
+  '/context/{context_id}/actors/{id}/top_countries':
+    get:
+      tags:
+        - node
+        - actor
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          description: ''
+          required: true
+          type: integer
+        - name: id
+          in: path
+          description: ''
+          required: true
+          type: integer
+        - name: year
+          in: query
+          type: integer
+          description: 'Defaults to context default year'
+          required: false
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/definitions/ActorTopCountries'
+
+  '/context/{context_id}/actors/{id}/top_sources':
+    get:
+      tags:
+        - node
+        - actor
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          description: ''
+          required: true
+          type: integer
+        - name: id
+          in: path
+          description: ''
+          required: true
+          type: integer
+        - name: year
+          in: query
+          type: integer
+          description: 'Defaults to context default year'
+          required: false
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/definitions/ActorTopSources'
+
+  '/context/{context_id}/actors/{id}/sustainability':
+    get:
+      tags:
+        - node
+        - actor
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          description: ''
+          required: true
+          type: integer
+        - name: id
+          in: path
+          description: ''
+          required: true
+          type: integer
+        - name: year
+          in: query
+          type: integer
+          description: 'Defaults to context default year'
+          required: false
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/definitions/ActorSustainability'
+
+  '/context/{context_id}/actors/{id}/exporting_companies':
+    get:
+      tags:
+        - node
+        - actor
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          description: ''
+          required: true
+          type: integer
+        - name: id
+          in: path
+          description: ''
+          required: true
+          type: integer
+        - name: year
+          in: query
+          type: integer
+          description: 'Defaults to context default year'
+          required: false
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/definitions/ActorExportingCompanies'
+
   '/context/{context_id}/nodes/{id}/place':
     get:
       tags:
@@ -293,6 +470,11 @@ paths:
           description: ''
           required: true
           type: integer
+        - name: year
+          in: query
+          type: integer
+          description: 'Defaults to context default year'
+          required: false
       responses:
         '200':
           description: successful operation
@@ -300,7 +482,6 @@ paths:
             type: object
             properties:
               data:
-                type: object
                 $ref: '#/definitions/PlaceNode'
   '/context/{context_id}/nodes/{id}/linked_nodes':
     get:
@@ -1106,8 +1287,6 @@ definitions:
                               type: integer
                             value:
                               type: string
-
-
           companies_sourcing:
             type: object
             properties:
@@ -1142,6 +1321,247 @@ definitions:
                       type: array
                       items:
                         type: number
+
+  ActorBasicAttributes:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          node_name:
+            type: string
+          column_name:
+            type: string
+          country_name:
+            type: string
+          country_geo_id:
+            type: string
+          zero_deforestation_link:
+            type: string
+          supply_change_link:
+            type: string
+          rtrs_member:
+            type: string
+          zero_deforestation:
+            type: string
+          supply_change:
+            type: string
+          soy_:
+            type: number
+          forest_500:
+            type: number
+          summary:
+            type: string
+
+  ActorTopCountries:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          included_years:
+            type: array
+            items:
+              type: integer
+          buckets:
+            type: array
+            items:
+              type: integer
+          lines:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                geo_id:
+                  type: string
+                values:
+                  type: array
+                  items:
+                    type: number
+                value9:
+                  type: number
+          unit:
+            type: string
+          style:
+            type: object
+            properties:
+              type:
+                type: string
+              style:
+                type: string
+
+  ActorTopSources:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          included_years:
+            type: array
+            items:
+              type: integer
+          buckets:
+            type: array
+            items:
+              type: integer
+          municipality:
+            type: object
+            properties:
+              lines:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    geo_id:
+                      type: string
+                    values:
+                      type: array
+                      items:
+                        type: number
+                    value9:
+                      type: number
+              unit:
+                type: string
+              style:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  style:
+                    type: string
+          biome:
+            type: object
+            properties:
+              lines:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    geo_id:
+                      type: string
+                    values:
+                      type: array
+                      items:
+                        type: number
+                    value9:
+                      type: number
+              unit:
+                type: string
+              style:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  style:
+                    type: string
+          state:
+            type: object
+            properties:
+              lines:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    geo_id:
+                      type: string
+                    values:
+                      type: array
+                      items:
+                        type: number
+                    value9:
+                      type: number
+              unit:
+                type: string
+              style:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  style:
+                    type: string
+
+  ActorSustainability:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            included_columns:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  unit:
+                    type: string
+                  tooltip:
+                    type: string
+            rows:
+              type: array
+              items:
+                type: object
+                properties:
+                  values:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        value:
+                          type: string
+
+  ActorExportingCompanies:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          dimension_y:
+            type: object
+            properties:
+              name:
+                type: string
+              unit:
+                type: string
+          dimensions_x:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                unit:
+                  type: string
+          companies:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                id:
+                  type: integer
+                y:
+                  type: number
+                x:
+                  type: array
+                  items:
+                    type: number
+
   TopNodes:
     type: object
     properties:

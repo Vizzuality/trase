@@ -1,11 +1,14 @@
 module Api
   module V3
-    module ActorNode
+    module Actors
       class TopNodesSummary
-        def initialize(context, year, node)
+        # @param context [Api::V3::Context]
+        # @param node [Api::V3::Node]
+        # @year [Integer]
+        def initialize(context, node, year)
           @context = context
-          @year = year
           @node = node
+          @year = year
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
           @soy_production_attribute = Dictionary::Quant.instance.get('SOY_TN')
@@ -13,9 +16,10 @@ module Api
           initialize_flow_stats_for_node
         end
 
-        # looking for top nodes (destinations and sources) linked to this actor node
+        # Top nodes (destinations and sources) linked to this actor node
         # across years
-        def call(node_list_label, node_type)
+        # @param node_type [String or Array<String>]
+        def call(node_type)
           years = @flow_stats.available_years_for_attribute(@volume_attribute)
           map_attribute = Api::V3::Readonly::MapAttribute.where(
             context_id: @context.id,
@@ -24,18 +28,16 @@ module Api
           )
           buckets = map_attribute.try(:single_layer_buckets) || [5000, 100_000, 300_000, 1_000_000]
           result = {
-            node_list_label => {
-              included_years: years, buckets: buckets
-            }
+            included_years: years, buckets: buckets
           }
           if node_type.is_a?(Array)
             node_type.each do |nt|
-              result[node_list_label][nt.downcase] = nodes_by_year_summary_for_indicator(
+              result[nt.downcase] = nodes_by_year_summary_for_indicator(
                 nt, years, buckets, @volume_attribute
               )
             end
           else
-            result[node_list_label] = result[node_list_label].merge(
+            result = result.merge(
               nodes_by_year_summary_for_indicator(node_type, years, buckets, @volume_attribute)
             )
           end

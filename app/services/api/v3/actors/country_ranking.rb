@@ -1,11 +1,14 @@
 module Api
   module V3
-    module ActorNode
+    module Actors
       class CountryRanking
-        def initialize(context, year, node)
+        # @param context [Api::V3::Context]
+        # @param node [Api::V3::Node]
+        # @year [Integer]
+        def initialize(context, node, year)
           @context = context
-          @year = year
           @node = node
+          @year = year
           @node_index = Api::V3::NodeType.node_index_for_id(@context, @node.node_type_id)
         end
 

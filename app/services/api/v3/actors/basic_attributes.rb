@@ -1,20 +1,23 @@
 module Api
   module V3
-    module ActorNode
+    module Actors
       class BasicAttributes
-        attr_reader :attributes
-
-        def initialize(context, year, node)
+        # @param context [Api::V3::Context]
+        # @param node [Api::V3::Node]
+        # @year [Integer]
+        def initialize(context, node, year)
           @context = context
-          @year = year
           @node = node
+          @year = year
           @node_type_name = @node&.node_type&.name
           @actor_quals = Dictionary::ActorQuals.new(@node, @year)
           @actor_quants = Dictionary::ActorQuants.new(@node, @year)
           @actor_inds = Dictionary::ActorInds.new(@node, @year)
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
+        end
 
+        def call
           @attributes = {
             node_name: @node.name,
             column_name: @node_type_name,
@@ -26,6 +29,7 @@ module Api
           initialize_top_nodes
           initialize_flow_stats_for_node
           @attributes[:summary] = summary
+          @attributes
         end
 
         def summary
@@ -175,7 +179,7 @@ module Api
             @trade_total_perc_difference = (@trade_total_current_year - @trade_total_previous_year) / @trade_total_previous_year
           end
 
-          trade_total_rank_in_country = CountryRanking.new(@context, @year, @node).
+          trade_total_rank_in_country = CountryRanking.new(@context, @node, @year).
             position_for_attribute(@volume_attribute)
           return unless trade_total_rank_in_country && trade_total_rank_in_country > 1
           @trade_total_rank_in_country_formatted = trade_total_rank_in_country.ordinalize + ' '

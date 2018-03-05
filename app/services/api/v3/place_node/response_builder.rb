@@ -1,3 +1,5 @@
+# @deprecated This allows to serve a combined response for the place profile
+# and will be retired when we amend front-end to use the split responses
 module Api
   module V3
     module PlaceNode

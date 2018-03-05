@@ -1,13 +1,16 @@
 module Api
   module V3
-    module ActorNode
+    module Actors
       class ExportingCompaniesPlot
         include Api::V3::Profiles::AttributesInitializer
 
-        def initialize(context, year, node)
+        # @param context [Api::V3::Context]
+        # @param node [Api::V3::Node]
+        # @year [Integer]
+        def initialize(context, node, year)
           @context = context
-          @year = year
           @node = node
+          @year = year
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
           initialize_attributes(attributes_list)
@@ -59,15 +62,13 @@ module Api
           end
 
           {
-            companies_sourcing: {
-              dimension_y: {
-                name: 'Trade Volume', unit: unit
-              },
-              dimensions_x: @attributes.map do |attribute_hash|
-                attribute_hash.slice(:name, :unit)
-              end,
-              companies: exports
-            }
+            dimension_y: {
+              name: 'Trade Volume', unit: unit
+            },
+            dimensions_x: @attributes.map do |attribute_hash|
+              attribute_hash.slice(:name, :unit)
+            end,
+            companies: exports
           }
         end
 

@@ -1,13 +1,16 @@
 module Api
   module V3
-    module ActorNode
+    module Actors
       class SustainabilityTable
         include Api::V3::Profiles::AttributesInitializer
 
-        def initialize(context, year, node)
+        # @param context [Api::V3::Context]
+        # @param node [Api::V3::Node]
+        # @year [Integer]
+        def initialize(context, node, year)
           @context = context
-          @year = year
           @node = node
+          @year = year
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
           initialize_attributes(attributes_list)
@@ -15,14 +18,12 @@ module Api
         end
 
         def call
-          {
-            sustainability: [
-              {group_name: 'Municipalities', node_type: NodeTypeName::MUNICIPALITY},
-              {group_name: 'Biomes', node_type: NodeTypeName::BIOME, is_total: true}
-            ].map do |group|
-              sustainability_for_group(group[:group_name], group[:node_type], group[:is_total])
-            end
-          }
+          [
+            {group_name: 'Municipalities', node_type: NodeTypeName::MUNICIPALITY},
+            {group_name: 'Biomes', node_type: NodeTypeName::BIOME, is_total: true}
+          ].map do |group|
+            sustainability_for_group(group[:group_name], group[:node_type], group[:is_total])
+          end
         end
 
         private
