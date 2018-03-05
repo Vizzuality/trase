@@ -1,29 +1,29 @@
 @import '../../settings';
 
+$line-margin: 23px;
+
 .c-top {
 
- .title {
-   margin-bottom: 9px;
-   font-family: $font-family-1;
-   text-transform: uppercase;
+ .subtitle {
+   margin-bottom: 25px;
   }
 
-  .top-list > .top-item {
+  .top-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 350px;
 
     &:not(:first-child) {
-      margin-top: 8px;
+      margin-top: $line-margin;
     }
 
-    .item-name,
+    .node-name,
     .item-value {
       color: $charcoal-grey;
       font-family: $font-family-1;
-      font-size: $font-size-xx-regular;
-      letter-spacing: -.8px;
+      font-size: 13px;
+      letter-spacing: -.6px;
     }
 
     .item-name {
@@ -73,7 +73,7 @@
     justify-content: space-between;
 
     &:not(:first-child) {
-      margin-top: 8px;
+      margin-top: $line-margin;
     }
   }
 
@@ -93,7 +93,7 @@
         justify-content: flex-start;
 
         &:not(:first-child) {
-          margin: 8px 0 0;
+          margin: $line-margin 0 0;
         }
 
         > .top-placeholder-line {
@@ -105,7 +105,7 @@
         display: flex;
 
         &:not(:first-child) {
-          margin: 8px 0 0;
+          margin: $line-margin 0 0;
         }
       }
 

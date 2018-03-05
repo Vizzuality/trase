@@ -23,7 +23,7 @@ class Top extends Component {
 
         return (
           <li key={index} className="top-item">
-            <span className="item-name">
+            <div className="item-name">
               <span className="node-name">{item.name}</span>
               {this.props.targetLink &&
                 !item.is_domestic_consumption && (
@@ -36,7 +36,7 @@ class Top extends Component {
                     </svg>
                   </Link>
                 )}
-            </span>
+            </div>
             {this.props.unit ? (
               <span className="item-value" data-unit={this.props.unit}>
                 {itemValue}
@@ -51,6 +51,7 @@ class Top extends Component {
   }
 
   renderPlaceholder() {
+
     return (
       <Placehold seed={this.seed} prefix="top-placeholder">
         {({ getParagraph, getLine }) =>
@@ -78,7 +79,7 @@ class Top extends Component {
   render() {
     return (
       <div className="c-top">
-        <h3 className="title -small">{this.props.title}</h3>
+        <h3 className="subtitle -dark">{this.props.title}</h3>
         {this.props.data.length > 0
           ? <ul className="top-list">{this.renderList()}</ul>
           : this.renderPlaceholder()
