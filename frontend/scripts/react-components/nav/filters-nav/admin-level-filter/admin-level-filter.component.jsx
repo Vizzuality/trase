@@ -19,7 +19,7 @@ class AdminLevelFilter extends Component {
           className={cx('dropdown-item', { '-disabled': node.isDisabled })}
           onClick={() => onSelected(node.name || node.value)}
         >
-          {node.name !== undefined ? node.name.toLowerCase() : 'All'}
+          {typeof node.name !== 'undefined' ? node.name.toLowerCase() : 'All'}
         </li>
       ));
   }
@@ -38,7 +38,9 @@ class AdminLevelFilter extends Component {
           <div className="c-dropdown -capitalize">
             <span className="dropdown-label">{filters.name.toLowerCase()}</span>
             <span className="dropdown-title">
-              {selectedFilter !== undefined && selectedFilter.name !== undefined
+              {selectedFilter !== 'undefined' &&
+              selectedFilter.name !== 'undefined' &&
+              selectedFilter.value !== 'none'
                 ? selectedFilter.name.toLowerCase()
                 : 'All'}
             </span>

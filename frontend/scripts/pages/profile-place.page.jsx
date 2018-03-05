@@ -253,16 +253,18 @@ const _setInfo = (store, info, onLinkClick, { nodeId, year }) => {
     info.soy_production !== null ? formatValue(info.soy_production, 'tons') : '-';
   document.querySelector('.js-link-map').addEventListener('click', () =>
     onLinkClick('tool', {
-      selectedNodesIds: [nodeId],
-      isMapVisible: true,
-      selectedYears: [year, year]
+      state: {
+        isMapVisible: true,
+        selectedNodesIds: [parseInt(nodeId, 10)],
+        selectedYears: [year, year]
+      }
     })
   );
-  document
-    .querySelector('.js-link-supply-chain')
-    .addEventListener('click', () =>
-      onLinkClick('tool', { selectedNodesIds: [nodeId], selectedYears: [year, year] })
-    );
+  document.querySelector('.js-link-supply-chain').addEventListener('click', () =>
+    onLinkClick('tool', {
+      state: { selectedNodesIds: [parseInt(nodeId, 10)], selectedYears: [year, year] }
+    })
+  );
   document.querySelector('.js-line-title').innerHTML = info.municipality
     ? `Deforestation trajectory of ${info.municipality}`
     : '-';
