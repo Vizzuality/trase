@@ -1,12 +1,12 @@
-import L from 'leaflet';
-import isNumber from 'lodash/isNumber';
 // eslint-disable-next-line camelcase
 import turf_bbox from '@turf/bbox';
 import { BASEMAPS, CARTO_BASE_URL, MAP_PANES, MAP_PANES_Z } from 'constants';
-import 'styles/components/tool/map/leaflet.css';
+import L from 'leaflet';
+import isNumber from 'lodash/isNumber';
 import 'styles/components/tool/map.scss';
-import 'styles/components/tool/map/map-legend.scss';
+import 'styles/components/tool/map/leaflet.css';
 import 'styles/components/tool/map/map-choropleth.scss';
+import 'styles/components/tool/map/map-legend.scss';
 
 export default class {
   constructor() {
@@ -204,7 +204,7 @@ export default class {
     }
   }
 
-  selectPolygonType({ selectedColumnsIds, choropleth, biomeFilter }) {
+  selectPolygonType({ selectedColumnsIds, choropleth, biomeFilter, stateFilter }) {
     if (!this.polygonTypesLayers || !selectedColumnsIds.length) {
       return;
     }
@@ -220,8 +220,8 @@ export default class {
         this._setChoropleth(choropleth);
       }
 
-      if (biomeFilter) {
-        this.filterByBiome(biomeFilter);
+      if (stateFilter || biomeFilter) {
+        this.filterPolygons({ state: stateFilter, biome: biomeFilter });
       }
     }
   }
@@ -324,8 +324,9 @@ export default class {
           if (
             event.target.disabled ||
             (event.target.classList && event.target.classList.contains('-disabled'))
-          )
+          ) {
             return;
+          }
           that.callbacks.onPolygonClicked(this.feature.properties.geoid);
         }
       });
@@ -400,16 +401,20 @@ export default class {
     }, 850);
   }
 
-  filterByBiome(biome) {
+  filterPolygons({ state, biome }) {
     if (!this.currentPolygonTypeLayer) {
       return;
     }
     this.currentPolygonTypeLayer.eachLayer(layer => {
-      const isFilteredOut =
-        biome.geoId === undefined || layer.feature.properties.biome_geoid === undefined
-          ? false
-          : biome.geoId !== layer.feature.properties.biome_geoid;
-      layer._path.classList.toggle('-filteredOut', isFilteredOut);
+      let isVisible = true;
+      if (biome.geoId !== undefined && layer.feature.properties.biome_geoid !== biome.geoId) {
+        isVisible = false;
+      }
+      if (state.geoId !== undefined && layer.feature.properties.state_geoid !== state.geoId) {
+        isVisible = false;
+      }
+
+      layer._path.classList.toggle('-filteredOut', !isVisible);
     });
   }
 }

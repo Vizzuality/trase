@@ -47,6 +47,7 @@ export const UPDATE_NODE_SELECTION = 'UPDATE_NODE_SELECTION';
 export const HIGHLIGHT_NODE = 'HIGHLIGHT_NODE';
 export const FILTER_LINKS_BY_NODES = 'FILTER_LINKS_BY_NODES';
 export const SELECT_BIOME_FILTER = 'SELECT_BIOME_FILTER';
+export const SELECT_STATE_FILTER = 'SELECT_STATE_FILTER';
 export const SELECT_YEARS = 'SELECT_YEARS';
 export const SELECT_RESIZE_BY = 'SELECT_RESIZE_BY';
 export const SELECT_RECOLOR_BY = 'SELECT_RECOLOR_BY';
@@ -170,6 +171,10 @@ export function selectContext(context) {
 
 export function selectBiomeFilter(biomeFilter, reloadLinks) {
   return _reloadLinks('biomeFilter', biomeFilter, SELECT_BIOME_FILTER, reloadLinks);
+}
+
+export function selectStateFilter(stateFilter, reloadLinks) {
+  return _reloadLinks('stateFilter', stateFilter, SELECT_STATE_FILTER, reloadLinks);
 }
 
 export function selectResizeBy(resizeBy, reloadLinks) {
@@ -365,6 +370,15 @@ export function loadNodes() {
         });
       }
 
+      const selectedStateFilter = getState().tool.selectedStateFilter;
+      // reselect state filter to add state geoid
+      if (selectedStateFilter && selectedStateFilter.nodeId) {
+        dispatch({
+          type: SELECT_STATE_FILTER,
+          stateFilter: getState().tool.selectedStateFilter.name
+        });
+      }
+
       const allAvailableMapDimensionsUids = payload.mapDimensionsMetaJSON.dimensions.map(
         dimension => getNodeMetaUid(dimension.type, dimension.layerAttributeId)
       );
@@ -428,6 +442,11 @@ export function loadLinks() {
     const selectedBiomeFilter = state.tool.selectedBiomeFilter;
     if (selectedBiomeFilter && selectedBiomeFilter.name && selectedBiomeFilter.name !== 'none') {
       params.biome_filter_id = selectedBiomeFilter.nodeId;
+    }
+
+    const selectedStateFilter = state.tool.selectedStateFilter;
+    if (selectedStateFilter && selectedStateFilter.name && selectedStateFilter.name !== 'none') {
+      params.state_filter_id = selectedStateFilter.nodeId;
     }
 
     if (state.tool.areNodesExpanded) {

@@ -4,8 +4,6 @@ import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.c
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 
-const id = 'filters';
-
 class AdminLevelFilter extends Component {
   renderOptions() {
     const { onSelected, selectedFilter, filters } = this.props;
@@ -25,11 +23,11 @@ class AdminLevelFilter extends Component {
   }
 
   render() {
-    const { className, onToggle, currentDropdown, selectedFilter, filters } = this.props;
+    const { id, onToggle, currentDropdown, selectedFilter, filters } = this.props;
 
     return (
       <div
-        className={cx('js-dropdown', className)}
+        className={cx('js-dropdown', 'filters-nav-item')}
         onClick={() => {
           onToggle(id);
         }}
@@ -51,9 +49,9 @@ class AdminLevelFilter extends Component {
 }
 
 AdminLevelFilter.propTypes = {
-  className: PropTypes.string,
   onToggle: PropTypes.func,
   onSelected: PropTypes.func,
+  id: PropTypes.string,
   currentDropdown: PropTypes.string,
   selectedFilter: PropTypes.object,
   filters: PropTypes.object

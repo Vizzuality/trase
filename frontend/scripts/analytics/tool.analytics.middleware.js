@@ -1,6 +1,7 @@
 import { TOGGLE_MAP_LAYERS_MENU } from 'actions/app.actions';
 import {
   SELECT_BIOME_FILTER,
+  SELECT_STATE_FILTER,
   SELECT_COLUMN,
   SELECT_CONTEXTUAL_LAYERS,
   SELECT_RECOLOR_BY,
@@ -34,6 +35,12 @@ export const GA_ACTION_WHITELIST = [
     category: 'Sankey',
     action: 'Update biome filter',
     getPayload: action => action.biomeFilter
+  },
+  {
+    type: SELECT_STATE_FILTER,
+    category: 'Sankey',
+    action: 'Update state filter',
+    getPayload: action => action.stateFilter
   },
   {
     type: SELECT_YEARS,

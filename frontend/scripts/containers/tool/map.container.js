@@ -26,7 +26,8 @@ const mapMethodsToState = state => ({
     _returnedValue: state => ({
       selectedColumnsIds: state.tool.selectedColumnsIds,
       choropleth: state.tool.choropleth,
-      biomeFilter: state.tool.selectedBiomeFilter
+      biomeFilter: state.tool.selectedBiomeFilter,
+      stateFilter: state.tool.selectedStateFilter
     })
   },
   selectPolygons: {
@@ -66,7 +67,14 @@ const mapMethodsToState = state => ({
     _comparedValue: state => getBasemap(state.tool),
     _returnedValue: state => getBasemap(state.tool)
   },
-  filterByBiome: state.tool.selectedBiomeFilter
+  filterPolygons: {
+    _comparedValue: state =>
+      state.tool.selectedStateFilter.name + state.tool.selectedBiomeFilter.name,
+    _returnedValue: state => ({
+      state: state.tool.selectedStateFilter,
+      biome: state.tool.selectedBiomeFilter
+    })
+  }
 });
 
 const mapViewCallbacksToActions = () => ({

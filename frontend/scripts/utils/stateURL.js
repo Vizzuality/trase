@@ -38,6 +38,9 @@ export const filterStateToURL = state => {
   stateToSave.selectedBiomeFilterName = state.selectedBiomeFilter
     ? state.selectedBiomeFilter.name
     : state.selectedBiomeFilterName;
+  stateToSave.selectedStateFilterName = state.selectedStateFilter
+    ? state.selectedStateFilter.name
+    : state.selectedStateFilterName;
   return stateToSave;
 };
 

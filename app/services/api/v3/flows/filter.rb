@@ -29,6 +29,7 @@ module Api
           initialize_node_types
           initialize_active_node_types
           initialize_biome_position
+          initialize_state_position
           initialize_selected_nodes
           initialize_other_nodes_ids
           initialize_unknown_nodes
@@ -59,6 +60,7 @@ module Api
             params[:locked_nodes_ids]
           )
           @biome_id = params[:biome_id]
+          @state_id = params[:state_id]
           @year_start = params[:year_start]
           @year_end = params[:year_end]
           @limit = params[:limit]&.to_i || 100
@@ -115,6 +117,12 @@ module Api
           end + 1
         end
 
+        def initialize_state_position
+          @state_position = @state_id && @node_types.index do |c|
+            c['name'] == NodeTypeName::STATE
+          end + 1
+        end
+
         # nodes selected by the user
         def initialize_selected_nodes
           # filter out nodes not involved in any flows in this context
@@ -123,8 +131,8 @@ module Api
               select('true').
               joins(:flow_quants).
               where('flow_quants.quant_id' => @resize_quant.id).
-              where(context_id: @context.id).# TODO: verify this
-            where('? = ANY(flows.path)', node_id).
+              where(context_id: @context.id).
+              where('? = ANY(flows.path)', node_id).
               where('year >= ? AND year <= ?', @year_start, @year_end).any?
           end
           @selected_nodes = Api::V3::Node.where(
@@ -329,6 +337,9 @@ module Api
 
           if @biome_position
             query = query.where('path[?] = ?', @biome_position, @biome_id)
+          end
+          if @state_position
+            query = query.where('path[?] = ?', @state_position, @state_id)
           end
 
           if @selected_nodes.any?

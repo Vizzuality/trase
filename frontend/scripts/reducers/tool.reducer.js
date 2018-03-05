@@ -20,6 +20,7 @@ import {
   SELECT_CONTEXTUAL_LAYERS,
   SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
+  SELECT_STATE_FILTER,
   SELECT_VIEW,
   SELECT_YEARS,
   SET_CONTEXT,
@@ -87,6 +88,7 @@ export const toolInitialState = {
   recolorByNodeIds: [],
   recolorGroups: [],
   selectedBiomeFilter: { name: 'none' },
+  selectedStateFilter: { name: 'none' },
   selectedColumnsIds: [],
   selectedContext: null,
   selectedContextId: null,
@@ -119,6 +121,7 @@ const toolReducer = {
       expandedNodesIds: [],
       areNodesExpanded: false,
       selectedBiomeFilter: { value: 'none' },
+      selectedStateFilter: { value: 'none' },
       recolorByNodeIds: []
     });
   },
@@ -154,6 +157,15 @@ const toolReducer = {
       );
     }
 
+    let stateFilter;
+    if (state.selectedStateFilterName === 'none' || !selectedContext.filterBy.length) {
+      stateFilter = { value: 'none' };
+    } else {
+      stateFilter = selectedContext.filterBy[0].nodes.find(
+        filterBy => filterBy.name === state.selectedStateFilterName
+      );
+    }
+
     // use current selectedMapContextualLayers, or use the context's default
     let selectedMapContextualLayers = selectedContext.defaultContextLayers || undefined;
     if (
@@ -182,6 +194,7 @@ const toolReducer = {
       selectedRecolorBy: selectedRecolorBy || { type: 'none', name: 'none' },
       selectedResizeBy,
       selectedBiomeFilter: biomeFilter || { value: 'none' },
+      selectedStateFilter: stateFilter || { value: 'none' },
       selectedMapContextualLayers,
       selectedMapBasemap,
       mapView
@@ -194,7 +207,12 @@ const toolReducer = {
       recolorBy => recolorBy.isDefault === true
     );
     const defaultResizeBy = selectedContext.resizeBy.find(resizeBy => resizeBy.isDefault === true);
-    const defaultFilterBy = selectedContext.filterBy.length && selectedContext.filterBy[0][0];
+    const defaultBiomeFilterBy =
+      selectedContext.filterBy.length &&
+      selectedContext.filterBy.find(elem => elem.name.toLowerCase() === 'biome')[0];
+    const defaultStateFilterBy =
+      selectedContext.filterBy.length &&
+      selectedContext.filterBy.find(elem => elem.name.toLowerCase() === 'state')[0];
 
     return Object.assign({}, state, {
       selectedContext,
@@ -202,7 +220,8 @@ const toolReducer = {
       selectedYears: [selectedContext.defaultYear, selectedContext.defaultYear],
       selectedRecolorBy: defaultRecolorBy || { type: 'none', name: 'none' },
       selectedResizeBy: defaultResizeBy,
-      selectedBiomeFilter: defaultFilterBy,
+      selectedBiomeFilter: defaultBiomeFilterBy,
+      selectedStateFilter: defaultStateFilterBy,
       selectedMapContextualLayers: selectedContext.defaultContextLayers || undefined,
       selectedMapBasemap: selectedContext.defaultBasemap || 'satellite',
       detailedView: false,
@@ -332,11 +351,30 @@ const toolReducer = {
       const currentContext = state.contexts.find(context => context.id === state.selectedContextId);
       selectedBiomeFilter = Object.assign(
         {},
-        currentContext.filterBy[0].nodes.find(filterBy => filterBy.name === action.biomeFilter)
+        currentContext.filterBy
+          .find(elem => elem.name.toLowerCase() === 'biome')
+          .nodes.find(filterBy => filterBy.name === action.biomeFilter)
       );
       selectedBiomeFilter.geoId = state.nodesDict[selectedBiomeFilter.nodeId].geoId;
     }
     return Object.assign({}, state, { selectedBiomeFilter });
+  },
+
+  [SELECT_STATE_FILTER](state, action) {
+    let selectedStateFilter;
+    if (action.stateFilter === 'none') {
+      selectedStateFilter = { value: 'none' };
+    } else {
+      const currentContext = state.contexts.find(context => context.id === state.selectedContextId);
+      selectedStateFilter = Object.assign(
+        {},
+        currentContext.filterBy
+          .find(elem => elem.name.toLowerCase() === 'state')
+          .nodes.find(filterBy => filterBy.name === action.stateFilter)
+      );
+      selectedStateFilter.geoId = state.nodesDict[selectedStateFilter.nodeId].geoId;
+    }
+    return Object.assign({}, state, { selectedStateFilter });
   },
 
   [SELECT_YEARS](state, action) {
@@ -597,6 +635,7 @@ const toolReducerTypes = PropTypes => ({
   recolorByNodeIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   recolorGroups: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedBiomeFilter: PropTypes.object,
+  selectedStateFilter: PropTypes.object,
   selectedColumnsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedContext: PropTypes.object,
   selectedContextId: PropTypes.number,

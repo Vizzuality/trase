@@ -17,7 +17,8 @@ const filteredState = {
   selectedMapBasemap: null,
   selectedResizeByName: 'none',
   selectedRecolorByName: 'none',
-  selectedBiomeFilterName: 'none'
+  selectedBiomeFilterName: 'none',
+  selectedStateFilterName: 'none'
 };
 
 test('filterStateToURL with existing selectedR---By as none', () => {
@@ -29,6 +30,7 @@ test('filterStateToURL with existing selectedR---By as undefined', () => {
     selectedResizeBy,
     selectedRecolorBy,
     selectedBiomeFilter,
+    selectedStateFilter,
     ...incompleteState // object rest assignment do not remove unused!
   } = toolInitialState;
 
@@ -36,7 +38,8 @@ test('filterStateToURL with existing selectedR---By as undefined', () => {
     ...filteredState,
     selectedResizeByName: undefined,
     selectedRecolorByName: undefined,
-    selectedBiomeFilterName: undefined
+    selectedBiomeFilterName: undefined,
+    selectedStateFilterName: undefined
   });
 });
 

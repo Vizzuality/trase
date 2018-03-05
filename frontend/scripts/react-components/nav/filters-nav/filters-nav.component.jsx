@@ -1,5 +1,5 @@
-import cx from 'classnames';
 /* eslint-disable jsx-a11y/no-static-element-interactions */
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import AdminLevelFilter from 'react-components/nav/filters-nav/admin-level-filter/admin-level-filter.container';
@@ -97,14 +97,41 @@ class FiltersNav extends React.PureComponent {
   }
 
   renderMenuClosed() {
-    const { selectedContext } = this.props;
+    const {
+      selectedContext,
+      onBiomeSelected,
+      onStateSelected,
+      selectedBiomeFilter,
+      selectedStateFilter
+    } = this.props;
+
+    const biomeFilter =
+      selectedContext && selectedContext.filterBy.find(elem => elem.name.toLowerCase() === 'biome');
+    const stateFilter =
+      selectedContext && selectedContext.filterBy.find(elem => elem.name.toLowerCase() === 'state');
+
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
           <ContextSelector className="filters-nav-item" />
           {selectedContext && (
             <React.Fragment>
-              <AdminLevelFilter className="filters-nav-item" />
+              {biomeFilter && (
+                <AdminLevelFilter
+                  id="biomeFilter"
+                  selectedFilter={selectedBiomeFilter}
+                  onSelected={onBiomeSelected}
+                  filters={biomeFilter}
+                />
+              )}
+              {stateFilter && (
+                <AdminLevelFilter
+                  id="stateFilter"
+                  selectedFilter={selectedStateFilter}
+                  onSelected={onStateSelected}
+                  filters={stateFilter}
+                />
+              )}
               <YearsSelector className="filters-nav-item" />
             </React.Fragment>
           )}
@@ -141,6 +168,10 @@ FiltersNav.propTypes = {
   selectedContext: PropTypes.object,
   isMapVisible: PropTypes.bool,
   openMap: PropTypes.func,
+  onBiomeSelected: PropTypes.func,
+  onStateSelected: PropTypes.func,
+  selectedBiomeFilter: PropTypes.object,
+  selectedStateFilter: PropTypes.object,
   openSankey: PropTypes.func
 };
 
