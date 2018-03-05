@@ -14,12 +14,12 @@ class Top extends Component {
   }
 
   renderList() {
-    const { data, targetLink, year } = this.props;
+    const { data, targetLink, year, valueProp } = this.props;
     return (
       data.map((item, index) => {
-        const itemValue = Array.isArray(item.values)
-          ? formatValue(item.values[0] * 100, 'percentage')
-          : formatValue(item.value * 100, 'percentage');
+        const itemValue = Array.isArray(item[valueProp])
+          ? formatValue(item[valueProp][0] * 100, 'percentage')
+          : formatValue(item[valueProp] * 100, 'percentage');
 
         return (
           <li key={index} className="top-item">
@@ -93,7 +93,8 @@ Top.propTypes = {
   title: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
   targetLink: PropTypes.string,
-  unit: PropTypes.string
+  unit: PropTypes.string,
+  valueProp: PropTypes.string
 };
 
 export default Top;

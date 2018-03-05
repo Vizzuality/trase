@@ -12,6 +12,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 350px;
 
     &:not(:first-child) {
       margin-top: 8px;

@@ -27,7 +27,8 @@ class Explore extends React.PureComponent {
               <div className="column medium-5">
                 <div className="explore-table-container">
                   <Top
-                    unit="tn"
+                    unit="%"
+                    valueProp="height"
                     targetLink="profileActor"
                     title="Top Exporting Companies"
                     year={year}
