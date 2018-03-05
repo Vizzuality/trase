@@ -9,6 +9,7 @@ const mapStateToProps = state => {
   const topNodesKey = getTopNodesKey(selectedContextId, 6, ...selectedYears);
   const topExporters = topNodes[topNodesKey] || [];
   return {
+    topNodesKey,
     topExporters,
     year: selectedYears[0],
     showTable: selectedContextId !== null

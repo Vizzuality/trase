@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import groupBy from 'lodash/groupBy';
 import memoize from 'lodash/memoize';
 import { toggleDropdown } from 'actions/app.actions';
-import { selectContext } from 'actions/tool.actions';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.component';
 
 function classifyColumn(contexts, { id, label, relation }) {
@@ -72,9 +71,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   toggleContextSelectorVisibility: id => {
     dispatch(toggleDropdown(id));
-  },
-  selectContext: contextId => {
-    dispatch(selectContext(parseInt(contextId, 10)));
   }
 });
 

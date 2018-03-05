@@ -6,8 +6,8 @@ import Top from 'react-components/profiles/top.component';
 
 class Explore extends React.PureComponent {
   componentDidUpdate(prevProps) {
-    const { year } = this.props;
-    if (prevProps.year !== year) {
+    const { topNodesKey } = this.props;
+    if (topNodesKey && prevProps.topNodesKey !== topNodesKey) {
       this.props.getTopExporters();
     }
   }
@@ -45,6 +45,7 @@ class Explore extends React.PureComponent {
 }
 
 Explore.propTypes = {
+  topNodesKey: PropTypes.string,
   showTable: PropTypes.bool.isRequired,
   topExporters: PropTypes.array.isRequired,
   year: PropTypes.number,

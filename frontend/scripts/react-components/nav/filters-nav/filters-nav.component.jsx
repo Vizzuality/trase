@@ -97,11 +97,11 @@ class FiltersNav extends React.PureComponent {
   }
 
   renderMenuClosed() {
-    const { selectedContext, isExplore } = this.props;
+    const { selectedContext, isExplore, selectContext } = this.props;
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
-          <ContextSelector className="filters-nav-item" />
+          <ContextSelector className="filters-nav-item" selectContext={selectContext} />
           {selectedContext && (
             <React.Fragment>
               {!isExplore && <AdminLevelFilter className="filters-nav-item" />}
@@ -146,7 +146,8 @@ FiltersNav.propTypes = {
   isExplore: PropTypes.bool,
   isMapVisible: PropTypes.bool,
   openMap: PropTypes.func,
-  openSankey: PropTypes.func
+  openSankey: PropTypes.func,
+  selectContext: PropTypes.func.isRequired
 };
 
 export default FiltersNav;

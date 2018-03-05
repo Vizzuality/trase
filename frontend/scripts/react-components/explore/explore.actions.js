@@ -3,8 +3,9 @@ import { getURLFromParams, GET_TOP_NODES_URL } from 'utils/getURLFromParams';
 
 export const EXPLORE__SET_TOP_NODES = 'EXPLORE__SET_TOP_NODES';
 
-export const getTopNodesKey = (ctx, col, start, end) =>
-  `CTX${ctx}_COL${col}_START${start}_END${end}`;
+export const getTopNodesKey = (ctx, col, start, end) => (ctx && col && start && end)
+  ? `CTX${ctx}_COL${col}_START${start}_END${end}`
+  : null;
 
 export const setExploreTopNodes = column_id => (dispatch, getState) => {
   const { selectedContext, selectedYears: [year_start, year_end] } = getState().tool;
