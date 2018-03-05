@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import WorldMap from 'react-components/shared/world-map/world-map.container';
 import cx from 'classnames';
+import Link from 'redux-first-router-link';
+import WorldMap from 'react-components/shared/world-map/world-map.container';
 import Top from 'react-components/profiles/top.component';
 
 class Explore extends React.PureComponent {
@@ -21,13 +22,18 @@ class Explore extends React.PureComponent {
             <div className={cx('column', 'small-12', { 'medium-7': showTable })}>
               <div className="explore-section">
                 <div className="explore-map-wrapper">
-                  <h2 className={cx('subtitle', '-dark', { 'is-hidden': !showTable })}>Top Destinations</h2>
+                  <h2 className={cx('subtitle', '-dark', { 'is-hidden': !showTable })}>
+                    Top Destinations
+                  </h2>
                   <div className={cx('explore-map-container', { '-small': showTable })}>
                     <WorldMap className="explore-world-map" />
                   </div>
                 </div>
                 <p className={cx('explore-footer-text', { 'is-hidden': !showTable })}>
-                  By accessing the Trase platform you have acknowledged and agreed to our Terms of Use.
+                  By accessing the Trase platform you have acknowledged and agreed to our{' '}
+                  <Link to={{ type: 'about', payload: { section: 'termsOfUse' } }}>
+                    Terms of Use.
+                  </Link>
                 </p>
               </div>
             </div>
@@ -44,9 +50,9 @@ class Explore extends React.PureComponent {
                       data={topExporters}
                     />
                   </div>
-                  <button className="c-button -pink -big explore-footer-button">
+                  <Link className="c-button -pink -big explore-footer-button" to={{ type: 'tool' }}>
                     Explore the subnational supply chain
-                  </button>
+                  </Link>
                 </div>
               </div>
             )}
