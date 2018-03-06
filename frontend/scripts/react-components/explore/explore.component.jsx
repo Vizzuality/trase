@@ -14,7 +14,7 @@ class Explore extends React.PureComponent {
   }
 
   render() {
-    const { showTable, topExporters, selectedYears, selectedContextId } = this.props;
+    const { showTable, topExporters, selectedYears, selectedContextId, isSubnational } = this.props;
     return (
       <div className="l-explore">
         <div className="c-explore">
@@ -57,7 +57,7 @@ class Explore extends React.PureComponent {
                       payload: { query: { state: { selectedContextId, selectedYears } } }
                     }}
                   >
-                    Explore the subnational supply chain
+                    Explore the {isSubnational ? 'subnational' : ''} supply chain
                   </Link>
                 </div>
               </div>
@@ -75,7 +75,8 @@ Explore.propTypes = {
   topExporters: PropTypes.array.isRequired,
   selectedContextId: PropTypes.number,
   selectedYears: PropTypes.arrayOf(PropTypes.number),
-  getTopExporters: PropTypes.func.isRequired
+  getTopExporters: PropTypes.func.isRequired,
+  isSubnational: PropTypes.bool
 };
 
 export default Explore;

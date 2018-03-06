@@ -4,15 +4,18 @@ import { getTopNodesKey, setExploreTopNodes } from 'react-components/explore/exp
 import Explore from './explore.component';
 
 const mapStateToProps = state => {
-  const { selectedContextId, selectedYears } = state.tool;
+  const { selectedContextId, selectedContext, selectedYears } = state.tool;
   const { topNodes } = state.explore;
   const topNodesKey = getTopNodesKey(selectedContextId, 6, ...selectedYears);
   const topExporters = topNodes[topNodesKey] || [];
+  const { isSubnational } = selectedContext || {};
+
   return {
     topNodesKey,
     topExporters,
-    selectedContextId,
+    isSubnational,
     selectedYears,
+    selectedContextId,
     showTable: selectedContextId !== null
   };
 };
