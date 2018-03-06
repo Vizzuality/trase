@@ -4,21 +4,17 @@
   top: 0;
   position: fixed;
   width: 100%;
-  height: $nav-height;
   font-family: $font-family-1;
   background-color: transparent;
   z-index: $z-nav;
   transition: all 150ms ease-in;
 
-  .row {
-    height: 100%;
-  }
-
   &.-has-background {
     background-color: $white;
     box-shadow: 0 10px 20px 0 rgba($charcoal-grey, 0.2);
 
-    .top-nav-item .top-nav-link {
+    .top-nav-link,
+    .top-nav-toggle-btn {
       color: $charcoal-grey;
     }
 
@@ -49,7 +45,8 @@
   }
 
   &.-light {
-    .top-nav-item .top-nav-link {
+    .top-nav-link,
+    .top-nav-toggle-btn {
       color: $charcoal-grey;
     }
 
@@ -57,6 +54,10 @@
     .locale-selector-menu-item {
       color: $charcoal-grey;
     }
+  }
+
+  .top-nav-bar {
+    height: $nav-height;
   }
 }
 
@@ -87,8 +88,6 @@
   cursor: pointer;
 
   &:first-child {
-    margin: 0 6px 0 0;
-
     .top-nav-link {
       padding: 16px 10px 16px 0;
     }
@@ -98,6 +97,10 @@
     .top-nav-link::after {
       width: 100%;
     }
+  }
+
+  &.-no-margin {
+    margin: 0;
   }
 
   .icon-download-pdf {
@@ -156,8 +159,71 @@
   }
 }
 
-.top-nav-item .c-locale-selector .locale-selector-selected-item {
+.top-nav-item .c-locale-selector .locale-selector-selected-item,
+.top-nav-item-horizontal .c-locale-selector .locale-selector-selected-item {
   &::after {
     border-top-color: $strong-pink;
+  }
+}
+
+.top-nav-toggle-btn {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  color: $white;
+  font-size: $font-size-medium;
+}
+
+.top-nav-collapse {
+  padding: 28px 0px;
+  position: relative;
+
+  .download-pdf-link {
+    position: absolute;
+    right: 0px;
+    bottom: 40px;
+  }
+}
+
+.top-nav-item-horizontal {
+  display: block;
+  padding: 12px 0px;
+  font-size: 16px;
+  font-weight: $font-weight-bold;
+  letter-spacing: .5px;
+
+  .c-locale-selector {
+    display: block;
+
+    .locale-selector-selected-item {
+      width: unset;
+    }
+
+    .locale-selector-menu {
+      min-width: unset;
+    }
+  }
+}
+
+.top-nav-link-horizontal {
+  display: inline-block;
+  padding: 0px;
+  color: $charcoal-grey;
+  text-align: center;
+  text-transform: uppercase;
+
+  &::after {
+    display: block;
+    content: '';
+    height: 3px;
+    width: 0;
+    background-color: $strong-pink;
+    transition: width 150ms ease-in;
+  }
+
+  &.-active {
+    &::after {
+      width: auto;
+    }
   }
 }
