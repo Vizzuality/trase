@@ -10,7 +10,7 @@ const ProfileRoot = props => {
         <div className="c-profile-root">
           <div className="row column">
             <div className="profile-root-search-container row align-center">
-              <div className="column small-6">
+              <div className="column small-12 medium-9 large-6">
                 <div className="profile-root-heading-container">
                   <div className="profile-root-heading-wrapper">
                     <h2 className="subtitle -gray">Country & Commodity</h2>
@@ -25,11 +25,16 @@ const ProfileRoot = props => {
               </div>
             </div>
             <div className="row align-center">
-              <div className="column small-8">
+              <div className="column small-12 medium-10 large-8">
                 <img
-                  className="profile-root-mock"
+                  className="profile-root-mock hide-for-small"
                   src="/images/backgrounds/profile-mock.jpg"
                   alt="Profile Page Example"
+                />
+                <img
+                  className="profile-root-mock show-for-small"
+                  src="/images/backgrounds/profile-mobile-mock.png"
+                  alt="Profile Mobile Page Example"
                 />
               </div>
             </div>

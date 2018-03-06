@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions,jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Tooltip from 'react-components/tool/help-tooltip.component';
 import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
 import cx from 'classnames';
+import Tooltip from 'react-components/shared/help-tooltip.component';
 import 'styles/components/shared/country-commodities-react.scss';
 import 'styles/components/shared/dimensional-selector-react.scss';
 

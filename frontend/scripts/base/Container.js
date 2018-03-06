@@ -26,6 +26,10 @@ export default class {
     if (this.view.onCreated) this.view.onCreated();
   }
 
+  remove() {
+    if (this.view.onRemoved) this.view.onRemoved();
+  }
+
   _onStateChange(state) {
     // returns a method - state values dictionary
     const methodsToState = this._methodsToState(state);

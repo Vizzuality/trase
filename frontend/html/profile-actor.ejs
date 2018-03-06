@@ -9,26 +9,26 @@
           <div class="row">
             <div class="small-12 columns">
               <div class="dropdown-element">
-                <div class="c-dropdown" data-dropdown="name">
+                <div class="c-dropdown -big">
                   <span class="dropdown-label js-legend">-</span>
-                  <span class="js-dropdown-title dropdown-title js-name">-</span>
-                  <ul class="js-dropdown-list dropdown-list is-hidden">
+                  <span class="dropdown-title js-name">-</span>
+                  <ul class="dropdown-list is-hidden">
                   </ul>
                 </div>
               </div>
               <div class="dropdown-element">
-                <div class="c-dropdown" data-dropdown="country">
+                <div class="c-dropdown -big">
                   <span class="dropdown-label">Country</span>
-                  <span class="js-dropdown-title dropdown-title js-country">-</span>
-                  <ul class="js-dropdown-list dropdown-list is-hidden">
+                  <span class="dropdown-title js-country">-</span>
+                  <ul class="dropdown-list is-hidden">
                   </ul>
                 </div>
               </div>
               <div class="dropdown-element">
-                <div class="c-dropdown" data-dropdown="commodity">
+                <div class="c-dropdown -big">
                   <span class="dropdown-label">Commodity</span>
-                  <span class="js-dropdown-title dropdown-title">Soy</span>
-                  <ul class="js-dropdown-list dropdown-list">
+                  <span class="dropdown-title">Soy</span>
+                  <ul class="dropdown-list">
                   </ul>
                 </div>
               </div>
@@ -52,13 +52,13 @@
                 </div>
               </div>
             </div>
-            <div class="small-<%= printMode ? '12' : '7' %> columns">
+            <div class="small-12 large-<%=printMode ? '12' : '7' %> columns">
               <div class="summary js-summary-text"></div>
             </div>
           </div>
         </div>
 
-        <div class="c-anchor-buttons">
+        <div class="c-anchor-buttons hide-for-small">
           <div class="row">
             <div class="small-4 columns">
               <a href="#profile-content-anchor" class="c-link-buttons -with-arrow js-link-profile">
@@ -69,14 +69,14 @@
             <div class="small-4 columns">
               <a class="c-link-buttons js-link-map">
                 <img src="/images/profiles/profile-main-option-2.svg"/>
-                PRODUCTION REGIONS
+                <span>PRODUCTION REGIONS</span>
                 <svg class="icon icon-external-link"><use xlink:href="#icon-external-link"></use></svg>
               </a>
             </div>
             <div class="small-4 columns">
               <a class="c-link-buttons js-link-supply-chain">
                 <img src="/images/profiles/profile-main-option-3.svg"/>
-                SUPPLY CHAIN ACTORS
+                <span>SUPPLY CHAIN ACTORS</span>
                 <svg class="icon icon-external-link"><use xlink:href="#icon-external-link"></use></svg>
               </a>
             </div>
@@ -87,30 +87,34 @@
 
         <section class="c-top-map is-page-break-always">
           <div class="row">
-            <div class="small-<%=printMode ? '6' : '8' %> columns">
+            <div class="small-12 medium-<%=printMode ? '6' : '8' %> columns">
               <h3 class="title -small js-top-map-title">-</h3>
             </div>
-            <div class="small-<%=printMode ? '6' : '4' %> columns">
+            <div class="small-<%=printMode ? '6' : '4' %> columns hide-for-small">
               <div class="js-destination-legend c-map-legend-choro"></div>
             </div>
-            <div class="small-6 columns">
+          </div>
+          <div class="row">
+            <div class="small-12 medium-6 columns">
               <div class="c-line js-top-destination"></div>
             </div>
-            <div class="small-6 columns js-top-destination-map"></div>
+            <div class="small-6 columns js-top-destination-map hide-for-small"></div>
           </div>
         </section>
 
         <section class="c-top-municipalities is-page-break-always">
           <div class="row">
-            <div class="js-top-municipalities-title-container small-<%=printMode ? '6' : '8' %> columns">
+            <div class="js-top-municipalities-title-container small-12 medium-<%=printMode ? '6' : '8' %> columns">
             </div>
-            <div class="small-<%=printMode ? '6' : '4' %> columns">
+            <div class="small-<%=printMode ? '6' : '4' %> columns hide-for-small">
               <div class="js-source-legend c-map-legend-choro"></div>
             </div>
-            <div class="small-7 columns">
+          </div>
+          <div class="row">
+            <div class="small-12 medium-7 columns">
               <div class="c-line js-top-municipalities"></div>
             </div>
-            <div class="small-5 columns js-top-municipalities-map"></div>
+            <div class="small-5 columns js-top-municipalities-map hide-for-small"></div>
           </div>
         </section>
 
@@ -122,13 +126,10 @@
           </div>
         </section>
 
-        <section class="c-scatterplot is-page-break-always">
-          <div class="row js-scatterplot-container">
-            <div class="small-12 columns" style="position: relative">
-              <h3 class="js-scatterplot-title title -small">-</h3>
-              <div class="js-companies-exporting-y-axis axis-legend"></div>
-              <div class="js-companies-exporting"></div>
-              <ul class="c-scatterplot-switcher js-scatterplot-switcher"></ul>
+        <section class="c-scatterplot-container is-page-break-always">
+          <div class="row">
+            <div class="small-12 columns">
+              <div class="js-scatterplot-container"></div>
             </div>
           </div>
         </section>

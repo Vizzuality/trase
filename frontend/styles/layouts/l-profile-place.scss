@@ -34,14 +34,33 @@
       flex-basis: calc(100% / 3);
       align-items: center;
     }
+
+    .c-locator-map {
+      max-height: 100px;
+    }
   }
 
   .c-overall-info {
     margin-top: 47px;
+
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      margin-top: 0;
+    }
   }
 
   .c-anchor-buttons {
     padding: 49px 0 46px;
+
+    > .row .columns {
+      margin-bottom: 10px;
+    }
+
+    @media screen and (min-width: $breakpoint-foundation-small)
+                  and (max-width: $breakpoint-foundation-medium) {
+      > .row .columns:not(:last-child) {
+        padding-right: 0;
+      }
+    }
   }
 
   .title {
@@ -56,6 +75,13 @@
   }
 
   .deforestation {
+    .c-line-container {
+      @media screen and (max-width: $breakpoint-foundation-small) {
+        margin-left: -1.25rem;
+        margin-right: -1.25rem;
+      }
+    }
+
     .c-line {
       margin-top: 15px;
     }
@@ -95,9 +121,13 @@
       height: 15px;
       vertical-align: top;
     }
+  }
 
-    .tooltip-react-content {
-      top: 22px;
-    }
+  .js-map-municipality {
+    height: 250px;
+  }
+
+  .c-dropdown {
+    align-items: flex-start;
   }
 }

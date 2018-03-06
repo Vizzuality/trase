@@ -1,6 +1,8 @@
 @import '../../settings';
 
 .mini-sankey {
+  margin-top: 10px;
+
   .gradient-color-start {
     stop-color: rgba($medium-pink, .5);
   }
@@ -37,6 +39,10 @@
       .pct {
         fill: rgba($charcoal-grey, .5);
       }
+    }
+
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      font-size: $font-size-regular;
     }
   }
 

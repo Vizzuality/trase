@@ -5,6 +5,7 @@
   min-height: 100vh;
   padding-top: calc(44px + #{$nav-height});
   background-color: $egg-shell;
+  line-height: 1.5;
 
   section:nth-of-type(2n-1) {
     background-color: rgba($white, 0.3);
@@ -45,6 +46,13 @@
 
   .c-anchor-buttons {
     padding: 49px 0 46px;
+
+    @media screen and (min-width: $breakpoint-foundation-small)
+                  and (max-width: $breakpoint-foundation-medium) {
+      > .row .columns:not(:last-child) {
+        padding-right: 0;
+      }
+    }
   }
 
   .c-line {
@@ -60,44 +68,18 @@
     .title {
       margin-bottom: 10px;
     }
+
+    @media screen and (min-width: $breakpoint-foundation-small)
+                  and (max-width: $breakpoint-foundation-medium) {
+      > .row .columns:not(:last-child) {
+        padding-right: 0;
+      }
+    }
   }
 
   .c-top-municipalities {
 
-    .js-top-municipalities-title {
-      display: flex;
-
-      span {
-        margin-right: 20px;
-      }
-
-      li {
-        position: relative;
-        opacity: 0.3;
-        cursor: pointer;
-
-        &:not(:last-child) {
-          margin-right: 21px;
-        }
-
-        &.selected {
-          opacity: 1;
-
-          &:before {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            width: 100%;
-            height: 2px;
-            background-color: $medium-pink;
-          }
-        }
-      }
-    }
-
     .js-top-municipalities-map {
-      height: 400px;
       overflow: hidden;
 
       svg {
@@ -106,17 +88,10 @@
     }
   }
 
-  .container-top {
-    display: flex;
-    justify-content: space-between;
-    margin: 56px 0 112px;
-
-    .c-top {
-      width: 40%;
-    }
-
-    .c-top-map {
-      width: 60%;
+  .js-top-municipalities, .js-top-destination {
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      margin-left: -1.25rem;
+      margin-right: -1.25rem;
     }
   }
 
@@ -143,9 +118,9 @@
       height: 15px;
       vertical-align: text-bottom;
     }
+  }
 
-    .tooltip-react-content {
-      top: 22px;
-    }
+  .c-dropdown {
+    align-items: flex-start;
   }
 }
