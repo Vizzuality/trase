@@ -13,27 +13,27 @@ module Api
         end
 
         def call
-          @basic_attributes = Api::V3::PlaceNode::BasicAttributes.new(
-            @context, @year, @node
+          @basic_attributes = Api::V3::Places::BasicAttributes.new(
+            @context, @node, @year
           )
-          top_nodes_list = Api::V3::PlaceNode::MiniSankey.new(
-            @context, @year, @node
+          top_nodes_list = Api::V3::Places::MiniSankey.new(
+            @context, @node, @year
           )
           top_consumer_actors = top_nodes_list.
             call(NodeTypeName::EXPORTER, true)
           top_consumer_countries = top_nodes_list.
             call(NodeTypeName::COUNTRY, true)
-          indicators = Api::V3::PlaceNode::IndicatorsTable.new(
-            @context, @year, @node
+          indicators = Api::V3::Places::IndicatorsTable.new(
+            @context, @node, @year
           ).call
           trajectory_deforestation =
             if @basic_attributes.municipality?
-              Api::V3::PlaceNode::TrajectoryDeforestationPlot.new(
-                @context, @year, @node
+              Api::V3::Places::TrajectoryDeforestationPlot.new(
+                @context, @node, @year
               ).call
             end
 
-          @basic_attributes.attributes.
+          @basic_attributes.call.
             merge(top_consumer_actors: top_consumer_actors).
             merge(top_consumer_countries: top_consumer_countries).
             merge(indicators: indicators).

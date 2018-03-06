@@ -1,13 +1,14 @@
 module Api
   module V3
-    module PlaceNode
+    module Places
       class BasicAttributes
-        attr_reader :attributes
-
-        def initialize(context, year, node)
+        # @param context [Api::V3::Context]
+        # @param node [Api::V3::Node]
+        # @param year [Integer]
+        def initialize(context, node, year)
           @context = context
-          @year = year
           @node = node
+          @year = year
           @node_type_name = @node&.node_type&.name
           @place_quals = Dictionary::PlaceQuals.new(@node, @year)
           @place_quants = Dictionary::PlaceQuants.new(@node, @year)
@@ -16,7 +17,9 @@ module Api
           raise 'Quant Volume not found' unless @volume_attribute.present?
           @soy_production_attribute = Dictionary::Quant.instance.get('SOY_TN')
           raise 'Quant SOY_TN not found' unless @soy_production_attribute.present?
+        end
 
+        def call
           @attributes = {
             column_name: @node_type_name,
             country_name: @context&.country&.name,
@@ -33,6 +36,7 @@ module Api
           @attributes = @attributes.merge initialize_dynamic_attributes
           initialize_top_nodes
           @attributes[:summary] = summary
+          @attributes
         end
 
         def municipality?
@@ -159,13 +163,13 @@ of #{@soy_area_formatted} #{@soy_area_unit} of land."
                 delimiter: ',', precision: 2
               )
             end
-          country_ranking = CountryRanking.new(@context, @year, @node).
+          country_ranking = CountryRanking.new(@context, @node, @year).
             position_for_attribute(@soy_production_attribute)
           if country_ranking.present?
             country_ranking = country_ranking.ordinalize
           end
           if @state.present?
-            state_ranking = StateRanking.new(@context, @year, @node, @state.name).
+            state_ranking = StateRanking.new(@context, @node, @year, @state.name).
               position_for_attribute(@soy_production_attribute)
           end
           state_ranking = state_ranking.ordinalize if state_ranking.present?

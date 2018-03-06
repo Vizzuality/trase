@@ -38,6 +38,13 @@ Rails.application.routes.draw do
           get :sustainability
           get :exporting_companies
         end
+        resources :places do
+          get :basic_attributes
+          get :top_consumer_actors
+          get :top_consumer_countries
+          get :indicators
+          get :trajectory_deforestation
+        end
         resources :download_attributes, only: [:index]
         namespace :nodes do
           resources :attributes, only: [:index], controller: :nodes_attributes

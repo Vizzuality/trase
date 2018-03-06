@@ -451,6 +451,7 @@ paths:
 
   '/context/{context_id}/nodes/{id}/place':
     get:
+      deprecated: true
       tags:
         - node
       summary: 'Data for place profile'
@@ -483,6 +484,167 @@ paths:
             properties:
               data:
                 $ref: '#/definitions/PlaceNode'
+
+  '/context/{context_id}/places/{id}/basic_attributes':
+    get:
+      tags:
+        - node
+        - place
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          required: true
+          type: integer
+        - name: id
+          in: path
+          required: true
+          type: integer
+        - name: year
+          in: query
+          type: integer
+          description: 'Defaults to context default year'
+          required: false
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/definitions/PlaceBasicAttributes'
+
+  '/context/{context_id}/places/{id}/top_consumer_actors':
+    get:
+      tags:
+        - node
+        - place
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          required: true
+          type: integer
+        - name: id
+          in: path
+          required: true
+          type: integer
+        - name: year
+          in: query
+          type: integer
+          description: 'Defaults to context default year'
+          required: false
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/definitions/PlaceTopConsumerActors'
+
+  '/context/{context_id}/places/{id}/top_consumer_countries':
+    get:
+      tags:
+        - node
+        - place
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          required: true
+          type: integer
+        - name: id
+          in: path
+          required: true
+          type: integer
+        - name: year
+          in: query
+          type: integer
+          description: 'Defaults to context default year'
+          required: false
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/definitions/PlaceTopConsumerCountries'
+
+  '/context/{context_id}/places/{id}/indicators':
+    get:
+      tags:
+        - node
+        - place
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          required: true
+          type: integer
+        - name: id
+          in: path
+          required: true
+          type: integer
+        - name: year
+          in: query
+          type: integer
+          description: 'Defaults to context default year'
+          required: false
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/definitions/PlaceIndicators'
+
+  '/context/{context_id}/places/{id}/trajectory_deforestation':
+    get:
+      tags:
+        - node
+        - place
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          required: true
+          type: integer
+        - name: id
+          in: path
+          required: true
+          type: integer
+        - name: year
+          in: query
+          type: integer
+          description: 'Defaults to context default year'
+          required: false
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/definitions/PlaceTrajectoryDeforestation'
+
   '/context/{context_id}/nodes/{id}/linked_nodes':
     get:
       tags:
@@ -504,6 +666,11 @@ paths:
           description: ''
           required: true
           type: integer
+        - name: year
+          in: query
+          type: integer
+          description: 'Defaults to context default year'
+          required: false
       responses:
         '200':
           description: successful operation
@@ -941,6 +1108,7 @@ definitions:
         type: array
         items:
           type: integer
+
   PlaceNode:
     type: object
     properties:
@@ -977,10 +1145,16 @@ definitions:
             type: string
           soy_farmland:
             type: number
-          top_traders:
+          top_consumer_actors:
             type: object
             properties:
-              actors:
+              name:
+                type: string
+              indicators:
+                type: string
+              unit:
+                type: string
+              targetNodes:
                 type: array
                 items:
                   type: object
@@ -989,29 +1163,22 @@ definitions:
                       type: integer
                     name:
                       type: string
+                    height:
+                      type: number
                     value:
                       type: number
                     is_domestic_consumption:
                       type: boolean
-              municipalities:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                    name:
-                      type: string
-              matrix:
-                type: array
-                items:
-                  type: array
-                  items:
-                    type: number
-          top_consumers:
+          top_consumer_countries:
             type: object
             properties:
-              countries:
+              name:
+                type: string
+              indicators:
+                type: string
+              unit:
+                type: string
+              targetNodes:
                 type: array
                 items:
                   type: object
@@ -1020,25 +1187,12 @@ definitions:
                       type: integer
                     name:
                       type: string
+                    height:
+                      type: number
                     value:
                       type: number
                     is_domestic_consumption:
                       type: boolean
-              municipalities:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                    name:
-                      type: string
-              matrix:
-                type: array
-                items:
-                  type: array
-                  items:
-                    type: number
           indicators:
             type: array
             items:
@@ -1098,6 +1252,167 @@ definitions:
                       type: array
                       items:
                         type: number
+
+  PlaceBasicAttributes:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          column_name:
+            type: string
+            description: 'e.g. MUNICIPALITY'
+          country_name:
+            type: string
+          country_geo_id:
+            type: string
+            description: 'e.g. BR'
+          summary:
+            type: string
+          municipality_name:
+            type: string
+          municipality_geo_id:
+            type: string
+          state_name:
+            type: string
+          state_geo_id:
+            type: string
+          biome_name:
+            type: string
+          biome_geo_id:
+            type: string
+          area:
+            type: number
+          soy_production:
+            type: number
+          soy_area:
+            type: string
+          soy_farmland:
+            type: number
+
+  PlaceTopConsumerActors:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          name:
+            type: string
+          indicators:
+            type: string
+          unit:
+            type: string
+          targetNodes:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                height:
+                  type: number
+                value:
+                  type: number
+                is_domestic_consumption:
+                  type: boolean
+
+  PlaceTopConsumerCountries:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          name:
+            type: string
+          indicators:
+            type: string
+          unit:
+            type: string
+          targetNodes:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                height:
+                  type: number
+                value:
+                  type: number
+                is_domestic_consumption:
+                  type: boolean
+
+  PlaceIndicators:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            included_columns:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  unit:
+                    type: string
+                  tooltip:
+                    type: string
+            rows:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  have_unit:
+                    type: boolean
+                  values:
+                    type: array
+                    items:
+                      type: number
+
+  PlaceTrajectoryDeforestation:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          included_years:
+            type: array
+            items:
+              type: integer
+          unit:
+            type: string
+          lines:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                legend_name:
+                  type: string
+                legend_tooltip:
+                  type: string
+                type:
+                  type: string
+                style:
+                  type: string
+                values:
+                  type: array
+                  items:
+                    type: number
+
   ActorNode:
     type: object
     properties:

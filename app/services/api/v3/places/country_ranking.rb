@@ -1,8 +1,11 @@
 module Api
   module V3
-    module PlaceNode
+    module Places
       class CountryRanking
-        def initialize(context, year, node)
+        # @param context [Api::V3::Context]
+        # @param node [Api::V3::Node]
+        # @param year [Integer]
+        def initialize(context, node, year)
           @context = context
           @year = year
           @node = node

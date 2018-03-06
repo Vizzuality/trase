@@ -1,10 +1,13 @@
 module Api
   module V3
-    module PlaceNode
+    module Places
       class TrajectoryDeforestationPlot
         include Api::V3::Profiles::AttributesInitializer
 
-        def initialize(context, year, node)
+        # @param context [Api::V3::Context]
+        # @param node [Api::V3::Node]
+        # @param year [Integer]
+        def initialize(context, node, year)
           @context = context
           @year = year
           @node = node
@@ -12,7 +15,7 @@ module Api
           state_qual = @place_quals.get(NodeTypeName::STATE)
           @state_name = state_qual && state_qual['value']
           if @state_name.present?
-            @state_ranking = StateRanking.new(@context, @year, @node, @state_name)
+            @state_ranking = StateRanking.new(@context, @node, @year, @state_name)
           end
           initialize_attributes(attributes_list)
         end

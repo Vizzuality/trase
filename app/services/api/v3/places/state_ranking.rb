@@ -1,11 +1,15 @@
 module Api
   module V3
-    module PlaceNode
+    module Places
       class StateRanking
-        def initialize(context, year, node, state_name)
+        # @param context [Api::V3::Context]
+        # @param node [Api::V3::Node]
+        # @param year [Integer]
+        # @param state_name [String]
+        def initialize(context, node, year, state_name)
           @context = context
-          @year = year
           @node = node
+          @year = year
           @state_name = state_name
           @node_index = Api::V3::NodeType.node_index_for_id(@context, @node.node_type_id)
         end
