@@ -6,6 +6,11 @@ import WorldMap from 'react-components/shared/world-map/world-map.container';
 import Top from 'react-components/profiles/top.component';
 
 class Explore extends React.PureComponent {
+  componentDidMount() {
+    const { topNodesKey } = this.props;
+    if (topNodesKey) this.props.getTopExporters();
+  }
+
   componentDidUpdate(prevProps) {
     const { topNodesKey } = this.props;
     if (topNodesKey && prevProps.topNodesKey !== topNodesKey) {

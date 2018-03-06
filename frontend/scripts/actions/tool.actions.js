@@ -241,9 +241,10 @@ export function selectYears(years) {
   };
 }
 
-export const loadInitialData = () => (dispatch, getState) => {
+export const loadInitialData = forceReload => (dispatch, getState) => {
   const { app, tool } = getState();
-  if (app.tooltips !== null && tool.contexts.length > 0) return Promise.resolve();
+  // we use forceReload to force state rehydration
+  if (app.tooltips !== null && tool.contexts.length > 0 && !forceReload) return Promise.resolve();
 
   dispatch({
     type: LOAD_INITIAL_DATA

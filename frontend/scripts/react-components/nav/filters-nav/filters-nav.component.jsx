@@ -44,42 +44,51 @@ class FiltersNav extends React.PureComponent {
     );
   }
 
-  renderMenuOpened() {
+  renderInToolLinks() {
     const { links, openMap, openSankey, isMapVisible } = this.props;
-    const [supplyChainLink, mapLink, ...restOfLinks] = links;
+    const [supplyChainLink, mapLink] = links;
+    return (
+      <ul className="filters-nav-submenu-list">
+        <li className="filters-nav-item">
+          <NavLink exact strict className="filters-nav-link" to={{ type: 'home' }}>
+            home
+          </NavLink>
+        </li>
+        <li className="filters-nav-item">
+          <span
+            className={cx('filters-nav-link', {
+              '-active': !isMapVisible
+            })}
+            onClick={openSankey}
+          >
+            {supplyChainLink.name}
+          </span>
+        </li>
+        <li className="filters-nav-item">
+          <span
+            className={cx('filters-nav-link', {
+              '-active': isMapVisible
+            })}
+            onClick={openMap}
+          >
+            {mapLink.name}
+          </span>
+        </li>
+      </ul>
+    );
+  }
 
+  renderMenuOpened() {
+    const { links, isExplore } = this.props;
+    const [, , ...restOfLinks] = links;
+    const decoratedLinks = [{ name: 'Home', page: { type: 'home' } }, ...links];
+    const navLinks = isExplore ? decoratedLinks : restOfLinks;
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
-          <ul className="filters-nav-submenu-list">
-            <li className="filters-nav-item">
-              <NavLink exact strict className="filters-nav-link" to={{ type: 'home' }}>
-                home
-              </NavLink>
-            </li>
-            <li className="filters-nav-item">
-              <span
-                className={cx('filters-nav-link', {
-                  '-active': !isMapVisible
-                })}
-                onClick={openSankey}
-              >
-                {supplyChainLink.name}
-              </span>
-            </li>
-            <li className="filters-nav-item">
-              <span
-                className={cx('filters-nav-link', {
-                  '-active': isMapVisible
-                })}
-                onClick={openMap}
-              >
-                {mapLink.name}
-              </span>
-            </li>
-          </ul>
+          {!isExplore && this.renderInToolLinks()}
           <NavLinksList
-            links={restOfLinks}
+            links={navLinks}
             listClassName="filters-nav-submenu-list"
             itemClassName="filters-nav-item"
             linkClassName="filters-nav-link"

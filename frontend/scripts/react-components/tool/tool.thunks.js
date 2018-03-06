@@ -9,7 +9,7 @@ import { displayStoryModal, loadDisclaimer, resize } from 'actions/app.actions';
 export const loadDisclaimerTool = dispatch => dispatch(loadDisclaimer());
 
 export const loadInitialDataTool = dispatch =>
-  dispatch(loadInitialData()).then(() => dispatch(setDefaultContext()));
+  dispatch(loadInitialData(true)).then(() => dispatch(setDefaultContext()));
 
 export const resizeSankeyTool = dispatch => dispatch(resize());
 

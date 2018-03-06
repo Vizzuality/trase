@@ -27,7 +27,7 @@ const config = {
     stringify
   },
   notFoundPath: '/404',
-  onBeforeChange: (...params) => redirectToExplore(...params)
+  onBeforeChange: dispatchThunks(redirectToExplore, resetToolThunk)
 };
 
 const routes = {
@@ -43,8 +43,7 @@ const routes = {
   },
   tool: {
     path: '/flows',
-    page: 'tool',
-    thunk: dispatchThunks(resetToolThunk)
+    page: 'tool'
   },
   profileRoot: {
     path: '/profiles',
