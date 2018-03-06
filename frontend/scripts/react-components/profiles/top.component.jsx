@@ -28,11 +28,12 @@ class Top extends Component {
   }
 
   renderList() {
+    const { toggled } = this.state;
     const { data, targetLink, year, valueProp, toggle } = this.props;
     return data.map((item, index) => {
-      const val = this.state.toggled ? item[toggle.valueProp] : item[valueProp];
-      const format = this.state.toggled ? toggle.format : null;
-      const unit = this.state.toggled ? toggle.unit : this.props.unit;
+      const val = toggled ? item[toggle.valueProp] : item[valueProp];
+      const format = toggled ? toggle.format : null;
+      const unit = toggled ? toggle.unit : this.props.unit;
       const itemValue = Top.getValue(val, format);
       return (
         <li key={index} className="top-item">
@@ -115,7 +116,8 @@ Top.propTypes = {
   toggle: PropTypes.shape({
     valueProp: PropTypes.string,
     unit: PropTypes.string,
-    unitFormat: PropTypes.string
+    unitFormat: PropTypes.string,
+    targetLink: PropTypes.string
   })
 };
 

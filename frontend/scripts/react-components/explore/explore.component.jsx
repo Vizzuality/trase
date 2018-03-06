@@ -14,6 +14,7 @@ class Explore extends React.PureComponent {
     this.items = [
       {
         label: 'Top Exporting Companies',
+        link: 'profileActor',
         value: 6
       },
       {
@@ -60,7 +61,15 @@ class Explore extends React.PureComponent {
   }
 
   render() {
-    const { showTable, topExporters, selectedYears, selectedContextId, isSubnational } = this.props;
+    const {
+      showTable,
+      topExporters,
+      selectedYears,
+      selectedContextId,
+      isSubnational,
+      selectedTableColumn
+    } = this.props;
+    const { link } = this.items.find(i => i.value === selectedTableColumn) || {};
     return (
       <div className="l-explore">
         <div className="c-explore">
@@ -91,7 +100,7 @@ class Explore extends React.PureComponent {
                     <Top
                       unit="%"
                       valueProp="height"
-                      targetLink="profileActor"
+                      targetLink={link}
                       year={selectedYears[0]}
                       data={topExporters}
                       toggle={this.topToggle}
