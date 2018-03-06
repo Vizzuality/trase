@@ -1,5 +1,6 @@
-import { filterStateToURL, computeStateQueryParams } from '../../utils/stateURL';
+import { filterStateToURL, rehydrateToolState } from '../../utils/stateURL';
 import { toolInitialState } from '../../reducers/tool.reducer';
+import { LOAD_INITIAL_DATA } from '../../actions/tool.actions';
 
 const filteredState = {
   selectedContextId: null,
@@ -19,6 +20,8 @@ const filteredState = {
   selectedRecolorByName: 'none',
   selectedBiomeFilterName: 'none'
 };
+
+const next = x => x;
 
 test('filterStateToURL with existing selectedR---By as none', () => {
   expect(filterStateToURL(toolInitialState)).toEqual(filteredState);
@@ -40,44 +43,37 @@ test('filterStateToURL with existing selectedR---By as undefined', () => {
   });
 });
 
-test('computeStateQueryParams casts array of strings to int', () => {
-  expect(
-    computeStateQueryParams(filteredState, {
-      selectedNodesIds: ['1', '2', '3'],
-      selectedYears: ['2015', '2016'],
-      isMapVisible: true
-    })
-  ).toEqual({
+test('filterStateToUrl receives selectedNodesIds and changes to expanded mode', () => {
+  const newState = { ...filteredState, selectedNodesIds: [587, 440] };
+  expect(filterStateToURL(newState)).toEqual({
     ...filteredState,
-    selectedNodesIds: [1, 2, 3],
-    expandedNodesIds: [1, 2, 3],
-    selectedYears: [2015, 2016],
-    isMapVisible: true,
+    selectedNodesIds: [587, 440],
+    expandedNodesIds: [587, 440],
     areNodesExpanded: true
   });
 });
 
-test('computeStateQueryParams casts strigified array to int', () => {
-  expect(
-    computeStateQueryParams(filteredState, {
-      selectedNodesIds: '[1, 2, 3]',
-      selectedYears: '[2015, 2016]',
-      isMapVisible: true
-    })
-  ).toEqual({
-    ...filteredState,
-    selectedNodesIds: [1, 2, 3],
-    expandedNodesIds: [1, 2, 3],
-    selectedYears: [2015, 2016],
-    isMapVisible: true,
-    areNodesExpanded: true
+test('rehydrateToolState receives no location.query.state and no location.search', () => {
+  expect(rehydrateToolState({ type: LOAD_INITIAL_DATA }, next, {})).toEqual({
+    type: LOAD_INITIAL_DATA
   });
 });
 
-test('computeStateQueryParams isMapVisible equals true, if undefined equals false', () => {
-  const mapIsVisible = { ...filteredState, isMapVisible: true };
-  expect(computeStateQueryParams(mapIsVisible, {})).toEqual({
-    ...filteredState,
-    isMapVisible: undefined
+test('rehydrateToolState generic action no location.query.state, no location.search', () => {
+  expect(rehydrateToolState({ type: 'other', payload: true }, next, {})).toEqual({
+    type: 'other',
+    payload: true
   });
+});
+
+test('rehydrateToolState receives query.state', () => {
+  const query = {
+    state: { selectedNodesIds: [587, 440], expandedNodesIds: [587, 440], areNodesExpanded: true }
+  };
+  expect(rehydrateToolState({ type: LOAD_INITIAL_DATA }, next, { query })).toEqual({
+    type: LOAD_INITIAL_DATA,
+    payload: query.state
+  });
+
+  expect(rehydrateToolState({ type: 'other' }, next, { query })).toEqual({ type: 'other' });
 });

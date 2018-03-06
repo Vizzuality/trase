@@ -7,8 +7,8 @@ export default {
     {
       name: 'Map',
       page: {
-        type: 'flows',
-        payload: { query: { isMapVisible: true } }
+        type: 'tool',
+        payload: { query: { state: { isMapVisible: true } } }
       }
     },
     {

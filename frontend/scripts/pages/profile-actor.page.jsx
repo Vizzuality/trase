@@ -382,16 +382,14 @@ const _setInfo = (info, onLinkClick, { nodeId, year }) => {
   }
   document.querySelector('.js-link-map').addEventListener('click', () =>
     onLinkClick('tool', {
-      selectedNodesIds: [nodeId],
-      isMapVisible: true,
-      selectedYears: [year, year]
+      state: { isMapVisible: true, selectedNodesIds: [nodeId], selectedYears: [year, year] }
     })
   );
 
   document
     .querySelector('.js-link-supply-chain')
     .addEventListener('click', () =>
-      onLinkClick('tool', { selectedNodesIds: [nodeId], selectedYears: [year, year] })
+      onLinkClick('tool', { state: { selectedNodesIds: [nodeId], selectedYears: [year, year] } })
     );
   document.querySelector('.js-summary-text').textContent = info.summary ? info.summary : '-';
 };

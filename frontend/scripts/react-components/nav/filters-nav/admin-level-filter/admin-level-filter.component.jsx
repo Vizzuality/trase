@@ -12,14 +12,14 @@ class AdminLevelFilter extends Component {
 
     return [{ value: 'none' }]
       .concat(filters.nodes)
-      .filter(node => selectedFilter === undefined || node.name !== selectedFilter.name)
+      .filter(node => typeof selectedFilter === 'undefined' || node.name !== selectedFilter.name)
       .map((node, index) => (
         <li
           key={index}
           className={cx('dropdown-item', { '-disabled': node.isDisabled })}
           onClick={() => onSelected(node.name || node.value)}
         >
-          {node.name !== undefined ? node.name.toLowerCase() : 'All'}
+          {typeof node.name !== 'undefined' ? node.name.toLowerCase() : 'All'}
         </li>
       ));
   }
@@ -28,24 +28,28 @@ class AdminLevelFilter extends Component {
     const { className, onToggle, currentDropdown, selectedFilter, filters } = this.props;
 
     return (
-      <div
-        className={cx('js-dropdown', className)}
-        onClick={() => {
-          onToggle(id);
-        }}
-      >
-        <div className="c-dropdown -capitalize">
-          <span className="dropdown-label">{filters.name.toLowerCase()}</span>
-          <span className="dropdown-title">
-            {selectedFilter !== undefined && selectedFilter.name !== undefined
-              ? selectedFilter.name.toLowerCase()
-              : 'All'}
-          </span>
-          <FiltersDropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
-            <ul className="dropdown-list -medium">{this.renderOptions()}</ul>
-          </FiltersDropdown>
+      filters && (
+        <div
+          className={cx('js-dropdown', className)}
+          onClick={() => {
+            onToggle(id);
+          }}
+        >
+          <div className="c-dropdown -capitalize">
+            <span className="dropdown-label">{filters.name.toLowerCase()}</span>
+            <span className="dropdown-title">
+              {selectedFilter !== 'undefined' &&
+              selectedFilter.name !== 'undefined' &&
+              selectedFilter.value !== 'none'
+                ? selectedFilter.name.toLowerCase()
+                : 'All'}
+            </span>
+            <FiltersDropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
+              <ul className="dropdown-list -medium">{this.renderOptions()}</ul>
+            </FiltersDropdown>
+          </div>
         </div>
-      </div>
+      )
     );
   }
 }

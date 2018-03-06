@@ -6,7 +6,7 @@ import AdminLevelFilter from 'react-components/nav/filters-nav/admin-level-filte
 const mapStateToProps = state => ({
   currentDropdown: state.app.currentDropdown,
   selectedFilter: state.tool.selectedBiomeFilter,
-  filters: state.tool.selectedContext.filterBy[0]
+  filters: state.tool.selectedContext.filterBy.length > 0 && state.tool.selectedContext.filterBy[0]
 });
 
 const mapDispatchToProps = dispatch => ({
