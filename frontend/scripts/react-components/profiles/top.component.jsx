@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'redux-first-router-link';
@@ -7,20 +8,32 @@ import formatValue from 'utils/formatValue';
 import 'styles/components/shared/top.scss';
 
 class Top extends Component {
+  static getValue(value, format) {
+    const formatFn = !format ? x => formatValue(x * 100, 'percentage') : formatValue;
+    return Array.isArray(value) ? formatFn(value[0], format) : formatFn(value, format);
+  }
   constructor(props) {
     super(props);
+    this.state = {
+      toggled: false
+    };
     this.seed = Math.random();
+    this.toggleValues = this.toggleValues.bind(this);
     this.renderList = this.renderList.bind(this);
     this.renderPlaceholder = this.renderPlaceholder.bind(this);
   }
 
-  renderList() {
-    const { data, targetLink, year, valueProp } = this.props;
-    return data.map((item, index) => {
-      const itemValue = Array.isArray(item[valueProp])
-        ? formatValue(item[valueProp][0] * 100, 'percentage')
-        : formatValue(item[valueProp] * 100, 'percentage');
+  toggleValues() {
+    this.setState(state => ({ toggled: !state.toggled }));
+  }
 
+  renderList() {
+    const { data, targetLink, year, valueProp, toggle } = this.props;
+    return data.map((item, index) => {
+      const val = this.state.toggled ? item[toggle.valueProp] : item[valueProp];
+      const format = this.state.toggled ? toggle.format : null;
+      const unit = this.state.toggled ? toggle.unit : this.props.unit;
+      const itemValue = Top.getValue(val, format);
       return (
         <li key={index} className="top-item">
           <div className="item-name">
@@ -37,8 +50,12 @@ class Top extends Component {
                 </Link>
               )}
           </div>
-          {this.props.unit ? (
-            <span className="item-value" data-unit={this.props.unit}>
+          {unit ? (
+            <span
+              className={cx('item-value', { '-toggable': !!toggle })}
+              data-unit={unit}
+              onClick={this.toggleValues}
+            >
               {itemValue}
             </span>
           ) : (
@@ -94,7 +111,12 @@ Top.propTypes = {
   year: PropTypes.number.isRequired,
   targetLink: PropTypes.string,
   unit: PropTypes.string,
-  valueProp: PropTypes.string
+  valueProp: PropTypes.string,
+  toggle: PropTypes.shape({
+    valueProp: PropTypes.string,
+    unit: PropTypes.string,
+    unitFormat: PropTypes.string
+  })
 };
 
 export default Top;

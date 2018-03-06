@@ -49,6 +49,10 @@ $line-margin: 23px;
         color: rgba($charcoal-grey, .6);
         content: attr(data-unit);
       }
+
+      &.-toggable {
+        cursor: pointer;
+      }
     }
   }
 

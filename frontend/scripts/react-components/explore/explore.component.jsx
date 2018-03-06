@@ -21,6 +21,12 @@ class Explore extends React.PureComponent {
         value: 8
       }
     ];
+
+    this.topToggle = {
+      unit: 'tn',
+      format: 'tons',
+      valueProp: 'value'
+    };
   }
 
   componentDidMount() {
@@ -88,6 +94,7 @@ class Explore extends React.PureComponent {
                       targetLink="profileActor"
                       year={selectedYears[0]}
                       data={topExporters}
+                      toggle={this.topToggle}
                     />
                   </div>
                   <Link
