@@ -1,10 +1,12 @@
 import { RESET_TOOL_STATE } from 'actions/tool.actions';
 import { getHomeContent } from 'react-components/home/home.actions';
 
-export const resetToolThunk = (dispatch, getState) => {
-  const { query = {} } = getState().location;
-  if (!query.state) {
-    dispatch({ type: RESET_TOOL_STATE, query });
+export const resetToolThunk = (dispatch, getState, { action }) => {
+  const { type, query = {}, prev } = getState().location;
+  if (action.type === 'tool' && prev.type && type !== 'tool') {
+    if (!query.state) {
+      dispatch({ type: RESET_TOOL_STATE, query });
+    }
   }
 };
 
