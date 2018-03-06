@@ -9,7 +9,8 @@ import 'styles/components/profiles/scatterplot.scss';
 import abbreviateNumber from 'utils/abbreviateNumber';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import { Responsive } from 'react-components/shared/responsive.hoc';
+import DropdownTabSwitcher from 'react-components/profiles/dropdown-tab-switcher.component';
 
 class Scatterplot extends Component {
   constructor(props) {
@@ -21,10 +22,11 @@ class Scatterplot extends Component {
       bottom: 30,
       left: 29
     };
-    this.key = `scatterplot_${new Date().getTime()}`;
     this.state = {
       selectedTabIndex: 0
     };
+
+    this.handleSwitcherIndexChange = this.handleSwitcherIndexChange.bind(this);
   }
 
   componentDidMount() {
@@ -32,14 +34,15 @@ class Scatterplot extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    this.build(prevProps.year);
+    const shouldRebuild =
+      prevProps.year !== this.props.year || prevProps.width !== this.props.width;
+
+    if (shouldRebuild) {
+      this.build();
+    }
   }
 
-  build(prevYear = null) {
-    // TODO: this is a very nice hack, that makes sure we only reload the whole chart on year change.
-    // It's needed so that react doesn't trigger a full re-render of the d3 elements, and the transition can be shown
-    if (prevYear && this.props.year === prevYear) return;
-
+  build() {
     const { data, showTooltipCallback, hideTooltipCallback } = this.props;
     const parentWidth = this.props.width;
 
@@ -74,10 +77,9 @@ class Scatterplot extends Component {
       .tickPadding(9)
       .tickFormat(value => abbreviateNumber(value, 3));
 
-    const svgElement = document.querySelector(`.${this.key}`);
-    svgElement.innerHTML = '';
+    this.svgElement.innerHTML = '';
 
-    this.svg = d3_select(svgElement)
+    this.svg = d3_select(this.svgElement)
       .attr('width', parentWidth)
       .attr('height', height + this.margins.top + this.margins.bottom)
       .append('g')
@@ -127,7 +129,7 @@ class Scatterplot extends Component {
       this.circles
         .on('mousemove', d => {
           const selectedSwitcher = document.querySelector(
-            '.js-scatterplot-switcher-item.selected span'
+            '.c-scatterplot .tab-switcher li.selected span'
           );
 
           showTooltipCallback(
@@ -146,7 +148,7 @@ class Scatterplot extends Component {
     }
   }
 
-  _switchTab(selectedTabIndex) {
+  handleSwitcherIndexChange(selectedTabIndex) {
     this.setState({ selectedTabIndex });
 
     const newData = this._getFormattedData(selectedTabIndex);
@@ -186,57 +188,44 @@ class Scatterplot extends Component {
     return d.name.toUpperCase() === this.props.node.name.toUpperCase() ? 'dot current' : 'dot';
   }
 
-  renderSwitcher() {
-    const tabs = this.props.xDimension.filter((x, i) => i < 3);
-
-    return (
-      <ul className="c-scatterplot-switcher js-scatterplot-switcher">
-        {tabs.map((elem, index) => (
-          <li
-            key={index}
-            className={classnames(
-              'js-scatterplot-switcher-item',
-              'tab',
-              { selected: index === this.state.selectedTabIndex },
-              { unit: elem.unit !== null }
-            )}
-            data-key={index}
-            onClick={() => this._switchTab(index)}
-          >
-            <span data-unit={elem.unit !== null ? elem.unit : null}>{elem.name}</span>
-          </li>
-        ))}
-      </ul>
-    );
-  }
-
   render() {
-    const { verbGerund, year } = this.props;
+    const { title, xDimension } = this.props;
+    const tabs = xDimension.filter((x, i) => i < 3);
+    const itemTabRenderer = (_, index) => {
+      const elem = tabs[index];
+      return <span data-unit={elem.unit !== null ? elem.unit : null}>{elem.name}</span>;
+    };
 
     return (
-      <div className="small-12 columns" style={{ position: 'relative' }}>
-        <h3 className="js-scatterplot-title title -small">
-          {`Comparing companies ${verbGerund} Soy from Brazil in ${year}`}
-        </h3>
+      <div className="c-scatterplot">
+        <DropdownTabSwitcher
+          title={title}
+          items={tabs.map(e => e.name)}
+          itemTabRenderer={itemTabRenderer}
+          onSelectedIndexChange={this.handleSwitcherIndexChange}
+        />
         <div className="js-companies-exporting-y-axis axis-legend" />
         <div className="js-companies-exporting">
-          <svg className={this.key} />
+          <svg
+            ref={el => {
+              this.svgElement = el;
+            }}
+          />
         </div>
-        {this.renderSwitcher()}
       </div>
     );
   }
 }
 
 Scatterplot.propTypes = {
+  title: PropTypes.string,
   data: PropTypes.array,
   node: PropTypes.object,
   xDimension: PropTypes.array,
-  verbGerund: PropTypes.string,
   year: PropTypes.number,
   width: PropTypes.number,
   showTooltipCallback: PropTypes.func,
   hideTooltipCallback: PropTypes.func
 };
 
-export default Scatterplot;
+export default Responsive()(Scatterplot);

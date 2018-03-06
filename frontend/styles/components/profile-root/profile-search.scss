@@ -16,7 +16,7 @@ $spinner-height-large: 40px;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: $search-height-small;
+    height: $search-height-large;
     padding: 2px 8px 0 0;
     background-color: $white;
     box-shadow: $search-box-shadow;
@@ -39,23 +39,13 @@ $spinner-height-large: 40px;
         }
       }
     }
-
-    @media only screen and (min-width: $search-breakpoint-medium) {
-      padding: 3px 15px 0 0;
-    }
-
-    @media only screen and (min-width: $search-breakpoint-large) {
-      padding: 2px 20px 0 0;
-      height: $search-height-large;
-    }
   }
 
   .profile-search-input {
     flex: 1;
-    height: $search-height-small - 10px;
-    padding: 0 5px 0 8px;
+    padding: 0 5px 0 15px;
     font-family: $font-family-1;
-    font-size: 12px;
+    font-size: 18px;
     letter-spacing: -0.8px;
     text-align: left;
     color: $charcoal-grey;
@@ -66,50 +56,31 @@ $spinner-height-large: 40px;
       transition: color 150ms ease-out;
     }
 
-    @media only screen and (min-width: $search-breakpoint-medium) {
-      font-size: 16px;
-      padding: 0 5px 0 15px;
-    }
-
     @media only screen and (min-width: $search-breakpoint-large) {
-      font-size: 18px;
-      height: $search-height-large - 5px;
       padding: 0 5px 0 20px;
     }
   }
 
   .profile-search-spinner {
     position: relative;
-    height: $spinner-height-small;
-    width: $spinner-height-small;
+    height: $spinner-height-large;
+    width: $spinner-height-large;
     background-color: transparent;
 
     &::after {
       content: '';
       position: absolute;
-      top: $spinner-height-small - 25px;
-      left: $spinner-height-small - 25px;
+      top: $spinner-height-large - 30px;
+      left: $spinner-height-large - 30px;
+      width: $spinner-height-large - 20px;
+      height: $spinner-height-large - 20px;
       border: 2px solid $charcoal-grey;
       border-radius: 99px;
-      width: $spinner-height-small - 20px;
-      height: $spinner-height-small - 20px;
       clip: rect(0, 20px, 13px, 0);
 
       animation: rotate 1s;
       animation-timing-function: linear;
       animation-iteration-count: infinite;
-    }
-
-    @media only screen and (min-width: $search-breakpoint-medium) {
-      height: $spinner-height-large;
-      width: $spinner-height-large;
-
-      &::after {
-        top: $spinner-height-large - 30px;
-        left: $spinner-height-large - 30px;
-        width: $spinner-height-large - 20px;
-        height: $spinner-height-large - 20px;
-      }
     }
 
     @keyframes rotate {

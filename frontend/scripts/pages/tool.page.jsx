@@ -33,6 +33,7 @@ import 'styles/tool.scss';
 import EventManager from 'utils/eventManager';
 
 const evManager = new EventManager();
+const containers = [];
 
 export const mount = (root, store) => {
   root.innerHTML = ToolMarkup({
@@ -49,7 +50,7 @@ export const mount = (root, store) => {
   new MapBasemapsContainer(store);
   new TitlebarContainer(store);
   new NodesTitlesContainer(store);
-  new TooltipContainer(store);
+  containers.push(new TooltipContainer(store));
   new ModalContainer(store);
 
   loadDisclaimerTool(store.dispatch);
@@ -80,6 +81,7 @@ export const unmount = () => {
   unmountComponentAtNode(document.getElementById('js-tool-nav-react'));
   unmountComponentAtNode(document.getElementById('js-columns-selector-react'));
   document.querySelector('body').classList.remove('-overflow-hidden');
+  containers.forEach(container => container.remove());
 };
 
 // if (NODE_ENV_DEV === true) {

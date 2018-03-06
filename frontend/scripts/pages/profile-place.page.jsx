@@ -27,7 +27,7 @@ import smoothScroll from 'utils/smoothScroll';
 import { GET_PLACE_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParams';
 import { DEFAULT_PROFILE_PAGE_YEAR, TOOLTIPS } from 'constants';
 import Tooltip from 'components/shared/info-tooltip.component';
-import HelpTooltip from 'react-components/tool/help-tooltip.component';
+import HelpTooltip from 'react-components/shared/help-tooltip.component';
 
 const defaults = {
   country: 'Brazil',
@@ -50,13 +50,11 @@ const _buildMaps = (data, store) => {
   render(
     <Provider store={store}>
       <Map
-        width={countryMapContainer.clientWidth}
         height={countryMapContainer.clientHeight}
         topoJSONPath="./vector_layers/WORLD.topo.json"
         topoJSONRoot="world"
         useRobinsonProjection
         getPolygonClassName={d => (d.properties.name === countryName ? '-isCurrent' : '')}
-        isStaticComponent
       />
     </Provider>,
     countryMapContainer
@@ -65,12 +63,10 @@ const _buildMaps = (data, store) => {
   render(
     <Provider store={store}>
       <Map
-        width={biomeMapContainer.clientWidth}
         height={biomeMapContainer.clientHeight}
         topoJSONPath={`./vector_layers/${defaults.country.toUpperCase()}_BIOME.topo.json`}
         topoJSONRoot={`${defaults.country.toUpperCase()}_BIOME`}
         getPolygonClassName={d => (d.properties.geoid === data.biome_geo_id ? '-isCurrent' : '')}
-        isStaticComponent
       />
     </Provider>,
     biomeMapContainer
@@ -79,12 +75,10 @@ const _buildMaps = (data, store) => {
   render(
     <Provider store={store}>
       <Map
-        width={stateMapContainer.clientWidth}
         height={stateMapContainer.clientHeight}
         topoJSONPath={`./vector_layers/${defaults.country.toUpperCase()}_STATE.topo.json`}
         topoJSONRoot={`${defaults.country.toUpperCase()}_STATE`}
         getPolygonClassName={d => (d.properties.geoid === stateGeoID ? '-isCurrent' : '')}
-        isStaticComponent
       />
     </Provider>,
     stateMapContainer
@@ -93,14 +87,12 @@ const _buildMaps = (data, store) => {
   render(
     <Provider store={store}>
       <Map
-        width={municipalityMapContainer.clientWidth}
         height={municipalityMapContainer.clientHeight}
         topoJSONPath={`./vector_layers/municip_states/${defaults.country.toLowerCase()}/${stateGeoID}.topo.json`}
         topoJSONRoot={`${defaults.country.toUpperCase()}_${stateGeoID}`}
         getPolygonClassName={d =>
           d.properties.geoid === data.municipality_geo_id ? '-isCurrent' : ''
         }
-        isStaticComponent
       />
     </Provider>,
     municipalityMapContainer
@@ -135,15 +127,14 @@ const _build = (data, year, onLinkClick, store) => {
     render(
       <Provider store={store}>
         <Line
-          className=".js-line"
           data={data.trajectory_deforestation}
           xValues={data.trajectory_deforestation.included_years}
           settings={{
-            margin: { top: 0, right: 40, bottom: 30, left: 99 },
+            margin: { top: 0, right: 20, bottom: 30, left: 60 },
             height: 425,
             ticks: {
               yTicks: 7,
-              yTickPadding: 52,
+              yTickPadding: 10,
               yTickFormatType: 'deforestation-trajectory',
               xTickPadding: 15
             }
@@ -364,6 +355,7 @@ const _loadData = (store, nodeId, year) => {
       render(
         <Dropdown
           label="Year"
+          size="big"
           value={year}
           valueList={[2010, 2011, 2012, 2013, 2014, 2015]}
           onValueSelected={dropdownYear => _switchYear(store, nodeId, dropdownYear)}
@@ -389,12 +381,9 @@ export const mount = (root, store) => {
     feedback: FeedbackMarkup()
   });
 
+  render(<HelpTooltip text={tooltips.soyLand} />, document.getElementById('soy-land-tooltip'));
   render(
-    <HelpTooltip text={tooltips.soyLand} position="bottom" />,
-    document.getElementById('soy-land-tooltip')
-  );
-  render(
-    <HelpTooltip text={tooltips.soyProduction} position="bottom" />,
+    <HelpTooltip text={tooltips.soyProduction} />,
     document.getElementById('soy-production-tooltip')
   );
 

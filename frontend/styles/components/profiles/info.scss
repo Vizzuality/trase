@@ -26,4 +26,8 @@
       font-size: $font-size-big;
     }
   }
+
+  @media screen and (max-width: $breakpoint-foundation-medium) {
+    padding-left: 15px;
+  }
 }

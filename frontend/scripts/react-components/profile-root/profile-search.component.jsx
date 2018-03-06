@@ -49,9 +49,15 @@ class ProfileSearch extends PureComponent {
           role="textbox"
         >
           <input
+            {...getInputProps({ placeholder: 'Search' })}
+            type="search"
+            className="profile-search-input show-for-small"
+            disabled={loading}
+          />
+          <input
             {...getInputProps({ placeholder: 'Search a company or production place' })}
             type="search"
-            className="profile-search-input"
+            className="profile-search-input hide-for-small"
             disabled={loading}
           />
           {loading ? (

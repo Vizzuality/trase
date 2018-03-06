@@ -1,3 +1,4 @@
+@import 'settings';
 
 .is-absolute {
   position: absolute;
@@ -13,6 +14,18 @@
 
 .is-fixed {
   position: fixed !important;
+}
+
+.hide-for-small {
+  @media screen and (max-width: $breakpoint-foundation-small) {
+    display: none !important;
+  }
+}
+
+.show-for-small {
+  @media screen and (min-width: $breakpoint-foundation-small) {
+    display: none !important;
+  }
 }
 
 ._text-align-right {
