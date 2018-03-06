@@ -50,6 +50,32 @@
   justify-content: flex-start;
   width: 100%;
   overflow: hidden;
+
+  .dropdown-title {
+    font-family: $font-family-1;
+    font-size: 13px;
+    letter-spacing: -0.6px;
+    text-transform: uppercase;
+    padding-right: 15px;
+    margin: 0 0 25px;
+
+    &::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      border-color: $strong-pink;
+      transform: translateY(-1px) rotate(45deg);
+    }
+  }
+
+  .dropdown-list {
+    top: 15px;
+    > .dropdown-item {
+      color: $charcoal-grey;
+      font-size: 13px;
+      padding: 5px 12px;
+    }
+  }
 }
 
 .explore-footer-text {
