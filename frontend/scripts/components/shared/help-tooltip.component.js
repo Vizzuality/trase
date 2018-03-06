@@ -34,6 +34,12 @@ export default class {
 
       this.tooltips.push(tooltip);
 
+      // workaround for ios not closing tooltips
+      const iOS = /iPhone|iPad|iPod/.test(navigator.platform) && !window.MSStream;
+      if (iOS) {
+        document.body.classList.add('tooltip-ios-touch');
+      }
+
       element.classList.add('c-tooltip');
       element.setAttribute('data-tooltip-load', '1');
     });

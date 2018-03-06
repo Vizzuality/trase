@@ -35,6 +35,12 @@ export default class TooltipComponent extends Component {
       boundariesElement: 'window',
       offset: '1, 1'
     });
+
+    // workaround for ios not closing tooltips
+    const iOS = /iPhone|iPad|iPod/.test(navigator.platform) && !window.MSStream;
+    if (iOS) {
+      document.body.classList.add('tooltip-ios-touch');
+    }
   }
 
   destroyTooltip() {
