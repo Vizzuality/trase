@@ -47,8 +47,9 @@ module Api
           end
           attribute_totals.each do |total|
             attribute_idx = attribute_indexes[total['attribute_name']]
-            if attribute_totals_hash.key?(total['node_id'])
-              attribute_totals_hash[total['node_id']][attribute_idx] = total['value']
+            node_id = total['node_id']
+            if attribute_totals_hash.key?(node_id)
+              attribute_totals_hash[node_id][attribute_idx] = total['value']
             end
           end
 

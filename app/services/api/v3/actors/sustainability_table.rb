@@ -19,10 +19,19 @@ module Api
 
         def call
           [
-            {group_name: 'Municipalities', node_type: NodeTypeName::MUNICIPALITY},
-            {group_name: 'Biomes', node_type: NodeTypeName::BIOME, is_total: true}
+            {
+              group_name: 'Municipalities',
+              node_type: NodeTypeName::MUNICIPALITY
+            },
+            {
+              group_name: 'Biomes',
+              node_type: NodeTypeName::BIOME,
+              is_total: true
+            }
           ].map do |group|
-            sustainability_for_group(group[:group_name], group[:node_type], group[:is_total])
+            sustainability_for_group(
+              group[:group_name], group[:node_type], group[:is_total]
+            )
           end
         end
 
@@ -58,7 +67,8 @@ module Api
                 [{name: node_type.humanize}] +
                   @attributes.map do |attribute_hash|
                     {
-                      name: attribute_hash[:name] || attribute_hash[:attribute].display_name,
+                      name: attribute_hash[:name] ||
+                        attribute_hash[:attribute].display_name,
                       unit: attribute_hash[:attribute].unit,
                       tooltip: attribute_hash[:attribute][:tooltip_text]
                     }
@@ -68,9 +78,10 @@ module Api
         end
 
         def data_row(group_totals_hash, node_type, node)
-          totals_per_attribute = @flow_stats.flow_values_totals_for_attributes_into(
-            @attributes.map { |a| a[:attribute] }, node_type, node['node_id']
-          )
+          totals_per_attribute = @flow_stats.
+            flow_values_totals_for_attributes_into(
+              @attributes.map { |a| a[:attribute] }, node_type, node['node_id']
+            )
           totals_hash = Hash[
             totals_per_attribute.map { |t| [t['name'], t['value']] }
           ]

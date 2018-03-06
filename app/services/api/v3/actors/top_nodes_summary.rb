@@ -12,7 +12,9 @@ module Api
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
           @soy_production_attribute = Dictionary::Quant.instance.get('SOY_TN')
-          raise 'Quant SOY_TN not found' unless @soy_production_attribute.present?
+          unless @soy_production_attribute.present?
+            raise 'Quant SOY_TN not found'
+          end
           initialize_flow_stats_for_node
         end
 
@@ -26,7 +28,8 @@ module Api
             attribute_type: 'quant',
             original_attribute_id: @soy_production_attribute.id
           )
-          buckets = map_attribute.try(:single_layer_buckets) || [5000, 100_000, 300_000, 1_000_000]
+          buckets = map_attribute.try(:single_layer_buckets) ||
+            [5000, 100_000, 300_000, 1_000_000]
           result = {
             included_years: years, buckets: buckets
           }
@@ -38,7 +41,9 @@ module Api
             end
           else
             result = result.merge(
-              nodes_by_year_summary_for_indicator(node_type, years, buckets, @volume_attribute)
+              nodes_by_year_summary_for_indicator(
+                node_type, years, buckets, @volume_attribute
+              )
             )
           end
           result
@@ -73,7 +78,9 @@ module Api
             ).all
         end
 
-        def nodes_by_year_summary_for_indicator(node_type, years, buckets, attribute)
+        def nodes_by_year_summary_for_indicator(
+          node_type, years, buckets, attribute
+        )
           initialize_top_nodes(node_type, attribute)
 
           lines = @top_nodes.map do |node|

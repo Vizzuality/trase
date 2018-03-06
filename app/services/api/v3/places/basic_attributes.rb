@@ -15,8 +15,11 @@ module Api
           @place_inds = Dictionary::PlaceInds.new(@node, @year)
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
-          @soy_production_attribute = Dictionary::Quant.instance.get('SOY_TN')
-          raise 'Quant SOY_TN not found' unless @soy_production_attribute.present?
+          @soy_production_attribute = Dictionary::Quant.instance.get(
+            'SOY_TN'
+          )
+          raise 'Quant SOY_TN not found' unless @soy_production_attribute.
+              present?
         end
 
         def call
@@ -169,7 +172,8 @@ of #{@soy_area_formatted} #{@soy_area_unit} of land."
             country_ranking = country_ranking.ordinalize
           end
           if @state.present?
-            state_ranking = StateRanking.new(@context, @node, @year, @state.name).
+            state_ranking = StateRanking.
+              new(@context, @node, @year, @state.name).
               position_for_attribute(@soy_production_attribute)
           end
           state_ranking = state_ranking.ordinalize if state_ranking.present?

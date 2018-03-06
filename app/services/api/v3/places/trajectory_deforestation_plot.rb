@@ -15,7 +15,9 @@ module Api
           state_qual = @place_quals.get(NodeTypeName::STATE)
           @state_name = state_qual && state_qual['value']
           if @state_name.present?
-            @state_ranking = StateRanking.new(@context, @node, @year, @state_name)
+            @state_ranking = StateRanking.new(
+              @context, @node, @year, @state_name
+            )
           end
           initialize_attributes(attributes_list)
         end

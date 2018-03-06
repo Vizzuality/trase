@@ -9,7 +9,9 @@ module Api
           @context = context
           @node = node
           @year = year
-          @node_index = Api::V3::NodeType.node_index_for_id(@context, @node.node_type_id)
+          @node_index = Api::V3::NodeType.node_index_for_id(
+            @context, @node.node_type_id
+          )
         end
 
         # Returns the node's ranking across all nodes of same type within given:
@@ -19,6 +21,7 @@ module Api
           attribute_type = attribute.class.name.demodulize.downcase
           value_table = "flow_#{attribute_type}s"
 
+          # rubocop:disable Metrics/LineLength
           select_clause = ActiveRecord::Base.send(
             :sanitize_sql_array,
             [
@@ -26,6 +29,7 @@ module Api
               @node_index
             ]
           )
+          # rubocop:enable Metrics/LineLength
           nodes_join_clause = ActiveRecord::Base.send(
             :sanitize_sql_array,
             ['JOIN nodes ON nodes.id = flows.path[?]', @node_index]

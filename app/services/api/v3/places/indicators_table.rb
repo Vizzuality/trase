@@ -15,7 +15,9 @@ module Api
           state_qual = @place_quals.get(NodeTypeName::STATE)
           @state_name = state_qual && state_qual['value']
           if @state_name.present?
-            @state_ranking = StateRanking.new(@context, @node, @year, @state_name)
+            @state_ranking = StateRanking.new(
+              @context, @node, @year, @state_name
+            )
           end
           @place_quants = Dictionary::PlaceQuants.new(@node, @year)
           @place_inds = Dictionary::PlaceInds.new(@node, @year)
@@ -35,9 +37,15 @@ module Api
             # Territorial deforestation
             {attribute_type: 'quant', attribute_name: 'DEFORESTATION_V2'},
             # Maximum soy deforestation
-            {attribute_type: 'quant', attribute_name: 'POTENTIAL_SOY_DEFORESTATION_V2'},
+            {
+              attribute_type: 'quant',
+              attribute_name: 'POTENTIAL_SOY_DEFORESTATION_V2'
+            },
             # Soy deforestation (Cerrado only)
-            {attribute_type: 'quant', attribute_name: 'AGROSATELITE_SOY_DEFOR_'},
+            {
+              attribute_type: 'quant',
+              attribute_name: 'AGROSATELITE_SOY_DEFOR_'
+            },
             # Land based CO2 emissions
             {attribute_type: 'quant', attribute_name: 'GHG_'},
             # Water scarcity

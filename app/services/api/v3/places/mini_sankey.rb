@@ -33,13 +33,16 @@ module Api
             indicator: @volume_attribute.display_name,
             unit: @volume_attribute.unit,
             targetNodes: @top_nodes.map do |top_node|
-              node = all_nodes_for_place.find { |e| e['node_id'] == top_node['node_id'] }
+              node = all_nodes_for_place.find do |e|
+                e['node_id'] == top_node['node_id']
+              end
               value = node && node['value']
               {
                 id: top_node['node_id'],
                 name: top_node['name'],
                 height: top_node['value'] / @all_nodes_total,
-                is_domestic_consumption: top_node['is_domestic_consumption'].present?,
+                is_domestic_consumption: top_node['is_domestic_consumption'].
+                  present?,
                 value: value
               }
             end

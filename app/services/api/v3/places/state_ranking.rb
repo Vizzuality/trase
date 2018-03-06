@@ -11,16 +11,21 @@ module Api
           @node = node
           @year = year
           @state_name = state_name
-          @node_index = Api::V3::NodeType.node_index_for_id(@context, @node.node_type_id)
+          @node_index = Api::V3::NodeType.node_index_for_id(
+            @context, @node.node_type_id
+          )
         end
 
         # Returns the node's ranking across all nodes of same type within given:
         # source country, year
         # for attribute (quant or ind)
-        def position_for_attribute(attribute, include_domestic_consumption = true)
+        def position_for_attribute(
+          attribute, include_domestic_consumption = true
+        )
           attribute_type = attribute.class.name.demodulize.downcase
           value_table = "node_#{attribute_type}s"
 
+          # rubocop:disable Metrics/LineLength
           query = basic_query(attribute, include_domestic_consumption).
             select(
               'nodes.id AS node_id',
@@ -30,6 +35,7 @@ module Api
 OR NOT COALESCE(#{attribute_type}_properties.is_temporal_on_place_profile, FALSE)",
               @year
             )
+          # rubocop:enable Metrics/LineLength
 
           result = Node.from('(' + query.to_sql + ') s').
             select('s.*').
@@ -43,15 +49,19 @@ OR NOT COALESCE(#{attribute_type}_properties.is_temporal_on_place_profile, FALSE
         # Returns the average across all nodes of same type and all years
         # within given source country
         # for attribute (quant or ind)
-        def average_for_attribute(attribute, include_domestic_consumption = true)
+        def average_for_attribute(
+          attribute, include_domestic_consumption = true
+        )
           attribute_type = attribute.class.name.demodulize.downcase
           value_table = "node_#{attribute_type}s"
+          # rubocop:disable Metrics/LineLength
           query = basic_query(attribute, include_domestic_consumption).
             select(
               'nodes.id AS node_id',
               "AVG(#{value_table}.value) OVER (PARTITION BY #{value_table}.year) AS value",
               "#{value_table}.year"
             )
+          # rubocop:enable Metrics/LineLength
 
           Node.from('(' + query.to_sql + ') s').
             select('s.*').
@@ -61,13 +71,17 @@ OR NOT COALESCE(#{attribute_type}_properties.is_temporal_on_place_profile, FALSE
 
         private
 
-        def basic_query(attribute, include_domestic_consumption = true)
+        def basic_query(
+          attribute, include_domestic_consumption = true
+        )
           attribute_type = attribute.class.name.demodulize.downcase
           value_table = "node_#{attribute_type}s"
 
           query = Api::V3::Node.
             joins(:node_property, node_quals: :qual).
-            joins(value_table => {attribute_type => "#{attribute_type}_property"}).
+            joins(
+              value_table => {attribute_type => "#{attribute_type}_property"}
+            ).
             where(node_type_id: @node.node_type_id).
             where("#{value_table}.#{attribute_type}_id" => attribute.id).
             where('node_quals.value' => @state_name, 'quals.name' => 'STATE')
