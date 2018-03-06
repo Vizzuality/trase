@@ -1,12 +1,16 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { getTopNodesKey, setExploreTopNodes } from 'react-components/explore/explore.actions';
+import {
+  getTopNodesKey,
+  setExploreTopNodes,
+  setSelectedTableColumn
+} from 'react-components/explore/explore.actions';
 import Explore from './explore.component';
 
 const mapStateToProps = state => {
   const { selectedContextId, selectedContext, selectedYears } = state.tool;
-  const { topNodes } = state.explore;
-  const topNodesKey = getTopNodesKey(selectedContextId, 6, ...selectedYears);
+  const { topNodes, selectedTableColumn } = state.explore;
+  const topNodesKey = getTopNodesKey(selectedContextId, selectedTableColumn, ...selectedYears);
   const topExporters = topNodes[topNodesKey] || [];
   const { isSubnational } = selectedContext || {};
 
@@ -16,6 +20,7 @@ const mapStateToProps = state => {
     isSubnational,
     selectedYears,
     selectedContextId,
+    selectedTableColumn,
     showTable: selectedContextId !== null
   };
 };
@@ -23,7 +28,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      getTopExporters: () => setExploreTopNodes(6)
+      setSelectedTableColumn,
+      getTableElements: setExploreTopNodes
     },
     dispatch
   );

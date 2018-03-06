@@ -45,7 +45,8 @@
 
 .explore-table-container {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
   overflow: hidden;
