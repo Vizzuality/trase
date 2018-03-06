@@ -14,7 +14,7 @@ class Explore extends React.PureComponent {
   }
 
   render() {
-    const { showTable, topExporters, year } = this.props;
+    const { showTable, topExporters, selectedYears, selectedContextId } = this.props;
     return (
       <div className="l-explore">
         <div className="c-explore">
@@ -46,11 +46,17 @@ class Explore extends React.PureComponent {
                       valueProp="height"
                       targetLink="profileActor"
                       title="Top Exporting Companies"
-                      year={year}
+                      year={selectedYears[0]}
                       data={topExporters}
                     />
                   </div>
-                  <Link className="c-button -pink -big explore-footer-button" to={{ type: 'tool' }}>
+                  <Link
+                    className="c-button -pink -big explore-footer-button"
+                    to={{
+                      type: 'tool',
+                      payload: { query: { state: { selectedContextId, selectedYears } } }
+                    }}
+                  >
                     Explore the subnational supply chain
                   </Link>
                 </div>
@@ -67,7 +73,8 @@ Explore.propTypes = {
   topNodesKey: PropTypes.string,
   showTable: PropTypes.bool.isRequired,
   topExporters: PropTypes.array.isRequired,
-  year: PropTypes.number,
+  selectedContextId: PropTypes.number,
+  selectedYears: PropTypes.arrayOf(PropTypes.number),
   getTopExporters: PropTypes.func.isRequired
 };
 

@@ -11,7 +11,8 @@ const mapStateToProps = state => {
   return {
     topNodesKey,
     topExporters,
-    year: selectedYears[0],
+    selectedContextId,
+    selectedYears,
     showTable: selectedContextId !== null
   };
 };
