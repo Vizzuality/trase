@@ -79,7 +79,7 @@ class Hero extends React.Component {
             <div className="hero-logo-container">
               <img src="/images/logos/new-logo-trase.svg" alt="TRASE" />
             </div>
-            <h1 className="hero-title">Transparent supply chains for sustainable economies</h1>
+            <h1 className="hero-title">Transparent supply chains for sustainable economies.</h1>
             <div className="hero-play-container">
               <HomeVideo
                 className="c-home-video"
@@ -88,7 +88,7 @@ class Hero extends React.Component {
                 events={this.videoEventHandlers}
               />
               <button className="hero-play-button" onClick={this.onClickPlay} />
-              <span>TRASE in 2’</span>
+              <span>Learn about Trase in 2 minutes</span>
             </div>
           </div>
           {showStory &&
