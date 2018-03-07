@@ -11,6 +11,10 @@
     .hero-content {
       display: none;
     }
+
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      height: 190px;
+    }
   }
 
   .hero-content {
@@ -164,4 +168,3 @@
     }
   }
 }
-
