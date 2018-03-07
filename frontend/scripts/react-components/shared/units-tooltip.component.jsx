@@ -34,8 +34,8 @@ class UnitsTooltip extends React.PureComponent {
         <div className="units-tooltip-text">{text}</div>
         {items.map(item => (
           <div className="units-tooltip-value">
-            <div className="units-tooltip-value-title">{item.title}</div>
-            <div className="units-tooltip-value-data">
+            <div className="units-tooltip-title">{item.title}</div>
+            <div className="units-tooltip-data">
               {item.value}
               {item.unit && <span className="units-tooltip-value-unit">{item.unit}</span>}
             </div>

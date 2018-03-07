@@ -16,12 +16,13 @@
     height: 32px;
     padding: 12px 8px;
     background-color: $egg-shell;
+    text-transform: uppercase;
   }
 
   .units-tooltip-value {
     padding: 10px 8px;
 
-    > .units-tooltip-title {
+    .units-tooltip-title {
       font-family: $font-family-1;
       font-size: $font-size-small;
       letter-spacing: -0.5px;
@@ -30,7 +31,7 @@
       line-height: 1;
     }
 
-    > .units-tooltip-data {
+    .units-tooltip-data {
       font-family: $font-family-1;
       font-size: 18px;
       letter-spacing: -0.9px;

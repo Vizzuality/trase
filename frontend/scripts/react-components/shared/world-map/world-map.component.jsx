@@ -9,9 +9,10 @@ import {
   Annotations,
   Annotation
 } from 'react-simple-maps';
-import cx from 'classnames';
 import Arc from 'react-components/shared/world-map/map-arc.component';
 import UnitsTooltip from 'react-components/shared/units-tooltip.component';
+import cx from 'classnames';
+import formatValue from 'utils/formatValue';
 
 class WorldMap extends React.PureComponent {
   static buildCurves(start, end, arc) {
@@ -25,6 +26,10 @@ class WorldMap extends React.PureComponent {
     }[arc.curveStyle];
 
     return `M ${start.join(' ')} Q ${curve} ${end.join(' ')}`;
+  }
+
+  static isDestinationCountry(iso, countries) {
+    return countries.map(f => f.geoId).includes(iso);
   }
 
   constructor(props) {
@@ -49,10 +54,19 @@ class WorldMap extends React.PureComponent {
   }
 
   onMouseMove(geometry, e) {
-    const x = e.clientX + 10;
-    const y = e.clientY + window.scrollY + 10;
-    const tooltipConfig = { x, y, text: 'hehehehe' };
-    this.setState(() => ({ tooltipConfig }));
+    const { flows } = this.props;
+    const geoId = geometry.properties ? geometry.properties.iso2 : geometry.geoId;
+    if (WorldMap.isDestinationCountry(geoId, flows)) {
+      const x = e.clientX + 10;
+      const y = e.clientY + window.scrollY + 10;
+      const text = geometry.name || geometry.properties.name;
+      const title = 'Trade Volume';
+      const unit = 'tn';
+      const volume = geometry.value || (flows.find(flow => flow.geoId === geoId) || {}).value;
+      const value = formatValue(volume, 'tons');
+      const tooltipConfig = { x, y, text, items: [{ title, value, unit }] };
+      this.setState(() => ({ tooltipConfig }));
+    }
   }
 
   onMouseLeave() {
@@ -60,10 +74,8 @@ class WorldMap extends React.PureComponent {
   }
 
   renderGeographies(geographies, projection) {
-    const { flows, origin, originCountries } = this.props;
-
-    const isDark = iso =>
-      (flows.length > 0 ? flows : originCountries).map(f => f.geoId).includes(iso);
+    const { origin, flows, originCountries } = this.props;
+    const countries = flows.length > 0 ? flows : originCountries;
     return geographies.map(
       geography =>
         geography.properties.iso2 !== 'AQ' && (
@@ -71,7 +83,7 @@ class WorldMap extends React.PureComponent {
             key={geography.properties.cartodb_id}
             className={cx(
               'world-map-geography',
-              { '-dark': isDark(geography.properties.iso2) },
+              { '-dark': WorldMap.isDestinationCountry(geography.properties.iso2, countries) },
               { '-pink': origin && origin.geoId === geography.properties.iso2 }
             )}
             geography={geography}
