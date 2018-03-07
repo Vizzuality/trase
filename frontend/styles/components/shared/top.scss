@@ -3,7 +3,7 @@
 $line-margin: 23px;
 
 .c-top {
-
+  width: 100%;
  .subtitle {
    margin-bottom: 25px;
   }
@@ -12,7 +12,8 @@ $line-margin: 23px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 350px;
+    width: 100%;
+    height: 16px;
 
     &:not(:first-child) {
       margin-top: $line-margin;
@@ -44,9 +45,6 @@ $line-margin: 23px;
       color: rgba($charcoal-grey, .6);
 
       &::after {
-        position: absolute;
-        top: 0;
-
         color: rgba($charcoal-grey, .6);
         content: attr(data-unit);
       }
@@ -94,7 +92,7 @@ $line-margin: 23px;
 
       .top-placeholder-line-wrapper {
         display: flex;
-        align-items: baseline;
+        align-items: center;
         justify-content: flex-start;
 
         &:not(:first-child) {
@@ -108,6 +106,8 @@ $line-margin: 23px;
 
       .top-placeholder-line {
         display: flex;
+        align-items: center;
+        height: 16px;
 
         &:not(:first-child) {
           margin: $line-margin 0 0;
@@ -116,7 +116,7 @@ $line-margin: 23px;
 
       .top-placeholder-word {
         width: 20px;
-        height: 16px;
+        height: 65%;
         background-color: rgba($charcoal-grey, 0.8);
 
         &:not(:last-child) {
@@ -152,7 +152,7 @@ $line-margin: 23px;
         }
 
         .top-placeholder-word {
-          background-color: rgba($charcoal-grey, .6);
+          background-color: $charcoal-grey-faded-a-lot;
 
           &.small {
             width: 20px;

@@ -4,6 +4,7 @@
   .world-map-geography {
     fill: rgba($charcoal-grey, 0.3);
     stroke: $white;
+    stroke-width: 0.2px;
     outline: 0;
     pointer-events: visibleFill;
 
@@ -18,7 +19,7 @@
 
   .world-map-arc {
     fill: transparent;
-    stroke: $charcoal-grey;
+    stroke: rgba($charcoal-grey, 0.7);
     stroke-linecap: round;
     outline: 0;
     pointer-events: visibleStroke;

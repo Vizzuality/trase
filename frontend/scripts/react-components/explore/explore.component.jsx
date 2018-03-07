@@ -94,7 +94,7 @@ class Explore extends React.PureComponent {
             </div>
             {showTable && (
               <div className="column medium-5">
-                <div className="explore-section">
+                <div className="explore-section -right">
                   <div className="explore-table-container">
                     {this.renderTableDropdown()}
                     <Top

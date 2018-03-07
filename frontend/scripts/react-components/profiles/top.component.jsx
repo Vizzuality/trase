@@ -70,20 +70,9 @@ class Top extends Component {
   renderPlaceholder() {
     return (
       <Placehold seed={this.seed} prefix="top-placeholder">
-        {({ getParagraph, getLine }) => (
+        {({ getParagraph }) => (
           <React.Fragment>
-            <div className="top-placeholder-paragraph">
-              {Array(10)
-                .fill(0)
-                .map((line, i) => (
-                  <div key={`line-wrapper-${i}`} className="top-placeholder-line-wrapper">
-                    {getLine(3, 5)}
-                    <svg className="icon icon-outside-link">
-                      <use xlinkHref="#icon-outside-link" />
-                    </svg>
-                  </div>
-                ))}
-            </div>
+            {getParagraph(10, 3, 5)}
             {getParagraph(10, 1, 3)}
           </React.Fragment>
         )}
