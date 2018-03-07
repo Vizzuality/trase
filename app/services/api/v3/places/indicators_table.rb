@@ -113,10 +113,11 @@ module Api
           values = []
           ranking_scores = []
           attributes.each do |attribute_hash|
+            attribute = attribute_hash[:attribute]
             attribute_values =
-              if attribute_hash[:attribute].is_a? Api::V3::Quant
+              if attribute.is_a? Api::V3::Quant
                 @place_quants
-              elsif attribute_hash[:attribute].is_a? Api::V3::Ind
+              elsif attribute.is_a? Api::V3::Ind
                 @place_inds
               end
             attribute_value = attribute_values&.get(
@@ -126,14 +127,15 @@ module Api
             values << value
             next unless @state_ranking.present?
             ranking_scores << @state_ranking.position_for_attribute(
-              attribute_hash[:attribute]
+              attribute
             )
           end
           included_columns = attributes.map do |attribute_hash|
+            attribute = attribute_hash[:attribute]
             {
-              name: attribute_hash[:attribute]['display_name'],
-              unit: attribute_hash[:attribute].unit,
-              tooltip: attribute_hash[:attribute][:tooltip_text]
+              name: attribute['display_name'],
+              unit: attribute.unit,
+              tooltip: attribute[:tooltip_text]
             }
           end
           {

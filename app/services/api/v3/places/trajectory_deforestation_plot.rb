@@ -32,18 +32,19 @@ module Api
             included_years: years,
             unit: 'ha',
             lines: @attributes.map do |attribute_hash|
+              attribute = attribute_hash[:attribute]
               data =
                 if attribute_hash[:state_average] && @state_ranking
                   @state_ranking.average_for_attribute(
-                    attribute_hash[:attribute]
+                    attribute
                   )
                 elsif attribute_hash[:attribute_type] == 'quant'
                   @node.temporal_place_quants.where(
-                    quant_id: attribute_hash[:attribute].id
+                    quant_id: attribute.id
                   )
                 elsif attribute_hash[:attribute_type] == 'ind'
                   @node.temporal_place_inds.where(
-                    inds_id: attribute_hash[:attribute].id
+                    inds_id: attribute.id
                   )
                 end
               values = Hash[
@@ -52,10 +53,12 @@ module Api
               {
                 name: attribute_hash[:name],
                 legend_name: attribute_hash[:legend_name],
-                legend_tooltip: attribute_hash[:attribute][:tooltip_text],
+                legend_tooltip: attribute[:tooltip_text],
                 type: attribute_hash[:type],
                 style: attribute_hash[:style],
-                values: years.map { |y| values[y] && values[y]['value'] }
+                values: years.map do |year|
+                  values[year] && values[year]['value']
+                end
               }
             end
           }

@@ -9,9 +9,10 @@ module Api
           @context = context
           @node = node
           @year = year
-          @volume_attribute = Dictionary::Quant.instance.get('Volume')
+          quant_dictionary = Dictionary::Quant.instance
+          @volume_attribute = quant_dictionary.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
-          @soy_production_attribute = Dictionary::Quant.instance.get('SOY_TN')
+          @soy_production_attribute = quant_dictionary.get('SOY_TN')
           unless @soy_production_attribute.present?
             raise 'Quant SOY_TN not found'
           end
@@ -88,9 +89,9 @@ module Api
               name: node['name'],
               geo_id: node['geo_id'],
               values: years.map do |year|
-                year_node = @top_node_values_by_year.select do |v|
-                  v['node_id'] == node['node_id'] && v['year'] == year
-                end.first
+                year_node = @top_node_values_by_year.find do |value|
+                  value['node_id'] == node['node_id'] && value['year'] == year
+                end
                 year_node && year_node['value']
               end
             }

@@ -38,11 +38,12 @@ module Api
           )
 
           exports = production_totals.map do |total|
+            node_id = total['node_id']
             {
               name: total['name'],
-              id: total['node_id'],
+              id: node_id,
               y: total['value'].to_f / value_divisor,
-              x: attribute_totals_hash[total['node_id']]
+              x: attribute_totals_hash[node_id]
             }
           end
 
