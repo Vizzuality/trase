@@ -11,10 +11,13 @@ class UnitsTooltip extends React.PureComponent {
   getPos() {
     if (!this.el) return 0;
     const { x, y } = this.props;
-    const left =
+    const leftPos =
       x < window.innerWidth - this.el.clientWidth - 10 ? x + 10 : x - this.el.clientWidth - 10;
-    const top =
+    const topPos =
       y < window.innerHeight - this.el.clientHeight - 10 ? y + 10 : y - this.el.clientHeight - 10;
+
+    const left = Number.isNaN(leftPos) ? 0 : leftPos;
+    const top = Number.isNaN(topPos) ? 0 : topPos;
     return { left, top };
   }
 
@@ -33,7 +36,7 @@ class UnitsTooltip extends React.PureComponent {
       >
         <div className="units-tooltip-text">{text}</div>
         {items.map(item => (
-          <div className="units-tooltip-value">
+          <div key={item.title} className="units-tooltip-value">
             <div className="units-tooltip-title">{item.title}</div>
             <div className="units-tooltip-data">
               {item.value}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Link from 'redux-first-router-link';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
-import Top from 'react-components/profiles/top.component';
+import Top from 'react-components/explore/top.component';
 import Dropdown from 'react-components/shared/dropdown.component';
 
 class Explore extends React.PureComponent {
