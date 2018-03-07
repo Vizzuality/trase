@@ -41,12 +41,11 @@
   .hero-play-container {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     font-family: $font-family-1;
     color: $white;
     font-size: 13px;
     letter-spacing: -.8px;
-    width: 130px;
 
     .hero-play-button {
       position: relative;
@@ -73,6 +72,12 @@
       &:hover {
         background-color: darken($medium-pink, 4%);
       }
+    }
+
+    > span {
+      text-transform: uppercase;
+      margin-left: 10px;
+      width: 120px;
     }
   }
 

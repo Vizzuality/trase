@@ -1,43 +1,38 @@
 /* eslint-disable no-new */
-import ProfileActorMarkup from 'html/profile-actor.ejs';
+import Tooltip from 'components/shared/info-tooltip.component';
+import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST, DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
-
-import 'styles/profile-actor.scss';
-
+import ProfileActorMarkup from 'html/profile-actor.ejs';
+import capitalize from 'lodash/capitalize';
 import React from 'react';
-import { render, unmountComponentAtNode } from 'react-dom';
-import { Provider } from 'react-redux';
+import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
-import Footer from 'react-components/shared/footer.component';
-
-import Dropdown from 'react-components/shared/dropdown.component';
-import Map from 'react-components/profiles/map.component';
+import ChoroLegend from 'react-components/profiles/choro-legend.component';
+import DropdownTabSwitcher from 'react-components/profiles/dropdown-tab-switcher.component';
 import Line from 'react-components/profiles/line.component';
+import Map from 'react-components/profiles/map.component';
 import MultiTable from 'react-components/profiles/multi-table.component';
 import Scatterplot from 'react-components/profiles/scatterplot.component';
-import Tooltip from 'components/shared/info-tooltip.component';
-import ChoroLegend from 'react-components/profiles/choro-legend.component';
-import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
-
-import smoothScroll from 'utils/smoothScroll';
+import Dropdown from 'react-components/shared/dropdown.component';
+import Footer from 'react-components/shared/footer.component';
+import HelpTooltip from 'react-components/shared/help-tooltip.component';
+import { render, unmountComponentAtNode } from 'react-dom';
+import { Provider } from 'react-redux';
+import 'styles/profile-actor.scss';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
-import capitalize from 'lodash/capitalize';
-import { GET_ACTOR_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParams';
 import {
-  ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST,
-  DEFAULT_PROFILE_PAGE_YEAR,
-  TOOLTIPS
-} from 'constants';
-import DropdownTabSwitcher from 'react-components/profiles/dropdown-tab-switcher.component';
-import HelpTooltip from 'react-components/shared/help-tooltip.component';
+  GET_ACTOR_FACTSHEET_URL,
+  GET_TOOLTIPS_URL,
+  getURLFromParams
+} from 'utils/getURLFromParams';
+
+import smoothScroll from 'utils/smoothScroll';
 
 const defaults = {
   country: 'Brazil',
   commodity: 'soy'
 };
-const tooltips = TOOLTIPS.pages.profileActor;
-
 const TranslatedLine = withTranslation(Line);
 const tooltip = new Tooltip('.js-infowindow');
 const LINE_MARGINS = {
@@ -135,9 +130,18 @@ const _setTopSourceSwitcher = (data, verb, year, store) => {
   );
 };
 
-const _build = (data, { nodeId, year, print }, store) => {
+const _build = (data, tooltips, { nodeId, year, print }, store) => {
   const verb = data.column_name === 'EXPORTER' ? 'exported' : 'imported';
   const verbGerund = data.column_name === 'EXPORTER' ? 'exporting' : 'importing';
+
+  render(
+    <HelpTooltip text={tooltips.zeroDeforestationCommitment} position="bottom" />,
+    document.getElementById('zero-deforestation-tooltip')
+  );
+  render(
+    <HelpTooltip text={tooltips.forest500Score} position="bottom" />,
+    document.getElementById('forest-500-tooltip')
+  );
 
   lineSettings = {
     margin: {
@@ -437,20 +441,26 @@ const _loadData = (store, nodeId, year) => {
     year
   });
   setLoading();
+  const tooltipsURL = getURLFromParams(GET_TOOLTIPS_URL);
 
-  fetch(actorFactsheetURL)
+  Promise.all(
+    [actorFactsheetURL, tooltipsURL].map(url =>
+      fetch(url).then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error(response.statusText);
+      })
+    )
+  )
     .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error(response.statusText);
-    })
-    .then(result => {
-      if (!result) return;
+      if (!response) return;
+
+      const tooltips = response[1].profileActor;
+      const data = response[0].data;
 
       setLoading(false);
 
-      const data = result.data;
       const info = {
         type: data.column_name,
         name: data.node_name,
@@ -474,9 +484,12 @@ const _loadData = (store, nodeId, year) => {
         document.getElementById('year-dropdown')
       );
 
-      _build(data, { nodeId, year }, store);
+      _build(data, tooltips, { nodeId, year }, store);
     })
-    .catch(reason => _showErrorMessage(reason.message));
+    .catch(reason => {
+      _showErrorMessage(reason.message);
+      console.error(reason);
+    });
 };
 
 export const mount = (root, store) => {
@@ -488,15 +501,6 @@ export const mount = (root, store) => {
     printMode: print,
     feedback: FeedbackMarkup()
   });
-
-  render(
-    <HelpTooltip text={tooltips.zeroDeforestationCommitment} />,
-    document.getElementById('zero-deforestation-tooltip')
-  );
-  render(
-    <HelpTooltip text={tooltips.forest500Score} />,
-    document.getElementById('forest-500-tooltip')
-  );
 
   render(
     <Provider store={store}>

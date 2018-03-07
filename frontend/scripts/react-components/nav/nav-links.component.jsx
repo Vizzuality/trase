@@ -14,10 +14,9 @@ function isActive(match, location, link) {
   );
 }
 
-const NavLinksList = props => {
+const NavLinks = props => {
   const {
     links,
-    listClassName,
     itemClassName,
     linkClassName,
     linkActiveClassName,
@@ -27,7 +26,7 @@ const NavLinksList = props => {
 
   const checkLink = isActiveLink || isActive;
   return (
-    <ul className={listClassName}>
+    <React.Fragment>
       {links.map(mapLinksToRouter).map(link => (
         <li key={link.name} className={link.itemClassName || itemClassName}>
           <NavLink
@@ -43,13 +42,12 @@ const NavLinksList = props => {
           </NavLink>
         </li>
       ))}
-    </ul>
+    </React.Fragment>
   );
 };
 
-NavLinksList.propTypes = {
+NavLinks.propTypes = {
   links: PropTypes.array,
-  listClassName: PropTypes.string,
   itemClassName: PropTypes.string,
   linkClassName: PropTypes.string,
   linkActiveClassName: PropTypes.string,
@@ -57,4 +55,4 @@ NavLinksList.propTypes = {
   isActiveLink: PropTypes.func
 };
 
-export default NavLinksList;
+export default NavLinks;

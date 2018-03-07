@@ -107,10 +107,8 @@ class MiniSankey extends Component {
                 onClick={() => {
                   if (node.isDomesticConsumption || !targetLink) return;
                   onLinkClick(targetLink, {
-                    state: {
-                      nodeId: node.id,
-                      year
-                    }
+                    nodeId: node.id,
+                    year
                   });
                 }}
               >
