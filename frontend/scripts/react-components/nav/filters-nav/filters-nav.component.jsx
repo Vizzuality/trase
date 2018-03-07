@@ -8,7 +8,7 @@ import ResizeBySelector from 'react-components/nav/filters-nav/resize-by-selecto
 import ViewSelector from 'react-components/nav/filters-nav/view-selector/view-selector.container';
 import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
 import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
-import NavLinksList from 'react-components/nav/nav-links-list.component';
+import NavLinks from 'react-components/nav/nav-links.component';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.container';
 import { NavLink } from 'redux-first-router-link';
@@ -78,13 +78,14 @@ class FiltersNav extends React.PureComponent {
               </span>
             </li>
           </ul>
-          <NavLinksList
-            links={restOfLinks}
-            listClassName="filters-nav-submenu-list"
-            itemClassName="filters-nav-item"
-            linkClassName="filters-nav-link"
-            linkActiveClassName="filters-nav-link -active"
-          />
+          <ul className="filters-nav-submenu-list">
+            <NavLinks
+              links={restOfLinks}
+              itemClassName="filters-nav-item"
+              linkClassName="filters-nav-link"
+              linkActiveClassName="filters-nav-link -active"
+            />
+          </ul>
         </div>
         <div className="filters-nav-right-section">
           <div className="filters-nav-item">

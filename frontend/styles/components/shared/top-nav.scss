@@ -4,21 +4,17 @@
   top: 0;
   position: fixed;
   width: 100%;
-  height: $nav-height;
   font-family: $font-family-1;
   background-color: transparent;
   z-index: $z-nav;
   transition: all 150ms ease-in;
 
-  .row {
-    height: 100%;
-  }
-
   &.-has-background {
     background-color: $white;
     box-shadow: 0 10px 20px 0 rgba($charcoal-grey, 0.2);
 
-    .top-nav-item .top-nav-link {
+    .top-nav-link,
+    .top-nav-toggle-btn {
       color: $charcoal-grey;
     }
 
@@ -49,7 +45,8 @@
   }
 
   &.-light {
-    .top-nav-item .top-nav-link {
+    .top-nav-link,
+    .top-nav-toggle-btn {
       color: $charcoal-grey;
     }
 
@@ -57,6 +54,10 @@
     .locale-selector-menu-item {
       color: $charcoal-grey;
     }
+  }
+
+  .top-nav-bar {
+    height: $nav-height;
   }
 }
 
@@ -98,6 +99,10 @@
     .top-nav-link::after {
       width: 100%;
     }
+  }
+
+  &.-no-margin {
+    margin: 0;
   }
 
   .icon-download-pdf {
@@ -159,5 +164,70 @@
 .top-nav-item .c-locale-selector .locale-selector-selected-item {
   &::after {
     border-top-color: $strong-pink;
+  }
+}
+
+.top-nav-toggle-btn {
+  position: fixed;
+  right: 24px;
+  color: $white;
+  cursor: pointer;
+
+  .icon {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.top-nav-collapse {
+  .top-nav-item-list-collapse {
+    padding: 28px 0px;
+  }
+
+  .top-nav-item-collapse {
+    display: block;
+    padding: 12px 0px;
+    font-size: 16px;
+    font-weight: $font-weight-bold;
+    letter-spacing: .5px;
+
+    .c-locale-selector {
+      display: block;
+
+      .locale-selector-selected-item {
+        width: auto;
+
+        &::after {
+          border-top-color: $strong-pink;
+        }
+      }
+
+      .locale-selector-menu {
+        min-width: auto;
+      }
+    }
+  }
+
+  .top-nav-link-collapse {
+    display: inline-block;
+    padding: 0;
+    color: $charcoal-grey;
+    text-align: center;
+    text-transform: uppercase;
+
+    &::after {
+      display: block;
+      content: '';
+      height: 3px;
+      width: 0;
+      background-color: $strong-pink;
+      transition: width 150ms ease-in;
+    }
+
+    &.-active {
+      &::after {
+        width: auto;
+      }
+    }
   }
 }
