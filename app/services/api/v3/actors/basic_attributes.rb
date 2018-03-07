@@ -157,6 +157,12 @@ module Api
         end
 
         def initialize_trade_volume_for_summary
+          initialize_trade_total_current_year
+          initialize_trade_total_difference
+          initialize_trade_total_rank
+        end
+
+        def initialize_trade_total_current_year
           trade_flows_current_year = @flow_stats.flow_values(
             @year, @volume_attribute
           )
@@ -183,7 +189,9 @@ module Api
             trade_total_current_year_value,
             delimiter: ',', precision: trade_total_current_year_precision
           ) + ' ' + trade_total_current_year_unit
+        end
 
+        def initialize_trade_total_difference
           trade_flows_previous_year = @flow_stats.
             flow_values(@year - 1, @volume_attribute)
           @trade_total_previous_year = trade_flows_previous_year.sum('value')
@@ -193,7 +201,9 @@ module Api
               @trade_total_current_year - @trade_total_previous_year
             ) / @trade_total_previous_year
           end
+        end
 
+        def initialize_trade_total_rank
           trade_total_rank_in_country = CountryRanking.
             new(@context, @node, @year).
             position_for_attribute(@volume_attribute)

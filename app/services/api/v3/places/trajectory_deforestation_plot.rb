@@ -64,32 +64,31 @@ module Api
         private
 
         def initialize_min_max_year
-          min_year = nil
-          max_year = nil
+          min_years = []
+          max_years = []
           @attributes.each do |attribute_hash|
+            attribute_type = attribute_hash[:attribute_type]
+            attribute_id = attribute_hash[:attribute].id
             min_max =
-              if attribute_hash[:attribute_type] == 'quant'
+              if attribute_type == 'quant'
                 @node.temporal_place_quants.where(
-                  quant_id: attribute_hash[:attribute].id
+                  quant_id: attribute_id
                 )
-              elsif attribute_hash[:attribute_type] == 'ind'
+              elsif attribute_type == 'ind'
                 @node.temporal_place_inds.where(
-                  ind_id: attribute_hash[:attribute].id
+                  ind_id: attribute_id
                 )
-              end.except(:select).order(nil).
-                select('MIN(year), MAX(year)')
-
-            min_max = min_max.first
-            if min_max && min_max['min'].present? &&
-                (min_year.nil? || min_max['min'] < min_year)
-              min_year = min_max['min']
-            end
-            if min_max && min_max['max'].present? &&
-                (max_year.nil? || min_max['max'] > max_year)
-              max_year = min_max['max']
-            end
+              end
+            min_max = min_max.
+              except(:select).
+              select('MIN(year), MAX(year)').
+              order(nil).
+              first
+            next unless min_max
+            min_years << min_max['min']
+            max_years << min_max['max']
           end
-          [min_year, max_year]
+          [min_years.compact.min, max_years.compact.max]
         end
 
         def attributes_list

@@ -140,16 +140,8 @@ module Api
             name: name,
             included_columns: included_columns,
             rows: [
-              {
-                name: 'Score',
-                have_unit: true,
-                values: values
-              },
-              {
-                name: 'State Ranking',
-                have_unit: false,
-                values: ranking_scores
-              }
+              {name: 'Score', have_unit: true, values: values},
+              {name: 'State Ranking', have_unit: false, values: ranking_scores}
             ]
           }
         end
