@@ -1,39 +1,36 @@
 /* eslint-disable no-new */
-
-import ProfilePlaceMarkup from 'html/profile-place.ejs';
+import Tooltip from 'components/shared/info-tooltip.component';
+import { DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
-
-import 'styles/profile-place.scss';
-
+import ProfilePlaceMarkup from 'html/profile-place.ejs';
+import capitalize from 'lodash/capitalize';
 import React from 'react';
-import { render, unmountComponentAtNode } from 'react-dom';
-import { Provider } from 'react-redux';
-import TopNav from 'react-components/nav/top-nav/top-nav.container';
-import Footer from 'react-components/shared/footer.component';
-
 import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
-import Dropdown from 'react-components/shared/dropdown.component';
-import Line from 'react-components/profiles/line.component';
+import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import LineLegend from 'react-components/profiles/line-legend.component';
+import Line from 'react-components/profiles/line.component';
+import Map from 'react-components/profiles/map.component';
 import MiniSankey from 'react-components/profiles/mini-sankey.component';
 import MultiTable from 'react-components/profiles/multi-table.component';
-import Map from 'react-components/profiles/map.component';
-
-import capitalize from 'lodash/capitalize';
+import Dropdown from 'react-components/shared/dropdown.component';
+import Footer from 'react-components/shared/footer.component';
+import HelpTooltip from 'react-components/shared/help-tooltip.component';
+import { render, unmountComponentAtNode } from 'react-dom';
+import { Provider } from 'react-redux';
+import 'styles/profile-place.scss';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
+import {
+  GET_PLACE_FACTSHEET_URL,
+  GET_TOOLTIPS_URL,
+  getURLFromParams
+} from 'utils/getURLFromParams';
 import smoothScroll from 'utils/smoothScroll';
-
-import { GET_PLACE_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParams';
-import { DEFAULT_PROFILE_PAGE_YEAR, TOOLTIPS } from 'constants';
-import Tooltip from 'components/shared/info-tooltip.component';
-import HelpTooltip from 'react-components/shared/help-tooltip.component';
 
 const defaults = {
   country: 'Brazil',
   commodity: 'Soy'
 };
-const tooltips = TOOLTIPS.pages.profilePlace;
 const tooltip = new Tooltip('.js-infowindow');
 
 const TranslatedMiniSankey = withTranslation(MiniSankey);
@@ -321,20 +318,25 @@ const _loadData = (store, nodeId, year) => {
     year
   });
   setLoading();
+  const tooltipsURL = getURLFromParams(GET_TOOLTIPS_URL);
 
-  fetch(placeFactsheetURL)
+  Promise.all(
+    [placeFactsheetURL, tooltipsURL].map(url =>
+      fetch(url).then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error(response.statusText);
+      })
+    )
+  )
     .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error(response.statusText);
-    })
-    .then(result => {
-      if (!result) return;
+      if (!response) return;
+
+      const tooltips = response[1].profilePlace;
+      const data = response[0].data;
 
       setLoading(false);
-
-      const data = result.data;
 
       const info = {
         area: data.area,
@@ -363,6 +365,15 @@ const _loadData = (store, nodeId, year) => {
         document.getElementById('year-dropdown')
       );
 
+      render(
+        <HelpTooltip text={tooltips.soyLand} position="bottom" />,
+        document.getElementById('soy-land-tooltip')
+      );
+      render(
+        <HelpTooltip text={tooltips.soyProduction} position="bottom" />,
+        document.getElementById('soy-production-tooltip')
+      );
+
       _build(data, year, onLinkClick(store), store);
     })
     .catch(reason => {
@@ -380,12 +391,6 @@ export const mount = (root, store) => {
     printMode: print,
     feedback: FeedbackMarkup()
   });
-
-  render(<HelpTooltip text={tooltips.soyLand} />, document.getElementById('soy-land-tooltip'));
-  render(
-    <HelpTooltip text={tooltips.soyProduction} />,
-    document.getElementById('soy-production-tooltip')
-  );
 
   render(
     <Provider store={store}>
