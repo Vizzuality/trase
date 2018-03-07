@@ -4,7 +4,17 @@ import Link from 'redux-first-router-link';
 import Hero from 'react-components/shared/hero.component';
 import NewsletterForm from 'react-components/shared/newsletter/newsletter.container';
 import SliderSection from './slider-section.component';
+import SentenceSelector from './sentence-selector.component';
 
+const commodities = {
+  valueList: ['Palm Oil'],
+  value: 'Palm Oil'
+};
+
+const countries = {
+  valueList: ['Indonesia'],
+  value: 'Indonesia'
+};
 function Home(props) {
   const { tweets, blogPosts, testimonials, insightsPosts, promotedPost, homeVideo } = props;
   return (
@@ -34,6 +44,11 @@ function Home(props) {
               <div className="screenshot -end" />
             </div>
           </div>
+        </div>
+        <div className="homepage-map">
+          <SentenceSelector connector="of" selectors={[commodities, countries]}>
+            What are the sustainability risks associated with the trading
+          </SentenceSelector>
         </div>
         <div className="sliders">
           <NewsletterForm />
