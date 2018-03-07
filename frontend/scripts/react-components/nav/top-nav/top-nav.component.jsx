@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import throttle from 'lodash/throttle';
 import { NavLink } from 'redux-first-router-link';
-import NavLinksList from 'react-components/nav/nav-links-list.component';
 import NavLinks from 'react-components/nav/nav-links.component';
 import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
 import DownloadPdfLink from './download-pdf-link.component';
@@ -65,34 +64,37 @@ class TopNav extends React.PureComponent {
       <div className="top-nav-bar row align-justify hide-for-small">
         <div className="column medium-8">
           <div className="top-nav-item-list-container">
-            <NavLinksList
-              links={allLinks}
-              listClassName="top-nav-item-list"
-              itemClassName="top-nav-item"
-              linkClassName="top-nav-link"
-              linkActiveClassName="top-nav-link -active"
-              navLinkProps={this.navLinkProps}
-            />
+            <ul className="top-nav-item-list">
+              <NavLinks
+                links={allLinks}
+                itemClassName="top-nav-item"
+                linkClassName="top-nav-link"
+                linkActiveClassName="top-nav-link -active"
+                navLinkProps={this.navLinkProps}
+              />
+            </ul>
           </div>
         </div>
         <div className="column medium-2">
-          <ul className="top-nav-item-list">
-            <li className="top-nav-item">
-              <LocaleSelector />
-            </li>
-            {printable && (
+          <div className="top-nav-item-list-container -flex-end">
+            <ul className="top-nav-item-list">
               <li className="top-nav-item">
-                <DownloadPdfLink />
+                <LocaleSelector />
               </li>
-            )}
-          </ul>
+              {printable && (
+                <li className="top-nav-item">
+                  <DownloadPdfLink />
+                </li>
+              )}
+            </ul>
+          </div>
         </div>
       </div>
     );
   }
 
   renderMobileMenu() {
-    const { links, printable } = this.props;
+    const { links } = this.props;
     const { menuOpen } = this.state;
 
     const toggleBtnIcon = menuOpen ? 'close' : 'menu';
@@ -116,22 +118,19 @@ class TopNav extends React.PureComponent {
           </ul>
         </div>
         {menuOpen && (
-          <div className="column small-12">
-            <div className="top-nav-collapse">
-              <ul className="top-nav-item-list-horizontal">
-                <NavLinks
-                  links={links}
-                  itemClassName="top-nav-item-horizontal"
-                  linkClassName="top-nav-link-horizontal"
-                  linkActiveClassName="top-nav-link-horizontal -active"
-                  navLinkProps={this.navLinkProps}
-                />
-                <li className="top-nav-item-horizontal">
-                  <LocaleSelector />
-                </li>
-              </ul>
-              {printable && <DownloadPdfLink className="download-pdf-link" />}
-            </div>
+          <div className="top-nav-collapse column small-12">
+            <ul className="top-nav-item-list-collapse">
+              <NavLinks
+                links={links}
+                itemClassName="top-nav-item-collapse"
+                linkClassName="top-nav-link-collapse"
+                linkActiveClassName="top-nav-link-collapse -active"
+                navLinkProps={this.navLinkProps}
+              />
+              <li className="top-nav-item-collapse">
+                <LocaleSelector />
+              </li>
+            </ul>
           </div>
         )}
       </div>
@@ -143,13 +142,7 @@ class TopNav extends React.PureComponent {
     const { backgroundVisible, menuOpen } = this.state;
 
     return (
-      <div
-        className={cx(
-          'c-nav',
-          { '-has-background': backgroundVisible || menuOpen, '-open': menuOpen },
-          className
-        )}
-      >
+      <div className={cx('c-nav', { '-has-background': backgroundVisible || menuOpen }, className)}>
         {this.renderDesktopMenu()}
         {this.renderMobileMenu()}
       </div>

@@ -88,6 +88,8 @@
   cursor: pointer;
 
   &:first-child {
+    margin: 0 6px 0 0;
+
     .top-nav-link {
       padding: 16px 10px 16px 0;
     }
@@ -159,8 +161,7 @@
   }
 }
 
-.top-nav-item .c-locale-selector .locale-selector-selected-item,
-.top-nav-item-horizontal .c-locale-selector .locale-selector-selected-item {
+.top-nav-item .c-locale-selector .locale-selector-selected-item {
   &::after {
     border-top-color: $strong-pink;
   }
@@ -168,62 +169,65 @@
 
 .top-nav-toggle-btn {
   position: fixed;
-  top: 24px;
   right: 24px;
   color: $white;
-  font-size: $font-size-medium;
+  cursor: pointer;
+
+  .icon {
+    width: 22px;
+    height: 22px;
+  }
 }
 
 .top-nav-collapse {
-  padding: 28px 0px;
-  position: relative;
-
-  .download-pdf-link {
-    position: absolute;
-    right: 0px;
-    bottom: 40px;
+  .top-nav-item-list-collapse {
+    padding: 28px 0px;
   }
-}
 
-.top-nav-item-horizontal {
-  display: block;
-  padding: 12px 0px;
-  font-size: 16px;
-  font-weight: $font-weight-bold;
-  letter-spacing: .5px;
-
-  .c-locale-selector {
+  .top-nav-item-collapse {
     display: block;
+    padding: 12px 0px;
+    font-size: 16px;
+    font-weight: $font-weight-bold;
+    letter-spacing: .5px;
 
-    .locale-selector-selected-item {
-      width: unset;
-    }
+    .c-locale-selector {
+      display: block;
 
-    .locale-selector-menu {
-      min-width: unset;
+      .locale-selector-selected-item {
+        width: auto;
+
+        &::after {
+          border-top-color: $strong-pink;
+        }
+      }
+
+      .locale-selector-menu {
+        min-width: auto;
+      }
     }
   }
-}
 
-.top-nav-link-horizontal {
-  display: inline-block;
-  padding: 0px;
-  color: $charcoal-grey;
-  text-align: center;
-  text-transform: uppercase;
+  .top-nav-link-collapse {
+    display: inline-block;
+    padding: 0;
+    color: $charcoal-grey;
+    text-align: center;
+    text-transform: uppercase;
 
-  &::after {
-    display: block;
-    content: '';
-    height: 3px;
-    width: 0;
-    background-color: $strong-pink;
-    transition: width 150ms ease-in;
-  }
-
-  &.-active {
     &::after {
-      width: auto;
+      display: block;
+      content: '';
+      height: 3px;
+      width: 0;
+      background-color: $strong-pink;
+      transition: width 150ms ease-in;
+    }
+
+    &.-active {
+      &::after {
+        width: auto;
+      }
     }
   }
 }
