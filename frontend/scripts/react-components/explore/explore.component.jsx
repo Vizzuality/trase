@@ -80,7 +80,7 @@ class Explore extends React.PureComponent {
                   <h2 className={cx('subtitle', '-dark', { 'is-hidden': !showTable })}>
                     Top Destinations
                   </h2>
-                  <div className={cx('explore-map-container', { '-small': showTable })}>
+                  <div className={cx('explore-map-container')}>
                     <WorldMap className="explore-world-map" />
                   </div>
                 </div>

@@ -28,8 +28,9 @@ $line-margin: 23px;
 
     .item-name {
       display: flex;
-      align-items: center;
-      max-width: 85%;
+      align-items: flex-end;
+      max-width: 70%;
+      height: 16px;
 
       .node-name {
         text-overflow: ellipsis;

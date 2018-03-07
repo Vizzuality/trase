@@ -11,6 +11,7 @@ import {
 } from 'react-simple-maps';
 import cx from 'classnames';
 import Arc from 'react-components/shared/world-map/map-arc.component';
+import UnitsTooltip from 'react-components/shared/units-tooltip.component';
 
 class WorldMap extends React.PureComponent {
   static buildCurves(start, end, arc) {
@@ -29,13 +30,12 @@ class WorldMap extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      active: null
+      tooltipConfig: null
     };
-    this.onMouseEnter = this.onMouseEnter.bind(this);
+    this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
     this.renderGeographies = this.renderGeographies.bind(this);
     this.renderArcs = this.renderArcs.bind(this);
-    this.renderFlowsAnnotations = this.renderFlowsAnnotations.bind(this);
     this.renderCountriesAnnotations = this.renderCountriesAnnotations.bind(this);
   }
 
@@ -48,13 +48,15 @@ class WorldMap extends React.PureComponent {
     }
   }
 
-  onMouseEnter(e) {
-    const active = e.properties ? e.properties.iso2 : e.geoId;
-    setTimeout(() => this.setState(() => ({ active })));
+  onMouseMove(geometry, e) {
+    const x = e.clientX + 10;
+    const y = e.clientY + window.scrollY + 10;
+    const tooltipConfig = { x, y, text: 'hehehehe' };
+    this.setState(() => ({ tooltipConfig }));
   }
 
   onMouseLeave() {
-    this.setState(() => ({ active: null }));
+    this.setState(() => ({ tooltipConfig: null }));
   }
 
   renderGeographies(geographies, projection) {
@@ -74,7 +76,7 @@ class WorldMap extends React.PureComponent {
             )}
             geography={geography}
             projection={projection}
-            onMouseEnter={this.onMouseEnter}
+            onMouseMove={this.onMouseMove}
             onMouseLeave={this.onMouseLeave}
           />
         )
@@ -97,29 +99,9 @@ class WorldMap extends React.PureComponent {
         }}
         buildPath={WorldMap.buildCurves}
         strokeWidth={flow.strokeWidth}
-        onMouseEnter={this.onMouseEnter}
+        onMouseMove={this.onMouseMove}
         onMouseLeave={this.onMouseLeave}
       />
-    ));
-  }
-
-  renderFlowsAnnotations() {
-    const { flows } = this.props;
-
-    return flows.map((flow, i) => (
-      <Annotation
-        key={flow.geoId}
-        dx={flow.curveStyle === 'convex' ? 5 : -5}
-        dy={-5}
-        subject={flow.coordinates}
-        strokeWidth={0}
-      >
-        <text
-          className={cx('world-map-annotation-text', {
-            'is-hidden': this.state.active !== flow.geoId
-          })}
-        >{`${i + 1}.${flow.name}`}</text>
-      </Annotation>
     ));
   }
 
@@ -143,18 +125,27 @@ class WorldMap extends React.PureComponent {
 
   render() {
     const { flows } = this.props;
+    const { tooltipConfig } = this.state;
     return (
-      <ComposableMap className="c-world-map">
-        <ZoomableGroup disablePanning>
-          <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
-            {this.renderGeographies}
-          </Geographies>
-          <Markers>{this.renderArcs()}</Markers>
-          <Annotations>
-            {flows.length > 0 ? this.renderFlowsAnnotations() : this.renderCountriesAnnotations()}
-          </Annotations>
-        </ZoomableGroup>
-      </ComposableMap>
+      <React.Fragment>
+        <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
+        <ComposableMap
+          className="c-world-map"
+          projection="robinson"
+          style={{ width: '100%', height: 'auto' }}
+          projectionConfig={{
+            scale: 145
+          }}
+        >
+          <ZoomableGroup disablePanning center={[20, 0]}>
+            <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
+              {this.renderGeographies}
+            </Geographies>
+            <Markers>{this.renderArcs()}</Markers>
+            <Annotations>{flows.length === 0 && this.renderCountriesAnnotations()}</Annotations>
+          </ZoomableGroup>
+        </ComposableMap>
+      </React.Fragment>
     );
   }
 }

@@ -33,14 +33,6 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-
-  > svg {
-    transform: translateY(45px);
-  }
-
-  &.-small {
-    height: 315px;
-  }
 }
 
 .explore-table-container {
@@ -52,6 +44,7 @@
   overflow: hidden;
 
   .c-dropdown {
+    cursor: pointer;
     .dropdown-title {
       font-family: $font-family-1;
       font-size: 13px;
