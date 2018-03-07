@@ -31,14 +31,14 @@ Rails.application.routes.draw do
           get :place, on: :member, controller: :place_nodes, action: :show
           get :actor, on: :member, controller: :actor_nodes, action: :show
         end
-        resources :actors do
+        resources :actors, only: [] do
           get :basic_attributes
           get :top_countries
           get :top_sources
           get :sustainability
           get :exporting_companies
         end
-        resources :places do
+        resources :places, only: [] do
           get :basic_attributes
           get :top_consumer_actors
           get :top_consumer_countries
