@@ -25,7 +25,12 @@ export const setExploreTopNodes = column_id => (dispatch, getState) => {
       .then(res =>
         dispatch({
           type: EXPLORE__SET_TOP_NODES,
-          payload: { topNodesKey, data: res.data }
+          payload: {
+            topNodesKey,
+            columnId: column_id,
+            data: res.data,
+            country: selectedContext.countryName
+          }
         })
       )
       .catch(error => console.error(error))

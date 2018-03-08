@@ -9,11 +9,12 @@ const initialState = {
 
 const exploreReducer = {
   [EXPLORE__SET_TOP_NODES](state, action) {
-    const { topNodesKey, data } = action.payload;
+    const { topNodesKey, data, columnId, country } = action.payload;
     const nodes = data.targetNodes.map(row => ({
       ...row,
       coordinates: COUNTRIES_COORDINATES[row.geo_id],
-      geoId: row.geo_id
+      geoId: row.geo_id,
+      name: columnId === 8 && country === row.name ? 'DOMESTIC CONSUMPTION' : row.name
     }));
     return { ...state, topNodes: { ...state.topNodes, [topNodesKey]: nodes } };
   },
