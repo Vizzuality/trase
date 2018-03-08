@@ -19,7 +19,7 @@ class HomeVideo extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.videoId !== this.props.videoId) {
+    if (prevProps.videoId !== this.props.videoId && this.plyr) {
       this.plyr.source = {
         type: 'video',
         sources: [
@@ -51,7 +51,7 @@ class HomeVideo extends React.PureComponent {
   }
 
   destroyPlyr() {
-    this.plyr.destroy();
+    if (this.plyr) this.plyr.destroy();
   }
 
   render() {

@@ -162,9 +162,9 @@ export function resetSankey() {
   };
 }
 
-export function selectContext(context) {
+export function selectContext(context, options) {
   return dispatch => {
-    dispatch(setContext(context));
+    dispatch(setContext(context, options));
   };
 }
 

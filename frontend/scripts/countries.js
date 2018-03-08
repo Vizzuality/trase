@@ -240,7 +240,7 @@ export const COUNTRIES = [
   'Uzbekistan',
   'Vanuatu',
   'Venezuela, Bolivarian Republic of',
-  'Viet Nam',
+  'Vietnam',
   'Virgin Islands, British',
   'Virgin Islands, U.S.',
   'Wallis and Futuna',

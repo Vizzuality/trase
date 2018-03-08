@@ -256,15 +256,6 @@
     margin: 1px 0 0 0;
   }
 
-  &.-homepage {
-    display: inline-flex;
-    height: auto;
-
-    > .dropdown-list {
-      top: 56px;
-    }
-  }
-
   &.-profiles {
     display: inline-flex;
 
@@ -276,4 +267,5 @@
       top: 85px;
     }
   }
+
 }
