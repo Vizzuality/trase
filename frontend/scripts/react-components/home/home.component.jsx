@@ -5,7 +5,7 @@ import Hero from 'react-components/shared/hero.component';
 import NewsletterForm from 'react-components/shared/newsletter/newsletter.container';
 import SliderSection from 'react-components/home/slider-section.component';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
-import SentenceSelector from 'react-components/home/sentence-selector';
+import SentenceSelector from 'react-components/home/sentence-selector/sentence-selector.container';
 
 function Home(props) {
   const { tweets, blogPosts, testimonials, insightsPosts, promotedPost, homeVideo } = props;
