@@ -31,4 +31,16 @@ $entrypoint-slide-height: 550px;
     height: 100%;
     width: 100%;
   }
+
+  .entrypoint-text {
+    font-family: $font-family-2;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: $charcoal-grey;
+
+    @media only screen and (min-width: $breakpoint-foundation-small) {
+      font-size: 24px;
+    }
+  }
 }
