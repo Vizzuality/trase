@@ -39,9 +39,11 @@ class SentenceSelector extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { contextsDict } = this.props;
+    const { selectedCommodity, selectedCountry } = SentenceSelector.getDefaultState(contextsDict);
     if (
-      !prevState.selectedCommodity ||
-      (!prevState.selectedCountry && Object.keys(contextsDict)[0])
+      (!prevState.selectedCommodity || !prevState.selectedCountry) &&
+      selectedCommodity !== null &&
+      selectedCountry !== null
     ) {
       this.setDefaultContext(contextsDict);
     }
