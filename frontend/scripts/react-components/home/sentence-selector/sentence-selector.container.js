@@ -1,12 +1,17 @@
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import SentenceSelector from 'react-components/home/sentence-selector/sentence-selector.component';
+import { selectContext } from 'actions/tool.actions';
 
 function mapStateToProps(state) {
   const { contexts } = state.tool;
   const contextsDict = contexts.reduce(
-    (acc, context) => ({
+    (acc, ctx) => ({
       ...acc,
-      [context.commodityName]: [...(acc[context.commodityName] || []), context.countryName]
+      [ctx.commodityName]: [
+        ...(acc[ctx.commodityName] || []),
+        { name: ctx.countryName, id: ctx.id }
+      ]
     }),
     {}
   );
@@ -15,4 +20,12 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(SentenceSelector);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      selectContext
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(SentenceSelector);
