@@ -38,7 +38,7 @@ class AdminLevelFilter extends Component {
           <div className="c-dropdown -capitalize">
             <span className="dropdown-label">{filters.name.toLowerCase()}</span>
             <span className="dropdown-title">
-              {selectedFilter !== 'undefined' &&
+              {typeof selectedFilter !== 'undefined' &&
               selectedFilter.name !== 'undefined' &&
               selectedFilter.value !== 'none'
                 ? selectedFilter.name.toLowerCase()
@@ -60,7 +60,7 @@ AdminLevelFilter.propTypes = {
   onSelected: PropTypes.func,
   currentDropdown: PropTypes.string,
   selectedFilter: PropTypes.object,
-  filters: PropTypes.object
+  filters: PropTypes.oneOfType([PropTypes.object, PropTypes.bool])
 };
 
 export default AdminLevelFilter;

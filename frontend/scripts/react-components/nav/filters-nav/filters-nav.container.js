@@ -1,7 +1,8 @@
-import { toggleMap } from 'actions/app.actions';
-import FiltersNav from 'react-components/nav/filters-nav/filters-nav.component';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { selectContextWithUpdates, selectContext } from 'actions/tool.actions';
+import { toggleMap } from 'actions/app.actions';
+import FiltersNav from 'react-components/nav/filters-nav/filters-nav.component';
 import routerLinks from 'router/nav-links';
 
 function mapStateToProps(state) {
@@ -12,9 +13,10 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
     {
+      selectContext: ownProps.isExplore ? selectContext : selectContextWithUpdates,
       openMap: () => toggleMap(true),
       openSankey: () => toggleMap(false)
     },

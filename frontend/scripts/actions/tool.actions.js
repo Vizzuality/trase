@@ -168,6 +168,12 @@ export function selectContext(context) {
   };
 }
 
+export function selectContextWithUpdates(context) {
+  return dispatch => {
+    dispatch(setContext(context, { withUpdates: true }));
+  };
+}
+
 export function selectBiomeFilter(biomeFilter, reloadLinks) {
   return _reloadLinks('biomeFilter', biomeFilter, SELECT_BIOME_FILTER, reloadLinks);
 }
@@ -235,43 +241,47 @@ export function selectYears(years) {
   };
 }
 
-export function loadInitialData() {
-  return (dispatch, getState) => {
+export const loadInitialData = forceReload => (dispatch, getState) => {
+  const { app, tool } = getState();
+  // we use forceReload to force state rehydration
+  if (app.tooltips !== null && tool.contexts.length > 0 && !forceReload) return Promise.resolve();
+
+  dispatch({
+    type: LOAD_INITIAL_DATA
+  });
+
+  const contextURL = getURLFromParams(GET_CONTEXTS_URL);
+  const tooltipsURL = getURLFromParams(GET_TOOLTIPS_URL);
+
+  return Promise.all(
+    [contextURL, tooltipsURL].map(url => fetch(url).then(resp => resp.text()))
+  ).then(data => {
+    const tooltipsPayload = JSON.parse(data[1]);
+
     dispatch({
-      type: LOAD_INITIAL_DATA
+      type: SET_TOOLTIPS,
+      payload: tooltipsPayload
     });
 
-    const contextURL = getURLFromParams(GET_CONTEXTS_URL);
-    const tooltipsURL = getURLFromParams(GET_TOOLTIPS_URL);
+    const contextPayload = JSON.parse(data[0]).data;
+    // load contexts
+    dispatch({
+      type: LOAD_CONTEXTS,
+      payload: contextPayload
+    });
+    return Promise.resolve();
+  });
+};
 
-    Promise.all([contextURL, tooltipsURL].map(url => fetch(url).then(resp => resp.text()))).then(
-      data => {
-        const tooltipsPayload = JSON.parse(data[1]);
+export const setDefaultContext = () => (dispatch, getState) => {
+  const { selectedContextId, contexts } = getState().tool;
+  const defaultContextId =
+    selectedContextId || contexts.find(context => context.isDefault === true).id;
+  dispatch(setContext(defaultContextId, { withUpdates: true, isInitialContextSet: true }));
+};
 
-        dispatch({
-          type: SET_TOOLTIPS,
-          payload: tooltipsPayload
-        });
-
-        const contextPayload = JSON.parse(data[0]).data;
-        // load contexts
-        dispatch({
-          type: LOAD_CONTEXTS,
-          payload: contextPayload
-        });
-
-        const state = getState();
-        const defaultContextId =
-          state.tool.selectedContextId ||
-          contextPayload.find(context => context.isDefault === true).id;
-
-        dispatch(setContext(defaultContextId, true));
-      }
-    );
-  };
-}
-
-export function setContext(contextId, isInitialContextSet = false) {
+// hate adding these boolean params but the current flow is a nightmare and need deep refactoring
+export function setContext(contextId, { isInitialContextSet = false, withUpdates = false } = {}) {
   return dispatch => {
     // load default params
     dispatch({
@@ -279,24 +289,26 @@ export function setContext(contextId, isInitialContextSet = false) {
       payload: contextId
     });
 
-    const params = {
-      context_id: contextId
-    };
-    const allNodesURL = getURLFromParams(GET_ALL_NODES_URL, params);
-    const columnsURL = getURLFromParams(GET_COLUMNS_URL, params);
-    const promises = [allNodesURL, columnsURL].map(url => fetch(url).then(resp => resp.text()));
+    if (withUpdates) {
+      const params = {
+        context_id: contextId
+      };
+      const allNodesURL = getURLFromParams(GET_ALL_NODES_URL, params);
+      const columnsURL = getURLFromParams(GET_COLUMNS_URL, params);
+      const promises = [allNodesURL, columnsURL].map(url => fetch(url).then(resp => resp.text()));
 
-    Promise.all(promises).then(payload => {
-      // TODO do not wait for end of all promises/use another .all call
-      dispatch({
-        type: GET_COLUMNS,
-        payload: payload.slice(0, 2)
+      Promise.all(promises).then(payload => {
+        // TODO do not wait for end of all promises/use another .all call
+        dispatch({
+          type: GET_COLUMNS,
+          payload: payload.slice(0, 2)
+        });
+
+        dispatch(loadLinks());
+        dispatch(loadNodes());
+        dispatch(loadMapVectorData());
       });
-
-      dispatch(loadLinks());
-      dispatch(loadNodes());
-      dispatch(loadMapVectorData());
-    });
+    }
   };
 }
 
