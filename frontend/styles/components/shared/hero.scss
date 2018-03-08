@@ -8,8 +8,14 @@
 
   &.-read-only {
     height: 400px;
+    overflow: hidden;
+
     .hero-content {
       display: none;
+    }
+
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      height: 190px;
     }
   }
 
@@ -169,4 +175,3 @@
     }
   }
 }
-
