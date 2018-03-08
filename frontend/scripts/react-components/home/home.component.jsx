@@ -3,18 +3,10 @@ import PropTypes from 'prop-types';
 import Link from 'redux-first-router-link';
 import Hero from 'react-components/shared/hero.component';
 import NewsletterForm from 'react-components/shared/newsletter/newsletter.container';
-import SliderSection from './slider-section.component';
-import SentenceSelector from './sentence-selector.component';
+import SliderSection from 'react-components/home/slider-section.component';
+import WorldMap from 'react-components/shared/world-map/world-map.container';
+import SentenceSelector from 'react-components/home/sentence-selector';
 
-const commodities = {
-  valueList: ['Palm Oil'],
-  value: 'Palm Oil'
-};
-
-const countries = {
-  valueList: ['Indonesia'],
-  value: 'Indonesia'
-};
 function Home(props) {
   const { tweets, blogPosts, testimonials, insightsPosts, promotedPost, homeVideo } = props;
   return (
@@ -46,9 +38,10 @@ function Home(props) {
           </div>
         </div>
         <div className="homepage-map">
-          <SentenceSelector connector="of" selectors={[commodities, countries]}>
-            What are the sustainability risks associated with the trading
-          </SentenceSelector>
+          <SentenceSelector />
+          <div className="homepage-map-container">
+            <WorldMap />
+          </div>
         </div>
         <div className="sliders">
           <NewsletterForm />

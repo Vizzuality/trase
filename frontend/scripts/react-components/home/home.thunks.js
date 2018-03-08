@@ -1,4 +1,4 @@
-import { RESET_TOOL_STATE } from 'actions/tool.actions';
+import { loadInitialData, RESET_TOOL_STATE } from 'actions/tool.actions';
 import { getHomeContent } from 'react-components/home/home.actions';
 
 export const resetToolThunk = (dispatch, getState, { action }) => {
@@ -13,3 +13,4 @@ export const resetToolThunk = (dispatch, getState, { action }) => {
 export const getPostsContent = dispatch => dispatch(getHomeContent('posts'));
 export const getTestimonialsContent = dispatch => dispatch(getHomeContent('testimonials'));
 export const getTweetsContent = dispatch => dispatch(getHomeContent('tweets'));
+export const loadInitialDataHome = dispatch => dispatch(loadInitialData());
