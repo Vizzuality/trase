@@ -19,13 +19,22 @@
     }
   }
 
+  @media screen and (max-width: $breakpoint-foundation-small) {
+    height: 360px;
+  }
+
   .hero-content {
     z-index: $z-above;
   }
 
   .hero-logo-container {
     width: 210px;
-    margin: 0 0 32px;
+
+    img {
+      @media screen and (max-width: $breakpoint-foundation-small) {
+        height: 34px;
+      }
+    }
   }
 
   .hero-title {
@@ -37,7 +46,13 @@
     color: $white;
     width: 590px;
     max-width: 100%;
-    margin-bottom: 25px;
+    margin: 32px 0 25px;
+
+    @media only screen and (max-width: $breakpoint-foundation-small) {
+      font-size: $font-size-big;
+      line-height: 1.67;
+      margin: 5px 0 40px;
+    }
   }
 
   .hero-play-container {
@@ -86,6 +101,10 @@
   > .row {
     height: 100%;
     position: relative;
+
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      padding-top: 50px;
+    }
   }
 
   .layover {

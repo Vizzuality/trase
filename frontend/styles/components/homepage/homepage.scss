@@ -116,6 +116,10 @@
   }
 
   .homepage-map {
+    @media only screen and (max-width: $breakpoint-foundation-small) {
+      display: none;
+    }
+
     .homepage-map-container {
       margin: 0 auto;
       width: 700px;
@@ -126,8 +130,17 @@
     background-color: $white;
     padding: 60px 0;
 
+    @media only screen and (max-width: $breakpoint-foundation-small) {
+      padding: 40px 0;
+    }
+
     .c-newsletter {
-      transform: translateY(calc(50% - 8px));
+      margin-bottom: 40px;
+
+      @media only screen and (min-width: $breakpoint-foundation-small) {
+        transform: translateY(calc(50% - 8px));
+        margin-bottom: 0px;
+      }
 
       .newsletter-label {
         position: absolute;
