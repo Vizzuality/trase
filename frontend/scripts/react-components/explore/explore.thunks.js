@@ -1,7 +1,14 @@
 import { redirect } from 'redux-first-router';
-import { loadInitialData } from 'actions/tool.actions';
+import { loadInitialData, selectContext } from 'actions/tool.actions';
 
-export const loadInitialDataExplore = dispatch => dispatch(loadInitialData());
+export const loadInitialDataExplore = (dispatch, getState) => {
+  const { query = {} } = getState().location;
+  const contextId = parseInt(query.contextId, 10);
+  if (contextId) {
+    return dispatch(loadInitialData()).then(() => dispatch(selectContext(contextId)));
+  }
+  return dispatch(loadInitialData());
+};
 
 export const redirectToExplore = (dispatch, getState, { action }) => {
   const { type } = getState().location;

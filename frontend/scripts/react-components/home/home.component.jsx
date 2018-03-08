@@ -8,7 +8,15 @@ import WorldMap from 'react-components/shared/world-map/world-map.container';
 import SentenceSelector from 'react-components/home/sentence-selector/sentence-selector.container';
 
 function Home(props) {
-  const { tweets, blogPosts, testimonials, insightsPosts, promotedPost, homeVideo } = props;
+  const {
+    tweets,
+    blogPosts,
+    homeVideo,
+    promotedPost,
+    testimonials,
+    insightsPosts,
+    selectedContextId
+  } = props;
   return (
     <div className="l-homepage">
       <div className="c-homepage">
@@ -42,6 +50,14 @@ function Home(props) {
           <div className="homepage-map-container">
             <WorldMap />
           </div>
+          <div className="homepage-map-link-container">
+            <Link
+              to={{ type: 'explore', payload: { query: { contextId: selectedContextId } } }}
+              className="homepage-map-link c-button -pink -big"
+            >
+              Find out more
+            </Link>
+          </div>
         </div>
         <div className="sliders">
           <NewsletterForm />
@@ -60,7 +76,8 @@ Home.propTypes = {
   tweets: PropTypes.array,
   blogPosts: PropTypes.array,
   promotedPost: PropTypes.object,
-  homeVideo: PropTypes.string
+  homeVideo: PropTypes.string,
+  selectedContextId: PropTypes.number
 };
 
 export default Home;

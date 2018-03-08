@@ -16,6 +16,7 @@ function mapStateToProps(state) {
     insightsPosts,
     promotedPost,
     testimonials,
+    selectedContextId: state.tool.selectedContextId,
     tweets: tweets.length > 0 ? tweets : null
   };
 }
