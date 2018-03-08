@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import throttle from 'lodash/throttle';
 import { Transition } from 'react-transition-group';
-import NavLinksList from 'react-components/nav/nav-links-list.component';
+import NavLinks from 'react-components/nav/nav-links.component';
 
 class SidebarNav extends React.PureComponent {
   constructor(props) {
@@ -39,14 +39,15 @@ class SidebarNav extends React.PureComponent {
         {transition => (
           <React.Fragment>
             <div className={`c-sidebar-nav -${transition}`}>
-              <NavLinksList
-                links={links}
-                listClassName="nav-sidebar-link-list"
-                itemClassName="nav-sidebar-link-list-item"
-                linkClassName="subtitle -gray"
-                linkActiveClassName="-pink"
-                navLinkProps={navLinkProps}
-              />
+              <ul className="nav-sidebar-link-list">
+                <NavLinks
+                  links={links}
+                  itemClassName="nav-sidebar-link-list-item"
+                  linkClassName="subtitle -gray"
+                  linkActiveClassName="-pink"
+                  navLinkProps={navLinkProps}
+                />
+              </ul>
             </div>
             <button className={`sidebar-nav-toggle -${transition}`} onClick={this.onToggleNav}>
               <svg className={`icon ${icon}`}>

@@ -17,7 +17,8 @@ function Home(props) {
               <Link to={{ type: 'profileRoot' }} className="splitted-column-wrapper">
                 <h3 className="subtitle">Profile</h3>
                 <p className="splitted-text">
-                  Can companies and governments meet their 2020 sustainability goals?
+                  View the trade and sustainability profile of a particular company or production
+                  region.
                 </p>
               </Link>
               <div className="screenshot -half" />
@@ -26,8 +27,8 @@ function Home(props) {
               <Link to={{ type: 'tool' }} className="splitted-column-wrapper">
                 <h3 className="subtitle">Supply Chain</h3>
                 <p className="splitted-text">
-                  Explore the supply chains and find the impacts and opportunities for a more
-                  sustainable production.
+                  Follow trade flows to identify sourcing regions, profile supply chain risks and
+                  assess opportunities for sustainable production.
                 </p>
               </Link>
               <div className="screenshot -end" />
