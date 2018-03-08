@@ -11,7 +11,7 @@ const Entrypoints = () => (
             <div className="entrypoint-slide-content">
               <h3 className="subtitle">Profile</h3>
               <Link to={{ type: 'profileRoot' }}>
-                <p className="splitted-text">
+                <p className="entrypoint-text">
                   View the trade and sustainability profile of a particular company or production
                   region.
                 </p>
@@ -29,7 +29,7 @@ const Entrypoints = () => (
             <div className="entrypoint-slide-content">
               <h3 className="subtitle">Supply Chain</h3>
               <Link to={{ type: 'profileRoot' }}>
-                <p className="splitted-text">
+                <p className="entrypoint-text">
                   Follow trade flows to identify sourcing regions, profile supply chain risks and
                   assess opportunities for sustainable production.
                 </p>
@@ -47,7 +47,7 @@ const Entrypoints = () => (
             <div className="entrypoint-slide-content">
               <h3 className="subtitle">Profile</h3>
               <Link to={{ type: 'profileRoot' }}>
-                <p className="splitted-text">
+                <p className="entrypoint-text">
                   Explore the sustainability of different production regions and identify risks and
                   opportunities facing downstream buyers.
                 </p>
