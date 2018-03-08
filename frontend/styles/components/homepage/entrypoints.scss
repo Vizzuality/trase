@@ -1,0 +1,34 @@
+$entrypoint-slide-height: 550px;
+.c-entrypoints {
+  height: 100%;
+
+  .row {
+    > div {
+      height: $entrypoint-slide-height;
+    }
+  }
+
+  .column {
+    padding: 0;
+  }
+
+  .entrypoint-slide {
+    position: relative;
+    height: $entrypoint-slide-height;
+  }
+
+  .entrypoint-slide-content {
+    position: relative;
+    padding: 42px 20px 0 60px;
+    height: 100%;
+    width: 100%;
+    z-index: $z-above;
+  }
+
+  .entrypoint-slide-img {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+  }
+}
