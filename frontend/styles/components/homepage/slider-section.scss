@@ -78,21 +78,29 @@ $slide-height-small: 300px;
 
 .slide-next {
   left: 100%;
-  transform: translate(-50%, calc(-50% + 20px));
+  transform: translate(-50%, 50%);
 
   &::after {
     transform: translate(-50%, -50%) rotate(45deg);
     margin-left: -1px;
   }
+
+  @media screen and (max-width: 1200px) {
+    transform: translate(-100%, 50%);
+  }
 }
 
 .slide-prev {
   right: 100%;
-  transform: translate(50%, calc(-50% + 20px));
+  transform: translate(50%, 50%);
 
   &::after {
     transform: translate(-50%, -50%) rotate(-135deg);
     margin-left: 1px;
+  }
+
+  @media screen and (max-width: 1200px) {
+    transform: translate(100%, 50%);
   }
 }
 
