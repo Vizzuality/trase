@@ -7,8 +7,10 @@ function mapStateToProps(state) {
   const { location } = state;
   const filename = getStaticContentFilename(location);
   const links = routerLinks[filename] || routerLinks.sidebarNav;
+
   return {
-    links
+    links,
+    filename // forcing to re-render when filename has changed
   };
 }
 

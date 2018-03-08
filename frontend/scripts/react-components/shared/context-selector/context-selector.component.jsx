@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions,jsx-a11y/no-noninteractive-element-interactions */
-import cx from 'classnames';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
+import cx from 'classnames';
 import Tooltip from 'react-components/shared/help-tooltip.component';
 import 'styles/components/shared/country-commodities-react.scss';
 import 'styles/components/shared/dimensional-selector-react.scss';
@@ -156,25 +156,26 @@ class ContextSelector extends Component {
       currentDropdown,
       selectedContextCountry,
       selectedContextCommodity,
-      dimensions
+      dimensions,
+      defaultContextLabel
     } = this.props;
-
+    const isContextSelected = selectedContextCountry && selectedContextCommodity;
+    const contextLabel = isContextSelected
+      ? `${selectedContextCountry.toLowerCase()} - ${selectedContextCommodity.toLowerCase()}`
+      : defaultContextLabel;
     return (
       <div
         className={cx('c-country-commodities', 'js-dropdown', className)}
         onClick={() => toggleContextSelectorVisibility(id)}
       >
         <div className="c-dropdown -capitalize">
-          <span className="dropdown-label">
-            Country - Commodity
-            {tooltipText && <Tooltip constraint="window" text={tooltipText} />}
-          </span>
-          {selectedContextCountry &&
-            selectedContextCommodity && (
-              <span className="dropdown-title">
-                {selectedContextCountry.toLowerCase()} - {selectedContextCommodity.toLowerCase()}
-              </span>
-            )}
+          {isContextSelected && (
+            <span className="dropdown-label">
+              Country - Commodity
+              {tooltipText && <Tooltip constraint="window" text={tooltipText} />}
+            </span>
+          )}
+          <span className="dropdown-title">{contextLabel}</span>
           <FiltersDropdown
             id={id}
             currentDropdown={currentDropdown}
@@ -207,7 +208,12 @@ ContextSelector.propTypes = {
   currentDropdown: PropTypes.string,
   selectedContextCountry: PropTypes.string,
   selectedContextCommodity: PropTypes.string,
-  dimensions: PropTypes.array
+  dimensions: PropTypes.array,
+  defaultContextLabel: PropTypes.string
+};
+
+ContextSelector.defaultProps = {
+  defaultContextLabel: 'Select a country and commodity'
 };
 
 export default ContextSelector;

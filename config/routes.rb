@@ -15,10 +15,7 @@ Rails.application.routes.draw do
     resources :tweets, only: [:index]
     resources :testimonials, only: [:index]
     resources :staff_groups, only: [:index]
-    get "about/:name",
-      controller: :pages,
-      action: :show,
-      defaults: {format: 'md'}
+    get 'about/:name', controller: :pages, action: :show, defaults: {format: 'md'}
   end
 
   namespace :api do
