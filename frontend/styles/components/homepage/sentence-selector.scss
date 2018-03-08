@@ -21,7 +21,6 @@
 
   .c-dropdown {
     margin: 0 10px;
-    min-width: 120px;
     cursor: pointer;
 
     .dropdown-title {
@@ -39,6 +38,8 @@
 
     .dropdown-list {
       top: 20px;
+      min-width: 120px;
+
       > .dropdown-item {
         color: $charcoal-grey;
         font-size: 13px;
