@@ -47,6 +47,10 @@ class SentenceSelector extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.resetContext();
+  }
+
   onSelectCommodity(selectedCommodity) {
     const { contextsDict } = this.props;
     const selectedCountry = (contextsDict[selectedCommodity][0] || {}).name;
@@ -120,11 +124,13 @@ SentenceSelector.propTypes = {
   contextsDict: PropTypes.objectOf(
     PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string, id: PropTypes.number }))
   ).isRequired,
-  selectContext: PropTypes.func
+  selectContext: PropTypes.func,
+  resetContext: PropTypes.func
 };
 
 SentenceSelector.defaultProps = {
-  selectContext: () => {}
+  selectContext: () => {},
+  resetContext: () => {}
 };
 
 export default SentenceSelector;

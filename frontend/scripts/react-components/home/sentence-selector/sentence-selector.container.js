@@ -23,7 +23,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      selectContext
+      selectContext,
+      resetContext: () => selectContext(null, { isInitialContextSet: true })
     },
     dispatch
   );
