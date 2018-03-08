@@ -10,7 +10,7 @@ function mapStateToProps(state) {
 
   return {
     links,
-    location // forcing to re-render when location has changed
+    filename // forcing to re-render when filename has changed
   };
 }
 
