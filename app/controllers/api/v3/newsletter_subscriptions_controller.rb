@@ -10,8 +10,9 @@ module Api
           ENV['MAILCHIMP_LIST_ID'], email: params[:email]
         )
         render json: response and return
-      rescue Error => e
+      rescue => e
         render json: {error: e.message}
+        Appsignal.send_error(e)
         Rails.logger.error e.message
         e.backtrace.each { |l| Rails.logger.error l }
       end
