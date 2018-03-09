@@ -63,6 +63,10 @@ $entrypoints-stacked-card-size: 360px;
       }
     }
 
+    @media screen and (min-width: $breakpoint-mobile) {
+      background-size: 60% auto;
+    }
+
     @media screen and (min-width: $home-entrypoint-breakpoint) {
       height: $entrypoint-slide-height;
       background-size: 100% auto;
