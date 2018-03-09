@@ -1,6 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
+  before do
+    Api::V3::Flow.delete_all # TODO
+    Api::V3::DownloadAttribute.skip_callback(:commit, :after, :refresh_dependencies)
+  end
+  after do
+    Api::V3::DownloadAttribute.set_callback(:commit, :after, :refresh_dependencies)
+  end
   include_context 'api v3 brazil two flows'
   describe :query do
     before(:each) do

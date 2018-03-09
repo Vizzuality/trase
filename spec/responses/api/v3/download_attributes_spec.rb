@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe 'Download Attributes', type: :request do
+  before do
+    Api::V3::DownloadAttribute.skip_callback(:commit, :after, :refresh_dependencies)
+  end
+  after do
+    Api::V3::DownloadAttribute.set_callback(:commit, :after, :refresh_dependencies)
+  end
   include_context 'api v3 brazil download attributes'
 
   describe 'GET /api/v3/contexts/:context_id/download_attributes' do
