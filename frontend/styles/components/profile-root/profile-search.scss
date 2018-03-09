@@ -17,9 +17,10 @@ $spinner-height-large: 40px;
     justify-content: space-between;
     width: 100%;
     height: $search-height-large;
-    padding: 2px 8px 0 0;
+    padding: 2px 16px 0 0;
     background-color: $white;
     box-shadow: $search-box-shadow;
+    border-radius: 4px;
     z-index: $z-above;
     cursor: text;
 
@@ -43,7 +44,7 @@ $spinner-height-large: 40px;
 
   .profile-search-input {
     flex: 1;
-    padding: 0 5px 0 15px;
+    padding: 0 5px 0 20px;
     font-family: $font-family-1;
     font-size: 18px;
     letter-spacing: -0.8px;
@@ -54,10 +55,6 @@ $spinner-height-large: 40px;
 
     &::placeholder {
       transition: color 150ms ease-out;
-    }
-
-    @media only screen and (min-width: $search-breakpoint-large) {
-      padding: 0 5px 0 20px;
     }
   }
 
