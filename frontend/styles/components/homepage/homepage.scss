@@ -8,11 +8,15 @@
     background: linear-gradient(to bottom, $egg-shell 0%, $egg-shell 33.33%, $light-gray 33.33%, $light-gray 100%);
 
     @media only screen and (min-width: $home-entrypoint-breakpoint) {
-      background: linear-gradient(to right, $egg-shell 0%, $egg-shell 50%, $light-gray 50%, $light-gray 100%);
+      background: linear-gradient(to right, $egg-shell 0%, $egg-shell 33.33%, $light-gray 33.33%, $light-gray 100%);
     }
   }
 
   .homepage-map {
+    @media only screen and (max-width: $breakpoint-foundation-small) {
+      display: none;
+    }
+
     .homepage-map-container {
       margin: 0 auto;
       width: 700px;
@@ -30,8 +34,17 @@
     background-color: $white;
     padding: 60px 0;
 
+    @media only screen and (max-width: $breakpoint-foundation-small) {
+      padding: 40px 0;
+    }
+
     .c-newsletter {
-      transform: translateY(calc(50% - 8px));
+      margin-bottom: 40px;
+
+      @media only screen and (min-width: $breakpoint-foundation-small) {
+        transform: translateY(calc(50% - 8px));
+        margin-bottom: 0px;
+      }
 
       .newsletter-label {
         position: absolute;
