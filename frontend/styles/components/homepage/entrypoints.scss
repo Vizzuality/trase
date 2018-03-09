@@ -1,13 +1,19 @@
 $entrypoint-slide-height: 550px;
+$entrypoints-stacked-card-size: 360px;
+
 .c-entrypoints {
   height: 100%;
 
   .row {
     position: relative;
     > div {
-      height: $entrypoint-slide-height;
+      height: $entrypoints-stacked-card-size;
       width: 100%;
       overflow: visible !important;
+
+      @media screen and (min-width: $home-entrypoint-breakpoint) {
+        height: $entrypoint-slide-height;
+      }
     }
   }
 
@@ -17,31 +23,68 @@ $entrypoint-slide-height: 550px;
 
   .entrypoint-slide {
     position: relative;
-    height: $entrypoint-slide-height;
+    height: $entrypoints-stacked-card-size;
     background-position: bottom right;
+    background-size: 75% auto;
     background-repeat: no-repeat;
-    background-size: 100% auto;
-    border-right: 1px solid $charcoal-grey-faded-a-lot;
+    border-bottom: 1px solid $charcoal-grey-faded-a-lot;
+
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
 
     &.-start {
       background-image: url('/images/backgrounds/entrypoint-1@2x.jpg');
+
+      &::after {
+        background-color: rgba($egg-shell, 0.15);
+      }
     }
 
     &.-mid {
       background-image: url('/images/backgrounds/entrypoint-2@2x.jpg');
+
+      &::after {
+        background-color: rgba($light-gray, 0.15);
+      }
     }
 
     &.-end {
       background-image: url('/images/backgrounds/entrypoint-3@2x.jpg');
+
+      &::after {
+        background-color: rgba($light-gray, 0.6);
+      }
+    }
+
+    @media screen and (min-width: $home-entrypoint-breakpoint) {
+      height: $entrypoint-slide-height;
+      background-size: 100% auto;
+      border-right: 1px solid $charcoal-grey-faded-a-lot;
+      border-bottom: 0;
+
+      &::after {
+        content: none;
+      }
     }
   }
 
   .entrypoint-slide-content {
     position: relative;
-    padding: 42px 20px 0 60px;
+    padding: 45px 20px 0 20px;
     height: 100%;
     width: 100%;
     z-index: $z-above;
+
+    @media screen and (min-width: $home-entrypoint-breakpoint) {
+      padding: 42px 20px 0 50px;
+    }
   }
 
   .entrypoint-text {
