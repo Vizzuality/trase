@@ -15,11 +15,12 @@ module.exports = merge(webpackBaseConfig, {
     port: 8081,
     host: '0.0.0.0',
     historyApiFallback: true,
-    proxy: {
-      '/system': {
-        target: 'http://0.0.0.0:3000'
+    proxy: [
+      {
+        context: ['/content', '/system'],
+        target: `http:${process.env.API_V2_URL}`
       }
-    }
+    ]
   },
   plugins: [new webpack.NamedModulesPlugin()],
   performance: {
