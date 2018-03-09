@@ -42,6 +42,7 @@ class Entrypoints extends React.PureComponent {
     this.getSliderRef = this.getSliderRef.bind(this);
     this.onClickPrev = this.onClickPrev.bind(this);
     this.onClickNext = this.onClickNext.bind(this);
+    this.onSlideChange = this.onSlideChange.bind(this);
     this.onResize = debounce(this.onResize.bind(this), 300);
   }
 
@@ -55,11 +56,13 @@ class Entrypoints extends React.PureComponent {
 
   onClickPrev() {
     this.slider.prev();
-    this.setState({ currentSlide: this.slider.currentSlide });
   }
 
   onClickNext() {
     this.slider.next();
+  }
+
+  onSlideChange() {
     this.setState({ currentSlide: this.slider.currentSlide });
   }
 
@@ -90,7 +93,7 @@ class Entrypoints extends React.PureComponent {
     const { currentSlide } = this.state;
     return (
       <React.Fragment>
-        <Siema loop={false} perPage={2.15} ref={this.getSliderRef}>
+        <Siema loop={false} perPage={2.15} ref={this.getSliderRef} onChange={this.onSlideChange}>
           {this.renderEntrypoints('column small-6')}
         </Siema>
         {currentSlide > 0 && (
