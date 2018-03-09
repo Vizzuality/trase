@@ -35,6 +35,7 @@ class SliderSection extends React.PureComponent {
 
     this.mediaQueries = { 640: 2, 950: 3 }; // undocumented feature { window.innerWidth: perPage }
     this.getSliderRef = this.getSliderRef.bind(this);
+    this.onSlideChange = this.onSlideChange.bind(this);
     this.onClickPrev = this.onClickPrev.bind(this);
     this.onClickNext = this.onClickNext.bind(this);
     this.onResize = debounce(this.onResize.bind(this), 300);
@@ -50,11 +51,13 @@ class SliderSection extends React.PureComponent {
 
   onClickPrev() {
     this.slider.prev();
-    this.setState({ currentSlide: this.slider.currentSlide });
   }
 
   onClickNext() {
     this.slider.next();
+  }
+
+  onSlideChange() {
     this.setState({ currentSlide: this.slider.currentSlide });
   }
 
@@ -87,6 +90,7 @@ class SliderSection extends React.PureComponent {
             draggable={smallScreen}
             loop={false}
             ref={this.getSliderRef}
+            onChange={this.onSlideChange}
           >
             {slides.map(slide => (
               <div
