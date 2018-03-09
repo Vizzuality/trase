@@ -7,7 +7,6 @@ function mapStateToProps(state) {
   const { tweets, posts, testimonials } = state.home;
   // not ideal, we could use redux-responsive if we need more changes like the one below
   const isSmallResolution = window.innerWidth <= BREAKPOINTS.small;
-  console.log('isSmallResolution', window.innerWidth);
   const INSIGHTS = ['INSIGHT', 'INFO BRIEF', 'ISSUE BRIEF', 'LONGER READ'];
   const promotedPost = posts.find(post => post.highlighted);
   const blogPosts = posts.filter(
