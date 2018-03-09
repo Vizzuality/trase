@@ -43,7 +43,7 @@ const routes = {
     )
   },
   explore: {
-    path: '/explore',
+    path: '/explore/:contextId?',
     page: 'explore',
     thunk: dispatchThunks(loadInitialDataExplore)
   },

@@ -55,7 +55,7 @@ class Hero extends React.Component {
 
   render() {
     const { showStory } = this.state;
-    const { className, visitStory, story, tweets, homeVideo } = this.props;
+    const { className, story, tweets, homeVideo } = this.props;
     const StoryBox = storyObj => (
       <div className="story-box">
         <button className="story-box-close" onClick={this.closeStoryBox} />
@@ -65,9 +65,14 @@ class Hero extends React.Component {
         />
         <figcaption className="story-box-content">
           <p className="story-box-title">{storyObj.title}</p>
-          <button className="subtitle story-box-link" onClick={() => visitStory(storyObj)}>
+          <a
+            className="subtitle story-box-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            href={storyObj.completePostUrl}
+          >
             See It Here
-          </button>
+          </a>
         </figcaption>
       </div>
     );
@@ -112,15 +117,10 @@ class Hero extends React.Component {
 
 Hero.propTypes = {
   className: PropTypes.string,
-  visitStory: PropTypes.func,
   story: PropTypes.object,
   tweets: PropTypes.array,
   onClickPlay: PropTypes.func,
   homeVideo: PropTypes.string
-};
-
-Hero.defaultProps = {
-  visitStory: () => {}
 };
 
 export default Hero;

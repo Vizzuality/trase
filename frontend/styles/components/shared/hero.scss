@@ -23,6 +23,11 @@
     height: 360px;
   }
 
+  .responsive-container {
+    position: absolute;
+    top: 0;
+  }
+
   .hero-content {
     z-index: $z-above;
   }
