@@ -5,7 +5,7 @@ import debounce from 'lodash/debounce';
 
 class Entrypoints extends React.PureComponent {
   static getIsMobile() {
-    return window.innerWidth <= 700;
+    return window.innerWidth <= 700; // value needs to match with entrypoints.scss variable
   }
   constructor(props) {
     super(props);
@@ -43,8 +43,6 @@ class Entrypoints extends React.PureComponent {
     this.onClickPrev = this.onClickPrev.bind(this);
     this.onClickNext = this.onClickNext.bind(this);
     this.onResize = debounce(this.onResize.bind(this), 300);
-    this.renderEntrypoints = this.renderEntrypoints.bind(this);
-    this.renderSlider = this.renderSlider.bind(this);
   }
 
   componentDidMount() {
@@ -75,8 +73,8 @@ class Entrypoints extends React.PureComponent {
 
   renderEntrypoints(grid) {
     return this.entrypoints.map(slide => (
-      <div className={grid}>
-        <div key={slide.subtitle} className={`entrypoint-slide ${slide.className}`}>
+      <div key={slide.subtitle} className={grid}>
+        <div className={`entrypoint-slide ${slide.className}`}>
           <Link to={slide.link}>
             <div className="entrypoint-slide-content">
               <h3 className="subtitle">{slide.subtitle}</h3>
@@ -111,7 +109,7 @@ class Entrypoints extends React.PureComponent {
     return (
       <div className="c-entrypoints">
         <div className="row">
-          {isMobile ? this.renderEntrypoints() : this.renderSlider('column small-12')}
+          {isMobile ? this.renderEntrypoints('column small-12') : this.renderSlider()}
         </div>
       </div>
     );
