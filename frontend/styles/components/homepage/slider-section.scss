@@ -85,8 +85,16 @@ $slide-height-small: 300px;
     margin-left: -1px;
   }
 
+  &.-no-image {
+    transform: translate(-50%, calc(-50% + 20px));
+  }
+
   @media screen and (max-width: 1200px) {
     transform: translate(-100%, 50%);
+
+    &.-no-image {
+      transform: translate(-100%, calc(-50% + 20px));
+    }
   }
 }
 
@@ -99,8 +107,16 @@ $slide-height-small: 300px;
     margin-left: 1px;
   }
 
+  &.-no-image {
+    transform: translate(50%, calc(-50% + 20px));
+  }
+
   @media screen and (max-width: 1200px) {
     transform: translate(100%, 50%);
+
+    &.-no-image {
+      transform: translate(100%, calc(-50% + 20px));
+    }
   }
 }
 

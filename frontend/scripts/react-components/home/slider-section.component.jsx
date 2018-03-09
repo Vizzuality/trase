@@ -107,9 +107,17 @@ class SliderSection extends React.PureComponent {
               </div>
             ))}
           </Siema>
-          {currentSlide > 0 && <button className="slide-prev" onClick={this.onClickPrev} />}
+          {currentSlide > 0 && (
+            <button
+              className={cx('slide-prev', { '-no-image': !!slides[0].quote })}
+              onClick={this.onClickPrev}
+            />
+          )}
           {currentSlide < slides.length - visiblePages && (
-            <button className="slide-next" onClick={this.onClickNext} />
+            <button
+              className={cx('slide-next', { '-no-image': !!slides[0].quote })}
+              onClick={this.onClickNext}
+            />
           )}
         </div>
       </section>
