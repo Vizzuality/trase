@@ -168,7 +168,7 @@ $slide-height-small: 300px;
       color: $gray-text;
       text-transform: capitalize;
 
-      @media screen and (max-width: $breakpoint-foundation-small) {
+      @media screen and (max-width: $breakpoint-foundation-medium) {
         font-size: $font-size-xx-regular;
       }
     }
