@@ -185,6 +185,22 @@ paths:
             type: array
             items:
               $ref: '#/definitions/FlowResult'
+        '400':
+          description: unprocessable entity
+          schema:
+            type: object
+            properties:
+              errors:
+                type: array
+                items:
+                  type: string
+        '500':
+          description: internal server error
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
   '/context/{context_id}/nodes':
     get:
       tags:
@@ -496,6 +512,10 @@ definitions:
           - quant
       name:
         type: string
+      years:
+        type: array
+        items:
+          type: integer
       label:
         type: string
       description:
@@ -517,6 +537,10 @@ definitions:
         type: integer
       name:
         type: string
+      years:
+        type: array
+        items:
+          type: integer
       label:
         type: string
       description:

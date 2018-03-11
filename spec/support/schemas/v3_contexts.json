@@ -171,6 +171,14 @@
                   "id": "/properties/data/items/properties/recolorBy/items/properties/isDisabled",
                   "type": "boolean"
                 },
+                "years": {
+                  "id": "/properties/data/items/properties/recolorBy/items/properties/years",
+                  "type": ["array", "null"],
+                  "items": {
+                    "id": "/properties/data/items/properties/recolorBy/items/properties/years/items",
+                    "type": "integer"
+                  }
+                },
                 "label": {
                   "id": "/properties/data/items/properties/recolorBy/items/properties/label",
                   "type": "string"
@@ -227,7 +235,8 @@
                 "minValue",
                 "nodes",
                 "isDefault",
-                "name"
+                "name",
+                "years"
               ],
               "type": "object"
             },
@@ -255,6 +264,14 @@
                   "id": "/properties/data/items/properties/resizeBy/items/properties/isDisabled",
                   "type": "boolean"
                 },
+                "years": {
+                  "id": "/properties/data/items/properties/resizeBy/items/properties/years",
+                  "type": ["array", "null"],
+                  "items": {
+                    "id": "/properties/data/items/properties/resizeBy/items/properties/years/items",
+                    "type": "integer"
+                  }
+                },
                 "label": {
                   "id": "/properties/data/items/properties/resizeBy/items/properties/label",
                   "type": "string"
@@ -275,7 +292,8 @@
                 "label",
                 "position",
                 "isDefault",
-                "description"
+                "description",
+                "years"
               ],
               "type": "object"
             },

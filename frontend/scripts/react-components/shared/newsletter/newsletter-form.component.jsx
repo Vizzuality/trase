@@ -37,7 +37,7 @@ class NewsletterForm extends React.PureComponent {
     const { message } = this.props;
     return (
       <div className="c-newsletter row align-middle align-right">
-        <form ref={this.getFormRef} className="column small-8 medium-5 large-4">
+        <form ref={this.getFormRef} className="column small-12 medium-6 large-4">
           <label htmlFor="newsletter-email" className="newsletter-label -pink">
             {message}
           </label>

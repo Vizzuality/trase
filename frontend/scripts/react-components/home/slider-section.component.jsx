@@ -35,6 +35,7 @@ class SliderSection extends React.PureComponent {
 
     this.mediaQueries = { 640: 2, 950: 3 }; // undocumented feature { window.innerWidth: perPage }
     this.getSliderRef = this.getSliderRef.bind(this);
+    this.onSlideChange = this.onSlideChange.bind(this);
     this.onClickPrev = this.onClickPrev.bind(this);
     this.onClickNext = this.onClickNext.bind(this);
     this.onResize = debounce(this.onResize.bind(this), 300);
@@ -50,11 +51,13 @@ class SliderSection extends React.PureComponent {
 
   onClickPrev() {
     this.slider.prev();
-    this.setState({ currentSlide: this.slider.currentSlide });
   }
 
   onClickNext() {
     this.slider.next();
+  }
+
+  onSlideChange() {
     this.setState({ currentSlide: this.slider.currentSlide });
   }
 
@@ -87,6 +90,7 @@ class SliderSection extends React.PureComponent {
             draggable={smallScreen}
             loop={false}
             ref={this.getSliderRef}
+            onChange={this.onSlideChange}
           >
             {slides.map(slide => (
               <div
@@ -103,10 +107,18 @@ class SliderSection extends React.PureComponent {
               </div>
             ))}
           </Siema>
-          {currentSlide > 0 &&
-            !smallScreen && <button className="slide-prev" onClick={this.onClickPrev} />}
-          {currentSlide < slides.length - visiblePages &&
-            !smallScreen && <button className="slide-next" onClick={this.onClickNext} />}
+          {currentSlide > 0 && (
+            <button
+              className={cx('slide-prev', { '-no-image': !!slides[0].quote })}
+              onClick={this.onClickPrev}
+            />
+          )}
+          {currentSlide < slides.length - visiblePages && (
+            <button
+              className={cx('slide-next', { '-no-image': !!slides[0].quote })}
+              onClick={this.onClickNext}
+            />
+          )}
         </div>
       </section>
     );

@@ -27,6 +27,7 @@
       display: flex;
       padding: 0;
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       align-items: center;
     }
 

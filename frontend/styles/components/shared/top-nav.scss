@@ -44,6 +44,14 @@
     }
   }
 
+  &:not(.-has-background) {
+    .top-nav-link {
+      &.-hide-when-on-top {
+        display: none;
+      }
+    }
+  }
+
   &.-light {
     .top-nav-link,
     .top-nav-toggle-btn {
@@ -106,6 +114,7 @@
   }
 
   .icon-download-pdf {
+    height: 25px;
     transform: translateY(1px)
   }
 }

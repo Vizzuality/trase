@@ -94,7 +94,7 @@ class TopNav extends React.PureComponent {
   }
 
   renderMobileMenu() {
-    const { links } = this.props;
+    const { links, showLogo } = this.props;
     const { menuOpen } = this.state;
 
     const toggleBtnIcon = menuOpen ? 'close' : 'menu';
@@ -104,7 +104,12 @@ class TopNav extends React.PureComponent {
         <div className="top-nav-bar column small-12">
           <ul className="top-nav-item-list">
             <li className="top-nav-item -no-margin">
-              <NavLink exact strict className="top-nav-link -logo" to={{ type: 'home' }}>
+              <NavLink
+                exact
+                strict
+                className={cx('top-nav-link', '-logo', { '-hide-when-on-top': !showLogo })}
+                to={{ type: 'home' }}
+              >
                 <img src="/images/logos/logo-trase-nav.png" alt="trase" />
               </NavLink>
             </li>

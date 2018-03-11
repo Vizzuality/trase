@@ -195,3 +195,7 @@ export const HOME_VIDEO = {
   en: 'IbwMVUCHrZc',
   es: 'IbwMVUCHrZc'
 };
+
+export const BREAKPOINTS = {
+  small: 640
+};

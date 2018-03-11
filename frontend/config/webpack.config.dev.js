@@ -14,7 +14,13 @@ module.exports = merge(webpackBaseConfig, {
     contentBase: path.join(__dirname, '..', 'public'),
     port: 8081,
     host: '0.0.0.0',
-    historyApiFallback: true
+    historyApiFallback: true,
+    proxy: [
+      {
+        context: ['/content', '/system'],
+        target: `http:${process.env.API_V2_URL}`
+      }
+    ]
   },
   plugins: [new webpack.NamedModulesPlugin()],
   performance: {

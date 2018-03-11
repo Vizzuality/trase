@@ -4,10 +4,15 @@ module Api
       before_action :set_filter_params, only: :index
 
       def index
-        @flows_result = Api::V3::Flows::Filter.new(@context, @filter_params).call
+        ensure_required_param_present(:include_columns)
+        ensure_required_param_present(:flow_quant)
+        ensure_required_param_present(:year_start)
+        @flows_result = Api::V3::Flows::Filter.new(
+          @context, @filter_params
+        ).call
 
         if @flows_result.errors.any?
-          render json: @flows_result.errors
+          render json: {errors: @flows_result.errors}, status: 400
         else
           render json: @flows_result,
                  adapter: :attributes,

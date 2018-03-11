@@ -11,6 +11,10 @@
     font-family: $font-family-2;
     font-weight: 300;
     line-height: 1.58;
+
+    @media screen and (max-width: $breakpoint-foundation-medium) {
+      font-size: 20px;
+    }
   }
 
   .sentence-selector-container {

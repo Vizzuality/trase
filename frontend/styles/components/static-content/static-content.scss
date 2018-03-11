@@ -1,9 +1,6 @@
 .c-static-content {
-
-  @media only screen and (max-width: $breakpoint-foundation-small)  {
-    background: $light-gray;
-    border-bottom: 1px solid rgba($charcoal-grey, .2);
-  }
+  background: $light-gray;
+  border-bottom: 1px solid $charcoal-grey-faded-a-lot;
 
   .container {
     padding-top: 56px;
