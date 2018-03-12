@@ -70,10 +70,10 @@ class Explore extends React.PureComponent {
       selectedTableColumn
     } = this.props;
 
-    let link = {};
+    let link = null;
     if (selectedContextId === 1) {
       const selectedTable = this.items.find(i => i.value === selectedTableColumn);
-      link = typeof selectedTable !== 'undefined' ? selectedTable.link : {};
+      link = typeof selectedTable !== 'undefined' ? selectedTable.link : null;
     }
 
     return (
