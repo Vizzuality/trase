@@ -46,7 +46,7 @@ module Content
     end
 
     def reset_highlighted_flag
-      return true unless highlighted
+      return true unless highlighted && highlighted_changed?
       Content::Post.update_all(highlighted: false)
     end
   end
