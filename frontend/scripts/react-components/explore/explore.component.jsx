@@ -69,7 +69,13 @@ class Explore extends React.PureComponent {
       isSubnational,
       selectedTableColumn
     } = this.props;
-    const { link } = this.items.find(i => i.value === selectedTableColumn) || {};
+
+    let link = {};
+    if (selectedContextId === 1) {
+      const selectedTable = this.items.find(i => i.value === selectedTableColumn);
+      link = typeof selectedTable !== 'undefined' ? selectedTable.link : {};
+    }
+
     return (
       <div className="l-explore">
         <div className="c-explore">
