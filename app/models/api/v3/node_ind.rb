@@ -1,3 +1,26 @@
+# == Schema Information
+#
+# Table name: node_inds
+#
+#  id         :integer          not null, primary key
+#  node_id    :integer          not null
+#  ind_id     :integer          not null
+#  year       :integer
+#  value      :float            not null
+#  created_at :datetime         not null
+#
+# Indexes
+#
+#  index_node_inds_on_node_id         (node_id)
+#  node_inds_ind_id_idx               (ind_id)
+#  node_inds_node_id_ind_id_year_key  (node_id,ind_id,year) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (ind_id => inds.id) ON DELETE => cascade ON UPDATE => cascade
+#  fk_rails_...  (node_id => nodes.id) ON DELETE => cascade
+#
+
 module Api
   module V3
     class NodeInd < BlueTable

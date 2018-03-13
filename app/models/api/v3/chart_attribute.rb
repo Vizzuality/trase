@@ -1,3 +1,24 @@
+# == Schema Information
+#
+# Table name: chart_attributes
+#
+#  id         :integer          not null, primary key
+#  chart_id   :integer          not null
+#  position   :integer
+#  years      :integer          is an Array
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  chart_attributes_chart_id_position_key  (chart_id,position) UNIQUE
+#  index_chart_attributes_on_chart_id      (chart_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (chart_id => charts.id) ON DELETE => cascade
+#
+
 module Api
   module V3
     class ChartAttribute < YellowTable

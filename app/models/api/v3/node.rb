@@ -1,3 +1,24 @@
+# == Schema Information
+#
+# Table name: nodes
+#
+#  id           :integer          not null, primary key
+#  node_type_id :integer          not null
+#  name         :text             not null
+#  geo_id       :text
+#  is_unknown   :boolean          default(FALSE), not null
+#  created_at   :datetime         not null
+#  main_id      :integer
+#
+# Indexes
+#
+#  nodes_node_type_id_idx  (node_type_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (node_type_id => node_types.id) ON DELETE => cascade
+#
+
 module Api
   module V3
     class Node < BlueTable

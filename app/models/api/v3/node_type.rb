@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: node_types
+#
+#  id         :integer          not null, primary key
+#  name       :text             not null
+#  created_at :datetime         not null
+#
+# Indexes
+#
+#  node_types_name_key  (name) UNIQUE
+#
+
 module Api
   module V3
     class NodeType < BlueTable

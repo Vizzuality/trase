@@ -1,3 +1,27 @@
+# == Schema Information
+#
+# Table name: attributes_mv
+#
+#  id                           :integer          primary key
+#  original_type                :text
+#  original_id                  :integer
+#  name                         :text
+#  display_name                 :text
+#  unit                         :text
+#  unit_type                    :text
+#  tooltip_text                 :text
+#  is_visible_on_actor_profile  :boolean
+#  is_visible_on_place_profile  :boolean
+#  is_temporal_on_actor_profile :boolean
+#  is_temporal_on_place_profile :boolean
+#  aggregate_method             :text
+#
+# Indexes
+#
+#  attributes_mv_name_idx      (name) UNIQUE
+#  index_attributes_mv_id_idx  (id) UNIQUE
+#
+
 module Api
   module V3
     module Readonly

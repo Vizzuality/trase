@@ -1,3 +1,28 @@
+# == Schema Information
+#
+# Table name: resize_by_attributes
+#
+#  id           :integer          not null, primary key
+#  context_id   :integer          not null
+#  group_number :integer          default(1), not null
+#  position     :integer          not null
+#  tooltip_text :text
+#  years        :integer          is an Array
+#  is_disabled  :boolean          default(FALSE), not null
+#  is_default   :boolean          default(FALSE), not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
+# Indexes
+#
+#  index_resize_by_attributes_on_context_id                   (context_id)
+#  resize_by_attributes_context_id_group_number_position_key  (context_id,group_number,position) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (context_id => contexts.id) ON DELETE => cascade
+#
+
 module Api
   module V3
     class ResizeByAttribute < YellowTable

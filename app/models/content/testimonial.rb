@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: content.testimonials
+#
+#  id                 :integer          not null, primary key
+#  quote              :text             not null
+#  author_name        :text             not null
+#  author_title       :text             not null
+#  image_file_name    :string
+#  image_content_type :string
+#  image_file_size    :integer
+#  image_updated_at   :datetime
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#
+
 module Content
   class Testimonial < Content::Base
     validates :quote, presence: true

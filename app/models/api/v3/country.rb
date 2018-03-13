@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: countries
+#
+#  id         :integer          not null, primary key
+#  name       :text             not null
+#  iso2       :text             not null
+#  created_at :datetime         not null
+#
+# Indexes
+#
+#  countries_iso2_key  (iso2) UNIQUE
+#
+
 module Api
   module V3
     class Country < BlueTable

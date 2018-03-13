@@ -1,3 +1,28 @@
+# == Schema Information
+#
+# Table name: qual_properties
+#
+#  id                           :integer          not null, primary key
+#  qual_id                      :integer          not null
+#  display_name                 :text             not null
+#  tooltip_text                 :text
+#  is_visible_on_place_profile  :boolean          default(FALSE), not null
+#  is_visible_on_actor_profile  :boolean          default(FALSE), not null
+#  is_temporal_on_place_profile :boolean          default(FALSE), not null
+#  is_temporal_on_actor_profile :boolean          default(FALSE), not null
+#  created_at                   :datetime         not null
+#  updated_at                   :datetime         not null
+#
+# Indexes
+#
+#  index_qual_properties_on_qual_id  (qual_id)
+#  qual_properties_qual_id_key       (qual_id) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (qual_id => quals.id) ON DELETE => cascade ON UPDATE => cascade
+#
+
 module Api
   module V3
     class QualProperty < YellowTable

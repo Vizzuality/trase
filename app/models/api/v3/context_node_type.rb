@@ -1,3 +1,25 @@
+# == Schema Information
+#
+# Table name: context_node_types
+#
+#  id              :integer          not null, primary key
+#  context_id      :integer          not null
+#  node_type_id    :integer          not null
+#  column_position :integer          not null
+#  created_at      :datetime         not null
+#
+# Indexes
+#
+#  context_node_types_context_id_node_type_id_key  (context_id,node_type_id) UNIQUE
+#  index_context_node_types_on_context_id          (context_id)
+#  index_context_node_types_on_node_type_id        (node_type_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (context_id => contexts.id) ON DELETE => cascade
+#  fk_rails_...  (node_type_id => node_types.id) ON DELETE => cascade
+#
+
 module Api
   module V3
     class ContextNodeType < BlueTable

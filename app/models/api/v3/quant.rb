@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: quants
+#
+#  id         :integer          not null, primary key
+#  name       :text             not null
+#  unit       :text
+#  created_at :datetime         not null
+#
+# Indexes
+#
+#  quants_name_key  (name) UNIQUE
+#
+
 module Api
   module V3
     class Quant < BlueTable
