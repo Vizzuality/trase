@@ -1,35 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Dropdown from 'react-components/shared/dropdown.component';
 import isEqual from 'lodash/isEqual';
+import uniq from 'lodash/uniq';
+
+import Dropdown from 'react-components/shared/dropdown.component';
 
 class SentenceSelector extends React.Component {
-  static getDefaultState(contextsDict) {
-    const selectedCommodity = Object.keys(contextsDict)[0] || null;
-    return {
-      selectedCommodity,
-      selectedCountry: selectedCommodity ? (contextsDict[selectedCommodity][0] || {}).name : null
-    };
-  }
-
   constructor(props) {
     super(props);
-    this.state = SentenceSelector.getDefaultState(props.contextsDict);
+
+    this.state = this.getDefaultState(props);
+
     this.onSelectCommodity = this.onSelectCommodity.bind(this);
     this.onSelectCountry = this.onSelectCountry.bind(this);
-    this.getContextId = this.getContextId.bind(this);
-    this.selectContextId = this.selectContextId.bind(this);
-    this.setDefaultContext = this.setDefaultContext.bind(this);
   }
 
   componentDidMount() {
-    const contextId = this.getContextId();
-    if (contextId) this.props.selectContext(contextId);
+    this.selectContextId();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!isEqual(nextProps.contexts, this.props.contexts)) {
+      this.setState(this.getDefaultState(nextProps), this.selectContextId);
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     const conditions = [
-      !isEqual(nextProps.contextsDict, this.state.contextsDict),
+      !isEqual(nextProps.contexts, this.props.contexts),
       nextState.selectedCommodity !== this.state.selectedCommodity,
       nextState.selectedCountry !== this.state.selectedCountry
     ];
@@ -37,30 +35,22 @@ class SentenceSelector extends React.Component {
     return conditions.includes(true);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { contextsDict } = this.props;
-    const { selectedCommodity, selectedCountry } = SentenceSelector.getDefaultState(contextsDict);
-    if (
-      (!prevState.selectedCommodity || !prevState.selectedCountry) &&
-      selectedCommodity !== null &&
-      selectedCountry !== null
-    ) {
-      this.setDefaultContext(contextsDict);
-    }
-  }
-
   componentWillUnmount() {
     this.props.resetContext();
   }
 
   onSelectCommodity(selectedCommodity) {
-    const { contextsDict } = this.props;
-    const selectedCountry = (contextsDict[selectedCommodity][0] || {}).name;
+    const { contexts } = this.props;
+
+    const countryNames = contexts
+      .filter(c => c.commodityName === selectedCommodity)
+      .map(c => c.countryName);
+
     this.setState(
-      {
-        selectedCommodity,
-        selectedCountry
-      },
+      state => ({
+        selectedCountry: countryNames.find(c => c === state.selectedCountry) || countryNames[0],
+        selectedCommodity
+      }),
       this.selectContextId
     );
   }
@@ -74,30 +64,43 @@ class SentenceSelector extends React.Component {
     );
   }
 
-  getContextId() {
-    const { selectedCommodity, selectedCountry } = this.state;
-    const { contextsDict } = this.props;
-    const countries = contextsDict[selectedCommodity] || [];
-    const context = countries.find(c => c.name === selectedCountry) || {};
-    return context.id;
+  getDefaultState(props) {
+    const defaultContext = props.contexts.find(c => c.isDefault) || props.contexts[0];
+
+    return {
+      selectedCommodity: defaultContext ? defaultContext.commodityName : null,
+      selectedCountry: defaultContext ? defaultContext.countryName : null
+    };
   }
 
-  setDefaultContext(contextsDict) {
-    this.setState(SentenceSelector.getDefaultState(contextsDict), this.selectContextId);
+  getContextId() {
+    const { selectedCommodity, selectedCountry } = this.state;
+    const { contexts } = this.props;
+
+    const context =
+      contexts.find(
+        c => c.countryName === selectedCountry && c.commodityName === selectedCommodity
+      ) || {};
+
+    return context.id;
   }
 
   selectContextId() {
     const { selectContext } = this.props;
     const contextId = this.getContextId();
-    if (contextId) return selectContext(contextId);
-    return undefined;
+
+    if (contextId) selectContext(contextId);
   }
 
   render() {
     const { selectedCommodity, selectedCountry } = this.state;
-    const { contextsDict } = this.props;
-    const countries = contextsDict[selectedCommodity] || [];
-    const countryList = countries.map(c => c.name);
+    const { contexts } = this.props;
+
+    const commodityNames = uniq(contexts.map(c => c.commodityName));
+    const countryNames = contexts
+      .filter(c => c.commodityName === selectedCommodity)
+      .map(c => c.countryName);
+
     return (
       <div className="c-sentence-selector">
         <p className="sentence-selector-text">
@@ -107,13 +110,13 @@ class SentenceSelector extends React.Component {
           <p className="sentence-selector-text">with the trade of</p>
           <Dropdown
             value={selectedCommodity}
-            valueList={Object.keys(contextsDict)}
+            valueList={commodityNames}
             onValueSelected={this.onSelectCommodity}
           />
           <span className="sentence-selector-text">from</span>
           <Dropdown
             value={selectedCountry}
-            valueList={countryList}
+            valueList={countryNames}
             onValueSelected={this.onSelectCountry}
           />
         </div>
@@ -123,9 +126,14 @@ class SentenceSelector extends React.Component {
 }
 
 SentenceSelector.propTypes = {
-  contextsDict: PropTypes.objectOf(
-    PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string, id: PropTypes.number }))
-  ).isRequired,
+  contexts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      commodityName: PropTypes.string,
+      countryName: PropTypes.string,
+      isDefault: PropTypes.bool
+    })
+  ),
   selectContext: PropTypes.func,
   resetContext: PropTypes.func
 };
