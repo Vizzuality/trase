@@ -11,7 +11,9 @@ RSpec.describe 'Download Attributes', type: :request do
 
   describe 'GET /api/v3/contexts/:context_id/download_attributes' do
     before(:each) do
-      SchemaRevamp.new.refresh
+      Api::V3::Readonly::Attribute.refresh
+      Api::V3::Readonly::DownloadAttribute.refresh
+      ActiveRecord::Base.connection.execute('COMMIT') # TODO: make default conn
     end
 
     it 'has the correct response structure' do

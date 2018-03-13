@@ -9,7 +9,6 @@ AllCops:
     - 'config/initializers/*'
     - 'config/*'
     - 'frontend/node_modules/**/*'
-    - lib/schema_revamp.rb
 
 Bundler/OrderedGems:
   Enabled: false
