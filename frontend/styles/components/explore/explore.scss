@@ -8,6 +8,10 @@
   .subtitle {
     font-weight: $font-weight-bold;
   }
+
+  > .row {
+    width: 100%;
+  }
 }
 
 .explore-section {
