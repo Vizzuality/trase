@@ -2,7 +2,7 @@ module Api
   module V3
     module Readonly
       class RecolorByAttribute < Api::V3::Readonly::BaseModel
-        self.table_name = 'revamp.recolor_by_attributes_mv'
+        self.table_name = 'recolor_by_attributes_mv'
         belongs_to :context
         belongs_to :readonly_attribute, foreign_key: :attribute_id, class_name: 'Attribute'
 

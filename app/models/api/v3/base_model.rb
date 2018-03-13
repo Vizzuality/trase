@@ -4,8 +4,6 @@ module Api
       include Api::V3::Import::Helpers
       self.abstract_class = true
 
-      establish_connection DB_REVAMP
-
       class << self
         def column_comment(column_name)
           tmp = column_comments.find do |cc|

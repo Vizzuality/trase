@@ -41,7 +41,6 @@ For the API:
 - Copy `.env.sample` to `.env` and replace the values accordingly. See the API documentation below for more information.
 - To setup the development database, first create a database in PostgreSQL and then import a base dump into it
 - Next, run `rake db:migrate` and `rake content:db:migrate` to update its structure
-- only while working on API V3 migration: please follow instructions in "Schema revamp: migration and documentation"
 
 You can now use `rails server` to start the API application
 
@@ -103,7 +102,7 @@ The project's main configuration values can be set using [environment variables]
 * TRASE_REMOTE_PASSWORD=
 * TRASE_REMOTE_SERVER=trase_server
 * TRASE_LOCAL_FDW_SCHEMA=main # this schema in local database where remote tables are mapped
-* TRASE_LOCAL_SCHEMA=revamp # this schema in local database where target tables are
+* TRASE_LOCAL_SCHEMA=public # this schema in local database where target tables are
 
 ## Background jobs
 
@@ -188,31 +187,21 @@ SELECT relname, seq_scan-idx_scan AS too_much_seq, CASE WHEN seq_scan-idx_scan>0
 SELECT indexrelid::regclass as index, relid::regclass as table, 'DROP INDEX ' || indexrelid::regclass || ';' as drop_statement FROM pg_stat_user_indexes JOIN pg_index USING (indexrelid) WHERE idx_scan = 0 AND indisunique is false;
 `
 
-## Schema revamp: migration and documentation
-
-In the transition period as work on changing the database schema continues, new tables are living in a separate `revamp` schema (~namespace), whereas the default `public` schema still contains the old tables. This means we can work on both schemas as necessary.
-
-To migrate the database:
-
-1. run `bundle exec rake db:migrate` to create revamped database objects
-2. run the queries in `db/revamp_cleanup.sql` to remove duplicates from the original database
-3. run `bundle exec rake db:revamp:copy` to copy data between old and new structure
-4. `bundle exec rake db:revamp:doc:sql`
-5. ideally after running all this you shouldn't have any changes on the structure.sql file, other than PostgreSQL version in some cases
+### Database documentation
 
 Schema documentation is generated directly from the database and requires the following steps:
 
 1. The file `db/schema_comments.yml` contains documentation of schema objects, which is prepared in a way to easily insert it into the database schema itself using `COMMENT IS` syntax.
 That is done using a dedicated rake task:
 
-    `rake db:revamp:doc:sql`
+    `rake db:doc:sql`
 
     Note: this rake task also creates a new dump of structure.sql, as comments are part of the schema.
 2. Once comments are in place, it is possible to generate html documentation of the database schema using an external tool. One os such tools is SchemaSpy, which is an open source java library.
     1. install [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
     2. install [Graphviz](http://www.graphviz.org/)
     3. the [SchemaSpy 6.0.0-rc2](http://schemaspy.readthedocs.io/en/latest/index.html) jar file and [PostgreSQL driver](https://jdbc.postgresql.org/download.html) file are already in doc/db
-    4. `rake db:revamp:doc:html`
+    4. `rake db:doc:html`
     5. output files are in `doc/db/all_tables` (complete schema) and `doc/db/blue_tables` (only blue tables)
 3. to update the [GH pages site](https://vizzuality.github.io/trase-api/) all the generated files from `doc/db/all_tables` and `doc/db/blue_tables` need to land in the top-level of the `gh-pages` branch. This is currently a manual process, easiest to have the repo checked out twice on local drive to be able to copy between branches (not great and not final.)
 

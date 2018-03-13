@@ -52,12 +52,12 @@ maa.#{attribute_type}_id = #{node_values}.#{attribute_type}_id").
 
         def select_list(attribute_type, node_values)
           dual_layer_bucket = <<~SQL
-            revamp.BUCKET_INDEX(
+            BUCKET_INDEX(
               dual_layer_buckets, SUM(#{node_values}.value)
             ) AS dual_layer_bucket
           SQL
           single_layer_bucket = <<~SQL
-            revamp.BUCKET_INDEX(
+            BUCKET_INDEX(
               single_layer_buckets, SUM(#{node_values}.value)
             ) AS single_layer_bucket
           SQL

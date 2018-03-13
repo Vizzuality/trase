@@ -2,7 +2,7 @@ module Api
   module V3
     module Readonly
       class DownloadAttribute < Api::V3::Readonly::BaseModel
-        self.table_name = 'revamp.download_attributes_mv'
+        self.table_name = 'download_attributes_mv'
         self.primary_key = 'id'
 
         belongs_to :context

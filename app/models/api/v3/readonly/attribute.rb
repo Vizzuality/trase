@@ -2,7 +2,7 @@ module Api
   module V3
     module Readonly
       class Attribute < Api::V3::Readonly::BaseModel
-        self.table_name = 'revamp.attributes_mv'
+        self.table_name = 'attributes_mv'
         self.primary_key = 'id'
 
         def self.select_options
