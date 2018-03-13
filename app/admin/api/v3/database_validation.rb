@@ -1,5 +1,5 @@
 ActiveAdmin.register_page 'Data Validation' do
-  menu parent: 'Database'
+  menu parent: 'Database', unless: proc { Rails.env.production? }
 
   content do
     database_validations = Api::V3::DatabaseValidationReport.
