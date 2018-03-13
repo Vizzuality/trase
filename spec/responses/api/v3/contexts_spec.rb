@@ -22,7 +22,6 @@ RSpec.describe 'Get contexts', type: :request do
       Api::V3::Readonly::DownloadAttribute.refresh
       Api::V3::Readonly::ResizeByAttribute.refresh
       Api::V3::Readonly::RecolorByAttribute.refresh
-      ActiveRecord::Base.connection.execute('COMMIT') # TODO: make default conn
     end
 
     it 'has the correct response structure' do

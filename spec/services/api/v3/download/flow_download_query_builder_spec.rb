@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
   before do
-    Api::V3::Flow.delete_all # TODO
     Api::V3::DownloadAttribute.skip_callback(:commit, :after, :refresh_dependencies)
   end
   after do
@@ -12,10 +11,6 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
   describe :query do
     before(:each) do
       Api::V3::Readonly::DownloadFlow.refresh
-      ActiveRecord::Base.connection.execute('COMMIT')
-    end
-    after(:each) do
-      Api::V3::Flow.delete_all # no idea why db cleaner doesn't do that ;(
     end
 
     it 'should return all flows when no filter applied' do
