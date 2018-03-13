@@ -10,10 +10,16 @@ RSpec.describe Content::Post, type: :model do
   end
 
   context 'when saving with highlighted flag unset' do
-    it 'does not de-highlight previously highlighted post' do
-      old_post = FactoryBot.create(:post, highlighted: true)
+    it 'keeps post highlighted when another post created' do
+      highlighted_post = FactoryBot.create(:post, highlighted: true)
       FactoryBot.create(:post, highlighted: false)
-      expect(old_post.reload).to be_highlighted
+      expect(highlighted_post.reload).to be_highlighted
+    end
+
+    it 'keeps post highlighted when another property updated' do
+      highlighted_post = FactoryBot.create(:post, highlighted: true)
+      highlighted_post.update_attributes(title: 'zonk')
+      expect(highlighted_post.reload).to be_highlighted
     end
   end
 end
