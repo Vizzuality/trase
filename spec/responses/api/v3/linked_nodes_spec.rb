@@ -9,7 +9,7 @@ RSpec.describe 'Linked nodes', type: :request do
       query_params = "target_column_id=#{api_v3_municipality_node_type.id}&years[]=2015&nodes_ids[]=#{api_v3_exporter1_node.id}"
       get "/api/v3/contexts/#{api_v3_context.id}/linked_nodes?#{query_params}"
 
-      expect(@response.status).to eq 200
+      expect(@response).to have_http_status(:ok)
       expect(@response).to match_response_schema('get_linked_geo_ids')
     end
   end

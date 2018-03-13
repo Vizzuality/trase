@@ -23,7 +23,7 @@ RSpec.describe 'Flows', type: :request do
     it 'requires include_columns' do
       get "/api/v3/contexts/#{api_v3_context.id}/flows",
           params: filter_params.except(:include_columns)
-      expect(@response.status).to eq 500
+      expect(@response).to have_http_status(:bad_request)
       expect(JSON.parse(@response.body)).to eq(
         'error' => 'param is missing or the value is empty: Required param include_columns missing'
       )
@@ -31,7 +31,7 @@ RSpec.describe 'Flows', type: :request do
     it 'requires flow_quant' do
       get "/api/v3/contexts/#{api_v3_context.id}/flows",
           params: filter_params.except(:flow_quant)
-      expect(@response.status).to eq 500
+      expect(@response).to have_http_status(:bad_request)
       expect(JSON.parse(@response.body)).to eq(
         'error' => 'param is missing or the value is empty: Required param flow_quant missing'
       )
@@ -39,7 +39,7 @@ RSpec.describe 'Flows', type: :request do
     it 'requires year_start' do
       get "/api/v3/contexts/#{api_v3_context.id}/flows",
           params: filter_params.except(:year_start)
-      expect(@response.status).to eq 500
+      expect(@response).to have_http_status(:bad_request)
       expect(JSON.parse(@response.body)).to eq(
         'error' => 'param is missing or the value is empty: Required param year_start missing'
       )
@@ -47,7 +47,7 @@ RSpec.describe 'Flows', type: :request do
     it 'has the correct response structure' do
       get "/api/v3/contexts/#{api_v3_context.id}/flows",
           params: filter_params
-      expect(@response.status).to eq 200
+      expect(@response).to have_http_status(:ok)
       expect(@response).to match_response_schema('flows')
     end
   end

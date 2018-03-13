@@ -22,7 +22,7 @@ RSpec.describe 'Place profile', type: :request do
     it 'has the correct response structure' do
       get "/api/v3/contexts/#{api_v3_context.id}/nodes/#{api_v3_municipality_node.id}/place"
 
-      expect(@response.status).to eq 200
+      expect(@response).to have_http_status(:ok)
       expect(@response).to match_response_schema('v3_place_profile')
     end
   end
