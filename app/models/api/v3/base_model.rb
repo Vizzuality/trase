@@ -1,6 +1,6 @@
 module Api
   module V3
-    class BaseModel < ActiveRecord::Base
+    class BaseModel < ApplicationRecord
       include Api::V3::Import::Helpers
       self.abstract_class = true
 
