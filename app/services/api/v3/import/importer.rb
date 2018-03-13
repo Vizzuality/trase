@@ -74,10 +74,19 @@ module Api
 
         def call(database_update)
           @database_update = database_update
-          with_search_path(ENV['TRASE_LOCAL_SCHEMA']) do
-            backup
-            import
+          Api::V3::BaseModel.transaction do
+            with_search_path(ENV['TRASE_LOCAL_SCHEMA']) do
+              backup
+              import
+              database_update.update_attribute(
+                :status, Api::V3::DatabaseUpdate::FINISHED
+              )
+            end
           end
+        rescue => e
+          database_update.update_attribute(:status, Api::V3::DatabaseUpdate::FAILED)
+          database_update.update_attribute(:error, e.message)
+          raise # re-raise same error
         end
 
         private
