@@ -34,11 +34,11 @@ class Hero extends React.Component {
 
   onEnded(plyr) {
     plyr.fullscreen.exit();
-    plyr.restart();
   }
 
   onClickPlay() {
     const { plyr } = this.video;
+
     if (plyr.fullscreen.active === false) {
       plyr.play();
       plyr.fullscreen.enter();

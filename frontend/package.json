@@ -97,7 +97,7 @@
     "leaflet.utfgrid": "git+https://github.com/danzel/Leaflet.utfgrid.git",
     "lodash": "^4.17.5",
     "morgan": "^1.9.0",
-    "plyr": "^3.0.0-beta.15",
+    "plyr": "^3.0.0-beta.20",
     "pretty-error": "^2.1.1",
     "prop-types": "^15.6.0",
     "query-string": "^5.1.0",
@@ -116,8 +116,8 @@
     "redux-thunk": "^2.2.0",
     "remark": "^9.0.0",
     "remark-react": "^4.0.1",
-    "topojson": "^3.0.2",
     "tooltip.js": "^1.1.7",
+    "topojson": "^3.0.2",
     "turf-linestring": "^1.0.2"
   },
   "engines": {
