@@ -70,7 +70,7 @@ const appReducerTypes = PropTypes => ({
   currentDropdown: PropTypes.string,
   modal: PropTypes.shape({
     visibility: PropTypes.bool,
-    modalParams: PropTypes.array
+    modalParams: PropTypes.object
   }).isRequired
 });
 
