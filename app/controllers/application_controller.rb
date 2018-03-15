@@ -24,6 +24,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_caching_headers
+    return true unless Rails.env.production?
     expires_in 2.hours, public: true
   end
 
