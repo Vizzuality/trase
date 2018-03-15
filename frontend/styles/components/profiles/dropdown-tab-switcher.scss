@@ -13,11 +13,16 @@
     color: $charcoal-grey;
     text-transform: uppercase;
 
+    ul {
+      display: flex;
+    }
+
+    .tab-switcher-title,
     li:not(:last-child) {
       margin-right: 21px;
     }
 
-    li:not(.tab-switcher-title) {
+    li {
       position: relative;
       opacity: 0.3;
       cursor: pointer;

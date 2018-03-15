@@ -28,25 +28,26 @@ class DropdownTabSwitcher extends Component {
 
     return (
       <div className="c-dropdown-tab-switcher">
-        <ul className="tab-switcher hide-for-small">
-          <li className="tab-switcher-title">
+        <div className="tab-switcher hide-for-small">
+          <div className="tab-switcher-title">
             {title}
             {titleTooltip && <Tooltip text={titleTooltip} />}
-          </li>
-
-          {items.map((item, index) => (
-            <li
-              key={index}
-              className={classnames('tab', {
-                selected: index === selectedIndex
-              })}
-              data-key={item}
-              onClick={() => this.handleSelect(index)}
-            >
-              {itemTabRenderer ? itemTabRenderer(item, index) : item}
-            </li>
-          ))}
-        </ul>
+          </div>
+          <ul>
+            {items.map((item, index) => (
+              <li
+                key={index}
+                className={classnames('tab', {
+                  selected: index === selectedIndex
+                })}
+                data-key={item}
+                onClick={() => this.handleSelect(index)}
+              >
+                {itemTabRenderer ? itemTabRenderer(item, index) : item}
+              </li>
+            ))}
+          </ul>
+        </div>
         <div className="dropdown-switcher show-for-small">
           <Dropdown
             label={title}
