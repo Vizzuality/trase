@@ -43,7 +43,7 @@ const API_ENDPOINTS = {
   [GET_JSON_DATA_DOWNLOAD_FILE_URL]: { api: 3, endpoint: '/contexts/$context_id$/download.json' },
   [GET_LINKED_GEO_IDS_URL]: { api: 3, endpoint: '/contexts/$context_id$/linked_nodes' },
   [POST_SUBSCRIBE_NEWSLETTER_URL]: { api: 3, endpoint: '/newsletter_subscriptions' },
-  [GET_SITE_DIVE_URL]: { api: 'content', endpoint: '/site_dive' },
+  [GET_SITE_DIVE_URL]: { api: 'content', endpoint: '/site_dives' },
   [GET_POSTS_URL]: { api: 'content', endpoint: '/posts' },
   [GET_TWEETS_URL]: { api: 'content', endpoint: '/tweets' },
   [GET_DISCLAIMER_URL]: { api: 'local', endpoint: 'disclaimer.json' },

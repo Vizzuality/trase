@@ -89,20 +89,13 @@ export function displayStoryModal(storyId) {
         dispatch({
           type: DISPLAY_STORY_MODAL,
           payload: {
-            visibility: false,
+            visibility: true,
             modalParams: data
           }
         })
       )
       .catch(err => {
-        console.error(err);
-        return dispatch({
-          type: DISPLAY_STORY_MODAL,
-          payload: {
-            visibility: false,
-            modalParams: null
-          }
-        });
+        console.error('Error loading site dive.', err);
       });
   };
 }
