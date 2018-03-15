@@ -203,7 +203,7 @@ const toolReducer = {
       selectedYears: [selectedContext.defaultYear, selectedContext.defaultYear],
       selectedRecolorBy: defaultRecolorBy || { type: 'none', name: 'none' },
       selectedResizeBy: defaultResizeBy,
-      selectedBiomeFilter: defaultBiomeFilterBy,
+      selectedBiomeFilter: defaultBiomeFilterBy || { name: 'none', value: 'none' },
       selectedMapContextualLayers: selectedContext.defaultContextLayers || undefined,
       selectedMapBasemap: selectedContext.defaultBasemap || 'satellite',
       detailedView: false,
