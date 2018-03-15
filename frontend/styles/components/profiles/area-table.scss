@@ -30,9 +30,11 @@
         vertical-align: middle;
         min-width: 150px;
 
-        > div {
+        .align-content-right {
           display: flex;
           align-items: center;
+          justify-content: flex-end;
+          text-align: right;
         }
 
         &:not(:first-child) {

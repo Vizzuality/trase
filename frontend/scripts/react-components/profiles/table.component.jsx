@@ -70,11 +70,8 @@ class Table extends Component {
       <thead>
         <tr className="table-row">
           {data.included_columns.map((column, columnIndex) => (
-            <th
-              key={columnIndex}
-              className={cx('header-cell', { '_text-align-right': columnIndex > 0 })}
-            >
-              <div>
+            <th key={columnIndex} className="header-cell">
+              <div className={cx({ 'align-content-right': columnIndex > 0 })}>
                 <span className="header-name">{column.name}</span>
                 {column.tooltip && <Tooltip text={column.tooltip} />}
               </div>
