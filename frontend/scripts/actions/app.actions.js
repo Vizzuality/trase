@@ -93,6 +93,9 @@ export function displayStoryModal(storyId) {
             modalParams: data
           }
         })
-      );
+      )
+      .catch(err => {
+        console.error('Error loading site dive.', err);
+      });
   };
 }
