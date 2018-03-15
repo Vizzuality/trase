@@ -30,6 +30,7 @@
     .dropdown-title {
       text-align: center;
       padding: 0 25px 0 0;
+      font-size: $font-size-big;
     }
 
     .dropdown-title::after {
@@ -46,7 +47,7 @@
 
       > .dropdown-item {
         color: $charcoal-grey;
-        font-size: 13px;
+        font-size: $font-size-xx-regular;
       }
     }
   }
