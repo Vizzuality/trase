@@ -56,10 +56,18 @@ class SentenceSelector extends React.Component {
   }
 
   onSelectCountry(selectedCountry) {
+    const { contexts } = this.props;
+
+    const commodityNames = contexts
+      .filter(c => c.countryName === selectedCountry)
+      .map(c => c.commodityName);
+
     this.setState(
-      {
+      state => ({
+        selectedCommodity:
+          commodityNames.find(c => c === state.selectedCommodity) || commodityNames[0],
         selectedCountry
-      },
+      }),
       this.selectContextId
     );
   }
@@ -97,9 +105,7 @@ class SentenceSelector extends React.Component {
     const { contexts } = this.props;
 
     const commodityNames = uniq(contexts.map(c => c.commodityName));
-    const countryNames = contexts
-      .filter(c => c.commodityName === selectedCommodity)
-      .map(c => c.countryName);
+    const countryNames = uniq(contexts.map(c => c.countryName));
 
     return (
       <div className="c-sentence-selector">
