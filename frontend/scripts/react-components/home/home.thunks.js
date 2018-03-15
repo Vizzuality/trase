@@ -1,12 +1,15 @@
+import get from 'lodash/get';
+
 import { loadInitialData, RESET_TOOL_STATE } from 'actions/tool.actions';
 import { getHomeContent } from 'react-components/home/home.actions';
 
 export const resetToolThunk = (dispatch, getState, { action }) => {
-  const { type, query = {}, prev } = getState().location;
-  if (action.type === 'tool' && prev.type && type !== 'tool') {
-    if (!query.state) {
-      dispatch({ type: RESET_TOOL_STATE, query });
-    }
+  const { type } = getState().location;
+
+  // only reset if redirects to tool page not from tool page
+  // and append action payload state with initial one
+  if (action.type === 'tool' && type !== 'tool') {
+    dispatch({ type: RESET_TOOL_STATE, payload: get(action, 'payload.query.state', {}) });
   }
 };
 
