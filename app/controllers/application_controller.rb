@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
     render json: {error: exception.message}, status: 400
   end
 
+  include CacheUtils
+
   def data_update_supported?
     !Rails.env.production?
   end
