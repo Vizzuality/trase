@@ -16,7 +16,9 @@ class Hero extends React.Component {
     this.videoEventHandlers = {
       pause: this.onPause,
       exitfullscreen: this.onExitFullScreen,
-      ended: this.onEnded
+      enterfullscreen: this.onEnterFullScreen,
+      ended: this.onEnded,
+      ready: this.onPlyrReady
     };
 
     this.onClickPlay = this.onClickPlay.bind(this);
@@ -39,10 +41,8 @@ class Hero extends React.Component {
   onClickPlay() {
     const { plyr } = this.video;
 
-    if (plyr.fullscreen.active === false) {
-      plyr.play();
-      plyr.fullscreen.enter();
-    }
+    plyr.play();
+    plyr.fullscreen.enter();
   }
 
   getVideoRef(ref) {
@@ -79,6 +79,7 @@ class Hero extends React.Component {
 
     return (
       <div className={cx('c-hero', className)}>
+        <AnimatedFlows />
         <div className="hero-content row align-middle">
           <div className="column small-12">
             <div className="hero-logo-container">
@@ -109,7 +110,6 @@ class Hero extends React.Component {
               </div>
             )}
         </div>
-        <AnimatedFlows />
       </div>
     );
   }

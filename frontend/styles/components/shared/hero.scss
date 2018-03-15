@@ -4,7 +4,6 @@
   position: relative;
   height: 600px;
   background-color: $charcoal-grey;
-  z-index: $z-above;
 
   &.-read-only {
     height: 400px;
@@ -26,10 +25,6 @@
   .responsive-container {
     position: absolute;
     top: 0;
-  }
-
-  .hero-content {
-    z-index: $z-above;
   }
 
   .hero-logo-container {

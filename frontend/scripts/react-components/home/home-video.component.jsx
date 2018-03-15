@@ -1,8 +1,9 @@
+/* eslint-disable jsx-a11y/media-has-caption */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import Plyr from 'plyr';
 import entries from 'lodash/toPairs';
-import cx from 'classnames';
 
 class HomeVideo extends React.PureComponent {
   constructor(props) {
@@ -16,19 +17,12 @@ class HomeVideo extends React.PureComponent {
 
   componentDidMount() {
     this.setupPlyr();
+    this.setupSource(this.props.videoId);
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.videoId !== this.props.videoId && this.plyr) {
-      this.plyr.source = {
-        type: 'video',
-        sources: [
-          {
-            src: this.props.videoId,
-            provider: 'youtube'
-          }
-        ]
-      };
+      this.setupSource(this.props.videoId);
     }
   }
 
@@ -45,6 +39,18 @@ class HomeVideo extends React.PureComponent {
     this.addEventListeners();
   }
 
+  setupSource(videoId) {
+    this.plyr.source = {
+      type: 'video',
+      sources: [
+        {
+          src: videoId,
+          provider: 'youtube'
+        }
+      ]
+    };
+  }
+
   addEventListeners() {
     const { events } = this.props;
     entries(events).forEach(([event, handler]) => this.plyr.on(event, () => handler(this.plyr)));
@@ -55,29 +61,14 @@ class HomeVideo extends React.PureComponent {
   }
 
   render() {
-    const { videoId, origin, className } = this.props;
-    return (
-      <div ref={this.getRef} className={cx('plyr__video-embed', className)} id="player">
-        <iframe
-          title="home video"
-          src={`https://www.youtube.com/embed/${videoId}?origin=${origin}&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1`}
-          allowFullScreen
-        />
-      </div>
-    );
+    return <video ref={this.getRef} controls crossOrigin playsInline />;
   }
 }
 
 HomeVideo.propTypes = {
-  origin: PropTypes.string,
   videoId: PropTypes.string.isRequired,
   options: PropTypes.object,
-  events: PropTypes.object,
-  className: PropTypes.string
-};
-
-HomeVideo.defaultProps = {
-  origin: window.location.origin
+  events: PropTypes.object
 };
 
 export default HomeVideo;

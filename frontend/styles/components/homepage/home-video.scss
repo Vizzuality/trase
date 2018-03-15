@@ -7,7 +7,7 @@
   margin-left: -1px; // otherwise video is not playing after first click on the button (only iOS Safari ofc) dunno why???
   min-width: 0;
 
-  &.plyr--playing.plyr--fullscreen-enabled {
+  &.plyr--playing {
     visibility: visible;
     height: 100%;
     width: 100%;
