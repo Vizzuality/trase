@@ -1,10 +1,13 @@
 module Api
   module V3
-    module PlaceNode
+    module Places
       class TrajectoryDeforestationPlot
         include Api::V3::Profiles::AttributesInitializer
 
-        def initialize(context, year, node)
+        # @param context [Api::V3::Context]
+        # @param node [Api::V3::Node]
+        # @param year [Integer]
+        def initialize(context, node, year)
           @context = context
           @year = year
           @node = node
@@ -12,7 +15,9 @@ module Api
           state_qual = @place_quals.get(NodeTypeName::STATE)
           @state_name = state_qual && state_qual['value']
           if @state_name.present?
-            @state_ranking = StateRanking.new(@context, @year, @node, @state_name)
+            @state_ranking = StateRanking.new(
+              @context, @node, @year, @state_name
+            )
           end
           initialize_attributes(attributes_list)
         end
@@ -27,18 +32,19 @@ module Api
             included_years: years,
             unit: 'ha',
             lines: @attributes.map do |attribute_hash|
+              attribute = attribute_hash[:attribute]
               data =
                 if attribute_hash[:state_average] && @state_ranking
                   @state_ranking.average_for_attribute(
-                    attribute_hash[:attribute]
+                    attribute
                   )
                 elsif attribute_hash[:attribute_type] == 'quant'
                   @node.temporal_place_quants.where(
-                    quant_id: attribute_hash[:attribute].id
+                    quant_id: attribute.id
                   )
                 elsif attribute_hash[:attribute_type] == 'ind'
                   @node.temporal_place_inds.where(
-                    inds_id: attribute_hash[:attribute].id
+                    inds_id: attribute.id
                   )
                 end
               values = Hash[
@@ -47,10 +53,12 @@ module Api
               {
                 name: attribute_hash[:name],
                 legend_name: attribute_hash[:legend_name],
-                legend_tooltip: attribute_hash[:attribute][:tooltip_text],
+                legend_tooltip: attribute[:tooltip_text],
                 type: attribute_hash[:type],
                 style: attribute_hash[:style],
-                values: years.map { |y| values[y] && values[y]['value'] }
+                values: years.map do |year|
+                  values[year] && values[year]['value']
+                end
               }
             end
           }
@@ -59,32 +67,31 @@ module Api
         private
 
         def initialize_min_max_year
-          min_year = nil
-          max_year = nil
+          min_years = []
+          max_years = []
           @attributes.each do |attribute_hash|
+            attribute_type = attribute_hash[:attribute_type]
+            attribute_id = attribute_hash[:attribute].id
             min_max =
-              if attribute_hash[:attribute_type] == 'quant'
+              if attribute_type == 'quant'
                 @node.temporal_place_quants.where(
-                  quant_id: attribute_hash[:attribute].id
+                  quant_id: attribute_id
                 )
-              elsif attribute_hash[:attribute_type] == 'ind'
+              elsif attribute_type == 'ind'
                 @node.temporal_place_inds.where(
-                  ind_id: attribute_hash[:attribute].id
+                  ind_id: attribute_id
                 )
-              end.except(:select).order(nil).
-                select('MIN(year), MAX(year)')
-
-            min_max = min_max.first
-            if min_max && min_max['min'].present? &&
-                (min_year.nil? || min_max['min'] < min_year)
-              min_year = min_max['min']
-            end
-            if min_max && min_max['max'].present? &&
-                (max_year.nil? || min_max['max'] > max_year)
-              max_year = min_max['max']
-            end
+              end
+            min_max = min_max.
+              except(:select).
+              select('MIN(year), MAX(year)').
+              order(nil).
+              first
+            next unless min_max
+            min_years << min_max['min']
+            max_years << min_max['max']
           end
-          [min_year, max_year]
+          [min_years.compact.min, max_years.compact.max]
         end
 
         def attributes_list

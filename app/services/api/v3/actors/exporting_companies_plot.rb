@@ -1,13 +1,16 @@
 module Api
   module V3
-    module ActorNode
+    module Actors
       class ExportingCompaniesPlot
         include Api::V3::Profiles::AttributesInitializer
 
-        def initialize(context, year, node)
+        # @param context [Api::V3::Context]
+        # @param node [Api::V3::Node]
+        # @year [Integer]
+        def initialize(context, node, year)
           @context = context
-          @year = year
           @node = node
+          @year = year
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
           initialize_attributes(attributes_list)
@@ -30,13 +33,40 @@ module Api
             @attributes.map { |attribute_hash| attribute_hash[:attribute] }
           )
 
+          attribute_totals_hash = attribute_totals_hash(
+            production_totals, attribute_totals
+          )
+
+          exports = production_totals.map do |total|
+            node_id = total['node_id']
+            {
+              name: total['name'],
+              id: node_id,
+              y: total['value'].to_f / value_divisor,
+              x: attribute_totals_hash[node_id]
+            }
+          end
+
+          {
+            dimension_y: {
+              name: 'Trade Volume', unit: unit
+            },
+            dimensions_x: @attributes.map do |attribute_hash|
+              attribute_hash.slice(:name, :unit)
+            end,
+            companies: exports
+          }
+        end
+
+        private
+
+        def attribute_totals_hash(production_totals, attribute_totals)
+          attribute_totals_hash = {}
           attribute_indexes = Hash[
             @attributes.map.each_with_index do |attribute_hash, idx|
               [attribute_hash[:attribute_name], idx]
             end
           ]
-
-          attribute_totals_hash = {}
           production_totals.each do |total|
             attribute_totals_hash[total['node_id']] ||= Array.new(
               @attributes.size
@@ -44,34 +74,13 @@ module Api
           end
           attribute_totals.each do |total|
             attribute_idx = attribute_indexes[total['attribute_name']]
-            if attribute_totals_hash.key?(total['node_id'])
-              attribute_totals_hash[total['node_id']][attribute_idx] = total['value']
+            node_id = total['node_id']
+            if attribute_totals_hash.key?(node_id)
+              attribute_totals_hash[node_id][attribute_idx] = total['value']
             end
           end
-
-          exports = production_totals.map do |total|
-            {
-              name: total['name'],
-              id: total['node_id'],
-              y: total['value'].to_f / value_divisor,
-              x: attribute_totals_hash[total['node_id']]
-            }
-          end
-
-          {
-            companies_sourcing: {
-              dimension_y: {
-                name: 'Trade Volume', unit: unit
-              },
-              dimensions_x: @attributes.map do |attribute_hash|
-                attribute_hash.slice(:name, :unit)
-              end,
-              companies: exports
-            }
-          }
+          attribute_totals_hash
         end
-
-        private
 
         def attributes_list
           [

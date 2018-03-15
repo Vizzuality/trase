@@ -30,6 +30,12 @@ Metrics/BlockLength:
     - 'spec/**/*'
     - 'lib/tasks/**/*'
 
+Metrics/LineLength:
+  Max: 80
+  Include:
+    - 'app/services/api/v3/actors/**/*'
+    - 'app/services/api/v3/places/**/*'
+
 Style/AndOr:
   Enabled: false
 

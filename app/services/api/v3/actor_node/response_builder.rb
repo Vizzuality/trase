@@ -1,3 +1,5 @@
+# @deprecated This allows to serve a combined response for the actor profile
+# and will be retired when we amend front-end to use the split responses
 module Api
   module V3
     module ActorNode
@@ -11,37 +13,36 @@ module Api
         end
 
         def call
-          @basic_attributes = Api::V3::ActorNode::BasicAttributes.new(
-            @context, @year, @node
+          @basic_attributes = Api::V3::Actors::BasicAttributes.new(
+            @context, @node, @year
           )
 
-          top_nodes_summary = Api::V3::ActorNode::TopNodesSummary.new(
-            @context, @year, @node
+          top_nodes_summary = Api::V3::Actors::TopNodesSummary.new(
+            @context, @node, @year
           )
           top_countries = top_nodes_summary.call(
-            :top_countries, NodeTypeName::COUNTRY
+            NodeTypeName::COUNTRY
           )
           top_sources = top_nodes_summary.call(
-            :top_sources,
             [
               NodeTypeName::MUNICIPALITY,
               NodeTypeName::BIOME,
               NodeTypeName::STATE
             ]
           )
-          sustainability = Api::V3::ActorNode::SustainabilityTable.new(
-            @context, @year, @node
+          sustainability = Api::V3::Actors::SustainabilityTable.new(
+            @context, @node, @year
           ).call
 
-          exporting_companies = Api::V3::ActorNode::ExportingCompaniesPlot.new(
-            @context, @year, @node
+          exporting_companies = Api::V3::Actors::ExportingCompaniesPlot.new(
+            @context, @node, @year
           ).call
 
-          @basic_attributes.attributes.
-            merge(top_countries).
-            merge(top_sources).
-            merge(sustainability).
-            merge(exporting_companies)
+          @basic_attributes.call.
+            merge(top_countries: top_countries).
+            merge(top_sources: top_sources).
+            merge(sustainability: sustainability).
+            merge(companies_sourcing: exporting_companies)
         end
       end
     end

@@ -1,22 +1,27 @@
 module Api
   module V3
-    module PlaceNode
+    module Places
       class BasicAttributes
-        attr_reader :attributes
-
-        def initialize(context, year, node)
+        # @param context [Api::V3::Context]
+        # @param node [Api::V3::Node]
+        # @param year [Integer]
+        def initialize(context, node, year)
           @context = context
-          @year = year
           @node = node
+          @year = year
           @node_type_name = @node&.node_type&.name
           @place_quals = Dictionary::PlaceQuals.new(@node, @year)
           @place_quants = Dictionary::PlaceQuants.new(@node, @year)
           @place_inds = Dictionary::PlaceInds.new(@node, @year)
-          @volume_attribute = Dictionary::Quant.instance.get('Volume')
+          quant_dictionary = Dictionary::Quant.instance
+          @volume_attribute = quant_dictionary.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
-          @soy_production_attribute = Dictionary::Quant.instance.get('SOY_TN')
-          raise 'Quant SOY_TN not found' unless @soy_production_attribute.present?
+          @soy_production_attribute = quant_dictionary.get('SOY_TN')
+          raise 'Quant SOY_TN not found' unless @soy_production_attribute.
+              present?
+        end
 
+        def call
           @attributes = {
             column_name: @node_type_name,
             country_name: @context&.country&.name,
@@ -33,6 +38,7 @@ module Api
           @attributes = @attributes.merge initialize_dynamic_attributes
           initialize_top_nodes
           @attributes[:summary] = summary
+          @attributes
         end
 
         def municipality?
@@ -58,11 +64,12 @@ of #{@soy_area_formatted} #{@soy_area_unit} of land."
 
         def initialize_dynamic_attributes
           dynamic_attributes = {}
+          node_type_name_us = @node_type_name.split.join('_').downcase
           dynamic_attributes[
-            (@node_type_name.split.join('_').downcase + '_name').to_sym
+            (node_type_name_us + '_name').to_sym
           ] = @node.name
           dynamic_attributes[
-            (@node_type_name.split.join('_').downcase + '_geo_id').to_sym
+            (node_type_name_us + '_geo_id').to_sym
           ] = @node.geo_id
           dynamic_attributes
         end
@@ -159,17 +166,18 @@ of #{@soy_area_formatted} #{@soy_area_unit} of land."
                 delimiter: ',', precision: 2
               )
             end
-          country_ranking = CountryRanking.new(@context, @year, @node).
+          country_ranking = CountryRanking.new(@context, @node, @year).
             position_for_attribute(@soy_production_attribute)
           if country_ranking.present?
             country_ranking = country_ranking.ordinalize
           end
           if @state.present?
-            state_ranking = StateRanking.new(@context, @year, @node, @state.name).
+            state_ranking = StateRanking.
+              new(@context, @node, @year, @state.name).
               position_for_attribute(@soy_production_attribute)
+            state_name = @state.name.titleize
           end
           state_ranking = state_ranking.ordinalize if state_ranking.present?
-          state_name = @state.name.titleize if @state.present?
 
           text =
             if percentage_total_production == '0.00%'

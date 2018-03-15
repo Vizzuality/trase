@@ -1,0 +1,140 @@
+{
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "properties": {
+    "data": {
+      "$id": "/properties/data",
+      "type": "object",
+      "properties": {
+        "column_name": {
+          "$id": "/properties/data/properties/column_name",
+          "type": "string",
+          "title": "The Column_name Schema ",
+          "default": "",
+          "examples": [
+            "MUNICIPALITY"
+          ]
+        },
+        "country_name": {
+          "$id": "/properties/data/properties/country_name",
+          "type": "string",
+          "title": "The Country_name Schema ",
+          "default": "",
+          "examples": [
+            "BRAZIL"
+          ]
+        },
+        "country_geo_id": {
+          "$id": "/properties/data/properties/country_geo_id",
+          "type": "string",
+          "title": "The Country_geo_id Schema ",
+          "default": "",
+          "examples": [
+            "BR"
+          ]
+        },
+        "biome_name": {
+          "$id": "/properties/data/properties/biome_name",
+          "type": "string",
+          "title": "The Biome_name Schema ",
+          "default": "",
+          "examples": [
+            "CERRADO"
+          ]
+        },
+        "biome_geo_id": {
+          "$id": "/properties/data/properties/biome_geo_id",
+          "type": "string",
+          "title": "The Biome_geo_id Schema ",
+          "default": "",
+          "examples": [
+            "BR2"
+          ]
+        },
+        "state_name": {
+          "$id": "/properties/data/properties/state_name",
+          "type": "string",
+          "title": "The State_name Schema ",
+          "default": "",
+          "examples": [
+            "MATO GROSSO"
+          ]
+        },
+        "state_geo_id": {
+          "$id": "/properties/data/properties/state_geo_id",
+          "type": "string",
+          "title": "The State_geo_id Schema ",
+          "default": "",
+          "examples": [
+            "BR51"
+          ]
+        },
+        "area": {
+          "$id": "/properties/data/properties/area",
+          "type": "number",
+          "title": "The Area Schema ",
+          "default": 0,
+          "examples": [
+            9329.599609375
+          ]
+        },
+        "soy_production": {
+          "$id": "/properties/data/properties/soy_production",
+          "type": "number",
+          "title": "The Soy_production Schema ",
+          "default": 0,
+          "examples": [
+            1951710
+          ]
+        },
+        "soy_area": {
+          "$id": "/properties/data/properties/soy_area",
+          "type": "string",
+          "title": "The Soy_area Schema ",
+          "default": "",
+          "examples": [
+            "619,984"
+          ]
+        },
+        "soy_farmland": {
+          "$id": "/properties/data/properties/soy_farmland",
+          "type": "number",
+          "title": "The Soy_farmland Schema ",
+          "default": 0,
+          "examples": [
+            57.72999954223633
+          ]
+        },
+        "municipality_name": {
+          "$id": "/properties/data/properties/municipality_name",
+          "type": "string",
+          "title": "The Municipality_name Schema ",
+          "default": "",
+          "examples": [
+            "SORRISO"
+          ]
+        },
+        "municipality_geo_id": {
+          "$id": "/properties/data/properties/municipality_geo_id",
+          "type": "string",
+          "title": "The Municipality_geo_id Schema ",
+          "default": "",
+          "examples": [
+            "BR5107925"
+          ]
+        },
+        "summary": {
+          "$id": "/properties/data/properties/summary",
+          "type": "string",
+          "title": "The Summary Schema ",
+          "default": "",
+          "examples": [
+            "In 2015, Sorriso produced 1,951,710 Tn of soy occupying a total of 619,984 ha of land. With 1.20% of the total production, it ranks 1st in Brazil in soy production, and 1st in the state of Mato Grosso. The largest exporter of soy in Sorriso was Fiagril, which accounted for 23.4% of the total exports, and the main destination was China."
+          ]
+        }
+      }
+    }
+  }
+}

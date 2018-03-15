@@ -1,20 +1,23 @@
 module Api
   module V3
-    module ActorNode
+    module Actors
       class BasicAttributes
-        attr_reader :attributes
-
-        def initialize(context, year, node)
+        # @param context [Api::V3::Context]
+        # @param node [Api::V3::Node]
+        # @year [Integer]
+        def initialize(context, node, year)
           @context = context
-          @year = year
           @node = node
+          @year = year
           @node_type_name = @node&.node_type&.name
           @actor_quals = Dictionary::ActorQuals.new(@node, @year)
           @actor_quants = Dictionary::ActorQuants.new(@node, @year)
           @actor_inds = Dictionary::ActorInds.new(@node, @year)
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
+        end
 
+        def call
           @attributes = {
             node_name: @node.name,
             column_name: @node_type_name,
@@ -26,6 +29,7 @@ module Api
           initialize_top_nodes
           initialize_flow_stats_for_node
           @attributes[:summary] = summary
+          @attributes
         end
 
         def summary
@@ -73,14 +77,18 @@ module Api
 
         def exporter_summary
           # For 1st rank:
-          # Bunge was the largest exporter of soy in BRAZIL in 2015, accounting for 11,061,393 tons.
-          # As an exporter, Bunge sources from 1,136 municipalities, or 44% of the soy production municipalities.
-          # The main destination of the soy exported by Bunge is China, accounting for 50% of the total.
+          # Bunge was the largest exporter of soy in BRAZIL in 2015, accounting
+          # for 11,061,393 tons. As an exporter, Bunge sources from 1,136
+          # municipalities, or 44% of the soy production municipalities. The
+          # main destination of the soy exported by Bunge is China, accounting
+          # for 50% of the total.
 
           # For all others:
-          # Cargill was the 2nd largest exporter of soy in BRAZIL in 2015, accounting for 8,801,294 tons.
-          # As an exporter, Cargill sources from 1,224 municipalities, or 48% of the soy production municipalities.
-          # The main destination of the soy exported by Cargill is China, accounting for 66% of the total.
+          # Cargill was the 2nd largest exporter of soy in BRAZIL in 2015,
+          # accounting for 8,801,294 tons. As an exporter, Cargill sources from
+          # 1,224 municipalities, or 48% of the soy production municipalities.
+          # The main destination of the soy exported by Cargill is China,
+          # accounting for 66% of the total.
           text = summary_of_total_trade_volume('exporter')
           text += summary_of_sources('exporter')
           text += summary_of_destinations('exporter')
@@ -88,14 +96,18 @@ module Api
         end
 
         def importer_summary
-          # Bunge was the 1st largest importer of soy from BRAZIL in 2015, accounting for 11,061,393 tons.
-          # As an importer, Bunge sources soy from 1,136 municipalities, or 44% of the soy production municipalities.
-          # The main destination of the soy imported by Bunge is China, accounting for 50% of the total.
+          # Bunge was the 1st largest importer of soy from BRAZIL in 2015,
+          # accounting for 11,061,393 tons. As an importer, Bunge sources soy
+          # from 1,136 municipalities, or 44% of the soy production
+          # municipalities. The main destination of the soy imported by Bunge
+          # is China, accounting for 50% of the total.
 
           # For all others:
-          # Cargill was the 2nd largest importer of soy from BRAZIL in 2015, accounting for 8,801,294 tons.
-          # As an importer, Cargill sources from 1,224 municipalities, or 48% of the soy production municipalities.
-          # The main destination of the soy imported by Cargill is China, accounting for 66% of the total.
+          # Cargill was the 2nd largest importer of soy from BRAZIL in 2015,
+          # accounting for 8,801,294 tons. As an importer, Cargill sources from
+          # 1,224 municipalities, or 48% of the soy production municipalities.
+          # The main destination of the soy imported by Cargill is China,
+          # accounting for 66% of the total.
           text = summary_of_total_trade_volume('importer')
           text += summary_of_sources('importer')
           text += summary_of_destinations('importer')
@@ -145,6 +157,12 @@ module Api
         end
 
         def initialize_trade_volume_for_summary
+          initialize_trade_total_current_year
+          initialize_trade_total_difference
+          initialize_trade_total_rank
+        end
+
+        def initialize_trade_total_current_year
           trade_flows_current_year = @flow_stats.flow_values(
             @year, @volume_attribute
           )
@@ -154,11 +172,15 @@ module Api
             trade_total_current_year_unit = 'tons'
             trade_total_current_year_precision = 0
           elsif @trade_total_current_year < 1_000_000
-            trade_total_current_year_value = @trade_total_current_year / 1000
+            trade_total_current_year_value = (
+              @trade_total_current_year / 1000
+            )
             trade_total_current_year_unit = 'thousand tons'
             trade_total_current_year_precision = 0
           else
-            trade_total_current_year_value = @trade_total_current_year / 1_000_000
+            trade_total_current_year_value = (
+              @trade_total_current_year / 1_000_000
+            )
             trade_total_current_year_unit = 'million tons'
             trade_total_current_year_precision = 1
           end
@@ -167,18 +189,29 @@ module Api
             trade_total_current_year_value,
             delimiter: ',', precision: trade_total_current_year_precision
           ) + ' ' + trade_total_current_year_unit
+        end
 
+        def initialize_trade_total_difference
           trade_flows_previous_year = @flow_stats.
             flow_values(@year - 1, @volume_attribute)
           @trade_total_previous_year = trade_flows_previous_year.sum('value')
-          if @trade_total_previous_year.present? && @trade_total_previous_year.positive?
-            @trade_total_perc_difference = (@trade_total_current_year - @trade_total_previous_year) / @trade_total_previous_year
+          if @trade_total_previous_year.present? && @trade_total_previous_year.
+              positive?
+            @trade_total_perc_difference = (
+              @trade_total_current_year - @trade_total_previous_year
+            ) / @trade_total_previous_year
           end
+        end
 
-          trade_total_rank_in_country = CountryRanking.new(@context, @year, @node).
+        def initialize_trade_total_rank
+          trade_total_rank_in_country = CountryRanking.
+            new(@context, @node, @year).
             position_for_attribute(@volume_attribute)
-          return unless trade_total_rank_in_country && trade_total_rank_in_country > 1
-          @trade_total_rank_in_country_formatted = trade_total_rank_in_country.ordinalize + ' '
+          unless trade_total_rank_in_country && trade_total_rank_in_country > 1
+            return
+          end
+          @trade_total_rank_in_country_formatted = trade_total_rank_in_country.
+            ordinalize + ' '
         end
 
         def initialize_sources_for_summary
@@ -190,7 +223,8 @@ module Api
             @volume_attribute, @node
           )
           @perc_municipalities_formatted = helper.number_to_percentage(
-            (source_municipalities_count * 100.0) / municipalities_count, precision: 0
+            (source_municipalities_count * 100.0) / municipalities_count,
+            precision: 0
           )
           @source_municipalities_count_formatted = helper.number_with_precision(
             source_municipalities_count, delimiter: ',', precision: 0
@@ -204,7 +238,8 @@ module Api
           return unless main_destination_exports && @trade_total_current_year &&
               @trade_total_current_year.positive?
           @perc_exports_formatted = helper.number_to_percentage(
-            (main_destination_exports * 100.0) / @trade_total_current_year, precision: 0
+            (main_destination_exports * 100.0) / @trade_total_current_year,
+            precision: 0
           )
         end
 

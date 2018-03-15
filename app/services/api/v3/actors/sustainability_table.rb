@@ -1,13 +1,16 @@
 module Api
   module V3
-    module ActorNode
+    module Actors
       class SustainabilityTable
         include Api::V3::Profiles::AttributesInitializer
 
-        def initialize(context, year, node)
+        # @param context [Api::V3::Context]
+        # @param node [Api::V3::Node]
+        # @year [Integer]
+        def initialize(context, node, year)
           @context = context
-          @year = year
           @node = node
+          @year = year
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
           initialize_attributes(attributes_list)
@@ -15,14 +18,21 @@ module Api
         end
 
         def call
-          {
-            sustainability: [
-              {group_name: 'Municipalities', node_type: NodeTypeName::MUNICIPALITY},
-              {group_name: 'Biomes', node_type: NodeTypeName::BIOME, is_total: true}
-            ].map do |group|
-              sustainability_for_group(group[:group_name], group[:node_type], group[:is_total])
-            end
-          }
+          [
+            {
+              group_name: 'Municipalities',
+              node_type: NodeTypeName::MUNICIPALITY
+            },
+            {
+              group_name: 'Biomes',
+              node_type: NodeTypeName::BIOME,
+              is_total: true
+            }
+          ].map do |group|
+            sustainability_for_group(
+              group[:group_name], group[:node_type], group[:is_total]
+            )
+          end
         end
 
         private
@@ -56,10 +66,11 @@ module Api
             included_columns:
                 [{name: node_type.humanize}] +
                   @attributes.map do |attribute_hash|
+                    attribute = attribute_hash[:attribute]
                     {
-                      name: attribute_hash[:name] || attribute_hash[:attribute].display_name,
-                      unit: attribute_hash[:attribute].unit,
-                      tooltip: attribute_hash[:attribute][:tooltip_text]
+                      name: attribute_hash[:name] || attribute.display_name,
+                      unit: attribute.unit,
+                      tooltip: attribute[:tooltip_text]
                     }
                   end,
             rows: rows
@@ -67,31 +78,38 @@ module Api
         end
 
         def data_row(group_totals_hash, node_type, node)
-          totals_per_attribute = @flow_stats.flow_values_totals_for_attributes_into(
-            @attributes.map { |a| a[:attribute] }, node_type, node['node_id']
-          )
+          node_id = node['node_id']
+          totals_per_attribute = @flow_stats.
+            flow_values_totals_for_attributes_into(
+              @attributes.map { |attribute_hash| attribute_hash[:attribute] },
+              node_type,
+              node_id
+            )
           totals_hash = Hash[
-            totals_per_attribute.map { |t| [t['name'], t['value']] }
+            totals_per_attribute.map do |total|
+              [total['name'], total['value']]
+            end
           ]
-          totals_hash.each do |k, v|
-            if group_totals_hash[k]
-              group_totals_hash[k] += v
+          totals_hash.each do |key, value|
+            if group_totals_hash[key]
+              group_totals_hash[key] += value
             else
-              group_totals_hash[k] = v
+              group_totals_hash[key] = value
             end
           end
           {
             values:
               [
                 {
-                  id: node['node_id'],
+                  id: node_id,
                   value: node['name']
                 }
               ] +
                 @attributes.map do |attribute_hash|
-                  if totals_hash[attribute_hash[:attribute_name]]
-                    {value: totals_hash[attribute_hash[:attribute_name]]}
-                  end
+                  attribute_total = totals_hash[
+                    attribute_hash[:attribute_name]
+                  ]
+                  {value: attribute_total} if attribute_total
                 end
           }
         end
@@ -100,9 +118,10 @@ module Api
           {
             is_total: true,
             values: @attributes.map do |attribute_hash|
-              if group_totals_hash[attribute_hash[:attribute_name]]
-                {value: group_totals_hash[attribute_hash[:attribute_name]]}
-              end
+              attribute_total = group_totals_hash[
+                attribute_hash[:attribute_name]
+              ]
+              {value: attribute_total} if attribute_total
             end
           }
         end

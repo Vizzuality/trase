@@ -1,18 +1,23 @@
 module Api
   module V3
-    module PlaceNode
+    module Places
       class IndicatorsTable
         include Api::V3::Profiles::AttributesInitializer
 
-        def initialize(context, year, node)
+        # @param context [Api::V3::Context]
+        # @param node [Api::V3::Node]
+        # @param year [Integer]
+        def initialize(context, node, year)
           @context = context
-          @year = year
           @node = node
+          @year = year
           @place_quals = Dictionary::PlaceQuals.new(@node, @year)
           state_qual = @place_quals.get(NodeTypeName::STATE)
           @state_name = state_qual && state_qual['value']
           if @state_name.present?
-            @state_ranking = StateRanking.new(@context, @year, @node, @state_name)
+            @state_ranking = StateRanking.new(
+              @context, @node, @year, @state_name
+            )
           end
           @place_quants = Dictionary::PlaceQuants.new(@node, @year)
           @place_inds = Dictionary::PlaceInds.new(@node, @year)
@@ -32,9 +37,15 @@ module Api
             # Territorial deforestation
             {attribute_type: 'quant', attribute_name: 'DEFORESTATION_V2'},
             # Maximum soy deforestation
-            {attribute_type: 'quant', attribute_name: 'POTENTIAL_SOY_DEFORESTATION_V2'},
+            {
+              attribute_type: 'quant',
+              attribute_name: 'POTENTIAL_SOY_DEFORESTATION_V2'
+            },
             # Soy deforestation (Cerrado only)
-            {attribute_type: 'quant', attribute_name: 'AGROSATELITE_SOY_DEFOR_'},
+            {
+              attribute_type: 'quant',
+              attribute_name: 'AGROSATELITE_SOY_DEFOR_'
+            },
             # Land based CO2 emissions
             {attribute_type: 'quant', attribute_name: 'GHG_'},
             # Water scarcity
@@ -102,10 +113,11 @@ module Api
           values = []
           ranking_scores = []
           attributes.each do |attribute_hash|
+            attribute = attribute_hash[:attribute]
             attribute_values =
-              if attribute_hash[:attribute].is_a? Api::V3::Quant
+              if attribute.is_a? Api::V3::Quant
                 @place_quants
-              elsif attribute_hash[:attribute].is_a? Api::V3::Ind
+              elsif attribute.is_a? Api::V3::Ind
                 @place_inds
               end
             attribute_value = attribute_values&.get(
@@ -115,30 +127,23 @@ module Api
             values << value
             next unless @state_ranking.present?
             ranking_scores << @state_ranking.position_for_attribute(
-              attribute_hash[:attribute]
+              attribute
             )
           end
           included_columns = attributes.map do |attribute_hash|
+            attribute = attribute_hash[:attribute]
             {
-              name: attribute_hash[:attribute]['display_name'],
-              unit: attribute_hash[:attribute].unit,
-              tooltip: attribute_hash[:attribute][:tooltip_text]
+              name: attribute['display_name'],
+              unit: attribute.unit,
+              tooltip: attribute[:tooltip_text]
             }
           end
           {
             name: name,
             included_columns: included_columns,
             rows: [
-              {
-                name: 'Score',
-                have_unit: true,
-                values: values
-              },
-              {
-                name: 'State Ranking',
-                have_unit: false,
-                values: ranking_scores
-              }
+              {name: 'Score', have_unit: true, values: values},
+              {name: 'State Ranking', have_unit: false, values: ranking_scores}
             ]
           }
         end

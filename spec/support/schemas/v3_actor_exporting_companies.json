@@ -1,0 +1,121 @@
+{
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "properties": {
+    "data": {
+      "$id": "/properties/data",
+      "type": "object",
+      "properties": {
+        "dimension_y": {
+          "$id": "/properties/data/properties/dimension_y",
+          "type": "object",
+          "properties": {
+            "name": {
+              "$id": "/properties/data/properties/dimension_y/properties/name",
+              "type": "string",
+              "title": "The Name Schema ",
+              "default": "",
+              "examples": [
+                "Trade Volume"
+              ]
+            },
+            "unit": {
+              "$id": "/properties/data/properties/dimension_y/properties/unit",
+              "type": "string",
+              "title": "The Unit Schema ",
+              "default": "",
+              "examples": [
+                "kt"
+              ]
+            }
+          }
+        },
+        "dimensions_x": {
+          "$id": "/properties/data/properties/dimensions_x",
+          "type": "array",
+          "items": {
+            "$id": "/properties/data/properties/dimensions_x/items",
+            "type": "object",
+            "properties": {
+              "name": {
+                "$id": "/properties/data/properties/dimensions_x/items/properties/name",
+                "type": "string",
+                "title": "The Name Schema ",
+                "default": "",
+                "examples": [
+                  "Land use"
+                ]
+              },
+              "unit": {
+                "$id": "/properties/data/properties/dimensions_x/items/properties/unit",
+                "type": "string",
+                "title": "The Unit Schema ",
+                "default": "",
+                "examples": [
+                  "ha"
+                ]
+              }
+            }
+          }
+        },
+        "companies": {
+          "$id": "/properties/data/properties/companies",
+          "type": "array",
+          "items": {
+            "$id": "/properties/data/properties/companies/items",
+            "type": "object",
+            "properties": {
+              "name": {
+                "$id": "/properties/data/properties/companies/items/properties/name",
+                "type": "string",
+                "title": "The Name Schema ",
+                "default": "",
+                "examples": [
+                  "DYTECH TECALON INDUSTRIA E COMERCIO DE AUTOPECAS S.A."
+                ]
+              },
+              "id": {
+                "$id": "/properties/data/properties/companies/items/properties/id",
+                "type": "integer",
+                "title": "The Id Schema ",
+                "default": 0,
+                "examples": [
+                  972
+                ]
+              },
+              "y": {
+                "$id": "/properties/data/properties/companies/items/properties/y",
+                "type": "number",
+                "title": "The Y Schema ",
+                "default": 0,
+                "examples": [
+                  5.780310153961182
+                ]
+              },
+              "x": {
+                "$id": "/properties/data/properties/companies/items/properties/x",
+                "type": "array",
+                "items": {
+                  "$id": "/properties/data/properties/companies/items/properties/x/items",
+                  "type": ["number", "null"],
+                  "title": "The 0th Schema ",
+                  "default": null,
+                  "examples": [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

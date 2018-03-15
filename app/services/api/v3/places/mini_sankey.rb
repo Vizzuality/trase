@@ -1,11 +1,14 @@
 module Api
   module V3
-    module PlaceNode
+    module Places
       class MiniSankey
-        def initialize(context, year, node)
+        # @param context [Api::V3::Context]
+        # @param node [Api::V3::Node]
+        # @param year [Integer]
+        def initialize(context, node, year)
           @context = context
-          @year = year
           @node = node
+          @year = year
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
         end
@@ -30,13 +33,17 @@ module Api
             indicator: @volume_attribute.display_name,
             unit: @volume_attribute.unit,
             targetNodes: @top_nodes.map do |top_node|
-              node = all_nodes_for_place.find { |e| e['node_id'] == top_node['node_id'] }
+              top_node_id = top_node['node_id']
+              node = all_nodes_for_place.find do |e|
+                e['node_id'] == top_node_id
+              end
               value = node && node['value']
               {
-                id: top_node['node_id'],
+                id: top_node_id,
                 name: top_node['name'],
                 height: top_node['value'] / @all_nodes_total,
-                is_domestic_consumption: top_node['is_domestic_consumption'].present?,
+                is_domestic_consumption: top_node['is_domestic_consumption'].
+                  present?,
                 value: value
               }
             end

@@ -1,12 +1,17 @@
 module Api
   module V3
-    module PlaceNode
+    module Places
       class CountryRanking
-        def initialize(context, year, node)
+        # @param context [Api::V3::Context]
+        # @param node [Api::V3::Node]
+        # @param year [Integer]
+        def initialize(context, node, year)
           @context = context
           @year = year
           @node = node
-          @node_index = Api::V3::NodeType.node_index_for_id(@context, @node.node_type_id)
+          @node_index = Api::V3::NodeType.node_index_for_id(
+            @context, @node.node_type_id
+          )
         end
 
         # Returns the node's ranking across all nodes of same type within given:
@@ -14,7 +19,7 @@ module Api
         # for attribute (quant or ind)
         def position_for_attribute(attribute)
           attribute_type = attribute.class.name.demodulize.downcase
-          value_table, dict_table = value_and_dict_tables(attribute_type)
+          value_table = "node_#{attribute_type}s"
 
           flows_join_clause = ActiveRecord::Base.send(
             :sanitize_sql_array,
@@ -28,12 +33,16 @@ module Api
             where(node_type_id: @node.node_type_id).
             joins(flows_join_clause).
             where('flows.context_id' => @context.id).
-            joins(value_table => {attribute_type => "#{attribute_type}_property"}).
-            where("#{dict_table}.name" => attribute.name).
+            joins(
+              value_table => {attribute_type => "#{attribute_type}_property"}
+            ).
+            where("#{value_table}.#{attribute_type}_id" => attribute.id).
+            # rubocop:disable Metrics/LineLength
             where(
               "#{value_table}.year = ? OR NOT COALESCE(#{attribute_type}_properties.is_temporal_on_place_profile, FALSE)",
               @year
             ).
+            # rubocop:enable Metrics/LineLength
             joins(:node_property).
             where('NOT is_domestic_consumption').
             distinct
@@ -45,16 +54,6 @@ module Api
             first
 
           result && result['rank'] || nil # TODO
-        end
-
-        private
-
-        def value_and_dict_tables(attribute_type)
-          if attribute_type == 'quant'
-            %w[node_quants quants]
-          elsif attribute_type == 'ind'
-            %w[node_inds inds]
-          end
         end
       end
     end
