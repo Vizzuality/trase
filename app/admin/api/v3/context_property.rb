@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::ContextProperty, as: 'ContextProperty' do
-  menu parent: 'General Settings'
+  menu parent: 'General Settings', priority: 2
 
   permit_params :context_id, :default_basemap, :is_disabled, :is_default,
                 :is_subnational

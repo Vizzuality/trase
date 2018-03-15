@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::Profile, as: 'Profile' do
-  menu parent: 'General Settings'
+  menu parent: 'General Settings', priority: 4
 
   permit_params :context_node_type_id, :name
 

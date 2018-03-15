@@ -1,7 +1,8 @@
 ActiveAdmin.register Content::Post, as: 'Post' do
+  menu parent: 'Content'
+
   permit_params :title, :date, :image, :post_url, :category, :state, :highlighted
   config.sort_order = 'date_desc'
-  menu parent: 'Content'
 
   form do |f|
     f.semantic_errors
