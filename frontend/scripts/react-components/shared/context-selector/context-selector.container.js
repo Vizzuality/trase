@@ -52,7 +52,7 @@ const mapStateToProps = state => {
 
   return {
     contexts,
-    tooltipText: tooltips && tooltips.sankey.nav.main,
+    tooltipText: tooltips && tooltips.sankey.nav.context.main,
     getComputedKey,
     currentDropdown,
     dimensions: [
