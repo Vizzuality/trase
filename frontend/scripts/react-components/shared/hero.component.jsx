@@ -9,14 +9,9 @@ import HomeVideo from 'react-components/home/home-video.component';
 class Hero extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       showStory: true
-    };
-
-    this.videoEventHandlers = {
-      pause: this.onPause,
-      exitfullscreen: this.onExitFullScreen,
-      ended: this.onEnded
     };
 
     this.onClickPlay = this.onClickPlay.bind(this);
@@ -24,23 +19,8 @@ class Hero extends React.Component {
     this.closeStoryBox = this.closeStoryBox.bind(this);
   }
 
-  onPause(plyr) {
-    plyr.fullscreen.exit();
-  }
-
-  onExitFullScreen(plyr) {
-    plyr.pause();
-  }
-
-  onEnded(plyr) {
-    plyr.fullscreen.exit();
-  }
-
   onClickPlay() {
-    const { plyr } = this.video;
-
-    plyr.play();
-    plyr.fullscreen.enter();
+    this.video.play();
   }
 
   getVideoRef(ref) {
@@ -85,12 +65,7 @@ class Hero extends React.Component {
             </div>
             <h1 className="hero-title">Transparent supply chains for sustainable economies.</h1>
             <div className="hero-play-container">
-              <HomeVideo
-                className="c-home-video"
-                ref={this.getVideoRef}
-                videoId={homeVideo}
-                events={this.videoEventHandlers}
-              />
+              <HomeVideo className="c-home-video" ref={this.getVideoRef} videoId={homeVideo} />
               <button className="hero-play-button" onClick={this.onClickPlay} />
               <span>Learn about Trase in 2 minutes</span>
             </div>
@@ -117,7 +92,6 @@ Hero.propTypes = {
   className: PropTypes.string,
   story: PropTypes.object,
   tweets: PropTypes.array,
-  onClickPlay: PropTypes.func,
   homeVideo: PropTypes.string
 };
 

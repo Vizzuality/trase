@@ -3,16 +3,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Plyr from 'plyr';
-import entries from 'lodash/toPairs';
 
 class HomeVideo extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.getRef = this.getRef.bind(this);
-    this.setupPlyr = this.setupPlyr.bind(this);
-    this.addEventListeners = this.addEventListeners.bind(this);
-    this.destroyPlyr = this.destroyPlyr.bind(this);
+    this.videoReady = false;
+    this.playVideoWhenReady = false;
+
+    this.getVideoRef = this.getVideoRef.bind(this);
+
+    this.onEnded = this.onEnded.bind(this);
+    this.onExitFullScreen = this.onExitFullScreen.bind(this);
+    this.onEnterFullScreen = this.onEnterFullScreen.bind(this);
+    this.onReady = this.onReady.bind(this);
   }
 
   componentDidMount() {
@@ -30,12 +34,29 @@ class HomeVideo extends React.PureComponent {
     this.destroyPlyr();
   }
 
-  getRef(el) {
-    this.selector = el;
+  onExitFullScreen() {
+    this.plyr.pause();
+    this.plyr.elements.container.classList.remove('-is-fullscreen');
+  }
+
+  onEnterFullScreen() {
+    this.plyr.elements.container.classList.add('-is-fullscreen');
+  }
+
+  onEnded() {
+    this.plyr.fullscreen.exit();
+  }
+
+  onReady() {
+    this.videoReady = true;
+  }
+
+  getVideoRef(el) {
+    this.videoElement = el;
   }
 
   setupPlyr() {
-    this.plyr = new Plyr(this.selector, this.props.options);
+    this.plyr = new Plyr(this.videoElement);
     this.addEventListeners();
   }
 
@@ -52,23 +73,33 @@ class HomeVideo extends React.PureComponent {
   }
 
   addEventListeners() {
-    const { events } = this.props;
-    entries(events).forEach(([event, handler]) => this.plyr.on(event, () => handler(this.plyr)));
+    this.plyr.on('ended', this.onEnded);
+    this.plyr.on('exitfullscreen', this.onExitFullScreen);
+    this.plyr.on('enterfullscreen', this.onEnterFullScreen);
+    this.plyr.on('ready', this.onReady);
   }
 
   destroyPlyr() {
     if (this.plyr) this.plyr.destroy();
   }
 
+  play() {
+    // we cannot schedule firing video later because initiating fullscreen won't work
+    // as it must be initiated by user guesture, that's why can only play video manually
+    // when it's ready
+    if (this.videoReady) {
+      this.plyr.play();
+      this.plyr.fullscreen.enter();
+    }
+  }
+
   render() {
-    return <video ref={this.getRef} controls crossOrigin="true" playsInline />;
+    return <video ref={this.getVideoRef} controls crossOrigin="true" playsInline />;
   }
 }
 
 HomeVideo.propTypes = {
-  videoId: PropTypes.string.isRequired,
-  options: PropTypes.object,
-  events: PropTypes.object
+  videoId: PropTypes.string.isRequired
 };
 
 export default HomeVideo;
