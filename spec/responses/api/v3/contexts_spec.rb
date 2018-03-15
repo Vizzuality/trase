@@ -28,7 +28,7 @@ RSpec.describe 'Get contexts', type: :request do
     it 'has the correct response structure' do
       get '/api/v3/contexts'
 
-      expect(@response.status).to eq 200
+      expect(@response).to have_http_status(:ok)
       expect(@response).to match_response_schema('v3_contexts')
     end
   end

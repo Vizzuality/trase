@@ -186,16 +186,7 @@ paths:
             items:
               $ref: '#/definitions/FlowResult'
         '400':
-          description: unprocessable entity
-          schema:
-            type: object
-            properties:
-              errors:
-                type: array
-                items:
-                  type: string
-        '500':
-          description: internal server error
+          description: bad request
           schema:
             type: object
             properties:
@@ -258,6 +249,13 @@ paths:
             type: array
             items:
               $ref: '#/definitions/NodeAttribute'
+        '400':
+          description: bad request
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
   '/context/{context_id}/nodes/{id}/actor':
     get:
       tags:

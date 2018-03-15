@@ -22,7 +22,7 @@ RSpec.describe 'Map layers', type: :request do
     it 'has the correct response structure' do
       get "/api/v3/contexts/#{api_v3_context.id}/map_layers"
 
-      expect(@response.status).to eq 200
+      expect(@response).to have_http_status(:ok)
       expect(@response).to match_response_schema('v3_map_layers')
     end
   end

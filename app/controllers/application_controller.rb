@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   rescue_from ActionController::ParameterMissing do |exception|
-    render json: {error: exception.message}, status: 500
+    render json: {error: exception.message}, status: 400
   end
 
   private
