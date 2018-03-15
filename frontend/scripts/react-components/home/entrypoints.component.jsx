@@ -15,14 +15,6 @@ class Entrypoints extends React.PureComponent {
     };
     this.entrypoints = [
       {
-        link: { type: 'profileRoot' },
-        subtitle: 'Profile',
-        text:
-          'View the trade and sustainability profile of a particular' +
-          ' company or production region.',
-        className: '-start'
-      },
-      {
         link: { type: 'tool' },
         subtitle: 'Supply Chain',
         text:
@@ -31,7 +23,15 @@ class Entrypoints extends React.PureComponent {
         className: '-mid'
       },
       {
-        link: { type: 'tool', payload: { state: { isMapVisible: true } } },
+        link: { type: 'profileRoot' },
+        subtitle: 'Profile',
+        text:
+          'View the trade and sustainability profile of a particular' +
+          ' company or production region.',
+        className: '-start'
+      },
+      {
+        link: { type: 'tool', payload: { query: { state: { isMapVisible: true } } } },
         subtitle: 'Map',
         text:
           'Explore the sustainability of different production regions and identify risks and' +
