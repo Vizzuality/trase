@@ -61,7 +61,7 @@ class HomeVideo extends React.PureComponent {
   }
 
   render() {
-    return <video ref={this.getRef} controls crossOrigin playsInline />;
+    return <video ref={this.getRef} controls crossOrigin="true" playsInline />;
   }
 }
 

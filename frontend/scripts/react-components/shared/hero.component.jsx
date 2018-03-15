@@ -16,9 +16,7 @@ class Hero extends React.Component {
     this.videoEventHandlers = {
       pause: this.onPause,
       exitfullscreen: this.onExitFullScreen,
-      enterfullscreen: this.onEnterFullScreen,
-      ended: this.onEnded,
-      ready: this.onPlyrReady
+      ended: this.onEnded
     };
 
     this.onClickPlay = this.onClickPlay.bind(this);
