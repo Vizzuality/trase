@@ -33,6 +33,7 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
     - 'lib/tasks/**/*'
+    - 'app/admin/**/*'
 
 Metrics/LineLength:
   Max: 80

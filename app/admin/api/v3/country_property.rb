@@ -3,6 +3,14 @@ ActiveAdmin.register Api::V3::CountryProperty, as: 'CountryProperty' do
 
   permit_params :country_id, :latitude, :longitude, :zoom
 
+  after_action :clear_cache, only: [:create, :update, :destroy]
+
+  controller do
+    def clear_cache
+      clear_cache_for_url(api_v3_contexts_url)
+    end
+  end
+
   form do |f|
     f.semantic_errors
     inputs do
