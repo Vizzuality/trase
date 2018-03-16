@@ -6,7 +6,7 @@ import Sankey from 'components/tool/sankey.component';
 const shouldRepositionExpandButton = (expandedNodesIds, selectedNodesIds, areNodesExpanded) =>
   areNodesExpanded === false ||
   expandedNodesIds === undefined ||
-  expandedNodesIds[0] === selectedNodesIds[0];
+  expandedNodesIds.slice().sort()[0] === selectedNodesIds.slice().sort()[0];
 
 // this maps component methods to app state updates
 // keys correspond to method names, values to state prop path
