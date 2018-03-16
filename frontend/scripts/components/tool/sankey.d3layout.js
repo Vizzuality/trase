@@ -126,6 +126,9 @@ const sankeyLayout = () => {
   // compute links y and y deltas (later used by sankey.link generator)
   // will be called at each relayouting (user clicks nodes, user scrolls, etc)
   const _computeLinksCoords = () => {
+    if (links.length === 0) {
+      return;
+    }
     // source and target are dicts (nodeIds are keys) containing the cumulated height of all links for each node
     const stackedHeightsByNodeId = { source: {}, target: {} };
 
