@@ -115,6 +115,7 @@
     bottom: -13px;
     right: 0;
     max-width: 50%;
+    z-index: $z-above-hero;
 
     &.-tweets {
       width: 350px;
