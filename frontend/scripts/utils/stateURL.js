@@ -40,13 +40,6 @@ export const filterStateToURL = state => {
   stateToSave.selectedBiomeFilterName = state.selectedBiomeFilter
     ? state.selectedBiomeFilter.name
     : state.selectedBiomeFilterName;
-  if (state.selectedNodesIds && state.selectedNodesIds.length) {
-    return {
-      ...stateToSave,
-      areNodesExpanded: true,
-      expandedNodesIds: state.selectedNodesIds
-    };
-  }
   return stateToSave;
 };
 
