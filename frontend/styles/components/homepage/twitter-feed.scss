@@ -76,6 +76,7 @@
 
   &.-exited {
     transform: translateX(40px) scale(1, 1);
+    z-index: -1;
   }
 }
 
