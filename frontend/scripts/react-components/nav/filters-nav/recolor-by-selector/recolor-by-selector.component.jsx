@@ -6,6 +6,7 @@ import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.c
 import RecolorByNodeLegendSummary from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-node-legend-summary/recolor-by-node-legend-summary.container';
 import cx from 'classnames';
 import isNumber from 'lodash/isNumber';
+import difference from 'lodash/difference';
 
 const id = 'recolor-by';
 
@@ -18,7 +19,8 @@ class RecolorBySelector extends Component {
       onSelected,
       currentDropdown,
       selectedRecolorBy,
-      recolorBys
+      recolorBys,
+      selectedYears
     } = this.props;
 
     recolorBys.sort(
@@ -58,35 +60,39 @@ class RecolorBySelector extends Component {
     });
 
     // Renders a dropdown item using recolorBy data
-    const getRecolorByItem = (recolorBy, index) => (
-      <li
-        key={index}
-        className={cx('dropdown-item', { '-disabled': recolorBy.isDisabled })}
-        onClick={() => onSelected(recolorBy)}
-      >
-        <div className="dropdown-item-title">
-          {recolorBy.label}
-          {recolorBy.description && <Tooltip constraint="window" text={recolorBy.description} />}
-        </div>
-        <div className="dropdown-item-legend-container">
-          {recolorBy.minValue && (
-            <span className="dropdown-item-legend-unit -left">{recolorBy.minValue}</span>
-          )}
-          {recolorBy.legendType && (
-            <ul className={cx('dropdown-item-legend', `-${recolorBy.legendType}`)}>
-              {recolorBy.legendItemsData.map((legendItem, key) => (
-                <li key={key} className={legendItem.cx}>
-                  {legendItem.value}
-                </li>
-              ))}
-            </ul>
-          )}
-          {recolorBy.maxValue && (
-            <span className="dropdown-item-legend-unit -right">{recolorBy.maxValue}</span>
-          )}
-        </div>
-      </li>
-    );
+    const getRecolorByItem = (recolorBy, index) => {
+      const isEnabled =
+        !recolorBy.isDisabled && difference(selectedYears, recolorBy.years).length === 0;
+      return (
+        <li
+          key={index}
+          className={cx('dropdown-item', { '-disabled': !isEnabled })}
+          onClick={() => onSelected(recolorBy)}
+        >
+          <div className="dropdown-item-title">
+            {recolorBy.label}
+            {recolorBy.description && <Tooltip constraint="window" text={recolorBy.description} />}
+          </div>
+          <div className="dropdown-item-legend-container">
+            {recolorBy.minValue && (
+              <span className="dropdown-item-legend-unit -left">{recolorBy.minValue}</span>
+            )}
+            {recolorBy.legendType && (
+              <ul className={cx('dropdown-item-legend', `-${recolorBy.legendType}`)}>
+                {recolorBy.legendItemsData.map((legendItem, key) => (
+                  <li key={key} className={legendItem.cx}>
+                    {legendItem.value}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {recolorBy.maxValue && (
+              <span className="dropdown-item-legend-unit -right">{recolorBy.maxValue}</span>
+            )}
+          </div>
+        </li>
+      );
+    };
 
     // Render all the dropdown items
     const recolorByElements = [];
@@ -166,7 +172,8 @@ RecolorBySelector.propTypes = {
   onSelected: PropTypes.func,
   currentDropdown: PropTypes.string,
   selectedRecolorBy: PropTypes.object,
-  recolorBys: PropTypes.array
+  recolorBys: PropTypes.array,
+  selectedYears: PropTypes.array
 };
 
 export default RecolorBySelector;

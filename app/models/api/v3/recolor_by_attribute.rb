@@ -13,6 +13,7 @@ module Api
 
       LEGEND_COLOR_THEME = %w(
         thematic
+        green-red
         blue-green
         yellow-green
         red-blue
