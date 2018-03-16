@@ -4,7 +4,11 @@
   padding: 53px 0 63px 0;
 
   .c-scatterplot {
-    position: 'relative';
+    position: relative;
+
+    @media screen and (min-width: $breakpoint-foundation-small) {
+      padding-bottom: 30px;
+    }
   }
 
   .title {
@@ -67,6 +71,17 @@
   }
 
   .c-dropdown-tab-switcher {
+    .tab-switcher {
+      ul {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        padding: 0 10px 0 30px;
+        display: flex;
+        justify-content: space-evenly;
+      }
+    }
+
     li.selected {
       span[data-unit]:after {
         content: '(' attr(data-unit) ')';
