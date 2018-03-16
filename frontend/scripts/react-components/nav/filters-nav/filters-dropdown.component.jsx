@@ -9,12 +9,15 @@ class FiltersDropdown extends Component {
     this.handleBound = this.handle.bind(this);
   }
 
-  componentDidMount() {
-    document.addEventListener('click', this.handleBound, true);
-  }
+  componentWillReceiveProps(nextProps) {
+    const currentlyDisplaysChildren = this.props.currentDropdown === this.props.id;
+    const willDisplayChildren = nextProps.currentDropdown === nextProps.id;
 
-  componentWillUnmount() {
-    document.removeEventListener('click', this.handleBound, true);
+    if (!currentlyDisplaysChildren && willDisplayChildren) {
+      document.addEventListener('click', this.handleBound, true);
+    } else if (currentlyDisplaysChildren && !willDisplayChildren) {
+      document.removeEventListener('click', this.handleBound, true);
+    }
   }
 
   handle(e) {
