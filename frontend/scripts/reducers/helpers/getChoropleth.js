@@ -49,7 +49,7 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
     isBivariate,
     titles: selectedMapDimensions.map(d => _shortenTitle(d.name)),
     bucket: selectedMapDimensions.map(
-      d => (isBivariate ? [...d.dualLayerBuckets].reverse() : [...d.singleLayerBuckets].reverse())
+      d => (isBivariate ? [...d.dualLayerBuckets] : [...d.singleLayerBuckets])
     )
   };
 
