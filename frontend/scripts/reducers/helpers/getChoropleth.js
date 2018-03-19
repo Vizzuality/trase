@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import compact from 'lodash/compact';
+import filter from 'lodash/filter';
 import { CHOROPLETH_CLASSES, CHOROPLETH_CLASS_ZERO } from 'constants';
 
 const _shortenTitle = title => {
@@ -9,7 +10,7 @@ const _shortenTitle = title => {
 };
 
 export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensions, forceEmpty) {
-  const uids = _.compact(selectedMapDimensionsUids);
+  const uids = compact(selectedMapDimensionsUids);
 
   if (!uids.length) {
     return {
@@ -36,7 +37,7 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
     ? CHOROPLETH_CLASSES.bidimensional
     : CHOROPLETH_CLASSES[selectedMapDimension.colorScale || 'red'];
 
-  const geoNodes = _.filter(
+  const geoNodes = filter(
     nodesDictWithMeta,
     node => node.geoId !== undefined && node.geoId !== null && node.isGeo
   );
