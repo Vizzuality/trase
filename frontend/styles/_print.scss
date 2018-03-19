@@ -1,9 +1,16 @@
-.-print { // sass-lint:disable
-  max-width: 22cm;
-  overflow-x: hidden;
+@media print {
+
+  body, html {
+    height: 100%;
+    background: red;
+  }
 
   .is-page-break-always {
     page-break-after: always;
+  }
+
+  .page-break-inside-avoid {
+    page-break-inside: avoid;
   }
 
   .c-nav {
@@ -12,7 +19,7 @@
 
   .l-profile-actor,
   .l-profile-place {
-    padding: 0 30px 30px;
+    padding: 30px 30px;
 
     .c-anchor-buttons {
       display: none;
@@ -69,6 +76,21 @@
   }
 
   .user-report-feedback {
+    display: none;
+  }
+
+  .tooltip-react {
+    display: none;
+  }
+
+  .c-dropdown-tab-switcher {
+    .dropdown-switcher {
+      display: none;
+    }
+  }
+
+  footer {
+    page-break-before: always;
     display: none;
   }
 }
