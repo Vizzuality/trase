@@ -44,14 +44,16 @@ class WorldMap extends Component {
     this.renderCountriesAnnotations = this.renderCountriesAnnotations.bind(this);
   }
 
-  shouldComponentUpdate(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (
       nextProps.selectedContext !== this.props.selectedContext ||
       nextProps.selectedYears !== this.props.selectedYears
     ) {
       this.props.getTopNodes();
     }
+  }
 
+  shouldComponentUpdate(nextProps) {
     if (nextProps.flows.length === 0) {
       return false;
     }
