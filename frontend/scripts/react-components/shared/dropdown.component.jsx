@@ -13,6 +13,7 @@ export default class Dropdown extends Component {
     };
     this.onDropdownValueClicked = this.onDropdownValueClicked.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.handleKeyUpOutside = this.handleKeyUpOutside.bind(this);
   }
 
   componentDidMount() {
@@ -22,7 +23,7 @@ export default class Dropdown extends Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleKeyUpOutside);
+    document.removeEventListener('keyup', this.handleKeyUpOutside);
     document.removeEventListener('mouseup', this.handleClickOutside);
     document.removeEventListener('touchstart', this.handleClickOutside);
   }
@@ -43,7 +44,7 @@ export default class Dropdown extends Component {
   }
 
   handleKeyUpOutside(event) {
-    if (event.keyCode === 27 && this.state.isOpen) {
+    if (event.key === 'Escape' && this.state.isOpen) {
       this.close();
     }
   }

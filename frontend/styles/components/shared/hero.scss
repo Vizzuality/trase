@@ -4,7 +4,6 @@
   position: relative;
   height: 600px;
   background-color: $charcoal-grey;
-  z-index: $z-above;
 
   &.-read-only {
     height: 400px;
@@ -26,10 +25,6 @@
   .responsive-container {
     position: absolute;
     top: 0;
-  }
-
-  .hero-content {
-    z-index: $z-above;
   }
 
   .hero-logo-container {
@@ -120,6 +115,7 @@
     bottom: -13px;
     right: 0;
     max-width: 50%;
+    z-index: $z-above-hero;
 
     &.-tweets {
       width: 350px;

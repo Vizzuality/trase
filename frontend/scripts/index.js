@@ -1,6 +1,7 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { createLogger } from 'redux-logger';
 import thunk from 'redux-thunk';
+import rangeTouch from 'rangetouch';
 import analyticsMiddleware from 'analytics/tool.analytics.middleware';
 import { toolUrlStateMiddleware } from 'utils/stateURL';
 import router from './router/router';
@@ -13,6 +14,9 @@ window.liveSettings = TRANSIFEX_API_KEY && {
   api_key: TRANSIFEX_API_KEY,
   autocollect: true
 };
+
+// Rangetouch to fix <input type="range"> on touch devices (see https://rangetouch.com)
+rangeTouch.set();
 
 if (process.env.NODE_ENV !== 'production' && PERF_TEST) {
   import('react').then(React => {
