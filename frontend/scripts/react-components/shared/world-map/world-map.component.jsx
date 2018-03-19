@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   ComposableMap,
@@ -14,7 +14,7 @@ import UnitsTooltip from 'react-components/shared/units-tooltip.component';
 import cx from 'classnames';
 import formatValue from 'utils/formatValue';
 
-class WorldMap extends React.PureComponent {
+class WorldMap extends Component {
   static buildCurves(start, end, arc) {
     const x0 = start[0];
     const x1 = end[0];
@@ -44,13 +44,20 @@ class WorldMap extends React.PureComponent {
     this.renderCountriesAnnotations = this.renderCountriesAnnotations.bind(this);
   }
 
-  componentDidUpdate(prevProps) {
+  componentWillReceiveProps(nextProps) {
     if (
-      prevProps.selectedContext !== this.props.selectedContext ||
-      prevProps.selectedYears !== this.props.selectedYears
+      nextProps.selectedContext !== this.props.selectedContext ||
+      nextProps.selectedYears !== this.props.selectedYears
     ) {
       this.props.getTopNodes();
     }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.flows.length === 0) {
+      return false;
+    }
+    return true;
   }
 
   onMouseMove(geometry, e) {
