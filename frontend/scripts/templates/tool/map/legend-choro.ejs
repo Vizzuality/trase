@@ -17,7 +17,7 @@
 
     <% if (isBivariate && typeof bucket !== "undefined" && bucket[0] !== null && bucket[1] !== null) { %>
     <ul class="bucket-values" >
-        <% bucket[0].reverse().forEach(function(value) { %>
+        <% bucket[0].forEach(function(value) { %>
         <li ><%= abbreviateNumber(value, 3) %></li >
         <% }) %>
         <% bucket[1].forEach(function(value) { %>
