@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import compact from 'lodash/compact';
+import filter from 'lodash/filter';
 import { CHOROPLETH_CLASSES, CHOROPLETH_CLASS_ZERO } from 'constants';
 
 const _shortenTitle = title => {
@@ -9,7 +10,7 @@ const _shortenTitle = title => {
 };
 
 export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensions, forceEmpty) {
-  const uids = _.compact(selectedMapDimensionsUids);
+  const uids = compact(selectedMapDimensionsUids);
 
   if (!uids.length) {
     return {
@@ -36,7 +37,7 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
     ? CHOROPLETH_CLASSES.bidimensional
     : CHOROPLETH_CLASSES[selectedMapDimension.colorScale || 'red'];
 
-  const geoNodes = _.filter(
+  const geoNodes = filter(
     nodesDictWithMeta,
     node => node.geoId !== undefined && node.geoId !== null && node.isGeo
   );
@@ -48,7 +49,7 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
     isBivariate,
     titles: selectedMapDimensions.map(d => _shortenTitle(d.name)),
     bucket: selectedMapDimensions.map(
-      d => (isBivariate ? d.dualLayerBuckets.slice(0) : d.singleLayerBuckets.slice(0))
+      d => (isBivariate ? [...d.dualLayerBuckets].reverse() : [...d.singleLayerBuckets].reverse())
     )
   };
 
@@ -82,7 +83,7 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
             color = CHOROPLETH_CLASSES.default;
           } else {
             // in case only one is zero, just ignore and use lowest bucket (Math.max zero)
-            colorIndex = (2 - Math.max(0, valueA - 1)) * 3 + Math.max(0, valueB - 1);
+            colorIndex = (3 - Math.max(0, valueA - 1)) * 4 + Math.max(0, valueB - 1);
             color = colors[colorIndex];
           }
         }
