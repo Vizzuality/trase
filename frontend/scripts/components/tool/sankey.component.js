@@ -18,6 +18,10 @@ export default class {
     this._build();
   }
 
+  onRemoved() {
+    this._removeEventListeners();
+  }
+
   translateNodes(relayoutOptions) {
     this._relayout(relayoutOptions);
   }
@@ -110,15 +114,17 @@ export default class {
 
     this.expandButton = document.querySelector('.js-expand');
     this.expandActionButton = document.querySelector('.js-expand-action');
-    this.expandActionButton.addEventListener('click', this._onExpandClick.bind(this));
+    this.expandActionButton.addEventListener('click', this.callbacks.onExpandClick);
     this.clearButton = document.querySelector('.js-clear');
     this.clearButton.addEventListener('click', this.callbacks.onClearClick);
 
     this._onScrollBound = this._onScroll.bind(this);
   }
 
-  _onExpandClick() {
-    this.callbacks.onExpandClick();
+  _removeEventListeners() {
+    this.sankeyColumns.on('mouseleave', null);
+    this.expandActionButton.removeEventListener('click', this.callbacks.onExpandClick);
+    this.clearButton.removeEventListener('click', this.callbacks.onClearClick);
   }
 
   _repositionExpandButton(nodesIds) {
@@ -180,7 +186,9 @@ export default class {
   }
 
   _render(selectedRecolorBy, currentQuant) {
-    this.sankeyColumns.data(this.layout.columns());
+    const cols = this.layout.columns();
+    if (cols.length === 0) return;
+    this.sankeyColumns.data(cols);
 
     this.sankeyColumns.attr('transform', d => `translate(${d.x},0)`);
 

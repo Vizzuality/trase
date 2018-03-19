@@ -42,7 +42,7 @@ export const mount = (root, store) => {
   });
 
   new FlowContentContainer(store);
-  new SankeyContainer(store);
+  containers.push(new SankeyContainer(store));
   new MapContainer(store);
   new MapDimensionsContainer(store);
   new MapContextContainer(store);
