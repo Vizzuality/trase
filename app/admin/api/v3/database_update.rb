@@ -1,5 +1,9 @@
 ActiveAdmin.register_page 'Database Update' do
-  menu parent: 'Database', unless: proc { Rails.env.production? }
+  menu parent: 'Database'
+
+  controller do
+    before_action :ensure_data_update_supported
+  end
 
   content do
     current_update = Api::V3::DatabaseUpdate.where(status: Api::V3::DatabaseUpdate::STARTED).first

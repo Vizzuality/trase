@@ -12,7 +12,7 @@ ActiveAdmin.register_page 'Dashboard' do
           end
         end
 
-        unless Rails.env.production?
+        if controller.data_update_supported?
           panel 'Last data update' do
             last_update = Api::V3::DatabaseUpdate.order(created_at: :desc).first
 
