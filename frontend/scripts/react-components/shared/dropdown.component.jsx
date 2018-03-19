@@ -44,7 +44,7 @@ export default class Dropdown extends Component {
   }
 
   handleKeyUpOutside(event) {
-    if (event.keyCode === 27 && this.state.isOpen) {
+    if (event.key === 'Escape' && this.state.isOpen) {
       this.close();
     }
   }
