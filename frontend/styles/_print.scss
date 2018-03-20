@@ -16,8 +16,16 @@
     page-break-after: always;
   }
 
+  .deforestation, .chords-container, .mini-sankey-container {
+    padding: 15px 0 !important;
+  }
+
   .table-container {
     page-break-inside: avoid;
+
+    &:not(:last-child) {
+      margin-bottom: 30px;
+    }
   }
 
   .page-break-inside-avoid {
@@ -51,6 +59,18 @@
   }
 
   .c-scatterplot {
+    margin-top: 20px;
+    page-break-inside: avoid;
+
+    .c-dropdown-tab-switcher {
+      .tab-switcher {
+        margin-bottom: 10px;
+      }
+
+      ul {
+        display: none;
+      }
+    }
 
     .axis-legend-x {
       display: block;
@@ -80,11 +100,13 @@
     font-size: $font-size-xx-regular;
   }
 
-  .tab-title {
-    display: block;
-    margin-top: 30px;
-    margin-bottom: -15px;
-    font-size: $font-size-x-regular;
+  .js-score-table {
+    .tab-title {
+      display: block;
+      margin-top: 30px;
+      margin-bottom: -15px;
+      font-size: $font-size-x-regular;
+    }
   }
 
   .-tab-hidden {

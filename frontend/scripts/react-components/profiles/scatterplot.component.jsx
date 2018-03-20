@@ -23,7 +23,7 @@ class Scatterplot extends Component {
       left: 29
     };
     this.state = {
-      selectedTabIndex: 0
+      selectedTabIndex: props.xDimensionSelectedIndex || 0
     };
 
     this.handleSwitcherIndexChange = this.handleSwitcherIndexChange.bind(this);
@@ -222,6 +222,7 @@ Scatterplot.propTypes = {
   data: PropTypes.array,
   node: PropTypes.object,
   xDimension: PropTypes.array,
+  xDimensionSelectedIndex: PropTypes.number,
   year: PropTypes.number,
   width: PropTypes.number,
   showTooltipCallback: PropTypes.func,

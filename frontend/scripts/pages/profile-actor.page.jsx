@@ -323,19 +323,32 @@ const _build = (data, tooltips, { nodeId, year, print }, store) => {
 
     const scatterplotContainerElement = document.querySelector('.js-scatterplot-container');
     const scatterplotTitle = `Comparing companies ${verbGerund} Soy from Brazil in ${year}`;
+    const scatterplotXDimensions = data.companies_sourcing.dimensions_x.slice(0, 3);
+    const scatterplots = print
+      ? scatterplotXDimensions.map(xDimension => ({
+          title: `${xDimension.name} [${xDimension.unit.toLowerCase()}]`
+        }))
+      : [{ title: scatterplotTitle }];
 
     render(
       <Provider store={store}>
-        <Scatterplot
-          width={scatterplotContainerElement.clientWidth}
-          title={scatterplotTitle}
-          data={data.companies_sourcing.companies}
-          xDimension={data.companies_sourcing.dimensions_x}
-          node={{ id: nodeId, name: data.node_name }}
-          year={year}
-          showTooltipCallback={showTooltipCallback}
-          hideTooltipCallback={tooltip.hide}
-        />
+        <div>
+          {print && <h3 className="title">{scatterplotTitle}</h3>}
+          {scatterplots.map((plot, index) => (
+            <Scatterplot
+              key={index}
+              width={scatterplotContainerElement.clientWidth}
+              title={plot.title}
+              data={data.companies_sourcing.companies}
+              xDimension={scatterplotXDimensions}
+              xDimensionSelectedIndex={index}
+              node={{ id: nodeId, name: data.node_name }}
+              year={year}
+              showTooltipCallback={showTooltipCallback}
+              hideTooltipCallback={tooltip.hide}
+            />
+          ))}
+        </div>
       </Provider>,
       scatterplotContainerElement
     );
@@ -424,17 +437,17 @@ const _showErrorMessage = (message = null) => {
   }
 };
 
-const _switchYear = (store, nodeId, dropdownYear, showMiniSankey) => {
+const _switchYear = (store, nodeId, dropdownYear) => {
   setLoading();
   // eslint-disable-next-line no-use-before-define
-  _loadData(store, nodeId, dropdownYear, showMiniSankey);
+  _loadData(store, nodeId, dropdownYear);
   store.dispatch({
     type: 'profileActor',
-    payload: { query: { nodeId, year: dropdownYear, showMiniSankey } }
+    payload: { query: { nodeId, year: dropdownYear } }
   });
 };
 
-const _loadData = (store, nodeId, year) => {
+const _loadData = (store, nodeId, year, print) => {
   const actorFactsheetURL = getURLFromParams(GET_ACTOR_FACTSHEET_URL, {
     context_id: 1,
     node_id: nodeId,
@@ -484,7 +497,7 @@ const _loadData = (store, nodeId, year) => {
         document.getElementById('year-dropdown')
       );
 
-      _build(data, tooltips, { nodeId, year }, store);
+      _build(data, tooltips, { nodeId, year, print }, store);
     })
     .catch(reason => {
       _showErrorMessage(reason.message);
@@ -516,7 +529,7 @@ export const mount = (root, store) => {
     document.getElementById('footer')
   );
 
-  _loadData(store, nodeId, year);
+  _loadData(store, nodeId, year, print);
 };
 
 export const unmount = () => {
