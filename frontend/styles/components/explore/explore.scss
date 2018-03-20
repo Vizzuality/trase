@@ -50,15 +50,26 @@
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
-  overflow: hidden;
+
+  .explore-table-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
 
   .c-dropdown {
     cursor: pointer;
+
+    &.-uppercase-title {
+      .dropdown-title {
+        text-transform: uppercase;
+      }
+    }
+
     .dropdown-title {
       font-family: $font-family-1;
       font-size: 13px;
       letter-spacing: -0.6px;
-      text-transform: uppercase;
       padding-right: 15px;
       margin: 0 0 25px;
 

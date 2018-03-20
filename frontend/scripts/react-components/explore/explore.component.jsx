@@ -5,13 +5,13 @@ import Link from 'redux-first-router-link';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
 import Top from 'react-components/explore/top.component';
 import Dropdown from 'react-components/shared/dropdown.component';
+import formatValue from 'utils/formatValue';
 
 class Explore extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.onTableValueChange = this.onTableValueChange.bind(this);
-    this.renderTableDropdown = this.renderTableDropdown.bind(this);
-    this.items = [
+
+    this.columns = [
       {
         label: 'Top Exporting Companies',
         link: 'profileActor',
@@ -22,12 +22,23 @@ class Explore extends React.PureComponent {
         value: 8
       }
     ];
+    this.units = [
+      {
+        name: '%',
+        format: item => formatValue(item.height * 100, 'percentage')
+      },
+      {
+        name: 'tn',
+        format: item => formatValue(item.value, 'tons')
+      }
+    ];
 
-    this.topToggle = {
-      unit: 'tn',
-      format: 'tons',
-      valueProp: 'value'
+    this.state = {
+      selectedTableUnit: this.units[0]
     };
+
+    this.handleTableColumnChange = this.handleTableColumnChange.bind(this);
+    this.handleTableUnitChange = this.handleTableUnitChange.bind(this);
   }
 
   componentDidMount() {
@@ -42,37 +53,57 @@ class Explore extends React.PureComponent {
     }
   }
 
-  onTableValueChange(label) {
-    const column = (this.items.find(item => item.label === label) || {}).value;
+  handleTableColumnChange(label) {
+    const column = (this.columns.find(item => item.label === label) || {}).value;
     this.props.setSelectedTableColumn(column);
   }
 
-  renderTableDropdown() {
+  handleTableUnitChange(unitName) {
+    this.setState({
+      selectedTableUnit: this.units.find(u => u.name === unitName)
+    });
+  }
+
+  renderTableColumnDropdown() {
     const { selectedTableColumn } = this.props;
-    const selectedItem = this.items.find(item => item.value === selectedTableColumn);
+    const column = this.columns.find(item => item.value === selectedTableColumn);
+
     return (
       <Dropdown
-        label={selectedItem.title}
-        value={selectedItem.label}
-        valueList={this.items.map(i => i.label)}
-        onValueSelected={this.onTableValueChange}
+        className="-uppercase-title"
+        value={column.label}
+        valueList={this.columns.map(i => i.label)}
+        onValueSelected={this.handleTableColumnChange}
+      />
+    );
+  }
+
+  renderTableUnitDropdown() {
+    const { selectedTableUnit } = this.state;
+
+    return (
+      <Dropdown
+        value={selectedTableUnit.name}
+        valueList={this.units.map(i => i.name)}
+        onValueSelected={this.handleTableUnitChange}
       />
     );
   }
 
   render() {
     const {
-      showTable,
-      topExporters,
-      selectedYears,
-      selectedContextId,
       isSubnational,
-      selectedTableColumn
+      selectedContextId,
+      selectedTableColumn,
+      selectedYears,
+      showTable,
+      topExporters
     } = this.props;
+    const { selectedTableUnit } = this.state;
 
     let link = null;
     if (selectedContextId === 1) {
-      const selectedTable = this.items.find(i => i.value === selectedTableColumn);
+      const selectedTable = this.columns.find(i => i.value === selectedTableColumn);
       link = typeof selectedTable !== 'undefined' ? selectedTable.link : null;
     }
 
@@ -102,14 +133,15 @@ class Explore extends React.PureComponent {
               <div className="column medium-5">
                 <div className="explore-section -right">
                   <div className="explore-table-container">
-                    {this.renderTableDropdown()}
+                    <div className="explore-table-header">
+                      {this.renderTableColumnDropdown()}
+                      {this.renderTableUnitDropdown()}
+                    </div>
                     <Top
-                      unit="%"
-                      valueProp="height"
+                      unit={selectedTableUnit}
                       targetLink={link}
                       year={selectedYears[0]}
                       data={topExporters}
-                      toggle={this.topToggle}
                     />
                   </div>
                   <Link

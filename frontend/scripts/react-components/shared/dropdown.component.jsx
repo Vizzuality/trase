@@ -54,12 +54,12 @@ export default class Dropdown extends Component {
   }
 
   render() {
-    const { hideOnlyChild, label, size, value, valueList } = this.props;
+    const { className, hideOnlyChild, label, size, value, valueList } = this.props;
 
     return (
       <div
         ref={ref => (this.ref = ref)}
-        className={cx('c-dropdown', '-active', {
+        className={cx('c-dropdown', '-active', className, {
           [`-${size}`]: size,
           '-hide-only-child': valueList.length <= 1 && hideOnlyChild
         })}
@@ -100,6 +100,7 @@ Dropdown.defaultProps = {
 };
 
 Dropdown.propTypes = {
+  className: PropTypes.string,
   hideOnlyChild: PropTypes.bool,
   label: PropTypes.string,
   onValueSelected: PropTypes.func,
