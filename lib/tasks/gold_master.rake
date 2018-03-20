@@ -64,7 +64,6 @@ namespace :gold_master do
 
   def compare(format, compressed = false)
     endpoints[format].each do |endpoint|
-      next unless endpoint['v3_ready'] # eliminate those not ready to test
       endpoint['queries'].each do |query|
         gold_master_file = gold_master_file(endpoint, query, format)
         puts gold_master_file
@@ -93,25 +92,20 @@ namespace :gold_master do
     YAML.safe_load(File.open("#{Rails.root}/spec/support/gold_master_urls.yml"), [], [], true)
   end
 
-  def host(version)
-    case version
-    when 'v1'
-      ENV['GOLD_MASTER_HOST_V1']
-    when 'v2'
-      ENV['GOLD_MASTER_HOST_V2']
-    else
-      ENV['GOLD_MASTER_HOST_V3']
-    end
+  def gold_master_host
+    ENV['GOLD_MASTER_HOST_V3']
+  end
+
+  def actual_host
+    ENV['GOLD_MASTER_HOST_V3']
   end
 
   def gold_master_url(endpoint, query)
-    host(endpoint['version']) + endpoint['url'] + '?' + query['params']
+    gold_master_host + endpoint['url'] + '?' + (query['params'] || '')
   end
 
   def actual_url(endpoint, query)
-    actual_url = endpoint['v3_url'] || endpoint['url']
-    actual_params = query['v3_params'] || query['params']
-    host('v3') + actual_url + '?' + actual_params
+    actual_host + endpoint['url'] + '?' + (query['params'] || '')
   end
 
   def gold_master_file(endpoint, query, format, compressed = false)
