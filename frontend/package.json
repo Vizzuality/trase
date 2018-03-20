@@ -67,6 +67,7 @@
     "image-webpack-loader": "^4.1.0",
     "jest": "^22.4.2",
     "lint-staged": "^6.1.1",
+    "mapshaper": "^0.4.63",
     "node-sass": "^4.7.2",
     "postcss-loader": "^2.1.1",
     "prettier": "^1.10.2",
