@@ -1,217 +1,125 @@
-context_queries: &context_queries
-  queries:
-    - params: context_id=1
-      name: brazil_soy
-    - params: context_id=2
-      name: paraguay_soy
-
 csv:
-  - url: /api/v2/download.csv
+  - url: /api/v3/contexts/1/download.csv
     name: download
     compressed: true
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/1/download.csv
     queries:
-    - params: context_id=1
-      name: brazil_soy
-  - url: /api/v2/download.csv
+    - name: brazil_soy
+  - url: /api/v3/contexts/2/download.csv
     name: download
     compressed: true
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/2/download.csv
     queries:
-    - params: context_id=2
-      name: paraguay_soy
-  - url: /api/v2/download.csv
+    - name: paraguay_soy
+  - url: /api/v3/contexts/5/download.csv
     name: download
     compressed: true
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/5/download.csv
     queries:
-    - params: context_id=5
-      name: argentina_beef
-  - url: /api/v2/download.csv
+    - name: argentina_beef
+  - url: /api/v3/contexts/7/download.csv
     name: download
     compressed: true
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/7/download.csv
     queries:
-    - params: context_id=7
-      name: indonesia_palm_oil
+    - name: indonesia_palm_oil
 json:
-  - url: /api/v2/indicators
-    name: indicators
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/1/download_attributes
+  - url: /api/v3/contexts/1/download_attributes
+    name: download_attributes
     queries:
-      - params: context_id=1
-        name: brazil_soy
-  - url: /api/v2/indicators
-    name: indicators
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/2/download_attributes
+      - name: brazil_soy
+  - url: /api/v3/contexts/2/download_attributes
+    name: download_attributes
     queries:
-      - params: context_id=2
-        name: paraguay_soy
-  - url: /api/v2/get_map_base_data
-    name: get_map_base_data
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/1/map_layers
+      - name: paraguay_soy
+  - url: /api/v3/contexts/1/map_layers
+    name: map_layers
     queries:
-      - params: context_id=1
-        name: brazil_soy
-  - url: /api/v2/get_map_base_data
-    name: get_map_base_data
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/2/map_layers
+      - name: brazil_soy
+  - url: /api/v3/contexts/2/map_layers
+    name: map_layers
     queries:
-      - params: context_id=2
-        name: paraguay_soy
-  - url: /api/v2/get_linked_geoids
-    name: get_linked_geoids
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/1/linked_nodes
+      - name: paraguay_soy
+  - url: /api/v3/contexts/1/linked_nodes
+    name: linked_nodes
     queries:
-      - params: context_id=1&years[]=2015&nodes_ids[]=440&nodes_ids[]=2759&target_column_id=3
+      - params: years[]=2015&nodes_ids[]=440&nodes_ids[]=2759&target_column_id=3
         name: brazil_soy_sorriso_bunge
-  - url: /api/v2/get_linked_geoids
-    name: get_linked_geoids
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/2/linked_nodes
+  - url: /api/v3/contexts/2/linked_nodes
+    name: linked_nodes
     queries:
-      - params: context_id=2&years[]=2015&nodes_ids[]=587&nodes_ids[]=3415&target_column_id=9
+      - params: years[]=2015&nodes_ids[]=587&nodes_ids[]=3415&target_column_id=9
         name: paraguay_soy_alto_parana_cargill
-  - url: /api/v2/get_columns
-    name: get_columns
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/1/columns
+  - url: /api/v3/contexts/1/columns
+    name: columns
     queries:
-      - params: 'context_id=1'
+      - name: brazil_soy
+  - url: /api/v3/contexts/2/columns
+    name: columns
+    queries:
+      - name: paraguay_soy
+  - url: /api/v3/contexts/1/nodes/attributes
+    name: attributes
+    queries:
+      - params: start_year=2015&end_year=2015
         name: brazil_soy
-  - url: /api/v2/get_columns
-    name: get_columns
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/2/columns
+  - url: /api/v3/contexts/2/nodes/attributes
+    name: attributes
     queries:
-      - params: 'context_id=2'
+      - params: start_year=2015&end_year=2015
         name: paraguay_soy
-  - url: /api/v2/get_node_attributes
-    name: get_node_attributes
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/1/nodes/attributes
+  - url: /api/v3/contexts
+    name: contexts
+    queries: []
+  - url: /api/v3/contexts/1/nodes
+    name: nodes
     queries:
-      - params: 'context_id=1&start_year=2015&end_year=2015'
-        name: brazil_soy
-  - url: /api/v2/get_node_attributes
-    name: get_node_attributes
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/2/nodes/attributes
+      - name: brazil_soy
+  - url: /api/v3/contexts/2/nodes
+    name: nodes
     queries:
-      - params: 'context_id=2&start_year=2015&end_year=2015'
-        name: paraguay_soy
-  - url: /api/v2/get_contexts
-    name: get_contexts
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts
-    <<: *context_queries
-  - url: /api/v2/get_all_nodes
-    name: get_all_nodes
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/1/nodes
+      - name: paraguay_soy
+  - url: /api/v3/contexts/1/nodes/2759/place
+    name: place_node_attributes
     queries:
-      - params: context_id=1
-        name: brazil_soy
-  - url: /api/v2/get_all_nodes
-    name: get_all_nodes
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/2/nodes
+      - name: sorriso
+  - url: /api/v3/contexts/1/nodes/2262/place
+    name: place_node_attributes
     queries:
-      - params: context_id=2
-        name: paraguay_soy
-  - url: /api/v2/get_place_node_attributes
-    name: get_place_node_attributes
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/1/nodes/2759/place
+      - name: querencia
+  - url: /api/v3/contexts/1/nodes/440/actor
+    name: actor_node_attributes
     queries:
-      - params: node_id=2759
-        name: sorriso
-  - url: /api/v2/get_place_node_attributes
-    name: get_place_node_attributes
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/1/nodes/2262/place
+      - name: bunge_exporter
+  - url: /api/v3/contexts/1/nodes/588/actor
+    name: actor_node_attributes
     queries:
-      - params: node_id=2262
-        name: querencia
-  - url: /api/v2/get_actor_node_attributes
-    name: get_actor_node_attributes
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/1/nodes/440/actor
+      - name: cargill_importer
+  - url: /api/v3/contexts/1/nodes
+    name: nodes
     queries:
-      - params: node_id=440
-        name: bunge_exporter
-  - url: /api/v2/get_actor_node_attributes
-    name: get_actor_node_attributes
-    version: v2
-    v3_ready: true
-    v3_url: /api/v3/contexts/1/nodes/588/actor
-    queries:
-      - params: node_id=588
-        name: cargill_importer
-  - url: /v1/get_nodes
-    name: get_nodes
-    version: v1
-    v3_ready: false
-    v3_url: /api/v3/get_nodes
-    queries:
-      - params: context_id=1&year_start=2015&year_end=2015
+      - params: year_start=2015&year_end=2015
         name: brazil_soy_2015_2015
-      - params: context_id=2&year_start=2015&year_end=2015
+  - url: /api/v3/contexts/2/nodes
+    name: nodes
+    queries:
+      - params: year_start=2015&year_end=2015
         name: paraguay_soy_2015_2015
-  - url: /v1/get_flows
-    name: get_flows
-    version: v1
-    v3_ready: true
-    v3_url: /api/v3/contexts/1/flows
+  - url: /api/v3/contexts/1/flows
+    name: flows
     queries:
-      - params: context_id=1&year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10
+      - params: year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10
         name: brazil_soy_2015_2015
-      - params: context_id=1&year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&biome_filter_id=652
+      - params: year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&biome_filter_id=652
         name: brazil_soy_2015_2015_biome
-      - params: context_id=1&year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&selected_nodes=587,588
+      - params: year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&selected_nodes=587,588
         name: brazil_soy_2015_2015_expand
-      - params: context_id=1&year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_ind=PROTECTED_DEFICIT_PERC
+      - params: year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_ind=PROTECTED_DEFICIT_PERC
         name: brazil_soy_2015_2015_recolor_by_ind
-      - params: context_id=1&year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_qual=ZERO_DEFORESTATION
+      - params: year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_qual=ZERO_DEFORESTATION
         name: brazil_soy_2015_2015_recolor_by_qual
-      - params: context_id=1&year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_ind=PROTECTED_DEFICIT_PERC&biome_filter_id=652&selected_nodes=587,588
+      - params: year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_ind=PROTECTED_DEFICIT_PERC&biome_filter_id=652&selected_nodes=587,588
         name: brazil_soy_2015_2015_recolor_by_ind_biome_expand
-      - params: context_id=1&year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_qual=ZERO_DEFORESTATION&biome_filter_id=652&selected_nodes=587,588
+      - params: year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_qual=ZERO_DEFORESTATION&biome_filter_id=652&selected_nodes=587,588
         name: brazil_soy_2015_2015_recolor_by_qual_biome_expand
-  - url: /v1/get_flows
-    name: get_flows
-    version: v1
-    v3_ready: true
-    v3_url: /api/v3/contexts/2/flows
+  - url: /api/v3/contexts/2/flows
+    name: flows
     queries:
-      - params: context_id=2&year_start=2015&year_end=2015&include_columns=9,10,6,8&flow_quant=Volume&n_nodes=10
+      - params: year_start=2015&year_end=2015&include_columns=9,10,6,8&flow_quant=Volume&n_nodes=10
         name: paraguay_soy_2015_2015
