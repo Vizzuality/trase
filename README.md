@@ -152,6 +152,11 @@ The project's main configuration values can be set using [environment variables]
 * TRASE_REMOTE_SERVER=trase_server
 * TRASE_LOCAL_FDW_SCHEMA=main # this schema in local database where remote tables are mapped
 * TRASE_LOCAL_SCHEMA=public # this schema in local database where target tables are
+* INSTANCE_NAME= # string to uniquely identify instance as source of db dump, e.g. staging
+* AWS_ACCESS_KEY_ID=
+* AWS_SECRET_ACCESS_KEY=
+* AWS_REGION=
+* S3_BUCKET_NAME= # name of bucket where db dumps are stored
 
 ## Background jobs
 

@@ -31,6 +31,7 @@ gem 'inherited_resources', github: 'activeadmin/inherited_resources'
 
 gem 'ckeditor', git: 'https://github.com/galetahub/ckeditor.git'
 gem 'paperclip', '~> 5.2.0'
+gem 'aws-sdk-s3', '~> 1'
 
 gem 'rack-cors', '~> 0.4'
 gem 'twitter', '~> 6.1'
