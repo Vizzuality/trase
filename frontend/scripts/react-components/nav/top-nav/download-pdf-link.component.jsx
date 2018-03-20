@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 
 function getDownloadPdfLink() {
   const pageTitle = encodeURIComponent(document.getElementsByTagName('title')[0].innerText);
-  const currentUrlBase = NODE_ENV_DEV
-    ? document.location.href.replace('localhost:8081', 'staging.trase.earth')
-    : document.location.href;
+  const currentUrlBase = document.location.href;
   const currentUrl = encodeURIComponent(`${currentUrlBase}&print=true`);
   return `${PDF_DOWNLOAD_URL}?filename=${pageTitle}&url=${currentUrl}`;
 }

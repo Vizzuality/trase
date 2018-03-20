@@ -1,12 +1,23 @@
 @media print {
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 
-  body, html {
-    height: 100%;
-    background: red;
+  body {
+    max-width: 21cm;
+  }
+
+  @page {
+    margin: 1cm;
   }
 
   .is-page-break-always {
     page-break-after: always;
+  }
+
+  .table-container {
+    page-break-inside: avoid;
   }
 
   .page-break-inside-avoid {
@@ -19,7 +30,8 @@
 
   .l-profile-actor,
   .l-profile-place {
-    padding: 30px 30px;
+    padding: 0;
+    background-color: $white;
 
     .c-anchor-buttons {
       display: none;
@@ -54,17 +66,35 @@
     }
   }
 
+  .c-locator-map {
+    .polygon {
+      stroke: $white;
+    }
+  }
+
   .tab {
     display: none;
   }
 
+  .tab-switcher-title {
+    font-size: $font-size-xx-regular;
+  }
+
   .tab-title {
     display: block;
-    margin-top: 20px;
+    margin-top: 30px;
+    margin-bottom: -15px;
+    font-size: $font-size-x-regular;
   }
 
   .-tab-hidden {
     display: block;
+  }
+
+  .c-overall-map {
+    > .row > .columns {
+      padding: 0;
+    }
   }
 
   .c-overall-info {

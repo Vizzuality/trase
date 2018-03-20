@@ -38,13 +38,9 @@ class MultiTable extends Component {
           onSelectedIndexChange={this.handleSwitcherIndexChange}
         />
         {data.map((elem, index) => (
-          <div key={index}>
+          <div key={index} className="table-container">
             <div className="tab-title title">{elem.name}</div>
-            <div
-              className={cx('c-area-table-container', {
-                '-tab-hidden': index !== selectedTableIndex
-              })}
-            >
+            <div className={cx({ '-tab-hidden': index !== selectedTableIndex })}>
               <Table
                 data={elem}
                 type={type}

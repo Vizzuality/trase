@@ -123,7 +123,7 @@
     fill: rgba($charcoal-grey, 0.2);
   }
 
-  .c-area-table-container {
+  .table-container table {
     @media screen and (max-width: $breakpoint-foundation-small) {
       overflow-x: auto;
     }
