@@ -6402,13 +6402,6 @@ CREATE INDEX index_map_attribute_groups_on_context_id ON map_attribute_groups US
 
 
 --
--- Name: index_map_attributes_mv_on_context_id; Type: INDEX; Schema: revamp; Owner: -
---
-
-CREATE INDEX index_map_attributes_mv_on_context_id ON map_attributes_mv USING btree (context_id);
-
-
---
 -- Name: index_map_attributes_on_map_attribute_group_id; Type: INDEX; Schema: revamp; Owner: -
 --
 
@@ -6546,6 +6539,13 @@ CREATE INDEX index_resize_by_quants_on_quant_id ON resize_by_quants USING btree 
 --
 
 CREATE INDEX index_resize_by_quants_on_resize_by_attribute_id ON resize_by_quants USING btree (resize_by_attribute_id);
+
+
+--
+-- Name: map_attributes_mv_context_id_is_disabled_idx; Type: INDEX; Schema: revamp; Owner: -
+--
+
+CREATE INDEX map_attributes_mv_context_id_is_disabled_idx ON map_attributes_mv USING btree (context_id, is_disabled) WHERE (is_disabled IS FALSE);
 
 
 --
@@ -7398,6 +7398,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180212120524'),
 ('20180221144544'),
 ('20180223141212'),
-('20180226094007');
+('20180226094007'),
+('20180320141501');
 
 
