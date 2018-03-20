@@ -189,7 +189,7 @@ const _build = (data, tooltips, { nodeId, year, print }, store) => {
       document.querySelector('.js-source-legend')
     );
 
-    _initSource(print === true ? 'state' : 'municipality', data, store);
+    _initSource(print ? 'state' : 'municipality', data, store);
   }
 
   if (data.top_countries && data.top_countries.lines.length) {
@@ -507,7 +507,8 @@ const _loadData = (store, nodeId, year, print) => {
 
 export const mount = (root, store) => {
   const { query = {} } = store.getState().location;
-  const { nodeId, print = false } = query;
+  const { nodeId } = query;
+  const print = query.print === 'true';
   const year = query.year ? parseInt(query.year, 10) : DEFAULT_PROFILE_PAGE_YEAR;
 
   root.innerHTML = ProfileActorMarkup({
