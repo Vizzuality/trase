@@ -4,12 +4,13 @@ import cx from 'classnames';
 import Tooltip from 'react-components/shared/help-tooltip.component';
 import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
 import PropTypes from 'prop-types';
+import difference from 'lodash/difference';
 
 const id = 'resize-by';
 
 class ResizeBySelector extends Component {
   renderResizeByElements() {
-    const { onSelected, currentDropdown, selectedResizeBy, resizeBys } = this.props;
+    const { onSelected, currentDropdown, selectedResizeBy, resizeBys, selectedYears } = this.props;
 
     resizeBys.sort((a, b) => a.position > b.position);
 
@@ -23,14 +24,17 @@ class ResizeBySelector extends Component {
               <li key={`separator-${index}`} className="dropdown-item -separator" />
             );
           }
+          const isEnabled =
+            !resizeBy.isDisabled && difference(selectedYears, resizeBy.years).length === 0;
           resizeByElements.push(
             <li
               key={index}
-              className={cx('dropdown-item', { '-disabled': resizeBy.isDisabled })}
+              className={cx('dropdown-item', { '-disabled': !isEnabled })}
               onClick={() => onSelected(resizeBy.name)}
             >
               {resizeBy.label.toLowerCase()}
-              {resizeBy.description && <Tooltip constraint="window" text={resizeBy.description} />}
+              {resizeBy.description &&
+                isEnabled && <Tooltip constraint="window" text={resizeBy.description} />}
             </li>
           );
         });
@@ -89,7 +93,8 @@ ResizeBySelector.propTypes = {
   currentDropdown: PropTypes.string,
   selectedResizeBy: PropTypes.object,
   resizeBys: PropTypes.array,
-  tooltips: PropTypes.object
+  tooltips: PropTypes.object,
+  selectedYears: PropTypes.array
 };
 
 export default ResizeBySelector;

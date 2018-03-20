@@ -131,11 +131,6 @@
       cursor: pointer;
     }
 
-    &.-disabled {
-      color: rgba($charcoal-grey, .3);
-      pointer-events: none;
-    }
-
     .dropdown-item-legend-container {
       display: flex;
       margin-top: 10px;
@@ -268,4 +263,8 @@
     }
   }
 
+  .-disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
 }

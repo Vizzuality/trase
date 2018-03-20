@@ -7,7 +7,8 @@ const mapStateToProps = state => ({
   tooltips: state.app.tooltips,
   currentDropdown: state.app.currentDropdown,
   selectedRecolorBy: state.tool.selectedRecolorBy,
-  recolorBys: state.tool.selectedContext.recolorBy
+  recolorBys: state.tool.selectedContext.recolorBy,
+  selectedYears: state.tool.selectedYears
 });
 
 const mapDispatchToProps = dispatch => ({
