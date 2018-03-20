@@ -62,6 +62,20 @@ module ActiveRecord
         )
         File.open(filename, "w") { |file| file << new_dump }
       end
+
+      def data_dump(filename)
+        set_psql_env
+        args = ['--no-owner', '-Fc', '-f', filename]
+        args << configuration['database']
+        run_cmd('pg_dump', args, 'dumping')
+      end
+
+      def data_restore(filename, restored_db_name)
+        set_psql_env
+        db_name = configuration['database']
+        args = ['-d', restored_db_name, filename]
+        run_cmd('pg_restore', args, 'restoring')
+      end
     end
   end
 end
