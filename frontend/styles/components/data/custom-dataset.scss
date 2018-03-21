@@ -162,6 +162,9 @@
     bottom: 0;
   }
 
+  .columns:not(:last-child) {
+    padding-right: 0;
+  }
 }
 
 .download-button {

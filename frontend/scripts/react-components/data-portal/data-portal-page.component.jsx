@@ -392,6 +392,8 @@ class DataContent extends Component {
                         selected={this.state.selectedYears}
                       />
                     </div>
+                  </div>
+                  <div className="row">
                     <div className="small-4 columns">
                       <DownloadSelector
                         allowMultiple
