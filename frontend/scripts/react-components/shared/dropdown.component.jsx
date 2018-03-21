@@ -102,7 +102,7 @@ Dropdown.defaultProps = {
 Dropdown.propTypes = {
   className: PropTypes.string,
   hideOnlyChild: PropTypes.bool,
-  label: PropTypes.string,
+  label: PropTypes.any,
   onValueSelected: PropTypes.func,
   size: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

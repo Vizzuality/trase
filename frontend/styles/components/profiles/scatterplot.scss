@@ -99,6 +99,17 @@
 
   .c-dropdown-tab-switcher {
     .tab-switcher {
+      .tab-switcher-title {
+        span[data-unit]:after {
+          content: '(' attr(data-unit) ')';
+          font-weight: normal;
+          letter-spacing: -1.3px;
+          text-transform: none;
+          color: rgba($charcoal-grey, .5);
+          margin-left: 2px;
+        }
+      }
+
       ul {
         position: absolute;
         bottom: 0;

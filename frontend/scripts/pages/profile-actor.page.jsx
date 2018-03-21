@@ -326,7 +326,7 @@ const _build = (data, tooltips, { nodeId, year, print }, store) => {
     const scatterplotXDimensions = data.companies_sourcing.dimensions_x.slice(0, 3);
     const scatterplots = print
       ? scatterplotXDimensions.map(xDimension => ({
-          title: `${xDimension.name} [${xDimension.unit.toLowerCase()}]`
+          title: <span data-unit={xDimension.unit}>{xDimension.name}</span>
         }))
       : [{ title: scatterplotTitle }];
 

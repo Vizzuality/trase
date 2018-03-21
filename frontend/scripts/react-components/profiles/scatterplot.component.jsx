@@ -218,7 +218,7 @@ class Scatterplot extends Component {
 }
 
 Scatterplot.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.any,
   data: PropTypes.array,
   node: PropTypes.object,
   xDimension: PropTypes.array,
