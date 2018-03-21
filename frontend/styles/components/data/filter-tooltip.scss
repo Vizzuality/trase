@@ -1,0 +1,54 @@
+@import '../../settings';
+@import '../shared/help-tooltip.scss';
+
+.tooltip-react {
+  .tooltip-content {
+    display: none;
+  }
+}
+
+.tooltip.download-filters {
+  padding: 0;
+  font-family: $font-family-1;
+  background-color: $white;
+  color: $charcoal-grey;
+  pointer-events: auto;
+
+  .tooltip-arrow {
+    border-top-color: $white;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+  }
+
+  .c-dropdown {
+    display: inline-block;
+
+    .dropdown-title {
+      padding-right: 17px;
+      font-size: $font-size-regular;
+    }
+
+    .dropdown-item {
+      padding: 5px 10px;
+      white-space: nowrap;
+      font-size: $font-size-regular;
+    }
+  }
+
+  .tooltip-content {
+    > .title {
+      font-family: $font-family-1;
+      font-size: $font-size-regular;
+      line-height: 1;
+      letter-spacing: -0.6px;
+      height: 32px;
+      padding: 12px 8px;
+      background-color: $egg-shell;
+    }
+
+    > .content {
+      padding: 12px 8px;
+    }
+  }
+}

@@ -1,7 +1,10 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
+import cx from 'classnames';
+import get from 'lodash/get';
 import xor from 'lodash/xor';
 import uniqBy from 'lodash/uniqBy';
+
 import {
   GET_CSV_DATA_DOWNLOAD_FILE_URL,
   GET_JSON_DATA_DOWNLOAD_FILE_URL,
@@ -12,7 +15,6 @@ import DownloadSelector from 'react-components/data-portal/download-selector.com
 import PropTypes from 'prop-types';
 import DataPortalDisabledMessage from 'react-components/data-portal/data-portal-disabled-message.component';
 import DataPortalForm from 'react-components/data-portal/data-portal-form.component';
-import classnames from 'classnames';
 
 class DataContent extends Component {
   constructor(props) {
@@ -328,7 +330,8 @@ class DataContent extends Component {
       .map(indicator => ({
         id: indicator.name,
         name: `${indicator.frontendName}${indicator.unit !== null ? `(${indicator.unit})` : ''}`,
-        noSelfCancel: false
+        noSelfCancel: false,
+        filterOptions: get(indicator, 'filterOptions.ops', [])
       }))
       .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -455,7 +458,7 @@ class DataContent extends Component {
                         <li className="-selected">
                           Pivot
                           <div
-                            className={classnames('c-radio-btn -no-self-cancel -grey', {
+                            className={cx('c-radio-btn -no-self-cancel -grey', {
                               '-enabled': this.state.outputType === 'pivot'
                             })}
                             onClick={() => this.onOutputTypeSelected('pivot')}
@@ -464,7 +467,7 @@ class DataContent extends Component {
                         <li>
                           Table
                           <div
-                            className={classnames('c-radio-btn -no-self-cancel -grey', {
+                            className={cx('c-radio-btn -no-self-cancel -grey', {
                               '-enabled': this.state.outputType === 'table'
                             })}
                             onClick={() => this.onOutputTypeSelected('table')}
@@ -479,7 +482,7 @@ class DataContent extends Component {
                         <li className="-selected">
                           .csv (comma separated)
                           <div
-                            className={classnames('c-radio-btn -no-self-cancel -grey', {
+                            className={cx('c-radio-btn -no-self-cancel -grey', {
                               '-enabled':
                                 this.state.fileExtension === '.csv' &&
                                 this.state.fileSeparator === 'comma'
@@ -490,7 +493,7 @@ class DataContent extends Component {
                         <li>
                           .csv (semicolon separated)
                           <div
-                            className={classnames('c-radio-btn -no-self-cancel -grey', {
+                            className={cx('c-radio-btn -no-self-cancel -grey', {
                               '-enabled':
                                 this.state.fileExtension === '.csv' &&
                                 this.state.fileSeparator === 'semicolon'
@@ -501,7 +504,7 @@ class DataContent extends Component {
                         <li>
                           .json
                           <div
-                            className={classnames('c-radio-btn -no-self-cancel -grey', {
+                            className={cx('c-radio-btn -no-self-cancel -grey', {
                               '-enabled':
                                 this.state.fileExtension === '.json' &&
                                 this.state.fileSeparator === ''
@@ -513,7 +516,7 @@ class DataContent extends Component {
                     </div>
 
                     <div
-                      className={classnames('download-button', {
+                      className={cx('download-button', {
                         '-disabled':
                           !DATA_DOWNLOAD_ENABLED ||
                           this.state.selectedCountry === null ||
