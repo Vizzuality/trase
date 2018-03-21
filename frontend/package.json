@@ -113,6 +113,7 @@
     "redux": "^3.7.2",
     "redux-first-router": "^0.0.4-rudy",
     "redux-first-router-link": "^1.4.2",
+    "redux-first-router-restore-scroll": "^1.2.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "remark": "^9.0.0",

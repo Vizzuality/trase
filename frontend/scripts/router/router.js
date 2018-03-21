@@ -1,4 +1,5 @@
 import { connectRoutes, NOT_FOUND, replace } from 'redux-first-router';
+import restoreScroll from 'redux-first-router-restore-scroll';
 
 import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.container';
 import TeamMember from 'react-components/team/team-member/team-member.container';
@@ -23,11 +24,14 @@ const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thu
 
 const config = {
   basename: '/',
+  notFoundPath: '/404',
   querySerializer: {
     parse,
     stringify
   },
-  notFoundPath: '/404',
+  restoreScroll: restoreScroll({
+    shouldUpdateScroll: (prev, locationState) => prev.pathname !== locationState.pathname
+  }),
   onBeforeChange: dispatchThunks(redirectToExplore, resetToolThunk)
 };
 
