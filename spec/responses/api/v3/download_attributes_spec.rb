@@ -8,6 +8,8 @@ RSpec.describe 'Download Attributes', type: :request do
     Api::V3::DownloadAttribute.set_callback(:commit, :after, :refresh_dependencies)
   end
   include_context 'api v3 brazil download attributes'
+  include_context 'api v3 brazil municipality qual values'
+  include_context 'api v3 brazil municipality quant values'
 
   describe 'GET /api/v3/contexts/:context_id/download_attributes' do
     before(:each) do

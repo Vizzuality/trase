@@ -125,6 +125,7 @@ class DataContent extends Component {
         this.setState({ selectedConsumptionCountries, allConsumptionCountriesSelected });
         break;
       }
+      // TODO: this is now a nested array called filters
       case 'indicators': {
         const selectedIndicators = xor(this.state.selectedIndicators, [value]);
         this.setState({
@@ -214,8 +215,8 @@ class DataContent extends Component {
     };
 
     params.years = this.state.allYearsSelected ? [] : this.state.selectedYears;
-    params.exporters_ids = this.state.allExportersSelected ? [] : this.state.selectedExporters;
-    params.countries_ids = this.state.allConsumptionCountriesSelected
+    params.e_ids = this.state.allExportersSelected ? [] : this.state.selectedExporters;
+    params.c_ids = this.state.allConsumptionCountriesSelected
       ? []
       : this.state.selectedConsumptionCountries;
     params.indicators = this.state.allIndicatorsSelected ? [] : this.state.selectedIndicators;

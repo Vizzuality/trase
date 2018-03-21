@@ -29,8 +29,10 @@ module Api
             attribute_type: 'quant',
             original_attribute_id: @soy_production_attribute.id
           )
+
           buckets = map_attribute.try(:single_layer_buckets) ||
             [5000, 100_000, 300_000, 1_000_000]
+
           result = {
             included_years: years, buckets: buckets
           }
