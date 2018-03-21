@@ -220,13 +220,13 @@ ActiveAdmin.setup do |config|
   #     admin.build_menu :default do |menu|
   #       menu.add label: "My Great Website", url: "http://www.mygreatwebsite.com", html_options: { target: :blank }
   #     end
-  #   end
+  # end
 
 config.namespace :admin do |admin|
   admin.build_menu do |menu|
     menu.add label: 'Dashboard', priority: 1
     menu.add label: 'Content', priority: 2
-    menu.add label: 'Database', priority: 4
+    menu.add label: 'Database', priority: 4, if: proc { controller.data_update_supported? }
     menu.add label: 'General Settings', priority: 5
     menu.add label: 'Sankey Settings', priority: 6
     menu.add label: 'Map Settings', priority: 7

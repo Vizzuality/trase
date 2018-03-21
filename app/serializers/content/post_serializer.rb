@@ -23,7 +23,9 @@ module Content
                :category
 
     attribute :image_url do
-      object.image.url(:small)
+      url = object.image.url(:small)
+      url = '/content' + url unless Rails.env.development? || Rails.env.test?
+      url
     end
   end
 end

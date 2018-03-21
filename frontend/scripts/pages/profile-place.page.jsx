@@ -1,39 +1,36 @@
 /* eslint-disable no-new */
-
-import ProfilePlaceMarkup from 'html/profile-place.ejs';
+import Tooltip from 'components/shared/info-tooltip.component';
+import { DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
-
-import 'styles/profile-place.scss';
-
+import ProfilePlaceMarkup from 'html/profile-place.ejs';
+import capitalize from 'lodash/capitalize';
 import React from 'react';
-import { render, unmountComponentAtNode } from 'react-dom';
-import { Provider } from 'react-redux';
-import TopNav from 'react-components/nav/top-nav/top-nav.container';
-import Footer from 'react-components/shared/footer.component';
-
 import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
-import Dropdown from 'react-components/shared/dropdown.component';
-import Line from 'react-components/profiles/line.component';
+import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import LineLegend from 'react-components/profiles/line-legend.component';
+import Line from 'react-components/profiles/line.component';
+import Map from 'react-components/profiles/map.component';
 import MiniSankey from 'react-components/profiles/mini-sankey.component';
 import MultiTable from 'react-components/profiles/multi-table.component';
-import Map from 'react-components/profiles/map.component';
-
-import capitalize from 'lodash/capitalize';
+import Dropdown from 'react-components/shared/dropdown.component';
+import Footer from 'react-components/shared/footer.component';
+import HelpTooltip from 'react-components/shared/help-tooltip.component';
+import { render, unmountComponentAtNode } from 'react-dom';
+import { Provider } from 'react-redux';
+import 'styles/profile-place.scss';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
+import {
+  GET_PLACE_FACTSHEET_URL,
+  GET_TOOLTIPS_URL,
+  getURLFromParams
+} from 'utils/getURLFromParams';
 import smoothScroll from 'utils/smoothScroll';
-
-import { GET_PLACE_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParams';
-import { DEFAULT_PROFILE_PAGE_YEAR, TOOLTIPS } from 'constants';
-import Tooltip from 'components/shared/info-tooltip.component';
-import HelpTooltip from 'react-components/tool/help-tooltip.component';
 
 const defaults = {
   country: 'Brazil',
   commodity: 'Soy'
 };
-const tooltips = TOOLTIPS.pages.profilePlace;
 const tooltip = new Tooltip('.js-infowindow');
 
 const TranslatedMiniSankey = withTranslation(MiniSankey);
@@ -50,13 +47,11 @@ const _buildMaps = (data, store) => {
   render(
     <Provider store={store}>
       <Map
-        width={countryMapContainer.clientWidth}
         height={countryMapContainer.clientHeight}
         topoJSONPath="./vector_layers/WORLD.topo.json"
         topoJSONRoot="world"
         useRobinsonProjection
         getPolygonClassName={d => (d.properties.name === countryName ? '-isCurrent' : '')}
-        isStaticComponent
       />
     </Provider>,
     countryMapContainer
@@ -65,12 +60,10 @@ const _buildMaps = (data, store) => {
   render(
     <Provider store={store}>
       <Map
-        width={biomeMapContainer.clientWidth}
         height={biomeMapContainer.clientHeight}
         topoJSONPath={`./vector_layers/${defaults.country.toUpperCase()}_BIOME.topo.json`}
         topoJSONRoot={`${defaults.country.toUpperCase()}_BIOME`}
         getPolygonClassName={d => (d.properties.geoid === data.biome_geo_id ? '-isCurrent' : '')}
-        isStaticComponent
       />
     </Provider>,
     biomeMapContainer
@@ -79,12 +72,10 @@ const _buildMaps = (data, store) => {
   render(
     <Provider store={store}>
       <Map
-        width={stateMapContainer.clientWidth}
         height={stateMapContainer.clientHeight}
         topoJSONPath={`./vector_layers/${defaults.country.toUpperCase()}_STATE.topo.json`}
         topoJSONRoot={`${defaults.country.toUpperCase()}_STATE`}
         getPolygonClassName={d => (d.properties.geoid === stateGeoID ? '-isCurrent' : '')}
-        isStaticComponent
       />
     </Provider>,
     stateMapContainer
@@ -93,14 +84,12 @@ const _buildMaps = (data, store) => {
   render(
     <Provider store={store}>
       <Map
-        width={municipalityMapContainer.clientWidth}
         height={municipalityMapContainer.clientHeight}
         topoJSONPath={`./vector_layers/municip_states/${defaults.country.toLowerCase()}/${stateGeoID}.topo.json`}
         topoJSONRoot={`${defaults.country.toUpperCase()}_${stateGeoID}`}
         getPolygonClassName={d =>
           d.properties.geoid === data.municipality_geo_id ? '-isCurrent' : ''
         }
-        isStaticComponent
       />
     </Provider>,
     municipalityMapContainer
@@ -135,15 +124,14 @@ const _build = (data, year, onLinkClick, store) => {
     render(
       <Provider store={store}>
         <Line
-          className=".js-line"
           data={data.trajectory_deforestation}
           xValues={data.trajectory_deforestation.included_years}
           settings={{
-            margin: { top: 0, right: 40, bottom: 30, left: 99 },
+            margin: { top: 0, right: 20, bottom: 30, left: 60 },
             height: 425,
             ticks: {
               yTicks: 7,
-              yTickPadding: 52,
+              yTickPadding: 10,
               yTickFormatType: 'deforestation-trajectory',
               xTickPadding: 15
             }
@@ -253,16 +241,18 @@ const _setInfo = (store, info, onLinkClick, { nodeId, year }) => {
     info.soy_production !== null ? formatValue(info.soy_production, 'tons') : '-';
   document.querySelector('.js-link-map').addEventListener('click', () =>
     onLinkClick('tool', {
-      selectedNodesIds: [nodeId],
-      isMapVisible: true,
-      selectedYears: [year, year]
+      state: {
+        isMapVisible: true,
+        selectedNodesIds: [parseInt(nodeId, 10)],
+        selectedYears: [year, year]
+      }
     })
   );
-  document
-    .querySelector('.js-link-supply-chain')
-    .addEventListener('click', () =>
-      onLinkClick('tool', { selectedNodesIds: [nodeId], selectedYears: [year, year] })
-    );
+  document.querySelector('.js-link-supply-chain').addEventListener('click', () =>
+    onLinkClick('tool', {
+      state: { selectedNodesIds: [parseInt(nodeId, 10)], selectedYears: [year, year] }
+    })
+  );
   document.querySelector('.js-line-title').innerHTML = info.municipality
     ? `Deforestation trajectory of ${info.municipality}`
     : '-';
@@ -328,20 +318,25 @@ const _loadData = (store, nodeId, year) => {
     year
   });
   setLoading();
+  const tooltipsURL = getURLFromParams(GET_TOOLTIPS_URL);
 
-  fetch(placeFactsheetURL)
+  Promise.all(
+    [placeFactsheetURL, tooltipsURL].map(url =>
+      fetch(url).then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error(response.statusText);
+      })
+    )
+  )
     .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error(response.statusText);
-    })
-    .then(result => {
-      if (!result) return;
+      if (!response) return;
+
+      const tooltips = response[1].profilePlace;
+      const data = response[0].data;
 
       setLoading(false);
-
-      const data = result.data;
 
       const info = {
         area: data.area,
@@ -362,11 +357,21 @@ const _loadData = (store, nodeId, year) => {
       render(
         <Dropdown
           label="Year"
+          size="big"
           value={year}
           valueList={[2010, 2011, 2012, 2013, 2014, 2015]}
           onValueSelected={dropdownYear => _switchYear(store, nodeId, dropdownYear)}
         />,
         document.getElementById('year-dropdown')
+      );
+
+      render(
+        <HelpTooltip text={tooltips.soyLand} position="bottom" />,
+        document.getElementById('soy-land-tooltip')
+      );
+      render(
+        <HelpTooltip text={tooltips.soyProduction} position="bottom" />,
+        document.getElementById('soy-production-tooltip')
       );
 
       _build(data, year, onLinkClick(store), store);
@@ -386,15 +391,6 @@ export const mount = (root, store) => {
     printMode: print,
     feedback: FeedbackMarkup()
   });
-
-  render(
-    <HelpTooltip text={tooltips.soyLand} position="bottom" />,
-    document.getElementById('soy-land-tooltip')
-  );
-  render(
-    <HelpTooltip text={tooltips.soyProduction} position="bottom" />,
-    document.getElementById('soy-production-tooltip')
-  );
 
   render(
     <Provider store={store}>

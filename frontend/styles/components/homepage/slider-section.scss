@@ -13,6 +13,10 @@ $slide-height-small: 300px;
       height: $slide-height-small;
     }
   }
+
+  @media screen and (max-width: $breakpoint-foundation-small) {
+    padding: 40px 0 0;
+  }
 }
 
 .slider-wrapper {
@@ -74,21 +78,45 @@ $slide-height-small: 300px;
 
 .slide-next {
   left: 100%;
-  transform: translate(-50%, calc(-50% + 20px));
+  transform: translate(-50%, 50%);
 
   &::after {
     transform: translate(-50%, -50%) rotate(45deg);
     margin-left: -1px;
   }
+
+  &.-no-image {
+    transform: translate(-50%, calc(-50% + 20px));
+  }
+
+  @media screen and (max-width: 1200px) {
+    transform: translate(-100%, 50%);
+
+    &.-no-image {
+      transform: translate(-100%, calc(-50% + 20px));
+    }
+  }
 }
 
 .slide-prev {
   right: 100%;
-  transform: translate(50%, calc(-50% + 20px));
+  transform: translate(50%, 50%);
 
   &::after {
     transform: translate(-50%, -50%) rotate(-135deg);
     margin-left: 1px;
+  }
+
+  &.-no-image {
+    transform: translate(50%, calc(-50% + 20px));
+  }
+
+  @media screen and (max-width: 1200px) {
+    transform: translate(100%, 50%);
+
+    &.-no-image {
+      transform: translate(100%, calc(-50% + 20px));
+    }
   }
 }
 
@@ -148,12 +176,17 @@ $slide-height-small: 300px;
 
 
     .slide-title {
+      margin-top: 5px;
       font-family: $font-family-2;
-      font-size: 20px;
+      font-size: $font-size-medium;
       font-weight: 300;
       line-height: 1.6;
       color: $gray-text;
       text-transform: capitalize;
+
+      @media screen and (max-width: $breakpoint-foundation-medium) {
+        font-size: $font-size-xx-regular;
+      }
     }
   }
 

@@ -9,7 +9,6 @@ AllCops:
     - 'config/initializers/*'
     - 'config/*'
     - 'frontend/node_modules/**/*'
-    - lib/schema_revamp.rb
 
 Bundler/OrderedGems:
   Enabled: false
@@ -30,6 +29,12 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
     - 'lib/tasks/**/*'
+
+Metrics/LineLength:
+  Max: 80
+  Include:
+    - 'app/services/api/v3/actors/**/*'
+    - 'app/services/api/v3/places/**/*'
 
 Style/AndOr:
   Enabled: false

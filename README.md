@@ -437,6 +437,8 @@ The project's main configuration values can be set using [environment variables]
 * DATA_FORM_ENDPOINT: end point to send form values in Data page
 * PDF_DOWNLOAD_URL: end point to download a PDF snapshot of the page
 * PERF_TEST: when set to true, enables performance evaluation mode. Only supported outside of production environments. See https://github.com/garbles/why-did-you-update for more info.
+* REDUX_LOGGER_ENABLED: when set to true, enables logging redux actions on the browser's console. Only supported outside of production environments.
+* USE_PLAIN_URL_STATE: when set to true, enables saving the sankey's state as a plain serialized string. Use "false" on production environments, ot use base64 encoding
 
 If you are using the included development server, you can set those variables in the `.env` file (use the included `.env.sample` as an example)
 

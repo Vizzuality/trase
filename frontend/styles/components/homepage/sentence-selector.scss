@@ -1,0 +1,54 @@
+.c-sentence-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 60px 0 25px;
+
+  .sentence-selector-text {
+    color: $charcoal-grey;
+    font-size: 24px;
+    font-family: $font-family-2;
+    font-weight: 300;
+    line-height: 1.58;
+
+    @media screen and (max-width: $breakpoint-foundation-medium) {
+      font-size: 20px;
+    }
+  }
+
+  .sentence-selector-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .c-dropdown {
+    margin: 0 10px;
+    cursor: pointer;
+
+    .dropdown-title {
+      text-align: center;
+      padding: 0 25px 0 0;
+      font-size: $font-size-big;
+    }
+
+    .dropdown-title::after {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      border-color: $strong-pink;
+      transform: translate(-50%, calc(-50% - 1px)) rotate(45deg)
+    }
+
+    .dropdown-list {
+      top: 20px;
+      min-width: 120px;
+
+      > .dropdown-item {
+        color: $charcoal-grey;
+        font-size: $font-size-xx-regular;
+      }
+    }
+  }
+}

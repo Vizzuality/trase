@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
-import classnames from 'classnames';
+import cx from 'classnames';
 import Link from 'redux-first-router-link';
 import PropTypes from 'prop-types';
 
 import formatValue from 'utils/formatValue';
 import { UNITLESS_UNITS } from 'constants';
-import Tooltip from 'react-components/tool/help-tooltip.component';
+import Tooltip from 'react-components/shared/help-tooltip.component';
 
 import 'styles/components/profiles/area-table.scss';
 
@@ -70,12 +70,11 @@ class Table extends Component {
       <thead>
         <tr className="table-row">
           {data.included_columns.map((column, columnIndex) => (
-            <th
-              key={columnIndex}
-              className={classnames('header-cell', { '_text-align-right': columnIndex > 0 })}
-            >
-              {column.name}
-              {column.tooltip && <Tooltip text={column.tooltip} />}
+            <th key={columnIndex} className="header-cell">
+              <div className={cx({ 'align-content-right': columnIndex > 0 })}>
+                <span className="header-name">{column.name}</span>
+                {column.tooltip && <Tooltip text={column.tooltip} />}
+              </div>
             </th>
           ))}
         </tr>
@@ -98,31 +97,34 @@ class Table extends Component {
             {row.values.map((value, valueIndex) => (
               <td
                 key={valueIndex}
-                className={classnames('cell-score', {
+                className={cx({
+                  'cell-score': valueIndex > 0,
+                  'cell-name': valueIndex === 0,
                   '_text-align-right': valueIndex > 0 || row.is_total === true
                 })}
               >
                 {value === null && <span className="unit">N/A</span>}
                 {value !== null && (
                   <span
-                    className="unit"
+                    className={`${valueIndex > 0 ? 'unit' : 'node-name'}`}
                     data-unit={rowIndex === 0 ? data.included_columns[valueIndex].unit : null}
                   >
                     {formatValue(value.value, data.included_columns[valueIndex].name)}
-                    {target !== null &&
-                      typeof value.value !== 'number' &&
-                      value.id !== undefined && (
-                        <Link
-                          className="node-link"
-                          to={{ type: target, payload: { query: { nodeId: value.id, year } } }}
-                        >
-                          <svg className="icon icon-check">
-                            <use xlinkHref="#icon-outside-link" />
-                          </svg>
-                        </Link>
-                      )}
                   </span>
                 )}
+                {value !== null &&
+                  target !== null &&
+                  typeof value.value !== 'number' &&
+                  value.id !== undefined && (
+                    <Link
+                      className="node-link"
+                      to={{ type: target, payload: { query: { nodeId: value.id, year } } }}
+                    >
+                      <svg className="icon icon-check">
+                        <use xlinkHref="#icon-outside-link" />
+                      </svg>
+                    </Link>
+                  )}
               </td>
             ))}
           </tr>

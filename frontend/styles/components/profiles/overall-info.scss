@@ -4,6 +4,7 @@
 
   .dropdown-element {
     display: inline-block;
+    margin-bottom: 10px;
 
     &:not(:last-child) {
       margin-right: 41px;
@@ -18,10 +19,6 @@
       }
 
       > .dropdown-title {
-        font-size: $font-size-huge;
-        line-height: 1.2em;
-        padding-right: 31px;
-
         &:after {
           content: normal;
         }
@@ -34,22 +31,29 @@
       > .dropdown-title {
         &::after {
           content: '';
-          width: 14px;
-          height: 14px;
-          border: 3px solid $medium-pink;
         }
       }
 
       > .dropdown-list {
+        width: 100%;
         top: 100%;
-        min-width: 140px;
+      }
+    }
+
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      &:first-child {
+        width: 100%;
+      }
+
+      &:not(:last-child) {
+        margin-right: 21px;
       }
     }
   }
 
   .stat-item {
     display: inline-block;
-    padding-top: 36px;
+    margin-top: 36px;
     margin-right: 20px;
 
     > .legend {
@@ -75,14 +79,23 @@
       font-family: $font-family-1;
       font-size: $font-size-medium;
     }
+
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      margin-top: 15px;
+    }
   }
 
   .summary {
     margin-top: 24px;
+    margin-bottom: 40px;
     font-family: $font-family-2;
     font-size: $font-size-xx-regular;
     font-weight: 300;
     line-height: 2;
     color: $charcoal-grey;
+
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      font-size: $font-size-x-regular;
+    }
   }
 }

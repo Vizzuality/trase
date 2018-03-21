@@ -8,7 +8,16 @@ engines:
   duplication:
     enabled: true
     exclude_paths:
+      - app/controllers/
       - app/admin/api/v3/
+      - app/models/actor_attributes.rb
+      - app/models/place_attributes.rb
+      - app/models/node.rb
+      - app/models/node_ind.rb
+      - app/models/node_qual.rb
+      - app/models/node_quant.rb
+      - app/models/flow_stats_for_node.rb
+      - app/models/node_type.rb
     config:
       languages:
       - ruby:
@@ -16,13 +25,39 @@ engines:
     enabled: true
   reek:
     enabled: true
-    checks:
-      UncommunicativeModuleName:
-        enabled: false
-      IrresponsibleModule:
-        enabled: false
-      InstanceVariableAssumption:
-        enabled: false
+
+version: '2' # required to adjust maintainability checks
+checks:
+  argument-count:
+    config:
+      threshold: 4
+  complex-logic:
+    config:
+      threshold: 4
+  file-lines:
+    config:
+      threshold: 250
+  method-complexity:
+    config:
+      threshold: 10
+  method-count:
+    config:
+      threshold: 20
+  method-lines:
+    config:
+      threshold: 40
+  nested-control-flow:
+    config:
+      threshold: 4
+  return-statements:
+    config:
+      threshold: 4
+  similar-code:
+    config:
+      threshold: # language-specific defaults. an override will affect all languages.
+  identical-code:
+    config:
+      threshold: # language-specific defaults. an override will affect all languages.
 
 ratings:
   paths:
@@ -33,6 +68,4 @@ exclude_paths:
 - spec/**/*
 - "**/vendor/**/*"
 - db/**/*
-- 'lib/schema_revamp.rb' # excluding because it is a temporary migration script
-- 'lib/schema_content.rb' # excluding because it is a temporary migration script
 - 'lib/db_helpers/**/*' # db helpers, mostly temporary

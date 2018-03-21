@@ -3,6 +3,10 @@
 .c-twitter-feed {
   position: relative;
   width: 350px;
+
+  @media only screen and (max-width: $breakpoint-foundation-small) {
+    display: none;
+  }
 }
 
 .twitter-token {
@@ -19,6 +23,10 @@
     fill: $white;
     margin-top: 2px;
     margin-left: 1px;
+  }
+
+  @media only screen and (max-width: $breakpoint-foundation-small) {
+    display: none;
   }
 }
 
@@ -68,6 +76,7 @@
 
   &.-exited {
     transform: translateX(40px) scale(1, 1);
+    z-index: -1;
   }
 }
 

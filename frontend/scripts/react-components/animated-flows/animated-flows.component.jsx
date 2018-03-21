@@ -1,46 +1,20 @@
 /* eslint-disable camelcase,no-var,vars-on-top,no-shadow */
 import React from 'react';
-import debounce from 'lodash/debounce';
+import PropTypes from 'prop-types';
 import { select as d3_select, interval as d3_interval, easeLinear } from 'd3';
+
+import { Responsive } from 'react-components/shared/responsive.hoc';
 import d3_sankey from './sankey';
 import energy from './energy.json';
 
 class AnimatedFlows extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      width: null,
-      height: null
-    };
-
-    this.build = this.build.bind(this);
-    this.update = debounce(this.update.bind(this), 350);
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize', this.update);
-    this.update();
-  }
-
   componentDidUpdate() {
     this.build();
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.build);
-  }
-
-  update() {
-    const parent = this.container.parentNode;
-    const { height, width } = window.getComputedStyle(parent);
-    this.setState({
-      width: parseInt(width, 10),
-      height: parseInt(height, 10)
-    });
-  }
-
   build() {
-    const { width, height } = this.state;
+    const { width, height } = this.props;
+
     this.container.innerHTML = '';
 
     const svg = d3_select(this.container)
@@ -186,4 +160,9 @@ class AnimatedFlows extends React.PureComponent {
   }
 }
 
-export default AnimatedFlows;
+AnimatedFlows.propTypes = {
+  width: PropTypes.number,
+  height: PropTypes.number
+};
+
+export default Responsive({ debounceRate: 350 })(AnimatedFlows);

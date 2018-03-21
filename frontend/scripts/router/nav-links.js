@@ -8,7 +8,7 @@ export default {
       name: 'Map',
       page: {
         type: 'tool',
-        payload: { query: { isMapVisible: true } }
+        payload: { query: { state: { isMapVisible: true } } }
       }
     },
     {
@@ -50,10 +50,10 @@ export default {
         payload: { section: 'faq' }
       }
     },
-    {
-      name: 'Team',
-      page: 'team'
-    },
+    // {
+    //   name: 'Team',
+    //   page: 'team'
+    // },
     {
       name: 'Partners',
       page: {

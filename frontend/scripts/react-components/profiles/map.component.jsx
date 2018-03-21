@@ -6,20 +6,11 @@ import { geoRobinson as d3_geoRobinson } from 'd3-geo-projection';
 import { feature as topojsonFeature } from 'topojson';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Responsive } from 'react-components/shared/responsive.hoc';
 
 class Map extends Component {
-  constructor(props) {
-    super(props);
-
-    this.key = `map_${new Date().getTime()}`;
-  }
-
   componentDidMount() {
     this.build();
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return !nextProps.isStaticComponent;
   }
 
   componentDidUpdate() {
@@ -59,10 +50,11 @@ class Map extends Component {
       useRobinsonProjection
     } = this.props;
 
-    const elem = document.querySelector(`.${this.key}`);
-    elem.innerHTML = '';
+    this.element.innerHTML = '';
 
-    const d3Container = d3_select(elem);
+    if (!width || !height) return;
+
+    const d3Container = d3_select(this.element);
 
     const svg = d3Container
       .append('svg')
@@ -110,7 +102,13 @@ class Map extends Component {
   }
 
   render() {
-    return <div className={this.key} />;
+    return (
+      <div
+        ref={elem => {
+          this.element = elem;
+        }}
+      />
+    );
   }
 }
 
@@ -122,8 +120,7 @@ Map.propTypes = {
   getPolygonClassName: PropTypes.func,
   showTooltipCallback: PropTypes.func,
   hideTooltipCallback: PropTypes.func,
-  useRobinsonProjection: PropTypes.bool,
-  isStaticComponent: PropTypes.bool
+  useRobinsonProjection: PropTypes.bool
 };
 
-export default Map;
+export default Responsive({ debounceRate: 1000 })(Map);

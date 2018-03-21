@@ -1,0 +1,139 @@
+---
+Attribute:
+  enabled: true
+  exclude: []
+BooleanParameter:
+  enabled: false
+  exclude: []
+ClassVariable:
+  enabled: true
+  exclude: []
+ControlParameter:
+  enabled: false
+  exclude: []
+DataClump:
+  enabled: true
+  exclude: []
+  max_copies: 3
+  min_clump_size: 3
+DuplicateMethodCall:
+  enabled: true
+  exclude: []
+  max_calls: 2
+  allow_calls: []
+FeatureEnvy:
+  enabled: false
+  exclude: []
+InstanceVariableAssumption:
+  enabled: false
+  exclude: []
+IrresponsibleModule:
+  enabled: false
+  exclude: []
+LongParameterList:
+  enabled: true
+  exclude: []
+  max_params: 5
+  overrides:
+    initialize:
+      max_params: 5
+LongYieldList:
+  enabled: true
+  exclude: []
+  max_params: 3
+ManualDispatch:
+  enabled: true
+  exclude: []
+ModuleInitialize:
+  enabled: true
+  exclude: []
+NestedIterators:
+  enabled: true
+  exclude: []
+  max_allowed_nesting: 2
+  ignore_iterators:
+  - tap
+  - find
+NilCheck:
+  enabled: false
+  exclude: []
+PrimaDonnaMethod:
+  enabled: true
+  exclude: []
+RepeatedConditional:
+  enabled: true
+  exclude: []
+  max_ifs: 2
+SubclassedFromCoreClass:
+  enabled: true
+  exclude: []
+Syntax:
+  enabled: true
+  exclude: []
+TooManyConstants:
+  enabled: true
+  exclude: []
+  max_constants: 5
+TooManyInstanceVariables:
+  enabled: true
+  exclude:
+    - 'Api::V3::Actors::BasicAttributes'
+    - 'Api::V3::Places::BasicAttributes'
+  max_instance_variables: 10
+TooManyMethods:
+  enabled: true
+  exclude:
+    - 'Api::V3::Actors::BasicAttributes'
+    - 'Api::V3::Places::BasicAttributes'
+  max_methods: 15
+TooManyStatements:
+  enabled: true
+  exclude:
+  - initialize
+  max_statements: 20
+UncommunicativeMethodName:
+  enabled: true
+  exclude: []
+  reject:
+  - !ruby/regexp /^[a-z]$/
+  - !ruby/regexp /[0-9]$/
+  - !ruby/regexp /[A-Z]/
+  accept: []
+UncommunicativeModuleName:
+  enabled: false
+  exclude: []
+  reject:
+  - !ruby/regexp /^.$/
+  - !ruby/regexp /[0-9]$/
+  accept: []
+UncommunicativeParameterName:
+  enabled: true
+  exclude: []
+  reject:
+  - !ruby/regexp /^.$/
+  - !ruby/regexp /[0-9]$/
+  - !ruby/regexp /[A-Z]/
+  - !ruby/regexp /^_/
+  accept: []
+UncommunicativeVariableName:
+  enabled: true
+  exclude: []
+  reject:
+  - !ruby/regexp /^.$/
+  - !ruby/regexp /[0-9]$/
+  - !ruby/regexp /[A-Z]/
+  accept:
+  - !ruby/regexp /^_$/
+  - 'i'
+  - 'j'
+  - 'e'
+UnusedParameters:
+  enabled: true
+  exclude: []
+UnusedPrivateMethod:
+  enabled: false
+  exclude: []
+UtilityFunction:
+  enabled: true
+  exclude: []
+  public_methods_only: true

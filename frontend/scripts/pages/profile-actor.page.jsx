@@ -1,43 +1,38 @@
 /* eslint-disable no-new */
-import ProfileActorMarkup from 'html/profile-actor.ejs';
+import Tooltip from 'components/shared/info-tooltip.component';
+import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST, DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
-
-import 'styles/profile-actor.scss';
-
+import ProfileActorMarkup from 'html/profile-actor.ejs';
+import capitalize from 'lodash/capitalize';
 import React from 'react';
-import { render, unmountComponentAtNode } from 'react-dom';
-import { Provider } from 'react-redux';
+import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
-import Footer from 'react-components/shared/footer.component';
-
-import Dropdown from 'react-components/shared/dropdown.component';
-import Map from 'react-components/profiles/map.component';
+import ChoroLegend from 'react-components/profiles/choro-legend.component';
+import DropdownTabSwitcher from 'react-components/profiles/dropdown-tab-switcher.component';
 import Line from 'react-components/profiles/line.component';
+import Map from 'react-components/profiles/map.component';
 import MultiTable from 'react-components/profiles/multi-table.component';
 import Scatterplot from 'react-components/profiles/scatterplot.component';
-import Tooltip from 'components/shared/info-tooltip.component';
-import ChoroLegend from 'react-components/profiles/choro-legend.component';
-import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
-
-import smoothScroll from 'utils/smoothScroll';
+import Dropdown from 'react-components/shared/dropdown.component';
+import Footer from 'react-components/shared/footer.component';
+import HelpTooltip from 'react-components/shared/help-tooltip.component';
+import { render, unmountComponentAtNode } from 'react-dom';
+import { Provider } from 'react-redux';
+import 'styles/profile-actor.scss';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
-import capitalize from 'lodash/capitalize';
-import { GET_ACTOR_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParams';
 import {
-  ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST,
-  DEFAULT_PROFILE_PAGE_YEAR,
-  TOOLTIPS
-} from 'constants';
-import TopSourceSwitcher from 'react-components/profiles/top-source-switcher.component';
-import HelpTooltip from 'react-components/tool/help-tooltip.component';
+  GET_ACTOR_FACTSHEET_URL,
+  GET_TOOLTIPS_URL,
+  getURLFromParams
+} from 'utils/getURLFromParams';
+
+import smoothScroll from 'utils/smoothScroll';
 
 const defaults = {
   country: 'Brazil',
   commodity: 'soy'
 };
-const tooltips = TOOLTIPS.pages.profileActor;
-
 const TranslatedLine = withTranslation(Line);
 const tooltip = new Tooltip('.js-infowindow');
 const LINE_MARGINS = {
@@ -69,12 +64,11 @@ const _initSource = (selectedSource, data, store) => {
         data={sourceLines}
         xValues={data.top_sources.included_years}
         settings={settings}
+        useBottomLegend
       />
     </Provider>,
     document.querySelector('.js-top-municipalities')
   );
-
-  // document.querySelector('.js-top-municipalities-map').innerHTML = '';
 
   const topoJSONPath = `./vector_layers/${defaults.country.toUpperCase()}_${selectedSource.toUpperCase()}.topo.json`;
   const topoJSONRoot = `${defaults.country.toUpperCase()}_${selectedSource.toUpperCase()}`;
@@ -105,7 +99,7 @@ const _initSource = (selectedSource, data, store) => {
     <Provider store={store}>
       <Map
         width={containerElement.clientWidth}
-        height={containerElement.clientHeight}
+        height={400}
         topoJSONPath={topoJSONPath}
         topoJSONRoot={topoJSONRoot}
         getPolygonClassName={getPolygonClassName}
@@ -118,32 +112,43 @@ const _initSource = (selectedSource, data, store) => {
 };
 
 const _setTopSourceSwitcher = (data, verb, year, store) => {
+  const nodeName = capitalize(data.node_name);
+  const title = `Top sourcing regions of Soy ${verb} by ${nodeName} in ${year}:`;
+  const items = Object.keys(data.top_sources).filter(
+    key => !ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)
+  );
+
   render(
     <Provider store={store}>
-      <TopSourceSwitcher
-        year={year}
-        verb={verb}
-        nodeName={capitalize(data.node_name)}
-        switchers={Object.keys(data.top_sources).filter(
-          key => !ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)
-        )}
-        onTopSourceSelected={selectedSwitcher => _initSource(selectedSwitcher, data, store)}
+      <DropdownTabSwitcher
+        title={title}
+        items={items}
+        onSelectedIndexChange={index => _initSource(items[index], data, store)}
       />
     </Provider>,
     document.querySelector('.js-top-municipalities-title-container')
   );
 };
 
-const _build = (data, { nodeId, year, print }, store) => {
+const _build = (data, tooltips, { nodeId, year, print }, store) => {
   const verb = data.column_name === 'EXPORTER' ? 'exported' : 'imported';
   const verbGerund = data.column_name === 'EXPORTER' ? 'exporting' : 'importing';
+
+  render(
+    <HelpTooltip text={tooltips.zeroDeforestationCommitment} position="bottom" />,
+    document.getElementById('zero-deforestation-tooltip')
+  );
+  render(
+    <HelpTooltip text={tooltips.forest500Score} position="bottom" />,
+    document.getElementById('forest-500-tooltip')
+  );
 
   lineSettings = {
     margin: {
       top: 10,
       right: 100,
       bottom: 30,
-      left: 94
+      left: 50
     },
     height: 244,
     ticks: {
@@ -232,6 +237,7 @@ const _build = (data, { nodeId, year, print }, store) => {
           data={topCountriesLines}
           xValues={data.top_countries.included_years}
           settings={settings}
+          useBottomLegend
         />
       </Provider>,
       document.querySelector('.js-top-destination')
@@ -300,10 +306,6 @@ const _build = (data, { nodeId, year, print }, store) => {
   }
 
   if (data.companies_sourcing) {
-    document.querySelector('.js-companies-exporting-y-axis').innerHTML = `${
-      data.companies_sourcing.dimension_y.name
-    } (${data.companies_sourcing.dimension_y.unit})`;
-
     const showTooltipCallback = (company, indicator, x, y) => {
       tooltip.show(x, y, company.name, [
         {
@@ -320,15 +322,16 @@ const _build = (data, { nodeId, year, print }, store) => {
     };
 
     const scatterplotContainerElement = document.querySelector('.js-scatterplot-container');
+    const scatterplotTitle = `Comparing companies ${verbGerund} Soy from Brazil in ${year}`;
 
     render(
       <Provider store={store}>
         <Scatterplot
           width={scatterplotContainerElement.clientWidth}
+          title={scatterplotTitle}
           data={data.companies_sourcing.companies}
           xDimension={data.companies_sourcing.dimensions_x}
           node={{ id: nodeId, name: data.node_name }}
-          verbGerund={verbGerund}
           year={year}
           showTooltipCallback={showTooltipCallback}
           hideTooltipCallback={tooltip.hide}
@@ -382,16 +385,14 @@ const _setInfo = (info, onLinkClick, { nodeId, year }) => {
   }
   document.querySelector('.js-link-map').addEventListener('click', () =>
     onLinkClick('tool', {
-      selectedNodesIds: [nodeId],
-      isMapVisible: true,
-      selectedYears: [year, year]
+      state: { isMapVisible: true, selectedNodesIds: [nodeId], selectedYears: [year, year] }
     })
   );
 
   document
     .querySelector('.js-link-supply-chain')
     .addEventListener('click', () =>
-      onLinkClick('tool', { selectedNodesIds: [nodeId], selectedYears: [year, year] })
+      onLinkClick('tool', { state: { selectedNodesIds: [nodeId], selectedYears: [year, year] } })
     );
   document.querySelector('.js-summary-text').textContent = info.summary ? info.summary : '-';
 };
@@ -440,20 +441,26 @@ const _loadData = (store, nodeId, year) => {
     year
   });
   setLoading();
+  const tooltipsURL = getURLFromParams(GET_TOOLTIPS_URL);
 
-  fetch(actorFactsheetURL)
+  Promise.all(
+    [actorFactsheetURL, tooltipsURL].map(url =>
+      fetch(url).then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error(response.statusText);
+      })
+    )
+  )
     .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error(response.statusText);
-    })
-    .then(result => {
-      if (!result) return;
+      if (!response) return;
+
+      const tooltips = response[1].profileActor;
+      const data = response[0].data;
 
       setLoading(false);
 
-      const data = result.data;
       const info = {
         type: data.column_name,
         name: data.node_name,
@@ -468,6 +475,7 @@ const _loadData = (store, nodeId, year) => {
 
       render(
         <Dropdown
+          size="big"
           label="Year"
           value={year}
           valueList={[2010, 2011, 2012, 2013, 2014, 2015]}
@@ -476,9 +484,12 @@ const _loadData = (store, nodeId, year) => {
         document.getElementById('year-dropdown')
       );
 
-      _build(data, { nodeId, year }, store);
+      _build(data, tooltips, { nodeId, year }, store);
     })
-    .catch(reason => _showErrorMessage(reason.message));
+    .catch(reason => {
+      _showErrorMessage(reason.message);
+      console.error(reason);
+    });
 };
 
 export const mount = (root, store) => {
@@ -490,15 +501,6 @@ export const mount = (root, store) => {
     printMode: print,
     feedback: FeedbackMarkup()
   });
-
-  render(
-    <HelpTooltip text={tooltips.zeroDeforestationCommitment} position="bottom" />,
-    document.getElementById('zero-deforestation-tooltip')
-  );
-  render(
-    <HelpTooltip text={tooltips.forest500Score} position="bottom" />,
-    document.getElementById('forest-500-tooltip')
-  );
 
   render(
     <Provider store={store}>

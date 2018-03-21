@@ -1,8 +1,12 @@
+/* eslint-disable */
+import { TOGGLE_DROPDOWN } from 'actions/app.actions';
 import { HIGHLIGHT_NODE, LOAD_INITIAL_DATA } from 'actions/tool.actions';
-import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import pick from 'lodash/pick';
+import pickBy from 'lodash/pickBy';
+import isEqual from 'lodash/isEqual';
 import qs from 'query-string';
 import { redirect } from 'redux-first-router';
-import { TOGGLE_DROPDOWN } from 'actions/app.actions';
 
 const URL_STATE_PROPS = [
   'selectedContextId',
@@ -20,14 +24,12 @@ const URL_STATE_PROPS = [
   'selectedMapBasemap'
 ];
 
-export const URL_PARAMS_PROPS = ['isMapVisible', 'selectedNodesIds', 'selectedYears'];
-
 export const filterStateToURL = state => {
-  if (_.isEmpty(state)) {
+  if (isEmpty(state)) {
     return {};
   }
 
-  const stateToSave = _.pick(state, URL_STATE_PROPS);
+  const stateToSave = pick(state, URL_STATE_PROPS);
 
   stateToSave.selectedResizeByName = state.selectedResizeBy
     ? state.selectedResizeBy.name
@@ -43,109 +45,63 @@ export const filterStateToURL = state => {
 
 export const encodeStateToURL = state => {
   const urlProps = JSON.stringify(filterStateToURL(state));
-  return btoa(urlProps);
+  return USE_PLAIN_URL_STATE ? urlProps : btoa(urlProps);
 };
 
-export const computeStateQueryParams = (state, params) => {
-  if (!params) return state;
-  const parsers = {
-    selectedNodesIds(currentState, value) {
-      let selectedNodesIds;
-      if (Array.isArray(value)) {
-        selectedNodesIds = value.map(nodeId => parseInt(nodeId, 10));
-      } else {
-        selectedNodesIds = value
-          .replace(/\[|\]/gi, '')
-          .split(',')
-          .map(nodeId => parseInt(nodeId, 10));
-      }
-      return {
-        ...currentState,
-        areNodesExpanded: true,
-        selectedNodesIds,
-        expandedNodesIds: selectedNodesIds
-      };
-    },
-    selectedYears(currentState, value) {
-      let selectedYears;
-      if (Array.isArray(value)) {
-        selectedYears = value.map(year => parseInt(year, 10));
-      } else {
-        selectedYears = value
-          .replace(/\[|\]/gi, '')
-          .split(',')
-          .map(year => parseInt(year, 10));
-      }
-      return { ...currentState, selectedYears };
-    },
-    default(currentState, value, prop) {
-      return { ...currentState, [prop]: value };
-    }
-  };
-  let newState = { ...state };
-  // if URL contains GET parameters, override hash state prop with it
-  URL_PARAMS_PROPS.forEach(prop => {
-    const value = params[prop];
-    const parser = parsers[prop] || parsers.default;
-    if (value) {
-      newState = { ...parser(newState, value, prop) };
-    }
-  });
-  return newState;
+export const decodeStateFromURL = state => {
+  return USE_PLAIN_URL_STATE ? JSON.parse(state) : JSON.parse(atob(state));
 };
-
-export const decodeStateFromURL = state =>
-  typeof state === 'undefined' ? {} : JSON.parse(atob(state));
 
 // remove all params that are now in the state
-const removeStateParamsFromQuery = (params, state) =>
-  _.pickBy({ ...params, state }, (v, param) => param !== '' && !URL_PARAMS_PROPS.includes(param));
+const removeEmptyParams = (params, state) =>
+  pickBy({ ...params, state }, (v, param) => param !== '' || typeof param !== 'undefined');
 
 export const parse = url => {
   const params = qs.parse(url);
   if (params.state) {
     const state = decodeStateFromURL(params.state);
-    return removeStateParamsFromQuery(params, state);
+    return removeEmptyParams(params, state);
   }
   return params;
 };
 
 export const stringify = params => {
-  const needsToComputeState = [...URL_PARAMS_PROPS, 'state'].reduce(
-    (acc, next) => typeof params[next] !== 'undefined' || acc,
-    false
-  );
-  if (needsToComputeState) {
-    const state = encodeStateToURL(computeStateQueryParams(params.state, params));
-    const result = removeStateParamsFromQuery(params, state);
-    return qs.stringify(result);
+  if (params.state) {
+    const { state, ...query } = params;
+    return qs.stringify({ ...query, state: encodeStateToURL(state) });
   }
   return qs.stringify(params);
 };
 
-export const toolUrlStateMiddleware = store => next => action => {
-  const prevLocation = store.getState().location;
-  // if highlight action bail
-  if ([HIGHLIGHT_NODE, TOGGLE_DROPDOWN].includes(action.type) || prevLocation.type !== 'tool') {
-    return next(action);
-  }
+export const rehydrateToolState = (action, next, location) => {
   const decoratedAction = { ...action };
   let urlState = null; // prev state
-  if (prevLocation.query && prevLocation.query.state) {
+  if (location.query && location.query.state) {
     // urlState is defined when entering the app with query params set
-    urlState = { ...prevLocation.query.state };
-  } else if (prevLocation.search) {
+    urlState = { ...location.query.state };
+  } else if (location.search) {
     // sometimes prevLocation.search is defined but urlState isn't when navigating from within the app
-    urlState = parse(prevLocation.search).state;
+    urlState = parse(location.search).state;
   }
   if (action.type === LOAD_INITIAL_DATA && urlState) {
     // need to rehydrate state
     decoratedAction.payload = urlState;
   }
-  const result = next(decoratedAction);
+  return next(decoratedAction);
+};
+
+export const toolUrlStateMiddleware = store => next => action => {
+  const prevLocation = store.getState().location;
+  const prevUrlState = filterStateToURL(store.getState().tool);
+  // if highlight action bail
+  if ([HIGHLIGHT_NODE, TOGGLE_DROPDOWN].includes(action.type) || prevLocation.type !== 'tool') {
+    return next(action);
+  }
+  const result = rehydrateToolState(action, next, prevLocation);
   const { location, tool } = store.getState(); // next state
-  const newState = computeStateQueryParams(filterStateToURL(tool), location.query);
-  const areNotEqual = !_.isEqual(newState, urlState);
+
+  const newUrlState = filterStateToURL(tool);
+  const areNotEqual = !isEqual(newUrlState, prevUrlState);
   const conditions = [
     location.type === 'tool',
     action.type !== 'tool',
@@ -156,7 +112,7 @@ export const toolUrlStateMiddleware = store => next => action => {
     store.dispatch(
       redirect({
         type: 'tool',
-        payload: { query: removeStateParamsFromQuery(location.query, newState) }
+        payload: { query: removeEmptyParams(location.query, newUrlState) }
       })
     );
   }

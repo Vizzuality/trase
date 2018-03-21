@@ -74,6 +74,10 @@ a {
     color: $charcoal-grey-faded;
   }
 
+  &.-dark {
+    color: $charcoal-grey;
+  }
+
   // for overriding scenarios
   &.-pink {
     color: $strong-pink;

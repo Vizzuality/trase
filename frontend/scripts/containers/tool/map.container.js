@@ -17,7 +17,8 @@ const mapMethodsToState = state => ({
       recolorByNodeIds: state.tool.recolorByNodeIds,
       choropleth: state.tool.choropleth,
       linkedGeoIds: state.tool.linkedGeoIds,
-      defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null
+      defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
+      biomeFilter: state.tool.selectedBiomeFilter
     })
   },
   selectPolygonType: {

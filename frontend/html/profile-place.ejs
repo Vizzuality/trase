@@ -5,10 +5,10 @@
       <div class="c-spinner"></div>
     </div>
     <div class="js-wrap is-hidden">
-      <div class="c-overall-map">
+      <div class="c-overall-map hide-for-small">
         <div class="row">
           <div class="small-4 columns">
-            <div class="row">
+            <div class="row medium-collapse large-uncollapse">
               <div class="small-6 columns">
                 <div class="c-locator-map js-map-country"></div>
               </div>
@@ -21,7 +21,7 @@
             </div>
           </div>
           <div class="small-4 columns">
-            <div class="row">
+            <div class="row medium-collapse large-uncollapse">
               <div class="small-3 columns">
                 <div class="c-locator-map js-map-biome"></div>
               </div>
@@ -34,7 +34,7 @@
             </div>
           </div>
           <div class="small-4 columns">
-            <div class="row">
+            <div class="row medium-collapse large-uncollapse">
               <div class="small-3 columns">
                 <div class="c-locator-map js-map-state"></div>
               </div>
@@ -51,25 +51,25 @@
 
       <div class="c-overall-info is-page-break-always">
         <div class="row">
-          <div class="small-3 columns">
+          <div class="small-12 medium-4 large-3 columns">
             <div class="c-locator-map js-map-municipality"></div>
           </div>
-          <div class="small-9 columns">
+          <div class="small-12 medium-8 large-9 columns">
             <div class="row">
               <div class="small-12 columns">
                 <div class="dropdown-element">
-                  <div class="c-dropdown" data-dropdown="municipality">
+                  <div class="c-dropdown -big">
                     <span class="dropdown-label js-legend">-</span>
-                    <span class="js-dropdown-title dropdown-title js-municipality">-</span>
-                    <ul class="js-dropdown-list dropdown-list is-hidden">
+                    <span class="dropdown-title js-municipality">-</span>
+                    <ul class="dropdown-list is-hidden">
                     </ul>
                   </div>
                 </div>
                 <div class="dropdown-element">
-                  <div class="c-dropdown" data-dropdown="commodity">
+                  <div class="c-dropdown -big">
                     <span class="dropdown-label">Commodity</span>
-                    <span class="js-dropdown-title dropdown-title">Soy</span>
-                    <ul class="js-dropdown-list dropdown-list">
+                    <span class="dropdown-title">Soy</span>
+                    <ul class="dropdown-list">
                     </ul>
                   </div>
                 </div>
@@ -101,7 +101,7 @@
         </div>
       </div>
 
-      <div class="c-anchor-buttons">
+      <div class="c-anchor-buttons hide-for-small">
         <div class="row">
           <div class="small-4 columns">
             <a href="#profile-content-anchor" class="c-link-buttons -with-arrow js-link-profile">
@@ -112,7 +112,7 @@
           <div class="small-4 columns">
             <a class="c-link-buttons js-link-map">
               <img src="/images/profiles/profile-main-option-2.svg" />
-              PRODUCTION REGIONS
+              <span>PRODUCTION REGIONS</span>
               <svg class="icon icon-external-link">
                 <use xlink:href="#icon-external-link"></use>
               </svg>
@@ -121,7 +121,7 @@
           <div class="small-4 columns">
             <a class="c-link-buttons js-link-supply-chain">
               <img src="/images/profiles/profile-main-option-3.svg" />
-              SUPPLY CHAIN ACTORS
+              <span>SUPPLY CHAIN ACTORS</span>
               <svg class="icon icon-external-link">
                 <use xlink:href="#icon-external-link"></use>
               </svg>
@@ -146,9 +146,10 @@
         <div class="row">
           <div class="small-12 columns">
             <h3 class="title -small js-line-title">-</h3>
-            <div class="axis-legend" style="margin-top: 20px">hectares</div>
-            <div class="js-line c-line"></div>
-            <div class="c-line-legend js-line-legend"></div>
+            <div class="c-line-container">
+              <div class="js-line c-line"></div>
+              <div class="c-line-legend js-line-legend"></div>
+            </div>
           </div>
         </div>
       </section>

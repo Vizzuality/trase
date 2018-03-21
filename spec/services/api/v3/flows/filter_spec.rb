@@ -98,7 +98,7 @@ RSpec.describe Api::V3::Flows::Filter do
     end
 
     context 'when expanded mode' do
-      let(:expanded_nodes){
+      let(:expanded_nodes) {
         {selected_nodes_ids: [api_v3_country_of_destination1_node.id]}
       }
       context 'when no locked nodes present' do
@@ -119,6 +119,20 @@ RSpec.describe Api::V3::Flows::Filter do
           )
           filter.call
           expect(filter.active_nodes).to have_key(api_v3_diamantino_node.id)
+        end
+      end
+    end
+
+    context 'when required options missing' do
+      context 'node_type_ids missing' do
+        let(:filter) { Api::V3::Flows::Filter.new(api_v3_context, {}) }
+        it 'should have errors set' do
+          filter.call
+          expect(filter.errors).not_to be_empty
+        end
+        it 'should return no flows' do
+          filter.call
+          expect(filter.flows).to be_nil
         end
       end
     end

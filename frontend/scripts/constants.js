@@ -49,15 +49,22 @@ export const DETAILED_VIEW_MIN_LINK_HEIGHT = 1;
 export const CHOROPLETH_CLASS_ZERO = 'ch-zero';
 export const CHOROPLETH_CLASSES = {
   bidimensional: [
+    'ch-bi-0-3',
+    'ch-bi-1-3',
+    'ch-bi-2-3',
+    'ch-bi-3-3',
     'ch-bi-0-2',
     'ch-bi-1-2',
     'ch-bi-2-2',
+    'ch-bi-3-2',
     'ch-bi-0-1',
     'ch-bi-1-1',
     'ch-bi-2-1',
+    'ch-bi-3-1',
     'ch-bi-0-0',
     'ch-bi-1-0',
-    'ch-bi-2-0'
+    'ch-bi-2-0',
+    'ch-bi-3-0'
   ],
   horizontal: ['ch-red-0', 'ch-red-1', 'ch-red-2', 'ch-red-3', 'ch-red-4'],
   vertical: ['ch-blue-0', 'ch-blue-1', 'ch-blue-2', 'ch-blue-3', 'ch-blue-4'],
@@ -184,34 +191,11 @@ export const BASEMAPS = {
 
 export const DEFAULT_BASEMAP_FOR_CHOROPLETH = 'default';
 
-export const TOOLTIPS = {
-  pages: {
-    profileActor: {
-      zeroDeforestationCommitment: `
-        Does the company have a zero deforestation commitments across their supply chains globally,
-        or are they signatories to the soy moratorium and therefore have a zero deforestation commitment
-        on all exports from the Amazon biome?
-      `,
-      forest500Score: `
-        The Forest 500 index ranks traders according to the strength of their sustainability commitments.
-      `,
-      deforestationRisk: `
-        Deforestation risk associated with a given actor sourcing from a given region is a proportion
-        of the total deforestation measured in that region (for a given indicator). This proportion
-        is calculated based on the volume of the commodity sourced by that actor relative to the total
-        production of that commodity in that region, and provides a measure of deforestation risk that
-        is "embedded" in the commodity exports. For biomes this embedded deforestation risk is
-        aggregated across all regions a given actor sources from within each biome.
-      `
-    },
-    profilePlace: {
-      soyLand: 'Area of land used to grow soybeans.',
-      soyProduction: 'Production of soy in tonnes.'
-    }
-  }
+export const HOME_VIDEO = {
+  en: 'IbwMVUCHrZc',
+  es: 'IbwMVUCHrZc'
 };
 
-export const HOME_VIDEO = {
-  en: 'Rv9hn4IGofM',
-  es: 'xjDjIWPwcPU'
+export const BREAKPOINTS = {
+  small: 640
 };

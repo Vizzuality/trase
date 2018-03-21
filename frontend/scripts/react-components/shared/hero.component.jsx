@@ -9,14 +9,9 @@ import HomeVideo from 'react-components/home/home-video.component';
 class Hero extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       showStory: true
-    };
-
-    this.videoEventHandlers = {
-      pause: this.onPause,
-      exitfullscreen: this.onExitFullScreen,
-      ended: this.onEnded
     };
 
     this.onClickPlay = this.onClickPlay.bind(this);
@@ -24,25 +19,8 @@ class Hero extends React.Component {
     this.closeStoryBox = this.closeStoryBox.bind(this);
   }
 
-  onPause(plyr) {
-    plyr.fullscreen.exit();
-  }
-
-  onExitFullScreen(plyr) {
-    plyr.pause();
-  }
-
-  onEnded(plyr) {
-    plyr.fullscreen.exit();
-    plyr.restart();
-  }
-
   onClickPlay() {
-    const { plyr } = this.video;
-    if (plyr.fullscreen.active === false) {
-      plyr.play();
-      plyr.fullscreen.enter();
-    }
+    this.video.play();
   }
 
   getVideoRef(ref) {
@@ -55,7 +33,7 @@ class Hero extends React.Component {
 
   render() {
     const { showStory } = this.state;
-    const { className, visitStory, story, tweets, homeVideo } = this.props;
+    const { className, story, tweets, homeVideo } = this.props;
     const StoryBox = storyObj => (
       <div className="story-box">
         <button className="story-box-close" onClick={this.closeStoryBox} />
@@ -65,30 +43,31 @@ class Hero extends React.Component {
         />
         <figcaption className="story-box-content">
           <p className="story-box-title">{storyObj.title}</p>
-          <button className="subtitle story-box-link" onClick={() => visitStory(storyObj)}>
+          <a
+            className="subtitle story-box-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            href={storyObj.completePostUrl}
+          >
             See It Here
-          </button>
+          </a>
         </figcaption>
       </div>
     );
 
     return (
       <div className={cx('c-hero', className)}>
+        <AnimatedFlows />
         <div className="hero-content row align-middle">
           <div className="column small-12">
             <div className="hero-logo-container">
               <img src="/images/logos/new-logo-trase.svg" alt="TRASE" />
             </div>
-            <h1 className="hero-title">Transparent supply chains for sustainable economies</h1>
+            <h1 className="hero-title">Transparent supply chains for sustainable economies.</h1>
             <div className="hero-play-container">
-              <HomeVideo
-                className="c-home-video"
-                ref={this.getVideoRef}
-                videoId={homeVideo}
-                events={this.videoEventHandlers}
-              />
+              <HomeVideo className="c-home-video" ref={this.getVideoRef} videoId={homeVideo} />
               <button className="hero-play-button" onClick={this.onClickPlay} />
-              <span>TRASE in 2’</span>
+              <span>Learn about Trase in 2 minutes</span>
             </div>
           </div>
           {showStory &&
@@ -104,7 +83,6 @@ class Hero extends React.Component {
               </div>
             )}
         </div>
-        <AnimatedFlows />
       </div>
     );
   }
@@ -112,15 +90,9 @@ class Hero extends React.Component {
 
 Hero.propTypes = {
   className: PropTypes.string,
-  visitStory: PropTypes.func,
   story: PropTypes.object,
   tweets: PropTypes.array,
-  onClickPlay: PropTypes.func,
   homeVideo: PropTypes.string
-};
-
-Hero.defaultProps = {
-  visitStory: () => {}
 };
 
 export default Hero;

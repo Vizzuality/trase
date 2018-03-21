@@ -20,14 +20,14 @@ ActiveAdmin.register Api::V3::MapAttribute, as: 'MapAttribute' do
                                   collection: Api::V3::MapAttributeGroup.select_options
       input :position, required: true,
                        hint: object.class.column_comment('position')
-      input :dual_layer_buckets_str,
-            required: true,
-            hint: (object.class.column_comment('dual_layer_buckets') || '') +
-              ' (comma-separated list)',
-            label: 'Single dimension buckets (variable length)'
       input :single_layer_buckets_str,
             required: true,
             hint: (object.class.column_comment('single_layer_buckets') || '') +
+              ' (comma-separated list)',
+            label: 'Single dimension buckets (variable length)'
+      input :dual_layer_buckets_str,
+            required: true,
+            hint: (object.class.column_comment('dual_layer_buckets') || '') +
               ' (comma-separated list)',
             label: 'Dual dimension buckets (3 values)'
       input :color_scale, as: :select, collection: Api::V3::MapAttribute::COLOR_SCALE,

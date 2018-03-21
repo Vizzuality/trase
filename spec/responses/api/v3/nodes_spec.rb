@@ -8,7 +8,7 @@ RSpec.describe 'Nodes', type: :request do
     it 'has the correct response structure' do
       get "/api/v3/contexts/#{api_v3_context.id}/nodes"
 
-      expect(@response.status).to eq 200
+      expect(@response).to have_http_status(:ok)
       expect(@response).to match_response_schema('all_nodes')
     end
   end

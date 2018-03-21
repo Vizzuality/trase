@@ -16,10 +16,17 @@
 
       &::after {
         @include arrow(14px, 3px, $medium-pink, 'down');
-        position: absolute;
-        top: 50%;
-        right: 0;
-        transform: translate(-50%, -50%) rotate(45deg);
+        transform: translate(-50%, -75%) rotate(45deg);
+      }
+
+      @media screen and (max-width: $breakpoint-foundation-small) {
+        padding: 0 25px 0 0;
+        font-size: $font-size-big;
+
+        &::after {
+          @include arrow(10px, 3px, $medium-pink, 'down');
+          transform: translate(-50%, -75%) rotate(45deg);
+        }
       }
     }
   }
@@ -69,7 +76,7 @@
       position: absolute;
       top: 50%;
       right: 0;
-      transform: translate(-50%, -50%) rotate(45deg);
+      transform: translate(-50%, -75%) rotate(45deg);
     }
 
     &.-dimmed {
@@ -86,17 +93,11 @@
     }
   }
 
-  .dropdown-container {
-    // hack. real solution implies fixing nav tool
-    > * {
-      left: -18px;
-    }
-  }
-
   .dropdown-list {
     @extend %dropdown;
     position: absolute;
     top: 0;
+    left: 0;
     padding: 5px 0;
 
     &.-large {
@@ -128,11 +129,6 @@
     &:hover {
       background-color: $manilla;
       cursor: pointer;
-    }
-
-    &.-disabled {
-      color: rgba($charcoal-grey, .3);
-      pointer-events: none;
     }
 
     .dropdown-item-legend-container {
@@ -255,15 +251,6 @@
     margin: 1px 0 0 0;
   }
 
-  &.-homepage {
-    display: inline-flex;
-    height: auto;
-
-    > .dropdown-list {
-      top: 56px;
-    }
-  }
-
   &.-profiles {
     display: inline-flex;
 
@@ -274,5 +261,10 @@
     > .dropdown-list {
       top: 85px;
     }
+  }
+
+  .-disabled {
+    opacity: 0.3;
+    pointer-events: none;
   }
 }

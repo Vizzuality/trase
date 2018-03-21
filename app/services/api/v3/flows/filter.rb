@@ -21,6 +21,9 @@ module Api
         end
 
         def call
+          if @errors.any?
+            return Api::V3::Flows::Result.new(self)
+          end
           initialize_node_types
           initialize_active_node_types
           initialize_biome_position
@@ -72,8 +75,11 @@ module Api
             @errors << 'Both start and end date not given'
           end
           @errors << 'Resize quant not given' unless @resize_quant
-          return unless @recolor_ind && @recolor_qual
-          @errors << 'Either ind or qual for recoloring'
+          if @recolor_ind && @recolor_qual
+            @errors << 'Either ind or qual for recoloring'
+          end
+          return if @node_types_ids.any?
+          @errors << 'No columns given'
         end
 
         def initialize_node_types

@@ -27,6 +27,7 @@ const getNodeSelectedMeta = (selectedMapDimension, node, selectedResizeByLabel, 
 const getSelectedNodesData = (
   selectedNodesIds,
   visibleNodes,
+  nodesDict,
   nodesDictWithMeta,
   selectedMapDimensions,
   selectedResizeByLabel
@@ -51,7 +52,10 @@ const getSelectedNodesData = (
 
     if (visibleNode) {
       node = Object.assign(node, visibleNode);
+    } else if (nodesDict[nodeId]) {
+      node = Object.assign(node, nodesDict[nodeId]);
     }
+
     return node;
   });
 };
@@ -71,6 +75,7 @@ export default (nodesIds, state) => {
   const data = getSelectedNodesData(
     nodesIds,
     state.visibleNodes,
+    state.nodesDict,
     state.nodesDictWithMeta,
     state.selectedMapDimensions,
     state.selectedResizeBy.label

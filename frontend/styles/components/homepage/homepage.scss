@@ -3,115 +3,30 @@
 .c-homepage {
   overflow: hidden;
 
-  .splitted {
+  .homepage-entrypoints {
     position: relative;
-    height: 550px;
-    background: linear-gradient(to bottom, $egg-shell 0%, $egg-shell 50%, $light-gray 50%, $light-gray 100%);
+    background: linear-gradient(to bottom, $light-gray 0%, $light-gray 33.33%, $egg-shell 33.33%, $egg-shell 66.66%, $light-gray 66.66%, $light-gray 100%);
 
-    @media only screen and (min-width: $breakpoint-foundation-small) {
-      background: linear-gradient(to right, $egg-shell 0%, $egg-shell 50%, $light-gray 50%, $light-gray 100%);
+    @media only screen and (min-width: $home-entrypoint-breakpoint) {
+      background: $light-gray
+    }
+  }
+
+  .homepage-map {
+    @media only screen and (max-width: $breakpoint-foundation-small) {
+      display: none;
     }
 
-    .screenshot {
-      position: absolute;
-      height: 60%;
-      width: 100%;
-      bottom: 0;
-      right: 0;
-      background-position: right bottom;
-      background-repeat: no-repeat;
-      background-size: contain;
-      pointer-events: none;
-
-      &::after {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-      }
-
-      @media only screen and (min-width: $breakpoint-foundation-small) {
-        &::after {
-          display: none;
-        }
-      }
-
-      &.-half {
-        background-image: url('./../public/images/backgrounds/screenshot-start.jpg');
-
-        &::after {
-          background-color: rgba($egg-shell, 0.5);
-        }
-      }
-
-      &.-end {
-        background-image: url('./../public/images/backgrounds/screenshot-end.jpg');
-
-        &::after {
-          background-color: rgba($light-gray, 0.6);
-        }
-
-        @media only screen and (min-width: 1058px) {
-          transform: translateX(60px);
-        }
-
-        @media only screen and (min-width: 1177px) {
-          transform: translateX(88px);
-        }
-
-        @media only screen and (min-width: 1280px) {
-          transform: translateX(112px);
-        }
-
-        @media only screen and (min-width: 1281px) {
-          transform: translateX(0);
-        }
-      }
+    .homepage-map-container {
+      margin: 0 auto;
+      width: 700px;
     }
 
-    .row {
-      height: 100%;
-    }
-
-    .column {
-      height: 50%;
-      position: relative;
-      cursor: pointer;
-
-      .splitted-column-wrapper {
-        padding: 42px 42px 0 0;
-      }
-
-      @media only screen and (min-width: $breakpoint-foundation-small) {
-        height: 100%;
-
-        &:last-child .splitted-column-wrapper {
-          padding: 42px 0 0 52px;
-        }
-      }
-    }
-
-    .splitted-column-wrapper {
-      display: block;
-      height: 100%;
-      width: 100%;
-    }
-
-    .splitted-text {
-      position: relative;
-      font-family: $font-family-2;
-      font-size: 18px;
-      font-weight: 300;
-      line-height: 1.75;
-      color: $charcoal-grey;
-      z-index: $z-above;
-
-      @media only screen and (min-width: $breakpoint-foundation-small) {
-        font-size: 24px;
-      }
+    .homepage-map-link-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 0 60px;
     }
   }
 
@@ -119,8 +34,17 @@
     background-color: $white;
     padding: 60px 0;
 
+    @media only screen and (max-width: $breakpoint-foundation-small) {
+      padding: 40px 0;
+    }
+
     .c-newsletter {
-      transform: translateY(calc(50% - 8px));
+      margin-bottom: 40px;
+
+      @media only screen and (min-width: $breakpoint-foundation-small) {
+        transform: translateY(calc(50% - 8px));
+        margin-bottom: 0px;
+      }
 
       .newsletter-label {
         position: absolute;

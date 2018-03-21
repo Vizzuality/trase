@@ -1,4 +1,6 @@
 .c-static-content {
+  background: $light-gray;
+  border-bottom: 1px solid $charcoal-grey-faded-a-lot;
 
   .container {
     padding-top: 56px;
@@ -10,6 +12,10 @@
       @media only screen and (min-width: 850px) {
         justify-content: flex-start;
       }
+    }
+
+    @media only screen and (max-width: $breakpoint-foundation-small)  {
+      padding-top: 40px;
     }
   }
 
@@ -41,26 +47,44 @@
       &:first-child {
         margin: 0;
       }
+
+      @media only screen and (max-width: $breakpoint-foundation-small) {
+        &:not(:first-child) {
+          margin: 30px 0 0;
+        }
+      }
     }
 
     h1 {
-      font-size: 48px;
+      font-size: $font-size-huge;
+
+      @media only screen and (max-width: $breakpoint-foundation-small) {
+        font-size: $font-size-x-regular;
+      }
     }
 
     h2 {
-      font-size: 24px;
+      font-size: $font-size-big;
       font-weight: $font-weight-regular;
+
+      @media only screen and (max-width: $breakpoint-foundation-small) {
+        font-size: $font-size-x-regular;
+      }
     }
 
     p, li {
       color: $charcoal-grey;
       font-family: $font-family-2;
-      font-size: 16px;
+      font-size: $font-size-xx-regular;
       font-weight: $font-weight-light;
       line-height: 2;
 
-    &:not(:first-child){
+      &:not(:first-child){
         margin: 16px 0 0;
+      }
+
+      @media only screen and (max-width: $breakpoint-foundation-small) {
+        font-size: $font-size-x-regular;
       }
     }
 

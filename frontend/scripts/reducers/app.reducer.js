@@ -14,7 +14,7 @@ const initialState = {
   isMapLayerVisible: false,
   isAppMenuVisible: false,
   tooltipCheck: 0,
-  tooltips: {},
+  tooltips: null,
   currentDropdown: null,
   modal: {
     visibility: false,
@@ -66,11 +66,11 @@ const appReducerTypes = PropTypes => ({
   isMapLayerVisible: PropTypes.bool,
   isAppMenuVisible: PropTypes.bool,
   tooltipCheck: PropTypes.number,
-  tooltips: PropTypes.object.isRequired,
+  tooltips: PropTypes.object,
   currentDropdown: PropTypes.string,
   modal: PropTypes.shape({
     visibility: PropTypes.bool,
-    modalParams: PropTypes.array
+    modalParams: PropTypes.object
   }).isRequired
 });
 

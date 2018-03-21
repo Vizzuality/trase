@@ -20,7 +20,7 @@
         <% bucket[0].reverse().forEach(function(value) { %>
         <li ><%= abbreviateNumber(value, 3) %></li >
         <% }) %>
-        <% bucket[1].forEach(function(value) { %>
+        <% bucket[1].reverse().forEach(function(value) { %>
         <li ><%= abbreviateNumber(value, 3) %></li >
         <% }) %>
     </ul >

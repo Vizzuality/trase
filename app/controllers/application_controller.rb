@@ -2,7 +2,11 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   rescue_from ActionController::ParameterMissing do |exception|
-    render json: {error: exception.message}, status: 500
+    render json: {error: exception.message}, status: 400
+  end
+
+  def data_update_supported?
+    !Rails.env.production?
   end
 
   private
@@ -19,5 +23,10 @@ class ApplicationController < ActionController::Base
 
   def set_caching_headers
     expires_in 2.hours, public: true
+  end
+
+  def ensure_data_update_supported
+    return true if data_update_supported?
+    redirect_to admin_root_url and return false
   end
 end

@@ -1,7 +1,7 @@
 /* eslint-disable no-return-assign,jsx-a11y/no-static-element-interactions,jsx-a11y/no-noninteractive-element-interactions */
 import 'styles/components/shared/dropdown.scss';
 import React, { Component } from 'react';
-import classnames from 'classnames';
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 
 export default class Dropdown extends Component {
@@ -13,6 +13,7 @@ export default class Dropdown extends Component {
     };
     this.onDropdownValueClicked = this.onDropdownValueClicked.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.handleKeyUpOutside = this.handleKeyUpOutside.bind(this);
   }
 
   componentDidMount() {
@@ -22,7 +23,7 @@ export default class Dropdown extends Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleKeyUpOutside);
+    document.removeEventListener('keyup', this.handleKeyUpOutside);
     document.removeEventListener('mouseup', this.handleClickOutside);
     document.removeEventListener('touchstart', this.handleClickOutside);
   }
@@ -43,7 +44,7 @@ export default class Dropdown extends Component {
   }
 
   handleKeyUpOutside(event) {
-    if (event.keyCode === 27 && this.state.isOpen) {
+    if (event.key === 'Escape' && this.state.isOpen) {
       this.close();
     }
   }
@@ -53,19 +54,19 @@ export default class Dropdown extends Component {
   }
 
   render() {
-    const { hideOnlyChild, valueList, value, label } = this.props;
+    const { className, hideOnlyChild, label, size, value, valueList } = this.props;
 
     return (
       <div
         ref={ref => (this.ref = ref)}
-        className={classnames('c-dropdown', '-active', {
+        className={cx('c-dropdown', '-active', className, {
+          [`-${size}`]: size,
           '-hide-only-child': valueList.length <= 1 && hideOnlyChild
         })}
-        data-dropdown="year"
       >
         <span className="dropdown-label">{label}</span>
         <span
-          className="js-dropdown-title dropdown-title"
+          className="dropdown-title"
           onClick={() => {
             this.onTitleClick();
           }}
@@ -73,7 +74,7 @@ export default class Dropdown extends Component {
           {value}
         </span>
         <ul
-          className={classnames('js-dropdown-list', 'dropdown-list', {
+          className={cx('dropdown-list', {
             'is-hidden': !this.state.isOpen
           })}
         >
@@ -99,9 +100,11 @@ Dropdown.defaultProps = {
 };
 
 Dropdown.propTypes = {
+  className: PropTypes.string,
+  hideOnlyChild: PropTypes.bool,
   label: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  valueList: PropTypes.array,
   onValueSelected: PropTypes.func,
-  hideOnlyChild: PropTypes.bool
+  size: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  valueList: PropTypes.array
 };

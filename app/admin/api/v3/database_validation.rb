@@ -1,6 +1,10 @@
 ActiveAdmin.register_page 'Data Validation' do
   menu parent: 'Database'
 
+  controller do
+    before_action :ensure_data_update_supported
+  end
+
   content do
     database_validations = Api::V3::DatabaseValidationReport.
       order(created_at: :desc).

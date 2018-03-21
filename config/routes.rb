@@ -15,10 +15,7 @@ Rails.application.routes.draw do
     resources :tweets, only: [:index]
     resources :testimonials, only: [:index]
     resources :staff_groups, only: [:index]
-    get "about/:name",
-      controller: :pages,
-      action: :show,
-      defaults: {format: 'md'}
+    get 'about/:name', controller: :pages, action: :show, defaults: {format: 'md'}
   end
 
   namespace :api do
@@ -30,6 +27,20 @@ Rails.application.routes.draw do
         resources :nodes, only: [:index] do
           get :place, on: :member, controller: :place_nodes, action: :show
           get :actor, on: :member, controller: :actor_nodes, action: :show
+        end
+        resources :actors, only: [] do
+          get :basic_attributes
+          get :top_countries
+          get :top_sources
+          get :sustainability
+          get :exporting_companies
+        end
+        resources :places, only: [] do
+          get :basic_attributes
+          get :top_consumer_actors
+          get :top_consumer_countries
+          get :indicators
+          get :trajectory_deforestation
         end
         resources :download_attributes, only: [:index]
         namespace :nodes do

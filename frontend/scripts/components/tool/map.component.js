@@ -93,7 +93,8 @@ export default class {
     selectedNodesGeoIds,
     choropleth,
     linkedGeoIds,
-    defaultMapView
+    defaultMapView,
+    biomeFilter
   }) {
     this.polygonTypesLayers = {};
 
@@ -120,7 +121,7 @@ export default class {
       }
     });
 
-    this.selectPolygonType({ selectedColumnsIds: currentPolygonType });
+    this.selectPolygonType({ selectedColumnsIds: currentPolygonType, biomeFilter });
     if (selectedNodesGeoIds) {
       this.selectPolygons({ selectedGeoIds: selectedNodesGeoIds });
     }

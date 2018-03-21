@@ -8,7 +8,7 @@ export default class {
   _setVars() {
     this.el = document.querySelector('.js-tool-content');
     this.map = this.el.querySelector('.js-map-container');
-    this.veil = this.el.querySelector('.js-sankey-veil');
+    this.mapViewVeil = this.el.querySelector('.js-map-view-veil');
     this.sankeyError = document.querySelector('.js-sankey-error');
     this.sankeyResetButton = document.querySelector('.js-sankey-reset');
 
@@ -35,7 +35,7 @@ export default class {
   toggleMapVisibility(isMapVisible) {
     this.el.classList.toggle('-center-map', isMapVisible);
     this.map.classList.toggle('-fullscreen', isMapVisible);
-    this.veil.classList.toggle('is-hidden', !isMapVisible);
+    this.mapViewVeil.classList.toggle('is-hidden', !isMapVisible);
   }
 
   toggleMapLayersVisibility(isVisible) {
