@@ -654,11 +654,13 @@ export function selectNode(param, isAggregated = false) {
         dispatch({
           type: FILTER_LINKS_BY_NODES
         });
-
-        // load related geoIds to show on the map
-        dispatch(loadLinkedGeoIDs());
       }
     });
+    if (!isAggregated) {
+      // load related geoIds to show on the map
+      return dispatch(loadLinkedGeoIDs());
+    }
+    return undefined;
   };
 }
 
@@ -802,7 +804,7 @@ export function loadLinkedGeoIDs() {
         type: GET_LINKED_GEOIDS,
         payload: []
       });
-      return;
+      return undefined;
     }
     const params = {
       context_id: state.tool.selectedContextId,
@@ -812,14 +814,19 @@ export function loadLinkedGeoIDs() {
     };
     const url = getURLFromParams(GET_LINKED_GEO_IDS_URL, params);
 
-    fetch(url)
-      .then(res => res.text())
-      .then(payload => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status >= 200 && xhr.status < 400) {
         dispatch({
           type: GET_LINKED_GEOIDS,
-          payload: JSON.parse(payload)
+          payload: JSON.parse(xhr.response)
         });
-      });
+      }
+    };
+
+    xhr.send();
+    return xhr;
   };
 }
 

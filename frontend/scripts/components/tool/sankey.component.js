@@ -14,6 +14,10 @@ const placeNodeText = node =>
   `translate(0,${-7 + node.renderedHeight / 2 - (node.label.length - 1) * 7})`;
 
 export default class {
+  constructor() {
+    this.onNodeClickedRequest = null;
+  }
+
   onCreated() {
     this._build();
   }
@@ -211,7 +215,8 @@ export default class {
         this._onNodeOut();
       })
       .on('click', node => {
-        this.callbacks.onNodeClicked(node.id, node.isAggregated);
+        if (this.onNodeClickedRequest) this.onNodeClickedRequest.abort();
+        this.onNodeClickedRequest = this.callbacks.onNodeClicked(node.id, node.isAggregated);
       });
 
     nodesEnter
