@@ -2,6 +2,9 @@ module Api
   module V3
     module NodeAttributes
       class Filter
+        # @param context [Api::V3::Context]
+        # @param start_year [Integer]
+        # @param end_year [Integer]
         def initialize(context, start_year, end_year)
           @context = context
           @years = (start_year..end_year).to_a
@@ -29,14 +32,16 @@ module Api
             joins("JOIN nodes ON nodes.id = #{node_values}.node_id").
             joins("JOIN context_node_types cnt ON \
 cnt.node_type_id = nodes.node_type_id").
-            joins("JOIN map_attributes_mv ma ON \
-ma.original_attribute_id = #{node_values}.#{attribute_type}_id AND \
-ma.attribute_type = '#{attribute_type}'").
+            joins("JOIN map_#{attribute_type}s maa ON \
+maa.#{attribute_type}_id = #{node_values}.#{attribute_type}_id").
+            joins('JOIN map_attributes_mv ma ON maa.map_attribute_id = ma.id').
             where('cnt.context_id' => @context.id).
-            where("#{node_values}.year IN (?) OR #{node_values}.year IS NULL", @years).
-            where('ma.is_disabled' => false).
+            where(
+              "#{node_values}.year IN (?) OR #{node_values}.year IS NULL",
+              @years
+            ).
+            where('ma.context_id' => @context.id, 'ma.is_disabled' => false).
             where('ma.years IS NULL OR ma.years && ARRAY[?]', @years).
-            where('ma.context_id' => @context.id).
             group(
               "#{node_values}.node_id",
               "#{node_values}.#{attribute_type}_id",
