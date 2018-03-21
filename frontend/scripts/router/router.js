@@ -26,11 +26,11 @@ const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thu
 
 const config = {
   basename: '/',
+  notFoundPath: '/404',
   querySerializer: {
     parse,
     stringify
   },
-  notFoundPath: '/404',
   onBeforeChange: (dispatch, getState, { action }) => {
     const isMobile = window.innerWidth <= BREAKPOINTS.small;
 
