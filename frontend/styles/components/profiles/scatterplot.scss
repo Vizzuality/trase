@@ -6,6 +6,33 @@
   .c-scatterplot {
     position: relative;
 
+    @media print {
+      margin-top: 20px;
+      page-break-inside: avoid;
+
+      .c-dropdown-tab-switcher {
+        .tab-switcher {
+          margin-bottom: 10px;
+        }
+
+        ul {
+          display: none !important;
+        }
+      }
+
+      .axis-legend-x {
+        display: block;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+      }
+
+      .dot {
+        stroke: $white;
+        stroke-width: 1;
+      }
+    }
+
     @media screen and (min-width: $breakpoint-foundation-small) {
       padding-bottom: 30px;
     }

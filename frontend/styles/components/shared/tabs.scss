@@ -4,4 +4,8 @@
 
 .-tab-hidden {
   display: none;
+
+  @media print {
+    display: block;
+  }
 }

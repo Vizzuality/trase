@@ -1,3 +1,9 @@
+.only-for-print {
+  @media not print {
+    display: none;
+  }
+}
+
 @media print {
   * {
     -webkit-print-color-adjust: exact;
@@ -6,143 +12,19 @@
 
   body {
     max-width: 21cm;
+    margin: auto;
   }
 
   @page {
+    size: A4;
     margin: 1cm;
-  }
-
-  .is-page-break-always {
-    page-break-after: always;
-  }
-
-  .deforestation, .chords-container, .mini-sankey-container {
-    padding: 15px 0 !important;
-  }
-
-  .table-container {
-    page-break-inside: avoid;
-
-    &:not(:last-child) {
-      margin-bottom: 30px;
-    }
   }
 
   .page-break-inside-avoid {
     page-break-inside: avoid;
   }
 
-  .c-nav {
-    display: none;
-  }
-
-  .l-profile-actor,
-  .l-profile-place {
-    padding: 0;
-    background-color: $white;
-
-    .c-anchor-buttons {
-      display: none;
-    }
-  }
-
-  .l-profile-actor .c-top-municipalities {
-    .js-top-municipalities-map svg {
-      margin-left: 20px;
-    }
-  }
-
-  .l-profile-place {
-    .c-area-table.score-table {
-      padding: 27px 0 42px;
-    }
-  }
-
-  .c-scatterplot {
-    margin-top: 20px;
-    page-break-inside: avoid;
-
-    .c-dropdown-tab-switcher {
-      .tab-switcher {
-        margin-bottom: 10px;
-      }
-
-      ul {
-        display: none;
-      }
-    }
-
-    .axis-legend-x {
-      display: block;
-      position: absolute;
-      right: 0;
-      bottom: 0;
-    }
-  }
-
-  .c-area-table {
-    .node-link {
-      display: none;
-    }
-  }
-
-  .c-locator-map {
-    .polygon {
-      stroke: $white;
-    }
-  }
-
-  .tab {
-    display: none;
-  }
-
-  .tab-switcher-title {
-    font-size: $font-size-xx-regular;
-  }
-
-  .js-score-table {
-    .tab-title {
-      display: block;
-      margin-top: 30px;
-      margin-bottom: -15px;
-      font-size: $font-size-x-regular;
-    }
-  }
-
-  .-tab-hidden {
-    display: block;
-  }
-
-  .c-overall-map {
-    > .row > .columns {
-      padding: 0;
-    }
-  }
-
-  .c-overall-info {
-    .c-dropdown {
-      .dropdown-title::after {
-        display: none;
-      }
-    }
-  }
-
-  .user-report-feedback {
-    display: none;
-  }
-
-  .tooltip-react {
-    display: none;
-  }
-
-  .c-dropdown-tab-switcher {
-    .dropdown-switcher {
-      display: none;
-    }
-  }
-
-  footer {
-    page-break-before: always;
-    display: none;
+  .page-break-after-avoid {
+    page-break-after: avoid;
   }
 }

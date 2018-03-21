@@ -40,6 +40,18 @@
       }
     }
 
+    @media print {
+      &:not(:last-child) {
+        margin-right: 21px;
+      }
+
+      .c-dropdown {
+        > .dropdown-title {
+          font-size: $font-size-x-big;
+        }
+      }
+    }
+
     @media screen and (max-width: $breakpoint-foundation-small) {
       &:first-child {
         width: 100%;

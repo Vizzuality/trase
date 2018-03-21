@@ -17,6 +17,10 @@
     transform: translateX(0);
   }
 
+  @media print {
+    display: none;
+  }
+
   .icon {
     height: 28px;
     width: 28px;

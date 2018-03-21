@@ -64,6 +64,10 @@
     }
   }
 
+  @media print {
+    display: none;
+  }
+
   .top-nav-bar {
     height: $nav-height;
   }

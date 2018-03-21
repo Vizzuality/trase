@@ -7,10 +7,6 @@
   background-color: $egg-shell;
   line-height: 1.5;
 
-  section:nth-of-type(2n-1) {
-    background-color: rgba($white, .3);
-  }
-
   &.-error {
     position: relative;
     min-height: calc(100vh - #{$nav-height});
@@ -23,7 +19,22 @@
     }
   }
 
+  @media print {
+    padding: 0;
+    background-color: $white;
+  }
+
+  section:nth-of-type(2n-1) {
+    background-color: rgba($white, .3);
+  }
+
   .c-overall-map {
+
+    @media print {
+      > .row > .columns {
+        padding: 0;
+      }
+    }
 
     > .map-list {
       display: flex;
@@ -55,6 +66,10 @@
       margin-bottom: 10px;
     }
 
+    @media print {
+      display: none;
+    }
+
     @media screen and (min-width: $breakpoint-foundation-small)
                   and (max-width: $breakpoint-foundation-medium) {
       > .row .columns:not(:last-child) {
@@ -72,6 +87,10 @@
 
   .deforestation, .chords-container, .mini-sankey-container {
     padding: 53px 0 51px;
+
+    @media print {
+      padding: 15px 0;
+    }
   }
 
   .deforestation {
@@ -89,6 +108,10 @@
 
   .score-table {
     padding: 54px 0 42px;
+
+    @media print {
+      padding: 27px 0 42px;
+    }
   }
 
   .-traders .c-chord {

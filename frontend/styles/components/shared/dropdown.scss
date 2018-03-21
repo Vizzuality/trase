@@ -77,6 +77,10 @@
       top: 50%;
       right: 0;
       transform: translate(-50%, -75%) rotate(45deg);
+
+      @media print {
+        display: none !important;
+      }
     }
 
     &.-dimmed {

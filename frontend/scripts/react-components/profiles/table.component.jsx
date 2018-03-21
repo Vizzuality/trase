@@ -17,7 +17,9 @@ class Table extends Component {
     return (
       <thead>
         <tr className="table-row">
-          <th className="header-cell" />
+          <th className="header-cell">
+            <span className="only-for-print">{data.name}</span>
+          </th>
           {data.rows.map((elem, index) => (
             <th key={index} className="header-cell _text-align-right">
               {elem.name}
