@@ -2,16 +2,19 @@
 import 'styles/components/profiles/chord.scss';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import cx from 'classnames';
 import includes from 'lodash/includes';
+
+import FilterTooltip from 'react-components/data-portal/filter-tooltip.component';
 
 class DownloadSelector extends Component {
   renderOptions() {
     return this.props.options.map((elem, key) => (
       <li key={key}>
         <span>{elem.name}</span>
+        {elem.filterOptions && <FilterTooltip indicator={elem} />}
         <div
-          className={classnames(
+          className={cx(
             'c-radio-btn',
             '-red',
             { '-no-self-cancel': elem.noSelfCancel },
@@ -26,7 +29,7 @@ class DownloadSelector extends Component {
   render() {
     return (
       <div
-        className={classnames('c-custom-dataset-selector', { '-disabled': !this.props.enabled })}
+        className={cx('c-custom-dataset-selector', { '-disabled': !this.props.enabled })}
         data-type="value"
       >
         <div className="c-custom-dataset-selector__header">
@@ -35,7 +38,7 @@ class DownloadSelector extends Component {
             <ul className="c-custom-dataset-selector__header-options">
               <li>
                 <div
-                  className={classnames('c-radio-btn', '-red', {
+                  className={cx('c-radio-btn', '-red', {
                     '-enabled': this.props.allSelected
                   })}
                   onClick={() => this.props.onAllSelected(this.props.type)}
