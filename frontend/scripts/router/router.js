@@ -29,9 +29,7 @@ const config = {
     parse,
     stringify
   },
-  restoreScroll: restoreScroll({
-    shouldUpdateScroll: (prev, locationState) => prev.pathname !== locationState.pathname
-  }),
+  restoreScroll: restoreScroll(),
   onBeforeChange: dispatchThunks(redirectToExplore, resetToolThunk)
 };
 

@@ -1,4 +1,5 @@
 import connect from 'connect';
+import { updateScroll } from 'redux-first-router';
 
 export default function routeSubscriber(store) {
   class RouterComponent {
@@ -20,6 +21,7 @@ export default function routeSubscriber(store) {
 
     onRouteChange({ routesMap, type } = {}) {
       const filename = routesMap[type].page;
+      updateScroll();
       if (this.filename !== filename) {
         this.resetPage();
         this.filename = filename;
