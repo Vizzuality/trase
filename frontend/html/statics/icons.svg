@@ -249,6 +249,10 @@
   <title>menu</title>
   <path d="M3 7.333h26v2.911h-26v-2.911zM3 17.422v-2.844h26v2.844h-26zM3 24.667v-2.911h26v2.911h-26z"></path>
 </symbol>
+<symbol id="icon-filter" viewBox="0 0 24 24">
+  <title>filter</title>
+  <path d="M22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3z"/>
+</symbol>
 </defs>
 </svg>
 </div>
