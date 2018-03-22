@@ -12,10 +12,9 @@ class DownloadSelector extends Component {
     return this.props.options.map((elem, key) => (
       <li key={key}>
         <span>{elem.name}</span>
-        {elem.filterOptions &&
-          elem.unit && (
-            <FilterTooltip indicator={elem} onChange={this.props.onOptionFilterChange} />
-          )}
+        {elem.filterOptions && (
+          <FilterTooltip indicator={elem} onChange={this.props.onOptionFilterChange} />
+        )}
         <div
           className={cx(
             'c-radio-btn',
