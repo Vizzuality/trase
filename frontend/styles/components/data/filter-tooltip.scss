@@ -11,6 +11,7 @@
     font-size: 16px;
     fill: none;
     stroke-width: 3px;
+    cursor: pointer;
   }
 
   .tooltip-content {
@@ -52,19 +53,23 @@
 
         .dropdown-title {
           padding-right: 17px;
+          font-family: $font-family-1;
           font-size: $font-size-regular;
         }
 
         .dropdown-item {
           padding: 5px 10px;
           white-space: nowrap;
+          font-family: $font-family-1;
           font-size: $font-size-regular;
         }
       }
 
       input {
         margin: 0px 5px;
-        width: 30px;
+        width: 60px;
+        font-family: $font-family-1;
+        font-size: $font-size-regular;
       }
     }
   }
