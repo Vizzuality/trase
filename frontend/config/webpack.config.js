@@ -4,6 +4,10 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+/**
+ * BundleAnalyzerPlugin allows profiling the webpack generated js, to help identify improvement points
+ * If you want to enable it, uncomment the line bellow and ´new BundleAnalyzerPlugin()´ further down.
+ */
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const srcPath = path.join(__dirname, '..', 'scripts');
