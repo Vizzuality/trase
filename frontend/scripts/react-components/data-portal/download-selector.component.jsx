@@ -9,20 +9,33 @@ import FilterTooltip from 'react-components/data-portal/filter-tooltip.component
 
 class DownloadSelector extends Component {
   renderOptions() {
-    return this.props.options.map((elem, key) => (
+    const {
+      onOptionFilterChange,
+      onOptionSelected,
+      options,
+      selected,
+      selectedFilters,
+      type
+    } = this.props;
+
+    return options.map((elem, key) => (
       <li key={key}>
         <span>{elem.name}</span>
         {elem.filterOptions && (
-          <FilterTooltip indicator={elem} onChange={this.props.onOptionFilterChange} />
+          <FilterTooltip
+            indicator={elem}
+            selectedFilter={selectedFilters[elem.id]}
+            onChange={onOptionFilterChange}
+          />
         )}
         <div
           className={cx(
             'c-radio-btn',
             '-red',
             { '-no-self-cancel': elem.noSelfCancel },
-            { '-enabled': includes(this.props.selected, elem.id) }
+            { '-enabled': includes(selected, elem.id) }
           )}
-          onClick={() => this.props.onOptionSelected(this.props.type, elem.id)}
+          onClick={() => onOptionSelected(type, elem.id)}
         />
       </li>
     ));
@@ -67,6 +80,7 @@ DownloadSelector.propTypes = {
   enabled: PropTypes.bool,
   selected: PropTypes.array,
   options: PropTypes.array,
+  selectedFilters: PropTypes.object,
   onOptionSelected: PropTypes.func.isRequired,
   onOptionFilterChange: PropTypes.func,
   onAllSelected: PropTypes.func,
