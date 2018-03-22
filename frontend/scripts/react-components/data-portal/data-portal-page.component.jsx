@@ -82,7 +82,7 @@ class DataContent extends Component {
     this.setState(state => ({
       selectedIndicatorsFilters: {
         ...state.selectedIndicatorsFilters,
-        [filter.id]: filter
+        [filter.name]: filter
       }
     }));
   }
@@ -450,6 +450,7 @@ class DataContent extends Component {
                         }
                         title="INDICATORS"
                         type="indicators"
+                        selectedFilters={this.state.selectedIndicatorsFilters}
                         onOptionSelected={this.onClickEventHandler}
                         onOptionFilterChange={this.onOptionFilterChange}
                         onAllSelected={this.onAllSelected}
