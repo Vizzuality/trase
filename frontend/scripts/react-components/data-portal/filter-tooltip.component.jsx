@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Tooltip from 'tooltip.js';
+import get from 'lodash/get';
+
 import Dropdown from 'react-components/shared/dropdown.component';
 
 import 'styles/components/data/filter-tooltip.scss';
@@ -16,17 +18,12 @@ export default class FilterTooltipComponent extends Component {
   constructor(props) {
     super(props);
 
-    const { indicator } = this.props;
-
-    this.state = {
-      selectedFilter: indicator.filterOptions.ops[0],
-      selectedValue: indicator.filterOptions.values ? indicator.filterOptions.values[0] : 0
-    };
-
     this.valueFormat = value => FILTER_OPTIONS_MAP[value];
-    this.handleFilterChange = this.handleFilterChange.bind(this);
-    this.handleInputValueChange = this.handleInputValueChange.bind(this);
+    this.tooltipElement = null;
+
     this.handleDropdownValueChange = this.handleDropdownValueChange.bind(this);
+    this.handleInputValueChange = this.handleInputValueChange.bind(this);
+    this.handleOperationChange = this.handleOperationChange.bind(this);
   }
 
   componentDidMount() {
@@ -37,39 +34,35 @@ export default class FilterTooltipComponent extends Component {
     this.destroyTooltip();
   }
 
-  handleFilterChange(filter) {
-    this.setState(
-      {
-        selectedFilter: filter
-      },
-      this.handleStateChange
-    );
+  setDefaultFilter() {
+    const { indicator } = this.props;
+    const op = get(indicator, 'filterOptions.ops[0]', undefined);
+    const value = get(indicator, 'filterOptions.values[0]', 0);
+
+    this.changeFilter({ op, value });
+  }
+
+  handleOperationChange(op) {
+    this.changeFilter({ op });
   }
 
   handleInputValueChange(event) {
-    this.setState(
-      {
-        selectedValue: event.target.value
-      },
-      this.handleStateChange
-    );
+    this.changeFilter({ value: event.target.value });
   }
 
   handleDropdownValueChange(value) {
-    this.setState(
-      {
-        selectedValue: value
-      },
-      this.handleStateChange
-    );
+    this.changeFilter({ value });
   }
 
-  handleStateChange() {
-    const { onChange, indicator } = this.props;
-    const { selectedFilter, selectedValue } = this.state;
+  changeFilter(filter) {
+    const { indicator, selectedFilter, onChange } = this.props;
 
     if (onChange) {
-      onChange({ name: indicator.id, op: selectedFilter, value: selectedValue });
+      onChange({
+        name: indicator.id,
+        ...selectedFilter,
+        ...filter
+      });
     }
   }
 
@@ -83,7 +76,12 @@ export default class FilterTooltipComponent extends Component {
       template:
         '<div class="tooltip filter-tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
       trigger: 'click',
-      html: true
+      html: true,
+      popperOptions: {
+        onCreate: () => {
+          this.setDefaultFilter();
+        }
+      }
     });
 
     // workaround for ios not closing tooltips
@@ -100,13 +98,12 @@ export default class FilterTooltipComponent extends Component {
   }
 
   renderValueInput() {
-    const { selectedValue } = this.state;
-    const { indicator } = this.props;
+    const { indicator, selectedFilter } = this.props;
 
     if (indicator.filterOptions.values) {
       return (
         <Dropdown
-          value={selectedValue}
+          value={selectedFilter.value}
           valueList={indicator.filterOptions.values}
           onValueSelected={this.handleDropdownValueChange}
         />
@@ -115,15 +112,14 @@ export default class FilterTooltipComponent extends Component {
 
     return (
       <React.Fragment>
-        <input type="number" value={selectedValue} onChange={this.handleInputValueChange} />
+        <input type="number" value={selectedFilter.value} onChange={this.handleInputValueChange} />
         {indicator.unit}
       </React.Fragment>
     );
   }
 
   renderTooltipContent() {
-    const { selectedFilter } = this.state;
-    const { indicator } = this.props;
+    const { indicator, selectedFilter } = this.props;
 
     return (
       <div
@@ -136,10 +132,10 @@ export default class FilterTooltipComponent extends Component {
         <div className="content">
           {indicator.filterName}
           <Dropdown
-            value={selectedFilter}
+            value={selectedFilter.op}
             valueFormat={this.valueFormat}
             valueList={indicator.filterOptions.ops}
-            onValueSelected={this.handleFilterChange}
+            onValueSelected={this.handleOperationChange}
           />
           {this.renderValueInput()}
         </div>
@@ -165,7 +161,18 @@ export default class FilterTooltipComponent extends Component {
   }
 }
 
+FilterTooltipComponent.defaultProps = {
+  selectedFilter: {
+    value: 0
+  }
+};
+
 FilterTooltipComponent.propTypes = {
   indicator: PropTypes.any,
+  selectedFilter: PropTypes.shape({
+    name: PropTypes.string,
+    op: PropTypes.string,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+  }),
   onChange: PropTypes.func
 };
