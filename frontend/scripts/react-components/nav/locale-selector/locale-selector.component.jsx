@@ -24,6 +24,9 @@ class LocaleSelector extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (typeof Transifex === 'undefined') {
+      return;
+    }
     const { defaultLanguage } = this.state;
     if (prevState.defaultLanguage === null && defaultLanguage !== null) {
       this.props.onTranslate(defaultLanguage.code);

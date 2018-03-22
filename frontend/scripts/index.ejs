@@ -8,5 +8,9 @@
 <body>
 <div id="app-root-container"></div>
 </body>
+
+<% if (!TRANSIFEX_API_KEY) { %>
 <script type="text/javascript" src="//cdn.transifex.com/live.js"></script>
+<% } %>
+
 </html>
