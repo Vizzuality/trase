@@ -10,6 +10,9 @@ module Api
           ENV['MAILCHIMP_LIST_ID'], email: params[:email]
         )
         render json: response and return
+      rescue Mailchimp::ListAlreadySubscribedError
+        # noop
+        render json: {email: params[:email]}
       rescue => e
         render json: {error: e.message}
         Appsignal.send_error(e)
