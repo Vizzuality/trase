@@ -1,4 +1,5 @@
 import { connectRoutes, NOT_FOUND, redirect, replace } from 'redux-first-router';
+import restoreScroll from 'redux-first-router-restore-scroll'
 
 import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.container';
 import TeamMember from 'react-components/team/team-member/team-member.container';
@@ -12,7 +13,8 @@ import {
   getTestimonialsContent,
   getTweetsContent,
   resetToolThunk,
-  loadInitialDataHome
+  loadInitialDataHome,
+  scrollTop
 } from 'react-components/home/home.thunks';
 import { withSidebarNavLayout } from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
 import { getProfileRootNodes } from 'react-components/profile-root/profile-root.thunks';
@@ -22,7 +24,8 @@ import { loadInitialDataExplore, redirectToExplore } from 'react-components/expl
 
 const pagesNotSupportedOnMobile = ['tool', 'map', 'data'];
 
-const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thunk(...params));
+const dispatchThunks = (...thunks) => async (...params) =>
+  thunks.forEach(async thunk => thunk(...params));
 
 const config = {
   basename: '/',
@@ -39,7 +42,10 @@ const config = {
     }
 
     return dispatchThunks(redirectToExplore, resetToolThunk)(dispatch, getState, { action });
-  }
+  },
+  restoreScroll: restoreScroll({
+    shouldUpdateScroll: (prev, locationState) => prev.pathname !== locationState.pathname
+  })
 };
 
 const routes = {

@@ -86,6 +86,7 @@
   },
   "dependencies": {
     "@turf/bbox": "^5.1.5",
+    "babel-polyfill": "^6.26.0",
     "body-parser": "^1.18.2",
     "classnames": "^2.2.5",
     "d3": "^4.13.0",
