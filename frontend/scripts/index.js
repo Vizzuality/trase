@@ -1,5 +1,5 @@
+/* eslint-disable global-require,import/no-extraneous-dependencies */
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import { createLogger } from 'redux-logger';
 import thunk from 'redux-thunk';
 import rangeTouch from 'rangetouch';
 import analyticsMiddleware from 'analytics/tool.analytics.middleware';
@@ -19,12 +19,15 @@ window.liveSettings = TRANSIFEX_API_KEY && {
 rangeTouch.set();
 
 if (process.env.NODE_ENV !== 'production' && PERF_TEST) {
-  import('react').then(React => {
-    import('why-did-you-update').then(({ whyDidYouUpdate }) => whyDidYouUpdate(React));
-  });
+  const React = require('react');
+  const { whyDidYouUpdate } = require('why-did-you-update');
+
+  whyDidYouUpdate(React);
 }
 
 if (process.env.NODE_ENV !== 'production' && REDUX_LOGGER_ENABLED) {
+  const { createLogger } = require('redux-logger');
+
   const loggerMiddleware = createLogger({
     collapsed: true
   });
