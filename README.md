@@ -428,6 +428,20 @@ The custom validators are defined in app/services/api/v3/database_validation. Th
 
 In case of the custom validations, the core class is the `Api::V3::DatabaseValidation::Report`, which builds a "chain" of checks to be run, then runs them by calling `passing?` on each of them and constructs the list of errors, which gets saved in the database. Chain builders are used to construct parts of the chain relevant to a particular resource.
 
+## Data Export / Import process
+
+The application has built-in functionality which allows for copying the database from one instance to another in two steps:
+- export: using the admin tool of the instance whose database is copied (source) run the 'Export database' process, which will:
+    - dump the database using `pg_dump` (custom format)
+    - upload the dump to S3
+- import: using the admin tool of the instance where we want the database copied to (target) run the 'Import database' process, which will:
+    - download requested database dump from S3
+    - check if schema version is compatible
+    - backup current database
+    - `pg_restore` into current database
+
+Both processes run in background using sidekiq and exceptions can be monitored using Sidekiq Web UI - the 'Dead' section.
+
 # Frontend
 
 The frontend application can be found inside the `frontend` folder. All files mentioned below can be found inside this folder,

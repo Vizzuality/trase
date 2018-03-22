@@ -1,5 +1,5 @@
 ActiveAdmin.register_page 'Database Update' do
-  menu parent: 'Database'
+  menu parent: 'Database', priority: 3
 
   controller do
     before_action :ensure_data_update_supported

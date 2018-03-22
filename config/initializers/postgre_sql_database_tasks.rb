@@ -73,7 +73,7 @@ module ActiveRecord
       def data_restore(filename, restored_db_name)
         set_psql_env
         db_name = configuration['database']
-        args = ['-d', restored_db_name, filename]
+        args = ['-c', '-n', 'public', '-n', 'content', '-d', restored_db_name, filename]
         run_cmd('pg_restore', args, 'restoring')
       end
     end
