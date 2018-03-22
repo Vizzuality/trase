@@ -1,13 +1,24 @@
 @import '../../settings';
 @import '../shared/help-tooltip.scss';
 
-.tooltip-react {
+.tooltip-react.filter-tooltip {
+  margin-right: 5px;
+  width: 16px;
+  height: 16px;
+
+  .icon {
+    color: $charcoal-grey;
+    font-size: 16px;
+    fill: none;
+    stroke-width: 3px;
+  }
+
   .tooltip-content {
     display: none;
   }
 }
 
-.tooltip.download-filters {
+.tooltip.filter-tooltip {
   padding: 0;
   font-family: $font-family-1;
   background-color: $white;

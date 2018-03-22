@@ -46,6 +46,7 @@ class DataContent extends Component {
       downloaded: false
     };
 
+    this.onOptionFilterChange = this.onOptionFilterChange.bind(this);
     this.onClickEventHandler = this.onClickEventHandler.bind(this);
     this.onAllSelected = this.onAllSelected.bind(this);
     this.closeForm = this.closeForm.bind(this);
@@ -75,6 +76,10 @@ class DataContent extends Component {
     } else {
       this.downloadFile({ context_id: contextId, pivot: 1 });
     }
+  }
+
+  onOptionFilterChange(filter) {
+    console.log('filter has changed', filter);
   }
 
   onOutputTypeSelected(outputType) {
@@ -134,8 +139,6 @@ class DataContent extends Component {
           selectedIndicators,
           allIndicatorsSelected: selectedIndicators.length === this.props.indicators.length
         });
-
-        this.setState({ selectedIndicators: xor(this.state.selectedIndicators, [value]) });
         break;
       }
     }
@@ -221,7 +224,7 @@ class DataContent extends Component {
     params.c_ids = this.state.allConsumptionCountriesSelected
       ? []
       : this.state.selectedConsumptionCountries;
-    params.indicators = this.state.allIndicatorsSelected ? [] : this.state.selectedIndicators;
+    params.filters = this.state.allIndicatorsSelected ? [] : this.state.selectedIndicators;
 
     if (file === '.csv') {
       params.separator = this.state.fileSeparator;
@@ -436,6 +439,7 @@ class DataContent extends Component {
                         title="INDICATORS"
                         type="indicators"
                         onOptionSelected={this.onClickEventHandler}
+                        onOptionFilterChange={this.onOptionFilterChange}
                         onAllSelected={this.onAllSelected}
                         disabledText="Please select first a country and commodity"
                         selected={this.state.selectedIndicators}
