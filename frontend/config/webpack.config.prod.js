@@ -1,15 +1,11 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const webpackBaseConfig = require('./webpack.config');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = merge(webpackBaseConfig, {
+  mode: 'production',
   devtool: 'source-map',
-  plugins: [
-    new webpack.optimize.ModuleConcatenationPlugin(),
-    new webpack.HashedModuleIdsPlugin(),
-    new UglifyJSPlugin()
-  ],
+  plugins: [new webpack.optimize.ModuleConcatenationPlugin(), new webpack.HashedModuleIdsPlugin()],
   module: {
     rules: [
       {

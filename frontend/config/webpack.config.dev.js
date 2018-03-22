@@ -4,6 +4,7 @@ const merge = require('webpack-merge');
 const webpackBaseConfig = require('./webpack.config');
 
 module.exports = merge(webpackBaseConfig, {
+  mode: 'development',
   output: {
     filename: '[name].[hash].js',
     chunkFilename: '[name].[hash].js',
