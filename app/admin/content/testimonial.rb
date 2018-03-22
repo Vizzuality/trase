@@ -3,6 +3,14 @@ ActiveAdmin.register Content::Testimonial, as: 'Testimonial' do
 
   permit_params :quote, :author_name, :author_title, :image
 
+  after_action :clear_cache, only: [:create, :update, :destroy]
+
+  controller do
+    def clear_cache
+      clear_cache_for_url(content_testimonials_url)
+    end
+  end
+
   form do |f|
     f.semantic_errors
     inputs do

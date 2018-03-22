@@ -3,6 +3,14 @@ ActiveAdmin.register Content::StaffGroup, as: 'Staff Group' do
 
   permit_params :name, :position
 
+  after_action :clear_cache, only: [:create, :update, :destroy]
+
+  controller do
+    def clear_cache
+      clear_cache_for_url(content_staff_groups_url)
+    end
+  end
+
   form do |f|
     f.semantic_errors
     inputs do

@@ -1,8 +1,16 @@
 ActiveAdmin.register Api::V3::ContextualLayer, as: 'ContextualLayer' do
-  menu parent: 'Map Settings'
+  menu parent: 'Map Settings', priority: 3
 
   permit_params :context_id, :title, :identifier, :position,
                 :tooltip_text, :legend, :is_default
+
+  after_action :clear_cache, only: [:create, :update, :destroy]
+
+  controller do
+    def clear_cache
+      clear_cache_for_regexp('/api/v3/contexts/.+/map_layers')
+    end
+  end
 
   form do |f|
     f.semantic_errors

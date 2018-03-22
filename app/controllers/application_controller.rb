@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
     render json: {error: exception.message}, status: 400
   end
 
+  include CacheUtils
+
   def data_update_supported?
     !Rails.env.production?
   end
@@ -22,7 +24,8 @@ class ApplicationController < ActionController::Base
   end
 
   def set_caching_headers
-    expires_in 2.hours, public: true
+    return true unless Rails.env.production?
+    expires_in 15.minutes, private: true, 's-maxage' => 5.minutes
   end
 
   def ensure_data_update_supported

@@ -1,7 +1,15 @@
 ActiveAdmin.register Api::V3::CountryProperty, as: 'CountryProperty' do
-  menu parent: 'General Settings'
+  menu parent: 'General Settings', priority: 1
 
   permit_params :country_id, :latitude, :longitude, :zoom
+
+  after_action :clear_cache, only: [:create, :update, :destroy]
+
+  controller do
+    def clear_cache
+      clear_cache_for_url(api_v3_contexts_url)
+    end
+  end
 
   form do |f|
     f.semantic_errors

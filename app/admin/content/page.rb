@@ -1,7 +1,17 @@
 ActiveAdmin.register Content::Page, as: 'Page' do
+  menu parent: 'Content'
+
   permit_params :name, :content
   config.sort_order = :name
-  menu parent: 'Content'
+
+  after_action :clear_cache, only: [:create, :update, :destroy]
+
+  controller do
+    def clear_cache
+      return unless @page&.name
+      clear_cache_for_url(content_url(name: @page.name))
+    end
+  end
 
   form do |f|
     f.semantic_errors

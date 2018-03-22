@@ -4,6 +4,14 @@ ActiveAdmin.register Api::V3::DownloadAttribute, as: 'DownloadAttribute' do
   permit_params :context_id, :position, :display_name, :years_str,
                 :readonly_attribute_id
 
+  after_action :clear_cache, only: [:create, :update, :destroy]
+
+  controller do
+    def clear_cache
+      clear_cache_for_regexp('/api/v3/contexts/.+/download_attributes')
+    end
+  end
+
   form do |f|
     f.semantic_errors
     inputs do

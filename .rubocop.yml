@@ -25,10 +25,15 @@ Layout/MultilineOperationIndentation:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
+Lint/RescueWithoutErrorClass:
+  Exclude:
+    - 'app/controllers/concerns/cache_utils.rb'
+
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
     - 'lib/tasks/**/*'
+    - 'app/admin/**/*'
 
 Metrics/LineLength:
   Max: 80

@@ -64,6 +64,55 @@ To deploy, simply use:
 cap <staging|production> deploy
 ```
 
+We use Varnish in staging / production for caching. The following configuration needs to be present to enable cache purging in `/etc/varnish/default.vcl`:
+
+```
+acl purge {
+    "localhost";
+}
+
+sub vcl_recv {
+    # Happens before we check if we have this in cache already.
+    #
+    # Typically you clean up the request here, removing cookies you don't need,
+    # rewriting the request, etc.
+
+    # allow PURGE from localhost
+    if (req.method == "PURGE") {
+        if (!client.ip ~ purge) {
+            return(synth(403, "Not allowed."));
+        }
+        return (purge);
+    }
+
+    if (req.method == "BAN") {
+        # Same ACL check as above:
+        if (!client.ip ~ purge) {
+            return(synth(403, "Not allowed."));
+        }
+        ban("obj.http.x-url ~ " + req.http.X-Ban-Url);
+        return (synth(200, "Ban added"));
+    }
+}
+
+sub vcl_backend_response {
+    # Happens after we have read the response headers from the backend.
+    #
+    # Here you clean the response headers, removing silly Set-Cookie headers
+    # and other mistakes your backend does.
+    set beresp.http.x-url = bereq.url;
+}
+
+sub vcl_deliver {
+    # Happens when we have all the pieces we need, and are about to send the
+    # response to the client.
+    #
+    # You can do accounting or modifying the final object here.
+    unset resp.http.x-url;
+}
+```
+
+
 ## Git hooks
 
 This project includes a set of git hooks that you may find useful

@@ -1,8 +1,16 @@
 ActiveAdmin.register Api::V3::ContextNodeTypeProperty, as: 'ContextNodeTypeProperty' do
-  menu parent: 'Map Settings'
+  menu parent: 'General Settings', priority: 3
 
   permit_params :context_node_type_id, :column_group, :is_default,
                 :is_geo_column, :is_choropleth_disabled
+
+  after_action :clear_cache, only: [:create, :update, :destroy]
+
+  controller do
+    def clear_cache
+      clear_cache_for_regexp('/api/v3/contexts')
+    end
+  end
 
   form do |f|
     f.semantic_errors

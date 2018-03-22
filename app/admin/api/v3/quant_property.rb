@@ -5,6 +5,15 @@ ActiveAdmin.register Api::V3::QuantProperty, as: 'QuantProperty' do
                 :is_visible_on_place_profile, :is_visible_on_actor_profile,
                 :is_temporal_on_place_profile, :is_temporal_on_actor_profile
 
+  after_action :clear_cache, only: [:create, :update, :destroy]
+
+  controller do
+    def clear_cache
+      clear_cache_for_regexp('/api/v3/contexts')
+      Dictionary::Quant.instance.reset
+    end
+  end
+
   form do |f|
     f.semantic_errors
     inputs do

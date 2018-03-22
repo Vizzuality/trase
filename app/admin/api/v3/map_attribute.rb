@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::MapAttribute, as: 'MapAttribute' do
-  menu parent: 'Map Settings'
+  menu parent: 'Map Settings', priority: 2
 
   includes [
     {map_attribute_group: {context: [:country, :commodity]}},
@@ -10,6 +10,14 @@ ActiveAdmin.register Api::V3::MapAttribute, as: 'MapAttribute' do
   permit_params :map_attribute_group_id, :position, :dual_layer_buckets_str,
                 :single_layer_buckets_str, :color_scale, :years_str, :is_disabled,
                 :is_default, :readonly_attribute_id
+
+  after_action :clear_cache, only: [:create, :update, :destroy]
+
+  controller do
+    def clear_cache
+      clear_cache_for_regexp('/api/v3/contexts/.+/map_layers')
+    end
+  end
 
   form do |f|
     f.semantic_errors
