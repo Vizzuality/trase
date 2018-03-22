@@ -17,13 +17,13 @@ export default class FilterTooltipComponent extends Component {
     super(props);
 
     const { indicator } = this.props;
-    this.filterOptions = indicator.filterOptions.map(o => FILTER_OPTIONS_MAP[o]);
 
     this.state = {
-      selectedFilter: this.filterOptions[0],
+      selectedFilter: indicator.filterOptions[0],
       selectedValue: 0
     };
 
+    this.valueFormat = value => FILTER_OPTIONS_MAP[value];
     this.handleFilterChange = this.handleFilterChange.bind(this);
     this.handleValueChange = this.handleValueChange.bind(this);
   }
@@ -37,15 +37,30 @@ export default class FilterTooltipComponent extends Component {
   }
 
   handleFilterChange(filter) {
-    this.setState({
-      selectedFilter: filter
-    });
+    this.setState(
+      {
+        selectedFilter: filter
+      },
+      this.handleStateChange
+    );
   }
 
   handleValueChange(event) {
-    this.setState({
-      selectedValue: event.target.value
-    });
+    this.setState(
+      {
+        selectedValue: event.target.value
+      },
+      this.handleStateChange
+    );
+  }
+
+  handleStateChange() {
+    const { onChange, indicator } = this.props;
+    const { selectedFilter, selectedValue } = this.state;
+
+    if (onChange) {
+      onChange({ id: indicator.id, op: selectedFilter, value: selectedValue });
+    }
   }
 
   initTooltip() {
@@ -56,7 +71,7 @@ export default class FilterTooltipComponent extends Component {
       boundariesElement: 'window',
       offset: '1, 1',
       template:
-        '<div class="tooltip download-filters"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
+        '<div class="tooltip filter-tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
       trigger: 'click',
       html: true
     });
@@ -90,7 +105,8 @@ export default class FilterTooltipComponent extends Component {
           {indicator.filterName}
           <Dropdown
             value={selectedFilter}
-            valueList={this.filterOptions}
+            valueFormat={this.valueFormat}
+            valueList={indicator.filterOptions}
             onValueSelected={this.handleFilterChange}
           />
           <input type="number" value={selectedValue} onChange={this.handleValueChange} />
@@ -106,10 +122,10 @@ export default class FilterTooltipComponent extends Component {
         ref={elem => {
           this.element = elem;
         }}
-        className="tooltip-react"
+        className="tooltip-react filter-tooltip"
       >
         <svg className="icon tooltip-react-icon">
-          <use xlinkHref="#icon-layer-info" />
+          <use xlinkHref="#icon-filter" />
         </svg>
 
         {this.renderTooltipContent()}
@@ -119,5 +135,6 @@ export default class FilterTooltipComponent extends Component {
 }
 
 FilterTooltipComponent.propTypes = {
-  indicator: PropTypes.any
+  indicator: PropTypes.any,
+  onChange: PropTypes.func
 };
