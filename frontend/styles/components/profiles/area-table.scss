@@ -134,10 +134,8 @@
       }
     }
 
-    table {
-      @media screen and (max-width: $breakpoint-foundation-small) {
-        overflow-x: auto;
-      }
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      overflow-x: auto;
     }
   }
 }
