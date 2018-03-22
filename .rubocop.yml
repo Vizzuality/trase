@@ -60,6 +60,10 @@ Style/FrozenStringLiteralComment:
 Style/Lambda:
   Enabled: false
 
+Style/MixinUsage:
+  Exclude:
+    - 'lib/tasks/db_doc.rake'
+
 Style/PercentLiteralDelimiters:
   Enabled: false
 
