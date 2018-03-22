@@ -248,16 +248,9 @@ class DataContent extends Component {
     }
 
     const file = this.state.fileExtension;
-    let downloadURL;
-
-    switch (file) {
-      case '.json':
-        downloadURL = getURLFromParams(GET_JSON_DATA_DOWNLOAD_FILE_URL, params);
-        break;
-      default:
-        downloadURL = getURLFromParams(GET_CSV_DATA_DOWNLOAD_FILE_URL, params);
-        break;
-    }
+    const fileUrl =
+      file === '.json' ? GET_JSON_DATA_DOWNLOAD_FILE_URL : GET_CSV_DATA_DOWNLOAD_FILE_URL;
+    const downloadURL = getURLFromParams(fileUrl, params);
 
     this.props.onDownloadTriggered(
       Object.assign(
@@ -330,7 +323,9 @@ class DataContent extends Component {
       .map(indicator => ({
         id: indicator.name,
         name: `${indicator.frontendName}${indicator.unit !== null ? `(${indicator.unit})` : ''}`,
+        unit: indicator.unit,
         noSelfCancel: false,
+        filterName: indicator.frontendName,
         filterOptions: get(indicator, 'filterOptions.ops', [])
       }))
       .sort((a, b) => a.name.localeCompare(b.name));

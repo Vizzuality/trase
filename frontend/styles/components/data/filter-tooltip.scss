@@ -21,21 +21,6 @@
     border-bottom-color: transparent;
   }
 
-  .c-dropdown {
-    display: inline-block;
-
-    .dropdown-title {
-      padding-right: 17px;
-      font-size: $font-size-regular;
-    }
-
-    .dropdown-item {
-      padding: 5px 10px;
-      white-space: nowrap;
-      font-size: $font-size-regular;
-    }
-  }
-
   .tooltip-content {
     > .title {
       font-family: $font-family-1;
@@ -49,6 +34,27 @@
 
     > .content {
       padding: 12px 8px;
+
+      .c-dropdown {
+        margin: 0px 5px;
+        display: inline-block;
+
+        .dropdown-title {
+          padding-right: 17px;
+          font-size: $font-size-regular;
+        }
+
+        .dropdown-item {
+          padding: 5px 10px;
+          white-space: nowrap;
+          font-size: $font-size-regular;
+        }
+      }
+
+      input {
+        margin: 0px 5px;
+        width: 30px;
+      }
     }
   }
 }

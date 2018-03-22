@@ -20,10 +20,12 @@ export default class FilterTooltipComponent extends Component {
     this.filterOptions = indicator.filterOptions.map(o => FILTER_OPTIONS_MAP[o]);
 
     this.state = {
-      selectedFilter: this.filterOptions[0]
+      selectedFilter: this.filterOptions[0],
+      selectedValue: 0
     };
 
     this.handleFilterChange = this.handleFilterChange.bind(this);
+    this.handleValueChange = this.handleValueChange.bind(this);
   }
 
   componentDidMount() {
@@ -37,6 +39,12 @@ export default class FilterTooltipComponent extends Component {
   handleFilterChange(filter) {
     this.setState({
       selectedFilter: filter
+    });
+  }
+
+  handleValueChange(event) {
+    this.setState({
+      selectedValue: event.target.value
     });
   }
 
@@ -67,7 +75,7 @@ export default class FilterTooltipComponent extends Component {
   }
 
   renderTooltipContent() {
-    const { selectedFilter } = this.state;
+    const { selectedFilter, selectedValue } = this.state;
     const { indicator } = this.props;
 
     return (
@@ -79,12 +87,14 @@ export default class FilterTooltipComponent extends Component {
       >
         <div className="title">FILTER INDICATOR</div>
         <div className="content">
-          {indicator.name}
+          {indicator.filterName}
           <Dropdown
             value={selectedFilter}
             valueList={this.filterOptions}
             onValueSelected={this.handleFilterChange}
           />
+          <input type="number" value={selectedValue} onChange={this.handleValueChange} />
+          {indicator.unit}
         </div>
       </div>
     );
