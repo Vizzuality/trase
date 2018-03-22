@@ -38,12 +38,10 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner[:active_record, {connection: DB_REVAMP[:database]}].strategy = :truncation
   end
 
   config.before(:each) do
     DatabaseCleaner.start
-    DatabaseCleaner[:active_record, {connection: DB_REVAMP[:database]}].start
     Dictionary::Quant.instance.reset
     Dictionary::Qual.instance.reset
     Dictionary::Ind.instance.reset
@@ -57,7 +55,6 @@ RSpec.configure do |config|
 
   config.after(:each) do
     DatabaseCleaner.clean
-    DatabaseCleaner[:active_record, {connection: DB_REVAMP[:database]}].clean
   end
 
   config.before(:each, type: :worker) do

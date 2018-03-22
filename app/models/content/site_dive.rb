@@ -1,11 +1,11 @@
 # == Schema Information
 #
-# Table name: site_dives
+# Table name: content.site_dives
 #
 #  id          :integer          not null, primary key
-#  title       :string
-#  description :text
-#  page_url    :string
+#  title       :text             not null
+#  page_url    :text             not null
+#  description :text             not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #

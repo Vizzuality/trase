@@ -13,7 +13,6 @@ RSpec.describe 'Download Attributes', type: :request do
     before(:each) do
       Api::V3::Readonly::Attribute.refresh
       Api::V3::Readonly::DownloadAttribute.refresh
-      ActiveRecord::Base.connection.execute('COMMIT') # TODO: make default conn
     end
 
     it 'has the correct response structure' do

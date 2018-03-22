@@ -1,10 +1,8 @@
 module Api
   module V3
-    class BaseModel < ActiveRecord::Base
+    class BaseModel < ApplicationRecord
       include Api::V3::Import::Helpers
       self.abstract_class = true
-
-      establish_connection DB_REVAMP
 
       class << self
         def column_comment(column_name)

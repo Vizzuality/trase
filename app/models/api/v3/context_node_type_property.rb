@@ -1,3 +1,26 @@
+# == Schema Information
+#
+# Table name: context_node_type_properties
+#
+#  id                     :integer          not null, primary key
+#  context_node_type_id   :integer          not null
+#  column_group           :integer          not null
+#  is_default             :boolean          default(FALSE), not null
+#  is_geo_column          :boolean          default(FALSE), not null
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  is_choropleth_disabled :boolean          default(FALSE), not null
+#
+# Indexes
+#
+#  context_node_type_properties_context_node_type_id_key       (context_node_type_id) UNIQUE
+#  index_context_node_type_properties_on_context_node_type_id  (context_node_type_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (context_node_type_id => context_node_types.id) ON DELETE => cascade
+#
+
 module Api
   module V3
     class ContextNodeTypeProperty < YellowTable

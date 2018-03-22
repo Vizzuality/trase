@@ -1,3 +1,26 @@
+# == Schema Information
+#
+# Table name: contexts
+#
+#  id           :integer          not null, primary key
+#  country_id   :integer          not null
+#  commodity_id :integer          not null
+#  years        :integer          is an Array
+#  default_year :integer
+#  created_at   :datetime         not null
+#
+# Indexes
+#
+#  contexts_country_id_commodity_id_key  (country_id,commodity_id) UNIQUE
+#  index_contexts_on_commodity_id        (commodity_id)
+#  index_contexts_on_country_id          (country_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (commodity_id => commodities.id) ON DELETE => cascade ON UPDATE => cascade
+#  fk_rails_...  (country_id => countries.id) ON DELETE => cascade ON UPDATE => cascade
+#
+
 module Api
   module V3
     class Context < BlueTable

@@ -1,8 +1,27 @@
+# == Schema Information
+#
+# Table name: download_attributes_mv
+#
+#  id           :integer          primary key
+#  context_id   :integer
+#  position     :integer
+#  display_name :text
+#  years        :integer          is an Array
+#  created_at   :datetime
+#  updated_at   :datetime
+#  attribute_id :integer
+#
+# Indexes
+#
+#  download_attributes_mv_context_id_attribute_id_idx  (context_id,attribute_id)
+#  download_attributes_mv_id_idx                       (id) UNIQUE
+#
+
 module Api
   module V3
     module Readonly
       class DownloadAttribute < Api::V3::Readonly::BaseModel
-        self.table_name = 'revamp.download_attributes_mv'
+        self.table_name = 'download_attributes_mv'
         self.primary_key = 'id'
 
         belongs_to :context

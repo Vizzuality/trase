@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Api::V3::TopNodes::ResponseBuilder do
-  before(:all) { Api::V3::Flow.delete_all } # db clearing doesn't seem to work
   include_context 'api v3 brazil flows quants'
 
   describe :top_nodes do

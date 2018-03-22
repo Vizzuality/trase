@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Api::V3::Flows::Filter do
-  before(:all) { Api::V3::Flow.delete_all } # db clearing doesn't seem to work }
   include_context 'api v3 brazil flows quants'
 
   let!(:api_v3_diamantino_node) {

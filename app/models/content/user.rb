@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: users
+# Table name: content.users
 #
 #  id                     :integer          not null, primary key
 #  email                  :string           default(""), not null
@@ -15,6 +15,11 @@
 #  last_sign_in_ip        :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#
+# Indexes
+#
+#  index_users_on_email                 (email) UNIQUE
+#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 
 module Content

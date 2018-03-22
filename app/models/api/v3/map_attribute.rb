@@ -1,18 +1,27 @@
 # == Schema Information
 #
-# Table name: context_layer
+# Table name: map_attributes
 #
-#  id                     :integer          not null
+#  id                     :integer          not null, primary key
 #  map_attribute_group_id :integer          not null
 #  position               :integer          not null
-#  dual_layer_buckets               :float            not null          is an Array
-#  single_layer_buckets               :float            not null          is an Array
-#  is_default             :boolean          not null          default("false")
-#  is_disabled            :boolean          not null          default("false")
-#  color_scale            :string
+#  dual_layer_buckets     :float            default([]), not null, is an Array
+#  single_layer_buckets   :float            default([]), not null, is an Array
+#  color_scale            :text
 #  years                  :integer          is an Array
-#  created_at             :datetime
-#  updated_at             :datetime
+#  is_disabled            :boolean          default(FALSE), not null
+#  is_default             :boolean          default(FALSE), not null
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#
+# Indexes
+#
+#  index_map_attributes_on_map_attribute_group_id      (map_attribute_group_id)
+#  map_attributes_map_attribute_group_id_position_key  (map_attribute_group_id,position) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (map_attribute_group_id => map_attribute_groups.id) ON DELETE => cascade
 #
 
 module Api

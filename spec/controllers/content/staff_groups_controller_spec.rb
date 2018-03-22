@@ -2,8 +2,6 @@ require 'rails_helper'
 
 RSpec.describe Content::StaffGroupsController, type: :controller do
   describe 'GET index' do
-    # TODO: merge those databases and make database clearing work again
-    before(:each) { Content::StaffGroup.delete_all }
     it 'assigns staff members' do
       g1 = FactoryBot.create(:staff_group)
       m1 = FactoryBot.create(:staff_member, staff_group: g1)

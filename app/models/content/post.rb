@@ -1,21 +1,20 @@
 # == Schema Information
 #
-# Table name: posts
+# Table name: content.posts
 #
 #  id                 :integer          not null, primary key
-#  title              :string
-#  date               :datetime
-#  image              :string
-#  post_url           :string
-#  state              :integer
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  image_file_name    :string
-#  image_content_type :string
+#  title              :text             not null
+#  date               :datetime         not null
+#  post_url           :text             not null
+#  state              :integer          default(0), not null
+#  highlighted        :boolean          default(FALSE), not null
+#  category           :text             not null
+#  image_file_name    :text
+#  image_content_type :text
 #  image_file_size    :integer
 #  image_updated_at   :datetime
-#  highlighted        :boolean          default(FALSE)
-#  category           :string
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
 #
 
 module Content

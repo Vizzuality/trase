@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: quals
+#
+#  id         :integer          not null, primary key
+#  name       :text             not null
+#  created_at :datetime         not null
+#
+# Indexes
+#
+#  quals_name_key  (name) UNIQUE
+#
+
 module Api
   module V3
     class Qual < BlueTable

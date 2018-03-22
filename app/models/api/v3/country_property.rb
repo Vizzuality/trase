@@ -1,3 +1,25 @@
+# == Schema Information
+#
+# Table name: country_properties
+#
+#  id         :integer          not null, primary key
+#  country_id :integer          not null
+#  latitude   :float            not null
+#  longitude  :float            not null
+#  zoom       :integer          not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  country_properties_country_id_key       (country_id) UNIQUE
+#  index_country_properties_on_country_id  (country_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (country_id => countries.id) ON DELETE => cascade ON UPDATE => cascade
+#
+
 module Api
   module V3
     class CountryProperty < YellowTable

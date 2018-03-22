@@ -1,3 +1,34 @@
+# == Schema Information
+#
+# Table name: recolor_by_attributes
+#
+#  id                 :integer          not null, primary key
+#  context_id         :integer          not null
+#  group_number       :integer          default(1), not null
+#  position           :integer          not null
+#  legend_type        :text             not null
+#  legend_color_theme :text             not null
+#  interval_count     :integer
+#  min_value          :text
+#  max_value          :text
+#  divisor            :float
+#  tooltip_text       :text
+#  years              :integer          is an Array
+#  is_disabled        :boolean          default(FALSE), not null
+#  is_default         :boolean          default(FALSE), not null
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#
+# Indexes
+#
+#  index_recolor_by_attributes_on_context_id                   (context_id)
+#  recolor_by_attributes_context_id_group_number_position_key  (context_id,group_number,position) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (context_id => contexts.id) ON DELETE => cascade
+#
+
 module Api
   module V3
     class RecolorByAttribute < YellowTable

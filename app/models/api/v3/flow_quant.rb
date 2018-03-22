@@ -1,3 +1,25 @@
+# == Schema Information
+#
+# Table name: flow_quants
+#
+#  id         :integer          not null, primary key
+#  flow_id    :integer          not null
+#  quant_id   :integer          not null
+#  value      :float            not null
+#  created_at :datetime         not null
+#
+# Indexes
+#
+#  flow_quants_flow_id_quant_id_key  (flow_id,quant_id) UNIQUE
+#  flow_quants_quant_id_idx          (quant_id)
+#  index_flow_quants_on_flow_id      (flow_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (flow_id => flows.id) ON DELETE => cascade ON UPDATE => cascade
+#  fk_rails_...  (quant_id => quants.id) ON DELETE => cascade ON UPDATE => cascade
+#
+
 module Api
   module V3
     class FlowQuant < BlueTable

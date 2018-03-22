@@ -4,10 +4,6 @@ require 'sidekiq/testing'
 RSpec.describe DatabaseUpdateWorker, type: :worker do
   Sidekiq::Testing.inline!
 
-  before do
-    Api::V3::DatabaseUpdate.delete_all
-  end
-
   let(:database_update) {
     FactoryBot.create(:api_v3_database_update)
   }
@@ -23,7 +19,6 @@ RSpec.describe DatabaseUpdateWorker, type: :worker do
     end
 
     it "updates database_updates status to FINISHED" do
-      database_update = FactoryBot.create(:api_v3_database_update)
       DatabaseUpdateWorker.perform_async(database_update.id)
       expect(database_update.reload.status).to eq(Api::V3::DatabaseUpdate::FINISHED)
     end
