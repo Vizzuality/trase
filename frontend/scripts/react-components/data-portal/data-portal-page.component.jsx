@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
 import cx from 'classnames';
-import get from 'lodash/get';
 import xor from 'lodash/xor';
 import uniqBy from 'lodash/uniqBy';
 
@@ -30,6 +29,7 @@ class DataContent extends Component {
       selectedExporters: [],
       selectedConsumptionCountries: [],
       selectedIndicators: [],
+      selectedIndicatorsFilters: {},
 
       allYearsSelected: false,
       allExportersSelected: false,
@@ -79,7 +79,12 @@ class DataContent extends Component {
   }
 
   onOptionFilterChange(filter) {
-    console.log('filter has changed', filter);
+    this.setState(state => ({
+      selectedIndicatorsFilters: {
+        ...state.selectedIndicatorsFilters,
+        [filter.id]: filter
+      }
+    }));
   }
 
   onOutputTypeSelected(outputType) {
@@ -224,7 +229,7 @@ class DataContent extends Component {
     params.c_ids = this.state.allConsumptionCountriesSelected
       ? []
       : this.state.selectedConsumptionCountries;
-    params.filters = this.state.allIndicatorsSelected ? [] : this.state.selectedIndicators;
+    params.filters = this.getIndicatorFilters();
 
     if (file === '.csv') {
       params.separator = this.state.fileSeparator;
@@ -232,6 +237,13 @@ class DataContent extends Component {
     params[outputType] = 1;
 
     return params;
+  }
+
+  getIndicatorFilters() {
+    const { allIndicatorsSelected, selectedIndicators, selectedIndicatorsFilters } = this.state;
+    const indicators = allIndicatorsSelected ? [] : selectedIndicators;
+
+    return indicators.map(indicator => selectedIndicatorsFilters[indicator] || { name: indicator });
   }
 
   closeForm() {
@@ -329,7 +341,7 @@ class DataContent extends Component {
         unit: indicator.unit,
         noSelfCancel: false,
         filterName: indicator.frontendName,
-        filterOptions: get(indicator, 'filterOptions.ops', [])
+        filterOptions: indicator.filterOptions
       }))
       .sort((a, b) => a.name.localeCompare(b.name));
 
