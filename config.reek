@@ -93,7 +93,9 @@ TooManyStatements:
   max_statements: 20
 UncommunicativeMethodName:
   enabled: true
-  exclude: []
+  exclude:
+    - 'DatabaseExportWorker'
+    - 'DatabaseImportWorker'
   reject:
   - !ruby/regexp /^[a-z]$/
   - !ruby/regexp /[0-9]$/
@@ -127,6 +129,7 @@ UncommunicativeVariableName:
   - 'i'
   - 'j'
   - 'e'
+  - 's3'
 UnusedParameters:
   enabled: true
   exclude: []
