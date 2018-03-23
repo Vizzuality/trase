@@ -95,35 +95,6 @@ function getURLForV3(endpoint, paramsArg = {}) {
   return `${API_V3_URL}${endpoint}${queryParams.length > 0 ? `?${queryParams}` : ''}`;
 }
 
-function getURLForV2(endpoint, params = {}) {
-  return Object.keys(params).reduce((prev, current) => {
-    const value = params[current];
-    if (Array.isArray(value)) {
-      const arrUrl = value.reduce(
-        (arrPrev, arrCurrent) => `${arrPrev}&${current}[]=${arrCurrent}`,
-        ''
-      );
-      return `${prev}&${arrUrl}`;
-    }
-    return `${prev}&${current}=${params[current]}`;
-  }, `${API_V2_URL}${endpoint}?`);
-}
-
-// builds an URL usable to call the API, using params
-function getURLForV1(endpoint, params = {}) {
-  return Object.keys(params).reduce((prev, current) => {
-    const value = params[current];
-    if (Array.isArray(value)) {
-      const arrUrl = value.reduce(
-        (arrPrev, arrCurrent) => `${arrPrev}&${current}=${arrCurrent}`,
-        ''
-      );
-      return `${prev}&${arrUrl}`;
-    }
-    return `${prev}&${current}=${params[current]}`;
-  }, `${API_V1_URL}${endpoint}?`);
-}
-
 export function getURLFromParams(endpointKey, params = {}, mock = false) {
   const endpointData = API_ENDPOINTS[endpointKey];
 
@@ -131,16 +102,12 @@ export function getURLFromParams(endpointKey, params = {}, mock = false) {
     switch (endpointData.api) {
       case 3:
         return getURLForV3(`/api/v3${endpointData.endpoint}`, params);
-      case 2:
-        return getURLForV2(`/api/v2${endpointData.endpoint}`, params);
-      case 1:
-        return getURLForV1(`/v1${endpointData.endpoint}`, params);
       case 'local':
         return `/${endpointData.endpoint}`;
       case 'content':
-        return `${API_V2_URL}/content${endpointData.endpoint}`;
+        return `${API_V3_URL}/content${endpointData.endpoint}`;
       case 'markdown':
-        return `${API_V2_URL}/content/${params.filename}.md`;
+        return `${API_V3_URL}/content/${params.filename}.md`;
       default:
         console.warn('Unmatched route found at router');
         return null;
