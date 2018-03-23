@@ -9,4 +9,14 @@
 <div id="app-root-container"></div>
 </body>
 <script type="text/javascript" src="//cdn.transifex.com/live.js"></script>
+<script>
+  (function() {
+    if('serviceWorker' in navigator) {
+      setTimeout(
+        function() { navigator.serviceWorker.register('/service-worker.js'); },
+        5000
+      );
+    }
+  })();
+</script>
 </html>
