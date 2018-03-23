@@ -6,6 +6,12 @@
   width: 16px;
   height: 16px;
 
+  &.-selected {
+    .icon {
+      opacity: 1;
+    }
+  }
+
   .icon {
     color: $charcoal-grey;
     font-size: 16px;
