@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions,jsx-a11y/no-noninteractive-element-interactions jsx-a11y/mouse-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Tooltip from 'tooltip.js';
+import cx from 'classnames';
 import get from 'lodash/get';
+import Tooltip from 'tooltip.js';
 
 import Dropdown from 'react-components/shared/dropdown.component';
 
@@ -20,8 +21,6 @@ export default class FilterTooltipComponent extends Component {
 
     this.valueFormat = value => FILTER_OPTIONS_MAP[value];
     this.tooltipElement = null;
-
-    this.setDefaultFilter();
 
     this.handleBodyClick = this.handleBodyClick.bind(this);
     this.handleDropdownValueChange = this.handleDropdownValueChange.bind(this);
@@ -60,11 +59,11 @@ export default class FilterTooltipComponent extends Component {
   }
 
   handleFilterIconClick() {
+    if (!this.props.selectedFilter) {
+      this.setDefaultFilter();
+    }
     this.tooltip.show();
-    const veil = document.createElement('div');
-    veil.classList.add('veil');
-    document.body.appendChild(veil);
-    this.tooltip._veil = veil;
+    this.createTooltipVeil();
   }
 
   handleInputValueChange(event) {
@@ -106,6 +105,13 @@ export default class FilterTooltipComponent extends Component {
     }
   }
 
+  createTooltipVeil() {
+    const veil = document.createElement('div');
+    veil.classList.add('veil');
+    document.body.appendChild(veil);
+    this.tooltip._veil = veil;
+  }
+
   destroyTooltip() {
     if (this.tooltip) {
       this.destroyTooltipVeil();
@@ -122,6 +128,8 @@ export default class FilterTooltipComponent extends Component {
 
   renderValueInput() {
     const { indicator, selectedFilter } = this.props;
+
+    if (!selectedFilter) return null;
 
     if (indicator.filterOptions.values) {
       return (
@@ -155,7 +163,7 @@ export default class FilterTooltipComponent extends Component {
         <div className="content">
           {indicator.filterName}
           <Dropdown
-            value={selectedFilter.op}
+            value={selectedFilter && selectedFilter.op}
             valueFormat={this.valueFormat}
             valueList={indicator.filterOptions.ops}
             onValueSelected={this.handleOperationChange}
@@ -172,7 +180,7 @@ export default class FilterTooltipComponent extends Component {
         ref={elem => {
           this.element = elem;
         }}
-        className="tooltip-react filter-tooltip"
+        className={cx('tooltip-react filter-tooltip', { '-selected': this.props.selectedFilter })}
         onClick={this.handleFilterIconClick}
       >
         <svg className="icon tooltip-react-icon">
@@ -184,12 +192,6 @@ export default class FilterTooltipComponent extends Component {
     );
   }
 }
-
-FilterTooltipComponent.defaultProps = {
-  selectedFilter: {
-    value: 0
-  }
-};
 
 FilterTooltipComponent.propTypes = {
   indicator: PropTypes.any,
