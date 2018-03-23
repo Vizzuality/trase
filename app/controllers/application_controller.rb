@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
 
   def set_caching_headers
     return true unless Rails.env.production?
-    expires_in 15.minutes, private: true, 's-maxage' => 5.minutes
+    expires_in 15.minutes, private: true, 's-maxage' => 2.hours
   end
 
   def ensure_data_update_supported
