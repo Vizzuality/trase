@@ -21,6 +21,8 @@ export default class FilterTooltipComponent extends Component {
     this.valueFormat = value => FILTER_OPTIONS_MAP[value];
     this.tooltipElement = null;
 
+    this.setDefaultFilter();
+
     this.handleDropdownValueChange = this.handleDropdownValueChange.bind(this);
     this.handleInputValueChange = this.handleInputValueChange.bind(this);
     this.handleOperationChange = this.handleOperationChange.bind(this);
@@ -76,12 +78,7 @@ export default class FilterTooltipComponent extends Component {
       template:
         '<div class="tooltip filter-tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
       trigger: 'click',
-      html: true,
-      popperOptions: {
-        onCreate: () => {
-          this.setDefaultFilter();
-        }
-      }
+      html: true
     });
 
     // workaround for ios not closing tooltips
