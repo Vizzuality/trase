@@ -25,6 +25,7 @@
   background-color: $white;
   color: $charcoal-grey;
   pointer-events: auto;
+  z-index: $z-above-veil;
 
   .tooltip-arrow {
     border-top-color: $white;
