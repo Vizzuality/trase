@@ -4,12 +4,12 @@ import {
   ComposableMap,
   Geographies,
   Geography,
-  Markers,
+  Lines,
   ZoomableGroup,
   Annotations,
-  Annotation
+  Annotation,
+  Line
 } from 'react-simple-maps';
-import Arc from 'react-components/shared/world-map/map-arc.component';
 import UnitsTooltip from 'react-components/shared/units-tooltip.component';
 import cx from 'classnames';
 import formatValue from 'utils/formatValue';
@@ -40,7 +40,7 @@ class WorldMap extends Component {
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
     this.renderGeographies = this.renderGeographies.bind(this);
-    this.renderArcs = this.renderArcs.bind(this);
+    this.renderLines = this.renderLines.bind(this);
     this.renderCountriesAnnotations = this.renderCountriesAnnotations.bind(this);
   }
 
@@ -102,14 +102,14 @@ class WorldMap extends Component {
     );
   }
 
-  renderArcs() {
+  renderLines() {
     const { flows, origin } = this.props;
 
     return flows.map(flow => (
-      <Arc
+      <Line
         key={flow.geoId}
         className="world-map-arc"
-        arc={{
+        line={{
           ...flow,
           coordinates: {
             start: flow.coordinates,
@@ -160,7 +160,7 @@ class WorldMap extends Component {
             <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
               {this.renderGeographies}
             </Geographies>
-            <Markers>{this.renderArcs()}</Markers>
+            <Lines>{this.renderLines()}</Lines>
             <Annotations>{flows.length === 0 && this.renderCountriesAnnotations()}</Annotations>
           </ZoomableGroup>
         </ComposableMap>
