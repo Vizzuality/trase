@@ -2,6 +2,8 @@ module Api
   module V3
     class MapLayersController < ApiController
       def index
+        ensure_required_param_present(:year_start)
+
         contextual_layers = Api::V3::ContextualLayer.
           select(
             [
