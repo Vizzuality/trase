@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/mouse-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions,jsx-a11y/no-noninteractive-element-interactions jsx-a11y/mouse-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Tooltip from 'tooltip.js';
@@ -23,17 +23,21 @@ export default class FilterTooltipComponent extends Component {
 
     this.setDefaultFilter();
 
+    this.handleBodyClick = this.handleBodyClick.bind(this);
     this.handleDropdownValueChange = this.handleDropdownValueChange.bind(this);
+    this.handleFilterIconClick = this.handleFilterIconClick.bind(this);
     this.handleInputValueChange = this.handleInputValueChange.bind(this);
     this.handleOperationChange = this.handleOperationChange.bind(this);
   }
 
   componentDidMount() {
     this.initTooltip();
+    document.body.addEventListener('click', this.handleBodyClick);
   }
 
   componentWillUnmount() {
     this.destroyTooltip();
+    document.body.removeEventListener('click', this.handleBodyClick);
   }
 
   setDefaultFilter() {
@@ -44,16 +48,31 @@ export default class FilterTooltipComponent extends Component {
     this.changeFilter({ op, value });
   }
 
-  handleOperationChange(op) {
-    this.changeFilter({ op });
+  handleBodyClick() {
+    if (this.tooltip) {
+      this.tooltip.hide();
+      this.destroyTooltipVeil();
+    }
+  }
+
+  handleDropdownValueChange(value) {
+    this.changeFilter({ value });
+  }
+
+  handleFilterIconClick() {
+    this.tooltip.show();
+    const veil = document.createElement('div');
+    veil.classList.add('veil');
+    document.body.appendChild(veil);
+    this.tooltip._veil = veil;
   }
 
   handleInputValueChange(event) {
     this.changeFilter({ value: event.target.value });
   }
 
-  handleDropdownValueChange(value) {
-    this.changeFilter({ value });
+  handleOperationChange(op) {
+    this.changeFilter({ op });
   }
 
   changeFilter(filter) {
@@ -74,10 +93,9 @@ export default class FilterTooltipComponent extends Component {
       placement: 'top',
       container: 'body',
       boundariesElement: 'window',
-      offset: '1, 1',
       template:
         '<div class="tooltip filter-tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
-      trigger: 'click',
+      trigger: 'manual',
       html: true
     });
 
@@ -90,7 +108,15 @@ export default class FilterTooltipComponent extends Component {
 
   destroyTooltip() {
     if (this.tooltip) {
+      this.destroyTooltipVeil();
       this.tooltip.dispose();
+    }
+  }
+
+  destroyTooltipVeil() {
+    if (this.tooltip && this.tooltip._veil) {
+      document.body.removeChild(this.tooltip._veil);
+      this.tooltip._veil = null;
     }
   }
 
@@ -147,6 +173,7 @@ export default class FilterTooltipComponent extends Component {
           this.element = elem;
         }}
         className="tooltip-react filter-tooltip"
+        onClick={this.handleFilterIconClick}
       >
         <svg className="icon tooltip-react-icon">
           <use xlinkHref="#icon-filter" />
