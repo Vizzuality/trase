@@ -1,9 +1,10 @@
 .c-explore {
   display: flex;
-  align-items: center;
-  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - #{$nav-height});
   background-color: $light-gray;
-  padding: 30px;
+  padding: 30px 0;
 
   .subtitle {
     font-weight: $font-weight-bold;
@@ -42,6 +43,10 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+
+  @media screen and (max-width: $breakpoint-foundation-small) {
+    margin-top: 15px;
+  }
 }
 
 .explore-table-container {
@@ -63,6 +68,12 @@
     &.-uppercase-title {
       .dropdown-title {
         text-transform: uppercase;
+      }
+    }
+
+    &.table-unit-dropdown {
+      .dropdown-list {
+        transform: translateX(-50%);
       }
     }
 
@@ -96,11 +107,24 @@
   font-family: $font-family-2;
   font-size: 12px;
   font-weight: $font-weight-light;
-  line-height: 1;
+  line-height: 1.3;
   color: $charcoal-grey-faded;
   padding-bottom: 13px;
+  margin-top: 15px;
+  text-align: center;
+
+  @media screen and (min-width: $breakpoint-foundation-small) {
+    margin-top: -30px;
+    text-align: left;
+  }
 }
 
 .explore-footer-button {
   margin: 30px 0 0;
+  white-space: normal;
+  line-height: 1.3;
+
+  @media screen and (max-width: $breakpoint-foundation-small) {
+    align-self: center;
+  }
 }

@@ -83,6 +83,7 @@ class Explore extends React.PureComponent {
 
     return (
       <Dropdown
+        className="table-unit-dropdown"
         value={selectedTableUnit.name}
         valueList={this.units.map(i => i.name)}
         onValueSelected={this.handleTableUnitChange}
@@ -121,16 +122,10 @@ class Explore extends React.PureComponent {
                     <WorldMap className="explore-world-map" />
                   </div>
                 </div>
-                <p className={cx('explore-footer-text', { 'is-hidden': !showTable })}>
-                  By accessing the Trase platform you have acknowledged and agreed to our{' '}
-                  <Link to={{ type: 'about', payload: { section: 'termsOfUse' } }}>
-                    Terms of Use.
-                  </Link>
-                </p>
               </div>
             </div>
             {showTable && (
-              <div className="column medium-5">
+              <div className="column small-12 medium-5">
                 <div className="explore-section -right">
                   <div className="explore-table-container">
                     <div className="explore-table-header">
@@ -156,6 +151,16 @@ class Explore extends React.PureComponent {
                 </div>
               </div>
             )}
+          </div>
+          <div className="row">
+            <div className="column small-12">
+              <p className={cx('explore-footer-text', { 'is-hidden': !showTable })}>
+                By accessing the Trase platform you have acknowledged and agreed to our{' '}
+                <Link to={{ type: 'about', payload: { section: 'termsOfUse' } }}>
+                  Terms of Use.
+                </Link>
+              </p>
+            </div>
           </div>
         </div>
       </div>
