@@ -18,6 +18,7 @@ export const setExploreTopNodes = column_id => (dispatch, getState) => {
   };
   const topNodesKey = getTopNodesKey(selectedContext.id, column_id, year_start, year_end);
   const url = getURLFromParams(GET_TOP_NODES_URL, params);
+
   return (
     !topNodes[topNodesKey] &&
     fetch(url)

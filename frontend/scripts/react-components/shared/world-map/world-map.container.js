@@ -45,7 +45,10 @@ const getContextFlows = (countries, origin) => {
   }));
 };
 
-const memoizedGetContextFlows = memoize(getContextFlows, (c, o, ctxId) => ctxId);
+const memoizedGetContextFlows = memoize(
+  getContextFlows,
+  (c, o, ctxId, start, end) => ctxId + start + end
+);
 
 const mapStateToProps = state => {
   const { selectedContext, selectedContextId, selectedYears } = state.tool;
@@ -54,7 +57,9 @@ const mapStateToProps = state => {
   const topNodesKey = getTopNodesKey(selectedContextId, 8, ...selectedYears);
   const countries = state.explore.topNodes[topNodesKey];
   const flows =
-    origin && countries ? memoizedGetContextFlows(countries, origin, selectedContextId) : [];
+    origin && countries
+      ? memoizedGetContextFlows(countries, origin, selectedContextId, ...selectedYears)
+      : [];
 
   return {
     flows,
