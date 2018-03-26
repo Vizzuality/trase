@@ -42,9 +42,9 @@ export default class FilterTooltipComponent extends Component {
   setDefaultFilter() {
     const { indicator } = this.props;
     const op = get(indicator, 'filterOptions.ops[0]', undefined);
-    const value = get(indicator, 'filterOptions.values[0]', 0);
+    const val = get(indicator, 'filterOptions.values[0]', 0);
 
-    this.changeFilter({ op, value });
+    this.changeFilter({ op, val });
   }
 
   handleBodyClick() {
@@ -54,8 +54,8 @@ export default class FilterTooltipComponent extends Component {
     }
   }
 
-  handleDropdownValueChange(value) {
-    this.changeFilter({ value });
+  handleDropdownValueChange(val) {
+    this.changeFilter({ val });
   }
 
   handleFilterIconClick() {
@@ -67,7 +67,7 @@ export default class FilterTooltipComponent extends Component {
   }
 
   handleInputValueChange(event) {
-    this.changeFilter({ value: event.target.value });
+    this.changeFilter({ val: event.target.value });
   }
 
   handleOperationChange(op) {
@@ -134,7 +134,7 @@ export default class FilterTooltipComponent extends Component {
     if (indicator.filterOptions.values) {
       return (
         <Dropdown
-          value={selectedFilter.value}
+          value={selectedFilter.val}
           valueList={indicator.filterOptions.values}
           onValueSelected={this.handleDropdownValueChange}
         />
@@ -143,7 +143,7 @@ export default class FilterTooltipComponent extends Component {
 
     return (
       <React.Fragment>
-        <input type="number" value={selectedFilter.value} onChange={this.handleInputValueChange} />
+        <input type="number" value={selectedFilter.val} onChange={this.handleInputValueChange} />
         {indicator.unit}
       </React.Fragment>
     );
@@ -198,7 +198,7 @@ FilterTooltipComponent.propTypes = {
   selectedFilter: PropTypes.shape({
     name: PropTypes.string,
     op: PropTypes.string,
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    val: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
   }),
   onChange: PropTypes.func
 };
