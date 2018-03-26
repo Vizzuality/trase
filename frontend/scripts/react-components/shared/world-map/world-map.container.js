@@ -55,6 +55,7 @@ const mapStateToProps = state => {
   const countries = state.explore.topNodes[topNodesKey];
   const flows =
     origin && countries ? memoizedGetContextFlows(countries, origin, selectedContextId) : [];
+
   return {
     flows,
     origin,
