@@ -139,29 +139,33 @@ class Explore extends React.PureComponent {
                       data={topExporters}
                     />
                   </div>
-                  <Link
-                    className="c-button -pink -big explore-footer-button"
-                    to={{
-                      type: 'tool',
-                      payload: { query: { state: { selectedContextId, selectedYears } } }
-                    }}
-                  >
-                    Explore the {isSubnational ? 'subnational' : ''} supply chain
-                  </Link>
                 </div>
               </div>
             )}
           </div>
-          <div className="row">
-            <div className="column small-12">
-              <p className={cx('explore-footer-text', { 'is-hidden': !showTable })}>
-                By accessing the Trase platform you have acknowledged and agreed to our{' '}
-                <Link to={{ type: 'about', payload: { section: 'termsOfUse' } }}>
-                  Terms of Use.
+          {showTable && (
+            <div className="row">
+              <div className="column small-12 medium-7 small-order-2 medium-order-1">
+                <p className="explore-footer-text">
+                  By accessing the Trase platform you have acknowledged and agreed to our{' '}
+                  <Link to={{ type: 'about', payload: { section: 'termsOfUse' } }}>
+                    Terms of Use.
+                  </Link>
+                </p>
+              </div>
+              <div className="column small-12 medium-5 small-order-1 medium-order-2 explore-footer-button-container">
+                <Link
+                  className="c-button -pink -big explore-footer-button"
+                  to={{
+                    type: 'tool',
+                    payload: { query: { state: { selectedContextId, selectedYears } } }
+                  }}
+                >
+                  Explore the {isSubnational ? 'subnational' : ''} supply chain
                 </Link>
-              </p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     );
