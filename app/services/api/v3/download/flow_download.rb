@@ -46,7 +46,12 @@ module Api
         end
 
         def zipped_json
-          content = @query.to_json(except: [:id])
+          json_query = Api::V3::Readonly::DownloadFlow.
+            select('array_to_json(array_agg(row_to_json(t)))').
+            from("(#{@query.to_sql}) t")
+          result = Api::V3::Readonly::DownloadFlow.connection.
+            execute(json_query.to_sql)
+          content = result.getvalue(0,0)
           filename = "#{@download_name}.json"
           zipfile = Api::V3::Download::TempZipfile.new(@download_name)
           zipfile.add(content, filename)
