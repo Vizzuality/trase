@@ -11,6 +11,7 @@ class DownloadSelector extends Component {
   renderOptions() {
     const {
       onOptionFilterChange,
+      onOptionFilterClear,
       onOptionSelected,
       options,
       selected,
@@ -26,6 +27,7 @@ class DownloadSelector extends Component {
             indicator={elem}
             selectedFilter={selectedFilters[elem.id]}
             onChange={onOptionFilterChange}
+            onClear={onOptionFilterClear}
           />
         )}
         <div
@@ -83,6 +85,7 @@ DownloadSelector.propTypes = {
   selectedFilters: PropTypes.object,
   onOptionSelected: PropTypes.func.isRequired,
   onOptionFilterChange: PropTypes.func,
+  onOptionFilterClear: PropTypes.func,
   onAllSelected: PropTypes.func,
   title: PropTypes.string,
   type: PropTypes.string
