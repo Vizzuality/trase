@@ -4811,6 +4811,20 @@ CREATE UNIQUE INDEX download_attributes_mv_id_idx ON download_attributes_mv USIN
 
 
 --
+-- Name: download_flows_mv_attribute_type_attribute_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX download_flows_mv_attribute_type_attribute_id_id_idx ON download_flows_mv USING btree (attribute_type, attribute_id, id);
+
+
+--
+-- Name: download_flows_mv_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_mv_context_id_idx ON download_flows_mv USING btree (context_id);
+
+
+--
 -- Name: flow_inds_ind_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4976,13 +4990,6 @@ CREATE UNIQUE INDEX index_database_updates_on_status ON database_updates USING b
 --
 
 CREATE INDEX index_download_attributes_on_context_id ON download_attributes USING btree (context_id);
-
-
---
--- Name: index_download_flows_mv_on_attribute_type_and_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_download_flows_mv_on_attribute_type_and_attribute_id ON download_flows_mv USING btree (attribute_type, attribute_id);
 
 
 --
@@ -5885,4 +5892,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180223141212'),
 ('20180226094007'),
 ('20180313091306'),
-('20180320141501');
+('20180320141501'),
+('20180326095318'),
+('20180326101002');
+
+
