@@ -47,6 +47,7 @@ class DataContent extends Component {
     };
 
     this.onOptionFilterChange = this.onOptionFilterChange.bind(this);
+    this.onOptionFilterClear = this.onOptionFilterClear.bind(this);
     this.onClickEventHandler = this.onClickEventHandler.bind(this);
     this.onAllSelected = this.onAllSelected.bind(this);
     this.closeForm = this.closeForm.bind(this);
@@ -85,6 +86,14 @@ class DataContent extends Component {
         [filter.name]: filter
       }
     }));
+  }
+
+  onOptionFilterClear(filterName) {
+    this.setState(state => {
+      const selectedIndicatorsFilters = { ...state.selectedIndicatorsFilters };
+      delete selectedIndicatorsFilters[filterName];
+      return { selectedIndicatorsFilters };
+    });
   }
 
   onOutputTypeSelected(outputType) {
@@ -453,6 +462,7 @@ class DataContent extends Component {
                         selectedFilters={this.state.selectedIndicatorsFilters}
                         onOptionSelected={this.onClickEventHandler}
                         onOptionFilterChange={this.onOptionFilterChange}
+                        onOptionFilterClear={this.onOptionFilterClear}
                         onAllSelected={this.onAllSelected}
                         disabledText="Please select first a country and commodity"
                         selected={this.state.selectedIndicators}

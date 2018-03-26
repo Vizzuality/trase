@@ -27,6 +27,7 @@ export default class FilterTooltipComponent extends Component {
     this.handleFilterIconClick = this.handleFilterIconClick.bind(this);
     this.handleInputValueChange = this.handleInputValueChange.bind(this);
     this.handleOperationChange = this.handleOperationChange.bind(this);
+    this.handleFilterClearClick = this.handleFilterClearClick.bind(this);
   }
 
   componentDidMount() {
@@ -47,15 +48,19 @@ export default class FilterTooltipComponent extends Component {
     this.changeFilter({ op, val });
   }
 
-  handleBodyClick() {
-    if (this.tooltip) {
-      this.tooltip.hide();
-      this.destroyTooltipVeil();
-    }
+  handleBodyClick(event) {
+    if (this.contentElement.contains(event.target)) return;
+    this.closeTooltip();
   }
 
   handleDropdownValueChange(val) {
     this.changeFilter({ val });
+  }
+
+  handleFilterClearClick() {
+    const { onClear, indicator } = this.props;
+    this.closeTooltip();
+    if (onClear) onClear(indicator.id);
   }
 
   handleFilterIconClick() {
@@ -112,11 +117,16 @@ export default class FilterTooltipComponent extends Component {
     this.tooltip._veil = veil;
   }
 
+  closeTooltip() {
+    if (!this.tooltip) return;
+    this.tooltip.hide();
+    this.destroyTooltipVeil();
+  }
+
   destroyTooltip() {
-    if (this.tooltip) {
-      this.destroyTooltipVeil();
-      this.tooltip.dispose();
-    }
+    if (!this.tooltip) return;
+    this.destroyTooltipVeil();
+    this.tooltip.dispose();
   }
 
   destroyTooltipVeil() {
@@ -159,7 +169,12 @@ export default class FilterTooltipComponent extends Component {
           this.contentElement = elem;
         }}
       >
-        <div className="title">FILTER INDICATOR</div>
+        <div className="title">
+          FILTER INDICATOR
+          <svg className="icon" onClick={this.handleFilterClearClick}>
+            <use xlinkHref="#icon-delete" />
+          </svg>
+        </div>
         <div className="content">
           {indicator.filterName}
           <Dropdown
@@ -181,9 +196,8 @@ export default class FilterTooltipComponent extends Component {
           this.element = elem;
         }}
         className={cx('tooltip-react filter-tooltip', { '-selected': this.props.selectedFilter })}
-        onClick={this.handleFilterIconClick}
       >
-        <svg className="icon tooltip-react-icon">
+        <svg className="icon tooltip-react-icon" onClick={this.handleFilterIconClick}>
           <use xlinkHref="#icon-filter" />
         </svg>
 
@@ -200,5 +214,6 @@ FilterTooltipComponent.propTypes = {
     op: PropTypes.string,
     val: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
   }),
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  onClear: PropTypes.func
 };
