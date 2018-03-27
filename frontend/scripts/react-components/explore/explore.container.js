@@ -5,6 +5,7 @@ import {
   setExploreTopNodes,
   setSelectedTableColumn
 } from 'react-components/explore/explore.actions';
+import { selectContext } from 'actions/tool.actions';
 import Explore from './explore.component';
 
 const mapStateToProps = state => {
@@ -28,6 +29,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
+      selectContext,
       setSelectedTableColumn,
       getTableElements: setExploreTopNodes
     },

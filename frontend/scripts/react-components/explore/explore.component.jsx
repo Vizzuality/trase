@@ -6,6 +6,8 @@ import WorldMap from 'react-components/shared/world-map/world-map.container';
 import Top from 'react-components/explore/top.component';
 import Dropdown from 'react-components/shared/dropdown.component';
 import formatValue from 'utils/formatValue';
+import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
+import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 
 class Explore extends React.PureComponent {
   constructor(props) {
@@ -97,6 +99,7 @@ class Explore extends React.PureComponent {
       selectedContextId,
       selectedTableColumn,
       selectedYears,
+      selectContext,
       showTable,
       topExporters
     } = this.props;
@@ -111,6 +114,18 @@ class Explore extends React.PureComponent {
     return (
       <div className="l-explore">
         <div className="c-explore">
+          <div className="row context-selectors show-for-small">
+            <div className="column small-12">
+              <div className="dropdown-element">
+                <ContextSelector dropdownClassName="-big" selectContext={selectContext} />
+              </div>
+            </div>
+            <div className="column small-12">
+              <div className="dropdown-element">
+                <YearsSelector dropdownClassName="-big" />
+              </div>
+            </div>
+          </div>
           <div className="row">
             <div className={cx('column', 'small-12', { 'medium-7': showTable })}>
               <div className="explore-section">
@@ -178,6 +193,7 @@ Explore.propTypes = {
   topExporters: PropTypes.array.isRequired,
   isSubnational: PropTypes.bool,
   selectedYears: PropTypes.arrayOf(PropTypes.number),
+  selectContext: PropTypes.func,
   getTableElements: PropTypes.func.isRequired,
   selectedContextId: PropTypes.number,
   selectedTableColumn: PropTypes.number.isRequired,

@@ -23,6 +23,30 @@
       margin-top: 30px;
     }
   }
+
+  .context-selectors {
+    .dropdown-element {
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .dropdown-label {
+      margin-bottom: 3px;
+      font-size: $font-size-x-regular;
+    }
+
+    .dropdown-container {
+      z-index: $z-above;
+
+      .country-commodities-children-container {
+        top: 45px;
+      }
+
+      .dropdown-list {
+        top: 45px;
+      }
+    }
+  }
 }
 
 .explore-section {
@@ -52,9 +76,11 @@
   justify-content: center;
   height: 100%;
   overflow: hidden;
-  margin-top: 15px;
-  margin-left: -1.25rem;
-  margin-right: -1.25rem;
+  margin: 15px -1.25rem 0 -1.25rem;
+
+  @media screen and (min-width: $breakpoint-foundation-small) {
+    margin: 15px 0 0 0;
+  }
 }
 
 .explore-table-container {

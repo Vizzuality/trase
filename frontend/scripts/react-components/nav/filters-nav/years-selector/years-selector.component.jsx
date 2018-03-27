@@ -103,7 +103,7 @@ class YearsSelector extends Component {
   }
 
   render() {
-    const { className, currentDropdown, selectedYears, years } = this.props;
+    const { className, dropdownClassName, currentDropdown, selectedYears, years } = this.props;
     this.totalWidth = YEAR_WIDTH * years.length;
     const title =
       selectedYears[0] === selectedYears[1] ? (
@@ -121,7 +121,7 @@ class YearsSelector extends Component {
     };
     return (
       <div className={cx('js-dropdown', className)} onMouseUp={() => this.onDropdownUp()}>
-        <div className="c-dropdown">
+        <div className={cx('c-dropdown', dropdownClassName)}>
           <span className="dropdown-label">
             year{selectedYears[0] !== selectedYears[1] && <span>s</span>}
           </span>
@@ -167,7 +167,8 @@ YearsSelector.propTypes = {
   years: PropTypes.array,
   currentDropdown: PropTypes.string,
   selectedYears: PropTypes.array,
-  className: PropTypes.string
+  className: PropTypes.string,
+  dropdownClassName: PropTypes.string
 };
 
 export default YearsSelector;
