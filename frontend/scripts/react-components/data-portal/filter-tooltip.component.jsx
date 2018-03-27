@@ -22,6 +22,8 @@ export default class FilterTooltipComponent extends Component {
 
     this.valueFormat = value => FILTER_OPTIONS_MAP[value];
     this.tooltipElement = null;
+    this.tooltip = null;
+    this.tooltipVeil = null;
 
     this.handleBodyClick = this.handleBodyClick.bind(this);
     this.handleDropdownValueChange = this.handleDropdownValueChange.bind(this);
@@ -70,6 +72,7 @@ export default class FilterTooltipComponent extends Component {
     }
     this.tooltip.show();
     this.createTooltipVeil();
+    this.forceUpdate(); // rerender autosize input
   }
 
   handleInputValueChange(event) {
@@ -115,7 +118,7 @@ export default class FilterTooltipComponent extends Component {
     const veil = document.createElement('div');
     veil.classList.add('veil');
     document.body.appendChild(veil);
-    this.tooltip._veil = veil;
+    this.tooltipVeil = veil;
   }
 
   closeTooltip() {
@@ -131,9 +134,9 @@ export default class FilterTooltipComponent extends Component {
   }
 
   destroyTooltipVeil() {
-    if (this.tooltip && this.tooltip._veil) {
-      document.body.removeChild(this.tooltip._veil);
-      this.tooltip._veil = null;
+    if (this.tooltipVeil) {
+      document.body.removeChild(this.tooltipVeil);
+      this.tooltipVeil = null;
     }
   }
 
@@ -195,6 +198,8 @@ export default class FilterTooltipComponent extends Component {
   }
 
   render() {
+    const filterIcon = this.props.selectedFilter ? 'filter-filled' : 'filter';
+
     return (
       <div
         ref={elem => {
@@ -203,7 +208,7 @@ export default class FilterTooltipComponent extends Component {
         className={cx('tooltip-react filter-tooltip', { '-selected': this.props.selectedFilter })}
       >
         <svg className="icon tooltip-react-icon" onClick={this.handleFilterIconClick}>
-          <use xlinkHref="#icon-filter" />
+          <use xlinkHref={`#icon-${filterIcon}`} />
         </svg>
 
         {this.renderTooltipContent()}
