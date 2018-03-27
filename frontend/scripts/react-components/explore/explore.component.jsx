@@ -144,7 +144,7 @@ class Explore extends React.PureComponent {
             )}
           </div>
           {showTable && (
-            <div className="row">
+            <div className="row hide-for-small">
               <div className="column small-12 medium-7 small-order-2 medium-order-1">
                 <p className="explore-footer-text">
                   By accessing the Trase platform you have acknowledged and agreed to our{' '}
