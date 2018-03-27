@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import get from 'lodash/get';
 import Tooltip from 'tooltip.js';
+import AutosizeInput from 'react-input-autosize';
 
 import Dropdown from 'react-components/shared/dropdown.component';
 
@@ -153,7 +154,11 @@ export default class FilterTooltipComponent extends Component {
 
     return (
       <React.Fragment>
-        <input type="number" value={selectedFilter.val} onChange={this.handleInputValueChange} />
+        <AutosizeInput
+          type="number"
+          value={selectedFilter.val}
+          onChange={this.handleInputValueChange}
+        />
         {indicator.unit}
       </React.Fragment>
     );
