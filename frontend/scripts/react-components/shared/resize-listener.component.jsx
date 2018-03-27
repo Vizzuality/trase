@@ -23,8 +23,6 @@ class ResizeListener extends Component {
   }
 
   onPageResize() {
-    console.log('ohhh hellooo!');
-
     this.setState({
       windowWidth: window.innerWidth,
       windowHeight: window.innerHeight
