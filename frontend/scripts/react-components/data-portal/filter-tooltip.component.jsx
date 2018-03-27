@@ -159,6 +159,7 @@ export default class FilterTooltipComponent extends Component {
       <React.Fragment>
         <AutosizeInput
           type="number"
+          minWidth="30"
           value={selectedFilter.val}
           onChange={this.handleInputValueChange}
         />
