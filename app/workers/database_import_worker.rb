@@ -1,5 +1,6 @@
 class DatabaseImportWorker
   include Sidekiq::Worker
+  include CacheUtils
   sidekiq_options queue: :database,
                   retry: 0,
                   backtrace: true,
@@ -9,11 +10,11 @@ class DatabaseImportWorker
   IMPORT_DIR = 'tmp/import'.freeze
   INSTANCE_NAME = ENV['INSTANCE_NAME']
 
-  def perform(s3_filename)
-    work(s3_filename)
+  def perform(s3_filename, root_url)
+    work(s3_filename, root_url)
   end
 
-  def work(s3_filename)
+  def work(s3_filename, root_url)
     raise 'Invalid S3 object name' unless s3_filename.match?(/\w+\/.+\.dump/)
     filename = s3_filename.split('/').last
     FileUtils.mkdir_p(IMPORT_DIR) unless File.directory?(IMPORT_DIR)
@@ -25,6 +26,8 @@ class DatabaseImportWorker
     Rails.logger.debug "Database backed up #{backup_s3_filename}"
 
     restore(local_filename)
+
+    clear_cache(root_url)
   ensure
     FileUtils.rm_f Dir.glob("#{IMPORT_DIR}/*") if dir_exists?
   end
@@ -46,6 +49,14 @@ class DatabaseImportWorker
     pg_tasks = ActiveRecord::Tasks::PostgreSQLDatabaseTasks.new(env_config)
     pg_tasks.data_restore(local_filename, active_db_name)
     Rails.logger.debug 'Database restored'
+  end
+
+  def clear_cache(root_url)
+    clear_cache_for_regexp_with_uri('/api/v3/', root_url)
+    clear_cache_for_regexp_with_uri('/content/', root_url)
+    Dictionary::Ind.instance.reset
+    Dictionary::Qual.instance.reset
+    Dictionary::Quant.instance.reset
   end
 
   def dir_exists?
