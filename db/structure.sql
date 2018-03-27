@@ -106,20 +106,6 @@ $$;
 COMMENT ON FUNCTION bucket_index(buckets double precision[], value double precision) IS 'Given an n-element array of choropleth buckets and a positive value, returns index of bucket where value falls (1 to n + 1); else returns 0.';
 
 
---
--- Name: trase_server; Type: SERVER; Schema: -; Owner: -
---
-
--- suppressed CREATE SERVER
-
-
---
--- Name: USER MAPPING postgres SERVER trase_server; Type: USER MAPPING; Schema: -; Owner: -
---
-
--- suppressed CREATE USER MAPPING
-
-
 SET search_path = content, pg_catalog;
 
 SET default_tablespace = '';
@@ -2073,7 +2059,8 @@ COMMENT ON COLUMN flow_quants.value IS 'Numeric value';
 --
 
 CREATE MATERIALIZED VIEW download_flows_mv AS
- SELECT f_0.flow_id AS id,
+ SELECT ARRAY[f_0.context_id, (f_0.year)::integer, f_0.node_id, f_1.node_id, f_2.node_id, f_3.node_id, f_4.node_id, f_5.node_id, f_6.node_id, f_7.node_id, f_0.flow_id] AS row_name,
+    f_0.flow_id AS id,
     f_0.context_id,
     f_0.year,
     f_0.name AS name_0,
@@ -4825,6 +4812,34 @@ CREATE INDEX download_flows_mv_context_id_idx ON download_flows_mv USING btree (
 
 
 --
+-- Name: download_flows_mv_country_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_mv_country_node_id_idx ON download_flows_mv USING btree (country_node_id);
+
+
+--
+-- Name: download_flows_mv_exporter_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_mv_exporter_node_id_idx ON download_flows_mv USING btree (exporter_node_id);
+
+
+--
+-- Name: download_flows_mv_importer_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_mv_importer_node_id_idx ON download_flows_mv USING btree (importer_node_id);
+
+
+--
+-- Name: download_flows_mv_row_name_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX download_flows_mv_row_name_attribute_type_attribute_id_idx ON download_flows_mv USING btree (row_name, attribute_type, attribute_id);
+
+
+--
 -- Name: flow_inds_ind_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4990,27 +5005,6 @@ CREATE UNIQUE INDEX index_database_updates_on_status ON database_updates USING b
 --
 
 CREATE INDEX index_download_attributes_on_context_id ON download_attributes USING btree (context_id);
-
-
---
--- Name: index_download_flows_mv_on_country_node_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_download_flows_mv_on_country_node_id ON download_flows_mv USING btree (country_node_id);
-
-
---
--- Name: index_download_flows_mv_on_exporter_node_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_download_flows_mv_on_exporter_node_id ON download_flows_mv USING btree (exporter_node_id);
-
-
---
--- Name: index_download_flows_mv_on_importer_node_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_download_flows_mv_on_importer_node_id ON download_flows_mv USING btree (importer_node_id);
 
 
 --
@@ -5894,6 +5888,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180313091306'),
 ('20180320141501'),
 ('20180326095318'),
-('20180326101002');
+('20180326101002'),
+('20180327111929');
 
 
