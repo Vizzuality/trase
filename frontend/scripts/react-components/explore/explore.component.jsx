@@ -120,11 +120,13 @@ class Explore extends React.PureComponent {
                 <ContextSelector dropdownClassName="-big" selectContext={selectContext} />
               </div>
             </div>
-            <div className="column small-12">
-              <div className="dropdown-element">
-                <YearsSelector dropdownClassName="-big" />
+            {selectedContextId && (
+              <div className="column small-12">
+                <div className="dropdown-element">
+                  <YearsSelector dropdownClassName="-big" />
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <div className="row">
             <div className={cx('column', 'small-12', { 'medium-7': showTable })}>

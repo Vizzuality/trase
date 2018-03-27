@@ -45,7 +45,7 @@ class WorldMap extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.flows.length) {
+    if (!this.props.flows.length && this.props.selectedContext && this.props.selectedYears) {
       this.props.getTopNodes();
     }
   }
