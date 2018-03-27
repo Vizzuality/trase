@@ -105,6 +105,7 @@
     "rangetouch": "^1.0.5",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-input-autosize": "^2.2.1",
     "react-placehodl": "^1.0.3",
     "react-redux": "^5.0.7",
     "react-siema": "git+https://github.com/sorodrigo/react-siema.git",
