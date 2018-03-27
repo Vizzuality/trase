@@ -99,6 +99,7 @@
 
   .c-dropdown {
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 
     &.-uppercase-title {
       .dropdown-title {
