@@ -1,3 +1,6 @@
+import trim from 'lodash/trim';
+import qs from 'qs';
+
 export const GET_CONTEXTS_URL = 'GET_CONTEXTS_URL';
 export const GET_TOOLTIPS_URL = 'GET_TOOLTIPS_URL';
 export const GET_ALL_NODES_URL = 'GET_ALL_NODES_URL';
@@ -62,37 +65,29 @@ const API_ENDPOINTS = {
   [GET_TOP_NODES_URL]: { api: 3, endpoint: '/contexts/$context_id$/top_nodes' }
 };
 
-function getURLForV3(endpoint, paramsArg = {}) {
-  const params = Object.assign({}, paramsArg);
-  if (
-    Object.prototype.hasOwnProperty.call(params, 'context_id') &&
-    endpoint.indexOf('$context_id$') !== -1
-  ) {
-    endpoint = endpoint.replace('$context_id$', params.context_id);
-    delete params.context_id;
-  }
-  if (
-    Object.prototype.hasOwnProperty.call(params, 'node_id') &&
-    endpoint.indexOf('$node_id$') !== -1
-  ) {
-    endpoint = endpoint.replace('$node_id$', params.node_id);
-    delete params.node_id;
-  }
+function replaceURLParams(endpoint, params) {
+  const regex = /\$[^$]+\$/g;
 
-  const queryParams = Object.keys(params).reduce((prev, current) => {
-    const value = params[current];
-    if (Array.isArray(value)) {
-      if (value.length === 0) return prev;
-      const arrUrl = value.reduce(
-        (arrPrev, arrCurrent) => `${arrPrev}&${current}[]=${arrCurrent}`,
-        ''
-      );
-      return `${prev}&${arrUrl}`;
+  const urlParams = endpoint.match(regex) || [];
+  urlParams.map(p => trim(p, '$')).forEach(param => {
+    if (!Object.prototype.hasOwnProperty.call(params, param)) {
+      throw new Error(`URL param ${param} not found in params object`);
     }
-    return `${prev}&${current}=${params[current]}`;
-  }, '');
 
-  return `${API_V3_URL}${endpoint}${queryParams.length > 0 ? `?${queryParams}` : ''}`;
+    endpoint = endpoint.replace(`$${param}$`, params[param]);
+    delete params[param];
+  });
+
+  return endpoint;
+}
+
+export function getURLForV3(endpoint, paramsArg = {}) {
+  const params = Object.assign({}, paramsArg);
+
+  const apiEndpoint = replaceURLParams(endpoint, params);
+  const queryParams = qs.stringify(params, { arrayFormat: 'brackets', encodeValuesOnly: true });
+
+  return `${API_V3_URL}${apiEndpoint}${queryParams.length > 0 ? `?${queryParams}` : ''}`;
 }
 
 function getURLForV2(endpoint, params = {}) {
