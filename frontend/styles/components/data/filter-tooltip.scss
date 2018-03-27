@@ -15,8 +15,6 @@
   .icon {
     color: $charcoal-grey;
     font-size: 16px;
-    fill: none;
-    stroke-width: 3px;
     cursor: pointer;
   }
 
@@ -60,7 +58,7 @@
       padding: 12px 8px;
 
       .c-dropdown {
-        margin: 0px 5px;
+        margin-left: 5px;
         display: inline-block;
 
         .dropdown-title {
@@ -78,8 +76,6 @@
       }
 
       input {
-        margin: 0px 5px;
-        width: 60px;
         font-family: $font-family-1;
         font-size: $font-size-regular;
         text-align: right;
