@@ -1,7 +1,3 @@
-require 'fileutils'
-require 'tempfile'
-require 'zip'
-
 module Api
   module V3
     module Download
@@ -30,31 +26,15 @@ module Api
         end
 
         def zipped_csv
-          csv = PgCsv.new(
-            sql: @query.to_sql,
-            header: true,
-            delimiter: @separator,
-            encoding: 'UTF8',
-            type: :plain,
-            logger: Rails.logger
-          )
-          content = csv.export
-          # NOTE: exporting directly into file raises encoding errors
-          filename = "#{@download_name}.csv"
-          zipfile = Api::V3::Download::TempZipfile.new(@download_name)
-          zipfile.add(content, filename)
+          Api::V3::Download::ZippedCsvDownload.new(
+            @query, @download_name, @separator
+          ).create
         end
 
         def zipped_json
-          json_query = Api::V3::Readonly::DownloadFlow.
-            select('array_to_json(array_agg(row_to_json(t)))').
-            from("(#{@query.to_sql}) t")
-          result = Api::V3::Readonly::DownloadFlow.connection.
-            execute(json_query.to_sql)
-          content = result.getvalue(0,0)
-          filename = "#{@download_name}.json"
-          zipfile = Api::V3::Download::TempZipfile.new(@download_name)
-          zipfile.add(content, filename)
+          Api::V3::Download::ZippedJsonDownload.new(
+            @query, @download_name
+          ).create
         end
       end
     end
