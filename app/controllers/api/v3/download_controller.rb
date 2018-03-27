@@ -6,13 +6,13 @@ module Api
 
         respond_to do |format|
           format.csv do
-            send_file download.zipped_csv.path,
+            send_data download.zipped_csv,
                       type: 'application/zip',
                       filename: "#{download.download_name}.zip",
                       disposition: 'attachment'
           end
           format.json do
-            send_file download.zipped_json.path,
+            send_data download.zipped_json,
                       type: 'application/zip',
                       filename: "#{download.download_name}.zip",
                       disposition: 'attachment'
