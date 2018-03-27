@@ -1,7 +1,7 @@
 import { redirect } from 'redux-first-router';
 import { loadInitialData, selectContext } from 'actions/tool.actions';
 
-export const loadInitialDataExplore = async (dispatch, getState) => {
+export const loadInitialDataExplore = (dispatch, getState) => {
   const { query = {} } = getState().location;
   const contextId = parseInt(query.contextId, 10);
   if (contextId) {
@@ -10,7 +10,7 @@ export const loadInitialDataExplore = async (dispatch, getState) => {
   return dispatch(loadInitialData());
 };
 
-export const redirectToExplore = async (dispatch, getState, { action }) => {
+export const redirectToExplore = (dispatch, getState, { action }) => {
   const { type } = getState().location;
   const toolPages = ['tool', 'map'];
   const previouslyVisitedExplorePage = {
