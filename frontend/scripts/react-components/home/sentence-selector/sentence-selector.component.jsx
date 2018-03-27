@@ -110,9 +110,8 @@ class SentenceSelector extends React.Component {
     return (
       <div className="c-sentence-selector">
         <div className="sentence-selector-text">
-          What are the sustainability risks and opportunities associated
-          <br className="hide-for-small" />
-          with the trade of
+          What are the sustainability risks and opportunities associated{' '}
+          <br className="hide-for-small" /> with the trade of
           <Dropdown
             value={selectedCommodity}
             valueList={commodityNames}

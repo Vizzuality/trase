@@ -15,7 +15,7 @@
   .homepage-map {
     .homepage-map-container {
       margin: 0 -1.25rem;
-      width: 100%;
+      width: calc(100% + 3rem);
 
       @media only screen and (min-width: $breakpoint-foundation-small) {
         margin: 0 auto;
