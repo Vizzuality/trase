@@ -2186,13 +2186,6 @@ CREATE MATERIALIZED VIEW download_flows_mv AS
 
 
 --
--- Name: MATERIALIZED VIEW download_flows_mv; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON MATERIALIZED VIEW download_flows_mv IS 'Combines data from flow_paths_mv and download_attributes_values_mv in a structure that can be directly used to generate data downloads.';
-
-
---
 -- Name: download_quals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
