@@ -41,11 +41,13 @@ module Api
         end
 
         def flat_query
-          @query.select(flat_select_columns)
+          @query.select(flat_select_columns).
+            order(:row_name, :attribute_type, :attribute_id)
         end
 
         def pivot_query
-          source = @query.select(pivot_select_columns)
+          source = @query.select(pivot_select_columns).
+            order(:row_name)
           source_sql = source.to_sql.gsub("'", "''")
           categories = @query.
             select('display_name').
@@ -99,12 +101,7 @@ module Api
 
         def pivot_select_columns
           [
-            'ARRAY[' +
-              (
-                ['year'] +
-                @path_crosstab_row_name_columns
-              ).join(', ') +
-              ']::INT[] AS row_name',
+            'row_name',
             'year AS "YEAR"'
           ] + @path_columns +
             [
@@ -138,9 +135,6 @@ module Api
             "#{n} AS #{@path_column_aliases[idx]}"
           end
           @path_crosstab_columns = @path_column_aliases.map { |a| "#{a} text" }
-          @path_crosstab_row_name_columns = context_column_positions.map do |p|
-            "node_id_#{p}"
-          end
         end
 
         def apply_attribute_filters(attributes_list)
