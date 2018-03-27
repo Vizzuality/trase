@@ -46,6 +46,7 @@ module.exports = {
       NODE_ENV_DEV: process.env.NODE_ENV === 'development',
       DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
       API_V3_URL: JSON.stringify(process.env.API_V3_URL),
+      API_V2_URL: JSON.stringify(process.env.API_V2_URL),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       DATA_FORM_ENDPOINT: JSON.stringify(process.env.DATA_FORM_ENDPOINT),
       DATA_FORM_ENABLED: process.env.DATA_FORM_ENABLED === 'true',
