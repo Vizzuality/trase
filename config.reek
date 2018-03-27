@@ -127,6 +127,7 @@ UncommunicativeVariableName:
   - 'i'
   - 'j'
   - 'e'
+  - 'f'
 UnusedParameters:
   enabled: true
   exclude: []
