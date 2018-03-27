@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import cx from 'classnames';
 import xor from 'lodash/xor';
 import uniqBy from 'lodash/uniqBy';
+import union from 'lodash/union';
 
 import {
   GET_CSV_DATA_DOWNLOAD_FILE_URL,
@@ -80,12 +81,18 @@ class DataContent extends Component {
   }
 
   onOptionFilterChange(filter) {
-    this.setState(state => ({
-      selectedIndicatorsFilters: {
-        ...state.selectedIndicatorsFilters,
-        [filter.name]: filter
-      }
-    }));
+    this.setState(state => {
+      const selectedIndicators = union(state.selectedIndicators, [filter.name]);
+
+      return {
+        selectedIndicators,
+        allIndicatorsSelected: selectedIndicators.length === this.props.indicators.length,
+        selectedIndicatorsFilters: {
+          ...state.selectedIndicatorsFilters,
+          [filter.name]: filter
+        }
+      };
+    });
   }
 
   onOptionFilterClear(filterName) {
@@ -146,7 +153,6 @@ class DataContent extends Component {
         this.setState({ selectedConsumptionCountries, allConsumptionCountriesSelected });
         break;
       }
-      // TODO: this is now a nested array called filters
       case 'indicators': {
         const selectedIndicators = xor(this.state.selectedIndicators, [value]);
         this.setState({
