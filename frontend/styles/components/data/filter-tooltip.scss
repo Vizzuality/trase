@@ -1,0 +1,85 @@
+@import '../../settings';
+@import '../shared/help-tooltip.scss';
+
+.tooltip-react.filter-tooltip {
+  margin-right: 5px;
+  width: 16px;
+  height: 16px;
+
+  &.-selected {
+    .icon {
+      opacity: 1;
+    }
+  }
+
+  .icon {
+    color: $charcoal-grey;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .tooltip-content {
+    display: none;
+  }
+}
+
+.tooltip.filter-tooltip {
+  padding: 0;
+  font-family: $font-family-1;
+  background-color: $white;
+  color: $charcoal-grey;
+  pointer-events: auto;
+  z-index: $z-above-veil;
+
+  .tooltip-arrow {
+    border-top-color: $white;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+  }
+
+  .tooltip-content {
+    > .title {
+      font-family: $font-family-1;
+      font-size: $font-size-regular;
+      line-height: 1;
+      letter-spacing: -0.6px;
+      height: 32px;
+      padding: 12px 8px;
+      background-color: $egg-shell;
+
+      .icon {
+        float: right;
+        cursor: pointer;
+      }
+    }
+
+    > .content {
+      padding: 12px 8px;
+
+      .c-dropdown {
+        margin-left: 5px;
+        display: inline-block;
+
+        .dropdown-title {
+          padding-right: 17px;
+          font-family: $font-family-1;
+          font-size: $font-size-regular;
+        }
+
+        .dropdown-item {
+          padding: 5px 10px;
+          white-space: nowrap;
+          font-family: $font-family-1;
+          font-size: $font-size-regular;
+        }
+      }
+
+      input {
+        font-family: $font-family-1;
+        font-size: $font-size-regular;
+        text-align: right;
+      }
+    }
+  }
+}

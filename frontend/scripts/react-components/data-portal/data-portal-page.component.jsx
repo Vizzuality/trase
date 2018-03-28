@@ -1,7 +1,10 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
+import cx from 'classnames';
 import xor from 'lodash/xor';
 import uniqBy from 'lodash/uniqBy';
+import union from 'lodash/union';
+
 import {
   GET_CSV_DATA_DOWNLOAD_FILE_URL,
   GET_JSON_DATA_DOWNLOAD_FILE_URL,
@@ -12,7 +15,6 @@ import DownloadSelector from 'react-components/data-portal/download-selector.com
 import PropTypes from 'prop-types';
 import DataPortalDisabledMessage from 'react-components/data-portal/data-portal-disabled-message.component';
 import DataPortalForm from 'react-components/data-portal/data-portal-form.component';
-import classnames from 'classnames';
 
 class DataContent extends Component {
   constructor(props) {
@@ -28,6 +30,7 @@ class DataContent extends Component {
       selectedExporters: [],
       selectedConsumptionCountries: [],
       selectedIndicators: [],
+      selectedIndicatorsFilters: {},
 
       allYearsSelected: false,
       allExportersSelected: false,
@@ -44,6 +47,8 @@ class DataContent extends Component {
       downloaded: false
     };
 
+    this.onOptionFilterChange = this.onOptionFilterChange.bind(this);
+    this.onOptionFilterClear = this.onOptionFilterClear.bind(this);
     this.onClickEventHandler = this.onClickEventHandler.bind(this);
     this.onAllSelected = this.onAllSelected.bind(this);
     this.closeForm = this.closeForm.bind(this);
@@ -73,6 +78,29 @@ class DataContent extends Component {
     } else {
       this.downloadFile({ context_id: contextId, pivot: 1 });
     }
+  }
+
+  onOptionFilterChange(filter) {
+    this.setState(state => {
+      const selectedIndicators = union(state.selectedIndicators, [filter.name]);
+
+      return {
+        selectedIndicators,
+        allIndicatorsSelected: selectedIndicators.length === this.props.indicators.length,
+        selectedIndicatorsFilters: {
+          ...state.selectedIndicatorsFilters,
+          [filter.name]: filter
+        }
+      };
+    });
+  }
+
+  onOptionFilterClear(filterName) {
+    this.setState(state => {
+      const selectedIndicatorsFilters = { ...state.selectedIndicatorsFilters };
+      delete selectedIndicatorsFilters[filterName];
+      return { selectedIndicatorsFilters };
+    });
   }
 
   onOutputTypeSelected(outputType) {
@@ -125,15 +153,12 @@ class DataContent extends Component {
         this.setState({ selectedConsumptionCountries, allConsumptionCountriesSelected });
         break;
       }
-      // TODO: this is now a nested array called filters
       case 'indicators': {
         const selectedIndicators = xor(this.state.selectedIndicators, [value]);
         this.setState({
           selectedIndicators,
           allIndicatorsSelected: selectedIndicators.length === this.props.indicators.length
         });
-
-        this.setState({ selectedIndicators: xor(this.state.selectedIndicators, [value]) });
         break;
       }
     }
@@ -219,7 +244,7 @@ class DataContent extends Component {
     params.c_ids = this.state.allConsumptionCountriesSelected
       ? []
       : this.state.selectedConsumptionCountries;
-    params.indicators = this.state.allIndicatorsSelected ? [] : this.state.selectedIndicators;
+    params.filters = this.getIndicatorFilters();
 
     if (file === '.csv') {
       params.separator = this.state.fileSeparator;
@@ -227,6 +252,13 @@ class DataContent extends Component {
     params[outputType] = 1;
 
     return params;
+  }
+
+  getIndicatorFilters() {
+    const { allIndicatorsSelected, selectedIndicators, selectedIndicatorsFilters } = this.state;
+    const indicators = allIndicatorsSelected ? [] : selectedIndicators;
+
+    return indicators.map(indicator => selectedIndicatorsFilters[indicator] || { name: indicator });
   }
 
   closeForm() {
@@ -246,16 +278,9 @@ class DataContent extends Component {
     }
 
     const file = this.state.fileExtension;
-    let downloadURL;
-
-    switch (file) {
-      case '.json':
-        downloadURL = getURLFromParams(GET_JSON_DATA_DOWNLOAD_FILE_URL, params);
-        break;
-      default:
-        downloadURL = getURLFromParams(GET_CSV_DATA_DOWNLOAD_FILE_URL, params);
-        break;
-    }
+    const fileUrl =
+      file === '.json' ? GET_JSON_DATA_DOWNLOAD_FILE_URL : GET_CSV_DATA_DOWNLOAD_FILE_URL;
+    const downloadURL = getURLFromParams(fileUrl, params);
 
     this.props.onDownloadTriggered(
       Object.assign(
@@ -328,7 +353,10 @@ class DataContent extends Component {
       .map(indicator => ({
         id: indicator.name,
         name: `${indicator.frontendName}${indicator.unit !== null ? `(${indicator.unit})` : ''}`,
-        noSelfCancel: false
+        unit: indicator.unit,
+        noSelfCancel: false,
+        filterName: indicator.frontendName,
+        filterOptions: indicator.filterOptions
       }))
       .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -392,6 +420,8 @@ class DataContent extends Component {
                         selected={this.state.selectedYears}
                       />
                     </div>
+                  </div>
+                  <div className="row">
                     <div className="small-4 columns">
                       <DownloadSelector
                         allowMultiple
@@ -437,7 +467,10 @@ class DataContent extends Component {
                         }
                         title="INDICATORS"
                         type="indicators"
+                        selectedFilters={this.state.selectedIndicatorsFilters}
                         onOptionSelected={this.onClickEventHandler}
+                        onOptionFilterChange={this.onOptionFilterChange}
+                        onOptionFilterClear={this.onOptionFilterClear}
                         onAllSelected={this.onAllSelected}
                         disabledText="Please select first a country and commodity"
                         selected={this.state.selectedIndicators}
@@ -453,7 +486,7 @@ class DataContent extends Component {
                         <li className="-selected">
                           Pivot
                           <div
-                            className={classnames('c-radio-btn -no-self-cancel -grey', {
+                            className={cx('c-radio-btn -no-self-cancel -grey', {
                               '-enabled': this.state.outputType === 'pivot'
                             })}
                             onClick={() => this.onOutputTypeSelected('pivot')}
@@ -462,7 +495,7 @@ class DataContent extends Component {
                         <li>
                           Table
                           <div
-                            className={classnames('c-radio-btn -no-self-cancel -grey', {
+                            className={cx('c-radio-btn -no-self-cancel -grey', {
                               '-enabled': this.state.outputType === 'table'
                             })}
                             onClick={() => this.onOutputTypeSelected('table')}
@@ -477,7 +510,7 @@ class DataContent extends Component {
                         <li className="-selected">
                           .csv (comma separated)
                           <div
-                            className={classnames('c-radio-btn -no-self-cancel -grey', {
+                            className={cx('c-radio-btn -no-self-cancel -grey', {
                               '-enabled':
                                 this.state.fileExtension === '.csv' &&
                                 this.state.fileSeparator === 'comma'
@@ -488,7 +521,7 @@ class DataContent extends Component {
                         <li>
                           .csv (semicolon separated)
                           <div
-                            className={classnames('c-radio-btn -no-self-cancel -grey', {
+                            className={cx('c-radio-btn -no-self-cancel -grey', {
                               '-enabled':
                                 this.state.fileExtension === '.csv' &&
                                 this.state.fileSeparator === 'semicolon'
@@ -499,7 +532,7 @@ class DataContent extends Component {
                         <li>
                           .json
                           <div
-                            className={classnames('c-radio-btn -no-self-cancel -grey', {
+                            className={cx('c-radio-btn -no-self-cancel -grey', {
                               '-enabled':
                                 this.state.fileExtension === '.json' &&
                                 this.state.fileSeparator === ''
@@ -511,7 +544,7 @@ class DataContent extends Component {
                     </div>
 
                     <div
-                      className={classnames('download-button', {
+                      className={cx('download-button', {
                         '-disabled':
                           !DATA_DOWNLOAD_ENABLED ||
                           this.state.selectedCountry === null ||
