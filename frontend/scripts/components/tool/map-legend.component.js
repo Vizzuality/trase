@@ -49,7 +49,9 @@ export default class {
     if (bucketClass === undefined || bucketClass === null) {
       return;
     }
-    const bucket = this.choro.getElementsByClassName(bucketClass)[0];
+    const bucket = this.choro.getElementsByClassName(
+      `color-${bucketClass.substr(1).toLowerCase()}`
+    )[0];
     if (bucket === undefined) {
       return;
     }

@@ -463,8 +463,6 @@ The project's main configuration values can be set using [environment variables]
 
 * PORT: port used by the development web server. defaults to 8081
 * NODE_ENV: environment used by the nodejs tasks
-* API_V1_URL: URL of the data API V1
-* API_V2_URL: URL of the data API V2
 * API_V3_URL: URL of the data API V3
 * API_CMS_URL: URL of the homepage stories API
 * API_STORY_CONTENT: URL of the deep dive stories API
@@ -477,6 +475,7 @@ The project's main configuration values can be set using [environment variables]
 * PERF_TEST: when set to true, enables performance evaluation mode. Only supported outside of production environments. See https://github.com/garbles/why-did-you-update for more info.
 * REDUX_LOGGER_ENABLED: when set to true, enables logging redux actions on the browser's console. Only supported outside of production environments.
 * USE_PLAIN_URL_STATE: when set to true, enables saving the sankey's state as a plain serialized string. Use "false" on production environments, ot use base64 encoding
+* USE_CANVAS_MAP: if set to true, may use a <canvas> to render the map's choropleth layer. Actual usage may also depend on browser support.
 
 If you are using the included development server, you can set those variables in the `.env` file (use the included `.env.sample` as an example)
 

@@ -4,14 +4,26 @@
         <div class="layer-name" ><%= title[1] %></div >
     </div >
     <ul class="bucket-legend" data-colors="5" >
-        <% colors.forEach(function(color, i) { %>
-        <li class="bucket-item" >
-            <div class="bucket <%= color %>" >
-                <% if (!isBivariate && typeof bucket !== "undefined" && bucket !== null) { %>
-                <span ><%= abbreviateNumber(bucket[0][i], 3, i) %></span >
-                <% } %>
-            </div >
-        </li >
+        <% Object.values(colors).forEach(function(color, i) { %>
+          <% if (isBivariate) {%>
+              <% Object.values(color).forEach(function(bivariateColor, j) { %>
+                <li class="bucket-item" >
+                    <div class="bucket color-<%= bivariateColor.substr(1).toLowerCase() %>" style="background-color: <%= bivariateColor %>" >
+                      <% if (!isBivariate && typeof bucket !== "undefined" && bucket !== null) { %>
+                        <span ><%= abbreviateNumber(bucket[0][j], 3, j) %></span >
+                      <% } %>
+                    </div >
+                </li >
+              <% }) %>
+          <% } else { %>
+            <li class="bucket-item" >
+                <div class="bucket color-<%= color.substr(1).toLowerCase() %>" style="background-color: <%= color %>" >
+                  <% if (!isBivariate && typeof bucket !== "undefined" && bucket !== null) { %>
+                    <span ><%= abbreviateNumber(bucket[0][i], 3, i) %></span >
+                  <% } %>
+                </div >
+            </li >
+          <% } %>
         <% }) %>
     </ul >
 
@@ -35,11 +47,11 @@
 
     <ul class="bullets" >
         <li >
-            <div class="bullet ch-default" style="background:#ebebeb" ></div >
+            <div class="bullet color-dfdfdf" style="background:#DFDFDF" ></div >
             N/A
         </li >
         <li >
-            <div class="bullet ch-zero" style="background:#ffffff" ></div >
+            <div class="bullet color-ffffff" style="background:#ffffff" ></div >
             0
         </li >
     </ul >

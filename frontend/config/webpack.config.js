@@ -52,6 +52,7 @@ module.exports = {
       PDF_DOWNLOAD_URL: JSON.stringify(process.env.PDF_DOWNLOAD_URL),
       PERF_TEST: process.env.PERF_TEST === 'true',
       REDUX_LOGGER_ENABLED: process.env.REDUX_LOGGER_ENABLED === 'true',
+      USE_CANVAS_MAP: process.env.USE_CANVAS_MAP === 'true',
       USE_PLAIN_URL_STATE: process.env.USE_PLAIN_URL_STATE === 'true',
       TRANSIFEX_API_KEY: JSON.stringify(process.env.TRANSIFEX_API_KEY),
       HOME_VIDEO_ID: JSON.stringify(process.env.HOME_VIDEO_ID)
