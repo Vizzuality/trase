@@ -46,61 +46,99 @@ export const DETAILED_VIEW_SCALE = 1200;
 export const DETAILED_VIEW_MIN_NODE_HEIGHT = 14;
 export const DETAILED_VIEW_MIN_LINK_HEIGHT = 1;
 
-export const CHOROPLETH_CLASS_ZERO = 'ch-zero';
-export const CHOROPLETH_CLASSES = {
-  bidimensional: [
-    'ch-bi-0-3',
-    'ch-bi-1-3',
-    'ch-bi-2-3',
-    'ch-bi-3-3',
-    'ch-bi-0-2',
-    'ch-bi-1-2',
-    'ch-bi-2-2',
-    'ch-bi-3-2',
-    'ch-bi-0-1',
-    'ch-bi-1-1',
-    'ch-bi-2-1',
-    'ch-bi-3-1',
-    'ch-bi-0-0',
-    'ch-bi-1-0',
-    'ch-bi-2-0',
-    'ch-bi-3-0'
-  ],
-  horizontal: ['ch-red-0', 'ch-red-1', 'ch-red-2', 'ch-red-3', 'ch-red-4'],
-  vertical: ['ch-blue-0', 'ch-blue-1', 'ch-blue-2', 'ch-blue-3', 'ch-blue-4'],
-  red: ['ch-red-0', 'ch-red-1', 'ch-red-2', 'ch-red-3', 'ch-red-4'],
-  blue: ['ch-blue-0', 'ch-blue-1', 'ch-blue-2', 'ch-blue-3', 'ch-blue-4'],
-  green: [
-    'recolorby-percentual-yellow-green-0',
-    'recolorby-percentual-yellow-green-1',
-    'recolorby-percentual-yellow-green-2',
-    'recolorby-percentual-yellow-green-3',
-    'recolorby-percentual-yellow-green-4'
-  ],
-  bluered: [
-    'choro-red-blue-toned-down-4',
-    'choro-red-blue-toned-down-3',
-    'choro-red-blue-toned-down-2',
-    'choro-red-blue-toned-down-1',
-    'choro-red-blue-toned-down-0'
-  ],
-  redblue: [
-    'choro-red-blue-toned-down-0',
-    'choro-red-blue-toned-down-1',
-    'choro-red-blue-toned-down-2',
-    'choro-red-blue-toned-down-3',
-    'choro-red-blue-toned-down-4'
-  ],
-  greenred: [
-    'choro-red-green-toned-down-4',
-    'choro-red-green-toned-down-3',
-    'choro-red-green-toned-down-2',
-    'choro-red-green-toned-down-1',
-    'choro-red-green-toned-down-0'
-  ],
-  error_no_metadata: 'ch-no-meta',
-  error_no_metadata_for_layer: 'ch-no-meta-layer',
-  default: 'ch-default'
+export const CHOROPLETH_CLASS_ZERO = '#FFFFFF';
+export const CHOROPLETH_COLORS = {
+  bidimensional: {
+    0: {
+      0: '#F6F5ED',
+      1: '#CFE7DF',
+      2: '#A4D2CF',
+      3: '#8DB6CA'
+    },
+    1: {
+      0: '#F5D0B9',
+      1: '#C6C6B9',
+      2: '#91B4B5',
+      3: '#7F90A4'
+    },
+    2: {
+      0: '#F5928D',
+      1: '#C18686',
+      2: '#84747A',
+      3: '#635B69'
+    },
+    3: {
+      0: '#F65E6E',
+      1: '#C55966',
+      2: '#864F57',
+      3: '#443537'
+    }
+  },
+  horizontal: {
+    0: '#F5EEE3',
+    1: '#F5B7AD',
+    2: '#EF4F60',
+    3: '#B41728',
+    4: '#4F0008'
+  },
+
+  vertical: {
+    0: '#EAF2EB',
+    1: '#A1D9D5',
+    2: '#8DB6CA',
+    3: '#3881A4',
+    4: '#06425F'
+  },
+  red: {
+    0: '#F5EEE3',
+    1: '#F5B7AD',
+    2: '#EF4F60',
+    3: '#B41728',
+    4: '#4F0008'
+  },
+  blue: {
+    0: '#EAF2EB',
+    1: '#A1D9D5',
+    2: '#8DB6CA',
+    3: '#3881A4',
+    4: '#06425F'
+  },
+  green: {
+    0: '#ffc',
+    1: '#c2e699',
+    2: '#78c679',
+    3: '#31a354',
+    4: '#006837'
+  },
+  bluered: {
+    4: '#79A8D0',
+    3: '#C2DFED',
+    2: '#FFFECC',
+    1: '#FFBD78',
+    0: '#E54935'
+  },
+  redblue: {
+    0: '#E54935',
+    1: '#FFBD78',
+    2: '#FFFECC',
+    3: '#C2DFED',
+    4: '#79A8D0'
+  },
+  greenred: {
+    4: '#70C67A',
+    3: '#B0DE82',
+    2: '#FFFECC',
+    1: '#FFBD78',
+    0: '#E54935'
+  },
+  error_no_metadata: '#DFDFDF',
+  error_no_metadata_for_layer: '#DFDFDF',
+  default_fill: '#FFFFFF',
+  fill_linked: '#FFEB8B',
+  fill_not_linked: '#DFDFDF',
+  bright_stroke: '#FFFFFF',
+  dark_stroke: '#536269',
+  zero: '#FFFFFF'
 };
 
 export const PROFILE_CHOROPLETH_CLASSES = [
@@ -142,7 +180,8 @@ export const MAP_PANES = {
   vectorMain: 'vectorMain',
   vectorOutline: 'vectorOutline',
   context: 'context',
-  basemapLabels: 'basemapLabels'
+  basemapLabels: 'basemapLabels',
+  overlayPane: 'overlayPane'
 };
 export const MAP_PANES_Z = {
   [MAP_PANES.basemap]: 200,
