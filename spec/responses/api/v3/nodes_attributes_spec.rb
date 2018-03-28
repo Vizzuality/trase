@@ -24,11 +24,7 @@ RSpec.describe 'Nodes attributes', type: :request do
     it 'has the correct response structure' do
       get "/api/v3/contexts/#{api_v3_context.id}/nodes/attributes", params: {start_year: 2015, end_year: 2015}
 
-<<<<<<< HEAD
       expect(@response).to have_http_status(:ok)
-=======
-      expect(@response.status).to eq 200
->>>>>>> Expanded map buckets & renamed to better reflect purpose
       expect(@response).to match_response_schema('v3_node_attributes')
     end
   end
