@@ -76,10 +76,12 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+  width: 100vw;
   overflow: hidden;
   margin: 15px -1.25rem 0 -1.25rem;
 
   @media screen and (min-width: $breakpoint-foundation-small) {
+    width: 100%;
     margin: 15px 0 0 0;
   }
 }
