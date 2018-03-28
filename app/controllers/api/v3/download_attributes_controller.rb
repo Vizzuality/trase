@@ -4,8 +4,7 @@ module Api
       def index
         @attributes = Api::V3::Readonly::DownloadAttribute.
           preload(:readonly_attribute).
-          where(context_id: @context.id).
-          map(&:readonly_attribute)
+          where(context_id: @context.id)
         render json: @attributes,
                each_serializer: Api::V3::DownloadAttributeSerializer,
                root: 'indicators'
