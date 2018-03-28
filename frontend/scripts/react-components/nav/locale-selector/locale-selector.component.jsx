@@ -115,7 +115,8 @@ LocaleSelector.propTypes = {
 };
 
 LocaleSelector.defaultProps = {
-  onTranslate: () => {}
+  onTranslate: () => {},
+  urlLang: 'en'
 };
 
 export default LocaleSelector;
