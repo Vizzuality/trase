@@ -1,0 +1,24 @@
+.l-not-supported {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $light-gray;
+  height: 100vh;
+
+  .not-supported {
+    text-align: center;
+
+    img {
+      margin-bottom: 20px;
+    }
+
+    p {
+      color: $charcoal-grey;
+      opacity: .5;
+      line-height: 1.71;
+      font-family: $font-family-2;
+      font-size: 14px;
+      font-weight: $font-weight-light;
+    }
+  }
+}

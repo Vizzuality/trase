@@ -1,10 +1,11 @@
-import { connectRoutes, NOT_FOUND, replace } from 'redux-first-router';
+import { connectRoutes, NOT_FOUND, redirect, replace } from 'redux-first-router';
 
 import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.container';
 import TeamMember from 'react-components/team/team-member/team-member.container';
 import Team from 'react-components/team/team.container';
 import { parse, stringify } from 'utils/stateURL';
 
+import { BREAKPOINTS } from 'constants';
 import { getDataPortalContext } from 'react-components/data-portal/data-portal.thunks';
 import {
   getPostsContent,
@@ -19,6 +20,8 @@ import { getPageStaticContent } from 'react-components/static-content/static-con
 import { getTeam } from 'react-components/team/team.thunks';
 import { loadInitialDataExplore, redirectToExplore } from 'react-components/explore/explore.thunks';
 
+const pagesNotSupportedOnMobile = ['tool', 'map', 'data'];
+
 const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thunk(...params));
 
 const config = {
@@ -28,7 +31,15 @@ const config = {
     stringify
   },
   notFoundPath: '/404',
-  onBeforeChange: dispatchThunks(redirectToExplore, resetToolThunk)
+  onBeforeChange: (dispatch, getState, { action }) => {
+    const isMobile = window.innerWidth <= BREAKPOINTS.small;
+
+    if (isMobile && pagesNotSupportedOnMobile.includes(action.type)) {
+      return dispatch(redirect({ type: 'notSupportedOnMobile' }));
+    }
+
+    return dispatchThunks(redirectToExplore, resetToolThunk)(dispatch, getState, { action });
+  }
 };
 
 const routes = {
@@ -101,6 +112,13 @@ const routes = {
     page: 'static-content',
     thunk: dispatchThunks(getPageStaticContent),
     component: withSidebarNavLayout(MarkdownRenderer)
+  },
+  notSupportedOnMobile: {
+    path: '/not-supported',
+    page: 'not-supported',
+    nav: {
+      className: '-light'
+    }
   },
   [NOT_FOUND]: {
     path: '/404',
