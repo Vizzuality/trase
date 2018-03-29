@@ -33,6 +33,7 @@ This project uses:
 - [Bundler](http://bundler.io/)
 - redis >= 3
 - wget
+- cron
 
 ## Setup
 
@@ -179,6 +180,12 @@ To ensure only one database job can run at any single time we use `sidekiq-uniqu
 It can be configured to lock execution according to a number of predefined strategies and the one we use is called `:until_and_while_executing`. It works as follows: you can enqueue a duplicate job A' unless job A is already enqueued; A' will not start executing until A is finished, at which point it will be possible to enqueue another job A''. It is also important to understand that the unique locks have an expiration time, which I set to match average execution time. It seems that without this in place it is possible that an enqueued job will start executing too early (after a default timeout of 60 seconds).
 
 In practice this means that if the admin makes 3 updates in a short time frame ( < lock expiration time) to e.g. Download Attributes, normally the `DownloadFlowsRefreshWorker` would be enqueued and executed 3 times, possibly concurrently. With the unique lock in place, it will enqueue the first one and if possible start executing immediately, possibly allowing to enqueue the second one while first one is in progress; the third one will never be enqueued. Once the first one has completed the second one will be executed.
+
+## Periodic jobs
+
+We use whenever backed by cron to periodically warm the cache. Crontab is managed by the `whenever` gem using `config/schedule.rb`.
+
+[It is recommended](https://github.com/javan/whenever#rvm-integration) to set `rvm_trust_rvmrcs_flag=1` in `~/.rvmrc`.
 
 ## Test
 
