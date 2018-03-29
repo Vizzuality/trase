@@ -2,9 +2,13 @@ module Api
   module V3
     class DownloadAttributeSerializer < ActiveModel::Serializer
       attributes :name, :unit, :unit_type, :years
-      attribute :display_name, key: :frontend_name
+      attribute :frontend_name
       attribute :original_type, key: :indicator_type
       attribute :filter_options
+
+      def frontend_name
+        object.readonly_attribute.display_name
+      end
 
       def filter_options
         return qual_filter_options if object.original_type == 'Qual'
