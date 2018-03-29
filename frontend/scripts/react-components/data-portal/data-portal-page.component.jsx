@@ -155,8 +155,15 @@ class DataContent extends Component {
       }
       case 'indicators': {
         const selectedIndicators = xor(this.state.selectedIndicators, [value]);
+        const selectedIndicatorsFilters = { ...this.state.selectedIndicatorsFilters };
+
+        if (!selectedIndicators.includes(value)) {
+          delete selectedIndicatorsFilters[value];
+        }
+
         this.setState({
           selectedIndicators,
+          selectedIndicatorsFilters,
           allIndicatorsSelected: selectedIndicators.length === this.props.indicators.length
         });
         break;
@@ -215,6 +222,7 @@ class DataContent extends Component {
         if (this.state.allIndicatorsSelected) {
           this.setState({
             selectedIndicators: [],
+            selectedIndicatorsFilters: {},
             allIndicatorsSelected: !this.state.allIndicatorsSelected
           });
         } else {
