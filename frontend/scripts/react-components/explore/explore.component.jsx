@@ -161,7 +161,7 @@ class Explore extends React.PureComponent {
             )}
           </div>
           {showTable && (
-            <div className="row hide-for-small">
+            <div className="row">
               <div className="column small-12 medium-7 small-order-2 medium-order-1">
                 <p className="explore-footer-text">
                   By accessing the Trase platform you have acknowledged and agreed to our{' '}
@@ -171,8 +171,11 @@ class Explore extends React.PureComponent {
                 </p>
               </div>
               <div className="column small-12 medium-5 small-order-1 medium-order-2 explore-footer-button-container">
+                <div className="c-button -gray -big explore-footer-button -no-pointer show-for-small">
+                  Visit trase on a computer to explore the full supply chain
+                </div>
                 <Link
-                  className="c-button -pink -big explore-footer-button"
+                  className="c-button -pink -big explore-footer-button hide-for-small"
                   to={{
                     type: 'tool',
                     payload: { query: { state: { selectedContextId, selectedYears } } }
