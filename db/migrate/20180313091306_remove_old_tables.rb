@@ -57,6 +57,7 @@ class RemoveOldTables < ActiveRecord::Migration[5.1]
       SELECT table_name FROM information_schema.tables
       WHERE table_schema = '#{schema_name}'
       AND table_name NOT IN ('schema_migrations', 'ar_internal_metadata')
+      AND table_type = 'BASE TABLE'
     SQL
     result = execute sql
     result.map { |row| row['table_name'] }
