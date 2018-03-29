@@ -133,7 +133,6 @@ The project's main configuration values can be set using [environment variables]
 * SECRET_KEY_BASE: Rails secret key. Use a random value
 * POSTGRES_HOSTNAME: Hostname of your database server
 * POSTGRES_DATABASE: Name of your data database
-* POSTGRES_CONTENT_DATABASE: Name of your content database
 * POSTGRES_USERNAME: Username used to connect to your PostgreSQL server instance
 * POSTGRES_PASSWORD: Password used to connect to your PostgreSQL server instance
 * POSTGRES_PORT: Port used to connect to your PostgreSQL server instance
