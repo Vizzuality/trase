@@ -26,4 +26,8 @@
   &.-outline {
     stroke: $charcoal-grey-faded;
   }
+
+  @media print {
+    stroke: $black;
+  }
 }

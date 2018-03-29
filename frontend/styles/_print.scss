@@ -1,74 +1,25 @@
-.-print { // sass-lint:disable
-  max-width: 22cm;
-  overflow-x: hidden;
-
-  .is-page-break-always {
-    page-break-after: always;
-  }
-
-  .c-nav {
+.only-for-print {
+  @media not print {
     display: none;
   }
+}
 
-  .l-profile-actor,
-  .l-profile-place {
-    padding: 0 30px 30px;
-
-    .c-anchor-buttons {
-      display: none;
-    }
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
-  .l-profile-actor .c-top-municipalities {
-    .js-top-municipalities-map svg {
-      margin-left: 20px;
-    }
+  @page {
+    size: A4;
+    margin: 1cm;
   }
 
-  .l-profile-place {
-    .c-area-table.score-table {
-      padding: 27px 0 42px;
-    }
+  .page-break-inside-avoid {
+    page-break-inside: avoid;
   }
 
-  .c-scatterplot {
-
-    .axis-legend-x {
-      display: block;
-      position: absolute;
-      right: 0;
-      bottom: 0;
-    }
-  }
-
-  .c-area-table {
-    .node-link {
-      display: none;
-    }
-  }
-
-  .tab {
-    display: none;
-  }
-
-  .tab-title {
-    display: block;
-    margin-top: 20px;
-  }
-
-  .-tab-hidden {
-    display: block;
-  }
-
-  .c-overall-info {
-    .c-dropdown {
-      .dropdown-title::after {
-        display: none;
-      }
-    }
-  }
-
-  .user-report-feedback {
-    display: none;
+  .page-break-after-avoid {
+    page-break-after: avoid;
   }
 }

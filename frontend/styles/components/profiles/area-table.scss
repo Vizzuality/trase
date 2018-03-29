@@ -82,6 +82,10 @@
           .node-link {
             display: inline-flex;
             position: absolute;
+
+            @media print {
+              display: none;
+            }
           }
 
           .node-link > .icon {
@@ -123,7 +127,13 @@
     fill: rgba($charcoal-grey, 0.2);
   }
 
-  .c-area-table-container {
+  .table-container {
+    @media print {
+      &:not(:last-child) {
+        margin-bottom: 30px;
+      }
+    }
+
     @media screen and (max-width: $breakpoint-foundation-small) {
       overflow-x: auto;
     }

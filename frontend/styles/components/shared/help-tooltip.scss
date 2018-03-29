@@ -11,6 +11,10 @@
     }
   }
 
+  @media print {
+    display: none;
+  }
+
   .tooltip-react-icon {
     opacity: .3;
     font-size: 12px;

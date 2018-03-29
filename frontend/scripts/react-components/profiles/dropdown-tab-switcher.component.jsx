@@ -62,7 +62,7 @@ class DropdownTabSwitcher extends Component {
 }
 
 DropdownTabSwitcher.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.any,
   titleTooltip: PropTypes.string,
   items: PropTypes.array,
   itemTabRenderer: PropTypes.func,
