@@ -32,6 +32,7 @@ This project uses:
 - PostgreSQL 9.5+ with `intarray`, `tablefunc` and `postgres_fdw` extensions
 - [Bundler](http://bundler.io/)
 - redis >= 3
+- wget
 
 ## Setup
 
@@ -131,6 +132,7 @@ To enable then, simply execute once: `bin/git/init-hooks`
 The project's main configuration values can be set using [environment variables](https://en.wikipedia.org/wiki/Environment_variable) in the `.env` file.
 
 * SECRET_KEY_BASE: Rails secret key. Use a random value
+* API_HOST: e.g. http://localhost:3000, https://staging.trase.earth
 * POSTGRES_HOSTNAME: Hostname of your database server
 * POSTGRES_DATABASE: Name of your data database
 * POSTGRES_USERNAME: Username used to connect to your PostgreSQL server instance
