@@ -151,6 +151,7 @@ The project's main configuration values can be set using [environment variables]
 * TRASE_REMOTE_PASSWORD=
 * TRASE_REMOTE_SERVER=trase_server
 * TRASE_LOCAL_FDW_SCHEMA=main # this schema in local database where remote tables are mapped
+* API_HOST=http://localhost:3000 # base url of API
 * TRASE_LOCAL_SCHEMA=public # this schema in local database where target tables are
 * INSTANCE_NAME= # string to uniquely identify instance as source of db dump, e.g. staging
 * AWS_ACCESS_KEY_ID=
@@ -441,6 +442,10 @@ The application has built-in functionality which allows for copying the database
     - `pg_restore` into current database
 
 Both processes run in background using sidekiq and exceptions can be monitored using Sidekiq Web UI - the 'Dead' section.
+
+However, it is also possible to start them synchronously using rake tasks:
+- `bundle exec db:s3:export`
+- `DATABASE_VERSION=[object name from S3] bundle exec db:s3:import`
 
 # Frontend
 

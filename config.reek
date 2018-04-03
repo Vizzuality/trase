@@ -94,8 +94,8 @@ TooManyStatements:
 UncommunicativeMethodName:
   enabled: true
   exclude:
-    - 'DatabaseExportWorker'
-    - 'DatabaseImportWorker'
+    - 'Api::V3::DatabaseExport::Exporter'
+    - 'Api::V3::DatabaseImport::Importer'
   reject:
   - !ruby/regexp /^[a-z]$/
   - !ruby/regexp /[0-9]$/
@@ -138,5 +138,7 @@ UnusedPrivateMethod:
   exclude: []
 UtilityFunction:
   enabled: true
-  exclude: []
+  exclude:
+  - 'DatabaseExportWorker'
+  - 'DatabaseImportWorker'
   public_methods_only: true
