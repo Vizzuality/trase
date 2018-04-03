@@ -28,8 +28,15 @@ module CacheWarmer
         find_by('countries.iso2' => 'BR', 'commodities.name' => 'SOY')
       volume_attribute = Dictionary::Quant.instance.get('Volume')
       raise 'Quant Volume not found' unless volume_attribute.present?
-      top_place_profile_urls(context, 2015, volume_attribute) +
-        top_actor_profile_urls(context, 2015, volume_attribute)
+      years = context.flows.joins(:flow_quants).
+        where('flow_quants.quant_id' => volume_attribute.id).
+        distinct('flows.year').
+        pluck(:year).
+        sort
+      years.map do |year|
+        top_place_profile_urls(context, year, volume_attribute) +
+          top_actor_profile_urls(context, year, volume_attribute)
+      end.flatten
     end
 
     def self.top_place_profile_urls(context, year, attribute)
