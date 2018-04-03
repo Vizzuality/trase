@@ -8,7 +8,7 @@ module Api
         attr_reader :local_filename
 
         def initialize
-          @filename = Time.now.strftime('%Y%m%d-%H:%M:%S%:z') + '.dump'
+          @filename = Time.now.strftime('%Y%m%d-%H:%M:%S%:z') + '.dump.gz'
           @local_filename = EXPORT_DIR + '/' + @filename
           @s3_filename = INSTANCE_NAME + '/' + @filename
         end

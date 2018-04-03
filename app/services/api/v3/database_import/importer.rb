@@ -10,7 +10,7 @@ module Api
         API_HOST = ENV['API_HOST']
 
         def initialize(s3_filename)
-          raise 'Invalid S3 object name' unless s3_filename.match?(/\w+\/.+\.dump/)
+          raise 'Invalid S3 object name' unless s3_filename.match?(/\w+\/.+\.dump\.gz/)
           @s3_filename = s3_filename
           @filename = s3_filename.split('/').last
           @local_filename = IMPORT_DIR + '/' + @filename

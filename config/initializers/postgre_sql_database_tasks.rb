@@ -65,16 +65,15 @@ module ActiveRecord
 
       def data_dump(filename)
         set_psql_env
-        args = ['--no-owner', '-Fc', '-f', filename]
-        args << configuration['database']
-        run_cmd('pg_dump', args, 'dumping')
+        db_name = configuration['database']
+        cmd = "pg_dump --no-owner -c #{db_name} | gzip > #{filename}"
+        run_cmd(cmd, [], 'dumping')
       end
 
       def data_restore(filename, restored_db_name)
         set_psql_env
-        db_name = configuration['database']
-        args = ['-c', '-n', 'public', '-n', 'content', '-d', restored_db_name, filename]
-        run_cmd('pg_restore', args, 'restoring')
+        cmd = "gunzip -c #{filename} | psql #{restored_db_name}"
+        run_cmd(cmd, [], 'restoring')
       end
     end
   end

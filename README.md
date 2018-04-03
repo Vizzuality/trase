@@ -433,13 +433,13 @@ In case of the custom validations, the core class is the `Api::V3::DatabaseValid
 
 The application has built-in functionality which allows for copying the database from one instance to another in two steps:
 - export: using the admin tool of the instance whose database is copied (source) run the 'Export database' process, which will:
-    - dump the database using `pg_dump` (custom format)
+    - dump the database using `pg_dump` + `gzip`
     - upload the dump to S3
 - import: using the admin tool of the instance where we want the database copied to (target) run the 'Import database' process, which will:
     - download requested database dump from S3
     - check if schema version is compatible
     - backup current database
-    - `pg_restore` into current database
+    - restore using `psql` into current database
 
 Both processes run in background using sidekiq and exceptions can be monitored using Sidekiq Web UI - the 'Dead' section.
 
