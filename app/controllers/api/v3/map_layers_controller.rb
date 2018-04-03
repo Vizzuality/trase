@@ -4,23 +4,9 @@ module Api
       def index
         ensure_required_param_present(:year_start)
 
-        contextual_layers = Api::V3::ContextualLayer.
-          select(
-            [
-              'title',
-              "#{Api::V3::ContextualLayer.table_name}.identifier",
-              'tooltip_text',
-              "#{Api::V3::ContextualLayer.table_name}.id",
-              'position',
-              'is_default',
-              'legend',
-              'years',
-              'raster_url'
-            ]
-          ).
-          joins(:carto_layers).
-          where(context_id: @context.id).
-          order('position ASC, id ASC')
+        contextual_layers = Api::V3::MapLayers::ContextualLayerFilter.new(
+          @context
+        ).call
 
         dimension_groups = Api::V3::MapAttributeGroup.
           select('DISTINCT name, id, position').
