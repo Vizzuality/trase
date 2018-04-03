@@ -19,8 +19,8 @@ module Api
           FileUtils.mkdir_p(EXPORT_DIR) unless dir_exists?
           keep_local_copy = options[:keep_local_copy]
 
-          dump(local_filename)
-          upload_to_s3(@s3_filename, @local_filename)
+          dump
+          upload_to_s3
         ensure
           if !keep_local_copy && dir_exists?
             FileUtils.rm_f Dir.glob("#{EXPORT_DIR}/*")
@@ -29,19 +29,18 @@ module Api
 
         private
 
-        def dump(local_filename)
+        def dump
           config = Rails.configuration.database_configuration
           env_config = config[Rails.env]
           pg_tasks = ActiveRecord::Tasks::PostgreSQLDatabaseTasks.new(env_config)
-          pg_tasks.data_dump(local_filename)
+          pg_tasks.data_dump(@local_filename)
           Rails.logger.debug 'Database dumped'
-          local_filename
         end
 
-        def upload_to_s3(s3_filename, local_filename)
+        def upload_to_s3
           Api::V3::S3Uploader.instance.call(
-            s3_filename,
-            local_filename,
+            @s3_filename,
+            @local_filename,
             schema_version: ActiveRecord::Migrator.current_version.to_s
           )
           Rails.logger.debug 'Database uploaded'

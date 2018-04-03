@@ -22,10 +22,10 @@ module Api
           Rails.logger.debug "Starting import #{@s3_filename}"
           FileUtils.mkdir_p(IMPORT_DIR) unless File.directory?(IMPORT_DIR)
 
-          download_from_s3(@s3_filename, @local_filename, options)
+          download_from_s3(options)
           Rails.logger.debug 'Download completed'
 
-          restore(@local_filename)
+          restore
 
           clear_cache
         ensure
@@ -34,8 +34,8 @@ module Api
 
         private
 
-        def download_from_s3(s3_filename, local_filename, options = {})
-          metadata = Api::V3::S3Downloader.instance.call(s3_filename, local_filename)
+        def download_from_s3(options = {})
+          metadata = Api::V3::S3Downloader.instance.call(@s3_filename, @local_filename)
           Rails.logger.debug 'Database downloaded'
           schema_version = ActiveRecord::Migrator.current_version.to_s
           schema_match = (metadata['schema_version'] == schema_version)
@@ -44,7 +44,7 @@ module Api
 cannot restore"
         end
 
-        def restore(local_filename)
+        def restore
           exporter = Api::V3::DatabaseExport::Exporter.new
           exporter.call(
             keep_local_copy: true
@@ -55,7 +55,7 @@ cannot restore"
           active_db_name = env_config['database']
           pg_tasks = ActiveRecord::Tasks::PostgreSQLDatabaseTasks.new(env_config)
           begin
-            pg_tasks.data_restore(local_filename, active_db_name)
+            pg_tasks.data_restore(@local_filename, active_db_name)
             Rails.logger.debug 'Database restored to new version'
           rescue
             # restore database to previous version using local backup
