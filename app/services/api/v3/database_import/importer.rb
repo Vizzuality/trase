@@ -16,12 +16,13 @@ module Api
           @local_filename = IMPORT_DIR + '/' + @filename
         end
 
-        # @param s3_filename [String]
-        def call
+        # @param options [Hash]
+        # @option options [Boolean] :force
+        def call(options = {})
           Rails.logger.debug "Starting import #{@s3_filename}"
           FileUtils.mkdir_p(IMPORT_DIR) unless File.directory?(IMPORT_DIR)
 
-          download_from_s3(@s3_filename, @local_filename)
+          download_from_s3(@s3_filename, @local_filename, options)
           Rails.logger.debug 'Download completed'
 
           restore(@local_filename)
@@ -33,12 +34,12 @@ module Api
 
         private
 
-        def download_from_s3(s3_filename, local_filename)
+        def download_from_s3(s3_filename, local_filename, options = {})
           metadata = Api::V3::S3Downloader.instance.call(s3_filename, local_filename)
           Rails.logger.debug 'Database downloaded'
           schema_version = ActiveRecord::Migrator.current_version.to_s
           schema_match = (metadata['schema_version'] == schema_version)
-          return if schema_match
+          return if options[:force] || schema_match
           raise "Incompatible schema version #{metadata['schema_version']}, \
 cannot restore"
         end

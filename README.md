@@ -447,6 +447,8 @@ However, it is also possible to start them synchronously using rake tasks:
 - `bundle exec db:s3:export`
 - `DATABASE_VERSION=[object name from S3] bundle exec db:s3:import`
 
+The import task checks whether your old database was at the same version (last migration) as the one you want to import and prevents you from accidentally getting into the hell of code - database mismatch. However, if you know what you're doing, you can override it: `DATABASE_VERSION=[object name from S3] bundle exec rake db:s3:force_import`
+
 # Frontend
 
 The frontend application can be found inside the `frontend` folder. All files mentioned below can be found inside this folder,

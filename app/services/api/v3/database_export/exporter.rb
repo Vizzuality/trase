@@ -14,7 +14,7 @@ module Api
         end
 
         # @param options [Hash]
-        # @option options [symbol] :keep_local_copy
+        # @option options [Boolean] :keep_local_copy
         def call(options = {})
           FileUtils.mkdir_p(EXPORT_DIR) unless dir_exists?
           keep_local_copy = options[:keep_local_copy]
