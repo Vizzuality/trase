@@ -129,6 +129,7 @@ UncommunicativeVariableName:
   - 'i'
   - 'j'
   - 'e'
+  - 'f'
   - 's3'
 UnusedParameters:
   enabled: true

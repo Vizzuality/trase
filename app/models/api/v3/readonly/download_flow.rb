@@ -2,6 +2,7 @@
 #
 # Table name: download_flows_mv
 #
+#  row_name                 :integer          is an Array
 #  id                       :integer          primary key
 #  context_id               :integer
 #  year                     :integer
@@ -35,10 +36,12 @@
 #
 # Indexes
 #
-#  index_download_flows_mv_on_attribute_type_and_attribute_id  (attribute_type,attribute_id)
-#  index_download_flows_mv_on_country_node_id                  (country_node_id)
-#  index_download_flows_mv_on_exporter_node_id                 (exporter_node_id)
-#  index_download_flows_mv_on_importer_node_id                 (importer_node_id)
+#  download_flows_mv_attribute_type_attribute_id_id_idx        (attribute_type,attribute_id,id) UNIQUE
+#  download_flows_mv_context_id_idx                            (context_id)
+#  download_flows_mv_country_node_id_idx                       (country_node_id)
+#  download_flows_mv_exporter_node_id_idx                      (exporter_node_id)
+#  download_flows_mv_importer_node_id_idx                      (importer_node_id)
+#  download_flows_mv_row_name_attribute_type_attribute_id_idx  (row_name,attribute_type,attribute_id) UNIQUE
 #
 
 module Api

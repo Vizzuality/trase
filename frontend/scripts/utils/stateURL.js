@@ -5,7 +5,7 @@ import isEmpty from 'lodash/isEmpty';
 import pick from 'lodash/pick';
 import pickBy from 'lodash/pickBy';
 import isEqual from 'lodash/isEqual';
-import qs from 'query-string';
+import qs from 'qs';
 import { redirect } from 'redux-first-router';
 
 const URL_STATE_PROPS = [

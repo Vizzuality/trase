@@ -23,18 +23,19 @@ export const GA_ACTION_WHITELIST = [
         },
         action.payload
       );
-      if (payload.countries_ids) {
-        payload.consumptionCountries = payload.countries_ids.map(
+      if (payload.c_ids) {
+        payload.consumptionCountries = payload.c_ids.map(
           countryId =>
             state.data.consumptionCountries.find(elem => elem.id === parseInt(countryId, 10)).name
         );
       }
-      if (payload.exporters_ids) {
-        payload.exporters = payload.exporters_ids.map(
+      if (payload.e_ids) {
+        payload.exporters = payload.e_ids.map(
           exportersId =>
             state.data.exporters.find(elem => elem.id === parseInt(exportersId, 10)).name
         );
       }
+      // TODO: this is now a nested array called filters
       if (payload.indicators) {
         payload.indicators = payload.indicators.map(
           indicatorName =>
@@ -42,8 +43,8 @@ export const GA_ACTION_WHITELIST = [
         );
       }
 
-      delete payload.countries_ids;
-      delete payload.exporters_ids;
+      delete payload.c_ids;
+      delete payload.e_ids;
       delete payload.indicators;
       delete payload.context_id;
       delete payload.file;
