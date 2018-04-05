@@ -75,8 +75,8 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
         if (!nodeMetaA || !nodeMetaB) {
           color = CHOROPLETH_CLASSES.error_no_metadata_layer;
         } else {
-          const valueA = nodeMetaA.value3;
-          const valueB = nodeMetaB.value3;
+          const valueA = nodeMetaA.dualLayerBucket;
+          const valueB = nodeMetaB.dualLayerBucket;
 
           // use zero class only when both A and B values are zero
           if (valueA === 0 || valueB === 0) {
@@ -92,7 +92,7 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
         if (!nodeMeta) {
           color = CHOROPLETH_CLASSES.error_no_metadata_layer; // no metadata on this node has been found for this layer
         } else {
-          const value = nodeMeta.value5;
+          const value = nodeMeta.singleLayerBucket;
           if (value === 0) {
             color = CHOROPLETH_CLASS_ZERO;
           } else {
