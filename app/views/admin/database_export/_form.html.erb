@@ -1,0 +1,39 @@
+
+<p>In order to export data from this Trase tool instance (SOURCE) and import it to another (TARGET):</p>
+<p>In the SOURCE instance:</p>
+<ul>
+  <li>Press the "Export" button</li>
+  <li>Refresh the list of exported database versions to check the process has finished</li>
+</ul>
+<p>In the TARGET instance:</p>
+<ul>
+  <li>Use the "Import database" functionality</li>
+</ul>
+
+<% if database_versions.any? %>
+<div class="panel">
+  <h3>Exported database versions:</h3>
+  <table class="index_table">
+    <thead>
+      <tr>
+        <th>Source</th>
+        <th>Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% database_versions.each do |export| %>
+      <tr>
+        <td><%= link_to export[:name], export[:url] %></td>
+        <td><%= export[:time] %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<% end %>
+
+<%= form_tag(admin_database_export_call_path, multipart: true) do %>
+  <%= submit_tag 'Start database export' %>
+<% end %>
+<p>Please note: this will queue an import and return immediately, but the operation is likely to run in background for a few minutes.</p>
+<p>Status of currently running and errored backround operations can be monitored <%= link_to 'here', sidekiq_web_url %>.</p>

@@ -26,8 +26,7 @@ Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
 Lint/RescueWithoutErrorClass:
-  Exclude:
-    - 'app/controllers/concerns/cache_utils.rb'
+  Enabled: false
 
 Metrics/BlockLength:
   Exclude:

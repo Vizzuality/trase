@@ -13,12 +13,7 @@ module CacheUtils
   # Uses BAN to remove objects from cache by regexp
   # @param regexp [String]
   def clear_cache_for_regexp(regexp)
-    with_uri(admin_root_url) do |uri|
-      Rails.logger.debug "Banning: #{regexp}"
-      request = Net::HTTP::Ban.new uri.request_uri
-      request['X-Ban-Url'] = regexp
-      request
-    end
+    clear_cache_for_regexp_with_uri(regexp, admin_root_url)
   end
 
   private
@@ -36,5 +31,14 @@ module CacheUtils
     end
   rescue => e
     Appsignal.send_error(e)
+  end
+
+  def clear_cache_for_regexp_with_uri(regexp, url)
+    with_uri(url) do |uri|
+      Rails.logger.debug "Banning: #{regexp}"
+      request = Net::HTTP::Ban.new uri.request_uri
+      request['X-Ban-Url'] = regexp
+      request
+    end
   end
 end

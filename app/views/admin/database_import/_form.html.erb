@@ -1,0 +1,27 @@
+<p>In order to import data from another Trase tool instance (SOURCE) and import it to this one (TARGET):</p>
+<p>In the SOURCE instance:</p>
+<ul>
+  <li>Use the "Export database" functionality</li>
+</ul>
+<p>In the TARGET instance:</p>
+<ul>
+  <li>Refresh the list of available database versions to import</li>
+  <li>Select the version you want to import and press the "Import" button</li>
+</ul>
+
+<% if database_versions.any? %>
+  <%= form_tag(admin_database_import_call_path, multipart: true) do %>
+
+    <%= select_tag(
+      :database_version,
+      options_for_select(
+        database_versions.map { |dv| [dv[:name] + ' ' + dv[:time], dv[:name]] }
+      )
+    ) %>
+    <%= submit_tag 'Start database import' %>
+  <% end %>
+  <p>Please note: this will queue an import and return immediately, but the operation is likely to run in background for a few minutes.</p>
+  <p>Status of currently running and errored backround operations can be monitored <%= link_to 'here', sidekiq_web_url %>.</p>
+<% else %>
+  <p>No available database versions to import.
+<% end %>

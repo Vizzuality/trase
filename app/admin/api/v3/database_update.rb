@@ -1,12 +1,12 @@
 ActiveAdmin.register_page 'Database Update' do
-  menu parent: 'Database'
+  menu parent: 'Database', priority: 3
 
   controller do
     before_action :ensure_data_update_supported
   end
 
   content do
-    current_update = Api::V3::DatabaseUpdate.where(status: Api::V3::DatabaseUpdate::STARTED).first
+    current_update = Api::V3::DatabaseUpdate.started.first
     database_updates = Api::V3::DatabaseUpdate.order(created_at: :desc).limit(25)
     render partial: 'admin/database_update/form', locals: {
       current_update: current_update,

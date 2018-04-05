@@ -93,7 +93,9 @@ TooManyStatements:
   max_statements: 20
 UncommunicativeMethodName:
   enabled: true
-  exclude: []
+  exclude:
+    - 'Api::V3::DatabaseExport::Exporter'
+    - 'Api::V3::DatabaseImport::Importer'
   reject:
   - !ruby/regexp /^[a-z]$/
   - !ruby/regexp /[0-9]$/
@@ -127,6 +129,7 @@ UncommunicativeVariableName:
   - 'i'
   - 'j'
   - 'e'
+  - 's3'
 UnusedParameters:
   enabled: true
   exclude: []
@@ -135,5 +138,7 @@ UnusedPrivateMethod:
   exclude: []
 UtilityFunction:
   enabled: true
-  exclude: []
+  exclude:
+  - 'DatabaseExportWorker'
+  - 'DatabaseImportWorker'
   public_methods_only: true

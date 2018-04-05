@@ -150,7 +150,13 @@ The project's main configuration values can be set using [environment variables]
 * TRASE_REMOTE_PASSWORD=
 * TRASE_REMOTE_SERVER=trase_server
 * TRASE_LOCAL_FDW_SCHEMA=main # this schema in local database where remote tables are mapped
+* API_HOST=http://localhost:3000 # base url of API
 * TRASE_LOCAL_SCHEMA=public # this schema in local database where target tables are
+* INSTANCE_NAME= # string to uniquely identify instance as source of db dump, e.g. staging
+* AWS_ACCESS_KEY_ID=
+* AWS_SECRET_ACCESS_KEY=
+* AWS_REGION=
+* S3_BUCKET_NAME= # name of bucket where db dumps are stored
 
 ## Background jobs
 
@@ -421,6 +427,26 @@ The custom validators are defined in app/services/api/v3/database_validation. Th
 ```
 
 In case of the custom validations, the core class is the `Api::V3::DatabaseValidation::Report`, which builds a "chain" of checks to be run, then runs them by calling `passing?` on each of them and constructs the list of errors, which gets saved in the database. Chain builders are used to construct parts of the chain relevant to a particular resource.
+
+## Data Export / Import process
+
+The application has built-in functionality which allows for copying the database from one instance to another in two steps:
+- export: using the admin tool of the instance whose database is copied (source) run the 'Export database' process, which will:
+    - dump the database using `pg_dump` + `gzip`
+    - upload the dump to S3
+- import: using the admin tool of the instance where we want the database copied to (target) run the 'Import database' process, which will:
+    - download requested database dump from S3
+    - check if schema version is compatible
+    - backup current database
+    - restore using `psql` into current database
+
+Both processes run in background using sidekiq and exceptions can be monitored using Sidekiq Web UI - the 'Dead' section.
+
+However, it is also possible to start them synchronously using rake tasks:
+- `bundle exec rake db:s3:export`
+- `DATABASE_VERSION=[object name from S3] bundle exec rake db:s3:import`
+
+The import task checks whether your old database was at the same version (last migration) as the one you want to import and prevents you from accidentally getting into the hell of code - database mismatch. However, if you know what you're doing, you can override it: `DATABASE_VERSION=[object name from S3] bundle exec rake db:s3:force_import`
 
 # Frontend
 

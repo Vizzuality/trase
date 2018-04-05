@@ -32,5 +32,6 @@
   <% end %>
 
   <%= submit_tag 'Start database update', disabled: current_update.present? %>
-  Please note: this will queue an update and return immediately, but the update is likely to take a while.
 <% end %>
+<p>Please note: this will queue an update and return immediately, but the update is likely to take a while.</p>
+<p>Status of currently running and errored backround operations can be monitored <%= link_to 'here', sidekiq_web_url %>.</p>
