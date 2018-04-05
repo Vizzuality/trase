@@ -25,7 +25,7 @@ class Team extends PureComponent {
               })}
               style={{ backgroundImage: `url(${members[slug].smallImageUrl})` }}
             />
-            <h3 className="team-list-item-title title -medium">{members[slug].name}</h3>
+            <h3 className="team-list-item-title title -medium -light">{members[slug].name}</h3>
             <span className="team-list-item-subtitle subtitle -gray">See More</span>
           </Link>
         </div>
@@ -41,9 +41,11 @@ class Team extends PureComponent {
     );
   }
 
-  renderTeamGroupMobile(group) {
+  renderTeamGroupMobile(group, windowWidth) {
+    const perPage = windowWidth <= 500 ? 1.3 : 2.3;
+
     return (
-      <Siema loop={false} perPage={1.3}>
+      <Siema loop={false} perPage={perPage}>
         {group.staffMembers.map(slug => this.renderTeamMember(slug))}
       </Siema>
     );
@@ -57,9 +59,9 @@ class Team extends PureComponent {
         <h3 className="subtitle">{group.name}</h3>
         <div className="team-list">
           <ResizeListener>
-            {({ resolution }) =>
+            {({ resolution, windowWidth }) =>
               resolution.isSmall
-                ? this.renderTeamGroupMobile(group)
+                ? this.renderTeamGroupMobile(group, windowWidth)
                 : this.renderTeamGroupDesktop(group)
             }
           </ResizeListener>
