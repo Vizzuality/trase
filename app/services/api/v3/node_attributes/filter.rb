@@ -46,19 +46,23 @@ maa.#{attribute_type}_id = #{node_values}.#{attribute_type}_id").
               "#{node_values}.node_id",
               "#{node_values}.#{attribute_type}_id",
               'ma.dual_layer_buckets',
-              'ma.single_layer_buckets'
+              'ma.single_layer_buckets',
+              'ma.years',
+              'ma.attribute_type'
             )
         end
 
         def select_list(attribute_type, node_values)
           dual_layer_bucket = <<~SQL
             BUCKET_INDEX(
-              dual_layer_buckets, SUM(#{node_values}.value)
+              aggregated_buckets(dual_layer_buckets, ma.years, ARRAY#{@years}, ma.attribute_type),
+              SUM(#{node_values}.value)
             ) AS dual_layer_bucket
           SQL
           single_layer_bucket = <<~SQL
             BUCKET_INDEX(
-              single_layer_buckets, SUM(#{node_values}.value)
+              aggregated_buckets(single_layer_buckets, ma.years, ARRAY#{@years}, ma.attribute_type),
+              SUM(#{node_values}.value)
             ) AS single_layer_bucket
           SQL
           [
