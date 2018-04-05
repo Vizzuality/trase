@@ -79,6 +79,30 @@ COMMENT ON EXTENSION tablefunc IS 'functions that manipulate whole tables, inclu
 
 SET search_path = public, pg_catalog;
 
+
+--
+-- Name: aggregated_buckets(double precision[], integer[], integer[], text); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], attribute_type text) RETURNS double precision[]
+    LANGUAGE sql IMMUTABLE
+    AS $$
+  SELECT CASE
+    WHEN attribute_type = 'quant' AND ICOUNT(COALESCE(declared_years, requested_years) & requested_years) > 0 THEN
+      ARRAY(SELECT ICOUNT(COALESCE(declared_years, requested_years) & requested_years) * UNNEST(buckets))
+    ELSE
+      buckets
+  END
+$$;
+
+
+--
+-- Name: FUNCTION aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], attribute_type text); Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON FUNCTION aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], attribute_type text) IS 'Aggregates buckets.';
+
+
 --
 -- Name: bucket_index(double precision[], double precision); Type: FUNCTION; Schema: public; Owner: -
 --
@@ -5889,6 +5913,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180320141501'),
 ('20180326095318'),
 ('20180326101002'),
-('20180327111929');
-
+('20180327111929'),
+('20180403155328');
 
