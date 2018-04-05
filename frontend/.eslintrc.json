@@ -87,6 +87,7 @@
     "TRANSIFEX_API_KEY": true,
     "PERF_TEST": true,
     "REDUX_LOGGER_ENABLED": true,
+    "USE_CANVAS_MAP": true,
     "USE_PLAIN_URL_STATE": true,
     "ga": true,
     "fetch": true

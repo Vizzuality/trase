@@ -18,7 +18,8 @@ const mapMethodsToState = state => ({
       choropleth: state.tool.choropleth,
       linkedGeoIds: state.tool.linkedGeoIds,
       defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
-      biomeFilter: state.tool.selectedBiomeFilter
+      biomeFilter: state.tool.selectedBiomeFilter,
+      forceDefaultMapView: !state.tool.selectedNodesIds.length
     })
   },
   selectPolygonType: {
@@ -27,7 +28,10 @@ const mapMethodsToState = state => ({
     _returnedValue: state => ({
       selectedColumnsIds: state.tool.selectedColumnsIds,
       choropleth: state.tool.choropleth,
-      biomeFilter: state.tool.selectedBiomeFilter
+      biomeFilter: state.tool.selectedBiomeFilter,
+      linkedGeoIds: state.tool.linkedGeoIds,
+      defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
+      forceDefaultMapView: !state.tool.selectedNodesIds.length
     })
   },
   selectPolygons: {
@@ -49,25 +53,46 @@ const mapMethodsToState = state => ({
     _comparedValue: state => state.tool.choropleth,
     _returnedValue: state => ({
       choropleth: state.tool.choropleth,
-      choroplethLegend: state.tool.choroplethLegend
+      choroplethLegend: state.tool.choroplethLegend,
+      selectedBiomeFilter: state.tool.selectedBiomeFilter,
+      linkedGeoIds: state.tool.linkedGeoIds,
+      defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
+      forceDefaultMapView: !state.tool.selectedNodesIds.length
     })
   },
   loadContextLayers: state.tool.selectedMapContextualLayersData,
   showLinkedGeoIds: {
     _comparedValue: state => state.tool.linkedGeoIds,
     _returnedValue: state => ({
+      choropleth: state.tool.choropleth,
+      selectedBiomeFilter: state.tool.selectedBiomeFilter,
       linkedGeoIds: state.tool.linkedGeoIds,
       defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
-      // get back to context default map view if no nodes are selected
       forceDefaultMapView: !state.tool.selectedNodesIds.length
     })
   },
   invalidate: state.tool.isMapVisible,
   setBasemap: {
     _comparedValue: state => getBasemap(state.tool),
-    _returnedValue: state => getBasemap(state.tool)
+    _returnedValue: state => ({
+      basemapId: getBasemap(state.tool),
+      choropleth: state.tool.choropleth,
+      selectedBiomeFilter: state.tool.selectedBiomeFilter,
+      linkedGeoIds: state.tool.linkedGeoIds,
+      defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
+      forceDefaultMapView: !state.tool.selectedNodesIds.length
+    })
   },
-  filterByBiome: state.tool.selectedBiomeFilter
+  filterByBiome: {
+    _comparedValue: state => state.tool.selectedBiomeFilter,
+    _returnedValue: state => ({
+      choropleth: state.tool.choropleth,
+      selectedBiomeFilter: state.tool.selectedBiomeFilter,
+      linkedGeoIds: state.tool.linkedGeoIds,
+      defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
+      forceDefaultMapView: !state.tool.selectedNodesIds.length
+    })
+  }
 });
 
 const mapViewCallbacksToActions = () => ({

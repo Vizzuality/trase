@@ -1,6 +1,6 @@
 import compact from 'lodash/compact';
 import filter from 'lodash/filter';
-import { CHOROPLETH_CLASSES, CHOROPLETH_CLASS_ZERO } from 'constants';
+import { CHOROPLETH_COLORS, CHOROPLETH_CLASS_ZERO } from 'constants';
 
 const _shortenTitle = title => {
   if (title.length < 50) {
@@ -34,8 +34,8 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
   }
 
   const colors = isBivariate
-    ? CHOROPLETH_CLASSES.bidimensional
-    : CHOROPLETH_CLASSES[selectedMapDimension.colorScale || 'red'];
+    ? CHOROPLETH_COLORS.bidimensional
+    : CHOROPLETH_COLORS[selectedMapDimension.colorScale || 'red'];
 
   const geoNodes = filter(
     nodesDictWithMeta,
@@ -59,12 +59,12 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
 
   geoNodesIds.forEach(nodeId => {
     const node = geoNodes[nodeId];
-    let color = 'none';
+    let color = CHOROPLETH_COLORS.default_fill;
 
     if (isEmpty) {
-      color = 'none';
+      color = CHOROPLETH_COLORS.default_fill;
     } else if (!node.meta) {
-      color = CHOROPLETH_CLASSES.error_no_metadata; // no metadata on this node has been found (something missing in get_nodes)
+      color = CHOROPLETH_COLORS.error_no_metadata; // no metadata on this node has been found (something missing in get_nodes)
     } else {
       let colorIndex;
 
@@ -73,24 +73,22 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
         const nodeMetaB = node.meta[uidB];
 
         if (!nodeMetaA || !nodeMetaB) {
-          color = CHOROPLETH_CLASSES.error_no_metadata_layer;
+          color = CHOROPLETH_COLORS.error_no_metadata_for_layer;
         } else {
           const valueA = nodeMetaA.dualLayerBucket;
           const valueB = nodeMetaB.dualLayerBucket;
 
           // use zero class only when both A and B values are zero
           if (valueA === 0 || valueB === 0) {
-            color = CHOROPLETH_CLASSES.default;
+            color = CHOROPLETH_CLASS_ZERO;
           } else {
-            // in case only one is zero, just ignore and use lowest bucket (Math.max zero)
-            colorIndex = (3 - Math.max(0, valueA - 1)) * 4 + Math.max(0, valueB - 1);
-            color = colors[colorIndex];
+            color = colors[Math.max(0, valueB - 1)][Math.max(0, valueA - 1)];
           }
         }
       } else {
         const nodeMeta = node.meta[uid];
         if (!nodeMeta) {
-          color = CHOROPLETH_CLASSES.error_no_metadata_layer; // no metadata on this node has been found for this layer
+          color = CHOROPLETH_COLORS.error_no_metadata_for_layer; // no metadata on this node has been found for this layer
         } else {
           const value = nodeMeta.singleLayerBucket;
           if (value === 0) {
