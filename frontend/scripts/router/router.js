@@ -1,4 +1,5 @@
 import { connectRoutes, NOT_FOUND, redirect, replace } from 'redux-first-router';
+import restoreScroll from 'redux-first-router-restore-scroll'
 
 import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.container';
 import TeamMember from 'react-components/team/team-member/team-member.container';
@@ -22,15 +23,18 @@ import { loadInitialDataExplore, redirectToExplore } from 'react-components/expl
 
 const pagesNotSupportedOnMobile = ['tool', 'map', 'data'];
 
-const dispatchThunks = (...thunks) => (...params) => thunks.forEach(thunk => thunk(...params));
+// We await for all thunks using Promise.all, this makes the result then-able and allows us to
+// add an await solely to the thunks that need it.
+const dispatchThunks = (...thunks) => (...params) =>
+  Promise.all(thunks.map(thunk => thunk(...params)));
 
 const config = {
   basename: '/',
+  notFoundPath: '/404',
   querySerializer: {
     parse,
     stringify
   },
-  notFoundPath: '/404',
   onBeforeChange: (dispatch, getState, { action }) => {
     const isMobile = window.innerWidth <= BREAKPOINTS.small;
 
@@ -39,7 +43,19 @@ const config = {
     }
 
     return dispatchThunks(redirectToExplore, resetToolThunk)(dispatch, getState, { action });
-  }
+  },
+  restoreScroll: restoreScroll({
+    shouldUpdateScroll: (prev, current) => {
+      if (
+        ((current.kind === 'redirect' && prev.kind === 'push') ||
+          (current.kind === 'pop' && prev.kind === 'pop')) &&
+        prev.pathname === current.pathname
+      ) {
+        return prev.prev.pathname !== current.pathname ? [0, 0] : false;
+      }
+      return prev.pathname !== current.pathname ? [0, 0] : false;
+    }
+  })
 };
 
 const routes = {

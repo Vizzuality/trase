@@ -86,6 +86,7 @@
   },
   "dependencies": {
     "@turf/bbox": "^5.1.5",
+    "babel-polyfill": "^6.26.0",
     "body-parser": "^1.18.2",
     "classnames": "^2.2.5",
     "d3": "^4.13.0",
@@ -115,6 +116,7 @@
     "redux": "^3.7.2",
     "redux-first-router": "^0.0.4-rudy",
     "redux-first-router-link": "^1.4.2",
+    "redux-first-router-restore-scroll": "^1.2.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "remark": "^9.0.0",

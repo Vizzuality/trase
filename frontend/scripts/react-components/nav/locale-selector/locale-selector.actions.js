@@ -1,7 +1,8 @@
 import { redirect } from 'redux-first-router';
 
 export const setLocaleCode = code => (dispatch, getState) => {
-  const { type, query = {}, payload } = getState().location;
+  const { location } = getState();
+  const { type, query = {}, payload } = location;
   dispatch(
     redirect({
       type,
