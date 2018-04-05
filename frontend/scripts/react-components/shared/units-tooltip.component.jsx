@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import isEqual from 'lodash/isEqual';
 
 class UnitsTooltip extends React.PureComponent {
   constructor(props) {
@@ -15,10 +16,8 @@ class UnitsTooltip extends React.PureComponent {
     this.updatePosition();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.x !== this.props.x || nextProps.y !== this.props.y) {
-      this.updatePosition();
-    }
+  componentDidUpdate() {
+    this.updatePosition();
   }
 
   getPosition() {
@@ -26,8 +25,9 @@ class UnitsTooltip extends React.PureComponent {
 
     if (!this.el || x === undefined || y === undefined) return null;
 
-    const canDisplayOnRight = x < window.innerWidth - this.el.clientWidth - 10;
-    const canDisplayOnBottom = y < window.innerHeight - this.el.clientHeight - 10;
+    const canDisplayOnRight = x < document.documentElement.clientWidth - this.el.clientWidth - 10;
+    const canDisplayOnBottom =
+      y < document.documentElement.clientHeight - this.el.clientHeight - 10;
     const leftPos = canDisplayOnRight ? x + 10 : x - this.el.clientWidth - 10;
     const topPos = canDisplayOnBottom ? y + 10 : y - this.el.clientHeight - 10;
 
@@ -41,7 +41,12 @@ class UnitsTooltip extends React.PureComponent {
   }
 
   updatePosition() {
-    this.setState({ position: this.getPosition() });
+    const newPosition = this.getPosition();
+    const { position } = this.state;
+
+    if (!isEqual(position, newPosition)) {
+      this.setState({ position: newPosition });
+    }
   }
 
   render() {
