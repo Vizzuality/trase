@@ -26,17 +26,21 @@ function Home(props) {
           <Entrypoints />
         </div>
         <div className="homepage-map">
-          <SentenceSelector />
-          <div className="homepage-map-container">
-            <WorldMap />
-          </div>
-          <div className="homepage-map-link-container">
-            <Link
-              to={{ type: 'explore', payload: { query: { contextId: selectedContextId } } }}
-              className="homepage-map-link c-button -pink -big"
-            >
-              Find out more
-            </Link>
+          <div className="row">
+            <div className="column small-12">
+              <SentenceSelector />
+              <div className="homepage-map-container">
+                <WorldMap />
+              </div>
+              <div className="homepage-map-link-container">
+                <Link
+                  to={{ type: 'explore', payload: { query: { contextId: selectedContextId } } }}
+                  className="homepage-map-link c-button -pink -big"
+                >
+                  Find out more
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
         <div className="sliders">

@@ -6,7 +6,9 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
 import FiltersNav from 'react-components/nav/filters-nav/filters-nav.container';
+import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import Explore from 'react-components/explore/explore.container';
+import ResizeListener from 'react-components/shared/resize-listener.component';
 
 import 'styles/explore.scss';
 
@@ -17,7 +19,11 @@ export const mount = (root, store) => {
 
   render(
     <Provider store={store}>
-      <FiltersNav isExplore />
+      <ResizeListener>
+        {({ resolution }) =>
+          resolution.isSmall ? <TopNav className="-light" /> : <FiltersNav isExplore />
+        }
+      </ResizeListener>
     </Provider>,
     document.getElementById('nav')
   );
@@ -31,5 +37,6 @@ export const mount = (root, store) => {
 };
 
 export const unmount = () => {
+  unmountComponentAtNode(document.getElementById('nav'));
   unmountComponentAtNode(document.getElementById('page-react-root'));
 };

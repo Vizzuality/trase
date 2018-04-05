@@ -1,5 +1,6 @@
 .c-world-map {
   background-color: transparent;
+  -webkit-tap-highlight-color: transparent;
 
   .world-map-geography {
     fill: rgba($charcoal-grey, 0.3);

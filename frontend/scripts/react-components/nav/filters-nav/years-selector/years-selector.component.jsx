@@ -12,8 +12,12 @@ const id = 'years';
 class YearsSelector extends Component {
   constructor(props) {
     super(props);
-    this.onSelectorMovedBound = this.onSelectorMoved.bind(this);
-    this.onSelectorUpBound = this.onSelectorUp.bind(this);
+
+    this.onSelectorDown = this.onSelectorDown.bind(this);
+    this.onSelectorMoved = this.onSelectorMoved.bind(this);
+    this.onSelectorUp = this.onSelectorUp.bind(this);
+    this.onDropdownUp = this.onDropdownUp.bind(this);
+
     this.state = this.getState(props);
   }
 
@@ -28,24 +32,29 @@ class YearsSelector extends Component {
     this.props.onToggle(id);
   }
 
-  onSelectorDown(mouseEvent) {
+  onSelectorDown(event) {
     this.dragging = true;
-    this.currentSelectorThumb = mouseEvent.target.getAttribute('data-thumb');
-    document.addEventListener('mousemove', this.onSelectorMovedBound);
-    document.addEventListener('mouseup', this.onSelectorUpBound);
+    this.currentSelectorThumb = event.target.getAttribute('data-thumb');
+    document.addEventListener('mousemove', this.onSelectorMoved);
+    document.addEventListener('touchmove', this.onSelectorMoved);
+    document.addEventListener('mouseup', this.onSelectorUp);
+    document.addEventListener('touchend', this.onSelectorUp);
   }
 
-  onSelectorMoved(mouseEvent) {
+  onSelectorMoved(event) {
     const sliderOffset = this.slider.getBoundingClientRect().left;
-    const x = mouseEvent.clientX - sliderOffset;
+    const pointerX = event.touches ? event.touches[0].clientX : event.clientX;
+    const x = pointerX - sliderOffset;
     this.moveSelector(x);
   }
 
-  onSelectorUp(mouseEvent) {
+  onSelectorUp(event) {
     this.dragging = false;
-    mouseEvent.stopPropagation();
-    document.removeEventListener('mousemove', this.onSelectorMovedBound);
-    document.removeEventListener('mouseup', this.onSelectorUpBound);
+    event.stopPropagation();
+    document.removeEventListener('mousemove', this.onSelectorMoved);
+    document.removeEventListener('mouseup', this.onSelectorUp);
+    document.removeEventListener('touchmove', this.onSelectorMoved);
+    document.removeEventListener('touchend', this.onSelectorUp);
     this.releaseSelector();
   }
 
@@ -103,7 +112,7 @@ class YearsSelector extends Component {
   }
 
   render() {
-    const { className, currentDropdown, selectedYears, years } = this.props;
+    const { className, dropdownClassName, currentDropdown, selectedYears, years } = this.props;
     this.totalWidth = YEAR_WIDTH * years.length;
     const title =
       selectedYears[0] === selectedYears[1] ? (
@@ -120,8 +129,8 @@ class YearsSelector extends Component {
       left: `${this.state.left}px`
     };
     return (
-      <div className={cx('js-dropdown', className)} onMouseUp={() => this.onDropdownUp()}>
-        <div className="c-dropdown">
+      <div className={cx('js-dropdown', className)} onMouseUp={this.onDropdownUp}>
+        <div className={cx('c-dropdown', dropdownClassName)}>
           <span className="dropdown-label">
             year{selectedYears[0] !== selectedYears[1] && <span>s</span>}
           </span>
@@ -144,7 +153,8 @@ class YearsSelector extends Component {
                 <div
                   className="selector"
                   style={selectorWidthStyle}
-                  onMouseDown={e => this.onSelectorDown(e)}
+                  onMouseDown={this.onSelectorDown}
+                  onTouchStart={this.onSelectorDown}
                 >
                   <YearsThumb id="left" />
                   <YearsThumb id="right" x={deltaWidth} />
@@ -167,7 +177,8 @@ YearsSelector.propTypes = {
   years: PropTypes.array,
   currentDropdown: PropTypes.string,
   selectedYears: PropTypes.array,
-  className: PropTypes.string
+  className: PropTypes.string,
+  dropdownClassName: PropTypes.string
 };
 
 export default YearsSelector;
