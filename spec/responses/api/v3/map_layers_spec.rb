@@ -19,7 +19,7 @@ RSpec.describe 'Map layers', type: :request do
     end
 
     it 'requires year_start' do
-       get "/api/v3/contexts/#{api_v3_context.id}/map_layers"
+      get "/api/v3/contexts/#{api_v3_context.id}/map_layers"
 
       expect(@response).to have_http_status(:bad_request)
       expect(JSON.parse(@response.body)).to eq(

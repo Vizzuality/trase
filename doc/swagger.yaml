@@ -70,16 +70,20 @@ paths:
       parameters:
         - name: context_id
           in: path
-          description: ''
           required: true
+          type: integer
+        - name: year_start
+          in: path
+          required: true
+          type: integer
+        - name: year_end
+          in: path
           type: integer
       responses:
         '200':
           description: successful operation
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/MapGroup'
+            $ref: '#/definitions/MapGroup'
   '/context/{context_id}/download_attributes':
     get:
       tags:
@@ -1139,6 +1143,38 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Dimension'
+      contextualLayers:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+            title:
+              type: string
+            identifier:
+              type: string
+              example: 'landcover'
+            tooltipText:
+              type: string
+            isDefault:
+              type: boolean
+            legend:
+             type: string
+            cartoLayers:
+              type: array
+              items:
+                type: object
+                properties:
+                  identifier:
+                    type: string
+                    example: 'landcover2015'
+                  years:
+                    type: array
+                    items:
+                      type: integer
+                  rasterUrl:
+                    type: string
   Attribute:
     type: object
     properties:
