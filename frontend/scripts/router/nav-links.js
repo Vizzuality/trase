@@ -50,10 +50,10 @@ export default {
         payload: { section: 'faq' }
       }
     },
-    // {
-    //   name: 'Team',
-    //   page: 'team'
-    // },
+    {
+      name: 'Team',
+      page: 'team'
+    },
     {
       name: 'Partners',
       page: {
