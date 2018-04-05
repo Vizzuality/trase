@@ -46,11 +46,9 @@ const config = {
   },
   restoreScroll: restoreScroll({
     shouldUpdateScroll: (prev, current) => {
-      const currentQuery = current.payload.query;
       if (
-        currentQuery &&
-        prev.query &&
-        prev.query.lang !== currentQuery.lang &&
+        ((current.kind === 'redirect' && prev.kind === 'push') ||
+          (current.kind === 'pop' && prev.kind === 'pop')) &&
         prev.pathname === current.pathname
       ) {
         return prev.prev.pathname !== current.pathname ? [0, 0] : false;
