@@ -1,20 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import isEqual from 'lodash/isEqual';
 
 class UnitsTooltip extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.getPos = this.getPos.bind(this);
+
+    this.state = { position: null };
+
     this.getRef = this.getRef.bind(this);
   }
-  getPos() {
-    if (!this.el) return 0;
+
+  componentDidMount() {
+    this.updatePosition();
+  }
+
+  componentDidUpdate() {
+    this.updatePosition();
+  }
+
+  getPosition() {
     const { x, y } = this.props;
-    const leftPos =
-      x < window.innerWidth - this.el.clientWidth - 10 ? x + 10 : x - this.el.clientWidth - 10;
-    const topPos =
-      y < window.innerHeight - this.el.clientHeight - 10 ? y + 10 : y - this.el.clientHeight - 10;
+
+    if (!this.el || x === undefined || y === undefined) return null;
+
+    const canDisplayOnRight = x < document.documentElement.clientWidth - this.el.clientWidth - 10;
+    const canDisplayOnBottom =
+      y < document.documentElement.clientHeight - this.el.clientHeight - 10;
+    const leftPos = canDisplayOnRight ? x + 10 : x - this.el.clientWidth - 10;
+    const topPos = canDisplayOnBottom ? y + 10 : y - this.el.clientHeight - 10;
 
     const left = Number.isNaN(leftPos) ? 0 : leftPos;
     const top = Number.isNaN(topPos) ? 0 : topPos;
@@ -25,14 +40,26 @@ class UnitsTooltip extends React.PureComponent {
     this.el = el;
   }
 
+  updatePosition() {
+    const newPosition = this.getPosition();
+    const { position } = this.state;
+
+    if (!isEqual(position, newPosition)) {
+      this.setState({ position: newPosition });
+    }
+  }
+
   render() {
     const { className, text, items = [], show } = this.props;
-    const { top, left } = this.getPos();
+    const { position } = this.state;
+    const { top, left } = position || {};
+    const visibility = show && position ? 'visible' : 'hidden';
+
     return (
       <div
         ref={this.getRef}
-        className={cx('c-units-tooltip', className, { 'is-hidden': !show })}
-        style={{ left, top }}
+        className={cx('c-units-tooltip', className)}
+        style={{ left, top, visibility }}
       >
         <div className="units-tooltip-text">{text}</div>
         {items.map(item => (

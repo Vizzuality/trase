@@ -151,6 +151,7 @@ class ContextSelector extends Component {
   render() {
     const {
       className,
+      dropdownClassName,
       toggleContextSelectorVisibility,
       tooltipText,
       currentDropdown,
@@ -168,7 +169,7 @@ class ContextSelector extends Component {
         className={cx('c-country-commodities', 'js-dropdown', className)}
         onClick={() => toggleContextSelectorVisibility(id)}
       >
-        <div className="c-dropdown -capitalize">
+        <div className={cx('c-dropdown', '-capitalize', dropdownClassName)}>
           {isContextSelected && (
             <span className="dropdown-label">
               Country - Commodity
@@ -200,6 +201,7 @@ class ContextSelector extends Component {
 
 ContextSelector.propTypes = {
   className: PropTypes.string,
+  dropdownClassName: PropTypes.string,
   toggleContextSelectorVisibility: PropTypes.func,
   getComputedKey: PropTypes.func,
   selectContext: PropTypes.func,

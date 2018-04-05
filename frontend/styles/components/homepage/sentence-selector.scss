@@ -7,30 +7,48 @@
 
   .sentence-selector-text {
     color: $charcoal-grey;
-    font-size: 24px;
+    text-align: center;
+    font-size: $font-size-xxx-regular;
     font-family: $font-family-2;
     font-weight: 300;
     line-height: 1.58;
 
-    @media screen and (max-width: $breakpoint-foundation-medium) {
-      font-size: 20px;
+    &.-nowrap {
+      white-space: nowrap;
+    }
+
+    @media screen and (min-width: $breakpoint-foundation-small) {
+      font-size: $font-size-medium;
+    }
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      font-size: $font-size-big;
     }
   }
 
-  .sentence-selector-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   .c-dropdown {
-    margin: 0 10px;
+    display: inline-block;
+    margin: 0 5px;
     cursor: pointer;
+
+    @media screen and (min-width: $breakpoint-foundation-small) {
+      margin: 0 7px;
+    }
 
     .dropdown-title {
       text-align: center;
-      padding: 0 25px 0 0;
-      font-size: $font-size-big;
+      padding: 0 18px 0 0;
+      font-size: $font-size-xxx-regular;
+
+      @media screen and (min-width: $breakpoint-foundation-small) {
+        padding: 0 21px 0 0;
+        font-size: $font-size-medium;
+      }
+
+      @media screen and (min-width: $breakpoint-foundation-medium) {
+        padding: 0 23px 0 0;
+        font-size: $font-size-big;
+      }
     }
 
     .dropdown-title::after {
@@ -42,7 +60,7 @@
     }
 
     .dropdown-list {
-      top: 20px;
+      top: 1.5em;
       min-width: 120px;
 
       > .dropdown-item {

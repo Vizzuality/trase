@@ -6,6 +6,8 @@ import WorldMap from 'react-components/shared/world-map/world-map.container';
 import Top from 'react-components/explore/top.component';
 import Dropdown from 'react-components/shared/dropdown.component';
 import formatValue from 'utils/formatValue';
+import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
+import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 
 class Explore extends React.PureComponent {
   constructor(props) {
@@ -83,6 +85,7 @@ class Explore extends React.PureComponent {
 
     return (
       <Dropdown
+        className="table-unit-dropdown"
         value={selectedTableUnit.name}
         valueList={this.units.map(i => i.name)}
         onValueSelected={this.handleTableUnitChange}
@@ -96,6 +99,7 @@ class Explore extends React.PureComponent {
       selectedContextId,
       selectedTableColumn,
       selectedYears,
+      selectContext,
       showTable,
       topExporters
     } = this.props;
@@ -110,6 +114,20 @@ class Explore extends React.PureComponent {
     return (
       <div className="l-explore">
         <div className="c-explore">
+          <div className="row context-selectors show-for-small">
+            <div className="column small-12">
+              <div className="dropdown-element">
+                <ContextSelector dropdownClassName="-big" selectContext={selectContext} />
+              </div>
+            </div>
+            {selectedContextId && (
+              <div className="column small-12">
+                <div className="dropdown-element">
+                  <YearsSelector dropdownClassName="-big" />
+                </div>
+              </div>
+            )}
+          </div>
           <div className="row">
             <div className={cx('column', 'small-12', { 'medium-7': showTable })}>
               <div className="explore-section">
@@ -117,20 +135,14 @@ class Explore extends React.PureComponent {
                   <h2 className={cx('subtitle', '-dark', { 'is-hidden': !showTable })}>
                     Top Destinations
                   </h2>
-                  <div className={cx('explore-map-container')}>
+                  <div className="explore-map-container">
                     <WorldMap className="explore-world-map" />
                   </div>
                 </div>
-                <p className={cx('explore-footer-text', { 'is-hidden': !showTable })}>
-                  By accessing the Trase platform you have acknowledged and agreed to our{' '}
-                  <Link to={{ type: 'about', payload: { section: 'termsOfUse' } }}>
-                    Terms of Use.
-                  </Link>
-                </p>
               </div>
             </div>
             {showTable && (
-              <div className="column medium-5">
+              <div className="column small-12 medium-5">
                 <div className="explore-section -right">
                   <div className="explore-table-container">
                     <div className="explore-table-header">
@@ -144,19 +156,36 @@ class Explore extends React.PureComponent {
                       data={topExporters}
                     />
                   </div>
-                  <Link
-                    className="c-button -pink -big explore-footer-button"
-                    to={{
-                      type: 'tool',
-                      payload: { query: { state: { selectedContextId, selectedYears } } }
-                    }}
-                  >
-                    Explore the {isSubnational ? 'subnational' : ''} supply chain
-                  </Link>
                 </div>
               </div>
             )}
           </div>
+          {showTable && (
+            <div className="row">
+              <div className="column small-12 medium-7 small-order-2 medium-order-1">
+                <p className="explore-footer-text">
+                  By accessing the Trase platform you have acknowledged and agreed to our{' '}
+                  <Link to={{ type: 'about', payload: { section: 'termsOfUse' } }}>
+                    Terms of Use.
+                  </Link>
+                </p>
+              </div>
+              <div className="column small-12 medium-5 small-order-1 medium-order-2 explore-footer-button-container">
+                <div className="c-button -gray -big explore-footer-button -no-pointer show-for-small">
+                  Visit trase on a computer to explore the full supply chain
+                </div>
+                <Link
+                  className="c-button -pink -big explore-footer-button hide-for-small"
+                  to={{
+                    type: 'tool',
+                    payload: { query: { state: { selectedContextId, selectedYears } } }
+                  }}
+                >
+                  Explore the {isSubnational ? 'subnational' : ''} supply chain
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -169,6 +198,7 @@ Explore.propTypes = {
   topExporters: PropTypes.array.isRequired,
   isSubnational: PropTypes.bool,
   selectedYears: PropTypes.arrayOf(PropTypes.number),
+  selectContext: PropTypes.func,
   getTableElements: PropTypes.func.isRequired,
   selectedContextId: PropTypes.number,
   selectedTableColumn: PropTypes.number.isRequired,
