@@ -15,11 +15,11 @@ module Api
       private
 
       def set_filter_params
-        year_start = params[:year_start] || @context.default_year
+        year_start = params[:start_year] || @context.default_year
         @filter_params = {
           node_type_id: params[:column_id],
           year_start: year_start,
-          year_end: params[:year_end] || year_start,
+          year_end: params[:end_year] || year_start,
           limit: params[:n_nodes]
         }
       end

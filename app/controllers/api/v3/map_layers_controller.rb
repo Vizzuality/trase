@@ -2,7 +2,7 @@ module Api
   module V3
     class MapLayersController < ApiController
       def index
-        ensure_required_param_present(:year_start)
+        ensure_required_param_present(:start_year)
         set_start_end_year
 
         contextual_layers = Api::V3::MapLayers::ContextualLayerFilter.new(
@@ -46,8 +46,8 @@ module Api
       private
 
       def set_start_end_year
-        @start_year = params[:year_start]&.to_i || @context&.default_year
-        @end_year = params[:year_end]&.to_i || @start_year
+        @start_year = params[:start_year]&.to_i || @context&.default_year
+        @end_year = params[:end_year]&.to_i || @start_year
       end
     end
   end

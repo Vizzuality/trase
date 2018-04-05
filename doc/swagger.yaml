@@ -72,11 +72,11 @@ paths:
           in: path
           required: true
           type: integer
-        - name: year_start
+        - name: start_year
           in: path
           required: true
           type: integer
-        - name: year_end
+        - name: end_year
           in: path
           type: integer
       responses:
@@ -160,12 +160,12 @@ paths:
           description: Id of biome to filter by
           required: false
           type: integer
-        - name: year_start
+        - name: start_year
           in: query
           description: Year range start
           required: true
           type: integer
-        - name: year_end
+        - name: end_year
           in: query
           description: Year range end (defaults to start)
           required: false
@@ -785,12 +785,12 @@ paths:
           description: Node type id
           required: true
           type: integer
-        - name: year_start
+        - name: start_year
           in: query
           description: Start year (defaults to context default year)
           required: false
           type: integer
-        - name: year_end
+        - name: end_year
           in: query
           description: End year (defaults to start year)
           required: false

@@ -14,8 +14,8 @@ RSpec.describe Api::V3::FlowsController, type: :controller do
     }
     let(:filter_params) {
       {
-        year_start: 2015,
-        year_end: 2015,
+        start_year: 2015,
+        end_year: 2015,
         include_columns: node_types.map(&:id),
         flow_quant: api_v3_volume.name,
         limit: 1

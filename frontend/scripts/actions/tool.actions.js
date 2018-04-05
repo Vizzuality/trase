@@ -414,8 +414,8 @@ export function loadLinks() {
     const state = getState();
     const params = {
       context_id: state.tool.selectedContextId,
-      year_start: state.tool.selectedYears[0],
-      year_end: state.tool.selectedYears[1],
+      start_year: state.tool.selectedYears[0],
+      end_year: state.tool.selectedYears[1],
       include_columns: state.tool.selectedColumnsIds.join(','),
       flow_quant: state.tool.selectedResizeBy.name,
       locked_nodes: state.tool.selectedNodesIds

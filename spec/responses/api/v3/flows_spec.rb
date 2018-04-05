@@ -15,7 +15,7 @@ RSpec.describe 'Flows', type: :request do
     }
     let(:filter_params) {
       {
-        year_start: 2015,
+        start_year: 2015,
         include_columns: node_types.map(&:id),
         flow_quant: api_v3_volume.name
       }
@@ -36,12 +36,12 @@ RSpec.describe 'Flows', type: :request do
         'error' => 'param is missing or the value is empty: Required param flow_quant missing'
       )
     end
-    it 'requires year_start' do
+    it 'requires start_year' do
       get "/api/v3/contexts/#{api_v3_context.id}/flows",
-          params: filter_params.except(:year_start)
+          params: filter_params.except(:start_year)
       expect(@response).to have_http_status(:bad_request)
       expect(JSON.parse(@response.body)).to eq(
-        'error' => 'param is missing or the value is empty: Required param year_start missing'
+        'error' => 'param is missing or the value is empty: Required param start_year missing'
       )
     end
     it 'has the correct response structure' do

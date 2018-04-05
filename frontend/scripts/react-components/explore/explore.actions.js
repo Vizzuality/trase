@@ -8,15 +8,15 @@ export const getTopNodesKey = (ctx, col, start, end) =>
   ctx && col && start && end ? `CTX${ctx}_COL${col}_START${start}_END${end}` : null;
 
 export const setExploreTopNodes = column_id => (dispatch, getState) => {
-  const { selectedContext, selectedYears: [year_start, year_end] } = getState().tool;
+  const { selectedContext, selectedYears: [start_year, end_year] } = getState().tool;
   const { topNodes } = getState().explore;
   const params = {
-    year_start,
-    year_end,
+    start_year,
+    end_year,
     column_id,
     context_id: selectedContext.id
   };
-  const topNodesKey = getTopNodesKey(selectedContext.id, column_id, year_start, year_end);
+  const topNodesKey = getTopNodesKey(selectedContext.id, column_id, start_year, end_year);
   const url = getURLFromParams(GET_TOP_NODES_URL, params);
 
   return (
