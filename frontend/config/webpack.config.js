@@ -112,6 +112,7 @@ module.exports = {
             loader: 'css-loader',
             options: { minimize: process.env.NODE_ENV === 'production' }
           },
+          'postcss-loader',
           'sass-loader'
         ]
       },
