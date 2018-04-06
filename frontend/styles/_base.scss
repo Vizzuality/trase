@@ -8,14 +8,18 @@
 @font-face {
   font-family: 'DecimaMonoPro';
   font-weight: $font-weight-regular;
-  src: url('/fonts/DecimaMonoPro.otf') format('embedded-opentype'),
+  src: url('/fonts/DecimaMonoPro.woff2') format('woff2'),
+  url('/fonts/DecimaMonoPro.woff') format('woff'),
+  url('/fonts/DecimaMonoPro.otf') format('embedded-opentype'),
   url('/fonts/DecimaMonoPro.otf');
 }
 
 @font-face {
   font-family: 'DecimaMonoPro';
   font-weight: $font-weight-bold;
-  src: url('/fonts/DecimaMonoPro-Bold.otf') format('embedded-opentype'),
+  src: url('/fonts/DecimaMonoPro-Bold.woff2') format('woff2'),
+  url('/fonts/DecimaMonoPro-Bold.woff') format('woff'),
+  url('/fonts/DecimaMonoPro-Bold.otf') format('embedded-opentype'),
   url('/fonts/DecimaMonoPro-Bold.otf');
 }
 
@@ -57,7 +61,9 @@ body {
   }
 }
 
-.loading-wrapper { display: block; }
+.loading-wrapper {
+  display: block;
+}
 
 .row {
   &.-equal-height {

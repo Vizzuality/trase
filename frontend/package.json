@@ -123,7 +123,8 @@
     "remark-react": "^4.0.1",
     "tooltip.js": "^1.2.0",
     "topojson": "^3.0.2",
-    "turf-linestring": "^1.0.2"
+    "turf-linestring": "^1.0.2",
+    "whatwg-fetch": "^2.0.4"
   },
   "engines": {
     "node": "8.2.1"
