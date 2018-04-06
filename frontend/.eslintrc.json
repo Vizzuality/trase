@@ -88,6 +88,7 @@
     "PERF_TEST": true,
     "REDUX_LOGGER_ENABLED": true,
     "USE_PLAIN_URL_STATE": true,
+    "USE_SERVICE_WORKER": true,
     "ga": true,
     "fetch": true
   },

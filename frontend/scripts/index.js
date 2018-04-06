@@ -7,6 +7,7 @@ import { toolUrlStateMiddleware } from 'utils/stateURL';
 import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
 import * as appReducers from './store';
+import { register, unregister } from './worker';
 
 const middlewares = [analyticsMiddleware, thunk, router.middleware, toolUrlStateMiddleware];
 
@@ -17,6 +18,12 @@ window.liveSettings = TRANSIFEX_API_KEY && {
 
 // Rangetouch to fix <input type="range"> on touch devices (see https://rangetouch.com)
 rangeTouch.set();
+
+if (USE_SERVICE_WORKER) {
+  register();
+} else {
+  unregister();
+}
 
 if (process.env.NODE_ENV !== 'production' && PERF_TEST) {
   const React = require('react');
