@@ -40,6 +40,10 @@ staging:
   <<: *defaults
   active: true
 
+sandbox:
+  <<: *defaults
+  active: true
+
 development:
   active: false
 
