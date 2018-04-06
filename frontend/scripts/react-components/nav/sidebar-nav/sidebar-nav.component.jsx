@@ -16,6 +16,8 @@ class SidebarNav extends React.PureComponent {
     const activeLink = document.querySelector('.c-sidebar-nav .active-link');
     const sidebarList = document.querySelector('.nav-sidebar-link-list');
 
+    if (!activeLink || !sidebarList) return;
+
     const activeLinkRect = activeLink.getBoundingClientRect();
 
     sidebarList.scrollLeft += activeLinkRect.x + activeLinkRect.width / 2 - window.innerWidth / 2;

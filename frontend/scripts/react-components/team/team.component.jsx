@@ -1,16 +1,22 @@
+import React, { PureComponent } from 'react';
+import Link from 'redux-first-router-link';
+import PropTypes from 'prop-types';
+import Siema from 'react-siema';
 import cx from 'classnames';
 import kebabCase from 'lodash/kebabCase';
-import PropTypes from 'prop-types';
-import React, { PureComponent } from 'react';
+
 import TeamPageMessage from 'react-components/team/team-page-message.component';
-import Link from 'redux-first-router-link';
+import ResizeListener from 'react-components/shared/resize-listener.component';
 
 class Team extends PureComponent {
   renderTeamMember(slug) {
     const { members } = this.props;
 
     return (
-      <div key={members[slug].position + members[slug].name} className="column small-12 medium-4">
+      <div
+        key={members[slug].position + members[slug].name}
+        className="column small-12 medium-6 large-4"
+      >
         <div className="team-list-item">
           <Link to={{ type: 'teamMember', payload: { member: kebabCase(slug) } }}>
             <div
@@ -19,11 +25,29 @@ class Team extends PureComponent {
               })}
               style={{ backgroundImage: `url(${members[slug].smallImageUrl})` }}
             />
-            <h3 className="team-list-item-title title -medium">{members[slug].name}</h3>
+            <h3 className="team-list-item-title title -medium -light">{members[slug].name}</h3>
             <span className="team-list-item-subtitle subtitle -gray">See More</span>
           </Link>
         </div>
       </div>
+    );
+  }
+
+  renderTeamGroupDesktop(group) {
+    return (
+      <div className="row -equal-height">
+        {group.staffMembers.map(slug => this.renderTeamMember(slug))}
+      </div>
+    );
+  }
+
+  renderTeamGroupMobile(group, windowWidth) {
+    const perPage = windowWidth <= 500 ? 1.3 : 2.3;
+
+    return (
+      <Siema loop={false} perPage={perPage}>
+        {group.staffMembers.map(slug => this.renderTeamMember(slug))}
+      </Siema>
     );
   }
 
@@ -34,9 +58,13 @@ class Team extends PureComponent {
       <section className="team-group" key={group.name}>
         <h3 className="subtitle">{group.name}</h3>
         <div className="team-list">
-          <div className="row -equal-height">
-            {group.staffMembers.map(slug => this.renderTeamMember(slug))}
-          </div>
+          <ResizeListener>
+            {({ resolution, windowWidth }) =>
+              resolution.isSmall
+                ? this.renderTeamGroupMobile(group, windowWidth)
+                : this.renderTeamGroupDesktop(group)
+            }
+          </ResizeListener>
         </div>
       </section>
     );
