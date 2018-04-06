@@ -275,7 +275,7 @@ const _setInfo = (store, info, onLinkClick, { nodeId, year }) => {
 };
 
 const _setEventListeners = () => {
-  smoothScroll(document.querySelectorAll('.js-link-profile'));
+  smoothScroll([].slice.call(document.querySelectorAll('.js-link-profile')));
 };
 
 const setLoading = (isLoading = true) => {
