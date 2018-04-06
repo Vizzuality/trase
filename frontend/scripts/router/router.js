@@ -105,7 +105,8 @@ const routes = {
     path: '/about/team/:member',
     page: 'static-content',
     thunk: dispatchThunks(getTeam),
-    component: withSidebarNavLayout(TeamMember)
+    component: withSidebarNavLayout(TeamMember),
+    parent: 'team'
   },
   about: {
     path: '/about/:section?',

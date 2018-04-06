@@ -10,10 +10,11 @@
 
   .team-list {
     padding: 20px 0 0;
+    margin-left: -1.25rem;
+    margin-right: -1.25rem;
 
-    @media screen and (max-width: $breakpoint-foundation-small) {
-      margin-left: -1.25rem;
-      margin-right: -1.25rem;
+    @media screen and (min-width: $breakpoint-foundation-small) {
+      margin: 0;
     }
   }
 
