@@ -21,5 +21,8 @@ test:
 staging:
   <<: *default
 
+sandbox:
+  <<: *default
+
 production:
   <<: *default
