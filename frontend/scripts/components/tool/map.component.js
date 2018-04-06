@@ -235,7 +235,7 @@ export default class {
     let forceZoom = 0;
 
     selectedMapContextualLayersData.forEach((layerData, i) => {
-      const contextLayer = layerData.rasterURL
+      const contextLayer = layerData.rasterUrl
         ? this._createRasterLayer(layerData)
         : this._createCartoLayer(layerData, i);
       this.contextLayers.push(contextLayer);
@@ -254,7 +254,7 @@ export default class {
   }
 
   _createRasterLayer(layerData) {
-    const url = `${layerData.rasterURL}{z}/{x}/{y}.png`;
+    const url = `${layerData.rasterUrl}{z}/{x}/{y}.png`;
 
     // TODO add those params in layer configuration
     const southWest = L.latLng(-36, -76);
