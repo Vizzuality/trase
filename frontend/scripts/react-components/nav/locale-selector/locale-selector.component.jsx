@@ -25,7 +25,7 @@ class LocaleSelector extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { defaultLanguage } = this.state;
-    if (prevState.defaultLanguage === null && defaultLanguage !== null) {
+    if (defaultLanguage && prevState.defaultLanguage === null && defaultLanguage !== null) {
       this.props.onTranslate(defaultLanguage.code);
     }
   }
