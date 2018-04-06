@@ -1,5 +1,5 @@
 import { connectRoutes, NOT_FOUND, redirect, replace } from 'redux-first-router';
-import restoreScroll from 'redux-first-router-restore-scroll'
+import restoreScroll from 'redux-first-router-restore-scroll';
 
 import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.container';
 import TeamMember from 'react-components/team/team-member/team-member.container';
