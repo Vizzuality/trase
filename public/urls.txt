@@ -118,3 +118,9 @@
 /api/v3/contexts/1/nodes/437/actor?year=2015
 /api/v3/contexts/1/nodes/723/actor?year=2015
 /api/v3/contexts/1/nodes/341/actor?year=2015
+/api/v3/contexts/1/nodes/attributes?start_year=2010&end_year=2010
+/api/v3/contexts/1/nodes/attributes?start_year=2011&end_year=2011
+/api/v3/contexts/1/nodes/attributes?start_year=2012&end_year=2012
+/api/v3/contexts/1/nodes/attributes?start_year=2013&end_year=2013
+/api/v3/contexts/1/nodes/attributes?start_year=2014&end_year=2014
+/api/v3/contexts/1/nodes/attributes?start_year=2015&end_year=2015

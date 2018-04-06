@@ -5,7 +5,8 @@ namespace :cache do
     task generate_urls: :environment do
       CacheWarmer::UrlsFile.generate
     end
-    task :run do
+
+    task run: :environment do
       CacheWarmer.run
     end
   end

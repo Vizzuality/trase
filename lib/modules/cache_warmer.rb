@@ -1,6 +1,7 @@
 module CacheWarmer
   # Warms urls in public/urls.txt
   def self.run
+    UrlsFile.ensure_exists
     cmd = "wget --output-document=/dev/null --header='Cache-Control: no-cache' --tries=1 --quiet --base=#{ENV['API_HOST']} --input-file=#{UrlsFile::URLS_FILE}"
     Kernel.system cmd
   end
@@ -10,7 +11,7 @@ module CacheWarmer
     # Generates list of urls to warm in public/urls.txt
     def self.generate
       File.open(URLS_FILE, 'w') do |f|
-        top_profile_urls.each do |url|
+        urls_to_warm.each do |url|
           f << url
           f << "\n"
         end
@@ -21,8 +22,9 @@ module CacheWarmer
       generate unless File.exist?(URLS_FILE)
     end
 
-    # Generates urls for top 10 actor and place profiles
-    def self.top_profile_urls
+    private
+
+    def self.urls_to_warm
       context = Api::V3::Context.
         joins(:commodity, :country).
         find_by('countries.iso2' => 'BR', 'commodities.name' => 'SOY')
@@ -33,6 +35,19 @@ module CacheWarmer
         distinct('flows.year').
         pluck(:year).
         sort
+      top_profile_urls(context, years, volume_attribute) +
+        node_attributes_urls(context, years)
+    end
+
+    # Generates urls for node attributes
+    def self.node_attributes_urls(context, years)
+      years.map do |year|
+        "/api/v3/contexts/#{context.id}/nodes/attributes?start_year=#{year}&end_year=#{year}"
+      end
+    end
+
+    # Generates urls for top 10 actor and place profiles
+    def self.top_profile_urls(context, years, volume_attribute)
       years.map do |year|
         top_place_profile_urls(context, year, volume_attribute) +
           top_actor_profile_urls(context, year, volume_attribute)
