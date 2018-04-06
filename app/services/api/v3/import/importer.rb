@@ -5,6 +5,7 @@ module Api
     module Import
       class Importer
         include SearchPathHelpers
+        include CacheUtils
 
         # order matters a lot in here
         ALL_TABLES = [
@@ -83,6 +84,8 @@ module Api
               )
             end
           end
+          clear_cache
+          CacheWarmer::UrlsFile.generate
         rescue => e
           database_update.update_attribute(:status, Api::V3::DatabaseUpdate::FAILED)
           database_update.update_attribute(:error, e.message)
@@ -137,6 +140,14 @@ module Api
             "SELECT COUNT(*) FROM #{table}"
           )
           result.getvalue(0, 0)
+        end
+
+        def clear_cache
+          clear_cache_for_regexp_with_uri('/api/v3/', API_HOST)
+          clear_cache_for_regexp_with_uri('/content/', API_HOST)
+          Dictionary::Ind.instance.reset
+          Dictionary::Qual.instance.reset
+          Dictionary::Quant.instance.reset
         end
       end
     end

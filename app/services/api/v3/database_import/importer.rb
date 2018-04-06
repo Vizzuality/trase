@@ -28,6 +28,7 @@ module Api
           restore
 
           clear_cache
+          CacheWarmer::UrlsFile.generate
         ensure
           FileUtils.rm_f Dir.glob("#{IMPORT_DIR}/*") if dir_exists?
         end
