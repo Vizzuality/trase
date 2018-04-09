@@ -10,7 +10,7 @@ ActiveAdmin.register_page 'Database Import' do
 
   page_action :call, method: :post do
     @job_id = DatabaseImportWorker.perform_async(
-      params[:database_version], admin_root_url
+      params[:database_version]
     )
     notice = "Database import #{@job_id} scheduled. Please check status using \
 the background job monitor."
