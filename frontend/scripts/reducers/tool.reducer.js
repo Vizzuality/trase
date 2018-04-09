@@ -460,27 +460,24 @@ const toolReducer = {
   [SET_MAP_DIMENSIONS_SELECTION](state, action) {
     const selectedMapDimensions = action.uids;
 
-    // TODO Remove that when server correctly implements map dimensions meta/choropleth
-    // ie it shouldn't return choropleth values in get_nodes over multiple years if metadata says data is unavailable
-    const forceEmptyChoropleth = state.selectedYears[1] - state.selectedYears[0] > 0;
-
     const { choropleth, choroplethLegend } = getChoropleth(
       selectedMapDimensions,
       state.nodesDictWithMeta,
-      state.mapDimensions,
-      forceEmptyChoropleth
+      state.mapDimensions
     );
     const selectedMapDimensionsWarnings = getMapDimensionsWarnings(
       state.mapDimensions,
-      selectedMapDimensions
+      selectedMapDimensions,
+      state.selectedYears
     );
 
-    return Object.assign({}, state, {
+    return {
+      ...state,
       selectedMapDimensions,
       selectedMapDimensionsWarnings,
       choropleth,
       choroplethLegend
-    });
+    };
   },
   [TOGGLE_MAP_DIMENSION](state, action) {
     const selectedMapDimensions = state.selectedMapDimensions.slice();
@@ -500,15 +497,25 @@ const toolReducer = {
       selectedMapDimensions[uidIndex] = null;
     }
 
+    const { choropleth, choroplethLegend } = getChoropleth(
+      selectedMapDimensions,
+      state.nodesDictWithMeta,
+      state.mapDimensions
+    );
+
     const selectedMapDimensionsWarnings = getMapDimensionsWarnings(
       state.mapDimensions,
-      selectedMapDimensions
+      selectedMapDimensions,
+      state.selectedYears
     );
-    return Object.assign({}, state, {
+    return {
+      ...state,
       selectedMapDimensions,
       selectedMapDimensionsWarnings,
-      mapLoading: true
-    });
+      mapLoading: true,
+      choropleth,
+      choroplethLegend
+    };
   },
   [SELECT_CONTEXTUAL_LAYERS](state, action) {
     const mapContextualLayersDict = keyBy(state.mapContextualLayers, 'id');

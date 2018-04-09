@@ -59,7 +59,7 @@ class YearsSelector extends Component {
   }
 
   getState({ selectedYears, years }) {
-    const left = YEAR_WIDTH * years.indexOf(selectedYears[0]);
+    const left = YEAR_WIDTH * years.indexOf(selectedYears[1] - 1);
     const right = YEAR_WIDTH * (years.indexOf(selectedYears[1]) + 1);
     return {
       left,
