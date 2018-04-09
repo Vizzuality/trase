@@ -6,7 +6,7 @@ module Api
       def index
         ensure_required_param_present(:include_columns)
         ensure_required_param_present(:flow_quant)
-        ensure_required_param_present(:year_start)
+        ensure_required_param_present(:start_year)
         @flows_result = Api::V3::Flows::Filter.new(
           @context, @filter_params
         ).call
@@ -31,8 +31,8 @@ module Api
           selected_nodes_ids: params[:selected_nodes],
           locked_nodes_ids: params[:locked_nodes],
           biome_id: params[:biome_filter_id],
-          year_start: params[:year_start],
-          year_end: params[:year_end] || params[:year_start],
+          year_start: params[:start_year],
+          year_end: params[:end_year] || params[:start_year],
           limit: params[:n_nodes]
         }
       end

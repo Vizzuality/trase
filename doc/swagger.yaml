@@ -70,16 +70,20 @@ paths:
       parameters:
         - name: context_id
           in: path
-          description: ''
           required: true
+          type: integer
+        - name: start_year
+          in: path
+          required: true
+          type: integer
+        - name: end_year
+          in: path
           type: integer
       responses:
         '200':
           description: successful operation
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/MapGroup'
+            $ref: '#/definitions/MapGroup'
   '/context/{context_id}/download_attributes':
     get:
       tags:
@@ -156,12 +160,12 @@ paths:
           description: Id of biome to filter by
           required: false
           type: integer
-        - name: year_start
+        - name: start_year
           in: query
           description: Year range start
           required: true
           type: integer
-        - name: year_end
+        - name: end_year
           in: query
           description: Year range end (defaults to start)
           required: false
@@ -781,12 +785,12 @@ paths:
           description: Node type id
           required: true
           type: integer
-        - name: year_start
+        - name: start_year
           in: query
           description: Start year (defaults to context default year)
           required: false
           type: integer
-        - name: year_end
+        - name: end_year
           in: query
           description: End year (defaults to start year)
           required: false
@@ -1139,6 +1143,38 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Dimension'
+      contextualLayers:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+            title:
+              type: string
+            identifier:
+              type: string
+              example: 'landcover'
+            tooltipText:
+              type: string
+            isDefault:
+              type: boolean
+            legend:
+             type: string
+            cartoLayers:
+              type: array
+              items:
+                type: object
+                properties:
+                  identifier:
+                    type: string
+                    example: 'landcover2015'
+                  years:
+                    type: array
+                    items:
+                      type: integer
+                  rasterUrl:
+                    type: string
   Attribute:
     type: object
     properties:

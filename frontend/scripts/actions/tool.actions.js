@@ -414,8 +414,8 @@ export function loadLinks() {
     const state = getState();
     const params = {
       context_id: state.tool.selectedContextId,
-      year_start: state.tool.selectedYears[0],
-      year_end: state.tool.selectedYears[1],
+      start_year: state.tool.selectedYears[0],
+      end_year: state.tool.selectedYears[1],
       include_columns: state.tool.selectedColumnsIds.join(','),
       flow_quant: state.tool.selectedResizeBy.name,
       locked_nodes: state.tool.selectedNodesIds
@@ -566,10 +566,12 @@ export function setMapContextLayers(contextualLayers) {
   return (dispatch, getState) => {
     const mapContextualLayers = contextualLayers.map(layer => {
       const contextLayer = Object.assign({}, layer);
-      const carto = contextLayersCarto[layer.identifier];
-      if (!layer.rasterUrl && carto) {
-        contextLayer.cartoURL = `${CARTO_NAMED_MAPS_BASE_URL}${carto.uid}/jsonp?callback=cb`;
-        contextLayer.layergroupid = carto.layergroupid;
+      const cartoIds = contextLayersCarto[layer.identifier];
+      // TODO: implement multi-year support
+      const cartoData = layer.cartoLayers[0];
+      if (!cartoData.rasterUrl && cartoIds) {
+        contextLayer.cartoURL = `${CARTO_NAMED_MAPS_BASE_URL}${cartoIds.uid}/jsonp?callback=cb`;
+        contextLayer.layergroupid = cartoIds.layergroupid;
       }
       return contextLayer;
     });

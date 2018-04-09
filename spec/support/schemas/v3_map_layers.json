@@ -286,17 +286,42 @@
               "<div class='cartodb-legend custom'><ul class='bullets'><li><div class='bullet' style='background:#008156'></div>Forest</li><li><div class='bullet' style='background:#556B2F'></div>Forest plantations</li><li><div class='bullet' style='background:#E1E196'></div>Pastures</li><li><div class='bullet' style='background:#E1A500'></div>Agriculture</li><li><div class='bullet' style='background:#00FFFF'></div>Coastal forest</li><li><div class='bullet' style='background:#00AFFF'></div>Water</li><li><div class='bullet' style='background:#F5F5F3'></div>Other vegetation</li><li><div class='bullet' style='background:#3E3F40'></div>Not observed</li></ul></div>"
             ]
           },
-          "rasterUrl": {
-            "$id": "/properties/contextualLayers/items/properties/rasterUrl",
-            "type": [
-              "null",
-              "string"
-            ],            "title": "The Rasterurl Schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": "",
-            "examples": [
-              "https://s3-eu-west-1.amazonaws.com/lulc/landcover_brazil_2015/"
-            ]
+          "cartoLayers": {
+            "$id": "/properties/contextualLayers/items/properties/cartoLayers",
+            "type": "array",
+            "items": {
+              "$id": "/properties/contextualLayers/items/properties/cartoLayers/items",
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "$id": "/properties/contextualLayers/items/properties/cartoLayers/items/properties/identifier",
+                  "type": "string",
+                  "title": "The Identifier Schema ",
+                  "default": "",
+                  "examples": [
+                    "landcover"
+                  ]
+                },
+                "years": {
+                  "$id": "/properties/contextualLayers/items/properties/cartoLayers/items/properties/years",
+                  "type": "null",
+                  "title": "The Years Schema ",
+                  "default": null,
+                  "examples": [
+                    null
+                  ]
+                },
+                "rasterUrl": {
+                  "$id": "/properties/contextualLayers/items/properties/cartoLayers/items/properties/rasterUrl",
+                  "type": ["string", "null"],
+                  "title": "The Rasterurl Schema ",
+                  "default": "",
+                  "examples": [
+                    "https://s3-eu-west-1.amazonaws.com/lulc/landcover_brazil_2015/"
+                  ]
+                }
+              }
+            }
           }
         },
         "required": [
@@ -306,7 +331,7 @@
           "tooltipText",
           "isDefault",
           "legend",
-          "rasterUrl"
+          "cartoLayers"
         ]
       }
     }

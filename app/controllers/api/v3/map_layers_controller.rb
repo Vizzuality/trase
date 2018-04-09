@@ -2,54 +2,21 @@ module Api
   module V3
     class MapLayersController < ApiController
       def index
-        contextual_layers = Api::V3::ContextualLayer.
-          select(
-            [
-              'title',
-              "#{Api::V3::ContextualLayer.table_name}.identifier",
-              'tooltip_text',
-              "#{Api::V3::ContextualLayer.table_name}.id",
-              'position',
-              'is_default',
-              'legend',
-              'years',
-              'raster_url'
-            ]
-          ).
-          joins(:carto_layers).
-          where(context_id: @context.id).
-          order('position ASC, id ASC')
+        ensure_required_param_present(:start_year)
+        set_start_end_year
+
+        contextual_layers = Api::V3::MapLayers::ContextualLayerFilter.new(
+          @context
+        ).call
 
         dimension_groups = Api::V3::MapAttributeGroup.
           select('DISTINCT name, id, position').
           where(context_id: @context.id).
           order('position ASC, id ASC')
 
-        dimensions = Api::V3::Readonly::MapAttribute.
-          select(
-            [
-              'color_scale',
-              "#{Api::V3::Readonly::MapAttribute.table_name}.id",
-              'dual_layer_buckets',
-              'single_layer_buckets',
-              'map_attribute_group_id AS group_id',
-              'is_default',
-              'years',
-              "#{Api::V3::Readonly::MapAttribute.table_name}.name",
-              'attribute_type AS type',
-              'unit',
-              'description',
-              'aggregate_method',
-              'original_attribute_id AS layer_attribute_id',
-              'map_attribute_group_id AS group_id'
-            ]
-          ).
-          joins(:map_attribute_group).
-          where(
-            is_disabled: false,
-            "#{Api::V3::MapAttributeGroup.table_name}.context_id": @context.id
-          ).
-          order(position: :asc)
+        dimensions = Api::V3::MapLayers::MapAttributeFilter.new(
+          @context, @start_year, @end_year
+        ).call
 
         serialized_contextual_layers =
           ActiveModelSerializers::SerializableResource.new(
@@ -74,6 +41,13 @@ module Api
 
         render json: serialized_layer_groups.merge(serialized_layers).
           merge(serialized_contextual_layers)
+      end
+
+      private
+
+      def set_start_end_year
+        @start_year = params[:start_year]&.to_i || @context&.default_year
+        @end_year = params[:end_year]&.to_i || @start_year
       end
     end
   end

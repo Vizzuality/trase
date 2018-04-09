@@ -31,11 +31,17 @@ json:
   - url: /api/v3/contexts/1/map_layers
     name: map_layers
     queries:
-      - name: brazil_soy
+      - params: start_year=2015&end_year=2015
+        name: brazil_soy
+      - params: start_year=2014&end_year=2015
+        name: brazil_soy_multi_year
   - url: /api/v3/contexts/2/map_layers
     name: map_layers
     queries:
-      - name: paraguay_soy
+      - params: start_year=2015&end_year=2015
+        name: paraguay_soy
+      - params: start_year=2014&end_year=2015
+        name: paraguay_soy_multi_year
   - url: /api/v3/contexts/1/linked_nodes
     name: linked_nodes
     queries:
@@ -59,11 +65,15 @@ json:
     queries:
       - params: start_year=2015&end_year=2015
         name: brazil_soy
+      - params: start_year=2014&end_year=2015
+        name: brazil_soy_multi_year
   - url: /api/v3/contexts/2/nodes/attributes
     name: attributes
     queries:
       - params: start_year=2015&end_year=2015
         name: paraguay_soy
+      - params: start_year=2014&end_year=2015
+        name: paraguay_soy_multi_year
   - url: /api/v3/contexts
     name: contexts
     queries: []
@@ -94,32 +104,32 @@ json:
   - url: /api/v3/contexts/1/nodes
     name: nodes
     queries:
-      - params: year_start=2015&year_end=2015
+      - params: start_year=2015&end_year=2015
         name: brazil_soy_2015_2015
   - url: /api/v3/contexts/2/nodes
     name: nodes
     queries:
-      - params: year_start=2015&year_end=2015
+      - params: start_year=2015&end_year=2015
         name: paraguay_soy_2015_2015
   - url: /api/v3/contexts/1/flows
     name: flows
     queries:
-      - params: year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10
+      - params: start_year=2015&end_year=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10
         name: brazil_soy_2015_2015
-      - params: year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&biome_filter_id=652
+      - params: start_year=2015&end_year=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&biome_filter_id=652
         name: brazil_soy_2015_2015_biome
-      - params: year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&selected_nodes=587,588
+      - params: start_year=2015&end_year=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&selected_nodes=587,588
         name: brazil_soy_2015_2015_expand
-      - params: year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_ind=PROTECTED_DEFICIT_PERC
+      - params: start_year=2015&end_year=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_ind=PROTECTED_DEFICIT_PERC
         name: brazil_soy_2015_2015_recolor_by_ind
-      - params: year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_qual=ZERO_DEFORESTATION
+      - params: start_year=2015&end_year=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_qual=ZERO_DEFORESTATION
         name: brazil_soy_2015_2015_recolor_by_qual
-      - params: year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_ind=PROTECTED_DEFICIT_PERC&biome_filter_id=652&selected_nodes=587,588
+      - params: start_year=2015&end_year=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_ind=PROTECTED_DEFICIT_PERC&biome_filter_id=652&selected_nodes=587,588
         name: brazil_soy_2015_2015_recolor_by_ind_biome_expand
-      - params: year_start=2015&year_end=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_qual=ZERO_DEFORESTATION&biome_filter_id=652&selected_nodes=587,588
+      - params: start_year=2015&end_year=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_qual=ZERO_DEFORESTATION&biome_filter_id=652&selected_nodes=587,588
         name: brazil_soy_2015_2015_recolor_by_qual_biome_expand
   - url: /api/v3/contexts/2/flows
     name: flows
     queries:
-      - params: year_start=2015&year_end=2015&include_columns=9,10,6,8&flow_quant=Volume&n_nodes=10
+      - params: start_year=2015&end_year=2015&include_columns=9,10,6,8&flow_quant=Volume&n_nodes=10
         name: paraguay_soy_2015_2015

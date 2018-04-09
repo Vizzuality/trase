@@ -12,16 +12,6 @@ module Api
 
           render json: {data: result}
         end
-
-        private
-
-        def set_filter_params
-          @filter_params = {
-            year_start: params[:year_start],
-            year_end: params[:year_end] || params[:year_start],
-            limit: params[:n_nodes]
-          }
-        end
       end
     end
   end
