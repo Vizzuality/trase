@@ -235,8 +235,10 @@ export default class {
     let forceZoom = 0;
 
     selectedMapContextualLayersData.forEach((layerData, i) => {
-      const contextLayer = layerData.rasterUrl
-        ? this._createRasterLayer(layerData)
+      // TODO: implement multi-year support
+      const cartoData = layerData.cartoLayers[0];
+      const contextLayer = cartoData.rasterUrl
+        ? this._createRasterLayer(cartoData.rasterUrl)
         : this._createCartoLayer(layerData, i);
       this.contextLayers.push(contextLayer);
       this.map.addLayer(contextLayer);
@@ -253,8 +255,8 @@ export default class {
     this._updateAttribution();
   }
 
-  _createRasterLayer(layerData) {
-    const url = `${layerData.rasterUrl}{z}/{x}/{y}.png`;
+  _createRasterLayer(rasterUrl) {
+    const url = `${rasterUrl}{z}/{x}/{y}.png`;
 
     // TODO add those params in layer configuration
     const southWest = L.latLng(-36, -76);

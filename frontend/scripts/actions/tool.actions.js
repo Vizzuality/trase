@@ -566,10 +566,12 @@ export function setMapContextLayers(contextualLayers) {
   return (dispatch, getState) => {
     const mapContextualLayers = contextualLayers.map(layer => {
       const contextLayer = Object.assign({}, layer);
-      const carto = contextLayersCarto[layer.identifier];
-      if (!layer.rasterUrl && carto) {
-        contextLayer.cartoURL = `${CARTO_NAMED_MAPS_BASE_URL}${carto.uid}/jsonp?callback=cb`;
-        contextLayer.layergroupid = carto.layergroupid;
+      const cartoIds = contextLayersCarto[layer.identifier];
+      // TODO: implement multi-year support
+      const cartoData = layer.cartoLayers[0];
+      if (!cartoData.rasterUrl && cartoIds) {
+        contextLayer.cartoURL = `${CARTO_NAMED_MAPS_BASE_URL}${cartoIds.uid}/jsonp?callback=cb`;
+        contextLayer.layergroupid = cartoIds.layergroupid;
       }
       return contextLayer;
     });
