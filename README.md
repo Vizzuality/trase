@@ -66,6 +66,8 @@ To deploy, simply use:
 cap <staging|production> deploy
 ```
 
+## Caching
+
 We use Varnish in staging / production for caching. The following configuration needs to be present to enable cache purging in `/etc/varnish/default.vcl`:
 
 ```
@@ -113,6 +115,10 @@ sub vcl_deliver {
     unset resp.http.x-url;
 }
 ```
+
+There are rake tasks to help with cache management:
+- `rake cache:cleaner:clear_all` - clears all cache using a BAN
+- `rake cache:warmer:run` - warms cache for heavy profile pages and node attributes
 
 
 ## Git hooks
