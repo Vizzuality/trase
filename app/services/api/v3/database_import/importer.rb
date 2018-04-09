@@ -1,13 +1,13 @@
+require "#{Rails.root}/lib/modules/cache/warmer.rb"
+require "#{Rails.root}/lib/modules/cache/cleaner.rb"
+
 # Downloads dump from S3 and restores to current database
 module Api
   module V3
     module DatabaseImport
       class Importer
-        include CacheUtils
-
         IMPORT_DIR = 'tmp/import'.freeze
         INSTANCE_NAME = ENV['INSTANCE_NAME']
-        API_HOST = ENV['API_HOST']
 
         def initialize(s3_filename)
           raise 'Invalid S3 object name' unless s3_filename.match?(/\w+\/.+\.dump\.gz/)
@@ -27,7 +27,8 @@ module Api
 
           restore
 
-          clear_cache
+          Cache::Cleaner.clear_all
+          Cache::Warmer::UrlsFile.generate
         ensure
           FileUtils.rm_f Dir.glob("#{IMPORT_DIR}/*") if dir_exists?
         end
@@ -63,14 +64,6 @@ cannot restore"
             Rails.logger.debug 'Database restored to previous version'
             raise
           end
-        end
-
-        def clear_cache
-          clear_cache_for_regexp_with_uri('/api/v3/', API_HOST)
-          clear_cache_for_regexp_with_uri('/content/', API_HOST)
-          Dictionary::Ind.instance.reset
-          Dictionary::Qual.instance.reset
-          Dictionary::Quant.instance.reset
         end
 
         def dir_exists?

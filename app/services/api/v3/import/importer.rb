@@ -1,4 +1,6 @@
 require 'db_helpers/search_path_helpers'
+require "#{Rails.root}/lib/modules/cache/warmer.rb"
+require "#{Rails.root}/lib/modules/cache/cleaner.rb"
 
 module Api
   module V3
@@ -83,6 +85,8 @@ module Api
               )
             end
           end
+          Cache::Cleaner.clear_all
+          Cache::Warmer::UrlsFile.generate
         rescue => e
           database_update.update_attribute(:status, Api::V3::DatabaseUpdate::FAILED)
           database_update.update_attribute(:error, e.message)
