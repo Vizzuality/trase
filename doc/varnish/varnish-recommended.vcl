@@ -9,20 +9,20 @@ backend server1 { # Define one backend
   .port = "8080";         # Port Apache or whatever is listening
   .max_connections = 300; # That's it
 
-  .probe = {
-    #.url = "/"; # short easy way (GET /)
-    # We prefer to only do a HEAD /
-    .request =
-      "HEAD / HTTP/1.1"
-      "Host: localhost"
-      "Connection: close"
-      "User-Agent: Varnish Health Probe";
-
-    .interval  = 5s; # check the health of each backend every 5 seconds
-    .timeout   = 1s; # timing out after 1 second.
-    .window    = 5;  # If 3 out of the last 5 polls succeeded the backend is considered healthy, otherwise it will be marked as sick
-    .threshold = 3;
-  }
+//  .probe = {
+//    #.url = "/"; # short easy way (GET /)
+//    # We prefer to only do a HEAD /
+//    .request =
+//      "HEAD / HTTP/1.1"
+//      "Host: localhost"
+//      "Connection: close"
+//      "User-Agent: Varnish Health Probe";
+//
+//    .interval  = 5s; # check the health of each backend every 5 seconds
+//    .timeout   = 1s; # timing out after 1 second.
+//    .window    = 5;  # If 3 out of the last 5 polls succeeded the backend is considered healthy, otherwise it will be marked as sick
+//    .threshold = 3;
+//  }
 
   .first_byte_timeout     = 300s;   # How long to wait before we receive a first byte from our backend?
   .connect_timeout        = 5s;     # How long to wait for a backend connection?
@@ -163,13 +163,15 @@ sub vcl_recv {
     return (hash);
   }
 
-  # Remove all cookies for static files
-  # A valid discussion could be held on this line: do you really need to cache static files that don't cause load? Only if you have memory left.
-  # Sure, there's disk I/O, but chances are your OS will already have these files in their buffers (thus memory).
-  # Before you blindly enable this, have a read here: https://ma.ttias.be/stop-caching-static-files/
-  if (req.url ~ "^[^?]*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)(\?.*)?$") {
+  # For API calls, strip cookies so request can be cached
+  if (req.url ~ "^\/api") {
     unset req.http.Cookie;
     return (hash);
+  }
+
+  # Pass static files to the webserver, we won't cache them
+  if (req.url ~ "^[^?]*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|ico|jpeg|jpg|js|json|less|map|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)(\?.*)?$") {
+    return (pass);
   }
 
   # Send Surrogate-Capability headers to announce ESI support to backend
@@ -298,9 +300,9 @@ sub vcl_backend_response {
   # Enable cache for all static files
   # The same argument as the static caches from above: monitor your cache size, if you get data nuked out of it, consider giving up the static file cache.
   # Before you blindly enable this, have a read here: https://ma.ttias.be/stop-caching-static-files/
-  if (bereq.url ~ "^[^?]*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)(\?.*)?$") {
-    unset beresp.http.set-cookie;
-  }
+//  if (bereq.url ~ "^[^?]*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|ico|jpeg|jpg|js|json|less|map|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)(\?.*)?$") {
+//    unset beresp.http.set-cookie;
+//  }
 
   # Large static files are delivered directly to the end-user without
   # waiting for Varnish to fully read the file first.
