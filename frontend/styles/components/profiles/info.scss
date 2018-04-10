@@ -27,7 +27,7 @@
     }
   }
 
-  @media screen and (max-width: $breakpoint-foundation-medium) {
+  @media (max-width: $breakpoint-foundation-medium) {
     padding-left: 15px;
   }
 }
