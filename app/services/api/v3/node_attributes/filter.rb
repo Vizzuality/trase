@@ -41,7 +41,7 @@ maa.#{attribute_type}_id = #{node_values}.#{attribute_type}_id").
               @years
             ).
             where('ma.context_id' => @context.id, 'ma.is_disabled' => false).
-            where('ma.years IS NULL OR ma.years && ARRAY[?]', @years).
+            where('ma.years IS NULL OR array_length(ma.years, 1) IS NULL OR ma.years && ARRAY[?]', @years).
             group(
               "#{node_values}.node_id",
               "#{node_values}.#{attribute_type}_id",
