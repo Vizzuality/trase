@@ -1,3 +1,5 @@
+require "#{Rails.root}/lib/modules/cache/cleaner.rb"
+
 module CacheUtils
   extend ActiveSupport::Concern
 
