@@ -122,7 +122,7 @@ export const YEARS_DISABLED_WARNINGS = {
   UNAVAILABLE_REASON: "can't be displayed for the selected years.",
   UNAVAILABLE_INSTRUCTION: 'Please change year selection.',
   INCOMPLETE_REASON: "doesn't have data for all selected years.",
-  INCOMPLETE_INSTRUCTION: 'Currently displaying data for the following years: $years.',
+  INCOMPLETE_INSTRUCTION: 'Data being displayed corresponds to the following years: $years.',
   THIS_LAYER: 'This layer',
   THAT_LAYER: 'The selected map layer ($layer)',
   THOSE_LAYERS: 'The selected map layers ($layer0 and $layer1)'
