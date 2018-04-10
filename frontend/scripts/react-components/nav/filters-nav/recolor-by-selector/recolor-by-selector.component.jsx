@@ -101,7 +101,8 @@ class RecolorBySelector extends Component {
         {
           label: 'Selection',
           name: 'none',
-          description: tooltips.sankey.nav.colorBy.none || ''
+          description: tooltips.sankey.nav.colorBy.none || '',
+          years: selectedYears
         }
       ]
         .concat(recolorBysData)
