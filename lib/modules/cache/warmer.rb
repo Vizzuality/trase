@@ -50,23 +50,22 @@ module Cache
         end
 
         # Generates urls for top 10 actor and place profiles
-        def top_profile_urls(context, years, volume_attribute)
+        def top_profile_urls(context, years, attribute)
           years.map do |year|
-            top_place_profile_urls(context, year, volume_attribute) +
-              top_actor_profile_urls(context, year, volume_attribute)
+            top_places =
+              top_nodes(context, year, attribute, NodeTypeName::MUNICIPALITY).map do |node|
+                "/api/v3/contexts/#{context.id}/nodes/#{node['node_id']}/place?year=#{year}"
+              end
+            top_exporters =
+              top_nodes(context, year, attribute, NodeTypeName::EXPORTER).map do |node|
+                "/api/v3/contexts/#{context.id}/nodes/#{node['node_id']}/actor?year=#{year}"
+              end
+            top_importers =
+              top_nodes(context, year, attribute, NodeTypeName::IMPORTER).map do |node|
+                "/api/v3/contexts/#{context.id}/nodes/#{node['node_id']}/actor?year=#{year}"
+              end
+            top_places + top_exporters + top_importers
           end.flatten
-        end
-
-        def top_place_profile_urls(context, year, attribute)
-          top_nodes(context, year, attribute, NodeTypeName::MUNICIPALITY).map do |node|
-            "/api/v3/contexts/#{context.id}/nodes/#{node['node_id']}/place?year=#{year}"
-          end
-        end
-
-        def top_actor_profile_urls(context, year, attribute)
-          top_nodes(context, year, attribute, NodeTypeName::EXPORTER).map do |node|
-            "/api/v3/contexts/#{context.id}/nodes/#{node['node_id']}/actor?year=#{year}"
-          end
         end
 
         def top_nodes(context, year, attribute, node_type_name)
