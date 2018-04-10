@@ -351,6 +351,7 @@ export function loadNodes() {
         } else {
           const allYearsCovered =
             dimension.years === null ||
+            (Array.isArray(dimension.years) && dimension.years.length === 0) ||
             allSelectedYears.every(year => dimension.years.indexOf(year) > -1);
           if (!allYearsCovered) {
             dimension.disabledYearRangeReason = YEARS_DISABLED_UNAVAILABLE;
