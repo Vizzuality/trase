@@ -34,6 +34,34 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Context'
+  /nodes/search:
+    get:
+      tags:
+        - node
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                nodeType:
+                  type: string
+                  example: 'EXPORTER'
+                contextId:
+                  type: integer
+                profile:
+                  type: string
+                  example: 'actor'
   '/context/{context_id}/columns':
     get:
       tags:
