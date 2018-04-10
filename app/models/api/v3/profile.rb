@@ -38,6 +38,10 @@ module Api
           {name: :context_node_type_id, table_class: Api::V3::ContextNodeType}
         ]
       end
+
+      def refresh_dependencies
+        Api::V3::Readonly::Node.refresh
+      end
     end
   end
 end
