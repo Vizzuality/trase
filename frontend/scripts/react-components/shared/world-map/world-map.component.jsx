@@ -74,7 +74,7 @@ class WorldMap extends Component {
       const y = e.clientY + window.scrollY + 10;
       const text = geometry.name || geometry.properties.name;
       const title = 'Trade Volume';
-      const unit = 'tn';
+      const unit = 't';
       const volume = geometry.value || (flows.find(flow => flow.geoId === geoId) || {}).value;
       const value = formatValue(volume, 'tons');
       const tooltipConfig = { x, y, text, items: [{ title, value, unit }] };

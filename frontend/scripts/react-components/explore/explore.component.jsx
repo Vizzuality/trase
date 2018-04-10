@@ -30,7 +30,7 @@ class Explore extends React.PureComponent {
         format: item => formatValue(item.height * 100, 'percentage')
       },
       {
-        name: 'tn',
+        name: 't',
         format: item => formatValue(item.value, 'tons')
       }
     ];

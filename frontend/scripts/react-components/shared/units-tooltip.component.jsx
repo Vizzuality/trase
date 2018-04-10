@@ -67,7 +67,7 @@ class UnitsTooltip extends React.PureComponent {
             <div className="units-tooltip-title">{item.title}</div>
             <div className="units-tooltip-data">
               {item.value}
-              {item.unit && <span className="units-tooltip-value-unit">{item.unit}</span>}
+              {item.unit && <span className="units-tooltip-value-unit"> {item.unit}</span>}
             </div>
           </div>
         ))}
