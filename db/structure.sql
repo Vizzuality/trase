@@ -3,6 +3,7 @@ SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
@@ -77,14 +78,11 @@ CREATE EXTENSION IF NOT EXISTS tablefunc WITH SCHEMA public;
 COMMENT ON EXTENSION tablefunc IS 'functions that manipulate whole tables, including crosstab';
 
 
-SET search_path = public, pg_catalog;
-
-
 --
 -- Name: aggregated_buckets(double precision[], integer[], integer[], text); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], attribute_type text) RETURNS double precision[]
+CREATE FUNCTION public.aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], attribute_type text) RETURNS double precision[]
     LANGUAGE sql IMMUTABLE
     AS $$
   SELECT CASE
@@ -100,14 +98,14 @@ $$;
 -- Name: FUNCTION aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], attribute_type text); Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON FUNCTION aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], attribute_type text) IS 'Aggregates buckets.';
+COMMENT ON FUNCTION public.aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], attribute_type text) IS 'Aggregates buckets.';
 
 
 --
 -- Name: bucket_index(double precision[], double precision); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION bucket_index(buckets double precision[], value double precision) RETURNS integer
+CREATE FUNCTION public.bucket_index(buckets double precision[], value double precision) RETURNS integer
     LANGUAGE sql IMMUTABLE
     AS $$
 
@@ -127,10 +125,8 @@ $$;
 -- Name: FUNCTION bucket_index(buckets double precision[], value double precision); Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON FUNCTION bucket_index(buckets double precision[], value double precision) IS 'Given an n-element array of choropleth buckets and a positive value, returns index of bucket where value falls (1 to n + 1); else returns 0.';
+COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double precision) IS 'Given an n-element array of choropleth buckets and a positive value, returns index of bucket where value falls (1 to n + 1); else returns 0.';
 
-
-SET search_path = content, pg_catalog;
 
 SET default_tablespace = '';
 
@@ -140,7 +136,7 @@ SET default_with_oids = false;
 -- Name: ckeditor_assets; Type: TABLE; Schema: content; Owner: -
 --
 
-CREATE TABLE ckeditor_assets (
+CREATE TABLE content.ckeditor_assets (
     id integer NOT NULL,
     data_file_name character varying NOT NULL,
     data_content_type character varying,
@@ -160,7 +156,7 @@ CREATE TABLE ckeditor_assets (
 -- Name: ckeditor_assets_id_seq; Type: SEQUENCE; Schema: content; Owner: -
 --
 
-CREATE SEQUENCE ckeditor_assets_id_seq
+CREATE SEQUENCE content.ckeditor_assets_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -172,14 +168,14 @@ CREATE SEQUENCE ckeditor_assets_id_seq
 -- Name: ckeditor_assets_id_seq; Type: SEQUENCE OWNED BY; Schema: content; Owner: -
 --
 
-ALTER SEQUENCE ckeditor_assets_id_seq OWNED BY ckeditor_assets.id;
+ALTER SEQUENCE content.ckeditor_assets_id_seq OWNED BY content.ckeditor_assets.id;
 
 
 --
 -- Name: pages; Type: TABLE; Schema: content; Owner: -
 --
 
-CREATE TABLE pages (
+CREATE TABLE content.pages (
     id bigint NOT NULL,
     name text NOT NULL,
     content text NOT NULL
@@ -190,7 +186,7 @@ CREATE TABLE pages (
 -- Name: pages_id_seq; Type: SEQUENCE; Schema: content; Owner: -
 --
 
-CREATE SEQUENCE pages_id_seq
+CREATE SEQUENCE content.pages_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -202,14 +198,14 @@ CREATE SEQUENCE pages_id_seq
 -- Name: pages_id_seq; Type: SEQUENCE OWNED BY; Schema: content; Owner: -
 --
 
-ALTER SEQUENCE pages_id_seq OWNED BY pages.id;
+ALTER SEQUENCE content.pages_id_seq OWNED BY content.pages.id;
 
 
 --
 -- Name: posts; Type: TABLE; Schema: content; Owner: -
 --
 
-CREATE TABLE posts (
+CREATE TABLE content.posts (
     id integer NOT NULL,
     title text NOT NULL,
     date timestamp without time zone NOT NULL,
@@ -230,7 +226,7 @@ CREATE TABLE posts (
 -- Name: posts_id_seq; Type: SEQUENCE; Schema: content; Owner: -
 --
 
-CREATE SEQUENCE posts_id_seq
+CREATE SEQUENCE content.posts_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -242,14 +238,14 @@ CREATE SEQUENCE posts_id_seq
 -- Name: posts_id_seq; Type: SEQUENCE OWNED BY; Schema: content; Owner: -
 --
 
-ALTER SEQUENCE posts_id_seq OWNED BY posts.id;
+ALTER SEQUENCE content.posts_id_seq OWNED BY content.posts.id;
 
 
 --
 -- Name: site_dives; Type: TABLE; Schema: content; Owner: -
 --
 
-CREATE TABLE site_dives (
+CREATE TABLE content.site_dives (
     id integer NOT NULL,
     title text NOT NULL,
     page_url text NOT NULL,
@@ -263,7 +259,7 @@ CREATE TABLE site_dives (
 -- Name: site_dives_id_seq; Type: SEQUENCE; Schema: content; Owner: -
 --
 
-CREATE SEQUENCE site_dives_id_seq
+CREATE SEQUENCE content.site_dives_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -275,14 +271,14 @@ CREATE SEQUENCE site_dives_id_seq
 -- Name: site_dives_id_seq; Type: SEQUENCE OWNED BY; Schema: content; Owner: -
 --
 
-ALTER SEQUENCE site_dives_id_seq OWNED BY site_dives.id;
+ALTER SEQUENCE content.site_dives_id_seq OWNED BY content.site_dives.id;
 
 
 --
 -- Name: staff_groups; Type: TABLE; Schema: content; Owner: -
 --
 
-CREATE TABLE staff_groups (
+CREATE TABLE content.staff_groups (
     id bigint NOT NULL,
     name text NOT NULL,
     "position" integer NOT NULL,
@@ -295,7 +291,7 @@ CREATE TABLE staff_groups (
 -- Name: staff_groups_id_seq; Type: SEQUENCE; Schema: content; Owner: -
 --
 
-CREATE SEQUENCE staff_groups_id_seq
+CREATE SEQUENCE content.staff_groups_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -307,14 +303,14 @@ CREATE SEQUENCE staff_groups_id_seq
 -- Name: staff_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: content; Owner: -
 --
 
-ALTER SEQUENCE staff_groups_id_seq OWNED BY staff_groups.id;
+ALTER SEQUENCE content.staff_groups_id_seq OWNED BY content.staff_groups.id;
 
 
 --
 -- Name: staff_members; Type: TABLE; Schema: content; Owner: -
 --
 
-CREATE TABLE staff_members (
+CREATE TABLE content.staff_members (
     id bigint NOT NULL,
     staff_group_id bigint NOT NULL,
     name text NOT NULL,
@@ -333,7 +329,7 @@ CREATE TABLE staff_members (
 -- Name: staff_members_id_seq; Type: SEQUENCE; Schema: content; Owner: -
 --
 
-CREATE SEQUENCE staff_members_id_seq
+CREATE SEQUENCE content.staff_members_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -345,14 +341,14 @@ CREATE SEQUENCE staff_members_id_seq
 -- Name: staff_members_id_seq; Type: SEQUENCE OWNED BY; Schema: content; Owner: -
 --
 
-ALTER SEQUENCE staff_members_id_seq OWNED BY staff_members.id;
+ALTER SEQUENCE content.staff_members_id_seq OWNED BY content.staff_members.id;
 
 
 --
 -- Name: testimonials; Type: TABLE; Schema: content; Owner: -
 --
 
-CREATE TABLE testimonials (
+CREATE TABLE content.testimonials (
     id bigint NOT NULL,
     quote text NOT NULL,
     author_name text NOT NULL,
@@ -370,7 +366,7 @@ CREATE TABLE testimonials (
 -- Name: testimonials_id_seq; Type: SEQUENCE; Schema: content; Owner: -
 --
 
-CREATE SEQUENCE testimonials_id_seq
+CREATE SEQUENCE content.testimonials_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -382,14 +378,14 @@ CREATE SEQUENCE testimonials_id_seq
 -- Name: testimonials_id_seq; Type: SEQUENCE OWNED BY; Schema: content; Owner: -
 --
 
-ALTER SEQUENCE testimonials_id_seq OWNED BY testimonials.id;
+ALTER SEQUENCE content.testimonials_id_seq OWNED BY content.testimonials.id;
 
 
 --
 -- Name: users; Type: TABLE; Schema: content; Owner: -
 --
 
-CREATE TABLE users (
+CREATE TABLE content.users (
     id integer NOT NULL,
     email character varying DEFAULT ''::character varying NOT NULL,
     encrypted_password character varying DEFAULT ''::character varying NOT NULL,
@@ -410,7 +406,7 @@ CREATE TABLE users (
 -- Name: users_id_seq; Type: SEQUENCE; Schema: content; Owner: -
 --
 
-CREATE SEQUENCE users_id_seq
+CREATE SEQUENCE content.users_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -422,16 +418,14 @@ CREATE SEQUENCE users_id_seq
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: content; Owner: -
 --
 
-ALTER SEQUENCE users_id_seq OWNED BY users.id;
+ALTER SEQUENCE content.users_id_seq OWNED BY content.users.id;
 
-
-SET search_path = public, pg_catalog;
 
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE ar_internal_metadata (
+CREATE TABLE public.ar_internal_metadata (
     key character varying NOT NULL,
     value character varying,
     created_at timestamp without time zone NOT NULL,
@@ -443,7 +437,7 @@ CREATE TABLE ar_internal_metadata (
 -- Name: ind_properties; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE ind_properties (
+CREATE TABLE public.ind_properties (
     id integer NOT NULL,
     ind_id integer NOT NULL,
     display_name text NOT NULL,
@@ -463,56 +457,56 @@ CREATE TABLE ind_properties (
 -- Name: COLUMN ind_properties.display_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN ind_properties.display_name IS 'Name of attribute for display';
+COMMENT ON COLUMN public.ind_properties.display_name IS 'Name of attribute for display';
 
 
 --
 -- Name: COLUMN ind_properties.unit_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN ind_properties.unit_type IS 'Type of unit, e.g. score. One of restricted set of values.';
+COMMENT ON COLUMN public.ind_properties.unit_type IS 'Type of unit, e.g. score. One of restricted set of values.';
 
 
 --
 -- Name: COLUMN ind_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN ind_properties.tooltip_text IS 'Tooltip text';
+COMMENT ON COLUMN public.ind_properties.tooltip_text IS 'Tooltip text';
 
 
 --
 -- Name: COLUMN ind_properties.is_visible_on_place_profile; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN ind_properties.is_visible_on_place_profile IS 'Whether to display this attribute on place profile';
+COMMENT ON COLUMN public.ind_properties.is_visible_on_place_profile IS 'Whether to display this attribute on place profile';
 
 
 --
 -- Name: COLUMN ind_properties.is_visible_on_actor_profile; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN ind_properties.is_visible_on_actor_profile IS 'Whether to display this attribute on actor profile';
+COMMENT ON COLUMN public.ind_properties.is_visible_on_actor_profile IS 'Whether to display this attribute on actor profile';
 
 
 --
 -- Name: COLUMN ind_properties.is_temporal_on_place_profile; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN ind_properties.is_temporal_on_place_profile IS 'Whether attribute has temporal data on place profile';
+COMMENT ON COLUMN public.ind_properties.is_temporal_on_place_profile IS 'Whether attribute has temporal data on place profile';
 
 
 --
 -- Name: COLUMN ind_properties.is_temporal_on_actor_profile; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN ind_properties.is_temporal_on_actor_profile IS 'Whether attribute has temporal data on actor profile';
+COMMENT ON COLUMN public.ind_properties.is_temporal_on_actor_profile IS 'Whether attribute has temporal data on actor profile';
 
 
 --
 -- Name: inds; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE inds (
+CREATE TABLE public.inds (
     id integer NOT NULL,
     name text NOT NULL,
     unit text,
@@ -524,28 +518,28 @@ CREATE TABLE inds (
 -- Name: TABLE inds; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE inds IS 'Attributes classified as inds';
+COMMENT ON TABLE public.inds IS 'Attributes classified as inds';
 
 
 --
 -- Name: COLUMN inds.name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN inds.name IS 'Attribute short name, e.g. FOREST_500; those literals are referred to in code, therefore should not be changed without notice';
+COMMENT ON COLUMN public.inds.name IS 'Attribute short name, e.g. FOREST_500; those literals are referred to in code, therefore should not be changed without notice';
 
 
 --
 -- Name: COLUMN inds.unit; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN inds.unit IS 'Unit in which values for this attribute are given';
+COMMENT ON COLUMN public.inds.unit IS 'Unit in which values for this attribute are given';
 
 
 --
 -- Name: qual_properties; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE qual_properties (
+CREATE TABLE public.qual_properties (
     id integer NOT NULL,
     qual_id integer NOT NULL,
     display_name text NOT NULL,
@@ -563,35 +557,35 @@ CREATE TABLE qual_properties (
 -- Name: COLUMN qual_properties.display_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN qual_properties.display_name IS 'Name of attribute for display';
+COMMENT ON COLUMN public.qual_properties.display_name IS 'Name of attribute for display';
 
 
 --
 -- Name: COLUMN qual_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN qual_properties.tooltip_text IS 'Tooltip text';
+COMMENT ON COLUMN public.qual_properties.tooltip_text IS 'Tooltip text';
 
 
 --
 -- Name: COLUMN qual_properties.is_visible_on_place_profile; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN qual_properties.is_visible_on_place_profile IS 'Whether to display this attribute on place profile';
+COMMENT ON COLUMN public.qual_properties.is_visible_on_place_profile IS 'Whether to display this attribute on place profile';
 
 
 --
 -- Name: COLUMN qual_properties.is_visible_on_actor_profile; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN qual_properties.is_visible_on_actor_profile IS 'Whether to display this attribute on actor profile';
+COMMENT ON COLUMN public.qual_properties.is_visible_on_actor_profile IS 'Whether to display this attribute on actor profile';
 
 
 --
 -- Name: quals; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE quals (
+CREATE TABLE public.quals (
     id integer NOT NULL,
     name text NOT NULL,
     created_at timestamp without time zone NOT NULL
@@ -602,21 +596,21 @@ CREATE TABLE quals (
 -- Name: TABLE quals; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE quals IS 'Attributes classified as quals';
+COMMENT ON TABLE public.quals IS 'Attributes classified as quals';
 
 
 --
 -- Name: COLUMN quals.name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN quals.name IS 'Attribute short name, e.g. ZERO_DEFORESTATION; those literals are referred to in code, therefore should not be changed without notice';
+COMMENT ON COLUMN public.quals.name IS 'Attribute short name, e.g. ZERO_DEFORESTATION; those literals are referred to in code, therefore should not be changed without notice';
 
 
 --
 -- Name: quant_properties; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE quant_properties (
+CREATE TABLE public.quant_properties (
     id integer NOT NULL,
     quant_id integer NOT NULL,
     display_name text NOT NULL,
@@ -636,42 +630,42 @@ CREATE TABLE quant_properties (
 -- Name: COLUMN quant_properties.display_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN quant_properties.display_name IS 'Name of attribute for display';
+COMMENT ON COLUMN public.quant_properties.display_name IS 'Name of attribute for display';
 
 
 --
 -- Name: COLUMN quant_properties.unit_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN quant_properties.unit_type IS 'Type of unit, e.g. count. One of restricted set of values.';
+COMMENT ON COLUMN public.quant_properties.unit_type IS 'Type of unit, e.g. count. One of restricted set of values.';
 
 
 --
 -- Name: COLUMN quant_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN quant_properties.tooltip_text IS 'Tooltip text';
+COMMENT ON COLUMN public.quant_properties.tooltip_text IS 'Tooltip text';
 
 
 --
 -- Name: COLUMN quant_properties.is_visible_on_place_profile; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN quant_properties.is_visible_on_place_profile IS 'Whether to display this attribute on place profile';
+COMMENT ON COLUMN public.quant_properties.is_visible_on_place_profile IS 'Whether to display this attribute on place profile';
 
 
 --
 -- Name: COLUMN quant_properties.is_visible_on_actor_profile; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN quant_properties.is_visible_on_actor_profile IS 'Whether to display this attribute on actor profile';
+COMMENT ON COLUMN public.quant_properties.is_visible_on_actor_profile IS 'Whether to display this attribute on actor profile';
 
 
 --
 -- Name: quants; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE quants (
+CREATE TABLE public.quants (
     id integer NOT NULL,
     name text NOT NULL,
     unit text,
@@ -683,28 +677,28 @@ CREATE TABLE quants (
 -- Name: TABLE quants; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE quants IS 'Attributes classified as quants';
+COMMENT ON TABLE public.quants IS 'Attributes classified as quants';
 
 
 --
 -- Name: COLUMN quants.name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN quants.name IS 'Attribute short name, e.g. FOB; those literals are referred to in code, therefore should not be changed without notice';
+COMMENT ON COLUMN public.quants.name IS 'Attribute short name, e.g. FOB; those literals are referred to in code, therefore should not be changed without notice';
 
 
 --
 -- Name: COLUMN quants.unit; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN quants.unit IS 'Unit in which values for this attribute are given';
+COMMENT ON COLUMN public.quants.unit IS 'Unit in which values for this attribute are given';
 
 
 --
 -- Name: attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
-CREATE MATERIALIZED VIEW attributes_mv AS
+CREATE MATERIALIZED VIEW public.attributes_mv AS
  SELECT row_number() OVER () AS id,
     s.original_type,
     s.original_id,
@@ -730,10 +724,10 @@ CREATE MATERIALIZED VIEW attributes_mv AS
             qp.is_temporal_on_actor_profile,
             qp.is_temporal_on_place_profile,
             'SUM'::text AS aggregate_method
-           FROM (quants
-             LEFT JOIN quant_properties qp ON ((qp.quant_id = quants.id)))
+           FROM (public.quants
+             LEFT JOIN public.quant_properties qp ON ((qp.quant_id = quants.id)))
         UNION ALL
-         SELECT 'Ind'::text,
+         SELECT 'Ind'::text AS text,
             inds.id,
             inds.name,
             ip.display_name,
@@ -744,24 +738,24 @@ CREATE MATERIALIZED VIEW attributes_mv AS
             ip.is_visible_on_place_profile,
             ip.is_temporal_on_actor_profile,
             ip.is_temporal_on_place_profile,
-            'AVG'::text
-           FROM (inds
-             LEFT JOIN ind_properties ip ON ((ip.ind_id = inds.id)))
+            'AVG'::text AS text
+           FROM (public.inds
+             LEFT JOIN public.ind_properties ip ON ((ip.ind_id = inds.id)))
         UNION ALL
-         SELECT 'Qual'::text,
+         SELECT 'Qual'::text AS text,
             quals.id,
             quals.name,
             qp.display_name,
-            NULL::text,
-            NULL::text,
+            NULL::text AS text,
+            NULL::text AS text,
             qp.tooltip_text,
             qp.is_visible_on_actor_profile,
             qp.is_visible_on_place_profile,
             qp.is_temporal_on_actor_profile,
             qp.is_temporal_on_place_profile,
-            NULL::text
-           FROM (quals
-             LEFT JOIN qual_properties qp ON ((qp.qual_id = quals.id)))) s
+            NULL::text AS text
+           FROM (public.quals
+             LEFT JOIN public.qual_properties qp ON ((qp.qual_id = quals.id)))) s
   WITH NO DATA;
 
 
@@ -769,35 +763,35 @@ CREATE MATERIALIZED VIEW attributes_mv AS
 -- Name: MATERIALIZED VIEW attributes_mv; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON MATERIALIZED VIEW attributes_mv IS 'Materialized view which merges inds, quals and quants.';
+COMMENT ON MATERIALIZED VIEW public.attributes_mv IS 'Materialized view which merges inds, quals and quants.';
 
 
 --
 -- Name: COLUMN attributes_mv.id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN attributes_mv.id IS 'The unique id is a sequential number which is generated at REFRESH and therefore not fixed.';
+COMMENT ON COLUMN public.attributes_mv.id IS 'The unique id is a sequential number which is generated at REFRESH and therefore not fixed.';
 
 
 --
 -- Name: COLUMN attributes_mv.original_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN attributes_mv.original_type IS 'Type of the original entity (Ind / Qual / Quant)';
+COMMENT ON COLUMN public.attributes_mv.original_type IS 'Type of the original entity (Ind / Qual / Quant)';
 
 
 --
 -- Name: COLUMN attributes_mv.original_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN attributes_mv.original_id IS 'Id from the original table (inds / quals / quants)';
+COMMENT ON COLUMN public.attributes_mv.original_id IS 'Id from the original table (inds / quals / quants)';
 
 
 --
 -- Name: carto_layers; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE carto_layers (
+CREATE TABLE public.carto_layers (
     id integer NOT NULL,
     contextual_layer_id integer NOT NULL,
     identifier text NOT NULL,
@@ -812,35 +806,35 @@ CREATE TABLE carto_layers (
 -- Name: TABLE carto_layers; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE carto_layers IS 'Year-specific data layers defined in CartoDB used to display contextual layers.';
+COMMENT ON TABLE public.carto_layers IS 'Year-specific data layers defined in CartoDB used to display contextual layers.';
 
 
 --
 -- Name: COLUMN carto_layers.identifier; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN carto_layers.identifier IS 'Identifier of the CartoDB named map, e.g. brazil_biomes; unique in scope of contextual layer';
+COMMENT ON COLUMN public.carto_layers.identifier IS 'Identifier of the CartoDB named map, e.g. brazil_biomes; unique in scope of contextual layer';
 
 
 --
 -- Name: COLUMN carto_layers.years; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN carto_layers.years IS 'Array of years for which to show this carto layer in scope of contextual layer; empty (NULL) for all years';
+COMMENT ON COLUMN public.carto_layers.years IS 'Array of years for which to show this carto layer in scope of contextual layer; empty (NULL) for all years';
 
 
 --
 -- Name: COLUMN carto_layers.raster_url; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN carto_layers.raster_url IS 'Url of raster layer';
+COMMENT ON COLUMN public.carto_layers.raster_url IS 'Url of raster layer';
 
 
 --
 -- Name: carto_layers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE carto_layers_id_seq
+CREATE SEQUENCE public.carto_layers_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -852,14 +846,14 @@ CREATE SEQUENCE carto_layers_id_seq
 -- Name: carto_layers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE carto_layers_id_seq OWNED BY carto_layers.id;
+ALTER SEQUENCE public.carto_layers_id_seq OWNED BY public.carto_layers.id;
 
 
 --
 -- Name: chart_attributes; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE chart_attributes (
+CREATE TABLE public.chart_attributes (
     id integer NOT NULL,
     chart_id integer NOT NULL,
     "position" integer,
@@ -873,35 +867,35 @@ CREATE TABLE chart_attributes (
 -- Name: TABLE chart_attributes; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE chart_attributes IS 'Attributes (inds/quals/quants) to display in a chart.';
+COMMENT ON TABLE public.chart_attributes IS 'Attributes (inds/quals/quants) to display in a chart.';
 
 
 --
 -- Name: COLUMN chart_attributes.chart_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN chart_attributes.chart_id IS 'Refence to chart';
+COMMENT ON COLUMN public.chart_attributes.chart_id IS 'Refence to chart';
 
 
 --
 -- Name: COLUMN chart_attributes."position"; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN chart_attributes."position" IS 'Display order in scope of chart';
+COMMENT ON COLUMN public.chart_attributes."position" IS 'Display order in scope of chart';
 
 
 --
 -- Name: COLUMN chart_attributes.years; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN chart_attributes.years IS 'Array of years for which to show this attribute in scope of chart; empty (NULL) for all years';
+COMMENT ON COLUMN public.chart_attributes.years IS 'Array of years for which to show this attribute in scope of chart; empty (NULL) for all years';
 
 
 --
 -- Name: chart_attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE chart_attributes_id_seq
+CREATE SEQUENCE public.chart_attributes_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -913,14 +907,14 @@ CREATE SEQUENCE chart_attributes_id_seq
 -- Name: chart_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE chart_attributes_id_seq OWNED BY chart_attributes.id;
+ALTER SEQUENCE public.chart_attributes_id_seq OWNED BY public.chart_attributes.id;
 
 
 --
 -- Name: chart_inds; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE chart_inds (
+CREATE TABLE public.chart_inds (
     id integer NOT NULL,
     chart_attribute_id integer NOT NULL,
     ind_id integer NOT NULL,
@@ -933,14 +927,14 @@ CREATE TABLE chart_inds (
 -- Name: TABLE chart_inds; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE chart_inds IS 'Inds to display in a chart (see chart_attributes.)';
+COMMENT ON TABLE public.chart_inds IS 'Inds to display in a chart (see chart_attributes.)';
 
 
 --
 -- Name: chart_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE chart_inds_id_seq
+CREATE SEQUENCE public.chart_inds_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -952,14 +946,14 @@ CREATE SEQUENCE chart_inds_id_seq
 -- Name: chart_inds_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE chart_inds_id_seq OWNED BY chart_inds.id;
+ALTER SEQUENCE public.chart_inds_id_seq OWNED BY public.chart_inds.id;
 
 
 --
 -- Name: chart_quals; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE chart_quals (
+CREATE TABLE public.chart_quals (
     id integer NOT NULL,
     chart_attribute_id integer NOT NULL,
     qual_id integer NOT NULL,
@@ -972,14 +966,14 @@ CREATE TABLE chart_quals (
 -- Name: TABLE chart_quals; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE chart_quals IS 'Quals to display in a chart (see chart_attributes.)';
+COMMENT ON TABLE public.chart_quals IS 'Quals to display in a chart (see chart_attributes.)';
 
 
 --
 -- Name: chart_quals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE chart_quals_id_seq
+CREATE SEQUENCE public.chart_quals_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -991,14 +985,14 @@ CREATE SEQUENCE chart_quals_id_seq
 -- Name: chart_quals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE chart_quals_id_seq OWNED BY chart_quals.id;
+ALTER SEQUENCE public.chart_quals_id_seq OWNED BY public.chart_quals.id;
 
 
 --
 -- Name: chart_quants; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE chart_quants (
+CREATE TABLE public.chart_quants (
     id integer NOT NULL,
     chart_attribute_id integer NOT NULL,
     quant_id integer NOT NULL,
@@ -1011,14 +1005,14 @@ CREATE TABLE chart_quants (
 -- Name: TABLE chart_quants; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE chart_quants IS 'Quants to display in a chart (see chart_attributes.)';
+COMMENT ON TABLE public.chart_quants IS 'Quants to display in a chart (see chart_attributes.)';
 
 
 --
 -- Name: chart_quants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE chart_quants_id_seq
+CREATE SEQUENCE public.chart_quants_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1030,14 +1024,14 @@ CREATE SEQUENCE chart_quants_id_seq
 -- Name: chart_quants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE chart_quants_id_seq OWNED BY chart_quants.id;
+ALTER SEQUENCE public.chart_quants_id_seq OWNED BY public.chart_quants.id;
 
 
 --
 -- Name: charts; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE charts (
+CREATE TABLE public.charts (
     id integer NOT NULL,
     profile_id integer NOT NULL,
     parent_id integer,
@@ -1053,42 +1047,42 @@ CREATE TABLE charts (
 -- Name: TABLE charts; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE charts IS 'Charts on profile pages.';
+COMMENT ON TABLE public.charts IS 'Charts on profile pages.';
 
 
 --
 -- Name: COLUMN charts.parent_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN charts.parent_id IS 'Self-reference to parent used to define complex charts, e.g. table with values in tabs';
+COMMENT ON COLUMN public.charts.parent_id IS 'Self-reference to parent used to define complex charts, e.g. table with values in tabs';
 
 
 --
 -- Name: COLUMN charts.identifier; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN charts.identifier IS 'Identifier used to map this chart to a part of code which contains calculation logic';
+COMMENT ON COLUMN public.charts.identifier IS 'Identifier used to map this chart to a part of code which contains calculation logic';
 
 
 --
 -- Name: COLUMN charts.title; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN charts.title IS 'Title of chart for display';
+COMMENT ON COLUMN public.charts.title IS 'Title of chart for display';
 
 
 --
 -- Name: COLUMN charts."position"; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN charts."position" IS 'Display order in scope of profile';
+COMMENT ON COLUMN public.charts."position" IS 'Display order in scope of profile';
 
 
 --
 -- Name: charts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE charts_id_seq
+CREATE SEQUENCE public.charts_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1100,14 +1094,14 @@ CREATE SEQUENCE charts_id_seq
 -- Name: charts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE charts_id_seq OWNED BY charts.id;
+ALTER SEQUENCE public.charts_id_seq OWNED BY public.charts.id;
 
 
 --
 -- Name: commodities; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE commodities (
+CREATE TABLE public.commodities (
     id integer NOT NULL,
     name text NOT NULL,
     created_at timestamp without time zone NOT NULL
@@ -1118,21 +1112,21 @@ CREATE TABLE commodities (
 -- Name: TABLE commodities; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE commodities IS 'Commodities in supply chains, such as soy or beef';
+COMMENT ON TABLE public.commodities IS 'Commodities in supply chains, such as soy or beef';
 
 
 --
 -- Name: COLUMN commodities.name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN commodities.name IS 'Commodity name; unique across commodities';
+COMMENT ON COLUMN public.commodities.name IS 'Commodity name; unique across commodities';
 
 
 --
 -- Name: commodities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE commodities_id_seq
+CREATE SEQUENCE public.commodities_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1144,14 +1138,14 @@ CREATE SEQUENCE commodities_id_seq
 -- Name: commodities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE commodities_id_seq OWNED BY commodities.id;
+ALTER SEQUENCE public.commodities_id_seq OWNED BY public.commodities.id;
 
 
 --
 -- Name: context_node_type_properties; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE context_node_type_properties (
+CREATE TABLE public.context_node_type_properties (
     id integer NOT NULL,
     context_node_type_id integer NOT NULL,
     column_group integer NOT NULL,
@@ -1167,35 +1161,35 @@ CREATE TABLE context_node_type_properties (
 -- Name: COLUMN context_node_type_properties.column_group; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN context_node_type_properties.column_group IS 'Zero-based number of sankey column in which to display nodes of this type';
+COMMENT ON COLUMN public.context_node_type_properties.column_group IS 'Zero-based number of sankey column in which to display nodes of this type';
 
 
 --
 -- Name: COLUMN context_node_type_properties.is_default; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN context_node_type_properties.is_default IS 'When set, show this node type as default (only use for one)';
+COMMENT ON COLUMN public.context_node_type_properties.is_default IS 'When set, show this node type as default (only use for one)';
 
 
 --
 -- Name: COLUMN context_node_type_properties.is_geo_column; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN context_node_type_properties.is_geo_column IS 'When set, show nodes on map';
+COMMENT ON COLUMN public.context_node_type_properties.is_geo_column IS 'When set, show nodes on map';
 
 
 --
 -- Name: COLUMN context_node_type_properties.is_choropleth_disabled; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN context_node_type_properties.is_choropleth_disabled IS 'When set, do not display the map choropleth';
+COMMENT ON COLUMN public.context_node_type_properties.is_choropleth_disabled IS 'When set, do not display the map choropleth';
 
 
 --
 -- Name: context_node_type_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE context_node_type_properties_id_seq
+CREATE SEQUENCE public.context_node_type_properties_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1207,14 +1201,14 @@ CREATE SEQUENCE context_node_type_properties_id_seq
 -- Name: context_node_type_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE context_node_type_properties_id_seq OWNED BY context_node_type_properties.id;
+ALTER SEQUENCE public.context_node_type_properties_id_seq OWNED BY public.context_node_type_properties.id;
 
 
 --
 -- Name: context_node_types; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE context_node_types (
+CREATE TABLE public.context_node_types (
     id integer NOT NULL,
     context_id integer NOT NULL,
     node_type_id integer NOT NULL,
@@ -1227,21 +1221,21 @@ CREATE TABLE context_node_types (
 -- Name: TABLE context_node_types; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE context_node_types IS 'Node types represented in supply chains per context. The value of column_position is interpreted as position in flows.path.';
+COMMENT ON TABLE public.context_node_types IS 'Node types represented in supply chains per context. The value of column_position is interpreted as position in flows.path.';
 
 
 --
 -- Name: COLUMN context_node_types.column_position; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN context_node_types.column_position IS 'Index of node of this type in flows.path';
+COMMENT ON COLUMN public.context_node_types.column_position IS 'Index of node of this type in flows.path';
 
 
 --
 -- Name: context_node_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE context_node_types_id_seq
+CREATE SEQUENCE public.context_node_types_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1253,14 +1247,14 @@ CREATE SEQUENCE context_node_types_id_seq
 -- Name: context_node_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE context_node_types_id_seq OWNED BY context_node_types.id;
+ALTER SEQUENCE public.context_node_types_id_seq OWNED BY public.context_node_types.id;
 
 
 --
 -- Name: context_properties; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE context_properties (
+CREATE TABLE public.context_properties (
     id integer NOT NULL,
     context_id integer NOT NULL,
     default_basemap text,
@@ -1276,42 +1270,42 @@ CREATE TABLE context_properties (
 -- Name: TABLE context_properties; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE context_properties IS 'Visualisation properties of a context (one row per context)';
+COMMENT ON TABLE public.context_properties IS 'Visualisation properties of a context (one row per context)';
 
 
 --
 -- Name: COLUMN context_properties.default_basemap; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN context_properties.default_basemap IS 'Default basemap for this context, e.g. satellite';
+COMMENT ON COLUMN public.context_properties.default_basemap IS 'Default basemap for this context, e.g. satellite';
 
 
 --
 -- Name: COLUMN context_properties.is_disabled; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN context_properties.is_disabled IS 'When set, do not show this context';
+COMMENT ON COLUMN public.context_properties.is_disabled IS 'When set, do not show this context';
 
 
 --
 -- Name: COLUMN context_properties.is_default; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN context_properties.is_default IS 'When set, show this context as default (only use for one)';
+COMMENT ON COLUMN public.context_properties.is_default IS 'When set, show this context as default (only use for one)';
 
 
 --
 -- Name: COLUMN context_properties.is_subnational; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN context_properties.is_subnational IS 'When set, show indication that sub-national level data is available';
+COMMENT ON COLUMN public.context_properties.is_subnational IS 'When set, show indication that sub-national level data is available';
 
 
 --
 -- Name: context_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE context_properties_id_seq
+CREATE SEQUENCE public.context_properties_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1323,14 +1317,14 @@ CREATE SEQUENCE context_properties_id_seq
 -- Name: context_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE context_properties_id_seq OWNED BY context_properties.id;
+ALTER SEQUENCE public.context_properties_id_seq OWNED BY public.context_properties.id;
 
 
 --
 -- Name: contexts; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE contexts (
+CREATE TABLE public.contexts (
     id integer NOT NULL,
     country_id integer NOT NULL,
     commodity_id integer NOT NULL,
@@ -1344,28 +1338,28 @@ CREATE TABLE contexts (
 -- Name: TABLE contexts; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE contexts IS 'Country-commodity combinations.';
+COMMENT ON TABLE public.contexts IS 'Country-commodity combinations.';
 
 
 --
 -- Name: COLUMN contexts.years; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN contexts.years IS 'Years for which country-commodity data is present; empty (NULL) for all years';
+COMMENT ON COLUMN public.contexts.years IS 'Years for which country-commodity data is present; empty (NULL) for all years';
 
 
 --
 -- Name: COLUMN contexts.default_year; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN contexts.default_year IS 'Default year for this context';
+COMMENT ON COLUMN public.contexts.default_year IS 'Default year for this context';
 
 
 --
 -- Name: contexts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE contexts_id_seq
+CREATE SEQUENCE public.contexts_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1377,14 +1371,14 @@ CREATE SEQUENCE contexts_id_seq
 -- Name: contexts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE contexts_id_seq OWNED BY contexts.id;
+ALTER SEQUENCE public.contexts_id_seq OWNED BY public.contexts.id;
 
 
 --
 -- Name: contextual_layers; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE contextual_layers (
+CREATE TABLE public.contextual_layers (
     id integer NOT NULL,
     context_id integer NOT NULL,
     title text NOT NULL,
@@ -1402,56 +1396,56 @@ CREATE TABLE contextual_layers (
 -- Name: TABLE contextual_layers; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE contextual_layers IS 'Additional layers shown on map coming from CartoDB';
+COMMENT ON TABLE public.contextual_layers IS 'Additional layers shown on map coming from CartoDB';
 
 
 --
 -- Name: COLUMN contextual_layers.title; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN contextual_layers.title IS 'Title of layer for display';
+COMMENT ON COLUMN public.contextual_layers.title IS 'Title of layer for display';
 
 
 --
 -- Name: COLUMN contextual_layers.identifier; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN contextual_layers.identifier IS 'Identifier of layer, e.g. brazil_biomes';
+COMMENT ON COLUMN public.contextual_layers.identifier IS 'Identifier of layer, e.g. brazil_biomes';
 
 
 --
 -- Name: COLUMN contextual_layers."position"; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN contextual_layers."position" IS 'Display order in scope of context';
+COMMENT ON COLUMN public.contextual_layers."position" IS 'Display order in scope of context';
 
 
 --
 -- Name: COLUMN contextual_layers.tooltip_text; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN contextual_layers.tooltip_text IS 'Tooltip text';
+COMMENT ON COLUMN public.contextual_layers.tooltip_text IS 'Tooltip text';
 
 
 --
 -- Name: COLUMN contextual_layers.is_default; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN contextual_layers.is_default IS 'When set, show this layer by default';
+COMMENT ON COLUMN public.contextual_layers.is_default IS 'When set, show this layer by default';
 
 
 --
 -- Name: COLUMN contextual_layers.legend; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN contextual_layers.legend IS 'Legend as HTML snippet';
+COMMENT ON COLUMN public.contextual_layers.legend IS 'Legend as HTML snippet';
 
 
 --
 -- Name: contextual_layers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE contextual_layers_id_seq
+CREATE SEQUENCE public.contextual_layers_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1463,14 +1457,14 @@ CREATE SEQUENCE contextual_layers_id_seq
 -- Name: contextual_layers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE contextual_layers_id_seq OWNED BY contextual_layers.id;
+ALTER SEQUENCE public.contextual_layers_id_seq OWNED BY public.contextual_layers.id;
 
 
 --
 -- Name: countries; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE countries (
+CREATE TABLE public.countries (
     id integer NOT NULL,
     name text NOT NULL,
     iso2 text NOT NULL,
@@ -1482,28 +1476,28 @@ CREATE TABLE countries (
 -- Name: TABLE countries; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE countries IS 'Countries (source)';
+COMMENT ON TABLE public.countries IS 'Countries (source)';
 
 
 --
 -- Name: COLUMN countries.name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN countries.name IS 'Country name';
+COMMENT ON COLUMN public.countries.name IS 'Country name';
 
 
 --
 -- Name: COLUMN countries.iso2; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN countries.iso2 IS '2-letter ISO code';
+COMMENT ON COLUMN public.countries.iso2 IS '2-letter ISO code';
 
 
 --
 -- Name: countries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE countries_id_seq
+CREATE SEQUENCE public.countries_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1515,14 +1509,14 @@ CREATE SEQUENCE countries_id_seq
 -- Name: countries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE countries_id_seq OWNED BY countries.id;
+ALTER SEQUENCE public.countries_id_seq OWNED BY public.countries.id;
 
 
 --
 -- Name: country_properties; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE country_properties (
+CREATE TABLE public.country_properties (
     id integer NOT NULL,
     country_id integer NOT NULL,
     latitude double precision NOT NULL,
@@ -1537,28 +1531,28 @@ CREATE TABLE country_properties (
 -- Name: COLUMN country_properties.latitude; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN country_properties.latitude IS 'Country latitide';
+COMMENT ON COLUMN public.country_properties.latitude IS 'Country latitide';
 
 
 --
 -- Name: COLUMN country_properties.longitude; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN country_properties.longitude IS 'Country longitude';
+COMMENT ON COLUMN public.country_properties.longitude IS 'Country longitude';
 
 
 --
 -- Name: COLUMN country_properties.zoom; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN country_properties.zoom IS 'Zoom level (0-18)';
+COMMENT ON COLUMN public.country_properties.zoom IS 'Zoom level (0-18)';
 
 
 --
 -- Name: country_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE country_properties_id_seq
+CREATE SEQUENCE public.country_properties_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1570,14 +1564,14 @@ CREATE SEQUENCE country_properties_id_seq
 -- Name: country_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE country_properties_id_seq OWNED BY country_properties.id;
+ALTER SEQUENCE public.country_properties_id_seq OWNED BY public.country_properties.id;
 
 
 --
 -- Name: database_updates; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE database_updates (
+CREATE TABLE public.database_updates (
     id bigint NOT NULL,
     stats json,
     created_at timestamp without time zone NOT NULL,
@@ -1593,42 +1587,42 @@ CREATE TABLE database_updates (
 -- Name: TABLE database_updates; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE database_updates IS 'Keeping track of database update operations, also used to ensure only one update processed at a time';
+COMMENT ON TABLE public.database_updates IS 'Keeping track of database update operations, also used to ensure only one update processed at a time';
 
 
 --
 -- Name: COLUMN database_updates.stats; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN database_updates.stats IS 'JSON structure with information on row counts for all tables before / after update';
+COMMENT ON COLUMN public.database_updates.stats IS 'JSON structure with information on row counts for all tables before / after update';
 
 
 --
 -- Name: COLUMN database_updates.jid; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN database_updates.jid IS 'Job ID, filled in when update started using a background job processor';
+COMMENT ON COLUMN public.database_updates.jid IS 'Job ID, filled in when update started using a background job processor';
 
 
 --
 -- Name: COLUMN database_updates.status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN database_updates.status IS 'STARTED (only one at a time), FINISHED or FAILED';
+COMMENT ON COLUMN public.database_updates.status IS 'STARTED (only one at a time), FINISHED or FAILED';
 
 
 --
 -- Name: COLUMN database_updates.error; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN database_updates.error IS 'Exception message for failed updates';
+COMMENT ON COLUMN public.database_updates.error IS 'Exception message for failed updates';
 
 
 --
 -- Name: database_updates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE database_updates_id_seq
+CREATE SEQUENCE public.database_updates_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1640,14 +1634,14 @@ CREATE SEQUENCE database_updates_id_seq
 -- Name: database_updates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE database_updates_id_seq OWNED BY database_updates.id;
+ALTER SEQUENCE public.database_updates_id_seq OWNED BY public.database_updates.id;
 
 
 --
 -- Name: database_validation_reports; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE database_validation_reports (
+CREATE TABLE public.database_validation_reports (
     id bigint NOT NULL,
     report json NOT NULL,
     error_count integer NOT NULL,
@@ -1661,35 +1655,35 @@ CREATE TABLE database_validation_reports (
 -- Name: TABLE database_validation_reports; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE database_validation_reports IS 'Keeping track of database validation operations';
+COMMENT ON TABLE public.database_validation_reports IS 'Keeping track of database validation operations';
 
 
 --
 -- Name: COLUMN database_validation_reports.report; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN database_validation_reports.report IS 'JSON structure with validation report';
+COMMENT ON COLUMN public.database_validation_reports.report IS 'JSON structure with validation report';
 
 
 --
 -- Name: COLUMN database_validation_reports.error_count; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN database_validation_reports.error_count IS 'Count of errors detected';
+COMMENT ON COLUMN public.database_validation_reports.error_count IS 'Count of errors detected';
 
 
 --
 -- Name: COLUMN database_validation_reports.warning_count; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN database_validation_reports.warning_count IS 'Count of warnings detected';
+COMMENT ON COLUMN public.database_validation_reports.warning_count IS 'Count of warnings detected';
 
 
 --
 -- Name: database_validation_reports_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE database_validation_reports_id_seq
+CREATE SEQUENCE public.database_validation_reports_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1701,14 +1695,14 @@ CREATE SEQUENCE database_validation_reports_id_seq
 -- Name: database_validation_reports_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE database_validation_reports_id_seq OWNED BY database_validation_reports.id;
+ALTER SEQUENCE public.database_validation_reports_id_seq OWNED BY public.database_validation_reports.id;
 
 
 --
 -- Name: download_attributes; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE download_attributes (
+CREATE TABLE public.download_attributes (
     id integer NOT NULL,
     context_id integer NOT NULL,
     "position" integer NOT NULL,
@@ -1723,35 +1717,35 @@ CREATE TABLE download_attributes (
 -- Name: TABLE download_attributes; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE download_attributes IS 'Attributes (quals/quants) available for download.';
+COMMENT ON TABLE public.download_attributes IS 'Attributes (quals/quants) available for download.';
 
 
 --
 -- Name: COLUMN download_attributes."position"; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN download_attributes."position" IS 'Display order in scope of context';
+COMMENT ON COLUMN public.download_attributes."position" IS 'Display order in scope of context';
 
 
 --
 -- Name: COLUMN download_attributes.display_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN download_attributes.display_name IS 'Name of attribute for display in downloads';
+COMMENT ON COLUMN public.download_attributes.display_name IS 'Name of attribute for display in downloads';
 
 
 --
 -- Name: COLUMN download_attributes.years; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN download_attributes.years IS 'Years for which attribute is present; empty (NULL) for all years';
+COMMENT ON COLUMN public.download_attributes.years IS 'Years for which attribute is present; empty (NULL) for all years';
 
 
 --
 -- Name: download_attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE download_attributes_id_seq
+CREATE SEQUENCE public.download_attributes_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1763,14 +1757,14 @@ CREATE SEQUENCE download_attributes_id_seq
 -- Name: download_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE download_attributes_id_seq OWNED BY download_attributes.id;
+ALTER SEQUENCE public.download_attributes_id_seq OWNED BY public.download_attributes.id;
 
 
 --
 -- Name: download_quals; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE download_quals (
+CREATE TABLE public.download_quals (
     id integer NOT NULL,
     download_attribute_id integer NOT NULL,
     qual_id integer NOT NULL,
@@ -1784,21 +1778,21 @@ CREATE TABLE download_quals (
 -- Name: TABLE download_quals; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE download_quals IS 'Quals to include in downloads (see download_attributes.)';
+COMMENT ON TABLE public.download_quals IS 'Quals to include in downloads (see download_attributes.)';
 
 
 --
 -- Name: COLUMN download_quals.is_filter_enabled; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN download_quals.is_filter_enabled IS 'When set, enable selection of discreet values (advanced filter)';
+COMMENT ON COLUMN public.download_quals.is_filter_enabled IS 'When set, enable selection of discreet values (advanced filter)';
 
 
 --
 -- Name: download_quants; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE download_quants (
+CREATE TABLE public.download_quants (
     id integer NOT NULL,
     download_attribute_id integer NOT NULL,
     quant_id integer NOT NULL,
@@ -1813,28 +1807,28 @@ CREATE TABLE download_quants (
 -- Name: TABLE download_quants; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE download_quants IS 'Quants to include in downloads (see download_attributes.)';
+COMMENT ON TABLE public.download_quants IS 'Quants to include in downloads (see download_attributes.)';
 
 
 --
 -- Name: COLUMN download_quants.is_filter_enabled; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN download_quants.is_filter_enabled IS 'When set, enable selection of value ranges (advanced filter)';
+COMMENT ON COLUMN public.download_quants.is_filter_enabled IS 'When set, enable selection of value ranges (advanced filter)';
 
 
 --
 -- Name: COLUMN download_quants.filter_bands; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN download_quants.filter_bands IS 'Array of value ranges to allow filtering by';
+COMMENT ON COLUMN public.download_quants.filter_bands IS 'Array of value ranges to allow filtering by';
 
 
 --
 -- Name: download_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
-CREATE MATERIALIZED VIEW download_attributes_mv AS
+CREATE MATERIALIZED VIEW public.download_attributes_mv AS
  SELECT da.id,
     da.context_id,
     da."position",
@@ -1843,9 +1837,9 @@ CREATE MATERIALIZED VIEW download_attributes_mv AS
     da.created_at,
     da.updated_at,
     a.id AS attribute_id
-   FROM ((download_quants daq
-     JOIN download_attributes da ON ((da.id = daq.download_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = daq.quant_id) AND (a.original_type = 'Quant'::text))))
+   FROM ((public.download_quants daq
+     JOIN public.download_attributes da ON ((da.id = daq.download_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = daq.quant_id) AND (a.original_type = 'Quant'::text))))
 UNION ALL
  SELECT da.id,
     da.context_id,
@@ -1855,9 +1849,9 @@ UNION ALL
     da.created_at,
     da.updated_at,
     a.id AS attribute_id
-   FROM ((download_quals daq
-     JOIN download_attributes da ON ((da.id = daq.download_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = daq.qual_id) AND (a.original_type = 'Qual'::text))))
+   FROM ((public.download_quals daq
+     JOIN public.download_attributes da ON ((da.id = daq.download_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = daq.qual_id) AND (a.original_type = 'Qual'::text))))
   WITH NO DATA;
 
 
@@ -1865,21 +1859,21 @@ UNION ALL
 -- Name: MATERIALIZED VIEW download_attributes_mv; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON MATERIALIZED VIEW download_attributes_mv IS 'Materialized view which merges download_quals and download_quants with download_attributes.';
+COMMENT ON MATERIALIZED VIEW public.download_attributes_mv IS 'Materialized view which merges download_quals and download_quants with download_attributes.';
 
 
 --
 -- Name: COLUMN download_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN download_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+COMMENT ON COLUMN public.download_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
 
 
 --
 -- Name: flows; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE flows (
+CREATE TABLE public.flows (
     id integer NOT NULL,
     context_id integer NOT NULL,
     year smallint NOT NULL,
@@ -1892,28 +1886,28 @@ CREATE TABLE flows (
 -- Name: TABLE flows; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE flows IS 'Flows of commodities through nodes';
+COMMENT ON TABLE public.flows IS 'Flows of commodities through nodes';
 
 
 --
 -- Name: COLUMN flows.year; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN flows.year IS 'Year';
+COMMENT ON COLUMN public.flows.year IS 'Year';
 
 
 --
 -- Name: COLUMN flows.path; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN flows.path IS 'Array of node ids which constitute the supply chain, where position of node in this array is linked to the value of column_position in context_node_types';
+COMMENT ON COLUMN public.flows.path IS 'Array of node ids which constitute the supply chain, where position of node in this array is linked to the value of column_position in context_node_types';
 
 
 --
 -- Name: node_types; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE node_types (
+CREATE TABLE public.node_types (
     id integer NOT NULL,
     name text NOT NULL,
     created_at timestamp without time zone NOT NULL
@@ -1924,21 +1918,21 @@ CREATE TABLE node_types (
 -- Name: TABLE node_types; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE node_types IS 'List of types of nodes in the system, e.g. MUNICIPALITY or EXPORTER. Important: those literals are referred to in code, therefore should not be changed without notice.';
+COMMENT ON TABLE public.node_types IS 'List of types of nodes in the system, e.g. MUNICIPALITY or EXPORTER. Important: those literals are referred to in code, therefore should not be changed without notice.';
 
 
 --
 -- Name: COLUMN node_types.name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN node_types.name IS 'Name of node type, spelt in capital letters; unique across node types';
+COMMENT ON COLUMN public.node_types.name IS 'Name of node type, spelt in capital letters; unique across node types';
 
 
 --
 -- Name: nodes; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE nodes (
+CREATE TABLE public.nodes (
     id integer NOT NULL,
     node_type_id integer NOT NULL,
     name text NOT NULL,
@@ -1953,42 +1947,42 @@ CREATE TABLE nodes (
 -- Name: TABLE nodes; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE nodes IS 'Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains';
+COMMENT ON TABLE public.nodes IS 'Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains';
 
 
 --
 -- Name: COLUMN nodes.name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN nodes.name IS 'Name of node';
+COMMENT ON COLUMN public.nodes.name IS 'Name of node';
 
 
 --
 -- Name: COLUMN nodes.geo_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN nodes.geo_id IS '2-letter iso code in case of country nodes; other geo identifiers possible for other node types';
+COMMENT ON COLUMN public.nodes.geo_id IS '2-letter iso code in case of country nodes; other geo identifiers possible for other node types';
 
 
 --
 -- Name: COLUMN nodes.is_unknown; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN nodes.is_unknown IS 'When set, node was not possible to identify';
+COMMENT ON COLUMN public.nodes.is_unknown IS 'When set, node was not possible to identify';
 
 
 --
 -- Name: COLUMN nodes.main_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN nodes.main_id IS 'Node identifier from Main DB';
+COMMENT ON COLUMN public.nodes.main_id IS 'Node identifier from Main DB';
 
 
 --
 -- Name: flow_paths_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
-CREATE MATERIALIZED VIEW flow_paths_mv AS
+CREATE MATERIALIZED VIEW public.flow_paths_mv AS
  SELECT f.node_id,
     n.geo_id,
         CASE
@@ -2005,15 +1999,15 @@ CREATE MATERIALIZED VIEW flow_paths_mv AS
             a.node_id,
             a."position",
             flows.context_id
-           FROM flows,
+           FROM public.flows,
             LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) f
      JOIN ( SELECT cnt.context_id,
             cnt.column_position,
             cnt.node_type_id,
             node_types.name AS node_type_name
-           FROM (context_node_types cnt
-             JOIN node_types ON ((node_types.id = cnt.node_type_id)))) cn ON (((f."position" = (cn.column_position + 1)) AND (f.context_id = cn.context_id))))
-     JOIN nodes n ON ((n.id = f.node_id)))
+           FROM (public.context_node_types cnt
+             JOIN public.node_types ON ((node_types.id = cnt.node_type_id)))) cn ON (((f."position" = (cn.column_position + 1)) AND (f.context_id = cn.context_id))))
+     JOIN public.nodes n ON ((n.id = f.node_id)))
   WITH NO DATA;
 
 
@@ -2021,14 +2015,14 @@ CREATE MATERIALIZED VIEW flow_paths_mv AS
 -- Name: MATERIALIZED VIEW flow_paths_mv; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON MATERIALIZED VIEW flow_paths_mv IS 'Normalised flows';
+COMMENT ON MATERIALIZED VIEW public.flow_paths_mv IS 'Normalised flows';
 
 
 --
 -- Name: flow_quals; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE flow_quals (
+CREATE TABLE public.flow_quals (
     id integer NOT NULL,
     flow_id integer NOT NULL,
     qual_id integer NOT NULL,
@@ -2041,21 +2035,21 @@ CREATE TABLE flow_quals (
 -- Name: TABLE flow_quals; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE flow_quals IS 'Values of quals for flow';
+COMMENT ON TABLE public.flow_quals IS 'Values of quals for flow';
 
 
 --
 -- Name: COLUMN flow_quals.value; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN flow_quals.value IS 'Textual value';
+COMMENT ON COLUMN public.flow_quals.value IS 'Textual value';
 
 
 --
 -- Name: flow_quants; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE flow_quants (
+CREATE TABLE public.flow_quants (
     id integer NOT NULL,
     flow_id integer NOT NULL,
     quant_id integer NOT NULL,
@@ -2068,21 +2062,21 @@ CREATE TABLE flow_quants (
 -- Name: TABLE flow_quants; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE flow_quants IS 'Values of quants for flow';
+COMMENT ON TABLE public.flow_quants IS 'Values of quants for flow';
 
 
 --
 -- Name: COLUMN flow_quants.value; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN flow_quants.value IS 'Numeric value';
+COMMENT ON COLUMN public.flow_quants.value IS 'Numeric value';
 
 
 --
 -- Name: download_flows_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
-CREATE MATERIALIZED VIEW download_flows_mv AS
+CREATE MATERIALIZED VIEW public.download_flows_mv AS
  SELECT ARRAY[f_0.context_id, (f_0.year)::integer, f_0.node_id, f_1.node_id, f_2.node_id, f_3.node_id, f_4.node_id, f_5.node_id, f_6.node_id, f_7.node_id, f_0.flow_id] AS row_name,
     f_0.flow_id AS id,
     f_0.context_id,
@@ -2134,14 +2128,14 @@ CREATE MATERIALIZED VIEW download_flows_mv AS
             WHEN ((fi.attribute_type = 'Qual'::text) AND (NOT bool_and(fi.boolean_value))) THEN 'no'::text
             ELSE (sum(fi.numeric_value))::text
         END AS total
-   FROM ((((((((flow_paths_mv f_0
-     JOIN flow_paths_mv f_1 ON (((f_1.flow_id = f_0.flow_id) AND (f_1.column_position = 1))))
-     JOIN flow_paths_mv f_2 ON (((f_2.flow_id = f_0.flow_id) AND (f_2.column_position = 2))))
-     JOIN flow_paths_mv f_3 ON (((f_3.flow_id = f_0.flow_id) AND (f_3.column_position = 3))))
-     LEFT JOIN flow_paths_mv f_4 ON (((f_4.flow_id = f_0.flow_id) AND (f_4.column_position = 4))))
-     LEFT JOIN flow_paths_mv f_5 ON (((f_5.flow_id = f_0.flow_id) AND (f_5.column_position = 5))))
-     LEFT JOIN flow_paths_mv f_6 ON (((f_6.flow_id = f_0.flow_id) AND (f_6.column_position = 6))))
-     LEFT JOIN flow_paths_mv f_7 ON (((f_7.flow_id = f_0.flow_id) AND (f_7.column_position = 7))))
+   FROM ((((((((public.flow_paths_mv f_0
+     JOIN public.flow_paths_mv f_1 ON (((f_1.flow_id = f_0.flow_id) AND (f_1.column_position = 1))))
+     JOIN public.flow_paths_mv f_2 ON (((f_2.flow_id = f_0.flow_id) AND (f_2.column_position = 2))))
+     JOIN public.flow_paths_mv f_3 ON (((f_3.flow_id = f_0.flow_id) AND (f_3.column_position = 3))))
+     LEFT JOIN public.flow_paths_mv f_4 ON (((f_4.flow_id = f_0.flow_id) AND (f_4.column_position = 4))))
+     LEFT JOIN public.flow_paths_mv f_5 ON (((f_5.flow_id = f_0.flow_id) AND (f_5.column_position = 5))))
+     LEFT JOIN public.flow_paths_mv f_6 ON (((f_6.flow_id = f_0.flow_id) AND (f_6.column_position = 6))))
+     LEFT JOIN public.flow_paths_mv f_7 ON (((f_7.flow_id = f_0.flow_id) AND (f_7.column_position = 7))))
      JOIN ( SELECT f.flow_id,
             f.qual_id AS attribute_id,
             'Qual'::text AS attribute_type,
@@ -2156,17 +2150,17 @@ CREATE MATERIALIZED VIEW download_flows_mv AS
             q.name AS name_with_unit,
             da.display_name,
             da.context_id
-           FROM (((flow_quals f
-             JOIN quals q ON ((f.qual_id = q.id)))
-             JOIN download_quals dq ON ((dq.qual_id = q.id)))
-             JOIN download_attributes da ON ((dq.download_attribute_id = da.id)))
+           FROM (((public.flow_quals f
+             JOIN public.quals q ON ((f.qual_id = q.id)))
+             JOIN public.download_quals dq ON ((dq.qual_id = q.id)))
+             JOIN public.download_attributes da ON ((dq.download_attribute_id = da.id)))
           GROUP BY f.flow_id, f.qual_id, f.value, q.name, da.display_name, da.context_id
         UNION ALL
          SELECT f.flow_id,
             f.quant_id,
-            'Quant'::text,
+            'Quant'::text AS text,
             f.value,
-            NULL::boolean,
+            NULL::boolean AS bool,
             q.name,
             q.unit,
                 CASE
@@ -2175,10 +2169,10 @@ CREATE MATERIALIZED VIEW download_flows_mv AS
                 END AS "case",
             da.display_name,
             da.context_id
-           FROM (((flow_quants f
-             JOIN quants q ON ((f.quant_id = q.id)))
-             JOIN download_quants dq ON ((dq.quant_id = q.id)))
-             JOIN download_attributes da ON ((dq.download_attribute_id = da.id)))
+           FROM (((public.flow_quants f
+             JOIN public.quants q ON ((f.quant_id = q.id)))
+             JOIN public.download_quants dq ON ((dq.quant_id = q.id)))
+             JOIN public.download_attributes da ON ((dq.download_attribute_id = da.id)))
           GROUP BY f.flow_id, f.quant_id, f.value, q.name, q.unit, da.display_name, da.context_id) fi ON (((f_0.flow_id = fi.flow_id) AND (f_0.context_id = fi.context_id))))
   WHERE (f_0.column_position = 0)
   GROUP BY f_0.flow_id, f_0.context_id, f_0.year, f_0.name, f_0.node_id, f_1.name, f_1.node_id, f_1.node_type_name, f_2.name, f_2.node_id, f_2.node_type_name, f_3.name, f_3.node_id, f_3.node_type_name, f_4.name, f_4.node_id, f_4.node_type_name, f_5.name, f_5.node_id, f_5.node_type_name, f_6.name, f_6.node_id, f_6.node_type_name, f_7.name, f_7.node_id, f_7.node_type_name, fi.attribute_type, fi.attribute_id, fi.name, fi.name_with_unit, fi.display_name
@@ -2189,14 +2183,14 @@ CREATE MATERIALIZED VIEW download_flows_mv AS
 -- Name: MATERIALIZED VIEW download_flows_mv; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON MATERIALIZED VIEW download_flows_mv IS 'Combines data from flow_paths_mv and download_attributes_values_mv in a structure that can be directly used to generate data downloads.';
+COMMENT ON MATERIALIZED VIEW public.download_flows_mv IS 'Combines data from flow_paths_mv and download_attributes_values_mv in a structure that can be directly used to generate data downloads.';
 
 
 --
 -- Name: download_quals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE download_quals_id_seq
+CREATE SEQUENCE public.download_quals_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2208,14 +2202,14 @@ CREATE SEQUENCE download_quals_id_seq
 -- Name: download_quals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE download_quals_id_seq OWNED BY download_quals.id;
+ALTER SEQUENCE public.download_quals_id_seq OWNED BY public.download_quals.id;
 
 
 --
 -- Name: download_quants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE download_quants_id_seq
+CREATE SEQUENCE public.download_quants_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2227,14 +2221,14 @@ CREATE SEQUENCE download_quants_id_seq
 -- Name: download_quants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE download_quants_id_seq OWNED BY download_quants.id;
+ALTER SEQUENCE public.download_quants_id_seq OWNED BY public.download_quants.id;
 
 
 --
 -- Name: download_versions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE download_versions (
+CREATE TABLE public.download_versions (
     id integer NOT NULL,
     context_id integer NOT NULL,
     symbol character varying NOT NULL,
@@ -2247,28 +2241,28 @@ CREATE TABLE download_versions (
 -- Name: TABLE download_versions; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE download_versions IS 'Versions of data downloads';
+COMMENT ON TABLE public.download_versions IS 'Versions of data downloads';
 
 
 --
 -- Name: COLUMN download_versions.symbol; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN download_versions.symbol IS 'Version symbol (included in downloaded file name)';
+COMMENT ON COLUMN public.download_versions.symbol IS 'Version symbol (included in downloaded file name)';
 
 
 --
 -- Name: COLUMN download_versions.is_current; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN download_versions.is_current IS 'When set, use this version symbol for new downloads (only use for one)';
+COMMENT ON COLUMN public.download_versions.is_current IS 'When set, use this version symbol for new downloads (only use for one)';
 
 
 --
 -- Name: download_versions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE download_versions_id_seq
+CREATE SEQUENCE public.download_versions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2280,14 +2274,14 @@ CREATE SEQUENCE download_versions_id_seq
 -- Name: download_versions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE download_versions_id_seq OWNED BY download_versions.id;
+ALTER SEQUENCE public.download_versions_id_seq OWNED BY public.download_versions.id;
 
 
 --
 -- Name: flow_inds; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE flow_inds (
+CREATE TABLE public.flow_inds (
     id integer NOT NULL,
     flow_id integer NOT NULL,
     ind_id integer NOT NULL,
@@ -2300,21 +2294,21 @@ CREATE TABLE flow_inds (
 -- Name: TABLE flow_inds; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE flow_inds IS 'Values of inds for flow';
+COMMENT ON TABLE public.flow_inds IS 'Values of inds for flow';
 
 
 --
 -- Name: COLUMN flow_inds.value; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN flow_inds.value IS 'Numeric value';
+COMMENT ON COLUMN public.flow_inds.value IS 'Numeric value';
 
 
 --
 -- Name: flow_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE flow_inds_id_seq
+CREATE SEQUENCE public.flow_inds_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2326,14 +2320,14 @@ CREATE SEQUENCE flow_inds_id_seq
 -- Name: flow_inds_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE flow_inds_id_seq OWNED BY flow_inds.id;
+ALTER SEQUENCE public.flow_inds_id_seq OWNED BY public.flow_inds.id;
 
 
 --
 -- Name: flow_quals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE flow_quals_id_seq
+CREATE SEQUENCE public.flow_quals_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2345,14 +2339,14 @@ CREATE SEQUENCE flow_quals_id_seq
 -- Name: flow_quals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE flow_quals_id_seq OWNED BY flow_quals.id;
+ALTER SEQUENCE public.flow_quals_id_seq OWNED BY public.flow_quals.id;
 
 
 --
 -- Name: flow_quants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE flow_quants_id_seq
+CREATE SEQUENCE public.flow_quants_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2364,14 +2358,14 @@ CREATE SEQUENCE flow_quants_id_seq
 -- Name: flow_quants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE flow_quants_id_seq OWNED BY flow_quants.id;
+ALTER SEQUENCE public.flow_quants_id_seq OWNED BY public.flow_quants.id;
 
 
 --
 -- Name: flows_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE flows_id_seq
+CREATE SEQUENCE public.flows_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2383,14 +2377,14 @@ CREATE SEQUENCE flows_id_seq
 -- Name: flows_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE flows_id_seq OWNED BY flows.id;
+ALTER SEQUENCE public.flows_id_seq OWNED BY public.flows.id;
 
 
 --
 -- Name: ind_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE ind_properties_id_seq
+CREATE SEQUENCE public.ind_properties_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2402,14 +2396,14 @@ CREATE SEQUENCE ind_properties_id_seq
 -- Name: ind_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE ind_properties_id_seq OWNED BY ind_properties.id;
+ALTER SEQUENCE public.ind_properties_id_seq OWNED BY public.ind_properties.id;
 
 
 --
 -- Name: inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE inds_id_seq
+CREATE SEQUENCE public.inds_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2421,14 +2415,14 @@ CREATE SEQUENCE inds_id_seq
 -- Name: inds_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE inds_id_seq OWNED BY inds.id;
+ALTER SEQUENCE public.inds_id_seq OWNED BY public.inds.id;
 
 
 --
 -- Name: map_attribute_groups; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE map_attribute_groups (
+CREATE TABLE public.map_attribute_groups (
     id integer NOT NULL,
     context_id integer NOT NULL,
     name text NOT NULL,
@@ -2442,28 +2436,28 @@ CREATE TABLE map_attribute_groups (
 -- Name: TABLE map_attribute_groups; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE map_attribute_groups IS 'Groups attributes (inds/quals/quants) to display on map';
+COMMENT ON TABLE public.map_attribute_groups IS 'Groups attributes (inds/quals/quants) to display on map';
 
 
 --
 -- Name: COLUMN map_attribute_groups.name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN map_attribute_groups.name IS 'Name for display';
+COMMENT ON COLUMN public.map_attribute_groups.name IS 'Name for display';
 
 
 --
 -- Name: COLUMN map_attribute_groups."position"; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN map_attribute_groups."position" IS 'Display order in scope of context';
+COMMENT ON COLUMN public.map_attribute_groups."position" IS 'Display order in scope of context';
 
 
 --
 -- Name: map_attribute_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE map_attribute_groups_id_seq
+CREATE SEQUENCE public.map_attribute_groups_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2475,14 +2469,14 @@ CREATE SEQUENCE map_attribute_groups_id_seq
 -- Name: map_attribute_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE map_attribute_groups_id_seq OWNED BY map_attribute_groups.id;
+ALTER SEQUENCE public.map_attribute_groups_id_seq OWNED BY public.map_attribute_groups.id;
 
 
 --
 -- Name: map_attributes; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE map_attributes (
+CREATE TABLE public.map_attributes (
     id integer NOT NULL,
     map_attribute_group_id integer NOT NULL,
     "position" integer NOT NULL,
@@ -2501,63 +2495,63 @@ CREATE TABLE map_attributes (
 -- Name: TABLE map_attributes; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE map_attributes IS 'Attributes (inds/quants) to display on map';
+COMMENT ON TABLE public.map_attributes IS 'Attributes (inds/quants) to display on map';
 
 
 --
 -- Name: COLUMN map_attributes."position"; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes."position" IS 'Display order in scope of group';
+COMMENT ON COLUMN public.map_attributes."position" IS 'Display order in scope of group';
 
 
 --
 -- Name: COLUMN map_attributes.dual_layer_buckets; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes.dual_layer_buckets IS 'Choropleth buckets for dual dimension choropleth';
+COMMENT ON COLUMN public.map_attributes.dual_layer_buckets IS 'Choropleth buckets for dual dimension choropleth';
 
 
 --
 -- Name: COLUMN map_attributes.single_layer_buckets; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes.single_layer_buckets IS 'Choropleth buckets for single dimension choropleth';
+COMMENT ON COLUMN public.map_attributes.single_layer_buckets IS 'Choropleth buckets for single dimension choropleth';
 
 
 --
 -- Name: COLUMN map_attributes.color_scale; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes.color_scale IS 'Choropleth colour scale, e.g. blue';
+COMMENT ON COLUMN public.map_attributes.color_scale IS 'Choropleth colour scale, e.g. blue';
 
 
 --
 -- Name: COLUMN map_attributes.years; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes.years IS 'Years for which attribute is present; empty (NULL) for all years';
+COMMENT ON COLUMN public.map_attributes.years IS 'Years for which attribute is present; empty (NULL) for all years';
 
 
 --
 -- Name: COLUMN map_attributes.is_disabled; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes.is_disabled IS 'When set, this attribute is not displayed';
+COMMENT ON COLUMN public.map_attributes.is_disabled IS 'When set, this attribute is not displayed';
 
 
 --
 -- Name: COLUMN map_attributes.is_default; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes.is_default IS 'When set, show this attribute by default. A maximum of 2 attributes per context may be set as default.';
+COMMENT ON COLUMN public.map_attributes.is_default IS 'When set, show this attribute by default. A maximum of 2 attributes per context may be set as default.';
 
 
 --
 -- Name: map_attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE map_attributes_id_seq
+CREATE SEQUENCE public.map_attributes_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2569,14 +2563,14 @@ CREATE SEQUENCE map_attributes_id_seq
 -- Name: map_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE map_attributes_id_seq OWNED BY map_attributes.id;
+ALTER SEQUENCE public.map_attributes_id_seq OWNED BY public.map_attributes.id;
 
 
 --
 -- Name: map_inds; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE map_inds (
+CREATE TABLE public.map_inds (
     id integer NOT NULL,
     map_attribute_id integer NOT NULL,
     ind_id integer NOT NULL,
@@ -2589,14 +2583,14 @@ CREATE TABLE map_inds (
 -- Name: TABLE map_inds; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE map_inds IS 'Inds to display on map (see map_attributes.)';
+COMMENT ON TABLE public.map_inds IS 'Inds to display on map (see map_attributes.)';
 
 
 --
 -- Name: map_quants; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE map_quants (
+CREATE TABLE public.map_quants (
     id integer NOT NULL,
     map_attribute_id integer NOT NULL,
     quant_id integer NOT NULL,
@@ -2609,14 +2603,14 @@ CREATE TABLE map_quants (
 -- Name: TABLE map_quants; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE map_quants IS 'Quants to display on map (see map_attributes.)';
+COMMENT ON TABLE public.map_quants IS 'Quants to display on map (see map_attributes.)';
 
 
 --
 -- Name: map_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
-CREATE MATERIALIZED VIEW map_attributes_mv AS
+CREATE MATERIALIZED VIEW public.map_attributes_mv AS
  SELECT ma.id,
     ma.map_attribute_group_id,
     ma."position",
@@ -2636,10 +2630,10 @@ CREATE MATERIALIZED VIEW map_attributes_mv AS
     a.aggregate_method,
     a.original_id AS original_attribute_id,
     mag.context_id
-   FROM (((map_quants maq
-     JOIN map_attributes ma ON ((ma.id = maq.map_attribute_id)))
-     JOIN map_attribute_groups mag ON ((mag.id = ma.map_attribute_group_id)))
-     JOIN attributes_mv a ON (((a.original_id = maq.quant_id) AND (a.original_type = 'Quant'::text))))
+   FROM (((public.map_quants maq
+     JOIN public.map_attributes ma ON ((ma.id = maq.map_attribute_id)))
+     JOIN public.map_attribute_groups mag ON ((mag.id = ma.map_attribute_group_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = maq.quant_id) AND (a.original_type = 'Quant'::text))))
 UNION ALL
  SELECT ma.id,
     ma.map_attribute_group_id,
@@ -2660,10 +2654,10 @@ UNION ALL
     a.aggregate_method,
     a.original_id AS original_attribute_id,
     mag.context_id
-   FROM (((map_inds mai
-     JOIN map_attributes ma ON ((ma.id = mai.map_attribute_id)))
-     JOIN map_attribute_groups mag ON ((mag.id = ma.map_attribute_group_id)))
-     JOIN attributes_mv a ON (((a.original_id = mai.ind_id) AND (a.original_type = 'Ind'::text))))
+   FROM (((public.map_inds mai
+     JOIN public.map_attributes ma ON ((ma.id = mai.map_attribute_id)))
+     JOIN public.map_attribute_groups mag ON ((mag.id = ma.map_attribute_group_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = mai.ind_id) AND (a.original_type = 'Ind'::text))))
   WITH NO DATA;
 
 
@@ -2671,70 +2665,70 @@ UNION ALL
 -- Name: MATERIALIZED VIEW map_attributes_mv; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON MATERIALIZED VIEW map_attributes_mv IS 'Materialized view which merges map_inds and map_quants with map_attributes.';
+COMMENT ON MATERIALIZED VIEW public.map_attributes_mv IS 'Materialized view which merges map_inds and map_quants with map_attributes.';
 
 
 --
 -- Name: COLUMN map_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+COMMENT ON COLUMN public.map_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
 
 
 --
 -- Name: COLUMN map_attributes_mv.name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes_mv.name IS 'Display name of the ind/quant';
+COMMENT ON COLUMN public.map_attributes_mv.name IS 'Display name of the ind/quant';
 
 
 --
 -- Name: COLUMN map_attributes_mv.attribute_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes_mv.attribute_type IS 'Type of the attribute (ind/quant)';
+COMMENT ON COLUMN public.map_attributes_mv.attribute_type IS 'Type of the attribute (ind/quant)';
 
 
 --
 -- Name: COLUMN map_attributes_mv.unit; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes_mv.unit IS 'Name of the attribute''s unit';
+COMMENT ON COLUMN public.map_attributes_mv.unit IS 'Name of the attribute''s unit';
 
 
 --
 -- Name: COLUMN map_attributes_mv.description; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes_mv.description IS 'Attribute''s description';
+COMMENT ON COLUMN public.map_attributes_mv.description IS 'Attribute''s description';
 
 
 --
 -- Name: COLUMN map_attributes_mv.aggregate_method; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes_mv.aggregate_method IS 'The method used to aggregate the data';
+COMMENT ON COLUMN public.map_attributes_mv.aggregate_method IS 'The method used to aggregate the data';
 
 
 --
 -- Name: COLUMN map_attributes_mv.original_attribute_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes_mv.original_attribute_id IS 'The attribute''s original id';
+COMMENT ON COLUMN public.map_attributes_mv.original_attribute_id IS 'The attribute''s original id';
 
 
 --
 -- Name: COLUMN map_attributes_mv.context_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN map_attributes_mv.context_id IS 'References the context';
+COMMENT ON COLUMN public.map_attributes_mv.context_id IS 'References the context';
 
 
 --
 -- Name: map_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE map_inds_id_seq
+CREATE SEQUENCE public.map_inds_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2746,14 +2740,14 @@ CREATE SEQUENCE map_inds_id_seq
 -- Name: map_inds_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE map_inds_id_seq OWNED BY map_inds.id;
+ALTER SEQUENCE public.map_inds_id_seq OWNED BY public.map_inds.id;
 
 
 --
 -- Name: map_quants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE map_quants_id_seq
+CREATE SEQUENCE public.map_quants_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2765,14 +2759,14 @@ CREATE SEQUENCE map_quants_id_seq
 -- Name: map_quants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE map_quants_id_seq OWNED BY map_quants.id;
+ALTER SEQUENCE public.map_quants_id_seq OWNED BY public.map_quants.id;
 
 
 --
 -- Name: node_inds; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE node_inds (
+CREATE TABLE public.node_inds (
     id integer NOT NULL,
     node_id integer NOT NULL,
     ind_id integer NOT NULL,
@@ -2786,28 +2780,28 @@ CREATE TABLE node_inds (
 -- Name: TABLE node_inds; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE node_inds IS 'Values of inds for node';
+COMMENT ON TABLE public.node_inds IS 'Values of inds for node';
 
 
 --
 -- Name: COLUMN node_inds.year; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN node_inds.year IS 'Year; empty (NULL) for all years';
+COMMENT ON COLUMN public.node_inds.year IS 'Year; empty (NULL) for all years';
 
 
 --
 -- Name: COLUMN node_inds.value; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN node_inds.value IS 'Numeric value';
+COMMENT ON COLUMN public.node_inds.value IS 'Numeric value';
 
 
 --
 -- Name: node_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE node_inds_id_seq
+CREATE SEQUENCE public.node_inds_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2819,14 +2813,14 @@ CREATE SEQUENCE node_inds_id_seq
 -- Name: node_inds_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE node_inds_id_seq OWNED BY node_inds.id;
+ALTER SEQUENCE public.node_inds_id_seq OWNED BY public.node_inds.id;
 
 
 --
 -- Name: node_properties; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE node_properties (
+CREATE TABLE public.node_properties (
     id integer NOT NULL,
     node_id integer NOT NULL,
     is_domestic_consumption boolean DEFAULT false NOT NULL,
@@ -2839,14 +2833,14 @@ CREATE TABLE node_properties (
 -- Name: COLUMN node_properties.is_domestic_consumption; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN node_properties.is_domestic_consumption IS 'When set, assume domestic trade';
+COMMENT ON COLUMN public.node_properties.is_domestic_consumption IS 'When set, assume domestic trade';
 
 
 --
 -- Name: node_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE node_properties_id_seq
+CREATE SEQUENCE public.node_properties_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2858,14 +2852,14 @@ CREATE SEQUENCE node_properties_id_seq
 -- Name: node_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE node_properties_id_seq OWNED BY node_properties.id;
+ALTER SEQUENCE public.node_properties_id_seq OWNED BY public.node_properties.id;
 
 
 --
 -- Name: node_quals; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE node_quals (
+CREATE TABLE public.node_quals (
     id integer NOT NULL,
     node_id integer NOT NULL,
     qual_id integer NOT NULL,
@@ -2879,28 +2873,28 @@ CREATE TABLE node_quals (
 -- Name: TABLE node_quals; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE node_quals IS 'Values of quals for node';
+COMMENT ON TABLE public.node_quals IS 'Values of quals for node';
 
 
 --
 -- Name: COLUMN node_quals.year; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN node_quals.year IS 'Year; empty (NULL) for all years';
+COMMENT ON COLUMN public.node_quals.year IS 'Year; empty (NULL) for all years';
 
 
 --
 -- Name: COLUMN node_quals.value; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN node_quals.value IS 'Textual value';
+COMMENT ON COLUMN public.node_quals.value IS 'Textual value';
 
 
 --
 -- Name: node_quals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE node_quals_id_seq
+CREATE SEQUENCE public.node_quals_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2912,14 +2906,14 @@ CREATE SEQUENCE node_quals_id_seq
 -- Name: node_quals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE node_quals_id_seq OWNED BY node_quals.id;
+ALTER SEQUENCE public.node_quals_id_seq OWNED BY public.node_quals.id;
 
 
 --
 -- Name: node_quants; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE node_quants (
+CREATE TABLE public.node_quants (
     id integer NOT NULL,
     node_id integer NOT NULL,
     quant_id integer NOT NULL,
@@ -2933,28 +2927,28 @@ CREATE TABLE node_quants (
 -- Name: TABLE node_quants; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE node_quants IS 'Values of quants for node';
+COMMENT ON TABLE public.node_quants IS 'Values of quants for node';
 
 
 --
 -- Name: COLUMN node_quants.year; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN node_quants.year IS 'Year; empty (NULL) for all years';
+COMMENT ON COLUMN public.node_quants.year IS 'Year; empty (NULL) for all years';
 
 
 --
 -- Name: COLUMN node_quants.value; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN node_quants.value IS 'Numeric value';
+COMMENT ON COLUMN public.node_quants.value IS 'Numeric value';
 
 
 --
 -- Name: node_quants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE node_quants_id_seq
+CREATE SEQUENCE public.node_quants_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2966,14 +2960,14 @@ CREATE SEQUENCE node_quants_id_seq
 -- Name: node_quants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE node_quants_id_seq OWNED BY node_quants.id;
+ALTER SEQUENCE public.node_quants_id_seq OWNED BY public.node_quants.id;
 
 
 --
 -- Name: node_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE node_types_id_seq
+CREATE SEQUENCE public.node_types_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2985,14 +2979,14 @@ CREATE SEQUENCE node_types_id_seq
 -- Name: node_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE node_types_id_seq OWNED BY node_types.id;
+ALTER SEQUENCE public.node_types_id_seq OWNED BY public.node_types.id;
 
 
 --
 -- Name: nodes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE nodes_id_seq
+CREATE SEQUENCE public.nodes_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3004,14 +2998,14 @@ CREATE SEQUENCE nodes_id_seq
 -- Name: nodes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE nodes_id_seq OWNED BY nodes.id;
+ALTER SEQUENCE public.nodes_id_seq OWNED BY public.nodes.id;
 
 
 --
 -- Name: profiles; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE profiles (
+CREATE TABLE public.profiles (
     id integer NOT NULL,
     context_node_type_id integer NOT NULL,
     name text,
@@ -3025,21 +3019,41 @@ CREATE TABLE profiles (
 -- Name: TABLE profiles; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE profiles IS 'Context-specific profiles';
+COMMENT ON TABLE public.profiles IS 'Context-specific profiles';
 
 
 --
 -- Name: COLUMN profiles.name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN profiles.name IS 'Profile name, either actor or place. One of restricted set of values.';
+COMMENT ON COLUMN public.profiles.name IS 'Profile name, either actor or place. One of restricted set of values.';
+
+
+--
+-- Name: nodes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.nodes_mv AS
+ SELECT nodes.id,
+    nodes.name,
+    node_types.name AS node_type,
+    nodes_with_flows.context_id,
+    profiles.name AS profile
+   FROM ((((public.nodes
+     JOIN ( SELECT DISTINCT unnest(flows.path) AS node_id,
+            flows.context_id
+           FROM public.flows) nodes_with_flows ON ((nodes.id = nodes_with_flows.node_id)))
+     JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
+     JOIN public.context_node_types ON (((context_node_types.node_type_id = node_types.id) AND (context_node_types.context_id = nodes_with_flows.context_id))))
+     LEFT JOIN public.profiles ON ((profiles.context_node_type_id = context_node_types.id)))
+  WITH NO DATA;
 
 
 --
 -- Name: profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE profiles_id_seq
+CREATE SEQUENCE public.profiles_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3051,14 +3065,14 @@ CREATE SEQUENCE profiles_id_seq
 -- Name: profiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE profiles_id_seq OWNED BY profiles.id;
+ALTER SEQUENCE public.profiles_id_seq OWNED BY public.profiles.id;
 
 
 --
 -- Name: qual_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE qual_properties_id_seq
+CREATE SEQUENCE public.qual_properties_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3070,14 +3084,14 @@ CREATE SEQUENCE qual_properties_id_seq
 -- Name: qual_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE qual_properties_id_seq OWNED BY qual_properties.id;
+ALTER SEQUENCE public.qual_properties_id_seq OWNED BY public.qual_properties.id;
 
 
 --
 -- Name: quals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE quals_id_seq
+CREATE SEQUENCE public.quals_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3089,14 +3103,14 @@ CREATE SEQUENCE quals_id_seq
 -- Name: quals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE quals_id_seq OWNED BY quals.id;
+ALTER SEQUENCE public.quals_id_seq OWNED BY public.quals.id;
 
 
 --
 -- Name: quant_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE quant_properties_id_seq
+CREATE SEQUENCE public.quant_properties_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3108,14 +3122,14 @@ CREATE SEQUENCE quant_properties_id_seq
 -- Name: quant_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE quant_properties_id_seq OWNED BY quant_properties.id;
+ALTER SEQUENCE public.quant_properties_id_seq OWNED BY public.quant_properties.id;
 
 
 --
 -- Name: quants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE quants_id_seq
+CREATE SEQUENCE public.quants_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3127,14 +3141,14 @@ CREATE SEQUENCE quants_id_seq
 -- Name: quants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE quants_id_seq OWNED BY quants.id;
+ALTER SEQUENCE public.quants_id_seq OWNED BY public.quants.id;
 
 
 --
 -- Name: recolor_by_attributes; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE recolor_by_attributes (
+CREATE TABLE public.recolor_by_attributes (
     id integer NOT NULL,
     context_id integer NOT NULL,
     group_number integer DEFAULT 1 NOT NULL,
@@ -3158,98 +3172,98 @@ CREATE TABLE recolor_by_attributes (
 -- Name: TABLE recolor_by_attributes; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE recolor_by_attributes IS 'Attributes (inds/quals) available for recoloring.';
+COMMENT ON TABLE public.recolor_by_attributes IS 'Attributes (inds/quals) available for recoloring.';
 
 
 --
 -- Name: COLUMN recolor_by_attributes.group_number; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.group_number IS 'Attributes are displayed grouped by their group number, with a separator between groups';
+COMMENT ON COLUMN public.recolor_by_attributes.group_number IS 'Attributes are displayed grouped by their group number, with a separator between groups';
 
 
 --
 -- Name: COLUMN recolor_by_attributes."position"; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes."position" IS 'Display order in scope of context and group number';
+COMMENT ON COLUMN public.recolor_by_attributes."position" IS 'Display order in scope of context and group number';
 
 
 --
 -- Name: COLUMN recolor_by_attributes.legend_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.legend_type IS 'Type of legend, e.g. linear';
+COMMENT ON COLUMN public.recolor_by_attributes.legend_type IS 'Type of legend, e.g. linear';
 
 
 --
 -- Name: COLUMN recolor_by_attributes.legend_color_theme; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.legend_color_theme IS 'Color theme of legend, e.g. red-blue';
+COMMENT ON COLUMN public.recolor_by_attributes.legend_color_theme IS 'Color theme of legend, e.g. red-blue';
 
 
 --
 -- Name: COLUMN recolor_by_attributes.interval_count; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.interval_count IS 'For legends with min / max value, number of intervals of the legend';
+COMMENT ON COLUMN public.recolor_by_attributes.interval_count IS 'For legends with min / max value, number of intervals of the legend';
 
 
 --
 -- Name: COLUMN recolor_by_attributes.min_value; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.min_value IS 'Min value for the legend';
+COMMENT ON COLUMN public.recolor_by_attributes.min_value IS 'Min value for the legend';
 
 
 --
 -- Name: COLUMN recolor_by_attributes.max_value; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.max_value IS 'Max value for the legend';
+COMMENT ON COLUMN public.recolor_by_attributes.max_value IS 'Max value for the legend';
 
 
 --
 -- Name: COLUMN recolor_by_attributes.divisor; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.divisor IS 'Step between intervals for percentual legends';
+COMMENT ON COLUMN public.recolor_by_attributes.divisor IS 'Step between intervals for percentual legends';
 
 
 --
 -- Name: COLUMN recolor_by_attributes.tooltip_text; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.tooltip_text IS 'Tooltip text';
+COMMENT ON COLUMN public.recolor_by_attributes.tooltip_text IS 'Tooltip text';
 
 
 --
 -- Name: COLUMN recolor_by_attributes.years; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.years IS 'Array of years for which to show this attribute in scope of chart; empty (NULL) for all years';
+COMMENT ON COLUMN public.recolor_by_attributes.years IS 'Array of years for which to show this attribute in scope of chart; empty (NULL) for all years';
 
 
 --
 -- Name: COLUMN recolor_by_attributes.is_disabled; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.is_disabled IS 'When set, this attribute is not displayed';
+COMMENT ON COLUMN public.recolor_by_attributes.is_disabled IS 'When set, this attribute is not displayed';
 
 
 --
 -- Name: COLUMN recolor_by_attributes.is_default; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes.is_default IS 'When set, show this attribute by default';
+COMMENT ON COLUMN public.recolor_by_attributes.is_default IS 'When set, show this attribute by default';
 
 
 --
 -- Name: recolor_by_attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE recolor_by_attributes_id_seq
+CREATE SEQUENCE public.recolor_by_attributes_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3261,14 +3275,14 @@ CREATE SEQUENCE recolor_by_attributes_id_seq
 -- Name: recolor_by_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE recolor_by_attributes_id_seq OWNED BY recolor_by_attributes.id;
+ALTER SEQUENCE public.recolor_by_attributes_id_seq OWNED BY public.recolor_by_attributes.id;
 
 
 --
 -- Name: recolor_by_inds; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE recolor_by_inds (
+CREATE TABLE public.recolor_by_inds (
     id integer NOT NULL,
     recolor_by_attribute_id integer NOT NULL,
     ind_id integer NOT NULL,
@@ -3281,14 +3295,14 @@ CREATE TABLE recolor_by_inds (
 -- Name: TABLE recolor_by_inds; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE recolor_by_inds IS 'Inds available for recoloring (see recolor_by_attributes.)';
+COMMENT ON TABLE public.recolor_by_inds IS 'Inds available for recoloring (see recolor_by_attributes.)';
 
 
 --
 -- Name: recolor_by_quals; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE recolor_by_quals (
+CREATE TABLE public.recolor_by_quals (
     id integer NOT NULL,
     recolor_by_attribute_id integer NOT NULL,
     qual_id integer NOT NULL,
@@ -3301,14 +3315,14 @@ CREATE TABLE recolor_by_quals (
 -- Name: TABLE recolor_by_quals; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE recolor_by_quals IS 'Quals available for recoloring (see recolor_by_attributes.)';
+COMMENT ON TABLE public.recolor_by_quals IS 'Quals available for recoloring (see recolor_by_attributes.)';
 
 
 --
 -- Name: recolor_by_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
-CREATE MATERIALIZED VIEW recolor_by_attributes_mv AS
+CREATE MATERIALIZED VIEW public.recolor_by_attributes_mv AS
  SELECT ra.id,
     ra.context_id,
     ra.group_number,
@@ -3326,9 +3340,9 @@ CREATE MATERIALIZED VIEW recolor_by_attributes_mv AS
     ra.created_at,
     ra.updated_at,
     a.id AS attribute_id
-   FROM ((recolor_by_inds rai
-     JOIN recolor_by_attributes ra ON ((ra.id = rai.recolor_by_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = rai.ind_id) AND (a.original_type = 'Ind'::text))))
+   FROM ((public.recolor_by_inds rai
+     JOIN public.recolor_by_attributes ra ON ((ra.id = rai.recolor_by_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = rai.ind_id) AND (a.original_type = 'Ind'::text))))
 UNION ALL
  SELECT ra.id,
     ra.context_id,
@@ -3347,9 +3361,9 @@ UNION ALL
     ra.created_at,
     ra.updated_at,
     a.id AS attribute_id
-   FROM ((recolor_by_quals raq
-     JOIN recolor_by_attributes ra ON ((ra.id = raq.recolor_by_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = raq.qual_id) AND (a.original_type = 'Qual'::text))))
+   FROM ((public.recolor_by_quals raq
+     JOIN public.recolor_by_attributes ra ON ((ra.id = raq.recolor_by_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = raq.qual_id) AND (a.original_type = 'Qual'::text))))
   WITH NO DATA;
 
 
@@ -3357,21 +3371,21 @@ UNION ALL
 -- Name: MATERIALIZED VIEW recolor_by_attributes_mv; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON MATERIALIZED VIEW recolor_by_attributes_mv IS 'Materialized view which merges recolor_by_inds and recolor_by_quals with recolor_by_attributes.';
+COMMENT ON MATERIALIZED VIEW public.recolor_by_attributes_mv IS 'Materialized view which merges recolor_by_inds and recolor_by_quals with recolor_by_attributes.';
 
 
 --
 -- Name: COLUMN recolor_by_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN recolor_by_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+COMMENT ON COLUMN public.recolor_by_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
 
 
 --
 -- Name: recolor_by_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE recolor_by_inds_id_seq
+CREATE SEQUENCE public.recolor_by_inds_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3383,14 +3397,14 @@ CREATE SEQUENCE recolor_by_inds_id_seq
 -- Name: recolor_by_inds_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE recolor_by_inds_id_seq OWNED BY recolor_by_inds.id;
+ALTER SEQUENCE public.recolor_by_inds_id_seq OWNED BY public.recolor_by_inds.id;
 
 
 --
 -- Name: recolor_by_quals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE recolor_by_quals_id_seq
+CREATE SEQUENCE public.recolor_by_quals_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3402,14 +3416,14 @@ CREATE SEQUENCE recolor_by_quals_id_seq
 -- Name: recolor_by_quals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE recolor_by_quals_id_seq OWNED BY recolor_by_quals.id;
+ALTER SEQUENCE public.recolor_by_quals_id_seq OWNED BY public.recolor_by_quals.id;
 
 
 --
 -- Name: resize_by_attributes; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE resize_by_attributes (
+CREATE TABLE public.resize_by_attributes (
     id integer NOT NULL,
     context_id integer NOT NULL,
     group_number integer DEFAULT 1 NOT NULL,
@@ -3427,56 +3441,56 @@ CREATE TABLE resize_by_attributes (
 -- Name: TABLE resize_by_attributes; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE resize_by_attributes IS 'Attributes (quants) available for resizing.';
+COMMENT ON TABLE public.resize_by_attributes IS 'Attributes (quants) available for resizing.';
 
 
 --
 -- Name: COLUMN resize_by_attributes.group_number; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN resize_by_attributes.group_number IS 'Group number';
+COMMENT ON COLUMN public.resize_by_attributes.group_number IS 'Group number';
 
 
 --
 -- Name: COLUMN resize_by_attributes."position"; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN resize_by_attributes."position" IS 'Display order in scope of context and group number';
+COMMENT ON COLUMN public.resize_by_attributes."position" IS 'Display order in scope of context and group number';
 
 
 --
 -- Name: COLUMN resize_by_attributes.tooltip_text; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN resize_by_attributes.tooltip_text IS 'Tooltip text';
+COMMENT ON COLUMN public.resize_by_attributes.tooltip_text IS 'Tooltip text';
 
 
 --
 -- Name: COLUMN resize_by_attributes.years; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN resize_by_attributes.years IS 'Array of years for which to show this attribute in scope of chart; empty (NULL) for all years';
+COMMENT ON COLUMN public.resize_by_attributes.years IS 'Array of years for which to show this attribute in scope of chart; empty (NULL) for all years';
 
 
 --
 -- Name: COLUMN resize_by_attributes.is_disabled; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN resize_by_attributes.is_disabled IS 'When set, this attribute is not displayed';
+COMMENT ON COLUMN public.resize_by_attributes.is_disabled IS 'When set, this attribute is not displayed';
 
 
 --
 -- Name: COLUMN resize_by_attributes.is_default; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN resize_by_attributes.is_default IS 'When set, show this attribute by default';
+COMMENT ON COLUMN public.resize_by_attributes.is_default IS 'When set, show this attribute by default';
 
 
 --
 -- Name: resize_by_attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE resize_by_attributes_id_seq
+CREATE SEQUENCE public.resize_by_attributes_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3488,14 +3502,14 @@ CREATE SEQUENCE resize_by_attributes_id_seq
 -- Name: resize_by_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE resize_by_attributes_id_seq OWNED BY resize_by_attributes.id;
+ALTER SEQUENCE public.resize_by_attributes_id_seq OWNED BY public.resize_by_attributes.id;
 
 
 --
 -- Name: resize_by_quants; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE resize_by_quants (
+CREATE TABLE public.resize_by_quants (
     id integer NOT NULL,
     resize_by_attribute_id integer NOT NULL,
     quant_id integer NOT NULL,
@@ -3508,14 +3522,14 @@ CREATE TABLE resize_by_quants (
 -- Name: TABLE resize_by_quants; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE resize_by_quants IS 'Quants available for recoloring (see resize_by_attributes.)';
+COMMENT ON TABLE public.resize_by_quants IS 'Quants available for recoloring (see resize_by_attributes.)';
 
 
 --
 -- Name: resize_by_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
-CREATE MATERIALIZED VIEW resize_by_attributes_mv AS
+CREATE MATERIALIZED VIEW public.resize_by_attributes_mv AS
  SELECT ra.id,
     ra.context_id,
     ra.group_number,
@@ -3527,9 +3541,9 @@ CREATE MATERIALIZED VIEW resize_by_attributes_mv AS
     ra.created_at,
     ra.updated_at,
     a.id AS attribute_id
-   FROM ((resize_by_quants raq
-     JOIN resize_by_attributes ra ON ((ra.id = raq.resize_by_attribute_id)))
-     JOIN attributes_mv a ON (((a.original_id = raq.quant_id) AND (a.original_type = 'Quant'::text))))
+   FROM ((public.resize_by_quants raq
+     JOIN public.resize_by_attributes ra ON ((ra.id = raq.resize_by_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = raq.quant_id) AND (a.original_type = 'Quant'::text))))
   WITH NO DATA;
 
 
@@ -3537,21 +3551,21 @@ CREATE MATERIALIZED VIEW resize_by_attributes_mv AS
 -- Name: MATERIALIZED VIEW resize_by_attributes_mv; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON MATERIALIZED VIEW resize_by_attributes_mv IS 'Materialized view which merges resize_by_quants with resize_by_attributes.';
+COMMENT ON MATERIALIZED VIEW public.resize_by_attributes_mv IS 'Materialized view which merges resize_by_quants with resize_by_attributes.';
 
 
 --
 -- Name: COLUMN resize_by_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN resize_by_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+COMMENT ON COLUMN public.resize_by_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
 
 
 --
 -- Name: resize_by_quants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE resize_by_quants_id_seq
+CREATE SEQUENCE public.resize_by_quants_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3563,407 +3577,401 @@ CREATE SEQUENCE resize_by_quants_id_seq
 -- Name: resize_by_quants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE resize_by_quants_id_seq OWNED BY resize_by_quants.id;
+ALTER SEQUENCE public.resize_by_quants_id_seq OWNED BY public.resize_by_quants.id;
 
 
 --
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE schema_migrations (
+CREATE TABLE public.schema_migrations (
     version character varying NOT NULL
 );
 
-
-SET search_path = content, pg_catalog;
 
 --
 -- Name: ckeditor_assets id; Type: DEFAULT; Schema: content; Owner: -
 --
 
-ALTER TABLE ONLY ckeditor_assets ALTER COLUMN id SET DEFAULT nextval('ckeditor_assets_id_seq'::regclass);
+ALTER TABLE ONLY content.ckeditor_assets ALTER COLUMN id SET DEFAULT nextval('content.ckeditor_assets_id_seq'::regclass);
 
 
 --
 -- Name: pages id; Type: DEFAULT; Schema: content; Owner: -
 --
 
-ALTER TABLE ONLY pages ALTER COLUMN id SET DEFAULT nextval('pages_id_seq'::regclass);
+ALTER TABLE ONLY content.pages ALTER COLUMN id SET DEFAULT nextval('content.pages_id_seq'::regclass);
 
 
 --
 -- Name: posts id; Type: DEFAULT; Schema: content; Owner: -
 --
 
-ALTER TABLE ONLY posts ALTER COLUMN id SET DEFAULT nextval('posts_id_seq'::regclass);
+ALTER TABLE ONLY content.posts ALTER COLUMN id SET DEFAULT nextval('content.posts_id_seq'::regclass);
 
 
 --
 -- Name: site_dives id; Type: DEFAULT; Schema: content; Owner: -
 --
 
-ALTER TABLE ONLY site_dives ALTER COLUMN id SET DEFAULT nextval('site_dives_id_seq'::regclass);
+ALTER TABLE ONLY content.site_dives ALTER COLUMN id SET DEFAULT nextval('content.site_dives_id_seq'::regclass);
 
 
 --
 -- Name: staff_groups id; Type: DEFAULT; Schema: content; Owner: -
 --
 
-ALTER TABLE ONLY staff_groups ALTER COLUMN id SET DEFAULT nextval('staff_groups_id_seq'::regclass);
+ALTER TABLE ONLY content.staff_groups ALTER COLUMN id SET DEFAULT nextval('content.staff_groups_id_seq'::regclass);
 
 
 --
 -- Name: staff_members id; Type: DEFAULT; Schema: content; Owner: -
 --
 
-ALTER TABLE ONLY staff_members ALTER COLUMN id SET DEFAULT nextval('staff_members_id_seq'::regclass);
+ALTER TABLE ONLY content.staff_members ALTER COLUMN id SET DEFAULT nextval('content.staff_members_id_seq'::regclass);
 
 
 --
 -- Name: testimonials id; Type: DEFAULT; Schema: content; Owner: -
 --
 
-ALTER TABLE ONLY testimonials ALTER COLUMN id SET DEFAULT nextval('testimonials_id_seq'::regclass);
+ALTER TABLE ONLY content.testimonials ALTER COLUMN id SET DEFAULT nextval('content.testimonials_id_seq'::regclass);
 
 
 --
 -- Name: users id; Type: DEFAULT; Schema: content; Owner: -
 --
 
-ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+ALTER TABLE ONLY content.users ALTER COLUMN id SET DEFAULT nextval('content.users_id_seq'::regclass);
 
-
-SET search_path = public, pg_catalog;
 
 --
 -- Name: carto_layers id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY carto_layers ALTER COLUMN id SET DEFAULT nextval('carto_layers_id_seq'::regclass);
+ALTER TABLE ONLY public.carto_layers ALTER COLUMN id SET DEFAULT nextval('public.carto_layers_id_seq'::regclass);
 
 
 --
 -- Name: chart_attributes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_attributes ALTER COLUMN id SET DEFAULT nextval('chart_attributes_id_seq'::regclass);
+ALTER TABLE ONLY public.chart_attributes ALTER COLUMN id SET DEFAULT nextval('public.chart_attributes_id_seq'::regclass);
 
 
 --
 -- Name: chart_inds id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_inds ALTER COLUMN id SET DEFAULT nextval('chart_inds_id_seq'::regclass);
+ALTER TABLE ONLY public.chart_inds ALTER COLUMN id SET DEFAULT nextval('public.chart_inds_id_seq'::regclass);
 
 
 --
 -- Name: chart_quals id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_quals ALTER COLUMN id SET DEFAULT nextval('chart_quals_id_seq'::regclass);
+ALTER TABLE ONLY public.chart_quals ALTER COLUMN id SET DEFAULT nextval('public.chart_quals_id_seq'::regclass);
 
 
 --
 -- Name: chart_quants id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_quants ALTER COLUMN id SET DEFAULT nextval('chart_quants_id_seq'::regclass);
+ALTER TABLE ONLY public.chart_quants ALTER COLUMN id SET DEFAULT nextval('public.chart_quants_id_seq'::regclass);
 
 
 --
 -- Name: charts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY charts ALTER COLUMN id SET DEFAULT nextval('charts_id_seq'::regclass);
+ALTER TABLE ONLY public.charts ALTER COLUMN id SET DEFAULT nextval('public.charts_id_seq'::regclass);
 
 
 --
 -- Name: commodities id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY commodities ALTER COLUMN id SET DEFAULT nextval('commodities_id_seq'::regclass);
+ALTER TABLE ONLY public.commodities ALTER COLUMN id SET DEFAULT nextval('public.commodities_id_seq'::regclass);
 
 
 --
 -- Name: context_node_type_properties id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY context_node_type_properties ALTER COLUMN id SET DEFAULT nextval('context_node_type_properties_id_seq'::regclass);
+ALTER TABLE ONLY public.context_node_type_properties ALTER COLUMN id SET DEFAULT nextval('public.context_node_type_properties_id_seq'::regclass);
 
 
 --
 -- Name: context_node_types id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY context_node_types ALTER COLUMN id SET DEFAULT nextval('context_node_types_id_seq'::regclass);
+ALTER TABLE ONLY public.context_node_types ALTER COLUMN id SET DEFAULT nextval('public.context_node_types_id_seq'::regclass);
 
 
 --
 -- Name: context_properties id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY context_properties ALTER COLUMN id SET DEFAULT nextval('context_properties_id_seq'::regclass);
+ALTER TABLE ONLY public.context_properties ALTER COLUMN id SET DEFAULT nextval('public.context_properties_id_seq'::regclass);
 
 
 --
 -- Name: contexts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY contexts ALTER COLUMN id SET DEFAULT nextval('contexts_id_seq'::regclass);
+ALTER TABLE ONLY public.contexts ALTER COLUMN id SET DEFAULT nextval('public.contexts_id_seq'::regclass);
 
 
 --
 -- Name: contextual_layers id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY contextual_layers ALTER COLUMN id SET DEFAULT nextval('contextual_layers_id_seq'::regclass);
+ALTER TABLE ONLY public.contextual_layers ALTER COLUMN id SET DEFAULT nextval('public.contextual_layers_id_seq'::regclass);
 
 
 --
 -- Name: countries id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY countries ALTER COLUMN id SET DEFAULT nextval('countries_id_seq'::regclass);
+ALTER TABLE ONLY public.countries ALTER COLUMN id SET DEFAULT nextval('public.countries_id_seq'::regclass);
 
 
 --
 -- Name: country_properties id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY country_properties ALTER COLUMN id SET DEFAULT nextval('country_properties_id_seq'::regclass);
+ALTER TABLE ONLY public.country_properties ALTER COLUMN id SET DEFAULT nextval('public.country_properties_id_seq'::regclass);
 
 
 --
 -- Name: database_updates id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY database_updates ALTER COLUMN id SET DEFAULT nextval('database_updates_id_seq'::regclass);
+ALTER TABLE ONLY public.database_updates ALTER COLUMN id SET DEFAULT nextval('public.database_updates_id_seq'::regclass);
 
 
 --
 -- Name: database_validation_reports id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY database_validation_reports ALTER COLUMN id SET DEFAULT nextval('database_validation_reports_id_seq'::regclass);
+ALTER TABLE ONLY public.database_validation_reports ALTER COLUMN id SET DEFAULT nextval('public.database_validation_reports_id_seq'::regclass);
 
 
 --
 -- Name: download_attributes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY download_attributes ALTER COLUMN id SET DEFAULT nextval('download_attributes_id_seq'::regclass);
+ALTER TABLE ONLY public.download_attributes ALTER COLUMN id SET DEFAULT nextval('public.download_attributes_id_seq'::regclass);
 
 
 --
 -- Name: download_quals id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY download_quals ALTER COLUMN id SET DEFAULT nextval('download_quals_id_seq'::regclass);
+ALTER TABLE ONLY public.download_quals ALTER COLUMN id SET DEFAULT nextval('public.download_quals_id_seq'::regclass);
 
 
 --
 -- Name: download_quants id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY download_quants ALTER COLUMN id SET DEFAULT nextval('download_quants_id_seq'::regclass);
+ALTER TABLE ONLY public.download_quants ALTER COLUMN id SET DEFAULT nextval('public.download_quants_id_seq'::regclass);
 
 
 --
 -- Name: download_versions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY download_versions ALTER COLUMN id SET DEFAULT nextval('download_versions_id_seq'::regclass);
+ALTER TABLE ONLY public.download_versions ALTER COLUMN id SET DEFAULT nextval('public.download_versions_id_seq'::regclass);
 
 
 --
 -- Name: flow_inds id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY flow_inds ALTER COLUMN id SET DEFAULT nextval('flow_inds_id_seq'::regclass);
+ALTER TABLE ONLY public.flow_inds ALTER COLUMN id SET DEFAULT nextval('public.flow_inds_id_seq'::regclass);
 
 
 --
 -- Name: flow_quals id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY flow_quals ALTER COLUMN id SET DEFAULT nextval('flow_quals_id_seq'::regclass);
+ALTER TABLE ONLY public.flow_quals ALTER COLUMN id SET DEFAULT nextval('public.flow_quals_id_seq'::regclass);
 
 
 --
 -- Name: flow_quants id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY flow_quants ALTER COLUMN id SET DEFAULT nextval('flow_quants_id_seq'::regclass);
+ALTER TABLE ONLY public.flow_quants ALTER COLUMN id SET DEFAULT nextval('public.flow_quants_id_seq'::regclass);
 
 
 --
 -- Name: flows id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY flows ALTER COLUMN id SET DEFAULT nextval('flows_id_seq'::regclass);
+ALTER TABLE ONLY public.flows ALTER COLUMN id SET DEFAULT nextval('public.flows_id_seq'::regclass);
 
 
 --
 -- Name: ind_properties id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY ind_properties ALTER COLUMN id SET DEFAULT nextval('ind_properties_id_seq'::regclass);
+ALTER TABLE ONLY public.ind_properties ALTER COLUMN id SET DEFAULT nextval('public.ind_properties_id_seq'::regclass);
 
 
 --
 -- Name: inds id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY inds ALTER COLUMN id SET DEFAULT nextval('inds_id_seq'::regclass);
+ALTER TABLE ONLY public.inds ALTER COLUMN id SET DEFAULT nextval('public.inds_id_seq'::regclass);
 
 
 --
 -- Name: map_attribute_groups id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY map_attribute_groups ALTER COLUMN id SET DEFAULT nextval('map_attribute_groups_id_seq'::regclass);
+ALTER TABLE ONLY public.map_attribute_groups ALTER COLUMN id SET DEFAULT nextval('public.map_attribute_groups_id_seq'::regclass);
 
 
 --
 -- Name: map_attributes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY map_attributes ALTER COLUMN id SET DEFAULT nextval('map_attributes_id_seq'::regclass);
+ALTER TABLE ONLY public.map_attributes ALTER COLUMN id SET DEFAULT nextval('public.map_attributes_id_seq'::regclass);
 
 
 --
 -- Name: map_inds id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY map_inds ALTER COLUMN id SET DEFAULT nextval('map_inds_id_seq'::regclass);
+ALTER TABLE ONLY public.map_inds ALTER COLUMN id SET DEFAULT nextval('public.map_inds_id_seq'::regclass);
 
 
 --
 -- Name: map_quants id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY map_quants ALTER COLUMN id SET DEFAULT nextval('map_quants_id_seq'::regclass);
+ALTER TABLE ONLY public.map_quants ALTER COLUMN id SET DEFAULT nextval('public.map_quants_id_seq'::regclass);
 
 
 --
 -- Name: node_inds id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_inds ALTER COLUMN id SET DEFAULT nextval('node_inds_id_seq'::regclass);
+ALTER TABLE ONLY public.node_inds ALTER COLUMN id SET DEFAULT nextval('public.node_inds_id_seq'::regclass);
 
 
 --
 -- Name: node_properties id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_properties ALTER COLUMN id SET DEFAULT nextval('node_properties_id_seq'::regclass);
+ALTER TABLE ONLY public.node_properties ALTER COLUMN id SET DEFAULT nextval('public.node_properties_id_seq'::regclass);
 
 
 --
 -- Name: node_quals id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_quals ALTER COLUMN id SET DEFAULT nextval('node_quals_id_seq'::regclass);
+ALTER TABLE ONLY public.node_quals ALTER COLUMN id SET DEFAULT nextval('public.node_quals_id_seq'::regclass);
 
 
 --
 -- Name: node_quants id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_quants ALTER COLUMN id SET DEFAULT nextval('node_quants_id_seq'::regclass);
+ALTER TABLE ONLY public.node_quants ALTER COLUMN id SET DEFAULT nextval('public.node_quants_id_seq'::regclass);
 
 
 --
 -- Name: node_types id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_types ALTER COLUMN id SET DEFAULT nextval('node_types_id_seq'::regclass);
+ALTER TABLE ONLY public.node_types ALTER COLUMN id SET DEFAULT nextval('public.node_types_id_seq'::regclass);
 
 
 --
 -- Name: nodes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY nodes ALTER COLUMN id SET DEFAULT nextval('nodes_id_seq'::regclass);
+ALTER TABLE ONLY public.nodes ALTER COLUMN id SET DEFAULT nextval('public.nodes_id_seq'::regclass);
 
 
 --
 -- Name: profiles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY profiles ALTER COLUMN id SET DEFAULT nextval('profiles_id_seq'::regclass);
+ALTER TABLE ONLY public.profiles ALTER COLUMN id SET DEFAULT nextval('public.profiles_id_seq'::regclass);
 
 
 --
 -- Name: qual_properties id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY qual_properties ALTER COLUMN id SET DEFAULT nextval('qual_properties_id_seq'::regclass);
+ALTER TABLE ONLY public.qual_properties ALTER COLUMN id SET DEFAULT nextval('public.qual_properties_id_seq'::regclass);
 
 
 --
 -- Name: quals id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY quals ALTER COLUMN id SET DEFAULT nextval('quals_id_seq'::regclass);
+ALTER TABLE ONLY public.quals ALTER COLUMN id SET DEFAULT nextval('public.quals_id_seq'::regclass);
 
 
 --
 -- Name: quant_properties id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY quant_properties ALTER COLUMN id SET DEFAULT nextval('quant_properties_id_seq'::regclass);
+ALTER TABLE ONLY public.quant_properties ALTER COLUMN id SET DEFAULT nextval('public.quant_properties_id_seq'::regclass);
 
 
 --
 -- Name: quants id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY quants ALTER COLUMN id SET DEFAULT nextval('quants_id_seq'::regclass);
+ALTER TABLE ONLY public.quants ALTER COLUMN id SET DEFAULT nextval('public.quants_id_seq'::regclass);
 
 
 --
 -- Name: recolor_by_attributes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY recolor_by_attributes ALTER COLUMN id SET DEFAULT nextval('recolor_by_attributes_id_seq'::regclass);
+ALTER TABLE ONLY public.recolor_by_attributes ALTER COLUMN id SET DEFAULT nextval('public.recolor_by_attributes_id_seq'::regclass);
 
 
 --
 -- Name: recolor_by_inds id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY recolor_by_inds ALTER COLUMN id SET DEFAULT nextval('recolor_by_inds_id_seq'::regclass);
+ALTER TABLE ONLY public.recolor_by_inds ALTER COLUMN id SET DEFAULT nextval('public.recolor_by_inds_id_seq'::regclass);
 
 
 --
 -- Name: recolor_by_quals id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY recolor_by_quals ALTER COLUMN id SET DEFAULT nextval('recolor_by_quals_id_seq'::regclass);
+ALTER TABLE ONLY public.recolor_by_quals ALTER COLUMN id SET DEFAULT nextval('public.recolor_by_quals_id_seq'::regclass);
 
 
 --
 -- Name: resize_by_attributes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY resize_by_attributes ALTER COLUMN id SET DEFAULT nextval('resize_by_attributes_id_seq'::regclass);
+ALTER TABLE ONLY public.resize_by_attributes ALTER COLUMN id SET DEFAULT nextval('public.resize_by_attributes_id_seq'::regclass);
 
 
 --
 -- Name: resize_by_quants id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY resize_by_quants ALTER COLUMN id SET DEFAULT nextval('resize_by_quants_id_seq'::regclass);
+ALTER TABLE ONLY public.resize_by_quants ALTER COLUMN id SET DEFAULT nextval('public.resize_by_quants_id_seq'::regclass);
 
-
-SET search_path = content, pg_catalog;
 
 --
 -- Name: ckeditor_assets ckeditor_assets_pkey; Type: CONSTRAINT; Schema: content; Owner: -
 --
 
-ALTER TABLE ONLY ckeditor_assets
+ALTER TABLE ONLY content.ckeditor_assets
     ADD CONSTRAINT ckeditor_assets_pkey PRIMARY KEY (id);
 
 
@@ -3971,7 +3979,7 @@ ALTER TABLE ONLY ckeditor_assets
 -- Name: pages pages_pkey; Type: CONSTRAINT; Schema: content; Owner: -
 --
 
-ALTER TABLE ONLY pages
+ALTER TABLE ONLY content.pages
     ADD CONSTRAINT pages_pkey PRIMARY KEY (id);
 
 
@@ -3979,7 +3987,7 @@ ALTER TABLE ONLY pages
 -- Name: posts posts_pkey; Type: CONSTRAINT; Schema: content; Owner: -
 --
 
-ALTER TABLE ONLY posts
+ALTER TABLE ONLY content.posts
     ADD CONSTRAINT posts_pkey PRIMARY KEY (id);
 
 
@@ -3987,7 +3995,7 @@ ALTER TABLE ONLY posts
 -- Name: site_dives site_dives_pkey; Type: CONSTRAINT; Schema: content; Owner: -
 --
 
-ALTER TABLE ONLY site_dives
+ALTER TABLE ONLY content.site_dives
     ADD CONSTRAINT site_dives_pkey PRIMARY KEY (id);
 
 
@@ -3995,7 +4003,7 @@ ALTER TABLE ONLY site_dives
 -- Name: staff_groups staff_groups_pkey; Type: CONSTRAINT; Schema: content; Owner: -
 --
 
-ALTER TABLE ONLY staff_groups
+ALTER TABLE ONLY content.staff_groups
     ADD CONSTRAINT staff_groups_pkey PRIMARY KEY (id);
 
 
@@ -4003,7 +4011,7 @@ ALTER TABLE ONLY staff_groups
 -- Name: staff_members staff_members_pkey; Type: CONSTRAINT; Schema: content; Owner: -
 --
 
-ALTER TABLE ONLY staff_members
+ALTER TABLE ONLY content.staff_members
     ADD CONSTRAINT staff_members_pkey PRIMARY KEY (id);
 
 
@@ -4011,7 +4019,7 @@ ALTER TABLE ONLY staff_members
 -- Name: testimonials testimonials_pkey; Type: CONSTRAINT; Schema: content; Owner: -
 --
 
-ALTER TABLE ONLY testimonials
+ALTER TABLE ONLY content.testimonials
     ADD CONSTRAINT testimonials_pkey PRIMARY KEY (id);
 
 
@@ -4019,17 +4027,15 @@ ALTER TABLE ONLY testimonials
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: content; Owner: -
 --
 
-ALTER TABLE ONLY users
+ALTER TABLE ONLY content.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
-
-SET search_path = public, pg_catalog;
 
 --
 -- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY ar_internal_metadata
+ALTER TABLE ONLY public.ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
 
 
@@ -4037,7 +4043,7 @@ ALTER TABLE ONLY ar_internal_metadata
 -- Name: carto_layers carto_layers_contextual_layer_id_identifier_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY carto_layers
+ALTER TABLE ONLY public.carto_layers
     ADD CONSTRAINT carto_layers_contextual_layer_id_identifier_key UNIQUE (contextual_layer_id, identifier);
 
 
@@ -4045,7 +4051,7 @@ ALTER TABLE ONLY carto_layers
 -- Name: carto_layers carto_layers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY carto_layers
+ALTER TABLE ONLY public.carto_layers
     ADD CONSTRAINT carto_layers_pkey PRIMARY KEY (id);
 
 
@@ -4053,7 +4059,7 @@ ALTER TABLE ONLY carto_layers
 -- Name: chart_attributes chart_attributes_chart_id_position_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_attributes
+ALTER TABLE ONLY public.chart_attributes
     ADD CONSTRAINT chart_attributes_chart_id_position_key UNIQUE (chart_id, "position");
 
 
@@ -4061,7 +4067,7 @@ ALTER TABLE ONLY chart_attributes
 -- Name: chart_attributes chart_attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_attributes
+ALTER TABLE ONLY public.chart_attributes
     ADD CONSTRAINT chart_attributes_pkey PRIMARY KEY (id);
 
 
@@ -4069,7 +4075,7 @@ ALTER TABLE ONLY chart_attributes
 -- Name: chart_inds chart_inds_chart_attribute_id_ind_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_inds
+ALTER TABLE ONLY public.chart_inds
     ADD CONSTRAINT chart_inds_chart_attribute_id_ind_id_key UNIQUE (chart_attribute_id, ind_id);
 
 
@@ -4077,7 +4083,7 @@ ALTER TABLE ONLY chart_inds
 -- Name: chart_inds chart_inds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_inds
+ALTER TABLE ONLY public.chart_inds
     ADD CONSTRAINT chart_inds_pkey PRIMARY KEY (id);
 
 
@@ -4085,7 +4091,7 @@ ALTER TABLE ONLY chart_inds
 -- Name: chart_quals chart_quals_chart_attribute_id_qual_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_quals
+ALTER TABLE ONLY public.chart_quals
     ADD CONSTRAINT chart_quals_chart_attribute_id_qual_id_key UNIQUE (chart_attribute_id, qual_id);
 
 
@@ -4093,7 +4099,7 @@ ALTER TABLE ONLY chart_quals
 -- Name: chart_quals chart_quals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_quals
+ALTER TABLE ONLY public.chart_quals
     ADD CONSTRAINT chart_quals_pkey PRIMARY KEY (id);
 
 
@@ -4101,7 +4107,7 @@ ALTER TABLE ONLY chart_quals
 -- Name: chart_quants chart_quants_chart_attribute_id_quant_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_quants
+ALTER TABLE ONLY public.chart_quants
     ADD CONSTRAINT chart_quants_chart_attribute_id_quant_id_key UNIQUE (chart_attribute_id, quant_id);
 
 
@@ -4109,7 +4115,7 @@ ALTER TABLE ONLY chart_quants
 -- Name: chart_quants chart_quants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_quants
+ALTER TABLE ONLY public.chart_quants
     ADD CONSTRAINT chart_quants_pkey PRIMARY KEY (id);
 
 
@@ -4117,7 +4123,7 @@ ALTER TABLE ONLY chart_quants
 -- Name: charts charts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY charts
+ALTER TABLE ONLY public.charts
     ADD CONSTRAINT charts_pkey PRIMARY KEY (id);
 
 
@@ -4125,7 +4131,7 @@ ALTER TABLE ONLY charts
 -- Name: charts charts_profile_id_parent_id_position_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY charts
+ALTER TABLE ONLY public.charts
     ADD CONSTRAINT charts_profile_id_parent_id_position_key UNIQUE (profile_id, parent_id, "position");
 
 
@@ -4133,7 +4139,7 @@ ALTER TABLE ONLY charts
 -- Name: commodities commodities_name_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY commodities
+ALTER TABLE ONLY public.commodities
     ADD CONSTRAINT commodities_name_key UNIQUE (name);
 
 
@@ -4141,7 +4147,7 @@ ALTER TABLE ONLY commodities
 -- Name: commodities commodities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY commodities
+ALTER TABLE ONLY public.commodities
     ADD CONSTRAINT commodities_pkey PRIMARY KEY (id);
 
 
@@ -4149,7 +4155,7 @@ ALTER TABLE ONLY commodities
 -- Name: context_node_type_properties context_node_type_properties_context_node_type_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY context_node_type_properties
+ALTER TABLE ONLY public.context_node_type_properties
     ADD CONSTRAINT context_node_type_properties_context_node_type_id_key UNIQUE (context_node_type_id);
 
 
@@ -4157,7 +4163,7 @@ ALTER TABLE ONLY context_node_type_properties
 -- Name: context_node_type_properties context_node_type_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY context_node_type_properties
+ALTER TABLE ONLY public.context_node_type_properties
     ADD CONSTRAINT context_node_type_properties_pkey PRIMARY KEY (id);
 
 
@@ -4165,7 +4171,7 @@ ALTER TABLE ONLY context_node_type_properties
 -- Name: context_node_types context_node_types_context_id_node_type_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY context_node_types
+ALTER TABLE ONLY public.context_node_types
     ADD CONSTRAINT context_node_types_context_id_node_type_id_key UNIQUE (context_id, node_type_id);
 
 
@@ -4173,7 +4179,7 @@ ALTER TABLE ONLY context_node_types
 -- Name: context_node_types context_node_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY context_node_types
+ALTER TABLE ONLY public.context_node_types
     ADD CONSTRAINT context_node_types_pkey PRIMARY KEY (id);
 
 
@@ -4181,7 +4187,7 @@ ALTER TABLE ONLY context_node_types
 -- Name: context_properties context_properties_context_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY context_properties
+ALTER TABLE ONLY public.context_properties
     ADD CONSTRAINT context_properties_context_id_key UNIQUE (context_id);
 
 
@@ -4189,7 +4195,7 @@ ALTER TABLE ONLY context_properties
 -- Name: context_properties context_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY context_properties
+ALTER TABLE ONLY public.context_properties
     ADD CONSTRAINT context_properties_pkey PRIMARY KEY (id);
 
 
@@ -4197,7 +4203,7 @@ ALTER TABLE ONLY context_properties
 -- Name: contexts contexts_country_id_commodity_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY contexts
+ALTER TABLE ONLY public.contexts
     ADD CONSTRAINT contexts_country_id_commodity_id_key UNIQUE (country_id, commodity_id);
 
 
@@ -4205,7 +4211,7 @@ ALTER TABLE ONLY contexts
 -- Name: contexts contexts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY contexts
+ALTER TABLE ONLY public.contexts
     ADD CONSTRAINT contexts_pkey PRIMARY KEY (id);
 
 
@@ -4213,7 +4219,7 @@ ALTER TABLE ONLY contexts
 -- Name: contextual_layers contextual_layers_context_id_identifier_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY contextual_layers
+ALTER TABLE ONLY public.contextual_layers
     ADD CONSTRAINT contextual_layers_context_id_identifier_key UNIQUE (context_id, identifier);
 
 
@@ -4221,7 +4227,7 @@ ALTER TABLE ONLY contextual_layers
 -- Name: contextual_layers contextual_layers_context_id_position_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY contextual_layers
+ALTER TABLE ONLY public.contextual_layers
     ADD CONSTRAINT contextual_layers_context_id_position_key UNIQUE (context_id, "position");
 
 
@@ -4229,7 +4235,7 @@ ALTER TABLE ONLY contextual_layers
 -- Name: contextual_layers contextual_layers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY contextual_layers
+ALTER TABLE ONLY public.contextual_layers
     ADD CONSTRAINT contextual_layers_pkey PRIMARY KEY (id);
 
 
@@ -4237,7 +4243,7 @@ ALTER TABLE ONLY contextual_layers
 -- Name: countries countries_iso2_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY countries
+ALTER TABLE ONLY public.countries
     ADD CONSTRAINT countries_iso2_key UNIQUE (iso2);
 
 
@@ -4245,7 +4251,7 @@ ALTER TABLE ONLY countries
 -- Name: countries countries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY countries
+ALTER TABLE ONLY public.countries
     ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
 
 
@@ -4253,7 +4259,7 @@ ALTER TABLE ONLY countries
 -- Name: country_properties country_properties_country_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY country_properties
+ALTER TABLE ONLY public.country_properties
     ADD CONSTRAINT country_properties_country_id_key UNIQUE (country_id);
 
 
@@ -4261,7 +4267,7 @@ ALTER TABLE ONLY country_properties
 -- Name: country_properties country_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY country_properties
+ALTER TABLE ONLY public.country_properties
     ADD CONSTRAINT country_properties_pkey PRIMARY KEY (id);
 
 
@@ -4269,7 +4275,7 @@ ALTER TABLE ONLY country_properties
 -- Name: database_updates database_updates_jid_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY database_updates
+ALTER TABLE ONLY public.database_updates
     ADD CONSTRAINT database_updates_jid_key UNIQUE (jid);
 
 
@@ -4277,7 +4283,7 @@ ALTER TABLE ONLY database_updates
 -- Name: database_updates database_updates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY database_updates
+ALTER TABLE ONLY public.database_updates
     ADD CONSTRAINT database_updates_pkey PRIMARY KEY (id);
 
 
@@ -4285,7 +4291,7 @@ ALTER TABLE ONLY database_updates
 -- Name: database_validation_reports database_validation_reports_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY database_validation_reports
+ALTER TABLE ONLY public.database_validation_reports
     ADD CONSTRAINT database_validation_reports_pkey PRIMARY KEY (id);
 
 
@@ -4293,7 +4299,7 @@ ALTER TABLE ONLY database_validation_reports
 -- Name: download_attributes download_attributes_context_id_position_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY download_attributes
+ALTER TABLE ONLY public.download_attributes
     ADD CONSTRAINT download_attributes_context_id_position_key UNIQUE (context_id, "position");
 
 
@@ -4301,7 +4307,7 @@ ALTER TABLE ONLY download_attributes
 -- Name: download_attributes download_attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY download_attributes
+ALTER TABLE ONLY public.download_attributes
     ADD CONSTRAINT download_attributes_pkey PRIMARY KEY (id);
 
 
@@ -4309,7 +4315,7 @@ ALTER TABLE ONLY download_attributes
 -- Name: download_quals download_quals_download_attribute_id_qual_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY download_quals
+ALTER TABLE ONLY public.download_quals
     ADD CONSTRAINT download_quals_download_attribute_id_qual_id_key UNIQUE (download_attribute_id, qual_id);
 
 
@@ -4317,7 +4323,7 @@ ALTER TABLE ONLY download_quals
 -- Name: download_quals download_quals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY download_quals
+ALTER TABLE ONLY public.download_quals
     ADD CONSTRAINT download_quals_pkey PRIMARY KEY (id);
 
 
@@ -4325,7 +4331,7 @@ ALTER TABLE ONLY download_quals
 -- Name: download_quants download_quants_download_attribute_id_quant_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY download_quants
+ALTER TABLE ONLY public.download_quants
     ADD CONSTRAINT download_quants_download_attribute_id_quant_id_key UNIQUE (download_attribute_id, quant_id);
 
 
@@ -4333,7 +4339,7 @@ ALTER TABLE ONLY download_quants
 -- Name: download_quants download_quants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY download_quants
+ALTER TABLE ONLY public.download_quants
     ADD CONSTRAINT download_quants_pkey PRIMARY KEY (id);
 
 
@@ -4341,7 +4347,7 @@ ALTER TABLE ONLY download_quants
 -- Name: download_versions download_versions_context_id_symbol_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY download_versions
+ALTER TABLE ONLY public.download_versions
     ADD CONSTRAINT download_versions_context_id_symbol_key UNIQUE (context_id, symbol);
 
 
@@ -4349,7 +4355,7 @@ ALTER TABLE ONLY download_versions
 -- Name: download_versions download_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY download_versions
+ALTER TABLE ONLY public.download_versions
     ADD CONSTRAINT download_versions_pkey PRIMARY KEY (id);
 
 
@@ -4357,7 +4363,7 @@ ALTER TABLE ONLY download_versions
 -- Name: flow_inds flow_inds_flow_id_ind_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY flow_inds
+ALTER TABLE ONLY public.flow_inds
     ADD CONSTRAINT flow_inds_flow_id_ind_id_key UNIQUE (flow_id, ind_id);
 
 
@@ -4365,7 +4371,7 @@ ALTER TABLE ONLY flow_inds
 -- Name: flow_inds flow_inds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY flow_inds
+ALTER TABLE ONLY public.flow_inds
     ADD CONSTRAINT flow_inds_pkey PRIMARY KEY (id);
 
 
@@ -4373,7 +4379,7 @@ ALTER TABLE ONLY flow_inds
 -- Name: flow_quals flow_quals_flow_id_qual_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY flow_quals
+ALTER TABLE ONLY public.flow_quals
     ADD CONSTRAINT flow_quals_flow_id_qual_id_key UNIQUE (flow_id, qual_id);
 
 
@@ -4381,7 +4387,7 @@ ALTER TABLE ONLY flow_quals
 -- Name: flow_quals flow_quals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY flow_quals
+ALTER TABLE ONLY public.flow_quals
     ADD CONSTRAINT flow_quals_pkey PRIMARY KEY (id);
 
 
@@ -4389,7 +4395,7 @@ ALTER TABLE ONLY flow_quals
 -- Name: flow_quants flow_quants_flow_id_quant_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY flow_quants
+ALTER TABLE ONLY public.flow_quants
     ADD CONSTRAINT flow_quants_flow_id_quant_id_key UNIQUE (flow_id, quant_id);
 
 
@@ -4397,7 +4403,7 @@ ALTER TABLE ONLY flow_quants
 -- Name: flow_quants flow_quants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY flow_quants
+ALTER TABLE ONLY public.flow_quants
     ADD CONSTRAINT flow_quants_pkey PRIMARY KEY (id);
 
 
@@ -4405,7 +4411,7 @@ ALTER TABLE ONLY flow_quants
 -- Name: flows flows_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY flows
+ALTER TABLE ONLY public.flows
     ADD CONSTRAINT flows_pkey PRIMARY KEY (id);
 
 
@@ -4413,7 +4419,7 @@ ALTER TABLE ONLY flows
 -- Name: ind_properties ind_properties_ind_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY ind_properties
+ALTER TABLE ONLY public.ind_properties
     ADD CONSTRAINT ind_properties_ind_id_key UNIQUE (ind_id);
 
 
@@ -4421,7 +4427,7 @@ ALTER TABLE ONLY ind_properties
 -- Name: ind_properties ind_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY ind_properties
+ALTER TABLE ONLY public.ind_properties
     ADD CONSTRAINT ind_properties_pkey PRIMARY KEY (id);
 
 
@@ -4429,7 +4435,7 @@ ALTER TABLE ONLY ind_properties
 -- Name: inds inds_name_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY inds
+ALTER TABLE ONLY public.inds
     ADD CONSTRAINT inds_name_key UNIQUE (name);
 
 
@@ -4437,7 +4443,7 @@ ALTER TABLE ONLY inds
 -- Name: inds inds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY inds
+ALTER TABLE ONLY public.inds
     ADD CONSTRAINT inds_pkey PRIMARY KEY (id);
 
 
@@ -4445,7 +4451,7 @@ ALTER TABLE ONLY inds
 -- Name: map_attribute_groups map_attribute_groups_context_id_position_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY map_attribute_groups
+ALTER TABLE ONLY public.map_attribute_groups
     ADD CONSTRAINT map_attribute_groups_context_id_position_key UNIQUE (context_id, "position");
 
 
@@ -4453,7 +4459,7 @@ ALTER TABLE ONLY map_attribute_groups
 -- Name: map_attribute_groups map_attribute_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY map_attribute_groups
+ALTER TABLE ONLY public.map_attribute_groups
     ADD CONSTRAINT map_attribute_groups_pkey PRIMARY KEY (id);
 
 
@@ -4461,7 +4467,7 @@ ALTER TABLE ONLY map_attribute_groups
 -- Name: map_attributes map_attributes_map_attribute_group_id_position_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY map_attributes
+ALTER TABLE ONLY public.map_attributes
     ADD CONSTRAINT map_attributes_map_attribute_group_id_position_key UNIQUE (map_attribute_group_id, "position");
 
 
@@ -4469,7 +4475,7 @@ ALTER TABLE ONLY map_attributes
 -- Name: map_attributes map_attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY map_attributes
+ALTER TABLE ONLY public.map_attributes
     ADD CONSTRAINT map_attributes_pkey PRIMARY KEY (id);
 
 
@@ -4477,7 +4483,7 @@ ALTER TABLE ONLY map_attributes
 -- Name: map_inds map_inds_map_attribute_id_ind_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY map_inds
+ALTER TABLE ONLY public.map_inds
     ADD CONSTRAINT map_inds_map_attribute_id_ind_id_key UNIQUE (map_attribute_id, ind_id);
 
 
@@ -4485,7 +4491,7 @@ ALTER TABLE ONLY map_inds
 -- Name: map_inds map_inds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY map_inds
+ALTER TABLE ONLY public.map_inds
     ADD CONSTRAINT map_inds_pkey PRIMARY KEY (id);
 
 
@@ -4493,7 +4499,7 @@ ALTER TABLE ONLY map_inds
 -- Name: map_quants map_quants_map_attribute_id_quant_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY map_quants
+ALTER TABLE ONLY public.map_quants
     ADD CONSTRAINT map_quants_map_attribute_id_quant_id_key UNIQUE (map_attribute_id, quant_id);
 
 
@@ -4501,7 +4507,7 @@ ALTER TABLE ONLY map_quants
 -- Name: map_quants map_quants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY map_quants
+ALTER TABLE ONLY public.map_quants
     ADD CONSTRAINT map_quants_pkey PRIMARY KEY (id);
 
 
@@ -4509,7 +4515,7 @@ ALTER TABLE ONLY map_quants
 -- Name: node_inds node_inds_node_id_ind_id_year_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_inds
+ALTER TABLE ONLY public.node_inds
     ADD CONSTRAINT node_inds_node_id_ind_id_year_key UNIQUE (node_id, ind_id, year);
 
 
@@ -4517,7 +4523,7 @@ ALTER TABLE ONLY node_inds
 -- Name: node_inds node_inds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_inds
+ALTER TABLE ONLY public.node_inds
     ADD CONSTRAINT node_inds_pkey PRIMARY KEY (id);
 
 
@@ -4525,7 +4531,7 @@ ALTER TABLE ONLY node_inds
 -- Name: node_properties node_properties_node_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_properties
+ALTER TABLE ONLY public.node_properties
     ADD CONSTRAINT node_properties_node_id_key UNIQUE (node_id);
 
 
@@ -4533,7 +4539,7 @@ ALTER TABLE ONLY node_properties
 -- Name: node_properties node_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_properties
+ALTER TABLE ONLY public.node_properties
     ADD CONSTRAINT node_properties_pkey PRIMARY KEY (id);
 
 
@@ -4541,7 +4547,7 @@ ALTER TABLE ONLY node_properties
 -- Name: node_quals node_quals_node_id_qual_id_year_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_quals
+ALTER TABLE ONLY public.node_quals
     ADD CONSTRAINT node_quals_node_id_qual_id_year_key UNIQUE (node_id, qual_id, year);
 
 
@@ -4549,7 +4555,7 @@ ALTER TABLE ONLY node_quals
 -- Name: node_quals node_quals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_quals
+ALTER TABLE ONLY public.node_quals
     ADD CONSTRAINT node_quals_pkey PRIMARY KEY (id);
 
 
@@ -4557,7 +4563,7 @@ ALTER TABLE ONLY node_quals
 -- Name: node_quants node_quants_node_id_quant_id_year_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_quants
+ALTER TABLE ONLY public.node_quants
     ADD CONSTRAINT node_quants_node_id_quant_id_year_key UNIQUE (node_id, quant_id, year);
 
 
@@ -4565,7 +4571,7 @@ ALTER TABLE ONLY node_quants
 -- Name: node_quants node_quants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_quants
+ALTER TABLE ONLY public.node_quants
     ADD CONSTRAINT node_quants_pkey PRIMARY KEY (id);
 
 
@@ -4573,7 +4579,7 @@ ALTER TABLE ONLY node_quants
 -- Name: node_types node_types_name_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_types
+ALTER TABLE ONLY public.node_types
     ADD CONSTRAINT node_types_name_key UNIQUE (name);
 
 
@@ -4581,7 +4587,7 @@ ALTER TABLE ONLY node_types
 -- Name: node_types node_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_types
+ALTER TABLE ONLY public.node_types
     ADD CONSTRAINT node_types_pkey PRIMARY KEY (id);
 
 
@@ -4589,7 +4595,7 @@ ALTER TABLE ONLY node_types
 -- Name: nodes nodes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY nodes
+ALTER TABLE ONLY public.nodes
     ADD CONSTRAINT nodes_pkey PRIMARY KEY (id);
 
 
@@ -4597,7 +4603,7 @@ ALTER TABLE ONLY nodes
 -- Name: profiles profiles_context_node_type_id_name_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY profiles
+ALTER TABLE ONLY public.profiles
     ADD CONSTRAINT profiles_context_node_type_id_name_key UNIQUE (context_node_type_id, name);
 
 
@@ -4605,7 +4611,7 @@ ALTER TABLE ONLY profiles
 -- Name: profiles profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY profiles
+ALTER TABLE ONLY public.profiles
     ADD CONSTRAINT profiles_pkey PRIMARY KEY (id);
 
 
@@ -4613,7 +4619,7 @@ ALTER TABLE ONLY profiles
 -- Name: qual_properties qual_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY qual_properties
+ALTER TABLE ONLY public.qual_properties
     ADD CONSTRAINT qual_properties_pkey PRIMARY KEY (id);
 
 
@@ -4621,7 +4627,7 @@ ALTER TABLE ONLY qual_properties
 -- Name: qual_properties qual_properties_qual_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY qual_properties
+ALTER TABLE ONLY public.qual_properties
     ADD CONSTRAINT qual_properties_qual_id_key UNIQUE (qual_id);
 
 
@@ -4629,7 +4635,7 @@ ALTER TABLE ONLY qual_properties
 -- Name: quals quals_name_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY quals
+ALTER TABLE ONLY public.quals
     ADD CONSTRAINT quals_name_key UNIQUE (name);
 
 
@@ -4637,7 +4643,7 @@ ALTER TABLE ONLY quals
 -- Name: quals quals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY quals
+ALTER TABLE ONLY public.quals
     ADD CONSTRAINT quals_pkey PRIMARY KEY (id);
 
 
@@ -4645,7 +4651,7 @@ ALTER TABLE ONLY quals
 -- Name: quant_properties quant_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY quant_properties
+ALTER TABLE ONLY public.quant_properties
     ADD CONSTRAINT quant_properties_pkey PRIMARY KEY (id);
 
 
@@ -4653,7 +4659,7 @@ ALTER TABLE ONLY quant_properties
 -- Name: quant_properties quant_properties_quant_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY quant_properties
+ALTER TABLE ONLY public.quant_properties
     ADD CONSTRAINT quant_properties_quant_id_key UNIQUE (quant_id);
 
 
@@ -4661,7 +4667,7 @@ ALTER TABLE ONLY quant_properties
 -- Name: quants quants_name_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY quants
+ALTER TABLE ONLY public.quants
     ADD CONSTRAINT quants_name_key UNIQUE (name);
 
 
@@ -4669,7 +4675,7 @@ ALTER TABLE ONLY quants
 -- Name: quants quants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY quants
+ALTER TABLE ONLY public.quants
     ADD CONSTRAINT quants_pkey PRIMARY KEY (id);
 
 
@@ -4677,7 +4683,7 @@ ALTER TABLE ONLY quants
 -- Name: recolor_by_attributes recolor_by_attributes_context_id_group_number_position_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY recolor_by_attributes
+ALTER TABLE ONLY public.recolor_by_attributes
     ADD CONSTRAINT recolor_by_attributes_context_id_group_number_position_key UNIQUE (context_id, group_number, "position");
 
 
@@ -4685,7 +4691,7 @@ ALTER TABLE ONLY recolor_by_attributes
 -- Name: recolor_by_attributes recolor_by_attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY recolor_by_attributes
+ALTER TABLE ONLY public.recolor_by_attributes
     ADD CONSTRAINT recolor_by_attributes_pkey PRIMARY KEY (id);
 
 
@@ -4693,7 +4699,7 @@ ALTER TABLE ONLY recolor_by_attributes
 -- Name: recolor_by_inds recolor_by_inds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY recolor_by_inds
+ALTER TABLE ONLY public.recolor_by_inds
     ADD CONSTRAINT recolor_by_inds_pkey PRIMARY KEY (id);
 
 
@@ -4701,7 +4707,7 @@ ALTER TABLE ONLY recolor_by_inds
 -- Name: recolor_by_inds recolor_by_inds_recolor_by_attribute_id_ind_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY recolor_by_inds
+ALTER TABLE ONLY public.recolor_by_inds
     ADD CONSTRAINT recolor_by_inds_recolor_by_attribute_id_ind_id_key UNIQUE (recolor_by_attribute_id, ind_id);
 
 
@@ -4709,7 +4715,7 @@ ALTER TABLE ONLY recolor_by_inds
 -- Name: recolor_by_quals recolor_by_quals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY recolor_by_quals
+ALTER TABLE ONLY public.recolor_by_quals
     ADD CONSTRAINT recolor_by_quals_pkey PRIMARY KEY (id);
 
 
@@ -4717,7 +4723,7 @@ ALTER TABLE ONLY recolor_by_quals
 -- Name: recolor_by_quals recolor_by_quals_recolor_by_attribute_id_qual_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY recolor_by_quals
+ALTER TABLE ONLY public.recolor_by_quals
     ADD CONSTRAINT recolor_by_quals_recolor_by_attribute_id_qual_id_key UNIQUE (recolor_by_attribute_id, qual_id);
 
 
@@ -4725,7 +4731,7 @@ ALTER TABLE ONLY recolor_by_quals
 -- Name: resize_by_attributes resize_by_attributes_context_id_group_number_position_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY resize_by_attributes
+ALTER TABLE ONLY public.resize_by_attributes
     ADD CONSTRAINT resize_by_attributes_context_id_group_number_position_key UNIQUE (context_id, group_number, "position");
 
 
@@ -4733,7 +4739,7 @@ ALTER TABLE ONLY resize_by_attributes
 -- Name: resize_by_attributes resize_by_attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY resize_by_attributes
+ALTER TABLE ONLY public.resize_by_attributes
     ADD CONSTRAINT resize_by_attributes_pkey PRIMARY KEY (id);
 
 
@@ -4741,7 +4747,7 @@ ALTER TABLE ONLY resize_by_attributes
 -- Name: resize_by_quants resize_by_quants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY resize_by_quants
+ALTER TABLE ONLY public.resize_by_quants
     ADD CONSTRAINT resize_by_quants_pkey PRIMARY KEY (id);
 
 
@@ -4749,7 +4755,7 @@ ALTER TABLE ONLY resize_by_quants
 -- Name: resize_by_quants resize_by_quants_resize_by_attribute_id_quant_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY resize_by_quants
+ALTER TABLE ONLY public.resize_by_quants
     ADD CONSTRAINT resize_by_quants_resize_by_attribute_id_quant_id_key UNIQUE (resize_by_attribute_id, quant_id);
 
 
@@ -4757,1068 +4763,1074 @@ ALTER TABLE ONLY resize_by_quants
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY schema_migrations
+ALTER TABLE ONLY public.schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
 
-
-SET search_path = content, pg_catalog;
 
 --
 -- Name: idx_ckeditor_assetable; Type: INDEX; Schema: content; Owner: -
 --
 
-CREATE INDEX idx_ckeditor_assetable ON ckeditor_assets USING btree (assetable_type, assetable_id);
+CREATE INDEX idx_ckeditor_assetable ON content.ckeditor_assets USING btree (assetable_type, assetable_id);
 
 
 --
 -- Name: idx_ckeditor_assetable_type; Type: INDEX; Schema: content; Owner: -
 --
 
-CREATE INDEX idx_ckeditor_assetable_type ON ckeditor_assets USING btree (assetable_type, type, assetable_id);
+CREATE INDEX idx_ckeditor_assetable_type ON content.ckeditor_assets USING btree (assetable_type, type, assetable_id);
 
 
 --
 -- Name: index_staff_members_on_staff_group_id; Type: INDEX; Schema: content; Owner: -
 --
 
-CREATE INDEX index_staff_members_on_staff_group_id ON staff_members USING btree (staff_group_id);
+CREATE INDEX index_staff_members_on_staff_group_id ON content.staff_members USING btree (staff_group_id);
 
 
 --
 -- Name: index_users_on_email; Type: INDEX; Schema: content; Owner: -
 --
 
-CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
+CREATE UNIQUE INDEX index_users_on_email ON content.users USING btree (email);
 
 
 --
 -- Name: index_users_on_reset_password_token; Type: INDEX; Schema: content; Owner: -
 --
 
-CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
+CREATE UNIQUE INDEX index_users_on_reset_password_token ON content.users USING btree (reset_password_token);
 
-
-SET search_path = public, pg_catalog;
 
 --
 -- Name: attributes_mv_name_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX attributes_mv_name_idx ON attributes_mv USING btree (name);
+CREATE UNIQUE INDEX attributes_mv_name_idx ON public.attributes_mv USING btree (name);
 
 
 --
 -- Name: download_attributes_mv_context_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX download_attributes_mv_context_id_attribute_id_idx ON download_attributes_mv USING btree (context_id, attribute_id);
+CREATE INDEX download_attributes_mv_context_id_attribute_id_idx ON public.download_attributes_mv USING btree (context_id, attribute_id);
 
 
 --
 -- Name: download_attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX download_attributes_mv_id_idx ON download_attributes_mv USING btree (id);
+CREATE UNIQUE INDEX download_attributes_mv_id_idx ON public.download_attributes_mv USING btree (id);
 
 
 --
 -- Name: download_flows_mv_attribute_type_attribute_id_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX download_flows_mv_attribute_type_attribute_id_id_idx ON download_flows_mv USING btree (attribute_type, attribute_id, id);
+CREATE UNIQUE INDEX download_flows_mv_attribute_type_attribute_id_id_idx ON public.download_flows_mv USING btree (attribute_type, attribute_id, id);
 
 
 --
 -- Name: download_flows_mv_context_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX download_flows_mv_context_id_idx ON download_flows_mv USING btree (context_id);
+CREATE INDEX download_flows_mv_context_id_idx ON public.download_flows_mv USING btree (context_id);
 
 
 --
 -- Name: download_flows_mv_country_node_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX download_flows_mv_country_node_id_idx ON download_flows_mv USING btree (country_node_id);
+CREATE INDEX download_flows_mv_country_node_id_idx ON public.download_flows_mv USING btree (country_node_id);
 
 
 --
 -- Name: download_flows_mv_exporter_node_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX download_flows_mv_exporter_node_id_idx ON download_flows_mv USING btree (exporter_node_id);
+CREATE INDEX download_flows_mv_exporter_node_id_idx ON public.download_flows_mv USING btree (exporter_node_id);
 
 
 --
 -- Name: download_flows_mv_importer_node_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX download_flows_mv_importer_node_id_idx ON download_flows_mv USING btree (importer_node_id);
+CREATE INDEX download_flows_mv_importer_node_id_idx ON public.download_flows_mv USING btree (importer_node_id);
 
 
 --
 -- Name: download_flows_mv_row_name_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX download_flows_mv_row_name_attribute_type_attribute_id_idx ON download_flows_mv USING btree (row_name, attribute_type, attribute_id);
+CREATE UNIQUE INDEX download_flows_mv_row_name_attribute_type_attribute_id_idx ON public.download_flows_mv USING btree (row_name, attribute_type, attribute_id);
 
 
 --
 -- Name: flow_inds_ind_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX flow_inds_ind_id_idx ON flow_inds USING btree (ind_id);
+CREATE INDEX flow_inds_ind_id_idx ON public.flow_inds USING btree (ind_id);
 
 
 --
 -- Name: flow_quals_qual_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX flow_quals_qual_id_idx ON flow_quals USING btree (qual_id);
+CREATE INDEX flow_quals_qual_id_idx ON public.flow_quals USING btree (qual_id);
 
 
 --
 -- Name: flow_quants_quant_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX flow_quants_quant_id_idx ON flow_quants USING btree (quant_id);
+CREATE INDEX flow_quants_quant_id_idx ON public.flow_quants USING btree (quant_id);
 
 
 --
 -- Name: index_attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_attributes_mv_id_idx ON attributes_mv USING btree (id);
+CREATE UNIQUE INDEX index_attributes_mv_id_idx ON public.attributes_mv USING btree (id);
 
 
 --
 -- Name: index_carto_layers_on_contextual_layer_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_carto_layers_on_contextual_layer_id ON carto_layers USING btree (contextual_layer_id);
+CREATE INDEX index_carto_layers_on_contextual_layer_id ON public.carto_layers USING btree (contextual_layer_id);
 
 
 --
 -- Name: index_chart_attributes_on_chart_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_attributes_on_chart_id ON chart_attributes USING btree (chart_id);
+CREATE INDEX index_chart_attributes_on_chart_id ON public.chart_attributes USING btree (chart_id);
 
 
 --
 -- Name: index_chart_inds_on_chart_attribute_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_inds_on_chart_attribute_id ON chart_inds USING btree (chart_attribute_id);
+CREATE INDEX index_chart_inds_on_chart_attribute_id ON public.chart_inds USING btree (chart_attribute_id);
 
 
 --
 -- Name: index_chart_inds_on_ind_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_inds_on_ind_id ON chart_inds USING btree (ind_id);
+CREATE INDEX index_chart_inds_on_ind_id ON public.chart_inds USING btree (ind_id);
 
 
 --
 -- Name: index_chart_quals_on_chart_attribute_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_quals_on_chart_attribute_id ON chart_quals USING btree (chart_attribute_id);
+CREATE INDEX index_chart_quals_on_chart_attribute_id ON public.chart_quals USING btree (chart_attribute_id);
 
 
 --
 -- Name: index_chart_quals_on_qual_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_quals_on_qual_id ON chart_quals USING btree (qual_id);
+CREATE INDEX index_chart_quals_on_qual_id ON public.chart_quals USING btree (qual_id);
 
 
 --
 -- Name: index_chart_quants_on_chart_attribute_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_quants_on_chart_attribute_id ON chart_quants USING btree (chart_attribute_id);
+CREATE INDEX index_chart_quants_on_chart_attribute_id ON public.chart_quants USING btree (chart_attribute_id);
 
 
 --
 -- Name: index_chart_quants_on_quant_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_quants_on_quant_id ON chart_quants USING btree (quant_id);
+CREATE INDEX index_chart_quants_on_quant_id ON public.chart_quants USING btree (quant_id);
 
 
 --
 -- Name: index_charts_on_parent_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_charts_on_parent_id ON charts USING btree (parent_id);
+CREATE INDEX index_charts_on_parent_id ON public.charts USING btree (parent_id);
 
 
 --
 -- Name: index_charts_on_profile_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_charts_on_profile_id ON charts USING btree (profile_id);
+CREATE INDEX index_charts_on_profile_id ON public.charts USING btree (profile_id);
 
 
 --
 -- Name: index_context_node_type_properties_on_context_node_type_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_context_node_type_properties_on_context_node_type_id ON context_node_type_properties USING btree (context_node_type_id);
+CREATE INDEX index_context_node_type_properties_on_context_node_type_id ON public.context_node_type_properties USING btree (context_node_type_id);
 
 
 --
 -- Name: index_context_node_types_on_context_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_context_node_types_on_context_id ON context_node_types USING btree (context_id);
+CREATE INDEX index_context_node_types_on_context_id ON public.context_node_types USING btree (context_id);
 
 
 --
 -- Name: index_context_node_types_on_node_type_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_context_node_types_on_node_type_id ON context_node_types USING btree (node_type_id);
+CREATE INDEX index_context_node_types_on_node_type_id ON public.context_node_types USING btree (node_type_id);
 
 
 --
 -- Name: index_context_properties_on_context_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_context_properties_on_context_id ON context_properties USING btree (context_id);
+CREATE INDEX index_context_properties_on_context_id ON public.context_properties USING btree (context_id);
 
 
 --
 -- Name: index_contexts_on_commodity_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_contexts_on_commodity_id ON contexts USING btree (commodity_id);
+CREATE INDEX index_contexts_on_commodity_id ON public.contexts USING btree (commodity_id);
 
 
 --
 -- Name: index_contexts_on_country_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_contexts_on_country_id ON contexts USING btree (country_id);
+CREATE INDEX index_contexts_on_country_id ON public.contexts USING btree (country_id);
 
 
 --
 -- Name: index_contextual_layers_on_context_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_contextual_layers_on_context_id ON contextual_layers USING btree (context_id);
+CREATE INDEX index_contextual_layers_on_context_id ON public.contextual_layers USING btree (context_id);
 
 
 --
 -- Name: index_country_properties_on_country_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_country_properties_on_country_id ON country_properties USING btree (country_id);
+CREATE INDEX index_country_properties_on_country_id ON public.country_properties USING btree (country_id);
 
 
 --
 -- Name: index_database_updates_on_status; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_database_updates_on_status ON database_updates USING btree (status) WHERE (status = 'STARTED'::text);
+CREATE UNIQUE INDEX index_database_updates_on_status ON public.database_updates USING btree (status) WHERE (status = 'STARTED'::text);
 
 
 --
 -- Name: index_download_attributes_on_context_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_download_attributes_on_context_id ON download_attributes USING btree (context_id);
+CREATE INDEX index_download_attributes_on_context_id ON public.download_attributes USING btree (context_id);
 
 
 --
 -- Name: index_download_quals_on_download_attribute_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_download_quals_on_download_attribute_id ON download_quals USING btree (download_attribute_id);
+CREATE INDEX index_download_quals_on_download_attribute_id ON public.download_quals USING btree (download_attribute_id);
 
 
 --
 -- Name: index_download_quals_on_qual_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_download_quals_on_qual_id ON download_quals USING btree (qual_id);
+CREATE INDEX index_download_quals_on_qual_id ON public.download_quals USING btree (qual_id);
 
 
 --
 -- Name: index_download_quants_on_download_attribute_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_download_quants_on_download_attribute_id ON download_quants USING btree (download_attribute_id);
+CREATE INDEX index_download_quants_on_download_attribute_id ON public.download_quants USING btree (download_attribute_id);
 
 
 --
 -- Name: index_download_quants_on_quant_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_download_quants_on_quant_id ON download_quants USING btree (quant_id);
+CREATE INDEX index_download_quants_on_quant_id ON public.download_quants USING btree (quant_id);
 
 
 --
 -- Name: index_download_versions_on_context_id_and_is_current; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_download_versions_on_context_id_and_is_current ON download_versions USING btree (context_id, is_current) WHERE (is_current IS TRUE);
+CREATE UNIQUE INDEX index_download_versions_on_context_id_and_is_current ON public.download_versions USING btree (context_id, is_current) WHERE (is_current IS TRUE);
 
 
 --
 -- Name: index_flow_inds_on_flow_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_flow_inds_on_flow_id ON flow_inds USING btree (flow_id);
+CREATE INDEX index_flow_inds_on_flow_id ON public.flow_inds USING btree (flow_id);
 
 
 --
 -- Name: index_flow_paths_mv_on_flow_id_and_column_position; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_flow_paths_mv_on_flow_id_and_column_position ON flow_paths_mv USING btree (flow_id, column_position);
+CREATE INDEX index_flow_paths_mv_on_flow_id_and_column_position ON public.flow_paths_mv USING btree (flow_id, column_position);
 
 
 --
 -- Name: index_flow_quals_on_flow_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_flow_quals_on_flow_id ON flow_quals USING btree (flow_id);
+CREATE INDEX index_flow_quals_on_flow_id ON public.flow_quals USING btree (flow_id);
 
 
 --
 -- Name: index_flow_quants_on_flow_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_flow_quants_on_flow_id ON flow_quants USING btree (flow_id);
+CREATE INDEX index_flow_quants_on_flow_id ON public.flow_quants USING btree (flow_id);
 
 
 --
 -- Name: index_flows_on_context_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_flows_on_context_id ON flows USING btree (context_id);
+CREATE INDEX index_flows_on_context_id ON public.flows USING btree (context_id);
 
 
 --
 -- Name: index_flows_on_context_id_and_year; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_flows_on_context_id_and_year ON flows USING btree (context_id, year);
+CREATE INDEX index_flows_on_context_id_and_year ON public.flows USING btree (context_id, year);
 
 
 --
 -- Name: index_flows_on_path; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_flows_on_path ON flows USING btree (path);
+CREATE INDEX index_flows_on_path ON public.flows USING btree (path);
 
 
 --
 -- Name: index_ind_properties_on_ind_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_ind_properties_on_ind_id ON ind_properties USING btree (ind_id);
+CREATE INDEX index_ind_properties_on_ind_id ON public.ind_properties USING btree (ind_id);
 
 
 --
 -- Name: index_map_attribute_groups_on_context_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_map_attribute_groups_on_context_id ON map_attribute_groups USING btree (context_id);
+CREATE INDEX index_map_attribute_groups_on_context_id ON public.map_attribute_groups USING btree (context_id);
 
 
 --
 -- Name: index_map_attributes_on_map_attribute_group_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_map_attributes_on_map_attribute_group_id ON map_attributes USING btree (map_attribute_group_id);
+CREATE INDEX index_map_attributes_on_map_attribute_group_id ON public.map_attributes USING btree (map_attribute_group_id);
 
 
 --
 -- Name: index_map_inds_on_ind_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_map_inds_on_ind_id ON map_inds USING btree (ind_id);
+CREATE INDEX index_map_inds_on_ind_id ON public.map_inds USING btree (ind_id);
 
 
 --
 -- Name: index_map_inds_on_map_attribute_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_map_inds_on_map_attribute_id ON map_inds USING btree (map_attribute_id);
+CREATE INDEX index_map_inds_on_map_attribute_id ON public.map_inds USING btree (map_attribute_id);
 
 
 --
 -- Name: index_map_quants_on_map_attribute_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_map_quants_on_map_attribute_id ON map_quants USING btree (map_attribute_id);
+CREATE INDEX index_map_quants_on_map_attribute_id ON public.map_quants USING btree (map_attribute_id);
 
 
 --
 -- Name: index_map_quants_on_quant_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_map_quants_on_quant_id ON map_quants USING btree (quant_id);
+CREATE INDEX index_map_quants_on_quant_id ON public.map_quants USING btree (quant_id);
 
 
 --
 -- Name: index_node_inds_on_node_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_node_inds_on_node_id ON node_inds USING btree (node_id);
+CREATE INDEX index_node_inds_on_node_id ON public.node_inds USING btree (node_id);
 
 
 --
 -- Name: index_node_properties_on_node_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_node_properties_on_node_id ON node_properties USING btree (node_id);
+CREATE INDEX index_node_properties_on_node_id ON public.node_properties USING btree (node_id);
 
 
 --
 -- Name: index_node_quals_on_node_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_node_quals_on_node_id ON node_quals USING btree (node_id);
+CREATE INDEX index_node_quals_on_node_id ON public.node_quals USING btree (node_id);
 
 
 --
 -- Name: index_node_quants_on_node_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_node_quants_on_node_id ON node_quants USING btree (node_id);
+CREATE INDEX index_node_quants_on_node_id ON public.node_quants USING btree (node_id);
 
 
 --
 -- Name: index_profiles_on_context_node_type_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_profiles_on_context_node_type_id ON profiles USING btree (context_node_type_id);
+CREATE INDEX index_profiles_on_context_node_type_id ON public.profiles USING btree (context_node_type_id);
 
 
 --
 -- Name: index_qual_properties_on_qual_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_qual_properties_on_qual_id ON qual_properties USING btree (qual_id);
+CREATE INDEX index_qual_properties_on_qual_id ON public.qual_properties USING btree (qual_id);
 
 
 --
 -- Name: index_quant_properties_on_quant_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_quant_properties_on_quant_id ON quant_properties USING btree (quant_id);
+CREATE INDEX index_quant_properties_on_quant_id ON public.quant_properties USING btree (quant_id);
 
 
 --
 -- Name: index_recolor_by_attributes_on_context_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_recolor_by_attributes_on_context_id ON recolor_by_attributes USING btree (context_id);
+CREATE INDEX index_recolor_by_attributes_on_context_id ON public.recolor_by_attributes USING btree (context_id);
 
 
 --
 -- Name: index_recolor_by_inds_on_ind_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_recolor_by_inds_on_ind_id ON recolor_by_inds USING btree (ind_id);
+CREATE INDEX index_recolor_by_inds_on_ind_id ON public.recolor_by_inds USING btree (ind_id);
 
 
 --
 -- Name: index_recolor_by_inds_on_recolor_by_attribute_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_recolor_by_inds_on_recolor_by_attribute_id ON recolor_by_inds USING btree (recolor_by_attribute_id);
+CREATE INDEX index_recolor_by_inds_on_recolor_by_attribute_id ON public.recolor_by_inds USING btree (recolor_by_attribute_id);
 
 
 --
 -- Name: index_recolor_by_quals_on_qual_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_recolor_by_quals_on_qual_id ON recolor_by_quals USING btree (qual_id);
+CREATE INDEX index_recolor_by_quals_on_qual_id ON public.recolor_by_quals USING btree (qual_id);
 
 
 --
 -- Name: index_recolor_by_quals_on_recolor_by_attribute_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_recolor_by_quals_on_recolor_by_attribute_id ON recolor_by_quals USING btree (recolor_by_attribute_id);
+CREATE INDEX index_recolor_by_quals_on_recolor_by_attribute_id ON public.recolor_by_quals USING btree (recolor_by_attribute_id);
 
 
 --
 -- Name: index_resize_by_attributes_on_context_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_resize_by_attributes_on_context_id ON resize_by_attributes USING btree (context_id);
+CREATE INDEX index_resize_by_attributes_on_context_id ON public.resize_by_attributes USING btree (context_id);
 
 
 --
 -- Name: index_resize_by_quants_on_quant_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_resize_by_quants_on_quant_id ON resize_by_quants USING btree (quant_id);
+CREATE INDEX index_resize_by_quants_on_quant_id ON public.resize_by_quants USING btree (quant_id);
 
 
 --
 -- Name: index_resize_by_quants_on_resize_by_attribute_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_resize_by_quants_on_resize_by_attribute_id ON resize_by_quants USING btree (resize_by_attribute_id);
+CREATE INDEX index_resize_by_quants_on_resize_by_attribute_id ON public.resize_by_quants USING btree (resize_by_attribute_id);
 
 
 --
 -- Name: map_attributes_mv_context_id_is_disabled_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX map_attributes_mv_context_id_is_disabled_idx ON map_attributes_mv USING btree (context_id, is_disabled) WHERE (is_disabled IS FALSE);
+CREATE INDEX map_attributes_mv_context_id_is_disabled_idx ON public.map_attributes_mv USING btree (context_id, is_disabled) WHERE (is_disabled IS FALSE);
 
 
 --
 -- Name: map_attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX map_attributes_mv_id_idx ON map_attributes_mv USING btree (id);
+CREATE UNIQUE INDEX map_attributes_mv_id_idx ON public.map_attributes_mv USING btree (id);
 
 
 --
 -- Name: map_attributes_mv_map_attribute_group_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX map_attributes_mv_map_attribute_group_id_attribute_id_idx ON map_attributes_mv USING btree (map_attribute_group_id, attribute_id);
+CREATE INDEX map_attributes_mv_map_attribute_group_id_attribute_id_idx ON public.map_attributes_mv USING btree (map_attribute_group_id, attribute_id);
 
 
 --
 -- Name: map_attributes_mv_original_attribute_id_attribute_type_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX map_attributes_mv_original_attribute_id_attribute_type_idx ON map_attributes_mv USING btree (original_attribute_id, attribute_type);
+CREATE INDEX map_attributes_mv_original_attribute_id_attribute_type_idx ON public.map_attributes_mv USING btree (original_attribute_id, attribute_type);
 
 
 --
 -- Name: node_inds_ind_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX node_inds_ind_id_idx ON node_inds USING btree (ind_id);
+CREATE INDEX node_inds_ind_id_idx ON public.node_inds USING btree (ind_id);
 
 
 --
 -- Name: node_quals_qual_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX node_quals_qual_id_idx ON node_quals USING btree (qual_id);
+CREATE INDEX node_quals_qual_id_idx ON public.node_quals USING btree (qual_id);
 
 
 --
 -- Name: node_quants_quant_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX node_quants_quant_id_idx ON node_quants USING btree (quant_id);
+CREATE INDEX node_quants_quant_id_idx ON public.node_quants USING btree (quant_id);
+
+
+--
+-- Name: nodes_mv_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX nodes_mv_context_id_idx ON public.nodes_mv USING btree (context_id);
+
+
+--
+-- Name: nodes_mv_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX nodes_mv_name_idx ON public.nodes_mv USING gin (to_tsvector('simple'::regconfig, COALESCE(name, ''::text)));
 
 
 --
 -- Name: nodes_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX nodes_node_type_id_idx ON nodes USING btree (node_type_id);
+CREATE INDEX nodes_node_type_id_idx ON public.nodes USING btree (node_type_id);
 
 
 --
 -- Name: recolor_by_attributes_mv_context_id_attribute_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX recolor_by_attributes_mv_context_id_attribute_id ON recolor_by_attributes_mv USING btree (context_id, attribute_id);
+CREATE INDEX recolor_by_attributes_mv_context_id_attribute_id ON public.recolor_by_attributes_mv USING btree (context_id, attribute_id);
 
 
 --
 -- Name: recolor_by_attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX recolor_by_attributes_mv_id_idx ON recolor_by_attributes_mv USING btree (id);
+CREATE UNIQUE INDEX recolor_by_attributes_mv_id_idx ON public.recolor_by_attributes_mv USING btree (id);
 
 
 --
 -- Name: resize_by_attributes_mv_context_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX resize_by_attributes_mv_context_id_attribute_id_idx ON resize_by_attributes_mv USING btree (context_id, attribute_id);
+CREATE INDEX resize_by_attributes_mv_context_id_attribute_id_idx ON public.resize_by_attributes_mv USING btree (context_id, attribute_id);
 
 
 --
 -- Name: resize_by_attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX resize_by_attributes_mv_id_idx ON resize_by_attributes_mv USING btree (id);
+CREATE UNIQUE INDEX resize_by_attributes_mv_id_idx ON public.resize_by_attributes_mv USING btree (id);
 
-
-SET search_path = content, pg_catalog;
 
 --
 -- Name: staff_members fk_rails_6ad8424ffc; Type: FK CONSTRAINT; Schema: content; Owner: -
 --
 
-ALTER TABLE ONLY staff_members
-    ADD CONSTRAINT fk_rails_6ad8424ffc FOREIGN KEY (staff_group_id) REFERENCES staff_groups(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY content.staff_members
+    ADD CONSTRAINT fk_rails_6ad8424ffc FOREIGN KEY (staff_group_id) REFERENCES content.staff_groups(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
-
-SET search_path = public, pg_catalog;
 
 --
 -- Name: download_quants fk_rails_05ea4b5d71; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY download_quants
-    ADD CONSTRAINT fk_rails_05ea4b5d71 FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.download_quants
+    ADD CONSTRAINT fk_rails_05ea4b5d71 FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: flow_inds fk_rails_0a8bdfaf25; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY flow_inds
-    ADD CONSTRAINT fk_rails_0a8bdfaf25 FOREIGN KEY (flow_id) REFERENCES flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.flow_inds
+    ADD CONSTRAINT fk_rails_0a8bdfaf25 FOREIGN KEY (flow_id) REFERENCES public.flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: node_quals fk_rails_14ebb50b5a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_quals
-    ADD CONSTRAINT fk_rails_14ebb50b5a FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.node_quals
+    ADD CONSTRAINT fk_rails_14ebb50b5a FOREIGN KEY (node_id) REFERENCES public.nodes(id) ON DELETE CASCADE;
 
 
 --
 -- Name: recolor_by_attributes fk_rails_15a713c884; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY recolor_by_attributes
-    ADD CONSTRAINT fk_rails_15a713c884 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.recolor_by_attributes
+    ADD CONSTRAINT fk_rails_15a713c884 FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON DELETE CASCADE;
 
 
 --
 -- Name: context_node_types fk_rails_15e56acf9a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY context_node_types
-    ADD CONSTRAINT fk_rails_15e56acf9a FOREIGN KEY (node_type_id) REFERENCES node_types(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.context_node_types
+    ADD CONSTRAINT fk_rails_15e56acf9a FOREIGN KEY (node_type_id) REFERENCES public.node_types(id) ON DELETE CASCADE;
 
 
 --
 -- Name: download_attributes fk_rails_163b9bb8d8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY download_attributes
-    ADD CONSTRAINT fk_rails_163b9bb8d8 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.download_attributes
+    ADD CONSTRAINT fk_rails_163b9bb8d8 FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON DELETE CASCADE;
 
 
 --
 -- Name: chart_attributes fk_rails_18fff2d805; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_attributes
-    ADD CONSTRAINT fk_rails_18fff2d805 FOREIGN KEY (chart_id) REFERENCES charts(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.chart_attributes
+    ADD CONSTRAINT fk_rails_18fff2d805 FOREIGN KEY (chart_id) REFERENCES public.charts(id) ON DELETE CASCADE;
 
 
 --
 -- Name: download_quals fk_rails_1be1712b6c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY download_quals
-    ADD CONSTRAINT fk_rails_1be1712b6c FOREIGN KEY (download_attribute_id) REFERENCES download_attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.download_quals
+    ADD CONSTRAINT fk_rails_1be1712b6c FOREIGN KEY (download_attribute_id) REFERENCES public.download_attributes(id) ON DELETE CASCADE;
 
 
 --
 -- Name: quant_properties fk_rails_201d91fbef; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY quant_properties
-    ADD CONSTRAINT fk_rails_201d91fbef FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.quant_properties
+    ADD CONSTRAINT fk_rails_201d91fbef FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: flow_inds fk_rails_23d15ab229; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY flow_inds
-    ADD CONSTRAINT fk_rails_23d15ab229 FOREIGN KEY (ind_id) REFERENCES inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.flow_inds
+    ADD CONSTRAINT fk_rails_23d15ab229 FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: context_node_types fk_rails_23d7986b34; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY context_node_types
-    ADD CONSTRAINT fk_rails_23d7986b34 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.context_node_types
+    ADD CONSTRAINT fk_rails_23d7986b34 FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON DELETE CASCADE;
 
 
 --
 -- Name: resize_by_quants fk_rails_2617a248e4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY resize_by_quants
-    ADD CONSTRAINT fk_rails_2617a248e4 FOREIGN KEY (resize_by_attribute_id) REFERENCES resize_by_attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.resize_by_quants
+    ADD CONSTRAINT fk_rails_2617a248e4 FOREIGN KEY (resize_by_attribute_id) REFERENCES public.resize_by_attributes(id) ON DELETE CASCADE;
 
 
 --
 -- Name: node_inds fk_rails_28ea53a9b9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_inds
-    ADD CONSTRAINT fk_rails_28ea53a9b9 FOREIGN KEY (ind_id) REFERENCES inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.node_inds
+    ADD CONSTRAINT fk_rails_28ea53a9b9 FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: recolor_by_inds fk_rails_2950876b56; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY recolor_by_inds
-    ADD CONSTRAINT fk_rails_2950876b56 FOREIGN KEY (recolor_by_attribute_id) REFERENCES recolor_by_attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.recolor_by_inds
+    ADD CONSTRAINT fk_rails_2950876b56 FOREIGN KEY (recolor_by_attribute_id) REFERENCES public.recolor_by_attributes(id) ON DELETE CASCADE;
 
 
 --
 -- Name: chart_inds fk_rails_2c8eebb539; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_inds
-    ADD CONSTRAINT fk_rails_2c8eebb539 FOREIGN KEY (chart_attribute_id) REFERENCES chart_attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.chart_inds
+    ADD CONSTRAINT fk_rails_2c8eebb539 FOREIGN KEY (chart_attribute_id) REFERENCES public.chart_attributes(id) ON DELETE CASCADE;
 
 
 --
 -- Name: flow_quants fk_rails_2dbc0a565f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY flow_quants
-    ADD CONSTRAINT fk_rails_2dbc0a565f FOREIGN KEY (flow_id) REFERENCES flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.flow_quants
+    ADD CONSTRAINT fk_rails_2dbc0a565f FOREIGN KEY (flow_id) REFERENCES public.flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: map_quants fk_rails_308b5b45f7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY map_quants
-    ADD CONSTRAINT fk_rails_308b5b45f7 FOREIGN KEY (map_attribute_id) REFERENCES map_attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.map_quants
+    ADD CONSTRAINT fk_rails_308b5b45f7 FOREIGN KEY (map_attribute_id) REFERENCES public.map_attributes(id) ON DELETE CASCADE;
 
 
 --
 -- Name: map_attribute_groups fk_rails_32f187c0c7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY map_attribute_groups
-    ADD CONSTRAINT fk_rails_32f187c0c7 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.map_attribute_groups
+    ADD CONSTRAINT fk_rails_32f187c0c7 FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON DELETE CASCADE;
 
 
 --
 -- Name: nodes fk_rails_37e87445f7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY nodes
-    ADD CONSTRAINT fk_rails_37e87445f7 FOREIGN KEY (node_type_id) REFERENCES node_types(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.nodes
+    ADD CONSTRAINT fk_rails_37e87445f7 FOREIGN KEY (node_type_id) REFERENCES public.node_types(id) ON DELETE CASCADE;
 
 
 --
 -- Name: download_versions fk_rails_3fcb3b1d94; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY download_versions
-    ADD CONSTRAINT fk_rails_3fcb3b1d94 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.download_versions
+    ADD CONSTRAINT fk_rails_3fcb3b1d94 FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON DELETE CASCADE;
 
 
 --
 -- Name: chart_quals fk_rails_48ef39e784; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_quals
-    ADD CONSTRAINT fk_rails_48ef39e784 FOREIGN KEY (chart_attribute_id) REFERENCES chart_attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.chart_quals
+    ADD CONSTRAINT fk_rails_48ef39e784 FOREIGN KEY (chart_attribute_id) REFERENCES public.chart_attributes(id) ON DELETE CASCADE;
 
 
 --
 -- Name: map_inds fk_rails_49db6b9c1f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY map_inds
-    ADD CONSTRAINT fk_rails_49db6b9c1f FOREIGN KEY (ind_id) REFERENCES inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.map_inds
+    ADD CONSTRAINT fk_rails_49db6b9c1f FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: node_properties fk_rails_4dcde982df; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_properties
-    ADD CONSTRAINT fk_rails_4dcde982df FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.node_properties
+    ADD CONSTRAINT fk_rails_4dcde982df FOREIGN KEY (node_id) REFERENCES public.nodes(id) ON DELETE CASCADE;
 
 
 --
 -- Name: recolor_by_quals fk_rails_5294e7fccd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY recolor_by_quals
-    ADD CONSTRAINT fk_rails_5294e7fccd FOREIGN KEY (recolor_by_attribute_id) REFERENCES recolor_by_attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.recolor_by_quals
+    ADD CONSTRAINT fk_rails_5294e7fccd FOREIGN KEY (recolor_by_attribute_id) REFERENCES public.recolor_by_attributes(id) ON DELETE CASCADE;
 
 
 --
 -- Name: contextual_layers fk_rails_5c2d32b5a7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY contextual_layers
-    ADD CONSTRAINT fk_rails_5c2d32b5a7 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.contextual_layers
+    ADD CONSTRAINT fk_rails_5c2d32b5a7 FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON DELETE CASCADE;
 
 
 --
 -- Name: country_properties fk_rails_668b355aa6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY country_properties
-    ADD CONSTRAINT fk_rails_668b355aa6 FOREIGN KEY (country_id) REFERENCES countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.country_properties
+    ADD CONSTRAINT fk_rails_668b355aa6 FOREIGN KEY (country_id) REFERENCES public.countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: chart_quants fk_rails_69c56caceb; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_quants
-    ADD CONSTRAINT fk_rails_69c56caceb FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.chart_quants
+    ADD CONSTRAINT fk_rails_69c56caceb FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: flow_quals fk_rails_6e55ca4cbc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY flow_quals
-    ADD CONSTRAINT fk_rails_6e55ca4cbc FOREIGN KEY (flow_id) REFERENCES flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.flow_quals
+    ADD CONSTRAINT fk_rails_6e55ca4cbc FOREIGN KEY (flow_id) REFERENCES public.flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: ind_properties fk_rails_720a88d4b2; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY ind_properties
-    ADD CONSTRAINT fk_rails_720a88d4b2 FOREIGN KEY (ind_id) REFERENCES inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.ind_properties
+    ADD CONSTRAINT fk_rails_720a88d4b2 FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: charts fk_rails_805a6066ad; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY charts
-    ADD CONSTRAINT fk_rails_805a6066ad FOREIGN KEY (parent_id) REFERENCES charts(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.charts
+    ADD CONSTRAINT fk_rails_805a6066ad FOREIGN KEY (parent_id) REFERENCES public.charts(id) ON DELETE CASCADE;
 
 
 --
 -- Name: flow_quals fk_rails_917b9da2b8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY flow_quals
-    ADD CONSTRAINT fk_rails_917b9da2b8 FOREIGN KEY (qual_id) REFERENCES quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.flow_quals
+    ADD CONSTRAINT fk_rails_917b9da2b8 FOREIGN KEY (qual_id) REFERENCES public.quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: resize_by_attributes fk_rails_91f952a39c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY resize_by_attributes
-    ADD CONSTRAINT fk_rails_91f952a39c FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.resize_by_attributes
+    ADD CONSTRAINT fk_rails_91f952a39c FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON DELETE CASCADE;
 
 
 --
 -- Name: recolor_by_inds fk_rails_93051274e4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY recolor_by_inds
-    ADD CONSTRAINT fk_rails_93051274e4 FOREIGN KEY (ind_id) REFERENCES inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.recolor_by_inds
+    ADD CONSTRAINT fk_rails_93051274e4 FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: node_quals fk_rails_962f283611; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_quals
-    ADD CONSTRAINT fk_rails_962f283611 FOREIGN KEY (qual_id) REFERENCES quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.node_quals
+    ADD CONSTRAINT fk_rails_962f283611 FOREIGN KEY (qual_id) REFERENCES public.quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: carto_layers fk_rails_9b2f0fa157; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY carto_layers
-    ADD CONSTRAINT fk_rails_9b2f0fa157 FOREIGN KEY (contextual_layer_id) REFERENCES contextual_layers(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.carto_layers
+    ADD CONSTRAINT fk_rails_9b2f0fa157 FOREIGN KEY (contextual_layer_id) REFERENCES public.contextual_layers(id) ON DELETE CASCADE;
 
 
 --
 -- Name: flow_quants fk_rails_a48f7b74d0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY flow_quants
-    ADD CONSTRAINT fk_rails_a48f7b74d0 FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.flow_quants
+    ADD CONSTRAINT fk_rails_a48f7b74d0 FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: charts fk_rails_a7dc6318f9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY charts
-    ADD CONSTRAINT fk_rails_a7dc6318f9 FOREIGN KEY (profile_id) REFERENCES profiles(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.charts
+    ADD CONSTRAINT fk_rails_a7dc6318f9 FOREIGN KEY (profile_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
 
 
 --
 -- Name: chart_inds fk_rails_b730b06fdc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_inds
-    ADD CONSTRAINT fk_rails_b730b06fdc FOREIGN KEY (ind_id) REFERENCES inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.chart_inds
+    ADD CONSTRAINT fk_rails_b730b06fdc FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: chart_quals fk_rails_c1341bce97; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_quals
-    ADD CONSTRAINT fk_rails_c1341bce97 FOREIGN KEY (qual_id) REFERENCES quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.chart_quals
+    ADD CONSTRAINT fk_rails_c1341bce97 FOREIGN KEY (qual_id) REFERENCES public.quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: flows fk_rails_c33db455e5; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY flows
-    ADD CONSTRAINT fk_rails_c33db455e5 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.flows
+    ADD CONSTRAINT fk_rails_c33db455e5 FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON DELETE CASCADE;
 
 
 --
 -- Name: resize_by_quants fk_rails_c63dc992e3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY resize_by_quants
-    ADD CONSTRAINT fk_rails_c63dc992e3 FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.resize_by_quants
+    ADD CONSTRAINT fk_rails_c63dc992e3 FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: qual_properties fk_rails_c8bcede145; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY qual_properties
-    ADD CONSTRAINT fk_rails_c8bcede145 FOREIGN KEY (qual_id) REFERENCES quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.qual_properties
+    ADD CONSTRAINT fk_rails_c8bcede145 FOREIGN KEY (qual_id) REFERENCES public.quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: map_inds fk_rails_cac7dc7c14; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY map_inds
-    ADD CONSTRAINT fk_rails_cac7dc7c14 FOREIGN KEY (map_attribute_id) REFERENCES map_attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.map_inds
+    ADD CONSTRAINT fk_rails_cac7dc7c14 FOREIGN KEY (map_attribute_id) REFERENCES public.map_attributes(id) ON DELETE CASCADE;
 
 
 --
 -- Name: profiles fk_rails_cbc235c3bc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY profiles
-    ADD CONSTRAINT fk_rails_cbc235c3bc FOREIGN KEY (context_node_type_id) REFERENCES context_node_types(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.profiles
+    ADD CONSTRAINT fk_rails_cbc235c3bc FOREIGN KEY (context_node_type_id) REFERENCES public.context_node_types(id) ON DELETE CASCADE;
 
 
 --
 -- Name: map_quants fk_rails_cc084396cb; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY map_quants
-    ADD CONSTRAINT fk_rails_cc084396cb FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.map_quants
+    ADD CONSTRAINT fk_rails_cc084396cb FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: context_properties fk_rails_cc3af59ff4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY context_properties
-    ADD CONSTRAINT fk_rails_cc3af59ff4 FOREIGN KEY (context_id) REFERENCES contexts(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.context_properties
+    ADD CONSTRAINT fk_rails_cc3af59ff4 FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON DELETE CASCADE;
 
 
 --
 -- Name: context_node_type_properties fk_rails_d35e506797; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY context_node_type_properties
-    ADD CONSTRAINT fk_rails_d35e506797 FOREIGN KEY (context_node_type_id) REFERENCES context_node_types(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.context_node_type_properties
+    ADD CONSTRAINT fk_rails_d35e506797 FOREIGN KEY (context_node_type_id) REFERENCES public.context_node_types(id) ON DELETE CASCADE;
 
 
 --
 -- Name: contexts fk_rails_d9e59d1113; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY contexts
-    ADD CONSTRAINT fk_rails_d9e59d1113 FOREIGN KEY (country_id) REFERENCES countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.contexts
+    ADD CONSTRAINT fk_rails_d9e59d1113 FOREIGN KEY (country_id) REFERENCES public.countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: node_quants fk_rails_dd544b3e59; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_quants
-    ADD CONSTRAINT fk_rails_dd544b3e59 FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.node_quants
+    ADD CONSTRAINT fk_rails_dd544b3e59 FOREIGN KEY (node_id) REFERENCES public.nodes(id) ON DELETE CASCADE;
 
 
 --
 -- Name: chart_quants fk_rails_dd98c02cd6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY chart_quants
-    ADD CONSTRAINT fk_rails_dd98c02cd6 FOREIGN KEY (chart_attribute_id) REFERENCES chart_attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.chart_quants
+    ADD CONSTRAINT fk_rails_dd98c02cd6 FOREIGN KEY (chart_attribute_id) REFERENCES public.chart_attributes(id) ON DELETE CASCADE;
 
 
 --
 -- Name: download_quants fk_rails_e3b3c104f3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY download_quants
-    ADD CONSTRAINT fk_rails_e3b3c104f3 FOREIGN KEY (download_attribute_id) REFERENCES download_attributes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.download_quants
+    ADD CONSTRAINT fk_rails_e3b3c104f3 FOREIGN KEY (download_attribute_id) REFERENCES public.download_attributes(id) ON DELETE CASCADE;
 
 
 --
 -- Name: node_quants fk_rails_e5f4cc54e9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_quants
-    ADD CONSTRAINT fk_rails_e5f4cc54e9 FOREIGN KEY (quant_id) REFERENCES quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.node_quants
+    ADD CONSTRAINT fk_rails_e5f4cc54e9 FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: download_quals fk_rails_e8e87251a2; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY download_quals
-    ADD CONSTRAINT fk_rails_e8e87251a2 FOREIGN KEY (qual_id) REFERENCES quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.download_quals
+    ADD CONSTRAINT fk_rails_e8e87251a2 FOREIGN KEY (qual_id) REFERENCES public.quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: contexts fk_rails_eea78f436e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY contexts
-    ADD CONSTRAINT fk_rails_eea78f436e FOREIGN KEY (commodity_id) REFERENCES commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.contexts
+    ADD CONSTRAINT fk_rails_eea78f436e FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: recolor_by_quals fk_rails_f5f36c9f54; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY recolor_by_quals
-    ADD CONSTRAINT fk_rails_f5f36c9f54 FOREIGN KEY (qual_id) REFERENCES quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.recolor_by_quals
+    ADD CONSTRAINT fk_rails_f5f36c9f54 FOREIGN KEY (qual_id) REFERENCES public.quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: map_attributes fk_rails_f85c86caa0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY map_attributes
-    ADD CONSTRAINT fk_rails_f85c86caa0 FOREIGN KEY (map_attribute_group_id) REFERENCES map_attribute_groups(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.map_attributes
+    ADD CONSTRAINT fk_rails_f85c86caa0 FOREIGN KEY (map_attribute_group_id) REFERENCES public.map_attribute_groups(id) ON DELETE CASCADE;
 
 
 --
 -- Name: node_inds fk_rails_fe29817503; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node_inds
-    ADD CONSTRAINT fk_rails_fe29817503 FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.node_inds
+    ADD CONSTRAINT fk_rails_fe29817503 FOREIGN KEY (node_id) REFERENCES public.nodes(id) ON DELETE CASCADE;
 
 
 --
@@ -5914,5 +5926,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180326095318'),
 ('20180326101002'),
 ('20180327111929'),
-('20180403155328');
+('20180403155328'),
+('20180410065335');
+
 
