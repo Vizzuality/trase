@@ -9,5 +9,6 @@ class NodeTypeName < EnumerateIt::Base
                    COUNTRY: 'COUNTRY',
                    TRADER: 'TRADER',
                    DEPARTMENT: 'DEPARTMENT',
-                   COUNTRY_OF_PRODUCTION: 'COUNTRY OF PRODUCTION')
+                   COUNTRY_OF_PRODUCTION: 'COUNTRY OF PRODUCTION',
+                   CUSTOMS_DEPARTMENT: 'CUSTOMS DEPARTMENT')
 end

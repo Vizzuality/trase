@@ -50,6 +50,9 @@ Rails.application.routes.draw do
         resources :linked_nodes, only: [:index], controller: :linked_nodes
         resources :top_nodes, only: [:index]
       end
+      resources :nodes, only: [] do
+        get :search, on: :collection, controller: :nodes_search, action: :index
+      end
       resources :newsletter_subscriptions, only: [:create]
       resource :database_validation, controller: :database_validation,
                                      only: [:show]

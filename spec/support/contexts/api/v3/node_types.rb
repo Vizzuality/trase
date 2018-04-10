@@ -31,4 +31,12 @@ shared_context 'api v3 node types' do
     Api::V3::NodeType.find_by_name(NodeTypeName::COUNTRY) ||
       FactoryBot.create(:api_v3_node_type, name: NodeTypeName::COUNTRY)
   end
+  let(:api_v3_department_node_type) do
+    Api::V3::NodeType.find_by_name(NodeTypeName::DEPARTMENT) ||
+      FactoryBot.create(:api_v3_node_type, name: NodeTypeName::DEPARTMENT)
+  end
+  let(:api_v3_customs_department_node_type) do
+    Api::V3::NodeType.find_by_name(NodeTypeName::CUSTOMS_DEPARTMENT) ||
+      FactoryBot.create(:api_v3_node_type, name: NodeTypeName::CUSTOMS_DEPARTMENT)
+  end
 end
