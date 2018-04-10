@@ -1,5 +1,5 @@
 ActiveAdmin.register_page 'Data Validation' do
-  menu parent: 'Database'
+  menu parent: 'Database', if: proc { controller.data_update_supported? }
 
   controller do
     before_action :ensure_data_update_supported
