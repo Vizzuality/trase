@@ -27,5 +27,21 @@ RSpec.describe Api::V3::NodesSearch::Filter do
         api_v3_importer1_node
       ].map(&:name))
     end
+
+    it 'filters by context id' do
+      nodes = filter.call('c', api_v3_paraguay_context.id)
+      expect(
+        nodes.map(&:name)
+      ).to match_array([
+        api_v3_paraguay_exporter_node
+      ].map(&:name))
+    end
+
+    it 'filters by profile only' do
+      nodes = filter.call('no', nil, true)
+      expect(
+        nodes.map(&:name)
+      ).to include(api_v3_municipality_node.name)
+    end
   end
 end

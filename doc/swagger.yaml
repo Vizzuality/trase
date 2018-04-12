@@ -42,6 +42,21 @@ paths:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: query
+          in: path
+          required: true
+          type: integer
+          description: 'Search string to use'
+        - name: context_id
+          in: path
+          required: false
+          type: integer
+          description: 'If provided, limit results to nodes of a given context'
+        - name: profile_only
+          in: path
+          type: boolean
+          description: 'If provided, only show results that have a profile type defined'
       responses:
         '200':
           description: successful operation
