@@ -25,7 +25,8 @@ export default class ToolSearch extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      specialCharPressed: false
+      specialCharPressed: false,
+      isSearchOpen: false
     };
     this.onOpenClicked = this.onOpenClicked.bind(this);
     this.onCloseClicked = this.onCloseClicked.bind(this);
@@ -42,8 +43,8 @@ export default class ToolSearch extends Component {
     document.addEventListener('keyup', this.onKeyup);
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.input && !prevProps.isSearchOpen && this.props.isSearchOpen) {
+  componentDidUpdate(prevProps, prevState) {
+    if (this.input && !prevState.isSearchOpen && this.state.isSearchOpen) {
       this.input.focus();
     }
   }
@@ -55,12 +56,12 @@ export default class ToolSearch extends Component {
 
   onOpenClicked(e) {
     if (e) e.stopPropagation();
-    this.props.setSankeySearchVisibility(true);
+    this.setState({ isSearchOpen: true });
   }
 
   onCloseClicked(e) {
     if (e) e.stopPropagation();
-    this.props.setSankeySearchVisibility(false);
+    this.setState({ isSearchOpen: false });
   }
 
   onSelected(selectedItem) {
@@ -86,11 +87,11 @@ export default class ToolSearch extends Component {
   }
 
   onKeydown(e) {
-    const { specialCharPressed, isOpened } = this.state;
-    const { isSearchOpen } = this.props;
+    const { specialCharPressed, isSearchOpen } = this.state;
+
     if (!isSearchOpen && ToolSearch.isValidChar(e.key) && !specialCharPressed) {
       this.onOpenClicked();
-    } else if (e.key === 'Escape' && isOpened) {
+    } else if (e.key === 'Escape') {
       this.onCloseClicked();
     } else {
       this.setState(state => ({ specialCharPressed: state.specialCharPressed + 1 }));
@@ -125,7 +126,8 @@ export default class ToolSearch extends Component {
   }
 
   render() {
-    const { className, nodes = [], selectedNodesIds = [], isSearchOpen } = this.props;
+    const { className, nodes = [], selectedNodesIds = [], onInputValueChange } = this.props;
+    const { isSearchOpen } = this.state;
     if (isSearchOpen === false) {
       return (
         <div onClick={this.onOpenClicked} className={className}>
@@ -146,6 +148,7 @@ export default class ToolSearch extends Component {
           <Downshift
             itemToString={i => (i === null ? '' : i.name)}
             onSelect={this.onSelected}
+            onInputValueChange={onInputValueChange}
             ref={this.getDownshiftRef}
           >
             {({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => (
@@ -166,9 +169,6 @@ export default class ToolSearch extends Component {
                 {isOpen && (
                   <ul className="tool-search-results">
                     {nodes
-                      .filter(
-                        i => !inputValue || i.name.toLowerCase().includes(inputValue.toLowerCase())
-                      )
                       .slice(0, 10)
                       .map((item, row) => (
                         <SearchResult
@@ -193,6 +193,10 @@ export default class ToolSearch extends Component {
   }
 }
 
+ToolSearch.defaultProps = {
+  selectedNodesIds: []
+};
+
 ToolSearch.propTypes = {
   className: PropTypes.string,
   navigateToActor: PropTypes.func,
@@ -200,6 +204,7 @@ ToolSearch.propTypes = {
   selectedNodesIds: PropTypes.array,
   nodes: PropTypes.array,
   isSearchOpen: PropTypes.bool,
+  onInputValueChange: PropTypes.func,
   onAddNode: PropTypes.func,
   onRemoveNode: PropTypes.func
 };

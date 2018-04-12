@@ -1,4 +1,9 @@
-import { selectExpandedNode, selectNode, setSankeySearchVisibility } from 'actions/tool.actions';
+import {
+  selectExpandedNode,
+  selectNode,
+  setSankeySearchVisibility,
+  setSearch
+} from 'actions/tool.actions';
 import camelcase from 'lodash/camelCase';
 import flatten from 'lodash/flatten';
 import groupBy from 'lodash/groupBy';
@@ -31,7 +36,14 @@ const getNode = (nodes, selectedColumnsIds, nodesDict) => {
 };
 
 const mapStateToProps = state => {
-  const { nodes, selectedNodesIds, selectedColumnsIds, nodesDict, isSearchOpen } = state.tool;
+  const {
+    nodes,
+    selectedNodesIds,
+    selectedColumnsIds,
+    nodesDict,
+    isSearchOpen,
+    search
+  } = state.tool;
   // store nodes at container level to avoid rerendering when filtering... for want of a better solution
   if (nodes !== undefined && (!searchNodes || nodes.length !== searchNodes.length)) {
     const allNodes = nodes.filter(
@@ -47,7 +59,7 @@ const mapStateToProps = state => {
   return {
     selectedNodesIds,
     isSearchOpen,
-    nodes: searchNodes
+    nodes: searchNodes.filter(i => !search || i.name.toLowerCase().includes(search.toLowerCase()))
   };
 };
 
@@ -60,7 +72,8 @@ const mapDispatchToProps = dispatch =>
       navigateToActor: (profileType, nodeId) => ({
         type: camelcase(`profile-${profileType}`),
         payload: { query: { nodeId } }
-      })
+      }),
+      onInputValueChange: inputValue => setSearch(inputValue)
     },
     dispatch
   );

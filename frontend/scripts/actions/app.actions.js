@@ -1,5 +1,10 @@
 import { TOGGLE_MAP } from 'actions/tool.actions';
-import { GET_DISCLAIMER_URL, GET_SITE_DIVE_URL, getURLFromParams } from 'utils/getURLFromParams';
+import {
+  GET_DISCLAIMER_URL,
+  GET_SITE_DIVE_URL,
+  GET_SEARCH_NODES_URL,
+  getURLFromParams
+} from 'utils/getURLFromParams';
 
 export const DISPLAY_STORY_MODAL = 'DISPLAY_STORY_MODAL';
 export const LOAD_TOOLTIP = 'LOAD_TOOLTIP';
@@ -9,6 +14,7 @@ export const SHOW_DISCLAIMER = 'SHOW_DISCLAIMER';
 export const TOGGLE_DROPDOWN = 'TOGGLE_DROPDOWN';
 export const TOGGLE_MAP_LAYERS_MENU = 'TOGGLE_MAP_LAYERS_MENU';
 export const CLOSE_STORY_MODAL = 'CLOSE_STORY_MODAL';
+export const SET_SEARCH = 'SET_SEARCH';
 
 export function resize() {
   return {
@@ -96,6 +102,41 @@ export function displayStoryModal(storyId) {
       )
       .catch(err => {
         console.error('Error loading site dive.', err);
+      });
+  };
+}
+
+export function setSearch(filter) {
+  return dispatch => {
+    const url = `${getURLFromParams(GET_SEARCH_NODES_URL)}?query=${filter}`;
+
+    dispatch({
+      type: SET_SEARCH,
+      payload: {
+        filter,
+        isLoading: true
+      }
+    });
+
+    fetch(url)
+      .then(resp => resp.json())
+      .then(results => {
+        dispatch({
+          type: SET_SEARCH,
+          payload: {
+            isLoading: false,
+            results: results.data
+          }
+        });
+      })
+      .catch(() => {
+        dispatch({
+          type: SET_SEARCH,
+          payload: {
+            isLoading: false,
+            results: []
+          }
+        });
       });
   };
 }

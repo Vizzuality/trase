@@ -66,6 +66,7 @@ export const TOGGLE_MAP_SIDEBAR_GROUP = 'TOGGLE_MAP_SIDEBAR_GROUP';
 export const SHOW_LINKS_ERROR = 'SHOW_LINKS_ERROR';
 export const RESET_TOOL_STATE = 'RESET_TOOL_STATE';
 export const SET_SANKEY_SEARCH_VISIBILITY = 'SET_SANKEY_SEARCH_VISIBILITY';
+export const SET_SEARCH = 'SET_SEARCH';
 
 const _reloadLinks = (param, value, type, reloadLinks = true) => dispatch => {
   const action = {
@@ -885,3 +886,10 @@ const _isNodeVisible = (getState, nodeId) =>
   getState()
     .tool.visibleNodes.map(node => node.id)
     .indexOf(nodeId) > -1;
+
+export function setSearch(search) {
+  return {
+    type: SET_SEARCH,
+    search
+  };
+}

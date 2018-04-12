@@ -3,6 +3,7 @@ import {
   LOAD_TOOLTIP,
   SET_SANKEY_SIZE,
   SET_TOOLTIPS,
+  SET_SEARCH,
   SHOW_DISCLAIMER,
   TOGGLE_DROPDOWN,
   TOGGLE_MAP_LAYERS_MENU
@@ -19,6 +20,11 @@ const initialState = {
   modal: {
     visibility: false,
     modalParams: null
+  },
+  search: {
+    filter: '',
+    isLoading: false,
+    results: []
   }
 };
 
@@ -58,6 +64,9 @@ const appReducer = {
   },
   [DISPLAY_STORY_MODAL](state, action) {
     return { ...state, modal: action.payload };
+  },
+  [SET_SEARCH](state, action) {
+    return { ...state, search: { ...state.search, ...action.payload } };
   }
 };
 
