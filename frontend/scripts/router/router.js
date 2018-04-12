@@ -16,7 +16,6 @@ import {
   loadInitialDataHome
 } from 'react-components/home/home.thunks';
 import { withSidebarNavLayout } from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
-import { getProfileRootNodes } from 'react-components/profile-root/profile-root.thunks';
 import { getPageStaticContent } from 'react-components/static-content/static-content.thunks';
 import { getTeam } from 'react-components/team/team.thunks';
 import { loadInitialDataExplore, redirectToExplore } from 'react-components/explore/explore.thunks';
@@ -82,7 +81,6 @@ const routes = {
     path: '/profiles',
     page: 'profile-root',
     extension: 'jsx',
-    thunk: dispatchThunks(getProfileRootNodes),
     nav: {
       className: '-light'
     }

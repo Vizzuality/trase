@@ -21,12 +21,24 @@ class ProfileSearch extends PureComponent {
   constructor(props) {
     super(props);
 
+    this.state = {
+      loading: false,
+      searchTerm: ''
+    };
     this.renderSearchBox = this.renderSearchBox.bind(this);
     this.onResultSelected = this.onResultSelected.bind(this);
+    this.onInputValueChange = this.onInputValueChange.bind(this);
   }
 
   onResultSelected(selectedItem) {
     this.props.onNodeSelected(selectedItem);
+  }
+
+  onInputValueChange(searchTerm) {
+    this.setState({ searchTerm });
+    if (searchTerm.length > 2) {
+      this.props.onSearchTermChange(searchTerm);
+    }
   }
 
   focusInput(e) {
@@ -34,8 +46,15 @@ class ProfileSearch extends PureComponent {
     if (input) input.focus();
   }
 
-  renderSearchBox({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) {
-    const loading = this.props.nodes.length === 0;
+  renderSearchBox({
+    getInputProps,
+    getItemProps,
+    isOpen,
+    inputValue,
+    highlightedIndex,
+    onInputValueChange
+  }) {
+    const loading = this.state.loading;
     const visibleResults = this.props.nodes
       .filter(
         item => inputValue.length > 1 && item.name.toLowerCase().includes(inputValue.toLowerCase())
@@ -53,6 +72,7 @@ class ProfileSearch extends PureComponent {
             type="search"
             className="profile-search-input show-for-small"
             disabled={loading}
+            oncChange={onInputValueChange}
           />
           <input
             {...getInputProps({ placeholder: 'Search a company or production place' })}
@@ -92,6 +112,8 @@ class ProfileSearch extends PureComponent {
         onSelect={this.onResultSelected}
         onChange={this.onChange}
         itemToString={i => (i === null ? '' : i.name)}
+        onInputValueChange={this.onInputValueChange}
+        inputValue={this.state.searchTerm}
       >
         {this.renderSearchBox}
       </Downshift>
@@ -101,7 +123,8 @@ class ProfileSearch extends PureComponent {
 
 ProfileSearch.propTypes = {
   nodes: PropTypes.array.isRequired,
-  onNodeSelected: PropTypes.func.isRequired
+  onNodeSelected: PropTypes.func.isRequired,
+  onSearchTermChange: PropTypes.func.isRequired
 };
 
 export default ProfileSearch;

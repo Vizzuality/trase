@@ -27,7 +27,7 @@ class ProfileSearchResult extends Component {
         {...itemProps}
         className={cx('c-profile-search-result', { '-highlighted': isHighlighted })}
       >
-        <span className="profile-search-node-type">{item.type}</span>
+        <span className="profile-search-node-type">{item.nodeType}</span>
         <span className="profile-search-node-name">
           {ProfileSearchResult.getNameSegments(searchString, item.name)}
         </span>
