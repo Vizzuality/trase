@@ -14,7 +14,8 @@ export const SHOW_DISCLAIMER = 'SHOW_DISCLAIMER';
 export const TOGGLE_DROPDOWN = 'TOGGLE_DROPDOWN';
 export const TOGGLE_MAP_LAYERS_MENU = 'TOGGLE_MAP_LAYERS_MENU';
 export const CLOSE_STORY_MODAL = 'CLOSE_STORY_MODAL';
-export const SET_SEARCH = 'SET_SEARCH';
+export const SET_SEARCH_FILTER = 'SET_SEARCH_FILTER';
+export const LOAD_SEARCH_RESULTS = 'LOAD_SEARCH_RESULTS';
 
 export function resize() {
   return {
@@ -106,36 +107,27 @@ export function displayStoryModal(storyId) {
   };
 }
 
-export function setSearch(filter) {
+export function loadSearchResults(filter) {
   return dispatch => {
     const url = `${getURLFromParams(GET_SEARCH_NODES_URL)}?query=${filter}`;
 
     dispatch({
-      type: SET_SEARCH,
-      payload: {
-        filter,
-        isLoading: true
-      }
+      type: SET_SEARCH_FILTER,
+      payload: filter
     });
 
     fetch(url)
       .then(resp => resp.json())
       .then(results => {
         dispatch({
-          type: SET_SEARCH,
-          payload: {
-            isLoading: false,
-            results: results.data
-          }
+          type: LOAD_SEARCH_RESULTS,
+          payload: results.data
         });
       })
       .catch(() => {
         dispatch({
-          type: SET_SEARCH,
-          payload: {
-            isLoading: false,
-            results: []
-          }
+          type: LOAD_SEARCH_RESULTS,
+          payload: []
         });
       });
   };

@@ -51,8 +51,10 @@
       }
     }
 
-    .icon-search {
-      color: $white;
+    .top-nav-search {
+      .icon-search {
+        color: $white;
+      }
     }
   }
 
@@ -78,6 +80,14 @@
 
   .top-nav-bar {
     height: $nav-height;
+  }
+
+  .top-nav-search {
+    .icon-search {
+      margin: 5px 10px 0 10px;
+      width: 20px;
+      height: 20px;
+    }
   }
 }
 

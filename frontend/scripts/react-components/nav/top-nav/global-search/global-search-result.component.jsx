@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { findAll } from 'highlight-words-core';
 import cx from 'classnames';
-import PropTypes from 'prop-types';
+import camelcase from 'lodash/camelCase';
+import Link from 'redux-first-router-link';
 
-export default class ToolSearchResult extends Component {
+export default class GlobalSearchResult extends Component {
   static getNameSegments(value, name) {
     // get name segments for highlighting typed string
     // ie if you type 'ng', you get ['pi', 'ng', 'po', 'ng']
@@ -21,16 +23,8 @@ export default class ToolSearchResult extends Component {
   }
 
   render() {
-    const {
-      value,
-      onClickNavigate,
-      onClickAdd,
-      selected,
-      itemProps,
-      isHighlighted,
-      item
-    } = this.props;
-    const nameSegments = ToolSearchResult.getNameSegments(value, item.name);
+    const { value, itemProps, isHighlighted, item } = this.props;
+    const nameSegments = GlobalSearchResult.getNameSegments(value, item.name);
 
     return (
       <li {...itemProps} className={cx('c-search-result', { '-highlighted': isHighlighted })}>
@@ -39,23 +33,32 @@ export default class ToolSearchResult extends Component {
           <span className="search-node-name">{nameSegments}</span>
         </div>
         <div className="search-node-actions-container">
-          <button
-            onClick={e => onClickAdd(e, item)}
+          <Link exact strict className="c-button -medium-large" to={{ type: 'tool' }}>
+            Supply Chain
+          </Link>
+          <Link
+            exact
+            strict
             className="c-button -medium-large"
-            disabled={selected}
+            to={{ type: 'tool', query: { state: { isMapVisible: true } } }}
           >
-            {selected ? 'Already in' : 'Add to'} supply chain
-          </button>
+            Production Region
+          </Link>
+
           {item.profileType &&
             item.type.split(' & ').map(type => (
-              <button
+              <Link
                 key={item.name + type}
-                role="link"
                 className="c-button -medium-large"
-                onClick={e => onClickNavigate(e, item, type)}
+                exact
+                strict
+                to={{
+                  type: camelcase(`profile-${item.profileType}`),
+                  query: { nodeId: item.id }
+                }}
               >
                 See {type} profile
-              </button>
+              </Link>
             ))}
         </div>
       </li>
@@ -63,11 +66,8 @@ export default class ToolSearchResult extends Component {
   }
 }
 
-ToolSearchResult.propTypes = {
+GlobalSearchResult.propTypes = {
   value: PropTypes.string,
-  onClickNavigate: PropTypes.func,
-  onClickAdd: PropTypes.func,
-  selected: PropTypes.bool,
   itemProps: PropTypes.object,
   isHighlighted: PropTypes.bool,
   item: PropTypes.object

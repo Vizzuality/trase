@@ -1,9 +1,10 @@
 import {
   DISPLAY_STORY_MODAL,
+  LOAD_SEARCH_RESULTS,
   LOAD_TOOLTIP,
   SET_SANKEY_SIZE,
+  SET_SEARCH_FILTER,
   SET_TOOLTIPS,
-  SET_SEARCH,
   SHOW_DISCLAIMER,
   TOGGLE_DROPDOWN,
   TOGGLE_MAP_LAYERS_MENU
@@ -65,8 +66,11 @@ const appReducer = {
   [DISPLAY_STORY_MODAL](state, action) {
     return { ...state, modal: action.payload };
   },
-  [SET_SEARCH](state, action) {
-    return { ...state, search: { ...state.search, ...action.payload } };
+  [SET_SEARCH_FILTER](state, action) {
+    return { ...state, search: { ...state.search, filter: action.payload, isLoading: true } };
+  },
+  [LOAD_SEARCH_RESULTS](state, action) {
+    return { ...state, search: { ...state.search, results: action.payload, isLoading: false } };
   }
 };
 

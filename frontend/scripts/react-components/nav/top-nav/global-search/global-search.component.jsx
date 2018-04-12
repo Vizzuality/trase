@@ -3,20 +3,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import deburr from 'lodash/deburr';
-import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group.container';
-import SearchResult from 'react-components/tool/tool-search/tool-search-result.component';
-import 'styles/components/tool/tool-search.scss';
-import 'styles/components/tool/tool-search-result.scss';
+import SearchResult from 'react-components/nav/top-nav/global-search/global-search-result.component';
+import 'styles/components/nav/global-search.scss';
+import 'styles/components/nav/global-search-result.scss';
 
-export default class ToolSearch extends Component {
-  static getNodeIds(selectedItem) {
-    const parts = `${selectedItem.id}`.split('_');
-    if (parts.length > 1) {
-      return [parseInt(parts[0], 10), parseInt(parts[1], 10)];
-    }
-    return [selectedItem.id];
-  }
-
+export default class GlobalSearch extends Component {
   static isValidChar(key) {
     const deburredKey = deburr(key);
     return /^([a-z]|[A-Z]){1}$/.test(deburredKey);
@@ -30,14 +21,10 @@ export default class ToolSearch extends Component {
     };
     this.onOpenClicked = this.onOpenClicked.bind(this);
     this.onCloseClicked = this.onCloseClicked.bind(this);
-    this.onSelected = this.onSelected.bind(this);
-    this.onAddNode = this.onAddNode.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
     this.onKeyup = this.onKeyup.bind(this);
     this.getDownshiftRef = this.getDownshiftRef.bind(this);
     this.getInputRef = this.getInputRef.bind(this);
-    this.navigateToActor = this.navigateToActor.bind(this);
-    this.isNodeSelected = this.isNodeSelected.bind(this);
 
     document.addEventListener('keydown', this.onKeydown);
     document.addEventListener('keyup', this.onKeyup);
@@ -64,32 +51,10 @@ export default class ToolSearch extends Component {
     this.setState({ isSearchOpen: false });
   }
 
-  onSelected(selectedItem) {
-    if (this.isNodeSelected(selectedItem)) {
-      this.downshift.clearSelection();
-      return;
-    }
-    const ids = ToolSearch.getNodeIds(selectedItem);
-    if (selectedItem.selected) {
-      this.props.onRemoveNode(ids);
-    } else {
-      this.props.onAddNode(ids);
-    }
-    this.onCloseClicked();
-  }
-
-  onAddNode(e, selectedItem) {
-    if (e) e.stopPropagation();
-    const ids = ToolSearch.getNodeIds(selectedItem);
-    this.props.onAddNode(ids);
-    this.downshift.reset();
-    this.input.focus();
-  }
-
   onKeydown(e) {
     const { specialCharPressed, isSearchOpen } = this.state;
 
-    if (!isSearchOpen && ToolSearch.isValidChar(e.key) && !specialCharPressed) {
+    if (!isSearchOpen && GlobalSearch.isValidChar(e.key) && !specialCharPressed) {
       this.onOpenClicked();
     } else if (e.key === 'Escape') {
       this.onCloseClicked();
@@ -99,7 +64,7 @@ export default class ToolSearch extends Component {
   }
 
   onKeyup(e) {
-    if (!ToolSearch.isValidChar(e.key)) {
+    if (!GlobalSearch.isValidChar(e.key)) {
       this.setState(state => ({ specialCharPressed: state.specialCharPressed - 1 }));
     }
   }
@@ -112,23 +77,11 @@ export default class ToolSearch extends Component {
     this.input = el;
   }
 
-  isNodeSelected(node) {
-    return [node, node.exporter, node.importer]
-      .filter(n => !!n)
-      .map(n => n.id)
-      .reduce((acc, next) => acc || this.props.selectedNodesIds.includes(next), false);
-  }
-
-  navigateToActor(e, item, type) {
-    if (e) e.stopPropagation();
-    const node = item[type.toLowerCase()] || item;
-    this.props.navigateToActor(node.profileType, node.id);
-  }
-
   render() {
-    const { className, nodes = [], selectedNodesIds = [], onInputValueChange } = this.props;
+    const { className, searchResults = [], onInputValueChange } = this.props;
     const { isSearchOpen } = this.state;
-    if (isSearchOpen === false) {
+
+    if (!isSearchOpen) {
       return (
         <div onClick={this.onOpenClicked} className={className}>
           <svg className="icon icon-search">
@@ -139,7 +92,7 @@ export default class ToolSearch extends Component {
     }
 
     return (
-      <div className="c-search -tool">
+      <div className="c-search -global">
         <svg className="icon icon-search">
           <use xlinkHref="#icon-search" />
         </svg>
@@ -154,12 +107,9 @@ export default class ToolSearch extends Component {
             {({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => (
               <div className="search-container" onClick={e => e.stopPropagation()}>
                 <div className="search-bar">
-                  <div style={{ overflow: selectedNodesIds.length > 3 ? 'auto' : 'inherit' }}>
-                    <NodeTitleGroup />
-                  </div>
                   <input
                     {...getInputProps({
-                      placeholder: 'Search a producer, trader or country of import'
+                      placeholder: 'Search a producer or trader'
                     })}
                     ref={this.getInputRef}
                     className="search-bar-input"
@@ -168,7 +118,7 @@ export default class ToolSearch extends Component {
                 </div>
                 {isOpen && (
                   <ul className="search-results">
-                    {nodes
+                    {searchResults
                       .slice(0, 10)
                       .map((item, row) => (
                         <SearchResult
@@ -177,9 +127,6 @@ export default class ToolSearch extends Component {
                           isHighlighted={row === highlightedIndex}
                           item={item}
                           itemProps={getItemProps({ item })}
-                          selected={this.isNodeSelected(item)}
-                          onClickNavigate={this.navigateToActor}
-                          onClickAdd={this.onAddNode}
                         />
                       ))}
                   </ul>
@@ -193,18 +140,8 @@ export default class ToolSearch extends Component {
   }
 }
 
-ToolSearch.defaultProps = {
-  selectedNodesIds: []
-};
-
-ToolSearch.propTypes = {
+GlobalSearch.propTypes = {
   className: PropTypes.string,
-  navigateToActor: PropTypes.func,
-  setSankeySearchVisibility: PropTypes.func,
-  selectedNodesIds: PropTypes.array,
-  nodes: PropTypes.array,
-  isSearchOpen: PropTypes.bool,
-  onInputValueChange: PropTypes.func,
-  onAddNode: PropTypes.func,
-  onRemoveNode: PropTypes.func
+  searchResults: PropTypes.array,
+  onInputValueChange: PropTypes.func
 };
