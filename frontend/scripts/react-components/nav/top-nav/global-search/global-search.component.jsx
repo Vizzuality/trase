@@ -122,7 +122,7 @@ export default class GlobalSearch extends Component {
                       .slice(0, 10)
                       .map((item, row) => (
                         <SearchResult
-                          key={item.id + item.type}
+                          key={row}
                           value={inputValue}
                           isHighlighted={row === highlightedIndex}
                           item={item}
