@@ -5,6 +5,7 @@ import throttle from 'lodash/throttle';
 import { NavLink } from 'redux-first-router-link';
 import NavLinks from 'react-components/nav/nav-links.component';
 import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
+import Search from 'react-components/shared/search.container';
 import DownloadPdfLink from './download-pdf-link.component';
 
 class TopNav extends React.PureComponent {
@@ -80,6 +81,9 @@ class TopNav extends React.PureComponent {
             <ul className="top-nav-item-list">
               <li className="top-nav-item">
                 <LocaleSelector />
+              </li>
+              <li className="top-nav-item">
+                <Search />
               </li>
               {printable && (
                 <li className="top-nav-item">

@@ -50,6 +50,10 @@
         display: none;
       }
     }
+
+    .icon-search {
+      color: $white;
+    }
   }
 
   &.-light {
@@ -60,6 +64,10 @@
 
     .locale-selector-selected-item,
     .locale-selector-menu-item {
+      color: $charcoal-grey;
+    }
+
+    .icon-search {
       color: $charcoal-grey;
     }
   }
