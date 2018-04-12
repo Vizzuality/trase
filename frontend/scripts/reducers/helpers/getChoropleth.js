@@ -12,7 +12,7 @@ const _shortenTitle = title => {
 export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensions, forceEmpty) {
   const uids = compact(selectedMapDimensionsUids);
 
-  if (!uids.length) {
+  if (!uids.length || !mapDimensions.length) {
     return {
       choropleth: {},
       choroplethLegend: null

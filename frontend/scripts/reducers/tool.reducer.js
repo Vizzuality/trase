@@ -30,7 +30,8 @@ import {
   TOGGLE_MAP_DIMENSION,
   TOGGLE_MAP_SIDEBAR_GROUP,
   TOGGLE_NODES_EXPAND,
-  UPDATE_NODE_SELECTION
+  UPDATE_NODE_SELECTION,
+  GET_MAP_DIMENSIONS
 } from 'actions/tool.actions';
 import groupBy from 'lodash/groupBy';
 import isEqual from 'lodash/isEqual';
@@ -264,8 +265,27 @@ const toolReducer = {
   },
 
   [GET_NODE_ATTRIBUTES](state, action) {
-    const nodesMeta = action.payload.nodesJSON;
+    const nodesMeta = action.payload;
 
+    // store dimension values in nodesDict as uid: dimensionValue
+    const nodesDictWithMeta = setNodesMeta(state.nodesDict, nodesMeta, state.mapDimensions);
+
+    const forceEmptyChoropleth = state.selectedYears[1] - state.selectedYears[0] > 0;
+
+    const { choropleth, choroplethLegend } = getChoropleth(
+      state.selectedMapDimensions,
+      nodesDictWithMeta,
+      state.mapDimensions,
+      forceEmptyChoropleth
+    );
+
+    return Object.assign({}, state, {
+      nodesDictWithMeta,
+      choropleth,
+      choroplethLegend
+    });
+  },
+  [GET_MAP_DIMENSIONS](state, action) {
     const mapDimensionsMeta = action.payload.mapDimensionsMetaJSON;
     const rawMapDimensions = mapDimensionsMeta.dimensions;
     const mapDimensions = getMapDimensions(rawMapDimensions);
@@ -275,13 +295,9 @@ const toolReducer = {
       dimensions: mapDimensions.filter(dimension => dimension.groupId === group.id)
     }));
 
-    // store dimension values in nodesDict as uid: dimensionValue
-    const nodesDictWithMeta = setNodesMeta(state.nodesDict, nodesMeta, mapDimensions);
-
     return Object.assign({}, state, {
       mapDimensions,
-      mapDimensionsGroups,
-      nodesDictWithMeta
+      mapDimensionsGroups
     });
   },
   [GET_LINKS](state, action) {
@@ -481,23 +497,23 @@ const toolReducer = {
 
     // TODO Remove that when server correctly implements map dimensions meta/choropleth
     // ie it shouldn't return choropleth values in get_nodes over multiple years if metadata says data is unavailable
-    const forceEmptyChoropleth = state.selectedYears[1] - state.selectedYears[0] > 0;
+    // const forceEmptyChoropleth = state.selectedYears[1] - state.selectedYears[0] > 0;
 
-    const { choropleth, choroplethLegend } = getChoropleth(
-      selectedMapDimensions,
-      state.nodesDictWithMeta,
-      state.mapDimensions,
-      forceEmptyChoropleth
-    );
+    // const { choropleth, choroplethLegend } = getChoropleth(
+    //   selectedMapDimensions,
+    //   state.nodesDictWithMeta,
+    //   state.mapDimensions,
+    //   forceEmptyChoropleth
+    // );
     const selectedMapDimensionsWarnings = getMapDimensionsWarnings(
       state.mapDimensions,
       selectedMapDimensions
     );
     return Object.assign({}, state, {
       selectedMapDimensions,
-      selectedMapDimensionsWarnings,
-      choropleth,
-      choroplethLegend
+      selectedMapDimensionsWarnings
+      // choropleth,
+      // choroplethLegend
     });
   },
   [SELECT_CONTEXTUAL_LAYERS](state, action) {

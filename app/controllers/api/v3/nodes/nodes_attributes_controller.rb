@@ -7,7 +7,7 @@ module Api
           ensure_required_param_present(:end_year)
 
           result = Api::V3::NodeAttributes::Filter.new(
-            @context, params[:start_year].to_i, params[:end_year].to_i
+            @context, params[:start_year].to_i, params[:end_year].to_i, params[:layer_ids]
           ).result
 
           render json: {data: result}
