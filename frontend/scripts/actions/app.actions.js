@@ -3,7 +3,7 @@ import { TOGGLE_MAP } from 'actions/tool.actions';
 import {
   GET_DISCLAIMER_URL,
   GET_SITE_DIVE_URL,
-  GET_SEARCH_NODES_URL,
+  GET_NODES_WITH_SEARCH_URL,
   getURLFromParams
 } from 'utils/getURLFromParams';
 
@@ -117,7 +117,7 @@ export function resetSearchResults() {
 
 export function loadSearchResults(searchTerm) {
   return dispatch => {
-    const url = `${getURLFromParams(GET_SEARCH_NODES_URL)}?query=${searchTerm}`;
+    const url = `${getURLFromParams(GET_NODES_WITH_SEARCH_URL)}?query=${searchTerm}`;
 
     if (isEmpty(searchTerm)) {
       dispatch(resetSearchResults());
