@@ -2,32 +2,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
-import deburr from 'lodash/deburr';
 import SearchResult from 'react-components/nav/top-nav/global-search/global-search-result.component';
 import 'styles/components/nav/global-search.scss';
 import 'styles/components/nav/global-search-result.scss';
 
 export default class GlobalSearch extends Component {
-  static isValidChar(key) {
-    const deburredKey = deburr(key);
-    return /^([a-z]|[A-Z]){1}$/.test(deburredKey);
-  }
-
   constructor(props) {
     super(props);
-    this.state = {
-      specialCharPressed: false,
-      isSearchOpen: false
-    };
+    this.state = { isSearchOpen: false };
     this.onOpenClicked = this.onOpenClicked.bind(this);
     this.onCloseClicked = this.onCloseClicked.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
-    this.onKeyup = this.onKeyup.bind(this);
-    this.getDownshiftRef = this.getDownshiftRef.bind(this);
-    this.getInputRef = this.getInputRef.bind(this);
+    this.setDownshiftRef = element => {
+      this.downshift = element;
+    };
+    this.setInputRef = element => {
+      this.input = element;
+    };
 
     document.addEventListener('keydown', this.onKeydown);
-    document.addEventListener('keyup', this.onKeyup);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -38,7 +31,6 @@ export default class GlobalSearch extends Component {
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onKeydown);
-    document.removeEventListener('keyup', this.onKeyup);
   }
 
   onOpenClicked(e) {
@@ -52,29 +44,9 @@ export default class GlobalSearch extends Component {
   }
 
   onKeydown(e) {
-    const { specialCharPressed, isSearchOpen } = this.state;
-
-    if (!isSearchOpen && GlobalSearch.isValidChar(e.key) && !specialCharPressed) {
-      this.onOpenClicked();
-    } else if (e.key === 'Escape') {
+    if (e.key === 'Escape' && this.state.isSearchOpen) {
       this.onCloseClicked();
-    } else {
-      this.setState(state => ({ specialCharPressed: state.specialCharPressed + 1 }));
     }
-  }
-
-  onKeyup(e) {
-    if (!GlobalSearch.isValidChar(e.key)) {
-      this.setState(state => ({ specialCharPressed: state.specialCharPressed - 1 }));
-    }
-  }
-
-  getDownshiftRef(instance) {
-    this.downshift = instance;
-  }
-
-  getInputRef(el) {
-    this.input = el;
   }
 
   render() {
@@ -102,7 +74,7 @@ export default class GlobalSearch extends Component {
             itemToString={i => (i === null ? '' : i.name)}
             onSelect={this.onSelected}
             onInputValueChange={onInputValueChange}
-            ref={this.getDownshiftRef}
+            ref={this.setDownshiftRef}
           >
             {({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => (
               <div className="search-container" onClick={e => e.stopPropagation()}>
@@ -111,7 +83,7 @@ export default class GlobalSearch extends Component {
                     {...getInputProps({
                       placeholder: 'Search a producer or trader'
                     })}
-                    ref={this.getInputRef}
+                    ref={this.setInputRef}
                     className="search-bar-input"
                     type="search"
                   />

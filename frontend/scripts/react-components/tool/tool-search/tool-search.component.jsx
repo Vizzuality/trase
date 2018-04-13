@@ -25,7 +25,7 @@ export default class ToolSearch extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      specialCharPressed: false,
+      charPressedCount: 0,
       isSearchOpen: false
     };
     this.onOpenClicked = this.onOpenClicked.bind(this);
@@ -34,10 +34,14 @@ export default class ToolSearch extends Component {
     this.onAddNode = this.onAddNode.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
     this.onKeyup = this.onKeyup.bind(this);
-    this.getDownshiftRef = this.getDownshiftRef.bind(this);
-    this.getInputRef = this.getInputRef.bind(this);
     this.navigateToActor = this.navigateToActor.bind(this);
     this.isNodeSelected = this.isNodeSelected.bind(this);
+    this.setDownshiftRef = element => {
+      this.downshift = element;
+    };
+    this.setInputRef = element => {
+      this.input = element;
+    };
 
     document.addEventListener('keydown', this.onKeydown);
     document.addEventListener('keyup', this.onKeyup);
@@ -87,29 +91,20 @@ export default class ToolSearch extends Component {
   }
 
   onKeydown(e) {
-    const { specialCharPressed, isSearchOpen } = this.state;
+    const { charPressedCount, isSearchOpen } = this.state;
 
-    if (!isSearchOpen && ToolSearch.isValidChar(e.key) && !specialCharPressed) {
+    // we won't open the search if any combination of keys is pressed
+    if (!isSearchOpen && ToolSearch.isValidChar(e.key) && charPressedCount === 0) {
       this.onOpenClicked();
-    } else if (e.key === 'Escape') {
+    } else if (isSearchOpen && e.key === 'Escape') {
       this.onCloseClicked();
-    } else {
-      this.setState(state => ({ specialCharPressed: state.specialCharPressed + 1 }));
     }
+
+    this.setState(state => ({ charPressedCount: state.charPressedCount + 1 }));
   }
 
-  onKeyup(e) {
-    if (!ToolSearch.isValidChar(e.key)) {
-      this.setState(state => ({ specialCharPressed: state.specialCharPressed - 1 }));
-    }
-  }
-
-  getDownshiftRef(instance) {
-    this.downshift = instance;
-  }
-
-  getInputRef(el) {
-    this.input = el;
+  onKeyup() {
+    this.setState(state => ({ charPressedCount: state.charPressedCount - 1 }));
   }
 
   isNodeSelected(node) {
@@ -149,7 +144,7 @@ export default class ToolSearch extends Component {
             itemToString={i => (i === null ? '' : i.name)}
             onSelect={this.onSelected}
             onInputValueChange={onInputValueChange}
-            ref={this.getDownshiftRef}
+            ref={this.setDownshiftRef}
           >
             {({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => (
               <div className="search-container" onClick={e => e.stopPropagation()}>
@@ -161,7 +156,7 @@ export default class ToolSearch extends Component {
                     {...getInputProps({
                       placeholder: 'Search a producer, trader or country of import'
                     })}
-                    ref={this.getInputRef}
+                    ref={this.setInputRef}
                     className="search-bar-input"
                     type="search"
                   />
