@@ -28,7 +28,7 @@ module Api
 
         def attribute_values_query(attribute_type, attribute_node_values_class)
           node_values = attribute_node_values_class.table_name
-          query = attribute_node_values_class.
+          attribute_node_values_class.
             select(select_list(attribute_type, node_values)).
             joins("JOIN nodes ON nodes.id = #{node_values}.node_id").
             joins("JOIN context_node_types cnt ON \

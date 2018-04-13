@@ -22,10 +22,11 @@ RSpec.describe 'Nodes attributes', type: :request do
     end
 
     it 'has the correct response structure' do
-      get "/api/v3/contexts/#{api_v3_context.id}/nodes/attributes", params: {start_year: 2015, end_year: 2015}
+      get "/api/v3/contexts/#{api_v3_context.id}/nodes/attributes", params: {start_year: 2015, end_year: 2015, layer_ids: [api_v3_water_scarcity_map_attribute.id]}
 
       expect(@response).to have_http_status(:ok)
       expect(@response).to match_response_schema('v3_node_attributes')
+      expect(JSON.parse(@response.body)['data'].empty?).to be false
     end
   end
 end
