@@ -43,8 +43,7 @@ body {
       transform: translate(-376px, 0);
 
       > .c-sankey,
-      .c-columns-selector,
-      > .c-titlebar {
+      .c-columns-selector {
         left: 91%;
       }
     }
@@ -68,7 +67,7 @@ body {
       left: $layer-map-width;
       flex-direction: column;
       width: 320px;
-      height: 100%;
+      height: calc(100% - 62px);
 
       transition: width .45s $ease-in-out-sine;
 
@@ -112,12 +111,13 @@ body {
 
     > .c-titlebar {
       position: absolute;
-      left: $map-width + $layer-map-width;
+      left: $layer-map-width;
       top: calc(100% - #{$titlebar-height});
       width: calc(100% - #{$map-width + $layer-map-width});
-      padding-left: 15px;
+      padding-left: 8px;
       overflow: auto;
       transition: left .45s $ease-in-out-sine;
+      z-index: 2;
 
       .search {
         padding-top: 16px;

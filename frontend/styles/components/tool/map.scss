@@ -3,6 +3,7 @@
 
 .c-map {
   border-right: solid 1px rgba($charcoal-grey, .7);
+  border-bottom: solid 1px rgba($charcoal-grey, .7);
   transform: translate(0, 0);
   transition: transform 1s ease;
   z-index: $z-base;
