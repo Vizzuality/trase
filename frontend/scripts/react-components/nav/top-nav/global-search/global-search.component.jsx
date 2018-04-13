@@ -5,7 +5,7 @@ import Downshift from 'downshift';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 
-import SearchResult from 'react-components/nav/top-nav/global-search/global-search-result.component';
+import GlobalSearchResult from 'react-components/nav/top-nav/global-search/global-search-result.container';
 import 'styles/components/nav/global-search.scss';
 import 'styles/components/nav/global-search-result.scss';
 
@@ -113,7 +113,7 @@ export default class GlobalSearch extends Component {
                       {searchResults
                         .slice(0, 10)
                         .map((item, row) => (
-                          <SearchResult
+                          <GlobalSearchResult
                             key={row}
                             value={inputValue}
                             isHighlighted={row === highlightedIndex}
