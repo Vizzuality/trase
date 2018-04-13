@@ -3,7 +3,7 @@ import {
   LOAD_SEARCH_RESULTS,
   LOAD_TOOLTIP,
   SET_SANKEY_SIZE,
-  SET_SEARCH_FILTER,
+  SET_SEARCH_TERM,
   SET_TOOLTIPS,
   SHOW_DISCLAIMER,
   TOGGLE_DROPDOWN,
@@ -66,8 +66,8 @@ const appReducer = {
   [DISPLAY_STORY_MODAL](state, action) {
     return { ...state, modal: action.payload };
   },
-  [SET_SEARCH_FILTER](state, action) {
-    return { ...state, search: { ...state.search, filter: action.payload, isLoading: true } };
+  [SET_SEARCH_TERM](state, action) {
+    return { ...state, search: { ...state.search, ...action.payload } };
   },
   [LOAD_SEARCH_RESULTS](state, action) {
     return { ...state, search: { ...state.search, results: action.payload, isLoading: false } };

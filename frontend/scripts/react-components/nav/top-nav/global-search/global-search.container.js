@@ -8,6 +8,7 @@ const mapStateToProps = state => {
 
   return {
     isLoading: search.isLoading,
+    searchTerm: search.term,
     searchResults: search.results.map(n => ({
       id: n.id,
       name: n.name,

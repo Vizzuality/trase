@@ -77,7 +77,7 @@
     background: $egg-shell;
   }
 
-  &:hover,
+  &:hover:not(.-no-highlight),
   &[aria-selected='true'],
   &.-highlighted {
     background: $egg-shell;

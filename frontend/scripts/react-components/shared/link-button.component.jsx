@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import Link from 'redux-first-router-link';
 
-function LinkButton({ children, ...props }) {
+function LinkButton({ children, className, ...props }) {
   return (
-    <Link className="c-button -with-icon -medium-large" {...props}>
+    <Link className={cx('c-button -with-icon', className)} {...props}>
       {children}
       <svg className="icon icon-link">
         <use xlinkHref="#icon-link" />
@@ -14,6 +15,7 @@ function LinkButton({ children, ...props }) {
 }
 
 LinkButton.propTypes = {
+  className: PropTypes.string,
   children: PropTypes.any
 };
 

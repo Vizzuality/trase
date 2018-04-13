@@ -26,6 +26,7 @@ function ToolSearchResult({ value, onClickAdd, selected, itemProps, isHighlighte
         {item.profileType &&
           item.type.split(' & ').map(type => (
             <LinkButton
+              className="-medium-large"
               key={item.name + type}
               to={{
                 type: camelcase(`profile-${item.profileType}`),

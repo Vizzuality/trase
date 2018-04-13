@@ -3,12 +3,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import debounce from 'lodash/debounce';
+import isEmpty from 'lodash/isEmpty';
 
 import SearchResult from 'react-components/nav/top-nav/global-search/global-search-result.component';
 import 'styles/components/nav/global-search.scss';
 import 'styles/components/nav/global-search-result.scss';
 
-const SEARCH_DEBOUNCE_RATE_IN_MS = 500;
+const SEARCH_DEBOUNCE_RATE_IN_MS = 400;
 
 export default class GlobalSearch extends Component {
   constructor(props) {
@@ -63,8 +64,9 @@ export default class GlobalSearch extends Component {
   }
 
   render() {
-    const { isLoading, className, searchResults = [] } = this.props;
+    const { isLoading, className, searchResults = [], searchTerm } = this.props;
     const { isSearchOpen } = this.state;
+    const noResults = !searchResults.length && !isLoading && !isEmpty(searchTerm);
 
     if (!isSearchOpen) {
       return (
@@ -105,21 +107,29 @@ export default class GlobalSearch extends Component {
                     type="search"
                   />
                 </div>
-                {isOpen && (
-                  <ul className="search-results">
-                    {searchResults
-                      .slice(0, 10)
-                      .map((item, row) => (
-                        <SearchResult
-                          key={row}
-                          value={inputValue}
-                          isHighlighted={row === highlightedIndex}
-                          item={item}
-                          itemProps={getItemProps({ item })}
-                        />
-                      ))}
-                  </ul>
-                )}
+                {isOpen &&
+                  !isEmpty(searchTerm) && (
+                    <ul className="search-results">
+                      {searchResults
+                        .slice(0, 10)
+                        .map((item, row) => (
+                          <SearchResult
+                            key={row}
+                            value={inputValue}
+                            isHighlighted={row === highlightedIndex}
+                            item={item}
+                            itemProps={getItemProps({ item })}
+                          />
+                        ))}
+                      {noResults && (
+                        <li className="c-search-result -no-highlight">
+                          <div className="search-node-text-container">
+                            <span className="search-node-name">No results found</span>
+                          </div>
+                        </li>
+                      )}
+                    </ul>
+                  )}
               </div>
             )}
           </Downshift>
@@ -133,5 +143,6 @@ GlobalSearch.propTypes = {
   className: PropTypes.string,
   isLoading: PropTypes.bool,
   onInputValueChange: PropTypes.func,
-  searchResults: PropTypes.array
+  searchResults: PropTypes.array,
+  searchTerm: PropTypes.string
 };

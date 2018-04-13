@@ -16,14 +16,20 @@ function GlobalSearchResult({ value, itemProps, isHighlighted, item }) {
         </span>
       </div>
       <div className="search-node-actions-container">
-        <LinkButton to={{ type: 'tool' }}>Supply Chain</LinkButton>
-        <LinkButton to={{ type: 'tool', payload: { query: { state: { isMapVisible: true } } } }}>
+        <LinkButton className="-medium-large" to={{ type: 'tool' }}>
+          Supply Chain
+        </LinkButton>
+        <LinkButton
+          className="-medium-large"
+          to={{ type: 'tool', payload: { query: { state: { isMapVisible: true } } } }}
+        >
           Production Region
         </LinkButton>
 
         {item.profileType &&
           item.type.split(' & ').map(type => (
             <LinkButton
+              className="-medium-large"
               key={item.name + type}
               to={{
                 type: camelcase(`profile-${item.profileType}`),
