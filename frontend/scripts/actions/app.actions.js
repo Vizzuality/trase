@@ -1,3 +1,4 @@
+import isEmpty from 'lodash/isEmpty';
 import { TOGGLE_MAP } from 'actions/tool.actions';
 import {
   GET_DISCLAIMER_URL,
@@ -14,7 +15,7 @@ export const SHOW_DISCLAIMER = 'SHOW_DISCLAIMER';
 export const TOGGLE_DROPDOWN = 'TOGGLE_DROPDOWN';
 export const TOGGLE_MAP_LAYERS_MENU = 'TOGGLE_MAP_LAYERS_MENU';
 export const CLOSE_STORY_MODAL = 'CLOSE_STORY_MODAL';
-export const SET_SEARCH_FILTER = 'SET_SEARCH_FILTER';
+export const SET_SEARCH_TERM = 'SET_SEARCH_TERM';
 export const LOAD_SEARCH_RESULTS = 'LOAD_SEARCH_RESULTS';
 
 export function resize() {
@@ -107,13 +108,25 @@ export function displayStoryModal(storyId) {
   };
 }
 
-export function loadSearchResults(filter) {
+export function resetSearchResults() {
+  return {
+    type: SET_SEARCH_TERM,
+    payload: { term: '', results: [] }
+  };
+}
+
+export function loadSearchResults(searchTerm) {
   return dispatch => {
-    const url = `${getURLFromParams(GET_SEARCH_NODES_URL)}?query=${filter}`;
+    const url = `${getURLFromParams(GET_SEARCH_NODES_URL)}?query=${searchTerm}`;
+
+    if (isEmpty(searchTerm)) {
+      dispatch(resetSearchResults());
+      return;
+    }
 
     dispatch({
-      type: SET_SEARCH_FILTER,
-      payload: filter
+      type: SET_SEARCH_TERM,
+      payload: { term: searchTerm, isLoading: true }
     });
 
     fetch(url)
