@@ -24,10 +24,7 @@ export default class ToolSearch extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      charPressedCount: 0,
-      isSearchOpen: false
-    };
+    this.state = { charPressedCount: 0 };
     this.onOpenClicked = this.onOpenClicked.bind(this);
     this.onCloseClicked = this.onCloseClicked.bind(this);
     this.onSelected = this.onSelected.bind(this);
@@ -46,8 +43,8 @@ export default class ToolSearch extends Component {
     document.addEventListener('keyup', this.onKeyup);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.input && !prevState.isSearchOpen && this.state.isSearchOpen) {
+  componentDidUpdate(prevProps) {
+    if (this.input && !prevProps.isSearchOpen && this.props.isSearchOpen) {
       this.input.focus();
     }
   }
@@ -59,12 +56,12 @@ export default class ToolSearch extends Component {
 
   onOpenClicked(e) {
     if (e) e.stopPropagation();
-    this.setState({ isSearchOpen: true });
+    this.props.setSankeySearchVisibility(true);
   }
 
   onCloseClicked(e) {
     if (e) e.stopPropagation();
-    this.setState({ isSearchOpen: false });
+    this.props.setSankeySearchVisibility(false);
   }
 
   onSelected(selectedItem) {
@@ -90,7 +87,8 @@ export default class ToolSearch extends Component {
   }
 
   onKeydown(e) {
-    const { charPressedCount, isSearchOpen } = this.state;
+    const { isSearchOpen } = this.props;
+    const { charPressedCount } = this.state;
 
     // we won't open the search if any combination of keys is pressed
     if (!isSearchOpen && ToolSearch.isValidChar(e.key) && charPressedCount === 0) {
@@ -114,8 +112,14 @@ export default class ToolSearch extends Component {
   }
 
   render() {
-    const { className, nodes = [], selectedNodesIds = [], onInputValueChange } = this.props;
-    const { isSearchOpen } = this.state;
+    const {
+      isSearchOpen,
+      className,
+      nodes = [],
+      selectedNodesIds = [],
+      onInputValueChange
+    } = this.props;
+
     if (isSearchOpen === false) {
       return (
         <div onClick={this.onOpenClicked} className={className}>
