@@ -112,13 +112,7 @@ export default class ToolSearch extends Component {
   }
 
   render() {
-    const {
-      isSearchOpen,
-      className,
-      nodes = [],
-      selectedNodesIds = [],
-      onInputValueChange
-    } = this.props;
+    const { isSearchOpen, className, nodes = [], selectedNodesIds = [] } = this.props;
 
     if (isSearchOpen === false) {
       return (
@@ -140,7 +134,6 @@ export default class ToolSearch extends Component {
           <Downshift
             itemToString={i => (i === null ? '' : i.name)}
             onSelect={this.onSelected}
-            onInputValueChange={onInputValueChange}
             ref={this.setDownshiftRef}
           >
             {({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => (
@@ -161,6 +154,9 @@ export default class ToolSearch extends Component {
                 {isOpen && (
                   <ul className="search-results">
                     {nodes
+                      .filter(
+                        i => !inputValue || i.name.toLowerCase().includes(inputValue.toLowerCase())
+                      )
                       .slice(0, 10)
                       .map((item, row) => (
                         <SearchResult
@@ -184,17 +180,12 @@ export default class ToolSearch extends Component {
   }
 }
 
-ToolSearch.defaultProps = {
-  selectedNodesIds: []
-};
-
 ToolSearch.propTypes = {
   className: PropTypes.string,
   setSankeySearchVisibility: PropTypes.func,
   selectedNodesIds: PropTypes.array,
   nodes: PropTypes.array,
   isSearchOpen: PropTypes.bool,
-  onInputValueChange: PropTypes.func,
   onAddNode: PropTypes.func,
   onRemoveNode: PropTypes.func
 };
