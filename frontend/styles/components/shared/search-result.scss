@@ -40,11 +40,27 @@
       height: 40px;
       letter-spacing: -0.7px;
       line-height: 0.77;
+      font-weight: normal;
+      border-color: rgba($charcoal-grey, .3);
 
       &:hover {
         border-color: transparent;
         background-color: $charcoal-grey;
         color: $white;
+
+        &.-with-icon {
+          .icon {
+            opacity: unset;
+          }
+        }
+      }
+
+      &.-with-icon {
+        .icon {
+          width: 12px;
+          height: 10px;
+          opacity: .3;
+        }
       }
     }
 

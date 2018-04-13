@@ -62,4 +62,10 @@
     color: rgba($charcoal-grey, .3);
     pointer-events: none;
   }
+
+  &.-with-icon {
+    .icon {
+      margin-left: 5px;
+    }
+  }
 }

@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import camelcase from 'lodash/camelCase';
-import Link from 'redux-first-router-link';
 
+import LinkButton from 'react-components/shared/link-button.component';
 import HighlightTextFragments from 'react-components/shared/highlight-text-fragments.component';
 
 function GlobalSearchResult({ value, itemProps, isHighlighted, item }) {
@@ -16,28 +16,22 @@ function GlobalSearchResult({ value, itemProps, isHighlighted, item }) {
         </span>
       </div>
       <div className="search-node-actions-container">
-        <Link className="c-button -medium-large" to={{ type: 'tool' }}>
-          Supply Chain
-        </Link>
-        <Link
-          className="c-button -medium-large"
-          to={{ type: 'tool', payload: { query: { state: { isMapVisible: true } } } }}
-        >
+        <LinkButton to={{ type: 'tool' }}>Supply Chain</LinkButton>
+        <LinkButton to={{ type: 'tool', payload: { query: { state: { isMapVisible: true } } } }}>
           Production Region
-        </Link>
+        </LinkButton>
 
         {item.profileType &&
           item.type.split(' & ').map(type => (
-            <Link
+            <LinkButton
               key={item.name + type}
-              className="c-button -medium-large"
               to={{
                 type: camelcase(`profile-${item.profileType}`),
                 query: { nodeId: item.id }
               }}
             >
               See {type} profile
-            </Link>
+            </LinkButton>
           ))}
       </div>
     </li>
