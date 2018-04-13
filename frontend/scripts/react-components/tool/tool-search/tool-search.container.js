@@ -1,9 +1,4 @@
-import {
-  selectExpandedNode,
-  selectNode,
-  setSankeySearchVisibility,
-  setSearch
-} from 'actions/tool.actions';
+import { selectExpandedNode, selectNode, setSankeySearchVisibility } from 'actions/tool.actions';
 import flatten from 'lodash/flatten';
 import groupBy from 'lodash/groupBy';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.component';
@@ -35,14 +30,7 @@ const getNode = (nodes, selectedColumnsIds, nodesDict) => {
 };
 
 const mapStateToProps = state => {
-  const {
-    nodes,
-    selectedNodesIds,
-    selectedColumnsIds,
-    nodesDict,
-    isSearchOpen,
-    search
-  } = state.tool;
+  const { nodes, selectedNodesIds, selectedColumnsIds, nodesDict, isSearchOpen } = state.tool;
   // store nodes at container level to avoid rerendering when filtering... for want of a better solution
   if (nodes !== undefined && (!searchNodes || nodes.length !== searchNodes.length)) {
     const allNodes = nodes.filter(
@@ -58,7 +46,7 @@ const mapStateToProps = state => {
   return {
     selectedNodesIds,
     isSearchOpen,
-    nodes: searchNodes.filter(i => !search || i.name.toLowerCase().includes(search.toLowerCase()))
+    nodes: searchNodes
   };
 };
 
@@ -67,8 +55,7 @@ const mapDispatchToProps = dispatch =>
     {
       onAddNode: nodeId => selectExpandedNode(nodeId),
       onRemoveNode: nodeId => selectNode(nodeId),
-      setSankeySearchVisibility: searchVisibility => setSankeySearchVisibility(searchVisibility),
-      onInputValueChange: inputValue => setSearch(inputValue)
+      setSankeySearchVisibility: searchVisibility => setSankeySearchVisibility(searchVisibility)
     },
     dispatch
   );

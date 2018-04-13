@@ -25,7 +25,6 @@ import {
   SET_CONTEXT,
   SET_MAP_DIMENSIONS,
   SET_SANKEY_SEARCH_VISIBILITY,
-  SET_SEARCH,
   SHOW_LINKS_ERROR,
   TOGGLE_MAP,
   TOGGLE_MAP_DIMENSION,
@@ -87,7 +86,6 @@ export const toolInitialState = {
   nodesDictWithMeta: {},
   recolorByNodeIds: [],
   recolorGroups: [],
-  search: '',
   selectedBiomeFilter: { name: 'none', value: 'none' },
   selectedColumnsIds: [],
   selectedContext: null,
@@ -562,9 +560,6 @@ const toolReducer = {
   },
   [SET_SANKEY_SEARCH_VISIBILITY](state, action) {
     return Object.assign({}, state, { isSearchOpen: action.searchVisibility });
-  },
-  [SET_SEARCH](state, action) {
-    return Object.assign({}, state, { search: action.search });
   }
 };
 
@@ -587,6 +582,7 @@ const toolReducerTypes = PropTypes => ({
   highlightedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   initialDataLoading: PropTypes.bool,
   isMapVisible: PropTypes.bool,
+  isSearchOpen: PropTypes.bool,
   linkedGeoIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   links: PropTypes.arrayOf(PropTypes.object).isRequired,
   linksLoading: PropTypes.bool,
@@ -602,7 +598,6 @@ const toolReducerTypes = PropTypes => ({
   nodesDictWithMeta: PropTypes.object.isRequired,
   recolorByNodeIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   recolorGroups: PropTypes.arrayOf(PropTypes.number).isRequired,
-  search: PropTypes.string,
   selectedBiomeFilter: PropTypes.object,
   selectedColumnsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedContext: PropTypes.object,
