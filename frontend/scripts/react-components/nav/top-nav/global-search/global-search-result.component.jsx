@@ -6,11 +6,15 @@ import camelcase from 'lodash/camelCase';
 import LinkButton from 'react-components/shared/link-button.component';
 import HighlightTextFragments from 'react-components/shared/highlight-text-fragments.component';
 
-function GlobalSearchResult({ value, itemProps, isHighlighted, item }) {
+function GlobalSearchResult({ value, itemProps, isHighlighted, item, contexts }) {
+  const itemContext = contexts.find(context => context.id === item.contextId);
+
   return (
     <li {...itemProps} className={cx('c-search-result', { '-highlighted': isHighlighted })}>
       <div className="search-node-text-container">
-        <span className="search-node-type">{item.type}</span>
+        <span className="search-node-type">
+          {item.type} for {itemContext.countryName} {itemContext.commodityName}{' '}
+        </span>
         <span className="search-node-name">
           <HighlightTextFragments text={item.name} highlight={value} />
         </span>
@@ -72,6 +76,7 @@ GlobalSearchResult.propTypes = {
   value: PropTypes.string,
   itemProps: PropTypes.object,
   isHighlighted: PropTypes.bool,
+  contexts: PropTypes.array,
   item: PropTypes.object
 };
 
