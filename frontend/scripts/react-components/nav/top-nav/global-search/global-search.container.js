@@ -7,6 +7,7 @@ const mapStateToProps = state => {
   const { search } = state.app;
 
   return {
+    isLoading: search.isLoading,
     searchResults: search.results.map(n => ({
       id: n.id,
       name: n.name,

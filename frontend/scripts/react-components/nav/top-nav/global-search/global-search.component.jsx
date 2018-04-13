@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
+import debounce from 'lodash/debounce';
+
 import SearchResult from 'react-components/nav/top-nav/global-search/global-search-result.component';
 import 'styles/components/nav/global-search.scss';
 import 'styles/components/nav/global-search-result.scss';
@@ -13,6 +15,8 @@ export default class GlobalSearch extends Component {
     this.onOpenClicked = this.onOpenClicked.bind(this);
     this.onCloseClicked = this.onCloseClicked.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
+    this.onInputValueChange = debounce(this.onInputValueChange.bind(this), 500);
+
     this.setDownshiftRef = element => {
       this.downshift = element;
     };
@@ -43,6 +47,10 @@ export default class GlobalSearch extends Component {
     this.setState({ isSearchOpen: false });
   }
 
+  onInputValueChange(value) {
+    this.props.onInputValueChange(value);
+  }
+
   onKeydown(e) {
     if (e.key === 'Escape' && this.state.isSearchOpen) {
       this.onCloseClicked();
@@ -50,7 +58,7 @@ export default class GlobalSearch extends Component {
   }
 
   render() {
-    const { className, searchResults = [], onInputValueChange } = this.props;
+    const { isLoading, className, searchResults = [] } = this.props;
     const { isSearchOpen } = this.state;
 
     if (!isSearchOpen) {
@@ -65,15 +73,19 @@ export default class GlobalSearch extends Component {
 
     return (
       <div className="c-search -global">
-        <svg className="icon icon-search">
-          <use xlinkHref="#icon-search" />
-        </svg>
+        {isLoading ? (
+          <span className="search-spinner" />
+        ) : (
+          <svg className="icon icon-search">
+            <use xlinkHref="#icon-search" />
+          </svg>
+        )}
         <div className="c-search__veil" onClick={this.onCloseClicked} />
         <div className="search-wrapper">
           <Downshift
             itemToString={i => (i === null ? '' : i.name)}
             onSelect={this.onSelected}
-            onInputValueChange={onInputValueChange}
+            onInputValueChange={this.onInputValueChange}
             ref={this.setDownshiftRef}
           >
             {({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => (
@@ -114,6 +126,7 @@ export default class GlobalSearch extends Component {
 
 GlobalSearch.propTypes = {
   className: PropTypes.string,
-  searchResults: PropTypes.array,
-  onInputValueChange: PropTypes.func
+  isLoading: PropTypes.bool,
+  onInputValueChange: PropTypes.func,
+  searchResults: PropTypes.array
 };
