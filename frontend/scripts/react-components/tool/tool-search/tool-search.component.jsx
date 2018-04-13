@@ -34,7 +34,6 @@ export default class ToolSearch extends Component {
     this.onAddNode = this.onAddNode.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
     this.onKeyup = this.onKeyup.bind(this);
-    this.navigateToActor = this.navigateToActor.bind(this);
     this.isNodeSelected = this.isNodeSelected.bind(this);
     this.setDownshiftRef = element => {
       this.downshift = element;
@@ -114,12 +113,6 @@ export default class ToolSearch extends Component {
       .reduce((acc, next) => acc || this.props.selectedNodesIds.includes(next), false);
   }
 
-  navigateToActor(e, item, type) {
-    if (e) e.stopPropagation();
-    const node = item[type.toLowerCase()] || item;
-    this.props.navigateToActor(node.profileType, node.id);
-  }
-
   render() {
     const { className, nodes = [], selectedNodesIds = [], onInputValueChange } = this.props;
     const { isSearchOpen } = this.state;
@@ -173,7 +166,6 @@ export default class ToolSearch extends Component {
                           item={item}
                           itemProps={getItemProps({ item })}
                           selected={this.isNodeSelected(item)}
-                          onClickNavigate={this.navigateToActor}
                           onClickAdd={this.onAddNode}
                         />
                       ))}
@@ -194,7 +186,6 @@ ToolSearch.defaultProps = {
 
 ToolSearch.propTypes = {
   className: PropTypes.string,
-  navigateToActor: PropTypes.func,
   setSankeySearchVisibility: PropTypes.func,
   selectedNodesIds: PropTypes.array,
   nodes: PropTypes.array,

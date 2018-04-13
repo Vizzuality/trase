@@ -8,6 +8,8 @@ import SearchResult from 'react-components/nav/top-nav/global-search/global-sear
 import 'styles/components/nav/global-search.scss';
 import 'styles/components/nav/global-search-result.scss';
 
+const SEARCH_DEBOUNCE_RATE_IN_MS = 500;
+
 export default class GlobalSearch extends Component {
   constructor(props) {
     super(props);
@@ -15,7 +17,10 @@ export default class GlobalSearch extends Component {
     this.onOpenClicked = this.onOpenClicked.bind(this);
     this.onCloseClicked = this.onCloseClicked.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
-    this.onInputValueChange = debounce(this.onInputValueChange.bind(this), 500);
+    this.onInputValueChange = debounce(
+      this.onInputValueChange.bind(this),
+      SEARCH_DEBOUNCE_RATE_IN_MS
+    );
 
     this.setDownshiftRef = element => {
       this.downshift = element;
