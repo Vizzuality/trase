@@ -1,19 +1,42 @@
-import { GET_ALL_NODES_URL, GET_NODES_WITH_SEARCH, getURLFromParams } from 'utils/getURLFromParams';
-import values from 'lodash/values';
+import { GET_NODES_WITH_SEARCH_URL, getURLFromParams } from 'utils/getURLFromParams';
 import { DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
 import capitalize from 'lodash/capitalize';
+import isEmpty from 'lodash/isEmpty';
 
 export const SET_PROFILE_SEARCH_NODES = 'SET_PROFILE_SEARCH_NODES';
-export const SET_PROFILE_SEARCH_ERROR_MESSAGE = 'SET_PROFILE_SEARCH_ERROR_MESSAGE';
+export const SET_PROFILE_SEARCH_TERM = 'SET_PROFILE_SEARCH_TERM';
+export const LOAD_PROFILE_SEARCH_RESULTS = 'LOAD_PROFILE_SEARCH_RESULTS';
+export const SET_PROFILE_ROOT_ERROR_MESSAGE = 'SET_PROFILE_ROOT_ERROR_MESSAGE';
 
 export const goToNodeProfilePage = node => dispatch =>
   dispatch({
-    type: `profile${capitalize(node.profileType)}`,
+    type: `profile${capitalize(node.profile)}`,
     payload: { query: { nodeId: node.id, year: DEFAULT_PROFILE_PAGE_YEAR } }
   });
 
+export function resetProfileSearchResults() {
+  return {
+    type: SET_PROFILE_SEARCH_TERM,
+    payload: { term: '', results: [] }
+  };
+}
+
 export const searchNodeWithTerm = searchTerm => dispatch => {
-  const nodeResultsURL = getURLFromParams(GET_NODES_WITH_SEARCH, { query: searchTerm });
+  const nodeResultsURL = getURLFromParams(GET_NODES_WITH_SEARCH_URL, {
+    query: searchTerm,
+    context_id: 1,
+    profile_only: true
+  });
+
+  if (isEmpty(searchTerm)) {
+    dispatch(resetProfileSearchResults());
+    return;
+  }
+
+  dispatch({
+    type: SET_PROFILE_SEARCH_TERM,
+    payload: { term: searchTerm, isLoading: true }
+  });
 
   fetch(nodeResultsURL)
     .then(response => {
@@ -22,53 +45,18 @@ export const searchNodeWithTerm = searchTerm => dispatch => {
       }
       return Promise.reject(new Error(response.statusText));
     })
-    .then(result => {
-      if (!result) return;
+    .then(results => {
+      if (!results) return;
 
       dispatch({
-        type: SET_PROFILE_SEARCH_NODES,
-        payload: { nodes: result.data }
+        type: LOAD_PROFILE_SEARCH_RESULTS,
+        payload: results.data
       });
     })
     .catch(reason => {
       console.error('Error loading profile search nodes', reason);
       dispatch({
-        type: SET_PROFILE_SEARCH_ERROR_MESSAGE,
-        payload: { errorMessage: reason.message }
-      });
-    });
-};
-
-export const loadProfileRootNodes = () => dispatch => {
-  const allNodesURL = getURLFromParams(GET_ALL_NODES_URL, { context_id: 1 });
-
-  fetch(allNodesURL)
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      return Promise.reject(new Error(response.statusText));
-    })
-    .then(result => {
-      if (!result) return;
-
-      const nodesArray = values(result.data).filter(
-        node =>
-          node.isUnknown !== true &&
-          node.isAggregated !== true &&
-          node.isDomesticConsumption !== true &&
-          !!node.profileType
-      );
-
-      dispatch({
-        type: SET_PROFILE_SEARCH_NODES,
-        payload: { nodes: nodesArray }
-      });
-    })
-    .catch(reason => {
-      console.error('Error loading profile search nodes', reason);
-      dispatch({
-        type: SET_PROFILE_SEARCH_ERROR_MESSAGE,
+        type: SET_PROFILE_ROOT_ERROR_MESSAGE,
         payload: { errorMessage: reason.message }
       });
     });

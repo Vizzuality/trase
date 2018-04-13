@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import ProfileSearchResult from 'react-components/profile-root/profile-search-result.component';
 import cx from 'classnames';
+import debounce from 'lodash/debounce';
+
+const SEARCH_DEBOUNCE_RATE_IN_MS = 400;
 
 /**
  * Dear future developer,
@@ -21,24 +24,15 @@ class ProfileSearch extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = {
-      loading: false,
-      searchTerm: ''
-    };
     this.renderSearchBox = this.renderSearchBox.bind(this);
-    this.onResultSelected = this.onResultSelected.bind(this);
-    this.onInputValueChange = this.onInputValueChange.bind(this);
-  }
-
-  onResultSelected(selectedItem) {
-    this.props.onNodeSelected(selectedItem);
+    this.onInputValueChange = debounce(
+      this.onInputValueChange.bind(this),
+      SEARCH_DEBOUNCE_RATE_IN_MS
+    );
   }
 
   onInputValueChange(searchTerm) {
-    this.setState({ searchTerm });
-    if (searchTerm.length > 2) {
-      this.props.onSearchTermChange(searchTerm);
-    }
+    this.props.onSearchTermChange(searchTerm);
   }
 
   focusInput(e) {
@@ -46,24 +40,14 @@ class ProfileSearch extends PureComponent {
     if (input) input.focus();
   }
 
-  renderSearchBox({
-    getInputProps,
-    getItemProps,
-    isOpen,
-    inputValue,
-    highlightedIndex,
-    onInputValueChange
-  }) {
-    const loading = this.state.loading;
-    const visibleResults = this.props.nodes
-      .filter(
-        item => inputValue.length > 1 && item.name.toLowerCase().includes(inputValue.toLowerCase())
-      )
-      .slice(0, 10);
+  renderSearchBox({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) {
+    const isLoading = this.props.isLoading;
+    const visibleResults = this.props.nodes.slice(0, 10);
+
     return (
       <div className="c-profile-search">
         <div
-          className={cx('profile-search-bar', { '-loading': loading })}
+          className={cx('profile-search-bar', { '-loading': isLoading })}
           onClick={this.focusInput}
           role="textbox"
         >
@@ -71,16 +55,13 @@ class ProfileSearch extends PureComponent {
             {...getInputProps({ placeholder: 'Search' })}
             type="search"
             className="profile-search-input show-for-small"
-            disabled={loading}
-            oncChange={onInputValueChange}
           />
           <input
             {...getInputProps({ placeholder: 'Search a company or production place' })}
             type="search"
             className="profile-search-input hide-for-small"
-            disabled={loading}
           />
-          {loading ? (
+          {isLoading ? (
             <span className="profile-search-spinner" />
           ) : (
             <svg className="icon icon-search">
@@ -109,11 +90,10 @@ class ProfileSearch extends PureComponent {
   render() {
     return (
       <Downshift
-        onSelect={this.onResultSelected}
+        onSelect={this.props.onNodeSelected}
         onChange={this.onChange}
         itemToString={i => (i === null ? '' : i.name)}
         onInputValueChange={this.onInputValueChange}
-        inputValue={this.state.searchTerm}
       >
         {this.renderSearchBox}
       </Downshift>
@@ -123,6 +103,7 @@ class ProfileSearch extends PureComponent {
 
 ProfileSearch.propTypes = {
   nodes: PropTypes.array.isRequired,
+  isLoading: PropTypes.bool,
   onNodeSelected: PropTypes.func.isRequired,
   onSearchTermChange: PropTypes.func.isRequired
 };

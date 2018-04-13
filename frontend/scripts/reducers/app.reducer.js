@@ -23,7 +23,7 @@ const initialState = {
     modalParams: null
   },
   search: {
-    filter: '',
+    term: '',
     isLoading: false,
     results: []
   }
@@ -84,6 +84,11 @@ const appReducerTypes = PropTypes => ({
   modal: PropTypes.shape({
     visibility: PropTypes.bool,
     modalParams: PropTypes.object
+  }).isRequired,
+  search: PropTypes.shape({
+    term: PropTypes.string.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    results: PropTypes.arrayOf(PropTypes.object).isRequired
   }).isRequired
 });
 

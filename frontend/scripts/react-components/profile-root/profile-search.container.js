@@ -8,7 +8,8 @@ import {
 
 function mapStateToProps(state) {
   return {
-    nodes: state.profileRoot.nodes
+    nodes: state.profileRoot.search.results,
+    isLoading: state.profileRoot.search.isLoading
   };
 }
 
