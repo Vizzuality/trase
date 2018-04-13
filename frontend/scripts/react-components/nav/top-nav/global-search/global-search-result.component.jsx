@@ -16,12 +16,36 @@ function GlobalSearchResult({ value, itemProps, isHighlighted, item }) {
         </span>
       </div>
       <div className="search-node-actions-container">
-        <LinkButton className="-medium-large" to={{ type: 'tool' }}>
+        <LinkButton
+          className="-medium-large"
+          to={{
+            type: 'tool',
+            payload: {
+              query: {
+                state: {
+                  selectedContextId: item.contextId,
+                  selectedNodesIds: [item.id]
+                }
+              }
+            }
+          }}
+        >
           Supply Chain
         </LinkButton>
         <LinkButton
           className="-medium-large"
-          to={{ type: 'tool', payload: { query: { state: { isMapVisible: true } } } }}
+          to={{
+            type: 'tool',
+            payload: {
+              query: {
+                state: {
+                  isMapVisible: true,
+                  selectedContextId: item.contextId,
+                  selectedNodesIds: [item.id]
+                }
+              }
+            }
+          }}
         >
           Production Region
         </LinkButton>
