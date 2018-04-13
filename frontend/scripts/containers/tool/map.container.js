@@ -64,8 +64,8 @@ const mapMethodsToState = state => ({
   },
   invalidate: state.tool.isMapVisible,
   setBasemap: {
-    _comparedValue: state => getBasemap(state.tool),
-    _returnedValue: state => getBasemap(state.tool)
+    _comparedValue: state => getBasemap(state.map),
+    _returnedValue: state => getBasemap(state.map)
   },
   filterByBiome: state.tool.selectedBiomeFilter
 });
