@@ -57,6 +57,10 @@ shared_context 'api v3 brazil context node types' do
         column_group: 0,
         is_default: true
       )
+      FactoryBot.create(
+        :api_v3_profile,
+        context_node_type: cnt
+      )
     end
     cnt
   end
