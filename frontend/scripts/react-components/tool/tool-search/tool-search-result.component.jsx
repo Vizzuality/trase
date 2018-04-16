@@ -30,7 +30,7 @@ function ToolSearchResult({ value, onClickAdd, selected, itemProps, isHighlighte
               key={item.name + type}
               to={{
                 type: camelcase(`profile-${item.profileType}`),
-                query: { nodeId: item.id }
+                query: { nodeId: (item[type.toLowerCase()] || item).id }
               }}
             >
               See {type} profile

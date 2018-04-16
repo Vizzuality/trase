@@ -19,7 +19,7 @@ const getNode = (nodes, selectedColumnsIds, nodesDict) => {
         id: `${nA.id}_${nB.id}`,
         name: nA.name,
         type: `${nA.type} & ${nB.type}`,
-        profileType: `${nA.type} & ${nB.type}`,
+        profileType: nA.profileType,
         [nA.type.toLowerCase()]: nA,
         [nB.type.toLowerCase()]: nB
       };
