@@ -22,9 +22,12 @@
           },
           "mainId": {
             "$id": "/properties/data/items/properties/mainId",
-            "type": "integer",
+            "type": [
+              "integer",
+              "null"
+            ],
             "title": "The Main Id Schema ",
-            "default": 0,
+            "default": null,
             "examples": [
               6035
             ]
