@@ -5,7 +5,7 @@ import Downshift from 'downshift';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 
-import GlobalSearchResult from 'react-components/nav/top-nav/global-search/global-search-result.container';
+import GlobalSearchResult from 'react-components/nav/top-nav/global-search/global-search-result.component';
 import 'styles/components/nav/global-search.scss';
 import 'styles/components/nav/global-search-result.scss';
 

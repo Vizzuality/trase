@@ -6,15 +6,11 @@ import camelcase from 'lodash/camelCase';
 import LinkButton from 'react-components/shared/link-button.component';
 import HighlightTextFragments from 'react-components/shared/highlight-text-fragments.component';
 
-function GlobalSearchResult({ value, itemProps, isHighlighted, item, contexts }) {
-  const itemContext = contexts.find(context => context.id === item.contextId);
-
+function GlobalSearchResult({ value, itemProps, isHighlighted, item }) {
   return (
     <li {...itemProps} className={cx('c-search-result', { '-highlighted': isHighlighted })}>
       <div className="search-node-text-container">
-        <span className="search-node-type">
-          {item.type} for {itemContext.countryName} {itemContext.commodityName}{' '}
-        </span>
+        <span className="search-node-type">{item.nodeTypeText}</span>
         <span className="search-node-name">
           <HighlightTextFragments text={item.name} highlight={value} />
         </span>
@@ -28,7 +24,7 @@ function GlobalSearchResult({ value, itemProps, isHighlighted, item, contexts })
               query: {
                 state: {
                   selectedContextId: item.contextId,
-                  selectedNodesIds: [item.id]
+                  selectedNodesIds: item.nodes.map(i => i.id)
                 }
               }
             }
@@ -45,7 +41,7 @@ function GlobalSearchResult({ value, itemProps, isHighlighted, item, contexts })
                 state: {
                   isMapVisible: true,
                   selectedContextId: item.contextId,
-                  selectedNodesIds: [item.id]
+                  selectedNodesIds: item.nodes.map(i => i.id)
                 }
               }
             }
@@ -54,19 +50,18 @@ function GlobalSearchResult({ value, itemProps, isHighlighted, item, contexts })
           Production Region
         </LinkButton>
 
-        {item.profileType &&
-          item.type.split(' & ').map(type => (
-            <LinkButton
-              className="-medium-large"
-              key={item.name + type}
-              to={{
-                type: camelcase(`profile-${item.profileType}`),
-                query: { nodeId: item.id }
-              }}
-            >
-              See {type} profile
-            </LinkButton>
-          ))}
+        {item.nodes.filter(n => n.profile).map(node => (
+          <LinkButton
+            className="-medium-large"
+            key={node.id}
+            to={{
+              type: camelcase(`profile-${node.profile}`),
+              query: { nodeId: node.id }
+            }}
+          >
+            See {node.nodeType} profile
+          </LinkButton>
+        ))}
       </div>
     </li>
   );
@@ -76,7 +71,6 @@ GlobalSearchResult.propTypes = {
   value: PropTypes.string,
   itemProps: PropTypes.object,
   isHighlighted: PropTypes.bool,
-  contexts: PropTypes.array,
   item: PropTypes.object
 };
 
