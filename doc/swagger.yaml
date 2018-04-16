@@ -67,6 +67,8 @@ paths:
               properties:
                 id:
                   type: integer
+                mainId:
+                  type: integer
                 name:
                   type: string
                 nodeType:

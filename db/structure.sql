@@ -2013,6 +2013,7 @@ CREATE TABLE public.profiles (
 
 CREATE MATERIALIZED VIEW public.nodes_mv AS
  SELECT nodes.id,
+    nodes.main_id,
     nodes.name,
     node_types.name AS node_type,
     nodes_with_flows.context_id,
@@ -4719,6 +4720,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180327111929'),
 ('20180403155328'),
 ('20180410065335'),
-('20180412074237');
+('20180412074237'),
+('20180416125150');
 
 

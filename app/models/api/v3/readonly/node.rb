@@ -3,6 +3,7 @@
 # Table name: nodes_mv
 #
 #  id         :integer          primary key
+#  main_id    :integer
 #  name       :text
 #  node_type  :text
 #  context_id :integer
@@ -11,7 +12,7 @@
 # Indexes
 #
 #  nodes_mv_context_id_idx  (context_id)
-#  nodes_mv_name_idx        (to_tsvector('simple'::regconfig, name))
+#  nodes_mv_name_idx        (to_tsvector('simple'::regconfig, COALESCE(name, ''::text)))
 #
 
 module Api
