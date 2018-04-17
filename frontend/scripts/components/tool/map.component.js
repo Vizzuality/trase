@@ -147,12 +147,13 @@ export default class {
 
     if (forceDefaultMapView === true) {
       this.setMapView(defaultMapView);
-    } else if (
-      this.vectorOutline !== undefined &&
-      selectedGeoIds.length &&
-      this.currentPolygonTypeLayer &&
-      (!linkedGeoIds || linkedGeoIds.length === 0)
-    ) {
+    } else if (!linkedGeoIds || linkedGeoIds.length === 0) {
+      this._fitBoundsToSelectedPolygons(selectedGeoIds);
+    }
+  }
+
+  _fitBoundsToSelectedPolygons(selectedGeoIds) {
+    if (this.vectorOutline !== undefined && selectedGeoIds.length && this.currentPolygonTypeLayer) {
       if (!this.currentPolygonTypeLayer.isPoint) {
         this.map.fitBounds(this.vectorOutline.getBounds());
       } else {
@@ -370,7 +371,7 @@ export default class {
     });
   }
 
-  showLinkedGeoIds({ linkedGeoIds, defaultMapView, forceDefaultMapView }) {
+  showLinkedGeoIds({ linkedGeoIds, selectedGeoIds, defaultMapView, forceDefaultMapView }) {
     if (!this.currentPolygonTypeLayer) {
       return;
     }
@@ -395,6 +396,8 @@ export default class {
       const boundsCenterZoom = this.map._getBoundsCenterZoom(bounds);
       boundsCenterZoom.zoom = Math.max(boundsCenterZoom.zoom, defaultMapView.zoom);
       this.map.setView(boundsCenterZoom.center, boundsCenterZoom.zoom);
+    } else {
+      this._fitBoundsToSelectedPolygons(selectedGeoIds);
     }
   }
 
