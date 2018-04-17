@@ -32,9 +32,9 @@ module Api
             path: "#{Rails.root}/public/README.pdf", name: 'README.pdf'
           }
           @data_entries = [readme_entry]
-          with_chunked_query do |query, chunk_idx|
+          with_chunked_query do |query, year|
             content = content(query)
-            filename = filename(chunk_idx)
+            filename = filename(year)
             path = @temp_dir + '/' + filename
             File.open(path, 'w') { |f| f.write content }
             @data_entries << {path: path, name: filename}
@@ -61,8 +61,8 @@ module Api
         end
 
         # @return [String]
-        def filename(chunk_idx)
-          "#{@download_name}#{chunk_idx ? ".part#{chunk_idx}" : nil}.#{format}"
+        def filename(year)
+          "#{@download_name}#{year ? ".#{year}" : nil}.#{format}"
         end
 
         # @abstract
@@ -72,20 +72,23 @@ module Api
           raise NotImplementedError
         end
 
-        CHUNK_SIZE = 500_000
+        MAX_SIZE = 500_000
 
         def with_chunked_query
           total = @query.except(:select).count
-          if total < CHUNK_SIZE
+          if total < MAX_SIZE
             yield(@query, nil)
           else
-            chunk_idx = 0
-            offset = 0
-            while offset < total
-              query = @query.limit(CHUNK_SIZE).offset(offset)
-              yield(query, chunk_idx)
-              chunk_idx += 1
-              offset += CHUNK_SIZE
+            years = @query.
+              except(:select).
+              except(:order).
+              select(:year).
+              distinct.
+              order(:year).
+              pluck(:year)
+            years.each do |year|
+              query = @query.where(year: year)
+              yield(query, year)
             end
           end
         end
