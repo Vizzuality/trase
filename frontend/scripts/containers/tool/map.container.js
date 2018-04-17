@@ -34,6 +34,7 @@ const mapMethodsToState = state => ({
     _comparedValue: state => state.tool.selectedNodesGeoIds,
     _returnedValue: state => ({
       selectedGeoIds: state.tool.selectedNodesGeoIds,
+      linkedGeoIds: state.tool.linkedGeoIds,
       defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
       forceDefaultMapView: !state.tool.selectedNodesIds.length
     })

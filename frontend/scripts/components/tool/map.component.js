@@ -123,7 +123,7 @@ export default class {
 
     this.selectPolygonType({ selectedColumnsIds: currentPolygonType, biomeFilter });
     if (selectedNodesGeoIds) {
-      this.selectPolygons({ selectedGeoIds: selectedNodesGeoIds });
+      this.selectPolygons({ selectedGeoIds: selectedNodesGeoIds, linkedGeoIds });
     }
 
     // under normal circumstances, choropleth (depends on loadNodes) and linkedGeoIds (depends on loadLinks)
@@ -136,7 +136,13 @@ export default class {
     }
   }
 
-  selectPolygons({ selectedGeoIds, highlightedGeoId, forceDefaultMapView, defaultMapView }) {
+  selectPolygons({
+    selectedGeoIds,
+    linkedGeoIds,
+    highlightedGeoId,
+    forceDefaultMapView,
+    defaultMapView
+  }) {
     this._outlinePolygons({ selectedGeoIds, highlightedGeoId });
 
     if (forceDefaultMapView === true) {
@@ -144,7 +150,8 @@ export default class {
     } else if (
       this.vectorOutline !== undefined &&
       selectedGeoIds.length &&
-      this.currentPolygonTypeLayer
+      this.currentPolygonTypeLayer &&
+      (!linkedGeoIds || linkedGeoIds.length === 0)
     ) {
       if (!this.currentPolygonTypeLayer.isPoint) {
         this.map.fitBounds(this.vectorOutline.getBounds());
