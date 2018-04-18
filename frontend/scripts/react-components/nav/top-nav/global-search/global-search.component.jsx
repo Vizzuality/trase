@@ -100,7 +100,7 @@ export default class GlobalSearch extends Component {
                 <div className="search-bar">
                   <input
                     {...getInputProps({
-                      placeholder: 'Search a producer or trader'
+                      placeholder: 'Search a producer, trader or country of import'
                     })}
                     ref={this.setInputRef}
                     className="search-bar-input"
