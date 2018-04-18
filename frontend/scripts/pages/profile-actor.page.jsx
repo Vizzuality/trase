@@ -407,7 +407,7 @@ const _setInfo = (info, onLinkClick, { nodeId, year }) => {
     .addEventListener('click', () =>
       onLinkClick('tool', { state: { selectedNodesIds: [nodeId], selectedYears: [year, year] } })
     );
-  document.querySelector('.js-summary-text').textContent = info.summary ? info.summary : '-';
+  document.querySelector('.js-summary-text').innerHTML = info.summary ? info.summary : '-';
 };
 
 const _setEventListeners = () => {

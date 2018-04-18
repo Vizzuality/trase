@@ -52,9 +52,11 @@ module Api
         def summary
           return nil unless municipality? || logistics_hub?
 
-          result = "In #{@year}, #{@node.name.titleize} produced \
-#{@soy_production_formatted} #{@soy_production_unit} of soy occupying a total \
-of #{@soy_area_formatted} #{@soy_area_unit} of land."
+          result = "In <span>#{@year}</span>, \
+<span>#{@node.name.titleize}</span> produced \
+<span>#{@soy_production_formatted}</span> \
+<span>#{@soy_production_unit}</span> of soy occupying a total \
+of <span>#{@soy_area_formatted}</span> <span>#{@soy_area_unit}</span> of land."
           result << summary_of_production_ranking
           result << summary_of_top_exporter_and_top_consumer
           result
@@ -187,8 +189,9 @@ of #{@soy_area_formatted} #{@soy_area_unit} of land."
             end
 
           text + "of the total production, it \
-ranks #{country_ranking} in Brazil in soy production, and #{state_ranking} in \
-the state of #{state_name}."
+ranks <span>#{country_ranking}</span> in Brazil in soy production, \
+and <span>#{state_ranking}</span> in \
+the state of <span>#{state_name}</span>."
         end
 
         def summary_of_top_exporter_and_top_consumer
@@ -207,9 +210,12 @@ the state of #{state_name}."
           top_consumer_name = top_consumer['name']&.titleize if top_consumer
 
           if top_exporter && percentage_total_exports && top_consumer
-            " The largest exporter of soy in #{@node.name.titleize} \
-was #{top_exporter_name}, which accounted for #{percentage_total_exports} of \
-the total exports, and the main destination was #{top_consumer_name}."
+            " The largest exporter of soy in \
+<span>#{@node.name.titleize}</span> was \
+<span>#{top_exporter_name}</span>, which accounted for \
+<span>#{percentage_total_exports}</span> of \
+the total exports, and the main destination was \
+<span>#{top_consumer_name}</span>."
           else
             ''
           end
