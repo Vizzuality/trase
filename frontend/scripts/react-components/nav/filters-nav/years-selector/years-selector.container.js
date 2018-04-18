@@ -9,9 +9,13 @@ const mapStateToProps = state => {
 
   const availableContextYears = selectedContext.years;
   const availableResizeByYears =
-    selectedResizeBy.years.length > 0 ? selectedResizeBy.years : availableContextYears;
+    selectedResizeBy.years && selectedResizeBy.years.length > 0
+      ? selectedResizeBy.years
+      : availableContextYears;
   const availableRecolorByYears =
-    selectedRecolorBy.years.length > 0 ? selectedRecolorBy.years : availableContextYears;
+    selectedRecolorBy.years && selectedRecolorBy.years.length > 0
+      ? selectedRecolorBy.years
+      : availableContextYears;
 
   const years = intersection(
     availableContextYears,
