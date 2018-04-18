@@ -76,7 +76,7 @@ class SliderSection extends React.PureComponent {
     const { className, name, slides } = this.props;
     const { visiblePages, currentSlide } = this.state;
     const smallScreen = visiblePages === 1;
-    const numColums = slides.length <= visiblePages && visiblePages < 3 ? 6 : 4;
+    const numColumns = slides.length <= visiblePages && visiblePages < 3 ? 6 : 4;
 
     if (slides.length === 0) return null;
     return (
@@ -95,7 +95,7 @@ class SliderSection extends React.PureComponent {
             {slides.map(slide => (
               <div
                 key={slide.title || slide.quote}
-                className={`column small-12 medium-${numColums}`}
+                className={`column small-12 medium-${numColumns}`}
               >
                 <div className={cx('slide', { '-actionable': !slide.quote })}>
                   {slide.quote ? (
