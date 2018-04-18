@@ -13,7 +13,8 @@ const MarkdownRenderer = props => {
   );
   const SmartLink = p => {
     const isAbsoluteLink = /^http(s)?:\/\//.test(p.href);
-    if (!isAbsoluteLink) {
+    const isEmail = /^mailto:/.test(p.href);
+    if (!isAbsoluteLink && !isEmail) {
       return <Link to={p.href}>{p.children}</Link>;
     }
     return (
