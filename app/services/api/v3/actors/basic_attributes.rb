@@ -116,22 +116,23 @@ module Api
 
         def summary_of_total_trade_volume(profile_type)
           initialize_trade_volume_for_summary
-          text = "#{@node.name.humanize} was the \
-#{@trade_total_rank_in_country_formatted}largest #{profile_type} of soy \
-#{profile_type.casecmp('exporter').zero? ? 'in' : 'from'} \
-#{@context.country.name} in #{@year}, accounting for \
-#{@trade_total_current_year_formatted}."
+          text = "<span>#{@node.name.humanize}</span> was the \
+<span>#{@trade_total_rank_in_country_formatted}</span>\
+largest #{profile_type} of soy
+          #{profile_type.casecmp('exporter').zero? ? 'in' : 'from'} \
+          #{@context.country.name} in <span>#{@year}</span>, accounting for \
+<span>#{@trade_total_current_year_formatted}</span>."
           return text unless @trade_total_perc_difference.present?
           difference_from = if @trade_total_perc_difference.positive?
-                              'a ' + helper.number_to_percentage(
+                              'a <span>' + helper.number_to_percentage(
                                 @trade_total_perc_difference * 100,
                                 precision: 0
-                              ) + ' increase vs'
+                              ) + '</span> increase vs'
                             elsif @trade_total_perc_difference.negative?
-                              'a ' + helper.number_to_percentage(
+                              'a <span>' + helper.number_to_percentage(
                                 -@trade_total_perc_difference * 100,
                                 precision: 0
-                              ) + ' decrease vs'
+                              ) + '</span> decrease vs'
                             else
                               'no change from'
                             end
@@ -140,17 +141,20 @@ module Api
 
         def summary_of_sources(profile_type)
           initialize_sources_for_summary
-          " As an #{profile_type}, #{@node.name.humanize} sources from \
-#{@source_municipalities_count_formatted} municipalities, or \
-#{@perc_municipalities_formatted} of the soy production municipalities."
+          " As an #{profile_type}, \
+<span>#{@node.name.humanize}</span> sources from \
+<span>#{@source_municipalities_count_formatted}</span> municipalities, or \
+<span>#{@perc_municipalities_formatted}</span> \
+of the soy production municipalities."
         end
 
         def summary_of_destinations(profile_type)
           initialize_destinations_for_summary
           if @perc_exports_formatted
             " The main destination of the soy #{profile_type.first(-1)}d by \
-#{@node.name.humanize} is #{@main_destination_name.humanize}, accounting for \
-#{@perc_exports_formatted} of the total."
+<span>#{@node.name.humanize}</span> is \
+<span>#{@main_destination_name.humanize}</span>, accounting for \
+<span>#{@perc_exports_formatted}</span> of the total."
           else
             ''
           end
@@ -173,13 +177,13 @@ module Api
             trade_total_current_year_precision = 0
           elsif @trade_total_current_year < 1_000_000
             trade_total_current_year_value = (
-              @trade_total_current_year / 1000
+            @trade_total_current_year / 1000
             )
             trade_total_current_year_unit = 'thousand tons'
             trade_total_current_year_precision = 0
           else
             trade_total_current_year_value = (
-              @trade_total_current_year / 1_000_000
+            @trade_total_current_year / 1_000_000
             )
             trade_total_current_year_unit = 'million tons'
             trade_total_current_year_precision = 1
@@ -195,10 +199,10 @@ module Api
           trade_flows_previous_year = @flow_stats.
             flow_values(@year - 1, @volume_attribute)
           @trade_total_previous_year = trade_flows_previous_year.sum('value')
-          if @trade_total_previous_year.present? && @trade_total_previous_year.
-              positive?
+          if @trade_total_previous_year.present? &&
+              @trade_total_previous_year.positive?
             @trade_total_perc_difference = (
-              @trade_total_current_year - @trade_total_previous_year
+            @trade_total_current_year - @trade_total_previous_year
             ) / @trade_total_previous_year
           end
         end
