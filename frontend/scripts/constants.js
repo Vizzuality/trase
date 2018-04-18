@@ -111,6 +111,8 @@ export const PROFILE_CHOROPLETH_CLASSES = [
   'ch-red-4'
 ];
 
+export const DOCUMENT_POST_TYPES = ['INFO BRIEF', 'ISSUE BRIEF'];
+
 export const NODE_SELECTION_LINKS_NUM_COLORS = 10;
 export const SANKEY_TRANSITION_TIME = 1000;
 

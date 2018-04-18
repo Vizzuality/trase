@@ -5,6 +5,7 @@ import cx from 'classnames';
 import QuoteTile from 'react-components/home/quote-tile.component';
 import StoryTile from 'react-components/home/story-tile.component';
 import debounce from 'lodash/debounce';
+import { DOCUMENT_POST_TYPES } from 'scripts/constants';
 
 class SliderSection extends React.PureComponent {
   static getPerPage() {
@@ -20,7 +21,7 @@ class SliderSection extends React.PureComponent {
   }
 
   static getActionName(category) {
-    if (['INFO BRIEF', 'ISSUE BRIEF'].includes(category)) {
+    if (DOCUMENT_POST_TYPES.includes(category)) {
       return 'Open document';
     }
     return 'See More';
@@ -76,7 +77,7 @@ class SliderSection extends React.PureComponent {
     const { className, name, slides } = this.props;
     const { visiblePages, currentSlide } = this.state;
     const smallScreen = visiblePages === 1;
-    const numColums = slides.length <= visiblePages && visiblePages < 3 ? 6 : 4;
+    const numColumns = slides.length <= visiblePages && visiblePages < 3 ? 6 : 4;
 
     if (slides.length === 0) return null;
     return (
@@ -95,7 +96,7 @@ class SliderSection extends React.PureComponent {
             {slides.map(slide => (
               <div
                 key={slide.title || slide.quote}
-                className={`column small-12 medium-${numColums}`}
+                className={`column small-12 medium-${numColumns}`}
               >
                 <div className={cx('slide', { '-actionable': !slide.quote })}>
                   {slide.quote ? (

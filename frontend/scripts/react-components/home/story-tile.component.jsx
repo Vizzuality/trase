@@ -11,6 +11,7 @@ function StoryTile(props) {
         href={slide.completePostUrl}
         target="_blank"
         rel="noopener noreferrer"
+        tx-content="translate_urls"
       >
         <figure className="slide-image" style={{ backgroundImage: `url(${slide.imageUrl})` }} />
       </a>
@@ -24,6 +25,7 @@ function StoryTile(props) {
           target="_blank"
           rel="noopener noreferrer"
           href={slide.completePostUrl}
+          tx-content="translate_urls"
         >
           {action}
         </a>
