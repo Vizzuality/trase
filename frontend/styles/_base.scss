@@ -42,6 +42,9 @@
 }
 
 body {
+  &.txlive-expanded {
+    position: static !important;
+  }
   &.-overflow-hidden {
     overflow: hidden;
   }
