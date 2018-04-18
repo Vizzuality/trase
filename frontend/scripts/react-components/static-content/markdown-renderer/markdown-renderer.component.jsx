@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import remark from 'remark';
 import remarkReact from 'remark-react';
 import cx from 'classnames';
+import Link from 'redux-first-router-link';
 
 const MarkdownRenderer = props => {
   const { content, className } = props;
@@ -10,8 +11,19 @@ const MarkdownRenderer = props => {
   const MarkdownContainer = p => (
     <div className={cx('markdown-content', className)}>{p.children}</div>
   );
+  const SmartLink = p => {
+    const isAbsoluteLink = /^http(s)?:\/\//.test(p.href);
+    if (!isAbsoluteLink) {
+      return <Link to={p.href}>{p.children}</Link>;
+    }
+    return (
+      <a href={p.href} target="_blank" rel="noopener noreferrer" tx-content="translate_urls">
+        {p.children}
+      </a>
+    );
+  };
   return remark()
-    .use(remarkReact, { remarkReactComponents: { div: MarkdownContainer } })
+    .use(remarkReact, { remarkReactComponents: { div: MarkdownContainer, a: SmartLink } })
     .processSync(content).contents;
 };
 
