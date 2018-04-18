@@ -94,8 +94,8 @@
       }
     }
 
-    @media screen and (min-width: $breakpoint-foundation-small)
-                  and (max-width: $breakpoint-foundation-medium) {
+    @media (min-width: $breakpoint-foundation-small)
+       and (max-width: $breakpoint-foundation-medium) {
       > .row .columns:not(:last-child) {
         padding-right: 0;
       }

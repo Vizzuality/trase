@@ -30,24 +30,19 @@
 
   .c-overall-map {
 
-    @media print {
+    .map-item {
       > .row > .columns {
         padding: 0;
+
+        svg {
+          float: right;
+        }
+
+        @media screen and (min-width: $breakpoint-foundation-medium) {
+          padding-right: 1.25rem;
+          padding-left: 1.25rem;
+        }
       }
-    }
-
-    > .map-list {
-      display: flex;
-    }
-
-    > .map-list > .map-item {
-      display: flex;
-      flex-basis: calc(100% / 3);
-      align-items: center;
-    }
-
-    .c-locator-map {
-      max-height: 100px;
     }
   }
 
@@ -70,8 +65,8 @@
       display: none;
     }
 
-    @media screen and (min-width: $breakpoint-foundation-small)
-                  and (max-width: $breakpoint-foundation-medium) {
+    @media (min-width: $breakpoint-foundation-small)
+       and (max-width: $breakpoint-foundation-medium) {
       > .row .columns:not(:last-child) {
         padding-right: 0;
       }

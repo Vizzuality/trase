@@ -26,8 +26,14 @@
   &.-outline {
     stroke: $charcoal-grey-faded;
   }
+}
 
-  @media print {
-    stroke: $black;
+@media print {
+  .c-overall-map .polygon {
+    stroke-width: 0 !important;
+  }
+
+  .polygon, .polygon.-outline {
+    stroke: $white;
   }
 }

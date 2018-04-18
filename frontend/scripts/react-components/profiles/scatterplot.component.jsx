@@ -176,16 +176,22 @@ class Scatterplot extends Component {
   }
 
   _getFormattedData(i) {
-    return this.props.data.map(item => ({
-      nodeId: item.id,
-      name: item.name,
-      y: item.y,
-      x: item.x[i]
-    }));
+    const { data, node } = this.props;
+    const currentComesLast = a => (a.isCurrent ? 1 : -1);
+
+    return data
+      .map(item => ({
+        nodeId: item.id,
+        name: item.name,
+        isCurrent: item.name.toUpperCase() === node.name.toUpperCase(),
+        y: item.y,
+        x: item.x[i]
+      }))
+      .sort(currentComesLast);
   }
 
   _getCircleClass(d) {
-    return d.name.toUpperCase() === this.props.node.name.toUpperCase() ? 'dot current' : 'dot';
+    return d.isCurrent ? 'dot current' : 'dot';
   }
 
   render() {
