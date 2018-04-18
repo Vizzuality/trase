@@ -24,8 +24,11 @@ class ResizeBySelector extends Component {
               <li key={`separator-${index}`} className="dropdown-item -separator" />
             );
           }
+
           const isEnabled =
-            !resizeBy.isDisabled && difference(selectedYears, resizeBy.years).length === 0;
+            !resizeBy.isDisabled &&
+            (resizeBy.years.length === 0 || difference(selectedYears, resizeBy.years).length === 0);
+
           resizeByElements.push(
             <li
               key={index}

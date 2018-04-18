@@ -6,9 +6,18 @@ import intersection from 'lodash/intersection';
 
 const mapStateToProps = state => {
   const { selectedResizeBy, selectedRecolorBy, selectedContext, selectedYears } = state.tool;
-  const availableYearsResize = intersection(selectedResizeBy.years, selectedContext.years);
-  const availableYearsRecolor = intersection(selectedRecolorBy.years, selectedContext.years);
-  const years = intersection(availableYearsRecolor, availableYearsResize);
+
+  const availableContextYears = selectedContext.years;
+  const availableResizeByYears =
+    selectedResizeBy.years.length > 0 ? selectedResizeBy.years : availableContextYears;
+  const availableRecolorByYears =
+    selectedRecolorBy.years.length > 0 ? selectedRecolorBy.years : availableContextYears;
+
+  const years = intersection(
+    availableContextYears,
+    availableResizeByYears,
+    availableRecolorByYears
+  );
 
   return {
     years,

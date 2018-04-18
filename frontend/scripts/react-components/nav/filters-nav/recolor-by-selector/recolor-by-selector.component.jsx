@@ -62,7 +62,9 @@ class RecolorBySelector extends Component {
     // Renders a dropdown item using recolorBy data
     const getRecolorByItem = (recolorBy, index) => {
       const isEnabled =
-        !recolorBy.isDisabled && difference(selectedYears, recolorBy.years).length === 0;
+        !recolorBy.isDisabled &&
+        (recolorBy.years.length === 0 || difference(selectedYears, recolorBy.years).length === 0);
+
       return (
         <li
           key={index}
