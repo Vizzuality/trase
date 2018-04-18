@@ -101,7 +101,11 @@ class SliderSection extends React.PureComponent {
                   {slide.quote ? (
                     <QuoteTile slide={slide} />
                   ) : (
-                    <StoryTile slide={slide} action={SliderSection.getActionName(slide.category)} />
+                    <StoryTile
+                      slide={slide}
+                      action={SliderSection.getActionName(slide.category)}
+                      translateUrl={SliderSection.getActionName(slide.category) === 'Open document'}
+                    />
                   )}
                 </div>
               </div>
