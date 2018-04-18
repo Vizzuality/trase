@@ -5,6 +5,7 @@ import cx from 'classnames';
 import QuoteTile from 'react-components/home/quote-tile.component';
 import StoryTile from 'react-components/home/story-tile.component';
 import debounce from 'lodash/debounce';
+import { DOCUMENT_POST_TYPES } from 'scripts/constants';
 
 class SliderSection extends React.PureComponent {
   static getPerPage() {
@@ -20,7 +21,7 @@ class SliderSection extends React.PureComponent {
   }
 
   static getActionName(category) {
-    if (['INFO BRIEF', 'ISSUE BRIEF'].includes(category)) {
+    if (DOCUMENT_POST_TYPES.includes(category)) {
       return 'Open document';
     }
     return 'See More';
@@ -101,11 +102,7 @@ class SliderSection extends React.PureComponent {
                   {slide.quote ? (
                     <QuoteTile slide={slide} />
                   ) : (
-                    <StoryTile
-                      slide={slide}
-                      action={SliderSection.getActionName(slide.category)}
-                      translateUrl={SliderSection.getActionName(slide.category) === 'Open document'}
-                    />
+                    <StoryTile slide={slide} action={SliderSection.getActionName(slide.category)} />
                   )}
                 </div>
               </div>

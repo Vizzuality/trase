@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function StoryTile(props) {
-  const { slide, action, translateUrl } = props;
+  const { slide, action } = props;
 
   return (
     <React.Fragment>
@@ -11,7 +11,7 @@ function StoryTile(props) {
         href={slide.completePostUrl}
         target="_blank"
         rel="noopener noreferrer"
-        tx-content={translateUrl && 'translate_urls'}
+        tx-content="translate_urls"
       >
         <figure className="slide-image" style={{ backgroundImage: `url(${slide.imageUrl})` }} />
       </a>
@@ -25,7 +25,7 @@ function StoryTile(props) {
           target="_blank"
           rel="noopener noreferrer"
           href={slide.completePostUrl}
-          tx-content={translateUrl && 'translate_urls'}
+          tx-content="translate_urls"
         >
           {action}
         </a>
@@ -41,8 +41,7 @@ StoryTile.propTypes = {
     imageUrl: PropTypes.string,
     completePostUrl: PropTypes.string
   }).isRequired,
-  action: PropTypes.string.isRequired,
-  translateUrl: PropTypes.bool
+  action: PropTypes.string.isRequired
 };
 
 export default StoryTile;
