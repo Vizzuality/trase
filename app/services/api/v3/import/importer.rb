@@ -85,6 +85,7 @@ module Api
               )
             end
           end
+          refresh_mviews
           Cache::Cleaner.clear_all
           Cache::Warmer::UrlsFile.generate
         rescue => e
@@ -141,6 +142,18 @@ module Api
             "SELECT COUNT(*) FROM #{table}"
           )
           result.getvalue(0, 0)
+        end
+
+        def refresh_mviews
+          [
+            Api::V3::Readonly::Attribute,
+            Api::V3::Readonly::DownloadAttribute,
+            Api::V3::Readonly::MapAttribute,
+            Api::V3::Readonly::RecolorByAttribute,
+            Api::V3::Readonly::ResizeByAttribute,
+            # TODO: Api::V3::Readonly::Node,
+            Api::V3::Readonly::DownloadFlow
+          ].each(&:refresh)
         end
       end
     end

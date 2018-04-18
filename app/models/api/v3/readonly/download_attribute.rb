@@ -32,11 +32,6 @@ module Api
         delegate :unit_type, to: :readonly_attribute
         delegate :original_type, to: :readonly_attribute
         delegate :original_id, to: :readonly_attribute
-
-        def self.refresh
-          Scenic.database.refresh_materialized_view(table_name, concurrently: false)
-          Api::V3::Readonly::DownloadFlow.refresh_later(skip_flow_paths: true)
-        end
       end
     end
   end
