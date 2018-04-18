@@ -1,5 +1,6 @@
 import L from 'leaflet';
 import isNumber from 'lodash/isNumber';
+import debounce from 'lodash/debounce';
 // eslint-disable-next-line camelcase
 import turf_bbox from '@turf/bbox';
 import { BASEMAPS, CARTO_BASE_URL, MAP_PANES, MAP_PANES_Z } from 'constants';
@@ -34,6 +35,8 @@ export default class {
       this._setPaneModifier('-high-zoom', z >= 6);
     });
 
+    this._setMapViewDebounced = debounce(this._setMapViewDebounced, 500);
+
     Object.keys(MAP_PANES).forEach(paneKey => {
       this.map.createPane(paneKey);
       this.map.getPane(paneKey).style.zIndex = MAP_PANES_Z[paneKey];
@@ -61,6 +64,10 @@ export default class {
     if (mapView === null) return;
 
     this.map.setView([mapView.latitude, mapView.longitude], mapView.zoom);
+  }
+
+  _setMapViewDebounced(latLng, zoom) {
+    this.map.setView(latLng, zoom);
   }
 
   setBasemap(basemapId) {
@@ -155,7 +162,9 @@ export default class {
   _fitBoundsToSelectedPolygons(selectedGeoIds) {
     if (this.vectorOutline !== undefined && selectedGeoIds.length && this.currentPolygonTypeLayer) {
       if (!this.currentPolygonTypeLayer.isPoint) {
-        this.map.fitBounds(this.vectorOutline.getBounds());
+        const bounds = this.vectorOutline.getBounds();
+        const boundsCenterZoom = this.map._getBoundsCenterZoom(bounds);
+        this._setMapViewDebounced(boundsCenterZoom.center, boundsCenterZoom.zoom);
       } else {
         const singlePoint = this.vectorOutline.getBounds().getCenter();
         this.map.setView(singlePoint);
@@ -395,7 +404,7 @@ export default class {
       const bounds = L.latLngBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
       const boundsCenterZoom = this.map._getBoundsCenterZoom(bounds);
       boundsCenterZoom.zoom = Math.max(boundsCenterZoom.zoom, defaultMapView.zoom);
-      this.map.setView(boundsCenterZoom.center, boundsCenterZoom.zoom);
+      this._setMapViewDebounced(boundsCenterZoom.center, boundsCenterZoom.zoom);
     } else {
       this._fitBoundsToSelectedPolygons(selectedGeoIds);
     }
