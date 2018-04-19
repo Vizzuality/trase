@@ -12,37 +12,85 @@ module Api
         def initialize(query, download_name)
           @query = query
           @download_name = download_name
+          @temp_dir = "#{Rails.root}/tmp/#{Time.now.strftime('%Y%m%d%H%M%S')}"
+        end
+
+        # @return [String] compressed data
+        def create
+          FileUtils.mkdir_p(@temp_dir)
+          create_data_entries
+          compressed_stream = compress_data_entries
+          compressed_stream.read
+        ensure
+          FileUtils.rm_rf(@temp_dir)
+        end
+
+        private
+
+        def create_data_entries
+          readme_entry = {
+            path: "#{Rails.root}/public/README.pdf", name: 'README.pdf'
+          }
+          @data_entries = [readme_entry]
+          with_chunked_query do |query, year|
+            content = content(query)
+            filename = filename(year)
+            path = @temp_dir + '/' + filename
+            File.open(path, 'w') { |f| f.write content }
+            @data_entries << {path: path, name: filename}
+          end
+        end
+
+        def compress_data_entries
+          compressed_stream = Zip::OutputStream.write_buffer do |stream|
+            @data_entries.each do |entry|
+              stream.put_next_entry(entry[:name])
+              stream.write File.read(entry[:path])
+            end
+          end
+          compressed_stream.rewind
+          compressed_stream
         end
 
         # @abstract
+        # @param query [ActiveRecord::Relation]
         # @return [String] content
         # @raise [NotImplementedError] when not defined in subclass
-        def content
+        def content(_query)
           raise NotImplementedError
         end
 
-        def content_tempfile(content)
-          tempfile = Tempfile.new(filename)
-          tempfile << content
-          tempfile.close
-          tempfile
+        # @return [String]
+        def filename(year)
+          "#{@download_name}#{year ? ".#{year}" : nil}.#{format}"
         end
 
         # @abstract
-        # @return [String] name of file as included in zip archive
+        # @return [String] format / extension for the file
         # @raise [NotImplementedError] when not defined in subclass
-        def filename
+        def format
           raise NotImplementedError
         end
 
-        def create
-          @zipfile = Tempfile.new("#{@download_name}.zip")
-          Zip::OutputStream.open(@zipfile) { |zos| }
-          Zip::File.open(@zipfile.path, Zip::File::CREATE) do |zipfile|
-            zipfile.add(filename, content_tempfile(content).path)
-            zipfile.add('README.pdf', "#{Rails.root}/public/README.pdf")
+        MAX_SIZE = 500_000
+
+        def with_chunked_query
+          total = @query.except(:select).count
+          if total < MAX_SIZE
+            yield(@query, nil)
+          else
+            years = @query.
+              except(:select).
+              except(:order).
+              select(:year).
+              distinct.
+              order(:year).
+              pluck(:year)
+            years.each do |year|
+              query = @query.where(year: year)
+              yield(query, year)
+            end
           end
-          @zipfile
         end
       end
     end

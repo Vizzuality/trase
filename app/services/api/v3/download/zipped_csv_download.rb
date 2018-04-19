@@ -9,9 +9,11 @@ module Api
           @separator = separator
         end
 
-        def content
+        private
+
+        def content(query)
           csv = PgCsv.new(
-            sql: @query.to_sql,
+            sql: query.to_sql,
             header: true,
             delimiter: @separator,
             encoding: 'UTF8',
@@ -21,8 +23,8 @@ module Api
           csv.export
         end
 
-        def filename
-          "#{@download_name}.csv"
+        def format
+          :csv
         end
       end
     end
