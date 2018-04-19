@@ -65,7 +65,7 @@ export default class {
     this.selectNodes(linksPayload);
   }
 
-  selectNodes({ selectedNodesIds, shouldRepositionExpandButton }) {
+  selectNodes({ selectedNodesIds, shouldRepositionExpandButton, canReExpandSelection }) {
     // let minimumY = Infinity;
     if (!this.layout.isReady()) {
       return;
@@ -76,6 +76,8 @@ export default class {
       .classed('-selected', node => selectedNodesIds.indexOf(node.id) > -1);
 
     if (shouldRepositionExpandButton) this._repositionExpandButton(selectedNodesIds);
+
+    this.reExpandActionButton.classList.toggle('is-hidden', !canReExpandSelection);
   }
 
   toggleExpandButton(areNodesExpanded) {
@@ -119,6 +121,8 @@ export default class {
     this.expandButton = document.querySelector('.js-expand');
     this.expandActionButton = document.querySelector('.js-expand-action');
     this.expandActionButton.addEventListener('click', this.callbacks.onExpandClick);
+    this.reExpandActionButton = document.querySelector('.js-re-expand-action');
+    this.reExpandActionButton.addEventListener('click', this.callbacks.onReExpandClick);
     this.clearButton = document.querySelector('.js-clear');
     this.clearButton.addEventListener('click', this.callbacks.onClearClick);
 
@@ -128,6 +132,7 @@ export default class {
   _removeEventListeners() {
     this.sankeyColumns.on('mouseleave', null);
     this.expandActionButton.removeEventListener('click', this.callbacks.onExpandClick);
+    this.reExpandActionButton.removeEventListener('click', this.callbacks.onReExpandClick);
     this.clearButton.removeEventListener('click', this.callbacks.onClearClick);
   }
 
