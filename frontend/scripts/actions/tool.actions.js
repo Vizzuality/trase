@@ -320,17 +320,12 @@ export function loadNodes() {
       type: LOAD_NODES
     });
 
-    // dispatch({
-    //   type: SET_MAP_LOADING_STATE
-    // });
-
     const params = {
       context_id: getState().tool.selectedContextId,
       start_year: getState().tool.selectedYears[0],
       end_year: getState().tool.selectedYears[1]
     };
 
-    // const getNodesURL = getURLFromParams(GET_NODE_ATTRIBUTES_URL, params);
     const getMapBaseDataURL = getURLFromParams(GET_MAP_BASE_DATA_URL, params);
     const selectedMapDimensions = getState().tool.selectedMapDimensions;
 

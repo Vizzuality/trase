@@ -502,16 +502,6 @@ const toolReducer = {
       selectedMapDimensions[uidIndex] = null;
     }
 
-    // TODO Remove that when server correctly implements map dimensions meta/choropleth
-    // ie it shouldn't return choropleth values in get_nodes over multiple years if metadata says data is unavailable
-    // const forceEmptyChoropleth = state.selectedYears[1] - state.selectedYears[0] > 0;
-
-    // const { choropleth, choroplethLegend } = getChoropleth(
-    //   selectedMapDimensions,
-    //   state.nodesDictWithMeta,
-    //   state.mapDimensions,
-    //   forceEmptyChoropleth
-    // );
     const selectedMapDimensionsWarnings = getMapDimensionsWarnings(
       state.mapDimensions,
       selectedMapDimensions
