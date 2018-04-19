@@ -114,8 +114,10 @@ body {
       left: $layer-map-width;
       top: calc(100% - #{$titlebar-height});
       width: calc(100% - #{$layer-map-width + $feedback-button-closed-width + 8});
+      height: $titlebar-height + 5px; /* some extra space for scrollbar */
       padding-left: 8px;
-      overflow: auto;
+      overflow-x: auto;
+      overflow-y: hidden;
       transition: left .45s $ease-in-out-sine;
       z-index: 2;
 

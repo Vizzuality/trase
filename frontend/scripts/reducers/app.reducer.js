@@ -28,7 +28,7 @@ const appReducer = {
   [SET_SANKEY_SIZE](state) {
     if (isSankeyExpanded(state)) {
       return Object.assign({}, state, {
-        sankeySize: [window.innerWidth - 392, window.innerHeight - 180]
+        sankeySize: [window.innerWidth - 392, window.innerHeight - 175]
       });
     }
     return state;
