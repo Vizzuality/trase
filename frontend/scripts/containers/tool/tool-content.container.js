@@ -6,8 +6,7 @@ import { resetSankey } from '../../actions/tool.actions';
 const mapMethodsToState = state => ({
   toggleMapVisibility: state.tool.isMapVisible,
   toggleMapLayersVisibility: state.app.isMapLayerVisible,
-  showLoaderAtInitialLoad: state.tool.initialDataLoading,
-  showLoader: state.tool.linksLoading,
+  showLoader: state.tool.flowsLoading || state.tool.mapLoading,
   toggleError: {
     _comparedValue: state => state.tool.links,
     _returnedValue: state => state.tool.links === null

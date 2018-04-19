@@ -39,11 +39,12 @@ export const RESET_SELECTION = 'RESET_SELECTION';
 export const SET_CONTEXT = 'SET_CONTEXT';
 export const LOAD_INITIAL_CONTEXT = 'LOAD_INITIAL_CONTEXT';
 export const GET_COLUMNS = 'GET_COLUMNS';
-export const LOAD_LINKS = 'LOAD_LINKS';
+export const SET_FLOWS_LOADING_STATE = 'SET_FLOWS_LOADING_STATE';
+export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
 export const LOAD_NODES = 'LOAD_NODES';
 export const GET_LINKS = 'GET_LINKS';
-export const GET_NODE_ATTRIBUTES = 'GET_NODE_ATTRIBUTES';
-export const GET_MAP_DIMENSIONS = 'GET_MAP_DIMENSIONS';
+export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
+export const SET_MAP_DIMENSIONS_DATA = 'SET_MAP_DIMENSIONS_DATA';
 export const UPDATE_NODE_SELECTION = 'UPDATE_NODE_SELECTION';
 export const HIGHLIGHT_NODE = 'HIGHLIGHT_NODE';
 export const FILTER_LINKS_BY_NODES = 'FILTER_LINKS_BY_NODES';
@@ -55,7 +56,7 @@ export const SELECT_VIEW = 'SELECT_VIEW';
 export const SELECT_COLUMN = 'SELECT_COLUMN';
 export const GET_MAP_VECTOR_DATA = 'GET_MAP_VECTOR_DATA';
 export const GET_CONTEXT_LAYERS = 'GET_CONTEXT_LAYERS';
-export const SET_MAP_DIMENSIONS = 'SET_MAP_DIMENSIONS';
+export const SET_MAP_DIMENSIONS_SELECTION = 'SET_MAP_DIMENSIONS_SELECTION';
 export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
 export const SELECT_CONTEXTUAL_LAYERS = 'SELECT_CONTEXTUAL_LAYERS';
 export const SELECT_BASEMAP = 'SELECT_BASEMAP';
@@ -318,6 +319,11 @@ export function loadNodes() {
     dispatch({
       type: LOAD_NODES
     });
+
+    // dispatch({
+    //   type: SET_MAP_LOADING_STATE
+    // });
+
     const params = {
       context_id: getState().tool.selectedContextId,
       start_year: getState().tool.selectedYears[0],
@@ -369,7 +375,7 @@ export function loadNodes() {
         dispatch(setMapContextLayers(payload.mapDimensionsMetaJSON.contextualLayers));
 
         dispatch({
-          type: GET_MAP_DIMENSIONS,
+          type: SET_MAP_DIMENSIONS_DATA,
           payload
         });
 
@@ -414,7 +420,7 @@ export function loadNodes() {
 export function loadLinks() {
   return (dispatch, getState) => {
     dispatch({
-      type: LOAD_LINKS
+      type: SET_FLOWS_LOADING_STATE
     });
     const state = getState();
     const params = {
@@ -861,7 +867,7 @@ export function toggleMapDimension(uid) {
 export function setMapDimensions(uids) {
   return (dispatch, getState) => {
     dispatch({
-      type: SET_MAP_DIMENSIONS,
+      type: SET_MAP_DIMENSIONS_SELECTION,
       uids
     });
 
@@ -878,7 +884,7 @@ export function loadMapChoropeth(getState, dispatch) {
 
   if (compact(uids).length === 0) {
     dispatch({
-      type: GET_NODE_ATTRIBUTES
+      type: SET_NODE_ATTRIBUTES
     });
 
     return;
@@ -906,7 +912,7 @@ export function loadMapChoropeth(getState, dispatch) {
     })
     .then(payload => {
       dispatch({
-        type: GET_NODE_ATTRIBUTES,
+        type: SET_NODE_ATTRIBUTES,
         payload
       });
     });

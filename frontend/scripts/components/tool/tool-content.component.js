@@ -15,19 +15,11 @@ export default class {
     this.sankeyResetButton.addEventListener('click', this.onSankeyReset);
   }
 
-  showLoaderAtInitialLoad(loading) {
-    this._toggleLoading(loading);
-  }
-
   _resetSankey() {
     this.callbacks.resetSankey();
   }
 
   showLoader(loading) {
-    this._toggleLoading(loading);
-  }
-
-  _toggleLoading(loading) {
     const toolLoading = document.querySelector('.js-tool-loading');
     if (toolLoading) toolLoading.classList.toggle('is-visible', loading);
   }
