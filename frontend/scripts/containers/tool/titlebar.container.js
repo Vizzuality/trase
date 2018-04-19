@@ -8,15 +8,9 @@ const mapMethodsToState = state => ({
   selectNodes: state.tool.selectedNodesData,
   highlightNode: {
     _comparedValue: state => state.tool.highlightedNodeData,
-    _returnedValue: state => {
-      if (state.tool.highlightedNodeData.length === 0) {
-        if (!state.tool.selectedNodesData) {
-          return false;
-        }
-        return state.tool.selectedNodesData.length > 0;
-      }
-      return state.tool.highlightedNodeData.length > 0;
-    }
+    _returnedValue: state =>
+      state.tool.selectedNodesData.length > 0 ||
+      (!state.tool.highlightedNodeCoordinates && state.tool.highlightedNodeData.length > 0)
   }
 });
 
