@@ -406,15 +406,26 @@ const _setInfo = (info, onLinkClick, { nodeId, year }) => {
   }
   document.querySelector('.js-link-map').addEventListener('click', () =>
     onLinkClick('tool', {
-      state: { isMapVisible: true, selectedNodesIds: [nodeId], selectedYears: [year, year] }
+      state: {
+        isMapVisible: true,
+        areNodesExpanded: true,
+        selectedNodesIds: [nodeId],
+        expandedNodesIds: [nodeId],
+        selectedYears: [year, year]
+      }
     })
   );
 
-  document
-    .querySelector('.js-link-supply-chain')
-    .addEventListener('click', () =>
-      onLinkClick('tool', { state: { selectedNodesIds: [nodeId], selectedYears: [year, year] } })
-    );
+  document.querySelector('.js-link-supply-chain').addEventListener('click', () =>
+    onLinkClick('tool', {
+      state: {
+        areNodesExpanded: true,
+        selectedNodesIds: [nodeId],
+        expandedNodesIds: [nodeId],
+        selectedYears: [year, year]
+      }
+    })
+  );
   document.querySelector('.js-summary-text').innerHTML = info.summary ? info.summary : '-';
 };
 
