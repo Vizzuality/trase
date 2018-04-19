@@ -10,8 +10,8 @@ RSpec.describe Api::V3::NodeAttributes::Filter do
   let(:municipality_land_conflicts) {
     node_attributes.find do |node_attr|
       node_attr['node_id'] == api_v3_municipality_node.id &&
-      node_attr['attribute_id'] == api_v3_land_conflicts.id &&
-      node_attr['attribute_type'] == 'quant'
+        node_attr['attribute_id'] == api_v3_land_conflicts.id &&
+        node_attr['attribute_type'] == 'quant'
     end
   }
 
@@ -22,7 +22,7 @@ RSpec.describe Api::V3::NodeAttributes::Filter do
     }
     let(:filter) {
       Api::V3::NodeAttributes::Filter.new(
-        api_v3_context, 2015, 2015
+        api_v3_context, 2015, 2015, [api_v3_land_conflicts_map_attribute.id]
       )
     }
     # buckets [6, 10, 15]
@@ -56,7 +56,7 @@ RSpec.describe Api::V3::NodeAttributes::Filter do
     }
     let(:filter) {
       Api::V3::NodeAttributes::Filter.new(
-        api_v3_context, 2014, 2015
+        api_v3_context, 2014, 2015, [api_v3_land_conflicts_map_attribute.id]
       )
     }
 
