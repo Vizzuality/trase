@@ -33,13 +33,14 @@ export default class {
     if (nodesData === undefined || !nodesData.length) {
       return;
     }
-    // when map is full screen, show data as a tooltip instead of a nodeTitle
+    // if we have coordinates, request came from hover on map, so we have a tooltip and don't need to show pill
+    // else show pill for sankey node
     if (coordinates !== undefined) {
       this._showTooltip(nodesData, coordinates, currentQuant);
+    } else {
+      this.el.classList.remove('is-hidden');
+      this._update(!isHighlight, nodesData, recolorGroups, currentQuant, selectedYears);
     }
-
-    this.el.classList.remove('is-hidden');
-    this._update(!isHighlight, nodesData, recolorGroups, currentQuant, selectedYears);
   }
 
   _update(isSelect, nodesData, recolorGroups = null, currentQuant, selectedYears) {
