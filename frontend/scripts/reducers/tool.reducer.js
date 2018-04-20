@@ -54,7 +54,6 @@ import splitLinksByColumn from './helpers/splitLinksByColumn';
 import splitVisibleNodesByColumn from './helpers/splitVisibleNodesByColumn';
 
 export const toolInitialState = {
-  areNodesExpanded: false,
   choropleth: {},
   choroplethLegend: null,
   columns: [],
@@ -120,7 +119,6 @@ const toolReducer = {
       highlightedGeoIds: [],
       selectedNodesIds: [],
       expandedNodesIds: [],
-      areNodesExpanded: false,
       selectedBiomeFilter: { value: 'none' },
       recolorByNodeIds: []
     });
@@ -216,8 +214,7 @@ const toolReducer = {
       selectedNodesData: [],
       selectedNodesGeoIds: [],
       selectedNodesColumnsPos: [],
-      expandedNodesIds: [],
-      areNodesExpanded: false
+      expandedNodesIds: []
     });
   },
   [GET_COLUMNS](state, action) {
@@ -533,12 +530,11 @@ const toolReducer = {
       expandedNodesIds = action.forceExpandNodeIds;
       selectedNodesIds = action.forceExpandNodeIds;
     } else {
-      expandedNodesIds = state.areNodesExpanded ? [] : state.selectedNodesIds;
+      expandedNodesIds = state.expandedNodesIds.length ? [] : state.selectedNodesIds;
       selectedNodesIds = state.selectedNodesIds;
     }
 
     return Object.assign({}, state, {
-      areNodesExpanded: action.forceExpand === true ? true : !state.areNodesExpanded,
       selectedNodesIds,
       expandedNodesIds
     });
@@ -576,7 +572,6 @@ const toolReducer = {
 };
 
 const toolReducerTypes = PropTypes => ({
-  areNodesExpanded: PropTypes.bool,
   choropleth: PropTypes.object.isRequired,
   choroplethLegend: PropTypes.object,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,

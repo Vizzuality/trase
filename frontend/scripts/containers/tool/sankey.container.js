@@ -1,5 +1,6 @@
 /* eslint-disable no-shadow */
 import isEqual from 'lodash/isEqual';
+import isEmpty from 'lodash/isEmpty';
 import {
   selectNode,
   highlightNode,
@@ -10,13 +11,13 @@ import {
 import connect from 'connect';
 import Sankey from 'components/tool/sankey.component';
 
-const shouldRepositionExpandButton = ({ expandedNodesIds, selectedNodesIds, areNodesExpanded }) =>
-  areNodesExpanded === false ||
-  expandedNodesIds === undefined ||
+const shouldRepositionExpandButton = ({ expandedNodesIds, selectedNodesIds }) =>
+  isEmpty(expandedNodesIds) ||
   expandedNodesIds.slice().sort()[0] === selectedNodesIds.slice().sort()[0];
 
-const canReExpandSelection = ({ expandedNodesIds, selectedNodesIds, areNodesExpanded }) =>
-  areNodesExpanded && !isEqual([...selectedNodesIds].sort(), [...expandedNodesIds].sort());
+const canReExpandSelection = ({ expandedNodesIds, selectedNodesIds }) =>
+  !isEmpty(expandedNodesIds) &&
+  !isEqual([...selectedNodesIds].sort(), [...expandedNodesIds].sort());
 
 // this maps component methods to app state updates
 // keys correspond to method names, values to state prop path
@@ -52,13 +53,12 @@ const mapMethodsToState = state => ({
       selectedNodesIds: state.tool.selectedNodesIds,
       shouldRepositionExpandButton: shouldRepositionExpandButton(
         state.tool.expandedNodesIds,
-        state.tool.selectedNodesIds,
-        state.tool.areNodesExpanded
+        state.tool.selectedNodesIds
       ),
       canReExpandSelection: canReExpandSelection(state.tool)
     })
   },
-  toggleExpandButton: state.tool.areNodesExpanded,
+  toggleExpandButton: !isEmpty(state.tool.expandedNodesIds),
   highlightNodes: state.tool.highlightedNodesIds,
   translateNodes: {
     _comparedValue: state => state.location.query && state.location.query.lang,

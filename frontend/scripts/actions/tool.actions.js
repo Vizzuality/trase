@@ -33,6 +33,7 @@ import capitalize from 'lodash/capitalize';
 import difference from 'lodash/difference';
 import compact from 'lodash/compact';
 import uniq from 'lodash/uniq';
+import isEmpty from 'lodash/isEmpty';
 
 export const LOAD_INITIAL_DATA = 'LOAD_INITIAL_DATA';
 export const RESET_SELECTION = 'RESET_SELECTION';
@@ -102,7 +103,8 @@ export function resetState(refilter = true) {
 // Resets sankey's params that may lead to no flows being returned from the API
 export function resetSankey() {
   return (dispatch, getState) => {
-    const { contexts, selectedContextId, columns, areNodesExpanded } = getState().tool;
+    const { contexts, selectedContextId, columns, expandedNodesIds } = getState().tool;
+    const areNodesExpanded = !isEmpty(expandedNodesIds);
     const currentContext = contexts.find(context => context.id === selectedContextId);
     const defaultColumns = columns.filter(column => column.isDefault);
     const defaultResizeBy =
@@ -123,7 +125,7 @@ export function resetSankey() {
       });
     });
 
-    if (areNodesExpanded === true) {
+    if (areNodesExpanded) {
       dispatch({
         type: TOGGLE_NODES_EXPAND
       });
@@ -426,10 +428,11 @@ export function loadLinks() {
       flow_quant: state.tool.selectedResizeBy.name,
       locked_nodes: state.tool.selectedNodesIds
     };
+    const areNodesExpanded = !isEmpty(state.tool.expandedNodesIds);
 
     if (state.tool.detailedView === true) {
       params.n_nodes = NUM_NODES_DETAILED;
-    } else if (state.tool.areNodesExpanded === true) {
+    } else if (areNodesExpanded) {
       params.n_nodes = NUM_NODES_EXPANDED;
     } else {
       params.n_nodes = NUM_NODES_SUMMARY;
@@ -448,7 +451,7 @@ export function loadLinks() {
       params.biome_filter_id = selectedBiomeFilter.nodeId;
     }
 
-    if (state.tool.areNodesExpanded) {
+    if (areNodesExpanded) {
       params.selected_nodes = state.tool.expandedNodesIds.join(',');
     }
 
@@ -640,13 +643,14 @@ export function selectNode(param, isAggregated = false) {
   const ids = Array.isArray(param) ? param : [param];
   return (dispatch, getState) => {
     ids.forEach(nodeId => {
+      const { selectedNodesIds: currentSelectedNodesIds, expandedNodesIds } = getState().tool;
+
       if (isAggregated) {
         dispatch(setSankeySearchVisibility(true));
       } else {
-        const currentSelectedNodesIds = getState().tool.selectedNodesIds;
         // we are unselecting the node that is currently expanded: just shrink it and bail
         if (
-          getState().tool.areNodesExpanded &&
+          !isEmpty(expandedNodesIds) &&
           currentSelectedNodesIds.length === 1 &&
           currentSelectedNodesIds.indexOf(nodeId) > -1
         ) {
@@ -764,17 +768,17 @@ export function toggleNodesExpand(forceExpand = false, forceExpandNodeIds) {
       forceExpandNodeIds
     });
 
+    const { expandedNodesIds, detailedView, forcedOverview } = getState().tool;
+    const areNodesExpanded = !isEmpty(expandedNodesIds);
+
     // if expanding, and if in detailed mode, toggle to overview mode
-    if (getState().tool.areNodesExpanded === true && getState().tool.detailedView === true) {
+    if (areNodesExpanded && detailedView === true) {
       dispatch({
         type: SELECT_VIEW,
         detailedView: false,
         forcedOverview: true
       });
-    } else if (
-      getState().tool.areNodesExpanded === false &&
-      getState().tool.forcedOverview === true
-    ) {
+    } else if (!areNodesExpanded && forcedOverview) {
       // if shrinking, and if overview was previously forced, go back to detailed
       dispatch({
         type: SELECT_VIEW,

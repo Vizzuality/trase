@@ -408,7 +408,6 @@ const _setInfo = (info, onLinkClick, { nodeId, year }) => {
     onLinkClick('tool', {
       state: {
         isMapVisible: true,
-        areNodesExpanded: true,
         selectedNodesIds: [nodeId],
         expandedNodesIds: [nodeId],
         selectedYears: [year, year]
@@ -419,7 +418,6 @@ const _setInfo = (info, onLinkClick, { nodeId, year }) => {
   document.querySelector('.js-link-supply-chain').addEventListener('click', () =>
     onLinkClick('tool', {
       state: {
-        areNodesExpanded: true,
         selectedNodesIds: [nodeId],
         expandedNodesIds: [nodeId],
         selectedYears: [year, year]
