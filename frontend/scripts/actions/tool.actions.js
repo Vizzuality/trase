@@ -489,7 +489,15 @@ export function loadLinks() {
 
         dispatch(updateNodes(selectedNodesIds));
 
-        if (getState().tool.selectedNodesIds && getState().tool.selectedNodesIds.length > 0) {
+        // if nodes were expanded and some of expanded nodes are not present anymore
+        // re-expand nodes
+        if (
+          !isEmpty(difference(getState().tool.expandedNodesIds, getState().tool.selectedNodesIds))
+        ) {
+          dispatch(expandNodeSelection());
+        }
+
+        if (!isEmpty(getState().tool.selectedNodesIds)) {
           dispatch({
             type: FILTER_LINKS_BY_NODES
           });
