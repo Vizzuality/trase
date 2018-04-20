@@ -118,8 +118,7 @@ module Api
           initialize_trade_volume_for_summary
           text = "<span>#{@node.name.humanize}</span> was the \
 <span>#{@trade_total_rank_in_country_formatted}</span>\
-largest #{profile_type} of soy
-          #{profile_type.casecmp('exporter').zero? ? 'in' : 'from'} \
+largest #{profile_type} of soy from \
           #{@context.country.name} in <span>#{@year}</span>, accounting for \
 <span>#{@trade_total_current_year_formatted}</span>."
           return text unless @trade_total_perc_difference.present?
