@@ -16,7 +16,7 @@ const shouldRepositionExpandButton = ({ expandedNodesIds, selectedNodesIds, areN
   expandedNodesIds.slice().sort()[0] === selectedNodesIds.slice().sort()[0];
 
 const canReExpandSelection = ({ expandedNodesIds, selectedNodesIds, areNodesExpanded }) =>
-  areNodesExpanded && !isEqual(selectedNodesIds.sort(), expandedNodesIds.sort());
+  areNodesExpanded && !isEqual([...selectedNodesIds].sort(), [...expandedNodesIds].sort());
 
 // this maps component methods to app state updates
 // keys correspond to method names, values to state prop path
