@@ -65,7 +65,7 @@ export default class {
     this.selectNodes(linksPayload);
   }
 
-  selectNodes({ selectedNodesIds, shouldRepositionExpandButton, canReExpandSelection }) {
+  selectNodes({ selectedNodesIds, shouldRepositionExpandButton }) {
     // let minimumY = Infinity;
     if (!this.layout.isReady()) {
       return;
@@ -76,12 +76,14 @@ export default class {
       .classed('-selected', node => selectedNodesIds.indexOf(node.id) > -1);
 
     if (shouldRepositionExpandButton) this._repositionExpandButton(selectedNodesIds);
-
-    this.reExpandActionButton.classList.toggle('is-hidden', !canReExpandSelection);
   }
 
-  toggleExpandButton(areNodesExpanded) {
-    this.expandButton.classList.toggle('-expanded', areNodesExpanded);
+  toggleCollapseButton(isVisible) {
+    this.collapseActionButton.classList.toggle('is-hidden', !isVisible);
+  }
+
+  toggleExpandButton(isVisible) {
+    this.expandActionButton.classList.toggle('is-hidden', !isVisible);
   }
 
   highlightNodes(nodesIds) {
@@ -121,8 +123,8 @@ export default class {
     this.expandButton = document.querySelector('.js-expand');
     this.expandActionButton = document.querySelector('.js-expand-action');
     this.expandActionButton.addEventListener('click', this.callbacks.onExpandClick);
-    this.reExpandActionButton = document.querySelector('.js-re-expand-action');
-    this.reExpandActionButton.addEventListener('click', this.callbacks.onReExpandClick);
+    this.collapseActionButton = document.querySelector('.js-collapse-action');
+    this.collapseActionButton.addEventListener('click', this.callbacks.onCollapseClick);
     this.clearButton = document.querySelector('.js-clear');
     this.clearButton.addEventListener('click', this.callbacks.onClearClick);
 
@@ -132,7 +134,7 @@ export default class {
   _removeEventListeners() {
     this.sankeyColumns.on('mouseleave', null);
     this.expandActionButton.removeEventListener('click', this.callbacks.onExpandClick);
-    this.reExpandActionButton.removeEventListener('click', this.callbacks.onReExpandClick);
+    this.collapseActionButton.removeEventListener('click', this.callvack.onCollapseClick);
     this.clearButton.removeEventListener('click', this.callbacks.onClearClick);
   }
 

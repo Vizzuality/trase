@@ -114,21 +114,10 @@
       display: none;
       top: 2px;
       right: 0;
-
-      .expand-action:before {
-        content: attr(data-collapsed-text);
-      }
     }
 
     &.-visible {
       display: block;
-    }
-
-    &.-expanded {
-
-      .expand-action:before {
-        content: attr(data-expanded-text);
-      }
     }
 
     &:hover {

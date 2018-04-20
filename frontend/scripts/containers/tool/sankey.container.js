@@ -4,7 +4,7 @@ import isEmpty from 'lodash/isEmpty';
 import {
   selectNode,
   highlightNode,
-  toggleNodesExpand,
+  collapseNodeSelection,
   expandNodeSelection,
   resetState
 } from 'actions/tool.actions';
@@ -15,8 +15,7 @@ const shouldRepositionExpandButton = ({ expandedNodesIds, selectedNodesIds }) =>
   isEmpty(expandedNodesIds) ||
   expandedNodesIds.slice().sort()[0] === selectedNodesIds.slice().sort()[0];
 
-const canReExpandSelection = ({ expandedNodesIds, selectedNodesIds }) =>
-  !isEmpty(expandedNodesIds) &&
+const canExpandSelection = ({ expandedNodesIds, selectedNodesIds }) =>
   !isEqual([...selectedNodesIds].sort(), [...expandedNodesIds].sort());
 
 // this maps component methods to app state updates
@@ -33,8 +32,7 @@ const mapMethodsToState = state => ({
       detailedView: state.tool.detailedView,
       visibleNodesByColumn: state.tool.visibleNodesByColumn,
       nodesColoredAtColumn: state.tool.nodesColoredAtColumn,
-      shouldRepositionExpandButton: shouldRepositionExpandButton(state.tool),
-      canReExpandSelection: canReExpandSelection(state.tool)
+      shouldRepositionExpandButton: shouldRepositionExpandButton(state.tool)
     })
   },
   resizeViewport: {
@@ -51,14 +49,11 @@ const mapMethodsToState = state => ({
     _comparedValue: state => state.tool.selectedNodesIds,
     _returnedValue: state => ({
       selectedNodesIds: state.tool.selectedNodesIds,
-      shouldRepositionExpandButton: shouldRepositionExpandButton(
-        state.tool.expandedNodesIds,
-        state.tool.selectedNodesIds
-      ),
-      canReExpandSelection: canReExpandSelection(state.tool)
+      shouldRepositionExpandButton: shouldRepositionExpandButton(state.tool)
     })
   },
-  toggleExpandButton: !isEmpty(state.tool.expandedNodesIds),
+  toggleExpandButton: canExpandSelection(state.tool),
+  toggleCollapseButton: !isEmpty(state.tool.expandedNodesIds),
   highlightNodes: state.tool.highlightedNodesIds,
   translateNodes: {
     _comparedValue: state => state.location.query && state.location.query.lang,
@@ -78,8 +73,8 @@ const mapMethodsToState = state => ({
 const mapViewCallbacksToActions = () => ({
   onNodeClicked: (id, isAggregated) => selectNode(id, isAggregated),
   onNodeHighlighted: (id, isAggregated) => highlightNode(id, isAggregated),
-  onExpandClick: () => toggleNodesExpand(),
-  onReExpandClick: () => expandNodeSelection(),
+  onExpandClick: () => expandNodeSelection(),
+  onCollapseClick: () => collapseNodeSelection(),
   onClearClick: () => resetState()
 });
 
