@@ -62,7 +62,8 @@ export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
 export const SELECT_CONTEXTUAL_LAYERS = 'SELECT_CONTEXTUAL_LAYERS';
 export const SELECT_BASEMAP = 'SELECT_BASEMAP';
 export const TOGGLE_MAP = 'TOGGLE_MAP';
-export const TOGGLE_NODES_EXPAND = 'TOGGLE_NODES_EXPAND';
+export const EXPAND_NODE_SELECTION = 'EXPAND_NODE_SELECTION';
+export const COLLAPSE_NODE_SELECTION = 'COLLAPSE_NODE_SELECTION';
 export const GET_LINKED_GEOIDS = 'GET_LINKED_GEOIDS';
 export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
 export const TOGGLE_MAP_SIDEBAR_GROUP = 'TOGGLE_MAP_SIDEBAR_GROUP';
@@ -126,9 +127,7 @@ export function resetSankey() {
     });
 
     if (areNodesExpanded) {
-      dispatch({
-        type: TOGGLE_NODES_EXPAND
-      });
+      dispatch(collapseNodeSelection());
     }
 
     dispatch({
@@ -644,17 +643,18 @@ export function selectNode(param, isAggregated = false) {
   return (dispatch, getState) => {
     ids.forEach(nodeId => {
       const { selectedNodesIds: currentSelectedNodesIds, expandedNodesIds } = getState().tool;
+      const areNodesExpanded = !isEmpty(expandedNodesIds);
 
       if (isAggregated) {
         dispatch(setSankeySearchVisibility(true));
       } else {
         // we are unselecting the node that is currently expanded: just shrink it and bail
         if (
-          !isEmpty(expandedNodesIds) &&
+          areNodesExpanded &&
           currentSelectedNodesIds.length === 1 &&
           currentSelectedNodesIds.indexOf(nodeId) > -1
         ) {
-          dispatch(toggleNodesExpand());
+          dispatch(collapseNodeSelection());
         }
 
         const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, nodeId);
@@ -727,7 +727,8 @@ export function selectExpandedNode(param) {
 
           const currentSelectedNodesIds = getState().tool.selectedNodesIds;
           const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, nodeId);
-          dispatch(toggleNodesExpand(true, selectedNodesIds));
+          dispatch(updateNodes(selectedNodesIds));
+          dispatch(expandNodeSelection());
         }
       } else {
         dispatch(selectNode(nodeId, false));
@@ -760,26 +761,37 @@ export function highlightNodeFromGeoId(geoId, coordinates) {
   };
 }
 
-export function toggleNodesExpand(forceExpand = false, forceExpandNodeIds) {
+export function expandNodeSelection() {
   return (dispatch, getState) => {
     dispatch({
-      type: TOGGLE_NODES_EXPAND,
-      forceExpand,
-      forceExpandNodeIds
+      type: EXPAND_NODE_SELECTION
     });
 
-    const { expandedNodesIds, detailedView, forcedOverview } = getState().tool;
-    const areNodesExpanded = !isEmpty(expandedNodesIds);
+    const { detailedView } = getState().tool;
 
     // if expanding, and if in detailed mode, toggle to overview mode
-    if (areNodesExpanded && detailedView === true) {
+    if (detailedView) {
       dispatch({
         type: SELECT_VIEW,
         detailedView: false,
         forcedOverview: true
       });
-    } else if (!areNodesExpanded && forcedOverview) {
-      // if shrinking, and if overview was previously forced, go back to detailed
+    }
+
+    dispatch(loadLinks());
+  };
+}
+
+export function collapseNodeSelection() {
+  return (dispatch, getState) => {
+    dispatch({
+      type: COLLAPSE_NODE_SELECTION
+    });
+
+    const { forcedOverview } = getState().tool;
+
+    // if shrinking, and if overview was previously forced, go back to detailed
+    if (forcedOverview) {
       dispatch({
         type: SELECT_VIEW,
         detailedView: true,
@@ -791,9 +803,13 @@ export function toggleNodesExpand(forceExpand = false, forceExpandNodeIds) {
   };
 }
 
-export function reExpandNodes() {
+export function toggleNodesExpand() {
   return (dispatch, getState) => {
-    dispatch(toggleNodesExpand(true, getState().tool.selectedNodesIds));
+    if (isEmpty(getState().tool.expandedNodesIds)) {
+      dispatch(expandNodeSelection());
+    } else {
+      dispatch(collapseNodeSelection());
+    }
   };
 }
 

@@ -30,8 +30,9 @@ import {
   TOGGLE_MAP,
   TOGGLE_MAP_DIMENSION,
   TOGGLE_MAP_SIDEBAR_GROUP,
-  TOGGLE_NODES_EXPAND,
   UPDATE_NODE_SELECTION,
+  EXPAND_NODE_SELECTION,
+  COLLAPSE_NODE_SELECTION,
   SET_MAP_DIMENSIONS_DATA
 } from 'actions/tool.actions';
 import groupBy from 'lodash/groupBy';
@@ -523,21 +524,17 @@ const toolReducer = {
   [SELECT_BASEMAP](state, action) {
     return Object.assign({}, state, { selectedMapBasemap: action.selectedMapBasemap });
   },
-  [TOGGLE_NODES_EXPAND](state, action) {
-    let expandedNodesIds;
-    let selectedNodesIds;
-    if (action.forceExpand === true) {
-      expandedNodesIds = action.forceExpandNodeIds;
-      selectedNodesIds = action.forceExpandNodeIds;
-    } else {
-      expandedNodesIds = state.expandedNodesIds.length ? [] : state.selectedNodesIds;
-      selectedNodesIds = state.selectedNodesIds;
-    }
-
-    return Object.assign({}, state, {
-      selectedNodesIds,
-      expandedNodesIds
-    });
+  [COLLAPSE_NODE_SELECTION](state) {
+    return {
+      ...state,
+      expandedNodesIds: []
+    };
+  },
+  [EXPAND_NODE_SELECTION](state) {
+    return {
+      ...state,
+      expandedNodesIds: state.selectedNodesIds
+    };
   },
   [TOGGLE_MAP](state, action) {
     return Object.assign({}, state, {

@@ -5,7 +5,7 @@ import {
   selectNode,
   highlightNode,
   toggleNodesExpand,
-  reExpandNodes,
+  expandNodeSelection,
   resetState
 } from 'actions/tool.actions';
 import connect from 'connect';
@@ -79,7 +79,7 @@ const mapViewCallbacksToActions = () => ({
   onNodeClicked: (id, isAggregated) => selectNode(id, isAggregated),
   onNodeHighlighted: (id, isAggregated) => highlightNode(id, isAggregated),
   onExpandClick: () => toggleNodesExpand(),
-  onReExpandClick: () => reExpandNodes(),
+  onReExpandClick: () => expandNodeSelection(),
   onClearClick: () => resetState()
 });
 
