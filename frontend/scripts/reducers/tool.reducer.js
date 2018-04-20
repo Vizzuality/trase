@@ -594,6 +594,7 @@ const toolReducerTypes = PropTypes => ({
   highlightedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   initialDataLoading: PropTypes.bool,
   isMapVisible: PropTypes.bool,
+  isSearchOpen: PropTypes.bool,
   linkedGeoIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   links: PropTypes.arrayOf(PropTypes.object).isRequired,
   flowsLoading: PropTypes.bool,

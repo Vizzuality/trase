@@ -1,83 +1,11 @@
-@import '../../settings';
-@import '../../mixins';
+@import '../shared/search';
 
-.c-tool-search {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: $nav-height;
-  background-color: $white;
-  z-index: $z-search;
+.c-search.-tool {
+  .c-nodes-titles {
+    padding: 8px 0;
 
-  > .icon-search {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 18px;
-    margin: auto;
-    width: 21px;
-    height: 22px;
-  }
-
-  .tool-search-wrapper {
-    width: 100%;
-    height: 100%;
-    position: relative;
-  }
-
-  .tool-search-container {
-    height: 100%;
-
-    .tool-search-bar {
-      display: flex;
-      position: relative;
-      height: 100%;
-      z-index: $z-above;
-      box-shadow: 0 10px 20px 0 rgba($charcoal-grey, 0.2);
-
-      .c-nodes-titles {
-        margin: 8px 16px 0;
-      }
+    .c-node-title:first-child {
+      margin-left: 8px;
     }
-  }
-
-  .tool-search-bar-input {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    padding: 2px 15px 0;
-    background: none;
-    font-family: $font-family-1;
-    font-size: $font-size-medium;
-    letter-spacing: -1px;
-    color: $charcoal-grey;
-    outline: none;
-    border-radius: 0;
-
-    &::-webkit-search-decoration,
-    &::-webkit-search-cancel-button,
-    &::-webkit-search-results-button,
-    &::-webkit-search-results-decoration {
-      display: none;
-    }
-  }
-
-  .tool-search-results {
-    position: absolute;
-    min-height: 80%;
-    background: $white;
-    overflow-y: auto;
-    max-height: 345px;
-    width: 100%;
-  }
-
-  .c-search__veil {
-    position: fixed;
-    top: $nav-height;
-    left: 0;
-    width: 100%;
-    height: calc(100% - 56px);
-    background-color: rgba($charcoal-grey, 0.4);
   }
 }

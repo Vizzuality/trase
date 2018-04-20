@@ -1,4 +1,4 @@
-class CreateMaterializedFlows < ActiveRecord::Migration
+class CreateMaterializedFlows < ActiveRecord::Migration[5.0]
   def change
     create_view :materialized_flows, materialized: true
     add_index :materialized_flows, :node_id

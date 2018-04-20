@@ -24,19 +24,20 @@ export default class ToolSearch extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      specialCharPressed: false
-    };
+    this.state = { charPressedCount: 0 };
     this.onOpenClicked = this.onOpenClicked.bind(this);
     this.onCloseClicked = this.onCloseClicked.bind(this);
     this.onSelected = this.onSelected.bind(this);
     this.onAddNode = this.onAddNode.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
     this.onKeyup = this.onKeyup.bind(this);
-    this.getDownshiftRef = this.getDownshiftRef.bind(this);
-    this.getInputRef = this.getInputRef.bind(this);
-    this.navigateToActor = this.navigateToActor.bind(this);
     this.isNodeSelected = this.isNodeSelected.bind(this);
+    this.setDownshiftRef = element => {
+      this.downshift = element;
+    };
+    this.setInputRef = element => {
+      this.input = element;
+    };
 
     document.addEventListener('keydown', this.onKeydown);
     document.addEventListener('keyup', this.onKeyup);
@@ -86,29 +87,21 @@ export default class ToolSearch extends Component {
   }
 
   onKeydown(e) {
-    const { specialCharPressed, isOpened } = this.state;
     const { isSearchOpen } = this.props;
-    if (!isSearchOpen && ToolSearch.isValidChar(e.key) && !specialCharPressed) {
+    const { charPressedCount } = this.state;
+
+    // we won't open the search if any combination of keys is pressed
+    if (!isSearchOpen && ToolSearch.isValidChar(e.key) && charPressedCount === 0) {
       this.onOpenClicked();
-    } else if (e.key === 'Escape' && isOpened) {
+    } else if (isSearchOpen && e.key === 'Escape') {
       this.onCloseClicked();
-    } else {
-      this.setState(state => ({ specialCharPressed: state.specialCharPressed + 1 }));
     }
+
+    this.setState(state => ({ charPressedCount: state.charPressedCount + 1 }));
   }
 
-  onKeyup(e) {
-    if (!ToolSearch.isValidChar(e.key)) {
-      this.setState(state => ({ specialCharPressed: state.specialCharPressed - 1 }));
-    }
-  }
-
-  getDownshiftRef(instance) {
-    this.downshift = instance;
-  }
-
-  getInputRef(el) {
-    this.input = el;
+  onKeyup() {
+    this.setState(state => ({ charPressedCount: state.charPressedCount - 1 }));
   }
 
   isNodeSelected(node) {
@@ -118,14 +111,9 @@ export default class ToolSearch extends Component {
       .reduce((acc, next) => acc || this.props.selectedNodesIds.includes(next), false);
   }
 
-  navigateToActor(e, item, type) {
-    if (e) e.stopPropagation();
-    const node = item[type.toLowerCase()] || item;
-    this.props.navigateToActor(node.profileType, node.id);
-  }
-
   render() {
-    const { className, nodes = [], selectedNodesIds = [], isSearchOpen } = this.props;
+    const { isSearchOpen, className, nodes = [], selectedNodesIds = [] } = this.props;
+
     if (isSearchOpen === false) {
       return (
         <div onClick={this.onOpenClicked} className={className}>
@@ -137,20 +125,20 @@ export default class ToolSearch extends Component {
     }
 
     return (
-      <div className="c-tool-search">
+      <div className="c-search -tool">
         <svg className="icon icon-search">
           <use xlinkHref="#icon-search" />
         </svg>
         <div className="c-search__veil" onClick={this.onCloseClicked} />
-        <div className="tool-search-wrapper">
+        <div className="search-wrapper">
           <Downshift
             itemToString={i => (i === null ? '' : i.name)}
             onSelect={this.onSelected}
-            ref={this.getDownshiftRef}
+            ref={this.setDownshiftRef}
           >
             {({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => (
-              <div className="tool-search-container" onClick={e => e.stopPropagation()}>
-                <div className="tool-search-bar">
+              <div className="search-container" onClick={e => e.stopPropagation()}>
+                <div className="search-bar">
                   <div style={{ overflow: selectedNodesIds.length > 3 ? 'auto' : 'inherit' }}>
                     <NodeTitleGroup />
                   </div>
@@ -158,13 +146,13 @@ export default class ToolSearch extends Component {
                     {...getInputProps({
                       placeholder: 'Search a producer, trader or country of import'
                     })}
-                    ref={this.getInputRef}
-                    className="tool-search-bar-input"
+                    ref={this.setInputRef}
+                    className="search-bar-input"
                     type="search"
                   />
                 </div>
                 {isOpen && (
-                  <ul className="tool-search-results">
+                  <ul className="search-results">
                     {nodes
                       .filter(
                         i => !inputValue || i.name.toLowerCase().includes(inputValue.toLowerCase())
@@ -178,7 +166,6 @@ export default class ToolSearch extends Component {
                           item={item}
                           itemProps={getItemProps({ item })}
                           selected={this.isNodeSelected(item)}
-                          onClickNavigate={this.navigateToActor}
                           onClickAdd={this.onAddNode}
                         />
                       ))}
@@ -195,7 +182,6 @@ export default class ToolSearch extends Component {
 
 ToolSearch.propTypes = {
   className: PropTypes.string,
-  navigateToActor: PropTypes.func,
   setSankeySearchVisibility: PropTypes.func,
   selectedNodesIds: PropTypes.array,
   nodes: PropTypes.array,

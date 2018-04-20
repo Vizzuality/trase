@@ -34,6 +34,51 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Context'
+  /nodes/search:
+    get:
+      tags:
+        - node
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: query
+          in: path
+          required: true
+          type: integer
+          description: 'Search string to use'
+        - name: context_id
+          in: path
+          required: false
+          type: integer
+          description: 'If provided, limit results to nodes of a given context'
+        - name: profile_only
+          in: path
+          type: boolean
+          description: 'If provided, only show results that have a profile type defined'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                mainId:
+                  type: integer
+                name:
+                  type: string
+                nodeType:
+                  type: string
+                  example: 'EXPORTER'
+                contextId:
+                  type: integer
+                profile:
+                  type: string
+                  example: 'actor'
   '/context/{context_id}/columns':
     get:
       tags:

@@ -4,6 +4,7 @@ import qs from 'qs';
 export const GET_CONTEXTS_URL = 'GET_CONTEXTS_URL';
 export const GET_TOOLTIPS_URL = 'GET_TOOLTIPS_URL';
 export const GET_ALL_NODES_URL = 'GET_ALL_NODES_URL';
+export const GET_NODES_WITH_SEARCH_URL = 'GET_NODES_WITH_SEARCH_URL';
 export const GET_COLUMNS_URL = 'GET_COLUMNS_URL';
 export const GET_NODE_ATTRIBUTES_URL = 'GET_NODE_ATTRIBUTES_URL';
 export const GET_FLOWS_URL = 'GET_FLOWS_URL';
@@ -29,6 +30,7 @@ const API_ENDPOINTS = {
   [GET_FLOWS_URL]: { api: 3, endpoint: '/contexts/$context_id$/flows' },
   [GET_COLUMNS_URL]: { api: 3, endpoint: '/contexts/$context_id$/columns' },
   [GET_ALL_NODES_URL]: { api: 3, endpoint: '/contexts/$context_id$/nodes' },
+  [GET_NODES_WITH_SEARCH_URL]: { api: 3, endpoint: '/nodes/search' },
   [GET_NODE_ATTRIBUTES_URL]: { api: 3, endpoint: '/contexts/$context_id$/nodes/attributes' },
   [GET_MAP_BASE_DATA_URL]: { api: 3, endpoint: '/contexts/$context_id$/map_layers' },
   [GET_INDICATORS_URL]: { api: 3, endpoint: '/contexts/$context_id$/download_attributes' },

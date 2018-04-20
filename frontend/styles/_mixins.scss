@@ -50,7 +50,7 @@
 @mixin smallcaps () {
   color: rgba($charcoal-grey, .6);
   font-family: $font-family-1;
-  font-size: $font-size-small;
+  font-size: 11px;
   letter-spacing: -.2px;
   text-transform: uppercase;
 }

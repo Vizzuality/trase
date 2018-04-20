@@ -50,6 +50,12 @@
         display: none;
       }
     }
+
+    .top-nav-search {
+      .icon-search {
+        color: $white;
+      }
+    }
   }
 
   &.-light {
@@ -62,6 +68,12 @@
     .locale-selector-menu-item {
       color: $charcoal-grey;
     }
+
+    .top-nav-search {
+      .icon-search {
+        color: $charcoal-grey;
+      }
+    }
   }
 
   @media print {
@@ -70,6 +82,14 @@
 
   .top-nav-bar {
     height: $nav-height;
+  }
+
+  .top-nav-search {
+    .icon-search {
+      margin: 0 10px 0 10px;
+      width: 20px;
+      height: 20px;
+    }
   }
 }
 

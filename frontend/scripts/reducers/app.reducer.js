@@ -1,7 +1,9 @@
 import {
   DISPLAY_STORY_MODAL,
+  LOAD_SEARCH_RESULTS,
   LOAD_TOOLTIP,
   SET_SANKEY_SIZE,
+  SET_SEARCH_TERM,
   SET_TOOLTIPS,
   SHOW_DISCLAIMER,
   TOGGLE_DROPDOWN,
@@ -19,6 +21,11 @@ const initialState = {
   modal: {
     visibility: false,
     modalParams: null
+  },
+  search: {
+    term: '',
+    isLoading: false,
+    results: []
   }
 };
 
@@ -58,6 +65,12 @@ const appReducer = {
   },
   [DISPLAY_STORY_MODAL](state, action) {
     return { ...state, modal: action.payload };
+  },
+  [SET_SEARCH_TERM](state, action) {
+    return { ...state, search: { ...state.search, ...action.payload } };
+  },
+  [LOAD_SEARCH_RESULTS](state, action) {
+    return { ...state, search: { ...state.search, results: action.payload, isLoading: false } };
   }
 };
 
@@ -71,6 +84,11 @@ const appReducerTypes = PropTypes => ({
   modal: PropTypes.shape({
     visibility: PropTypes.bool,
     modalParams: PropTypes.object
+  }).isRequired,
+  search: PropTypes.shape({
+    term: PropTypes.string.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    results: PropTypes.arrayOf(PropTypes.object).isRequired
   }).isRequired
 });
 

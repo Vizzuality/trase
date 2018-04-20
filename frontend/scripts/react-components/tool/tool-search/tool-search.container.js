@@ -1,5 +1,4 @@
 import { selectExpandedNode, selectNode, setSankeySearchVisibility } from 'actions/tool.actions';
-import camelcase from 'lodash/camelCase';
 import flatten from 'lodash/flatten';
 import groupBy from 'lodash/groupBy';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.component';
@@ -20,7 +19,7 @@ const getNode = (nodes, selectedColumnsIds, nodesDict) => {
         id: `${nA.id}_${nB.id}`,
         name: nA.name,
         type: `${nA.type} & ${nB.type}`,
-        profileType: `${nA.type} & ${nB.type}`,
+        profileType: nA.profileType,
         [nA.type.toLowerCase()]: nA,
         [nB.type.toLowerCase()]: nB
       };
@@ -56,11 +55,7 @@ const mapDispatchToProps = dispatch =>
     {
       onAddNode: nodeId => selectExpandedNode(nodeId),
       onRemoveNode: nodeId => selectNode(nodeId),
-      setSankeySearchVisibility: searchVisibility => setSankeySearchVisibility(searchVisibility),
-      navigateToActor: (profileType, nodeId) => ({
-        type: camelcase(`profile-${profileType}`),
-        payload: { query: { nodeId } }
-      })
+      setSankeySearchVisibility: searchVisibility => setSankeySearchVisibility(searchVisibility)
     },
     dispatch
   );
