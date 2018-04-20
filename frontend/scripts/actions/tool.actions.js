@@ -803,16 +803,6 @@ export function collapseNodeSelection() {
   };
 }
 
-export function toggleNodesExpand() {
-  return (dispatch, getState) => {
-    if (isEmpty(getState().tool.expandedNodesIds)) {
-      dispatch(expandNodeSelection());
-    } else {
-      dispatch(collapseNodeSelection());
-    }
-  };
-}
-
 export function navigateToProfile(nodeId, year) {
   return (dispatch, getState) => {
     const node = getState().tool.nodesDict[nodeId];
