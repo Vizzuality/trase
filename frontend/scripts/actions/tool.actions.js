@@ -39,10 +39,12 @@ export const RESET_SELECTION = 'RESET_SELECTION';
 export const SET_CONTEXT = 'SET_CONTEXT';
 export const LOAD_INITIAL_CONTEXT = 'LOAD_INITIAL_CONTEXT';
 export const GET_COLUMNS = 'GET_COLUMNS';
-export const LOAD_LINKS = 'LOAD_LINKS';
+export const SET_FLOWS_LOADING_STATE = 'SET_FLOWS_LOADING_STATE';
+export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
 export const LOAD_NODES = 'LOAD_NODES';
 export const GET_LINKS = 'GET_LINKS';
-export const GET_NODE_ATTRIBUTES = 'GET_NODE_ATTRIBUTES';
+export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
+export const SET_MAP_DIMENSIONS_DATA = 'SET_MAP_DIMENSIONS_DATA';
 export const UPDATE_NODE_SELECTION = 'UPDATE_NODE_SELECTION';
 export const HIGHLIGHT_NODE = 'HIGHLIGHT_NODE';
 export const FILTER_LINKS_BY_NODES = 'FILTER_LINKS_BY_NODES';
@@ -54,7 +56,7 @@ export const SELECT_VIEW = 'SELECT_VIEW';
 export const SELECT_COLUMN = 'SELECT_COLUMN';
 export const GET_MAP_VECTOR_DATA = 'GET_MAP_VECTOR_DATA';
 export const GET_CONTEXT_LAYERS = 'GET_CONTEXT_LAYERS';
-export const SET_MAP_DIMENSIONS = 'SET_MAP_DIMENSIONS';
+export const SET_MAP_DIMENSIONS_SELECTION = 'SET_MAP_DIMENSIONS_SELECTION';
 export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
 export const SELECT_CONTEXTUAL_LAYERS = 'SELECT_CONTEXTUAL_LAYERS';
 export const SELECT_BASEMAP = 'SELECT_BASEMAP';
@@ -317,100 +319,103 @@ export function loadNodes() {
     dispatch({
       type: LOAD_NODES
     });
+
     const params = {
       context_id: getState().tool.selectedContextId,
       start_year: getState().tool.selectedYears[0],
       end_year: getState().tool.selectedYears[1]
     };
 
-    const getNodesURL = getURLFromParams(GET_NODE_ATTRIBUTES_URL, params);
     const getMapBaseDataURL = getURLFromParams(GET_MAP_BASE_DATA_URL, params);
     const selectedMapDimensions = getState().tool.selectedMapDimensions;
-    const promises = [getNodesURL, getMapBaseDataURL].map(url =>
-      fetch(url).then(resp => resp.text())
-    );
 
-    Promise.all(promises).then(rawPayload => {
-      const payload = {
-        nodesJSON: JSON.parse(rawPayload[0]),
-        mapDimensionsMetaJSON: JSON.parse(rawPayload[1])
-      };
+    fetch(getMapBaseDataURL)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        return Promise.reject(new Error(response.statusText));
+      })
+      .then(jsonPayload => {
+        const payload = {
+          mapDimensionsMetaJSON: jsonPayload
+        };
 
-      const currentYearBoundaries = getState().tool.selectedYears;
-      const allSelectedYears = [];
-      for (let i = currentYearBoundaries[0]; i <= currentYearBoundaries[1]; i++) {
-        allSelectedYears.push(i);
-      }
+        const currentYearBoundaries = getState().tool.selectedYears;
+        const allSelectedYears = [];
+        for (let i = currentYearBoundaries[0]; i <= currentYearBoundaries[1]; i++) {
+          allSelectedYears.push(i);
+        }
 
-      payload.mapDimensionsMetaJSON.dimensions.forEach(dimension => {
-        if (allSelectedYears.length > 1) {
-          dimension.disabledYearRangeReason = YEARS_DISABLED_NO_AGGR;
-          dimension.disabledYearRangeReasonText = getSingleMapDimensionWarning(
-            dimension.disabledYearRangeReason
-          );
-        } else {
-          const allYearsCovered =
-            dimension.years === null ||
-            (Array.isArray(dimension.years) && dimension.years.length === 0) ||
-            allSelectedYears.every(year => dimension.years.indexOf(year) > -1);
-          if (!allYearsCovered) {
-            dimension.disabledYearRangeReason = YEARS_DISABLED_UNAVAILABLE;
+        payload.mapDimensionsMetaJSON.dimensions.forEach(dimension => {
+          if (allSelectedYears.length > 1) {
+            dimension.disabledYearRangeReason = YEARS_DISABLED_NO_AGGR;
             dimension.disabledYearRangeReasonText = getSingleMapDimensionWarning(
               dimension.disabledYearRangeReason
             );
+          } else {
+            const allYearsCovered =
+              dimension.years === null ||
+              (Array.isArray(dimension.years) && dimension.years.length === 0) ||
+              allSelectedYears.every(year => dimension.years.indexOf(year) > -1);
+            if (!allYearsCovered) {
+              dimension.disabledYearRangeReason = YEARS_DISABLED_UNAVAILABLE;
+              dimension.disabledYearRangeReasonText = getSingleMapDimensionWarning(
+                dimension.disabledYearRangeReason
+              );
+            }
+          }
+        });
+
+        dispatch(setMapContextLayers(payload.mapDimensionsMetaJSON.contextualLayers));
+
+        dispatch({
+          type: SET_MAP_DIMENSIONS_DATA,
+          payload
+        });
+
+        const selectedBiomeFilter = getState().tool.selectedBiomeFilter;
+        // reselect biome filter to add biome geoid
+        if (selectedBiomeFilter && selectedBiomeFilter.nodeId) {
+          dispatch({
+            type: SELECT_BIOME_FILTER,
+            biomeFilter: getState().tool.selectedBiomeFilter.name
+          });
+        }
+
+        const allAvailableMapDimensionsUids = payload.mapDimensionsMetaJSON.dimensions.map(
+          dimension => getNodeMetaUid(dimension.type, dimension.layerAttributeId)
+        );
+        const selectedMapDimensionsSet = compact(selectedMapDimensions);
+
+        // are all currently selected map dimensions available ?
+        if (
+          selectedMapDimensionsSet.length > 0 &&
+          difference(selectedMapDimensionsSet, allAvailableMapDimensionsUids).length === 0
+        ) {
+          dispatch(setMapDimensions(selectedMapDimensions.concat([])));
+        } else {
+          // use default map dimensions
+          const defaultMapDimensions = payload.mapDimensionsMetaJSON.dimensions.filter(
+            dimension => dimension.isDefault
+          );
+          if (defaultMapDimensions !== undefined) {
+            const uids = defaultMapDimensions.map(selectedDimension =>
+              getNodeMetaUid(selectedDimension.type, selectedDimension.layerAttributeId)
+            );
+            if (uids[0] === undefined) uids[0] = null;
+            if (uids[1] === undefined) uids[1] = null;
+            dispatch(setMapDimensions(uids));
           }
         }
       });
-
-      dispatch(setMapContextLayers(payload.mapDimensionsMetaJSON.contextualLayers));
-
-      dispatch({
-        type: GET_NODE_ATTRIBUTES,
-        payload
-      });
-
-      const selectedBiomeFilter = getState().tool.selectedBiomeFilter;
-      // reselect biome filter to add biome geoid
-      if (selectedBiomeFilter && selectedBiomeFilter.nodeId) {
-        dispatch({
-          type: SELECT_BIOME_FILTER,
-          biomeFilter: getState().tool.selectedBiomeFilter.name
-        });
-      }
-
-      const allAvailableMapDimensionsUids = payload.mapDimensionsMetaJSON.dimensions.map(
-        dimension => getNodeMetaUid(dimension.type, dimension.layerAttributeId)
-      );
-      const selectedMapDimensionsSet = compact(selectedMapDimensions);
-
-      // are all currently selected map dimensions available ?
-      if (
-        selectedMapDimensionsSet.length > 0 &&
-        difference(selectedMapDimensionsSet, allAvailableMapDimensionsUids).length === 0
-      ) {
-        dispatch(setMapDimensions(selectedMapDimensions.concat([])));
-      } else {
-        // use default map dimensions
-        const defaultMapDimensions = payload.mapDimensionsMetaJSON.dimensions.filter(
-          dimension => dimension.isDefault
-        );
-        if (defaultMapDimensions !== undefined) {
-          const uids = defaultMapDimensions.map(selectedDimension =>
-            getNodeMetaUid(selectedDimension.type, selectedDimension.layerAttributeId)
-          );
-          if (uids[0] === undefined) uids[0] = null;
-          if (uids[1] === undefined) uids[1] = null;
-          dispatch(setMapDimensions(uids));
-        }
-      }
-    });
   };
 }
 
 export function loadLinks() {
   return (dispatch, getState) => {
     dispatch({
-      type: LOAD_LINKS
+      type: SET_FLOWS_LOADING_STATE
     });
     const state = getState();
     const params = {
@@ -847,6 +852,9 @@ export function toggleMapDimension(uid) {
       type: TOGGLE_MAP_DIMENSION,
       uid
     });
+
+    loadMapChoropeth(getState, dispatch);
+
     dispatch(updateNodes(getState().tool.selectedNodesIds));
   };
 }
@@ -854,11 +862,55 @@ export function toggleMapDimension(uid) {
 export function setMapDimensions(uids) {
   return (dispatch, getState) => {
     dispatch({
-      type: SET_MAP_DIMENSIONS,
+      type: SET_MAP_DIMENSIONS_SELECTION,
       uids
     });
+
+    loadMapChoropeth(getState, dispatch);
+
     dispatch(updateNodes(getState().tool.selectedNodesIds));
   };
+}
+
+export function loadMapChoropeth(getState, dispatch) {
+  const state = getState();
+
+  const uids = state.tool.selectedMapDimensions;
+
+  if (compact(uids).length === 0) {
+    dispatch({
+      type: SET_NODE_ATTRIBUTES
+    });
+
+    return;
+  }
+
+  const selectedMapDimensions = compact(uids).map(uid =>
+    state.tool.mapDimensions.find(dimension => dimension.uid === uid)
+  );
+
+  const params = {
+    context_id: state.tool.selectedContextId,
+    start_year: state.tool.selectedYears[0],
+    end_year: state.tool.selectedYears[1],
+    layer_ids: selectedMapDimensions.map(layer => layer.id)
+  };
+
+  const getNodesURL = getURLFromParams(GET_NODE_ATTRIBUTES_URL, params);
+
+  fetch(getNodesURL)
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      return Promise.reject(new Error(response.statusText));
+    })
+    .then(payload => {
+      dispatch({
+        type: SET_NODE_ATTRIBUTES,
+        payload
+      });
+    });
 }
 
 export function selectContextualLayers(contextualLayers) {

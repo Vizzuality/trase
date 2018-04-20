@@ -5,9 +5,10 @@ module Api
         # @param context [Api::V3::Context]
         # @param start_year [Integer]
         # @param end_year [Integer]
-        def initialize(context, start_year, end_year)
+        def initialize(context, start_year, end_year, layer_ids)
           @context = context
           @years = (start_year..end_year).to_a
+          @layer_ids = layer_ids.map(&:to_i)
         end
 
         def result
@@ -41,6 +42,7 @@ maa.#{attribute_type}_id = #{node_values}.#{attribute_type}_id").
               @years
             ).
             where('ma.context_id' => @context.id, 'ma.is_disabled' => false).
+            where('ma.id IN (?)', @layer_ids).
             where('ma.years IS NULL OR array_length(ma.years, 1) IS NULL OR ma.years && ARRAY[?]', @years).
             group(
               "#{node_values}.node_id",

@@ -6,6 +6,10 @@ export default function(nodesDict, nodesMeta, layers) {
   const layersByUID = _.keyBy(layers, 'uid');
   const nodesDictWithMeta = {};
 
+  if (!nodesMeta) {
+    return nodesDictWithMeta;
+  }
+
   nodesMeta.data.forEach(nodeMeta => {
     const nodeId = parseInt(nodeMeta.node_id, 10);
     const nodeWithMeta = nodesDictWithMeta[nodeId] || _.cloneDeep(nodesDict[nodeId]);

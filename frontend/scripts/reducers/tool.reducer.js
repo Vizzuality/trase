@@ -6,11 +6,12 @@ import {
   GET_LINKED_GEOIDS,
   GET_LINKS,
   GET_MAP_VECTOR_DATA,
-  GET_NODE_ATTRIBUTES,
+  SET_NODE_ATTRIBUTES,
   HIGHLIGHT_NODE,
   LOAD_INITIAL_CONTEXT,
   LOAD_INITIAL_DATA,
-  LOAD_LINKS,
+  SET_FLOWS_LOADING_STATE,
+  SET_MAP_LOADING_STATE,
   RESET_SELECTION,
   RESET_TOOL_STATE,
   SAVE_MAP_VIEW,
@@ -23,14 +24,15 @@ import {
   SELECT_VIEW,
   SELECT_YEARS,
   SET_CONTEXT,
-  SET_MAP_DIMENSIONS,
+  SET_MAP_DIMENSIONS_SELECTION,
   SET_SANKEY_SEARCH_VISIBILITY,
   SHOW_LINKS_ERROR,
   TOGGLE_MAP,
   TOGGLE_MAP_DIMENSION,
   TOGGLE_MAP_SIDEBAR_GROUP,
   TOGGLE_NODES_EXPAND,
-  UPDATE_NODE_SELECTION
+  UPDATE_NODE_SELECTION,
+  SET_MAP_DIMENSIONS_DATA
 } from 'actions/tool.actions';
 import groupBy from 'lodash/groupBy';
 import isEqual from 'lodash/isEqual';
@@ -73,10 +75,11 @@ export const toolInitialState = {
   isSearchOpen: false,
   linkedGeoIds: [],
   links: [],
-  linksLoading: false,
+  flowsLoading: true,
   mapContextualLayers: [],
   mapDimensions: [],
   mapDimensionsGroups: [],
+  mapLoading: true,
   mapVectorData: null,
   mapView: null,
   nodes: [],
@@ -259,13 +262,37 @@ const toolReducer = {
     });
   },
 
-  [LOAD_LINKS](state) {
-    return Object.assign({}, state, { linksLoading: true });
+  [SET_FLOWS_LOADING_STATE](state) {
+    return Object.assign({}, state, { flowsLoading: true });
   },
 
-  [GET_NODE_ATTRIBUTES](state, action) {
-    const nodesMeta = action.payload.nodesJSON;
+  [SET_MAP_LOADING_STATE](state) {
+    return Object.assign({}, state, { mapLoading: true });
+  },
 
+  [SET_NODE_ATTRIBUTES](state, action) {
+    const nodesMeta = action.payload;
+
+    // store dimension values in nodesDict as uid: dimensionValue
+    const nodesDictWithMeta = setNodesMeta(state.nodesDict, nodesMeta, state.mapDimensions);
+
+    const forceEmptyChoropleth = state.selectedYears[1] - state.selectedYears[0] > 0;
+
+    const { choropleth, choroplethLegend } = getChoropleth(
+      state.selectedMapDimensions,
+      nodesDictWithMeta,
+      state.mapDimensions,
+      forceEmptyChoropleth
+    );
+
+    return Object.assign({}, state, {
+      nodesDictWithMeta,
+      choropleth,
+      choroplethLegend,
+      mapLoading: false
+    });
+  },
+  [SET_MAP_DIMENSIONS_DATA](state, action) {
     const mapDimensionsMeta = action.payload.mapDimensionsMetaJSON;
     const rawMapDimensions = mapDimensionsMeta.dimensions;
     const mapDimensions = getMapDimensions(rawMapDimensions);
@@ -275,13 +302,9 @@ const toolReducer = {
       dimensions: mapDimensions.filter(dimension => dimension.groupId === group.id)
     }));
 
-    // store dimension values in nodesDict as uid: dimensionValue
-    const nodesDictWithMeta = setNodesMeta(state.nodesDict, nodesMeta, mapDimensions);
-
     return Object.assign({}, state, {
       mapDimensions,
-      mapDimensionsGroups,
-      nodesDictWithMeta
+      mapDimensionsGroups
     });
   },
   [GET_LINKS](state, action) {
@@ -309,7 +332,7 @@ const toolReducer = {
       visibleNodes,
       visibleNodesByColumn,
       currentQuant,
-      linksLoading: false
+      flowsLoading: false
     });
   },
   [SHOW_LINKS_ERROR](state) {
@@ -436,7 +459,7 @@ const toolReducer = {
   [GET_CONTEXT_LAYERS](state, action) {
     return Object.assign({}, state, { mapContextualLayers: action.mapContextualLayers });
   },
-  [SET_MAP_DIMENSIONS](state, action) {
+  [SET_MAP_DIMENSIONS_SELECTION](state, action) {
     const selectedMapDimensions = action.uids;
 
     // TODO Remove that when server correctly implements map dimensions meta/choropleth
@@ -479,16 +502,6 @@ const toolReducer = {
       selectedMapDimensions[uidIndex] = null;
     }
 
-    // TODO Remove that when server correctly implements map dimensions meta/choropleth
-    // ie it shouldn't return choropleth values in get_nodes over multiple years if metadata says data is unavailable
-    const forceEmptyChoropleth = state.selectedYears[1] - state.selectedYears[0] > 0;
-
-    const { choropleth, choroplethLegend } = getChoropleth(
-      selectedMapDimensions,
-      state.nodesDictWithMeta,
-      state.mapDimensions,
-      forceEmptyChoropleth
-    );
     const selectedMapDimensionsWarnings = getMapDimensionsWarnings(
       state.mapDimensions,
       selectedMapDimensions
@@ -496,8 +509,7 @@ const toolReducer = {
     return Object.assign({}, state, {
       selectedMapDimensions,
       selectedMapDimensionsWarnings,
-      choropleth,
-      choroplethLegend
+      mapLoading: true
     });
   },
   [SELECT_CONTEXTUAL_LAYERS](state, action) {
@@ -584,10 +596,11 @@ const toolReducerTypes = PropTypes => ({
   isMapVisible: PropTypes.bool,
   linkedGeoIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   links: PropTypes.arrayOf(PropTypes.object).isRequired,
-  linksLoading: PropTypes.bool,
+  flowsLoading: PropTypes.bool,
   mapContextualLayers: PropTypes.arrayOf(PropTypes.object).isRequired,
   mapDimensions: PropTypes.arrayOf(PropTypes.object).isRequired,
   mapDimensionsGroups: PropTypes.arrayOf(PropTypes.object).isRequired,
+  mapLoading: PropTypes.bool,
   mapVectorData: PropTypes.object,
   mapView: PropTypes.object,
   nodes: PropTypes.arrayOf(PropTypes.object).isRequired,
