@@ -52,7 +52,13 @@ const mapMethodsToState = state => ({
       shouldRepositionExpandButton: shouldRepositionExpandButton(state.tool)
     })
   },
-  toggleExpandButton: canExpandSelection(state.tool),
+  toggleExpandButton: {
+    _comparedValue: state => canExpandSelection(state.tool),
+    _returnedValue: state => ({
+      isVisible: canExpandSelection(state.tool),
+      isReExpand: !isEmpty(state.tool.expandedNodesIds) && canExpandSelection(state.tool)
+    })
+  },
   toggleCollapseButton: !isEmpty(state.tool.expandedNodesIds),
   highlightNodes: state.tool.highlightedNodesIds,
   translateNodes: {

@@ -1,5 +1,6 @@
 /* eslint-disable camelcase,import/no-extraneous-dependencies,func-names */
-import _ from 'lodash';
+import toLower from 'lodash/toLower';
+import capitalize from 'lodash/capitalize';
 import { event as d3_event, select as d3_select } from 'd3-selection';
 import 'd3-transition';
 import { DETAILED_VIEW_MIN_LINK_HEIGHT, SANKEY_TRANSITION_TIME } from 'constants';
@@ -82,8 +83,9 @@ export default class {
     this.collapseActionButton.classList.toggle('is-hidden', !isVisible);
   }
 
-  toggleExpandButton(isVisible) {
+  toggleExpandButton({ isVisible, isReExpand }) {
     this.expandActionButton.classList.toggle('is-hidden', !isVisible);
+    this.expandActionButton.classList.toggle('-re-expand', isReExpand);
   }
 
   highlightNodes(nodesIds) {
@@ -95,7 +97,9 @@ export default class {
   _relayout({ selectedRecolorBy, currentQuant, shouldRepositionExpandButton, selectedNodesIds }) {
     if (this.layout.relayout()) {
       this._render(selectedRecolorBy, currentQuant);
-      if (shouldRepositionExpandButton) this._repositionExpandButton(selectedNodesIds);
+      if (shouldRepositionExpandButton || this.expandButtonIsVisible === undefined) {
+        this._repositionExpandButton(selectedNodesIds);
+      }
     }
   }
 
@@ -134,7 +138,7 @@ export default class {
   _removeEventListeners() {
     this.sankeyColumns.on('mouseleave', null);
     this.expandActionButton.removeEventListener('click', this.callbacks.onExpandClick);
-    this.collapseActionButton.removeEventListener('click', this.callvack.onCollapseClick);
+    this.collapseActionButton.removeEventListener('click', this.callbacks.onCollapseClick);
     this.clearButton.removeEventListener('click', this.callbacks.onClearClick);
   }
 
@@ -186,8 +190,8 @@ export default class {
       if (selectedRecolorBy.divisor) {
         recolorBy = Math.floor(link.recolorBy / selectedRecolorBy.divisor);
       }
-      const legendTypeClass = _.toLower(selectedRecolorBy.legendType);
-      const legendColorThemeClass = _.toLower(selectedRecolorBy.legendColorTheme);
+      const legendTypeClass = toLower(selectedRecolorBy.legendType);
+      const legendColorThemeClass = toLower(selectedRecolorBy.legendColorTheme);
       classPath = `${classPath} -recolorby-${legendTypeClass}-${legendColorThemeClass}-${recolorBy}`;
     } else {
       classPath = `${classPath} -recolorgroup-${link.recolorGroup}`;
@@ -336,7 +340,7 @@ export default class {
     if (link.recolorBy === null) {
       return 'unknown';
     } else if (this.currentSelectedRecolorBy.type !== 'ind') {
-      return _.capitalize(link.recolorBy);
+      return capitalize(link.recolorBy);
     }
 
     if (this.currentSelectedRecolorBy.legendType === 'percentual') {
