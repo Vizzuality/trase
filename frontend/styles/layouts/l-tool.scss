@@ -125,14 +125,16 @@ body {
         padding-top: 16px;
       }
     }
+  }
 
-    > .sankey-veil {
-      z-index: $z-above;
-    }
+  .sankey-veil {
+    z-index: $z-above;
+    left: $layer-map-width;
+    height: calc(100% - 62px);
+  }
 
-    .sankey-inner-veil {
-      top: 48px;
-      left: $map-width + $layer-map-width;
-    }
+  .sankey-inner-veil {
+    top: 48px;
+    left: $map-width + $layer-map-width;
   }
 }

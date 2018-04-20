@@ -32,12 +32,11 @@ class ResizeBySelector extends Component {
           resizeByElements.push(
             <li
               key={index}
-              className={cx('dropdown-item', { '-disabled': !isEnabled })}
-              onClick={() => onSelected(resizeBy.name)}
+              className={cx('dropdown-item', { '-faded': !isEnabled })}
+              onClick={() => isEnabled && onSelected(resizeBy.name)}
             >
               {resizeBy.label.toLowerCase()}
-              {resizeBy.description &&
-                isEnabled && <Tooltip constraint="window" text={resizeBy.description} />}
+              {resizeBy.description && <Tooltip constraint="window" text={resizeBy.description} />}
             </li>
           );
         });

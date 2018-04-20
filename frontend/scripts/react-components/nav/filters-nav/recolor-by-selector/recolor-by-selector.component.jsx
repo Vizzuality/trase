@@ -69,7 +69,7 @@ class RecolorBySelector extends Component {
         <li
           key={index}
           className={cx('dropdown-item', { '-disabled': !isEnabled })}
-          onClick={() => onSelected(recolorBy)}
+          onClick={() => isEnabled && onSelected(recolorBy)}
         >
           <div className="dropdown-item-title">
             {recolorBy.label}

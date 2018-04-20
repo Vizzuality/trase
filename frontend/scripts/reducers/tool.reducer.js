@@ -336,7 +336,7 @@ const toolReducer = {
     });
   },
   [SHOW_LINKS_ERROR](state) {
-    return Object.assign({}, state, { links: null });
+    return Object.assign({}, state, { links: null, flowsLoading: false });
   },
   [GET_LINKED_GEOIDS](state, action) {
     const linkedGeoIds =

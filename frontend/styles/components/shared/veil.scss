@@ -3,9 +3,8 @@
 .veil {
   position: fixed;
   top: 0;
-  left: $layer-map-width;
   width: 100%;
-  height: calc(100% - 62px);
+  height: 100%;
   background-color: rgba($charcoal-grey, .7);
   z-index: $z-veil;
 

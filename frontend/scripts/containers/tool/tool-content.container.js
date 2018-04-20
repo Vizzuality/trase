@@ -6,11 +6,8 @@ import { resetSankey } from '../../actions/tool.actions';
 const mapMethodsToState = state => ({
   toggleMapVisibility: state.tool.isMapVisible,
   toggleMapLayersVisibility: state.app.isMapLayerVisible,
-  showLoader: state.tool.flowsLoading || state.tool.mapLoading,
-  toggleError: {
-    _comparedValue: state => state.tool.links,
-    _returnedValue: state => state.tool.links === null
-  }
+  showLoader: state.tool.links !== null && (state.tool.flowsLoading || state.tool.mapLoading),
+  toggleError: state.tool.links === null && !state.tool.flowsLoading
 });
 
 const mapViewCallbacksToActions = () => ({
