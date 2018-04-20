@@ -60,14 +60,14 @@ const _initSource = (selectedSource, data, store) => {
   render(
     <Provider store={store}>
       <TranslatedLine
-        className=".js-top-municipalities"
+        className=".js-top-municipalities-chart"
         data={sourceLines}
         xValues={data.top_sources.included_years}
         settings={settings}
         useBottomLegend
       />
     </Provider>,
-    document.querySelector('.js-top-municipalities')
+    document.querySelector('.js-top-municipalities-chart')
   );
 
   const topoJSONPath = `./vector_layers/${defaults.country.toUpperCase()}_${selectedSource.toUpperCase()}.topo.json`;
@@ -117,6 +117,8 @@ const _setTopSourceSwitcher = (data, verb, year, store) => {
   const items = Object.keys(data.top_sources).filter(
     key => !ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)
   );
+
+  document.querySelector('.js-top-municipalities').classList.remove('is-hidden');
 
   render(
     <Provider store={store}>
@@ -193,6 +195,7 @@ const _build = (data, tooltips, { nodeId, year, print }, store) => {
   }
 
   if (data.top_countries && data.top_countries.lines.length) {
+    document.querySelector('.js-top-map').classList.remove('is-hidden');
     document.querySelector(
       '.js-top-map-title'
     ).textContent = `Top destination countries of Soy ${verb} by ${capitalize(
@@ -285,24 +288,29 @@ const _build = (data, tooltips, { nodeId, year, print }, store) => {
   }
 
   if (data.sustainability && data.sustainability.length) {
-    const tabsTitle = `Deforestation risk associated with ${formatApostrophe(
-      data.node_name
-    )} top sourcing regions in ${year}:`;
+    const filteredData = data.sustainability.filter(elem => elem.rows.length > 0);
+    if (filteredData.length !== 0) {
+      const tabsTitle = `Deforestation risk associated with ${formatApostrophe(
+        data.node_name
+      )} top sourcing regions in ${year}:`;
 
-    render(
-      <Provider store={store}>
-        <MultiTable
-          id="sustainability"
-          data={data.sustainability}
-          tabsTitle={tabsTitle}
-          tabsTitleTooltip={tooltips.deforestationRisk}
-          type="t_head_actors"
-          target={item => (item.name === 'Municipalities' ? 'profilePlace' : null)}
-          year={year}
-        />
-      </Provider>,
-      document.querySelector('.js-sustainability-table')
-    );
+      document.querySelector('.js-area-table').classList.remove('is-hidden');
+
+      render(
+        <Provider store={store}>
+          <MultiTable
+            id="sustainability"
+            data={filteredData}
+            tabsTitle={tabsTitle}
+            tabsTitleTooltip={tooltips.deforestationRisk}
+            type="t_head_actors"
+            target={item => (item.name === 'Municipalities' ? 'profilePlace' : null)}
+            year={year}
+          />
+        </Provider>,
+        document.querySelector('.js-sustainability-table')
+      );
+    }
   }
 
   if (data.companies_sourcing) {
@@ -534,7 +542,7 @@ export const mount = (root, store) => {
 };
 
 export const unmount = () => {
-  unmountComponentAtNode(document.querySelector('.js-top-municipalities'));
+  unmountComponentAtNode(document.querySelector('.js-top-municipalities-chart'));
   unmountComponentAtNode(document.querySelector('.js-top-municipalities-map'));
   unmountComponentAtNode(document.querySelector('.js-top-municipalities-title-container'));
   unmountComponentAtNode(document.querySelector('.js-source-legend'));
