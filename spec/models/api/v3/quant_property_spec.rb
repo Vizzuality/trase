@@ -11,7 +11,7 @@ RSpec.describe Api::V3::QuantProperty, type: :model do
       FactoryBot.build(:api_v3_quant_property, quant: api_v3_area)
     }
     it 'fails when quant missing' do
-      expect(property_without_quant).to have(1).errors_on(:quant)
+      expect(property_without_quant).to have(2).errors_on(:quant)
     end
     it 'fails when quant taken' do
       expect(duplicate).to have(1).errors_on(:quant)

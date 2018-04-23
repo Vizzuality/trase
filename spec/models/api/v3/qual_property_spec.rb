@@ -11,7 +11,7 @@ RSpec.describe Api::V3::QualProperty, type: :model do
       FactoryBot.build(:api_v3_qual_property, qual: api_v3_state)
     }
     it 'fails when qual missing' do
-      expect(property_without_qual).to have(1).errors_on(:qual)
+      expect(property_without_qual).to have(2).errors_on(:qual)
     end
     it 'fails when qual taken' do
       expect(duplicate).to have(1).errors_on(:qual)

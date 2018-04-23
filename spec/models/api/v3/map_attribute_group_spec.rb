@@ -21,7 +21,7 @@ RSpec.describe Api::V3::MapAttributeGroup, type: :model do
       )
     }
     it 'fails when context missing' do
-      expect(group_without_context).to have(1).errors_on(:context)
+      expect(group_without_context).to have(2).errors_on(:context)
     end
     it 'fails when context + position taken' do
       expect(duplicate).to have(1).errors_on(:position)

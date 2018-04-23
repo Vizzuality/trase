@@ -23,7 +23,7 @@ RSpec.describe Api::V3::Profile, type: :model do
       )
     }
     it 'fails when context node type missing' do
-      expect(profile_without_context_node_type).to have(1).
+      expect(profile_without_context_node_type).to have(2).
         errors_on(:context_node_type)
     end
     it 'fails when context node type taken' do
