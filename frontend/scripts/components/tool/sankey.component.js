@@ -63,10 +63,10 @@ export default class {
 
     this._render(linksPayload.selectedRecolorBy, linksPayload.currentQuant);
 
-    this.selectNodes(linksPayload);
+    this.selectNodes(linksPayload.selectedNodesIds);
   }
 
-  selectNodes({ selectedNodesIds, shouldRepositionExpandButton }) {
+  selectNodes(selectedNodesIds) {
     // let minimumY = Infinity;
     if (!this.layout.isReady()) {
       return;
@@ -76,9 +76,7 @@ export default class {
       .selectAll('.sankey-node')
       .classed('-selected', node => selectedNodesIds.indexOf(node.id) > -1);
 
-    if (shouldRepositionExpandButton || this.expandButtonIsVisible === undefined) {
-      this._repositionExpandButton(selectedNodesIds);
-    }
+    this._repositionExpandButton(selectedNodesIds);
   }
 
   toggleCollapseActionButton(isVisible) {
@@ -96,13 +94,10 @@ export default class {
       .classed('-highlighted', node => nodesIds.indexOf(node.id) > -1);
   }
 
-  _relayout({ selectedRecolorBy, currentQuant, shouldRepositionExpandButton, selectedNodesIds }) {
+  _relayout({ selectedRecolorBy, currentQuant, selectedNodesIds }) {
     if (this.layout.relayout()) {
       this._render(selectedRecolorBy, currentQuant);
-
-      if (shouldRepositionExpandButton || this.expandButtonIsVisible === undefined) {
-        this._repositionExpandButton(selectedNodesIds);
-      }
+      this._repositionExpandButton(selectedNodesIds);
     }
   }
 
@@ -146,16 +141,21 @@ export default class {
   }
 
   _repositionExpandButton(nodesIds) {
-    // TODO split by columns
-    if (nodesIds && nodesIds.length > 0) {
-      this.expandButton.classList.add('-visible');
+    const lastSelectedNodeId = nodesIds && nodesIds[0];
 
+    // TODO split by columns
+    if (lastSelectedNodeId && lastSelectedNodeId !== this.lastSelectedNodeId) {
       const lastSelectedNode = this.sankeyColumns
         .selectAll('.sankey-node')
-        .filter(node => node.id === nodesIds[0])
+        .filter(node => node.id === lastSelectedNodeId)
         .data()[0];
 
       if (lastSelectedNode) {
+        this.lastSelectedNodeId = lastSelectedNodeId;
+
+        this.expandButton.classList.add('-visible');
+        this.expandButtonIsVisible = true;
+
         const selectedColumnFirstNode = this.sankeyColumns
           .selectAll('.sankey-node.-selected')
           .filter(node => node.x === lastSelectedNode.x)
@@ -163,14 +163,14 @@ export default class {
           .reduce((acc, val) => (acc.y < val.y ? acc : val));
 
         this.currentExpandButtonY = Math.max(0, selectedColumnFirstNode.y - 12);
-        this.expandButtonIsVisible = true;
+
         this._repositionExpandButtonScroll();
         this.expandButton.style.left = `${selectedColumnFirstNode.x - 12}px`;
-        return;
       }
+    } else if (lastSelectedNodeId === undefined) {
+      this.expandButtonIsVisible = false;
+      this.expandButton.classList.remove('-visible');
     }
-    this.expandButtonIsVisible = false;
-    this.expandButton.classList.remove('-visible');
   }
 
   _repositionExpandButtonScroll() {
