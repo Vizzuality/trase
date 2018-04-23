@@ -284,11 +284,27 @@ export const setDefaultContext = () => (dispatch, getState) => {
 
 // hate adding these boolean params but the current flow is a nightmare and need deep refactoring
 export function setContext(contextId, { isInitialContextSet = false, withUpdates = false } = {}) {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const state = getState();
     // load default params
     dispatch({
       type: isInitialContextSet ? LOAD_INITIAL_CONTEXT : SET_CONTEXT,
       payload: contextId
+    });
+
+    let selectedContext = state.tool.contexts.find(context => context.id === contextId);
+    if (!selectedContext) {
+      selectedContext = state.tool.contexts.find(context => context.isDefault === true);
+    }
+
+    let selectedMapBasemap = selectedContext.defaultBasemap || 'satellite';
+    if (state.map.selectedMapBasemap !== undefined && state.map.selectedMapBasemap !== null) {
+      selectedMapBasemap = state.map.selectedMapBasemap;
+    }
+
+    dispatch({
+      type: SELECT_BASEMAP,
+      payload: selectedMapBasemap
     });
 
     if (withUpdates) {
@@ -917,13 +933,6 @@ export function selectContextualLayers(contextualLayers) {
   return {
     type: SELECT_CONTEXTUAL_LAYERS,
     contextualLayers
-  };
-}
-
-export function selectMapBasemap(selectedMapBasemap) {
-  return {
-    type: SELECT_BASEMAP,
-    selectedMapBasemap
   };
 }
 

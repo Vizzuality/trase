@@ -15,6 +15,7 @@ export function createReducer(initialState, reducers, getTypes) {
 export { default as app } from 'reducers/app.reducer';
 export { default as tool } from 'reducers/tool.reducer';
 export { default as data } from 'reducers/data.reducer';
+export { default as map } from 'reducers/map.reducer';
 export { default as home } from 'react-components/home/home.reducer';
 export { default as profileRoot } from 'react-components/profile-root/profile-root.reducer';
 export { default as newsletter } from 'react-components/shared/newsletter/newsletter.reducer';

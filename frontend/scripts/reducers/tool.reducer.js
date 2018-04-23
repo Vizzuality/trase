@@ -15,7 +15,6 @@ import {
   RESET_SELECTION,
   RESET_TOOL_STATE,
   SAVE_MAP_VIEW,
-  SELECT_BASEMAP,
   SELECT_BIOME_FILTER,
   SELECT_COLUMN,
   SELECT_CONTEXTUAL_LAYERS,
@@ -93,7 +92,6 @@ export const toolInitialState = {
   selectedColumnsIds: [],
   selectedContext: null,
   selectedContextId: null,
-  selectedMapBasemap: null,
   selectedMapContextualLayers: null,
   selectedMapDimensions: [null, null],
   selectedMapDimensionsWarnings: null,
@@ -523,9 +521,6 @@ const toolReducer = {
       selectedMapContextualLayersData
     });
   },
-  [SELECT_BASEMAP](state, action) {
-    return Object.assign({}, state, { selectedMapBasemap: action.selectedMapBasemap });
-  },
   [TOGGLE_NODES_EXPAND](state, action) {
     let expandedNodesIds;
     let selectedNodesIds;
@@ -615,7 +610,6 @@ const toolReducerTypes = PropTypes => ({
   selectedColumnsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedContext: PropTypes.object,
   selectedContextId: PropTypes.number,
-  selectedMapBasemap: PropTypes.string,
   selectedMapContextualLayers: PropTypes.array,
   selectedMapDimensions: PropTypes.array.isRequired,
   selectedMapDimensionsWarnings: PropTypes.string,
