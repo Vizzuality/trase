@@ -76,14 +76,16 @@ export default class {
       .selectAll('.sankey-node')
       .classed('-selected', node => selectedNodesIds.indexOf(node.id) > -1);
 
-    if (shouldRepositionExpandButton) this._repositionExpandButton(selectedNodesIds);
+    if (shouldRepositionExpandButton || this.expandButtonIsVisible === undefined) {
+      this._repositionExpandButton(selectedNodesIds);
+    }
   }
 
-  toggleCollapseButton(isVisible) {
+  toggleCollapseActionButton(isVisible) {
     this.collapseActionButton.classList.toggle('is-hidden', !isVisible);
   }
 
-  toggleExpandButton({ isVisible, isReExpand }) {
+  toggleExpandActionButton({ isVisible, isReExpand }) {
     this.expandActionButton.classList.toggle('is-hidden', !isVisible);
     this.expandActionButton.classList.toggle('-re-expand', isReExpand);
   }
@@ -97,6 +99,7 @@ export default class {
   _relayout({ selectedRecolorBy, currentQuant, shouldRepositionExpandButton, selectedNodesIds }) {
     if (this.layout.relayout()) {
       this._render(selectedRecolorBy, currentQuant);
+
       if (shouldRepositionExpandButton || this.expandButtonIsVisible === undefined) {
         this._repositionExpandButton(selectedNodesIds);
       }

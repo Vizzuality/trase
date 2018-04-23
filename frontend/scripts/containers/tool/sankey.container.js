@@ -11,9 +11,14 @@ import {
 import connect from 'connect';
 import Sankey from 'components/tool/sankey.component';
 
-const shouldRepositionExpandButton = ({ expandedNodesIds, selectedNodesIds }) =>
-  isEmpty(expandedNodesIds) ||
-  expandedNodesIds.slice().sort()[0] === selectedNodesIds.slice().sort()[0];
+let lastSelectedNodeId;
+
+const shouldRepositionExpandButton = ({ selectedNodesIds }) => {
+  const lastSelectedNodeChanged = selectedNodesIds[0] !== lastSelectedNodeId;
+  lastSelectedNodeId = selectedNodesIds[0];
+
+  return lastSelectedNodeChanged;
+};
 
 const canExpandSelection = ({ expandedNodesIds, selectedNodesIds }) =>
   !isEqual([...selectedNodesIds].sort(), [...expandedNodesIds].sort());
@@ -54,7 +59,7 @@ const mapMethodsToState = state => ({
       shouldRepositionExpandButton: shouldRepositionExpandButton(state.tool)
     })
   },
-  toggleExpandButton: {
+  toggleExpandActionButton: {
     _comparedValue: state =>
       anyOfConditionsDidChange(
         canExpandSelection(state.tool),
@@ -65,7 +70,7 @@ const mapMethodsToState = state => ({
       isReExpand: !isEmpty(state.tool.expandedNodesIds) && canExpandSelection(state.tool)
     })
   },
-  toggleCollapseButton: !isEmpty(state.tool.expandedNodesIds),
+  toggleCollapseActionButton: !isEmpty(state.tool.expandedNodesIds),
   highlightNodes: state.tool.highlightedNodesIds,
   translateNodes: {
     _comparedValue: state => state.location.query && state.location.query.lang,
