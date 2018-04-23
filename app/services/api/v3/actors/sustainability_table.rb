@@ -60,7 +60,9 @@ module Api
           rows = top_nodes.map do |node|
             data_row(group_totals_hash, node_type, node)
           end
-          rows << totals_row(group_totals_hash) if include_totals
+          if include_totals && !rows.empty?
+            rows << totals_row(group_totals_hash)
+          end
           {
             name: name,
             included_columns:

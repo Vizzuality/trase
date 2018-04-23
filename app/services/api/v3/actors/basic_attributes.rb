@@ -89,7 +89,11 @@ module Api
           # 1,224 municipalities, or 48% of the soy production municipalities.
           # The main destination of the soy exported by Cargill is China,
           # accounting for 66% of the total.
+
+          initialize_trade_volume_for_summary
           text = summary_of_total_trade_volume('exporter')
+          return text if @trade_total_current_year_raw.zero?
+
           text += summary_of_sources('exporter')
           text += summary_of_destinations('exporter')
           text
@@ -108,14 +112,23 @@ module Api
           # 1,224 municipalities, or 48% of the soy production municipalities.
           # The main destination of the soy imported by Cargill is China,
           # accounting for 66% of the total.
+
+          initialize_trade_volume_for_summary
           text = summary_of_total_trade_volume('importer')
+          return text if @trade_total_current_year_raw.zero?
+
           text += summary_of_sources('importer')
           text += summary_of_destinations('importer')
           text
         end
 
         def summary_of_total_trade_volume(profile_type)
-          initialize_trade_volume_for_summary
+          if @trade_total_current_year_raw.zero?
+            return "<span>#{@node.name.humanize}</span> \
+ #{profile_type.first(-1)}d 0 tons of soy from \
+#{@context.country.name} in <span>#{@year}</span>."
+          end
+
           text = "<span>#{@node.name.humanize}</span> was the \
 <span>#{@trade_total_rank_in_country_formatted}</span>\
 largest #{profile_type} of soy from \
@@ -139,7 +152,6 @@ largest #{profile_type} of soy from \
         end
 
         def summary_of_sources(profile_type)
-          initialize_sources_for_summary
           " As an #{profile_type}, \
 <span>#{@node.name.humanize}</span> sources from \
 <span>#{@source_municipalities_count_formatted}</span> municipalities, or \
@@ -148,7 +160,6 @@ of the soy production municipalities."
         end
 
         def summary_of_destinations(profile_type)
-          initialize_destinations_for_summary
           if @perc_exports_formatted
             " The main destination of the soy #{profile_type.first(-1)}d by \
 <span>#{@node.name.humanize}</span> is \
@@ -188,6 +199,7 @@ of the soy production municipalities."
             trade_total_current_year_precision = 1
           end
 
+          @trade_total_current_year_raw = trade_total_current_year_value
           @trade_total_current_year_formatted = helper.number_with_precision(
             trade_total_current_year_value,
             delimiter: ',', precision: trade_total_current_year_precision
