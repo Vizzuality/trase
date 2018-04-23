@@ -1,3 +1,4 @@
+import chroma from 'chroma-js';
 import compact from 'lodash/compact';
 import filter from 'lodash/filter';
 import { CHOROPLETH_COLORS, CHOROPLETH_CLASS_ZERO } from 'constants';
@@ -8,6 +9,8 @@ const _shortenTitle = title => {
   }
   return [title.slice(0, 34), title.slice(-12)].join('(…)');
 };
+
+const generateColorScale = (baseColorScale, length) => chroma.scale(baseColorScale).colors(length);
 
 export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensions, forceEmpty) {
   const uids = compact(selectedMapDimensionsUids);
@@ -33,9 +36,16 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
     selectedMapDimension.colorScale = 'greenred';
   }
 
+  const bucket = selectedMapDimensions.map(
+    d => (isBivariate ? [...d.dualLayerBuckets] : [...d.singleLayerBuckets])
+  );
+
   const colors = isBivariate
     ? CHOROPLETH_COLORS.bidimensional
-    : CHOROPLETH_COLORS[selectedMapDimension.colorScale || 'red'];
+    : generateColorScale(
+        CHOROPLETH_COLORS[selectedMapDimension.colorScale] || CHOROPLETH_COLORS.red,
+        bucket[0].length + 1
+      );
 
   const geoNodes = filter(
     nodesDictWithMeta,
@@ -48,9 +58,7 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
     colors,
     isBivariate,
     titles: selectedMapDimensions.map(d => _shortenTitle(d.name)),
-    bucket: selectedMapDimensions.map(
-      d => (isBivariate ? [...d.dualLayerBuckets] : [...d.singleLayerBuckets])
-    )
+    bucket
   };
 
   if (forceEmpty === true) {
