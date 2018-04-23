@@ -15,7 +15,7 @@ RSpec.describe Api::V3::CartoLayer, type: :model do
       )
     }
     it 'fails when contextual layer missing' do
-      expect(layer_without_contextual_layer).to have(1).errors_on(:contextual_layer)
+      expect(layer_without_contextual_layer).to have(2).errors_on(:contextual_layer)
     end
     it 'fails when contextual_layer + identifier taken' do
       expect(duplicate).to have(1).errors_on(:identifier)

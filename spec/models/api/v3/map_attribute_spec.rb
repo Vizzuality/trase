@@ -21,7 +21,7 @@ RSpec.describe Api::V3::MapAttribute, type: :model do
       )
     }
     it 'fails when map_attribute_group missing' do
-      expect(layer_without_map_attribute_group).to have(1).errors_on(:map_attribute_group)
+      expect(layer_without_map_attribute_group).to have(2).errors_on(:map_attribute_group)
     end
     it 'fails when map_attribute_group + position taken' do
       expect(duplicate).to have(1).errors_on(:position)

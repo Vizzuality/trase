@@ -22,7 +22,7 @@ RSpec.describe Api::V3::RecolorByAttribute, type: :model do
       )
     }
     it 'fails when context missing' do
-      expect(attribute_without_context).to have(1).errors_on(:context)
+      expect(attribute_without_context).to have(2).errors_on(:context)
     end
     it 'fails when context + group_number + position taken' do
       expect(duplicate).to have(1).errors_on(:position)

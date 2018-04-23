@@ -15,7 +15,7 @@ RSpec.describe Api::V3::ContextualLayer, type: :model do
       )
     }
     it 'fails when context missing' do
-      expect(layer_without_context).to have(1).errors_on(:context)
+      expect(layer_without_context).to have(2).errors_on(:context)
     end
     it 'fails when context + identifier taken' do
       expect(duplicate).to have(1).errors_on(:identifier)
