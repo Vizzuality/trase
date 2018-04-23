@@ -30,8 +30,9 @@ import {
   TOGGLE_MAP,
   TOGGLE_MAP_DIMENSION,
   TOGGLE_MAP_SIDEBAR_GROUP,
-  TOGGLE_NODES_EXPAND,
   UPDATE_NODE_SELECTION,
+  EXPAND_NODE_SELECTION,
+  COLLAPSE_NODE_SELECTION,
   SET_MAP_DIMENSIONS_DATA
 } from 'actions/tool.actions';
 import groupBy from 'lodash/groupBy';
@@ -54,7 +55,6 @@ import splitLinksByColumn from './helpers/splitLinksByColumn';
 import splitVisibleNodesByColumn from './helpers/splitVisibleNodesByColumn';
 
 export const toolInitialState = {
-  areNodesExpanded: false,
   choropleth: {},
   choroplethLegend: null,
   columns: [],
@@ -120,7 +120,6 @@ const toolReducer = {
       highlightedGeoIds: [],
       selectedNodesIds: [],
       expandedNodesIds: [],
-      areNodesExpanded: false,
       selectedBiomeFilter: { value: 'none' },
       recolorByNodeIds: []
     });
@@ -216,8 +215,7 @@ const toolReducer = {
       selectedNodesData: [],
       selectedNodesGeoIds: [],
       selectedNodesColumnsPos: [],
-      expandedNodesIds: [],
-      areNodesExpanded: false
+      expandedNodesIds: []
     });
   },
   [GET_COLUMNS](state, action) {
@@ -526,22 +524,17 @@ const toolReducer = {
   [SELECT_BASEMAP](state, action) {
     return Object.assign({}, state, { selectedMapBasemap: action.selectedMapBasemap });
   },
-  [TOGGLE_NODES_EXPAND](state, action) {
-    let expandedNodesIds;
-    let selectedNodesIds;
-    if (action.forceExpand === true) {
-      expandedNodesIds = action.forceExpandNodeIds;
-      selectedNodesIds = action.forceExpandNodeIds;
-    } else {
-      expandedNodesIds = state.areNodesExpanded ? [] : state.selectedNodesIds;
-      selectedNodesIds = state.selectedNodesIds;
-    }
-
-    return Object.assign({}, state, {
-      areNodesExpanded: action.forceExpand === true ? true : !state.areNodesExpanded,
-      selectedNodesIds,
-      expandedNodesIds
-    });
+  [COLLAPSE_NODE_SELECTION](state) {
+    return {
+      ...state,
+      expandedNodesIds: []
+    };
+  },
+  [EXPAND_NODE_SELECTION](state) {
+    return {
+      ...state,
+      expandedNodesIds: state.selectedNodesIds
+    };
   },
   [TOGGLE_MAP](state, action) {
     return Object.assign({}, state, {
@@ -576,7 +569,6 @@ const toolReducer = {
 };
 
 const toolReducerTypes = PropTypes => ({
-  areNodesExpanded: PropTypes.bool,
   choropleth: PropTypes.object.isRequired,
   choroplethLegend: PropTypes.object,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,

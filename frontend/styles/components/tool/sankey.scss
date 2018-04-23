@@ -101,6 +101,18 @@
     cursor: pointer;
     z-index: $z-base;
 
+    &.-visible {
+      display: block;
+    }
+
+    &:hover {
+      background-color: transparent;
+      box-shadow: unset;
+      .c-node-menu {
+        display: block;
+      }
+    }
+
     > .icon {
       position: absolute;
       bottom: 0;
@@ -110,33 +122,31 @@
       margin: auto;
     }
 
+    .actions {
+      /* only first visible button will have more-options icon */
+      li:not(.is-hidden) ~ li:not(.is-hidden) {
+        > .icon {
+          display: none;
+        }
+      }
+    }
+
+    .expand-action {
+      &:before {
+        content: attr(data-expand-text);
+      }
+
+      &.-re-expand {
+        &:before {
+          content: attr(data-re-expand-text);
+        }
+      }
+    }
+
     .c-node-menu {
       display: none;
       top: 2px;
       right: 0;
-
-      .expand-action:before {
-        content: attr(data-collapsed-text);
-      }
-    }
-
-    &.-visible {
-      display: block;
-    }
-
-    &.-expanded {
-
-      .expand-action:before {
-        content: attr(data-expanded-text);
-      }
-    }
-
-    &:hover {
-      background-color: transparent;
-      box-shadow: unset;
-      .c-node-menu {
-        display: block;
-      }
     }
   }
 }

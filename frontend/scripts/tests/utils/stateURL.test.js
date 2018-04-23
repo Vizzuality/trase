@@ -8,7 +8,6 @@ const filteredState = {
   detailedView: false,
   selectedNodesIds: [],
   expandedNodesIds: [],
-  areNodesExpanded: false,
   selectedColumnsIds: [],
   selectedMapDimensions: [null, null],
   isMapVisible: false,
@@ -48,8 +47,7 @@ test('filterStateToUrl receives selectedNodesIds and changes to expanded mode', 
   expect(filterStateToURL(newState)).toEqual({
     ...filteredState,
     selectedNodesIds: [587, 440],
-    expandedNodesIds: [587, 440],
-    areNodesExpanded: true
+    expandedNodesIds: [587, 440]
   });
 });
 
@@ -68,7 +66,7 @@ test('rehydrateToolState generic action no location.query.state, no location.sea
 
 test('rehydrateToolState receives query.state', () => {
   const query = {
-    state: { selectedNodesIds: [587, 440], expandedNodesIds: [587, 440], areNodesExpanded: true }
+    state: { selectedNodesIds: [587, 440], expandedNodesIds: [587, 440] }
   };
   expect(rehydrateToolState({ type: LOAD_INITIAL_DATA }, next, { query })).toEqual({
     type: LOAD_INITIAL_DATA,

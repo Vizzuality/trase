@@ -244,13 +244,18 @@ const _setInfo = (store, info, onLinkClick, { nodeId, year }) => {
       state: {
         isMapVisible: true,
         selectedNodesIds: [parseInt(nodeId, 10)],
+        expandedNodesIds: [parseInt(nodeId, 10)],
         selectedYears: [year, year]
       }
     })
   );
   document.querySelector('.js-link-supply-chain').addEventListener('click', () =>
     onLinkClick('tool', {
-      state: { selectedNodesIds: [parseInt(nodeId, 10)], selectedYears: [year, year] }
+      state: {
+        selectedNodesIds: [parseInt(nodeId, 10)],
+        expandedNodesIds: [parseInt(nodeId, 10)],
+        selectedYears: [year, year]
+      }
     })
   );
   document.querySelector('.js-line-title').innerHTML = info.municipality

@@ -1,12 +1,29 @@
 /* eslint-disable no-shadow */
-import { selectNode, highlightNode, toggleNodesExpand, resetState } from 'actions/tool.actions';
+import isEqual from 'lodash/isEqual';
+import isEmpty from 'lodash/isEmpty';
+import {
+  selectNode,
+  highlightNode,
+  collapseNodeSelection,
+  expandNodeSelection,
+  resetState
+} from 'actions/tool.actions';
 import connect from 'connect';
 import Sankey from 'components/tool/sankey.component';
 
-const shouldRepositionExpandButton = (expandedNodesIds, selectedNodesIds, areNodesExpanded) =>
-  areNodesExpanded === false ||
-  expandedNodesIds === undefined ||
-  expandedNodesIds.slice().sort()[0] === selectedNodesIds.slice().sort()[0];
+let lastSelectedNodeId;
+
+const shouldRepositionExpandButton = ({ selectedNodesIds }) => {
+  const lastSelectedNodeChanged = selectedNodesIds[0] !== lastSelectedNodeId;
+  lastSelectedNodeId = selectedNodesIds[0];
+
+  return lastSelectedNodeChanged;
+};
+
+const canExpandSelection = ({ expandedNodesIds, selectedNodesIds }) =>
+  !isEqual([...selectedNodesIds].sort(), [...expandedNodesIds].sort());
+
+const anyOfConditionsDidChange = (...conditions) => conditions.map(c => (!!c).toString()).join('');
 
 // this maps component methods to app state updates
 // keys correspond to method names, values to state prop path
@@ -22,11 +39,7 @@ const mapMethodsToState = state => ({
       detailedView: state.tool.detailedView,
       visibleNodesByColumn: state.tool.visibleNodesByColumn,
       nodesColoredAtColumn: state.tool.nodesColoredAtColumn,
-      shouldRepositionExpandButton: shouldRepositionExpandButton(
-        state.tool.expandedNodesIds,
-        state.tool.selectedNodesIds,
-        state.tool.areNodesExpanded
-      )
+      shouldRepositionExpandButton: shouldRepositionExpandButton(state.tool)
     })
   },
   resizeViewport: {
@@ -36,25 +49,28 @@ const mapMethodsToState = state => ({
       selectedRecolorBy: state.tool.selectedRecolorBy,
       currentQuant: state.tool.currentQuant,
       selectedNodesIds: state.tool.selectedNodesIds,
-      shouldRepositionExpandButton: shouldRepositionExpandButton(
-        state.tool.expandedNodesIds,
-        state.tool.selectedNodesIds,
-        state.tool.areNodesExpanded
-      )
+      shouldRepositionExpandButton: shouldRepositionExpandButton(state.tool)
     })
   },
   selectNodes: {
     _comparedValue: state => state.tool.selectedNodesIds,
     _returnedValue: state => ({
       selectedNodesIds: state.tool.selectedNodesIds,
-      shouldRepositionExpandButton: shouldRepositionExpandButton(
-        state.tool.expandedNodesIds,
-        state.tool.selectedNodesIds,
-        state.tool.areNodesExpanded
-      )
+      shouldRepositionExpandButton: shouldRepositionExpandButton(state.tool)
     })
   },
-  toggleExpandButton: state.tool.areNodesExpanded,
+  toggleExpandActionButton: {
+    _comparedValue: state =>
+      anyOfConditionsDidChange(
+        canExpandSelection(state.tool),
+        isEmpty(state.tool.expandedNodesIds)
+      ),
+    _returnedValue: state => ({
+      isVisible: canExpandSelection(state.tool),
+      isReExpand: !isEmpty(state.tool.expandedNodesIds) && canExpandSelection(state.tool)
+    })
+  },
+  toggleCollapseActionButton: !isEmpty(state.tool.expandedNodesIds),
   highlightNodes: state.tool.highlightedNodesIds,
   translateNodes: {
     _comparedValue: state => state.location.query && state.location.query.lang,
@@ -62,11 +78,7 @@ const mapMethodsToState = state => ({
       selectedRecolorBy: state.tool.selectedRecolorBy,
       currentQuant: state.tool.currentQuant,
       selectedNodesIds: state.tool.selectedNodesIds,
-      shouldRepositionExpandButton: shouldRepositionExpandButton(
-        state.tool.expandedNodesIds,
-        state.tool.selectedNodesIds,
-        state.tool.areNodesExpanded
-      )
+      shouldRepositionExpandButton: shouldRepositionExpandButton(state.tool)
     })
   }
 });
@@ -78,7 +90,8 @@ const mapMethodsToState = state => ({
 const mapViewCallbacksToActions = () => ({
   onNodeClicked: (id, isAggregated) => selectNode(id, isAggregated),
   onNodeHighlighted: (id, isAggregated) => highlightNode(id, isAggregated),
-  onExpandClick: () => toggleNodesExpand(),
+  onExpandClick: () => expandNodeSelection(),
+  onCollapseClick: () => collapseNodeSelection(),
   onClearClick: () => resetState()
 });
 
