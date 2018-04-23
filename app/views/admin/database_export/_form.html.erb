@@ -35,5 +35,5 @@
 <%= form_tag(admin_database_export_call_path, multipart: true) do %>
   <%= submit_tag 'Start database export' %>
 <% end %>
-<p>Please note: this will queue an import and return immediately, but the operation is likely to run in background for a few minutes.</p>
+<p>Please note: this will queue an export and return immediately, but the operation is likely to run in background for a few minutes.</p>
 <p>Status of currently running and errored backround operations can be monitored <%= link_to 'here', sidekiq_web_url %>.</p>
