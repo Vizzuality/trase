@@ -18,7 +18,7 @@ const shouldRepositionExpandButton = ({ expandedNodesIds, selectedNodesIds }) =>
 const canExpandSelection = ({ expandedNodesIds, selectedNodesIds }) =>
   !isEqual([...selectedNodesIds].sort(), [...expandedNodesIds].sort());
 
-const anyOf = (...conditions) => conditions.map(c => (!!c).toString()).join('');
+const anyOfConditionsDidChange = (...conditions) => conditions.map(c => (!!c).toString()).join('');
 
 // this maps component methods to app state updates
 // keys correspond to method names, values to state prop path
@@ -56,7 +56,10 @@ const mapMethodsToState = state => ({
   },
   toggleExpandButton: {
     _comparedValue: state =>
-      anyOf(canExpandSelection(state.tool), isEmpty(state.tool.expandedNodesIds)),
+      anyOfConditionsDidChange(
+        canExpandSelection(state.tool),
+        isEmpty(state.tool.expandedNodesIds)
+      ),
     _returnedValue: state => ({
       isVisible: canExpandSelection(state.tool),
       isReExpand: !isEmpty(state.tool.expandedNodesIds) && canExpandSelection(state.tool)
