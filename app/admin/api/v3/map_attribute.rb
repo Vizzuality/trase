@@ -69,8 +69,8 @@ ActiveAdmin.register Api::V3::MapAttribute, as: 'MapAttribute' do
       row('Country') { |attr| attr.map_attribute_group&.context&.country&.name }
       row('Commodity') { |attr| attr.map_attribute_group&.context&.commodity&.name }
       row :position
-      row('Single dimension buckets', &:dual_layer_buckets_str)
-      row('Dual dimension buckets', &:single_layer_buckets_str)
+      row('Single dimension buckets', &:single_layer_buckets_str)
+      row('Dual dimension buckets', &:dual_layer_buckets_str)
       row :color_scale
       row('Years', &:years_str)
       row :is_disabled
