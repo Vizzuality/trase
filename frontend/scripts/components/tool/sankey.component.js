@@ -144,15 +144,13 @@ export default class {
     const lastSelectedNodeId = nodesIds && nodesIds[0];
 
     // TODO split by columns
-    if (lastSelectedNodeId && lastSelectedNodeId !== this.lastSelectedNodeId) {
+    if (lastSelectedNodeId !== undefined) {
       const lastSelectedNode = this.sankeyColumns
         .selectAll('.sankey-node')
         .filter(node => node.id === lastSelectedNodeId)
         .data()[0];
 
       if (lastSelectedNode) {
-        this.lastSelectedNodeId = lastSelectedNodeId;
-
         this.expandButton.classList.add('-visible');
         this.expandButtonIsVisible = true;
 
@@ -167,7 +165,7 @@ export default class {
         this._repositionExpandButtonScroll();
         this.expandButton.style.left = `${selectedColumnFirstNode.x - 12}px`;
       }
-    } else if (lastSelectedNodeId === undefined) {
+    } else {
       this.expandButtonIsVisible = false;
       this.expandButton.classList.remove('-visible');
     }
