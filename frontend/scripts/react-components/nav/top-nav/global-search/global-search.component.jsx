@@ -95,7 +95,7 @@ export default class GlobalSearch extends Component {
             onInputValueChange={this.onInputValueChange}
             ref={this.setDownshiftRef}
           >
-            {({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => (
+            {({ getInputProps, getItemProps, isOpen, highlightedIndex }) => (
               <div className="search-container" onClick={e => e.stopPropagation()}>
                 <div className="search-bar">
                   <input
@@ -115,7 +115,8 @@ export default class GlobalSearch extends Component {
                         .map((item, row) => (
                           <GlobalSearchResult
                             key={row}
-                            value={inputValue}
+                            value={searchTerm}
+                            isLoading={isLoading}
                             isHighlighted={row === highlightedIndex}
                             item={item}
                             itemProps={getItemProps({ item })}
