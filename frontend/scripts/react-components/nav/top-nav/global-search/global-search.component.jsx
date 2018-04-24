@@ -64,7 +64,7 @@ export default class GlobalSearch extends Component {
   }
 
   render() {
-    const { isLoading, className, searchResults = [], searchTerm } = this.props;
+    const { isLoading, className, searchResults = [], searchTerm, onItemSelected } = this.props;
     const { isSearchOpen } = this.state;
     const noResults = !searchResults.length && !isLoading && !isEmpty(searchTerm);
 
@@ -91,7 +91,7 @@ export default class GlobalSearch extends Component {
         <div className="search-wrapper">
           <Downshift
             itemToString={i => (i === null ? '' : i.name)}
-            onSelect={this.onSelected}
+            onSelect={onItemSelected}
             onInputValueChange={this.onInputValueChange}
             ref={this.setDownshiftRef}
           >
@@ -143,6 +143,7 @@ GlobalSearch.propTypes = {
   className: PropTypes.string,
   isLoading: PropTypes.bool,
   onInputValueChange: PropTypes.func,
+  onItemSelected: PropTypes.func,
   searchResults: PropTypes.array,
   searchTerm: PropTypes.string
 };

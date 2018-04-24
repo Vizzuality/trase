@@ -17,7 +17,7 @@ function GlobalSearchResult({ value, itemProps, isHighlighted, item }) {
       </div>
       <div className="search-node-actions-container">
         <LinkButton
-          className="-medium-large"
+          className="-medium-large -charcoal"
           to={{
             type: 'tool',
             payload: {

@@ -47,7 +47,20 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      onInputValueChange: inputValue => loadSearchResults(inputValue)
+      onInputValueChange: inputValue => loadSearchResults(inputValue),
+      onItemSelected: item =>
+        dispatch({
+          type: 'tool',
+          payload: {
+            query: {
+              state: {
+                selectedContextId: item.contextId,
+                selectedNodesIds: item.nodes.map(i => i.id),
+                expandedNodesIds: item.nodes.map(i => i.id)
+              }
+            }
+          }
+        })
     },
     dispatch
   );
