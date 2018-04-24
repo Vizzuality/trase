@@ -134,13 +134,13 @@ export function loadSearchResults(searchTerm) {
       .then(results => {
         dispatch({
           type: LOAD_SEARCH_RESULTS,
-          payload: results.data
+          payload: { term: searchTerm, results: results.data }
         });
       })
       .catch(() => {
         dispatch({
           type: LOAD_SEARCH_RESULTS,
-          payload: []
+          payload: { term: searchTerm, results: [] }
         });
       });
   };
