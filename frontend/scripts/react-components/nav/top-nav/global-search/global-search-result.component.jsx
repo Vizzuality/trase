@@ -8,7 +8,10 @@ import HighlightTextFragments from 'react-components/shared/highlight-text-fragm
 
 class GlobalSearchResult extends Component {
   shouldComponentUpdate(nextProps) {
-    return !nextProps.isLoading && this.props.isLoading;
+    return (
+      (!nextProps.isLoading && this.props.isLoading) ||
+      nextProps.isHighlighted !== this.props.isHighlighted
+    );
   }
 
   render() {
