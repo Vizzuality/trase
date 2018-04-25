@@ -45,7 +45,9 @@ export default class FilterTooltipComponent extends Component {
 
   setDefaultFilter() {
     const { indicator } = this.props;
-    const op = get(indicator, 'filterOptions.ops[0]', undefined);
+
+    const options = get(indicator, 'filterOptions.ops', []);
+    const op = options.includes('gt') ? 'gt' : options[0];
     const val = get(indicator, 'filterOptions.values[0]', 0);
 
     this.changeFilter({ op, val });

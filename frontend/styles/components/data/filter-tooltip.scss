@@ -25,6 +25,7 @@
 
 .tooltip.filter-tooltip {
   padding: 0;
+  max-width: 500px;
   font-family: $font-family-1;
   background-color: $white;
   color: $charcoal-grey;
@@ -72,6 +73,11 @@
           white-space: nowrap;
           font-family: $font-family-1;
           font-size: $font-size-regular;
+        }
+
+        .dropdown-list {
+          position: absolute;
+          top: 20px;
         }
       }
 
