@@ -34,17 +34,15 @@ export default [
             state.data.exporters.find(elem => elem.id === parseInt(exportersId, 10)).name
         );
       }
-      // TODO: this is now a nested array called filters
-      if (payload.indicators) {
-        payload.indicators = payload.indicators.map(
-          indicatorName =>
-            state.data.indicators.find(elem => elem.name === indicatorName).frontendName
+      // TODO: apply filters values?
+      if (payload.filters) {
+        payload.filters = payload.filters.map(
+          filter => state.data.indicators.find(elem => elem.name === filter.name).frontendName
         );
       }
 
       delete payload.c_ids;
       delete payload.e_ids;
-      delete payload.indicators;
       delete payload.context_id;
       delete payload.file;
       delete payload.type;
@@ -54,10 +52,11 @@ export default [
       const payloadStringComponents = [];
 
       Object.keys(payload).forEach(key => {
-        if (Array.isArray(payload[key])) {
-          payloadStringComponents.push(`${key}=${payload[key].join(',')}`);
+        const value = payload[key];
+        if (value && value.length) {
+          payloadStringComponents.push(`${key}=${value.join(',')}`);
         } else {
-          payloadStringComponents.push(`${key}=${payload[key]}`);
+          payloadStringComponents.push(`${key}=${value}`);
         }
       });
 
