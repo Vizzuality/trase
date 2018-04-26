@@ -1,28 +1,33 @@
 import isFunction from 'lodash/isFunction';
 import GA_TOOL_EVENTS from './tool.events';
 import GA_DATA_EVENTS from './data.events';
+import GA_ROUTER_EVENTS from './router.events';
 
-const GA_EVENT_WHITELIST = [...GA_TOOL_EVENTS, ...GA_DATA_EVENTS];
+const GA_EVENT_WHITELIST = [...GA_TOOL_EVENTS, ...GA_DATA_EVENTS, ...GA_ROUTER_EVENTS];
+
+function createGAEvent(event, action, state) {
+  if (event.hitType === 'pageview') {
+    return {
+      hitType: 'pageview',
+      page: window.location.pathname
+    };
+  }
+
+  return {
+    hitType: 'event',
+    eventCategory: event.category,
+    eventAction: isFunction(event.action) ? event.action(action, state) : event.action,
+    eventLabel: event.getPayload ? event.getPayload(action, state) : undefined
+  };
+}
 
 const googleAnalyticsMiddleware = store => next => action => {
-  if (typeof ga !== 'undefined') {
+  if (typeof window.ga !== 'undefined') {
     const state = store.getState();
-    const gaAction = GA_EVENT_WHITELIST.find(
-      whitelistAction => action.type === whitelistAction.type
-    );
-    if (gaAction) {
-      const gaEvent = {
-        hitType: 'event',
-        eventCategory: gaAction.category
-      };
-      if (isFunction(gaAction.action)) {
-        gaEvent.eventAction = gaAction.action(action, state);
-      } else {
-        gaEvent.eventAction = gaAction.action;
-      }
-      if (gaAction.getPayload) {
-        gaEvent.eventLabel = gaAction.getPayload(action, state);
-      }
+    const event = GA_EVENT_WHITELIST.find(whitelistEvent => action.type === whitelistEvent.type);
+
+    if (event) {
+      const gaEvent = createGAEvent(event, action, state);
       window.ga('send', gaEvent);
     }
   }
