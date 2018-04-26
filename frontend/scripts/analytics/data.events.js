@@ -1,4 +1,3 @@
-import isFunction from 'lodash/isFunction';
 import {
   GA_TRACK_DOWNLOAD_FILE_TYPE,
   GA_TRACK_DOWNLOAD_FILTERS,
@@ -6,7 +5,7 @@ import {
   GA_TRACK_DOWNLOAD_OUTPUT_TYPE
 } from './analytics.actions';
 
-export const GA_ACTION_WHITELIST = [
+export default [
   {
     type: GA_TRACK_DOWNLOAD_FILTERS,
     category: 'Download',
@@ -84,32 +83,3 @@ export const GA_ACTION_WHITELIST = [
     getPayload: action => action.payload
   }
 ];
-
-const googleAnalyticsMiddleware = store => next => action => {
-  if (typeof ga !== 'undefined') {
-    const state = store.getState();
-    const gaAction = GA_ACTION_WHITELIST.find(
-      whitelistAction => action.type === whitelistAction.type
-    );
-    if (gaAction) {
-      const gaEvent = {
-        hitType: 'event',
-        eventCategory: gaAction.category
-      };
-      if (isFunction(gaAction.action)) {
-        gaEvent.eventAction = gaAction.action(action, state);
-      } else {
-        gaEvent.eventAction = gaAction.action;
-      }
-      if (gaAction.getPayload) {
-        gaEvent.eventLabel = gaAction.getPayload(action, state);
-      }
-
-      window.ga('send', gaEvent);
-    }
-  }
-
-  return next(action);
-};
-
-export { googleAnalyticsMiddleware as default };

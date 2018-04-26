@@ -11,9 +11,8 @@ import {
   TOGGLE_MAP,
   UPDATE_NODE_SELECTION
 } from 'actions/tool.actions';
-import isFunction from 'lodash/isFunction';
 
-export const GA_ACTION_WHITELIST = [
+export default [
   {
     type: SET_CONTEXT,
     category: 'Sankey',
@@ -82,31 +81,3 @@ export const GA_ACTION_WHITELIST = [
     getPayload: action => action.contextualLayers.join(', ')
   }
 ];
-
-const googleAnalyticsMiddleware = store => next => action => {
-  if (typeof ga !== 'undefined') {
-    const state = store.getState();
-    const gaAction = GA_ACTION_WHITELIST.find(
-      whitelistAction => action.type === whitelistAction.type
-    );
-    if (gaAction) {
-      const gaEvent = {
-        hitType: 'event',
-        eventCategory: gaAction.category
-      };
-      if (isFunction(gaAction.action)) {
-        gaEvent.eventAction = gaAction.action(action, state);
-      } else {
-        gaEvent.eventAction = gaAction.action;
-      }
-      if (gaAction.getPayload) {
-        gaEvent.eventLabel = gaAction.getPayload(action, state);
-      }
-      window.ga('send', gaEvent);
-    }
-  }
-
-  return next(action);
-};
-
-export { googleAnalyticsMiddleware as default };
