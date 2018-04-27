@@ -42,37 +42,52 @@
   .tooltip-content {
     > .title {
       font-family: $font-family-1;
-      font-size: $font-size-regular;
+      font-size: $font-size-x-regular;
       line-height: 1;
       letter-spacing: -0.6px;
-      height: 32px;
-      padding: 12px 8px;
-      background-color: $egg-shell;
+      height: 40px;
+      padding: 0px 16px;
+      background-color: #fff4d4;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
 
-      .icon {
-        float: right;
+      .clear-filter {
+        color: rgba($charcoal-grey, .5);
         cursor: pointer;
+
+        .icon {
+          margin-left: 5px;
+          color: $charcoal-grey;
+          vertical-align: text-top;
+        }
       }
     }
 
     > .content {
-      padding: 12px 8px;
+      padding: 16px;
+      font-size: $font-size-x-regular;
+      color: rgba($charcoal-grey, .6);
+      line-height: 1.23;
 
       .c-dropdown {
         margin-left: 5px;
         display: inline-block;
+        color: $charcoal-grey;
 
         .dropdown-title {
           padding-right: 17px;
           font-family: $font-family-1;
-          font-size: $font-size-regular;
+          font-size: $font-size-x-regular;
+          font-weight: normal;
         }
 
         .dropdown-item {
           padding: 5px 10px;
           white-space: nowrap;
           font-family: $font-family-1;
-          font-size: $font-size-regular;
+          font-size: $font-size-x-regular;
+          font-weight: normal;
         }
 
         .dropdown-list {

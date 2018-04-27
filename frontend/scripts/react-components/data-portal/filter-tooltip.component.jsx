@@ -181,10 +181,13 @@ export default class FilterTooltipComponent extends Component {
         }}
       >
         <div className="title">
-          FILTER INDICATOR
-          <svg className="icon" onClick={this.handleFilterClearClick}>
-            <use xlinkHref="#icon-delete" />
-          </svg>
+          <div>FILTER INDICATOR</div>
+          <div className="clear-filter" onClick={this.handleFilterClearClick}>
+            DELETE
+            <svg className="icon">
+              <use xlinkHref="#icon-delete" />
+            </svg>
+          </div>
         </div>
         <div className="content">
           {indicator.filterName}
