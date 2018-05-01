@@ -28,6 +28,15 @@
     background-color: rgba($white, 0.3);
   }
 
+  .top-logo {
+    display: none;
+    margin-bottom: 30px;
+
+    @media print {
+      display: block;
+    }
+  }
+
   .c-overall-info {
 
     .stat-item {
