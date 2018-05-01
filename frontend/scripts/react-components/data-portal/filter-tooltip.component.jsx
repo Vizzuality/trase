@@ -45,7 +45,9 @@ export default class FilterTooltipComponent extends Component {
 
   setDefaultFilter() {
     const { indicator } = this.props;
-    const op = get(indicator, 'filterOptions.ops[0]', undefined);
+
+    const options = get(indicator, 'filterOptions.ops', []);
+    const op = options.includes('gt') ? 'gt' : options[0];
     const val = get(indicator, 'filterOptions.values[0]', 0);
 
     this.changeFilter({ op, val });
@@ -179,10 +181,13 @@ export default class FilterTooltipComponent extends Component {
         }}
       >
         <div className="title">
-          FILTER INDICATOR
-          <svg className="icon" onClick={this.handleFilterClearClick}>
-            <use xlinkHref="#icon-delete" />
-          </svg>
+          <div>FILTER INDICATOR</div>
+          <div className="clear-filter" onClick={this.handleFilterClearClick}>
+            DELETE
+            <svg className="icon">
+              <use xlinkHref="#icon-delete" />
+            </svg>
+          </div>
         </div>
         <div className="content">
           {indicator.filterName}
