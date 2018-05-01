@@ -11,15 +11,6 @@ import {
 import connect from 'connect';
 import Sankey from 'components/tool/sankey.component';
 
-let lastSelectedNodeId;
-
-const shouldRepositionExpandButton = ({ selectedNodesIds }) => {
-  const lastSelectedNodeChanged = selectedNodesIds[0] !== lastSelectedNodeId;
-  lastSelectedNodeId = selectedNodesIds[0];
-
-  return lastSelectedNodeChanged;
-};
-
 const canExpandSelection = ({ expandedNodesIds, selectedNodesIds }) =>
   !isEqual([...selectedNodesIds].sort(), [...expandedNodesIds].sort());
 
@@ -38,8 +29,7 @@ const mapMethodsToState = state => ({
       links: state.tool.links,
       detailedView: state.tool.detailedView,
       visibleNodesByColumn: state.tool.visibleNodesByColumn,
-      nodesColoredAtColumn: state.tool.nodesColoredAtColumn,
-      shouldRepositionExpandButton: shouldRepositionExpandButton(state.tool)
+      nodesColoredAtColumn: state.tool.nodesColoredAtColumn
     })
   },
   resizeViewport: {
@@ -48,17 +38,10 @@ const mapMethodsToState = state => ({
       sankeySize: state.app.sankeySize,
       selectedRecolorBy: state.tool.selectedRecolorBy,
       currentQuant: state.tool.currentQuant,
-      selectedNodesIds: state.tool.selectedNodesIds,
-      shouldRepositionExpandButton: shouldRepositionExpandButton(state.tool)
+      selectedNodesIds: state.tool.selectedNodesIds
     })
   },
-  selectNodes: {
-    _comparedValue: state => state.tool.selectedNodesIds,
-    _returnedValue: state => ({
-      selectedNodesIds: state.tool.selectedNodesIds,
-      shouldRepositionExpandButton: shouldRepositionExpandButton(state.tool)
-    })
-  },
+  selectNodes: state.tool.selectedNodesIds,
   toggleExpandActionButton: {
     _comparedValue: state =>
       anyOfConditionsDidChange(
@@ -77,8 +60,7 @@ const mapMethodsToState = state => ({
     _returnedValue: state => ({
       selectedRecolorBy: state.tool.selectedRecolorBy,
       currentQuant: state.tool.currentQuant,
-      selectedNodesIds: state.tool.selectedNodesIds,
-      shouldRepositionExpandButton: shouldRepositionExpandButton(state.tool)
+      selectedNodesIds: state.tool.selectedNodesIds
     })
   }
 });

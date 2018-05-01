@@ -34,7 +34,8 @@ class GlobalSearchResult extends Component {
                 query: {
                   state: {
                     selectedContextId: item.contextId,
-                    selectedNodesIds: item.nodes.map(i => i.id)
+                    selectedNodesIds: item.nodes.map(i => i.id),
+                    expandedNodesIds: item.nodes.map(i => i.id)
                   }
                 }
               }
@@ -51,7 +52,8 @@ class GlobalSearchResult extends Component {
                   state: {
                     isMapVisible: true,
                     selectedContextId: item.contextId,
-                    selectedNodesIds: item.nodes.map(i => i.id)
+                    selectedNodesIds: item.nodes.map(i => i.id),
+                    expandedNodesIds: item.nodes.map(i => i.id)
                   }
                 }
               }
