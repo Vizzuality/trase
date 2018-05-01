@@ -14,15 +14,17 @@ const SEARCH_DEBOUNCE_RATE_IN_MS = 400;
 export default class GlobalSearch extends Component {
   constructor(props) {
     super(props);
-    this.state = { isSearchOpen: false };
+    this.state = { isSearchOpen: false, inputValue: '' };
     this.onOpenClicked = this.onOpenClicked.bind(this);
     this.onCloseClicked = this.onCloseClicked.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
-    this.onInputValueChange = debounce(
-      this.onInputValueChange.bind(this),
+    this.onDownshiftStateChange = this.onDownshiftStateChange.bind(this);
+    this.onItemSelected = this.onItemSelected.bind(this);
+    this.debouncedInputValueChange = debounce(
+      this.debouncedInputValueChange.bind(this),
       SEARCH_DEBOUNCE_RATE_IN_MS
     );
-
+    this.onInputValueChange = this.onInputValueChange.bind(this);
     this.setDownshiftRef = element => {
       this.downshift = element;
     };
@@ -50,11 +52,22 @@ export default class GlobalSearch extends Component {
 
   onCloseClicked(e) {
     if (e) e.stopPropagation();
-    this.setState({ isSearchOpen: false });
+    this.setState({ isSearchOpen: false, inputValue: '' });
+    this.debouncedInputValueChange('');
+  }
+
+  onItemSelected(item) {
+    this.onCloseClicked();
+    this.props.onItemSelected(item);
+  }
+
+  onDownshiftStateChange(state) {
+    if (state.inputValue !== undefined) this.onInputValueChange(state.inputValue);
   }
 
   onInputValueChange(value) {
-    this.props.onInputValueChange(value);
+    this.setState({ inputValue: value });
+    this.debouncedInputValueChange(value);
   }
 
   onKeydown(e) {
@@ -63,9 +76,13 @@ export default class GlobalSearch extends Component {
     }
   }
 
+  debouncedInputValueChange(value) {
+    this.props.onInputValueChange(value);
+  }
+
   render() {
     const { isLoading, className, searchResults = [], searchTerm } = this.props;
-    const { isSearchOpen } = this.state;
+    const { isSearchOpen, inputValue } = this.state;
     const noResults = !searchResults.length && !isLoading && !isEmpty(searchTerm);
 
     if (!isSearchOpen) {
@@ -90,12 +107,17 @@ export default class GlobalSearch extends Component {
         <div className="c-search__veil" onClick={this.onCloseClicked} />
         <div className="search-wrapper">
           <Downshift
-            itemToString={i => (i === null ? '' : i.name)}
-            onSelect={this.onSelected}
-            onInputValueChange={this.onInputValueChange}
+            itemToString={i => {
+              if (i === null) return '';
+              if (typeof i === 'object') return i.name;
+              return i;
+            }}
+            selectedItem={inputValue}
+            onStateChange={this.onDownshiftStateChange}
+            onChange={this.onItemSelected}
             ref={this.setDownshiftRef}
           >
-            {({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => (
+            {({ getInputProps, getItemProps, highlightedIndex }) => (
               <div className="search-container" onClick={e => e.stopPropagation()}>
                 <div className="search-bar">
                   <input
@@ -107,29 +129,29 @@ export default class GlobalSearch extends Component {
                     type="search"
                   />
                 </div>
-                {isOpen &&
-                  !isEmpty(searchTerm) && (
-                    <ul className="search-results">
-                      {searchResults
-                        .slice(0, 10)
-                        .map((item, row) => (
-                          <GlobalSearchResult
-                            key={row}
-                            value={inputValue}
-                            isHighlighted={row === highlightedIndex}
-                            item={item}
-                            itemProps={getItemProps({ item })}
-                          />
-                        ))}
-                      {noResults && (
-                        <li className="c-search-result -no-highlight">
-                          <div className="search-node-text-container">
-                            <span className="search-node-name">No results found</span>
-                          </div>
-                        </li>
-                      )}
-                    </ul>
-                  )}
+                {!isEmpty(searchTerm) && (
+                  <ul className="search-results">
+                    {searchResults
+                      .slice(0, 10)
+                      .map((item, row) => (
+                        <GlobalSearchResult
+                          key={row}
+                          value={searchTerm}
+                          isLoading={isLoading}
+                          isHighlighted={row === highlightedIndex}
+                          item={item}
+                          itemProps={getItemProps({ item })}
+                        />
+                      ))}
+                    {noResults && (
+                      <li className="c-search-result -no-highlight">
+                        <div className="search-node-text-container">
+                          <span className="search-node-name">No results found</span>
+                        </div>
+                      </li>
+                    )}
+                  </ul>
+                )}
               </div>
             )}
           </Downshift>
@@ -143,6 +165,7 @@ GlobalSearch.propTypes = {
   className: PropTypes.string,
   isLoading: PropTypes.bool,
   onInputValueChange: PropTypes.func,
+  onItemSelected: PropTypes.func,
   searchResults: PropTypes.array,
   searchTerm: PropTypes.string
 };

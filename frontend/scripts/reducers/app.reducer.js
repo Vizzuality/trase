@@ -70,7 +70,14 @@ const appReducer = {
     return { ...state, search: { ...state.search, ...action.payload } };
   },
   [LOAD_SEARCH_RESULTS](state, action) {
-    return { ...state, search: { ...state.search, results: action.payload, isLoading: false } };
+    // if current search term is different than the one for results
+    // that means we can ignore those results as not the latest ones
+    if (state.search.term !== action.payload.term) return state;
+
+    return {
+      ...state,
+      search: { ...state.search, results: action.payload.results, isLoading: false }
+    };
   }
 };
 
