@@ -5,11 +5,17 @@ import GA_DATA_EVENTS from './data.events';
 import GA_ROUTER_EVENTS from './router.events';
 
 const GA_EVENT_WHITELIST = [...GA_TOOL_EVENTS, ...GA_DATA_EVENTS, ...GA_ROUTER_EVENTS];
+const TRACK_WITH_QUERY = ['profileActor', 'profilePage'];
 
 function createGAEvent(event, action, state) {
   if (event.hitType === 'pageview') {
-    const prevPath = get(action, 'meta.location.prev.pathname');
-    const currPath = get(action, 'meta.location.current.pathname');
+    let prevPath = get(action, 'meta.location.prev.pathname');
+    let currPath = get(action, 'meta.location.current.pathname');
+
+    if (TRACK_WITH_QUERY.includes(action.type)) {
+      prevPath += `?${get(action, 'meta.location.prev.search')}`;
+      currPath += `?${get(action, 'meta.location.current.search')}`;
+    }
 
     // do not track redirects to the same page
     if (prevPath === currPath) return null;
