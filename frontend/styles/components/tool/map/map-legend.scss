@@ -75,8 +75,8 @@
     span {
       position: absolute;
       top: 22px;
-      left: 22px;
       right: 0;
+      transform: translateX(50%);
       margin: auto;
       font-size: 10px;
       line-height: normal;
@@ -283,6 +283,7 @@
         span {
           left: 0;
           top: 14px;
+          transform: none;
         }
       }
 
