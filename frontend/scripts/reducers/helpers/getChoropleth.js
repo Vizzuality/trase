@@ -10,7 +10,10 @@ const _shortenTitle = title => {
   return [title.slice(0, 34), title.slice(-12)].join('(…)');
 };
 
-const generateColorScale = (baseColorScale, length) => chroma.scale(baseColorScale).colors(length);
+const generateColorScale = (baseColorScale, length) => {
+  if (length === baseColorScale.length) return baseColorScale;
+  return chroma.scale(baseColorScale).colors(length);
+};
 
 export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensions, forceEmpty) {
   const uids = compact(selectedMapDimensionsUids);

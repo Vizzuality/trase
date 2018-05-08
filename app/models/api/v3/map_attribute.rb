@@ -31,12 +31,15 @@ module Api
       include Api::V3::AssociatedAttributes
 
       COLOR_SCALE = %w(
-        bluered
-        green
         blue
+        bluered
+        bluered8
+        green
+        greenblue
+        greenred
+        greenred12
         red
         redblue
-        greenblue
       ).freeze
 
       belongs_to :map_attribute_group
