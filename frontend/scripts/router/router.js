@@ -57,7 +57,7 @@ const config = {
   })
 };
 
-const routes = {
+export const routes = {
   home: {
     path: '/',
     page: 'home',
