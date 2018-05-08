@@ -9,7 +9,8 @@ import routeSubscriber from './router/route-subscriber';
 import * as appReducers from './store';
 import { register, unregister } from './worker';
 
-const middlewares = [analyticsMiddleware, thunk, router.middleware, toolUrlStateMiddleware];
+// analytics middleware has to be after router.middleware
+const middlewares = [thunk, router.middleware, toolUrlStateMiddleware, analyticsMiddleware];
 
 window.liveSettings = TRANSIFEX_API_KEY && {
   api_key: TRANSIFEX_API_KEY,

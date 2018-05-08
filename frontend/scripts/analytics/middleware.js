@@ -1,4 +1,5 @@
 import isFunction from 'lodash/isFunction';
+import get from 'lodash/get';
 import GA_TOOL_EVENTS from './tool.events';
 import GA_DATA_EVENTS from './data.events';
 import GA_ROUTER_EVENTS from './router.events';
@@ -7,9 +8,15 @@ const GA_EVENT_WHITELIST = [...GA_TOOL_EVENTS, ...GA_DATA_EVENTS, ...GA_ROUTER_E
 
 function createGAEvent(event, action, state) {
   if (event.hitType === 'pageview') {
+    const prevPath = get(action, 'meta.location.prev.pathname');
+    const currPath = get(action, 'meta.location.current.pathname');
+
+    // do not track redirects to the same page
+    if (prevPath === currPath) return null;
+
     return {
       hitType: 'pageview',
-      page: window.location.pathname
+      page: currPath
     };
   }
 
@@ -28,7 +35,10 @@ const googleAnalyticsMiddleware = store => next => action => {
 
     if (event) {
       const gaEvent = createGAEvent(event, action, state);
-      window.ga('send', gaEvent);
+
+      if (gaEvent) {
+        window.ga('send', gaEvent);
+      }
     }
   }
 
