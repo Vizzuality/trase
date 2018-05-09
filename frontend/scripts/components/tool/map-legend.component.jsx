@@ -1,3 +1,7 @@
+import ReactDOMServer from 'react-dom/server';
+import React from 'react';
+
+import ChoroArrow from 'react-components/tool/choro-arrow.component';
 import LegendChoroTemplate from 'templates/tool/map/legend-choro.ejs';
 import LegendContextTemplate from 'templates/tool/map/legend-context.ejs';
 import 'styles/components/tool/map/map-legend.scss';
@@ -113,6 +117,16 @@ export default class {
     this.currentBuckets = Array.prototype.slice
       .call(this.choro.getElementsByClassName('bucket'))
       .concat(Array.prototype.slice.call(this.choro.getElementsByClassName('bullet')));
+
+    const choroArrow = document.querySelector('.js-choro-arrow');
+
+    if (!choroplethLegend.isBivariate) {
+      choroArrow.innerHTML = ReactDOMServer.renderToStaticMarkup(
+        <ChoroArrow ticks={choroplethLegend.bucket[0].length} />
+      );
+    } else {
+      choroArrow.innerHTML = '';
+    }
   }
 
   _renderContext(layers) {

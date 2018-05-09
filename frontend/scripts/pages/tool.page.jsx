@@ -80,6 +80,7 @@ export const unmount = () => {
   evManager.clearEventListeners();
   unmountComponentAtNode(document.getElementById('js-tool-nav-react'));
   unmountComponentAtNode(document.getElementById('js-columns-selector-react'));
+  unmountComponentAtNode(document.getElementById('js-arrow'));
   document.querySelector('body').classList.remove('-overflow-hidden');
   containers.forEach(container => container.remove());
 };

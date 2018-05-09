@@ -137,13 +137,12 @@
       text-transform: uppercase;
     }
 
-    .icon-unidimensional-legend-arrows {
+    .unidimensional-legend-arrow {
       display: block;
       position: absolute;
       width: 45%;
-      height: 6px;
       right: 10px;
-      bottom: 18px;
+      bottom: 14px;
     }
 
     .icon-bidimensional-legend-arrows {
@@ -232,7 +231,7 @@
         }
       }
 
-      .icon-unidimensional-legend-arrows {
+      .unidimensional-legend-arrow {
         display: none;
       }
 

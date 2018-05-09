@@ -1,0 +1,14 @@
+@import '../../../settings';
+
+.choro-arrow {
+  line {
+    stroke: $charcoal-grey;
+    opacity: .5;
+  }
+
+  .arrow-ticks {
+    line {
+      opacity: .3;
+    }
+  }
+}
