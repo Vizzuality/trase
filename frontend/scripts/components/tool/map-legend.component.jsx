@@ -103,12 +103,17 @@ export default class {
   }
 
   _renderChoro(choroplethLegend) {
-    const cssClass = choroplethLegend.isBivariate ? '-bidimensional' : '-horizontal';
+    const cssClasses = [];
+    cssClasses.push(choroplethLegend.isBivariate ? '-bidimensional' : '-horizontal');
+
+    if (!choroplethLegend.isBivariate && choroplethLegend.bucket[0].length >= 7) {
+      cssClasses.push('-wide');
+    }
 
     this.choro.innerHTML = LegendChoroTemplate({
       title: choroplethLegend.titles,
       colors: choroplethLegend.colors,
-      cssClass,
+      cssClass: cssClasses.join(' '),
       bucket: choroplethLegend.bucket,
       isBivariate: choroplethLegend.isBivariate,
       abbreviateNumber
