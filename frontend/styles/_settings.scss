@@ -137,12 +137,6 @@ $recolorby-linear-red-blue-2: #9FCAE1;
 $recolorby-linear-red-blue-1: #5488C0;
 $recolorby-linear-red-blue-0: #246AB6;
 
-$choro-red-blue-toned-down-0: #E54935;
-$choro-red-blue-toned-down-1: #FFBD78;
-$choro-red-blue-toned-down-2: #FFFECC;
-$choro-red-blue-toned-down-3: #C2DFED;
-$choro-red-blue-toned-down-4: #79A8D0;
-
 $recolorby-percentual-yellow-green-0: #ffc;
 $recolorby-percentual-yellow-green-1: #c2e699;
 $recolorby-percentual-yellow-green-2: #78c679;
@@ -163,13 +157,6 @@ $recolorby-percentual-green-red-9: #d73027;
 $recolorby-percentual-green-red-10: #a50026;
 $recolorby-percentual-green-red-11: #6f001a;
 
-$choro-red-green-toned-down-0: #E54935;
-$choro-red-green-toned-down-1: #FFBD78;
-$choro-red-green-toned-down-2: #FFFECC;
-$choro-red-green-toned-down-3: #B0DE82;
-$choro-red-green-toned-down-4: #70C67A;
-
-
 $recolorby-colors: $recolorby-qual-thematic-amazonia, $recolorby-qual-thematic-cerrado, $recolorby-qual-thematic-mata-atlantica, $recolorby-qual-thematic-caatinga, $recolorby-qual-thematic-pampa, $recolorby-qual-thematic-pantanal, $recolorby-stars-red-blue-0, $recolorby-stars-red-blue-1, $recolorby-stars-red-blue-2, $recolorby-stars-red-blue-3, $recolorby-stars-red-blue-4, $recolorby-stars-red-blue-5, $recolorby-qual-yes-no-yes, $recolorby-qual-yes-no-no, $recolorby-linear-red-blue-0, $recolorby-linear-red-blue-1, $recolorby-linear-red-blue-2, $recolorby-linear-red-blue-3, $recolorby-linear-red-blue-4, $recolorby-linear-red-blue-5, $recolorby-linear-red-blue-6, $recolorby-linear-red-blue-7, $recolorby-percentual-yellow-green-0, $recolorby-percentual-yellow-green-1, $recolorby-percentual-yellow-green-2, $recolorby-percentual-yellow-green-3, $recolorby-percentual-yellow-green-4, $recolorby-percentual-green-red-0, $recolorby-percentual-green-red-1, $recolorby-percentual-green-red-2, $recolorby-percentual-green-red-3, $recolorby-percentual-green-red-4, $recolorby-percentual-green-red-5, $recolorby-percentual-green-red-6, $recolorby-percentual-green-red-7, $recolorby-percentual-green-red-8, $recolorby-percentual-green-red-9, $recolorby-percentual-green-red-10, $recolorby-percentual-green-red-11;
 
 $recolorby-colors-names: '-recolorby-qual-thematic-amazonia', '-recolorby-qual-thematic-cerrado', '-recolorby-qual-thematic-mata-atlantica', '-recolorby-qual-thematic-caatinga', '-recolorby-qual-thematic-pampa', '-recolorby-qual-thematic-pantanal', '-recolorby-stars-red-blue-0', '-recolorby-stars-red-blue-1', '-recolorby-stars-red-blue-2', '-recolorby-stars-red-blue-3', '-recolorby-stars-red-blue-4', '-recolorby-stars-red-blue-5', '-recolorby-qual-yes-no-yes', '-recolorby-qual-yes-no-no', '-recolorby-linear-red-blue-0', '-recolorby-linear-red-blue-1', '-recolorby-linear-red-blue-2', '-recolorby-linear-red-blue-3', '-recolorby-linear-red-blue-4', '-recolorby-linear-red-blue-5', '-recolorby-linear-red-blue-6', '-recolorby-linear-red-blue-7', '-recolorby-percentual-yellow-green-0', '-recolorby-percentual-yellow-green-1', '-recolorby-percentual-yellow-green-2', '-recolorby-percentual-yellow-green-3', '-recolorby-percentual-yellow-green-4', '-recolorby-percentual-green-red-0', '-recolorby-percentual-green-red-1', '-recolorby-percentual-green-red-2', '-recolorby-percentual-green-red-3', '-recolorby-percentual-green-red-4', '-recolorby-percentual-green-red-5', '-recolorby-percentual-green-red-6', '-recolorby-percentual-green-red-7', '-recolorby-percentual-green-red-8', '-recolorby-percentual-green-red-9', '-recolorby-percentual-green-red-10', '-recolorby-percentual-green-red-11';
@@ -182,40 +169,13 @@ $recolorgroup-colors-names: '-recolorgroup-1', '-recolorgroup-2', '-recolorgroup
 
 // choropleth
 $ch-zero: $white;
+$ch-default: $gray;
 
 $ch-red-0: #F5EEE3;
 $ch-red-1: #F5B7AD;
 $ch-red-2: #EF4F60;
 $ch-red-3: #B41728;
 $ch-red-4: #4F0008;
-
-$ch-blue-0: #EAF2EB;
-$ch-blue-1: #A1D9D5;
-$ch-blue-2: #8DB6CA;
-$ch-blue-3: #3881A4;
-$ch-blue-4: #06425F;
-
-$ch-bi-0-0: #F6F5ED;
-$ch-bi-0-1: #CFE7DF;
-$ch-bi-0-2: #A4D2CF;
-$ch-bi-0-3: #8DB6CA;
-$ch-bi-1-0: #F5D0B9;
-$ch-bi-1-1: #C6C6B9;
-$ch-bi-1-2: #91B4B5;
-$ch-bi-1-3: #7F90A4;
-$ch-bi-2-0: #F5928D;
-$ch-bi-2-1: #C18686;
-$ch-bi-2-2: #84747A;
-$ch-bi-2-3: #635B69;
-$ch-bi-3-0: #F65E6E;
-$ch-bi-3-1: #C55966;
-$ch-bi-3-2: #864F57;
-$ch-bi-3-3: #443537;
-
-$ch-no-meta: $gray;
-$ch-no-meta-layer: $gray;
-$ch-default: $gray;
-
 
 // profile choropleth
 // For now we'll use the same color scheme as in the tool, when we include more buckets this has to change.
@@ -230,56 +190,9 @@ $ch-profile-red-6: $ch-red-4; // #790916;
 $ch-profile-red-7: $ch-red-4; // #4e0008;
 
 $choropleth-colors: (
-        ch-red-0: $ch-red-0,
-        ch-red-1: $ch-red-1,
-        ch-red-2: $ch-red-2,
-        ch-red-3: $ch-red-3,
-        ch-red-4: $ch-red-4,
-        ch-blue-0: $ch-blue-0,
-        ch-blue-1: $ch-blue-1,
-        ch-blue-2: $ch-blue-2,
-        ch-blue-3: $ch-blue-3,
-        ch-blue-4: $ch-blue-4,
-        ch-bi-0-0: $ch-bi-0-0,
-        ch-bi-0-1: $ch-bi-0-1,
-        ch-bi-0-2: $ch-bi-0-2,
-        ch-bi-0-3: $ch-bi-0-3,
-        ch-bi-1-0: $ch-bi-1-0,
-        ch-bi-1-1: $ch-bi-1-1,
-        ch-bi-1-2: $ch-bi-1-2,
-        ch-bi-1-3: $ch-bi-1-3,
-        ch-bi-2-0: $ch-bi-2-0,
-        ch-bi-2-1: $ch-bi-2-1,
-        ch-bi-2-2: $ch-bi-2-2,
-        ch-bi-2-3: $ch-bi-2-3,
-        ch-bi-3-0: $ch-bi-3-0,
-        ch-bi-3-1: $ch-bi-3-1,
-        ch-bi-3-2: $ch-bi-3-2,
-        ch-bi-3-3: $ch-bi-3-3,
-        recolorby-percentual-yellow-green-0: $recolorby-percentual-yellow-green-0,
-        recolorby-percentual-yellow-green-1: $recolorby-percentual-yellow-green-1,
-        recolorby-percentual-yellow-green-2: $recolorby-percentual-yellow-green-2,
-        recolorby-percentual-yellow-green-3: $recolorby-percentual-yellow-green-3,
-        recolorby-percentual-yellow-green-4: $recolorby-percentual-yellow-green-4,
-        recolorby-linear-red-blue-7: $recolorby-linear-red-blue-7,
-        recolorby-linear-red-blue-6: $recolorby-linear-red-blue-6,
-        recolorby-linear-red-blue-5: $recolorby-linear-red-blue-5,
-        recolorby-linear-red-blue-3: $recolorby-linear-red-blue-3,
-        recolorby-linear-red-blue-1: $recolorby-linear-red-blue-1,
-        recolorby-linear-red-blue-0: $recolorby-linear-red-blue-0,
-        choro-red-blue-toned-down-0: $choro-red-blue-toned-down-0,
-        choro-red-blue-toned-down-1: $choro-red-blue-toned-down-1,
-        choro-red-blue-toned-down-2: $choro-red-blue-toned-down-2,
-        choro-red-blue-toned-down-3: $choro-red-blue-toned-down-3,
-        choro-red-blue-toned-down-4: $choro-red-blue-toned-down-4,
-        recolorby-percentual-green-red-0: $recolorby-percentual-green-red-0,
-        recolorby-percentual-green-red-2: $recolorby-percentual-green-red-2,
-        recolorby-percentual-green-red-5: $recolorby-percentual-green-red-5,
-        recolorby-percentual-green-red-8: $recolorby-percentual-green-red-8,
-        recolorby-percentual-green-red-10: $recolorby-percentual-green-red-10,
-        choro-red-green-toned-down-0: $choro-red-green-toned-down-0,
-        choro-red-green-toned-down-1: $choro-red-green-toned-down-1,
-        choro-red-green-toned-down-2: $choro-red-green-toned-down-2,
-        choro-red-green-toned-down-3: $choro-red-green-toned-down-3,
-        choro-red-green-toned-down-4: $choro-red-green-toned-down-4
+  ch-red-0: $ch-red-0,
+  ch-red-1: $ch-red-1,
+  ch-red-2: $ch-red-2,
+  ch-red-3: $ch-red-3,
+  ch-red-4: $ch-red-4
 )
