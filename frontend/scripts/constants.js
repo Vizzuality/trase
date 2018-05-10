@@ -67,7 +67,6 @@ export const CHOROPLETH_COLORS = {
     '#E5F5F9',
     '#FFFECC',
     '#FFE6A4',
-    '#FFE6A4',
     '#FFA16F',
     '#E54935'
   ],
