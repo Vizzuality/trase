@@ -34,11 +34,6 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
   const isBivariate = selectedMapDimensions.length === 2;
   const isEmpty = selectedMapDimensions.length === 0;
 
-  // Hack for invalid API value
-  if (selectedMapDimension.colorScale === 'greenblue') {
-    selectedMapDimension.colorScale = 'greenred';
-  }
-
   const bucket = selectedMapDimensions.map(
     d => (isBivariate ? [...d.dualLayerBuckets] : [...d.singleLayerBuckets])
   );
