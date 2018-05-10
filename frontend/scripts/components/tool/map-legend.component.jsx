@@ -127,7 +127,7 @@ export default class {
 
     if (!choroplethLegend.isBivariate) {
       choroArrow.innerHTML = ReactDOMServer.renderToStaticMarkup(
-        <ChoroArrow ticks={choroplethLegend.bucket[0].length} />
+        <ChoroArrow ticks={choroplethLegend.bucket[0].length} width={choroArrow.clientWidth} />
       );
     } else {
       choroArrow.innerHTML = '';
