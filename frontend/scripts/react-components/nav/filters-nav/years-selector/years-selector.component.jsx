@@ -62,6 +62,7 @@ class YearsSelector extends Component {
   getClassName(year) {
     const { start, end, hovered } = this.state;
     const { years } = this.props;
+    const maxYear = Math.max(...years);
 
     const [startYear, endYear] = [start || hovered, end || hovered].sort();
 
@@ -70,14 +71,30 @@ class YearsSelector extends Component {
     if (range(startYear, (endYear || startYear) + 1).includes(year)) {
       classes.push('active');
     }
-    if (year === startYear && year < Math.max(...years)) {
+    if (year === startYear && year < maxYear) {
       classes.push('start');
     }
-    if ((year === endYear && start) || (startYear === year && year === Math.max(...years))) {
+    if ((year === endYear && start) || (startYear === year && year === maxYear)) {
       classes.push('end');
     }
 
     return classes.join(' ');
+  }
+
+  renderFooter() {
+    const { start, end } = this.state;
+
+    if (start && end) return null;
+
+    let text = 'Select a start and end year';
+
+    if (start && !end) text = 'Select an end year';
+
+    return (
+      <div className="years-selector-footer">
+        <p>{text}</p>
+      </div>
+    );
   }
 
   render() {
@@ -91,25 +108,24 @@ class YearsSelector extends Component {
     } = this.props;
     const [selectedStart, selectedEnd] = selectedYears;
     const { start, end } = this.state;
-    const title =
-      selectedStart === selectedEnd ? (
-        <span>{selectedStart}</span>
-      ) : (
-        <span>
-          {selectedStart}&thinsp;-&thinsp;{selectedEnd}
-        </span>
-      );
+    const isOneYearSelected = selectedStart === selectedEnd;
+    const isSelected = start && end;
+    const title = isOneYearSelected ? (
+      <span>{selectedStart}</span>
+    ) : (
+      <span>
+        {selectedStart}&thinsp;-&thinsp;{selectedEnd}
+      </span>
+    );
 
     return (
       <div className={cx('js-dropdown', className)} onClick={() => onToggle(id)}>
         <div className={cx('c-dropdown', dropdownClassName)}>
-          <span className="dropdown-label">
-            year{selectedStart !== selectedEnd && <span>s</span>}
-          </span>
+          <span className="dropdown-label">year{!isOneYearSelected && <span>s</span>}</span>
           <span className="dropdown-title">{title}</span>
           <FiltersDropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
             <div className="dropdown-list" onClick={e => e.stopPropagation()}>
-              <div className={cx('c-years-selector', start && end ? 'selected' : 'selecting')}>
+              <div className={cx('c-years-selector', isSelected ? 'selected' : 'selecting')}>
                 <div className="years-selector-content">
                   {years.map(year => (
                     <div
@@ -127,9 +143,7 @@ class YearsSelector extends Component {
                     </div>
                   ))}
                 </div>
-                <div className="years-selector-footer">
-                  <p>Select year</p>
-                </div>
+                {this.renderFooter()}
               </div>
             </div>
           </FiltersDropdown>
