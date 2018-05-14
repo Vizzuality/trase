@@ -32,6 +32,7 @@ $active-color: $charcoal-grey;
   .button {
     height: $button-height;
     width: $button-height;
+    cursor: pointer;
     border: solid 2px $not-active-color;
     border-radius: 50%;
     display: flex;

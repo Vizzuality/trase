@@ -39,7 +39,7 @@ class YearsSelector extends Component {
 
   setActive(year) {
     const { start, end } = this.state;
-    const { onSelected } = this.props;
+    const { onSelected, onToggle } = this.props;
 
     if (start !== null) {
       if (end !== null) {
@@ -49,6 +49,7 @@ class YearsSelector extends Component {
         const newEnd = Math.max(start, year);
         this.setState({ start: newStart, end: newEnd });
         onSelected([newStart, newEnd]);
+        onToggle(id);
       }
     } else {
       this.setState({ start: year });
