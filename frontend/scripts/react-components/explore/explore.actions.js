@@ -8,8 +8,10 @@ export const getTopNodesKey = (ctx, col, start, end) =>
   ctx && col && start && end ? `CTX${ctx}_COL${col}_START${start}_END${end}` : null;
 
 export const setExploreTopNodes = column_id => (dispatch, getState) => {
-  const { selectedContext, selectedYears: [start_year, end_year] } = getState().tool;
-  const { topNodes } = getState().explore;
+  const state = getState();
+  const { selectedContext } = state.app;
+  const { selectedYears: [start_year, end_year] } = state.tool;
+  const { topNodes } = state.explore;
   const params = {
     start_year,
     end_year,

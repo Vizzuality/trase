@@ -1,34 +1,19 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import capitalize from 'lodash/capitalize';
 import sortBy from 'lodash/sortBy';
 
 import SentenceSelector from 'react-components/home/sentence-selector/sentence-selector.component';
-import { selectContext } from 'actions/tool.actions';
+import { selectContextById } from 'actions/app.actions';
 
 function mapStateToProps(state) {
-  const contexts = sortBy(
-    state.tool.contexts.map(c => ({
-      id: c.id,
-      countryName: capitalize(c.countryName),
-      commodityName: c.commodityName.toLowerCase(),
-      isDefault: c.isDefault
-    })),
-    ['commodityName', 'countryName']
-  );
+  const contexts = sortBy(state.app.contexts, ['commodityName', 'countryName']);
 
   return {
-    contexts
+    contexts,
+    selectedContext: state.app.selectedContext
   };
 }
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      selectContext,
-      resetContext: () => selectContext(null, { isInitialContextSet: true })
-    },
-    dispatch
-  );
+const mapDispatchToProps = dispatch => bindActionCreators({ selectContextById }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SentenceSelector);

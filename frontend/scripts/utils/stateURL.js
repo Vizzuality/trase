@@ -1,46 +1,86 @@
 /* eslint-disable */
 import { TOGGLE_DROPDOWN } from 'actions/app.actions';
-import { HIGHLIGHT_NODE, LOAD_INITIAL_DATA } from 'actions/tool.actions';
+import { HIGHLIGHT_NODE } from 'actions/tool.actions';
 import isEmpty from 'lodash/isEmpty';
-import pick from 'lodash/pick';
 import pickBy from 'lodash/pickBy';
 import isEqual from 'lodash/isEqual';
 import qs from 'qs';
-import { redirect } from 'redux-first-router';
+import { LOAD_STATE_FROM_URL } from 'scripts/actions/app.actions';
+import { getContextById } from 'scripts/reducers/helpers/contextHelper';
 
-const URL_STATE_PROPS = [
-  'selectedContextId',
-  'selectedYears',
-  'detailedView',
-  'selectedNodesIds',
-  'expandedNodesIds',
-  'areNodesExpanded',
-  'selectedColumnsIds',
-  'selectedMapDimensions',
-  'isMapVisible',
-  'mapView',
-  'expandedMapSidebarGroupsIds',
-  'selectedMapContextualLayers',
-  'selectedMapBasemap'
-];
+// remove all params that are now in the state
+const removeEmptyParams = params => pickBy(params, param => typeof param !== 'undefined');
+
+const appStateToURLParams = state => {
+  if (isEmpty(state.app) || isEmpty(state.tool)) {
+    return {};
+  }
+
+  return {
+    selectedContextId: state.app.selectedContext ? state.app.selectedContext.id : null,
+    selectedYears: state.tool.selectedYears,
+    detailedView: state.tool.detailedView,
+    selectedNodesIds: state.tool.selectedNodesIds,
+    expandedNodesIds: state.tool.expandedNodesIds,
+    areNodesExpanded: state.tool.areNodesExpanded,
+    selectedColumnsIds: state.tool.selectedColumnsIds,
+    selectedMapDimensions: state.tool.selectedMapDimensions,
+    isMapVisible: state.tool.isMapVisible,
+    mapView: state.tool.mapView,
+    expandedMapSidebarGroupsIds: state.tool.expandedMapSidebarGroupsIds,
+    selectedMapContextualLayers: state.tool.selectedMapContextualLayers,
+    selectedMapBasemap: state.tool.selectedMapBasemap,
+    selectedResizeByName: state.tool.selectedResizeBy
+      ? state.tool.selectedResizeBy.name
+      : state.tool.selectedResizeByName,
+    selectedRecolorByName: state.tool.selectedRecolorBy
+      ? state.tool.selectedRecolorBy.name
+      : state.tool.selectedRecolorByName,
+    selectedBiomeFilterName: state.tool.selectedBiomeFilter
+      ? state.tool.selectedBiomeFilter.name
+      : state.tool.selectedBiomeFilterName
+  };
+};
+
+const URLParamsToAppState = (params, state) => {
+  const appReducerState = removeEmptyParams({
+    initialSelectedContextIdFromURL: params.selectedContextId
+  });
+
+  if (typeof params.selectedContextId !== 'undefined' && state.app.contexts.length > 0) {
+    appReducerState.selectedContext = getContextById(state, params.selectedContextId);
+  }
+
+  const toolReducerState = removeEmptyParams({
+    selectedYears: params.selectedYears,
+    detailedView: params.detailedView,
+    selectedNodesIds: params.selectedNodesIds,
+    expandedNodesIds: params.expandedNodesIds,
+    areNodesExpanded: params.areNodesExpanded,
+    selectedColumnsIds: params.selectedColumnsIds,
+    selectedMapDimensions: params.selectedMapDimensions,
+    isMapVisible: params.isMapVisible,
+    mapView: params.mapView,
+    expandedMapSidebarGroupsIds: params.expandedMapSidebarGroupsIds,
+    selectedMapContextualLayers: params.selectedMapContextualLayers,
+    selectedMapBasemap: params.selectedMapBasemap,
+    selectedResizeByName: params.selectedResizeByName,
+    selectedRecolorByName: params.selectedRecolorByName,
+    selectedBiomeFilterName: params.selectedBiomeFilterName
+  });
+
+  return {
+    app: appReducerState,
+    tool: toolReducerState
+  };
+};
 
 export const filterStateToURL = state => {
   if (isEmpty(state)) {
     return {};
   }
 
-  const stateToSave = pick(state, URL_STATE_PROPS);
-
-  stateToSave.selectedResizeByName = state.selectedResizeBy
-    ? state.selectedResizeBy.name
-    : state.selectedResizeByName;
-  stateToSave.selectedRecolorByName = state.selectedRecolorBy
-    ? state.selectedRecolorBy.name
-    : state.selectedRecolorByName;
-  stateToSave.selectedBiomeFilterName = state.selectedBiomeFilter
-    ? state.selectedBiomeFilter.name
-    : state.selectedBiomeFilterName;
-  return stateToSave;
+  return appStateToURLParams(state);
 };
 
 export const encodeStateToURL = state => {
@@ -52,15 +92,10 @@ export const decodeStateFromURL = state => {
   return USE_PLAIN_URL_STATE ? JSON.parse(state) : JSON.parse(atob(state));
 };
 
-// remove all params that are now in the state
-const removeEmptyParams = (params, state) =>
-  pickBy({ ...params, state }, (v, param) => param !== '' || typeof param !== 'undefined');
-
 export const parse = url => {
   const params = qs.parse(url);
   if (params.state) {
-    const state = decodeStateFromURL(params.state);
-    return removeEmptyParams(params, state);
+    return decodeStateFromURL(params.state);
   }
   return params;
 };
@@ -73,47 +108,46 @@ export const stringify = params => {
   return qs.stringify(params);
 };
 
-export const rehydrateToolState = (action, next, location) => {
-  const decoratedAction = { ...action };
+export const rehydrateAppStateFromToolURL = (action, next, state) => {
   let urlState = null; // prev state
-  if (location.query && location.query.state) {
-    // urlState is defined when entering the app with query params set
-    urlState = { ...location.query.state };
-  } else if (location.search) {
-    // sometimes prevLocation.search is defined but urlState isn't when navigating from within the app
-    urlState = parse(location.search).state;
+  if (action.payload && action.payload.query && action.payload.query.state) {
+    urlState = { ...action.payload.query.state };
+  } else if (action && action.meta && action.meta.query) {
+    urlState = { ...action.meta.query };
   }
-  if (action.type === LOAD_INITIAL_DATA && urlState) {
-    // need to rehydrate state
-    decoratedAction.payload = urlState;
+  // need to rehydrate state
+  if (urlState) {
+    next({
+      type: LOAD_STATE_FROM_URL,
+      payload: URLParamsToAppState(urlState, state)
+    });
   }
-  return next(decoratedAction);
+  return next(action);
 };
 
 export const toolUrlStateMiddleware = store => next => action => {
   const prevLocation = store.getState().location;
-  const prevUrlState = filterStateToURL(store.getState().tool);
-  // if highlight action bail
-  if ([HIGHLIGHT_NODE, TOGGLE_DROPDOWN].includes(action.type) || prevLocation.type !== 'tool') {
+  const prevUrlState = filterStateToURL(store.getState());
+  if (
+    [HIGHLIGHT_NODE, TOGGLE_DROPDOWN].includes(action.type) ||
+    (prevLocation.prev.type !== '' && prevLocation.type !== 'tool' && action.type !== 'tool')
+  ) {
+    //Not in the sankey, or actions are not part of the URL updating ones. Bail
     return next(action);
   }
-  const result = rehydrateToolState(action, next, prevLocation);
-  const { location, tool } = store.getState(); // next state
 
-  const newUrlState = filterStateToURL(tool);
+  const result = rehydrateAppStateFromToolURL(action, next, store.getState());
+  const state = store.getState();
+  const { location } = state; // next state
+
+  const newUrlState = filterStateToURL(state);
   const areNotEqual = !isEqual(newUrlState, prevUrlState);
-  const conditions = [
-    location.type === 'tool',
-    action.type !== 'tool',
-    action.type !== LOAD_INITIAL_DATA,
-    areNotEqual
-  ];
+  const conditions = [location.type === 'tool', areNotEqual];
   if (!conditions.includes(false)) {
-    store.dispatch(
-      redirect({
-        type: 'tool',
-        payload: { query: removeEmptyParams(location.query, newUrlState) }
-      })
+    window.history.replaceState(
+      newUrlState,
+      'TRASE - ' + location.type,
+      '/flows?' + stringify({ state })
     );
   }
   return result;

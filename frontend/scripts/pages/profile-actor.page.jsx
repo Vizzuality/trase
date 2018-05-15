@@ -21,13 +21,10 @@ import { Provider } from 'react-redux';
 import 'styles/profile-actor.scss';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
-import {
-  GET_ACTOR_FACTSHEET_URL,
-  GET_TOOLTIPS_URL,
-  getURLFromParams
-} from 'utils/getURLFromParams';
+import { GET_ACTOR_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParams';
 
 import smoothScroll from 'utils/smoothScroll';
+import { getDefaultContext } from 'scripts/reducers/helpers/contextHelper';
 
 const defaults = {
   country: 'Brazil',
@@ -132,9 +129,10 @@ const _setTopSourceSwitcher = (data, verb, year, store) => {
   );
 };
 
-const _build = (data, tooltips, { nodeId, year, print }, store) => {
+const _build = (data, { nodeId, year, print }, store) => {
   const verb = data.column_name === 'EXPORTER' ? 'exported' : 'imported';
   const verbGerund = data.column_name === 'EXPORTER' ? 'exporting' : 'importing';
+  const { tooltips } = store.getState().app;
 
   render(
     <HelpTooltip text={tooltips.zeroDeforestationCommitment} position="bottom" />,
@@ -363,7 +361,7 @@ const _build = (data, tooltips, { nodeId, year, print }, store) => {
   }
 };
 
-const _setInfo = (info, onLinkClick, { nodeId, year }) => {
+const _setInfo = (info, onLinkClick, { nodeId, year, contextId }) => {
   document.querySelector('.js-name').textContent = info.name ? capitalize(info.name) : '-';
   document.querySelector('.js-link-button-name').textContent = `${formatApostrophe(
     capitalize(info.name)
@@ -408,9 +406,10 @@ const _setInfo = (info, onLinkClick, { nodeId, year }) => {
     onLinkClick('tool', {
       state: {
         isMapVisible: true,
-        selectedNodesIds: [nodeId],
-        expandedNodesIds: [nodeId],
-        selectedYears: [year, year]
+        selectedNodesIds: [parseInt(nodeId, 10)],
+        expandedNodesIds: [parseInt(nodeId, 10)],
+        selectedYears: [year, year],
+        selectedContextId: contextId
       }
     })
   );
@@ -418,9 +417,10 @@ const _setInfo = (info, onLinkClick, { nodeId, year }) => {
   document.querySelector('.js-link-supply-chain').addEventListener('click', () =>
     onLinkClick('tool', {
       state: {
-        selectedNodesIds: [nodeId],
-        expandedNodesIds: [nodeId],
-        selectedYears: [year, year]
+        selectedNodesIds: [parseInt(nodeId, 10)],
+        expandedNodesIds: [parseInt(nodeId, 10)],
+        selectedYears: [year, year],
+        selectedContextId: contextId
       }
     })
   );
@@ -471,23 +471,23 @@ const _loadData = (store, nodeId, year, print) => {
     year
   });
   setLoading();
-  const tooltipsURL = getURLFromParams(GET_TOOLTIPS_URL);
 
-  Promise.all(
-    [actorFactsheetURL, tooltipsURL].map(url =>
-      fetch(url).then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error(response.statusText);
-      })
-    )
-  )
+  fetch(actorFactsheetURL)
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error(response.statusText);
+    })
     .then(response => {
       if (!response) return;
 
-      const tooltips = response[1].profileActor;
-      const data = response[0].data;
+      const data = response.data;
+
+      // TODO: once we have this state in the reducer, move this logic to the exiting page title helper
+      document.title = `TRASE - ${capitalize(
+        data.node_name
+      )} ${data.column_name.toLowerCase()} profile`;
 
       setLoading(false);
 
@@ -500,7 +500,11 @@ const _loadData = (store, nodeId, year, print) => {
         summary: data.summary
       };
 
-      _setInfo(info, onLinkClick(store), { nodeId, year });
+      _setInfo(info, onLinkClick(store), {
+        nodeId,
+        year,
+        contextId: getDefaultContext(store.getState()).id
+      });
       _setEventListeners();
 
       render(
@@ -514,7 +518,7 @@ const _loadData = (store, nodeId, year, print) => {
         document.getElementById('year-dropdown')
       );
 
-      _build(data, tooltips, { nodeId, year, print }, store);
+      _build(data, { nodeId, year, print }, store);
     })
     .catch(reason => {
       _showErrorMessage(reason.message);

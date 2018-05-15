@@ -31,7 +31,7 @@ class ResizeBySelector extends Component {
           <li
             key={index}
             className={cx('dropdown-item', { '-faded': !isEnabled })}
-            onClick={() => isEnabled && onSelected(resizeBy.name)}
+            onClick={() => isEnabled && onSelected(resizeBy)}
           >
             {resizeBy.label.toLowerCase()}
             {resizeBy.description && <Tooltip constraint="window" text={resizeBy.description} />}

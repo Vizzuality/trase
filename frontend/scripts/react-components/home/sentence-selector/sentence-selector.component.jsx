@@ -1,88 +1,44 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
 import uniq from 'lodash/uniq';
-
+import capitalize from 'lodash/capitalize';
 import Dropdown from 'react-components/shared/dropdown.component';
 
 class SentenceSelector extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = this.getDefaultState(props);
-
     this.onSelectCommodity = this.onSelectCommodity.bind(this);
     this.onSelectCountry = this.onSelectCountry.bind(this);
   }
 
-  componentDidMount() {
-    this.selectContextId();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!isEqual(nextProps.contexts, this.props.contexts)) {
-      this.setState(this.getDefaultState(nextProps), this.selectContextId);
-    }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    const conditions = [
-      !isEqual(nextProps.contexts, this.props.contexts),
-      nextState.selectedCommodity !== this.state.selectedCommodity,
-      nextState.selectedCountry !== this.state.selectedCountry
-    ];
-
-    return conditions.includes(true);
-  }
-
-  componentWillUnmount() {
-    this.props.resetContext();
-  }
-
   onSelectCommodity(selectedCommodity) {
-    const { contexts } = this.props;
+    const { contexts, selectedContext } = this.props;
 
     const countryNames = contexts
-      .filter(c => c.commodityName === selectedCommodity)
+      .filter(c => c.commodityName === selectedCommodity.toUpperCase())
       .map(c => c.countryName);
 
-    this.setState(
-      state => ({
-        selectedCountry: countryNames.find(c => c === state.selectedCountry) || countryNames[0],
-        selectedCommodity
-      }),
-      this.selectContextId
-    );
+    const selectedCountry =
+      countryNames.find(c => c === selectedContext.countryName) || countryNames[0];
+
+    this.selectContextId(selectedCountry, selectedCommodity.toUpperCase());
   }
 
   onSelectCountry(selectedCountry) {
-    const { contexts } = this.props;
+    const { contexts, selectedContext } = this.props;
 
     const commodityNames = contexts
-      .filter(c => c.countryName === selectedCountry)
+      .filter(c => c.countryName === selectedCountry.toUpperCase())
       .map(c => c.commodityName);
 
-    this.setState(
-      state => ({
-        selectedCommodity:
-          commodityNames.find(c => c === state.selectedCommodity) || commodityNames[0],
-        selectedCountry
-      }),
-      this.selectContextId
-    );
+    const selectedCommodity =
+      commodityNames.find(c => c === selectedContext.commodityName) || commodityNames[0];
+
+    this.selectContextId(selectedCountry.toUpperCase(), selectedCommodity);
   }
 
-  getDefaultState(props) {
-    const defaultContext = props.contexts.find(c => c.isDefault) || props.contexts[0];
-
-    return {
-      selectedCommodity: defaultContext ? defaultContext.commodityName : null,
-      selectedCountry: defaultContext ? defaultContext.countryName : null
-    };
-  }
-
-  getContextId() {
-    const { selectedCommodity, selectedCountry } = this.state;
+  getContextId(selectedCountry, selectedCommodity) {
     const { contexts } = this.props;
 
     const context =
@@ -93,19 +49,24 @@ class SentenceSelector extends React.Component {
     return context.id;
   }
 
-  selectContextId() {
-    const { selectContext } = this.props;
-    const contextId = this.getContextId();
+  selectContextId(selectedCommodity, selectedCountry) {
+    const { selectContextById } = this.props;
+    const contextId = this.getContextId(selectedCommodity, selectedCountry);
 
-    if (contextId) selectContext(contextId);
+    if (contextId) {
+      selectContextById(contextId);
+    }
   }
 
   render() {
-    const { selectedCommodity, selectedCountry } = this.state;
-    const { contexts } = this.props;
+    const { contexts, selectedContext } = this.props;
 
-    const commodityNames = uniq(contexts.map(c => c.commodityName));
-    const countryNames = uniq(contexts.map(c => c.countryName));
+    if (!selectedContext) return null;
+
+    const { commodityName, countryName } = selectedContext;
+
+    const commodityNames = uniq(contexts.map(c => c.commodityName.toLowerCase()));
+    const countryNames = uniq(contexts.map(c => capitalize(c.countryName)));
 
     return (
       <div className="c-sentence-selector">
@@ -113,13 +74,15 @@ class SentenceSelector extends React.Component {
           What are the sustainability risks and opportunities associated{' '}
           <br className="hide-for-small" /> with the trade of
           <Dropdown
-            value={selectedCommodity}
+            className="c-commodity-selector"
+            value={commodityName.toLowerCase()}
             valueList={commodityNames}
             onValueSelected={this.onSelectCommodity}
           />
           from
           <Dropdown
-            value={selectedCountry}
+            className="c-country-selector"
+            value={capitalize(countryName)}
             valueList={countryNames}
             onValueSelected={this.onSelectCountry}
           />
@@ -138,13 +101,8 @@ SentenceSelector.propTypes = {
       isDefault: PropTypes.bool
     })
   ),
-  selectContext: PropTypes.func,
-  resetContext: PropTypes.func
-};
-
-SentenceSelector.defaultProps = {
-  selectContext: () => {},
-  resetContext: () => {}
+  selectContextById: PropTypes.func,
+  selectedContext: PropTypes.object
 };
 
 export default SentenceSelector;
