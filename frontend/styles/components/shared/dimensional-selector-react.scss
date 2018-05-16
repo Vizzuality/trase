@@ -55,12 +55,16 @@
     cursor: default;
 
     .dimensional-selector-footer-text {
-      font-size: $font-size-small;
+      font-size: $font-size-x-regular;
       font-weight: 500;
       color: $charcoal-grey-faded;
       letter-spacing: -.5px;
       text-align: center;
       text-transform: uppercase;
+
+      @media screen and (min-width: $breakpoint-foundation-small) {
+        font-size: $font-size-small;
+      }
     }
   }
 }

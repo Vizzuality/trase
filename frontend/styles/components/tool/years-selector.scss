@@ -1,7 +1,9 @@
 @import '../../settings';
 
-$button-height: 20px;
-$fill-height: 8px;
+$button-size: 20px;
+$fill-size: 8px;
+$button-mobile-size: 24px;
+$fill-mobile-size: 10px;
 $not-active-color: $charcoal-grey-faded;
 $active-color: $charcoal-grey;
 
@@ -18,11 +20,15 @@ $active-color: $charcoal-grey;
     height: 25px;
     background-color: $background-white;
     cursor: default;
-    font-size: $font-size-small;
+    font-size: $font-size-x-regular;
     font-weight: 500;
     color: $charcoal-grey-faded;
     letter-spacing: -.5px;
     text-transform: uppercase;
+
+    @media screen and (min-width: $breakpoint-foundation-small) {
+      font-size: $font-size-small;
+    }
   }
 
   .unrotate {
@@ -30,8 +36,8 @@ $active-color: $charcoal-grey;
   }
 
   .button {
-    height: $button-height;
-    width: $button-height;
+    height: $button-mobile-size;
+    width: $button-mobile-size;
     cursor: pointer;
     border: solid 2px $not-active-color;
     border-radius: 50%;
@@ -50,9 +56,14 @@ $active-color: $charcoal-grey;
           position: absolute;
           height: 2px;
           background: $not-active-color;
-          top: 3px;
-          left: 14px;
+          top: 4px;
+          left: 17px;
           width: 20px;
+
+          @media screen and (min-width: $breakpoint-foundation-small) {
+            top: 3px;
+            left: 14px;
+          }
         }
       }
     }
@@ -60,12 +71,17 @@ $active-color: $charcoal-grey;
     &:last-child {
       margin-right: 0;
     }
+
+    @media screen and (min-width: $breakpoint-foundation-small) {
+      height: $button-size;
+      width: $button-size;
+    }
   }
 
   .fill {
     position: relative;
-    height: $fill-height;
-    width: $fill-height;
+    height: $fill-mobile-size;
+    width: $fill-mobile-size;
     border: none;
     border-radius: 50%;
 
@@ -74,9 +90,18 @@ $active-color: $charcoal-grey;
       top: 20px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: $font-size-small;
+      font-size: $font-size-x-regular;
       color: $charcoal-grey-faded;
       letter-spacing: -0.5px;
+
+      @media screen and (min-width: $breakpoint-foundation-small) {
+        font-size: $font-size-small;
+      }
+    }
+
+    @media screen and (min-width: $breakpoint-foundation-small) {
+      height: $fill-size;
+      width: $fill-size;
     }
   }
 
