@@ -16,10 +16,12 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      onContextSelected: loadContextNodes,
+      onContextSelected: contextId => () => {
+        dispatch(loadContextNodes(contextId));
+        dispatch(selectContextById(contextId));
+      },
       onDownloadTriggered: trackDownload,
-      onDataDownloadFormLoaded: trackDataDownloadFormLoaded,
-      selectContextById
+      onDataDownloadFormLoaded: trackDataDownloadFormLoaded
     },
     dispatch
   );

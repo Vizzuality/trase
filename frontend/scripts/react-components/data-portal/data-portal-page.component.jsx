@@ -135,7 +135,6 @@ class DataContent extends Component {
           elem => elem.isDisabled !== true && elem.id === value
         );
         this.setState({ selectedCommodity: value });
-        this.props.selectContextById(selectedContext.id);
         if (selectedContext) {
           this.props.onContextSelected(selectedContext.id);
         }
@@ -601,7 +600,6 @@ DataContent.propTypes = {
   onContextSelected: PropTypes.func,
   onDataDownloadFormLoaded: PropTypes.func,
   onDownloadTriggered: PropTypes.func,
-  selectContextById: PropTypes.func,
   selectedContext: PropTypes.object
 };
 

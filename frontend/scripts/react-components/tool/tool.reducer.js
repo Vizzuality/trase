@@ -40,20 +40,20 @@ import groupBy from 'lodash/groupBy';
 import isEqual from 'lodash/isEqual';
 import keyBy from 'lodash/keyBy';
 import { createReducer } from 'scripts/store';
-import filterLinks from '../../reducers/helpers/filterLinks';
-import getChoropleth from '../../reducers/helpers/getChoropleth';
-import getMapDimensions from '../../reducers/helpers/getMapDimensions';
-import { getMapDimensionsWarnings } from '../../reducers/helpers/getMapDimensionsWarnings';
-import getNodesAtColumns from '../../reducers/helpers/getNodesAtColumns';
-import getNodesColoredBySelection from '../../reducers/helpers/getNodesColoredBySelection';
-import getNodesDict from '../../reducers/helpers/getNodesDict';
-import getRecolorGroups from '../../reducers/helpers/getRecolorGroups';
-import getVisibleNodes from '../../reducers/helpers/getVisibleNodes';
-import mergeLinks from '../../reducers/helpers/mergeLinks';
-import setNodesMeta from '../../reducers/helpers/setNodesMeta';
-import sortVisibleNodes from '../../reducers/helpers/sortVisibleNodes';
-import splitLinksByColumn from '../../reducers/helpers/splitLinksByColumn';
-import splitVisibleNodesByColumn from '../../reducers/helpers/splitVisibleNodesByColumn';
+import filterLinks from 'scripts/reducers/helpers/filterLinks';
+import getChoropleth from 'scripts/reducers/helpers/getChoropleth';
+import getMapDimensions from 'scripts/reducers/helpers/getMapDimensions';
+import { getMapDimensionsWarnings } from 'scripts/reducers/helpers/getMapDimensionsWarnings';
+import getNodesAtColumns from 'scripts/reducers/helpers/getNodesAtColumns';
+import getNodesColoredBySelection from 'scripts/reducers/helpers/getNodesColoredBySelection';
+import getNodesDict from 'scripts/reducers/helpers/getNodesDict';
+import getRecolorGroups from 'scripts/reducers/helpers/getRecolorGroups';
+import getVisibleNodes from 'scripts/reducers/helpers/getVisibleNodes';
+import mergeLinks from 'scripts/reducers/helpers/mergeLinks';
+import setNodesMeta from 'scripts/reducers/helpers/setNodesMeta';
+import sortVisibleNodes from 'scripts/reducers/helpers/sortVisibleNodes';
+import splitLinksByColumn from 'scripts/reducers/helpers/splitLinksByColumn';
+import splitVisibleNodesByColumn from 'scripts/reducers/helpers/splitVisibleNodesByColumn';
 
 export const toolInitialState = {
   choropleth: {},

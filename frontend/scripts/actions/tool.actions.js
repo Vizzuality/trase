@@ -152,7 +152,8 @@ export function resetState(refilter = true) {
 // Resets sankey's params that may lead to no flows being returned from the API
 export function resetSankey() {
   return (dispatch, getState) => {
-    const { contexts, selectedContext, columns, expandedNodesIds } = getState().tool;
+    const { columns, expandedNodesIds } = getState().tool;
+    const { contexts, selectedContext } = getState().app;
     const areNodesExpanded = !isEmpty(expandedNodesIds);
     const currentContext = contexts.find(context => context.id === selectedContext.id);
     const defaultColumns = columns.filter(column => column.isDefault);

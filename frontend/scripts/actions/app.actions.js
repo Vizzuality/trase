@@ -56,11 +56,6 @@ export function selectContextById(contextId) {
 
     dispatch(setContextIsUserSelected(true));
 
-    dispatch({
-      type: SET_CONTEXT_IS_USER_SELECTED,
-      payload: true
-    });
-
     if (getState().location.type === 'tool') {
       dispatch(loadToolDataForCurrentContext());
     }
