@@ -10,36 +10,34 @@ const id = 'resize-by';
 
 class ResizeBySelector extends Component {
   renderResizeByElements() {
-    const { onSelected, currentDropdown, selectedResizeBy, resizeBys, selectedYears } = this.props;
+    const { onSelected, currentDropdown, resizeBys, selectedYears } = this.props;
 
     resizeBys.sort((a, b) => a.position > b.position);
 
     const resizeByElements = [];
     if (currentDropdown === 'resize-by') {
-      resizeBys
-        .filter(resizeBy => resizeBy.name !== selectedResizeBy.name)
-        .forEach((resizeBy, index, currentResizeBys) => {
-          if (index > 0 && currentResizeBys[index - 1].groupNumber !== resizeBy.groupNumber) {
-            resizeByElements.push(
-              <li key={`separator-${index}`} className="dropdown-item -separator" />
-            );
-          }
-
-          const isEnabled =
-            !resizeBy.isDisabled &&
-            (resizeBy.years.length === 0 || difference(selectedYears, resizeBy.years).length === 0);
-
+      resizeBys.forEach((resizeBy, index, currentResizeBys) => {
+        if (index > 0 && currentResizeBys[index - 1].groupNumber !== resizeBy.groupNumber) {
           resizeByElements.push(
-            <li
-              key={index}
-              className={cx('dropdown-item', { '-faded': !isEnabled })}
-              onClick={() => isEnabled && onSelected(resizeBy.name)}
-            >
-              {resizeBy.label.toLowerCase()}
-              {resizeBy.description && <Tooltip constraint="window" text={resizeBy.description} />}
-            </li>
+            <li key={`separator-${index}`} className="dropdown-item -separator" />
           );
-        });
+        }
+
+        const isEnabled =
+          !resizeBy.isDisabled &&
+          (resizeBy.years.length === 0 || difference(selectedYears, resizeBy.years).length === 0);
+
+        resizeByElements.push(
+          <li
+            key={index}
+            className={cx('dropdown-item', { '-faded': !isEnabled })}
+            onClick={() => isEnabled && onSelected(resizeBy.name)}
+          >
+            {resizeBy.label.toLowerCase()}
+            {resizeBy.description && <Tooltip constraint="window" text={resizeBy.description} />}
+          </li>
+        );
+      });
     }
 
     return resizeByElements;

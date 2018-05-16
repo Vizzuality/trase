@@ -1,5 +1,6 @@
 import L from 'leaflet';
 import isNumber from 'lodash/isNumber';
+import debounce from 'lodash/debounce';
 // eslint-disable-next-line camelcase
 import turf_bbox from '@turf/bbox';
 import { BASEMAPS, CARTO_BASE_URL, MAP_PANES, MAP_PANES_Z, CHOROPLETH_COLORS } from 'constants';
@@ -39,6 +40,8 @@ export default class {
       this._setPaneModifier('-high-zoom', z >= 6);
     });
 
+    this._setMapViewDebounced = debounce(this._setMapViewDebounced, 500);
+
     Object.keys(MAP_PANES).forEach(paneKey => {
       this.map.createPane(paneKey);
       this.map.getPane(paneKey).style.zIndex = MAP_PANES_Z[paneKey];
@@ -66,6 +69,10 @@ export default class {
     if (mapView === null) return;
 
     this.map.setView([mapView.latitude, mapView.longitude], mapView.zoom);
+  }
+
+  _setMapViewDebounced(latLng, zoom) {
+    this.map.setView(latLng, zoom);
   }
 
   setBasemap({
@@ -143,7 +150,7 @@ export default class {
 
     this.selectPolygonType({ selectedColumnsIds: currentPolygonType, biomeFilter });
     if (selectedNodesGeoIds) {
-      this.selectPolygons({ selectedGeoIds: selectedNodesGeoIds });
+      this.selectPolygons({ selectedGeoIds: selectedNodesGeoIds, linkedGeoIds });
     }
 
     // under normal circumstances, choropleth (depends on loadNodes) and linkedGeoIds (depends on loadLinks)
@@ -159,18 +166,28 @@ export default class {
     }
   }
 
-  selectPolygons({ selectedGeoIds, highlightedGeoId, forceDefaultMapView, defaultMapView }) {
+  selectPolygons({
+    selectedGeoIds,
+    linkedGeoIds,
+    highlightedGeoId,
+    forceDefaultMapView,
+    defaultMapView
+  }) {
     this._outlinePolygons({ selectedGeoIds, highlightedGeoId });
 
     if (forceDefaultMapView === true) {
       this.setMapView(defaultMapView);
-    } else if (
-      this.vectorOutline !== undefined &&
-      selectedGeoIds.length &&
-      this.currentPolygonTypeLayer
-    ) {
+    } else if (!linkedGeoIds || linkedGeoIds.length === 0) {
+      this._fitBoundsToSelectedPolygons(selectedGeoIds);
+    }
+  }
+
+  _fitBoundsToSelectedPolygons(selectedGeoIds) {
+    if (this.vectorOutline !== undefined && selectedGeoIds.length && this.currentPolygonTypeLayer) {
       if (!this.currentPolygonTypeLayer.isPoint) {
-        this.map.fitBounds(this.vectorOutline.getBounds());
+        const bounds = this.vectorOutline.getBounds();
+        const boundsCenterZoom = this.map._getBoundsCenterZoom(bounds);
+        this._setMapViewDebounced(boundsCenterZoom.center, boundsCenterZoom.zoom);
       } else {
         const singlePoint = this.vectorOutline.getBounds().getCenter();
         this.map.setView(singlePoint);
@@ -511,7 +528,7 @@ export default class {
       const bounds = L.latLngBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
       const boundsCenterZoom = this.map._getBoundsCenterZoom(bounds);
       boundsCenterZoom.zoom = Math.max(boundsCenterZoom.zoom, defaultMapView.zoom);
-      this.map.setView(boundsCenterZoom.center, boundsCenterZoom.zoom);
+      this._setMapViewDebounced(boundsCenterZoom.center, boundsCenterZoom.zoom);
     }
   }
 
@@ -519,6 +536,7 @@ export default class {
     choropleth,
     selectedBiomeFilter,
     linkedGeoIds,
+    selectedGeoIds,
     defaultMapView,
     forceDefaultMapView
   }) {
@@ -529,6 +547,10 @@ export default class {
       defaultMapView,
       forceDefaultMapView
     );
+
+    if (!forceDefaultMapView && linkedGeoIds.length === 0) {
+      this._fitBoundsToSelectedPolygons(selectedGeoIds);
+    }
   }
 
   _updateAttribution() {

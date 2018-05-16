@@ -2,14 +2,15 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import rangeTouch from 'rangetouch';
-import analyticsMiddleware from 'analytics/tool.analytics.middleware';
+import analyticsMiddleware from 'analytics/middleware';
 import { toolUrlStateMiddleware } from 'utils/stateURL';
 import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
 import * as appReducers from './store';
 import { register, unregister } from './worker';
 
-const middlewares = [analyticsMiddleware, thunk, router.middleware, toolUrlStateMiddleware];
+// analytics middleware has to be after router.middleware
+const middlewares = [thunk, router.middleware, toolUrlStateMiddleware, analyticsMiddleware];
 
 window.liveSettings = TRANSIFEX_API_KEY && {
   api_key: TRANSIFEX_API_KEY,

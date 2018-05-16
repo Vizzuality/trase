@@ -151,13 +151,6 @@ class RecolorBySelector extends Component {
             <Tooltip text={tooltips.sankey.nav.colorBy.main} />
           </span>
           <span className="dropdown-title -small">{selectedRecolorBy.label || 'Selection'}</span>
-          {selectedRecolorBy.name &&
-            tooltips.sankey.nav.colorBy[selectedRecolorBy.name] && (
-              <Tooltip
-                className="recolor-by"
-                text={tooltips.sankey.nav.colorBy[selectedRecolorBy.name]}
-              />
-            )}
           <FiltersDropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
             <ul className="dropdown-list -large">{recolorByElements}</ul>
           </FiltersDropdown>

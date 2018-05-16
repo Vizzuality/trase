@@ -45,9 +45,8 @@ const getContextFlows = (countries, origin) => {
   }));
 };
 
-const memoizedGetContextFlows = memoize(
-  getContextFlows,
-  (c, o, ctxId, start, end) => ctxId + start + end
+const memoizedGetContextFlows = memoize(getContextFlows, (c, o, ctxId, start, end) =>
+  [ctxId, start, end].join('_')
 );
 
 const mapStateToProps = state => {

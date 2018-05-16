@@ -38,6 +38,7 @@ const mapMethodsToState = state => ({
     _comparedValue: state => state.tool.selectedNodesGeoIds,
     _returnedValue: state => ({
       selectedGeoIds: state.tool.selectedNodesGeoIds,
+      linkedGeoIds: state.tool.linkedGeoIds,
       defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
       forceDefaultMapView: !state.tool.selectedNodesIds.length
     })
@@ -67,6 +68,7 @@ const mapMethodsToState = state => ({
       choropleth: state.tool.choropleth,
       selectedBiomeFilter: state.tool.selectedBiomeFilter,
       linkedGeoIds: state.tool.linkedGeoIds,
+      selectedGeoIds: state.tool.selectedNodesGeoIds,
       defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
       forceDefaultMapView: !state.tool.selectedNodesIds.length
     })
