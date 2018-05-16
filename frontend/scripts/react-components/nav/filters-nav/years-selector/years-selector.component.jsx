@@ -41,18 +41,14 @@ class YearsSelector extends Component {
     const { start, end } = this.state;
     const { onSelected, onToggle } = this.props;
 
-    if (start !== null) {
-      if (end !== null) {
-        this.setState({ start: null, end: null });
-      } else {
-        const newStart = Math.min(start, year);
-        const newEnd = Math.max(start, year);
-        this.setState({ start: newStart, end: newEnd });
-        onSelected([newStart, newEnd]);
-        onToggle(id);
-      }
+    if (end !== null) {
+      this.setState({ start: year, end: null });
     } else {
-      this.setState({ start: year });
+      const newStart = Math.min(start, year);
+      const newEnd = Math.max(start, year);
+      this.setState({ start: newStart, end: newEnd });
+      onSelected([newStart, newEnd]);
+      onToggle(id);
     }
   }
 
@@ -62,20 +58,17 @@ class YearsSelector extends Component {
 
   getClassName(year) {
     const { start, end, hovered } = this.state;
-    const { years } = this.props;
-    const maxYear = Math.max(...years);
 
     const [startYear, endYear] = [start || hovered, end || hovered].sort();
-
     const classes = [];
 
     if (range(startYear, (endYear || startYear) + 1).includes(year)) {
       classes.push('active');
     }
-    if (year === startYear && year < maxYear) {
+    if (year === startYear) {
       classes.push('start');
     }
-    if ((year === endYear && start) || (startYear === year && year === maxYear)) {
+    if (year === endYear) {
       classes.push('end');
     }
 
@@ -83,13 +76,11 @@ class YearsSelector extends Component {
   }
 
   renderFooter() {
-    const { start, end } = this.state;
-
-    if (start && end) return null;
+    const { end } = this.state;
 
     let text = 'Select a start and end year';
 
-    if (start && !end) text = 'Select an end year';
+    if (!end) text = 'Select an end year';
 
     return (
       <div className="years-selector-footer">
@@ -137,7 +128,7 @@ class YearsSelector extends Component {
                       className={cx('button', this.getClassName(year))}
                     >
                       <div className="unrotate">
-                        <div className={cx('fill', this.getClassName(year))}>
+                        <div className="fill">
                           <span>{year}</span>
                         </div>
                       </div>

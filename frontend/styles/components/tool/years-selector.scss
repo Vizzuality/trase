@@ -85,29 +85,31 @@ $active-color: $charcoal-grey;
       &.start {
         border-left-color: $active-color;
         border-bottom-color: $active-color;
+
+        .fill {
+          background: linear-gradient(to right, $active-color 0%, $active-color 50%, rgba($active-color,.5) 50%, rgba($active-color,.5) 100%);
+        }
       }
 
       &.end {
         border-right-color: $active-color;
         border-top-color: $active-color;
-      }
-    }
 
-    .fill {
-      &.active {
-        background-color: $not-active-color;
-      }
-
-      &.start {
-        background: linear-gradient(to right, $active-color 0%, $active-color 50%, rgba($active-color,.5) 50%, rgba($active-color,.5) 100%);
-      }
-
-      &.end {
-        background: linear-gradient(to left, $active-color 0%, $active-color 50%, rgba($active-color,.5) 50%, rgba($active-color,.5) 100%);
+        .fill {
+          background: linear-gradient(to left, $active-color 0%, $active-color 50%, rgba($active-color,.5) 50%, rgba($active-color,.5) 100%);
+        }
       }
 
       &.start.end {
-        background-color: $active-color;
+        .fill {
+          background-color: $active-color;
+        }
+      }
+
+      &.active {
+        .fill {
+          background-color: $not-active-color;
+        }
       }
     }
   }
@@ -123,12 +125,10 @@ $active-color: $charcoal-grey;
             }
           }
         }
-      }
-    }
 
-    .fill {
-      &.active {
-        background-color: $active-color;
+        .fill {
+          background-color: $active-color;
+        }
       }
     }
   }
