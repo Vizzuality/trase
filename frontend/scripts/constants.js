@@ -119,7 +119,7 @@ export const CARTO_NAMED_MAPS_BASE_URL = 'https://p2cs-sei.carto.com/api/v1/map/
 export const YEARS_DISABLED_WARNINGS = {
   NO_AGGR_REASON: "can't be displayed over multiple years.",
   NO_AGGR_INSTRUCTION: 'Please modify year selection to a single year.',
-  UNAVAILABLE_REASON: "can't be displayed for the selected years.",
+  UNAVAILABLE_REASON: "is only available for $years and can't be displayed for the selected years.",
   UNAVAILABLE_INSTRUCTION: 'Please change year selection.',
   INCOMPLETE_REASON: "doesn't have data for all selected years.",
   INCOMPLETE_INSTRUCTION: 'Data being displayed corresponds to the following years: $years.',

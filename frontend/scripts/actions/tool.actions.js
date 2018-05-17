@@ -351,6 +351,7 @@ export function loadNodes() {
         payload.mapDimensionsMetaJSON.dimensions.forEach(dimension => {
           const allYearsCovered =
             dimension.years === null ||
+            dimension.years.length === 0 ||
             allSelectedYears.every(year => dimension.years.includes(year));
           const yearsWithDataToDisplay = intesection(dimension.years, allSelectedYears);
           if (
@@ -361,12 +362,15 @@ export function loadNodes() {
             dimension.disabledYearRangeReason = YEARS_INCOMPLETE;
             dimension.disabledYearRangeReasonText = getSingleMapDimensionWarning(
               dimension.disabledYearRangeReason,
-              yearsWithDataToDisplay
+              yearsWithDataToDisplay,
+              dimension.years
             );
           } else if (!allYearsCovered) {
             dimension.disabledYearRangeReason = YEARS_DISABLED_UNAVAILABLE;
             dimension.disabledYearRangeReasonText = getSingleMapDimensionWarning(
-              dimension.disabledYearRangeReason
+              dimension.disabledYearRangeReason,
+              yearsWithDataToDisplay,
+              dimension.years
             );
           }
         });

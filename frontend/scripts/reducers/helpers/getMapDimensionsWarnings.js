@@ -1,9 +1,12 @@
 import intersection from 'lodash/intersection';
 import { YEARS_DISABLED_WARNINGS as W, YEARS_INCOMPLETE } from 'constants';
 
-const getDimensionWarning = (reason, existingYears) => {
-  const reasonWarning = W[`${reason}_REASON`];
-  const reasonInstruction = W[`${reason}_INSTRUCTION`].replace('$years', existingYears);
+const getDimensionWarning = (reason, existingDataYears = [], layerDataYears = []) => {
+  const reasonWarning = W[`${reason}_REASON`].replace('$years', layerDataYears.join(', '));
+  const reasonInstruction = W[`${reason}_INSTRUCTION`].replace(
+    '$years',
+    existingDataYears.join(', ')
+  );
 
   return [reasonWarning, reasonInstruction].join(' ');
 };
@@ -37,7 +40,8 @@ const getMapDimensionsWarnings = (
   let warnings = [W.THAT_LAYER.replace('$layer', dimensions[0].name)].concat(
     getDimensionWarning(
       dimensions[0].disabledYearRangeReason,
-      intersection(dimensions[0].years, allSelectedYears)
+      intersection(dimensions[0].years, allSelectedYears),
+      dimensions[0].years
     )
   );
 
@@ -48,14 +52,15 @@ const getMapDimensionsWarnings = (
       .concat(
         getDimensionWarning(
           dimensions[1].disabledYearRangeReason,
-          intersection(dimensions[1].years, allSelectedYears)
+          intersection(dimensions[1].years, allSelectedYears),
+          dimensions[0].years
         )
       );
   }
   return warnings.join(' ');
 };
 
-const getSingleMapDimensionWarning = (reason, existingYears) =>
-  [W.THIS_LAYER].concat(getDimensionWarning(reason, existingYears)).join(' ');
+const getSingleMapDimensionWarning = (reason, existingYears, layerDataYears) =>
+  [W.THIS_LAYER].concat(getDimensionWarning(reason, existingYears, layerDataYears)).join(' ');
 
 export { getMapDimensionsWarnings, getSingleMapDimensionWarning };
