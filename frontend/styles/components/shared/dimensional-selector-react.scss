@@ -3,7 +3,11 @@
 
 .c-dimensional-selector {
   @extend %dropdown;
-  height: 275px;
+  height: 300px;
+
+  @media screen and (min-width: $breakpoint-foundation-small) {
+    height: 275px;
+  }
 
   .dimension-container {
     display: flex;
@@ -49,18 +53,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 25px;
+    height: 50px;
     width: 100%;
     background-color: $background-white;
     cursor: default;
 
+    @media screen and (min-width: $breakpoint-foundation-small) {
+      height: 25px;
+    }
+
     .dimensional-selector-footer-text {
-      font-size: $font-size-small;
+      font-size: $font-size-x-regular;
       font-weight: 500;
       color: $charcoal-grey-faded;
       letter-spacing: -.5px;
       text-align: center;
       text-transform: uppercase;
+
+      @media screen and (min-width: $breakpoint-foundation-small) {
+        font-size: $font-size-small;
+      }
     }
   }
 }

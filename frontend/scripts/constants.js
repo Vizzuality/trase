@@ -121,6 +121,8 @@ export const YEARS_DISABLED_WARNINGS = {
   NO_AGGR_INSTRUCTION: 'Please modify year selection to a single year.',
   UNAVAILABLE_REASON: "can't be displayed for the selected years.",
   UNAVAILABLE_INSTRUCTION: 'Please change year selection.',
+  INCOMPLETE_REASON: "doesn't have data for all selected years.",
+  INCOMPLETE_INSTRUCTION: 'Data being displayed corresponds to the following years: $years.',
   THIS_LAYER: 'This layer',
   THAT_LAYER: 'The selected map layer ($layer)',
   THOSE_LAYERS: 'The selected map layers ($layer0 and $layer1)'
@@ -128,6 +130,7 @@ export const YEARS_DISABLED_WARNINGS = {
 
 export const YEARS_DISABLED_NO_AGGR = 'NO_AGGR';
 export const YEARS_DISABLED_UNAVAILABLE = 'UNAVAILABLE';
+export const YEARS_INCOMPLETE = 'INCOMPLETE';
 
 export const MAP_PANES = {
   basemap: 'basemap',

@@ -7,7 +7,7 @@ import {
   NUM_NODES_DETAILED,
   NUM_NODES_EXPANDED,
   NUM_NODES_SUMMARY,
-  YEARS_DISABLED_NO_AGGR,
+  YEARS_INCOMPLETE,
   YEARS_DISABLED_UNAVAILABLE
 } from 'constants';
 import {
@@ -31,6 +31,7 @@ import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsW
 import isNodeColumnVisible from 'utils/isNodeColumnVisible';
 import capitalize from 'lodash/capitalize';
 import difference from 'lodash/difference';
+import intesection from 'lodash/intersection';
 import compact from 'lodash/compact';
 import uniq from 'lodash/uniq';
 import isEmpty from 'lodash/isEmpty';
@@ -342,29 +343,31 @@ export function loadNodes() {
           mapDimensionsMetaJSON: jsonPayload
         };
 
-        const currentYearBoundaries = getState().tool.selectedYears;
-        const allSelectedYears = [];
-        for (let i = currentYearBoundaries[0]; i <= currentYearBoundaries[1]; i++) {
-          allSelectedYears.push(i);
-        }
+        const [startYear, endYear] = getState().tool.selectedYears;
+        const allSelectedYears = Array(endYear - startYear + 1)
+          .fill(startYear)
+          .map((year, index) => year + index);
 
         payload.mapDimensionsMetaJSON.dimensions.forEach(dimension => {
-          if (allSelectedYears.length > 1) {
-            dimension.disabledYearRangeReason = YEARS_DISABLED_NO_AGGR;
+          const allYearsCovered =
+            dimension.years === null ||
+            allSelectedYears.every(year => dimension.years.includes(year));
+          const yearsWithDataToDisplay = intesection(dimension.years, allSelectedYears);
+          if (
+            !allYearsCovered &&
+            allSelectedYears.length > 1 &&
+            yearsWithDataToDisplay.length > 0
+          ) {
+            dimension.disabledYearRangeReason = YEARS_INCOMPLETE;
+            dimension.disabledYearRangeReasonText = getSingleMapDimensionWarning(
+              dimension.disabledYearRangeReason,
+              yearsWithDataToDisplay
+            );
+          } else if (!allYearsCovered) {
+            dimension.disabledYearRangeReason = YEARS_DISABLED_UNAVAILABLE;
             dimension.disabledYearRangeReasonText = getSingleMapDimensionWarning(
               dimension.disabledYearRangeReason
             );
-          } else {
-            const allYearsCovered =
-              dimension.years === null ||
-              (Array.isArray(dimension.years) && dimension.years.length === 0) ||
-              allSelectedYears.every(year => dimension.years.indexOf(year) > -1);
-            if (!allYearsCovered) {
-              dimension.disabledYearRangeReason = YEARS_DISABLED_UNAVAILABLE;
-              dimension.disabledYearRangeReasonText = getSingleMapDimensionWarning(
-                dimension.disabledYearRangeReason
-              );
-            }
           }
         });
 
