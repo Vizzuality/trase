@@ -6,7 +6,23 @@ import camelcase from 'lodash/camelCase';
 import LinkButton from 'react-components/shared/link-button.component';
 import HighlightTextFragments from 'react-components/shared/highlight-text-fragments.component';
 
-function ToolSearchResult({ value, onClickAdd, selected, itemProps, isHighlighted, item }) {
+function ToolSearchResult({
+  value,
+  onClickAdd,
+  selected,
+  exporterNotSelected,
+  importerNotSelected,
+  itemProps,
+  isHighlighted,
+  item
+}) {
+  let addButtonText = 'Add to supply chain';
+
+  if (!(exporterNotSelected && importerNotSelected)) {
+    if (exporterNotSelected) addButtonText = 'Add exporter to supply chain';
+    if (importerNotSelected) addButtonText = 'Add importer to supply chain';
+  }
+
   return (
     <li {...itemProps} className={cx('c-search-result', { '-highlighted': isHighlighted })}>
       <div className="search-node-text-container">
@@ -16,13 +32,15 @@ function ToolSearchResult({ value, onClickAdd, selected, itemProps, isHighlighte
         </span>
       </div>
       <div className="search-node-actions-container">
-        <button
-          onClick={e => onClickAdd(e, item)}
-          className="c-button -medium-large"
-          disabled={selected}
-        >
-          {selected ? 'Already in' : 'Add to'} supply chain
-        </button>
+        {selected ? (
+          <button className="c-button -medium-large" disabled="true">
+            Already in supply chain
+          </button>
+        ) : (
+          <button onClick={e => onClickAdd(e, item)} className="c-button -medium-large">
+            {addButtonText}
+          </button>
+        )}
         {item.profileType &&
           item.type.split(' & ').map(type => (
             <LinkButton
@@ -45,6 +63,8 @@ ToolSearchResult.propTypes = {
   value: PropTypes.string,
   onClickAdd: PropTypes.func,
   selected: PropTypes.bool,
+  exporterNotSelected: PropTypes.bool,
+  importerNotSelected: PropTypes.bool,
   itemProps: PropTypes.object,
   isHighlighted: PropTypes.bool,
   item: PropTypes.object
