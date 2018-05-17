@@ -274,13 +274,10 @@ const toolReducer = {
     // store dimension values in nodesDict as uid: dimensionValue
     const nodesDictWithMeta = setNodesMeta(state.nodesDict, nodesMeta, state.mapDimensions);
 
-    const forceEmptyChoropleth = state.selectedYears[1] - state.selectedYears[0] > 0;
-
     const { choropleth, choroplethLegend } = getChoropleth(
       state.selectedMapDimensions,
       nodesDictWithMeta,
-      state.mapDimensions,
-      forceEmptyChoropleth
+      state.mapDimensions
     );
 
     return Object.assign({}, state, {

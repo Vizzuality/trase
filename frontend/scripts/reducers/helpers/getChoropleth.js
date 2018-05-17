@@ -15,7 +15,7 @@ const generateColorScale = (baseColorScale, length) => {
   return chroma.scale(baseColorScale).colors(length);
 };
 
-export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensions, forceEmpty) {
+export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensions) {
   const uids = compact(selectedMapDimensionsUids);
 
   if (!uids.length || !mapDimensions.length) {
@@ -58,10 +58,6 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
     titles: selectedMapDimensions.map(d => _shortenTitle(d.name)),
     bucket
   };
-
-  if (forceEmpty === true) {
-    return { choropleth, choroplethLegend };
-  }
 
   geoNodesIds.forEach(nodeId => {
     const node = geoNodes[nodeId];
