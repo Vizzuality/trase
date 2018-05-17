@@ -3,7 +3,7 @@ import isNumber from 'lodash/isNumber';
 import debounce from 'lodash/debounce';
 // eslint-disable-next-line camelcase
 import turf_bbox from '@turf/bbox';
-import { BASEMAPS, CARTO_BASE_URL, MAP_PANES, MAP_PANES_Z } from 'constants';
+import { BASEMAPS, CARTO_BASE_URL, MAP_PANES, MAP_PANES_Z, CHOROPLETH_COLORS } from 'constants';
 import 'styles/components/tool/map/leaflet.css';
 import 'styles/components/tool/map.scss';
 import 'styles/components/tool/map/map-legend.scss';
@@ -11,9 +11,14 @@ import 'styles/components/tool/map/map-choropleth.scss';
 
 export default class {
   constructor() {
+    this.canvasRender = !!document.createElement('canvas').getContext && USE_CANVAS_MAP;
+
+    this.darkBasemap = false;
+
     const mapOptions = {
       zoomControl: false,
-      minZoom: 2
+      minZoom: 2,
+      preferCanvas: this.canvasRender
     };
 
     this.map = L.map('js-map', mapOptions);
@@ -70,7 +75,14 @@ export default class {
     this.map.setView(latLng, zoom);
   }
 
-  setBasemap(basemapId) {
+  setBasemap({
+    basemapId,
+    choropleth,
+    selectedBiomeFilter,
+    linkedGeoIds,
+    defaultMapView,
+    forceDefaultMapView
+  }) {
     if (basemapId === null) return;
 
     if (this.basemap) {
@@ -85,7 +97,14 @@ export default class {
     this.basemap = L.tileLayer(basemapOptions.url, basemapOptions);
     this.map.addLayer(this.basemap);
 
-    this._setPaneModifier('-darkBasemap', basemapOptions.dark === true);
+    this.darkBasemap = basemapOptions.dark === true;
+    this._drawChoroplethLayer(
+      choropleth,
+      selectedBiomeFilter,
+      linkedGeoIds,
+      defaultMapView,
+      forceDefaultMapView
+    );
 
     if (basemapOptions.labelsUrl !== undefined) {
       basemapOptions.pane = MAP_PANES.basemapLabels;
@@ -101,7 +120,8 @@ export default class {
     choropleth,
     linkedGeoIds,
     defaultMapView,
-    biomeFilter
+    biomeFilter,
+    forceDefaultMapView
   }) {
     this.polygonTypesLayers = {};
 
@@ -136,10 +156,13 @@ export default class {
     // under normal circumstances, choropleth (depends on loadNodes) and linkedGeoIds (depends on loadLinks)
     // are not available yet, but this is just a fail-safe for race conditions
     if (choropleth) {
-      this._setChoropleth(choropleth);
-    }
-    if (linkedGeoIds && linkedGeoIds.length) {
-      this.showLinkedGeoIds({ linkedGeoIds, defaultMapView });
+      this._drawChoroplethLayer(
+        choropleth,
+        biomeFilter,
+        linkedGeoIds,
+        defaultMapView,
+        forceDefaultMapView
+      );
     }
   }
 
@@ -222,7 +245,14 @@ export default class {
     }
   }
 
-  selectPolygonType({ selectedColumnsIds, choropleth, biomeFilter }) {
+  selectPolygonType({
+    selectedColumnsIds,
+    choropleth,
+    biomeFilter,
+    linkedGeoIds,
+    defaultMapView,
+    forceDefaultMapView
+  }) {
     if (!this.polygonTypesLayers || !selectedColumnsIds.length) {
       return;
     }
@@ -235,11 +265,13 @@ export default class {
     if (this.currentPolygonTypeLayer) {
       this.map.addLayer(this.currentPolygonTypeLayer);
       if (choropleth) {
-        this._setChoropleth(choropleth);
-      }
-
-      if (biomeFilter) {
-        this.filterByBiome(biomeFilter);
+        this._drawChoroplethLayer(
+          choropleth,
+          biomeFilter,
+          linkedGeoIds,
+          defaultMapView,
+          forceDefaultMapView
+        );
       }
     }
   }
@@ -313,11 +345,22 @@ export default class {
   _getPolygonTypeLayer(geoJSON, isPoint) {
     this._setPaneModifier('-pointData', isPoint);
     this._setPaneModifier('-pointData', isPoint, MAP_PANES.vectorOutline);
+
+    const geoJsonLayerStyle = this.canvasRender
+      ? {
+          smoothFactor: 0.9,
+          stroke: true,
+          color: this.darkBasemap ? CHOROPLETH_COLORS.bright_stroke : CHOROPLETH_COLORS.dark_stroke,
+          weight: 0.3,
+          opacity: 0.5,
+          fillColor: CHOROPLETH_COLORS.default_fill,
+          fillOpacity: 1
+        }
+      : { smoothFactor: 0.9 };
+
     const topoLayer = new L.GeoJSON(geoJSON, {
-      pane: MAP_PANES.vectorMain,
-      style: {
-        smoothFactor: 0.9
-      },
+      pane: this.canvasRender ? MAP_PANES.overlayPane : MAP_PANES.vectorMain,
+      style: geoJsonLayerStyle,
       pointToLayer: (feature, latlng) =>
         L.circleMarker(latlng, {
           pane: MAP_PANES.vectorMain,
@@ -353,44 +396,125 @@ export default class {
     return topoLayer;
   }
 
-  setChoropleth({ choropleth, choroplethLegend }) {
+  setChoropleth({
+    choropleth,
+    choroplethLegend,
+    selectedBiomeFilter,
+    linkedGeoIds,
+    defaultMapView,
+    forceDefaultMapView
+  }) {
     this._setPaneModifier('-noDimensions', choroplethLegend === null);
     if (!this.currentPolygonTypeLayer) {
       return;
     }
-    this._setChoropleth(choropleth);
+    this._drawChoroplethLayer(
+      choropleth,
+      selectedBiomeFilter,
+      linkedGeoIds,
+      defaultMapView,
+      forceDefaultMapView
+    );
   }
 
-  _setChoropleth(choropleth) {
-    this.currentPolygonTypeLayer.eachLayer(layer => {
-      const choroItem = choropleth[layer.feature.properties.geoid];
-      layer.disabled = !layer.feature.properties.hasFlows;
-      layer._path.classList.toggle('-disabled', layer.disabled);
-
-      const currentBucketClass = layer._path.getAttribute('data-bucketClass');
-      const newBucketClass = choroItem || 'ch-default';
-
-      if (currentBucketClass === null) {
-        layer._path.classList.add(newBucketClass);
-      } else {
-        layer._path.classList.replace(currentBucketClass, newBucketClass);
-      }
-
-      layer._path.setAttribute('data-bucketClass', newBucketClass);
-    });
-  }
-
-  showLinkedGeoIds({ linkedGeoIds, selectedGeoIds, defaultMapView, forceDefaultMapView }) {
+  _drawChoroplethLayer(choropleth, biome, linkedGeoIds, defaultMapView, forceDefaultMapView) {
     if (!this.currentPolygonTypeLayer) {
       return;
     }
-
-    this._setPaneModifier('-linkedActivated', linkedGeoIds.length);
-
     const linkedPolygons = [];
+    const hasLinkedGeoIds = linkedGeoIds.length > 0;
+    const hasChoroplethLayersEnabled = Object.values(choropleth).length > 0;
+
     this.currentPolygonTypeLayer.eachLayer(layer => {
+      const isFilteredOut =
+        biome === null ||
+        biome.geoId === undefined ||
+        layer.feature.properties.biome_geoid === undefined
+          ? false
+          : biome.geoId !== layer.feature.properties.biome_geoid;
+
       const isLinked = linkedGeoIds.indexOf(layer.feature.properties.geoid) > -1;
-      layer._path.classList.toggle('-linked', isLinked);
+      const choroItem = choropleth[layer.feature.properties.geoid];
+
+      let fillColor = CHOROPLETH_COLORS.default_fill;
+      let weight = 0.3;
+      let fillOpacity = 1;
+      const color = this.darkBasemap
+        ? CHOROPLETH_COLORS.bright_stroke
+        : CHOROPLETH_COLORS.dark_stroke;
+
+      if (isFilteredOut) {
+        // If region is filtered out by biome filter, hide it and bail
+        fillOpacity = 0;
+      } else if (hasChoroplethLayersEnabled) {
+        // Handle cases where we have map choropleth layers enabled
+        switch (true) {
+          case hasLinkedGeoIds && isLinked:
+            // There are nodes selected in the sankey, our node is linked to them
+            // Fill with the choropleth color and show thicker borders
+            fillColor = choroItem;
+            weight = 1.2;
+            break;
+          case hasLinkedGeoIds && !isLinked:
+            // There are nodes selected in the sankey, our node is not linked and map has choropleth layers
+            // Show preset color for not linked nodes
+            fillColor = CHOROPLETH_COLORS.fill_not_linked;
+            break;
+          case !!choroItem:
+            // Map has choropleth layers enabled, and sankey has no nodes selected
+            // Show the choropleth color
+            fillColor = choroItem;
+            break;
+          default:
+            // Default state
+            // Show the default fill
+            fillColor = CHOROPLETH_COLORS.default_fill;
+            break;
+        }
+      } else {
+        // Handle cases where we don't have map choropleth layers enabled
+        switch (true) {
+          case hasLinkedGeoIds && isLinked:
+            // There are nodes selected in the sankey, our node is linked to them and map has no choropleth layers
+            // Fill with preset color and show slightly thicker borders
+            fillColor = CHOROPLETH_COLORS.fill_linked;
+            fillOpacity = 0.4;
+            weight = 0.5;
+            break;
+          case hasLinkedGeoIds && !isLinked:
+            // There are nodes selected in the sankey, our node is not linked and map has choropleth layers
+            // Show preset color for not linked nodes
+            fillColor = CHOROPLETH_COLORS.fill_not_linked;
+            fillOpacity = this.darkBasemap ? 0 : 1;
+            weight = 0.5;
+            break;
+          default:
+            // Default state
+            // Show transparent
+            fillOpacity = 0;
+            break;
+        }
+      }
+
+      if (this.canvasRender) {
+        layer.setStyle({
+          fillColor,
+          fillOpacity,
+          stroke: !isFilteredOut,
+          interactive: !isFilteredOut,
+          color,
+          weight
+        });
+      } else {
+        layer.disabled = !layer.feature.properties.hasFlows;
+        layer._path.style.fill = fillColor;
+        layer._path.style.fillOpacity = fillOpacity;
+        layer._path.style.stroke = color;
+        layer._path.style.strokeOpacity = !isFilteredOut ? 0.5 : 0;
+        layer._path.style.strokeWidth = `${weight}px`;
+        layer._path.style.pointerEvents = isFilteredOut ? 'none' : 'auto';
+      }
+
       if (isLinked) {
         linkedPolygons.push(layer.feature);
       }
@@ -405,7 +529,26 @@ export default class {
       const boundsCenterZoom = this.map._getBoundsCenterZoom(bounds);
       boundsCenterZoom.zoom = Math.max(boundsCenterZoom.zoom, defaultMapView.zoom);
       this._setMapViewDebounced(boundsCenterZoom.center, boundsCenterZoom.zoom);
-    } else {
+    }
+  }
+
+  showLinkedGeoIds({
+    choropleth,
+    selectedBiomeFilter,
+    linkedGeoIds,
+    selectedGeoIds,
+    defaultMapView,
+    forceDefaultMapView
+  }) {
+    this._drawChoroplethLayer(
+      choropleth,
+      selectedBiomeFilter,
+      linkedGeoIds,
+      defaultMapView,
+      forceDefaultMapView
+    );
+
+    if (!forceDefaultMapView && linkedGeoIds.length === 0) {
       this._fitBoundsToSelectedPolygons(selectedGeoIds);
     }
   }
@@ -422,16 +565,19 @@ export default class {
     }, 850);
   }
 
-  filterByBiome(biome) {
-    if (!this.currentPolygonTypeLayer) {
-      return;
-    }
-    this.currentPolygonTypeLayer.eachLayer(layer => {
-      const isFilteredOut =
-        biome.geoId === undefined || layer.feature.properties.biome_geoid === undefined
-          ? false
-          : biome.geoId !== layer.feature.properties.biome_geoid;
-      layer._path.classList.toggle('-filteredOut', isFilteredOut);
-    });
+  filterByBiome({
+    choropleth,
+    selectedBiomeFilter,
+    linkedGeoIds,
+    defaultMapView,
+    forceDefaultMapView
+  }) {
+    this._drawChoroplethLayer(
+      choropleth,
+      selectedBiomeFilter,
+      linkedGeoIds,
+      defaultMapView,
+      forceDefaultMapView
+    );
   }
 }

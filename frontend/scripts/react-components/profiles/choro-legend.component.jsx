@@ -19,7 +19,7 @@ class ChoroLegend extends Component {
           <div className="layer-name">{title[0]}</div>
           <div className="layer-name">{title[1]}</div>
         </div>
-        <ul className="bucket-legend" data-colors="5">
+        <ul className="bucket-legend">
           {PROFILE_CHOROPLETH_CLASSES.map((color, index) => (
             <li className="bucket-item" key={index}>
               <div className={classnames('bucket', color)}>

@@ -16,7 +16,7 @@
       &.-disabled {
         cursor: not-allowed;
       }
-      
+
       &.-filteredOut {
         display: none;
       }
@@ -27,12 +27,6 @@
       }
 
       &.ch-zero { fill: $ch-zero; };
-
-      @each $item, $color in $choropleth-colors {
-        &.#{$item} {
-          fill: $color;
-        }
-      }
     }
 
     &.-noDimensions {

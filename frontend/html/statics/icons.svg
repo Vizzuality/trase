@@ -180,15 +180,6 @@
     </g>
   </g>
 </symbol>
-<symbol id="icon-unidimensional-legend-arrows" viewBox="0 0 768 32">
-  <title>Single</title>
-  <path fill="none" stroke="#6c787d" stroke-width="5.3333" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" style="stroke: var(--color1, #6c787d)" d="M2.659 15.274h742.129"></path>
-  <path fill="none" opacity="0.3" stroke="#6c787d" stroke-width="5.3333" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" style="stroke: var(--color1, #6c787d)" d="M154.667 26.667v-21.333"></path>
-  <path fill="none" opacity="0.3" stroke="#6c787d" stroke-width="5.3333" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" style="stroke: var(--color1, #6c787d)" d="M309.333 26.667v-21.333"></path>
-  <path fill="none" opacity="0.3" stroke="#6c787d" stroke-width="5.3333" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" style="stroke: var(--color1, #6c787d)" d="M458.667 26.667v-21.333"></path>
-  <path fill="none" opacity="0.3" stroke="#6c787d" stroke-width="5.3333" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" style="stroke: var(--color1, #6c787d)" d="M613.333 26.667v-21.333"></path>
-  <path fill="#6c787d" stroke="#6c787d" stroke-width="5.3333" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" style="stroke: var(--color1, #6c787d)" style="fill: var(--color1, #6c787d)" d="M748.307 2.667l18.856 11.314-18.86 11.317z"></path>
-</symbol>
 <symbol id="icon-download" viewBox="0 0 27 32">
   <title>download</title>
   <path d="M15.262 17.985v-15.7h-3.657v15.7l-5.029-5.029-2.586 2.586 9.443 9.443 9.443-9.443-2.586-2.586-5.029 5.029zM0 31.771v-3.657h26.866v3.657h-26.866z"></path>

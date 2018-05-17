@@ -1,3 +1,7 @@
+import ReactDOMServer from 'react-dom/server';
+import React from 'react';
+
+import ChoroArrow from 'react-components/tool/choro-arrow.component';
 import LegendChoroTemplate from 'templates/tool/map/legend-choro.ejs';
 import LegendContextTemplate from 'templates/tool/map/legend-context.ejs';
 import 'styles/components/tool/map/map-legend.scss';
@@ -49,7 +53,9 @@ export default class {
     if (bucketClass === undefined || bucketClass === null) {
       return;
     }
-    const bucket = this.choro.getElementsByClassName(bucketClass)[0];
+    const bucket = this.choro.getElementsByClassName(
+      `color-${bucketClass.substr(1).toLowerCase()}`
+    )[0];
     if (bucket === undefined) {
       return;
     }
@@ -97,12 +103,17 @@ export default class {
   }
 
   _renderChoro(choroplethLegend) {
-    const cssClass = choroplethLegend.isBivariate ? '-bidimensional' : '-horizontal';
+    const cssClasses = [];
+    cssClasses.push(choroplethLegend.isBivariate ? '-bidimensional' : '-horizontal');
+
+    if (!choroplethLegend.isBivariate && choroplethLegend.bucket[0].length >= 7) {
+      cssClasses.push('-wide');
+    }
 
     this.choro.innerHTML = LegendChoroTemplate({
       title: choroplethLegend.titles,
       colors: choroplethLegend.colors,
-      cssClass,
+      cssClass: cssClasses.join(' '),
       bucket: choroplethLegend.bucket,
       isBivariate: choroplethLegend.isBivariate,
       abbreviateNumber
@@ -111,6 +122,16 @@ export default class {
     this.currentBuckets = Array.prototype.slice
       .call(this.choro.getElementsByClassName('bucket'))
       .concat(Array.prototype.slice.call(this.choro.getElementsByClassName('bullet')));
+
+    const choroArrow = document.querySelector('.js-choro-arrow');
+
+    if (!choroplethLegend.isBivariate) {
+      choroArrow.innerHTML = ReactDOMServer.renderToStaticMarkup(
+        <ChoroArrow ticks={choroplethLegend.bucket[0].length} width={choroArrow.clientWidth} />
+      );
+    } else {
+      choroArrow.innerHTML = '';
+    }
   }
 
   _renderContext(layers) {
