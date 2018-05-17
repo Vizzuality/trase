@@ -353,7 +353,11 @@ export function loadNodes() {
             dimension.years === null ||
             allSelectedYears.every(year => dimension.years.includes(year));
           const yearsWithDataToDisplay = intesection(dimension.years, allSelectedYears);
-          if (!allYearsCovered && allSelectedYears.length > 1 && yearsWithDataToDisplay.length > 0) {
+          if (
+            !allYearsCovered &&
+            allSelectedYears.length > 1 &&
+            yearsWithDataToDisplay.length > 0
+          ) {
             dimension.disabledYearRangeReason = YEARS_INCOMPLETE;
             dimension.disabledYearRangeReasonText = getSingleMapDimensionWarning(
               dimension.disabledYearRangeReason,

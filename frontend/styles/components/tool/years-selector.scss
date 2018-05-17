@@ -8,9 +8,12 @@ $not-active-color: $charcoal-grey-faded;
 $active-color: $charcoal-grey;
 
 .c-years-selector {
+  min-width: 180px;
+
   .years-selector-content {
     display: flex;
     padding: 15px;
+    min-width: auto;
   }
 
   .years-selector-footer {
