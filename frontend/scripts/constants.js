@@ -135,6 +135,7 @@ export const YEARS_INCOMPLETE = 'INCOMPLETE';
 export const MAP_PANES = {
   basemap: 'basemap',
   contextBelow: 'contextBelow',
+  vectorBelow: 'vectorBelow',
   vectorMain: 'vectorMain',
   vectorOutline: 'vectorOutline',
   context: 'context',
@@ -144,6 +145,7 @@ export const MAP_PANES = {
 export const MAP_PANES_Z = {
   [MAP_PANES.basemap]: 200,
   [MAP_PANES.contextBelow]: 400,
+  [MAP_PANES.vectorBelow]: 409,
   [MAP_PANES.vectorMain]: 410,
   [MAP_PANES.vectorOutline]: 412,
   [MAP_PANES.context]: 420,

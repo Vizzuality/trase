@@ -35,10 +35,6 @@ export default class {
     this.map.on('dragend zoomend', () =>
       this.callbacks.onMoveEnd(this.map.getCenter(), this.map.getZoom())
     );
-    this.map.on('zoomend', () => {
-      const z = this.map.getZoom();
-      this._setPaneModifier('-high-zoom', z >= 6);
-    });
 
     this._setMapViewDebounced = debounce(this._setMapViewDebounced, 500);
 
@@ -47,7 +43,7 @@ export default class {
       this.map.getPane(paneKey).style.zIndex = MAP_PANES_Z[paneKey];
     });
     this.contextLayers = [];
-    this.polygonFeaturesDict = {};
+    this.pointVolumeShadowLayer = null;
 
     document.querySelector('.js-basemap-switcher').addEventListener('click', () => {
       this.callbacks.onToggleMapLayerMenu();
@@ -130,10 +126,7 @@ export default class {
     Object.keys(mapVectorData).forEach(polygonTypeId => {
       const polygonType = mapVectorData[polygonTypeId];
       if (polygonType.useGeometryFromColumnId === undefined) {
-        this.polygonTypesLayers[polygonTypeId] = this._getPolygonTypeLayer(
-          polygonType.geoJSON,
-          polygonType.isPoint
-        );
+        this.polygonTypesLayers[polygonTypeId] = this._createPolygonTypeLayer(polygonType);
       }
     });
 
@@ -262,6 +255,12 @@ export default class {
 
     this.currentPolygonTypeLayer = this.polygonTypesLayers[id];
     if (this.currentPolygonTypeLayer) {
+      this._setPaneModifier('-pointData', this.currentPolygonTypeLayer.isPoint);
+      this._setPaneModifier(
+        '-pointData',
+        this.currentPolygonTypeLayer.isPoint,
+        MAP_PANES.vectorOutline
+      );
       this.map.addLayer(this.currentPolygonTypeLayer);
       if (choropleth) {
         this._drawChoroplethLayer(
@@ -341,36 +340,88 @@ export default class {
     return layer;
   }
 
-  _getPolygonTypeLayer(geoJSON, isPoint) {
-    this._setPaneModifier('-pointData', isPoint);
-    this._setPaneModifier('-pointData', isPoint, MAP_PANES.vectorOutline);
-
-    const geoJsonLayerStyle = this.canvasRender
-      ? {
-          smoothFactor: 0.9,
-          stroke: true,
-          color: this.darkBasemap ? CHOROPLETH_COLORS.bright_stroke : CHOROPLETH_COLORS.dark_stroke,
-          weight: 0.3,
-          opacity: 0.5,
-          fillColor: CHOROPLETH_COLORS.default_fill,
-          fillOpacity: 1
-        }
-      : { smoothFactor: 0.9 };
-
-    const topoLayer = new L.GeoJSON(geoJSON, {
-      pane: this.canvasRender ? MAP_PANES.overlayPane : MAP_PANES.vectorMain,
-      style: geoJsonLayerStyle,
-      pointToLayer: (feature, latlng) =>
-        L.circleMarker(latlng, {
-          pane: MAP_PANES.vectorMain,
-          radius: 6
-        })
-    });
+  _createPolygonTypeLayer({ geoJSON, isPoint }) {
+    const topoLayer = isPoint
+      ? this._createPointTopoLayer(geoJSON)
+      : this._createPolygonTopoLayer(geoJSON);
 
     topoLayer.isPoint = isPoint;
+    this._setEventsForTopoLayer(topoLayer);
 
+    return topoLayer;
+  }
+
+  _createPolygonTopoLayer(geoJSON) {
+    const style = {
+      smoothFactor: 0.9,
+      stroke: true,
+      color: this.darkBasemap ? CHOROPLETH_COLORS.bright_stroke : CHOROPLETH_COLORS.dark_stroke,
+      weight: 0.3,
+      opacity: 0.5,
+      fillColor: CHOROPLETH_COLORS.default_fill,
+      fillOpacity: 1
+    };
+
+    return new L.GeoJSON(geoJSON, {
+      pane: this.canvasRender ? MAP_PANES.overlayPane : MAP_PANES.vectorMain,
+      style
+    });
+  }
+
+  _createPointTopoLayer(geoJSON) {
+    const pane = MAP_PANES.vectorMain;
+    const style = {
+      stroke: true,
+      weight: 2,
+      color: '#34444c',
+      opacity: 1,
+      fillOpacity: 1,
+      fillColor: '#fff'
+    };
+
+    return new L.GeoJSON(geoJSON, {
+      pane,
+      pointToLayer: (feature, latlng) =>
+        L.circleMarker(latlng, {
+          pane,
+          radius: 6,
+          ...style
+        })
+    });
+  }
+
+  _createPointVolumeShadowLayer(geoJSON, visibleNodes) {
+    const style = {
+      smoothFactor: 0.9,
+      stroke: false,
+      fillColor: '#34444c',
+      fillOpacity: 0.3
+    };
+    const minRadius = 6;
+    const maxRadius = 100;
+
+    const topoLayer = new L.GeoJSON(geoJSON, {
+      pane: MAP_PANES.vectorBelow,
+      style,
+      pointToLayer: (feature, latlng) => {
+        const node = visibleNodes.find(n => n.geoId === feature.properties.geoid);
+        // node is not visible bail
+        if (!node) return null;
+
+        return L.circleMarker(latlng, {
+          pane: MAP_PANES.vectorBelow,
+          radius: minRadius + Math.sqrt(node.height) * maxRadius
+        });
+      }
+    });
+
+    this._setEventsForTopoLayer(topoLayer);
+
+    return topoLayer;
+  }
+
+  _setEventsForTopoLayer(topoLayer) {
     topoLayer.eachLayer(layer => {
-      this.polygonFeaturesDict[layer.feature.properties.geoid] = layer;
       const that = this;
       layer.on({
         mouseover(event) {
@@ -392,18 +443,15 @@ export default class {
         }
       });
     });
-    return topoLayer;
   }
 
   setChoropleth({
     choropleth,
-    choroplethLegend,
     selectedBiomeFilter,
     linkedGeoIds,
     defaultMapView,
     forceDefaultMapView
   }) {
-    this._setPaneModifier('-noDimensions', choroplethLegend === null);
     if (!this.currentPolygonTypeLayer) {
       return;
     }
@@ -417,9 +465,9 @@ export default class {
   }
 
   _drawChoroplethLayer(choropleth, biome, linkedGeoIds, defaultMapView, forceDefaultMapView) {
-    if (!this.currentPolygonTypeLayer) {
-      return;
-    }
+    if (!this.currentPolygonTypeLayer) return;
+    if (this.currentPolygonTypeLayer.isPoint) return;
+
     const linkedPolygons = [];
     const hasLinkedGeoIds = linkedGeoIds.length > 0;
     const hasChoroplethLayersEnabled = Object.values(choropleth).length > 0;
@@ -578,5 +626,33 @@ export default class {
       defaultMapView,
       forceDefaultMapView
     );
+  }
+
+  updatePointLayerStyle(anyGeoSelected) {
+    if (!this.currentPolygonTypeLayer) return;
+    if (!this.currentPolygonTypeLayer.isPoint) return;
+
+    this.currentPolygonTypeLayer.setStyle({
+      fillColor: anyGeoSelected ? '#d6dadb' : '#fff'
+    });
+  }
+
+  updatePointShadowLayer({ mapVectorData, visibleNodes }) {
+    if (!mapVectorData) return;
+
+    if (this.pointVolumeShadowLayer) {
+      this.map.removeLayer(this.pointVolumeShadowLayer);
+    }
+
+    const polygonTypeId = Object.keys(mapVectorData)[0];
+    const polygonType = mapVectorData[polygonTypeId];
+
+    if (!polygonType.isPoint) return;
+
+    this.pointVolumeShadowLayer = this._createPointVolumeShadowLayer(
+      polygonType.geoJSON,
+      visibleNodes
+    );
+    this.map.addLayer(this.pointVolumeShadowLayer);
   }
 }

@@ -1,5 +1,6 @@
 /* eslint-disable no-shadow */
 // see sankey.container for details on how to use those containers
+import isEmpty from 'lodash/isEmpty';
 import { toggleMap, toggleMapLayerMenu } from 'actions/app.actions';
 import { selectNodeFromGeoId, highlightNodeFromGeoId, saveMapView } from 'actions/tool.actions';
 import connect from 'connect';
@@ -54,7 +55,6 @@ const mapMethodsToState = state => ({
     _comparedValue: state => state.tool.choropleth,
     _returnedValue: state => ({
       choropleth: state.tool.choropleth,
-      choroplethLegend: state.tool.choroplethLegend,
       selectedBiomeFilter: state.tool.selectedBiomeFilter,
       linkedGeoIds: state.tool.linkedGeoIds,
       defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
@@ -94,6 +94,14 @@ const mapMethodsToState = state => ({
       linkedGeoIds: state.tool.linkedGeoIds,
       defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
       forceDefaultMapView: !state.tool.selectedNodesIds.length
+    })
+  },
+  updatePointLayerStyle: !isEmpty(state.tool.selectedNodesGeoIds),
+  updatePointShadowLayer: {
+    _comparedValue: state => state.tool.visibleNodes,
+    _returnedValue: state => ({
+      mapVectorData: state.tool.mapVectorData,
+      visibleNodes: state.tool.visibleNodes
     })
   }
 });
