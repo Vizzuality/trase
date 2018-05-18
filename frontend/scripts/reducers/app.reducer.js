@@ -12,7 +12,8 @@ import {
   SET_CONTEXT_IS_USER_SELECTED,
   SET_CONTEXT,
   LOAD_INITIAL_CONTEXT,
-  LOAD_STATE_FROM_URL
+  LOAD_STATE_FROM_URL,
+  SET_LANGUAGE
 } from 'actions/app.actions';
 import { createReducer } from 'store';
 
@@ -35,7 +36,8 @@ const initialState = {
   },
   selectedContext: null,
   initialSelectedContextIdFromURL: null, // IMPORTANT: this should only be used to load context by id from the URL
-  contexts: []
+  contexts: [],
+  languageCode: undefined
 };
 
 const isSankeyExpanded = state => state.isMapLayerVisible !== true && state.isMapVisible !== true;
@@ -60,6 +62,9 @@ const appReducer = {
   },
   [SET_TOOLTIPS](state, action) {
     return Object.assign({}, state, { tooltips: action.payload });
+  },
+  [SET_LANGUAGE](state, action) {
+    return Object.assign({}, state, { languageCode: action.payload });
   },
   [SHOW_DISCLAIMER](state, action) {
     return Object.assign({}, state, {
@@ -119,6 +124,7 @@ const appReducerTypes = PropTypes => ({
   currentDropdown: PropTypes.string,
   isMapLayerVisible: PropTypes.bool,
   isAppMenuVisible: PropTypes.bool,
+  languageCode: PropTypes.string,
   modal: PropTypes.shape({
     visibility: PropTypes.bool,
     modalParams: PropTypes.object

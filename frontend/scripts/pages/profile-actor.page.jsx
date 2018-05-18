@@ -417,6 +417,7 @@ const _setInfo = (info, onLinkClick, { nodeId, year, contextId }) => {
   document.querySelector('.js-link-supply-chain').addEventListener('click', () =>
     onLinkClick('tool', {
       state: {
+        isMapVisible: false,
         selectedNodesIds: [parseInt(nodeId, 10)],
         expandedNodesIds: [parseInt(nodeId, 10)],
         selectedYears: [year, year],

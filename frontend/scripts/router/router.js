@@ -137,17 +137,17 @@ const config = {
     stringify
   },
   title: state => {
-    const foo = routes[state.location.type];
+    const route = routes[state.location.type];
 
-    if (!foo.title) {
+    if (!route.title) {
       return 'TRASE';
     }
 
-    if (typeof foo.title === 'function') {
-      return foo.title(state);
+    if (typeof route.title === 'function') {
+      return route.title(state);
     }
 
-    return foo;
+    return route;
   },
   onBeforeChange: (dispatch, getState, { action }) => {
     const isMobile = window.innerWidth <= BREAKPOINTS.small;
@@ -156,10 +156,7 @@ const config = {
       return dispatch(redirect({ type: 'notSupportedOnMobile' }));
     }
 
-    return dispatchThunks(
-      redirectToExplore
-      // resetToolThunk
-    )(dispatch, getState, { action });
+    return dispatchThunks(redirectToExplore)(dispatch, getState, { action });
   },
   restoreScroll: restoreScroll({
     shouldUpdateScroll: (prev, current) => {

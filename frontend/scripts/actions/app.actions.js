@@ -24,6 +24,7 @@ export const SET_SEARCH_TERM = 'SET_SEARCH_TERM';
 export const LOAD_SEARCH_RESULTS = 'LOAD_SEARCH_RESULTS';
 export const SET_CONTEXTS = 'SET_CONTEXTS';
 export const SET_CONTEXT_IS_USER_SELECTED = 'SET_CONTEXT_IS_USER_SELECTED';
+export const SET_LANGUAGE = 'SET_LANGUAGE';
 
 export function selectInitialContextById(contextId) {
   return (dispatch, getState) => {
@@ -158,6 +159,13 @@ export function resetSearchResults() {
   return {
     type: SET_SEARCH_TERM,
     payload: { term: '', results: [] }
+  };
+}
+
+export function setLanguage(languageCode) {
+  return {
+    type: SET_LANGUAGE,
+    payload: languageCode
   };
 }
 
