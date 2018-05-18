@@ -10,11 +10,10 @@ import 'styles/components/tool/tool-search-result.scss';
 
 export default class ToolSearch extends Component {
   static getNodeIds(selectedItem) {
-    const parts = `${selectedItem.id}`.split('_');
-    if (parts.length > 1) {
-      return [parseInt(parts[0], 10), parseInt(parts[1], 10)];
-    }
-    return [selectedItem.id];
+    return selectedItem.id
+      .toString()
+      .split('_')
+      .map(n => parseInt(n, 10));
   }
 
   static isValidChar(key) {
@@ -65,23 +64,23 @@ export default class ToolSearch extends Component {
   }
 
   onSelected(selectedItem) {
+    if (!selectedItem) return;
+
     if (this.isNodeSelected(selectedItem)) {
       this.downshift.clearSelection();
       return;
     }
+
     const ids = ToolSearch.getNodeIds(selectedItem);
-    if (selectedItem.selected) {
-      this.props.onRemoveNode(ids);
-    } else {
-      this.props.onAddNode(ids);
-    }
+    this.props.onAddNode(ids);
     this.onCloseClicked();
   }
 
-  onAddNode(e, selectedItem) {
+  onAddNode(e, item) {
+    const { onAddNode, selectedNodesIds } = this.props;
     if (e) e.stopPropagation();
-    const ids = ToolSearch.getNodeIds(selectedItem);
-    this.props.onAddNode(ids);
+    const ids = ToolSearch.getNodeIds(item).filter(id => !selectedNodesIds.includes(id));
+    onAddNode(ids);
     this.downshift.reset();
     this.input.focus();
   }
@@ -105,10 +104,8 @@ export default class ToolSearch extends Component {
   }
 
   isNodeSelected(node) {
-    return [node, node.exporter, node.importer]
-      .filter(n => !!n)
-      .map(n => n.id)
-      .reduce((acc, next) => acc || this.props.selectedNodesIds.includes(next), false);
+    const ids = ToolSearch.getNodeIds(node);
+    return ids.every(id => this.props.selectedNodesIds.includes(id));
   }
 
   render() {
@@ -166,6 +163,8 @@ export default class ToolSearch extends Component {
                           item={item}
                           itemProps={getItemProps({ item })}
                           selected={this.isNodeSelected(item)}
+                          importerNotSelected={item.importer && !this.isNodeSelected(item.importer)}
+                          exporterNotSelected={item.exporter && !this.isNodeSelected(item.exporter)}
                           onClickAdd={this.onAddNode}
                         />
                       ))}
@@ -186,6 +185,5 @@ ToolSearch.propTypes = {
   selectedNodesIds: PropTypes.array,
   nodes: PropTypes.array,
   isSearchOpen: PropTypes.bool,
-  onAddNode: PropTypes.func,
-  onRemoveNode: PropTypes.func
+  onAddNode: PropTypes.func
 };

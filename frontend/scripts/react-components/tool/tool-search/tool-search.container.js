@@ -1,4 +1,4 @@
-import { selectExpandedNode, selectNode, setSankeySearchVisibility } from 'actions/tool.actions';
+import { selectExpandedNode, setSankeySearchVisibility } from 'actions/tool.actions';
 import flatten from 'lodash/flatten';
 import groupBy from 'lodash/groupBy';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.component';
@@ -54,7 +54,6 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       onAddNode: nodeId => selectExpandedNode(nodeId),
-      onRemoveNode: nodeId => selectNode(nodeId),
       setSankeySearchVisibility: searchVisibility => setSankeySearchVisibility(searchVisibility)
     },
     dispatch
