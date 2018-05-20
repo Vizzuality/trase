@@ -9,6 +9,8 @@ import 'styles/components/tool/map.scss';
 import 'styles/components/tool/map/map-legend.scss';
 import 'styles/components/tool/map/map-choropleth.scss';
 
+const POINT_RADIUS = 6;
+
 export default class {
   constructor() {
     this.canvasRender = !!document.createElement('canvas').getContext && USE_CANVAS_MAP;
@@ -35,6 +37,9 @@ export default class {
     this.map.on('dragend zoomend', () =>
       this.callbacks.onMoveEnd(this.map.getCenter(), this.map.getZoom())
     );
+    this.map.on('zoomend', () => {
+      this._recalculatePointVolumeShadowRadius();
+    });
 
     this._setMapViewDebounced = debounce(this._setMapViewDebounced, 500);
 
@@ -225,7 +230,7 @@ export default class {
         pointToLayer(feature, latlng) {
           return L.circleMarker(latlng, {
             pane: MAP_PANES.vectorOutline,
-            radius: 6
+            radius: POINT_RADIUS
           });
         }
       });
@@ -384,7 +389,7 @@ export default class {
       pointToLayer: (feature, latlng) =>
         L.circleMarker(latlng, {
           pane,
-          radius: 6,
+          radius: POINT_RADIUS,
           ...style
         })
     });
@@ -397,8 +402,6 @@ export default class {
       fillColor: '#34444c',
       fillOpacity: 0.3
     };
-    const minRadius = 6;
-    const maxRadius = 100;
 
     const topoLayer = new L.GeoJSON(geoJSON, {
       pane: MAP_PANES.vectorBelow,
@@ -408,9 +411,11 @@ export default class {
         // node is not visible bail
         if (!node) return null;
 
+        feature.properties.nodeHeight = node.height;
+
         return L.circleMarker(latlng, {
           pane: MAP_PANES.vectorBelow,
-          radius: minRadius + Math.sqrt(node.height) * maxRadius
+          radius: this._calculatePointVolumeShadowRadius(node.height)
         });
       }
     });
@@ -418,6 +423,20 @@ export default class {
     this._setEventsForTopoLayer(topoLayer);
 
     return topoLayer;
+  }
+
+  _calculatePointVolumeShadowRadius(value) {
+    const zoomRatio = 10 * Math.exp(this.map.getZoom() / 2.5);
+    return POINT_RADIUS + Math.sqrt(value) * zoomRatio;
+  }
+
+  _recalculatePointVolumeShadowRadius() {
+    if (!this.pointVolumeShadowLayer) return;
+
+    this.pointVolumeShadowLayer.eachLayer(marker => {
+      const nodeHeight = marker.feature.properties.nodeHeight;
+      marker.setRadius(this._calculatePointVolumeShadowRadius(nodeHeight));
+    });
   }
 
   _setEventsForTopoLayer(topoLayer) {
