@@ -61,10 +61,6 @@ export default class {
     this.attributionSource = document.querySelector('.leaflet-control-attribution');
   }
 
-  _setPaneModifier(modifier, value, pane = MAP_PANES.vectorMain) {
-    this.map.getPane(pane).classList.toggle(modifier, value);
-  }
-
   setMapView(mapView) {
     if (mapView === null) return;
 
@@ -234,8 +230,14 @@ export default class {
           });
         }
       });
+      const getClassName = feature => {
+        const classes = [];
+        if (this.currentPolygonTypeLayer.isPoint) classes.push('-point');
+        classes.push(feature.properties.geoid === highlightedGeoId ? '-highlighted' : '-selected');
+        return classes.join(' ');
+      };
       this.vectorOutline.setStyle(feature => ({
-        className: feature.properties.geoid === highlightedGeoId ? '-highlighted' : '-selected'
+        className: getClassName(feature)
       }));
 
       this.map.addLayer(this.vectorOutline);
@@ -260,12 +262,6 @@ export default class {
 
     this.currentPolygonTypeLayer = this.polygonTypesLayers[id];
     if (this.currentPolygonTypeLayer) {
-      this._setPaneModifier('-pointData', this.currentPolygonTypeLayer.isPoint);
-      this._setPaneModifier(
-        '-pointData',
-        this.currentPolygonTypeLayer.isPoint,
-        MAP_PANES.vectorOutline
-      );
       this.map.addLayer(this.currentPolygonTypeLayer);
       if (choropleth) {
         this._drawChoroplethLayer(

@@ -38,10 +38,8 @@
         stroke: $charcoal-grey;
         stroke-width: 2.5px;
       }
-    }
 
-    &.-pointData {
-      path {
+      &.-point {
         &.-selected {
           fill: $egg-shell;
           fill-opacity: 1;
