@@ -19,7 +19,7 @@ class ContextSelector extends Component {
       firstNotSeenContext: this.getFirstNotSeenContextAndUpdateLocalStorage(props),
       newlySelectedCountryId: null,
       newlySelectedCommodityId: null,
-      selectedTabIndex: 0
+      isSubnationalTabSelected: true
     };
 
     this.resetSelection = this.resetSelection.bind(this);
@@ -36,11 +36,12 @@ class ContextSelector extends Component {
   }
 
   getCountriesAndCommodities() {
-    const { selectedTabIndex, newlySelectedCountryId, newlySelectedCommodityId } = this.state;
-    const isSubnationalSelected = selectedTabIndex === 0;
-    const contexts = Object.values(this.props.contexts).filter(
-      c => c.isSubnational === isSubnationalSelected
-    );
+    const {
+      newlySelectedCountryId,
+      newlySelectedCommodityId,
+      isSubnationalTabSelected
+    } = this.state;
+    const contexts = this.props.contexts.filter(c => c.isSubnational === isSubnationalTabSelected);
     const countries = Object.values(groupBy(contexts, 'countryId')).map(grouped => ({
       id: grouped[0].countryId,
       name: grouped[0].countryName,
@@ -74,9 +75,10 @@ class ContextSelector extends Component {
     };
   }
 
-  getFirstNotSeenContextAndUpdateLocalStorage(props) {
-    const contexts = Object.values(props.contexts);
+  getFirstNotSeenContextAndUpdateLocalStorage({ contexts }) {
     const contextIds = contexts.map(c => c.id);
+    // no contexts yet do not check localstorage
+    if (!contextIds.length) return null;
     const alreadySeenContextIds = JSON.parse(localStorage.getItem(SEEN_CONTEXTS_KEY)) || [];
 
     // we assume this is a first visit so don't feature a new context
@@ -85,8 +87,7 @@ class ContextSelector extends Component {
       return null;
     }
 
-    /* const firstNotSeenContext = contexts.find(c => !alreadySeenContextIds.includes(c.id)) || null; */
-    const firstNotSeenContext = contexts[0];
+    const firstNotSeenContext = contexts.find(c => !alreadySeenContextIds.includes(c.id)) || null;
     localStorage.setItem(SEEN_CONTEXTS_KEY, JSON.stringify(contextIds));
 
     return firstNotSeenContext;
@@ -115,8 +116,9 @@ class ContextSelector extends Component {
       const { newlySelectedCountryId, newlySelectedCommodityId } = this.state;
       if (newlySelectedCountryId === null || newlySelectedCommodityId === null) return;
 
-      const key = this.props.getComputedKey([newlySelectedCountryId, newlySelectedCommodityId]);
-      const selectedContext = this.props.contexts[key];
+      const selectedContext = this.props.contexts.find(
+        c => c.countryId === newlySelectedCountryId && c.commodityId === newlySelectedCommodityId
+      );
 
       if (selectedContext) {
         this.resetSelection();
@@ -169,20 +171,20 @@ class ContextSelector extends Component {
   }
 
   renderContextList(countries, commodities) {
-    const { selectedTabIndex } = this.state;
+    const { isSubnationalTabSelected } = this.state;
 
     return (
       <div className="context-list-container">
         <ul className="context-list-tabs">
           <li
-            className={cx('tab', { '-selected': selectedTabIndex === 0 })}
-            onClick={() => this.setState({ selectedTabIndex: 0 })}
+            className={cx('tab', { '-selected': isSubnationalTabSelected })}
+            onClick={() => this.setState({ isSubnationalTabSelected: true })}
           >
             Subnational Data
           </li>
           <li
-            className={cx('tab', { '-selected': selectedTabIndex === 1 })}
-            onClick={() => this.setState({ selectedTabIndex: 1 })}
+            className={cx('tab', { '-selected': !isSubnationalTabSelected })}
+            onClick={() => this.setState({ isSubnationalTabSelected: false })}
           >
             National Data
           </li>
@@ -271,10 +273,9 @@ ContextSelector.propTypes = {
   isExplore: PropTypes.bool,
   contextIsUserSelected: PropTypes.bool,
   toggleContextSelectorVisibility: PropTypes.func,
-  getComputedKey: PropTypes.func,
   selectContextById: PropTypes.func,
   tooltipText: PropTypes.string,
-  contexts: PropTypes.object,
+  contexts: PropTypes.array,
   currentDropdown: PropTypes.string,
   selectedContextCountry: PropTypes.string,
   selectedContextCommodity: PropTypes.string,
