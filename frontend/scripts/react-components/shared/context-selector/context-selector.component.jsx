@@ -9,17 +9,30 @@ import Tooltip from 'react-components/shared/help-tooltip.component';
 import 'styles/components/shared/context-selector.scss';
 
 const id = 'country-commodity';
+const SEEN_CONTEXTS_KEY = 'SEEN_CONTEXTS';
 
 class ContextSelector extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      firstNotSeenContext: this.getFirstNotSeenContextAndUpdateLocalStorage(props),
       newlySelectedCountryId: null,
       newlySelectedCommodityId: null,
       selectedTabIndex: 0
     };
+
     this.resetSelection = this.resetSelection.bind(this);
+    this.closeFeaturedHeader = this.closeFeaturedHeader.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.contexts !== this.props.contexts) {
+      const firstNotSeenContext = this.getFirstNotSeenContextAndUpdateLocalStorage(nextProps);
+      if (firstNotSeenContext) {
+        this.setState({ firstNotSeenContext });
+      }
+    }
   }
 
   getCountriesAndCommodities() {
@@ -59,6 +72,28 @@ class ContextSelector extends Component {
           (newlySelectedCountry && !newlySelectedCountry.commodityIds.includes(c.id))
       }))
     };
+  }
+
+  getFirstNotSeenContextAndUpdateLocalStorage(props) {
+    const contexts = Object.values(props.contexts);
+    const contextIds = contexts.map(c => c.id);
+    const alreadySeenContextIds = JSON.parse(localStorage.getItem(SEEN_CONTEXTS_KEY)) || [];
+
+    // we assume this is a first visit so don't feature a new context
+    if (!alreadySeenContextIds.length) {
+      localStorage.setItem(SEEN_CONTEXTS_KEY, JSON.stringify(contextIds));
+      return null;
+    }
+
+    /* const firstNotSeenContext = contexts.find(c => !alreadySeenContextIds.includes(c.id)) || null; */
+    const firstNotSeenContext = contexts[0];
+    localStorage.setItem(SEEN_CONTEXTS_KEY, JSON.stringify(contextIds));
+
+    return firstNotSeenContext;
+  }
+
+  closeFeaturedHeader() {
+    this.setState({ firstNotSeenContext: null });
   }
 
   resetSelection(e) {
@@ -107,6 +142,29 @@ class ContextSelector extends Component {
           </li>
         ))}
       </ul>
+    );
+  }
+
+  renderFeaturedContext() {
+    const { firstNotSeenContext } = this.state;
+
+    if (!firstNotSeenContext) return null;
+
+    const title = `New ${firstNotSeenContext.isSubnational ? 'Subnational' : 'National'} Data`;
+    const newContextName = `
+    ${firstNotSeenContext.countryName.toLowerCase()} - ${firstNotSeenContext.commodityName.toLowerCase()}
+    `;
+
+    return (
+      <div className="context-selector-featured-header">
+        <svg className="icon icon-close" onClick={this.closeFeaturedHeader}>
+          <use xlinkHref="#icon-close" />
+        </svg>
+        <div>
+          <span className="featured-header-title">{title}</span>
+          <span className="featured-header-new-context-name">{newContextName}</span>
+        </div>
+      </div>
     );
   }
 
@@ -192,6 +250,7 @@ class ContextSelector extends Component {
             onClickOutside={toggleContextSelectorVisibility}
           >
             <div className="context-selector-content" onClick={this.resetSelection}>
+              {this.renderFeaturedContext()}
               {this.renderContextList(countries, commodities)}
               <div className="context-selector-footer">
                 <span className="context-selector-footer-text">

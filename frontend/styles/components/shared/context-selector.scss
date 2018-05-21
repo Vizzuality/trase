@@ -11,12 +11,46 @@
   }
 
   .context-selector-featured-header {
+    position: relative;
     height: 125px;
     width: 100%;
-    background-color: $white;
+    background-color: $charcoal-grey; // TODO - update with background-image
     display: flex;
     align-items: center;
-    padding: 22px;
+    padding: 0 25px;
+
+    .icon {
+      position: absolute;
+      height: 14px;
+      width: 14x;
+      right: 10px;
+      top: 10px;
+      color: $white;
+    }
+
+    span {
+      display: block;
+    }
+
+    .featured-header-title {
+      font-family: $font-family-1;
+      font-size: $font-size-small;
+      font-weight: normal;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      color: $white;
+    }
+
+    .featured-header-new-context-name {
+      margin-top: 2px;
+      height: 20px;
+      font-family: $font-family-2;
+      font-size: $font-size-xx-regular;
+      font-weight: normal;
+      letter-spacing: .5px;
+      text-transform: capitalize;
+      color: $white;
+    }
   }
 
   .context-list-tabs {
