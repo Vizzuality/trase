@@ -46,6 +46,15 @@ export const DETAILED_VIEW_SCALE = 1200;
 export const DETAILED_VIEW_MIN_NODE_HEIGHT = 14;
 export const DETAILED_VIEW_MIN_LINK_HEIGHT = 1;
 
+export const COLORS = {
+  white: '#FFFFFF',
+  gray: '#DFDFDF',
+  charcoalGrey: '#34444C',
+  charcoalGreyTonedDown: '#536269',
+  charcoalGreyFadedALot: '#D6DADB',
+  manilla: '#FFEB8B'
+};
+
 export const CHOROPLETH_CLASS_ZERO = '#FFFFFF';
 export const CHOROPLETH_COLORS = {
   bidimensional: [
@@ -86,14 +95,14 @@ export const CHOROPLETH_COLORS = {
     '#a50026',
     '#6f001a'
   ],
-  error_no_metadata: '#DFDFDF',
-  error_no_metadata_for_layer: '#DFDFDF',
-  default_fill: '#FFFFFF',
-  fill_linked: '#FFEB8B',
-  fill_not_linked: '#DFDFDF',
-  bright_stroke: '#FFFFFF',
-  dark_stroke: '#536269',
-  zero: '#FFFFFF'
+  error_no_metadata: COLORS.gray,
+  error_no_metadata_for_layer: COLORS.gray,
+  default_fill: COLORS.white,
+  fill_linked: COLORS.manilla,
+  fill_not_linked: COLORS.gray,
+  bright_stroke: COLORS.white,
+  dark_stroke: COLORS.charcoalGreyTonedDown,
+  zero: COLORS.white
 };
 
 export const PROFILE_CHOROPLETH_CLASSES = [

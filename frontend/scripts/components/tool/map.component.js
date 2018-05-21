@@ -3,7 +3,14 @@ import isNumber from 'lodash/isNumber';
 import debounce from 'lodash/debounce';
 // eslint-disable-next-line camelcase
 import turf_bbox from '@turf/bbox';
-import { BASEMAPS, CARTO_BASE_URL, MAP_PANES, MAP_PANES_Z, CHOROPLETH_COLORS } from 'constants';
+import {
+  BASEMAPS,
+  CARTO_BASE_URL,
+  COLORS,
+  MAP_PANES,
+  MAP_PANES_Z,
+  CHOROPLETH_COLORS
+} from 'constants';
 import 'styles/components/tool/map/leaflet.css';
 import 'styles/components/tool/map.scss';
 import 'styles/components/tool/map/map-legend.scss';
@@ -374,10 +381,10 @@ export default class {
     const style = {
       stroke: true,
       weight: 2,
-      color: '#34444c',
+      color: COLORS.charcoalGrey,
       opacity: 1,
       fillOpacity: 1,
-      fillColor: '#fff'
+      fillColor: COLORS.white
     };
 
     return new L.GeoJSON(geoJSON, {
@@ -395,7 +402,7 @@ export default class {
     const style = {
       smoothFactor: 0.9,
       stroke: false,
-      fillColor: '#34444c',
+      fillColor: COLORS.charcoalGrey,
       fillOpacity: 0.3
     };
 
@@ -648,7 +655,7 @@ export default class {
     if (!this.currentPolygonTypeLayer.isPoint) return;
 
     this.currentPolygonTypeLayer.setStyle({
-      fillColor: anyGeoSelected ? '#d6dadb' : '#fff'
+      fillColor: anyGeoSelected ? COLORS.charcoalGreyFadedALot : COLORS.white
     });
   }
 
