@@ -60,7 +60,7 @@ class GlobalSearchResult extends Component {
                 }
               }}
             >
-              Production Region
+              Map
             </LinkButton>
           )}
 
