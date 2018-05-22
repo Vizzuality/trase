@@ -9,17 +9,16 @@ import Tooltip from 'react-components/shared/help-tooltip.component';
 import 'styles/components/shared/context-selector.scss';
 
 const id = 'country-commodity';
-const SEEN_CONTEXTS_KEY = 'SEEN_CONTEXTS';
 
 class ContextSelector extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      firstNotSeenContext: this.getFirstNotSeenContextAndUpdateLocalStorage(props),
       newlySelectedCountryId: null,
       newlySelectedCommodityId: null,
-      isSubnationalTabSelected: true
+      isSubnationalTabSelected: true,
+      featuredContext: null
     };
 
     this.resetSelection = this.resetSelection.bind(this);
@@ -27,11 +26,12 @@ class ContextSelector extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.contexts !== this.props.contexts) {
-      const firstNotSeenContext = this.getFirstNotSeenContextAndUpdateLocalStorage(nextProps);
-      if (firstNotSeenContext) {
-        this.setState({ firstNotSeenContext });
-      }
+    const isOpening = nextProps.currentDropdown === id && this.props.currentDropdown !== id;
+
+    if (isOpening) {
+      this.setState({
+        featuredContext: this.getFeaturedContext(nextProps)
+      });
     }
   }
 
@@ -75,26 +75,14 @@ class ContextSelector extends Component {
     };
   }
 
-  getFirstNotSeenContextAndUpdateLocalStorage({ contexts }) {
-    const contextIds = contexts.map(c => c.id);
-    // no contexts yet do not check localstorage
-    if (!contextIds.length) return null;
-    const alreadySeenContextIds = JSON.parse(localStorage.getItem(SEEN_CONTEXTS_KEY)) || [];
+  getFeaturedContext({ contexts }) {
+    const pickRandomOne = ctxs => ctxs[Math.floor(Math.random() * ctxs.length)];
 
-    // we assume this is a first visit so don't feature a new context
-    if (!alreadySeenContextIds.length) {
-      localStorage.setItem(SEEN_CONTEXTS_KEY, JSON.stringify(contextIds));
-      return null;
-    }
-
-    const firstNotSeenContext = contexts.find(c => !alreadySeenContextIds.includes(c.id)) || null;
-    localStorage.setItem(SEEN_CONTEXTS_KEY, JSON.stringify(contextIds));
-
-    return firstNotSeenContext;
+    return pickRandomOne(contexts.filter(c => c.isHighlighted));
   }
 
   closeFeaturedHeader() {
-    this.setState({ firstNotSeenContext: null });
+    this.setState({ featuredContext: null });
   }
 
   resetSelection(e) {
@@ -148,13 +136,13 @@ class ContextSelector extends Component {
   }
 
   renderFeaturedContext() {
-    const { firstNotSeenContext } = this.state;
+    const { featuredContext } = this.state;
 
-    if (!firstNotSeenContext) return null;
+    if (!featuredContext) return null;
 
-    const title = `New ${firstNotSeenContext.isSubnational ? 'Subnational' : 'National'} Data`;
+    const title = `New ${featuredContext.isSubnational ? 'Subnational' : 'National'} Data`;
     const newContextName = `
-    ${firstNotSeenContext.countryName.toLowerCase()} - ${firstNotSeenContext.commodityName.toLowerCase()}
+    ${featuredContext.countryName.toLowerCase()} - ${featuredContext.commodityName.toLowerCase()}
     `;
 
     return (

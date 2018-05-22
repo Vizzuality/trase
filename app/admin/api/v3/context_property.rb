@@ -2,7 +2,7 @@ ActiveAdmin.register Api::V3::ContextProperty, as: 'ContextProperty' do
   menu parent: 'General Settings', priority: 2
 
   permit_params :context_id, :default_basemap, :is_disabled, :is_default,
-                :is_subnational
+                :is_subnational, :is_highlighted
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -38,6 +38,7 @@ ActiveAdmin.register Api::V3::ContextProperty, as: 'ContextProperty' do
     column :is_disabled
     column :is_default
     column :is_subnational
+    column :is_highlighted
     actions
   end
 
