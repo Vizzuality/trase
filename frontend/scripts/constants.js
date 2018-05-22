@@ -158,7 +158,8 @@ export const MAP_PANES_Z = {
   [MAP_PANES.vectorMain]: 410,
   [MAP_PANES.vectorOutline]: 412,
   [MAP_PANES.context]: 420,
-  [MAP_PANES.basemapLabels]: 490
+  [MAP_PANES.basemapLabels]: 490,
+  [MAP_PANES.overlayPane]: 410
 };
 
 export const BASEMAPS = {

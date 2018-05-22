@@ -16,7 +16,7 @@ import 'styles/components/tool/map.scss';
 import 'styles/components/tool/map/map-legend.scss';
 import 'styles/components/tool/map/map-choropleth.scss';
 
-const POINT_RADIUS = 6;
+const POINT_RADIUS = 5;
 
 export default class {
   constructor() {
@@ -349,17 +349,6 @@ export default class {
   }
 
   _createPolygonTypeLayer({ geoJSON, isPoint }) {
-    const topoLayer = isPoint
-      ? this._createPointTopoLayer(geoJSON)
-      : this._createPolygonTopoLayer(geoJSON);
-
-    topoLayer.isPoint = isPoint;
-    this._setEventsForTopoLayer(topoLayer);
-
-    return topoLayer;
-  }
-
-  _createPolygonTopoLayer(geoJSON) {
     const style = {
       smoothFactor: 0.9,
       stroke: true,
@@ -370,32 +359,19 @@ export default class {
       fillOpacity: 1
     };
 
-    return new L.GeoJSON(geoJSON, {
+    const topoLayer = new L.GeoJSON(geoJSON, {
       pane: this.canvasRender ? MAP_PANES.overlayPane : MAP_PANES.vectorMain,
-      style
-    });
-  }
-
-  _createPointTopoLayer(geoJSON) {
-    const pane = MAP_PANES.vectorMain;
-    const style = {
-      stroke: true,
-      weight: 2,
-      color: COLORS.charcoalGrey,
-      opacity: 1,
-      fillOpacity: 1,
-      fillColor: COLORS.white
-    };
-
-    return new L.GeoJSON(geoJSON, {
-      pane,
+      style,
       pointToLayer: (feature, latlng) =>
         L.circleMarker(latlng, {
-          pane,
-          radius: POINT_RADIUS,
-          ...style
+          radius: POINT_RADIUS
         })
     });
+
+    topoLayer.isPoint = isPoint;
+    this._setEventsForTopoLayer(topoLayer);
+
+    return topoLayer;
   }
 
   _createPointVolumeShadowLayer(geoJSON, visibleNodes) {
@@ -488,11 +464,11 @@ export default class {
 
   _drawChoroplethLayer(choropleth, biome, linkedGeoIds, defaultMapView, forceDefaultMapView) {
     if (!this.currentPolygonTypeLayer) return;
-    if (this.currentPolygonTypeLayer.isPoint) return;
 
     const linkedPolygons = [];
     const hasLinkedGeoIds = linkedGeoIds.length > 0;
     const hasChoroplethLayersEnabled = Object.values(choropleth).length > 0;
+    const isPoint = this.currentPolygonTypeLayer.isPoint;
 
     this.currentPolygonTypeLayer.eachLayer(layer => {
       const isFilteredOut =
@@ -506,8 +482,9 @@ export default class {
       const choroItem = choropleth[layer.feature.properties.geoid];
 
       let fillColor = CHOROPLETH_COLORS.default_fill;
-      let weight = 0.3;
+      let weight = isPoint ? 1.5 : 0.3;
       let fillOpacity = 1;
+      let strokeOpacity = isPoint ? 1 : 0.5;
       const color = this.darkBasemap
         ? CHOROPLETH_COLORS.bright_stroke
         : CHOROPLETH_COLORS.dark_stroke;
@@ -515,6 +492,7 @@ export default class {
       if (isFilteredOut) {
         // If region is filtered out by biome filter, hide it and bail
         fillOpacity = 0;
+        strokeOpacity = 0;
       } else if (hasChoroplethLayersEnabled) {
         // Handle cases where we have map choropleth layers enabled
         switch (true) {
@@ -547,18 +525,19 @@ export default class {
             // There are nodes selected in the sankey, our node is linked to them and map has no choropleth layers
             // Fill with preset color and show slightly thicker borders
             fillColor = CHOROPLETH_COLORS.fill_linked;
-            fillOpacity = 0.4;
-            weight = 0.5;
+            fillOpacity = isPoint ? 1 : 0.4;
+            weight = isPoint ? 1.5 : 0.5;
             break;
           case hasLinkedGeoIds && !isLinked:
             // There are nodes selected in the sankey, our node is not linked and map has choropleth layers
             // Show preset color for not linked nodes
             fillColor = CHOROPLETH_COLORS.fill_not_linked;
             fillOpacity = this.darkBasemap ? 0 : 1;
-            weight = 0.5;
+            strokeOpacity = isPoint ? 0.4 : strokeOpacity;
+            weight = isPoint ? 1.5 : 0.5;
             break;
-          default:
-            // Default state
+          case !isPoint:
+            // Default state for not point
             // Show transparent
             fillOpacity = 0;
             break;
@@ -570,6 +549,7 @@ export default class {
           fillColor,
           fillOpacity,
           stroke: !isFilteredOut,
+          opacity: strokeOpacity,
           interactive: !isFilteredOut,
           color,
           weight
@@ -579,7 +559,7 @@ export default class {
         layer._path.style.fill = fillColor;
         layer._path.style.fillOpacity = fillOpacity;
         layer._path.style.stroke = color;
-        layer._path.style.strokeOpacity = !isFilteredOut ? 0.5 : 0;
+        layer._path.style.strokeOpacity = strokeOpacity;
         layer._path.style.strokeWidth = `${weight}px`;
         layer._path.style.pointerEvents = isFilteredOut ? 'none' : 'auto';
       }
@@ -596,7 +576,9 @@ export default class {
       // we use L's _getBoundsCenterZoom internal method + setView as fitBounds does not support a minZoom option
       const bounds = L.latLngBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
       const boundsCenterZoom = this.map._getBoundsCenterZoom(bounds);
-      boundsCenterZoom.zoom = Math.max(boundsCenterZoom.zoom, defaultMapView.zoom);
+      if (defaultMapView) {
+        boundsCenterZoom.zoom = Math.max(boundsCenterZoom.zoom, defaultMapView.zoom);
+      }
       this._setMapViewDebounced(boundsCenterZoom.center, boundsCenterZoom.zoom);
     }
   }
@@ -648,15 +630,6 @@ export default class {
       defaultMapView,
       forceDefaultMapView
     );
-  }
-
-  updatePointLayerStyle(anyGeoSelected) {
-    if (!this.currentPolygonTypeLayer) return;
-    if (!this.currentPolygonTypeLayer.isPoint) return;
-
-    this.currentPolygonTypeLayer.setStyle({
-      fillColor: anyGeoSelected ? COLORS.charcoalGreyFadedALot : COLORS.white
-    });
   }
 
   updatePointShadowLayer({ mapVectorData, visibleNodes }) {

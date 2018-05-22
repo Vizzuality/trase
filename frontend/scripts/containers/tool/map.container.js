@@ -1,6 +1,5 @@
 /* eslint-disable no-shadow */
 // see sankey.container for details on how to use those containers
-import isEmpty from 'lodash/isEmpty';
 import { toggleMap, toggleMapLayerMenu } from 'actions/app.actions';
 import { selectNodeFromGeoId, highlightNodeFromGeoId, saveMapView } from 'actions/tool.actions';
 import connect from 'connect';
@@ -96,7 +95,6 @@ const mapMethodsToState = state => ({
       forceDefaultMapView: !state.tool.selectedNodesIds.length
     })
   },
-  updatePointLayerStyle: !isEmpty(state.tool.selectedNodesGeoIds),
   updatePointShadowLayer: {
     _comparedValue: state => state.tool.visibleNodes,
     _returnedValue: state => ({

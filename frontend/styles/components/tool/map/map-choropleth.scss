@@ -40,14 +40,7 @@
       }
 
       &.-point {
-        &.-selected {
-          fill: $egg-shell;
-          fill-opacity: 1;
-        }
-
         &.-highlighted {
-          fill: $white;
-          fill-opacity: 1;
           stroke: $charcoal-grey;
         }
       }
