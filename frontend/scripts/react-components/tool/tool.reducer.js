@@ -170,8 +170,6 @@ const toolReducer = {
     const mapView = state.mapView ? Object.assign({}, state.mapView) : selectedContext.map;
 
     return Object.assign({}, state, {
-      selectedContext,
-      selectedContextId: selectedContext.id,
       selectedYears,
       selectedRecolorBy: selectedRecolorBy || { type: 'none', name: 'none' },
       selectedResizeBy,

@@ -105,7 +105,7 @@ class Explore extends React.PureComponent {
     const { selectedTableUnit } = this.state;
 
     let link = null;
-    if (selectedContext.id === 1) {
+    if (selectedContext && selectedContext.id === 1) {
       const selectedTable = this.columns.find(i => i.value === selectedTableColumn);
       link = typeof selectedTable !== 'undefined' ? selectedTable.link : null;
     }
@@ -119,13 +119,14 @@ class Explore extends React.PureComponent {
                 <ContextSelector dropdownClassName="-big" isExplore />
               </div>
             </div>
-            {selectedContext.id && (
-              <div className="column small-12">
-                <div className="dropdown-element">
-                  <YearsSelector dropdownClassName="-big" />
+            {selectedContext &&
+              selectedContext.id && (
+                <div className="column small-12">
+                  <div className="dropdown-element">
+                    <YearsSelector dropdownClassName="-big" />
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
           <div className="row">
             <div className={cx('column', 'small-12', { 'medium-7': showTable })}>

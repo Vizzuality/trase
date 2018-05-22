@@ -5,7 +5,8 @@ import YearsSelector from 'react-components/nav/filters-nav/years-selector/years
 import intersection from 'lodash/intersection';
 
 const mapStateToProps = state => {
-  const { selectedResizeBy, selectedRecolorBy, selectedContext, selectedYears } = state.tool;
+  const { selectedResizeBy, selectedRecolorBy, selectedYears } = state.tool;
+  const { selectedContext } = state.app;
 
   const availableContextYears = selectedContext.years;
   const availableResizeByYears =

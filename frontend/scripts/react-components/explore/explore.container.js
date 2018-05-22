@@ -12,9 +12,11 @@ const mapStateToProps = state => {
   const { selectedYears } = state.tool;
   const { selectedContext, contextIsUserSelected } = state.app;
   const { topNodes, selectedTableColumn } = state.explore;
-  const topNodesKey = getTopNodesKey(selectedContext.id, selectedTableColumn, ...selectedYears);
+  const topNodesKey = selectedContext
+    ? getTopNodesKey(selectedContext.id, selectedTableColumn, ...selectedYears)
+    : null;
   const topExporters = topNodes[topNodesKey] || [];
-  const { isSubnational } = selectedContext.id || {};
+  const isSubnational = selectedContext ? selectedContext.isSubnational : null;
 
   return {
     topNodesKey,
