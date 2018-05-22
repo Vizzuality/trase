@@ -26,6 +26,8 @@ ActiveAdmin.register Api::V3::ContextProperty, as: 'ContextProperty' do
                          hint: object.class.column_comment('is_default')
       input :is_subnational, as: :boolean, required: true,
                              hint: object.class.column_comment('is_subnational')
+      input :is_highlighted, as: :boolean, required: true,
+                             hint: object.class.column_comment('is_highlighted')
     end
     f.actions
   end
