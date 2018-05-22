@@ -912,7 +912,8 @@ CREATE TABLE public.context_properties (
     is_default boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    is_subnational boolean DEFAULT false NOT NULL
+    is_subnational boolean DEFAULT false NOT NULL,
+    is_highlighted boolean DEFAULT false NOT NULL
 );
 
 
@@ -4724,6 +4725,5 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180410065335'),
 ('20180412074237'),
 ('20180416125150'),
-('20180522102950');
-
-
+('20180522102950'),
+('20180522135640');
