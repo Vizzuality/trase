@@ -34,7 +34,11 @@ const mapStateToProps = state => {
   // store nodes at container level to avoid rerendering when filtering... for want of a better solution
   if (nodes !== undefined && (!searchNodes || nodes.length !== searchNodes.length)) {
     const allNodes = nodes.filter(
-      node => node.hasFlows === true && node.isAggregated !== true && node.isUnknown !== true
+      node =>
+        node.hasFlows === true &&
+        node.isAggregated !== true &&
+        node.isUnknown !== true &&
+        node.isDomesticConsumption !== true
     );
     searchNodes = flatten(
       Object.values(groupBy(allNodes, 'mainNodeId')).map(groupedNodes =>
