@@ -14,7 +14,10 @@
     position: relative;
     height: 125px;
     width: 100%;
-    background-color: $charcoal-grey; // TODO - update with background-image
+    background-color: $charcoal-grey;
+    background-image: url('/images/backgrounds/featured-context.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
     display: flex;
     align-items: center;
     padding: 0 25px;
