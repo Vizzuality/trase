@@ -78,7 +78,7 @@ class YearsSelector extends Component {
   renderFooter() {
     const { end } = this.state;
 
-    let text = 'Select a start and end year';
+    let text = 'Select one or more year(s)';
 
     if (!end) text = 'Select an end year';
 
