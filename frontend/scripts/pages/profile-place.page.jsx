@@ -20,12 +20,9 @@ import { Provider } from 'react-redux';
 import 'styles/profile-place.scss';
 import formatApostrophe from 'utils/formatApostrophe';
 import formatValue from 'utils/formatValue';
-import {
-  GET_PLACE_FACTSHEET_URL,
-  GET_TOOLTIPS_URL,
-  getURLFromParams
-} from 'utils/getURLFromParams';
+import { GET_PLACE_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParams';
 import smoothScroll from 'utils/smoothScroll';
+import { getDefaultContext } from 'scripts/reducers/helpers/contextHelper';
 
 const defaults = {
   country: 'Brazil',
@@ -221,7 +218,7 @@ const _build = (data, year, onLinkClick, store) => {
   }
 };
 
-const _setInfo = (store, info, onLinkClick, { nodeId, year }) => {
+const _setInfo = (store, info, onLinkClick, { nodeId, year, contextId }) => {
   document.querySelector('.js-country-name').innerHTML = info.country
     ? capitalize(info.country)
     : '-';
@@ -245,16 +242,19 @@ const _setInfo = (store, info, onLinkClick, { nodeId, year }) => {
         isMapVisible: true,
         selectedNodesIds: [parseInt(nodeId, 10)],
         expandedNodesIds: [parseInt(nodeId, 10)],
-        selectedYears: [year, year]
+        selectedYears: [year, year],
+        selectedContextId: contextId
       }
     })
   );
   document.querySelector('.js-link-supply-chain').addEventListener('click', () =>
     onLinkClick('tool', {
       state: {
+        isMapVisible: false,
         selectedNodesIds: [parseInt(nodeId, 10)],
         expandedNodesIds: [parseInt(nodeId, 10)],
-        selectedYears: [year, year]
+        selectedYears: [year, year],
+        selectedContextId: contextId
       }
     })
   );
@@ -323,23 +323,21 @@ const _loadData = (store, nodeId, year) => {
     year
   });
   setLoading();
-  const tooltipsURL = getURLFromParams(GET_TOOLTIPS_URL);
 
-  Promise.all(
-    [placeFactsheetURL, tooltipsURL].map(url =>
-      fetch(url).then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error(response.statusText);
-      })
-    )
-  )
+  fetch(placeFactsheetURL)
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error(response.statusText);
+    })
     .then(response => {
       if (!response) return;
 
-      const tooltips = response[1].profilePlace;
-      const data = response[0].data;
+      const data = response.data;
+
+      // TODO: once we have this state in the reducer, move this logic to the exiting page title helper
+      document.title = `TRASE - ${capitalize(data.municipality_name)} profile`;
 
       setLoading(false);
 
@@ -356,7 +354,13 @@ const _loadData = (store, nodeId, year) => {
         summary: data.summary
       };
 
-      _setInfo(store, info, onLinkClick(store), { nodeId, year });
+      const { tooltips } = store.getState().app;
+
+      _setInfo(store, info, onLinkClick(store), {
+        nodeId,
+        year,
+        contextId: getDefaultContext(store.getState()).id
+      });
       _setEventListeners();
 
       render(

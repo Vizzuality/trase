@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import groupBy from 'lodash/groupBy';
 import memoize from 'lodash/memoize';
-import { toggleDropdown } from 'actions/app.actions';
+import { toggleDropdown, selectContextById } from 'actions/app.actions';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.component';
 
 function classifyColumn(contexts, { id, label, relation }) {
@@ -31,27 +31,27 @@ const memoizedClassifyColumn = memoize(
 const getComputedKey = keys => keys.join('_');
 
 const mapStateToProps = state => {
-  const contexts = state.tool.contexts.reduce((acc, context) => {
+  const contexts = state.app.contexts.reduce((acc, context) => {
     const computedId = getComputedKey([context.countryId, context.commodityId]);
     return Object.assign({}, acc, { [computedId]: context });
   }, {});
 
-  const commodities = memoizedClassifyColumn(state.tool.contexts, {
+  const commodities = memoizedClassifyColumn(state.app.contexts, {
     id: 'commodityId',
     label: 'commodityName',
     relation: 'countryName'
   });
-  const countries = memoizedClassifyColumn(state.tool.contexts, {
+  const countries = memoizedClassifyColumn(state.app.contexts, {
     id: 'countryId',
     label: 'countryName',
     relation: 'commodityName'
   });
 
-  const { tooltips, currentDropdown } = state.app;
-  const { selectedContext } = state.tool;
+  const { tooltips, currentDropdown, selectedContext } = state.app;
 
   return {
     contexts,
+    contextIsUserSelected: state.app.contextIsUserSelected,
     tooltipText: tooltips && tooltips.sankey.nav.context.main,
     getComputedKey,
     currentDropdown,
@@ -69,6 +69,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
+  selectContextById: selectedContextId => dispatch(selectContextById(selectedContextId)),
   toggleContextSelectorVisibility: id => {
     dispatch(toggleDropdown(id));
   }

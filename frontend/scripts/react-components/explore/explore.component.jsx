@@ -96,17 +96,16 @@ class Explore extends React.PureComponent {
   render() {
     const {
       isSubnational,
-      selectedContextId,
+      selectedContext,
       selectedTableColumn,
       selectedYears,
-      selectContext,
       showTable,
       topExporters
     } = this.props;
     const { selectedTableUnit } = this.state;
 
     let link = null;
-    if (selectedContextId === 1) {
+    if (selectedContext && selectedContext.id === 1) {
       const selectedTable = this.columns.find(i => i.value === selectedTableColumn);
       link = typeof selectedTable !== 'undefined' ? selectedTable.link : null;
     }
@@ -117,16 +116,17 @@ class Explore extends React.PureComponent {
           <div className="row context-selectors show-for-small">
             <div className="column small-12">
               <div className="dropdown-element">
-                <ContextSelector dropdownClassName="-big" selectContext={selectContext} />
+                <ContextSelector dropdownClassName="-big" isExplore />
               </div>
             </div>
-            {selectedContextId && (
-              <div className="column small-12">
-                <div className="dropdown-element">
-                  <YearsSelector dropdownClassName="-big" />
+            {selectedContext &&
+              selectedContext.id && (
+                <div className="column small-12">
+                  <div className="dropdown-element">
+                    <YearsSelector dropdownClassName="-big" />
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
           <div className="row">
             <div className={cx('column', 'small-12', { 'medium-7': showTable })}>
@@ -177,8 +177,7 @@ class Explore extends React.PureComponent {
                 <Link
                   className="c-button -pink -big explore-footer-button hide-for-small"
                   to={{
-                    type: 'tool',
-                    payload: { query: { state: { selectedContextId, selectedYears } } }
+                    type: 'tool'
                   }}
                 >
                   Explore the {isSubnational ? 'subnational' : ''} supply chain
@@ -193,16 +192,15 @@ class Explore extends React.PureComponent {
 }
 
 Explore.propTypes = {
-  topNodesKey: PropTypes.string,
+  isSubnational: PropTypes.bool,
+  getTableElements: PropTypes.func.isRequired,
+  selectedYears: PropTypes.arrayOf(PropTypes.number),
+  selectedContext: PropTypes.object,
+  selectedTableColumn: PropTypes.number.isRequired,
+  setSelectedTableColumn: PropTypes.func.isRequired,
   showTable: PropTypes.bool.isRequired,
   topExporters: PropTypes.array.isRequired,
-  isSubnational: PropTypes.bool,
-  selectedYears: PropTypes.arrayOf(PropTypes.number),
-  selectContext: PropTypes.func,
-  getTableElements: PropTypes.func.isRequired,
-  selectedContextId: PropTypes.number,
-  selectedTableColumn: PropTypes.number.isRequired,
-  setSelectedTableColumn: PropTypes.func.isRequired
+  topNodesKey: PropTypes.string
 };
 
 export default Explore;

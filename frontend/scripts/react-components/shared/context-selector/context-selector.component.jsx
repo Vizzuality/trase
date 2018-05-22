@@ -60,7 +60,7 @@ class ContextSelector extends Component {
 
     if (selectedContext) {
       this.resetDimensionSelection();
-      this.props.selectContext(selectedContext.id);
+      this.props.selectContextById(selectedContext.id);
       this.props.toggleContextSelectorVisibility();
     }
   }
@@ -155,12 +155,15 @@ class ContextSelector extends Component {
       toggleContextSelectorVisibility,
       tooltipText,
       currentDropdown,
+      contextIsUserSelected,
+      isExplore,
       selectedContextCountry,
       selectedContextCommodity,
       dimensions,
       defaultContextLabel
     } = this.props;
-    const isContextSelected = selectedContextCountry && selectedContextCommodity;
+    const isContextSelected =
+      (!isExplore || contextIsUserSelected) && selectedContextCountry && selectedContextCommodity;
     const contextLabel = isContextSelected
       ? `${selectedContextCountry.toLowerCase()} - ${selectedContextCommodity.toLowerCase()}`
       : defaultContextLabel;
@@ -202,9 +205,11 @@ class ContextSelector extends Component {
 ContextSelector.propTypes = {
   className: PropTypes.string,
   dropdownClassName: PropTypes.string,
+  isExplore: PropTypes.bool,
+  contextIsUserSelected: PropTypes.bool,
   toggleContextSelectorVisibility: PropTypes.func,
   getComputedKey: PropTypes.func,
-  selectContext: PropTypes.func,
+  selectContextById: PropTypes.func,
   tooltipText: PropTypes.string,
   contexts: PropTypes.object,
   currentDropdown: PropTypes.string,

@@ -46,7 +46,6 @@ export default class {
       this.map.createPane(paneKey);
       this.map.getPane(paneKey).style.zIndex = MAP_PANES_Z[paneKey];
     });
-
     this.contextLayers = [];
     this.polygonFeaturesDict = {};
 
@@ -68,7 +67,7 @@ export default class {
   setMapView(mapView) {
     if (mapView === null) return;
 
-    this.map.setView([mapView.latitude, mapView.longitude], mapView.zoom);
+    this._setMapViewDebounced([mapView.latitude, mapView.longitude], mapView.zoom);
   }
 
   _setMapViewDebounced(latLng, zoom) {
@@ -505,7 +504,7 @@ export default class {
           color,
           weight
         });
-      } else {
+      } else if (typeof layer._path !== 'undefined') {
         layer.disabled = !layer.feature.properties.hasFlows;
         layer._path.style.fill = fillColor;
         layer._path.style.fillOpacity = fillOpacity;

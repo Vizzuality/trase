@@ -1,24 +1,26 @@
 import { connectRoutes, NOT_FOUND, redirect, replace } from 'redux-first-router';
 import restoreScroll from 'redux-first-router-restore-scroll';
-
 import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.container';
 import TeamMember from 'react-components/team/team-member/team-member.container';
 import Team from 'react-components/team/team.container';
 import { parse, stringify } from 'utils/stateURL';
 
 import { BREAKPOINTS } from 'constants';
-import { getDataPortalContext } from 'react-components/data-portal/data-portal.thunks';
 import {
   getPostsContent,
   getTestimonialsContent,
-  getTweetsContent,
-  resetToolThunk,
-  loadInitialDataHome
+  getTweetsContent
 } from 'react-components/home/home.thunks';
 import { withSidebarNavLayout } from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
 import { getPageStaticContent } from 'react-components/static-content/static-content.thunks';
+import { loadBaseAppData } from 'react-components/shared/app.thunks';
 import { getTeam } from 'react-components/team/team.thunks';
-import { loadInitialDataExplore, redirectToExplore } from 'react-components/explore/explore.thunks';
+import {
+  setContextForExplorePage,
+  redirectToExplore
+} from 'react-components/explore/explore.thunks';
+import { loadToolInitialData } from 'scripts/react-components/tool/tool.thunks';
+import { getPageTitle } from 'scripts/router/page-title';
 
 const pagesNotSupportedOnMobile = ['tool', 'map', 'data'];
 
@@ -27,12 +29,125 @@ const pagesNotSupportedOnMobile = ['tool', 'map', 'data'];
 const dispatchThunks = (...thunks) => (...params) =>
   Promise.all(thunks.map(thunk => thunk(...params)));
 
+const loadPageData = (...thunks) => (...params) =>
+  loadBaseAppData(...params).then(() => Promise.all(thunks.map(thunk => thunk(...params))));
+
+export const routes = {
+  home: {
+    path: '/',
+    page: 'home',
+    title: getPageTitle,
+    thunk: loadPageData(getPostsContent, getTweetsContent, getTestimonialsContent)
+  },
+  explore: {
+    path: '/explore/:contextId?',
+    page: 'explore',
+    title: getPageTitle,
+    thunk: loadPageData(setContextForExplorePage)
+  },
+  tool: {
+    path: '/flows',
+    page: 'tool',
+    title: getPageTitle,
+    thunk: loadPageData(loadToolInitialData)
+  },
+  profileRoot: {
+    path: '/profiles',
+    page: 'profile-root',
+    title: getPageTitle,
+    extension: 'jsx',
+    nav: {
+      className: '-light'
+    },
+    thunk: loadPageData()
+  },
+  profileActor: {
+    path: '/profile-actor',
+    page: 'profile-actor',
+    title: getPageTitle,
+    nav: {
+      className: '-light',
+      printable: true
+    },
+    thunk: loadPageData()
+  },
+  profilePlace: {
+    path: '/profile-place',
+    page: 'profile-place',
+    title: getPageTitle,
+    nav: {
+      className: '-light',
+      printable: true
+    },
+    thunk: loadPageData()
+  },
+  data: {
+    path: '/data',
+    page: 'data-portal',
+    title: getPageTitle,
+    thunk: loadPageData(),
+    nav: {
+      className: '-light'
+    }
+  },
+  team: {
+    path: '/about/team',
+    page: 'static-content',
+    title: getPageTitle,
+    thunk: loadPageData(getTeam),
+    component: withSidebarNavLayout(Team)
+  },
+  teamMember: {
+    path: '/about/team/:member',
+    page: 'static-content',
+    title: getPageTitle,
+    thunk: loadPageData(getTeam),
+    component: withSidebarNavLayout(TeamMember),
+    parent: 'team'
+  },
+  about: {
+    path: '/about/:section?',
+    page: 'static-content',
+    title: getPageTitle,
+    thunk: loadPageData(getPageStaticContent),
+    component: withSidebarNavLayout(MarkdownRenderer)
+  },
+  notSupportedOnMobile: {
+    path: '/not-supported',
+    page: 'not-supported',
+    title: getPageTitle,
+    nav: {
+      className: '-light'
+    },
+    thunk: loadPageData()
+  },
+  [NOT_FOUND]: {
+    path: '/404',
+    page: 'static-content',
+    title: getPageTitle,
+    thunk: loadPageData(() => replace('/404'), getPageStaticContent)
+  }
+};
+
 const config = {
   basename: '/',
   notFoundPath: '/404',
   querySerializer: {
     parse,
     stringify
+  },
+  title: state => {
+    const route = routes[state.location.type];
+
+    if (!route.title) {
+      return 'TRASE';
+    }
+
+    if (typeof route.title === 'function') {
+      return route.title(state);
+    }
+
+    return route;
   },
   onBeforeChange: (dispatch, getState, { action }) => {
     const isMobile = window.innerWidth <= BREAKPOINTS.small;
@@ -41,7 +156,7 @@ const config = {
       return dispatch(redirect({ type: 'notSupportedOnMobile' }));
     }
 
-    return dispatchThunks(redirectToExplore, resetToolThunk)(dispatch, getState, { action });
+    return dispatchThunks(redirectToExplore)(dispatch, getState, { action });
   },
   restoreScroll: restoreScroll({
     shouldUpdateScroll: (prev, current) => {
@@ -55,91 +170,6 @@ const config = {
       return prev.pathname !== current.pathname ? [0, 0] : false;
     }
   })
-};
-
-export const routes = {
-  home: {
-    path: '/',
-    page: 'home',
-    thunk: dispatchThunks(
-      getPostsContent,
-      getTweetsContent,
-      getTestimonialsContent,
-      loadInitialDataHome
-    )
-  },
-  explore: {
-    path: '/explore/:contextId?',
-    page: 'explore',
-    thunk: dispatchThunks(loadInitialDataExplore)
-  },
-  tool: {
-    path: '/flows',
-    page: 'tool'
-  },
-  profileRoot: {
-    path: '/profiles',
-    page: 'profile-root',
-    extension: 'jsx',
-    nav: {
-      className: '-light'
-    }
-  },
-  profileActor: {
-    path: '/profile-actor',
-    page: 'profile-actor',
-    nav: {
-      className: '-light',
-      printable: true
-    }
-  },
-  profilePlace: {
-    path: '/profile-place',
-    page: 'profile-place',
-    nav: {
-      className: '-light',
-      printable: true
-    }
-  },
-  data: {
-    path: '/data',
-    page: 'data-portal',
-    thunk: dispatchThunks(getDataPortalContext),
-    nav: {
-      className: '-light'
-    }
-  },
-  team: {
-    path: '/about/team',
-    page: 'static-content',
-    thunk: dispatchThunks(getTeam),
-    component: withSidebarNavLayout(Team)
-  },
-  teamMember: {
-    path: '/about/team/:member',
-    page: 'static-content',
-    thunk: dispatchThunks(getTeam),
-    component: withSidebarNavLayout(TeamMember),
-    parent: 'team'
-  },
-  about: {
-    path: '/about/:section?',
-    page: 'static-content',
-    thunk: dispatchThunks(getPageStaticContent),
-    component: withSidebarNavLayout(MarkdownRenderer)
-  },
-  notSupportedOnMobile: {
-    path: '/not-supported',
-    page: 'not-supported',
-    nav: {
-      className: '-light'
-    }
-  },
-  [NOT_FOUND]: {
-    path: '/404',
-    page: 'static-content',
-    thunk: dispatchThunks(() => replace('/404'), getPageStaticContent)
-  }
 };
 
 export default connectRoutes(routes, config);

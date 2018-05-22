@@ -17,7 +17,7 @@ const mapMethodsToState = state => ({
       recolorByNodeIds: state.tool.recolorByNodeIds,
       choropleth: state.tool.choropleth,
       linkedGeoIds: state.tool.linkedGeoIds,
-      defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
+      defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
       biomeFilter: state.tool.selectedBiomeFilter,
       forceDefaultMapView: !state.tool.selectedNodesIds.length
     })
@@ -39,7 +39,7 @@ const mapMethodsToState = state => ({
     _returnedValue: state => ({
       selectedGeoIds: state.tool.selectedNodesGeoIds,
       linkedGeoIds: state.tool.linkedGeoIds,
-      defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
+      defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
       forceDefaultMapView: !state.tool.selectedNodesIds.length
     })
   },
@@ -69,7 +69,8 @@ const mapMethodsToState = state => ({
       selectedBiomeFilter: state.tool.selectedBiomeFilter,
       linkedGeoIds: state.tool.linkedGeoIds,
       selectedGeoIds: state.tool.selectedNodesGeoIds,
-      defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
+      defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
+      // get back to context default map view if no nodes are selected
       forceDefaultMapView: !state.tool.selectedNodesIds.length
     })
   },

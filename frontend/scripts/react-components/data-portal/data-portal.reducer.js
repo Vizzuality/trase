@@ -1,22 +1,13 @@
-import {
-  LOAD_CONSUMPTION_COUNTRIES,
-  LOAD_CONTEXTS,
-  LOAD_EXPORTERS,
-  LOAD_INDICATORS
-} from 'actions/data.actions';
-import { createReducer } from 'store';
+import { LOAD_CONSUMPTION_COUNTRIES, LOAD_EXPORTERS, LOAD_INDICATORS } from 'actions/data.actions';
+import { createReducer } from 'scripts/store';
 
 const initialState = {
-  contexts: [],
   exporters: [],
   consumptionCountries: [],
   indicators: []
 };
 
-const dataReducer = {
-  [LOAD_CONTEXTS](state, action) {
-    return Object.assign({}, state, { contexts: action.payload });
-  },
+const dataPortalReducer = {
   [LOAD_EXPORTERS](state, action) {
     return Object.assign({}, state, { exporters: action.exporters });
   },
@@ -29,10 +20,9 @@ const dataReducer = {
 };
 
 const dataReducerTypes = PropTypes => ({
-  contexts: PropTypes.arrayOf(PropTypes.object).isRequired,
   exporters: PropTypes.arrayOf(PropTypes.object).isRequired,
   consumptionCountries: PropTypes.arrayOf(PropTypes.object).isRequired,
   indicators: PropTypes.arrayOf(PropTypes.object).isRequired
 });
 
-export default createReducer(initialState, dataReducer, dataReducerTypes);
+export default createReducer(initialState, dataPortalReducer, dataReducerTypes);

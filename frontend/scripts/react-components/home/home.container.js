@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import Home from 'react-components/home/home.component';
 import { BREAKPOINTS, HOME_VIDEO } from 'constants';
+import { setContextIsUserSelected } from 'scripts/actions/app.actions';
 
 function mapStateToProps(state) {
   const { query = {} } = state.location;
@@ -22,9 +23,14 @@ function mapStateToProps(state) {
     insightsPosts,
     promotedPost,
     testimonials,
-    selectedContextId: state.tool.selectedContextId,
     tweets: tweets.length > 0 ? tweets : null
   };
 }
 
-export default connect(mapStateToProps)(Home);
+const mapDispatchToProps = dispatch => ({
+  goToContextPage: () => {
+    dispatch(setContextIsUserSelected(true));
+    dispatch({ type: 'explore' });
+  }
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

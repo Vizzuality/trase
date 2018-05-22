@@ -7,7 +7,13 @@ import {
   SET_TOOLTIPS,
   SHOW_DISCLAIMER,
   TOGGLE_DROPDOWN,
-  TOGGLE_MAP_LAYERS_MENU
+  TOGGLE_MAP_LAYERS_MENU,
+  SET_CONTEXTS,
+  SET_CONTEXT_IS_USER_SELECTED,
+  SET_CONTEXT,
+  LOAD_INITIAL_CONTEXT,
+  LOAD_STATE_FROM_URL,
+  SET_LANGUAGE
 } from 'actions/app.actions';
 import { createReducer } from 'store';
 
@@ -17,6 +23,7 @@ const initialState = {
   isAppMenuVisible: false,
   tooltipCheck: 0,
   tooltips: null,
+  contextIsUserSelected: false,
   currentDropdown: null,
   modal: {
     visibility: false,
@@ -26,12 +33,19 @@ const initialState = {
     term: '',
     isLoading: false,
     results: []
-  }
+  },
+  selectedContext: null,
+  initialSelectedContextIdFromURL: null, // IMPORTANT: this should only be used to load context by id from the URL
+  contexts: [],
+  languageCode: undefined
 };
 
 const isSankeyExpanded = state => state.isMapLayerVisible !== true && state.isMapVisible !== true;
 
 const appReducer = {
+  [LOAD_STATE_FROM_URL](state, action) {
+    return { ...state, initialDataLoading: true, ...action.payload.app };
+  },
   [SET_SANKEY_SIZE](state) {
     if (isSankeyExpanded(state)) {
       return Object.assign({}, state, {
@@ -48,6 +62,9 @@ const appReducer = {
   },
   [SET_TOOLTIPS](state, action) {
     return Object.assign({}, state, { tooltips: action.payload });
+  },
+  [SET_LANGUAGE](state, action) {
+    return Object.assign({}, state, { languageCode: action.payload });
   },
   [SHOW_DISCLAIMER](state, action) {
     return Object.assign({}, state, {
@@ -78,16 +95,36 @@ const appReducer = {
       ...state,
       search: { ...state.search, results: action.payload.results, isLoading: false }
     };
+  },
+  [SET_CONTEXTS](state, action) {
+    return Object.assign({}, state, { contexts: action.payload });
+  },
+  [SET_CONTEXT_IS_USER_SELECTED](state, action) {
+    return Object.assign({}, state, { contextIsUserSelected: action.payload });
+  },
+  [SET_CONTEXT](state, action) {
+    const selectedContext = action.payload;
+
+    return Object.assign({}, state, {
+      selectedContext
+    });
+  },
+  [LOAD_INITIAL_CONTEXT](state, action) {
+    const selectedContext = action.payload;
+
+    return Object.assign({}, state, {
+      selectedContext
+    });
   }
 };
 
 const appReducerTypes = PropTypes => ({
-  windowSize: PropTypes.arrayOf(PropTypes.number).isRequired,
+  contexts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  contextIsUserSelected: PropTypes.bool.isRequired,
+  currentDropdown: PropTypes.string,
   isMapLayerVisible: PropTypes.bool,
   isAppMenuVisible: PropTypes.bool,
-  tooltipCheck: PropTypes.number,
-  tooltips: PropTypes.object,
-  currentDropdown: PropTypes.string,
+  languageCode: PropTypes.string,
   modal: PropTypes.shape({
     visibility: PropTypes.bool,
     modalParams: PropTypes.object
@@ -96,7 +133,12 @@ const appReducerTypes = PropTypes => ({
     term: PropTypes.string.isRequired,
     isLoading: PropTypes.bool.isRequired,
     results: PropTypes.arrayOf(PropTypes.object).isRequired
-  }).isRequired
+  }).isRequired,
+  selectedContext: PropTypes.object,
+  initialSelectedContextIdFromURL: PropTypes.number,
+  tooltips: PropTypes.object,
+  tooltipCheck: PropTypes.number,
+  windowSize: PropTypes.arrayOf(PropTypes.number).isRequired
 });
 
 export default createReducer(initialState, appReducer, appReducerTypes);

@@ -2,7 +2,10 @@ export default {
   nav: [
     {
       name: 'Supply Chain',
-      page: 'tool'
+      page: {
+        type: 'tool',
+        payload: { query: { state: { isMapVisible: false } } }
+      }
     },
     {
       name: 'Map',
