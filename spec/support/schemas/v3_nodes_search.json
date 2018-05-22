@@ -67,6 +67,16 @@
             "examples": [
               null
             ]
+          },
+          "isSubnational": {
+            "$id": "/properties/data/items/properties/isSubnational",
+            "type": "boolean",
+            "title": "The isSubnational Schema ",
+            "default": false,
+            "examples": [
+              true,
+              false
+            ]
           }
         }
       }

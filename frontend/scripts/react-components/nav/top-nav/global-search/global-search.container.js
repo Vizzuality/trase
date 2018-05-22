@@ -30,6 +30,7 @@ const mapStateToProps = state => {
       return {
         name: node.name,
         nodeTypeText: getNodeTypeText(nodes, contexts),
+        isSubnational: node.isSubnational,
         contextId: node.contextId,
         nodes
       };

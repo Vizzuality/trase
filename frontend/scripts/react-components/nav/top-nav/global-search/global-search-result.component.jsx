@@ -43,24 +43,26 @@ class GlobalSearchResult extends Component {
           >
             Supply Chain
           </LinkButton>
-          <LinkButton
-            className="-medium-large"
-            to={{
-              type: 'tool',
-              payload: {
-                query: {
-                  state: {
-                    isMapVisible: true,
-                    selectedContextId: item.contextId,
-                    selectedNodesIds: item.nodes.map(i => i.id),
-                    expandedNodesIds: item.nodes.map(i => i.id)
+          {item.isSubnational && (
+            <LinkButton
+              className="-medium-large"
+              to={{
+                type: 'tool',
+                payload: {
+                  query: {
+                    state: {
+                      isMapVisible: true,
+                      selectedContextId: item.contextId,
+                      selectedNodesIds: item.nodes.map(i => i.id),
+                      expandedNodesIds: item.nodes.map(i => i.id)
+                    }
                   }
                 }
-              }
-            }}
-          >
-            Production Region
-          </LinkButton>
+              }}
+            >
+              Production Region
+            </LinkButton>
+          )}
 
           {item.nodes.filter(n => n.profile).map(node => (
             <LinkButton
@@ -82,6 +84,7 @@ class GlobalSearchResult extends Component {
 
 GlobalSearchResult.propTypes = {
   isLoading: PropTypes.bool,
+  showMap: PropTypes.bool,
   value: PropTypes.string,
   itemProps: PropTypes.object,
   isHighlighted: PropTypes.bool,
