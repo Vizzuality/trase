@@ -1,4 +1,4 @@
-/* eslint-disable camelcase,import/no-extraneous-dependencies */
+/* eslint-disable camelcase,import/no-extraneous-dependencies,jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isFunction from 'lodash/isFunction';
@@ -40,6 +40,8 @@ class Line extends Component {
   prepareData(xValues, data) {
     const continuousValues = xValues.map((year, index) => ({
       name: data.name,
+      nodeId: data.node_id,
+      profileType: data.profile_type,
       date: new Date(year, 0),
       value: data.values[index],
       value9: data.value9
@@ -66,7 +68,7 @@ class Line extends Component {
   }
 
   build() {
-    const { data, xValues, settings } = this.props;
+    const { data, xValues, settings, onLinkClick, targetLink, year } = this.props;
 
     const { ticks } = settings;
     const margin = { ...settings.margin };
@@ -100,7 +102,8 @@ class Line extends Component {
       .rangeRound([height, 0])
       .domain(d3_extent([0, ...allYValues]));
 
-    let lastY = height + LINE_LABEL_HEIGHT;
+    let lastNumberY = height + LINE_LABEL_HEIGHT;
+    let lastNameY = height + LINE_LABEL_HEIGHT;
 
     const lines = this.getLines().sort((a, b) => {
       const last = xValues.length - 1;
@@ -173,35 +176,76 @@ class Line extends Component {
             .attr('d', line);
 
           if (!isSmallChart) {
-            pathContainers
+            const texts = pathContainers
               .selectAll('text')
               .data(d => [d])
-              .enter()
+              .enter();
+
+            texts
               .append('text')
               .attr('transform', d => {
                 const last = d.length - 1;
                 const { value } = d[last];
-                let newY = y(value) + 4;
-                if (newY + LINE_LABEL_HEIGHT > lastY) {
-                  newY = lastY - LINE_LABEL_HEIGHT;
+                let newNumberY = y(value) + 4;
+                if (newNumberY + LINE_LABEL_HEIGHT > lastNumberY) {
+                  newNumberY = lastNumberY - LINE_LABEL_HEIGHT - 1;
                 }
-                lastY = newY;
-                return `translate(${width + 6},${newY})`;
+                lastNumberY = newNumberY;
+                return `translate(${width + 6},${newNumberY})`;
               })
-              .text(d => `${numLines - i}.${capitalize(i18n(d[0].name))}`);
+
+              .text(`${numLines - i}.`);
+
+            texts
+              .append('text')
+              .attr('class', d => {
+                if (typeof onLinkClick !== 'undefined' && d[0].nodeId && d[0].profileType) {
+                  return 'link';
+                }
+                return '';
+              })
+              .attr('transform', d => {
+                const last = d.length - 1;
+                const { value } = d[last];
+                let newNameY = y(value) + 4;
+                if (newNameY + LINE_LABEL_HEIGHT > lastNameY) {
+                  newNameY = lastNameY - LINE_LABEL_HEIGHT - 1;
+                }
+                lastNameY = newNameY;
+                return `translate(${width + 20},${newNameY})`;
+              })
+              .on('click', d => {
+                if (typeof onLinkClick !== 'undefined' && d[0].nodeId && d[0].profileType) {
+                  onLinkClick(targetLink, {
+                    nodeId: d[0].nodeId,
+                    year
+                  });
+                }
+              })
+              .text(d => `${capitalize(i18n(d[0].name))}`);
           }
 
-          this.circles = pathContainers
+          const circles = pathContainers
             .selectAll('circle')
             .data(d => d)
-            .enter()
+            .enter();
+
+          circles
             .append('circle')
+            .attr('class', 'small-circle')
+            .attr('cx', d => x(d.date))
+            .attr('cy', d => y(d.value))
+            .attr('r', 2);
+
+          this.hoverCircles = circles
+            .append('circle')
+            .attr('class', 'hover-circle')
             .attr('cx', d => x(d.date))
             .attr('cy', d => y(d.value))
             .attr('r', 4);
 
           if (this.showTooltipCallback !== undefined) {
-            this.circles
+            this.hoverCircles
               .on('mousemove', d => {
                 this.showTooltipCallback(
                   d,
@@ -320,10 +364,13 @@ class Line extends Component {
 
 Line.propTypes = {
   data: PropTypes.object,
+  onLinkClick: PropTypes.func,
+  targetLink: PropTypes.string,
   settings: PropTypes.object,
   width: PropTypes.number,
   xValues: PropTypes.array,
-  useBottomLegend: PropTypes.bool
+  useBottomLegend: PropTypes.bool,
+  year: PropTypes.number
 };
 
 export default Responsive()(Line);

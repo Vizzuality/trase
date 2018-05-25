@@ -180,6 +180,17 @@
                     "id": "/properties/data/properties/top_countries/properties/lines/items/properties/geo_id",
                     "type": "string"
                   },
+                  "node_id": {
+                    "id": "/properties/data/properties/top_countries/properties/lines/items/properties/node_id",
+                    "type": "integer"
+                  },
+                  "profile_type": {
+                    "id": "/properties/data/properties/top_countries/properties/lines/items/properties/profile_type",
+                    "type": [
+                      "profile_type",
+                      null
+                    ]
+                  },
                   "name": {
                     "id": "/properties/data/properties/top_countries/properties/lines/items/properties/name",
                     "type": "string"
@@ -200,7 +211,9 @@
                 "required": [
                   "values",
                   "name",
+                  "profile_type",
                   "value9",
+                  "node_id",
                   "geo_id"
                 ],
                 "type": "object"
@@ -262,6 +275,17 @@
                         "id": "/properties/data/properties/top_sources/properties/biome/properties/lines/items/properties/name",
                         "type": "string"
                       },
+                      "node_id": {
+                        "id": "/properties/data/properties/top_countries/properties/lines/items/properties/node_id",
+                        "type": "integer"
+                      },
+                      "profile_type": {
+                        "id": "/properties/data/properties/top_countries/properties/lines/items/properties/profile_type",
+                        "type": [
+                          "profile_type",
+                          null
+                        ]
+                      },
                       "value9": {
                         "id": "/properties/data/properties/top_sources/properties/biome/properties/lines/items/properties/value9",
                         "type": "integer"
@@ -278,6 +302,8 @@
                     "required": [
                       "values",
                       "name",
+                      "profile_type",
+                      "node_id",
                       "value9",
                       "geo_id"
                     ],
@@ -346,6 +372,17 @@
                         "id": "/properties/data/properties/top_sources/properties/municipality/properties/lines/items/properties/geo_id",
                         "type": "string"
                       },
+                      "node_id": {
+                        "id": "/properties/data/properties/top_countries/properties/lines/items/properties/node_id",
+                        "type": "integer"
+                      },
+                      "profile_type": {
+                        "id": "/properties/data/properties/top_countries/properties/lines/items/properties/profile_type",
+                        "type": [
+                          "profile_type",
+                          null
+                        ]
+                      },
                       "name": {
                         "id": "/properties/data/properties/top_sources/properties/municipality/properties/lines/items/properties/name",
                         "type": "string"
@@ -366,6 +403,8 @@
                     "required": [
                       "values",
                       "name",
+                      "node_id",
+                      "profile_type",
                       "value9",
                       "geo_id"
                     ],
@@ -418,6 +457,17 @@
                         "id": "/properties/data/properties/top_sources/properties/state/properties/lines/items/properties/geo_id",
                         "type": "string"
                       },
+                      "node_id": {
+                        "id": "/properties/data/properties/top_countries/properties/lines/items/properties/node_id",
+                        "type": "integer"
+                      },
+                      "profile_type": {
+                        "id": "/properties/data/properties/top_countries/properties/lines/items/properties/profile_type",
+                        "type": [
+                          "profile_type",
+                          null
+                        ]
+                      },
                       "name": {
                         "id": "/properties/data/properties/top_sources/properties/state/properties/lines/items/properties/name",
                         "type": "string"
@@ -438,6 +488,8 @@
                     "required": [
                       "values",
                       "name",
+                      "profile_type",
+                      "node_id",
                       "value9",
                       "geo_id"
                     ],
