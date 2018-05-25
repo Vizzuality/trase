@@ -3,11 +3,20 @@ import isNumber from 'lodash/isNumber';
 import debounce from 'lodash/debounce';
 // eslint-disable-next-line camelcase
 import turf_bbox from '@turf/bbox';
-import { BASEMAPS, CARTO_BASE_URL, MAP_PANES, MAP_PANES_Z, CHOROPLETH_COLORS } from 'constants';
+import {
+  BASEMAPS,
+  CARTO_BASE_URL,
+  COLORS,
+  MAP_PANES,
+  MAP_PANES_Z,
+  CHOROPLETH_COLORS
+} from 'constants';
 import 'styles/components/tool/map/leaflet.css';
 import 'styles/components/tool/map.scss';
 import 'styles/components/tool/map/map-legend.scss';
 import 'styles/components/tool/map/map-choropleth.scss';
+
+const POINT_RADIUS = 5;
 
 export default class {
   constructor() {
@@ -36,8 +45,7 @@ export default class {
       this.callbacks.onMoveEnd(this.map.getCenter(), this.map.getZoom())
     );
     this.map.on('zoomend', () => {
-      const z = this.map.getZoom();
-      this._setPaneModifier('-high-zoom', z >= 6);
+      this._recalculatePointVolumeShadowRadius();
     });
 
     this._setMapViewDebounced = debounce(this._setMapViewDebounced, 500);
@@ -47,7 +55,7 @@ export default class {
       this.map.getPane(paneKey).style.zIndex = MAP_PANES_Z[paneKey];
     });
     this.contextLayers = [];
-    this.polygonFeaturesDict = {};
+    this.pointVolumeShadowLayer = null;
 
     document.querySelector('.js-basemap-switcher').addEventListener('click', () => {
       this.callbacks.onToggleMapLayerMenu();
@@ -58,10 +66,6 @@ export default class {
 
     this.attribution = document.querySelector('.js-map-attribution');
     this.attributionSource = document.querySelector('.leaflet-control-attribution');
-  }
-
-  _setPaneModifier(modifier, value, pane = MAP_PANES.vectorMain) {
-    this.map.getPane(pane).classList.toggle(modifier, value);
   }
 
   setMapView(mapView) {
@@ -130,10 +134,7 @@ export default class {
     Object.keys(mapVectorData).forEach(polygonTypeId => {
       const polygonType = mapVectorData[polygonTypeId];
       if (polygonType.useGeometryFromColumnId === undefined) {
-        this.polygonTypesLayers[polygonTypeId] = this._getPolygonTypeLayer(
-          polygonType.geoJSON,
-          polygonType.isPoint
-        );
+        this.polygonTypesLayers[polygonTypeId] = this._createPolygonTypeLayer(polygonType);
       }
     });
 
@@ -232,12 +233,18 @@ export default class {
         pointToLayer(feature, latlng) {
           return L.circleMarker(latlng, {
             pane: MAP_PANES.vectorOutline,
-            radius: 6
+            radius: POINT_RADIUS
           });
         }
       });
+      const getClassName = feature => {
+        const classes = [];
+        if (this.currentPolygonTypeLayer.isPoint) classes.push('-point');
+        classes.push(feature.properties.geoid === highlightedGeoId ? '-highlighted' : '-selected');
+        return classes.join(' ');
+      };
       this.vectorOutline.setStyle(feature => ({
-        className: feature.properties.geoid === highlightedGeoId ? '-highlighted' : '-selected'
+        className: getClassName(feature)
       }));
 
       this.map.addLayer(this.vectorOutline);
@@ -341,36 +348,78 @@ export default class {
     return layer;
   }
 
-  _getPolygonTypeLayer(geoJSON, isPoint) {
-    this._setPaneModifier('-pointData', isPoint);
-    this._setPaneModifier('-pointData', isPoint, MAP_PANES.vectorOutline);
-
-    const geoJsonLayerStyle = this.canvasRender
-      ? {
-          smoothFactor: 0.9,
-          stroke: true,
-          color: this.darkBasemap ? CHOROPLETH_COLORS.bright_stroke : CHOROPLETH_COLORS.dark_stroke,
-          weight: 0.3,
-          opacity: 0.5,
-          fillColor: CHOROPLETH_COLORS.default_fill,
-          fillOpacity: 1
-        }
-      : { smoothFactor: 0.9 };
+  _createPolygonTypeLayer({ geoJSON, isPoint }) {
+    const style = {
+      smoothFactor: 0.9,
+      stroke: true,
+      color: this.darkBasemap ? CHOROPLETH_COLORS.bright_stroke : CHOROPLETH_COLORS.dark_stroke,
+      weight: 0.3,
+      opacity: 0.5,
+      fillColor: CHOROPLETH_COLORS.default_fill,
+      fillOpacity: 1
+    };
 
     const topoLayer = new L.GeoJSON(geoJSON, {
       pane: this.canvasRender ? MAP_PANES.overlayPane : MAP_PANES.vectorMain,
-      style: geoJsonLayerStyle,
+      style,
       pointToLayer: (feature, latlng) =>
         L.circleMarker(latlng, {
-          pane: MAP_PANES.vectorMain,
-          radius: 6
+          radius: POINT_RADIUS
         })
     });
 
     topoLayer.isPoint = isPoint;
+    this._setEventsForTopoLayer(topoLayer);
 
+    return topoLayer;
+  }
+
+  _createPointVolumeShadowLayer(geoJSON, visibleNodes) {
+    const style = {
+      smoothFactor: 0.9,
+      stroke: false,
+      fillColor: COLORS.charcoalGrey,
+      fillOpacity: 0.3
+    };
+
+    const topoLayer = new L.GeoJSON(geoJSON, {
+      pane: MAP_PANES.vectorBelow,
+      style,
+      pointToLayer: (feature, latlng) => {
+        const node = visibleNodes.find(n => n.geoId === feature.properties.geoid);
+        // node is not visible bail
+        if (!node) return null;
+
+        feature.properties.nodeHeight = node.height;
+
+        return L.circleMarker(latlng, {
+          pane: MAP_PANES.vectorBelow,
+          radius: this._calculatePointVolumeShadowRadius(node.height)
+        });
+      }
+    });
+
+    this._setEventsForTopoLayer(topoLayer);
+
+    return topoLayer;
+  }
+
+  _calculatePointVolumeShadowRadius(value) {
+    const zoomRatio = 10 * Math.exp(this.map.getZoom() / 2.5);
+    return POINT_RADIUS + Math.sqrt(value) * zoomRatio;
+  }
+
+  _recalculatePointVolumeShadowRadius() {
+    if (!this.pointVolumeShadowLayer) return;
+
+    this.pointVolumeShadowLayer.eachLayer(marker => {
+      const nodeHeight = marker.feature.properties.nodeHeight;
+      marker.setRadius(this._calculatePointVolumeShadowRadius(nodeHeight));
+    });
+  }
+
+  _setEventsForTopoLayer(topoLayer) {
     topoLayer.eachLayer(layer => {
-      this.polygonFeaturesDict[layer.feature.properties.geoid] = layer;
       const that = this;
       layer.on({
         mouseover(event) {
@@ -392,18 +441,15 @@ export default class {
         }
       });
     });
-    return topoLayer;
   }
 
   setChoropleth({
     choropleth,
-    choroplethLegend,
     selectedBiomeFilter,
     linkedGeoIds,
     defaultMapView,
     forceDefaultMapView
   }) {
-    this._setPaneModifier('-noDimensions', choroplethLegend === null);
     if (!this.currentPolygonTypeLayer) {
       return;
     }
@@ -417,12 +463,12 @@ export default class {
   }
 
   _drawChoroplethLayer(choropleth, biome, linkedGeoIds, defaultMapView, forceDefaultMapView) {
-    if (!this.currentPolygonTypeLayer) {
-      return;
-    }
+    if (!this.currentPolygonTypeLayer) return;
+
     const linkedPolygons = [];
     const hasLinkedGeoIds = linkedGeoIds.length > 0;
     const hasChoroplethLayersEnabled = Object.values(choropleth).length > 0;
+    const isPoint = this.currentPolygonTypeLayer.isPoint;
 
     this.currentPolygonTypeLayer.eachLayer(layer => {
       const isFilteredOut =
@@ -436,8 +482,9 @@ export default class {
       const choroItem = choropleth[layer.feature.properties.geoid];
 
       let fillColor = CHOROPLETH_COLORS.default_fill;
-      let weight = 0.3;
+      let weight = isPoint ? 1.5 : 0.3;
       let fillOpacity = 1;
+      let strokeOpacity = isPoint ? 1 : 0.5;
       const color = this.darkBasemap
         ? CHOROPLETH_COLORS.bright_stroke
         : CHOROPLETH_COLORS.dark_stroke;
@@ -445,6 +492,7 @@ export default class {
       if (isFilteredOut) {
         // If region is filtered out by biome filter, hide it and bail
         fillOpacity = 0;
+        strokeOpacity = 0;
       } else if (hasChoroplethLayersEnabled) {
         // Handle cases where we have map choropleth layers enabled
         switch (true) {
@@ -477,18 +525,19 @@ export default class {
             // There are nodes selected in the sankey, our node is linked to them and map has no choropleth layers
             // Fill with preset color and show slightly thicker borders
             fillColor = CHOROPLETH_COLORS.fill_linked;
-            fillOpacity = 0.4;
-            weight = 0.5;
+            fillOpacity = isPoint ? 1 : 0.4;
+            weight = isPoint ? 1.5 : 0.5;
             break;
           case hasLinkedGeoIds && !isLinked:
             // There are nodes selected in the sankey, our node is not linked and map has choropleth layers
             // Show preset color for not linked nodes
             fillColor = CHOROPLETH_COLORS.fill_not_linked;
             fillOpacity = this.darkBasemap ? 0 : 1;
-            weight = 0.5;
+            strokeOpacity = isPoint ? 0.4 : strokeOpacity;
+            weight = isPoint ? 1.5 : 0.5;
             break;
-          default:
-            // Default state
+          case !isPoint:
+            // Default state for not point
             // Show transparent
             fillOpacity = 0;
             break;
@@ -500,6 +549,7 @@ export default class {
           fillColor,
           fillOpacity,
           stroke: !isFilteredOut,
+          opacity: strokeOpacity,
           interactive: !isFilteredOut,
           color,
           weight
@@ -509,7 +559,7 @@ export default class {
         layer._path.style.fill = fillColor;
         layer._path.style.fillOpacity = fillOpacity;
         layer._path.style.stroke = color;
-        layer._path.style.strokeOpacity = !isFilteredOut ? 0.5 : 0;
+        layer._path.style.strokeOpacity = strokeOpacity;
         layer._path.style.strokeWidth = `${weight}px`;
         layer._path.style.pointerEvents = isFilteredOut ? 'none' : 'auto';
       }
@@ -526,7 +576,9 @@ export default class {
       // we use L's _getBoundsCenterZoom internal method + setView as fitBounds does not support a minZoom option
       const bounds = L.latLngBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
       const boundsCenterZoom = this.map._getBoundsCenterZoom(bounds);
-      boundsCenterZoom.zoom = Math.max(boundsCenterZoom.zoom, defaultMapView.zoom);
+      if (defaultMapView) {
+        boundsCenterZoom.zoom = Math.max(boundsCenterZoom.zoom, defaultMapView.zoom);
+      }
       this._setMapViewDebounced(boundsCenterZoom.center, boundsCenterZoom.zoom);
     }
   }
@@ -578,5 +630,24 @@ export default class {
       defaultMapView,
       forceDefaultMapView
     );
+  }
+
+  updatePointShadowLayer({ mapVectorData, visibleNodes }) {
+    if (!mapVectorData) return;
+
+    if (this.pointVolumeShadowLayer) {
+      this.map.removeLayer(this.pointVolumeShadowLayer);
+    }
+
+    const polygonTypeId = Object.keys(mapVectorData)[0];
+    const polygonType = mapVectorData[polygonTypeId];
+
+    if (!polygonType.isPoint) return;
+
+    this.pointVolumeShadowLayer = this._createPointVolumeShadowLayer(
+      polygonType.geoJSON,
+      visibleNodes
+    );
+    this.map.addLayer(this.pointVolumeShadowLayer);
   }
 }
