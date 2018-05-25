@@ -16,7 +16,7 @@ import 'styles/components/tool/map.scss';
 import 'styles/components/tool/map/map-legend.scss';
 import 'styles/components/tool/map/map-choropleth.scss';
 
-const POINT_RADIUS = 5;
+const POINT_RADIUS = 4;
 
 export default class {
   constructor() {
