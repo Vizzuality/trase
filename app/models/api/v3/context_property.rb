@@ -10,6 +10,7 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  is_subnational  :boolean          default(FALSE), not null
+#  is_highlighted  :boolean
 #
 # Indexes
 #

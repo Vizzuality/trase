@@ -1,151 +1,199 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions,jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
 import cx from 'classnames';
+import groupBy from 'lodash/groupBy';
+
+import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
 import Tooltip from 'react-components/shared/help-tooltip.component';
-import 'styles/components/shared/country-commodities-react.scss';
-import 'styles/components/shared/dimensional-selector-react.scss';
+import 'styles/components/shared/context-selector.scss';
 
 const id = 'country-commodity';
 
 class ContextSelector extends Component {
-  static sortDimensions(a, b) {
-    if (a.order < b.order) return -1;
-    if (a.order > b.order) return 1;
-    return 0;
-  }
-
   constructor(props) {
     super(props);
 
     this.state = {
-      selectedDimensions: []
+      newlySelectedCountryId: null,
+      newlySelectedCommodityId: null,
+      isSubnationalTabSelected: true,
+      featuredContext: null
     };
-    this.resetDimensionSelection = this.resetDimensionSelection.bind(this);
-    this.selectDimension = this.selectDimension.bind(this);
-    this.isSubnational = this.isSubnational.bind(this);
-    this.isDisabled = this.isDisabled.bind(this);
-    this.renderDimensionList = this.renderDimensionList.bind(this);
+
+    this.resetSelection = this.resetSelection.bind(this);
+    this.closeFeaturedHeader = this.closeFeaturedHeader.bind(this);
   }
 
-  resetDimensionSelection(e) {
-    if (e) e.stopPropagation();
-    this.setState({ selectedDimensions: [] });
+  componentWillReceiveProps(nextProps) {
+    const isOpening = nextProps.currentDropdown === id && this.props.currentDropdown !== id;
+
+    if (isOpening) {
+      this.setState({
+        featuredContext: this.getFeaturedContext(nextProps)
+      });
+    }
   }
 
-  selectDimension(e, status, index, element) {
+  getCountriesAndCommodities() {
+    const {
+      newlySelectedCountryId,
+      newlySelectedCommodityId,
+      isSubnationalTabSelected
+    } = this.state;
+    const contexts = this.props.contexts.filter(c => c.isSubnational === isSubnationalTabSelected);
+    const countries = Object.values(groupBy(contexts, 'countryId')).map(grouped => ({
+      id: grouped[0].countryId,
+      name: grouped[0].countryName,
+      commodityIds: grouped.map(c => c.commodityId)
+    }));
+    const commodities = Object.values(groupBy(contexts, 'commodityId')).map(grouped => ({
+      id: grouped[0].commodityId,
+      name: grouped[0].commodityName,
+      countryIds: grouped.map(c => c.countryId)
+    }));
+    const newlySelectedCountry = countries.find(c => c.id === newlySelectedCountryId) || null;
+    const newlySelectedCommodity = commodities.find(c => c.id === newlySelectedCommodityId) || null;
+
+    return {
+      newlySelectedCountry,
+      newlySelectedCommodity,
+      countries: countries.map(c => ({
+        ...c,
+        isSelected: c.id === newlySelectedCountryId,
+        isDisabled:
+          (newlySelectedCountryId !== null && c.id !== newlySelectedCountryId) ||
+          (newlySelectedCommodity && !newlySelectedCommodity.countryIds.includes(c.id))
+      })),
+      commodities: commodities.map(c => ({
+        ...c,
+        isSelected: c.id === newlySelectedCommodityId,
+        isDisabled:
+          (newlySelectedCommodityId !== null && c.id !== newlySelectedCommodityId) ||
+          (newlySelectedCountry && !newlySelectedCountry.commodityIds.includes(c.id))
+      }))
+    };
+  }
+
+  getFeaturedContext({ contexts }) {
+    const pickRandomOne = ctxs => ctxs[Math.floor(Math.random() * ctxs.length)];
+
+    return pickRandomOne(contexts.filter(c => c.isHighlighted));
+  }
+
+  closeFeaturedHeader() {
+    this.setState({ featuredContext: null });
+  }
+
+  resetSelection(e) {
     if (e) e.stopPropagation();
-    if (['disabled', 'selected'].includes(status)) {
-      this.resetDimensionSelection();
+    this.setState({
+      newlySelectedCountryId: null,
+      newlySelectedCommodityId: null
+    });
+  }
+
+  selectElement(e, element, type) {
+    if (e) e.stopPropagation();
+    if (element.isDisabled || element.isSelected) {
+      this.resetSelection();
       return;
     }
-    const selectedDimensions = [
-      ...this.state.selectedDimensions,
-      Object.assign({}, element, { order: index })
-    ];
-    this.setState({
-      selectedDimensions
+
+    this.setState({ [`newlySelected${type}Id`]: element.id }, () => {
+      const { newlySelectedCountryId, newlySelectedCommodityId } = this.state;
+      if (newlySelectedCountryId === null || newlySelectedCommodityId === null) return;
+
+      const selectedContext = this.props.contexts.find(
+        c => c.countryId === newlySelectedCountryId && c.commodityId === newlySelectedCommodityId
+      );
+
+      if (selectedContext) {
+        this.resetSelection();
+        this.props.selectContextById(selectedContext.id);
+        this.props.toggleContextSelectorVisibility();
+      }
     });
-
-    // not all dimensions selected, not ready to select a context, bail
-    if (selectedDimensions.length !== this.props.dimensions.length) return;
-
-    const selectedDimensionsIds = selectedDimensions
-      .sort(ContextSelector.sortDimensions)
-      .map(el => el.id);
-
-    const key = this.props.getComputedKey(selectedDimensionsIds);
-    const selectedContext = this.props.contexts[key];
-
-    if (selectedContext) {
-      this.resetDimensionSelection();
-      this.props.selectContextById(selectedContext.id);
-      this.props.toggleContextSelectorVisibility();
-    }
   }
 
-  isSubnational(i, element) {
-    const { selectedDimensions } = this.state;
-    if (selectedDimensions.length === 0) return false;
-    const currentDimension = selectedDimensions.find(dimension => dimension.order === i);
-    if (currentDimension) return false;
-
+  renderDimension(elements, type) {
     return (
-      selectedDimensions[0].relation[element.label] &&
-      selectedDimensions[0].relation[element.label].isSubnational
+      <ul className="dimension-list -medium">
+        {elements.map(element => (
+          <li
+            key={element.id}
+            className={cx('dimension-list-item', {
+              '-selected': element.isSelected,
+              '-disabled': element.isDisabled
+            })}
+            onClick={e => this.selectElement(e, element, type)}
+          >
+            {element.name.toLowerCase()}
+          </li>
+        ))}
+      </ul>
     );
   }
 
-  isDisabled(i, element) {
-    const { selectedDimensions } = this.state;
-    if (selectedDimensions.length === 0) return false;
-    const currentDimension = selectedDimensions.find(dimension => dimension.order === i);
-    if (currentDimension) return element && currentDimension.id !== element.id;
+  renderFeaturedContext() {
+    const { featuredContext } = this.state;
 
-    const result = selectedDimensions
-      .map(selected => Object.keys(selected.relation))
-      .reduce((acc, next) => acc || !next.includes(element.label), false);
-    return result;
-  }
+    if (!featuredContext) return null;
 
-  isSelected(i, el) {
-    const { selectedDimensions } = this.state;
-    const current = selectedDimensions.find(dimension => dimension.order === i);
-    return current && current.id === el.id;
-  }
+    const title = `New ${featuredContext.isSubnational ? 'Subnational' : 'National'} Data`;
+    const newContextName = `
+    ${featuredContext.countryName.toLowerCase()} - ${featuredContext.commodityName.toLowerCase()}
+    `;
 
-  renderFooterText(selected, dimensions) {
-    if (selected.length === dimensions.length) return null;
-    if (selected.length === 1) {
-      const active = selected[0];
-      const order = active.order;
-      const pending = dimensions.find(dimension => dimension.order !== order);
-      return `Select a ${pending.name} for ${active.label}`;
-    }
-    return 'Select both a country and a commodity';
-  }
-
-  renderElement(el, dimension, isSubnational) {
     return (
-      <div className="country-commodities-selector-element">
-        {el.label.toLowerCase()}
-        {isSubnational && <div className="data-coverage-info">Subnational Data</div>}
+      <div className="context-selector-featured-header">
+        <svg className="icon icon-close" onClick={this.closeFeaturedHeader}>
+          <use xlinkHref="#icon-close" />
+        </svg>
+        <div>
+          <span className="featured-header-title">{title}</span>
+          <span className="featured-header-new-context-name">{newContextName}</span>
+        </div>
       </div>
     );
   }
 
-  renderDimensionList() {
-    const { dimensions = [] } = this.props;
+  renderContextList(countries, commodities) {
+    const { isSubnationalTabSelected } = this.state;
 
-    const getItemStatus = (i, el) => {
-      if (this.isSelected(i, el)) return 'selected';
-      if (this.isDisabled(i, el)) return 'disabled';
-      return null;
-    };
-
-    return dimensions
-      .sort(ContextSelector.sortDimensions)
-      .map(dimension => dimension.elements)
-      .map((dimensionElement, dimensionElementIndex) => (
-        <ul className="dimension-list -medium" key={dimensionElementIndex}>
-          {dimensionElement.map((el, index) => {
-            const status = getItemStatus(dimensionElementIndex, el);
-            const isSubnational = this.isSubnational(dimensionElementIndex, el);
-            return (
-              <li
-                key={index}
-                className={cx('dimension-list-item -capitalize', {
-                  [`-${status}`]: status
-                })}
-                onClick={e => this.selectDimension(e, status, dimensionElementIndex, el)}
-              >
-                {this.renderElement(el, dimensionElementIndex, isSubnational)}
-              </li>
-            );
-          })}
+    return (
+      <div className="context-list-container">
+        <ul className="context-list-tabs">
+          <li
+            className={cx('tab', { '-selected': isSubnationalTabSelected })}
+            onClick={() => this.setState({ isSubnationalTabSelected: true })}
+          >
+            Subnational Data
+          </li>
+          <li
+            className={cx('tab', { '-selected': !isSubnationalTabSelected })}
+            onClick={() => this.setState({ isSubnationalTabSelected: false })}
+          >
+            National Data
+          </li>
         </ul>
-      ));
+        <div className="dimension-container">
+          {this.renderDimension(countries, 'Country')}
+          {this.renderDimension(commodities, 'Commodity')}
+        </div>
+      </div>
+    );
+  }
+
+  renderFooterText(newlySelectedCountry, newlySelectedCommodity) {
+    if (newlySelectedCountry !== null && newlySelectedCommodity !== null) return null;
+    if (newlySelectedCountry === null && newlySelectedCommodity === null) {
+      return 'Select both a country and a commodity';
+    }
+    if (newlySelectedCommodity === null) {
+      return `Select a commodity for ${newlySelectedCountry.name}`;
+    }
+    return `Select a country for ${newlySelectedCommodity.name}`;
   }
 
   render() {
@@ -159,7 +207,6 @@ class ContextSelector extends Component {
       isExplore,
       selectedContextCountry,
       selectedContextCommodity,
-      dimensions,
       defaultContextLabel
     } = this.props;
     const isContextSelected =
@@ -167,9 +214,16 @@ class ContextSelector extends Component {
     const contextLabel = isContextSelected
       ? `${selectedContextCountry.toLowerCase()} - ${selectedContextCommodity.toLowerCase()}`
       : defaultContextLabel;
+    const {
+      countries,
+      commodities,
+      newlySelectedCountry,
+      newlySelectedCommodity
+    } = this.getCountriesAndCommodities();
+
     return (
       <div
-        className={cx('c-country-commodities', 'js-dropdown', className)}
+        className={cx('c-context-selector', 'js-dropdown', className)}
         onClick={() => toggleContextSelectorVisibility(id)}
       >
         <div className={cx('c-dropdown', '-capitalize', dropdownClassName)}>
@@ -185,14 +239,13 @@ class ContextSelector extends Component {
             currentDropdown={currentDropdown}
             onClickOutside={toggleContextSelectorVisibility}
           >
-            <div className="country-commodities-children-container">
-              <div className="c-dimensional-selector" onClick={this.resetDimensionSelection}>
-                <div className="dimension-container">{this.renderDimensionList()}</div>
-                <div className="dimensional-selector-footer">
-                  <span className="dimensional-selector-footer-text">
-                    {this.renderFooterText(this.state.selectedDimensions, dimensions)}
-                  </span>
-                </div>
+            <div className="context-selector-content" onClick={this.resetSelection}>
+              {this.renderFeaturedContext()}
+              {this.renderContextList(countries, commodities)}
+              <div className="context-selector-footer">
+                <span className="context-selector-footer-text">
+                  {this.renderFooterText(newlySelectedCountry, newlySelectedCommodity)}
+                </span>
               </div>
             </div>
           </FiltersDropdown>
@@ -208,14 +261,12 @@ ContextSelector.propTypes = {
   isExplore: PropTypes.bool,
   contextIsUserSelected: PropTypes.bool,
   toggleContextSelectorVisibility: PropTypes.func,
-  getComputedKey: PropTypes.func,
   selectContextById: PropTypes.func,
   tooltipText: PropTypes.string,
-  contexts: PropTypes.object,
+  contexts: PropTypes.array,
   currentDropdown: PropTypes.string,
   selectedContextCountry: PropTypes.string,
   selectedContextCommodity: PropTypes.string,
-  dimensions: PropTypes.array,
   defaultContextLabel: PropTypes.string
 };
 
