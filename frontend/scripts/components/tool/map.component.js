@@ -525,7 +525,7 @@ export default class {
             // There are nodes selected in the sankey, our node is linked to them and map has no choropleth layers
             // Fill with preset color and show slightly thicker borders
             fillColor = CHOROPLETH_COLORS.fill_linked;
-            fillOpacity = isPoint ? 1 : 0.4;
+            fillOpacity = 1;
             weight = isPoint ? 1.5 : 0.5;
             break;
           case hasLinkedGeoIds && !isLinked:
