@@ -20,7 +20,6 @@ import {
 import contextLayersCarto from 'actions/map/context_layers_carto';
 import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
 import getNodesSelectionAction from 'actions/helpers/getNodesSelectionAction';
-import getSelectedNodesStillVisible from 'actions/helpers/getSelectedNodesStillVisible';
 import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
 import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
@@ -472,13 +471,9 @@ export function loadLinks() {
           jsonPayload
         });
 
-        // reselect nodes ---> FILTER NODE IDS THAT ARE NOT VISIBLE ANYMORE + UPDATE DATA for titlebar
-        const selectedNodesIds = getSelectedNodesStillVisible(
-          getState().tool.visibleNodes,
-          getState().tool.selectedNodesIds
-        );
-
-        dispatch(updateNodes(selectedNodesIds));
+        // const selectedNodesIds = getState().tool.selectedNodesIds
+        //
+        // dispatch(updateNodes(selectedNodesIds));
 
         // if nodes were expanded and some of expanded nodes are not present anymore
         // re-expand nodes
@@ -624,16 +619,19 @@ function getSelectedNodeIdsNotInColumnIndex(currentSelectedNodesIds, columnIndex
   return currentSelectedNodesIds.filter(nodeId => nodesDict[nodeId].columnGroup !== columnIndex);
 }
 
-// remove or add nodeId from selectedNodesIds
-function getSelectedNodeIds(currentSelectedNodesIds, changedNodeId) {
-  let selectedNodesIds;
-  const nodeIndex = currentSelectedNodesIds.indexOf(changedNodeId);
-  if (nodeIndex > -1) {
-    selectedNodesIds = [].concat(currentSelectedNodesIds);
-    selectedNodesIds.splice(nodeIndex, 1);
-  } else {
-    selectedNodesIds = [changedNodeId].concat(currentSelectedNodesIds);
-  }
+// remove or add nodeIds from selectedNodesIds
+function getSelectedNodeIds(currentSelectedNodesIds, changedNodeIds) {
+  let selectedNodesIds = [].concat(currentSelectedNodesIds);
+
+  changedNodeIds.forEach(changedNodeId => {
+    const nodeIndex = currentSelectedNodesIds.indexOf(changedNodeId);
+    if (nodeIndex > -1) {
+      selectedNodesIds.splice(nodeIndex, 1);
+    } else {
+      selectedNodesIds = [changedNodeId].concat(selectedNodesIds);
+    }
+  });
+
   return selectedNodesIds;
 }
 
@@ -656,7 +654,7 @@ export function selectNode(param, isAggregated = false) {
           dispatch(collapseNodeSelection());
         }
 
-        const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, nodeId);
+        const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, [nodeId]);
 
         // send to state the new node selection along with new data, geoIds, etc
         dispatch(updateNodes(selectedNodesIds));
@@ -707,32 +705,38 @@ export function selectNodeFromGeoId(geoId) {
 export function selectExpandedNode(param) {
   const ids = Array.isArray(param) ? param : [param];
   return (dispatch, getState) => {
-    ids.forEach(nodeId => {
-      if (!_isNodeVisible(getState, nodeId)) {
-        const { tool } = getState();
-        if (tool.selectedNodesIds.length === 1 && tool.selectedNodesIds.includes(nodeId)) {
-          dispatch(resetState());
-        } else {
-          const node = tool.nodesDict[nodeId];
-          if (!node) {
-            console.warn(`requested node ${nodeId} does not exist in nodesDict`);
-            return;
-          }
+    const hasInvisibleNodes = ids.some(elem => !_isNodeVisible(getState, elem));
 
-          // check if we need to swap column
+    if (hasInvisibleNodes) {
+      const { tool } = getState();
+      if (
+        tool.selectedNodesIds.length === ids.length &&
+        intesection(tool.selectedNodesIds, ids).length === ids.length
+      ) {
+        dispatch(resetState());
+      } else {
+        const nodes = ids.map(nodeId => {
+          if (!tool.nodesDict[nodeId]) {
+            console.warn(`requested node ${nodeId} does not exist in nodesDict`);
+          }
+          return tool.nodesDict[nodeId];
+        });
+
+        nodes.forEach(node => {
           if (!isNodeColumnVisible(node, tool.selectedColumnsIds)) {
             dispatch(selectColumn(node.columnGroup, node.columnId, false));
           }
+        });
 
-          const currentSelectedNodesIds = getState().tool.selectedNodesIds;
-          const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, nodeId);
-          dispatch(updateNodes(selectedNodesIds));
-          dispatch(expandNodeSelection());
-        }
-      } else {
-        dispatch(selectNode(nodeId, false));
+        const currentSelectedNodesIds = getState().tool.selectedNodesIds;
+        const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, ids);
+
+        dispatch(updateNodes(selectedNodesIds));
+        dispatch(expandNodeSelection());
       }
-    });
+    } else {
+      dispatch(selectNode(ids, false));
+    }
   };
 }
 
