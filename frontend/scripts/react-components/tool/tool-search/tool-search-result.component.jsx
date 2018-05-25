@@ -16,11 +16,53 @@ function ToolSearchResult({
   isHighlighted,
   item
 }) {
-  let addButtonText = 'Add to supply chain';
+  const buttonList = [];
 
-  if (!(exporterNotSelected && importerNotSelected)) {
-    if (exporterNotSelected) addButtonText = 'Add exporter to supply chain';
-    if (importerNotSelected) addButtonText = 'Add importer to supply chain';
+  if (selected) {
+    buttonList.push(
+      <button key="alreadyInSupplyChain" className="c-button -medium-large" disabled="true">
+        Already in supply chain
+      </button>
+    );
+  } else if (exporterNotSelected === importerNotSelected) {
+    // The weird "if" above means that we only do NOT show this button if
+    // node is both importer and exporter, and is added as one of them but no the other to the supply chain.
+    // The "if" statement above that ensures it's also not shown if node is both and is selected
+    buttonList.push(
+      <button
+        key="addToSupplyChain"
+        className="c-button -medium-large"
+        onClick={e => onClickAdd(e, item)}
+      >
+        Add to supply chain
+      </button>
+    );
+  }
+
+  if (!(exporterNotSelected && !importerNotSelected)) {
+    if (exporterNotSelected) {
+      buttonList.push(
+        <button
+          key="addAsExporter"
+          onClick={e => onClickAdd(e, item.exporter)}
+          className="c-button -medium-large"
+        >
+          Add as exporter
+        </button>
+      );
+    }
+
+    if (importerNotSelected) {
+      buttonList.push(
+        <button
+          key="addAsImporter"
+          onClick={e => onClickAdd(e, item.importer)}
+          className="c-button -medium-large"
+        >
+          Add as importer
+        </button>
+      );
+    }
   }
 
   return (
@@ -32,15 +74,7 @@ function ToolSearchResult({
         </span>
       </div>
       <div className="search-node-actions-container">
-        {selected ? (
-          <button className="c-button -medium-large" disabled="true">
-            Already in supply chain
-          </button>
-        ) : (
-          <button onClick={e => onClickAdd(e, item)} className="c-button -medium-large">
-            {addButtonText}
-          </button>
-        )}
+        {buttonList}
         {item.profileType &&
           item.type.split(' & ').map(type => (
             <LinkButton
@@ -51,7 +85,7 @@ function ToolSearchResult({
                 query: { nodeId: (item[type.toLowerCase()] || item).id }
               }}
             >
-              See {type} profile
+              {type} profile
             </LinkButton>
           ))}
       </div>
