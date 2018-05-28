@@ -11,7 +11,7 @@ export default [
     category: 'Download',
     action: action => `Download ${action.payload.type} data`,
     getPayload: (action, state) => {
-      const context = state.data.contexts.find(
+      const context = state.app.contexts.find(
         elem => elem.id === parseInt(action.payload.context_id, 10)
       );
       const payload = Object.assign(
