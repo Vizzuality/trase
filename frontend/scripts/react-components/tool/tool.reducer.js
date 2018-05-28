@@ -38,6 +38,7 @@ import {
 } from 'scripts/actions/app.actions';
 import groupBy from 'lodash/groupBy';
 import isEqual from 'lodash/isEqual';
+import isEmpty from 'lodash/isEmpty';
 import keyBy from 'lodash/keyBy';
 import { createReducer } from 'scripts/store';
 import filterLinks from 'scripts/reducers/helpers/filterLinks';
@@ -233,14 +234,21 @@ const toolReducer = {
       }
     });
 
+    const { nodesDict, geoIdsDict } = getNodesDict(rawNodes, columns);
+
+    // if any selectedNode, make those columns visible (selected)
+    if (!isEmpty(state.selectedNodesIds)) {
+      state.selectedNodesIds.map(id => nodesDict[id]).forEach(node => {
+        selectedColumnsIds[node.columnGroup] = node.columnId;
+      });
+    }
+
     // TODO the API should have the info on which file to load (if any) per column
     const municipalitiesColumn = columns.find(column => column.name === 'MUNICIPALITY');
     const logisticsHubColumn = columns.find(column => column.name === 'LOGISTICS HUB');
     if (logisticsHubColumn && municipalitiesColumn) {
       logisticsHubColumn.useGeometryFromColumnId = municipalitiesColumn.id;
     }
-
-    const { nodesDict, geoIdsDict } = getNodesDict(rawNodes, columns);
 
     return Object.assign({}, state, {
       columns,
