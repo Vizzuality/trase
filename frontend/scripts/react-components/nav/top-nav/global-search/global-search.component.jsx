@@ -42,6 +42,8 @@ export default class GlobalSearch extends Component {
   }
 
   componentWillUnmount() {
+    // reset search term when removing this component
+    this.debouncedInputValueChange('');
     document.removeEventListener('keydown', this.onKeydown);
   }
 
