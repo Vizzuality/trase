@@ -116,6 +116,7 @@ const toolReducer = {
       highlightedNodesIds: [],
       highlightedNodeData: [],
       highlightedGeoIds: [],
+      selectedNodesData: [],
       selectedNodesIds: [],
       expandedNodesIds: [],
       selectedBiomeFilter: { value: 'none' },
