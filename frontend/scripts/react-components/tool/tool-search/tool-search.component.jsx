@@ -109,7 +109,7 @@ export default class ToolSearch extends Component {
   }
 
   render() {
-    const { isSearchOpen, className, nodes = [], selectedNodesIds = [] } = this.props;
+    const { isSearchOpen, className, nodes = [], selectedNodesIds = [], isMapVisible } = this.props;
 
     if (isSearchOpen === false) {
       return (
@@ -160,6 +160,7 @@ export default class ToolSearch extends Component {
                           key={item.id + item.type}
                           value={inputValue}
                           isHighlighted={row === highlightedIndex}
+                          isMapVisible={isMapVisible}
                           item={item}
                           itemProps={getItemProps({ item })}
                           selected={this.isNodeSelected(item)}
@@ -185,5 +186,6 @@ ToolSearch.propTypes = {
   selectedNodesIds: PropTypes.array,
   nodes: PropTypes.array,
   isSearchOpen: PropTypes.bool,
-  onAddNode: PropTypes.func
+  onAddNode: PropTypes.func,
+  isMapVisible: PropTypes.bool
 };

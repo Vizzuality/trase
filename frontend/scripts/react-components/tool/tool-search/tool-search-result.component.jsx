@@ -14,14 +14,15 @@ function ToolSearchResult({
   importerNotSelected,
   itemProps,
   isHighlighted,
-  item
+  item,
+  isMapVisible
 }) {
   const buttonList = [];
 
   if (selected) {
     buttonList.push(
       <button key="alreadyInSupplyChain" className="c-button -medium-large" disabled="true">
-        Already in supply chain
+        Already in {isMapVisible ? 'map' : 'supply chain'}
       </button>
     );
   } else if (exporterNotSelected === importerNotSelected) {
@@ -34,7 +35,7 @@ function ToolSearchResult({
         className="c-button -medium-large"
         onClick={e => onClickAdd(e, item)}
       >
-        Add to supply chain
+        Add to {isMapVisible ? 'map' : 'supply chain'}
       </button>
     );
   }
@@ -101,6 +102,7 @@ ToolSearchResult.propTypes = {
   importerNotSelected: PropTypes.bool,
   itemProps: PropTypes.object,
   isHighlighted: PropTypes.bool,
+  isMapVisible: PropTypes.bool,
   item: PropTypes.object
 };
 
