@@ -371,14 +371,13 @@ class DataContent extends Component {
     return (
       <div className="l-data">
         {DATA_DOWNLOAD_ENABLED === false && <DataPortalDisabledMessage />}
-        {this.state.formVisible && (
-          <DataPortalForm
-            autoCompleteCountries={autoCompleteCountries}
-            closeForm={this.closeForm}
-            downloadFile={this.downloadFile}
-            downloaded={this.state.downloaded}
-          />
-        )}
+        <DataPortalForm
+          autoCompleteCountries={autoCompleteCountries}
+          isFormVisible={this.state.formVisible}
+          closeForm={this.closeForm}
+          downloadFile={this.downloadFile}
+          downloaded={this.state.downloaded}
+        />
         <div className="row">
           <div className="small-12 columns c-bulk-downloads-container">
             <BulkDownloadsBlock

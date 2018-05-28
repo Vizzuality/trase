@@ -99,7 +99,7 @@ class DataPortalForm extends Component {
 
   render() {
     return (
-      <div>
+      <div className={cx({ 'is-hidden': !this.props.isFormVisible })}>
         <div className="veil -below-nav" onClick={this.props.closeForm} />
         <div className="c-modal -below-nav">
           <div className="content -white -big-margin">
@@ -224,6 +224,7 @@ class DataPortalForm extends Component {
 }
 
 DataPortalForm.propTypes = {
+  isFormVisible: PropTypes.bool,
   closeForm: PropTypes.func,
   downloadFile: PropTypes.func,
   downloaded: PropTypes.bool
