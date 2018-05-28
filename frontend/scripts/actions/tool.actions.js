@@ -471,10 +471,6 @@ export function loadLinks() {
           jsonPayload
         });
 
-        // const selectedNodesIds = getState().tool.selectedNodesIds
-        //
-        // dispatch(updateNodes(selectedNodesIds));
-
         // if nodes were expanded and some of expanded nodes are not present anymore
         // re-expand nodes
         if (
