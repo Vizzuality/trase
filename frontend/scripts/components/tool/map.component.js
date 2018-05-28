@@ -359,11 +359,17 @@ export default class {
       fillOpacity: 1
     };
 
+    // don't add point layers to canvas
+    // we have problem with port shadow layer being obscured  by canvas layer
+    // which does not pass any pointer events through - and we need to show tooltip
+    const pane = this.canvasRender && !isPoint ? MAP_PANES.overlayPane : MAP_PANES.vectorMain;
+
     const topoLayer = new L.GeoJSON(geoJSON, {
-      pane: this.canvasRender ? MAP_PANES.overlayPane : MAP_PANES.vectorMain,
+      pane,
       style,
       pointToLayer: (feature, latlng) =>
         L.circleMarker(latlng, {
+          pane,
           radius: POINT_RADIUS
         })
     });

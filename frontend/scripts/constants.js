@@ -159,7 +159,7 @@ export const MAP_PANES_Z = {
   [MAP_PANES.vectorOutline]: 412,
   [MAP_PANES.context]: 420,
   [MAP_PANES.basemapLabels]: 490,
-  [MAP_PANES.overlayPane]: 410
+  [MAP_PANES.overlayPane]: 408 // when using canvas mode, better should be behind all vector layers, canvas not passing through pointer events
 };
 
 export const BASEMAPS = {
