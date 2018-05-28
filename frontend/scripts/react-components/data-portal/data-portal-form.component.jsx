@@ -20,49 +20,48 @@ class DataPortalForm extends Component {
     ];
 
     this.state = {
-      name: '',
-      country: '',
-      organisation: '',
-      organisationType: '',
-      dataUse: '',
-      comments: '',
-      email: '',
-      tos_check: '',
-
       showTOSWarning: false
     };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  onFieldValueChanged(field, value) {
-    const newState = {};
-    newState[field] = value;
-    this.setState(newState);
+  getFormData(form) {
+    const data = {};
+    for (let i = 0; i < form.elements.length; i++) {
+      const element = form.elements[i];
+      if (element.tagName !== 'BUTTON') {
+        data[element.id] = element.type === 'checkbox' ? element.checked : element.value;
+      }
+    }
+    return data;
   }
 
-  sendForm() {
+  handleSubmit(event) {
+    event.preventDefault();
+    const { downloaded, downloadFile, closeForm } = this.props;
+    const data = this.getFormData(event.target);
     const payload = {};
 
     this.formFieldWhiteList.forEach(elem => {
-      if (this.state[elem] !== '') {
-        payload[elem] = this.state[elem];
+      if (data[elem] !== '') {
+        payload[elem] = data[elem];
       }
     });
 
-    if (!this.state.tos_check) {
+    if (!downloaded && !data.tos_check) {
       this.setState({ showTOSWarning: true });
       return;
     }
 
-    delete payload.tos_check;
     payload.date = new Date().toString();
 
-    if (!this.props.downloaded) {
-      this.props.downloadFile();
+    if (!downloaded) {
+      downloadFile();
     }
 
     // Check if we have user data, and if not, ask for it
     if (Object.values(payload).filter(v => v !== '').length === 1) {
-      // this._setFormStatus(true);
       return;
     }
 
@@ -86,7 +85,7 @@ class DataPortalForm extends Component {
       });
     }
 
-    this.props.closeForm();
+    closeForm();
   }
 
   generateCountryList(id) {
@@ -100,11 +99,11 @@ class DataPortalForm extends Component {
 
   render() {
     return (
-      <div className={cx({ 'is-hidden': !this.props.formVisible })}>
+      <div>
         <div className="veil -below-nav" onClick={this.props.closeForm} />
         <div className="c-modal -below-nav">
           <div className="content -white -big-margin">
-            <form className="c-download-form">
+            <form className="c-download-form" onSubmit={this.handleSubmit}>
               <p className="description">
                 Thank you for your interest in downloading data from Trase! To help us better
                 understand how the data is currently being used and to improve the platform, we
@@ -116,13 +115,7 @@ class DataPortalForm extends Component {
               </p>
               <label htmlFor="name">
                 Name:
-                <input
-                  type="text"
-                  placeholder="type name"
-                  id="name"
-                  value={this.state.name}
-                  onChange={event => this.onFieldValueChanged('name', event.target.value)}
-                />
+                <input type="text" placeholder="type name" id="name" />
               </label>
 
               <label htmlFor="country">
@@ -132,21 +125,13 @@ class DataPortalForm extends Component {
                   placeholder="select or type country..."
                   id="country"
                   list="countriesList"
-                  value={this.state.country}
-                  onChange={event => this.onFieldValueChanged('country', event.target.value)}
                 />
                 {this.generateCountryList('countriesList')}
               </label>
 
               <label htmlFor="organisation">
                 Organisation name:
-                <input
-                  type="text"
-                  placeholder="type organisation name"
-                  id="organisation"
-                  value={this.state.organisation}
-                  onChange={event => this.onFieldValueChanged('organisation', event.target.value)}
-                />
+                <input type="text" placeholder="type organisation name" id="organisation" />
               </label>
 
               <label htmlFor="organisationType">
@@ -156,10 +141,6 @@ class DataPortalForm extends Component {
                   placeholder="select or type..."
                   id="organisationType"
                   list="organisationTypeList"
-                  value={this.state.organisationType}
-                  onChange={event =>
-                    this.onFieldValueChanged('organisationType', event.target.value)
-                  }
                 />
                 <datalist id="organisationTypeList">
                   <option>Company</option>
@@ -177,8 +158,6 @@ class DataPortalForm extends Component {
                   placeholder="select or type..."
                   id="dataUse"
                   list="dataUseList"
-                  value={this.state.dataUse}
-                  onChange={event => this.onFieldValueChanged('dataUse', event.target.value)}
                 />
                 <datalist id="dataUseList">
                   <option>Decision support</option>
@@ -190,25 +169,13 @@ class DataPortalForm extends Component {
               <label htmlFor="comments">
                 Please tell us more about your work and if you are interested in helping improve
                 Trase:
-                <input
-                  type="text"
-                  placeholder="type comments"
-                  id="comments"
-                  value={this.state.comments}
-                  onChange={event => this.onFieldValueChanged('comments', event.target.value)}
-                />
+                <input type="text" placeholder="type comments" id="comments" />
               </label>
 
               <label htmlFor="email">
                 If you would like to sign up for the Trase quarterly newsletter, please provide your
                 email address:
-                <input
-                  type="email"
-                  placeholder="type email"
-                  id="email"
-                  value={this.state.email}
-                  onChange={event => this.onFieldValueChanged('email', event.target.value)}
-                />
+                <input type="email" placeholder="type email" id="email" />
               </label>
 
               <p
@@ -219,12 +186,7 @@ class DataPortalForm extends Component {
                 )}
               >
                 <label htmlFor="tos_check">
-                  <input
-                    type="checkbox"
-                    id="tos_check"
-                    value={this.state.tos_check}
-                    onChange={() => this.onFieldValueChanged('tos_check', !this.state.tos_check)}
-                  />
+                  <input type="checkbox" id="tos_check" />
                   &nbsp;* I agree to the&nbsp;
                   <a
                     rel="noopener noreferrer"
@@ -237,25 +199,21 @@ class DataPortalForm extends Component {
                 </label>
               </p>
               <label className="submit">
-                <div className="download-button" onClick={() => this.sendForm()}>
-                  <div
-                    className={cx('form-submit-download', {
-                      'is-hidden': this.props.downloaded
-                    })}
-                  >
-                    <svg className="icon icon-download">
-                      <use xlinkHref="#icon-download" />
-                    </svg>
-                    download data
-                  </div>
-                  <div
-                    className={cx('form-submit-submit', {
-                      'is-hidden': !this.props.downloaded
-                    })}
-                  >
-                    Submit
-                  </div>
-                </div>
+                <button
+                  type="submit"
+                  className={cx('download-button', { 'is-hidden': !this.props.downloaded })}
+                >
+                  Submit
+                </button>
+                <button
+                  type="submit"
+                  className={cx('download-button', { 'is-hidden': this.props.downloaded })}
+                >
+                  <svg className="icon icon-download">
+                    <use xlinkHref="#icon-download" />
+                  </svg>
+                  Download data
+                </button>
               </label>
             </form>
           </div>
@@ -267,7 +225,6 @@ class DataPortalForm extends Component {
 
 DataPortalForm.propTypes = {
   closeForm: PropTypes.func,
-  formVisible: PropTypes.bool,
   downloadFile: PropTypes.func,
   downloaded: PropTypes.bool
 };
