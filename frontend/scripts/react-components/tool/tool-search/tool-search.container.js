@@ -30,7 +30,14 @@ const getNode = (nodes, selectedColumnsIds, nodesDict) => {
 };
 
 const mapStateToProps = state => {
-  const { nodes, selectedNodesIds, selectedColumnsIds, nodesDict, isSearchOpen } = state.tool;
+  const {
+    nodes,
+    selectedNodesIds,
+    selectedColumnsIds,
+    nodesDict,
+    isSearchOpen,
+    isMapVisible
+  } = state.tool;
   // store nodes at container level to avoid rerendering when filtering... for want of a better solution
   if (nodes !== undefined && (!searchNodes || nodes.length !== searchNodes.length)) {
     const allNodes = nodes.filter(
@@ -50,6 +57,7 @@ const mapStateToProps = state => {
   return {
     selectedNodesIds,
     isSearchOpen,
+    isMapVisible,
     nodes: searchNodes
   };
 };
