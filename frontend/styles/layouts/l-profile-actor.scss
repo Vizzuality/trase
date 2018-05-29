@@ -124,6 +124,12 @@
         }
       }
     }
+
+    .js-top-municipalities-title-container {
+      @media screen and (max-width: $breakpoint-foundation-small) {
+        margin-left: 1.25rem;
+      }
+    }
   }
 
   .js-top-municipalities, .js-top-destination {

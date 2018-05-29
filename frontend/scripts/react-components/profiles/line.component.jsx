@@ -101,8 +101,7 @@ class Line extends Component {
       .rangeRound([height, 0])
       .domain(d3_extent([0, ...allYValues]));
 
-    let lastNumberY = height + LINE_LABEL_HEIGHT;
-    let lastNameY = height + LINE_LABEL_HEIGHT;
+    let lastY = height + LINE_LABEL_HEIGHT;
 
     const lines = this.getLines().sort((a, b) => {
       const last = xValues.length - 1;
@@ -178,40 +177,29 @@ class Line extends Component {
             const texts = pathContainers
               .selectAll('text')
               .data(d => [d])
-              .enter();
-
-            texts
-              .append('text')
+              .enter()
+              .append('g')
               .attr('transform', d => {
                 const last = d.length - 1;
                 const { value } = d[last];
                 let newNumberY = y(value) + 4;
-                if (newNumberY + LINE_LABEL_HEIGHT > lastNumberY) {
-                  newNumberY = lastNumberY - LINE_LABEL_HEIGHT - 1;
+                if (newNumberY + LINE_LABEL_HEIGHT > lastY) {
+                  newNumberY = lastY - LINE_LABEL_HEIGHT - 1;
                 }
-                lastNumberY = newNumberY;
+                lastY = newNumberY;
                 return `translate(${width + 6},${newNumberY})`;
-              })
+              });
 
-              .text(`${numLines - i}.`);
+            texts.append('text').text(`${numLines - i}.`);
 
             texts
               .append('text')
+              .attr('transform', 'translate(16,0)')
               .attr('class', d => {
                 if (typeof onLinkClick !== 'undefined' && d[0].nodeId && data.profile_type) {
                   return 'link';
                 }
                 return '';
-              })
-              .attr('transform', d => {
-                const last = d.length - 1;
-                const { value } = d[last];
-                let newNameY = y(value) + 4;
-                if (newNameY + LINE_LABEL_HEIGHT > lastNameY) {
-                  newNameY = lastNameY - LINE_LABEL_HEIGHT - 1;
-                }
-                lastNameY = newNameY;
-                return `translate(${width + 20},${newNameY})`;
               })
               .on('click', d => {
                 if (typeof onLinkClick !== 'undefined' && d[0].nodeId && data.profile_type) {
@@ -306,7 +294,7 @@ class Line extends Component {
   }
 
   renderLegend() {
-    const { data, settings, xValues } = this.props;
+    const { data, settings, xValues, onLinkClick, targetLink, year } = this.props;
     const lines = this.getLines().sort((a, b) => {
       const last = xValues.length - 1;
       return b.values[last] - a.values[last];
@@ -325,6 +313,14 @@ class Line extends Component {
           const lineStyle = isFunction(settings.lineClassNameCallback)
             ? settings.lineClassNameCallback([lineData], style)
             : style;
+          const isLink =
+            typeof onLinkClick !== 'undefined' && lineData.node_id && lineData.profile_type;
+          const linkOnClick = () => {
+            onLinkClick(targetLink, {
+              nodeId: lineData.node_id,
+              year
+            });
+          };
 
           return (
             <li
@@ -337,9 +333,14 @@ class Line extends Component {
                   <path d="M0 3 20 3" />
                 </g>
               </svg>
-              <span>
-                {index + 1}.{capitalize(i18n(lineData.name))}
-              </span>
+              <span>{index + 1}.</span>
+              {isLink ? (
+                <span className="link" onClick={linkOnClick}>
+                  {capitalize(i18n(lineData.name))}
+                </span>
+              ) : (
+                <span>{capitalize(i18n(lineData.name))}</span>
+              )}
             </li>
           );
         })}
