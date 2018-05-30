@@ -113,6 +113,8 @@ export const PROFILE_CHOROPLETH_CLASSES = [
   'ch-red-4'
 ];
 
+export const PROFILE_CHOROPLETH_COLORS = ['#4e0008', '#900e1d', '#d12d3d', '#f66c76', '#f5b7ad'];
+
 export const DOCUMENT_POST_TYPES = ['INFO BRIEF', 'ISSUE BRIEF'];
 
 export const NODE_SELECTION_LINKS_NUM_COLORS = 10;

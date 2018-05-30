@@ -72,6 +72,10 @@
     &.line-6 { path, circle { stroke: $ch-profile-red-6; } };
     &.line-7 { path, circle { stroke: $ch-profile-red-7; } };
 
+    &.generated-color {
+      path, circle { stroke: unset; }
+    }
+
     path {
       stroke-width: 3px;
     }

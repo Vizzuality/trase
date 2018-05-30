@@ -10,8 +10,9 @@ import { extent as d3_extent } from 'd3-array';
 import { area as d3_area, line as d3_line } from 'd3-shape';
 import { format as d3_format } from 'd3-format';
 import { timeFormat as d3_timeFormat } from 'd3-time-format';
+import chroma from 'chroma-js';
 
-import { LINE_LABEL_HEIGHT } from 'constants';
+import { LINE_LABEL_HEIGHT, PROFILE_CHOROPLETH_COLORS } from 'constants';
 import abbreviateNumber from 'utils/abbreviateNumber';
 import i18n from 'utils/transifex';
 import { Responsive } from 'react-components/shared/responsive.hoc';
@@ -108,6 +109,7 @@ class Line extends Component {
       return a.values[last] - b.values[last];
     });
     const numLines = lines.length;
+    const colorScaleForMobile = chroma.scale(PROFILE_CHOROPLETH_COLORS).colors(numLines);
 
     lines.forEach((lineData, i) => {
       const lineValuesWithFormat = this.prepareData(xValues, lineData);
@@ -154,17 +156,24 @@ class Line extends Component {
           break;
 
         case 'line-points': {
+          const lineNumber = numLines - i;
           pathContainers = d3Container
             .datum(lineValuesWithFormat[0])
             .append('g')
-            .attr('id', lineData.geo_id)
-            .attr(
+            .attr('id', lineData.geo_id);
+
+          if (isSmallChart) {
+            pathContainers.attr('class', `${style} generated-color`);
+            pathContainers.attr('stroke', colorScaleForMobile[lineNumber - 1]);
+          } else {
+            pathContainers.attr(
               'class',
               d =>
                 isFunction(settings.lineClassNameCallback)
                   ? settings.lineClassNameCallback(d, style)
                   : style
             );
+          }
 
           pathContainers
             .selectAll('path')
@@ -190,7 +199,7 @@ class Line extends Component {
                 return `translate(${width + 6},${newNumberY})`;
               });
 
-            texts.append('text').text(`${numLines - i}.`);
+            texts.append('text').text(`${lineNumber}.`);
 
             texts
               .append('text')
@@ -295,6 +304,7 @@ class Line extends Component {
 
   renderLegend() {
     const { data, settings, xValues, onLinkClick, targetLink, year } = this.props;
+    const isSmallChart = this.isSmallChart();
     const lines = this.getLines().sort((a, b) => {
       const last = xValues.length - 1;
       return b.values[last] - a.values[last];
@@ -305,14 +315,21 @@ class Line extends Component {
     const lineOnMouseLeave = lineData => {
       this.chart.querySelector(`#${lineData.geo_id}`).classList.remove('selected');
     };
+    const colorScaleForMobile = chroma.scale(PROFILE_CHOROPLETH_COLORS).colors(lines.length);
 
     return (
       <ul className="line-bottom-legend">
         {lines.map((lineData, index) => {
           const style = typeof data.style !== 'undefined' ? data.style.style : lineData.style;
-          const lineStyle = isFunction(settings.lineClassNameCallback)
-            ? settings.lineClassNameCallback([lineData], style)
-            : style;
+          const strokeColor = isSmallChart ? colorScaleForMobile[index] : null;
+          let lineClassName = style;
+
+          if (isSmallChart) {
+            lineClassName = `${style} generated-color`;
+          } else if (isFunction(settings.lineClassNameCallback)) {
+            lineClassName = settings.lineClassNameCallback([lineData], style);
+          }
+
           const isLink =
             typeof onLinkClick !== 'undefined' && lineData.node_id && lineData.profile_type;
           const linkOnClick = () => {
@@ -329,7 +346,7 @@ class Line extends Component {
               onMouseLeave={() => lineOnMouseLeave(lineData)}
             >
               <svg height="6" width="20" className="line-color">
-                <g className={lineStyle}>
+                <g className={lineClassName} stroke={strokeColor}>
                   <path d="M0 3 20 3" />
                 </g>
               </svg>
