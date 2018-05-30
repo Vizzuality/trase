@@ -33,6 +33,7 @@ class GlobalSearchResult extends Component {
               payload: {
                 query: {
                   state: {
+                    isMapVisible: false,
                     selectedContextId: item.contextId,
                     selectedNodesIds: item.nodes.map(i => i.id),
                     expandedNodesIds: item.nodes.map(i => i.id)
