@@ -123,7 +123,7 @@ export default class {
   _showTooltip(nodesData, coordinates, currentQuant) {
     const node = nodesData[0];
 
-    if (node.selectedMetas === undefined) {
+    if (node.selectedMetas === undefined || !coordinates) {
       return;
     }
 
