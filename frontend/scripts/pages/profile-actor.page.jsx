@@ -19,7 +19,7 @@ import HelpTooltip from 'react-components/shared/help-tooltip.component';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 import 'styles/profile-actor.scss';
-import formatApostrophe from 'utils/formatApostrophe';
+import addApostrophe from 'utils/addApostrophe';
 import formatValue from 'utils/formatValue';
 import { GET_ACTOR_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParams';
 
@@ -110,9 +110,15 @@ const _initSource = (selectedSource, data, store) => {
 
 const _setTopSourceSwitcher = (data, verb, year, store) => {
   const nodeName = capitalize(data.node_name);
-  const title = `Top sourcing regions of Soy ${verb} by ${nodeName} in ${year}:`;
   const items = Object.keys(data.top_sources).filter(
     key => !ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)
+  );
+
+  const title = (
+    <span>
+      Top sourcing regions of Soy {verb} by <span className="notranslate">{nodeName}</span> in{' '}
+      <span className="notranslate">{year}</span>:
+    </span>
   );
 
   document.querySelector('.js-top-municipalities').classList.remove('is-hidden');
@@ -192,13 +198,24 @@ const _build = (data, { nodeId, year, print }, store) => {
     _initSource(print ? 'state' : 'municipality', data, store);
   }
 
+  const nameSpan = document.createElement('span');
+  nameSpan.classList.add('notranslate');
+  nameSpan.textContent = capitalize(data.node_name);
+
+  const yearSpan = document.createElement('span');
+  yearSpan.classList.add('notranslate');
+  yearSpan.textContent = year;
+
   if (data.top_countries && data.top_countries.lines.length) {
     document.querySelector('.js-top-map').classList.remove('is-hidden');
-    document.querySelector(
-      '.js-top-map-title'
-    ).textContent = `Top destination countries of Soy ${verb} by ${capitalize(
-      data.node_name
-    )} in ${year}`;
+
+    const titleNode = document.querySelector('.js-top-map-title');
+
+    titleNode.innerHTML = '';
+    titleNode.appendChild(document.createTextNode(`Top destination countries of Soy ${verb} by `));
+    titleNode.appendChild(nameSpan);
+    titleNode.appendChild(document.createTextNode(' in '));
+    titleNode.appendChild(yearSpan);
 
     render(
       <Provider store={store}>
@@ -288,9 +305,13 @@ const _build = (data, { nodeId, year, print }, store) => {
   if (data.sustainability && data.sustainability.length) {
     const filteredData = data.sustainability.filter(elem => elem.rows.length > 0);
     if (filteredData.length !== 0) {
-      const tabsTitle = `Deforestation risk associated with ${formatApostrophe(
-        data.node_name
-      )} top sourcing regions in ${year}:`;
+      const title = (
+        <span>
+          Deforestation risk associated with <span className="notranslate">{data.node_name}</span>
+          {addApostrophe(data.node_name)} top sourcing regions in in{' '}
+          <span className="notranslate">{year}</span>:
+        </span>
+      );
 
       document.querySelector('.js-area-table').classList.remove('is-hidden');
 
@@ -299,7 +320,7 @@ const _build = (data, { nodeId, year, print }, store) => {
           <MultiTable
             id="sustainability"
             data={filteredData}
-            tabsTitle={tabsTitle}
+            tabsTitle={title}
             tabsTitleTooltip={tooltips.deforestationRisk}
             type="t_head_actors"
             target={item => (item.name === 'Municipalities' ? 'profilePlace' : null)}
@@ -363,9 +384,16 @@ const _build = (data, { nodeId, year, print }, store) => {
 
 const _setInfo = (info, onLinkClick, { nodeId, year, contextId }) => {
   document.querySelector('.js-name').textContent = info.name ? capitalize(info.name) : '-';
-  document.querySelector('.js-link-button-name').textContent = `${formatApostrophe(
-    capitalize(info.name)
-  )} PROFILE`;
+
+  const nameSpan = document.createElement('span');
+  nameSpan.classList.add('notranslate');
+  nameSpan.textContent = capitalize(info.name);
+
+  const linkButtonNode = document.querySelector('.js-link-button-name');
+  linkButtonNode.innerHTML = '';
+  linkButtonNode.appendChild(nameSpan);
+  linkButtonNode.appendChild(document.createTextNode(`${addApostrophe(info.name)} PROFILE`));
+
   document.querySelector('.js-legend').textContent = info.type || '-';
   document.querySelector('.js-country').textContent = info.country ? capitalize(info.country) : '-';
   if (info.forest_500 > 0) {
