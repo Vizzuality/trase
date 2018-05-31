@@ -751,12 +751,21 @@ export function highlightNode(nodeId, isAggregated, coordinates) {
 
 export function highlightNodeFromGeoId(geoId, coordinates) {
   return (dispatch, getState) => {
-    const nodeId = getNodeIdFromGeoId(
-      geoId,
-      getState().tool.nodesDict,
-      getState().tool.selectedColumnsIds[0]
-    );
-    dispatch(highlightNode(nodeId, false, coordinates));
+    const {
+      nodesDict,
+      selectedColumnsIds,
+      highlightedGeoIds,
+      highlightedNodesIds
+    } = getState().tool;
+
+    const nodeId = getNodeIdFromGeoId(geoId, nodesDict, selectedColumnsIds[0]);
+    if (nodeId === null || Number.isNaN(nodeId)) {
+      if (highlightedGeoIds.length || highlightedNodesIds.length) {
+        dispatch(highlightNode(null));
+      }
+    } else {
+      dispatch(highlightNode(nodeId, false, coordinates));
+    }
   };
 }
 

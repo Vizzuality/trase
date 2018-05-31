@@ -441,8 +441,9 @@ export default class {
           if (
             event.target.disabled ||
             (event.target.classList && event.target.classList.contains('-disabled'))
-          )
+          ) {
             return;
+          }
           that.callbacks.onPolygonClicked(this.feature.properties.geoid);
         }
       });
