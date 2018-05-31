@@ -3,6 +3,7 @@ import Tooltip from 'components/shared/info-tooltip.component';
 import { DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 import ProfilePlaceMarkup from 'html/profile-place.ejs';
+import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
 import React from 'react';
 import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
@@ -397,11 +398,11 @@ const _loadData = (store, nodeId, year) => {
       );
 
       render(
-        <HelpTooltip text={tooltips.soyLand} position="bottom" />,
+        <HelpTooltip text={get(tooltips, 'profilePlace.soyLand')} position="bottom" />,
         document.getElementById('soy-land-tooltip')
       );
       render(
-        <HelpTooltip text={tooltips.soyProduction} position="bottom" />,
+        <HelpTooltip text={get(tooltips, 'profilePlace.soyProduction')} position="bottom" />,
         document.getElementById('soy-production-tooltip')
       );
 
