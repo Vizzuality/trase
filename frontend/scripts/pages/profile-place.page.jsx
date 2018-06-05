@@ -18,7 +18,7 @@ import HelpTooltip from 'react-components/shared/help-tooltip.component';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 import 'styles/profile-place.scss';
-import formatApostrophe from 'utils/formatApostrophe';
+import addApostrophe from 'utils/addApostrophe';
 import formatValue from 'utils/formatValue';
 import { GET_PLACE_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParams';
 import smoothScroll from 'utils/smoothScroll';
@@ -258,23 +258,45 @@ const _setInfo = (store, info, onLinkClick, { nodeId, year, contextId }) => {
       }
     })
   );
-  document.querySelector('.js-line-title').innerHTML = info.municipality
-    ? `Deforestation trajectory of ${info.municipality}`
-    : '-';
-  document.querySelector('.js-traders-title').innerHTML = `Top traders of soy in ${
-    info.municipality
-  } in ${year}`;
-  document.querySelector(
-    '.js-consumers-title'
-  ).innerHTML = `Top importer countries of ${formatApostrophe(
-    capitalize(info.municipality)
-  )} soy in ${year}`;
-  document.querySelector('.js-link-button-municipality').textContent = `${formatApostrophe(
-    capitalize(info.municipality)
-  )} PROFILE`;
+
+  const nameSpan = document.createElement('span');
+  nameSpan.classList.add('notranslate');
+  nameSpan.textContent = capitalize(info.municipality);
+
+  const yearSpan = document.createElement('span');
+  yearSpan.classList.add('notranslate');
+  yearSpan.textContent = year;
+
+  const lineTitleNode = document.querySelector('.js-line-title');
+  lineTitleNode.innerHTML = '';
+  lineTitleNode.appendChild(document.createTextNode('Deforestation trajectory of '));
+  lineTitleNode.appendChild(nameSpan.cloneNode(true));
+
+  const tradersTitleNode = document.querySelector('.js-traders-title');
+  tradersTitleNode.innerHTML = '';
+  tradersTitleNode.appendChild(document.createTextNode('Top traders of soy in '));
+  tradersTitleNode.appendChild(nameSpan.cloneNode(true));
+  tradersTitleNode.appendChild(document.createTextNode(' in '));
+  tradersTitleNode.appendChild(yearSpan.cloneNode(true));
+
+  const consumersTitleNode = document.querySelector('.js-consumers-title');
+  consumersTitleNode.innerHTML = '';
+  consumersTitleNode.appendChild(document.createTextNode('Top importer countries of '));
+  consumersTitleNode.appendChild(nameSpan.cloneNode(true));
+  consumersTitleNode.appendChild(document.createTextNode(' soy in '));
+  consumersTitleNode.appendChild(yearSpan.cloneNode(true));
+
+  const linkButtonMunicipalityNode = document.querySelector('.js-link-button-municipality');
+  linkButtonMunicipalityNode.innerHTML = '';
+  linkButtonMunicipalityNode.appendChild(nameSpan.cloneNode(true));
+  linkButtonMunicipalityNode.appendChild(
+    document.createTextNode(`${addApostrophe(info.municipality)} PROFILE`)
+  );
 
   if (info.soy_production === 0) {
-    info.summary = `${info.municipality} did not produce any soy in ${year}`;
+    info.summary = `<span class="notranslate">${
+      info.municipality
+    }</span> did not produce any soy in <span class="notranslate">${year}</span>`;
   }
   document.querySelector('.js-summary-text').innerHTML = info.summary ? info.summary : '-';
 };
