@@ -41,7 +41,7 @@ const LINE_MARGINS = {
 };
 let lineSettings;
 
-const _initSource = (selectedSource, data, store) => {
+const _initSource = (selectedSource, data, year, onLinkClick, store) => {
   if (data.top_sources === undefined) {
     return;
   }
@@ -63,6 +63,9 @@ const _initSource = (selectedSource, data, store) => {
         xValues={data.top_sources.included_years}
         settings={settings}
         useBottomLegend
+        targetLink="profilePlace"
+        onLinkClick={onLinkClick}
+        year={year}
       />
     </Provider>,
     document.querySelector('.js-top-municipalities-chart')
@@ -78,13 +81,13 @@ const _initSource = (selectedSource, data, store) => {
   };
   const showTooltipCallback = ({ properties }, x, y) => {
     const source = data.top_sources[selectedSource].lines.find(s => properties.geoid === s.geo_id);
-    const title = `${data.node_name} > ${properties.nome.toUpperCase()}`;
+    const title = `${data.node_name} > ${properties.name.toUpperCase()}`;
 
     if (source) {
       tooltip.show(x, y, title, [
         {
           title: 'Trade Volume',
-          value: formatValue(source.values[0], 'Trade volume'),
+          value: formatValue(source.values[year - 2010], 'Trade volume'),
           unit: 't'
         }
       ]);
@@ -109,7 +112,7 @@ const _initSource = (selectedSource, data, store) => {
   );
 };
 
-const _setTopSourceSwitcher = (data, verb, year, store) => {
+const _setTopSourceSwitcher = (data, verb, year, onLinkClick, store) => {
   const nodeName = capitalize(data.node_name);
   const items = Object.keys(data.top_sources).filter(
     key => !ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)
@@ -129,14 +132,14 @@ const _setTopSourceSwitcher = (data, verb, year, store) => {
       <DropdownTabSwitcher
         title={title}
         items={items}
-        onSelectedIndexChange={index => _initSource(items[index], data, store)}
+        onSelectedIndexChange={index => _initSource(items[index], data, year, onLinkClick, store)}
       />
     </Provider>,
     document.querySelector('.js-top-municipalities-title-container')
   );
 };
 
-const _build = (data, { nodeId, year, print }, store) => {
+const _build = (data, { nodeId, year, print }, onLinkClick, store) => {
   const verb = data.column_name === 'EXPORTER' ? 'exported' : 'imported';
   const verbGerund = data.column_name === 'EXPORTER' ? 'exporting' : 'importing';
   const { tooltips } = store.getState().app;
@@ -182,12 +185,11 @@ const _build = (data, { nodeId, year, print }, store) => {
       );
     },
     hideTooltipCallback: tooltip.hide,
-    lineClassNameCallback: (lineData, lineDefaultStyle) =>
-      `${lineDefaultStyle} line-${lineData[0].value9}`
+    lineClassNameCallback: (lineIndex, lineDefaultStyle) => `${lineDefaultStyle} line-${lineIndex}`
   };
 
   if (data.top_sources && data.top_sources.municipality.lines.length) {
-    _setTopSourceSwitcher(data, verb, year, store);
+    _setTopSourceSwitcher(data, verb, year, onLinkClick, store);
 
     render(
       <Provider store={store}>
@@ -199,7 +201,7 @@ const _build = (data, { nodeId, year, print }, store) => {
       document.querySelector('.js-source-legend')
     );
 
-    _initSource(print ? 'state' : 'municipality', data, store);
+    _initSource(print ? 'state' : 'municipality', data, year, onLinkClick, store);
   }
 
   const nameSpan = document.createElement('span');
@@ -551,7 +553,7 @@ const _loadData = (store, nodeId, year, print) => {
         document.getElementById('year-dropdown')
       );
 
-      _build(data, { nodeId, year, print }, store);
+      _build(data, { nodeId, year, print }, onLinkClick(store), store);
     })
     .catch(reason => {
       _showErrorMessage(reason.message);

@@ -171,23 +171,23 @@ $recolorgroup-colors-names: '-recolorgroup-1', '-recolorgroup-2', '-recolorgroup
 $ch-zero: $white;
 $ch-default: $gray;
 
-$ch-red-0: #F5EEE3;
-$ch-red-1: #F5B7AD;
+$ch-red-0: #F5B7AD;
+$ch-red-1: #F28789;
 $ch-red-2: #EF4F60;
-$ch-red-3: #B41728;
+$ch-red-3: #95232F;
 $ch-red-4: #4F0008;
 
 // profile choropleth
 // For now we'll use the same color scheme as in the tool, when we include more buckets this has to change.
 $ch-profile-n-a: $metal-grey;
-$ch-profile-red-0: $ch-red-0; // #f6f5ed;
-$ch-profile-red-1: $ch-red-1; // #f5decd;
-$ch-profile-red-2: $ch-red-2; // #f6928d;
-$ch-profile-red-3: $ch-red-3; // #f65e6e;
-$ch-profile-red-4: $ch-red-4; // #e1384a;
-$ch-profile-red-5: $ch-red-4; // #b41728;
-$ch-profile-red-6: $ch-red-4; // #790916;
-$ch-profile-red-7: $ch-red-4; // #4e0008;
+$ch-profile-red-0: $ch-red-0;
+$ch-profile-red-1: $ch-red-1;
+$ch-profile-red-2: $ch-red-2;
+$ch-profile-red-3: $ch-red-3;
+$ch-profile-red-4: $ch-red-4;
+$ch-profile-red-5: $ch-red-4;
+$ch-profile-red-6: $ch-red-4;
+$ch-profile-red-7: $ch-red-4;
 
 $choropleth-colors: (
   ch-red-0: $ch-red-0,
