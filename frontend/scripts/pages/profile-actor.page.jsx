@@ -81,7 +81,7 @@ const _initSource = (selectedSource, data, year, onLinkClick, store) => {
   };
   const showTooltipCallback = ({ properties }, x, y) => {
     const source = data.top_sources[selectedSource].lines.find(s => properties.geoid === s.geo_id);
-    const title = `${data.node_name} > ${properties.nome.toUpperCase()}`;
+    const title = `${data.node_name} > ${properties.name.toUpperCase()}`;
 
     if (source) {
       tooltip.show(x, y, title, [
