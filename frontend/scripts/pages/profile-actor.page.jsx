@@ -312,7 +312,7 @@ const _build = (data, { nodeId, year, print }, store) => {
       const title = (
         <span>
           Deforestation risk associated with <span className="notranslate">{data.node_name}</span>
-          {addApostrophe(data.node_name)} top sourcing regions in in{' '}
+          {addApostrophe(data.node_name)} top sourcing regions in{' '}
           <span className="notranslate">{year}</span>:
         </span>
       );
