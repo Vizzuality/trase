@@ -5,7 +5,7 @@ import { select as d3_select } from 'd3-selection';
 import { chord as d3_chord, ribbon as d3_ribbon } from 'd3-chord';
 import { descending as d3_descending } from 'd3-array';
 import { arc as d3_arc } from 'd3-shape';
-import i18n from 'utils/transifex';
+import { translateText } from 'utils/transifex';
 import 'styles/components/profiles/chord.scss';
 
 const TYPE_KEY_1 = 'list';
@@ -137,7 +137,10 @@ class Chord extends Component {
           }`
       )
       .style('text-anchor', d => (d.angle > Math.PI ? 'end' : null))
-      .text((d, i) => (i === 0 || allNames[i].type === TYPE_KEY_2 ? i18n(allNames[i].name) : ''));
+      .text(
+        (d, i) =>
+          i === 0 || allNames[i].type === TYPE_KEY_2 ? translateText(allNames[i].name) : ''
+      );
   }
 
   render() {

@@ -24,6 +24,7 @@ import formatValue from 'utils/formatValue';
 import { GET_PLACE_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParams';
 import smoothScroll from 'utils/smoothScroll';
 import { getDefaultContext } from 'scripts/reducers/helpers/contextHelper';
+import { translateNode } from 'utils/transifex';
 
 const defaults = {
   country: 'Brazil',
@@ -272,6 +273,7 @@ const _setInfo = (store, info, onLinkClick, { nodeId, year, contextId }) => {
   lineTitleNode.innerHTML = '';
   lineTitleNode.appendChild(document.createTextNode('Deforestation trajectory of '));
   lineTitleNode.appendChild(nameSpan.cloneNode(true));
+  translateNode(lineTitleNode);
 
   const tradersTitleNode = document.querySelector('.js-traders-title');
   tradersTitleNode.innerHTML = '';
@@ -279,6 +281,7 @@ const _setInfo = (store, info, onLinkClick, { nodeId, year, contextId }) => {
   tradersTitleNode.appendChild(nameSpan.cloneNode(true));
   tradersTitleNode.appendChild(document.createTextNode(' in '));
   tradersTitleNode.appendChild(yearSpan.cloneNode(true));
+  translateNode(tradersTitleNode);
 
   const consumersTitleNode = document.querySelector('.js-consumers-title');
   consumersTitleNode.innerHTML = '';
@@ -286,6 +289,7 @@ const _setInfo = (store, info, onLinkClick, { nodeId, year, contextId }) => {
   consumersTitleNode.appendChild(nameSpan.cloneNode(true));
   consumersTitleNode.appendChild(document.createTextNode(' soy in '));
   consumersTitleNode.appendChild(yearSpan.cloneNode(true));
+  translateNode(consumersTitleNode);
 
   const linkButtonMunicipalityNode = document.querySelector('.js-link-button-municipality');
   linkButtonMunicipalityNode.innerHTML = '';
@@ -293,13 +297,16 @@ const _setInfo = (store, info, onLinkClick, { nodeId, year, contextId }) => {
   linkButtonMunicipalityNode.appendChild(
     document.createTextNode(`${addApostrophe(info.municipality)} PROFILE`)
   );
+  translateNode(linkButtonMunicipalityNode);
 
+  const summaryTextNode = document.querySelector('.js-summary-text');
   if (info.soy_production === 0) {
     info.summary = `<span class="notranslate">${
       info.municipality
     }</span> did not produce any soy in <span class="notranslate">${year}</span>`;
   }
-  document.querySelector('.js-summary-text').innerHTML = info.summary ? info.summary : '-';
+  summaryTextNode.innerHTML = info.summary ? info.summary : '-';
+  translateNode(summaryTextNode);
 };
 
 const _setEventListeners = () => {

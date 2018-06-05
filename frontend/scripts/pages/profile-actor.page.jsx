@@ -23,6 +23,7 @@ import 'styles/profile-actor.scss';
 import addApostrophe from 'utils/addApostrophe';
 import formatValue from 'utils/formatValue';
 import { GET_ACTOR_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParams';
+import { translateNode, translateText } from 'utils/transifex';
 
 import smoothScroll from 'utils/smoothScroll';
 import { getDefaultContext } from 'scripts/reducers/helpers/contextHelper';
@@ -222,11 +223,12 @@ const _build = (data, { nodeId, year, print }, onLinkClick, store) => {
     titleNode.appendChild(nameSpan);
     titleNode.appendChild(document.createTextNode(' in '));
     titleNode.appendChild(yearSpan);
+    translateNode(titleNode);
 
     render(
       <Provider store={store}>
         <ChoroLegend
-          title={[`Soy ${verb} in ${year}`, '(tonnes)']}
+          title={[translateText(`Soy ${verb} in ${year}`), translateText('(tonnes)')]}
           bucket={[[data.top_countries.buckets[0], ...data.top_countries.buckets]]}
         />
       </Provider>,
@@ -319,6 +321,8 @@ const _build = (data, { nodeId, year, print }, onLinkClick, store) => {
         </span>
       );
 
+      translateText(title);
+
       document.querySelector('.js-area-table').classList.remove('is-hidden');
 
       render(
@@ -399,6 +403,7 @@ const _setInfo = (info, onLinkClick, { nodeId, year, contextId }) => {
   linkButtonNode.innerHTML = '';
   linkButtonNode.appendChild(nameSpan);
   linkButtonNode.appendChild(document.createTextNode(`${addApostrophe(info.name)} PROFILE`));
+  translateNode(linkButtonNode);
 
   document.querySelector('.js-legend').textContent = info.type || '-';
   document.querySelector('.js-country').textContent = info.country ? capitalize(info.country) : '-';

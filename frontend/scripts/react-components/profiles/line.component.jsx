@@ -13,7 +13,7 @@ import { timeFormat as d3_timeFormat } from 'd3-time-format';
 
 import { LINE_LABEL_HEIGHT } from 'constants';
 import abbreviateNumber from 'utils/abbreviateNumber';
-import i18n from 'utils/transifex';
+import { translateText } from 'utils/transifex';
 import { Responsive } from 'react-components/shared/responsive.hoc';
 
 import 'styles/components/profiles/line.scss';
@@ -210,7 +210,7 @@ class Line extends Component {
                   });
                 }
               })
-              .text(d => `${capitalize(i18n(d[0].name))}`);
+              .text(d => `${capitalize(translateText(d[0].name))}`);
           }
 
           const circles = pathContainers
@@ -339,10 +339,10 @@ class Line extends Component {
               <span>{index + 1}.</span>
               {isLink ? (
                 <span className="link" onClick={linkOnClick}>
-                  {capitalize(i18n(lineData.name))}
+                  {capitalize(translateText(lineData.name))}
                 </span>
               ) : (
-                <span>{capitalize(i18n(lineData.name))}</span>
+                <span>{capitalize(translateText(lineData.name))}</span>
               )}
             </li>
           );
