@@ -694,7 +694,9 @@ export function selectNodeFromGeoId(geoId) {
     );
 
     // node not in visible Nodes ---> expand node (same behavior as search)
-    dispatch(selectExpandedNode(nodeId));
+    if (nodeId !== null) {
+      dispatch(selectExpandedNode(nodeId));
+    }
   };
 }
 
@@ -751,12 +753,21 @@ export function highlightNode(nodeId, isAggregated, coordinates) {
 
 export function highlightNodeFromGeoId(geoId, coordinates) {
   return (dispatch, getState) => {
-    const nodeId = getNodeIdFromGeoId(
-      geoId,
-      getState().tool.nodesDict,
-      getState().tool.selectedColumnsIds[0]
-    );
-    dispatch(highlightNode(nodeId, false, coordinates));
+    const {
+      nodesDict,
+      selectedColumnsIds,
+      highlightedGeoIds,
+      highlightedNodesIds
+    } = getState().tool;
+
+    const nodeId = getNodeIdFromGeoId(geoId, nodesDict, selectedColumnsIds[0]);
+    if (nodeId === null) {
+      if (highlightedGeoIds.length || highlightedNodesIds.length) {
+        dispatch(highlightNode(null));
+      }
+    } else {
+      dispatch(highlightNode(nodeId, false, coordinates));
+    }
   };
 }
 

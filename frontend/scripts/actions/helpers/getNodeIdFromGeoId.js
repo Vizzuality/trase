@@ -10,5 +10,7 @@ export default (geoId, nodesDict, selectedGeoColumnId) => {
       nodesDict[nodeId].geoId === geoId && selectedGeoColumnId === nodesDict[nodeId].columnId
   );
 
+  if (selectedNodeId === undefined) return null;
+
   return parseInt(selectedNodeId, 10);
 };

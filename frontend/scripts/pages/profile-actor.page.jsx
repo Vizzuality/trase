@@ -3,6 +3,7 @@ import Tooltip from 'components/shared/info-tooltip.component';
 import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST, DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 import ProfileActorMarkup from 'html/profile-actor.ejs';
+import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
 import React from 'react';
 import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
@@ -141,11 +142,14 @@ const _build = (data, { nodeId, year, print }, store) => {
   const { tooltips } = store.getState().app;
 
   render(
-    <HelpTooltip text={tooltips.zeroDeforestationCommitment} position="bottom" />,
+    <HelpTooltip
+      text={get(tooltips, 'profileActor.zeroDeforestationCommitment')}
+      position="bottom"
+    />,
     document.getElementById('zero-deforestation-tooltip')
   );
   render(
-    <HelpTooltip text={tooltips.forest500Score} position="bottom" />,
+    <HelpTooltip text={get(tooltips, 'profileActor.forest500Score')} position="bottom" />,
     document.getElementById('forest-500-tooltip')
   );
 
@@ -308,7 +312,7 @@ const _build = (data, { nodeId, year, print }, store) => {
       const title = (
         <span>
           Deforestation risk associated with <span className="notranslate">{data.node_name}</span>
-          {addApostrophe(data.node_name)} top sourcing regions in in{' '}
+          {addApostrophe(data.node_name)} top sourcing regions in{' '}
           <span className="notranslate">{year}</span>:
         </span>
       );
@@ -321,7 +325,7 @@ const _build = (data, { nodeId, year, print }, store) => {
             id="sustainability"
             data={filteredData}
             tabsTitle={title}
-            tabsTitleTooltip={tooltips.deforestationRisk}
+            tabsTitleTooltip={get(tooltips, 'profileActor.deforestationRisk')}
             type="t_head_actors"
             target={item => (item.name === 'Municipalities' ? 'profilePlace' : null)}
             year={year}
