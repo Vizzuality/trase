@@ -87,7 +87,7 @@ const _initSource = (selectedSource, data, year, onLinkClick, store) => {
       tooltip.show(x, y, title, [
         {
           title: 'Trade Volume',
-          value: formatValue(source.values[0], 'Trade volume'),
+          value: formatValue(source.values[year - 2010], 'Trade volume'),
           unit: 't'
         }
       ]);
