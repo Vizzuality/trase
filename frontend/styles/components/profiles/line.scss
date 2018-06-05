@@ -121,6 +121,13 @@ ul.line-bottom-legend {
   letter-spacing: -0.6px;
   color: $charcoal-grey;
 
+  .link {
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
   .line-color {
     margin-right: 5px;
   }

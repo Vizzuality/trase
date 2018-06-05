@@ -101,8 +101,7 @@ class Line extends Component {
       .rangeRound([height, 0])
       .domain(d3_extent([0, ...allYValues]));
 
-    let lastNumberY = height + LINE_LABEL_HEIGHT;
-    let lastNameY = height + LINE_LABEL_HEIGHT;
+    let lastY = height + LINE_LABEL_HEIGHT;
 
     const lines = this.getLines().sort((a, b) => {
       const last = xValues.length - 1;
@@ -155,17 +154,18 @@ class Line extends Component {
           break;
 
         case 'line-points': {
+          const lineNumber = numLines - i;
           pathContainers = d3Container
             .datum(lineValuesWithFormat[0])
             .append('g')
             .attr('id', lineData.geo_id)
-            .attr(
-              'class',
-              d =>
-                isFunction(settings.lineClassNameCallback)
-                  ? settings.lineClassNameCallback(d, style)
-                  : style
-            );
+            .attr('class', d => {
+              const lineIndex = isSmallChart ? i : d[0].value9;
+
+              return isFunction(settings.lineClassNameCallback)
+                ? settings.lineClassNameCallback(lineIndex, style)
+                : style;
+            });
 
           pathContainers
             .selectAll('path')
@@ -178,40 +178,29 @@ class Line extends Component {
             const texts = pathContainers
               .selectAll('text')
               .data(d => [d])
-              .enter();
-
-            texts
-              .append('text')
+              .enter()
+              .append('g')
               .attr('transform', d => {
                 const last = d.length - 1;
                 const { value } = d[last];
                 let newNumberY = y(value) + 4;
-                if (newNumberY + LINE_LABEL_HEIGHT > lastNumberY) {
-                  newNumberY = lastNumberY - LINE_LABEL_HEIGHT - 1;
+                if (newNumberY + LINE_LABEL_HEIGHT > lastY) {
+                  newNumberY = lastY - LINE_LABEL_HEIGHT - 1;
                 }
-                lastNumberY = newNumberY;
+                lastY = newNumberY;
                 return `translate(${width + 6},${newNumberY})`;
-              })
+              });
 
-              .text(`${numLines - i}.`);
+            texts.append('text').text(`${lineNumber}.`);
 
             texts
               .append('text')
+              .attr('transform', 'translate(16,0)')
               .attr('class', d => {
                 if (typeof onLinkClick !== 'undefined' && d[0].nodeId && data.profile_type) {
                   return 'link';
                 }
                 return '';
-              })
-              .attr('transform', d => {
-                const last = d.length - 1;
-                const { value } = d[last];
-                let newNameY = y(value) + 4;
-                if (newNameY + LINE_LABEL_HEIGHT > lastNameY) {
-                  newNameY = lastNameY - LINE_LABEL_HEIGHT - 1;
-                }
-                lastNameY = newNameY;
-                return `translate(${width + 20},${newNameY})`;
               })
               .on('click', d => {
                 if (typeof onLinkClick !== 'undefined' && d[0].nodeId && data.profile_type) {
@@ -306,7 +295,8 @@ class Line extends Component {
   }
 
   renderLegend() {
-    const { data, settings, xValues } = this.props;
+    const { data, settings, xValues, onLinkClick, targetLink, year } = this.props;
+    const isSmallChart = this.isSmallChart();
     const lines = this.getLines().sort((a, b) => {
       const last = xValues.length - 1;
       return b.values[last] - a.values[last];
@@ -322,9 +312,18 @@ class Line extends Component {
       <ul className="line-bottom-legend">
         {lines.map((lineData, index) => {
           const style = typeof data.style !== 'undefined' ? data.style.style : lineData.style;
-          const lineStyle = isFunction(settings.lineClassNameCallback)
-            ? settings.lineClassNameCallback([lineData], style)
+          const lineIndex = isSmallChart ? lines.length - index - 1 : lineData.value9;
+          const lineClassName = isFunction(settings.lineClassNameCallback)
+            ? settings.lineClassNameCallback(lineIndex, style)
             : style;
+          const isLink =
+            typeof onLinkClick !== 'undefined' && lineData.node_id && lineData.profile_type;
+          const linkOnClick = () => {
+            onLinkClick(targetLink, {
+              nodeId: lineData.node_id,
+              year
+            });
+          };
 
           return (
             <li
@@ -333,13 +332,18 @@ class Line extends Component {
               onMouseLeave={() => lineOnMouseLeave(lineData)}
             >
               <svg height="6" width="20" className="line-color">
-                <g className={lineStyle}>
+                <g className={lineClassName}>
                   <path d="M0 3 20 3" />
                 </g>
               </svg>
-              <span>
-                {index + 1}.{capitalize(i18n(lineData.name))}
-              </span>
+              <span>{index + 1}.</span>
+              {isLink ? (
+                <span className="link" onClick={linkOnClick}>
+                  {capitalize(i18n(lineData.name))}
+                </span>
+              ) : (
+                <span>{capitalize(i18n(lineData.name))}</span>
+              )}
             </li>
           );
         })}

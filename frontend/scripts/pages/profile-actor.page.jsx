@@ -185,8 +185,7 @@ const _build = (data, { nodeId, year, print }, onLinkClick, store) => {
       );
     },
     hideTooltipCallback: tooltip.hide,
-    lineClassNameCallback: (lineData, lineDefaultStyle) =>
-      `${lineDefaultStyle} line-${lineData[0].value9}`
+    lineClassNameCallback: (lineIndex, lineDefaultStyle) => `${lineDefaultStyle} line-${lineIndex}`
   };
 
   if (data.top_sources && data.top_sources.municipality.lines.length) {
