@@ -97,7 +97,6 @@ module Api
             {
               name: node['name'],
               node_id: node['node_id'],
-              profile_type: profile_type_name,
               geo_id: node['geo_id'],
               values: years.map do |year|
                 year_node = @top_node_values_by_year.find do |value|
@@ -117,6 +116,7 @@ module Api
           {
             lines: lines,
             unit: 't',
+            profile_type: profile_type_name,
             style: {
               type: 'line-points',
               style: 'line-pink-with-points'

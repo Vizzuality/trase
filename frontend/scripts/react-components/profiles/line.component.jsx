@@ -41,7 +41,6 @@ class Line extends Component {
     const continuousValues = xValues.map((year, index) => ({
       name: data.name,
       nodeId: data.node_id,
-      profileType: data.profile_type,
       date: new Date(year, 0),
       value: data.values[index],
       value9: data.value9
@@ -199,7 +198,7 @@ class Line extends Component {
             texts
               .append('text')
               .attr('class', d => {
-                if (typeof onLinkClick !== 'undefined' && d[0].nodeId && d[0].profileType) {
+                if (typeof onLinkClick !== 'undefined' && d[0].nodeId && data.profile_type) {
                   return 'link';
                 }
                 return '';
@@ -215,7 +214,7 @@ class Line extends Component {
                 return `translate(${width + 20},${newNameY})`;
               })
               .on('click', d => {
-                if (typeof onLinkClick !== 'undefined' && d[0].nodeId && d[0].profileType) {
+                if (typeof onLinkClick !== 'undefined' && d[0].nodeId && data.profile_type) {
                   onLinkClick(targetLink, {
                     nodeId: d[0].nodeId,
                     year
