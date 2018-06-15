@@ -73,6 +73,7 @@ class Line extends Component {
     const margin = { ...settings.margin };
 
     const isSmallChart = this.isSmallChart();
+    const isTouchDevice = 'ontouchstart' in window; // I know this is not 100% true, but it's good enough
 
     if (isSmallChart) {
       margin.right = 30;
@@ -225,15 +226,22 @@ class Line extends Component {
             .attr('cy', d => y(d.value))
             .attr('r', 2);
 
-          this.hoverCircles = circles
+          circles
             .append('circle')
             .attr('class', 'hover-circle')
             .attr('cx', d => x(d.date))
             .attr('cy', d => y(d.value))
             .attr('r', 4);
 
+          this.hitboxCircles = circles
+            .append('circle')
+            .attr('class', 'hitbox-circle')
+            .attr('cx', d => x(d.date))
+            .attr('cy', d => y(d.value))
+            .attr('r', isTouchDevice ? 15 : 4);
+
           if (this.showTooltipCallback !== undefined) {
-            this.hoverCircles
+            this.hitboxCircles
               .on('mousemove', d => {
                 this.showTooltipCallback(
                   d,

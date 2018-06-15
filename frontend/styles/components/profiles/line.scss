@@ -84,6 +84,11 @@
       &.hover-circle {
         display: none;
       }
+
+      &.hitbox-circle {
+        stroke: transparent;
+        fill: transparent;
+      }
     }
 
     text {
