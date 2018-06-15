@@ -124,15 +124,9 @@
         }
       }
     }
-
-    .js-top-municipalities-title-container {
-      @media screen and (max-width: $breakpoint-foundation-small) {
-        margin-left: 1.25rem;
-      }
-    }
   }
 
-  .js-top-municipalities, .js-top-destination {
+  .js-top-municipalities-chart, .js-top-destination-chart {
     @media screen and (max-width: $breakpoint-foundation-small) {
       margin-left: -1.25rem;
       margin-right: -1.25rem;

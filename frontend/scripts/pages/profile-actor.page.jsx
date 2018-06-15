@@ -59,7 +59,6 @@ const _initSource = (selectedSource, data, year, onLinkClick, store) => {
   render(
     <Provider store={store}>
       <TranslatedLine
-        className=".js-top-municipalities-chart"
         data={sourceLines}
         xValues={data.top_sources.included_years}
         settings={settings}
@@ -259,14 +258,13 @@ const _build = (data, { nodeId, year, print }, onLinkClick, store) => {
     render(
       <Provider store={store}>
         <TranslatedLine
-          className=".js-top-destination"
           data={topCountriesLines}
           xValues={data.top_countries.included_years}
           settings={settings}
           useBottomLegend
         />
       </Provider>,
-      document.querySelector('.js-top-destination')
+      document.querySelector('.js-top-destination-chart')
     );
 
     const getPolygonClassName = ({ properties }) => {
@@ -600,7 +598,7 @@ export const unmount = () => {
   unmountComponentAtNode(document.querySelector('.js-top-municipalities-title-container'));
   unmountComponentAtNode(document.querySelector('.js-source-legend'));
   unmountComponentAtNode(document.querySelector('.js-destination-legend'));
-  unmountComponentAtNode(document.querySelector('.js-top-destination'));
+  unmountComponentAtNode(document.querySelector('.js-top-destination-chart'));
   unmountComponentAtNode(document.getElementById('year-dropdown'));
   unmountComponentAtNode(document.querySelector('.js-top-destination-map'));
   unmountComponentAtNode(document.querySelector('.js-sustainability-table'));
