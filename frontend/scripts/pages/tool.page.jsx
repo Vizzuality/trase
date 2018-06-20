@@ -39,10 +39,10 @@ export const mount = (root, store) => {
     search: SearchMarkup(),
     feedback: FeedbackMarkup()
   });
+  const { isMapIframe } = store.getState().tool;
 
   containers = [
     new FlowContentContainer(store),
-    new SankeyContainer(store),
     new MapContainer(store),
     new MapDimensionsContainer(store),
     new MapContextContainer(store),
@@ -50,36 +50,46 @@ export const mount = (root, store) => {
     new MapBasemapsContainer(store),
     new TitlebarContainer(store),
     new NodesTitlesContainer(store),
-    new TooltipContainer(store),
-    new ModalContainer(store)
+    new TooltipContainer(store)
   ];
 
-  loadDisclaimerTool(store.dispatch);
-  loadStoryModalTool(store.dispatch, store.getState);
-  resizeSankeyTool(store.dispatch);
+  if (!isMapIframe) {
+    containers.push(new SankeyContainer(store));
+    containers.push(new ModalContainer(store));
 
-  render(
-    <Provider store={store}>
-      <FiltersNav />
-    </Provider>,
-    document.getElementById('js-tool-nav-react')
-  );
+    loadDisclaimerTool(store.dispatch);
+    loadStoryModalTool(store.dispatch, store.getState);
+    resizeSankeyTool(store.dispatch);
 
-  render(
-    <Provider store={store}>
-      <ColumnsSelectorContainer />
-    </Provider>,
-    document.getElementById('js-columns-selector-react')
-  );
+    render(
+      <Provider store={store}>
+        <FiltersNav />
+      </Provider>,
+      document.getElementById('js-tool-nav-react')
+    );
 
-  evManager.addEventListener(window, 'resize', () => resizeSankeyTool(store.dispatch));
+    render(
+      <Provider store={store}>
+        <ColumnsSelectorContainer />
+      </Provider>,
+      document.getElementById('js-columns-selector-react')
+    );
+    evManager.addEventListener(window, 'resize', () => resizeSankeyTool(store.dispatch));
+  } else {
+    document.querySelector('body').classList.add('l-map-framed');
+  }
   document.querySelector('body').classList.add('-overflow-hidden');
 };
 
-export const unmount = () => {
+export const unmount = (root, store) => {
   evManager.clearEventListeners();
-  unmountComponentAtNode(document.getElementById('js-tool-nav-react'));
-  unmountComponentAtNode(document.getElementById('js-columns-selector-react'));
+  const { isMapIframe } = store.getState().tool;
+  if (isMapIframe) {
+    document.querySelector('body').classList.remove('l-map-framed');
+  } else {
+    unmountComponentAtNode(document.getElementById('js-tool-nav-react'));
+    unmountComponentAtNode(document.getElementById('js-columns-selector-react'));
+  }
   document.querySelector('body').classList.remove('-overflow-hidden');
   containers.forEach(container => container.remove());
 };

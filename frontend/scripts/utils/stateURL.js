@@ -24,6 +24,7 @@ const appStateToURLParams = state => {
     selectedColumnsIds: state.tool.selectedColumnsIds,
     selectedMapDimensions: state.tool.selectedMapDimensions,
     isMapVisible: state.tool.isMapVisible,
+    isMapIframe: state.tool.isMapIframe,
     mapView: state.tool.mapView,
     expandedMapSidebarGroupsIds: state.tool.expandedMapSidebarGroupsIds,
     selectedMapContextualLayers: state.tool.selectedMapContextualLayers,
@@ -88,6 +89,7 @@ const URLParamsToAppState = (params, state) => {
     selectedColumnsIds: _getIntArrayValue(params.selectedColumnsIds),
     selectedMapDimensions: params.selectedMapDimensions,
     isMapVisible: _getBoolValue(params.isMapVisible),
+    isMapIframe: params.isMapIframe,
     mapView: params.mapView,
     expandedMapSidebarGroupsIds: _getIntArrayValue(params.expandedMapSidebarGroupsIds),
     selectedMapContextualLayers: params.selectedMapContextualLayers,
@@ -123,14 +125,13 @@ export const decodeStateFromURL = state => {
 export const parse = url => {
   const params = qs.parse(url);
   if (params.state) {
-    return decodeStateFromURL(params.state);
+    const state = decodeStateFromURL(params.state);
+    return { ...state, isMapIframe: params.iframe ? params.iframe === 'true' : state.isMapIframe };
   }
   return params;
 };
 
-export const stringify = params => {
-  return qs.stringify(params);
-};
+export const stringify = params => qs.stringify(params);
 
 const stateToURLObject = (state, location) => {
   if (location.type === 'tool') {

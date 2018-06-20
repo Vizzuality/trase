@@ -1,0 +1,30 @@
+@import '../base';
+@import '../settings';
+
+.l-map-framed {
+  .tool-nav,
+  .c-sankey,
+  .veil,
+  .-map-layers,
+  .user-report-feedback,
+  .c-titlebar {
+    display: none;
+  }
+
+
+  .l-tool {
+    .sankey-veil {
+      height: 100%;
+    }
+    .flow-content {
+      top: 0;
+      height: 100%;
+
+      >.c-map {
+        height: 100%;
+        width: 100%;
+        top: 0;
+      }
+    }
+  }
+}
