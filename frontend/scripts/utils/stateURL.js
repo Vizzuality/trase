@@ -126,6 +126,8 @@ export const parse = url => {
   const params = qs.parse(url);
   if (params.state) {
     const state = decodeStateFromURL(params.state);
+    // This bit moves the iframe param from outside the "state" query param into it.
+    // A bit hacky, but makes creating iframe URLs a lot easier
     return { ...state, isMapIframe: params.iframe ? params.iframe === 'true' : state.isMapIframe };
   }
   return params;
