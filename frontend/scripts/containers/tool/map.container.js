@@ -2,6 +2,10 @@
 // see sankey.container for details on how to use those containers
 import { toggleMap, toggleMapLayerMenu } from 'actions/app.actions';
 import { selectNodeFromGeoId, highlightNodeFromGeoId, saveMapView } from 'actions/tool.actions';
+import {
+  getSelectedNodesGeoIds,
+  getHighlightedNodesGeoIds
+} from 'react-components/tool/tool.selectors';
 import connect from 'connect';
 import Map from 'components/tool/map.component';
 import getBasemap from '../helpers/getBasemap';
@@ -13,7 +17,7 @@ const mapMethodsToState = state => ({
     _returnedValue: state => ({
       mapVectorData: state.tool.mapVectorData,
       currentPolygonType: state.tool.selectedColumnsIds,
-      selectedNodesGeoIds: state.tool.selectedNodesGeoIds,
+      selectedNodesGeoIds: getSelectedNodesGeoIds(state.tool),
       recolorByNodeIds: state.tool.recolorByNodeIds,
       choropleth: state.tool.choropleth,
       linkedGeoIds: state.tool.linkedGeoIds,
@@ -35,19 +39,19 @@ const mapMethodsToState = state => ({
     })
   },
   selectPolygons: {
-    _comparedValue: state => state.tool.selectedNodesGeoIds,
+    _comparedValue: state => getSelectedNodesGeoIds(state.tool),
     _returnedValue: state => ({
-      selectedGeoIds: state.tool.selectedNodesGeoIds,
+      selectedGeoIds: getSelectedNodesGeoIds(state.tool),
       linkedGeoIds: state.tool.linkedGeoIds,
       defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
       forceDefaultMapView: !state.tool.selectedNodesIds.length
     })
   },
   highlightPolygon: {
-    _comparedValue: state => state.tool.highlightedGeoIds,
+    _comparedValue: state => getHighlightedNodesGeoIds(state.tool),
     _returnedValue: state => ({
-      selectedGeoIds: state.tool.selectedNodesGeoIds,
-      highlightedGeoId: state.tool.highlightedGeoIds[0]
+      selectedGeoIds: getSelectedNodesGeoIds(state.tool),
+      highlightedGeoId: getHighlightedNodesGeoIds(state.tool)[0]
     })
   },
   setChoropleth: {
@@ -67,7 +71,7 @@ const mapMethodsToState = state => ({
       choropleth: state.tool.choropleth,
       selectedBiomeFilter: state.tool.selectedBiomeFilter,
       linkedGeoIds: state.tool.linkedGeoIds,
-      selectedGeoIds: state.tool.selectedNodesGeoIds,
+      selectedGeoIds: getSelectedNodesGeoIds(state.tool),
       defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
       // get back to context default map view if no nodes are selected
       forceDefaultMapView: !state.tool.selectedNodesIds.length

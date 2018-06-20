@@ -41,6 +41,7 @@ import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
 import keyBy from 'lodash/keyBy';
 import { createReducer } from 'scripts/store';
+import { getSelectedNodesColumnsPos } from 'react-components/tool/tool.selectors';
 import filterLinks from 'scripts/reducers/helpers/filterLinks';
 import getChoropleth from 'scripts/reducers/helpers/getChoropleth';
 import getMapDimensions from 'scripts/reducers/helpers/getMapDimensions';
@@ -60,16 +61,13 @@ export const toolInitialState = {
   choropleth: {},
   choroplethLegend: null,
   columns: [],
-  currentHighlightedChoroplethBucket: null,
   currentQuant: null,
   detailedView: false,
   expandedMapSidebarGroupsIds: [],
   expandedNodesIds: [],
   forcedOverview: false,
   geoIdsDict: {},
-  highlightedGeoIds: [],
   highlightedNodeCoordinates: null,
-  highlightedNodeData: [],
   highlightedNodesIds: [],
   initialDataLoading: false,
   isMapVisible: false,
@@ -96,9 +94,6 @@ export const toolInitialState = {
   selectedMapContextualLayers: null,
   selectedMapDimensions: [null, null],
   selectedMapDimensionsWarnings: null,
-  selectedNodesColumnsPos: [],
-  selectedNodesData: [],
-  selectedNodesGeoIds: [],
   selectedNodesIds: [],
   selectedRecolorBy: { type: 'none', name: 'none' },
   selectedResizeBy: { type: 'none', name: 'none' },
@@ -115,11 +110,7 @@ const toolReducer = {
   [RESET_SELECTION](state) {
     return Object.assign({}, state, {
       highlightedNodesIds: [],
-      highlightedNodeData: [],
-      highlightedGeoIds: [],
-      selectedNodesData: [],
       selectedNodesIds: [],
-      selectedNodesGeoIds: [],
       expandedNodesIds: [],
       selectedBiomeFilter: { value: 'none' },
       recolorByNodeIds: []
@@ -206,9 +197,6 @@ const toolReducer = {
       recolorGroups: [],
       mapView: selectedContext.map,
       selectedNodesIds: [],
-      selectedNodesData: [],
-      selectedNodesGeoIds: [],
-      selectedNodesColumnsPos: [],
       expandedNodesIds: []
     });
   },
@@ -373,25 +361,20 @@ const toolReducer = {
   },
   [UPDATE_NODE_SELECTION](state, action) {
     return Object.assign({}, state, {
-      selectedNodesIds: action.ids,
-      selectedNodesData: action.data,
-      selectedNodesGeoIds: action.geoIds,
-      selectedNodesColumnsPos: action.columnsPos
+      selectedNodesIds: action.ids
     });
   },
   [HIGHLIGHT_NODE](state, action) {
     return Object.assign({}, state, {
       highlightedNodesIds: action.ids,
-      highlightedNodeData: action.data,
-      highlightedGeoIds: action.geoIds,
-      highlightedNodeCoordinates: action.coordinates,
-      currentHighlightedChoroplethBucket: action.choroplethBucket
+      highlightedNodeCoordinates: action.coordinates
     });
   },
   [FILTER_LINKS_BY_NODES](state) {
+    const selectedNodesColumnsPos = getSelectedNodesColumnsPos(state);
     const selectedNodesAtColumns = getNodesAtColumns(
       state.selectedNodesIds,
-      state.selectedNodesColumnsPos
+      selectedNodesColumnsPos
     );
 
     const { nodesColoredBySelection, nodesColoredAtColumn } = getNodesColoredBySelection(
@@ -551,16 +534,13 @@ const toolReducerTypes = PropTypes => ({
   choropleth: PropTypes.object.isRequired,
   choroplethLegend: PropTypes.object,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
-  currentHighlightedChoroplethBucket: PropTypes.string,
   currentQuant: PropTypes.object,
   detailedView: PropTypes.bool,
   expandedMapSidebarGroupsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   expandedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   forcedOverview: PropTypes.bool,
   geoIdsDict: PropTypes.object.isRequired,
-  highlightedGeoIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   highlightedNodeCoordinates: PropTypes.object,
-  highlightedNodeData: PropTypes.arrayOf(PropTypes.object).isRequired,
   highlightedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   initialDataLoading: PropTypes.bool,
   isMapVisible: PropTypes.bool,
@@ -587,9 +567,6 @@ const toolReducerTypes = PropTypes => ({
   selectedMapContextualLayers: PropTypes.array,
   selectedMapDimensions: PropTypes.array.isRequired,
   selectedMapDimensionsWarnings: PropTypes.string,
-  selectedNodesColumnsPos: PropTypes.arrayOf(PropTypes.number).isRequired,
-  selectedNodesData: PropTypes.arrayOf(PropTypes.object).isRequired,
-  selectedNodesGeoIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   selectedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedRecolorBy: PropTypes.object.isRequired,
   selectedResizeBy: PropTypes.object.isRequired,

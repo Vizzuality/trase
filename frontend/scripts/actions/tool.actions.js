@@ -19,7 +19,6 @@ import {
 } from 'utils/getURLFromParams';
 import contextLayersCarto from 'actions/map/context_layers_carto';
 import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
-import getNodesSelectionAction from 'actions/helpers/getNodesSelectionAction';
 import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
 import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
@@ -30,7 +29,9 @@ import intesection from 'lodash/intersection';
 import compact from 'lodash/compact';
 import uniq from 'lodash/uniq';
 import isEmpty from 'lodash/isEmpty';
+import xor from 'lodash/xor';
 import { getCurrentContext } from 'scripts/reducers/helpers/contextHelper';
+import { getSelectedNodesColumnsPos } from 'react-components/tool/tool.selectors';
 
 export const RESET_SELECTION = 'RESET_SELECTION';
 export const GET_COLUMNS = 'GET_COLUMNS';
@@ -617,18 +618,7 @@ function getSelectedNodeIdsNotInColumnIndex(currentSelectedNodesIds, columnIndex
 
 // remove or add nodeIds from selectedNodesIds
 function getSelectedNodeIds(currentSelectedNodesIds, changedNodeIds) {
-  let selectedNodesIds = [].concat(currentSelectedNodesIds);
-
-  changedNodeIds.forEach(changedNodeId => {
-    const nodeIndex = currentSelectedNodesIds.indexOf(changedNodeId);
-    if (nodeIndex > -1) {
-      selectedNodesIds.splice(nodeIndex, 1);
-    } else {
-      selectedNodesIds = [changedNodeId].concat(selectedNodesIds);
-    }
-  });
-
-  return selectedNodesIds;
+  return xor(currentSelectedNodesIds, changedNodeIds);
 }
 
 export function selectNode(param, isAggregated = false) {
@@ -652,7 +642,7 @@ export function selectNode(param, isAggregated = false) {
 
         const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, [nodeId]);
 
-        // send to state the new node selection along with new data, geoIds, etc
+        // send to state the new node selection
         dispatch(updateNodes(selectedNodesIds));
 
         // refilter links by selected nodes
@@ -670,10 +660,11 @@ export function selectNode(param, isAggregated = false) {
 }
 
 export function updateNodes(selectedNodesIds) {
-  return (dispatch, getState) => {
-    const action = getNodesSelectionAction(selectedNodesIds, getState().tool);
-    action.type = UPDATE_NODE_SELECTION;
-    dispatch(action);
+  return dispatch => {
+    dispatch({
+      type: UPDATE_NODE_SELECTION,
+      ids: selectedNodesIds
+    });
   };
 }
 
@@ -739,30 +730,26 @@ export function selectExpandedNode(param) {
 }
 
 export function highlightNode(nodeId, isAggregated, coordinates) {
-  return (dispatch, getState) => {
+  return dispatch => {
     if (isAggregated) {
       return;
     }
 
-    const action = getNodesSelectionAction([nodeId], getState().tool);
-    action.type = HIGHLIGHT_NODE;
-    action.coordinates = coordinates;
-    dispatch(action);
+    dispatch({
+      ids: compact([nodeId]),
+      type: HIGHLIGHT_NODE,
+      coordinates
+    });
   };
 }
 
 export function highlightNodeFromGeoId(geoId, coordinates) {
   return (dispatch, getState) => {
-    const {
-      nodesDict,
-      selectedColumnsIds,
-      highlightedGeoIds,
-      highlightedNodesIds
-    } = getState().tool;
+    const { nodesDict, selectedColumnsIds, highlightedNodesIds } = getState().tool;
 
     const nodeId = getNodeIdFromGeoId(geoId, nodesDict, selectedColumnsIds[0]);
     if (nodeId === null) {
-      if (highlightedGeoIds.length || highlightedNodesIds.length) {
+      if (highlightedNodesIds.length) {
         dispatch(highlightNode(null));
       }
     } else {
@@ -829,7 +816,7 @@ export function loadLinkedGeoIDs() {
     const selectedNodesIds = state.tool.selectedNodesIds;
 
     // when selection only contains geo nodes (column 0), we should not call get_linked_geoids
-    const selectedNodesColumnsPos = state.tool.selectedNodesColumnsPos;
+    const selectedNodesColumnsPos = getSelectedNodesColumnsPos(state.tool);
     const selectedNonGeoNodeIds = selectedNodesIds.filter(
       (nodeId, index) => selectedNodesColumnsPos[index] !== 0
     );
@@ -880,8 +867,6 @@ export function toggleMapDimension(uid) {
     });
 
     loadMapChoropeth(getState, dispatch);
-
-    dispatch(updateNodes(getState().tool.selectedNodesIds));
   };
 }
 
@@ -893,8 +878,6 @@ export function setMapDimensions(uids) {
     });
 
     loadMapChoropeth(getState, dispatch);
-
-    dispatch(updateNodes(getState().tool.selectedNodesIds));
   };
 }
 
