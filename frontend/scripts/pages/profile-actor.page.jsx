@@ -270,15 +270,13 @@ const _build = (data, { nodeId, year, print }, onLinkClick, store) => {
     const getPolygonClassName = ({ properties }) => {
       const country = data.top_countries.lines.find(c => properties.iso2 === c.geo_id);
       let value = 'n-a';
-      if (country) value = country.value9 || 'n-a';
+      if (country) value = typeof country.value9 !== 'undefined' ? country.value9 : 'n-a';
       return `-outline ch-${value}`;
     };
     const showTooltipCallback = ({ properties }, x, y) => {
-      const country = data.top_countries.lines.find(
-        c => properties.name.toUpperCase() === c.name.toUpperCase()
-      );
-      const title = `${properties.name.toUpperCase()} > ${data.node_name}`;
+      const country = data.top_countries.lines.find(c => properties.iso2 === c.geo_id);
       if (country) {
+        const title = `${country.name.toUpperCase()} > ${data.node_name}`;
         tooltip.show(x, y, title, [
           {
             title: 'Trade Volume',

@@ -94,6 +94,8 @@ module Api
           text = summary_of_total_trade_volume('exporter')
           return text if @trade_total_current_year_raw.zero?
 
+          initialize_sources_for_summary
+          initialize_destinations_for_summary
           text += summary_of_sources('exporter')
           text += summary_of_destinations('exporter')
           text
@@ -117,6 +119,8 @@ module Api
           text = summary_of_total_trade_volume('importer')
           return text if @trade_total_current_year_raw.zero?
 
+          initialize_sources_for_summary
+          initialize_destinations_for_summary
           text += summary_of_sources('importer')
           text += summary_of_destinations('importer')
           text
