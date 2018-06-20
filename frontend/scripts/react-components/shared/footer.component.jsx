@@ -81,22 +81,6 @@ const sections = [
       ],
       [
         {
-          className: 'conservancy-logo',
-          href: 'https://www.nature.org/',
-          image: '/images/footer/donors/nature-conservancy@2x.png',
-          alt: 'The Nature Conservancy',
-          imageClassName: null
-        },
-        {
-          className: 'sida-logo',
-          href: 'http://www.sida.se/English/',
-          image: '/images/footer/donors/s-i-d-a-logo@2x.png',
-          alt: 'The Swedish International Development Cooperation Agency',
-          imageClassName: null
-        }
-      ],
-      [
-        {
           className: 'moore-logo',
           href: 'https://www.moore.org/',
           image: '/images/footer/donors/moore@2x.png',
@@ -116,6 +100,15 @@ const sections = [
           href: 'http://www.formas.se/en/',
           image: '/images/footer/donors/formas@2x.png',
           alt: 'Formas',
+          imageClassName: null
+        }
+      ],
+      [
+        {
+          className: 'conservancy-logo',
+          href: 'https://www.nature.org/',
+          image: '/images/footer/donors/nature-conservancy@2x.png',
+          alt: 'The Nature Conservancy',
           imageClassName: null
         }
       ]
