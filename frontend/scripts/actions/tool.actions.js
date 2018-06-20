@@ -31,6 +31,7 @@ import compact from 'lodash/compact';
 import uniq from 'lodash/uniq';
 import isEmpty from 'lodash/isEmpty';
 import { getCurrentContext } from 'scripts/reducers/helpers/contextHelper';
+import { getSelectedNodesColumnsPos } from 'react-components/tool/tool.selectors';
 
 export const RESET_SELECTION = 'RESET_SELECTION';
 export const GET_COLUMNS = 'GET_COLUMNS';
@@ -670,10 +671,11 @@ export function selectNode(param, isAggregated = false) {
 }
 
 export function updateNodes(selectedNodesIds) {
-  return (dispatch, getState) => {
-    const action = getNodesSelectionAction(selectedNodesIds, getState().tool);
-    action.type = UPDATE_NODE_SELECTION;
-    dispatch(action);
+  return dispatch => {
+    dispatch({
+      type: UPDATE_NODE_SELECTION,
+      ids: selectedNodesIds
+    });
   };
 }
 
@@ -829,7 +831,7 @@ export function loadLinkedGeoIDs() {
     const selectedNodesIds = state.tool.selectedNodesIds;
 
     // when selection only contains geo nodes (column 0), we should not call get_linked_geoids
-    const selectedNodesColumnsPos = state.tool.selectedNodesColumnsPos;
+    const selectedNodesColumnsPos = getSelectedNodesColumnsPos(state.tool);
     const selectedNonGeoNodeIds = selectedNodesIds.filter(
       (nodeId, index) => selectedNodesColumnsPos[index] !== 0
     );
@@ -880,8 +882,6 @@ export function toggleMapDimension(uid) {
     });
 
     loadMapChoropeth(getState, dispatch);
-
-    dispatch(updateNodes(getState().tool.selectedNodesIds));
   };
 }
 
@@ -893,8 +893,6 @@ export function setMapDimensions(uids) {
     });
 
     loadMapChoropeth(getState, dispatch);
-
-    dispatch(updateNodes(getState().tool.selectedNodesIds));
   };
 }
 

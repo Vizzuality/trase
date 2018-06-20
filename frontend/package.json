@@ -122,6 +122,7 @@
     "redux-thunk": "^2.2.0",
     "remark": "^9.0.0",
     "remark-react": "^4.0.1",
+    "reselect": "^3.0.1",
     "tooltip.js": "^1.2.0",
     "topojson": "^3.0.2",
     "turf-linestring": "^1.0.2",
