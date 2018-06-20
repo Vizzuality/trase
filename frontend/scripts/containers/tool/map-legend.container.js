@@ -2,6 +2,7 @@
 import connect from 'connect';
 import { toggleMapLayerMenu } from 'actions/app.actions';
 import MapLegend from 'components/tool/map-legend.component';
+import { getCurrentHighlightedChoroplethBucket } from 'react-components/tool/tool.selectors';
 
 const mapMethodsToState = state => ({
   updateChoroplethLegend: {
@@ -18,7 +19,7 @@ const mapMethodsToState = state => ({
       selectedMapContextualLayersData: state.tool.selectedMapContextualLayersData
     })
   },
-  highlightChoroplethBucket: state.tool.currentHighlightedChoroplethBucket,
+  highlightChoroplethBucket: getCurrentHighlightedChoroplethBucket(state.tool),
   selectMapDimensions: state.tool.selectedMapDimensionsWarnings
 });
 

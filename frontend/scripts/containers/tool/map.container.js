@@ -2,7 +2,10 @@
 // see sankey.container for details on how to use those containers
 import { toggleMap, toggleMapLayerMenu } from 'actions/app.actions';
 import { selectNodeFromGeoId, highlightNodeFromGeoId, saveMapView } from 'actions/tool.actions';
-import { getSelectedNodesGeoIds } from 'react-components/tool/tool.selectors';
+import {
+  getSelectedNodesGeoIds,
+  getHighlightedNodesGeoIds
+} from 'react-components/tool/tool.selectors';
 import connect from 'connect';
 import Map from 'components/tool/map.component';
 import getBasemap from '../helpers/getBasemap';
@@ -45,10 +48,10 @@ const mapMethodsToState = state => ({
     })
   },
   highlightPolygon: {
-    _comparedValue: state => state.tool.highlightedGeoIds,
+    _comparedValue: state => getHighlightedNodesGeoIds(state.tool),
     _returnedValue: state => ({
       selectedGeoIds: getSelectedNodesGeoIds(state.tool),
-      highlightedGeoId: state.tool.highlightedGeoIds[0]
+      highlightedGeoId: getHighlightedNodesGeoIds(state.tool)[0]
     })
   },
   setChoropleth: {

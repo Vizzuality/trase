@@ -61,16 +61,13 @@ export const toolInitialState = {
   choropleth: {},
   choroplethLegend: null,
   columns: [],
-  currentHighlightedChoroplethBucket: null,
   currentQuant: null,
   detailedView: false,
   expandedMapSidebarGroupsIds: [],
   expandedNodesIds: [],
   forcedOverview: false,
   geoIdsDict: {},
-  highlightedGeoIds: [],
   highlightedNodeCoordinates: null,
-  highlightedNodeData: [],
   highlightedNodesIds: [],
   initialDataLoading: false,
   isMapVisible: false,
@@ -113,8 +110,6 @@ const toolReducer = {
   [RESET_SELECTION](state) {
     return Object.assign({}, state, {
       highlightedNodesIds: [],
-      highlightedNodeData: [],
-      highlightedGeoIds: [],
       selectedNodesIds: [],
       expandedNodesIds: [],
       selectedBiomeFilter: { value: 'none' },
@@ -372,10 +367,7 @@ const toolReducer = {
   [HIGHLIGHT_NODE](state, action) {
     return Object.assign({}, state, {
       highlightedNodesIds: action.ids,
-      highlightedNodeData: action.data,
-      highlightedGeoIds: action.geoIds,
-      highlightedNodeCoordinates: action.coordinates,
-      currentHighlightedChoroplethBucket: action.choroplethBucket
+      highlightedNodeCoordinates: action.coordinates
     });
   },
   [FILTER_LINKS_BY_NODES](state) {
@@ -542,16 +534,13 @@ const toolReducerTypes = PropTypes => ({
   choropleth: PropTypes.object.isRequired,
   choroplethLegend: PropTypes.object,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
-  currentHighlightedChoroplethBucket: PropTypes.string,
   currentQuant: PropTypes.object,
   detailedView: PropTypes.bool,
   expandedMapSidebarGroupsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   expandedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   forcedOverview: PropTypes.bool,
   geoIdsDict: PropTypes.object.isRequired,
-  highlightedGeoIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   highlightedNodeCoordinates: PropTypes.object,
-  highlightedNodeData: PropTypes.arrayOf(PropTypes.object).isRequired,
   highlightedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   initialDataLoading: PropTypes.bool,
   isMapVisible: PropTypes.bool,

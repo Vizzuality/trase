@@ -19,7 +19,6 @@ import {
 } from 'utils/getURLFromParams';
 import contextLayersCarto from 'actions/map/context_layers_carto';
 import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
-import getNodesSelectionAction from 'actions/helpers/getNodesSelectionAction';
 import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
 import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
@@ -741,30 +740,26 @@ export function selectExpandedNode(param) {
 }
 
 export function highlightNode(nodeId, isAggregated, coordinates) {
-  return (dispatch, getState) => {
+  return dispatch => {
     if (isAggregated) {
       return;
     }
 
-    const action = getNodesSelectionAction([nodeId], getState().tool);
-    action.type = HIGHLIGHT_NODE;
-    action.coordinates = coordinates;
-    dispatch(action);
+    dispatch({
+      ids: compact([nodeId]),
+      type: HIGHLIGHT_NODE,
+      coordinates
+    });
   };
 }
 
 export function highlightNodeFromGeoId(geoId, coordinates) {
   return (dispatch, getState) => {
-    const {
-      nodesDict,
-      selectedColumnsIds,
-      highlightedGeoIds,
-      highlightedNodesIds
-    } = getState().tool;
+    const { nodesDict, selectedColumnsIds, highlightedNodesIds } = getState().tool;
 
     const nodeId = getNodeIdFromGeoId(geoId, nodesDict, selectedColumnsIds[0]);
     if (nodeId === null) {
-      if (highlightedGeoIds.length || highlightedNodesIds.length) {
+      if (highlightedNodesIds.length) {
         dispatch(highlightNode(null));
       }
     } else {
