@@ -29,6 +29,7 @@ import intesection from 'lodash/intersection';
 import compact from 'lodash/compact';
 import uniq from 'lodash/uniq';
 import isEmpty from 'lodash/isEmpty';
+import xor from 'lodash/xor';
 import { getCurrentContext } from 'scripts/reducers/helpers/contextHelper';
 import { getSelectedNodesColumnsPos } from 'react-components/tool/tool.selectors';
 
@@ -617,18 +618,7 @@ function getSelectedNodeIdsNotInColumnIndex(currentSelectedNodesIds, columnIndex
 
 // remove or add nodeIds from selectedNodesIds
 function getSelectedNodeIds(currentSelectedNodesIds, changedNodeIds) {
-  let selectedNodesIds = [].concat(currentSelectedNodesIds);
-
-  changedNodeIds.forEach(changedNodeId => {
-    const nodeIndex = currentSelectedNodesIds.indexOf(changedNodeId);
-    if (nodeIndex > -1) {
-      selectedNodesIds.splice(nodeIndex, 1);
-    } else {
-      selectedNodesIds = [changedNodeId].concat(selectedNodesIds);
-    }
-  });
-
-  return selectedNodesIds;
+  return xor(currentSelectedNodesIds, changedNodeIds);
 }
 
 export function selectNode(param, isAggregated = false) {
@@ -652,7 +642,7 @@ export function selectNode(param, isAggregated = false) {
 
         const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, [nodeId]);
 
-        // send to state the new node selection along with new data, geoIds, etc
+        // send to state the new node selection
         dispatch(updateNodes(selectedNodesIds));
 
         // refilter links by selected nodes
