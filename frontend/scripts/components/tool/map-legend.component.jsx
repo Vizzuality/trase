@@ -125,6 +125,8 @@ export default class {
 
     const choroArrow = document.querySelector('.js-choro-arrow');
 
+    if (!choroArrow) return;
+
     if (!choroplethLegend.isBivariate) {
       choroArrow.innerHTML = ReactDOMServer.renderToStaticMarkup(
         <ChoroArrow ticks={choroplethLegend.bucket[0].length} width={choroArrow.clientWidth} />

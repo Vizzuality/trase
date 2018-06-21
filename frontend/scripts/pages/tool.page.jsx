@@ -32,7 +32,7 @@ import 'styles/tool.scss';
 import EventManager from 'utils/eventManager';
 
 const evManager = new EventManager();
-const containers = [];
+let containers = [];
 
 export const mount = (root, store) => {
   root.innerHTML = ToolMarkup({
@@ -40,17 +40,19 @@ export const mount = (root, store) => {
     feedback: FeedbackMarkup()
   });
 
-  new FlowContentContainer(store);
-  containers.push(new SankeyContainer(store));
-  new MapContainer(store);
-  new MapDimensionsContainer(store);
-  new MapContextContainer(store);
-  new MapLegendContainer(store);
-  new MapBasemapsContainer(store);
-  new TitlebarContainer(store);
-  new NodesTitlesContainer(store);
-  containers.push(new TooltipContainer(store));
-  new ModalContainer(store);
+  containers = [
+    new FlowContentContainer(store),
+    new SankeyContainer(store),
+    new MapContainer(store),
+    new MapDimensionsContainer(store),
+    new MapContextContainer(store),
+    new MapLegendContainer(store),
+    new MapBasemapsContainer(store),
+    new TitlebarContainer(store),
+    new NodesTitlesContainer(store),
+    new TooltipContainer(store),
+    new ModalContainer(store)
+  ];
 
   loadDisclaimerTool(store.dispatch);
   loadStoryModalTool(store.dispatch, store.getState);

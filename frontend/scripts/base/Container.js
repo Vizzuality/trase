@@ -4,7 +4,9 @@ export default class {
     this.view = new ViewClass(ownProps);
 
     // listen to all app state updates
-    if (mapMethodsToState) store.subscribe(() => this._onStateChange(store.getState()));
+    if (mapMethodsToState) {
+      this.unsubscribe = store.subscribe(() => this._onStateChange(store.getState()));
+    }
 
     // an internal representation of the state props that this component is interested in
     // used for diffing of these props and app state
@@ -28,9 +30,18 @@ export default class {
 
   remove() {
     if (this.view.onRemoved) this.view.onRemoved();
+
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+
+    this.view = null;
+    this._props = null;
   }
 
   _onStateChange(state) {
+    // if view was already removed, but dispatched actions were in progress
+    if (!this.view) return;
     // returns a method - state values dictionary
     const methodsToState = this._methodsToState(state);
     Object.keys(methodsToState).forEach(k => {
