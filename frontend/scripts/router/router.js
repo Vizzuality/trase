@@ -151,8 +151,9 @@ const config = {
   },
   onBeforeChange: (dispatch, getState, { action }) => {
     const isMobile = window.innerWidth <= BREAKPOINTS.small;
+    const isMapIframe = action.meta.query && action.meta.query.isMapIframe;
 
-    if (isMobile && pagesNotSupportedOnMobile.includes(action.type)) {
+    if (isMobile && !isMapIframe && pagesNotSupportedOnMobile.includes(action.type)) {
       return dispatch(redirect({ type: 'notSupportedOnMobile' }));
     }
 
