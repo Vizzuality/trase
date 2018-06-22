@@ -618,9 +618,26 @@ export default class {
   invalidate() {
     // recalculates map size once CSS transition ends
     this.map.invalidateSize(true);
-    setTimeout(() => {
+    const mapContainer = this.map.getContainer();
+    let oldWidth = mapContainer.clientWidth;
+
+    const invalidateSizeDebounced = debounce(() => {
       this.map.invalidateSize(true);
-    }, 850);
+    }, 200);
+
+    const interval = window.setInterval(() => {
+      if (mapContainer) {
+        const width = mapContainer.clientWidth;
+        if (width !== oldWidth) {
+          oldWidth = width;
+          invalidateSizeDebounced();
+        }
+      }
+    }, 50);
+
+    window.setTimeout(() => {
+      window.clearInterval(interval);
+    }, 3000);
   }
 
   filterByBiome({
