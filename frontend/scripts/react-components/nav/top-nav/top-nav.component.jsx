@@ -59,7 +59,21 @@ class TopNav extends React.PureComponent {
       });
     }
 
+    // allLinks.push({
+    //   name: 'Yearbook',
+    //   page: '/yearbook2018',
+    //   external: true,
+    //   linkClassName: 'top-nav-link',
+    //   linkActiveClassName: 'top-nav-link',
+    // });
+
     allLinks.push(...links);
+
+    allLinks.splice(-2, 0, {
+      name: 'Yearbook',
+      page: '/yearbook2018',
+      external: true
+    });
 
     return (
       <div className="top-nav-bar row align-justify hide-for-small">
@@ -103,6 +117,16 @@ class TopNav extends React.PureComponent {
 
     const toggleBtnIcon = menuOpen ? 'close' : 'menu';
 
+    const allLinks = [];
+
+    allLinks.push(...links);
+
+    allLinks.splice(-2, 0, {
+      name: 'Yearbook',
+      page: '/yearbook2018',
+      external: true
+    });
+
     return (
       <div className="row show-for-small">
         <div className="top-nav-bar column small-12">
@@ -130,7 +154,7 @@ class TopNav extends React.PureComponent {
           <div className="top-nav-collapse column small-12">
             <ul className="top-nav-item-list-collapse">
               <NavLinks
-                links={links}
+                links={allLinks}
                 itemClassName="top-nav-item-collapse"
                 linkClassName="top-nav-link-collapse"
                 linkActiveClassName="top-nav-link-collapse -active"

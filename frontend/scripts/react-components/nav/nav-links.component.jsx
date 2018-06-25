@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { NavLink } from 'redux-first-router-link';
 
 function mapLinksToRouter(link) {
-  return typeof link.page === 'string' ? { ...link, page: { type: link.page, payload: {} } } : link;
+  return typeof link.page === 'string' && link.external !== true
+    ? { ...link, page: { type: link.page, payload: {} } }
+    : link;
 }
 
 function isActive(match, location, link) {
