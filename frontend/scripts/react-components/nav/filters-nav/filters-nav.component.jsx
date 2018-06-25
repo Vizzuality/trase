@@ -83,6 +83,13 @@ class FiltersNav extends React.PureComponent {
     const [, , ...restOfLinks] = links;
     const decoratedLinks = [{ name: 'Home', page: { type: 'home' } }, ...links];
     const navLinks = isExplore ? decoratedLinks : restOfLinks;
+
+    navLinks.splice(-2, 0, {
+      name: 'Yearbook',
+      page: '/yearbook2018',
+      external: true
+    });
+
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">

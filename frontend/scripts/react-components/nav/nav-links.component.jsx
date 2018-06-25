@@ -29,6 +29,7 @@ const NavLinks = props => {
     isActiveLink
   } = props;
 
+  console.log(links);
   const checkLink = isActiveLink || isActive;
   return (
     <React.Fragment>
