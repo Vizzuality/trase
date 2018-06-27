@@ -59,19 +59,11 @@ class TopNav extends React.PureComponent {
       });
     }
 
-    // allLinks.push({
-    //   name: 'Yearbook',
-    //   page: '/yearbook2018',
-    //   external: true,
-    //   linkClassName: 'top-nav-link',
-    //   linkActiveClassName: 'top-nav-link',
-    // });
-
     allLinks.push(...links);
 
     allLinks.splice(-2, 0, {
       name: 'Yearbook',
-      page: '/yearbook2018',
+      page: `https://yearbook2018.${window.location.hostname}`,
       external: true
     });
 
@@ -123,7 +115,7 @@ class TopNav extends React.PureComponent {
 
     allLinks.splice(-2, 0, {
       name: 'Yearbook',
-      page: '/yearbook2018',
+      page: `https://yearbook2018.${window.location.hostname}`,
       external: true
     });
 
