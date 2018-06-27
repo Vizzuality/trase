@@ -29,15 +29,16 @@ function ToolSearchResult({
     // The weird "if" above means that we only do NOT show this button if
     // node is both importer and exporter, and is added as one of them but no the other to the supply chain.
     // The "if" statement above that ensures it's also not shown if node is both and is selected
-    buttonList.push(
-      <button
-        key="addToSupplyChain"
-        className="c-button -medium-large"
-        onClick={e => onClickAdd(e, item)}
-      >
-        Add to {isMapVisible ? 'map' : 'supply chain'}
-      </button>
-    );
+    // Commented out to hide the "add to supply chain"/"add to map" button
+    // buttonList.push(
+    //   <button
+    //     key="addToSupplyChain"
+    //     className="c-button -medium-large"
+    //     onClick={e => onClickAdd(e, item)}
+    //   >
+    //     Add to {isMapVisible ? 'map' : 'supply chain'}
+    //   </button>
+    // );
   }
 
   if (!(exporterNotSelected && !importerNotSelected)) {
