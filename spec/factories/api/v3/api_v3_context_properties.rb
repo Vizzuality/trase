@@ -5,5 +5,6 @@ FactoryBot.define do
     is_disabled false
     is_default false
     is_subnational false
+    is_highlighted false
   end
 end

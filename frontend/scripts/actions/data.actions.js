@@ -1,37 +1,8 @@
-import {
-  getURLFromParams,
-  GET_CONTEXTS_URL,
-  GET_ALL_NODES_URL,
-  GET_INDICATORS_URL
-} from 'utils/getURLFromParams';
+import { getURLFromParams, GET_ALL_NODES_URL, GET_INDICATORS_URL } from 'utils/getURLFromParams';
 
-export const LOAD_CONTEXTS = 'LOAD_CONTEXTS';
 export const LOAD_EXPORTERS = 'LOAD_EXPORTERS';
 export const LOAD_CONSUMPTION_COUNTRIES = 'LOAD_CONSUMPTION_COUNTRIES';
 export const LOAD_INDICATORS = 'LOAD_INDICATORS';
-
-export function loadContext() {
-  return dispatch => {
-    const sortContexts = (a, b) => {
-      if (a.id < b.id) return -1;
-      if (a.id > b.id) return 1;
-      return 0;
-    };
-
-    const contextURL = getURLFromParams(GET_CONTEXTS_URL);
-
-    fetch(contextURL)
-      .then(resp => resp.text())
-      .then(data => {
-        const payload = JSON.parse(data).data.sort(sortContexts);
-
-        dispatch({
-          type: LOAD_CONTEXTS,
-          payload
-        });
-      });
-  };
-}
 
 export function loadContextNodes(contextId) {
   return dispatch => {

@@ -3,7 +3,7 @@ import uniqBy from 'lodash/uniqBy';
 import wrapSVGText from 'utils/wrapSVGText';
 import { NUM_COLUMNS, DETAILED_VIEW_MIN_NODE_HEIGHT, DETAILED_VIEW_SCALE } from 'constants';
 import { interpolateNumber as d3_interpolateNumber } from 'd3-interpolate';
-import i18n from 'utils/transifex';
+import { translateText } from 'utils/transifex';
 
 const sankeyLayout = () => {
   const sankeyLayoutState = {};
@@ -113,7 +113,7 @@ const sankeyLayout = () => {
     columns.forEach(column => {
       column.values.forEach(node => {
         node.label = wrapSVGText(
-          i18n(node.name),
+          translateText(node.name),
           node.renderedHeight,
           _labelCharHeight,
           _labelCharsPerLine,

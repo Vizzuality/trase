@@ -77,9 +77,18 @@
     }
 
     circle {
-      display: none;
+
       fill: $egg-shell;
       stroke-width: 3px;
+
+      &.hover-circle {
+        display: none;
+      }
+
+      &.hitbox-circle {
+        stroke: transparent;
+        fill: transparent;
+      }
     }
 
     text {
@@ -89,6 +98,13 @@
       line-height: 1.15;
       letter-spacing: -0.6px;
       color: $charcoal-grey;
+
+      &.link {
+        &:hover {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
     }
 
     &:hover,
@@ -109,6 +125,13 @@ ul.line-bottom-legend {
   line-height: 1.5;
   letter-spacing: -0.6px;
   color: $charcoal-grey;
+
+  .link {
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
 
   .line-color {
     margin-right: 5px;

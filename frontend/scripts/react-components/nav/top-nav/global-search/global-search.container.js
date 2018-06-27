@@ -21,8 +21,7 @@ function byContextMainIdAndNodeType({ mainId, contextId, nodeType }) {
 }
 
 const mapStateToProps = state => {
-  const { search } = state.app;
-  const { contexts } = state.tool;
+  const { search, contexts } = state.app;
 
   const searchResults = Object.values(groupBy(search.results, byContextMainIdAndNodeType)).map(
     nodes => {
@@ -31,6 +30,7 @@ const mapStateToProps = state => {
       return {
         name: node.name,
         nodeTypeText: getNodeTypeText(nodes, contexts),
+        isSubnational: node.isSubnational,
         contextId: node.contextId,
         nodes
       };
@@ -54,6 +54,7 @@ const mapDispatchToProps = dispatch =>
           payload: {
             query: {
               state: {
+                isMapVisible: false,
                 selectedContextId: item.contextId,
                 selectedNodesIds: item.nodes.map(i => i.id),
                 expandedNodesIds: item.nodes.map(i => i.id)

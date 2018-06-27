@@ -15,14 +15,13 @@ import MapContextContainer from 'containers/tool/map-context.container';
 import MapLegendContainer from 'containers/tool/map-legend.container';
 import MapBasemapsContainer from 'containers/tool/map-basemaps.container';
 import MapContainer from 'containers/tool/map.container';
-import NavReactContainer from 'react-components/nav/filters-nav/filters-nav.container';
+import FiltersNav from 'react-components/nav/filters-nav/filters-nav.container';
 import TitlebarContainer from 'containers/tool/titlebar.container';
 import NodesTitlesContainer from 'containers/tool/nodesTitles.container';
 import ModalContainer from 'containers/tool/story-modal.container';
 import TooltipContainer from 'containers/shared/help-tooltip.container';
 
 import {
-  loadInitialDataTool,
   resizeSankeyTool,
   loadDisclaimerTool,
   loadStoryModalTool
@@ -33,7 +32,7 @@ import 'styles/tool.scss';
 import EventManager from 'utils/eventManager';
 
 const evManager = new EventManager();
-const containers = [];
+let containers = [];
 
 export const mount = (root, store) => {
   root.innerHTML = ToolMarkup({
@@ -41,26 +40,27 @@ export const mount = (root, store) => {
     feedback: FeedbackMarkup()
   });
 
-  new FlowContentContainer(store);
-  containers.push(new SankeyContainer(store));
-  new MapContainer(store);
-  new MapDimensionsContainer(store);
-  new MapContextContainer(store);
-  new MapLegendContainer(store);
-  new MapBasemapsContainer(store);
-  new TitlebarContainer(store);
-  new NodesTitlesContainer(store);
-  containers.push(new TooltipContainer(store));
-  new ModalContainer(store);
+  containers = [
+    new FlowContentContainer(store),
+    new SankeyContainer(store),
+    new MapContainer(store),
+    new MapDimensionsContainer(store),
+    new MapContextContainer(store),
+    new MapLegendContainer(store),
+    new MapBasemapsContainer(store),
+    new TitlebarContainer(store),
+    new NodesTitlesContainer(store),
+    new TooltipContainer(store),
+    new ModalContainer(store)
+  ];
 
   loadDisclaimerTool(store.dispatch);
-  loadInitialDataTool(store.dispatch);
   loadStoryModalTool(store.dispatch, store.getState);
   resizeSankeyTool(store.dispatch);
 
   render(
     <Provider store={store}>
-      <NavReactContainer />
+      <FiltersNav />
     </Provider>,
     document.getElementById('js-tool-nav-react')
   );

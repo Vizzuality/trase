@@ -56,7 +56,7 @@ class MultiTable extends Component {
 }
 
 MultiTable.propTypes = {
-  tabsTitle: PropTypes.string,
+  tabsTitle: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   tabsTitleTooltip: PropTypes.string,
   data: PropTypes.array,
   target: PropTypes.func,

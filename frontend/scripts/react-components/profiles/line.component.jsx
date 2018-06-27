@@ -1,4 +1,4 @@
-/* eslint-disable camelcase,import/no-extraneous-dependencies */
+/* eslint-disable camelcase,import/no-extraneous-dependencies,jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isFunction from 'lodash/isFunction';
@@ -13,7 +13,7 @@ import { timeFormat as d3_timeFormat } from 'd3-time-format';
 
 import { LINE_LABEL_HEIGHT } from 'constants';
 import abbreviateNumber from 'utils/abbreviateNumber';
-import i18n from 'utils/transifex';
+import { translateText } from 'utils/transifex';
 import { Responsive } from 'react-components/shared/responsive.hoc';
 
 import 'styles/components/profiles/line.scss';
@@ -40,6 +40,7 @@ class Line extends Component {
   prepareData(xValues, data) {
     const continuousValues = xValues.map((year, index) => ({
       name: data.name,
+      nodeId: data.node_id,
       date: new Date(year, 0),
       value: data.values[index],
       value9: data.value9
@@ -66,12 +67,13 @@ class Line extends Component {
   }
 
   build() {
-    const { data, xValues, settings } = this.props;
+    const { data, xValues, settings, onLinkClick, targetLink, year } = this.props;
 
     const { ticks } = settings;
     const margin = { ...settings.margin };
 
     const isSmallChart = this.isSmallChart();
+    const isTouchDevice = 'ontouchstart' in window; // I know this is not 100% true, but it's good enough
 
     if (isSmallChart) {
       margin.right = 30;
@@ -153,17 +155,18 @@ class Line extends Component {
           break;
 
         case 'line-points': {
+          const lineNumber = numLines - i;
           pathContainers = d3Container
             .datum(lineValuesWithFormat[0])
             .append('g')
             .attr('id', lineData.geo_id)
-            .attr(
-              'class',
-              d =>
-                isFunction(settings.lineClassNameCallback)
-                  ? settings.lineClassNameCallback(d, style)
-                  : style
-            );
+            .attr('class', d => {
+              const lineIndex = isSmallChart ? i : d[0].value9;
+
+              return isFunction(settings.lineClassNameCallback)
+                ? settings.lineClassNameCallback(lineIndex, style)
+                : style;
+            });
 
           pathContainers
             .selectAll('path')
@@ -173,35 +176,72 @@ class Line extends Component {
             .attr('d', line);
 
           if (!isSmallChart) {
-            pathContainers
+            const texts = pathContainers
               .selectAll('text')
               .data(d => [d])
               .enter()
-              .append('text')
+              .append('g')
               .attr('transform', d => {
                 const last = d.length - 1;
                 const { value } = d[last];
-                let newY = y(value) + 4;
-                if (newY + LINE_LABEL_HEIGHT > lastY) {
-                  newY = lastY - LINE_LABEL_HEIGHT;
+                let newNumberY = y(value) + 4;
+                if (newNumberY + LINE_LABEL_HEIGHT > lastY) {
+                  newNumberY = lastY - LINE_LABEL_HEIGHT - 1;
                 }
-                lastY = newY;
-                return `translate(${width + 6},${newY})`;
+                lastY = newNumberY;
+                return `translate(${width + 6},${newNumberY})`;
+              });
+
+            texts.append('text').text(`${lineNumber}.`);
+
+            texts
+              .append('text')
+              .attr('transform', 'translate(16,0)')
+              .attr('class', d => {
+                if (typeof onLinkClick !== 'undefined' && d[0].nodeId && data.profile_type) {
+                  return 'link';
+                }
+                return '';
               })
-              .text(d => `${numLines - i}.${capitalize(i18n(d[0].name))}`);
+              .on('click', d => {
+                if (typeof onLinkClick !== 'undefined' && d[0].nodeId && data.profile_type) {
+                  onLinkClick(targetLink, {
+                    nodeId: d[0].nodeId,
+                    year
+                  });
+                }
+              })
+              .text(d => `${capitalize(translateText(d[0].name))}`);
           }
 
-          this.circles = pathContainers
+          const circles = pathContainers
             .selectAll('circle')
             .data(d => d)
-            .enter()
+            .enter();
+
+          circles
             .append('circle')
+            .attr('class', 'small-circle')
+            .attr('cx', d => x(d.date))
+            .attr('cy', d => y(d.value))
+            .attr('r', 2);
+
+          circles
+            .append('circle')
+            .attr('class', 'hover-circle')
             .attr('cx', d => x(d.date))
             .attr('cy', d => y(d.value))
             .attr('r', 4);
 
+          this.hitboxCircles = circles
+            .append('circle')
+            .attr('class', 'hitbox-circle')
+            .attr('cx', d => x(d.date))
+            .attr('cy', d => y(d.value))
+            .attr('r', isTouchDevice ? 15 : 4);
+
           if (this.showTooltipCallback !== undefined) {
-            this.circles
+            this.hitboxCircles
               .on('mousemove', d => {
                 this.showTooltipCallback(
                   d,
@@ -263,7 +303,8 @@ class Line extends Component {
   }
 
   renderLegend() {
-    const { data, settings, xValues } = this.props;
+    const { data, settings, xValues, onLinkClick, targetLink, year } = this.props;
+    const isSmallChart = this.isSmallChart();
     const lines = this.getLines().sort((a, b) => {
       const last = xValues.length - 1;
       return b.values[last] - a.values[last];
@@ -279,9 +320,18 @@ class Line extends Component {
       <ul className="line-bottom-legend">
         {lines.map((lineData, index) => {
           const style = typeof data.style !== 'undefined' ? data.style.style : lineData.style;
-          const lineStyle = isFunction(settings.lineClassNameCallback)
-            ? settings.lineClassNameCallback([lineData], style)
+          const lineIndex = isSmallChart ? lines.length - index - 1 : lineData.value9;
+          const lineClassName = isFunction(settings.lineClassNameCallback)
+            ? settings.lineClassNameCallback(lineIndex, style)
             : style;
+          const isLink =
+            typeof onLinkClick !== 'undefined' && lineData.node_id && lineData.profile_type;
+          const linkOnClick = () => {
+            onLinkClick(targetLink, {
+              nodeId: lineData.node_id,
+              year
+            });
+          };
 
           return (
             <li
@@ -290,13 +340,18 @@ class Line extends Component {
               onMouseLeave={() => lineOnMouseLeave(lineData)}
             >
               <svg height="6" width="20" className="line-color">
-                <g className={lineStyle}>
+                <g className={lineClassName}>
                   <path d="M0 3 20 3" />
                 </g>
               </svg>
-              <span>
-                {index + 1}.{capitalize(i18n(lineData.name))}
-              </span>
+              <span>{index + 1}.</span>
+              {isLink ? (
+                <span className="link" onClick={linkOnClick}>
+                  {capitalize(translateText(lineData.name))}
+                </span>
+              ) : (
+                <span>{capitalize(translateText(lineData.name))}</span>
+              )}
             </li>
           );
         })}
@@ -320,10 +375,13 @@ class Line extends Component {
 
 Line.propTypes = {
   data: PropTypes.object,
+  onLinkClick: PropTypes.func,
+  targetLink: PropTypes.string,
   settings: PropTypes.object,
   width: PropTypes.number,
   xValues: PropTypes.array,
-  useBottomLegend: PropTypes.bool
+  useBottomLegend: PropTypes.bool,
+  year: PropTypes.number
 };
 
 export default Responsive()(Line);

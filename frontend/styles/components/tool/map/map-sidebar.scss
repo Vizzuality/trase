@@ -154,7 +154,7 @@
       }
 
       &.-disabled {
-        cursor: default;
+        cursor: not-allowed;
         color: $medium-grey;
 
         &:hover {
@@ -173,6 +173,11 @@
       .actions {
         .icon-layer-info {
           margin-right: 6px;
+          color: $charcoal-grey-faded;
+
+          &:hover {
+            color: $charcoal-grey;
+          }
         }
       }
     }

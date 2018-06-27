@@ -5,7 +5,7 @@ import { interpolateNumber as d3InterpolateNumber } from 'd3-interpolate';
 
 import formatValue from 'utils/formatValue';
 import wrapSVGText from 'utils/wrapSVGText';
-import i18n from 'utils/transifex';
+import { translateText } from 'utils/transifex';
 import { Responsive } from 'react-components/shared/responsive.hoc';
 
 import 'styles/components/profiles/mini-sankey.scss';
@@ -57,7 +57,7 @@ class MiniSankey extends Component {
       const renderedHeight = MiniSankey.roundHeight(node.height);
 
       const lines = wrapSVGText(
-        i18n(node.name),
+        translateText(node.name),
         Math.max(TEXT_LINE_HEIGHT, renderedHeight),
         TEXT_LINE_HEIGHT,
         isSmallResolution ? 11 : 18,

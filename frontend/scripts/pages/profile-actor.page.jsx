@@ -3,6 +3,7 @@ import Tooltip from 'components/shared/info-tooltip.component';
 import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST, DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 import ProfileActorMarkup from 'html/profile-actor.ejs';
+import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
 import React from 'react';
 import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
@@ -19,15 +20,13 @@ import HelpTooltip from 'react-components/shared/help-tooltip.component';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 import 'styles/profile-actor.scss';
-import formatApostrophe from 'utils/formatApostrophe';
+import addApostrophe from 'utils/addApostrophe';
 import formatValue from 'utils/formatValue';
-import {
-  GET_ACTOR_FACTSHEET_URL,
-  GET_TOOLTIPS_URL,
-  getURLFromParams
-} from 'utils/getURLFromParams';
+import { GET_ACTOR_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParams';
+import { translateNode, translateText } from 'utils/transifex';
 
 import smoothScroll from 'utils/smoothScroll';
+import { getDefaultContext } from 'scripts/reducers/helpers/contextHelper';
 
 const defaults = {
   country: 'Brazil',
@@ -43,7 +42,7 @@ const LINE_MARGINS = {
 };
 let lineSettings;
 
-const _initSource = (selectedSource, data, store) => {
+const _initSource = (selectedSource, data, year, onLinkClick, store) => {
   if (data.top_sources === undefined) {
     return;
   }
@@ -60,11 +59,13 @@ const _initSource = (selectedSource, data, store) => {
   render(
     <Provider store={store}>
       <TranslatedLine
-        className=".js-top-municipalities-chart"
         data={sourceLines}
         xValues={data.top_sources.included_years}
         settings={settings}
         useBottomLegend
+        targetLink="profilePlace"
+        onLinkClick={onLinkClick}
+        year={year}
       />
     </Provider>,
     document.querySelector('.js-top-municipalities-chart')
@@ -80,13 +81,13 @@ const _initSource = (selectedSource, data, store) => {
   };
   const showTooltipCallback = ({ properties }, x, y) => {
     const source = data.top_sources[selectedSource].lines.find(s => properties.geoid === s.geo_id);
-    const title = `${data.node_name} > ${properties.nome.toUpperCase()}`;
+    const title = `${data.node_name} > ${properties.name.toUpperCase()}`;
 
     if (source) {
       tooltip.show(x, y, title, [
         {
           title: 'Trade Volume',
-          value: formatValue(source.values[0], 'Trade volume'),
+          value: formatValue(source.values[year - 2010], 'Trade volume'),
           unit: 't'
         }
       ]);
@@ -111,11 +112,17 @@ const _initSource = (selectedSource, data, store) => {
   );
 };
 
-const _setTopSourceSwitcher = (data, verb, year, store) => {
+const _setTopSourceSwitcher = (data, verb, year, onLinkClick, store) => {
   const nodeName = capitalize(data.node_name);
-  const title = `Top sourcing regions of Soy ${verb} by ${nodeName} in ${year}:`;
   const items = Object.keys(data.top_sources).filter(
     key => !ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST.includes(key)
+  );
+
+  const title = (
+    <span>
+      Top sourcing regions of Soy {verb} by <span className="notranslate">{nodeName}</span> in{' '}
+      <span className="notranslate">{year}</span>:
+    </span>
   );
 
   document.querySelector('.js-top-municipalities').classList.remove('is-hidden');
@@ -125,23 +132,27 @@ const _setTopSourceSwitcher = (data, verb, year, store) => {
       <DropdownTabSwitcher
         title={title}
         items={items}
-        onSelectedIndexChange={index => _initSource(items[index], data, store)}
+        onSelectedIndexChange={index => _initSource(items[index], data, year, onLinkClick, store)}
       />
     </Provider>,
     document.querySelector('.js-top-municipalities-title-container')
   );
 };
 
-const _build = (data, tooltips, { nodeId, year, print }, store) => {
+const _build = (data, { nodeId, year, print }, onLinkClick, store) => {
   const verb = data.column_name === 'EXPORTER' ? 'exported' : 'imported';
   const verbGerund = data.column_name === 'EXPORTER' ? 'exporting' : 'importing';
+  const { tooltips } = store.getState().app;
 
   render(
-    <HelpTooltip text={tooltips.zeroDeforestationCommitment} position="bottom" />,
+    <HelpTooltip
+      text={get(tooltips, 'profileActor.zeroDeforestationCommitment')}
+      position="bottom"
+    />,
     document.getElementById('zero-deforestation-tooltip')
   );
   render(
-    <HelpTooltip text={tooltips.forest500Score} position="bottom" />,
+    <HelpTooltip text={get(tooltips, 'profileActor.forest500Score')} position="bottom" />,
     document.getElementById('forest-500-tooltip')
   );
 
@@ -174,12 +185,11 @@ const _build = (data, tooltips, { nodeId, year, print }, store) => {
       );
     },
     hideTooltipCallback: tooltip.hide,
-    lineClassNameCallback: (lineData, lineDefaultStyle) =>
-      `${lineDefaultStyle} line-${lineData[0].value9}`
+    lineClassNameCallback: (lineIndex, lineDefaultStyle) => `${lineDefaultStyle} line-${lineIndex}`
   };
 
   if (data.top_sources && data.top_sources.municipality.lines.length) {
-    _setTopSourceSwitcher(data, verb, year, store);
+    _setTopSourceSwitcher(data, verb, year, onLinkClick, store);
 
     render(
       <Provider store={store}>
@@ -191,21 +201,33 @@ const _build = (data, tooltips, { nodeId, year, print }, store) => {
       document.querySelector('.js-source-legend')
     );
 
-    _initSource(print ? 'state' : 'municipality', data, store);
+    _initSource(print ? 'state' : 'municipality', data, year, onLinkClick, store);
   }
+
+  const nameSpan = document.createElement('span');
+  nameSpan.classList.add('notranslate');
+  nameSpan.textContent = capitalize(data.node_name);
+
+  const yearSpan = document.createElement('span');
+  yearSpan.classList.add('notranslate');
+  yearSpan.textContent = year;
 
   if (data.top_countries && data.top_countries.lines.length) {
     document.querySelector('.js-top-map').classList.remove('is-hidden');
-    document.querySelector(
-      '.js-top-map-title'
-    ).textContent = `Top destination countries of Soy ${verb} by ${capitalize(
-      data.node_name
-    )} in ${year}`;
+
+    const titleNode = document.querySelector('.js-top-map-title');
+
+    titleNode.innerHTML = '';
+    titleNode.appendChild(document.createTextNode(`Top destination countries of Soy ${verb} by `));
+    titleNode.appendChild(nameSpan);
+    titleNode.appendChild(document.createTextNode(' in '));
+    titleNode.appendChild(yearSpan);
+    translateNode(titleNode);
 
     render(
       <Provider store={store}>
         <ChoroLegend
-          title={[`Soy ${verb} in ${year}`, '(tonnes)']}
+          title={[translateText(`Soy ${verb} in ${year}`), translateText('(tonnes)')]}
           bucket={[[data.top_countries.buckets[0], ...data.top_countries.buckets]]}
         />
       </Provider>,
@@ -236,28 +258,25 @@ const _build = (data, tooltips, { nodeId, year, print }, store) => {
     render(
       <Provider store={store}>
         <TranslatedLine
-          className=".js-top-destination"
           data={topCountriesLines}
           xValues={data.top_countries.included_years}
           settings={settings}
           useBottomLegend
         />
       </Provider>,
-      document.querySelector('.js-top-destination')
+      document.querySelector('.js-top-destination-chart')
     );
 
     const getPolygonClassName = ({ properties }) => {
       const country = data.top_countries.lines.find(c => properties.iso2 === c.geo_id);
       let value = 'n-a';
-      if (country) value = country.value9 || 'n-a';
+      if (country) value = typeof country.value9 !== 'undefined' ? country.value9 : 'n-a';
       return `-outline ch-${value}`;
     };
     const showTooltipCallback = ({ properties }, x, y) => {
-      const country = data.top_countries.lines.find(
-        c => properties.name.toUpperCase() === c.name.toUpperCase()
-      );
-      const title = `${properties.name.toUpperCase()} > ${data.node_name}`;
+      const country = data.top_countries.lines.find(c => properties.iso2 === c.geo_id);
       if (country) {
+        const title = `${country.name.toUpperCase()} > ${data.node_name}`;
         tooltip.show(x, y, title, [
           {
             title: 'Trade Volume',
@@ -290,9 +309,15 @@ const _build = (data, tooltips, { nodeId, year, print }, store) => {
   if (data.sustainability && data.sustainability.length) {
     const filteredData = data.sustainability.filter(elem => elem.rows.length > 0);
     if (filteredData.length !== 0) {
-      const tabsTitle = `Deforestation risk associated with ${formatApostrophe(
-        data.node_name
-      )} top sourcing regions in ${year}:`;
+      const title = (
+        <span>
+          Deforestation risk associated with <span className="notranslate">{data.node_name}</span>
+          {addApostrophe(data.node_name)} top sourcing regions in{' '}
+          <span className="notranslate">{year}</span>:
+        </span>
+      );
+
+      translateText(title);
 
       document.querySelector('.js-area-table').classList.remove('is-hidden');
 
@@ -301,8 +326,8 @@ const _build = (data, tooltips, { nodeId, year, print }, store) => {
           <MultiTable
             id="sustainability"
             data={filteredData}
-            tabsTitle={tabsTitle}
-            tabsTitleTooltip={tooltips.deforestationRisk}
+            tabsTitle={title}
+            tabsTitleTooltip={get(tooltips, 'profileActor.deforestationRisk')}
             type="t_head_actors"
             target={item => (item.name === 'Municipalities' ? 'profilePlace' : null)}
             year={year}
@@ -363,11 +388,19 @@ const _build = (data, tooltips, { nodeId, year, print }, store) => {
   }
 };
 
-const _setInfo = (info, onLinkClick, { nodeId, year }) => {
+const _setInfo = (info, onLinkClick, { nodeId, year, contextId }) => {
   document.querySelector('.js-name').textContent = info.name ? capitalize(info.name) : '-';
-  document.querySelector('.js-link-button-name').textContent = `${formatApostrophe(
-    capitalize(info.name)
-  )} PROFILE`;
+
+  const nameSpan = document.createElement('span');
+  nameSpan.classList.add('notranslate');
+  nameSpan.textContent = capitalize(info.name);
+
+  const linkButtonNode = document.querySelector('.js-link-button-name');
+  linkButtonNode.innerHTML = '';
+  linkButtonNode.appendChild(nameSpan);
+  linkButtonNode.appendChild(document.createTextNode(`${addApostrophe(info.name)} PROFILE`));
+  translateNode(linkButtonNode);
+
   document.querySelector('.js-legend').textContent = info.type || '-';
   document.querySelector('.js-country').textContent = info.country ? capitalize(info.country) : '-';
   if (info.forest_500 > 0) {
@@ -408,9 +441,10 @@ const _setInfo = (info, onLinkClick, { nodeId, year }) => {
     onLinkClick('tool', {
       state: {
         isMapVisible: true,
-        selectedNodesIds: [nodeId],
-        expandedNodesIds: [nodeId],
-        selectedYears: [year, year]
+        selectedNodesIds: [parseInt(nodeId, 10)],
+        expandedNodesIds: [parseInt(nodeId, 10)],
+        selectedYears: [year, year],
+        selectedContextId: contextId
       }
     })
   );
@@ -418,9 +452,11 @@ const _setInfo = (info, onLinkClick, { nodeId, year }) => {
   document.querySelector('.js-link-supply-chain').addEventListener('click', () =>
     onLinkClick('tool', {
       state: {
-        selectedNodesIds: [nodeId],
-        expandedNodesIds: [nodeId],
-        selectedYears: [year, year]
+        isMapVisible: false,
+        selectedNodesIds: [parseInt(nodeId, 10)],
+        expandedNodesIds: [parseInt(nodeId, 10)],
+        selectedYears: [year, year],
+        selectedContextId: contextId
       }
     })
   );
@@ -471,23 +507,23 @@ const _loadData = (store, nodeId, year, print) => {
     year
   });
   setLoading();
-  const tooltipsURL = getURLFromParams(GET_TOOLTIPS_URL);
 
-  Promise.all(
-    [actorFactsheetURL, tooltipsURL].map(url =>
-      fetch(url).then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error(response.statusText);
-      })
-    )
-  )
+  fetch(actorFactsheetURL)
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error(response.statusText);
+    })
     .then(response => {
       if (!response) return;
 
-      const tooltips = response[1].profileActor;
-      const data = response[0].data;
+      const data = response.data;
+
+      // TODO: once we have this state in the reducer, move this logic to the exiting page title helper
+      document.title = `TRASE - ${capitalize(
+        data.node_name
+      )} ${data.column_name.toLowerCase()} profile`;
 
       setLoading(false);
 
@@ -500,7 +536,11 @@ const _loadData = (store, nodeId, year, print) => {
         summary: data.summary
       };
 
-      _setInfo(info, onLinkClick(store), { nodeId, year });
+      _setInfo(info, onLinkClick(store), {
+        nodeId,
+        year,
+        contextId: getDefaultContext(store.getState()).id
+      });
       _setEventListeners();
 
       render(
@@ -514,7 +554,7 @@ const _loadData = (store, nodeId, year, print) => {
         document.getElementById('year-dropdown')
       );
 
-      _build(data, tooltips, { nodeId, year, print }, store);
+      _build(data, { nodeId, year, print }, onLinkClick(store), store);
     })
     .catch(reason => {
       _showErrorMessage(reason.message);
@@ -556,7 +596,7 @@ export const unmount = () => {
   unmountComponentAtNode(document.querySelector('.js-top-municipalities-title-container'));
   unmountComponentAtNode(document.querySelector('.js-source-legend'));
   unmountComponentAtNode(document.querySelector('.js-destination-legend'));
-  unmountComponentAtNode(document.querySelector('.js-top-destination'));
+  unmountComponentAtNode(document.querySelector('.js-top-destination-chart'));
   unmountComponentAtNode(document.getElementById('year-dropdown'));
   unmountComponentAtNode(document.querySelector('.js-top-destination-map'));
   unmountComponentAtNode(document.querySelector('.js-sustainability-table'));

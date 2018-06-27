@@ -94,6 +94,8 @@ module Api
           text = summary_of_total_trade_volume('exporter')
           return text if @trade_total_current_year_raw.zero?
 
+          initialize_sources_for_summary
+          initialize_destinations_for_summary
           text += summary_of_sources('exporter')
           text += summary_of_destinations('exporter')
           text
@@ -117,6 +119,8 @@ module Api
           text = summary_of_total_trade_volume('importer')
           return text if @trade_total_current_year_raw.zero?
 
+          initialize_sources_for_summary
+          initialize_destinations_for_summary
           text += summary_of_sources('importer')
           text += summary_of_destinations('importer')
           text
@@ -124,27 +128,32 @@ module Api
 
         def summary_of_total_trade_volume(profile_type)
           if @trade_total_current_year_raw.zero?
-            return "<span>#{@node.name.humanize}</span> \
- #{profile_type.first(-1)}d 0 tons of soy from \
-#{@context.country.name} in <span>#{@year}</span>."
+            return "<span class=\"notranslate\">#{@node.name.humanize}</span> \
+            #{profile_type.first(-1)}d 0 tons of soy from \
+            #{@context.country.name} in \
+<span class=\"notranslate\">#{@year}</span>."
           end
 
-          text = "<span>#{@node.name.humanize}</span> was the \
-<span>#{@trade_total_rank_in_country_formatted}</span>\
+          text = "<span class=\"notranslate\">#{@node.name.humanize}</span> \
+was the \
+<span class=\"notranslate\">#{@trade_total_rank_in_country_formatted}</span>\
 largest #{profile_type} of soy from \
-          #{@context.country.name} in <span>#{@year}</span>, accounting for \
-<span>#{@trade_total_current_year_formatted}</span>."
+          #{@context.country.name} in \
+<span class=\"notranslate\">#{@year}</span>, accounting for \
+<span class=\"notranslate\">#{@trade_total_current_year_formatted}</span>."
           return text unless @trade_total_perc_difference.present?
           difference_from = if @trade_total_perc_difference.positive?
-                              'a <span>' + helper.number_to_percentage(
-                                @trade_total_perc_difference * 100,
-                                precision: 0
-                              ) + '</span> increase vs'
+                              'a <span class="notranslate">' +
+                                helper.number_to_percentage(
+                                  @trade_total_perc_difference * 100,
+                                  precision: 0
+                                ) + '</span> increase vs'
                             elsif @trade_total_perc_difference.negative?
-                              'a <span>' + helper.number_to_percentage(
-                                -@trade_total_perc_difference * 100,
-                                precision: 0
-                              ) + '</span> decrease vs'
+                              'a <span class="notranslate">' +
+                                helper.number_to_percentage(
+                                  -@trade_total_perc_difference * 100,
+                                  precision: 0
+                                ) + '</span> decrease vs'
                             else
                               'no change from'
                             end
@@ -153,18 +162,20 @@ largest #{profile_type} of soy from \
 
         def summary_of_sources(profile_type)
           " As an #{profile_type}, \
-<span>#{@node.name.humanize}</span> sources from \
-<span>#{@source_municipalities_count_formatted}</span> municipalities, or \
-<span>#{@perc_municipalities_formatted}</span> \
+<span class=\"notranslate\">#{@node.name.humanize}</span> sources from \
+<span class=\"notranslate\">#{@source_municipalities_count_formatted}</span> \
+municipalities, or \
+<span class=\"notranslate\">#{@perc_municipalities_formatted}</span> \
 of the soy production municipalities."
         end
 
         def summary_of_destinations(profile_type)
           if @perc_exports_formatted
             " The main destination of the soy #{profile_type.first(-1)}d by \
-<span>#{@node.name.humanize}</span> is \
-<span>#{@main_destination_name.humanize}</span>, accounting for \
-<span>#{@perc_exports_formatted}</span> of the total."
+<span class=\"notranslate\">#{@node.name.humanize}</span> is \
+<span class=\"notranslate\">#{@main_destination_name.humanize}</span>, \
+accounting for \
+<span class=\"notranslate\">#{@perc_exports_formatted}</span> of the total."
           else
             ''
           end

@@ -3,6 +3,7 @@ import Tooltip from 'components/shared/info-tooltip.component';
 import { DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 import ProfilePlaceMarkup from 'html/profile-place.ejs';
+import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
 import React from 'react';
 import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
@@ -18,14 +19,12 @@ import HelpTooltip from 'react-components/shared/help-tooltip.component';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 import 'styles/profile-place.scss';
-import formatApostrophe from 'utils/formatApostrophe';
+import addApostrophe from 'utils/addApostrophe';
 import formatValue from 'utils/formatValue';
-import {
-  GET_PLACE_FACTSHEET_URL,
-  GET_TOOLTIPS_URL,
-  getURLFromParams
-} from 'utils/getURLFromParams';
+import { GET_PLACE_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParams';
 import smoothScroll from 'utils/smoothScroll';
+import { getDefaultContext } from 'scripts/reducers/helpers/contextHelper';
+import { translateNode } from 'utils/transifex';
 
 const defaults = {
   country: 'Brazil',
@@ -221,7 +220,7 @@ const _build = (data, year, onLinkClick, store) => {
   }
 };
 
-const _setInfo = (store, info, onLinkClick, { nodeId, year }) => {
+const _setInfo = (store, info, onLinkClick, { nodeId, year, contextId }) => {
   document.querySelector('.js-country-name').innerHTML = info.country
     ? capitalize(info.country)
     : '-';
@@ -245,38 +244,69 @@ const _setInfo = (store, info, onLinkClick, { nodeId, year }) => {
         isMapVisible: true,
         selectedNodesIds: [parseInt(nodeId, 10)],
         expandedNodesIds: [parseInt(nodeId, 10)],
-        selectedYears: [year, year]
+        selectedYears: [year, year],
+        selectedContextId: contextId
       }
     })
   );
   document.querySelector('.js-link-supply-chain').addEventListener('click', () =>
     onLinkClick('tool', {
       state: {
+        isMapVisible: false,
         selectedNodesIds: [parseInt(nodeId, 10)],
         expandedNodesIds: [parseInt(nodeId, 10)],
-        selectedYears: [year, year]
+        selectedYears: [year, year],
+        selectedContextId: contextId
       }
     })
   );
-  document.querySelector('.js-line-title').innerHTML = info.municipality
-    ? `Deforestation trajectory of ${info.municipality}`
-    : '-';
-  document.querySelector('.js-traders-title').innerHTML = `Top traders of soy in ${
-    info.municipality
-  } in ${year}`;
-  document.querySelector(
-    '.js-consumers-title'
-  ).innerHTML = `Top importer countries of ${formatApostrophe(
-    capitalize(info.municipality)
-  )} soy in ${year}`;
-  document.querySelector('.js-link-button-municipality').textContent = `${formatApostrophe(
-    capitalize(info.municipality)
-  )} PROFILE`;
 
+  const nameSpan = document.createElement('span');
+  nameSpan.classList.add('notranslate');
+  nameSpan.textContent = capitalize(info.municipality);
+
+  const yearSpan = document.createElement('span');
+  yearSpan.classList.add('notranslate');
+  yearSpan.textContent = year;
+
+  const lineTitleNode = document.querySelector('.js-line-title');
+  lineTitleNode.innerHTML = '';
+  lineTitleNode.appendChild(document.createTextNode('Deforestation trajectory of '));
+  lineTitleNode.appendChild(nameSpan.cloneNode(true));
+  translateNode(lineTitleNode);
+
+  const tradersTitleNode = document.querySelector('.js-traders-title');
+  tradersTitleNode.innerHTML = '';
+  tradersTitleNode.appendChild(document.createTextNode('Top traders of soy in '));
+  tradersTitleNode.appendChild(nameSpan.cloneNode(true));
+  tradersTitleNode.appendChild(document.createTextNode(' in '));
+  tradersTitleNode.appendChild(yearSpan.cloneNode(true));
+  translateNode(tradersTitleNode);
+
+  const consumersTitleNode = document.querySelector('.js-consumers-title');
+  consumersTitleNode.innerHTML = '';
+  consumersTitleNode.appendChild(document.createTextNode('Top importer countries of '));
+  consumersTitleNode.appendChild(nameSpan.cloneNode(true));
+  consumersTitleNode.appendChild(document.createTextNode(' soy in '));
+  consumersTitleNode.appendChild(yearSpan.cloneNode(true));
+  translateNode(consumersTitleNode);
+
+  const linkButtonMunicipalityNode = document.querySelector('.js-link-button-municipality');
+  linkButtonMunicipalityNode.innerHTML = '';
+  linkButtonMunicipalityNode.appendChild(nameSpan.cloneNode(true));
+  linkButtonMunicipalityNode.appendChild(
+    document.createTextNode(`${addApostrophe(info.municipality)} PROFILE`)
+  );
+  translateNode(linkButtonMunicipalityNode);
+
+  const summaryTextNode = document.querySelector('.js-summary-text');
   if (info.soy_production === 0) {
-    info.summary = `${info.municipality} did not produce any soy in ${year}`;
+    info.summary = `<span class="notranslate">${
+      info.municipality
+    }</span> did not produce any soy in <span class="notranslate">${year}</span>`;
   }
-  document.querySelector('.js-summary-text').innerHTML = info.summary ? info.summary : '-';
+  summaryTextNode.innerHTML = info.summary ? info.summary : '-';
+  translateNode(summaryTextNode);
 };
 
 const _setEventListeners = () => {
@@ -323,23 +353,21 @@ const _loadData = (store, nodeId, year) => {
     year
   });
   setLoading();
-  const tooltipsURL = getURLFromParams(GET_TOOLTIPS_URL);
 
-  Promise.all(
-    [placeFactsheetURL, tooltipsURL].map(url =>
-      fetch(url).then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error(response.statusText);
-      })
-    )
-  )
+  fetch(placeFactsheetURL)
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error(response.statusText);
+    })
     .then(response => {
       if (!response) return;
 
-      const tooltips = response[1].profilePlace;
-      const data = response[0].data;
+      const data = response.data;
+
+      // TODO: once we have this state in the reducer, move this logic to the exiting page title helper
+      document.title = `TRASE - ${capitalize(data.municipality_name)} profile`;
 
       setLoading(false);
 
@@ -356,7 +384,13 @@ const _loadData = (store, nodeId, year) => {
         summary: data.summary
       };
 
-      _setInfo(store, info, onLinkClick(store), { nodeId, year });
+      const { tooltips } = store.getState().app;
+
+      _setInfo(store, info, onLinkClick(store), {
+        nodeId,
+        year,
+        contextId: getDefaultContext(store.getState()).id
+      });
       _setEventListeners();
 
       render(
@@ -371,11 +405,11 @@ const _loadData = (store, nodeId, year) => {
       );
 
       render(
-        <HelpTooltip text={tooltips.soyLand} position="bottom" />,
+        <HelpTooltip text={get(tooltips, 'profilePlace.soyLand')} position="bottom" />,
         document.getElementById('soy-land-tooltip')
       );
       render(
-        <HelpTooltip text={tooltips.soyProduction} position="bottom" />,
+        <HelpTooltip text={get(tooltips, 'profilePlace.soyProduction')} position="bottom" />,
         document.getElementById('soy-production-tooltip')
       );
 

@@ -10,6 +10,7 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  is_subnational  :boolean          default(FALSE), not null
+#  is_highlighted  :boolean
 #
 # Indexes
 #
@@ -37,6 +38,7 @@ module Api
       validates :is_disabled, inclusion: {in: [true, false]}
       validates :is_default, inclusion: {in: [true, false]}
       validates :is_subnational, inclusion: {in: [true, false]}
+      validates :is_highlighted, inclusion: {in: [true, false]}
       validates :default_basemap, inclusion: {in: DEFAULT_BASEMAP, allow_blank: true}
 
       def self.blue_foreign_keys

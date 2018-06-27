@@ -92,6 +92,10 @@
             "id": "/properties/data/items/properties/isSubnational",
             "type": "boolean"
           },
+          "isHighlighted": {
+            "id": "/properties/data/items/properties/isHighlighted",
+            "type": "boolean"
+          },
           "isDisabled": {
             "id": "/properties/data/items/properties/isDisabled",
             "type": "boolean"

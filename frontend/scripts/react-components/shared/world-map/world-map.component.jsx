@@ -13,6 +13,7 @@ import {
 import UnitsTooltip from 'react-components/shared/units-tooltip.component';
 import cx from 'classnames';
 import formatValue from 'utils/formatValue';
+import xor from 'lodash/xor';
 
 class WorldMap extends Component {
   static buildCurves(start, end, arc) {
@@ -45,25 +46,27 @@ class WorldMap extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.flows.length && this.props.selectedContext && this.props.selectedYears) {
+    if (this.props.flows.length === 0 && this.props.selectedContext && this.props.selectedYears) {
       this.props.getTopNodes();
     }
   }
 
   componentWillReceiveProps(nextProps) {
+    if (!nextProps.selectedContext) {
+      return;
+    }
+
     if (
-      nextProps.selectedContext !== this.props.selectedContext ||
-      nextProps.selectedYears !== this.props.selectedYears
+      !this.props.selectedContext ||
+      nextProps.selectedContext.id !== this.props.selectedContext.id ||
+      xor(nextProps.selectedYears, this.props.selectedYears).length !== 0
     ) {
       this.props.getTopNodes();
     }
   }
 
   shouldComponentUpdate(nextProps) {
-    if (nextProps.flows.length === 0) {
-      return false;
-    }
-    return true;
+    return nextProps.flows.length !== 0;
   }
 
   onMouseMove(geometry, e) {
@@ -149,7 +152,7 @@ class WorldMap extends Component {
   }
 
   render() {
-    const { flows } = this.props;
+    const { renderFlows } = this.props;
     const { tooltipConfig } = this.state;
     return (
       <React.Fragment>
@@ -166,8 +169,8 @@ class WorldMap extends Component {
             <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
               {this.renderGeographies}
             </Geographies>
-            <Lines>{this.renderLines()}</Lines>
-            <Annotations>{flows.length === 0 && this.renderCountriesAnnotations()}</Annotations>
+            <Lines>{renderFlows && this.renderLines()}</Lines>
+            <Annotations>{!renderFlows && this.renderCountriesAnnotations()}</Annotations>
           </ZoomableGroup>
         </ComposableMap>
       </React.Fragment>
@@ -176,6 +179,7 @@ class WorldMap extends Component {
 }
 
 WorldMap.propTypes = {
+  renderFlows: PropTypes.bool.isRequired,
   flows: PropTypes.array.isRequired,
   origin: PropTypes.object,
   selectedContext: PropTypes.object,

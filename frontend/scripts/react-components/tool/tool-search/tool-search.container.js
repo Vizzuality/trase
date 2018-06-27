@@ -1,4 +1,4 @@
-import { selectExpandedNode, selectNode, setSankeySearchVisibility } from 'actions/tool.actions';
+import { selectExpandedNode, setSankeySearchVisibility } from 'actions/tool.actions';
 import flatten from 'lodash/flatten';
 import groupBy from 'lodash/groupBy';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.component';
@@ -30,11 +30,22 @@ const getNode = (nodes, selectedColumnsIds, nodesDict) => {
 };
 
 const mapStateToProps = state => {
-  const { nodes, selectedNodesIds, selectedColumnsIds, nodesDict, isSearchOpen } = state.tool;
+  const {
+    nodes,
+    selectedNodesIds,
+    selectedColumnsIds,
+    nodesDict,
+    isSearchOpen,
+    isMapVisible
+  } = state.tool;
   // store nodes at container level to avoid rerendering when filtering... for want of a better solution
   if (nodes !== undefined && (!searchNodes || nodes.length !== searchNodes.length)) {
     const allNodes = nodes.filter(
-      node => node.hasFlows === true && node.isAggregated !== true && node.isUnknown !== true
+      node =>
+        node.hasFlows === true &&
+        node.isAggregated !== true &&
+        node.isUnknown !== true &&
+        node.isDomesticConsumption !== true
     );
     searchNodes = flatten(
       Object.values(groupBy(allNodes, 'mainNodeId')).map(groupedNodes =>
@@ -46,6 +57,7 @@ const mapStateToProps = state => {
   return {
     selectedNodesIds,
     isSearchOpen,
+    isMapVisible,
     nodes: searchNodes
   };
 };
@@ -54,7 +66,6 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       onAddNode: nodeId => selectExpandedNode(nodeId),
-      onRemoveNode: nodeId => selectNode(nodeId),
       setSankeySearchVisibility: searchVisibility => setSankeySearchVisibility(searchVisibility)
     },
     dispatch

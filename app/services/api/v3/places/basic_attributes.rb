@@ -52,11 +52,13 @@ module Api
         def summary
           return nil unless municipality? || logistics_hub?
 
-          result = "In <span>#{@year}</span>, \
-<span>#{@node.name.titleize}</span> produced \
-<span>#{@soy_production_formatted}</span> \
-<span>#{@soy_production_unit}</span> of soy occupying a total \
-of <span>#{@soy_area_formatted}</span> <span>#{@soy_area_unit}</span> of land."
+          result = "In <span class=\"notranslate\">#{@year}</span>, \
+<span class=\"notranslate\">#{@node.name.titleize}</span> produced \
+<span class=\"notranslate\">#{@soy_production_formatted}</span> \
+<span class=\"notranslate\">#{@soy_production_unit}</span> of soy \
+occupying a total of \
+<span class=\"notranslate\">#{@soy_area_formatted}</span> \
+<span class=\"notranslate\">#{@soy_area_unit}</span> of land."
           result << summary_of_production_ranking
           result << summary_of_top_exporter_and_top_consumer
           result
@@ -189,9 +191,10 @@ of <span>#{@soy_area_formatted}</span> <span>#{@soy_area_unit}</span> of land."
             end
 
           text + "of the total production, it \
-ranks <span>#{country_ranking}</span> in Brazil in soy production, \
-and <span>#{state_ranking}</span> in \
-the state of <span>#{state_name}</span>."
+ranks <span class=\"notranslate\">#{country_ranking}</span> in \
+Brazil in soy production, \
+and <span class=\"notranslate\">#{state_ranking}</span> in \
+the state of <span class=\"notranslate\">#{state_name}</span>."
         end
 
         def summary_of_top_exporter_and_top_consumer
@@ -211,11 +214,11 @@ the state of <span>#{state_name}</span>."
 
           if top_exporter && percentage_total_exports && top_consumer
             " The largest exporter of soy in \
-<span>#{@node.name.titleize}</span> was \
-<span>#{top_exporter_name}</span>, which accounted for \
-<span>#{percentage_total_exports}</span> of \
+<span class=\"notranslate\">#{@node.name.titleize}</span> was \
+<span class=\"notranslate\">#{top_exporter_name}</span>, which accounted for \
+<span class=\"notranslate\">#{percentage_total_exports}</span> of \
 the total exports, and the main destination was \
-<span>#{top_consumer_name}</span>."
+<span class=\"notranslate\">#{top_consumer_name}</span>."
           else
             ''
           end

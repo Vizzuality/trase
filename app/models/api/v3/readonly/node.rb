@@ -2,12 +2,13 @@
 #
 # Table name: nodes_mv
 #
-#  id         :integer          primary key
-#  main_id    :integer
-#  name       :text
-#  node_type  :text
-#  context_id :integer
-#  profile    :text
+#  id             :integer          primary key
+#  main_id        :integer
+#  name           :text
+#  node_type      :text
+#  context_id     :integer
+#  profile        :text
+#  is_subnational :boolean
 #
 # Indexes
 #

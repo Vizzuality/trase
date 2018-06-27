@@ -1,13 +1,19 @@
 import { redirect } from 'redux-first-router';
-import { loadInitialData, selectContext } from 'actions/tool.actions';
+import { selectContextById, setContextIsUserSelected } from 'actions/app.actions';
 
-export const loadInitialDataExplore = (dispatch, getState) => {
+/**
+ * @deprecated this should be used to load legacy URLs only. New code will use internal state instead
+ *
+ * @param dispatch
+ * @param getState
+ */
+export const setContextForExplorePage = (dispatch, getState) => {
   const { query = {} } = getState().location;
   const contextId = parseInt(query.contextId, 10);
   if (contextId) {
-    return dispatch(loadInitialData()).then(() => dispatch(selectContext(contextId)));
+    dispatch(selectContextById(contextId));
+    dispatch(setContextIsUserSelected(true));
   }
-  return dispatch(loadInitialData());
 };
 
 export const redirectToExplore = (dispatch, getState, { action }) => {
@@ -26,10 +32,10 @@ export const redirectToExplore = (dispatch, getState, { action }) => {
   if (toolPages.includes(action.type)) {
     if (!previouslyVisitedExplorePage.get()) {
       previouslyVisitedExplorePage.set(Date.now());
-      return dispatch(redirect({ type: 'explore' }));
+      dispatch(setContextIsUserSelected(false));
+      dispatch(redirect({ type: 'explore' }));
     }
   } else if (type === 'explore') {
-    return previouslyVisitedExplorePage.set(Date.now());
+    previouslyVisitedExplorePage.set(Date.now());
   }
-  return undefined;
 };

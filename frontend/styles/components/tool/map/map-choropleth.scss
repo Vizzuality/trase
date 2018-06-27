@@ -7,75 +7,18 @@
 
     path {
       pointer-events: auto;
-      fill: transparent;
-      fill-opacity: 1;
-      stroke: $charcoal-grey-toned-down;
-      stroke-width: .3px;
-      stroke-opacity: .5;
 
       &.-disabled {
         cursor: not-allowed;
       }
-      
-      &.-filteredOut {
-        display: none;
-      }
-
-      &.-linked {
-        stroke-width: 1.2px;
-        stroke: $charcoal-grey;
-      }
 
       &.ch-zero { fill: $ch-zero; };
-
-      @each $item, $color in $choropleth-colors {
-        &.#{$item} {
-          fill: $color;
-        }
-      }
     }
+  }
 
-    &.-noDimensions {
-      path.-linked {
-        fill: $manilla;
-        fill-opacity: .4;
-        stroke-width: .5px;
-      }
-    }
-
-    &.-linkedActivated {
-      path:not(.-linked) {
-        fill: $ch-default;
-      }
-    }
-
-    &.-high-zoom {
-      path {
-        stroke-width: .5px;
-
-        &.-linked {
-          stroke-width: 2px;
-        }
-      }
-    }
-
-    &.-darkBasemap {
-      path {
-        stroke: $white;
-      }
-      &.-linkedActivated {
-        path:not(.-linked) {
-          fill: transparent;
-        }
-      }
-    }
-
-    &.-pointData {
-      path {
-        stroke-width: 1px;
-        stroke-opacity: 1;
-        fill: $white;
-      }
+  .leaflet-vectorBelow-pane {
+    path {
+      pointer-events: auto;
     }
   }
 
@@ -95,10 +38,8 @@
         stroke: $charcoal-grey;
         stroke-width: 2.5px;
       }
-    }
 
-    &.-pointData {
-      path {
+      &.-point {
         &.-highlighted {
           stroke: $charcoal-grey;
         }

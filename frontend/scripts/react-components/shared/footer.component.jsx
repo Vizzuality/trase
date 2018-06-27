@@ -58,13 +58,6 @@ const sections = [
     logos: [
       [
         {
-          className: 'wwf-logo',
-          href: 'https://www.worldwildlife.org/',
-          image: '/images/footer/donors/wwf@2x.png',
-          alt: 'WWF',
-          imageClassName: null
-        },
-        {
           className: 'gef-logo',
           href: 'https://www.thegef.org/',
           image: '/images/footer/donors/gef@2x.png',
@@ -72,26 +65,18 @@ const sections = [
           imageClassName: null
         },
         {
+          className: 'wwf-logo',
+          href: 'https://www.worldwildlife.org/',
+          image: '/images/footer/donors/wwf@2x.png',
+          alt: 'WWF',
+          imageClassName: null
+        },
+
+        {
           className: 'eustars-logo',
           href: 'https://ec.europa.eu/',
           image: '/images/footer/donors/eu-stars-33@2x.png',
           alt: 'Europe',
-          imageClassName: null
-        }
-      ],
-      [
-        {
-          className: 'conservancy-logo',
-          href: 'https://www.nature.org/',
-          image: '/images/footer/donors/nature-conservancy@2x.png',
-          alt: 'The Nature Conservancy',
-          imageClassName: null
-        },
-        {
-          className: 'sida-logo',
-          href: 'http://www.sida.se/English/',
-          image: '/images/footer/donors/s-i-d-a-logo@2x.png',
-          alt: 'The Swedish International Development Cooperation Agency',
           imageClassName: null
         }
       ],
@@ -103,6 +88,15 @@ const sections = [
           alt: 'Gordon and Betty Moore Foundation',
           imageClassName: null
         },
+        {
+          className: 'conservancy-logo',
+          href: 'https://www.nature.org/',
+          image: '/images/footer/donors/nature-conservancy@2x.png',
+          alt: 'The Nature Conservancy',
+          imageClassName: null
+        }
+      ],
+      [
         {
           className: 'ukaidsv-logo',
           href:

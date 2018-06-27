@@ -83,6 +83,13 @@ class FiltersNav extends React.PureComponent {
     const [, , ...restOfLinks] = links;
     const decoratedLinks = [{ name: 'Home', page: { type: 'home' } }, ...links];
     const navLinks = isExplore ? decoratedLinks : restOfLinks;
+
+    navLinks.splice(-2, 0, {
+      name: 'Yearbook',
+      page: `https://yearbook2018.${window.location.hostname}`,
+      external: true
+    });
+
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
@@ -107,17 +114,18 @@ class FiltersNav extends React.PureComponent {
   }
 
   renderMenuClosed() {
-    const { selectedContext, isExplore, selectContext } = this.props;
+    const { selectedContext, isExplore, contextIsUserSelected } = this.props;
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
-          <ContextSelector className="filters-nav-item" selectContext={selectContext} />
-          {selectedContext && (
-            <React.Fragment>
-              {!isExplore && <AdminLevelFilter className="filters-nav-item" />}
-              <YearsSelector className="filters-nav-item" />
-            </React.Fragment>
-          )}
+          <ContextSelector className="filters-nav-item" isExplore={isExplore} />
+          {selectedContext &&
+            (contextIsUserSelected || !isExplore) && (
+              <React.Fragment>
+                {!isExplore && <AdminLevelFilter className="filters-nav-item" />}
+                <YearsSelector className="filters-nav-item" />
+              </React.Fragment>
+            )}
         </div>
         <div className="filters-nav-right-section">
           {!isExplore && (
@@ -151,13 +159,13 @@ class FiltersNav extends React.PureComponent {
 }
 
 FiltersNav.propTypes = {
-  links: PropTypes.array.isRequired,
-  selectedContext: PropTypes.object,
-  isExplore: PropTypes.bool,
+  contextIsUserSelected: PropTypes.bool,
+  isExplore: PropTypes.bool.isRequired,
   isMapVisible: PropTypes.bool,
+  links: PropTypes.array.isRequired,
   openMap: PropTypes.func,
   openSankey: PropTypes.func,
-  selectContext: PropTypes.func.isRequired
+  selectedContext: PropTypes.object
 };
 
 export default FiltersNav;

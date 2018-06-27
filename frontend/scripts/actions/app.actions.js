@@ -1,12 +1,17 @@
 import isEmpty from 'lodash/isEmpty';
-import { TOGGLE_MAP } from 'actions/tool.actions';
 import {
   GET_DISCLAIMER_URL,
   GET_SITE_DIVE_URL,
   GET_NODES_WITH_SEARCH_URL,
   getURLFromParams
 } from 'utils/getURLFromParams';
+import { TOGGLE_MAP, loadToolDataForCurrentContext } from 'scripts/actions/tool.actions';
+import { getContextById } from 'scripts/reducers/helpers/contextHelper';
+import { getPageTitle } from 'scripts/router/page-title';
 
+export const LOAD_STATE_FROM_URL = 'LOAD_STATE_FROM_URL';
+export const LOAD_INITIAL_CONTEXT = 'LOAD_INITIAL_CONTEXT';
+export const SET_CONTEXT = 'SET_CONTEXT';
 export const DISPLAY_STORY_MODAL = 'DISPLAY_STORY_MODAL';
 export const LOAD_TOOLTIP = 'LOAD_TOOLTIP';
 export const SET_SANKEY_SIZE = 'SET_SANKEY_SIZE';
@@ -17,6 +22,48 @@ export const TOGGLE_MAP_LAYERS_MENU = 'TOGGLE_MAP_LAYERS_MENU';
 export const CLOSE_STORY_MODAL = 'CLOSE_STORY_MODAL';
 export const SET_SEARCH_TERM = 'SET_SEARCH_TERM';
 export const LOAD_SEARCH_RESULTS = 'LOAD_SEARCH_RESULTS';
+export const SET_CONTEXTS = 'SET_CONTEXTS';
+export const SET_CONTEXT_IS_USER_SELECTED = 'SET_CONTEXT_IS_USER_SELECTED';
+export const SET_LANGUAGE = 'SET_LANGUAGE';
+
+export function selectInitialContextById(contextId) {
+  return (dispatch, getState) => {
+    const selectedContext = getContextById(getState(), contextId);
+
+    dispatch({
+      type: LOAD_INITIAL_CONTEXT,
+      payload: selectedContext
+    });
+
+    document.title = getPageTitle(getState());
+  };
+}
+
+export function setContextIsUserSelected(contextIsUserSelected) {
+  return {
+    type: SET_CONTEXT_IS_USER_SELECTED,
+    payload: contextIsUserSelected
+  };
+}
+
+export function selectContextById(contextId) {
+  return (dispatch, getState) => {
+    const selectedContext = getContextById(getState(), contextId);
+
+    dispatch({
+      type: SET_CONTEXT,
+      payload: selectedContext
+    });
+
+    dispatch(setContextIsUserSelected(true));
+
+    if (getState().location.type === 'tool') {
+      dispatch(loadToolDataForCurrentContext());
+    }
+
+    document.title = getPageTitle(getState());
+  };
+}
 
 export function resize() {
   return {
@@ -112,6 +159,13 @@ export function resetSearchResults() {
   return {
     type: SET_SEARCH_TERM,
     payload: { term: '', results: [] }
+  };
+}
+
+export function setLanguage(languageCode) {
+  return {
+    type: SET_LANGUAGE,
+    payload: languageCode
   };
 }
 

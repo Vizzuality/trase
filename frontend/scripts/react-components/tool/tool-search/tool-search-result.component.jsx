@@ -6,7 +6,67 @@ import camelcase from 'lodash/camelCase';
 import LinkButton from 'react-components/shared/link-button.component';
 import HighlightTextFragments from 'react-components/shared/highlight-text-fragments.component';
 
-function ToolSearchResult({ value, onClickAdd, selected, itemProps, isHighlighted, item }) {
+function ToolSearchResult({
+  value,
+  onClickAdd,
+  selected,
+  exporterNotSelected,
+  importerNotSelected,
+  itemProps,
+  isHighlighted,
+  item,
+  isMapVisible
+}) {
+  const buttonList = [];
+
+  if (selected) {
+    buttonList.push(
+      <button key="alreadyInSupplyChain" className="c-button -medium-large" disabled="true">
+        Already in {isMapVisible ? 'map' : 'supply chain'}
+      </button>
+    );
+  } else if (exporterNotSelected === importerNotSelected) {
+    // The weird "if" above means that we only do NOT show this button if
+    // node is both importer and exporter, and is added as one of them but no the other to the supply chain.
+    // The "if" statement above that ensures it's also not shown if node is both and is selected
+    // Commented out to hide the "add to supply chain"/"add to map" button
+    // buttonList.push(
+    //   <button
+    //     key="addToSupplyChain"
+    //     className="c-button -medium-large"
+    //     onClick={e => onClickAdd(e, item)}
+    //   >
+    //     Add to {isMapVisible ? 'map' : 'supply chain'}
+    //   </button>
+    // );
+  }
+
+  if (!(exporterNotSelected && !importerNotSelected)) {
+    if (exporterNotSelected) {
+      buttonList.push(
+        <button
+          key="addAsExporter"
+          onClick={e => onClickAdd(e, item.exporter)}
+          className="c-button -medium-large"
+        >
+          Add as exporter
+        </button>
+      );
+    }
+
+    if (importerNotSelected) {
+      buttonList.push(
+        <button
+          key="addAsImporter"
+          onClick={e => onClickAdd(e, item.importer)}
+          className="c-button -medium-large"
+        >
+          Add as importer
+        </button>
+      );
+    }
+  }
+
   return (
     <li {...itemProps} className={cx('c-search-result', { '-highlighted': isHighlighted })}>
       <div className="search-node-text-container">
@@ -16,13 +76,7 @@ function ToolSearchResult({ value, onClickAdd, selected, itemProps, isHighlighte
         </span>
       </div>
       <div className="search-node-actions-container">
-        <button
-          onClick={e => onClickAdd(e, item)}
-          className="c-button -medium-large"
-          disabled={selected}
-        >
-          {selected ? 'Already in' : 'Add to'} supply chain
-        </button>
+        {buttonList}
         {item.profileType &&
           item.type.split(' & ').map(type => (
             <LinkButton
@@ -33,7 +87,7 @@ function ToolSearchResult({ value, onClickAdd, selected, itemProps, isHighlighte
                 query: { nodeId: (item[type.toLowerCase()] || item).id }
               }}
             >
-              See {type} profile
+              {type} profile
             </LinkButton>
           ))}
       </div>
@@ -45,8 +99,11 @@ ToolSearchResult.propTypes = {
   value: PropTypes.string,
   onClickAdd: PropTypes.func,
   selected: PropTypes.bool,
+  exporterNotSelected: PropTypes.bool,
+  importerNotSelected: PropTypes.bool,
   itemProps: PropTypes.object,
   isHighlighted: PropTypes.bool,
+  isMapVisible: PropTypes.bool,
   item: PropTypes.object
 };
 

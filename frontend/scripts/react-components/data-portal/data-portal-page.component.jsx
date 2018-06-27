@@ -20,12 +20,17 @@ class DataContent extends Component {
   constructor(props) {
     super(props);
 
+    const selectedCountry = props.selectedContext ? props.selectedContext.countryId : null;
+
+    // This may look weird but it is indeed intended behavior
+    // This component's internal state uses the context id as the id of the commodity.
+    const selectedCommodity = props.selectedContext ? props.selectedContext.id : null;
+
     this.state = {
-      selectedContextId: null,
       formVisible: false,
 
-      selectedCountry: null,
-      selectedCommodity: null,
+      selectedCountry,
+      selectedCommodity,
       selectedYears: [],
       selectedExporters: [],
       selectedConsumptionCountries: [],
@@ -54,6 +59,14 @@ class DataContent extends Component {
     this.closeForm = this.closeForm.bind(this);
     this.downloadFile = this.downloadFile.bind(this);
     this.onBulkDownloadClicked = this.onBulkDownloadClicked.bind(this);
+  }
+
+  componentDidMount() {
+    const { selectedContext, onContextSelected } = this.props;
+
+    if (selectedContext) {
+      onContextSelected(selectedContext.id);
+    }
   }
 
   onDownloadButtonClicked() {
@@ -121,7 +134,7 @@ class DataContent extends Component {
         const selectedContext = this.props.contexts.find(
           elem => elem.isDisabled !== true && elem.id === value
         );
-        this.setState({ selectedCommodity: value, selectedContextId: selectedContext.id });
+        this.setState({ selectedCommodity: value });
         if (selectedContext) {
           this.props.onContextSelected(selectedContext.id);
         }
@@ -129,9 +142,7 @@ class DataContent extends Component {
       }
       case 'years': {
         const selectedYears = xor(this.state.selectedYears, [value]);
-        const selectedContext = this.props.contexts.find(
-          context => context.id === this.state.selectedContextId
-        );
+        const { selectedContext } = this.props;
         this.setState({
           selectedYears,
           allYearsSelected: selectedYears.length === selectedContext.years.length
@@ -180,9 +191,7 @@ class DataContent extends Component {
             allYearsSelected: !this.state.allYearsSelected
           });
         } else {
-          const selectedContext = this.props.contexts.find(
-            context => context.id === this.state.selectedContextId
-          );
+          const { selectedContext } = this.props;
           this.setState({
             selectedYears: selectedContext.years,
             allYearsSelected: !this.state.allYearsSelected
@@ -240,7 +249,7 @@ class DataContent extends Component {
     if (this.state.selectedCommodity === null) {
       return [];
     }
-    const contextId = this.state.selectedContextId;
+    const contextId = this.props.selectedContext.id;
     const file = this.state.fileExtension;
     const outputType = this.state.outputType;
     const params = {
@@ -311,10 +320,9 @@ class DataContent extends Component {
       contexts,
       exporters,
       consumptionCountries,
-      indicators
+      indicators,
+      selectedContext
     } = this.props;
-
-    const selectedContext = contexts.find(context => context.id === this.state.selectedContextId);
 
     const enabledContexts = contexts.filter(elem => elem.isDisabled !== true);
 
@@ -591,7 +599,8 @@ DataContent.propTypes = {
   indicators: PropTypes.array,
   onContextSelected: PropTypes.func,
   onDataDownloadFormLoaded: PropTypes.func,
-  onDownloadTriggered: PropTypes.func
+  onDownloadTriggered: PropTypes.func,
+  selectedContext: PropTypes.object
 };
 
 export default DataContent;

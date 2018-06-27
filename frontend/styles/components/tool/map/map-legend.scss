@@ -62,21 +62,11 @@
       }
     }
 
-    &.ch-n-a { background-color: $ch-profile-n-a; }
-    &.ch-0 { background-color: $ch-profile-red-0; };
-    &.ch-1 { background-color: $ch-profile-red-1; };
-    &.ch-2 { background-color: $ch-profile-red-2; };
-    &.ch-3 { background-color: $ch-profile-red-3; };
-    &.ch-4 { background-color: $ch-profile-red-4; };
-    &.ch-5 { background-color: $ch-profile-red-5; };
-    &.ch-6 { background-color: $ch-profile-red-6; };
-    &.ch-7 { background-color: $ch-profile-red-7; };
-
     span {
       position: absolute;
       top: 22px;
-      left: 22px;
       right: 0;
+      transform: translateX(50%);
       margin: auto;
       font-size: 10px;
       line-height: normal;
@@ -98,7 +88,7 @@
       }
     }
 
-    &.ch-red-0, &.ch-blue-0, &.ch-bi-0-0, &.recolorby-linear-red-blue-3, &.recolorby-percentual-green-red-5, &.recolorby-linear-yellow-green-0 {
+    &.ch-red-0, &.ch-blue-0, &.recolorby-linear-red-blue-3, &.recolorby-percentual-green-red-5, &.recolorby-linear-yellow-green-0 {
       &::after {
         border-color: $charcoal-grey;
       }
@@ -120,7 +110,6 @@
     }
 
     .bucket-legend {
-
       border: 1px solid #6C787D;
     }
 
@@ -137,13 +126,12 @@
       text-transform: uppercase;
     }
 
-    .icon-unidimensional-legend-arrows {
+    .unidimensional-legend-arrow {
       display: block;
       position: absolute;
       width: 45%;
-      height: 6px;
       right: 10px;
-      bottom: 18px;
+      bottom: 15px;
     }
 
     .icon-bidimensional-legend-arrows {
@@ -172,28 +160,25 @@
         justify-content: flex-end;
         height: 14px;
         margin: 4px 10px 0 0;
+        width: 45.2%;
 
-
-
-        &[data-colors="5"] {
-          width: 45.2%;
-
-          .bucket-item {
-            flex-basis: calc(100% / 5);
-          }
-        }
-
-        &[data-colors="7"] {
-          width: 65.5%;
-
-          .bucket-item {
-            flex-basis: calc(100% / 7);
-          }
+        .bucket-item {
+          flex: 1;
         }
       }
 
       > .icon-legend-arrow {
         display: none;
+      }
+    }
+
+    &.-wide {
+      .bucket-legend {
+        width: 65.5%;
+      }
+
+      .unidimensional-legend-arrow {
+        width: 65.5%;
       }
     }
 
@@ -214,7 +199,7 @@
         right: 0px;
         width: 66px;
         height: 66px;
-        transform: rotateZ(-45deg);
+        transform: rotateZ(-135deg);
         display: flex;
         flex-wrap: wrap;
 
@@ -232,14 +217,13 @@
         }
       }
 
-      .icon-unidimensional-legend-arrows {
+      .unidimensional-legend-arrow {
         display: none;
       }
 
       .icon-bidimensional-legend-arrows {
         display: block;
       }
-
     }
 
     &.-profile {
@@ -264,30 +248,20 @@
         }
       }
 
-      .icon-unidimensional-legend-arrows {
-        display: none;
-      }
-
       .bucket-legend {
         display: inline-flex;
         justify-content: flex-end;
         height: 14px;
         margin: 4px 0 0;
-
-        &[data-colors = '5'] {
-          width: calc(100% - 40px);
-        }
+        width: calc(100% - 40px);
       }
 
       .bucket {
         span {
           left: 0;
           top: 14px;
+          transform: none;
         }
-      }
-
-      .icon-unidimensional-legend-arrows {
-        height: 10px;
       }
 
       .bullets {
@@ -295,6 +269,7 @@
         bottom: 0;
 
         li {
+          font-family: $font-family-1;
           display: flex;
           align-items: baseline;
           font-size: 10px;

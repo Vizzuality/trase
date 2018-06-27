@@ -1,5 +1,5 @@
-import { filterStateToURL, rehydrateToolState } from '../../utils/stateURL';
-import { toolInitialState } from '../../reducers/tool.reducer';
+import { appStateToURLParams, rehydrateToolState } from '../../utils/stateURL';
+import { toolInitialState } from '../../react-components/tool/tool.reducer';
 import { LOAD_INITIAL_DATA } from '../../actions/tool.actions';
 
 const filteredState = {
@@ -23,7 +23,7 @@ const filteredState = {
 const next = x => x;
 
 test('filterStateToURL with existing selectedR---By as none', () => {
-  expect(filterStateToURL(toolInitialState)).toEqual(filteredState);
+  expect(appStateToURLParams(toolInitialState)).toEqual(filteredState);
 });
 
 test('filterStateToURL with existing selectedR---By as undefined', () => {
@@ -34,7 +34,7 @@ test('filterStateToURL with existing selectedR---By as undefined', () => {
     ...incompleteState // object rest assignment do not remove unused!
   } = toolInitialState;
 
-  expect(filterStateToURL(incompleteState)).toEqual({
+  expect(appStateToURLParams(incompleteState)).toEqual({
     ...filteredState,
     selectedResizeByName: undefined,
     selectedRecolorByName: undefined,
@@ -44,7 +44,7 @@ test('filterStateToURL with existing selectedR---By as undefined', () => {
 
 test('filterStateToUrl receives selectedNodesIds and changes to expanded mode', () => {
   const newState = { ...filteredState, selectedNodesIds: [587, 440] };
-  expect(filterStateToURL(newState)).toEqual({
+  expect(appStateToURLParams(newState)).toEqual({
     ...filteredState,
     selectedNodesIds: [587, 440],
     expandedNodesIds: [587, 440]

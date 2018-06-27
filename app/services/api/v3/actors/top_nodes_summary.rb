@@ -84,9 +84,19 @@ module Api
         )
           initialize_top_nodes(node_type, attribute)
 
+          profile_type = Api::V3::Profile.
+            joins(context_node_type: :node_type).
+            where('node_types.name' => node_type).
+            where('context_node_types.context' => @context).
+            select('profiles.name').
+            first
+
+          profile_type_name = profile_type.name unless profile_type.nil?
+
           lines = @top_nodes.map do |node|
             {
               name: node['name'],
+              node_id: node['node_id'],
               geo_id: node['geo_id'],
               values: years.map do |year|
                 year_node = @top_node_values_by_year.find do |value|
@@ -106,6 +116,7 @@ module Api
           {
             lines: lines,
             unit: 't',
+            profile_type: profile_type_name,
             style: {
               type: 'line-points',
               style: 'line-pink-with-points'

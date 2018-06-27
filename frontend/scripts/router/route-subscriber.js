@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import connect from 'connect';
 
 export default function routeSubscriber(store) {
@@ -31,13 +32,28 @@ export default function routeSubscriber(store) {
         });
       }
     }
+
+    onProfilePageChange(location) {
+      // Fix global search on profile pages, to remount the same profile page with different nodeId
+      // TODO: eventually we may remove that when we refactor old style pages to be react components
+      if (
+        location &&
+        ['profileActor', 'profilePlace'].includes(location.type) &&
+        location.type === location.prev.type &&
+        parseInt(location.query.nodeId, 10) !== parseInt(location.prev.query.nodeId, 10)
+      ) {
+        this.filename = null;
+        this.onRouteChange(location);
+      }
+    }
   }
 
-  const mapMethodsToState = () => ({
+  const mapMethodsToState = state => ({
     onRouteChange: {
       _comparedValue: state => state.location.type,
       _returnedValue: state => state.location
-    }
+    },
+    onProfilePageChange: state.location
   });
   const RouterContainer = connect(RouterComponent, mapMethodsToState);
 

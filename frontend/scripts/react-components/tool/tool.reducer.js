@@ -1,4 +1,3 @@
-import { LOAD_CONTEXTS } from 'actions/data.actions';
 import {
   FILTER_LINKS_BY_NODES,
   GET_COLUMNS,
@@ -8,8 +7,6 @@ import {
   GET_MAP_VECTOR_DATA,
   SET_NODE_ATTRIBUTES,
   HIGHLIGHT_NODE,
-  LOAD_INITIAL_CONTEXT,
-  LOAD_INITIAL_DATA,
   SET_FLOWS_LOADING_STATE,
   SET_MAP_LOADING_STATE,
   RESET_SELECTION,
@@ -23,7 +20,6 @@ import {
   SELECT_RESIZE_BY,
   SELECT_VIEW,
   SELECT_YEARS,
-  SET_CONTEXT,
   SET_MAP_DIMENSIONS_SELECTION,
   SET_SANKEY_SEARCH_VISIBILITY,
   SHOW_LINKS_ERROR,
@@ -35,40 +31,43 @@ import {
   COLLAPSE_NODE_SELECTION,
   SET_MAP_DIMENSIONS_DATA
 } from 'actions/tool.actions';
+import {
+  LOAD_INITIAL_CONTEXT,
+  SET_CONTEXT,
+  LOAD_STATE_FROM_URL
+} from 'scripts/actions/app.actions';
 import groupBy from 'lodash/groupBy';
 import isEqual from 'lodash/isEqual';
+import isEmpty from 'lodash/isEmpty';
 import keyBy from 'lodash/keyBy';
-import { createReducer } from 'store';
-import filterLinks from './helpers/filterLinks';
-import getChoropleth from './helpers/getChoropleth';
-import getMapDimensions from './helpers/getMapDimensions';
-import { getMapDimensionsWarnings } from './helpers/getMapDimensionsWarnings';
-import getNodesAtColumns from './helpers/getNodesAtColumns';
-import getNodesColoredBySelection from './helpers/getNodesColoredBySelection';
-import getNodesDict from './helpers/getNodesDict';
-import getRecolorGroups from './helpers/getRecolorGroups';
-import getVisibleNodes from './helpers/getVisibleNodes';
-import mergeLinks from './helpers/mergeLinks';
-import setNodesMeta from './helpers/setNodesMeta';
-import sortVisibleNodes from './helpers/sortVisibleNodes';
-import splitLinksByColumn from './helpers/splitLinksByColumn';
-import splitVisibleNodesByColumn from './helpers/splitVisibleNodesByColumn';
+import { createReducer } from 'scripts/store';
+import { getSelectedNodesColumnsPos } from 'react-components/tool/tool.selectors';
+import filterLinks from 'scripts/reducers/helpers/filterLinks';
+import getChoropleth from 'scripts/reducers/helpers/getChoropleth';
+import getMapDimensions from 'scripts/reducers/helpers/getMapDimensions';
+import { getMapDimensionsWarnings } from 'scripts/reducers/helpers/getMapDimensionsWarnings';
+import getNodesAtColumns from 'scripts/reducers/helpers/getNodesAtColumns';
+import getNodesColoredBySelection from 'scripts/reducers/helpers/getNodesColoredBySelection';
+import getNodesDict from 'scripts/reducers/helpers/getNodesDict';
+import getRecolorGroups from 'scripts/reducers/helpers/getRecolorGroups';
+import getVisibleNodes from 'scripts/reducers/helpers/getVisibleNodes';
+import mergeLinks from 'scripts/reducers/helpers/mergeLinks';
+import setNodesMeta from 'scripts/reducers/helpers/setNodesMeta';
+import sortVisibleNodes from 'scripts/reducers/helpers/sortVisibleNodes';
+import splitLinksByColumn from 'scripts/reducers/helpers/splitLinksByColumn';
+import splitVisibleNodesByColumn from 'scripts/reducers/helpers/splitVisibleNodesByColumn';
 
 export const toolInitialState = {
   choropleth: {},
   choroplethLegend: null,
   columns: [],
-  contexts: [],
-  currentHighlightedChoroplethBucket: null,
   currentQuant: null,
   detailedView: false,
   expandedMapSidebarGroupsIds: [],
   expandedNodesIds: [],
   forcedOverview: false,
   geoIdsDict: {},
-  highlightedGeoIds: [],
   highlightedNodeCoordinates: null,
-  highlightedNodeData: [],
   highlightedNodesIds: [],
   initialDataLoading: false,
   isMapVisible: false,
@@ -91,15 +90,10 @@ export const toolInitialState = {
   recolorGroups: [],
   selectedBiomeFilter: { name: 'none', value: 'none' },
   selectedColumnsIds: [],
-  selectedContext: null,
-  selectedContextId: null,
   selectedMapBasemap: null,
   selectedMapContextualLayers: null,
   selectedMapDimensions: [null, null],
   selectedMapDimensionsWarnings: null,
-  selectedNodesColumnsPos: [],
-  selectedNodesData: [],
-  selectedNodesGeoIds: [],
   selectedNodesIds: [],
   selectedRecolorBy: { type: 'none', name: 'none' },
   selectedResizeBy: { type: 'none', name: 'none' },
@@ -110,28 +104,20 @@ export const toolInitialState = {
 };
 
 const toolReducer = {
-  [LOAD_INITIAL_DATA](state, action) {
-    return { ...state, initialDataLoading: true, ...action.payload };
+  [LOAD_STATE_FROM_URL](state, action) {
+    return { ...state, initialDataLoading: true, ...action.payload.tool };
   },
   [RESET_SELECTION](state) {
     return Object.assign({}, state, {
       highlightedNodesIds: [],
-      highlightedNodeData: [],
-      highlightedGeoIds: [],
       selectedNodesIds: [],
       expandedNodesIds: [],
       selectedBiomeFilter: { value: 'none' },
       recolorByNodeIds: []
     });
   },
-  [LOAD_CONTEXTS](state, action) {
-    return Object.assign({}, state, { contexts: action.payload });
-  },
-  [LOAD_INITIAL_CONTEXT](state) {
-    let selectedContext = state.contexts.find(context => context.id === state.selectedContextId);
-    if (!selectedContext) {
-      selectedContext = state.contexts.find(context => context.isDefault === true);
-    }
+  [LOAD_INITIAL_CONTEXT](state, action) {
+    const selectedContext = action.payload;
 
     let selectedRecolorBy = selectedContext.recolorBy.find(
       recolorBy => recolorBy.name === state.selectedRecolorByName
@@ -178,8 +164,6 @@ const toolReducer = {
     const mapView = state.mapView ? Object.assign({}, state.mapView) : selectedContext.map;
 
     return Object.assign({}, state, {
-      selectedContext,
-      selectedContextId: selectedContext.id,
       selectedYears,
       selectedRecolorBy: selectedRecolorBy || { type: 'none', name: 'none' },
       selectedResizeBy,
@@ -190,8 +174,11 @@ const toolReducer = {
     });
   },
   [SET_CONTEXT](state, action) {
-    const contextId = action.payload;
-    const selectedContext = state.contexts.find(context => context.id === contextId);
+    const selectedContext = action.payload;
+    if (!selectedContext) {
+      return Object.assign({}, state);
+    }
+
     const defaultRecolorBy = selectedContext.recolorBy.find(
       recolorBy => recolorBy.isDefault === true
     );
@@ -200,8 +187,6 @@ const toolReducer = {
       selectedContext.filterBy.length > 0 && selectedContext.filterBy[0][0];
 
     return Object.assign({}, state, {
-      selectedContext,
-      selectedContextId: contextId,
       selectedYears: [selectedContext.defaultYear, selectedContext.defaultYear],
       selectedRecolorBy: defaultRecolorBy || { type: 'none', name: 'none' },
       selectedResizeBy: defaultResizeBy,
@@ -212,9 +197,6 @@ const toolReducer = {
       recolorGroups: [],
       mapView: selectedContext.map,
       selectedNodesIds: [],
-      selectedNodesData: [],
-      selectedNodesGeoIds: [],
-      selectedNodesColumnsPos: [],
       expandedNodesIds: []
     });
   },
@@ -241,14 +223,21 @@ const toolReducer = {
       }
     });
 
+    const { nodesDict, geoIdsDict } = getNodesDict(rawNodes, columns);
+
+    // if any selectedNode, make those columns visible (selected)
+    if (!isEmpty(state.selectedNodesIds)) {
+      state.selectedNodesIds.map(id => nodesDict[id]).forEach(node => {
+        selectedColumnsIds[node.columnGroup] = node.columnId;
+      });
+    }
+
     // TODO the API should have the info on which file to load (if any) per column
     const municipalitiesColumn = columns.find(column => column.name === 'MUNICIPALITY');
     const logisticsHubColumn = columns.find(column => column.name === 'LOGISTICS HUB');
     if (logisticsHubColumn && municipalitiesColumn) {
       logisticsHubColumn.useGeometryFromColumnId = municipalitiesColumn.id;
     }
-
-    const { nodesDict, geoIdsDict } = getNodesDict(rawNodes, columns);
 
     return Object.assign({}, state, {
       columns,
@@ -274,13 +263,10 @@ const toolReducer = {
     // store dimension values in nodesDict as uid: dimensionValue
     const nodesDictWithMeta = setNodesMeta(state.nodesDict, nodesMeta, state.mapDimensions);
 
-    const forceEmptyChoropleth = state.selectedYears[1] - state.selectedYears[0] > 0;
-
     const { choropleth, choroplethLegend } = getChoropleth(
       state.selectedMapDimensions,
       nodesDictWithMeta,
-      state.mapDimensions,
-      forceEmptyChoropleth
+      state.mapDimensions
     );
 
     return Object.assign({}, state, {
@@ -347,42 +333,16 @@ const toolReducer = {
     return Object.assign({}, state, { linkedGeoIds });
   },
   [SELECT_BIOME_FILTER](state, action) {
-    let selectedBiomeFilter;
-    if (action.biomeFilter === 'none') {
-      selectedBiomeFilter = { value: 'none', name: 'none' };
-    } else {
-      const currentContext = state.contexts.find(context => context.id === state.selectedContextId);
-      selectedBiomeFilter = Object.assign(
-        {},
-        currentContext.filterBy[0].nodes.find(filterBy => filterBy.name === action.biomeFilter)
-      );
-      selectedBiomeFilter.geoId = state.nodesDict[selectedBiomeFilter.nodeId].geoId;
-    }
-    return Object.assign({}, state, { selectedBiomeFilter });
+    return Object.assign({}, state, { selectedBiomeFilter: action.payload });
   },
-
   [SELECT_YEARS](state, action) {
     return Object.assign({}, state, { selectedYears: action.years });
   },
   [SELECT_RECOLOR_BY](state, action) {
-    let selectedRecolorBy;
-    if (action.value === 'none') {
-      selectedRecolorBy = { name: 'none' };
-    } else {
-      const currentContext = state.contexts.find(context => context.id === state.selectedContextId);
-      selectedRecolorBy = currentContext.recolorBy.find(
-        recolorBy => recolorBy.name === action.value && recolorBy.type === action.value_type
-      );
-    }
-
-    return Object.assign({}, state, { selectedRecolorBy });
+    return Object.assign({}, state, { selectedRecolorBy: action.payload });
   },
   [SELECT_RESIZE_BY](state, action) {
-    const currentContext = state.contexts.find(context => context.id === state.selectedContextId);
-    const selectedResizeBy = currentContext.resizeBy.find(
-      resizeBy => resizeBy.name === action.resizeBy
-    );
-    return Object.assign({}, state, { selectedResizeBy });
+    return Object.assign({}, state, { selectedResizeBy: action.payload });
   },
   [SELECT_VIEW](state, action) {
     return Object.assign({}, state, {
@@ -401,25 +361,20 @@ const toolReducer = {
   },
   [UPDATE_NODE_SELECTION](state, action) {
     return Object.assign({}, state, {
-      selectedNodesIds: action.ids,
-      selectedNodesData: action.data,
-      selectedNodesGeoIds: action.geoIds,
-      selectedNodesColumnsPos: action.columnsPos
+      selectedNodesIds: action.ids
     });
   },
   [HIGHLIGHT_NODE](state, action) {
     return Object.assign({}, state, {
       highlightedNodesIds: action.ids,
-      highlightedNodeData: action.data,
-      highlightedGeoIds: action.geoIds,
-      highlightedNodeCoordinates: action.coordinates,
-      currentHighlightedChoroplethBucket: action.choroplethBucket
+      highlightedNodeCoordinates: action.coordinates
     });
   },
   [FILTER_LINKS_BY_NODES](state) {
+    const selectedNodesColumnsPos = getSelectedNodesColumnsPos(state);
     const selectedNodesAtColumns = getNodesAtColumns(
       state.selectedNodesIds,
-      state.selectedNodesColumnsPos
+      selectedNodesColumnsPos
     );
 
     const { nodesColoredBySelection, nodesColoredAtColumn } = getNodesColoredBySelection(
@@ -460,27 +415,24 @@ const toolReducer = {
   [SET_MAP_DIMENSIONS_SELECTION](state, action) {
     const selectedMapDimensions = action.uids;
 
-    // TODO Remove that when server correctly implements map dimensions meta/choropleth
-    // ie it shouldn't return choropleth values in get_nodes over multiple years if metadata says data is unavailable
-    const forceEmptyChoropleth = state.selectedYears[1] - state.selectedYears[0] > 0;
-
     const { choropleth, choroplethLegend } = getChoropleth(
       selectedMapDimensions,
       state.nodesDictWithMeta,
-      state.mapDimensions,
-      forceEmptyChoropleth
+      state.mapDimensions
     );
     const selectedMapDimensionsWarnings = getMapDimensionsWarnings(
       state.mapDimensions,
-      selectedMapDimensions
+      selectedMapDimensions,
+      state.selectedYears
     );
 
-    return Object.assign({}, state, {
+    return {
+      ...state,
       selectedMapDimensions,
       selectedMapDimensionsWarnings,
       choropleth,
       choroplethLegend
-    });
+    };
   },
   [TOGGLE_MAP_DIMENSION](state, action) {
     const selectedMapDimensions = state.selectedMapDimensions.slice();
@@ -500,15 +452,25 @@ const toolReducer = {
       selectedMapDimensions[uidIndex] = null;
     }
 
+    const { choropleth, choroplethLegend } = getChoropleth(
+      selectedMapDimensions,
+      state.nodesDictWithMeta,
+      state.mapDimensions
+    );
+
     const selectedMapDimensionsWarnings = getMapDimensionsWarnings(
       state.mapDimensions,
-      selectedMapDimensions
+      selectedMapDimensions,
+      state.selectedYears
     );
-    return Object.assign({}, state, {
+    return {
+      ...state,
       selectedMapDimensions,
       selectedMapDimensionsWarnings,
-      mapLoading: true
-    });
+      mapLoading: true,
+      choropleth,
+      choroplethLegend
+    };
   },
   [SELECT_CONTEXTUAL_LAYERS](state, action) {
     const mapContextualLayersDict = keyBy(state.mapContextualLayers, 'id');
@@ -561,7 +523,7 @@ const toolReducer = {
     return Object.assign({}, state, { expandedMapSidebarGroupsIds });
   },
   [RESET_TOOL_STATE](state, action) {
-    return { ...toolInitialState, contexts: state.contexts, ...action.payload };
+    return { ...toolInitialState, ...action.payload };
   },
   [SET_SANKEY_SEARCH_VISIBILITY](state, action) {
     return Object.assign({}, state, { isSearchOpen: action.searchVisibility });
@@ -572,17 +534,13 @@ const toolReducerTypes = PropTypes => ({
   choropleth: PropTypes.object.isRequired,
   choroplethLegend: PropTypes.object,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
-  contexts: PropTypes.arrayOf(PropTypes.object).isRequired,
-  currentHighlightedChoroplethBucket: PropTypes.string,
   currentQuant: PropTypes.object,
   detailedView: PropTypes.bool,
   expandedMapSidebarGroupsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   expandedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   forcedOverview: PropTypes.bool,
   geoIdsDict: PropTypes.object.isRequired,
-  highlightedGeoIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   highlightedNodeCoordinates: PropTypes.object,
-  highlightedNodeData: PropTypes.arrayOf(PropTypes.object).isRequired,
   highlightedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   initialDataLoading: PropTypes.bool,
   isMapVisible: PropTypes.bool,
@@ -605,15 +563,10 @@ const toolReducerTypes = PropTypes => ({
   recolorGroups: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedBiomeFilter: PropTypes.object,
   selectedColumnsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-  selectedContext: PropTypes.object,
-  selectedContextId: PropTypes.number,
   selectedMapBasemap: PropTypes.string,
   selectedMapContextualLayers: PropTypes.array,
   selectedMapDimensions: PropTypes.array.isRequired,
   selectedMapDimensionsWarnings: PropTypes.string,
-  selectedNodesColumnsPos: PropTypes.arrayOf(PropTypes.number).isRequired,
-  selectedNodesData: PropTypes.arrayOf(PropTypes.object).isRequired,
-  selectedNodesGeoIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   selectedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedRecolorBy: PropTypes.object.isRequired,
   selectedResizeBy: PropTypes.object.isRequired,

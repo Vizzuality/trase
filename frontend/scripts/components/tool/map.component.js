@@ -1,18 +1,33 @@
 import L from 'leaflet';
 import isNumber from 'lodash/isNumber';
+import debounce from 'lodash/debounce';
 // eslint-disable-next-line camelcase
 import turf_bbox from '@turf/bbox';
-import { BASEMAPS, CARTO_BASE_URL, MAP_PANES, MAP_PANES_Z } from 'constants';
+import {
+  BASEMAPS,
+  CARTO_BASE_URL,
+  COLORS,
+  MAP_PANES,
+  MAP_PANES_Z,
+  CHOROPLETH_COLORS
+} from 'constants';
 import 'styles/components/tool/map/leaflet.css';
 import 'styles/components/tool/map.scss';
 import 'styles/components/tool/map/map-legend.scss';
 import 'styles/components/tool/map/map-choropleth.scss';
 
+const POINT_RADIUS = 4;
+
 export default class {
   constructor() {
+    this.canvasRender = !!document.createElement('canvas').getContext && USE_CANVAS_MAP;
+
+    this.darkBasemap = false;
+
     const mapOptions = {
       zoomControl: false,
-      minZoom: 2
+      minZoom: 2,
+      preferCanvas: this.canvasRender
     };
 
     this.map = L.map('js-map', mapOptions);
@@ -30,17 +45,17 @@ export default class {
       this.callbacks.onMoveEnd(this.map.getCenter(), this.map.getZoom())
     );
     this.map.on('zoomend', () => {
-      const z = this.map.getZoom();
-      this._setPaneModifier('-high-zoom', z >= 6);
+      this._recalculatePointVolumeShadowRadius();
     });
+
+    this._setMapViewDebounced = debounce(this._setMapViewDebounced, 500);
 
     Object.keys(MAP_PANES).forEach(paneKey => {
       this.map.createPane(paneKey);
       this.map.getPane(paneKey).style.zIndex = MAP_PANES_Z[paneKey];
     });
-
     this.contextLayers = [];
-    this.polygonFeaturesDict = {};
+    this.pointVolumeShadowLayer = null;
 
     document.querySelector('.js-basemap-switcher').addEventListener('click', () => {
       this.callbacks.onToggleMapLayerMenu();
@@ -53,17 +68,24 @@ export default class {
     this.attributionSource = document.querySelector('.leaflet-control-attribution');
   }
 
-  _setPaneModifier(modifier, value, pane = MAP_PANES.vectorMain) {
-    this.map.getPane(pane).classList.toggle(modifier, value);
-  }
-
   setMapView(mapView) {
     if (mapView === null) return;
 
-    this.map.setView([mapView.latitude, mapView.longitude], mapView.zoom);
+    this._setMapViewDebounced([mapView.latitude, mapView.longitude], mapView.zoom);
   }
 
-  setBasemap(basemapId) {
+  _setMapViewDebounced(latLng, zoom) {
+    this.map.setView(latLng, zoom);
+  }
+
+  setBasemap({
+    basemapId,
+    choropleth,
+    selectedBiomeFilter,
+    linkedGeoIds,
+    defaultMapView,
+    forceDefaultMapView
+  }) {
     if (basemapId === null) return;
 
     if (this.basemap) {
@@ -78,7 +100,14 @@ export default class {
     this.basemap = L.tileLayer(basemapOptions.url, basemapOptions);
     this.map.addLayer(this.basemap);
 
-    this._setPaneModifier('-darkBasemap', basemapOptions.dark === true);
+    this.darkBasemap = basemapOptions.dark === true;
+    this._drawChoroplethLayer(
+      choropleth,
+      selectedBiomeFilter,
+      linkedGeoIds,
+      defaultMapView,
+      forceDefaultMapView
+    );
 
     if (basemapOptions.labelsUrl !== undefined) {
       basemapOptions.pane = MAP_PANES.basemapLabels;
@@ -94,7 +123,8 @@ export default class {
     choropleth,
     linkedGeoIds,
     defaultMapView,
-    biomeFilter
+    biomeFilter,
+    forceDefaultMapView
   }) {
     this.polygonTypesLayers = {};
 
@@ -104,10 +134,7 @@ export default class {
     Object.keys(mapVectorData).forEach(polygonTypeId => {
       const polygonType = mapVectorData[polygonTypeId];
       if (polygonType.useGeometryFromColumnId === undefined) {
-        this.polygonTypesLayers[polygonTypeId] = this._getPolygonTypeLayer(
-          polygonType.geoJSON,
-          polygonType.isPoint
-        );
+        this.polygonTypesLayers[polygonTypeId] = this._createPolygonTypeLayer(polygonType);
       }
     });
 
@@ -123,31 +150,44 @@ export default class {
 
     this.selectPolygonType({ selectedColumnsIds: currentPolygonType, biomeFilter });
     if (selectedNodesGeoIds) {
-      this.selectPolygons({ selectedGeoIds: selectedNodesGeoIds });
+      this.selectPolygons({ selectedGeoIds: selectedNodesGeoIds, linkedGeoIds });
     }
 
     // under normal circumstances, choropleth (depends on loadNodes) and linkedGeoIds (depends on loadLinks)
     // are not available yet, but this is just a fail-safe for race conditions
     if (choropleth) {
-      this._setChoropleth(choropleth);
-    }
-    if (linkedGeoIds && linkedGeoIds.length) {
-      this.showLinkedGeoIds({ linkedGeoIds, defaultMapView });
+      this._drawChoroplethLayer(
+        choropleth,
+        biomeFilter,
+        linkedGeoIds,
+        defaultMapView,
+        forceDefaultMapView
+      );
     }
   }
 
-  selectPolygons({ selectedGeoIds, highlightedGeoId, forceDefaultMapView, defaultMapView }) {
+  selectPolygons({
+    selectedGeoIds,
+    linkedGeoIds,
+    highlightedGeoId,
+    forceDefaultMapView,
+    defaultMapView
+  }) {
     this._outlinePolygons({ selectedGeoIds, highlightedGeoId });
 
     if (forceDefaultMapView === true) {
       this.setMapView(defaultMapView);
-    } else if (
-      this.vectorOutline !== undefined &&
-      selectedGeoIds.length &&
-      this.currentPolygonTypeLayer
-    ) {
+    } else if (!linkedGeoIds || linkedGeoIds.length === 0) {
+      this._fitBoundsToSelectedPolygons(selectedGeoIds);
+    }
+  }
+
+  _fitBoundsToSelectedPolygons(selectedGeoIds) {
+    if (this.vectorOutline !== undefined && selectedGeoIds.length && this.currentPolygonTypeLayer) {
       if (!this.currentPolygonTypeLayer.isPoint) {
-        this.map.fitBounds(this.vectorOutline.getBounds());
+        const bounds = this.vectorOutline.getBounds();
+        const boundsCenterZoom = this.map._getBoundsCenterZoom(bounds);
+        this._setMapViewDebounced(boundsCenterZoom.center, boundsCenterZoom.zoom);
       } else {
         const singlePoint = this.vectorOutline.getBounds().getCenter();
         this.map.setView(singlePoint);
@@ -193,19 +233,32 @@ export default class {
         pointToLayer(feature, latlng) {
           return L.circleMarker(latlng, {
             pane: MAP_PANES.vectorOutline,
-            radius: 6
+            radius: POINT_RADIUS
           });
         }
       });
+      const getClassName = feature => {
+        const classes = [];
+        if (this.currentPolygonTypeLayer.isPoint) classes.push('-point');
+        classes.push(feature.properties.geoid === highlightedGeoId ? '-highlighted' : '-selected');
+        return classes.join(' ');
+      };
       this.vectorOutline.setStyle(feature => ({
-        className: feature.properties.geoid === highlightedGeoId ? '-highlighted' : '-selected'
+        className: getClassName(feature)
       }));
 
       this.map.addLayer(this.vectorOutline);
     }
   }
 
-  selectPolygonType({ selectedColumnsIds, choropleth, biomeFilter }) {
+  selectPolygonType({
+    selectedColumnsIds,
+    choropleth,
+    biomeFilter,
+    linkedGeoIds,
+    defaultMapView,
+    forceDefaultMapView
+  }) {
     if (!this.polygonTypesLayers || !selectedColumnsIds.length) {
       return;
     }
@@ -218,11 +271,13 @@ export default class {
     if (this.currentPolygonTypeLayer) {
       this.map.addLayer(this.currentPolygonTypeLayer);
       if (choropleth) {
-        this._setChoropleth(choropleth);
-      }
-
-      if (biomeFilter) {
-        this.filterByBiome(biomeFilter);
+        this._drawChoroplethLayer(
+          choropleth,
+          biomeFilter,
+          linkedGeoIds,
+          defaultMapView,
+          forceDefaultMapView
+        );
       }
     }
   }
@@ -293,25 +348,84 @@ export default class {
     return layer;
   }
 
-  _getPolygonTypeLayer(geoJSON, isPoint) {
-    this._setPaneModifier('-pointData', isPoint);
-    this._setPaneModifier('-pointData', isPoint, MAP_PANES.vectorOutline);
+  _createPolygonTypeLayer({ geoJSON, isPoint }) {
+    const style = {
+      smoothFactor: 0.9,
+      stroke: true,
+      color: this.darkBasemap ? CHOROPLETH_COLORS.bright_stroke : CHOROPLETH_COLORS.dark_stroke,
+      weight: 0.3,
+      opacity: 0.5,
+      fillColor: CHOROPLETH_COLORS.default_fill,
+      fillOpacity: 1
+    };
+
+    // don't add point layers to canvas
+    // we have problem with port shadow layer being obscured  by canvas layer
+    // which does not pass any pointer events through - and we need to show tooltip
+    const pane = this.canvasRender && !isPoint ? MAP_PANES.overlayPane : MAP_PANES.vectorMain;
+
     const topoLayer = new L.GeoJSON(geoJSON, {
-      pane: MAP_PANES.vectorMain,
-      style: {
-        smoothFactor: 0.9
-      },
+      pane,
+      style,
       pointToLayer: (feature, latlng) =>
         L.circleMarker(latlng, {
-          pane: MAP_PANES.vectorMain,
-          radius: 6
+          pane,
+          radius: POINT_RADIUS
         })
     });
 
     topoLayer.isPoint = isPoint;
+    this._setEventsForTopoLayer(topoLayer);
 
+    return topoLayer;
+  }
+
+  _createPointVolumeShadowLayer(geoJSON, visibleNodes) {
+    const style = {
+      smoothFactor: 0.9,
+      stroke: false,
+      fillColor: COLORS.charcoalGrey,
+      fillOpacity: 0.3
+    };
+
+    const topoLayer = new L.GeoJSON(geoJSON, {
+      pane: MAP_PANES.vectorBelow,
+      style,
+      pointToLayer: (feature, latlng) => {
+        const node = visibleNodes.find(n => n.geoId === feature.properties.geoid);
+        // node is not visible bail
+        if (!node) return null;
+
+        feature.properties.nodeHeight = node.height;
+
+        return L.circleMarker(latlng, {
+          pane: MAP_PANES.vectorBelow,
+          radius: this._calculatePointVolumeShadowRadius(node.height)
+        });
+      }
+    });
+
+    this._setEventsForTopoLayer(topoLayer);
+
+    return topoLayer;
+  }
+
+  _calculatePointVolumeShadowRadius(value) {
+    const zoomRatio = 10 * Math.exp(this.map.getZoom() / 2.5);
+    return POINT_RADIUS + Math.sqrt(value) * zoomRatio;
+  }
+
+  _recalculatePointVolumeShadowRadius() {
+    if (!this.pointVolumeShadowLayer) return;
+
+    this.pointVolumeShadowLayer.eachLayer(marker => {
+      const nodeHeight = marker.feature.properties.nodeHeight;
+      marker.setRadius(this._calculatePointVolumeShadowRadius(nodeHeight));
+    });
+  }
+
+  _setEventsForTopoLayer(topoLayer) {
     topoLayer.eachLayer(layer => {
-      this.polygonFeaturesDict[layer.feature.properties.geoid] = layer;
       const that = this;
       layer.on({
         mouseover(event) {
@@ -327,53 +441,136 @@ export default class {
           if (
             event.target.disabled ||
             (event.target.classList && event.target.classList.contains('-disabled'))
-          )
+          ) {
             return;
+          }
           that.callbacks.onPolygonClicked(this.feature.properties.geoid);
         }
       });
     });
-    return topoLayer;
   }
 
-  setChoropleth({ choropleth, choroplethLegend }) {
-    this._setPaneModifier('-noDimensions', choroplethLegend === null);
+  setChoropleth({
+    choropleth,
+    selectedBiomeFilter,
+    linkedGeoIds,
+    defaultMapView,
+    forceDefaultMapView
+  }) {
     if (!this.currentPolygonTypeLayer) {
       return;
     }
-    this._setChoropleth(choropleth);
+    this._drawChoroplethLayer(
+      choropleth,
+      selectedBiomeFilter,
+      linkedGeoIds,
+      defaultMapView,
+      forceDefaultMapView
+    );
   }
 
-  _setChoropleth(choropleth) {
-    this.currentPolygonTypeLayer.eachLayer(layer => {
-      const choroItem = choropleth[layer.feature.properties.geoid];
-      layer.disabled = !layer.feature.properties.hasFlows;
-      layer._path.classList.toggle('-disabled', layer.disabled);
-
-      const currentBucketClass = layer._path.getAttribute('data-bucketClass');
-      const newBucketClass = choroItem || 'ch-default';
-
-      if (currentBucketClass === null) {
-        layer._path.classList.add(newBucketClass);
-      } else {
-        layer._path.classList.replace(currentBucketClass, newBucketClass);
-      }
-
-      layer._path.setAttribute('data-bucketClass', newBucketClass);
-    });
-  }
-
-  showLinkedGeoIds({ linkedGeoIds, defaultMapView, forceDefaultMapView }) {
-    if (!this.currentPolygonTypeLayer) {
-      return;
-    }
-
-    this._setPaneModifier('-linkedActivated', linkedGeoIds.length);
+  _drawChoroplethLayer(choropleth, biome, linkedGeoIds, defaultMapView, forceDefaultMapView) {
+    if (!this.currentPolygonTypeLayer) return;
 
     const linkedPolygons = [];
+    const hasLinkedGeoIds = linkedGeoIds.length > 0;
+    const hasChoroplethLayersEnabled = Object.values(choropleth).length > 0;
+    const isPoint = this.currentPolygonTypeLayer.isPoint;
+
     this.currentPolygonTypeLayer.eachLayer(layer => {
+      const isFilteredOut =
+        biome === null ||
+        biome.geoId === undefined ||
+        layer.feature.properties.biome_geoid === undefined
+          ? false
+          : biome.geoId !== layer.feature.properties.biome_geoid;
+
       const isLinked = linkedGeoIds.indexOf(layer.feature.properties.geoid) > -1;
-      layer._path.classList.toggle('-linked', isLinked);
+      const choroItem = choropleth[layer.feature.properties.geoid];
+
+      let fillColor = CHOROPLETH_COLORS.default_fill;
+      let weight = isPoint ? 1.5 : 0.3;
+      let fillOpacity = 1;
+      let strokeOpacity = isPoint ? 1 : 0.5;
+      const color = this.darkBasemap
+        ? CHOROPLETH_COLORS.bright_stroke
+        : CHOROPLETH_COLORS.dark_stroke;
+
+      if (isFilteredOut) {
+        // If region is filtered out by biome filter, hide it and bail
+        fillOpacity = 0;
+        strokeOpacity = 0;
+      } else if (hasChoroplethLayersEnabled) {
+        // Handle cases where we have map choropleth layers enabled
+        switch (true) {
+          case hasLinkedGeoIds && isLinked:
+            // There are nodes selected in the sankey, our node is linked to them
+            // Fill with the choropleth color and show thicker borders
+            fillColor = choroItem;
+            weight = 1.2;
+            break;
+          case hasLinkedGeoIds && !isLinked:
+            // There are nodes selected in the sankey, our node is not linked and map has choropleth layers
+            // Show preset color for not linked nodes
+            fillColor = CHOROPLETH_COLORS.fill_not_linked;
+            break;
+          case !!choroItem:
+            // Map has choropleth layers enabled, and sankey has no nodes selected
+            // Show the choropleth color
+            fillColor = choroItem;
+            break;
+          default:
+            // Default state
+            // Show the default fill
+            fillColor = CHOROPLETH_COLORS.default_fill;
+            break;
+        }
+      } else {
+        // Handle cases where we don't have map choropleth layers enabled
+        switch (true) {
+          case hasLinkedGeoIds && isLinked:
+            // There are nodes selected in the sankey, our node is linked to them and map has no choropleth layers
+            // Fill with preset color and show slightly thicker borders
+            fillColor = CHOROPLETH_COLORS.fill_linked;
+            fillOpacity = 1;
+            weight = isPoint ? 1.5 : 0.5;
+            break;
+          case hasLinkedGeoIds && !isLinked:
+            // There are nodes selected in the sankey, our node is not linked and map has choropleth layers
+            // Show preset color for not linked nodes
+            fillColor = CHOROPLETH_COLORS.fill_not_linked;
+            fillOpacity = this.darkBasemap ? 0 : 1;
+            strokeOpacity = isPoint ? 0.4 : strokeOpacity;
+            weight = isPoint ? 1.5 : 0.5;
+            break;
+          case !isPoint:
+            // Default state for not point
+            // Show transparent
+            fillOpacity = 0;
+            break;
+        }
+      }
+
+      if (this.canvasRender) {
+        layer.setStyle({
+          fillColor,
+          fillOpacity,
+          stroke: !isFilteredOut,
+          opacity: strokeOpacity,
+          interactive: !isFilteredOut,
+          color,
+          weight
+        });
+      } else if (typeof layer._path !== 'undefined') {
+        layer.disabled = !layer.feature.properties.hasFlows;
+        layer._path.style.fill = fillColor;
+        layer._path.style.fillOpacity = fillOpacity;
+        layer._path.style.stroke = color;
+        layer._path.style.strokeOpacity = strokeOpacity;
+        layer._path.style.strokeWidth = `${weight}px`;
+        layer._path.style.pointerEvents = isFilteredOut ? 'none' : 'auto';
+      }
+
       if (isLinked) {
         linkedPolygons.push(layer.feature);
       }
@@ -386,8 +583,31 @@ export default class {
       // we use L's _getBoundsCenterZoom internal method + setView as fitBounds does not support a minZoom option
       const bounds = L.latLngBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
       const boundsCenterZoom = this.map._getBoundsCenterZoom(bounds);
-      boundsCenterZoom.zoom = Math.max(boundsCenterZoom.zoom, defaultMapView.zoom);
-      this.map.setView(boundsCenterZoom.center, boundsCenterZoom.zoom);
+      if (defaultMapView) {
+        boundsCenterZoom.zoom = Math.max(boundsCenterZoom.zoom, defaultMapView.zoom);
+      }
+      this._setMapViewDebounced(boundsCenterZoom.center, boundsCenterZoom.zoom);
+    }
+  }
+
+  showLinkedGeoIds({
+    choropleth,
+    selectedBiomeFilter,
+    linkedGeoIds,
+    selectedGeoIds,
+    defaultMapView,
+    forceDefaultMapView
+  }) {
+    this._drawChoroplethLayer(
+      choropleth,
+      selectedBiomeFilter,
+      linkedGeoIds,
+      defaultMapView,
+      forceDefaultMapView
+    );
+
+    if (!forceDefaultMapView && linkedGeoIds.length === 0) {
+      this._fitBoundsToSelectedPolygons(selectedGeoIds);
     }
   }
 
@@ -398,21 +618,60 @@ export default class {
   invalidate() {
     // recalculates map size once CSS transition ends
     this.map.invalidateSize(true);
-    setTimeout(() => {
+    const mapContainer = this.map.getContainer();
+    let oldWidth = mapContainer.clientWidth;
+
+    const invalidateSizeDebounced = debounce(() => {
       this.map.invalidateSize(true);
-    }, 850);
+    }, 200);
+
+    const interval = window.setInterval(() => {
+      if (mapContainer) {
+        const width = mapContainer.clientWidth;
+        if (width !== oldWidth) {
+          oldWidth = width;
+          invalidateSizeDebounced();
+        }
+      }
+    }, 50);
+
+    window.setTimeout(() => {
+      window.clearInterval(interval);
+    }, 3000);
   }
 
-  filterByBiome(biome) {
-    if (!this.currentPolygonTypeLayer) {
-      return;
+  filterByBiome({
+    choropleth,
+    selectedBiomeFilter,
+    linkedGeoIds,
+    defaultMapView,
+    forceDefaultMapView
+  }) {
+    this._drawChoroplethLayer(
+      choropleth,
+      selectedBiomeFilter,
+      linkedGeoIds,
+      defaultMapView,
+      forceDefaultMapView
+    );
+  }
+
+  updatePointShadowLayer({ mapVectorData, visibleNodes }) {
+    if (!mapVectorData) return;
+
+    if (this.pointVolumeShadowLayer) {
+      this.map.removeLayer(this.pointVolumeShadowLayer);
     }
-    this.currentPolygonTypeLayer.eachLayer(layer => {
-      const isFilteredOut =
-        biome.geoId === undefined || layer.feature.properties.biome_geoid === undefined
-          ? false
-          : biome.geoId !== layer.feature.properties.biome_geoid;
-      layer._path.classList.toggle('-filteredOut', isFilteredOut);
-    });
+
+    const polygonTypeId = Object.keys(mapVectorData)[0];
+    const polygonType = mapVectorData[polygonTypeId];
+
+    if (!polygonType.isPoint) return;
+
+    this.pointVolumeShadowLayer = this._createPointVolumeShadowLayer(
+      polygonType.geoJSON,
+      visibleNodes
+    );
+    this.map.addLayer(this.pointVolumeShadowLayer);
   }
 }
