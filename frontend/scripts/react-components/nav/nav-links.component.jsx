@@ -29,23 +29,34 @@ const NavLinks = props => {
     isActiveLink
   } = props;
 
-  console.log(links);
   const checkLink = isActiveLink || isActive;
   return (
     <React.Fragment>
       {links.map(mapLinksToRouter).map(link => (
         <li key={link.name} className={link.itemClassName || itemClassName}>
-          <NavLink
-            exact
-            strict
-            to={link.page}
-            className={link.linkClassName || linkClassName}
-            activeClassName={link.linkActiveClassName || linkActiveClassName}
-            isActive={(...params) => checkLink(...params, link)}
-            {...navLinkProps}
-          >
-            {link.children || link.name}
-          </NavLink>
+          {link.external && (
+            <a
+              href={link.page}
+              className={link.linkClassName || linkClassName}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {link.children || link.name}
+            </a>
+          )}
+          {!link.external && (
+            <NavLink
+              exact
+              strict
+              to={link.page}
+              className={link.linkClassName || linkClassName}
+              activeClassName={link.linkActiveClassName || linkActiveClassName}
+              isActive={(...params) => checkLink(...params, link)}
+              {...navLinkProps}
+            >
+              {link.children || link.name}
+            </NavLink>
+          )}
         </li>
       ))}
     </React.Fragment>

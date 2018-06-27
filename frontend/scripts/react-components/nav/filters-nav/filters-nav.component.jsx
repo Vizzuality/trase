@@ -86,7 +86,11 @@ class FiltersNav extends React.PureComponent {
 
     navLinks.splice(-2, 0, {
       name: 'Yearbook',
-      page: `https://yearbook2018.${window.location.hostname}`,
+      page: `https://yearbook2018.${
+        window.location.hostname === 'staging.trase.earth'
+          ? window.location.hostname
+          : 'trase.earth'
+      }`,
       external: true
     });
 
