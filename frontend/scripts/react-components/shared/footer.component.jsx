@@ -58,19 +58,20 @@ const sections = [
     logos: [
       [
         {
-          className: 'wwf-logo',
-          href: 'https://www.worldwildlife.org/',
-          image: '/images/footer/donors/wwf@2x.png',
-          alt: 'WWF',
-          imageClassName: null
-        },
-        {
           className: 'gef-logo',
           href: 'https://www.thegef.org/',
           image: '/images/footer/donors/gef@2x.png',
           alt: 'The Global Environment Facility',
           imageClassName: null
         },
+        {
+          className: 'wwf-logo',
+          href: 'https://www.worldwildlife.org/',
+          image: '/images/footer/donors/wwf@2x.png',
+          alt: 'WWF',
+          imageClassName: null
+        },
+
         {
           className: 'eustars-logo',
           href: 'https://ec.europa.eu/',
@@ -88,6 +89,15 @@ const sections = [
           imageClassName: null
         },
         {
+          className: 'conservancy-logo',
+          href: 'https://www.nature.org/',
+          image: '/images/footer/donors/nature-conservancy@2x.png',
+          alt: 'The Nature Conservancy',
+          imageClassName: null
+        }
+      ],
+      [
+        {
           className: 'ukaidsv-logo',
           href:
             'https://www.gov.uk/government/organisations/department-for-international-development',
@@ -100,15 +110,6 @@ const sections = [
           href: 'http://www.formas.se/en/',
           image: '/images/footer/donors/formas@2x.png',
           alt: 'Formas',
-          imageClassName: null
-        }
-      ],
-      [
-        {
-          className: 'conservancy-logo',
-          href: 'https://www.nature.org/',
-          image: '/images/footer/donors/nature-conservancy@2x.png',
-          alt: 'The Nature Conservancy',
           imageClassName: null
         }
       ]
