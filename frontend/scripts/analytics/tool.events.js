@@ -26,7 +26,18 @@ export default [
     type: UPDATE_NODE_SELECTION,
     category: 'Sankey',
     action: 'Update node selection',
-    getPayload: action => action.data.map(d => d.name).join(',')
+    getPayload: (action, state) => {
+      const nodeNames = [];
+
+      action.ids.forEach(d => {
+        const node = state.tool.nodesDict[d];
+        if (typeof node !== 'undefined') {
+          nodeNames.push(node.name);
+        }
+      });
+
+      return nodeNames.join(',');
+    }
   },
   {
     type: SELECT_BIOME_FILTER,
