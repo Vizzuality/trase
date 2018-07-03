@@ -31,6 +31,7 @@ module Cache
           context = Api::V3::Context.
             joins(:commodity, :country).
             find_by('countries.iso2' => 'BR', 'commodities.name' => 'SOY')
+          return [] unless context.present? # allow to terminate normally
           volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless volume_attribute.present?
           years = context.flows.joins(:flow_quants).
