@@ -46,6 +46,10 @@ module Api
         zero_based_idx && zero_based_idx + 1 || 0
       end
 
+      def self.select_options
+        order(:name).map { |node_type| [node_type.name, node_type.id] }
+      end
+
       def self.import_key
         [
           {name: :name, sql_type: 'TEXT'}

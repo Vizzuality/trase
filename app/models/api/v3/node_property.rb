@@ -23,10 +23,16 @@ module Api
     class NodeProperty < YellowTable
       belongs_to :node
 
+      after_commit :refresh_dependencies
+
       def self.blue_foreign_keys
         [
           {name: :node_id, table_class: Api::V3::Node}
         ]
+      end
+
+      def refresh_dependencies
+        Api::V3::Readonly::Node.refresh
       end
     end
   end
