@@ -34,6 +34,20 @@ module Api
       def refresh_dependencies
         Api::V3::Readonly::Node.refresh
       end
+
+      def self.insert_missing_node_properties
+        sql = <<-SQL
+          WITH node_ids_without_property AS (
+            SELECT nodes.id AS node_id FROM nodes
+            LEFT JOIN node_properties ON node_properties.node_id = nodes.id
+            WHERE node_properties.id IS NULL
+          )
+          INSERT INTO node_properties(node_id, is_domestic_consumption, created_at, updated_at)
+          SELECT node_id, FALSE, NOW(), NOW()
+          FROM node_ids_without_property
+        SQL
+        connection.execute sql
+      end
     end
   end
 end
