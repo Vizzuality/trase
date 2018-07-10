@@ -23,6 +23,8 @@ module Api
     class NodeProperty < YellowTable
       belongs_to :node
 
+      validates :node, presence: true, uniqueness: true
+
       after_commit :refresh_dependencies
 
       def self.blue_foreign_keys
