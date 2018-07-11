@@ -20,6 +20,10 @@ function columnSelector({
     column => column.id === selectedColumnsIds[group]
   )[0];
 
+  if (typeof selectedColumnItem === 'undefined') {
+    return null;
+  }
+
   const hasSingleElement = columnItems.length <= 1;
 
   return (

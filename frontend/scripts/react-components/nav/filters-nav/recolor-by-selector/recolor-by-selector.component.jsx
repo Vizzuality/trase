@@ -132,7 +132,7 @@ class RecolorBySelector extends Component {
       legendSummary = <RecolorByNodeLegendSummary />;
     }
 
-    const hasZeroOrSingleElement = recolorBys.length <= 1;
+    const hasZeroOrSingleElement = recolorBys.length < 1;
 
     return (
       <div

@@ -130,6 +130,9 @@ module Api
             # restore dependent yellow tables
             yellow_tables.each do |yellow_table_class|
               yellow_table_cnt = RestoreYellowTable.new(yellow_table_class).call
+              if yellow_table_class == Api::V3::NodeProperty
+                Api::V3::NodeProperty.insert_missing_node_properties
+              end
               @stats[table_class.table_name][:yellow_tables][yellow_table_class.table_name][:after] = yellow_table_cnt
             end
           end
@@ -151,7 +154,7 @@ module Api
             Api::V3::Readonly::MapAttribute,
             Api::V3::Readonly::RecolorByAttribute,
             Api::V3::Readonly::ResizeByAttribute,
-            # TODO: Api::V3::Readonly::Node,
+            Api::V3::Readonly::Node,
             Api::V3::Readonly::DownloadFlow
           ].each(&:refresh)
         end

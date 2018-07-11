@@ -206,7 +206,9 @@ const toolReducer = {
 
     // context-dependant columns
     const columnsByGroupObj = groupBy(columns, 'group');
-    const columnsByGroup = [0, 0, 0, 0].map((e, i) => columnsByGroupObj[i]);
+    const columnsByGroup = [0, 0, 0, 0]
+      .map((e, i) => columnsByGroupObj[i])
+      .filter(n => typeof n !== 'undefined');
 
     const selectedColumnsIds = [];
     columnsByGroup.forEach((group, i) => {

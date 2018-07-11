@@ -104,5 +104,39 @@
         }
       ]
     }
+  },
+  {
+    "version": "0.0.1",
+    "id": "col_protected_areas",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT * FROM protected_areas",
+            "cartocss": "#col_protected_areas{   polygon-opacity: 0.5;   polygon-fill:#B4D84F;   line-color: #B4D84F;   line-width: 1;   line-opacity: 1;}",
+            "cartocss_version": "2.3.0"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "version": "0.0.1",
+    "id": "col_adm1_1",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT the_geom_webmercator FROM col_adm1_1",
+            "cartocss": "#col_department_boundries { polygon-opacity: 0;    line-color: #000000;    line-width: 1;    line-opacity: 1;}",
+            "cartocss_version": "2.3.0"
+          }
+        }
+      ]
+    }
   }
 ]

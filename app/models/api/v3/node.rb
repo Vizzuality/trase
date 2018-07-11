@@ -132,6 +132,10 @@ module Api
         rel
       end
 
+      def self.select_options
+        order(:name).map { |node| [node.name, node.id] }
+      end
+
       def self.import_key
         [
           {name: :name, sql_type: 'TEXT'},

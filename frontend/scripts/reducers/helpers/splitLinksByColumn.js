@@ -22,6 +22,10 @@ export default function(rawLinks, nodesDict, selectedRecolorBy) {
         }
       }
 
+      if (!sourceNode || !targetNode) {
+        return;
+      }
+
       links.push({
         sourceNodeId,
         targetNodeId,
