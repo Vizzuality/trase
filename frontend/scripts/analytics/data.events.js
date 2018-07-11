@@ -53,7 +53,7 @@ export default [
 
       Object.keys(payload).forEach(key => {
         const value = payload[key];
-        if (value && value.length) {
+        if (value && value instanceof Array && value.length) {
           payloadStringComponents.push(`${key}=${value.join(',')}`);
         } else {
           payloadStringComponents.push(`${key}=${value}`);
