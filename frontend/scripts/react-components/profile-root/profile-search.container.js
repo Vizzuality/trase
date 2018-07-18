@@ -22,4 +22,7 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileSearch);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProfileSearch);

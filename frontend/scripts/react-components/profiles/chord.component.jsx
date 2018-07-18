@@ -132,7 +132,7 @@ class Chord extends Component {
       .attr(
         'transform',
         d =>
-          `rotate(${d.angle * 180 / Math.PI - 90}) translate(${innerRadius + 24}) ${
+          `rotate(${(d.angle * 180) / Math.PI - 90}) translate(${innerRadius + 24}) ${
             d.angle > Math.PI ? 'rotate(180)' : ''
           }`
       )

@@ -27,4 +27,8 @@ const mapViewCallbacksToActions = () => ({
   onToggleMapLayerMenu: () => toggleMapLayerMenu()
 });
 
-export default connect(MapLegend, mapMethodsToState, mapViewCallbacksToActions);
+export default connect(
+  MapLegend,
+  mapMethodsToState,
+  mapViewCallbacksToActions
+);

@@ -7,4 +7,7 @@ const mapStateToProps = state => ({ urlLang: state.app.languageCode });
 
 const mapDispatchToProps = dispatch => bindActionCreators({ onTranslate: setLanguage }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(LocaleSelector);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LocaleSelector);

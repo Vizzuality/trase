@@ -45,7 +45,7 @@ class MiniSankey extends Component {
     const nodeWidth = isSmallResolution ? NODE_WIDTH_SMALL : NODE_WIDTH;
     const textMinWidth = isSmallResolution ? 130 : 200;
     const leftTextRotate = isSmallResolution ? '-90' : '0';
-    const rightTextWidth = Math.max(width * TEXT_WIDTH_PERCENTAGE / 100, textMinWidth);
+    const rightTextWidth = Math.max((width * TEXT_WIDTH_PERCENTAGE) / 100, textMinWidth);
     const leftTextWidth = isSmallResolution ? 20 : rightTextWidth;
     const sankeyWidth = width - (leftTextWidth + rightTextWidth);
     const sankeyXStart = leftTextWidth;
@@ -116,7 +116,7 @@ class MiniSankey extends Component {
                 <text
                   className="end"
                   transform={`translate(${nodeWidth + 10},
-                ${13 + node.renderedHeight / 2 - TEXT_LINE_HEIGHT * node.lines.length / 2})`}
+                ${13 + node.renderedHeight / 2 - (TEXT_LINE_HEIGHT * node.lines.length) / 2})`}
                 >
                   {node.lines.map((line, i) => (
                     <tspan key={i} y={i * TEXT_LINE_HEIGHT} x="0">

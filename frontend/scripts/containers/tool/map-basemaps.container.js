@@ -14,4 +14,8 @@ const mapViewCallbacksToActions = () => ({
   onMapBasemapSelected: basemapId => selectMapBasemap(basemapId)
 });
 
-export default connect(mapBasemaps, mapMethodsToState, mapViewCallbacksToActions);
+export default connect(
+  mapBasemaps,
+  mapMethodsToState,
+  mapViewCallbacksToActions
+);

@@ -18,4 +18,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ViewSelector);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ViewSelector);

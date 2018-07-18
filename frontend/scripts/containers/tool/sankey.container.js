@@ -77,4 +77,8 @@ const mapViewCallbacksToActions = () => ({
   onClearClick: () => resetState()
 });
 
-export default connect(Sankey, mapMethodsToState, mapViewCallbacksToActions);
+export default connect(
+  Sankey,
+  mapMethodsToState,
+  mapViewCallbacksToActions
+);

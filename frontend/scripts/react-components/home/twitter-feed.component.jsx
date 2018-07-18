@@ -28,7 +28,9 @@ class TwitterFeed extends React.PureComponent {
   }
 
   setFeedInterval() {
-    const { tweets: { length } } = this.props;
+    const {
+      tweets: { length }
+    } = this.props;
     if (this.interval) clearInterval(this.interval);
     this.interval = setInterval(
       () => this.setState(state => ({ current: (state.current + 1) % (length || 1) })),

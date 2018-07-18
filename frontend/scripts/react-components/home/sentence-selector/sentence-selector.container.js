@@ -16,4 +16,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => bindActionCreators({ selectContextById }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(SentenceSelector);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SentenceSelector);
