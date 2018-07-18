@@ -128,7 +128,7 @@
     "whatwg-fetch": "2.0.4"
   },
   "engines": {
-    "node": "10.6.0"
+    "node": ">=8.2.1"
   },
   "jest": {
     "rootDir": "scripts",
