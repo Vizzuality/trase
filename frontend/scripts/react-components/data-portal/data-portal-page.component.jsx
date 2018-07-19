@@ -97,9 +97,11 @@ class DataContent extends Component {
     this.setState(state => {
       const selectedIndicators = union(state.selectedIndicators, [filter.name]);
 
+      const { indicators } = this.props;
+
       return {
         selectedIndicators,
-        allIndicatorsSelected: selectedIndicators.length === this.props.indicators.length,
+        allIndicatorsSelected: selectedIndicators.length === indicators.length,
         selectedIndicatorsFilters: {
           ...state.selectedIndicatorsFilters,
           [filter.name]: filter
@@ -125,57 +127,68 @@ class DataContent extends Component {
   }
 
   onClickEventHandler(group, value = null) {
+    const {
+      selectedExporters,
+      selectedYears,
+      selectedConsumptionCountries,
+      selectedIndicators,
+      selectedIndicatorsFilters
+    } = this.state;
+    const { selectedContext, contexts, exporters, consumptionCountries, indicators } = this.props;
+
     switch (group) {
       case 'countries': {
         this.setState({ selectedCountry: value });
         break;
       }
       case 'commodities': {
-        const selectedContext = this.props.contexts.find(
+        const newSelectedContext = contexts.find(
           elem => elem.isDisabled !== true && elem.id === value
         );
         this.setState({ selectedCommodity: value });
-        if (selectedContext) {
-          this.props.onContextSelected(selectedContext.id);
+        if (newSelectedContext) {
+          this.props.onContextSelected(newSelectedContext.id);
         }
         break;
       }
       case 'years': {
-        const selectedYears = xor(this.state.selectedYears, [value]);
-        const { selectedContext } = this.props;
+        const newSelectedYears = xor(selectedYears, [value]);
         this.setState({
-          selectedYears,
-          allYearsSelected: selectedYears.length === selectedContext.years.length
+          selectedYears: newSelectedYears,
+          allYearsSelected: newSelectedYears.length === selectedContext.years.length
         });
         break;
       }
       case 'exporters': {
-        const selectedExporters = xor(this.state.selectedExporters, [value]);
+        const newSelectedExporters = xor(selectedExporters, [value]);
         this.setState({
-          selectedExporters,
-          allExportersSelected: selectedExporters.length === this.props.exporters.length
+          selectedExporters: newSelectedExporters,
+          allExportersSelected: newSelectedExporters.length === exporters.length
         });
         break;
       }
       case 'consumption-countries': {
-        const selectedConsumptionCountries = xor(this.state.selectedConsumptionCountries, [value]);
+        const newSelectedConsumptionCountries = xor(selectedConsumptionCountries, [value]);
         const allConsumptionCountriesSelected =
-          selectedConsumptionCountries.length === this.props.consumptionCountries.length;
-        this.setState({ selectedConsumptionCountries, allConsumptionCountriesSelected });
+          selectedConsumptionCountries.length === consumptionCountries.length;
+        this.setState({
+          selectedConsumptionCountries: newSelectedConsumptionCountries,
+          allConsumptionCountriesSelected
+        });
         break;
       }
       case 'indicators': {
-        const selectedIndicators = xor(this.state.selectedIndicators, [value]);
-        const selectedIndicatorsFilters = { ...this.state.selectedIndicatorsFilters };
+        const newSelectedIndicators = xor(selectedIndicators, [value]);
+        const newSelectedIndicatorsFilters = { ...selectedIndicatorsFilters };
 
-        if (!selectedIndicators.includes(value)) {
-          delete selectedIndicatorsFilters[value];
+        if (!newSelectedIndicators.includes(value)) {
+          delete newSelectedIndicatorsFilters[value];
         }
 
         this.setState({
-          selectedIndicators,
-          selectedIndicatorsFilters,
-          allIndicatorsSelected: selectedIndicators.length === this.props.indicators.length
+          selectedIndicators: newSelectedIndicators,
+          selectedIndicatorsFilters: newSelectedIndicatorsFilters,
+          allIndicatorsSelected: newSelectedIndicators.length === indicators.length
         });
         break;
       }
@@ -183,61 +196,68 @@ class DataContent extends Component {
   }
 
   onAllSelected(group) {
+    const {
+      allYearsSelected,
+      allExportersSelected,
+      allConsumptionCountriesSelected,
+      allIndicatorsSelected
+    } = this.state;
+    const { indicators, consumptionCountries, selectedContext } = this.props;
+
     switch (group) {
       case 'years': {
-        if (this.state.allYearsSelected) {
+        if (allYearsSelected) {
           this.setState({
             selectedYears: [],
-            allYearsSelected: !this.state.allYearsSelected
+            allYearsSelected: !allYearsSelected
           });
         } else {
-          const { selectedContext } = this.props;
           this.setState({
             selectedYears: selectedContext.years,
-            allYearsSelected: !this.state.allYearsSelected
+            allYearsSelected: !allYearsSelected
           });
         }
         break;
       }
       case 'exporters': {
-        if (this.state.allExportersSelected) {
+        if (allExportersSelected) {
           this.setState({
             selectedExporters: [],
-            allExportersSelected: !this.state.allExportersSelected
+            allExportersSelected: !allExportersSelected
           });
         } else {
           this.setState({
             selectedExporters: this.props.exporters.map(elem => elem.id),
-            allExportersSelected: !this.state.allExportersSelected
+            allExportersSelected: !allExportersSelected
           });
         }
         break;
       }
       case 'consumption-countries': {
-        if (this.state.allConsumptionCountriesSelected) {
+        if (allConsumptionCountriesSelected) {
           this.setState({
             selectedConsumptionCountries: [],
-            allConsumptionCountriesSelected: !this.state.allConsumptionCountriesSelected
+            allConsumptionCountriesSelected: !allConsumptionCountriesSelected
           });
         } else {
           this.setState({
-            selectedConsumptionCountries: this.props.consumptionCountries.map(elem => elem.id),
-            allConsumptionCountriesSelected: !this.state.allConsumptionCountriesSelected
+            selectedConsumptionCountries: consumptionCountries.map(elem => elem.id),
+            allConsumptionCountriesSelected: !allConsumptionCountriesSelected
           });
         }
         break;
       }
       case 'indicators': {
-        if (this.state.allIndicatorsSelected) {
+        if (allIndicatorsSelected) {
           this.setState({
             selectedIndicators: [],
             selectedIndicatorsFilters: {},
-            allIndicatorsSelected: !this.state.allIndicatorsSelected
+            allIndicatorsSelected: !allIndicatorsSelected
           });
         } else {
           this.setState({
-            selectedIndicators: this.props.indicators.map(elem => elem.name),
-            allIndicatorsSelected: !this.state.allIndicatorsSelected
+            selectedIndicators: indicators.map(elem => elem.name),
+            allIndicatorsSelected: !allIndicatorsSelected
           });
         }
         break;
@@ -251,7 +271,7 @@ class DataContent extends Component {
     }
     const contextId = this.props.selectedContext.id;
     const file = this.state.fileExtension;
-    const outputType = this.state.outputType;
+    const { outputType } = this.state;
     const params = {
       context_id: contextId
     };

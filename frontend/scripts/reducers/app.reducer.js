@@ -15,7 +15,7 @@ import {
   LOAD_STATE_FROM_URL,
   SET_LANGUAGE
 } from 'actions/app.actions';
-import { createReducer } from 'store';
+import createReducer from 'utils/createReducer';
 
 const initialState = {
   windowSize: [window.innerWidth, window.innerHeight],

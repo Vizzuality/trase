@@ -6,7 +6,7 @@ import { geoRobinson as d3_geoRobinson } from 'd3-geo-projection';
 import { feature as topojsonFeature } from 'topojson';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Responsive } from 'react-components/shared/responsive.hoc';
+import Responsive from 'react-components/shared/responsive.hoc';
 
 class Map extends Component {
   componentDidMount() {

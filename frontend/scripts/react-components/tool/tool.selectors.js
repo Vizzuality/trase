@@ -8,7 +8,8 @@ const getNodeSelectedMeta = (selectedMapDimension, node, selectedResizeByLabel, 
   const meta = node.meta[selectedMapDimension];
   if (meta && meta.name !== selectedResizeByLabel) {
     return meta;
-  } else if (
+  }
+  if (
     meta &&
     visibleNode &&
     visibleNode.quant &&

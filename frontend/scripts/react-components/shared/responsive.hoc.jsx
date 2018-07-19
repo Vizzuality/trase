@@ -3,7 +3,7 @@ import debounce from 'lodash/debounce';
 
 const DEFAULT_DEBOUNCE_RATE = 200;
 
-export function Responsive({ debounceRate = DEFAULT_DEBOUNCE_RATE } = {}) {
+export default function({ debounceRate = DEFAULT_DEBOUNCE_RATE } = {}) {
   return function ResponsiveEnhancer(WrappedComponent) {
     return class extends Component {
       constructor(props) {

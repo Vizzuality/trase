@@ -9,13 +9,6 @@ import 'styles/components/tool/tool-search.scss';
 import 'styles/components/tool/tool-search-result.scss';
 
 export default class ToolSearch extends Component {
-  static getNodeIds(selectedItem) {
-    return selectedItem.id
-      .toString()
-      .split('_')
-      .map(n => parseInt(n, 10));
-  }
-
   static isValidChar(key) {
     const deburredKey = deburr(key);
     return /^([a-z]|[A-Z]){1}$/.test(deburredKey);
@@ -101,6 +94,13 @@ export default class ToolSearch extends Component {
 
   onKeyup() {
     this.setState(state => ({ charPressedCount: state.charPressedCount - 1 }));
+  }
+
+  static getNodeIds(selectedItem) {
+    return selectedItem.id
+      .toString()
+      .split('_')
+      .map(n => parseInt(n, 10));
   }
 
   isNodeSelected(node) {

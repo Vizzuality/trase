@@ -19,7 +19,7 @@ export function loadContextNodes(contextId) {
         const flowNodes = payload.nodes.filter(node => node.hasFlows === true);
         const exporters = flowNodes.filter(node => node.type === 'EXPORTER');
         const consumptionCountries = flowNodes.filter(node => node.type === 'COUNTRY');
-        const indicators = payload.indicators;
+        const { indicators } = payload;
 
         dispatch({
           type: LOAD_EXPORTERS,

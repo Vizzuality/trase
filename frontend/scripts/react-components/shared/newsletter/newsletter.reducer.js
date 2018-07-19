@@ -1,4 +1,4 @@
-import { createReducer } from 'store';
+import createReducer from 'utils/createReducer';
 import {
   NEWSLETTER__SET_SUBSCRIPTION_MESSAGE,
   NEWSLETTER__RESET_NEWSLETTER

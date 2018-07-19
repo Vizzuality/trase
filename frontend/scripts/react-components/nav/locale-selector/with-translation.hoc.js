@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-export function withTranslation(Component) {
+export default function(Component) {
   const mapStateToProps = state => {
     const { query = {} } = state.location;
     return { lang: query.lang };

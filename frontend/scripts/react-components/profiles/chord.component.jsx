@@ -105,7 +105,8 @@ class Chord extends Component {
       .attr('class', (d, i) => {
         if (i === 0) {
           return 'arc-current';
-        } else if (allNames[i].type === TYPE_KEY_2) {
+        }
+        if (allNames[i].type === TYPE_KEY_2) {
           return 'arc-active';
         }
         return 'arc-default';

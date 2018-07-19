@@ -4,9 +4,9 @@ import thunk from 'redux-thunk';
 import rangeTouch from 'rangetouch';
 import analyticsMiddleware from 'analytics/middleware';
 import { toolUrlStateMiddleware } from 'utils/stateURL';
+import * as appReducers from 'store';
 import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
-import * as appReducers from './store';
 import { register, unregister } from './worker';
 
 // analytics middleware has to be after router.middleware

@@ -1,7 +1,7 @@
 import React from 'react';
 import SidebarNav from 'react-components/nav/sidebar-nav/sidebar-nav.container';
 
-export function withSidebarNavLayout(Component) {
+export default function(Component) {
   function SidebarNavLayoutHOC() {
     return (
       <div className="row">
