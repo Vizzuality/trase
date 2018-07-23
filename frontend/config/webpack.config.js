@@ -79,12 +79,18 @@ module.exports = {
       connect: path.resolve(srcPath, 'base', 'connect'),
       Container: path.resolve(srcPath, 'base', 'Container'),
       store: path.resolve(srcPath, 'store'),
+      gql: path.resolve(srcPath, 'gql'),
       router: path.resolve(srcPath, 'router')
     },
     extensions: ['.js', '.jsx']
   },
   module: {
     rules: [
+      {
+        type: 'javascript/auto',
+        test: /\.mjs$/,
+        use: []
+      },
       {
         test: /\.ejs$/,
         exclude: /node_modules/,

@@ -45,26 +45,6 @@ class WorldMap extends Component {
     this.renderCountriesAnnotations = this.renderCountriesAnnotations.bind(this);
   }
 
-  componentDidMount() {
-    if (this.props.flows.length === 0 && this.props.selectedContext && this.props.selectedYears) {
-      this.props.getTopNodes();
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.selectedContext) {
-      return;
-    }
-
-    if (
-      !this.props.selectedContext ||
-      nextProps.selectedContext.id !== this.props.selectedContext.id ||
-      xor(nextProps.selectedYears, this.props.selectedYears).length !== 0
-    ) {
-      this.props.getTopNodes();
-    }
-  }
-
   shouldComponentUpdate(nextProps) {
     return nextProps.flows.length !== 0;
   }
@@ -184,8 +164,7 @@ WorldMap.propTypes = {
   origin: PropTypes.object,
   selectedContext: PropTypes.object,
   selectedYears: PropTypes.array,
-  originCountries: PropTypes.array,
-  getTopNodes: PropTypes.func.isRequired
+  originCountries: PropTypes.array
 };
 
 export default WorldMap;
