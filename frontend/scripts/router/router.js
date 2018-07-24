@@ -61,19 +61,9 @@ export const routes = {
     },
     thunk: loadPageData()
   },
-  profileActor: {
-    path: '/profile-actor',
-    page: 'profile-actor',
-    title: getPageTitle,
-    nav: {
-      className: '-light',
-      printable: true
-    },
-    thunk: loadPageData()
-  },
-  profilePlace: {
-    path: '/profile-place',
-    page: 'profile-place',
+  profileNode: {
+    path: '/profile-:profileType',
+    page: 'profile-node',
     title: getPageTitle,
     nav: {
       className: '-light',

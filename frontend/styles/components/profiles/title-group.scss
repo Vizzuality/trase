@@ -1,0 +1,52 @@
+
+.c-title-group {
+  display: flex;
+
+  .title-group-element {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &:not(:last-child) {
+      margin-right: 41px;
+    }
+
+    .title-group-label {
+      margin-bottom: 0;
+      color: rgba($charcoal-grey, .6);
+      font-size: $font-size-x-regular;
+      font-weight: normal;
+      font-family: $font-family-1;
+      line-height: 1em;
+      letter-spacing: -.5px;
+      text-transform: uppercase;
+    }
+
+    .title-group-content {
+      padding: 0 30px 0 0;
+      color: $charcoal-grey;
+      font-family: $font-family-2;
+      font-size: $font-size-huge;
+      font-weight: $font-weight-bold;
+    }
+
+    &.-dropdown {
+      cursor: pointer;
+
+      .dropdown-list {
+        width: 100%;
+        top: 100%;
+      }
+    }
+
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      &:first-child {
+        width: 100%;
+      }
+
+      &:not(:last-child) {
+        margin-right: 21px;
+      }
+    }
+  }
+}

@@ -24,6 +24,7 @@ export const GET_TESTIMONIALS_URL = 'GET_TESTIMONIALS_URL';
 export const GET_MARKDOWN_CONTENT_URL = 'GET_MARKDOWN_CONTENT_URL';
 export const GET_TEAM_URL = 'GET_TEAM_URL';
 export const GET_TOP_NODES_URL = 'GET_TOP_NODES_URL';
+export const GET_NODE_SUMMARY_URL = 'GET_NODE_SUMMARY_URL';
 
 const API_ENDPOINTS = {
   [GET_CONTEXTS_URL]: { api: 3, endpoint: '/contexts' },
@@ -64,7 +65,11 @@ const API_ENDPOINTS = {
     endpoint: '/staff_groups',
     mock: '/mocks/v3_get_team.json'
   },
-  [GET_TOP_NODES_URL]: { api: 3, endpoint: '/contexts/$context_id$/top_nodes' }
+  [GET_TOP_NODES_URL]: { api: 3, endpoint: '/contexts/$context_id$/top_nodes' },
+  [GET_NODE_SUMMARY_URL]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/$profile_type$/$node_id$/basic_attributes'
+  }
 };
 
 function replaceURLParams(endpoint, params) {

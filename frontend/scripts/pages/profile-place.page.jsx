@@ -171,7 +171,7 @@ const _build = (data, year, onLinkClick, store) => {
       <Provider store={store}>
         <TranslatedMiniSankey
           data={data.top_consumer_actors}
-          targetLink="profileActor"
+          targetLink="profileNode"
           year={year}
           showTooltipCallback={showTooltipCallback}
           hideTooltipCallback={tooltip.hide}
@@ -211,7 +211,7 @@ const _build = (data, year, onLinkClick, store) => {
           data={data.indicators}
           tabsTitle="Sustainability indicators:"
           type="t_head_places"
-          target={item => (item.name === 'Municipalities' ? 'profilePlace' : null)}
+          target={item => (item.name === 'Municipalities' ? 'profileNode' : null)}
           year={year}
         />
       </Provider>,
@@ -341,7 +341,7 @@ const _switchYear = (store, nodeId, dropdownYear) => {
   // eslint-disable-next-line no-use-before-define
   _loadData(store, nodeId, dropdownYear);
   store.dispatch({
-    type: 'profilePlace',
+    type: 'profileNode',
     payload: { query: { nodeId, year: dropdownYear } }
   });
 };
@@ -405,11 +405,11 @@ const _loadData = (store, nodeId, year) => {
       );
 
       render(
-        <HelpTooltip text={get(tooltips, 'profilePlace.soyLand')} position="bottom" />,
+        <HelpTooltip text={get(tooltips, 'profileNode.soyLand')} position="bottom" />,
         document.getElementById('soy-land-tooltip')
       );
       render(
-        <HelpTooltip text={get(tooltips, 'profilePlace.soyProduction')} position="bottom" />,
+        <HelpTooltip text={get(tooltips, 'profileNode.soyProduction')} position="bottom" />,
         document.getElementById('soy-production-tooltip')
       );
 

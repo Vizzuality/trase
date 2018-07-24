@@ -1,23 +1,17 @@
 /* eslint-disable no-new */
 import Tooltip from 'components/shared/info-tooltip.component';
-import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST, DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
-import FeedbackMarkup from 'html/includes/_feedback.ejs';
-import ProfileActorMarkup from 'html/profile-actor.ejs';
+import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST } from 'constants';
 import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
 import React from 'react';
 import withTranslation from 'react-components/nav/locale-selector/with-translation.hoc';
-import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import ChoroLegend from 'react-components/profiles/choro-legend.component';
 import DropdownTabSwitcher from 'react-components/profiles/dropdown-tab-switcher.component';
 import Line from 'react-components/profiles/line.component';
 import Map from 'react-components/profiles/map.component';
 import MultiTable from 'react-components/profiles/multi-table.component';
 import Scatterplot from 'react-components/profiles/scatterplot.component';
-import Dropdown from 'react-components/shared/dropdown.component';
-import Footer from 'react-components/shared/footer.component';
-import HelpTooltip from 'react-components/shared/help-tooltip.component';
-import { render, unmountComponentAtNode } from 'react-dom';
+import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import 'styles/profile-actor.scss';
 import addApostrophe from 'utils/addApostrophe';
@@ -26,7 +20,6 @@ import { GET_ACTOR_FACTSHEET_URL, getURLFromParams } from 'utils/getURLFromParam
 import { translateNode, translateText } from 'utils/transifex';
 
 import smoothScroll from 'utils/smoothScroll';
-import { getDefaultContext } from 'scripts/reducers/helpers/contextHelper';
 
 const defaults = {
   country: 'Brazil',
@@ -63,7 +56,7 @@ const _initSource = (selectedSource, data, year, onLinkClick, store) => {
         xValues={data.top_sources.included_years}
         settings={settings}
         useBottomLegend
-        targetLink="profilePlace"
+        targetLink="profileNode"
         onLinkClick={onLinkClick}
         year={year}
       />
@@ -143,18 +136,6 @@ const _build = (data, { nodeId, year, print }, onLinkClick, store) => {
   const verb = data.column_name === 'EXPORTER' ? 'exported' : 'imported';
   const verbGerund = data.column_name === 'EXPORTER' ? 'exporting' : 'importing';
   const { tooltips } = store.getState().app;
-
-  render(
-    <HelpTooltip
-      text={get(tooltips, 'profileActor.zeroDeforestationCommitment')}
-      position="bottom"
-    />,
-    document.getElementById('zero-deforestation-tooltip')
-  );
-  render(
-    <HelpTooltip text={get(tooltips, 'profileActor.forest500Score')} position="bottom" />,
-    document.getElementById('forest-500-tooltip')
-  );
 
   lineSettings = {
     margin: {
@@ -327,9 +308,9 @@ const _build = (data, { nodeId, year, print }, onLinkClick, store) => {
             id="sustainability"
             data={filteredData}
             tabsTitle={title}
-            tabsTitleTooltip={get(tooltips, 'profileActor.deforestationRisk')}
+            tabsTitleTooltip={get(tooltips, 'profileNode.deforestationRisk')}
             type="t_head_actors"
-            target={item => (item.name === 'Municipalities' ? 'profilePlace' : null)}
+            target={item => (item.name === 'Municipalities' ? 'profileNode' : null)}
             year={year}
           />
         </Provider>,
@@ -388,95 +369,8 @@ const _build = (data, { nodeId, year, print }, onLinkClick, store) => {
   }
 };
 
-const _setInfo = (info, onLinkClick, { nodeId, year, contextId }) => {
-  document.querySelector('.js-name').textContent = info.name ? capitalize(info.name) : '-';
-
-  const nameSpan = document.createElement('span');
-  nameSpan.classList.add('notranslate');
-  nameSpan.textContent = capitalize(info.name);
-
-  const linkButtonNode = document.querySelector('.js-link-button-name');
-  linkButtonNode.innerHTML = '';
-  linkButtonNode.appendChild(nameSpan);
-  linkButtonNode.appendChild(document.createTextNode(`${addApostrophe(info.name)} PROFILE`));
-  translateNode(linkButtonNode);
-
-  document.querySelector('.js-legend').textContent = info.type || '-';
-  document.querySelector('.js-country').textContent = info.country ? capitalize(info.country) : '-';
-  if (info.forest_500 > 0) {
-    document
-      .querySelector('.js-forest-500-score .circle-icon[data-value="1"] use')
-      .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
-  }
-  if (info.forest_500 > 1) {
-    document
-      .querySelector('.js-forest-500-score .circle-icon[data-value="2"] use')
-      .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
-  }
-  if (info.forest_500 > 2) {
-    document
-      .querySelector('.js-forest-500-score .circle-icon[data-value="3"] use')
-      .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
-  }
-  if (info.forest_500 > 3) {
-    document
-      .querySelector('.js-forest-500-score .circle-icon[data-value="4"] use')
-      .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
-  }
-  if (info.forest_500 > 4) {
-    document
-      .querySelector('.js-forest-500-score .circle-icon[data-value="5"] use')
-      .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#icon-circle-filled');
-  }
-  if (info.zero_deforestation === 'YES') {
-    document
-      .querySelector('.js-zero-deforestation-commitment [data-value="yes"]')
-      .classList.remove('is-hidden');
-  } else {
-    document
-      .querySelector('.js-zero-deforestation-commitment [data-value="no"]')
-      .classList.remove('is-hidden');
-  }
-  document.querySelector('.js-link-map').addEventListener('click', () =>
-    onLinkClick('tool', {
-      state: {
-        isMapVisible: true,
-        selectedNodesIds: [parseInt(nodeId, 10)],
-        expandedNodesIds: [parseInt(nodeId, 10)],
-        selectedYears: [year, year],
-        selectedContextId: contextId
-      }
-    })
-  );
-
-  document.querySelector('.js-link-supply-chain').addEventListener('click', () =>
-    onLinkClick('tool', {
-      state: {
-        isMapVisible: false,
-        selectedNodesIds: [parseInt(nodeId, 10)],
-        expandedNodesIds: [parseInt(nodeId, 10)],
-        selectedYears: [year, year],
-        selectedContextId: contextId
-      }
-    })
-  );
-  document.querySelector('.js-summary-text').innerHTML = info.summary ? info.summary : '-';
-};
-
 const _setEventListeners = () => {
   smoothScroll([].slice.call(document.querySelectorAll('.js-link-profile')));
-};
-
-const onLinkClick = store => (type, params) => store.dispatch({ type, payload: { query: params } });
-
-const setLoading = (isLoading = true) => {
-  if (isLoading) {
-    document.querySelector('.js-loading').classList.remove('is-hidden');
-    document.querySelector('.js-wrap').classList.add('is-hidden');
-  } else {
-    document.querySelector('.js-loading').classList.add('is-hidden');
-    document.querySelector('.js-wrap').classList.remove('is-hidden');
-  }
 };
 
 const _showErrorMessage = (message = null) => {
@@ -495,7 +389,7 @@ const _switchYear = (store, nodeId, dropdownYear) => {
   // eslint-disable-next-line no-use-before-define
   _loadData(store, nodeId, dropdownYear);
   store.dispatch({
-    type: 'profileActor',
+    type: 'profileNode',
     payload: { query: { nodeId, year: dropdownYear } }
   });
 };
@@ -525,34 +419,7 @@ const _loadData = (store, nodeId, year, print) => {
         data.node_name
       )} ${data.column_name.toLowerCase()} profile`;
 
-      setLoading(false);
-
-      const info = {
-        type: data.column_name,
-        name: data.node_name,
-        country: data.country_name,
-        forest_500: data.forest_500,
-        zero_deforestation: data.zero_deforestation,
-        summary: data.summary
-      };
-
-      _setInfo(info, onLinkClick(store), {
-        nodeId,
-        year,
-        contextId: getDefaultContext(store.getState()).id
-      });
       _setEventListeners();
-
-      render(
-        <Dropdown
-          size="big"
-          label="Year"
-          value={year}
-          valueList={[2010, 2011, 2012, 2013, 2014, 2015]}
-          onValueSelected={dropdownYear => _switchYear(store, nodeId, dropdownYear)}
-        />,
-        document.getElementById('year-dropdown')
-      );
 
       _build(data, { nodeId, year, print }, onLinkClick(store), store);
     })
@@ -563,47 +430,5 @@ const _loadData = (store, nodeId, year, print) => {
 };
 
 export const mount = (root, store) => {
-  const { query = {} } = store.getState().location;
-  const { nodeId } = query;
-  const print = query.print === 'true';
-  const year = query.year ? parseInt(query.year, 10) : DEFAULT_PROFILE_PAGE_YEAR;
-
-  root.innerHTML = ProfileActorMarkup({
-    printMode: print,
-    feedback: FeedbackMarkup()
-  });
-
-  render(
-    <Provider store={store}>
-      <TopNav />
-    </Provider>,
-    document.getElementById('nav')
-  );
-
-  render(
-    <Provider store={store}>
-      <Footer />
-    </Provider>,
-    document.getElementById('footer')
-  );
-
   _loadData(store, nodeId, year, print);
-};
-
-export const unmount = () => {
-  unmountComponentAtNode(document.querySelector('.js-top-municipalities-chart'));
-  unmountComponentAtNode(document.querySelector('.js-top-municipalities-map'));
-  unmountComponentAtNode(document.querySelector('.js-top-municipalities-title-container'));
-  unmountComponentAtNode(document.querySelector('.js-source-legend'));
-  unmountComponentAtNode(document.querySelector('.js-destination-legend'));
-  unmountComponentAtNode(document.querySelector('.js-top-destination-chart'));
-  unmountComponentAtNode(document.getElementById('year-dropdown'));
-  unmountComponentAtNode(document.querySelector('.js-top-destination-map'));
-  unmountComponentAtNode(document.querySelector('.js-sustainability-table'));
-  unmountComponentAtNode(document.querySelector('.js-scatterplot-container'));
-  unmountComponentAtNode(document.getElementById('zero-deforestation-tooltip'));
-  unmountComponentAtNode(document.getElementById('forest-500-tooltip'));
-  unmountComponentAtNode(document.getElementById('year-dropdown'));
-  unmountComponentAtNode(document.getElementById('nav'));
-  unmountComponentAtNode(document.getElementById('footer'));
 };

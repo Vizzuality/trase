@@ -3,7 +3,6 @@ import { DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
 import capitalize from 'lodash/capitalize';
 import isEmpty from 'lodash/isEmpty';
 
-export const SET_PROFILE_SEARCH_NODES = 'SET_PROFILE_SEARCH_NODES';
 export const SET_PROFILE_SEARCH_TERM = 'SET_PROFILE_SEARCH_TERM';
 export const LOAD_PROFILE_SEARCH_RESULTS = 'LOAD_PROFILE_SEARCH_RESULTS';
 export const SET_PROFILE_ROOT_ERROR_MESSAGE = 'SET_PROFILE_ROOT_ERROR_MESSAGE';
