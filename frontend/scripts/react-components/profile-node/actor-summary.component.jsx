@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
-
+import withWidget from 'react-components/widgets/with-widget.hoc';
 import HelpTooltip from 'react-components/shared/help-tooltip.component';
 import TitleGroup from 'react-components/profile-node/title-group.component';
 
@@ -105,4 +105,4 @@ ActorSummary.propTypes = {
   zero_deforestation: PropTypes.string
 };
 
-export default ActorSummary;
+export default withWidget(ActorSummary);

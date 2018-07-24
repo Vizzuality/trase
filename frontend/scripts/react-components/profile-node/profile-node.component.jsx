@@ -3,9 +3,15 @@ import PropTypes from 'prop-types';
 
 import ActorSummary from 'react-components/profile-node/actor-summary.component';
 import ButtonLinks from 'react-components/profile-node/button-links.component';
+import { GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 
 const ProfileNode = props => {
-  const { printMode, year, nodeId, contextId } = props;
+  const { printMode, year, nodeId, contextId = 6, profileType } = props;
+  const params = {
+    context_id: contextId,
+    profile_type: profileType,
+    node_id: nodeId
+  };
   return (
     <div className="l-profile-actor">
       {printMode && (
@@ -17,7 +23,12 @@ const ProfileNode = props => {
           </div>
         </div>
       )}
-      <ActorSummary printMode={printMode} year={year} />
+      <ActorSummary
+        printMode={printMode}
+        year={year}
+        endpoint={GET_NODE_SUMMARY_URL}
+        params={params}
+      />
       <ButtonLinks year={year} nodeId={nodeId} contextId={contextId} />
     </div>
   );
@@ -30,10 +41,9 @@ ProfileNode.defaultProps = {
 ProfileNode.propTypes = {
   year: PropTypes.number,
   printMode: PropTypes.bool,
-  tooltips: PropTypes.object.isRequired,
-  nodeId: PropTypes.number.isRequired,
-  info: PropTypes.object.isRequired,
-  contextId: PropTypes.number.isRequired
+  profileType: PropTypes.string,
+  nodeId: PropTypes.string.isRequired,
+  contextId: PropTypes.string.isRequired
 };
 
 export default ProfileNode;
