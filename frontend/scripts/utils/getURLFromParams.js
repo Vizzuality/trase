@@ -68,7 +68,7 @@ const API_ENDPOINTS = {
   [GET_TOP_NODES_URL]: { api: 3, endpoint: '/contexts/$context_id$/top_nodes' },
   [GET_NODE_SUMMARY_URL]: {
     api: 3,
-    endpoint: '/context/$context_id$/$profile_type$s/$node_id$/basic_attributes'
+    endpoint: '/contexts/$context_id$/$profile_type$s/$node_id$/basic_attributes'
   }
 };
 

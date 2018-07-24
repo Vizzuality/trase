@@ -7,10 +7,11 @@ function mapStateToProps(state) {
     payload: { profileType }
   } = state.location;
   return {
-    year,
-    nodeId,
     profileType,
-    printMode: print
+    contextId: 1,
+    printMode: print,
+    year: parseInt(year, 10),
+    nodeId: parseInt(nodeId, 10)
   };
 }
 

@@ -71,7 +71,7 @@ function ButtonLinks(props) {
 
 ButtonLinks.propTypes = {
   name: PropTypes.string,
-  year: PropTypes.string.isRequired,
+  year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,
   contextId: PropTypes.number.isRequired
 };

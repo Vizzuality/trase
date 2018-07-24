@@ -5,9 +5,13 @@ import { connect } from 'react-redux';
 import { getWidgetData } from 'react-components/widgets/widgets.actions';
 
 function withWidget(Component) {
-  const mapStateToProps = (state, { endpoint }) => {
+  const mapStateToProps = (state, { endpoint, params, ...ownProps }) => {
     const { endpoints } = state.widgets;
-    return { widget: endpoints[endpoint] };
+    return {
+      params,
+      ownProps,
+      widget: endpoints[endpoint]
+    };
   };
   const mapDispatchToProps = dispatch => bindActionCreators({ getWidgetData }, dispatch);
 
@@ -17,10 +21,19 @@ function withWidget(Component) {
       widget: PropTypes.shape({
         data: PropTypes.any,
         error: PropTypes.any,
-        loading: PropTypes.bool.isRequired
+        loading: PropTypes.bool
       }),
+      ownProps: PropTypes.any,
       endpoint: PropTypes.string.isRequired,
       getWidgetData: PropTypes.func.isRequired
+    };
+
+    static defaultProps = {
+      widget: {
+        data: {},
+        error: null,
+        loading: true
+      }
     };
 
     componentDidMount() {
@@ -29,8 +42,8 @@ function withWidget(Component) {
     }
 
     render() {
-      const { widget } = this.props;
-      return <Component {...widget} />;
+      const { widget, ownProps } = this.props;
+      return <Component {...widget} {...ownProps} />;
     }
   }
 

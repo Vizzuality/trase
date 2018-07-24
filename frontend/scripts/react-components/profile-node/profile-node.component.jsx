@@ -6,7 +6,7 @@ import ButtonLinks from 'react-components/profile-node/button-links.component';
 import { GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 
 const ProfileNode = props => {
-  const { printMode, year, nodeId, contextId = 6, profileType } = props;
+  const { printMode, year, nodeId, contextId, profileType } = props;
   const params = {
     context_id: contextId,
     profile_type: profileType,
@@ -34,16 +34,12 @@ const ProfileNode = props => {
   );
 };
 
-ProfileNode.defaultProps = {
-  year: 2015
-};
-
 ProfileNode.propTypes = {
-  year: PropTypes.number,
   printMode: PropTypes.bool,
-  profileType: PropTypes.string,
-  nodeId: PropTypes.string.isRequired,
-  contextId: PropTypes.string.isRequired
+  year: PropTypes.number.isRequired,
+  nodeId: PropTypes.number.isRequired,
+  contextId: PropTypes.number.isRequired,
+  profileType: PropTypes.string.isRequired
 };
 
 export default ProfileNode;
