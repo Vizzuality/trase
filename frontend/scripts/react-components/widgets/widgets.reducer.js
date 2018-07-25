@@ -1,6 +1,7 @@
 import createReducer from 'utils/createReducer';
 import camelCase from 'lodash/camelCase';
 import {
+  WIDGETS__INIT_ENDPOINT,
   WIDGETS__SET_ENDPOINT_DATA,
   WIDGETS__SET_ENDPOINT_ERROR,
   WIDGETS__SET_ENDPOINT_LOADING
@@ -9,14 +10,18 @@ import {
 const initialState = {
   endpoints: {
     /**
-     * { [endpoint]: { data, error, loading } }
+     * { [endpoint]: { key, data, error, loading } }
      */
   }
 };
 
-const defaultEndpoint = { data: {}, loading: true, error: null };
+const defaultEndpoint = key => ({ data: {}, loading: true, error: null, key });
 
 const widgetsReducer = {
+  [WIDGETS__INIT_ENDPOINT](state, action) {
+    const { endpoint, key } = action.payload;
+    return { ...state, endpoints: { ...state.endpoints, [endpoint]: defaultEndpoint(key) } };
+  },
   [WIDGETS__SET_ENDPOINT_DATA](state, action) {
     const { endpoint, data } = action.payload;
     const camelCaseData = Object.entries(data).reduce(
@@ -28,7 +33,6 @@ const widgetsReducer = {
       endpoints: {
         ...state.endpoints,
         [endpoint]: {
-          ...defaultEndpoint,
           ...state.endpoints[endpoint],
           data: camelCaseData
         }
@@ -42,7 +46,6 @@ const widgetsReducer = {
       endpoints: {
         ...state.endpoints,
         [endpoint]: {
-          ...defaultEndpoint,
           ...state.endpoints[endpoint],
           loading
         }

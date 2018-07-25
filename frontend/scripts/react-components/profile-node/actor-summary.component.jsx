@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+/* eslint-disable camelcase,react/no-danger */
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -14,25 +14,26 @@ class ActorSummary extends React.PureComponent {
       year,
       tooltips,
       printMode,
-      data: { nodeName, columnName, country, summary, forest500, zeroDeforestation } = {}
+      onYearChange,
+      data: { nodeName, columnName, summary, forest500, zeroDeforestation, countryName } = {}
     } = this.props;
     const titles = [
       { name: nodeName, label: capitalize(columnName) },
-      { name: country, label: 'Country' },
+      { name: countryName, label: 'Country' },
       { name: 'Soy', label: 'Commodity' },
       {
         dropdown: true,
         label: 'Year',
         value: year,
         valueList: [2010, 2011, 2012, 2013, 2014, 2015],
-        onValueSelected: console.log
+        onValueSelected: onYearChange
       }
     ];
     return (
       <div className="c-overall-info">
         <div className="row">
           <div className="small-12 columns">
-            <TitleGroup titles={titles} />
+            <TitleGroup titles={titles} on={onYearChange} />
           </div>
           <div className="small-12 columns">
             <div className="stat-item zero-deforestation-commitment js-zero-deforestation-commitment">
@@ -95,7 +96,8 @@ ActorSummary.propTypes = {
   year: PropTypes.number,
   data: PropTypes.object,
   printMode: PropTypes.bool,
-  tooltips: PropTypes.object
+  tooltips: PropTypes.object,
+  onYearChange: PropTypes.func.isRequired
 };
 
 export default withWidget(ActorSummary);

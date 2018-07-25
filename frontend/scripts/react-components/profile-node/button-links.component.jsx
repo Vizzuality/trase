@@ -3,9 +3,16 @@ import PropTypes from 'prop-types';
 import addApostrophe from 'utils/addApostrophe';
 import capitalize from 'lodash/capitalize';
 import Link from 'redux-first-router-link';
+import withWidget from 'react-components/widgets/with-widget.hoc';
 
 function ButtonLinks(props) {
-  const { name, year, nodeId, contextId } = props;
+  const {
+    year,
+    nodeId,
+    contextId,
+    data: { nodeName, municipalityName }
+  } = props;
+  const name = nodeName || municipalityName;
   return (
     <div className="c-anchor-buttons hide-for-small">
       <div className="row">
@@ -26,8 +33,8 @@ function ButtonLinks(props) {
               payload: {
                 state: {
                   isMapVisible: true,
-                  selectedNodesIds: [parseInt(nodeId, 10)],
-                  expandedNodesIds: [parseInt(nodeId, 10)],
+                  selectedNodesIds: [nodeId],
+                  expandedNodesIds: [nodeId],
                   selectedYears: [year, year],
                   selectedContextId: contextId
                 }
@@ -49,8 +56,8 @@ function ButtonLinks(props) {
               payload: {
                 state: {
                   isMapVisible: false,
-                  selectedNodesIds: [parseInt(nodeId, 10)],
-                  expandedNodesIds: [parseInt(nodeId, 10)],
+                  selectedNodesIds: [nodeId],
+                  expandedNodesIds: [nodeId],
                   selectedYears: [year, year],
                   selectedContextId: contextId
                 }
@@ -70,10 +77,10 @@ function ButtonLinks(props) {
 }
 
 ButtonLinks.propTypes = {
-  name: PropTypes.string,
+  data: PropTypes.any,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,
   contextId: PropTypes.number.isRequired
 };
 
-export default ButtonLinks;
+export default withWidget(ButtonLinks);

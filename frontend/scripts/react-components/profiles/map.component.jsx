@@ -4,6 +4,7 @@ import { json as d3_json } from 'd3-request';
 import { geoPath as d3_geoPath, geoMercator as d3_geoMercator } from 'd3-geo';
 import { geoRobinson as d3_geoRobinson } from 'd3-geo-projection';
 import { feature as topojsonFeature } from 'topojson';
+import isEqual from 'lodash/isEqual';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Responsive from 'react-components/shared/responsive.hoc';
@@ -11,6 +12,22 @@ import Responsive from 'react-components/shared/responsive.hoc';
 class Map extends Component {
   componentDidMount() {
     this.build();
+  }
+
+  shouldComponentUpdate(nextProps) {
+    const {
+      getPolygonClassName: cb1,
+      hideTooltipCallback: cb2,
+      showTooltipCallback: cb3,
+      ...next
+    } = nextProps;
+    const {
+      getPolygonClassName,
+      hideTooltipCallback,
+      showTooltipCallback,
+      ...current
+    } = this.props;
+    return !isEqual(next, current);
   }
 
   componentDidUpdate() {

@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import ProfileNode from 'react-components/profile-node/profile-node.component';
 
 function mapStateToProps(state) {
@@ -15,4 +16,19 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(ProfileNode);
+const updateQueryParams = (query, profileType) => ({
+  type: 'profileNode',
+  payload: { query, profileType }
+});
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      updateQueryParams
+    },
+    dispatch
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProfileNode);
