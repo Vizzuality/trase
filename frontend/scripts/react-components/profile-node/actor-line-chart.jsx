@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import cx from 'classnames';
 import capitalize from 'lodash/capitalize';
 import Line from 'react-components/profiles/line.component';
+import Tooltip from 'components/shared/info-tooltip.component';
 import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
-import PropTypes from 'prop-types';
+import formatValue from 'utils/formatValue';
 
 const TranslatedLine = withTranslation(Line);
 
@@ -22,7 +24,31 @@ class ActorLineChart extends Component {
       yTickFormatType: 'top-location',
       xTickPadding: 15
     },
-    lineClassNameCallback: (lineIndex, lineDefaultStyle) => `${lineDefaultStyle} line-${lineIndex}`
+    lineClassNameCallback: (lineIndex, lineDefaultStyle) => `${lineDefaultStyle} line-${lineIndex}`,
+    hideTooltipCallback: () => this.tooltip && this.tooltip.hide(),
+    showTooltipCallback: (location, x, y) => {
+      const {
+        data: { nodeName }
+      } = this.props;
+      if (this.tooltip) {
+        this.tooltip.show(
+          x,
+          y,
+          `${nodeName} > ${location.name.toUpperCase()}, ${location.date.getFullYear()}`,
+          [
+            {
+              title: 'Trade volume',
+              value: formatValue(location.value, 'Trade volume'),
+              unit: 't'
+            }
+          ]
+        );
+      }
+    }
+  };
+
+  getTooltipRef = ref => {
+    this.tooltip = new Tooltip(ref);
   };
 
   render() {
@@ -34,6 +60,7 @@ class ActorLineChart extends Component {
     const verb = columnName === 'EXPORTER' ? 'exported' : 'imported';
     return (
       <section className="c-top-map page-break-inside-avoid">
+        <div className="c-info-tooltip is-hidden" ref={this.getTooltipRef} />
         <div className="row">
           <div
             className={cx('small-12', 'columns', {
