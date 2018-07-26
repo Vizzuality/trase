@@ -4,7 +4,7 @@ import { ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST } from 'constants';
 import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
 import React from 'react';
-import withTranslation from 'react-components/nav/locale-selector/with-translation.hoc';
+import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
 import ChoroLegend from 'react-components/profiles/choro-legend.component';
 import DropdownTabSwitcher from 'react-components/profiles/dropdown-tab-switcher.component';
 import Line from 'react-components/profiles/line.component';

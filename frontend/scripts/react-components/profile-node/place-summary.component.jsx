@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
-import withWidget from 'react-components/widgets/with-widget.hoc';
 import HelpTooltip from 'react-components/shared/help-tooltip.component';
 import TitleGroup from 'react-components/profile-node/title-group.component';
 import Map from 'react-components/profiles/map.component';
@@ -186,4 +185,4 @@ PlaceSummary.propTypes = {
   onYearChange: PropTypes.func.isRequired
 };
 
-export default withWidget(PlaceSummary);
+export default PlaceSummary;

@@ -15,7 +15,7 @@ const initialState = {
   }
 };
 
-const defaultEndpoint = key => ({ data: {}, loading: true, error: null, key });
+const defaultEndpoint = key => ({ data: null, loading: true, error: null, key });
 
 const widgetsReducer = {
   [WIDGETS__INIT_ENDPOINT](state, action) {
@@ -24,17 +24,19 @@ const widgetsReducer = {
   },
   [WIDGETS__SET_ENDPOINT_DATA](state, action) {
     const { endpoint, data } = action.payload;
-    const camelCaseData = Object.entries(data).reduce(
-      (acc, [key, value]) => ({ ...acc, [camelCase(key)]: value }),
-      {}
-    );
+    const parsedData = Array.isArray(data)
+      ? data
+      : Object.entries(data).reduce(
+          (acc, [key, value]) => ({ ...acc, [camelCase(key)]: value }),
+          {}
+        );
     return {
       ...state,
       endpoints: {
         ...state.endpoints,
         [endpoint]: {
           ...state.endpoints[endpoint],
-          data: camelCaseData
+          data: parsedData
         }
       }
     };

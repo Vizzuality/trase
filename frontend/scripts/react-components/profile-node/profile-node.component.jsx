@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import ActorSummary from 'react-components/profile-node/actor-summary.component';
-import ButtonLinks from 'react-components/profile-node/button-links.component';
-import { GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
-import PlaceSummary from 'react-components/profile-node/place-summary.component';
+import SummaryWidget from 'react-components/profile-node/profile-node-widgets/summary-widget.component';
+import TopDestinationsWidget from 'react-components/profile-node/profile-node-widgets/top-destinations-widget.component';
+import SustainabilityIndicatorsWidget from 'react-components/profile-node/profile-node-widgets/sustainability-indicators-widget.component';
 
 class ProfileNode extends React.PureComponent {
   onYearChange = year => this.updateQuery('year', year);
@@ -16,11 +14,6 @@ class ProfileNode extends React.PureComponent {
 
   render() {
     const { printMode, year, nodeId, contextId, profileType } = this.props;
-    const params = {
-      context_id: contextId,
-      profile_type: profileType,
-      node_id: nodeId
-    };
     return (
       <div className="l-profile-actor">
         {printMode && (
@@ -32,31 +25,22 @@ class ProfileNode extends React.PureComponent {
             </div>
           </div>
         )}
+
+        <SummaryWidget
+          year={year}
+          printMode={printMode}
+          contextId={contextId}
+          profileType={profileType}
+          nodeId={nodeId}
+          onYearChange={this.onYearChange}
+        />
+
         {profileType === 'actor' && (
-          <ActorSummary
-            printMode={printMode}
-            year={year}
-            endpoint={GET_NODE_SUMMARY_URL}
-            params={params}
-            onYearChange={this.onYearChange}
-          />
+          <TopDestinationsWidget year={year} nodeId={nodeId} contextId={contextId} />
         )}
         {profileType === 'place' && (
-          <PlaceSummary
-            printMode={printMode}
-            year={year}
-            onYearChange={this.onYearChange}
-            endpoint={GET_NODE_SUMMARY_URL}
-            params={params}
-          />
+          <SustainabilityIndicatorsWidget year={year} nodeId={nodeId} contextId={contextId} />
         )}
-        <ButtonLinks
-          year={year}
-          nodeId={nodeId}
-          contextId={contextId}
-          endpoint={GET_NODE_SUMMARY_URL}
-          params={params}
-        />
       </div>
     );
   }

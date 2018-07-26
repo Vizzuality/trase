@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import addApostrophe from 'utils/addApostrophe';
 import capitalize from 'lodash/capitalize';
 import Link from 'redux-first-router-link';
-import withWidget from 'react-components/widgets/with-widget.hoc';
 
 function ButtonLinks(props) {
   const {
@@ -83,4 +82,4 @@ ButtonLinks.propTypes = {
   contextId: PropTypes.number.isRequired
 };
 
-export default withWidget(ButtonLinks);
+export default ButtonLinks;
