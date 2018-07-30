@@ -43,18 +43,6 @@ class Explore extends React.PureComponent {
     this.handleTableUnitChange = this.handleTableUnitChange.bind(this);
   }
 
-  componentDidMount() {
-    const { topNodesKey, selectedTableColumn } = this.props;
-    if (topNodesKey) this.props.getTableElements(selectedTableColumn);
-  }
-
-  componentDidUpdate(prevProps) {
-    const { topNodesKey, selectedTableColumn } = this.props;
-    if (topNodesKey && prevProps.topNodesKey !== topNodesKey) {
-      this.props.getTableElements(selectedTableColumn);
-    }
-  }
-
   handleTableColumnChange(label) {
     const column = (this.columns.find(item => item.label === label) || {}).value;
     this.props.setSelectedTableColumn(column);
@@ -136,7 +124,7 @@ class Explore extends React.PureComponent {
                     Top Destinations
                   </h2>
                   <div className="explore-map-container">
-                    <WorldMap className="explore-world-map" />
+                    <WorldMap selectedTableColumn={selectedTableColumn} />
                   </div>
                 </div>
               </div>
@@ -193,14 +181,12 @@ class Explore extends React.PureComponent {
 
 Explore.propTypes = {
   isSubnational: PropTypes.bool,
-  getTableElements: PropTypes.func.isRequired,
   selectedYears: PropTypes.arrayOf(PropTypes.number),
   selectedContext: PropTypes.object,
   selectedTableColumn: PropTypes.number.isRequired,
   setSelectedTableColumn: PropTypes.func.isRequired,
   showTable: PropTypes.bool.isRequired,
-  topExporters: PropTypes.array.isRequired,
-  topNodesKey: PropTypes.string
+  topExporters: PropTypes.array.isRequired
 };
 
 export default Explore;

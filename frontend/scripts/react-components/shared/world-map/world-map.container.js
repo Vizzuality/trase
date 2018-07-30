@@ -1,11 +1,12 @@
-import { bindActionCreators } from 'redux';
+import React from 'react';
 import { connect } from 'react-redux';
 import bbox from '@turf/bbox';
 import lineString from 'turf-linestring';
 import memoize from 'lodash/memoize';
+import { Query } from 'react-apollo';
+import gql from 'graphql-tag';
 import WorldMap from 'react-components/shared/world-map/world-map.component';
-import { COUNTRY_ID_ORIGIN } from 'scripts/countries';
-import { setExploreTopNodes, getTopNodesKey } from 'react-components/explore/explore.actions';
+import { COUNTRY_ID_ORIGIN, COUNTRIES_COORDINATES } from 'scripts/countries';
 
 const originCountries = Object.values(COUNTRY_ID_ORIGIN);
 
@@ -54,18 +55,9 @@ const mapStateToProps = state => {
   const { selectedYears } = state.tool;
   const { selectedContext, contextIsUserSelected } = state.app;
   const origin = selectedContext && COUNTRY_ID_ORIGIN[selectedContext.countryId];
-  const selectedContextId = selectedContext ? selectedContext.id : null;
-
-  const topNodesKey = getTopNodesKey(selectedContextId, 8, ...selectedYears);
-  const countries = state.explore.topNodes[topNodesKey];
-  const flows =
-    origin && countries
-      ? memoizedGetContextFlows(countries, origin, selectedContextId, ...selectedYears)
-      : [];
 
   return {
     renderFlows: contextIsUserSelected || pageType !== 'explore',
-    flows,
     origin,
     selectedContext,
     selectedYears,
@@ -73,15 +65,52 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      getTopNodes: () => setExploreTopNodes(8)
-    },
-    dispatch
-  );
+const TOP_NODES = gql`
+  query($ctx: Int!, $start: Int!, $end: Int!, $col: Int!) {
+    nodes(ctx: $ctx, start: $start, end: $end, col: $col)
+      @rest(
+        type: "TopNodes"
+        path: "/contexts/:ctx/top_nodes?start_year=:start&end_year=:end&column_id=:col"
+      ) {
+      data
+    }
+  }
+`;
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(WorldMap);
+class WorldMapContainer extends React.Component {
+  render() {
+    const { origin, selectedContext, selectedYears, renderFlows } = this.props;
+    if (!selectedContext) return null;
+
+    const params = {
+      start: selectedYears[0],
+      end: selectedYears[1],
+      col: 8,
+      ctx: selectedContext.id
+    };
+    return (
+      <Query query={TOP_NODES} variables={params}>
+        {({ data: { nodes }, loading }) => {
+          const topNodes =
+            !loading &&
+            nodes &&
+            nodes.data &&
+            nodes.data.targetNodes.map(row => ({
+              ...row,
+              geoId: row.geo_id,
+              coordinates: COUNTRIES_COORDINATES[row.geo_id],
+              name: row.name === selectedContext.countryName ? 'DOMESTIC CONSUMPTION' : row.name
+            }));
+          const flows =
+            origin && topNodes
+              ? memoizedGetContextFlows(topNodes, origin, selectedContext.id, ...selectedYears)
+              : [];
+
+          return <WorldMap {...this.props} renderFlows={renderFlows} flows={flows} />;
+        }}
+      </Query>
+    );
+  }
+}
+
+export default connect(mapStateToProps)(WorldMapContainer);

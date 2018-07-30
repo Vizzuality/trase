@@ -6,4 +6,3 @@ export { default as profileRoot } from 'react-components/profile-root/profile-ro
 export { default as newsletter } from 'react-components/shared/newsletter/newsletter.reducer';
 export { default as staticContent } from 'react-components/static-content/static-content.reducer';
 export { default as team } from 'react-components/team/team.reducer';
-export { default as explore } from 'react-components/explore/explore.reducer';
