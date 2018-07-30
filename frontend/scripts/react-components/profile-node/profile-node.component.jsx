@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import SummaryWidget from 'react-components/profile-node/profile-node-widgets/summary-widget.component';
 import TopDestinationsWidget from 'react-components/profile-node/profile-node-widgets/top-destinations-widget.component';
 import SustainabilityIndicatorsWidget from 'react-components/profile-node/profile-node-widgets/sustainability-indicators-widget.component';
+import DeforestationWidget from 'react-components/profile-node/profile-node-widgets/deforestation-widget.component';
+import TopConsumersWidget from 'react-components/profile-node/profile-node-widgets/top-consumers-widget.component';
 
 class ProfileNode extends React.PureComponent {
   onYearChange = year => this.updateQuery('year', year);
@@ -15,7 +17,7 @@ class ProfileNode extends React.PureComponent {
   render() {
     const { printMode, year, nodeId, contextId, profileType } = this.props;
     return (
-      <div className="l-profile-actor">
+      <div className="l-profile-actor l-profile-place">
         {printMode && (
           <div className="top-logo">
             <div className="row">
@@ -25,7 +27,6 @@ class ProfileNode extends React.PureComponent {
             </div>
           </div>
         )}
-
         <SummaryWidget
           year={year}
           printMode={printMode}
@@ -34,12 +35,23 @@ class ProfileNode extends React.PureComponent {
           nodeId={nodeId}
           onYearChange={this.onYearChange}
         />
-
         {profileType === 'actor' && (
-          <TopDestinationsWidget year={year} nodeId={nodeId} contextId={contextId} />
+          <section className="c-top-map page-break-inside-avoid">
+            <TopDestinationsWidget year={year} nodeId={nodeId} contextId={contextId} />
+          </section>
         )}
         {profileType === 'place' && (
-          <SustainabilityIndicatorsWidget year={year} nodeId={nodeId} contextId={contextId} />
+          <React.Fragment>
+            <SustainabilityIndicatorsWidget year={year} nodeId={nodeId} contextId={contextId} />
+            <DeforestationWidget year={year} nodeId={nodeId} contextId={contextId} />
+            <TopConsumersWidget year={year} nodeId={nodeId} contextId={contextId} type="actors" />
+            <TopConsumersWidget
+              year={year}
+              nodeId={nodeId}
+              contextId={contextId}
+              type="countries"
+            />
+          </React.Fragment>
         )}
       </div>
     );

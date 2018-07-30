@@ -59,7 +59,7 @@ class ActorLineChart extends Component {
     } = this.props;
     const verb = columnName === 'EXPORTER' ? 'exported' : 'imported';
     return (
-      <section className="c-top-map page-break-inside-avoid">
+      <React.Fragment>
         <div className="c-info-tooltip is-hidden" ref={this.getTooltipRef} />
         <div className="row">
           <div
@@ -88,7 +88,7 @@ class ActorLineChart extends Component {
             </div>
           </div>
         </div>
-      </section>
+      </React.Fragment>
     );
   }
 }

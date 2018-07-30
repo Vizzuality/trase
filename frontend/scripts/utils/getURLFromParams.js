@@ -27,6 +27,9 @@ export const GET_TOP_NODES_URL = 'GET_TOP_NODES_URL';
 export const GET_NODE_SUMMARY_URL = 'GET_NODE_SUMMARY_URL';
 export const GET_PLACE_INDICATORS = 'GET_PLACE_INDICATORS';
 export const GET_ACTOR_TOP_COUNTRIES = 'GET_ACTOR_TOP_COUNTRIES';
+export const GET_PLACE_DEFORESTATION_TRAYECTORY = 'GET_PLACE_DEFORESTATION_TRAYECTORY';
+export const GET_PLACE_TOP_CONSUMER_ACTORS = 'GET_PLACE_TOP_CONSUMER_ACTORS';
+export const GET_PLACE_TOP_CONSUMER_COUNTRIES = 'GET_PLACE_TOP_CONSUMER_COUNTRIES';
 
 const API_ENDPOINTS = {
   [GET_CONTEXTS_URL]: { api: 3, endpoint: '/contexts' },
@@ -79,6 +82,18 @@ const API_ENDPOINTS = {
   [GET_ACTOR_TOP_COUNTRIES]: {
     api: 3,
     endpoint: '/contexts/$context_id$/actors/$node_id$/top_countries'
+  },
+  [GET_PLACE_DEFORESTATION_TRAYECTORY]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/places/$node_id$/trajectory_deforestation'
+  },
+  [GET_PLACE_TOP_CONSUMER_ACTORS]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/places/$node_id$/top_consumer_actors'
+  },
+  [GET_PLACE_TOP_CONSUMER_COUNTRIES]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/places/$node_id$/top_consumer_countries'
   }
 };
 
