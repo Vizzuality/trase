@@ -85,7 +85,7 @@ class TopDestinationsWidget extends React.PureComponent {
   updateTab = index => this.setState({ activeTab: this.tabs[index] });
 
   render() {
-    const { printMode, year, nodeId, contextId, type } = this.props;
+    const { printMode, year, nodeId, contextId, type, className } = this.props;
     const mainQuery = type === 'countries' ? GET_ACTOR_TOP_COUNTRIES : GET_ACTOR_TOP_SOURCES;
     const params = { node_id: nodeId, context_id: contextId };
     return (
@@ -100,7 +100,7 @@ class TopDestinationsWidget extends React.PureComponent {
           );
           const { nodeName } = data[GET_NODE_SUMMARY_URL];
           return (
-            <React.Fragment>
+            <section className={className}>
               <div className="c-info-tooltip is-hidden" ref={this.getTooltipRef} />
               <div className="row">
                 <div
@@ -134,7 +134,7 @@ class TopDestinationsWidget extends React.PureComponent {
                   </div>
                 </div>
               </div>
-            </React.Fragment>
+            </section>
           );
         }}
       </Widget>
@@ -144,6 +144,7 @@ class TopDestinationsWidget extends React.PureComponent {
 
 TopDestinationsWidget.propTypes = {
   printMode: PropTypes.bool,
+  className: PropTypes.string,
   type: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,

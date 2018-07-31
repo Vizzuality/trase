@@ -31,6 +31,8 @@ export const GET_ACTOR_TOP_SOURCES = 'GET_ACTOR_TOP_SOURCES';
 export const GET_PLACE_DEFORESTATION_TRAYECTORY = 'GET_PLACE_DEFORESTATION_TRAYECTORY';
 export const GET_PLACE_TOP_CONSUMER_ACTORS = 'GET_PLACE_TOP_CONSUMER_ACTORS';
 export const GET_PLACE_TOP_CONSUMER_COUNTRIES = 'GET_PLACE_TOP_CONSUMER_COUNTRIES';
+export const GET_ACTOR_SUSTAINABILITY = 'GET_ACTOR_SUSTAINABILITY';
+export const GET_ACTOR_EXPORTING_COMPANIES = 'GET_ACTOR_EXPORTING_COMPANIES';
 
 const API_ENDPOINTS = {
   [GET_CONTEXTS_URL]: { api: 3, endpoint: '/contexts' },
@@ -87,6 +89,14 @@ const API_ENDPOINTS = {
   [GET_ACTOR_TOP_SOURCES]: {
     api: 3,
     endpoint: '/contexts/$context_id$/actors/$node_id$/top_sources'
+  },
+  [GET_ACTOR_SUSTAINABILITY]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/actors/$node_id$/sustainability'
+  },
+  [GET_ACTOR_EXPORTING_COMPANIES]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/actors/$node_id$/exporting_companies'
   },
   [GET_PLACE_DEFORESTATION_TRAYECTORY]: {
     api: 3,

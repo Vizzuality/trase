@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SummaryWidget from 'react-components/profile-node/profile-node-widgets/summary-widget.component';
 import TopDestinationsWidget from 'react-components/profile-node/profile-node-widgets/top-destinations-widget.component';
-import SustainabilityIndicatorsWidget from 'react-components/profile-node/profile-node-widgets/sustainability-indicators-widget.component';
+import SustainabilityTableWidget from 'react-components/profile-node/profile-node-widgets/sustainability-table-widget.component';
 import DeforestationWidget from 'react-components/profile-node/profile-node-widgets/deforestation-widget.component';
 import TopConsumersWidget from 'react-components/profile-node/profile-node-widgets/top-consumers-widget.component';
+import ImportingCompaniesWidget from 'react-components/profile-node/profile-node-widgets/importing-companies-widget.component';
 
 class ProfileNode extends React.PureComponent {
   onYearChange = year => this.updateQuery('year', year);
@@ -37,27 +38,44 @@ class ProfileNode extends React.PureComponent {
         />
         {profileType === 'actor' && (
           <React.Fragment>
-            <section className="c-top-map page-break-inside-avoid">
-              <TopDestinationsWidget
-                year={year}
-                nodeId={nodeId}
-                contextId={contextId}
-                type="countries"
-              />
-            </section>
-            <section className="c-top-municipalities page-break-inside-avoid">
-              <TopDestinationsWidget
-                year={year}
-                nodeId={nodeId}
-                contextId={contextId}
-                type="regions"
-              />
-            </section>
+            <TopDestinationsWidget
+              className="c-top-map page-break-inside-avoid"
+              year={year}
+              nodeId={nodeId}
+              contextId={contextId}
+              type="countries"
+            />
+            <TopDestinationsWidget
+              className="c-top-municipalities page-break-inside-avoid"
+              year={year}
+              nodeId={nodeId}
+              contextId={contextId}
+              type="regions"
+            />
+            <SustainabilityTableWidget
+              type="risk"
+              className="c-area-table page-break-inside-avoid"
+              year={year}
+              nodeId={nodeId}
+              contextId={contextId}
+            />
+            <ImportingCompaniesWidget
+              printMode={printMode}
+              year={year}
+              nodeId={nodeId}
+              contextId={contextId}
+            />
           </React.Fragment>
         )}
         {profileType === 'place' && (
           <React.Fragment>
-            <SustainabilityIndicatorsWidget year={year} nodeId={nodeId} contextId={contextId} />
+            <SustainabilityTableWidget
+              type="indicators"
+              className="c-area-table score-table"
+              year={year}
+              nodeId={nodeId}
+              contextId={contextId}
+            />
             <DeforestationWidget year={year} nodeId={nodeId} contextId={contextId} />
             <TopConsumersWidget year={year} nodeId={nodeId} contextId={contextId} type="actors" />
             <TopConsumersWidget
