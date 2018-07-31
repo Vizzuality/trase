@@ -36,9 +36,24 @@ class ProfileNode extends React.PureComponent {
           onYearChange={this.onYearChange}
         />
         {profileType === 'actor' && (
-          <section className="c-top-map page-break-inside-avoid">
-            <TopDestinationsWidget year={year} nodeId={nodeId} contextId={contextId} />
-          </section>
+          <React.Fragment>
+            <section className="c-top-map page-break-inside-avoid">
+              <TopDestinationsWidget
+                year={year}
+                nodeId={nodeId}
+                contextId={contextId}
+                type="countries"
+              />
+            </section>
+            <section className="c-top-municipalities page-break-inside-avoid">
+              <TopDestinationsWidget
+                year={year}
+                nodeId={nodeId}
+                contextId={contextId}
+                type="regions"
+              />
+            </section>
+          </React.Fragment>
         )}
         {profileType === 'place' && (
           <React.Fragment>

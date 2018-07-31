@@ -34,13 +34,13 @@ class TopConsumersWidget extends React.PureComponent {
 
   render() {
     const { year, nodeId, contextId, type } = this.props;
-    const params = { node_id: nodeId, context_id: contextId, year };
+    const params = { node_id: nodeId, context_id: contextId };
     const mainQuery =
       type === 'actors' ? GET_PLACE_TOP_CONSUMER_ACTORS : GET_PLACE_TOP_CONSUMER_COUNTRIES;
     return (
       <Widget
         query={[mainQuery, GET_NODE_SUMMARY_URL]}
-        params={[params, { ...params, profile_type: 'place' }]}
+        params={[{ ...params, year }, { ...params, profile_type: 'place' }]}
       >
         {({ error, data, loading }) => {
           if (loading || error) return null;
