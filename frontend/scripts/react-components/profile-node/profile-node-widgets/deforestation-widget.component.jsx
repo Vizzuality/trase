@@ -28,15 +28,13 @@ function DeforestationWidget(props) {
                       lines={lines}
                       xValues={includedYears}
                       unit={unit}
-                      settings={{
-                        margin: { top: 0, right: 20, bottom: 30, left: 60 },
-                        height: 425,
-                        ticks: {
-                          yTicks: 7,
-                          yTickPadding: 10,
-                          yTickFormatType: 'deforestation-trajectory',
-                          xTickPadding: 15
-                        }
+                      margin={{ top: 0, right: 20, bottom: 30, left: 60 }}
+                      settingsHeight={425}
+                      ticks={{
+                        yTicks: 7,
+                        yTickPadding: 10,
+                        yTickFormatType: 'deforestation-trajectory',
+                        xTickPadding: 15
                       }}
                     />
                   </div>

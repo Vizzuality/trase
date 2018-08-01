@@ -3,46 +3,47 @@ import PropTypes from 'prop-types';
 import capitalize from 'lodash/capitalize';
 import Line from 'react-components/profiles/line.component';
 import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
-import Tooltip from 'components/shared/info-tooltip.component';
 import formatValue from 'utils/formatValue';
 import DropdownTabSwitcher from 'react-components/profiles/dropdown-tab-switcher.component';
+import UnitsTooltip from 'react-components/shared/units-tooltip.component';
 
 const TranslatedLine = withTranslation(Line);
 
 class TopDestinationsChartWidget extends React.PureComponent {
-  lineChartSettings = {
-    margin: {
-      top: 10,
-      right: 100,
-      bottom: 30,
-      left: 50
-    },
-    height: 244,
-    ticks: {
-      yTicks: 6,
-      yTickPadding: 10,
-      yTickFormatType: 'top-location',
-      xTickPadding: 15
-    },
-    lineClassNameCallback: (lineIndex, lineDefaultStyle) => `${lineDefaultStyle} line-${lineIndex}`,
-    hideTooltipCallback: () => this.tooltip && this.tooltip.hide(),
-    showTooltipCallback: (location, x, y) => {
-      if (this.tooltip) {
-        this.tooltip.show(
-          x,
-          y,
-          `${this.props.nodeName} > ${location.name.toUpperCase()}, ${location.date.getFullYear()}`,
-          [
-            {
-              title: 'Trade volume',
-              value: formatValue(location.value, 'Trade volume'),
-              unit: 't'
-            }
-          ]
-        );
-      }
-    }
+  state = { tooltipConfig: null };
+
+  onMouseMove = (location, x, y) => {
+    const text = `${
+      this.props.nodeName
+    } > ${location.name.toUpperCase()}, ${location.date.getFullYear()}`;
+    const title = 'Trade Volume';
+    const unit = 't';
+    const value = formatValue(location.value, 'Trade volume');
+    const tooltipConfig = { x, y, text, items: [{ title, value, unit }] };
+    this.setState(() => ({ tooltipConfig }));
   };
+
+  onMouseLeave = () => {
+    this.setState(() => ({ tooltipConfig: null }));
+  };
+
+  margin = {
+    top: 10,
+    right: 100,
+    bottom: 30,
+    left: 50
+  };
+
+  height = 244;
+
+  ticks = {
+    yTicks: 6,
+    yTickPadding: 10,
+    yTickFormatType: 'top-location',
+    xTickPadding: 15
+  };
+
+  lineClassNameCallback = (lineIndex, lineDefaultStyle) => `${lineDefaultStyle} line-${lineIndex}`;
 
   getTitle() {
     const { type, year, nodeName, verb } = this.props;
@@ -55,13 +56,8 @@ class TopDestinationsChartWidget extends React.PureComponent {
     );
   }
 
-  getTooltipRef = ref => {
-    this.tooltip = new Tooltip(ref);
-  };
-
   render() {
     const {
-      lines,
       year,
       profileType,
       unit,
@@ -70,11 +66,13 @@ class TopDestinationsChartWidget extends React.PureComponent {
       includedYears,
       tabs,
       onChangeTab,
-      height
+      height,
+      lines
     } = this.props;
+    const { tooltipConfig } = this.state;
     return (
       <React.Fragment>
-        <div className="c-info-tooltip is-hidden" ref={this.getTooltipRef} />
+        <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
         <div className="top-destinations-chart-container">
           <div>
             {type === 'countries' ? (
@@ -91,12 +89,17 @@ class TopDestinationsChartWidget extends React.PureComponent {
             <TranslatedLine
               profileType={profileType}
               unit={unit}
-              lines={lines.slice(0, 5)}
+              lines={lines}
               style={style}
               xValues={includedYears}
-              settings={this.lineChartSettings}
               useBottomLegend
               year={year}
+              showTooltipCallback={this.onMouseMove}
+              hideTooltipCallback={this.onMouseLeave}
+              lineClassNameCallback={this.lineClassNameCallback}
+              margin={this.margin}
+              settingsHeight={this.height}
+              ticks={this.ticks}
             />
           </div>
         </div>

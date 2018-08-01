@@ -60,7 +60,7 @@ class TopDestinationsWidget extends React.PureComponent {
                     onChangeTab={this.updateTab}
                     year={year}
                     includedYears={includedYears}
-                    lines={lines}
+                    lines={lines.slice(0, 5)}
                     unit={unit}
                     profileType={profileType}
                     style={style}
