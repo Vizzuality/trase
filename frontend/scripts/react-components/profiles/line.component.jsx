@@ -369,7 +369,7 @@ class Line extends Component {
 
   render() {
     return (
-      <div>
+      <div className="c-line">
         <div
           ref={elem => {
             this.chart = elem;

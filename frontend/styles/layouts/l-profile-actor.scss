@@ -113,7 +113,7 @@
 
   .c-top-municipalities {
 
-    .js-top-municipalities-map {
+    .top-municipalities-map {
       overflow: hidden;
 
       svg {
@@ -160,5 +160,12 @@
 
   .c-dropdown {
     align-items: flex-start;
+  }
+
+  .top-destinations-chart-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
   }
 }

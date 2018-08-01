@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SummaryWidget from 'react-components/profile-node/profile-node-widgets/summary-widget.component';
-import TopDestinationsWidget from 'react-components/profile-node/profile-node-widgets/top-destinations-widget.component';
 import SustainabilityTableWidget from 'react-components/profile-node/profile-node-widgets/sustainability-table-widget.component';
 import DeforestationWidget from 'react-components/profile-node/profile-node-widgets/deforestation-widget.component';
 import TopConsumersWidget from 'react-components/profile-node/profile-node-widgets/top-consumers-widget.component';
 import ImportingCompaniesWidget from 'react-components/profile-node/profile-node-widgets/importing-companies-widget.component';
+import TopDestinationsWidget from 'react-components/profile-node/profile-node-widgets/top-destinations-widget.component';
 
 class ProfileNode extends React.PureComponent {
   onYearChange = year => this.updateQuery('year', year);
@@ -18,7 +18,7 @@ class ProfileNode extends React.PureComponent {
   render() {
     const { printMode, year, nodeId, contextId, profileType } = this.props;
     return (
-      <div className="l-profile-actor l-profile-place">
+      <div className={`l-profile-${profileType}`}>
         {printMode && (
           <div className="top-logo">
             <div className="row">
@@ -54,6 +54,7 @@ class ProfileNode extends React.PureComponent {
             />
             <SustainabilityTableWidget
               type="risk"
+              profileType={profileType}
               className="c-area-table page-break-inside-avoid"
               year={year}
               nodeId={nodeId}
@@ -70,6 +71,7 @@ class ProfileNode extends React.PureComponent {
         {profileType === 'place' && (
           <React.Fragment>
             <SustainabilityTableWidget
+              profileType={profileType}
               type="indicators"
               className="c-area-table score-table"
               year={year}
