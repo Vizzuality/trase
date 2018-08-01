@@ -6,17 +6,21 @@ import Dropdown from 'react-components/shared/dropdown.component';
 class TitleGroup extends React.PureComponent {
   static renderPlainElement(title) {
     return (
-      <div className="title-group-element" key={title.label}>
-        <span className="title-group-label">{title.label || '-'}</span>
-        <span className="title-group-content">{title.name ? capitalize(title.name) : '-'}</span>
+      <div key={title.label} className="title-group-element-container">
+        <div className="title-group-element" key={title.label}>
+          <span className="title-group-label">{title.label || '-'}</span>
+          <span className="title-group-content">{title.name ? capitalize(title.name) : '-'}</span>
+        </div>
       </div>
     );
   }
 
   static renderDropdownElement(title) {
     return (
-      <div className="title-group-element -dropdown" key={title.label}>
-        <Dropdown size="big" {...title} />
+      <div key={title.label} className="title-group-element-container">
+        <div className="title-group-element -dropdown" key={title.label}>
+          <Dropdown size="big" {...title} />
+        </div>
       </div>
     );
   }

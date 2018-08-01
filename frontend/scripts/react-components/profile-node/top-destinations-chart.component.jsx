@@ -85,7 +85,10 @@ class TopDestinationsChart extends React.PureComponent {
               />
             )}
           </div>
-          <div style={{ height, width: '100%' }}>
+          <div
+            className="top-destinations-chart-container"
+            style={{ minHeight: height, width: '100%' }}
+          >
             <TranslatedLine
               profileType={profileType}
               unit={unit}

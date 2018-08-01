@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
 import addApostrophe from 'utils/addApostrophe';
@@ -9,14 +10,15 @@ function ButtonLinks(props) {
     year,
     nodeId,
     contextId,
-    data: { nodeName, municipalityName }
+    data: { nodeName, municipalityName },
+    scrollTo
   } = props;
   const name = nodeName || municipalityName;
   return (
     <div className="c-anchor-buttons hide-for-small">
       <div className="row">
         <div className="small-4 columns">
-          <a href="#profile-content-anchor" className="c-link-buttons -with-arrow js-link-profile">
+          <a className="c-link-buttons -with-arrow js-link-profile" onClickCapture={scrollTo}>
             <img alt="" src="/images/profiles/profile-main-option-1.svg" />
             <span className="js-link-button-name">
               <span className="notranslate">{name ? capitalize(name) : '-'}</span>
@@ -79,7 +81,8 @@ ButtonLinks.propTypes = {
   data: PropTypes.any,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,
-  contextId: PropTypes.number.isRequired
+  contextId: PropTypes.number.isRequired,
+  scrollTo: PropTypes.func.isRequired
 };
 
 export default ButtonLinks;

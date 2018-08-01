@@ -7,7 +7,7 @@ import Widget from 'react-components/widgets/widget.component';
 import { GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 
 function SummaryWidget(props) {
-  const { printMode, year, nodeId, contextId, profileType, onYearChange } = props;
+  const { printMode, year, nodeId, contextId, profileType, onYearChange, scrollTo } = props;
   const params = { node_id: nodeId, context_id: contextId, profile_type: profileType };
   return (
     <Widget params={[params]} query={[GET_NODE_SUMMARY_URL]}>
@@ -37,6 +37,7 @@ function SummaryWidget(props) {
               year={year}
               nodeId={nodeId}
               contextId={contextId}
+              scrollTo={scrollTo}
             />
           </React.Fragment>
         );
@@ -48,10 +49,11 @@ function SummaryWidget(props) {
 SummaryWidget.propTypes = {
   printMode: PropTypes.bool,
   year: PropTypes.number.isRequired,
+  scrollTo: PropTypes.func.isRequired,
   nodeId: PropTypes.number.isRequired,
   contextId: PropTypes.number.isRequired,
-  profileType: PropTypes.string.isRequired,
-  onYearChange: PropTypes.func.isRequired
+  onYearChange: PropTypes.func.isRequired,
+  profileType: PropTypes.string.isRequired
 };
 
 export default SummaryWidget;

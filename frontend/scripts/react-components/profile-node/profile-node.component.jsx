@@ -6,8 +6,19 @@ import DeforestationWidget from 'react-components/profile-node/profile-node-widg
 import TopConsumersWidget from 'react-components/profile-node/profile-node-widgets/top-consumers-widget.component';
 import ImportingCompaniesWidget from 'react-components/profile-node/profile-node-widgets/importing-companies-widget.component';
 import TopDestinationsWidget from 'react-components/profile-node/profile-node-widgets/top-destinations-widget.component';
+import { smoothScroll } from 'utils/smoothScroll';
 
 class ProfileNode extends React.PureComponent {
+  getAnchorRef = ref => {
+    this.anchor = ref;
+  };
+
+  scrollTo = () => {
+    if (this.anchor) {
+      smoothScroll(this.anchor, 500);
+    }
+  };
+
   onYearChange = year => this.updateQuery('year', year);
 
   updateQuery(key, value) {
@@ -35,7 +46,9 @@ class ProfileNode extends React.PureComponent {
           profileType={profileType}
           nodeId={nodeId}
           onYearChange={this.onYearChange}
+          scrollTo={this.scrollTo}
         />
+        <div className="profile-content-anchor" ref={this.getAnchorRef} />
         {profileType === 'actor' && (
           <React.Fragment>
             <TopDestinationsWidget

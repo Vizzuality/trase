@@ -1,6 +1,20 @@
 
 .c-title-group {
-  display: flex;
+
+  .title-group-element-container {
+    display: inline-block;
+    margin-bottom: 10px;
+
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      &:first-child {
+        width: 100%;
+      }
+
+      &:not(:last-child) {
+        margin-right: 21px;
+      }
+    }
+  }
 
   .title-group-element {
     display: flex;
@@ -28,24 +42,25 @@
       font-family: $font-family-2;
       font-size: $font-size-huge;
       font-weight: $font-weight-bold;
+
+      @media screen and (max-width: $breakpoint-foundation-small) {
+        padding: 0 25px 0 0;
+        font-size: $font-size-big;
+      }
     }
 
     &.-dropdown {
       cursor: pointer;
 
+      .dropdown-label {
+        margin-bottom: 0;
+        font-size: $font-size-x-regular;
+        line-height: 1em;
+      }
+
       .dropdown-list {
         width: 100%;
         top: 100%;
-      }
-    }
-
-    @media screen and (max-width: $breakpoint-foundation-small) {
-      &:first-child {
-        width: 100%;
-      }
-
-      &:not(:last-child) {
-        margin-right: 21px;
       }
     }
   }

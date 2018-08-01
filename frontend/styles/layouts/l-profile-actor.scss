@@ -81,12 +81,6 @@
     }
   }
 
-  .c-line {
-    display: flex;
-    align-items: center;
-    // height: 100%;
-  }
-
   .c-top-map,
   .c-top-municipalities {
     padding: 52px 0;
@@ -113,7 +107,7 @@
 
   .c-top-municipalities {
 
-    .top-municipalities-map {
+    .top-destinations-map-container {
       overflow: hidden;
 
       svg {
@@ -126,10 +120,10 @@
     }
   }
 
-  .js-top-municipalities-chart, .js-top-destination-chart {
-    @media screen and (max-width: $breakpoint-foundation-small) {
-      margin-left: -1.25rem;
-      margin-right: -1.25rem;
+  .top-destinations-map-widget {
+    display: none;
+    @media screen and (min-width: $breakpoint-foundation-small) {
+      display: block;
     }
   }
 

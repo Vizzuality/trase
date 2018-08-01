@@ -72,8 +72,8 @@ class TopDestinationsMap extends React.PureComponent {
               bucket={[buckets[0], ...buckets]}
             />
           </div>
-          <div className="column small-10">
-            <div className="top-municipalities-map" style={{ height, width }}>
+          <div className="column small-12 medium-10">
+            <div className="top-destinations-map-container" style={{ height, width }}>
               <Map
                 topoJSONPath={this.getTopoJsonLink()}
                 topoJSONRoot={this.getTopoJsonRoot()}

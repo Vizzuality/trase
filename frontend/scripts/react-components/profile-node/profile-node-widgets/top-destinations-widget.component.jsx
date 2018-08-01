@@ -69,7 +69,7 @@ class TopDestinationsWidget extends React.PureComponent {
                     verb={verb}
                   />
                 </div>
-                <div className="column small-12 medium-6">
+                <div className="column small-12 medium-6 top-destinations-map-widget">
                   <TopDestinationsMap
                     height={250}
                     year={year}
