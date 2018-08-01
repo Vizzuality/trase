@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TopDestinationsChartWidget from 'react-components/profile-node/profile-node-widgets/top-destinations-chart-widget.component';
-import TopDestinationsMapWidget from 'react-components/profile-node/profile-node-widgets/top-destinations-map-widget.component';
+import TopDestinationsChart from 'react-components/profile-node/top-destinations-chart.component';
+import TopDestinationsMap from 'react-components/profile-node/top-destinations-map.component';
 import {
   GET_ACTOR_TOP_COUNTRIES,
   GET_ACTOR_TOP_SOURCES,
@@ -53,7 +53,7 @@ class TopDestinationsWidget extends React.PureComponent {
             <section className={className}>
               <div className="row align-justify">
                 <div className="column small-12 medium-6">
-                  <TopDestinationsChartWidget
+                  <TopDestinationsChart
                     height={250}
                     type={type}
                     tabs={this.tabs}
@@ -70,7 +70,7 @@ class TopDestinationsWidget extends React.PureComponent {
                   />
                 </div>
                 <div className="column small-12 medium-6">
-                  <TopDestinationsMapWidget
+                  <TopDestinationsMap
                     height={250}
                     year={year}
                     printMode={printMode}
@@ -78,7 +78,7 @@ class TopDestinationsWidget extends React.PureComponent {
                     buckets={buckets}
                     lines={lines}
                     nodeName={nodeName}
-                    activeTab={type === 'regions' && activeTab}
+                    activeTab={type === 'regions' ? activeTab : undefined}
                     profileType={profileType}
                   />
                 </div>

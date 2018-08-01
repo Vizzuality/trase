@@ -9,7 +9,7 @@ import UnitsTooltip from 'react-components/shared/units-tooltip.component';
 
 const TranslatedLine = withTranslation(Line);
 
-class TopDestinationsChartWidget extends React.PureComponent {
+class TopDestinationsChart extends React.PureComponent {
   state = { tooltipConfig: null };
 
   onMouseMove = (location, x, y) => {
@@ -108,7 +108,7 @@ class TopDestinationsChartWidget extends React.PureComponent {
   }
 }
 
-TopDestinationsChartWidget.propTypes = {
+TopDestinationsChart.propTypes = {
   tabs: PropTypes.array,
   onChangeTab: PropTypes.func,
   profileType: PropTypes.string,
@@ -123,4 +123,4 @@ TopDestinationsChartWidget.propTypes = {
   includedYears: PropTypes.array.isRequired
 };
 
-export default TopDestinationsChartWidget;
+export default TopDestinationsChart;

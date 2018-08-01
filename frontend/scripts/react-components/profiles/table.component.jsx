@@ -85,7 +85,15 @@ class Table extends Component {
   }
 
   renderActorsTable() {
-    const { data, target, year } = this.props;
+    const { data, target, year, targetPayload } = this.props;
+
+    const linkTo = id => ({
+      type: target,
+      payload: {
+        ...(targetPayload || {}),
+        query: { year, nodeId: id }
+      }
+    });
 
     return (
       <tbody>
@@ -118,10 +126,7 @@ class Table extends Component {
                   target !== null &&
                   typeof value.value !== 'number' &&
                   value.id !== undefined && (
-                    <Link
-                      className="node-link"
-                      to={{ type: target, payload: { query: { nodeId: value.id, year } } }}
-                    >
+                    <Link className="node-link" to={linkTo(value.id)}>
                       <svg className="icon icon-check">
                         <use xlinkHref="#icon-outside-link" />
                       </svg>
@@ -136,8 +141,14 @@ class Table extends Component {
   }
 
   renderOtherTable() {
-    const { data, target } = this.props;
-
+    const { data, target, targetPayload, year } = this.props;
+    const linkTo = id => ({
+      type: target,
+      payload: {
+        ...(targetPayload || {}),
+        query: { year, nodeId: id }
+      }
+    });
     return (
       <tbody>
         {data.map((elem, dataIndex) => (
@@ -147,10 +158,7 @@ class Table extends Component {
                 {dataIndex + 1}.{elem.name}
               </span>
               {target !== null && (
-                <Link
-                  className="node-link"
-                  to={{ type: target, payload: { query: { nodeId: elem.id } } }}
-                >
+                <Link className="node-link" to={linkTo(elem.id)}>
                   <svg className="icon icon-check">
                     <use xlinkHref="#icon-outside-link" />
                   </svg>
@@ -187,7 +195,8 @@ Table.propTypes = {
   data: PropTypes.object,
   type: PropTypes.string,
   target: PropTypes.string,
-  year: PropTypes.number
+  year: PropTypes.number,
+  targetPayload: PropTypes.object
 };
 
 export default Table;

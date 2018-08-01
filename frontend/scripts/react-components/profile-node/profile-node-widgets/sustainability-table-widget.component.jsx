@@ -47,6 +47,7 @@ class SustainabilityTableWidget extends React.PureComponent {
                     data={data[mainQuery]}
                     tabsTitle={this.getTitle(nodeName)}
                     target={item => (item.name === 'Municipalities' ? 'profileNode' : null)}
+                    targetPayload={{ profileType }}
                   />
                 </div>
               </div>

@@ -7,7 +7,7 @@ import ChoroLegend from 'react-components/profiles/choro-legend.component';
 import cx from 'classnames';
 import Map from 'react-components/profiles/map.component';
 
-class TopDestinationsMapWidget extends React.PureComponent {
+class TopDestinationsMap extends React.PureComponent {
   state = { tooltipConfig: null };
 
   onMouseMove = (geography, x, y) => {
@@ -90,17 +90,16 @@ class TopDestinationsMapWidget extends React.PureComponent {
   }
 }
 
-TopDestinationsMapWidget.propTypes = {
+TopDestinationsMap.propTypes = {
   printMode: PropTypes.bool,
-  activeTab: PropTypes.array,
+  activeTab: PropTypes.string,
   profileType: PropTypes.string,
   verb: PropTypes.string.isRequired,
   lines: PropTypes.array.isRequired,
-  type: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   buckets: PropTypes.array.isRequired,
   nodeName: PropTypes.string.isRequired
 };
 
-export default TopDestinationsMapWidget;
+export default TopDestinationsMap;

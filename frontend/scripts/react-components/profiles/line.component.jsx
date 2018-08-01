@@ -260,7 +260,6 @@ class Line extends Component {
                 );
               })
               .on('mouseout', () => {
-                console.log('heeeeeeee');
                 hideTooltipCallback();
               });
           }
