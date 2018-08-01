@@ -3,8 +3,14 @@ import PropTypes from 'prop-types';
 import Widget from 'react-components/widgets/widget.component';
 import { GET_ACTOR_EXPORTING_COMPANIES, GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 import Scatterplot from 'react-components/profiles/scatterplot.component';
+import UnitsTooltip from 'react-components/shared/units-tooltip.component';
+import formatValue from 'utils/formatValue';
 
 class ImportingCompaniesWidget extends React.PureComponent {
+  state = {
+    tooltipConfig: null
+  };
+
   getScatterplots(dimensionsX, title) {
     const { printMode } = this.props;
     if (printMode) {
@@ -16,8 +22,30 @@ class ImportingCompaniesWidget extends React.PureComponent {
     return [{ title }];
   }
 
+  onMouseMove = data => (company, indicator, x, y) => {
+    const items = [
+      {
+        title: data.dimensionY.name,
+        value: formatValue(company.y, data.dimensionY.name),
+        unit: data.dimensionY.unit
+      },
+      {
+        title: indicator.name,
+        value: formatValue(company.x, indicator.name),
+        unit: indicator.unit
+      }
+    ];
+    const tooltipConfig = { x, y, text: company.name, items };
+    this.setState(() => ({ tooltipConfig }));
+  };
+
+  onMouseLeave = () => {
+    this.setState(() => ({ tooltipConfig: null }));
+  };
+
   render() {
     const { year, nodeId, contextId, printMode } = this.props;
+    const { tooltipConfig } = this.state;
     const params = { node_id: nodeId, context_id: contextId };
     return (
       <Widget
@@ -34,6 +62,7 @@ class ImportingCompaniesWidget extends React.PureComponent {
           const scatterplots = this.getScatterplots(dimensions, title);
           return (
             <section className="c-scatterplot-container">
+              <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
               <div className="row">
                 <div className="small-12 columns">
                   <div>
@@ -47,6 +76,8 @@ class ImportingCompaniesWidget extends React.PureComponent {
                         xDimensionSelectedIndex={index}
                         node={{ id: nodeId, name: nodeName }}
                         year={year}
+                        showTooltipCallback={this.onMouseMove(data[GET_ACTOR_EXPORTING_COMPANIES])}
+                        hideTooltipCallback={this.onMouseLeave}
                       />
                     ))}
                   </div>
