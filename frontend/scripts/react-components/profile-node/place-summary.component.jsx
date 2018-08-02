@@ -90,9 +90,7 @@ class PlaceSummary extends React.PureComponent {
                 <div className="small-9 columns">
                   <div className="c-info">
                     <div className="legend">biome</div>
-                    <div className="name -medium js-biome-name">
-                      {biomeName ? capitalize(biomeName) : '-'}
-                    </div>
+                    <div className="name -medium">{biomeName ? capitalize(biomeName) : '-'}</div>
                   </div>
                 </div>
               </div>
@@ -126,7 +124,7 @@ class PlaceSummary extends React.PureComponent {
         <div className="c-overall-info page-break-inside-avoid">
           <div className="row">
             <div className="small-12 medium-4 large-3 columns">
-              <div className="c-locator-map">
+              <div className="c-locator-map map-municipality-banner">
                 {countryName && (
                   <Map
                     topoJSONPath={`./vector_layers/municip_states/${countryName.toLowerCase()}/${stateGeoId}.topo.json`}
