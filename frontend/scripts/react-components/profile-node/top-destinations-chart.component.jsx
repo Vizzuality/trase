@@ -12,6 +12,10 @@ const TranslatedLine = withTranslation(Line);
 class TopDestinationsChart extends React.PureComponent {
   state = { tooltipConfig: null };
 
+  static getIsMobile() {
+    return window.innerWidth <= 640; // value needs to match with entrypoints.scss variable
+  }
+
   onMouseMove = (location, x, y) => {
     const text = `${
       this.props.nodeName
@@ -70,6 +74,7 @@ class TopDestinationsChart extends React.PureComponent {
       lines
     } = this.props;
     const { tooltipConfig } = this.state;
+    const heightStyle = TopDestinationsChart.getIsMobile() ? { minHeigh: height } : { height };
     return (
       <React.Fragment>
         <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
@@ -87,7 +92,7 @@ class TopDestinationsChart extends React.PureComponent {
           </div>
           <div
             className="top-destinations-chart-container"
-            style={{ minHeight: height, width: '100%' }}
+            style={{ ...heightStyle, width: '100%' }}
           >
             <TranslatedLine
               profileType={profileType}

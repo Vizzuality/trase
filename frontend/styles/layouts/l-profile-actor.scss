@@ -125,6 +125,10 @@
     @media screen and (min-width: $breakpoint-foundation-small) {
       display: block;
     }
+
+    @media print {
+      display: block;
+    }
   }
 
   .title {

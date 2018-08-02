@@ -27,7 +27,7 @@ class ProfileNode extends React.PureComponent {
   }
 
   render() {
-    const { printMode, year, nodeId, contextId, profileType } = this.props;
+    const { printMode, year, nodeId, contextId, profileType, tooltips } = this.props;
     return (
       <div className={`l-profile-${profileType}`}>
         {printMode && (
@@ -44,6 +44,7 @@ class ProfileNode extends React.PureComponent {
           printMode={printMode}
           contextId={contextId}
           profileType={profileType}
+          tooltips={tooltips}
           nodeId={nodeId}
           onYearChange={this.onYearChange}
           scrollTo={this.scrollTo}
@@ -107,6 +108,7 @@ class ProfileNode extends React.PureComponent {
 }
 
 ProfileNode.propTypes = {
+  tooltips: PropTypes.object,
   printMode: PropTypes.bool,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,

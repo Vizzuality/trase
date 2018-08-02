@@ -7,10 +7,12 @@ function mapStateToProps(state) {
     query: { year, nodeId, print } = {},
     payload: { profileType }
   } = state.location;
+  const { tooltips } = state.app;
   return {
+    tooltips,
     profileType,
     contextId: 1,
-    printMode: print,
+    printMode: print && JSON.parse(print),
     year: parseInt(year, 10),
     nodeId: parseInt(nodeId, 10)
   };
