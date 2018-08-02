@@ -13,7 +13,7 @@ class TopDestinationsWidget extends React.PureComponent {
   tabs = ['municipality', 'biome', 'state'];
 
   state = {
-    activeTab: 'municipality'
+    activeTab: this.props.printMode ? 'state' : 'municipality'
   };
 
   getActiveTabProps(data) {

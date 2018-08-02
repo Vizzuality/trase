@@ -6,6 +6,7 @@ import capitalize from 'lodash/capitalize';
 import HelpTooltip from 'react-components/shared/help-tooltip.component';
 import TitleGroup from 'react-components/profile-node/title-group.component';
 import Map from 'react-components/profiles/map.component';
+import formatValue from 'utils/formatValue';
 
 class PlaceSummary extends React.PureComponent {
   render() {
@@ -39,6 +40,10 @@ class PlaceSummary extends React.PureComponent {
         onValueSelected: onYearChange
       }
     ];
+    const soyValue = soyArea !== null && soyArea !== 'NaN' ? formatValue(soyArea, 'area') : '-';
+    const areaValue = area !== null ? formatValue(area, 'area') : '-';
+    const soyProductionValue = soyProduction !== null ? formatValue(soyProduction, 'tons') : '-';
+
     return (
       <React.Fragment>
         <div className="c-overall-map hide-for-small">
@@ -141,7 +146,7 @@ class PlaceSummary extends React.PureComponent {
                 <div className="small-12 columns">
                   <div className="stat-item">
                     <div className="legend">area</div>
-                    <div className="value js-area">{area}</div>
+                    <div className="value">{areaValue}</div>
                     <div className="unit">
                       km<sup>2</sup>
                     </div>
@@ -151,7 +156,7 @@ class PlaceSummary extends React.PureComponent {
                       soy land
                       <HelpTooltip text={get(tooltips, 'profileNode.soyLand')} position="bottom" />
                     </div>
-                    <div className="value js-soy-land">{soyArea}</div>
+                    <div className="value">{soyValue}</div>
                     <div className="unit">ha</div>
                   </div>
                   <div className="stat-item">
@@ -162,7 +167,7 @@ class PlaceSummary extends React.PureComponent {
                         position="bottom"
                       />
                     </div>
-                    <div className="value js-soy-production">{soyProduction}</div>
+                    <div className="value">{soyProductionValue}</div>
                     <div className="unit">t</div>
                   </div>
                 </div>

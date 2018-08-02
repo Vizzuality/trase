@@ -65,6 +65,7 @@ class ProfileNode extends React.PureComponent {
               nodeId={nodeId}
               contextId={contextId}
               type="regions"
+              printMode={printMode}
             />
             <SustainabilityTableWidget
               type="risk"

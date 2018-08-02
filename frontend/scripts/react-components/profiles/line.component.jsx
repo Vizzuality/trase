@@ -29,7 +29,7 @@ class Line extends Component {
 
   getLines() {
     const { lines } = this.props;
-    return lines.filter(lineData => lineData.values.filter(v => v !== null).length);
+    return lines.filter(lineData => lineData.values.some(v => v !== null));
   }
 
   isSmallChart() {
