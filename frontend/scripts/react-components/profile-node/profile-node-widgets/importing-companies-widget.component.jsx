@@ -5,6 +5,7 @@ import { GET_ACTOR_EXPORTING_COMPANIES, GET_NODE_SUMMARY_URL } from 'utils/getUR
 import Scatterplot from 'react-components/profiles/scatterplot.component';
 import UnitsTooltip from 'react-components/shared/units-tooltip.component';
 import formatValue from 'utils/formatValue';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
 
 class ImportingCompaniesWidget extends React.PureComponent {
   state = {
@@ -52,8 +53,14 @@ class ImportingCompaniesWidget extends React.PureComponent {
         query={[GET_ACTOR_EXPORTING_COMPANIES, GET_NODE_SUMMARY_URL]}
         params={[{ ...params, year }, { ...params, profile_type: 'actor' }]}
       >
-        {({ data, loading, error }) => {
-          if (loading || error) return null;
+        {({ data, loading }) => {
+          if (loading)
+            return (
+              <section className="spinner-section">
+                <ShrinkingSpinner className="-large" />
+              </section>
+            );
+
           const { dimensionsX, companies } = data[GET_ACTOR_EXPORTING_COMPANIES];
           const { nodeName, columnName } = data[GET_NODE_SUMMARY_URL];
           const verb = columnName === 'EXPORTER' ? 'exporting' : 'importing';

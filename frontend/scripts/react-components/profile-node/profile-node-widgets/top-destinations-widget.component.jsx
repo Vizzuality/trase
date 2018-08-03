@@ -8,6 +8,7 @@ import {
   GET_NODE_SUMMARY_URL
 } from 'utils/getURLFromParams';
 import Widget from 'react-components/widgets/widget.component';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
 
 class TopDestinationsWidget extends React.PureComponent {
   tabs = ['municipality', 'biome', 'state'];
@@ -38,7 +39,12 @@ class TopDestinationsWidget extends React.PureComponent {
         params={[{ ...params, year }, { ...params, profile_type: 'actor' }]}
       >
         {({ data, loading }) => {
-          if (loading) return null;
+          if (loading)
+            return (
+              <section className="spinner-section">
+                <ShrinkingSpinner className="-large" />
+              </section>
+            );
           const {
             includedYears,
             lines,

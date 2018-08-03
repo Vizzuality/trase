@@ -4,15 +4,21 @@ import Widget from 'react-components/widgets/widget.component';
 import Line from 'react-components/profiles/line.component';
 import LineLegend from 'react-components/profiles/line-legend.component';
 import { GET_PLACE_DEFORESTATION_TRAYECTORY } from 'utils/getURLFromParams';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
 
 function DeforestationWidget(props) {
   const { nodeId, contextId, year } = props;
   const params = { node_id: nodeId, context_id: contextId, year };
   return (
     <Widget query={[GET_PLACE_DEFORESTATION_TRAYECTORY]} params={[params]}>
-      {({ data, loading, error }) => {
-        if (loading) return null;
-        if (error) return null;
+      {({ data, loading }) => {
+        if (loading)
+          return (
+            <section className="spinner-section">
+              <ShrinkingSpinner className="-large" />
+            </section>
+          );
+
         const { lines, unit, includedYears } = data[GET_PLACE_DEFORESTATION_TRAYECTORY];
         return (
           <section className="deforestation page-break-inside-avoid">

@@ -9,6 +9,7 @@ import {
   GET_PLACE_TOP_CONSUMER_COUNTRIES
 } from 'utils/getURLFromParams';
 import capitalize from 'lodash/capitalize';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
 
 const TranslatedMiniSankey = withTranslation(MiniSankey);
 
@@ -42,8 +43,14 @@ class TopConsumersWidget extends React.PureComponent {
         query={[mainQuery, GET_NODE_SUMMARY_URL]}
         params={[{ ...params, year }, { ...params, profile_type: 'place' }]}
       >
-        {({ error, data, loading }) => {
-          if (loading || error) return null;
+        {({ data, loading }) => {
+          if (loading)
+            return (
+              <section className="spinner-section">
+                <ShrinkingSpinner className="-large" />
+              </section>
+            );
+
           const { municipalityName } = data[GET_NODE_SUMMARY_URL];
           return (
             <section className="mini-sankey-container page-break-inside-avoid">

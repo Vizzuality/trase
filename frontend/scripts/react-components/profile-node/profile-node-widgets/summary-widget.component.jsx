@@ -5,6 +5,7 @@ import PlaceSummary from 'react-components/profile-node/place-summary.component'
 import ButtonLinks from 'react-components/profile-node/button-links.component';
 import Widget from 'react-components/widgets/widget.component';
 import { GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
 
 function SummaryWidget(props) {
   const {
@@ -20,9 +21,14 @@ function SummaryWidget(props) {
   const params = { node_id: nodeId, context_id: contextId, profile_type: profileType };
   return (
     <Widget params={[params]} query={[GET_NODE_SUMMARY_URL]}>
-      {({ data, loading, error }) => {
-        if (loading) return null;
-        if (error) return null;
+      {({ data, loading }) => {
+        if (loading)
+          return (
+            <div className="spinner-section">
+              <ShrinkingSpinner className="-large" />
+            </div>
+          );
+
         return (
           <React.Fragment>
             {profileType === 'actor' && (

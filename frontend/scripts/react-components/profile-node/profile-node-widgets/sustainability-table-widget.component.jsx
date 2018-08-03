@@ -8,6 +8,7 @@ import {
   GET_NODE_SUMMARY_URL
 } from 'utils/getURLFromParams';
 import addApostrophe from 'utils/addApostrophe';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
 
 class SustainabilityTableWidget extends React.PureComponent {
   getTitle(nodeName) {
@@ -34,8 +35,14 @@ class SustainabilityTableWidget extends React.PureComponent {
         query={[mainQuery, GET_NODE_SUMMARY_URL]}
         params={[{ ...params, year }, { ...params, profile_type: profileType }]}
       >
-        {({ data, loading, error }) => {
-          if (loading || error) return null;
+        {({ data, loading }) => {
+          if (loading)
+            return (
+              <section className="spinner-section">
+                <ShrinkingSpinner className="-large" />
+              </section>
+            );
+
           const { nodeName } = data[GET_NODE_SUMMARY_URL];
           return (
             <section className={className}>
