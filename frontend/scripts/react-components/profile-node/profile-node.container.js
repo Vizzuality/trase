@@ -4,14 +4,16 @@ import ProfileNode from 'react-components/profile-node/profile-node.component';
 
 function mapStateToProps(state) {
   const {
-    query: { year, nodeId, print } = {},
+    query: { year, nodeId, print, contextId = 1 } = {},
     payload: { profileType }
   } = state.location;
-  const { tooltips } = state.app;
+  const { tooltips, contexts } = state.app;
+  const ctxId = contextId && parseInt(contextId, 10);
+  const context = contexts.find(ctx => ctx.id === ctxId) || { id: ctxId };
   return {
     tooltips,
+    context,
     profileType,
-    contextId: 1,
     printMode: print && JSON.parse(print),
     year: parseInt(year, 10),
     nodeId: parseInt(nodeId, 10)

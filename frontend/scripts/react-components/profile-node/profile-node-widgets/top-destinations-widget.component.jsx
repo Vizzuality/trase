@@ -29,7 +29,16 @@ class TopDestinationsWidget extends React.PureComponent {
   updateTab = index => this.setState({ activeTab: this.tabs[index] });
 
   render() {
-    const { printMode, year, nodeId, contextId, type, className } = this.props;
+    const {
+      printMode,
+      year,
+      nodeId,
+      contextId,
+      type,
+      className,
+      commodityName,
+      countryName
+    } = this.props;
     const { activeTab } = this.state;
     const mainQuery = type === 'countries' ? GET_ACTOR_TOP_COUNTRIES : GET_ACTOR_TOP_SOURCES;
     const params = { node_id: nodeId, context_id: contextId };
@@ -71,6 +80,7 @@ class TopDestinationsWidget extends React.PureComponent {
                     profileType={profileType}
                     style={style}
                     nodeName={nodeName}
+                    commodityName={commodityName}
                     columnName={columnName}
                     verb={verb}
                   />
@@ -84,8 +94,10 @@ class TopDestinationsWidget extends React.PureComponent {
                     buckets={buckets}
                     lines={lines}
                     nodeName={nodeName}
-                    activeTab={type === 'regions' ? activeTab : undefined}
                     profileType={profileType}
+                    countryName={countryName}
+                    commodityName={commodityName}
+                    activeTab={type === 'regions' ? activeTab : undefined}
                   />
                 </div>
               </div>
@@ -100,6 +112,8 @@ class TopDestinationsWidget extends React.PureComponent {
 TopDestinationsWidget.propTypes = {
   printMode: PropTypes.bool,
   className: PropTypes.string,
+  countryName: PropTypes.string,
+  commodityName: PropTypes.string,
   type: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,

@@ -38,23 +38,26 @@ class TopDestinationsMap extends React.PureComponent {
   };
 
   getTopoJsonRoot() {
-    const { activeTab } = this.props;
+    const { activeTab, countryName } = this.props;
     if (activeTab) {
-      return `BRAZIL_${activeTab.toUpperCase()}`;
+      return countryName && `${countryName.toUpperCase()}_${activeTab.toUpperCase()}`;
     }
     return 'world';
   }
 
   getTopoJsonLink() {
-    const { activeTab } = this.props;
+    const { activeTab, countryName } = this.props;
     if (activeTab) {
-      return `./vector_layers/BRAZIL_${activeTab.toUpperCase()}.topo.json`;
+      return (
+        countryName &&
+        `./vector_layers/${countryName.toUpperCase()}_${activeTab.toUpperCase()}.topo.json`
+      );
     }
     return './vector_layers/WORLD.topo.json';
   }
 
   render() {
-    const { year, printMode, buckets, verb, activeTab, height } = this.props;
+    const { year, printMode, buckets, verb, activeTab, height, commodityName } = this.props;
     const { tooltipConfig } = this.state;
     const width = activeTab ? 400 : '100%';
     return (
@@ -68,7 +71,10 @@ class TopDestinationsMap extends React.PureComponent {
             })}
           >
             <ChoroLegend
-              title={[translateText(`Soy ${verb} in ${year}`), translateText('(tonnes)')]}
+              title={[
+                translateText(`${commodityName} ${verb} in ${year}`),
+                translateText('(tonnes)')
+              ]}
               bucket={[buckets[0], ...buckets]}
             />
           </div>
@@ -94,6 +100,8 @@ TopDestinationsMap.propTypes = {
   printMode: PropTypes.bool,
   activeTab: PropTypes.string,
   profileType: PropTypes.string,
+  countryName: PropTypes.string,
+  commodityName: PropTypes.string,
   verb: PropTypes.string.isRequired,
   lines: PropTypes.array.isRequired,
   year: PropTypes.number.isRequired,

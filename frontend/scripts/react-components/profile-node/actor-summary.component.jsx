@@ -13,13 +13,15 @@ class ActorSummary extends React.PureComponent {
       year,
       tooltips,
       printMode,
+      countryName,
       onYearChange,
-      data: { nodeName, columnName, summary, forest500, zeroDeforestation, countryName } = {}
+      commodityName,
+      data: { nodeName, columnName, summary, forest500, zeroDeforestation } = {}
     } = this.props;
     const titles = [
       { name: nodeName, label: capitalize(columnName) },
       { name: countryName, label: 'Country' },
-      { name: 'Soy', label: 'Commodity' },
+      { name: commodityName, label: 'Commodity' },
       {
         dropdown: true,
         label: 'Year',
@@ -96,6 +98,8 @@ ActorSummary.propTypes = {
   data: PropTypes.object,
   printMode: PropTypes.bool,
   tooltips: PropTypes.object,
+  countryName: PropTypes.string,
+  commodityName: PropTypes.string,
   onYearChange: PropTypes.func.isRequired
 };
 

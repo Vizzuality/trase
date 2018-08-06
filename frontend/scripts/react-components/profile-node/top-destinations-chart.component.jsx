@@ -50,11 +50,12 @@ class TopDestinationsChart extends React.PureComponent {
   lineClassNameCallback = (lineIndex, lineDefaultStyle) => `${lineDefaultStyle} line-${lineIndex}`;
 
   getTitle() {
-    const { type, year, nodeName, verb } = this.props;
+    const { type, year, nodeName, verb, commodityName } = this.props;
     const noun = type === 'countries' ? 'destination countries' : 'sourcing regions';
     return (
       <React.Fragment>
-        Top {noun} of soy {verb} by <span className="notranslate">{capitalize(nodeName)}</span> in{' '}
+        Top {noun} of {commodityName} {verb} by{' '}
+        <span className="notranslate">{capitalize(nodeName)}</span> in{' '}
         <span className="notranslate">{year}</span>
       </React.Fragment>
     );
@@ -120,6 +121,7 @@ TopDestinationsChart.propTypes = {
   tabs: PropTypes.array,
   onChangeTab: PropTypes.func,
   profileType: PropTypes.string,
+  commodityName: PropTypes.string,
   verb: PropTypes.string.isRequired,
   lines: PropTypes.array.isRequired,
   type: PropTypes.string.isRequired,

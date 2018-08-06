@@ -45,7 +45,7 @@ class ImportingCompaniesWidget extends React.PureComponent {
   };
 
   render() {
-    const { year, nodeId, contextId, printMode } = this.props;
+    const { year, nodeId, contextId, printMode, commodityName, countryName } = this.props;
     const { tooltipConfig } = this.state;
     const params = { node_id: nodeId, context_id: contextId };
     return (
@@ -65,7 +65,7 @@ class ImportingCompaniesWidget extends React.PureComponent {
           const { nodeName, columnName } = data[GET_NODE_SUMMARY_URL];
           const verb = columnName === 'EXPORTER' ? 'exporting' : 'importing';
           const dimensions = dimensionsX.slice(0, 3);
-          const title = `Comparing companies ${verb} Soy from Brazil in ${year}`;
+          const title = `Comparing companies ${verb} ${commodityName} from ${countryName} in ${year}`;
           const scatterplots = this.getScatterplots(dimensions, title);
           return (
             <section className="c-scatterplot-container">
@@ -100,6 +100,8 @@ class ImportingCompaniesWidget extends React.PureComponent {
 
 ImportingCompaniesWidget.propTypes = {
   printMode: PropTypes.bool,
+  countryName: PropTypes.string,
+  commodityName: PropTypes.string,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,
   contextId: PropTypes.number.isRequired

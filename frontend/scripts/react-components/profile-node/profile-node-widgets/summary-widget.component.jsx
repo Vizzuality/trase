@@ -8,17 +8,8 @@ import { GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
 
 function SummaryWidget(props) {
-  const {
-    printMode,
-    year,
-    nodeId,
-    contextId,
-    profileType,
-    onYearChange,
-    scrollTo,
-    tooltips
-  } = props;
-  const params = { node_id: nodeId, context_id: contextId, profile_type: profileType };
+  const { printMode, year, nodeId, context, profileType, onYearChange, scrollTo, tooltips } = props;
+  const params = { node_id: nodeId, context_id: context.id, profile_type: profileType };
   return (
     <Widget params={[params]} query={[GET_NODE_SUMMARY_URL]}>
       {({ data, loading }) => {
@@ -33,28 +24,32 @@ function SummaryWidget(props) {
           <React.Fragment>
             {profileType === 'actor' && (
               <ActorSummary
-                tooltips={tooltips}
-                data={data[GET_NODE_SUMMARY_URL]}
                 year={year}
+                tooltips={tooltips}
                 printMode={printMode}
+                countryName={context.countryName}
+                commodityName={context.commodityName}
                 onYearChange={onYearChange}
+                data={data[GET_NODE_SUMMARY_URL]}
               />
             )}
             {profileType === 'place' && (
               <PlaceSummary
-                tooltips={tooltips}
-                data={data[GET_NODE_SUMMARY_URL]}
                 year={year}
+                tooltips={tooltips}
                 printMode={printMode}
                 onYearChange={onYearChange}
+                countryName={context.countryName}
+                data={data[GET_NODE_SUMMARY_URL]}
+                commodityName={context.commodityName}
               />
             )}
             <ButtonLinks
-              data={data[GET_NODE_SUMMARY_URL]}
               year={year}
               nodeId={nodeId}
-              contextId={contextId}
               scrollTo={scrollTo}
+              contextId={context.id}
+              data={data[GET_NODE_SUMMARY_URL]}
             />
           </React.Fragment>
         );
@@ -65,11 +60,11 @@ function SummaryWidget(props) {
 
 SummaryWidget.propTypes = {
   printMode: PropTypes.bool,
+  context: PropTypes.object,
   tooltips: PropTypes.object,
   year: PropTypes.number.isRequired,
   scrollTo: PropTypes.func.isRequired,
   nodeId: PropTypes.number.isRequired,
-  contextId: PropTypes.number.isRequired,
   onYearChange: PropTypes.func.isRequired,
   profileType: PropTypes.string.isRequired
 };

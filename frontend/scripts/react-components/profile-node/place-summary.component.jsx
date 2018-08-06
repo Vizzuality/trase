@@ -14,6 +14,8 @@ class PlaceSummary extends React.PureComponent {
       year,
       tooltips,
       onYearChange,
+      countryName,
+      commodityName,
       data: {
         columnName,
         biomeName,
@@ -24,14 +26,13 @@ class PlaceSummary extends React.PureComponent {
         area,
         soyProduction,
         soyArea,
-        countryName,
         municipalityName,
         municipalityGeoId
       } = {}
     } = this.props;
     const titles = [
       { name: municipalityName, label: capitalize(columnName) },
-      { name: 'Soy', label: 'Commodity' },
+      { name: commodityName, label: 'Commodity' },
       {
         dropdown: true,
         label: 'Year',
@@ -151,7 +152,7 @@ class PlaceSummary extends React.PureComponent {
                   </div>
                   <div className="stat-item">
                     <div className="legend">
-                      soy land
+                      {commodityName} land
                       <HelpTooltip text={get(tooltips, 'profileNode.soyLand')} position="bottom" />
                     </div>
                     <div className="value">{soyValue}</div>
@@ -185,6 +186,8 @@ PlaceSummary.propTypes = {
   year: PropTypes.number,
   data: PropTypes.object,
   tooltips: PropTypes.object,
+  countryName: PropTypes.string,
+  commodityName: PropTypes.string,
   onYearChange: PropTypes.func.isRequired
 };
 

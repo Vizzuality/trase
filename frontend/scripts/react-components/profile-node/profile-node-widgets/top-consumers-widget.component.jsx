@@ -15,19 +15,19 @@ const TranslatedMiniSankey = withTranslation(MiniSankey);
 
 class TopConsumersWidget extends React.PureComponent {
   getTitle(name) {
-    const { type, year } = this.props;
+    const { type, year, commodityName } = this.props;
     const noun = type === 'actors' ? 'traders' : 'importer countries';
     if (type === 'actors') {
       return (
         <React.Fragment>
-          Top {noun} of soy in <span className="notranslate">{capitalize(name)}</span> in{' '}
-          <span className="notranslate">{year}</span>
+          Top {noun} of {commodityName} in <span className="notranslate">{capitalize(name)}</span>{' '}
+          in <span className="notranslate">{year}</span>
         </React.Fragment>
       );
     }
     return (
       <React.Fragment>
-        Top {noun} of <span className="notranslate">{capitalize(name)}</span> soy in{' '}
+        Top {noun} of <span className="notranslate">{capitalize(name)}</span> {commodityName} in{' '}
         <span className="notranslate">{year}</span>
       </React.Fragment>
     );
@@ -73,6 +73,7 @@ class TopConsumersWidget extends React.PureComponent {
 }
 
 TopConsumersWidget.propTypes = {
+  commodityName: PropTypes.string,
   year: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
   nodeId: PropTypes.number.isRequired,

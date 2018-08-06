@@ -22,12 +22,20 @@ class ProfileNode extends React.PureComponent {
   onYearChange = year => this.updateQuery('year', year);
 
   updateQuery(key, value) {
-    const { nodeId, year, profileType, updateQueryParams } = this.props;
-    updateQueryParams({ nodeId, year, [key]: value }, profileType);
+    const { nodeId, year, context, profileType, updateQueryParams } = this.props;
+    updateQueryParams(
+      {
+        nodeId,
+        year,
+        contextId: context.id,
+        [key]: value
+      },
+      profileType
+    );
   }
 
   render() {
-    const { printMode, year, nodeId, contextId, profileType, tooltips } = this.props;
+    const { printMode, year, nodeId, context, profileType, tooltips } = this.props;
     return (
       <div className={`l-profile-${profileType}`}>
         {printMode && (
@@ -41,8 +49,8 @@ class ProfileNode extends React.PureComponent {
         )}
         <SummaryWidget
           year={year}
+          context={context}
           printMode={printMode}
-          contextId={contextId}
           profileType={profileType}
           tooltips={tooltips}
           nodeId={nodeId}
@@ -56,16 +64,20 @@ class ProfileNode extends React.PureComponent {
               className="c-top-map page-break-inside-avoid"
               year={year}
               nodeId={nodeId}
-              contextId={contextId}
               type="countries"
+              contextId={context.id}
+              countryName={context.countryName}
+              commodityName={context.commodityName}
             />
             <TopDestinationsWidget
               className="c-top-municipalities page-break-inside-avoid"
               year={year}
-              nodeId={nodeId}
-              contextId={contextId}
               type="regions"
+              nodeId={nodeId}
               printMode={printMode}
+              contextId={context.id}
+              countryName={context.countryName}
+              commodityName={context.commodityName}
             />
             <SustainabilityTableWidget
               type="risk"
@@ -73,13 +85,15 @@ class ProfileNode extends React.PureComponent {
               className="c-area-table page-break-inside-avoid"
               year={year}
               nodeId={nodeId}
-              contextId={contextId}
+              contextId={context.id}
             />
             <ImportingCompaniesWidget
               printMode={printMode}
               year={year}
               nodeId={nodeId}
-              contextId={contextId}
+              contextId={context.id}
+              countryName={context.countryName}
+              commodityName={context.commodityName}
             />
           </React.Fragment>
         )}
@@ -91,14 +105,14 @@ class ProfileNode extends React.PureComponent {
               className="c-area-table score-table"
               year={year}
               nodeId={nodeId}
-              contextId={contextId}
+              contextId={context.id}
             />
-            <DeforestationWidget year={year} nodeId={nodeId} contextId={contextId} />
-            <TopConsumersWidget year={year} nodeId={nodeId} contextId={contextId} type="actors" />
+            <DeforestationWidget year={year} nodeId={nodeId} contextId={context.id} />
+            <TopConsumersWidget year={year} nodeId={nodeId} contextId={context.id} type="actors" />
             <TopConsumersWidget
               year={year}
               nodeId={nodeId}
-              contextId={contextId}
+              contextId={context.id}
               type="countries"
             />
           </React.Fragment>
@@ -109,11 +123,11 @@ class ProfileNode extends React.PureComponent {
 }
 
 ProfileNode.propTypes = {
-  tooltips: PropTypes.object,
   printMode: PropTypes.bool,
+  context: PropTypes.object,
+  tooltips: PropTypes.object,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,
-  contextId: PropTypes.number.isRequired,
   profileType: PropTypes.string.isRequired,
   updateQueryParams: PropTypes.func.isRequired
 };
