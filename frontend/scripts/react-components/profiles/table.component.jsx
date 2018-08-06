@@ -85,13 +85,13 @@ class Table extends Component {
   }
 
   renderActorsTable() {
-    const { data, target, year, targetPayload } = this.props;
+    const { data, target, year, targetPayload, contextId } = this.props;
 
     const linkTo = id => ({
       type: target,
       payload: {
         ...(targetPayload || {}),
-        query: { year, nodeId: id }
+        query: { year, contextId, nodeId: id }
       }
     });
 
@@ -141,12 +141,12 @@ class Table extends Component {
   }
 
   renderOtherTable() {
-    const { data, target, targetPayload, year } = this.props;
+    const { data, target, targetPayload, year, contextId } = this.props;
     const linkTo = id => ({
       type: target,
       payload: {
         ...(targetPayload || {}),
-        query: { year, nodeId: id }
+        query: { year, contextId, nodeId: id }
       }
     });
     return (
@@ -196,7 +196,8 @@ Table.propTypes = {
   type: PropTypes.string,
   target: PropTypes.string,
   year: PropTypes.number,
-  targetPayload: PropTypes.object
+  targetPayload: PropTypes.object,
+  contextId: PropTypes.number.isRequired
 };
 
 export default Table;

@@ -35,8 +35,8 @@ class SustainabilityTableWidget extends React.PureComponent {
         query={[mainQuery, GET_NODE_SUMMARY_URL]}
         params={[{ ...params, year }, { ...params, profile_type: profileType }]}
       >
-        {({ data, loading }) => {
-          if (loading)
+        {({ data, loading, error }) => {
+          if (loading || error)
             return (
               <section className="spinner-section">
                 <ShrinkingSpinner className="-large" />
@@ -50,6 +50,7 @@ class SustainabilityTableWidget extends React.PureComponent {
                 <div className="small-12 columns">
                   <MultiTable
                     year={year}
+                    contextId={contextId}
                     type={type === 'indicators' ? 't_head_places' : 't_head_actors'}
                     data={data[mainQuery]}
                     tabsTitle={this.getTitle(nodeName)}

@@ -11,8 +11,8 @@ function DeforestationWidget(props) {
   const params = { node_id: nodeId, context_id: contextId, year };
   return (
     <Widget query={[GET_PLACE_DEFORESTATION_TRAYECTORY]} params={[params]}>
-      {({ data, loading }) => {
-        if (loading)
+      {({ data, loading, error }) => {
+        if (loading || error)
           return (
             <section className="spinner-section">
               <ShrinkingSpinner className="-large" />

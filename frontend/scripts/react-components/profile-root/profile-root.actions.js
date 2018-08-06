@@ -10,7 +10,11 @@ export const goToNodeProfilePage = node => dispatch =>
   dispatch({
     type: 'profileNode',
     payload: {
-      query: { nodeId: node.id, year: DEFAULT_PROFILE_PAGE_YEAR },
+      query: {
+        nodeId: node.id,
+        contextId: node.contextId,
+        year: DEFAULT_PROFILE_PAGE_YEAR
+      },
       profileType: node.profile
     }
   });

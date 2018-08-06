@@ -47,8 +47,8 @@ class TopDestinationsWidget extends React.PureComponent {
         query={[mainQuery, GET_NODE_SUMMARY_URL]}
         params={[{ ...params, year }, { ...params, profile_type: 'actor' }]}
       >
-        {({ data, loading }) => {
-          if (loading)
+        {({ data, loading, error }) => {
+          if (loading || error)
             return (
               <section className="spinner-section">
                 <ShrinkingSpinner className="-large" />

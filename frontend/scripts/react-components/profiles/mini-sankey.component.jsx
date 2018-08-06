@@ -45,7 +45,7 @@ class MiniSankey extends Component {
   hideTooltipCallback = () => this.tooltip && this.tooltip.hide();
 
   render() {
-    const { data, onLinkClick, targetLink, width, year } = this.props;
+    const { data, onLinkClick, targetLink, width, year, targetPayload, contextId } = this.props;
     const totalHeight = data.targetNodes.reduce(
       (total, node) => total + Math.ceil(node.height * BASE_HEIGHT) + NODE_V_SPACE,
       0
@@ -119,8 +119,12 @@ class MiniSankey extends Component {
                 onClick={() => {
                   if (node.isDomesticConsumption || !targetLink) return;
                   onLinkClick(targetLink, {
-                    nodeId: node.id,
-                    year
+                    ...(targetPayload || {}),
+                    query: {
+                      year,
+                      contextId,
+                      nodeId: node.id
+                    }
                   });
                 }}
               >
@@ -183,8 +187,10 @@ MiniSankey.propTypes = {
   data: PropTypes.object,
   onLinkClick: PropTypes.func,
   targetLink: PropTypes.string,
+  targetPayload: PropTypes.string,
   width: PropTypes.number,
-  year: PropTypes.number
+  year: PropTypes.number,
+  contextId: PropTypes.number
 };
 
 export default Responsive()(MiniSankey);

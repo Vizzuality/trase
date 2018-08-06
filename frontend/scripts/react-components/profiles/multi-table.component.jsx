@@ -25,7 +25,16 @@ class MultiTable extends Component {
   }
 
   render() {
-    const { data, tabsTitle, tabsTitleTooltip, target, type, year, targetPayload } = this.props;
+    const {
+      data,
+      tabsTitle,
+      tabsTitleTooltip,
+      target,
+      type,
+      year,
+      targetPayload,
+      contextId
+    } = this.props;
     const { selectedTableIndex } = this.state;
     const indicatorNames = data.map(d => d.name);
 
@@ -47,6 +56,7 @@ class MultiTable extends Component {
                 target={_.isFunction(target) ? target(elem) : target}
                 targetPayload={targetPayload}
                 year={year}
+                contextId={contextId}
               />
             </div>
           </div>
@@ -63,7 +73,8 @@ MultiTable.propTypes = {
   target: PropTypes.func,
   type: PropTypes.string,
   year: PropTypes.number,
-  targetPayload: PropTypes.object
+  targetPayload: PropTypes.object,
+  contextId: PropTypes.number.isRequired
 };
 
 export default MultiTable;

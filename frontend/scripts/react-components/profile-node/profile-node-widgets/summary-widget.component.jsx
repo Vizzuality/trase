@@ -12,8 +12,8 @@ function SummaryWidget(props) {
   const params = { node_id: nodeId, context_id: context.id, profile_type: profileType };
   return (
     <Widget params={[params]} query={[GET_NODE_SUMMARY_URL]}>
-      {({ data, loading }) => {
-        if (loading)
+      {({ data, loading, error }) => {
+        if (loading || error)
           return (
             <div className="spinner-section">
               <ShrinkingSpinner className="-large" />

@@ -20,7 +20,7 @@ function mapStateToProps(state) {
   };
 }
 
-const updateQueryParams = (query, profileType) => ({
+const updateQueryParams = (profileType, query) => ({
   type: 'profileNode',
   payload: { query, profileType }
 });

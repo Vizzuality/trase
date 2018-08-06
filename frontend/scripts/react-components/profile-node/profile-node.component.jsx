@@ -23,19 +23,24 @@ class ProfileNode extends React.PureComponent {
 
   updateQuery(key, value) {
     const { nodeId, year, context, profileType, updateQueryParams } = this.props;
-    updateQueryParams(
-      {
-        nodeId,
-        year,
-        contextId: context.id,
-        [key]: value
-      },
-      profileType
-    );
+    updateQueryParams(profileType, {
+      nodeId,
+      year,
+      contextId: context.id,
+      [key]: value
+    });
   }
 
   render() {
-    const { printMode, year, nodeId, context, profileType, tooltips } = this.props;
+    const {
+      printMode,
+      year,
+      nodeId,
+      context,
+      profileType,
+      tooltips,
+      updateQueryParams
+    } = this.props;
     return (
       <div className={`l-profile-${profileType}`}>
         {printMode && (
@@ -108,13 +113,14 @@ class ProfileNode extends React.PureComponent {
               contextId={context.id}
             />
             <DeforestationWidget year={year} nodeId={nodeId} contextId={context.id} />
-            <TopConsumersWidget year={year} nodeId={nodeId} contextId={context.id} type="actors" />
             <TopConsumersWidget
               year={year}
+              type="actor"
               nodeId={nodeId}
               contextId={context.id}
-              type="countries"
+              onLinkClick={updateQueryParams}
             />
+            <TopConsumersWidget year={year} nodeId={nodeId} contextId={context.id} type="place" />
           </React.Fragment>
         )}
       </div>
