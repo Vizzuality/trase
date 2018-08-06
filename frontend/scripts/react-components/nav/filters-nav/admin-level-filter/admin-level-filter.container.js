@@ -18,4 +18,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminLevelFilter);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AdminLevelFilter);

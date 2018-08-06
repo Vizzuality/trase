@@ -20,4 +20,8 @@ const mapViewCallbacksToActions = () => ({
   onContextualLayerSelected: layers => selectContextualLayers(layers)
 });
 
-export default connect(mapContext, mapMethodsToState, mapViewCallbacksToActions);
+export default connect(
+  mapContext,
+  mapMethodsToState,
+  mapViewCallbacksToActions
+);

@@ -6,7 +6,7 @@ import ProfileActorMarkup from 'html/profile-actor.ejs';
 import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
 import React from 'react';
-import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
+import withTranslation from 'react-components/nav/locale-selector/with-translation.hoc';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import ChoroLegend from 'react-components/profiles/choro-legend.component';
 import DropdownTabSwitcher from 'react-components/profiles/dropdown-tab-switcher.component';

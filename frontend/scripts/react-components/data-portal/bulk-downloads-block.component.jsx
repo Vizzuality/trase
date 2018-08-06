@@ -15,8 +15,8 @@ class BulkDownloadsBlock extends Component {
       <div className="c-bulk-downloads">
         <div className="c-bulk-downloads__title">BULK DOWNLOADS</div>
         <div className="row">
-          {this.props.contexts.map((context, key) => (
-            <div key={key} className="small-4 columns">
+          {this.props.contexts.map(context => (
+            <div key={context.id} className="small-4 columns">
               <div
                 className={classnames('c-bulk-downloads__item', {
                   '-disabled': !this.props.enabled

@@ -1,4 +1,4 @@
-import { createReducer } from 'store';
+import createReducer from 'utils/createReducer';
 import { HOME__SET_CONTENT } from './home.actions';
 
 const initialState = {

@@ -26,7 +26,8 @@ const getMapDimensionsWarnings = (
     .map((year, index) => year + index);
   if (dimensions.length === 0) {
     return null;
-  } else if (
+  }
+  if (
     dimensions.length === 2 &&
     dimensions[0].disabledYearRangeReason === dimensions[1].disabledYearRangeReason &&
     dimensions[0].disabledYearRangeReason !== YEARS_INCOMPLETE

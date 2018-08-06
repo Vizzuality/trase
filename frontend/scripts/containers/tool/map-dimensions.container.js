@@ -31,4 +31,8 @@ const mapViewCallbacksToActions = () => ({
   onDimensionClick: uid => toggleMapDimension(uid)
 });
 
-export default connect(MapDimensions, mapMethodsToState, mapViewCallbacksToActions);
+export default connect(
+  MapDimensions,
+  mapMethodsToState,
+  mapViewCallbacksToActions
+);

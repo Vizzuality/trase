@@ -1,5 +1,5 @@
 import { LOAD_CONSUMPTION_COUNTRIES, LOAD_EXPORTERS, LOAD_INDICATORS } from 'actions/data.actions';
-import { createReducer } from 'scripts/store';
+import createReducer from 'utils/createReducer';
 
 const initialState = {
   exporters: [],

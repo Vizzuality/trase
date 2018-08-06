@@ -45,4 +45,8 @@ const mapViewCallbacksToActions = () => ({
   onClearClick: () => resetState()
 });
 
-export default connect(NodesTitles, mapMethodsToState, mapViewCallbacksToActions);
+export default connect(
+  NodesTitles,
+  mapMethodsToState,
+  mapViewCallbacksToActions
+);

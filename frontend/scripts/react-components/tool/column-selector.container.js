@@ -19,4 +19,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ColumnSelector);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ColumnSelector);

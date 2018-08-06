@@ -33,4 +33,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: 'explore' });
   }
 });
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Home);

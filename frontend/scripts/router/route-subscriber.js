@@ -55,7 +55,10 @@ export default function routeSubscriber(store) {
     },
     onProfilePageChange: state.location
   });
-  const RouterContainer = connect(RouterComponent, mapMethodsToState);
+  const RouterContainer = connect(
+    RouterComponent,
+    mapMethodsToState
+  );
 
   return new RouterContainer(store);
 }

@@ -14,4 +14,8 @@ const mapViewCallbacksToActions = () => ({
   resetSankey: () => resetSankey()
 });
 
-export default connect(ToolContent, mapMethodsToState, mapViewCallbacksToActions);
+export default connect(
+  ToolContent,
+  mapMethodsToState,
+  mapViewCallbacksToActions
+);

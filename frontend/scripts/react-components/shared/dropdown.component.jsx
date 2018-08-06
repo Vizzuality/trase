@@ -35,7 +35,8 @@ export default class Dropdown extends Component {
   }
 
   onTitleClick() {
-    this.setState({ isOpen: !this.state.isOpen });
+    const { isOpen } = this.state;
+    this.setState({ isOpen: !isOpen });
   }
 
   handleClickOutside(event) {

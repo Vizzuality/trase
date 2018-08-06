@@ -4,7 +4,7 @@ import pickBy from 'lodash/pickBy';
 import qs from 'qs';
 import { LOAD_STATE_FROM_URL } from 'scripts/actions/app.actions';
 import { getContextById } from 'scripts/reducers/helpers/contextHelper';
-import { getPageTitle } from 'scripts/router/page-title';
+import getPageTitle from 'scripts/router/page-title';
 
 // remove all params that are now in the state
 const removeEmptyParams = params => pickBy(params, param => typeof param !== 'undefined');

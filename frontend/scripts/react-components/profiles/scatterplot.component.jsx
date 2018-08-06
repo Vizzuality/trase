@@ -9,7 +9,7 @@ import 'styles/components/profiles/scatterplot.scss';
 import abbreviateNumber from 'utils/abbreviateNumber';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Responsive } from 'react-components/shared/responsive.hoc';
+import Responsive from 'react-components/shared/responsive.hoc';
 import DropdownTabSwitcher from 'react-components/profiles/dropdown-tab-switcher.component';
 
 class Scatterplot extends Component {

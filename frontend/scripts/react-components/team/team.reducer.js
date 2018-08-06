@@ -2,7 +2,7 @@ import kebabCase from 'lodash/kebabCase';
 import keyBy from 'lodash/keyBy';
 import sortBy from 'lodash/sortBy';
 import { TEAM__SET_CONTENT, TEAM__SET_ERROR_MESSAGE } from 'react-components/team/team.actions';
-import { createReducer } from 'store';
+import createReducer from 'utils/createReducer';
 
 const initialState = {
   groups: [],

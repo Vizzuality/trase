@@ -1,4 +1,4 @@
-import { createReducer } from 'store';
+import createReducer from 'utils/createReducer';
 import { COUNTRIES_COORDINATES } from 'scripts/countries';
 import { EXPLORE__SET_TOP_NODES, EXPLORE__SET_SELECTED_TABLE_COLUMN } from './explore.actions';
 

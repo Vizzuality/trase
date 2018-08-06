@@ -194,7 +194,8 @@ const sankeyLayout = () => {
               : linkA.recolorBy.charCodeAt(0) - linkB.recolorBy.charCodeAt(0);
         }
         return recolorBySort;
-      } else if (links[0].recolorGroup !== undefined) {
+      }
+      if (links[0].recolorGroup !== undefined) {
         // When using a recolorGroup
         // For columns outside of adjacent columns, links should be sorted by the original *y order of recolored nodes*
         // (mapped to recolor groups before sorting, see recolorGroupsOrderedByY bit above)
@@ -212,7 +213,8 @@ const sankeyLayout = () => {
         }
         if (linkA.targetColumnPosition <= nodesColoredAtColumn) {
           return tIdAY - tIdBY || sIdAY - sIdBY;
-        } else if (linkA.sourceColumnPosition >= nodesColoredAtColumn) {
+        }
+        if (linkA.sourceColumnPosition >= nodesColoredAtColumn) {
           return sIdAY - sIdBY || tIdAY - tIdBY;
         }
 

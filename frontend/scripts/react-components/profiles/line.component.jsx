@@ -14,7 +14,7 @@ import { timeFormat as d3_timeFormat } from 'd3-time-format';
 import { LINE_LABEL_HEIGHT } from 'constants';
 import abbreviateNumber from 'utils/abbreviateNumber';
 import { translateText } from 'utils/transifex';
-import { Responsive } from 'react-components/shared/responsive.hoc';
+import Responsive from 'react-components/shared/responsive.hoc';
 
 import 'styles/components/profiles/line.scss';
 

@@ -6,7 +6,7 @@ import ProfilePlaceMarkup from 'html/profile-place.ejs';
 import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
 import React from 'react';
-import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
+import withTranslation from 'react-components/nav/locale-selector/with-translation.hoc';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import LineLegend from 'react-components/profiles/line-legend.component';
 import Line from 'react-components/profiles/line.component';
@@ -364,7 +364,7 @@ const _loadData = (store, nodeId, year) => {
     .then(response => {
       if (!response) return;
 
-      const data = response.data;
+      const { data } = response;
 
       // TODO: once we have this state in the reducer, move this logic to the exiting page title helper
       document.title = `TRASE - ${capitalize(data.municipality_name)} profile`;

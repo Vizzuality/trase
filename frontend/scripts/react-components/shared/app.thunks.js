@@ -63,5 +63,9 @@ function loadContextsPromise(dispatch, getState) {
   );
 }
 
-export const loadBaseAppData = (dispatch, getState) =>
-  Promise.all([loadTooltipsPromise(dispatch, getState), loadContextsPromise(dispatch, getState)]);
+export default function(dispatch, getState) {
+  return Promise.all([
+    loadTooltipsPromise(dispatch, getState),
+    loadContextsPromise(dispatch, getState)
+  ]);
+}

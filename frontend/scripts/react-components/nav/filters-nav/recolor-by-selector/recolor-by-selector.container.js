@@ -21,4 +21,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(RecolorBySelector);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RecolorBySelector);

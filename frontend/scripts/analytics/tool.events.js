@@ -1,4 +1,4 @@
-import { TOGGLE_MAP_LAYERS_MENU } from 'actions/app.actions';
+import { TOGGLE_MAP_LAYERS_MENU, SET_CONTEXT } from 'actions/app.actions';
 import {
   SELECT_BIOME_FILTER,
   SELECT_COLUMN,
@@ -7,7 +7,6 @@ import {
   SELECT_RESIZE_BY,
   SELECT_VIEW,
   SELECT_YEARS,
-  SET_CONTEXT,
   TOGGLE_MAP,
   UPDATE_NODE_SELECTION
 } from 'actions/tool.actions';
