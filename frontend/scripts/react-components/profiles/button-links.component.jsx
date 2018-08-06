@@ -32,12 +32,14 @@ function ButtonLinks(props) {
             to={{
               type: 'tool',
               payload: {
-                state: {
-                  isMapVisible: true,
-                  selectedNodesIds: [nodeId],
-                  expandedNodesIds: [nodeId],
-                  selectedYears: [year, year],
-                  selectedContextId: contextId
+                query: {
+                  state: {
+                    isMapVisible: true,
+                    selectedNodesIds: [nodeId],
+                    expandedNodesIds: [nodeId],
+                    selectedYears: [year, year],
+                    selectedContextId: contextId
+                  }
                 }
               }
             }}
@@ -55,12 +57,14 @@ function ButtonLinks(props) {
             to={{
               type: 'tool',
               payload: {
-                state: {
-                  isMapVisible: false,
-                  selectedNodesIds: [nodeId],
-                  expandedNodesIds: [nodeId],
-                  selectedYears: [year, year],
-                  selectedContextId: contextId
+                query: {
+                  state: {
+                    isMapVisible: false,
+                    selectedNodesIds: [nodeId],
+                    expandedNodesIds: [nodeId],
+                    selectedYears: [year, year],
+                    selectedContextId: contextId
+                  }
                 }
               }
             }}
