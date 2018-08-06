@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TopDestinationsChart from 'react-components/profile-node/top-destinations-chart.component';
-import TopDestinationsMap from 'react-components/profile-node/top-destinations-map.component';
+import TopDestinationsChart from 'react-components/profiles/top-destinations-chart.component';
+import TopDestinationsMap from 'react-components/profiles/top-destinations-map.component';
 import {
   GET_ACTOR_TOP_COUNTRIES,
   GET_ACTOR_TOP_SOURCES,

@@ -5,7 +5,7 @@ import cx from 'classnames';
 import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
 import HelpTooltip from 'react-components/shared/help-tooltip.component';
-import TitleGroup from 'react-components/profile-node/title-group.component';
+import TitleGroup from 'react-components/profiles/title-group.component';
 
 class ActorSummary extends React.PureComponent {
   render() {

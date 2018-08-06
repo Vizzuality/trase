@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ActorSummary from 'react-components/profile-node/actor-summary.component';
-import PlaceSummary from 'react-components/profile-node/place-summary.component';
-import ButtonLinks from 'react-components/profile-node/button-links.component';
+import ActorSummary from 'react-components/profiles/actor-summary.component';
+import PlaceSummary from 'react-components/profiles/place-summary.component';
+import ButtonLinks from 'react-components/profiles/button-links.component';
 import Widget from 'react-components/widgets/widget.component';
 import { GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';

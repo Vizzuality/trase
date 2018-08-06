@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
 import HelpTooltip from 'react-components/shared/help-tooltip.component';
-import TitleGroup from 'react-components/profile-node/title-group.component';
+import TitleGroup from 'react-components/profiles/title-group.component';
 import Map from 'react-components/profiles/map.component';
 import formatValue from 'utils/formatValue';
 
