@@ -21,6 +21,11 @@ function DeforestationWidget(props) {
           );
 
         const { lines, unit, includedYears } = data[GET_PLACE_DEFORESTATION_TRAJECTORY];
+
+        if (!lines) {
+          return null;
+        }
+
         return (
           <section className="deforestation page-break-inside-avoid">
             <div className="row">
