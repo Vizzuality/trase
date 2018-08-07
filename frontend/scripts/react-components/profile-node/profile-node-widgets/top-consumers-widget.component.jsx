@@ -39,7 +39,7 @@ class TopConsumersWidget extends React.PureComponent {
 
   render() {
     const { year, nodeId, contextId, type, onLinkClick } = this.props;
-    const params = { node_id: nodeId, context_id: contextId };
+    const params = { node_id: nodeId, context_id: contextId, year };
     const mainQuery =
       type === 'actor' ? GET_PLACE_TOP_CONSUMER_ACTORS : GET_PLACE_TOP_CONSUMER_COUNTRIES;
     return (

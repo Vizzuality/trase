@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 
 import ProfileNode from 'react-components/profile-node/profile-node.container';
+import Footer from 'scripts/react-components/shared/footer.component';
 
 export const mount = (root, store) => {
   root.innerHTML = BaseMarkup({
@@ -28,6 +29,13 @@ export const mount = (root, store) => {
       <ProfileNode />
     </Provider>,
     document.getElementById('page-react-root')
+  );
+
+  render(
+    <Provider store={store}>
+      <Footer />
+    </Provider>,
+    document.getElementById('footer')
   );
 };
 

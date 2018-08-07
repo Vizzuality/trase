@@ -72,8 +72,8 @@ class Line extends Component {
       style,
       xValues,
       onLinkClick,
-      targetLink,
       year,
+      contextId,
       profileType,
       margin,
       ticks,
@@ -215,7 +215,8 @@ class Line extends Component {
               })
               .on('click', d => {
                 if (typeof onLinkClick !== 'undefined' && d[0].nodeId && profileType) {
-                  onLinkClick(targetLink, {
+                  onLinkClick(profileType, {
+                    contextId,
                     nodeId: d[0].nodeId,
                     year
                   });
@@ -313,7 +314,15 @@ class Line extends Component {
   }
 
   renderLegend() {
-    const { xValues, onLinkClick, targetLink, year, style, lineClassNameCallback } = this.props;
+    const {
+      xValues,
+      onLinkClick,
+      year,
+      style,
+      lineClassNameCallback,
+      profileType,
+      contextId
+    } = this.props;
     const isSmallChart = this.isSmallChart();
     const lines = this.getLines().sort((a, b) => {
       const last = xValues.length - 1;
@@ -334,10 +343,10 @@ class Line extends Component {
           const lineClassName = isFunction(lineClassNameCallback)
             ? lineClassNameCallback(lineIndex, lineStyle)
             : lineStyle;
-          const isLink =
-            typeof onLinkClick !== 'undefined' && lineData.node_id && lineData.profile_type;
+          const isLink = typeof onLinkClick !== 'undefined' && lineData.node_id && profileType;
           const linkOnClick = () => {
-            onLinkClick(targetLink, {
+            onLinkClick(profileType, {
+              contextId,
               nodeId: lineData.node_id,
               year
             });
@@ -389,8 +398,8 @@ Line.propTypes = {
   unit: PropTypes.string,
   style: PropTypes.object,
   onLinkClick: PropTypes.func,
-  targetLink: PropTypes.string,
   width: PropTypes.number,
+  contextId: PropTypes.number,
   xValues: PropTypes.array,
   useBottomLegend: PropTypes.bool,
   year: PropTypes.number,

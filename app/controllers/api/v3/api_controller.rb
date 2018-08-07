@@ -12,7 +12,7 @@ module Api
       end
 
       def set_year
-        @year = params[:year]&.to_i || @context&.default_year
+        @year = params[:year]&.to_i
         return if @year.present?
         raise ActionController::ParameterMissing,
               'Required param year missing'

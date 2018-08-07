@@ -66,8 +66,7 @@ class TopDestinationsMap extends React.PureComponent {
         <div className="row align-right">
           <div
             className={cx('column', 'small-12', {
-              'medium-6': printMode,
-              'medium-8': !printMode
+              'medium-6': printMode
             })}
           >
             <ChoroLegend
@@ -78,7 +77,7 @@ class TopDestinationsMap extends React.PureComponent {
               bucket={[buckets[0], ...buckets]}
             />
           </div>
-          <div className="column small-12 medium-10">
+          <div className="column small-12">
             <div className="top-destinations-map-container" style={{ height, width }}>
               <Map
                 topoJSONPath={this.getTopoJsonLink()}
@@ -107,7 +106,7 @@ TopDestinationsMap.propTypes = {
   year: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   buckets: PropTypes.array.isRequired,
-  nodeName: PropTypes.string.isRequired
+  nodeName: PropTypes.string
 };
 
 export default TopDestinationsMap;

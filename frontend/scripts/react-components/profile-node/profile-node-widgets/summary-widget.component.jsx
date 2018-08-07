@@ -9,7 +9,7 @@ import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.componen
 
 function SummaryWidget(props) {
   const { printMode, year, nodeId, context, profileType, onYearChange, scrollTo, tooltips } = props;
-  const params = { node_id: nodeId, context_id: context.id, profile_type: profileType };
+  const params = { node_id: nodeId, context_id: context.id, profile_type: profileType, year };
   return (
     <Widget params={[params]} query={[GET_NODE_SUMMARY_URL]}>
       {({ data, loading, error }) => {

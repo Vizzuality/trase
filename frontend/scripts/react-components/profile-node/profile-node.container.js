@@ -24,6 +24,7 @@ const updateQueryParams = (profileType, query) => ({
   type: 'profileNode',
   payload: { query, profileType }
 });
+
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {

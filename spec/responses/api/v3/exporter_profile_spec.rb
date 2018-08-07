@@ -10,6 +10,12 @@ RSpec.describe 'Exporter profile', type: :request do
   include_context 'api v3 brazil flows'
   include_context 'api v3 brazil flows quants'
 
+  let(:summary_params) {
+    {
+      year: 2015
+    }
+  }
+
   describe 'GET /api/v3/contexts/:context_id/nodes/:id/actor' do
     it 'validates node types' do
       expect { get "/api/v3/contexts/#{api_v3_context.id}/nodes/#{api_v3_country_of_destination1_node.id}/actor" }.to raise_error(ActiveRecord::RecordNotFound)
@@ -22,8 +28,17 @@ RSpec.describe 'Exporter profile', type: :request do
       expect { get "/api/v3/contexts/#{api_v3_context.id}/nodes/#{api_v3_exporter1_node.id}/actor" }.to_not raise_error
     end
 
-    it 'has the correct response structure' do
+    it 'requires year' do
       get "/api/v3/contexts/#{api_v3_context.id}/nodes/#{api_v3_exporter1_node.id}/actor"
+
+      expect(@response).to have_http_status(:bad_request)
+      expect(JSON.parse(@response.body)).to eq(
+                                              'error' => 'param is missing or the value is empty: Required param year missing'
+                                            )
+    end
+
+    it 'has the correct response structure' do
+      get "/api/v3/contexts/#{api_v3_context.id}/nodes/#{api_v3_exporter1_node.id}/actor", params: summary_params
 
       expect(@response).to have_http_status(:ok)
       expect(@response).to match_response_schema('exporter_profile')
@@ -43,7 +58,7 @@ RSpec.describe 'Exporter profile', type: :request do
     end
 
     it 'has the correct response structure' do
-      get "/api/v3/contexts/#{api_v3_context.id}/actors/#{api_v3_exporter1_node.id}/basic_attributes"
+      get "/api/v3/contexts/#{api_v3_context.id}/actors/#{api_v3_exporter1_node.id}/basic_attributes", params: summary_params
 
       expect(@response.status).to eq 200
       expect(@response).to match_response_schema('v3_actor_basic_attributes')
@@ -52,7 +67,7 @@ RSpec.describe 'Exporter profile', type: :request do
 
   describe 'GET /api/v3/contexts/:context_id/actors/:id/top_countries' do
     it 'has the correct response structure' do
-      get "/api/v3/contexts/#{api_v3_context.id}/actors/#{api_v3_exporter1_node.id}/top_countries"
+      get "/api/v3/contexts/#{api_v3_context.id}/actors/#{api_v3_exporter1_node.id}/top_countries", params: summary_params
 
       expect(@response.status).to eq 200
       expect(@response).to match_response_schema('v3_actor_top_countries')
@@ -61,7 +76,7 @@ RSpec.describe 'Exporter profile', type: :request do
 
   describe 'GET /api/v3/contexts/:context_id/actors/:id/top_sources' do
     it 'has the correct response structure' do
-      get "/api/v3/contexts/#{api_v3_context.id}/actors/#{api_v3_exporter1_node.id}/top_sources"
+      get "/api/v3/contexts/#{api_v3_context.id}/actors/#{api_v3_exporter1_node.id}/top_sources", params: summary_params
 
       expect(@response.status).to eq 200
       expect(@response).to match_response_schema('v3_actor_top_sources')
@@ -70,7 +85,7 @@ RSpec.describe 'Exporter profile', type: :request do
 
   describe 'GET /api/v3/contexts/:context_id/actors/:id/sustainability' do
     it 'has the correct response structure' do
-      get "/api/v3/contexts/#{api_v3_context.id}/actors/#{api_v3_exporter1_node.id}/sustainability"
+      get "/api/v3/contexts/#{api_v3_context.id}/actors/#{api_v3_exporter1_node.id}/sustainability", params: summary_params
 
       expect(@response.status).to eq 200
       expect(@response).to match_response_schema('v3_actor_sustainability')
@@ -79,7 +94,7 @@ RSpec.describe 'Exporter profile', type: :request do
 
   describe 'GET /api/v3/contexts/:context_id/actors/:id/exporting_companies' do
     it 'has the correct response structure' do
-      get "/api/v3/contexts/#{api_v3_context.id}/actors/#{api_v3_exporter1_node.id}/exporting_companies"
+      get "/api/v3/contexts/#{api_v3_context.id}/actors/#{api_v3_exporter1_node.id}/exporting_companies", params: summary_params
 
       expect(@response.status).to eq 200
       expect(@response).to match_response_schema('v3_actor_exporting_companies')

@@ -56,10 +56,14 @@ class TopDestinationsChart extends React.PureComponent {
       <React.Fragment>
         Top {noun} of {commodityName} {verb} by{' '}
         <span className="notranslate">{capitalize(nodeName)}</span> in{' '}
-        <span className="notranslate">{year}</span>
+        <span className="notranslate">{year}</span>:
       </React.Fragment>
     );
   }
+
+  handleLinkClick = (linkTarget, query) => {
+    this.props.onLinkClick(linkTarget, query);
+  };
 
   render() {
     const {
@@ -72,7 +76,8 @@ class TopDestinationsChart extends React.PureComponent {
       tabs,
       onChangeTab,
       height,
-      lines
+      lines,
+      contextId
     } = this.props;
     const { tooltipConfig } = this.state;
     const heightStyle = TopDestinationsChart.getIsMobile() ? { minHeigh: height } : { height };
@@ -96,8 +101,10 @@ class TopDestinationsChart extends React.PureComponent {
             style={{ ...heightStyle, width: '100%' }}
           >
             <TranslatedLine
+              onLinkClick={this.handleLinkClick}
               profileType={profileType}
               unit={unit}
+              contextId={contextId}
               lines={lines}
               style={style}
               xValues={includedYears}
@@ -120,8 +127,10 @@ class TopDestinationsChart extends React.PureComponent {
 TopDestinationsChart.propTypes = {
   tabs: PropTypes.array,
   onChangeTab: PropTypes.func,
+  onLinkClick: PropTypes.func,
   profileType: PropTypes.string,
   commodityName: PropTypes.string,
+  contextId: PropTypes.number.isRequired,
   verb: PropTypes.string.isRequired,
   lines: PropTypes.array.isRequired,
   type: PropTypes.string.isRequired,
@@ -129,7 +138,7 @@ TopDestinationsChart.propTypes = {
   unit: PropTypes.string.isRequired,
   style: PropTypes.object.isRequired,
   height: PropTypes.number.isRequired,
-  nodeName: PropTypes.string.isRequired,
+  nodeName: PropTypes.string,
   includedYears: PropTypes.array.isRequired
 };
 

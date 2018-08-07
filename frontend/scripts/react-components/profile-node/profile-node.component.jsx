@@ -72,6 +72,7 @@ class ProfileNode extends React.PureComponent {
               type="countries"
               contextId={context.id}
               countryName={context.countryName}
+              onLinkClick={updateQueryParams}
               commodityName={context.commodityName}
             />
             <TopDestinationsWidget
@@ -83,6 +84,8 @@ class ProfileNode extends React.PureComponent {
               contextId={context.id}
               countryName={context.countryName}
               commodityName={context.commodityName}
+              onLinkClick={updateQueryParams}
+              profileType={profileType}
             />
             <SustainabilityTableWidget
               type="risk"

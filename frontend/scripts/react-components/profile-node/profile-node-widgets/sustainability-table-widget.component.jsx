@@ -28,20 +28,21 @@ class SustainabilityTableWidget extends React.PureComponent {
 
   render() {
     const { year, nodeId, contextId, type, className, profileType } = this.props;
-    const params = { node_id: nodeId, context_id: contextId };
+    const params = { node_id: nodeId, context_id: contextId, year };
     const mainQuery = type === 'indicators' ? GET_PLACE_INDICATORS : GET_ACTOR_SUSTAINABILITY;
     return (
       <Widget
         query={[mainQuery, GET_NODE_SUMMARY_URL]}
-        params={[{ ...params, year }, { ...params, profile_type: profileType }]}
+        params={[params, { ...params, profile_type: profileType }]}
       >
         {({ data, loading, error }) => {
-          if (loading || error)
+          if (loading || error) {
             return (
               <section className="spinner-section">
                 <ShrinkingSpinner className="-large" />
               </section>
             );
+          }
 
           const { nodeName } = data[GET_NODE_SUMMARY_URL];
           return (

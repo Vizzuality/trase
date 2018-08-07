@@ -22,8 +22,8 @@ class TopDestinationsWidget extends React.PureComponent {
     const { activeTab } = this.state;
     const linesData = type === 'countries' ? data : data[activeTab];
     const { includedYears, buckets } = data;
-    const { lines, style, unit, profileType } = linesData;
-    return { includedYears, lines, style, unit, profileType, buckets };
+    const { lines, style, unit } = linesData;
+    return { includedYears, lines, style, unit, profileType: linesData.profile_type, buckets };
   }
 
   updateTab = index => this.setState({ activeTab: this.tabs[index] });
@@ -37,11 +37,12 @@ class TopDestinationsWidget extends React.PureComponent {
       type,
       className,
       commodityName,
-      countryName
+      countryName,
+      onLinkClick
     } = this.props;
     const { activeTab } = this.state;
     const mainQuery = type === 'countries' ? GET_ACTOR_TOP_COUNTRIES : GET_ACTOR_TOP_SOURCES;
-    const params = { node_id: nodeId, context_id: contextId };
+    const params = { node_id: nodeId, context_id: contextId, year };
     return (
       <Widget
         query={[mainQuery, GET_NODE_SUMMARY_URL]}
@@ -62,17 +63,20 @@ class TopDestinationsWidget extends React.PureComponent {
             style,
             buckets
           } = this.getActiveTabProps(data[mainQuery]);
+
           const { nodeName, columnName } = data[GET_NODE_SUMMARY_URL];
           const verb = columnName === 'EXPORTER' ? 'exported' : 'imported';
           return (
             <section className={className}>
               <div className="row align-justify">
-                <div className="column small-12 medium-6">
+                <div className="column small-12 medium-7">
                   <TopDestinationsChart
                     height={250}
                     type={type}
                     tabs={this.tabs}
                     onChangeTab={this.updateTab}
+                    onLinkClick={onLinkClick}
+                    contextId={contextId}
                     year={year}
                     includedYears={includedYears}
                     lines={lines.slice(0, 5)}
@@ -85,7 +89,7 @@ class TopDestinationsWidget extends React.PureComponent {
                     verb={verb}
                   />
                 </div>
-                <div className="column small-12 medium-6 top-destinations-map-widget">
+                <div className="column small-12 medium-5 top-destinations-map-widget">
                   <TopDestinationsMap
                     height={250}
                     year={year}
@@ -117,7 +121,8 @@ TopDestinationsWidget.propTypes = {
   type: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,
-  contextId: PropTypes.number.isRequired
+  contextId: PropTypes.number.isRequired,
+  onLinkClick: PropTypes.func.isRequired
 };
 
 export default TopDestinationsWidget;

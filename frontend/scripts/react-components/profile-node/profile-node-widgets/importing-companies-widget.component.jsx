@@ -47,11 +47,11 @@ class ImportingCompaniesWidget extends React.PureComponent {
   render() {
     const { year, nodeId, contextId, printMode, commodityName, countryName } = this.props;
     const { tooltipConfig } = this.state;
-    const params = { node_id: nodeId, context_id: contextId };
+    const params = { node_id: nodeId, context_id: contextId, year };
     return (
       <Widget
         query={[GET_ACTOR_EXPORTING_COMPANIES, GET_NODE_SUMMARY_URL]}
-        params={[{ ...params, year }, { ...params, profile_type: 'actor' }]}
+        params={[params, { ...params, profile_type: 'actor' }]}
       >
         {({ data, loading, error }) => {
           if (loading || error)
