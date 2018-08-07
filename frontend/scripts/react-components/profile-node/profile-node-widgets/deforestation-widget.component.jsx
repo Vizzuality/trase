@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import Widget from 'react-components/widgets/widget.component';
 import Line from 'react-components/profiles/line.component';
 import LineLegend from 'react-components/profiles/line-legend.component';
-import { GET_PLACE_DEFORESTATION_TRAYECTORY } from 'utils/getURLFromParams';
+import { GET_PLACE_DEFORESTATION_TRAJECTORY } from 'utils/getURLFromParams';
+
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
 
 function DeforestationWidget(props) {
   const { nodeId, contextId, year } = props;
   const params = { node_id: nodeId, context_id: contextId, year };
   return (
-    <Widget query={[GET_PLACE_DEFORESTATION_TRAYECTORY]} params={[params]}>
+    <Widget query={[GET_PLACE_DEFORESTATION_TRAJECTORY]} params={[params]}>
       {({ data, loading, error }) => {
         if (loading || error)
           return (
@@ -19,7 +20,7 @@ function DeforestationWidget(props) {
             </section>
           );
 
-        const { lines, unit, includedYears } = data[GET_PLACE_DEFORESTATION_TRAYECTORY];
+        const { lines, unit, includedYears } = data[GET_PLACE_DEFORESTATION_TRAJECTORY];
         return (
           <section className="deforestation page-break-inside-avoid">
             <div className="row">
