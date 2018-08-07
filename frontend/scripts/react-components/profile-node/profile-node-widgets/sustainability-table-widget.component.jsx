@@ -44,6 +44,12 @@ class SustainabilityTableWidget extends React.PureComponent {
             );
           }
 
+          const rowCount = data[mainQuery].map(e => e.rows.length || 0).reduce((a, c) => a + c);
+
+          if (rowCount === 0) {
+            return null;
+          }
+
           const { nodeName } = data[GET_NODE_SUMMARY_URL];
           return (
             <section className={className}>

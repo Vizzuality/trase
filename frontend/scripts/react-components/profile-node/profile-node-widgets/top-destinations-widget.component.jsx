@@ -64,6 +64,10 @@ class TopDestinationsWidget extends React.PureComponent {
             buckets
           } = this.getActiveTabProps(data[mainQuery]);
 
+          if (!lines || lines.length === 0) {
+            return null;
+          }
+
           const { nodeName, columnName } = data[GET_NODE_SUMMARY_URL];
           const verb = columnName === 'EXPORTER' ? 'exported' : 'imported';
           return (
