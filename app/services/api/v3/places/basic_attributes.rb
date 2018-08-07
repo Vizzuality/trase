@@ -52,6 +52,12 @@ module Api
         def summary
           return nil unless municipality? || logistics_hub?
 
+          if @soy_production == 0
+            return "<span class=\"notranslate\">#{@node.name.titleize}</span> did not produce any \
+soy in \
+<span class=\"notranslate\">#{@year}</span>."
+          end
+
           result = "In <span class=\"notranslate\">#{@year}</span>, \
 <span class=\"notranslate\">#{@node.name.titleize}</span> produced \
 <span class=\"notranslate\">#{@soy_production_formatted}</span> \

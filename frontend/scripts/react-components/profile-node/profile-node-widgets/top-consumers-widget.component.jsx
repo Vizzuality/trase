@@ -48,12 +48,21 @@ class TopConsumersWidget extends React.PureComponent {
         params={[{ ...params, year }, { ...params, profile_type: 'place' }]}
       >
         {({ data, loading, error }) => {
-          if (loading || error)
+          if (loading || error) {
             return (
               <section className="spinner-section">
                 <ShrinkingSpinner className="-large" />
               </section>
             );
+          }
+
+          if (
+            data[mainQuery] &&
+            data[mainQuery].targetNodes &&
+            data[mainQuery].targetNodes.length === 0
+          ) {
+            return null;
+          }
 
           const { municipalityName } = data[GET_NODE_SUMMARY_URL];
           return (
