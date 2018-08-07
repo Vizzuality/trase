@@ -187,7 +187,7 @@ MiniSankey.propTypes = {
   data: PropTypes.object,
   onLinkClick: PropTypes.func,
   targetLink: PropTypes.string,
-  targetPayload: PropTypes.string,
+  targetPayload: PropTypes.object,
   width: PropTypes.number,
   year: PropTypes.number,
   contextId: PropTypes.number

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Widget from 'react-components/widgets/widget.component';
 import Line from 'react-components/profiles/line.component';
 import LineLegend from 'react-components/profiles/line-legend.component';
-import { GET_PLACE_DEFORESTATION_TRAJECTORY } from 'utils/getURLFromParams';
+import { GET_PLACE_DEFORESTATION_TRAJECTORY, GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
 
@@ -11,14 +11,18 @@ function DeforestationWidget(props) {
   const { nodeId, contextId, year } = props;
   const params = { node_id: nodeId, context_id: contextId, year };
   return (
-    <Widget query={[GET_PLACE_DEFORESTATION_TRAJECTORY]} params={[params]}>
+    <Widget
+      query={[GET_PLACE_DEFORESTATION_TRAJECTORY, GET_NODE_SUMMARY_URL]}
+      params={[{ ...params }, { ...params, profile_type: 'place' }]}
+    >
       {({ data, loading, error }) => {
-        if (loading || error)
+        if (loading || error) {
           return (
             <section className="spinner-section">
               <ShrinkingSpinner className="-large" />
             </section>
           );
+        }
 
         const { lines, unit, includedYears } = data[GET_PLACE_DEFORESTATION_TRAJECTORY];
 
@@ -32,7 +36,7 @@ function DeforestationWidget(props) {
               <div className="small-12 columns">
                 <h3 className="title -small">
                   Deforestation trajectory of{' '}
-                  <span className="notranslate">{data.municipality}</span>
+                  <span className="notranslate">{data[GET_NODE_SUMMARY_URL].municipalityName}</span>
                 </h3>
                 <div className="c-line-container">
                   <div className="c-line">
