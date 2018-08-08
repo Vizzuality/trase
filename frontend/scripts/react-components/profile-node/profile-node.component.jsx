@@ -74,6 +74,7 @@ class ProfileNode extends React.PureComponent {
               countryName={context.countryName}
               onLinkClick={updateQueryParams}
               commodityName={context.commodityName}
+              testId="top-destination-countries"
             />
             <TopDestinationsWidget
               className="c-top-municipalities page-break-inside-avoid"

@@ -56,7 +56,7 @@ class ImportingCompaniesWidget extends React.PureComponent {
         {({ data, loading, error }) => {
           if (loading || error)
             return (
-              <section className="spinner-section">
+              <section className="spinner-section" data-test="loading-section">
                 <ShrinkingSpinner className="-large" />
               </section>
             );

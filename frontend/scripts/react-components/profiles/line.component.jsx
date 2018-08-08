@@ -70,6 +70,7 @@ class Line extends Component {
       unit,
       lines,
       style,
+      testId,
       xValues,
       onLinkClick,
       year,
@@ -170,6 +171,7 @@ class Line extends Component {
             .datum(lineValuesWithFormat[0])
             .append('g')
             .attr('id', lineData.geo_id)
+            .attr('data-test', `${testId}-line-points`)
             .attr('class', d => {
               const lineIndex = isSmallChart ? i : d[0].value9;
 
@@ -379,8 +381,9 @@ class Line extends Component {
   }
 
   render() {
+    const { testId } = this.props;
     return (
-      <div className="c-line">
+      <div className="c-line" data-test={testId}>
         <div
           ref={elem => {
             this.chart = elem;
@@ -393,6 +396,7 @@ class Line extends Component {
 }
 
 Line.propTypes = {
+  testId: PropTypes.string,
   profileType: PropTypes.string,
   lines: PropTypes.array,
   unit: PropTypes.string,

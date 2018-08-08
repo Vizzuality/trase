@@ -31,7 +31,7 @@ class ActorSummary extends React.PureComponent {
       }
     ];
     return (
-      <div className="c-overall-info">
+      <div className="c-overall-info" data-test="actor-summary">
         <div className="row">
           <div className="small-12 columns">
             <TitleGroup titles={titles} on={onYearChange} />

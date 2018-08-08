@@ -15,7 +15,7 @@ function SummaryWidget(props) {
       {({ data, loading, error }) => {
         if (loading || error)
           return (
-            <div className="spinner-section">
+            <div className="spinner-section" data-test="loading-section">
               <ShrinkingSpinner className="-large" />
             </div>
           );
