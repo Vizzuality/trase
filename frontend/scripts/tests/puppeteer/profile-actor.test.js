@@ -16,7 +16,7 @@ const openBrowser = visible =>
     : { args: ['--no-sandbox'] };
 
 beforeAll(async () => {
-  browser = await puppeteer.launch(openBrowser(true));
+  browser = await puppeteer.launch(openBrowser(false));
   page = await browser.newPage();
   await page.setRequestInterception(true);
   page.on('request', interceptedRequest => {
@@ -194,5 +194,31 @@ describe('Profile actor', () => {
     const biomePolygons = await page.$$('[data-test=top-sourcing-regions-map-d3-polygon-colored]');
 
     expect(biomePolygons.length).toBe(6);
+  });
+
+  test('Deforestation risk widget loads successfully', async () => {
+    await page.waitForSelector('[data-test=deforestation-risk]');
+    const tableTitle = await page.$eval(
+      '[data-test=deforestation-risk-multi-switch-title]',
+      el => el.textContent
+    );
+    const tabs = await page.$$('[data-test=deforestation-risk-multi-switch-item]');
+    const columns = await page.$$eval(
+      '[data-test=deforestation-risk-multi-table-header-name]',
+      list => ({ length: list.length, firstCol: list[0].textContent })
+    );
+    const rows = await page.$$eval('[data-test=deforestation-risk-multi-table-row]', list => ({
+      length: list.length,
+      firstRow: list[0].textContent
+    }));
+
+    expect(tableTitle.toLowerCase()).toMatch(
+      "deforestation risk associated with bunge's top sourcing regions in 2015:"
+    );
+    expect(tabs.length).toBe(2);
+    expect(columns.length).toBe(4);
+    expect(columns.firstCol).toMatch('Municipality');
+    expect(rows.length).toBe(10);
+    expect(rows.firstRow).toMatch('NOVA MUTUM218194N/A');
   });
 });

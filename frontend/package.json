@@ -6,7 +6,7 @@
     "start": "webpack-dev-server --config config/webpack.config.dev.js",
     "build": "npm run webpack:prod && cp -a public/. dist/",
     "test": "jest ./scripts --colors",
-    "ci": "start-server-and-test http-get://localhost:8081 test",
+    "ci": "start-server-and-test start http-get://localhost:8081 test",
     "webpack:prod": "NODE_ENV='production' webpack --config config/webpack.config.prod.js",
     "precommit": "lint-staged",
     "eslint": "eslint -c .eslintrc.json --ext .jsx,.js scripts/**/* --fix",

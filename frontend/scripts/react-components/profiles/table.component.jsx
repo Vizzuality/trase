@@ -66,7 +66,7 @@ class Table extends Component {
   }
 
   renderActorsTableHeader() {
-    const data = this.props.data;
+    const { testId, data } = this.props;
 
     return (
       <thead>
@@ -74,7 +74,9 @@ class Table extends Component {
           {data.included_columns.map((column, columnIndex) => (
             <th key={columnIndex} className="header-cell">
               <div className={cx({ 'align-content-right': columnIndex > 0 })}>
-                <span className="header-name">{column.name}</span>
+                <span className="header-name" data-test={`${testId}-header-name`}>
+                  {column.name}
+                </span>
                 {column.tooltip && <Tooltip text={column.tooltip} />}
               </div>
             </th>
@@ -85,7 +87,7 @@ class Table extends Component {
   }
 
   renderActorsTable() {
-    const { data, target, year, targetPayload, contextId } = this.props;
+    const { data, target, year, targetPayload, contextId, testId } = this.props;
 
     const linkTo = id => ({
       type: target,
@@ -98,7 +100,7 @@ class Table extends Component {
     return (
       <tbody>
         {data.rows.map((row, rowIndex) => (
-          <tr key={rowIndex} className="table-row">
+          <tr key={rowIndex} className="table-row" data-test={`${testId}-row`}>
             {row.is_total === true && (
               <td className="cell-score">
                 <span className="node-name">Total</span>
@@ -195,6 +197,7 @@ Table.propTypes = {
   data: PropTypes.object,
   type: PropTypes.string,
   target: PropTypes.string,
+  testId: PropTypes.string,
   year: PropTypes.number,
   targetPayload: PropTypes.object,
   contextId: PropTypes.number.isRequired

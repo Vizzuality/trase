@@ -27,7 +27,7 @@ class SustainabilityTableWidget extends React.PureComponent {
   }
 
   render() {
-    const { year, nodeId, contextId, type, className, profileType } = this.props;
+    const { year, nodeId, contextId, type, className, profileType, testId } = this.props;
     const params = { node_id: nodeId, context_id: contextId, year };
     const mainQuery = type === 'indicators' ? GET_PLACE_INDICATORS : GET_ACTOR_SUSTAINABILITY;
     return (
@@ -52,7 +52,7 @@ class SustainabilityTableWidget extends React.PureComponent {
 
           const { nodeName } = data[GET_NODE_SUMMARY_URL];
           return (
-            <section className={className}>
+            <section className={className} data-test={testId}>
               <div className="row">
                 <div className="small-12 columns">
                   <MultiTable
@@ -63,6 +63,7 @@ class SustainabilityTableWidget extends React.PureComponent {
                     tabsTitle={this.getTitle(nodeName)}
                     target={item => (item.name === 'Municipalities' ? 'profileNode' : null)}
                     targetPayload={{ profileType }}
+                    testId={`${testId}-multi`}
                   />
                 </div>
               </div>
@@ -75,6 +76,7 @@ class SustainabilityTableWidget extends React.PureComponent {
 }
 
 SustainabilityTableWidget.propTypes = {
+  testId: PropTypes.string,
   className: PropTypes.string,
   type: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,

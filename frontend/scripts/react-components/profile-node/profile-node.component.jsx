@@ -96,6 +96,7 @@ class ProfileNode extends React.PureComponent {
               year={year}
               nodeId={nodeId}
               contextId={context.id}
+              testId="deforestation-risk"
             />
             <ImportingCompaniesWidget
               printMode={printMode}
