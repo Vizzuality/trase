@@ -16,7 +16,7 @@ const openBrowser = visible =>
     : { args: ['--no-sandbox'] };
 
 beforeAll(async () => {
-  browser = await puppeteer.launch(openBrowser(false));
+  browser = await puppeteer.launch(openBrowser(true));
   page = await browser.newPage();
   await page.setRequestInterception(true);
   page.on('request', interceptedRequest => {
@@ -130,5 +130,19 @@ describe('Profile actor', () => {
     30000
   );
 
-  test('Top destination countries map loads successfully', async () => {});
+  test('Top destination countries map loads successfully', async () => {
+    expect.assertions(2);
+
+    await page.waitForSelector('[data-test=top-destination-countries-map]');
+    const hasLegend = await page.$eval(
+      '[data-test=top-destination-countries-map-legend]',
+      el => el !== null
+    );
+    const coloredMapPolygons = await page.$$(
+      '[data-test=top-destination-countries-map-d3-polygon-colored]'
+    );
+
+    expect(hasLegend).toBe(true);
+    expect(coloredMapPolygons.length).toBe(32);
+  });
 });

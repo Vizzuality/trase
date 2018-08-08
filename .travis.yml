@@ -17,6 +17,6 @@ before_script:
   - cd frontend && npm install && cd ..
 script:
   - TRASE_LOCAL_SCHEMA=public bundle exec rspec spec --fail-fast
-  - cd frontend && npm test && cd ..
+  - cd frontend && npm run ci && cd ..
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
