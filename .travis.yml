@@ -2,21 +2,33 @@ dist: trusty
 env:
   global:
     - CC_TEST_REPORTER_ID=ae4098e380eed3c112bd34c4c2ceec913288ce9479bb748bf098a57b75ff5de5
-language: ruby
-rvm:
-  - 2.4.2
-services:
-  - postgresql
-addons:
-  postgresql: 9.6
-before_script:
-  - bundle exec rake db:drop db:create db:structure:load RAILS_ENV=test
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
-  - cd frontend && npm install && cd ..
-script:
-  - TRASE_LOCAL_SCHEMA=public bundle exec rspec spec --fail-fast
-  - cd frontend && npm run ci && cd ..
-after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+matrix:
+  include:
+    - language: ruby
+      rvm:
+        - 2.4.2
+      services:
+        - postgresql
+      addons:
+        postgresql: 9.6
+      before_script:
+        - bundle exec rake db:drop db:create db:structure:load RAILS_ENV=test
+        - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        - chmod +x ./cc-test-reporter
+        - ./cc-test-reporter before-build
+
+      script:
+        - TRASE_LOCAL_SCHEMA=public bundle exec rspec spec --fail-fast
+
+      after_script:
+        - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+
+
+    - language: node_js
+      node_js:
+        - 10
+      before_script:
+        - cd frontend
+        - npm install
+      script:
+        - npm run ci
