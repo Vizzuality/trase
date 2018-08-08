@@ -14,9 +14,9 @@ before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
-  - cd frontend; npm install; cd ..
+  - cd frontend && npm install && cd ..
 script:
   - TRASE_LOCAL_SCHEMA=public bundle exec rspec spec --fail-fast
-  - cd frontend; npm test; cd ..
+  - cd frontend && npm test && cd ..
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
