@@ -23,7 +23,6 @@ import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
 import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
 import isNodeColumnVisible from 'utils/isNodeColumnVisible';
-import capitalize from 'lodash/capitalize';
 import difference from 'lodash/difference';
 import intesection from 'lodash/intersection';
 import compact from 'lodash/compact';
@@ -800,12 +799,12 @@ export function collapseNodeSelection() {
   };
 }
 
-export function navigateToProfile(nodeId, year) {
+export function navigateToProfile(nodeId, year, contextId) {
   return (dispatch, getState) => {
     const node = getState().tool.nodesDict[nodeId];
     dispatch({
-      type: `profile${capitalize(node.profileType)}`,
-      payload: { query: { nodeId, year } }
+      type: 'profileNode',
+      payload: { query: { nodeId, year, contextId }, profileType: node.profileType }
     });
   };
 }
