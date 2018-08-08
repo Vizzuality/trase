@@ -145,4 +145,54 @@ describe('Profile actor', () => {
     expect(hasLegend).toBe(true);
     expect(coloredMapPolygons.length).toBe(32);
   });
+
+  test(
+    'Top sourcing regions chart loads successfully',
+    async () => {
+      expect.assertions(2);
+      await page.waitForSelector('[data-test=top-sourcing-regions]');
+      const chartTitle = await page.$eval(
+        '[data-test=top-sourcing-regions-chart-switch-title]',
+        el => el.textContent
+      );
+      const chartLines = await page.$$('[data-test=top-sourcing-regions-chart-d3-line-points]');
+
+      expect(chartTitle.toLowerCase()).toMatch(
+        'top sourcing regions of soy imported by bunge in 2015:'
+      );
+      expect(chartLines.length).toBe(5);
+    },
+    30000
+  );
+
+  test('Top sourcing regions map loads successfully', async () => {
+    expect.assertions(2);
+
+    await page.waitForSelector('[data-test=top-sourcing-regions-map]');
+    const hasLegend = await page.$eval(
+      '[data-test=top-sourcing-regions-map-legend]',
+      el => el !== null
+    );
+    const coloredMapPolygons = await page.$$(
+      '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
+    );
+
+    expect(hasLegend).toBe(true);
+    expect(coloredMapPolygons.length).toBe(908);
+  });
+
+  test('Top sourcing regions switch changes map', async () => {
+    expect.assertions(2);
+
+    await page.waitForSelector('[data-test=top-sourcing-regions-chart-switch]');
+    const municipalityPolygons = await page.$$(
+      '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
+    );
+    expect(municipalityPolygons.length).toBe(908);
+
+    await page.click('[data-test=top-sourcing-regions-chart-switch-item][data-key=biome]');
+    const biomePolygons = await page.$$('[data-test=top-sourcing-regions-map-d3-polygon-colored]');
+
+    expect(biomePolygons.length).toBe(6);
+  });
 });

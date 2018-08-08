@@ -87,6 +87,7 @@ class ProfileNode extends React.PureComponent {
               commodityName={context.commodityName}
               onLinkClick={updateQueryParams}
               profileType={profileType}
+              testId="top-sourcing-regions"
             />
             <SustainabilityTableWidget
               type="risk"

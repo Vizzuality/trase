@@ -86,14 +86,17 @@ class TopDestinationsChart extends React.PureComponent {
       <React.Fragment>
         <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
         <div className="top-destinations-chart-container">
-          <div data-test={`${testId}-title`}>
+          <div>
             {type === 'countries' ? (
-              <h3 className="title -small">{this.getTitle()}</h3>
+              <h3 className="title -small" data-test={`${testId}-title`}>
+                {this.getTitle()}
+              </h3>
             ) : (
               <DropdownTabSwitcher
                 title={this.getTitle()}
                 items={tabs}
                 onSelectedIndexChange={onChangeTab}
+                testId={`${testId}-switch`}
               />
             )}
           </div>
