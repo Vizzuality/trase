@@ -7,11 +7,13 @@ let browser;
 const baseUrl = 'http://0.0.0.0:8081';
 
 const openBrowser = visible =>
-  visible && {
-    headless: false,
-    slowMo: 80,
-    args: [`--window-size=1920,1080`]
-  };
+  visible
+    ? {
+        headless: false,
+        slowMo: 80,
+        args: [`--window-size=1920,1080`]
+      }
+    : { args: ['--no-sandbox'] };
 
 beforeAll(async () => {
   browser = await puppeteer.launch(openBrowser(false));
@@ -127,4 +129,6 @@ describe('Profile actor', () => {
     },
     30000
   );
+
+  test('Top destination countries map loads successfully', async () => {});
 });
