@@ -18,12 +18,12 @@ export default function({ debounceRate = DEFAULT_DEBOUNCE_RATE } = {}) {
       }
 
       componentDidMount() {
-        window.addEventListener('resize', this.onPageResize);
+        window.addEventListener('resize', this.onPageResize, { passive: true });
         this.setSize();
       }
 
       componentWillUnmount() {
-        window.removeEventListener('resize', this.onPageResize);
+        window.removeEventListener('resize', this.onPageResize, { passive: true });
       }
 
       onPageResize() {

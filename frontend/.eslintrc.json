@@ -36,7 +36,9 @@
     "react/jsx-indent-props": 0,
     "react/jsx-max-props-per-line": 0,
     "react/jsx-tag-spacing": 0,
-    "react/jsx-wrap-multilines": 0
+    "react/jsx-wrap-multilines": 0,
+    "import/prefer-default-export": 0, // DON'T REMOVE AGAIN PLZ *cries*
+    "react/sort-comp": 0 // DON'T REMOVE AGAIN PLZ *cries again*
   },
   "parser": "babel-eslint",
   "parserOptions": {

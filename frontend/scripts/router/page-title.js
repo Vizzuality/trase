@@ -9,8 +9,7 @@ export default function(state) {
     case 'data':
       return 'TRASE - Data Download';
     case 'profileRoot':
-    case 'profileActor':
-    case 'profilePlace':
+    case 'profileNode':
       return 'TRASE - Profiles';
     case 'tool':
       if (!state.app.selectedContext) {

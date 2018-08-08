@@ -137,7 +137,7 @@ const stateToURLObject = (state, location) => {
     return { state: encodeStateToURL(state), lang: state.app.languageCode };
   }
 
-  if (location.type === 'profileActor' || location.type === 'profilePlace') {
+  if (location.type === 'profileNode') {
     return { lang: state.app.languageCode, ...location.query };
   }
 

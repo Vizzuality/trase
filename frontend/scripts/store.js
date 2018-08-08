@@ -7,3 +7,4 @@ export { default as newsletter } from 'react-components/shared/newsletter/newsle
 export { default as staticContent } from 'react-components/static-content/static-content.reducer';
 export { default as team } from 'react-components/team/team.reducer';
 export { default as explore } from 'react-components/explore/explore.reducer';
+export { default as widgets } from 'react-components/widgets/widgets.reducer';

@@ -183,7 +183,7 @@ class Scatterplot extends Component {
       .map(item => ({
         nodeId: item.id,
         name: item.name,
-        isCurrent: item.name.toUpperCase() === node.name.toUpperCase(),
+        isCurrent: item.name.toUpperCase() === (node.name && node.name.toUpperCase()),
         y: item.y,
         x: item.x[i]
       }))

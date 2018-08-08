@@ -81,12 +81,6 @@
     }
   }
 
-  .c-line {
-    display: flex;
-    align-items: center;
-    // height: 100%;
-  }
-
   .c-top-map,
   .c-top-municipalities {
     padding: 52px 0;
@@ -113,12 +107,10 @@
 
   .c-top-municipalities {
 
-    .js-top-municipalities-map {
+    .top-destinations-map-container {
       overflow: hidden;
 
       svg {
-        margin-left: 50px;
-
         @media print {
           margin-left: 0;
         }
@@ -126,10 +118,14 @@
     }
   }
 
-  .js-top-municipalities-chart, .js-top-destination-chart {
-    @media screen and (max-width: $breakpoint-foundation-small) {
-      margin-left: -1.25rem;
-      margin-right: -1.25rem;
+  .top-destinations-map-widget {
+    display: none;
+    @media screen and (min-width: $breakpoint-foundation-small) {
+      display: block;
+    }
+
+    @media print {
+      display: block;
     }
   }
 
@@ -160,5 +156,19 @@
 
   .c-dropdown {
     align-items: flex-start;
+  }
+
+  .top-destinations-chart-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .spinner-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
   }
 }

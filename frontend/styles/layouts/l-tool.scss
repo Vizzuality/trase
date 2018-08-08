@@ -68,8 +68,8 @@ body {
       flex-direction: column;
       width: 320px;
       height: calc(100% - 62px);
-
       transition: width .45s $ease-in-out-sine;
+      will-change: width, z-index;
 
       &.-fullscreen {
         width: calc(91% - 366px);

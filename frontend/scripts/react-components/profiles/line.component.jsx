@@ -28,9 +28,8 @@ class Line extends Component {
   }
 
   getLines() {
-    const { data } = this.props;
-
-    return [...data.lines].filter(lineData => lineData.values.filter(v => v !== null).length);
+    const { lines } = this.props;
+    return lines.filter(lineData => lineData.values.some(v => v !== null));
   }
 
   isSmallChart() {
@@ -67,56 +66,67 @@ class Line extends Component {
   }
 
   build() {
-    const { data, xValues, settings, onLinkClick, targetLink, year } = this.props;
+    const {
+      unit,
+      lines,
+      style,
+      xValues,
+      onLinkClick,
+      year,
+      contextId,
+      profileType,
+      margin,
+      ticks,
+      settingsHeight,
+      lineClassNameCallback,
+      showTooltipCallback,
+      hideTooltipCallback
+    } = this.props;
 
-    const { ticks } = settings;
-    const margin = { ...settings.margin };
+    const chartMargin = { ...margin };
 
     const isSmallChart = this.isSmallChart();
     const isTouchDevice = 'ontouchstart' in window; // I know this is not 100% true, but it's good enough
 
     if (isSmallChart) {
-      margin.right = 30;
+      chartMargin.right = 30;
     }
 
-    const width = this.props.width - margin.left - margin.right;
-    const height = settings.height - margin.top - margin.bottom;
-    this.showTooltipCallback = settings.showTooltipCallback;
-    this.hideTooltipCallback = settings.hideTooltipCallback;
-    // const allYValues = [].concat.apply([], data.lines.map(line => line.values));
-    const allYValues = [].concat(...data.lines.map(line => line.values));
+    const width = this.props.width - chartMargin.left - chartMargin.right;
+    const chartHeight = settingsHeight - chartMargin.top - chartMargin.bottom;
+    const allYValues = [].concat(...lines.map(line => line.values));
 
     this.chart.innerHTML = '';
     const d3Container = d3_select(this.chart)
       .append('svg')
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom)
+      .attr('width', width + chartMargin.left + chartMargin.right)
+      .attr('height', chartHeight + chartMargin.top + chartMargin.bottom)
       .append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
+      .attr('transform', `translate(${chartMargin.left},${chartMargin.top})`);
 
     const x = d3_scale_time()
       .range([0, width])
       .domain(d3_extent(xValues, y => new Date(y, 0)));
 
     const y = d3_scale_linear()
-      .rangeRound([height, 0])
+      .rangeRound([chartHeight, 0])
       .domain(d3_extent([0, ...allYValues]));
 
-    let lastY = height + LINE_LABEL_HEIGHT;
+    let lastY = chartHeight + LINE_LABEL_HEIGHT;
 
-    const lines = this.getLines().sort((a, b) => {
+    const sanitizedLines = this.getLines().sort((a, b) => {
       const last = xValues.length - 1;
       return a.values[last] - b.values[last];
     });
-    const numLines = lines.length;
+    const numLines = sanitizedLines.length;
 
-    lines.forEach((lineData, i) => {
+    sanitizedLines.forEach((lineData, i) => {
       const lineValuesWithFormat = this.prepareData(xValues, lineData);
       const line = d3_line()
         .x(d => x(d.date))
         .y(d => y(d.value));
-      const type = typeof data.style !== 'undefined' ? data.style.type : lineData.type;
-      const style = typeof data.style !== 'undefined' ? data.style.style : lineData.style;
+      const type = typeof style !== 'undefined' ? style.type : lineData.type;
+      const lineStyle = typeof style !== 'undefined' ? style.style : lineData.style;
 
       let area = null;
       let pathContainers = null;
@@ -126,7 +136,7 @@ class Line extends Component {
         case 'area':
           area = d3_area()
             .x(d => x(d.date))
-            .y(height)
+            .y(chartHeight)
             .y1(d => y(d.value));
 
           // loop through broken/discontinuous lines
@@ -134,13 +144,13 @@ class Line extends Component {
             d3Container
               .append('path')
               .datum(points)
-              .attr('class', style)
+              .attr('class', lineStyle)
               .attr('d', area);
 
             d3Container
               .append('path')
               .datum(points)
-              .attr('class', `line-${style}`)
+              .attr('class', `line-${lineStyle}`)
               .attr('d', line);
           });
           break;
@@ -150,7 +160,7 @@ class Line extends Component {
           d3Container
             .append('path')
             .datum(lineValuesWithFormat[0])
-            .attr('class', style)
+            .attr('class', lineStyle)
             .attr('d', line);
           break;
 
@@ -163,9 +173,9 @@ class Line extends Component {
             .attr('class', d => {
               const lineIndex = isSmallChart ? i : d[0].value9;
 
-              return isFunction(settings.lineClassNameCallback)
-                ? settings.lineClassNameCallback(lineIndex, style)
-                : style;
+              return isFunction(lineClassNameCallback)
+                ? lineClassNameCallback(lineIndex, lineStyle)
+                : lineStyle;
             });
 
           pathContainers
@@ -198,14 +208,15 @@ class Line extends Component {
               .append('text')
               .attr('transform', 'translate(16,0)')
               .attr('class', d => {
-                if (typeof onLinkClick !== 'undefined' && d[0].nodeId && data.profile_type) {
+                if (typeof onLinkClick !== 'undefined' && d[0].nodeId && profileType) {
                   return 'link';
                 }
                 return '';
               })
               .on('click', d => {
-                if (typeof onLinkClick !== 'undefined' && d[0].nodeId && data.profile_type) {
-                  onLinkClick(targetLink, {
+                if (typeof onLinkClick !== 'undefined' && d[0].nodeId && profileType) {
+                  onLinkClick(profileType, {
+                    contextId,
                     nodeId: d[0].nodeId,
                     year
                   });
@@ -240,17 +251,17 @@ class Line extends Component {
             .attr('cy', d => y(d.value))
             .attr('r', isTouchDevice ? 15 : 4);
 
-          if (this.showTooltipCallback !== undefined) {
+          if (showTooltipCallback !== undefined) {
             this.hitboxCircles
               .on('mousemove', d => {
-                this.showTooltipCallback(
+                showTooltipCallback(
                   d,
                   d3_event.clientX + 10,
                   d3_event.clientY + window.scrollY + 10
                 );
               })
               .on('mouseout', () => {
-                this.hideTooltipCallback();
+                hideTooltipCallback();
               });
           }
           break;
@@ -271,7 +282,7 @@ class Line extends Component {
       yTickFormat = (value, idx, arr) => {
         const format = d3_format('0');
         const isLast = idx === arr.length - 1;
-        return `${format(value)}${isLast ? data.unit : ''}`;
+        return `${format(value)}${isLast ? unit : ''}`;
       };
       xTickFormat = value => {
         const format = d3_timeFormat('%Y');
@@ -292,7 +303,7 @@ class Line extends Component {
 
     d3Container
       .append('g')
-      .attr('transform', `translate(0, ${height} )`)
+      .attr('transform', `translate(0, ${chartHeight} )`)
       .attr('class', 'axis axis--x')
       .call(xAxis);
 
@@ -303,7 +314,15 @@ class Line extends Component {
   }
 
   renderLegend() {
-    const { data, settings, xValues, onLinkClick, targetLink, year } = this.props;
+    const {
+      xValues,
+      onLinkClick,
+      year,
+      style,
+      lineClassNameCallback,
+      profileType,
+      contextId
+    } = this.props;
     const isSmallChart = this.isSmallChart();
     const lines = this.getLines().sort((a, b) => {
       const last = xValues.length - 1;
@@ -319,15 +338,15 @@ class Line extends Component {
     return (
       <ul className="line-bottom-legend">
         {lines.map((lineData, index) => {
-          const style = typeof data.style !== 'undefined' ? data.style.style : lineData.style;
+          const lineStyle = typeof style !== 'undefined' ? style.style : lineData.style;
           const lineIndex = isSmallChart ? lines.length - index - 1 : lineData.value9;
-          const lineClassName = isFunction(settings.lineClassNameCallback)
-            ? settings.lineClassNameCallback(lineIndex, style)
-            : style;
-          const isLink =
-            typeof onLinkClick !== 'undefined' && lineData.node_id && lineData.profile_type;
+          const lineClassName = isFunction(lineClassNameCallback)
+            ? lineClassNameCallback(lineIndex, lineStyle)
+            : lineStyle;
+          const isLink = typeof onLinkClick !== 'undefined' && lineData.node_id && profileType;
           const linkOnClick = () => {
-            onLinkClick(targetLink, {
+            onLinkClick(profileType, {
+              contextId,
               nodeId: lineData.node_id,
               year
             });
@@ -361,7 +380,7 @@ class Line extends Component {
 
   render() {
     return (
-      <div>
+      <div className="c-line">
         <div
           ref={elem => {
             this.chart = elem;
@@ -374,14 +393,22 @@ class Line extends Component {
 }
 
 Line.propTypes = {
-  data: PropTypes.object,
+  profileType: PropTypes.string,
+  lines: PropTypes.array,
+  unit: PropTypes.string,
+  style: PropTypes.object,
   onLinkClick: PropTypes.func,
-  targetLink: PropTypes.string,
-  settings: PropTypes.object,
   width: PropTypes.number,
+  contextId: PropTypes.number,
   xValues: PropTypes.array,
   useBottomLegend: PropTypes.bool,
-  year: PropTypes.number
+  year: PropTypes.number,
+  margin: PropTypes.object,
+  ticks: PropTypes.object,
+  settingsHeight: PropTypes.number,
+  lineClassNameCallback: PropTypes.func,
+  showTooltipCallback: PropTypes.func,
+  hideTooltipCallback: PropTypes.func
 };
 
 export default Responsive()(Line);

@@ -38,7 +38,7 @@ export default function routeSubscriber(store) {
       // TODO: eventually we may remove that when we refactor old style pages to be react components
       if (
         location &&
-        ['profileActor', 'profilePlace'].includes(location.type) &&
+        location.type === 'profileNode' &&
         location.type === location.prev.type &&
         parseInt(location.query.nodeId, 10) !== parseInt(location.prev.query.nodeId, 10)
       ) {

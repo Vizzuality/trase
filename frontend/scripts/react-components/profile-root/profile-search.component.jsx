@@ -5,6 +5,7 @@ import Downshift from 'downshift';
 import ProfileSearchResult from 'react-components/profile-root/profile-search-result.component';
 import cx from 'classnames';
 import debounce from 'lodash/debounce';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
 
 const SEARCH_DEBOUNCE_RATE_IN_MS = 400;
 
@@ -62,7 +63,7 @@ class ProfileSearch extends PureComponent {
             className="profile-search-input hide-for-small"
           />
           {isLoading ? (
-            <span className="profile-search-spinner" />
+            <ShrinkingSpinner className="-dark" />
           ) : (
             <svg className="icon icon-search">
               <use xlinkHref="#icon-search" />
