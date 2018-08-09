@@ -41,7 +41,6 @@ beforeAll(async () => {
         300
       );
     } else {
-      console.error('Request not intecepted by mocks: ', url);
       interceptedRequest.continue();
     }
   });
@@ -49,7 +48,6 @@ beforeAll(async () => {
 
 afterAll(() => {
   browser.close();
-  console.info(`URL mocks`, Object.keys(mocks));
 });
 
 describe('Profile Root search', () => {
@@ -147,6 +145,7 @@ describe('Profile actor', () => {
         '[data-test=top-destination-countries-map-legend]',
         el => el !== null
       );
+      await page.waitForSelector('[data-test=top-destination-countries-map-d3-polygon]');
       const coloredMapPolygons = await page.$$(
         '[data-test=top-destination-countries-map-d3-polygon-colored]'
       );
@@ -187,6 +186,7 @@ describe('Profile actor', () => {
         '[data-test=top-sourcing-regions-map-legend]',
         el => el !== null
       );
+      await page.waitForSelector('[data-test=top-sourcing-regions-map-d3-polygon]');
       const coloredMapPolygons = await page.$$(
         '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
       );
@@ -203,6 +203,7 @@ describe('Profile actor', () => {
       expect.assertions(2);
 
       await page.waitForSelector('[data-test=top-sourcing-regions-chart-switch]');
+      await page.waitForSelector('[data-test=top-sourcing-regions-map-d3-polygon]');
       const municipalityPolygons = await page.$$(
         '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
       );
