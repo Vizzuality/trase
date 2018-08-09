@@ -45,7 +45,7 @@ class ImportingCompaniesWidget extends React.PureComponent {
   };
 
   render() {
-    const { year, nodeId, contextId, printMode, commodityName, countryName } = this.props;
+    const { year, nodeId, contextId, printMode, commodityName, countryName, testId } = this.props;
     const { tooltipConfig } = this.state;
     const params = { node_id: nodeId, context_id: contextId, year };
     return (
@@ -68,7 +68,7 @@ class ImportingCompaniesWidget extends React.PureComponent {
           const title = `Comparing companies ${verb} ${commodityName} from ${countryName} in ${year}`;
           const scatterplots = this.getScatterplots(dimensions, title);
           return (
-            <section className="c-scatterplot-container">
+            <section className="c-scatterplot-container" data-test={testId}>
               <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
               <div className="row">
                 <div className="small-12 columns">
@@ -81,6 +81,7 @@ class ImportingCompaniesWidget extends React.PureComponent {
                         data={companies}
                         xDimension={dimensions}
                         xDimensionSelectedIndex={index}
+                        testId={`${testId}-scatterplot`}
                         node={{ id: nodeId, name: nodeName }}
                         year={year}
                         showTooltipCallback={this.onMouseMove(data[GET_ACTOR_EXPORTING_COMPANIES])}
@@ -99,6 +100,7 @@ class ImportingCompaniesWidget extends React.PureComponent {
 }
 
 ImportingCompaniesWidget.propTypes = {
+  testId: PropTypes.string,
   printMode: PropTypes.bool,
   countryName: PropTypes.string,
   commodityName: PropTypes.string,

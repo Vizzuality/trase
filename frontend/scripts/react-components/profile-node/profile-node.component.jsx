@@ -105,6 +105,7 @@ class ProfileNode extends React.PureComponent {
               contextId={context.id}
               countryName={context.countryName}
               commodityName={context.commodityName}
+              testId="company-compare"
             />
           </React.Fragment>
         )}

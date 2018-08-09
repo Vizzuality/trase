@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import puppeteer from 'puppeteer';
 
 import mocks from '../mocks';
@@ -26,7 +27,7 @@ beforeAll(async () => {
       .replace('http:', '');
 
     if (url in mocks) {
-      console.info('Request intecepted by mocks: ', url);
+      console.warn(`URL (${url}) intercepted and response mocked`);
       setTimeout(
         () =>
           interceptedRequest.respond({
@@ -40,7 +41,7 @@ beforeAll(async () => {
         300
       );
     } else {
-      console.warn('Request not intecepted by mocks: ', url);
+      console.error('Request not intecepted by mocks: ', url);
       interceptedRequest.continue();
     }
   });
@@ -48,6 +49,7 @@ beforeAll(async () => {
 
 afterAll(() => {
   browser.close();
+  console.info(`URL mocks`, Object.keys(mocks));
 });
 
 describe('Profile Root search', () => {
@@ -76,15 +78,13 @@ describe('Profile Root search', () => {
 describe('Profile actor', () => {
   test(
     'All 5 widget sections attempt to load',
-    async done => {
+    async () => {
+      expect.assertions(1);
+
       // await page.goto(`${baseUrl}/profile-actor?lang=en&nodeId=441&contextId=1&year=2015`);
       await page.waitForSelector('[data-test=loading-section]');
       const loadingSections = await page.$$('[data-test=loading-section]');
       expect(loadingSections.length).toBe(5);
-
-      expect.assertions(1);
-
-      done();
     },
     30000
   );
@@ -92,6 +92,8 @@ describe('Profile actor', () => {
   test(
     'Summary widget loads successfully',
     async () => {
+      expect.assertions(3);
+
       await page.waitForSelector('[data-test=actor-summary]');
       const titleGroup = await page.$eval(
         '[data-test=title-group]',
@@ -109,8 +111,6 @@ describe('Profile actor', () => {
       expect(titleGroup).toBe(4);
       expect(companyName.toLowerCase()).toMatch('bunge');
       expect(countryName.toLowerCase()).toMatch('brazil');
-
-      expect.assertions(3);
     },
     30000
   );
@@ -118,6 +118,8 @@ describe('Profile actor', () => {
   test(
     'Top destination countries chart loads successfully',
     async () => {
+      expect.assertions(2);
+
       await page.waitForSelector('[data-test=top-destination-countries]');
       const chartTitle = await page.$eval(
         '[data-test=top-destination-countries-chart-title]',
@@ -131,31 +133,35 @@ describe('Profile actor', () => {
         'top destination countries of soy imported by bunge in 2015'
       );
       expect(chartLines.length).toBe(5);
-
-      expect.assertions(2);
     },
     30000
   );
 
-  test('Top destination countries map loads successfully', async () => {
-    await page.waitForSelector('[data-test=top-destination-countries-map]');
-    const hasLegend = await page.$eval(
-      '[data-test=top-destination-countries-map-legend]',
-      el => el !== null
-    );
-    const coloredMapPolygons = await page.$$(
-      '[data-test=top-destination-countries-map-d3-polygon-colored]'
-    );
+  test(
+    'Top destination countries map loads successfully',
+    async () => {
+      expect.assertions(2);
 
-    expect(hasLegend).toBe(true);
-    expect(coloredMapPolygons.length).toBe(32);
+      await page.waitForSelector('[data-test=top-destination-countries-map]');
+      const hasLegend = await page.$eval(
+        '[data-test=top-destination-countries-map-legend]',
+        el => el !== null
+      );
+      const coloredMapPolygons = await page.$$(
+        '[data-test=top-destination-countries-map-d3-polygon-colored]'
+      );
 
-    expect.assertions(2);
-  });
+      expect(hasLegend).toBe(true);
+      expect(coloredMapPolygons.length).toBe(32);
+    },
+    30000
+  );
 
   test(
     'Top sourcing regions chart loads successfully',
     async () => {
+      expect.assertions(2);
+
       await page.waitForSelector('[data-test=top-sourcing-regions]');
       const chartTitle = await page.$eval(
         '[data-test=top-sourcing-regions-chart-switch-title]',
@@ -167,66 +173,101 @@ describe('Profile actor', () => {
         'top sourcing regions of soy imported by bunge in 2015:'
       );
       expect(chartLines.length).toBe(5);
-
-      expect.assertions(2);
     },
     30000
   );
 
-  test('Top sourcing regions map loads successfully', async () => {
-    await page.waitForSelector('[data-test=top-sourcing-regions-map]');
-    const hasLegend = await page.$eval(
-      '[data-test=top-sourcing-regions-map-legend]',
-      el => el !== null
-    );
-    const coloredMapPolygons = await page.$$(
-      '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
-    );
+  test(
+    'Top sourcing regions map loads successfully',
+    async () => {
+      expect.assertions(2);
 
-    expect(hasLegend).toBe(true);
-    expect(coloredMapPolygons.length).toBe(908);
+      await page.waitForSelector('[data-test=top-sourcing-regions-map]');
+      const hasLegend = await page.$eval(
+        '[data-test=top-sourcing-regions-map-legend]',
+        el => el !== null
+      );
+      const coloredMapPolygons = await page.$$(
+        '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
+      );
 
-    expect.assertions(2);
-  });
+      expect(hasLegend).toBe(true);
+      expect(coloredMapPolygons.length).toBe(908);
+    },
+    30000
+  );
 
-  test('Top sourcing regions switch changes map', async () => {
-    await page.waitForSelector('[data-test=top-sourcing-regions-chart-switch]');
-    const municipalityPolygons = await page.$$(
-      '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
-    );
-    expect(municipalityPolygons.length).toBe(908);
+  test(
+    'Top sourcing regions switch changes map',
+    async () => {
+      expect.assertions(2);
 
-    await page.click('[data-test=top-sourcing-regions-chart-switch-item][data-key=biome]');
-    const biomePolygons = await page.$$('[data-test=top-sourcing-regions-map-d3-polygon-colored]');
+      await page.waitForSelector('[data-test=top-sourcing-regions-chart-switch]');
+      const municipalityPolygons = await page.$$(
+        '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
+      );
+      expect(municipalityPolygons.length).toBe(908);
 
-    expect(biomePolygons.length).toBe(6);
+      await page.click('[data-test=top-sourcing-regions-chart-switch-item][data-key=biome]');
+      const biomePolygons = await page.$$(
+        '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
+      );
+      expect(biomePolygons.length).toBe(6);
+    },
+    30000
+  );
 
-    expect.assertions(2);
-  });
+  test(
+    'Deforestation risk widget loads successfully',
+    async () => {
+      expect.assertions(6);
 
-  test('Deforestation risk widget loads successfully', async () => {
-    await page.waitForSelector('[data-test=deforestation-risk]');
-    const tableTitle = await page.$eval(
-      '[data-test=deforestation-risk-multi-switch-title]',
-      el => el.textContent
-    );
-    const tabs = await page.$$('[data-test=deforestation-risk-multi-switch-item]');
-    const columns = await page.$$eval(
-      '[data-test=deforestation-risk-multi-table-header-name]',
-      list => ({ length: list.length, firstCol: list[0].textContent })
-    );
-    const rows = await page.$$eval('[data-test=deforestation-risk-multi-table-row]', list => ({
-      length: list.length,
-      firstRow: list[0].textContent
-    }));
+      await page.waitForSelector('[data-test=deforestation-risk]');
+      const tableTitle = await page.$eval(
+        '[data-test=deforestation-risk-multi-switch-title]',
+        el => el.textContent
+      );
+      const tabs = await page.$$('[data-test=deforestation-risk-multi-switch-item]');
+      const columns = await page.$$eval(
+        '[data-test=deforestation-risk-multi-table-header-name]',
+        list => ({ length: list.length, firstCol: list[0].textContent })
+      );
+      const rows = await page.$$eval('[data-test=deforestation-risk-multi-table-row]', list => ({
+        length: list.length,
+        firstRow: list[0].textContent
+      }));
 
-    expect(tableTitle.toLowerCase()).toMatch(
-      "deforestation risk associated with bunge's top sourcing regions in 2015:"
-    );
-    expect(tabs.length).toBe(2);
-    expect(columns.length).toBe(4);
-    expect(columns.firstCol).toMatch('Municipality');
-    expect(rows.length).toBe(10);
-    expect(rows.firstRow).toMatch('NOVA MUTUM218194N/A');
-  });
+      expect(tableTitle.toLowerCase()).toMatch(
+        "deforestation risk associated with bunge's top sourcing regions in 2015:"
+      );
+      expect(tabs.length).toBe(2);
+      expect(columns.length).toBe(4);
+      expect(columns.firstCol).toMatch('Municipality');
+      expect(rows.length).toBe(10);
+      expect(rows.firstRow).toMatch('NOVA MUTUM218194N/A');
+    },
+    30000
+  );
+
+  test(
+    'Company compare scatterplot loads successfully',
+    async () => {
+      expect.assertions(3);
+
+      await page.waitForSelector('[data-test=company-compare]');
+      const title = await page.$eval(
+        '[data-test=company-compare-scatterplot-switch-title]',
+        el => el.textContent
+      );
+      const circles = await page.$$('[data-test=company-compare-scatterplot-circle]');
+      const selectedCircles = await page.$$(
+        '[data-test=company-compare-scatterplot-circle-current]'
+      );
+
+      expect(title.toLowerCase()).toMatch('comparing companies importing soy from brazil in 2015');
+      expect(circles.length).toBe(341);
+      expect(selectedCircles.length).toBe(1);
+    },
+    30000
+  );
 });
