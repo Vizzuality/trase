@@ -1,49 +1,18 @@
 /* eslint-disable no-console */
 import puppeteer from 'puppeteer';
 
-import mocks from '../mocks';
+import { mockRequests, openBrowser } from '../utils';
 
 let page;
 let browser;
-const baseUrl = 'http://0.0.0.0:8081';
-
-const openBrowser = visible =>
-  visible
-    ? {
-        headless: false,
-        slowMo: 80,
-        args: [`--window-size=1920,1080`]
-      }
-    : { args: ['--no-sandbox'] };
+const BASE_URL = 'http://0.0.0.0:8081';
+const TIMEOUT = 30000;
 
 beforeAll(async () => {
   browser = await puppeteer.launch(openBrowser(false));
   page = await browser.newPage();
   await page.setRequestInterception(true);
-  page.on('request', interceptedRequest => {
-    const url = interceptedRequest
-      .url()
-      .replace('https:', '')
-      .replace('http:', '');
-
-    if (url in mocks) {
-      console.warn(`URL (${url}) intercepted and response mocked`);
-      setTimeout(
-        () =>
-          interceptedRequest.respond({
-            status: 200,
-            contentType: 'application/json',
-            headers: {
-              'Access-Control-Allow-Origin': '*'
-            },
-            body: JSON.stringify(mocks[url])
-          }),
-        300
-      );
-    } else {
-      interceptedRequest.continue();
-    }
-  });
+  page.on('request', mockRequests);
 });
 
 afterAll(() => {
@@ -58,18 +27,16 @@ describe('Profile Root search', () => {
       const nodeType = 'importer';
       const profileType = 'actor';
 
-      await page.goto(`${baseUrl}/profiles`);
+      await page.goto(`${BASE_URL}/profiles`);
       await page.waitForSelector('[data-test=profile-search]');
       await page.click('[data-test=search-input-desktop]');
       await page.type('[data-test=search-input-desktop]', nodeName);
       await page.waitForSelector(`[data-test=search-result-${nodeType}-${nodeName}]`);
       await page.click(`[data-test=search-result-${nodeType}-${nodeName}]`);
 
-      expect(page.url().startsWith(`${baseUrl}/profile-${profileType}`)).toBe(true);
-
-      expect.assertions(1);
+      expect(page.url().startsWith(`${BASE_URL}/profile-${profileType}`)).toBe(true);
     },
-    30000
+    TIMEOUT
   );
 });
 
@@ -79,12 +46,12 @@ describe('Profile actor', () => {
     async () => {
       expect.assertions(1);
 
-      // await page.goto(`${baseUrl}/profile-actor?lang=en&nodeId=441&contextId=1&year=2015`);
+      // await page.goto(`${BASE_URL}/profile-actor?lang=en&nodeId=441&contextId=1&year=2015`);
       await page.waitForSelector('[data-test=loading-section]');
       const loadingSections = await page.$$('[data-test=loading-section]');
       expect(loadingSections.length).toBe(5);
     },
-    30000
+    TIMEOUT
   );
 
   test(
@@ -110,7 +77,7 @@ describe('Profile actor', () => {
       expect(companyName.toLowerCase()).toMatch('bunge');
       expect(countryName.toLowerCase()).toMatch('brazil');
     },
-    30000
+    TIMEOUT
   );
 
   test(
@@ -132,7 +99,7 @@ describe('Profile actor', () => {
       );
       expect(chartLines.length).toBe(5);
     },
-    30000
+    TIMEOUT
   );
 
   test(
@@ -153,7 +120,7 @@ describe('Profile actor', () => {
       expect(hasLegend).toBe(true);
       expect(coloredMapPolygons.length).toBe(32);
     },
-    30000
+    TIMEOUT
   );
 
   test(
@@ -173,7 +140,7 @@ describe('Profile actor', () => {
       );
       expect(chartLines.length).toBe(5);
     },
-    30000
+    TIMEOUT
   );
 
   test(
@@ -194,7 +161,7 @@ describe('Profile actor', () => {
       expect(hasLegend).toBe(true);
       expect(coloredMapPolygons.length).toBe(908);
     },
-    30000
+    TIMEOUT
   );
 
   test(
@@ -215,7 +182,7 @@ describe('Profile actor', () => {
       );
       expect(biomePolygons.length).toBe(6);
     },
-    30000
+    TIMEOUT
   );
 
   test(
@@ -247,7 +214,7 @@ describe('Profile actor', () => {
       expect(rows.length).toBe(10);
       expect(rows.firstRow).toMatch('NOVA MUTUM218194N/A');
     },
-    30000
+    TIMEOUT
   );
 
   test(
@@ -269,6 +236,6 @@ describe('Profile actor', () => {
       expect(circles.length).toBe(341);
       expect(selectedCircles.length).toBe(1);
     },
-    30000
+    TIMEOUT
   );
 });
