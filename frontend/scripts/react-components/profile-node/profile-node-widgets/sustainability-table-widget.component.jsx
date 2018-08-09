@@ -63,9 +63,19 @@ class SustainabilityTableWidget extends React.PureComponent {
             );
           }
 
-          const rowCount = data[mainQuery].map(e => e.rows.length || 0).reduce((a, c) => a + c);
+          if (error) {
+            return null;
+          }
 
-          if (rowCount === 0) {
+          const rows = data[mainQuery].map(e => e.rows || []).reduce((a, c) => a.concat(c));
+
+          if (rows.length === 0) {
+            return null;
+          }
+
+          const values = rows.map(e => e.values || []).reduce((a, c) => a.concat(c));
+
+          if (values.length === 0) {
             return null;
           }
 

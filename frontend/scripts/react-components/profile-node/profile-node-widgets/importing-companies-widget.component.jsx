@@ -65,11 +65,7 @@ class ImportingCompaniesWidget extends React.PureComponent {
           if (error) {
             // TODO: display a proper error message to the user
             console.error('Error loading importing companies data for profile page', error);
-            return (
-              <div className="spinner-section" data-test="loading-section">
-                <ShrinkingSpinner className="-large" />
-              </div>
-            );
+            return null;
           }
 
           const { dimensionsX, companies } = data[GET_ACTOR_EXPORTING_COMPANIES];

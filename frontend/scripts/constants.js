@@ -31,6 +31,7 @@ export const NUM_DECIMALS = {
   percentage: 1,
   tons: 0
 };
+
 export const NUM_DECIMALS_DEFAULT = 1;
 
 export const UNITLESS_UNITS = ['Unitless', 'Number', 'Head', 'Number', 'NA'];

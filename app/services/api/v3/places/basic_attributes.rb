@@ -61,7 +61,8 @@ did not produce any soy in \
           result = "In <span class=\"notranslate\">#{@year}</span>, \
 <span class=\"notranslate\">#{@node.name.titleize}</span> produced \
 <span class=\"notranslate\">#{@soy_production_formatted}</span> \
-<span class=\"notranslate\">#{@soy_production_unit}</span> of soy \
+<span class=\"notranslate\">#{@soy_production_unit}</span> of \
+<span class=\"notranslate\">#{@context.commodity.name.downcase}</span> \
 occupying a total of \
 <span class=\"notranslate\">#{@soy_area_formatted}</span> \
 <span class=\"notranslate\">#{@soy_area_unit}</span> of land."
@@ -198,8 +199,11 @@ occupying a total of \
 
           text + "of the total production, it \
 ranks <span class=\"notranslate\">#{country_ranking}</span> in \
-Brazil in soy production, \
-and <span class=\"notranslate\">#{state_ranking}</span> in \
+<span class=\"notranslate\">#{@context.country.name.capitalize}</span> \
+in \
+<span class=\"notranslate\">#{@context.commodity.name.downcase}</span> \
+production, and \
+<span class=\"notranslate\">#{state_ranking}</span> in \
 the state of <span class=\"notranslate\">#{state_name}</span>."
         end
 
