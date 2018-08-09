@@ -14,6 +14,10 @@ module Api
           object.country.name
         end
 
+        attribute :has_profiles do
+          object.profiles.length != 0
+        end
+
         attribute :map do
           {
             latitude: object.country.latitude,
