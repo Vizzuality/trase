@@ -26,6 +26,7 @@ beforeAll(async () => {
       .replace('http:', '');
 
     if (url in mocks) {
+      console.info('Request intecepted by mocks: ', url);
       setTimeout(
         () =>
           interceptedRequest.respond({
@@ -39,6 +40,7 @@ beforeAll(async () => {
         300
       );
     } else {
+      console.warn('Request not intecepted by mocks: ', url);
       interceptedRequest.continue();
     }
   });
@@ -56,8 +58,6 @@ describe('Profile Root search', () => {
       const nodeType = 'importer';
       const profileType = 'actor';
 
-      expect.assertions(1);
-
       await page.goto(`${baseUrl}/profiles`);
       await page.waitForSelector('[data-test=profile-search]');
       await page.click('[data-test=search-input-desktop]');
@@ -66,6 +66,8 @@ describe('Profile Root search', () => {
       await page.click(`[data-test=search-result-${nodeType}-${nodeName}]`);
 
       expect(page.url().startsWith(`${baseUrl}/profile-${profileType}`)).toBe(true);
+
+      expect.assertions(1);
     },
     30000
   );
@@ -74,12 +76,15 @@ describe('Profile Root search', () => {
 describe('Profile actor', () => {
   test(
     'All 5 widget sections attempt to load',
-    async () => {
-      expect.assertions(1);
+    async done => {
       // await page.goto(`${baseUrl}/profile-actor?lang=en&nodeId=441&contextId=1&year=2015`);
       await page.waitForSelector('[data-test=loading-section]');
       const loadingSections = await page.$$('[data-test=loading-section]');
       expect(loadingSections.length).toBe(5);
+
+      expect.assertions(1);
+
+      done();
     },
     30000
   );
@@ -87,7 +92,6 @@ describe('Profile actor', () => {
   test(
     'Summary widget loads successfully',
     async () => {
-      expect.assertions(3);
       await page.waitForSelector('[data-test=actor-summary]');
       const titleGroup = await page.$eval(
         '[data-test=title-group]',
@@ -105,6 +109,8 @@ describe('Profile actor', () => {
       expect(titleGroup).toBe(4);
       expect(companyName.toLowerCase()).toMatch('bunge');
       expect(countryName.toLowerCase()).toMatch('brazil');
+
+      expect.assertions(3);
     },
     30000
   );
@@ -112,7 +118,6 @@ describe('Profile actor', () => {
   test(
     'Top destination countries chart loads successfully',
     async () => {
-      expect.assertions(2);
       await page.waitForSelector('[data-test=top-destination-countries]');
       const chartTitle = await page.$eval(
         '[data-test=top-destination-countries-chart-title]',
@@ -126,13 +131,13 @@ describe('Profile actor', () => {
         'top destination countries of soy imported by bunge in 2015'
       );
       expect(chartLines.length).toBe(5);
+
+      expect.assertions(2);
     },
     30000
   );
 
   test('Top destination countries map loads successfully', async () => {
-    expect.assertions(2);
-
     await page.waitForSelector('[data-test=top-destination-countries-map]');
     const hasLegend = await page.$eval(
       '[data-test=top-destination-countries-map-legend]',
@@ -144,12 +149,13 @@ describe('Profile actor', () => {
 
     expect(hasLegend).toBe(true);
     expect(coloredMapPolygons.length).toBe(32);
+
+    expect.assertions(2);
   });
 
   test(
     'Top sourcing regions chart loads successfully',
     async () => {
-      expect.assertions(2);
       await page.waitForSelector('[data-test=top-sourcing-regions]');
       const chartTitle = await page.$eval(
         '[data-test=top-sourcing-regions-chart-switch-title]',
@@ -161,13 +167,13 @@ describe('Profile actor', () => {
         'top sourcing regions of soy imported by bunge in 2015:'
       );
       expect(chartLines.length).toBe(5);
+
+      expect.assertions(2);
     },
     30000
   );
 
   test('Top sourcing regions map loads successfully', async () => {
-    expect.assertions(2);
-
     await page.waitForSelector('[data-test=top-sourcing-regions-map]');
     const hasLegend = await page.$eval(
       '[data-test=top-sourcing-regions-map-legend]',
@@ -179,11 +185,11 @@ describe('Profile actor', () => {
 
     expect(hasLegend).toBe(true);
     expect(coloredMapPolygons.length).toBe(908);
+
+    expect.assertions(2);
   });
 
   test('Top sourcing regions switch changes map', async () => {
-    expect.assertions(2);
-
     await page.waitForSelector('[data-test=top-sourcing-regions-chart-switch]');
     const municipalityPolygons = await page.$$(
       '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
@@ -194,6 +200,8 @@ describe('Profile actor', () => {
     const biomePolygons = await page.$$('[data-test=top-sourcing-regions-map-d3-polygon-colored]');
 
     expect(biomePolygons.length).toBe(6);
+
+    expect.assertions(2);
   });
 
   test('Deforestation risk widget loads successfully', async () => {
