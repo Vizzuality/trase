@@ -45,6 +45,15 @@ class PlaceSummary extends React.PureComponent {
     const areaValue = area !== null ? formatValue(area, 'area') : '-';
     const soyProductionValue = soyProduction !== null ? formatValue(soyProduction, 'tons') : '-';
 
+    const admin1MapTopoJSONFilePath = `./vector_layers/${countryName.toUpperCase()}_BIOME.topo.json`;
+    const admin1MapTopoJSONRoot = `${countryName.toUpperCase()}_BIOME`;
+
+    const admin2MapTopoJSONFilePath = `./vector_layers/${countryName.toUpperCase()}_STATE.topo.json`;
+    const admin2MapTopoJSONRoot = `${countryName.toUpperCase()}_STATE`;
+
+    const mainMapTopoJSONFilePath = `./vector_layers/municip_states/${countryName.toLowerCase()}/${stateGeoId}.topo.json`;
+    const mainMapTopoJSONRoot = `${countryName.toUpperCase()}_${stateGeoId}`;
+
     return (
       <React.Fragment>
         <div className="c-overall-map hide-for-small" data-test="place-summary">
@@ -74,50 +83,54 @@ class PlaceSummary extends React.PureComponent {
               </div>
             </div>
             <div className="small-4 columns map-item">
-              <div className="row">
-                <div className="small-3 columns">
-                  <div className="c-locator-map">
-                    {countryName && (
-                      <Map
-                        topoJSONPath={`./vector_layers/${countryName.toUpperCase()}_BIOME.topo.json`}
-                        topoJSONRoot={`${countryName.toUpperCase()}_BIOME`}
-                        getPolygonClassName={d =>
-                          d.properties.geoid === biomeGeoId ? '-isCurrent' : ''
-                        }
-                      />
-                    )}
+              {biomeName && (
+                <div className="row">
+                  <div className="small-3 columns">
+                    <div className="c-locator-map">
+                      {countryName && (
+                        <Map
+                          topoJSONPath={admin1MapTopoJSONFilePath}
+                          topoJSONRoot={admin1MapTopoJSONRoot}
+                          getPolygonClassName={d =>
+                            d.properties.geoid === biomeGeoId ? '-isCurrent' : ''
+                          }
+                        />
+                      )}
+                    </div>
+                  </div>
+                  <div className="small-9 columns">
+                    <div className="c-info">
+                      <div className="legend">biome</div>
+                      <div className="name -medium">{biomeName ? capitalize(biomeName) : '-'}</div>
+                    </div>
                   </div>
                 </div>
-                <div className="small-9 columns">
-                  <div className="c-info">
-                    <div className="legend">biome</div>
-                    <div className="name -medium">{biomeName ? capitalize(biomeName) : '-'}</div>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
             <div className="small-4 columns map-item">
-              <div className="row">
-                <div className="small-3 columns">
-                  <div className="c-locator-map">
-                    {countryName && (
-                      <Map
-                        topoJSONPath={`./vector_layers/${countryName.toUpperCase()}_STATE.topo.json`}
-                        topoJSONRoot={`${countryName.toUpperCase()}_STATE`}
-                        getPolygonClassName={d =>
-                          d.properties.geoid === stateGeoId ? '-isCurrent' : ''
-                        }
-                      />
-                    )}
+              {stateName && (
+                <div className="row">
+                  <div className="small-3 columns">
+                    <div className="c-locator-map">
+                      {countryName && (
+                        <Map
+                          topoJSONPath={admin2MapTopoJSONFilePath}
+                          topoJSONRoot={admin2MapTopoJSONRoot}
+                          getPolygonClassName={d =>
+                            d.properties.geoid === stateGeoId ? '-isCurrent' : ''
+                          }
+                        />
+                      )}
+                    </div>
+                  </div>
+                  <div className="small-9 columns">
+                    <div className="c-info">
+                      <div className="legend">state</div>
+                      <div className="name -medium">{stateName ? capitalize(stateName) : '-'}</div>
+                    </div>
                   </div>
                 </div>
-                <div className="small-9 columns">
-                  <div className="c-info">
-                    <div className="legend">state</div>
-                    <div className="name -medium">{stateName ? capitalize(stateName) : '-'}</div>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -128,8 +141,8 @@ class PlaceSummary extends React.PureComponent {
               <div className="c-locator-map map-municipality-banner">
                 {countryName && (
                   <Map
-                    topoJSONPath={`./vector_layers/municip_states/${countryName.toLowerCase()}/${stateGeoId}.topo.json`}
-                    topoJSONRoot={`${countryName.toUpperCase()}_${stateGeoId}`}
+                    topoJSONPath={mainMapTopoJSONFilePath}
+                    topoJSONRoot={mainMapTopoJSONRoot}
                     getPolygonClassName={d =>
                       d.properties.geoid === municipalityGeoId ? '-isCurrent' : ''
                     }

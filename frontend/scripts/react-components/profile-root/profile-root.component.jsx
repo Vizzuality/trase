@@ -14,7 +14,7 @@ const ProfileRoot = props => {
                 <div className="profile-root-heading-container">
                   <div className="profile-root-heading-wrapper">
                     <h2 className="subtitle -gray">Country & Commodity</h2>
-                    <h1 className="title">Brazil &ndash; Soy</h1>
+                    <h1 className="title">Colombia &ndash; Coffee</h1>
                   </div>
                 </div>
                 <ProfileSearch />

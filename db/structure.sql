@@ -2004,6 +2004,12 @@ CREATE TABLE public.profiles (
     name text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
+    adm_1_topojson_path varchar,
+    adm_1_topojson_root varchar,
+    adm_2_topojson_path varchar,
+    adm_2_topojson_root varchar,
+    main_topojson_path varchar,
+    main_topojson_root varchar,
     CONSTRAINT profiles_name_check CHECK ((name = ANY (ARRAY['actor'::text, 'place'::text])))
 );
 
@@ -4726,4 +4732,5 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180412074237'),
 ('20180416125150'),
 ('20180522102950'),
-('20180522135640');
+('20180522135640'),
+('20180808114630');

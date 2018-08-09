@@ -54,12 +54,17 @@ class ImportingCompaniesWidget extends React.PureComponent {
         params={[params, { ...params, profile_type: 'actor' }]}
       >
         {({ data, loading, error }) => {
-          if (loading || error)
+          if (loading) {
             return (
               <section className="spinner-section" data-test="loading-section">
                 <ShrinkingSpinner className="-large" />
               </section>
             );
+          }
+
+          if (error) {
+            return null;
+          }
 
           const { dimensionsX, companies } = data[GET_ACTOR_EXPORTING_COMPANIES];
           const { nodeName, columnName } = data[GET_NODE_SUMMARY_URL];

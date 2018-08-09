@@ -48,12 +48,16 @@ class TopConsumersWidget extends React.PureComponent {
         params={[{ ...params, year }, { ...params, profile_type: 'place' }]}
       >
         {({ data, loading, error }) => {
-          if (loading || error) {
+          if (loading) {
             return (
               <section className="spinner-section" data-test="loading-section">
                 <ShrinkingSpinner className="-large" />
               </section>
             );
+          }
+
+          if (error) {
+            return null;
           }
 
           if (

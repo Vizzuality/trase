@@ -50,12 +50,18 @@ class TopDestinationsWidget extends React.PureComponent {
         params={[{ ...params, year }, { ...params, profile_type: 'actor' }]}
       >
         {({ data, loading, error }) => {
-          if (loading || error)
+          if (loading) {
             return (
               <section className="spinner-section" data-test="loading-section">
                 <ShrinkingSpinner className="-large" />
               </section>
             );
+          }
+
+          if (error) {
+            return null;
+          }
+
           const {
             includedYears,
             lines,

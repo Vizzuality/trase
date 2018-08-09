@@ -1,5 +1,5 @@
 import { GET_NODES_WITH_SEARCH_URL, getURLFromParams } from 'utils/getURLFromParams';
-import { DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
+import { DEFAULT_PROFILE_PAGE_YEAR, DEFAULT_PROFILE_PAGE_CONTEXT_ID } from 'constants';
 import isEmpty from 'lodash/isEmpty';
 
 export const SET_PROFILE_SEARCH_TERM = 'SET_PROFILE_SEARCH_TERM';
@@ -29,7 +29,7 @@ export function resetProfileSearchResults() {
 export const searchNodeWithTerm = searchTerm => dispatch => {
   const nodeResultsURL = getURLFromParams(GET_NODES_WITH_SEARCH_URL, {
     query: searchTerm,
-    context_id: 1,
+    context_id: DEFAULT_PROFILE_PAGE_CONTEXT_ID,
     profile_only: true
   });
 
