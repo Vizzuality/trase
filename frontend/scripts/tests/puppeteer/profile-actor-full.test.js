@@ -3,7 +3,6 @@ import puppeteer from 'puppeteer';
 
 import { mockRequests, openBrowser } from '../utils';
 import {
-  testRootSearch,
   testProfileSpinners,
   testProfileSummary,
   testProfileMultiTable
@@ -11,41 +10,31 @@ import {
 
 let page;
 let browser;
-const TIMEOUT = 30000;
+const BASE_URL = 'http://0.0.0.0:8081';
+const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
 
 beforeAll(async () => {
   browser = await puppeteer.launch(openBrowser(false));
   page = await browser.newPage();
   await page.setRequestInterception(true);
-  page.on('request', mockRequests);
+  page.on('request', mockRequests(['brazil-soy', 'brazil-soy-actor-profile']));
 });
 
 afterAll(() => {
   browser.close();
 });
 
-describe('Profile Root search', () => {
-  test(
-    'search for bunge and click importer result',
-    async () => {
-      const nodeName = 'bunge';
-      const nodeType = 'importer';
-      const profileType = 'actor';
-
-      expect.assertions(1);
-      await testRootSearch(page, expect, { nodeName, nodeType, profileType });
-    },
-    TIMEOUT
-  );
-});
-
-describe('Profile actor', () => {
+describe('Profile actor - Full data', () => {
   test(
     'All 5 widget sections attempt to load',
     async () => {
-      expect.assertions(1);
-      // await page.goto(`${BASE_URL}/profile-actor?lang=en&nodeId=441&contextId=1&year=2015`);
+      expect.assertions(2);
+
+      await page.goto(`${BASE_URL}/profile-actor?lang=en&nodeId=441&contextId=1&year=2015`);
       await testProfileSpinners(page, expect);
+      await page.waitForSelector('[data-test=loading-section]');
+      const loadingSections = await page.$$('[data-test=loading-section]');
+      expect(loadingSections.length).toBe(5);
     },
     TIMEOUT
   );
