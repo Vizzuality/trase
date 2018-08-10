@@ -12,7 +12,7 @@ import 'styles/components/profiles/area-table.scss';
 
 class Table extends Component {
   renderPlacesTableHeader() {
-    const data = this.props.data;
+    const { data, testId } = this.props;
 
     return (
       <thead>
@@ -21,7 +21,11 @@ class Table extends Component {
             <span className="only-for-print">{data.name}</span>
           </th>
           {data.rows.map((elem, index) => (
-            <th key={index} className="header-cell _text-align-right">
+            <th
+              key={index}
+              className="header-cell _text-align-right"
+              data-test={`${testId}-header-name`}
+            >
               {elem.name}
             </th>
           ))}
@@ -31,13 +35,13 @@ class Table extends Component {
   }
 
   renderPlacesTable() {
-    const data = this.props.data;
+    const { data, testId } = this.props;
     const columns = data.included_columns;
 
     return (
       <tbody>
         {data.rows[0].values.map((value, valueKey) => (
-          <tr key={valueKey} className="table-row">
+          <tr key={valueKey} className="table-row" data-test={`${testId}-row`}>
             <td className="cell-name">
               <span className="node-name">
                 {columns[valueKey].name}

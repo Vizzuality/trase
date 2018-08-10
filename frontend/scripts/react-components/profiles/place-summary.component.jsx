@@ -47,7 +47,7 @@ class PlaceSummary extends React.PureComponent {
 
     return (
       <React.Fragment>
-        <div className="c-overall-map hide-for-small">
+        <div className="c-overall-map hide-for-small" data-test="place-summary">
           <div className="row">
             <div className="small-4 columns map-item">
               <div className="row">

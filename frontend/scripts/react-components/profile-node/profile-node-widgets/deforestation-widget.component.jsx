@@ -8,7 +8,7 @@ import { GET_PLACE_DEFORESTATION_TRAJECTORY, GET_NODE_SUMMARY_URL } from 'utils/
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
 
 function DeforestationWidget(props) {
-  const { nodeId, contextId, year } = props;
+  const { nodeId, contextId, year, testId } = props;
   const params = { node_id: nodeId, context_id: contextId, year };
   return (
     <Widget
@@ -34,13 +34,14 @@ function DeforestationWidget(props) {
           <section className="deforestation page-break-inside-avoid">
             <div className="row">
               <div className="small-12 columns">
-                <h3 className="title -small">
+                <h3 className="title -small" data-test={`${testId}-title`}>
                   Deforestation trajectory of{' '}
                   <span className="notranslate">{data[GET_NODE_SUMMARY_URL].municipalityName}</span>
                 </h3>
                 <div className="c-line-container">
                   <div className="c-line">
                     <Line
+                      testId={testId}
                       lines={DeforestationWidget.getLastNYears(lines, 6)}
                       xValues={includedYears.slice(-6)}
                       unit={unit}
@@ -75,6 +76,7 @@ DeforestationWidget.getLastNYears = function getLastNYears(lines, nYears) {
 };
 
 DeforestationWidget.propTypes = {
+  testId: PropTypes.string,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,
   contextId: PropTypes.number.isRequired
