@@ -118,16 +118,31 @@ class ProfileNode extends React.PureComponent {
               year={year}
               nodeId={nodeId}
               contextId={context.id}
+              testId="sustainability-indicators"
             />
-            <DeforestationWidget year={year} nodeId={nodeId} contextId={context.id} />
+            <DeforestationWidget
+              year={year}
+              nodeId={nodeId}
+              contextId={context.id}
+              testId="deforestation-trajectory"
+            />
             <TopConsumersWidget
               year={year}
               type="actor"
               nodeId={nodeId}
+              testId="top-traders"
               contextId={context.id}
+              commodityName={context.commodityName}
               onLinkClick={updateQueryParams}
             />
-            <TopConsumersWidget year={year} nodeId={nodeId} contextId={context.id} type="place" />
+            <TopConsumersWidget
+              year={year}
+              nodeId={nodeId}
+              testId="top-importers"
+              contextId={context.id}
+              type="place"
+              commodityName={context.commodityName}
+            />
           </React.Fragment>
         )}
       </div>

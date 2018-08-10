@@ -45,7 +45,16 @@ class MiniSankey extends Component {
   hideTooltipCallback = () => this.tooltip && this.tooltip.hide();
 
   render() {
-    const { data, onLinkClick, targetLink, width, year, targetPayload, contextId } = this.props;
+    const {
+      data,
+      onLinkClick,
+      targetLink,
+      width,
+      year,
+      targetPayload,
+      contextId,
+      testId
+    } = this.props;
     const totalHeight = data.targetNodes.reduce(
       (total, node) => total + Math.ceil(node.height * BASE_HEIGHT) + NODE_V_SPACE,
       0
@@ -92,7 +101,7 @@ class MiniSankey extends Component {
     });
 
     return (
-      <div className="mini-sankey">
+      <div className="mini-sankey" data-test={testId}>
         <div className="c-info-tooltip is-hidden" ref={this.getTooltipRef} />
         <svg style={{ height: totalHeight, width }}>
           <linearGradient id="gradient" x1="0" x2="1" y1="0" y2="0">
@@ -161,6 +170,7 @@ class MiniSankey extends Component {
                   key={index}
                   d={path}
                   strokeWidth={node.renderedHeight}
+                  data-test={`${testId}-flow`}
                   className={node.isAggregated ? 'link-aggr' : 'link'}
                   onMouseLeave={this.hideTooltipCallback}
                   onMouseMove={event =>
@@ -185,6 +195,7 @@ class MiniSankey extends Component {
 
 MiniSankey.propTypes = {
   data: PropTypes.object,
+  testId: PropTypes.string,
   onLinkClick: PropTypes.func,
   targetLink: PropTypes.string,
   targetPayload: PropTypes.object,

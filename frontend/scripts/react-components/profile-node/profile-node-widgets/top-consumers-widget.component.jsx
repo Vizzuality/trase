@@ -38,7 +38,7 @@ class TopConsumersWidget extends React.PureComponent {
   };
 
   render() {
-    const { year, nodeId, contextId, type, onLinkClick } = this.props;
+    const { year, nodeId, contextId, type, onLinkClick, testId } = this.props;
     const params = { node_id: nodeId, context_id: contextId, year };
     const mainQuery =
       type === 'actor' ? GET_PLACE_TOP_CONSUMER_ACTORS : GET_PLACE_TOP_CONSUMER_COUNTRIES;
@@ -66,14 +66,17 @@ class TopConsumersWidget extends React.PureComponent {
 
           const { municipalityName } = data[GET_NODE_SUMMARY_URL];
           return (
-            <section className="mini-sankey-container page-break-inside-avoid">
+            <section className="mini-sankey-container page-break-inside-avoid" data-test={testId}>
               <div className="row">
                 <div className="small-12 columns">
-                  <h3 className="title -small">{this.getTitle(municipalityName)}</h3>
+                  <h3 className="title -small" data-test={`${testId}-title`}>
+                    {this.getTitle(municipalityName)}
+                  </h3>
                   <TranslatedMiniSankey
                     year={year}
                     data={data[mainQuery]}
                     contextId={contextId}
+                    testId={`${testId}-mini-sankey`}
                     onLinkClick={this.handleLinkClick}
                     targetLink={onLinkClick && 'profileNode'}
                     targetPayload={onLinkClick && { profileType: type }}
@@ -89,6 +92,7 @@ class TopConsumersWidget extends React.PureComponent {
 }
 
 TopConsumersWidget.propTypes = {
+  testId: PropTypes.string,
   onLinkClick: PropTypes.func,
   commodityName: PropTypes.string,
   year: PropTypes.number.isRequired,
