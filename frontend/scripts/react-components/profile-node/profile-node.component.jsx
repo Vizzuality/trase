@@ -74,6 +74,7 @@ class ProfileNode extends React.PureComponent {
               countryName={context.countryName}
               onLinkClick={updateQueryParams}
               commodityName={context.commodityName}
+              testId="top-destination-countries"
             />
             <TopDestinationsWidget
               className="c-top-municipalities page-break-inside-avoid"
@@ -86,6 +87,7 @@ class ProfileNode extends React.PureComponent {
               commodityName={context.commodityName}
               onLinkClick={updateQueryParams}
               profileType={profileType}
+              testId="top-sourcing-regions"
             />
             <SustainabilityTableWidget
               type="risk"
@@ -94,6 +96,7 @@ class ProfileNode extends React.PureComponent {
               year={year}
               nodeId={nodeId}
               contextId={context.id}
+              testId="deforestation-risk"
             />
             <ImportingCompaniesWidget
               printMode={printMode}
@@ -102,6 +105,7 @@ class ProfileNode extends React.PureComponent {
               contextId={context.id}
               countryName={context.countryName}
               commodityName={context.commodityName}
+              testId="company-compare"
             />
           </React.Fragment>
         )}

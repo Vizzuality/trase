@@ -59,8 +59,10 @@ class Map extends Component {
     const {
       width,
       height,
+      testId,
       topoJSONPath,
       topoJSONRoot,
+      getPolygonTestId,
       getPolygonClassName,
       showTooltipCallback,
       hideTooltipCallback,
@@ -93,6 +95,7 @@ class Map extends Component {
         .enter()
         .append('path')
         .attr('class', d => `polygon ${getPolygonClassName(d)}`)
+        .attr('data-test', d => getPolygonTestId && getPolygonTestId(d, testId))
         .attr('d', path);
 
       if (showTooltipCallback !== undefined) {
@@ -131,9 +134,11 @@ class Map extends Component {
 
 Map.propTypes = {
   width: PropTypes.number,
+  testId: PropTypes.string,
   height: PropTypes.number,
   topoJSONPath: PropTypes.string,
   topoJSONRoot: PropTypes.string,
+  getPolygonTestId: PropTypes.func,
   getPolygonClassName: PropTypes.func,
   showTooltipCallback: PropTypes.func,
   hideTooltipCallback: PropTypes.func,

@@ -77,7 +77,8 @@ class TopDestinationsChart extends React.PureComponent {
       onChangeTab,
       height,
       lines,
-      contextId
+      contextId,
+      testId
     } = this.props;
     const { tooltipConfig } = this.state;
     const heightStyle = TopDestinationsChart.getIsMobile() ? { minHeigh: height } : { height };
@@ -87,12 +88,15 @@ class TopDestinationsChart extends React.PureComponent {
         <div className="top-destinations-chart-container">
           <div>
             {type === 'countries' ? (
-              <h3 className="title -small">{this.getTitle()}</h3>
+              <h3 className="title -small" data-test={`${testId}-title`}>
+                {this.getTitle()}
+              </h3>
             ) : (
               <DropdownTabSwitcher
                 title={this.getTitle()}
                 items={tabs}
                 onSelectedIndexChange={onChangeTab}
+                testId={`${testId}-switch`}
               />
             )}
           </div>
@@ -116,6 +120,7 @@ class TopDestinationsChart extends React.PureComponent {
               margin={this.margin}
               settingsHeight={this.height}
               ticks={this.ticks}
+              testId={`${testId}-d3`}
             />
           </div>
         </div>
@@ -126,6 +131,7 @@ class TopDestinationsChart extends React.PureComponent {
 
 TopDestinationsChart.propTypes = {
   tabs: PropTypes.array,
+  testId: PropTypes.string,
   onChangeTab: PropTypes.func,
   onLinkClick: PropTypes.func,
   profileType: PropTypes.string,

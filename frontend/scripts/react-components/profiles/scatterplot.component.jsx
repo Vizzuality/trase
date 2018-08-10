@@ -43,7 +43,7 @@ class Scatterplot extends Component {
   }
 
   build() {
-    const { data, showTooltipCallback, hideTooltipCallback } = this.props;
+    const { data, showTooltipCallback, hideTooltipCallback, testId } = this.props;
     const parentWidth = this.props.width;
 
     const width = parentWidth - this.margins.left - this.margins.right;
@@ -121,6 +121,7 @@ class Scatterplot extends Component {
       .enter()
       .append('circle')
       .attr('class', d => this._getCircleClass(d))
+      .attr('data-test', d => (d.isCurrent ? `${testId}-circle-current` : `${testId}-circle`))
       .attr('r', 5)
       .attr('cx', d => this.x(d.x))
       .attr('cy', d => this.y(d.y));
@@ -195,7 +196,7 @@ class Scatterplot extends Component {
   }
 
   render() {
-    const { title, xDimension } = this.props;
+    const { title, xDimension, testId } = this.props;
     const tabs = xDimension.filter((x, i) => i < 3);
     const itemTabRenderer = (_, index) => {
       const elem = tabs[index];
@@ -206,6 +207,7 @@ class Scatterplot extends Component {
       <div className="c-scatterplot">
         <DropdownTabSwitcher
           title={title}
+          testId={`${testId}-switch`}
           items={tabs.map(e => e.name)}
           itemTabRenderer={itemTabRenderer}
           onSelectedIndexChange={this.handleSwitcherIndexChange}
@@ -224,6 +226,7 @@ class Scatterplot extends Component {
 }
 
 Scatterplot.propTypes = {
+  testId: PropTypes.string,
   title: PropTypes.any,
   data: PropTypes.array,
   node: PropTypes.object,

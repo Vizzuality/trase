@@ -4,21 +4,27 @@ import capitalize from 'lodash/capitalize';
 import Dropdown from 'react-components/shared/dropdown.component';
 
 class TitleGroup extends React.PureComponent {
-  static renderPlainElement(title) {
+  static renderPlainElement(title, i) {
     return (
       <div key={title.label} className="title-group-element-container">
         <div className="title-group-element" key={title.label}>
           <span className="title-group-label">{title.label || '-'}</span>
-          <span className="title-group-content">{title.name ? capitalize(title.name) : '-'}</span>
+          <span className="title-group-content" data-test={`title-group-el-${i}`}>
+            {title.name ? capitalize(title.name) : '-'}
+          </span>
         </div>
       </div>
     );
   }
 
-  static renderDropdownElement(title) {
+  static renderDropdownElement(title, i) {
     return (
       <div key={title.label} className="title-group-element-container">
-        <div className="title-group-element -dropdown" key={title.label}>
+        <div
+          className="title-group-element -dropdown"
+          key={title.label}
+          data-test={`title-group-el-${i}`}
+        >
           <Dropdown size="big" {...title} />
         </div>
       </div>
@@ -28,12 +34,12 @@ class TitleGroup extends React.PureComponent {
   render() {
     const { titles } = this.props;
     return (
-      <div className="c-title-group">
+      <div className="c-title-group" data-test="title-group">
         {titles.map(
-          title =>
+          (title, i) =>
             title.dropdown
-              ? TitleGroup.renderDropdownElement(title)
-              : TitleGroup.renderPlainElement(title)
+              ? TitleGroup.renderDropdownElement(title, i)
+              : TitleGroup.renderPlainElement(title, i)
         )}
       </div>
     );

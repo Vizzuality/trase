@@ -6,7 +6,11 @@ import HighlightTextFragments from 'react-components/shared/highlight-text-fragm
 
 function ProfileSearchResult({ item, itemProps, searchString, isHighlighted }) {
   return (
-    <li {...itemProps} className={cx('c-profile-search-result', { '-highlighted': isHighlighted })}>
+    <li
+      {...itemProps}
+      className={cx('c-profile-search-result', { '-highlighted': isHighlighted })}
+      data-test={`search-result-${item.nodeType.toLowerCase()}-${item.name.toLowerCase()}`}
+    >
       <span className="profile-search-node-type">{item.nodeType}</span>
       <span className="profile-search-node-name">
         <HighlightTextFragments text={item.name} highlight={searchString} />

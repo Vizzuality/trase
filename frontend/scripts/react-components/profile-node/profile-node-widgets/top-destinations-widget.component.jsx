@@ -38,7 +38,8 @@ class TopDestinationsWidget extends React.PureComponent {
       className,
       commodityName,
       countryName,
-      onLinkClick
+      onLinkClick,
+      testId
     } = this.props;
     const { activeTab } = this.state;
     const mainQuery = type === 'countries' ? GET_ACTOR_TOP_COUNTRIES : GET_ACTOR_TOP_SOURCES;
@@ -51,7 +52,7 @@ class TopDestinationsWidget extends React.PureComponent {
         {({ data, loading, error }) => {
           if (loading || error)
             return (
-              <section className="spinner-section">
+              <section className="spinner-section" data-test="loading-section">
                 <ShrinkingSpinner className="-large" />
               </section>
             );
@@ -71,7 +72,7 @@ class TopDestinationsWidget extends React.PureComponent {
           const { nodeName, columnName } = data[GET_NODE_SUMMARY_URL];
           const verb = columnName === 'EXPORTER' ? 'exported' : 'imported';
           return (
-            <section className={className}>
+            <section className={className} data-test={testId}>
               <div className="row align-justify">
                 <div className="column small-12 medium-7">
                   <TopDestinationsChart
@@ -91,6 +92,7 @@ class TopDestinationsWidget extends React.PureComponent {
                     commodityName={commodityName}
                     columnName={columnName}
                     verb={verb}
+                    testId={`${testId}-chart`}
                   />
                 </div>
                 <div className="column small-12 medium-5 top-destinations-map-widget">
@@ -102,6 +104,7 @@ class TopDestinationsWidget extends React.PureComponent {
                     buckets={buckets}
                     lines={lines}
                     nodeName={nodeName}
+                    testId={`${testId}-map`}
                     profileType={profileType}
                     countryName={countryName}
                     commodityName={commodityName}
@@ -118,6 +121,7 @@ class TopDestinationsWidget extends React.PureComponent {
 }
 
 TopDestinationsWidget.propTypes = {
+  testId: PropTypes.string,
   printMode: PropTypes.bool,
   className: PropTypes.string,
   countryName: PropTypes.string,

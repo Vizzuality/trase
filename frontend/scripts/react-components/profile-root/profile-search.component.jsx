@@ -46,7 +46,7 @@ class ProfileSearch extends PureComponent {
     const visibleResults = this.props.nodes.slice(0, 10);
 
     return (
-      <div className="c-profile-search">
+      <div className="c-profile-search" data-test="profile-search">
         <div
           className={cx('profile-search-bar', { '-loading': isLoading })}
           onClick={this.focusInput}
@@ -61,6 +61,7 @@ class ProfileSearch extends PureComponent {
             {...getInputProps({ placeholder: 'Search a company or production place' })}
             type="search"
             className="profile-search-input hide-for-small"
+            data-test="search-input-desktop"
           />
           {isLoading ? (
             <ShrinkingSpinner className="-dark" />

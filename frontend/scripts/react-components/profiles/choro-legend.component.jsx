@@ -11,10 +11,10 @@ class ChoroLegend extends Component {
   }
 
   render() {
-    const { title, bucket } = this.props;
+    const { title, bucket, testId } = this.props;
 
     return (
-      <div className="c-map-legend-choro">
+      <div className="c-map-legend-choro" data-test={testId}>
         <div className="bucket-container -horizontal -profile">
           <div className="bucket-names">
             <div className="layer-name">{title[0]}</div>
@@ -48,6 +48,7 @@ class ChoroLegend extends Component {
 }
 
 ChoroLegend.propTypes = {
+  testId: PropTypes.string,
   title: PropTypes.array,
   bucket: PropTypes.array
 };

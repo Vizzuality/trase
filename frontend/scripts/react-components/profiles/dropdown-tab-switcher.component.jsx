@@ -23,13 +23,13 @@ class DropdownTabSwitcher extends Component {
   }
 
   render() {
-    const { items, itemTabRenderer, title, titleTooltip } = this.props;
+    const { items, itemTabRenderer, title, titleTooltip, testId } = this.props;
     const { selectedIndex } = this.state;
 
     return (
-      <div className="c-dropdown-tab-switcher">
+      <div className="c-dropdown-tab-switcher" data-test={testId}>
         <div className="tab-switcher hide-for-small">
-          <div className="tab-switcher-title">
+          <div className="tab-switcher-title" data-test={`${testId}-title`}>
             {title}
             {titleTooltip && <Tooltip text={titleTooltip} />}
           </div>
@@ -42,6 +42,7 @@ class DropdownTabSwitcher extends Component {
                 })}
                 data-key={item}
                 onClick={() => this.handleSelect(index)}
+                data-test={`${testId}-item`}
               >
                 {itemTabRenderer ? itemTabRenderer(item, index) : item}
               </li>
@@ -62,6 +63,7 @@ class DropdownTabSwitcher extends Component {
 }
 
 DropdownTabSwitcher.propTypes = {
+  testId: PropTypes.string,
   title: PropTypes.any,
   titleTooltip: PropTypes.string,
   items: PropTypes.array,

@@ -37,6 +37,16 @@ class TopDestinationsMap extends React.PureComponent {
     return `-outline ch-${value}`;
   };
 
+  getPolygonTestId = (geography, testId) => {
+    const { lines, activeTab } = this.props;
+    const searchKey = activeTab ? 'geoid' : 'iso2';
+    const polygon = lines.find(c => geography.properties[searchKey] === c.geo_id);
+    if (polygon) {
+      return `${testId}-polygon-colored`;
+    }
+    return `${testId}-polygon`;
+  };
+
   getTopoJsonRoot() {
     const { activeTab, countryName } = this.props;
     if (activeTab) {
@@ -57,19 +67,20 @@ class TopDestinationsMap extends React.PureComponent {
   }
 
   render() {
-    const { year, printMode, buckets, verb, activeTab, height, commodityName } = this.props;
+    const { year, printMode, buckets, verb, activeTab, height, commodityName, testId } = this.props;
     const { tooltipConfig } = this.state;
     const width = activeTab ? 400 : '100%';
     return (
       <React.Fragment>
         <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
-        <div className="row align-right">
+        <div className="row align-right" data-test={testId}>
           <div
             className={cx('column', 'small-12', {
               'medium-6': printMode
             })}
           >
             <ChoroLegend
+              testId={`${testId}-legend`}
               title={[
                 translateText(`${commodityName} ${verb} in ${year}`),
                 translateText('(tonnes)')
@@ -80,8 +91,10 @@ class TopDestinationsMap extends React.PureComponent {
           <div className="column small-12">
             <div className="top-destinations-map-container" style={{ height, width }}>
               <Map
+                testId={`${testId}-d3`}
                 topoJSONPath={this.getTopoJsonLink()}
                 topoJSONRoot={this.getTopoJsonRoot()}
+                getPolygonTestId={this.getPolygonTestId}
                 getPolygonClassName={this.getPolygonClassName}
                 showTooltipCallback={this.onMouseMove}
                 hideTooltipCallback={this.onMouseLeave}
@@ -96,6 +109,7 @@ class TopDestinationsMap extends React.PureComponent {
 }
 
 TopDestinationsMap.propTypes = {
+  testId: PropTypes.string,
   printMode: PropTypes.bool,
   activeTab: PropTypes.string,
   profileType: PropTypes.string,
