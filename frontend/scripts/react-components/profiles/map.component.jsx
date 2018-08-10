@@ -80,7 +80,7 @@ class Map extends Component {
       .attr('width', width)
       .attr('height', height);
 
-    const geoParent = svg.append('g');
+    const geoParent = svg.append('g').attr('data-test', testId);
     const container = geoParent.append('g');
 
     const projection = useRobinsonProjection === true ? d3_geoRobinson() : d3_geoMercator();

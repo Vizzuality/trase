@@ -1,60 +1,53 @@
 const fs = require('fs');
 const url = require('url');
+const promisify = require('util').promisify;
 
-const asyncReadFile = (path, opts = 'utf8') =>
-  new Promise((res, rej) => {
-    fs.readFile(path, opts, (err, data) => {
-      if (err) {
-        rej(err);
-      } else {
-        res(data);
+require('dotenv').config({ silent: true });
+
+const readFilePromise = promisify(fs.readFile);
+const readdirPromise = promisify(fs.readdir);
+const existsPromise = promisify(fs.exists);
+
+const getMockList = async dirs => {
+  const mocks = await Promise.all(
+    dirs.map(async namespace => {
+      const namespacePath = `${__dirname}/mocks/${namespace}`;
+      try {
+        await existsPromise(namespacePath);
+      } catch (e) {
+        throw new Error(`Realm ${namespace} could not be found`);
       }
-    });
-  });
+      const filenames = await readdirPromise(namespacePath);
+      return filenames.reduce(
+        (acc, filename) => ({ ...acc, [filename]: `${namespacePath}/${filename}` }),
+        {}
+      );
+    })
+  );
+  return mocks.reduce((acc, next) => ({ ...acc, ...next }), {});
+};
 
-export const mockRequests = mockRealms => {
+export const getRequestMockFn = async files => {
+  const namespaces = !Array.isArray(files) ? [files] : files;
   if (typeof process.env.API_V3_URL === 'undefined') {
     throw new Error('API_V3_URL needs to be defined');
   }
 
-  if (!Array.isArray(mockRealms)) {
-    mockRealms = [mockRealms];
-  }
-
-  const mocksList = {};
-
-  mockRealms.forEach(mockRealm => {
-    const realmPath = `${__dirname}/mocks/${mockRealm}`;
-
-    if (!fs.existsSync(realmPath)) {
-      throw new Error(`Realm ${mockRealm} could not be found`);
-    }
-
-    fs.readdir(realmPath, (err, filenames) => {
-      filenames.forEach(filename => {
-        mocksList[filename] = `${realmPath}/${filename}`;
-      });
-    });
-  });
+  const mocksList = await getMockList(namespaces);
 
   return async interceptedRequest => {
     const parsedUrl = url.parse(interceptedRequest.url());
-
-    if (parsedUrl.host !== url.parse(process.env.API_V3_URL).host) {
-      interceptedRequest.continue();
-      return;
-    }
 
     const filePath = `${parsedUrl.path
       .substr(1)
       .replace(/\/|\?|&|=/g, '-')
       .toLowerCase()}.json`;
 
-    if (Object.keys(mocksList).includes(filePath)) {
-      console.info(`URL (${interceptedRequest.url()}) intercepted and response mocked`);
-      const content = await asyncReadFile(mocksList[filePath]);
+    if (typeof mocksList[filePath] !== 'undefined') {
+      // console.info(`URL (${interceptedRequest.url()}) intercepted and response mocked`);
+      const content = await readFilePromise(mocksList[filePath], 'utf8');
 
-      setTimeout(
+      return setTimeout(
         () =>
           interceptedRequest.respond({
             status: 200,
@@ -64,23 +57,24 @@ export const mockRequests = mockRealms => {
             },
             body: content
           }),
-        300
+        1500
       );
-    } else {
-      console.warn(`API request ${interceptedRequest.url()} with key ${filePath} not intercepted.`);
-
-      console.log(Object.keys(mocksList));
-
-      interceptedRequest.continue();
     }
+
+    // console.warn(`API request ${interceptedRequest.url()} not intercepted.`);
+    return interceptedRequest.continue();
   };
 };
 
-export const openBrowser = visible =>
-  visible
-    ? {
-        headless: false,
-        slowMo: 80,
-        args: [`--window-size=1920,1080`]
-      }
-    : { args: ['--no-sandbox'] };
+export const openBrowser = visible => {
+  if (visible) {
+    jest.setTimeout(10000);
+    return {
+      headless: false,
+      slowMo: 80,
+      args: [`--window-size=1920,1080`]
+    };
+  }
+
+  return { args: ['--no-sandbox'] };
+};

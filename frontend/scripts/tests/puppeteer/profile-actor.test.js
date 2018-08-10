@@ -1,12 +1,9 @@
 /* eslint-disable no-console */
 import puppeteer from 'puppeteer';
 
-import { mockRequests, openBrowser } from '../utils';
-import {
-  testProfileSpinners,
-  testProfileSummary,
-  testProfileMultiTable
-} from './shared';
+import { CONTEXTS, PROFILE_NODE_ACTOR } from '../mocks';
+import { getRequestMockFn, openBrowser } from '../utils';
+import { testProfileSpinners, testProfileSummary, testProfileMultiTable } from './shared';
 
 let page;
 let browser;
@@ -17,7 +14,9 @@ beforeAll(async () => {
   browser = await puppeteer.launch(openBrowser(false));
   page = await browser.newPage();
   await page.setRequestInterception(true);
-  page.on('request', mockRequests(['brazil-soy', 'brazil-soy-actor-profile']));
+  const mockRequests = await getRequestMockFn([CONTEXTS, PROFILE_NODE_ACTOR]);
+  page.on('request', mockRequests);
+  await page.goto(`${BASE_URL}/profile-actor?lang=en&nodeId=441&contextId=1&year=2015`);
 });
 
 afterAll(() => {
@@ -28,13 +27,8 @@ describe('Profile actor - Full data', () => {
   test(
     'All 5 widget sections attempt to load',
     async () => {
-      expect.assertions(2);
-
-      await page.goto(`${BASE_URL}/profile-actor?lang=en&nodeId=441&contextId=1&year=2015`);
+      expect.assertions(1);
       await testProfileSpinners(page, expect);
-      await page.waitForSelector('[data-test=loading-section]');
-      const loadingSections = await page.$$('[data-test=loading-section]');
-      expect(loadingSections.length).toBe(5);
     },
     TIMEOUT
   );
@@ -84,7 +78,7 @@ describe('Profile actor - Full data', () => {
         '[data-test=top-destination-countries-map-legend]',
         el => el !== null
       );
-      await page.waitForSelector('[data-test=top-destination-countries-map-d3-polygon]');
+      await page.waitForSelector('[data-test=top-destination-countries-map-d3]');
       const coloredMapPolygons = await page.$$(
         '[data-test=top-destination-countries-map-d3-polygon-colored]'
       );
@@ -125,7 +119,7 @@ describe('Profile actor - Full data', () => {
         '[data-test=top-sourcing-regions-map-legend]',
         el => el !== null
       );
-      await page.waitForSelector('[data-test=top-sourcing-regions-map-d3-polygon]');
+      await page.waitForSelector('[data-test=top-sourcing-regions-map-d3]');
       const coloredMapPolygons = await page.$$(
         '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
       );
@@ -142,13 +136,14 @@ describe('Profile actor - Full data', () => {
       expect.assertions(2);
 
       await page.waitForSelector('[data-test=top-sourcing-regions-chart-switch]');
-      await page.waitForSelector('[data-test=top-sourcing-regions-map-d3-polygon]');
+      await page.waitForSelector('[data-test=top-sourcing-regions-map-d3]');
       const municipalityPolygons = await page.$$(
         '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
       );
       expect(municipalityPolygons.length).toBe(908);
 
       await page.click('[data-test=top-sourcing-regions-chart-switch-item][data-key=biome]');
+      await page.waitForSelector('[data-test=top-sourcing-regions-map-d3]');
       const biomePolygons = await page.$$(
         '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
       );

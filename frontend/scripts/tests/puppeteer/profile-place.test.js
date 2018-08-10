@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 import puppeteer from 'puppeteer';
 
-import { mockRequests, openBrowser } from '../utils';
+import { CONTEXTS, PROFILE_NODE_PLACE } from '../mocks';
+import { getRequestMockFn, openBrowser } from '../utils';
 import {
   testProfileSpinners,
   testProfileSummary,
@@ -18,7 +19,9 @@ beforeAll(async () => {
   browser = await puppeteer.launch(openBrowser(false));
   page = await browser.newPage();
   await page.setRequestInterception(true);
-  page.on('request', mockRequests(['brazil-soy', 'brazil-soy-place-profile']));
+  const mockRequests = await getRequestMockFn([CONTEXTS, PROFILE_NODE_PLACE]);
+  page.on('request', mockRequests);
+  await page.goto(`${BASE_URL}/profile-place?lang=en&nodeId=2759&contextId=1&year=2015`);
 });
 
 afterAll(() => {
@@ -30,7 +33,6 @@ describe('Profile place - Full data', () => {
     'All 5 widget sections attempt to load',
     async () => {
       expect.assertions(1);
-      await page.goto(`${BASE_URL}/profile-place?lang=en&nodeId=2759&contextId=1&year=2015`);
       await testProfileSpinners(page, expect);
     },
     TIMEOUT
