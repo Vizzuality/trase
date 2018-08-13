@@ -78,7 +78,7 @@ describe('Profile actor - Full data', () => {
         '[data-test=top-destination-countries-map-legend]',
         el => el !== null
       );
-      await page.waitForSelector('[data-test=top-destination-countries-map-d3]');
+      await page.waitForSelector('[data-test=top-destination-countries-map-d3-polygon-colored]');
       const coloredMapPolygons = await page.$$(
         '[data-test=top-destination-countries-map-d3-polygon-colored]'
       );
@@ -119,7 +119,7 @@ describe('Profile actor - Full data', () => {
         '[data-test=top-sourcing-regions-map-legend]',
         el => el !== null
       );
-      await page.waitForSelector('[data-test=top-sourcing-regions-map-d3]');
+      await page.waitForSelector('[data-test=top-sourcing-regions-map-d3-polygon-colored]');
       const coloredMapPolygons = await page.$$(
         '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
       );
@@ -136,14 +136,14 @@ describe('Profile actor - Full data', () => {
       expect.assertions(2);
 
       await page.waitForSelector('[data-test=top-sourcing-regions-chart-switch]');
-      await page.waitForSelector('[data-test=top-sourcing-regions-map-d3]');
+      await page.waitForSelector('[data-test=top-sourcing-regions-map-d3-polygon-colored]');
       const municipalityPolygons = await page.$$(
         '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
       );
       expect(municipalityPolygons.length).toBe(908);
 
       await page.click('[data-test=top-sourcing-regions-chart-switch-item][data-key=biome]');
-      await page.waitForSelector('[data-test=top-sourcing-regions-map-d3]');
+      await page.waitForSelector('[data-test=top-sourcing-regions-map-d3-polygon-colored]');
       const biomePolygons = await page.$$(
         '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
       );
