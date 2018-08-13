@@ -2,7 +2,7 @@ dist: trusty
 env:
   global:
     - CC_TEST_REPORTER_ID=ae4098e380eed3c112bd34c4c2ceec913288ce9479bb748bf098a57b75ff5de5
-    - API_V3_URL=http://localhost:3000
+    - API_V3_URL=http://0.0.0.0:3000
     - PORT=3000
 matrix:
   include:

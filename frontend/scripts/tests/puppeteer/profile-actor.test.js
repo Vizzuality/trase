@@ -1,50 +1,33 @@
 /* eslint-disable no-console */
 import puppeteer from 'puppeteer';
 
-import { mockRequests, openBrowser } from '../utils';
-import {
-  testRootSearch,
-  testProfileSpinners,
-  testProfileSummary,
-  testProfileMultiTable
-} from './shared';
+import { CONTEXTS, PROFILE_NODE_ACTOR } from '../mocks';
+import { getRequestMockFn, openBrowser } from '../utils';
+import { testProfileSpinners, testProfileSummary, testProfileMultiTable } from './shared';
 
 let page;
 let browser;
-const TIMEOUT = 30000;
+const BASE_URL = 'http://0.0.0.0:8081';
+const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
 
 beforeAll(async () => {
   browser = await puppeteer.launch(openBrowser(false));
   page = await browser.newPage();
   await page.setRequestInterception(true);
+  const mockRequests = await getRequestMockFn([CONTEXTS, PROFILE_NODE_ACTOR]);
   page.on('request', mockRequests);
+  await page.goto(`${BASE_URL}/profile-actor?lang=en&nodeId=441&contextId=1&year=2015`);
 });
 
 afterAll(() => {
   browser.close();
 });
 
-describe('Profile Root search', () => {
-  test(
-    'search for bunge and click importer result',
-    async () => {
-      const nodeName = 'bunge';
-      const nodeType = 'importer';
-      const profileType = 'actor';
-
-      expect.assertions(1);
-      await testRootSearch(page, expect, { nodeName, nodeType, profileType });
-    },
-    TIMEOUT
-  );
-});
-
-describe('Profile actor', () => {
+describe('Profile actor - Full data', () => {
   test(
     'All 5 widget sections attempt to load',
     async () => {
       expect.assertions(1);
-      // await page.goto(`${BASE_URL}/profile-actor?lang=en&nodeId=441&contextId=1&year=2015`);
       await testProfileSpinners(page, expect);
     },
     TIMEOUT
@@ -95,7 +78,7 @@ describe('Profile actor', () => {
         '[data-test=top-destination-countries-map-legend]',
         el => el !== null
       );
-      await page.waitForSelector('[data-test=top-destination-countries-map-d3-polygon]');
+      await page.waitForSelector('[data-test=top-destination-countries-map-d3-polygon-colored]');
       const coloredMapPolygons = await page.$$(
         '[data-test=top-destination-countries-map-d3-polygon-colored]'
       );
@@ -136,7 +119,7 @@ describe('Profile actor', () => {
         '[data-test=top-sourcing-regions-map-legend]',
         el => el !== null
       );
-      await page.waitForSelector('[data-test=top-sourcing-regions-map-d3-polygon]');
+      await page.waitForSelector('[data-test=top-sourcing-regions-map-d3-polygon-colored]');
       const coloredMapPolygons = await page.$$(
         '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
       );
@@ -153,13 +136,14 @@ describe('Profile actor', () => {
       expect.assertions(2);
 
       await page.waitForSelector('[data-test=top-sourcing-regions-chart-switch]');
-      await page.waitForSelector('[data-test=top-sourcing-regions-map-d3-polygon]');
+      await page.waitForSelector('[data-test=top-sourcing-regions-map-d3-polygon-colored]');
       const municipalityPolygons = await page.$$(
         '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
       );
       expect(municipalityPolygons.length).toBe(908);
 
       await page.click('[data-test=top-sourcing-regions-chart-switch-item][data-key=biome]');
+      await page.waitForSelector('[data-test=top-sourcing-regions-map-d3-polygon-colored]');
       const biomePolygons = await page.$$(
         '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
       );

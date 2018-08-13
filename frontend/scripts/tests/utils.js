@@ -1,35 +1,80 @@
-import mocks from './mocks';
+const fs = require('fs');
+const url = require('url');
+const promisify = require('util').promisify;
 
-export const mockRequests = interceptedRequest => {
-  const url = interceptedRequest
-    .url()
-    .replace('https:', '')
-    .replace('http:', '');
+require('dotenv').config({ silent: true });
 
-  if (url in mocks) {
-    console.warn(`URL (${url}) intercepted and response mocked`);
-    setTimeout(
-      () =>
-        interceptedRequest.respond({
-          status: 200,
-          contentType: 'application/json',
-          headers: {
-            'Access-Control-Allow-Origin': '*'
-          },
-          body: JSON.stringify(mocks[url])
-        }),
-      300
-    );
-  } else {
-    interceptedRequest.continue();
-  }
+const readFilePromise = promisify(fs.readFile);
+const readdirPromise = promisify(fs.readdir);
+const existsPromise = promisify(fs.exists);
+
+const getMockList = async dirs => {
+  const mocks = await Promise.all(
+    dirs.map(async namespace => {
+      const namespacePath = `${__dirname}/mocks/${namespace}`;
+      try {
+        await existsPromise(namespacePath);
+      } catch (e) {
+        throw new Error(`Realm ${namespace} could not be found`);
+      }
+      const filenames = await readdirPromise(namespacePath);
+      return filenames.reduce(
+        (acc, filename) => ({ ...acc, [filename]: `${namespacePath}/${filename}` }),
+        {}
+      );
+    })
+  );
+  return mocks.reduce((acc, next) => ({ ...acc, ...next }), {});
 };
 
-export const openBrowser = visible =>
-  visible
-    ? {
-        headless: false,
-        slowMo: 80,
-        args: [`--window-size=1920,1080`]
-      }
-    : { args: ['--no-sandbox'] };
+export const getRequestMockFn = async files => {
+  const namespaces = !Array.isArray(files) ? [files] : files;
+  if (typeof process.env.API_V3_URL === 'undefined') {
+    throw new Error('API_V3_URL needs to be defined');
+  }
+
+  const mocksList = await getMockList(namespaces);
+
+  return async interceptedRequest => {
+    const parsedUrl = url.parse(interceptedRequest.url());
+
+    const filePath = `${parsedUrl.path
+      .substr(1)
+      .replace(/\/|\?|&|=/g, '-')
+      .toLowerCase()}.json`;
+
+    if (typeof mocksList[filePath] !== 'undefined') {
+      // console.info(`URL (${interceptedRequest.url()}) intercepted and response mocked`);
+      const content = await readFilePromise(mocksList[filePath], 'utf8');
+
+      return setTimeout(
+        () =>
+          interceptedRequest.respond({
+            status: 200,
+            contentType: 'application/json',
+            headers: {
+              'Access-Control-Allow-Origin': '*'
+            },
+            body: content
+          }),
+        1500
+      );
+    }
+
+    // console.warn(`API request ${interceptedRequest.url()} not intercepted.`);
+    return interceptedRequest.continue();
+  };
+};
+
+export const openBrowser = visible => {
+  if (visible) {
+    jest.setTimeout(10000);
+    return {
+      headless: false,
+      slowMo: 80,
+      args: [`--window-size=1920,1080`]
+    };
+  }
+
+  return { args: ['--no-sandbox'] };
+};
