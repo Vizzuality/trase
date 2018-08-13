@@ -15,7 +15,7 @@ module Api
         end
 
         attribute :has_profiles do
-          object.profiles.length != 0
+          object.profiles.any?
         end
 
         attribute :map do
