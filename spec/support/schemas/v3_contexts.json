@@ -33,6 +33,10 @@
               "null"
             ]
           },
+          "hasProfiles": {
+            "id": "/properties/data/items/properties/hasProfiles",
+            "type": "boolean"
+          },
           "defaultYear": {
             "id": "/properties/data/items/properties/defaultYear",
             "type": "integer"
