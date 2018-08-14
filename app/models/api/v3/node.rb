@@ -49,10 +49,6 @@ module Api
         )
       }
 
-      scope :profile_nodes, -> {
-        includes(:node_type)
-      }
-
       scope :biomes, -> {
         includes(:node_type).where('node_types.name' => NodeTypeName::BIOME)
       }

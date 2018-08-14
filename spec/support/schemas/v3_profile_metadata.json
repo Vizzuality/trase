@@ -6,125 +6,174 @@
   "properties": {
     "data": {
       "$id": "/properties/data",
-      "type": "array",
-      "items": {
-        "$id": "/properties/data/items",
-        "type": "object",
-        "properties": {
-          "id": {
-            "$id": "/properties/data/items/properties/id",
-            "type": "integer",
-            "title": "The Id Schema ",
-            "default": 0,
-            "examples": [
-              7
-            ]
-          },
-          "context_node_type_id": {
-            "$id": "/properties/data/items/properties/context_node_type_id",
-            "type": "integer",
-            "title": "The Context_node_type_id Schema ",
-            "default": 0,
-            "examples": [
-              7
-            ]
-          },
-          "name": {
-            "$id": "/properties/data/items/properties/name",
-            "type": "string",
-            "title": "The Name Schema ",
-            "default": "",
-            "examples": [
-              "place"
-            ]
-          },
-          "created_at": {
-            "$id": "/properties/data/items/properties/created_at",
-            "type": "string",
-            "title": "The Created_at Schema ",
-            "default": "",
-            "examples": [
-              "2018-07-03T14:22:16.457Z"
-            ]
-          },
-          "updated_at": {
-            "$id": "/properties/data/items/properties/updated_at",
-            "type": "string",
-            "title": "The Updated_at Schema ",
-            "default": "",
-            "examples": [
-              "2018-07-03T14:22:16.457Z"
-            ]
-          },
-          "adm_1_topojson_path": {
-            "$id": "/properties/data/items/properties/adm_1_topojson_path",
-            "type": ["null", "string"],
-            "title": "The Adm_1_topojson_path Schema ",
-            "default": null,
-            "examples": [
-              null
-            ]
-          },
-          "adm_1_topojson_root": {
-            "$id": "/properties/data/items/properties/adm_1_topojson_root",
-            "type": ["null", "string"],
-            "title": "The Adm_1_topojson_root Schema ",
-            "default": null,
-            "examples": [
-              null
-            ]
-          },
-          "adm_2_topojson_path": {
-            "$id": "/properties/data/items/properties/adm_2_topojson_path",
-            "type": ["null", "string"],
-            "title": "The Adm_2_topojson_path Schema ",
-            "default": null,
-            "examples": [
-              null
-            ]
-          },
-          "adm_2_topojson_root": {
-            "$id": "/properties/data/items/properties/adm_2_topojson_root",
-            "type": ["null", "string"],
-            "title": "The Adm_2_topojson_root Schema ",
-            "default": null,
-            "examples": [
-              null
-            ]
-          },
-          "main_topojson_path": {
-            "$id": "/properties/data/items/properties/main_topojson_path",
-            "type": ["null", "string"],
-            "title": "The Main_topojson_path Schema ",
-            "default": null,
-            "examples": [
-              null
-            ]
-          },
-          "main_topojson_root": {
-            "$id": "/properties/data/items/properties/main_topojson_root",
-            "type": ["null", "string"],
-            "title": "The Main_topojson_root Schema ",
-            "default": null,
-            "examples": [
-              null
-            ]
-          }
+      "type": "object",
+      "properties": {
+        "id": {
+          "$id": "/properties/data/properties/id",
+          "type": "integer",
+          "title": "The Id Schema ",
+          "default": 0,
+          "examples": [
+            7
+          ]
         },
-        "required": [
-          "id",
-          "context_node_type_id",
-          "name",
-          "created_at",
-          "updated_at",
-          "adm_1_topojson_path",
-          "adm_1_topojson_root",
-          "adm_2_topojson_path",
-          "adm_2_topojson_root",
-          "main_topojson_path",
-          "main_topojson_root"
-        ]
-      }
+        "context_node_type_id": {
+          "$id": "/properties/data/properties/context_node_type_id",
+          "type": "integer",
+          "title": "The Context_node_type_id Schema ",
+          "default": 0,
+          "examples": [
+            7
+          ]
+        },
+        "name": {
+          "$id": "/properties/data/properties/name",
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "The Name Schema ",
+          "default": "",
+          "examples": [
+            "place"
+          ]
+        },
+        "created_at": {
+          "$id": "/properties/data/properties/created_at",
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "The Created_at Schema ",
+          "default": "",
+          "examples": [
+            "2018-07-03T14:22:16.457Z"
+          ]
+        },
+        "updated_at": {
+          "$id": "/properties/data/properties/updated_at",
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "The Updated_at Schema ",
+          "default": "",
+          "examples": [
+            "2018-08-09T12:31:14.915Z"
+          ]
+        },
+        "adm_1_topojson_path": {
+          "$id": "/properties/data/properties/adm_1_topojson_path",
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "The Adm_1_topojson_path Schema ",
+          "default": "",
+          "examples": [
+            "/BRAZIL_STATE.topo.json"
+          ]
+        },
+        "adm_1_topojson_root": {
+          "$id": "/properties/data/properties/adm_1_topojson_root",
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "The Adm_1_topojson_root Schema ",
+          "default": "",
+          "examples": [
+            "BRAZIL_STATE"
+          ]
+        },
+        "adm_2_topojson_path": {
+          "$id": "/properties/data/properties/adm_2_topojson_path",
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "The Adm_2_topojson_path Schema ",
+          "default": "",
+          "examples": [
+            ""
+          ]
+        },
+        "adm_2_topojson_root": {
+          "$id": "/properties/data/properties/adm_2_topojson_root",
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "The Adm_2_topojson_root Schema ",
+          "default": "",
+          "examples": [
+            ""
+          ]
+        },
+        "main_topojson_path": {
+          "$id": "/properties/data/properties/main_topojson_path",
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "The Main_topojson_path Schema ",
+          "default": "",
+          "examples": [
+            ""
+          ]
+        },
+        "main_topojson_root": {
+          "$id": "/properties/data/properties/main_topojson_root",
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "The Main_topojson_root Schema ",
+          "default": "",
+          "examples": [
+            ""
+          ]
+        },
+        "adm_1_name": {
+          "$id": "/properties/data/properties/adm_1_name",
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "The Adm_1_name Schema ",
+          "default": "",
+          "examples": [
+            "State"
+          ]
+        },
+        "adm_2_name": {
+          "$id": "/properties/data/properties/adm_2_name",
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "The Adm_2_name Schema ",
+          "default": "",
+          "examples": [
+            ""
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "context_node_type_id",
+        "name",
+        "created_at",
+        "updated_at",
+        "adm_1_topojson_path",
+        "adm_1_topojson_root",
+        "adm_2_topojson_path",
+        "adm_2_topojson_root",
+        "main_topojson_path",
+        "main_topojson_root",
+        "adm_1_name",
+        "adm_2_name"
+      ]
     }
   },
   "required": [

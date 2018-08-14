@@ -41,7 +41,7 @@
     (ga.q = ga.q || []).push(arguments)
   };
   ga.l = +new Date;
-  ga('create', <%= GOOGLE_ANALYTICS_KEY ? GOOGLE_ANALYTICS_KEY : '' %>, 'auto');
+  ga('create', <%= GOOGLE_ANALYTICS_KEY ? GOOGLE_ANALYTICS_KEY : "''" %>, 'auto');
   ga('send', 'pageview');
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
@@ -52,7 +52,7 @@
 <!-- User Report start -->
 <script type="text/javascript">
   window._urq = window._urq || [];
-  _urq.push(['initSite', <%= USER_REPORT_KEY ? USER_REPORT_KEY : '' %>]);
+  _urq.push(['initSite', <%= USER_REPORT_KEY ? USER_REPORT_KEY : "''" %>]);
   (function () {
     var ur = document.createElement('script');
     ur.type = 'text/javascript';

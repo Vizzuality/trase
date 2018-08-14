@@ -15,7 +15,7 @@ module Api
 
       def load_node
         ensure_required_param_present(:id)
-        @node = Api::V3::Node.profile_nodes.find(params[:id])
+        @node = Api::V3::Node.find(params[:id])
       end
     end
   end

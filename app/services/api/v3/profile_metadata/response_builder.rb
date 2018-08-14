@@ -11,7 +11,9 @@ module Api
         def call
           Api::V3::Profile.
             joins(context_node_type: [node_type: :nodes]).
-            where('nodes.id' => @node.id)
+            where('nodes.id' => @node.id).
+            limit(1).
+            first()
         end
       end
     end
