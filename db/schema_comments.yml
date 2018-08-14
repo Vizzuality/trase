@@ -251,6 +251,20 @@ tables:
     columns:
       - name: name
         comment: Profile name, either actor or place. One of restricted set of values.
+      - name: main_topojson_path
+        comment: Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /
+      - name: main_topojson_root
+        comment: Path within the TopoJSON file where geometries are contained
+      - name: adm_1_name
+      - name: adm_1_topojson_path
+        comment: Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /
+      - name: adm_1_topojson_root
+        comment: Path within the TopoJSON file where geometries are contained
+      - name: adm_2_name
+      - name: adm_2_topojson_path
+        comment: Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /
+      - name: adm_2_topojson_root
+        comment: Path within the TopoJSON file where geometries are contained
   - name: quals
     comment: Attributes classified as quals
     columns:

@@ -25,6 +25,7 @@ export const GET_MARKDOWN_CONTENT_URL = 'GET_MARKDOWN_CONTENT_URL';
 export const GET_TEAM_URL = 'GET_TEAM_URL';
 export const GET_TOP_NODES_URL = 'GET_TOP_NODES_URL';
 export const GET_NODE_SUMMARY_URL = 'GET_NODE_SUMMARY_URL';
+export const GET_PROFILE_METADATA = 'GET_PROFILE_METADATA';
 export const GET_PLACE_INDICATORS = 'GET_PLACE_INDICATORS';
 export const GET_ACTOR_TOP_COUNTRIES = 'GET_ACTOR_TOP_COUNTRIES';
 export const GET_ACTOR_TOP_SOURCES = 'GET_ACTOR_TOP_SOURCES';
@@ -109,6 +110,10 @@ const API_ENDPOINTS = {
   [GET_PLACE_TOP_CONSUMER_COUNTRIES]: {
     api: 3,
     endpoint: '/contexts/$context_id$/places/$node_id$/top_consumer_countries'
+  },
+  [GET_PROFILE_METADATA]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/nodes/$node_id$/profile_metadata'
   }
 };
 

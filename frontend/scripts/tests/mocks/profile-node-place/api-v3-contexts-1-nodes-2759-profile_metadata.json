@@ -1,0 +1,17 @@
+{
+  "data": {
+    "id": 6,
+    "context_node_type_id": 1881,
+    "name": "place",
+    "created_at": "2018-01-10T14:28:35.787Z",
+    "updated_at": "2018-08-09T13:15:41.086Z",
+    "main_topojson_path": "/municip_states/brazil/$stateGeoId$.topo.json",
+    "main_topojson_root": "BRAZIL_$stateGeoId$",
+    "adm_1_name": "Biome",
+    "adm_1_topojson_path": "/BRAZIL_BIOME.topo.json",
+    "adm_1_topojson_root": "BRAZIL_BIOME",
+    "adm_2_name": "State",
+    "adm_2_topojson_path": "/BRAZIL_STATE.topo.json",
+    "adm_2_topojson_root": "BRAZIL_STATE"
+  }
+}
