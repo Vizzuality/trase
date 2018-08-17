@@ -415,6 +415,11 @@ materialized_views:
         comment: Type of the original entity (Ind / Qual / Quant)
       - name: original_id
         comment: Id from the original table (inds / quals / quants)
+  - name: chart_attributes_mv
+    comment: Materialized view which merges chart_inds, chart_quals and chart_quants with chart_attributes.
+    columns:
+      - name: display_name
+        comment: If absent in chart_attributes this is pulled from attributes_mv.
   - name: dashboards_attributes_mv
     comment: Materialized view which merges dashboards_inds, dashboards_quals and dashboards_quants with dashboards_attributes.
     columns:

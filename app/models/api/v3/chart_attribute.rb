@@ -27,10 +27,16 @@
 module Api
   module V3
     class ChartAttribute < YellowTable
+      after_commit :refresh_dependencies
+
       def self.yellow_foreign_keys
         [
           {name: :chart_id, table_class: Api::V3::Chart}
         ]
+      end
+
+      def refresh_dependencies
+        Api::V3::Readonly::ChartAttribute.refresh
       end
     end
   end

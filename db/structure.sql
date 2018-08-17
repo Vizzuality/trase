@@ -691,6 +691,102 @@ CREATE TABLE public.chart_inds (
 
 
 --
+-- Name: chart_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chart_quals (
+    id integer NOT NULL,
+    chart_attribute_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: chart_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chart_quants (
+    id integer NOT NULL,
+    chart_attribute_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: chart_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.chart_attributes_mv AS
+ SELECT cha.id,
+    cha.chart_id,
+    cha."position",
+    cha.years,
+    COALESCE(cha.display_name, a.display_name) AS display_name,
+    cha.legend_name,
+    cha.display_type,
+    cha.display_style,
+    cha.state_average,
+    a.name,
+    a.unit,
+    a.tooltip_text,
+    a.id AS attribute_id,
+    a.original_id,
+    a.original_type,
+    cha.created_at,
+    cha.updated_at
+   FROM ((public.chart_quals chq
+     JOIN public.chart_attributes cha ON ((cha.id = chq.chart_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = chq.qual_id) AND (a.original_type = 'Qual'::text))))
+UNION ALL
+ SELECT cha.id,
+    cha.chart_id,
+    cha."position",
+    cha.years,
+    COALESCE(cha.display_name, a.display_name) AS display_name,
+    cha.legend_name,
+    cha.display_type,
+    cha.display_style,
+    cha.state_average,
+    a.name,
+    a.unit,
+    a.tooltip_text,
+    a.id AS attribute_id,
+    a.original_id,
+    a.original_type,
+    cha.created_at,
+    cha.updated_at
+   FROM ((public.chart_quants chq
+     JOIN public.chart_attributes cha ON ((cha.id = chq.chart_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = chq.quant_id) AND (a.original_type = 'Quant'::text))))
+UNION ALL
+ SELECT cha.id,
+    cha.chart_id,
+    cha."position",
+    cha.years,
+    COALESCE(cha.display_name, a.display_name) AS display_name,
+    cha.legend_name,
+    cha.display_type,
+    cha.display_style,
+    cha.state_average,
+    a.name,
+    a.unit,
+    a.tooltip_text,
+    a.id AS attribute_id,
+    a.original_id,
+    a.original_type,
+    cha.created_at,
+    cha.updated_at
+   FROM ((public.chart_inds chi
+     JOIN public.chart_attributes cha ON ((cha.id = chi.chart_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = chi.ind_id) AND (a.original_type = 'Ind'::text))))
+  WITH NO DATA;
+
+
+--
 -- Name: chart_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -710,19 +806,6 @@ ALTER SEQUENCE public.chart_inds_id_seq OWNED BY public.chart_inds.id;
 
 
 --
--- Name: chart_quals; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.chart_quals (
-    id integer NOT NULL,
-    chart_attribute_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
 -- Name: chart_quals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -739,19 +822,6 @@ CREATE SEQUENCE public.chart_quals_id_seq
 --
 
 ALTER SEQUENCE public.chart_quals_id_seq OWNED BY public.chart_quals.id;
-
-
---
--- Name: chart_quants; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.chart_quants (
-    id integer NOT NULL,
-    chart_attribute_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
 
 
 --
@@ -4784,6 +4854,20 @@ CREATE UNIQUE INDEX dashboards_sources_unique_idx ON public.dashboards_sources_m
 
 
 --
+-- Name: chart_attributes_mv_chart_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX chart_attributes_mv_chart_id_idx ON public.chart_attributes_mv USING btree (chart_id);
+
+
+--
+-- Name: chart_attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX chart_attributes_mv_id_idx ON public.chart_attributes_mv USING btree (id);
+
+
+--
 -- Name: download_attributes_mv_context_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6027,6 +6111,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180522135640'),
 ('20180808114630'),
 ('20180817125528'),
+('20180817130807'),
 ('20180827134927'),
 ('20180917124246'),
 ('20180921103012'),

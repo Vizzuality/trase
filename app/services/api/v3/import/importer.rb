@@ -179,6 +179,7 @@ module Api
           ].each { |mview| mview.refresh(sync: true, skip_dependents: true) }
           # synchronously, skip dependencies (already refreshed)
           [
+            Api::V3::Readonly::ChartAttribute,
             Api::V3::Readonly::DownloadAttribute,
             Api::V3::Readonly::MapAttribute,
             Api::V3::Readonly::RecolorByAttribute,
