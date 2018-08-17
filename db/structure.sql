@@ -649,7 +649,12 @@ CREATE TABLE public.chart_attributes (
     "position" integer,
     years integer[],
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text,
+    legend_name text,
+    display_type text,
+    display_style text,
+    state_average boolean DEFAULT false NOT NULL
 );
 
 
@@ -6021,6 +6026,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180522102950'),
 ('20180522135640'),
 ('20180808114630'),
+('20180817125528'),
 ('20180827134927'),
 ('20180917124246'),
 ('20180921103012'),

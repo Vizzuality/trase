@@ -17,6 +17,16 @@ tables:
         comment: Display order in scope of chart
       - name: years
         comment: Array of years for which to show this attribute in scope of chart; empty (NULL) for all years
+      - name: display_name
+        comment: Name of attribute for display in chart
+      - name: legend_name
+        comment: Legend title
+      - name: display_type
+        comment: Type of display, only used for trajectory deforestation plot in place profiles; e.g. 'area', 'line'
+      - name: display_style
+        comment: Style of display, only used for trajectory deforestation plot in place profiles; e.g. 'area-pink', 'area-black', 'line-dashed-black'
+      - name: state_average
+        comment: Only used for trajectory deforestation plot in place profiles
   - name: chart_inds
     comment: Inds to display in a chart (see chart_attributes.)
   - name: chart_quals

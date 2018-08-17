@@ -2,12 +2,17 @@
 #
 # Table name: chart_attributes
 #
-#  id         :integer          not null, primary key
-#  chart_id   :integer          not null
-#  position   :integer
-#  years      :integer          is an Array
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id            :integer          not null, primary key
+#  chart_id      :integer          not null
+#  position      :integer
+#  years         :integer          is an Array
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  display_name  :text
+#  legend_name   :text
+#  display_type  :text
+#  display_style :text
+#  state_average :boolean          default(FALSE), not null
 #
 # Indexes
 #
