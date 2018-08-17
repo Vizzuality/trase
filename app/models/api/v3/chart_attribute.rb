@@ -27,6 +27,11 @@
 module Api
   module V3
     class ChartAttribute < YellowTable
+      belongs_to :chart
+      has_one :chart_ind, autosave: true
+      has_one :chart_qual, autosave: true
+      has_one :chart_quant, autosave: true
+
       after_commit :refresh_dependencies
 
       def self.yellow_foreign_keys

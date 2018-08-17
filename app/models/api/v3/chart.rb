@@ -26,6 +26,8 @@
 module Api
   module V3
     class Chart < YellowTable
+      belongs_to :profile
+
       def self.yellow_foreign_keys
         [
           {name: :profile_id, table_class: Api::V3::Profile}

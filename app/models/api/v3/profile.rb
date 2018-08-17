@@ -33,6 +33,7 @@ module Api
       NAME = [ACTOR, PLACE].freeze
 
       belongs_to :context_node_type
+      has_many :charts
 
       validates :context_node_type, presence: true
       validates :name,
