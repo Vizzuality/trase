@@ -40,7 +40,7 @@ shared_context 'api v3 brazil context node types' do
     end
     cnt
   end
-  let!(:municipality_context_node) do
+  let!(:api_v3_municipality_context_node) do
     cnt = Api::V3::ContextNodeType.where(
       context_id: api_v3_context.id, node_type_id: api_v3_municipality_node_type.id
     ).first
@@ -66,10 +66,20 @@ shared_context 'api v3 brazil context node types' do
         adm_2_topojson_root: 'adm_2_topojson_root',
         main_topojson_path: 'main_topojson_path',
         main_topojson_root: 'main_topojson_root'
-
       )
     end
     cnt
+  end
+  let!(:api_v3_brazil_municipality_place_profile) do
+    profile = Api::V3::Profile.where(
+      context_node_type_id: api_v3_municipality_context_node,
+      name: :place
+    ).first
+    profile || FactoryBot.create(
+      :api_v3_profile,
+      context_node_type: api_v3_municipality_context_node,
+      name: :place
+    )
   end
   let!(:api_v3_logistics_hub_context_node) do
     cnt = Api::V3::ContextNodeType.where(

@@ -9,8 +9,9 @@ module Api
         # @param year [Integer]
         def initialize(context, node, year)
           @context = context
-          @year = year
           @node = node
+          @year = year
+
           @place_quals = Dictionary::PlaceQuals.new(@node, @year)
           state_qual = @place_quals.get(NodeTypeName::STATE)
           @state_name = state_qual && state_qual['value']
@@ -19,7 +20,8 @@ module Api
               @context, @node, @year, @state_name
             )
           end
-          initialize_attributes(attributes_list)
+          @chart = initialize_chart(:place, :trajectory_deforestation)
+          initialize_attributes(@chart.attributes_list)
         end
 
         def call
@@ -92,36 +94,6 @@ module Api
             max_years << min_max['max']
           end
           [min_years.compact.min, max_years.compact.max]
-        end
-
-        def attributes_list
-          [
-            {
-              name: 'Soy deforestation',
-              attribute_type: 'quant',
-              attribute_name: 'AGROSATELITE_SOY_DEFOR_',
-              legend_name: 'Soy deforestation',
-              type: 'area',
-              style: 'area-pink'
-            },
-            {
-              name: 'Territorial Deforestation',
-              attribute_type: 'quant',
-              attribute_name: 'DEFORESTATION_V2',
-              legend_name: 'Territorial<br/>Deforestation',
-              type: 'area',
-              style: 'area-black'
-            },
-            {
-              name: 'State Average',
-              attribute_type: 'quant',
-              attribute_name: 'DEFORESTATION_V2',
-              legend_name: 'State<br/>Average',
-              type: 'line',
-              style: 'line-dashed-black',
-              state_average: true
-            }
-          ]
         end
       end
     end

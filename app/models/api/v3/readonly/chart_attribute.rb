@@ -33,6 +33,18 @@ module Api
         self.table_name = 'chart_attributes_mv'
 
         belongs_to :chart
+
+        def to_attribute_hash
+          {
+            name: display_name,
+            attribute_type: original_type.downcase,
+            attribute_name: name,
+            legend_name: legend_name,
+            type: display_type,
+            style: display_style,
+            state_average: state_average
+          }
+        end
       end
     end
   end

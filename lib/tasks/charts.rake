@@ -21,6 +21,11 @@ namespace :charts do
   end
 
   def create_trajectory_deforestation(profile)
+    chart = find_or_create_chart(
+      profile,
+      :trajectory_deforestation,
+      position: 1, title: 'Deforestation trajectory of %{place}'
+    )
     attributes_list = [
       {
         name: 'Soy deforestation',
@@ -48,24 +53,20 @@ namespace :charts do
         state_average: true
       }
     ]
-    chart = find_or_create_chart(profile, :trajectory_deforestation, 1)
     create_chart_attributes_from_attributes_list(chart, attributes_list)
   end
 
-  def find_or_create_chart(profile, identifier, position)
-    chart = Api::V3::Chart.
-      includes(profile: :context_node_type).
-      where(
-        'profiles.name' => profile.name,
-        'context_node_types.context_id' => profile.context_node_type.context_id,
-        identifier: identifier
-      ).first
+  def find_or_create_chart(profile, identifier, options)
+    chart = Api::V3::Chart.where(
+      profile_id: profile.id,
+      identifier: identifier
+    ).first
     return chart if chart.present?
     Api::V3::Chart.create(
       profile: profile,
-      position: position,
       identifier: identifier,
-      title: 'Deforestation trajectory of %{place}'
+      position: options[:position],
+      title: options[:title]
     )
   end
 
@@ -78,8 +79,6 @@ namespace :charts do
 
   # rubocop:disable Metrics/CyclomaticComplexity
   def create_chart_attribute(chart, attribute_hash, position)
-    attribute_type = attribute_hash.delete(:attribute_type)
-    attribute_name = attribute_hash.delete(:attribute_name)
     chart_attribute = Api::V3::ChartAttribute.new(
       chart: chart,
       position: position,
@@ -89,6 +88,8 @@ namespace :charts do
       display_style: attribute_hash[:style],
       state_average: attribute_hash[:state_average] || false
     )
+    attribute_type = attribute_hash.delete(:attribute_type)
+    attribute_name = attribute_hash.delete(:attribute_name)
     linked_attribute =
       case attribute_type
       when 'ind'

@@ -1,10 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe 'Place profile', type: :request do
+  before do
+    Api::V3::ChartAttribute.skip_callback(:commit, :after, :refresh_dependencies)
+  end
+  after do
+    Api::V3::ChartAttribute.set_callback(:commit, :after, :refresh_dependencies)
+  end
   include_context 'api v3 brazil municipality ind values'
   include_context 'api v3 brazil municipality qual values'
   include_context 'api v3 brazil municipality quant values'
   include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil municipality place profile'
 
   let(:summary_params) {
     {
@@ -91,6 +98,10 @@ RSpec.describe 'Place profile', type: :request do
   end
 
   describe 'GET /api/v3/contexts/:context_id/places/:id/trajectory_deforestation' do
+    before(:each) do
+      Api::V3::Readonly::Attribute.refresh
+      Api::V3::Readonly::ChartAttribute.refresh
+    end
     it 'has the correct response structure' do
       get "/api/v3/contexts/#{api_v3_context.id}/places/#{api_v3_municipality_node.id}/trajectory_deforestation", params: summary_params
 

@@ -27,11 +27,19 @@ module Api
   module V3
     class Chart < YellowTable
       belongs_to :profile
+      has_many :chart_attributes, dependent: :delete_all
+      has_many :readonly_chart_attributes, class_name: 'Readonly::ChartAttribute'
 
       def self.yellow_foreign_keys
         [
           {name: :profile_id, table_class: Api::V3::Profile}
         ]
+      end
+
+      def attributes_list
+        readonly_chart_attributes.order(:position).map do |attribute|
+          attribute.to_attribute_hash
+        end
       end
     end
   end
