@@ -35,12 +35,6 @@ module Api
           {name: :profile_id, table_class: Api::V3::Profile}
         ]
       end
-
-      def attributes_list
-        readonly_chart_attributes.order(:position).map do |attribute|
-          attribute.to_attribute_hash
-        end
-      end
     end
   end
 end

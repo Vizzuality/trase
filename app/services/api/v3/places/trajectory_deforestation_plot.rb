@@ -20,8 +20,8 @@ module Api
               @context, @node, @year, @state_name
             )
           end
-          @chart = initialize_chart(:place, :trajectory_deforestation)
-          initialize_attributes(@chart.attributes_list)
+          chart = initialize_chart(:place, :trajectory_deforestation)
+          @chart_attributes, @attributes = initialize_attributes(chart)
         end
 
         def call
@@ -33,31 +33,31 @@ module Api
           {
             included_years: years,
             unit: 'ha',
-            lines: @attributes.map do |attribute_hash|
-              attribute = attribute_hash[:attribute]
+            lines: @chart_attributes.map.with_index do |chart_attribute, idx|
+              attribute = @attributes[idx]
               data =
-                if attribute_hash[:state_average] && @state_ranking
+                if chart_attribute.state_average && @state_ranking
                   @state_ranking.average_for_attribute(
                     attribute
                   )
-                elsif attribute_hash[:attribute_type] == 'quant'
+                elsif attribute.is_a? Api::V3::Quant
                   @node.temporal_place_quants.where(
                     quant_id: attribute.id
                   )
-                elsif attribute_hash[:attribute_type] == 'ind'
+                elsif attribute.is_a? Api::V3::Ind
                   @node.temporal_place_inds.where(
-                    inds_id: attribute.id
+                    ind_id: attribute.id
                   )
                 end
               values = Hash[
                 data.map { |e| [e['year'], e] }
               ]
               {
-                name: attribute_hash[:name],
-                legend_name: attribute_hash[:legend_name],
-                legend_tooltip: attribute[:tooltip_text],
-                type: attribute_hash[:type],
-                style: attribute_hash[:style],
+                name: chart_attribute.display_name,
+                legend_name: chart_attribute.legend_name,
+                legend_tooltip: chart_attribute.tooltip_text,
+                type: chart_attribute.display_type,
+                style: chart_attribute.display_style,
                 values: years.map do |year|
                   values[year] && values[year]['value']
                 end
@@ -71,17 +71,15 @@ module Api
         def initialize_min_max_year
           min_years = []
           max_years = []
-          @attributes.each do |attribute_hash|
-            attribute_type = attribute_hash[:attribute_type]
-            attribute_id = attribute_hash[:attribute].id
+          @attributes.each do |attribute|
             min_max =
-              if attribute_type == 'quant'
+              if attribute.is_a? Api::V3::Quant
                 @node.temporal_place_quants.where(
-                  quant_id: attribute_id
+                  quant_id: attribute.id
                 )
-              elsif attribute_type == 'ind'
+              elsif attribute.is_a? Api::V3::Ind
                 @node.temporal_place_inds.where(
-                  ind_id: attribute_id
+                  ind_id: attribute.id
                 )
               end
             min_max = min_max.
