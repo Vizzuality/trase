@@ -13,7 +13,8 @@ module Api
           @year = year
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
-          initialize_attributes(attributes_list)
+          chart = initialize_chart(:actor, nil, :companies_sourcing)
+          @chart_attributes, @attributes = initialize_attributes(chart)
         end
 
         def call
@@ -30,7 +31,7 @@ module Api
 
           production_totals = stats.nodes_with_flows_totals(@volume_attribute)
           attribute_totals = stats.nodes_with_flows_totals_for_attributes(
-            @attributes.map { |attribute_hash| attribute_hash[:attribute] }
+            @attributes
           )
 
           attribute_totals_hash = attribute_totals_hash(
@@ -51,8 +52,8 @@ module Api
             dimension_y: {
               name: 'Trade Volume', unit: unit
             },
-            dimensions_x: @attributes.map do |attribute_hash|
-              attribute_hash.slice(:name, :unit)
+            dimensions_x: @chart_attributes.map do |chart_attribute|
+              {name: chart_attribute.display_name, unit: chart_attribute.unit}
             end,
             companies: exports
           }
@@ -63,8 +64,8 @@ module Api
         def attribute_totals_hash(production_totals, attribute_totals)
           attribute_totals_hash = {}
           attribute_indexes = Hash[
-            @attributes.map.each_with_index do |attribute_hash, idx|
-              [attribute_hash[:attribute_name], idx]
+            @chart_attributes.map.each_with_index do |attribute, idx|
+              [attribute.name, idx]
             end
           ]
           production_totals.each do |total|
@@ -81,6 +82,7 @@ module Api
           end
           attribute_totals_hash
         end
+<<<<<<< HEAD
 
         def attributes_list
           [
@@ -104,6 +106,8 @@ module Api
             }
           ]
         end
+=======
+>>>>>>> Serving actor exporting companies from dynamic configuration
       end
     end
   end

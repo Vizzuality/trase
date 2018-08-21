@@ -14,6 +14,7 @@ namespace :charts do
   def initialise_actor_profiles(context)
     context.profiles.where(name: 'actor').each do |profile|
       create_sustainability(profile)
+      create_companies_sourcing(profile)
     end
   end
 
@@ -41,6 +42,35 @@ namespace :charts do
       },
       {
         name: 'Soy deforestation',
+        attribute_type: 'quant',
+        attribute_name: 'SOY_DEFORESTATION_5_YEAR_ANNUAL'
+      }
+    ]
+    create_chart_attributes_from_attributes_list(chart, attributes_list)
+  end
+
+  def create_companies_sourcing(profile)
+    chart = find_or_create_chart(
+      profile,
+      :companies_sourcing,
+      position: 3, title: 'Comparing companies'
+    )
+    attributes_list = [
+      {
+        name: 'Land use',
+        unit: 'ha',
+        attribute_type: 'quant',
+        attribute_name: 'SOY_AREA_'
+      },
+      {
+        name: 'Territorial Deforestation',
+        unit: 'ha',
+        attribute_type: 'quant',
+        attribute_name: 'DEFORESTATION_V2'
+      },
+      {
+        name: 'Soy deforestation',
+        unit: 'ha',
         attribute_type: 'quant',
         attribute_name: 'SOY_DEFORESTATION_5_YEAR_ANNUAL'
       }

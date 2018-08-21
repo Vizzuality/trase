@@ -38,4 +38,40 @@ shared_context 'api v3 brazil importer actor profile' do
     end
     chart_attribute
   end
+
+  let!(:api_v3_importer_companies_sourcing) do
+    chart = Api::V3::Chart.where(
+      profile_id: api_v3_brazil_importer_actor_profile.id,
+      identifier: :companies_sourcing
+    ).first
+    chart || FactoryBot.create(
+      :api_v3_chart,
+      profile: api_v3_brazil_importer_actor_profile,
+      identifier: :companies_sourcing,
+      title: 'Comparing companies',
+      position: 3
+    )
+  end
+
+  let!(:api_v3_importer_companies_sourcing_land_use) do
+    chart_attribute = Api::V3::ChartQuant.
+      includes(:chart_attribute).
+      where(
+        'chart_attributes.chart_id' => api_v3_importer_companies_sourcing.id,
+        quant_id: api_v3_land_use.id
+      ).first&.chart_attribute
+    unless chart_attribute
+      chart_attribute = FactoryBot.create(
+        :api_v3_chart_attribute,
+        chart: api_v3_importer_companies_sourcing,
+        position: 0
+      )
+      FactoryBot.create(
+        :api_v3_chart_quant,
+        chart_attribute: chart_attribute,
+        quant: api_v3_land_use
+      )
+    end
+    chart_attribute
+  end
 end

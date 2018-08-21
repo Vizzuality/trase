@@ -102,6 +102,10 @@ RSpec.describe 'Importer profile', type: :request do
   end
 
   describe 'GET /api/v3/contexts/:context_id/actors/:id/exporting_companies' do
+    before(:each) do
+      Api::V3::Readonly::Attribute.refresh
+      Api::V3::Readonly::ChartAttribute.refresh
+    end
     it 'has the correct response structure' do
       get "/api/v3/contexts/#{api_v3_context.id}/actors/#{api_v3_importer1_node.id}/exporting_companies", params: summary_params
 
