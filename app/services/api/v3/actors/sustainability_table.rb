@@ -13,7 +13,8 @@ module Api
           @year = year
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
-          initialize_attributes(attributes_list)
+          chart = initialize_chart(:actor, nil, :sustainability)
+          @chart_attributes, @attributes = initialize_attributes(chart)
           initialize_flow_stats_for_node
         end
 
@@ -67,12 +68,11 @@ module Api
             name: name,
             included_columns:
                 [{name: node_type.humanize}] +
-                  @attributes.map do |attribute_hash|
-                    attribute = attribute_hash[:attribute]
+                  @chart_attributes.map do |ro_chart_attribute|
                     {
-                      name: attribute_hash[:name] || attribute.display_name,
-                      unit: attribute.unit,
-                      tooltip: attribute[:tooltip_text]
+                      name: ro_chart_attribute.display_name,
+                      unit: ro_chart_attribute.unit,
+                      tooltip: ro_chart_attribute.tooltip_text
                     }
                   end,
             rows: rows
@@ -83,7 +83,7 @@ module Api
           node_id = node['node_id']
           totals_per_attribute = @flow_stats.
             flow_values_totals_for_attributes_into(
-              @attributes.map { |attribute_hash| attribute_hash[:attribute] },
+              @attributes,
               node_type,
               node_id
             )
@@ -107,10 +107,8 @@ module Api
                   value: node['name']
                 }
               ] +
-                @attributes.map do |attribute_hash|
-                  attribute_total = totals_hash[
-                    attribute_hash[:attribute_name]
-                  ]
+                @attributes.map do |attribute|
+                  attribute_total = totals_hash[attribute.name]
                   {value: attribute_total} if attribute_total
                 end
           }
@@ -119,27 +117,12 @@ module Api
         def totals_row(group_totals_hash)
           {
             is_total: true,
-            values: @attributes.map do |attribute_hash|
-              attribute_total = group_totals_hash[
-                attribute_hash[:attribute_name]
-              ]
-              {value: attribute_total} if attribute_total
-            end
+            values:
+              @attributes.map do |attribute|
+                attribute_total = group_totals_hash[attribute.name]
+                {value: attribute_total} if attribute_total
+              end
           }
-        end
-
-        def attributes_list
-          [
-            {
-              attribute_type: 'quant',
-              attribute_name: 'DEFORESTATION_V2'
-            },
-            {
-              name: 'Soy deforestation',
-              attribute_type: 'quant',
-              attribute_name: 'SOY_DEFORESTATION_5_YEAR_ANNUAL'
-            }
-          ]
         end
       end
     end

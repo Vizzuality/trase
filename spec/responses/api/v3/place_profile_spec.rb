@@ -20,6 +20,11 @@ RSpec.describe 'Place profile', type: :request do
   }
 
   describe 'GET /api/v3/contexts/:context_id/nodes/:id/place' do
+    before(:each) do
+      Api::V3::Readonly::Attribute.refresh
+      Api::V3::Readonly::ChartAttribute.refresh
+    end
+
     it 'validates node types' do
       expect { get "/api/v3/contexts/#{api_v3_context.id}/nodes/#{api_v3_country_of_destination1_node.id}/place" }.to raise_error(ActiveRecord::RecordNotFound)
       expect { get "/api/v3/contexts/#{api_v3_context.id}/nodes/#{api_v3_exporter1_node.id}/place" }.to raise_error(ActiveRecord::RecordNotFound)
@@ -89,6 +94,10 @@ RSpec.describe 'Place profile', type: :request do
   end
 
   describe 'GET /api/v3/contexts/:context_id/places/:id/indicators' do
+    before(:each) do
+      Api::V3::Readonly::Attribute.refresh
+      Api::V3::Readonly::ChartAttribute.refresh
+    end
     it 'has the correct response structure' do
       get "/api/v3/contexts/#{api_v3_context.id}/places/#{api_v3_municipality_node.id}/indicators", params: summary_params
 

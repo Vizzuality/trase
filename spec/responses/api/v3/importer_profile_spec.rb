@@ -9,6 +9,7 @@ RSpec.describe 'Importer profile', type: :request do
   include_context 'api v3 brazil municipality ind values'
   include_context 'api v3 brazil flows'
   include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil importer actor profile'
 
   let(:summary_params) {
     {
@@ -17,6 +18,10 @@ RSpec.describe 'Importer profile', type: :request do
   }
 
   describe 'GET /api/v3/contexts/:context_id/nodes/:id/actor' do
+    before(:each) do
+      Api::V3::Readonly::Attribute.refresh
+      Api::V3::Readonly::ChartAttribute.refresh
+    end
     it 'validates node types' do
       expect { get "/api/v3/contexts/#{api_v3_context.id}/nodes/#{api_v3_country_of_destination1_node.id}/actor" }.to raise_error(ActiveRecord::RecordNotFound)
       expect { get "/api/v3/contexts/#{api_v3_context.id}/nodes/#{api_v3_port1_node.id}/actor" }.to raise_error(ActiveRecord::RecordNotFound)
@@ -84,6 +89,10 @@ RSpec.describe 'Importer profile', type: :request do
   end
 
   describe 'GET /api/v3/contexts/:context_id/actors/:id/sustainability' do
+    before(:each) do
+      Api::V3::Readonly::Attribute.refresh
+      Api::V3::Readonly::ChartAttribute.refresh
+    end
     it 'has the correct response structure' do
       get "/api/v3/contexts/#{api_v3_context.id}/actors/#{api_v3_importer1_node.id}/sustainability", params: summary_params
 

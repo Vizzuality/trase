@@ -138,6 +138,17 @@ shared_context 'api v3 brazil context node types' do
     end
     cnt
   end
+  let!(:api_v3_brazil_exporter_actor_profile) do
+    profile = Api::V3::Profile.where(
+      context_node_type_id: api_v3_exporter1_context_node,
+      name: :actor
+    ).first
+    profile || FactoryBot.create(
+      :api_v3_profile,
+      context_node_type: api_v3_exporter1_context_node,
+      name: :actor
+    )
+  end
   let!(:api_v3_importer1_context_node) do
     cnt = Api::V3::ContextNodeType.where(
       context_id: api_v3_context.id, node_type_id: api_v3_importer_node_type.id
@@ -156,6 +167,17 @@ shared_context 'api v3 brazil context node types' do
       )
     end
     cnt
+  end
+  let!(:api_v3_brazil_importer_actor_profile) do
+    profile = Api::V3::Profile.where(
+      context_node_type_id: api_v3_importer1_context_node,
+      name: :actor
+    ).first
+    profile || FactoryBot.create(
+      :api_v3_profile,
+      context_node_type: api_v3_importer1_context_node,
+      name: :actor
+    )
   end
   let!(:country_of_destination1_context_node) do
     cnt = Api::V3::ContextNodeType.where(

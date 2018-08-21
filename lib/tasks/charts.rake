@@ -12,16 +12,40 @@ namespace :charts do
   end
 
   def initialise_actor_profiles(context)
-    profiles = context.profiles.where(name: 'actor')
+    context.profiles.where(name: 'actor').each do |profile|
+      create_sustainability(profile)
+    end
   end
 
   def initialise_place_profiles(context)
-    profile = context.profiles.where(name: 'place').first
-    create_environmental_indicators(profile)
-    create_socioeconomic_indicators(profile)
-    create_agricultiral_indicators(profile)
-    create_territorial_governance(profile)
-    create_trajectory_deforestation(profile)
+    context.profiles.where(name: 'place').each do |profile|
+      create_environmental_indicators(profile)
+      create_socioeconomic_indicators(profile)
+      create_agricultural_indicators(profile)
+      create_territorial_governance(profile)
+      create_trajectory_deforestation(profile)
+    end
+  end
+
+  def create_sustainability(profile)
+    chart = find_or_create_chart(
+      profile,
+      :sustainability,
+      position: 2,
+      title: 'Deforestation risk associated with top sourcing regions'
+    )
+    attributes_list = [
+      {
+        attribute_type: 'quant',
+        attribute_name: 'DEFORESTATION_V2'
+      },
+      {
+        name: 'Soy deforestation',
+        attribute_type: 'quant',
+        attribute_name: 'SOY_DEFORESTATION_5_YEAR_ANNUAL'
+      }
+    ]
+    create_chart_attributes_from_attributes_list(chart, attributes_list)
   end
 
   def create_environmental_indicators(profile)
@@ -65,7 +89,7 @@ namespace :charts do
     create_chart_attributes_from_attributes_list(chart, attributes_list)
   end
 
-  def create_agricultiral_indicators(profile)
+  def create_agricultural_indicators(profile)
     chart = find_or_create_chart(
       profile,
       :agricultural_indicators,
