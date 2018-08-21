@@ -17,7 +17,81 @@ namespace :charts do
 
   def initialise_place_profiles(context)
     profile = context.profiles.where(name: 'place').first
+    create_environmental_indicators(profile)
+    create_socioeconomic_indicators(profile)
+    create_agricultiral_indicators(profile)
+    create_territorial_governance(profile)
     create_trajectory_deforestation(profile)
+  end
+
+  def create_environmental_indicators(profile)
+    chart = find_or_create_chart(
+      profile,
+      :environmental_indicators,
+      position: 0, title: 'Environmental indicators'
+    )
+    attributes_list = [
+      {attribute_type: 'quant', attribute_name: 'DEFORESTATION_V2'},
+      {
+        attribute_type: 'quant',
+        attribute_name: 'POTENTIAL_SOY_DEFORESTATION_V2'
+      },
+      {
+        attribute_type: 'quant',
+        attribute_name: 'AGROSATELITE_SOY_DEFOR_'
+      },
+      {attribute_type: 'quant', attribute_name: 'GHG_'},
+      {attribute_type: 'ind', attribute_name: 'WATER_SCARCITY'},
+      {attribute_type: 'quant', attribute_name: 'BIODIVERSITY'}
+    ]
+    create_chart_attributes_from_attributes_list(chart, attributes_list)
+  end
+
+  def create_socioeconomic_indicators(profile)
+    chart = find_or_create_chart(
+      profile,
+      :socioeconomic_indicators,
+      position: 0, title: 'Socio-economic indicators'
+    )
+    attributes_list = [
+      {attribute_type: 'ind', attribute_name: 'HDI'},
+      {attribute_type: 'ind', attribute_name: 'GDP_CAP'},
+      {attribute_type: 'ind', attribute_name: 'PERC_FARM_GDP_'},
+      {attribute_type: 'ind', attribute_name: 'SMALLHOLDERS'},
+      {attribute_type: 'quant', attribute_name: 'SLAVERY'},
+      {attribute_type: 'quant', attribute_name: 'LAND_CONFL'},
+      {attribute_type: 'quant', attribute_name: 'POPULATION'}
+    ]
+    create_chart_attributes_from_attributes_list(chart, attributes_list)
+  end
+
+  def create_agricultiral_indicators(profile)
+    chart = find_or_create_chart(
+      profile,
+      :agricultural_indicators,
+      position: 0, title: 'Agricultural indicators'
+    )
+    attributes_list = [
+      {attribute_type: 'quant', attribute_name: 'SOY_TN'},
+      {attribute_type: 'ind', attribute_name: 'SOY_YIELD'},
+      {attribute_type: 'ind', attribute_name: 'SOY_AREAPERC'}
+    ]
+    create_chart_attributes_from_attributes_list(chart, attributes_list)
+  end
+
+  def create_territorial_governance(profile)
+    chart = find_or_create_chart(
+      profile,
+      :territorial_governance,
+      position: 0, title: 'Territorial governance'
+    )
+    attributes_list = [
+      {attribute_type: 'quant', attribute_name: 'APP_DEFICIT_AREA'},
+      {attribute_type: 'quant', attribute_name: 'LR_DEFICIT_AREA'},
+      {attribute_type: 'ind', attribute_name: 'PROTECTED_DEFICIT_PERC'},
+      {attribute_type: 'quant', attribute_name: 'EMBARGOES_'}
+    ]
+    create_chart_attributes_from_attributes_list(chart, attributes_list)
   end
 
   def create_trajectory_deforestation(profile)
