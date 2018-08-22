@@ -18,7 +18,7 @@ module Api
 
         # @param profile_type [Symbol] either :actor or :place
         # @param identifier [Symbol] chart identifier
-        def initialize_chart(profile_type, identifier)
+        def initialize_chart(profile_type, parent_identifier, identifier)
           profile = @context.profiles.where(
             'context_node_types.node_type_id' => @node.node_type_id,
             name: profile_type
@@ -27,9 +27,12 @@ module Api
             node_type = @node&.node_type&.name
             raise "Profile not configured: #{profile_type} for #{node_type}"
           end
-          chart = profile.charts.
-            where(identifier: identifier).
-            first
+          charts = profile.charts.where(identifier: identifier)
+          if parent_identifier.present?
+            charts = charts.includes(:parent).
+              where('parents_charts.identifier' => parent_identifier)
+          end
+          chart = charts.first
           unless chart
             raise "Chart not configured: #{identifier} for #{profile_type}"
           end

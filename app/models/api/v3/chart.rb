@@ -27,7 +27,8 @@
 module Api
   module V3
     class Chart < YellowTable
-      belongs_to :profile
+      belongs_to :profile, optional: false
+      belongs_to :parent, class_name: 'Chart', optional: true
       has_many :chart_attributes, dependent: :delete_all
       has_many :readonly_chart_attributes, class_name: 'Readonly::ChartAttribute'
 

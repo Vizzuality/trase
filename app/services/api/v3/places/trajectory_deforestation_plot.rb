@@ -20,7 +20,7 @@ module Api
               @context, @node, @year, @state_name
             )
           end
-          chart = initialize_chart(:place, :trajectory_deforestation)
+          chart = initialize_chart(:place, nil, :trajectory_deforestation)
           @chart_attributes, @attributes = initialize_attributes(chart)
         end
 
