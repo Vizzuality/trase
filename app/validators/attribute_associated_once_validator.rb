@@ -13,7 +13,8 @@ class AttributeAssociatedOnceValidator < ActiveModel::Validator
     # e.g. ind_id
     attribute_id_name = "#{attribute_name}_id"
     attribute_id = record.send(attribute_association_name)&.send(attribute_id_name)
-    scope_attribute_name = "#{options[:scope] || :context}_id"
+    scope_attribute = options[:scope] || :context
+    scope_attribute_name = "#{scope_attribute}_id"
     existing_assignments = record.class.joins(attribute_association_name).where(
       "#{attribute_association_name}s.#{attribute_name}_id" => attribute_id,
       scope_attribute_name => record.send(scope_attribute_name)
@@ -26,7 +27,7 @@ class AttributeAssociatedOnceValidator < ActiveModel::Validator
     return if existing_assignments.reject(&:marked_for_destruction?).empty?
     record.errors.add(
       :base,
-      "#{attribute_name} can only be listed once per context"
+      "#{attribute_name} can only be listed once per #{scope_attribute}"
     )
   end
 end

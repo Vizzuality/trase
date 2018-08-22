@@ -27,12 +27,33 @@
 module Api
   module V3
     class ChartAttribute < YellowTable
-      belongs_to :chart
+      include Api::V3::StringyArray
+      include Api::V3::AssociatedAttributes
+
+      belongs_to :chart, optional: false
       has_one :chart_ind, autosave: true
       has_one :chart_qual, autosave: true
       has_one :chart_quant, autosave: true
 
+      validates :position,
+                presence: true,
+                uniqueness: {scope: :chart}
+      validates_with OneAssociatedAttributeValidator,
+                     attributes: [:chart_ind, :chart_qual, :chart_quant]
+      validates_with AttributeAssociatedOnceValidator,
+                     attribute: :chart_ind, scope: :chart,
+                     if: :new_chart_ind_given?
+      validates_with AttributeAssociatedOnceValidator,
+                     attribute: :chart_qual, scope: :chart,
+                     if: :new_chart_qual_given?
+      validates_with AttributeAssociatedOnceValidator,
+                     attribute: :chart_quant, scope: :chart,
+                     if: :new_chart_quant_given?
+
       after_commit :refresh_dependencies
+
+      stringy_array :years
+      manage_associated_attributes [:chart_ind, :chart_qual, :chart_quant]
 
       def self.yellow_foreign_keys
         [

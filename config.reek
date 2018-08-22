@@ -144,4 +144,5 @@ UtilityFunction:
   - 'DatabaseImportWorker'
   - 'Api::V3::Profiles::AttributesInitializer'
   - 'Api::V3::Chart'
+  - 'Api::V3::ChartAttribute'
   public_methods_only: true
