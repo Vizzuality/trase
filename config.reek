@@ -142,4 +142,6 @@ UtilityFunction:
   exclude:
   - 'DatabaseExportWorker'
   - 'DatabaseImportWorker'
+  - 'Api::V3::Profiles::AttributesInitializer'
+  - 'Api::V3::Chart'
   public_methods_only: true

@@ -30,12 +30,55 @@ module Api
       belongs_to :profile, optional: false
       belongs_to :parent, class_name: 'Chart', optional: true
       has_many :chart_attributes, dependent: :delete_all
-      has_many :readonly_chart_attributes, class_name: 'Readonly::ChartAttribute'
+      has_many :readonly_chart_attributes,
+               class_name: 'Readonly::ChartAttribute'
+
+      validates :identifier,
+                presence: true, uniqueness: {scope: [:profile_id, :parent_id]}
+      validates :title, presence: true
+      validates :position,
+                presence: true, uniqueness: {scope: [:profile_id, :parent_id]}
+      validate :parent_is_in_same_profile
+      validate :parent_is_root
+
+      after_commit :refresh_dependencies
+
+      def self.select_options
+        Api::V3::Chart.includes(:profile).where(parent: nil).all.map do |chart|
+          context_node_type = chart.profile&.context_node_type
+          [
+            [
+              context_node_type&.context&.country&.name,
+              context_node_type&.context&.commodity&.name,
+              context_node_type&.node_type&.name,
+              chart.profile&.name,
+              chart.identifier
+            ].join(' / '),
+            chart.id
+          ]
+        end
+      end
 
       def self.yellow_foreign_keys
         [
           {name: :profile_id, table_class: Api::V3::Profile}
         ]
+      end
+
+      def refresh_dependencies
+        Api::V3::Readonly::MapAttribute.refresh
+      end
+
+      protected
+
+      def parent_is_in_same_profile
+        return if parent.nil? || parent.profile_id == profile_id
+        errors.add(:parent, 'cannot belong to a different profile')
+      end
+
+      def parent_is_root
+        return if parent.nil? || parent.parent.nil?
+        errors.add(:parent, 'cannot be a nested chart')
       end
     end
   end

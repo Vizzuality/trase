@@ -42,6 +42,23 @@ module Api
 
       after_commit :refresh_dependents
 
+      def self.select_options
+        Api::V3::Profile.includes(
+          context_node_type: [{context: [:country, :commodity]}, :node_type]
+        ).all.map do |profile|
+          context_node_type = profile&.context_node_type
+          [
+            [
+              context_node_type&.context&.country&.name,
+              context_node_type&.context&.commodity&.name,
+              context_node_type&.node_type&.name,
+              profile.name
+            ].join(' / '),
+            profile.id
+          ]
+        end
+      end
+
       def self.blue_foreign_keys
         [
           {name: :context_node_type_id, table_class: Api::V3::ContextNodeType}
