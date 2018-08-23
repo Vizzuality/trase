@@ -116,7 +116,7 @@ class Explore extends React.PureComponent {
           <div className="row context-selectors show-for-small">
             <div className="column small-12">
               <div className="dropdown-element">
-                <ContextSelector dropdownClassName="-big" isExplore />
+                <ContextSelector dropdownClassName="-big" />
               </div>
             </div>
             {selectedContext &&

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ProfileSearch from 'react-components/profile-root/profile-search.container';
+import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 
 const ProfileRoot = props => {
   const { errorMessage } = props;
@@ -13,8 +14,7 @@ const ProfileRoot = props => {
               <div className="column small-12 medium-9 large-6">
                 <div className="profile-root-heading-container">
                   <div className="profile-root-heading-wrapper">
-                    <h2 className="subtitle -gray">Country & Commodity</h2>
-                    <h1 className="title">Colombia &ndash; Coffee</h1>
+                    <ContextSelector />
                   </div>
                 </div>
                 <ProfileSearch />
