@@ -4,14 +4,22 @@ import ContextSelector from 'react-components/shared/context-selector/context-se
 
 const mapStateToProps = state => {
   const { contexts, tooltips, currentDropdown, selectedContext, contextIsUserSelected } = state.app;
-
+  const { type } = state.location;
+  const selectedContextCountry = selectedContext && selectedContext.countryName;
+  const selectedContextCommodity = selectedContext && selectedContext.commodityName;
+  const isExplore = type === 'explore';
+  const isContextSelected =
+    (!isExplore || contextIsUserSelected) && !!selectedContextCountry && !!selectedContextCommodity;
+  const contextLabel =
+    isContextSelected &&
+    `${selectedContextCountry.toLowerCase()} - ${selectedContextCommodity.toLowerCase()}`;
   return {
-    contexts: contexts || [],
-    tooltipText: tooltips && tooltips.sankey.nav.context.main,
     currentDropdown,
+    isContextSelected,
     contextIsUserSelected,
-    selectedContextCountry: selectedContext && selectedContext.countryName,
-    selectedContextCommodity: selectedContext && selectedContext.commodityName
+    contexts: contexts || [],
+    contextLabel: contextLabel || undefined,
+    tooltipText: tooltips && tooltips.sankey.nav.context.main
   };
 };
 
