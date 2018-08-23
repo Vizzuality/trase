@@ -54,10 +54,10 @@ module Api
         def self.refresh(options = {})
           unless options[:skip_flow_paths]
             Scenic.database.refresh_materialized_view(
-              'flow_paths_mv', concurrently: false
+              'flow_paths_mv', concurrently: true
             )
           end
-          Scenic.database.refresh_materialized_view(table_name, concurrently: false)
+          Scenic.database.refresh_materialized_view(table_name, concurrently: true)
         end
 
         # this materialized view takes a long time to refresh

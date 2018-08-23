@@ -19,7 +19,7 @@ module Api
 
         def restore
           update_keys_in_full_backup
-          @table_class.connection.execute("TRUNCATE #{@table} CASCADE")
+          @table_class.connection.execute("DELETE FROM #{@table}")
           stmt = <<~SQL
             INSERT INTO #{@table}
             (#{@columns_cs})
