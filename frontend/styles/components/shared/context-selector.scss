@@ -2,7 +2,7 @@
 @import '../nav/basic-dropdown';
 
 .c-context-selector {
-
+  cursor: pointer;
   .context-selector-content {
     @extend %dropdown;
     position: absolute;
@@ -97,11 +97,12 @@
 
     .dimension-list-item {
       padding: 12px 25px;
-      cursor: pointer;
+      color: $charcoal-grey;
       text-transform: capitalize;
       font-family: $font-family-2;
       font-size: $font-size-xx-regular;
       font-weight: normal;
+      cursor: pointer;
 
       &:hover {
         background-color: $manilla;
@@ -133,6 +134,7 @@
     }
 
     .context-selector-footer-text {
+      font-family: $font-family-1;
       font-size: $font-size-x-regular;
       font-weight: 500;
       color: $charcoal-grey-faded;

@@ -14,7 +14,7 @@ const ProfileRoot = props => {
               <div className="column small-12 medium-9 large-6">
                 <div className="profile-root-heading-container">
                   <div className="profile-root-heading-wrapper">
-                    <ContextSelector />
+                    <ContextSelector className="profile-root-context-selector" />
                   </div>
                 </div>
                 <ProfileSearch
