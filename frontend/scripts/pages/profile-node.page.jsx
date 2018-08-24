@@ -4,7 +4,7 @@ import FeedbackMarkup from 'html/includes/_feedback.ejs';
 import 'styles/profile-actor.scss';
 import 'styles/profile-place.scss';
 
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
@@ -18,23 +18,29 @@ export const mount = (root, store) => {
   });
 
   render(
-    <Provider store={store}>
-      <TopNav />
-    </Provider>,
+    <StrictMode>
+      <Provider store={store}>
+        <TopNav />
+      </Provider>
+    </StrictMode>,
     document.getElementById('nav')
   );
 
   render(
-    <Provider store={store}>
-      <ProfileNode />
-    </Provider>,
+    <StrictMode>
+      <Provider store={store}>
+        <ProfileNode />
+      </Provider>
+    </StrictMode>,
     document.getElementById('page-react-root')
   );
 
   render(
-    <Provider store={store}>
-      <Footer />
-    </Provider>,
+    <StrictMode>
+      <Provider store={store}>
+        <Footer />
+      </Provider>
+    </StrictMode>,
     document.getElementById('footer')
   );
 };

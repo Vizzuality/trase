@@ -4,7 +4,7 @@ import ToolMarkup from 'html/tool.ejs';
 import SearchMarkup from 'html/includes/_search.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
@@ -59,16 +59,20 @@ export const mount = (root, store) => {
   resizeSankeyTool(store.dispatch);
 
   render(
-    <Provider store={store}>
-      <FiltersNav />
-    </Provider>,
+    <StrictMode>
+      <Provider store={store}>
+        <FiltersNav />
+      </Provider>
+    </StrictMode>,
     document.getElementById('js-tool-nav-react')
   );
 
   render(
-    <Provider store={store}>
-      <ColumnsSelectorContainer />
-    </Provider>,
+    <StrictMode>
+      <Provider store={store}>
+        <ColumnsSelectorContainer />
+      </Provider>
+    </StrictMode>,
     document.getElementById('js-columns-selector-react')
   );
 
@@ -83,13 +87,3 @@ export const unmount = () => {
   document.querySelector('body').classList.remove('-overflow-hidden');
   containers.forEach(container => container.remove());
 };
-
-// if (NODE_ENV_DEV === true) {
-//   window.addEventListener('keydown', (event) => {
-//     if (event.key === 'r' && event.ctrlKey) {
-//       // reload without the hash
-//       window.location.href = './flows';
-//       // window.location.href = './flows?selectedNodesIds=[1915]';
-//     }
-//   });
-// }
