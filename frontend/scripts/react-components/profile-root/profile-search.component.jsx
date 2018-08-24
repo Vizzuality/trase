@@ -62,6 +62,7 @@ class ProfileSearch extends PureComponent {
             type="search"
             className="profile-search-input hide-for-small"
             data-test="search-input-desktop"
+            autoComplete="off"
           />
           {isLoading ? (
             <ShrinkingSpinner className="-dark" />

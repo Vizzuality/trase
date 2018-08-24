@@ -19,7 +19,7 @@ $search-height-large: 55px;
     background-color: $white;
     box-shadow: $search-box-shadow;
     border-radius: 4px;
-    z-index: $z-above;
+    z-index: $z-base;
     cursor: text;
 
     .icon-search {

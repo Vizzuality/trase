@@ -1,5 +1,23 @@
 .c-profile-root {
 
+  .profile-root-context-selector {
+    position: relative;
+    z-index: $z-above;
+    margin: 0 0 10px 0;
+
+    .dropdown-label {
+      font-size: 13px;
+    }
+
+    .dropdown-title {
+      font-size: 48px;
+    }
+
+    .context-selector-content {
+      top: 72px;
+    }
+  }
+
   .profile-root-search-container {
     padding: 90px 0;
 
