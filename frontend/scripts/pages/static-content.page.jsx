@@ -5,7 +5,7 @@ import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import 'styles/static-content.scss';
 
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
@@ -19,23 +19,29 @@ export const mount = (root, store) => {
   });
 
   render(
-    <Provider store={store}>
-      <TopNav />
-    </Provider>,
+    <StrictMode>
+      <Provider store={store}>
+        <TopNav />
+      </Provider>
+    </StrictMode>,
     document.getElementById('nav')
   );
 
   render(
-    <Provider store={store}>
-      <StaticContent />
-    </Provider>,
+    <StrictMode>
+      <Provider store={store}>
+        <StaticContent />
+      </Provider>
+    </StrictMode>,
     document.getElementById('page-react-root')
   );
 
   render(
-    <Provider store={store}>
-      <Footer />
-    </Provider>,
+    <StrictMode>
+      <Provider store={store}>
+        <Footer />
+      </Provider>
+    </StrictMode>,
     document.getElementById('footer')
   );
 };

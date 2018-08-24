@@ -1,7 +1,7 @@
 import BaseMarkup from 'html/base.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 import NotSupportedOnMobile from 'react-components/mobile/not-supported.component';
@@ -15,9 +15,11 @@ export const mount = (root, store) => {
   });
 
   render(
-    <Provider store={store}>
-      <TopNav />
-    </Provider>,
+    <StrictMode>
+      <Provider store={store}>
+        <TopNav />
+      </Provider>
+    </StrictMode>,
     document.getElementById('nav')
   );
 
