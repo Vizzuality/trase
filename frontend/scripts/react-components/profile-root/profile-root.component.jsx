@@ -4,7 +4,7 @@ import ProfileSearch from 'react-components/profile-root/profile-search.containe
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 
 const ProfileRoot = props => {
-  const { errorMessage, selectedContext, getContextsWithProfilePages } = props;
+  const { errorMessage, activeContext, getContextsWithProfilePages } = props;
   return (
     <div className="l-profile-root">
       {!errorMessage && (
@@ -16,7 +16,7 @@ const ProfileRoot = props => {
                   <div className="profile-root-heading-wrapper">
                     <ContextSelector
                       selectContexts={getContextsWithProfilePages}
-                      selectedContext={selectedContext}
+                      selectedContext={activeContext}
                       className="profile-root-context-selector"
                     />
                   </div>
@@ -66,7 +66,7 @@ const ProfileRoot = props => {
 
 ProfileRoot.propTypes = {
   errorMessage: PropTypes.string,
-  selectedContext: PropTypes.object,
+  activeContext: PropTypes.object,
   getContextsWithProfilePages: PropTypes.func.isRequired
 };
 

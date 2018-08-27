@@ -24,7 +24,8 @@
       flex: none;
     }
 
-    &.-loading {
+    &.-loading,
+    [disabled=true] {
       background-color: $white;
       .profile-search-input {
         background-color: $white;
