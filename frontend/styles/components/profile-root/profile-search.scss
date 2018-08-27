@@ -29,7 +29,8 @@ $search-height-large: 55px;
       flex: none;
     }
 
-    &.-loading {
+    &.-loading,
+    [disabled=true] {
       background-color: $white;
       .profile-search-input {
         background-color: $white;

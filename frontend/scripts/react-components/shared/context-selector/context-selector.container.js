@@ -8,12 +8,8 @@ const mapStateToProps = (state, ownProps) => {
   const { type } = state.location;
   const selectorContexts = selectContexts(contexts || []);
 
-  // we make sure the globally selected context is available in the selectorContexts
-  const activeContext = selectedContext
-    ? selectorContexts.find(c => c.id === selectedContext.id)
-    : null;
-  const selectedContextCountry = activeContext && selectedContext.countryName;
-  const selectedContextCommodity = activeContext && selectedContext.commodityName;
+  const selectedContextCountry = selectedContext && selectedContext.countryName;
+  const selectedContextCommodity = selectedContext && selectedContext.commodityName;
   const isExplore = type === 'explore';
   const isContextSelected =
     (!isExplore || contextIsUserSelected) && !!selectedContextCountry && !!selectedContextCommodity;
