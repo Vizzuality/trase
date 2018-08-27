@@ -34,13 +34,15 @@ class ContextSelector extends Component {
       newlySelectedCommodityId,
       isSubnationalTabSelected
     } = this.state;
-    const contexts = this.props.contexts.filter(c => c.isSubnational === isSubnationalTabSelected);
-    const countries = Object.values(groupBy(contexts, 'countryId')).map(grouped => ({
+    const selectedContexts = this.props.contexts.filter(
+      c => c.isSubnational === isSubnationalTabSelected
+    );
+    const countries = Object.values(groupBy(selectedContexts, 'countryId')).map(grouped => ({
       id: grouped[0].countryId,
       name: grouped[0].countryName,
       commodityIds: grouped.map(c => c.commodityId)
     }));
-    const commodities = Object.values(groupBy(contexts, 'commodityId')).map(grouped => ({
+    const commodities = Object.values(groupBy(selectedContexts, 'commodityId')).map(grouped => ({
       id: grouped[0].commodityId,
       name: grouped[0].commodityName,
       countryIds: grouped.map(c => c.countryId)
@@ -51,6 +53,8 @@ class ContextSelector extends Component {
     return {
       newlySelectedCountry,
       newlySelectedCommodity,
+      showSubnational: this.props.contexts.some(c => c.isSubnational),
+      showNational: this.props.contexts.some(c => !c.isSubnational),
       countries: countries.map(c => ({
         ...c,
         isSelected: c.id === newlySelectedCountryId,
@@ -149,20 +153,25 @@ class ContextSelector extends Component {
     );
   }
 
-  renderContextList(countries, commodities) {
+  renderContextList({ countries, commodities, showNational, showSubnational }) {
     const { isSubnationalTabSelected } = this.state;
-
     return (
       <div className="context-list-container">
         <ul className="context-list-tabs">
           <li
-            className={cx('tab', { '-selected': isSubnationalTabSelected })}
+            className={cx('tab', {
+              '-selected': isSubnationalTabSelected,
+              'is-hidden': !showSubnational
+            })}
             onClick={() => this.setState({ isSubnationalTabSelected: true })}
           >
             Subnational Data
           </li>
           <li
-            className={cx('tab', { '-selected': !isSubnationalTabSelected })}
+            className={cx('tab', {
+              '-selected': !isSubnationalTabSelected,
+              'is-hidden': !showNational
+            })}
             onClick={() => this.setState({ isSubnationalTabSelected: false })}
           >
             National Data
@@ -201,6 +210,8 @@ class ContextSelector extends Component {
     const {
       countries,
       commodities,
+      showNational,
+      showSubnational,
       newlySelectedCountry,
       newlySelectedCommodity
     } = this.getCountriesAndCommodities();
@@ -225,7 +236,7 @@ class ContextSelector extends Component {
           >
             <div className="context-selector-content" onClick={this.resetSelection}>
               {this.renderFeaturedContext()}
-              {this.renderContextList(countries, commodities)}
+              {this.renderContextList({ countries, commodities, showNational, showSubnational })}
               <div className="context-selector-footer">
                 <span className="context-selector-footer-text">
                   {this.renderFooterText(newlySelectedCountry, newlySelectedCommodity)}
