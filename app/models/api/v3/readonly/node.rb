@@ -12,8 +12,9 @@
 #
 # Indexes
 #
-#  nodes_mv_context_id_idx  (context_id)
-#  nodes_mv_name_idx        (to_tsvector('simple'::regconfig, COALESCE(name, ''::text)))
+#  index_nodes_mv_on_id_and_context_id  (id,context_id)
+#  nodes_mv_context_id_idx              (context_id)
+#  nodes_mv_name_idx                    (to_tsvector('simple'::regconfig, COALESCE(name, ''::text)))
 #
 
 module Api

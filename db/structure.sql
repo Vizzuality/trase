@@ -142,6 +142,13 @@ $$;
 COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double precision) IS 'Given an n-element array of choropleth buckets and a positive value, returns index of bucket where value falls (1 to n + 1); else returns 0.';
 
 
+--
+-- Name: trase_server; Type: SERVER; Schema: -; Owner: -
+--
+
+-- suppressed CREATE SERVER
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -913,7 +920,7 @@ CREATE TABLE public.context_properties (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     is_subnational boolean DEFAULT false NOT NULL,
-    is_highlighted boolean DEFAULT false NOT NULL
+    is_highlighted boolean
 );
 
 
@@ -2019,8 +2026,8 @@ CREATE MATERIALIZED VIEW public.nodes_mv AS
     node_types.name AS node_type,
     nodes_with_flows.context_id,
     profiles.name AS profile,
-    context_properties.is_subnational AS is_subnational
- FROM (((((public.nodes
+    context_properties.is_subnational
+   FROM ((((((public.nodes
      JOIN ( SELECT DISTINCT unnest(flows.path) AS node_id,
             flows.context_id
            FROM public.flows) nodes_with_flows ON ((nodes.id = nodes_with_flows.node_id)))
@@ -2028,8 +2035,8 @@ CREATE MATERIALIZED VIEW public.nodes_mv AS
      JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
      JOIN public.context_node_types ON (((context_node_types.node_type_id = node_types.id) AND (context_node_types.context_id = nodes_with_flows.context_id))))
      LEFT JOIN public.profiles ON ((profiles.context_node_type_id = context_node_types.id)))
-     LEFT JOIN public.context_properties ON ((context_node_types.context_id = context_properties.context_id))
-   WHERE ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text))
+     LEFT JOIN public.context_properties ON ((context_node_types.context_id = context_properties.context_id)))
+  WHERE ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text))
   WITH NO DATA;
 
 
@@ -3990,6 +3997,13 @@ CREATE INDEX index_node_quants_on_node_id ON public.node_quants USING btree (nod
 
 
 --
+-- Name: index_nodes_mv_on_id_and_context_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_nodes_mv_on_id_and_context_id ON public.nodes_mv USING btree (id, context_id);
+
+
+--
 -- Name: index_profiles_on_context_node_type_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4726,4 +4740,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180412074237'),
 ('20180416125150'),
 ('20180522102950'),
-('20180522135640');
+('20180522135640'),
+('20180827134927');
+
+
