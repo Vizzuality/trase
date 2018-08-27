@@ -8,6 +8,11 @@
     position: absolute;
     top: $nav-height;
     left: 0;
+    max-width: calc(100vw - 3rem);
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      max-width: none;
+    }
   }
 
   .context-selector-featured-header {
@@ -25,7 +30,7 @@
     .icon {
       position: absolute;
       height: 14px;
-      width: 14x;
+      width: 14px;
       right: 10px;
       top: 10px;
       color: $white;
@@ -124,7 +129,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 50px;
+    height: 30px;
     width: 100%;
     background-color: $background-white;
     cursor: default;
