@@ -112,7 +112,11 @@ class FiltersNav extends React.PureComponent {
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
-          <ContextSelector className="filters-nav-item" isExplore={isExplore} />
+          <ContextSelector
+            className="filters-nav-item"
+            isExplore={isExplore}
+            selectedContext={selectedContext}
+          />
           {selectedContext &&
             (contextIsUserSelected || !isExplore) && (
               <React.Fragment>

@@ -2,8 +2,9 @@ import { connect } from 'react-redux';
 import { toggleDropdown, selectContextById } from 'actions/app.actions';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.component';
 
-const mapStateToProps = state => {
-  const { contexts, tooltips, currentDropdown, selectedContext, contextIsUserSelected } = state.app;
+const mapStateToProps = (state, ownProps) => {
+  const { selectedContext, selectContexts = i => i } = ownProps;
+  const { contexts, tooltips, currentDropdown, contextIsUserSelected } = state.app;
   const { type } = state.location;
   const selectedContextCountry = selectedContext && selectedContext.countryName;
   const selectedContextCommodity = selectedContext && selectedContext.commodityName;
@@ -17,7 +18,7 @@ const mapStateToProps = state => {
     currentDropdown,
     isContextSelected,
     contextIsUserSelected,
-    contexts: contexts || [],
+    contexts: selectContexts(contexts || []),
     contextLabel: contextLabel || undefined,
     tooltipText: tooltips && tooltips.sankey.nav.context.main
   };
