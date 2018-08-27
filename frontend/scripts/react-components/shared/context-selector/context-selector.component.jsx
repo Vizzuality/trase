@@ -228,7 +228,9 @@ class ContextSelector extends Component {
               {tooltipText && <Tooltip constraint="window" text={tooltipText} />}
             </span>
           )}
-          <span className="dropdown-title">{contextLabel || defaultContextLabel}</span>
+          <span className={cx('dropdown-title', { '-label': !contextLabel })}>
+            {contextLabel || defaultContextLabel}
+          </span>
           <FiltersDropdown
             id={ContextSelector.id}
             currentDropdown={currentDropdown}

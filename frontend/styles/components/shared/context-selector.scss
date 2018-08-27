@@ -3,6 +3,14 @@
 
 .c-context-selector {
   cursor: pointer;
+
+  .dropdown-title {
+
+    &.-label {
+      text-align: center;
+    }
+  }
+
   .context-selector-content {
     @extend %dropdown;
     position: absolute;
