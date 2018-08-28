@@ -21,7 +21,7 @@ const ProfileRoot = props => {
                     />
                   </div>
                 </div>
-                <ProfileSearch selectedContext={activeContext} />
+                <ProfileSearch selectedContext={activeContext} testId="profile-root-search" />
                 <p className="profile-root-explanatory-text">
                   Enter the name of a company or production municipality, state or biome for key
                   sustainability indicators and statistics on linked traders and consumer markets.

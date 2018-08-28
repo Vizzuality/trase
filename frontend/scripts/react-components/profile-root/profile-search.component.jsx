@@ -43,11 +43,11 @@ class ProfileSearch extends PureComponent {
   }
 
   renderSearchBox({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) {
-    const { isLoading, nodes, selectedContext } = this.props;
+    const { isLoading, nodes, selectedContext, testId } = this.props;
     const visibleResults = nodes.slice(0, 10);
 
     return (
-      <div className="c-profile-search" data-test="profile-search">
+      <div className="c-profile-search" data-test={testId}>
         <div
           className={cx('profile-search-bar', { '-loading': isLoading || !selectedContext })}
           onClick={this.focusInput}
@@ -64,7 +64,7 @@ class ProfileSearch extends PureComponent {
             {...getInputProps({ placeholder: 'Search a company or production place' })}
             type="search"
             className="profile-search-input hide-for-small"
-            data-test="search-input-desktop"
+            data-test={`${testId}-input-desktop${!selectedContext ? '-disabled' : ''}`}
             autoComplete="off"
             disabled={!selectedContext}
           />
@@ -109,6 +109,7 @@ class ProfileSearch extends PureComponent {
 }
 
 ProfileSearch.propTypes = {
+  testId: PropTypes.string,
   isLoading: PropTypes.bool,
   nodes: PropTypes.array.isRequired,
   selectedContext: PropTypes.object,
