@@ -19,6 +19,19 @@ export default {
       page: 'profileRoot'
     },
     {
+      name: 'Dashboards',
+      page: 'dashboards'
+    },
+    {
+      name: 'Yearbook',
+      page: `https://yearbook2018.${
+        window.location.hostname === 'staging.trase.earth'
+          ? window.location.hostname
+          : 'trase.earth'
+      }`,
+      external: true
+    },
+    {
       name: 'Download',
       page: 'data'
     },

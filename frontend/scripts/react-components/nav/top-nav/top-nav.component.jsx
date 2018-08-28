@@ -61,16 +61,6 @@ class TopNav extends React.PureComponent {
 
     allLinks.push(...links);
 
-    allLinks.splice(-2, 0, {
-      name: 'Yearbook',
-      page: `https://yearbook2018.${
-        window.location.hostname === 'staging.trase.earth'
-          ? window.location.hostname
-          : 'trase.earth'
-      }`,
-      external: true
-    });
-
     return (
       <div className="top-nav-bar row align-justify hide-for-small">
         <div className="column medium-8">
