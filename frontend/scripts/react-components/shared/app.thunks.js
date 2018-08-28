@@ -57,7 +57,7 @@ function loadContextsPromise(dispatch, getState) {
 
         const currentContext = getCurrentContext(state);
 
-        dispatch(selectInitialContextById(currentContext.id));
+        if (currentContext) dispatch(selectInitialContextById(currentContext.id));
       })
       .then(() => resolve())
   );

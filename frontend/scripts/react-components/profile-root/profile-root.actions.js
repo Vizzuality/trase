@@ -25,10 +25,10 @@ export function resetProfileSearchResults() {
   };
 }
 
-export const searchNodeWithTerm = searchTerm => dispatch => {
+export const searchNodeWithTerm = (searchTerm, contextId) => dispatch => {
   const nodeResultsURL = getURLFromParams(GET_NODES_WITH_SEARCH_URL, {
     query: searchTerm,
-    context_id: DEFAULT_PROFILE_PAGE_CONTEXT_ID,
+    context_id: contextId,
     profile_only: true
   });
 

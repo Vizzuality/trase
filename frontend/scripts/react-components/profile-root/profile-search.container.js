@@ -17,8 +17,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      onSelect: (node, year) => goToNodeProfilePage(node, year),
-      onSearchTermChange: searchTerm => searchNodeWithTerm(searchTerm)
+      onSelect: goToNodeProfilePage,
+      onSearchTermChange: searchNodeWithTerm
     },
     dispatch
   );
