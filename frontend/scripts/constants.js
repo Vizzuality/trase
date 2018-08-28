@@ -32,7 +32,6 @@ export const NUM_DECIMALS = {
   tons: 0
 };
 export const DEFAULT_PROFILE_PAGE_YEAR = 2015;
-export const DEFAULT_PROFILE_PAGE_CONTEXT_ID = 1;
 
 export const NUM_DECIMALS_DEFAULT = 1;
 

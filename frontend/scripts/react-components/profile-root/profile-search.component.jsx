@@ -33,7 +33,8 @@ class ProfileSearch extends PureComponent {
   }
 
   onInputValueChange(searchTerm) {
-    this.props.onSearchTermChange(searchTerm);
+    const { onSearchTermChange, selectedContext } = this.props;
+    onSearchTermChange(searchTerm, selectedContext.id);
   }
 
   focusInput(e) {
