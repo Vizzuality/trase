@@ -7,6 +7,7 @@ import {
   GET_ACTOR_SUSTAINABILITY,
   GET_NODE_SUMMARY_URL
 } from 'utils/getURLFromParams';
+import flatMap from 'lodash/flatMap';
 import addApostrophe from 'utils/addApostrophe';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
 
@@ -67,13 +68,13 @@ class SustainabilityTableWidget extends React.PureComponent {
             return null;
           }
 
-          const rows = data[mainQuery].map(e => e.rows || []).reduce((a, c) => a.concat(c));
+          const rows = flatMap(data[mainQuery], e => e.rows);
 
           if (rows.length === 0) {
             return null;
           }
 
-          const values = rows.map(e => e.values || []).reduce((a, c) => a.concat(c));
+          const values = flatMap(data[mainQuery], e => e.values);
 
           if (values.length === 0) {
             return null;
