@@ -1,0 +1,123 @@
+$slide-height: 430px;
+
+.c-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  height: $slide-height;
+  transition: box-shadow 350ms ease-out, transform 300ms ease-out, opacity 200ms ease-out;
+
+  &:hover {
+    box-shadow: 0 10px 30px rgba($black, 0.2);
+    transform: translate(0, -4px);
+  }
+
+  .card-dashed-box,
+  .card-dashed-line {
+    display: none;
+    pointer-events: none;
+  }
+
+  .card-link {
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .card-image {
+    height: 240px;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: darken($light-gray, 12%);
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    height: 190px;
+    max-height: 190px;
+    padding: 20px;
+    background-color: $light-gray;
+
+    .card-details-container {
+      height: calc(100% - 20px);
+      overflow: hidden;
+    }
+
+    .card-action {
+      width: 100%;
+      text-align: right;
+      color: $charcoal-grey-faded;
+      cursor: pointer;
+      height: 20px;
+    }
+
+
+    .card-title {
+      margin-top: 5px;
+      font-family: $font-family-2;
+      font-size: $font-size-medium;
+      font-weight: 300;
+      line-height: 1.6;
+      color: $gray-text;
+      text-transform: capitalize;
+
+      @media screen and (max-width: $breakpoint-foundation-medium) {
+        font-size: $font-size-xx-regular;
+      }
+    }
+  }
+
+  &:first-child {
+    margin: 0;
+  }
+
+  &.-dashed {
+
+    .card-image {
+      background-color: transparent;
+      background-size: 55%;
+    }
+
+    .card-content {
+      background-color: transparent;
+    }
+
+    .card-dashed-box {
+      display: block;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+    }
+
+    .card-dashed-line {
+      display: block;
+      position: absolute;
+      height: 5px;
+      width: 100%;
+    }
+
+    .dashed-line {
+      fill: none;
+      stroke: $white;
+      stroke-width: 5px;
+      stroke-dasharray: 22px, 10px;
+    }
+
+    .card-action,
+    .card-title,
+    .subtitle {
+      color: $white;
+    }
+
+    .card-link {
+      cursor: default;
+    }
+  }
+}

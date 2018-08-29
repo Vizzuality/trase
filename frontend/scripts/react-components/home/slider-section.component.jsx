@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Siema from 'react-siema';
 import cx from 'classnames';
-import QuoteTile from 'react-components/home/quote-tile.component';
-import StoryTile from 'react-components/home/story-tile.component';
+import Card from 'react-components/shared/card.component';
+import QuoteCard from 'react-components/shared/quote-card.component';
 import debounce from 'lodash/debounce';
 import { DOCUMENT_POST_TYPES } from 'scripts/constants';
 
@@ -98,13 +98,23 @@ class SliderSection extends React.PureComponent {
                 key={slide.title || slide.quote}
                 className={`column small-12 medium-${numColumns}`}
               >
-                <div className={cx('slide', { '-actionable': !slide.quote })}>
-                  {slide.quote ? (
-                    <QuoteTile slide={slide} />
-                  ) : (
-                    <StoryTile slide={slide} action={SliderSection.getActionName(slide.category)} />
-                  )}
-                </div>
+                {slide.quote ? (
+                  <QuoteCard
+                    quote={slide.quote}
+                    name={slide.authorName}
+                    title={slide.authorTitle}
+                    imageUrl={slide.imageUrl}
+                  />
+                ) : (
+                  <Card
+                    translateUrl
+                    title={slide.title}
+                    subtitle={slide.category}
+                    imageUrl={slide.imageUrl}
+                    linkUrl={slide.completePostUrl}
+                    actionName={SliderSection.getActionName(slide.category)}
+                  />
+                )}
               </div>
             ))}
           </Siema>
