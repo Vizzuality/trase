@@ -1,0 +1,22 @@
+.c-dashboards-element {
+  padding: 60px 0;
+
+  .dashboard-element-title {
+    color: $white;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 2.33;
+    letter-spacing: -0.5px;
+  }
+
+  .dashboards-element-placeholder {
+
+    &-item {
+      display: block;
+      height: 400px;
+      width: 100%;
+      margin: 0 0 40px;
+      background-color: $elephant;
+    }
+  }
+}
