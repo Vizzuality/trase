@@ -1,10 +1,17 @@
 import React from 'react';
 import Card from 'react-components/shared/card.component';
+import Link from 'redux-first-router-link';
 // import PropTypes from 'prop-types';
 // import cx from 'classnames';
 
 function Dashboards(props) {
   const { posts } = props;
+  const linkProps = {
+    to: { type: 'home' },
+    target: undefined,
+    rel: undefined,
+    'tx-content': undefined
+  };
   return (
     <div className="l-dashboards">
       <div className="c-dashboards">
@@ -32,6 +39,8 @@ function Dashboards(props) {
                 subtitle="Custom dashboard"
                 actionName="Create dashboard"
                 imageUrl="/images/logos/trase_logo_white.svg"
+                Link={Link}
+                linkProps={linkProps}
               />
             </div>
           </div>
