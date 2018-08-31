@@ -21,7 +21,7 @@ module Api
 
           def error
             super.merge(
-              message: "node types missing: #{@missing_node_types.join(', ')}"
+              message: "Required node type(s) missing: #{@missing_node_types.join(', ')}. Make sure node type(s) with this/these name(s) exist."
             )
           end
         end
