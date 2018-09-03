@@ -34,6 +34,8 @@ set :keep_releases, 5
 set :npm_target_path, -> { release_path.join('frontend') } # default not set
 set :npm_flags, ''
 
+set :init_system, :systemd
+
 namespace :deploy do
   after :finishing, 'deploy:cleanup'
   after 'deploy:publishing', 'deploy:restart'

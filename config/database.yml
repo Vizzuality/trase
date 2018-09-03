@@ -21,6 +21,9 @@ test:
 staging:
   <<: *default
 
+demo:
+  <<: *default
+
 sandbox:
   <<: *default
 
