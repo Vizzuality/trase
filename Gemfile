@@ -65,7 +65,6 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
   gem 'capistrano-npm'
-  gem 'capistrano-sidekiq'
   gem 'rubocop', require: false
 end
 
