@@ -17,6 +17,16 @@ function DashboardsRoot(props) {
         <h1 className="title">See how commodity trade impacts the world</h1>
         <section className="dashboards-root-grid">
           <div className="row">
+            <div className="column small-12 medium-6 large-4">
+              <Card
+                className="-new"
+                title="Create your own Dashboard with custom options."
+                subtitle="Custom dashboard"
+                actionName="Create dashboard"
+                Link={Link}
+                linkProps={linkProps}
+              />
+            </div>
             {posts.slice(0, 5).map(post => (
               <div className="column small-12 medium-6 large-4">
                 <div className="post">
@@ -31,17 +41,6 @@ function DashboardsRoot(props) {
                 </div>
               </div>
             ))}
-            <div className="column small-12 medium-6 large-4">
-              <Card
-                className="-dashed"
-                title="Create your own Dashboard with custom options."
-                subtitle="Custom dashboard"
-                actionName="Create dashboard"
-                imageUrl="/images/logos/trase_logo_white.svg"
-                Link={Link}
-                linkProps={linkProps}
-              />
-            </div>
           </div>
         </section>
       </div>

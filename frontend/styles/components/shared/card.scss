@@ -120,4 +120,28 @@ $slide-height: 430px;
       cursor: default;
     }
   }
+
+  &.-new {
+    .card-image {
+      position: relative;
+      background-color: $egg-shell;
+
+      &::after,
+      &::before {
+        position: absolute;
+        content: '';
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        height: 75px;
+        width: 10px;
+        border-radius: 10px;
+        background-color: $strong-pink;
+      }
+
+      &::after {
+        transform: translate(-50%, -50%) rotate(90deg);
+      }
+    }
+  }
 }
