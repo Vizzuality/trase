@@ -19,3 +19,7 @@
   background-color: $charcoal-grey-faded;
   z-index: $z-veil;
 }
+
+.ReactModal__Body--open {
+  overflow: hidden;
+}
