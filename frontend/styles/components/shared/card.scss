@@ -78,7 +78,7 @@ $slide-height: 430px;
     margin: 0;
   }
 
-  &.-dashed {
+  &.dashed {
 
     .card-image {
       background-color: transparent;
@@ -121,7 +121,7 @@ $slide-height: 430px;
     }
   }
 
-  &.-new {
+  &.new {
     .card-image {
       position: relative;
       background-color: $egg-shell;

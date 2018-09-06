@@ -1,0 +1,21 @@
+.c-simple-modal {
+  position: absolute;
+  top: 177px;
+  left: 140px;
+  right: 140px;
+  bottom: 40px;
+  background: transparent;
+  z-index: $z-above-veil;
+  overflow: auto;
+  outline: none;
+}
+
+.c-simple-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $charcoal-grey-faded;
+  z-index: $z-veil;
+}

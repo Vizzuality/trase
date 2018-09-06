@@ -119,6 +119,7 @@
     "react": "16.4.1",
     "react-dom": "16.4.1",
     "react-input-autosize": "2.2.1",
+    "react-modal": "^3.5.1",
     "react-placehodl": "1.0.3",
     "react-redux": "5.0.7",
     "react-siema": "git+https://github.com/sorodrigo/react-siema.git",

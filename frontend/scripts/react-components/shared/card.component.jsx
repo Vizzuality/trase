@@ -1,21 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
-function Card(props) {
-  const {
-    linkUrl,
-    subtitle,
-    title,
-    imageUrl,
-    actionName,
-    className,
-    translateUrl,
-    Link,
-    linkProps
-  } = props;
-  return (
-    <div className={cx('c-card', className)}>
+class Card extends Component {
+  static renderDashedBox() {
+    const dashedBox = (
       <svg
         className="card-dashed-box"
         viewBox="0 0 300 100"
@@ -28,42 +17,70 @@ function Card(props) {
           vectorEffect="non-scaling-stroke"
         />
       </svg>
-      <Link
-        className="card-link"
-        href={linkUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        tx-content={translateUrl ? 'translate_urls' : undefined}
-        {...linkProps}
+    );
+
+    const dashedLine = (
+      <svg
+        className="card-dashed-line"
+        viewBox="0 0 300 100"
+        preserveAspectRatio="none"
+        shapeRendering="crispEdges"
       >
-        <figure className="card-image" style={{ backgroundImage: `url(${imageUrl})` }} />
-        <svg
-          className="card-dashed-line"
-          viewBox="0 0 300 100"
-          preserveAspectRatio="none"
-          shapeRendering="crispEdges"
-        >
-          <path className="dashed-line" d="M0,0 300, 0" vectorEffect="non-scaling-stroke" />
-        </svg>
-      </Link>
-      <figcaption className="card-content">
-        <div className="card-details-container">
-          <h4 className="subtitle">{subtitle}</h4>
-          <p className="card-title">{title}</p>
-        </div>
+        <path className="dashed-line" d="M0,0 300, 0" vectorEffect="non-scaling-stroke" />
+      </svg>
+    );
+
+    return { dashedBox, dashedLine };
+  }
+
+  render() {
+    const {
+      linkUrl,
+      subtitle,
+      title,
+      imageUrl,
+      actionName,
+      className,
+      translateUrl,
+      Link,
+      variant,
+      linkProps
+    } = this.props;
+    const { dashedBox, dashedLine } = Card.renderDashedBox();
+
+    return (
+      <div className={cx('c-card', variant, className)}>
+        {variant === 'dashed' && dashedBox}
         <Link
-          className="card-action subtitle -gray"
+          className="card-link"
+          href={linkUrl}
           target="_blank"
           rel="noopener noreferrer"
-          href={linkUrl}
           tx-content={translateUrl ? 'translate_urls' : undefined}
           {...linkProps}
         >
-          {actionName}
+          <figure className="card-image" style={{ backgroundImage: `url(${imageUrl})` }} />
+          {variant === 'dahsed' && dashedLine}
         </Link>
-      </figcaption>
-    </div>
-  );
+        <figcaption className="card-content">
+          <div className="card-details-container">
+            <h4 className="subtitle">{subtitle}</h4>
+            <p className="card-title">{title}</p>
+          </div>
+          <Link
+            className="card-action subtitle -gray"
+            target="_blank"
+            rel="noopener noreferrer"
+            href={linkUrl}
+            tx-content={translateUrl ? 'translate_urls' : undefined}
+            {...linkProps}
+          >
+            {actionName}
+          </Link>
+        </figcaption>
+      </div>
+    );
+  }
 }
 
 Card.defaultProps = {
@@ -71,15 +88,16 @@ Card.defaultProps = {
 };
 
 Card.propTypes = {
-  Link: PropTypes.element,
+  Link: PropTypes.any,
   linkUrl: PropTypes.string,
+  imageUrl: PropTypes.string,
   linkProps: PropTypes.object,
   className: PropTypes.string,
   translateUrl: PropTypes.bool,
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string.isRequired,
-  imageUrl: PropTypes.string.isRequired,
-  actionName: PropTypes.string.isRequired
+  actionName: PropTypes.string.isRequired,
+  variant: PropTypes.oneOf(['new', 'dashed'])
 };
 
 export default Card;

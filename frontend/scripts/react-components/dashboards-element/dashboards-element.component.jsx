@@ -1,5 +1,7 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
+import SimpleModal from 'react-components/shared/simple-modal.component';
+import Panel from 'react-components/dashboards-element/dashboards-panel/dashboards-panel.component';
 // import cx from 'classnames';
 
 function DashboardsElement() {
@@ -18,6 +20,9 @@ function DashboardsElement() {
             ))}
           </div>
         </section>
+        <SimpleModal isOpen>
+          <Panel />
+        </SimpleModal>
       </div>
     </div>
   );

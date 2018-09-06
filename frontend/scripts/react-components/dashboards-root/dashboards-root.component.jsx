@@ -19,16 +19,17 @@ function DashboardsRoot(props) {
           <div className="row">
             <div className="column small-12 medium-6 large-4">
               <Card
-                className="-new"
+                className="dashboards-create-card"
                 title="Create your own Dashboard with custom options."
                 subtitle="Custom dashboard"
                 actionName="Create dashboard"
+                variant="new"
                 Link={Link}
                 linkProps={linkProps}
               />
             </div>
             {posts.slice(0, 5).map(post => (
-              <div className="column small-12 medium-6 large-4">
+              <div key={post.title} className="column small-12 medium-6 large-4">
                 <div className="post">
                   <Card
                     title={post.title}
