@@ -1,0 +1,26 @@
+.c-dashboards-welcome {
+  .title {
+    margin: 0 0 46px 0;
+  }
+
+  .dashboards-welcome-card-container {
+    display: flex;
+    margin: 0 0 30px 0;
+  }
+
+  .dashboards-welcome-card {
+    background-color: darken($light-gray, 7%);
+    width: 300px;
+    height: 300px;
+    margin: 0 15px 0 0;
+
+    &:last-child {
+      margin: 0;
+    }
+  }
+
+  .dashboards-welcome-button-container {
+    display: flex;
+    justify-content: center;
+  }
+}

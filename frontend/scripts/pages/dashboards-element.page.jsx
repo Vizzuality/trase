@@ -5,7 +5,7 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
-import DashboardsElement from 'react-components/dashboards-element/dashboards-element.component';
+import DashboardsElement from 'react-components/dashboards-element/dashboards-element.container';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import Footer from 'react-components/shared/footer.component';
 

@@ -1,7 +1,7 @@
 .c-dashboards-element {
   padding: 60px 0;
 
-  .dashboard-element-title {
+  .dashboards-element-title {
     color: $white;
     font-size: 24px;
     font-weight: 300;
@@ -17,6 +17,20 @@
       width: 100%;
       margin: 0 0 40px;
       background-color: $elephant;
+    }
+  }
+}
+
+.dashboards-modal-content {
+  background-color: $light-gray;
+  padding: 26px;
+
+  .dashboards-modal-close {
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      cursor: pointer;
     }
   }
 }

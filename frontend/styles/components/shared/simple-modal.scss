@@ -1,9 +1,6 @@
 .c-simple-modal {
   position: absolute;
-  top: 177px;
-  left: 140px;
-  right: 140px;
-  bottom: 40px;
+  width: 100%;
   background: transparent;
   z-index: $z-above-veil;
   overflow: auto;
@@ -11,6 +8,9 @@
 }
 
 .c-simple-modal-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: fixed;
   top: 0;
   left: 0;
