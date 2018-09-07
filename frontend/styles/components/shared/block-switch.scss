@@ -1,0 +1,48 @@
+.c-block-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 30px 0;
+
+  .block-switch-title {
+    display: block;
+    margin: 0 0 15px 0;
+  }
+
+  .block-switch-element {
+    width: 220px;
+    height: 150px;
+    padding: 16px;
+    border: solid 1px $charcoal-grey;
+    border-radius: 4px;
+    margin: 0 15px 0 0;
+    cursor: pointer;
+
+    &:last-child {
+      margin: 0;
+    }
+
+    &.-active {
+      background-color: $charcoal-grey;
+    }
+
+    &.-selected {
+      position: relative;
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        height: 8px;
+        width: 8px;
+        border-radius: 100%;
+        transform: translateX(-50%);
+        background-color: $strong-pink;
+      }
+    }
+  }
+
+  .block-switch-image {
+    height: 80px;
+  }
+}
