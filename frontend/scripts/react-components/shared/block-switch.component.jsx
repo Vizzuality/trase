@@ -4,13 +4,14 @@ import cx from 'classnames';
 
 class BlockSwitch extends React.PureComponent {
   static propTypes = {
+    dirtyBlocks: PropTypes.array,
     blocks: PropTypes.array.isRequired,
     selectBlock: PropTypes.func.isRequired,
     activeBlockId: PropTypes.string.isRequired
   };
 
   render() {
-    const { blocks, activeBlockId, selectBlock } = this.props;
+    const { blocks, activeBlockId, selectBlock, dirtyBlocks } = this.props;
 
     return (
       <div className="c-block-switch">
@@ -18,8 +19,11 @@ class BlockSwitch extends React.PureComponent {
           const isActive = block.id === activeBlockId;
           return (
             <button
-              className={cx('block-switch-element', { '-active': isActive })}
-              onClick={selectBlock}
+              className={cx('block-switch-element', {
+                '-active': isActive,
+                '-dirty': dirtyBlocks && dirtyBlocks.includes(block.id)
+              })}
+              onClick={() => selectBlock(block.id)}
             >
               <span
                 className={cx('subtitle', 'block-switch-title', {
