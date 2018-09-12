@@ -5,9 +5,10 @@ import cx from 'classnames';
 
 class GridList extends React.Component {
   static propTypes = {
+    children: PropTypes.any,
+    groupBy: PropTypes.string,
     className: PropTypes.string,
     getMoreItems: PropTypes.func,
-    children: PropTypes.any,
     items: PropTypes.array.isRequired,
     height: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
@@ -46,6 +47,23 @@ class GridList extends React.Component {
     }
   };
 
+  getGroupedItems() {
+    const { groupBy, items } = this.props;
+    const grouped = [];
+    items.forEach(item => {
+      const index = grouped.length;
+      if (item[groupBy]) {
+        if (index % 3 !== 0) {
+          grouped.push(...Array(3 - (index % 3)).fill(null));
+        }
+        grouped.push(item, null, null);
+      } else {
+        grouped.push(item);
+      }
+    });
+    return grouped;
+  }
+
   render() {
     const {
       className,
@@ -55,25 +73,27 @@ class GridList extends React.Component {
       rowHeight,
       items,
       columnCount,
-      children
+      children,
+      groupBy
     } = this.props;
+    const groupedItems = groupBy && this.getGroupedItems();
     return (
       <FixedSizeGrid
         ref={this.listRef}
-        className={cx('c-grid-list', 'List', className)}
+        className={cx('c-grid-list', className)}
         height={height}
         width={width}
         columnWidth={columnWidth}
         rowHeight={rowHeight}
-        itemData={items}
-        rowCount={items.length}
+        itemData={groupedItems || items}
+        rowCount={(groupedItems || items).length}
         columnCount={columnCount}
         onScroll={this.getMoreItems}
       >
         {({ rowIndex, columnIndex, style, data }) => {
-          const itemProps = data[rowIndex * columnCount + columnIndex];
-          if (!itemProps || !children) return null;
-          return React.createElement(children, { ...itemProps, style });
+          const item = data[rowIndex * columnCount + columnIndex];
+          if (typeof item === 'undefined' || !children) return null;
+          return children({ item, style, isGroup: item && !!item[groupBy] });
         }}
       </FixedSizeGrid>
     );

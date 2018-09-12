@@ -1,0 +1,40 @@
+.c-grid-list-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 10px 10px 0;
+
+  .grid-list-item-content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 40px;
+    width: 100%;
+    padding: 0 20px;
+    background-color: $medium-gray;
+    border-radius: 4px;
+    cursor: pointer;
+
+    p {
+      color: $charcoal-grey;
+      font-family: $font-family-1;
+      font-size: 13px;
+      font-weight: $font-weight-bold;
+      line-height: 0.77;
+      letter-spacing: -0.8px;
+      text-transform: capitalize;
+    }
+
+    &.-active {
+      background-color: $charcoal-grey;
+      p {
+        color: $white;
+      }
+    }
+
+    &.-header {
+
+    }
+  }
+}

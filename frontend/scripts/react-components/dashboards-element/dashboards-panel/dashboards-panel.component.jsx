@@ -3,10 +3,12 @@ import React from 'react';
 import SearchInput from 'react-components/shared/search-input.component';
 import BlockSwitch from 'react-components/shared/block-switch.component';
 import GridList from 'react-components/shared/grid-list.component';
+import cx from 'classnames';
 
 class DashboardsPanel extends React.PureComponent {
   state = {
-    activeBlockId: null
+    activeBlockId: null,
+    activeItem: null
   };
 
   blocks = [
@@ -17,15 +19,19 @@ class DashboardsPanel extends React.PureComponent {
   ];
 
   items = [
+    { value: 'west coast', header: true },
     { value: 'tupac' },
+    { value: 'kanye' },
+    { value: 'east coast', header: true },
     { value: 'eminem' },
-    { value: 'drake' },
+    { value: 'biggie' },
     { value: 'jay z' },
-    { value: 'kanye' }
+    { value: 'other', header: true },
+    { value: 'drake' }
   ];
 
   render() {
-    const { activeBlockId } = this.state;
+    const { activeBlockId, activeItem } = this.state;
 
     return (
       <div className="c-dashboards-panel">
@@ -42,26 +48,28 @@ class DashboardsPanel extends React.PureComponent {
             <SearchInput items={this.items} placeholder="search place" />
             <GridList
               height={150}
-              width={300}
-              columnWidth={100}
-              rowHeight={35}
+              width={600}
+              columnWidth={180}
+              rowHeight={50}
               columnCount={3}
               items={this.items}
             >
-              {({ header, style, value }) => {
-                if (header) {
-                  return (
-                    <div
-                      style={{ ...style, width: '100%' }}
-                      className="grid-item-container -header"
-                    >
-                      <div className="grid-item-header">{value}</div>
-                    </div>
-                  );
-                }
+              {({ item, style, isGroup }) => {
+                if (!item) return <b style={style} />;
                 return (
-                  <div style={style} className="grid-item-container">
-                    <div className="grid-item">{value}</div>
+                  <div style={style} className="c-grid-list-item">
+                    {isGroup && <p>{item.value}</p>}
+                    {!isGroup && (
+                      <button
+                        onClick={() => this.setState({ activeItem: item.value })}
+                        className={cx('grid-list-item-content', {
+                          '-active': item.value === activeItem,
+                          '-header': isGroup
+                        })}
+                      >
+                        <p>{item.value}</p>
+                      </button>
+                    )}
                   </div>
                 );
               }}
