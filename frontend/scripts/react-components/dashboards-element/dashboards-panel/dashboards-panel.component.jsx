@@ -19,14 +19,11 @@ class DashboardsPanel extends React.PureComponent {
   ];
 
   items = [
-    { value: 'west coast', header: true },
     { value: 'tupac' },
     { value: 'kanye' },
-    { value: 'east coast', header: true },
     { value: 'eminem' },
     { value: 'biggie' },
     { value: 'jay z' },
-    { value: 'other', header: true },
     { value: 'drake' }
   ];
 

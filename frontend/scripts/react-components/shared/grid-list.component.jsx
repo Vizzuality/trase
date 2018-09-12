@@ -48,13 +48,13 @@ class GridList extends React.Component {
   };
 
   getGroupedItems() {
-    const { groupBy, items } = this.props;
+    const { groupBy, items, columnCount } = this.props;
     const grouped = [];
     items.forEach(item => {
       const index = grouped.length;
       if (item[groupBy]) {
-        if (index % 3 !== 0) {
-          grouped.push(...Array(3 - (index % 3)).fill(null));
+        if (index % columnCount !== 0) {
+          grouped.push(...Array(columnCount - (index % columnCount)).fill(null));
         }
         grouped.push(item, null, null);
       } else {
