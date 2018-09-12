@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FixedSizeGrid } from 'react-window';
-import cx from 'classnames';
 
 class GridList extends React.Component {
   static propTypes = {
     children: PropTypes.any,
+    noScroll: PropTypes.bool,
     groupBy: PropTypes.string,
     className: PropTypes.string,
     getMoreItems: PropTypes.func,
@@ -74,13 +74,15 @@ class GridList extends React.Component {
       items,
       columnCount,
       children,
-      groupBy
+      groupBy,
+      noScroll
     } = this.props;
     const groupedItems = groupBy && this.getGroupedItems();
     return (
       <FixedSizeGrid
         ref={this.listRef}
-        className={cx('c-grid-list', className)}
+        className={className}
+        style={{ overflow: noScroll ? 'hidden' : 'auto' }}
         height={height}
         width={width}
         columnWidth={columnWidth}

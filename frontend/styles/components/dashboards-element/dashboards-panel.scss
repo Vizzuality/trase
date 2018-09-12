@@ -14,4 +14,12 @@
       border: 1px solid $charcoal-grey-faded;
     }
   }
+
+  .dashboards-panel-text {
+    color: $charcoal-grey-faded;
+    font-family: $font-family-2;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.71;
+  }
 }
