@@ -1,21 +1,99 @@
+@import '../../mixins';
+
 .c-search-input {
+  position: relative;
+
   .search-input-bar {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    border: 1px solid #34444C;
-    width: 300px;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    padding: 2px 16px 0 0;
+    background-color: $white;
+    box-shadow: $box-shadow;
     border-radius: 4px;
-    padding: 0 0 0 15px;
-    position: relative;
-    height: 40px;
+    z-index: $z-above;
+    cursor: text;
 
-    input {
-      height: 40px;
-      width: 100%;
-      background: transparent;
-      padding: 0 0 0 5px;
-      outline: 0;
+    .icon-search {
+      height: 20px;
+      width: 20px;
+      fill: $charcoal-grey;
+      flex: none;
     }
+
+    &.-loading {
+      background-color: $white;
+      .profile-search-input {
+        background-color: $white;
+        &::placeholder {
+          color: $charcoal-grey-faded-a-lot;
+        }
+      }
+    }
+  }
+
+  .search-input-field {
+    flex: 1;
+    padding: 0 5px 0 20px;
+    font-family: $font-family-1;
+    font-size: 18px;
+    letter-spacing: -0.8px;
+    text-align: left;
+    color: $charcoal-grey;
+    outline: none;
+    min-width: 0;
+
+    &::placeholder {
+      transition: color 150ms ease-out;
+    }
+  }
+
+  .search-input-results {
+    position: absolute;
+    background: $white;
+    overflow-y: auto;
+    width: 100%;
+    max-height: 100px;
+    box-shadow: $box-shadow;
+    z-index: $z-base;
+  }
+
+}
+
+.c-search-input-result {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 8px 15px;
+  cursor: pointer;
+  border-bottom: solid 1px $pale-grey;
+  overflow: hidden;
+
+  &:hover,
+  &[aria-selected='true'],
+  &.-highlighted {
+    background: $egg-shell;
+    color: $charcoal-grey;
+  }
+
+  .search-input-item-name {
+    left: -1px;
+    font-family: $font-family-1;
+    font-size: 13px;
+    letter-spacing: -0.5px;
+    color: $charcoal-grey;
+    text-transform: uppercase;
+  }
+
+  .search-input-item-type {
+    @include smallcaps;
+    display: block;
+  }
+
+  mark {
+    background: $egg-shell;
   }
 }

@@ -1,4 +1,17 @@
 .c-dashboards-panel {
   width: 100%;
   background-color: $light-gray;
+
+  .dashboard-panel-search {
+    height: 40px;
+    width: 300px;
+    margin: 0 0 15px 0;
+
+    .search-input-bar {
+      flex-direction: row-reverse;
+      padding: 2px 0 0 16px;
+      box-shadow: none;
+      border: 1px solid $charcoal-grey-faded;
+    }
+  }
 }

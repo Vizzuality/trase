@@ -1,6 +1,6 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
-import SearchInput from 'react-components/shared/search-input.component';
+import SearchInput from 'react-components/shared/search-input/search-input.component';
 import BlockSwitch from 'react-components/shared/block-switch.component';
 import GridList from 'react-components/shared/grid-list.component';
 import cx from 'classnames';
@@ -19,12 +19,12 @@ class DashboardsPanel extends React.PureComponent {
   ];
 
   items = [
-    { value: 'tupac' },
-    { value: 'kanye' },
-    { value: 'eminem' },
-    { value: 'biggie' },
-    { value: 'jay z' },
-    { value: 'drake' }
+    { name: 'tupac' },
+    { name: 'kanye' },
+    { name: 'eminem' },
+    { name: 'biggie' },
+    { name: 'jay z' },
+    { name: 'drake' }
   ];
 
   render() {
@@ -42,7 +42,12 @@ class DashboardsPanel extends React.PureComponent {
         />
         {activeBlockId === 'sourcing' && (
           <React.Fragment>
-            <SearchInput items={this.items} placeholder="search place" />
+            <SearchInput
+              className="dashboard-panel-search"
+              items={this.items}
+              placeholder="Search place"
+              onSelect={i => i}
+            />
             <GridList
               height={150}
               width={600}
@@ -55,16 +60,16 @@ class DashboardsPanel extends React.PureComponent {
                 if (!item) return <b style={style} />;
                 return (
                   <div style={style} className="c-grid-list-item">
-                    {isGroup && <p>{item.value}</p>}
+                    {isGroup && <p>{item.name}</p>}
                     {!isGroup && (
                       <button
-                        onClick={() => this.setState({ activeItem: item.value })}
+                        onClick={() => this.setState({ activeItem: item.name })}
                         className={cx('grid-list-item-content', {
-                          '-active': item.value === activeItem,
+                          '-active': item.name === activeItem,
                           '-header': isGroup
                         })}
                       >
-                        <p>{item.value}</p>
+                        <p>{item.name}</p>
                       </button>
                     )}
                   </div>
