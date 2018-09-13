@@ -7,7 +7,7 @@ import _ from 'lodash';
 import Table from 'react-components/profiles/table.component';
 import DropdownTabSwitcher from 'react-components/profiles/dropdown-tab-switcher.component';
 
-import 'styles/components/shared/tabs.scss';
+import 'styles/components/profiles/multi-table.scss';
 
 class MultiTable extends Component {
   constructor(props) {

@@ -1,11 +1,37 @@
-.tab-title {
-  display: none;
-}
+.c-tabs {
+  .tabs-container {
+    display: flex;
+    margin: 0 0 25px 0;
+  }
 
-.-tab-hidden {
-  display: none;
+  .tab {
+    position: relative;
+    font-family: $font-family-1;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.23;
+    letter-spacing: -.6px;
+    color: $charcoal-grey;
+    text-transform: uppercase;
+    opacity: 0.3;
+    cursor: pointer;
 
-  @media print {
-    display: block;
+    &.-selected {
+      opacity: 1;
+
+      &:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 100%;
+        height: 2px;
+        background-color: $medium-pink;
+      }
+    }
+
+    &:not(:last-child) {
+      margin-right: 21px;
+    }
   }
 }

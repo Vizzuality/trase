@@ -5,7 +5,6 @@ import { FixedSizeGrid } from 'react-window';
 class GridList extends React.Component {
   static propTypes = {
     children: PropTypes.any,
-    noScroll: PropTypes.bool,
     groupBy: PropTypes.string,
     className: PropTypes.string,
     getMoreItems: PropTypes.func,
@@ -74,21 +73,20 @@ class GridList extends React.Component {
       items,
       columnCount,
       children,
-      groupBy,
-      noScroll
+      groupBy
     } = this.props;
     const groupedItems = groupBy && this.getGroupedItems();
+
     return (
       <FixedSizeGrid
         ref={this.listRef}
         className={className}
-        style={{ overflow: noScroll ? 'hidden' : 'auto' }}
         height={height}
         width={width}
         columnWidth={columnWidth}
         rowHeight={rowHeight}
         itemData={groupedItems || items}
-        rowCount={(groupedItems || items).length}
+        rowCount={(groupedItems || items).length / columnCount}
         columnCount={columnCount}
         onScroll={this.getMoreItems}
       >

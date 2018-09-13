@@ -4,7 +4,7 @@ import cx from 'classnames';
 
 class BlockSwitch extends React.PureComponent {
   static propTypes = {
-    dirtyBlocks: PropTypes.array,
+    dirtyBlocks: PropTypes.object,
     blocks: PropTypes.array.isRequired,
     selectBlock: PropTypes.func.isRequired,
     activeBlockId: PropTypes.string.isRequired
@@ -21,7 +21,7 @@ class BlockSwitch extends React.PureComponent {
             <button
               className={cx('block-switch-element', {
                 '-active': isActive,
-                '-dirty': dirtyBlocks && dirtyBlocks.includes(block.id)
+                '-dirty': dirtyBlocks && dirtyBlocks[block.id]
               })}
               onClick={() => selectBlock(block.id)}
             >

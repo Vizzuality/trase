@@ -1,27 +1,42 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
 function Tabs(props) {
-  const { tabs, onTabClick, children } = props;
-  console.log(tabs);
+  const { tabs, onSelectTab, children, itemTabRenderer, selectedTab, testId } = props;
   return (
     <div className="c-tabs">
       <div className="tabs-container">
-        {tabs.map(tab => (
-          <button className="tab-item" onClick={() => onTabClick(tab)}>
-            {tab}
+        {tabs.map((item, index) => (
+          <button
+            key={index}
+            className={cx('tab', {
+              '-selected': item === selectedTab
+            })}
+            data-key={item}
+            onClick={() => onSelectTab(item, index)}
+            data-test={`${testId}-item`}
+          >
+            {itemTabRenderer ? itemTabRenderer(item, index) : item}
           </button>
         ))}
       </div>
-      <div className="tabs-content">{children}</div>
+      {children && <div className="tabs-content">{children}</div>}
     </div>
   );
 }
 
+Tabs.defaultProps = {
+  testId: 'tab'
+};
+
 Tabs.propTypes = {
+  testId: PropTypes.string,
+  itemTabRenderer: PropTypes.func,
   tabs: PropTypes.array.isRequired,
-  children: PropTypes.func.isRequired,
-  onTabClick: PropTypes.func.isRequired
+  children: PropTypes.any.isRequired,
+  onSelectTab: PropTypes.func.isRequired,
+  selectedTab: PropTypes.string.isRequired
 };
 
 export default Tabs;

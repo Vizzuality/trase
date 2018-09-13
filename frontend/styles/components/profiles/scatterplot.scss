@@ -15,7 +15,7 @@
           margin-bottom: 10px;
         }
 
-        ul {
+        .tabs-container {
           display: none !important;
         }
       }
@@ -110,7 +110,7 @@
         }
       }
 
-      ul {
+      .tabs-container {
         position: absolute;
         bottom: 0;
         width: 100%;
@@ -120,7 +120,7 @@
       }
     }
 
-    li.selected {
+    .tab.-selected {
       span[data-unit]:after {
         content: '(' attr(data-unit) ')';
         font-weight: normal;

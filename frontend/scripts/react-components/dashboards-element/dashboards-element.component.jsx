@@ -1,5 +1,5 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import SimpleModal from 'react-components/shared/simple-modal.component';
 import Panel from 'react-components/dashboards-element/dashboards-panel/dashboards-panel.component';
 import DashboardsWelcome from 'react-components/dashboards-element/dashboards-welcome.component';
@@ -24,7 +24,7 @@ function DashboardsElement(props) {
         </section>
         <SimpleModal isOpen>
           <div className="row align-center">
-            <div className="column small-12 medium-10">
+            <div className="column small-12 medium-11">
               <div className="dashboards-modal-content">
                 <div className="dashboards-modal-close">
                   <button>
@@ -44,6 +44,9 @@ function DashboardsElement(props) {
   );
 }
 
-DashboardsElement.propTypes = {};
+DashboardsElement.propTypes = {
+  step: PropTypes.number,
+  setStep: PropTypes.func
+};
 
 export default DashboardsElement;

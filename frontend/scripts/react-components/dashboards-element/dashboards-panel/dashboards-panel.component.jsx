@@ -5,19 +5,22 @@ import SourcingPanel from 'react-components/dashboards-element/dashboards-panel/
 
 class DashboardsPanel extends React.PureComponent {
   state = {
-    activeBlockId: null,
-    activeItem: null,
-    selectedTab: 'biome'
+    activePanelId: null,
+    sourcingPanel: {
+      activeCountryId: null,
+      activeJurisdictionValueId: null,
+      activeJurisdictionTabId: 'biome'
+    }
   };
 
-  blocks = [
+  panels = [
     { id: 'sourcing', title: 'sourcing places' },
     { id: 'importing', title: 'importing countries' },
     { id: 'companies', title: 'companies' },
     { id: 'commodities', title: 'commodities' }
   ];
 
-  items = [
+  countries = [
     { name: 'tupac' },
     { name: 'kanye' },
     { name: 'eminem' },
@@ -26,29 +29,141 @@ class DashboardsPanel extends React.PureComponent {
     // { name: 'drake' }
   ];
 
-  tabs = ['biome', 'state'];
+  jurisdictionTabs = ['biome', 'state'];
+
+  jurisdictionValues = {
+    biome: [
+      { name: 'Amazonia' },
+      { name: 'Cerrado' },
+      { name: 'Mata Atlántica' },
+      { name: 'Pampa' }
+    ],
+    state: [
+      { name: 'Acre' },
+      { name: 'Alagoas' },
+      { name: 'Amapa' },
+      { name: 'Amazonas' },
+      { name: 'Cearra' },
+      { name: 'Distrito Federal' },
+      { name: 'Espirito Santo' },
+      { name: 'Goias' },
+      { name: 'Maranhao' },
+      { name: 'Mato Grosso' },
+      { name: 'Mato Grosso do Sul' },
+      { name: 'Acre' },
+      { name: 'Alagoas' },
+      { name: 'Amapa' },
+      { name: 'Amazonas' },
+      { name: 'Cearra' },
+      { name: 'Distrito Federal' },
+      { name: 'Espirito Santo' },
+      { name: 'Goias' },
+      { name: 'Maranhao' },
+      { name: 'Mato Grosso' },
+      { name: 'Mato Grosso do Sul' },
+      { name: 'Acre' },
+      { name: 'Alagoas' },
+      { name: 'Amapa' },
+      { name: 'Amazonas' },
+      { name: 'Cearra' },
+      { name: 'Distrito Federal' },
+      { name: 'Espirito Santo' },
+      { name: 'Goias' },
+      { name: 'Maranhao' },
+      { name: 'Mato Grosso' },
+      { name: 'Mato Grosso do Sul' },
+      { name: 'Acre' },
+      { name: 'Alagoas' },
+      { name: 'Amapa' },
+      { name: 'Amazonas' },
+      { name: 'Cearra' },
+      { name: 'Distrito Federal' },
+      { name: 'Espirito Santo' },
+      { name: 'Goias' },
+      { name: 'Maranhao' },
+      { name: 'Mato Grosso' },
+      { name: 'Mato Grosso do Sul' },
+      { name: 'Acre' },
+      { name: 'Alagoas' },
+      { name: 'Amapa' },
+      { name: 'Amazonas' },
+      { name: 'Cearra' },
+      { name: 'Distrito Federal' },
+      { name: 'Espirito Santo' },
+      { name: 'Goias' },
+      { name: 'Maranhao' },
+      { name: 'Mato Grosso' },
+      { name: 'Mato Grosso do Sul' },
+      { name: 'Acre' },
+      { name: 'Alagoas' },
+      { name: 'Amapa' },
+      { name: 'Amazonas' },
+      { name: 'Cearra' },
+      { name: 'Distrito Federal' },
+      { name: 'Espirito Santo' },
+      { name: 'Goias' },
+      { name: 'Maranhao' },
+      { name: 'Mato Grosso' },
+      { name: 'Mato Grosso do Sul' },
+      { name: 'Acre' },
+      { name: 'Alagoas' },
+      { name: 'Amapa' },
+      { name: 'Amazonas' },
+      { name: 'Cearra' },
+      { name: 'Distrito Federal' },
+      { name: 'Espirito Santo' },
+      { name: 'Goias' },
+      { name: 'Maranhao' },
+      { name: 'Mato Grosso' },
+      { name: 'Mato Grosso do Sul' },
+      { name: 'Acre' },
+      { name: 'Alagoas' },
+      { name: 'Amapa' },
+      { name: 'Amazonas' },
+      { name: 'Cearra' },
+      { name: 'Distrito Federal' },
+      { name: 'Espirito Santo' },
+      { name: 'Goias' },
+      { name: 'Maranhao' },
+      { name: 'Mato Grosso' },
+      { name: 'Mato Grosso do Sul' }
+    ]
+  };
 
   render() {
-    const { activeBlockId, activeItem, selectedTab } = this.state;
+    const { activePanelId, sourcingPanel } = this.state;
+    const dirtyBlocks = { sourcing: sourcingPanel.activeCountryId !== null };
 
     return (
       <div className="c-dashboards-panel">
-        <h2 className="title -center -medium -light">
+        <h2 className="dashboard-panel-title title -center -medium -light">
           Choose the options you want to add to the dashboard
         </h2>
         <BlockSwitch
-          blocks={this.blocks}
-          selectBlock={id => this.setState({ activeBlockId: id })}
-          activeBlockId={activeBlockId}
+          blocks={this.panels}
+          selectBlock={id => this.setState({ activePanelId: id })}
+          activeBlockId={activePanelId}
+          dirtyBlocks={dirtyBlocks}
         />
-        {activeBlockId === 'sourcing' && (
+        {activePanelId === 'sourcing' && (
           <SourcingPanel
-            activeItem={activeItem}
-            selectedTab={selectedTab}
-            items={this.items}
-            tabs={this.tabs}
-            onTabClick={tab => this.setState({ selectedTab: tab })}
-            onSelectItem={item => this.setState({ activeItem: item.name })}
+            activeCountryId={sourcingPanel.activeCountryId}
+            activeJurisdictionTabId={sourcingPanel.activeJurisdictionTabId}
+            activeJurisdictionValueId={sourcingPanel.activeJurisdictionValueId}
+            countries={this.countries}
+            tabs={this.jurisdictionTabs}
+            jurisdictions={this.jurisdictionValues}
+            onSelectCountry={country =>
+              this.setState({ sourcingPanel: { ...sourcingPanel, activeCountryId: country.name } })
+            }
+            onSelectJurisdictionTab={tab =>
+              this.setState({ sourcingPanel: { ...sourcingPanel, activeJurisdictionTabId: tab } })
+            }
+            onSelectJurisdictionValue={item =>
+              this.setState({
+                sourcingPanel: { ...sourcingPanel, activeJurisdictionValueId: item.name }
+              })
+            }
           />
         )}
       </div>
