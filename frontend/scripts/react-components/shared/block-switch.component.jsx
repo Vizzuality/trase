@@ -4,6 +4,7 @@ import cx from 'classnames';
 
 class BlockSwitch extends React.PureComponent {
   static propTypes = {
+    className: PropTypes.string,
     dirtyBlocks: PropTypes.object,
     blocks: PropTypes.array.isRequired,
     selectBlock: PropTypes.func.isRequired,
@@ -11,10 +12,10 @@ class BlockSwitch extends React.PureComponent {
   };
 
   render() {
-    const { blocks, activeBlockId, selectBlock, dirtyBlocks } = this.props;
+    const { className, blocks, activeBlockId, selectBlock, dirtyBlocks } = this.props;
 
     return (
-      <div className="c-block-switch">
+      <div className={cx('c-block-switch', className)}>
         {blocks.map(block => {
           const isActive = block.id === activeBlockId;
           return (

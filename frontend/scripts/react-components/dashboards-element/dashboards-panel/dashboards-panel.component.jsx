@@ -135,36 +135,47 @@ class DashboardsPanel extends React.PureComponent {
     const dirtyBlocks = { sourcing: sourcingPanel.activeCountryId !== null };
 
     return (
-      <div className="c-dashboards-panel">
-        <h2 className="dashboard-panel-title title -center -medium -light">
-          Choose the options you want to add to the dashboard
-        </h2>
-        <BlockSwitch
-          blocks={this.panels}
-          selectBlock={id => this.setState({ activePanelId: id })}
-          activeBlockId={activePanelId}
-          dirtyBlocks={dirtyBlocks}
-        />
-        {activePanelId === 'sourcing' && (
-          <SourcingPanel
-            activeCountryId={sourcingPanel.activeCountryId}
-            activeJurisdictionTabId={sourcingPanel.activeJurisdictionTabId}
-            activeJurisdictionValueId={sourcingPanel.activeJurisdictionValueId}
-            countries={this.countries}
-            tabs={this.jurisdictionTabs}
-            jurisdictions={this.jurisdictionValues}
-            onSelectCountry={country =>
-              this.setState({ sourcingPanel: { ...sourcingPanel, activeCountryId: country.name } })
-            }
-            onSelectJurisdictionTab={tab =>
-              this.setState({ sourcingPanel: { ...sourcingPanel, activeJurisdictionTabId: tab } })
-            }
-            onSelectJurisdictionValue={item =>
-              this.setState({
-                sourcingPanel: { ...sourcingPanel, activeJurisdictionValueId: item.name }
-              })
-            }
+      <div className="c-dashboard-panel">
+        <div className="dashboard-panel-content">
+          <h2 className="dashboard-panel-title title -center -light">
+            Choose the options you want to add to the dashboard
+          </h2>
+          <BlockSwitch
+            className="dashboard-panel-block-switch"
+            blocks={this.panels}
+            selectBlock={id => this.setState({ activePanelId: id })}
+            activeBlockId={activePanelId}
+            dirtyBlocks={dirtyBlocks}
           />
+          {activePanelId === 'sourcing' && (
+            <SourcingPanel
+              activeCountryId={sourcingPanel.activeCountryId}
+              activeJurisdictionTabId={sourcingPanel.activeJurisdictionTabId}
+              activeJurisdictionValueId={sourcingPanel.activeJurisdictionValueId}
+              countries={this.countries}
+              tabs={this.jurisdictionTabs}
+              jurisdictions={this.jurisdictionValues}
+              onSelectCountry={country =>
+                this.setState({
+                  sourcingPanel: { ...sourcingPanel, activeCountryId: country.name }
+                })
+              }
+              onSelectJurisdictionTab={tab =>
+                this.setState({ sourcingPanel: { ...sourcingPanel, activeJurisdictionTabId: tab } })
+              }
+              onSelectJurisdictionValue={item =>
+                this.setState({
+                  sourcingPanel: { ...sourcingPanel, activeJurisdictionValueId: item.name }
+                })
+              }
+            />
+          )}
+        </div>
+        {Object.values(dirtyBlocks).some(b => b) && (
+          <div className="dashboard-panel-footer">
+            <p>Explore commodities produced in {sourcingPanel.activeCountryId}</p>
+            <button className="c-button -pink -large">Continue</button>
+          </div>
         )}
       </div>
     );

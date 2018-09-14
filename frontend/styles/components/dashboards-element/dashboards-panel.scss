@@ -1,9 +1,35 @@
-.c-dashboards-panel {
+.c-dashboard-panel {
+  display: flex;
+  flex-direction: column;
+  position: relative;
   width: 100%;
   background-color: $light-gray;
+  overflow: hidden;
+  height: 100%;
+
+  .dashboard-panel-content {
+    flex: 1;
+    overflow: auto;
+    padding: 20px 25px 0;
+  }
+
+  .dashboard-panel-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 110px;
+    padding: 0 0 20px;
+    background-color: $light-gray;
+  }
 
   .dashboard-panel-title {
-    margin: 0 0 45px 0;
+    font-size: 20px;
+    margin: 0 0 20px 0;
+  }
+
+  .dashboard-panel-block-switch {
+    margin: 0 0 30px 0;
   }
 
   .dashboard-panel-search {
@@ -19,7 +45,7 @@
     }
   }
 
-  .dashboards-panel-text {
+  .dashboard-panel-text {
     color: $charcoal-grey-faded;
     font-family: $font-family-2;
     font-size: 14px;

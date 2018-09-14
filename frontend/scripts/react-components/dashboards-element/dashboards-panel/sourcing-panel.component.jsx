@@ -29,7 +29,7 @@ function SourcingPanel(props) {
       <GridList
         height={50}
         width={720}
-        columnWidth={180}
+        columnWidth={160}
         rowHeight={50}
         columnCount={4}
         items={countries}
@@ -40,7 +40,7 @@ function SourcingPanel(props) {
       </GridList>
       {activeCountryId && (
         <React.Fragment>
-          <p className="dashboards-panel-text">
+          <p className="dashboard-panel-text">
             You can choose up to three places of the same category:
           </p>
           <Tabs
@@ -50,10 +50,10 @@ function SourcingPanel(props) {
           >
             <GridList
               items={jurisdictions[activeJurisdictionTabId]}
-              height={200}
-              width={900}
+              height={jurisdictions[activeJurisdictionTabId].length > 5 ? 200 : 50}
+              width={800}
               rowHeight={50}
-              columnWidth={180}
+              columnWidth={160}
               columnCount={5}
             >
               {itemProps => (
