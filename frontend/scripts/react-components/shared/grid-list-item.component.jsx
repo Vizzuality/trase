@@ -26,7 +26,7 @@ function GridListItem(props) {
 GridListItem.propTypes = {
   onClick: PropTypes.func,
   isGroup: PropTypes.bool,
-  activeItem: PropTypes.bool,
+  activeItem: PropTypes.string,
   item: PropTypes.object.isRequired,
   style: PropTypes.object.isRequired
 };

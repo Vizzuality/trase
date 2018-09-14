@@ -15,8 +15,8 @@ function DashboardsElement(props) {
         </div>
         <section className="dashboards-element-placeholder">
           <div className="row">
-            {Array.from({ length: 6 }).map(() => (
-              <div className="column small-12 medium-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="column small-12 medium-6">
                 <b className="dashboards-element-placeholder-item" />
               </div>
             ))}

@@ -2,6 +2,7 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import BlockSwitch from 'react-components/shared/block-switch.component';
 import SourcingPanel from 'react-components/dashboards-element/dashboards-panel/sourcing-panel.component';
+import ImportingPanel from 'react-components/dashboards-element/dashboards-panel/importing-panel.component';
 
 class DashboardsPanel extends React.PureComponent {
   state = {
@@ -10,6 +11,9 @@ class DashboardsPanel extends React.PureComponent {
       activeCountryId: null,
       activeJurisdictionValueId: null,
       activeJurisdictionTabId: 'biome'
+    },
+    importingPanel: {
+      activeJurisdictionId: null
     }
   };
 
@@ -131,8 +135,11 @@ class DashboardsPanel extends React.PureComponent {
   };
 
   render() {
-    const { activePanelId, sourcingPanel } = this.state;
-    const dirtyBlocks = { sourcing: sourcingPanel.activeCountryId !== null };
+    const { activePanelId, sourcingPanel, importingPanel } = this.state;
+    const dirtyBlocks = {
+      sourcing: sourcingPanel.activeCountryId !== null,
+      importing: importingPanel.activeJurisdictionId !== null
+    };
 
     return (
       <div className="c-dashboard-panel">
@@ -152,7 +159,7 @@ class DashboardsPanel extends React.PureComponent {
               activeCountryId={sourcingPanel.activeCountryId}
               activeJurisdictionTabId={sourcingPanel.activeJurisdictionTabId}
               activeJurisdictionValueId={sourcingPanel.activeJurisdictionValueId}
-              countries={this.countries}
+              searchJurisdictions={this.countries}
               tabs={this.jurisdictionTabs}
               jurisdictions={this.jurisdictionValues}
               onSelectCountry={country =>
@@ -168,6 +175,18 @@ class DashboardsPanel extends React.PureComponent {
                   sourcingPanel: { ...sourcingPanel, activeJurisdictionValueId: item.name }
                 })
               }
+            />
+          )}
+          {activePanelId === 'importing' && (
+            <ImportingPanel
+              searchJurisdictions={this.countries}
+              jurisdictions={this.jurisdictionValues.state}
+              onSelectJurisdictionValue={item =>
+                this.setState({
+                  importingPanel: { ...importingPanel, activeJurisdictionId: item.name }
+                })
+              }
+              activeJurisdictionId={importingPanel.activeJurisdictionId}
             />
           )}
         </div>

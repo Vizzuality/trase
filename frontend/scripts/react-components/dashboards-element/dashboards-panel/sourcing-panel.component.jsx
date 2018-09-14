@@ -8,7 +8,7 @@ import Tabs from 'react-components/shared/tabs.component';
 function SourcingPanel(props) {
   const {
     tabs,
-    countries,
+    searchJurisdictions,
     activeCountryId,
     jurisdictions,
     onSelectCountry,
@@ -22,7 +22,7 @@ function SourcingPanel(props) {
     <React.Fragment>
       <SearchInput
         className="dashboard-panel-search"
-        items={countries}
+        items={searchJurisdictions}
         placeholder="Search place"
         onSelect={i => i}
       />
@@ -32,7 +32,7 @@ function SourcingPanel(props) {
         columnWidth={160}
         rowHeight={50}
         columnCount={4}
-        items={countries}
+        items={searchJurisdictions}
       >
         {itemProps => (
           <GridListItem {...itemProps} activeItem={activeCountryId} onClick={onSelectCountry} />
@@ -72,14 +72,12 @@ function SourcingPanel(props) {
 }
 
 SourcingPanel.propTypes = {
-  countries: PropTypes.array.isRequired,
+  searchJurisdictions: PropTypes.array.isRequired,
   jurisdictions: PropTypes.object.isRequired,
-  activeCountryId: PropTypes.object,
+  activeCountryId: PropTypes.string,
   activeJurisdictionTabId: PropTypes.string,
   activeJurisdictionValueId: PropTypes.string,
-  onSelectItem: PropTypes.func.isRequired,
   tabs: PropTypes.array.isRequired,
-  children: PropTypes.func.isRequired,
   onSelectCountry: PropTypes.func.isRequired,
   onSelectJurisdictionValue: PropTypes.func.isRequired,
   onSelectJurisdictionTab: PropTypes.func.isRequired

@@ -6,9 +6,9 @@ class BlockSwitch extends React.PureComponent {
   static propTypes = {
     className: PropTypes.string,
     dirtyBlocks: PropTypes.object,
+    activeBlockId: PropTypes.string,
     blocks: PropTypes.array.isRequired,
-    selectBlock: PropTypes.func.isRequired,
-    activeBlockId: PropTypes.string.isRequired
+    selectBlock: PropTypes.func.isRequired
   };
 
   render() {
@@ -20,6 +20,7 @@ class BlockSwitch extends React.PureComponent {
           const isActive = block.id === activeBlockId;
           return (
             <button
+              key={block.id}
               className={cx('block-switch-element', {
                 '-active': isActive,
                 '-dirty': dirtyBlocks && dirtyBlocks[block.id]
