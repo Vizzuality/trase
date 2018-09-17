@@ -4,25 +4,20 @@ import SearchInput from 'react-components/shared/search-input/search-input.compo
 import GridList from 'react-components/shared/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item.component';
 
-function ImportingPanel(props) {
-  const {
-    searchJurisdictions,
-    jurisdictions,
-    activeJurisdictionId,
-    onSelectJurisdictionValue
-  } = props;
+function CommoditiesPanel(props) {
+  const { searchCommodities, commodities, activeCommodityId, onSelectCommodity } = props;
 
   return (
     <React.Fragment>
       <SearchInput
         className="dashboard-panel-search"
-        items={searchJurisdictions}
+        items={searchCommodities}
         placeholder="Search place"
         onSelect={i => i}
       />
       <p className="dashboard-panel-text">You can choose up to three countries:</p>
       <GridList
-        items={jurisdictions}
+        items={commodities}
         height={200}
         width={800}
         rowHeight={50}
@@ -30,22 +25,18 @@ function ImportingPanel(props) {
         columnCount={5}
       >
         {itemProps => (
-          <GridListItem
-            {...itemProps}
-            activeItem={activeJurisdictionId}
-            onClick={onSelectJurisdictionValue}
-          />
+          <GridListItem {...itemProps} activeItem={activeCommodityId} onClick={onSelectCommodity} />
         )}
       </GridList>
     </React.Fragment>
   );
 }
 
-ImportingPanel.propTypes = {
-  jurisdictions: PropTypes.array,
-  searchJurisdictions: PropTypes.array,
-  activeJurisdictionId: PropTypes.string,
-  onSelectJurisdictionValue: PropTypes.func.isRequired
+CommoditiesPanel.propTypes = {
+  commodities: PropTypes.array,
+  searchCommodities: PropTypes.array,
+  activeCommodityId: PropTypes.string,
+  onSelectCommodity: PropTypes.func.isRequired
 };
 
-export default ImportingPanel;
+export default CommoditiesPanel;

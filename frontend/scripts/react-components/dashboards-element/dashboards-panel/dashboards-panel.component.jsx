@@ -3,6 +3,8 @@ import React from 'react';
 import BlockSwitch from 'react-components/shared/block-switch.component';
 import SourcingPanel from 'react-components/dashboards-element/dashboards-panel/sourcing-panel.component';
 import ImportingPanel from 'react-components/dashboards-element/dashboards-panel/importing-panel.component';
+import CompaniesPanel from 'react-components/dashboards-element/dashboards-panel/companies-panel.component';
+import CommoditiesPanel from 'react-components/dashboards-element/dashboards-panel/commodities-panel.component';
 
 class DashboardsPanel extends React.PureComponent {
   state = {
@@ -14,6 +16,10 @@ class DashboardsPanel extends React.PureComponent {
     },
     importingPanel: {
       activeJurisdictionId: null
+    },
+    companiesPanel: {
+      activeCompanyId: null,
+      activeNodeTypeTabId: 'importers'
     }
   };
 
@@ -34,6 +40,13 @@ class DashboardsPanel extends React.PureComponent {
   ];
 
   jurisdictionTabs = ['biome', 'state'];
+
+  companiesTabs = ['importers', 'exporters'];
+
+  companiesValues = {
+    importers: [{ name: 'Bunge' }, { name: 'Cargill' }, { name: 'ADM' }],
+    exporters: [{ name: 'Bunge' }, { name: 'Cargill' }, { name: 'ADM' }]
+  };
 
   jurisdictionValues = {
     biome: [
@@ -135,7 +148,7 @@ class DashboardsPanel extends React.PureComponent {
   };
 
   render() {
-    const { activePanelId, sourcingPanel, importingPanel } = this.state;
+    const { activePanelId, sourcingPanel, importingPanel, companiesPanel } = this.state;
     const dirtyBlocks = {
       sourcing: sourcingPanel.activeCountryId !== null,
       importing: importingPanel.activeJurisdictionId !== null
@@ -187,6 +200,29 @@ class DashboardsPanel extends React.PureComponent {
                 })
               }
               activeJurisdictionId={importingPanel.activeJurisdictionId}
+            />
+          )}
+          {activePanelId === 'companies' && (
+            <CompaniesPanel
+              tabs={this.companiesTabs}
+              searchCompanies={this.companiesValues.importers}
+              companies={this.companiesValues}
+              onSelectNodeTypeTab={() => {}}
+              onSelectCompany={() => {}}
+              activeNodeTypeTabId={companiesPanel.activeNodeTypeTabId}
+              activeCompanyId={companiesPanel.activeCompanyId}
+            />
+          )}
+          {activePanelId === 'commodities' && (
+            <CommoditiesPanel
+              searchCommodities={this.countries}
+              commodities={this.jurisdictionValues.state}
+              onSelectCommodity={item =>
+                this.setState({
+                  importingPanel: { ...importingPanel, activeJurisdictionId: item.name }
+                })
+              }
+              activeCommodityId={importingPanel.activeJurisdictionId}
             />
           )}
         </div>
