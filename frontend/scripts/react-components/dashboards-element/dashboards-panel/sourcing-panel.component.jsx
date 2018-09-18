@@ -17,6 +17,7 @@ function SourcingPanel(props) {
     activeJurisdictionTabId,
     activeJurisdictionValueId
   } = props;
+  const jurisdictionsList = jurisdictions[activeJurisdictionTabId] || [];
 
   return (
     <React.Fragment>
@@ -49,8 +50,8 @@ function SourcingPanel(props) {
             selectedTab={activeJurisdictionTabId}
           >
             <GridList
-              items={jurisdictions[activeJurisdictionTabId]}
-              height={jurisdictions[activeJurisdictionTabId].length > 5 ? 200 : 50}
+              items={jurisdictionsList}
+              height={jurisdictionsList.length > 5 ? 200 : 50}
               width={800}
               rowHeight={50}
               columnWidth={160}

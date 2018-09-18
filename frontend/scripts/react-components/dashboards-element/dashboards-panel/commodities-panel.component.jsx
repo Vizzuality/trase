@@ -15,7 +15,7 @@ function CommoditiesPanel(props) {
         placeholder="Search place"
         onSelect={i => i}
       />
-      <p className="dashboard-panel-text">You can choose up to three countries:</p>
+      <p className="dashboard-panel-text">You can choose up to three commodities:</p>
       <GridList
         items={commodities}
         height={200}

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SimpleModal from 'react-components/shared/simple-modal.component';
-import Panel from 'react-components/dashboards-element/dashboards-panel/dashboards-panel.component';
+import Panel from 'react-components/dashboards-element/dashboards-panel/dashboards-panel.container';
 import DashboardsWelcome from 'react-components/dashboards-element/dashboards-welcome.component';
 // import cx from 'classnames';
 

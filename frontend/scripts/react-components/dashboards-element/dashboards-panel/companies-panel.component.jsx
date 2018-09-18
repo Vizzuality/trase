@@ -16,6 +16,7 @@ function CompaniesPanel(props) {
     activeCompanyId
   } = props;
 
+  const companiesList = companies[activeNodeTypeTabId] || [];
   return (
     <React.Fragment>
       <SearchInput
@@ -27,8 +28,8 @@ function CompaniesPanel(props) {
       <p className="dashboard-panel-text">You can choose up to three companies:</p>
       <Tabs tabs={tabs} onSelectTab={onSelectNodeTypeTab} selectedTab={activeNodeTypeTabId}>
         <GridList
-          items={companies[activeNodeTypeTabId]}
-          height={companies[activeNodeTypeTabId].length > 5 ? 200 : 50}
+          items={companiesList}
+          height={companiesList.length > 5 ? 200 : 50}
           width={800}
           rowHeight={50}
           columnWidth={160}
