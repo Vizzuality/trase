@@ -6,9 +6,9 @@ const data = {
     { name: 'tupac' },
     { name: 'kanye' },
     { name: 'eminem' },
-    { name: 'biggie' }
-    // { name: 'jay z' },
-    // { name: 'drake' }
+    { name: 'biggie' },
+    { name: 'jay z' },
+    { name: 'drake' }
   ],
   countries: [
     { name: 'tupac' },

@@ -1,5 +1,13 @@
 @import 'settings';
 
+.no-events {
+  pointer-events: none;
+}
+
+.all-events {
+  pointer-events: all;
+}
+
 .is-absolute {
   position: absolute;
 }

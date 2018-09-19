@@ -37,7 +37,9 @@ const mapDispatchToProps = dispatch =>
 
 class DashboardsPanelContainer extends React.PureComponent {
   static propTypes = {
-    getData: PropTypes.func.isRequired
+    dirtyBlocks: PropTypes.object,
+    getData: PropTypes.func.isRequired,
+    setCanCloseModal: PropTypes.func.isRequired
   };
 
   state = {
@@ -56,10 +58,15 @@ class DashboardsPanelContainer extends React.PureComponent {
     companies: ['importers', 'exporters']
   };
 
-  componentDidUpdate(_, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     const { activePanelId } = this.state;
+    const { dirtyBlocks, setCanCloseModal } = this.props;
     if (prevState.activePanelId !== activePanelId) {
       this.props.getData(activePanelId);
+    }
+
+    if (prevProps.dirtyBlocks !== dirtyBlocks && dirtyBlocks) {
+      setCanCloseModal(true);
     }
   }
 

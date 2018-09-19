@@ -10,6 +10,7 @@ function GridListItem(props) {
       {isGroup && <p>{item.name}</p>}
       {!isGroup && (
         <button
+          type="button"
           onClick={() => onClick(item)}
           className={cx('grid-list-item-content', {
             '-active': item.name === activeItem,

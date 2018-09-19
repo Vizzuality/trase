@@ -6,7 +6,7 @@ import DashboardsWelcome from 'react-components/dashboards-element/dashboards-we
 // import cx from 'classnames';
 
 function DashboardsElement(props) {
-  const { step, setStep } = props;
+  const { step, setStep, modalOpen, closeModal, canCloseModal, setCanCloseModal } = props;
   return (
     <div className="l-dashboards-element">
       <div className="c-dashboards-element">
@@ -22,19 +22,21 @@ function DashboardsElement(props) {
             ))}
           </div>
         </section>
-        <SimpleModal isOpen>
+        <SimpleModal isOpen={modalOpen} onRequestClose={closeModal} className="no-events">
           <div className="row align-center">
             <div className="column small-12 medium-11">
-              <div className="dashboards-modal-content">
+              <div className="dashboards-modal-content all-events">
                 <div className="dashboards-modal-close">
-                  <button>
-                    <svg className="icon icon-close">
-                      <use xlinkHref="#icon-close" />
-                    </svg>
-                  </button>
+                  {canCloseModal && (
+                    <button onClick={closeModal}>
+                      <svg className="icon icon-close">
+                        <use xlinkHref="#icon-close" />
+                      </svg>
+                    </button>
+                  )}
                 </div>
                 {step === 0 && <DashboardsWelcome onContinue={() => setStep(1)} />}
-                {step === 1 && <Panel />}
+                {step === 1 && <Panel setCanCloseModal={setCanCloseModal} />}
               </div>
             </div>
           </div>
@@ -45,8 +47,12 @@ function DashboardsElement(props) {
 }
 
 DashboardsElement.propTypes = {
-  step: PropTypes.number,
-  setStep: PropTypes.func
+  step: PropTypes.number.isRequired,
+  setStep: PropTypes.func.isRequired,
+  modalOpen: PropTypes.bool.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  canCloseModal: PropTypes.bool.isRequired,
+  setCanCloseModal: PropTypes.func.isRequired
 };
 
 export default DashboardsElement;
