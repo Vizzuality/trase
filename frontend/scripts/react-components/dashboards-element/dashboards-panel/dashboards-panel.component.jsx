@@ -21,6 +21,7 @@ function DashboardsPanel(props) {
     countries,
     companies,
     commodities,
+    dynamicSentenceParts,
     commoditiesPanel
   } = props;
   return (
@@ -126,9 +127,36 @@ function DashboardsPanel(props) {
           />
         )}
       </div>
-      {dirtyBlocks && (
+      {dynamicSentenceParts && (
         <div className="dashboard-panel-footer">
-          <p>Explore commodities produced in {sourcingPanel.activeCountryItemId}</p>
+          <p className="dashboard-panel-footer-text">
+            {dynamicSentenceParts.map(part => (
+              <React.Fragment>
+                {`${part.prefix} `}
+                {part.value && (
+                  <span className="panel-footer-item">
+                    {part.value}
+                    <button
+                      onClick={() =>
+                        setActiveId({
+                          type: 'item',
+                          active: null,
+                          section: part.section,
+                          panel: activePanelId
+                        })
+                      }
+                      className="panel-footer-item-remove-arrow"
+                      type="button"
+                    >
+                      <svg className="icon icon-close">
+                        <use xlinkHref="#icon-close" />
+                      </svg>
+                    </button>
+                  </span>
+                )}
+              </React.Fragment>
+            ))}
+          </p>
           <button className="c-button -pink -large">Continue</button>
         </div>
       )}
@@ -146,6 +174,7 @@ DashboardsPanel.propTypes = {
   tabs: PropTypes.array.isRequired,
   commoditiesPanel: PropTypes.array,
   panels: PropTypes.array.isRequired,
+  dynamicSentenceParts: PropTypes.array,
   setActiveId: PropTypes.func.isRequired,
   setActivePanel: PropTypes.func.isRequired,
   sourcingPanel: PropTypes.object.isRequired,

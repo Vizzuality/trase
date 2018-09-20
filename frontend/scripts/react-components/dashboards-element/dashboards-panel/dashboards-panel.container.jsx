@@ -8,7 +8,8 @@ import {
 import DashboardsPanel from 'react-components/dashboards-element/dashboards-panel/dashboards-panel.component';
 import {
   getDashboardsPanels,
-  getDirtyBlocks
+  getDirtyBlocks,
+  getDynamicSentence
 } from 'react-components/dashboards-element/dashboards-panel/dashboards-panel.selectors';
 import PropTypes from 'prop-types';
 
@@ -22,6 +23,7 @@ const mapStateToProps = state => {
     commodities,
     jurisdictions,
     dirtyBlocks: getDirtyBlocks(state),
+    dynamicSentenceParts: getDynamicSentence(state),
     ...getDashboardsPanels(state)
   };
 };
@@ -57,6 +59,13 @@ class DashboardsPanelContainer extends React.PureComponent {
     jurisdictions: ['biome', 'state', 'municipality'],
     companies: ['importers', 'exporters']
   };
+
+  componentDidMount() {
+    const { dirtyBlocks, setCanCloseModal } = this.props;
+    if (dirtyBlocks) {
+      setCanCloseModal(true);
+    }
+  }
 
   componentDidUpdate(prevProps, prevState) {
     const { activePanelId } = this.state;
