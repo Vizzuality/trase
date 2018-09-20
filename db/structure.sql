@@ -1072,6 +1072,162 @@ ALTER SEQUENCE public.country_properties_id_seq OWNED BY public.country_properti
 
 
 --
+-- Name: flows; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.flows (
+    id integer NOT NULL,
+    context_id integer NOT NULL,
+    year smallint NOT NULL,
+    path integer[] DEFAULT '{}'::integer[],
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: node_types; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_types (
+    id integer NOT NULL,
+    name text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: nodes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.nodes (
+    id integer NOT NULL,
+    node_type_id integer NOT NULL,
+    name text NOT NULL,
+    geo_id text,
+    is_unknown boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    main_id integer
+);
+
+
+--
+-- Name: dashboards_flow_paths_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.dashboards_flow_paths_mv AS
+ SELECT DISTINCT flow_paths.context_id,
+    contexts.country_id,
+    contexts.commodity_id,
+    flow_paths.node_id,
+    flow_paths.flow_id
+   FROM (((((( SELECT flows.context_id,
+            flows.id AS flow_id,
+            a.node_id,
+            a."position"
+           FROM public.flows,
+            LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) flow_paths
+     JOIN public.contexts ON ((flow_paths.context_id = contexts.id)))
+     JOIN public.nodes ON ((flow_paths.node_id = nodes.id)))
+     JOIN public.node_types ON ((nodes.node_type_id = node_types.id)))
+     JOIN public.context_node_types cnt ON (((node_types.id = cnt.node_type_id) AND (flow_paths.context_id = cnt.context_id))))
+     JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
+  WHERE ((cnt_props.column_group = 0) OR (node_types.name = ANY (ARRAY['COUNTRY'::text, 'IMPORTER'::text, 'EXPORTER'::text, 'TRADER'::text])))
+  WITH NO DATA;
+
+
+--
+-- Name: dashboards_commodities_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.dashboards_commodities_mv AS
+ SELECT fp.commodity_id AS id,
+    commodities.name,
+    fp.flow_id
+   FROM (public.dashboards_flow_paths_mv fp
+     JOIN public.commodities ON ((commodities.id = fp.commodity_id)))
+  GROUP BY fp.commodity_id, commodities.name, fp.flow_id
+  WITH NO DATA;
+
+
+--
+-- Name: dashboards_companies_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
+ SELECT fp.node_id AS id,
+    nodes.name,
+    nodes.node_type_id,
+    node_types.name AS node_type,
+    fp.flow_id
+   FROM ((((public.dashboards_flow_paths_mv fp
+     JOIN public.nodes ON ((fp.node_id = nodes.id)))
+     JOIN public.node_types ON ((nodes.node_type_id = node_types.id)))
+     JOIN public.context_node_types cnt ON (((node_types.id = cnt.node_type_id) AND (fp.context_id = cnt.context_id))))
+     JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
+  WHERE (node_types.name = ANY (ARRAY['IMPORTER'::text, 'EXPORTER'::text, 'TRADER'::text]))
+  GROUP BY fp.node_id, nodes.name, nodes.node_type_id, node_types.name, fp.flow_id
+  ORDER BY nodes.name
+  WITH NO DATA;
+
+
+--
+-- Name: dashboards_countries_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.dashboards_countries_mv AS
+ SELECT fp.country_id AS id,
+    countries.name,
+    countries.iso2,
+    fp.flow_id
+   FROM (public.dashboards_flow_paths_mv fp
+     JOIN public.countries ON ((countries.id = fp.country_id)))
+  GROUP BY fp.country_id, countries.name, countries.iso2, fp.flow_id
+  WITH NO DATA;
+
+
+--
+-- Name: dashboards_destinations_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
+ SELECT fp.node_id AS id,
+    nodes.name,
+    nodes.node_type_id,
+    node_types.name AS node_type,
+    fp.flow_id
+   FROM ((((public.dashboards_flow_paths_mv fp
+     JOIN public.nodes ON ((fp.node_id = nodes.id)))
+     JOIN public.node_types ON ((nodes.node_type_id = node_types.id)))
+     JOIN public.context_node_types cnt ON (((node_types.id = cnt.node_type_id) AND (fp.context_id = cnt.context_id))))
+     JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
+  WHERE (node_types.name = 'COUNTRY'::text)
+  GROUP BY fp.node_id, nodes.name, nodes.node_type_id, node_types.name, fp.flow_id
+  ORDER BY nodes.name
+  WITH NO DATA;
+
+
+--
+-- Name: dashboards_sources_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.dashboards_sources_mv AS
+ SELECT fp.node_id AS id,
+    nodes.name,
+    nodes.node_type_id,
+    node_types.name AS node_type,
+    fp.flow_id
+   FROM ((((public.dashboards_flow_paths_mv fp
+     JOIN public.nodes ON ((fp.node_id = nodes.id)))
+     JOIN public.node_types ON ((nodes.node_type_id = node_types.id)))
+     JOIN public.context_node_types cnt ON (((node_types.id = cnt.node_type_id) AND (fp.context_id = cnt.context_id))))
+     JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
+  WHERE (cnt_props.column_group = 0)
+  GROUP BY fp.node_id, nodes.name, nodes.node_type_id, node_types.name, fp.flow_id
+  ORDER BY nodes.name
+  WITH NO DATA;
+
+
+--
 -- Name: database_updates; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1231,45 +1387,6 @@ UNION ALL
      JOIN public.download_attributes da ON ((da.id = daq.download_attribute_id)))
      JOIN public.attributes_mv a ON (((a.original_id = daq.qual_id) AND (a.original_type = 'Qual'::text))))
   WITH NO DATA;
-
-
---
--- Name: flows; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.flows (
-    id integer NOT NULL,
-    context_id integer NOT NULL,
-    year smallint NOT NULL,
-    path integer[] DEFAULT '{}'::integer[],
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: node_types; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_types (
-    id integer NOT NULL,
-    name text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: nodes; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.nodes (
-    id integer NOT NULL,
-    node_type_id integer NOT NULL,
-    name text NOT NULL,
-    geo_id text,
-    is_unknown boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    main_id integer
-);
 
 
 --
@@ -1538,6 +1655,19 @@ CREATE SEQUENCE public.flow_inds_id_seq
 --
 
 ALTER SEQUENCE public.flow_inds_id_seq OWNED BY public.flow_inds.id;
+
+
+--
+-- Name: flow_paths_new_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.flow_paths_new_mv AS
+ SELECT DISTINCT a.node_id,
+    a."position",
+    flows.context_id
+   FROM public.flows,
+    LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")
+  WITH NO DATA;
 
 
 --
@@ -3668,6 +3798,13 @@ CREATE INDEX flow_inds_ind_id_idx ON public.flow_inds USING btree (ind_id);
 
 
 --
+-- Name: flow_paths_new_mv_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX flow_paths_new_mv_node_id_idx ON public.flow_paths_new_mv USING btree (node_id);
+
+
+--
 -- Name: flow_quals_qual_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3812,6 +3949,132 @@ CREATE INDEX index_contextual_layers_on_context_id ON public.contextual_layers U
 --
 
 CREATE INDEX index_country_properties_on_country_id ON public.country_properties USING btree (country_id);
+
+
+--
+-- Name: index_dashboards_commodities_mv_on_flow_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_dashboards_commodities_mv_on_flow_id ON public.dashboards_commodities_mv USING btree (flow_id);
+
+
+--
+-- Name: index_dashboards_commodities_mv_on_id_and_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_commodities_mv_on_id_and_name ON public.dashboards_commodities_mv USING btree (id, name);
+
+
+--
+-- Name: index_dashboards_companies_mv_on_flow_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_companies_mv_on_flow_id ON public.dashboards_companies_mv USING btree (flow_id);
+
+
+--
+-- Name: index_dashboards_companies_mv_on_flow_id_and_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_dashboards_companies_mv_on_flow_id_and_id ON public.dashboards_companies_mv USING btree (flow_id, id);
+
+
+--
+-- Name: index_dashboards_companies_mv_on_id_and_name_and_node_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_companies_mv_on_id_and_name_and_node_type ON public.dashboards_companies_mv USING btree (id, name, node_type);
+
+
+--
+-- Name: index_dashboards_countries_mv_on_flow_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_dashboards_countries_mv_on_flow_id ON public.dashboards_countries_mv USING btree (flow_id);
+
+
+--
+-- Name: index_dashboards_countries_mv_on_id_and_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_countries_mv_on_id_and_name ON public.dashboards_countries_mv USING btree (id, name);
+
+
+--
+-- Name: index_dashboards_destinations_mv_on_flow_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_destinations_mv_on_flow_id ON public.dashboards_destinations_mv USING btree (flow_id);
+
+
+--
+-- Name: index_dashboards_destinations_mv_on_flow_id_and_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_dashboards_destinations_mv_on_flow_id_and_id ON public.dashboards_destinations_mv USING btree (flow_id, id);
+
+
+--
+-- Name: index_dashboards_destinations_mv_on_id_and_name_and_node_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_destinations_mv_on_id_and_name_and_node_type ON public.dashboards_destinations_mv USING btree (id, name, node_type);
+
+
+--
+-- Name: index_dashboards_flow_paths_mv_on_commodity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_flow_paths_mv_on_commodity_id ON public.dashboards_flow_paths_mv USING btree (commodity_id);
+
+
+--
+-- Name: index_dashboards_flow_paths_mv_on_country_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_flow_paths_mv_on_country_id ON public.dashboards_flow_paths_mv USING btree (country_id);
+
+
+--
+-- Name: index_dashboards_flow_paths_mv_on_flow_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_flow_paths_mv_on_flow_id ON public.dashboards_flow_paths_mv USING btree (flow_id);
+
+
+--
+-- Name: index_dashboards_flow_paths_mv_on_flow_id_and_node_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_dashboards_flow_paths_mv_on_flow_id_and_node_id ON public.dashboards_flow_paths_mv USING btree (flow_id, node_id);
+
+
+--
+-- Name: index_dashboards_flow_paths_mv_on_node_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_flow_paths_mv_on_node_id ON public.dashboards_flow_paths_mv USING btree (node_id);
+
+
+--
+-- Name: index_dashboards_sources_mv_on_flow_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_sources_mv_on_flow_id ON public.dashboards_sources_mv USING btree (flow_id);
+
+
+--
+-- Name: index_dashboards_sources_mv_on_flow_id_and_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_dashboards_sources_mv_on_flow_id_and_id ON public.dashboards_sources_mv USING btree (flow_id, id);
+
+
+--
+-- Name: index_dashboards_sources_mv_on_id_and_name_and_node_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_sources_mv_on_id_and_name_and_node_type ON public.dashboards_sources_mv USING btree (id, name, node_type);
 
 
 --
@@ -4742,6 +5005,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180522102950'),
 ('20180522135640'),
 ('20180827134927'),
+('20180917124246'),
+('20180918113243'),
+('20180918122959'),
+('20180918123747'),
+('20180919121847'),
+('20180919123241'),
 ('20180921103012');
 
 
