@@ -62,22 +62,10 @@ class DashboardsPanelContainer extends React.PureComponent {
     companies: ['importers', 'exporters']
   };
 
-  componentDidMount() {
-    const { dirtyBlocks, setCanCloseModal } = this.props;
-    if (dirtyBlocks) {
-      setCanCloseModal(true);
-    }
-  }
-
   componentDidUpdate(prevProps, prevState) {
     const { activePanelId } = this.state;
-    const { dirtyBlocks, setCanCloseModal } = this.props;
     if (prevState.activePanelId !== activePanelId) {
       this.props.getData(activePanelId);
-    }
-
-    if (prevProps.dirtyBlocks !== dirtyBlocks && dirtyBlocks) {
-      setCanCloseModal(true);
     }
   }
 

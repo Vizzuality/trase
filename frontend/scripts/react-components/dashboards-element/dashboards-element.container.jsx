@@ -1,39 +1,51 @@
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import React from 'react';
+import PropTypes from 'prop-types';
 import DashboardsElement from 'react-components/dashboards-element/dashboards-element.component';
 
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      goToRoot: () => ({ type: 'dashboardsRoot' })
+    },
+    dispatch
+  );
+
 class DashboardsElementContainer extends React.Component {
+  static propTypes = {
+    goToRoot: PropTypes.func.isRequired
+  };
+
   state = {
     step: 0,
-    modalOpen: true,
-    canCloseModal: false
+    goBackOnCloseModal: true,
+    modalOpen: true
   };
 
   closeModal = () => {
-    console.log('hehehehehe');
-    if (this.state.canCloseModal) {
-      this.setState({ modalOpen: false });
+    this.setState({ modalOpen: false });
+    if (this.state.goBackOnCloseModal) {
+      this.props.goToRoot();
     }
-  };
-
-  setCanCloseModal = canClose => {
-    this.setState({ canCloseModal: canClose });
   };
 
   updateStep = step => this.setState({ step });
 
   render() {
-    const { step, modalOpen, canCloseModal } = this.state;
+    const { step, modalOpen } = this.state;
     return (
       <DashboardsElement
         step={step}
         modalOpen={modalOpen}
         setStep={this.updateStep}
         closeModal={this.closeModal}
-        canCloseModal={canCloseModal}
-        setCanCloseModal={this.setCanCloseModal}
       />
     );
   }
 }
 
-export default DashboardsElementContainer;
+export default connect(
+  null,
+  mapDispatchToProps
+)(DashboardsElementContainer);

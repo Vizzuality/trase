@@ -6,7 +6,7 @@ import DashboardsWelcome from 'react-components/dashboards-element/dashboards-we
 // import cx from 'classnames';
 
 function DashboardsElement(props) {
-  const { step, setStep, modalOpen, closeModal, canCloseModal, setCanCloseModal } = props;
+  const { step, setStep, modalOpen, closeModal } = props;
   return (
     <div className="l-dashboards-element">
       <div className="c-dashboards-element">
@@ -27,16 +27,14 @@ function DashboardsElement(props) {
             <div className="column small-12 medium-11">
               <div className="dashboards-modal-content all-events">
                 <div className="dashboards-modal-close">
-                  {canCloseModal && (
-                    <button onClick={closeModal}>
-                      <svg className="icon icon-close">
-                        <use xlinkHref="#icon-close" />
-                      </svg>
-                    </button>
-                  )}
+                  <button onClick={closeModal}>
+                    <svg className="icon icon-close">
+                      <use xlinkHref="#icon-close" />
+                    </svg>
+                  </button>
                 </div>
                 {step === 0 && <DashboardsWelcome onContinue={() => setStep(1)} />}
-                {step === 1 && <Panel setCanCloseModal={setCanCloseModal} />}
+                {step === 1 && <Panel />}
               </div>
             </div>
           </div>
@@ -50,9 +48,7 @@ DashboardsElement.propTypes = {
   step: PropTypes.number.isRequired,
   setStep: PropTypes.func.isRequired,
   modalOpen: PropTypes.bool.isRequired,
-  closeModal: PropTypes.func.isRequired,
-  canCloseModal: PropTypes.bool.isRequired,
-  setCanCloseModal: PropTypes.func.isRequired
+  closeModal: PropTypes.func.isRequired
 };
 
 export default DashboardsElement;
