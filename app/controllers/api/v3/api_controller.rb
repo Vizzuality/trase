@@ -1,6 +1,10 @@
 module Api
   module V3
-    class ApiController < ApplicationController
+    class ApiController < ActionController::API
+      include ActionController::MimeResponds
+      include CacheUtils
+      include Exceptions
+
       before_action :load_context
       before_action :set_caching_headers
 

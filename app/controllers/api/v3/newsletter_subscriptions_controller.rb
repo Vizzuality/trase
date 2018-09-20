@@ -1,7 +1,6 @@
 module Api
   module V3
     class NewsletterSubscriptionsController < ApiController
-      skip_before_action :verify_authenticity_token
       skip_before_action :load_context
 
       def create
