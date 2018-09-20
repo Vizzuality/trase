@@ -56,6 +56,13 @@ Rails.application.routes.draw do
       resources :newsletter_subscriptions, only: [:create]
       resource :database_validation, controller: :database_validation,
                                      only: [:show]
+      namespace :dashboards do
+        resources :sources, only: [:index]
+        resources :companies, only: [:index]
+        resources :destinations, only: [:index]
+        resources :commodities, only: [:index]
+        resources :countries, only: [:index]
+      end
     end
     namespace :v2 do
       resources :geo_id, only: :index

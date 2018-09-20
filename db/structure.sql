@@ -901,6 +901,54 @@ ALTER SEQUENCE public.context_node_types_id_seq OWNED BY public.context_node_typ
 
 
 --
+-- Name: node_types; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_types (
+    id integer NOT NULL,
+    name text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: context_node_types_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.context_node_types_mv AS
+ WITH RECURSIVE context_node_types_with_parent AS (
+         SELECT cnt.context_id,
+            cnt.column_position,
+            cnt.node_type_id,
+            nt.name AS node_type,
+            NULL::integer AS parent_node_type_id,
+            NULL::text AS parent_node_type
+           FROM (public.context_node_types cnt
+             JOIN public.node_types nt ON ((cnt.node_type_id = nt.id)))
+          WHERE (cnt.column_position = 0)
+        UNION ALL
+         SELECT cnt.context_id,
+            cnt.column_position,
+            cnt.node_type_id,
+            nt.name,
+            parent_cnt.node_type_id,
+            parent_cnt.node_type
+           FROM ((public.context_node_types cnt
+             JOIN public.node_types nt ON ((cnt.node_type_id = nt.id)))
+             JOIN context_node_types_with_parent parent_cnt ON (((cnt.column_position = (parent_cnt.column_position + 1)) AND (cnt.context_id = parent_cnt.context_id))))
+        )
+ SELECT context_node_types_with_parent.context_id,
+    context_node_types_with_parent.column_position,
+    context_node_types_with_parent.node_type_id,
+    context_node_types_with_parent.node_type,
+    context_node_types_with_parent.parent_node_type_id,
+    context_node_types_with_parent.parent_node_type
+   FROM context_node_types_with_parent
+  ORDER BY context_node_types_with_parent.context_id, context_node_types_with_parent.column_position
+  WITH NO DATA;
+
+
+--
 -- Name: context_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1085,17 +1133,6 @@ CREATE TABLE public.flows (
 
 
 --
--- Name: node_types; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_types (
-    id integer NOT NULL,
-    name text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
 -- Name: nodes; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1207,6 +1244,20 @@ CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
 
 
 --
+-- Name: node_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_quals (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    year integer,
+    value text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: dashboards_sources_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -1214,15 +1265,19 @@ CREATE MATERIALIZED VIEW public.dashboards_sources_mv AS
  SELECT fp.node_id AS id,
     nodes.name,
     nodes.node_type_id,
-    node_types.name AS node_type,
+    cnt_mv.node_type,
+    quals.name AS parent_node_type,
+    node_quals.value AS parent_name,
     fp.flow_id
-   FROM ((((public.dashboards_flow_paths_mv fp
+   FROM ((((((public.dashboards_flow_paths_mv fp
      JOIN public.nodes ON ((fp.node_id = nodes.id)))
-     JOIN public.node_types ON ((nodes.node_type_id = node_types.id)))
-     JOIN public.context_node_types cnt ON (((node_types.id = cnt.node_type_id) AND (fp.context_id = cnt.context_id))))
+     JOIN public.context_node_types cnt ON (((nodes.node_type_id = cnt.node_type_id) AND (fp.context_id = cnt.context_id))))
      JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
+     JOIN public.context_node_types_mv cnt_mv ON (((nodes.node_type_id = cnt_mv.node_type_id) AND (fp.context_id = cnt_mv.context_id))))
+     LEFT JOIN public.quals ON ((quals.name = cnt_mv.parent_node_type)))
+     LEFT JOIN public.node_quals ON (((nodes.id = node_quals.node_id) AND (quals.id = node_quals.qual_id))))
   WHERE (cnt_props.column_group = 0)
-  GROUP BY fp.node_id, nodes.name, nodes.node_type_id, node_types.name, fp.flow_id
+  GROUP BY fp.node_id, nodes.name, nodes.node_type_id, cnt_mv.node_type, quals.name, node_quals.value, fp.flow_id
   ORDER BY nodes.name
   WITH NO DATA;
 
@@ -2018,20 +2073,6 @@ CREATE SEQUENCE public.node_properties_id_seq
 --
 
 ALTER SEQUENCE public.node_properties_id_seq OWNED BY public.node_properties.id;
-
-
---
--- Name: node_quals; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_quals (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    year integer,
-    value text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
 
 
 --
@@ -3735,6 +3776,13 @@ CREATE UNIQUE INDEX attributes_mv_name_idx ON public.attributes_mv USING btree (
 
 
 --
+-- Name: context_node_types_mv_context_id_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX context_node_types_mv_context_id_node_type_id_idx ON public.context_node_types_mv USING btree (context_id, node_type_id);
+
+
+--
 -- Name: download_attributes_mv_context_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5011,6 +5059,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180918123747'),
 ('20180919121847'),
 ('20180919123241'),
-('20180921103012');
+('20180921103012'),
+('20180924112256'),
+('20180924112257');
 
 

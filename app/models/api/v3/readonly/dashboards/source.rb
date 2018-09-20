@@ -2,11 +2,13 @@
 #
 # Table name: dashboards_sources_mv
 #
-#  id           :integer          primary key
-#  name         :text
-#  node_type_id :integer
-#  node_type    :text
-#  flow_id      :integer
+#  id               :integer          primary key
+#  name             :text
+#  node_type_id     :integer
+#  node_type        :text
+#  parent_node_type :text
+#  parent_name      :text
+#  flow_id          :integer
 #
 # Indexes
 #
@@ -24,6 +26,13 @@ module Api
 
           self.table_name = 'dashboards_sources_mv'
           belongs_to :node
+
+          def self.refresh(options = {})
+            Scenic.database.refresh_materialized_view(
+              'context_node_types_mv', concurrently: false
+            )
+            super(options)
+          end
         end
       end
     end

@@ -44,17 +44,17 @@ paths:
         - application/json
       parameters:
         - name: query
-          in: path
+          in: query
           required: true
           type: integer
           description: 'Search string to use'
         - name: context_id
-          in: path
+          in: query
           required: false
           type: integer
           description: 'If provided, limit results to nodes of a given context'
         - name: profile_only
-          in: path
+          in: query
           type: boolean
           description: 'If provided, only show results that have a profile type defined'
       responses:
@@ -118,11 +118,11 @@ paths:
           required: true
           type: integer
         - name: start_year
-          in: path
+          in: query
           required: true
           type: integer
         - name: end_year
-          in: path
+          in: query
           type: integer
       responses:
         '200':
@@ -746,20 +746,18 @@ paths:
       tags:
         - newsletter_subscription
       summary: Adds a new email to the subscriptions list
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-              required:
-                - email
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: email
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
+
   '/context/{context_id}/download':
     get:
       tags:
@@ -854,7 +852,214 @@ paths:
               data:
                 type: object
                 $ref: '#/definitions/TopNodes'
+  '/dashboards/commodities':
+    get:
+      tags:
+        - dashboards
+      summary: 'Commodities matching selected filters'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsCommodity'
+
+  '/dashboards/countries':
+    get:
+      tags:
+        - dashboards
+      summary: 'Countries matching selected filters'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsCountry'
+
+  '/dashboards/sources':
+    get:
+      tags:
+        - dashboards
+      summary: 'Sources matching selected filters'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+        - $ref: "#/parameters/page"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsSource'
+
+  '/dashboards/companies':
+    get:
+      tags:
+        - dashboards
+      summary: 'Companies matching selected filters'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+        - $ref: "#/parameters/page"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsCompany'
+
+  '/dashboards/destinations':
+    get:
+      tags:
+        - dashboards
+      summary: 'Destinations matching selected filters'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/page"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsDestination'
+
+parameters:
+  dashboards_countries_ids:
+    name: countries_ids
+    in: query
+    description: 'String with comma-separated numeric ids'
+    required: false
+    type: string
+  dashboards_commodities_ids:
+    name: commodities_ids
+    in: query
+    description: 'String with comma-separated numeric ids'
+    required: false
+    type: string 
+  dashboards_sources_ids:
+    name: sources_ids
+    in: query
+    description: 'String with comma-separated numeric ids'
+    required: false
+    type: string
+  dashboards_companies_ids:
+    name: companies_ids
+    in: query
+    description: 'String with comma-separated numeric ids'
+    required: false
+    type: string
+  dashboards_destinations_ids:
+    name: destinations_ids
+    in: query
+    description: 'String with comma-separated numeric ids'
+    required: false
+    type: string
+  page:
+    name: page
+    in: query
+    description: 'Number of page for paginated responses'
+    required: false
+    type: integer
+    
 definitions:
+  DashboardsCommodity:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+  DashboardsCountry:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+  DashboardsSource:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      nodeType:
+        type: string
+  DashboardsCompany:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      nodeType:
+        type: string
+  DashboardsDestination:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      nodeType:
+        type: string
   Context:
     type: object
     properties:
