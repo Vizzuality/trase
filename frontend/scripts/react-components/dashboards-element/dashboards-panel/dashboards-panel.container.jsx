@@ -2,6 +2,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
+  clearDashaboardPanel,
   getDashboardsPanelData,
   setDashboardsPanelActiveId
 } from 'react-components/dashboards-element/dashboards-element.actions';
@@ -32,7 +33,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       getData: getDashboardsPanelData,
-      setActiveId: setDashboardsPanelActiveId
+      setActiveId: setDashboardsPanelActiveId,
+      clearActiveId: clearDashaboardPanel
     },
     dispatch
   );

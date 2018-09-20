@@ -25,13 +25,8 @@ export const getDirtyBlocks = createSelector(
 export const getDynamicSentence = createSelector(
   getDashboardsPanels,
   ({ sourcingPanel, importingPanel, companiesPanel, commoditiesPanel }) => {
-    let sourcingActiveId = null;
-    if (sourcingPanel.activeJurisdictionItemId) {
-      sourcingActiveId = { value: sourcingPanel.activeJurisdictionItemId, section: 'jurisdiction' };
-    } else if (sourcingPanel.activeCountryItemId) {
-      sourcingActiveId = { value: sourcingPanel.activeCountryItemId, section: 'country' };
-    }
-
+    const sourcingActiveId =
+      sourcingPanel.activeJurisdictionItemId || sourcingPanel.activeCountryItemId;
     const importingActiveId = importingPanel.activeJurisdictionItemId;
     const companiesActiveId = companiesPanel.activeCompanyItemId;
     const commoditiesActiveId = commoditiesPanel.activeCommodityItemId;
@@ -49,24 +44,21 @@ export const getDynamicSentence = createSelector(
 
     return [
       {
-        section: 'commodity',
+        panel: 'commodities',
         prefix: commoditiesActiveId ? 'Explore' : 'Explore commodities',
         value: commoditiesActiveId
       },
       {
-        prefix: sourcingActiveId ? `produced in` : '',
-        ...sourcingActiveId
+        panel: 'sourcing',
+        prefix: sourcingActiveId ? `produced in` : 'produced in the world',
+        value: sourcingActiveId
       },
       {
-        section: 'company',
+        panel: 'companies',
         prefix: companiesActiveId ? `exported by` : '',
         value: companiesActiveId
       },
-      {
-        section: 'jurisdiction',
-        prefix: importingActiveId ? `going to` : '',
-        value: importingActiveId
-      }
+      { panel: 'importing', prefix: importingActiveId ? `going to` : '', value: importingActiveId }
     ];
   }
 );

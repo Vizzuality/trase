@@ -16,6 +16,7 @@ function DashboardsPanel(props) {
     sourcingPanel,
     importingPanel,
     companiesPanel,
+    clearActiveId,
     setActiveId,
     jurisdictions,
     countries,
@@ -134,17 +135,10 @@ function DashboardsPanel(props) {
               <React.Fragment>
                 {`${part.prefix} `}
                 {part.value && (
-                  <span className="panel-footer-item">
+                  <span className="panel-footer-item notranslate">
                     {part.value}
                     <button
-                      onClick={() =>
-                        setActiveId({
-                          type: 'item',
-                          active: null,
-                          section: part.section,
-                          panel: activePanelId
-                        })
-                      }
+                      onClick={() => clearActiveId(part.panel)}
                       className="panel-footer-item-remove-arrow"
                       type="button"
                     >
@@ -176,6 +170,7 @@ DashboardsPanel.propTypes = {
   panels: PropTypes.array.isRequired,
   dynamicSentenceParts: PropTypes.array,
   setActiveId: PropTypes.func.isRequired,
+  clearActiveId: PropTypes.func.isRequired,
   setActivePanel: PropTypes.func.isRequired,
   sourcingPanel: PropTypes.object.isRequired,
   importingPanel: PropTypes.object.isRequired,

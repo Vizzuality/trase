@@ -2,7 +2,8 @@ import camelCase from 'lodash/camelCase';
 import createReducer from 'utils/createReducer';
 import {
   DASHBOARDS_ELEMENT__SET_PANEL_DATA,
-  DASHBOARDS_ELEMENT__SET_ACTIVE_ID
+  DASHBOARDS_ELEMENT__SET_ACTIVE_ID,
+  DASHBOARDS_ELEMENT__CLEAR_PANEL
 } from './dashboards-element.actions';
 
 const initialState = {
@@ -49,6 +50,14 @@ const dashboardsElementReducer = {
         ...state[panelName],
         [camelCase(`active_${section}_${type}_id`)]: active
       }
+    };
+  },
+  [DASHBOARDS_ELEMENT__CLEAR_PANEL](state, action) {
+    const { panel } = action.payload;
+    const panelName = `${panel}Panel`;
+    return {
+      ...state,
+      [panelName]: initialState[panelName]
     };
   }
 };

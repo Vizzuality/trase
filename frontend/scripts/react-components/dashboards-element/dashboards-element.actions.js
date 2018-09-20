@@ -1,5 +1,6 @@
 export const DASHBOARDS_ELEMENT__SET_PANEL_DATA = 'DASHBOARDS_ELEMENT__SET_PANEL_DATA';
 export const DASHBOARDS_ELEMENT__SET_ACTIVE_ID = 'DASHBOARDS_ELEMENT__SET_ACTIVE_ID';
+export const DASHBOARDS_ELEMENT__CLEAR_PANEL = 'DASHBOARDS_ELEMENT__CLEAR_PANEL';
 
 const data = {
   commodities: [
@@ -153,4 +154,9 @@ export const setDashboardsPanelActiveId = ({ type, active, panel, section }) => 
     active,
     section
   }
+});
+
+export const clearDashaboardPanel = panel => ({
+  type: DASHBOARDS_ELEMENT__CLEAR_PANEL,
+  payload: { panel }
 });
