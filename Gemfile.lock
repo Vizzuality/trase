@@ -445,6 +445,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   jquery-rails
   json-schema
+  kaminari
   listen (~> 3.0.5)
   mailchimp-api
   oj
