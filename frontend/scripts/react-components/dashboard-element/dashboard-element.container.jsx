@@ -2,17 +2,17 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React from 'react';
 import PropTypes from 'prop-types';
-import DashboardsElement from 'react-components/dashboards-element/dashboards-element.component';
+import DashboardElement from 'react-components/dashboard-element/dashboard-element.component';
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      goToRoot: () => ({ type: 'dashboardsRoot' })
+      goToRoot: () => ({ type: 'dashboardRoot' })
     },
     dispatch
   );
 
-class DashboardsElementContainer extends React.Component {
+class DashboardElementContainer extends React.Component {
   static propTypes = {
     goToRoot: PropTypes.func.isRequired
   };
@@ -35,7 +35,7 @@ class DashboardsElementContainer extends React.Component {
   render() {
     const { step, modalOpen } = this.state;
     return (
-      <DashboardsElement
+      <DashboardElement
         step={step}
         modalOpen={modalOpen}
         setStep={this.updateStep}
@@ -48,4 +48,4 @@ class DashboardsElementContainer extends React.Component {
 export default connect(
   null,
   mapDispatchToProps
-)(DashboardsElementContainer);
+)(DashboardElementContainer);

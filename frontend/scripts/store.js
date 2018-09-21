@@ -9,5 +9,5 @@ export { default as team } from 'react-components/team/team.reducer';
 export { default as explore } from 'react-components/explore/explore.reducer';
 export { default as widgets } from 'react-components/widgets/widgets.reducer';
 export {
-  default as dashboardsElement
-} from 'react-components/dashboards-element/dashboards-element.reducer';
+  default as dashboardElement
+} from 'react-components/dashboard-element/dashboard-element.reducer';

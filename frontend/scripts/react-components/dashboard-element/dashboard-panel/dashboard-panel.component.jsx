@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import BlockSwitch from 'react-components/shared/block-switch.component';
-import SourcingPanel from 'react-components/dashboards-element/dashboards-panel/sourcing-panel.component';
-import ImportingPanel from 'react-components/dashboards-element/dashboards-panel/importing-panel.component';
-import CompaniesPanel from 'react-components/dashboards-element/dashboards-panel/companies-panel.component';
-import CommoditiesPanel from 'react-components/dashboards-element/dashboards-panel/commodities-panel.component';
+import SourcingPanel from 'react-components/dashboard-element/dashboard-panel/sourcing-panel.component';
+import ImportingPanel from 'react-components/dashboard-element/dashboard-panel/importing-panel.component';
+import CompaniesPanel from 'react-components/dashboard-element/dashboard-panel/companies-panel.component';
+import CommoditiesPanel from 'react-components/dashboard-element/dashboard-panel/commodities-panel.component';
+import DashboardModalFooter from 'react-components/dashboard-element/dahsboard-modal-footer.component';
 
-function DashboardsPanel(props) {
+function DashboardPanel(props) {
   const {
     tabs,
     panels,
@@ -22,6 +23,7 @@ function DashboardsPanel(props) {
     countries,
     companies,
     commodities,
+    onContinue,
     dynamicSentenceParts,
     commoditiesPanel
   } = props;
@@ -129,36 +131,17 @@ function DashboardsPanel(props) {
         )}
       </div>
       {dynamicSentenceParts && (
-        <div className="dashboard-panel-footer">
-          <p className="dashboard-panel-footer-text">
-            {dynamicSentenceParts.map(part => (
-              <React.Fragment>
-                {`${part.prefix} `}
-                {part.value && (
-                  <span className="panel-footer-item notranslate">
-                    {part.value}
-                    <button
-                      onClick={() => clearActiveId(part.panel)}
-                      className="panel-footer-item-remove-arrow"
-                      type="button"
-                    >
-                      <svg className="icon icon-close">
-                        <use xlinkHref="#icon-close" />
-                      </svg>
-                    </button>
-                  </span>
-                )}
-              </React.Fragment>
-            ))}
-          </p>
-          <button className="c-button -pink -large">Continue</button>
-        </div>
+        <DashboardModalFooter
+          onContinue={onContinue}
+          clearItem={clearActiveId}
+          dynamicSentenceParts={dynamicSentenceParts}
+        />
       )}
     </div>
   );
 }
 
-DashboardsPanel.propTypes = {
+DashboardPanel.propTypes = {
   countries: PropTypes.array,
   companies: PropTypes.object,
   commodities: PropTypes.array,
@@ -168,6 +151,7 @@ DashboardsPanel.propTypes = {
   tabs: PropTypes.array.isRequired,
   commoditiesPanel: PropTypes.array,
   panels: PropTypes.array.isRequired,
+  onContinue: PropTypes.func.isRequired,
   dynamicSentenceParts: PropTypes.array,
   setActiveId: PropTypes.func.isRequired,
   clearActiveId: PropTypes.func.isRequired,
@@ -177,4 +161,4 @@ DashboardsPanel.propTypes = {
   companiesPanel: PropTypes.object.isRequired
 };
 
-export default DashboardsPanel;
+export default DashboardPanel;

@@ -4,7 +4,7 @@
 'mixins',
 'foundation',
 
-'layouts/l-dashboards-element',
+'layouts/l-dashboard-element',
 
 'components/shared/top-nav',
 'components/shared/footer',
@@ -17,7 +17,8 @@
 'components/shared/grid-list-item',
 'components/shared/tabs',
 
-'components/dashboards-element/dashboards-panel',
-'components/dashboards-element/dashboards-welcome',
-'components/dashboards-element/dashboards-element'
+'components/dashboard-element/dashboard-modal-footer',
+'components/dashboard-element/dashboard-panel',
+'components/dashboard-element/dashboard-welcome',
+'components/dashboard-element/dashboard-element'
 ;

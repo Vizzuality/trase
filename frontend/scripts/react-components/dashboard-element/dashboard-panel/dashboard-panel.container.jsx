@@ -3,21 +3,21 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
   clearDashaboardPanel,
-  getDashboardsPanelData,
-  setDashboardsPanelActiveId
-} from 'react-components/dashboards-element/dashboards-element.actions';
-import DashboardsPanel from 'react-components/dashboards-element/dashboards-panel/dashboards-panel.component';
+  getDashboardPanelData,
+  setDashboardPanelActiveId
+} from 'react-components/dashboard-element/dashboard-element.actions';
+import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
 import {
-  getDashboardsPanels,
+  getDashboardPanels,
   getDirtyBlocks,
   getDynamicSentence
-} from 'react-components/dashboards-element/dashboards-panel/dashboards-panel.selectors';
+} from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.selectors';
 import PropTypes from 'prop-types';
 
 const mapStateToProps = state => {
   const {
     data: { jurisdictions, countries, commodities, companies }
-  } = state.dashboardsElement;
+  } = state.dashboardElement;
   return {
     countries,
     companies,
@@ -25,21 +25,21 @@ const mapStateToProps = state => {
     jurisdictions,
     dirtyBlocks: getDirtyBlocks(state),
     dynamicSentenceParts: getDynamicSentence(state),
-    ...getDashboardsPanels(state)
+    ...getDashboardPanels(state)
   };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      getData: getDashboardsPanelData,
-      setActiveId: setDashboardsPanelActiveId,
+      getData: getDashboardPanelData,
+      setActiveId: setDashboardPanelActiveId,
       clearActiveId: clearDashaboardPanel
     },
     dispatch
   );
 
-class DashboardsPanelContainer extends React.PureComponent {
+class DashboardPanelContainer extends React.PureComponent {
   static propTypes = {
     dirtyBlocks: PropTypes.object,
     getData: PropTypes.func.isRequired,
@@ -76,7 +76,7 @@ class DashboardsPanelContainer extends React.PureComponent {
   render() {
     const { activePanelId } = this.state;
     return (
-      <DashboardsPanel
+      <DashboardPanel
         tabs={this.tabs}
         panels={this.panels}
         setActivePanel={this.setActivePanel}
@@ -90,4 +90,4 @@ class DashboardsPanelContainer extends React.PureComponent {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(DashboardsPanelContainer);
+)(DashboardPanelContainer);

@@ -1,7 +1,7 @@
-.c-dashboards-element {
+.c-dashboard-element {
   padding: 60px 0;
 
-  .dashboards-element-title {
+  .dashboard-element-title {
     color: $white;
     font-size: 24px;
     font-weight: 300;
@@ -9,7 +9,7 @@
     letter-spacing: -0.5px;
   }
 
-  .dashboards-element-placeholder {
+  .dashboard-element-placeholder {
 
     &-item {
       display: block;
@@ -21,12 +21,12 @@
   }
 }
 
-.dashboards-modal-content {
+.dashboard-modal-content {
   position: relative;
   background-color: $light-gray;
   height: 100%;
 
-  .dashboards-modal-close {
+  .dashboard-modal-close {
     position: absolute;
     top: 20px;
     right: 30px;

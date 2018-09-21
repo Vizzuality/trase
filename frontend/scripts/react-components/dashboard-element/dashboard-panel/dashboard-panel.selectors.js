@@ -1,11 +1,11 @@
 import { createSelector, createStructuredSelector } from 'reselect';
 
-const getSourcingPanel = state => state.dashboardsElement.sourcingPanel;
-const getImportingPanel = state => state.dashboardsElement.importingPanel;
-const getCompaniesPanel = state => state.dashboardsElement.companiesPanel;
-const getCommoditiesPanel = state => state.dashboardsElement.commoditiesPanel;
+const getSourcingPanel = state => state.dashboardElement.sourcingPanel;
+const getImportingPanel = state => state.dashboardElement.importingPanel;
+const getCompaniesPanel = state => state.dashboardElement.companiesPanel;
+const getCommoditiesPanel = state => state.dashboardElement.commoditiesPanel;
 
-export const getDashboardsPanels = createStructuredSelector({
+export const getDashboardPanels = createStructuredSelector({
   sourcingPanel: getSourcingPanel,
   importingPanel: getImportingPanel,
   companiesPanel: getCompaniesPanel,
@@ -13,7 +13,7 @@ export const getDashboardsPanels = createStructuredSelector({
 });
 
 export const getDirtyBlocks = createSelector(
-  getDashboardsPanels,
+  getDashboardPanels,
   ({ sourcingPanel, importingPanel, companiesPanel, commoditiesPanel }) => ({
     sourcing: sourcingPanel.activeCountryItemId !== null,
     importing: importingPanel.activeJurisdictionItemId !== null,
@@ -23,7 +23,7 @@ export const getDirtyBlocks = createSelector(
 );
 
 export const getDynamicSentence = createSelector(
-  getDashboardsPanels,
+  getDashboardPanels,
   ({ sourcingPanel, importingPanel, companiesPanel, commoditiesPanel }) => {
     const sourcingActiveId =
       sourcingPanel.activeJurisdictionItemId || sourcingPanel.activeCountryItemId;

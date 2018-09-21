@@ -20,7 +20,7 @@ export default {
     },
     {
       name: 'Dashboards',
-      page: 'dashboardsRoot'
+      page: 'dashboardRoot'
     },
     {
       name: 'Yearbook',

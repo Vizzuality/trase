@@ -5,11 +5,11 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
-import DashboardsRoot from 'react-components/dashboards-root/dashboards-root.container';
+import DashboardElement from 'react-components/dashboard-element/dashboard-element.container';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import Footer from 'react-components/shared/footer.component';
 
-import 'styles/dashboards-root.scss';
+import 'styles/dashboard-element.scss';
 
 export const mount = (root, store) => {
   root.innerHTML = BaseMarkup({
@@ -25,7 +25,7 @@ export const mount = (root, store) => {
 
   render(
     <Provider store={store}>
-      <DashboardsRoot />
+      <DashboardElement />
     </Provider>,
     document.getElementById('page-react-root')
   );

@@ -1,15 +1,15 @@
-.c-dashboards-welcome {
+.c-dashboard-welcome {
   padding: 20px 25px;
   .title {
     margin: 0 0 45px 0;
   }
 
-  .dashboards-welcome-card-container {
+  .dashboard-welcome-card-container {
     display: flex;
     margin: 0 0 30px 0;
   }
 
-  .dashboards-welcome-card {
+  .dashboard-welcome-card {
     background-color: darken($light-gray, 7%);
     width: 300px;
     height: 300px;
@@ -20,7 +20,7 @@
     }
   }
 
-  .dashboards-welcome-button-container {
+  .dashboard-welcome-button-container {
     display: flex;
     justify-content: center;
   }

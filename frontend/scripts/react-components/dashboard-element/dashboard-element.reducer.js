@@ -1,10 +1,10 @@
 import camelCase from 'lodash/camelCase';
 import createReducer from 'utils/createReducer';
 import {
-  DASHBOARDS_ELEMENT__SET_PANEL_DATA,
-  DASHBOARDS_ELEMENT__SET_ACTIVE_ID,
-  DASHBOARDS_ELEMENT__CLEAR_PANEL
-} from './dashboards-element.actions';
+  DASHBOARD_ELEMENT__SET_PANEL_DATA,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ID,
+  DASHBOARD_ELEMENT__CLEAR_PANEL
+} from './dashboard-element.actions';
 
 const initialState = {
   data: {
@@ -30,8 +30,8 @@ const initialState = {
   }
 };
 
-const dashboardsElementReducer = {
-  [DASHBOARDS_ELEMENT__SET_PANEL_DATA](state, action) {
+const dashboardElementReducer = {
+  [DASHBOARD_ELEMENT__SET_PANEL_DATA](state, action) {
     const { key, data } = action.payload;
     return {
       ...state,
@@ -41,7 +41,7 @@ const dashboardsElementReducer = {
       }
     };
   },
-  [DASHBOARDS_ELEMENT__SET_ACTIVE_ID](state, action) {
+  [DASHBOARD_ELEMENT__SET_ACTIVE_ID](state, action) {
     const { panel, section, active, type } = action.payload;
     const panelName = `${panel}Panel`;
     return {
@@ -52,7 +52,7 @@ const dashboardsElementReducer = {
       }
     };
   },
-  [DASHBOARDS_ELEMENT__CLEAR_PANEL](state, action) {
+  [DASHBOARD_ELEMENT__CLEAR_PANEL](state, action) {
     const { panel } = action.payload;
     const panelName = `${panel}Panel`;
     return {
@@ -62,7 +62,7 @@ const dashboardsElementReducer = {
   }
 };
 
-const dashboardsElementReducerTypes = PropTypes => ({
+const dashboardElementReducerTypes = PropTypes => ({
   data: PropTypes.shape({
     countries: PropTypes.array.isRequired,
     companies: PropTypes.shape({
@@ -92,4 +92,4 @@ const dashboardsElementReducerTypes = PropTypes => ({
   }).isRequired
 });
 
-export default createReducer(initialState, dashboardsElementReducer, dashboardsElementReducerTypes);
+export default createReducer(initialState, dashboardElementReducer, dashboardElementReducerTypes);

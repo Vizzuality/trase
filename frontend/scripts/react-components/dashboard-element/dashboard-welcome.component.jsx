@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function DashboardsWelcome(props) {
+function DashboardWelcome(props) {
   const { onContinue } = props;
   return (
-    <div className="c-dashboards-welcome">
+    <div className="c-dashboard-welcome">
       <h2 className="title -medium -light -center">Welcome to the Dashboard</h2>
-      <div className="dashboards-welcome-card-container">
+      <div className="dashboard-welcome-card-container">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="dashboards-welcome-card" />
+          <div key={i} className="dashboard-welcome-card" />
         ))}
       </div>
-      <div className="dashboards-welcome-button-container">
+      <div className="dashboard-welcome-button-container">
         <button className="c-button -pink -large" onClick={onContinue}>
           Continue
         </button>
@@ -20,8 +20,8 @@ function DashboardsWelcome(props) {
   );
 }
 
-DashboardsWelcome.propTypes = {
+DashboardWelcome.propTypes = {
   onContinue: PropTypes.func.isRequired
 };
 
-export default DashboardsWelcome;
+export default DashboardWelcome;

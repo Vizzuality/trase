@@ -1,6 +1,6 @@
-export const DASHBOARDS_ELEMENT__SET_PANEL_DATA = 'DASHBOARDS_ELEMENT__SET_PANEL_DATA';
-export const DASHBOARDS_ELEMENT__SET_ACTIVE_ID = 'DASHBOARDS_ELEMENT__SET_ACTIVE_ID';
-export const DASHBOARDS_ELEMENT__CLEAR_PANEL = 'DASHBOARDS_ELEMENT__CLEAR_PANEL';
+export const DASHBOARD_ELEMENT__SET_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_PANEL_DATA';
+export const DASHBOARD_ELEMENT__SET_ACTIVE_ID = 'DASHBOARD_ELEMENT__SET_ACTIVE_ID';
+export const DASHBOARD_ELEMENT__CLEAR_PANEL = 'DASHBOARD_ELEMENT__CLEAR_PANEL';
 
 const data = {
   commodities: [
@@ -130,12 +130,12 @@ const dependencies = {
   commodities: ['commodities']
 };
 
-export const getDashboardsPanelData = panel => dispatch => {
+export const getDashboardPanelData = panel => dispatch => {
   dependencies[panel].map(key =>
     setTimeout(
       () =>
         dispatch({
-          type: DASHBOARDS_ELEMENT__SET_PANEL_DATA,
+          type: DASHBOARD_ELEMENT__SET_PANEL_DATA,
           payload: {
             key,
             data: data[key]
@@ -146,8 +146,8 @@ export const getDashboardsPanelData = panel => dispatch => {
   );
 };
 
-export const setDashboardsPanelActiveId = ({ type, active, panel, section }) => ({
-  type: DASHBOARDS_ELEMENT__SET_ACTIVE_ID,
+export const setDashboardPanelActiveId = ({ type, active, panel, section }) => ({
+  type: DASHBOARD_ELEMENT__SET_ACTIVE_ID,
   payload: {
     type,
     panel,
@@ -157,6 +157,6 @@ export const setDashboardsPanelActiveId = ({ type, active, panel, section }) => 
 });
 
 export const clearDashaboardPanel = panel => ({
-  type: DASHBOARDS_ELEMENT__CLEAR_PANEL,
+  type: DASHBOARD_ELEMENT__CLEAR_PANEL,
   payload: { panel }
 });

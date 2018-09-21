@@ -4,22 +4,22 @@ import Link from 'redux-first-router-link';
 import PropTypes from 'prop-types';
 // import cx from 'classnames';
 
-function DashboardsRoot(props) {
+function DashboardRoot(props) {
   const { posts } = props;
   const linkProps = {
-    to: { type: 'dashboardsElement', payload: { dashboardId: 'new' } },
+    to: { type: 'dashboardElement', payload: { dashboardId: 'new' } },
     target: undefined,
     rel: undefined
   };
   return (
-    <div className="l-dashboards-root">
-      <div className="c-dashboards-root">
+    <div className="l-dashboard-root">
+      <div className="c-dashboard-root">
         <h1 className="title">See how commodity trade impacts the world</h1>
-        <section className="dashboards-root-grid">
+        <section className="dashboard-root-grid">
           <div className="row">
             <div className="column small-12 medium-6 large-4">
               <Card
-                className="dashboards-create-card"
+                className="dashboard-create-card"
                 title="Create your own Dashboard with custom options."
                 subtitle="Custom dashboard"
                 actionName="Create dashboard"
@@ -49,8 +49,8 @@ function DashboardsRoot(props) {
   );
 }
 
-DashboardsRoot.propTypes = {
+DashboardRoot.propTypes = {
   posts: PropTypes.any
 };
 
-export default DashboardsRoot;
+export default DashboardRoot;
