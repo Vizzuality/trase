@@ -142,13 +142,6 @@ $$;
 COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double precision) IS 'Given an n-element array of choropleth buckets and a positive value, returns index of bucket where value falls (1 to n + 1); else returns 0.';
 
 
---
--- Name: trase_server; Type: SERVER; Schema: -; Owner: -
---
-
--- suppressed CREATE SERVER
-
-
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -4130,6 +4123,13 @@ CREATE INDEX node_quants_quant_id_idx ON public.node_quants USING btree (quant_i
 
 
 --
+-- Name: nodes_mv_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX nodes_mv_context_id_id_idx ON public.nodes_mv USING btree (context_id, id);
+
+
+--
 -- Name: nodes_mv_context_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4741,6 +4741,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180416125150'),
 ('20180522102950'),
 ('20180522135640'),
-('20180827134927');
+('20180827134927'),
+('20180921103012');
 
 

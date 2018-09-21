@@ -17,5 +17,3 @@ JOIN context_node_types ON context_node_types.node_type_id = node_types.id AND c
 LEFT JOIN profiles ON profiles.context_node_type_id = context_node_types.id
 LEFT JOIN context_properties ON context_node_types.context_id = context_properties.context_id
 WHERE nodes.is_unknown = FALSE AND node_properties.is_domestic_consumption = FALSE AND nodes.name NOT ILIKE 'OTHER';
-
-CREATE INDEX index_nodes_mv_on_id_and_context_id ON public.nodes_mv USING btree (id, context_id);
