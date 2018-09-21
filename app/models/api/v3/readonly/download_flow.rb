@@ -57,7 +57,7 @@ module Api
               'flow_paths_mv', concurrently: false
             )
           end
-          Scenic.database.refresh_materialized_view(table_name, concurrently: false)
+          super(options.slice(:concurrently))
         end
 
         # this materialized view takes a long time to refresh
