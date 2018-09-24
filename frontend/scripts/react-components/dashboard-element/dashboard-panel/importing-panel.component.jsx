@@ -24,9 +24,9 @@ function ImportingPanel(props) {
       <GridList
         items={jurisdictions}
         height={200}
-        width={800}
+        width={950}
         rowHeight={50}
-        columnWidth={160}
+        columnWidth={190}
         columnCount={5}
       >
         {itemProps => (

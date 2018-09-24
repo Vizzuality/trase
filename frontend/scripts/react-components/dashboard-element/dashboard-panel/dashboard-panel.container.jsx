@@ -9,8 +9,7 @@ import {
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
 import {
   getDashboardPanels,
-  getDirtyBlocks,
-  getDynamicSentence
+  getDirtyBlocks
 } from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.selectors';
 import PropTypes from 'prop-types';
 
@@ -24,7 +23,6 @@ const mapStateToProps = state => {
     commodities,
     jurisdictions,
     dirtyBlocks: getDirtyBlocks(state),
-    dynamicSentenceParts: getDynamicSentence(state),
     ...getDashboardPanels(state)
   };
 };

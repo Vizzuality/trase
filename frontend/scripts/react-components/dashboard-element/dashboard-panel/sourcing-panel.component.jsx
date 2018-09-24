@@ -29,8 +29,8 @@ function SourcingPanel(props) {
       />
       <GridList
         height={50}
-        width={720}
-        columnWidth={160}
+        width={950}
+        columnWidth={190}
         rowHeight={50}
         columnCount={4}
         items={searchJurisdictions}

@@ -30,9 +30,9 @@ function CompaniesPanel(props) {
         <GridList
           items={companiesList}
           height={companiesList.length > 5 ? 200 : 50}
-          width={800}
+          width={950}
           rowHeight={50}
-          columnWidth={160}
+          columnWidth={190}
           columnCount={5}
         >
           {itemProps => (
