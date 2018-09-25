@@ -1156,7 +1156,17 @@ CREATE MATERIALIZED VIEW public.dashboards_flow_paths_mv AS
     contexts.country_id,
     contexts.commodity_id,
     flow_paths.node_id,
-    flow_paths.flow_id
+    nodes.name AS node,
+    nodes.node_type_id,
+    node_types.name AS node_type,
+    flow_paths.flow_id,
+    cnt.column_position,
+    cnt_props.column_group,
+        CASE
+            WHEN (cnt_props.column_group = 0) THEN 'SOURCE'::text
+            WHEN (node_types.name = 'COUNTRY'::text) THEN 'DESTINATION'::text
+            ELSE 'COMPANY'::text
+        END AS category
    FROM (((((( SELECT flows.context_id,
             flows.id AS flow_id,
             a.node_id,
@@ -1179,10 +1189,11 @@ CREATE MATERIALIZED VIEW public.dashboards_flow_paths_mv AS
 CREATE MATERIALIZED VIEW public.dashboards_commodities_mv AS
  SELECT fp.commodity_id AS id,
     commodities.name,
-    fp.flow_id
+    fp.country_id,
+    fp.node_id
    FROM (public.dashboards_flow_paths_mv fp
      JOIN public.commodities ON ((commodities.id = fp.commodity_id)))
-  GROUP BY fp.commodity_id, commodities.name, fp.flow_id
+  GROUP BY fp.commodity_id, commodities.name, fp.country_id, fp.node_id
   WITH NO DATA;
 
 
@@ -1192,18 +1203,17 @@ CREATE MATERIALIZED VIEW public.dashboards_commodities_mv AS
 
 CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
  SELECT fp.node_id AS id,
-    nodes.name,
-    nodes.node_type_id,
-    node_types.name AS node_type,
-    fp.flow_id
-   FROM ((((public.dashboards_flow_paths_mv fp
-     JOIN public.nodes ON ((fp.node_id = nodes.id)))
-     JOIN public.node_types ON ((nodes.node_type_id = node_types.id)))
-     JOIN public.context_node_types cnt ON (((node_types.id = cnt.node_type_id) AND (fp.context_id = cnt.context_id))))
-     JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
-  WHERE (node_types.name = ANY (ARRAY['IMPORTER'::text, 'EXPORTER'::text, 'TRADER'::text]))
-  GROUP BY fp.node_id, nodes.name, nodes.node_type_id, node_types.name, fp.flow_id
-  ORDER BY nodes.name
+    fp.node AS name,
+    fp.node_type_id,
+    fp.node_type,
+    all_fp.country_id,
+    all_fp.commodity_id,
+    all_fp.node_id
+   FROM (public.dashboards_flow_paths_mv all_fp
+     JOIN public.dashboards_flow_paths_mv fp ON ((all_fp.flow_id = fp.flow_id)))
+  WHERE (fp.category = 'COMPANY'::text)
+  GROUP BY fp.node_id, fp.node, fp.node_type_id, fp.node_type, all_fp.country_id, all_fp.commodity_id, all_fp.node_id
+  ORDER BY fp.node_type, fp.node
   WITH NO DATA;
 
 
@@ -1215,10 +1225,11 @@ CREATE MATERIALIZED VIEW public.dashboards_countries_mv AS
  SELECT fp.country_id AS id,
     countries.name,
     countries.iso2,
-    fp.flow_id
+    fp.commodity_id,
+    fp.node_id
    FROM (public.dashboards_flow_paths_mv fp
      JOIN public.countries ON ((countries.id = fp.country_id)))
-  GROUP BY fp.country_id, countries.name, countries.iso2, fp.flow_id
+  GROUP BY fp.country_id, countries.name, countries.iso2, fp.commodity_id, fp.node_id
   WITH NO DATA;
 
 
@@ -1228,18 +1239,17 @@ CREATE MATERIALIZED VIEW public.dashboards_countries_mv AS
 
 CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
  SELECT fp.node_id AS id,
-    nodes.name,
-    nodes.node_type_id,
-    node_types.name AS node_type,
-    fp.flow_id
-   FROM ((((public.dashboards_flow_paths_mv fp
-     JOIN public.nodes ON ((fp.node_id = nodes.id)))
-     JOIN public.node_types ON ((nodes.node_type_id = node_types.id)))
-     JOIN public.context_node_types cnt ON (((node_types.id = cnt.node_type_id) AND (fp.context_id = cnt.context_id))))
-     JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
-  WHERE (node_types.name = 'COUNTRY'::text)
-  GROUP BY fp.node_id, nodes.name, nodes.node_type_id, node_types.name, fp.flow_id
-  ORDER BY nodes.name
+    fp.node AS name,
+    fp.node_type_id,
+    fp.node_type,
+    all_fp.country_id,
+    all_fp.commodity_id,
+    all_fp.node_id
+   FROM (public.dashboards_flow_paths_mv all_fp
+     JOIN public.dashboards_flow_paths_mv fp ON ((all_fp.flow_id = fp.flow_id)))
+  WHERE (fp.category = 'DESTINATION'::text)
+  GROUP BY fp.node_id, fp.node, fp.node_type_id, fp.node_type, all_fp.country_id, all_fp.commodity_id, all_fp.node_id
+  ORDER BY fp.node_type, fp.node
   WITH NO DATA;
 
 
@@ -1263,22 +1273,22 @@ CREATE TABLE public.node_quals (
 
 CREATE MATERIALIZED VIEW public.dashboards_sources_mv AS
  SELECT fp.node_id AS id,
-    nodes.name,
-    nodes.node_type_id,
-    cnt_mv.node_type,
+    fp.node AS name,
+    fp.node_type_id,
+    fp.node_type,
     quals.name AS parent_node_type,
     node_quals.value AS parent_name,
-    fp.flow_id
-   FROM ((((((public.dashboards_flow_paths_mv fp
-     JOIN public.nodes ON ((fp.node_id = nodes.id)))
-     JOIN public.context_node_types cnt ON (((nodes.node_type_id = cnt.node_type_id) AND (fp.context_id = cnt.context_id))))
-     JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
-     JOIN public.context_node_types_mv cnt_mv ON (((nodes.node_type_id = cnt_mv.node_type_id) AND (fp.context_id = cnt_mv.context_id))))
+    all_fp.country_id,
+    all_fp.commodity_id,
+    all_fp.node_id
+   FROM ((((public.dashboards_flow_paths_mv all_fp
+     JOIN public.dashboards_flow_paths_mv fp ON ((all_fp.flow_id = fp.flow_id)))
+     JOIN public.context_node_types_mv cnt_mv ON (((fp.node_type_id = cnt_mv.node_type_id) AND (fp.context_id = cnt_mv.context_id))))
      LEFT JOIN public.quals ON ((quals.name = cnt_mv.parent_node_type)))
-     LEFT JOIN public.node_quals ON (((nodes.id = node_quals.node_id) AND (quals.id = node_quals.qual_id))))
-  WHERE (cnt_props.column_group = 0)
-  GROUP BY fp.node_id, nodes.name, nodes.node_type_id, cnt_mv.node_type, quals.name, node_quals.value, fp.flow_id
-  ORDER BY nodes.name
+     LEFT JOIN public.node_quals ON (((fp.node_id = node_quals.node_id) AND (quals.id = node_quals.qual_id))))
+  WHERE ((fp.category = 'SOURCE'::text) AND (all_fp.node_id <> fp.node_id))
+  GROUP BY fp.node_id, fp.node, fp.node_type_id, fp.node_type, quals.name, node_quals.value, all_fp.country_id, all_fp.commodity_id, all_fp.node_id
+  ORDER BY fp.node_type, fp.node
   WITH NO DATA;
 
 
@@ -5054,13 +5064,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180522135640'),
 ('20180827134927'),
 ('20180917124246'),
-('20180918113243'),
-('20180918122959'),
-('20180918123747'),
-('20180919121847'),
-('20180919123241'),
 ('20180921103012'),
 ('20180924112256'),
-('20180924112257');
+('20180924112257'),
+('20180924112258'),
+('20180924112259'),
+('20180924112260'),
+('20180924112261');
 
 

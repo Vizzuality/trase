@@ -2,15 +2,18 @@
 #
 # Table name: dashboards_countries_mv
 #
-#  id      :integer          primary key
-#  name    :text
-#  iso2    :text
-#  flow_id :integer
+#  id           :integer          primary key
+#  name         :text
+#  iso2         :text
+#  commodity_id :integer
+#  node_id      :integer
 #
 # Indexes
 #
-#  index_dashboards_countries_mv_on_flow_id      (flow_id) UNIQUE
-#  index_dashboards_countries_mv_on_id_and_name  (id,name)
+#  dashboards_countries_mv_commodity_id_idx   (commodity_id)
+#  dashboards_countries_mv_group_columns_idx  (id,name)
+#  dashboards_countries_mv_node_id_idx        (node_id)
+#  dashboards_countries_mv_unique_idx         (id,node_id,commodity_id) UNIQUE
 #
 
 module Api

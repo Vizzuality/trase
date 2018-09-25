@@ -2,19 +2,22 @@
 #
 # Table name: dashboards_flow_paths_mv
 #
-#  context_id   :integer
-#  country_id   :integer
-#  commodity_id :integer
-#  node_id      :integer
-#  flow_id      :integer
+#  context_id      :integer
+#  country_id      :integer
+#  commodity_id    :integer
+#  node_id         :integer
+#  node            :text
+#  node_type_id    :integer
+#  node_type       :text
+#  flow_id         :integer
+#  column_position :integer
+#  column_group    :integer
+#  category        :text
 #
 # Indexes
 #
-#  index_dashboards_flow_paths_mv_on_commodity_id         (commodity_id)
-#  index_dashboards_flow_paths_mv_on_country_id           (country_id)
-#  index_dashboards_flow_paths_mv_on_flow_id              (flow_id)
-#  index_dashboards_flow_paths_mv_on_flow_id_and_node_id  (flow_id,node_id) UNIQUE
-#  index_dashboards_flow_paths_mv_on_node_id              (node_id)
+#  dashboards_flow_paths_mv_category_idx         (category)
+#  dashboards_flow_paths_mv_flow_id_node_id_idx  (flow_id,node_id) UNIQUE
 #
 
 module Api

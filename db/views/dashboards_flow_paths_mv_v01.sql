@@ -3,7 +3,17 @@ SELECT DISTINCT
   contexts.country_id,
   contexts.commodity_id,
   flow_paths.node_id,
-  flow_paths.flow_id
+  nodes.name AS node,
+  nodes.node_type_id,
+  node_types.name AS node_type,
+  flow_paths.flow_id,
+  column_position,
+  column_group,
+  CASE
+    WHEN cnt_props.column_group = 0 THEN 'SOURCE'
+    WHEN node_types.name = 'COUNTRY' THEN 'DESTINATION'
+    ELSE 'COMPANY'
+  END AS category
 FROM (
   SELECT
     flows.context_id,

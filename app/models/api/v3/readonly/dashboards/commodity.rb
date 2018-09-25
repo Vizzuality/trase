@@ -2,14 +2,17 @@
 #
 # Table name: dashboards_commodities_mv
 #
-#  id      :integer          primary key
-#  name    :text
-#  flow_id :integer
+#  id         :integer          primary key
+#  name       :text
+#  country_id :integer
+#  node_id    :integer
 #
 # Indexes
 #
-#  index_dashboards_commodities_mv_on_flow_id      (flow_id) UNIQUE
-#  index_dashboards_commodities_mv_on_id_and_name  (id,name)
+#  dashboards_commodities_mv_country_id_idx     (country_id)
+#  dashboards_commodities_mv_group_columns_idx  (id,name)
+#  dashboards_commodities_mv_node_id_idx        (node_id)
+#  dashboards_commodities_mv_unique_idx         (id,node_id,country_id) UNIQUE
 #
 
 module Api

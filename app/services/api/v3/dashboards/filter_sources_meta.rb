@@ -36,6 +36,7 @@ module Api
           if @commodities_ids.any?
             @query = @query.where('contexts.commodity_id' => @commodities_ids)
           end
+          @query
         end
       end
     end

@@ -901,6 +901,25 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/DashboardsCountry'
+              meta:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    context_id:
+                      type: integer
+                    node_type_id:
+                      type: integer
+                    column_position:
+                      type: integer
+                    country_id:
+                      type: integer
+                    commodity_id:
+                      type: integer
+                    node_type_name:
+                      type: string
 
   '/dashboards/sources':
     get:
@@ -916,6 +935,7 @@ paths:
         - $ref: "#/parameters/dashboards_commodities_ids"
         - $ref: "#/parameters/dashboards_companies_ids"
         - $ref: "#/parameters/dashboards_destinations_ids"
+        - $ref: "#/parameters/dashboards_node_type_ids"
         - $ref: "#/parameters/page"
       responses:
         '200':
@@ -942,6 +962,7 @@ paths:
         - $ref: "#/parameters/dashboards_commodities_ids"
         - $ref: "#/parameters/dashboards_sources_ids"
         - $ref: "#/parameters/dashboards_destinations_ids"
+        - $ref: "#/parameters/dashboards_node_type_ids"
         - $ref: "#/parameters/page"
       responses:
         '200':
@@ -968,6 +989,7 @@ paths:
         - $ref: "#/parameters/dashboards_commodities_ids"
         - $ref: "#/parameters/dashboards_sources_ids"
         - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_node_type_ids"
         - $ref: "#/parameters/page"
       responses:
         '200':
@@ -1007,6 +1029,12 @@ parameters:
     type: string
   dashboards_destinations_ids:
     name: destinations_ids
+    in: query
+    description: 'String with comma-separated numeric ids'
+    required: false
+    type: string
+  dashboards_node_type_ids:
+    name: node_types_ids
     in: query
     description: 'String with comma-separated numeric ids'
     required: false
