@@ -6,7 +6,6 @@ import GridListItem from 'react-components/shared/grid-list-item.component';
 
 function CommoditiesPanel(props) {
   const { searchCommodities, commodities, activeCommodityId, onSelectCommodity } = props;
-
   return (
     <React.Fragment>
       <SearchInput
@@ -18,14 +17,18 @@ function CommoditiesPanel(props) {
       <p className="dashboard-panel-text">You can choose up to three commodities:</p>
       <GridList
         items={commodities}
-        height={200}
+        height={commodities.length > 5 ? 200 : 50}
         width={950}
         rowHeight={50}
         columnWidth={190}
         columnCount={5}
       >
         {itemProps => (
-          <GridListItem {...itemProps} activeItem={activeCommodityId} onClick={onSelectCommodity} />
+          <GridListItem
+            {...itemProps}
+            isActive={activeCommodityId === (itemProps.item && itemProps.item.name)}
+            onClick={onSelectCommodity}
+          />
         )}
       </GridList>
     </React.Fragment>

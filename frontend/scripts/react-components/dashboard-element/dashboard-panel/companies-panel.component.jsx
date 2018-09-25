@@ -36,7 +36,11 @@ function CompaniesPanel(props) {
           columnCount={5}
         >
           {itemProps => (
-            <GridListItem {...itemProps} activeItem={activeCompanyId} onClick={onSelectCompany} />
+            <GridListItem
+              {...itemProps}
+              isActive={activeCompanyId === (itemProps.item && itemProps.item.name)}
+              onClick={onSelectCompany}
+            />
           )}
         </GridList>
       </Tabs>

@@ -55,7 +55,7 @@ class GridList extends React.Component {
         if (index % columnCount !== 0) {
           grouped.push(...Array(columnCount - (index % columnCount)).fill(null));
         }
-        grouped.push(item, null, null);
+        grouped.push(item, ...Array(columnCount - 1).fill(null));
       } else {
         grouped.push(item);
       }
@@ -86,7 +86,7 @@ class GridList extends React.Component {
         columnWidth={columnWidth}
         rowHeight={rowHeight}
         itemData={groupedItems || items}
-        rowCount={(groupedItems || items).length / columnCount}
+        rowCount={Math.ceil((groupedItems || items).length / columnCount)}
         columnCount={columnCount}
         onScroll={this.getMoreItems}
       >

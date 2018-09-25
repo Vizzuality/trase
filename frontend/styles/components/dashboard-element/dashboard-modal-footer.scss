@@ -19,12 +19,16 @@
     position: relative;
     align-items: center;
     height: 30px;
-    padding: 0 13px 0 0;
+    padding: 0 6px 0 0;
     font-size: 20px;
     font-weight: $font-weight-bold;
     text-transform: capitalize;
 
-    .modal-footer-item-remove-arrow {
+    &.-with-cross {
+      padding: 0 13px 0 0;
+    }
+
+    .modal-footer-item-remove-cross {
       position: absolute;
       top: 0;
       right: 0;

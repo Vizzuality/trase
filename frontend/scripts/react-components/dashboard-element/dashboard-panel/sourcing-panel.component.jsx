@@ -36,7 +36,11 @@ function SourcingPanel(props) {
         items={searchJurisdictions}
       >
         {itemProps => (
-          <GridListItem {...itemProps} activeItem={activeCountryId} onClick={onSelectCountry} />
+          <GridListItem
+            {...itemProps}
+            isActive={activeCountryId === (itemProps.item && itemProps.item.name)}
+            onClick={onSelectCountry}
+          />
         )}
       </GridList>
       {activeCountryId && (
@@ -60,7 +64,7 @@ function SourcingPanel(props) {
               {itemProps => (
                 <GridListItem
                   {...itemProps}
-                  activeItem={activeJurisdictionValueId}
+                  isActive={activeJurisdictionValueId === (itemProps.item && itemProps.item.name)}
                   onClick={onSelectJurisdictionValue}
                 />
               )}

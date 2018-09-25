@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
 function DashboardModalFooter(props) {
   const { dynamicSentenceParts, clearItem, onContinue } = props;
@@ -11,17 +12,21 @@ function DashboardModalFooter(props) {
           <React.Fragment>
             {`${part.prefix} `}
             {part.value && (
-              <span className="modal-footer-item notranslate">
+              <span
+                className={cx('modal-footer-item', 'notranslate', { '-with-cross': clearItem })}
+              >
                 {part.value}
-                <button
-                  onClick={() => clearItem(part.panel)}
-                  className="modal-footer-item-remove-arrow"
-                  type="button"
-                >
-                  <svg className="icon icon-close">
-                    <use xlinkHref="#icon-close" />
-                  </svg>
-                </button>
+                {clearItem && (
+                  <button
+                    onClick={() => clearItem(part.panel)}
+                    className="modal-footer-item-remove-cross"
+                    type="button"
+                  >
+                    <svg className="icon icon-close">
+                      <use xlinkHref="#icon-close" />
+                    </svg>
+                  </button>
+                )}
               </span>
             )}
           </React.Fragment>
