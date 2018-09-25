@@ -34,6 +34,7 @@ function ImportingPanel(props) {
             {...itemProps}
             isActive={activeJurisdictionId === (itemProps.item && itemProps.item.name)}
             enableItem={onSelectJurisdictionValue}
+            disableItem={() => onSelectJurisdictionValue(null)}
           />
         )}
       </GridList>

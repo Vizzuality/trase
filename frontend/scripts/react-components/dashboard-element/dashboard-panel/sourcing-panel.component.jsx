@@ -39,7 +39,10 @@ function SourcingPanel(props) {
           <GridListItem
             {...itemProps}
             isActive={activeCountryId === (itemProps.item && itemProps.item.name)}
-            onClick={onSelectCountry}
+            enableItem={onSelectCountry}
+            disableItem={
+              activeJurisdictionValueId === null ? () => onSelectCountry(null) : undefined
+            }
           />
         )}
       </GridList>
@@ -66,6 +69,7 @@ function SourcingPanel(props) {
                   {...itemProps}
                   isActive={activeJurisdictionValueId === (itemProps.item && itemProps.item.name)}
                   enableItem={onSelectJurisdictionValue}
+                  disableItem={() => onSelectJurisdictionValue(null)}
                 />
               )}
             </GridList>

@@ -28,7 +28,8 @@ function GridListItem(props) {
               onClick={() => onClick(item)}
               className={cx('grid-list-item-button', {
                 '-active': isActive,
-                '-has-info': !!tooltip
+                '-has-info': !!tooltip,
+                '-disabled': isActive && !disableItem
               })}
             >
               <span>{item.name}</span>

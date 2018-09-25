@@ -41,7 +41,6 @@
 
     &.-active {
       background-color: $charcoal-grey;
-      cursor: default;
 
       span {
         color: $white;
@@ -51,6 +50,10 @@
     &.-has-info {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
+    }
+
+    &.-disabled {
+      cursor: default;
     }
   }
 

@@ -51,7 +51,7 @@ function DashboardPanel(props) {
             onSelectCountry={item =>
               setActiveId({
                 type: 'item',
-                active: item.name,
+                active: item && item.name,
                 section: 'country',
                 panel: activePanelId
               })
@@ -67,7 +67,7 @@ function DashboardPanel(props) {
             onSelectJurisdictionValue={item =>
               setActiveId({
                 type: 'item',
-                active: item.name,
+                active: item && item.name,
                 section: 'jurisdiction',
                 panel: activePanelId
               })
@@ -80,7 +80,7 @@ function DashboardPanel(props) {
             jurisdictions={jurisdictions.state || []}
             onSelectJurisdictionValue={item =>
               setActiveId({
-                active: item.name,
+                active: item && item.name,
                 type: 'item',
                 section: 'jurisdiction',
                 panel: activePanelId
@@ -105,7 +105,7 @@ function DashboardPanel(props) {
             onSelectCompany={item =>
               setActiveId({
                 type: 'item',
-                active: item.name,
+                active: item && item.name,
                 section: 'company',
                 panel: activePanelId
               })
@@ -121,7 +121,7 @@ function DashboardPanel(props) {
             onSelectCommodity={item =>
               setActiveId({
                 type: 'item',
-                active: item.name,
+                active: item && item.name,
                 section: 'commodity',
                 panel: activePanelId
               })
