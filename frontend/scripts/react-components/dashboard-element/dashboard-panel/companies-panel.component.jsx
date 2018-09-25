@@ -51,12 +51,12 @@ function CompaniesPanel(props) {
 
 CompaniesPanel.propTypes = {
   tabs: PropTypes.array.isRequired,
+  activeCompanyId: PropTypes.string,
+  companies: PropTypes.object.isRequired,
   searchCompanies: PropTypes.array.isRequired,
-  companies: PropTypes.array.isRequired,
   onSelectNodeTypeTab: PropTypes.func.isRequired,
   onSelectCompany: PropTypes.func.isRequired,
-  activeNodeTypeTabId: PropTypes.string.isRequired,
-  activeCompanyId: PropTypes.string.isRequired
+  activeNodeTypeTabId: PropTypes.string.isRequired
 };
 
 export default CompaniesPanel;

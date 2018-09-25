@@ -7,7 +7,16 @@ import DashboardIndicators from 'react-components/dashboard-element/dashboard-in
 // import cx from 'classnames';
 
 function DashboardElement(props) {
-  const { step, setStep, modalOpen, closeModal, dynamicSentenceParts } = props;
+  const {
+    step,
+    setStep,
+    goToRoot,
+    modalOpen,
+    closeModal,
+    dynamicSentenceParts,
+    goBackOnCloseModal
+  } = props;
+  const onClose = goBackOnCloseModal ? goToRoot : closeModal;
   return (
     <div className="l-dashboard-element">
       <div className="c-dashboard-element">
@@ -23,20 +32,31 @@ function DashboardElement(props) {
             ))}
           </div>
         </section>
-        <SimpleModal isOpen={modalOpen} onRequestClose={closeModal} className="no-events">
+        <SimpleModal isOpen={modalOpen} onRequestClose={onClose} className="no-events">
           <div className="dashboard-modal-content all-events">
             <div className="dashboard-modal-close">
-              <button onClick={closeModal}>
+              <button onClick={onClose}>
                 <svg className="icon icon-close">
                   <use xlinkHref="#icon-close" />
                 </svg>
               </button>
             </div>
-            {step === 0 && <DashboardWelcome onContinue={() => setStep(1)} />}
-            {step === 1 && (
-              <Panel onContinue={() => setStep(2)} dynamicSentenceParts={dynamicSentenceParts} />
+            {step === DashboardElement.steps.WELCOME && (
+              <DashboardWelcome onContinue={() => setStep(DashboardElement.steps.PANEL)} />
             )}
-            {step === 2 && <DashboardIndicators dynamicSentenceParts={dynamicSentenceParts} />}
+            {step === DashboardElement.steps.PANEL && (
+              <Panel
+                onContinue={() => setStep(DashboardElement.steps.INDICATORS)}
+                dynamicSentenceParts={dynamicSentenceParts}
+              />
+            )}
+            {step === DashboardElement.steps.INDICATORS && (
+              <DashboardIndicators
+                dynamicSentenceParts={dynamicSentenceParts}
+                onContinue={closeModal}
+                goBack={() => setStep(DashboardElement.steps.PANEL)}
+              />
+            )}
           </div>
         </SimpleModal>
       </div>
@@ -47,9 +67,17 @@ function DashboardElement(props) {
 DashboardElement.propTypes = {
   step: PropTypes.number.isRequired,
   setStep: PropTypes.func.isRequired,
+  goToRoot: PropTypes.func.isRequired,
   modalOpen: PropTypes.bool.isRequired,
   dynamicSentenceParts: PropTypes.array,
-  closeModal: PropTypes.func.isRequired
+  closeModal: PropTypes.func.isRequired,
+  goBackOnCloseModal: PropTypes.bool.isRequired
+};
+
+DashboardElement.steps = {
+  WELCOME: 0,
+  PANEL: 1,
+  INDICATORS: 2
 };
 
 export default DashboardElement;

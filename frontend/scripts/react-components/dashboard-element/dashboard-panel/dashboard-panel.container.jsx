@@ -40,8 +40,7 @@ const mapDispatchToProps = dispatch =>
 class DashboardPanelContainer extends React.PureComponent {
   static propTypes = {
     dirtyBlocks: PropTypes.object,
-    getData: PropTypes.func.isRequired,
-    setCanCloseModal: PropTypes.func.isRequired
+    getData: PropTypes.func.isRequired
   };
 
   state = {

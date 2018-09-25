@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 
 function DashboardModalFooter(props) {
-  const { dynamicSentenceParts, clearItem, onContinue } = props;
+  const { dynamicSentenceParts, clearItem, onContinue, onBack, isDisabled } = props;
 
   return (
     <div className="c-dashboard-modal-footer">
       <p className="dashboard-modal-footer-text">
-        {dynamicSentenceParts.map(part => (
-          <React.Fragment>
+        {dynamicSentenceParts.map((part, i) => (
+          <React.Fragment key={part.prefix + part.value + i}>
             {`${part.prefix} `}
             {part.value && (
               <span
@@ -32,16 +32,30 @@ function DashboardModalFooter(props) {
           </React.Fragment>
         ))}
       </p>
-      <button type="button" onClick={onContinue} className="c-button -pink -large">
-        Continue
-      </button>
+      <div className="dashboard-modal-actions">
+        <button
+          type="button"
+          onClick={onContinue}
+          className="c-button -pink -large"
+          disabled={isDisabled}
+        >
+          Continue
+        </button>
+        {onBack && (
+          <button type="button" onClick={onBack} className="dashboard-modal-back-button">
+            Back To Options
+          </button>
+        )}
+      </div>
     </div>
   );
 }
 
 DashboardModalFooter.propTypes = {
+  onBack: PropTypes.func,
+  clearItem: PropTypes.func,
+  isDisabled: PropTypes.func,
   dynamicSentenceParts: PropTypes.array,
-  clearItem: PropTypes.func.isRequired,
   onContinue: PropTypes.func.isRequired
 };
 

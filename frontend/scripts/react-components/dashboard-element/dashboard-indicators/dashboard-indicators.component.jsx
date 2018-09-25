@@ -29,11 +29,13 @@ class DashboardIndicators extends React.PureComponent {
 
   render() {
     const {
-      dynamicSentenceParts,
+      goBack,
       indicators,
-      activeIndicatorsList,
+      onContinue,
       setActiveId,
-      removeActiveId
+      removeActiveId,
+      activeIndicatorsList,
+      dynamicSentenceParts
     } = this.props;
     const { activeItemInfo } = this.state;
     return (
@@ -64,7 +66,12 @@ class DashboardIndicators extends React.PureComponent {
             )}
           </GridList>
         </div>
-        <DashboardModalFooter dynamicSentenceParts={dynamicSentenceParts} />
+        <DashboardModalFooter
+          onBack={goBack}
+          onContinue={onContinue}
+          isDisabled={activeIndicatorsList.length === 0}
+          dynamicSentenceParts={dynamicSentenceParts}
+        />
       </div>
     );
   }
@@ -74,6 +81,8 @@ DashboardIndicators.propTypes = {
   indicators: PropTypes.array,
   setActiveId: PropTypes.func,
   removeActiveId: PropTypes.func,
+  goBack: PropTypes.func.isRequired,
+  onContinue: PropTypes.func.isRequired,
   activeIndicatorsList: PropTypes.array,
   dynamicSentenceParts: PropTypes.array
 };

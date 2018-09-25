@@ -38,4 +38,15 @@
       }
     }
   }
+
+  .dashboard-modal-back-button {
+    border: 0;
+    padding: 15px 10px;
+    margin: 0 0 0 10px;
+    color: $charcoal-grey;
+    font-family: $font-family-1;
+    font-size: 13px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
 }

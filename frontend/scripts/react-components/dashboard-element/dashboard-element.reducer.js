@@ -85,29 +85,29 @@ const dashboardElementReducerTypes = PropTypes => ({
     indicators: PropTypes.array.isRequired,
     countries: PropTypes.array.isRequired,
     companies: PropTypes.shape({
-      importers: PropTypes.array.isRequired,
-      exporters: PropTypes.array.isRequired
+      importers: PropTypes.array,
+      exporters: PropTypes.array
     }).isRequired,
     jurisdictions: PropTypes.shape({
-      biome: PropTypes.array.isRequired,
-      state: PropTypes.array.isRequired,
-      municipality: PropTypes.array.isRequired
+      biome: PropTypes.array,
+      state: PropTypes.array,
+      municipality: PropTypes.array
     }).isRequired
   }).isRequired,
   sourcingPanel: PropTypes.shape({
-    activeCountryItemId: PropTypes.string.isRequired,
-    activeJurisdictionItemId: PropTypes.string.isRequired,
+    activeCountryItemId: PropTypes.string,
+    activeJurisdictionItemId: PropTypes.string,
     activeJurisdictionTabId: PropTypes.string.isRequired
   }).isRequired,
   importingPanel: PropTypes.shape({
-    activeJurisdictionItemId: PropTypes.string.isRequired
+    activeJurisdictionItemId: PropTypes.string
   }).isRequired,
   companiesPanel: PropTypes.shape({
-    activeCompanyItemId: PropTypes.string.isRequired,
+    activeCompanyItemId: PropTypes.string,
     activeNodeTypeTabId: PropTypes.string.isRequired
   }).isRequired,
   commoditiesPanel: PropTypes.shape({
-    activeCommodityItemId: PropTypes.string.isRequired
+    activeCommodityItemId: PropTypes.string
   }).isRequired
 });
 
