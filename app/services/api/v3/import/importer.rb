@@ -102,10 +102,7 @@ module Api
             table_class = table[:table_class]
             yellow_tables = table[:yellow_tables]
             table_class.key_backup
-            @stats[table_class.table_name] = {
-              before: table_class.count,
-              remote: count_table(table_class.remote_table)
-            }
+            @stats[table_class.table_name] = {before: table_class.count}
             next unless yellow_tables
 
             yellow_table_stats = {}
