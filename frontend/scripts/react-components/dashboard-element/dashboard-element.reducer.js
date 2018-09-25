@@ -3,16 +3,20 @@ import createReducer from 'utils/createReducer';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_ACTIVE_ID,
-  DASHBOARD_ELEMENT__CLEAR_PANEL
+  DASHBOARD_ELEMENT__CLEAR_PANEL,
+  DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
+  DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR
 } from './dashboard-element.actions';
 
 const initialState = {
   data: {
+    indicators: [],
     countries: [],
     companies: {},
     jurisdictions: {},
     commodities: []
   },
+  activeIndicatorsList: [],
   sourcingPanel: {
     activeCountryItemId: null,
     activeJurisdictionItemId: null,
@@ -59,11 +63,26 @@ const dashboardElementReducer = {
       ...state,
       [panelName]: initialState[panelName]
     };
+  },
+  [DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR](state, action) {
+    const { active } = action.payload;
+    return {
+      ...state,
+      activeIndicatorsList: [...state.activeIndicatorsList, active]
+    };
+  },
+  [DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR](state, action) {
+    const { toRemove } = action.payload;
+    return {
+      ...state,
+      activeIndicatorsList: state.activeIndicatorsList.filter(item => item.name !== toRemove.name)
+    };
   }
 };
 
 const dashboardElementReducerTypes = PropTypes => ({
   data: PropTypes.shape({
+    indicators: PropTypes.array.isRequired,
     countries: PropTypes.array.isRequired,
     companies: PropTypes.shape({
       importers: PropTypes.array.isRequired,

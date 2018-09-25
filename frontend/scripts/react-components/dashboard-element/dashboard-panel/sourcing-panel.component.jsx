@@ -65,7 +65,7 @@ function SourcingPanel(props) {
                 <GridListItem
                   {...itemProps}
                   isActive={activeJurisdictionValueId === (itemProps.item && itemProps.item.name)}
-                  onClick={onSelectJurisdictionValue}
+                  enableItem={onSelectJurisdictionValue}
                 />
               )}
             </GridList>

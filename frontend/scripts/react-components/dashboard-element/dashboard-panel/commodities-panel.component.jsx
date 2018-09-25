@@ -27,7 +27,7 @@ function CommoditiesPanel(props) {
           <GridListItem
             {...itemProps}
             isActive={activeCommodityId === (itemProps.item && itemProps.item.name)}
-            onClick={onSelectCommodity}
+            enableItem={onSelectCommodity}
           />
         )}
       </GridList>

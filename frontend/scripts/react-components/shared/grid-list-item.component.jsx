@@ -4,8 +4,19 @@ import cx from 'classnames';
 import HelpTooltip from 'react-components/shared/help-tooltip.component';
 
 function GridListItem(props) {
-  const { item, style, isGroup, isActive, onClick, tooltip, onInfoClick, isInfoActive } = props;
+  const {
+    item,
+    style,
+    isGroup,
+    isActive,
+    enableItem,
+    disableItem,
+    tooltip,
+    onInfoClick,
+    isInfoActive
+  } = props;
   if (!item) return <b style={style} />;
+  const onClick = isActive && disableItem ? disableItem : enableItem;
   return (
     <React.Fragment>
       <div style={style} className="c-grid-list-item">
@@ -49,7 +60,8 @@ function GridListItem(props) {
 }
 
 GridListItem.propTypes = {
-  onClick: PropTypes.func,
+  enableItem: PropTypes.func,
+  disableItem: PropTypes.func,
   isGroup: PropTypes.bool,
   isActive: PropTypes.bool,
   tooltip: PropTypes.string,

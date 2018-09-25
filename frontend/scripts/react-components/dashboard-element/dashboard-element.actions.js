@@ -1,8 +1,21 @@
 export const DASHBOARD_ELEMENT__SET_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_ID = 'DASHBOARD_ELEMENT__SET_ACTIVE_ID';
 export const DASHBOARD_ELEMENT__CLEAR_PANEL = 'DASHBOARD_ELEMENT__CLEAR_PANEL';
+export const DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR = 'DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR';
+export const DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR =
+  'DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR';
 
 const data = {
+  indicators: [
+    { group: true, name: 'East Coast' },
+    { name: 'tupac' },
+    { name: 'kanye' },
+    { name: 'eminem' },
+    { group: true, name: 'West Coast' },
+    { name: 'biggie' },
+    { name: 'jay z' },
+    { name: 'drake' }
+  ],
   commodities: [
     { name: 'tupac' },
     { name: 'kanye' },
@@ -124,6 +137,7 @@ const data = {
 };
 
 const dependencies = {
+  indicators: ['indicators'],
   sourcing: ['countries', 'jurisdictions'],
   importing: ['jurisdictions'],
   companies: ['companies'],
@@ -159,4 +173,14 @@ export const setDashboardPanelActiveId = ({ type, active, panel, section }) => (
 export const clearDashaboardPanel = panel => ({
   type: DASHBOARD_ELEMENT__CLEAR_PANEL,
   payload: { panel }
+});
+
+export const addActiveIndicator = active => ({
+  type: DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
+  payload: { active }
+});
+
+export const removeActiveIndicator = toRemove => ({
+  type: DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
+  payload: { toRemove }
 });

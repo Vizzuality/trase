@@ -5,17 +5,6 @@ import DashboardModalFooter from 'react-components/dashboard-element/dahsboard-m
 import GridList from 'react-components/shared/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item.component';
 
-const list = [
-  { group: true, name: 'East Coast' },
-  { name: 'tupac' },
-  { name: 'kanye' },
-  { name: 'eminem' },
-  { group: true, name: 'West Coast' },
-  { name: 'biggie' },
-  { name: 'jay z' },
-  { name: 'drake' }
-];
-
 class DashboardIndicators extends React.PureComponent {
   state = {
     activeItemInfo: null
@@ -39,14 +28,20 @@ class DashboardIndicators extends React.PureComponent {
   };
 
   render() {
-    const { dynamicSentenceParts } = this.props;
+    const {
+      dynamicSentenceParts,
+      indicators,
+      activeIndicatorsList,
+      setActiveId,
+      removeActiveId
+    } = this.props;
     const { activeItemInfo } = this.state;
     return (
       <div className="c-dashboard-panel" onClick={this.resetActiveItemInfo}>
         <div className="dashboard-panel-content">
           <h2 className="dasboard-panel-title title -center -light">Indicators</h2>
           <GridList
-            items={list}
+            items={indicators}
             height={350}
             width={800}
             rowHeight={50}
@@ -58,6 +53,11 @@ class DashboardIndicators extends React.PureComponent {
               <GridListItem
                 {...itemProps}
                 tooltip="hehehe"
+                enableItem={setActiveId}
+                disableItem={removeActiveId}
+                isActive={activeIndicatorsList.find(
+                  indicator => indicator.name === (itemProps.item && itemProps.item.name)
+                )}
                 isInfoActive={activeItemInfo === (itemProps.item && itemProps.item.name)}
                 onInfoClick={this.setActiveItemInfo}
               />
@@ -71,6 +71,10 @@ class DashboardIndicators extends React.PureComponent {
 }
 
 DashboardIndicators.propTypes = {
+  indicators: PropTypes.array,
+  setActiveId: PropTypes.func,
+  removeActiveId: PropTypes.func,
+  activeIndicatorsList: PropTypes.array,
   dynamicSentenceParts: PropTypes.array
 };
 

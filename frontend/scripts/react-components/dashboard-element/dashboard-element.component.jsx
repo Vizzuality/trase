@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import SimpleModal from 'react-components/shared/simple-modal.component';
 import Panel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.container';
 import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome.component';
-import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators.component';
+import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators/dashboard-indicators.container';
 // import cx from 'classnames';
 
 function DashboardElement(props) {
