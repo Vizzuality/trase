@@ -23,7 +23,7 @@ const initialState = {
   isAppMenuVisible: false,
   tooltipCheck: 0,
   tooltips: null,
-  contextIsUserSelected: false,
+  contextIsUserSelected: true,
   currentDropdown: null,
   modal: {
     visibility: false,

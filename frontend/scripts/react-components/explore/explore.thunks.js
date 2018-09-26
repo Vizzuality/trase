@@ -32,7 +32,7 @@ export const redirectToExplore = (dispatch, getState, { action }) => {
   if (toolPages.includes(action.type)) {
     if (!previouslyVisitedExplorePage.get()) {
       previouslyVisitedExplorePage.set(Date.now());
-      dispatch(setContextIsUserSelected(false));
+      //     dispatch(setContextIsUserSelected(false));
       dispatch(redirect({ type: 'explore' }));
     }
   } else if (type === 'explore') {
