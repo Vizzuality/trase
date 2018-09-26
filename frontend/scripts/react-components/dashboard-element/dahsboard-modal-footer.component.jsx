@@ -54,7 +54,7 @@ function DashboardModalFooter(props) {
 DashboardModalFooter.propTypes = {
   onBack: PropTypes.func,
   clearItem: PropTypes.func,
-  isDisabled: PropTypes.func,
+  isDisabled: PropTypes.bool,
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired
 };

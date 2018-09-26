@@ -19,6 +19,39 @@
       background-color: $elephant;
     }
   }
+
+  .dashboard-element-widgets {
+    padding: 40px 0;
+
+    &-title-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    &-title {
+      color: $white;
+      font-family: $font-family-2;
+      font-size: 20px;
+      font-weight: $font-weight-light;
+      line-height: 1.6;
+      letter-spacing: -0.4px;
+    }
+
+    &-actions {
+      button {
+        width: 30px;
+        height: 30px;
+        border-radius: 100%;
+        border: solid 1px $white;
+        margin: 0 15px 0 0;
+
+        &:last-child {
+          margin: 0;
+        }
+      }
+    }
+  }
 }
 
 .dashboard-modal-content {

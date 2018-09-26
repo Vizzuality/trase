@@ -24,7 +24,7 @@ class DashboardElementContainer extends React.Component {
   };
 
   state = {
-    modalOpen: true,
+    modalOpen: false,
     goBackOnCloseModal: true,
     step: DashboardElement.steps.WELCOME
   };

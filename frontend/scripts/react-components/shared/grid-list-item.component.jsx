@@ -61,6 +61,7 @@ function GridListItem(props) {
 }
 
 GridListItem.propTypes = {
+  item: PropTypes.object,
   enableItem: PropTypes.func,
   disableItem: PropTypes.func,
   isGroup: PropTypes.bool,
@@ -68,7 +69,6 @@ GridListItem.propTypes = {
   tooltip: PropTypes.string,
   onInfoClick: PropTypes.func,
   isInfoActive: PropTypes.bool,
-  item: PropTypes.object.isRequired,
   style: PropTypes.object.isRequired
 };
 

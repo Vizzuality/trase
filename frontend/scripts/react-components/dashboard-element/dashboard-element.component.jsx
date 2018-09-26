@@ -6,32 +6,32 @@ import DashboardWelcome from 'react-components/dashboard-element/dashboard-welco
 import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators/dashboard-indicators.container';
 // import cx from 'classnames';
 
-function DashboardElement(props) {
-  const {
-    step,
-    setStep,
-    goToRoot,
-    modalOpen,
-    closeModal,
-    dynamicSentenceParts,
-    goBackOnCloseModal
-  } = props;
-  const onClose = goBackOnCloseModal ? goToRoot : closeModal;
-  return (
-    <div className="l-dashboard-element">
-      <div className="c-dashboard-element">
-        <div className="row column">
-          <h2 className="dashboard-element-title">Dashboard</h2>
-        </div>
-        <section className="dashboard-element-placeholder">
-          <div className="row">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="column small-12 medium-6">
-                <b className="dashboard-element-placeholder-item" />
-              </div>
-            ))}
-          </div>
-        </section>
+class DashboardElement extends React.PureComponent {
+  renderDashboardModal() {
+    const {
+      step,
+      setStep,
+      goToRoot,
+      modalOpen,
+      closeModal,
+      dynamicSentenceParts,
+      goBackOnCloseModal
+    } = this.props;
+    const onClose = goBackOnCloseModal ? goToRoot : closeModal;
+
+    return (
+      <React.Fragment>
+        {modalOpen && (
+          <section className="dashboard-element-placeholder">
+            <div className="row">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="column small-12 medium-6">
+                  <b className="dashboard-element-placeholder-item" />
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
         <SimpleModal isOpen={modalOpen} onRequestClose={onClose} className="no-events">
           <div className="dashboard-modal-content all-events">
             <div className="dashboard-modal-close">
@@ -59,9 +59,45 @@ function DashboardElement(props) {
             )}
           </div>
         </SimpleModal>
+      </React.Fragment>
+    );
+  }
+
+  render() {
+    const { modalOpen } = this.props;
+    return (
+      <div className="l-dashboard-element">
+        <div className="c-dashboard-element">
+          <section className="dashboard-element-header">
+            <div className="row">
+              <div className="column small-12">
+                <h2 className="dashboard-element-title">Dashboard</h2>
+              </div>
+            </div>
+          </section>
+          {this.renderDashboardModal()}
+          {modalOpen === false && (
+            <section className="dashboard-element-widgets">
+              <div className="row">
+                <div className="column small-12 medium-6">
+                  <div className="dashboard-element-widgets-title-container">
+                    <h3 className="dashboard-element-widgets-title">
+                      Max deforestation by exporter
+                    </h3>
+                    <div className="dashboard-element-widgets-actions">
+                      <button type="button" />
+                      <button type="button" />
+                      <button type="button" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 DashboardElement.propTypes = {
