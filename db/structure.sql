@@ -1723,19 +1723,6 @@ ALTER SEQUENCE public.flow_inds_id_seq OWNED BY public.flow_inds.id;
 
 
 --
--- Name: flow_paths_new_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.flow_paths_new_mv AS
- SELECT DISTINCT a.node_id,
-    a."position",
-    flows.context_id
-   FROM public.flows,
-    LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")
-  WITH NO DATA;
-
-
---
 -- Name: flow_quals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -3793,6 +3780,202 @@ CREATE UNIQUE INDEX context_node_types_mv_context_id_node_type_id_idx ON public.
 
 
 --
+-- Name: dashboards_commodities_mv_country_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_commodities_mv_country_id_idx ON public.dashboards_commodities_mv USING btree (country_id);
+
+
+--
+-- Name: dashboards_commodities_mv_group_columns_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_commodities_mv_group_columns_idx ON public.dashboards_commodities_mv USING btree (id, name);
+
+
+--
+-- Name: dashboards_commodities_mv_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_commodities_mv_node_id_idx ON public.dashboards_commodities_mv USING btree (node_id);
+
+
+--
+-- Name: dashboards_commodities_mv_unique_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX dashboards_commodities_mv_unique_idx ON public.dashboards_commodities_mv USING btree (id, node_id, country_id);
+
+
+--
+-- Name: dashboards_companies_mv_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_companies_mv_commodity_id_idx ON public.dashboards_companies_mv USING btree (commodity_id);
+
+
+--
+-- Name: dashboards_companies_mv_country_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_companies_mv_country_id_idx ON public.dashboards_companies_mv USING btree (country_id);
+
+
+--
+-- Name: dashboards_companies_mv_group_columns_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_companies_mv_group_columns_idx ON public.dashboards_companies_mv USING btree (id, name, node_type);
+
+
+--
+-- Name: dashboards_companies_mv_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_companies_mv_node_id_idx ON public.dashboards_companies_mv USING btree (node_id);
+
+
+--
+-- Name: dashboards_companies_mv_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_companies_mv_node_type_id_idx ON public.dashboards_companies_mv USING btree (node_type_id);
+
+
+--
+-- Name: dashboards_companies_mv_unique_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX dashboards_companies_mv_unique_idx ON public.dashboards_companies_mv USING btree (id, node_id, country_id, commodity_id);
+
+
+--
+-- Name: dashboards_countries_mv_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_countries_mv_commodity_id_idx ON public.dashboards_countries_mv USING btree (commodity_id);
+
+
+--
+-- Name: dashboards_countries_mv_group_columns_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_countries_mv_group_columns_idx ON public.dashboards_countries_mv USING btree (id, name);
+
+
+--
+-- Name: dashboards_countries_mv_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_countries_mv_node_id_idx ON public.dashboards_countries_mv USING btree (node_id);
+
+
+--
+-- Name: dashboards_countries_mv_unique_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX dashboards_countries_mv_unique_idx ON public.dashboards_countries_mv USING btree (id, node_id, commodity_id);
+
+
+--
+-- Name: dashboards_destinations_mv_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_destinations_mv_commodity_id_idx ON public.dashboards_destinations_mv USING btree (commodity_id);
+
+
+--
+-- Name: dashboards_destinations_mv_country_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_destinations_mv_country_id_idx ON public.dashboards_destinations_mv USING btree (country_id);
+
+
+--
+-- Name: dashboards_destinations_mv_group_columns_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_destinations_mv_group_columns_idx ON public.dashboards_destinations_mv USING btree (id, name, node_type);
+
+
+--
+-- Name: dashboards_destinations_mv_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_destinations_mv_node_id_idx ON public.dashboards_destinations_mv USING btree (node_id);
+
+
+--
+-- Name: dashboards_destinations_mv_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_destinations_mv_node_type_id_idx ON public.dashboards_destinations_mv USING btree (node_type_id);
+
+
+--
+-- Name: dashboards_destinations_mv_unique_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX dashboards_destinations_mv_unique_idx ON public.dashboards_destinations_mv USING btree (id, node_id, country_id, commodity_id);
+
+
+--
+-- Name: dashboards_flow_paths_mv_category_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_flow_paths_mv_category_idx ON public.dashboards_flow_paths_mv USING btree (category);
+
+
+--
+-- Name: dashboards_flow_paths_mv_flow_id_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX dashboards_flow_paths_mv_flow_id_node_id_idx ON public.dashboards_flow_paths_mv USING btree (flow_id, node_id);
+
+
+--
+-- Name: dashboards_sources_mv_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_sources_mv_commodity_id_idx ON public.dashboards_sources_mv USING btree (commodity_id);
+
+
+--
+-- Name: dashboards_sources_mv_country_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_sources_mv_country_id_idx ON public.dashboards_sources_mv USING btree (country_id);
+
+
+--
+-- Name: dashboards_sources_mv_group_columns_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_sources_mv_group_columns_idx ON public.dashboards_sources_mv USING btree (id, name, node_type, parent_name, parent_node_type);
+
+
+--
+-- Name: dashboards_sources_mv_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_sources_mv_node_id_idx ON public.dashboards_sources_mv USING btree (node_id);
+
+
+--
+-- Name: dashboards_sources_mv_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_sources_mv_node_type_id_idx ON public.dashboards_sources_mv USING btree (node_type_id);
+
+
+--
+-- Name: dashboards_sources_unique_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX dashboards_sources_unique_idx ON public.dashboards_sources_mv USING btree (id, node_id, country_id, commodity_id);
+
+
+--
 -- Name: download_attributes_mv_context_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3853,13 +4036,6 @@ CREATE UNIQUE INDEX download_flows_mv_row_name_attribute_type_attribute_id_idx O
 --
 
 CREATE INDEX flow_inds_ind_id_idx ON public.flow_inds USING btree (ind_id);
-
-
---
--- Name: flow_paths_new_mv_node_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX flow_paths_new_mv_node_id_idx ON public.flow_paths_new_mv USING btree (node_id);
 
 
 --
@@ -4007,132 +4183,6 @@ CREATE INDEX index_contextual_layers_on_context_id ON public.contextual_layers U
 --
 
 CREATE INDEX index_country_properties_on_country_id ON public.country_properties USING btree (country_id);
-
-
---
--- Name: index_dashboards_commodities_mv_on_flow_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_dashboards_commodities_mv_on_flow_id ON public.dashboards_commodities_mv USING btree (flow_id);
-
-
---
--- Name: index_dashboards_commodities_mv_on_id_and_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_commodities_mv_on_id_and_name ON public.dashboards_commodities_mv USING btree (id, name);
-
-
---
--- Name: index_dashboards_companies_mv_on_flow_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_companies_mv_on_flow_id ON public.dashboards_companies_mv USING btree (flow_id);
-
-
---
--- Name: index_dashboards_companies_mv_on_flow_id_and_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_dashboards_companies_mv_on_flow_id_and_id ON public.dashboards_companies_mv USING btree (flow_id, id);
-
-
---
--- Name: index_dashboards_companies_mv_on_id_and_name_and_node_type; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_companies_mv_on_id_and_name_and_node_type ON public.dashboards_companies_mv USING btree (id, name, node_type);
-
-
---
--- Name: index_dashboards_countries_mv_on_flow_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_dashboards_countries_mv_on_flow_id ON public.dashboards_countries_mv USING btree (flow_id);
-
-
---
--- Name: index_dashboards_countries_mv_on_id_and_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_countries_mv_on_id_and_name ON public.dashboards_countries_mv USING btree (id, name);
-
-
---
--- Name: index_dashboards_destinations_mv_on_flow_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_destinations_mv_on_flow_id ON public.dashboards_destinations_mv USING btree (flow_id);
-
-
---
--- Name: index_dashboards_destinations_mv_on_flow_id_and_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_dashboards_destinations_mv_on_flow_id_and_id ON public.dashboards_destinations_mv USING btree (flow_id, id);
-
-
---
--- Name: index_dashboards_destinations_mv_on_id_and_name_and_node_type; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_destinations_mv_on_id_and_name_and_node_type ON public.dashboards_destinations_mv USING btree (id, name, node_type);
-
-
---
--- Name: index_dashboards_flow_paths_mv_on_commodity_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_flow_paths_mv_on_commodity_id ON public.dashboards_flow_paths_mv USING btree (commodity_id);
-
-
---
--- Name: index_dashboards_flow_paths_mv_on_country_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_flow_paths_mv_on_country_id ON public.dashboards_flow_paths_mv USING btree (country_id);
-
-
---
--- Name: index_dashboards_flow_paths_mv_on_flow_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_flow_paths_mv_on_flow_id ON public.dashboards_flow_paths_mv USING btree (flow_id);
-
-
---
--- Name: index_dashboards_flow_paths_mv_on_flow_id_and_node_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_dashboards_flow_paths_mv_on_flow_id_and_node_id ON public.dashboards_flow_paths_mv USING btree (flow_id, node_id);
-
-
---
--- Name: index_dashboards_flow_paths_mv_on_node_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_flow_paths_mv_on_node_id ON public.dashboards_flow_paths_mv USING btree (node_id);
-
-
---
--- Name: index_dashboards_sources_mv_on_flow_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_sources_mv_on_flow_id ON public.dashboards_sources_mv USING btree (flow_id);
-
-
---
--- Name: index_dashboards_sources_mv_on_flow_id_and_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_dashboards_sources_mv_on_flow_id_and_id ON public.dashboards_sources_mv USING btree (flow_id, id);
-
-
---
--- Name: index_dashboards_sources_mv_on_id_and_name_and_node_type; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_sources_mv_on_id_and_name_and_node_type ON public.dashboards_sources_mv USING btree (id, name, node_type);
 
 
 --
