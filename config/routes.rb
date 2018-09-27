@@ -57,11 +57,21 @@ Rails.application.routes.draw do
       resource :database_validation, controller: :database_validation,
                                      only: [:show]
       namespace :dashboards do
-        resources :sources, only: [:index]
-        resources :companies, only: [:index]
-        resources :destinations, only: [:index]
-        resources :commodities, only: [:index]
-        resources :countries, only: [:index]
+        resources :sources, only: [:index] do
+          get :search, on: :collection
+        end
+        resources :companies, only: [:index] do
+          get :search, on: :collection
+        end
+        resources :destinations, only: [:index] do
+          get :search, on: :collection
+        end
+        resources :commodities, only: [:index] do
+          get :search, on: :collection
+        end
+        resources :countries, only: [:index] do
+          get :search, on: :collection
+        end
       end
     end
     namespace :v2 do

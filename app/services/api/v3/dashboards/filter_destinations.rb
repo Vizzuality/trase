@@ -2,6 +2,8 @@ module Api
   module V3
     module Dashboards
       class FilterDestinations < BaseFilter
+        include CallWithQueryTerm
+
         private
 
         def initialize_query
@@ -11,7 +13,11 @@ module Api
               :name,
               :node_type
             ).
-            group(:id, :name, :node_type)
+            group(
+              :id,
+              :name,
+              :node_type
+            )
         end
       end
     end

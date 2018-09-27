@@ -2,6 +2,8 @@ module Api
   module V3
     module Dashboards
       class FilterSources < BaseFilter
+        include CallWithQueryTerm
+
         private
 
         def initialize_query
