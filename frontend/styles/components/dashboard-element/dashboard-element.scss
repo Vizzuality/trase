@@ -1,5 +1,5 @@
 .c-dashboard-element {
-  padding: 60px 0;
+  padding: 60px 0 0;
 
   .dashboard-element-title {
     color: $white;
@@ -22,6 +22,7 @@
 
   .dashboard-element-widgets {
     padding: 40px 0;
+    background-color: $charcoal-dark;
 
     &-title-container {
       display: flex;
@@ -40,16 +41,24 @@
 
     &-actions {
       button {
+        cursor: pointer;
         width: 30px;
         height: 30px;
         border-radius: 100%;
-        border: solid 1px $white;
+        border: solid 1px rgba($white, 0.13);
         margin: 0 15px 0 0;
 
         &:last-child {
           margin: 0;
         }
       }
+    }
+
+    &-item {
+      height: 480px;
+      border-radius: 6px;
+      border: solid 1px rgba($white, 0.13);
+      margin: 18px 0 0;
     }
   }
 }

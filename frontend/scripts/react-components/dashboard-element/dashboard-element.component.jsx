@@ -4,6 +4,7 @@ import SimpleModal from 'react-components/shared/simple-modal.component';
 import Panel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.container';
 import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome.component';
 import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators/dashboard-indicators.container';
+import WidgetHeader from 'react-components/dashboard-element/widget-header.component';
 // import cx from 'classnames';
 
 class DashboardElement extends React.PureComponent {
@@ -80,15 +81,9 @@ class DashboardElement extends React.PureComponent {
             <section className="dashboard-element-widgets">
               <div className="row">
                 <div className="column small-12 medium-6">
-                  <div className="dashboard-element-widgets-title-container">
-                    <h3 className="dashboard-element-widgets-title">
-                      Max deforestation by exporter
-                    </h3>
-                    <div className="dashboard-element-widgets-actions">
-                      <button type="button" />
-                      <button type="button" />
-                      <button type="button" />
-                    </div>
+                  <WidgetHeader title="Max deforestation by exporter" />
+                  <div className="dashboard-element-widgets-item">
+
                   </div>
                 </div>
               </div>
