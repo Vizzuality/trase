@@ -4,6 +4,7 @@
 #
 #  id               :integer          primary key
 #  name             :text
+#  name_tsvector    :tsvector
 #  node_type_id     :integer
 #  node_type        :text
 #  parent_node_type :text
@@ -17,6 +18,7 @@
 #  dashboards_sources_mv_commodity_id_idx   (commodity_id)
 #  dashboards_sources_mv_country_id_idx     (country_id)
 #  dashboards_sources_mv_group_columns_idx  (id,name,node_type,parent_name,parent_node_type)
+#  dashboards_sources_mv_name_tsvector_idx  (name_tsvector)
 #  dashboards_sources_mv_node_id_idx        (node_id)
 #  dashboards_sources_mv_node_type_id_idx   (node_type_id)
 #  dashboards_sources_unique_idx            (id,node_id,country_id,commodity_id) UNIQUE

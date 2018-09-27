@@ -16,17 +16,13 @@ module Api
             (params[:companies_ids] || []) +
             (params[:destinations_ids] || [])
           @node_types_ids = params[:node_types_ids] || []
-          @filtered = false
+          @self_ids ||= []
           initialize_query
           apply_filters
         end
 
         def call
           @query
-        end
-
-        def filtered?
-          @filtered
         end
 
         private
@@ -43,34 +39,37 @@ module Api
           filter_by_commodities
           filter_by_nodes
           filter_by_node_types
+          filter_by_self
         end
 
         def filter_by_countries
           return unless @countries_ids.any?
 
           @query = @query.where(country_id: @countries_ids)
-          @filtered = true
         end
 
         def filter_by_commodities
           return unless @commodities_ids.any?
 
           @query = @query.where(commodity_id: @commodities_ids)
-          @filtered = true
         end
 
         def filter_by_nodes
           return unless @node_ids.any?
 
           @query = @query.where(node_id: @node_ids)
-          @filtered = true
         end
 
         def filter_by_node_types
           return unless @node_types_ids.any?
 
           @query = @query.where(node_type_id: @node_types_ids)
-          @filtered = true
+        end
+
+        def filter_by_self
+          return unless @self_ids.any?
+
+          @query = @query.where(id: @self_ids)
         end
       end
     end

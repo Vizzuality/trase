@@ -1189,6 +1189,7 @@ CREATE MATERIALIZED VIEW public.dashboards_flow_paths_mv AS
 CREATE MATERIALIZED VIEW public.dashboards_commodities_mv AS
  SELECT fp.commodity_id AS id,
     commodities.name,
+    to_tsvector('simple'::regconfig, COALESCE(commodities.name, ''::text)) AS name_tsvector,
     fp.country_id,
     fp.node_id
    FROM (public.dashboards_flow_paths_mv fp
@@ -1204,6 +1205,7 @@ CREATE MATERIALIZED VIEW public.dashboards_commodities_mv AS
 CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
  SELECT fp.node_id AS id,
     fp.node AS name,
+    to_tsvector('simple'::regconfig, COALESCE(fp.node, ''::text)) AS name_tsvector,
     fp.node_type_id,
     fp.node_type,
     all_fp.country_id,
@@ -1224,6 +1226,7 @@ CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
 CREATE MATERIALIZED VIEW public.dashboards_countries_mv AS
  SELECT fp.country_id AS id,
     countries.name,
+    to_tsvector('simple'::regconfig, COALESCE(countries.name, ''::text)) AS name_tsvector,
     countries.iso2,
     fp.commodity_id,
     fp.node_id
@@ -1240,6 +1243,7 @@ CREATE MATERIALIZED VIEW public.dashboards_countries_mv AS
 CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
  SELECT fp.node_id AS id,
     fp.node AS name,
+    to_tsvector('simple'::regconfig, COALESCE(fp.node, ''::text)) AS name_tsvector,
     fp.node_type_id,
     fp.node_type,
     all_fp.country_id,
@@ -1274,6 +1278,7 @@ CREATE TABLE public.node_quals (
 CREATE MATERIALIZED VIEW public.dashboards_sources_mv AS
  SELECT fp.node_id AS id,
     fp.node AS name,
+    to_tsvector('simple'::regconfig, COALESCE(fp.node, ''::text)) AS name_tsvector,
     fp.node_type_id,
     fp.node_type,
     quals.name AS parent_node_type,
@@ -3794,6 +3799,13 @@ CREATE INDEX dashboards_commodities_mv_group_columns_idx ON public.dashboards_co
 
 
 --
+-- Name: dashboards_commodities_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_commodities_mv_name_tsvector_idx ON public.dashboards_commodities_mv USING gin (name_tsvector);
+
+
+--
 -- Name: dashboards_commodities_mv_node_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3826,6 +3838,13 @@ CREATE INDEX dashboards_companies_mv_country_id_idx ON public.dashboards_compani
 --
 
 CREATE INDEX dashboards_companies_mv_group_columns_idx ON public.dashboards_companies_mv USING btree (id, name, node_type);
+
+
+--
+-- Name: dashboards_companies_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_companies_mv_name_tsvector_idx ON public.dashboards_companies_mv USING gin (name_tsvector);
 
 
 --
@@ -3864,6 +3883,13 @@ CREATE INDEX dashboards_countries_mv_group_columns_idx ON public.dashboards_coun
 
 
 --
+-- Name: dashboards_countries_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_countries_mv_name_tsvector_idx ON public.dashboards_countries_mv USING gin (name_tsvector);
+
+
+--
 -- Name: dashboards_countries_mv_node_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3896,6 +3922,13 @@ CREATE INDEX dashboards_destinations_mv_country_id_idx ON public.dashboards_dest
 --
 
 CREATE INDEX dashboards_destinations_mv_group_columns_idx ON public.dashboards_destinations_mv USING btree (id, name, node_type);
+
+
+--
+-- Name: dashboards_destinations_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_destinations_mv_name_tsvector_idx ON public.dashboards_destinations_mv USING gin (name_tsvector);
 
 
 --
@@ -3952,6 +3985,13 @@ CREATE INDEX dashboards_sources_mv_country_id_idx ON public.dashboards_sources_m
 --
 
 CREATE INDEX dashboards_sources_mv_group_columns_idx ON public.dashboards_sources_mv USING btree (id, name, node_type, parent_name, parent_node_type);
+
+
+--
+-- Name: dashboards_sources_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_sources_mv_name_tsvector_idx ON public.dashboards_sources_mv USING gin (name_tsvector);
 
 
 --
@@ -5120,6 +5160,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180924112258'),
 ('20180924112259'),
 ('20180924112260'),
-('20180924112261');
+('20180924112261'),
+('20180926084643');
 
 

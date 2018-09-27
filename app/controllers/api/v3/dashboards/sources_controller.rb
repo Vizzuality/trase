@@ -16,6 +16,15 @@ module Api
                  each_serializer: Api::V3::Dashboards::SourceSerializer
         end
 
+        def search
+          ensure_required_param_present(:q)
+          initialize_collection_for_search
+
+          render json: @collection,
+                 root: 'data',
+                 each_serializer: Api::V3::Dashboards::NodeSerializer
+        end
+
         private
 
         def filter_klass
