@@ -29,8 +29,14 @@ export const redirectToExplore = (dispatch, getState, { action }) => {
     }
   };
 
+  const urlHasSankeyState = !!(
+    action.meta &&
+    action.meta.query &&
+    action.meta.query.selectedContextId
+  );
+
   if (toolPages.includes(action.type)) {
-    if (!previouslyVisitedExplorePage.get()) {
+    if (!previouslyVisitedExplorePage.get() && !urlHasSankeyState) {
       previouslyVisitedExplorePage.set(Date.now());
       //     dispatch(setContextIsUserSelected(false));
       dispatch(redirect({ type: 'explore' }));
