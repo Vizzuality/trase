@@ -4,18 +4,21 @@ module Api
       class DestinationsController < ApiController
         include FilterParams
         include PaginationHeaders
+        include PaginatedCollection
         skip_before_action :load_context
 
         def index
-          @destinations = FilterDestinations.new(filter_params).call.
-            page(current_page).
-            per(current_per_page).
-            without_count
-          set_link_headers(@destinations)
+          initialize_collection_for_index
 
-          render json: @destinations,
+          render json: @collection,
                  root: 'data',
                  each_serializer: Api::V3::Dashboards::DestinationSerializer
+        end
+
+        private
+
+        def filter_klass
+          FilterDestinations
         end
       end
     end

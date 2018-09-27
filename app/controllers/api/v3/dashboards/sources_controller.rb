@@ -4,19 +4,22 @@ module Api
       class SourcesController < ApiController
         include FilterParams
         include PaginationHeaders
+        include PaginatedCollection
         skip_before_action :load_context
 
         def index
           ensure_required_param_present(:countries_ids)
-          @sources = FilterSources.new(filter_params).call.
-            page(current_page).
-            per(current_per_page).
-            without_count
-          set_link_headers(@sources)
+          initialize_collection_for_index
 
-          render json: @sources,
+          render json: @collection,
                  root: 'data',
                  each_serializer: Api::V3::Dashboards::SourceSerializer
+        end
+
+        private
+
+        def filter_klass
+          FilterSources
         end
       end
     end

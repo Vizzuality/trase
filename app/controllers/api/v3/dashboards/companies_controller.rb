@@ -4,18 +4,21 @@ module Api
       class CompaniesController < ApiController
         include FilterParams
         include PaginationHeaders
+        include PaginatedCollection
         skip_before_action :load_context
 
         def index
-          @companies = FilterCompanies.new(filter_params).call.
-            page(current_page).
-            per(current_per_page).
-            without_count
-          set_link_headers(@companies)
+          initialize_collection_for_index
 
-          render json: @companies,
+          render json: @collection,
                  root: 'data',
                  each_serializer: Api::V3::Dashboards::CompanySerializer
+        end
+
+        private
+
+        def filter_klass
+          FilterCompanies
         end
       end
     end
