@@ -4,6 +4,11 @@ module Api
       class FilterCountries < BaseFilter
         include CallWithQueryTerm
 
+        def initialize(params)
+          @self_ids = params.delete(:countries_ids)
+          super(params)
+        end
+
         private
 
         def initialize_query

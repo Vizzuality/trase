@@ -4,6 +4,11 @@ module Api
       class FilterSources < BaseFilter
         include CallWithQueryTerm
 
+        def initialize(params)
+          @self_ids = params.delete(:sources_ids)
+          super(params)
+        end
+
         private
 
         def initialize_query

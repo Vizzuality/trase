@@ -4,6 +4,11 @@ module Api
       class FilterCommodities < BaseFilter
         include CallWithQueryTerm
 
+        def initialize(params)
+          @self_ids = params.delete(:commodities_ids)
+          super(params)
+        end
+
         private
 
         def initialize_query

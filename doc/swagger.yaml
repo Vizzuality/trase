@@ -862,6 +862,7 @@ paths:
       produces:
         - application/json
       parameters:
+        - $ref: "#/parameters/dashboards_commodities_ids"
         - $ref: "#/parameters/dashboards_countries_ids"
         - $ref: "#/parameters/dashboards_sources_ids"
         - $ref: "#/parameters/dashboards_companies_ids"
@@ -887,6 +888,7 @@ paths:
       produces:
         - application/json
       parameters:
+        - $ref: "#/parameters/dashboards_countries_ids"
         - $ref: "#/parameters/dashboards_commodities_ids"
         - $ref: "#/parameters/dashboards_sources_ids"
         - $ref: "#/parameters/dashboards_companies_ids"
@@ -931,6 +933,7 @@ paths:
       produces:
         - application/json
       parameters:
+        - $ref: "#/parameters/dashboards_sources_ids"
         - $ref: "#/parameters/dashboards_countries_ids"
         - $ref: "#/parameters/dashboards_commodities_ids"
         - $ref: "#/parameters/dashboards_companies_ids"
@@ -959,6 +962,7 @@ paths:
       produces:
         - application/json
       parameters:
+        - $ref: "#/parameters/dashboards_companies_ids"
         - $ref: "#/parameters/dashboards_countries_ids"
         - $ref: "#/parameters/dashboards_commodities_ids"
         - $ref: "#/parameters/dashboards_sources_ids"
@@ -987,6 +991,7 @@ paths:
       produces:
         - application/json
       parameters:
+        - $ref: "#/parameters/dashboards_destinations_ids"
         - $ref: "#/parameters/dashboards_countries_ids"
         - $ref: "#/parameters/dashboards_commodities_ids"
         - $ref: "#/parameters/dashboards_sources_ids"
