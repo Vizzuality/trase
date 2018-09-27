@@ -10,6 +10,7 @@ module Api
           ensure_required_param_present(:countries_ids)
           @sources = FilterSources.new(filter_params).call.
             page(current_page).
+            per(current_per_page).
             without_count
           set_link_headers(@sources)
 

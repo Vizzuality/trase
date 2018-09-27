@@ -9,6 +9,7 @@ module Api
         def index
           @destinations = FilterDestinations.new(filter_params).call.
             page(current_page).
+            per(current_per_page).
             without_count
           set_link_headers(@destinations)
 

@@ -937,6 +937,7 @@ paths:
         - $ref: "#/parameters/dashboards_destinations_ids"
         - $ref: "#/parameters/dashboards_node_type_ids"
         - $ref: "#/parameters/page"
+        - $ref: "#/parameters/per_page"
       responses:
         '200':
           description: successful operation
@@ -964,6 +965,7 @@ paths:
         - $ref: "#/parameters/dashboards_destinations_ids"
         - $ref: "#/parameters/dashboards_node_type_ids"
         - $ref: "#/parameters/page"
+        - $ref: "#/parameters/per_page"
       responses:
         '200':
           description: successful operation
@@ -991,6 +993,7 @@ paths:
         - $ref: "#/parameters/dashboards_companies_ids"
         - $ref: "#/parameters/dashboards_node_type_ids"
         - $ref: "#/parameters/page"
+        - $ref: "#/parameters/per_page"
       responses:
         '200':
           description: successful operation
@@ -1043,6 +1046,12 @@ parameters:
     name: page
     in: query
     description: 'Number of page for paginated responses'
+    required: false
+    type: integer
+  per_page:
+    name: per_page
+    in: query
+    description: 'Number of iterms per page'
     required: false
     type: integer
     
