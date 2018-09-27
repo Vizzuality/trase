@@ -6,6 +6,7 @@ import DashboardElement from 'react-components/dashboard-element/dashboard-eleme
 import { getDynamicSentence } from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.selectors';
 
 const mapStateToProps = state => ({
+  activeIndicatorsList: state.dashboardElement.activeIndicatorsList,
   dynamicSentenceParts: getDynamicSentence(state)
 });
 
@@ -20,7 +21,8 @@ const mapDispatchToProps = dispatch =>
 class DashboardElementContainer extends React.Component {
   static propTypes = {
     goToRoot: PropTypes.func.isRequired,
-    dynamicSentenceParts: PropTypes.array
+    dynamicSentenceParts: PropTypes.array,
+    activeIndicatorsList: PropTypes.array
   };
 
   state = {
@@ -37,7 +39,7 @@ class DashboardElementContainer extends React.Component {
 
   render() {
     const { step, modalOpen, goBackOnCloseModal } = this.state;
-    const { dynamicSentenceParts, goToRoot } = this.props;
+    const { dynamicSentenceParts, goToRoot, activeIndicatorsList } = this.props;
     return (
       <DashboardElement
         step={step}
@@ -47,6 +49,7 @@ class DashboardElementContainer extends React.Component {
         goBackOnCloseModal={goBackOnCloseModal}
         closeModal={this.closeModal}
         dynamicSentenceParts={dynamicSentenceParts}
+        activeIndicatorsList={activeIndicatorsList}
       />
     );
   }

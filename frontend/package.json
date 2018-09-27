@@ -127,6 +127,7 @@
     "react-tether": "1.0.1",
     "react-transition-group": "2.4.0",
     "react-window": "^1.1.2",
+    "recharts": "^1.2.0",
     "redux": "4.0.0",
     "redux-first-router": "0.0.9-rudy",
     "redux-first-router-link": "1.4.2",

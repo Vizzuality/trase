@@ -4,7 +4,7 @@ import SimpleModal from 'react-components/shared/simple-modal.component';
 import Panel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.container';
 import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome.component';
 import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators/dashboard-indicators.container';
-import WidgetHeader from 'react-components/dashboard-element/widget-header.component';
+import WidgetHeader from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.component';
 // import cx from 'classnames';
 
 class DashboardElement extends React.PureComponent {
@@ -65,7 +65,7 @@ class DashboardElement extends React.PureComponent {
   }
 
   render() {
-    const { modalOpen } = this.props;
+    const { modalOpen, activeIndicatorsList } = this.props;
     return (
       <div className="l-dashboard-element">
         <div className="c-dashboard-element">
@@ -80,12 +80,11 @@ class DashboardElement extends React.PureComponent {
           {modalOpen === false && (
             <section className="dashboard-element-widgets">
               <div className="row">
-                <div className="column small-12 medium-6">
-                  <WidgetHeader title="Max deforestation by exporter" />
-                  <div className="dashboard-element-widgets-item">
-
+                {activeIndicatorsList.map(() => (
+                  <div className="column small-12 medium-6">
+                    <WidgetHeader title="Max deforestation by exporter" />
                   </div>
-                </div>
+                ))}
               </div>
             </section>
           )}
@@ -101,6 +100,7 @@ DashboardElement.propTypes = {
   goToRoot: PropTypes.func.isRequired,
   modalOpen: PropTypes.bool.isRequired,
   dynamicSentenceParts: PropTypes.array,
+  activeIndicatorsList: PropTypes.array,
   closeModal: PropTypes.func.isRequired,
   goBackOnCloseModal: PropTypes.bool.isRequired
 };
