@@ -8,14 +8,29 @@ export const DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR =
 const data = {
   indicators: [
     { group: true, name: 'East Coast' },
-    { name: 'tupac' },
+    {
+      name: 'tupac',
+      chartType: 'bar',
+      url:
+        'https://api.resourcewatch.org/v1/query/a86d906d-9862-4783-9e30-cdb68cd808b8?sql=SELECT%20fuel1%20as%20x,%20SUM(estimated_generation_gwh)%20as%20y%20FROM%20powerwatch_data_20180102%20%20GROUP%20BY%20%20x%20ORDER%20BY%20y%20desc%20LIMIT%20500&geostore=8de481b604a9d8c3f85d19846a976a3d'
+    },
     { name: 'eminem', disabled: true },
     { group: true, name: 'West Coast' },
     { name: 'biggie', disabled: true },
     { group: true, name: 'Other' },
     { name: 'jay z', disabled: true },
-    { name: 'kanye' },
-    { name: 'drake' }
+    {
+      name: 'kanye',
+      chartType: 'bar',
+      url:
+        'https://api.resourcewatch.org/v1/query/a86d906d-9862-4783-9e30-cdb68cd808b8?sql=SELECT%20fuel1%20as%20x,%20SUM(estimated_generation_gwh)%20as%20y%20FROM%20powerwatch_data_20180102%20%20GROUP%20BY%20%20x%20ORDER%20BY%20y%20desc%20LIMIT%20500&geostore=8de481b604a9d8c3f85d19846a976a3d'
+    },
+    {
+      name: 'drake',
+      chartType: 'bar',
+      url:
+        'https://api.resourcewatch.org/v1/query/a86d906d-9862-4783-9e30-cdb68cd808b8?sql=SELECT%20fuel1%20as%20x,%20SUM(estimated_generation_gwh)%20as%20y%20FROM%20powerwatch_data_20180102%20%20GROUP%20BY%20%20x%20ORDER%20BY%20y%20desc%20LIMIT%20500&geostore=8de481b604a9d8c3f85d19846a976a3d'
+    }
   ],
   commodities: [
     { name: 'tupac' },

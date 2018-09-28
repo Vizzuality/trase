@@ -4,8 +4,7 @@ import SimpleModal from 'react-components/shared/simple-modal.component';
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.container';
 import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome.component';
 import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators/dashboard-indicators.container';
-import WidgetHeader from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.component';
-// import cx from 'classnames';
+import DashboardWiget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.container';
 
 class DashboardElement extends React.PureComponent {
   static propTypes = {
@@ -84,9 +83,13 @@ class DashboardElement extends React.PureComponent {
           {modalOpen === false && (
             <section className="dashboard-element-widgets">
               <div className="row">
-                {activeIndicators.map(() => (
+                {activeIndicators.map(indicator => (
                   <div className="column small-12 medium-6">
-                    <WidgetHeader title="Max deforestation by exporter" />
+                    <DashboardWiget
+                      url={indicator.url}
+                      title={indicator.name}
+                      chartType={indicator.chartType}
+                    />
                   </div>
                 ))}
               </div>
