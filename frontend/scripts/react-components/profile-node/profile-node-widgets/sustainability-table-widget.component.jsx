@@ -27,7 +27,16 @@ class SustainabilityTableWidget extends React.PureComponent {
   }
 
   render() {
-    const { year, nodeId, contextId, type, className, profileType, testId } = this.props;
+    const {
+      year,
+      nodeId,
+      contextId,
+      type,
+      className,
+      profileType,
+      testId,
+      targetPayload
+    } = this.props;
     const params = { node_id: nodeId, context_id: contextId, year };
     const mainQuery = type === 'indicators' ? GET_PLACE_INDICATORS : GET_ACTOR_SUSTAINABILITY;
     return (
@@ -62,7 +71,7 @@ class SustainabilityTableWidget extends React.PureComponent {
                     data={data[mainQuery]}
                     tabsTitle={this.getTitle(nodeName)}
                     target={item => (item.name === 'Municipalities' ? 'profileNode' : null)}
-                    targetPayload={{ profileType }}
+                    targetPayload={targetPayload}
                     testId={`${testId}-multi`}
                   />
                 </div>
@@ -82,7 +91,8 @@ SustainabilityTableWidget.propTypes = {
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,
   contextId: PropTypes.number.isRequired,
-  profileType: PropTypes.string.isRequired
+  profileType: PropTypes.string.isRequired,
+  targetPayload: PropTypes.object.isRequired
 };
 
 export default SustainabilityTableWidget;
