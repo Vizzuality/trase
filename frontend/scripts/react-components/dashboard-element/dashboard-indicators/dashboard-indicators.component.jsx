@@ -57,6 +57,7 @@ class DashboardIndicators extends React.PureComponent {
                 tooltip="hehehe"
                 enableItem={setActiveId}
                 disableItem={removeActiveId}
+                isDisabled={!!itemProps.item && itemProps.item.disabled}
                 isActive={activeIndicatorsList.includes(itemProps.item && itemProps.item.name)}
                 isInfoActive={activeItemInfo === (itemProps.item && itemProps.item.name)}
                 onInfoClick={this.setActiveItemInfo}

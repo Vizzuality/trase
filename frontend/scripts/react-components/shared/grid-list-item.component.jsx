@@ -8,10 +8,11 @@ function GridListItem(props) {
     item,
     style,
     isGroup,
+    tooltip,
     isActive,
+    isDisabled,
     enableItem,
     disableItem,
-    tooltip,
     onInfoClick,
     isInfoActive
   } = props;
@@ -25,11 +26,12 @@ function GridListItem(props) {
           <div className="grid-list-item-content">
             <button
               type="button"
+              disabled={isDisabled}
               onClick={() => onClick(item)}
               className={cx('grid-list-item-button', {
                 '-active': isActive,
                 '-has-info': !!tooltip,
-                '-disabled': isActive && !disableItem
+                '-clickable': isActive && !disableItem
               })}
             >
               <span>{item.name}</span>
@@ -47,7 +49,7 @@ function GridListItem(props) {
                   show={isInfoActive}
                   position="bottom-start"
                 >
-                  <button type="button" onClick={() => onInfoClick(item)}>
+                  <button type="button" disabled={isDisabled} onClick={() => onInfoClick(item)}>
                     i
                   </button>
                 </HelpTooltip>
@@ -62,11 +64,12 @@ function GridListItem(props) {
 
 GridListItem.propTypes = {
   item: PropTypes.object,
-  enableItem: PropTypes.func,
-  disableItem: PropTypes.func,
   isGroup: PropTypes.bool,
   isActive: PropTypes.bool,
   tooltip: PropTypes.string,
+  isDisabled: PropTypes.bool,
+  enableItem: PropTypes.func,
+  disableItem: PropTypes.func,
   onInfoClick: PropTypes.func,
   isInfoActive: PropTypes.bool,
   style: PropTypes.object.isRequired
