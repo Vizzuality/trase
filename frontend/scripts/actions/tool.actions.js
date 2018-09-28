@@ -504,10 +504,7 @@ export function loadMapVectorData() {
       };
       if (geoColumn.useGeometryFromColumnId === undefined) {
         const countryName = getState().app.selectedContext.countryName;
-        const vectorLayerURL = `vector_layers/${countryName}_${geoColumn.name.replace(
-          / /g,
-          '_'
-        )}.topo.json`;
+        const vectorLayerURL = `vector_layers/${countryName}_${geoColumn.name}.topo.json`;
         const geometryPromise = fetch(vectorLayerURL)
           .then(response => {
             if (response.status >= 200 && response.status < 300) {
