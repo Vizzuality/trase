@@ -68,14 +68,14 @@ const dashboardElementReducer = {
     const { active } = action.payload;
     return {
       ...state,
-      activeIndicatorsList: [...state.activeIndicatorsList, active]
+      activeIndicatorsList: [...state.activeIndicatorsList, active.name]
     };
   },
   [DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR](state, action) {
     const { toRemove } = action.payload;
     return {
       ...state,
-      activeIndicatorsList: state.activeIndicatorsList.filter(item => item.name !== toRemove.name)
+      activeIndicatorsList: state.activeIndicatorsList.filter(item => item !== toRemove.name)
     };
   }
 };

@@ -4,6 +4,8 @@ const getSourcingPanel = state => state.dashboardElement.sourcingPanel;
 const getImportingPanel = state => state.dashboardElement.importingPanel;
 const getCompaniesPanel = state => state.dashboardElement.companiesPanel;
 const getCommoditiesPanel = state => state.dashboardElement.commoditiesPanel;
+const getIndicators = state => state.dashboardElement.data.indicators;
+const getActiveIndicators = state => state.dashboardElement.activeIndicatorsList;
 
 export const getDashboardPanels = createStructuredSelector({
   sourcingPanel: getSourcingPanel,
@@ -61,4 +63,10 @@ export const getDynamicSentence = createSelector(
       { panel: 'importing', prefix: importingActiveId ? `going to` : '', value: importingActiveId }
     ];
   }
+);
+
+export const getActiveIndicatorsData = createSelector(
+  [getIndicators, getActiveIndicators],
+  (indicators, activeIndicatorsList) =>
+    indicators.filter(indicator => activeIndicatorsList.includes(indicator.name))
 );

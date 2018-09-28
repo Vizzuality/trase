@@ -1,6 +1,7 @@
-import React from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
   clearDashaboardPanel,
   getDashboardPanelData,
@@ -9,20 +10,22 @@ import {
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
 import {
   getDashboardPanels,
-  getDirtyBlocks
-} from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.selectors';
-import PropTypes from 'prop-types';
+  getDirtyBlocks,
+  getDynamicSentence
+} from 'react-components/dashboard-element/dashboard-element.selectors';
 
 const mapStateToProps = state => {
   const {
     data: { jurisdictions, countries, commodities, companies }
   } = state.dashboardElement;
+
   return {
     countries,
     companies,
     commodities,
     jurisdictions,
     dirtyBlocks: getDirtyBlocks(state),
+    dynamicSentenceParts: getDynamicSentence(state),
     ...getDashboardPanels(state)
   };
 };
@@ -40,7 +43,8 @@ const mapDispatchToProps = dispatch =>
 class DashboardPanelContainer extends React.PureComponent {
   static propTypes = {
     dirtyBlocks: PropTypes.object,
-    getData: PropTypes.func.isRequired
+    getData: PropTypes.func.isRequired,
+    dynamicSentenceParts: PropTypes.array
   };
 
   state = {

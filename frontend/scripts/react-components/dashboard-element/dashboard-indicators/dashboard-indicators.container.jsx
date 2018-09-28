@@ -8,6 +8,7 @@ import {
   getDashboardPanelData
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators/dashboard-indicators.component';
+import { getDynamicSentence } from 'react-components/dashboard-element/dashboard-element.selectors';
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
@@ -20,6 +21,7 @@ const mapDispatchToProps = dispatch =>
   );
 
 const mapStateToProps = state => ({
+  dynamicSentenceParts: getDynamicSentence(state),
   indicators: state.dashboardElement.data.indicators,
   activeIndicatorsList: state.dashboardElement.activeIndicatorsList
 });

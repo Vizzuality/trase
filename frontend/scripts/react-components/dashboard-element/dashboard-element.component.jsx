@@ -1,23 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SimpleModal from 'react-components/shared/simple-modal.component';
-import Panel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.container';
+import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.container';
 import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome.component';
 import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators/dashboard-indicators.container';
 import WidgetHeader from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.component';
 // import cx from 'classnames';
 
 class DashboardElement extends React.PureComponent {
+  static propTypes = {
+    activeIndicators: PropTypes.array,
+    step: PropTypes.number.isRequired,
+    setStep: PropTypes.func.isRequired,
+    goToRoot: PropTypes.func.isRequired,
+    modalOpen: PropTypes.bool.isRequired,
+    closeModal: PropTypes.func.isRequired,
+    goBackOnCloseModal: PropTypes.bool.isRequired
+  };
+
+  static steps = {
+    WELCOME: 0,
+    PANEL: 1,
+    INDICATORS: 2
+  };
+
   renderDashboardModal() {
-    const {
-      step,
-      setStep,
-      goToRoot,
-      modalOpen,
-      closeModal,
-      dynamicSentenceParts,
-      goBackOnCloseModal
-    } = this.props;
+    const { step, setStep, goToRoot, modalOpen, closeModal, goBackOnCloseModal } = this.props;
     const onClose = goBackOnCloseModal ? goToRoot : closeModal;
 
     return (
@@ -46,14 +54,10 @@ class DashboardElement extends React.PureComponent {
               <DashboardWelcome onContinue={() => setStep(DashboardElement.steps.PANEL)} />
             )}
             {step === DashboardElement.steps.PANEL && (
-              <Panel
-                onContinue={() => setStep(DashboardElement.steps.INDICATORS)}
-                dynamicSentenceParts={dynamicSentenceParts}
-              />
+              <DashboardPanel onContinue={() => setStep(DashboardElement.steps.INDICATORS)} />
             )}
             {step === DashboardElement.steps.INDICATORS && (
               <DashboardIndicators
-                dynamicSentenceParts={dynamicSentenceParts}
                 onContinue={closeModal}
                 goBack={() => setStep(DashboardElement.steps.PANEL)}
               />
@@ -65,7 +69,7 @@ class DashboardElement extends React.PureComponent {
   }
 
   render() {
-    const { modalOpen, activeIndicatorsList } = this.props;
+    const { modalOpen, activeIndicators } = this.props;
     return (
       <div className="l-dashboard-element">
         <div className="c-dashboard-element">
@@ -80,7 +84,7 @@ class DashboardElement extends React.PureComponent {
           {modalOpen === false && (
             <section className="dashboard-element-widgets">
               <div className="row">
-                {activeIndicatorsList.map(() => (
+                {activeIndicators.map(() => (
                   <div className="column small-12 medium-6">
                     <WidgetHeader title="Max deforestation by exporter" />
                   </div>
@@ -93,22 +97,5 @@ class DashboardElement extends React.PureComponent {
     );
   }
 }
-
-DashboardElement.propTypes = {
-  step: PropTypes.number.isRequired,
-  setStep: PropTypes.func.isRequired,
-  goToRoot: PropTypes.func.isRequired,
-  modalOpen: PropTypes.bool.isRequired,
-  dynamicSentenceParts: PropTypes.array,
-  activeIndicatorsList: PropTypes.array,
-  closeModal: PropTypes.func.isRequired,
-  goBackOnCloseModal: PropTypes.bool.isRequired
-};
-
-DashboardElement.steps = {
-  WELCOME: 0,
-  PANEL: 1,
-  INDICATORS: 2
-};
 
 export default DashboardElement;

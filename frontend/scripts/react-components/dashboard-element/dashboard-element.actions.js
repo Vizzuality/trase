@@ -9,11 +9,12 @@ const data = {
   indicators: [
     { group: true, name: 'East Coast' },
     { name: 'tupac' },
-    { name: 'kanye' },
-    { name: 'eminem' },
+    { name: 'eminem', disabled: true },
     { group: true, name: 'West Coast' },
-    { name: 'biggie' },
-    { name: 'jay z' },
+    { name: 'biggie', disabled: true },
+    { group: true, name: 'Other' },
+    { name: 'jay z', disabled: true },
+    { name: 'kanye' },
     { name: 'drake' }
   ],
   commodities: [
