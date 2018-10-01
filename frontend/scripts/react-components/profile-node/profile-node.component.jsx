@@ -97,6 +97,7 @@ class ProfileNode extends React.PureComponent {
               nodeId={nodeId}
               contextId={context.id}
               testId="deforestation-risk"
+              targetPayload={{ profileType: 'place' }}
             />
             <ImportingCompaniesWidget
               printMode={printMode}
@@ -119,6 +120,7 @@ class ProfileNode extends React.PureComponent {
               nodeId={nodeId}
               contextId={context.id}
               testId="sustainability-indicators"
+              targetPayload={{ profileType: 'actor' }}
             />
             <DeforestationWidget
               year={year}
