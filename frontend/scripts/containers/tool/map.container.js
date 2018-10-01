@@ -116,4 +116,8 @@ const mapViewCallbacksToActions = () => ({
   onMoveEnd: (latlng, zoom) => saveMapView(latlng, zoom)
 });
 
-export default connect(Map, mapMethodsToState, mapViewCallbacksToActions);
+export default connect(
+  Map,
+  mapMethodsToState,
+  mapViewCallbacksToActions
+);

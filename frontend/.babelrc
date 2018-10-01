@@ -11,7 +11,8 @@
   "plugins": [
     "syntax-dynamic-import",
     "transform-object-rest-spread",
-    "transform-exponentiation-operator"
+    "transform-exponentiation-operator",
+    "transform-class-properties"
   ],
   "env": {
     "test": {

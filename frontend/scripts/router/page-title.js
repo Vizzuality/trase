@@ -1,6 +1,6 @@
 import capitalize from 'lodash/capitalize';
 
-export const getPageTitle = state => {
+export default function(state) {
   switch (state.location.type) {
     case 'about':
       return 'TRASE - About TRASE';
@@ -9,8 +9,7 @@ export const getPageTitle = state => {
     case 'data':
       return 'TRASE - Data Download';
     case 'profileRoot':
-    case 'profileActor':
-    case 'profilePlace':
+    case 'profileNode':
       return 'TRASE - Profiles';
     case 'tool':
       if (!state.app.selectedContext) {
@@ -34,4 +33,4 @@ export const getPageTitle = state => {
     default:
       return 'TRASE';
   }
-};
+}

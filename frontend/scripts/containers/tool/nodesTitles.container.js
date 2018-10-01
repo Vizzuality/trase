@@ -16,7 +16,8 @@ const mapMethodsToState = () => ({
       nodesData: getSelectedNodesData(state.tool),
       recolorGroups: state.tool.recolorGroups,
       currentQuant: state.tool.currentQuant,
-      selectedYears: state.tool.selectedYears
+      selectedYears: state.tool.selectedYears,
+      selectedContextId: state.app.selectedContext ? state.app.selectedContext.id : null
     })
   },
   highlightNode: {
@@ -33,7 +34,8 @@ const mapMethodsToState = () => ({
         recolorGroups: state.tool.recolorGroups,
         coordinates: state.tool.highlightedNodeCoordinates,
         currentQuant: state.tool.currentQuant,
-        selectedYears: state.tool.selectedYears
+        selectedYears: state.tool.selectedYears,
+        selectedContextId: state.app.selectedContext ? state.app.selectedContext.id : null
       };
     }
   }
@@ -41,8 +43,12 @@ const mapMethodsToState = () => ({
 
 const mapViewCallbacksToActions = () => ({
   onCloseNodeClicked: id => selectNode(id),
-  onProfileLinkClicked: (id, year) => navigateToProfile(id, year),
+  onProfileLinkClicked: (id, year, contextId) => navigateToProfile(id, year, contextId),
   onClearClick: () => resetState()
 });
 
-export default connect(NodesTitles, mapMethodsToState, mapViewCallbacksToActions);
+export default connect(
+  NodesTitles,
+  mapMethodsToState,
+  mapViewCallbacksToActions
+);

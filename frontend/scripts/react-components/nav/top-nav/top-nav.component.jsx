@@ -22,7 +22,7 @@ class TopNav extends React.PureComponent {
     };
     this.setBackground = throttle(this.setBackground.bind(this), 300);
     this.handleToggleClick = this.handleToggleClick.bind(this);
-    window.addEventListener('scroll', this.setBackground);
+    window.addEventListener('scroll', this.setBackground, { passive: true });
   }
 
   componentWillUnmount() {

@@ -4,13 +4,30 @@ import { json as d3_json } from 'd3-request';
 import { geoPath as d3_geoPath, geoMercator as d3_geoMercator } from 'd3-geo';
 import { geoRobinson as d3_geoRobinson } from 'd3-geo-projection';
 import { feature as topojsonFeature } from 'topojson';
+import isEqual from 'lodash/isEqual';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Responsive } from 'react-components/shared/responsive.hoc';
+import Responsive from 'react-components/shared/responsive.hoc';
 
 class Map extends Component {
   componentDidMount() {
     this.build();
+  }
+
+  shouldComponentUpdate(nextProps) {
+    const {
+      getPolygonClassName: cb1,
+      hideTooltipCallback: cb2,
+      showTooltipCallback: cb3,
+      ...next
+    } = nextProps;
+    const {
+      getPolygonClassName,
+      hideTooltipCallback,
+      showTooltipCallback,
+      ...current
+    } = this.props;
+    return !isEqual(next, current);
   }
 
   componentDidUpdate() {
@@ -42,8 +59,10 @@ class Map extends Component {
     const {
       width,
       height,
+      testId,
       topoJSONPath,
       topoJSONRoot,
+      getPolygonTestId,
       getPolygonClassName,
       showTooltipCallback,
       hideTooltipCallback,
@@ -61,7 +80,7 @@ class Map extends Component {
       .attr('width', width)
       .attr('height', height);
 
-    const geoParent = svg.append('g');
+    const geoParent = svg.append('g').attr('data-test', testId);
     const container = geoParent.append('g');
 
     const projection = useRobinsonProjection === true ? d3_geoRobinson() : d3_geoMercator();
@@ -76,6 +95,7 @@ class Map extends Component {
         .enter()
         .append('path')
         .attr('class', d => `polygon ${getPolygonClassName(d)}`)
+        .attr('data-test', d => getPolygonTestId && getPolygonTestId(d, testId))
         .attr('d', path);
 
       if (showTooltipCallback !== undefined) {
@@ -114,9 +134,11 @@ class Map extends Component {
 
 Map.propTypes = {
   width: PropTypes.number,
+  testId: PropTypes.string,
   height: PropTypes.number,
   topoJSONPath: PropTypes.string,
   topoJSONRoot: PropTypes.string,
+  getPolygonTestId: PropTypes.func,
   getPolygonClassName: PropTypes.func,
   showTooltipCallback: PropTypes.func,
   hideTooltipCallback: PropTypes.func,

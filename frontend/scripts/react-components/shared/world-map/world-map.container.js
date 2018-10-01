@@ -53,7 +53,8 @@ const mapStateToProps = state => {
   const pageType = state.location.type;
   const { selectedYears } = state.tool;
   const { selectedContext, contextIsUserSelected } = state.app;
-  const origin = selectedContext && COUNTRY_ID_ORIGIN[selectedContext.countryId];
+  const origin =
+    contextIsUserSelected && selectedContext ? COUNTRY_ID_ORIGIN[selectedContext.countryId] : null;
   const selectedContextId = selectedContext ? selectedContext.id : null;
 
   const topNodesKey = getTopNodesKey(selectedContextId, 8, ...selectedYears);
@@ -81,4 +82,7 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(WorldMap);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(WorldMap);

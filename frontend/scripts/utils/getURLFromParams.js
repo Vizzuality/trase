@@ -24,6 +24,15 @@ export const GET_TESTIMONIALS_URL = 'GET_TESTIMONIALS_URL';
 export const GET_MARKDOWN_CONTENT_URL = 'GET_MARKDOWN_CONTENT_URL';
 export const GET_TEAM_URL = 'GET_TEAM_URL';
 export const GET_TOP_NODES_URL = 'GET_TOP_NODES_URL';
+export const GET_NODE_SUMMARY_URL = 'GET_NODE_SUMMARY_URL';
+export const GET_PLACE_INDICATORS = 'GET_PLACE_INDICATORS';
+export const GET_ACTOR_TOP_COUNTRIES = 'GET_ACTOR_TOP_COUNTRIES';
+export const GET_ACTOR_TOP_SOURCES = 'GET_ACTOR_TOP_SOURCES';
+export const GET_PLACE_DEFORESTATION_TRAJECTORY = 'GET_PLACE_DEFORESTATION_TRAJECTORY';
+export const GET_PLACE_TOP_CONSUMER_ACTORS = 'GET_PLACE_TOP_CONSUMER_ACTORS';
+export const GET_PLACE_TOP_CONSUMER_COUNTRIES = 'GET_PLACE_TOP_CONSUMER_COUNTRIES';
+export const GET_ACTOR_SUSTAINABILITY = 'GET_ACTOR_SUSTAINABILITY';
+export const GET_ACTOR_EXPORTING_COMPANIES = 'GET_ACTOR_EXPORTING_COMPANIES';
 
 const API_ENDPOINTS = {
   [GET_CONTEXTS_URL]: { api: 3, endpoint: '/contexts' },
@@ -64,7 +73,43 @@ const API_ENDPOINTS = {
     endpoint: '/staff_groups',
     mock: '/mocks/v3_get_team.json'
   },
-  [GET_TOP_NODES_URL]: { api: 3, endpoint: '/contexts/$context_id$/top_nodes' }
+  [GET_TOP_NODES_URL]: { api: 3, endpoint: '/contexts/$context_id$/top_nodes' },
+  [GET_NODE_SUMMARY_URL]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/$profile_type$s/$node_id$/basic_attributes'
+  },
+  [GET_PLACE_INDICATORS]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/places/$node_id$/indicators'
+  },
+  [GET_ACTOR_TOP_COUNTRIES]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/actors/$node_id$/top_countries'
+  },
+  [GET_ACTOR_TOP_SOURCES]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/actors/$node_id$/top_sources'
+  },
+  [GET_ACTOR_SUSTAINABILITY]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/actors/$node_id$/sustainability'
+  },
+  [GET_ACTOR_EXPORTING_COMPANIES]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/actors/$node_id$/exporting_companies'
+  },
+  [GET_PLACE_DEFORESTATION_TRAJECTORY]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/places/$node_id$/trajectory_deforestation'
+  },
+  [GET_PLACE_TOP_CONSUMER_ACTORS]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/places/$node_id$/top_consumer_actors'
+  },
+  [GET_PLACE_TOP_CONSUMER_COUNTRIES]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/places/$node_id$/top_consumer_countries'
+  }
 };
 
 function replaceURLParams(endpoint, params) {

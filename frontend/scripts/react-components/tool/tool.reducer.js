@@ -40,7 +40,7 @@ import groupBy from 'lodash/groupBy';
 import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
 import keyBy from 'lodash/keyBy';
-import { createReducer } from 'scripts/store';
+import createReducer from 'utils/createReducer';
 import { getSelectedNodesColumnsPos } from 'react-components/tool/tool.selectors';
 import filterLinks from 'scripts/reducers/helpers/filterLinks';
 import getChoropleth from 'scripts/reducers/helpers/getChoropleth';

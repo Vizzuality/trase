@@ -5,7 +5,7 @@ import GA_DATA_EVENTS from './data.events';
 import GA_ROUTER_EVENTS from './router.events';
 
 const GA_EVENT_WHITELIST = [...GA_TOOL_EVENTS, ...GA_DATA_EVENTS, ...GA_ROUTER_EVENTS];
-const TRACK_WITH_QUERY = ['profileActor', 'profilePage'];
+const TRACK_WITH_QUERY = ['profileNode'];
 
 function createGAEvent(event, action, state) {
   if (event.hitType === 'pageview') {

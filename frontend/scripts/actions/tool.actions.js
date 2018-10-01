@@ -23,7 +23,6 @@ import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
 import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
 import isNodeColumnVisible from 'utils/isNodeColumnVisible';
-import capitalize from 'lodash/capitalize';
 import difference from 'lodash/difference';
 import intesection from 'lodash/intersection';
 import compact from 'lodash/compact';
@@ -505,7 +504,10 @@ export function loadMapVectorData() {
       };
       if (geoColumn.useGeometryFromColumnId === undefined) {
         const countryName = getState().app.selectedContext.countryName;
-        const vectorLayerURL = `vector_layers/${countryName}_${geoColumn.name}.topo.json`;
+        const vectorLayerURL = `vector_layers/${countryName}_${geoColumn.name.replace(
+          / /g,
+          '_'
+        )}.topo.json`;
         const geometryPromise = fetch(vectorLayerURL)
           .then(response => {
             if (response.status >= 200 && response.status < 300) {
@@ -800,12 +802,12 @@ export function collapseNodeSelection() {
   };
 }
 
-export function navigateToProfile(nodeId, year) {
+export function navigateToProfile(nodeId, year, contextId) {
   return (dispatch, getState) => {
     const node = getState().tool.nodesDict[nodeId];
     dispatch({
-      type: `profile${capitalize(node.profileType)}`,
-      payload: { query: { nodeId, year } }
+      type: 'profileNode',
+      payload: { query: { nodeId, year, contextId }, profileType: node.profileType }
     });
   };
 }

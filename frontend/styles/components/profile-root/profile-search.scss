@@ -3,8 +3,6 @@ $search-breakpoint-large: 911px;
 $search-box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2);
 $search-height-small: 45px;
 $search-height-large: 55px;
-$spinner-height-small: 35px;
-$spinner-height-large: 40px;
 
 
 .c-profile-search {
@@ -55,39 +53,6 @@ $spinner-height-large: 40px;
 
     &::placeholder {
       transition: color 150ms ease-out;
-    }
-  }
-
-  .profile-search-spinner {
-    position: relative;
-    height: $spinner-height-large;
-    width: $spinner-height-large;
-    background-color: transparent;
-
-    &::after {
-      content: '';
-      position: absolute;
-      top: $spinner-height-large - 30px;
-      left: $spinner-height-large - 30px;
-      width: $spinner-height-large - 20px;
-      height: $spinner-height-large - 20px;
-      border: 2px solid $charcoal-grey;
-      border-radius: 99px;
-      clip: rect(0, 20px, 13px, 0);
-
-      animation: rotate 1s;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
-    }
-
-    @keyframes rotate {
-      0% {
-        transform: rotate(0deg);
-      }
-
-      100% {
-        transform: rotate(360deg);
-      }
     }
   }
 

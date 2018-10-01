@@ -5,6 +5,7 @@ import Downshift from 'downshift';
 import ProfileSearchResult from 'react-components/profile-root/profile-search-result.component';
 import cx from 'classnames';
 import debounce from 'lodash/debounce';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
 
 const SEARCH_DEBOUNCE_RATE_IN_MS = 400;
 
@@ -45,7 +46,7 @@ class ProfileSearch extends PureComponent {
     const visibleResults = this.props.nodes.slice(0, 10);
 
     return (
-      <div className="c-profile-search">
+      <div className="c-profile-search" data-test="profile-search">
         <div
           className={cx('profile-search-bar', { '-loading': isLoading })}
           onClick={this.focusInput}
@@ -60,9 +61,10 @@ class ProfileSearch extends PureComponent {
             {...getInputProps({ placeholder: 'Search a company or production place' })}
             type="search"
             className="profile-search-input hide-for-small"
+            data-test="search-input-desktop"
           />
           {isLoading ? (
-            <span className="profile-search-spinner" />
+            <ShrinkingSpinner className="-dark" />
           ) : (
             <svg className="icon icon-search">
               <use xlinkHref="#icon-search" />

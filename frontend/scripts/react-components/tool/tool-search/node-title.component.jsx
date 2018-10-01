@@ -11,7 +11,7 @@ export default function NodeTitle({ columns = [], recolorGroup, onClose }) {
         <div className="node-title-column" key={key}>
           <div className="column-title">{column.title}</div>
           <div className="column-content">
-            {column.content}
+            {`${column.content} `}
             <span className="unit">{column.unit}</span>
           </div>
         </div>

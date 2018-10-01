@@ -5,6 +5,8 @@ module Api
       before_action :set_year
 
       def basic_attributes
+        ensure_required_param_present(:year)
+
         @result = Api::V3::Actors::BasicAttributes.new(
           @context, @node, @year
         ).call

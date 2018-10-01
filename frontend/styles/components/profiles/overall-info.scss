@@ -2,55 +2,6 @@
 
 .c-overall-info {
 
-  .dropdown-element {
-    display: inline-block;
-    margin-bottom: 10px;
-
-    &:not(:last-child) {
-      margin-right: 41px;
-    }
-
-    .c-dropdown {
-
-      > .dropdown-label {
-        margin-bottom: 0 !important;
-        font-size: $font-size-x-regular;
-        line-height: 1em;
-      }
-
-      > .dropdown-title {
-        &:after {
-          content: normal;
-        }
-      }
-    }
-
-    .c-dropdown.-active {
-      cursor: pointer;
-
-      > .dropdown-title {
-        &::after {
-          content: '';
-        }
-      }
-
-      > .dropdown-list {
-        width: 100%;
-        top: 100%;
-      }
-    }
-
-    @media screen and (max-width: $breakpoint-foundation-small) {
-      &:first-child {
-        width: 100%;
-      }
-
-      &:not(:last-child) {
-        margin-right: 21px;
-      }
-    }
-  }
-
   .stat-item {
     display: inline-block;
     margin-top: 36px;

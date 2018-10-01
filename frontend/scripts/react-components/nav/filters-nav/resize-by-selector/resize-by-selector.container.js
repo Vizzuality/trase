@@ -20,4 +20,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ResizeBySelector);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ResizeBySelector);

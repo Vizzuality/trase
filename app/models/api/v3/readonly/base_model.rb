@@ -6,8 +6,14 @@ module Api
           true
         end
 
-        def self.refresh
-          Scenic.database.refresh_materialized_view(table_name, concurrently: false)
+        def self.refresh(options = {})
+          concurrently = options[:concurrently] || true
+          concurrently = false unless IsMviewPopulated.new(table_name).call
+
+          Scenic.database.refresh_materialized_view(
+            table_name,
+            concurrently: concurrently
+          )
         end
       end
     end

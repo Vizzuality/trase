@@ -4,9 +4,6 @@ import Link from 'redux-first-router-link';
 import debounce from 'lodash/debounce';
 
 class Entrypoints extends React.PureComponent {
-  static getIsMobile() {
-    return window.innerWidth <= 700; // value needs to match with entrypoints.scss variable
-  }
   constructor(props) {
     super(props);
     this.state = {
@@ -68,6 +65,10 @@ class Entrypoints extends React.PureComponent {
 
   onResize() {
     this.setState({ isMobile: Entrypoints.getIsMobile() });
+  }
+
+  static getIsMobile() {
+    return window.innerWidth <= 700; // value needs to match with entrypoints.scss variable
   }
 
   getSliderRef(el) {

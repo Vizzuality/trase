@@ -18,7 +18,14 @@ export default class {
   }
 
   selectNodes(data) {
-    this._update(true, data.nodesData, data.recolorGroups, data.currentQuant, data.selectedYears);
+    this._update(
+      true,
+      data.nodesData,
+      data.recolorGroups,
+      data.currentQuant,
+      data.selectedYears,
+      data.selectedContextId
+    );
   }
 
   highlightNode({
@@ -27,7 +34,8 @@ export default class {
     recolorGroups,
     coordinates,
     currentQuant,
-    selectedYears
+    selectedYears,
+    selectedContextId
   }) {
     this.tooltip.hide();
     if (nodesData === undefined || !nodesData.length) {
@@ -39,11 +47,25 @@ export default class {
       this._showTooltip(nodesData, coordinates, currentQuant);
     } else {
       this.el.classList.remove('is-hidden');
-      this._update(!isHighlight, nodesData, recolorGroups, currentQuant, selectedYears);
+      this._update(
+        !isHighlight,
+        nodesData,
+        recolorGroups,
+        currentQuant,
+        selectedYears,
+        selectedContextId
+      );
     }
   }
 
-  _update(isSelect, nodesData, recolorGroups = null, currentQuant, selectedYears) {
+  _update(
+    isSelect,
+    nodesData,
+    recolorGroups = null,
+    currentQuant,
+    selectedYears,
+    selectedContextId
+  ) {
     this.clear.classList.toggle('is-hidden', !isSelect);
 
     Array.prototype.slice
@@ -59,6 +81,7 @@ export default class {
       });
 
     const templateData = {
+      contextId: selectedContextId,
       year: selectedYears ? selectedYears[0] : null,
       nodes: nodesData.map(node => {
         let renderedQuant;
@@ -111,7 +134,8 @@ export default class {
   _onNodeTitleClick(e) {
     this.callbacks.onProfileLinkClicked(
       parseInt(e.currentTarget.dataset.nodeId, 10),
-      parseInt(e.currentTarget.dataset.year, 10)
+      parseInt(e.currentTarget.dataset.year, 10),
+      parseInt(e.currentTarget.dataset.contextId, 10)
     );
   }
 

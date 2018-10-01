@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { select as d3_select, interval as d3_interval, easeLinear } from 'd3';
 
-import { Responsive } from 'react-components/shared/responsive.hoc';
+import Responsive from 'react-components/shared/responsive.hoc';
 import d3_sankey from './sankey';
 import energy from './energy.json';
 

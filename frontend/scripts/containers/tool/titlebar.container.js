@@ -18,4 +18,7 @@ const mapMethodsToState = state => ({
   }
 });
 
-export default connect(Titlebar, mapMethodsToState);
+export default connect(
+  Titlebar,
+  mapMethodsToState
+);

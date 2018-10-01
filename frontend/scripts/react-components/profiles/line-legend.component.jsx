@@ -1,15 +1,15 @@
 /* eslint-disable react/no-danger */
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import Tooltip from 'react-components/shared/help-tooltip.component';
 
 import 'styles/components/profiles/line.scss';
 
-class LineLegend extends Component {
+class LineLegend extends React.PureComponent {
   render() {
-    const filteredSortedLines = this.props.data.lines
+    const filteredSortedLines = this.props.lines
       .sort((a, b) => {
         const last = this.props.xValues.length - 1;
         if (a.values[last] > b.values[last]) return 1;
@@ -20,7 +20,7 @@ class LineLegend extends Component {
 
     return filteredSortedLines.map((lineData, index) => {
       const style =
-        typeof this.props.data.style !== 'undefined' ? this.props.data.style.style : lineData.style;
+        typeof this.props.style !== 'undefined' ? this.props.style.style : lineData.style;
 
       if (typeof lineData.legend_name !== 'undefined') {
         return (
@@ -39,7 +39,8 @@ class LineLegend extends Component {
 }
 
 LineLegend.propTypes = {
-  data: PropTypes.object,
+  lines: PropTypes.array,
+  style: PropTypes.object,
   xValues: PropTypes.array
 };
 

@@ -6,7 +6,8 @@ import { interpolateNumber as d3InterpolateNumber } from 'd3-interpolate';
 import formatValue from 'utils/formatValue';
 import wrapSVGText from 'utils/wrapSVGText';
 import { translateText } from 'utils/transifex';
-import { Responsive } from 'react-components/shared/responsive.hoc';
+import Tooltip from 'components/shared/info-tooltip.component';
+import Responsive from 'react-components/shared/responsive.hoc';
 
 import 'styles/components/profiles/mini-sankey.scss';
 
@@ -25,15 +26,34 @@ class MiniSankey extends Component {
     return Math.ceil(h);
   }
 
+  getTooltipRef = ref => {
+    this.tooltip = new Tooltip(ref);
+  };
+
+  showTooltipCallback = (source, indicator, value, unit, x, y) => {
+    if (this.tooltip) {
+      this.tooltip.show(x, y, source, [
+        {
+          title: indicator,
+          value: formatValue(value, indicator),
+          unit
+        }
+      ]);
+    }
+  };
+
+  hideTooltipCallback = () => this.tooltip && this.tooltip.hide();
+
   render() {
     const {
       data,
-      hideTooltipCallback,
       onLinkClick,
-      showTooltipCallback,
       targetLink,
       width,
-      year
+      year,
+      targetPayload,
+      contextId,
+      testId
     } = this.props;
     const totalHeight = data.targetNodes.reduce(
       (total, node) => total + Math.ceil(node.height * BASE_HEIGHT) + NODE_V_SPACE,
@@ -45,7 +65,7 @@ class MiniSankey extends Component {
     const nodeWidth = isSmallResolution ? NODE_WIDTH_SMALL : NODE_WIDTH;
     const textMinWidth = isSmallResolution ? 130 : 200;
     const leftTextRotate = isSmallResolution ? '-90' : '0';
-    const rightTextWidth = Math.max(width * TEXT_WIDTH_PERCENTAGE / 100, textMinWidth);
+    const rightTextWidth = Math.max((width * TEXT_WIDTH_PERCENTAGE) / 100, textMinWidth);
     const leftTextWidth = isSmallResolution ? 20 : rightTextWidth;
     const sankeyWidth = width - (leftTextWidth + rightTextWidth);
     const sankeyXStart = leftTextWidth;
@@ -81,7 +101,8 @@ class MiniSankey extends Component {
     });
 
     return (
-      <div className="mini-sankey">
+      <div className="mini-sankey" data-test={testId}>
+        <div className="c-info-tooltip is-hidden" ref={this.getTooltipRef} />
         <svg style={{ height: totalHeight, width }}>
           <linearGradient id="gradient" x1="0" x2="1" y1="0" y2="0">
             <stop offset="0%" className="gradient-color-start" />
@@ -107,8 +128,12 @@ class MiniSankey extends Component {
                 onClick={() => {
                   if (node.isDomesticConsumption || !targetLink) return;
                   onLinkClick(targetLink, {
-                    nodeId: node.id,
-                    year
+                    ...(targetPayload || {}),
+                    query: {
+                      year,
+                      contextId,
+                      nodeId: node.id
+                    }
                   });
                 }}
               >
@@ -116,7 +141,7 @@ class MiniSankey extends Component {
                 <text
                   className="end"
                   transform={`translate(${nodeWidth + 10},
-                ${13 + node.renderedHeight / 2 - TEXT_LINE_HEIGHT * node.lines.length / 2})`}
+                ${13 + node.renderedHeight / 2 - (TEXT_LINE_HEIGHT * node.lines.length) / 2})`}
                 >
                   {node.lines.map((line, i) => (
                     <tspan key={i} y={i * TEXT_LINE_HEIGHT} x="0">
@@ -145,18 +170,19 @@ class MiniSankey extends Component {
                   key={index}
                   d={path}
                   strokeWidth={node.renderedHeight}
+                  data-test={`${testId}-flow`}
                   className={node.isAggregated ? 'link-aggr' : 'link'}
-                  onMouseLeave={hideTooltipCallback}
-                  onMouseMove={event => {
-                    showTooltipCallback(
+                  onMouseLeave={this.hideTooltipCallback}
+                  onMouseMove={event =>
+                    this.showTooltipCallback(
                       node.name,
                       data.indicator,
                       node.value,
                       data.unit,
                       event.clientX + 10,
                       event.clientY + window.scrollY + 10
-                    );
-                  }}
+                    )
+                  }
                 />
               );
             })}
@@ -169,12 +195,13 @@ class MiniSankey extends Component {
 
 MiniSankey.propTypes = {
   data: PropTypes.object,
-  hideTooltipCallback: PropTypes.func,
+  testId: PropTypes.string,
   onLinkClick: PropTypes.func,
-  showTooltipCallback: PropTypes.func,
   targetLink: PropTypes.string,
+  targetPayload: PropTypes.object,
   width: PropTypes.number,
-  year: PropTypes.number
+  year: PropTypes.number,
+  contextId: PropTypes.number
 };
 
 export default Responsive()(MiniSankey);

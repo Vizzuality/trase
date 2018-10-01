@@ -10,4 +10,8 @@ const mapViewCallbacksToActions = () => ({
   onClose: () => closeStoryModal()
 });
 
-export default connect(ModalComponent, mapMethodsToState, mapViewCallbacksToActions);
+export default connect(
+  ModalComponent,
+  mapMethodsToState,
+  mapViewCallbacksToActions
+);

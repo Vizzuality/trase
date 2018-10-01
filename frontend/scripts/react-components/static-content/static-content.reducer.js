@@ -1,4 +1,4 @@
-import { createReducer } from 'store';
+import createReducer from 'utils/createReducer';
 import { STATIC_CONTENT__SET_MARKDOWN } from './static-content.actions';
 
 const initialState = {

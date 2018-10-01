@@ -340,7 +340,8 @@ export default class {
   _getLinkValue(link) {
     if (link.recolorBy === null) {
       return 'unknown';
-    } else if (this.currentSelectedRecolorBy.type !== 'ind') {
+    }
+    if (this.currentSelectedRecolorBy.type !== 'ind') {
       return capitalize(link.recolorBy);
     }
 

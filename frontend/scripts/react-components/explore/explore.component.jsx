@@ -16,7 +16,7 @@ class Explore extends React.PureComponent {
     this.columns = [
       {
         label: 'Top Exporting Companies',
-        link: 'profileActor',
+        link: 'profileNode',
         value: 6
       },
       {

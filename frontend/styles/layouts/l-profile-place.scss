@@ -150,11 +150,18 @@
     }
   }
 
-  .js-map-municipality {
+  .map-municipality-banner {
     height: 250px;
   }
 
   .c-dropdown {
     align-items: flex-start;
+  }
+
+  .spinner-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
   }
 }

@@ -22,4 +22,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContextSelector);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ContextSelector);

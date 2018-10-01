@@ -66,4 +66,7 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(GlobalSearch);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(GlobalSearch);

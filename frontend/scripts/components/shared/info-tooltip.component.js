@@ -3,16 +3,13 @@ import TooltipTemplate from 'templates/shared/info-tooltip.ejs';
 import 'styles/components/shared/info-tooltip.scss';
 
 export default class {
-  constructor(className) {
-    this.className = className;
+  constructor(selector) {
+    this.el = typeof selector === 'string' ? document.querySelector(selector) : selector;
     this.hide = debounce(this._hide.bind(this), 100);
   }
 
-  show(x, y, title, values) {
+  show = (x, y, title, values) => {
     this.hide.cancel();
-    if (this.el === undefined) {
-      this.el = document.querySelector(this.className);
-    }
 
     this.el.innerHTML = TooltipTemplate({ title, values });
     this.el.classList.remove('is-hidden');
@@ -24,12 +21,9 @@ export default class {
 
     this.el.style.left = `${fx}px`;
     this.el.style.top = `${fy}px`;
-  }
+  };
 
-  _hide() {
-    if (this.el === undefined) {
-      this.el = document.querySelector(this.className);
-    }
+  _hide = () => {
     this.el.classList.add('is-hidden');
-  }
+  };
 }

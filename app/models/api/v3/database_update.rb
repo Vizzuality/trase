@@ -31,7 +31,6 @@ module Api
         ary = []
         stats.each do |blue_table, blue_stats|
           b_line = "#{blue_table}: "
-          b_line << "REMOTE: #{blue_stats['remote']}, "
           b_line << "BEFORE: #{blue_stats['before']}, "
           b_line << "AFTER: #{blue_stats['after']}"
           ary << b_line

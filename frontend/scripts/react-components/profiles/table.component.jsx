@@ -12,7 +12,7 @@ import 'styles/components/profiles/area-table.scss';
 
 class Table extends Component {
   renderPlacesTableHeader() {
-    const data = this.props.data;
+    const { data, testId } = this.props;
 
     return (
       <thead>
@@ -21,7 +21,11 @@ class Table extends Component {
             <span className="only-for-print">{data.name}</span>
           </th>
           {data.rows.map((elem, index) => (
-            <th key={index} className="header-cell _text-align-right">
+            <th
+              key={index}
+              className="header-cell _text-align-right"
+              data-test={`${testId}-header-name`}
+            >
               {elem.name}
             </th>
           ))}
@@ -31,13 +35,13 @@ class Table extends Component {
   }
 
   renderPlacesTable() {
-    const data = this.props.data;
+    const { data, testId } = this.props;
     const columns = data.included_columns;
 
     return (
       <tbody>
         {data.rows[0].values.map((value, valueKey) => (
-          <tr key={valueKey} className="table-row">
+          <tr key={valueKey} className="table-row" data-test={`${testId}-row`}>
             <td className="cell-name">
               <span className="node-name">
                 {columns[valueKey].name}
@@ -66,7 +70,7 @@ class Table extends Component {
   }
 
   renderActorsTableHeader() {
-    const data = this.props.data;
+    const { testId, data } = this.props;
 
     return (
       <thead>
@@ -74,7 +78,9 @@ class Table extends Component {
           {data.included_columns.map((column, columnIndex) => (
             <th key={columnIndex} className="header-cell">
               <div className={cx({ 'align-content-right': columnIndex > 0 })}>
-                <span className="header-name">{column.name}</span>
+                <span className="header-name" data-test={`${testId}-header-name`}>
+                  {column.name}
+                </span>
                 {column.tooltip && <Tooltip text={column.tooltip} />}
               </div>
             </th>
@@ -85,12 +91,20 @@ class Table extends Component {
   }
 
   renderActorsTable() {
-    const { data, target, year } = this.props;
+    const { data, target, year, targetPayload, contextId, testId } = this.props;
+
+    const linkTo = id => ({
+      type: target,
+      payload: {
+        ...(targetPayload || {}),
+        query: { year, contextId, nodeId: id }
+      }
+    });
 
     return (
       <tbody>
         {data.rows.map((row, rowIndex) => (
-          <tr key={rowIndex} className="table-row">
+          <tr key={rowIndex} className="table-row" data-test={`${testId}-row`}>
             {row.is_total === true && (
               <td className="cell-score">
                 <span className="node-name">Total</span>
@@ -118,10 +132,7 @@ class Table extends Component {
                   target !== null &&
                   typeof value.value !== 'number' &&
                   value.id !== undefined && (
-                    <Link
-                      className="node-link"
-                      to={{ type: target, payload: { query: { nodeId: value.id, year } } }}
-                    >
+                    <Link className="node-link" to={linkTo(value.id)}>
                       <svg className="icon icon-check">
                         <use xlinkHref="#icon-outside-link" />
                       </svg>
@@ -136,8 +147,14 @@ class Table extends Component {
   }
 
   renderOtherTable() {
-    const { data, target } = this.props;
-
+    const { data, target, targetPayload, year, contextId } = this.props;
+    const linkTo = id => ({
+      type: target,
+      payload: {
+        ...(targetPayload || {}),
+        query: { year, contextId, nodeId: id }
+      }
+    });
     return (
       <tbody>
         {data.map((elem, dataIndex) => (
@@ -147,10 +164,7 @@ class Table extends Component {
                 {dataIndex + 1}.{elem.name}
               </span>
               {target !== null && (
-                <Link
-                  className="node-link"
-                  to={{ type: target, payload: { query: { nodeId: elem.id } } }}
-                >
+                <Link className="node-link" to={linkTo(elem.id)}>
                   <svg className="icon icon-check">
                     <use xlinkHref="#icon-outside-link" />
                   </svg>
@@ -187,7 +201,10 @@ Table.propTypes = {
   data: PropTypes.object,
   type: PropTypes.string,
   target: PropTypes.string,
-  year: PropTypes.number
+  testId: PropTypes.string,
+  year: PropTypes.number,
+  targetPayload: PropTypes.object,
+  contextId: PropTypes.number.isRequired
 };
 
 export default Table;

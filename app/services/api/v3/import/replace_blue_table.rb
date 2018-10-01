@@ -19,7 +19,7 @@ module Api
         private
 
         def replace
-          @table_class.connection.execute("TRUNCATE #{@local_table} CASCADE")
+          @table_class.connection.execute("DELETE FROM #{@local_table}")
           stmt = <<~SQL
             INSERT INTO #{@local_table}
             (#{@columns_cs})

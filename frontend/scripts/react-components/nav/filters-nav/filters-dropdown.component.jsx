@@ -10,7 +10,9 @@ class FiltersDropdown extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const currentlyDisplaysChildren = this.props.currentDropdown === this.props.id;
+    const { id, currentDropdown } = this.props;
+
+    const currentlyDisplaysChildren = currentDropdown === id;
     const willDisplayChildren = nextProps.currentDropdown === nextProps.id;
 
     if (!currentlyDisplaysChildren && willDisplayChildren) {
@@ -26,18 +28,19 @@ class FiltersDropdown extends Component {
       findParent.byClassName(e.target, 'js-dropdown') !== undefined;
 
     if (isInside === false) {
-      this.props.onClickOutside(null);
+      const { onClickOutside } = this.props;
+      onClickOutside(null);
     }
   }
 
   render() {
-    const { id, currentDropdown } = this.props;
+    const { id, currentDropdown, children } = this.props;
 
-    const children = currentDropdown !== id ? null : this.props.children;
+    const contentChildren = currentDropdown !== id ? null : children;
 
     return (
       <div id={id} ref={ref => (this.container = ref)} className="dropdown-container">
-        {children}
+        {contentChildren}
       </div>
     );
   }

@@ -3,7 +3,7 @@ import debounce from 'lodash/debounce';
 
 const DEFAULT_DEBOUNCE_RATE = 200;
 
-export function Responsive({ debounceRate = DEFAULT_DEBOUNCE_RATE } = {}) {
+export default function({ debounceRate = DEFAULT_DEBOUNCE_RATE } = {}) {
   return function ResponsiveEnhancer(WrappedComponent) {
     return class extends Component {
       constructor(props) {
@@ -18,12 +18,12 @@ export function Responsive({ debounceRate = DEFAULT_DEBOUNCE_RATE } = {}) {
       }
 
       componentDidMount() {
-        window.addEventListener('resize', this.onPageResize);
+        window.addEventListener('resize', this.onPageResize, { passive: true });
         this.setSize();
       }
 
       componentWillUnmount() {
-        window.removeEventListener('resize', this.onPageResize);
+        window.removeEventListener('resize', this.onPageResize, { passive: true });
       }
 
       onPageResize() {

@@ -25,4 +25,7 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(NodeTitleGroup);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NodeTitleGroup);

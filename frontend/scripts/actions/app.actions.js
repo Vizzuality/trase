@@ -7,7 +7,7 @@ import {
 } from 'utils/getURLFromParams';
 import { TOGGLE_MAP, loadToolDataForCurrentContext } from 'scripts/actions/tool.actions';
 import { getContextById } from 'scripts/reducers/helpers/contextHelper';
-import { getPageTitle } from 'scripts/router/page-title';
+import getPageTitle from 'scripts/router/page-title';
 
 export const LOAD_STATE_FROM_URL = 'LOAD_STATE_FROM_URL';
 export const LOAD_INITIAL_CONTEXT = 'LOAD_INITIAL_CONTEXT';

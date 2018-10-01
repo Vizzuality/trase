@@ -8,25 +8,6 @@ import debounce from 'lodash/debounce';
 import { DOCUMENT_POST_TYPES } from 'scripts/constants';
 
 class SliderSection extends React.PureComponent {
-  static getPerPage() {
-    // might seem repetitive but it's still needed.
-    switch (true) {
-      case window.innerWidth < 640:
-        return 1;
-      case window.innerWidth < 950:
-        return 2;
-      default:
-        return 3;
-    }
-  }
-
-  static getActionName(category) {
-    if (DOCUMENT_POST_TYPES.includes(category)) {
-      return 'Open document';
-    }
-    return 'See More';
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -67,6 +48,25 @@ class SliderSection extends React.PureComponent {
       visiblePages: SliderSection.getPerPage(),
       currentSlide: this.slider ? this.slider.currentSlide : 0
     });
+  }
+
+  static getPerPage() {
+    // might seem repetitive but it's still needed.
+    switch (true) {
+      case window.innerWidth < 640:
+        return 1;
+      case window.innerWidth < 950:
+        return 2;
+      default:
+        return 3;
+    }
+  }
+
+  static getActionName(category) {
+    if (DOCUMENT_POST_TYPES.includes(category)) {
+      return 'Open document';
+    }
+    return 'See More';
   }
 
   getSliderRef(ref) {

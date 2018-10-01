@@ -1,17 +1,22 @@
 import { GET_NODES_WITH_SEARCH_URL, getURLFromParams } from 'utils/getURLFromParams';
 import { DEFAULT_PROFILE_PAGE_YEAR } from 'constants';
-import capitalize from 'lodash/capitalize';
 import isEmpty from 'lodash/isEmpty';
 
-export const SET_PROFILE_SEARCH_NODES = 'SET_PROFILE_SEARCH_NODES';
 export const SET_PROFILE_SEARCH_TERM = 'SET_PROFILE_SEARCH_TERM';
 export const LOAD_PROFILE_SEARCH_RESULTS = 'LOAD_PROFILE_SEARCH_RESULTS';
 export const SET_PROFILE_ROOT_ERROR_MESSAGE = 'SET_PROFILE_ROOT_ERROR_MESSAGE';
 
 export const goToNodeProfilePage = node => dispatch =>
   dispatch({
-    type: `profile${capitalize(node.profile)}`,
-    payload: { query: { nodeId: node.id, year: DEFAULT_PROFILE_PAGE_YEAR } }
+    type: 'profileNode',
+    payload: {
+      query: {
+        nodeId: node.id,
+        contextId: node.contextId,
+        year: DEFAULT_PROFILE_PAGE_YEAR
+      },
+      profileType: node.profile
+    }
   });
 
 export function resetProfileSearchResults() {

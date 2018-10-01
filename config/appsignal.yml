@@ -44,6 +44,10 @@ sandbox:
   <<: *defaults
   active: true
 
+demo:
+  <<: *defaults
+  active: true
+
 development:
   active: false
 

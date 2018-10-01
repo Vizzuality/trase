@@ -11,16 +11,16 @@ import {
   getTestimonialsContent,
   getTweetsContent
 } from 'react-components/home/home.thunks';
-import { withSidebarNavLayout } from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
-import { getPageStaticContent } from 'react-components/static-content/static-content.thunks';
-import { loadBaseAppData } from 'react-components/shared/app.thunks';
-import { getTeam } from 'react-components/team/team.thunks';
+import withSidebarNavLayout from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
+import getPageStaticContent from 'react-components/static-content/static-content.thunks';
+import loadBaseAppData from 'react-components/shared/app.thunks';
+import getTeam from 'react-components/team/team.thunks';
 import {
   setContextForExplorePage,
   redirectToExplore
 } from 'react-components/explore/explore.thunks';
 import { loadToolInitialData } from 'scripts/react-components/tool/tool.thunks';
-import { getPageTitle } from 'scripts/router/page-title';
+import getPageTitle from 'scripts/router/page-title';
 
 const pagesNotSupportedOnMobile = ['tool', 'map', 'data'];
 
@@ -61,19 +61,9 @@ export const routes = {
     },
     thunk: loadPageData()
   },
-  profileActor: {
-    path: '/profile-actor',
-    page: 'profile-actor',
-    title: getPageTitle,
-    nav: {
-      className: '-light',
-      printable: true
-    },
-    thunk: loadPageData()
-  },
-  profilePlace: {
-    path: '/profile-place',
-    page: 'profile-place',
+  profileNode: {
+    path: '/profile-:profileType',
+    page: 'profile-node',
     title: getPageTitle,
     nav: {
       className: '-light',
