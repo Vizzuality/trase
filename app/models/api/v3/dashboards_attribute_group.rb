@@ -28,7 +28,7 @@ module Api
       end
 
       def refresh_dependencies
-        # TODO: mview
+        Api::V3::Readonly::DashboardsAttribute.refresh
       end
     end
   end

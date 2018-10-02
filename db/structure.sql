@@ -1185,6 +1185,85 @@ ALTER SEQUENCE public.dashboards_attributes_id_seq OWNED BY public.dashboards_at
 
 
 --
+-- Name: dashboards_inds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboards_inds (
+    id bigint NOT NULL,
+    dashboards_attribute_id bigint NOT NULL,
+    ind_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: dashboards_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboards_quals (
+    id bigint NOT NULL,
+    dashboards_attribute_id bigint NOT NULL,
+    qual_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: dashboards_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboards_quants (
+    id bigint NOT NULL,
+    dashboards_attribute_id bigint NOT NULL,
+    quant_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: dashboards_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.dashboards_attributes_mv AS
+ SELECT da.id,
+    da.dashboards_attribute_group_id,
+    da."position",
+    da.chart_type,
+    da.created_at,
+    da.updated_at,
+    a.id AS attribute_id
+   FROM ((public.dashboards_inds di
+     JOIN public.dashboards_attributes da ON ((da.id = di.dashboards_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = di.ind_id) AND (a.original_type = 'Ind'::text))))
+UNION ALL
+ SELECT da.id,
+    da.dashboards_attribute_group_id,
+    da."position",
+    da.chart_type,
+    da.created_at,
+    da.updated_at,
+    a.id AS attribute_id
+   FROM ((public.dashboards_quals dq
+     JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = dq.qual_id) AND (a.original_type = 'Qual'::text))))
+UNION ALL
+ SELECT da.id,
+    da.dashboards_attribute_group_id,
+    da."position",
+    da.chart_type,
+    da.created_at,
+    da.updated_at,
+    a.id AS attribute_id
+   FROM ((public.dashboards_quants dq
+     JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = dq.quant_id) AND (a.original_type = 'Quant'::text))))
+  WITH NO DATA;
+
+
+--
 -- Name: flows; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1323,19 +1402,6 @@ CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
 
 
 --
--- Name: dashboards_inds; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.dashboards_inds (
-    id bigint NOT NULL,
-    dashboards_attribute_id bigint NOT NULL,
-    ind_id bigint NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
 -- Name: dashboards_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -1355,19 +1421,6 @@ ALTER SEQUENCE public.dashboards_inds_id_seq OWNED BY public.dashboards_inds.id;
 
 
 --
--- Name: dashboards_quals; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.dashboards_quals (
-    id bigint NOT NULL,
-    dashboards_attribute_id bigint NOT NULL,
-    qual_id bigint NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
 -- Name: dashboards_quals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -1384,19 +1437,6 @@ CREATE SEQUENCE public.dashboards_quals_id_seq
 --
 
 ALTER SEQUENCE public.dashboards_quals_id_seq OWNED BY public.dashboards_quals.id;
-
-
---
--- Name: dashboards_quants; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.dashboards_quants (
-    id bigint NOT NULL,
-    dashboards_attribute_id bigint NOT NULL,
-    quant_id bigint NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
 
 
 --
@@ -4061,6 +4101,20 @@ CREATE UNIQUE INDEX context_node_types_mv_context_id_node_type_id_idx ON public.
 
 
 --
+-- Name: dashboards_attributes_mv_group_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_attributes_mv_group_id_attribute_id_idx ON public.dashboards_attributes_mv USING btree (dashboards_attribute_group_id, attribute_id);
+
+
+--
+-- Name: dashboards_attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX dashboards_attributes_mv_id_idx ON public.dashboards_attributes_mv USING btree (id);
+
+
+--
 -- Name: dashboards_commodities_mv_country_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5543,6 +5597,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180924112260'),
 ('20180924112261'),
 ('20180926084643'),
-('20180928122607');
+('20180928122607'),
+('20181001105332');
 
 
