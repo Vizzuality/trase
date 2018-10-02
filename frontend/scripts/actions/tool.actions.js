@@ -546,9 +546,6 @@ export function loadMapVectorData() {
         type: GET_MAP_VECTOR_DATA,
         mapVectorData
       });
-      dispatch({
-        type: SET_NODE_ATTRIBUTES
-      });
     });
   };
 }
