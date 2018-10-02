@@ -63,6 +63,7 @@ namespace :dashboards do
             COFFEE_YIELD_
             SOY_AREAPERC
           ),
+
           quals: %w(
             Commodity
           ),
