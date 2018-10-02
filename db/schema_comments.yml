@@ -104,6 +104,26 @@ tables:
         comment: Country longitude
       - name: zoom
         comment: Zoom level (0-18)
+  - name: dashboards_attribute_groups
+    comment: Groups attributes (inds/quals/quants) to display on dashboards wizard
+    columns:
+    - name: name
+      comment: Name for display
+    - name: position
+      comment: Display order
+  - name: dashboards_attributes
+    comment: Attributes (inds/quals/quants) available in dashboards
+    columns:
+      - name: chart_type
+        comment: Type of chart to use in dashboards
+      - name: position
+        comment: Display order in scope of group
+  - name: dashboards_inds
+    comment: Inds available in dashboards (see dashboards_attributes.)
+  - name: dashboards_quals
+    comment: Quals available in dashboards (see dashboards_attributes.)
+  - name: dashboards_quants
+    comment: Quants available in dashboards (see dashboards_attributes.)
   - name: download_attributes
     comment: Attributes (quals/quants) available for download.
     columns:
