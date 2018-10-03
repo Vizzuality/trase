@@ -152,8 +152,16 @@ module Api
             Api::V3::Readonly::RecolorByAttribute,
             Api::V3::Readonly::ResizeByAttribute,
             Api::V3::Readonly::Node,
-            Api::V3::Readonly::DownloadFlow
+            Api::V3::Readonly::DownloadFlow,
+            Api::V3::Readonly::Dashboards::FlowPath
           ].each(&:refresh)
+          [
+            Api::V3::Readonly::Dashboards::Commodity,
+            Api::V3::Readonly::Dashboards::Country,
+            Api::V3::Readonly::Dashboards::Source,
+            Api::V3::Readonly::Dashboards::Company,
+            Api::V3::Readonly::Dashboards::Destination
+          ].each { |mview| mview.refresh(skip_flow_paths: true) }
         end
       end
     end

@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'sidekiq/testing'
 
 RSpec.describe DatabaseUpdateWorker, type: :worker do
   Sidekiq::Testing.inline!

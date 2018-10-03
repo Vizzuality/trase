@@ -1,0 +1,133 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "The Root Schema",
+  "required": [
+    "data",
+    "meta"
+  ],
+  "properties": {
+    "data": {
+      "$id": "#/properties/data",
+      "type": "array",
+      "title": "The Data Schema",
+      "items": {
+        "$id": "#/properties/data/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "$id": "#/properties/data/items/properties/id",
+            "type": "integer",
+            "title": "The Id Schema",
+            "default": 0,
+            "examples": [
+              176
+            ]
+          },
+          "name": {
+            "$id": "#/properties/data/items/properties/name",
+            "type": "string",
+            "title": "The Name Schema",
+            "default": "",
+            "examples": [
+              "PARAGUAY"
+            ],
+            "pattern": "^(.*)$"
+          }
+        }
+      }
+    },
+    "meta": {
+      "$id": "#/properties/meta",
+      "type": "array",
+      "title": "The Meta Schema",
+      "items": {
+        "$id": "#/properties/meta/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "required": [
+          "id",
+          "context_id",
+          "node_type_id",
+          "column_position",
+          "country_id",
+          "commodity_id",
+          "node_type_name"
+        ],
+        "properties": {
+          "id": {
+            "$id": "#/properties/meta/items/properties/id",
+            "type": "integer",
+            "title": "The Id Schema",
+            "default": 0,
+            "examples": [
+              6
+            ]
+          },
+          "context_id": {
+            "$id": "#/properties/meta/items/properties/context_id",
+            "type": "integer",
+            "title": "The Context_id Schema",
+            "default": 0,
+            "examples": [
+              1
+            ]
+          },
+          "node_type_id": {
+            "$id": "#/properties/meta/items/properties/node_type_id",
+            "type": "integer",
+            "title": "The Node_type_id Schema",
+            "default": 0,
+            "examples": [
+              1
+            ]
+          },
+          "column_position": {
+            "$id": "#/properties/meta/items/properties/column_position",
+            "type": "integer",
+            "title": "The Column_position Schema",
+            "default": 0,
+            "examples": [
+              3
+            ]
+          },
+          "country_id": {
+            "$id": "#/properties/meta/items/properties/country_id",
+            "type": "integer",
+            "title": "The Country_id Schema",
+            "default": 0,
+            "examples": [
+              27
+            ]
+          },
+          "commodity_id": {
+            "$id": "#/properties/meta/items/properties/commodity_id",
+            "type": "integer",
+            "title": "The Commodity_id Schema",
+            "default": 0,
+            "examples": [
+              1
+            ]
+          },
+          "node_type_name": {
+            "$id": "#/properties/meta/items/properties/node_type_name",
+            "type": "string",
+            "title": "The Node_type_name Schema",
+            "default": "",
+            "examples": [
+              "LOGISTICS HUB"
+            ],
+            "pattern": "^(.*)$"
+          }
+        }
+      }
+    }
+  }
+}
