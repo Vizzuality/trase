@@ -1402,6 +1402,94 @@ CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
 
 
 --
+-- Name: flow_inds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.flow_inds (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    ind_id integer NOT NULL,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: flow_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.flow_quals (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    value text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: flow_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.flow_quants (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: dashboards_flow_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.dashboards_flow_attributes_mv AS
+ WITH all_attributes(id, display_name, tooltip_text, chart_type, dashboards_attribute_group_id, "position", original_id, original_type) AS (
+         SELECT a.id,
+            a.display_name,
+            a.tooltip_text,
+            da.chart_type,
+            da.dashboards_attribute_group_id,
+            da."position",
+            a.original_id,
+            a.original_type
+           FROM (public.dashboards_attributes_mv da
+             JOIN public.attributes_mv a ON ((a.id = da.attribute_id)))
+        ), combinations(flow_id, original_id, original_type) AS (
+         SELECT DISTINCT flow_inds.flow_id,
+            flow_inds.ind_id,
+            'Ind'::text
+           FROM public.flow_inds
+        UNION ALL
+         SELECT DISTINCT flow_quals.flow_id,
+            flow_quals.qual_id,
+            'Qual'::text
+           FROM public.flow_quals
+        UNION ALL
+         SELECT DISTINCT flow_quants.flow_id,
+            flow_quants.quant_id,
+            'Quant'::text
+           FROM public.flow_quants
+        )
+ SELECT DISTINCT contexts.country_id,
+    contexts.commodity_id,
+    flows.path,
+    all_attributes.id AS attribute_id,
+    all_attributes.display_name,
+    all_attributes.tooltip_text,
+    all_attributes.chart_type,
+    all_attributes.dashboards_attribute_group_id,
+    all_attributes."position"
+   FROM (((all_attributes
+     JOIN combinations ON (((all_attributes.original_id = combinations.original_id) AND (all_attributes.original_type = combinations.original_type))))
+     JOIN public.flows ON ((combinations.flow_id = flows.id)))
+     JOIN public.contexts ON ((flows.context_id = contexts.id)))
+  GROUP BY contexts.country_id, contexts.commodity_id, flows.path, all_attributes.id, all_attributes.display_name, all_attributes.tooltip_text, all_attributes.chart_type, all_attributes.dashboards_attribute_group_id, all_attributes."position"
+  WITH NO DATA;
+
+
+--
 -- Name: dashboards_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -1418,6 +1506,92 @@ CREATE SEQUENCE public.dashboards_inds_id_seq
 --
 
 ALTER SEQUENCE public.dashboards_inds_id_seq OWNED BY public.dashboards_inds.id;
+
+
+--
+-- Name: node_inds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_inds (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    ind_id integer NOT NULL,
+    year integer,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: node_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_quals (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    year integer,
+    value text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: node_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_quants (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    year integer,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: dashboards_node_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.dashboards_node_attributes_mv AS
+ WITH all_attributes(id, display_name, tooltip_text, chart_type, dashboards_attribute_group_id, "position", original_id, original_type) AS (
+         SELECT a.id,
+            a.display_name,
+            a.tooltip_text,
+            da.chart_type,
+            da.dashboards_attribute_group_id,
+            da."position",
+            a.original_id,
+            a.original_type
+           FROM (public.dashboards_attributes_mv da
+             JOIN public.attributes_mv a ON ((a.id = da.attribute_id)))
+        ), combinations(node_id, original_id, original_type) AS (
+         SELECT DISTINCT node_inds.node_id,
+            node_inds.ind_id,
+            'Ind'::text
+           FROM public.node_inds
+        UNION ALL
+         SELECT DISTINCT node_quals.node_id,
+            node_quals.qual_id,
+            'Qual'::text
+           FROM public.node_quals
+        UNION ALL
+         SELECT DISTINCT node_quants.node_id,
+            node_quants.quant_id,
+            'Quant'::text
+           FROM public.node_quants
+        )
+ SELECT DISTINCT combinations.node_id,
+    all_attributes.id AS attribute_id,
+    all_attributes.display_name,
+    all_attributes.tooltip_text,
+    all_attributes.chart_type,
+    all_attributes.dashboards_attribute_group_id,
+    all_attributes."position"
+   FROM (all_attributes
+     JOIN combinations ON (((all_attributes.original_id = combinations.original_id) AND (all_attributes.original_type = combinations.original_type))))
+  WITH NO DATA;
 
 
 --
@@ -1456,20 +1630,6 @@ CREATE SEQUENCE public.dashboards_quants_id_seq
 --
 
 ALTER SEQUENCE public.dashboards_quants_id_seq OWNED BY public.dashboards_quants.id;
-
-
---
--- Name: node_quals; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_quals (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    year integer,
-    value text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
 
 
 --
@@ -1694,32 +1854,6 @@ CREATE MATERIALIZED VIEW public.flow_paths_mv AS
 
 
 --
--- Name: flow_quals; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.flow_quals (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    value text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: flow_quants; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.flow_quants (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
 -- Name: download_flows_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -1894,19 +2028,6 @@ CREATE SEQUENCE public.download_versions_id_seq
 --
 
 ALTER SEQUENCE public.download_versions_id_seq OWNED BY public.download_versions.id;
-
-
---
--- Name: flow_inds; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.flow_inds (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    ind_id integer NOT NULL,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
 
 
 --
@@ -2214,20 +2335,6 @@ ALTER SEQUENCE public.map_quants_id_seq OWNED BY public.map_quants.id;
 
 
 --
--- Name: node_inds; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_inds (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    ind_id integer NOT NULL,
-    year integer,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
 -- Name: node_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -2295,20 +2402,6 @@ CREATE SEQUENCE public.node_quals_id_seq
 --
 
 ALTER SEQUENCE public.node_quals_id_seq OWNED BY public.node_quals.id;
-
-
---
--- Name: node_quants; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_quants (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    year integer,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
 
 
 --
@@ -4283,6 +4376,34 @@ CREATE UNIQUE INDEX dashboards_destinations_mv_unique_idx ON public.dashboards_d
 
 
 --
+-- Name: dashboards_flow_attributes_mv_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_flow_attributes_mv_commodity_id_idx ON public.dashboards_flow_attributes_mv USING btree (commodity_id);
+
+
+--
+-- Name: dashboards_flow_attributes_mv_country_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_flow_attributes_mv_country_id_idx ON public.dashboards_flow_attributes_mv USING btree (country_id);
+
+
+--
+-- Name: dashboards_flow_attributes_mv_flow_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX dashboards_flow_attributes_mv_flow_id_attribute_id_idx ON public.dashboards_flow_attributes_mv USING btree (attribute_id, path);
+
+
+--
+-- Name: dashboards_flow_attributes_mv_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_flow_attributes_mv_path_idx ON public.dashboards_flow_attributes_mv USING gist (path);
+
+
+--
 -- Name: dashboards_flow_paths_mv_category_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4294,6 +4415,13 @@ CREATE INDEX dashboards_flow_paths_mv_category_idx ON public.dashboards_flow_pat
 --
 
 CREATE UNIQUE INDEX dashboards_flow_paths_mv_flow_id_node_id_idx ON public.dashboards_flow_paths_mv USING btree (flow_id, node_id);
+
+
+--
+-- Name: dashboards_node_attributes_mv_node_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX dashboards_node_attributes_mv_node_id_attribute_id_idx ON public.dashboards_node_attributes_mv USING btree (node_id, attribute_id);
 
 
 --
@@ -5598,6 +5726,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180924112261'),
 ('20180926084643'),
 ('20180928122607'),
-('20181001105332');
+('20181001105332'),
+('20181002105509'),
+('20181002105912');
 
 

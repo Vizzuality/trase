@@ -27,6 +27,18 @@ module Api
         delegate :display_name, to: :readonly_attribute
         delegate :original_type, to: :readonly_attribute
         delegate :original_id, to: :readonly_attribute
+
+        def self.refresh(options = {})
+          super(options)
+          [
+            :dashboards_flow_attributes_mv,
+            :dashboards_node_attributes_mv
+          ].each do |mview|
+            Scenic.database.refresh_materialized_view(
+              mview, concurrently: false
+            )
+          end
+        end
       end
     end
   end
