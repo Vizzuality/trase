@@ -12,7 +12,9 @@ module Api
         end
 
         def call
-          @query.all
+          {
+            context_node_types: @query.all
+          }
         end
 
         private

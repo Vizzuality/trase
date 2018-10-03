@@ -904,24 +904,27 @@ paths:
                 items:
                   $ref: '#/definitions/DashboardsCountry'
               meta:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                    context_id:
-                      type: integer
-                    node_type_id:
-                      type: integer
-                    column_position:
-                      type: integer
-                    country_id:
-                      type: integer
-                    commodity_id:
-                      type: integer
-                    node_type_name:
-                      type: string
+                type: object
+                properties:
+                  context_node_types:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        context_id:
+                          type: integer
+                        node_type_id:
+                          type: integer
+                        column_position:
+                          type: integer
+                        country_id:
+                          type: integer
+                        commodity_id:
+                          type: integer
+                        node_type_name:
+                          type: string
 
   '/dashboards/sources':
     get:
