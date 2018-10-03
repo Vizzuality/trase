@@ -1013,6 +1013,44 @@ paths:
                 items:
                   $ref: '#/definitions/DashboardsDestination'
 
+  '/dashboards/attributes':
+    get:
+      tags:
+        - dashboards
+      summary: 'Attributes matching selected filters'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/dashboards_destinations_ids"
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsAttribute'
+              meta:
+                type: object
+                properties:
+                  groups:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+
 parameters:
   dashboards_countries_ids:
     name: countries_ids
@@ -1104,6 +1142,24 @@ definitions:
       name:
         type: string
       nodeType:
+        type: string
+  DashboardsAttribute:
+    type: object
+    properties:
+      id:
+        type: integer
+      displayName:
+        type: string
+      tooltipText:
+        type: string
+      groupId:
+        type: integer
+      chartType:
+        type: string
+        example: 'line, pie, bar, stacked_bar'
+      isDisabled:
+        type: boolean
+      url:
         type: string
   Context:
     type: object
