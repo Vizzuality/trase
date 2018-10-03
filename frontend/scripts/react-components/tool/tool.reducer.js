@@ -29,7 +29,8 @@ import {
   UPDATE_NODE_SELECTION,
   EXPAND_NODE_SELECTION,
   COLLAPSE_NODE_SELECTION,
-  SET_MAP_DIMENSIONS_DATA
+  SET_MAP_DIMENSIONS_DATA,
+  RESET_TOOL_LOADERS
 } from 'actions/tool.actions';
 import {
   LOAD_INITIAL_CONTEXT,
@@ -529,6 +530,9 @@ const toolReducer = {
   },
   [SET_SANKEY_SEARCH_VISIBILITY](state, action) {
     return Object.assign({}, state, { isSearchOpen: action.searchVisibility });
+  },
+  [RESET_TOOL_LOADERS](state) {
+    return Object.assign({}, state, { flowsLoading: true, mapLoading: true });
   }
 };
 
