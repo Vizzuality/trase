@@ -30,6 +30,7 @@ gem 'devise', '~> 4.2'
 gem 'activeadmin', '~> 1.2.1'
 gem 'activeadmin_simplemde'
 gem 'inherited_resources', github: 'activeadmin/inherited_resources'
+gem 'activeadmin_addons'
 
 gem 'ckeditor', git: 'https://github.com/galetahub/ckeditor.git'
 gem 'paperclip', '~> 5.2.0'
