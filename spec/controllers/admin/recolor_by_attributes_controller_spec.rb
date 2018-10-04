@@ -4,10 +4,10 @@ RSpec.describe Admin::RecolorByAttributesController, type: :controller do
   let(:user) { FactoryBot.create(:user) }
   before { sign_in user }
   before do
-    Api::V3::RecolorByAttribute.skip_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::RecolorByAttribute.skip_callback(:commit, :after, :refresh_dependents)
   end
   after do
-    Api::V3::RecolorByAttribute.set_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::RecolorByAttribute.set_callback(:commit, :after, :refresh_dependents)
   end
   describe 'POST create' do
     let(:context) { FactoryBot.create(:api_v3_context) }

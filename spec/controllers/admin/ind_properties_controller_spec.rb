@@ -4,10 +4,10 @@ RSpec.describe Admin::IndPropertiesController, type: :controller do
   let(:user) { FactoryBot.create(:user) }
   before { sign_in user }
   before do
-    Api::V3::IndProperty.skip_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::IndProperty.skip_callback(:commit, :after, :refresh_dependents)
   end
   after do
-    Api::V3::IndProperty.set_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::IndProperty.set_callback(:commit, :after, :refresh_dependents)
   end
   describe 'POST create' do
     let(:ind) { FactoryBot.create(:api_v3_ind) }

@@ -4,10 +4,10 @@ require 'services/api/v3/database_validation/checks/shared_check_examples'
 RSpec.describe Api::V3::DatabaseValidation::Checks::DeclaredYearsMatchData do
   context 'when checking resize_by_attributes' do
     before do
-      Api::V3::ResizeByAttribute.skip_callback(:commit, :after, :refresh_dependencies)
+      Api::V3::ResizeByAttribute.skip_callback(:commit, :after, :refresh_dependents)
     end
     after do
-      Api::V3::ResizeByAttribute.set_callback(:commit, :after, :refresh_dependencies)
+      Api::V3::ResizeByAttribute.set_callback(:commit, :after, :refresh_dependents)
     end
 
     let(:context) { FactoryBot.create(:api_v3_context) }

@@ -46,7 +46,7 @@ module Api
       validates :is_temporal_on_place_profile, inclusion: {in: [true, false]}
       validates :is_temporal_on_actor_profile, inclusion: {in: [true, false]}
 
-      after_commit :refresh_dependencies
+      after_commit :refresh_dependents
 
       def self.blue_foreign_keys
         [
@@ -54,7 +54,7 @@ module Api
         ]
       end
 
-      def refresh_dependencies
+      def refresh_dependents
         Api::V3::Readonly::Attribute.refresh
       end
     end

@@ -4,12 +4,12 @@ RSpec.describe Admin::MapAttributesController, type: :controller do
   let(:user) { FactoryBot.create(:user) }
   before { sign_in user }
   before do
-    Api::V3::MapAttributeGroup.skip_callback(:commit, :after, :refresh_dependencies)
-    Api::V3::MapAttribute.skip_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::MapAttributeGroup.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::MapAttribute.skip_callback(:commit, :after, :refresh_dependents)
   end
   after do
-    Api::V3::MapAttributeGroup.set_callback(:commit, :after, :refresh_dependencies)
-    Api::V3::MapAttribute.set_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::MapAttributeGroup.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::MapAttribute.set_callback(:commit, :after, :refresh_dependents)
   end
   describe 'POST create' do
     let(:map_attribute_group) {

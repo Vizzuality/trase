@@ -33,13 +33,15 @@ module Api
                 uniqueness: {scope: :context_node_type},
                 inclusion: NAME
 
+      after_commit :refresh_dependents
+
       def self.blue_foreign_keys
         [
           {name: :context_node_type_id, table_class: Api::V3::ContextNodeType}
         ]
       end
 
-      def refresh_dependencies
+      def refresh_dependents
         Api::V3::Readonly::Node.refresh
       end
     end

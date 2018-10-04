@@ -20,7 +20,7 @@ class ExpandAndRenameBucketsInMapAttributes < ActiveRecord::Migration[5.1]
       execute 'REFRESH MATERIALIZED VIEW map_attributes_mv'
     end
 
-    Api::V3::MapAttribute.skip_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::MapAttribute.skip_callback(:commit, :after, :refresh_dependents)
 
     Api::V3::MapAttribute.all.each do |ma|
       old_buckets = ma.dual_layer_buckets
@@ -34,7 +34,7 @@ class ExpandAndRenameBucketsInMapAttributes < ActiveRecord::Migration[5.1]
       end
     end
 
-    Api::V3::MapAttribute.set_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::MapAttribute.set_callback(:commit, :after, :refresh_dependents)
 
     Api::V3::Readonly::MapAttribute.refresh
   end
@@ -57,7 +57,7 @@ class ExpandAndRenameBucketsInMapAttributes < ActiveRecord::Migration[5.1]
       execute 'REFRESH MATERIALIZED VIEW map_attributes_mv'
     end
 
-    Api::V3::MapAttribute.skip_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::MapAttribute.skip_callback(:commit, :after, :refresh_dependents)
 
     Api::V3::MapAttribute.all.each do |ma|
       old_buckets = ma.dual_layer_buckets
@@ -69,7 +69,7 @@ class ExpandAndRenameBucketsInMapAttributes < ActiveRecord::Migration[5.1]
       end
     end
 
-    Api::V3::MapAttribute.set_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::MapAttribute.set_callback(:commit, :after, :refresh_dependents)
 
     Api::V3::Readonly::MapAttribute.refresh
   end

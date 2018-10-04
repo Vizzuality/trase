@@ -11,10 +11,10 @@ RSpec.describe Api::V3::DatabaseValidation::Checks::HasAtLeastOne do
 
   context 'when checking context resize_by_attributes' do
     before do
-      Api::V3::ResizeByAttribute.skip_callback(:commit, :after, :refresh_dependencies)
+      Api::V3::ResizeByAttribute.skip_callback(:commit, :after, :refresh_dependents)
     end
     after do
-      Api::V3::ResizeByAttribute.set_callback(:commit, :after, :refresh_dependencies)
+      Api::V3::ResizeByAttribute.set_callback(:commit, :after, :refresh_dependents)
     end
 
     let(:check) {

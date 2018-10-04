@@ -4,10 +4,10 @@ RSpec.describe Admin::QualPropertiesController, type: :controller do
   let(:user) { FactoryBot.create(:user) }
   before { sign_in user }
   before do
-    Api::V3::QualProperty.skip_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::QualProperty.skip_callback(:commit, :after, :refresh_dependents)
   end
   after do
-    Api::V3::QualProperty.set_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::QualProperty.set_callback(:commit, :after, :refresh_dependents)
   end
   describe 'POST create' do
     let(:qual) { FactoryBot.create(:api_v3_qual) }
