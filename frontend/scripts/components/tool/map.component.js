@@ -565,14 +565,17 @@ export default class {
           color,
           weight
         });
-      } else if (typeof layer._path !== 'undefined') {
+      } else {
+        layer.setStyle({
+          fillColor,
+          fillOpacity,
+          stroke: !isFilteredOut,
+          opacity: strokeOpacity,
+          interactive: !isFilteredOut,
+          color,
+          weight
+        });
         layer.disabled = !layer.feature.properties.hasFlows;
-        layer._path.style.fill = fillColor;
-        layer._path.style.fillOpacity = fillOpacity;
-        layer._path.style.stroke = color;
-        layer._path.style.strokeOpacity = strokeOpacity;
-        layer._path.style.strokeWidth = `${weight}px`;
-        layer._path.style.pointerEvents = isFilteredOut ? 'none' : 'auto';
       }
 
       if (isLinked) {

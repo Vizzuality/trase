@@ -33,7 +33,7 @@ if (process.env.NODE_ENV !== 'production' && PERF_TEST) {
   whyDidYouUpdate(React);
 }
 
-if (process.env.NODE_ENV !== 'production' && REDUX_LOGGER_ENABLED) {
+if (REDUX_LOGGER_ENABLED) {
   const { createLogger } = require('redux-logger');
 
   const loggerMiddleware = createLogger({

@@ -22,6 +22,12 @@ export default class {
   showLoader(loading) {
     const toolLoading = document.querySelector('.js-tool-loading');
     if (toolLoading) toolLoading.classList.toggle('is-visible', loading);
+
+    const map = document.querySelector('.c-map');
+    map.classList.toggle('-smooth-transition', !loading);
+
+    const sankey = document.querySelector('.c-sankey');
+    sankey.classList.toggle('-smooth-transition', !loading);
   }
 
   toggleMapVisibility(isMapVisible) {

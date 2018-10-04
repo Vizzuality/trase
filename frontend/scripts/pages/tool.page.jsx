@@ -24,7 +24,8 @@ import TooltipContainer from 'containers/shared/help-tooltip.container';
 import {
   resizeSankeyTool,
   loadDisclaimerTool,
-  loadStoryModalTool
+  loadStoryModalTool,
+  setToolLoaders
 } from 'react-components/tool/tool.thunks';
 import MapDimensionsContainer from 'containers/tool/map-dimensions.container';
 
@@ -54,6 +55,7 @@ export const mount = (root, store) => {
     new ModalContainer(store)
   ];
 
+  setToolLoaders(store.dispatch);
   loadDisclaimerTool(store.dispatch);
   loadStoryModalTool(store.dispatch, store.getState);
   resizeSankeyTool(store.dispatch);
