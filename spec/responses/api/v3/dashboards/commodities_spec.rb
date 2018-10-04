@@ -5,7 +5,7 @@ RSpec.describe 'Commodities', type: :request do
 
   describe 'GET /api/v3/dashboards/commodities' do
     before(:each) do
-      Api::V3::Readonly::Dashboards::Commodity.refresh(concurrently: false)
+      Api::V3::Readonly::Dashboards::Commodity.refresh
     end
 
     it 'has the correct response structure' do

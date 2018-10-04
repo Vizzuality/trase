@@ -27,13 +27,10 @@ module Api
     module Readonly
       module Dashboards
         class Destination < Api::V3::Readonly::BaseModel
+          include Refresh
+
           self.table_name = 'dashboards_destinations_mv'
           belongs_to :node
-
-          def self.refresh(options = {})
-            FlowPath.refresh unless options[:skip_flow_paths]
-            Scenic.database.refresh_materialized_view(table_name, concurrently: false)
-          end
         end
       end
     end
