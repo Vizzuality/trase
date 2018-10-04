@@ -37,6 +37,10 @@ module Api
         self.table_name = 'map_attributes_mv'
 
         belongs_to :map_attribute_group
+
+        def self.refresh_dependencies(options = {})
+          Api::V3::Readonly::Attribute.refresh(options)
+        end
       end
     end
   end

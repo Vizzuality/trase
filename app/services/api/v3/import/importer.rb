@@ -153,6 +153,7 @@ module Api
         end
 
         def refresh_mviews
+          Api::V3::Readonly::DownloadFlow.refresh # with dependencies
           [
             Api::V3::Readonly::Attribute,
             Api::V3::Readonly::DownloadAttribute,
@@ -161,16 +162,13 @@ module Api
             Api::V3::Readonly::ResizeByAttribute,
             Api::V3::Readonly::DashboardsAttribute,
             Api::V3::Readonly::Node,
-            Api::V3::Readonly::DownloadFlow,
-            Api::V3::Readonly::Dashboards::FlowPath
-          ].each(&:refresh)
-          [
+            Api::V3::Readonly::Dashboards::FlowPath,
             Api::V3::Readonly::Dashboards::Commodity,
             Api::V3::Readonly::Dashboards::Country,
             Api::V3::Readonly::Dashboards::Source,
             Api::V3::Readonly::Dashboards::Company,
             Api::V3::Readonly::Dashboards::Destination
-          ].each { |mview| mview.refresh(skip_flow_paths: true) }
+          ].each { |mview| mview.refresh(skip_dependencies: true) }
         end
       end
     end

@@ -32,6 +32,10 @@ module Api
         delegate :display_name, to: :readonly_attribute
         delegate :original_type, to: :readonly_attribute
         delegate :original_id, to: :readonly_attribute
+
+        def self.refresh_dependencies(options = {})
+          Api::V3::Readonly::Attribute.refresh(options)
+        end
       end
     end
   end

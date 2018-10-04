@@ -51,18 +51,13 @@ module Api
         self.table_name = 'download_flows_mv'
         self.primary_key = 'id'
 
-        def self.refresh(options = {})
-          unless options[:skip_flow_paths]
-            Scenic.database.refresh_materialized_view(
-              'flow_paths_mv', concurrently: false
-            )
-          end
-          super(options.slice(:concurrently))
-        end
-
         # this materialized view takes a long time to refresh
         def self.refresh_later(options = {})
           DownloadFlowsRefreshWorker.perform_async(options)
+        end
+
+        def self.refresh_dependencies(options = {})
+          refresh_by_name('flow_paths_mv', concurrently: false) # no unique index
         end
       end
     end

@@ -53,7 +53,7 @@ module Api
 
       def refresh_dependents
         Api::V3::Readonly::DownloadAttribute.refresh
-        Api::V3::Readonly::DownloadFlow.refresh_later(skip_flow_paths: true)
+        Api::V3::Readonly::DownloadFlow.refresh_later(skip_dependencies: true)
       end
     end
   end
