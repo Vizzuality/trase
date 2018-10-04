@@ -1,7 +1,7 @@
 ActiveAdmin.register Api::V3::DashboardTemplate, as: 'DashboardTemplate' do
   menu parent: 'Dashboards'
 
-  permit_params :title, :description, :image
+  permit_params :title, :description, :image, node_ids: []
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -21,6 +21,13 @@ ActiveAdmin.register Api::V3::DashboardTemplate, as: 'DashboardTemplate' do
                                      else
                                        content_tag(:span, 'no image available')
                                      end
+      input :node_ids, as: :selected_list,
+                       label: 'Nodes',
+                       minimum_input_length: 2,
+                       url: '/admin/node_search',
+                       display_name: :stringify,
+                       response_root: 'data',
+                       hint: 'Choose a node by name. The context displayed is merely for guidance, and will not restrict the dashboard to that country/commodity. Nodes used in multiple contexts will only be displayed once.'
     end
     f.actions
   end
@@ -32,9 +39,18 @@ ActiveAdmin.register Api::V3::DashboardTemplate, as: 'DashboardTemplate' do
   end
 
   show do
-    attributes_table do
+    attributes_table_for dashboard_template do
       row :title
       row :description
+      panel 'Nodes' do
+        table_for dashboard_template.nodes do
+          column :name
+          column(:node_type) { |node| node.node_type&.name }
+          column(:country) { |node| node.node_type&.context_node_types&.first&.context&.country&.name }
+          column(:commodity) { |node| node.node_type&.context_node_types&.first&.context&.commodity&.name }
+          # column :node_type.name
+        end
+      end
     end
   end
 end

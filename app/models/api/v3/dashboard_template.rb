@@ -16,6 +16,9 @@
 module Api
   module V3
     class DashboardTemplate < YellowTable
+      has_many :dashboard_template_nodes
+      has_many :nodes, through: :dashboard_template_nodes
+
       has_attached_file :image, styles: {small: '320x320>', large: '640x640>'}
       validates_attachment_content_type :image, content_type: /\Aimage\/.*\z/
     end

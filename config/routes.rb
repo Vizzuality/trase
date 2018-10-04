@@ -8,6 +8,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :admin do
+    resources :node_search, only: [:index]
+  end
+
   namespace :content do
     mount Ckeditor::Engine => '/ckeditor'
     resources :posts, only: [:index]

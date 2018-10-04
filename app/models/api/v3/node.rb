@@ -28,6 +28,9 @@ module Api
       has_many :node_quals
       has_many :node_quants
 
+      has_many :dashboard_template_nodes
+      has_many :dashboard_templates, through: :dashboard_template_nodes
+
       scope :place_nodes, -> {
         includes(:node_type).where(
           'node_types.name' => Api::V3::NodeType::PLACES
@@ -130,6 +133,10 @@ module Api
           select(%w(inds.name inds.unit node_inds.value node_inds.year))
         rel = rel.where('node_inds.year' => year) if year.present?
         rel
+      end
+
+      def stringify
+        name + ' - ' + node_type.name + ' - ' + node_type&.context_node_types&.first&.context&.country&.name + ' ' + node_type&.context_node_types&.first&.context&.commodity&.name
       end
 
       def self.select_options
