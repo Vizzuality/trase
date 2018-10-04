@@ -34,6 +34,7 @@ import { getSelectedNodesColumnsPos } from 'react-components/tool/tool.selectors
 
 export const RESET_SELECTION = 'RESET_SELECTION';
 export const GET_COLUMNS = 'GET_COLUMNS';
+export const RESET_TOOL_LOADERS = 'RESET_TOOL_LOADERS';
 export const SET_FLOWS_LOADING_STATE = 'SET_FLOWS_LOADING_STATE';
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
 export const LOAD_NODES = 'LOAD_NODES';

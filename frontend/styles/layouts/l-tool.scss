@@ -68,12 +68,15 @@ body {
       flex-direction: column;
       width: 320px;
       height: calc(100% - 62px);
-      transition: width .45s $ease-in-out-sine;
-      will-change: width, z-index;
 
       &.-fullscreen {
         width: calc(91% - 366px);
         z-index: $z-above;
+      }
+
+      &.-smooth-transition {
+        transition: width .45s $ease-in-out-sine;
+        will-change: width, z-index;
       }
     }
 
@@ -84,7 +87,6 @@ body {
       width: calc(100% - #{$map-width + $layer-map-width + ($sankey-x-margin * 2)});
       height: calc(100% - 110px);
       margin-left: $sankey-x-margin + 5px;
-      transition: left .45s $ease-in-out-sine;
 
       .sankey-scroll-container {
         width: 100%;
@@ -99,6 +101,10 @@ body {
           width: 100%;
           height: 100%;
         }
+      }
+
+      &.-smooth-transition {
+        transition: left .45s $ease-in-out-sine;
       }
 
     }

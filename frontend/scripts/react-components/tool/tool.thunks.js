@@ -1,5 +1,11 @@
 import { displayStoryModal, loadDisclaimer, resize } from 'actions/app.actions';
-import { GET_COLUMNS, loadMapVectorData, loadNodes, loadLinks } from 'scripts/actions/tool.actions';
+import {
+  GET_COLUMNS,
+  RESET_TOOL_LOADERS,
+  loadMapVectorData,
+  loadNodes,
+  loadLinks
+} from 'scripts/actions/tool.actions';
 import {
   GET_COLUMNS_URL,
   GET_ALL_NODES_URL,
@@ -10,6 +16,11 @@ import {
 // currently we need to load initial data every time we enter the page
 // the implementation of the vanilla redux container doesn't pass existing props to the sankey
 // passes callbacks that after execution assign values to local variables
+
+export const setToolLoaders = dispatch =>
+  dispatch({
+    type: RESET_TOOL_LOADERS
+  });
 
 export const loadDisclaimerTool = dispatch => dispatch(loadDisclaimer());
 
