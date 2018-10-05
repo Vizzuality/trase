@@ -56,7 +56,7 @@ module Api
           DownloadFlowsRefreshWorker.perform_async(options)
         end
 
-        def self.refresh_dependencies(options = {})
+        def self.refresh_dependencies(_options = {})
           refresh_by_name('flow_paths_mv', concurrently: false) # no unique index
         end
       end

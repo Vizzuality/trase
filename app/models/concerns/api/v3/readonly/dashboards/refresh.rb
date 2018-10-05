@@ -6,7 +6,7 @@ module Api
           extend ActiveSupport::Concern
 
           class_methods do
-            def refresh_dependencies(options = {})
+            def refresh_dependencies(_options = {})
               FlowPath.refresh(concurrently: false) # no unique index
             end
           end

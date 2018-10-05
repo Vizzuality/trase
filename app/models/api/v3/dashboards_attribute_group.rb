@@ -24,7 +24,7 @@ module Api
       after_commit :refresh_dependents
 
       def self.select_options
-        Api::V3::DashboardsAttributeGroup.all.map(&:name)
+        order(:name).map { |group| [group.name, group.id] }
       end
 
       def refresh_dependents
