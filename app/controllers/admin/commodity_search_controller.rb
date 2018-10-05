@@ -4,7 +4,7 @@ module Admin
 
     def index
       @q = Api::V3::Readonly::Dashboards::Commodity.ransack(params[:q])
-      @nodes = @q.result.page(params[:page])
+      @nodes = @q.result.order(:name).page(params[:page]).to_a.uniq
 
       render json: @nodes, root: 'data',
              each_serializer: Admin::CommoditySearchSerializer

@@ -48,7 +48,7 @@ ActiveAdmin.register Api::V3::DashboardTemplate, as: 'DashboardTemplate' do
       input :company_ids,
             as: :selected_list,
             label: 'Companies',
-            minimum_input_length: 2,
+            minimum_input_length: 3,
             url: '/admin/company_search',
             display_name: :stringify,
             response_root: 'data',

@@ -8,7 +8,7 @@ module Admin
         joins('LEFT JOIN commodities ON commodities.id = dashboards_sources_mv.commodity_id').
         joins('LEFT JOIN countries ON countries.id = dashboards_sources_mv.country_id').
         ransack(params[:q])
-      @nodes = @q.result(distinct: true).page(params[:page])
+      @nodes = @q.result.order(:name).to_a.uniq
 
       render json: @nodes, root: 'data',
              each_serializer: Admin::SourceSearchSerializer
@@ -20,7 +20,7 @@ module Admin
         joins('LEFT JOIN commodities ON commodities.id = dashboards_companies_mv.commodity_id').
         joins('LEFT JOIN countries ON countries.id = dashboards_companies_mv.country_id').
         ransack(params[:q])
-      @nodes = @q.result(distinct: true).page(params[:page])
+      @nodes = @q.result.order(:name).to_a.uniq
 
       render json: @nodes, root: 'data',
              each_serializer: Admin::CompanySearchSerializer
@@ -32,7 +32,7 @@ module Admin
         joins('LEFT JOIN commodities ON commodities.id = dashboards_destinations_mv.commodity_id').
         joins('LEFT JOIN countries ON countries.id = dashboards_destinations_mv.country_id').
         ransack(params[:q])
-      @nodes = @q.result(distinct: true).page(params[:page])
+      @nodes = @q.result.order(:name).to_a.uniq
 
       render json: @nodes, root: 'data',
              each_serializer: Admin::DestinationSearchSerializer
