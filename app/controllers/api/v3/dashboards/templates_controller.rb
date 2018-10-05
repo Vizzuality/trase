@@ -5,7 +5,14 @@ module Api
         skip_before_action :load_context
 
         def index
-          render json: Api::V3::DashboardTemplate.all,
+          render json: Api::V3::DashboardTemplate.
+            includes(
+              :countries, :commodities,
+              :companies_mv,
+              :destinations_mv,
+              :sources_mv
+            ).
+            joins(sources: :node_type),
                  root: 'data',
                  each_serializer: Api::V3::Dashboards::TemplateSerializer
         end

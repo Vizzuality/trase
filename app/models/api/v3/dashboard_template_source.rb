@@ -14,6 +14,8 @@ module Api
     class DashboardTemplateSource < YellowTable
       belongs_to :dashboard_template
       belongs_to :node
+
+      belongs_to :readonly_dashboards_source, class_name: Api::V3::Readonly::Dashboards::Source, foreign_key: 'node_id'
     end
   end
 end
