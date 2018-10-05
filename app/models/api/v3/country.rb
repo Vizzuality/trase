@@ -18,6 +18,9 @@ module Api
       has_one :country_property
       has_many :contexts
 
+      has_many :dashboard_template_countries
+      has_many :dashboard_templates, through: :dashboard_template_countries
+
       delegate :latitude, to: :country_property
       delegate :longitude, to: :country_property
       delegate :zoom, to: :country_property

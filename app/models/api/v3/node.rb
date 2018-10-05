@@ -28,8 +28,14 @@ module Api
       has_many :node_quals
       has_many :node_quants
 
-      has_many :dashboard_template_nodes
-      has_many :dashboard_templates, through: :dashboard_template_nodes
+      has_many :dashboard_template_companies
+      has_many :dashboard_templates, through: :dashboard_template_companies
+
+      has_many :dashboard_template_destinations
+      has_many :dashboard_templates, through: :dashboard_template_destinations
+
+      has_many :dashboard_template_sources
+      has_many :dashboard_templates, through: :dashboard_template_sources
 
       scope :place_nodes, -> {
         includes(:node_type).where(

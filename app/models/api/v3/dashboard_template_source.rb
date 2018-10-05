@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: dashboard_template_nodes
+# Table name: dashboard_template_sources
 #
 #  id                    :integer          not null, primary key
 #  dashboard_template_id :integer
@@ -11,7 +11,7 @@
 
 module Api
   module V3
-    class DashboardTemplateNode < YellowTable
+    class DashboardTemplateSource < YellowTable
       belongs_to :dashboard_template
       belongs_to :node
     end

@@ -16,8 +16,20 @@
 module Api
   module V3
     class DashboardTemplate < YellowTable
-      has_many :dashboard_template_nodes
-      has_many :nodes, through: :dashboard_template_nodes
+      has_many :dashboard_template_commodities
+      has_many :commodities, through: :dashboard_template_commodities
+
+      has_many :dashboard_template_companies
+      has_many :companies, through: :dashboard_template_companies, source: :node
+
+      has_many :dashboard_template_countries
+      has_many :countries, through: :dashboard_template_countries
+
+      has_many :dashboard_template_destinations
+      has_many :destinations, through: :dashboard_template_destinations, source: :node
+
+      has_many :dashboard_template_sources
+      has_many :sources, through: :dashboard_template_sources, source: :node
 
       has_attached_file :image, styles: {small: '320x320>', large: '640x640>'}
       validates_attachment_content_type :image, content_type: /\Aimage\/.*\z/

@@ -9,7 +9,12 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resources :node_search, only: [:index]
+    get :source_search, controller: :node_search, action: :source_search
+    get :company_search, controller: :node_search, action: :company_search
+    get :destination_search, controller: :node_search, action: :destination_search
+
+    resources :commodity_search, only: [:index]
+    resources :country_search, only: [:index]
   end
 
   namespace :content do
