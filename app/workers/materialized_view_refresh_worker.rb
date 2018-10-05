@@ -10,6 +10,6 @@ class MaterializedViewRefreshWorker
   # @param mview_class_name [String] e.g. Api::V3::Readonly::DownloadFlow
   def perform(mview_class_name, options)
     mview_class = mview_class_name.constantize
-    mview_class.refresh(options)
+    mview_class.refresh_now(options)
   end
 end

@@ -51,6 +51,10 @@ module Api
         self.table_name = 'download_flows_mv'
         self.primary_key = 'id'
 
+        def self.long_running?
+          true
+        end
+
         def self.refresh_dependencies(_options = {})
           refresh_by_name('flow_paths_mv', concurrently: false) # no unique index
         end

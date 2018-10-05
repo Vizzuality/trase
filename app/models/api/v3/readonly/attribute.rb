@@ -41,7 +41,7 @@ module Api
             Api::V3::Readonly::ResizeByAttribute,
             Api::V3::Readonly::DashboardsAttribute
           ].each do |mview_klass|
-            mview_klass.refresh_by_name(mview_klass.table_name, options)
+            mview_klass.refresh(options.merge(skip_dependencies: true))
           end
         end
       end

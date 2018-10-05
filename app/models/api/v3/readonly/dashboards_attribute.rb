@@ -34,10 +34,10 @@ module Api
 
         def self.refresh_dependents(options = {})
           [
-            :dashboards_flow_attributes_mv,
-            :dashboards_node_attributes_mv
-          ].each do |table_name|
-            refresh_by_name(table_name, options)
+            Api::V3::Readonly::Dashboards::FlowAttribute,
+            Api::V3::Readonly::Dashboards::NodeAttribute
+          ].each do |mview_klass|
+            mview_klass.refresh(options.merge(skip_dependencies: true))
           end
         end
       end
