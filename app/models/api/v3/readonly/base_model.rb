@@ -48,7 +48,7 @@ module Api
             # rubocop:disable Style/DoubleNegation
             safe_concurrently = !!options[:concurrently]
             # rubocop:enable Style/DoubleNegation
-            is_populated = IsMviewPopulated.new(table_name).call
+            is_populated = Api::V3::IsMviewPopulated.new(table_name).call
             # cannot refresh concurrently a view that is not populated
             safe_concurrently = false unless is_populated
             Scenic.database.refresh_materialized_view(
