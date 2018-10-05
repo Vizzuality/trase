@@ -59,7 +59,7 @@ module Api
       end
 
       def refresh_dependents
-        Api::V3::Readonly::DashboardsAttribute.refresh
+        Api::V3::Readonly::DashboardsAttribute.refresh_later
       end
     end
   end

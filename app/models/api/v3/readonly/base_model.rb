@@ -29,6 +29,11 @@ module Api
           )
         end
 
+        # this materialized view takes a long time to refresh
+        def self.refresh_later(options = {})
+          MaterializedViewRefreshWorker.perform_async(name, options)
+        end
+
         # Refreshes materialized views this view depends on
         def self.refresh_dependencies(options = {}); end
 

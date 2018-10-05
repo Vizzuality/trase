@@ -51,11 +51,6 @@ module Api
         self.table_name = 'download_flows_mv'
         self.primary_key = 'id'
 
-        # this materialized view takes a long time to refresh
-        def self.refresh_later(options = {})
-          DownloadFlowsRefreshWorker.perform_async(options)
-        end
-
         def self.refresh_dependencies(_options = {})
           refresh_by_name('flow_paths_mv', concurrently: false) # no unique index
         end
