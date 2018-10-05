@@ -17,7 +17,7 @@ module Api
       has_one :qual_property
       has_many :node_quals
 
-      delegate :display_name, to: :qual_property
+      delegate :display_name, to: :qual_property, allow_nil: true
 
       def self.select_options
         order(:name).map { |qual| [qual.name, qual.id] }

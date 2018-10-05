@@ -18,7 +18,7 @@ module Api
       has_one :ind_property
       has_many :node_inds
 
-      delegate :display_name, to: :ind_property
+      delegate :display_name, to: :ind_property, allow_nil: true
 
       def self.select_options
         order(:name).map { |ind| [ind.name, ind.id] }
