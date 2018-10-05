@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::DashboardsAttributeGroup, as: 'DashboardsAttributeGroup' do
-  menu parent: 'Dashboards Settings'
+  menu parent: 'Dashboards'
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 

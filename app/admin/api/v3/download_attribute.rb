@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::DownloadAttribute, as: 'DownloadAttribute' do
-  menu parent: 'Data Download Settings'
+  menu parent: 'Data Download'
 
   permit_params :context_id, :position, :display_name, :years_str,
                 :readonly_attribute_id

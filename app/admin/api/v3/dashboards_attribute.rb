@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::DashboardsAttribute, as: 'DashboardsAttribute' do
-  menu parent: 'Dashboards Settings'
+  menu parent: 'Dashboards'
 
   includes [
     :dashboards_attribute_group,
