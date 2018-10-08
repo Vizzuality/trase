@@ -8,22 +8,22 @@ import Tabs from 'react-components/shared/tabs.component';
 function SourcingPanel(props) {
   const {
     tabs,
-    searchJurisdictions,
+    searchSources,
     activeCountryId,
-    jurisdictions,
+    sources,
     onSelectCountry,
-    onSelectJurisdictionTab,
-    onSelectJurisdictionValue,
-    activeJurisdictionTabId,
-    activeJurisdictionValueId
+    onSelectSourceTab,
+    onSelectSourceValue,
+    activeSourceTabId,
+    activeSourceValueId
   } = props;
-  const jurisdictionsList = jurisdictions[activeJurisdictionTabId] || [];
+  const sourcesList = sources[activeSourceTabId] || [];
 
   return (
     <React.Fragment>
       <SearchInput
         className="dashboard-panel-search"
-        items={searchJurisdictions}
+        items={searchSources}
         placeholder="Search place"
         onSelect={i => i}
       />
@@ -33,16 +33,14 @@ function SourcingPanel(props) {
         columnWidth={190}
         rowHeight={50}
         columnCount={4}
-        items={searchJurisdictions}
+        items={searchSources}
       >
         {itemProps => (
           <GridListItem
             {...itemProps}
             isActive={activeCountryId === (itemProps.item && itemProps.item.name)}
             enableItem={onSelectCountry}
-            disableItem={
-              activeJurisdictionValueId === null ? () => onSelectCountry(null) : undefined
-            }
+            disableItem={activeSourceValueId === null ? () => onSelectCountry(null) : undefined}
           />
         )}
       </GridList>
@@ -51,14 +49,10 @@ function SourcingPanel(props) {
           <p className="dashboard-panel-text">
             You can choose up to three places of the same category:
           </p>
-          <Tabs
-            tabs={tabs}
-            onSelectTab={onSelectJurisdictionTab}
-            selectedTab={activeJurisdictionTabId}
-          >
+          <Tabs tabs={tabs} onSelectTab={onSelectSourceTab} selectedTab={activeSourceTabId}>
             <GridList
-              items={jurisdictionsList}
-              height={jurisdictionsList.length > 5 ? 200 : 50}
+              items={sourcesList}
+              height={sourcesList.length > 5 ? 200 : 50}
               width={800}
               rowHeight={50}
               columnWidth={160}
@@ -67,9 +61,9 @@ function SourcingPanel(props) {
               {itemProps => (
                 <GridListItem
                   {...itemProps}
-                  isActive={activeJurisdictionValueId === (itemProps.item && itemProps.item.name)}
-                  enableItem={onSelectJurisdictionValue}
-                  disableItem={() => onSelectJurisdictionValue(null)}
+                  isActive={activeSourceValueId === (itemProps.item && itemProps.item.name)}
+                  enableItem={onSelectSourceValue}
+                  disableItem={() => onSelectSourceValue(null)}
                 />
               )}
             </GridList>
@@ -81,15 +75,15 @@ function SourcingPanel(props) {
 }
 
 SourcingPanel.propTypes = {
-  searchJurisdictions: PropTypes.array.isRequired,
-  jurisdictions: PropTypes.object.isRequired,
+  searchSources: PropTypes.array.isRequired,
+  sources: PropTypes.object.isRequired,
   activeCountryId: PropTypes.string,
-  activeJurisdictionTabId: PropTypes.string,
-  activeJurisdictionValueId: PropTypes.string,
+  activeSourceTabId: PropTypes.string,
+  activeSourceValueId: PropTypes.string,
   tabs: PropTypes.array.isRequired,
   onSelectCountry: PropTypes.func.isRequired,
-  onSelectJurisdictionValue: PropTypes.func.isRequired,
-  onSelectJurisdictionTab: PropTypes.func.isRequired
+  onSelectSourceValue: PropTypes.func.isRequired,
+  onSelectSourceTab: PropTypes.func.isRequired
 };
 
 export default SourcingPanel;

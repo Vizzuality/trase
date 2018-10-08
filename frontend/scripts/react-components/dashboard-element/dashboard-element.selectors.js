@@ -18,7 +18,7 @@ export const getDirtyBlocks = createSelector(
   getDashboardPanels,
   ({ sourcingPanel, importingPanel, companiesPanel, commoditiesPanel }) => ({
     sourcing: sourcingPanel.activeCountryItemId !== null,
-    importing: importingPanel.activeJurisdictionItemId !== null,
+    importing: importingPanel.activeSourceItemId !== null,
     companies: companiesPanel.activeCompanyItemId !== null,
     commodities: commoditiesPanel.activeCommodityItemId !== null
   })
@@ -27,9 +27,8 @@ export const getDirtyBlocks = createSelector(
 export const getDynamicSentence = createSelector(
   getDashboardPanels,
   ({ sourcingPanel, importingPanel, companiesPanel, commoditiesPanel }) => {
-    const sourcingActiveId =
-      sourcingPanel.activeJurisdictionItemId || sourcingPanel.activeCountryItemId;
-    const importingActiveId = importingPanel.activeJurisdictionItemId;
+    const sourcingActiveId = sourcingPanel.activeSourceItemId || sourcingPanel.activeCountryItemId;
+    const importingActiveId = importingPanel.activeDestinationItemId;
     const companiesActiveId = companiesPanel.activeCompanyItemId;
     const commoditiesActiveId = commoditiesPanel.activeCommodityItemId;
 

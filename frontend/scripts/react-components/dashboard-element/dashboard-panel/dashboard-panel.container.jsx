@@ -16,14 +16,15 @@ import {
 
 const mapStateToProps = state => {
   const {
-    data: { jurisdictions, countries, commodities, companies }
+    data: { sources, countries, commodities, companies, destinations }
   } = state.dashboardElement;
 
   return {
+    sources,
     countries,
     companies,
     commodities,
-    jurisdictions,
+    destinations,
     dirtyBlocks: getDirtyBlocks(state),
     dynamicSentenceParts: getDynamicSentence(state),
     ...getDashboardPanels(state)
@@ -59,7 +60,7 @@ class DashboardPanelContainer extends React.PureComponent {
   ];
 
   tabs = {
-    jurisdictions: ['biome', 'state', 'municipality'],
+    sources: ['biome', 'state', 'municipality'],
     companies: ['importers', 'exporters']
   };
 

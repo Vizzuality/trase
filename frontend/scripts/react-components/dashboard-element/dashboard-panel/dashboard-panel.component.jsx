@@ -19,7 +19,8 @@ function DashboardPanel(props) {
     companiesPanel,
     clearActiveId,
     setActiveId,
-    jurisdictions,
+    sources,
+    destinations,
     countries,
     companies,
     commodities,
@@ -43,11 +44,11 @@ function DashboardPanel(props) {
         {activePanelId === 'sourcing' && (
           <SourcingPanel
             activeCountryId={sourcingPanel.activeCountryItemId}
-            activeJurisdictionTabId={sourcingPanel.activeJurisdictionTabId}
-            activeJurisdictionValueId={sourcingPanel.activeJurisdictionItemId}
-            searchJurisdictions={countries}
-            tabs={tabs.jurisdictions}
-            jurisdictions={jurisdictions}
+            activeSourceTabId={sourcingPanel.activeSourceTabId}
+            activeSourceValueId={sourcingPanel.activeSourceItemId}
+            searchSources={countries}
+            tabs={tabs.sources}
+            sources={sources}
             onSelectCountry={item =>
               setActiveId({
                 type: 'item',
@@ -56,19 +57,19 @@ function DashboardPanel(props) {
                 panel: activePanelId
               })
             }
-            onSelectJurisdictionTab={item =>
+            onSelectSourceTab={item =>
               setActiveId({
                 type: 'tab',
                 active: item,
-                section: 'jurisdiction',
+                section: 'source',
                 panel: activePanelId
               })
             }
-            onSelectJurisdictionValue={item =>
+            onSelectSourceValue={item =>
               setActiveId({
                 type: 'item',
                 active: item && item.name,
-                section: 'jurisdiction',
+                section: 'source',
                 panel: activePanelId
               })
             }
@@ -76,17 +77,17 @@ function DashboardPanel(props) {
         )}
         {activePanelId === 'importing' && (
           <ImportingPanel
-            searchJurisdictions={countries}
-            jurisdictions={jurisdictions.state || []}
-            onSelectJurisdictionValue={item =>
+            searchDestinations={destinations}
+            destinations={destinations || []}
+            onSelectDestinationValue={item =>
               setActiveId({
                 active: item && item.name,
                 type: 'item',
-                section: 'jurisdiction',
+                section: 'destination',
                 panel: activePanelId
               })
             }
-            activeJurisdictionId={importingPanel.activeJurisdictionItemId}
+            activeDestinationId={importingPanel.activeDestinationItemId}
           />
         )}
         {activePanelId === 'companies' && (
@@ -147,10 +148,11 @@ DashboardPanel.propTypes = {
   commodities: PropTypes.array,
   dirtyBlocks: PropTypes.object,
   activePanelId: PropTypes.string,
-  jurisdictions: PropTypes.object,
+  sources: PropTypes.object,
   tabs: PropTypes.object,
   commoditiesPanel: PropTypes.object,
   panels: PropTypes.array.isRequired,
+  destinations: PropTypes.array.isRequired,
   onContinue: PropTypes.func.isRequired,
   dynamicSentenceParts: PropTypes.array,
   setActiveId: PropTypes.func.isRequired,

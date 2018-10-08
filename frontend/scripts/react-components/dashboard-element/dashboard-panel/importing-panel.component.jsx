@@ -5,24 +5,19 @@ import GridList from 'react-components/shared/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item.component';
 
 function ImportingPanel(props) {
-  const {
-    searchJurisdictions,
-    jurisdictions,
-    activeJurisdictionId,
-    onSelectJurisdictionValue
-  } = props;
+  const { searchDestinations, destinations, activeDestinationId, onSelectDestinationValue } = props;
 
   return (
     <React.Fragment>
       <SearchInput
         className="dashboard-panel-search"
-        items={searchJurisdictions}
+        items={searchDestinations}
         placeholder="Search place"
         onSelect={i => i}
       />
       <p className="dashboard-panel-text">You can choose up to three countries:</p>
       <GridList
-        items={jurisdictions}
+        items={destinations}
         height={200}
         width={950}
         rowHeight={50}
@@ -32,9 +27,9 @@ function ImportingPanel(props) {
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={activeJurisdictionId === (itemProps.item && itemProps.item.name)}
-            enableItem={onSelectJurisdictionValue}
-            disableItem={() => onSelectJurisdictionValue(null)}
+            isActive={activeDestinationId === (itemProps.item && itemProps.item.name)}
+            enableItem={onSelectDestinationValue}
+            disableItem={() => onSelectDestinationValue(null)}
           />
         )}
       </GridList>
@@ -43,10 +38,10 @@ function ImportingPanel(props) {
 }
 
 ImportingPanel.propTypes = {
-  jurisdictions: PropTypes.array,
-  searchJurisdictions: PropTypes.array,
-  activeJurisdictionId: PropTypes.string,
-  onSelectJurisdictionValue: PropTypes.func.isRequired
+  destinations: PropTypes.array,
+  searchDestinations: PropTypes.array,
+  activeDestinationId: PropTypes.string,
+  onSelectDestinationValue: PropTypes.func.isRequired
 };
 
 export default ImportingPanel;

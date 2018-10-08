@@ -13,17 +13,18 @@ const initialState = {
     indicators: [],
     countries: [],
     companies: {},
-    jurisdictions: {},
+    sources: {},
+    destinations: [],
     commodities: []
   },
   activeIndicatorsList: [],
   sourcingPanel: {
     activeCountryItemId: null,
-    activeJurisdictionItemId: null,
-    activeJurisdictionTabId: 'biome'
+    activeSourceItemId: null,
+    activeSourceTabId: 'biome'
   },
   importingPanel: {
-    activeJurisdictionItemId: null
+    activeDestinationItemId: null
   },
   companiesPanel: {
     activeCompanyItemId: null,
@@ -88,19 +89,20 @@ const dashboardElementReducerTypes = PropTypes => ({
       importers: PropTypes.array,
       exporters: PropTypes.array
     }).isRequired,
-    jurisdictions: PropTypes.shape({
+    sources: PropTypes.shape({
       biome: PropTypes.array,
       state: PropTypes.array,
       municipality: PropTypes.array
-    }).isRequired
+    }).isRequired,
+    destinations: PropTypes.array.isRequired
   }).isRequired,
   sourcingPanel: PropTypes.shape({
     activeCountryItemId: PropTypes.string,
-    activeJurisdictionItemId: PropTypes.string,
-    activeJurisdictionTabId: PropTypes.string.isRequired
+    activeSourceItemId: PropTypes.string,
+    activeSourceTabId: PropTypes.string.isRequired
   }).isRequired,
   importingPanel: PropTypes.shape({
-    activeJurisdictionItemId: PropTypes.string
+    activeDestinationItemId: PropTypes.string
   }).isRequired,
   companiesPanel: PropTypes.shape({
     activeCompanyItemId: PropTypes.string,
