@@ -72,6 +72,7 @@ Rails.application.routes.draw do
         resources :countries, only: [:index] do
           get :search, on: :collection
         end
+        resources :attributes
       end
     end
     namespace :v2 do

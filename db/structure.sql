@@ -1120,6 +1120,150 @@ ALTER SEQUENCE public.country_properties_id_seq OWNED BY public.country_properti
 
 
 --
+-- Name: dashboards_attribute_groups; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboards_attribute_groups (
+    id bigint NOT NULL,
+    name text NOT NULL,
+    "position" integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: dashboards_attribute_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.dashboards_attribute_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: dashboards_attribute_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.dashboards_attribute_groups_id_seq OWNED BY public.dashboards_attribute_groups.id;
+
+
+--
+-- Name: dashboards_attributes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboards_attributes (
+    id bigint NOT NULL,
+    dashboards_attribute_group_id bigint NOT NULL,
+    "position" integer NOT NULL,
+    chart_type character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: dashboards_attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.dashboards_attributes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: dashboards_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.dashboards_attributes_id_seq OWNED BY public.dashboards_attributes.id;
+
+
+--
+-- Name: dashboards_inds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboards_inds (
+    id bigint NOT NULL,
+    dashboards_attribute_id bigint NOT NULL,
+    ind_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: dashboards_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboards_quals (
+    id bigint NOT NULL,
+    dashboards_attribute_id bigint NOT NULL,
+    qual_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: dashboards_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboards_quants (
+    id bigint NOT NULL,
+    dashboards_attribute_id bigint NOT NULL,
+    quant_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: dashboards_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.dashboards_attributes_mv AS
+ SELECT da.id,
+    da.dashboards_attribute_group_id,
+    da."position",
+    da.chart_type,
+    da.created_at,
+    da.updated_at,
+    a.id AS attribute_id
+   FROM ((public.dashboards_inds di
+     JOIN public.dashboards_attributes da ON ((da.id = di.dashboards_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = di.ind_id) AND (a.original_type = 'Ind'::text))))
+UNION ALL
+ SELECT da.id,
+    da.dashboards_attribute_group_id,
+    da."position",
+    da.chart_type,
+    da.created_at,
+    da.updated_at,
+    a.id AS attribute_id
+   FROM ((public.dashboards_quals dq
+     JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = dq.qual_id) AND (a.original_type = 'Qual'::text))))
+UNION ALL
+ SELECT da.id,
+    da.dashboards_attribute_group_id,
+    da."position",
+    da.chart_type,
+    da.created_at,
+    da.updated_at,
+    a.id AS attribute_id
+   FROM ((public.dashboards_quants dq
+     JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = dq.quant_id) AND (a.original_type = 'Quant'::text))))
+  WITH NO DATA;
+
+
+--
 -- Name: flows; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1258,6 +1402,127 @@ CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
 
 
 --
+-- Name: flow_inds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.flow_inds (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    ind_id integer NOT NULL,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: flow_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.flow_quals (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    value text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: flow_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.flow_quants (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: dashboards_flow_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.dashboards_flow_attributes_mv AS
+ WITH all_attributes(id, display_name, tooltip_text, chart_type, dashboards_attribute_group_id, "position", original_id, original_type) AS (
+         SELECT a.id,
+            a.display_name,
+            a.tooltip_text,
+            da.chart_type,
+            da.dashboards_attribute_group_id,
+            da."position",
+            a.original_id,
+            a.original_type
+           FROM (public.dashboards_attributes_mv da
+             JOIN public.attributes_mv a ON ((a.id = da.attribute_id)))
+        ), combinations(flow_id, original_id, original_type) AS (
+         SELECT DISTINCT flow_inds.flow_id,
+            flow_inds.ind_id,
+            'Ind'::text
+           FROM public.flow_inds
+        UNION ALL
+         SELECT DISTINCT flow_quals.flow_id,
+            flow_quals.qual_id,
+            'Qual'::text
+           FROM public.flow_quals
+        UNION ALL
+         SELECT DISTINCT flow_quants.flow_id,
+            flow_quants.quant_id,
+            'Quant'::text
+           FROM public.flow_quants
+        )
+ SELECT DISTINCT contexts.country_id,
+    contexts.commodity_id,
+    flows.path,
+    all_attributes.id AS attribute_id,
+    all_attributes.display_name,
+    all_attributes.tooltip_text,
+    all_attributes.chart_type,
+    all_attributes.dashboards_attribute_group_id,
+    all_attributes."position"
+   FROM (((all_attributes
+     JOIN combinations ON (((all_attributes.original_id = combinations.original_id) AND (all_attributes.original_type = combinations.original_type))))
+     JOIN public.flows ON ((combinations.flow_id = flows.id)))
+     JOIN public.contexts ON ((flows.context_id = contexts.id)))
+  GROUP BY contexts.country_id, contexts.commodity_id, flows.path, all_attributes.id, all_attributes.display_name, all_attributes.tooltip_text, all_attributes.chart_type, all_attributes.dashboards_attribute_group_id, all_attributes."position"
+  WITH NO DATA;
+
+
+--
+-- Name: dashboards_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.dashboards_inds_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: dashboards_inds_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.dashboards_inds_id_seq OWNED BY public.dashboards_inds.id;
+
+
+--
+-- Name: node_inds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_inds (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    ind_id integer NOT NULL,
+    year integer,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: node_quals; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1269,6 +1534,102 @@ CREATE TABLE public.node_quals (
     value text NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: node_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_quants (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    year integer,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: dashboards_node_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.dashboards_node_attributes_mv AS
+ WITH all_attributes(id, display_name, tooltip_text, chart_type, dashboards_attribute_group_id, "position", original_id, original_type) AS (
+         SELECT a.id,
+            a.display_name,
+            a.tooltip_text,
+            da.chart_type,
+            da.dashboards_attribute_group_id,
+            da."position",
+            a.original_id,
+            a.original_type
+           FROM (public.dashboards_attributes_mv da
+             JOIN public.attributes_mv a ON ((a.id = da.attribute_id)))
+        ), combinations(node_id, original_id, original_type) AS (
+         SELECT DISTINCT node_inds.node_id,
+            node_inds.ind_id,
+            'Ind'::text
+           FROM public.node_inds
+        UNION ALL
+         SELECT DISTINCT node_quals.node_id,
+            node_quals.qual_id,
+            'Qual'::text
+           FROM public.node_quals
+        UNION ALL
+         SELECT DISTINCT node_quants.node_id,
+            node_quants.quant_id,
+            'Quant'::text
+           FROM public.node_quants
+        )
+ SELECT DISTINCT combinations.node_id,
+    all_attributes.id AS attribute_id,
+    all_attributes.display_name,
+    all_attributes.tooltip_text,
+    all_attributes.chart_type,
+    all_attributes.dashboards_attribute_group_id,
+    all_attributes."position"
+   FROM (all_attributes
+     JOIN combinations ON (((all_attributes.original_id = combinations.original_id) AND (all_attributes.original_type = combinations.original_type))))
+  WITH NO DATA;
+
+
+--
+-- Name: dashboards_quals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.dashboards_quals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: dashboards_quals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.dashboards_quals_id_seq OWNED BY public.dashboards_quals.id;
+
+
+--
+-- Name: dashboards_quants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.dashboards_quants_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: dashboards_quants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.dashboards_quants_id_seq OWNED BY public.dashboards_quants.id;
 
 
 --
@@ -1493,32 +1854,6 @@ CREATE MATERIALIZED VIEW public.flow_paths_mv AS
 
 
 --
--- Name: flow_quals; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.flow_quals (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    value text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: flow_quants; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.flow_quants (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
 -- Name: download_flows_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -1693,19 +2028,6 @@ CREATE SEQUENCE public.download_versions_id_seq
 --
 
 ALTER SEQUENCE public.download_versions_id_seq OWNED BY public.download_versions.id;
-
-
---
--- Name: flow_inds; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.flow_inds (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    ind_id integer NOT NULL,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
 
 
 --
@@ -2013,20 +2335,6 @@ ALTER SEQUENCE public.map_quants_id_seq OWNED BY public.map_quants.id;
 
 
 --
--- Name: node_inds; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_inds (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    ind_id integer NOT NULL,
-    year integer,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
 -- Name: node_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -2094,20 +2402,6 @@ CREATE SEQUENCE public.node_quals_id_seq
 --
 
 ALTER SEQUENCE public.node_quals_id_seq OWNED BY public.node_quals.id;
-
-
---
--- Name: node_quants; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_quants (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    year integer,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
 
 
 --
@@ -2712,6 +3006,41 @@ ALTER TABLE ONLY public.country_properties ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
+-- Name: dashboards_attribute_groups id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_attribute_groups ALTER COLUMN id SET DEFAULT nextval('public.dashboards_attribute_groups_id_seq'::regclass);
+
+
+--
+-- Name: dashboards_attributes id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_attributes ALTER COLUMN id SET DEFAULT nextval('public.dashboards_attributes_id_seq'::regclass);
+
+
+--
+-- Name: dashboards_inds id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_inds ALTER COLUMN id SET DEFAULT nextval('public.dashboards_inds_id_seq'::regclass);
+
+
+--
+-- Name: dashboards_quals id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_quals ALTER COLUMN id SET DEFAULT nextval('public.dashboards_quals_id_seq'::regclass);
+
+
+--
+-- Name: dashboards_quants id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_quants ALTER COLUMN id SET DEFAULT nextval('public.dashboards_quants_id_seq'::regclass);
+
+
+--
 -- Name: database_updates id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3237,6 +3566,86 @@ ALTER TABLE ONLY public.country_properties
 
 ALTER TABLE ONLY public.country_properties
     ADD CONSTRAINT country_properties_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: dashboards_attribute_groups dashboards_attribute_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_attribute_groups
+    ADD CONSTRAINT dashboards_attribute_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: dashboards_attribute_groups dashboards_attribute_groups_position_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_attribute_groups
+    ADD CONSTRAINT dashboards_attribute_groups_position_key UNIQUE ("position");
+
+
+--
+-- Name: dashboards_attributes dashboards_attributes_dashboards_attribute_group_id_position_ke; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_attributes
+    ADD CONSTRAINT dashboards_attributes_dashboards_attribute_group_id_position_ke UNIQUE (dashboards_attribute_group_id, "position");
+
+
+--
+-- Name: dashboards_attributes dashboards_attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_attributes
+    ADD CONSTRAINT dashboards_attributes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: dashboards_inds dashboards_inds_dashboards_attribute_id_ind_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_inds
+    ADD CONSTRAINT dashboards_inds_dashboards_attribute_id_ind_id_key UNIQUE (dashboards_attribute_id, ind_id);
+
+
+--
+-- Name: dashboards_inds dashboards_inds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_inds
+    ADD CONSTRAINT dashboards_inds_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: dashboards_quals dashboards_quals_dashboards_attribute_id_qual_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_quals
+    ADD CONSTRAINT dashboards_quals_dashboards_attribute_id_qual_id_key UNIQUE (dashboards_attribute_id, qual_id);
+
+
+--
+-- Name: dashboards_quals dashboards_quals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_quals
+    ADD CONSTRAINT dashboards_quals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: dashboards_quants dashboards_quants_dashboards_attribute_id_quant_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_quants
+    ADD CONSTRAINT dashboards_quants_dashboards_attribute_id_quant_id_key UNIQUE (dashboards_attribute_id, quant_id);
+
+
+--
+-- Name: dashboards_quants dashboards_quants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_quants
+    ADD CONSTRAINT dashboards_quants_pkey PRIMARY KEY (id);
 
 
 --
@@ -3785,6 +4194,20 @@ CREATE UNIQUE INDEX context_node_types_mv_context_id_node_type_id_idx ON public.
 
 
 --
+-- Name: dashboards_attributes_mv_group_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_attributes_mv_group_id_attribute_id_idx ON public.dashboards_attributes_mv USING btree (dashboards_attribute_group_id, attribute_id);
+
+
+--
+-- Name: dashboards_attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX dashboards_attributes_mv_id_idx ON public.dashboards_attributes_mv USING btree (id);
+
+
+--
 -- Name: dashboards_commodities_mv_country_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3953,6 +4376,34 @@ CREATE UNIQUE INDEX dashboards_destinations_mv_unique_idx ON public.dashboards_d
 
 
 --
+-- Name: dashboards_flow_attributes_mv_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_flow_attributes_mv_commodity_id_idx ON public.dashboards_flow_attributes_mv USING btree (commodity_id);
+
+
+--
+-- Name: dashboards_flow_attributes_mv_country_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_flow_attributes_mv_country_id_idx ON public.dashboards_flow_attributes_mv USING btree (country_id);
+
+
+--
+-- Name: dashboards_flow_attributes_mv_flow_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX dashboards_flow_attributes_mv_flow_id_attribute_id_idx ON public.dashboards_flow_attributes_mv USING btree (attribute_id, path);
+
+
+--
+-- Name: dashboards_flow_attributes_mv_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_flow_attributes_mv_path_idx ON public.dashboards_flow_attributes_mv USING gist (path);
+
+
+--
 -- Name: dashboards_flow_paths_mv_category_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3964,6 +4415,13 @@ CREATE INDEX dashboards_flow_paths_mv_category_idx ON public.dashboards_flow_pat
 --
 
 CREATE UNIQUE INDEX dashboards_flow_paths_mv_flow_id_node_id_idx ON public.dashboards_flow_paths_mv USING btree (flow_id, node_id);
+
+
+--
+-- Name: dashboards_node_attributes_mv_node_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX dashboards_node_attributes_mv_node_id_attribute_id_idx ON public.dashboards_node_attributes_mv USING btree (node_id, attribute_id);
 
 
 --
@@ -4223,6 +4681,55 @@ CREATE INDEX index_contextual_layers_on_context_id ON public.contextual_layers U
 --
 
 CREATE INDEX index_country_properties_on_country_id ON public.country_properties USING btree (country_id);
+
+
+--
+-- Name: index_dashboards_attributes_on_dashboards_attribute_group_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_attributes_on_dashboards_attribute_group_id ON public.dashboards_attributes USING btree (dashboards_attribute_group_id);
+
+
+--
+-- Name: index_dashboards_inds_on_dashboards_attribute_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_inds_on_dashboards_attribute_id ON public.dashboards_inds USING btree (dashboards_attribute_id);
+
+
+--
+-- Name: index_dashboards_inds_on_ind_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_inds_on_ind_id ON public.dashboards_inds USING btree (ind_id);
+
+
+--
+-- Name: index_dashboards_quals_on_dashboards_attribute_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_quals_on_dashboards_attribute_id ON public.dashboards_quals USING btree (dashboards_attribute_id);
+
+
+--
+-- Name: index_dashboards_quals_on_qual_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_quals_on_qual_id ON public.dashboards_quals USING btree (qual_id);
+
+
+--
+-- Name: index_dashboards_quants_on_dashboards_attribute_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_quants_on_dashboards_attribute_id ON public.dashboards_quants USING btree (dashboards_attribute_id);
+
+
+--
+-- Name: index_dashboards_quants_on_quant_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dashboards_quants_on_quant_id ON public.dashboards_quants USING btree (quant_id);
 
 
 --
@@ -4614,6 +5121,14 @@ ALTER TABLE ONLY public.flow_inds
 
 
 --
+-- Name: dashboards_quals fk_rails_122397808e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_quals
+    ADD CONSTRAINT fk_rails_122397808e FOREIGN KEY (dashboards_attribute_id) REFERENCES public.dashboards_attributes(id) ON DELETE CASCADE;
+
+
+--
 -- Name: node_quals fk_rails_14ebb50b5a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4766,6 +5281,14 @@ ALTER TABLE ONLY public.chart_quals
 
 
 --
+-- Name: dashboards_quants fk_rails_49a997570a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_quants
+    ADD CONSTRAINT fk_rails_49a997570a FOREIGN KEY (dashboards_attribute_id) REFERENCES public.dashboards_attributes(id) ON DELETE CASCADE;
+
+
+--
 -- Name: map_inds fk_rails_49db6b9c1f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4779,6 +5302,14 @@ ALTER TABLE ONLY public.map_inds
 
 ALTER TABLE ONLY public.node_properties
     ADD CONSTRAINT fk_rails_4dcde982df FOREIGN KEY (node_id) REFERENCES public.nodes(id) ON DELETE CASCADE;
+
+
+--
+-- Name: dashboards_inds fk_rails_50cb385211; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_inds
+    ADD CONSTRAINT fk_rails_50cb385211 FOREIGN KEY (dashboards_attribute_id) REFERENCES public.dashboards_attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -4870,6 +5401,22 @@ ALTER TABLE ONLY public.node_quals
 
 
 --
+-- Name: dashboards_quals fk_rails_965c3e87f9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_quals
+    ADD CONSTRAINT fk_rails_965c3e87f9 FOREIGN KEY (qual_id) REFERENCES public.quals(id) ON DELETE CASCADE;
+
+
+--
+-- Name: dashboards_attributes fk_rails_9afdb92e8e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_attributes
+    ADD CONSTRAINT fk_rails_9afdb92e8e FOREIGN KEY (dashboards_attribute_group_id) REFERENCES public.dashboards_attribute_groups(id) ON DELETE CASCADE;
+
+
+--
 -- Name: carto_layers fk_rails_9b2f0fa157; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4891,6 +5438,14 @@ ALTER TABLE ONLY public.flow_quants
 
 ALTER TABLE ONLY public.charts
     ADD CONSTRAINT fk_rails_a7dc6318f9 FOREIGN KEY (profile_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+
+
+--
+-- Name: dashboards_quants fk_rails_b49efb2529; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_quants
+    ADD CONSTRAINT fk_rails_b49efb2529 FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON DELETE CASCADE;
 
 
 --
@@ -5030,6 +5585,14 @@ ALTER TABLE ONLY public.contexts
 
 
 --
+-- Name: dashboards_inds fk_rails_f4e97b1eab; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_inds
+    ADD CONSTRAINT fk_rails_f4e97b1eab FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON DELETE CASCADE;
+
+
+--
 -- Name: recolor_by_quals fk_rails_f5f36c9f54; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5161,6 +5724,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180924112259'),
 ('20180924112260'),
 ('20180924112261'),
-('20180926084643');
+('20180926084643'),
+('20180928122607'),
+('20181001105332'),
+('20181002105509'),
+('20181002105912');
 
 

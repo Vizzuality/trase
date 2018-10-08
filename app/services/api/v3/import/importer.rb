@@ -22,7 +22,9 @@ module Api
               Api::V3::MapAttributeGroup,
               Api::V3::MapAttribute,
               Api::V3::RecolorByAttribute,
-              Api::V3::ResizeByAttribute
+              Api::V3::ResizeByAttribute,
+              Api::V3::DashboardsAttributeGroup,
+              Api::V3::DashboardsAttribute
             ]
           },
           {table_class: Api::V3::NodeType},
@@ -43,7 +45,8 @@ module Api
               Api::V3::IndProperty,
               Api::V3::MapInd,
               Api::V3::ChartInd,
-              Api::V3::RecolorByInd
+              Api::V3::RecolorByInd,
+              Api::V3::DashboardsInd
             ]
           },
           {table_class: Api::V3::NodeInd},
@@ -53,7 +56,8 @@ module Api
               Api::V3::QualProperty,
               Api::V3::DownloadQual,
               Api::V3::ChartQual,
-              Api::V3::RecolorByQual
+              Api::V3::RecolorByQual,
+              Api::V3::DashboardsQual
             ]
           },
           {table_class: Api::V3::NodeQual},
@@ -64,7 +68,8 @@ module Api
               Api::V3::DownloadQuant,
               Api::V3::MapQuant,
               Api::V3::ChartQuant,
-              Api::V3::ResizeByQuant
+              Api::V3::ResizeByQuant,
+              Api::V3::DashboardsQuant
             ]
           },
           {table_class: Api::V3::NodeQuant},
@@ -151,6 +156,7 @@ module Api
             Api::V3::Readonly::MapAttribute,
             Api::V3::Readonly::RecolorByAttribute,
             Api::V3::Readonly::ResizeByAttribute,
+            Api::V3::Readonly::DashboardsAttribute,
             Api::V3::Readonly::Node,
             Api::V3::Readonly::DownloadFlow,
             Api::V3::Readonly::Dashboards::FlowPath
