@@ -14,6 +14,12 @@ module Api
     class DashboardTemplateCommodity < YellowTable
       belongs_to :dashboard_template
       belongs_to :commodity
+
+      def self.blue_foreign_keys
+        [
+          {name: :commodity_id, table_class: Api::V3::Commodity}
+        ]
+      end
     end
   end
 end

@@ -14,6 +14,12 @@ module Api
     class DashboardTemplateCountry < YellowTable
       belongs_to :dashboard_template
       belongs_to :country
+
+      def self.blue_foreign_keys
+        [
+          {name: :country_id, table_class: Api::V3::Country}
+        ]
+      end
     end
   end
 end

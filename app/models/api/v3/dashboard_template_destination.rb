@@ -16,6 +16,12 @@ module Api
       belongs_to :node
 
       belongs_to :readonly_dashboards_destination, class_name: Api::V3::Readonly::Dashboards::Destination, foreign_key: 'node_id'
+
+      def self.blue_foreign_keys
+        [
+          {name: :node_id, table_class: Api::V3::Node}
+        ]
+      end
     end
   end
 end
