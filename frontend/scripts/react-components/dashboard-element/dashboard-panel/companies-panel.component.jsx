@@ -38,7 +38,7 @@ function CompaniesPanel(props) {
           {itemProps => (
             <GridListItem
               {...itemProps}
-              isActive={activeCompanyId === (itemProps.item && itemProps.item.name)}
+              isActive={activeCompanyId === (itemProps.item && itemProps.item.id)}
               enableItem={onSelectCompany}
               disableItem={() => onSelectCompany(null)}
             />
@@ -52,7 +52,7 @@ function CompaniesPanel(props) {
 CompaniesPanel.propTypes = {
   tabs: PropTypes.array.isRequired,
   activeCompanyId: PropTypes.string,
-  companies: PropTypes.object.isRequired,
+  companies: PropTypes.array.isRequired,
   searchCompanies: PropTypes.array.isRequired,
   onSelectNodeTypeTab: PropTypes.func.isRequired,
   onSelectCompany: PropTypes.func.isRequired,

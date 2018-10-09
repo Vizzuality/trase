@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import BlockSwitch from 'react-components/shared/block-switch.component';
-import SourcingPanel from 'react-components/dashboard-element/dashboard-panel/sourcing-panel.component';
+import SourcesPanel from 'react-components/dashboard-element/dashboard-panel/sources-panel.component';
 import ImportingPanel from 'react-components/dashboard-element/dashboard-panel/importing-panel.component';
 import CompaniesPanel from 'react-components/dashboard-element/dashboard-panel/companies-panel.component';
 import CommoditiesPanel from 'react-components/dashboard-element/dashboard-panel/commodities-panel.component';
@@ -14,7 +14,7 @@ function DashboardPanel(props) {
     dirtyBlocks,
     activePanelId,
     setActivePanel,
-    sourcingPanel,
+    sourcesPanel,
     importingPanel,
     companiesPanel,
     clearActiveId,
@@ -25,8 +25,9 @@ function DashboardPanel(props) {
     companies,
     commodities,
     onContinue,
+    commoditiesPanel,
     dynamicSentenceParts,
-    commoditiesPanel
+    getDashboardPanelData
   } = props;
   return (
     <div className="c-dashboard-panel">
@@ -41,18 +42,21 @@ function DashboardPanel(props) {
           activeBlockId={activePanelId}
           dirtyBlocks={dirtyBlocks}
         />
-        {activePanelId === 'sourcing' && (
-          <SourcingPanel
-            activeCountryId={sourcingPanel.activeCountryItemId}
-            activeSourceTabId={sourcingPanel.activeSourceTabId}
-            activeSourceValueId={sourcingPanel.activeSourceItemId}
+        {activePanelId === 'sources' && (
+          <SourcesPanel
+            clearItems={() => clearActiveId(activePanelId)}
+            getCountriesData={options => getDashboardPanelData('countries', options)}
+            getSourcesData={options => getDashboardPanelData(activePanelId, options)}
+            activeCountryItemId={sourcesPanel.activeCountryItemId}
+            activeSourceTabId={sourcesPanel.activeSourceTabId}
+            activeSourceItemId={sourcesPanel.activeSourceItemId}
             searchSources={countries}
-            tabs={tabs.sources}
+            tabs={tabs}
             sources={sources}
             onSelectCountry={item =>
               setActiveId({
                 type: 'item',
-                active: item && item.name,
+                active: item && item.id,
                 section: 'country',
                 panel: activePanelId
               })
@@ -60,7 +64,7 @@ function DashboardPanel(props) {
             onSelectSourceTab={item =>
               setActiveId({
                 type: 'tab',
-                active: item,
+                active: item.id,
                 section: 'source',
                 panel: activePanelId
               })
@@ -68,7 +72,7 @@ function DashboardPanel(props) {
             onSelectSourceValue={item =>
               setActiveId({
                 type: 'item',
-                active: item && item.name,
+                active: item && item.id,
                 section: 'source',
                 panel: activePanelId
               })
@@ -81,7 +85,7 @@ function DashboardPanel(props) {
             destinations={destinations || []}
             onSelectDestinationValue={item =>
               setActiveId({
-                active: item && item.name,
+                active: item && item.id,
                 type: 'item',
                 section: 'destination',
                 panel: activePanelId
@@ -92,7 +96,7 @@ function DashboardPanel(props) {
         )}
         {activePanelId === 'companies' && (
           <CompaniesPanel
-            tabs={tabs.companies}
+            tabs={tabs}
             searchCompanies={[]}
             companies={companies}
             onSelectNodeTypeTab={item =>
@@ -106,23 +110,24 @@ function DashboardPanel(props) {
             onSelectCompany={item =>
               setActiveId({
                 type: 'item',
-                active: item && item.name,
+                active: item && item.id,
                 section: 'company',
                 panel: activePanelId
               })
             }
-            activeNodeTypeTabId={companiesPanel.activeNodeTypeTabId}
+            activeNodeTypeTabId={companiesPanel.activeNodeTypeTabId || tabs[0]}
             activeCompanyId={companiesPanel.activeCompanyItemId}
           />
         )}
         {activePanelId === 'commodities' && (
           <CommoditiesPanel
+            getData={options => getDashboardPanelData(activePanelId, options)}
             searchCommodities={commodities}
             commodities={commodities}
             onSelectCommodity={item =>
               setActiveId({
                 type: 'item',
-                active: item && item.name,
+                active: item && item.id,
                 section: 'commodity',
                 panel: activePanelId
               })
@@ -144,12 +149,12 @@ function DashboardPanel(props) {
 
 DashboardPanel.propTypes = {
   countries: PropTypes.array,
-  companies: PropTypes.object,
+  companies: PropTypes.array,
   commodities: PropTypes.array,
   dirtyBlocks: PropTypes.object,
   activePanelId: PropTypes.string,
   sources: PropTypes.object,
-  tabs: PropTypes.object,
+  tabs: PropTypes.array,
   commoditiesPanel: PropTypes.object,
   panels: PropTypes.array.isRequired,
   destinations: PropTypes.array.isRequired,
@@ -158,9 +163,10 @@ DashboardPanel.propTypes = {
   setActiveId: PropTypes.func.isRequired,
   clearActiveId: PropTypes.func.isRequired,
   setActivePanel: PropTypes.func.isRequired,
-  sourcingPanel: PropTypes.object.isRequired,
+  sourcesPanel: PropTypes.object.isRequired,
   importingPanel: PropTypes.object.isRequired,
-  companiesPanel: PropTypes.object.isRequired
+  companiesPanel: PropTypes.object.isRequired,
+  getDashboardPanelData: PropTypes.func.isRequired
 };
 
 export default DashboardPanel;

@@ -5,30 +5,33 @@ import {
   DASHBOARD_ELEMENT__SET_ACTIVE_ID,
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
-  DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR
+  DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
+  DASHBOARD_ELEMENT__SET_ACTIVE_PANEL
 } from './dashboard-element.actions';
 
 const initialState = {
   data: {
     indicators: [],
     countries: [],
-    companies: {},
-    sources: {},
+    companies: [],
+    sources: [],
     destinations: [],
     commodities: []
   },
+  meta: {},
+  activePanelId: null,
   activeIndicatorsList: [],
-  sourcingPanel: {
+  sourcesPanel: {
     activeCountryItemId: null,
     activeSourceItemId: null,
-    activeSourceTabId: 'biome'
+    activeSourceTabId: null
   },
   importingPanel: {
     activeDestinationItemId: null
   },
   companiesPanel: {
     activeCompanyItemId: null,
-    activeNodeTypeTabId: 'importers'
+    activeNodeTypeTabId: null
   },
   commoditiesPanel: {
     activeCommodityItemId: null
@@ -36,14 +39,16 @@ const initialState = {
 };
 
 const dashboardElementReducer = {
+  [DASHBOARD_ELEMENT__SET_ACTIVE_PANEL](state, action) {
+    const { activePanelId } = action.payload;
+    return { ...state, activePanelId };
+  },
   [DASHBOARD_ELEMENT__SET_PANEL_DATA](state, action) {
-    const { key, data } = action.payload;
+    const { key, data, meta } = action.payload;
     return {
       ...state,
-      data: {
-        ...state.data,
-        [key]: data
-      }
+      data: { ...state.data, [key]: data },
+      meta: { ...state.meta, [key]: meta }
     };
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ID](state, action) {
@@ -69,14 +74,14 @@ const dashboardElementReducer = {
     const { active } = action.payload;
     return {
       ...state,
-      activeIndicatorsList: [...state.activeIndicatorsList, active.name]
+      activeIndicatorsList: [...state.activeIndicatorsList, active.id]
     };
   },
   [DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR](state, action) {
     const { toRemove } = action.payload;
     return {
       ...state,
-      activeIndicatorsList: state.activeIndicatorsList.filter(item => item !== toRemove.name)
+      activeIndicatorsList: state.activeIndicatorsList.filter(item => item !== toRemove.id)
     };
   }
 };
@@ -85,28 +90,21 @@ const dashboardElementReducerTypes = PropTypes => ({
   data: PropTypes.shape({
     indicators: PropTypes.array.isRequired,
     countries: PropTypes.array.isRequired,
-    companies: PropTypes.shape({
-      importers: PropTypes.array,
-      exporters: PropTypes.array
-    }).isRequired,
-    sources: PropTypes.shape({
-      biome: PropTypes.array,
-      state: PropTypes.array,
-      municipality: PropTypes.array
-    }).isRequired,
+    companies: PropTypes.array.isRequired,
+    sources: PropTypes.array.isRequired,
     destinations: PropTypes.array.isRequired
   }).isRequired,
-  sourcingPanel: PropTypes.shape({
-    activeCountryItemId: PropTypes.string,
-    activeSourceItemId: PropTypes.string,
-    activeSourceTabId: PropTypes.string.isRequired
+  sourcesPanel: PropTypes.shape({
+    activeCountryItemId: PropTypes.number,
+    activeSourceItemId: PropTypes.number,
+    activeSourceTabId: PropTypes.number
   }).isRequired,
   importingPanel: PropTypes.shape({
     activeDestinationItemId: PropTypes.string
   }).isRequired,
   companiesPanel: PropTypes.shape({
     activeCompanyItemId: PropTypes.string,
-    activeNodeTypeTabId: PropTypes.string.isRequired
+    activeNodeTypeTabId: PropTypes.string
   }).isRequired,
   commoditiesPanel: PropTypes.shape({
     activeCommodityItemId: PropTypes.string

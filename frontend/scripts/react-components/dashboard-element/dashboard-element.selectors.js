@@ -1,23 +1,51 @@
 import { createSelector, createStructuredSelector } from 'reselect';
+import uniq from 'lodash/uniq';
 
-const getSourcingPanel = state => state.dashboardElement.sourcingPanel;
+const getSourcesPanel = state => state.dashboardElement.sourcesPanel;
 const getImportingPanel = state => state.dashboardElement.importingPanel;
 const getCompaniesPanel = state => state.dashboardElement.companiesPanel;
 const getCommoditiesPanel = state => state.dashboardElement.commoditiesPanel;
 const getIndicators = state => state.dashboardElement.data.indicators;
 const getActiveIndicators = state => state.dashboardElement.activeIndicatorsList;
+const getDashboardPanelMeta = state => state.dashboardElement.meta;
+const getActiveDashboardPanel = state => {
+  const { activePanelId, ...restState } = state.dashboardElement;
+  return { id: activePanelId, ...restState[`${activePanelId}Panel`] };
+};
 
 export const getDashboardPanels = createStructuredSelector({
-  sourcingPanel: getSourcingPanel,
+  sourcesPanel: getSourcesPanel,
   importingPanel: getImportingPanel,
   companiesPanel: getCompaniesPanel,
   commoditiesPanel: getCommoditiesPanel
 });
 
+export const getActivePanelTabs = createSelector(
+  [getActiveDashboardPanel, getDashboardPanelMeta],
+  (panel, meta) => {
+    switch (panel.id) {
+      case 'sources': {
+        if (meta.countries) {
+          const tabs = meta.countries
+            .filter(row => row.country_id === panel.activeCountryItemId && row.node_type_id !== 13)
+            .map(row => ({ name: row.node_type_name, id: row.node_type_id }));
+          return uniq(tabs);
+        }
+        return [];
+      }
+      case 'companies': {
+        return ['EXPORTERS', 'IMPORTERS'];
+      }
+      default:
+        return [];
+    }
+  }
+);
+
 export const getDirtyBlocks = createSelector(
   getDashboardPanels,
-  ({ sourcingPanel, importingPanel, companiesPanel, commoditiesPanel }) => ({
-    sourcing: sourcingPanel.activeCountryItemId !== null,
+  ({ sourcesPanel, importingPanel, companiesPanel, commoditiesPanel }) => ({
+    sources: sourcesPanel.activeCountryItemId !== null,
     importing: importingPanel.activeSourceItemId !== null,
     companies: companiesPanel.activeCompanyItemId !== null,
     commodities: commoditiesPanel.activeCommodityItemId !== null
@@ -26,15 +54,15 @@ export const getDirtyBlocks = createSelector(
 
 export const getDynamicSentence = createSelector(
   getDashboardPanels,
-  ({ sourcingPanel, importingPanel, companiesPanel, commoditiesPanel }) => {
-    const sourcingActiveId = sourcingPanel.activeSourceItemId || sourcingPanel.activeCountryItemId;
+  ({ sourcesPanel, importingPanel, companiesPanel, commoditiesPanel }) => {
+    const sourcesActiveId = sourcesPanel.activeSourceItemId || sourcesPanel.activeCountryItemId;
     const importingActiveId = importingPanel.activeDestinationItemId;
     const companiesActiveId = companiesPanel.activeCompanyItemId;
     const commoditiesActiveId = commoditiesPanel.activeCommodityItemId;
 
     if (
       ![
-        !!sourcingActiveId,
+        !!sourcesActiveId,
         !!importingActiveId,
         !!companiesActiveId,
         !!commoditiesActiveId
@@ -50,9 +78,9 @@ export const getDynamicSentence = createSelector(
         value: commoditiesActiveId
       },
       {
-        panel: 'sourcing',
-        prefix: sourcingActiveId ? `produced in` : 'produced in the world',
-        value: sourcingActiveId
+        panel: 'sources',
+        prefix: sourcesActiveId ? `produced in` : 'produced in the world',
+        value: sourcesActiveId
       },
       {
         panel: 'companies',
@@ -67,5 +95,5 @@ export const getDynamicSentence = createSelector(
 export const getActiveIndicatorsData = createSelector(
   [getIndicators, getActiveIndicators],
   (indicators, activeIndicatorsList) =>
-    indicators.filter(indicator => activeIndicatorsList.includes(indicator.name))
+    indicators.filter(indicator => activeIndicatorsList.includes(indicator.id))
 );

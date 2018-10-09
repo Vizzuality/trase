@@ -27,7 +27,7 @@ function ImportingPanel(props) {
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={activeDestinationId === (itemProps.item && itemProps.item.name)}
+            isActive={activeDestinationId === (itemProps.item && itemProps.item.id)}
             enableItem={onSelectDestinationValue}
             disableItem={() => onSelectDestinationValue(null)}
           />

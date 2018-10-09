@@ -18,7 +18,7 @@ class DashboardIndicators extends React.PureComponent {
     document.body.classList.remove('tooltip-modal');
   }
 
-  setActiveItemInfo = item => this.setState({ activeItemInfo: item.name });
+  setActiveItemInfo = item => this.setState({ activeItemInfo: item.id });
 
   resetActiveItemInfo = () => {
     const { activeItemInfo } = this.state;
@@ -58,8 +58,8 @@ class DashboardIndicators extends React.PureComponent {
                 enableItem={setActiveId}
                 disableItem={removeActiveId}
                 isDisabled={!!itemProps.item && itemProps.item.disabled}
-                isActive={activeIndicatorsList.includes(itemProps.item && itemProps.item.name)}
-                isInfoActive={activeItemInfo === (itemProps.item && itemProps.item.name)}
+                isActive={activeIndicatorsList.includes(itemProps.item && itemProps.item.id)}
+                isInfoActive={activeItemInfo === (itemProps.item && itemProps.item.id)}
                 onInfoClick={this.setActiveItemInfo}
               />
             )}

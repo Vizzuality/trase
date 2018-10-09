@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 
 function Tabs(props) {
-  const { tabs, onSelectTab, children, itemTabRenderer, selectedTab, testId } = props;
+  const { tabs, onSelectTab, children, itemTabRenderer, selectedTab, testId, getTabId } = props;
   return (
     <div className="c-tabs">
       <div className="tabs-container">
@@ -11,7 +11,7 @@ function Tabs(props) {
           <button
             key={index}
             className={cx('tab', {
-              '-selected': item === selectedTab
+              '-selected': getTabId(item) === selectedTab
             })}
             data-key={item}
             onClick={() => onSelectTab(item, index)}
@@ -27,11 +27,13 @@ function Tabs(props) {
 }
 
 Tabs.defaultProps = {
-  testId: 'tab'
+  testId: 'tab',
+  getTabId: x => x
 };
 
 Tabs.propTypes = {
   testId: PropTypes.string,
+  getTabId: PropTypes.func,
   itemTabRenderer: PropTypes.func,
   tabs: PropTypes.array.isRequired,
   children: PropTypes.any.isRequired,

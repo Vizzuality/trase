@@ -1,14 +1,14 @@
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
-  clearDashaboardPanel,
+  clearDashboardPanel,
   getDashboardPanelData,
+  setDashboardActivePanel,
   setDashboardPanelActiveId
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
 import {
+  getActivePanelTabs,
   getDashboardPanels,
   getDirtyBlocks,
   getDynamicSentence
@@ -16,6 +16,7 @@ import {
 
 const mapStateToProps = state => {
   const {
+    activePanelId,
     data: { sources, countries, commodities, companies, destinations }
   } = state.dashboardElement;
 
@@ -25,67 +26,31 @@ const mapStateToProps = state => {
     companies,
     commodities,
     destinations,
+    activePanelId,
+    tabs: getActivePanelTabs(state),
     dirtyBlocks: getDirtyBlocks(state),
     dynamicSentenceParts: getDynamicSentence(state),
     ...getDashboardPanels(state)
   };
 };
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      getData: getDashboardPanelData,
-      setActiveId: setDashboardPanelActiveId,
-      clearActiveId: clearDashaboardPanel
-    },
-    dispatch
-  );
+const mapDispatchToProps = {
+  getDashboardPanelData,
+  clearActiveId: clearDashboardPanel,
+  setActiveId: setDashboardPanelActiveId,
+  setActivePanel: setDashboardActivePanel
+};
 
 class DashboardPanelContainer extends React.PureComponent {
-  static propTypes = {
-    dirtyBlocks: PropTypes.object,
-    getData: PropTypes.func.isRequired,
-    dynamicSentenceParts: PropTypes.array
-  };
-
-  state = {
-    activePanelId: null
-  };
-
   panels = [
-    { id: 'sourcing', title: 'sourcing places' },
+    { id: 'sources', title: 'sourcing places' },
     { id: 'importing', title: 'importing countries' },
     { id: 'companies', title: 'companies' },
     { id: 'commodities', title: 'commodities' }
   ];
 
-  tabs = {
-    sources: ['biome', 'state', 'municipality'],
-    companies: ['importers', 'exporters']
-  };
-
-  componentDidUpdate(prevProps, prevState) {
-    const { activePanelId } = this.state;
-    if (prevState.activePanelId !== activePanelId) {
-      this.props.getData(activePanelId);
-    }
-  }
-
-  setActivePanel = activePanelId => {
-    this.setState({ activePanelId });
-  };
-
   render() {
-    const { activePanelId } = this.state;
-    return (
-      <DashboardPanel
-        tabs={this.tabs}
-        panels={this.panels}
-        setActivePanel={this.setActivePanel}
-        activePanelId={activePanelId}
-        {...this.props}
-      />
-    );
+    return <DashboardPanel panels={this.panels} {...this.props} />;
   }
 }
 
