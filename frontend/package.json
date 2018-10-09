@@ -9,10 +9,14 @@
     "test": "jest --config ./jest.config.js ./scripts --colors",
     "ci": "start-server-and-test start:staging http-get://localhost:8081 test",
     "webpack:prod": "NODE_ENV='production' webpack --config config/webpack.config.prod.js",
-    "precommit": "lint-staged",
     "eslint": "eslint -c .eslintrc.json --ext .jsx,.js scripts/**/* --fix",
     "prettier": "prettier --config .prettierrc --ignore-path .prettierignore --write 'scripts/**/*'",
     "eslint-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
     "*.scss": "sass-lint -c .sass-lint.yml -v -q",
@@ -66,10 +70,10 @@
     "faker": "^4.1.0",
     "file-loader": "1.1.11",
     "html-webpack-plugin": "3.2.0",
-    "husky": "0.14.3",
+    "husky": "1.1.1",
     "image-webpack-loader": "4.3.1",
     "jest": "23.4.2",
-    "lint-staged": "7.2.0",
+    "lint-staged": "7.3.0",
     "mapshaper": "0.4.87",
     "node-sass": "4.9.2",
     "postcss-loader": "2.1.6",
