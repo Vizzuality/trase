@@ -142,13 +142,6 @@ $$;
 COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double precision) IS 'Given an n-element array of choropleth buckets and a positive value, returns index of bucket where value falls (1 to n + 1); else returns 0.';
 
 
---
--- Name: trase_server; Type: SERVER; Schema: -; Owner: -
---
-
--- suppressed CREATE SERVER
-
-
 SET default_tablespace = '';
 
 SET default_with_oids = false;
