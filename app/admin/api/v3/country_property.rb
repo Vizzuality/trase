@@ -37,7 +37,6 @@ ActiveAdmin.register Api::V3::CountryProperty, as: 'CountryProperty' do
     column :latitude
     column :longitude
     column :zoom
-    column :geo_id
     column :annotation_position_x_pos
     column :annotation_position_y_pos
     actions

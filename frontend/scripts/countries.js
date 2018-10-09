@@ -448,30 +448,3 @@ export const COUNTRIES_COORDINATES = {
   SG: [103.85387481909902, 1.2949793251059418],
   HK: [114.18306345846304, 22.30692675357551]
 };
-
-export const COUNTRY_ID_ORIGIN = {
-  1: {
-    coordinates: COUNTRIES_COORDINATES.BR,
-    geoId: 'BR',
-    name: 'Brazil',
-    annotationPos: [20, -0.5]
-  },
-  2: {
-    coordinates: COUNTRIES_COORDINATES.PY,
-    geoId: 'PY',
-    name: 'Paraguay',
-    annotationPos: [-35, -0.5]
-  },
-  3: {
-    coordinates: COUNTRIES_COORDINATES.AR,
-    geoId: 'AR',
-    name: 'Argentina',
-    annotationPos: [20, -0.5]
-  },
-  4: {
-    coordinates: COUNTRIES_COORDINATES.ID,
-    geoId: 'ID',
-    name: 'Indonesia',
-    annotationPos: [-30, -0.5]
-  }
-};
