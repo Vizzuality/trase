@@ -11,7 +11,6 @@ module Api
 
           render json: @collection,
                  root: 'data',
-                 meta: FilterSourcesMeta.new(filter_params.slice(:countries_ids, :commodities_ids)).call,
                  each_serializer: Api::V3::Dashboards::CountrySerializer
         end
 
