@@ -38,7 +38,9 @@ export const redirectToExplore = (dispatch, getState, { action }) => {
   if (toolPages.includes(action.type)) {
     if (!previouslyVisitedExplorePage.get() && !urlHasSankeyState) {
       previouslyVisitedExplorePage.set(Date.now());
-      //     dispatch(setContextIsUserSelected(false));
+      if (SHOW_WORLD_MAP_IN_EXPLORE) {
+        dispatch(setContextIsUserSelected(false));
+      }
       dispatch(redirect({ type: 'explore' }));
     }
   } else if (type === 'explore') {

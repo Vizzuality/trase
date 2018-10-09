@@ -56,6 +56,7 @@
     "GOOGLE_ANALYTICS_KEY": true,
     "USER_REPORT_KEY": true,
     "DATA_DOWNLOAD_ENABLED": true,
+    "SHOW_WORLD_MAP_IN_EXPLORE": true,
     "DATA_FORM_ENDPOINT": true,
     "DATA_FORM_ENABLED": true,
     "PDF_DOWNLOAD_URL": true,
