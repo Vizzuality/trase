@@ -22,7 +22,7 @@ module Api
           end
 
           def refresh_now(options = {})
-            refresh_dependencies unless options[:skip_dependencies]
+            refresh_dependencies(options) unless options[:skip_dependencies]
             refresh_by_name(table_name, options)
             refresh_dependents(options) unless options[:skip_dependents]
           end
