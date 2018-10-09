@@ -64,7 +64,7 @@ module Api
                      attribute: :map_quant, scope: :map_attribute_group,
                      if: :new_map_quant_given?
 
-      after_commit :refresh_dependencies
+      after_commit :refresh_dependents
 
       stringy_array :dual_layer_buckets
       stringy_array :single_layer_buckets
@@ -77,7 +77,7 @@ module Api
         ]
       end
 
-      def refresh_dependencies
+      def refresh_dependents
         Api::V3::Readonly::MapAttribute.refresh
       end
     end

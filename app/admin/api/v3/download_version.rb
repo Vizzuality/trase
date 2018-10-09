@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::DownloadVersion, as: 'DownloadVersion' do
-  menu parent: 'Data Download Settings'
+  menu parent: 'Data Download'
 
   permit_params :context_id, :is_current, :symbol, :created_at
 

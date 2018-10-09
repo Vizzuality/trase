@@ -33,18 +33,16 @@ module Api
           order(:display_name).map { |a| [a.display_name, a.id] }
         end
 
-        def self.refresh
-          super
-          dependents.each(&:refresh)
-        end
-
-        def self.dependents
+        def self.refresh_dependents(options = {})
           [
             Api::V3::Readonly::DownloadAttribute,
             Api::V3::Readonly::MapAttribute,
             Api::V3::Readonly::RecolorByAttribute,
-            Api::V3::Readonly::ResizeByAttribute
-          ]
+            Api::V3::Readonly::ResizeByAttribute,
+            Api::V3::Readonly::DashboardsAttribute
+          ].each do |mview_klass|
+            mview_klass.refresh(options.merge(skip_dependencies: true))
+          end
         end
       end
     end

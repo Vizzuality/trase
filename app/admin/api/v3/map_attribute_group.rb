@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::MapAttributeGroup, as: 'MapAttributeGroup' do
-  menu parent: 'Map Settings', priority: 1
+  menu parent: 'Map', priority: 1
 
   permit_params :context_id, :name, :position
 

@@ -6,8 +6,7 @@ RSpec.describe 'Attributes', type: :request do
 
   describe 'GET /api/v3/dashboards/attributes' do
     before(:each) do
-      Api::V3::Readonly::Attribute.refresh
-      Api::V3::Readonly::DashboardsAttribute.refresh(concurrently: false)
+      Api::V3::Readonly::DashboardsAttribute.refresh
     end
 
     it 'has the correct response structure' do

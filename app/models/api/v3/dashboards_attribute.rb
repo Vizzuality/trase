@@ -48,7 +48,7 @@ module Api
                      scope: :dashboards_attribute_group,
                      if: :new_dashboards_quant_given?
 
-      after_commit :refresh_dependencies
+      after_commit :refresh_dependents
 
       manage_associated_attributes [:dashboards_ind, :dashboards_qual, :dashboards_quant]
 
@@ -58,7 +58,7 @@ module Api
         ]
       end
 
-      def refresh_dependencies
+      def refresh_dependents
         Api::V3::Readonly::DashboardsAttribute.refresh
       end
     end

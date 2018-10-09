@@ -35,9 +35,8 @@ module Api
           belongs_to :node
 
           def self.refresh(options = {})
-            Scenic.database.refresh_materialized_view(
-              'context_node_types_mv', concurrently: false
-            )
+            # TODO: try the new :cascade option
+            refresh_by_name('context_node_types_mv', options)
             super(options)
           end
         end

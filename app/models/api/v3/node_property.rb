@@ -25,7 +25,7 @@ module Api
 
       validates :node, presence: true, uniqueness: true
 
-      after_commit :refresh_dependencies
+      after_commit :refresh_dependents
 
       def self.blue_foreign_keys
         [
@@ -33,7 +33,7 @@ module Api
         ]
       end
 
-      def refresh_dependencies
+      def refresh_dependents
         Api::V3::Readonly::Node.refresh
       end
 

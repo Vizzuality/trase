@@ -2,14 +2,14 @@ require 'rails_helper'
 
 RSpec.describe 'Get contexts', type: :request do
   before do
-    Api::V3::DownloadAttribute.skip_callback(:commit, :after, :refresh_dependencies)
-    Api::V3::ResizeByAttribute.skip_callback(:commit, :after, :refresh_dependencies)
-    Api::V3::RecolorByAttribute.skip_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::DownloadAttribute.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::ResizeByAttribute.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::RecolorByAttribute.skip_callback(:commit, :after, :refresh_dependents)
   end
   after do
-    Api::V3::DownloadAttribute.set_callback(:commit, :after, :refresh_dependencies)
-    Api::V3::ResizeByAttribute.set_callback(:commit, :after, :refresh_dependencies)
-    Api::V3::RecolorByAttribute.set_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::DownloadAttribute.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::ResizeByAttribute.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::RecolorByAttribute.set_callback(:commit, :after, :refresh_dependents)
   end
   include_context 'api v3 brazil soy nodes'
   include_context 'api v3 brazil download attributes'

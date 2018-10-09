@@ -21,13 +21,13 @@ module Api
       validates :name, presence: true
       validates :position, presence: true, uniqueness: true
 
-      after_commit :refresh_dependencies
+      after_commit :refresh_dependents
 
       def self.select_options
-        Api::V3::DashboardsAttributeGroup.all.map(&:name)
+        order(:name).map { |group| [group.name, group.id] }
       end
 
-      def refresh_dependencies
+      def refresh_dependents
         Api::V3::Readonly::DashboardsAttribute.refresh
       end
     end

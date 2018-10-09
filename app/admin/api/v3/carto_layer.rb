@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::CartoLayer, as: 'CartoLayer' do
-  menu parent: 'Map Settings'
+  menu parent: 'Map'
 
   permit_params :contextual_layer_id, :identifier, :years_str, :raster_url
 

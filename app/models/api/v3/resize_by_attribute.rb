@@ -45,7 +45,7 @@ module Api
                      attribute: :resize_by_quant,
                      if: :new_resize_by_quant_given?
 
-      after_commit :refresh_dependencies
+      after_commit :refresh_dependents
 
       stringy_array :years
       manage_associated_attributes [:resize_by_quant]
@@ -56,7 +56,7 @@ module Api
         ]
       end
 
-      def refresh_dependencies
+      def refresh_dependents
         Api::V3::Readonly::ResizeByAttribute.refresh
       end
     end

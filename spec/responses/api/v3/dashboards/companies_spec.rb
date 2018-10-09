@@ -5,7 +5,7 @@ RSpec.describe 'Companies', type: :request do
 
   describe 'GET /api/v3/dashboards/companies' do
     before(:each) do
-      Api::V3::Readonly::Dashboards::Company.refresh(concurrently: false)
+      Api::V3::Readonly::Dashboards::Company.refresh
     end
 
     it 'has the correct response structure' do

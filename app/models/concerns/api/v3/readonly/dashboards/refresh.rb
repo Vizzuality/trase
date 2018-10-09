@@ -6,11 +6,8 @@ module Api
           extend ActiveSupport::Concern
 
           class_methods do
-            def refresh(options = {})
-              unless options[:skip_flow_paths]
-                FlowPath.refresh(options.slice(:concurrently))
-              end
-              super(options.slice(:concurrently))
+            def refresh_dependencies(_options = {})
+              FlowPath.refresh(concurrently: false) # no unique index
             end
           end
         end

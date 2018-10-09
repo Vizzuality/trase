@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::ResizeByAttribute, type: :model do
   before do
-    Api::V3::ResizeByAttribute.skip_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::ResizeByAttribute.skip_callback(:commit, :after, :refresh_dependents)
   end
   after do
-    Api::V3::ResizeByAttribute.set_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::ResizeByAttribute.set_callback(:commit, :after, :refresh_dependents)
   end
   include_context 'api v3 brazil resize by attributes'
 

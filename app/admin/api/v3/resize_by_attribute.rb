@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
-  menu parent: 'Sankey Settings'
+  menu parent: 'Sankey'
 
   includes [
     {context: [:country, :commodity]},

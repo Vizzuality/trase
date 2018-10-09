@@ -5,7 +5,7 @@ RSpec.describe 'Countries', type: :request do
 
   describe 'GET /api/v3/dashboards/countries' do
     before(:each) do
-      Api::V3::Readonly::Dashboards::Country.refresh(concurrently: false)
+      Api::V3::Readonly::Dashboards::Country.refresh
     end
 
     it 'has the correct response structure' do

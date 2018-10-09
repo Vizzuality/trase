@@ -2,12 +2,12 @@ require 'rails_helper'
 
 RSpec.describe 'Map layers', type: :request do
   before do
-    Api::V3::MapAttributeGroup.skip_callback(:commit, :after, :refresh_dependencies)
-    Api::V3::MapAttribute.skip_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::MapAttributeGroup.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::MapAttribute.skip_callback(:commit, :after, :refresh_dependents)
   end
   after do
-    Api::V3::MapAttributeGroup.set_callback(:commit, :after, :refresh_dependencies)
-    Api::V3::MapAttribute.set_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::MapAttributeGroup.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::MapAttribute.set_callback(:commit, :after, :refresh_dependents)
   end
   include_context 'api v3 brazil contextual layers'
   include_context 'api v3 brazil map attributes'

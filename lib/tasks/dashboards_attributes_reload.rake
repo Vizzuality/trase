@@ -2,8 +2,8 @@ namespace :dashboards do
   namespace :attributes do
     desc 'Reloads dashboards attributes tables'
     task reload: :environment do
-      Api::V3::DashboardsAttributeGroup.skip_callback(:commit, :after, :refresh_dependencies)
-      Api::V3::DashboardsAttribute.skip_callback(:commit, :after, :refresh_dependencies)
+      Api::V3::DashboardsAttributeGroup.skip_callback(:commit, :after, :refresh_dependents)
+      Api::V3::DashboardsAttribute.skip_callback(:commit, :after, :refresh_dependents)
 
       Api::V3::DashboardsInd.delete_all
       Api::V3::DashboardsQual.delete_all
@@ -15,8 +15,8 @@ namespace :dashboards do
         reload_group(properties, idx)
       end
 
-      Api::V3::DashboardsAttributeGroup.set_callback(:commit, :after, :refresh_dependencies)
-      Api::V3::DashboardsAttribute.set_callback(:commit, :after, :refresh_dependencies)
+      Api::V3::DashboardsAttributeGroup.set_callback(:commit, :after, :refresh_dependents)
+      Api::V3::DashboardsAttribute.set_callback(:commit, :after, :refresh_dependents)
 
       Api::V3::Readonly::DashboardsAttribute.refresh
     end
@@ -63,6 +63,7 @@ namespace :dashboards do
             COFFEE_YIELD_
             SOY_AREAPERC
           ),
+
           quals: %w(
             Commodity
           ),

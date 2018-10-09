@@ -5,7 +5,7 @@ RSpec.describe 'sources', type: :request do
 
   describe 'GET /api/v3/dashboards/sources' do
     before(:each) do
-      Api::V3::Readonly::Dashboards::Source.refresh(concurrently: false)
+      Api::V3::Readonly::Dashboards::Source.refresh
     end
 
     it 'requires countries_ids' do
