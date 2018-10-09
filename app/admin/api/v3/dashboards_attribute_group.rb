@@ -3,6 +3,10 @@ ActiveAdmin.register Api::V3::DashboardsAttributeGroup, as: 'DashboardsAttribute
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
+  permit_params :name,
+                :position
+
+
   controller do
     def clear_cache
       clear_cache_for_regexp('/api/v3/dashboards/indicators')
