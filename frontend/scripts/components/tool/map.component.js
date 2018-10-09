@@ -213,10 +213,6 @@ export default class {
       const originalPolygon = this.currentPolygonTypeLayer
         .getLayers()
         .find(polygon => polygon.feature.properties.geoid === selectedGeoId);
-
-      if (!originalPolygon) {
-        console.error(`Could not find polygon with GeoID ${selectedGeoId}`);
-      }
       return originalPolygon.feature;
     });
 
