@@ -8,6 +8,15 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :admin do
+    get :source_search, controller: :node_search, action: :source_search
+    get :company_search, controller: :node_search, action: :company_search
+    get :destination_search, controller: :node_search, action: :destination_search
+
+    resources :commodity_search, only: [:index]
+    resources :country_search, only: [:index]
+  end
+
   namespace :content do
     mount Ckeditor::Engine => '/ckeditor'
     resources :posts, only: [:index]
@@ -57,6 +66,7 @@ Rails.application.routes.draw do
       resource :database_validation, controller: :database_validation,
                                      only: [:show]
       namespace :dashboards do
+        resources :templates, only: [:index]
         resources :sources, only: [:index] do
           get :search, on: :collection
         end

@@ -43,6 +43,7 @@ gem 'appsignal'
 gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
 gem 'whenever', require: false
+gem 'ransack'
 
 group :development, :test do
   gem 'byebug', platform: :mri

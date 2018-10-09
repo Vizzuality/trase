@@ -30,6 +30,7 @@ Lint/RescueWithoutErrorClass:
 
 Metrics/BlockLength:
   Exclude:
+    - 'config/routes.rb'
     - 'spec/**/*'
     - 'lib/tasks/**/*'
     - 'app/admin/**/*'

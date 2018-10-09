@@ -142,6 +142,13 @@ $$;
 COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double precision) IS 'Given an n-element array of choropleth buckets and a positive value, returns index of bucket where value falls (1 to n + 1); else returns 0.';
 
 
+--
+-- Name: trase_server; Type: SERVER; Schema: -; Owner: -
+--
+
+-- suppressed CREATE SERVER
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -1117,6 +1124,202 @@ CREATE SEQUENCE public.country_properties_id_seq
 --
 
 ALTER SEQUENCE public.country_properties_id_seq OWNED BY public.country_properties.id;
+
+
+--
+-- Name: dashboard_template_commodities; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboard_template_commodities (
+    id bigint NOT NULL,
+    dashboard_template_id integer,
+    commodity_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: dashboard_template_commodities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.dashboard_template_commodities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: dashboard_template_commodities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.dashboard_template_commodities_id_seq OWNED BY public.dashboard_template_commodities.id;
+
+
+--
+-- Name: dashboard_template_companies; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboard_template_companies (
+    id bigint NOT NULL,
+    dashboard_template_id integer,
+    node_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: dashboard_template_companies_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.dashboard_template_companies_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: dashboard_template_companies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.dashboard_template_companies_id_seq OWNED BY public.dashboard_template_companies.id;
+
+
+--
+-- Name: dashboard_template_countries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboard_template_countries (
+    id bigint NOT NULL,
+    dashboard_template_id integer,
+    country_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: dashboard_template_countries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.dashboard_template_countries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: dashboard_template_countries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.dashboard_template_countries_id_seq OWNED BY public.dashboard_template_countries.id;
+
+
+--
+-- Name: dashboard_template_destinations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboard_template_destinations (
+    id bigint NOT NULL,
+    dashboard_template_id integer,
+    node_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: dashboard_template_destinations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.dashboard_template_destinations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: dashboard_template_destinations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.dashboard_template_destinations_id_seq OWNED BY public.dashboard_template_destinations.id;
+
+
+--
+-- Name: dashboard_template_sources; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboard_template_sources (
+    id bigint NOT NULL,
+    dashboard_template_id integer,
+    node_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: dashboard_template_sources_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.dashboard_template_sources_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: dashboard_template_sources_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.dashboard_template_sources_id_seq OWNED BY public.dashboard_template_sources.id;
+
+
+--
+-- Name: dashboard_templates; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboard_templates (
+    id bigint NOT NULL,
+    title text NOT NULL,
+    description text NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    image_file_name character varying,
+    image_content_type character varying,
+    image_file_size integer,
+    image_updated_at timestamp without time zone
+);
+
+
+--
+-- Name: dashboard_templates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.dashboard_templates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: dashboard_templates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.dashboard_templates_id_seq OWNED BY public.dashboard_templates.id;
 
 
 --
@@ -3006,6 +3209,48 @@ ALTER TABLE ONLY public.country_properties ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
+-- Name: dashboard_template_commodities id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboard_template_commodities ALTER COLUMN id SET DEFAULT nextval('public.dashboard_template_commodities_id_seq'::regclass);
+
+
+--
+-- Name: dashboard_template_companies id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboard_template_companies ALTER COLUMN id SET DEFAULT nextval('public.dashboard_template_companies_id_seq'::regclass);
+
+
+--
+-- Name: dashboard_template_countries id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboard_template_countries ALTER COLUMN id SET DEFAULT nextval('public.dashboard_template_countries_id_seq'::regclass);
+
+
+--
+-- Name: dashboard_template_destinations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboard_template_destinations ALTER COLUMN id SET DEFAULT nextval('public.dashboard_template_destinations_id_seq'::regclass);
+
+
+--
+-- Name: dashboard_template_sources id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboard_template_sources ALTER COLUMN id SET DEFAULT nextval('public.dashboard_template_sources_id_seq'::regclass);
+
+
+--
+-- Name: dashboard_templates id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboard_templates ALTER COLUMN id SET DEFAULT nextval('public.dashboard_templates_id_seq'::regclass);
+
+
+--
 -- Name: dashboards_attribute_groups id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3566,6 +3811,54 @@ ALTER TABLE ONLY public.country_properties
 
 ALTER TABLE ONLY public.country_properties
     ADD CONSTRAINT country_properties_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: dashboard_template_commodities dashboard_template_commodities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboard_template_commodities
+    ADD CONSTRAINT dashboard_template_commodities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: dashboard_template_companies dashboard_template_companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboard_template_companies
+    ADD CONSTRAINT dashboard_template_companies_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: dashboard_template_countries dashboard_template_countries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboard_template_countries
+    ADD CONSTRAINT dashboard_template_countries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: dashboard_template_destinations dashboard_template_destinations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboard_template_destinations
+    ADD CONSTRAINT dashboard_template_destinations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: dashboard_template_sources dashboard_template_sources_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboard_template_sources
+    ADD CONSTRAINT dashboard_template_sources_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: dashboard_templates dashboard_templates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboard_templates
+    ADD CONSTRAINT dashboard_templates_pkey PRIMARY KEY (id);
 
 
 --
@@ -4908,13 +5201,6 @@ CREATE INDEX index_node_quants_on_node_id ON public.node_quants USING btree (nod
 
 
 --
--- Name: index_nodes_mv_on_id_and_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_nodes_mv_on_id_and_context_id ON public.nodes_mv USING btree (id, context_id);
-
-
---
 -- Name: index_profiles_on_context_node_type_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5728,6 +6014,14 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180928122607'),
 ('20181001105332'),
 ('20181002105509'),
-('20181002105912');
+('20181002105912'),
+('20181003063720'),
+('20181004075142'),
+('20181005063834'),
+('20181005063841'),
+('20181005063849'),
+('20181005063856'),
+('20181005063909'),
+('20181005064856');
 
 

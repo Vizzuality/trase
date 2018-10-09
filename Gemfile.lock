@@ -472,6 +472,7 @@ DEPENDENCIES
   rack-cors (~> 0.4)
   rails (~> 5.1.6)
   rails-controller-testing
+  ransack
   rspec-collection_matchers
   rspec-rails (~> 3.5)
   rubocop

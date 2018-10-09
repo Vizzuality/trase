@@ -16,6 +16,9 @@ module Api
     class Commodity < BlueTable
       has_many :contexts
 
+      has_many :dashboard_template_commodities
+      has_many :dashboard_templates, through: :dashboard_template_commodities
+
       validates :name, presence: true, uniqueness: true
 
       def self.import_key

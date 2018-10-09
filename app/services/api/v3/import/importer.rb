@@ -10,8 +10,19 @@ module Api
 
         # order matters a lot in here
         ALL_TABLES = [
-          {table_class: Api::V3::Country, yellow_tables: [Api::V3::CountryProperty]},
-          {table_class: Api::V3::Commodity},
+          {
+            table_class: Api::V3::Country,
+            yellow_tables: [
+              Api::V3::CountryProperty,
+              Api::V3::DashboardTemplateCountry
+            ]
+          },
+          {
+            table_class: Api::V3::Commodity,
+            yellow_tables: [
+              Api::V3::DashboardTemplateCommodity
+            ]
+          },
           {
             table_class: Api::V3::Context,
             yellow_tables: [
@@ -38,7 +49,16 @@ module Api
             ]
           },
           {table_class: Api::V3::DownloadVersion},
-          {table_class: Api::V3::Node, yellow_tables: [Api::V3::NodeProperty]},
+          {
+            table_class: Api::V3::Node,
+            yellow_tables: [
+              Api::V3::NodeProperty,
+              Api::V3::DashboardTemplateSource,
+              Api::V3::DashboardTemplateCompany,
+              Api::V3::DashboardTemplateDestination
+
+            ]
+          },
           {
             table_class: Api::V3::Ind,
             yellow_tables: [
