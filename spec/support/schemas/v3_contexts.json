@@ -146,11 +146,11 @@
               },
               "annotationPositionXPos": {
                 "id": "/properties/data/items/properties/map/properties/annotationPositionXPos",
-                "type": "string"
+                "type": "number"
               },
               "annotationPositionYPos": {
                 "id": "/properties/data/items/properties/map/properties/annotationPositionYPos",
-                "type": "string"
+                "type": "number"
               }
             },
             "required": [
