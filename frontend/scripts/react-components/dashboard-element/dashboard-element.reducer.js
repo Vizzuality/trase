@@ -26,7 +26,7 @@ const initialState = {
     activeSourceItemId: null,
     activeSourceTabId: null
   },
-  importingPanel: {
+  destinationsPanel: {
     activeDestinationItemId: null
   },
   companiesPanel: {
@@ -99,7 +99,7 @@ const dashboardElementReducerTypes = PropTypes => ({
     activeSourceItemId: PropTypes.number,
     activeSourceTabId: PropTypes.number
   }).isRequired,
-  importingPanel: PropTypes.shape({
+  destinationsPanel: PropTypes.shape({
     activeDestinationItemId: PropTypes.string
   }).isRequired,
   companiesPanel: PropTypes.shape({

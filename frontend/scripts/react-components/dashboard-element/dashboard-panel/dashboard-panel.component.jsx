@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BlockSwitch from 'react-components/shared/block-switch.component';
 import SourcesPanel from 'react-components/dashboard-element/dashboard-panel/sources-panel.component';
-import ImportingPanel from 'react-components/dashboard-element/dashboard-panel/importing-panel.component';
+import DestinationsPanel from 'react-components/dashboard-element/dashboard-panel/destinations-panel.component';
 import CompaniesPanel from 'react-components/dashboard-element/dashboard-panel/companies-panel.component';
 import CommoditiesPanel from 'react-components/dashboard-element/dashboard-panel/commodities-panel.component';
 import DashboardModalFooter from 'react-components/dashboard-element/dahsboard-modal-footer.component';
@@ -15,7 +15,7 @@ function DashboardPanel(props) {
     activePanelId,
     setActivePanel,
     sourcesPanel,
-    importingPanel,
+    destinationsPanel,
     companiesPanel,
     clearActiveId,
     setActiveId,
@@ -79,8 +79,8 @@ function DashboardPanel(props) {
             }
           />
         )}
-        {activePanelId === 'importing' && (
-          <ImportingPanel
+        {activePanelId === 'destinations' && (
+          <DestinationsPanel
             searchDestinations={destinations}
             destinations={destinations || []}
             onSelectDestinationValue={item =>
@@ -91,7 +91,7 @@ function DashboardPanel(props) {
                 panel: activePanelId
               })
             }
-            activeDestinationId={importingPanel.activeDestinationItemId}
+            activeDestinationId={destinationsPanel.activeDestinationItemId}
           />
         )}
         {activePanelId === 'companies' && (
@@ -164,7 +164,7 @@ DashboardPanel.propTypes = {
   clearActiveId: PropTypes.func.isRequired,
   setActivePanel: PropTypes.func.isRequired,
   sourcesPanel: PropTypes.object.isRequired,
-  importingPanel: PropTypes.object.isRequired,
+  destinationsPanel: PropTypes.object.isRequired,
   companiesPanel: PropTypes.object.isRequired,
   getDashboardPanelData: PropTypes.func.isRequired
 };

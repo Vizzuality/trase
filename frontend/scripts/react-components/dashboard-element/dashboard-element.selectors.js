@@ -3,7 +3,7 @@ import uniq from 'lodash/uniq';
 
 const getDashboardPanelData = state => state.dashboardElement.data;
 const getSourcesPanel = state => state.dashboardElement.sourcesPanel;
-const getImportingPanel = state => state.dashboardElement.importingPanel;
+const getDestinationsPanel = state => state.dashboardElement.destinationsPanel;
 const getCompaniesPanel = state => state.dashboardElement.companiesPanel;
 const getCommoditiesPanel = state => state.dashboardElement.commoditiesPanel;
 const getIndicators = state => state.dashboardElement.data.indicators;
@@ -37,10 +37,10 @@ export const getActivePanelTabs = createSelector(
 );
 
 export const getDirtyBlocks = createSelector(
-  [getSourcesPanel, getImportingPanel, getCompaniesPanel, getCommoditiesPanel],
-  (sourcesPanel, importingPanel, companiesPanel, commoditiesPanel) => ({
+  [getSourcesPanel, getDestinationsPanel, getCompaniesPanel, getCommoditiesPanel],
+  (sourcesPanel, destinationsPanel, companiesPanel, commoditiesPanel) => ({
     sources: sourcesPanel.activeCountryItemId !== null,
-    importing: importingPanel.activeDestinationItemId !== null,
+    destinations: destinationsPanel.activeDestinationItemId !== null,
     companies: companiesPanel.activeCompanyItemId !== null,
     commodities: commoditiesPanel.activeCommodityItemId !== null
   })
@@ -49,15 +49,15 @@ export const getDirtyBlocks = createSelector(
 export const getDynamicSentence = createSelector(
   [
     getSourcesPanel,
-    getImportingPanel,
+    getDestinationsPanel,
     getCompaniesPanel,
     getCommoditiesPanel,
     getDashboardPanelData
   ],
-  (sourcesPanel, importingPanel, companiesPanel, commoditiesPanel, data) => {
+  (sourcesPanel, destinationsPanel, companiesPanel, commoditiesPanel, data) => {
     const countriesActiveId = sourcesPanel.activeCountryItemId;
     const sourcesActiveId = sourcesPanel.activeSourceItemId;
-    const importingActiveId = importingPanel.activeDestinationItemId;
+    const destinationsActiveId = destinationsPanel.activeDestinationItemId;
     const companiesActiveId = companiesPanel.activeCompanyItemId;
     const commoditiesActiveId = commoditiesPanel.activeCommodityItemId;
 
@@ -65,7 +65,7 @@ export const getDynamicSentence = createSelector(
       ![
         !!countriesActiveId,
         !!sourcesActiveId,
-        !!importingActiveId,
+        !!destinationsActiveId,
         !!companiesActiveId,
         !!commoditiesActiveId
       ].includes(true)
@@ -76,7 +76,7 @@ export const getDynamicSentence = createSelector(
     const commoditiesValue = data.commodities.find(item => item.id === commoditiesActiveId);
     const sourcesValue = data.sources.find(item => item.id === sourcesActiveId);
     const companiesValue = data.companies.find(item => item.id === companiesActiveId);
-    const importingValue = data.destinations.find(item => item.id === importingActiveId);
+    const destinationsValue = data.destinations.find(item => item.id === destinationsActiveId);
 
     return [
       {
@@ -95,9 +95,9 @@ export const getDynamicSentence = createSelector(
         value: companiesValue && companiesValue.name
       },
       {
-        panel: 'importing',
-        prefix: importingActiveId ? `going to` : '',
-        value: importingValue && importingValue.name
+        panel: 'destinations',
+        prefix: destinationsActiveId ? `going to` : '',
+        value: destinationsValue && destinationsValue.name
       }
     ];
   }

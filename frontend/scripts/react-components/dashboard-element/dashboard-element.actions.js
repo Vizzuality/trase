@@ -14,7 +14,7 @@ export const getDashboardPanelData = options_type => (dispatch, getState) => {
   const {
     sourcesPanel,
     companiesPanel,
-    importingPanel,
+    destinationsPanel,
     commoditiesPanel
   } = getState().dashboardElement;
   const node_types_ids = {
@@ -35,8 +35,8 @@ export const getDashboardPanelData = options_type => (dispatch, getState) => {
     params.commodities_ids = commoditiesPanel.activeCommodityItemId;
   }
 
-  if (options_type !== 'importing') {
-    params.destinations_ids = importingPanel.activeDestinationItemId;
+  if (options_type !== 'destinations') {
+    params.destinations_ids = destinationsPanel.activeDestinationItemId;
   }
 
   if (options_type !== 'companies') {

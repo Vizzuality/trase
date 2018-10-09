@@ -17,7 +17,7 @@ const mapStateToProps = state => {
   const {
     activePanelId,
     sourcesPanel,
-    importingPanel,
+    destinationsPanel,
     companiesPanel,
     commoditiesPanel,
     data: { sources, countries, commodities, companies, destinations }
@@ -31,7 +31,7 @@ const mapStateToProps = state => {
     destinations,
     activePanelId,
     sourcesPanel,
-    importingPanel,
+    destinationsPanel,
     companiesPanel,
     commoditiesPanel,
     tabs: getActivePanelTabs(state),
@@ -50,7 +50,7 @@ const mapDispatchToProps = {
 class DashboardPanelContainer extends React.PureComponent {
   panels = [
     { id: 'sources', title: 'sourcing places' },
-    { id: 'importing', title: 'importing countries' },
+    { id: 'destinations', title: 'importing countries' },
     { id: 'companies', title: 'companies' },
     { id: 'commodities', title: 'commodities' }
   ];

@@ -4,7 +4,7 @@ import SearchInput from 'react-components/shared/search-input/search-input.compo
 import GridList from 'react-components/shared/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item.component';
 
-function ImportingPanel(props) {
+function DestinationsPanel(props) {
   const { searchDestinations, destinations, activeDestinationId, onSelectDestinationValue } = props;
 
   return (
@@ -36,11 +36,11 @@ function ImportingPanel(props) {
   );
 }
 
-ImportingPanel.propTypes = {
+DestinationsPanel.propTypes = {
   destinations: PropTypes.array,
   searchDestinations: PropTypes.array,
   activeDestinationId: PropTypes.string,
   onSelectDestinationValue: PropTypes.func.isRequired
 };
 
-export default ImportingPanel;
+export default DestinationsPanel;
