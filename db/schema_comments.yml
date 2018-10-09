@@ -104,6 +104,10 @@ tables:
         comment: Country longitude
       - name: zoom
         comment: Zoom level (0-18)
+      - name: annotation_position_x_pos
+        comment: X position (in coordinates) where the country's label is displayed on the explore page
+      - name: annotation_position_y_pos
+        comment: Y position (in coordinates) where the country's label is displayed on the explore page
   - name: dashboards_attribute_groups
     comment: Groups attributes (inds/quals/quants) to display on dashboards wizard
     columns:

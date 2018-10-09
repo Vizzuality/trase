@@ -2,13 +2,15 @@
 #
 # Table name: country_properties
 #
-#  id         :integer          not null, primary key
-#  country_id :integer          not null
-#  latitude   :float            not null
-#  longitude  :float            not null
-#  zoom       :integer          not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id                        :integer          not null, primary key
+#  country_id                :integer          not null
+#  latitude                  :float            not null
+#  longitude                 :float            not null
+#  zoom                      :integer          not null
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
+#  annotation_position_x_pos :float
+#  annotation_position_y_pos :float
 #
 # Indexes
 #

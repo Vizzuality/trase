@@ -123,8 +123,8 @@
             },
             "required": [
               "latitude",
-              "zoom",
-              "longitude"
+              "longitude",
+              "zoom"
             ],
             "type": "object"
           },
@@ -139,11 +139,26 @@
               "listColumnId": {
                 "id": "/properties/data/items/properties/worldMap/properties/listColumnId",
                 "type": "integer"
+              },
+              "geoId": {
+                "id": "/properties/data/items/properties/map/properties/geoId",
+                "type": "string"
+              },
+              "annotationPositionXPos": {
+                "id": "/properties/data/items/properties/map/properties/annotationPositionXPos",
+                "type": "string"
+              },
+              "annotationPositionYPos": {
+                "id": "/properties/data/items/properties/map/properties/annotationPositionYPos",
+                "type": "string"
               }
             },
             "required": [
               "mapColumnId",
-              "listColumnId"
+              "listColumnId",
+              "geoId",
+              "annotationPositionYPos",
+              "annotationPositionYPos"
             ]
           },
           "recolorBy": {
