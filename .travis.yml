@@ -26,14 +26,14 @@ matrix:
         - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 
-    - language: node_js
-      addons:
-        chrome: stable
-      node_js:
-        - 10
-      before_install:
-        - cd frontend
-      install:
-        - npm install
-      script:
-        - npm run ci
+#    - language: node_js
+#      addons:
+#        chrome: stable
+#      node_js:
+#        - 10
+#      before_install:
+#        - cd frontend
+#      install:
+#        - npm install
+#      script:
+#        - npm run ci
