@@ -28,7 +28,7 @@ export const getActivePanelTabs = createSelector(
         return [];
       }
       case 'companies': {
-        return ['EXPORTERS', 'IMPORTERS'];
+        return [{ name: 'EXPORTERS', id: 6 }, { name: 'IMPORTERS', id: 7 }];
       }
       default:
         return [];

@@ -81,6 +81,7 @@ function DashboardPanel(props) {
         )}
         {activePanelId === 'destinations' && (
           <DestinationsPanel
+            getData={options => getDashboardPanelData(activePanelId, options)}
             searchDestinations={destinations}
             destinations={destinations || []}
             onSelectDestinationValue={item =>
@@ -97,12 +98,13 @@ function DashboardPanel(props) {
         {activePanelId === 'companies' && (
           <CompaniesPanel
             tabs={tabs}
+            getCompaniesData={options => getDashboardPanelData(activePanelId, options)}
             searchCompanies={[]}
             companies={companies}
             onSelectNodeTypeTab={item =>
               setActiveId({
                 type: 'tab',
-                active: item,
+                active: item && item.id,
                 section: 'nodeType',
                 panel: activePanelId
               })
