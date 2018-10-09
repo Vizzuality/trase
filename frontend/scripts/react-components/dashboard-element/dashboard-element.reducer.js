@@ -48,7 +48,7 @@ const dashboardElementReducer = {
     return {
       ...state,
       data: { ...state.data, [key]: data },
-      meta: { ...state.meta, [key]: meta }
+      meta: { ...state.meta, [key]: meta && meta.contextNodeTypes }
     };
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ID](state, action) {

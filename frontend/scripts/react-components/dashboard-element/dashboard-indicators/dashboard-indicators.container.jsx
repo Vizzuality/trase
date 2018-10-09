@@ -37,7 +37,7 @@ class DashboardIndicatorsContainer extends React.PureComponent {
   };
 
   componentDidMount() {
-    this.props.getData('indicators');
+    this.props.getData('attributes');
   }
 
   render() {
