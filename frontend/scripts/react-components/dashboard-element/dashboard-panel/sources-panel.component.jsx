@@ -24,7 +24,6 @@ class SourcesPanel extends React.PureComponent {
       tabs.length > 0 &&
       (prevProps.tabs && prevProps.tabs[0] && prevProps.tabs[0].id) !== tabs[0].id
     ) {
-      console.log(tabs[0]);
       onSelectSourceTab(tabs[0]);
     }
 

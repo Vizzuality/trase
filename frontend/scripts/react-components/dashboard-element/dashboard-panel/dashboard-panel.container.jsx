@@ -9,7 +9,6 @@ import {
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
 import {
   getActivePanelTabs,
-  getDashboardPanels,
   getDirtyBlocks,
   getDynamicSentence
 } from 'react-components/dashboard-element/dashboard-element.selectors';
@@ -17,6 +16,10 @@ import {
 const mapStateToProps = state => {
   const {
     activePanelId,
+    sourcesPanel,
+    importingPanel,
+    companiesPanel,
+    commoditiesPanel,
     data: { sources, countries, commodities, companies, destinations }
   } = state.dashboardElement;
 
@@ -27,10 +30,13 @@ const mapStateToProps = state => {
     commodities,
     destinations,
     activePanelId,
+    sourcesPanel,
+    importingPanel,
+    companiesPanel,
+    commoditiesPanel,
     tabs: getActivePanelTabs(state),
     dirtyBlocks: getDirtyBlocks(state),
-    dynamicSentenceParts: getDynamicSentence(state),
-    ...getDashboardPanels(state)
+    dynamicSentenceParts: getDynamicSentence(state)
   };
 };
 

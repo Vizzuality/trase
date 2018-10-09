@@ -15,7 +15,6 @@ function ImportingPanel(props) {
         placeholder="Search place"
         onSelect={i => i}
       />
-      <p className="dashboard-panel-text">You can choose up to three countries:</p>
       <GridList
         items={destinations}
         height={200}

@@ -25,7 +25,6 @@ function CompaniesPanel(props) {
         placeholder="Search place"
         onSelect={i => i}
       />
-      <p className="dashboard-panel-text">You can choose up to three companies:</p>
       <Tabs tabs={tabs} onSelectTab={onSelectNodeTypeTab} selectedTab={activeNodeTypeTabId}>
         <GridList
           items={companiesList}

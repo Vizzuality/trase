@@ -27,7 +27,6 @@ class CommoditiesPanel extends React.PureComponent {
           placeholder="Search place"
           onSelect={i => i}
         />
-        <p className="dashboard-panel-text">You can choose up to three commodities:</p>
         <GridList
           items={commodities}
           height={commodities.length > 5 ? 200 : 50}

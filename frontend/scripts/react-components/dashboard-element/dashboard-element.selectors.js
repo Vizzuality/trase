@@ -1,6 +1,7 @@
-import { createSelector, createStructuredSelector } from 'reselect';
+import { createSelector } from 'reselect';
 import uniq from 'lodash/uniq';
 
+const getDashboardPanelData = state => state.dashboardElement.data;
 const getSourcesPanel = state => state.dashboardElement.sourcesPanel;
 const getImportingPanel = state => state.dashboardElement.importingPanel;
 const getCompaniesPanel = state => state.dashboardElement.companiesPanel;
@@ -12,13 +13,6 @@ const getActiveDashboardPanel = state => {
   const { activePanelId, ...restState } = state.dashboardElement;
   return { id: activePanelId, ...restState[`${activePanelId}Panel`] };
 };
-
-export const getDashboardPanels = createStructuredSelector({
-  sourcesPanel: getSourcesPanel,
-  importingPanel: getImportingPanel,
-  companiesPanel: getCompaniesPanel,
-  commoditiesPanel: getCommoditiesPanel
-});
 
 export const getActivePanelTabs = createSelector(
   [getActiveDashboardPanel, getDashboardPanelMeta],
@@ -43,25 +37,33 @@ export const getActivePanelTabs = createSelector(
 );
 
 export const getDirtyBlocks = createSelector(
-  getDashboardPanels,
-  ({ sourcesPanel, importingPanel, companiesPanel, commoditiesPanel }) => ({
+  [getSourcesPanel, getImportingPanel, getCompaniesPanel, getCommoditiesPanel],
+  (sourcesPanel, importingPanel, companiesPanel, commoditiesPanel) => ({
     sources: sourcesPanel.activeCountryItemId !== null,
-    importing: importingPanel.activeSourceItemId !== null,
+    importing: importingPanel.activeDestinationItemId !== null,
     companies: companiesPanel.activeCompanyItemId !== null,
     commodities: commoditiesPanel.activeCommodityItemId !== null
   })
 );
 
 export const getDynamicSentence = createSelector(
-  getDashboardPanels,
-  ({ sourcesPanel, importingPanel, companiesPanel, commoditiesPanel }) => {
-    const sourcesActiveId = sourcesPanel.activeSourceItemId || sourcesPanel.activeCountryItemId;
+  [
+    getSourcesPanel,
+    getImportingPanel,
+    getCompaniesPanel,
+    getCommoditiesPanel,
+    getDashboardPanelData
+  ],
+  (sourcesPanel, importingPanel, companiesPanel, commoditiesPanel, data) => {
+    const countriesActiveId = sourcesPanel.activeCountryItemId;
+    const sourcesActiveId = sourcesPanel.activeSourceItemId;
     const importingActiveId = importingPanel.activeDestinationItemId;
     const companiesActiveId = companiesPanel.activeCompanyItemId;
     const commoditiesActiveId = commoditiesPanel.activeCommodityItemId;
 
     if (
       ![
+        !!countriesActiveId,
         !!sourcesActiveId,
         !!importingActiveId,
         !!companiesActiveId,
@@ -70,24 +72,33 @@ export const getDynamicSentence = createSelector(
     ) {
       return null;
     }
+    const countriesValue = data.countries.find(item => item.id === countriesActiveId);
+    const commoditiesValue = data.commodities.find(item => item.id === commoditiesActiveId);
+    const sourcesValue = data.sources.find(item => item.id === sourcesActiveId);
+    const companiesValue = data.companies.find(item => item.id === companiesActiveId);
+    const importingValue = data.destinations.find(item => item.id === importingActiveId);
 
     return [
       {
         panel: 'commodities',
         prefix: commoditiesActiveId ? 'Explore' : 'Explore commodities',
-        value: commoditiesActiveId
+        value: commoditiesValue && commoditiesValue.name
       },
       {
         panel: 'sources',
         prefix: sourcesActiveId ? `produced in` : 'produced in the world',
-        value: sourcesActiveId
+        value: (sourcesValue && sourcesValue.name) || (countriesValue && countriesValue.name)
       },
       {
         panel: 'companies',
         prefix: companiesActiveId ? `exported by` : '',
-        value: companiesActiveId
+        value: companiesValue && companiesValue.name
       },
-      { panel: 'importing', prefix: importingActiveId ? `going to` : '', value: importingActiveId }
+      {
+        panel: 'importing',
+        prefix: importingActiveId ? `going to` : '',
+        value: importingValue && importingValue.name
+      }
     ];
   }
 );
