@@ -15,7 +15,9 @@ module Api
       belongs_to :dashboard_template
       belongs_to :node
 
-      belongs_to :readonly_dashboards_destination, class_name: Api::V3::Readonly::Dashboards::Destination, foreign_key: 'node_id'
+      belongs_to :readonly_dashboards_destination,
+                 class_name: 'Api::V3::Readonly::Dashboards::Destination',
+                 foreign_key: 'node_id'
 
       def self.blue_foreign_keys
         [
