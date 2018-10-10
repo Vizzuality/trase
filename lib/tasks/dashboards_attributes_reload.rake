@@ -18,7 +18,7 @@ namespace :dashboards do
       Api::V3::DashboardsAttributeGroup.set_callback(:commit, :after, :refresh_dependents)
       Api::V3::DashboardsAttribute.set_callback(:commit, :after, :refresh_dependents)
 
-      Api::V3::Readonly::DashboardsAttribute.refresh
+      Api::V3::Readonly::DashboardsAttribute.refresh(sync: true)
     end
 
     def reload_group(properties, idx)

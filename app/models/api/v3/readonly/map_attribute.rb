@@ -39,7 +39,7 @@ module Api
         belongs_to :map_attribute_group
 
         def self.refresh_dependencies(options = {})
-          Api::V3::Readonly::Attribute.refresh(options)
+          Api::V3::Readonly::Attribute.refresh(options.merge(skip_dependents: true))
         end
       end
     end
