@@ -202,6 +202,18 @@ export const BASEMAPS = {
 
 export const DEFAULT_BASEMAP_FOR_CHOROPLETH = 'default';
 
+export const EXPLORE_COLUMN_LIST = [
+  {
+    label: 'Top Exporting Companies',
+    link: 'profileNode',
+    type: 'exporter'
+  },
+  {
+    label: 'Top Sourcing Countries',
+    type: 'country'
+  }
+];
+
 export const HOME_VIDEO = {
   en: 'wMnAQJBptj8',
   es: 'kuJAEzISoEA',

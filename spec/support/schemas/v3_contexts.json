@@ -132,12 +132,12 @@
             "additionalProperties": false,
             "id": "/properties/data/items/properties/worldMap",
             "properties": {
-              "mapColumnId": {
-                "id": "/properties/data/items/properties/worldMap/properties/mapColumnId",
+              "countryColumnId": {
+                "id": "/properties/data/items/properties/worldMap/properties/countryColumnId",
                 "type": "integer"
               },
-              "listColumnId": {
-                "id": "/properties/data/items/properties/worldMap/properties/listColumnId",
+              "exporterColumnId": {
+                "id": "/properties/data/items/properties/worldMap/properties/exporterColumnId",
                 "type": "integer"
               },
               "geoId": {
@@ -154,8 +154,8 @@
               }
             },
             "required": [
-              "mapColumnId",
-              "listColumnId",
+              "countryColumnId",
+              "exporterColumnId",
               "geoId",
               "annotationPositionYPos",
               "annotationPositionYPos"

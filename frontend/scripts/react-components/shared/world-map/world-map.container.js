@@ -73,8 +73,9 @@ const mapStateToProps = state => {
 
   const selectedContextId = selectedContext ? selectedContext.id : null;
 
-  const topNodesKey = getTopNodesKey(selectedContextId, 8, ...selectedYears);
+  const topNodesKey = getTopNodesKey(selectedContextId, 'country', ...selectedYears);
   const countries = state.explore.topNodes[topNodesKey];
+
   const flows =
     originGeoId && originCoordinates && countries
       ? memoizedGetContextFlows(
@@ -100,7 +101,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      getTopNodes: () => setExploreTopNodes(8)
+      getTopNodes: () => setExploreTopNodes('country')
     },
     dispatch
   );
