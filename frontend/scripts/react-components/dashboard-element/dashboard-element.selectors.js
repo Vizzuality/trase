@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import uniq from 'lodash/uniq';
+import sortBy from 'lodash/sortBy';
 
 const getDashboardPanelData = state => state.dashboardElement.data;
 const getSourcesPanel = state => state.dashboardElement.sourcesPanel;
@@ -13,6 +14,7 @@ const getActiveDashboardPanel = state => {
   const { activePanelId, ...restState } = state.dashboardElement;
   return { id: activePanelId, ...restState[`${activePanelId}Panel`] };
 };
+const getIndicatorsMeta = state => state.dashboardElement.meta.indicators;
 
 export const getActivePanelTabs = createSelector(
   [getActiveDashboardPanel, getDashboardPanelMeta],
@@ -107,4 +109,27 @@ export const getActiveIndicatorsData = createSelector(
   [getIndicators, getActiveIndicators],
   (indicators, activeIndicatorsList) =>
     indicators.filter(indicator => activeIndicatorsList.includes(indicator.id))
+);
+
+export const getIndicatorsByGroup = createSelector(
+  [getIndicators, getIndicatorsMeta],
+  (indicators, groups) => {
+    const sortedIndicators = (sortBy(indicators, ['groupId']) || []).map(
+      ({ displayName, ...item }) => ({ name: displayName, ...item })
+    );
+    const sortedGroups = (sortBy(groups || [], ['id']) || []).map(g => ({ ...g, group: true }));
+    const groupedIndicators = sortedGroups.reduce(
+      (acc, next) => {
+        const index = acc.findIndex(i => i.groupId === next.id);
+        const result = [...acc];
+        if (index > -1) {
+          result.splice(index, 0, next);
+        }
+        return result;
+      },
+      [...sortedIndicators]
+    );
+
+    return groupedIndicators;
+  }
 );

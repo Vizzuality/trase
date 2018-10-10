@@ -45,10 +45,11 @@ const dashboardElementReducer = {
   },
   [DASHBOARD_ELEMENT__SET_PANEL_DATA](state, action) {
     const { key, data, meta } = action.payload;
+    const metaFallback = meta && meta.contextNodeTypes ? meta.contextNodeTypes : meta; // FIXME
     return {
       ...state,
       data: { ...state.data, [key]: data },
-      meta: { ...state.meta, [key]: meta && meta.contextNodeTypes }
+      meta: { ...state.meta, [key]: metaFallback }
     };
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ID](state, action) {

@@ -43,18 +43,21 @@ export const getDashboardPanelData = options_type => (dispatch, getState) => {
     params.companies_ids = companiesPanel.activeCompanyItemId;
   }
 
+  const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
+  const key = options_type !== 'attributes' ? options_type : 'indicators'; // FIXME
+
   dispatch({
     type: DASHBOARD_ELEMENT__SET_PANEL_DATA,
-    payload: { key: options_type, data: [], meta: null }
+    payload: { key, data: [], meta: null }
   });
-  const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
+
   fetch(url)
     .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
     .then(json =>
       dispatch({
         type: DASHBOARD_ELEMENT__SET_PANEL_DATA,
         payload: {
-          key: options_type,
+          key,
           data: json.data,
           meta: json.meta
         }

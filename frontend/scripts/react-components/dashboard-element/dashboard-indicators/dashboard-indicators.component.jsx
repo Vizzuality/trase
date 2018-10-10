@@ -54,10 +54,10 @@ class DashboardIndicators extends React.PureComponent {
             {itemProps => (
               <GridListItem
                 {...itemProps}
-                tooltip="hehehe"
+                tooltip={itemProps.item && itemProps.item.tooltipText}
                 enableItem={setActiveId}
                 disableItem={removeActiveId}
-                isDisabled={!!itemProps.item && itemProps.item.disabled}
+                isDisabled={!!itemProps.item && itemProps.item.isDisabled}
                 isActive={activeIndicatorsList.includes(itemProps.item && itemProps.item.id)}
                 isInfoActive={activeItemInfo === (itemProps.item && itemProps.item.id)}
                 onInfoClick={this.setActiveItemInfo}
