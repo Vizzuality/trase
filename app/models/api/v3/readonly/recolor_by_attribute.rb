@@ -40,7 +40,7 @@ module Api
         delegate :original_id, to: :readonly_attribute
 
         def self.refresh_dependencies(options = {})
-          Api::V3::Readonly::Attribute.refresh(options)
+          Api::V3::Readonly::Attribute.refresh(options.merge(skip_dependents: true))
         end
       end
     end
