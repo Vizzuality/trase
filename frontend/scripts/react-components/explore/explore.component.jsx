@@ -8,22 +8,12 @@ import Dropdown from 'react-components/shared/dropdown.component';
 import formatValue from 'utils/formatValue';
 import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
+import { EXPLORE_COLUMN_LIST } from 'constants';
 
 class Explore extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.columns = [
-      {
-        label: 'Top Exporting Companies',
-        link: 'profileNode',
-        value: 6
-      },
-      {
-        label: 'Top Sourcing Countries',
-        value: 8
-      }
-    ];
     this.units = [
       {
         name: '%',
@@ -44,20 +34,20 @@ class Explore extends React.PureComponent {
   }
 
   componentDidMount() {
-    const { topNodesKey, selectedTableColumn } = this.props;
-    if (topNodesKey) this.props.getTableElements(selectedTableColumn);
+    const { topNodesKey, selectedTableColumnType } = this.props;
+    if (topNodesKey) this.props.getTableElements(selectedTableColumnType);
   }
 
   componentDidUpdate(prevProps) {
-    const { topNodesKey, selectedTableColumn } = this.props;
+    const { topNodesKey, selectedTableColumnType } = this.props;
     if (topNodesKey && prevProps.topNodesKey !== topNodesKey) {
-      this.props.getTableElements(selectedTableColumn);
+      this.props.getTableElements(selectedTableColumnType);
     }
   }
 
   handleTableColumnChange(label) {
-    const column = (this.columns.find(item => item.label === label) || {}).value;
-    this.props.setSelectedTableColumn(column);
+    const column = (EXPLORE_COLUMN_LIST.find(item => item.label === label) || {}).type;
+    this.props.setSelectedTableColumnType(column);
   }
 
   handleTableUnitChange(unitName) {
@@ -67,14 +57,14 @@ class Explore extends React.PureComponent {
   }
 
   renderTableColumnDropdown() {
-    const { selectedTableColumn } = this.props;
-    const column = this.columns.find(item => item.value === selectedTableColumn);
+    const { selectedTableColumnType } = this.props;
+    const column = EXPLORE_COLUMN_LIST.find(item => item.type === selectedTableColumnType);
 
     return (
       <Dropdown
         className="-uppercase-title"
         value={column.label}
-        valueList={this.columns.map(i => i.label)}
+        valueList={EXPLORE_COLUMN_LIST.map(i => i.label)}
         onValueSelected={this.handleTableColumnChange}
       />
     );
@@ -97,7 +87,7 @@ class Explore extends React.PureComponent {
     const {
       isSubnational,
       selectedContext,
-      selectedTableColumn,
+      selectedTableColumnType,
       selectedYears,
       showTable,
       topExporters
@@ -106,7 +96,7 @@ class Explore extends React.PureComponent {
 
     let link = null;
     if (selectedContext && selectedContext.id === 1) {
-      const selectedTable = this.columns.find(i => i.value === selectedTableColumn);
+      const selectedTable = EXPLORE_COLUMN_LIST.find(i => i.type === selectedTableColumnType);
       link = typeof selectedTable !== 'undefined' ? selectedTable.link : null;
     }
 
@@ -196,8 +186,8 @@ Explore.propTypes = {
   getTableElements: PropTypes.func.isRequired,
   selectedYears: PropTypes.arrayOf(PropTypes.number),
   selectedContext: PropTypes.object,
-  selectedTableColumn: PropTypes.number.isRequired,
-  setSelectedTableColumn: PropTypes.func.isRequired,
+  selectedTableColumnType: PropTypes.string.isRequired,
+  setSelectedTableColumnType: PropTypes.func.isRequired,
   showTable: PropTypes.bool.isRequired,
   topExporters: PropTypes.array.isRequired,
   topNodesKey: PropTypes.string
