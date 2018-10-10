@@ -12,7 +12,9 @@ shared_context 'api v3 paraguay country' do
         country: api_v3_paraguay,
         latitude: -23.44,
         longitude: -58.44,
-        zoom: 4
+        zoom: 4,
+        annotation_position_x_pos: 10,
+        annotation_position_y_pos: 20
       )
   end
 end

@@ -23,7 +23,7 @@ const initialState = {
   isAppMenuVisible: false,
   tooltipCheck: 0,
   tooltips: null,
-  contextIsUserSelected: true,
+  contextIsUserSelected: !SHOW_WORLD_MAP_IN_EXPLORE,
   currentDropdown: null,
   modal: {
     visibility: false,

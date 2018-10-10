@@ -142,6 +142,13 @@ $$;
 COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double precision) IS 'Given an n-element array of choropleth buckets and a positive value, returns index of bucket where value falls (1 to n + 1); else returns 0.';
 
 
+--
+-- Name: trase_server; Type: SERVER; Schema: -; Owner: -
+--
+
+-- suppressed CREATE SERVER
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -1096,7 +1103,9 @@ CREATE TABLE public.country_properties (
     longitude double precision NOT NULL,
     zoom integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    annotation_position_x_pos double precision,
+    annotation_position_y_pos double precision
 );
 
 
@@ -6015,6 +6024,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181005063849'),
 ('20181005063856'),
 ('20181005063909'),
-('20181005064856');
+('20181005064856'),
+('20181009102913');
 
 

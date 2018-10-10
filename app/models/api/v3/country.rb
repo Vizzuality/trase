@@ -24,6 +24,8 @@ module Api
       delegate :latitude, to: :country_property
       delegate :longitude, to: :country_property
       delegate :zoom, to: :country_property
+      delegate :annotation_position_x_pos, to: :country_property
+      delegate :annotation_position_y_pos, to: :country_property
 
       validates :name, presence: true
       validates :iso2, presence: true, uniqueness: true
