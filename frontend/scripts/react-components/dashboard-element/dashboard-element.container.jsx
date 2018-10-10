@@ -18,6 +18,8 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
+let hasVisitedBefore = localStorage.getItem('hasVisitedBefore');
+
 class DashboardElementContainer extends React.Component {
   static propTypes = {
     goToRoot: PropTypes.func.isRequired,
@@ -27,8 +29,15 @@ class DashboardElementContainer extends React.Component {
   state = {
     modalOpen: true,
     goBackOnCloseModal: true,
-    step: DashboardElement.steps.WELCOME
+    step: hasVisitedBefore ? DashboardElement.steps.PANEL : DashboardElement.steps.WELCOME
   };
+
+  componentDidMount() {
+    if (!hasVisitedBefore) {
+      hasVisitedBefore = true;
+      localStorage.setItem('hasVisitedBefore', true);
+    }
+  }
 
   closeModal = () => {
     this.setState({ modalOpen: false });
