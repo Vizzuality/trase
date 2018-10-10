@@ -83,6 +83,7 @@ Rails.application.routes.draw do
           get :search, on: :collection
         end
         resources :attributes
+        resources :filter_meta, only: [:index]
       end
     end
     namespace :v2 do
