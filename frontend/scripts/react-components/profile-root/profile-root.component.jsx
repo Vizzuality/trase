@@ -17,7 +17,16 @@ const ProfileRoot = props => {
                     <h1 className="title">Brazil &ndash; Soy</h1>
                   </div>
                 </div>
-                <ProfileSearch />
+                <ProfileSearch
+                  testId="profile-search"
+                  className="profile-search"
+                  resultClassName="profile-search-result"
+                  placeholderSmall="Search"
+                  placeholder="Search a company or production place"
+                  getResultTestId={item =>
+                    `search-result-${item.nodeType.toLowerCase()}-${item.name.toLowerCase()}`
+                  }
+                />
                 <p className="profile-root-explanatory-text">
                   Enter the name of a company or production municipality, state or biome for key
                   sustainability indicators and statistics on linked traders and consumer markets.

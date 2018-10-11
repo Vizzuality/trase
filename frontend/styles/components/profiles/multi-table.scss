@@ -1,0 +1,13 @@
+.c-multi-table {
+  .tab-title {
+    display: none;
+  }
+
+  .-tab-hidden {
+    display: none;
+
+    @media print {
+      display: block;
+    }
+  }
+}

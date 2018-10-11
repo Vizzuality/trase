@@ -53,6 +53,10 @@ a {
     letter-spacing: -1.3px;
   }
 
+  &.-light {
+    font-weight: $font-weight-light;
+  }
+
   &.-regular {
     font-weight: $font-weight-regular;
   }
@@ -69,6 +73,10 @@ a {
   letter-spacing: -0.8px;
   text-transform: uppercase;
   color: $strong-pink;
+
+  &.-white {
+    color: $white;
+  }
 
   &.-gray {
     color: $charcoal-grey-faded;

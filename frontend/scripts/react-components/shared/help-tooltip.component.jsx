@@ -26,15 +26,24 @@ export default class TooltipComponent extends Component {
   }
 
   initTooltip() {
-    const { position, text } = this.props;
+    const { position, text, show } = this.props;
 
     this.tooltip = new Tooltip(this.element, {
+      trigger: typeof show !== 'undefined' ? '' : 'hover focus',
       title: text,
       placement: position,
       container: 'body',
       boundariesElement: 'window',
       offset: '1, 1'
     });
+
+    if (typeof show !== 'undefined') {
+      if (show) {
+        this.tooltip.show();
+      } else {
+        this.tooltip.hide();
+      }
+    }
 
     // workaround for ios not closing tooltips
     const iOS = /iPhone|iPad|iPod/.test(navigator.platform) && !window.MSStream;
@@ -50,6 +59,7 @@ export default class TooltipComponent extends Component {
   }
 
   render() {
+    const { showIcon, children } = this.props;
     return (
       <div
         ref={elem => {
@@ -57,20 +67,27 @@ export default class TooltipComponent extends Component {
         }}
         className={cx('tooltip-react', this.props.className)}
       >
-        <svg className="icon tooltip-react-icon">
-          <use xlinkHref="#icon-layer-info" />
-        </svg>
+        {showIcon && (
+          <svg className="icon tooltip-react-icon">
+            <use xlinkHref="#icon-layer-info" />
+          </svg>
+        )}
+        {children}
       </div>
     );
   }
 }
 
 TooltipComponent.propTypes = {
-  className: PropTypes.string,
+  show: PropTypes.bool,
   text: PropTypes.string,
-  position: PropTypes.string
+  children: PropTypes.any,
+  showIcon: PropTypes.bool,
+  position: PropTypes.string,
+  className: PropTypes.string
 };
 
 TooltipComponent.defaultProps = {
-  position: 'bottom'
+  position: 'bottom',
+  showIcon: true
 };

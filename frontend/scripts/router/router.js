@@ -71,6 +71,18 @@ export const routes = {
     },
     thunk: loadPageData()
   },
+  dashboardRoot: {
+    path: '/dashboards',
+    page: 'dashboard-root',
+    title: getPageTitle,
+    thunk: loadPageData(getPostsContent)
+  },
+  dashboardElement: {
+    path: '/dashboards/:dashboardId',
+    page: 'dashboard-element',
+    title: getPageTitle,
+    thunk: loadPageData(getPostsContent)
+  },
   data: {
     path: '/data',
     page: 'data-portal',

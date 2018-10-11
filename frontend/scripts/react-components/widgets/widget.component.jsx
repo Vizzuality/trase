@@ -31,6 +31,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({ getWidgetData }, dis
 
 class Widget extends React.PureComponent {
   static propTypes = {
+    raw: PropTypes.bool,
     params: PropTypes.array,
     widget: PropTypes.shape({
       data: PropTypes.any,
@@ -46,21 +47,22 @@ class Widget extends React.PureComponent {
   static defaultProps = {
     widget: {
       data: {},
+      raw: false,
       error: null,
       loading: true
     }
   };
 
   componentDidMount() {
-    const { query, params } = this.props;
-    query.forEach((endpoint, i) => this.props.getWidgetData(endpoint, params[i]));
+    const { query, params, raw } = this.props;
+    query.forEach((endpoint, i) => this.props.getWidgetData(endpoint, params[i], raw));
   }
 
   componentDidUpdate(prev) {
-    const { query, params } = this.props;
+    const { query, params, raw } = this.props;
     query.forEach((endpoint, i) => {
       if (prev.query[i] !== query[i] || !isEqual(params[i], prev.params[i])) {
-        this.props.getWidgetData(endpoint, params[i]);
+        this.props.getWidgetData(endpoint, params[i], raw);
       }
     });
   }

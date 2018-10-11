@@ -1,11 +1,11 @@
 /* eslint-disable camelcase,import/no-extraneous-dependencies,jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 
 import Dropdown from 'react-components/shared/dropdown.component';
 import Tooltip from 'react-components/shared/help-tooltip.component';
 import 'styles/components/profiles/dropdown-tab-switcher.scss';
+import Tabs from 'react-components/shared/tabs.component';
 
 class DropdownTabSwitcher extends Component {
   constructor(props) {
@@ -16,11 +16,11 @@ class DropdownTabSwitcher extends Component {
     };
   }
 
-  handleSelect(selectedIndex) {
+  handleSelect = (_, selectedIndex) => {
     this.setState({ selectedIndex });
 
     this.props.onSelectedIndexChange(selectedIndex);
-  }
+  };
 
   render() {
     const { items, itemTabRenderer, title, titleTooltip, testId } = this.props;
@@ -33,21 +33,12 @@ class DropdownTabSwitcher extends Component {
             {title}
             {titleTooltip && <Tooltip text={titleTooltip} />}
           </div>
-          <ul>
-            {items.map((item, index) => (
-              <li
-                key={index}
-                className={classnames('tab', {
-                  selected: index === selectedIndex
-                })}
-                data-key={item}
-                onClick={() => this.handleSelect(index)}
-                data-test={`${testId}-item`}
-              >
-                {itemTabRenderer ? itemTabRenderer(item, index) : item}
-              </li>
-            ))}
-          </ul>
+          <Tabs
+            tabs={items}
+            onSelectTab={this.handleSelect}
+            itemTabRenderer={itemTabRenderer}
+            selectedTab={items[selectedIndex]}
+          />
         </div>
         <div className="dropdown-switcher show-for-small">
           <Dropdown

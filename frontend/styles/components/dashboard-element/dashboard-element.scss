@@ -1,0 +1,43 @@
+.c-dashboard-element {
+  padding: 60px 0 0;
+
+  .dashboard-element-title {
+    color: $white;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 2.33;
+    letter-spacing: -0.5px;
+  }
+
+  .dashboard-element-placeholder {
+
+    &-item {
+      display: block;
+      height: 400px;
+      width: 100%;
+      margin: 0 0 40px;
+      background-color: $elephant;
+    }
+  }
+
+  .dashboard-element-widgets {
+    padding: 0 0 40px;
+    background-color: $charcoal-dark;
+  }
+}
+
+.dashboard-modal-content {
+  position: relative;
+  background-color: $light-gray;
+
+  .dashboard-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    z-index: $z-above;
+
+    button {
+      cursor: pointer;
+    }
+  }
+}

@@ -44,4 +44,21 @@
     width: 100%;
     vertical-align: bottom
   }
+
+  .profile-search {
+    height: 55px;
+
+    .search-input-results {
+      max-height: 345px;
+      z-index: 0;
+    }
+
+    .profile-search-result {
+      padding: 14px 15px;
+
+      .search-input-item-name {
+        font-size: 17px;
+      }
+    }
+  }
 }

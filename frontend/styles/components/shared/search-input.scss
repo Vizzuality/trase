@@ -1,23 +1,18 @@
-$search-breakpoint-medium: 806px;
-$search-breakpoint-large: 911px;
-$search-box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2);
-$search-height-small: 45px;
-$search-height-large: 55px;
+@import '../../mixins';
 
-
-.c-profile-search {
+.c-search-input {
   position: relative;
 
-  .profile-search-bar {
+  .search-input-bar {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: $search-height-large;
+    height: 100%;
     padding: 2px 16px 0 0;
     background-color: $white;
-    box-shadow: $search-box-shadow;
+    box-shadow: $box-shadow;
     border-radius: 4px;
     z-index: $z-above;
     cursor: text;
@@ -40,7 +35,7 @@ $search-height-large: 55px;
     }
   }
 
-  .profile-search-input {
+  .search-input-field {
     flex: 1;
     padding: 0 5px 0 20px;
     font-family: $font-family-1;
@@ -56,13 +51,49 @@ $search-height-large: 55px;
     }
   }
 
-  .profile-search-results {
+  .search-input-results {
     position: absolute;
     background: $white;
     overflow-y: auto;
     width: 100%;
-    max-height: 345px;
-    box-shadow: $search-box-shadow;
+    max-height: 100px;
+    box-shadow: $box-shadow;
+    z-index: $z-base;
   }
 
+}
+
+.c-search-input-result {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 8px 15px;
+  cursor: pointer;
+  border-bottom: solid 1px $pale-grey;
+  overflow: hidden;
+
+  &:hover,
+  &[aria-selected='true'],
+  &.-highlighted {
+    background: $egg-shell;
+    color: $charcoal-grey;
+  }
+
+  .search-input-item-name {
+    left: -1px;
+    font-family: $font-family-1;
+    font-size: 13px;
+    letter-spacing: -0.5px;
+    color: $charcoal-grey;
+    text-transform: uppercase;
+  }
+
+  .search-input-item-type {
+    @include smallcaps;
+    display: block;
+  }
+
+  mark {
+    background: $egg-shell;
+  }
 }

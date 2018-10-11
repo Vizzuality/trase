@@ -25,6 +25,10 @@
   cursor: pointer !important;
 }
 
+.tooltip-modal .tooltip {
+  z-index: $z-above-veil + 1;
+}
+
 .tooltip-react.recolor-by {
   position: absolute;
   top: 34px;

@@ -21,6 +21,12 @@ $width-large: 60px;
       stroke: $charcoal-grey;
     }
   }
+
+  &.-white {
+    .shrinking-spinner-circle {
+      stroke: $white;
+    }
+  }
 }
 
 .shrinking-spinner-circle-container {
