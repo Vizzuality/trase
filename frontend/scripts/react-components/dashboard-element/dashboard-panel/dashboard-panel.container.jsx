@@ -49,10 +49,10 @@ const mapDispatchToProps = {
 
 class DashboardPanelContainer extends React.PureComponent {
   panels = [
-    { id: 'sources', title: 'sourcing places' },
-    { id: 'destinations', title: 'importing countries' },
-    { id: 'companies', title: 'companies' },
-    { id: 'commodities', title: 'commodities' }
+    { id: 'sources', title: 'sourcing places', imageUrl: '/images/dashboards/icon_sourcing.svg' },
+    { id: 'destinations', title: 'importing countries', imageUrl: '/images/dashboards/icon_importing.svg'  },
+    { id: 'companies', title: 'companies', imageUrl: '/images/dashboards/icon_companies.svg'  },
+    { id: 'commodities', title: 'commodities', imageUrl: '/images/dashboards/icon_commodities.svg'  }
   ];
 
   render() {

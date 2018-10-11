@@ -35,9 +35,19 @@
     top: 20px;
     right: 30px;
     z-index: $z-above;
-
+    font-family: DecimaMonoPro;
+    font-size: 13px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 0.77;
+    letter-spacing: -0.8px;
+    text-align: center;
+    color: #34444c;
+    
     button {
       cursor: pointer;
+      padding-left: 10px;
     }
   }
 }
