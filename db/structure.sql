@@ -142,13 +142,6 @@ $$;
 COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double precision) IS 'Given an n-element array of choropleth buckets and a positive value, returns index of bucket where value falls (1 to n + 1); else returns 0.';
 
 
---
--- Name: trase_server; Type: SERVER; Schema: -; Owner: -
---
-
--- suppressed CREATE SERVER
-
-
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -4685,17 +4678,17 @@ CREATE INDEX dashboards_flow_attributes_mv_country_id_idx ON public.dashboards_f
 
 
 --
--- Name: dashboards_flow_attributes_mv_flow_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX dashboards_flow_attributes_mv_flow_id_attribute_id_idx ON public.dashboards_flow_attributes_mv USING btree (attribute_id, path);
-
-
---
 -- Name: dashboards_flow_attributes_mv_path_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX dashboards_flow_attributes_mv_path_idx ON public.dashboards_flow_attributes_mv USING gist (path);
+
+
+--
+-- Name: dashboards_flow_attributes_mv_unique_attr_flow_context_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX dashboards_flow_attributes_mv_unique_attr_flow_context_idx ON public.dashboards_flow_attributes_mv USING btree (attribute_id, path, commodity_id, country_id);
 
 
 --
@@ -6026,6 +6019,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181005063909'),
 ('20181005064856'),
 ('20181008101006'),
-('20181009102913');
+('20181009102913'),
+('20181011103455');
 
 
