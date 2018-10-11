@@ -47,8 +47,8 @@ class DashboardIndicators extends React.PureComponent {
             height={350}
             width={800}
             rowHeight={50}
-            columnWidth={190}
-            columnCount={4}
+            columnWidth={252}
+            columnCount={3}
             groupBy="group"
           >
             {itemProps => (

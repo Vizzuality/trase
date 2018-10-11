@@ -107,8 +107,9 @@ export const getDynamicSentence = createSelector(
 
 export const getActiveIndicatorsData = createSelector(
   [getIndicators, getActiveIndicators],
-  (indicators, activeIndicatorsList) =>
-    indicators.filter(indicator => activeIndicatorsList.includes(indicator.id))
+  (indicators, activeIndicatorsList) => {
+    return indicators.filter(indicator => activeIndicatorsList.includes(indicator.id));
+  }
 );
 
 export const getIndicatorsByGroup = createSelector(
