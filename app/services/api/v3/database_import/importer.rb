@@ -25,7 +25,7 @@ module Api
           download_from_s3(options)
           Rails.logger.debug 'Download completed'
 
-          restore
+          restore(options)
 
           Cache::Cleaner.clear_all
           Cache::Warmer::UrlsFile.generate
@@ -45,7 +45,7 @@ module Api
 cannot restore"
         end
 
-        def restore
+        def restore(options = {})
           exporter = Api::V3::DatabaseExport::Exporter.new
           exporter.call(
             keep_local_copy: true
@@ -56,6 +56,7 @@ cannot restore"
           active_db_name = env_config['database']
           pg_tasks = ActiveRecord::Tasks::PostgreSQLDatabaseTasks.new(env_config)
           begin
+            pg_tasks.purge if options[:force]
             pg_tasks.data_restore(@local_filename, active_db_name)
             Rails.logger.debug 'Database restored to new version'
           rescue
