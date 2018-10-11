@@ -24,11 +24,27 @@ class DashboardElementContainer extends React.Component {
     activeIndicators: PropTypes.array
   };
 
+  hasVisitedBefore = {
+    key: 'TRASE__HAS_VISITED_DASHBOARDS_BEFORE',
+    get() {
+      return localStorage.getItem(this.key);
+    },
+    set(key) {
+      return localStorage.setItem(this.key, key);
+    }
+  };
+
   state = {
     modalOpen: true,
     goBackOnCloseModal: true,
-    step: DashboardElement.steps.WELCOME
+    step: this.hasVisitedBefore.get() ? DashboardElement.steps.PANEL : DashboardElement.steps.WELCOME
   };
+
+  componentDidMount() {
+    if (!this.hasVisitedBefore.get()) {
+      this.hasVisitedBefore.set(Date.now());
+    }
+  }
 
   closeModal = () => {
     this.setState({ modalOpen: false });
