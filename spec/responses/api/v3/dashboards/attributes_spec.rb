@@ -6,7 +6,10 @@ RSpec.describe 'Attributes', type: :request do
 
   describe 'GET /api/v3/dashboards/attributes' do
     before(:each) do
-      Api::V3::Readonly::DashboardsAttribute.refresh
+      Api::V3::Readonly::Dashboards::FlowPath.refresh(sync: true, skip_dependents: true)
+      Api::V3::Readonly::DashboardsAttribute.refresh(sync: true, skip_dependents: true)
+      Api::V3::Readonly::Dashboards::FlowAttribute.refresh(sync: true, skip_dependencies: true)
+      Api::V3::Readonly::Dashboards::NodeAttribute.refresh(sync: true, skip_dependencies: true)
     end
 
     it 'has the correct response structure' do
