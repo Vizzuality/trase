@@ -1513,7 +1513,7 @@ CREATE MATERIALIZED VIEW public.dashboards_flow_paths_mv AS
     cnt_props.column_group,
         CASE
             WHEN (cnt_props.column_group = 0) THEN 'SOURCE'::text
-            WHEN (node_types.name = 'COUNTRY'::text) THEN 'DESTINATION'::text
+            WHEN (cnt_props.column_group = 3) THEN 'DESTINATION'::text
             ELSE 'COMPANY'::text
         END AS category
    FROM (((((( SELECT flows.context_id,
@@ -1527,7 +1527,7 @@ CREATE MATERIALIZED VIEW public.dashboards_flow_paths_mv AS
      JOIN public.node_types ON ((nodes.node_type_id = node_types.id)))
      JOIN public.context_node_types cnt ON (((node_types.id = cnt.node_type_id) AND (flow_paths.context_id = cnt.context_id))))
      JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
-  WHERE ((cnt_props.column_group = 0) OR (node_types.name = ANY (ARRAY['COUNTRY'::text, 'IMPORTER'::text, 'EXPORTER'::text, 'TRADER'::text])))
+  WHERE ((cnt_props.column_group = ANY (ARRAY[0, 3])) OR (node_types.name = ANY (ARRAY['COUNTRY'::text, 'IMPORTER'::text, 'EXPORTER'::text, 'TRADER'::text])))
   WITH NO DATA;
 
 
@@ -6025,6 +6025,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181005063856'),
 ('20181005063909'),
 ('20181005064856'),
+('20181008101006'),
 ('20181009102913');
 
 

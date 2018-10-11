@@ -33,8 +33,8 @@ RSpec.describe 'Exporter profile', type: :request do
 
       expect(@response).to have_http_status(:bad_request)
       expect(JSON.parse(@response.body)).to eq(
-                                              'error' => 'param is missing or the value is empty: Required param year missing'
-                                            )
+        'error' => 'param is missing or the value is empty: Required param year missing'
+      )
     end
 
     it 'has the correct response structure' do
