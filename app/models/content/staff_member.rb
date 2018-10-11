@@ -2,8 +2,8 @@
 #
 # Table name: content.staff_members
 #
-#  id                 :integer          not null, primary key
-#  staff_group_id     :integer          not null
+#  id                 :bigint(8)        not null, primary key
+#  staff_group_id     :bigint(8)        not null
 #  name               :text             not null
 #  position           :integer          not null
 #  bio                :text             not null

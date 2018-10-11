@@ -2,7 +2,7 @@
 #
 # Table name: database_updates
 #
-#  id         :integer          not null, primary key
+#  id         :bigint(8)        not null, primary key
 #  stats      :json
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -13,7 +13,7 @@
 # Indexes
 #
 #  database_updates_jid_key          (jid) UNIQUE
-#  index_database_updates_on_status  (status) UNIQUE
+#  index_database_updates_on_status  (status) UNIQUE WHERE (status = 'STARTED'::text)
 #
 
 module Api

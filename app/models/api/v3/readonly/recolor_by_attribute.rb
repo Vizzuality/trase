@@ -18,7 +18,7 @@
 #  is_default         :boolean
 #  created_at         :datetime
 #  updated_at         :datetime
-#  attribute_id       :integer
+#  attribute_id       :bigint(8)
 #
 # Indexes
 #

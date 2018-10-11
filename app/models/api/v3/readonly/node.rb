@@ -14,7 +14,7 @@
 #
 #  nodes_mv_context_id_id_idx  (context_id,id) UNIQUE
 #  nodes_mv_context_id_idx     (context_id)
-#  nodes_mv_name_idx           (to_tsvector('simple'::regconfig, COALESCE(name, ''::text)))
+#  nodes_mv_name_idx           (to_tsvector('simple'::regconfig, COALESCE(name, ''::text))) USING gin
 #
 
 module Api
