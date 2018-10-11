@@ -2,7 +2,7 @@
 #
 # Table name: content.testimonials
 #
-#  id                 :integer          not null, primary key
+#  id                 :bigint(8)        not null, primary key
 #  quote              :text             not null
 #  author_name        :text             not null
 #  author_title       :text             not null

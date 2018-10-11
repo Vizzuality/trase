@@ -2,9 +2,9 @@
 #
 # Table name: dashboards_inds
 #
-#  id                      :integer          not null, primary key
-#  dashboards_attribute_id :integer          not null
-#  ind_id                  :integer          not null
+#  id                      :bigint(8)        not null, primary key
+#  dashboards_attribute_id :bigint(8)        not null
+#  ind_id                  :bigint(8)        not null
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #

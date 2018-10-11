@@ -16,7 +16,7 @@
 #  dashboards_companies_mv_commodity_id_idx   (commodity_id)
 #  dashboards_companies_mv_country_id_idx     (country_id)
 #  dashboards_companies_mv_group_columns_idx  (id,name,node_type)
-#  dashboards_companies_mv_name_tsvector_idx  (name_tsvector)
+#  dashboards_companies_mv_name_tsvector_idx  (name_tsvector) USING gin
 #  dashboards_companies_mv_node_id_idx        (node_id)
 #  dashboards_companies_mv_node_type_id_idx   (node_type_id)
 #  dashboards_companies_mv_unique_idx         (id,node_id,country_id,commodity_id) UNIQUE

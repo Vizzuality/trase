@@ -2,7 +2,7 @@
 #
 # Table name: dashboard_template_countries
 #
-#  id                    :integer          not null, primary key
+#  id                    :bigint(8)        not null, primary key
 #  dashboard_template_id :integer
 #  country_id            :integer
 #  created_at            :datetime         not null

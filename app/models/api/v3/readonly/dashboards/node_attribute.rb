@@ -3,11 +3,11 @@
 # Table name: dashboards_node_attributes_mv
 #
 #  node_id                       :integer
-#  attribute_id                  :integer
+#  attribute_id                  :bigint(8)
 #  display_name                  :text
 #  tooltip_text                  :text
 #  chart_type                    :string
-#  dashboards_attribute_group_id :integer
+#  dashboards_attribute_group_id :bigint(8)
 #  position                      :integer
 #
 # Indexes

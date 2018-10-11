@@ -2,7 +2,7 @@
 #
 # Table name: attributes_mv
 #
-#  id                           :integer          primary key
+#  id                           :bigint(8)        primary key
 #  original_type                :text
 #  original_id                  :integer
 #  name                         :text

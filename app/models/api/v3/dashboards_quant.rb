@@ -2,9 +2,9 @@
 #
 # Table name: dashboards_quants
 #
-#  id                      :integer          not null, primary key
-#  dashboards_attribute_id :integer          not null
-#  quant_id                :integer          not null
+#  id                      :bigint(8)        not null, primary key
+#  dashboards_attribute_id :bigint(8)        not null
+#  quant_id                :bigint(8)        not null
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #

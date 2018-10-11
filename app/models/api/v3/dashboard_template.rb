@@ -2,7 +2,7 @@
 #
 # Table name: dashboard_templates
 #
-#  id                 :integer          not null, primary key
+#  id                 :bigint(8)        not null, primary key
 #  title              :text             not null
 #  description        :text             not null
 #  created_at         :datetime         not null
