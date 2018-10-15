@@ -11,6 +11,7 @@ class DashboardElement extends React.PureComponent {
     activeIndicators: PropTypes.array,
     step: PropTypes.number.isRequired,
     setStep: PropTypes.func.isRequired,
+    openPanel: PropTypes.func.isRequired,
     goToRoot: PropTypes.func.isRequired,
     modalOpen: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
@@ -68,7 +69,7 @@ class DashboardElement extends React.PureComponent {
   }
 
   render() {
-    const { modalOpen, activeIndicators } = this.props;
+    const { modalOpen, activeIndicators, openPanel } = this.props;
     return (
       <div className="l-dashboard-element">
         <div className="c-dashboard-element">
@@ -76,6 +77,32 @@ class DashboardElement extends React.PureComponent {
             <div className="row">
               <div className="column small-12">
                 <h2 className="dashboard-element-title">Dashboard</h2>
+              </div>
+            </div>
+            <div className="row">
+              <div className="column small-12 medium-6">
+                <button
+                  type="button"
+                  className="c-button -gray -medium"
+                  onClick={() => openPanel(DashboardElement.steps.PANEL)}
+                >
+                  Edit Options
+                </button>
+                <button
+                  type="button"
+                  className="c-button -gray -medium"
+                  onClick={() => openPanel(DashboardElement.steps.INDICATORS)}
+                >
+                  Edit Indicators
+                </button>
+              </div>
+              <div className="column small-12 medium-6">
+                <a href="/" className="dashboard-header-subtitle">
+                  SHARE
+                </a>
+                <a href="/" className="dashboard-header-subtitle">
+                  DOWNLOAD
+                </a>
               </div>
             </div>
           </section>
