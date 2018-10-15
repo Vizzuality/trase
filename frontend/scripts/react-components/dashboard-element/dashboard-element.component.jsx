@@ -81,28 +81,32 @@ class DashboardElement extends React.PureComponent {
             </div>
             <div className="row">
               <div className="column small-12 medium-6">
-                <button
-                  type="button"
-                  className="c-button -gray -medium"
-                  onClick={() => openPanel(DashboardElement.steps.PANEL)}
-                >
-                  Edit Options
-                </button>
-                <button
-                  type="button"
-                  className="c-button -gray -medium"
-                  onClick={() => openPanel(DashboardElement.steps.INDICATORS)}
-                >
-                  Edit Indicators
-                </button>
+                <div className="dashboard-header-actions">
+                  <button
+                    type="button"
+                    className="c-button -gray -medium dashboard-header-action -panel"
+                    onClick={() => openPanel(DashboardElement.steps.PANEL)}
+                  >
+                    Edit Options
+                  </button>
+                  <button
+                    type="button"
+                    className="c-button -gray -medium dashboard-header-action -panel"
+                    onClick={() => openPanel(DashboardElement.steps.INDICATORS)}
+                  >
+                    Edit Indicators
+                  </button>
+                </div>
               </div>
               <div className="column small-12 medium-6">
-                <a href="/" className="dashboard-header-subtitle">
-                  SHARE
-                </a>
-                <a href="/" className="dashboard-header-subtitle">
-                  DOWNLOAD
-                </a>
+                <div className="dashboard-header-actions -end">
+                  <a href="/" className="dashboard-header-action -link">
+                    SHARE
+                  </a>
+                  <a href="/" className="dashboard-header-action -link">
+                    DOWNLOAD
+                  </a>
+                </div>
               </div>
             </div>
           </section>
