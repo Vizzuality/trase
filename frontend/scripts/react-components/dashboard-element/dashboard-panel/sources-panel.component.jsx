@@ -6,7 +6,6 @@ import GridListItem from 'react-components/shared/grid-list-item.component';
 import Tabs from 'react-components/shared/tabs.component';
 
 class SourcesPanel extends React.PureComponent {
-
   static propTypes = {
     searchSources: PropTypes.array.isRequired,
     sources: PropTypes.object,
@@ -84,6 +83,7 @@ class SourcesPanel extends React.PureComponent {
           onSelect={i => i}
         />
         <GridList
+          className="dashboard-panel-pill-list"
           height={50}
           width={950}
           columnWidth={190}
@@ -111,11 +111,12 @@ class SourcesPanel extends React.PureComponent {
                 getTabId={item => item.id}
               >
                 <GridList
+                  className="dashboard-panel-pill-list"
                   items={sources}
                   height={sources.length > 5 ? 200 : 50}
-                  width={800}
+                  width={950}
                   rowHeight={50}
-                  columnWidth={160}
+                  columnWidth={190}
                   columnCount={5}
                   getMoreItems={getSourcesData}
                 >

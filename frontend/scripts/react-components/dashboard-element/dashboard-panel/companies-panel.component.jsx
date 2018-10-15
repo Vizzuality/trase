@@ -24,7 +24,7 @@ class CompaniesPanel extends Component {
   };
 
   componentDidMount() {
-    const { tabs, onSelectNodeTypeTab, getSectionTabs} = this.props;
+    const { tabs, onSelectNodeTypeTab, getSectionTabs } = this.props;
     if (typeof tabs[0] !== 'undefined') {
       onSelectNodeTypeTab(tabs[0]);
     }
@@ -81,6 +81,7 @@ class CompaniesPanel extends Component {
         >
           {activeNodeTypeTabId && (
             <GridList
+              className="dashboard-panel-pill-list"
               items={companies}
               height={companies.length > 5 ? 200 : 50}
               width={950}

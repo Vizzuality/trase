@@ -28,6 +28,7 @@ class CommoditiesPanel extends React.PureComponent {
           onSelect={i => i}
         />
         <GridList
+          className="dashboard-panel-pill-list"
           items={commodities}
           height={commodities.length > 5 ? 200 : 50}
           width={950}

@@ -25,6 +25,7 @@ class DestinationsPanel extends React.PureComponent {
           onSelect={i => i}
         />
         <GridList
+          className="dashboard-panel-pill-list"
           items={destinations}
           height={200}
           width={950}
