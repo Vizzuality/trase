@@ -6,12 +6,40 @@ import GridListItem from 'react-components/shared/grid-list-item.component';
 import Tabs from 'react-components/shared/tabs.component';
 
 class CompaniesPanel extends Component {
+  static propTypes = {
+    tabs: PropTypes.array.isRequired,
+    activeCompanyId: PropTypes.string,
+    activeNodeTypeTabId: PropTypes.string,
+    companies: PropTypes.array.isRequired,
+    getCompaniesData: PropTypes.func.isRequired,
+    searchCompanies: PropTypes.array.isRequired,
+    onSelectNodeTypeTab: PropTypes.func.isRequired,
+    onSelectCompany: PropTypes.func.isRequired
+  };
+
+  static defaultProps = {
+    activeNodeTypeTabId: null
+  };
+
   componentDidMount() {
-    this.props.onSelectNodeTypeTab(this.props.tabs[0]);
+    if (typeof this.props.tabs[0] !== 'undefined') {
+      this.props.onSelectNodeTypeTab(this.props.tabs[0]);
+    }
   }
 
   componentDidUpdate(prevProps) {
-    const { activeCompanyId, getCompaniesData, activeNodeTypeTabId } = this.props;
+    const {
+      tabs,
+      activeCompanyId,
+      getCompaniesData,
+      activeNodeTypeTabId,
+      onSelectNodeTypeTab
+    } = this.props;
+
+    if (activeNodeTypeTabId === null && prevProps.activeNodeTypeTabId !== null) {
+      const tab = tabs.find(t => t.id === prevProps.activeNodeTypeTabId);
+      onSelectNodeTypeTab(tab);
+    }
 
     const shouldGetData = [
       prevProps.activeNodeTypeTabId !== activeNodeTypeTabId,
@@ -71,16 +99,5 @@ class CompaniesPanel extends Component {
     );
   }
 }
-
-CompaniesPanel.propTypes = {
-  tabs: PropTypes.array.isRequired,
-  activeCompanyId: PropTypes.string,
-  companies: PropTypes.array.isRequired,
-  getCompaniesData: PropTypes.func.isRequired,
-  searchCompanies: PropTypes.array.isRequired,
-  onSelectNodeTypeTab: PropTypes.func.isRequired,
-  onSelectCompany: PropTypes.func.isRequired,
-  activeNodeTypeTabId: PropTypes.string.isRequired
-};
 
 export default CompaniesPanel;
