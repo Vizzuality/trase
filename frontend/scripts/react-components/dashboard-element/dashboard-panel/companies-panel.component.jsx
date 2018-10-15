@@ -10,7 +10,7 @@ class CompaniesPanel extends Component {
     tabs: PropTypes.array.isRequired,
     activeCompanyId: PropTypes.string,
     activeNodeTypeTabId: PropTypes.string,
-    companies: PropTypes.array.isRequired,
+    companies: PropTypes.array,
     getCompaniesData: PropTypes.func.isRequired,
     searchCompanies: PropTypes.array.isRequired,
     onSelectNodeTypeTab: PropTypes.func.isRequired,
@@ -18,6 +18,7 @@ class CompaniesPanel extends Component {
   };
 
   static defaultProps = {
+    companies: [],
     activeNodeTypeTabId: null
   };
 

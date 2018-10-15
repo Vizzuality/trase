@@ -13,8 +13,8 @@ const initialState = {
   data: {
     indicators: [],
     countries: [],
-    companies: [],
-    sources: [],
+    companies: {},
+    sources: {},
     destinations: [],
     commodities: []
   },
@@ -44,11 +44,12 @@ const dashboardElementReducer = {
     return { ...state, activePanelId };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_DATA](state, action) {
-    const { key, data, meta } = action.payload;
+    const { key, data, meta, tab } = action.payload;
     const metaFallback = meta && meta.contextNodeTypes ? meta.contextNodeTypes : meta; // FIXME
+    const newData = tab ? { ...state.data[key], [tab]: data } : data;
     return {
       ...state,
-      data: { ...state.data, [key]: data },
+      data: { ...state.data, [key]: newData },
       meta: { ...state.meta, [key]: metaFallback }
     };
   },
@@ -91,8 +92,8 @@ const dashboardElementReducerTypes = PropTypes => ({
   data: PropTypes.shape({
     indicators: PropTypes.array.isRequired,
     countries: PropTypes.array.isRequired,
-    companies: PropTypes.array.isRequired,
-    sources: PropTypes.array.isRequired,
+    companies: PropTypes.object.isRequired,
+    sources: PropTypes.object.isRequired,
     destinations: PropTypes.array.isRequired
   }).isRequired,
   sourcesPanel: PropTypes.shape({

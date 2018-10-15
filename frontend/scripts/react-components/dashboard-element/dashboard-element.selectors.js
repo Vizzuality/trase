@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import uniq from 'lodash/uniq';
 import sortBy from 'lodash/sortBy';
+import flatten from 'lodash/flatten';
 
 const getDashboardPanelData = state => state.dashboardElement.data;
 const getSourcesPanel = state => state.dashboardElement.sourcesPanel;
@@ -62,6 +63,8 @@ export const getDynamicSentence = createSelector(
     const destinationsActiveId = destinationsPanel.activeDestinationItemId;
     const companiesActiveId = companiesPanel.activeCompanyItemId;
     const commoditiesActiveId = commoditiesPanel.activeCommodityItemId;
+    const sources = flatten(Object.values(data.sources));
+    const companies = flatten(Object.values(data.companies));
 
     if (
       ![
@@ -76,8 +79,8 @@ export const getDynamicSentence = createSelector(
     }
     const countriesValue = data.countries.find(item => item.id === countriesActiveId);
     const commoditiesValue = data.commodities.find(item => item.id === commoditiesActiveId);
-    const sourcesValue = data.sources.find(item => item.id === sourcesActiveId);
-    const companiesValue = data.companies.find(item => item.id === companiesActiveId);
+    const sourcesValue = sources.find(item => item.id === sourcesActiveId);
+    const companiesValue = companies.find(item => item.id === companiesActiveId);
     const destinationsValue = data.destinations.find(item => item.id === destinationsActiveId);
 
     return [
