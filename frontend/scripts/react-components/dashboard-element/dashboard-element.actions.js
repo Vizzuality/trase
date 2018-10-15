@@ -10,7 +10,7 @@ export const DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR = 'DASHBOARD_ELEMENT__ADD_A
 export const DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR =
   'DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR';
 
-export const getDashboardPanelData = options_type => (dispatch, getState) => {
+export const getDashboardPanelData = (options_type, tab) => (dispatch, getState) => {
   const {
     sourcesPanel,
     companiesPanel,
@@ -48,7 +48,7 @@ export const getDashboardPanelData = options_type => (dispatch, getState) => {
 
   dispatch({
     type: DASHBOARD_ELEMENT__SET_PANEL_DATA,
-    payload: { key, data: [], meta: null }
+    payload: { key, tab, data: [], meta: null }
   });
 
   fetch(url)
@@ -58,6 +58,7 @@ export const getDashboardPanelData = options_type => (dispatch, getState) => {
         type: DASHBOARD_ELEMENT__SET_PANEL_DATA,
         payload: {
           key,
+          tab,
           data: json.data,
           meta: json.meta
         }

@@ -45,8 +45,10 @@ function DashboardPanel(props) {
         {activePanelId === 'sources' && (
           <SourcesPanel
             clearItems={() => clearActiveId(activePanelId)}
-            getCountriesData={options => getDashboardPanelData('countries', options)}
-            getSourcesData={options => getDashboardPanelData(activePanelId, options)}
+            getCountriesData={options => getDashboardPanelData('countries', null, options)}
+            getSourcesData={options =>
+              getDashboardPanelData(activePanelId, sourcesPanel.activeSourceTabId, options)
+            }
             activeCountryItemId={sourcesPanel.activeCountryItemId}
             activeSourceTabId={sourcesPanel.activeSourceTabId}
             activeSourceItemId={sourcesPanel.activeSourceItemId}
@@ -81,7 +83,7 @@ function DashboardPanel(props) {
         )}
         {activePanelId === 'destinations' && (
           <DestinationsPanel
-            getData={options => getDashboardPanelData(activePanelId, options)}
+            getData={options => getDashboardPanelData(activePanelId, null, options)}
             searchDestinations={destinations}
             destinations={destinations || []}
             onSelectDestinationValue={item =>
@@ -98,9 +100,11 @@ function DashboardPanel(props) {
         {activePanelId === 'companies' && (
           <CompaniesPanel
             tabs={tabs}
-            getCompaniesData={options => getDashboardPanelData(activePanelId, options)}
+            getCompaniesData={options =>
+              getDashboardPanelData(activePanelId, companiesPanel.activeNodeTypeTabId, options)
+            }
             searchCompanies={[]}
-            companies={companies}
+            companies={companies[companiesPanel.activeNodeTypeTabId]}
             onSelectNodeTypeTab={item =>
               setActiveId({
                 type: 'tab',
@@ -123,7 +127,7 @@ function DashboardPanel(props) {
         )}
         {activePanelId === 'commodities' && (
           <CommoditiesPanel
-            getData={options => getDashboardPanelData(activePanelId, options)}
+            getData={options => getDashboardPanelData(activePanelId, null, options)}
             searchCommodities={commodities}
             commodities={commodities}
             onSelectCommodity={item =>
@@ -151,7 +155,7 @@ function DashboardPanel(props) {
 
 DashboardPanel.propTypes = {
   countries: PropTypes.array,
-  companies: PropTypes.array,
+  companies: PropTypes.object,
   commodities: PropTypes.array,
   dirtyBlocks: PropTypes.object,
   activePanelId: PropTypes.string,

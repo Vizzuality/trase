@@ -6,6 +6,26 @@ import GridListItem from 'react-components/shared/grid-list-item.component';
 import Tabs from 'react-components/shared/tabs.component';
 
 class SourcesPanel extends React.PureComponent {
+
+  static propTypes = {
+    searchSources: PropTypes.array.isRequired,
+    sources: PropTypes.object,
+    activeCountryItemId: PropTypes.number,
+    activeSourceTabId: PropTypes.number,
+    activeSourceItemId: PropTypes.string,
+    tabs: PropTypes.array.isRequired,
+    onSelectCountry: PropTypes.func.isRequired,
+    clearItems: PropTypes.func.isRequired,
+    onSelectSourceValue: PropTypes.func.isRequired,
+    onSelectSourceTab: PropTypes.func.isRequired,
+    getSourcesData: PropTypes.func.isRequired,
+    getCountriesData: PropTypes.func.isRequired
+  };
+
+  static defaultProps = {
+    sources: {}
+  };
+
   componentDidMount() {
     this.props.getCountriesData();
   }
@@ -111,20 +131,5 @@ class SourcesPanel extends React.PureComponent {
     );
   }
 }
-
-SourcesPanel.propTypes = {
-  searchSources: PropTypes.array.isRequired,
-  sources: PropTypes.object.isRequired,
-  activeCountryItemId: PropTypes.number,
-  activeSourceTabId: PropTypes.number,
-  activeSourceItemId: PropTypes.string,
-  tabs: PropTypes.array.isRequired,
-  onSelectCountry: PropTypes.func.isRequired,
-  clearItems: PropTypes.func.isRequired,
-  onSelectSourceValue: PropTypes.func.isRequired,
-  onSelectSourceTab: PropTypes.func.isRequired,
-  getSourcesData: PropTypes.func.isRequired,
-  getCountriesData: PropTypes.func.isRequired
-};
 
 export default SourcesPanel;
