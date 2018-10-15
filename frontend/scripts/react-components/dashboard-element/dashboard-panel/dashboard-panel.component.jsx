@@ -117,7 +117,7 @@ function DashboardPanel(props) {
                 panel: activePanelId
               })
             }
-            activeNodeTypeTabId={companiesPanel.activeNodeTypeTabId || tabs[0]}
+            activeNodeTypeTabId={companiesPanel.activeNodeTypeTabId}
             activeCompanyId={companiesPanel.activeCompanyItemId}
           />
         )}
