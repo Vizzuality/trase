@@ -1,6 +1,10 @@
 /* eslint-disable camelcase */
 // import camelCase from 'lodash/camelCase';
-import { GET_DASHBOARD_OPTIONS_URL, getURLFromParams } from 'utils/getURLFromParams';
+import {
+  getURLFromParams,
+  GET_DASHBOARD_OPTIONS_URL,
+  GET_DASHBOARD_OPTIONS_TABS_URL
+} from 'utils/getURLFromParams';
 
 export const DASHBOARD_ELEMENT__SET_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_PANEL = 'DASHBOARD_ELEMENT__SET_ACTIVE_PANEL';
@@ -9,14 +13,15 @@ export const DASHBOARD_ELEMENT__CLEAR_PANEL = 'DASHBOARD_ELEMENT__CLEAR_PANEL';
 export const DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR = 'DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR';
 export const DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR =
   'DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR';
+export const DASHBOARD_ELEMENT__SET_PANEL_TABS = 'DASHBOARD_ELEMENT__SET_PANEL_TABS';
 
-export const getDashboardPanelData = (options_type, tab) => (dispatch, getState) => {
+const getDashboardPanelParams = (state, options_type) => {
   const {
     sourcesPanel,
     companiesPanel,
     destinationsPanel,
     commoditiesPanel
-  } = getState().dashboardElement;
+  } = state;
   const node_types_ids = {
     sources: sourcesPanel.activeSourceTabId,
     companies: companiesPanel.activeNodeTypeTabId
@@ -42,7 +47,11 @@ export const getDashboardPanelData = (options_type, tab) => (dispatch, getState)
   if (options_type !== 'companies') {
     params.companies_ids = companiesPanel.activeCompanyItemId;
   }
+  return params;
+};
 
+export const getDashboardPanelData = (options_type, tab) => (dispatch, getState) => {
+  const params = getDashboardPanelParams(getState().dashboardElement, options_type);
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const key = options_type !== 'attributes' ? options_type : 'indicators'; // FIXME
 
@@ -61,6 +70,22 @@ export const getDashboardPanelData = (options_type, tab) => (dispatch, getState)
           tab,
           data: json.data,
           meta: json.meta
+        }
+      })
+    );
+};
+
+export const getDashboardPanelSectionTabs = options_type => (dispatch, getState) => {
+  const params = getDashboardPanelParams(getState().dashboardElement, options_type);
+  const url = getURLFromParams(GET_DASHBOARD_OPTIONS_TABS_URL, params);
+
+  fetch(url)
+    .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    .then(json =>
+      dispatch({
+        type: DASHBOARD_ELEMENT__SET_PANEL_TABS,
+        payload: {
+          data: json.data
         }
       })
     );

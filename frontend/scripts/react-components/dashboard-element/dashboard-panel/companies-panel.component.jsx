@@ -11,6 +11,7 @@ class CompaniesPanel extends Component {
     activeCompanyId: PropTypes.string,
     activeNodeTypeTabId: PropTypes.string,
     companies: PropTypes.array,
+    getSectionTabs: PropTypes.func.isRequired,
     getCompaniesData: PropTypes.func.isRequired,
     searchCompanies: PropTypes.array.isRequired,
     onSelectNodeTypeTab: PropTypes.func.isRequired,
@@ -23,9 +24,11 @@ class CompaniesPanel extends Component {
   };
 
   componentDidMount() {
-    if (typeof this.props.tabs[0] !== 'undefined') {
-      this.props.onSelectNodeTypeTab(this.props.tabs[0]);
+    const { tabs, onSelectNodeTypeTab, getSectionTabs} = this.props;
+    if (typeof tabs[0] !== 'undefined') {
+      onSelectNodeTypeTab(tabs[0]);
     }
+    getSectionTabs();
   }
 
   componentDidUpdate(prevProps) {

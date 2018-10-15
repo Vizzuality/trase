@@ -6,7 +6,8 @@ import {
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
   DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
-  DASHBOARD_ELEMENT__SET_ACTIVE_PANEL
+  DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
+  DASHBOARD_ELEMENT__SET_PANEL_TABS
 } from './dashboard-element.actions';
 
 const initialState = {
@@ -19,6 +20,7 @@ const initialState = {
     commodities: []
   },
   meta: {},
+  tabs: {},
   activePanelId: null,
   activeIndicatorsList: [],
   sourcesPanel: {
@@ -52,6 +54,15 @@ const dashboardElementReducer = {
       data: { ...state.data, [key]: newData },
       meta: { ...state.meta, [key]: metaFallback }
     };
+  },
+  [DASHBOARD_ELEMENT__SET_PANEL_TABS](state, action) {
+    const { data } = action.payload;
+    const getSection = n => n.section && n.section.toLowerCase();
+    const tabs = data.reduce((acc, next) => ({ ...acc, [getSection(next)]: next.tabs }), {});
+    return {
+      ...state,
+      tabs
+    }
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ID](state, action) {
     const { panel, section, active, type } = action.payload;
@@ -89,6 +100,10 @@ const dashboardElementReducer = {
 };
 
 const dashboardElementReducerTypes = PropTypes => ({
+  meta: PropTypes.object.isRequired,
+  tabs: PropTypes.object.isRequired,
+  activePanelId: PropTypes.string,
+  activeIndicatorsList: PropTypes.array.isRequired,
   data: PropTypes.shape({
     indicators: PropTypes.array.isRequired,
     countries: PropTypes.array.isRequired,

@@ -4,7 +4,8 @@ import {
   clearDashboardPanel,
   getDashboardPanelData,
   setDashboardActivePanel,
-  setDashboardPanelActiveId
+  setDashboardPanelActiveId,
+  getDashboardPanelSectionTabs
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
 import {
@@ -44,10 +45,12 @@ const mapDispatchToProps = {
   getDashboardPanelData,
   clearActiveId: clearDashboardPanel,
   setActiveId: setDashboardPanelActiveId,
-  setActivePanel: setDashboardActivePanel
+  setActivePanel: setDashboardActivePanel,
+  getSectionTabs: getDashboardPanelSectionTabs
 };
 
 class DashboardPanelContainer extends React.PureComponent {
+
   panels = [
     { id: 'sources', title: 'sourcing places', imageUrl: '/images/dashboards/icon_sourcing.svg', whiteImageUrl: '/images/dashboards/icon_sourcing_white.svg' },
     { id: 'destinations', title: 'importing countries', imageUrl: '/images/dashboards/icon_importing.svg', whiteImageUrl: '/images/dashboards/icon_importing_white.svg'  },
