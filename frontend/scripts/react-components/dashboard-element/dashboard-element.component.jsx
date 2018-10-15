@@ -116,7 +116,7 @@ class DashboardElement extends React.PureComponent {
             <section className="dashboard-element-widgets">
               <div className="row -equal-height -flex-end">
                 {activeIndicators.map(indicator => (
-                  <div className="column small-12 medium-6 ">
+                  <div key={indicator.id} className="column small-12 medium-6 ">
                     <DashboardWiget
                       url={indicator.url}
                       title={indicator.displayName}

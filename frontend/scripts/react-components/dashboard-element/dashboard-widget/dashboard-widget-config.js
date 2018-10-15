@@ -7,8 +7,71 @@ export default {
         y: {
           stroke: '#ee5463',
           fill: '#ee5463',
-          interval: 'preserveStartEnd',
-          stackId: 'type'
+          interval: 'preserveStartEnd'
+        }
+      }
+    },
+    xAxis: {
+      type: 'category',
+      tickLine: false,
+      interval: 'preserveStartEnd',
+      tick: {
+        fontFamily: 'DecimaMonoPro',
+        fontSize: 14,
+        fill: '#ffffff'
+      },
+      axisLine: false
+    },
+    yAxis: {
+      axisLine: false,
+      tick: {
+        fontFamily: 'DecimaMonoPro',
+        tickCount: 2,
+        interval: 2,
+        fontSize: 14,
+        fill: '#ffffff'
+      },
+      tickFormatter: t => t.toLocaleString(),
+      domain: [0, 'auto']
+    },
+    cartesianGrid: {
+      vertical: false,
+      strokeDasharray: '5 5'
+    }
+  },
+  stackedBar: {
+    xKey: 'x',
+    yKeys: {
+      bars: {
+        liquids: {
+          stroke: '#fff0c2',
+          fill: '#fff0c2',
+          stackId: 'x',
+          interval: 'preserveStartEnd'
+        },
+        natural_gas: {
+          stroke: '#9a1e2a',
+          fill: '#9a1e2a',
+          stackId: 'x',
+          interval: 'preserveStartEnd'
+        },
+        coal: {
+          stroke: '#ee5463',
+          fill: '#ee5463',
+          stackId: 'x',
+          interval: 'preserveStartEnd'
+        },
+        nuclear: {
+          stroke: '#c62c3b',
+          fill: '#c62c3b',
+          stackId: 'x',
+          interval: 'preserveStartEnd'
+        },
+        renewables: {
+          stroke: '#fd7d8a',
+          fill: '#fd7d8a',
+          stackId: 'x',
+          interval: 'preserveStartEnd'
         }
       }
     },

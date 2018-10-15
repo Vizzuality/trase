@@ -1,3 +1,35 @@
 .c-dashboard-widget-legend {
-  padding: 38px 42px;
+  padding: 31px 42px;
+
+  .dashboard-widget-legend-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    .column {
+      margin-top: 15px;
+    }
+
+    &:last-child {
+      margin: 0;
+    }
+
+    span {
+      height: 4px;
+      width: 22px;
+    }
+
+    p {
+      font-family: $font-family-1;
+      font-size: 13px;
+      font-weight: $font-weight-bold;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1.23;
+      letter-spacing: -0.8px;
+      color: $white;
+      text-transform: uppercase;
+      margin: 0 0 0 8px;
+    }
+  }
 }
