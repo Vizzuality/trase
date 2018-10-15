@@ -6,6 +6,7 @@
   height: 100%;
   background-color: $light-gray;
   overflow: hidden;
+  min-width: 1000px;
 
   .dashboard-panel-content {
     flex: 1;
@@ -56,5 +57,6 @@
 
   .dashboard-panel-pill-list {
     margin-bottom: 39px;
+    overflow-x: hidden !important;
   }
 }

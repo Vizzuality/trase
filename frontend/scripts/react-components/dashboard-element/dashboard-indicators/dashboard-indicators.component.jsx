@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import DashboardModalFooter from 'react-components/dashboard-element/dahsboard-modal-footer.component';
 import GridList from 'react-components/shared/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item.component';
+import Spinner from 'scripts/react-components/shared/shrinking-spinner.component';
 
 class DashboardIndicators extends React.PureComponent {
   state = {
@@ -38,17 +39,26 @@ class DashboardIndicators extends React.PureComponent {
       dynamicSentenceParts
     } = this.props;
     const { activeItemInfo } = this.state;
+
     return (
       <div className="c-dashboard-panel" onClick={this.resetActiveItemInfo}>
         <div className="dashboard-panel-content">
-          <h2 className="dasboard-panel-title title -center -light">Indicators</h2>
+          <h2 className="dashboard-panel-title title -center -light">
+            Choose the options you want to add to the dashboard
+          </h2>
+          {indicators.length === 0 && (
+            <div className="widget-spinner">
+              <Spinner className="-large -dark" />
+            </div>
+          )}
           <GridList
+            className="dashboard-panel-pill-list"
             items={indicators}
             height={350}
-            width={800}
+            width={950}
             rowHeight={50}
-            columnWidth={190}
-            columnCount={4}
+            columnWidth={316}
+            columnCount={3}
             groupBy="group"
           >
             {itemProps => (
