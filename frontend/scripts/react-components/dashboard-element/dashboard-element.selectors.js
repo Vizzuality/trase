@@ -18,7 +18,7 @@ const getIndicatorsMeta = state => state.dashboardElement.meta.indicators;
 
 export const getActivePanelTabs = createSelector(
   [getActiveDashboardPanel, getDashboardPanelTabs],
-  (panel, tabs) => (tabs[panel.id] || [])
+  (panel, tabs) => tabs[panel.id] || []
 );
 
 export const getDirtyBlocks = createSelector(
@@ -73,7 +73,7 @@ export const getDynamicSentence = createSelector(
       },
       {
         panel: 'sources',
-        prefix: sourcesActiveId ? `produced in` : 'produced in the world',
+        prefix: sourcesActiveId || countriesActiveId ? `produced in` : 'produced worldwide',
         value: (sourcesValue && sourcesValue.name) || (countriesValue && countriesValue.name)
       },
       {
