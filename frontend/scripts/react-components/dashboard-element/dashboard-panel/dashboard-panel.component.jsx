@@ -171,6 +171,7 @@ DashboardPanel.propTypes = {
   dynamicSentenceParts: PropTypes.array,
   setActiveId: PropTypes.func.isRequired,
   clearActiveId: PropTypes.func.isRequired,
+  getSectionTabs: PropTypes.func.isRequired,
   setActivePanel: PropTypes.func.isRequired,
   sourcesPanel: PropTypes.object.isRequired,
   destinationsPanel: PropTypes.object.isRequired,

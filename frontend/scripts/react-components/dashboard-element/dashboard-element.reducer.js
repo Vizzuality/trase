@@ -141,7 +141,7 @@ const dashboardElementReducerTypes = PropTypes => ({
     activeNodeTypeTabId: PropTypes.string
   }).isRequired,
   commoditiesPanel: PropTypes.shape({
-    activeCommodityItemId: PropTypes.string
+    activeCommodityItemId: PropTypes.number
   }).isRequired
 });
 
