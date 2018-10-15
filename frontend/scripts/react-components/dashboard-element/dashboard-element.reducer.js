@@ -101,6 +101,7 @@ const dashboardElementReducer = {
     const panelName = `${panel}Panel`;
     return {
       ...state,
+      activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
         [camelCase(`active_${section}_${type}_id`)]: active
