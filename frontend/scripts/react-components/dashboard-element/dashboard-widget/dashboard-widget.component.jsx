@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Chart from 'react-components/chart';
 import Spinner from 'react-components/shared/shrinking-spinner.component';
+import DashboardWidgetLegend
+  from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-legend.component';
 
 const colors = [
   '#fff0c2',
@@ -32,7 +34,12 @@ function DashboardWidget(props) {
             <Spinner className="-large -white" />
           </div>
         )}
-        {data && <Chart data={coloredData} config={chartConfig} />}
+        {data && (
+          <React.Fragment>
+            <DashboardWidgetLegend data={coloredData} />
+            <Chart className="widget-chart" data={coloredData} config={chartConfig} />
+          </React.Fragment>
+        )}
       </div>
     </div>
   );
