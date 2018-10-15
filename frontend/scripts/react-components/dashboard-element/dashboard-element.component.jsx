@@ -114,12 +114,12 @@ class DashboardElement extends React.PureComponent {
           {this.renderDashboardModal()}
           {modalOpen === false && (
             <section className="dashboard-element-widgets">
-              <div className="row">
+              <div className="row -equal-height -flex-end">
                 {activeIndicators.map(indicator => (
-                  <div className="column small-12 medium-6">
+                  <div className="column small-12 medium-6 ">
                     <DashboardWiget
                       url={indicator.url}
-                      title={indicator.name}
+                      title={indicator.displayName}
                       chartType={indicator.chartType}
                     />
                   </div>

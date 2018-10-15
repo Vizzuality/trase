@@ -77,6 +77,12 @@ body {
       flex-direction: column;
       margin-top: 1.25rem;
     }
+
+    &.-flex-end {
+      div[class^=column], div[class*=column] {
+        justify-content: flex-end;
+      }
+    }
   }
 }
 
