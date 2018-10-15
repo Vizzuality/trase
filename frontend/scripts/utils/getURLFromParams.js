@@ -34,6 +34,7 @@ export const GET_PLACE_TOP_CONSUMER_COUNTRIES = 'GET_PLACE_TOP_CONSUMER_COUNTRIE
 export const GET_ACTOR_SUSTAINABILITY = 'GET_ACTOR_SUSTAINABILITY';
 export const GET_ACTOR_EXPORTING_COMPANIES = 'GET_ACTOR_EXPORTING_COMPANIES';
 export const GET_DASHBOARD_OPTIONS_URL = 'GET_DASHBOARD_OPTIONS_URL';
+export const GET_DASHBOARD_OPTIONS_TABS_URL = 'GET_DASHBOARD_OPTIONS_TABS_URL';
 
 const API_ENDPOINTS = {
   [GET_CONTEXTS_URL]: { api: 3, endpoint: '/contexts' },
@@ -114,6 +115,10 @@ const API_ENDPOINTS = {
   [GET_DASHBOARD_OPTIONS_URL]: {
     api: 3,
     endpoint: '/dashboards/$options_type$'
+  },
+  [GET_DASHBOARD_OPTIONS_TABS_URL]: {
+    api: 3,
+    endpoint: '/dashboards/filter_meta'
   }
 };
 

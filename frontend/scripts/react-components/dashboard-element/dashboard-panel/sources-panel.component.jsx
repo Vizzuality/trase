@@ -19,6 +19,7 @@ class SourcesPanel extends React.PureComponent {
     onSelectSourceValue: PropTypes.func.isRequired,
     onSelectSourceTab: PropTypes.func.isRequired,
     getSourcesData: PropTypes.func.isRequired,
+    getSectionTabs: PropTypes.func.isRequired,
     getCountriesData: PropTypes.func.isRequired
   };
 
@@ -33,6 +34,7 @@ class SourcesPanel extends React.PureComponent {
   componentDidUpdate(prevProps) {
     const {
       tabs,
+      getSectionTabs,
       getSourcesData,
       onSelectSourceTab,
       activeCountryItemId,
@@ -47,12 +49,14 @@ class SourcesPanel extends React.PureComponent {
       onSelectSourceTab(tabs[0]);
     }
 
-    const shouldGetData = [
+    const shouldGetSourcesData = [
       prevProps.activeCountryItemId !== activeCountryItemId,
       prevProps.activeSourceTabId !== activeSourceTabId,
       prevProps.activeSourceItemId !== activeSourceItemId
     ];
-    if (shouldGetData.includes(true)) {
+
+    if (shouldGetSourcesData.includes(true)) {
+      getSectionTabs();
       getSourcesData();
     }
   }

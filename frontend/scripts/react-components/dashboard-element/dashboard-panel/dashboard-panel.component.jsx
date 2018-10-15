@@ -25,6 +25,7 @@ function DashboardPanel(props) {
     companies,
     commodities,
     onContinue,
+    getSectionTabs,
     commoditiesPanel,
     dynamicSentenceParts,
     getDashboardPanelData
@@ -44,6 +45,7 @@ function DashboardPanel(props) {
         />
         {activePanelId === 'sources' && (
           <SourcesPanel
+            getSectionTabs={() => getSectionTabs(activePanelId)}
             clearItems={() => clearActiveId(activePanelId)}
             getCountriesData={options => getDashboardPanelData('countries', null, options)}
             getSourcesData={options =>
@@ -54,7 +56,7 @@ function DashboardPanel(props) {
             activeSourceItemId={sourcesPanel.activeSourceItemId}
             searchSources={countries}
             tabs={tabs}
-            sources={sources}
+            sources={sources[sourcesPanel.activeSourceTabId]}
             onSelectCountry={item =>
               setActiveId({
                 type: 'item',
@@ -100,6 +102,7 @@ function DashboardPanel(props) {
         {activePanelId === 'companies' && (
           <CompaniesPanel
             tabs={tabs}
+            getSectionTabs={() => getSectionTabs(activePanelId)}
             getCompaniesData={options =>
               getDashboardPanelData(activePanelId, companiesPanel.activeNodeTypeTabId, options)
             }
