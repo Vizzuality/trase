@@ -6,6 +6,7 @@
   height: 100%;
   background-color: $light-gray;
   overflow: hidden;
+  min-width: 1000px;
 
   .dashboard-panel-content {
     flex: 1;
@@ -14,7 +15,7 @@
   }
 
   .dashboard-panel-title {
-    font-size: 20px;
+    font-size: $font-size-big;
     margin: 32px 0 43px 0;
   }
 
@@ -31,7 +32,17 @@
       flex-direction: row-reverse;
       padding: 2px 0 0 16px;
       box-shadow: none;
-      border: 1px solid $charcoal-grey-faded;
+      border: solid 2px $charcoal-grey-faded-a-lot;
+      background-color: $light-gray;
+
+      input {
+        padding: 9px;
+        color: $charcoal-grey;
+        font-size: $font-size-x-regular;
+        letter-spacing: -0.8px;
+        background-color: $light-gray;
+        text-transform: uppercase;
+      }
     }
   }
 
@@ -42,5 +53,10 @@
     font-weight: 300;
     line-height: 1.71;
     margin: 0 0 25px 0;
+  }
+
+  .dashboard-panel-pill-list {
+    margin-bottom: 39px;
+    overflow-x: hidden !important;
   }
 }
