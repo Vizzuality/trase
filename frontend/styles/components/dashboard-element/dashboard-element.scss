@@ -3,7 +3,7 @@
 
   .dashboard-element-title {
     color: $white;
-    font-size: 24px;
+    font-size: $font-size-big;
     font-weight: 300;
     line-height: 2.33;
     letter-spacing: -0.5px;
@@ -32,12 +32,27 @@
 
   .dashboard-modal-close {
     position: absolute;
-    top: 20px;
+    top: 26px;
     right: 30px;
     z-index: $z-above;
 
     button {
       cursor: pointer;
+      display: flex;
+
+      span {
+        font-family: $font-family-1;
+        font-size: $font-size-x-regular;
+        padding-right: 13px;
+        letter-spacing: -0.8px;
+        text-align: center;
+        color: $charcoal-grey;
+        vertical-align: bottom;
+        text-transform: uppercase;
+      }
+      svg {
+        display: block;
+      }
     }
   }
 }

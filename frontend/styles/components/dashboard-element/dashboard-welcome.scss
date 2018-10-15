@@ -1,27 +1,62 @@
 .c-dashboard-welcome {
-  padding: 20px 25px;
+  padding: 40px 25px;
   .title {
-    margin: 0 0 45px 0;
+    margin: 26px 0 55px 0;
+    font-family: $font-family-2;
+    font-size: $font-size-huge;
+    font-weight: $font-weight-light;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 0.79;
+    letter-spacing: -1px;
+    text-align: center;
+    color: $charcoal-grey;
   }
 
   .dashboard-welcome-card-container {
     display: flex;
-    margin: 0 0 30px 0;
+    margin-left: 15px;
   }
 
   .dashboard-welcome-card {
-    background-color: darken($light-gray, 7%);
+    font-family: $font-family-2;
     width: 300px;
-    height: 300px;
-    margin: 0 15px 0 0;
+    margin: 0 25px 0 0;
 
     &:last-child {
       margin: 0;
+    }
+
+    h3 {
+      font-size: $font-size-medium;
+      font-weight: $font-weight-bold;
+      font-style: normal;
+      line-height: 1.6;
+      letter-spacing: normal;
+      color: $charcoal-grey;
+      margin-bottom: 10px;
+    }
+
+    img {
+      display:block;
+      margin:auto;
+    }
+
+    p {
+      width: 260px;
+      height: 96px;
+      margin-bottom: 36px;
+      font-size: $font-size-xx-regular;
+      font-weight: $font-weight-light;
+      line-height: 2;
+      letter-spacing: normal;
+      color: $charcoal-grey;
     }
   }
 
   .dashboard-welcome-button-container {
     display: flex;
     justify-content: center;
+    margin-top: 35px;
   }
 }

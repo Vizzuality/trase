@@ -44,6 +44,7 @@ class DashboardElement extends React.PureComponent {
           <div className="dashboard-modal-content all-events">
             <div className="dashboard-modal-close">
               <button onClick={onClose}>
+                <span>close</span>
                 <svg className="icon icon-close">
                   <use xlinkHref="#icon-close" />
                 </svg>
