@@ -35,7 +35,14 @@ class BlockSwitch extends React.PureComponent {
               >
                 {block.title}
               </span>
-              <div className="block-switch-image" style={!isActive ? { backgroundImage: block.imageUrl && `url(${block.imageUrl})` } : { backgroundImage: block.whiteImageUrl && `url(${block.whiteImageUrl})` } } />
+              <div
+                className="block-switch-image"
+                style={{
+                  backgroundImage: !isActive
+                    ? `url(${block.imageUrl})`
+                    : `url(${block.whiteImageUrl})`
+                }}
+              />
             </button>
           );
         })}

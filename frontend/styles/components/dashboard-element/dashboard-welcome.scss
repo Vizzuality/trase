@@ -2,7 +2,7 @@
   padding: 40px 25px;
   .title {
     margin: 0 0 45px 0;
-    font-family: Merriweather;
+    font-family: $font-family-2;
     font-size: 38px !important;
     font-weight: 300 !important;
     font-style: normal;
@@ -10,7 +10,7 @@
     line-height: 0.79;
     letter-spacing: -1px;
     text-align: center;
-    color: #34444c;
+    color: $charcoal-grey;
   }
 
   .dashboard-welcome-card-container {
@@ -19,7 +19,7 @@
   }
 
   .dashboard-welcome-card {
-    font-family: Merriweather;
+    font-family: $font-family-2;
     width: 300px;
     height: 300px;
     margin: 0 25px 0 0;
@@ -31,16 +31,13 @@
     h3 {
       font-size: 17px;
       font-weight: bold;
-      font-style: normal;
-      font-stretch: normal;
       line-height: 1.6;
       letter-spacing: normal;
-      color: #34444c;
+      color: $charcoal-grey;
       margin-bottom: 10px;
     }
 
     img {
-      object-fit: contain;
       display:block;
       margin:auto;
     }
@@ -51,11 +48,9 @@
       margin-bottom: 20px;
       font-size: 15px;
       font-weight: 300;
-      font-style: normal;
-      font-stretch: normal;
       line-height: 2;
       letter-spacing: normal;
-      color: #34444c;
+      color: $charcoal-grey;
     }
   }
 
