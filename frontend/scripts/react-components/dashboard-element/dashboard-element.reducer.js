@@ -11,34 +11,17 @@ import {
 } from './dashboard-element.actions';
 
 const INDICATORS_MOCK = [
-  { group: true, name: 'East Coast' },
   {
-    id: 1,
-    name: 'tupac',
     chartType: 'bar',
-    tooltipText: 'tuuuupac',
-    url:
-      'https://api.resourcewatch.org/v1/query/a86d906d-9862-4783-9e30-cdb68cd808b8?sql=SELECT%20fuel1%20as%20x,%20SUM(estimated_generation_gwh)%20as%20y%20FROM%20powerwatch_data_20180102%20%20GROUP%20BY%20%20x%20ORDER%20BY%20y%20desc%20LIMIT%20500&geostore=8de481b604a9d8c3f85d19846a976a3d'
+    url: 'https://api.resourcewatch.org/v1/query/a86d906d-9862-4783-9e30-cdb68cd808b8?sql=SELECT%20fuel1%20as%20x,%20SUM(estimated_generation_gwh)%20as%20y%20FROM%20powerwatch_data_20180102%20%20GROUP%20BY%20%20x%20ORDER%20BY%20y%20desc%20LIMIT%20500&geostore=8de481b604a9d8c3f85d19846a976a3d'
   },
-  { id: 2, name: 'marshall mathers aka eminem (GOAT) Really Really Really Long Name', disabled: true },
-  { group: true, name: 'West Coast' },
-  { id: 3, name: 'biggie', disabled: true },
-  { group: true, name: 'Other' },
-  { id: 4, name: 'jay z', disabled: true },
   {
-    id: 5,
-    name: 'kanye',
     chartType: 'pie',
-    tooltipText: 'Kanyeeeeeee weeeeeeest',
-    url:
-      'https://api.resourcewatch.org/v1/query/e63bb157-4b98-4ecb-81d6-c1b15e79895a?sql=SELECT%20dam_name%20as%20x,%20dam_hgt_m%20as%20y%20FROM%20grand_dams%20%20%20ORDER%20BY%20dam_hgt_m%20desc%20LIMIT%207'
+    url: 'https://api.resourcewatch.org/v1/query/e63bb157-4b98-4ecb-81d6-c1b15e79895a?sql=SELECT%20dam_name%20as%20x,%20dam_hgt_m%20as%20y%20FROM%20grand_dams%20%20%20ORDER%20BY%20dam_hgt_m%20desc%20LIMIT%207'
   },
   {
-    id: 6,
-    name: 'drake',
     chartType: 'bar',
-    url:
-      'https://api.resourcewatch.org/v1/query/950e7d99-dbea-4402-b81d-663dfe4b2f8c?sql=SELECT year as x, population as y, type as c FROM index_950e7d99dbea4402b81d663dfe4b2f8c_1521500456608 ORDER BY year ASC&application=rw'
+    url: 'https://api.resourcewatch.org/v1/query/950e7d99-dbea-4402-b81d-663dfe4b2f8c?sql=SELECT year as x, population as y, type as c FROM index_950e7d99dbea4402b81d663dfe4b2f8c_1521500456608 ORDER BY year ASC&application=rw'
   }
 ];
 
@@ -81,9 +64,10 @@ const dashboardElementReducer = {
     const { key, data, meta, tab } = action.payload;
     const metaFallback = meta && meta.contextNodeTypes ? meta.contextNodeTypes : meta; // FIXME
     const newData = tab ? { ...state.data[key], [tab]: data } : data;
+    const dataWithMock = key === 'indicators' && data.map(d => ({ ...d, ...INDICATORS_MOCK[d.id % 3] }));
     return {
       ...state,
-      data: { ...state.data, [key]: newData },
+      data: { ...state.data, [key]: dataWithMock || newData },
       meta: { ...state.meta, [key]: metaFallback }
     };
   },
