@@ -8,7 +8,7 @@ import Tabs from 'react-components/shared/tabs.component';
 class SourcesPanel extends React.PureComponent {
   static propTypes = {
     searchSources: PropTypes.array.isRequired,
-    sources: PropTypes.object,
+    sources: PropTypes.array,
     activeCountryItemId: PropTypes.number,
     activeSourceTabId: PropTypes.number,
     activeSourceItemId: PropTypes.string,
@@ -23,7 +23,7 @@ class SourcesPanel extends React.PureComponent {
   };
 
   static defaultProps = {
-    sources: {}
+    sources: []
   };
 
   componentDidMount() {
@@ -56,7 +56,9 @@ class SourcesPanel extends React.PureComponent {
 
     if (shouldGetSourcesData.includes(true)) {
       getSectionTabs();
-      getSourcesData();
+      if (activeSourceTabId) {
+        getSourcesData();
+      }
     }
   }
 

@@ -20,8 +20,8 @@ const INDICATORS_MOCK = [
     url: 'https://api.resourcewatch.org/v1/query/e63bb157-4b98-4ecb-81d6-c1b15e79895a?sql=SELECT%20dam_name%20as%20x,%20dam_hgt_m%20as%20y%20FROM%20grand_dams%20%20%20ORDER%20BY%20dam_hgt_m%20desc%20LIMIT%207'
   },
   {
-    chartType: 'bar',
-    url: 'https://api.resourcewatch.org/v1/query/950e7d99-dbea-4402-b81d-663dfe4b2f8c?sql=SELECT year as x, population as y, type as c FROM index_950e7d99dbea4402b81d663dfe4b2f8c_1521500456608 ORDER BY year ASC&application=rw'
+    chartType: 'stackedBar',
+    url: 'https://api.resourcewatch.org/v1/query/b437f9ac-2bb1-4baf-89c5-291494bf83be?sql=SELECT%20year%20as%20x,%20liquids,%20natural_gas,%20coal,%20nuclear,%20renewables%20FROM%20dash_0090_energy_use_electric_power_eia%20ORDER%20BY%20year%20ASC&application=rw'
   }
 ];
 
@@ -141,7 +141,7 @@ const dashboardElementReducerTypes = PropTypes => ({
     activeNodeTypeTabId: PropTypes.string
   }).isRequired,
   commoditiesPanel: PropTypes.shape({
-    activeCommodityItemId: PropTypes.string
+    activeCommodityItemId: PropTypes.number
   }).isRequired
 });
 

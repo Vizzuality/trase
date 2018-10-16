@@ -2,20 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Chart from 'react-components/chart';
 import Spinner from 'react-components/shared/shrinking-spinner.component';
-
-const colors = [
-  '#fff0c2',
-  '#9a1e2a',
-  '#ee5463',
-  '#c62c3b',
-  '#fd7d8a',
-  '#ffb1b9',
-  '#ffffff'
-];
+import DashboardWidgetLegend
+  from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-legend.component';
+import groupBy from 'lodash/groupBy';
 
 function DashboardWidget(props) {
-  const { title, loading, error, data, chartConfig } = props;
-  const coloredData = data && data.map((d, i) => ({ ...d, color: colors[i] }));
+  const { title, loading, error, data, chartConfig, colors } = props;
+  const colorsDict = groupBy(colors, 'colorClass');
+  const coloredData = data && data.map(d => ({ ...d, color: colorsDict[d.x] && colorsDict[d.x][0].color }))
+    .slice(0, 7)
+    .filter(x => !!x);
   return (
     <div className="c-dashboard-widget">
       <div className="widget-title-container">
@@ -32,7 +28,12 @@ function DashboardWidget(props) {
             <Spinner className="-large -white" />
           </div>
         )}
-        {data && <Chart data={coloredData} config={chartConfig} />}
+        {coloredData && coloredData.length > 0 && (
+          <React.Fragment>
+            <DashboardWidgetLegend data={colors} />
+            <Chart className="widget-chart" data={coloredData} config={chartConfig} />
+          </React.Fragment>
+        )}
       </div>
     </div>
   );
