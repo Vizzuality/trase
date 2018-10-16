@@ -112,4 +112,7 @@ ActiveAdmin.register Api::V3::DashboardTemplate, as: 'DashboardTemplate' do
       end
     end
   end
+
+  filter :commodities, as: :select, collection: -> { Api::V3::Commodity.select_options }
+  filter :countries, as: :select, collection: -> { Api::V3::Country.select_options }
 end

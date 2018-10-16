@@ -8,6 +8,7 @@ export { default as staticContent } from 'react-components/static-content/static
 export { default as team } from 'react-components/team/team.reducer';
 export { default as explore } from 'react-components/explore/explore.reducer';
 export { default as widgets } from 'react-components/widgets/widgets.reducer';
+export { default as dashboardRoot } from 'react-components/dashboard-root/dashboard-root.reducer';
 export {
   default as dashboardElement
 } from 'react-components/dashboard-element/dashboard-element.reducer';

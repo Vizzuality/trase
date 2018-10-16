@@ -26,6 +26,10 @@ module Api
           {name: :name, sql_type: 'TEXT'}
         ]
       end
+
+      def self.select_options
+        order(:name).map { |commodity| [commodity.name, commodity.id] }
+      end
     end
   end
 end
