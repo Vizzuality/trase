@@ -4,9 +4,20 @@
   .dashboard-element-title {
     color: $white;
     font-size: $font-size-big;
-    font-weight: 300;
+    font-weight: $font-weight-light;
     line-height: 2.33;
     letter-spacing: -0.5px;
+
+    .dashboard-element-title-item {
+      display: inline-flex;
+      position: relative;
+      align-items: center;
+      height: 30px;
+      padding: 0 6px 0 0;
+      font-size: $font-size-big;
+      font-weight: $font-weight-bold;
+      text-transform: capitalize;
+    }
   }
 
   .dashboard-element-placeholder {
