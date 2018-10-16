@@ -24,6 +24,41 @@
     padding: 0 0 40px;
     background-color: $charcoal-dark;
   }
+
+  .dashboard-element-header {
+      padding: 0 0 38px;
+  }
+
+  .dashboard-header-actions {
+
+    .dashboard-header-action {
+
+      &.-panel {
+        height: 30px;
+        padding: 8px 15px;
+      }
+
+      &.-link {
+        font-family: $font-family-1;
+        font-size: 13px;
+        line-height: 0.77;
+        letter-spacing: -0.8px;
+        color: $white;
+      }
+
+      &:last-child {
+        margin: 0 0 0 15px;
+      }
+
+    }
+
+    &.-end {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      height: 100%;
+    }
+  }
 }
 
 .dashboard-modal-content {

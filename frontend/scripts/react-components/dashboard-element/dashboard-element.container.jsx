@@ -37,7 +37,9 @@ class DashboardElementContainer extends React.Component {
   state = {
     modalOpen: true,
     goBackOnCloseModal: true,
-    step: this.hasVisitedBefore.get() ? DashboardElement.steps.PANEL : DashboardElement.steps.WELCOME
+    step: this.hasVisitedBefore.get()
+      ? DashboardElement.steps.PANEL
+      : DashboardElement.steps.WELCOME
   };
 
   componentDidMount() {
@@ -48,6 +50,10 @@ class DashboardElementContainer extends React.Component {
 
   closeModal = () => {
     this.setState({ modalOpen: false });
+  };
+
+  openPanel = step => {
+    this.setState({ step, modalOpen: true, goBackOnCloseModal: false });
   };
 
   updateStep = step => this.setState({ step });
@@ -64,6 +70,7 @@ class DashboardElementContainer extends React.Component {
         closeModal={this.closeModal}
         goBackOnCloseModal={goBackOnCloseModal}
         activeIndicators={activeIndicators}
+        openPanel={this.openPanel}
       />
     );
   }

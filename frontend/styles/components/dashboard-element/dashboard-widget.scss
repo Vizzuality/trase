@@ -1,6 +1,4 @@
 .c-dashboard-widget {
-  padding: 40px 0 0;
-
   .widget-title-container {
     display: flex;
     justify-content: space-between;
@@ -17,6 +15,8 @@
   }
 
   .widget-actions {
+    flex-shrink: 0;
+    display: none;
     button {
       cursor: pointer;
       width: 30px;
@@ -32,6 +32,9 @@
   }
 
   .widget-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     height: 480px;
     border-radius: 6px;
     border: solid 1px rgba($white, 0.13);
@@ -43,6 +46,12 @@
       justify-content: center;
       height: 100%;
       width: 100%;
+    }
+
+    .widget-chart {
+      border-top: solid 1px rgba($white, 0.13);
+      flex: 1;
+      padding: 25px 42px;
     }
   }
 }

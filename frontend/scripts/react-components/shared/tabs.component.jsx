@@ -38,7 +38,10 @@ Tabs.propTypes = {
   tabs: PropTypes.array.isRequired,
   children: PropTypes.any.isRequired,
   onSelectTab: PropTypes.func.isRequired,
-  selectedTab: PropTypes.string.isRequired
+  selectedTab: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ])
 };
 
 export default Tabs;
