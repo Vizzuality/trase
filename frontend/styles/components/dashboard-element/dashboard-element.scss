@@ -2,11 +2,15 @@
   padding: 60px 0 0;
 
   .dashboard-element-title {
+    font-family: $font-family-2;
     color: $white;
     font-size: $font-size-big;
     font-weight: $font-weight-light;
     line-height: 2.33;
-    letter-spacing: -0.5px;
+    letter-spacing: -0.6px;
+    font-style: normal;
+    font-stretch: normal;
+    margin-bottom: 41px;
 
     .dashboard-element-title-item {
       display: inline-flex;
