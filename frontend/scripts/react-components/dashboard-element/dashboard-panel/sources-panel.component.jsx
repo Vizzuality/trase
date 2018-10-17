@@ -16,7 +16,6 @@ function SourcesPanel(props) {
     onSelectSourceTab,
     onSelectSourceValue,
     activeSourceTabId,
-    getSourcesData,
     activeSourceItemId
   } = props;
   return (
@@ -64,7 +63,7 @@ function SourcesPanel(props) {
                 rowHeight={50}
                 columnWidth={190}
                 columnCount={5}
-                getMoreItems={getSourcesData}
+                getMoreItems={i => i}
               >
                 {itemProps => (
                   <GridListItem
@@ -92,8 +91,7 @@ SourcesPanel.propTypes = {
   onSelectCountry: PropTypes.func.isRequired,
   clearItems: PropTypes.func.isRequired,
   onSelectSourceValue: PropTypes.func.isRequired,
-  onSelectSourceTab: PropTypes.func.isRequired,
-  getSourcesData: PropTypes.func.isRequired
+  onSelectSourceTab: PropTypes.func.isRequired
 };
 
 SourcesPanel.defaultProps = {

@@ -27,14 +27,18 @@ function* fetchDataOnPanelChange() {
 
 function* fetchDataOnFilterChange() {
   function* onFilterChange(action) {
-    const { type } = action.payload;
+    const { type, section } = action.payload;
     const { dashboardElement } = yield select();
     const { activeTab } = getActiveTab(dashboardElement);
 
-    if (type === 'item') {
+    // for now, we just need to recalculate the tabs when selecting a new country
+    if (type === 'item' && section === 'country') {
       yield put(getDashboardPanelSectionTabs(dashboardElement.activePanelId));
     }
-    yield put(getDashboardPanelData(dashboardElement.activePanelId, activeTab));
+
+    if (type === 'tab') {
+      yield put(getDashboardPanelData(dashboardElement.activePanelId, activeTab));
+    }
   }
 
   yield takeLatest(DASHBOARD_ELEMENT__SET_ACTIVE_ID, onFilterChange);
