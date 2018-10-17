@@ -55,6 +55,16 @@
             ],
             "pattern": "^(.*)$"
           },
+          "category": {
+            "$id": "#/properties/data/items/properties/category",
+            "type": "string",
+            "title": "The Category Schema",
+            "default": "",
+            "examples": [
+              "category 3"
+            ],
+            "pattern": "^(.*)$"
+          },
           "imageUrl": {
             "$id": "#/properties/data/items/properties/imageUrl",
             "type": "string",

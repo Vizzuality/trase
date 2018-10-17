@@ -26,6 +26,7 @@ function SourcesPanel(props) {
         items={searchSources}
         placeholder="Search place"
         onSelect={i => i}
+        onSearchTermChange={i => i}
       />
       <GridList
         className="dashboard-panel-pill-list"

@@ -15,6 +15,7 @@ class DashboardElement extends React.PureComponent {
     goToRoot: PropTypes.func.isRequired,
     modalOpen: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
+    dynamicSentenceParts: PropTypes.array,
     goBackOnCloseModal: PropTypes.bool.isRequired
   };
 
@@ -69,6 +70,23 @@ class DashboardElement extends React.PureComponent {
     );
   }
 
+  renderDynamicSentence() {
+    const { dynamicSentenceParts } = this.props;
+
+    if (dynamicSentenceParts) {
+      return dynamicSentenceParts.map((part, i) => (
+        <React.Fragment key={part.prefix + part.value + i}>
+          {`${part.prefix} `}
+          {part.value && (
+            <span className="dashboard-element-title-item notranslate">{part.value}</span>
+          )}
+        </React.Fragment>
+      ));
+    }
+
+    return 'Dashboards';
+  }
+
   render() {
     const { modalOpen, activeIndicators, openPanel } = this.props;
     return (
@@ -77,7 +95,7 @@ class DashboardElement extends React.PureComponent {
           <section className="dashboard-element-header">
             <div className="row">
               <div className="column small-12">
-                <h2 className="dashboard-element-title">Dashboard</h2>
+                <h2 className="dashboard-element-title">{this.renderDynamicSentence()}</h2>
               </div>
             </div>
             <div className="row">

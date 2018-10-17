@@ -2,7 +2,7 @@ module Api
   module V3
     module Dashboards
       class TemplateSerializer < ActiveModel::Serializer
-        attributes :id, :title, :description
+        attributes :id, :title, :description, :category
 
         has_many :sources_mv,
                  serializer: Api::V3::Dashboards::SourceSerializer,
@@ -15,6 +15,14 @@ module Api
         has_many :destinations_mv,
                  serializer: Api::V3::Dashboards::DestinationSerializer,
                  key: :destinations
+
+        has_many :commodities,
+                 serializer: Api::V3::Dashboards::CommoditySerializer,
+                 key: :commodities
+
+        has_many :countries,
+                 serializer: Api::V3::Dashboards::CountrySerializer,
+                 key: :countries
 
         attribute :image_url do
           url = object.image.url(:small)

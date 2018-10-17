@@ -69,22 +69,27 @@ export const getDynamicSentence = createSelector(
       {
         panel: 'commodities',
         prefix: commoditiesActiveId ? 'Explore' : 'Explore commodities',
-        value: commoditiesValue && commoditiesValue.name
+        value: commoditiesValue && commoditiesValue.name.toLowerCase()
       },
       {
         panel: 'sources',
         prefix: sourcesActiveId || countriesActiveId ? `produced in` : 'produced worldwide',
-        value: (sourcesValue && sourcesValue.name) || (countriesValue && countriesValue.name)
+        value:
+          (sourcesValue && sourcesValue.name.toLowerCase()) ||
+          (countriesValue && countriesValue.name.toLowerCase())
       },
       {
         panel: 'companies',
-        prefix: companiesActiveId ? `exported by` : '',
-        value: companiesValue && companiesValue.name
+        prefix:
+          companiesActiveId && companiesValue
+            ? `${companiesValue.nodeType.toLowerCase() === 'exporter' ? 'exported' : 'imported'} by`
+            : '',
+        value: companiesValue && companiesValue.name.toLowerCase()
       },
       {
         panel: 'destinations',
         prefix: destinationsActiveId ? `going to` : '',
-        value: destinationsValue && destinationsValue.name
+        value: destinationsValue && destinationsValue.name.toLowerCase()
       }
     ];
   }

@@ -22,6 +22,7 @@ function CompaniesPanel(props) {
         items={searchCompanies}
         placeholder="Search place"
         onSelect={i => i}
+        onSearchTermChange={i => i}
       />
       <Tabs
         tabs={tabs}

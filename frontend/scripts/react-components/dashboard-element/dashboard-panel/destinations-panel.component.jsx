@@ -13,6 +13,7 @@ function DestinationsPanel(props) {
         items={searchDestinations}
         placeholder="Search place"
         onSelect={i => i}
+        onSearchTermChange={i => i}
       />
       <GridList
         className="dashboard-panel-pill-list"

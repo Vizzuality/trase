@@ -13,6 +13,7 @@ function CommoditiesPanel(props) {
         items={searchCommodities}
         placeholder="Search place"
         onSelect={i => i}
+        onSearchTermChange={i => i}
       />
       <GridList
         className="dashboard-panel-pill-list"
