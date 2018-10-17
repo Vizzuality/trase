@@ -121,6 +121,7 @@ The project's main configuration values can be set using [environment variables]
 * USE_CANVAS_MAP: if set to true, may use a <canvas> to render the map's choropleth layer. Actual usage may also depend on browser support.
 * SHOW_WORLD_MAP_IN_EXPLORE: if set to true, explore section will have the 2 step behavior. Setting it to false will only show the context-specific step.
 * ENABLE_DASHBOARDS: if set to true, the dashboards section will be visible to end users.
+* ALWAYS_DISPLAY_DASHBOARD_INFO: if set to true, the dashboards info modal will always be displayed. If set to false, it will only be displayed for new users.
 
 If you are using the included development server, you can set those variables in the `.env` file (use the included `.env.sample` as an example)
 
