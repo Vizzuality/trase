@@ -9,7 +9,7 @@ class CompaniesPanel extends Component {
   static propTypes = {
     tabs: PropTypes.array.isRequired,
     activeCompanyId: PropTypes.string,
-    activeNodeTypeTabId: PropTypes.string,
+    activeNodeTypeTabId: PropTypes.number,
     companies: PropTypes.array,
     getSectionTabs: PropTypes.func.isRequired,
     getCompaniesData: PropTypes.func.isRequired,
@@ -71,6 +71,7 @@ class CompaniesPanel extends Component {
           items={searchCompanies}
           placeholder="Search place"
           onSelect={i => i}
+          onSearchTermChange={i => i}
         />
         <Tabs
           tabs={tabs}
