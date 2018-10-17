@@ -24,10 +24,7 @@ class CompaniesPanel extends Component {
   };
 
   componentDidMount() {
-    const { tabs, onSelectNodeTypeTab, getSectionTabs } = this.props;
-    if (typeof tabs[0] !== 'undefined') {
-      onSelectNodeTypeTab(tabs[0]);
-    }
+    const { getSectionTabs } = this.props;
     getSectionTabs();
   }
 
@@ -39,6 +36,10 @@ class CompaniesPanel extends Component {
       activeNodeTypeTabId,
       onSelectNodeTypeTab
     } = this.props;
+
+    if (typeof tabs[0] !== 'undefined' && typeof prevProps.tabs[0] === 'undefined') {
+      onSelectNodeTypeTab(tabs[0]);
+    }
 
     if (activeNodeTypeTabId === null && prevProps.activeNodeTypeTabId !== null) {
       const tab = tabs.find(t => t.id === prevProps.activeNodeTypeTabId);
