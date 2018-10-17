@@ -74,11 +74,16 @@ export const getDynamicSentence = createSelector(
       {
         panel: 'sources',
         prefix: sourcesActiveId || countriesActiveId ? `produced in` : 'produced worldwide',
-        value: (sourcesValue && sourcesValue.name.toLowerCase()) || (countriesValue && countriesValue.name.toLowerCase())
+        value:
+          (sourcesValue && sourcesValue.name.toLowerCase()) ||
+          (countriesValue && countriesValue.name.toLowerCase())
       },
       {
         panel: 'companies',
-        prefix: companiesActiveId ? `exported by` : '',
+        prefix:
+          companiesActiveId && companiesValue
+            ? `${companiesValue.nodeType.toLowerCase() === 'exporter' ? 'exported' : 'imported'} by`
+            : '',
         value: companiesValue && companiesValue.name.toLowerCase()
       },
       {
