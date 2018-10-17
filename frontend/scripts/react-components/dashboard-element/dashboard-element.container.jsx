@@ -32,7 +32,7 @@ class DashboardElementContainer extends React.Component {
   hasVisitedBefore = {
     key: 'TRASE__HAS_VISITED_DASHBOARDS_BEFORE',
     get() {
-      return localStorage.getItem(this.key);
+      return !ALWAYS_DISPLAY_DASHBOARD_INFO && localStorage.getItem(this.key);
     },
     set(key) {
       return localStorage.setItem(this.key, key);
