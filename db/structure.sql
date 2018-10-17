@@ -1294,7 +1294,8 @@ CREATE TABLE public.dashboard_templates (
     image_file_name character varying,
     image_content_type character varying,
     image_file_size integer,
-    image_updated_at timestamp without time zone
+    image_updated_at timestamp without time zone,
+    category character varying
 );
 
 
@@ -1657,17 +1658,17 @@ CREATE MATERIALIZED VIEW public.dashboards_flow_attributes_mv AS
         ), combinations(flow_id, original_id, original_type) AS (
          SELECT DISTINCT flow_inds.flow_id,
             flow_inds.ind_id,
-            'Ind'::text
+            'Ind'::text AS text
            FROM public.flow_inds
         UNION ALL
          SELECT DISTINCT flow_quals.flow_id,
             flow_quals.qual_id,
-            'Qual'::text
+            'Qual'::text AS text
            FROM public.flow_quals
         UNION ALL
          SELECT DISTINCT flow_quants.flow_id,
             flow_quants.quant_id,
-            'Quant'::text
+            'Quant'::text AS text
            FROM public.flow_quants
         )
  SELECT DISTINCT contexts.country_id,
@@ -1767,17 +1768,17 @@ CREATE MATERIALIZED VIEW public.dashboards_node_attributes_mv AS
         ), combinations(node_id, original_id, original_type) AS (
          SELECT DISTINCT node_inds.node_id,
             node_inds.ind_id,
-            'Ind'::text
+            'Ind'::text AS text
            FROM public.node_inds
         UNION ALL
          SELECT DISTINCT node_quals.node_id,
             node_quals.qual_id,
-            'Qual'::text
+            'Qual'::text AS text
            FROM public.node_quals
         UNION ALL
          SELECT DISTINCT node_quants.node_id,
             node_quants.quant_id,
-            'Quant'::text
+            'Quant'::text AS text
            FROM public.node_quants
         )
  SELECT DISTINCT combinations.node_id,
@@ -6020,6 +6021,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181005064856'),
 ('20181008101006'),
 ('20181009102913'),
-('20181011103455');
+('20181011103455'),
+('20181017053240');
 
 

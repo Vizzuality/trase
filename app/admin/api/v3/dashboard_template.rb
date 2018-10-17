@@ -1,7 +1,9 @@
 ActiveAdmin.register Api::V3::DashboardTemplate, as: 'DashboardTemplate' do
   menu parent: 'Dashboards'
 
-  permit_params :title, :description, :image, commodity_ids: [], company_ids: [], country_ids: [], destination_ids: [], source_ids: []
+  permit_params :title, :description, :image, :category, commodity_ids: [],
+                company_ids: [], country_ids: [], destination_ids: [],
+                source_ids: []
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -16,6 +18,7 @@ ActiveAdmin.register Api::V3::DashboardTemplate, as: 'DashboardTemplate' do
     inputs do
       input :title, as: :string, required: true
       input :description, required: true
+      input :category
       input :image, as: :file, hint: if f.object.image.present?
                                        image_tag(f.object.image.url(:small))
                                      else
@@ -69,6 +72,7 @@ ActiveAdmin.register Api::V3::DashboardTemplate, as: 'DashboardTemplate' do
   index do
     column :title
     column :description
+    column :category
     actions
   end
 
@@ -76,6 +80,7 @@ ActiveAdmin.register Api::V3::DashboardTemplate, as: 'DashboardTemplate' do
     attributes_table_for dashboard_template do
       row :title
       row :description
+      row :category
       panel 'Commodities' do
         table_for dashboard_template.commodities do
           column :name
@@ -112,4 +117,7 @@ ActiveAdmin.register Api::V3::DashboardTemplate, as: 'DashboardTemplate' do
       end
     end
   end
+
+  filter :commodities, as: :select, collection: -> { Api::V3::Commodity.select_options }
+  filter :countries, as: :select, collection: -> { Api::V3::Country.select_options }
 end
