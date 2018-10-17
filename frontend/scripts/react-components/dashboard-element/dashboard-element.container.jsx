@@ -3,11 +3,15 @@ import { connect } from 'react-redux';
 import React from 'react';
 import PropTypes from 'prop-types';
 import DashboardElement from 'react-components/dashboard-element/dashboard-element.component';
-import { getActiveIndicatorsData } from 'react-components/dashboard-element/dashboard-element.selectors';
+import {
+  getActiveIndicatorsData,
+  getDynamicSentence
+} from 'react-components/dashboard-element/dashboard-element.selectors';
 
 const mapStateToProps = state => ({
   indicators: state.dashboardElement.data.indicators,
-  activeIndicators: getActiveIndicatorsData(state)
+  activeIndicators: getActiveIndicatorsData(state),
+  dynamicSentenceParts: getDynamicSentence(state)
 });
 
 const mapDispatchToProps = dispatch =>
@@ -20,8 +24,9 @@ const mapDispatchToProps = dispatch =>
 
 class DashboardElementContainer extends React.Component {
   static propTypes = {
+    activeIndicators: PropTypes.array,
     goToRoot: PropTypes.func.isRequired,
-    activeIndicators: PropTypes.array
+    dynamicSentenceParts: PropTypes.array
   };
 
   hasVisitedBefore = {
@@ -60,17 +65,18 @@ class DashboardElementContainer extends React.Component {
 
   render() {
     const { step, modalOpen, goBackOnCloseModal } = this.state;
-    const { goToRoot, activeIndicators } = this.props;
+    const { goToRoot, activeIndicators, dynamicSentenceParts } = this.props;
     return (
       <DashboardElement
         step={step}
         goToRoot={goToRoot}
         modalOpen={modalOpen}
         setStep={this.updateStep}
+        openPanel={this.openPanel}
         closeModal={this.closeModal}
         goBackOnCloseModal={goBackOnCloseModal}
         activeIndicators={activeIndicators}
-        openPanel={this.openPanel}
+        dynamicSentenceParts={dynamicSentenceParts}
       />
     );
   }
