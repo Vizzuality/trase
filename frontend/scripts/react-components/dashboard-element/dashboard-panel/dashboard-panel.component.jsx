@@ -25,7 +25,6 @@ function DashboardPanel(props) {
     companies,
     commodities,
     onContinue,
-    getSectionTabs,
     commoditiesPanel,
     dynamicSentenceParts,
     getDashboardPanelData
@@ -45,12 +44,8 @@ function DashboardPanel(props) {
         />
         {activePanelId === 'sources' && (
           <SourcesPanel
-            getSectionTabs={() => getSectionTabs(activePanelId)}
             clearItems={() => clearActiveId(activePanelId)}
             getCountriesData={options => getDashboardPanelData('countries', null, options)}
-            getSourcesData={options =>
-              getDashboardPanelData(activePanelId, sourcesPanel.activeSourceTabId, options)
-            }
             activeCountryItemId={sourcesPanel.activeCountryItemId}
             activeSourceTabId={sourcesPanel.activeSourceTabId}
             activeSourceItemId={sourcesPanel.activeSourceItemId}
@@ -85,7 +80,6 @@ function DashboardPanel(props) {
         )}
         {activePanelId === 'destinations' && (
           <DestinationsPanel
-            getData={options => getDashboardPanelData(activePanelId, null, options)}
             searchDestinations={destinations}
             destinations={destinations || []}
             onSelectDestinationValue={item =>
@@ -102,10 +96,6 @@ function DashboardPanel(props) {
         {activePanelId === 'companies' && (
           <CompaniesPanel
             tabs={tabs}
-            getSectionTabs={() => getSectionTabs(activePanelId)}
-            getCompaniesData={options =>
-              getDashboardPanelData(activePanelId, companiesPanel.activeNodeTypeTabId, options)
-            }
             searchCompanies={[]}
             companies={companies[companiesPanel.activeNodeTypeTabId]}
             onSelectNodeTypeTab={item =>
@@ -130,7 +120,6 @@ function DashboardPanel(props) {
         )}
         {activePanelId === 'commodities' && (
           <CommoditiesPanel
-            getData={options => getDashboardPanelData(activePanelId, null, options)}
             searchCommodities={commodities}
             commodities={commodities}
             onSelectCommodity={item =>
@@ -171,7 +160,6 @@ DashboardPanel.propTypes = {
   dynamicSentenceParts: PropTypes.array,
   setActiveId: PropTypes.func.isRequired,
   clearActiveId: PropTypes.func.isRequired,
-  getSectionTabs: PropTypes.func.isRequired,
   setActivePanel: PropTypes.func.isRequired,
   sourcesPanel: PropTypes.object.isRequired,
   destinationsPanel: PropTypes.object.isRequired,

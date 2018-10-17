@@ -5,138 +5,98 @@ import GridList from 'react-components/shared/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item.component';
 import Tabs from 'react-components/shared/tabs.component';
 
-class SourcesPanel extends React.PureComponent {
-  static propTypes = {
-    searchSources: PropTypes.array.isRequired,
-    sources: PropTypes.array,
-    activeCountryItemId: PropTypes.number,
-    activeSourceTabId: PropTypes.number,
-    activeSourceItemId: PropTypes.string,
-    tabs: PropTypes.array.isRequired,
-    onSelectCountry: PropTypes.func.isRequired,
-    clearItems: PropTypes.func.isRequired,
-    onSelectSourceValue: PropTypes.func.isRequired,
-    onSelectSourceTab: PropTypes.func.isRequired,
-    getSourcesData: PropTypes.func.isRequired,
-    getSectionTabs: PropTypes.func.isRequired,
-    getCountriesData: PropTypes.func.isRequired
-  };
-
-  static defaultProps = {
-    sources: []
-  };
-
-  componentDidMount() {
-    this.props.getCountriesData();
-  }
-
-  componentDidUpdate(prevProps) {
-    const {
-      tabs,
-      getSectionTabs,
-      getSourcesData,
-      onSelectSourceTab,
-      activeCountryItemId,
-      activeSourceItemId,
-      activeSourceTabId
-    } = this.props;
-
-    if (
-      tabs.length > 0 &&
-      (prevProps.tabs && prevProps.tabs[0] && prevProps.tabs[0].id) !== tabs[0].id
-    ) {
-      onSelectSourceTab(tabs[0]);
-    }
-
-    const shouldGetSourcesData = [
-      prevProps.activeCountryItemId !== activeCountryItemId,
-      prevProps.activeSourceTabId !== activeSourceTabId,
-      prevProps.activeSourceItemId !== activeSourceItemId
-    ];
-
-    if (shouldGetSourcesData.includes(true)) {
-      getSectionTabs();
-      if (activeSourceTabId) {
-        getSourcesData();
-      }
-    }
-  }
-
-  render() {
-    const {
-      tabs,
-      searchSources,
-      activeCountryItemId,
-      sources,
-      clearItems,
-      onSelectCountry,
-      onSelectSourceTab,
-      onSelectSourceValue,
-      activeSourceTabId,
-      getSourcesData,
-      activeSourceItemId
-    } = this.props;
-    return (
-      <React.Fragment>
-        <SearchInput
-          className="dashboard-panel-search"
-          items={searchSources}
-          placeholder="Search place"
-          onSelect={i => i}
-        />
-        <GridList
-          className="dashboard-panel-pill-list"
-          height={50}
-          width={950}
-          columnWidth={190}
-          rowHeight={50}
-          columnCount={4}
-          items={searchSources}
-        >
-          {itemProps => (
-            <GridListItem
-              {...itemProps}
-              isActive={activeCountryItemId === (itemProps.item && itemProps.item.id)}
-              enableItem={onSelectCountry}
-              disableItem={activeSourceItemId === null ? () => onSelectCountry(null) : clearItems}
-            />
-          )}
-        </GridList>
-        {activeCountryItemId &&
-          tabs.length > 0 && (
-            <React.Fragment>
-              <Tabs
-                tabs={tabs}
-                onSelectTab={onSelectSourceTab}
-                selectedTab={activeSourceTabId}
-                itemTabRenderer={i => i.name}
-                getTabId={item => item.id}
+function SourcesPanel(props) {
+  const {
+    tabs,
+    searchSources,
+    activeCountryItemId,
+    sources,
+    clearItems,
+    onSelectCountry,
+    onSelectSourceTab,
+    onSelectSourceValue,
+    activeSourceTabId,
+    getSourcesData,
+    activeSourceItemId
+  } = props;
+  return (
+    <React.Fragment>
+      <SearchInput
+        className="dashboard-panel-search"
+        items={searchSources}
+        placeholder="Search place"
+        onSelect={i => i}
+      />
+      <GridList
+        className="dashboard-panel-pill-list"
+        height={50}
+        width={950}
+        columnWidth={190}
+        rowHeight={50}
+        columnCount={4}
+        items={searchSources}
+      >
+        {itemProps => (
+          <GridListItem
+            {...itemProps}
+            isActive={activeCountryItemId === (itemProps.item && itemProps.item.id)}
+            enableItem={onSelectCountry}
+            disableItem={activeSourceItemId === null ? () => onSelectCountry(null) : clearItems}
+          />
+        )}
+      </GridList>
+      {activeCountryItemId &&
+        tabs.length > 0 && (
+          <React.Fragment>
+            <Tabs
+              tabs={tabs}
+              onSelectTab={onSelectSourceTab}
+              selectedTab={activeSourceTabId}
+              itemTabRenderer={i => i.name}
+              getTabId={item => item.id}
+            >
+              <GridList
+                className="dashboard-panel-pill-list"
+                items={sources}
+                height={sources.length > 5 ? 200 : 50}
+                width={950}
+                rowHeight={50}
+                columnWidth={190}
+                columnCount={5}
+                getMoreItems={getSourcesData}
               >
-                <GridList
-                  className="dashboard-panel-pill-list"
-                  items={sources}
-                  height={sources.length > 5 ? 200 : 50}
-                  width={950}
-                  rowHeight={50}
-                  columnWidth={190}
-                  columnCount={5}
-                  getMoreItems={getSourcesData}
-                >
-                  {itemProps => (
-                    <GridListItem
-                      {...itemProps}
-                      isActive={activeSourceItemId === (itemProps.item && itemProps.item.id)}
-                      enableItem={onSelectSourceValue}
-                      disableItem={() => onSelectSourceValue(null)}
-                    />
-                  )}
-                </GridList>
-              </Tabs>
-            </React.Fragment>
-          )}
-      </React.Fragment>
-    );
-  }
+                {itemProps => (
+                  <GridListItem
+                    {...itemProps}
+                    isActive={activeSourceItemId === (itemProps.item && itemProps.item.id)}
+                    enableItem={onSelectSourceValue}
+                    disableItem={() => onSelectSourceValue(null)}
+                  />
+                )}
+              </GridList>
+            </Tabs>
+          </React.Fragment>
+        )}
+    </React.Fragment>
+  );
 }
+
+SourcesPanel.propTypes = {
+  searchSources: PropTypes.array.isRequired,
+  sources: PropTypes.array,
+  activeCountryItemId: PropTypes.number,
+  activeSourceTabId: PropTypes.number,
+  activeSourceItemId: PropTypes.string,
+  tabs: PropTypes.array.isRequired,
+  onSelectCountry: PropTypes.func.isRequired,
+  clearItems: PropTypes.func.isRequired,
+  onSelectSourceValue: PropTypes.func.isRequired,
+  onSelectSourceTab: PropTypes.func.isRequired,
+  getSourcesData: PropTypes.func.isRequired
+};
+
+SourcesPanel.defaultProps = {
+  sources: []
+};
 
 export default SourcesPanel;
