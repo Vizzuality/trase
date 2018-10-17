@@ -118,3 +118,19 @@ export const getIndicatorsByGroup = createSelector(
     return groupedIndicators;
   }
 );
+
+export function getActiveTab(dashboardElement) {
+  const { activePanelId, ...state } = dashboardElement;
+  const panelKey = `${activePanelId}Panel`;
+  const tabKey = {
+    sources: 'activeSourceTabId',
+    destinations: null,
+    companies: 'activeNodeTypeTabId',
+    commodities: null
+  }[activePanelId];
+
+  return {
+    activeTabName: tabKey,
+    activeTab: state[panelKey][tabKey]
+  };
+}

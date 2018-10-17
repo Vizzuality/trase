@@ -1,24 +1,13 @@
 import { select, put, all, fork, takeLatest } from 'redux-saga/effects';
 import {
+  DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_ID,
   getDashboardPanelData,
   getDashboardPanelSectionTabs,
   DASHBOARD_ELEMENT__SET_PANEL_TABS
 } from 'react-components/dashboard-element/dashboard-element.actions';
-
-function getActiveTab(dashboardElement) {
-  const { activePanelId, ...state } = dashboardElement;
-  const panelKey = `${activePanelId}Panel`;
-  const tabKey = {
-    sources: 'activeSourceTabId',
-    destinations: null,
-    companies: 'activeNodeTypeTabId',
-    commodities: null
-  }[activePanelId];
-
-  return tabKey && state[panelKey][tabKey];
-}
+import { getActiveTab } from 'react-components/dashboard-element/dashboard-element.selectors';
 
 function* fetchDataOnPanelChange() {
   function* fetchDashboardPanelInitialData(action) {
@@ -37,10 +26,10 @@ function* fetchDataOnPanelChange() {
 }
 
 function* fetchDataOnFilterChange() {
-  function* fetchDashboardPanel(action) {
+  function* onFilterChange(action) {
     const { type } = action.payload;
     const { dashboardElement } = yield select();
-    const activeTab = getActiveTab(dashboardElement);
+    const { activeTab } = getActiveTab(dashboardElement);
 
     if (type === 'item') {
       yield put(getDashboardPanelSectionTabs(dashboardElement.activePanelId));
@@ -48,7 +37,22 @@ function* fetchDataOnFilterChange() {
     yield put(getDashboardPanelData(dashboardElement.activePanelId, activeTab));
   }
 
-  yield takeLatest(DASHBOARD_ELEMENT__SET_ACTIVE_ID, fetchDashboardPanel);
+  yield takeLatest(DASHBOARD_ELEMENT__SET_ACTIVE_ID, onFilterChange);
+}
+
+function* fetchDataOnFilterClear() {
+  function* onFilterClear() {
+    const { dashboardElement } = yield select();
+    const { activeTab } = getActiveTab(dashboardElement);
+    yield put(getDashboardPanelData(dashboardElement.activePanelId, activeTab));
+
+    if (dashboardElement.activePanelId) {
+      yield put(getDashboardPanelData('countries'));
+    }
+    yield put(getDashboardPanelSectionTabs(dashboardElement.activePanelId));
+  }
+
+  yield takeLatest(DASHBOARD_ELEMENT__CLEAR_PANEL, onFilterClear);
 }
 
 function* setActiveTabOnDataFetch() {
@@ -81,6 +85,11 @@ function* setActiveTabOnDataFetch() {
 }
 
 export default function* dashboardElementSaga() {
-  const sagas = [fetchDataOnPanelChange, setActiveTabOnDataFetch, fetchDataOnFilterChange];
+  const sagas = [
+    fetchDataOnPanelChange,
+    setActiveTabOnDataFetch,
+    fetchDataOnFilterChange,
+    fetchDataOnFilterClear
+  ];
   yield all(sagas.map(saga => fork(saga)));
 }

@@ -41,7 +41,7 @@ function SourcesPanel(props) {
             {...itemProps}
             isActive={activeCountryItemId === (itemProps.item && itemProps.item.id)}
             enableItem={onSelectCountry}
-            disableItem={activeSourceItemId === null ? () => onSelectCountry(null) : clearItems}
+            disableItem={clearItems}
           />
         )}
       </GridList>
