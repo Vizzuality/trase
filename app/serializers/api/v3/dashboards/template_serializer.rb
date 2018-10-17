@@ -2,7 +2,7 @@ module Api
   module V3
     module Dashboards
       class TemplateSerializer < ActiveModel::Serializer
-        attributes :id, :title, :description
+        attributes :id, :title, :description, :category
 
         has_many :sources_mv,
                  serializer: Api::V3::Dashboards::SourceSerializer,
