@@ -23,6 +23,7 @@ class DestinationsPanel extends React.PureComponent {
           items={searchDestinations}
           placeholder="Search place"
           onSelect={i => i}
+          onSearchTermChange={i => i}
         />
         <GridList
           className="dashboard-panel-pill-list"

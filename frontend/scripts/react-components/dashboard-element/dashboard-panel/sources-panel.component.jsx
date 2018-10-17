@@ -83,6 +83,7 @@ class SourcesPanel extends React.PureComponent {
           items={searchSources}
           placeholder="Search place"
           onSelect={i => i}
+          onSearchTermChange={i => i}
         />
         <GridList
           className="dashboard-panel-pill-list"

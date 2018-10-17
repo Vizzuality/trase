@@ -36,12 +36,9 @@ Tabs.propTypes = {
   getTabId: PropTypes.func,
   itemTabRenderer: PropTypes.func,
   tabs: PropTypes.array.isRequired,
-  children: PropTypes.any.isRequired,
+  children: PropTypes.any,
   onSelectTab: PropTypes.func.isRequired,
-  selectedTab: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ])
+  selectedTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 
 export default Tabs;
