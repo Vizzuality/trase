@@ -50,12 +50,31 @@ const mapDispatchToProps = {
 };
 
 class DashboardPanelContainer extends React.PureComponent {
-
   panels = [
-    { id: 'sources', title: 'sourcing places', imageUrl: '/images/dashboards/icon_sourcing.svg', whiteImageUrl: '/images/dashboards/icon_sourcing_white.svg' },
-    { id: 'destinations', title: 'importing countries', imageUrl: '/images/dashboards/icon_importing.svg', whiteImageUrl: '/images/dashboards/icon_importing_white.svg'  },
-    { id: 'companies', title: 'companies', imageUrl: '/images/dashboards/icon_companies.svg', whiteImageUrl: '/images/dashboards/icon_companies_white.svg'  },
-    { id: 'commodities', title: 'commodities', imageUrl: '/images/dashboards/icon_commodities.svg', whiteImageUrl: '/images/dashboards/icon_commodities_white.svg'  }
+    {
+      id: 'sources',
+      title: 'sourcing places',
+      imageUrl: '/images/dashboards/icon_sourcing.svg',
+      whiteImageUrl: '/images/dashboards/icon_sourcing_white.svg'
+    },
+    {
+      id: 'destinations',
+      title: 'importing countries',
+      imageUrl: '/images/dashboards/icon_importing.svg',
+      whiteImageUrl: '/images/dashboards/icon_importing_white.svg'
+    },
+    {
+      id: 'companies',
+      title: 'companies',
+      imageUrl: '/images/dashboards/icon_companies.svg',
+      whiteImageUrl: '/images/dashboards/icon_companies_white.svg'
+    },
+    {
+      id: 'commodities',
+      title: 'commodities',
+      imageUrl: '/images/dashboards/icon_commodities.svg',
+      whiteImageUrl: '/images/dashboards/icon_commodities_white.svg'
+    }
   ];
 
   render() {
