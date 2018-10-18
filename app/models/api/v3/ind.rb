@@ -20,6 +20,12 @@ module Api
 
       delegate :display_name, to: :ind_property, allow_nil: true
 
+      def readonly_attribute
+        Api::V3::Readonly::Attribute.
+          where(original_type: 'Ind', original_id: id).
+          first
+      end
+
       def self.select_options
         order(:name).map { |ind| [ind.name, ind.id] }
       end
