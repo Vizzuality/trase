@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     devise_for :users, ActiveAdmin::Devise.config.merge(class_name: 'Content::User')
     authenticate :user do
       require 'sidekiq/web'
+      require 'sidekiq_unique_jobs/web'
       mount Sidekiq::Web => '/sidekiq'
     end
   end
