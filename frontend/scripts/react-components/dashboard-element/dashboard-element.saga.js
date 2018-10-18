@@ -29,17 +29,24 @@ function* fetchDataOnPanelChange() {
 
 function* fetchDataOnFilterChange() {
   function* onFilterChange(action) {
-    const { type, section } = action.payload;
+    const { type, section, active } = action.payload;
     const { dashboardElement } = yield select();
     const { activeTab } = getActiveTab(dashboardElement);
+    const data = dashboardElement.data[dashboardElement.activePanelId];
+    const items = typeof activeTab !== 'undefined' ? data[activeTab] : data;
+    const activeItemExists = !!items && items.find(i => i.id === active);
 
     // for now, we just need to recalculate the tabs when selecting a new country
     if (type === 'item' && section === 'country') {
       yield put(getDashboardPanelSectionTabs(dashboardElement.activePanelId));
     }
 
-    if (type === 'tab') {
-      yield put(getDashboardPanelData(dashboardElement.activePanelId, activeTab));
+    if (type === 'tab' || (items && !activeItemExists)) {
+      yield put(
+        getDashboardPanelData(dashboardElement.activePanelId, activeTab, {
+          refetchPanel: !activeItemExists
+        })
+      );
     }
   }
 

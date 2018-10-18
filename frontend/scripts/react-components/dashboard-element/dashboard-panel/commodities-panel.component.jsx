@@ -6,6 +6,7 @@ import GridListItem from 'react-components/shared/grid-list-item.component';
 
 function CommoditiesPanel(props) {
   const {
+    getSearchResults,
     loadingMoreItems,
     searchCommodities,
     commodities,
@@ -19,9 +20,9 @@ function CommoditiesPanel(props) {
       <SearchInput
         className="dashboard-panel-search"
         items={searchCommodities}
-        placeholder="Search place"
-        onSelect={i => i}
-        onSearchTermChange={i => i}
+        placeholder="Search commodity"
+        onSelect={onSelectCommodity}
+        onSearchTermChange={getSearchResults}
       />
       <GridList
         className="dashboard-panel-pill-list"
@@ -55,6 +56,7 @@ CommoditiesPanel.propTypes = {
   searchCommodities: PropTypes.array,
   activeCommodityId: PropTypes.string,
   getMoreItems: PropTypes.func.isRequired,
+  getSearchResults: PropTypes.func.isRequired,
   onSelectCommodity: PropTypes.func.isRequired
 };
 

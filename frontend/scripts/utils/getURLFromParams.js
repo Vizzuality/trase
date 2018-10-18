@@ -36,6 +36,7 @@ export const GET_ACTOR_EXPORTING_COMPANIES = 'GET_ACTOR_EXPORTING_COMPANIES';
 export const GET_DASHBOARD_OPTIONS_URL = 'GET_DASHBOARD_OPTIONS_URL';
 export const GET_DASHBOARD_OPTIONS_TABS_URL = 'GET_DASHBOARD_OPTIONS_TABS_URL';
 export const GET_DASHBOARD_TEMPLATES_URL = 'GET_DASHBOARD_TEMPLATES_URL';
+export const GET_DASHBOARD_SEARCH_RESULTS_URL = 'GET_DASHBOARD_SEARCH_RESULTS_URL';
 
 const API_ENDPOINTS = {
   [GET_CONTEXTS_URL]: { api: 3, endpoint: '/contexts' },
@@ -124,6 +125,10 @@ const API_ENDPOINTS = {
   [GET_DASHBOARD_TEMPLATES_URL]: {
     api: 3,
     endpoint: '/dashboards/templates'
+  },
+  [GET_DASHBOARD_SEARCH_RESULTS_URL]: {
+    api: 3,
+    endpoint: '/dashboards/$options_type$/search'
   }
 };
 
