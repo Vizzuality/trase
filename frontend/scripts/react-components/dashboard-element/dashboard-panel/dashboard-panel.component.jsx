@@ -29,6 +29,7 @@ class DashboardPanel extends Component {
     const {
       tabs,
       panels,
+      getMoreData,
       dirtyBlocks,
       activePanelId,
       setActivePanel,
@@ -61,6 +62,8 @@ class DashboardPanel extends Component {
           />
           {activePanelId === 'sources' && (
             <SourcesPanel
+              page={sourcesPanel.page}
+              getMoreData={getMoreData}
               clearItems={() => clearActiveId(activePanelId)}
               activeCountryItemId={sourcesPanel.activeCountryItemId}
               activeSourceTabId={sourcesPanel.activeSourceTabId}
@@ -165,6 +168,7 @@ class DashboardPanel extends Component {
 DashboardPanel.propTypes = {
   countries: PropTypes.array,
   companies: PropTypes.object,
+  getMoreData: PropTypes.func,
   commodities: PropTypes.array,
   dirtyBlocks: PropTypes.object,
   activePanelId: PropTypes.string,

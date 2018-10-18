@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import React from 'react';
 import {
   clearDashboardPanel,
+  setDashboardPanelPage,
   setDashboardActivePanel,
   setDashboardPanelActiveId
 } from 'react-components/dashboard-element/dashboard-element.actions';
@@ -40,6 +41,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
+  getMoreData: setDashboardPanelPage,
   clearActiveId: clearDashboardPanel,
   setActiveId: setDashboardPanelActiveId,
   setActivePanel: setDashboardActivePanel

@@ -6,6 +6,7 @@ import {
   GET_DASHBOARD_OPTIONS_TABS_URL
 } from 'utils/getURLFromParams';
 
+export const DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_PANEL = 'DASHBOARD_ELEMENT__SET_ACTIVE_PANEL';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_ID = 'DASHBOARD_ELEMENT__SET_ACTIVE_ID';
@@ -14,19 +15,17 @@ export const DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR = 'DASHBOARD_ELEMENT__ADD_A
 export const DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR =
   'DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR';
 export const DASHBOARD_ELEMENT__SET_PANEL_TABS = 'DASHBOARD_ELEMENT__SET_PANEL_TABS';
+export const DASHBOARD_ELEMENT__SET_PANEL_PAGE = 'DASHBOARD_ELEMENT__SET_PANEL_PAGE';
 
-const getDashboardPanelParams = (state, options_type) => {
-  const {
-    sourcesPanel,
-    companiesPanel,
-    destinationsPanel,
-    commoditiesPanel
-  } = state;
+const getDashboardPanelParams = (state, options_type, options = {}) => {
+  const { sourcesPanel, companiesPanel, destinationsPanel, commoditiesPanel } = state;
+  const { page } = options;
   const node_types_ids = {
     sources: sourcesPanel.activeSourceTabId,
     companies: companiesPanel.activeNodeTypeTabId
   }[options_type];
   const params = {
+    page,
     options_type,
     node_types_ids,
     countries_ids: sourcesPanel.activeCountryItemId
@@ -50,10 +49,12 @@ const getDashboardPanelParams = (state, options_type) => {
   return params;
 };
 
-export const getDashboardPanelData = (options_type, tab) => (dispatch, getState) => {
-  const params = getDashboardPanelParams(getState().dashboardElement, options_type);
+export const getDashboardPanelData = (optionsType, tab) => (dispatch, getState) => {
+  const { dashboardElement } = getState();
+  const { page } = dashboardElement[`${dashboardElement.activePanelId}Panel`];
+  const params = getDashboardPanelParams(dashboardElement, optionsType, { page });
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
-  const key = options_type !== 'attributes' ? options_type : 'indicators'; // FIXME
+  const key = optionsType !== 'attributes' ? optionsType : 'indicators'; // FIXME
 
   dispatch({
     type: DASHBOARD_ELEMENT__SET_PANEL_DATA,
@@ -120,3 +121,30 @@ export const removeActiveIndicator = toRemove => ({
   type: DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
   payload: { toRemove }
 });
+
+export const setDashboardPanelPage = (page, direction) => ({
+  type: DASHBOARD_ELEMENT__SET_PANEL_PAGE,
+  payload: { page, direction }
+});
+
+export const getMoreDashboardPanelData = (optionsType, tab, direction) => (dispatch, getState) => {
+  const { dashboardElement } = getState();
+  const { page } = dashboardElement[`${dashboardElement.activePanelId}Panel`];
+  const params = getDashboardPanelParams(dashboardElement, optionsType, { page });
+  const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
+  const key = optionsType !== 'attributes' ? optionsType : 'indicators'; // FIXME
+
+  fetch(url)
+    .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    .then(json =>
+      dispatch({
+        type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
+        payload: {
+          key,
+          tab,
+          direction,
+          data: json.data
+        }
+      })
+    );
+};

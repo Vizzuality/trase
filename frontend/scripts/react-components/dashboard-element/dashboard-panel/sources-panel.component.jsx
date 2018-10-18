@@ -8,6 +8,8 @@ import Tabs from 'react-components/shared/tabs.component';
 function SourcesPanel(props) {
   const {
     tabs,
+    page,
+    getMoreData,
     searchSources,
     activeCountryItemId,
     sources,
@@ -63,7 +65,8 @@ function SourcesPanel(props) {
                 rowHeight={50}
                 columnWidth={190}
                 columnCount={5}
-                getMoreItems={i => i}
+                page={page}
+                getMoreItems={getMoreData}
               >
                 {itemProps => (
                   <GridListItem
@@ -82,8 +85,10 @@ function SourcesPanel(props) {
 }
 
 SourcesPanel.propTypes = {
+  page: PropTypes.number.isRequired,
   searchSources: PropTypes.array.isRequired,
   sources: PropTypes.array,
+  getMoreData: PropTypes.func.isRequired,
   activeCountryItemId: PropTypes.number,
   activeSourceTabId: PropTypes.number,
   activeSourceItemId: PropTypes.string,
