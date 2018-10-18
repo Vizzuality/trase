@@ -54,7 +54,7 @@ CommoditiesPanel.propTypes = {
   loadingMoreItems: PropTypes.bool,
   page: PropTypes.number.isRequired,
   searchCommodities: PropTypes.array,
-  activeCommodityId: PropTypes.string,
+  activeCommodityId: PropTypes.number,
   getMoreItems: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
   onSelectCommodity: PropTypes.func.isRequired

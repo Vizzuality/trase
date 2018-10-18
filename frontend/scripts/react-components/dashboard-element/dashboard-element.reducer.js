@@ -98,7 +98,7 @@ const dashboardElementReducer = {
     }
 
     const dataWithMock =
-      key === 'indicators' && data.map(d => ({ ...d, ...INDICATORS_MOCK[d.id % 3] }));
+      key === 'indicators' && data && data.map(d => ({ ...d, ...INDICATORS_MOCK[d.id % 3] }));
 
     return {
       ...state,
@@ -206,18 +206,30 @@ const dashboardElementReducerTypes = PropTypes => ({
     destinations: PropTypes.array.isRequired
   }).isRequired,
   sourcesPanel: PropTypes.shape({
+    page: PropTypes.number,
+    searchResults: PropTypes.array,
+    loadingItems: PropTypes.bool,
     activeCountryItemId: PropTypes.number,
     activeSourceItemId: PropTypes.number,
     activeSourceTabId: PropTypes.number
   }).isRequired,
   destinationsPanel: PropTypes.shape({
+    page: PropTypes.number,
+    searchResults: PropTypes.array,
+    loadingItems: PropTypes.bool,
     activeDestinationItemId: PropTypes.number
   }).isRequired,
   companiesPanel: PropTypes.shape({
+    page: PropTypes.number,
+    searchResults: PropTypes.array,
+    loadingItems: PropTypes.bool,
     activeCompanyItemId: PropTypes.number,
     activeNodeTypeTabId: PropTypes.number
   }).isRequired,
   commoditiesPanel: PropTypes.shape({
+    page: PropTypes.number,
+    searchResults: PropTypes.array,
+    loadingItems: PropTypes.bool,
     activeCommodityItemId: PropTypes.number
   }).isRequired
 });

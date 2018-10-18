@@ -65,14 +65,16 @@ class DashboardPanel extends Component {
             <SourcesPanel
               page={sourcesPanel.page}
               getMoreItems={getMoreItems}
+              getSearchResults={getSearchResults}
               loadingMoreItems={sourcesPanel.loadingItems}
               clearItems={() => clearActiveId(activePanelId)}
               activeCountryItemId={sourcesPanel.activeCountryItemId}
               activeSourceTabId={sourcesPanel.activeSourceTabId}
               activeSourceItemId={sourcesPanel.activeSourceItemId}
-              searchSources={countries}
+              searchSources={sourcesPanel.searchResults}
               tabs={tabs}
               sources={sources[sourcesPanel.activeSourceTabId]}
+              countries={countries}
               onSelectCountry={item =>
                 setActiveId({
                   type: 'item',
@@ -103,8 +105,9 @@ class DashboardPanel extends Component {
             <DestinationsPanel
               page={destinationsPanel.page}
               getMoreItems={getMoreItems}
-              searchDestinations={destinations}
-              destinations={destinations || []}
+              getSearchResults={getSearchResults}
+              searchDestinations={destinationsPanel.searchResults}
+              destinations={destinations}
               onSelectDestinationValue={item =>
                 setActiveId({
                   active: item && item.id,

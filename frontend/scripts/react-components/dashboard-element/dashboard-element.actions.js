@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-// import camelCase from 'lodash/camelCase';
 import {
   getURLFromParams,
   GET_DASHBOARD_OPTIONS_URL,
@@ -168,7 +167,15 @@ export const getMoreDashboardPanelData = (optionsType, tab, direction) => (dispa
 export const getDashboardPanelSearchResults = query => (dispatch, getState) => {
   if (!query) return;
   const { dashboardElement } = getState();
-  const filters = getDashboardPanelParams(dashboardElement, dashboardElement.activePanelId);
+  let optionsType = dashboardElement.activePanelId;
+  if (
+    optionsType === 'sources' &&
+    dashboardElement.sourcesPanel.activeCountryItemId === null &&
+    dashboardElement.sourcesPanel.activeSourceTabId === null
+  ) {
+    optionsType = 'countries';
+  }
+  const filters = getDashboardPanelParams(dashboardElement, optionsType);
   const params = { ...filters, q: query };
   const url = getURLFromParams(GET_DASHBOARD_SEARCH_RESULTS_URL, params);
 

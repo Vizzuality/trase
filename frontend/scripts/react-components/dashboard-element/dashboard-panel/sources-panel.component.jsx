@@ -12,9 +12,11 @@ function SourcesPanel(props) {
     getMoreItems,
     searchSources,
     loadingMoreItems,
+    getSearchResults,
     activeCountryItemId,
     sources,
     clearItems,
+    countries,
     onSelectCountry,
     onSelectSourceTab,
     onSelectSourceValue,
@@ -27,8 +29,8 @@ function SourcesPanel(props) {
         className="dashboard-panel-search"
         items={searchSources}
         placeholder="Search place"
-        onSelect={i => i}
-        onSearchTermChange={i => i}
+        onSelect={item => (!item.nodeType ? onSelectCountry(item) : onSelectSourceValue(item))}
+        onSearchTermChange={getSearchResults}
       />
       <GridList
         className="dashboard-panel-pill-list"
@@ -37,7 +39,7 @@ function SourcesPanel(props) {
         columnWidth={190}
         rowHeight={50}
         columnCount={4}
-        items={searchSources}
+        items={countries}
       >
         {itemProps => (
           <GridListItem
@@ -91,13 +93,15 @@ SourcesPanel.propTypes = {
   page: PropTypes.number.isRequired,
   searchSources: PropTypes.array.isRequired,
   sources: PropTypes.array,
+  countries: PropTypes.array,
   getMoreItems: PropTypes.func.isRequired,
   activeCountryItemId: PropTypes.number,
   activeSourceTabId: PropTypes.number,
-  activeSourceItemId: PropTypes.string,
+  activeSourceItemId: PropTypes.number,
   tabs: PropTypes.array.isRequired,
   onSelectCountry: PropTypes.func.isRequired,
   clearItems: PropTypes.func.isRequired,
+  getSearchResults: PropTypes.func.isRequired,
   onSelectSourceValue: PropTypes.func.isRequired,
   onSelectSourceTab: PropTypes.func.isRequired
 };
