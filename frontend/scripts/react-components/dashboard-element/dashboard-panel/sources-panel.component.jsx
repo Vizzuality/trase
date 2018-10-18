@@ -11,6 +11,7 @@ function SourcesPanel(props) {
     page,
     getMoreItems,
     searchSources,
+    loadingMoreItems,
     activeCountryItemId,
     sources,
     clearItems,
@@ -67,6 +68,7 @@ function SourcesPanel(props) {
                 columnCount={5}
                 page={page}
                 getMoreItems={getMoreItems}
+                loading={loadingMoreItems}
               >
                 {itemProps => (
                   <GridListItem
@@ -85,6 +87,7 @@ function SourcesPanel(props) {
 }
 
 SourcesPanel.propTypes = {
+  loadingMoreItems: PropTypes.bool,
   page: PropTypes.number.isRequired,
   searchSources: PropTypes.array.isRequired,
   sources: PropTypes.array,

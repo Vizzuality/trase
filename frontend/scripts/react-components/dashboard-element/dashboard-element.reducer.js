@@ -10,6 +10,7 @@ import {
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
+  DASHBOARD_ELEMENT__SET_LOADING_ITEMS,
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA
 } from './dashboard-element.actions';
 
@@ -46,21 +47,25 @@ const initialState = {
   activeIndicatorsList: [],
   sourcesPanel: {
     page: 0,
+    loadingItems: false,
     activeCountryItemId: null,
     activeSourceItemId: null,
     activeSourceTabId: null
   },
   destinationsPanel: {
     page: 0,
+    loadingItems: false,
     activeDestinationItemId: null
   },
   companiesPanel: {
     page: 0,
+    loadingItems: false,
     activeCompanyItemId: null,
     activeNodeTypeTabId: null
   },
   commoditiesPanel: {
     page: 0,
+    loadingItems: false,
     activeCommodityItemId: null
   }
 };
@@ -102,6 +107,17 @@ const dashboardElementReducer = {
     return {
       ...state,
       data: { ...state.data, [key]: newData }
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_LOADING_ITEMS](state, action) {
+    const { loadingItems } = action.payload;
+    const panelName = `${state.activePanelId}Panel`;
+    return {
+      ...state,
+      [panelName]: {
+        ...state[panelName],
+        loadingItems
+      }
     };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_TABS](state, action) {

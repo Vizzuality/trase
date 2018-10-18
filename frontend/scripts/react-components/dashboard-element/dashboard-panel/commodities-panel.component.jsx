@@ -6,6 +6,7 @@ import GridListItem from 'react-components/shared/grid-list-item.component';
 
 function CommoditiesPanel(props) {
   const {
+    loadingMoreItems,
     searchCommodities,
     commodities,
     activeCommodityId,
@@ -32,6 +33,7 @@ function CommoditiesPanel(props) {
         columnCount={5}
         getMoreItems={getMoreItems}
         page={page}
+        loading={loadingMoreItems}
       >
         {itemProps => (
           <GridListItem
@@ -48,6 +50,7 @@ function CommoditiesPanel(props) {
 
 CommoditiesPanel.propTypes = {
   commodities: PropTypes.array,
+  loadingMoreItems: PropTypes.bool,
   page: PropTypes.number.isRequired,
   searchCommodities: PropTypes.array,
   activeCommodityId: PropTypes.string,

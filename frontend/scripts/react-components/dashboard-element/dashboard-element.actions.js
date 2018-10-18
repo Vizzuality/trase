@@ -16,6 +16,7 @@ export const DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR =
   'DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR';
 export const DASHBOARD_ELEMENT__SET_PANEL_TABS = 'DASHBOARD_ELEMENT__SET_PANEL_TABS';
 export const DASHBOARD_ELEMENT__SET_PANEL_PAGE = 'DASHBOARD_ELEMENT__SET_PANEL_PAGE';
+export const DASHBOARD_ELEMENT__SET_LOADING_ITEMS = 'DASHBOARD_ELEMENT__SET_LOADING_ITEMS';
 
 const getDashboardPanelParams = (state, options_type, options = {}) => {
   const { sourcesPanel, companiesPanel, destinationsPanel, commoditiesPanel } = state;
@@ -127,6 +128,11 @@ export const setDashboardPanelPage = (page, direction) => ({
   payload: { page, direction }
 });
 
+export const setDashboardPanelLoadingItems = loadingItems => ({
+  type: DASHBOARD_ELEMENT__SET_LOADING_ITEMS,
+  payload: { loadingItems }
+});
+
 export const getMoreDashboardPanelData = (optionsType, tab, direction) => (dispatch, getState) => {
   const { dashboardElement } = getState();
   const { page } = dashboardElement[`${dashboardElement.activePanelId}Panel`];
@@ -134,9 +140,13 @@ export const getMoreDashboardPanelData = (optionsType, tab, direction) => (dispa
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const key = optionsType !== 'attributes' ? optionsType : 'indicators'; // FIXME
 
+  const timeoutId = setTimeout(() => dispatch(setDashboardPanelLoadingItems(true)), 300);
+
   fetch(url)
     .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
-    .then(json =>
+    .then(json => {
+      clearTimeout(timeoutId);
+      setTimeout(() => dispatch(setDashboardPanelLoadingItems(false)), 1000);
       dispatch({
         type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
         payload: {
@@ -145,6 +155,10 @@ export const getMoreDashboardPanelData = (optionsType, tab, direction) => (dispa
           direction,
           data: json.data
         }
-      })
-    );
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      dispatch(setDashboardPanelLoadingItems(false));
+    });
 };

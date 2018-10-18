@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FixedSizeGrid } from 'react-window';
 import debounce from 'lodash/debounce';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
 
 class GridList extends React.Component {
   static propTypes = {
     page: PropTypes.number,
     children: PropTypes.any,
+    loading: PropTypes.bool,
     groupBy: PropTypes.string,
     className: PropTypes.string,
     getMoreItems: PropTypes.func,
@@ -88,29 +90,37 @@ class GridList extends React.Component {
       items,
       columnCount,
       children,
-      groupBy
+      groupBy,
+      loading
     } = this.props;
     const groupedItems = groupBy && this.getGroupedItems();
 
     return (
-      <FixedSizeGrid
-        ref={this.listRef}
-        className={className}
-        height={height}
-        width={width}
-        columnWidth={columnWidth}
-        rowHeight={rowHeight}
-        itemData={groupedItems || items}
-        rowCount={Math.ceil((groupedItems || items).length / columnCount)}
-        columnCount={columnCount}
-        onScroll={this.getMoreItems}
-      >
-        {({ rowIndex, columnIndex, style, data }) => {
-          const item = data[rowIndex * columnCount + columnIndex];
-          if (typeof item === 'undefined' || !children) return null;
-          return children({ item, style, isGroup: item && !!item[groupBy] });
-        }}
-      </FixedSizeGrid>
+      <div className="c-grid-list">
+        <FixedSizeGrid
+          ref={this.listRef}
+          className={className}
+          height={height}
+          width={width}
+          columnWidth={columnWidth}
+          rowHeight={rowHeight}
+          itemData={groupedItems || items}
+          rowCount={Math.ceil((groupedItems || items).length / columnCount)}
+          columnCount={columnCount}
+          onScroll={this.getMoreItems}
+        >
+          {({ rowIndex, columnIndex, style, data }) => {
+            const item = data[rowIndex * columnCount + columnIndex];
+            if (typeof item === 'undefined' || !children) return null;
+            return children({ item, style, isGroup: item && !!item[groupBy] });
+          }}
+        </FixedSizeGrid>
+        {loading && (
+          <div className="grid-list-loading-container">
+            <ShrinkingSpinner className="-small -dark grid-list-spinner" />
+          </div>
+        )}
+      </div>
     );
   }
 }

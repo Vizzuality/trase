@@ -9,6 +9,7 @@ function CompaniesPanel(props) {
   const {
     tabs,
     page,
+    loadingMoreItems,
     searchCompanies,
     companies,
     getMoreItems,
@@ -44,6 +45,7 @@ function CompaniesPanel(props) {
             columnCount={5}
             getMoreItems={getMoreItems}
             page={page}
+            loading={loadingMoreItems}
           >
             {itemProps => (
               <GridListItem
@@ -65,6 +67,7 @@ CompaniesPanel.propTypes = {
   tabs: PropTypes.array.isRequired,
   activeCompanyId: PropTypes.string,
   page: PropTypes.number.isRequired,
+  loadingMoreItems: PropTypes.bool,
   activeNodeTypeTabId: PropTypes.string,
   getMoreItems: PropTypes.func.isRequired,
   onSelectCompany: PropTypes.func.isRequired,

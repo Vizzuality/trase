@@ -64,6 +64,7 @@ class DashboardPanel extends Component {
             <SourcesPanel
               page={sourcesPanel.page}
               getMoreItems={getMoreItems}
+              loadingMoreItems={sourcesPanel.loadingItems}
               clearItems={() => clearActiveId(activePanelId)}
               activeCountryItemId={sourcesPanel.activeCountryItemId}
               activeSourceTabId={sourcesPanel.activeSourceTabId}
@@ -111,6 +112,7 @@ class DashboardPanel extends Component {
                   panel: activePanelId
                 })
               }
+              loadingMoreItems={destinationsPanel.loadingItems}
               activeDestinationId={destinationsPanel.activeDestinationItemId}
             />
           )}
@@ -120,6 +122,7 @@ class DashboardPanel extends Component {
               page={companiesPanel.page}
               getMoreItems={getMoreItems}
               searchCompanies={[]}
+              loadingMoreItems={companiesPanel.loadingItems}
               companies={companies[companiesPanel.activeNodeTypeTabId]}
               onSelectNodeTypeTab={item =>
                 setActiveId({
@@ -146,6 +149,7 @@ class DashboardPanel extends Component {
               page={commoditiesPanel.page}
               getMoreItems={getMoreItems}
               searchCommodities={commodities}
+              loadingMoreItems={commoditiesPanel.loadingItems}
               commodities={commodities}
               onSelectCommodity={item =>
                 setActiveId({

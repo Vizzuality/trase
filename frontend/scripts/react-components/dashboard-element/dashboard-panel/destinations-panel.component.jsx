@@ -9,6 +9,7 @@ function DestinationsPanel(props) {
     page,
     searchDestinations,
     destinations,
+    loadingMoreItems,
     activeDestinationId,
     onSelectDestinationValue,
     getMoreItems
@@ -32,6 +33,7 @@ function DestinationsPanel(props) {
         columnCount={5}
         page={page}
         getMoreItems={getMoreItems}
+        loading={loadingMoreItems}
       >
         {itemProps => (
           <GridListItem
@@ -49,6 +51,7 @@ function DestinationsPanel(props) {
 DestinationsPanel.propTypes = {
   destinations: PropTypes.array,
   page: PropTypes.number.isRequired,
+  loadingMoreItems: PropTypes.bool,
   searchDestinations: PropTypes.array,
   activeDestinationId: PropTypes.string,
   getMoreItems: PropTypes.func.isRequired,
