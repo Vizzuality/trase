@@ -29,7 +29,7 @@ class DashboardPanel extends Component {
     const {
       tabs,
       panels,
-      getMoreData,
+      getMoreItems,
       dirtyBlocks,
       activePanelId,
       setActivePanel,
@@ -63,7 +63,7 @@ class DashboardPanel extends Component {
           {activePanelId === 'sources' && (
             <SourcesPanel
               page={sourcesPanel.page}
-              getMoreData={getMoreData}
+              getMoreItems={getMoreItems}
               clearItems={() => clearActiveId(activePanelId)}
               activeCountryItemId={sourcesPanel.activeCountryItemId}
               activeSourceTabId={sourcesPanel.activeSourceTabId}
@@ -99,6 +99,8 @@ class DashboardPanel extends Component {
           )}
           {activePanelId === 'destinations' && (
             <DestinationsPanel
+              page={destinationsPanel.page}
+              getMoreItems={getMoreItems}
               searchDestinations={destinations}
               destinations={destinations || []}
               onSelectDestinationValue={item =>
@@ -115,6 +117,8 @@ class DashboardPanel extends Component {
           {activePanelId === 'companies' && (
             <CompaniesPanel
               tabs={tabs}
+              page={companiesPanel.page}
+              getMoreItems={getMoreItems}
               searchCompanies={[]}
               companies={companies[companiesPanel.activeNodeTypeTabId]}
               onSelectNodeTypeTab={item =>
@@ -139,6 +143,8 @@ class DashboardPanel extends Component {
           )}
           {activePanelId === 'commodities' && (
             <CommoditiesPanel
+              page={commoditiesPanel.page}
+              getMoreItems={getMoreItems}
               searchCommodities={commodities}
               commodities={commodities}
               onSelectCommodity={item =>
@@ -168,7 +174,7 @@ class DashboardPanel extends Component {
 DashboardPanel.propTypes = {
   countries: PropTypes.array,
   companies: PropTypes.object,
-  getMoreData: PropTypes.func,
+  getMoreItems: PropTypes.func,
   commodities: PropTypes.array,
   dirtyBlocks: PropTypes.object,
   activePanelId: PropTypes.string,

@@ -5,7 +5,14 @@ import GridList from 'react-components/shared/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item.component';
 
 function CommoditiesPanel(props) {
-  const { searchCommodities, commodities, activeCommodityId, onSelectCommodity } = props;
+  const {
+    searchCommodities,
+    commodities,
+    activeCommodityId,
+    onSelectCommodity,
+    getMoreItems,
+    page
+  } = props;
   return (
     <React.Fragment>
       <SearchInput
@@ -23,6 +30,8 @@ function CommoditiesPanel(props) {
         rowHeight={50}
         columnWidth={190}
         columnCount={5}
+        getMoreItems={getMoreItems}
+        page={page}
       >
         {itemProps => (
           <GridListItem
@@ -39,8 +48,10 @@ function CommoditiesPanel(props) {
 
 CommoditiesPanel.propTypes = {
   commodities: PropTypes.array,
+  page: PropTypes.number.isRequired,
   searchCommodities: PropTypes.array,
   activeCommodityId: PropTypes.string,
+  getMoreItems: PropTypes.func.isRequired,
   onSelectCommodity: PropTypes.func.isRequired
 };
 

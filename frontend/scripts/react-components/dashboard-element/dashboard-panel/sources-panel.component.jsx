@@ -9,7 +9,7 @@ function SourcesPanel(props) {
   const {
     tabs,
     page,
-    getMoreData,
+    getMoreItems,
     searchSources,
     activeCountryItemId,
     sources,
@@ -66,7 +66,7 @@ function SourcesPanel(props) {
                 columnWidth={190}
                 columnCount={5}
                 page={page}
-                getMoreItems={getMoreData}
+                getMoreItems={getMoreItems}
               >
                 {itemProps => (
                   <GridListItem
@@ -88,7 +88,7 @@ SourcesPanel.propTypes = {
   page: PropTypes.number.isRequired,
   searchSources: PropTypes.array.isRequired,
   sources: PropTypes.array,
-  getMoreData: PropTypes.func.isRequired,
+  getMoreItems: PropTypes.func.isRequired,
   activeCountryItemId: PropTypes.number,
   activeSourceTabId: PropTypes.number,
   activeSourceItemId: PropTypes.string,

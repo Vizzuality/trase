@@ -41,7 +41,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  getMoreData: setDashboardPanelPage,
+  getMoreItems: setDashboardPanelPage,
   clearActiveId: clearDashboardPanel,
   setActiveId: setDashboardPanelActiveId,
   setActivePanel: setDashboardActivePanel

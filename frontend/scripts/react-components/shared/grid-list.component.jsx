@@ -56,7 +56,6 @@ class GridList extends React.Component {
     // if (reachedPageStart && !scrollUpdateWasRequested && page > 0) {
     //   getMoreItems(page - 1, 'backwards');
     // }
-
     if ((reachedPageEnd || reachedPageEndWithBuffer) && !scrollUpdateWasRequested) {
       this.debouncedGetMoreItemsCb(page + 1, 'forwards');
     }
