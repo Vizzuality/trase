@@ -78,7 +78,16 @@ const initialState = {
 const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_ACTIVE_PANEL](state, action) {
     const { activePanelId } = action.payload;
-    return { ...state, activePanelId };
+    const prevActivePanelId = state.activePanelId;
+    const prevPanelName = `${prevActivePanelId}Panel`;
+    return {
+      ...state,
+      activePanelId,
+      [prevPanelName]: {
+        ...state[prevPanelName],
+        page: 0
+      }
+    };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_PAGE](state, action) {
     const { activePanelId } = state;

@@ -9,19 +9,25 @@ import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_PAGE
 } from 'react-components/dashboard-element/dashboard-element.actions';
-import { getActiveTab } from 'react-components/dashboard-element/dashboard-element.selectors';
+import {
+  getActiveTab,
+  getDirtyBlocks
+} from 'react-components/dashboard-element/dashboard-element.selectors';
 
 function* fetchDataOnPanelChange() {
   function* fetchDashboardPanelInitialData(action) {
     const { activePanelId } = action.payload;
     const initialData = activePanelId === 'sources' ? 'countries' : activePanelId;
-    const { dashboardElement } = yield select();
+    const state = yield select();
+    const { dashboardElement } = state;
+    const { activeTab } = getActiveTab(dashboardElement);
+    const refetchPanel = getDirtyBlocks(state)[activePanelId];
 
     if (dashboardElement.activePanelId === 'companies') {
       yield put(getDashboardPanelSectionTabs(dashboardElement.activePanelId));
     }
 
-    yield put(getDashboardPanelData(initialData));
+    yield put(getDashboardPanelData(initialData, activeTab, { refetchPanel }));
   }
 
   yield takeLatest(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL, fetchDashboardPanelInitialData);
