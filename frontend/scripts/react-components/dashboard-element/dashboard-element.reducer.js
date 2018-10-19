@@ -8,7 +8,10 @@ import {
   DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
   DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
-  DASHBOARD_ELEMENT__SET_PANEL_TABS
+  DASHBOARD_ELEMENT__SET_PANEL_TABS,
+  DASHBOARD_ELEMENT__SET_PANEL_PAGE,
+  DASHBOARD_ELEMENT__SET_LOADING_ITEMS,
+  DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA
 } from './dashboard-element.actions';
 
 const INDICATORS_MOCK = [
@@ -43,18 +46,26 @@ const initialState = {
   activePanelId: null,
   activeIndicatorsList: [],
   sourcesPanel: {
+    page: 0,
+    loadingItems: false,
     activeCountryItemId: null,
     activeSourceItemId: null,
     activeSourceTabId: null
   },
   destinationsPanel: {
+    page: 0,
+    loadingItems: false,
     activeDestinationItemId: null
   },
   companiesPanel: {
+    page: 0,
+    loadingItems: false,
     activeCompanyItemId: null,
     activeNodeTypeTabId: null
   },
   commoditiesPanel: {
+    page: 0,
+    loadingItems: false,
     activeCommodityItemId: null
   }
 };
@@ -63,6 +74,12 @@ const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_ACTIVE_PANEL](state, action) {
     const { activePanelId } = action.payload;
     return { ...state, activePanelId };
+  },
+  [DASHBOARD_ELEMENT__SET_PANEL_PAGE](state, action) {
+    const { activePanelId } = state;
+    const panelName = `${activePanelId}Panel`;
+    const { page } = action.payload;
+    return { ...state, [panelName]: { ...state[panelName], page } };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_DATA](state, action) {
     const { key, data, meta, tab } = action.payload;
@@ -74,6 +91,33 @@ const dashboardElementReducer = {
       ...state,
       data: { ...state.data, [key]: dataWithMock || newData },
       meta: { ...state.meta, [key]: metaFallback }
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA](state, action) {
+    const { key, data, tab, direction } = action.payload;
+    const oldData = tab ? state.data[key][tab] : state.data[key];
+    let together;
+    if (direction === 'backwards') {
+      together = [...data, ...oldData];
+    } else if (direction === 'forwards') {
+      together = [...oldData, ...data];
+    }
+    const newData = tab ? { ...state.data[key], [tab]: together } : together;
+
+    return {
+      ...state,
+      data: { ...state.data, [key]: newData }
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_LOADING_ITEMS](state, action) {
+    const { loadingItems } = action.payload;
+    const panelName = `${state.activePanelId}Panel`;
+    return {
+      ...state,
+      [panelName]: {
+        ...state[panelName],
+        loadingItems
+      }
     };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_TABS](state, action) {
@@ -88,11 +132,13 @@ const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_ACTIVE_ID](state, action) {
     const { panel, section, active, type } = action.payload;
     const panelName = `${panel}Panel`;
+    const page = type === 'tab' || section === 'country' ? 0 : state[panelName].page;
     return {
       ...state,
       activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
+        page,
         [camelCase(`active_${section}_${type}_id`)]: active
       }
     };

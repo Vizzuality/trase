@@ -4,8 +4,10 @@ import {
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_ID,
   getDashboardPanelData,
+  getMoreDashboardPanelData,
   getDashboardPanelSectionTabs,
-  DASHBOARD_ELEMENT__SET_PANEL_TABS
+  DASHBOARD_ELEMENT__SET_PANEL_TABS,
+  DASHBOARD_ELEMENT__SET_PANEL_PAGE
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import { getActiveTab } from 'react-components/dashboard-element/dashboard-element.selectors';
 
@@ -59,6 +61,18 @@ function* fetchDataOnFilterClear() {
   yield takeLatest(DASHBOARD_ELEMENT__CLEAR_PANEL, onFilterClear);
 }
 
+function* fetchDataOnPageChange() {
+  function* onPageChange(action) {
+    const { direction } = action.payload;
+    const { dashboardElement } = yield select();
+    const { activeTab } = getActiveTab(dashboardElement);
+
+    yield put(getMoreDashboardPanelData(dashboardElement.activePanelId, activeTab, direction));
+  }
+
+  yield takeLatest(DASHBOARD_ELEMENT__SET_PANEL_PAGE, onPageChange);
+}
+
 function* setActiveTabOnDataFetch() {
   function* setFirstTab(action) {
     const { data } = action.payload;
@@ -93,7 +107,8 @@ export default function* dashboardElementSaga() {
     fetchDataOnPanelChange,
     setActiveTabOnDataFetch,
     fetchDataOnFilterChange,
-    fetchDataOnFilterClear
+    fetchDataOnFilterClear,
+    fetchDataOnPageChange
   ];
   yield all(sagas.map(saga => fork(saga)));
 }

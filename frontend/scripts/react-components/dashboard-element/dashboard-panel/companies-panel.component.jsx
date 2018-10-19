@@ -8,8 +8,11 @@ import Tabs from 'react-components/shared/tabs.component';
 function CompaniesPanel(props) {
   const {
     tabs,
+    page,
+    loadingMoreItems,
     searchCompanies,
     companies,
+    getMoreItems,
     onSelectNodeTypeTab,
     onSelectCompany,
     activeNodeTypeTabId,
@@ -40,6 +43,9 @@ function CompaniesPanel(props) {
             rowHeight={50}
             columnWidth={190}
             columnCount={5}
+            getMoreItems={getMoreItems}
+            page={page}
+            loading={loadingMoreItems}
           >
             {itemProps => (
               <GridListItem
@@ -57,14 +63,17 @@ function CompaniesPanel(props) {
 }
 
 CompaniesPanel.propTypes = {
+  companies: PropTypes.array,
   tabs: PropTypes.array.isRequired,
   activeCompanyId: PropTypes.string,
+  page: PropTypes.number.isRequired,
+  loadingMoreItems: PropTypes.bool,
   activeNodeTypeTabId: PropTypes.string,
-  companies: PropTypes.array,
+  getMoreItems: PropTypes.func.isRequired,
+  onSelectCompany: PropTypes.func.isRequired,
   getCompaniesData: PropTypes.func.isRequired,
   searchCompanies: PropTypes.array.isRequired,
-  onSelectNodeTypeTab: PropTypes.func.isRequired,
-  onSelectCompany: PropTypes.func.isRequired
+  onSelectNodeTypeTab: PropTypes.func.isRequired
 };
 
 CompaniesPanel.defaultProps = {

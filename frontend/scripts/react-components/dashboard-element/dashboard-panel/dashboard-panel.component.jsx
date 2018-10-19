@@ -29,6 +29,7 @@ class DashboardPanel extends Component {
     const {
       tabs,
       panels,
+      getMoreItems,
       dirtyBlocks,
       activePanelId,
       setActivePanel,
@@ -61,6 +62,9 @@ class DashboardPanel extends Component {
           />
           {activePanelId === 'sources' && (
             <SourcesPanel
+              page={sourcesPanel.page}
+              getMoreItems={getMoreItems}
+              loadingMoreItems={sourcesPanel.loadingItems}
               clearItems={() => clearActiveId(activePanelId)}
               activeCountryItemId={sourcesPanel.activeCountryItemId}
               activeSourceTabId={sourcesPanel.activeSourceTabId}
@@ -96,6 +100,8 @@ class DashboardPanel extends Component {
           )}
           {activePanelId === 'destinations' && (
             <DestinationsPanel
+              page={destinationsPanel.page}
+              getMoreItems={getMoreItems}
               searchDestinations={destinations}
               destinations={destinations || []}
               onSelectDestinationValue={item =>
@@ -106,13 +112,17 @@ class DashboardPanel extends Component {
                   panel: activePanelId
                 })
               }
+              loadingMoreItems={destinationsPanel.loadingItems}
               activeDestinationId={destinationsPanel.activeDestinationItemId}
             />
           )}
           {activePanelId === 'companies' && (
             <CompaniesPanel
               tabs={tabs}
+              page={companiesPanel.page}
+              getMoreItems={getMoreItems}
               searchCompanies={[]}
+              loadingMoreItems={companiesPanel.loadingItems}
               companies={companies[companiesPanel.activeNodeTypeTabId]}
               onSelectNodeTypeTab={item =>
                 setActiveId({
@@ -136,7 +146,10 @@ class DashboardPanel extends Component {
           )}
           {activePanelId === 'commodities' && (
             <CommoditiesPanel
+              page={commoditiesPanel.page}
+              getMoreItems={getMoreItems}
               searchCommodities={commodities}
+              loadingMoreItems={commoditiesPanel.loadingItems}
               commodities={commodities}
               onSelectCommodity={item =>
                 setActiveId({
@@ -165,6 +178,7 @@ class DashboardPanel extends Component {
 DashboardPanel.propTypes = {
   countries: PropTypes.array,
   companies: PropTypes.object,
+  getMoreItems: PropTypes.func,
   commodities: PropTypes.array,
   dirtyBlocks: PropTypes.object,
   activePanelId: PropTypes.string,

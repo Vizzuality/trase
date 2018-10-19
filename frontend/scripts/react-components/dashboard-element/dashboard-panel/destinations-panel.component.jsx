@@ -5,7 +5,15 @@ import GridList from 'react-components/shared/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item.component';
 
 function DestinationsPanel(props) {
-  const { searchDestinations, destinations, activeDestinationId, onSelectDestinationValue } = props;
+  const {
+    page,
+    searchDestinations,
+    destinations,
+    loadingMoreItems,
+    activeDestinationId,
+    onSelectDestinationValue,
+    getMoreItems
+  } = props;
   return (
     <React.Fragment>
       <SearchInput
@@ -23,6 +31,9 @@ function DestinationsPanel(props) {
         rowHeight={50}
         columnWidth={190}
         columnCount={5}
+        page={page}
+        getMoreItems={getMoreItems}
+        loading={loadingMoreItems}
       >
         {itemProps => (
           <GridListItem
@@ -39,8 +50,11 @@ function DestinationsPanel(props) {
 
 DestinationsPanel.propTypes = {
   destinations: PropTypes.array,
+  page: PropTypes.number.isRequired,
+  loadingMoreItems: PropTypes.bool,
   searchDestinations: PropTypes.array,
   activeDestinationId: PropTypes.string,
+  getMoreItems: PropTypes.func.isRequired,
   onSelectDestinationValue: PropTypes.func.isRequired
 };
 
