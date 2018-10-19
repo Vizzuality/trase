@@ -7,11 +7,11 @@
 #
 # set :output, "/path/to/my/cron_log.log"
 #
-every 2.hours do
-  # command "/usr/bin/some_great_command"
-  # runner 'CacheWarmer.run'
-  rake 'cache:warmer:run'
-end
+# every 2.hours do
+#   # command "/usr/bin/some_great_command"
+#   # runner 'CacheWarmer.run'
+#   rake 'cache:warmer:run'
+# end
 #
 # every 4.days do
 #   runner "AnotherModel.prune_old_records"
