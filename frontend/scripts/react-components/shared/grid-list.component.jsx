@@ -27,9 +27,12 @@ class GridList extends React.Component {
   listRef = React.createRef();
 
   componentDidUpdate(_, prevState) {
-    if (this.state.rowCount !== prevState.rowCount) {
+    const { rowCount } = this.state;
+    if (rowCount !== prevState.rowCount) {
+      const rowIndex =
+        rowCount !== prevState.rowCount ? prevState.rowCount - 1 : prevState.rowCount;
       this.listRef.current.scrollToItem({
-        rowIndex: prevState.rowCount - 1,
+        rowIndex,
         columnIndex: 0,
         align: 'start'
       });

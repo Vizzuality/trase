@@ -78,12 +78,10 @@ class DashboardElement extends React.PureComponent {
         <React.Fragment key={part.prefix + part.value + i}>
           {`${part.prefix} `}
           {part.value && (
-            <span className="dashboard-element-title-item notranslate">
-              {part.value}
-            </span>
+            <span className="dashboard-element-title-item notranslate">{part.value}</span>
           )}
         </React.Fragment>
-      ))
+      ));
     }
 
     return 'Dashboards';
@@ -97,9 +95,7 @@ class DashboardElement extends React.PureComponent {
           <section className="dashboard-element-header">
             <div className="row">
               <div className="column small-12">
-                <h2 className="dashboard-element-title">
-                  {this.renderDynamicSentence()}
-                </h2>
+                <h2 className="dashboard-element-title">{this.renderDynamicSentence()}</h2>
               </div>
             </div>
             <div className="row">
