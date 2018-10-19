@@ -35,7 +35,7 @@ module Api
               :tooltip_text,
               :chart_type,
               :dashboards_attribute_group_id,
-              'BOOL_OR(is_disabled) AS is_disabled'
+              'NOT BOOL_OR(NOT is_disabled) AS is_disabled'
             ).
             where('display_name IS NOT NULL').
             group(
