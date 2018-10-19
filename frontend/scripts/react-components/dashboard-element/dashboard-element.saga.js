@@ -9,19 +9,25 @@ import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_PAGE
 } from 'react-components/dashboard-element/dashboard-element.actions';
-import { getActiveTab } from 'react-components/dashboard-element/dashboard-element.selectors';
+import {
+  getActiveTab,
+  getDirtyBlocks
+} from 'react-components/dashboard-element/dashboard-element.selectors';
 
 function* fetchDataOnPanelChange() {
   function* fetchDashboardPanelInitialData(action) {
     const { activePanelId } = action.payload;
     const initialData = activePanelId === 'sources' ? 'countries' : activePanelId;
-    const { dashboardElement } = yield select();
+    const state = yield select();
+    const { dashboardElement } = state;
+    const { activeTab } = getActiveTab(dashboardElement);
+    const refetchPanel = getDirtyBlocks(state)[activePanelId];
 
     if (dashboardElement.activePanelId === 'companies') {
       yield put(getDashboardPanelSectionTabs(dashboardElement.activePanelId));
     }
 
-    yield put(getDashboardPanelData(initialData));
+    yield put(getDashboardPanelData(initialData, activeTab, { refetchPanel }));
   }
 
   yield takeLatest(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL, fetchDashboardPanelInitialData);
@@ -29,17 +35,24 @@ function* fetchDataOnPanelChange() {
 
 function* fetchDataOnFilterChange() {
   function* onFilterChange(action) {
-    const { type, section } = action.payload;
+    const { type, section, active } = action.payload;
     const { dashboardElement } = yield select();
     const { activeTab } = getActiveTab(dashboardElement);
+    const data = dashboardElement.data[dashboardElement.activePanelId];
+    const items = typeof activeTab !== 'undefined' ? data[activeTab] : data;
+    const activeItemExists = !!items && items.find(i => i.id === active);
 
     // for now, we just need to recalculate the tabs when selecting a new country
     if (type === 'item' && section === 'country') {
       yield put(getDashboardPanelSectionTabs(dashboardElement.activePanelId));
     }
 
-    if (type === 'tab') {
-      yield put(getDashboardPanelData(dashboardElement.activePanelId, activeTab));
+    if (type === 'tab' || (items && !activeItemExists)) {
+      yield put(
+        getDashboardPanelData(dashboardElement.activePanelId, activeTab, {
+          refetchPanel: !activeItemExists
+        })
+      );
     }
   }
 

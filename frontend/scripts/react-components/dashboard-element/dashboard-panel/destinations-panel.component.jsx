@@ -10,6 +10,7 @@ function DestinationsPanel(props) {
     searchDestinations,
     destinations,
     loadingMoreItems,
+    getSearchResults,
     activeDestinationId,
     onSelectDestinationValue,
     getMoreItems
@@ -20,8 +21,8 @@ function DestinationsPanel(props) {
         className="dashboard-panel-search"
         items={searchDestinations}
         placeholder="Search place"
-        onSelect={i => i}
-        onSearchTermChange={i => i}
+        onSelect={onSelectDestinationValue}
+        onSearchTermChange={getSearchResults}
       />
       <GridList
         className="dashboard-panel-pill-list"
@@ -53,9 +54,14 @@ DestinationsPanel.propTypes = {
   page: PropTypes.number.isRequired,
   loadingMoreItems: PropTypes.bool,
   searchDestinations: PropTypes.array,
-  activeDestinationId: PropTypes.string,
+  activeDestinationId: PropTypes.number,
   getMoreItems: PropTypes.func.isRequired,
+  getSearchResults: PropTypes.func.isRequired,
   onSelectDestinationValue: PropTypes.func.isRequired
+};
+
+DestinationsPanel.defaultProps = {
+  destinations: []
 };
 
 export default DestinationsPanel;

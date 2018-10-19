@@ -13,6 +13,7 @@ function CompaniesPanel(props) {
     searchCompanies,
     companies,
     getMoreItems,
+    getSearchResults,
     onSelectNodeTypeTab,
     onSelectCompany,
     activeNodeTypeTabId,
@@ -23,9 +24,9 @@ function CompaniesPanel(props) {
       <SearchInput
         className="dashboard-panel-search"
         items={searchCompanies}
-        placeholder="Search place"
-        onSelect={i => i}
-        onSearchTermChange={i => i}
+        placeholder="Search company"
+        onSelect={onSelectCompany}
+        onSearchTermChange={getSearchResults}
       />
       <Tabs
         tabs={tabs}
@@ -65,13 +66,13 @@ function CompaniesPanel(props) {
 CompaniesPanel.propTypes = {
   companies: PropTypes.array,
   tabs: PropTypes.array.isRequired,
-  activeCompanyId: PropTypes.string,
+  activeCompanyId: PropTypes.number,
   page: PropTypes.number.isRequired,
   loadingMoreItems: PropTypes.bool,
-  activeNodeTypeTabId: PropTypes.string,
+  activeNodeTypeTabId: PropTypes.number,
   getMoreItems: PropTypes.func.isRequired,
+  getSearchResults: PropTypes.func.isRequired,
   onSelectCompany: PropTypes.func.isRequired,
-  getCompaniesData: PropTypes.func.isRequired,
   searchCompanies: PropTypes.array.isRequired,
   onSelectNodeTypeTab: PropTypes.func.isRequired
 };

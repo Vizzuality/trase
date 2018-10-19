@@ -11,7 +11,8 @@ import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   DASHBOARD_ELEMENT__SET_LOADING_ITEMS,
-  DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA
+  DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
+  DASHBOARD_ELEMENT__SET_SEARCH_RESULTS
 } from './dashboard-element.actions';
 
 const INDICATORS_MOCK = [
@@ -47,6 +48,7 @@ const initialState = {
   activeIndicatorsList: [],
   sourcesPanel: {
     page: 0,
+    searchResults: [],
     loadingItems: false,
     activeCountryItemId: null,
     activeSourceItemId: null,
@@ -54,17 +56,20 @@ const initialState = {
   },
   destinationsPanel: {
     page: 0,
+    searchResults: [],
     loadingItems: false,
     activeDestinationItemId: null
   },
   companiesPanel: {
     page: 0,
+    searchResults: [],
     loadingItems: false,
     activeCompanyItemId: null,
     activeNodeTypeTabId: null
   },
   commoditiesPanel: {
     page: 0,
+    searchResults: [],
     loadingItems: false,
     activeCommodityItemId: null
   }
@@ -73,7 +78,16 @@ const initialState = {
 const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_ACTIVE_PANEL](state, action) {
     const { activePanelId } = action.payload;
-    return { ...state, activePanelId };
+    const prevActivePanelId = state.activePanelId;
+    const prevPanelName = `${prevActivePanelId}Panel`;
+    return {
+      ...state,
+      activePanelId,
+      [prevPanelName]: {
+        ...state[prevPanelName],
+        page: 0
+      }
+    };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_PAGE](state, action) {
     const { activePanelId } = state;
@@ -84,9 +98,17 @@ const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_PANEL_DATA](state, action) {
     const { key, data, meta, tab } = action.payload;
     const metaFallback = meta && meta.contextNodeTypes ? meta.contextNodeTypes : meta; // FIXME
-    const newData = tab ? { ...state.data[key], [tab]: data } : data;
+    const initialData = initialState.data[key];
+    let newData;
+    if (Array.isArray(initialData)) {
+      newData = data || initialData;
+    } else {
+      newData = tab && data ? { ...state.data[key], [tab]: data } : initialData;
+    }
+
     const dataWithMock =
-      key === 'indicators' && data.map(d => ({ ...d, ...INDICATORS_MOCK[d.id % 3] }));
+      key === 'indicators' && data && data.map(d => ({ ...d, ...INDICATORS_MOCK[d.id % 3] }));
+
     return {
       ...state,
       data: { ...state.data, [key]: dataWithMock || newData },
@@ -166,6 +188,17 @@ const dashboardElementReducer = {
       ...state,
       activeIndicatorsList: state.activeIndicatorsList.filter(item => item !== toRemove.id)
     };
+  },
+  [DASHBOARD_ELEMENT__SET_SEARCH_RESULTS](state, action) {
+    const { data } = action.payload;
+    const panelName = `${state.activePanelId}Panel`;
+    return {
+      ...state,
+      [panelName]: {
+        ...state[panelName],
+        searchResults: data
+      }
+    };
   }
 };
 
@@ -182,18 +215,30 @@ const dashboardElementReducerTypes = PropTypes => ({
     destinations: PropTypes.array.isRequired
   }).isRequired,
   sourcesPanel: PropTypes.shape({
+    page: PropTypes.number,
+    searchResults: PropTypes.array,
+    loadingItems: PropTypes.bool,
     activeCountryItemId: PropTypes.number,
     activeSourceItemId: PropTypes.number,
     activeSourceTabId: PropTypes.number
   }).isRequired,
   destinationsPanel: PropTypes.shape({
-    activeDestinationItemId: PropTypes.string
+    page: PropTypes.number,
+    searchResults: PropTypes.array,
+    loadingItems: PropTypes.bool,
+    activeDestinationItemId: PropTypes.number
   }).isRequired,
   companiesPanel: PropTypes.shape({
-    activeCompanyItemId: PropTypes.string,
-    activeNodeTypeTabId: PropTypes.string
+    page: PropTypes.number,
+    searchResults: PropTypes.array,
+    loadingItems: PropTypes.bool,
+    activeCompanyItemId: PropTypes.number,
+    activeNodeTypeTabId: PropTypes.number
   }).isRequired,
   commoditiesPanel: PropTypes.shape({
+    page: PropTypes.number,
+    searchResults: PropTypes.array,
+    loadingItems: PropTypes.bool,
     activeCommodityItemId: PropTypes.number
   }).isRequired
 });

@@ -4,7 +4,8 @@ import {
   clearDashboardPanel,
   setDashboardPanelPage,
   setDashboardActivePanel,
-  setDashboardPanelActiveId
+  setDashboardPanelActiveId,
+  getDashboardPanelSearchResults
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
 import {
@@ -44,7 +45,8 @@ const mapDispatchToProps = {
   getMoreItems: setDashboardPanelPage,
   clearActiveId: clearDashboardPanel,
   setActiveId: setDashboardPanelActiveId,
-  setActivePanel: setDashboardActivePanel
+  setActivePanel: setDashboardActivePanel,
+  getSearchResults: getDashboardPanelSearchResults
 };
 
 class DashboardPanelContainer extends React.PureComponent {

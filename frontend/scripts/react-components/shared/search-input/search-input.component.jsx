@@ -20,6 +20,22 @@ class SearchInput extends PureComponent {
     if (input) input.focus();
   }
 
+  stateReducer = (state, changes) => {
+    switch (changes.type) {
+      case Downshift.stateChangeTypes.clickItem:
+      case Downshift.stateChangeTypes.keyDownEnter: {
+        return {
+          ...changes,
+          highlightedIndex: null,
+          isOpen: false,
+          inputValue: ''
+        };
+      }
+      default:
+        return changes;
+    }
+  };
+
   renderSearchBox = ({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => {
     const {
       className,
@@ -83,6 +99,7 @@ class SearchInput extends PureComponent {
     return (
       <Downshift
         onSelect={this.props.onSelect}
+        stateReducer={this.stateReducer}
         itemToString={i => (i === null ? '' : i.name)}
         onInputValueChange={this.onInputValueChange}
       >
