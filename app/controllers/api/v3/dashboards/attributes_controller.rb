@@ -12,7 +12,17 @@ module Api
           render json: @collection,
                  root: 'data',
                  meta: RetrieveAttributesMeta.new.call,
-                 each_serializer: Api::V3::Dashboards::AttributeSerializer
+                 each_serializer: Api::V3::Dashboards::AttributeSerializer,
+                 url: proc { |options|
+                   api_v3_dashboards_chart_data_url(options)
+                 },
+                 url_opts: params.permit(
+                   :countries_ids,
+                   :sources_ids,
+                   :companies_ids,
+                   :destinations_ids,
+                   :commodities_ids
+                 )
         end
 
         private
