@@ -54,7 +54,7 @@ DestinationsPanel.propTypes = {
   page: PropTypes.number.isRequired,
   loadingMoreItems: PropTypes.bool,
   searchDestinations: PropTypes.array,
-  activeDestinationId: PropTypes.string,
+  activeDestinationId: PropTypes.number,
   getMoreItems: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
   onSelectDestinationValue: PropTypes.func.isRequired
