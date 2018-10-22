@@ -3,11 +3,12 @@ require 'rails_helper'
 RSpec.describe 'sources', type: :request do
   include_context 'api v3 brazil flows quants'
 
-  describe 'GET /api/v3/dashboards/sources' do
-    before(:each) do
-      Api::V3::Readonly::Dashboards::Source.refresh
-    end
+  before(:each) do
+    Api::V3::Readonly::Dashboards::FlowPath.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::Dashboards::Source.refresh(sync: true, skip_dependencies: true)
+  end
 
+  describe 'GET /api/v3/dashboards/sources' do
     it 'requires countries_ids' do
       get '/api/v3/dashboards/sources'
 

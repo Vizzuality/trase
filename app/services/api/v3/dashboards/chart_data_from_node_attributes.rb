@@ -8,6 +8,7 @@ module Api
           @commodities_ids = commodities_ids
           @nodes_ids = nodes_ids
           raise 'Node missing' unless @nodes_ids.any?
+
           initialize_nodes_ids_with_data
           initialize_query
         end

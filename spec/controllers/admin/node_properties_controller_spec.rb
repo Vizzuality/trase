@@ -3,12 +3,7 @@ require 'rails_helper'
 RSpec.describe Admin::NodePropertiesController, type: :controller do
   let(:user) { FactoryBot.create(:user) }
   before { sign_in user }
-  before do
-    Api::V3::NodeProperty.skip_callback(:commit, :after, :refresh_dependents)
-  end
-  after do
-    Api::V3::NodeProperty.set_callback(:commit, :after, :refresh_dependents)
-  end
+
   describe 'POST create' do
     let(:node) { FactoryBot.create(:api_v3_node) }
     let(:valid_attributes) {

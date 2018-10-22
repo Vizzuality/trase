@@ -6,6 +6,11 @@ RSpec.describe 'Nodes attributes', type: :request do
   include_context 'api v3 brazil municipality quant values'
   include_context 'api v3 brazil municipality ind values'
 
+  before(:each) do
+    Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::MapAttribute.refresh(sync: true, skip_dependencies: true)
+  end
+
   describe 'GET /api/v3/contexts/:context_id/nodes/attributes' do
     it 'requires a start_year' do
       get "/api/v3/contexts/#{api_v3_context.id}/nodes/attributes"

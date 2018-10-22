@@ -6,7 +6,7 @@ RSpec.describe Api::V3::NodesSearch::Filter do
 
   describe :call do
     before(:each) do
-      Api::V3::Readonly::Node.refresh
+      Api::V3::Readonly::Node.refresh(sync: true)
     end
     let(:filter) { Api::V3::NodesSearch::Filter.new }
 

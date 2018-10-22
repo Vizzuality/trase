@@ -45,12 +45,14 @@ module Api
         def current_page
           page = params[:page]&.to_i
           return 1 if page.nil? || page.negative?
+
           page
         end
 
         def current_per_page
           per_page = params[:per_page]&.to_i
           return 25 if per_page.nil? || per_page.negative?
+
           per_page
         end
       end
