@@ -1,18 +1,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import sortBy from 'lodash/sortBy';
 import DashboardWidget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.component';
 import Widget from 'react-components/widgets/widget.component';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
 
 class DashboardWidgetContainer extends Component {
+  static getGroupedY(meta) {
+    const { xAxis, yAxis, x, ...groupedY } = meta;
+    return groupedY;
+  }
+
+  static sortGroupedY(keys) {
+    return sortBy(Object.keys(keys), key => parseInt(key.substr(1), 10));
+  }
+
   static getYKeys(meta, { yKeys, yKeysAttributes, colors }) {
     if (!meta || !yKeys) return yKeys;
-    const { xAxis, yAxis, x, ...groupedYKeys } = meta;
+    const groupedY = DashboardWidgetContainer.getGroupedY(meta);
     return Object.keys(yKeys).reduce((yKeysTypesAcc, nextYKeyType) => {
       const yKeyTypeAttributes = yKeysAttributes && yKeysAttributes[nextYKeyType];
       return {
         ...yKeysTypesAcc,
-        [nextYKeyType]: Object.keys(groupedYKeys).reduce(
+        [nextYKeyType]: DashboardWidgetContainer.sortGroupedY(groupedY).reduce(
           (groupedYKeysAcc, nextGroupedYKey, index) => ({
             [nextGroupedYKey]: {
               ...yKeyTypeAttributes,
@@ -24,6 +34,15 @@ class DashboardWidgetContainer extends Component {
         )
       };
     }, {});
+  }
+
+  static getColors(meta, { colors }) {
+    if (!meta) return colors;
+    const groupedY = DashboardWidgetContainer.getGroupedY(meta);
+    return DashboardWidgetContainer.sortGroupedY(groupedY).map((key, index) => ({
+      label: groupedY[key].label || meta.yAxis.label,
+      color: colors[index]
+    }));
   }
 
   getConfig(meta) {
@@ -40,7 +59,8 @@ class DashboardWidgetContainer extends Component {
         ...defaultConfig.yAxis,
         type: meta.y && meta.x.type
       },
-      yKeys: DashboardWidgetContainer.getYKeys(meta, defaultConfig)
+      yKeys: DashboardWidgetContainer.getYKeys(meta, defaultConfig),
+      colors: DashboardWidgetContainer.getColors(meta, defaultConfig)
     };
   }
 

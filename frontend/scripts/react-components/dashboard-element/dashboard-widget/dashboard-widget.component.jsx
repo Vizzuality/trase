@@ -28,7 +28,7 @@ function DashboardWidget(props) {
           data.length > 0 &&
           chartConfig && (
             <React.Fragment>
-              <DashboardWidgetLegend data={data} />
+              <DashboardWidgetLegend colors={chartConfig.colors} />
               <Chart className="widget-chart" data={data} config={chartConfig} />
             </React.Fragment>
           )}
