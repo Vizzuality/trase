@@ -65,13 +65,14 @@ module Api
               :chart_type,
               :dashboards_attribute_group_id,
               case_sql(
-                send(:"#{attribute_type}_attributes_conditions_for_case")
+                send(:"#{attribute_type}_attributes_conditions_for_case"),
+                send(:"#{attribute_type}_attributes_default_for_case")
               )
             ).distinct
         end
 
-        def case_sql(conditions)
-          return 'FALSE AS is_disabled' if conditions.blank?
+        def case_sql(conditions, default)
+          return "#{default} AS is_disabled" if conditions.blank?
           <<~SQL
             CASE
               WHEN #{conditions} THEN FALSE
@@ -109,12 +110,20 @@ module Api
           )
         end
 
+        def flow_attributes_default_for_case
+          false
+        end
+
         def node_attributes_conditions_for_case
           return unless @nodes_ids.any?
           Api::V3::Readonly::Attribute.send(
             :sanitize_sql_for_conditions,
             ['node_id IN (?)', @nodes_ids]
           )
+        end
+
+        def node_attributes_default_for_case
+          @nodes_ids.empty?
         end
       end
     end
