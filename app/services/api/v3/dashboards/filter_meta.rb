@@ -18,6 +18,8 @@ module Api
                 section: 'SOURCES',
                 tabs: @query.where(
                   'context_node_type_properties.column_group' => 0
+                ).where(
+                  'node_types.name <> ?', NodeTypeName::COUNTRY_OF_PRODUCTION
                 ).all
               },
               {
