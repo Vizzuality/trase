@@ -27,9 +27,19 @@ const cartesianGrid = {
   strokeDasharray: '5 5'
 };
 
+const tooltip = {
+  cursor: {
+    opacity: 0.5,
+    stroke: '#9a1e2a',
+    strokeWidth: 2
+  },
+  content: null
+};
+
 const defaults = {
   xAxis,
   yAxis,
+  tooltip,
   cartesianGrid
 };
 

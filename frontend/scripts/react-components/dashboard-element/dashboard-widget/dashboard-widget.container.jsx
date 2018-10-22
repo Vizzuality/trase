@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import sortBy from 'lodash/sortBy';
 import DashboardWidget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.component';
+import DashboardWidgetTooltip from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-tooltip';
 import Widget from 'react-components/widgets/widget.component';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
 
@@ -60,7 +61,11 @@ class DashboardWidgetContainer extends Component {
         type: meta.y && meta.x.type
       },
       yKeys: DashboardWidgetContainer.getYKeys(meta, defaultConfig),
-      colors: DashboardWidgetContainer.getColors(meta, defaultConfig)
+      colors: DashboardWidgetContainer.getColors(meta, defaultConfig),
+      tooltip: {
+        ...defaultConfig.tooltip,
+        content: <DashboardWidgetTooltip meta={meta} />
+      }
     };
   }
 
