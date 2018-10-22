@@ -17,7 +17,9 @@ module Api
         end
 
         attribute :url do
-          nil # TODO: integrate urls
+          instance_options[:url].call(
+            instance_options[:url_opts].merge(attribute_id: object.id)
+          )
         end
       end
     end

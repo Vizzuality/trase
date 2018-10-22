@@ -1051,6 +1051,49 @@ paths:
                         name:
                           type: string
 
+  '/dashboards/chart_data':
+    get:
+      tags:
+        - dashboards
+      summary: 'Data formatted for display in charts'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/dashboards_destinations_ids"
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_attribute_id"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    x:
+                      description: "Type defined in meta"
+                    y1:
+                      description: "Type defined in meta"
+              meta:
+                type: object
+                properties:
+                  xAxis:
+                    $ref: "#/definitions/DashboardsChartAxis"
+                  yAxis:
+                    $ref: "#/definitions/DashboardsChartAxis"
+                  x:
+                    $ref: "#/definitions/DashboardsChartValue"
+                  y1:
+                    $ref: "#/definitions/DashboardsChartValue"
+
 parameters:
   dashboards_countries_ids:
     name: countries_ids
@@ -1088,6 +1131,12 @@ parameters:
     description: 'String with comma-separated numeric ids'
     required: false
     type: string
+  dashboards_attribute_id:
+    name: attribute_id
+    in: query
+    description: 'Attribute id'
+    required: false
+    type: integer
   page:
     name: page
     in: query
@@ -1100,8 +1149,38 @@ parameters:
     description: 'Number of iterms per page'
     required: false
     type: integer
-    
+
 definitions:
+  DashboardsChartAxis:
+    type: object
+    properties:
+      label:
+        type: string
+      prefix:
+        type: string
+      format:
+        type: string
+      suffix:
+        type: string
+  DashboardsChartValue:
+    type: object
+    properties:
+      type:
+        type: string
+        example: "numeric,date,categoric"
+      label:
+        type: string
+      tooltip:
+        type: object
+        properties:
+          prefix:
+            type: string
+            description: "not used"
+          format:
+            type: string
+            description: "not used"
+          suffix:
+            type: string
   DashboardsCommodity:
     type: object
     properties:

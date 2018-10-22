@@ -85,6 +85,7 @@ Rails.application.routes.draw do
         end
         resources :attributes
         resources :filter_meta, only: [:index]
+        resources :chart_data, only: [:index]
       end
     end
     namespace :v2 do
