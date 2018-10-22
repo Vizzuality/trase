@@ -26,7 +26,7 @@ module Api
           end
           x_axis_label, x_axis_type =
             if @attribute.temporal?
-              %w(Year numeric)
+              %w(Year category)
             else
               %w(Node categorical)
             end
@@ -53,7 +53,7 @@ module Api
 
           @nodes_with_data.each.with_index do |node, idx|
             @meta["y#{idx}"] = {
-              type: 'numeric',
+              type: 'number',
               label: node.name,
               tooltip: {prefix: '', format: '', suffix: ''}
             }
