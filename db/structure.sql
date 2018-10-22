@@ -1763,42 +1763,44 @@ CREATE TABLE public.node_quants (
 --
 
 CREATE MATERIALIZED VIEW public.dashboards_node_attributes_mv AS
- WITH all_attributes(id, display_name, tooltip_text, chart_type, dashboards_attribute_group_id, "position", original_id, original_type) AS (
-         SELECT a.id,
-            a.display_name,
-            a.tooltip_text,
-            da.chart_type,
-            da.dashboards_attribute_group_id,
-            da."position",
-            a.original_id,
-            a.original_type
-           FROM (public.dashboards_attributes_mv da
-             JOIN public.attributes_mv a ON ((a.id = da.attribute_id)))
-        ), combinations(node_id, original_id, original_type) AS (
-         SELECT DISTINCT node_inds.node_id,
-            node_inds.ind_id,
-            'Ind'::text AS text
-           FROM public.node_inds
-        UNION ALL
-         SELECT DISTINCT node_quals.node_id,
-            node_quals.qual_id,
-            'Qual'::text AS text
-           FROM public.node_quals
-        UNION ALL
-         SELECT DISTINCT node_quants.node_id,
-            node_quants.quant_id,
-            'Quant'::text AS text
-           FROM public.node_quants
-        )
- SELECT DISTINCT combinations.node_id,
-    all_attributes.id AS attribute_id,
-    all_attributes.display_name,
-    all_attributes.tooltip_text,
-    all_attributes.chart_type,
-    all_attributes.dashboards_attribute_group_id,
-    all_attributes."position"
-   FROM (all_attributes
-     JOIN combinations ON (((all_attributes.original_id = combinations.original_id) AND (all_attributes.original_type = combinations.original_type))))
+ SELECT DISTINCT node_inds.node_id,
+    a.id AS attribute_id,
+    a.display_name,
+    a.tooltip_text,
+    da.chart_type,
+    da.dashboards_attribute_group_id,
+    da."position"
+   FROM (((public.node_inds
+     JOIN public.dashboards_inds di ON ((node_inds.ind_id = di.ind_id)))
+     JOIN public.dashboards_attributes da ON ((da.id = di.dashboards_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = di.ind_id) AND (a.original_type = 'Ind'::text))))
+  WHERE (a.display_name IS NOT NULL)
+UNION ALL
+ SELECT DISTINCT node_quals.node_id,
+    a.id AS attribute_id,
+    a.display_name,
+    a.tooltip_text,
+    da.chart_type,
+    da.dashboards_attribute_group_id,
+    da."position"
+   FROM (((public.node_quals
+     JOIN public.dashboards_quals dq ON ((node_quals.qual_id = dq.qual_id)))
+     JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = dq.qual_id) AND (a.original_type = 'Qual'::text))))
+  WHERE (a.display_name IS NOT NULL)
+UNION ALL
+ SELECT DISTINCT node_quants.node_id,
+    a.id AS attribute_id,
+    a.display_name,
+    a.tooltip_text,
+    da.chart_type,
+    da.dashboards_attribute_group_id,
+    da."position"
+   FROM (((public.node_quants
+     JOIN public.dashboards_quants dq ON ((node_quants.quant_id = dq.quant_id)))
+     JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = dq.quant_id) AND (a.original_type = 'Quant'::text))))
+  WHERE (a.display_name IS NOT NULL)
   WITH NO DATA;
 
 
@@ -4688,13 +4690,6 @@ CREATE UNIQUE INDEX dashboards_flow_paths_mv_flow_id_node_id_idx ON public.dashb
 
 
 --
--- Name: dashboards_node_attributes_mv_node_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX dashboards_node_attributes_mv_node_id_attribute_id_idx ON public.dashboards_node_attributes_mv USING btree (node_id, attribute_id);
-
-
---
 -- Name: dashboards_sources_mv_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6011,6 +6006,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181009102913'),
 ('20181011103455'),
 ('20181017053240'),
-('20181019222226');
+('20181019222226'),
+('20181019232447');
 
 

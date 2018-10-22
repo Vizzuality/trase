@@ -10,10 +10,6 @@
 #  dashboards_attribute_group_id :bigint(8)
 #  position                      :integer
 #
-# Indexes
-#
-#  dashboards_node_attributes_mv_node_id_attribute_id_idx  (node_id,attribute_id) UNIQUE
-#
 
 module Api
   module V3
