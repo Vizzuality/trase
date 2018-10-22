@@ -5,7 +5,7 @@ module Api
         skip_before_action :load_context
 
         def index
-          dashboardTemplates = Api::V3::DashboardTemplate.
+          dashboard_templates = Api::V3::DashboardTemplate.
             includes(
               :countries,
               :commodities,
@@ -15,7 +15,7 @@ module Api
               sources: :node_type
             )
 
-          render json: dashboardTemplates,
+          render json: dashboard_templates,
                  root: 'data',
                  each_serializer: Api::V3::Dashboards::TemplateSerializer
         end

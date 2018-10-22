@@ -71,6 +71,7 @@ module Api
 
         def case_sql(conditions)
           return 'FALSE AS is_disabled' if conditions.blank?
+
           <<~SQL
             CASE
               WHEN #{conditions} THEN FALSE
@@ -110,6 +111,7 @@ module Api
 
         def node_attributes_conditions_for_case
           return unless @nodes_ids.any?
+
           Api::V3::Readonly::Attribute.send(
             :sanitize_sql_for_conditions,
             ['node_id IN (?)', @nodes_ids]
