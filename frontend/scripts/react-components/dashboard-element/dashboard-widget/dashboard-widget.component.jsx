@@ -18,7 +18,8 @@ function DashboardWidget(props) {
         </div>
       </div>
       <div className="widget-box">
-        {(loading || error || !chartConfig) && (
+        {error && <p className="widget-title">{error.statusText}</p>}
+        {loading && (
           <div className="widget-spinner">
             <Spinner className="-large -white" />
           </div>

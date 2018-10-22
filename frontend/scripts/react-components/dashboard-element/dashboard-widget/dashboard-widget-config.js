@@ -41,10 +41,11 @@ export default {
     colors: ['#ee5463'],
     xKey: 'x',
     yKeys: {
+      bars: null
+    },
+    yKeysAttributes: {
       bars: {
-        y1: {
-          interval: 'preserveStartEnd'
-        }
+        interval: 'preserveStartEnd'
       }
     }
   },
@@ -54,7 +55,7 @@ export default {
     colors: ['#fff0c2', '#9a1e2a', '#ee5463', '#c62c3b', '#fd7d8a'],
     xKey: 'x',
     yKeys: {
-      bars: {}
+      bars: null
     }
   },
   pie: {
@@ -63,14 +64,15 @@ export default {
     colors: ['#fff0c2', '#9a1e2a', '#ee5463', '#c62c3b', '#fd7d8a', '#ffb1b9', '#ffffff'],
     xKey: 'x',
     yKeys: {
+      pies: null
+    },
+    yKeysAttributes: {
       pies: {
-        y1: {
-          cx: '40%',
-          cy: '50%',
-          nameKey: 'x1',
-          innerRadius: '60%',
-          outerRadius: '80%'
-        }
+        cx: '40%',
+        cy: '50%',
+        nameKey: 'x1',
+        innerRadius: '60%',
+        outerRadius: '80%'
       }
     }
   },
@@ -80,9 +82,7 @@ export default {
     colors: ['#fff0c2', '#ee5463', '#fd7d8a'],
     xKey: 'x',
     yKeys: {
-      lines: {
-        y1: {}
-      }
+      lines: null
     }
   }
 };
