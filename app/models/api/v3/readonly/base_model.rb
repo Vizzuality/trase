@@ -45,8 +45,9 @@ module Api
           def refresh_dependents(options = {}); end
 
           def refresh_by_name(table_name, options)
+            safe_concurrently = true
             # rubocop:disable Style/DoubleNegation
-            safe_concurrently = !!options[:concurrently]
+            safe_concurrently = !!options[:concurrently] unless options[:concurrently].nil?
             # rubocop:enable Style/DoubleNegation
             is_populated = Api::V3::IsMviewPopulated.new(table_name).call
             # cannot refresh concurrently a view that is not populated
