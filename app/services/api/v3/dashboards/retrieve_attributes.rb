@@ -37,7 +37,6 @@ module Api
               :dashboards_attribute_group_id,
               'NOT BOOL_OR(NOT is_disabled) AS is_disabled'
             ).
-            where('display_name IS NOT NULL').
             group(
               :id,
               :display_name,
