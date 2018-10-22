@@ -1,121 +1,98 @@
+const xAxis = {
+  tickLine: false,
+  interval: 'preserveStartEnd',
+  tick: {
+    fontFamily: 'DecimaMonoPro',
+    fontSize: 14,
+    fill: '#ffffff'
+  },
+  axisLine: false
+};
+
+const yAxis = {
+  axisLine: false,
+  tick: {
+    fontFamily: 'DecimaMonoPro',
+    tickCount: 2,
+    interval: 2,
+    fontSize: 14,
+    fill: '#ffffff'
+  },
+  tickFormatter: t => t.toLocaleString(),
+  domain: [0, 'auto']
+};
+
+const cartesianGrid = {
+  vertical: false,
+  strokeDasharray: '5 5'
+};
+
+const tooltip = {
+  cursor: {
+    opacity: 0.5,
+    stroke: '#9a1e2a',
+    strokeWidth: 2
+  },
+  content: null
+};
+
+const defaults = {
+  xAxis,
+  yAxis,
+  tooltip,
+  cartesianGrid
+};
+
 export default {
   margin: { top: 0, right: 0, bottom: 0, left: 0 },
   bar: {
+    ...defaults,
+    type: 'bar',
+    colors: ['#ee5463'],
     xKey: 'x',
     yKeys: {
+      bars: null
+    },
+    yKeysAttributes: {
       bars: {
-        y: {
-          stroke: '#ee5463',
-          fill: '#ee5463',
-          interval: 'preserveStartEnd'
-        }
+        interval: 'preserveStartEnd'
       }
-    },
-    xAxis: {
-      type: 'category',
-      tickLine: false,
-      interval: 'preserveStartEnd',
-      tick: {
-        fontFamily: 'DecimaMonoPro',
-        fontSize: 14,
-        fill: '#ffffff'
-      },
-      axisLine: false
-    },
-    yAxis: {
-      axisLine: false,
-      tick: {
-        fontFamily: 'DecimaMonoPro',
-        tickCount: 2,
-        interval: 2,
-        fontSize: 14,
-        fill: '#ffffff'
-      },
-      tickFormatter: t => t.toLocaleString(),
-      domain: [0, 'auto']
-    },
-    cartesianGrid: {
-      vertical: false,
-      strokeDasharray: '5 5'
     }
   },
   stackedBar: {
+    ...defaults,
+    type: 'bar',
+    colors: ['#fff0c2', '#9a1e2a', '#ee5463', '#c62c3b', '#fd7d8a'],
     xKey: 'x',
     yKeys: {
-      bars: {
-        liquids: {
-          stroke: '#fff0c2',
-          fill: '#fff0c2',
-          stackId: 'x',
-          interval: 'preserveStartEnd'
-        },
-        natural_gas: {
-          stroke: '#9a1e2a',
-          fill: '#9a1e2a',
-          stackId: 'x',
-          interval: 'preserveStartEnd'
-        },
-        coal: {
-          stroke: '#ee5463',
-          fill: '#ee5463',
-          stackId: 'x',
-          interval: 'preserveStartEnd'
-        },
-        nuclear: {
-          stroke: '#c62c3b',
-          fill: '#c62c3b',
-          stackId: 'x',
-          interval: 'preserveStartEnd'
-        },
-        renewables: {
-          stroke: '#fd7d8a',
-          fill: '#fd7d8a',
-          stackId: 'x',
-          interval: 'preserveStartEnd'
-        }
-      }
-    },
-    xAxis: {
-      type: 'category',
-      tickLine: false,
-      interval: 'preserveStartEnd',
-      tick: {
-        fontFamily: 'DecimaMonoPro',
-        fontSize: 14,
-        fill: '#ffffff'
-      },
-      axisLine: false
-    },
-    yAxis: {
-      axisLine: false,
-      tick: {
-        fontFamily: 'DecimaMonoPro',
-        tickCount: 2,
-        interval: 2,
-        fontSize: 14,
-        fill: '#ffffff'
-      },
-      tickFormatter: t => t.toLocaleString(),
-      domain: [0, 'auto']
-    },
-    cartesianGrid: {
-      vertical: false,
-      strokeDasharray: '5 5'
+      bars: null
     }
   },
   pie: {
+    ...defaults,
     type: 'pie',
+    colors: ['#fff0c2', '#9a1e2a', '#ee5463', '#c62c3b', '#fd7d8a', '#ffb1b9', '#ffffff'],
     xKey: 'x',
     yKeys: {
-      pies: {
-        y: {
-          cx: '40%',
-          cy: '50%',
-          nameKey: 'x',
-          innerRadius: '60%',
-          outerRadius: '80%'
-        }
-      }
+      pies: null
     },
+    yKeysAttributes: {
+      pies: {
+        cx: '40%',
+        cy: '50%',
+        nameKey: 'x1',
+        innerRadius: '60%',
+        outerRadius: '80%'
+      }
+    }
+  },
+  line: {
+    ...defaults,
+    type: 'line',
+    colors: ['#fff0c2', '#ee5463', '#fd7d8a'],
+    xKey: 'x',
+    yKeys: {
+      lines: null
+    }
   }
 };

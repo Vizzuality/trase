@@ -26,12 +26,12 @@ module Api
               suffix: @attribute.unit
             },
             x: {
-              type: 'numeric', # categorical || date || numeric
+              type: 'category', # category || date || number
               label: 'Year',
               tooltip: {prefix: '', format: '', suffix: ''}
             },
             y1: {
-              type: 'numeric',
+              type: 'number',
               label: '',
               tooltip: {prefix: '', format: '', suffix: ''}
             }

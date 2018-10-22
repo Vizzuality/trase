@@ -16,6 +16,10 @@ const mapStateToProps = (state, { query, params }) => {
           ...acc.data,
           [endpoint]: current.data || null
         },
+        meta: {
+          ...acc.meta,
+          [endpoint]: current.meta || null
+        },
         loading: acc.loading || current.loading,
         error: acc.error || current.error
       };

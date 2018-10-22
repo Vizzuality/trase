@@ -23,20 +23,22 @@ const widgetsReducer = {
     return { ...state, endpoints: { ...state.endpoints, [endpoint]: defaultEndpoint(key) } };
   },
   [WIDGETS__SET_ENDPOINT_DATA](state, action) {
-    const { endpoint, data } = action.payload;
-    const parsedData = Array.isArray(data)
-      ? data
-      : Object.entries(data).reduce(
-          (acc, [key, value]) => ({ ...acc, [camelCase(key)]: value }),
-          {}
-        );
+    const { endpoint, data, meta } = action.payload;
+    const parseObject = obj =>
+      Array.isArray(obj)
+        ? obj
+        : Object.entries(obj).reduce(
+            (acc, [key, value]) => ({ ...acc, [camelCase(key)]: value }),
+            {}
+          );
     return {
       ...state,
       endpoints: {
         ...state.endpoints,
         [endpoint]: {
           ...state.endpoints[endpoint],
-          data: parsedData
+          data: parseObject(data),
+          meta: parseObject(meta)
         }
       }
     };

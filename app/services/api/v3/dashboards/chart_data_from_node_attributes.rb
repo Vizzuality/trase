@@ -45,7 +45,7 @@ module Api
               suffix: @attribute.unit
             },
             x: {
-              type: x_axis_type, # categorical || date || numeric
+              type: x_axis_type, # category || date || number
               label: x_axis_label,
               tooltip: {prefix: '', format: '', suffix: ''}
             }
