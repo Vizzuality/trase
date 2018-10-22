@@ -37,7 +37,6 @@ module Api
               :dashboards_attribute_group_id,
               'NOT BOOL_OR(NOT is_disabled) AS is_disabled'
             ).
-            where('display_name IS NOT NULL').
             group(
               :id,
               :display_name,
@@ -73,6 +72,7 @@ module Api
 
         def case_sql(conditions, default)
           return "#{default} AS is_disabled" if conditions.blank?
+
           <<~SQL
             CASE
               WHEN #{conditions} THEN FALSE
@@ -116,6 +116,7 @@ module Api
 
         def node_attributes_conditions_for_case
           return unless @nodes_ids.any?
+
           Api::V3::Readonly::Attribute.send(
             :sanitize_sql_for_conditions,
             ['node_id IN (?)', @nodes_ids]

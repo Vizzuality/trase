@@ -39,6 +39,36 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
+
+    # disable after commit refresh callbacks
+    Api::V3::DashboardsAttribute.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::DashboardsAttributeGroup.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::DownloadAttribute.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::IndProperty.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::MapAttribute.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::MapAttributeGroup.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::NodeProperty.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::Profile.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::QualProperty.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::QuantProperty.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::RecolorByAttribute.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::ResizeByAttribute.skip_callback(:commit, :after, :refresh_dependents)
+  end
+
+  config.after(:suite) do
+    # enable after commit refresh callbacks
+    Api::V3::DashboardsAttribute.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::DashboardsAttributeGroup.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::DownloadAttribute.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::IndProperty.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::MapAttribute.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::MapAttributeGroup.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::NodeProperty.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::Profile.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::QualProperty.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::QuantProperty.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::RecolorByAttribute.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::ResizeByAttribute.set_callback(:commit, :after, :refresh_dependents)
   end
 
   config.before(:each) do

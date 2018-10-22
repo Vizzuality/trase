@@ -5,7 +5,7 @@ RSpec.describe 'Search', type: :request do
 
   describe 'GET /api/v3/nodes/search' do
     before(:each) do
-      Api::V3::Readonly::Node.refresh
+      Api::V3::Readonly::Node.refresh(sync: true)
     end
 
     it 'has the correct response structure' do

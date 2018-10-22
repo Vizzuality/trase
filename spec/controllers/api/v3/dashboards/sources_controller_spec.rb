@@ -4,7 +4,8 @@ RSpec.describe Api::V3::Dashboards::SourcesController, type: :controller do
   include_context 'api v3 brazil flows quants'
 
   before(:each) do
-    Api::V3::Readonly::Dashboards::Source.refresh
+    Api::V3::Readonly::Dashboards::FlowPath.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::Dashboards::Source.refresh(sync: true, skip_dependencies: true)
   end
 
   describe 'GET search' do

@@ -35,6 +35,10 @@ module Api
               mview_klass.refresh(options.merge(skip_dependencies: true))
             end
           end
+
+          def self.long_running?
+            true
+          end
         end
       end
     end

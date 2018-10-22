@@ -1,11 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
-  before(:all) { Api::V3::Flow.delete_all } # TODO: one day db cleaning will work
   include_context 'api v3 brazil two flows'
   describe :query do
     before(:each) do
-      Api::V3::Readonly::DownloadFlow.refresh
+      Api::V3::Readonly::DownloadFlow.refresh(sync: true)
     end
 
     let(:flow1_potential_deforestation_row) {

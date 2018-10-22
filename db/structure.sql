@@ -1644,47 +1644,56 @@ CREATE TABLE public.flow_quants (
 --
 
 CREATE MATERIALIZED VIEW public.dashboards_flow_attributes_mv AS
- WITH all_attributes(id, display_name, tooltip_text, chart_type, dashboards_attribute_group_id, "position", original_id, original_type) AS (
-         SELECT a.id,
-            a.display_name,
-            a.tooltip_text,
-            da.chart_type,
-            da.dashboards_attribute_group_id,
-            da."position",
-            a.original_id,
-            a.original_type
-           FROM (public.dashboards_attributes_mv da
-             JOIN public.attributes_mv a ON ((a.id = da.attribute_id)))
-        ), combinations(flow_id, original_id, original_type) AS (
-         SELECT DISTINCT flow_inds.flow_id,
-            flow_inds.ind_id,
-            'Ind'::text AS text
-           FROM public.flow_inds
-        UNION ALL
-         SELECT DISTINCT flow_quals.flow_id,
-            flow_quals.qual_id,
-            'Qual'::text AS text
-           FROM public.flow_quals
-        UNION ALL
-         SELECT DISTINCT flow_quants.flow_id,
-            flow_quants.quant_id,
-            'Quant'::text AS text
-           FROM public.flow_quants
-        )
  SELECT DISTINCT contexts.country_id,
     contexts.commodity_id,
     flows.path,
-    all_attributes.id AS attribute_id,
-    all_attributes.display_name,
-    all_attributes.tooltip_text,
-    all_attributes.chart_type,
-    all_attributes.dashboards_attribute_group_id,
-    all_attributes."position"
-   FROM (((all_attributes
-     JOIN combinations ON (((all_attributes.original_id = combinations.original_id) AND (all_attributes.original_type = combinations.original_type))))
-     JOIN public.flows ON ((combinations.flow_id = flows.id)))
+    a.id AS attribute_id,
+    a.display_name,
+    a.tooltip_text,
+    da.chart_type,
+    da.dashboards_attribute_group_id,
+    da."position"
+   FROM (((((public.flows
      JOIN public.contexts ON ((flows.context_id = contexts.id)))
-  GROUP BY contexts.country_id, contexts.commodity_id, flows.path, all_attributes.id, all_attributes.display_name, all_attributes.tooltip_text, all_attributes.chart_type, all_attributes.dashboards_attribute_group_id, all_attributes."position"
+     JOIN public.flow_inds ON ((flows.id = flow_inds.flow_id)))
+     JOIN public.dashboards_inds di ON ((flow_inds.ind_id = di.ind_id)))
+     JOIN public.dashboards_attributes da ON ((da.id = di.dashboards_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = di.ind_id) AND (a.original_type = 'Ind'::text))))
+  WHERE (a.display_name IS NOT NULL)
+UNION ALL
+ SELECT DISTINCT contexts.country_id,
+    contexts.commodity_id,
+    flows.path,
+    a.id AS attribute_id,
+    a.display_name,
+    a.tooltip_text,
+    da.chart_type,
+    da.dashboards_attribute_group_id,
+    da."position"
+   FROM (((((public.flows
+     JOIN public.contexts ON ((flows.context_id = contexts.id)))
+     JOIN public.flow_quals ON ((flows.id = flow_quals.flow_id)))
+     JOIN public.dashboards_quals dq ON ((flow_quals.qual_id = dq.qual_id)))
+     JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = dq.qual_id) AND (a.original_type = 'Qual'::text))))
+  WHERE (a.display_name IS NOT NULL)
+UNION ALL
+ SELECT DISTINCT contexts.country_id,
+    contexts.commodity_id,
+    flows.path,
+    a.id AS attribute_id,
+    a.display_name,
+    a.tooltip_text,
+    da.chart_type,
+    da.dashboards_attribute_group_id,
+    da."position"
+   FROM (((((public.flows
+     JOIN public.contexts ON ((flows.context_id = contexts.id)))
+     JOIN public.flow_quants ON ((flows.id = flow_quants.flow_id)))
+     JOIN public.dashboards_quants dq ON ((flow_quants.quant_id = dq.quant_id)))
+     JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = dq.quant_id) AND (a.original_type = 'Quant'::text))))
+  WHERE (a.display_name IS NOT NULL)
   WITH NO DATA;
 
 
@@ -1754,42 +1763,44 @@ CREATE TABLE public.node_quants (
 --
 
 CREATE MATERIALIZED VIEW public.dashboards_node_attributes_mv AS
- WITH all_attributes(id, display_name, tooltip_text, chart_type, dashboards_attribute_group_id, "position", original_id, original_type) AS (
-         SELECT a.id,
-            a.display_name,
-            a.tooltip_text,
-            da.chart_type,
-            da.dashboards_attribute_group_id,
-            da."position",
-            a.original_id,
-            a.original_type
-           FROM (public.dashboards_attributes_mv da
-             JOIN public.attributes_mv a ON ((a.id = da.attribute_id)))
-        ), combinations(node_id, original_id, original_type) AS (
-         SELECT DISTINCT node_inds.node_id,
-            node_inds.ind_id,
-            'Ind'::text AS text
-           FROM public.node_inds
-        UNION ALL
-         SELECT DISTINCT node_quals.node_id,
-            node_quals.qual_id,
-            'Qual'::text AS text
-           FROM public.node_quals
-        UNION ALL
-         SELECT DISTINCT node_quants.node_id,
-            node_quants.quant_id,
-            'Quant'::text AS text
-           FROM public.node_quants
-        )
- SELECT DISTINCT combinations.node_id,
-    all_attributes.id AS attribute_id,
-    all_attributes.display_name,
-    all_attributes.tooltip_text,
-    all_attributes.chart_type,
-    all_attributes.dashboards_attribute_group_id,
-    all_attributes."position"
-   FROM (all_attributes
-     JOIN combinations ON (((all_attributes.original_id = combinations.original_id) AND (all_attributes.original_type = combinations.original_type))))
+ SELECT DISTINCT node_inds.node_id,
+    a.id AS attribute_id,
+    a.display_name,
+    a.tooltip_text,
+    da.chart_type,
+    da.dashboards_attribute_group_id,
+    da."position"
+   FROM (((public.node_inds
+     JOIN public.dashboards_inds di ON ((node_inds.ind_id = di.ind_id)))
+     JOIN public.dashboards_attributes da ON ((da.id = di.dashboards_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = di.ind_id) AND (a.original_type = 'Ind'::text))))
+  WHERE (a.display_name IS NOT NULL)
+UNION ALL
+ SELECT DISTINCT node_quals.node_id,
+    a.id AS attribute_id,
+    a.display_name,
+    a.tooltip_text,
+    da.chart_type,
+    da.dashboards_attribute_group_id,
+    da."position"
+   FROM (((public.node_quals
+     JOIN public.dashboards_quals dq ON ((node_quals.qual_id = dq.qual_id)))
+     JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = dq.qual_id) AND (a.original_type = 'Qual'::text))))
+  WHERE (a.display_name IS NOT NULL)
+UNION ALL
+ SELECT DISTINCT node_quants.node_id,
+    a.id AS attribute_id,
+    a.display_name,
+    a.tooltip_text,
+    da.chart_type,
+    da.dashboards_attribute_group_id,
+    da."position"
+   FROM (((public.node_quants
+     JOIN public.dashboards_quants dq ON ((node_quants.quant_id = dq.quant_id)))
+     JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = dq.quant_id) AND (a.original_type = 'Quant'::text))))
+  WHERE (a.display_name IS NOT NULL)
   WITH NO DATA;
 
 
@@ -4665,34 +4676,6 @@ CREATE UNIQUE INDEX dashboards_destinations_mv_unique_idx ON public.dashboards_d
 
 
 --
--- Name: dashboards_flow_attributes_mv_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_flow_attributes_mv_commodity_id_idx ON public.dashboards_flow_attributes_mv USING btree (commodity_id);
-
-
---
--- Name: dashboards_flow_attributes_mv_country_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_flow_attributes_mv_country_id_idx ON public.dashboards_flow_attributes_mv USING btree (country_id);
-
-
---
--- Name: dashboards_flow_attributes_mv_path_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_flow_attributes_mv_path_idx ON public.dashboards_flow_attributes_mv USING gist (path);
-
-
---
--- Name: dashboards_flow_attributes_mv_unique_attr_flow_context_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX dashboards_flow_attributes_mv_unique_attr_flow_context_idx ON public.dashboards_flow_attributes_mv USING btree (attribute_id, path, commodity_id, country_id);
-
-
---
 -- Name: dashboards_flow_paths_mv_category_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4704,13 +4687,6 @@ CREATE INDEX dashboards_flow_paths_mv_category_idx ON public.dashboards_flow_pat
 --
 
 CREATE UNIQUE INDEX dashboards_flow_paths_mv_flow_id_node_id_idx ON public.dashboards_flow_paths_mv USING btree (flow_id, node_id);
-
-
---
--- Name: dashboards_node_attributes_mv_node_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX dashboards_node_attributes_mv_node_id_attribute_id_idx ON public.dashboards_node_attributes_mv USING btree (node_id, attribute_id);
 
 
 --
@@ -4823,6 +4799,20 @@ CREATE UNIQUE INDEX download_flows_mv_row_name_attribute_type_attribute_id_idx O
 --
 
 CREATE INDEX flow_inds_ind_id_idx ON public.flow_inds USING btree (ind_id);
+
+
+--
+-- Name: flow_paths_mv_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX flow_paths_mv_flow_id_idx ON public.flow_paths_mv USING btree (flow_id);
+
+
+--
+-- Name: flow_paths_mv_flow_id_position_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX flow_paths_mv_flow_id_position_idx ON public.flow_paths_mv USING btree (flow_id, column_position);
 
 
 --
@@ -5075,13 +5065,6 @@ CREATE UNIQUE INDEX index_download_versions_on_context_id_and_is_current ON publ
 --
 
 CREATE INDEX index_flow_inds_on_flow_id ON public.flow_inds USING btree (flow_id);
-
-
---
--- Name: index_flow_paths_mv_on_flow_id_and_column_position; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_flow_paths_mv_on_flow_id_and_column_position ON public.flow_paths_mv USING btree (flow_id, column_position);
 
 
 --
@@ -6022,6 +6005,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181008101006'),
 ('20181009102913'),
 ('20181011103455'),
-('20181017053240');
+('20181017053240'),
+('20181019222226'),
+('20181019232447');
 
 
