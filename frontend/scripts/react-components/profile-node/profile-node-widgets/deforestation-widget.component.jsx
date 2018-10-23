@@ -16,11 +16,21 @@ function DeforestationWidget(props) {
       params={[{ ...params }, { ...params, profile_type: 'place' }]}
     >
       {({ data, loading, error }) => {
-        if (loading || error) {
+        if (loading) {
           return (
-            <section className="spinner-section" data-test="loading-section">
+            <div className="spinner-section" data-test="loading-section">
               <ShrinkingSpinner className="-large" />
-            </section>
+            </div>
+          );
+        }
+
+        if (error) {
+          // TODO: display a proper error message to the user
+          console.error('Error loading deforestation widget data for profile page', error);
+          return (
+            <div className="spinner-section" data-test="loading-section">
+              <ShrinkingSpinner className="-large" />
+            </div>
           );
         }
 
