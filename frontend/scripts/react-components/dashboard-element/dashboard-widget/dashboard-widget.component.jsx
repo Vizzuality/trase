@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Chart from 'react-components/chart';
 import Spinner from 'react-components/shared/shrinking-spinner.component';
 import DashboardWidgetLegend from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-legend.component';
+import ErrorCatch from 'react-components/shared/ErrorCatch';
 
 function DashboardWidget(props) {
   const { title, loading, error, data, chartConfig } = props;
@@ -18,20 +19,24 @@ function DashboardWidget(props) {
         </div>
       </div>
       <div className="widget-box">
-        {error && <p className="widget-title">{error.statusText}</p>}
-        {loading && (
-          <div className="widget-spinner">
-            <Spinner className="-large -white" />
-          </div>
-        )}
-        {data &&
-          data.length > 0 &&
-          chartConfig && (
-            <React.Fragment>
-              <DashboardWidgetLegend colors={chartConfig.colors} />
-              <Chart className="widget-chart" data={data} config={chartConfig} />
-            </React.Fragment>
+        <ErrorCatch
+          renderFallback={err => <p className="widget-title -error">Error: {err.message}</p>}
+        >
+          {error && <p className="widget-title -error">Error: {error.statusText}</p>}
+          {loading && (
+            <div className="widget-spinner">
+              <Spinner className="-large -white" />
+            </div>
           )}
+          {data &&
+            data.length > 0 &&
+            chartConfig && (
+              <React.Fragment>
+                <DashboardWidgetLegend colors={chartConfig.colors} />
+                <Chart className="widget-chart" data={data} config={chartConfig} />
+              </React.Fragment>
+            )}
+        </ErrorCatch>
       </div>
     </div>
   );

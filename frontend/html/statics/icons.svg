@@ -88,10 +88,10 @@
 </symbol>
 <symbol id="icon-share" viewBox="0 0 32 32">
 <title>share</title>
-<path class="path1" fill="none" stroke="#000" stroke-width="2.72" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M6.4 16l19.2-11.2zM6.4 16l19.2 11.2z"></path>
-<path class="path2" fill="#fff" stroke="#000" stroke-width="2.4" stroke-miterlimit="4" stroke-linecap="butt" stroke-linejoin="miter" d="M9.6 16c0 1.767-1.433 3.2-3.2 3.2s-3.2-1.433-3.2-3.2c0-1.767 1.433-3.2 3.2-3.2s3.2 1.433 3.2 3.2z"></path>
-<path class="path3" fill="#fff" stroke="#000" stroke-width="2.4" stroke-miterlimit="4" stroke-linecap="butt" stroke-linejoin="miter" d="M28.8 4.8c0 1.767-1.433 3.2-3.2 3.2s-3.2-1.433-3.2-3.2c0-1.767 1.433-3.2 3.2-3.2s3.2 1.433 3.2 3.2z"></path>
-<path class="path4" fill="#fff" stroke="#000" stroke-width="2.4" stroke-miterlimit="4" stroke-linecap="butt" stroke-linejoin="miter" d="M28.8 27.2c0 1.767-1.433 3.2-3.2 3.2s-3.2-1.433-3.2-3.2c0-1.767 1.433-3.2 3.2-3.2s3.2 1.433 3.2 3.2z"></path>
+<path class="path1"  stroke-width="2.72" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M6.4 16l19.2-11.2zM6.4 16l19.2 11.2z"></path>
+<path class="path2"  stroke-width="2.4" stroke-miterlimit="4" stroke-linecap="butt" stroke-linejoin="miter" d="M9.6 16c0 1.767-1.433 3.2-3.2 3.2s-3.2-1.433-3.2-3.2c0-1.767 1.433-3.2 3.2-3.2s3.2 1.433 3.2 3.2z"></path>
+<path class="path3"  stroke-width="2.4" stroke-miterlimit="4" stroke-linecap="butt" stroke-linejoin="miter" d="M28.8 4.8c0 1.767-1.433 3.2-3.2 3.2s-3.2-1.433-3.2-3.2c0-1.767 1.433-3.2 3.2-3.2s3.2 1.433 3.2 3.2z"></path>
+<path class="path4"  stroke-width="2.4" stroke-miterlimit="4" stroke-linecap="butt" stroke-linejoin="miter" d="M28.8 27.2c0 1.767-1.433 3.2-3.2 3.2s-3.2-1.433-3.2-3.2c0-1.767 1.433-3.2 3.2-3.2s3.2 1.433 3.2 3.2z"></path>
 </symbol>
 <symbol id="icon-update" viewBox="0 0 32 32">
 <title>update</title>
