@@ -50,7 +50,7 @@ class DashboardWidgetContainer extends Component {
     const { chartType } = this.props;
     const defaultConfig = CHART_CONFIG[chartType];
     if (!meta) return defaultConfig;
-    return {
+    const config = {
       ...defaultConfig,
       xAxis: {
         ...defaultConfig.xAxis,
@@ -67,6 +67,7 @@ class DashboardWidgetContainer extends Component {
         content: <DashboardWidgetTooltip meta={meta} />
       }
     };
+    return config;
   }
 
   render() {

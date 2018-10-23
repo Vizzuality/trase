@@ -119,11 +119,17 @@ class DashboardElement extends React.PureComponent {
               </div>
               <div className="column small-12 medium-6">
                 <div className="dashboard-header-actions -end">
-                  <a href="/" className="dashboard-header-action -link">
-                    SHARE
-                  </a>
-                  <a href="/" className="dashboard-header-action -link">
+                  <a href={false} className="dashboard-header-action -link">
+                    <svg className="icon icon-download">
+                      <use xlinkHref="#icon-download" />
+                    </svg>
                     DOWNLOAD
+                  </a>
+                  <a href={false} className="dashboard-header-action -link">
+                    <svg className="icon icon-share">
+                      <use xlinkHref="#icon-share" />
+                    </svg>
+                    SHARE
                   </a>
                 </div>
               </div>

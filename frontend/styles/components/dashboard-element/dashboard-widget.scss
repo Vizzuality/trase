@@ -12,6 +12,13 @@
     font-weight: $font-weight-light;
     line-height: 1.6;
     letter-spacing: -0.4px;
+
+    &.-error {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
   }
 
   .widget-actions {
