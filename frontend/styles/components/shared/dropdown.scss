@@ -99,6 +99,9 @@
 
   .dropdown-list {
     @extend %dropdown;
+    max-height: 265px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     position: absolute;
     top: 0;
     left: 0;
