@@ -38,10 +38,9 @@ function SummaryWidget(props) {
                 year={year}
                 tooltips={tooltips}
                 printMode={printMode}
-                countryName={context.countryName}
-                commodityName={context.commodityName}
                 onYearChange={onYearChange}
                 data={data[GET_NODE_SUMMARY_URL]}
+                context={context}
               />
             )}
             {profileType === 'place' && (
@@ -50,9 +49,8 @@ function SummaryWidget(props) {
                 tooltips={tooltips}
                 printMode={printMode}
                 onYearChange={onYearChange}
-                countryName={context.countryName}
                 data={data[GET_NODE_SUMMARY_URL]}
-                commodityName={context.commodityName}
+                context={context}
               />
             )}
             <ButtonLinks
