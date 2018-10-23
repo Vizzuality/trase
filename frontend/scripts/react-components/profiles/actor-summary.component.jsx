@@ -26,7 +26,7 @@ class ActorSummary extends React.PureComponent {
         dropdown: true,
         label: 'Year',
         value: year,
-        valueList: context.years || [],
+        valueList: (context.years || []).sort((a, b) => b - a),
         onValueSelected: onYearChange
       }
     ];
