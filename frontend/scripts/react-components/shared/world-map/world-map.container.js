@@ -23,7 +23,14 @@ const getContextFlows = (countries, origin, originGeoId, originCoordinates) => {
           strokeWidth: index + 1
         }))
     : [];
-  const [minX, , maxX] = bbox(lineString(contextFlows.map(f => f.coordinates)));
+  const contextFlowsWithCoordinates = contextFlows.filter(
+    f => typeof f.coordinates !== 'undefined'
+  );
+  if (contextFlowsWithCoordinates.length !== contextFlows.length) {
+    console.warn('World map flows are missing geoids. Check your database.');
+  }
+
+  const [minX, , maxX] = bbox(lineString(contextFlowsWithCoordinates.map(f => f.coordinates)));
   const medianX = (maxX + minX) / 2;
   const originLeftOfBbox = originCoordinates[0] < medianX;
   const pointOfControl = {
@@ -39,7 +46,7 @@ const getContextFlows = (countries, origin, originGeoId, originCoordinates) => {
     return 'forceUp';
   };
 
-  return contextFlows.map(destination => ({
+  return contextFlowsWithCoordinates.map(destination => ({
     ...destination,
     curveStyle: getCurveStyle(destination.coordinates)
   }));

@@ -13,12 +13,23 @@ function SummaryWidget(props) {
   return (
     <Widget params={[params]} query={[GET_NODE_SUMMARY_URL]}>
       {({ data, loading, error }) => {
-        if (loading || error)
+        if (loading) {
           return (
             <div className="spinner-section" data-test="loading-section">
               <ShrinkingSpinner className="-large" />
             </div>
           );
+        }
+
+        if (error) {
+          // TODO: display a proper error message to the user
+          console.error('Error loading summary data for profile page', error);
+          return (
+            <div className="spinner-section" data-test="loading-section">
+              <ShrinkingSpinner className="-large" />
+            </div>
+          );
+        }
 
         return (
           <React.Fragment>
