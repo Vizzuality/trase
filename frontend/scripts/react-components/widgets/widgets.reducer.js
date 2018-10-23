@@ -23,7 +23,7 @@ const widgetsReducer = {
     return { ...state, endpoints: { ...state.endpoints, [endpoint]: defaultEndpoint(key) } };
   },
   [WIDGETS__SET_ENDPOINT_DATA](state, action) {
-    const { endpoint, data, meta } = action.payload;
+    const { endpoint, data, meta = {} } = action.payload;
     const parseObject = obj =>
       Array.isArray(obj)
         ? obj
