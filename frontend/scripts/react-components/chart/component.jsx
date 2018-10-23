@@ -164,7 +164,10 @@ class Chart extends PureComponent {
               Object.keys(bars).map(key => (
                 <Bar key={key} dataKey={key} dot={false} {...bars[key]}>
                   {bars[key].itemColor &&
-                    data.map(item => <Cell key={`c_${item.color}`} fill={item.color} />)}
+                    data.map(item => {
+                      const { color } = colors.find(c => c.key === key) || {};
+                      return <Cell key={`c_${item.color || color}`} fill={item.color || color} />;
+                    })}
                 </Bar>
               ))}
 
