@@ -69,6 +69,7 @@ class Chart extends PureComponent {
       tooltip,
       legend,
       unit,
+      colors,
       unitFormat
     } = config;
 
@@ -128,16 +129,7 @@ class Chart extends PureComponent {
               <CartesianGrid strokeDasharray="4 4" stroke="#d6d6d9" {...cartesianGrid} />
             )}
 
-            {xAxis && (
-              <XAxis
-                dataKey={xKey || ''}
-                tick={{ fontSize: 12 }}
-                // axisLine={false}
-                // tickLine={false}
-                // tick={{ dy: 8, fontSize: '12px', fill: '#555555' }}
-                {...xAxis}
-              />
-            )}
+            {xAxis && <XAxis dataKey={xKey || ''} tick={{ fontSize: 12 }} {...xAxis} />}
 
             {yAxis && (
               <YAxis
@@ -179,9 +171,16 @@ class Chart extends PureComponent {
             {pies &&
               Object.keys(pies).map(key => (
                 <Pie key={key} data={data} dataKey={key} {...pies[key]}>
-                  {data.map(item => (
-                    <Cell key={`c_${item.color}`} fill={item.color} stroke={item.color} />
-                  ))}
+                  {data.map(item => {
+                    const { color } = colors.find(c => c.key === key) || {};
+                    return (
+                      <Cell
+                        key={`c_${item.color || color}`}
+                        fill={item.color || color}
+                        stroke={item.color || color}
+                      />
+                    );
+                  })}
                 </Pie>
               ))}
 

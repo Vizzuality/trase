@@ -72,6 +72,8 @@ export default {
     ...defaults,
     type: 'pie',
     colors: ['#fff0c2', '#9a1e2a', '#ee5463', '#c62c3b', '#fd7d8a', '#ffb1b9', '#ffffff'],
+    xAxis: undefined,
+    yAxis: undefined,
     xKey: 'x',
     yKeys: {
       pies: null
@@ -80,7 +82,7 @@ export default {
       pies: {
         cx: '40%',
         cy: '50%',
-        nameKey: 'x1',
+        nameKey: 'x',
         innerRadius: '60%',
         outerRadius: '80%'
       }

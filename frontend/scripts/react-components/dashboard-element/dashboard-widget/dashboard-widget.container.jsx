@@ -41,6 +41,7 @@ class DashboardWidgetContainer extends Component {
     if (!meta) return colors;
     const groupedY = DashboardWidgetContainer.getGroupedY(meta);
     return DashboardWidgetContainer.sortGroupedY(groupedY).map((key, index) => ({
+      key,
       label: groupedY[key].label || meta.yAxis.label,
       color: colors[index]
     }));
@@ -56,11 +57,11 @@ class DashboardWidgetContainer extends Component {
     if (!meta) return defaultConfig;
     const config = {
       ...defaultConfig,
-      xAxis: {
+      xAxis: defaultConfig.xAxis && {
         ...defaultConfig.xAxis,
         type: meta.x && meta.x.type
       },
-      yAxis: {
+      yAxis: defaultConfig.yAxis && {
         ...defaultConfig.yAxis,
         type: meta.y && meta.x.type
       },
