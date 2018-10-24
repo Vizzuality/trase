@@ -55,6 +55,16 @@
       width: 100%;
     }
 
+    .widget-yAxis-label {
+      color: $elephant;
+      font-family: $font-family-1;
+      font-size: 11px;
+      position: relative;
+      top: 25px;
+      margin-left: 42px;
+      text-transform: uppercase;
+    }
+
     .widget-chart {
       border-top: solid 1px rgba($white, 0.13);
       flex: 1;

@@ -60,6 +60,10 @@ class DashboardWidgetContainer extends Component {
         ...defaultConfig.yAxis,
         type: meta.y && meta.x.type
       },
+      yAxisLabel: {
+        text: meta.yAxis && meta.yAxis.label,
+        suffix: meta.yAxis && meta.yAxis.suffix
+      },
       yKeys: DashboardWidgetContainer.getYKeys(meta, defaultConfig),
       colors: DashboardWidgetContainer.getColors(meta, defaultConfig),
       tooltip: {
@@ -81,6 +85,7 @@ class DashboardWidgetContainer extends Component {
             loading={loading}
             data={data && data[url]}
             chartConfig={this.getConfig(meta && meta[url])}
+            topLegend={meta && meta}
           />
         )}
       </Widget>
