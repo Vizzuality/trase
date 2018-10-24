@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Chart from 'react-components/chart';
 import Spinner from 'react-components/shared/shrinking-spinner.component';
+import DashboardWidgetLabel from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-label.component';
 import DashboardWidgetLegend from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-legend.component';
 import ErrorCatch from 'react-components/shared/ErrorCatch';
 
@@ -33,6 +34,12 @@ function DashboardWidget(props) {
             chartConfig && (
               <React.Fragment>
                 <DashboardWidgetLegend colors={chartConfig.colors} />
+                {chartConfig.yAxisLabel && (
+                  <DashboardWidgetLabel
+                    text={chartConfig.yAxisLabel.text}
+                    suffix={chartConfig.yAxisLabel.suffix}
+                  />
+                )}
                 <Chart className="widget-chart" data={data} config={chartConfig} />
               </React.Fragment>
             )}

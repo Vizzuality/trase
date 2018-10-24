@@ -8,6 +8,7 @@ import SearchInput from 'react-components/shared/search-input/search-input.compo
 
 function mapStateToProps(state) {
   return {
+    year: state.app.selectedContext ? state.app.selectedContext.defaultYear : null,
     items: state.profileRoot.search.results,
     isLoading: state.profileRoot.search.isLoading
   };
@@ -16,7 +17,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      onSelect: node => goToNodeProfilePage(node),
+      onSelect: (node, year) => goToNodeProfilePage(node, year),
       onSearchTermChange: searchTerm => searchNodeWithTerm(searchTerm)
     },
     dispatch
