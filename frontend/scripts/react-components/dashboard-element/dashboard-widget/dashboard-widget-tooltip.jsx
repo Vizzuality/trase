@@ -36,7 +36,7 @@ class DashboardWidgetTooltip extends React.PureComponent {
     return (
       <div className="c-dashboard-widget-tooltip">
         {payload.map(item => (
-          <div className="dashboard-widget-key-item">
+          <div className="dashboard-widget-key-item" key={item}>
             <span style={{ backgroundColor: item.color || 'white' }} />
             <p>
               <span>{DashboardWidgetTooltip.getTooltipLabel(meta, item.dataKey)}</span>
