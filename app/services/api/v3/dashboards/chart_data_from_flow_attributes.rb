@@ -5,13 +5,21 @@ module Api
         def initialize(attribute, countries_ids, commodities_ids, nodes_ids)
           @attribute = attribute
           @countries_ids = countries_ids
+          @countries = Api::V3::Country.where(id: @countries_ids)
           @commodities_ids = commodities_ids
+          @commodities = Api::V3::Commodity.where(id: @commodities_ids)
           @nodes_ids = nodes_ids
+          @nodes = Api::V3::Node.where(id: @nodes_ids)
           initialize_query
         end
 
         def call
           @data = @query.map { |r| r.attributes.slice('x', 'y1') }
+          y_value_label = (
+            @countries.pluck(:iso2) +
+            @commodities.pluck(:name) +
+            @nodes.order(:node_type_id, :name).pluck(:name)
+          ).reject(&:blank?).join(' / ')
           @meta = {
             xAxis: {
               label: 'Year',
@@ -32,7 +40,7 @@ module Api
             },
             y1: {
               type: 'number',
-              label: '',
+              label: y_value_label,
               tooltip: {prefix: '', format: '', suffix: ''}
             }
           }
