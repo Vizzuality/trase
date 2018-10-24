@@ -59,7 +59,7 @@ class DashboardWidgetContainer extends Component {
 
   getConfig(meta, data) {
     const { chartType } = this.props;
-    const defaultConfig = CHART_CONFIG[chartType];
+    const defaultConfig = CHART_CONFIG[chartType] || CHART_CONFIG.line;
     if (!meta) return defaultConfig;
     const config = {
       ...defaultConfig,

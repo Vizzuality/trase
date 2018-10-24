@@ -28,7 +28,7 @@ class DashboardWidgetTooltip extends React.PureComponent {
     let text = '';
     if (meta && meta[key]) {
       const { label } = meta[key];
-      text = label;
+      text = `${label} `;
     } else {
       text = `${payload.x} `;
     }
