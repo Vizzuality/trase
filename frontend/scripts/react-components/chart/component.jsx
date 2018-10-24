@@ -174,8 +174,8 @@ class Chart extends PureComponent {
             {pies &&
               Object.keys(pies).map(key => (
                 <Pie key={key} data={data} dataKey={key} {...pies[key]}>
-                  {data.map(item => {
-                    const { color } = colors.find(c => c.key === key) || {};
+                  {data.map((item, index) => {
+                    const { color } = colors[index] || {};
                     return (
                       <Cell
                         key={`c_${item.color || color}`}

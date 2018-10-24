@@ -25,6 +25,7 @@ class DashboardWidgetContainer extends Component {
         ...yKeysTypesAcc,
         [nextYKeyType]: DashboardWidgetContainer.sortGroupedY(groupedY).reduce(
           (groupedYKeysAcc, nextGroupedYKey, index) => ({
+            ...groupedYKeysAcc,
             [nextGroupedYKey]: {
               ...yKeyTypeAttributes,
               fill: colors && colors[index],
@@ -37,21 +38,26 @@ class DashboardWidgetContainer extends Component {
     }, {});
   }
 
-  static getColors(meta, { colors }) {
+  static getColors(meta, { colors }, chartType, data) {
     if (!meta) return colors;
-    const groupedY = DashboardWidgetContainer.getGroupedY(meta);
-    return DashboardWidgetContainer.sortGroupedY(groupedY).map((key, index) => ({
-      key,
-      label: groupedY[key].label || meta.yAxis.label,
+    if (chartType !== 'pie') {
+      const groupedY = DashboardWidgetContainer.getGroupedY(meta);
+      return DashboardWidgetContainer.sortGroupedY(groupedY).map((key, index) => ({
+        label: groupedY[key].label || meta.yAxis.label,
+        color: colors[index]
+      }));
+    }
+    return data.map((item, index) => ({
+      label: item.x,
       color: colors[index]
     }));
   }
 
-  sortByYear(data) {
+  sortByX(data) {
     return sortBy(data, 'x');
   }
 
-  getConfig(meta) {
+  getConfig(meta, data) {
     const { chartType } = this.props;
     const defaultConfig = CHART_CONFIG[chartType];
     if (!meta) return defaultConfig;
@@ -70,7 +76,7 @@ class DashboardWidgetContainer extends Component {
         suffix: meta.yAxis && meta.yAxis.suffix
       },
       yKeys: DashboardWidgetContainer.getYKeys(meta, defaultConfig),
-      colors: DashboardWidgetContainer.getColors(meta, defaultConfig),
+      colors: DashboardWidgetContainer.getColors(meta, defaultConfig, chartType, data),
       tooltip: {
         ...defaultConfig.tooltip,
         content: <DashboardWidgetTooltip meta={meta} />
@@ -83,16 +89,19 @@ class DashboardWidgetContainer extends Component {
     const { url, title } = this.props;
     return (
       <Widget raw query={[url]} params={[{ title }]}>
-        {({ data, loading, error, meta }) => (
-          <DashboardWidget
-            title={title}
-            error={error}
-            loading={loading}
-            data={this.sortByYear(data && data[url])}
-            chartConfig={this.getConfig(meta && meta[url])}
-            topLegend={meta && meta}
-          />
-        )}
+        {({ data, loading, error, meta }) => {
+          const sortedData = this.sortByX(data && data[url]);
+          return (
+            <DashboardWidget
+              title={title}
+              error={error}
+              loading={loading}
+              data={sortedData}
+              chartConfig={this.getConfig(meta && meta[url], sortedData)}
+              topLegend={meta && meta}
+            />
+          );
+        }}
       </Widget>
     );
   }
