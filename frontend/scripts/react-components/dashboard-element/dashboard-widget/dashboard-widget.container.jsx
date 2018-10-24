@@ -46,6 +46,10 @@ class DashboardWidgetContainer extends Component {
     }));
   }
 
+  sortByYear(data) {
+    return sortBy(data, 'x');
+  }
+
   getConfig(meta) {
     const { chartType } = this.props;
     const defaultConfig = CHART_CONFIG[chartType];
@@ -83,7 +87,7 @@ class DashboardWidgetContainer extends Component {
             title={title}
             error={error}
             loading={loading}
-            data={data && data[url]}
+            data={this.sortByYear(data && data[url])}
             chartConfig={this.getConfig(meta && meta[url])}
             topLegend={meta && meta}
           />
