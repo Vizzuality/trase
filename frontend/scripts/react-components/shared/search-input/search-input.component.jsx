@@ -98,7 +98,7 @@ class SearchInput extends PureComponent {
   render() {
     return (
       <Downshift
-        onSelect={this.props.onSelect}
+        onSelect={node => this.props.onSelect(node, this.props.year)}
         stateReducer={this.stateReducer}
         itemToString={i => (i === null ? '' : i.name)}
         onInputValueChange={this.onInputValueChange}
@@ -110,6 +110,7 @@ class SearchInput extends PureComponent {
 }
 
 SearchInput.propTypes = {
+  year: PropTypes.number,
   testId: PropTypes.string,
   isLoading: PropTypes.bool,
   className: PropTypes.string,
