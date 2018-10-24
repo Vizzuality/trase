@@ -63,6 +63,11 @@
       top: 25px;
       margin-left: 42px;
       text-transform: uppercase;
+
+      .widget-yAxis-label-unit {
+        margin: 0 0 0 10px;
+        text-transform: none;
+      }
     }
 
     .widget-chart {
