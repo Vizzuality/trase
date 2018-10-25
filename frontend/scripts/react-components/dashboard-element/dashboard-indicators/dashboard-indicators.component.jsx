@@ -30,6 +30,7 @@ class DashboardIndicators extends React.PureComponent {
 
   render() {
     const {
+      editMode,
       goBack,
       indicators,
       onContinue,
@@ -44,7 +45,7 @@ class DashboardIndicators extends React.PureComponent {
       <div className="c-dashboard-panel" onClick={this.resetActiveItemInfo}>
         <div className="dashboard-panel-content">
           <h2 className="dashboard-panel-title title -center -light">
-            Choose the options you want to add to the dashboard
+            {editMode ? 'Edit indicators' : 'Choose the options you want to add to the dashboard'}
           </h2>
           {indicators.length === 0 && (
             <div className="widget-spinner">
@@ -76,6 +77,7 @@ class DashboardIndicators extends React.PureComponent {
           </GridList>
         </div>
         <DashboardModalFooter
+          editMode={editMode}
           onBack={goBack}
           onContinue={onContinue}
           isDisabled={activeIndicatorsList.length === 0}
@@ -87,6 +89,7 @@ class DashboardIndicators extends React.PureComponent {
 }
 
 DashboardIndicators.propTypes = {
+  editMode: PropTypes.bool.isRequired,
   indicators: PropTypes.array,
   setActiveId: PropTypes.func,
   removeActiveId: PropTypes.func,

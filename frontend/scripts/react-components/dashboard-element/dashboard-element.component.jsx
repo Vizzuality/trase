@@ -11,6 +11,7 @@ class DashboardElement extends React.PureComponent {
     activeIndicators: PropTypes.array,
     step: PropTypes.number.isRequired,
     setStep: PropTypes.func.isRequired,
+    editMode: PropTypes.bool.isRequired,
     openPanel: PropTypes.func.isRequired,
     goToRoot: PropTypes.func.isRequired,
     modalOpen: PropTypes.bool.isRequired,
@@ -26,7 +27,15 @@ class DashboardElement extends React.PureComponent {
   };
 
   renderDashboardModal() {
-    const { step, setStep, goToRoot, modalOpen, closeModal, goBackOnCloseModal } = this.props;
+    const {
+      step,
+      setStep,
+      editMode,
+      goToRoot,
+      modalOpen,
+      closeModal,
+      goBackOnCloseModal
+    } = this.props;
     const onClose = goBackOnCloseModal ? goToRoot : closeModal;
 
     return (
@@ -56,10 +65,16 @@ class DashboardElement extends React.PureComponent {
               <DashboardWelcome onContinue={() => setStep(DashboardElement.steps.PANEL)} />
             )}
             {step === DashboardElement.steps.PANEL && (
-              <DashboardPanel onContinue={() => setStep(DashboardElement.steps.INDICATORS)} />
+              <DashboardPanel
+                editMode={editMode}
+                onContinue={() =>
+                  editMode ? closeModal() : setStep(DashboardElement.steps.INDICATORS)
+                }
+              />
             )}
             {step === DashboardElement.steps.INDICATORS && (
               <DashboardIndicators
+                editMode={editMode}
                 onContinue={closeModal}
                 goBack={() => setStep(DashboardElement.steps.PANEL)}
               />
@@ -104,14 +119,14 @@ class DashboardElement extends React.PureComponent {
                   <button
                     type="button"
                     className="c-button -gray -medium dashboard-header-action -panel"
-                    onClick={() => openPanel(DashboardElement.steps.PANEL)}
+                    onClick={() => openPanel(DashboardElement.steps.PANEL, true)}
                   >
                     Edit Options
                   </button>
                   <button
                     type="button"
                     className="c-button -gray -medium dashboard-header-action -panel"
-                    onClick={() => openPanel(DashboardElement.steps.INDICATORS)}
+                    onClick={() => openPanel(DashboardElement.steps.INDICATORS, true)}
                   >
                     Edit Indicators
                   </button>

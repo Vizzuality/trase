@@ -29,6 +29,7 @@ class DashboardPanel extends Component {
     const {
       tabs,
       panels,
+      editMode,
       getMoreItems,
       dirtyBlocks,
       activePanelId,
@@ -52,7 +53,7 @@ class DashboardPanel extends Component {
       <div className="c-dashboard-panel">
         <div ref={this.containerRef} className="dashboard-panel-content">
           <h2 className="dashboard-panel-title title -center -light">
-            Choose the options you want to add to the dashboard
+            {editMode ? 'Edit options' : 'Choose the options you want to add to the dashboard'}
           </h2>
           <BlockSwitch
             className="dashboard-panel-block-switch"
@@ -171,6 +172,8 @@ class DashboardPanel extends Component {
         </div>
         {dynamicSentenceParts && (
           <DashboardModalFooter
+            editMode={editMode}
+            isPanelFooter
             onContinue={onContinue}
             clearItem={clearActiveId}
             dynamicSentenceParts={dynamicSentenceParts}
@@ -190,6 +193,7 @@ DashboardPanel.propTypes = {
   activePanelId: PropTypes.string,
   sources: PropTypes.object,
   tabs: PropTypes.array,
+  editMode: PropTypes.bool.isRequired,
   commoditiesPanel: PropTypes.object,
   panels: PropTypes.array.isRequired,
   destinations: PropTypes.array.isRequired,
