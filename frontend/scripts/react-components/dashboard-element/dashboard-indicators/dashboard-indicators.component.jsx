@@ -42,7 +42,7 @@ class DashboardIndicators extends React.PureComponent {
 
     return (
       <div className="c-dashboard-panel" onClick={this.resetActiveItemInfo}>
-        <div className="dashboard-panel-content">
+        <div className="dashboard-indicators-content">
           <h2 className="dashboard-panel-title title -center -light">
             Choose the options you want to add to the dashboard
           </h2>

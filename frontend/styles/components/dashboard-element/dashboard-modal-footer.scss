@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 20px 0 20px;
+  border-top: 1px solid $medium-gray;
 
   .dashboard-modal-footer-text {
     color: $charcoal-grey;
@@ -13,7 +14,7 @@
     letter-spacing: -0.4px;
     line-height: 1.9;
     margin: 0 0 15px;
-    max-width: 75%;
+    max-width: 920px;
     text-align: center;
   }
 

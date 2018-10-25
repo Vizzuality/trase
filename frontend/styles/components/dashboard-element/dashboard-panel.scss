@@ -8,15 +8,20 @@
   overflow: hidden;
   min-width: 1000px;
 
-  .dashboard-panel-content {
+  .dashboard-panel-content,
+  .dashboard-indicators-content {
     flex: 1;
     overflow: auto;
     padding: 20px 25px 0;
   }
 
+  .dashboard-indicators-content {
+    overflow: hidden;
+  }
+
   .dashboard-panel-title {
     font-size: $font-size-big;
-    margin: 32px 0 43px 0;
+    margin-bottom: $sankey-x-margin;
   }
 
   .dashboard-panel-block-switch {
