@@ -16,12 +16,14 @@ module Api
             select(
               :id,
               :name,
-              :node_type
+              :node_type,
+              :node_type_id
             ).
             group(
               :id,
               :name,
-              :node_type
+              :node_type,
+              :node_type_id
             )
         end
       end

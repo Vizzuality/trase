@@ -17,6 +17,7 @@ module Api
               :id,
               :name,
               :node_type,
+              :node_type_id,
               :parent_name,
               :parent_node_type
             ).
@@ -24,6 +25,7 @@ module Api
               :id,
               :name,
               :node_type,
+              :node_type_id,
               :parent_name,
               :parent_node_type
             )

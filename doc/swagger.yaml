@@ -878,6 +878,33 @@ paths:
                 items:
                   $ref: '#/definitions/DashboardsCommodity'
 
+  '/dashboards/commodities/search':
+    get:
+      tags:
+        - dashboards
+      summary: 'Commodities matching selected filters with full text search'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/query"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsCommodity'
+
   '/dashboards/countries':
     get:
       tags:
@@ -926,6 +953,33 @@ paths:
                         node_type_name:
                           type: string
 
+  '/dashboards/countries/search':
+    get:
+      tags:
+        - dashboards
+      summary: 'Countries matching selected filters with full text search'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/query"
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsCountry'
+
   '/dashboards/sources':
     get:
       tags:
@@ -954,6 +1008,36 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/DashboardsSource'
+
+  '/dashboards/sources/search':
+    get:
+      tags:
+        - dashboards
+      summary: 'Sources matching selected filters with full text search'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/query"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_node_type_ids"
+        - $ref: "#/parameters/page"
+        - $ref: "#/parameters/per_page"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsSearchNode'
 
   '/dashboards/companies':
     get:
@@ -984,6 +1068,36 @@ paths:
                 items:
                   $ref: '#/definitions/DashboardsCompany'
 
+  '/dashboards/companies/search':
+    get:
+      tags:
+        - dashboards
+      summary: 'Companies matching selected filters with full text search'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/query"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_node_type_ids"
+        - $ref: "#/parameters/page"
+        - $ref: "#/parameters/per_page"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsSearchNode'
+
   '/dashboards/destinations':
     get:
       tags:
@@ -1012,6 +1126,36 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/DashboardsDestination'
+
+  '/dashboards/destinations/search':
+    get:
+      tags:
+        - dashboards
+      summary: 'Destinations matching selected filters with full text search'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/query"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_node_type_ids"
+        - $ref: "#/parameters/page"
+        - $ref: "#/parameters/per_page"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsSearchNode'
 
   '/dashboards/attributes':
     get:
@@ -1149,6 +1293,12 @@ parameters:
     description: 'Number of iterms per page'
     required: false
     type: integer
+  query:
+    name: q
+    in: query
+    description: 'String with comma-separated numeric ids'
+    required: true
+    type: string
 
 definitions:
   DashboardsChartAxis:
@@ -1220,6 +1370,17 @@ definitions:
         type: integer
       name:
         type: string
+      nodeType:
+        type: string
+  DashboardsSearchNode:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      nodeTypeId:
+        type: integer
       nodeType:
         type: string
   DashboardsAttribute:
