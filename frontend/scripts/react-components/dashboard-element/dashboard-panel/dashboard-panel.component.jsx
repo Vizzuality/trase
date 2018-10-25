@@ -39,7 +39,8 @@ class DashboardPanel extends Component {
       destinationsPanel,
       companiesPanel,
       clearActiveId,
-      setActiveId,
+      setActiveTab,
+      setActiveItem,
       sources,
       destinations,
       countries,
@@ -79,26 +80,20 @@ class DashboardPanel extends Component {
               sources={sources[sourcesPanel.activeSourceTabId]}
               countries={countries}
               onSelectCountry={item =>
-                setActiveId({
-                  type: 'item',
+                setActiveItem({
                   active: item && item.id,
-                  section: 'country',
-                  panel: activePanelId
+                  panel: 'countries'
                 })
               }
               onSelectSourceTab={item =>
-                setActiveId({
-                  type: 'tab',
-                  active: item.id,
-                  section: 'source',
+                setActiveTab({
+                  active: item && item.id,
                   panel: activePanelId
                 })
               }
               onSelectSourceValue={item =>
-                setActiveId({
-                  type: 'item',
+                setActiveItem({
                   active: item && item.id,
-                  section: 'source',
                   panel: activePanelId
                 })
               }
@@ -112,10 +107,8 @@ class DashboardPanel extends Component {
               searchDestinations={destinationsPanel.searchResults}
               destinations={destinations}
               onSelectDestinationValue={item =>
-                setActiveId({
+                setActiveItem({
                   active: item && item.id,
-                  type: 'item',
-                  section: 'destination',
                   panel: activePanelId
                 })
               }
@@ -135,18 +128,14 @@ class DashboardPanel extends Component {
               loading={loading}
               companies={companies[companiesPanel.activeNodeTypeTabId]}
               onSelectNodeTypeTab={item =>
-                setActiveId({
-                  type: 'tab',
+                setActiveTab({
                   active: item && item.id,
-                  section: 'nodeType',
                   panel: activePanelId
                 })
               }
               onSelectCompany={item =>
-                setActiveId({
-                  type: 'item',
+                setActiveItem({
                   active: item && item.id,
-                  section: 'company',
                   panel: activePanelId
                 })
               }
@@ -164,10 +153,8 @@ class DashboardPanel extends Component {
               loading={loading}
               commodities={commodities}
               onSelectCommodity={item =>
-                setActiveId({
-                  type: 'item',
+                setActiveItem({
                   active: item && item.id,
-                  section: 'commodity',
                   panel: activePanelId
                 })
               }
@@ -206,7 +193,8 @@ DashboardPanel.propTypes = {
   onContinue: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
   dynamicSentenceParts: PropTypes.array,
-  setActiveId: PropTypes.func.isRequired,
+  setActiveTab: PropTypes.func.isRequired,
+  setActiveItem: PropTypes.func.isRequired,
   clearActiveId: PropTypes.func.isRequired,
   setActivePanel: PropTypes.func.isRequired,
   sourcesPanel: PropTypes.object.isRequired,

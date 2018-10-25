@@ -9,7 +9,8 @@ import {
 export const DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_PANEL = 'DASHBOARD_ELEMENT__SET_ACTIVE_PANEL';
-export const DASHBOARD_ELEMENT__SET_ACTIVE_ID = 'DASHBOARD_ELEMENT__SET_ACTIVE_ID';
+export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEM = 'DASHBOARD_ELEMENT__SET_ACTIVE_ITEM';
+export const DASHBOARD_ELEMENT__SET_ACTIVE_TAB = 'DASHBOARD_ELEMENT__SET_ACTIVE_TAB';
 export const DASHBOARD_ELEMENT__CLEAR_PANEL = 'DASHBOARD_ELEMENT__CLEAR_PANEL';
 export const DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR = 'DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR';
 export const DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR =
@@ -100,14 +101,14 @@ export const setDashboardActivePanel = activePanelId => ({
   payload: { activePanelId }
 });
 
-export const setDashboardPanelActiveId = ({ type, active, panel, section }) => ({
-  type: DASHBOARD_ELEMENT__SET_ACTIVE_ID,
-  payload: {
-    type,
-    panel,
-    active,
-    section
-  }
+export const setDashboardPanelActiveItem = ({ activeItem, panel }) => ({
+  type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+  payload: { panel, activeItem }
+});
+
+export const setDashboardPanelActiveTab = ({ activeTab, panel }) => ({
+  type: DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
+  payload: { panel, activeTab }
 });
 
 export const clearDashboardPanel = panel => ({
@@ -176,7 +177,10 @@ export const getDashboardPanelSearchResults = query => (dispatch, getState) => {
   ) {
     optionsType = 'countries';
   }
-  const filters = getDashboardPanelParams(dashboardElement, optionsType);
+  const filters = {
+    ...getDashboardPanelParams(dashboardElement, optionsType),
+    node_types_ids: undefined
+  };
   const params = { ...filters, q: query };
   const url = getURLFromParams(GET_DASHBOARD_SEARCH_RESULTS_URL, params);
 
