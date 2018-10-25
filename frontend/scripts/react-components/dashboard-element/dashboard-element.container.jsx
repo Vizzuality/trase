@@ -41,7 +41,7 @@ class DashboardElementContainer extends React.Component {
 
   state = {
     modalOpen: true,
-    goBackOnCloseModal: true,
+    editMode: false,
     step: this.hasVisitedBefore.get()
       ? DashboardElement.steps.PANEL
       : DashboardElement.steps.WELCOME
@@ -57,24 +57,22 @@ class DashboardElementContainer extends React.Component {
     this.setState({ modalOpen: false });
   };
 
-  openPanel = step => {
-    this.setState({ step, modalOpen: true, goBackOnCloseModal: false });
-  };
+  reopenPanel = (step, editMode) => this.setState({ step, editMode, modalOpen: true });
 
   updateStep = step => this.setState({ step });
 
   render() {
-    const { step, modalOpen, goBackOnCloseModal } = this.state;
+    const { step, modalOpen, editMode } = this.state;
     const { goToRoot, activeIndicators, dynamicSentenceParts } = this.props;
     return (
       <DashboardElement
         step={step}
+        editMode={editMode}
         goToRoot={goToRoot}
         modalOpen={modalOpen}
         setStep={this.updateStep}
-        openPanel={this.openPanel}
+        reopenPanel={this.reopenPanel}
         closeModal={this.closeModal}
-        goBackOnCloseModal={goBackOnCloseModal}
         activeIndicators={activeIndicators}
         dynamicSentenceParts={dynamicSentenceParts}
       />
