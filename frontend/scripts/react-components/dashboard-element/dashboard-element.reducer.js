@@ -1,9 +1,9 @@
-import camelCase from 'lodash/camelCase';
 import createReducer from 'utils/createReducer';
 import { getActiveTab } from 'react-components/dashboard-element/dashboard-element.selectors';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ID,
+  DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
   DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
@@ -29,32 +29,37 @@ const initialState = {
   tabs: {},
   activePanelId: null,
   activeIndicatorsList: [],
+  countriesPanel: {
+    page: 0,
+    searchResults: [],
+    loadingItems: false,
+    activeItem: null
+  },
   sourcesPanel: {
     page: 0,
     searchResults: [],
     loadingItems: false,
-    activeCountryItemId: null,
-    activeSourceItemId: null,
-    activeSourceTabId: null
+    activeItem: null,
+    activeTab: null
   },
   destinationsPanel: {
     page: 0,
     searchResults: [],
     loadingItems: false,
-    activeDestinationItemId: null
+    activeItem: null
   },
   companiesPanel: {
     page: 0,
     searchResults: [],
     loadingItems: false,
-    activeCompanyItemId: null,
-    activeNodeTypeTabId: null
+    activeItem: null,
+    activeTab: null
   },
   commoditiesPanel: {
     page: 0,
     searchResults: [],
     loadingItems: false,
-    activeCommodityItemId: null
+    activeItem: null
   }
 };
 
@@ -131,17 +136,29 @@ const dashboardElementReducer = {
       tabs
     };
   },
-  [DASHBOARD_ELEMENT__SET_ACTIVE_ID](state, action) {
-    const { panel, section, active, type } = action.payload;
+  [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM](state, action) {
+    const { panel, activeItem } = action.payload;
     const panelName = `${panel}Panel`;
-    const page = type === 'tab' || section === 'country' ? 0 : state[panelName].page;
+    const page = panel === 'country' ? 0 : state[panelName].page;
     return {
       ...state,
       activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
         page,
-        [camelCase(`active_${section}_${type}_id`)]: active
+        activeItem
+      }
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_ACTIVE_TAB](state, action) {
+    const { panel, activeTab } = action.payload;
+    const panelName = `${panel}Panel`;
+    return {
+      ...state,
+      activeIndicatorsList: [],
+      [panelName]: {
+        ...state[panelName],
+        activeTab
       }
     };
   },

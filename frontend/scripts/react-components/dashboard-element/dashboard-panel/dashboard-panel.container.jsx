@@ -4,7 +4,8 @@ import {
   clearDashboardPanel,
   setDashboardPanelPage,
   setDashboardActivePanel,
-  setDashboardPanelActiveId,
+  setDashboardPanelActiveTab,
+  setDashboardPanelActiveItem,
   getDashboardPanelSearchResults
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
@@ -46,8 +47,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   getMoreItems: setDashboardPanelPage,
   clearActiveId: clearDashboardPanel,
-  setActiveId: setDashboardPanelActiveId,
   setActivePanel: setDashboardActivePanel,
+  setActiveTab: setDashboardPanelActiveTab,
+  setActiveItem: setDashboardPanelActiveItem,
   getSearchResults: getDashboardPanelSearchResults
 };
 
