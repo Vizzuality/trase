@@ -76,7 +76,11 @@ class DashboardPanel extends Component {
               activeCountryItemId={countriesPanel.activeItem}
               activeSourceTabId={sourcesPanel.activeTab}
               activeSourceItemId={sourcesPanel.activeItem}
-              searchSources={sourcesPanel.searchResults}
+              searchSources={
+                !countriesPanel.activeItem
+                  ? countriesPanel.searchResults
+                  : sourcesPanel.searchResults
+              }
               tabs={tabs}
               sources={sources[sourcesPanel.activeTab]}
               countries={countries}
