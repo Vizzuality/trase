@@ -38,6 +38,22 @@
   .dashboard-element-widgets {
     padding: 0 0 40px;
     background-color: $charcoal-dark;
+
+    .dashboard-element-fallback {
+      padding: 40px 0 0;
+      text-align: center;
+
+      &-text {
+        font-size: $font-size-medium;
+        margin: 0;
+      }
+
+      &-button {
+        height: 30px;
+        width: 125px;
+        padding: 8px 15px;
+      }
+    }
   }
 
   .dashboard-element-header {

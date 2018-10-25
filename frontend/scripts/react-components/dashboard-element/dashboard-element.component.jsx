@@ -93,8 +93,26 @@ class DashboardElement extends React.PureComponent {
     return 'Dashboards';
   }
 
+  renderWidgets() {
+    const { activeIndicators } = this.props;
+    return (
+      <div className="row -equal-height -flex-end">
+        {activeIndicators.map(indicator => (
+          <div key={indicator.id} className="column small-12 medium-6 ">
+            <DashboardWiget
+              url={indicator.url}
+              title={indicator.displayName}
+              chartType={indicator.chartType}
+            />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   render() {
-    const { modalOpen, activeIndicators, reopenPanel } = this.props;
+    const { modalOpen, activeIndicators, reopenPanel, goToRoot } = this.props;
+    const hasIndicators = activeIndicators.length > 0;
     return (
       <div className="l-dashboard-element">
         <div className="c-dashboard-element">
@@ -110,14 +128,14 @@ class DashboardElement extends React.PureComponent {
                   <button
                     type="button"
                     className="c-button -gray -medium dashboard-header-action -panel"
-                    onClick={() => reopenPanel(DashboardElement.steps.PANEL)}
+                    onClick={() => reopenPanel(DashboardElement.steps.PANEL, hasIndicators)}
                   >
                     Edit Options
                   </button>
                   <button
                     type="button"
                     className="c-button -gray-transparent -medium dashboard-header-action -panel"
-                    onClick={() => reopenPanel(DashboardElement.steps.INDICATORS)}
+                    onClick={() => reopenPanel(DashboardElement.steps.INDICATORS, hasIndicators)}
                   >
                     Edit Indicators
                   </button>
@@ -152,17 +170,26 @@ class DashboardElement extends React.PureComponent {
           {this.renderDashboardModal()}
           {modalOpen === false && (
             <section className="dashboard-element-widgets">
-              <div className="row -equal-height -flex-end">
-                {activeIndicators.map(indicator => (
-                  <div key={indicator.id} className="column small-12 medium-6 ">
-                    <DashboardWiget
-                      url={indicator.url}
-                      title={indicator.displayName}
-                      chartType={indicator.chartType}
-                    />
+              {activeIndicators.length > 0 ? (
+                this.renderWidgets()
+              ) : (
+                <div className="row align-center">
+                  <div className="column small-6">
+                    <div className="dashboard-element-fallback">
+                      <p className="dashboard-element-title dashboard-element-fallback-text">
+                        Your dashboard has no selection.
+                      </p>
+                      <button
+                        type="button"
+                        className="c-button -gray-transparent -medium dashboard-element-fallback-button"
+                        onClick={goToRoot}
+                      >
+                        Go Back
+                      </button>
+                    </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
             </section>
           )}
         </div>
