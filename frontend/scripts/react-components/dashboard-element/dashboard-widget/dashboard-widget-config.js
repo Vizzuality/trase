@@ -47,6 +47,11 @@ export default {
   margin: { top: 0, right: 0, bottom: 0, left: 0 },
   bar: {
     ...defaults,
+    tooltip: {
+      cursor: {
+        opacity: 0
+      }
+    },
     type: 'bar',
     colors: ['#ee5463'],
     xKey: 'x',
