@@ -207,45 +207,33 @@ const dashboardElementReducer = {
   }
 };
 
-const dashboardElementReducerTypes = PropTypes => ({
-  meta: PropTypes.object.isRequired,
-  tabs: PropTypes.object.isRequired,
-  activePanelId: PropTypes.string,
-  activeIndicatorsList: PropTypes.array.isRequired,
-  data: PropTypes.shape({
-    indicators: PropTypes.array.isRequired,
-    countries: PropTypes.array.isRequired,
-    companies: PropTypes.object.isRequired,
-    sources: PropTypes.object.isRequired,
-    destinations: PropTypes.array.isRequired
-  }).isRequired,
-  sourcesPanel: PropTypes.shape({
+const dashboardElementReducerTypes = PropTypes => {
+  const PanelTypes = {
     page: PropTypes.number,
     searchResults: PropTypes.array,
     loadingItems: PropTypes.bool,
-    activeCountryItemId: PropTypes.number,
-    activeSourceItemId: PropTypes.number,
-    activeSourceTabId: PropTypes.number
-  }).isRequired,
-  destinationsPanel: PropTypes.shape({
-    page: PropTypes.number,
-    searchResults: PropTypes.array,
-    loadingItems: PropTypes.bool,
-    activeDestinationItemId: PropTypes.number
-  }).isRequired,
-  companiesPanel: PropTypes.shape({
-    page: PropTypes.number,
-    searchResults: PropTypes.array,
-    loadingItems: PropTypes.bool,
-    activeCompanyItemId: PropTypes.number,
-    activeNodeTypeTabId: PropTypes.number
-  }).isRequired,
-  commoditiesPanel: PropTypes.shape({
-    page: PropTypes.number,
-    searchResults: PropTypes.array,
-    loadingItems: PropTypes.bool,
-    activeCommodityItemId: PropTypes.number
-  }).isRequired
-});
+    activeItem: PropTypes.number,
+    activeTab: PropTypes.number
+  };
+
+  return {
+    meta: PropTypes.object.isRequired,
+    tabs: PropTypes.object.isRequired,
+    activePanelId: PropTypes.string,
+    activeIndicatorsList: PropTypes.array.isRequired,
+    data: PropTypes.shape({
+      indicators: PropTypes.array.isRequired,
+      countries: PropTypes.array.isRequired,
+      companies: PropTypes.object.isRequired,
+      sources: PropTypes.object.isRequired,
+      destinations: PropTypes.array.isRequired
+    }).isRequired,
+    countriesPanel: PropTypes.shape(PanelTypes).isRequired,
+    sourcesPanel: PropTypes.shape(PanelTypes).isRequired,
+    destinationsPanel: PropTypes.shape(PanelTypes).isRequired,
+    companiesPanel: PropTypes.shape(PanelTypes).isRequired,
+    commoditiesPanel: PropTypes.shape(PanelTypes).isRequired
+  };
+};
 
 export default createReducer(initialState, dashboardElementReducer, dashboardElementReducerTypes);
