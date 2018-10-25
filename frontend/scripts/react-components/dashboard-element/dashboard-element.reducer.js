@@ -196,7 +196,11 @@ const dashboardElementReducer = {
   },
   [DASHBOARD_ELEMENT__SET_SEARCH_RESULTS](state, action) {
     const { data } = action.payload;
-    const panelName = `${state.activePanelId}Panel`;
+    let panel = state.activePanelId;
+    if (state.activePanelId === 'sources' && state.countriesPanel.activeItem === null) {
+      panel = 'countries';
+    }
+    const panelName = `${panel}Panel`;
     return {
       ...state,
       [panelName]: {
