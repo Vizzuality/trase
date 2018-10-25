@@ -48,6 +48,7 @@ function GridListItem(props) {
                   trigger="click"
                   show={isInfoActive}
                   position="bottom-start"
+                  insideTooltip
                 >
                   <button type="button" disabled={isDisabled} onClick={() => onInfoClick(item)}>
                     i
