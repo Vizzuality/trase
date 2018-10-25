@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 function DashboardWidgetLegend(props) {
   const { colors } = props;
+  if (colors.length < 2) return null;
   return (
     <div className="c-dashboard-widget-legend">
       <div className="row -equal-height">
