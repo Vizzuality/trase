@@ -21,33 +21,39 @@ export const DASHBOARD_ELEMENT__SET_LOADING_ITEMS = 'DASHBOARD_ELEMENT__SET_LOAD
 export const DASHBOARD_ELEMENT__SET_SEARCH_RESULTS = 'DASHBOARD_ELEMENT__SET_SEARCH_RESULTS';
 
 const getDashboardPanelParams = (state, options_type, options = {}) => {
-  const { sourcesPanel, companiesPanel, destinationsPanel, commoditiesPanel } = state;
+  const {
+    countriesPanel,
+    sourcesPanel,
+    companiesPanel,
+    destinationsPanel,
+    commoditiesPanel
+  } = state;
   const { page, refetchPanel } = options;
   const node_types_ids = {
-    sources: sourcesPanel.activeSourceTabId,
-    companies: companiesPanel.activeNodeTypeTabId
+    sources: sourcesPanel.activeTab,
+    companies: companiesPanel.activeTab
   }[options_type];
   const params = {
     page,
     options_type,
     node_types_ids,
-    countries_ids: sourcesPanel.activeCountryItemId
+    countries_ids: countriesPanel.activeItem
   };
 
   if (options_type !== 'sources' || refetchPanel) {
-    params.sources_ids = sourcesPanel.activeSourceItemId;
+    params.sources_ids = sourcesPanel.activeItem;
   }
 
   if (options_type !== 'commodities' || refetchPanel) {
-    params.commodities_ids = commoditiesPanel.activeCommodityItemId;
+    params.commodities_ids = commoditiesPanel.activeItem;
   }
 
   if (options_type !== 'destinations' || refetchPanel) {
-    params.destinations_ids = destinationsPanel.activeDestinationItemId;
+    params.destinations_ids = destinationsPanel.activeItem;
   }
 
   if (options_type !== 'companies' || refetchPanel) {
-    params.companies_ids = companiesPanel.activeCompanyItemId;
+    params.companies_ids = companiesPanel.activeItem;
   }
   return params;
 };
@@ -172,8 +178,8 @@ export const getDashboardPanelSearchResults = query => (dispatch, getState) => {
   let optionsType = dashboardElement.activePanelId;
   if (
     optionsType === 'sources' &&
-    dashboardElement.sourcesPanel.activeCountryItemId === null &&
-    dashboardElement.sourcesPanel.activeSourceTabId === null
+    dashboardElement.sourcesPanel.activeItem === null &&
+    dashboardElement.sourcesPanel.activeTab === null
   ) {
     optionsType = 'countries';
   }
