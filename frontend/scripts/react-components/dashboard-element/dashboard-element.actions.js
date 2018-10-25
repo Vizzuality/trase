@@ -107,12 +107,12 @@ export const setDashboardActivePanel = activePanelId => ({
   payload: { activePanelId }
 });
 
-export const setDashboardPanelActiveItem = ({ activeItem, panel }) => ({
+export const setDashboardPanelActiveItem = (activeItem, panel) => ({
   type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
   payload: { panel, activeItem }
 });
 
-export const setDashboardPanelActiveTab = ({ activeTab, panel }) => ({
+export const setDashboardPanelActiveTab = (activeTab, panel) => ({
   type: DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
   payload: { panel, activeTab }
 });
