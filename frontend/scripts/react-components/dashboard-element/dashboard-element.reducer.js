@@ -1,5 +1,4 @@
 import createReducer from 'utils/createReducer';
-import { getActiveTab } from 'react-components/dashboard-element/dashboard-element.selectors';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
@@ -131,15 +130,22 @@ const dashboardElementReducer = {
     const { data } = action.payload;
     const getSection = n => n.section && n.section.toLowerCase();
     const tabs = data.reduce((acc, next) => ({ ...acc, [getSection(next)]: next.tabs }), {});
+    const panelName = `${state.activePanelId}Panel`;
+    const activeTab =
+      tabs[state.activePanelId] && tabs[state.activePanelId][0] && tabs[state.activePanelId][0].id;
     return {
       ...state,
-      tabs
+      tabs,
+      [panelName]: {
+        ...state[panelName],
+        activeTab
+      }
     };
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM](state, action) {
     const { panel, activeItem } = action.payload;
     const panelName = `${panel}Panel`;
-    const page = panel === 'country' ? 0 : state[panelName].page;
+    const page = panel === 'countries' ? 0 : state[panelName].page;
     return {
       ...state,
       activeIndicatorsList: [],
@@ -165,11 +171,13 @@ const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__CLEAR_PANEL](state, action) {
     const { panel } = action.payload;
     const panelName = `${panel}Panel`;
-    const { activeTab, activeTabName } = getActiveTab(state);
+    const { activeTab } = state[panelName];
+    const countriesState = panel === 'sources' ? initialState.countriesPanel : state.countriesPanel;
 
     return {
       ...state,
-      [panelName]: { ...initialState[panelName], [activeTabName]: activeTab }
+      [panelName]: { ...initialState[panelName], activeTab },
+      countriesPanel: countriesState
     };
   },
   [DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR](state, action) {
