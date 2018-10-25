@@ -15,7 +15,7 @@ function DashboardModalFooter(props) {
 
   return (
     <div className="c-dashboard-modal-footer">
-      {!editMode && (
+      {(!editMode || isPanelFooter) && (
         <p className="dashboard-modal-footer-text">
           {dynamicSentenceParts.map((part, i) => (
             <React.Fragment key={part.prefix + part.value + i}>

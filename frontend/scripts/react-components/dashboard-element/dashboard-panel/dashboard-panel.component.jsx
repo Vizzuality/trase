@@ -5,7 +5,7 @@ import SourcesPanel from 'react-components/dashboard-element/dashboard-panel/sou
 import DestinationsPanel from 'react-components/dashboard-element/dashboard-panel/destinations-panel.component';
 import CompaniesPanel from 'react-components/dashboard-element/dashboard-panel/companies-panel.component';
 import CommoditiesPanel from 'react-components/dashboard-element/dashboard-panel/commodities-panel.component';
-import DashboardModalFooter from 'react-components/dashboard-element/dahsboard-modal-footer.component';
+import DashboardModalFooter from 'react-components/dashboard-element/dashboard-modal-footer.component';
 
 class DashboardPanel extends Component {
   containerRef = React.createRef();
