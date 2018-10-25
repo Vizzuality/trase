@@ -44,6 +44,12 @@
     color: $charcoal-grey;
   }
 
+  &.-gray-transparent{
+    border-color: $gray;
+    background-color: transparent;
+    color: $gray;
+  }
+
   &.-charcoal {
     border-color: transparent;
     background-color: $charcoal-grey;

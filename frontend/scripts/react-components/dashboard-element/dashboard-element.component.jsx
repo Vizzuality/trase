@@ -125,7 +125,7 @@ class DashboardElement extends React.PureComponent {
                   </button>
                   <button
                     type="button"
-                    className="c-button -gray -medium dashboard-header-action -panel"
+                    className="c-button -gray-transparent -medium dashboard-header-action -panel"
                     onClick={() => openPanel(DashboardElement.steps.INDICATORS, true)}
                   >
                     Edit Indicators
