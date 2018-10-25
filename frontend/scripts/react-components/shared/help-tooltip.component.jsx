@@ -26,14 +26,14 @@ export default class TooltipComponent extends Component {
   }
 
   initTooltip() {
-    const { position, text, show } = this.props;
+    const { position, text, show, insideTooltip } = this.props;
 
     this.tooltip = new Tooltip(this.element, {
       trigger: typeof show !== 'undefined' ? '' : 'hover focus',
       title: text,
       placement: position,
       container: 'body',
-      boundariesElement: 'window',
+      boundariesElement: insideTooltip ? 'scrollParent' : 'window',
       offset: '1, 1'
     });
 
@@ -83,11 +83,13 @@ TooltipComponent.propTypes = {
   text: PropTypes.string,
   children: PropTypes.any,
   showIcon: PropTypes.bool,
+  insideTooltip: PropTypes.bool,
   position: PropTypes.string,
   className: PropTypes.string
 };
 
 TooltipComponent.defaultProps = {
   position: 'bottom',
-  showIcon: true
+  showIcon: true,
+  insideTooltip: false
 };
