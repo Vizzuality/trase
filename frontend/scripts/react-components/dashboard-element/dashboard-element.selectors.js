@@ -3,6 +3,7 @@ import sortBy from 'lodash/sortBy';
 import flatten from 'lodash/flatten';
 
 const getDashboardPanelData = state => state.dashboardElement.data;
+const getCountriesPanel = state => state.dashboardElement.countriesPanel;
 const getSourcesPanel = state => state.dashboardElement.sourcesPanel;
 const getDestinationsPanel = state => state.dashboardElement.destinationsPanel;
 const getCompaniesPanel = state => state.dashboardElement.companiesPanel;
@@ -22,43 +23,52 @@ export const getActivePanelTabs = createSelector(
 );
 
 export const getDirtyBlocks = createSelector(
-  [getSourcesPanel, getDestinationsPanel, getCompaniesPanel, getCommoditiesPanel],
-  (sourcesPanel, destinationsPanel, companiesPanel, commoditiesPanel) => ({
-    sources: sourcesPanel.activeCountryItemId !== null,
-    destinations: destinationsPanel.activeDestinationItemId !== null,
-    companies: companiesPanel.activeCompanyItemId !== null,
-    commodities: commoditiesPanel.activeCommodityItemId !== null
+  [
+    getCountriesPanel,
+    getSourcesPanel,
+    getDestinationsPanel,
+    getCompaniesPanel,
+    getCommoditiesPanel
+  ],
+  (countriesPanel, sourcesPanel, destinationsPanel, companiesPanel, commoditiesPanel) => ({
+    sources: countriesPanel.activeItem !== null,
+    destinations: destinationsPanel.activeItem !== null,
+    companies: companiesPanel.activeItem !== null,
+    commodities: commoditiesPanel.activeItem !== null
   })
 );
 
 export const getDynamicSentence = createSelector(
   [
+    getDirtyBlocks,
+    getCountriesPanel,
     getSourcesPanel,
     getDestinationsPanel,
     getCompaniesPanel,
     getCommoditiesPanel,
     getDashboardPanelData
   ],
-  (sourcesPanel, destinationsPanel, companiesPanel, commoditiesPanel, data) => {
-    const countriesActiveId = sourcesPanel.activeCountryItemId;
-    const sourcesActiveId = sourcesPanel.activeSourceItemId;
-    const destinationsActiveId = destinationsPanel.activeDestinationItemId;
-    const companiesActiveId = companiesPanel.activeCompanyItemId;
-    const commoditiesActiveId = commoditiesPanel.activeCommodityItemId;
+  (
+    dirtyBlocks,
+    countriesPanel,
+    sourcesPanel,
+    destinationsPanel,
+    companiesPanel,
+    commoditiesPanel,
+    data
+  ) => {
+    if (Object.values(dirtyBlocks).every(block => !block)) {
+      return null;
+    }
+
+    const countriesActiveId = countriesPanel.activeItem;
+    const sourcesActiveId = sourcesPanel.activeItem;
+    const destinationsActiveId = destinationsPanel.activeItem;
+    const companiesActiveId = companiesPanel.activeItem;
+    const commoditiesActiveId = commoditiesPanel.activeItem;
     const sources = flatten(Object.values(data.sources));
     const companies = flatten(Object.values(data.companies));
 
-    if (
-      ![
-        !!countriesActiveId,
-        !!sourcesActiveId,
-        !!destinationsActiveId,
-        !!companiesActiveId,
-        !!commoditiesActiveId
-      ].includes(true)
-    ) {
-      return null;
-    }
     const countriesValue = data.countries.find(item => item.id === countriesActiveId);
     const commoditiesValue = data.commodities.find(item => item.id === commoditiesActiveId);
     const sourcesValue = sources.find(item => item.id === sourcesActiveId);
@@ -123,19 +133,3 @@ export const getIndicatorsByGroup = createSelector(
     return groupedIndicators;
   }
 );
-
-export function getActiveTab(dashboardElement) {
-  const { activePanelId, ...state } = dashboardElement;
-  const panelKey = `${activePanelId}Panel`;
-  const tabKey = {
-    sources: 'activeSourceTabId',
-    destinations: null,
-    companies: 'activeNodeTypeTabId',
-    commodities: null
-  }[activePanelId];
-
-  return {
-    activeTabName: tabKey,
-    activeTab: state[panelKey][tabKey]
-  };
-}
