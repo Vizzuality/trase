@@ -139,17 +139,21 @@ const dashboardElementReducer = {
       tabs,
       [panelName]: {
         ...state[panelName],
-        activeTab
+        activeTab,
+        page: initialState[panelName].page
       }
     };
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM](state, action) {
     const { panel, activeItem } = action.payload;
     const panelName = `${panel}Panel`;
-    const page = panel === 'countries' ? 0 : state[panelName].page;
+    const page = panel === 'countries' ? initialState.countriesPanel.page : state[panelName].page;
+    const sourcesPanelState =
+      panel === 'countries' ? initialState.sourcesPanel : state.sourcesPanel;
     return {
       ...state,
       activeIndicatorsList: [],
+      sourcesPanel: sourcesPanelState,
       [panelName]: {
         ...state[panelName],
         page,
@@ -165,7 +169,8 @@ const dashboardElementReducer = {
       activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
-        activeTab
+        activeTab,
+        page: initialState[panelName].page
       }
     };
   },
