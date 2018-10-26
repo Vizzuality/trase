@@ -24,6 +24,7 @@ function SourcesPanel(props) {
     activeSourceTab,
     activeSourceItem
   } = props;
+  const showJurisdictions = activeCountryItem && tabs.length > 0 && sources.length > 0;
   return (
     <React.Fragment>
       <SearchInput
@@ -54,44 +55,43 @@ function SourcesPanel(props) {
           />
         )}
       </GridList>
-      {activeCountryItem &&
-        tabs.length > 0 && (
-          <React.Fragment>
-            <Tabs
-              tabs={tabs}
-              onSelectTab={onSelectSourceTab}
-              selectedTab={activeSourceTab && activeSourceTab.id}
-              itemTabRenderer={i => i.name}
-              getTabId={item => item.id}
+      {showJurisdictions && (
+        <React.Fragment>
+          <Tabs
+            tabs={tabs}
+            onSelectTab={onSelectSourceTab}
+            selectedTab={activeSourceTab && activeSourceTab.id}
+            itemTabRenderer={i => i.name}
+            getTabId={item => item.id}
+          >
+            <GridList
+              className="dashboard-panel-pill-list"
+              items={sources}
+              height={sources.length > 5 ? 200 : 50}
+              width={950}
+              rowHeight={50}
+              columnWidth={190}
+              columnCount={5}
+              page={page}
+              getMoreItems={getMoreItems}
+              loadingMoreItems={loadingMoreItems}
+              loading={loading}
             >
-              <GridList
-                className="dashboard-panel-pill-list"
-                items={sources}
-                height={sources.length > 5 ? 200 : 50}
-                width={950}
-                rowHeight={50}
-                columnWidth={190}
-                columnCount={5}
-                page={page}
-                getMoreItems={getMoreItems}
-                loadingMoreItems={loadingMoreItems}
-                loading={loading}
-              >
-                {itemProps => (
-                  <GridListItem
-                    {...itemProps}
-                    isActive={
-                      (activeSourceItem && activeSourceItem.id) ===
-                      (itemProps.item && itemProps.item.id)
-                    }
-                    enableItem={onSelectSourceValue}
-                    disableItem={() => onSelectSourceValue(null)}
-                  />
-                )}
-              </GridList>
-            </Tabs>
-          </React.Fragment>
-        )}
+              {itemProps => (
+                <GridListItem
+                  {...itemProps}
+                  isActive={
+                    (activeSourceItem && activeSourceItem.id) ===
+                    (itemProps.item && itemProps.item.id)
+                  }
+                  enableItem={onSelectSourceValue}
+                  disableItem={() => onSelectSourceValue(null)}
+                />
+              )}
+            </GridList>
+          </Tabs>
+        </React.Fragment>
+      )}
     </React.Fragment>
   );
 }
