@@ -183,10 +183,7 @@ export const getDashboardPanelSearchResults = query => (dispatch, getState) => {
   ) {
     optionsType = 'countries';
   }
-  const filters = {
-    ...getDashboardPanelParams(dashboardElement, optionsType),
-    node_types_ids: undefined
-  };
+  const filters = getDashboardPanelParams(dashboardElement, optionsType);
   const params = { ...filters, q: query };
   const url = getURLFromParams(GET_DASHBOARD_SEARCH_RESULTS_URL, params);
 
