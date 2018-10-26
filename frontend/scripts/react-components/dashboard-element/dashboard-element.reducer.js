@@ -65,17 +65,9 @@ const initialState = {
 const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_ACTIVE_PANEL](state, action) {
     const { activePanelId } = action.payload;
-    const prevActivePanelId = state.activePanelId;
-    const prevPanelName = `${prevActivePanelId}Panel`;
     return {
       ...state,
-      activePanelId,
-      [prevPanelName]: prevActivePanelId
-        ? {
-            ...state[prevPanelName],
-            page: initialState[prevPanelName].page
-          }
-        : undefined
+      activePanelId
     };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_PAGE](state, action) {
@@ -132,14 +124,14 @@ const dashboardElementReducer = {
     const getSection = n => n.section && n.section.toLowerCase();
     const tabs = data.reduce((acc, next) => ({ ...acc, [getSection(next)]: next.tabs }), {});
     const panelName = `${state.activePanelId}Panel`;
-    const activeTab =
+    const firstTab =
       tabs[state.activePanelId] && tabs[state.activePanelId][0] && tabs[state.activePanelId][0].id;
     return {
       ...state,
       tabs,
       [panelName]: {
         ...state[panelName],
-        activeTab,
+        activeTab: state[panelName].activeTab || firstTab,
         page: initialState[panelName].page
       }
     };
