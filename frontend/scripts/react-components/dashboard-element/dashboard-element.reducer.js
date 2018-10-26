@@ -17,7 +17,6 @@ import {
 
 const initialState = {
   loading: false,
-  loaded: false,
   data: {
     indicators: [],
     countries: [],
@@ -80,7 +79,7 @@ const dashboardElementReducer = {
     return { ...state, [panelName]: { ...state[panelName], page } };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_DATA](state, action) {
-    const { key, data, meta, tab, loading, loaded } = action.payload;
+    const { key, data, meta, tab, loading } = action.payload;
     const metaFallback = meta && meta.contextNodeTypes ? meta.contextNodeTypes : meta; // FIXME
     const initialData = initialState.data[key];
     let newData;
@@ -92,7 +91,6 @@ const dashboardElementReducer = {
     return {
       ...state,
       loading,
-      loaded,
       data: { ...state.data, [key]: newData },
       meta: { ...state.meta, [key]: metaFallback }
     };
