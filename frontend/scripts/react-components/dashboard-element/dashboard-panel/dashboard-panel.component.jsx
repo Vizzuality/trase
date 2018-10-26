@@ -25,6 +25,10 @@ class DashboardPanel extends Component {
     }
   }
 
+  static nodeTypeRenderer(node) {
+    return node.nodeType;
+  }
+
   render() {
     const {
       tabs,
@@ -70,6 +74,7 @@ class DashboardPanel extends Component {
             <SourcesPanel
               page={sourcesPanel.page}
               getMoreItems={getMoreItems}
+              nodeTypeRenderer={DashboardPanel.nodeTypeRenderer}
               setSearchResult={item => setSearchResult(item, activePanelId)}
               getSearchResults={getSearchResults}
               loadingMoreItems={sourcesPanel.loadingItems}
@@ -95,7 +100,7 @@ class DashboardPanel extends Component {
             <DestinationsPanel
               page={destinationsPanel.page}
               getMoreItems={getMoreItems}
-              setSearchResult={item => setSearchResult(item, activePanelId)}
+              nodeTypeRenderer={DashboardPanel.nodeTypeRenderer}
               getSearchResults={getSearchResults}
               searchDestinations={destinationsPanel.searchResults}
               destinations={destinations}
@@ -111,6 +116,7 @@ class DashboardPanel extends Component {
               page={companiesPanel.page}
               getMoreItems={getMoreItems}
               searchCompanies={companiesPanel.searchResults}
+              nodeTypeRenderer={DashboardPanel.nodeTypeRenderer}
               setSearchResult={item => setSearchResult(item, activePanelId)}
               getSearchResults={getSearchResults}
               loadingMoreItems={companiesPanel.loadingItems}
@@ -124,11 +130,8 @@ class DashboardPanel extends Component {
           )}
           {activePanelId === 'commodities' && (
             <CommoditiesPanel
-              setSearchResult={item => setSearchResult(item, activePanelId)}
-              getSearchResults={getSearchResults}
               page={commoditiesPanel.page}
               getMoreItems={getMoreItems}
-              searchCommodities={commoditiesPanel.searchResults}
               loadingMoreItems={commoditiesPanel.loadingItems}
               loading={loading}
               commodities={commodities}

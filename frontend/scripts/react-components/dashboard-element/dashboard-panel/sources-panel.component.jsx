@@ -21,6 +21,7 @@ function SourcesPanel(props) {
     countries,
     onSelectCountry,
     onSelectSourceTab,
+    nodeTypeRenderer,
     onSelectSourceValue,
     activeSourceTab,
     activeSourceItem
@@ -34,10 +35,11 @@ function SourcesPanel(props) {
         placeholder="Search place"
         onSelect={item => (!item.nodeType ? onSelectCountry(item) : setSearchResult(item))}
         onSearchTermChange={getSearchResults}
+        nodeTypeRenderer={nodeTypeRenderer}
       />
       <GridList
         className="dashboard-panel-pill-list"
-        height={50}
+        height={countries.length > 5 ? 200 : 50}
         width={950}
         columnWidth={190}
         rowHeight={50}
@@ -114,7 +116,8 @@ SourcesPanel.propTypes = {
   setSearchResult: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
   onSelectSourceValue: PropTypes.func.isRequired,
-  onSelectSourceTab: PropTypes.func.isRequired
+  onSelectSourceTab: PropTypes.func.isRequired,
+  nodeTypeRenderer: PropTypes.func.isRequired
 };
 
 SourcesPanel.defaultProps = {

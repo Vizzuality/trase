@@ -4,14 +4,23 @@ import cx from 'classnames';
 
 import HighlightTextFragments from 'react-components/shared/highlight-text-fragments.component';
 
-function SearchInputResult({ className, item, itemProps, searchString, isHighlighted, testId }) {
+function SearchInputResult(props) {
+  const {
+    className,
+    item,
+    itemProps,
+    searchString,
+    isHighlighted,
+    testId,
+    nodeTypeRenderer
+  } = props;
   return (
     <li
       {...itemProps}
       className={cx('c-search-input-result', className, { '-highlighted': isHighlighted })}
       data-test={testId}
     >
-      <span className="search-input-item-type">{item.nodeType}</span>
+      <span className="search-input-item-type">{nodeTypeRenderer(item)}</span>
       <span className="search-input-item-name">
         <HighlightTextFragments text={item.name} highlight={searchString} />
       </span>
@@ -22,10 +31,15 @@ function SearchInputResult({ className, item, itemProps, searchString, isHighlig
 SearchInputResult.propTypes = {
   testId: PropTypes.string,
   className: PropTypes.string,
+  nodeTypeRenderer: PropTypes.func,
   item: PropTypes.object.isRequired,
   itemProps: PropTypes.object.isRequired,
-  searchString: PropTypes.string.isRequired,
-  isHighlighted: PropTypes.bool.isRequired
+  isHighlighted: PropTypes.bool.isRequired,
+  searchString: PropTypes.string.isRequired
+};
+
+SearchInputResult.defaultProps = {
+  nodeTypeRenderer: node => node.nodeType
 };
 
 export default SearchInputResult;

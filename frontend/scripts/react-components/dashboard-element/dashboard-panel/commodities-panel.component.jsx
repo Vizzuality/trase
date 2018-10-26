@@ -1,15 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SearchInput from 'react-components/shared/search-input/search-input.component';
 import GridList from 'react-components/shared/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item.component';
 
 function CommoditiesPanel(props) {
   const {
-    getSearchResults,
     loadingMoreItems,
     loading,
-    searchCommodities,
     commodities,
     activeCommodity,
     onSelectCommodity,
@@ -18,13 +15,6 @@ function CommoditiesPanel(props) {
   } = props;
   return (
     <React.Fragment>
-      <SearchInput
-        className="dashboard-panel-search"
-        items={searchCommodities}
-        placeholder="Search commodity"
-        onSelect={onSelectCommodity}
-        onSearchTermChange={getSearchResults}
-      />
       <GridList
         className="dashboard-panel-pill-list"
         items={commodities}
@@ -58,10 +48,8 @@ CommoditiesPanel.propTypes = {
   loadingMoreItems: PropTypes.bool,
   loading: PropTypes.bool,
   page: PropTypes.number.isRequired,
-  searchCommodities: PropTypes.array,
   activeCommodity: PropTypes.object,
   getMoreItems: PropTypes.func.isRequired,
-  getSearchResults: PropTypes.func.isRequired,
   onSelectCommodity: PropTypes.func.isRequired
 };
 

@@ -13,6 +13,7 @@ function DestinationsPanel(props) {
     loading,
     getSearchResults,
     activeDestination,
+    nodeTypeRenderer,
     onSelectDestinationValue,
     getMoreItems
   } = props;
@@ -23,6 +24,7 @@ function DestinationsPanel(props) {
         items={searchDestinations}
         placeholder="Search place"
         onSelect={onSelectDestinationValue}
+        nodeTypeRenderer={nodeTypeRenderer}
         onSearchTermChange={getSearchResults}
       />
       <GridList
@@ -62,6 +64,7 @@ DestinationsPanel.propTypes = {
   activeDestination: PropTypes.object,
   getMoreItems: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
+  nodeTypeRenderer: PropTypes.func.isRequired,
   onSelectDestinationValue: PropTypes.func.isRequired
 };
 

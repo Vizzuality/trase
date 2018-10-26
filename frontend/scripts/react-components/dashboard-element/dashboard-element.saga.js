@@ -23,8 +23,7 @@ function* fetchDataOnPanelChange() {
     // avoid dispatching getDashboardPanelData through getDashboardPanelSectionTabs for companies
     if (dashboardElement.activePanelId === 'companies') {
       yield put(getDashboardPanelSectionTabs(activePanelId));
-    }
-    if (activePanelId === 'sources') {
+    } else if (activePanelId === 'sources') {
       yield put(getDashboardPanelData('countries', { refetchPanel }));
       if (dashboardElement.countriesPanel.activeItem) {
         yield put(getDashboardPanelData(activePanelId, { refetchPanel }));
