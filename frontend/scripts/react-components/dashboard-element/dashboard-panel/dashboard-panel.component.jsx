@@ -47,7 +47,8 @@ class DashboardPanel extends Component {
       commodities,
       onContinue,
       commoditiesPanel,
-      dynamicSentenceParts
+      dynamicSentenceParts,
+      loading
     } = this.props;
     return (
       <div className="c-dashboard-panel">
@@ -68,6 +69,7 @@ class DashboardPanel extends Component {
               getMoreItems={getMoreItems}
               getSearchResults={getSearchResults}
               loadingMoreItems={sourcesPanel.loadingItems}
+              loading={loading}
               clearItems={() => clearActiveId(activePanelId)}
               activeCountryItemId={sourcesPanel.activeCountryItemId}
               activeSourceTabId={sourcesPanel.activeSourceTabId}
@@ -118,6 +120,7 @@ class DashboardPanel extends Component {
                 })
               }
               loadingMoreItems={destinationsPanel.loadingItems}
+              loading={loading}
               activeDestinationId={destinationsPanel.activeDestinationItemId}
             />
           )}
@@ -129,6 +132,7 @@ class DashboardPanel extends Component {
               searchCompanies={companiesPanel.searchResults}
               getSearchResults={getSearchResults}
               loadingMoreItems={companiesPanel.loadingItems}
+              loading={loading}
               companies={companies[companiesPanel.activeNodeTypeTabId]}
               onSelectNodeTypeTab={item =>
                 setActiveId({
@@ -157,6 +161,7 @@ class DashboardPanel extends Component {
               getMoreItems={getMoreItems}
               searchCommodities={commoditiesPanel.searchResults}
               loadingMoreItems={commoditiesPanel.loadingItems}
+              loading={loading}
               commodities={commodities}
               onSelectCommodity={item =>
                 setActiveId({
@@ -194,6 +199,7 @@ DashboardPanel.propTypes = {
   sources: PropTypes.object,
   tabs: PropTypes.array,
   editMode: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
   commoditiesPanel: PropTypes.object,
   panels: PropTypes.array.isRequired,
   destinations: PropTypes.array.isRequired,
