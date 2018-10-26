@@ -41,6 +41,7 @@ function SourcesPanel(props) {
         rowHeight={50}
         columnCount={4}
         items={countries}
+        loading={loading}
       >
         {itemProps => (
           <GridListItem
