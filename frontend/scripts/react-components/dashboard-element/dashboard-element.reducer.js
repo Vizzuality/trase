@@ -67,17 +67,16 @@ const dashboardElementReducer = {
     const { activePanelId } = action.payload;
     const prevActivePanelId = state.activePanelId;
     const prevPanelName = `${prevActivePanelId}Panel`;
-    const prevPanelState =
-      prevActivePanelId && [prevPanelName].activeItem !== null
-        ? {
-            ...state[prevPanelName],
-            page: initialState[prevPanelName].page
-          }
-        : undefined;
+    const prevPanelState = prevActivePanelId
+      ? {
+          ...state[prevPanelName],
+          page: initialState[prevPanelName].page
+        }
+      : undefined;
     return {
       ...state,
       activePanelId,
-      [prevPanelName]: prevActivePanelId && prevPanelState
+      [prevPanelName]: prevPanelState
     };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_PAGE](state, action) {
@@ -151,10 +150,6 @@ const dashboardElementReducer = {
     const page = panel === 'countries' ? initialState.countriesPanel.page : state[panelName].page;
     const sourcesPanelState =
       panel === 'countries' ? initialState.sourcesPanel : state.sourcesPanel;
-    const item = activeItem && {
-      ...activeItem,
-      tabId: state[panelName].activeTab && state[panelName].activeTab.id
-    };
     return {
       ...state,
       activeIndicatorsList: [],
@@ -162,7 +157,7 @@ const dashboardElementReducer = {
       [panelName]: {
         ...state[panelName],
         page,
-        activeItem: item
+        activeItem
       }
     };
   },

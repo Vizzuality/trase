@@ -29,12 +29,8 @@ const getDashboardPanelParams = (state, options_type, options = {}) => {
     commoditiesPanel
   } = state;
   const { page, refetchPanel } = options;
-  const sourcesTab =
-    (sourcesPanel.activeItem && sourcesPanel.activeItem.tabId) ||
-    (sourcesPanel.activeTab && sourcesPanel.activeTab.id);
-  const companiesTab =
-    (companiesPanel.activeItem && companiesPanel.activeItem.tabId) ||
-    (companiesPanel.activeTab && companiesPanel.activeTab.id);
+  const sourcesTab = sourcesPanel.activeTab && sourcesPanel.activeTab.id;
+  const companiesTab = companiesPanel.activeTab && companiesPanel.activeTab.id;
 
   const node_types_ids = {
     sources: sourcesTab,
@@ -67,10 +63,8 @@ const getDashboardPanelParams = (state, options_type, options = {}) => {
 
 export const getDashboardPanelData = (optionsType, options) => (dispatch, getState) => {
   const { dashboardElement } = getState();
-  const { page, activeItem, activeTab } = dashboardElement[
-    `${dashboardElement.activePanelId}Panel`
-  ];
-  const tab = (activeItem && activeItem.tabId) || (activeTab && activeTab.id);
+  const { page, activeTab } = dashboardElement[`${dashboardElement.activePanelId}Panel`];
+  const tab = activeTab && activeTab.id;
   const params = getDashboardPanelParams(dashboardElement, optionsType, { page, ...options });
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const key = optionsType !== 'attributes' ? optionsType : 'indicators'; // FIXME

@@ -15,16 +15,21 @@ import { getDirtyBlocks } from 'react-components/dashboard-element/dashboard-ele
 function* fetchDataOnPanelChange() {
   function* fetchDashboardPanelInitialData(action) {
     const { activePanelId } = action.payload;
-    const initialData = activePanelId === 'sources' ? 'countries' : activePanelId;
     const state = yield select();
     const { dashboardElement } = state;
     const refetchPanel = getDirtyBlocks(state)[activePanelId];
 
+    // avoid dispatching getDashboardPanelData through getDashboardPanelSectionTabs for companies
     if (dashboardElement.activePanelId === 'companies') {
-      yield put(getDashboardPanelSectionTabs(dashboardElement.activePanelId));
+      yield put(getDashboardPanelSectionTabs(activePanelId));
+    }
+    if (activePanelId === 'sources') {
+      yield put(getDashboardPanelData('countries', { refetchPanel }));
+      if (dashboardElement.countriesPanel.activeItem) {
+        yield put(getDashboardPanelData(activePanelId, { refetchPanel }));
+      }
     } else {
-      // avoid dispatching getDashboardPanelData through getDashboardPanelSectionTabs
-      yield put(getDashboardPanelData(initialData, { refetchPanel }));
+      yield put(getDashboardPanelData(activePanelId, { refetchPanel }));
     }
   }
 
