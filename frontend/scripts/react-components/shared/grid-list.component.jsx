@@ -96,14 +96,10 @@ class GridList extends React.Component {
       loadingMoreItems
     } = this.props;
     const groupedItems = groupBy && this.getGroupedItems();
+    const isLoading = loading || loadingMoreItems;
 
     return (
       <div className="c-grid-list">
-        {loading && (
-          <div className="grid-list-loading-container">
-            <ShrinkingSpinner className="-small -dark grid-list-spinner" />
-          </div>
-        )}
         <FixedSizeGrid
           ref={this.listRef}
           className={className}
@@ -122,7 +118,7 @@ class GridList extends React.Component {
             return children({ item, style, isGroup: item && !!item[groupBy] });
           }}
         </FixedSizeGrid>
-        {loadingMoreItems && (
+        {isLoading && (
           <div className="grid-list-loading-container">
             <ShrinkingSpinner className="-small -dark grid-list-spinner" />
           </div>
