@@ -9,6 +9,7 @@ class GridList extends React.Component {
     page: PropTypes.number,
     children: PropTypes.any,
     loading: PropTypes.bool,
+    loadingMoreItems: PropTypes.bool,
     groupBy: PropTypes.string,
     className: PropTypes.string,
     getMoreItems: PropTypes.func,
@@ -91,12 +92,18 @@ class GridList extends React.Component {
       columnCount,
       children,
       groupBy,
-      loading
+      loading,
+      loadingMoreItems
     } = this.props;
     const groupedItems = groupBy && this.getGroupedItems();
 
     return (
       <div className="c-grid-list">
+        {loading && (
+          <div className="grid-list-loading-container">
+            <ShrinkingSpinner className="-small -dark grid-list-spinner" />
+          </div>
+        )}
         <FixedSizeGrid
           ref={this.listRef}
           className={className}
@@ -115,7 +122,7 @@ class GridList extends React.Component {
             return children({ item, style, isGroup: item && !!item[groupBy] });
           }}
         </FixedSizeGrid>
-        {loading && (
+        {loadingMoreItems && (
           <div className="grid-list-loading-container">
             <ShrinkingSpinner className="-small -dark grid-list-spinner" />
           </div>
