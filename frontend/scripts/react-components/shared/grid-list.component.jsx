@@ -23,7 +23,7 @@ class GridList extends React.Component {
 
   static defaultProps = {
     getMoreItems: () => {},
-    page: 1
+    page: 0
   };
 
   listRef = React.createRef();
