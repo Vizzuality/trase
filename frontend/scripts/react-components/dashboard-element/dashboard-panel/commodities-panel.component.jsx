@@ -11,7 +11,7 @@ function CommoditiesPanel(props) {
     loading,
     searchCommodities,
     commodities,
-    activeCommodityId,
+    activeCommodity,
     onSelectCommodity,
     getMoreItems,
     page
@@ -41,7 +41,9 @@ function CommoditiesPanel(props) {
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={activeCommodityId === (itemProps.item && itemProps.item.id)}
+            isActive={
+              (activeCommodity && activeCommodity.id) === (itemProps.item && itemProps.item.id)
+            }
             enableItem={onSelectCommodity}
             disableItem={() => onSelectCommodity(null)}
           />
@@ -57,7 +59,7 @@ CommoditiesPanel.propTypes = {
   loading: PropTypes.bool,
   page: PropTypes.number.isRequired,
   searchCommodities: PropTypes.array,
-  activeCommodityId: PropTypes.number,
+  activeCommodity: PropTypes.object,
   getMoreItems: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
   onSelectCommodity: PropTypes.func.isRequired

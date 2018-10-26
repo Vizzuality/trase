@@ -73,20 +73,20 @@ class DashboardPanel extends Component {
               loadingMoreItems={sourcesPanel.loadingItems}
               loading={loading}
               clearItems={() => clearActiveItem(activePanelId)}
-              activeCountryItemId={countriesPanel.activeItem}
-              activeSourceTabId={sourcesPanel.activeTab}
-              activeSourceItemId={sourcesPanel.activeItem}
+              activeCountryItem={countriesPanel.activeItem}
+              activeSourceTab={sourcesPanel.activeTab}
+              activeSourceItem={sourcesPanel.activeItem}
               searchSources={
                 !countriesPanel.activeItem
                   ? countriesPanel.searchResults
                   : sourcesPanel.searchResults
               }
               tabs={tabs}
-              sources={sources[sourcesPanel.activeTab]}
+              sources={sources[sourcesPanel.activeTab && sourcesPanel.activeTab.id] || []}
               countries={countries}
-              onSelectCountry={item => setActiveItem(item && item.id, 'countries')}
-              onSelectSourceTab={item => setActiveTab(item && item.id, activePanelId)}
-              onSelectSourceValue={item => setActiveItem(item && item.id, activePanelId)}
+              onSelectCountry={item => setActiveItem(item, 'countries')}
+              onSelectSourceTab={item => setActiveTab(item, activePanelId)}
+              onSelectSourceValue={item => setActiveItem(item, activePanelId)}
             />
           )}
           {activePanelId === 'destinations' && (
@@ -96,10 +96,10 @@ class DashboardPanel extends Component {
               getSearchResults={getSearchResults}
               searchDestinations={destinationsPanel.searchResults}
               destinations={destinations}
-              onSelectDestinationValue={item => setActiveItem(item && item.id, activePanelId)}
+              onSelectDestinationValue={item => setActiveItem(item, activePanelId)}
               loadingMoreItems={destinationsPanel.loadingItems}
               loading={loading}
-              activeDestinationId={destinationsPanel.activeItem}
+              activeDestination={destinationsPanel.activeItem}
             />
           )}
           {activePanelId === 'companies' && (
@@ -111,11 +111,11 @@ class DashboardPanel extends Component {
               getSearchResults={getSearchResults}
               loadingMoreItems={companiesPanel.loadingItems}
               loading={loading}
-              companies={companies[companiesPanel.activeTab]}
-              onSelectNodeTypeTab={item => setActiveTab(item && item.id, activePanelId)}
-              onSelectCompany={item => setActiveItem(item && item.id, activePanelId)}
-              activeNodeTypeTabId={companiesPanel.activeTab}
-              activeCompanyId={companiesPanel.activeItem}
+              companies={companies[companiesPanel.activeTab && companiesPanel.activeTab.id] || []}
+              onSelectNodeTypeTab={item => setActiveTab(item, activePanelId)}
+              onSelectCompany={item => setActiveItem(item, activePanelId)}
+              activeNodeTypeTab={companiesPanel.activeTab}
+              activeCompany={companiesPanel.activeItem}
             />
           )}
           {activePanelId === 'commodities' && (
@@ -127,8 +127,8 @@ class DashboardPanel extends Component {
               loadingMoreItems={commoditiesPanel.loadingItems}
               loading={loading}
               commodities={commodities}
-              onSelectCommodity={item => setActiveItem(item && item.id, activePanelId)}
-              activeCommodityId={commoditiesPanel.activeItem}
+              onSelectCommodity={item => setActiveItem(item, activePanelId)}
+              activeCommodity={commoditiesPanel.activeItem}
             />
           )}
         </div>

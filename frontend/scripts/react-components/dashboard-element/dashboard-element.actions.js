@@ -29,38 +29,48 @@ const getDashboardPanelParams = (state, options_type, options = {}) => {
     commoditiesPanel
   } = state;
   const { page, refetchPanel } = options;
+  const sourcesTab =
+    (sourcesPanel.activeItem && sourcesPanel.activeItem.tabId) ||
+    (sourcesPanel.activeTab && sourcesPanel.activeTab.id);
+  const companiesTab =
+    (companiesPanel.activeItem && companiesPanel.activeItem.tabId) ||
+    (companiesPanel.activeTab && companiesPanel.activeTab.id);
+
   const node_types_ids = {
-    sources: sourcesPanel.activeTab,
-    companies: companiesPanel.activeTab
+    sources: sourcesTab,
+    companies: companiesTab
   }[options_type];
   const params = {
     page,
     options_type,
     node_types_ids,
-    countries_ids: countriesPanel.activeItem
+    countries_ids: countriesPanel.activeItem && countriesPanel.activeItem.id
   };
 
   if (options_type !== 'sources' || refetchPanel) {
-    params.sources_ids = sourcesPanel.activeItem;
+    params.sources_ids = sourcesPanel.activeItem && sourcesPanel.activeItem.id;
   }
 
   if (options_type !== 'commodities' || refetchPanel) {
-    params.commodities_ids = commoditiesPanel.activeItem;
+    params.commodities_ids = commoditiesPanel.activeItem && commoditiesPanel.activeItem.id;
   }
 
   if (options_type !== 'destinations' || refetchPanel) {
-    params.destinations_ids = destinationsPanel.activeItem;
+    params.destinations_ids = destinationsPanel.activeItem && destinationsPanel.activeItem.id;
   }
 
   if (options_type !== 'companies' || refetchPanel) {
-    params.companies_ids = companiesPanel.activeItem;
+    params.companies_ids = companiesPanel.activeItem && companiesPanel.activeItem.id;
   }
   return params;
 };
 
-export const getDashboardPanelData = (optionsType, tab, options) => (dispatch, getState) => {
+export const getDashboardPanelData = (optionsType, options) => (dispatch, getState) => {
   const { dashboardElement } = getState();
-  const { page } = dashboardElement[`${dashboardElement.activePanelId}Panel`];
+  const { page, activeItem, activeTab } = dashboardElement[
+    `${dashboardElement.activePanelId}Panel`
+  ];
+  const tab = (activeItem && activeItem.tabId) || (activeTab && activeTab.id);
   const params = getDashboardPanelParams(dashboardElement, optionsType, { page, ...options });
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const key = optionsType !== 'attributes' ? optionsType : 'indicators'; // FIXME
@@ -142,7 +152,10 @@ export const setDashboardPanelLoadingItems = loadingItems => ({
   payload: { loadingItems }
 });
 
-export const getMoreDashboardPanelData = (optionsType, tab, direction) => (dispatch, getState) => {
+export const getMoreDashboardPanelData = (optionsType, activeTab, direction) => (
+  dispatch,
+  getState
+) => {
   const { dashboardElement } = getState();
   const { page } = dashboardElement[`${dashboardElement.activePanelId}Panel`];
   const params = getDashboardPanelParams(dashboardElement, optionsType, { page });
@@ -160,7 +173,7 @@ export const getMoreDashboardPanelData = (optionsType, tab, direction) => (dispa
         type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
         payload: {
           key,
-          tab,
+          tab: activeTab && activeTab.id,
           direction,
           data: json.data
         }

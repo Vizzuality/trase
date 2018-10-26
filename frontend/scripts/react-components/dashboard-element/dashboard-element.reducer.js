@@ -65,9 +65,19 @@ const initialState = {
 const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_ACTIVE_PANEL](state, action) {
     const { activePanelId } = action.payload;
+    const prevActivePanelId = state.activePanelId;
+    const prevPanelName = `${prevActivePanelId}Panel`;
+    const prevPanelState =
+      prevActivePanelId && [prevPanelName].activeItem !== null
+        ? {
+            ...state[prevPanelName],
+            page: initialState[prevPanelName].page
+          }
+        : undefined;
     return {
       ...state,
-      activePanelId
+      activePanelId,
+      [prevPanelName]: prevActivePanelId && prevPanelState
     };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_PAGE](state, action) {
@@ -83,7 +93,7 @@ const dashboardElementReducer = {
     if (Array.isArray(initialData)) {
       newData = data || initialData;
     } else {
-      newData = tab && data ? { ...state.data[key], [tab]: data } : initialData;
+      newData = tab ? { ...state.data[key], [tab]: data } : initialData;
     }
     return {
       ...state,
@@ -124,8 +134,7 @@ const dashboardElementReducer = {
     const getSection = n => n.section && n.section.toLowerCase();
     const tabs = data.reduce((acc, next) => ({ ...acc, [getSection(next)]: next.tabs }), {});
     const panelName = `${state.activePanelId}Panel`;
-    const firstTab =
-      tabs[state.activePanelId] && tabs[state.activePanelId][0] && tabs[state.activePanelId][0].id;
+    const firstTab = tabs[state.activePanelId] && tabs[state.activePanelId][0];
     return {
       ...state,
       tabs,
@@ -142,6 +151,10 @@ const dashboardElementReducer = {
     const page = panel === 'countries' ? initialState.countriesPanel.page : state[panelName].page;
     const sourcesPanelState =
       panel === 'countries' ? initialState.sourcesPanel : state.sourcesPanel;
+    const item = activeItem && {
+      ...activeItem,
+      tabId: state[panelName].activeTab && state[panelName].activeTab.id
+    };
     return {
       ...state,
       activeIndicatorsList: [],
@@ -149,7 +162,7 @@ const dashboardElementReducer = {
       [panelName]: {
         ...state[panelName],
         page,
-        activeItem
+        activeItem: item
       }
     };
   },

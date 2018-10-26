@@ -1,8 +1,6 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash/sortBy';
-import flatten from 'lodash/flatten';
 
-const getDashboardPanelData = state => state.dashboardElement.data;
 const getCountriesPanel = state => state.dashboardElement.countriesPanel;
 const getSourcesPanel = state => state.dashboardElement.sourcesPanel;
 const getDestinationsPanel = state => state.dashboardElement.destinationsPanel;
@@ -45,8 +43,7 @@ export const getDynamicSentence = createSelector(
     getSourcesPanel,
     getDestinationsPanel,
     getCompaniesPanel,
-    getCommoditiesPanel,
-    getDashboardPanelData
+    getCommoditiesPanel
   ],
   (
     dirtyBlocks,
@@ -54,52 +51,42 @@ export const getDynamicSentence = createSelector(
     sourcesPanel,
     destinationsPanel,
     companiesPanel,
-    commoditiesPanel,
-    data
+    commoditiesPanel
   ) => {
     if (Object.values(dirtyBlocks).every(block => !block)) {
       return null;
     }
 
-    const countriesActiveId = countriesPanel.activeItem;
-    const sourcesActiveId = sourcesPanel.activeItem;
-    const destinationsActiveId = destinationsPanel.activeItem;
-    const companiesActiveId = companiesPanel.activeItem;
-    const commoditiesActiveId = commoditiesPanel.activeItem;
-    const sources = flatten(Object.values(data.sources));
-    const companies = flatten(Object.values(data.companies));
-
-    const countriesValue = data.countries.find(item => item.id === countriesActiveId);
-    const commoditiesValue = data.commodities.find(item => item.id === commoditiesActiveId);
-    const sourcesValue = sources.find(item => item.id === sourcesActiveId);
-    const companiesValue = companies.find(item => item.id === companiesActiveId);
-    const destinationsValue = data.destinations.find(item => item.id === destinationsActiveId);
+    const activeCountry = countriesPanel.activeItem;
+    const activeSource = sourcesPanel.activeItem;
+    const activeDestination = destinationsPanel.activeItem;
+    const activeCompany = companiesPanel.activeItem;
+    const activeCommodity = commoditiesPanel.activeItem;
 
     return [
       {
         panel: 'commodities',
-        prefix: commoditiesActiveId ? 'Explore' : 'Explore commodities',
-        value: commoditiesValue && commoditiesValue.name.toLowerCase()
+        prefix: activeCommodity ? 'Explore' : 'Explore commodities',
+        value: activeCommodity && activeCommodity.name.toLowerCase()
       },
       {
         panel: 'sources',
-        prefix: sourcesActiveId || countriesActiveId ? `produced in` : 'produced worldwide',
+        prefix: activeSource || activeCountry ? `produced in` : 'produced worldwide',
         value:
-          (sourcesValue && sourcesValue.name.toLowerCase()) ||
-          (countriesValue && countriesValue.name.toLowerCase())
+          (activeSource && activeSource.name.toLowerCase()) ||
+          (activeCountry && activeCountry.name.toLowerCase())
       },
       {
         panel: 'companies',
-        prefix:
-          companiesActiveId && companiesValue
-            ? `${companiesValue.nodeType.toLowerCase() === 'exporter' ? 'exported' : 'imported'} by`
-            : '',
-        value: companiesValue && companiesValue.name.toLowerCase()
+        prefix: activeCompany
+          ? `${activeCompany.nodeType.toLowerCase() === 'exporter' ? 'exported' : 'imported'} by`
+          : '',
+        value: activeCompany && activeCompany.name.toLowerCase()
       },
       {
         panel: 'destinations',
-        prefix: destinationsActiveId ? `going to` : '',
-        value: destinationsValue && destinationsValue.name.toLowerCase()
+        prefix: activeDestination ? `going to` : '',
+        value: activeDestination && activeDestination.name.toLowerCase()
       }
     ];
   }

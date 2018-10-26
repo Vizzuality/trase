@@ -14,15 +14,15 @@ function SourcesPanel(props) {
     loadingMoreItems,
     loading,
     getSearchResults,
-    activeCountryItemId,
+    activeCountryItem,
     sources,
     clearItems,
     countries,
     onSelectCountry,
     onSelectSourceTab,
     onSelectSourceValue,
-    activeSourceTabId,
-    activeSourceItemId
+    activeSourceTab,
+    activeSourceItem
   } = props;
   return (
     <React.Fragment>
@@ -41,24 +41,26 @@ function SourcesPanel(props) {
         rowHeight={50}
         columnCount={4}
         items={countries}
-        loading={!activeCountryItemId && loading}
+        loading={!activeCountryItem && loading}
       >
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={activeCountryItemId === (itemProps.item && itemProps.item.id)}
+            isActive={
+              (activeCountryItem && activeCountryItem.id) === (itemProps.item && itemProps.item.id)
+            }
             enableItem={onSelectCountry}
             disableItem={clearItems}
           />
         )}
       </GridList>
-      {activeCountryItemId &&
+      {activeCountryItem &&
         tabs.length > 0 && (
           <React.Fragment>
             <Tabs
               tabs={tabs}
               onSelectTab={onSelectSourceTab}
-              selectedTab={activeSourceTabId}
+              selectedTab={activeSourceTab && activeSourceTab.id}
               itemTabRenderer={i => i.name}
               getTabId={item => item.id}
             >
@@ -78,7 +80,10 @@ function SourcesPanel(props) {
                 {itemProps => (
                   <GridListItem
                     {...itemProps}
-                    isActive={activeSourceItemId === (itemProps.item && itemProps.item.id)}
+                    isActive={
+                      (activeSourceItem && activeSourceItem.id) ===
+                      (itemProps.item && itemProps.item.id)
+                    }
                     enableItem={onSelectSourceValue}
                     disableItem={() => onSelectSourceValue(null)}
                   />
@@ -99,9 +104,9 @@ SourcesPanel.propTypes = {
   sources: PropTypes.array,
   countries: PropTypes.array,
   getMoreItems: PropTypes.func.isRequired,
-  activeCountryItemId: PropTypes.number,
-  activeSourceTabId: PropTypes.number,
-  activeSourceItemId: PropTypes.number,
+  activeCountryItem: PropTypes.object,
+  activeSourceTab: PropTypes.object,
+  activeSourceItem: PropTypes.object,
   tabs: PropTypes.array.isRequired,
   onSelectCountry: PropTypes.func.isRequired,
   clearItems: PropTypes.func.isRequired,
