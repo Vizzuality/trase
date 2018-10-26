@@ -13,6 +13,7 @@ function SourcesPanel(props) {
     searchSources,
     loadingMoreItems,
     loading,
+    setSearchResult,
     getSearchResults,
     activeCountryItem,
     sources,
@@ -31,7 +32,7 @@ function SourcesPanel(props) {
         className="dashboard-panel-search"
         items={searchSources}
         placeholder="Search place"
-        onSelect={item => (!item.nodeType ? onSelectCountry(item) : onSelectSourceValue(item))}
+        onSelect={item => (!item.nodeType ? onSelectCountry(item) : setSearchResult(item))}
         onSearchTermChange={getSearchResults}
       />
       <GridList
@@ -110,6 +111,7 @@ SourcesPanel.propTypes = {
   tabs: PropTypes.array.isRequired,
   onSelectCountry: PropTypes.func.isRequired,
   clearItems: PropTypes.func.isRequired,
+  setSearchResult: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
   onSelectSourceValue: PropTypes.func.isRequired,
   onSelectSourceTab: PropTypes.func.isRequired

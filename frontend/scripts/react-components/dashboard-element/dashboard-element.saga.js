@@ -1,14 +1,15 @@
 import { select, put, all, fork, takeLatest } from 'redux-saga/effects';
 import {
+  getDashboardPanelData,
+  getMoreDashboardPanelData,
+  getDashboardPanelSectionTabs,
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
-  getDashboardPanelData,
-  getMoreDashboardPanelData,
-  getDashboardPanelSectionTabs,
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
-  DASHBOARD_ELEMENT__SET_PANEL_PAGE
+  DASHBOARD_ELEMENT__SET_PANEL_PAGE,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import { getDirtyBlocks } from 'react-components/dashboard-element/dashboard-element.selectors';
 
@@ -45,7 +46,11 @@ function* fetchDataOnTabChange() {
   }
 
   yield takeLatest(
-    [DASHBOARD_ELEMENT__SET_ACTIVE_TAB, DASHBOARD_ELEMENT__SET_PANEL_TABS],
+    [
+      DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
+      DASHBOARD_ELEMENT__SET_PANEL_TABS,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
+    ],
     onTabChange
   );
 }

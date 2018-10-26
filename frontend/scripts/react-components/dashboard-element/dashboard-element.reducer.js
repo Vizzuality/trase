@@ -11,7 +11,8 @@ import {
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   DASHBOARD_ELEMENT__SET_LOADING_ITEMS,
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
-  DASHBOARD_ELEMENT__SET_SEARCH_RESULTS
+  DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
 } from './dashboard-element.actions';
 
 const initialState = {
@@ -171,6 +172,25 @@ const dashboardElementReducer = {
         ...state[panelName],
         activeTab,
         page: initialState[panelName].page
+      }
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH](state, action) {
+    const { panel, activeItem } = action.payload;
+    const panelName = `${panel}Panel`;
+    const page = panel === 'countries' ? initialState.countriesPanel.page : state[panelName].page;
+    const sourcesPanelState =
+      panel === 'countries' ? initialState.sourcesPanel : state.sourcesPanel;
+    const activeTab = state.tabs[panel].find(tab => tab.id === activeItem.nodeTypeId);
+    return {
+      ...state,
+      activeIndicatorsList: [],
+      sourcesPanel: sourcesPanelState,
+      [panelName]: {
+        ...state[panelName],
+        page,
+        activeItem,
+        activeTab
       }
     };
   },

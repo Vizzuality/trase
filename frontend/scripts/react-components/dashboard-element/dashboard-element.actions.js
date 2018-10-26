@@ -19,6 +19,8 @@ export const DASHBOARD_ELEMENT__SET_PANEL_TABS = 'DASHBOARD_ELEMENT__SET_PANEL_T
 export const DASHBOARD_ELEMENT__SET_PANEL_PAGE = 'DASHBOARD_ELEMENT__SET_PANEL_PAGE';
 export const DASHBOARD_ELEMENT__SET_LOADING_ITEMS = 'DASHBOARD_ELEMENT__SET_LOADING_ITEMS';
 export const DASHBOARD_ELEMENT__SET_SEARCH_RESULTS = 'DASHBOARD_ELEMENT__SET_SEARCH_RESULTS';
+export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH =
+  'DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH';
 
 const getDashboardPanelParams = (state, options_type, options = {}) => {
   const {
@@ -109,6 +111,11 @@ export const getDashboardPanelSectionTabs = options_type => (dispatch, getState)
 export const setDashboardActivePanel = activePanelId => ({
   type: DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   payload: { activePanelId }
+});
+
+export const setDashboardPanelActiveItemWithSearch = (activeItem, panel) => ({
+  type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
+  payload: { panel, activeItem }
 });
 
 export const setDashboardPanelActiveItem = (activeItem, panel) => ({

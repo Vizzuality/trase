@@ -6,7 +6,8 @@ import {
   setDashboardActivePanel,
   setDashboardPanelActiveTab,
   setDashboardPanelActiveItem,
-  getDashboardPanelSearchResults
+  getDashboardPanelSearchResults,
+  setDashboardPanelActiveItemWithSearch
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
 import {
@@ -52,7 +53,8 @@ const mapDispatchToProps = {
   setActivePanel: setDashboardActivePanel,
   setActiveTab: setDashboardPanelActiveTab,
   setActiveItem: setDashboardPanelActiveItem,
-  getSearchResults: getDashboardPanelSearchResults
+  getSearchResults: getDashboardPanelSearchResults,
+  setSearchResult: setDashboardPanelActiveItemWithSearch
 };
 
 class DashboardPanelContainer extends React.PureComponent {
