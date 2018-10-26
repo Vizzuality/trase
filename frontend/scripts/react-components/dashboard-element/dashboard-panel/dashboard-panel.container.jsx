@@ -4,8 +4,7 @@ import {
   clearDashboardPanel,
   setDashboardPanelPage,
   setDashboardActivePanel,
-  setDashboardPanelActiveTab,
-  setDashboardPanelActiveItem,
+  setDashboardPanelActiveId,
   getDashboardPanelSearchResults
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
@@ -17,14 +16,13 @@ import {
 
 const mapStateToProps = state => {
   const {
-    loading,
     activePanelId,
     sourcesPanel,
     destinationsPanel,
     companiesPanel,
     commoditiesPanel,
-    countriesPanel,
-    data: { sources, countries, commodities, companies, destinations }
+    data: { sources, countries, commodities, companies, destinations },
+    loading
   } = state.dashboardElement;
 
   return {
@@ -36,7 +34,6 @@ const mapStateToProps = state => {
     destinations,
     activePanelId,
     sourcesPanel,
-    countriesPanel,
     destinationsPanel,
     companiesPanel,
     commoditiesPanel,
@@ -48,10 +45,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   getMoreItems: setDashboardPanelPage,
-  clearActiveItem: clearDashboardPanel,
+  clearActiveId: clearDashboardPanel,
+  setActiveId: setDashboardPanelActiveId,
   setActivePanel: setDashboardActivePanel,
-  setActiveTab: setDashboardPanelActiveTab,
-  setActiveItem: setDashboardPanelActiveItem,
   getSearchResults: getDashboardPanelSearchResults
 };
 

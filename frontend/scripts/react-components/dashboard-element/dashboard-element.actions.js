@@ -9,8 +9,7 @@ import {
 export const DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_PANEL = 'DASHBOARD_ELEMENT__SET_ACTIVE_PANEL';
-export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEM = 'DASHBOARD_ELEMENT__SET_ACTIVE_ITEM';
-export const DASHBOARD_ELEMENT__SET_ACTIVE_TAB = 'DASHBOARD_ELEMENT__SET_ACTIVE_TAB';
+export const DASHBOARD_ELEMENT__SET_ACTIVE_ID = 'DASHBOARD_ELEMENT__SET_ACTIVE_ID';
 export const DASHBOARD_ELEMENT__CLEAR_PANEL = 'DASHBOARD_ELEMENT__CLEAR_PANEL';
 export const DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR = 'DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR';
 export const DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR =
@@ -21,39 +20,33 @@ export const DASHBOARD_ELEMENT__SET_LOADING_ITEMS = 'DASHBOARD_ELEMENT__SET_LOAD
 export const DASHBOARD_ELEMENT__SET_SEARCH_RESULTS = 'DASHBOARD_ELEMENT__SET_SEARCH_RESULTS';
 
 const getDashboardPanelParams = (state, options_type, options = {}) => {
-  const {
-    countriesPanel,
-    sourcesPanel,
-    companiesPanel,
-    destinationsPanel,
-    commoditiesPanel
-  } = state;
+  const { sourcesPanel, companiesPanel, destinationsPanel, commoditiesPanel } = state;
   const { page, refetchPanel } = options;
   const node_types_ids = {
-    sources: sourcesPanel.activeTab,
-    companies: companiesPanel.activeTab
+    sources: sourcesPanel.activeSourceTabId,
+    companies: companiesPanel.activeNodeTypeTabId
   }[options_type];
   const params = {
     page,
     options_type,
     node_types_ids,
-    countries_ids: countriesPanel.activeItem
+    countries_ids: sourcesPanel.activeCountryItemId
   };
 
   if (options_type !== 'sources' || refetchPanel) {
-    params.sources_ids = sourcesPanel.activeItem;
+    params.sources_ids = sourcesPanel.activeSourceItemId;
   }
 
   if (options_type !== 'commodities' || refetchPanel) {
-    params.commodities_ids = commoditiesPanel.activeItem;
+    params.commodities_ids = commoditiesPanel.activeCommodityItemId;
   }
 
   if (options_type !== 'destinations' || refetchPanel) {
-    params.destinations_ids = destinationsPanel.activeItem;
+    params.destinations_ids = destinationsPanel.activeDestinationItemId;
   }
 
   if (options_type !== 'companies' || refetchPanel) {
-    params.companies_ids = companiesPanel.activeItem;
+    params.companies_ids = companiesPanel.activeCompanyItemId;
   }
   return params;
 };
@@ -107,14 +100,14 @@ export const setDashboardActivePanel = activePanelId => ({
   payload: { activePanelId }
 });
 
-export const setDashboardPanelActiveItem = (activeItem, panel) => ({
-  type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
-  payload: { panel, activeItem }
-});
-
-export const setDashboardPanelActiveTab = (activeTab, panel) => ({
-  type: DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
-  payload: { panel, activeTab }
+export const setDashboardPanelActiveId = ({ type, active, panel, section }) => ({
+  type: DASHBOARD_ELEMENT__SET_ACTIVE_ID,
+  payload: {
+    type,
+    panel,
+    active,
+    section
+  }
 });
 
 export const clearDashboardPanel = panel => ({
@@ -178,8 +171,8 @@ export const getDashboardPanelSearchResults = query => (dispatch, getState) => {
   let optionsType = dashboardElement.activePanelId;
   if (
     optionsType === 'sources' &&
-    dashboardElement.sourcesPanel.activeItem === null &&
-    dashboardElement.sourcesPanel.activeTab === null
+    dashboardElement.sourcesPanel.activeCountryItemId === null &&
+    dashboardElement.sourcesPanel.activeSourceTabId === null
   ) {
     optionsType = 'countries';
   }
