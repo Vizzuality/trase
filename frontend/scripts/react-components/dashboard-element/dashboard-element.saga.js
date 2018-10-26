@@ -24,8 +24,10 @@ function* fetchDataOnPanelChange() {
 
     if (dashboardElement.activePanelId === 'companies') {
       yield put(getDashboardPanelSectionTabs(dashboardElement.activePanelId));
+    } else {
+      // avoid dispatching getDashboardPanelData through getDashboardPanelSectionTabs
+      yield put(getDashboardPanelData(initialData, activeTab, { refetchPanel }));
     }
-    yield put(getDashboardPanelData(initialData, activeTab, { refetchPanel }));
   }
 
   yield takeLatest(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL, fetchDashboardPanelInitialData);
@@ -50,9 +52,9 @@ function* fetchDataOnItemChange() {
   function* onItemChange(action) {
     const { activeItem, panel } = action.payload;
     const { dashboardElement } = yield select();
-    const panelName = `${dashboardElement.activePanelId}Panel`;
+    const panelName = `${panel}Panel`;
     const { activeTab } = dashboardElement[panelName];
-    const data = dashboardElement.data[dashboardElement.activePanelId];
+    const data = dashboardElement.data[panel];
     const items = typeof activeTab !== 'undefined' ? data[activeTab] : data;
     const activeItemExists = !!items && items.find(i => i.id === activeItem);
 
@@ -61,7 +63,7 @@ function* fetchDataOnItemChange() {
       yield put(getDashboardPanelSectionTabs(panel));
     }
 
-    if (items && !activeItemExists) {
+    if (items && !activeItemExists && panel !== 'countries') {
       yield put(
         getDashboardPanelData(panel, activeTab, {
           refetchPanel: true
@@ -78,12 +80,12 @@ function* fetchDataOnFilterClear() {
     const { dashboardElement } = yield select();
     const panelName = `${dashboardElement.activePanelId}Panel`;
     const { activeTab } = dashboardElement[panelName];
-    yield put(getDashboardPanelData(dashboardElement.activePanelId, activeTab));
 
-    if (dashboardElement.activePanelId) {
+    if (dashboardElement.activePanelId !== 'sources') {
+      yield put(getDashboardPanelData(dashboardElement.activePanelId, activeTab));
+    } else {
       yield put(getDashboardPanelData('countries'));
     }
-    yield put(getDashboardPanelSectionTabs(dashboardElement.activePanelId));
   }
 
   yield takeLatest(DASHBOARD_ELEMENT__CLEAR_PANEL, onFilterClear);
@@ -95,7 +97,6 @@ function* fetchDataOnPageChange() {
     const { dashboardElement } = yield select();
     const panelName = `${dashboardElement.activePanelId}Panel`;
     const { activeTab } = dashboardElement[panelName];
-
     yield put(getMoreDashboardPanelData(dashboardElement.activePanelId, activeTab, direction));
   }
 
