@@ -1,7 +1,10 @@
 .c-dashboard-welcome {
-  padding: 40px 25px;
+  padding: 40px 30px;
+  overflow: auto;
+  max-height: 100%;
+
   .title {
-    margin: 26px 0 55px 0;
+    margin: 0 0 45px;
     font-family: $font-family-2;
     font-size: $font-size-huge;
     font-weight: $font-weight-light;
@@ -13,9 +16,9 @@
     color: $charcoal-grey;
   }
 
-  .dashboard-welcome-card-container {
+  .dashboard-welcome-container {
     display: flex;
-    margin-left: 15px;
+    margin: 15px 0 0;
   }
 
   .dashboard-welcome-card {
@@ -35,22 +38,31 @@
       letter-spacing: normal;
       color: $charcoal-grey;
       margin-bottom: 10px;
+      height: 28px;
     }
 
-    img {
-      display:block;
-      margin:auto;
+    &-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: calc(100% - 28px);
     }
 
-    p {
-      width: 260px;
-      height: 96px;
-      margin-bottom: 36px;
-      font-size: $font-size-xx-regular;
+    .dashboard-welcome-card-text {
+      font-size: 15px;
       font-weight: $font-weight-light;
-      line-height: 2;
+      line-height: 1.9;
       letter-spacing: normal;
       color: $charcoal-grey;
+    }
+
+    .dashboard-welcome-card-image {
+      height: 170px;
+      max-height: 170px;
+      width: 100%;
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
     }
   }
 

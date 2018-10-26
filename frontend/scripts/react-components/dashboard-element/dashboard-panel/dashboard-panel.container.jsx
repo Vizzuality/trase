@@ -55,7 +55,7 @@ class DashboardPanelContainer extends React.PureComponent {
   panels = [
     {
       id: 'sources',
-      title: 'sourcing places',
+      title: 'Regions of production',
       imageUrl: '/images/dashboards/icon_sourcing.svg',
       whiteImageUrl: '/images/dashboards/icon_sourcing_white.svg'
     },

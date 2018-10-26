@@ -16,7 +16,7 @@ function DashboardRoot(props) {
   return (
     <div className="l-dashboard-root">
       <div className="c-dashboard-root">
-        <h1 className="title">See how commodity trade impacts the world</h1>
+        <h1 className="title is-hidden">See how commodity trade impacts the world</h1>
         <section className="dashboard-root-grid">
           <div className="row">
             {loadingDashboardTemplates && (

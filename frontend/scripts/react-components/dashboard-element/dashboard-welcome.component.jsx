@@ -3,25 +3,42 @@ import PropTypes from 'prop-types';
 
 function DashboardWelcome(props) {
   const { onContinue } = props;
+  const cards = [
+    {
+      title: 'Single or multiple choices',
+      body:
+        "Select one or more options in the categories you are interested in. You don't need to select an item from every category to create your dashboard.",
+      image: '/images/dashboards/icon_welcome_01.png'
+    },
+    {
+      title: 'More options',
+      body:
+        'Within each category you will be able to select from sub-categories where data is available. For example, select a country in "regions of production" and you will be presented with sub-national levels of governance, such as biomes or states, to select if you want to.',
+      image: '/images/dashboards/icon_welcome_02.png'
+    },
+    {
+      title: 'Filtering',
+      body:
+        'Once the first selection has been made, you will be able to select from remaining options available for that selection only.',
+      image: '/images/dashboards/icon_welcome_03.png'
+    }
+  ];
   return (
     <div className="c-dashboard-welcome">
-      <h2 className="title -medium -light -center">Welcome to the Dashboard</h2>
-      <div className="dashboard-welcome-card-container">
-        <div className="dashboard-welcome-card">
-          <h3>Single or multiple choices</h3>
-          <p>Choose the options your are interested in, it is not necessary to select from every section.</p>
-          <img src="/images/dashboards/icon_welcome_01.png" alt="single or multiple choices"/>
-        </div>
-        <div className="dashboard-welcome-card">
-          <h3>Countries and beyond</h3>
-          <p>Explore Sourcing Countries and their municipalities, biomes, states or ports.</p>
-          <img src="/images/dashboards/icon_welcome_02.png" alt="countries and beyond" />
-        </div>
-        <div className="dashboard-welcome-card">
-          <h3>Related options</h3>
-          <p>Once the first choice has been made, you will be able to select from related options only.</p>
-          <img src="/images/dashboards/icon_welcome_03.png" alt="related options" />
-        </div>
+      <h2 className="title -medium -light -center">Welcome to your dashboard</h2>
+      <div className="dashboard-welcome-container">
+        {cards.map(card => (
+          <div className="dashboard-welcome-card">
+            <h3 className="dashboard-welcome-card-title">{card.title}</h3>
+            <div className="dashboard-welcome-card-container">
+              <p className="dashboard-welcome-card-text">{card.body}</p>
+              <div
+                className="dashboard-welcome-card-image"
+                style={{ backgroundImage: `url(${card.image})` }}
+              />
+            </div>
+          </div>
+        ))}
       </div>
       <div className="dashboard-welcome-button-container">
         <button className="c-button -pink -large" onClick={onContinue}>
