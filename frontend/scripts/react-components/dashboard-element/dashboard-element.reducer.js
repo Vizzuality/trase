@@ -29,33 +29,33 @@ const initialState = {
   activePanelId: null,
   activeIndicatorsList: [],
   countriesPanel: {
-    page: 0,
+    page: 1,
     searchResults: [],
     loadingItems: false,
     activeItem: null
   },
   sourcesPanel: {
-    page: 0,
+    page: 1,
     searchResults: [],
     loadingItems: false,
     activeItem: null,
     activeTab: null
   },
   destinationsPanel: {
-    page: 0,
+    page: 1,
     searchResults: [],
     loadingItems: false,
     activeItem: null
   },
   companiesPanel: {
-    page: 0,
+    page: 1,
     searchResults: [],
     loadingItems: false,
     activeItem: null,
     activeTab: null
   },
   commoditiesPanel: {
-    page: 0,
+    page: 1,
     searchResults: [],
     loadingItems: false,
     activeItem: null
@@ -70,10 +70,12 @@ const dashboardElementReducer = {
     return {
       ...state,
       activePanelId,
-      [prevPanelName]: {
-        ...state[prevPanelName],
-        page: 0
-      }
+      [prevPanelName]: prevActivePanelId
+        ? {
+            ...state[prevPanelName],
+            page: initialState[prevPanelName].page
+          }
+        : undefined
     };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_PAGE](state, action) {
@@ -84,7 +86,6 @@ const dashboardElementReducer = {
   },
   [DASHBOARD_ELEMENT__SET_PANEL_DATA](state, action) {
     const { key, data, meta, tab, loading } = action.payload;
-    const metaFallback = meta && meta.contextNodeTypes ? meta.contextNodeTypes : meta; // FIXME
     const initialData = initialState.data[key];
     let newData;
     if (Array.isArray(initialData)) {
@@ -96,7 +97,7 @@ const dashboardElementReducer = {
       ...state,
       loading,
       data: { ...state.data, [key]: newData },
-      meta: { ...state.meta, [key]: metaFallback }
+      meta: { ...state.meta, [key]: meta }
     };
   },
   [DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA](state, action) {
