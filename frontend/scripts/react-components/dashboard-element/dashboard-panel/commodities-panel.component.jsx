@@ -8,6 +8,7 @@ function CommoditiesPanel(props) {
   const {
     getSearchResults,
     loadingMoreItems,
+    loading,
     searchCommodities,
     commodities,
     activeCommodityId,
@@ -34,7 +35,8 @@ function CommoditiesPanel(props) {
         columnCount={5}
         getMoreItems={getMoreItems}
         page={page}
-        loading={loadingMoreItems}
+        loadingMoreItems={loadingMoreItems}
+        loading={loading}
       >
         {itemProps => (
           <GridListItem
@@ -52,6 +54,7 @@ function CommoditiesPanel(props) {
 CommoditiesPanel.propTypes = {
   commodities: PropTypes.array,
   loadingMoreItems: PropTypes.bool,
+  loading: PropTypes.bool,
   page: PropTypes.number.isRequired,
   searchCommodities: PropTypes.array,
   activeCommodityId: PropTypes.number,

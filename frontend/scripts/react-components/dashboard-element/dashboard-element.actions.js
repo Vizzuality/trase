@@ -60,7 +60,7 @@ export const getDashboardPanelData = (optionsType, tab, options) => (dispatch, g
 
   dispatch({
     type: DASHBOARD_ELEMENT__SET_PANEL_DATA,
-    payload: { key, tab, data: null, meta: null }
+    payload: { key, tab, data: null, meta: null, loading: true }
   });
 
   fetch(url)
@@ -72,7 +72,8 @@ export const getDashboardPanelData = (optionsType, tab, options) => (dispatch, g
           key,
           tab,
           data: json.data,
-          meta: json.meta
+          meta: json.meta,
+          loading: false
         }
       })
     );
