@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import puppeteer from 'puppeteer';
 
-import { CONTEXTS, PROFILE_ROOT_SEARCH } from '../mocks';
-import { getRequestMockFn, openBrowser } from '../utils';
+import { CONTEXTS, PROFILE_ROOT_SEARCH } from './mocks';
+import { getRequestMockFn, openBrowser } from './utils';
 import { testRootSearch } from './shared';
 
 let page;

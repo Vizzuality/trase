@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import puppeteer from 'puppeteer';
 
-import { CONTEXTS, PROFILE_NODE_ACTOR } from '../mocks';
-import { getRequestMockFn, openBrowser } from '../utils';
+import { CONTEXTS, PROFILE_NODE_ACTOR } from './mocks';
+import { getRequestMockFn, openBrowser } from './utils';
 import { testProfileSpinners, testProfileSummary, testProfileMultiTable } from './shared';
 
 let page;

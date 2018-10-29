@@ -33,7 +33,8 @@ const initialState = {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItem: null
+    activeItem: null,
+    activeTab: null
   },
   sourcesPanel: {
     page: 1,
@@ -46,7 +47,8 @@ const initialState = {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItem: null
+    activeItem: null,
+    activeTab: null
   },
   companiesPanel: {
     page: 1,
@@ -59,7 +61,8 @@ const initialState = {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItem: null
+    activeItem: null,
+    activeTab: null
   }
 };
 
@@ -266,4 +269,5 @@ const dashboardElementReducerTypes = PropTypes => {
   };
 };
 
+export { initialState };
 export default createReducer(initialState, dashboardElementReducer, dashboardElementReducerTypes);
