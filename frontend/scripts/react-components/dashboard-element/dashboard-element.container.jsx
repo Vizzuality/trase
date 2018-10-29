@@ -5,13 +5,15 @@ import PropTypes from 'prop-types';
 import DashboardElement from 'react-components/dashboard-element/dashboard-element.component';
 import {
   getActiveIndicatorsData,
+  getDirtyBlocks,
   getDynamicSentence
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 
 const mapStateToProps = state => ({
   indicators: state.dashboardElement.data.indicators,
   activeIndicators: getActiveIndicatorsData(state),
-  dynamicSentenceParts: getDynamicSentence(state)
+  dynamicSentenceParts: getDynamicSentence(state),
+  dirtyBlocks: getDirtyBlocks(state)
 });
 
 const mapDispatchToProps = dispatch =>
@@ -24,6 +26,7 @@ const mapDispatchToProps = dispatch =>
 
 class DashboardElementContainer extends React.Component {
   static propTypes = {
+    dirtyBlocks: PropTypes.object,
     activeIndicators: PropTypes.array,
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array
@@ -63,7 +66,7 @@ class DashboardElementContainer extends React.Component {
 
   render() {
     const { step, modalOpen, editMode } = this.state;
-    const { goToRoot, activeIndicators, dynamicSentenceParts } = this.props;
+    const { goToRoot, activeIndicators, dynamicSentenceParts, dirtyBlocks } = this.props;
     return (
       <DashboardElement
         step={step}
@@ -75,6 +78,7 @@ class DashboardElementContainer extends React.Component {
         closeModal={this.closeModal}
         activeIndicators={activeIndicators}
         dynamicSentenceParts={dynamicSentenceParts}
+        dirtyBlocks={dirtyBlocks}
       />
     );
   }

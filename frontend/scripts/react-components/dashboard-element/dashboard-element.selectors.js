@@ -24,7 +24,7 @@ export const getActivePanelTabs = createSelector(
 export const getDirtyBlocks = createSelector(
   [getSourcesPanel, getDestinationsPanel, getCompaniesPanel, getCommoditiesPanel],
   (sourcesPanel, destinationsPanel, companiesPanel, commoditiesPanel) => ({
-    sources: sourcesPanel.activeCountryItemId !== null,
+    sources: sourcesPanel.activeCountryItemId !== null || sourcesPanel.activeSourceItemId !== null,
     destinations: destinationsPanel.activeDestinationItemId !== null,
     companies: companiesPanel.activeCompanyItemId !== null,
     commodities: commoditiesPanel.activeCommodityItemId !== null
