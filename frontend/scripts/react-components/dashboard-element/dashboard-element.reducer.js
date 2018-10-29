@@ -11,7 +11,8 @@ import {
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   DASHBOARD_ELEMENT__SET_LOADING_ITEMS,
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
-  DASHBOARD_ELEMENT__SET_SEARCH_RESULTS
+  DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
 } from './dashboard-element.actions';
 
 const initialState = {
@@ -67,15 +68,16 @@ const dashboardElementReducer = {
     const { activePanelId } = action.payload;
     const prevActivePanelId = state.activePanelId;
     const prevPanelName = `${prevActivePanelId}Panel`;
+    const prevPanelState = prevActivePanelId
+      ? {
+          ...state[prevPanelName],
+          page: initialState[prevPanelName].page
+        }
+      : undefined;
     return {
       ...state,
       activePanelId,
-      [prevPanelName]: prevActivePanelId
-        ? {
-            ...state[prevPanelName],
-            page: initialState[prevPanelName].page
-          }
-        : undefined
+      [prevPanelName]: prevPanelState
     };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_PAGE](state, action) {
@@ -91,7 +93,7 @@ const dashboardElementReducer = {
     if (Array.isArray(initialData)) {
       newData = data || initialData;
     } else {
-      newData = tab && data ? { ...state.data[key], [tab]: data } : initialData;
+      newData = tab ? { ...state.data[key], [tab]: data } : initialData;
     }
     return {
       ...state,
@@ -132,24 +134,27 @@ const dashboardElementReducer = {
     const getSection = n => n.section && n.section.toLowerCase();
     const tabs = data.reduce((acc, next) => ({ ...acc, [getSection(next)]: next.tabs }), {});
     const panelName = `${state.activePanelId}Panel`;
-    const activeTab =
-      tabs[state.activePanelId] && tabs[state.activePanelId][0] && tabs[state.activePanelId][0].id;
+    const firstTab = tabs[state.activePanelId] && tabs[state.activePanelId][0];
     return {
       ...state,
       tabs,
       [panelName]: {
         ...state[panelName],
-        activeTab
+        activeTab: state[panelName].activeTab || firstTab,
+        page: initialState[panelName].page
       }
     };
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM](state, action) {
     const { panel, activeItem } = action.payload;
     const panelName = `${panel}Panel`;
-    const page = panel === 'countries' ? 0 : state[panelName].page;
+    const page = panel === 'countries' ? initialState.countriesPanel.page : state[panelName].page;
+    const sourcesPanelState =
+      panel === 'countries' ? initialState.sourcesPanel : state.sourcesPanel;
     return {
       ...state,
       activeIndicatorsList: [],
+      sourcesPanel: sourcesPanelState,
       [panelName]: {
         ...state[panelName],
         page,
@@ -165,6 +170,26 @@ const dashboardElementReducer = {
       activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
+        activeTab,
+        page: initialState[panelName].page
+      }
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH](state, action) {
+    const { panel, activeItem } = action.payload;
+    const panelName = `${panel}Panel`;
+    const page = panel === 'countries' ? initialState.countriesPanel.page : state[panelName].page;
+    const sourcesPanelState =
+      panel === 'countries' ? initialState.sourcesPanel : state.sourcesPanel;
+    const activeTab = state.tabs[panel].find(tab => tab.id === activeItem.nodeTypeId);
+    return {
+      ...state,
+      activeIndicatorsList: [],
+      sourcesPanel: sourcesPanelState,
+      [panelName]: {
+        ...state[panelName],
+        page,
+        activeItem,
         activeTab
       }
     };

@@ -45,7 +45,8 @@ class SearchInput extends PureComponent {
       placeholderSmall,
       testId,
       getResultTestId,
-      resultClassName
+      resultClassName,
+      nodeTypeRenderer
     } = this.props;
     const visibleResults = items.slice(0, 10);
 
@@ -86,6 +87,7 @@ class SearchInput extends PureComponent {
                   testId={getResultTestId(item)}
                   searchString={inputValue}
                   itemProps={getItemProps({ item })}
+                  nodeTypeRenderer={nodeTypeRenderer}
                   isHighlighted={row === highlightedIndex}
                 />
               ))}
@@ -116,6 +118,7 @@ SearchInput.propTypes = {
   className: PropTypes.string,
   placeholder: PropTypes.string,
   getResultTestId: PropTypes.func,
+  nodeTypeRenderer: PropTypes.func,
   items: PropTypes.array.isRequired,
   resultClassName: PropTypes.string,
   placeholderSmall: PropTypes.string,

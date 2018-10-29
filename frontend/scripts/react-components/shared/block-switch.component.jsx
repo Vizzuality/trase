@@ -26,6 +26,7 @@ class BlockSwitch extends React.PureComponent {
                 '-dirty': dirtyBlocks && dirtyBlocks[block.id]
               })}
               onClick={() => selectBlock(block.id)}
+              disabled={isActive}
             >
               <span
                 className={cx('subtitle', 'block-switch-title', {

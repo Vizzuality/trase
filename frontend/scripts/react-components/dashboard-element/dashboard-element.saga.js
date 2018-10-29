@@ -1,32 +1,35 @@
 import { select, put, all, fork, takeLatest } from 'redux-saga/effects';
 import {
+  getDashboardPanelData,
+  getMoreDashboardPanelData,
+  getDashboardPanelSectionTabs,
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
-  getDashboardPanelData,
-  getMoreDashboardPanelData,
-  getDashboardPanelSectionTabs,
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
-  DASHBOARD_ELEMENT__SET_PANEL_PAGE
+  DASHBOARD_ELEMENT__SET_PANEL_PAGE,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import { getDirtyBlocks } from 'react-components/dashboard-element/dashboard-element.selectors';
 
 function* fetchDataOnPanelChange() {
   function* fetchDashboardPanelInitialData(action) {
     const { activePanelId } = action.payload;
-    const initialData = activePanelId === 'sources' ? 'countries' : activePanelId;
     const state = yield select();
     const { dashboardElement } = state;
-    const panelName = `${dashboardElement.activePanelId}Panel`;
-    const { activeTab } = dashboardElement[panelName];
     const refetchPanel = getDirtyBlocks(state)[activePanelId];
 
+    // avoid dispatching getDashboardPanelData through getDashboardPanelSectionTabs for companies
     if (dashboardElement.activePanelId === 'companies') {
-      yield put(getDashboardPanelSectionTabs(dashboardElement.activePanelId));
+      yield put(getDashboardPanelSectionTabs(activePanelId));
+    } else if (activePanelId === 'sources') {
+      yield put(getDashboardPanelData('countries', { refetchPanel }));
+      if (dashboardElement.countriesPanel.activeItem) {
+        yield put(getDashboardPanelData(activePanelId, { refetchPanel }));
+      }
     } else {
-      // avoid dispatching getDashboardPanelData through getDashboardPanelSectionTabs
-      yield put(getDashboardPanelData(initialData, activeTab, { refetchPanel }));
+      yield put(getDashboardPanelData(activePanelId, { refetchPanel }));
     }
   }
 
@@ -35,15 +38,18 @@ function* fetchDataOnPanelChange() {
 
 function* fetchDataOnTabChange() {
   function* onTabChange(action) {
-    const { activeTab, panel } = action.payload;
+    const { panel } = action.payload;
     const { dashboardElement } = yield select();
     const activePanelId = panel || dashboardElement.activePanelId;
-    const activeTabId = activeTab || dashboardElement[`${activePanelId}Panel`].activeTab;
-    yield put(getDashboardPanelData(activePanelId, activeTabId));
+    yield put(getDashboardPanelData(activePanelId));
   }
 
   yield takeLatest(
-    [DASHBOARD_ELEMENT__SET_ACTIVE_TAB, DASHBOARD_ELEMENT__SET_PANEL_TABS],
+    [
+      DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
+      DASHBOARD_ELEMENT__SET_PANEL_TABS,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
+    ],
     onTabChange
   );
 }
@@ -55,8 +61,8 @@ function* fetchDataOnItemChange() {
     const panelName = `${panel}Panel`;
     const { activeTab } = dashboardElement[panelName];
     const data = dashboardElement.data[panel];
-    const items = typeof activeTab !== 'undefined' ? data[activeTab] : data;
-    const activeItemExists = !!items && items.find(i => i.id === activeItem);
+    const items = typeof activeTab !== 'undefined' ? data[activeTab && activeTab.id] : data;
+    const activeItemExists = !!items && items.find(i => i.id === (activeItem && activeItem.id));
 
     // for now, we just need to recalculate the tabs when selecting a new country
     if (panel === 'countries') {
@@ -65,7 +71,7 @@ function* fetchDataOnItemChange() {
 
     if (items && !activeItemExists && panel !== 'countries') {
       yield put(
-        getDashboardPanelData(panel, activeTab, {
+        getDashboardPanelData(panel, {
           refetchPanel: true
         })
       );
@@ -78,13 +84,14 @@ function* fetchDataOnItemChange() {
 function* fetchDataOnFilterClear() {
   function* onFilterClear() {
     const { dashboardElement } = yield select();
-    const panelName = `${dashboardElement.activePanelId}Panel`;
-    const { activeTab } = dashboardElement[panelName];
 
-    if (dashboardElement.activePanelId !== 'sources') {
-      yield put(getDashboardPanelData(dashboardElement.activePanelId, activeTab));
-    } else {
+    if (dashboardElement.activePanelId === 'sources') {
       yield put(getDashboardPanelData('countries'));
+      if (dashboardElement.countriesPanel.activeItem !== null) {
+        yield put(getDashboardPanelData(dashboardElement.activePanelId));
+      }
+    } else {
+      yield put(getDashboardPanelData(dashboardElement.activePanelId));
     }
   }
 
