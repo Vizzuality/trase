@@ -44,7 +44,7 @@ class DashboardIndicators extends React.PureComponent {
     return (
       <div className="c-dashboard-panel" onClick={this.resetActiveItemInfo}>
         <div className="dashboard-indicators-content">
-          <h2 className="dashboard-panel-title title -center -light">
+          <h2 className="dashboard-panel-title title -center -light -small">
             {editMode
               ? 'Edit indicators'
               : 'Select the indicators you want to analyse for the selections you have made'}
