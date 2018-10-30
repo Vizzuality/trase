@@ -20,6 +20,10 @@ module Api
         class FlowAttribute < Api::V3::Readonly::BaseModel
           self.table_name = 'dashboards_flow_attributes_mv'
 
+          def self.unique_index?
+            false
+          end
+
           def self.long_running?
             true
           end
