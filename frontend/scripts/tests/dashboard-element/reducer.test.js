@@ -9,7 +9,10 @@ import {
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
-  DASHBOARD_ELEMENT__CLEAR_PANEL
+  DASHBOARD_ELEMENT__CLEAR_PANEL,
+  DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
+  DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
+  DASHBOARD_ELEMENT__SET_SEARCH_RESULTS
 } from 'react-components/dashboard-element/dashboard-element.actions';
 
 describe(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL, () => {
@@ -417,6 +420,103 @@ describe(DASHBOARD_ELEMENT__CLEAR_PANEL, () => {
     expect(newState).toEqual({
       ...onlyCountriesState,
       countriesPanel: initialState.countriesPanel
+    });
+  });
+});
+
+test(DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR, () => {
+  const anotherIndicator = { id: 4, name: 'another indicator' };
+  const state = {
+    ...initialState,
+    activeIndicatorsList: [0]
+  };
+  const action = {
+    type: DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
+    payload: {
+      active: anotherIndicator
+    }
+  };
+  const newState = reducer(state, action);
+  expect(newState).toEqual({
+    ...initialState,
+    activeIndicatorsList: [...state.activeIndicatorsList, anotherIndicator.id]
+  });
+});
+
+test(DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR, () => {
+  const someIndicator = { id: 4, name: 'some indicator' };
+  const action = {
+    type: DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
+    payload: {
+      toRemove: someIndicator
+    }
+  };
+  const state = {
+    ...initialState,
+    activeIndicatorsList: [1, 3, 4]
+  };
+  const newState = reducer(state, action);
+  expect(newState).toEqual({ ...state, activeIndicatorsList: [1, 3] });
+});
+
+describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
+  const someResults = [
+    { id: 0, name: 'some result' },
+    { id: 2, name: 'some result2' },
+    { id: 3, name: 'some result3' }
+  ];
+  const action = {
+    type: DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
+    payload: {
+      data: someResults
+    }
+  };
+  it('sets results in a panel with a single entity (not sources)', () => {
+    const state = {
+      ...initialState,
+      activePanelId: 'destinations'
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      destinationsPanel: {
+        ...state.destinationsPanel,
+        searchResults: someResults
+      }
+    });
+  });
+
+  it('sets results in sourcePanel when a country is selected', () => {
+    const state = {
+      ...initialState,
+      activePanelId: 'sources',
+      countriesPanel: {
+        ...initialState.countriesPanel,
+        activeItem: { id: 0, name: 'brazil' }
+      }
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      sourcesPanel: {
+        ...state.sourcesPanel,
+        searchResults: someResults
+      }
+    });
+  });
+
+  it('sets results in sourcePanel when a country is not selected', () => {
+    const state = {
+      ...initialState,
+      activePanelId: 'sources'
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      countriesPanel: {
+        ...state.countriesPanel,
+        searchResults: someResults
+      }
     });
   });
 });
