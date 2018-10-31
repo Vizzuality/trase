@@ -38,6 +38,10 @@ module Api
             false
           end
 
+          def unique_index?
+            true
+          end
+
           # Refreshes materialized views this view depends on
           def refresh_dependencies(options = {}); end
 
@@ -51,7 +55,7 @@ module Api
             # rubocop:enable Style/DoubleNegation
             is_populated = Api::V3::IsMviewPopulated.new(table_name).call
             # cannot refresh concurrently a view that is not populated
-            safe_concurrently = false unless is_populated
+            safe_concurrently = false unless is_populated and unique_index?
             Scenic.database.refresh_materialized_view(
               table_name,
               concurrently: safe_concurrently

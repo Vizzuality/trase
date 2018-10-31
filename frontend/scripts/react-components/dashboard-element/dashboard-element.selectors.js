@@ -71,7 +71,8 @@ export const getDynamicSentence = createSelector(
       },
       {
         panel: 'sources',
-        prefix: activeSource || activeCountry ? `produced in` : 'produced worldwide',
+        prefix:
+          activeSource || activeCountry ? `produced in` : 'produced in countries covered by Trase',
         value:
           (activeSource && activeSource.name.toLowerCase()) ||
           (activeCountry && activeCountry.name.toLowerCase())

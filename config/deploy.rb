@@ -41,6 +41,23 @@ namespace :deploy do
   after 'deploy:publishing', 'deploy:restart'
 end
 
+namespace :sidekiq do
+  task :quiet do
+    on roles(:app) do
+      puts capture("pgrep -f 'sidekiq' | xargs kill -TSTP")
+    end
+  end
+  task :restart do
+    on roles(:app) do
+      execute :sudo, :systemctl, :restart, :sidekiq
+    end
+  end
+end
+
+after 'deploy:starting', 'sidekiq:quiet'
+after 'deploy:reverted', 'sidekiq:restart'
+after 'deploy:published', 'sidekiq:restart'
+
 namespace :npm do
   after 'npm:install', 'npm:build'
 
