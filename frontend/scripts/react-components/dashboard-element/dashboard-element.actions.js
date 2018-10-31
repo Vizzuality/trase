@@ -30,7 +30,7 @@ const getDashboardPanelParams = (state, options_type, options = {}) => {
     destinationsPanel,
     commoditiesPanel
   } = state;
-  const { page, refetchPanel } = options;
+  const { page } = options;
   const sourcesTab = sourcesPanel.activeTab && sourcesPanel.activeTab.id;
   const companiesTab = companiesPanel.activeTab && companiesPanel.activeTab.id;
 
@@ -45,19 +45,19 @@ const getDashboardPanelParams = (state, options_type, options = {}) => {
     countries_ids: countriesPanel.activeItem && countriesPanel.activeItem.id
   };
 
-  if (options_type !== 'sources' || refetchPanel) {
+  if (options_type !== 'sources') {
     params.sources_ids = sourcesPanel.activeItem && sourcesPanel.activeItem.id;
   }
 
-  if (options_type !== 'commodities' || refetchPanel) {
+  if (options_type !== 'commodities') {
     params.commodities_ids = commoditiesPanel.activeItem && commoditiesPanel.activeItem.id;
   }
 
-  if (options_type !== 'destinations' || refetchPanel) {
+  if (options_type !== 'destinations') {
     params.destinations_ids = destinationsPanel.activeItem && destinationsPanel.activeItem.id;
   }
 
-  if (options_type !== 'companies' || refetchPanel) {
+  if (options_type !== 'companies') {
     params.companies_ids = companiesPanel.activeItem && companiesPanel.activeItem.id;
   }
   return params;

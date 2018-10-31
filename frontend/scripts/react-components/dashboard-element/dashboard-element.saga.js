@@ -11,25 +11,23 @@ import {
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
 } from 'react-components/dashboard-element/dashboard-element.actions';
-import { getDirtyBlocks } from 'react-components/dashboard-element/dashboard-element.selectors';
 
 function* fetchDataOnPanelChange() {
   function* fetchDashboardPanelInitialData(action) {
     const { activePanelId } = action.payload;
     const state = yield select();
     const { dashboardElement } = state;
-    const refetchPanel = getDirtyBlocks(state)[activePanelId];
 
     // avoid dispatching getDashboardPanelData through getDashboardPanelSectionTabs for companies
     if (dashboardElement.activePanelId === 'companies') {
       yield put(getDashboardPanelSectionTabs(activePanelId));
     } else if (activePanelId === 'sources') {
-      yield put(getDashboardPanelData('countries', { refetchPanel }));
+      yield put(getDashboardPanelData('countries'));
       if (dashboardElement.countriesPanel.activeItem) {
-        yield put(getDashboardPanelData(activePanelId, { refetchPanel }));
+        yield put(getDashboardPanelData(activePanelId));
       }
     } else {
-      yield put(getDashboardPanelData(activePanelId, { refetchPanel }));
+      yield put(getDashboardPanelData(activePanelId));
     }
   }
 
@@ -70,11 +68,7 @@ function* fetchDataOnItemChange() {
     }
 
     if (items && !activeItemExists && panel !== 'countries') {
-      yield put(
-        getDashboardPanelData(panel, {
-          refetchPanel: true
-        })
-      );
+      yield put(getDashboardPanelData(panel));
     }
   }
 

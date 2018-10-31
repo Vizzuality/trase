@@ -151,7 +151,6 @@ const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM](state, action) {
     const { panel, activeItem } = action.payload;
     const panelName = `${panel}Panel`;
-    const page = panel === 'countries' ? initialState.countriesPanel.page : state[panelName].page;
     const sourcesPanelState =
       panel === 'countries' ? initialState.sourcesPanel : state.sourcesPanel;
     return {
@@ -160,7 +159,6 @@ const dashboardElementReducer = {
       sourcesPanel: sourcesPanelState,
       [panelName]: {
         ...state[panelName],
-        page,
         activeItem
       }
     };
