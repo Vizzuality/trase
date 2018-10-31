@@ -13,7 +13,8 @@ import {
   DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
   DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
 } from 'react-components/dashboard-element/dashboard-element.actions';
 
 describe(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL, () => {
@@ -573,5 +574,39 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
         activeItem: someItem
       }
     });
+  });
+});
+
+test(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH, () => {
+  const tabs = {
+    sources: [{ id: 3, name: 'MUNICIPALITY' }, { id: 1, name: 'BIOME' }],
+    companies: [{ id: 6, name: 'EXPORTER' }, { id: 7, name: 'IMPORTER' }]
+  };
+  const someItem = { id: 1, name: 'some item', nodeTypeId: 6 };
+  const action = {
+    type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
+    payload: {
+      panel: 'companies',
+      activeItem: someItem
+    }
+  };
+  const state = {
+    ...initialState,
+    tabs,
+    activeIndicatorsList: [1, 2, 3],
+    companiesPanel: {
+      ...initialState.companiesPanel,
+      activeTab: { id: 7, name: 'IMPORTER' }
+    }
+  };
+  const newState = reducer(state, action);
+  expect(newState).toEqual({
+    ...state,
+    activeIndicatorsList: [],
+    companiesPanel: {
+      ...state.companiesPanel,
+      activeItem: someItem,
+      activeTab: tabs.companies[0]
+    }
   });
 });
