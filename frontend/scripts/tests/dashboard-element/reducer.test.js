@@ -4,7 +4,10 @@ import reducer, {
 import {
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
-  DASHBOARD_ELEMENT__SET_PANEL_PAGE
+  DASHBOARD_ELEMENT__SET_PANEL_PAGE,
+  DASHBOARD_ELEMENT__SET_LOADING_ITEMS,
+  DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
+  DASHBOARD_ELEMENT__SET_PANEL_TABS
 } from 'react-components/dashboard-element/dashboard-element.actions';
 
 describe(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL, () => {
@@ -168,6 +171,143 @@ describe(DASHBOARD_ELEMENT__SET_PANEL_DATA, () => {
     expect(tabReset).toEqual({
       ...expected,
       data: { ...expected.data, sources: { 1: null, 2: someData } }
+    });
+  });
+});
+
+describe(DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA, () => {
+  const someData = [{ id: 0, name: 'name0' }, { id: 1, name: 'name1' }];
+  const moreData = [{ id: 0, name: 'Whatever' }];
+  it('adds more data to an array entity', () => {
+    const action = {
+      type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
+      payload: {
+        tab: null,
+        data: moreData,
+        key: 'commodities',
+        direction: 'forwards'
+      }
+    };
+    const state = {
+      ...initialState,
+      data: {
+        ...initialState.data,
+        commodities: someData
+      }
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...initialState,
+      data: {
+        ...initialState.data,
+        commodities: [...someData, ...moreData]
+      }
+    });
+  });
+
+  it('adds more data to an array entity', () => {
+    const action = {
+      type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
+      payload: {
+        tab: 1,
+        data: moreData,
+        key: 'sources',
+        direction: 'forwards'
+      }
+    };
+    const state = {
+      ...initialState,
+      data: {
+        ...initialState.data,
+        commodities: someData,
+        sources: {
+          1: someData,
+          2: someData
+        }
+      }
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...initialState,
+      data: {
+        ...state.data,
+        sources: {
+          1: [...someData, ...moreData],
+          2: someData
+        }
+      }
+    });
+  });
+});
+
+test(DASHBOARD_ELEMENT__SET_LOADING_ITEMS, () => {
+  const action = {
+    type: DASHBOARD_ELEMENT__SET_LOADING_ITEMS,
+    payload: { loadingItems: true }
+  };
+  const state = {
+    ...initialState,
+    activePanelId: 'sources'
+  };
+  const newState = reducer(state, action);
+  expect(newState).toEqual({
+    ...state,
+    sourcesPanel: {
+      ...state.sourcesPanel,
+      loadingItems: action.payload.loadingItems
+    }
+  });
+});
+
+describe(DASHBOARD_ELEMENT__SET_PANEL_TABS, () => {
+  const data = [
+    { section: 'SOURCES', tabs: [{ id: 3, name: 'MUNICIPALITY' }, { id: 1, name: 'BIOME' }] },
+    { section: 'COMPANIES', tabs: [{ id: 6, name: 'EXPORTER' }, { id: 7, name: 'IMPORTER' }] }
+  ];
+  const expectedTabs = {
+    sources: data[0].tabs,
+    companies: data[1].tabs
+  };
+  const action = {
+    type: DASHBOARD_ELEMENT__SET_PANEL_TABS,
+    payload: { data }
+  };
+  it('loads tabs for the first time', () => {
+    const state = {
+      ...initialState,
+      activePanelId: 'sources'
+    };
+
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      tabs: expectedTabs,
+      sourcesPanel: {
+        ...state.sourcesPanel,
+        activeTab: expectedTabs.sources[0]
+      }
+    });
+  });
+
+  it('loads tabs after panel pagination', () => {
+    const state = {
+      ...initialState,
+      tabs: { sources: expectedTabs.companies },
+      activePanelId: 'sources',
+      sourcesPanel: {
+        ...initialState.sourcesPanel,
+        activeTab: { id: 0, name: 'someTab' },
+        page: 4
+      }
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      tabs: expectedTabs,
+      sourcesPanel: {
+        ...state.sourcesPanel,
+        page: initialState.sourcesPanel.page
+      }
     });
   });
 });
