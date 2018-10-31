@@ -12,7 +12,8 @@ import {
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
   DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
-  DASHBOARD_ELEMENT__SET_SEARCH_RESULTS
+  DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM
 } from 'react-components/dashboard-element/dashboard-element.actions';
 
 describe(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL, () => {
@@ -516,6 +517,60 @@ describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
       countriesPanel: {
         ...state.countriesPanel,
         searchResults: someResults
+      }
+    });
+  });
+});
+
+describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
+  const someItem = { id: 1, name: 'some item' };
+  it('sets active item in a single entity panel (not countries)', () => {
+    const action = {
+      type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+      payload: {
+        panel: 'companies',
+        activeItem: someItem
+      }
+    };
+    const state = {
+      ...initialState,
+      activeIndicatorsList: [0, 1, 2],
+      companiesPanel: {
+        ...initialState.companiesPanel,
+        page: 4
+      }
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      activeIndicatorsList: [],
+      companiesPanel: {
+        ...state.companiesPanel,
+        activeItem: someItem
+      }
+    });
+  });
+
+  it('sets active item in the countries panel', () => {
+    const action = {
+      type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+      payload: {
+        panel: 'countries',
+        activeItem: someItem
+      }
+    };
+    const state = {
+      ...initialState,
+      activeIndicatorsList: [0, 1, 2]
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      activeIndicatorsList: [],
+      sourcesPanel: initialState.sourcesPanel,
+      countriesPanel: {
+        ...state.countriesPanel,
+        activeItem: someItem
       }
     });
   });
