@@ -1363,6 +1363,8 @@ definitions:
         type: string
       nodeType:
         type: string
+      countryId:
+        type: integer
   DashboardsDestination:
     type: object
     properties:
