@@ -7,7 +7,9 @@ import {
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   DASHBOARD_ELEMENT__SET_LOADING_ITEMS,
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
-  DASHBOARD_ELEMENT__SET_PANEL_TABS
+  DASHBOARD_ELEMENT__SET_PANEL_TABS,
+  DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
+  DASHBOARD_ELEMENT__CLEAR_PANEL
 } from 'react-components/dashboard-element/dashboard-element.actions';
 
 describe(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL, () => {
@@ -308,6 +310,113 @@ describe(DASHBOARD_ELEMENT__SET_PANEL_TABS, () => {
         ...state.sourcesPanel,
         page: initialState.sourcesPanel.page
       }
+    });
+  });
+});
+
+test(DASHBOARD_ELEMENT__SET_ACTIVE_TAB, () => {
+  const action = {
+    type: DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
+    payload: {
+      panel: 'sources',
+      activeTab: { id: 3, name: 'MUNICIPALITY' }
+    }
+  };
+  const state = {
+    ...initialState,
+    activeIndicatorsList: [{ id: 0, name: 'some indicator' }, { id: 3, name: 'some indicator3' }],
+    sourcesPanel: {
+      ...initialState.sourcesPanel,
+      activeTab: { id: 1, name: 'BIOME' },
+      page: 4
+    }
+  };
+  const newState = reducer(state, action);
+  expect(newState).toEqual({
+    ...state,
+    activeIndicatorsList: [],
+    sourcesPanel: {
+      ...state.sourcesPanel,
+      activeTab: action.payload.activeTab,
+      page: initialState.sourcesPanel.page
+    }
+  });
+});
+
+describe(DASHBOARD_ELEMENT__CLEAR_PANEL, () => {
+  const state = {
+    ...initialState,
+    countriesPanel: {
+      ...initialState.countriesPanel,
+      activeTab: { id: 6, name: 'some tab' },
+      activeItem: { id: 1, name: 'some item' },
+      page: 2
+    },
+    sourcesPanel: {
+      ...initialState.sourcesPanel,
+      activeTab: { id: 2, name: 'some tab' },
+      activeItem: { id: 0, name: 'some item' },
+      page: 9
+    },
+    companiesPanel: {
+      ...initialState.companiesPanel,
+      activeTab: { id: 1, name: 'some tab' },
+      activeItem: { id: 4, name: 'some item' },
+      page: 5
+    }
+  };
+  it('clears a panel with only one entity (not sources)', () => {
+    const action = {
+      type: DASHBOARD_ELEMENT__CLEAR_PANEL,
+      payload: {
+        panel: 'companies'
+      }
+    };
+
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      companiesPanel: {
+        ...initialState.companiesPanel,
+        activeTab: state.companiesPanel.activeTab
+      }
+    });
+  });
+
+  it('clears a panel with multiple entities (source panel)', () => {
+    const action = {
+      type: DASHBOARD_ELEMENT__CLEAR_PANEL,
+      payload: {
+        panel: 'sources'
+      }
+    };
+
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      countriesPanel: initialState.countriesPanel,
+      sourcesPanel: {
+        ...initialState.sourcesPanel,
+        activeTab: state.sourcesPanel.activeTab
+      }
+    });
+  });
+
+  it('clears the countriesPanel', () => {
+    const action = {
+      type: DASHBOARD_ELEMENT__CLEAR_PANEL,
+      payload: {
+        panel: 'countries'
+      }
+    };
+    const onlyCountriesState = {
+      ...state,
+      sourcesPanel: initialState.sourcesPanel
+    };
+    const newState = reducer(onlyCountriesState, action);
+    expect(newState).toEqual({
+      ...onlyCountriesState,
+      countriesPanel: initialState.countriesPanel
     });
   });
 });

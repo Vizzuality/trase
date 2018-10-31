@@ -201,7 +201,10 @@ const dashboardElementReducer = {
     const { panel } = action.payload;
     const panelName = `${panel}Panel`;
     const { activeTab } = state[panelName];
-    const countriesState = panel === 'sources' ? initialState.countriesPanel : state.countriesPanel;
+    const shouldResetCountries = ['countries', 'sources'].includes(panel);
+    const countriesState = shouldResetCountries
+      ? initialState.countriesPanel
+      : state.countriesPanel;
 
     return {
       ...state,
