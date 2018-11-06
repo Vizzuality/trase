@@ -5,7 +5,7 @@ import { getRequestMockFn } from './utils';
 import { testProfileSpinners, testProfileSummary, testProfileMultiTable } from './shared';
 
 const BASE_URL = 'http://0.0.0.0:8081';
-const TIMEOUT = process.env.PUPETEER_TIMEOUT || 6000;
+const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
 
 const { page } = global;
 
