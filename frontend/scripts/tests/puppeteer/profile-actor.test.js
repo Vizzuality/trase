@@ -4,7 +4,7 @@ import { getRequestMockFn } from './utils';
 import { testProfileSpinners, testProfileSummary, testProfileMultiTable } from './shared';
 
 const BASE_URL = 'http://0.0.0.0:8081';
-const TIMEOUT = process.env.PUPETEER_TIMEOUT || 6000;
+const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
 
 const { page } = global;
 
@@ -117,7 +117,7 @@ describe('Profile actor - Full data', () => {
       );
 
       expect(hasLegend).toBe(true);
-      expect(coloredMapPolygons.length).toBe(908);
+      expect(coloredMapPolygons.length).toBe(387);
     },
     TIMEOUT
   );
@@ -132,14 +132,14 @@ describe('Profile actor - Full data', () => {
       const municipalityPolygons = await page.$$(
         '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
       );
-      expect(municipalityPolygons.length).toBe(908);
+      expect(municipalityPolygons.length).toBe(387);
 
       await page.click('[data-test=top-sourcing-regions-chart-switch-item][data-key=biome]');
       await page.waitForSelector('[data-test=top-sourcing-regions-map-d3-polygon-colored]');
       const biomePolygons = await page.$$(
         '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
       );
-      expect(biomePolygons.length).toBe(6);
+      expect(biomePolygons.length).toBe(5);
     },
     TIMEOUT
   );

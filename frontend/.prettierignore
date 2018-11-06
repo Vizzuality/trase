@@ -2,3 +2,4 @@
 **/*.json
 .prettierrc
 .prettierignore
+**/*.topo.json

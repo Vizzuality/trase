@@ -3,7 +3,7 @@ import { CONTEXTS, PROFILE_ROOT_SEARCH } from './mocks';
 import { getRequestMockFn } from './utils';
 import { testRootSearch } from './shared';
 
-const TIMEOUT = process.env.PUPETEER_TIMEOUT || 6000;
+const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
 const BASE_URL = 'http://0.0.0.0:8081';
 
 const { page } = global;
