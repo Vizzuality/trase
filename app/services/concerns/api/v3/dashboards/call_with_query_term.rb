@@ -6,11 +6,11 @@ module Api
           tsquery = "to_tsquery('simple', ''' ' || '#{query_term}' || ' ''' || ':*')"
           tsrank = "ts_rank(name_tsvector, #{tsquery}, 0)"
           @query = @query.
-            select(tsrank).
-            group(tsrank).
+            select(Arel.sql(tsrank)).
+            group(Arel.sql(tsrank)).
             where("name_tsvector @@ #{tsquery}").
             except(:order).
-            order("#{tsrank} DESC", name: :asc)
+            order(Arel.sql("#{tsrank} DESC"), name: :asc)
         end
       end
     end
