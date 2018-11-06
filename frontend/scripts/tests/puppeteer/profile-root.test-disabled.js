@@ -3,7 +3,7 @@ import { CONTEXTS, PROFILE_ROOT_SEARCH } from './mocks';
 import { getRequestMockFn } from './utils';
 import { testRootSearch } from './shared';
 
-const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
+const TIMEOUT = process.env.PUPETEER_TIMEOUT || 6000;
 const BASE_URL = 'http://0.0.0.0:8081';
 
 const { page } = global;
@@ -14,13 +14,9 @@ beforeAll(async () => {
   page.on('request', mockRequests);
 });
 
-beforeEach(async () => {
-  await page.goto(`${BASE_URL}/profiles`);
-});
-
 describe('Profile Root search', () => {
   it(
-    delete 'search for actor',
+    'search for actor',
     async () => {
       const nodeName = 'bunge';
       const nodeType = 'importer';
@@ -32,6 +28,7 @@ describe('Profile Root search', () => {
     },
     TIMEOUT
   );
+
   it(
     'search for municipality',
     async () => {

@@ -9,7 +9,7 @@ import {
 } from './shared';
 
 const BASE_URL = 'http://0.0.0.0:8081';
-const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
+const TIMEOUT = process.env.PUPETEER_TIMEOUT || 6000;
 
 const { page } = global;
 
