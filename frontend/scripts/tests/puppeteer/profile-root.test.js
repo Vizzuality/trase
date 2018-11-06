@@ -1,29 +1,21 @@
 /* eslint-disable no-console */
-import puppeteer from 'puppeteer';
-
 import { CONTEXTS, PROFILE_ROOT_SEARCH } from './mocks';
-import { getRequestMockFn, openBrowser } from './utils';
+import { getRequestMockFn } from './utils';
 import { testRootSearch } from './shared';
 
-let page;
-let browser;
-const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
+const TIMEOUT = process.env.PUPETEER_TIMEOUT || 6000;
 const BASE_URL = 'http://0.0.0.0:8081';
 
+const { page } = global;
+
 beforeAll(async () => {
-  browser = await puppeteer.launch(openBrowser(false));
-  page = await browser.newPage();
   await page.setRequestInterception(true);
   const mockRequests = await getRequestMockFn([CONTEXTS, PROFILE_ROOT_SEARCH]);
   page.on('request', mockRequests);
 });
 
-afterAll(() => {
-  browser.close();
-});
-
 describe('Profile Root search', () => {
-  test(
+  it(
     'search for actor',
     async () => {
       const nodeName = 'bunge';
@@ -38,7 +30,7 @@ describe('Profile Root search', () => {
     TIMEOUT
   );
 
-  test(
+  it(
     'search for municipality',
     async () => {
       const nodeName = 'sorriso';
