@@ -5,7 +5,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails', '~> 5.1.6'
+gem 'rails', '~> 5.2.1'
 gem 'pg', '~> 0.18'
 gem 'scenic'
 gem 'pg_csv'
@@ -27,7 +27,7 @@ gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'devise', '~> 4.2'
-gem 'activeadmin', '~> 1.2.1'
+gem 'activeadmin', '~> 1.3.1'
 gem 'activeadmin_simplemde'
 gem 'inherited_resources', github: 'activeadmin/inherited_resources'
 gem 'activeadmin_addons'
@@ -44,6 +44,7 @@ gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
 gem 'whenever', require: false
 gem 'ransack'
+gem 'bootsnap'
 
 group :development, :test do
   gem 'byebug', platform: :mri
