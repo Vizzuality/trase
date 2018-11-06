@@ -48,6 +48,7 @@ gem 'ransack'
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'rspec-rails', '~> 3.5'
+  gem 'rubocop-rspec'
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
   gem 'factory_bot_rails'

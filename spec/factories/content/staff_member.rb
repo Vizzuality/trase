@@ -4,6 +4,6 @@ FactoryBot.define do
     sequence(:name) { |n| "Staff Member #{n}" }
     sequence(:position) { |n| n }
     image { File.new("#{Rails.root}/spec/support/fixtures/blank.jpg") }
-    bio '# Bio'
+    bio { '# Bio' }
   end
 end
