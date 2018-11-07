@@ -14,6 +14,10 @@ beforeAll(async () => {
   page.on('request', mockRequests);
 });
 
+beforeEach(async () => {
+  await page.goto(`${BASE_URL}/profiles`);
+});
+
 describe('Profile Root search', () => {
   it(
     'search for actor',
@@ -24,7 +28,6 @@ describe('Profile Root search', () => {
 
       expect.assertions(1);
 
-      await page.goto(`${BASE_URL}/profiles`);
       await testRootSearch(page, expect, { nodeName, nodeType, profileType });
     },
     TIMEOUT
@@ -39,7 +42,6 @@ describe('Profile Root search', () => {
 
       expect.assertions(1);
 
-      await page.goto(`${BASE_URL}/profiles`);
       await testRootSearch(page, expect, { nodeName, nodeType, profileType });
     },
     TIMEOUT
