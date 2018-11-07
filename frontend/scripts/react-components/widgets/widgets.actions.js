@@ -1,11 +1,12 @@
 import { getURLFromParams } from 'utils/getURLFromParams';
+import qs from 'qs';
 
 export const WIDGETS__INIT_ENDPOINT = 'WIDGETS__INIT_ENDPOINT';
 export const WIDGETS__SET_ENDPOINT_DATA = 'WIDGETS__SET_ENDPOINT_DATA';
 export const WIDGETS__SET_ENDPOINT_ERROR = 'WIDGETS__SET_ENDPOINT_ERROR';
 export const WIDGETS__SET_ENDPOINT_LOADING = 'WIDGETS__SET_ENDPOINT_LOADING';
 
-export const getWidgetData = (endpoint, params, raw) => (dispatch, getState) => {
+export const getWidgetData = (endpoint, params = { noKey: true }, raw) => (dispatch, getState) => {
   const { endpoints } = getState().widgets;
   const key = Object.entries(params)
     .map(([name, value]) => `${name}${value}`)
@@ -16,7 +17,17 @@ export const getWidgetData = (endpoint, params, raw) => (dispatch, getState) => 
       payload: { endpoint, key }
     });
 
-    const url = raw ? endpoint : getURLFromParams(endpoint, params);
+    let url;
+    if (raw) {
+      url = raw;
+      if (params) {
+        const search = qs.stringify(params);
+        url = endpoint.includes('?') ? `${endpoint}&${search}` : `${endpoint}?${search}`;
+      }
+    } else {
+      url = getURLFromParams(endpoint, params);
+    }
+
     fetch(url)
       .then(res => (res.ok ? res.json() : Promise.reject(res)))
       .then(res =>

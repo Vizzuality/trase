@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import qs from 'qs';
+import pickBy from 'lodash/pickBy';
 import sortBy from 'lodash/sortBy';
 import DashboardWidget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.component';
 import DashboardWidgetTooltip from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-tooltip';
@@ -87,17 +89,25 @@ class DashboardWidgetContainer extends Component {
 
   render() {
     const { url, title } = this.props;
+
+    const [base, search] = url.split('?');
+    // eslint-disable-next-line camelcase
+    const { attribute_id, ...params } = pickBy(qs.parse(search, x => x !== '' && x !== null));
+
+    // <Widget /> caches data by url and each cache entry is cache busted by it's params
+    // if we want to avoid creating infinite cache entries we should limit the entries to the indicators (attribute_id)
+    const uniqueUrl = `${base}?${qs.stringify({ attribute_id })}`;
     return (
-      <Widget raw query={[url]} params={[{ title }]}>
+      <Widget raw query={[uniqueUrl]} params={[params]}>
         {({ data, loading, error, meta }) => {
-          const sortedData = this.sortByX(data && data[url]);
+          const sortedData = this.sortByX(data && data[uniqueUrl]);
           return (
             <DashboardWidget
               title={title}
               error={error}
               loading={loading}
               data={sortedData}
-              chartConfig={this.getConfig(meta && meta[url], sortedData)}
+              chartConfig={this.getConfig(meta && meta[uniqueUrl], sortedData)}
               topLegend={meta && meta}
             />
           );
