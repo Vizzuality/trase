@@ -85,6 +85,8 @@ The project's main configuration values can be set using [environment variables]
 * MAILCHIMP_API_KEY: API key for Mailchimp mailing service
 * MAILCHIMP_LIST_ID: List ID for Mailchimp mailing service
 * APPSIGNAL_PUSH_API_KEY: Appsignal API key for tracking exceptions
+* APPSIGNAL_APP_NAME: Appsignal App name, should be "Trase"
+* APPSIGNAL_APP_ENV: Appsignal environment name
 * GOLD_MASTER_HOST_V3:
 * TRASE_REMOTE_HOST=localhost
 * TRASE_REMOTE_PORT=5432
