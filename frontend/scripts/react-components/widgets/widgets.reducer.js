@@ -7,7 +7,7 @@ import {
   WIDGETS__SET_ENDPOINT_LOADING
 } from './widgets.actions';
 
-const initialState = {
+export const initialState = {
   endpoints: {
     /**
      * { [endpoint]: { key, data, error, loading } }
@@ -15,7 +15,7 @@ const initialState = {
   }
 };
 
-const defaultEndpoint = key => ({ data: null, loading: true, error: null, key });
+export const defaultEndpoint = key => ({ data: null, loading: true, error: null, key });
 
 const widgetsReducer = {
   [WIDGETS__INIT_ENDPOINT](state, action) {
@@ -73,7 +73,14 @@ const widgetsReducer = {
 };
 
 const widgetsReducerTypes = PropTypes => ({
-  endpoints: PropTypes.object.isRequired
+  endpoints: PropTypes.objectOf(
+    PropTypes.shape({
+      error: PropTypes.any,
+      key: PropTypes.string.isRequired,
+      data: PropTypes.oneOf([PropTypes.object, PropTypes.array]).isRequired,
+      loading: PropTypes.bool.isRequired
+    })
+  ).isRequired
 });
 
 export default createReducer(initialState, widgetsReducer, widgetsReducerTypes);

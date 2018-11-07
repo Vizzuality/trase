@@ -14,6 +14,10 @@ beforeAll(async () => {
   page.on('request', mockRequests);
 });
 
+beforeEach(async () => {
+  await page.goto(`${BASE_URL}/profiles`);
+});
+
 describe('Profile Root search', () => {
   it(
     'search for actor',
