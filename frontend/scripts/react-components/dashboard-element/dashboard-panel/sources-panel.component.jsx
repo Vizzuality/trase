@@ -39,11 +39,11 @@ function SourcesPanel(props) {
       />
       <GridList
         className="dashboard-panel-pill-list"
-        height={countries.length > 5 ? 200 : 50}
+        height={Math.min(200, Math.ceil(countries.length / 5) * 50)}
         width={950}
         columnWidth={190}
         rowHeight={50}
-        columnCount={4}
+        columnCount={5}
         items={countries}
         loading={!activeCountryItem && loading}
       >
