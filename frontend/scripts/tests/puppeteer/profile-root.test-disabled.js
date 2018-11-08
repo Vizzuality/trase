@@ -32,7 +32,6 @@ describe('Profile Root search', () => {
     },
     TIMEOUT
   );
-
   it(
     'search for municipality',
     async () => {
