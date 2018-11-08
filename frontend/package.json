@@ -145,19 +145,5 @@
   },
   "engines": {
     "node": ">=8.2.1"
-  },
-  "jest": {
-    "rootDir": "scripts",
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "json"
-    ],
-    "moduleDirectories": [
-      "node_modules"
-    ],
-    "unmockedModulePathPatterns": [
-      "<rootDir>/node_modules/nock"
-    ]
   }
 }

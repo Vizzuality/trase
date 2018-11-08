@@ -1,30 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SearchInput from 'react-components/shared/search-input/search-input.component';
 import GridList from 'react-components/shared/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item.component';
 
 function CommoditiesPanel(props) {
   const {
-    getSearchResults,
     loadingMoreItems,
     loading,
-    searchCommodities,
     commodities,
-    activeCommodityId,
+    activeCommodity,
     onSelectCommodity,
     getMoreItems,
     page
   } = props;
   return (
     <React.Fragment>
-      <SearchInput
-        className="dashboard-panel-search"
-        items={searchCommodities}
-        placeholder="Search commodity"
-        onSelect={onSelectCommodity}
-        onSearchTermChange={getSearchResults}
-      />
       <GridList
         className="dashboard-panel-pill-list"
         items={commodities}
@@ -41,7 +31,9 @@ function CommoditiesPanel(props) {
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={activeCommodityId === (itemProps.item && itemProps.item.id)}
+            isActive={
+              (activeCommodity && activeCommodity.id) === (itemProps.item && itemProps.item.id)
+            }
             enableItem={onSelectCommodity}
             disableItem={() => onSelectCommodity(null)}
           />
@@ -56,10 +48,8 @@ CommoditiesPanel.propTypes = {
   loadingMoreItems: PropTypes.bool,
   loading: PropTypes.bool,
   page: PropTypes.number.isRequired,
-  searchCommodities: PropTypes.array,
-  activeCommodityId: PropTypes.number,
+  activeCommodity: PropTypes.object,
   getMoreItems: PropTypes.func.isRequired,
-  getSearchResults: PropTypes.func.isRequired,
   onSelectCommodity: PropTypes.func.isRequired
 };
 

@@ -14,11 +14,13 @@ function CompaniesPanel(props) {
     searchCompanies,
     companies,
     getMoreItems,
+    setSearchResult,
     getSearchResults,
+    nodeTypeRenderer,
     onSelectNodeTypeTab,
     onSelectCompany,
-    activeNodeTypeTabId,
-    activeCompanyId
+    activeNodeTypeTab,
+    activeCompany
   } = props;
   return (
     <React.Fragment>
@@ -26,17 +28,18 @@ function CompaniesPanel(props) {
         className="dashboard-panel-search"
         items={searchCompanies}
         placeholder="Search company"
-        onSelect={onSelectCompany}
+        onSelect={setSearchResult}
+        nodeTypeRenderer={nodeTypeRenderer}
         onSearchTermChange={getSearchResults}
       />
       <Tabs
         tabs={tabs}
         onSelectTab={onSelectNodeTypeTab}
-        selectedTab={activeNodeTypeTabId}
+        selectedTab={activeNodeTypeTab && activeNodeTypeTab.id}
         itemTabRenderer={i => i.name}
         getTabId={item => item.id}
       >
-        {activeNodeTypeTabId && (
+        {activeNodeTypeTab && (
           <GridList
             className="dashboard-panel-pill-list"
             items={companies}
@@ -53,7 +56,9 @@ function CompaniesPanel(props) {
             {itemProps => (
               <GridListItem
                 {...itemProps}
-                isActive={activeCompanyId === (itemProps.item && itemProps.item.id)}
+                isActive={
+                  (activeCompany && activeCompany.id) === (itemProps.item && itemProps.item.id)
+                }
                 enableItem={onSelectCompany}
                 disableItem={() => onSelectCompany(null)}
               />
@@ -68,21 +73,23 @@ function CompaniesPanel(props) {
 CompaniesPanel.propTypes = {
   companies: PropTypes.array,
   tabs: PropTypes.array.isRequired,
-  activeCompanyId: PropTypes.number,
+  activeCompany: PropTypes.object,
   page: PropTypes.number.isRequired,
   loadingMoreItems: PropTypes.bool,
   loading: PropTypes.bool,
-  activeNodeTypeTabId: PropTypes.number,
+  activeNodeTypeTab: PropTypes.object,
   getMoreItems: PropTypes.func.isRequired,
+  setSearchResult: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
   onSelectCompany: PropTypes.func.isRequired,
   searchCompanies: PropTypes.array.isRequired,
+  nodeTypeRenderer: PropTypes.func.isRequired,
   onSelectNodeTypeTab: PropTypes.func.isRequired
 };
 
 CompaniesPanel.defaultProps = {
   companies: [],
-  activeNodeTypeTabId: null
+  activeNodeTypeTab: null
 };
 
 export default CompaniesPanel;

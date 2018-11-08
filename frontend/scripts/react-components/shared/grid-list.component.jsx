@@ -23,7 +23,7 @@ class GridList extends React.Component {
 
   static defaultProps = {
     getMoreItems: () => {},
-    page: 0
+    page: 1
   };
 
   listRef = React.createRef();
@@ -52,7 +52,8 @@ class GridList extends React.Component {
     const buffer = 1;
     const pageEnd = parseInt(items.length / columnCount, 10);
     const reachedPageEnd = current === pageEnd;
-    const reachedPageEndWithBuffer = current === pageEnd - buffer;
+    const reachedPageEndWithBuffer =
+      current === pageEnd - buffer && page > GridList.defaultProps.page;
 
     // TODO: add backwards support
     // const reachedPageStart = current === columnCount;

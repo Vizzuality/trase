@@ -1,9 +1,8 @@
-import camelCase from 'lodash/camelCase';
 import createReducer from 'utils/createReducer';
-import { getActiveTab } from 'react-components/dashboard-element/dashboard-element.selectors';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ID,
+  DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
   DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
@@ -12,7 +11,8 @@ import {
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   DASHBOARD_ELEMENT__SET_LOADING_ITEMS,
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
-  DASHBOARD_ELEMENT__SET_SEARCH_RESULTS
+  DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
 } from './dashboard-element.actions';
 
 const initialState = {
@@ -29,32 +29,40 @@ const initialState = {
   tabs: {},
   activePanelId: null,
   activeIndicatorsList: [],
-  sourcesPanel: {
-    page: 0,
+  countriesPanel: {
+    page: 1,
     searchResults: [],
     loadingItems: false,
-    activeCountryItemId: null,
-    activeSourceItemId: null,
-    activeSourceTabId: null
+    activeItem: null,
+    activeTab: null
+  },
+  sourcesPanel: {
+    page: 1,
+    searchResults: [],
+    loadingItems: false,
+    activeItem: null,
+    activeTab: null
   },
   destinationsPanel: {
-    page: 0,
+    page: 1,
     searchResults: [],
     loadingItems: false,
-    activeDestinationItemId: null
+    activeItem: null,
+    activeTab: null
   },
   companiesPanel: {
-    page: 0,
+    page: 1,
     searchResults: [],
     loadingItems: false,
-    activeCompanyItemId: null,
-    activeNodeTypeTabId: null
+    activeItem: null,
+    activeTab: null
   },
   commoditiesPanel: {
-    page: 0,
+    page: 1,
     searchResults: [],
     loadingItems: false,
-    activeCommodityItemId: null
+    activeItem: null,
+    activeTab: null
   }
 };
 
@@ -63,13 +71,16 @@ const dashboardElementReducer = {
     const { activePanelId } = action.payload;
     const prevActivePanelId = state.activePanelId;
     const prevPanelName = `${prevActivePanelId}Panel`;
+    const prevPanelState = prevActivePanelId
+      ? {
+          ...state[prevPanelName],
+          page: initialState[prevPanelName].page
+        }
+      : undefined;
     return {
       ...state,
       activePanelId,
-      [prevPanelName]: {
-        ...state[prevPanelName],
-        page: 0
-      }
+      [prevPanelName]: prevPanelState
     };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_PAGE](state, action) {
@@ -80,19 +91,18 @@ const dashboardElementReducer = {
   },
   [DASHBOARD_ELEMENT__SET_PANEL_DATA](state, action) {
     const { key, data, meta, tab, loading } = action.payload;
-    const metaFallback = meta && meta.contextNodeTypes ? meta.contextNodeTypes : meta; // FIXME
     const initialData = initialState.data[key];
     let newData;
     if (Array.isArray(initialData)) {
       newData = data || initialData;
     } else {
-      newData = tab && data ? { ...state.data[key], [tab]: data } : initialData;
+      newData = tab ? { ...state.data[key], [tab]: data } : initialData;
     }
     return {
       ...state,
       loading,
       data: { ...state.data, [key]: newData },
-      meta: { ...state.meta, [key]: metaFallback }
+      meta: { ...state.meta, [key]: meta }
     };
   },
   [DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA](state, action) {
@@ -126,33 +136,73 @@ const dashboardElementReducer = {
     const { data } = action.payload;
     const getSection = n => n.section && n.section.toLowerCase();
     const tabs = data.reduce((acc, next) => ({ ...acc, [getSection(next)]: next.tabs }), {});
+    const panelName = `${state.activePanelId}Panel`;
+    const firstTab = tabs[state.activePanelId] && tabs[state.activePanelId][0];
     return {
       ...state,
-      tabs
+      tabs,
+      [panelName]: {
+        ...state[panelName],
+        activeTab: state[panelName].activeTab || firstTab,
+        page: initialState[panelName].page
+      }
     };
   },
-  [DASHBOARD_ELEMENT__SET_ACTIVE_ID](state, action) {
-    const { panel, section, active, type } = action.payload;
+  [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM](state, action) {
+    const { panel, activeItem } = action.payload;
     const panelName = `${panel}Panel`;
-    const page = type === 'tab' || section === 'country' ? 0 : state[panelName].page;
+    const sourcesPanelState =
+      panel === 'countries' ? initialState.sourcesPanel : state.sourcesPanel;
+    return {
+      ...state,
+      activeIndicatorsList: [],
+      sourcesPanel: sourcesPanelState,
+      [panelName]: {
+        ...state[panelName],
+        activeItem
+      }
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_ACTIVE_TAB](state, action) {
+    const { panel, activeTab } = action.payload;
+    const panelName = `${panel}Panel`;
     return {
       ...state,
       activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
-        page,
-        [camelCase(`active_${section}_${type}_id`)]: active
+        activeTab,
+        page: initialState[panelName].page
+      }
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH](state, action) {
+    const { panel, activeItem } = action.payload;
+    const panelName = `${panel}Panel`;
+    const activeTab = state.tabs[panel].find(tab => tab.id === activeItem.nodeTypeId);
+    return {
+      ...state,
+      activeIndicatorsList: [],
+      [panelName]: {
+        ...state[panelName],
+        activeItem,
+        activeTab
       }
     };
   },
   [DASHBOARD_ELEMENT__CLEAR_PANEL](state, action) {
     const { panel } = action.payload;
     const panelName = `${panel}Panel`;
-    const { activeTab, activeTabName } = getActiveTab(state);
+    const { activeTab } = state[panelName];
+    const shouldResetCountries = ['countries', 'sources'].includes(panel);
+    const countriesState = shouldResetCountries
+      ? initialState.countriesPanel
+      : state.countriesPanel;
 
     return {
       ...state,
-      [panelName]: { ...initialState[panelName], [activeTabName]: activeTab }
+      [panelName]: { ...initialState[panelName], activeTab },
+      countriesPanel: countriesState
     };
   },
   [DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR](state, action) {
@@ -171,7 +221,11 @@ const dashboardElementReducer = {
   },
   [DASHBOARD_ELEMENT__SET_SEARCH_RESULTS](state, action) {
     const { data } = action.payload;
-    const panelName = `${state.activePanelId}Panel`;
+    let panel = state.activePanelId;
+    if (state.activePanelId === 'sources' && state.countriesPanel.activeItem === null) {
+      panel = 'countries';
+    }
+    const panelName = `${panel}Panel`;
     return {
       ...state,
       [panelName]: {
@@ -182,45 +236,34 @@ const dashboardElementReducer = {
   }
 };
 
-const dashboardElementReducerTypes = PropTypes => ({
-  meta: PropTypes.object.isRequired,
-  tabs: PropTypes.object.isRequired,
-  activePanelId: PropTypes.string,
-  activeIndicatorsList: PropTypes.array.isRequired,
-  data: PropTypes.shape({
-    indicators: PropTypes.array.isRequired,
-    countries: PropTypes.array.isRequired,
-    companies: PropTypes.object.isRequired,
-    sources: PropTypes.object.isRequired,
-    destinations: PropTypes.array.isRequired
-  }).isRequired,
-  sourcesPanel: PropTypes.shape({
+const dashboardElementReducerTypes = PropTypes => {
+  const PanelTypes = {
     page: PropTypes.number,
     searchResults: PropTypes.array,
     loadingItems: PropTypes.bool,
-    activeCountryItemId: PropTypes.number,
-    activeSourceItemId: PropTypes.number,
-    activeSourceTabId: PropTypes.number
-  }).isRequired,
-  destinationsPanel: PropTypes.shape({
-    page: PropTypes.number,
-    searchResults: PropTypes.array,
-    loadingItems: PropTypes.bool,
-    activeDestinationItemId: PropTypes.number
-  }).isRequired,
-  companiesPanel: PropTypes.shape({
-    page: PropTypes.number,
-    searchResults: PropTypes.array,
-    loadingItems: PropTypes.bool,
-    activeCompanyItemId: PropTypes.number,
-    activeNodeTypeTabId: PropTypes.number
-  }).isRequired,
-  commoditiesPanel: PropTypes.shape({
-    page: PropTypes.number,
-    searchResults: PropTypes.array,
-    loadingItems: PropTypes.bool,
-    activeCommodityItemId: PropTypes.number
-  }).isRequired
-});
+    activeItem: PropTypes.number,
+    activeTab: PropTypes.number
+  };
 
+  return {
+    meta: PropTypes.object.isRequired,
+    tabs: PropTypes.object.isRequired,
+    activePanelId: PropTypes.string,
+    activeIndicatorsList: PropTypes.array.isRequired,
+    data: PropTypes.shape({
+      indicators: PropTypes.array.isRequired,
+      countries: PropTypes.array.isRequired,
+      companies: PropTypes.object.isRequired,
+      sources: PropTypes.object.isRequired,
+      destinations: PropTypes.array.isRequired
+    }).isRequired,
+    countriesPanel: PropTypes.shape(PanelTypes).isRequired,
+    sourcesPanel: PropTypes.shape(PanelTypes).isRequired,
+    destinationsPanel: PropTypes.shape(PanelTypes).isRequired,
+    companiesPanel: PropTypes.shape(PanelTypes).isRequired,
+    commoditiesPanel: PropTypes.shape(PanelTypes).isRequired
+  };
+};
+
+export { initialState };
 export default createReducer(initialState, dashboardElementReducer, dashboardElementReducerTypes);

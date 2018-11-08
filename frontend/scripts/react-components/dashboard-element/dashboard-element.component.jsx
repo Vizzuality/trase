@@ -158,8 +158,7 @@ class DashboardElement extends React.PureComponent {
               </div>
               <div className="column small-12 medium-6">
                 <div className="dashboard-header-actions -end">
-                  <a
-                    href={false}
+                  <button
                     className="dashboard-header-action -link"
                     onClick={() => alert('coming soon')}
                   >
@@ -167,9 +166,8 @@ class DashboardElement extends React.PureComponent {
                       <use xlinkHref="#icon-download" />
                     </svg>
                     DOWNLOAD
-                  </a>
-                  <a
-                    href={false}
+                  </button>
+                  <button
                     className="dashboard-header-action -link"
                     onClick={() => alert('coming soon')}
                   >
@@ -177,7 +175,7 @@ class DashboardElement extends React.PureComponent {
                       <use xlinkHref="#icon-share" />
                     </svg>
                     SHARE
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>

@@ -9,7 +9,8 @@ import {
 export const DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_PANEL = 'DASHBOARD_ELEMENT__SET_ACTIVE_PANEL';
-export const DASHBOARD_ELEMENT__SET_ACTIVE_ID = 'DASHBOARD_ELEMENT__SET_ACTIVE_ID';
+export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEM = 'DASHBOARD_ELEMENT__SET_ACTIVE_ITEM';
+export const DASHBOARD_ELEMENT__SET_ACTIVE_TAB = 'DASHBOARD_ELEMENT__SET_ACTIVE_TAB';
 export const DASHBOARD_ELEMENT__CLEAR_PANEL = 'DASHBOARD_ELEMENT__CLEAR_PANEL';
 export const DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR = 'DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR';
 export const DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR =
@@ -18,42 +19,54 @@ export const DASHBOARD_ELEMENT__SET_PANEL_TABS = 'DASHBOARD_ELEMENT__SET_PANEL_T
 export const DASHBOARD_ELEMENT__SET_PANEL_PAGE = 'DASHBOARD_ELEMENT__SET_PANEL_PAGE';
 export const DASHBOARD_ELEMENT__SET_LOADING_ITEMS = 'DASHBOARD_ELEMENT__SET_LOADING_ITEMS';
 export const DASHBOARD_ELEMENT__SET_SEARCH_RESULTS = 'DASHBOARD_ELEMENT__SET_SEARCH_RESULTS';
+export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH =
+  'DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH';
 
 const getDashboardPanelParams = (state, options_type, options = {}) => {
-  const { sourcesPanel, companiesPanel, destinationsPanel, commoditiesPanel } = state;
-  const { page, refetchPanel } = options;
+  const {
+    countriesPanel,
+    sourcesPanel,
+    companiesPanel,
+    destinationsPanel,
+    commoditiesPanel
+  } = state;
+  const { page } = options;
+  const sourcesTab = sourcesPanel.activeTab && sourcesPanel.activeTab.id;
+  const companiesTab = companiesPanel.activeTab && companiesPanel.activeTab.id;
+
   const node_types_ids = {
-    sources: sourcesPanel.activeSourceTabId,
-    companies: companiesPanel.activeNodeTypeTabId
+    sources: sourcesTab,
+    companies: companiesTab
   }[options_type];
   const params = {
     page,
     options_type,
     node_types_ids,
-    countries_ids: sourcesPanel.activeCountryItemId
+    countries_ids: countriesPanel.activeItem && countriesPanel.activeItem.id
   };
 
-  if (options_type !== 'sources' || refetchPanel) {
-    params.sources_ids = sourcesPanel.activeSourceItemId;
+  if (options_type !== 'sources') {
+    params.sources_ids = sourcesPanel.activeItem && sourcesPanel.activeItem.id;
   }
 
-  if (options_type !== 'commodities' || refetchPanel) {
-    params.commodities_ids = commoditiesPanel.activeCommodityItemId;
+  if (options_type !== 'commodities') {
+    params.commodities_ids = commoditiesPanel.activeItem && commoditiesPanel.activeItem.id;
   }
 
-  if (options_type !== 'destinations' || refetchPanel) {
-    params.destinations_ids = destinationsPanel.activeDestinationItemId;
+  if (options_type !== 'destinations') {
+    params.destinations_ids = destinationsPanel.activeItem && destinationsPanel.activeItem.id;
   }
 
-  if (options_type !== 'companies' || refetchPanel) {
-    params.companies_ids = companiesPanel.activeCompanyItemId;
+  if (options_type !== 'companies') {
+    params.companies_ids = companiesPanel.activeItem && companiesPanel.activeItem.id;
   }
   return params;
 };
 
-export const getDashboardPanelData = (optionsType, tab, options) => (dispatch, getState) => {
+export const getDashboardPanelData = (optionsType, options) => (dispatch, getState) => {
   const { dashboardElement } = getState();
-  const { page } = dashboardElement[`${dashboardElement.activePanelId}Panel`];
+  const { page, activeTab } = dashboardElement[`${dashboardElement.activePanelId}Panel`];
+  const tab = activeTab && activeTab.id;
   const params = getDashboardPanelParams(dashboardElement, optionsType, { page, ...options });
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const key = optionsType !== 'attributes' ? optionsType : 'indicators'; // FIXME
@@ -100,14 +113,19 @@ export const setDashboardActivePanel = activePanelId => ({
   payload: { activePanelId }
 });
 
-export const setDashboardPanelActiveId = ({ type, active, panel, section }) => ({
-  type: DASHBOARD_ELEMENT__SET_ACTIVE_ID,
-  payload: {
-    type,
-    panel,
-    active,
-    section
-  }
+export const setDashboardPanelActiveItemWithSearch = (activeItem, panel) => ({
+  type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
+  payload: { panel, activeItem }
+});
+
+export const setDashboardPanelActiveItem = (activeItem, panel) => ({
+  type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+  payload: { panel, activeItem }
+});
+
+export const setDashboardPanelActiveTab = (activeTab, panel) => ({
+  type: DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
+  payload: { panel, activeTab }
 });
 
 export const clearDashboardPanel = panel => ({
@@ -135,7 +153,10 @@ export const setDashboardPanelLoadingItems = loadingItems => ({
   payload: { loadingItems }
 });
 
-export const getMoreDashboardPanelData = (optionsType, tab, direction) => (dispatch, getState) => {
+export const getMoreDashboardPanelData = (optionsType, activeTab, direction) => (
+  dispatch,
+  getState
+) => {
   const { dashboardElement } = getState();
   const { page } = dashboardElement[`${dashboardElement.activePanelId}Panel`];
   const params = getDashboardPanelParams(dashboardElement, optionsType, { page });
@@ -153,7 +174,7 @@ export const getMoreDashboardPanelData = (optionsType, tab, direction) => (dispa
         type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
         payload: {
           key,
-          tab,
+          tab: activeTab && activeTab.id,
           direction,
           data: json.data
         }
@@ -171,12 +192,15 @@ export const getDashboardPanelSearchResults = query => (dispatch, getState) => {
   let optionsType = dashboardElement.activePanelId;
   if (
     optionsType === 'sources' &&
-    dashboardElement.sourcesPanel.activeCountryItemId === null &&
-    dashboardElement.sourcesPanel.activeSourceTabId === null
+    dashboardElement.sourcesPanel.activeItem === null &&
+    dashboardElement.sourcesPanel.activeTab === null
   ) {
     optionsType = 'countries';
   }
-  const filters = getDashboardPanelParams(dashboardElement, optionsType);
+  const filters = {
+    ...getDashboardPanelParams(dashboardElement, optionsType),
+    node_types_ids: undefined
+  };
   const params = { ...filters, q: query };
   const url = getURLFromParams(GET_DASHBOARD_SEARCH_RESULTS_URL, params);
 

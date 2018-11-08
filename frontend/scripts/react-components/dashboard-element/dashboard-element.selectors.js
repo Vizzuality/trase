@@ -1,8 +1,7 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash/sortBy';
-import flatten from 'lodash/flatten';
 
-const getDashboardPanelData = state => state.dashboardElement.data;
+const getCountriesPanel = state => state.dashboardElement.countriesPanel;
 const getSourcesPanel = state => state.dashboardElement.sourcesPanel;
 const getDestinationsPanel = state => state.dashboardElement.destinationsPanel;
 const getCompaniesPanel = state => state.dashboardElement.companiesPanel;
@@ -22,77 +21,73 @@ export const getActivePanelTabs = createSelector(
 );
 
 export const getDirtyBlocks = createSelector(
-  [getSourcesPanel, getDestinationsPanel, getCompaniesPanel, getCommoditiesPanel],
-  (sourcesPanel, destinationsPanel, companiesPanel, commoditiesPanel) => ({
-    sources: sourcesPanel.activeCountryItemId !== null || sourcesPanel.activeSourceItemId !== null,
-    destinations: destinationsPanel.activeDestinationItemId !== null,
-    companies: companiesPanel.activeCompanyItemId !== null,
-    commodities: commoditiesPanel.activeCommodityItemId !== null
+  [
+    getCountriesPanel,
+    getSourcesPanel,
+    getDestinationsPanel,
+    getCompaniesPanel,
+    getCommoditiesPanel
+  ],
+  (countriesPanel, sourcesPanel, destinationsPanel, companiesPanel, commoditiesPanel) => ({
+    sources: countriesPanel.activeItem !== null,
+    destinations: destinationsPanel.activeItem !== null,
+    companies: companiesPanel.activeItem !== null,
+    commodities: commoditiesPanel.activeItem !== null
   })
 );
 
 export const getDynamicSentence = createSelector(
   [
+    getDirtyBlocks,
+    getCountriesPanel,
     getSourcesPanel,
     getDestinationsPanel,
     getCompaniesPanel,
-    getCommoditiesPanel,
-    getDashboardPanelData
+    getCommoditiesPanel
   ],
-  (sourcesPanel, destinationsPanel, companiesPanel, commoditiesPanel, data) => {
-    const countriesActiveId = sourcesPanel.activeCountryItemId;
-    const sourcesActiveId = sourcesPanel.activeSourceItemId;
-    const destinationsActiveId = destinationsPanel.activeDestinationItemId;
-    const companiesActiveId = companiesPanel.activeCompanyItemId;
-    const commoditiesActiveId = commoditiesPanel.activeCommodityItemId;
-    const sources = flatten(Object.values(data.sources));
-    const companies = flatten(Object.values(data.companies));
-
-    if (
-      ![
-        !!countriesActiveId,
-        !!sourcesActiveId,
-        !!destinationsActiveId,
-        !!companiesActiveId,
-        !!commoditiesActiveId
-      ].includes(true)
-    ) {
+  (
+    dirtyBlocks,
+    countriesPanel,
+    sourcesPanel,
+    destinationsPanel,
+    companiesPanel,
+    commoditiesPanel
+  ) => {
+    if (Object.values(dirtyBlocks).every(block => !block)) {
       return null;
     }
-    const countriesValue = data.countries.find(item => item.id === countriesActiveId);
-    const commoditiesValue = data.commodities.find(item => item.id === commoditiesActiveId);
-    const sourcesValue = sources.find(item => item.id === sourcesActiveId);
-    const companiesValue = companies.find(item => item.id === companiesActiveId);
-    const destinationsValue = data.destinations.find(item => item.id === destinationsActiveId);
+
+    const activeCountry = countriesPanel.activeItem;
+    const activeSource = sourcesPanel.activeItem;
+    const activeDestination = destinationsPanel.activeItem;
+    const activeCompany = companiesPanel.activeItem;
+    const activeCommodity = commoditiesPanel.activeItem;
 
     return [
       {
         panel: 'commodities',
-        prefix: commoditiesActiveId ? 'Explore' : 'Explore commodities',
-        value: commoditiesValue && commoditiesValue.name.toLowerCase()
+        prefix: activeCommodity ? 'Explore' : 'Explore commodities',
+        value: activeCommodity && activeCommodity.name.toLowerCase()
       },
       {
         panel: 'sources',
         prefix:
-          sourcesActiveId || countriesActiveId
-            ? `produced in`
-            : 'produced in countries covered by Trase',
+          activeSource || activeCountry ? `produced in` : 'produced in countries covered by Trase',
         value:
-          (sourcesValue && sourcesValue.name.toLowerCase()) ||
-          (countriesValue && countriesValue.name.toLowerCase())
+          (activeSource && activeSource.name.toLowerCase()) ||
+          (activeCountry && activeCountry.name.toLowerCase())
       },
       {
         panel: 'companies',
-        prefix:
-          companiesActiveId && companiesValue
-            ? `${companiesValue.nodeType.toLowerCase() === 'exporter' ? 'exported' : 'imported'} by`
-            : '',
-        value: companiesValue && companiesValue.name.toLowerCase()
+        prefix: activeCompany
+          ? `${activeCompany.nodeType.toLowerCase() === 'exporter' ? 'exported' : 'imported'} by`
+          : '',
+        value: activeCompany && activeCompany.name.toLowerCase()
       },
       {
         panel: 'destinations',
-        prefix: destinationsActiveId ? `going to` : '',
-        value: destinationsValue && destinationsValue.name.toLowerCase()
+        prefix: activeDestination ? `going to` : '',
+        value: activeDestination && activeDestination.name.toLowerCase()
       }
     ];
   }
@@ -126,19 +121,3 @@ export const getIndicatorsByGroup = createSelector(
     return groupedIndicators;
   }
 );
-
-export function getActiveTab(dashboardElement) {
-  const { activePanelId, ...state } = dashboardElement;
-  const panelKey = `${activePanelId}Panel`;
-  const tabKey = {
-    sources: 'activeSourceTabId',
-    destinations: null,
-    companies: 'activeNodeTypeTabId',
-    commodities: null
-  }[activePanelId];
-
-  return {
-    activeTabName: tabKey,
-    activeTab: state[panelKey][tabKey]
-  };
-}
