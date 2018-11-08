@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
+const TerserPlugin = require('terser-webpack-plugin');
 const webpackBaseConfig = require('./webpack.config');
 
 module.exports = merge(webpackBaseConfig, {
@@ -15,5 +16,8 @@ module.exports = merge(webpackBaseConfig, {
         enforce: 'pre'
       }
     ]
+  },
+  optimization: {
+    minimizer: [new TerserPlugin()]
   }
 });
