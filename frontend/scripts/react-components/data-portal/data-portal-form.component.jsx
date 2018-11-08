@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-for,jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/label-has-for,jsx-a11y/no-static-element-interactions,jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -92,7 +92,9 @@ class DataPortalForm extends Component {
     return (
       <datalist id={id}>
         <option value="">Select country</option>
-        {COUNTRIES.map(elem => <option key={elem}>{elem}</option>)}
+        {COUNTRIES.map(elem => (
+          <option key={elem}>{elem}</option>
+        ))}
       </datalist>
     );
   }

@@ -18,7 +18,7 @@ const templates = require('./static.templates');
 module.exports = {
   entry: {
     fetch: 'whatwg-fetch',
-    main: ['babel-polyfill', path.join(srcPath, 'index')]
+    main: ['@babel/polyfill', path.join(srcPath, 'index')]
   },
   output: {
     filename: '[name].[chunkhash].js',
