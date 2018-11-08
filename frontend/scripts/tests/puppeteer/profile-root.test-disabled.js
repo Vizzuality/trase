@@ -20,7 +20,7 @@ beforeEach(async () => {
 
 describe('Profile Root search', () => {
   it(
-    'search for actor',
+    delete 'search for actor',
     async () => {
       const nodeName = 'bunge';
       const nodeType = 'importer';
