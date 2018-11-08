@@ -28,7 +28,7 @@ function DashboardWelcome(props) {
       <h2 className="title -medium -light -center">Welcome to your dashboard</h2>
       <div className="dashboard-welcome-container">
         {cards.map(card => (
-          <div className="dashboard-welcome-card">
+          <div className="dashboard-welcome-card" key={card.title}>
             <h3 className="dashboard-welcome-card-title">{card.title}</h3>
             <div className="dashboard-welcome-card-container">
               <p className="dashboard-welcome-card-text">{card.body}</p>
