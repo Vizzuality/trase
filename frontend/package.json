@@ -144,6 +144,9 @@
     "turf-linestring": "^1.0.2",
     "whatwg-fetch": "^3.0.0"
   },
+  "resolutions": {
+    "babel-core": "7.0.0-bridge.0"
+  },
   "engines": {
     "node": ">=8.2.1"
   }

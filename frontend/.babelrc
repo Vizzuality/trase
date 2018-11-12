@@ -9,7 +9,7 @@
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-syntax-object-rest-spread",
     "@babel/plugin-transform-exponentiation-operator",
-    "@babel/plugin-proposal-class-properties"
+    ["@babel/plugin-proposal-class-properties", { "spec": true }]
   ],
   "env": {
     "test": {
@@ -23,7 +23,7 @@
         "@babel/plugin-syntax-dynamic-import",
         "@babel/plugin-syntax-object-rest-spread",
         "@babel/plugin-transform-exponentiation-operator",
-        "@babel/plugin-proposal-class-properties",
+        ["@babel/plugin-proposal-class-properties", { "spec": true }],
         "@babel/plugin-transform-modules-commonjs",
         ["module-resolver", {
           "alias": {

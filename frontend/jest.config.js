@@ -6,7 +6,7 @@ module.exports = {
   moduleDirectories: ['node_modules'],
   globals: {
     NODE_ENV_DEV: false
-  },
-  collectCoverage: true,
-  collectCoverageFrom: ['**/*.js']
+  }
+  // collectCoverage: true,
+  // collectCoverageFrom: ['**/*.js']
 };
