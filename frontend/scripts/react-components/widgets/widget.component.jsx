@@ -2,35 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { getWidgetData } from 'react-components/widgets/widgets.actions';
+import { getWidgetData, getWidgetState } from 'react-components/widgets/widgets.actions';
 import isEqual from 'lodash/isEqual';
 
 const mapStateToProps = (state, { query, params }) => {
   const { endpoints } = state.widgets;
-  const widget = query.reduce(
-    (acc, endpoint) => {
-      const current = endpoints[endpoint];
-      if (!current) return { loading: true };
-      return {
-        data: {
-          ...acc.data,
-          [endpoint]: current.data || null
-        },
-        meta: {
-          ...acc.meta,
-          [endpoint]: current.meta || null
-        },
-        loading: acc.loading || current.loading,
-        error: acc.error || current.error
-      };
-    },
-    { data: {}, loading: false, error: null }
-  );
+  const widget = getWidgetState(query, endpoints);
   return {
     params,
     widget
   };
 };
+
 const mapDispatchToProps = dispatch => bindActionCreators({ getWidgetData }, dispatch);
 
 class Widget extends React.PureComponent {

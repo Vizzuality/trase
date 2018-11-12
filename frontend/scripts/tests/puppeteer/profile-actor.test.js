@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+
 import { CONTEXTS, PROFILE_NODE_ACTOR } from './mocks';
 import { getRequestMockFn } from './utils';
 import { testProfileSpinners, testProfileSummary, testProfileMultiTable } from './shared';
