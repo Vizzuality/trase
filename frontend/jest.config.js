@@ -6,7 +6,8 @@ module.exports = {
   moduleDirectories: ['node_modules'],
   globals: {
     NODE_ENV_DEV: false
-  }
-  // collectCoverage: true,
-  // collectCoverageFrom: ['**/*.js']
+  },
+  collectCoverage: process.env.JEST_COVERAGE && JSON.parse(process.env.JEST_COVERAGE),
+  collectCoverageFrom: ['**/*.js'],
+  coveragePathIgnorePatterns: ['tests/puppeteer']
 };
