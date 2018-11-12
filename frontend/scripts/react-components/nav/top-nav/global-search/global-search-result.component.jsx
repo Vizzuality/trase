@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import camelcase from 'lodash/camelCase';
 
 import LinkButton from 'react-components/shared/link-button.component';
 import HighlightTextFragments from 'react-components/shared/highlight-text-fragments.component';
@@ -65,18 +64,23 @@ class GlobalSearchResult extends Component {
             </LinkButton>
           )}
 
-          {item.nodes.filter(n => n.profile).map(node => (
-            <LinkButton
-              className="-medium-large"
-              key={node.id}
-              to={{
-                type: camelcase(`profile-${node.profile}`),
-                query: { nodeId: node.id }
-              }}
-            >
-              See {node.nodeType} profile
-            </LinkButton>
-          ))}
+          {item.nodes
+            .filter(n => n.profile)
+            .map(node => (
+              <LinkButton
+                className="-medium-large"
+                key={node.id}
+                to={{
+                  type: 'profileNode',
+                  payload: {
+                    query: { nodeId: node.id, year: item.defaultYear },
+                    profileType: node.profile
+                  }
+                }}
+              >
+                See {node.nodeType} profile
+              </LinkButton>
+            ))}
         </div>
       </li>
     );
