@@ -9,7 +9,7 @@
     "ci": "start-server-and-test start:staging http-get://localhost:8081 test",
     "test": "npm run unit && npm run e2e",
     "unit": "jest --config ./jest.config.js --colors --runInBand",
-    "e2e": "jest --config ./jest.config.js --colors --runInBand --testMatch='**/?(*.)+(spec|test).e2e.js?(x)'",
+    "e2e": "jest --config ./jest.e2e.config.js --colors --runInBand --testMatch='**/?(*.)+(spec|test).e2e.js?(x)'",
     "webpack:prod": "NODE_ENV='production' webpack --config config/webpack.config.prod.js",
     "eslint": "eslint -c .eslintrc.json --ext .jsx,.js scripts/**/* --fix",
     "prettier": "prettier --config .prettierrc --ignore-path .prettierignore --write 'scripts/**/*'",
