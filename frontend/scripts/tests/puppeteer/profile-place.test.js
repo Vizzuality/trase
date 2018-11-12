@@ -1,8 +1,6 @@
 /* eslint-disable no-console */
-import puppeteer from 'puppeteer';
-
 import { CONTEXTS, PROFILE_NODE_PLACE } from './mocks';
-import { getRequestMockFn, openBrowser } from './utils';
+import { getRequestMockFn } from './utils';
 import {
   testProfileSpinners,
   testProfileSummary,
@@ -10,22 +8,16 @@ import {
   testProfileMiniSankey
 } from './shared';
 
-let page;
-let browser;
 const BASE_URL = 'http://0.0.0.0:8081';
 const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
 
+const { page } = global;
+
 beforeAll(async () => {
-  browser = await puppeteer.launch(openBrowser(false));
-  page = await browser.newPage();
   await page.setRequestInterception(true);
   const mockRequests = await getRequestMockFn([CONTEXTS, PROFILE_NODE_PLACE]);
   page.on('request', mockRequests);
   await page.goto(`${BASE_URL}/profile-place?lang=en&nodeId=2759&contextId=1&year=2015`);
-});
-
-afterAll(() => {
-  browser.close();
 });
 
 describe('Profile place - Full data', () => {

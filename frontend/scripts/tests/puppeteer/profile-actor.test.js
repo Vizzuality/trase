@@ -1,30 +1,22 @@
 /* eslint-disable no-console */
-import puppeteer from 'puppeteer';
-
 import { CONTEXTS, PROFILE_NODE_ACTOR } from './mocks';
-import { getRequestMockFn, openBrowser } from './utils';
+import { getRequestMockFn } from './utils';
 import { testProfileSpinners, testProfileSummary, testProfileMultiTable } from './shared';
 
-let page;
-let browser;
 const BASE_URL = 'http://0.0.0.0:8081';
 const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
 
+const { page } = global;
+
 beforeAll(async () => {
-  browser = await puppeteer.launch(openBrowser(false));
-  page = await browser.newPage();
   await page.setRequestInterception(true);
   const mockRequests = await getRequestMockFn([CONTEXTS, PROFILE_NODE_ACTOR]);
   page.on('request', mockRequests);
   await page.goto(`${BASE_URL}/profile-actor?lang=en&nodeId=441&contextId=1&year=2015`);
 });
 
-afterAll(() => {
-  browser.close();
-});
-
 describe('Profile actor - Full data', () => {
-  test(
+  it(
     'All 5 widget sections attempt to load',
     async () => {
       expect.assertions(1);
@@ -33,7 +25,7 @@ describe('Profile actor - Full data', () => {
     TIMEOUT
   );
 
-  test(
+  it(
     'Summary widget loads successfully',
     async () => {
       expect.assertions(3);
@@ -46,7 +38,7 @@ describe('Profile actor - Full data', () => {
     TIMEOUT
   );
 
-  test(
+  it(
     'Top destination countries chart loads successfully',
     async () => {
       expect.assertions(2);
@@ -68,7 +60,7 @@ describe('Profile actor - Full data', () => {
     TIMEOUT
   );
 
-  test(
+  it(
     'Top destination countries map loads successfully',
     async () => {
       expect.assertions(2);
@@ -89,7 +81,7 @@ describe('Profile actor - Full data', () => {
     TIMEOUT
   );
 
-  test(
+  it(
     'Top sourcing regions chart loads successfully',
     async () => {
       expect.assertions(2);
@@ -109,7 +101,7 @@ describe('Profile actor - Full data', () => {
     TIMEOUT
   );
 
-  test(
+  it(
     'Top sourcing regions map loads successfully',
     async () => {
       expect.assertions(2);
@@ -125,12 +117,12 @@ describe('Profile actor - Full data', () => {
       );
 
       expect(hasLegend).toBe(true);
-      expect(coloredMapPolygons.length).toBe(908);
+      expect(coloredMapPolygons.length).toBe(387);
     },
     TIMEOUT
   );
 
-  test(
+  it(
     'Top sourcing regions switch changes map',
     async () => {
       expect.assertions(2);
@@ -140,19 +132,19 @@ describe('Profile actor - Full data', () => {
       const municipalityPolygons = await page.$$(
         '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
       );
-      expect(municipalityPolygons.length).toBe(908);
+      expect(municipalityPolygons.length).toBe(387);
 
       await page.click('[data-test=top-sourcing-regions-chart-switch-item][data-key=biome]');
       await page.waitForSelector('[data-test=top-sourcing-regions-map-d3-polygon-colored]');
       const biomePolygons = await page.$$(
         '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
       );
-      expect(biomePolygons.length).toBe(6);
+      expect(biomePolygons.length).toBe(5);
     },
     TIMEOUT
   );
 
-  test(
+  it(
     'Deforestation risk widget loads successfully',
     async () => {
       expect.assertions(6);
@@ -170,7 +162,7 @@ describe('Profile actor - Full data', () => {
     TIMEOUT
   );
 
-  test(
+  it(
     'Company compare scatterplot loads successfully',
     async () => {
       expect.assertions(3);

@@ -38,11 +38,12 @@ export const getRequestMockFn = async files => {
   return async interceptedRequest => {
     const parsedUrl = url.parse(interceptedRequest.url());
 
-    const filePath = `${parsedUrl.path
+    const dashedFile = parsedUrl.path
       .substr(1)
       .replace(/\/|\?|&|=/g, '-')
-      .toLowerCase()}.json`;
-
+      .toLowerCase();
+    const filePath =
+      !dashedFile || dashedFile.endsWith('.json') ? dashedFile : `${dashedFile}.json`;
     if (typeof mocksList[filePath] !== 'undefined') {
       // console.info(`URL (${interceptedRequest.url()}) intercepted and response mocked`);
       const content = await readFilePromise(mocksList[filePath], 'utf8');

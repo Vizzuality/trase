@@ -30,11 +30,12 @@ matrix:
     - language: node_js
       node_js:
         - 10
+        - 11
       before_install:
         - cd frontend
       install:
         - npm install
       script:
-        - npm run test
+        - npm run ci
 
 

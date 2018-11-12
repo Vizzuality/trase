@@ -35,6 +35,7 @@ class DropdownTabSwitcher extends Component {
           </div>
           <Tabs
             tabs={items}
+            testId={testId}
             onSelectTab={this.handleSelect}
             itemTabRenderer={itemTabRenderer}
             selectedTab={items[selectedIndex]}

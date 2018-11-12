@@ -85,8 +85,8 @@ class Map extends Component {
 
     const projection = useRobinsonProjection === true ? d3_geoRobinson() : d3_geoMercator();
     const path = d3_geoPath().projection(projection);
-
     d3_json(topoJSONPath, (error, topoJSON) => {
+      if (!topoJSON) return;
       const features = topojsonFeature(topoJSON, topoJSON.objects[topoJSONRoot]);
 
       const polygons = container
