@@ -31,7 +31,6 @@ describe('Profile Root search', () => {
   ])(
     'click search %s profiles button link',
     async (nodeName, profileType, nodeType, contextId) => {
-      expect.assertions(3);
       const globalSearchToggleSelector = '[data-test=global-search-toggle]';
       const globalSearchInputSelector = '[data-test=global-search-input]';
       const profileLinkSelector = `[data-test=global-search-result-${nodeName}-${contextId}-${nodeType}-link]`;
@@ -48,7 +47,7 @@ describe('Profile Root search', () => {
         page.waitForNavigation({ waitUntil: 'load' })
       ]);
       const url = page.url();
-      const query = parse(url);
+      const query = parse(url.split('?')[1]);
       expect(url.startsWith(`${BASE_URL}/profile-${profileType}`)).toBe(true);
       expect(query.year).toBe('2017');
       expect(query.contextId).toBe(contextId.toString());
@@ -63,7 +62,6 @@ describe('Profile Root search', () => {
   ])(
     'navigate to sankey',
     async (nodeName, profileType, nodeType, contextId) => {
-      expect.assertions(1);
       const globalSearchToggleSelector = '[data-test=global-search-toggle]';
       const globalSearchInputSelector = '[data-test=global-search-input]';
       const globalSearchResult = `[data-test=global-search-result-${nodeName}-${contextId}]`;
@@ -92,7 +90,6 @@ describe('Profile Root search', () => {
   ])(
     'navigate to map',
     async (nodeName, profileType, nodeType, contextId) => {
-      expect.assertions(1);
       const globalSearchToggleSelector = '[data-test=global-search-toggle]';
       const globalSearchInputSelector = '[data-test=global-search-input]';
       const globalSearchResult = `[data-test=global-search-result-${nodeName}-${contextId}-map-link]`;
@@ -109,9 +106,9 @@ describe('Profile Root search', () => {
         page.waitForNavigation({ waitUntil: 'load' })
       ]);
       const url = page.url();
-      const query = parse(url);
-      console.info(query);
+      const query = parse(url.split('?')[1]);
       expect(url.startsWith(`${BASE_URL}/flows`)).toBe(true);
+      expect(query.isMapVisible).toBe(true);
     },
     TIMEOUT
   );
