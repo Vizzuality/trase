@@ -6,19 +6,28 @@ import LinkButton from 'react-components/shared/link-button.component';
 import HighlightTextFragments from 'react-components/shared/highlight-text-fragments.component';
 
 class GlobalSearchResult extends Component {
-  shouldComponentUpdate(nextProps) {
+  state = {
+    hoverOverLink: false
+  };
+
+  shouldComponentUpdate(nextProps, prevState) {
     return (
       (!nextProps.isLoading && this.props.isLoading) ||
-      nextProps.isHighlighted !== this.props.isHighlighted
+      nextProps.isHighlighted !== this.props.isHighlighted ||
+      prevState.hoverOverLink !== this.state.hoverOverLink
     );
   }
 
+  onMouseEnter = () => this.setState({ hoverOverLink: true });
+
+  onMouseOut = () => this.setState({ hoverOverLink: false });
+
   render() {
-    const { value, itemProps, isHighlighted, item } = this.props;
+    const { value, itemProps, isHighlighted, item, testId } = this.props;
 
     return (
       <li {...itemProps} className={cx('c-search-result', { '-highlighted': isHighlighted })}>
-        <div className="search-node-text-container">
+        <div className="search-node-text-container" data-test={testId}>
           <span className="search-node-type">{item.nodeTypeText}</span>
           <span className="search-node-name">
             <HighlightTextFragments text={item.name} highlight={value} />
@@ -26,7 +35,7 @@ class GlobalSearchResult extends Component {
         </div>
         <div className="search-node-actions-container">
           <LinkButton
-            className="-medium-large -charcoal"
+            className={cx('-medium-large', { '-charcoal': !this.state.hoverOverLink })}
             to={{
               type: 'tool',
               payload: {
@@ -40,12 +49,16 @@ class GlobalSearchResult extends Component {
                 }
               }
             }}
+            data-test={`${testId}-tool-link`}
           >
             Supply Chain
           </LinkButton>
           {item.isSubnational && (
             <LinkButton
               className="-medium-large"
+              onMouseEnter={this.onMouseEnter}
+              onMouseOut={this.onMouseOut}
+              onBlur={this.onMouseOut}
               to={{
                 type: 'tool',
                 payload: {
@@ -59,6 +72,7 @@ class GlobalSearchResult extends Component {
                   }
                 }
               }}
+              data-test={`${testId}-map-link`}
             >
               Map
             </LinkButton>
@@ -68,15 +82,23 @@ class GlobalSearchResult extends Component {
             .filter(n => n.profile)
             .map(node => (
               <LinkButton
+                onMouseEnter={this.onMouseEnter}
+                onMouseOut={this.onMouseOut}
+                onBlur={this.onMouseOut}
                 className="-medium-large"
                 key={node.id}
                 to={{
                   type: 'profileNode',
                   payload: {
-                    query: { nodeId: node.id, year: item.defaultYear },
+                    query: {
+                      nodeId: node.id,
+                      year: item.defaultYear,
+                      contextId: item.contextId
+                    },
                     profileType: node.profile
                   }
                 }}
+                data-test={`${testId}-${node.nodeType}-link`.toLowerCase()}
               >
                 See {node.nodeType} profile
               </LinkButton>
@@ -93,7 +115,8 @@ GlobalSearchResult.propTypes = {
   value: PropTypes.string,
   itemProps: PropTypes.object,
   isHighlighted: PropTypes.bool,
-  item: PropTypes.object
+  item: PropTypes.object,
+  testId: PropTypes.string
 };
 
 export default GlobalSearchResult;

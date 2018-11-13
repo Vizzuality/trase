@@ -27,6 +27,7 @@
         "@babel/plugin-transform-modules-commonjs",
         ["module-resolver", {
           "alias": {
+            "scripts": "./scripts",
             "actions": "./scripts/actions",
             "utils": "./scripts/utils",
             "reducers": "./scripts/reducers",

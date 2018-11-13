@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
+import kebabCase from 'lodash/kebabCase';
 
 import GlobalSearchResult from 'react-components/nav/top-nav/global-search/global-search-result.component';
 import 'styles/components/nav/global-search.scss';
@@ -89,7 +90,7 @@ export default class GlobalSearch extends Component {
 
     if (!isSearchOpen) {
       return (
-        <div onClick={this.onOpenClicked} className={className}>
+        <div onClick={this.onOpenClicked} className={className} data-test="global-search-toggle">
           <svg className="icon icon-search">
             <use xlinkHref="#icon-search" />
           </svg>
@@ -129,26 +130,30 @@ export default class GlobalSearch extends Component {
                     ref={this.setInputRef}
                     className="search-bar-input"
                     type="search"
+                    data-test="global-search-input"
                   />
                 </div>
                 {!isEmpty(searchTerm) && (
                   <ul className="search-results">
-                    {searchResults
-                      .slice(0, 10)
-                      .map((item, row) => (
-                        <GlobalSearchResult
-                          key={row}
-                          value={searchTerm}
-                          isLoading={isLoading}
-                          isHighlighted={row === highlightedIndex}
-                          item={item}
-                          itemProps={getItemProps({ item })}
-                        />
-                      ))}
+                    {searchResults.slice(0, 10).map((item, row) => (
+                      <GlobalSearchResult
+                        key={row}
+                        value={searchTerm}
+                        isLoading={isLoading}
+                        isHighlighted={row === highlightedIndex}
+                        item={item}
+                        itemProps={getItemProps({ item })}
+                        testId={`global-search-result-${kebabCase(item.name)}-${
+                          item.contextId
+                        }`.toLowerCase()}
+                      />
+                    ))}
                     {noResults && (
                       <li className="c-search-result -no-highlight">
                         <div className="search-node-text-container">
-                          <span className="search-node-name">No results found</span>
+                          <span className="search-node-name" data-test="global-search-no-result">
+                            No results found
+                          </span>
                         </div>
                       </li>
                     )}
