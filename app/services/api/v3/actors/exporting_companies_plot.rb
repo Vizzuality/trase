@@ -97,10 +97,10 @@ module Api
               attribute_name: 'DEFORESTATION_V2'
             },
             {
-              name: 'Maximum soy deforestation',
+              name: 'Soy deforestation',
               unit: 'ha',
               attribute_type: 'quant',
-              attribute_name: 'POTENTIAL_SOY_DEFORESTATION_V2'
+              attribute_name: 'SOY_DEFORESTATION_1_YEAR'
             },
             {
               name: 'Soy related deforestation',
