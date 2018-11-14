@@ -37,32 +37,13 @@ class Line extends Component {
   }
 
   prepareData(xValues, data) {
-    const continuousValues = xValues.map((year, index) => ({
+    return xValues.map((year, index) => ({
       name: data.name,
       nodeId: data.node_id,
       date: new Date(year, 0),
       value: data.values[index],
       value9: data.value9
     }));
-
-    // break down data into discontinuous blocks when data is missing, to avoid
-    // having the impression values is zero while it's actually unknown
-    const discontinuousValues = [[]];
-    continuousValues.forEach((point, i) => {
-      if (i > 0) {
-        const prevPoint = continuousValues[i - 1];
-        if (
-          (prevPoint.value === null && point.value !== null) ||
-          (prevPoint.value !== null && point.value === null)
-        ) {
-          discontinuousValues.push([]);
-        }
-      }
-      discontinuousValues[discontinuousValues.length - 1].push(point);
-    });
-
-    // get rid of blocks composed of only nulls
-    return discontinuousValues.filter(points => points.filter(p => p.value !== null).length);
   }
 
   build() {
@@ -124,6 +105,7 @@ class Line extends Component {
     sanitizedLines.forEach((lineData, i) => {
       const lineValuesWithFormat = this.prepareData(xValues, lineData);
       const line = d3_line()
+        .defined(d => d.value)
         .x(d => x(d.date))
         .y(d => y(d.value));
       const type = typeof style !== 'undefined' ? style.type : lineData.type;
@@ -160,7 +142,7 @@ class Line extends Component {
         case 'line':
           d3Container
             .append('path')
-            .datum(lineValuesWithFormat[0])
+            .datum(lineValuesWithFormat)
             .attr('class', lineStyle)
             .attr('d', line);
           break;
@@ -168,7 +150,7 @@ class Line extends Component {
         case 'line-points': {
           const lineNumber = numLines - i;
           pathContainers = d3Container
-            .datum(lineValuesWithFormat[0])
+            .datum(lineValuesWithFormat)
             .append('g')
             .attr('id', lineData.geo_id)
             .attr('data-test', `${testId}-line-points`)
@@ -229,7 +211,7 @@ class Line extends Component {
 
           const circles = pathContainers
             .selectAll('circle')
-            .data(d => d)
+            .data(d => d.filter(dd => dd.value !== null))
             .enter();
 
           circles
