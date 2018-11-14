@@ -39,6 +39,7 @@ ActiveAdmin.register Api::V3::IndProperty, as: 'IndProperty' do
   end
 
   index do
+    column('Name') { |property| property.ind&.name }
     column :display_name
     column :unit_type
     column :tooltip_text
