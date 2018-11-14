@@ -1,6 +1,7 @@
 /* eslint-disable camelcase,import/no-extraneous-dependencies,func-names */
 import toLower from 'lodash/toLower';
 import capitalize from 'lodash/capitalize';
+import startCase from 'lodash/startCase';
 import { event as d3_event, select as d3_select } from 'd3-selection';
 import 'd3-transition';
 import { DETAILED_VIEW_MIN_LINK_HEIGHT, SANKEY_TRANSITION_TIME } from 'constants';
@@ -339,10 +340,10 @@ export default class {
 
   _getLinkValue(link) {
     if (link.recolorBy === null) {
-      return 'unknown';
+      return 'Unknown';
     }
     if (this.currentSelectedRecolorBy.type !== 'ind') {
-      return capitalize(link.recolorBy);
+      return capitalize(startCase(link.recolorBy));
     }
 
     if (this.currentSelectedRecolorBy.legendType === 'percentual') {
