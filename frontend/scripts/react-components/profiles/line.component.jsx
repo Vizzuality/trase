@@ -6,6 +6,7 @@ import capitalize from 'lodash/capitalize';
 import { event as d3_event, select as d3_select } from 'd3-selection';
 import { axisBottom as d3_axis_bottom, axisLeft as d3_axis_left } from 'd3-axis';
 import { scaleLinear as d3_scale_linear, scaleTime as d3_scale_time } from 'd3-scale';
+import { timeYear as d3_time_year } from 'd3-time';
 import { extent as d3_extent } from 'd3-array';
 import { area as d3_area, line as d3_line } from 'd3-shape';
 import { format as d3_format } from 'd3-format';
@@ -34,6 +35,19 @@ class Line extends Component {
 
   isSmallChart() {
     return this.props.width < 450;
+  }
+
+  getTicksStyle() {
+    const { width } = this.props;
+    console.log(width);
+    if (this.isSmallChart()) {
+      return 'small';
+    }
+    if (width <= 600) {
+      return 'medium';
+    }
+
+    return 'normal';
   }
 
   prepareData(xValues, data) {
@@ -260,7 +274,10 @@ class Line extends Component {
 
       xTickFormat = value => {
         const format = d3_timeFormat('%Y');
-        return format(value);
+        const formatValue = format(value);
+        return this.getTicksStyle() === 'normal'
+          ? formatValue
+          : `'${formatValue.toString().slice(2)}`;
       };
     } else {
       yTickFormat = (value, idx, arr) => {
@@ -270,12 +287,17 @@ class Line extends Component {
       };
       xTickFormat = value => {
         const format = d3_timeFormat('%Y');
-        return format(value);
+        const formatValue = format(value);
+        return this.getTicksStyle() === 'normal'
+          ? formatValue
+          : `'${formatValue.toString().slice(2)}`;
       };
     }
 
+    const xTicks = this.getTicksStyle() === 'small' ? d3_time_year.every(2) : xValues.length;
+
     const xAxis = d3_axis_bottom(x)
-      .ticks(ticks.xTicks || xValues.length)
+      .ticks(ticks.xTicks || xTicks)
       .tickSize(0)
       .tickPadding(ticks.xTickPadding)
       .tickFormat(xTickFormat);
