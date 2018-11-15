@@ -16,4 +16,13 @@ RSpec.describe 'Companies', type: :request do
       expect(@response).to match_response_schema('dashboards_companies')
     end
   end
+
+  describe 'GET /api/v3/dashboards/companies/search' do
+    it 'has the correct response structure' do
+      get '/api/v3/dashboards/companies/search?q=a'
+
+      expect(@response).to have_http_status(:ok)
+      expect(@response).to match_response_schema('dashboards_companies_search')
+    end
+  end
 end

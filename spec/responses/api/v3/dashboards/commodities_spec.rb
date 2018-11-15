@@ -16,4 +16,13 @@ RSpec.describe 'Commodities', type: :request do
       expect(@response).to match_response_schema('dashboards_commodities')
     end
   end
+
+  describe 'GET /api/v3/dashboards/commodities/search' do
+    it 'has the correct response structure' do
+      get '/api/v3/dashboards/commodities/search?q=b'
+
+      expect(@response).to have_http_status(:ok)
+      expect(@response).to match_response_schema('dashboards_commodities_search')
+    end
+  end
 end

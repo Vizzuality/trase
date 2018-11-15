@@ -1385,6 +1385,8 @@ definitions:
         type: integer
       nodeType:
         type: string
+      countryId:
+        type: integer
   DashboardsAttribute:
     type: object
     properties:

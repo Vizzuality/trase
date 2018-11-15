@@ -9,6 +9,10 @@ module Api
           super(params)
         end
 
+        def call_with_query_term(query_term)
+          super(query_term, {include_country_id: true})
+        end
+
         private
 
         def initialize_query
