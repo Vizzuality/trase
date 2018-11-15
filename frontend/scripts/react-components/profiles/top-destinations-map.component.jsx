@@ -11,14 +11,16 @@ class TopDestinationsMap extends React.PureComponent {
   state = { tooltipConfig: null };
 
   onMouseMove = (geography, x, y) => {
-    const { lines, nodeName, activeTab } = this.props;
+    const { year, includedYears, lines, nodeName, activeTab } = this.props;
     const searchKey = activeTab ? 'geoid' : 'iso2';
     const polygon = lines.find(c => geography.properties[searchKey] === c.geo_id);
     if (polygon) {
       const text = `${polygon.name.toUpperCase()} > ${nodeName}`;
       const title = 'Trade Volume';
       const unit = 't';
-      const value = formatValue(polygon.values[0], 'Trade volume');
+      const yearIndex = includedYears.findIndex(ye => ye === year);
+      const currentYear = polygon.values[yearIndex];
+      const value = currentYear ? formatValue(currentYear, 'Trade volume') : 'Unknown';
       const tooltipConfig = { x, y, text, items: [{ title, value, unit }] };
       this.setState(() => ({ tooltipConfig }));
     }
@@ -70,6 +72,7 @@ class TopDestinationsMap extends React.PureComponent {
     const { year, printMode, buckets, verb, activeTab, height, commodityName, testId } = this.props;
     const { tooltipConfig } = this.state;
     const width = activeTab ? 400 : '100%';
+
     return (
       <React.Fragment>
         <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
@@ -111,6 +114,7 @@ class TopDestinationsMap extends React.PureComponent {
 TopDestinationsMap.propTypes = {
   testId: PropTypes.string,
   printMode: PropTypes.bool,
+  nodeName: PropTypes.string,
   activeTab: PropTypes.string,
   profileType: PropTypes.string,
   countryName: PropTypes.string,
@@ -120,7 +124,7 @@ TopDestinationsMap.propTypes = {
   year: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   buckets: PropTypes.array.isRequired,
-  nodeName: PropTypes.string
+  includedYears: PropTypes.array.isRequired
 };
 
 export default TopDestinationsMap;
