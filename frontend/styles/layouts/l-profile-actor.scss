@@ -1,5 +1,7 @@
 @import '../settings';
 
+$small-line-chart-width: 840px;
+
 .l-profile-actor {
   position: relative;
   min-height: 100vh;
@@ -109,6 +111,7 @@
 
     .top-destinations-map-container {
       overflow: hidden;
+      max-width: 100%;
 
       svg {
         @media print {
@@ -163,6 +166,10 @@
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
+
+    @media screen and (min-width: $small-line-chart-width) {
+      padding: 0 0 60px;
+    }
   }
 
   .spinner-section {
