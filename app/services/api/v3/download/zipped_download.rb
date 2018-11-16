@@ -75,19 +75,12 @@ module Api
         MAX_SIZE = 500_000
 
         def with_chunked_query
-          total = @query.except(:select).count
+          total = @query.total
           if total < MAX_SIZE
-            yield(@query, nil)
+            yield(@query.all, nil)
           else
-            years = @query.
-              except(:select).
-              except(:order).
-              select(:year).
-              distinct.
-              order(:year).
-              pluck(:year)
-            years.each do |year|
-              query = @query.where(year: year)
+            @query.years.each do |year|
+              query = @query.by_year(year)
               yield(query, year)
             end
           end

@@ -107,7 +107,7 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
   end
 
   def query_to_row(query)
-    query.map do |f|
+    query.all.map do |f|
       [
         f['YEAR'],
         f['MUNICIPALITY'],
