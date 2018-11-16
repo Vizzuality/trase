@@ -135,13 +135,9 @@ module Api
               attribute_name: 'DEFORESTATION_V2'
             },
             {
-              attribute_type: 'quant',
-              attribute_name: 'POTENTIAL_SOY_DEFORESTATION_V2'
-            },
-            {
               name: 'Soy deforestation',
               attribute_type: 'quant',
-              attribute_name: 'AGROSATELITE_SOY_DEFOR_'
+              attribute_name: 'SOY_DEFORESTATION_1_YEAR'
             }
           ]
         end

@@ -39,6 +39,7 @@ ActiveAdmin.register Api::V3::QuantProperty, as: 'QuantProperty' do
   end
 
   index do
+    column('Name') { |property| property.quant&.name }
     column :display_name
     column :unit_type
     column :tooltip_text

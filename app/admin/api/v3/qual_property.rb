@@ -36,6 +36,7 @@ ActiveAdmin.register Api::V3::QualProperty, as: 'QualProperty' do
   end
 
   index do
+    column('Name') { |property| property.qual&.name }
     column :display_name
     column :tooltip_text
     actions
