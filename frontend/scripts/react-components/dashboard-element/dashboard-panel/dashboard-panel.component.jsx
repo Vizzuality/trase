@@ -6,6 +6,7 @@ import DestinationsPanel from 'react-components/dashboard-element/dashboard-pane
 import CompaniesPanel from 'react-components/dashboard-element/dashboard-panel/companies-panel.component';
 import CommoditiesPanel from 'react-components/dashboard-element/dashboard-panel/commodities-panel.component';
 import DashboardModalFooter from 'react-components/dashboard-element/dashboard-modal-footer.component';
+import addApostrophe from 'utils/addApostrophe';
 
 class DashboardPanel extends Component {
   containerRef = React.createRef();
@@ -25,8 +26,8 @@ class DashboardPanel extends Component {
     }
   }
 
-  static nodeTypeRenderer(node) {
-    return node.nodeType;
+  static countryNameNodeTypeRenderer(node) {
+    return `${node.countryName + addApostrophe(node.countryName)} ${node.nodeType}`;
   }
 
   render() {
@@ -74,7 +75,6 @@ class DashboardPanel extends Component {
             <SourcesPanel
               page={sourcesPanel.page}
               getMoreItems={getMoreItems}
-              nodeTypeRenderer={DashboardPanel.nodeTypeRenderer}
               setSearchResult={item => setSearchResult(item, activePanelId)}
               getSearchResults={getSearchResults}
               loadingMoreItems={sourcesPanel.loadingItems}
@@ -100,7 +100,6 @@ class DashboardPanel extends Component {
             <DestinationsPanel
               page={destinationsPanel.page}
               getMoreItems={getMoreItems}
-              nodeTypeRenderer={DashboardPanel.nodeTypeRenderer}
               getSearchResults={getSearchResults}
               searchDestinations={destinationsPanel.searchResults}
               destinations={destinations}
@@ -116,7 +115,7 @@ class DashboardPanel extends Component {
               page={companiesPanel.page}
               getMoreItems={getMoreItems}
               searchCompanies={companiesPanel.searchResults}
-              nodeTypeRenderer={DashboardPanel.nodeTypeRenderer}
+              nodeTypeRenderer={DashboardPanel.countryNameNodeTypeRenderer}
               setSearchResult={item => setSearchResult(item, activePanelId)}
               getSearchResults={getSearchResults}
               loadingMoreItems={companiesPanel.loadingItems}

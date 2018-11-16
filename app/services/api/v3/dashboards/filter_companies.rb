@@ -9,6 +9,10 @@ module Api
           super(params)
         end
 
+        def call_with_query_term(query_term)
+          super(query_term, {include_country_id: true})
+        end
+
         private
 
         def initialize_query
@@ -17,13 +21,15 @@ module Api
               :id,
               :name,
               :node_type,
-              :node_type_id
+              :node_type_id,
+              :country_id
             ).
             group(
               :id,
               :name,
               :node_type,
-              :node_type_id
+              :node_type_id,
+              :country_id
             )
         end
       end

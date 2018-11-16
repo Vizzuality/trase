@@ -19,6 +19,7 @@
         "required": [
           "id",
           "name",
+          "nodeTypeId",
           "countryId",
           "nodeType"
         ],
@@ -29,7 +30,7 @@
             "title": "The Id Schema",
             "default": 0,
             "examples": [
-              17
+              29667
             ]
           },
           "name": {
@@ -38,9 +39,18 @@
             "title": "The Name Schema",
             "default": "",
             "examples": [
-              "ABC INDUSTRIA E COMERCIO"
+              "AL-ETEHAD AL-A'AM FOR GEN. TRADE"
             ],
             "pattern": "^(.*)$"
+          },
+          "nodeTypeId": {
+            "$id": "#/properties/data/items/properties/nodeTypeId",
+            "type": "integer",
+            "title": "The Nodetypeid Schema",
+            "default": 0,
+            "examples": [
+              7
+            ]
           },
           "countryId": {
             "$id": "#/properties/data/items/properties/countryId",
@@ -57,7 +67,7 @@
             "title": "The Nodetype Schema",
             "default": "",
             "examples": [
-              "EXPORTER"
+              "IMPORTER"
             ],
             "pattern": "^(.*)$"
           }

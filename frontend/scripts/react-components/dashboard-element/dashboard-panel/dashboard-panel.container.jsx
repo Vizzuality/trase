@@ -15,6 +15,7 @@ import {
   getDirtyBlocks,
   getDynamicSentence
 } from 'react-components/dashboard-element/dashboard-element.selectors';
+import { getCountryNamesByCountryId } from 'reducers/app.selectors';
 
 const mapStateToProps = state => {
   const {
@@ -41,6 +42,7 @@ const mapStateToProps = state => {
     destinationsPanel,
     companiesPanel,
     commoditiesPanel,
+    countryNames: getCountryNamesByCountryId(state),
     tabs: getActivePanelTabs(state),
     dirtyBlocks: getDirtyBlocks(state),
     dynamicSentenceParts: getDynamicSentence(state)
@@ -85,8 +87,21 @@ class DashboardPanelContainer extends React.PureComponent {
     }
   ];
 
+  static addCountryNameToSearchResults(panel, countryNames) {
+    const searchResults = panel.searchResults.map(item => ({
+      ...item,
+      countryName: countryNames[item.countryId]
+    }));
+
+    return { ...panel, searchResults };
+  }
+
   render() {
-    return <DashboardPanel panels={this.panels} {...this.props} />;
+    const companiesPanel = DashboardPanelContainer.addCountryNameToSearchResults(
+      this.props.companiesPanel,
+      this.props.countryNames
+    );
+    return <DashboardPanel {...this.props} panels={this.panels} companiesPanel={companiesPanel} />;
   }
 }
 

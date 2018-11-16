@@ -18,9 +18,7 @@
         "title": "The Items Schema",
         "required": [
           "id",
-          "name",
-          "countryId",
-          "nodeType"
+          "name"
         ],
         "properties": {
           "id": {
@@ -29,7 +27,7 @@
             "title": "The Id Schema",
             "default": 0,
             "examples": [
-              17
+              23
             ]
           },
           "name": {
@@ -38,26 +36,7 @@
             "title": "The Name Schema",
             "default": "",
             "examples": [
-              "ABC INDUSTRIA E COMERCIO"
-            ],
-            "pattern": "^(.*)$"
-          },
-          "countryId": {
-            "$id": "#/properties/data/items/properties/countryId",
-            "type": "integer",
-            "title": "The Countryid Schema",
-            "default": 0,
-            "examples": [
-              27
-            ]
-          },
-          "nodeType": {
-            "$id": "#/properties/data/items/properties/nodeType",
-            "type": "string",
-            "title": "The Nodetype Schema",
-            "default": "",
-            "examples": [
-              "EXPORTER"
+              "BOLIVIA"
             ],
             "pattern": "^(.*)$"
           }
