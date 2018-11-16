@@ -26,13 +26,15 @@ const mapStateToProps = state => {
   const searchResults = Object.values(groupBy(search.results, byContextMainIdAndNodeType)).map(
     nodes => {
       const node = nodes[0];
+      const { defaultYear = null } = contexts.find(c => c.id === node.contextId) || {};
 
       return {
+        nodes,
+        defaultYear,
         name: node.name,
-        nodeTypeText: getNodeTypeText(nodes, contexts),
-        isSubnational: node.isSubnational,
         contextId: node.contextId,
-        nodes
+        isSubnational: node.isSubnational,
+        nodeTypeText: getNodeTypeText(nodes, contexts)
       };
     }
   );

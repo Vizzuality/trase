@@ -77,7 +77,7 @@ const widgetsReducerTypes = PropTypes => ({
     PropTypes.shape({
       error: PropTypes.any,
       key: PropTypes.string.isRequired,
-      data: PropTypes.oneOf([PropTypes.object, PropTypes.array]).isRequired,
+      data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
       loading: PropTypes.bool.isRequired
     })
   ).isRequired

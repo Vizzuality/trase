@@ -34,7 +34,8 @@
   }
 
   .search-node-actions-container {
-    display: none;
+    display: flex;
+    visibility: hidden;
 
     .c-button {
       height: 42px;
@@ -86,7 +87,7 @@
     color: $charcoal-grey;
 
     .search-node-actions-container {
-      display: flex;
+      visibility: visible;
     }
   }
 }

@@ -5,5 +5,7 @@ module.exports = {
   ...baseConfig,
   preset: 'jest-puppeteer',
   collectCoverage: false,
-  testPathIgnorePatterns: isCI ? ['tests/puppeteer/profile-root.test.e2e.js'] : []
+  testPathIgnorePatterns: isCI
+    ? ['tests/puppeteer/profile-root.test.e2e.js', 'tests/puppeteer/global-search.test.e2e.js']
+    : []
 };
