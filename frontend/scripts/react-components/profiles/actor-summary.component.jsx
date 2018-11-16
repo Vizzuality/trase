@@ -49,19 +49,19 @@ class ActorSummary extends React.PureComponent {
                     />
                   </span>
                 </div>
-                {zeroDeforestation === 'YES' ? (
+                {zeroDeforestation.toLowerCase() !== 'none' ? (
                   <div className="value">
                     <svg className="icon icon-check">
                       <use xlinkHref="#icon-check-circle" />
                     </svg>
-                    Yes
+                    {zeroDeforestation}
                   </div>
                 ) : (
                   <div className="value">
                     <svg className="icon icon-no">
                       <use xlinkHref="#icon-no-circle" />
                     </svg>
-                    No
+                    None
                   </div>
                 )}
               </div>
