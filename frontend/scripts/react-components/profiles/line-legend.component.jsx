@@ -9,7 +9,7 @@ import 'styles/components/profiles/line.scss';
 
 class LineLegend extends React.PureComponent {
   render() {
-    const filteredSortedLines = this.props.lines
+    const filteredSortedLines = [...this.props.lines]
       .sort((a, b) => {
         const last = this.props.xValues.length - 1;
         if (a.values[last] > b.values[last]) return 1;
