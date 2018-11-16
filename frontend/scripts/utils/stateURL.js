@@ -134,14 +134,10 @@ export const stringify = params => {
 
 const stateToURLObject = (state, location) => {
   if (location.type === 'tool') {
-    return { state: encodeStateToURL(state), lang: state.app.languageCode };
+    return { state: encodeStateToURL(state) };
   }
 
-  if (location.type === 'profileNode') {
-    return { lang: state.app.languageCode, ...location.query };
-  }
-
-  return { lang: state.app.languageCode };
+  return { ...location.query };
 };
 
 export const rehydrateAppStateFromToolURL = (action, next, state) => {
