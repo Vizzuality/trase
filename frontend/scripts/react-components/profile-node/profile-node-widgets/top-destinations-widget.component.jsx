@@ -119,6 +119,7 @@ class TopDestinationsWidget extends React.PureComponent {
                     testId={`${testId}-map`}
                     profileType={profileType}
                     countryName={countryName}
+                    includedYears={includedYears}
                     commodityName={commodityName}
                     activeTab={type === 'regions' ? activeTab : undefined}
                   />
