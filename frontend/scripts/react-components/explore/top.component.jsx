@@ -20,17 +20,16 @@ class Top extends Component {
       <li key={index} className="top-item">
         <div className="item-name">
           <span className="node-name">{item.name}</span>
-          {this.props.targetLink &&
-            !item.is_domestic_consumption && (
-              <Link
-                className="outside-link"
-                to={{ type: targetLink, payload: { query: { nodeId: item.id, year } } }}
-              >
-                <svg className="icon icon-outside-link">
-                  <use xlinkHref="#icon-outside-link" />
-                </svg>
-              </Link>
-            )}
+          {this.props.targetLink && !item.is_domestic_consumption && (
+            <Link
+              className="outside-link"
+              to={{ type: targetLink, payload: { query: { nodeId: item.id, year } } }}
+            >
+              <svg className="icon icon-outside-link">
+                <use xlinkHref="#icon-outside-link" />
+              </svg>
+            </Link>
+          )}
         </div>
         <span className="item-value" data-unit={unit.name}>
           {unit.format(item)}
@@ -53,21 +52,19 @@ class Top extends Component {
   }
 
   render() {
-    const { title } = this.props;
+    const { title, loading } = this.props;
     return (
       <div className="c-top">
         <h3 className={cx('subtitle -dark', { 'is-hidden': !title })}>{title}</h3>
-        {this.props.data.length > 0 ? (
-          <ul className="top-list">{this.renderList()}</ul>
-        ) : (
-          this.renderPlaceholder()
-        )}
+        {loading && this.renderPlaceholder()}
+        {!loading && <ul className="top-list">{this.renderList()}</ul>}
       </div>
     );
   }
 }
 
 Top.propTypes = {
+  loading: PropTypes.bool.isRequired,
   data: PropTypes.array.isRequired,
   title: PropTypes.string,
   year: PropTypes.number.isRequired,

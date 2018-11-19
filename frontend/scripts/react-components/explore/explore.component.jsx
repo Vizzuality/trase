@@ -85,6 +85,7 @@ class Explore extends React.PureComponent {
 
   render() {
     const {
+      loading,
       isSubnational,
       selectedContext,
       selectedTableColumnType,
@@ -109,14 +110,13 @@ class Explore extends React.PureComponent {
                 <ContextSelector dropdownClassName="-big" isExplore />
               </div>
             </div>
-            {selectedContext &&
-              selectedContext.id && (
-                <div className="column small-12">
-                  <div className="dropdown-element">
-                    <YearsSelector dropdownClassName="-big" />
-                  </div>
+            {selectedContext && selectedContext.id && (
+              <div className="column small-12">
+                <div className="dropdown-element">
+                  <YearsSelector dropdownClassName="-big" />
                 </div>
-              )}
+              </div>
+            )}
           </div>
           <div className="row">
             <div className={cx('column', 'small-12', { 'medium-7': showTable })}>
@@ -144,6 +144,7 @@ class Explore extends React.PureComponent {
                       targetLink={link}
                       year={selectedYears[0]}
                       data={topExporters}
+                      loading={loading}
                     />
                   </div>
                 </div>
@@ -182,6 +183,7 @@ class Explore extends React.PureComponent {
 }
 
 Explore.propTypes = {
+  loading: PropTypes.bool,
   isSubnational: PropTypes.bool,
   getTableElements: PropTypes.func.isRequired,
   selectedYears: PropTypes.arrayOf(PropTypes.number),
