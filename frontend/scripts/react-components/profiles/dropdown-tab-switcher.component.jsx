@@ -16,7 +16,7 @@ class DropdownTabSwitcher extends Component {
     };
   }
 
-  handleSelect = (_, selectedIndex) => {
+  handleSelect = selectedIndex => {
     this.setState({ selectedIndex });
 
     this.props.onSelectedIndexChange(selectedIndex);
