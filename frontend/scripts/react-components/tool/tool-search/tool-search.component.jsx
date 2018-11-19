@@ -154,7 +154,7 @@ export default class ToolSearch extends Component {
                       .filter(
                         i => !inputValue || i.name.toLowerCase().includes(inputValue.toLowerCase())
                       )
-                      .slice(0, 10)
+                      .slice(0, 30)
                       .map((item, row) => (
                         <SearchResult
                           key={item.id + item.type}

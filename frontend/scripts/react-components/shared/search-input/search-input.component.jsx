@@ -48,7 +48,7 @@ class SearchInput extends PureComponent {
       resultClassName,
       nodeTypeRenderer
     } = this.props;
-    const visibleResults = items.slice(0, 10);
+    const visibleResults = items.slice(0, 30);
 
     return (
       <div className={cx('c-search-input', className)} data-test={`search-input-${testId}`}>
@@ -76,23 +76,22 @@ class SearchInput extends PureComponent {
             </svg>
           )}
         </div>
-        {isOpen &&
-          visibleResults.length > 0 && (
-            <ul className="search-input-results">
-              {visibleResults.map((item, row) => (
-                <SearchInputResult
-                  key={item.id}
-                  item={item}
-                  className={resultClassName}
-                  testId={getResultTestId(item)}
-                  searchString={inputValue}
-                  itemProps={getItemProps({ item })}
-                  nodeTypeRenderer={nodeTypeRenderer}
-                  isHighlighted={row === highlightedIndex}
-                />
-              ))}
-            </ul>
-          )}
+        {isOpen && visibleResults.length > 0 && (
+          <ul className="search-input-results">
+            {visibleResults.map((item, row) => (
+              <SearchInputResult
+                key={item.id}
+                item={item}
+                className={resultClassName}
+                testId={getResultTestId(item)}
+                searchString={inputValue}
+                itemProps={getItemProps({ item })}
+                nodeTypeRenderer={nodeTypeRenderer}
+                isHighlighted={row === highlightedIndex}
+              />
+            ))}
+          </ul>
+        )}
       </div>
     );
   };
