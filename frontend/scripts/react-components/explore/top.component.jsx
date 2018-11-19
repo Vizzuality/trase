@@ -15,16 +15,16 @@ class Top extends Component {
 
   renderList() {
     const { data, targetLink, year, unit } = this.props;
-
+    const getLink = item => ({
+      type: targetLink.type,
+      payload: { ...targetLink.payload, query: { nodeId: item.id, year } }
+    });
     return data.map((item, index) => (
       <li key={index} className="top-item">
         <div className="item-name">
           <span className="node-name">{item.name}</span>
           {this.props.targetLink && !item.is_domestic_consumption && (
-            <Link
-              className="outside-link"
-              to={{ type: targetLink, payload: { query: { nodeId: item.id, year } } }}
-            >
+            <Link className="outside-link" to={getLink(item)}>
               <svg className="icon icon-outside-link">
                 <use xlinkHref="#icon-outside-link" />
               </svg>
@@ -68,7 +68,7 @@ Top.propTypes = {
   data: PropTypes.array.isRequired,
   title: PropTypes.string,
   year: PropTypes.number.isRequired,
-  targetLink: PropTypes.string,
+  targetLink: PropTypes.object,
   unit: PropTypes.shape({
     name: PropTypes.string.isRequired,
     format: PropTypes.func.isRequired

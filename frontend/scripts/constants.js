@@ -204,7 +204,7 @@ export const EXPLORE_COLUMN_LIST = [
   {
     type: 'exporter',
     label: 'Top Exporting Companies',
-    link: 'profileNode',
+    link: { type: 'profileNode', payload: { profileType: 'actor' } },
     fallbackText: 'exporting companies'
   },
   {
