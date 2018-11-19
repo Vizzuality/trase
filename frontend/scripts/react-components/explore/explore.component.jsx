@@ -11,27 +11,20 @@ import ContextSelector from 'react-components/shared/context-selector/context-se
 import { EXPLORE_COLUMN_LIST } from 'constants';
 
 class Explore extends React.PureComponent {
-  constructor(props) {
-    super(props);
+  units = [
+    {
+      name: '%',
+      format: item => formatValue(item.height * 100, 'percentage')
+    },
+    {
+      name: 't',
+      format: item => formatValue(item.value, 'tons')
+    }
+  ];
 
-    this.units = [
-      {
-        name: '%',
-        format: item => formatValue(item.height * 100, 'percentage')
-      },
-      {
-        name: 't',
-        format: item => formatValue(item.value, 'tons')
-      }
-    ];
-
-    this.state = {
-      selectedTableUnit: this.units[0]
-    };
-
-    this.handleTableColumnChange = this.handleTableColumnChange.bind(this);
-    this.handleTableUnitChange = this.handleTableUnitChange.bind(this);
-  }
+  state = {
+    selectedTableUnit: this.units[0]
+  };
 
   componentDidMount() {
     const { topNodesKey, selectedTableColumnType } = this.props;
@@ -45,16 +38,21 @@ class Explore extends React.PureComponent {
     }
   }
 
-  handleTableColumnChange(label) {
-    const column = (EXPLORE_COLUMN_LIST.find(item => item.label === label) || {}).type;
-    this.props.setSelectedTableColumnType(column);
-  }
+  handleTableColumnChange = column => {
+    this.props.setSelectedTableColumnType(column.type);
+  };
 
-  handleTableUnitChange(unitName) {
+  handleTableUnitChange = unitName => {
     this.setState({
       selectedTableUnit: this.units.find(u => u.name === unitName)
     });
-  }
+  };
+
+  handleFallbackClick = () => {
+    const { selectedTableColumnType } = this.props;
+    const [column] = EXPLORE_COLUMN_LIST.filter(item => item.type !== selectedTableColumnType);
+    this.handleTableColumnChange(column);
+  };
 
   renderTableColumnDropdown() {
     const { selectedTableColumnType } = this.props;
@@ -63,8 +61,9 @@ class Explore extends React.PureComponent {
     return (
       <Dropdown
         className="-uppercase-title"
-        value={column.label}
-        valueList={EXPLORE_COLUMN_LIST.map(i => i.label)}
+        value={column}
+        valueList={EXPLORE_COLUMN_LIST}
+        valueFormat={v => v.label}
         onValueSelected={this.handleTableColumnChange}
       />
     );
@@ -80,6 +79,28 @@ class Explore extends React.PureComponent {
         valueList={this.units.map(i => i.name)}
         onValueSelected={this.handleTableUnitChange}
       />
+    );
+  }
+
+  renderTableFallback() {
+    const { selectedTableColumnType } = this.props;
+    const column = EXPLORE_COLUMN_LIST.find(item => item.type === selectedTableColumnType);
+    const [alternativeColumn] = EXPLORE_COLUMN_LIST.filter(
+      item => item.type !== selectedTableColumnType
+    );
+    return (
+      <div className="explore-table-fallback">
+        <p className="explore-table-fallback-text">
+          100% of {column.fallbackText} are unknown, explore{' '}
+        </p>
+        <button
+          type="button"
+          onClick={this.handleFallbackClick}
+          className="explore-table-fallback-button"
+        >
+          {alternativeColumn.label.toLowerCase()}.
+        </button>
+      </div>
     );
   }
 
@@ -144,8 +165,9 @@ class Explore extends React.PureComponent {
                       targetLink={link}
                       year={selectedYears[0]}
                       data={topExporters}
-                      loading={loading}
+                      loading={!!loading}
                     />
+                    {!loading && topExporters.length === 0 && this.renderTableFallback()}
                   </div>
                 </div>
               </div>
