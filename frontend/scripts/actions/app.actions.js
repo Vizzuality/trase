@@ -8,6 +8,7 @@ import {
 import { TOGGLE_MAP, loadToolDataForCurrentContext } from 'scripts/actions/tool.actions';
 import { getContextById } from 'scripts/reducers/helpers/contextHelper';
 import getPageTitle from 'scripts/router/page-title';
+import { redirect } from 'redux-first-router';
 
 export const LOAD_STATE_FROM_URL = 'LOAD_STATE_FROM_URL';
 export const LOAD_INITIAL_CONTEXT = 'LOAD_INITIAL_CONTEXT';
@@ -24,7 +25,6 @@ export const SET_SEARCH_TERM = 'SET_SEARCH_TERM';
 export const LOAD_SEARCH_RESULTS = 'LOAD_SEARCH_RESULTS';
 export const SET_CONTEXTS = 'SET_CONTEXTS';
 export const SET_CONTEXT_IS_USER_SELECTED = 'SET_CONTEXT_IS_USER_SELECTED';
-export const SET_LANGUAGE = 'SET_LANGUAGE';
 
 export function selectInitialContextById(contextId) {
   return (dispatch, getState) => {
@@ -162,12 +162,12 @@ export function resetSearchResults() {
   };
 }
 
-export function setLanguage(languageCode) {
-  return {
-    type: SET_LANGUAGE,
-    payload: languageCode
-  };
-}
+export const setLanguage = lang => (dispatch, getState) => {
+  const { location } = getState();
+  const query = { ...location.query, lang };
+  const payload = { ...location.payload, query };
+  return dispatch(redirect({ type: location.type, payload }));
+};
 
 export function loadSearchResults(searchTerm) {
   return dispatch => {
