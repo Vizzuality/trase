@@ -19,6 +19,18 @@ RSpec.describe Api::V3::Dashboards::SourcesController, type: :controller do
   end
 
   describe 'GET index' do
+    it 'returns list in alphabetical order' do
+      get :index, params: {countries_ids: [api_v3_brazil.id].join(',')}
+      expect(assigns(:collection).map(&:id)).to eq(
+        [
+          api_v3_biome_node.id,
+          api_v3_logistics_hub_node.id,
+          api_v3_state_node.id,
+          api_v3_municipality_node.id
+        ]
+      )
+    end
+
     it 'returns sources by id' do
       get :index, params: {
         countries_ids: [api_v3_brazil.id].join(','),

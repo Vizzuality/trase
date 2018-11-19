@@ -19,6 +19,11 @@ RSpec.describe Api::V3::Dashboards::DestinationsController, type: :controller do
   end
 
   describe 'GET index' do
+    it 'returns list in alphabetical order' do
+      get :index, params: {countries_ids: [api_v3_brazil.id].join(',')}
+      expect(assigns(:collection).map(&:id)).to eq([api_v3_country_of_destination1_node.id])
+    end
+
     it 'returns destinations by id' do
       get :index, params: {
         countries_ids: [api_v3_brazil.id].join(','),

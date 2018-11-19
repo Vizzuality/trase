@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::Dashboards::CommoditiesController, type: :controller do
   include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil beef flows'
 
   before(:each) do
     Api::V3::Readonly::Dashboards::FlowPath.refresh(sync: true, skip_dependents: true)
@@ -16,6 +17,11 @@ RSpec.describe Api::V3::Dashboards::CommoditiesController, type: :controller do
   end
 
   describe 'GET index' do
+    it 'returns list in alphabetical order' do
+      get :index, params: {countries_ids: api_v3_brazil.id}
+      expect(assigns(:collection).map(&:id)).to eq([api_v3_beef.id, api_v3_soy.id])
+    end
+
     it 'returns commodities by id' do
       get :index, params: {commodities_ids: api_v3_soy.id.to_s}
       expect(assigns(:collection).map(&:id)).to eq([api_v3_soy.id])
