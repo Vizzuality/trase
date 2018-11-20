@@ -222,3 +222,5 @@ export const HOME_VIDEO = {
 export const BREAKPOINTS = {
   small: 640
 };
+
+export const MAX_SEARCH_RESULTS = 15;

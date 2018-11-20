@@ -9,6 +9,7 @@ import kebabCase from 'lodash/kebabCase';
 import GlobalSearchResult from 'react-components/nav/top-nav/global-search/global-search-result.component';
 import 'styles/components/nav/global-search.scss';
 import 'styles/components/nav/global-search-result.scss';
+import { MAX_SEARCH_RESULTS } from 'constants';
 
 const SEARCH_DEBOUNCE_RATE_IN_MS = 400;
 
@@ -135,7 +136,7 @@ export default class GlobalSearch extends Component {
                 </div>
                 {!isEmpty(searchTerm) && (
                   <ul className="search-results">
-                    {searchResults.slice(0, 10).map((item, row) => (
+                    {searchResults.slice(0, MAX_SEARCH_RESULTS).map((item, row) => (
                       <GlobalSearchResult
                         key={row}
                         value={searchTerm}

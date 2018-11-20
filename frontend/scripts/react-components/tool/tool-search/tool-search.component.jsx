@@ -3,8 +3,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import deburr from 'lodash/deburr';
+import sortBy from 'lodash/sortBy';
 import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group.container';
 import SearchResult from 'react-components/tool/tool-search/tool-search-result.component';
+import { MAX_SEARCH_RESULTS } from 'constants';
 import 'styles/components/tool/tool-search.scss';
 import 'styles/components/tool/tool-search-result.scss';
 
@@ -108,8 +110,20 @@ export default class ToolSearch extends Component {
     return ids.every(id => this.props.selectedNodesIds.includes(id));
   }
 
+  getSearchNodes(query) {
+    const { nodes = [] } = this.props;
+    return sortBy(
+      nodes.filter(i => {
+        if (!query) return true;
+        const item = deburr(i.name.toLowerCase());
+        return item.includes(query.toLowerCase());
+      }),
+      item => item.name
+    ).slice(0, MAX_SEARCH_RESULTS);
+  }
+
   render() {
-    const { isSearchOpen, className, nodes = [], selectedNodesIds = [], isMapVisible } = this.props;
+    const { isSearchOpen, className, selectedNodesIds = [], isMapVisible } = this.props;
 
     if (isSearchOpen === false) {
       return (
@@ -150,25 +164,20 @@ export default class ToolSearch extends Component {
                 </div>
                 {isOpen && (
                   <ul className="search-results">
-                    {nodes
-                      .filter(
-                        i => !inputValue || i.name.toLowerCase().includes(inputValue.toLowerCase())
-                      )
-                      .slice(0, 30)
-                      .map((item, row) => (
-                        <SearchResult
-                          key={item.id + item.type}
-                          value={inputValue}
-                          isHighlighted={row === highlightedIndex}
-                          isMapVisible={isMapVisible}
-                          item={item}
-                          itemProps={getItemProps({ item })}
-                          selected={this.isNodeSelected(item)}
-                          importerNotSelected={item.importer && !this.isNodeSelected(item.importer)}
-                          exporterNotSelected={item.exporter && !this.isNodeSelected(item.exporter)}
-                          onClickAdd={this.onAddNode}
-                        />
-                      ))}
+                    {this.getSearchNodes(inputValue).map((item, row) => (
+                      <SearchResult
+                        key={item.id + item.type}
+                        value={inputValue}
+                        isHighlighted={row === highlightedIndex}
+                        isMapVisible={isMapVisible}
+                        item={item}
+                        itemProps={getItemProps({ item })}
+                        selected={this.isNodeSelected(item)}
+                        importerNotSelected={item.importer && !this.isNodeSelected(item.importer)}
+                        exporterNotSelected={item.exporter && !this.isNodeSelected(item.exporter)}
+                        onClickAdd={this.onAddNode}
+                      />
+                    ))}
                   </ul>
                 )}
               </div>

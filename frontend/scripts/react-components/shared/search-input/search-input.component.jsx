@@ -6,6 +6,7 @@ import SearchInputResult from 'react-components/shared/search-input/search-input
 import cx from 'classnames';
 import debounce from 'lodash/debounce';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
+import { MAX_SEARCH_RESULTS } from 'constants';
 
 const SEARCH_DEBOUNCE_RATE_IN_MS = 400;
 
@@ -48,7 +49,7 @@ class SearchInput extends PureComponent {
       resultClassName,
       nodeTypeRenderer
     } = this.props;
-    const visibleResults = items.slice(0, 30);
+    const visibleResults = items.slice(0, MAX_SEARCH_RESULTS);
 
     return (
       <div className={cx('c-search-input', className)} data-test={`search-input-${testId}`}>
