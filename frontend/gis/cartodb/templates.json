@@ -1,7 +1,7 @@
 [
   {
     "version": "0.0.1",
-    "id": "brazil_states",
+    "name": "brazil_states",
     "layergroup": {
       "version": "1.0.1",
       "layers": [
@@ -18,7 +18,7 @@
   },
   {
     "version": "0.0.1",
-    "id": "brazil_biomes",
+    "name": "brazil_biomes",
     "layergroup": {
       "version": "1.0.1",
       "layers": [
@@ -35,7 +35,7 @@
   },
   {
     "version": "0.0.1",
-    "id": "water_scarcity",
+    "name": "water_scarcity",
     "layergroup": {
       "version": "1.0.1",
       "layers": [
@@ -52,7 +52,7 @@
   },
   {
     "version": "0.0.1",
-    "id": "indigenous_areas",
+    "name": "indigenous_areas",
     "layergroup": {
       "version": "1.0.1",
       "layers": [
@@ -71,7 +71,7 @@
   {
     "version": "0.0.1",
     "human_name": "Brazil protected areas",
-    "id": "brazil_protected",
+    "name": "brazil_protected",
     "layergroup": {
       "version": "1.0.1",
       "layers": [
@@ -89,7 +89,7 @@
   },
   {
     "version": "0.0.1",
-    "id": "brazil_defor_alerts",
+    "name": "brazil_defor_alerts",
     "layergroup": {
       "version": "1.0.1",
       "layers": [
@@ -107,7 +107,7 @@
   },
   {
     "version": "0.0.1",
-    "id": "col_protected_areas",
+    "name": "col_protected_areas",
     "layergroup": {
       "version": "1.0.1",
       "layers": [
@@ -124,7 +124,7 @@
   },
   {
     "version": "0.0.1",
-    "id": "col_adm1_1",
+    "name": "col_adm1_1",
     "layergroup": {
       "version": "1.0.1",
       "layers": [
