@@ -39,7 +39,6 @@ class Line extends Component {
 
   getTicksStyle() {
     const { width } = this.props;
-    console.log(width);
     if (this.isSmallChart()) {
       return 'small';
     }

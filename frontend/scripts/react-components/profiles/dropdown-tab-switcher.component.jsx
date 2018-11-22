@@ -16,9 +16,15 @@ class DropdownTabSwitcher extends Component {
     };
   }
 
-  handleSelect = (_, selectedIndex) => {
+  onSelectTab = (value, selectedIndex) => {
     this.setState({ selectedIndex });
+    this.props.onSelectedIndexChange(selectedIndex);
+  };
 
+  onValueSelected = value => {
+    const { items } = this.props;
+    const selectedIndex = items.indexOf(value);
+    this.setState({ selectedIndex });
     this.props.onSelectedIndexChange(selectedIndex);
   };
 
@@ -36,7 +42,7 @@ class DropdownTabSwitcher extends Component {
           <Tabs
             tabs={items}
             testId={testId}
-            onSelectTab={this.handleSelect}
+            onSelectTab={this.onSelectTab}
             itemTabRenderer={itemTabRenderer}
             selectedTab={items[selectedIndex]}
           />
@@ -46,7 +52,7 @@ class DropdownTabSwitcher extends Component {
             label={title}
             value={items[selectedIndex]}
             valueList={items}
-            onValueSelected={s => this.handleSelect(items.indexOf(s))}
+            onValueSelected={this.onValueSelected}
           />
         </div>
       </div>
