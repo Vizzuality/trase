@@ -46,8 +46,6 @@ class ResizeBySelector extends Component {
       resizeBys
     } = this.props;
 
-    resizeBys.sort((a, b) => a.position > b.position);
-
     const hasZeroOrSingleElement = resizeBys.length <= 1;
 
     return (
