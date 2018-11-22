@@ -2,6 +2,7 @@
 import { getURLFromParams, GET_TOP_NODES_URL } from 'utils/getURLFromParams';
 
 export const EXPLORE__SET_TOP_NODES = 'EXPLORE__SET_TOP_NODES';
+export const EXPLORE__SET_TOP_NODES_LOADING = 'EXPLORE__SET_TOP_NODES_LOADING';
 export const EXPLORE__SET_SELECTED_TABLE_COLUMN_TYPE = 'EXPLORE__SET_SELECTED_TABLE_COLUMN_TYPE';
 
 export const getTopNodesKey = (ctx, col, start, end) =>
@@ -44,6 +45,12 @@ export const setExploreTopNodes = columnType => (dispatch, getState) => {
     context_id: selectedContext.id
   };
   const topNodesKey = getTopNodesKey(selectedContext.id, columnType, start_year, end_year);
+  if (!topNodes[topNodesKey]) {
+    dispatch({
+      type: EXPLORE__SET_TOP_NODES_LOADING,
+      payload: { topNodesKey, loading: true }
+    });
+  }
   const url = getURLFromParams(GET_TOP_NODES_URL, params);
 
   return (
@@ -68,4 +75,9 @@ export const setExploreTopNodes = columnType => (dispatch, getState) => {
 export const setSelectedTableColumnType = columnType => ({
   type: EXPLORE__SET_SELECTED_TABLE_COLUMN_TYPE,
   payload: { columnType }
+});
+
+export const setExploreTopNodesLoading = loading => ({
+  type: EXPLORE__SET_TOP_NODES_LOADING,
+  payload: { loading }
 });

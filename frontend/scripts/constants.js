@@ -202,13 +202,15 @@ export const DEFAULT_BASEMAP_FOR_CHOROPLETH = 'default';
 
 export const EXPLORE_COLUMN_LIST = [
   {
+    type: 'exporter',
     label: 'Top Exporting Companies',
-    link: 'profileNode',
-    type: 'exporter'
+    link: { type: 'profileNode', payload: { profileType: 'actor' } },
+    fallbackText: 'exporting companies'
   },
   {
+    type: 'country',
     label: 'Top Sourcing Countries',
-    type: 'country'
+    fallbackText: 'sourcing countries'
   }
 ];
 

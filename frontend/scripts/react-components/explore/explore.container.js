@@ -11,14 +11,15 @@ import Explore from './explore.component';
 const mapStateToProps = state => {
   const { selectedYears } = state.tool;
   const { selectedContext, contextIsUserSelected } = state.app;
-  const { topNodes, selectedTableColumnType } = state.explore;
+  const { topNodes, selectedTableColumnType, loading: loadingDict } = state.explore;
   const topNodesKey = selectedContext
     ? getTopNodesKey(selectedContext.id, selectedTableColumnType, ...selectedYears)
     : null;
   const topExporters = topNodes[topNodesKey] || [];
   const isSubnational = selectedContext ? selectedContext.isSubnational : null;
-
+  const loading = loadingDict[topNodesKey];
   return {
+    loading,
     topNodesKey,
     topExporters,
     isSubnational,
