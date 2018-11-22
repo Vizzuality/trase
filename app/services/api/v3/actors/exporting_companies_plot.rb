@@ -88,7 +88,7 @@ module Api
               name: 'Land use',
               unit: 'ha',
               attribute_type: 'quant',
-              attribute_name: 'LAND_USE'
+              attribute_name: 'SOY_AREA_'
             },
             {
               name: 'Territorial Deforestation',
