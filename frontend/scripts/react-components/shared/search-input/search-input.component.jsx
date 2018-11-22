@@ -12,7 +12,7 @@ const SEARCH_DEBOUNCE_RATE_IN_MS = 400;
 
 class SearchInput extends PureComponent {
   onInputValueChange = debounce(
-    searchTerm => this.props.onSearchTermChange && this.props.onSearchTermChange(searchTerm),
+    (...params) => this.props.onSearchTermChange && this.props.onSearchTermChange(...params),
     SEARCH_DEBOUNCE_RATE_IN_MS
   );
 
@@ -98,12 +98,13 @@ class SearchInput extends PureComponent {
   };
 
   render() {
+    const { searchOptions, onSelect } = this.props;
     return (
       <Downshift
-        onSelect={node => this.props.onSelect(node, this.props.year)}
+        onSelect={node => onSelect(node, searchOptions)}
         stateReducer={this.stateReducer}
         itemToString={i => (i === null ? '' : i.name)}
-        onInputValueChange={this.onInputValueChange}
+        onInputValueChange={term => this.onInputValueChange(term, searchOptions)}
       >
         {this.renderSearchBox}
       </Downshift>

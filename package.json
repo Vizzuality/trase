@@ -8,7 +8,6 @@
   },
   "scripts": {
     "precommit-rb": "bundle exec rubocop",
-    "precommit-frontend": "cd frontend && npm run precommit",
     "postmerge-bundle-install": "bin/git-hooks/postmerge-bundle-install.sh ${HUSKY_GIT_PARAMS}",
     "postmerge-npm-install": "bin/git-hooks/postmerge-npm-install.sh ${HUSKY_GIT_PARAMS}",
     "postmerge-warn-env-changes": "bin/git-hooks/postmerge-warn-env-changes.sh ${HUSKY_GIT_PARAMS}",
