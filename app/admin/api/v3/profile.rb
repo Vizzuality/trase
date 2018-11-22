@@ -1,9 +1,15 @@
 ActiveAdmin.register Api::V3::Profile, as: 'Profile' do
   menu parent: 'General Settings', priority: 4
 
-  permit_params :context_node_type_id, :name, :main_topojson_path, :main_topojson_root,
-    :adm_1_topojson_path, :adm_1_topojson_root, :adm_1_name,
-    :adm_2_topojson_path, :adm_2_topojson_root, :adm_2_name
+  permit_params :context_node_type_id,
+                :name, :main_topojson_path,
+                :main_topojson_root,
+                :adm_1_topojson_path,
+                :adm_1_topojson_root,
+                :adm_1_name,
+                :adm_2_topojson_path,
+                :adm_2_topojson_root,
+                :adm_2_name
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -21,7 +27,6 @@ ActiveAdmin.register Api::V3::Profile, as: 'Profile' do
       input :name, as: :select,
                    collection: Api::V3::Profile::NAME,
                    hint: object.class.column_comment('name')
-
 
       input :main_topojson_path,
             hint: object.class.column_comment('main_topojson_path'),
@@ -47,7 +52,6 @@ ActiveAdmin.register Api::V3::Profile, as: 'Profile' do
       input :adm_2_topojson_root,
             hint: object.class.column_comment('adm_2_topojson_root'),
             label: 'Map 2 TopoJSON root'
-
     end
     f.actions
   end

@@ -2,7 +2,6 @@ module Api
   module V3
     module ProfileMetadata
       class ResponseBuilder
-
         def initialize(context, node)
           @context = context
           @node = node
@@ -13,7 +12,7 @@ module Api
             joins(context_node_type: [node_type: :nodes]).
             where('nodes.id' => @node.id).
             limit(1).
-            first()
+            first
         end
       end
     end

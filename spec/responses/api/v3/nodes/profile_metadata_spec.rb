@@ -10,6 +10,5 @@ RSpec.describe 'Profile metadata', type: :request do
       expect(@response).to have_http_status(:ok)
       expect(@response).to match_response_schema('v3_profile_metadata')
     end
-
   end
 end

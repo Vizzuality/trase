@@ -7,7 +7,6 @@ RSpec.describe 'Place profile', type: :request do
   include_context 'api v3 brazil flows quants'
 
   let(:summary_params) {
-    
     {
       year: 2015
     }
