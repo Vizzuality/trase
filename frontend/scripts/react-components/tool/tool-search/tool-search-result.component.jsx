@@ -1,7 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import camelcase from 'lodash/camelCase';
 
 import LinkButton from 'react-components/shared/link-button.component';
 import HighlightTextFragments from 'react-components/shared/highlight-text-fragments.component';
@@ -15,6 +14,8 @@ function ToolSearchResult({
   itemProps,
   isHighlighted,
   item,
+  contextId,
+  defaultYear,
   isMapVisible
 }) {
   const buttonList = [];
@@ -83,8 +84,15 @@ function ToolSearchResult({
               className="-medium-large"
               key={item.name + type}
               to={{
-                type: camelcase(`profile-${item.profileType}`),
-                query: { nodeId: (item[type.toLowerCase()] || item).id }
+                type: 'profileNode',
+                payload: {
+                  profileType: item.profileType,
+                  query: {
+                    contextId,
+                    year: defaultYear,
+                    nodeId: (item[type.toLowerCase()] || item).id
+                  }
+                }
               }}
             >
               {type} profile
@@ -96,15 +104,17 @@ function ToolSearchResult({
 }
 
 ToolSearchResult.propTypes = {
+  item: PropTypes.object,
   value: PropTypes.string,
-  onClickAdd: PropTypes.func,
   selected: PropTypes.bool,
+  onClickAdd: PropTypes.func,
+  itemProps: PropTypes.object,
+  isMapVisible: PropTypes.bool,
+  isHighlighted: PropTypes.bool,
+  defaultYear: PropTypes.number,
   exporterNotSelected: PropTypes.bool,
   importerNotSelected: PropTypes.bool,
-  itemProps: PropTypes.object,
-  isHighlighted: PropTypes.bool,
-  isMapVisible: PropTypes.bool,
-  item: PropTypes.object
+  contextId: PropTypes.number.isRequired
 };
 
 export default ToolSearchResult;

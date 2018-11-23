@@ -123,7 +123,14 @@ export default class ToolSearch extends Component {
   }
 
   render() {
-    const { isSearchOpen, className, selectedNodesIds = [], isMapVisible } = this.props;
+    const {
+      isSearchOpen,
+      className,
+      selectedNodesIds = [],
+      isMapVisible,
+      contextId,
+      defaultYear
+    } = this.props;
 
     if (isSearchOpen === false) {
       return (
@@ -171,6 +178,8 @@ export default class ToolSearch extends Component {
                         isHighlighted={row === highlightedIndex}
                         isMapVisible={isMapVisible}
                         item={item}
+                        contextId={contextId}
+                        defaultYear={defaultYear}
                         itemProps={getItemProps({ item })}
                         selected={this.isNodeSelected(item)}
                         importerNotSelected={item.importer && !this.isNodeSelected(item.importer)}
@@ -190,11 +199,13 @@ export default class ToolSearch extends Component {
 }
 
 ToolSearch.propTypes = {
-  className: PropTypes.string,
-  setSankeySearchVisibility: PropTypes.func,
-  selectedNodesIds: PropTypes.array,
   nodes: PropTypes.array,
-  isSearchOpen: PropTypes.bool,
   onAddNode: PropTypes.func,
-  isMapVisible: PropTypes.bool
+  contextId: PropTypes.number,
+  className: PropTypes.string,
+  isSearchOpen: PropTypes.bool,
+  isMapVisible: PropTypes.bool,
+  defaultYear: PropTypes.number,
+  selectedNodesIds: PropTypes.array,
+  setSankeySearchVisibility: PropTypes.func
 };
