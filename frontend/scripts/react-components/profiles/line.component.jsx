@@ -96,6 +96,7 @@ class Line extends Component {
       .append('svg')
       .attr('width', width + chartMargin.left + chartMargin.right)
       .attr('height', chartHeight + chartMargin.top + chartMargin.bottom)
+      .style('overflow', 'visible')
       .append('g')
       .attr('transform', `translate(${chartMargin.left},${chartMargin.top})`);
 
