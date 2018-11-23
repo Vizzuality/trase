@@ -111,8 +111,11 @@
           > .unit {
 
             &::after {
+              display: flex;
               position: absolute;
+              right: 0;
               top: 0;
+              transform: translateX(100%);
 
               color: rgba($charcoal-grey, .6);
               content: attr(data-unit);
