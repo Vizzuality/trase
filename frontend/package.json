@@ -13,7 +13,8 @@
     "webpack:prod": "NODE_ENV='production' webpack --config config/webpack.config.prod.js",
     "eslint": "eslint -c .eslintrc.json --ext .jsx,.js scripts/**/* --fix",
     "prettier": "prettier --config .prettierrc --ignore-path .prettierignore --write 'scripts/**/*'",
-    "eslint-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check"
+    "eslint-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
+    "named-maps": "node ./gis/cartodb/named-maps.js"
   },
   "husky": {
     "hooks": {
@@ -78,6 +79,7 @@
     "jest-puppeteer": "^3.5.0",
     "lint-staged": "^8.0.4",
     "mapshaper": "^0.4.99",
+    "node-fetch": "^2.3.0",
     "node-sass": "^4.10.0",
     "postcss-loader": "^3.0.0",
     "prettier": "^1.15.1",
@@ -88,9 +90,8 @@
     "start-server-and-test": "^1.7.9",
     "style-loader": "^0.23.1",
     "sw-precache-webpack-plugin": "^0.11.5",
-    "terser-webpack-plugin": "^1.1.0",
     "url-loader": "^1.1.2",
-    "webpack": "^4.25.1",
+    "webpack": "^4.26.0",
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.10",

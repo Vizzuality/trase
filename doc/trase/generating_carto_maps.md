@@ -29,15 +29,18 @@ cd frontend
 
 This is necessary when context maps stored in CARTO tables need to be updated. A CARTO API key is needed.
 
-- Copy CARTO credentials:
+- Add CARTO credentials to your `.env`:
 ```
-cd frontend
-cp ./gis/cartodb/cartodb-config.sample.json ./gis/cartodb/cartodb-config.json
+CARTO_ACCOUNT=
+CARTO_TOKEN=
 ```
-- Replace api_key value in `cartodb-config.json`
 - To update or instantiate context layers run
 ```
-cd frontend
-./gis/getContextMaps.sh
+npm run named-maps -- --env=**type the environment**
 ```
-This will use the layers configuration stored in `frontend/gis/cartodb/templates.json`, to create a named map for each item. Then, a JS file to be used by the front-end is created at `cd frontend/scripts/actions/map/context_layers_carto.js`. This file contains the unique name for the created template as well as the layergroupid. The rest of the configuration (legend, title) is located in the constants.
+This will use the layers configuration stored in `frontend/gis/cartodb/templates.**environment**.json`, to create a named map for each item. Then, a JS file to be used by the front-end is created at `cd frontend/scripts/actions/map/context_layers_carto.js`. This file contains the unique name for the created template as well as the layergroupid. The rest of the configuration (legend, title) is located in the constants.
+
+- Add the following to your `.env` to run the application using the desired named maps environment:
+```
+NAMED_MAPS_ENV=**environment**
+```
