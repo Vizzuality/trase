@@ -1,7 +1,7 @@
 import BaseMarkup from 'html/base.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
-import React, { StrictMode } from 'react';
+import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
@@ -18,24 +18,20 @@ export const mount = (root, store) => {
   });
 
   render(
-    <StrictMode>
-      <Provider store={store}>
-        <ResizeListener>
-          {({ resolution }) =>
-            resolution.isSmall ? <TopNav className="-light" /> : <FiltersNav isExplore />
-          }
-        </ResizeListener>
-      </Provider>
-    </StrictMode>,
+    <Provider store={store}>
+      <ResizeListener>
+        {({ resolution }) =>
+          resolution.isSmall ? <TopNav className="-light" /> : <FiltersNav isExplore />
+        }
+      </ResizeListener>
+    </Provider>,
     document.getElementById('nav')
   );
 
   render(
-    <StrictMode>
-      <Provider store={store}>
-        <Explore />
-      </Provider>
-    </StrictMode>,
+    <Provider store={store}>
+      <Explore />
+    </Provider>,
     document.getElementById('page-react-root')
   );
 };

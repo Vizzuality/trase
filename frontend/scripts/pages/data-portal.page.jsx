@@ -7,7 +7,7 @@ import 'styles/components/shared/veil.scss';
 import 'styles/components/shared/modal.scss';
 
 import { render, unmountComponentAtNode } from 'react-dom';
-import React, { StrictMode } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import Footer from 'react-components/shared/footer.component';
@@ -20,29 +20,23 @@ export const mount = (root, store) => {
   });
 
   render(
-    <StrictMode>
-      <Provider store={store}>
-        <TopNav />
-      </Provider>
-    </StrictMode>,
+    <Provider store={store}>
+      <TopNav />
+    </Provider>,
     document.getElementById('nav')
   );
 
   render(
-    <StrictMode>
-      <Provider store={store}>
-        <DataPortalPage />
-      </Provider>
-    </StrictMode>,
+    <Provider store={store}>
+      <DataPortalPage />
+    </Provider>,
     document.getElementById('page-react-root')
   );
 
   render(
-    <StrictMode>
-      <Provider store={store}>
-        <Footer />
-      </Provider>
-    </StrictMode>,
+    <Provider store={store}>
+      <Footer />
+    </Provider>,
     document.getElementById('footer')
   );
 };

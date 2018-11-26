@@ -4,7 +4,7 @@ import ToolMarkup from 'html/tool.ejs';
 import SearchMarkup from 'html/includes/_search.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
-import React, { StrictMode } from 'react';
+import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
@@ -61,20 +61,16 @@ export const mount = (root, store) => {
   resizeSankeyTool(store.dispatch);
 
   render(
-    <StrictMode>
-      <Provider store={store}>
-        <FiltersNav />
-      </Provider>
-    </StrictMode>,
+    <Provider store={store}>
+      <FiltersNav />
+    </Provider>,
     document.getElementById('js-tool-nav-react')
   );
 
   render(
-    <StrictMode>
-      <Provider store={store}>
-        <ColumnsSelectorContainer />
-      </Provider>
-    </StrictMode>,
+    <Provider store={store}>
+      <ColumnsSelectorContainer />
+    </Provider>,
     document.getElementById('js-columns-selector-react')
   );
 
