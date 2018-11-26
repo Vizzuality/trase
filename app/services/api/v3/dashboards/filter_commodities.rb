@@ -14,7 +14,8 @@ module Api
         def initialize_query
           @query = Api::V3::Readonly::Dashboards::Commodity.
             select(:id, :name).
-            group(:id, :name)
+            group(:id, :name).
+            order(:name)
         end
       end
     end

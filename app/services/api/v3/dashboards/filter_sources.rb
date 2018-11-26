@@ -32,7 +32,8 @@ module Api
               :node_type_id,
               :parent_name,
               :parent_node_type
-            )
+            ).
+            order(:name)
         end
       end
     end

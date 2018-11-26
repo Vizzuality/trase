@@ -28,7 +28,8 @@ module Api
               :name,
               :node_type,
               :node_type_id
-            )
+            ).
+            order(:name)
         end
       end
     end
