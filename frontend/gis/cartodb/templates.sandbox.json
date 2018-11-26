@@ -1,0 +1,108 @@
+[
+  {
+    "version": "0.0.1",
+    "name": "brazil_states",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT * FROM brazil_states",
+            "cartocss": "#s{  polygon-opacity: 0;  line-color: #000000;   line-width: 1;    line-opacity: 1;} #s[zoom>3]::labels {    text-name: [siglauf3];    text-face-name: 'Open Sans Regular';    text-size: 12;    text-allow-overlap: true;    text-placement: interior;    text-fill: #FFFFFF;    text-halo-fill: #000000;    text-halo-radius: 1;   text-character-spacing: 0;   [zoom>4] {        text-name: [name];    text-size: 14; text-allow-overlap: true;   text-placement: interior;      text-character-spacing: 3;     [name='DISTRITO FEDERAL'] {      text-dy: -5;      }      [name='GOIAS'] {      text-dy: 10;      }      [name='RIO GRANDE DO NORTE'] {      text-dx: 1;      }    }}",
+            "cartocss_version": "2.3.0"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "version": "0.0.1",
+    "name": "brazil_biomes",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT * FROM brazil_biomes",
+            "cartocss": "#brazil_biomes{  polygon-opacity: 0;  line-color: #000000;  line-width: 1;  line-opacity: 1;}#brazil_biomes[zoom>3]::labels {  text-name: [name];  text-face-name: 'Open Sans Regular';  text-size: 15;  text-fill: #FFFFFF;  text-allow-overlap: true;  text-placement: interior;  text-halo-fill: black;  text-halo-radius: 1;  text-character-spacing: 3;  [name='MATA ATLANTICA'] {    text-horizontal-alignment: left;    text-dx: 85;   }  [name='PANTANAL'] {    text-horizontal-alignment: right;    text-dx: -60;  }  [zoom=4] {    text-size: 13;  }}",
+            "cartocss_version": "2.3.0"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "version": "0.0.1",
+    "name": "brazil_water_scarcity",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT * FROM brazil_water_scarcity",
+            "cartocss": "#ana_dissolve{   polygon-fill:  #4575b4;   polygon-opacity: 0.8;   line-color: #FFF;   line-width: 0;   line-opacity: 1; } #ana_dissolve [ cat <= 7] {    polygon-fill:#d73027; } #ana_dissolve [ cat <= 6.5] {    polygon-fill: #fc8d59; } #ana_dissolve [ cat <= 5.5] {    polygon-fill: #fee090; } #ana_dissolve [ cat <= 4.5] {    polygon-fill: #ffffbf; } #ana_dissolve [ cat <= 3.5] {    polygon-fill:  #e0f3f8; } #ana_dissolve [ cat <= 2.5] {    polygon-fill: #91bfdb; } #ana_dissolve [ cat <= 1] {    polygon-fill: #4575b4; }",
+            "cartocss_version": "2.3.0"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "version": "0.0.1",
+    "name": "brazil_indigenous_areas",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT * FROM brazil_indigenous_territories",
+            "cartocss": "#brazil_indigenous_territories{  polygon-fill:#ECC35F;  polygon-opacity: 0.5;  line-color:  #ECC35F;   line-width: 1;   line-opacity: 1;}",
+            "cartocss_version": "2.3.0",
+            "interactivity":[ "cartodb_id", "situacao13", "populaca", "nome_are22", "grupos9", "datadoc16","areaetno7"]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "version": "0.0.1",
+    "human_name": "Brazil protected areas",
+    "name": "brazil_protected",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT * FROM brazil_protected_areas",
+            "cartocss": "#brazil_protected_areas{   polygon-opacity: 0.5;   polygon-fill:#B4D84F;   line-color: #B4D84F;   line-width: 1;   line-opacity: 1;}",
+            "cartocss_version": "2.3.0",
+            "interactivity":["cartodb_id", "type"]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "version": "0.0.1",
+    "name": "brazil_defor_alerts",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT * from brazil_deforestation_2017_20181001",
+            "cartocss": "#deforestation_alerts_2013{ polygon-fill: #B40903;   polygon-opacity: 1;   line-color: #B40903;   line-width: 0.2;   line-opacity: 1; }",
+            "cartocss_version": "2.3.0",
+            "interactivity":["year"]
+          }
+        }
+      ]
+    }
+  }
+]

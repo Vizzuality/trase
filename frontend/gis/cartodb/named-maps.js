@@ -80,6 +80,7 @@ function instanciate(templates) {
         'Content-Type': 'application/json'
       }
     }).then(res => res.json())
+      .catch(console.error)
   );
   return Promise.all(updates);
 }
@@ -121,7 +122,7 @@ function applyTemplates(classified) {
   Promise.all([updated, created])
     .then(() => instanciate([...toUpdate, ...toCreate]))
     .then(namedMaps => saveTemplates([...toUpdate, ...toCreate], namedMaps))
-    .catch(e => console.error(e));
+    .catch(console.error);
 }
 
 const allTemplates = getTemplatesByEnvironment();
