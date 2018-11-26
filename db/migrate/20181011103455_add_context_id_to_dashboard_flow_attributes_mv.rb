@@ -1,7 +1,8 @@
 class AddContextIdToDashboardFlowAttributesMv < ActiveRecord::Migration[5.1]
   def change
-    remove_index :dashboards_flow_attributes_mv,
-                 [:attribute_id, :path]
+    # no-op
+    # remove_index :dashboards_flow_attributes_mv,
+    #              [:attribute_id, :path]
     add_index :dashboards_flow_attributes_mv,
               [:attribute_id, :path, :commodity_id, :country_id],
               unique: true,
