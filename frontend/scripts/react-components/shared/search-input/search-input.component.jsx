@@ -52,7 +52,10 @@ class SearchInput extends PureComponent {
     const visibleResults = items.slice(0, MAX_SEARCH_RESULTS);
 
     return (
-      <div className={cx('c-search-input', className)} data-test={`search-input-${testId}`}>
+      <div
+        className={cx('c-search-input', className)}
+        data-test={`${testId}-search-input-container`}
+      >
         <div
           className={cx('search-input-bar', { '-loading': isLoading })}
           onClick={this.focusInput}
@@ -62,12 +65,13 @@ class SearchInput extends PureComponent {
             {...getInputProps({ placeholder: placeholderSmall })}
             type="search"
             className="search-input-field show-for-small"
+            data-test={`${testId}-search-input-field-sm`}
           />
           <input
             {...getInputProps({ placeholder })}
             type="search"
             className="search-input-field hide-for-small"
-            data-test="search-input-desktop"
+            data-test={`${testId}-search-input-field-lg`}
           />
           {isLoading ? (
             <ShrinkingSpinner className="-dark" />

@@ -7,14 +7,12 @@
 #  name                 :text
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
-#  main_topojson_path   :string
-#  main_topojson_root   :string
-#  adm_1_name           :string
 #  adm_1_topojson_path  :string
 #  adm_1_topojson_root  :string
-#  adm_2_name           :string
 #  adm_2_topojson_path  :string
 #  adm_2_topojson_root  :string
+#  main_topojson_path   :string
+#  main_topojson_root   :string
 #
 # Indexes
 #

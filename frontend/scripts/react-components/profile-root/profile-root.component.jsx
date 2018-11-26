@@ -22,7 +22,7 @@ const ProfileRoot = props => {
                   </div>
                 </div>
                 <ProfileSearch
-                  testId="profile-search"
+                  testId="profile-root"
                   className="profile-search"
                   resultClassName="profile-search-result"
                   placeholderSmall="Search"
