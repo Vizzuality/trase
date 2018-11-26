@@ -1531,8 +1531,8 @@ CREATE MATERIALIZED VIEW public.dashboards_flow_paths_mv AS
 
 CREATE MATERIALIZED VIEW public.dashboards_commodities_mv AS
  SELECT fp.commodity_id AS id,
-    commodities.name,
-    to_tsvector('simple'::regconfig, COALESCE(commodities.name, ''::text)) AS name_tsvector,
+    btrim(commodities.name) AS name,
+    to_tsvector('simple'::regconfig, COALESCE(btrim(commodities.name), ''::text)) AS name_tsvector,
     fp.country_id,
     fp.node_id
    FROM (public.dashboards_flow_paths_mv fp
@@ -1547,8 +1547,8 @@ CREATE MATERIALIZED VIEW public.dashboards_commodities_mv AS
 
 CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
  SELECT fp.node_id AS id,
-    fp.node AS name,
-    to_tsvector('simple'::regconfig, COALESCE(fp.node, ''::text)) AS name_tsvector,
+    btrim(fp.node) AS name,
+    to_tsvector('simple'::regconfig, COALESCE(btrim(fp.node), ''::text)) AS name_tsvector,
     fp.node_type_id,
     fp.node_type,
     all_fp.country_id,
@@ -1558,7 +1558,6 @@ CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
      JOIN public.dashboards_flow_paths_mv fp ON ((all_fp.flow_id = fp.flow_id)))
   WHERE (fp.category = 'COMPANY'::text)
   GROUP BY fp.node_id, fp.node, fp.node_type_id, fp.node_type, all_fp.country_id, all_fp.commodity_id, all_fp.node_id
-  ORDER BY fp.node_type, fp.node
   WITH NO DATA;
 
 
@@ -1568,8 +1567,8 @@ CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
 
 CREATE MATERIALIZED VIEW public.dashboards_countries_mv AS
  SELECT fp.country_id AS id,
-    countries.name,
-    to_tsvector('simple'::regconfig, COALESCE(countries.name, ''::text)) AS name_tsvector,
+    btrim(countries.name) AS name,
+    to_tsvector('simple'::regconfig, COALESCE(btrim(countries.name), ''::text)) AS name_tsvector,
     countries.iso2,
     fp.commodity_id,
     fp.node_id
@@ -1585,8 +1584,8 @@ CREATE MATERIALIZED VIEW public.dashboards_countries_mv AS
 
 CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
  SELECT fp.node_id AS id,
-    fp.node AS name,
-    to_tsvector('simple'::regconfig, COALESCE(fp.node, ''::text)) AS name_tsvector,
+    btrim(fp.node) AS name,
+    to_tsvector('simple'::regconfig, COALESCE(btrim(fp.node), ''::text)) AS name_tsvector,
     fp.node_type_id,
     fp.node_type,
     all_fp.country_id,
@@ -1596,7 +1595,6 @@ CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
      JOIN public.dashboards_flow_paths_mv fp ON ((all_fp.flow_id = fp.flow_id)))
   WHERE (fp.category = 'DESTINATION'::text)
   GROUP BY fp.node_id, fp.node, fp.node_type_id, fp.node_type, all_fp.country_id, all_fp.commodity_id, all_fp.node_id
-  ORDER BY fp.node_type, fp.node
   WITH NO DATA;
 
 
@@ -1848,8 +1846,8 @@ ALTER SEQUENCE public.dashboards_quants_id_seq OWNED BY public.dashboards_quants
 
 CREATE MATERIALIZED VIEW public.dashboards_sources_mv AS
  SELECT fp.node_id AS id,
-    fp.node AS name,
-    to_tsvector('simple'::regconfig, COALESCE(fp.node, ''::text)) AS name_tsvector,
+    btrim(fp.node) AS name,
+    to_tsvector('simple'::regconfig, COALESCE(btrim(fp.node), ''::text)) AS name_tsvector,
     fp.node_type_id,
     fp.node_type,
     quals.name AS parent_node_type,
@@ -1864,7 +1862,6 @@ CREATE MATERIALIZED VIEW public.dashboards_sources_mv AS
      LEFT JOIN public.node_quals ON (((fp.node_id = node_quals.node_id) AND (quals.id = node_quals.qual_id))))
   WHERE ((fp.category = 'SOURCE'::text) AND (all_fp.node_id <> fp.node_id))
   GROUP BY fp.node_id, fp.node, fp.node_type_id, fp.node_type, quals.name, node_quals.value, all_fp.country_id, all_fp.commodity_id, all_fp.node_id
-  ORDER BY fp.node_type, fp.node
   WITH NO DATA;
 
 
@@ -4530,6 +4527,13 @@ CREATE INDEX dashboards_commodities_mv_group_columns_idx ON public.dashboards_co
 
 
 --
+-- Name: dashboards_commodities_mv_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_commodities_mv_name_idx ON public.dashboards_commodities_mv USING btree (name);
+
+
+--
 -- Name: dashboards_commodities_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4569,6 +4573,13 @@ CREATE INDEX dashboards_companies_mv_country_id_idx ON public.dashboards_compani
 --
 
 CREATE INDEX dashboards_companies_mv_group_columns_idx ON public.dashboards_companies_mv USING btree (id, name, node_type);
+
+
+--
+-- Name: dashboards_companies_mv_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_companies_mv_name_idx ON public.dashboards_companies_mv USING btree (name);
 
 
 --
@@ -4614,6 +4625,13 @@ CREATE INDEX dashboards_countries_mv_group_columns_idx ON public.dashboards_coun
 
 
 --
+-- Name: dashboards_countries_mv_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_countries_mv_name_idx ON public.dashboards_countries_mv USING btree (name);
+
+
+--
 -- Name: dashboards_countries_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4653,6 +4671,13 @@ CREATE INDEX dashboards_destinations_mv_country_id_idx ON public.dashboards_dest
 --
 
 CREATE INDEX dashboards_destinations_mv_group_columns_idx ON public.dashboards_destinations_mv USING btree (id, name, node_type);
+
+
+--
+-- Name: dashboards_destinations_mv_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_destinations_mv_name_idx ON public.dashboards_destinations_mv USING btree (name);
 
 
 --
@@ -4716,6 +4741,13 @@ CREATE INDEX dashboards_sources_mv_country_id_idx ON public.dashboards_sources_m
 --
 
 CREATE INDEX dashboards_sources_mv_group_columns_idx ON public.dashboards_sources_mv USING btree (id, name, node_type, parent_name, parent_node_type);
+
+
+--
+-- Name: dashboards_sources_mv_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_sources_mv_name_idx ON public.dashboards_sources_mv USING btree (name);
 
 
 --
@@ -6016,6 +6048,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181011103455'),
 ('20181017053240'),
 ('20181019222226'),
-('20181019232447');
+('20181019232447'),
+('20181116144800'),
+('20181119104937'),
+('20181119105000'),
+('20181119105010'),
+('20181119105022');
 
 

@@ -1,7 +1,7 @@
 SELECT
   commodity_id AS id,
-  commodities.name,
-  to_tsvector('simple', coalesce(commodities.name::text, '')) AS name_tsvector,
+  TRIM(commodities.name) AS name,
+  TO_TSVECTOR('simple', COALESCE(TRIM(commodities.name)::TEXT, '')) AS name_tsvector,
   fp.country_id,
   fp.node_id
 FROM dashboards_flow_paths_mv fp

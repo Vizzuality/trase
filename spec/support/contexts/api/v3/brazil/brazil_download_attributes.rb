@@ -53,13 +53,13 @@ shared_context 'api v3 brazil download attributes' do
     download_attribute = Api::V3::DownloadQuant.
       includes(:download_attribute).
       where(
-        'download_attributes.context_id' => api_v3_another_context.id,
+        'download_attributes.context_id' => api_v3_brazil_beef_context.id,
         quant_id: api_v3_fob.id
       ).first&.download_attribute
     unless download_attribute
       download_attribute = FactoryBot.create(
         :api_v3_download_attribute,
-        context: api_v3_another_context,
+        context: api_v3_brazil_beef_context,
         display_name: 'FOB',
         position: 1
       )

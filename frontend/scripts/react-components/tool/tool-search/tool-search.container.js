@@ -30,6 +30,7 @@ const getNode = (nodes, selectedColumnsIds, nodesDict) => {
 };
 
 const mapStateToProps = state => {
+  const { selectedContext } = state.app;
   const {
     nodes,
     selectedNodesIds,
@@ -58,7 +59,9 @@ const mapStateToProps = state => {
     selectedNodesIds,
     isSearchOpen,
     isMapVisible,
-    nodes: searchNodes
+    nodes: searchNodes,
+    contextId: selectedContext && selectedContext.id,
+    defaultYear: selectedContext && selectedContext.defaultYear
   };
 };
 

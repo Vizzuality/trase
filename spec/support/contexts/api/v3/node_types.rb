@@ -1,4 +1,8 @@
 shared_context 'api v3 node types' do
+  let(:api_v3_country_of_production_node_type) do
+    Api::V3::NodeType.find_by_name(NodeTypeName::COUNTRY_OF_PRODUCTION) ||
+      FactoryBot.create(:api_v3_node_type, name: NodeTypeName::COUNTRY_OF_PRODUCTION)
+  end
   let(:api_v3_biome_node_type) do
     Api::V3::NodeType.find_by_name(NodeTypeName::BIOME) ||
       FactoryBot.create(:api_v3_node_type, name: NodeTypeName::BIOME)
@@ -18,6 +22,10 @@ shared_context 'api v3 node types' do
   let(:api_v3_exporter_node_type) do
     Api::V3::NodeType.find_by_name(NodeTypeName::EXPORTER) ||
       FactoryBot.create(:api_v3_node_type, name: NodeTypeName::EXPORTER)
+  end
+  let(:api_v3_port_of_export_node_type) do
+    Api::V3::NodeType.find_by_name(NodeTypeName::PORT_OF_EXPORT) ||
+      FactoryBot.create(:api_v3_node_type, name: NodeTypeName::PORT_OF_EXPORT)
   end
   let(:api_v3_port_node_type) do
     Api::V3::NodeType.find_by_name(NodeTypeName::PORT) ||

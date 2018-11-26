@@ -124,6 +124,9 @@ The project's main configuration values can be set using [environment variables]
 * SHOW_WORLD_MAP_IN_EXPLORE: if set to true, explore section will have the 2 step behavior. Setting it to false will only show the context-specific step.
 * ENABLE_DASHBOARDS: if set to true, the dashboards section will be visible to end users.
 * ALWAYS_DISPLAY_DASHBOARD_INFO: if set to true, the dashboards info modal will always be displayed. If set to false, it will only be displayed for new users.
+* CARTO_ACCOUNT: name of the carto account where the named maps layers are hosted.
+* CARTO_TOKEN: token to authenticate into carto for the named maps creation.
+* NAMED_MAPS_ENV: named maps environment to use inside the app.
 
 If you are using the included development server, you can set those variables in the `.env` file (use the included `.env.sample` as an example)
 

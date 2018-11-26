@@ -568,7 +568,11 @@ export function setMapContextLayers(contextualLayers) {
   return (dispatch, getState) => {
     const mapContextualLayers = contextualLayers.map(layer => {
       const contextLayer = Object.assign({}, layer);
-      const cartoIds = contextLayersCarto[layer.identifier];
+      if (!NAMED_MAPS_ENV || !contextLayersCarto[NAMED_MAPS_ENV]) {
+        console.error('Invalid or missing NAMED_MAPS_ENV is preventing contextual layer loading.');
+        return {};
+      }
+      const cartoIds = contextLayersCarto[NAMED_MAPS_ENV][layer.identifier];
       // TODO: implement multi-year support
       const cartoData = layer.cartoLayers[0];
       if (!cartoData.rasterUrl && cartoIds) {

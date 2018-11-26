@@ -30,7 +30,8 @@ module Api
               :node_type,
               :node_type_id,
               :country_id
-            )
+            ).
+            order(:name)
         end
       end
     end

@@ -195,7 +195,7 @@ shared_context 'api v3 brazil soy nodes' do
         :api_v3_node,
         name: 'RUSSIAN FEDERATION',
         node_type: api_v3_country_node_type,
-        geo_id: 'CN'
+        geo_id: 'RU'
       )
       FactoryBot.create(
         :api_v3_node_property,
