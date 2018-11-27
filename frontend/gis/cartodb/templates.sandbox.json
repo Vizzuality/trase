@@ -9,7 +9,7 @@
           "type": "cartodb",
           "options": {
             "sql": "SELECT * FROM brazil_states",
-            "cartocss": "#s{  polygon-opacity: 0;  line-color: #000000;   line-width: 1;    line-opacity: 1;} #s[zoom>3]::labels {    text-name: [siglauf3];    text-face-name: 'Open Sans Regular';    text-size: 12;    text-allow-overlap: true;    text-placement: interior;    text-fill: #FFFFFF;    text-halo-fill: #000000;    text-halo-radius: 1;   text-character-spacing: 0;   [zoom>4] {        text-name: [name];    text-size: 14; text-allow-overlap: true;   text-placement: interior;      text-character-spacing: 3;     [name='DISTRITO FEDERAL'] {      text-dy: -5;      }      [name='GOIAS'] {      text-dy: 10;      }      [name='RIO GRANDE DO NORTE'] {      text-dx: 1;      }    }}",
+            "cartocss": "#s{  polygon-opacity: 0;  line-color: #000000;   line-width: 1;    line-opacity: 1;} #s[zoom>3]::labels {    text-name: [siglauf3];    text-face-name: 'Open Sans Regular';    text-size: 12;    text-allow-overlap: true;    text-placement: interior;    text-fill: #000000;   text-character-spacing: 0;   [zoom>4] {        text-name: [name];    text-size: 14; text-allow-overlap: true;   text-placement: interior;      text-character-spacing: 3;     [name='DISTRITO FEDERAL'] {      text-dy: -5;      }      [name='GOIAS'] {      text-dy: 10;      }      [name='RIO GRANDE DO NORTE'] {      text-dx: 1;      }    }}",
             "cartocss_version": "2.3.0"
           }
         }
@@ -26,7 +26,7 @@
           "type": "cartodb",
           "options": {
             "sql": "SELECT * FROM brazil_biomes",
-            "cartocss": "#brazil_biomes{  polygon-opacity: 0;  line-color: #000000;  line-width: 1;  line-opacity: 1;}#brazil_biomes[zoom>3]::labels {  text-name: [name];  text-face-name: 'Open Sans Regular';  text-size: 15;  text-fill: #FFFFFF;  text-allow-overlap: true;  text-placement: interior;  text-halo-fill: black;  text-halo-radius: 1;  text-character-spacing: 3;  [name='MATA ATLANTICA'] {    text-horizontal-alignment: left;    text-dx: 85;   }  [name='PANTANAL'] {    text-horizontal-alignment: right;    text-dx: -60;  }  [zoom=4] {    text-size: 13;  }}",
+            "cartocss": "#brazil_biomes{  polygon-opacity: 0;  line-color: #000000;  line-width: 1;  line-opacity: 1;}#brazil_biomes[zoom>3]::labels {  text-name: [name];  text-face-name: 'Open Sans Regular';  text-size: 15;  text-fill: #000000;  text-allow-overlap: true;  text-placement: interior;  text-character-spacing: 3;  [name='MATA ATLANTICA'] {    text-horizontal-alignment: left;    text-dx: 85;   }  [name='PANTANAL'] {    text-horizontal-alignment: right;    text-dx: -60;  }  [zoom=4] {    text-size: 13;  }}",
             "cartocss_version": "2.3.0"
           }
         }
