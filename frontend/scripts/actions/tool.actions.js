@@ -31,6 +31,7 @@ import isEmpty from 'lodash/isEmpty';
 import xor from 'lodash/xor';
 import { getCurrentContext } from 'scripts/reducers/helpers/contextHelper';
 import { getSelectedNodesColumnsPos } from 'react-components/tool/tool.selectors';
+import pSettle from 'p-settle';
 
 export const RESET_SELECTION = 'RESET_SELECTION';
 export const GET_COLUMNS = 'GET_COLUMNS';
@@ -495,11 +496,9 @@ export function loadLinks() {
 export function loadMapVectorData() {
   return (dispatch, getState) => {
     const geoColumns = getState().tool.columns.filter(column => column.isGeo === true);
-    const geometriesPromises = [];
-    const mapVectorData = {};
 
-    geoColumns.forEach(geoColumn => {
-      mapVectorData[geoColumn.id] = {
+    const vectorMaps = geoColumns.map(geoColumn => {
+      const vectorData = {
         name: geoColumn.name,
         useGeometryFromColumnId: geoColumn.useGeometryFromColumnId
       };
@@ -509,18 +508,9 @@ export function loadMapVectorData() {
           / /g,
           '_'
         )}.topo.json`;
-        const geometryPromise = fetch(vectorLayerURL)
-          .then(response => {
-            if (response.status >= 200 && response.status < 300) {
-              return response.text();
-            }
-            return undefined;
-          })
+        return fetch(vectorLayerURL)
+          .then(res => res.json())
           .then(payload => {
-            if (payload === undefined) {
-              console.warn('missing vector layer file', vectorLayerURL);
-              return;
-            }
             const topoJSON = JSON.parse(payload);
             const key = Object.keys(topoJSON.objects)[0];
             const geoJSON = topojsonFeature(topoJSON, topoJSON.objects[key]);
@@ -530,24 +520,35 @@ export function loadMapVectorData() {
               getState().tool.geoIdsDict,
               geoColumn.id
             );
-            mapVectorData[geoColumn.id].geoJSON = geoJSON;
-          });
-        geometriesPromises.push(geometryPromise);
+            return {
+              geoJSON,
+              ...vectorData
+            };
+          })
+          .catch(() => Promise.reject(vectorLayerURL));
       }
+      return Promise.resolve(vectorData);
     });
 
-    Promise.all(geometriesPromises).then(() => {
-      Object.keys(mapVectorData).forEach(id => {
-        mapVectorData[id].isPoint =
-          mapVectorData[id].geoJSON &&
-          mapVectorData[id].geoJSON.features.length &&
-          mapVectorData[id].geoJSON.features[0].geometry.type === 'Point';
-      });
-      dispatch({
-        type: GET_MAP_VECTOR_DATA,
-        mapVectorData
-      });
-    });
+    pSettle(vectorMaps).then(results =>
+      results.forEach(res => {
+        if (res.isFulfilled && !res.isRejected) {
+          const mapVectorData = {
+            ...res.value,
+            isPoint:
+              res.value.geoJSON &&
+              res.value.geoJSON.features.length &&
+              res.value.geoJSON.features[0].geometry.type === 'Point'
+          };
+          dispatch({
+            type: GET_MAP_VECTOR_DATA,
+            mapVectorData
+          });
+        } else {
+          console.warn('missing vector layer file', res.reason);
+        }
+      })
+    );
   };
 }
 
