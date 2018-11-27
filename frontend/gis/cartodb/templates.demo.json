@@ -1,0 +1,70 @@
+[
+  {
+    "version": "0.0.1",
+    "name": "paraguay_ecoregions_2018_11_14",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT * FROM paraguay_ecoregions_2018_11_14",
+            "cartocss": "#layer { polygon-fill: #FFFFFF; polygon-opacity: 0; } #layer::outline { line-width: 1; line-color: #000000; line-opacity: 1; } #layer[zoom>3]::labels { text-name: [eco_name]; text-face-name: 'Open Sans Regular'; text-size: 15; text-fill: #000000; text-label-position-tolerance: 0; text-halo-radius: 1; text-character-spacing: 3; text-halo-fill: #FFFFFF; text-allow-overlap: true; text-placement: interior; [zoom=4] { text-size: 13; } [eco_name='Alto Paraná Atlantic Forests'] { text-dy: 20; } [eco_name='Pantanal'] { text-dy: 30; text-dx: 5; } }",
+            "cartocss_version": "2.3.0"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "version": "0.0.1",
+    "name": "paraguay_protected_areas_2018_11_14",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT * FROM paraguay_protected_areas_2018_11_14",
+            "cartocss": "#paraguay_protected_areas_2018_11_14{   polygon-opacity: 0.5;   polygon-fill:#B4D84F;   line-color: #B4D84F;   line-width: 1;   line-opacity: 1;}",
+            "cartocss_version": "2.3.0"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "version": "0.0.1",
+    "name": "paraguay_indigenous_areas_2018_11_14",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT * FROM paraguay_indigenous_areas_2018_11_14",
+            "cartocss": "#paraguay_indigenous_areas_2018_11_14{  polygon-fill:#ECC35F;  polygon-opacity: 0.5;  line-color:  #ECC35F;   line-width: 1;   line-opacity: 1;}",
+            "cartocss_version": "2.3.0"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "version": "0.0.1",
+    "name": "col_departments",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT the_geom_webmercator FROM col_adm1_1",
+            "cartocss": "#col_department_boundries { polygon-opacity: 0;    line-color: #000000;    line-width: 1;    line-opacity: 1;}",
+            "cartocss_version": "2.3.0"
+          }
+        }
+      ]
+    }
+  }
+]

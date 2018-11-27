@@ -1,15 +1,16 @@
 class AddMoreNodeTypesAsDestinationToDashboardsFlowPathsMv < ActiveRecord::Migration[5.1]
   def change
-    drop_view :dashboards_companies_mv, materialized: true
-    drop_view :dashboards_destinations_mv, materialized: true
-    drop_view :dashboards_countries_mv, materialized: true
-    drop_view :dashboards_commodities_mv, materialized: true
-    drop_view :dashboards_sources_mv, materialized: true
-
-    update_view :dashboards_flow_paths_mv,
-                version: 2,
-                revert_to_version: 1,
-                materialized: true
+    # no-op
+    # drop_view :dashboards_companies_mv, materialized: true
+    # drop_view :dashboards_destinations_mv, materialized: true
+    # drop_view :dashboards_countries_mv, materialized: true
+    # drop_view :dashboards_commodities_mv, materialized: true
+    # drop_view :dashboards_sources_mv, materialized: true
+    #
+    # update_view :dashboards_flow_paths_mv,
+    #             version: 2,
+    #             revert_to_version: 1,
+    #             materialized: true
 
     create_view :dashboards_companies_mv,
                 version: 2,
