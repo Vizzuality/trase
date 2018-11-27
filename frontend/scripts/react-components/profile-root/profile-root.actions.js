@@ -28,7 +28,8 @@ export function resetProfileSearchResults() {
 export const searchNodeWithTerm = (searchTerm, { contextId }) => dispatch => {
   const nodeResultsURL = getURLFromParams(GET_NODES_WITH_SEARCH_URL, {
     query: searchTerm,
-    context_id: contextId
+    context_id: contextId,
+    profile_only: true
   });
 
   if (isEmpty(searchTerm)) {

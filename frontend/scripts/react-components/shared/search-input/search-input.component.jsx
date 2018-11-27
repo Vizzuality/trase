@@ -41,6 +41,7 @@ class SearchInput extends PureComponent {
     const {
       className,
       isLoading,
+      isDisabled,
       items,
       placeholder,
       placeholderSmall,
@@ -57,21 +58,23 @@ class SearchInput extends PureComponent {
         data-test={`${testId}-search-input-container`}
       >
         <div
-          className={cx('search-input-bar', { '-loading': isLoading })}
+          className={cx('search-input-bar', { '-loading': isLoading, '-disabled': isDisabled })}
           onClick={this.focusInput}
           role="textbox"
         >
           <input
             {...getInputProps({ placeholder: placeholderSmall })}
             type="search"
+            disabled={isDisabled}
             className="search-input-field show-for-small"
-            data-test={`${testId}-search-input-field-sm`}
+            data-test={`${testId}-search-input-field-sm${isDisabled ? '-disabled' : ''}`}
           />
           <input
             {...getInputProps({ placeholder })}
             type="search"
+            disabled={isDisabled}
             className="search-input-field hide-for-small"
-            data-test={`${testId}-search-input-field-lg`}
+            data-test={`${testId}-search-input-field-lg${isDisabled ? '-disabled' : ''}`}
           />
           {isLoading ? (
             <ShrinkingSpinner className="-dark" />
@@ -120,6 +123,7 @@ SearchInput.propTypes = {
   year: PropTypes.number,
   testId: PropTypes.string,
   isLoading: PropTypes.bool,
+  isDisabled: PropTypes.bool,
   className: PropTypes.string,
   placeholder: PropTypes.string,
   getResultTestId: PropTypes.func,

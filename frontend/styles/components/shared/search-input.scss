@@ -24,8 +24,7 @@
       flex: none;
     }
 
-    &.-loading,
-    [disabled=true] {
+    &.-loading {
       background-color: $white;
       .profile-search-input {
         background-color: $white;
@@ -33,6 +32,11 @@
           color: $charcoal-grey-faded-a-lot;
         }
       }
+    }
+
+    &.-disabled {
+      opacity: 0.3;
+      cursor: default;
     }
   }
 
@@ -46,6 +50,7 @@
     color: $charcoal-grey;
     outline: none;
     min-width: 0;
+    background-color: transparent;
 
     &::placeholder {
       transition: color 150ms ease-out;

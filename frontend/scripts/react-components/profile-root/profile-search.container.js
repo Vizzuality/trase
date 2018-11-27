@@ -14,7 +14,8 @@ function mapStateToProps(state) {
   return {
     searchOptions,
     items: state.profileRoot.search.results,
-    isLoading: state.profileRoot.search.isLoading
+    isLoading: state.profileRoot.search.isLoading,
+    isDisabled: (searchOptions.year || searchOptions.contextId) === null
   };
 }
 
