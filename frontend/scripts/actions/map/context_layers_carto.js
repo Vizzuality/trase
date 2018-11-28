@@ -97,7 +97,7 @@ module.exports = {
   demo: {
     paraguay_ecoregions_2018_11_14: {
       uid: 'paraguay_ecoregions_2018_11_14__demo',
-      layergroupid: 'p2cs-sei@00caad1a@a1d1ee6971974da9a1401449aa9d209b:1542212986044'
+      layergroupid: 'p2cs-sei@994d4ecc@e6242c89e7af7c01ad3c7286e7f8e75f:1543380503816'
     },
     paraguay_protected_areas_2018_11_14: {
       uid: 'paraguay_protected_areas_2018_11_14__demo',
@@ -110,6 +110,10 @@ module.exports = {
     col_departments: {
       uid: 'col_departments__demo',
       layergroupid: 'p2cs-sei@ac7a49be@5ae47ae98e8070dbc3983e87100857c9:1525368093739'
+    },
+    paraguay_deforestation_2017_2018_11_15: {
+      uid: 'paraguay_deforestation_2017_2018_11_15__demo',
+      layergroupid: 'p2cs-sei@2f21313c@cbeebda836abe3d170b8e3d750a24eb5:1542298677399'
     }
   }
 };
