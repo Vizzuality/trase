@@ -11,15 +11,16 @@ module Api
             ENV['TRASE_LOCAL_SCHEMA'] + '.' + table_name
           end
 
-          def remote_table
-            ENV['TRASE_LOCAL_FDW_SCHEMA'] + '.' + table_name
+          def source_table(source_schema)
+            source_schema + '.' + table_name
           end
 
-          def key_backup
+          def key_backup(source_schema)
             return unless import_key.any?
+
             connection.execute "DROP TABLE IF EXISTS #{key_backup_table}"
 
-            remote_join_condition = []
+            source_join_condition = []
             joins = []
 
             import_key.each.with_index do |key, idx|
@@ -30,18 +31,18 @@ module Api
                   JOIN #{blue_fk[:table_class].key_backup_table} #{table_alias}
                   ON #{table_alias}.id = local.#{key[:name]}
                 SQL
-                remote_join_condition << "remote.#{key[:name]} = #{table_alias}.new_id"
+                source_join_condition << "source.#{key[:name]} = #{table_alias}.new_id"
               else
-                remote_join_condition << "remote.#{key[:name]} = local.#{key[:name]}"
+                source_join_condition << "source.#{key[:name]} = local.#{key[:name]}"
               end
             end
             query = <<~SQL
               CREATE TEMPORARY TABLE #{key_backup_table} AS
-              SELECT remote.id AS new_id, local.id
+              SELECT source.id AS new_id, local.id
               FROM #{local_table} local
               #{joins&.join(' ')}
-              JOIN #{remote_table} remote
-              ON #{remote_join_condition.join(' AND ')}
+              JOIN #{source_table(source_schema)} source
+              ON #{source_join_condition.join(' AND ')}
             SQL
             connection.execute query
           end

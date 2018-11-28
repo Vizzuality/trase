@@ -35,6 +35,7 @@ module Api
             delete_rows_without_match_in_yellow_tables
           end
           return unless @table_class.blue_foreign_keys.any?
+
           delete_rows_without_match_in_blue_tables
           update_blue_foreign_keys
         end
