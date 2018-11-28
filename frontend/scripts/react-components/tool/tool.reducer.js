@@ -101,7 +101,8 @@ export const toolInitialState = {
   selectedYears: [],
   unmergedLinks: [],
   visibleNodes: [],
-  visibleNodesByColumn: []
+  visibleNodesByColumn: [],
+  loadedFlowsContextId: null
 };
 
 const toolReducer = {
@@ -202,8 +203,8 @@ const toolReducer = {
     });
   },
   [GET_COLUMNS](state, action) {
-    const rawNodes = JSON.parse(action.payload[0]).data;
-    const columns = JSON.parse(action.payload[1]).data;
+    const rawNodes = action.payload[0].data;
+    const columns = action.payload[1].data;
 
     // context-dependant columns
     const columnsByGroupObj = groupBy(columns, 'group');
@@ -230,9 +231,11 @@ const toolReducer = {
 
     // if any selectedNode, make those columns visible (selected)
     if (!isEmpty(state.selectedNodesIds)) {
-      state.selectedNodesIds.map(id => nodesDict[id]).forEach(node => {
-        selectedColumnsIds[node.columnGroup] = node.columnId;
-      });
+      state.selectedNodesIds
+        .map(id => nodesDict[id])
+        .forEach(node => {
+          selectedColumnsIds[node.columnGroup] = node.columnId;
+        });
     }
 
     // TODO the API should have the info on which file to load (if any) per column
@@ -252,8 +255,10 @@ const toolReducer = {
     });
   },
 
-  [SET_FLOWS_LOADING_STATE](state) {
-    return Object.assign({}, state, { flowsLoading: true });
+  [SET_FLOWS_LOADING_STATE](state, action) {
+    // TODO: remove this see tool.thunks.js
+    const { loadedFlowsContextId } = action.payload;
+    return { ...state, flowsLoading: true, loadedFlowsContextId };
   },
 
   [SET_MAP_LOADING_STATE](state) {
@@ -558,7 +563,7 @@ const toolReducerTypes = PropTypes => ({
   mapDimensions: PropTypes.arrayOf(PropTypes.object).isRequired,
   mapDimensionsGroups: PropTypes.arrayOf(PropTypes.object).isRequired,
   mapLoading: PropTypes.bool,
-  mapVectorData: PropTypes.object,
+  mapVectorData: PropTypes.array,
   mapView: PropTypes.object,
   nodes: PropTypes.arrayOf(PropTypes.object).isRequired,
   nodesColoredAtColumn: PropTypes.number,
@@ -579,7 +584,8 @@ const toolReducerTypes = PropTypes => ({
   selectedYears: PropTypes.arrayOf(PropTypes.number).isRequired,
   unmergedLinks: PropTypes.arrayOf(PropTypes.object).isRequired,
   visibleNodes: PropTypes.arrayOf(PropTypes.object).isRequired,
-  visibleNodesByColumn: PropTypes.arrayOf(PropTypes.object).isRequired
+  visibleNodesByColumn: PropTypes.arrayOf(PropTypes.object).isRequired,
+  loadedFlowsContextId: PropTypes.string
 });
 
 export default createReducer(toolInitialState, toolReducer, toolReducerTypes);
