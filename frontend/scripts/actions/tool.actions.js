@@ -38,7 +38,6 @@ export const GET_COLUMNS = 'GET_COLUMNS';
 export const RESET_TOOL_LOADERS = 'RESET_TOOL_LOADERS';
 export const SET_FLOWS_LOADING_STATE = 'SET_FLOWS_LOADING_STATE';
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
-export const LOAD_NODES = 'LOAD_NODES';
 export const GET_LINKS = 'GET_LINKS';
 export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
 export const SET_MAP_DIMENSIONS_DATA = 'SET_MAP_DIMENSIONS_DATA';
@@ -289,13 +288,13 @@ export function loadToolDataForCurrentContext() {
     };
     const allNodesURL = getURLFromParams(GET_ALL_NODES_URL, params);
     const columnsURL = getURLFromParams(GET_COLUMNS_URL, params);
-    const promises = [allNodesURL, columnsURL].map(url => fetch(url).then(resp => resp.text()));
+    const promises = [allNodesURL, columnsURL].map(url => fetch(url).then(resp => resp.json()));
 
     Promise.all(promises).then(payload => {
       // TODO do not wait for end of all promises/use another .all call
       dispatch({
         type: GET_COLUMNS,
-        payload: payload.slice(0, 2)
+        payload
       });
 
       dispatch(loadLinks());
@@ -307,10 +306,6 @@ export function loadToolDataForCurrentContext() {
 
 export function loadNodes() {
   return (dispatch, getState) => {
-    dispatch({
-      type: LOAD_NODES
-    });
-
     const params = {
       context_id: getState().app.selectedContext.id,
       start_year: getState().tool.selectedYears[0],
@@ -407,10 +402,11 @@ export function loadNodes() {
 
 export function loadLinks() {
   return (dispatch, getState) => {
-    dispatch({
-      type: SET_FLOWS_LOADING_STATE
-    });
     const state = getState();
+    dispatch({
+      type: SET_FLOWS_LOADING_STATE,
+      payload: { loadedFlowsContextId: state.app.selectedContext.id }
+    });
     const params = {
       context_id: state.app.selectedContext.id,
       start_year: state.tool.selectedYears[0],
@@ -453,13 +449,9 @@ export function loadLinks() {
         if (response.status === 404) {
           return null;
         }
-        return response.text();
+        return response.json();
       })
-      .then(payload => {
-        if (!payload) {
-          return;
-        }
-        const jsonPayload = JSON.parse(payload);
+      .then(jsonPayload => {
         if (jsonPayload.data === undefined || !jsonPayload.data.length) {
           console.error('server returned empty flows/link list, with params:', params);
           dispatch({
@@ -489,7 +481,8 @@ export function loadLinks() {
 
         // load related geoIds to show on the map
         dispatch(loadLinkedGeoIDs());
-      });
+      })
+      .catch(console.error);
   };
 }
 
