@@ -1,4 +1,4 @@
-class DatabaseUpdateWorker
+class RemoteDatabaseUpdateWorker
   include Sidekiq::Worker
   sidekiq_options queue: :database,
                   retry: 0,
@@ -9,7 +9,7 @@ class DatabaseUpdateWorker
 
   def perform(database_update_id)
     database_update = Api::V3::DatabaseUpdate.find(database_update_id)
-    database_update.update_attributes(jid: self.jid) # make sure validations run here
-    Api::V3::Import::Importer.new.call(database_update)
+    database_update.update_attributes(jid: jid) # make sure validations run here
+    Api::V3::Import::RemoteImport.new.call(database_update)
   end
 end
