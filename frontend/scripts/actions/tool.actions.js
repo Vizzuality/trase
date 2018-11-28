@@ -499,6 +499,7 @@ export function loadMapVectorData() {
 
     const vectorMaps = geoColumns.map(geoColumn => {
       const vectorData = {
+        id: geoColumn.id,
         name: geoColumn.name,
         useGeometryFromColumnId: geoColumn.useGeometryFromColumnId
       };
@@ -510,8 +511,7 @@ export function loadMapVectorData() {
         )}.topo.json`;
         return fetch(vectorLayerURL)
           .then(res => res.json())
-          .then(payload => {
-            const topoJSON = JSON.parse(payload);
+          .then(topoJSON => {
             const key = Object.keys(topoJSON.objects)[0];
             const geoJSON = topojsonFeature(topoJSON, topoJSON.objects[key]);
             setGeoJSONMeta(
@@ -530,25 +530,27 @@ export function loadMapVectorData() {
       return Promise.resolve(vectorData);
     });
 
-    pSettle(vectorMaps).then(results =>
-      results.forEach(res => {
-        if (res.isFulfilled && !res.isRejected) {
-          const mapVectorData = {
-            ...res.value,
-            isPoint:
-              res.value.geoJSON &&
-              res.value.geoJSON.features.length &&
-              res.value.geoJSON.features[0].geometry.type === 'Point'
-          };
-          dispatch({
-            type: GET_MAP_VECTOR_DATA,
-            mapVectorData
-          });
-        } else {
+    pSettle(vectorMaps).then(results => {
+      const mapVectorData = results
+        .map(res => {
+          if (res.isFulfilled && !res.isRejected) {
+            return {
+              ...res.value,
+              isPoint:
+                !!res.value.geoJSON &&
+                !!res.value.geoJSON.features.length &&
+                res.value.geoJSON.features[0].geometry.type === 'Point'
+            };
+          }
           console.warn('missing vector layer file', res.reason);
-        }
-      })
-    );
+          return null;
+        })
+        .filter(item => item !== null);
+      dispatch({
+        type: GET_MAP_VECTOR_DATA,
+        mapVectorData
+      });
+    });
   };
 }
 

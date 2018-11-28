@@ -230,9 +230,11 @@ const toolReducer = {
 
     // if any selectedNode, make those columns visible (selected)
     if (!isEmpty(state.selectedNodesIds)) {
-      state.selectedNodesIds.map(id => nodesDict[id]).forEach(node => {
-        selectedColumnsIds[node.columnGroup] = node.columnId;
-      });
+      state.selectedNodesIds
+        .map(id => nodesDict[id])
+        .forEach(node => {
+          selectedColumnsIds[node.columnGroup] = node.columnId;
+        });
     }
 
     // TODO the API should have the info on which file to load (if any) per column
@@ -558,7 +560,7 @@ const toolReducerTypes = PropTypes => ({
   mapDimensions: PropTypes.arrayOf(PropTypes.object).isRequired,
   mapDimensionsGroups: PropTypes.arrayOf(PropTypes.object).isRequired,
   mapLoading: PropTypes.bool,
-  mapVectorData: PropTypes.object,
+  mapVectorData: PropTypes.array,
   mapView: PropTypes.object,
   nodes: PropTypes.arrayOf(PropTypes.object).isRequired,
   nodesColoredAtColumn: PropTypes.number,
