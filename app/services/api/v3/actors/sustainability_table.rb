@@ -137,7 +137,7 @@ module Api
             {
               name: 'Soy deforestation',
               attribute_type: 'quant',
-              attribute_name: 'SOY_DEFORESTATION_1_YEAR'
+              attribute_name: 'SOY_DEFORESTATION_5_YEAR_ANNUAL'
             }
           ]
         end
