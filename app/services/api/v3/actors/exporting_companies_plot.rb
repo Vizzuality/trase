@@ -100,7 +100,6 @@ module Api
               name: 'Soy deforestation',
               unit: 'ha',
               attribute_type: 'quant',
-              attribute_name: 'SOY_DEFORESTATION_1_YEAR'
             },
             {
               name: 'Soy related deforestation',
@@ -118,6 +117,7 @@ module Api
               unit: 't',
               attribute_type: 'quant',
               attribute_name: 'GHG_'
+              attribute_name: 'SOY_DEFORESTATION_5_YEAR_ANNUAL'
             }
           ]
         end
