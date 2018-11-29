@@ -9,6 +9,8 @@ import isNumber from 'lodash/isNumber';
 import difference from 'lodash/difference';
 import sortBy from 'lodash/sortBy';
 
+import 'styles/components/shared/dropdown-item-legend-summary.scss';
+
 const id = 'recolor-by';
 
 class RecolorBySelector extends Component {
