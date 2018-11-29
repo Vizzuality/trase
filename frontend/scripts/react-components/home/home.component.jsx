@@ -8,6 +8,8 @@ import SentenceSelector from 'react-components/home/sentence-selector/sentence-s
 import Entrypoints from 'react-components/home/entrypoints.component';
 import Button from 'react-components/shared/button.component';
 
+import 'styles/components/homepage/homepage.scss';
+
 class Home extends React.PureComponent {
   constructor(props) {
     super(props);

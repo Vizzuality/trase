@@ -4,7 +4,7 @@ import Link from 'redux-first-router-link';
 import PropTypes from 'prop-types';
 import ShrinkingSpinner from 'scripts/react-components/shared/shrinking-spinner.component';
 
-// import cx from 'classnames';
+import 'styles/components/dashboard-root/dashboard-root.scss';
 
 function DashboardRoot(props) {
   const { dashboardTemplates, loadingDashboardTemplates } = props;

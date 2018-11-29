@@ -9,7 +9,7 @@ import DashboardRoot from 'react-components/dashboard-root/dashboard-root.contai
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import Footer from 'react-components/shared/footer.component';
 
-import 'styles/dashboard-root.scss';
+import 'styles/layouts/l-dashboard-root.scss';
 
 export const mount = (root, store) => {
   root.innerHTML = BaseMarkup({

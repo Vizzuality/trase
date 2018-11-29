@@ -7,6 +7,8 @@ import DashboardIndicators from 'react-components/dashboard-element/dashboard-in
 import DashboardWiget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.container';
 import Button from 'react-components/shared/button.component';
 
+import 'styles/components/dashboard-element/dashboard-element.scss';
+
 class DashboardElement extends React.PureComponent {
   static propTypes = {
     dirtyBlocks: PropTypes.object,

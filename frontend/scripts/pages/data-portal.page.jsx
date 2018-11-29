@@ -2,7 +2,8 @@
 import BaseMarkup from 'html/base.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
-import 'styles/data.scss';
+import 'styles/layouts/l-data.scss';
+import 'styles/components/data/custom-dataset.scss';
 import 'styles/components/shared/veil.scss';
 import 'styles/components/shared/modal.scss';
 

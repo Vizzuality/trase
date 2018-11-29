@@ -11,6 +11,8 @@ import ContextSelector from 'react-components/shared/context-selector/context-se
 import { EXPLORE_COLUMN_LIST } from 'constants';
 import Button from 'react-components/shared/button.component';
 
+import 'styles/components/explore/explore.scss';
+
 class Explore extends React.PureComponent {
   units = [
     {

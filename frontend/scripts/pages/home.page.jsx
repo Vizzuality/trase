@@ -8,7 +8,7 @@ import Home from 'react-components/home/home.container';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import Footer from 'react-components/shared/footer.component';
 
-import 'styles/homepage.scss';
+import 'styles/layouts/l-homepage.scss';
 
 export const mount = (root, store) => {
   root.innerHTML = BaseMarkup({
