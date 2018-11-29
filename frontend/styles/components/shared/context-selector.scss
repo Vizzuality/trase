@@ -1,5 +1,4 @@
-@import '../../settings';
-@import '../nav/basic-dropdown';
+@import 'styles/settings';
 
 .c-context-selector {
   cursor: pointer;
@@ -12,10 +11,12 @@
   }
 
   .context-selector-content {
-    @extend %dropdown;
     position: absolute;
     top: $nav-height;
     left: 0;
+    background-color: $white;
+    box-shadow: $box-shadow-big;
+    z-index: $z-above;
     max-width: calc(100vw - 3rem);
 
     @media screen and (min-width: $breakpoint-foundation-medium) {

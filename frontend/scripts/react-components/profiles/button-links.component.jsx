@@ -5,6 +5,8 @@ import addApostrophe from 'utils/addApostrophe';
 import capitalize from 'lodash/capitalize';
 import Link from 'redux-first-router-link';
 
+import 'styles/components/profile-node/button-links.scss';
+
 function ButtonLinks(props) {
   const {
     year,
@@ -15,10 +17,10 @@ function ButtonLinks(props) {
   } = props;
   const name = nodeName || municipalityName;
   return (
-    <div className="c-anchor-buttons hide-for-small">
+    <div className="c-button-links hide-for-small">
       <div className="row">
         <div className="small-4 columns">
-          <a className="c-link-buttons -with-arrow js-link-profile" onClickCapture={scrollTo}>
+          <a className="link-button -with-arrow js-link-profile" onClickCapture={scrollTo}>
             <img alt="" src="/images/profiles/profile-main-option-1.svg" />
             <span className="js-link-button-name">
               <span className="notranslate">{name ? capitalize(name) : '-'}</span>
@@ -28,7 +30,7 @@ function ButtonLinks(props) {
         </div>
         <div className="small-4 columns">
           <Link
-            className="c-link-buttons"
+            className="link-button"
             to={{
               type: 'tool',
               payload: {
@@ -53,7 +55,7 @@ function ButtonLinks(props) {
         </div>
         <div className="small-4 columns">
           <Link
-            className="c-link-buttons"
+            className="link-button"
             to={{
               type: 'tool',
               payload: {

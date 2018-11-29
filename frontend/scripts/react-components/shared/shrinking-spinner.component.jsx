@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
+import 'styles/components/shared/shrinking-spinner.scss';
+
 function ShrinkingSpinner({ className }) {
   return (
     <div className={cx('c-shrinking-spinner', className)}>

@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
+import 'styles/components/shared/tabs.scss';
+
 function Tabs(props) {
   const { tabs, onSelectTab, children, itemTabRenderer, selectedTab, testId, getTabId } = props;
   return (

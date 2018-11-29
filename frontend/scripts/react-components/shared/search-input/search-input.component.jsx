@@ -8,6 +8,8 @@ import debounce from 'lodash/debounce';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
 import { MAX_SEARCH_RESULTS } from 'constants';
 
+import 'styles/components/shared/search-input.scss';
+
 const SEARCH_DEBOUNCE_RATE_IN_MS = 400;
 
 class SearchInput extends PureComponent {
