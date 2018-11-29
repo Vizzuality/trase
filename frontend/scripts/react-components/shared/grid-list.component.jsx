@@ -4,6 +4,8 @@ import { FixedSizeGrid } from 'react-window';
 import debounce from 'lodash/debounce';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
 
+import 'styles/components/shared/grid-list.scss';
+
 class GridList extends React.Component {
   static propTypes = {
     page: PropTypes.number,

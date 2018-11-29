@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
+import 'styles/components/shared/block-switch.scss';
+
 class BlockSwitch extends React.PureComponent {
   static propTypes = {
     className: PropTypes.string,

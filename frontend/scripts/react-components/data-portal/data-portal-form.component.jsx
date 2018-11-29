@@ -5,6 +5,8 @@ import cx from 'classnames';
 import { getURLFromParams, POST_SUBSCRIBE_NEWSLETTER_URL } from 'utils/getURLFromParams';
 import { COUNTRIES } from '../../countries';
 
+import 'styles/components/data/download-form.scss';
+
 class DataPortalForm extends Component {
   constructor(props) {
     super(props);

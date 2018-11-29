@@ -8,6 +8,8 @@ import CommoditiesPanel from 'react-components/dashboard-element/dashboard-panel
 import DashboardModalFooter from 'react-components/dashboard-element/dashboard-modal-footer.component';
 import addApostrophe from 'utils/addApostrophe';
 
+import 'styles/components/dashboard-element/dashboard-panel.scss';
+
 class DashboardPanel extends Component {
   containerRef = React.createRef();
 

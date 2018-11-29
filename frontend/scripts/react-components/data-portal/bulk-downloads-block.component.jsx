@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
+import 'styles/components/data/bulk-downloads.scss';
+
 class BulkDownloadsBlock extends Component {
   onBulkDownloadButtonClicked(contextId) {
     if (!this.props.enabled) return;

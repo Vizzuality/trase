@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
 
+import 'styles/components/shared/simple-modal.scss';
+
 function SimpleModal(props) {
   return (
     <ReactModal

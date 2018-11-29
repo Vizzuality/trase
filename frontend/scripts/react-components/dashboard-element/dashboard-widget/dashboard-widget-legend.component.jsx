@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import 'styles/components/dashboard-element/dashboard-widget-legend.scss';
+
 function DashboardWidgetLegend(props) {
   const { colors } = props;
   if (colors.length < 2) return null;

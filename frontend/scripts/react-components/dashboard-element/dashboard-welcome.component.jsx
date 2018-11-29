@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import 'styles/components/dashboard-element/dashboard-welcome.scss';
+
 function DashboardWelcome(props) {
   const { onContinue } = props;
   const cards = [

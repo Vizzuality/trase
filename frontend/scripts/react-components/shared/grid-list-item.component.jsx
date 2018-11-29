@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import HelpTooltip from 'react-components/shared/help-tooltip.component';
 
+import 'styles/components/shared/grid-list-item.scss';
+
 function GridListItem(props) {
   const {
     item,

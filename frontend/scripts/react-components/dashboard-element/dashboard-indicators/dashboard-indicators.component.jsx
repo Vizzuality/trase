@@ -6,6 +6,8 @@ import GridList from 'react-components/shared/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item.component';
 import Spinner from 'scripts/react-components/shared/shrinking-spinner.component';
 
+import 'styles/components/dashboard-element/dashboard-panel.scss';
+
 class DashboardIndicators extends React.PureComponent {
   state = {
     activeItemInfo: null

@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
+import 'styles/components/dashboard-element/dashboard-modal-footer.scss';
+
 function DashboardModalFooter(props) {
   const {
     editMode,
@@ -43,12 +45,11 @@ function DashboardModalFooter(props) {
         </p>
       )}
       <div className="dashboard-modal-actions">
-        {onBack &&
-          !editMode && (
-            <button type="button" onClick={onBack} className="dashboard-modal-back-button">
-              Back To Options
-            </button>
-          )}
+        {onBack && !editMode && (
+          <button type="button" onClick={onBack} className="dashboard-modal-back-button">
+            Back To Options
+          </button>
+        )}
         <button
           type="button"
           onClick={onContinue}
