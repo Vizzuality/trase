@@ -3,6 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Transition } from 'react-transition-group';
+import AuthorFooter from 'react-components/home/author-footer.component';
+
+import 'styles/components/homepage/twitter-feed.scss';
 
 class TwitterFeed extends React.PureComponent {
   constructor(props) {
@@ -52,16 +55,7 @@ class TwitterFeed extends React.PureComponent {
                     className="tweet-box-content"
                     dangerouslySetInnerHTML={{ __html: tweet.text }}
                   />
-                  <div className="c-author-footer">
-                    <p className="author-details">{tweet.screen_name}</p>
-                    <div
-                      className="author-avatar"
-                      style={{
-                        backgroundImage:
-                          tweet.profilePictureUrl && `url(${tweet.profilePictureUrl})`
-                      }}
-                    />
-                  </div>
+                  <AuthorFooter details={tweet.screen_name} imageUrl={tweet.profilePictureUrl} />
                 </div>
               )}
             </Transition>

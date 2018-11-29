@@ -7,6 +7,8 @@ import QuoteCard from 'react-components/shared/quote-card.component';
 import debounce from 'lodash/debounce';
 import { DOCUMENT_POST_TYPES } from 'scripts/constants';
 
+import 'styles/components/homepage/slider-section.scss';
+
 class SliderSection extends React.PureComponent {
   constructor(props) {
     super(props);

@@ -1,6 +1,7 @@
 /* eslint-disable react/no-danger */
 import React from 'react';
 import PropTypes from 'prop-types';
+import AuthorFooter from 'react-components/home/author-footer.component';
 
 function QuoteCard(props) {
   const { quote, imageUrl, name, title } = props;
@@ -12,16 +13,15 @@ function QuoteCard(props) {
           className="quote-card-content"
           dangerouslySetInnerHTML={{ __html: `&ldquo;${quote}&rdquo;` }}
         />
-        <div className="c-author-footer">
-          <figcaption className="author-details">
-            <span>{name}</span>
-            <span>{title}</span>
-          </figcaption>
-          <figure
-            className="author-avatar"
-            style={{ backgroundImage: imageUrl && `url(${imageUrl})` }}
-          />
-        </div>
+        <AuthorFooter
+          details={
+            <React.Fragment>
+              <span>{name}</span>
+              <span>{title}</span>
+            </React.Fragment>
+          }
+          imageUrl={imageUrl}
+        />
       </div>
     </div>
   );

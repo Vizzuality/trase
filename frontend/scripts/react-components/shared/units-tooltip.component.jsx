@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import isEqual from 'lodash/isEqual';
 
+import 'styles/components/shared/units-tooltip.scss';
+
 class UnitsTooltip extends React.PureComponent {
   constructor(props) {
     super(props);

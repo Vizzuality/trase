@@ -8,6 +8,8 @@ import LocaleSelector from 'react-components/nav/locale-selector/locale-selector
 import Search from 'react-components/nav/top-nav/global-search/global-search.container';
 import DownloadPdfLink from './download-pdf-link.component';
 
+import 'styles/components/shared/top-nav.scss';
+
 class TopNav extends React.PureComponent {
   constructor(props) {
     super(props);

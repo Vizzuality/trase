@@ -6,6 +6,7 @@ import SliderSection from 'react-components/home/slider-section.component';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
 import SentenceSelector from 'react-components/home/sentence-selector/sentence-selector.container';
 import Entrypoints from 'react-components/home/entrypoints.component';
+import Button from 'react-components/shared/button.component';
 
 class Home extends React.PureComponent {
   constructor(props) {
@@ -35,12 +36,9 @@ class Home extends React.PureComponent {
                   <WorldMap />
                 </div>
                 <div className="homepage-map-link-container">
-                  <button
-                    className="homepage-map-link c-button -pink -big"
-                    onClick={this.onFindOutMore}
-                  >
+                  <Button className="homepage-map-link -pink -big" onClick={this.onFindOutMore}>
                     Find out more
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>

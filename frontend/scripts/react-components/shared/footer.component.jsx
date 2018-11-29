@@ -2,6 +2,8 @@ import React from 'react';
 import cx from 'classnames';
 import Link from 'redux-first-router-link';
 
+import 'styles/components/shared/footer.scss';
+
 const sections = [
   {
     title: 'Trase is a partnership between',

@@ -15,6 +15,8 @@ import cx from 'classnames';
 import formatValue from 'utils/formatValue';
 import xor from 'lodash/xor';
 
+import 'styles/components/shared/world-map.scss';
+
 class WorldMap extends Component {
   static buildCurves(start, end, arc) {
     const x0 = start[0];

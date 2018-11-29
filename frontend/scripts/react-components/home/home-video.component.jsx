@@ -4,6 +4,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Plyr from 'plyr';
 
+import 'styles/components/homepage/home-video.scss';
+
 class HomeVideo extends React.PureComponent {
   constructor(props) {
     super(props);

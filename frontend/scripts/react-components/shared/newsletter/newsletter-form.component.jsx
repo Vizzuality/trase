@@ -2,6 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import 'styles/components/shared/newsletter.scss';
+
 class NewsletterForm extends React.PureComponent {
   constructor(props) {
     super(props);

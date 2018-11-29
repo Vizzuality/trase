@@ -3,6 +3,8 @@ import Siema from 'react-siema';
 import Link from 'redux-first-router-link';
 import debounce from 'lodash/debounce';
 
+import 'styles/components/homepage/entrypoints.scss';
+
 class Entrypoints extends React.PureComponent {
   constructor(props) {
     super(props);

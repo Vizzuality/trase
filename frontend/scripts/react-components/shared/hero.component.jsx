@@ -5,6 +5,8 @@ import TwitterFeed from 'react-components/home/twitter-feed.component';
 import AnimatedFlows from 'react-components/animated-flows/animated-flows.component';
 import HomeVideo from 'react-components/home/home-video.component';
 
+import 'styles/components/shared/hero.scss';
+
 // old school name: https://en.wikipedia.org/wiki/Hero_image
 class Hero extends React.Component {
   constructor(props) {
@@ -70,18 +72,16 @@ class Hero extends React.Component {
               <span>Learn about Trase in 2 minutes</span>
             </div>
           </div>
-          {showStory &&
-            story && (
-              <div className="layover">
-                <StoryBox {...story} />
-              </div>
-            )}
-          {(!showStory || !story) &&
-            tweets && (
-              <div className="layover">
-                <TwitterFeed tweets={tweets} />
-              </div>
-            )}
+          {showStory && story && (
+            <div className="layover">
+              <StoryBox {...story} />
+            </div>
+          )}
+          {(!showStory || !story) && tweets && (
+            <div className="layover">
+              <TwitterFeed tweets={tweets} />
+            </div>
+          )}
         </div>
       </div>
     );

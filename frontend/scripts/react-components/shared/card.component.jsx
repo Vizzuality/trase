@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
+import 'styles/components/shared/card.scss';
+
 class Card extends Component {
   static renderDashedBox() {
     const dashedBox = (
