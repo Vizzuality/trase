@@ -1,3 +1,5 @@
+@import 'styles/settings';
+
 .c-team {
 
   .team-group {
@@ -41,34 +43,3 @@
   }
 }
 
-.c-team-member {
-
-  .team-member-profile-picture-container {
-    height: 290px;
-    width: 100%;
-
-    .c-team-profile-picture {
-      margin: 10px 0 0;
-    }
-  }
-
-  .team-member-details {
-    margin: 18px 0 0;
-  }
-
-  .team-member-bio {
-    margin-top: 20px;
-  }
-}
-
-.c-team-profile-picture {
-  height: 260px;
-  width: 100%;
-  background-position: left center;
-  background-repeat: no-repeat;
-  background-size: contain;
-
-  &.-placeholder {
-    background-color: $charcoal-grey-faded-a-lot;
-  }
-}

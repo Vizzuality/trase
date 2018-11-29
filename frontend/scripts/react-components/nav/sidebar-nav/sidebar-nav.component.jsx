@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import NavLinks from 'react-components/nav/nav-links.component';
+
+import 'styles/components/shared/sidebar-nav.scss';
 
 class SidebarNav extends React.PureComponent {
   componentDidMount() {

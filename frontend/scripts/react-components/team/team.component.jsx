@@ -2,11 +2,12 @@ import React, { PureComponent } from 'react';
 import Link from 'redux-first-router-link';
 import PropTypes from 'prop-types';
 import Siema from 'react-siema';
-import cx from 'classnames';
 import kebabCase from 'lodash/kebabCase';
-
 import TeamPageMessage from 'react-components/team/team-page-message.component';
 import ResizeListener from 'react-components/shared/resize-listener.component';
+import TeamProfilePicture from 'react-components/team/team-profile-picture.component';
+
+import 'styles/components/static-content/team.scss';
 
 class Team extends PureComponent {
   renderTeamMember(slug) {
@@ -19,12 +20,7 @@ class Team extends PureComponent {
       >
         <div className="team-list-item">
           <Link to={{ type: 'teamMember', payload: { member: kebabCase(slug) } }}>
-            <div
-              className={cx('c-team-profile-picture', {
-                '-placeholder': !members[slug].smallImageUrl
-              })}
-              style={{ backgroundImage: `url(${members[slug].smallImageUrl})` }}
-            />
+            <TeamProfilePicture imageUrl={members[slug].smallImageUrl} />
             <h3 className="team-list-item-title title -medium -light">{members[slug].name}</h3>
             <span className="team-list-item-subtitle subtitle -gray">See More</span>
           </Link>

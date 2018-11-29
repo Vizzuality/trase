@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import TeamPageMessage from 'react-components/team/team-page-message.component';
 import Link from 'redux-first-router-link';
 import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.component';
-import cx from 'classnames';
+import TeamProfilePicture from 'react-components/team/team-profile-picture.component';
+
+import 'styles/components/static-content/team-member.scss';
 
 const TeamMember = props => {
   const { member, errorMessage } = props;
@@ -22,10 +24,7 @@ const TeamMember = props => {
             <Link className="subtitle -gray" to={{ type: 'team' }}>
               back to trase team
             </Link>
-            <div
-              className={cx('c-team-profile-picture', { '-placeholder': !member.smallImageUrl })}
-              style={{ backgroundImage: `url(${member.smallImageUrl})` }}
-            />
+            <TeamProfilePicture imageUrl={member.smallImageUrl} />
           </div>
         </div>
         <div className="column small-12 medium-8">
