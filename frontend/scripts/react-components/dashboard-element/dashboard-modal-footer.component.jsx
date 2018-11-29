@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 
 import 'styles/components/dashboard-element/dashboard-modal-footer.scss';
+import Button from 'react-components/shared/button.component';
 
 function DashboardModalFooter(props) {
   const {
@@ -50,14 +51,9 @@ function DashboardModalFooter(props) {
             Back To Options
           </button>
         )}
-        <button
-          type="button"
-          onClick={onContinue}
-          className="c-button -pink -large"
-          disabled={isDisabled}
-        >
+        <Button onClick={onContinue} className="-pink -large" disabled={isDisabled}>
           {isPanelFooter && !editMode ? 'Continue' : 'Go to dashboard'}
-        </button>
+        </Button>
       </div>
     </div>
   );

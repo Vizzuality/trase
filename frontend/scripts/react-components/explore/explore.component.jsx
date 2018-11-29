@@ -9,6 +9,7 @@ import formatValue from 'utils/formatValue';
 import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 import { EXPLORE_COLUMN_LIST } from 'constants';
+import Button from 'react-components/shared/button.component';
 
 class Explore extends React.PureComponent {
   units = [
@@ -184,17 +185,21 @@ class Explore extends React.PureComponent {
                 </p>
               </div>
               <div className="column small-12 medium-5 small-order-1 medium-order-2 explore-footer-button-container">
-                <div className="c-button -gray -big explore-footer-button -no-pointer show-for-small">
+                <Button
+                  as="div"
+                  className="-gray -big explore-footer-button -no-pointer show-for-small"
+                >
                   Visit trase on a computer to explore the full supply chain
-                </div>
-                <Link
-                  className="c-button -pink -big explore-footer-button hide-for-small"
+                </Button>
+                <Button
+                  as={Link}
+                  className="-pink -big explore-footer-button hide-for-small"
                   to={{
                     type: 'tool'
                   }}
                 >
                   Explore the {isSubnational ? 'subnational' : ''} supply chain
-                </Link>
+                </Button>
               </div>
             </div>
           )}

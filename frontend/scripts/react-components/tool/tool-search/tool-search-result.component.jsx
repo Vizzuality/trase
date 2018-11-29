@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import LinkButton from 'react-components/shared/link-button.component';
 import HighlightTextFragments from 'react-components/shared/highlight-text-fragments.component';
+import Button from 'react-components/shared/button.component';
 
 function ToolSearchResult({
   value,
@@ -22,9 +23,9 @@ function ToolSearchResult({
 
   if (selected) {
     buttonList.push(
-      <button key="alreadyInSupplyChain" className="c-button -medium-large" disabled="true">
+      <Button key="alreadyInSupplyChain" className="-medium-large" disabled="true">
         Already in {isMapVisible ? 'map' : 'supply chain'}
-      </button>
+      </Button>
     );
   } else if (exporterNotSelected === importerNotSelected) {
     // The weird "if" above means that we only do NOT show this button if
@@ -32,38 +33,38 @@ function ToolSearchResult({
     // The "if" statement above that ensures it's also not shown if node is both and is selected
     // Commented out to hide the "add to supply chain"/"add to map" button
     // buttonList.push(
-    //   <button
+    //   <Button
     //     key="addToSupplyChain"
-    //     className="c-button -medium-large"
+    //     className="-medium-large"
     //     onClick={e => onClickAdd(e, item)}
     //   >
     //     Add to {isMapVisible ? 'map' : 'supply chain'}
-    //   </button>
+    //   </Button>
     // );
   }
 
   if (!(exporterNotSelected && !importerNotSelected)) {
     if (exporterNotSelected) {
       buttonList.push(
-        <button
+        <Button
           key="addAsExporter"
           onClick={e => onClickAdd(e, item.exporter)}
-          className="c-button -medium-large"
+          className="-medium-large"
         >
           Add as exporter
-        </button>
+        </Button>
       );
     }
 
     if (importerNotSelected) {
       buttonList.push(
-        <button
+        <Button
           key="addAsImporter"
           onClick={e => onClickAdd(e, item.importer)}
-          className="c-button -medium-large"
+          className="-medium-large"
         >
           Add as importer
-        </button>
+        </Button>
       );
     }
   }

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import 'styles/components/dashboard-element/dashboard-welcome.scss';
+import Button from 'react-components/shared/button.component';
 
 function DashboardWelcome(props) {
   const { onContinue } = props;
@@ -43,9 +44,9 @@ function DashboardWelcome(props) {
         ))}
       </div>
       <div className="dashboard-welcome-button-container">
-        <button className="c-button -pink -large" onClick={onContinue}>
+        <Button className="-pink -large" onClick={onContinue}>
           Continue
-        </button>
+        </Button>
       </div>
     </div>
   );

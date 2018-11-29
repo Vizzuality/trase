@@ -5,6 +5,7 @@ import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/d
 import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome.component';
 import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators/dashboard-indicators.container';
 import DashboardWiget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.container';
+import Button from 'react-components/shared/button.component';
 
 class DashboardElement extends React.PureComponent {
   static propTypes = {
@@ -140,20 +141,20 @@ class DashboardElement extends React.PureComponent {
             <div className="row">
               <div className="column small-12 medium-6">
                 <div className="dashboard-header-actions">
-                  <button
+                  <Button
                     type="button"
-                    className="c-button -gray -medium dashboard-header-action -panel"
+                    className="-gray -medium dashboard-header-action -panel"
                     onClick={() => reopenPanel(DashboardElement.steps.PANEL, canProceed)}
                   >
                     Edit Options
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="button"
-                    className="c-button -gray-transparent -medium dashboard-header-action -panel"
+                    className="-gray-transparent -medium dashboard-header-action -panel"
                     onClick={() => reopenPanel(DashboardElement.steps.INDICATORS, canProceed)}
                   >
                     Edit Indicators
-                  </button>
+                  </Button>
                 </div>
               </div>
               <div className="column small-12 medium-6">
@@ -192,13 +193,12 @@ class DashboardElement extends React.PureComponent {
                       <p className="dashboard-element-title dashboard-element-fallback-text">
                         Your dashboard has no selection.
                       </p>
-                      <button
-                        type="button"
-                        className="c-button -gray-transparent -medium dashboard-element-fallback-button"
+                      <Button
+                        className="-gray-transparent -medium dashboard-element-fallback-button"
                         onClick={goToRoot}
                       >
                         Go Back
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>

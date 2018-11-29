@@ -6,7 +6,11 @@ import 'styles/components/shared/button.scss';
 
 function Button(props) {
   const { as, children, ...rest } = props;
-  const buttonProps = { ...rest, className: cx('c-button', rest.className) };
+  const buttonProps = {
+    ...rest,
+    className: cx('c-button', rest.className),
+    type: 'button'
+  };
 
   return React.createElement(as, buttonProps, children);
 }
