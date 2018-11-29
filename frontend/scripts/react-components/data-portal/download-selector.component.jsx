@@ -6,6 +6,7 @@ import cx from 'classnames';
 import includes from 'lodash/includes';
 
 import FilterTooltip from 'react-components/data-portal/filter-tooltip.component';
+import RadioButton from 'react-components/shared/radio-button.component';
 
 class DownloadSelector extends Component {
   renderOptions() {
@@ -30,13 +31,10 @@ class DownloadSelector extends Component {
             onClear={onOptionFilterClear}
           />
         )}
-        <div
-          className={cx(
-            'c-radio-btn',
-            '-red',
-            { '-no-self-cancel': elem.noSelfCancel },
-            { '-enabled': includes(selected, elem.id) }
-          )}
+        <RadioButton
+          className="-red"
+          noSelfCancel={elem.noSelfCancel}
+          enabled={includes(selected, elem.id)}
           onClick={() => onOptionSelected(type, elem.id)}
         />
       </li>
@@ -54,10 +52,9 @@ class DownloadSelector extends Component {
           {this.props.allowMultiple && (
             <ul className="c-custom-dataset-selector__header-options">
               <li>
-                <div
-                  className={cx('c-radio-btn', '-red', {
-                    '-enabled': this.props.allSelected
-                  })}
+                <RadioButton
+                  className="-red"
+                  enabled={this.props.allSelected}
                   onClick={() => this.props.onAllSelected(this.props.type)}
                 />
               </li>

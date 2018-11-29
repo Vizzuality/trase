@@ -1,4 +1,4 @@
-@import '../../settings';
+@import 'styles/settings';
 
 .c-radio-btn {
   display: inline-block;
@@ -8,6 +8,7 @@
   height: 16px;
   border: 2px solid rgba($charcoal-grey, .3);
   border-radius: 50%;
+  cursor: pointer;
 
   &:hover, &.-enabled {
     border-color: $charcoal-grey;
@@ -17,8 +18,8 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 7px;
-      height: 7px;
+      width: 6px;
+      height: 6px;
       transform: translate(-50%, -50%);
       border-radius: 50%;
       content: '';
