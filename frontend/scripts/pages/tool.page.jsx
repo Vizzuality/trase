@@ -4,6 +4,12 @@ import ToolMarkup from 'html/tool.ejs';
 import SearchMarkup from 'html/includes/_search.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
+import 'styles/layouts/l-tool.scss';
+import 'styles/components/shared/veil.scss';
+import 'styles/components/shared/spinner.scss';
+import 'styles/components/shared/dropdown.scss';
+import 'styles/components/tool/map/map-sidebar.scss';
+
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
@@ -29,7 +35,6 @@ import {
 } from 'react-components/tool/tool.thunks';
 import MapDimensionsContainer from 'containers/tool/map-dimensions.container';
 
-import 'styles/tool.scss';
 import EventManager from 'utils/eventManager';
 
 const evManager = new EventManager();

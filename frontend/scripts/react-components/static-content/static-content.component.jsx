@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Hero from 'react-components/shared/hero.component';
 import NotFound from './not-found.component';
 
+import 'styles/components/static-content/static-content.scss';
+
 class StaticContent extends React.PureComponent {
   render() {
     const { Content, notFound } = this.props;

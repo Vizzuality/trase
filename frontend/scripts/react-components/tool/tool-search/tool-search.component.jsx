@@ -7,6 +7,7 @@ import sortBy from 'lodash/sortBy';
 import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group.container';
 import SearchResult from 'react-components/tool/tool-search/tool-search-result.component';
 import { MAX_SEARCH_RESULTS } from 'constants';
+
 import 'styles/components/tool/tool-search.scss';
 import 'styles/components/tool/tool-search-result.scss';
 
