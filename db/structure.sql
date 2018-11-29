@@ -142,13 +142,6 @@ $$;
 COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double precision) IS 'Given an n-element array of choropleth buckets and a positive value, returns index of bucket where value falls (1 to n + 1); else returns 0.';
 
 
---
--- Name: trase_server; Type: SERVER; Schema: -; Owner: -
---
-
--- suppressed CREATE SERVER
-
-
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -2685,12 +2678,14 @@ CREATE TABLE public.profiles (
     name text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    adm_1_topojson_path character varying,
-    adm_1_topojson_root character varying,
-    adm_2_topojson_path character varying,
-    adm_2_topojson_root character varying,
     main_topojson_path character varying,
     main_topojson_root character varying,
+    adm_1_name character varying,
+    adm_1_topojson_path character varying,
+    adm_1_topojson_root character varying,
+    adm_2_name character varying,
+    adm_2_topojson_path character varying,
+    adm_2_topojson_root character varying,
     CONSTRAINT profiles_name_check CHECK ((name = ANY (ARRAY['actor'::text, 'place'::text])))
 );
 
@@ -4847,6 +4842,20 @@ CREATE INDEX flow_inds_ind_id_idx ON public.flow_inds USING btree (ind_id);
 
 
 --
+-- Name: flow_paths_mv_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX flow_paths_mv_flow_id_idx ON public.flow_paths_mv USING btree (flow_id);
+
+
+--
+-- Name: flow_paths_mv_flow_id_position_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX flow_paths_mv_flow_id_position_idx ON public.flow_paths_mv USING btree (flow_id, column_position);
+
+
+--
 -- Name: flow_quals_qual_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5096,13 +5105,6 @@ CREATE UNIQUE INDEX index_download_versions_on_context_id_and_is_current ON publ
 --
 
 CREATE INDEX index_flow_inds_on_flow_id ON public.flow_inds USING btree (flow_id);
-
-
---
--- Name: index_flow_paths_mv_on_flow_id_and_column_position; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_flow_paths_mv_on_flow_id_and_column_position ON public.flow_paths_mv USING btree (flow_id, column_position);
 
 
 --
