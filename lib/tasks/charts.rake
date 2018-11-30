@@ -103,10 +103,6 @@ namespace :charts do
       {attribute_type: 'quant', attribute_name: 'DEFORESTATION_V2'},
       {
         attribute_type: 'quant',
-        attribute_name: 'POTENTIAL_SOY_DEFORESTATION_V2'
-      },
-      {
-        attribute_type: 'quant',
         attribute_name: 'AGROSATELITE_SOY_DEFOR_'
       },
       {attribute_type: 'quant', attribute_name: 'GHG_'},
