@@ -1,12 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Api::V3::ChartAttribute, type: :model do
-  before do
-    Api::V3::ChartAttribute.skip_callback(:commit, :after, :refresh_dependencies)
-  end
-  after do
-    Api::V3::ChartAttribute.set_callback(:commit, :after, :refresh_dependencies)
-  end
   include_context 'api v3 brazil municipality place profile'
 
   describe :validate do

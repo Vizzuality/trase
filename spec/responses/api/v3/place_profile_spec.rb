@@ -1,12 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Place profile', type: :request do
-  before do
-    Api::V3::ChartAttribute.skip_callback(:commit, :after, :refresh_dependencies)
-  end
-  after do
-    Api::V3::ChartAttribute.set_callback(:commit, :after, :refresh_dependencies)
-  end
   include_context 'api v3 brazil municipality ind values'
   include_context 'api v3 brazil municipality qual values'
   include_context 'api v3 brazil municipality quant values'

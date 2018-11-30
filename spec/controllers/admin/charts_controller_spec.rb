@@ -3,12 +3,6 @@ require 'rails_helper'
 RSpec.describe Admin::ChartsController, type: :controller do
   let(:user) { FactoryBot.create(:user) }
   before { sign_in user }
-  before do
-    Api::V3::Chart.skip_callback(:commit, :after, :refresh_dependencies)
-  end
-  after do
-    Api::V3::Chart.set_callback(:commit, :after, :refresh_dependencies)
-  end
   describe 'POST create' do
     let(:valid_attributes) {
       FactoryBot.attributes_for(
