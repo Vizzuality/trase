@@ -3757,6 +3757,14 @@ ALTER TABLE ONLY public.charts
 
 
 --
+-- Name: charts charts_profile_id_parent_id_identifier_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.charts
+    ADD CONSTRAINT charts_profile_id_parent_id_identifier_key UNIQUE (profile_id, parent_id, identifier);
+
+
+--
 -- Name: charts charts_profile_id_parent_id_position_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4213,19 +4221,7 @@ ALTER TABLE ONLY public.map_attribute_groups
 
 
 --
-<<<<<<< HEAD
 -- Name: map_attribute_groups map_attribute_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: -
-=======
--- Name: charts charts_profile_id_parent_id_identifier_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.charts
-    ADD CONSTRAINT charts_profile_id_parent_id_identifier_key UNIQUE (profile_id, parent_id, identifier);
-
-
---
--- Name: charts charts_profile_id_parent_id_position_key; Type: CONSTRAINT; Schema: public; Owner: -
->>>>>>> Added unique constraint on chart identifier
 --
 
 ALTER TABLE ONLY public.map_attribute_groups
@@ -4579,6 +4575,20 @@ CREATE UNIQUE INDEX attributes_mv_name_idx ON public.attributes_mv USING btree (
 
 
 --
+-- Name: chart_attributes_mv_chart_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX chart_attributes_mv_chart_id_idx ON public.chart_attributes_mv USING btree (chart_id);
+
+
+--
+-- Name: chart_attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX chart_attributes_mv_id_idx ON public.chart_attributes_mv USING btree (id);
+
+
+--
 -- Name: context_node_types_mv_context_id_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4863,20 +4873,6 @@ CREATE INDEX dashboards_sources_mv_node_type_id_idx ON public.dashboards_sources
 --
 
 CREATE UNIQUE INDEX dashboards_sources_unique_idx ON public.dashboards_sources_mv USING btree (id, node_id, country_id, commodity_id);
-
-
---
--- Name: chart_attributes_mv_chart_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX chart_attributes_mv_chart_id_idx ON public.chart_attributes_mv USING btree (chart_id);
-
-
---
--- Name: chart_attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX chart_attributes_mv_id_idx ON public.chart_attributes_mv USING btree (id);
 
 
 --
