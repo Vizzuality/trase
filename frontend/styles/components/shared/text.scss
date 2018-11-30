@@ -1,0 +1,14 @@
+@import 'styles/settings';
+
+.c-text {
+  color: $charcoal-grey;
+
+  .mono {
+    font-family: $font-family-1;
+  }
+
+  .serif {
+    font-family: $font-family-2;
+  }
+
+}

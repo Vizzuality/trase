@@ -10,6 +10,7 @@ import {
 } from 'utils/getURLFromParams';
 import capitalize from 'lodash/capitalize';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
+import Heading from 'react-components/shared/heading.component';
 
 const TranslatedMiniSankey = withTranslation(MiniSankey);
 
@@ -83,9 +84,9 @@ class TopConsumersWidget extends React.PureComponent {
             <section className="mini-sankey-container page-break-inside-avoid" data-test={testId}>
               <div className="row">
                 <div className="small-12 columns">
-                  <h3 className="title -small" data-test={`${testId}-title`}>
+                  <Heading as="h3" size="sm" data-test={`${testId}-title`}>
                     {this.getTitle(municipalityName)}
-                  </h3>
+                  </Heading>
                   <TranslatedMiniSankey
                     year={year}
                     data={data[mainQuery]}

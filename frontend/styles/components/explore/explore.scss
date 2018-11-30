@@ -12,12 +12,6 @@
     justify-content: center;
   }
 
-  .subtitle {
-    @media screen and (min-width: $breakpoint-foundation-small) {
-      font-weight: $font-weight-bold;
-    }
-  }
-
   > .row {
     width: 100%;
 

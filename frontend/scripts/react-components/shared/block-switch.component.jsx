@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 
 import 'styles/components/shared/block-switch.scss';
+import Heading from 'react-components/shared/heading.component';
 
 class BlockSwitch extends React.PureComponent {
   static propTypes = {
@@ -30,14 +31,9 @@ class BlockSwitch extends React.PureComponent {
               onClick={() => selectBlock(block.id)}
               disabled={isActive}
             >
-              <span
-                className={cx('subtitle', 'block-switch-title', {
-                  '-dark': !isActive,
-                  '-white': isActive
-                })}
-              >
+              <Heading variant="mono" weight="bold" color={isActive ? 'white' : 'grey'}>
                 {block.title}
-              </span>
+              </Heading>
               <div
                 className="block-switch-image"
                 style={{

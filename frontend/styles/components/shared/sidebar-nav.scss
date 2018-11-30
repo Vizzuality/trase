@@ -63,4 +63,13 @@
       }
     }
   }
+
+  .nav-sidebar-link-list-item-link {
+    font-family: $font-family-1;
+    font-size: 13px;
+    font-weight: $font-weight-light;
+    letter-spacing: -0.8px;
+    text-transform: uppercase;
+    color: $charcoal-grey-faded;
+  }
 }

@@ -33,7 +33,7 @@ class SidebarNav extends React.PureComponent {
           <NavLinks
             links={links}
             itemClassName="nav-sidebar-link-list-item"
-            linkClassName="subtitle -gray"
+            linkClassName="nav-sidebar-link"
             linkActiveClassName="-pink active-link"
           />
         </ul>

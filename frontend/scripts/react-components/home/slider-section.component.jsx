@@ -8,6 +8,7 @@ import debounce from 'lodash/debounce';
 import { DOCUMENT_POST_TYPES } from 'scripts/constants';
 
 import 'styles/components/homepage/slider-section.scss';
+import Heading from 'react-components/shared/heading.component';
 
 class SliderSection extends React.PureComponent {
   constructor(props) {
@@ -87,7 +88,11 @@ class SliderSection extends React.PureComponent {
         <div
           className={cx('row', 'slider-wrapper', { '-auto-width': slides.length < visiblePages })}
         >
-          <h3 className="subtitle column small-12">{name}</h3>
+          <div className="column small-12">
+            <Heading as="h3" variant="mono" color="pink" size="sm">
+              {name}
+            </Heading>
+          </div>
           <Siema
             perPage={this.mediaQueries}
             draggable={smallScreen}

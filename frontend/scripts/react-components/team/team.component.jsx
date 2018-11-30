@@ -8,6 +8,7 @@ import ResizeListener from 'react-components/shared/resize-listener.component';
 import TeamProfilePicture from 'react-components/team/team-profile-picture.component';
 
 import 'styles/components/static-content/team.scss';
+import Heading from 'react-components/shared/heading.component';
 
 class Team extends PureComponent {
   renderTeamMember(slug) {
@@ -22,7 +23,9 @@ class Team extends PureComponent {
           <Link to={{ type: 'teamMember', payload: { member: kebabCase(slug) } }}>
             <TeamProfilePicture imageUrl={members[slug].smallImageUrl} />
             <h3 className="team-list-item-title title -medium -light">{members[slug].name}</h3>
-            <span className="team-list-item-subtitle subtitle -gray">See More</span>
+            <Heading as="h4" variant="mono" color="grey-faded" size="sm">
+              <span className="team-list-item-subtitle">See More</span>
+            </Heading>
           </Link>
         </div>
       </div>
@@ -52,7 +55,9 @@ class Team extends PureComponent {
 
     return (
       <section className="team-group" key={group.name}>
-        <h3 className="subtitle">{group.name}</h3>
+        <Heading variant="mono" color="pink" size="sm">
+          {group.name}
+        </Heading>
         <div className="team-list">
           <ResizeListener>
             {({ resolution, windowWidth }) =>

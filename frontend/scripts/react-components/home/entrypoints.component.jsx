@@ -4,6 +4,7 @@ import Link from 'redux-first-router-link';
 import debounce from 'lodash/debounce';
 
 import 'styles/components/homepage/entrypoints.scss';
+import Heading from 'react-components/shared/heading.component';
 
 class Entrypoints extends React.PureComponent {
   constructor(props) {
@@ -83,7 +84,9 @@ class Entrypoints extends React.PureComponent {
         <div className={`entrypoint-slide ${slide.className}`}>
           <Link to={slide.link}>
             <div className="entrypoint-slide-content">
-              <h3 className="subtitle">{slide.subtitle}</h3>
+              <Heading variant="mono" color="pink" size="sm">
+                {slide.subtitle}
+              </Heading>
               <p className="entrypoint-text">{slide.text}</p>
             </div>
           </Link>

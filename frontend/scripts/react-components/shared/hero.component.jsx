@@ -6,6 +6,7 @@ import AnimatedFlows from 'react-components/animated-flows/animated-flows.compon
 import HomeVideo from 'react-components/home/home-video.component';
 
 import 'styles/components/shared/hero.scss';
+import Heading from 'react-components/shared/heading.component';
 
 // old school name: https://en.wikipedia.org/wiki/Hero_image
 class Hero extends React.Component {
@@ -45,14 +46,16 @@ class Hero extends React.Component {
         />
         <figcaption className="story-box-content">
           <p className="story-box-title">{storyObj.title}</p>
-          <a
-            className="subtitle story-box-link"
-            target="_blank"
-            rel="noopener noreferrer"
-            href={storyObj.completePostUrl}
-          >
-            See It Here
-          </a>
+          <Heading variant="mono" color="pink" size="sm">
+            <a
+              className="story-box-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              href={storyObj.completePostUrl}
+            >
+              See It Here
+            </a>
+          </Heading>
         </figcaption>
       </div>
     );

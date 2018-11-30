@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'redux-first-router-link';
 import Placehold from 'react-placehodl';
-import cx from 'classnames';
 import 'styles/components/shared/top.scss';
+import Heading from 'react-components/shared/heading.component';
 
 class Top extends Component {
   constructor(props) {
@@ -55,7 +55,11 @@ class Top extends Component {
     const { title, loading } = this.props;
     return (
       <div className="c-top">
-        <h3 className={cx('subtitle -dark', { 'is-hidden': !title })}>{title}</h3>
+        {title && (
+          <Heading as="h3" variant="mono" size="sm">
+            {title}
+          </Heading>
+        )}
         {loading && this.renderPlaceholder()}
         {!loading && <ul className="top-list">{this.renderList()}</ul>}
       </div>

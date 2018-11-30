@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import 'styles/components/dashboard-element/dashboard-welcome.scss';
 import Button from 'react-components/shared/button.component';
+import Heading from 'react-components/shared/heading.component';
 
 function DashboardWelcome(props) {
   const { onContinue } = props;
@@ -28,7 +29,9 @@ function DashboardWelcome(props) {
   ];
   return (
     <div className="c-dashboard-welcome">
-      <h2 className="title -medium -light -center">Welcome to your dashboard</h2>
+      <Heading size="lg" align="center">
+        Welcome to your dashboard
+      </Heading>
       <div className="dashboard-welcome-container">
         {cards.map(card => (
           <div className="dashboard-welcome-card" key={card.title}>

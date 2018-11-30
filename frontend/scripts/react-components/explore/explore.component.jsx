@@ -10,6 +10,7 @@ import YearsSelector from 'react-components/nav/filters-nav/years-selector/years
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 import { EXPLORE_COLUMN_LIST } from 'constants';
 import Button from 'react-components/shared/button.component';
+import Heading from 'react-components/shared/heading.component';
 
 import 'styles/components/explore/explore.scss';
 
@@ -146,9 +147,11 @@ class Explore extends React.PureComponent {
             <div className={cx('column', 'small-12', { 'medium-7': showTable })}>
               <div className="explore-section">
                 <div className="explore-map-wrapper">
-                  <h2 className={cx('subtitle', '-dark', { 'is-hidden': !showTable })}>
-                    Top Destinations
-                  </h2>
+                  {showTable && (
+                    <Heading variant="mono" size="sm" weight="bold">
+                      Top Destinations
+                    </Heading>
+                  )}
                   <div className="explore-map-container">
                     <WorldMap className="explore-world-map" />
                   </div>

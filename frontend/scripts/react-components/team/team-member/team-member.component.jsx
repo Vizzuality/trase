@@ -6,6 +6,7 @@ import MarkdownRenderer from 'react-components/static-content/markdown-renderer/
 import TeamProfilePicture from 'react-components/team/team-profile-picture.component';
 
 import 'styles/components/static-content/team-member.scss';
+import Heading from 'react-components/shared/heading.component';
 
 const TeamMember = props => {
   const { member, errorMessage } = props;
@@ -21,16 +22,18 @@ const TeamMember = props => {
       <div className="row">
         <div className="column small-12 medium-4">
           <div className="team-member-profile-picture-container">
-            <Link className="subtitle -gray" to={{ type: 'team' }}>
-              back to trase team
-            </Link>
+            <Heading as="h3" variant="mono" color="grey-faded" size="sm">
+              <Link to={{ type: 'team' }}>back to trase team</Link>
+            </Heading>
             <TeamProfilePicture imageUrl={member.smallImageUrl} />
           </div>
         </div>
         <div className="column small-12 medium-8">
           <div className="team-member-details">
-            <h2 className="team-member-name title -medium -light">{member.name}</h2>
-            <h3 className="subtitle team-member-group">{member.group}</h3>
+            <Heading size="lg">{member.name}</Heading>
+            <Heading as="h3" variant="mono" color="pink" size="sm">
+              {member.group}
+            </Heading>
             <MarkdownRenderer className="team-member-bio" content={member.bio} />
           </div>
         </div>
