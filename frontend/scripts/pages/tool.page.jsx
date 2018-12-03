@@ -59,7 +59,7 @@ export const mount = (root, store) => {
   // In order to avoid adding loading states when not needed we check that the selectedContext
   // has indeed changed.
   const { app, tool } = store.getState();
-  if (app.selectedContext.id !== tool.loadedFlowsContextId) {
+  if ((app.selectedContext && app.selectedContext.id) !== tool.loadedFlowsContextId) {
     setToolLoaders(store.dispatch);
   }
   loadDisclaimerTool(store.dispatch);
