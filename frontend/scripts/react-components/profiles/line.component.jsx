@@ -132,24 +132,23 @@ class Line extends Component {
       switch (type) {
         case 'area':
           area = d3_area()
+            .defined(d => d.value)
             .x(d => x(d.date))
             .y(chartHeight)
             .y1(d => y(d.value));
 
-          // loop through broken/discontinuous lines
-          lineValuesWithFormat.forEach(points => {
-            d3Container
-              .append('path')
-              .datum(points)
-              .attr('class', lineStyle)
-              .attr('d', area);
+          d3Container
+            .append('path')
+            .datum(lineValuesWithFormat)
+            .attr('class', lineStyle)
+            .attr('d', area);
 
-            d3Container
-              .append('path')
-              .datum(points)
-              .attr('class', `line-${lineStyle}`)
-              .attr('d', line);
-          });
+          d3Container
+            .append('path')
+            .datum(lineValuesWithFormat)
+            .attr('class', `line-${lineStyle}`)
+            .attr('d', line);
+
           break;
 
         // following styles don't care about discontinuous blocks for now and will only render the first one
