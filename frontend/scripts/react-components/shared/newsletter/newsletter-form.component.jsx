@@ -54,7 +54,7 @@ class NewsletterForm extends React.PureComponent {
               required
               className="newsletter-email"
             />
-            <Button onClick={this.onClickSubmit} className="-charcoal -bold">
+            <Button onClick={this.onClickSubmit} color="charcoal" weight="bold">
               Subscribe
             </Button>
           </div>

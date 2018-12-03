@@ -47,7 +47,7 @@ function DashboardWelcome(props) {
         ))}
       </div>
       <div className="dashboard-welcome-button-container">
-        <Button className="-pink -large" onClick={onContinue}>
+        <Button size="md" color="pink" onClick={onContinue}>
           Continue
         </Button>
       </div>

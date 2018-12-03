@@ -145,14 +145,18 @@ class DashboardElement extends React.PureComponent {
                 <div className="dashboard-header-actions">
                   <Button
                     type="button"
-                    className="-gray -medium dashboard-header-action -panel"
+                    color="gray"
+                    size="sm"
+                    className="dashboard-header-action -panel"
                     onClick={() => reopenPanel(DashboardElement.steps.PANEL, canProceed)}
                   >
                     Edit Options
                   </Button>
                   <Button
                     type="button"
-                    className="-gray-transparent -medium dashboard-header-action -panel"
+                    color="gray-transparent"
+                    size="sm"
+                    className="dashboard-header-action -panel"
                     onClick={() => reopenPanel(DashboardElement.steps.INDICATORS, canProceed)}
                   >
                     Edit Indicators
@@ -196,7 +200,9 @@ class DashboardElement extends React.PureComponent {
                         Your dashboard has no selection.
                       </p>
                       <Button
-                        className="-gray-transparent -medium dashboard-element-fallback-button"
+                        color="gray-transparent"
+                        size="medium"
+                        className="dashboard-element-fallback-button"
                         onClick={goToRoot}
                       >
                         Go Back

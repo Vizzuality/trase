@@ -11,6 +11,7 @@ import ContextSelector from 'react-components/shared/context-selector/context-se
 import { EXPLORE_COLUMN_LIST } from 'constants';
 import Button from 'react-components/shared/button.component';
 import Heading from 'react-components/shared/heading.component';
+import Text from 'react-components/shared/text.component';
 
 import 'styles/components/explore/explore.scss';
 
@@ -190,15 +191,16 @@ class Explore extends React.PureComponent {
                 </p>
               </div>
               <div className="column small-12 medium-5 small-order-1 medium-order-2 explore-footer-button-container">
-                <Button
-                  as="div"
-                  className="-gray -big explore-footer-button -no-pointer show-for-small"
-                >
-                  Visit trase on a computer to explore the full supply chain
-                </Button>
+                <div className="explore-footer-fake-button show-for-small">
+                  <Text as="span" variant="mono">
+                    Visit trase on a computer to explore the full supply chain
+                  </Text>
+                </div>
                 <Button
                   as={Link}
-                  className="-pink -big explore-footer-button hide-for-small"
+                  color="pink"
+                  size="lg"
+                  className="hide-for-small"
                   to={{
                     type: 'tool'
                   }}

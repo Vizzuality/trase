@@ -51,7 +51,7 @@ function DashboardModalFooter(props) {
             Back To Options
           </button>
         )}
-        <Button onClick={onContinue} className="-pink -large" disabled={isDisabled}>
+        <Button onClick={onContinue} color="pink" size="md" disabled={isDisabled}>
           {isPanelFooter && !editMode ? 'Continue' : 'Go to dashboard'}
         </Button>
       </div>

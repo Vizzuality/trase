@@ -23,7 +23,7 @@ function ToolSearchResult({
 
   if (selected) {
     buttonList.push(
-      <Button key="alreadyInSupplyChain" className="-medium-large" disabled="true">
+      <Button key="alreadyInSupplyChain" size="rg" disabled>
         Already in {isMapVisible ? 'map' : 'supply chain'}
       </Button>
     );
@@ -35,7 +35,7 @@ function ToolSearchResult({
     // buttonList.push(
     //   <Button
     //     key="addToSupplyChain"
-    //     className="-medium-large"
+    //     size="rg"
     //     onClick={e => onClickAdd(e, item)}
     //   >
     //     Add to {isMapVisible ? 'map' : 'supply chain'}
@@ -46,11 +46,7 @@ function ToolSearchResult({
   if (!(exporterNotSelected && !importerNotSelected)) {
     if (exporterNotSelected) {
       buttonList.push(
-        <Button
-          key="addAsExporter"
-          onClick={e => onClickAdd(e, item.exporter)}
-          className="-medium-large"
-        >
+        <Button key="addAsExporter" onClick={e => onClickAdd(e, item.exporter)} size="rg">
           Add as exporter
         </Button>
       );
@@ -58,11 +54,7 @@ function ToolSearchResult({
 
     if (importerNotSelected) {
       buttonList.push(
-        <Button
-          key="addAsImporter"
-          onClick={e => onClickAdd(e, item.importer)}
-          className="-medium-large"
-        >
+        <Button key="addAsImporter" onClick={e => onClickAdd(e, item.importer)} size="rg">
           Add as importer
         </Button>
       );

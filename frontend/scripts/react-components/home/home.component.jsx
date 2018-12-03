@@ -38,7 +38,12 @@ class Home extends React.PureComponent {
                   <WorldMap />
                 </div>
                 <div className="homepage-map-link-container">
-                  <Button className="homepage-map-link -pink -big" onClick={this.onFindOutMore}>
+                  <Button
+                    color="pink"
+                    size="lg"
+                    className="homepage-map-link"
+                    onClick={this.onFindOutMore}
+                  >
                     Find out more
                   </Button>
                 </div>
