@@ -64,13 +64,19 @@ describe('Profile place - Full data', () => {
   test(
     'Deforestation trajectory widget loads successfully',
     async () => {
-      expect.assertions(1);
+      expect.assertions(4);
       await page.waitForSelector('[data-test=deforestation-trajectory]');
       const title = await page.$eval(
         '[data-test=deforestation-trajectory-title]',
         el => el.textContent
       );
+      const chartLines = await page.$$('[data-test=deforestation-trajectory-line]');
+      const chartAreaLines = await page.$$('[data-test=deforestation-trajectory-area-line]');
+      const chartAreas = await page.$$('[data-test=deforestation-trajectory-area]');
       expect(title.toLowerCase()).toMatch('deforestation trajectory of sorriso');
+      expect(chartLines.length).toBe(1);
+      expect(chartAreaLines.length).toBe(2);
+      expect(chartAreas.length).toBe(2);
     },
     TIMEOUT
   );

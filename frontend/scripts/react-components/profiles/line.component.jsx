@@ -140,12 +140,14 @@ class Line extends Component {
           d3Container
             .append('path')
             .datum(lineValuesWithFormat)
+            .attr('data-test', `${testId}-area`)
             .attr('class', lineStyle)
             .attr('d', area);
 
           d3Container
             .append('path')
             .datum(lineValuesWithFormat)
+            .attr('data-test', `${testId}-area-line`)
             .attr('class', `line-${lineStyle}`)
             .attr('d', line);
 
@@ -156,6 +158,7 @@ class Line extends Component {
           d3Container
             .append('path')
             .datum(lineValuesWithFormat)
+            .attr('data-test', `${testId}-line`)
             .attr('class', lineStyle)
             .attr('d', line);
           break;
