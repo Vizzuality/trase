@@ -45,13 +45,15 @@ module Api
 
       def self.select_options
         Api::V3::Chart.includes(:profile).where(parent: nil).all.map do |chart|
-          context_node_type = chart.profile&.context_node_type
+          profile = chart.profile
+          context_node_type = profile&.context_node_type
+          context = context_node_type&.context
           [
             [
-              context_node_type&.context&.country&.name,
-              context_node_type&.context&.commodity&.name,
+              context&.country&.name,
+              context&.commodity&.name,
               context_node_type&.node_type&.name,
-              chart.profile&.name,
+              profile&.name,
               chart.identifier
             ].join(' / '),
             chart.id
