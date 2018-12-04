@@ -2,11 +2,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { toggleMap } from 'actions/app.actions';
 import FiltersNav from 'react-components/nav/filters-nav/filters-nav.component';
+import { getNavFilters } from 'react-components/nav/filters-nav/filters-nav.selectors';
 import routerLinks from 'router/nav-links';
 
 function mapStateToProps(state) {
   return {
     links: routerLinks.nav,
+    filters: getNavFilters(state),
     selectedContext: state.app.selectedContext,
     contextIsUserSelected: state.app.contextIsUserSelected,
     isMapVisible: state.tool.isMapVisible,

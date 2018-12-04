@@ -17,22 +17,13 @@ import 'scripts/react-components/nav/filters-nav/filters-nav.scss';
 import 'scripts/react-components/nav/filters-nav/burger.scss';
 
 class FiltersNav extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      menuOpen: false
-    };
-    this.toggleMenu = this.toggleMenu.bind(this);
-    this.renderMenuButton = this.renderMenuButton.bind(this);
-    this.renderMenuOpened = this.renderMenuOpened.bind(this);
-    this.renderMenuClosed = this.renderMenuClosed.bind(this);
-  }
+  state = {
+    menuOpen: false
+  };
 
-  toggleMenu() {
-    this.setState(state => ({ menuOpen: !state.menuOpen }));
-  }
+  toggleMenu = () => this.setState(state => ({ menuOpen: !state.menuOpen }));
 
-  renderMenuButton() {
+  renderMenuButton = () => {
     const { menuOpen } = this.state;
     return menuOpen ? (
       <button className="c-burger open" onClick={this.toggleMenu}>
@@ -45,7 +36,7 @@ class FiltersNav extends React.PureComponent {
         <img src="/images/logos/logo-trase-small-beta.svg" alt="TRASE" />
       </button>
     );
-  }
+  };
 
   renderInToolLinks() {
     const { links, openMap, openSankey, isMapVisible } = this.props;
@@ -81,16 +72,16 @@ class FiltersNav extends React.PureComponent {
     );
   }
 
-  renderMenuOpened() {
-    const { links, isExplore } = this.props;
-    const [, , ...restOfLinks] = links;
+  renderMenuOpened = () => {
+    const { links, filters } = this.props;
+    const restOfLinks = links.slice(2);
     const decoratedLinks = [{ name: 'Home', page: { type: 'home' } }, ...links];
-    const navLinks = isExplore ? decoratedLinks : restOfLinks;
+    const navLinks = filters.toolLinks ? restOfLinks : decoratedLinks;
 
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
-          {!isExplore && this.renderInToolLinks()}
+          {filters.toolLinks && this.renderInToolLinks()}
           <ul className="filters-nav-submenu-list">
             <NavLinksList
               links={navLinks}
@@ -108,42 +99,28 @@ class FiltersNav extends React.PureComponent {
         </div>
       </React.Fragment>
     );
-  }
+  };
 
-  renderMenuClosed() {
-    const { selectedContext, isExplore, contextIsUserSelected } = this.props;
+  renderMenuClosed = () => {
+    const { selectedContext, filters } = this.props;
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
-          <ContextSelector
-            className="filters-nav-item"
-            isExplore={isExplore}
-            selectedContext={selectedContext}
-          />
-          {selectedContext && (contextIsUserSelected || !isExplore) && (
-            <React.Fragment>
-              {!isExplore && <AdminLevelFilter className="filters-nav-item" />}
-              <YearsSelector className="filters-nav-item" />
-            </React.Fragment>
+          {filters.contextSelector && (
+            <ContextSelector className="filters-nav-item" selectedContext={selectedContext} />
           )}
+          {filters.adminLevel && <AdminLevelFilter className="filters-nav-item" />}
+          {filters.year && <YearsSelector className="filters-nav-item" />}
         </div>
         <div className="filters-nav-right-section">
-          {!isExplore && (
-            <React.Fragment>
-              {selectedContext && (
-                <React.Fragment>
-                  <ResizeBySelector className="filters-nav-item" />
-                  <RecolorBySelector className="filters-nav-item" />
-                  <ViewSelector className="filters-nav-item" />
-                </React.Fragment>
-              )}
-              <ToolSearch className="filters-nav-item -no-padding" />
-            </React.Fragment>
-          )}
+          {filters.resizeBy && <ResizeBySelector className="filters-nav-item" />}
+          {filters.recolorBy && <RecolorBySelector className="filters-nav-item" />}
+          {filters.viewSelector && <ViewSelector className="filters-nav-item" />}
+          {filters.toolSearch && <ToolSearch className="filters-nav-item -no-padding" />}
         </div>
       </React.Fragment>
     );
-  }
+  };
 
   render() {
     const { menuOpen } = this.state;
@@ -159,13 +136,12 @@ class FiltersNav extends React.PureComponent {
 }
 
 FiltersNav.propTypes = {
-  contextIsUserSelected: PropTypes.bool,
-  isExplore: PropTypes.bool.isRequired,
-  isMapVisible: PropTypes.bool,
-  links: PropTypes.array.isRequired,
   openMap: PropTypes.func,
   openSankey: PropTypes.func,
-  selectedContext: PropTypes.object
+  isMapVisible: PropTypes.bool,
+  selectedContext: PropTypes.object,
+  links: PropTypes.array.isRequired,
+  filters: PropTypes.object.isRequired
 };
 
 export default FiltersNav;

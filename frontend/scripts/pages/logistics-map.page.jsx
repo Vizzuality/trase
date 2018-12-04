@@ -18,7 +18,7 @@ export const mount = (root, store) => {
 
   render(
     <Provider store={store}>
-      <FiltersNav isExplore />
+      <FiltersNav />
     </Provider>,
     document.getElementById('nav')
   );
