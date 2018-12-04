@@ -21,9 +21,7 @@ export const mount = (root, store) => {
   render(
     <Provider store={store}>
       <ResizeListener>
-        {({ resolution }) =>
-          resolution.isSmall ? <TopNav className="-light" /> : <FiltersNav isExplore />
-        }
+        {({ resolution }) => (resolution.isSmall ? <TopNav className="-light" /> : <FiltersNav />)}
       </ResizeListener>
     </Provider>,
     document.getElementById('nav')
