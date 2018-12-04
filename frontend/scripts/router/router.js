@@ -124,6 +124,11 @@ export const routes = {
     },
     thunk: loadPageData()
   },
+  logisticsMap: {
+    path: '/logistics-map',
+    page: 'logistics-map',
+    title: getPageTitle
+  },
   [NOT_FOUND]: {
     path: '/404',
     page: 'static-content',
