@@ -21,7 +21,8 @@ module Api
         NodeTypeName::MUNICIPALITY,
         NodeTypeName::LOGISTICS_HUB,
         NodeTypeName::BIOME,
-        NodeTypeName::STATE
+        NodeTypeName::STATE,
+        NodeTypeName::DEPARTMENT
       ].freeze
 
       ACTORS = [

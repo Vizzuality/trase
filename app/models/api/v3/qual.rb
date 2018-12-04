@@ -25,6 +25,10 @@ module Api
           first
       end
 
+      def simple_type
+        'qual'
+      end
+
       def self.select_options
         order(:name).map { |qual| [qual.name, qual.id] }
       end

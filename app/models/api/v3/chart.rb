@@ -32,6 +32,7 @@ module Api
       has_many :chart_attributes, dependent: :delete_all
       has_many :readonly_chart_attributes,
                class_name: 'Readonly::ChartAttribute'
+      has_many :chart_node_types, dependent: :delete_all
 
       validates :identifier,
                 presence: true, uniqueness: {scope: [:profile_id, :parent_id]}
@@ -44,7 +45,7 @@ module Api
       after_commit :refresh_dependencies
 
       def self.select_options
-        Api::V3::Chart.includes(:profile).where(parent: nil).all.map do |chart|
+        Api::V3::Chart.includes(:profile).all.map do |chart|
           profile = chart.profile
           context_node_type = profile&.context_node_type
           context = context_node_type&.context
@@ -75,11 +76,13 @@ module Api
 
       def parent_is_in_same_profile
         return if parent.nil? || parent.profile_id == profile_id
+
         errors.add(:parent, 'cannot belong to a different profile')
       end
 
       def parent_is_root
         return if parent.nil? || parent.parent.nil?
+
         errors.add(:parent, 'cannot be a nested chart')
       end
     end

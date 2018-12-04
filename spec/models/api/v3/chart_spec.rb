@@ -24,7 +24,7 @@ RSpec.describe Api::V3::Chart, type: :model do
       FactoryBot.build(
         :api_v3_chart,
         profile: api_v3_brazil_municipality_place_profile,
-        identifier: :trajectory_deforestation,
+        identifier: :place_trajectory_deforestation,
         position: 1
       )
     }

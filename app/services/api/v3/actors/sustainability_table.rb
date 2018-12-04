@@ -11,27 +11,30 @@ module Api
           @context = context
           @node = node
           @year = year
+          # Assumption: Volume is a special quant which always exists
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
-          chart = initialize_chart(:actor, nil, :sustainability)
-          @chart_attributes, @attributes = initialize_attributes(chart)
+
+          initialize_chart_config(:actor, nil, :actor_sustainability_table)
+          raise "No attributes found" unless @chart_config.attributes.any?
+
+          @source_node_types = @chart_config.named_node_types('source')
+          unless @source_node_types.any?
+            raise 'Chart node type "source" not found'
+          end
+
           initialize_flow_stats_for_node
         end
 
         def call
-          [
-            {
-              group_name: 'Municipalities',
-              node_type: NodeTypeName::MUNICIPALITY
-            },
-            {
-              group_name: 'Biomes',
-              node_type: NodeTypeName::BIOME,
-              is_total: true
-            }
-          ].map do |group|
+          @source_node_types.map do |node_type|
+            node_type_name = node_type.name
+            chart_node_type = @chart_config.chart_node_types.
+              find { |nta| nta.node_type_id = node_type.id }
             sustainability_for_group(
-              group[:group_name], group[:node_type], group[:is_total]
+              node_type_name.pluralize,
+              node_type_name,
+              chart_node_type&.is_total
             )
           end
         end
@@ -68,7 +71,7 @@ module Api
             name: name,
             included_columns:
                 [{name: node_type.humanize}] +
-                  @chart_attributes.map do |ro_chart_attribute|
+                  @chart_config.chart_attributes.map do |ro_chart_attribute|
                     {
                       name: ro_chart_attribute.display_name,
                       unit: ro_chart_attribute.unit,
@@ -81,9 +84,10 @@ module Api
 
         def data_row(group_totals_hash, node_type, node)
           node_id = node['node_id']
+          attributes = @chart_config.attributes
           totals_per_attribute = @flow_stats.
             flow_values_totals_for_attributes_into(
-              @attributes,
+              attributes,
               node_type,
               node_id
             )
@@ -107,7 +111,7 @@ module Api
                   value: node['name']
                 }
               ] +
-                @attributes.map do |attribute|
+                attributes.map do |attribute|
                   attribute_total = totals_hash[attribute.name]
                   {value: attribute_total} if attribute_total
                 end
@@ -118,7 +122,7 @@ module Api
           {
             is_total: true,
             values:
-              @attributes.map do |attribute|
+              @chart_config.attributes.map do |attribute|
                 attribute_total = group_totals_hash[attribute.name]
                 {value: attribute_total} if attribute_total
               end

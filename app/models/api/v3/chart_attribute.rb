@@ -13,11 +13,13 @@
 #  display_type  :text
 #  display_style :text
 #  state_average :boolean          default(FALSE), not null
+#  identifier    :text
 #
 # Indexes
 #
-#  chart_attributes_chart_id_position_key  (chart_id,position) UNIQUE
-#  index_chart_attributes_on_chart_id      (chart_id)
+#  chart_attributes_chart_id_identifier_key  (chart_id,identifier) UNIQUE
+#  chart_attributes_chart_id_position_key    (chart_id,position) UNIQUE WHERE (identifier IS NULL)
+#  index_chart_attributes_on_chart_id        (chart_id)
 #
 # Foreign Keys
 #
@@ -37,17 +39,19 @@ module Api
 
       validates :position,
                 presence: true,
-                uniqueness: {scope: :chart}
+                uniqueness: {scope: :chart},
+                if: proc { |chart_attr| chart_attr.identifier.blank? }
+      validates :identifier, uniqueness: {scope: :chart, allow_blank: true}
       validates_with OneAssociatedAttributeValidator,
                      attributes: [:chart_ind, :chart_qual, :chart_quant]
       validates_with AttributeAssociatedOnceValidator,
-                     attribute: :chart_ind, scope: :chart,
+                     attribute: :chart_ind, scope: [:chart_id, :state_average],
                      if: :new_chart_ind_given?
       validates_with AttributeAssociatedOnceValidator,
-                     attribute: :chart_qual, scope: :chart,
+                     attribute: :chart_qual, scope: [:chart_id, :state_average],
                      if: :new_chart_qual_given?
       validates_with AttributeAssociatedOnceValidator,
-                     attribute: :chart_quant, scope: :chart,
+                     attribute: :chart_quant, scope: [:chart_id, :state_average],
                      if: :new_chart_quant_given?
 
       after_commit :refresh_dependencies

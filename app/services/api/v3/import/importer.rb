@@ -45,7 +45,8 @@ module Api
               Api::V3::ContextNodeTypeProperty,
               Api::V3::Profile,
               Api::V3::Chart,
-              Api::V3::ChartAttribute
+              Api::V3::ChartAttribute,
+              Api::V3::ChartNodeType
             ]
           },
           {table_class: Api::V3::DownloadVersion},

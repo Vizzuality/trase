@@ -9,6 +9,7 @@ module Api
           @context = context
           @node = node
           @year = year
+          # Assumption: Volume is a special quant which always exists
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
         end

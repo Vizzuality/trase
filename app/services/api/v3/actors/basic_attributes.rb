@@ -2,6 +2,8 @@ module Api
   module V3
     module Actors
       class BasicAttributes
+        include Api::V3::Profiles::AttributesInitializer
+
         # @param context [Api::V3::Context]
         # @param node [Api::V3::Node]
         # @year [Integer]
@@ -13,8 +15,18 @@ module Api
           @actor_quals = Dictionary::ActorQuals.new(@node, @year)
           @actor_quants = Dictionary::ActorQuants.new(@node, @year)
           @actor_inds = Dictionary::ActorInds.new(@node, @year)
+          # Assumption: Volume is a special quant which always exists
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
+
+          initialize_chart_config(:actor, nil, :actor_basic_attributes)
+          @source_node_type = @chart_config.named_node_type('source')
+          raise 'Chart node type "source" not found' unless @source_node_type
+
+          @destination_node_type = @chart_config.named_node_type('destination')
+          unless @destination_node_type
+            raise 'Chart node type "destination" not found'
+          end
         end
 
         def call
@@ -58,7 +70,7 @@ module Api
             @node,
             year_start: @year,
             year_end: @year,
-            other_node_type_name: NodeTypeName::COUNTRY,
+            other_node_type_name: @destination_node_type.name,
             place_inds: @place_inds,
             place_quants: @place_quants
           )
@@ -142,6 +154,7 @@ largest #{profile_type} of soy from \
 <span class=\"notranslate\">#{@year}</span>, accounting for \
 <span class=\"notranslate\">#{@trade_total_current_year_formatted}</span>."
           return text unless @trade_total_perc_difference.present?
+
           difference_from = if @trade_total_perc_difference.positive?
                               'a <span class="notranslate">' +
                                 helper.number_to_percentage(
@@ -161,6 +174,7 @@ largest #{profile_type} of soy from \
         end
 
         def summary_of_sources(profile_type)
+          return '' unless @context.context_property.is_subnational
           " As an #{profile_type}, \
 <span class=\"notranslate\">#{@node.name.humanize}</span> sources from \
 <span class=\"notranslate\">#{@source_municipalities_count_formatted}</span> \
@@ -198,13 +212,13 @@ accounting for \
             trade_total_current_year_precision = 0
           elsif @trade_total_current_year < 1_000_000
             trade_total_current_year_value = (
-            @trade_total_current_year / 1000
+              @trade_total_current_year / 1000
             )
             trade_total_current_year_unit = 'thousand tons'
             trade_total_current_year_precision = 0
           else
             trade_total_current_year_value = (
-            @trade_total_current_year / 1_000_000
+              @trade_total_current_year / 1_000_000
             )
             trade_total_current_year_unit = 'million tons'
             trade_total_current_year_precision = 1
@@ -224,7 +238,7 @@ accounting for \
           if @trade_total_previous_year.present? &&
               @trade_total_previous_year.positive?
             @trade_total_perc_difference = (
-            @trade_total_current_year - @trade_total_previous_year
+              @trade_total_current_year - @trade_total_previous_year
             ) / @trade_total_previous_year
           end
         end
@@ -236,13 +250,15 @@ accounting for \
           unless trade_total_rank_in_country && trade_total_rank_in_country > 1
             return
           end
+
           @trade_total_rank_in_country_formatted = trade_total_rank_in_country.
             ordinalize + ' '
         end
 
         def initialize_sources_for_summary
+          return unless @context.context_property.is_subnational
           stats = Api::V3::Profiles::FlowStatsForNodeType.new(
-            @context, @year, NodeTypeName::MUNICIPALITY
+            @context, @year, @source_node_type.name
           )
           municipalities_count = stats.nodes_with_flows_count(@volume_attribute)
           source_municipalities_count = stats.nodes_with_flows_into_node_count(
@@ -259,10 +275,12 @@ accounting for \
 
         def initialize_destinations_for_summary
           return unless @main_destination.present?
+
           @main_destination_name = @main_destination.name
           main_destination_exports = @main_destination['value']
           return unless main_destination_exports && @trade_total_current_year &&
-              @trade_total_current_year.positive?
+            @trade_total_current_year.positive?
+
           @perc_exports_formatted = helper.number_to_percentage(
             (main_destination_exports * 100.0) / @trade_total_current_year,
             precision: 0

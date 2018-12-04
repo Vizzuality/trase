@@ -11,10 +11,12 @@ module Api
           @context = context
           @node = node
           @year = year
+          # Assumption: Volume is a special quant which always exists
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
-          chart = initialize_chart(:actor, nil, :companies_sourcing)
-          @chart_attributes, @attributes = initialize_attributes(chart)
+
+          initialize_chart_config(:actor, nil, :actor_exporting_companies)
+          raise "No attributes found" unless @chart_config.attributes.any?
         end
 
         def call
@@ -31,7 +33,7 @@ module Api
 
           production_totals = stats.nodes_with_flows_totals(@volume_attribute)
           attribute_totals = stats.nodes_with_flows_totals_for_attributes(
-            @attributes
+            @chart_config.attributes
           )
 
           attribute_totals_hash = attribute_totals_hash(
@@ -52,9 +54,10 @@ module Api
             dimension_y: {
               name: 'Trade Volume', unit: unit
             },
-            dimensions_x: @chart_attributes.map do |chart_attribute|
-              {name: chart_attribute.display_name, unit: chart_attribute.unit}
-            end,
+            dimensions_x: @chart_config.chart_attributes.
+              map do |chart_attribute|
+                {name: chart_attribute.display_name, unit: chart_attribute.unit}
+              end,
             companies: exports
           }
         end
@@ -64,13 +67,14 @@ module Api
         def attribute_totals_hash(production_totals, attribute_totals)
           attribute_totals_hash = {}
           attribute_indexes = Hash[
-            @chart_attributes.map.each_with_index do |attribute, idx|
-              [attribute.name, idx]
-            end
+            @chart_config.chart_attributes.map.
+              each_with_index do |attribute, idx|
+                [attribute.name, idx]
+              end
           ]
           production_totals.each do |total|
             attribute_totals_hash[total['node_id']] ||= Array.new(
-              @attributes.size
+              @chart_config.attributes.size
             )
           end
           attribute_totals.each do |total|
@@ -82,32 +86,6 @@ module Api
           end
           attribute_totals_hash
         end
-<<<<<<< HEAD
-
-        def attributes_list
-          [
-            {
-              name: 'Land use',
-              unit: 'ha',
-              attribute_type: 'quant',
-              attribute_name: 'SOY_AREA_'
-            },
-            {
-              name: 'Territorial Deforestation',
-              unit: 'ha',
-              attribute_type: 'quant',
-              attribute_name: 'DEFORESTATION_V2'
-            },
-            {
-              name: 'Soy deforestation',
-              unit: 'ha',
-              attribute_type: 'quant',
-              attribute_name: 'SOY_DEFORESTATION_5_YEAR_ANNUAL'
-            }
-          ]
-        end
-=======
->>>>>>> Serving actor exporting companies from dynamic configuration
       end
     end
   end

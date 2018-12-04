@@ -35,7 +35,9 @@ module Api
       def self.select_options
         Api::V3::ContextNodeType.includes(
           context: [:country, :commodity]
-        ).all.map do |ctx_nt|
+        ).order(
+          'countries.name', 'commodities.name', :column_position
+        ).map do |ctx_nt|
           [
             [
               ctx_nt.context&.country&.name,

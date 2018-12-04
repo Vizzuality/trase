@@ -12,6 +12,8 @@ module Api
           @node = node
           @year = year
 
+          # This remains hardcoded, because it only makes sense
+          # for Brazil soy for now
           @place_quals = Dictionary::PlaceQuals.new(@node, @year)
           state_qual = @place_quals.get(NodeTypeName::STATE)
           @state_name = state_qual && state_qual['value']
@@ -20,12 +22,16 @@ module Api
               @context, @node, @year, @state_name
             )
           end
-          chart = initialize_chart(:place, nil, :trajectory_deforestation)
-          @chart_attributes, @attributes = initialize_attributes(chart)
+          @chart_config = initialize_chart_config(
+            :place, nil, :place_trajectory_deforestation
+          )
+          raise "No attributes found" unless @chart_config.attributes.any?
         end
 
+        # rubocop:disable Metrics/AbcSize
         def call
           min_year, max_year = initialize_min_max_year
+          chart_attributes = @chart_config.chart_attributes
 
           return {} unless min_year.present? and max_year.present?
 
@@ -33,8 +39,8 @@ module Api
           {
             included_years: years,
             unit: 'ha',
-            lines: @chart_attributes.map.with_index do |chart_attribute, idx|
-              attribute = @attributes[idx]
+            lines: chart_attributes.map.with_index do |chart_attribute, idx|
+              attribute = @chart_config.attributes[idx]
               data =
                 if chart_attribute.state_average && @state_ranking
                   @state_ranking.average_for_attribute(
@@ -65,13 +71,14 @@ module Api
             end
           }
         end
+        # rubocop:enable Metrics/AbcSize
 
         private
 
         def initialize_min_max_year
           min_years = []
           max_years = []
-          @attributes.each do |attribute|
+          @chart_config.attributes.each do |attribute|
             min_max =
               if attribute.is_a? Api::V3::Quant
                 @node.temporal_place_quants.where(
@@ -88,6 +95,7 @@ module Api
               order(nil).
               first
             next unless min_max
+
             min_years << min_max['min']
             max_years << min_max['max']
           end

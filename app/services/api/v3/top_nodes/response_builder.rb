@@ -36,6 +36,7 @@ module Api
           @year_end = initialize_param(params, :year_end)
           @limit = params[:limit]&.to_i || 10
 
+          # Assumption: Volume is a special quant which always exists
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
         end

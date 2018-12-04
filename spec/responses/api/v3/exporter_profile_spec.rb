@@ -11,6 +11,11 @@ RSpec.describe 'Exporter profile', type: :request do
   include_context 'api v3 brazil flows quants'
   include_context 'api v3 brazil exporter actor profile'
 
+  before(:each) do
+    Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
+  end
+
   let(:summary_params) {
     {
       year: 2015

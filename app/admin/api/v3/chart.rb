@@ -59,7 +59,7 @@ ActiveAdmin.register Api::V3::Chart, as: 'Chart' do
         chart.profile&.context_node_type&.node_type&.name
       end
       row('Profile Type') { |chart| chart.profile&.name }
-      row('Parent') { |chart| chart.parent&.name }
+      row('Parent') { |chart| chart.parent&.title }
       row :title
       row :identifier
       row :position

@@ -58,10 +58,10 @@ module Api
       validates_with OneAssociatedAttributeValidator,
                      attributes: [:map_ind, :map_quant]
       validates_with AttributeAssociatedOnceValidator,
-                     attribute: :map_ind, scope: :map_attribute_group,
+                     attribute: :map_ind, scope: :map_attribute_group_id,
                      if: :new_map_ind_given?
       validates_with AttributeAssociatedOnceValidator,
-                     attribute: :map_quant, scope: :map_attribute_group,
+                     attribute: :map_quant, scope: :map_attribute_group_id,
                      if: :new_map_quant_given?
 
       after_commit :refresh_dependents

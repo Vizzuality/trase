@@ -10,24 +10,23 @@ module Api
           @node = node
           @year = year
           quant_dictionary = Dictionary::Quant.instance
+          # Assumption: Volume is a special quant which always exists
           @volume_attribute = quant_dictionary.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
-          @soy_production_attribute = quant_dictionary.get('SOY_TN')
-          unless @soy_production_attribute.present?
-            raise 'Quant SOY_TN not found'
-          end
+
           initialize_flow_stats_for_node
         end
 
         # Top nodes (destinations and sources) linked to this actor node
         # across years
         # @param node_type [String or Array<String>]
-        def call(node_type)
+        # @param attribute [Api::V3::Ind or Api::V3::Qual or Api::V3::Quant]
+        def call(node_type, commodity_production_attribute)
           years = @flow_stats.available_years_for_attribute(@volume_attribute)
           map_attribute = Api::V3::Readonly::MapAttribute.where(
             context_id: @context.id,
-            attribute_type: 'quant',
-            original_attribute_id: @soy_production_attribute.id
+            attribute_type: commodity_production_attribute.simple_type,
+            original_attribute_id: commodity_production_attribute.id
           )
           buckets = map_attribute.try(:single_layer_buckets) ||
             [5000, 100_000, 300_000, 1_000_000]

@@ -13,6 +13,8 @@ tables:
     columns:
       - name: chart_id
         comment: Refence to chart
+      - name: identifier
+        comment: Identifier used to map this chart attribute to a part of code which contains calculation logic
       - name: position
         comment: Display order in scope of chart
       - name: years
@@ -29,6 +31,17 @@ tables:
         comment: Only used for trajectory deforestation plot in place profiles
   - name: chart_inds
     comment: Inds to display in a chart (see chart_attributes.)
+  - name: chart_node_types
+    comment: Node types to display in a chart.
+    columns:
+      - name: chart_id
+        comment: Refence to chart
+      - name: node_type_id
+        comment: Refence to node type
+      - name: identifier
+        comment: Identifier used to map this chart node type to a part of code which contains calculation logic
+      - name: position
+        comment: Display order in scope of chart; required when more than one
   - name: chart_quals
     comment: Quals to display in a chart (see chart_attributes.)
   - name: chart_quants

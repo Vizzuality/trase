@@ -9,6 +9,8 @@ namespace :charts do
 
   task reload: :environment do
     without_chart_callbacks do
+      Api::V3::ChartNodeType.delete_all
+      Api::V3::ChartAttribute.delete_all
       Api::V3::Chart.delete_all
     end
     Rake::Task['charts:populate'].invoke
@@ -30,28 +32,117 @@ namespace :charts do
 
   def initialise_actor_profiles(context)
     context.profiles.where(name: 'actor').each do |profile|
-      create_sustainability(profile)
-      create_companies_sourcing(profile)
+      create_actor_basic_attributes(profile)
+      create_actor_top_countries(profile)
+      create_actor_top_sources(profile)
+      create_actor_sustainability_table(profile)
+      create_actor_exporting_companies(profile)
     end
   end
 
   def initialise_place_profiles(context)
     context.profiles.where(name: 'place').each do |profile|
-      chart = create_sustainability_indicators(profile)
-      create_environmental_indicators(profile, chart)
-      create_socioeconomic_indicators(profile, chart)
-      create_agricultural_indicators(profile, chart)
-      create_territorial_governance(profile, chart)
-      create_trajectory_deforestation(profile)
+      chart = create_place_indicators_table(profile)
+      create_place_basic_attributes(profile)
+      create_place_environmental_indicators(profile, chart)
+      create_place_socioeconomic_indicators(profile, chart)
+      create_place_agricultural_indicators(profile, chart)
+      create_place_territorial_governance(profile, chart)
+      create_place_trajectory_deforestation(profile)
+      create_place_top_consumer_actors(profile)
+      create_place_top_consumer_countries(profile)
     end
   end
 
-  def create_sustainability(profile)
+  def create_actor_basic_attributes(profile)
     chart = find_or_create_chart(
       profile,
       nil,
-      :sustainability,
+      :actor_basic_attributes,
+      position: 0,
+      title: 'Basic attributes'
+    )
+    node_types_list = [
+      {
+        name: NodeTypeName::MUNICIPALITY,
+        identifier: :source
+      },
+      {
+        name: NodeTypeName::COUNTRY,
+        identifier: :destination
+      }
+    ]
+    create_chart_node_types_from_node_types_list(chart, node_types_list)
+  end
+
+  def create_actor_top_countries(profile)
+    chart = find_or_create_chart(
+      profile,
+      nil,
+      :actor_top_countries,
+      position: 1,
+      title: 'Top destinations'
+    )
+    attributes_list = [
+      {
+        attribute_type: 'quant',
+        attribute_name: 'SOY_TN',
+        identifier: :commodity_production
+      }
+    ]
+    create_chart_attributes_from_attributes_list(chart, attributes_list)
+    node_types_list = [
+      {
+        name: NodeTypeName::COUNTRY,
+        identifier: :destination
+      }
+    ]
+    create_chart_node_types_from_node_types_list(chart, node_types_list)
+  end
+
+  def create_actor_top_sources(profile)
+    chart = find_or_create_chart(
+      profile,
+      nil,
+      :actor_top_sources,
       position: 2,
+      title: 'Top sourcing regions'
+    )
+    attributes_list = [
+      {
+        attribute_type: 'quant',
+        attribute_name: 'SOY_TN',
+        identifier: :commodity_production
+      }
+    ]
+    create_chart_attributes_from_attributes_list(chart, attributes_list)
+
+    node_types_list = [
+      {
+        name: NodeTypeName::BIOME,
+        identifier: :source,
+        position: 0
+      },
+      {
+        name: NodeTypeName::STATE,
+        identifier: :source,
+        position: 1
+      },
+      {
+        name: NodeTypeName::MUNICIPALITY,
+        identifier: :source,
+        position: 2
+      }
+    ]
+    create_chart_node_types_from_node_types_list(chart, node_types_list)
+  end
+
+  def create_actor_sustainability_table(profile)
+    chart = find_or_create_chart(
+      profile,
+      nil,
+      :actor_sustainability_table,
+      position: 3,
       title: 'Deforestation risk associated with top sourcing regions'
     )
     attributes_list = [
@@ -66,14 +157,30 @@ namespace :charts do
       }
     ]
     create_chart_attributes_from_attributes_list(chart, attributes_list)
+
+    node_types_list = [
+      {
+        name: NodeTypeName::MUNICIPALITY,
+        identifier: :source,
+        position: 0
+      },
+      {
+        name: NodeTypeName::BIOME,
+        identifier: :source,
+        position: 1,
+        is_total: true
+      }
+    ]
+    create_chart_node_types_from_node_types_list(chart, node_types_list)
   end
 
-  def create_companies_sourcing(profile)
+  def create_actor_exporting_companies(profile)
     chart = find_or_create_chart(
       profile,
       nil,
-      :companies_sourcing,
-      position: 3, title: 'Comparing companies'
+      :actor_exporting_companies,
+      position: 4,
+      title: 'Comparing companies'
     )
     attributes_list = [
       {
@@ -98,23 +205,73 @@ namespace :charts do
     create_chart_attributes_from_attributes_list(chart, attributes_list)
   end
 
-  def create_sustainability_indicators(profile)
+  def create_place_basic_attributes(profile)
     chart = find_or_create_chart(
       profile,
       nil,
-      :indicators,
-      position: 0, title: 'Sustainability indicators'
+      :place_basic_attributes,
+      position: 0,
+      title: 'Basic attributes'
+    )
+
+    attributes_list = [
+      {
+        attribute_type: 'quant',
+        attribute_name: 'AREA_KM2',
+        identifier: :area
+      },
+      {
+        attribute_type: 'ind',
+        attribute_name: 'SOY_AREAPERC',
+        identifier: :commodity_farmland
+      },
+      {
+        attribute_type: 'quant',
+        attribute_name: 'SOY_TN',
+        identifier: :commodity_production
+      },
+      {
+        attribute_type: 'ind',
+        attribute_name: 'SOY_YIELD',
+        identifier: :commodity_yield
+      }
+    ]
+    create_chart_attributes_from_attributes_list(chart, attributes_list)
+
+    node_types_list = [
+      {
+        name: NodeTypeName::MUNICIPALITY,
+        identifier: :summary,
+        position: 0
+      },
+      {
+        name: NodeTypeName::LOGISTICS_HUB,
+        identifier: :summary,
+        position: 1
+      }
+    ]
+    create_chart_node_types_from_node_types_list(chart, node_types_list)
+  end
+
+  def create_place_indicators_table(profile)
+    chart = find_or_create_chart(
+      profile,
+      nil,
+      :place_indicators_table,
+      position: 1,
+      title: 'Sustainability indicators'
     )
     create_chart_attributes_from_attributes_list(chart, [])
     chart
   end
 
-  def create_environmental_indicators(profile, parent)
+  def create_place_environmental_indicators(profile, parent)
     chart = find_or_create_chart(
       profile,
       parent,
-      :environmental_indicators,
-      position: 0, title: 'Environmental indicators'
+      :place_environmental_indicators,
+      position: 0,
+      title: 'Environmental indicators'
     )
     attributes_list = [
       {attribute_type: 'quant', attribute_name: 'DEFORESTATION_V2'},
@@ -129,12 +286,13 @@ namespace :charts do
     create_chart_attributes_from_attributes_list(chart, attributes_list)
   end
 
-  def create_socioeconomic_indicators(profile, parent)
+  def create_place_socioeconomic_indicators(profile, parent)
     chart = find_or_create_chart(
       profile,
       parent,
-      :socioeconomic_indicators,
-      position: 0, title: 'Socio-economic indicators'
+      :place_socioeconomic_indicators,
+      position: 1,
+      title: 'Socio-economic indicators'
     )
     attributes_list = [
       {attribute_type: 'ind', attribute_name: 'HDI'},
@@ -148,12 +306,13 @@ namespace :charts do
     create_chart_attributes_from_attributes_list(chart, attributes_list)
   end
 
-  def create_agricultural_indicators(profile, parent)
+  def create_place_agricultural_indicators(profile, parent)
     chart = find_or_create_chart(
       profile,
       parent,
-      :agricultural_indicators,
-      position: 0, title: 'Agricultural indicators'
+      :place_agricultural_indicators,
+      position: 2,
+      title: 'Agricultural indicators'
     )
     attributes_list = [
       {attribute_type: 'quant', attribute_name: 'SOY_TN'},
@@ -163,12 +322,13 @@ namespace :charts do
     create_chart_attributes_from_attributes_list(chart, attributes_list)
   end
 
-  def create_territorial_governance(profile, parent)
+  def create_place_territorial_governance(profile, parent)
     chart = find_or_create_chart(
       profile,
       parent,
-      :territorial_governance,
-      position: 0, title: 'Territorial governance'
+      :place_territorial_governance,
+      position: 3,
+      title: 'Territorial governance'
     )
     attributes_list = [
       {attribute_type: 'quant', attribute_name: 'APP_DEFICIT_AREA'},
@@ -179,12 +339,13 @@ namespace :charts do
     create_chart_attributes_from_attributes_list(chart, attributes_list)
   end
 
-  def create_trajectory_deforestation(profile)
+  def create_place_trajectory_deforestation(profile)
     chart = find_or_create_chart(
       profile,
       nil,
-      :trajectory_deforestation,
-      position: 1, title: 'Deforestation trajectory of %{place}'
+      :place_trajectory_deforestation,
+      position: 2,
+      title: 'Deforestation trajectory of %{place}'
     )
     attributes_list = [
       {
@@ -216,6 +377,42 @@ namespace :charts do
     create_chart_attributes_from_attributes_list(chart, attributes_list)
   end
 
+  def create_place_top_consumer_actors(profile)
+    chart = find_or_create_chart(
+      profile,
+      nil,
+      :place_top_consumer_actors,
+      position: 3,
+      title: 'Top traders'
+    )
+
+    node_types_list = [
+      {
+        name: NodeTypeName::EXPORTER,
+        identifier: :trader
+      }
+    ]
+    create_chart_node_types_from_node_types_list(chart, node_types_list)
+  end
+
+  def create_place_top_consumer_countries(profile)
+    chart = find_or_create_chart(
+      profile,
+      nil,
+      :place_top_consumer_countries,
+      position: 4,
+      title: 'Top importer countries'
+    )
+
+    node_types_list = [
+      {
+        name: NodeTypeName::COUNTRY,
+        identifier: :destination
+      }
+    ]
+    create_chart_node_types_from_node_types_list(chart, node_types_list)
+  end
+
   def find_or_create_chart(profile, parent, identifier, options)
     chart = Api::V3::Chart.where(
       profile_id: profile.id,
@@ -223,12 +420,14 @@ namespace :charts do
       identifier: identifier
     ).first
     return chart if chart.present?
+
     Api::V3::Chart.create(
       profile: profile,
       parent: parent,
       identifier: identifier,
       position: options[:position],
-      title: options[:title]
+      title: options[:title],
+      options: options[:options]
     )
   end
 
@@ -243,12 +442,13 @@ namespace :charts do
   def create_chart_attribute(chart, attribute_hash, position)
     chart_attribute = Api::V3::ChartAttribute.new(
       chart: chart,
-      position: position,
+      position: attribute_hash[:identifier].present? ? nil : position,
       display_name: attribute_hash[:name],
       legend_name: attribute_hash[:legend_name],
       display_type: attribute_hash[:type],
       display_style: attribute_hash[:style],
-      state_average: attribute_hash[:state_average] || false
+      state_average: attribute_hash[:state_average] || false,
+      identifier: attribute_hash[:identifier]
     )
     attribute_type = attribute_hash.delete(:attribute_type)
     attribute_name = attribute_hash.delete(:attribute_name)
@@ -269,4 +469,19 @@ namespace :charts do
     chart_attribute.save
   end
   # rubocop:enable Metrics/CyclomaticComplexity
+
+  def create_chart_node_types_from_node_types_list(chart, list)
+    chart.chart_node_types.delete_all
+    list.each do |node_type_hash|
+      node_type = Api::V3::NodeType.find_by_name(node_type_hash[:name])
+      next unless node_type
+
+      chart.chart_node_types.create(
+        node_type: node_type,
+        identifier: node_type_hash[:identifier],
+        position: node_type_hash[:position],
+        is_total: node_type_hash[:is_total]
+      )
+    end
+  end
 end

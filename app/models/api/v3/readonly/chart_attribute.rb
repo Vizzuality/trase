@@ -11,10 +11,11 @@
 #  display_type  :text
 #  display_style :text
 #  state_average :boolean
+#  identifier    :text
 #  name          :text
 #  unit          :text
 #  tooltip_text  :text
-#  attribute_id  :integer
+#  attribute_id  :bigint(8)
 #  original_id   :integer
 #  original_type :text
 #  created_at    :datetime
@@ -36,6 +37,7 @@ module Api
 
         def original_attribute
           return nil unless %w(Ind Qual Quant).include? original_type
+
           original_class = Api::V3.const_get(original_type)
           original_class.find(original_id)
         end
