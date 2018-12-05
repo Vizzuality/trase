@@ -69,6 +69,7 @@ module.exports = {
       styles: path.resolve(__dirname, '..', 'styles'),
       components: path.resolve(srcPath, 'components'),
       'react-components': path.resolve(srcPath, 'react-components'),
+      'named-maps': path.resolve(srcPath, 'named-maps'),
       containers: path.resolve(srcPath, 'containers'),
       utils: path.resolve(srcPath, 'utils'),
       constants: path.resolve(srcPath, 'constants'),

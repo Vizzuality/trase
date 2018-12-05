@@ -17,7 +17,7 @@ import {
   GET_NODE_ATTRIBUTES_URL,
   getURLFromParams
 } from 'utils/getURLFromParams';
-import contextLayersCarto from 'actions/map/context_layers_carto';
+import contextLayersCarto from 'named-maps/tool_context_layers_carto';
 import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
 import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
 import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
@@ -29,7 +29,7 @@ import compact from 'lodash/compact';
 import uniq from 'lodash/uniq';
 import isEmpty from 'lodash/isEmpty';
 import xor from 'lodash/xor';
-import { getCurrentContext } from 'scripts/reducers/helpers/contextHelper';
+import { getCurrentContext } from 'reducers/helpers/contextHelper';
 import { getSelectedNodesColumnsPos } from 'react-components/tool/tool.selectors';
 import pSettle from 'p-settle';
 
