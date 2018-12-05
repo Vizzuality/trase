@@ -36,7 +36,8 @@
             "containers": "./scripts/containers",
             "constants": "./scripts/constants",
             "router": "./scripts/router",
-            "react-components": "./scripts/react-components"
+            "react-components": "./scripts/react-components",
+            "named-maps": "./scripts/named-maps"
           }
         }]
       ]
