@@ -113,7 +113,7 @@ function saveTemplates(templates, namedMaps) {
     '..',
     'scripts',
     'named-maps',
-    `${type}_context_layers_carto.js`
+    `${type}_named_maps_carto.js`
   );
 
   let existingLayers = {};
@@ -143,6 +143,7 @@ function saveTemplates(templates, namedMaps) {
 
 function applyTemplates(classified) {
   const { toUpdate, toCreate } = classified;
+  console.log(toUpdate);
   const updated = toUpdate.length > 0 ? update(toUpdate) : [];
   const created = toCreate.length > 0 ? create(toCreate) : [];
   Promise.all([updated, created])

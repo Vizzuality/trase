@@ -17,7 +17,7 @@ import {
   GET_NODE_ATTRIBUTES_URL,
   getURLFromParams
 } from 'utils/getURLFromParams';
-import contextLayersCarto from 'named-maps/tool_context_layers_carto';
+import contextLayersCarto from 'named-maps/tool_named_maps_carto';
 import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
 import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
 import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
