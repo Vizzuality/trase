@@ -1,14 +1,31 @@
 namespace :charts do
+  def without_chart_callbacks
+    Api::V3::Chart.skip_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::ChartAttribute.skip_callback(:commit, :after, :refresh_dependencies)
+    yield
+    Api::V3::Chart.set_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::ChartAttribute.set_callback(:commit, :after, :refresh_dependencies)
+  end
+
+  task reload: :environment do
+    without_chart_callbacks do
+      Api::V3::Chart.delete_all
+    end
+    Rake::Task['charts:populate'].invoke
+  end
+
   desc 'Populate charts tables with profiles configuration for Brazil soy'
   task populate: :environment do
-    context = Api::V3::Context.
-      joins(:commodity, :country).
-      find_by('countries.iso2' => 'BR', 'commodities.name' => 'SOY')
-    exit(1) unless context.present?
+    without_chart_callbacks do
+      context = Api::V3::Context.
+        joins(:commodity, :country).
+        find_by('countries.iso2' => 'BR', 'commodities.name' => 'SOY')
+      exit(1) unless context.present?
 
-    initialise_actor_profiles(context)
-    initialise_place_profiles(context)
-    Api::V3::Readonly::ChartAttribute.refresh
+      initialise_actor_profiles(context)
+      initialise_place_profiles(context)
+      Api::V3::Readonly::ChartAttribute.refresh
+    end
   end
 
   def initialise_actor_profiles(context)
