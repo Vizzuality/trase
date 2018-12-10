@@ -11,6 +11,21 @@ export default function routeSubscriber(store) {
       this.resetPage = this.resetPage.bind(this);
     }
 
+    loadDynamicLayouts(type, componentName) {
+      // This avoids loading the components from the start, by importing such
+      // components code-splitting purpose was defeated
+      switch (type) {
+        case 'team':
+          return import(`../react-components/team/${componentName}`);
+        case 'teamMember':
+          return import(`../react-components/team/team-member/${componentName}`);
+        case 'about':
+          return import(`../react-components/static-content/markdown-renderer/${componentName}`);
+        default:
+          return Promise.resolve();
+      }
+    }
+
     onCreated() {
       this.onRouteChange(store.getState().location);
     }
@@ -20,7 +35,7 @@ export default function routeSubscriber(store) {
     }
 
     onRouteChange({ routesMap, type } = {}) {
-      const filename = routesMap[type].page;
+      const { page: filename, component: componentName, layout = x => x } = routesMap[type];
       if (this.filename !== filename) {
         this.resetPage();
         this.filename = filename;
@@ -28,7 +43,13 @@ export default function routeSubscriber(store) {
         import(/* webpackChunkName: "[request]" */
         `../pages/${this.filename}.page.jsx`).then(page => {
           this.page = page;
-          this.page.mount(this.root, store);
+          if (componentName) {
+            this.loadDynamicLayouts(type, componentName).then(component => {
+              this.page.mount(this.root, store, { component: layout(component.default) });
+            });
+          } else {
+            this.page.mount(this.root, store);
+          }
         });
       }
     }
