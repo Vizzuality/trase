@@ -7,6 +7,7 @@ import RecolorBySelector from 'react-components/nav/filters-nav/recolor-by-selec
 import ResizeBySelector from 'react-components/nav/filters-nav/resize-by-selector/resize-by-selector.container';
 import ViewSelector from 'react-components/nav/filters-nav/view-selector/view-selector.container';
 import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
+import YearsDropdownSelector from 'react-components/nav/filters-nav/years-dropdown-selector/years-dropdown-selector.container';
 import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
 import NavLinksList from 'react-components/nav/nav-links.component';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
@@ -111,6 +112,7 @@ class FiltersNav extends React.PureComponent {
           )}
           {filters.adminLevel && <AdminLevelFilter className="filters-nav-item" />}
           {filters.year && <YearsSelector className="filters-nav-item" />}
+          {filters.yearsDropdown && <YearsDropdownSelector className="filters-nav-item" />}
         </div>
         <div className="filters-nav-right-section">
           {filters.resizeBy && <ResizeBySelector className="filters-nav-item" />}

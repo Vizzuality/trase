@@ -14,6 +14,7 @@ export const getNavFilters = createSelector(
       toolSearch: isToolPage,
       year: navDisplaysContext,
       contextSelector: navDisplaysContext,
+      yearsDropdown: page === 'logisticsMap',
       resizeBy: selectedContext && isToolPage,
       recolorBy: selectedContext && isToolPage,
       adminLevel: selectedContext && isToolPage,
