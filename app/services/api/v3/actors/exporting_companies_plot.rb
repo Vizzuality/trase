@@ -100,24 +100,7 @@ module Api
               name: 'Soy deforestation',
               unit: 'ha',
               attribute_type: 'quant',
-              attribute_name: 'SOY_DEFORESTATION_1_YEAR'
-            },
-            {
-              name: 'Soy related deforestation',
-              unit: 'ha',
-              attribute_type: 'quant',
-              attribute_name: 'AGROSATELITE_SOY_DEFOR_'
-            },
-            {
-              name: 'Loss of biodiversity',
-              attribute_type: 'quant',
-              attribute_name: 'BIODIVERSITY'
-            },
-            {
-              name: 'Land-based emissions',
-              unit: 't',
-              attribute_type: 'quant',
-              attribute_name: 'GHG_'
+              attribute_name: 'SOY_DEFORESTATION_5_YEAR_ANNUAL'
             }
           ]
         end
