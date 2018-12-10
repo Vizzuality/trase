@@ -16,7 +16,7 @@ class LogisticsMapContainer extends React.PureComponent {
     if (!data) return;
     const show = true;
     const x = 0;
-    const y = 0;
+    const y = 35;
     const text = {
       crushing_facilities: 'Crushing Facility',
       brazil_refining_facilities: 'Refinery',
