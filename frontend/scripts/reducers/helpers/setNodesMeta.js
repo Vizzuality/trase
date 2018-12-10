@@ -1,9 +1,9 @@
-import _ from 'lodash';
+import keyBy from 'lodash/keyBy';
 import { UNITLESS_UNITS } from 'constants';
 import getNodeMetaUid from './getNodeMetaUid';
 
 export default function(nodesDict, nodesMeta, layers) {
-  const layersByUID = _.keyBy(layers, 'uid');
+  const layersByUID = keyBy(layers, 'uid');
   const nodesDictWithMeta = {};
 
   if (!nodesMeta) {
@@ -12,7 +12,7 @@ export default function(nodesDict, nodesMeta, layers) {
 
   nodesMeta.data.forEach(nodeMeta => {
     const nodeId = parseInt(nodeMeta.node_id, 10);
-    const nodeWithMeta = nodesDictWithMeta[nodeId] || _.cloneDeep(nodesDict[nodeId]);
+    const nodeWithMeta = nodesDictWithMeta[nodeId] || { ...nodesDict[nodeId] };
 
     if (!nodeWithMeta) {
       console.warn(
@@ -39,7 +39,7 @@ export default function(nodesDict, nodesMeta, layers) {
       dimensionMeta.unit = layerByUID.unit;
     }
 
-    nodeWithMeta.meta[uid] = dimensionMeta;
+    nodeWithMeta.meta = { ...nodeWithMeta.meta, [uid]: dimensionMeta };
     nodesDictWithMeta[nodeId] = nodeWithMeta;
   });
   return nodesDictWithMeta;

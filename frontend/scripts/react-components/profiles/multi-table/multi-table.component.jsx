@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+import isFunction from 'lodash/isFunction';
 
 import Table from 'react-components/profiles/table/table.component';
 import DropdownTabSwitcher from '../dropdown-tab-switcher/dropdown-tab-switcher.component';
@@ -56,7 +56,7 @@ class MultiTable extends Component {
               <Table
                 data={elem}
                 type={type}
-                target={_.isFunction(target) ? target(elem) : target}
+                target={isFunction(target) ? target(elem) : target}
                 targetPayload={targetPayload}
                 year={year}
                 contextId={contextId}
