@@ -70,6 +70,7 @@
     "USE_SERVICE_WORKER": true,
     "NAMED_MAPS_ENV": true,
     "GFW_WIDGETS_BASE_URL": true,
+    "CARTO_ACCOUNT": true,
     "ga": true,
     "fetch": true
   },

@@ -54,7 +54,8 @@ module.exports = {
       USE_SERVICE_WORKER: process.env.USE_SERVICE_WORKER === 'true',
       TRANSIFEX_API_KEY: JSON.stringify(process.env.TRANSIFEX_API_KEY),
       HOME_VIDEO_ID: JSON.stringify(process.env.HOME_VIDEO_ID),
-      NAMED_MAPS_ENV: JSON.stringify(process.env.NAMED_MAPS_ENV)
+      NAMED_MAPS_ENV: JSON.stringify(process.env.NAMED_MAPS_ENV),
+      CARTO_ACCOUNT: JSON.stringify(process.env.CARTO_ACCOUNT)
     }),
     new webpack.LoaderOptionsPlugin({ options: {} })
   ],

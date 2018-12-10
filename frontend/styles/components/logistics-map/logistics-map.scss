@@ -2,4 +2,18 @@
 
 .c-logistics-map {
   height: 100%;
+
+
+  .leaflet-popup-content-wrapper {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .leaflet-popup-tip-container {
+    display: none;
+  }
+
+  .leaflet-popup-close-button {
+    display: none;
+  }
 }
