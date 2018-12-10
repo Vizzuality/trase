@@ -1,25 +1,72 @@
-import logisticsMapLayers from 'named-maps/logistics-map_named_maps_carto';
-import entries from 'lodash/entries';
-import { CARTO_BASE_URL } from 'constants';
+const layers = [
+  {
+    version: '0.0.1',
+    name: 'crushing_facilities',
+    layers: [
+      {
+        type: 'cartodb',
+        options: {
+          sql:
+            'SELECT to_date(year::varchar, \'yyyy\') as year_date, * FROM "p2cs-sei".brazil_crushing_facilities',
+          cartocss:
+            "#layer { marker-width: ramp([capacity], range(15, 26), quantiles(7)); marker-fill: #e1833b; marker-fill-opacity: 1; marker-file: url('https://s3.amazonaws.com/com.cartodb.users-assets.production/maki-icons/industrial-18.svg'); marker-allow-overlap: true; marker-line-width: 0.5; marker-line-color: #000000; marker-line-opacity: 1; marker-comp-op: overlay; } #layer::labels { text-name: [company]; text-face-name: 'DejaVu Sans Book'; text-size: 12; text-fill: #a40000; text-label-position-tolerance: 0; text-halo-radius: 3; text-halo-fill: #fcfcfc; text-dy: 13; text-allow-overlap: false; text-placement: point; text-placement-type: dummy; }",
+          cartocss_version: '2.3.0',
+          interactivity: ['company', 'municipality', 'capacity']
+        }
+      }
+    ]
+  },
+  {
+    version: '0.0.1',
+    name: 'brazil_refining_facilities',
+    layers: [
+      {
+        type: 'cartodb',
+        options: {
+          sql: 'SELECT * FROM "p2cs-sei".brazil_refining_facilities',
+          cartocss:
+            '#layer { marker-width: 7; marker-fill: #EE4D5A; marker-fill-opacity: 0.9; marker-allow-overlap: true; marker-line-width: 1; marker-line-color: #FFFFFF; marker-line-opacity: 1; }',
+          cartocss_version: '2.3.0',
+          interactivity: ['company', 'municipality', 'capacity']
+        }
+      }
+    ]
+  },
+  {
+    version: '0.0.1',
+    name: 'storage_facilities',
+    layers: [
+      {
+        type: 'cartodb',
+        options: {
+          sql: 'SELECT * FROM "p2cs-sei".brazil_storage_facilities_sample',
+          cartocss:
+            "#layer['mapnik::geometry_type'=1] { marker-width: 7; marker-fill: #EE4D5A; marker-fill-opacity: 0.9; marker-line-color: #FFFFFF; marker-line-width: 1; marker-line-opacity: 1; marker-type: ellipse; marker-allow-overlap: true; } #layer['mapnik::geometry_type'=2] { line-color: #4CC8A3; line-width: 1.5; line-opacity: 1; } #layer['mapnik::geometry_type'=3] { polygon-fill: #826DBA; polygon-opacity: 0.9; ::outline { line-color: #FFFFFF; line-width: 1; line-opacity: 0.5; } }",
+          cartocss_version: '2.3.0',
+          interactivity: ['company', 'municipality', 'capacity']
+        }
+      }
+    ]
+  }
+];
 
-export const getLogisticsMapLayers = () => {
-  const layers = logisticsMapLayers[NAMED_MAPS_ENV] || {};
-  return entries(layers).map(([name, layer]) => ({
-    name,
+export const getLogisticsMapLayers = () =>
+  layers.map(layer => ({
+    name: layer.name,
     opacity: 1,
     active: true,
-    id: layer.uid,
+    id: layer.name,
     type: 'layer',
-    provider: 'leaflet',
+    provider: 'carto',
     layerConfig: {
+      account: CARTO_ACCOUNT,
       body: {
-        format: 'image/png',
+        layers: layer.layers,
         minzoom: 2,
         maxzoom: 20
       },
-      type: 'tileLayer',
-      service: 'leaflet',
-      url: `${CARTO_BASE_URL}${layer.layergroupid}/{z}/{x}/{y}.png`
-    }
+      type: 'carto',
+      service: 'carto'
+    },
+    interactivity: layer.layers[0].options.interactivity
   }));
-};
