@@ -24,7 +24,8 @@
         "@babel/plugin-syntax-object-rest-spread",
         "@babel/plugin-transform-exponentiation-operator",
         ["@babel/plugin-proposal-class-properties", { "spec": true }],
-        "transform-react-remove-prop-types"
+        "transform-react-remove-prop-types",
+        "lodash"
       ]
     },
     "test": {
