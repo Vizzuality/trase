@@ -1,11 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { getLogisticsMapLayers } from 'react-components/logistics-map/logistics-map.selectors';
 import LogisticsMap from 'react-components/logistics-map/logistics-map.component';
 import formatValue from 'utils/formatValue';
 
 class LogisticsMapContainer extends React.PureComponent {
+  static propTypes = {
+    layers: PropTypes
+  };
+
   state = {
-    layers: getLogisticsMapLayers(),
     mapPopUp: null
   };
 
@@ -41,7 +46,8 @@ class LogisticsMapContainer extends React.PureComponent {
   };
 
   render() {
-    const { layers, mapPopUp } = this.state;
+    const { layers } = this.props;
+    const { mapPopUp } = this.state;
     return (
       <LogisticsMap
         layers={layers}
@@ -53,4 +59,9 @@ class LogisticsMapContainer extends React.PureComponent {
   }
 }
 
-export default LogisticsMapContainer;
+const mapStateToProps = state => ({
+  layers: getLogisticsMapLayers(),
+  activeYear: state.logisticsMap.activeYear
+});
+
+export default connect(mapStateToProps)(LogisticsMapContainer);

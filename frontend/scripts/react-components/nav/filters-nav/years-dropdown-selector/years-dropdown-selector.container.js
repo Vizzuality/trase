@@ -1,21 +1,24 @@
 import { connect } from 'react-redux';
 import { toggleDropdown } from 'actions/app.actions';
 import YearsDropdownSelector from 'react-components/nav/filters-nav/years-dropdown-selector/years-dropdown-selector.component';
+import { selectLogisticsMapYear } from 'react-components/logistics-map/logistics-map.actions';
 
-const mapStateToProps = state => ({
-  selectedYear: 2013,
-  currentDropdown: state.app.currentDropdown,
-  years: Array(10)
-    .fill(2000)
-    .map((year, index) => year + index)
-});
+const mapStateToProps = state => {
+  const {
+    app,
+    logisticsMap: { years, selectedYear }
+  } = state;
+  return {
+    years,
+    selectedYear,
+    currentDropdown: app.currentDropdown
+  };
+};
 
-const mapDispatchToProps = dispatch => ({
-  onToggle: id => {
-    dispatch(toggleDropdown(id));
-  },
-  onSelected: year => console.log(year)
-});
+const mapDispatchToProps = {
+  onToggle: toggleDropdown,
+  onSelected: selectLogisticsMapYear
+};
 
 export default connect(
   mapStateToProps,
