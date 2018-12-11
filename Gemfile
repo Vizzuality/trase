@@ -5,7 +5,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails', '~> 5.1.6'
+gem 'rails', '~> 5.2.1'
 gem 'pg', '~> 0.18'
 gem 'scenic'
 gem 'pg_csv'
@@ -14,6 +14,7 @@ gem 'rubyzip'
 gem 'puma', '~> 3.0'
 gem 'dotenv-rails', '~> 2.2'
 gem 'active_model_serializers', '~> 0.10.0'
+gem 'kaminari'
 gem 'enumerate_it', '~> 1.4.1'
 gem 'mailchimp-api', require: 'mailchimp'
 gem 'oj'
@@ -26,9 +27,10 @@ gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'devise', '~> 4.2'
-gem 'activeadmin', '~> 1.2.1'
+gem 'activeadmin', '~> 1.3.1'
 gem 'activeadmin_simplemde'
 gem 'inherited_resources', github: 'activeadmin/inherited_resources'
+gem 'activeadmin_addons'
 
 gem 'ckeditor', git: 'https://github.com/galetahub/ckeditor.git'
 gem 'paperclip', '~> 5.2.0'
@@ -41,10 +43,13 @@ gem 'appsignal'
 gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
 gem 'whenever', require: false
+gem 'ransack'
+gem 'bootsnap'
 
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'rspec-rails', '~> 3.5'
+  gem 'rubocop-rspec'
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
   gem 'factory_bot_rails'
@@ -66,6 +71,9 @@ group :development do
   gem 'capistrano-passenger'
   gem 'capistrano-npm'
   gem 'rubocop', require: false
+  gem 'rbnacl', '>= 3.2', '< 5.0'
+  gem 'rbnacl-libsodium'
+  gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
 end
 
 group :test do

@@ -1,6 +1,7 @@
 /* eslint-disable global-require,import/no-extraneous-dependencies */
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
 import rangeTouch from 'rangetouch';
 import analyticsMiddleware from 'analytics/middleware';
 import { toolUrlStateMiddleware } from 'utils/stateURL';
@@ -8,9 +9,18 @@ import * as appReducers from 'store';
 import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
 import { register, unregister } from './worker';
+import { rootSaga } from './sagas';
+
+const sagaMiddleware = createSagaMiddleware();
 
 // analytics middleware has to be after router.middleware
-const middlewares = [thunk, router.middleware, toolUrlStateMiddleware, analyticsMiddleware];
+const middlewares = [
+  thunk,
+  sagaMiddleware,
+  router.middleware,
+  toolUrlStateMiddleware,
+  analyticsMiddleware
+];
 
 window.liveSettings = TRANSIFEX_API_KEY && {
   api_key: TRANSIFEX_API_KEY,
@@ -59,3 +69,4 @@ const store = createStore(
 );
 
 routeSubscriber(store);
+sagaMiddleware.run(rootSaga);

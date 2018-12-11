@@ -6,6 +6,7 @@ import capitalize from 'lodash/capitalize';
 import { event as d3_event, select as d3_select } from 'd3-selection';
 import { axisBottom as d3_axis_bottom, axisLeft as d3_axis_left } from 'd3-axis';
 import { scaleLinear as d3_scale_linear, scaleTime as d3_scale_time } from 'd3-scale';
+import { timeYear as d3_time_year } from 'd3-time';
 import { extent as d3_extent } from 'd3-array';
 import { area as d3_area, line as d3_line } from 'd3-shape';
 import { format as d3_format } from 'd3-format';
@@ -36,33 +37,26 @@ class Line extends Component {
     return this.props.width < 450;
   }
 
+  getTicksStyle() {
+    const { width } = this.props;
+    if (this.isSmallChart()) {
+      return 'small';
+    }
+    if (width <= 600) {
+      return 'medium';
+    }
+
+    return 'normal';
+  }
+
   prepareData(xValues, data) {
-    const continuousValues = xValues.map((year, index) => ({
+    return xValues.map((year, index) => ({
       name: data.name,
       nodeId: data.node_id,
       date: new Date(year, 0),
       value: data.values[index],
       value9: data.value9
     }));
-
-    // break down data into discontinuous blocks when data is missing, to avoid
-    // having the impression values is zero while it's actually unknown
-    const discontinuousValues = [[]];
-    continuousValues.forEach((point, i) => {
-      if (i > 0) {
-        const prevPoint = continuousValues[i - 1];
-        if (
-          (prevPoint.value === null && point.value !== null) ||
-          (prevPoint.value !== null && point.value === null)
-        ) {
-          discontinuousValues.push([]);
-        }
-      }
-      discontinuousValues[discontinuousValues.length - 1].push(point);
-    });
-
-    // get rid of blocks composed of only nulls
-    return discontinuousValues.filter(points => points.filter(p => p.value !== null).length);
   }
 
   build() {
@@ -102,6 +96,7 @@ class Line extends Component {
       .append('svg')
       .attr('width', width + chartMargin.left + chartMargin.right)
       .attr('height', chartHeight + chartMargin.top + chartMargin.bottom)
+      .style('overflow', 'visible')
       .append('g')
       .attr('transform', `translate(${chartMargin.left},${chartMargin.top})`);
 
@@ -124,6 +119,7 @@ class Line extends Component {
     sanitizedLines.forEach((lineData, i) => {
       const lineValuesWithFormat = this.prepareData(xValues, lineData);
       const line = d3_line()
+        .defined(d => d.value)
         .x(d => x(d.date))
         .y(d => y(d.value));
       const type = typeof style !== 'undefined' ? style.type : lineData.type;
@@ -136,31 +132,33 @@ class Line extends Component {
       switch (type) {
         case 'area':
           area = d3_area()
+            .defined(d => d.value)
             .x(d => x(d.date))
             .y(chartHeight)
             .y1(d => y(d.value));
 
-          // loop through broken/discontinuous lines
-          lineValuesWithFormat.forEach(points => {
-            d3Container
-              .append('path')
-              .datum(points)
-              .attr('class', lineStyle)
-              .attr('d', area);
+          d3Container
+            .append('path')
+            .datum(lineValuesWithFormat)
+            .attr('data-test', `${testId}-area`)
+            .attr('class', lineStyle)
+            .attr('d', area);
 
-            d3Container
-              .append('path')
-              .datum(points)
-              .attr('class', `line-${lineStyle}`)
-              .attr('d', line);
-          });
+          d3Container
+            .append('path')
+            .datum(lineValuesWithFormat)
+            .attr('data-test', `${testId}-area-line`)
+            .attr('class', `line-${lineStyle}`)
+            .attr('d', line);
+
           break;
 
         // following styles don't care about discontinuous blocks for now and will only render the first one
         case 'line':
           d3Container
             .append('path')
-            .datum(lineValuesWithFormat[0])
+            .datum(lineValuesWithFormat)
+            .attr('data-test', `${testId}-line`)
             .attr('class', lineStyle)
             .attr('d', line);
           break;
@@ -168,7 +166,7 @@ class Line extends Component {
         case 'line-points': {
           const lineNumber = numLines - i;
           pathContainers = d3Container
-            .datum(lineValuesWithFormat[0])
+            .datum(lineValuesWithFormat)
             .append('g')
             .attr('id', lineData.geo_id)
             .attr('data-test', `${testId}-line-points`)
@@ -229,7 +227,7 @@ class Line extends Component {
 
           const circles = pathContainers
             .selectAll('circle')
-            .data(d => d)
+            .data(d => d.filter(dd => dd.value !== null))
             .enter();
 
           circles
@@ -278,7 +276,10 @@ class Line extends Component {
 
       xTickFormat = value => {
         const format = d3_timeFormat('%Y');
-        return format(value);
+        const formatValue = format(value);
+        return this.getTicksStyle() === 'normal'
+          ? formatValue
+          : `'${formatValue.toString().slice(2)}`;
       };
     } else {
       yTickFormat = (value, idx, arr) => {
@@ -288,12 +289,17 @@ class Line extends Component {
       };
       xTickFormat = value => {
         const format = d3_timeFormat('%Y');
-        return format(value);
+        const formatValue = format(value);
+        return this.getTicksStyle() === 'normal'
+          ? formatValue
+          : `'${formatValue.toString().slice(2)}`;
       };
     }
 
+    const xTicks = this.getTicksStyle() === 'small' ? d3_time_year.every(2) : xValues.length;
+
     const xAxis = d3_axis_bottom(x)
-      .ticks(ticks.xTicks || xValues.length)
+      .ticks(ticks.xTicks || xTicks)
       .tickSize(0)
       .tickPadding(ticks.xTickPadding)
       .tickFormat(xTickFormat);

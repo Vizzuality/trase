@@ -13,7 +13,7 @@
 #  is_default             :boolean
 #  created_at             :datetime
 #  updated_at             :datetime
-#  attribute_id           :integer
+#  attribute_id           :bigint(8)
 #  name                   :text
 #  attribute_type         :text
 #  unit                   :text
@@ -24,7 +24,7 @@
 #
 # Indexes
 #
-#  map_attributes_mv_context_id_is_disabled_idx                (context_id,is_disabled)
+#  map_attributes_mv_context_id_is_disabled_idx                (context_id,is_disabled) WHERE (is_disabled IS FALSE)
 #  map_attributes_mv_id_idx                                    (id) UNIQUE
 #  map_attributes_mv_map_attribute_group_id_attribute_id_idx   (map_attribute_group_id,attribute_id)
 #  map_attributes_mv_original_attribute_id_attribute_type_idx  (original_attribute_id,attribute_type)
@@ -37,6 +37,10 @@ module Api
         self.table_name = 'map_attributes_mv'
 
         belongs_to :map_attribute_group
+
+        def self.refresh_dependencies(options = {})
+          Api::V3::Readonly::Attribute.refresh(options.merge(skip_dependents: true))
+        end
       end
     end
   end

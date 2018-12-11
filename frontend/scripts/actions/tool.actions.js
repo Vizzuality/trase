@@ -31,13 +31,13 @@ import isEmpty from 'lodash/isEmpty';
 import xor from 'lodash/xor';
 import { getCurrentContext } from 'scripts/reducers/helpers/contextHelper';
 import { getSelectedNodesColumnsPos } from 'react-components/tool/tool.selectors';
+import pSettle from 'p-settle';
 
 export const RESET_SELECTION = 'RESET_SELECTION';
 export const GET_COLUMNS = 'GET_COLUMNS';
 export const RESET_TOOL_LOADERS = 'RESET_TOOL_LOADERS';
 export const SET_FLOWS_LOADING_STATE = 'SET_FLOWS_LOADING_STATE';
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
-export const LOAD_NODES = 'LOAD_NODES';
 export const GET_LINKS = 'GET_LINKS';
 export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
 export const SET_MAP_DIMENSIONS_DATA = 'SET_MAP_DIMENSIONS_DATA';
@@ -288,13 +288,13 @@ export function loadToolDataForCurrentContext() {
     };
     const allNodesURL = getURLFromParams(GET_ALL_NODES_URL, params);
     const columnsURL = getURLFromParams(GET_COLUMNS_URL, params);
-    const promises = [allNodesURL, columnsURL].map(url => fetch(url).then(resp => resp.text()));
+    const promises = [allNodesURL, columnsURL].map(url => fetch(url).then(resp => resp.json()));
 
     Promise.all(promises).then(payload => {
       // TODO do not wait for end of all promises/use another .all call
       dispatch({
         type: GET_COLUMNS,
-        payload: payload.slice(0, 2)
+        payload
       });
 
       dispatch(loadLinks());
@@ -306,10 +306,6 @@ export function loadToolDataForCurrentContext() {
 
 export function loadNodes() {
   return (dispatch, getState) => {
-    dispatch({
-      type: LOAD_NODES
-    });
-
     const params = {
       context_id: getState().app.selectedContext.id,
       start_year: getState().tool.selectedYears[0],
@@ -406,10 +402,11 @@ export function loadNodes() {
 
 export function loadLinks() {
   return (dispatch, getState) => {
-    dispatch({
-      type: SET_FLOWS_LOADING_STATE
-    });
     const state = getState();
+    dispatch({
+      type: SET_FLOWS_LOADING_STATE,
+      payload: { loadedFlowsContextId: state.app.selectedContext.id }
+    });
     const params = {
       context_id: state.app.selectedContext.id,
       start_year: state.tool.selectedYears[0],
@@ -452,13 +449,9 @@ export function loadLinks() {
         if (response.status === 404) {
           return null;
         }
-        return response.text();
+        return response.json();
       })
-      .then(payload => {
-        if (!payload) {
-          return;
-        }
-        const jsonPayload = JSON.parse(payload);
+      .then(jsonPayload => {
         if (jsonPayload.data === undefined || !jsonPayload.data.length) {
           console.error('server returned empty flows/link list, with params:', params);
           dispatch({
@@ -488,18 +481,18 @@ export function loadLinks() {
 
         // load related geoIds to show on the map
         dispatch(loadLinkedGeoIDs());
-      });
+      })
+      .catch(console.error);
   };
 }
 
 export function loadMapVectorData() {
   return (dispatch, getState) => {
     const geoColumns = getState().tool.columns.filter(column => column.isGeo === true);
-    const geometriesPromises = [];
-    const mapVectorData = {};
 
-    geoColumns.forEach(geoColumn => {
-      mapVectorData[geoColumn.id] = {
+    const vectorMaps = geoColumns.map(geoColumn => {
+      const vectorData = {
+        id: geoColumn.id,
         name: geoColumn.name,
         useGeometryFromColumnId: geoColumn.useGeometryFromColumnId
       };
@@ -509,19 +502,9 @@ export function loadMapVectorData() {
           / /g,
           '_'
         )}.topo.json`;
-        const geometryPromise = fetch(vectorLayerURL)
-          .then(response => {
-            if (response.status >= 200 && response.status < 300) {
-              return response.text();
-            }
-            return undefined;
-          })
-          .then(payload => {
-            if (payload === undefined) {
-              console.warn('missing vector layer file', vectorLayerURL);
-              return;
-            }
-            const topoJSON = JSON.parse(payload);
+        return fetch(vectorLayerURL)
+          .then(res => res.json())
+          .then(topoJSON => {
             const key = Object.keys(topoJSON.objects)[0];
             const geoJSON = topojsonFeature(topoJSON, topoJSON.objects[key]);
             setGeoJSONMeta(
@@ -530,19 +513,32 @@ export function loadMapVectorData() {
               getState().tool.geoIdsDict,
               geoColumn.id
             );
-            mapVectorData[geoColumn.id].geoJSON = geoJSON;
-          });
-        geometriesPromises.push(geometryPromise);
+            return {
+              geoJSON,
+              ...vectorData
+            };
+          })
+          .catch(() => Promise.reject(vectorLayerURL));
       }
+      return Promise.resolve(vectorData);
     });
 
-    Promise.all(geometriesPromises).then(() => {
-      Object.keys(mapVectorData).forEach(id => {
-        mapVectorData[id].isPoint =
-          mapVectorData[id].geoJSON &&
-          mapVectorData[id].geoJSON.features.length &&
-          mapVectorData[id].geoJSON.features[0].geometry.type === 'Point';
-      });
+    pSettle(vectorMaps).then(results => {
+      const mapVectorData = results
+        .map(res => {
+          if (res.isFulfilled && !res.isRejected) {
+            return {
+              ...res.value,
+              isPoint:
+                !!res.value.geoJSON &&
+                !!res.value.geoJSON.features.length &&
+                res.value.geoJSON.features[0].geometry.type === 'Point'
+            };
+          }
+          console.warn('missing vector layer file', res.reason);
+          return null;
+        })
+        .filter(item => item !== null);
       dispatch({
         type: GET_MAP_VECTOR_DATA,
         mapVectorData
@@ -568,7 +564,11 @@ export function setMapContextLayers(contextualLayers) {
   return (dispatch, getState) => {
     const mapContextualLayers = contextualLayers.map(layer => {
       const contextLayer = Object.assign({}, layer);
-      const cartoIds = contextLayersCarto[layer.identifier];
+      if (!NAMED_MAPS_ENV || !contextLayersCarto[NAMED_MAPS_ENV]) {
+        console.error('Invalid or missing NAMED_MAPS_ENV is preventing contextual layer loading.');
+        return {};
+      }
+      const cartoIds = contextLayersCarto[NAMED_MAPS_ENV][layer.identifier];
       // TODO: implement multi-year support
       const cartoData = layer.cartoLayers[0];
       if (!cartoData.rasterUrl && cartoIds) {

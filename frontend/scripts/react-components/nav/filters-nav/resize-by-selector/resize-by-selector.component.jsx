@@ -5,6 +5,7 @@ import Tooltip from 'react-components/shared/help-tooltip.component';
 import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
 import PropTypes from 'prop-types';
 import difference from 'lodash/difference';
+import sortBy from 'lodash/sortBy';
 
 const id = 'resize-by';
 
@@ -12,35 +13,27 @@ class ResizeBySelector extends Component {
   renderResizeByElements() {
     const { onSelected, currentDropdown, resizeBys, selectedYears } = this.props;
 
-    resizeBys.sort((a, b) => a.position > b.position);
+    if (currentDropdown !== 'resize-by') return [];
+    return sortBy(resizeBys, ['groupNumber', 'position']).map((resizeBy, index, list) => {
+      const isEnabled =
+        !resizeBy.isDisabled &&
+        (resizeBy.years.length === 0 || difference(selectedYears, resizeBy.years).length === 0);
 
-    const resizeByElements = [];
-    if (currentDropdown === 'resize-by') {
-      resizeBys.forEach((resizeBy, index, currentResizeBys) => {
-        if (index > 0 && currentResizeBys[index - 1].groupNumber !== resizeBy.groupNumber) {
-          resizeByElements.push(
-            <li key={`separator-${index}`} className="dropdown-item -separator" />
-          );
-        }
+      const hasSeparator = list[index - 1] && list[index - 1].groupNumber !== resizeBy.groupNumber;
 
-        const isEnabled =
-          !resizeBy.isDisabled &&
-          (resizeBy.years.length === 0 || difference(selectedYears, resizeBy.years).length === 0);
-
-        resizeByElements.push(
+      return (
+        <React.Fragment key={resizeBy.label}>
+          {hasSeparator && <li className="dropdown-item -separator" />}
           <li
-            key={index}
             className={cx('dropdown-item', { '-faded': !isEnabled })}
             onClick={() => isEnabled && onSelected(resizeBy)}
           >
             {resizeBy.label.toLowerCase()}
             {resizeBy.description && <Tooltip constraint="window" text={resizeBy.description} />}
           </li>
-        );
-      });
-    }
-
-    return resizeByElements;
+        </React.Fragment>
+      );
+    });
   }
 
   render() {
@@ -52,8 +45,6 @@ class ResizeBySelector extends Component {
       selectedResizeBy,
       resizeBys
     } = this.props;
-
-    resizeBys.sort((a, b) => a.position > b.position);
 
     const hasZeroOrSingleElement = resizeBys.length <= 1;
 
@@ -69,14 +60,13 @@ class ResizeBySelector extends Component {
             <Tooltip constraint="window" text={tooltips.sankey.nav.resizeBy.main} />
           </span>
           <span className="dropdown-title -small">{selectedResizeBy.label.toLowerCase()}</span>
-          {selectedResizeBy.name &&
-            tooltips.sankey.nav.resizeBy[selectedResizeBy.name] && (
-              <Tooltip
-                constraint="window"
-                floating
-                text={tooltips.sankey.nav.resizeBy[selectedResizeBy.name]}
-              />
-            )}
+          {selectedResizeBy.name && tooltips.sankey.nav.resizeBy[selectedResizeBy.name] && (
+            <Tooltip
+              constraint="window"
+              floating
+              text={tooltips.sankey.nav.resizeBy[selectedResizeBy.name]}
+            />
+          )}
           <FiltersDropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
             <ul className="dropdown-list -medium">{this.renderResizeByElements()}</ul>
           </FiltersDropdown>

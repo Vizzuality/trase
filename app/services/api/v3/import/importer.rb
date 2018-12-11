@@ -10,8 +10,19 @@ module Api
 
         # order matters a lot in here
         ALL_TABLES = [
-          {table_class: Api::V3::Country, yellow_tables: [Api::V3::CountryProperty]},
-          {table_class: Api::V3::Commodity},
+          {
+            table_class: Api::V3::Country,
+            yellow_tables: [
+              Api::V3::CountryProperty,
+              Api::V3::DashboardTemplateCountry
+            ]
+          },
+          {
+            table_class: Api::V3::Commodity,
+            yellow_tables: [
+              Api::V3::DashboardTemplateCommodity
+            ]
+          },
           {
             table_class: Api::V3::Context,
             yellow_tables: [
@@ -22,7 +33,9 @@ module Api
               Api::V3::MapAttributeGroup,
               Api::V3::MapAttribute,
               Api::V3::RecolorByAttribute,
-              Api::V3::ResizeByAttribute
+              Api::V3::ResizeByAttribute,
+              Api::V3::DashboardsAttributeGroup,
+              Api::V3::DashboardsAttribute
             ]
           },
           {table_class: Api::V3::NodeType},
@@ -36,14 +49,24 @@ module Api
             ]
           },
           {table_class: Api::V3::DownloadVersion},
-          {table_class: Api::V3::Node, yellow_tables: [Api::V3::NodeProperty]},
+          {
+            table_class: Api::V3::Node,
+            yellow_tables: [
+              Api::V3::NodeProperty,
+              Api::V3::DashboardTemplateSource,
+              Api::V3::DashboardTemplateCompany,
+              Api::V3::DashboardTemplateDestination
+
+            ]
+          },
           {
             table_class: Api::V3::Ind,
             yellow_tables: [
               Api::V3::IndProperty,
               Api::V3::MapInd,
               Api::V3::ChartInd,
-              Api::V3::RecolorByInd
+              Api::V3::RecolorByInd,
+              Api::V3::DashboardsInd
             ]
           },
           {table_class: Api::V3::NodeInd},
@@ -53,7 +76,8 @@ module Api
               Api::V3::QualProperty,
               Api::V3::DownloadQual,
               Api::V3::ChartQual,
-              Api::V3::RecolorByQual
+              Api::V3::RecolorByQual,
+              Api::V3::DashboardsQual
             ]
           },
           {table_class: Api::V3::NodeQual},
@@ -64,7 +88,8 @@ module Api
               Api::V3::DownloadQuant,
               Api::V3::MapQuant,
               Api::V3::ChartQuant,
-              Api::V3::ResizeByQuant
+              Api::V3::ResizeByQuant,
+              Api::V3::DashboardsQuant
             ]
           },
           {table_class: Api::V3::NodeQuant},
@@ -145,15 +170,26 @@ module Api
         end
 
         def refresh_mviews
+          # synchronously, with dependencies
           [
             Api::V3::Readonly::Attribute,
+            Api::V3::Readonly::Node,
+            Api::V3::Readonly::DownloadFlow,
+            Api::V3::Readonly::Dashboards::FlowPath
+          ].each { |mview| mview.refresh(sync: true, skip_dependents: true) }
+          # synchronously, skip dependencies (already refreshed)
+          [
             Api::V3::Readonly::DownloadAttribute,
             Api::V3::Readonly::MapAttribute,
             Api::V3::Readonly::RecolorByAttribute,
             Api::V3::Readonly::ResizeByAttribute,
-            Api::V3::Readonly::Node,
-            Api::V3::Readonly::DownloadFlow
-          ].each(&:refresh)
+            Api::V3::Readonly::DashboardsAttribute,
+            Api::V3::Readonly::Dashboards::Commodity,
+            Api::V3::Readonly::Dashboards::Country,
+            Api::V3::Readonly::Dashboards::Source,
+            Api::V3::Readonly::Dashboards::Company,
+            Api::V3::Readonly::Dashboards::Destination
+          ].each { |mview| mview.refresh(sync: true, skip_dependencies: true) }
         end
       end
     end

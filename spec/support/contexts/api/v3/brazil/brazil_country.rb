@@ -12,7 +12,9 @@ shared_context 'api v3 brazil country' do
         country: api_v3_brazil,
         latitude: 23,
         longitude: 32,
-        zoom: 4
+        zoom: 4,
+        annotation_position_x_pos: 10,
+        annotation_position_y_pos: 20
       )
   end
 end

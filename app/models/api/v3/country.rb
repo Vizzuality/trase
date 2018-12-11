@@ -18,9 +18,14 @@ module Api
       has_one :country_property
       has_many :contexts
 
+      has_many :dashboard_template_countries
+      has_many :dashboard_templates, through: :dashboard_template_countries
+
       delegate :latitude, to: :country_property
       delegate :longitude, to: :country_property
       delegate :zoom, to: :country_property
+      delegate :annotation_position_x_pos, to: :country_property
+      delegate :annotation_position_y_pos, to: :country_property
 
       validates :name, presence: true
       validates :iso2, presence: true, uniqueness: true
@@ -29,6 +34,10 @@ module Api
         [
           {name: :iso2, sql_type: 'TEXT'}
         ]
+      end
+
+      def self.select_options
+        order(:name).map { |commodity| [commodity.name, commodity.id] }
       end
     end
   end

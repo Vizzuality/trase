@@ -4,8 +4,18 @@ Rails.application.routes.draw do
     devise_for :users, ActiveAdmin::Devise.config.merge(class_name: 'Content::User')
     authenticate :user do
       require 'sidekiq/web'
+      require 'sidekiq_unique_jobs/web'
       mount Sidekiq::Web => '/sidekiq'
     end
+  end
+
+  namespace :admin do
+    get :source_search, controller: :node_search, action: :source_search
+    get :company_search, controller: :node_search, action: :company_search
+    get :destination_search, controller: :node_search, action: :destination_search
+
+    resources :commodity_search, only: [:index]
+    resources :country_search, only: [:index]
   end
 
   namespace :content do
@@ -56,6 +66,27 @@ Rails.application.routes.draw do
       resources :newsletter_subscriptions, only: [:create]
       resource :database_validation, controller: :database_validation,
                                      only: [:show]
+      namespace :dashboards do
+        resources :templates, only: [:index]
+        resources :sources, only: [:index] do
+          get :search, on: :collection
+        end
+        resources :companies, only: [:index] do
+          get :search, on: :collection
+        end
+        resources :destinations, only: [:index] do
+          get :search, on: :collection
+        end
+        resources :commodities, only: [:index] do
+          get :search, on: :collection
+        end
+        resources :countries, only: [:index] do
+          get :search, on: :collection
+        end
+        resources :attributes
+        resources :filter_meta, only: [:index]
+        resources :chart_data, only: [:index]
+      end
     end
     namespace :v2 do
       resources :geo_id, only: :index

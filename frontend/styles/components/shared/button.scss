@@ -11,6 +11,11 @@
   cursor: pointer;
   white-space: nowrap;
 
+  &[disabled=""] {
+    opacity: 0.4;
+    cursor: default;
+  }
+
   &.-bold {
     font-weight: $font-weight-bold;
   }
@@ -39,6 +44,12 @@
     color: $charcoal-grey;
   }
 
+  &.-gray-transparent{
+    border-color: $gray;
+    background-color: transparent;
+    color: $gray;
+  }
+
   &.-charcoal {
     border-color: transparent;
     background-color: $charcoal-grey;
@@ -51,6 +62,10 @@
 
   &.-medium-large {
     padding: 15px 24px;
+  }
+
+  &.-large {
+    padding: 15px 70px;
   }
 
   &.-big {

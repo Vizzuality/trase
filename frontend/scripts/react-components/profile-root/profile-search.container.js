@@ -1,14 +1,15 @@
 import { connect } from 'react-redux';
-import ProfileSearch from 'react-components/profile-root/profile-search.component';
 import { bindActionCreators } from 'redux';
 import {
   goToNodeProfilePage,
   searchNodeWithTerm
 } from 'react-components/profile-root/profile-root.actions';
+import SearchInput from 'react-components/shared/search-input/search-input.component';
 
 function mapStateToProps(state) {
   return {
-    nodes: state.profileRoot.search.results,
+    year: state.app.selectedContext ? state.app.selectedContext.defaultYear : null,
+    items: state.profileRoot.search.results,
     isLoading: state.profileRoot.search.isLoading
   };
 }
@@ -16,7 +17,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      onNodeSelected: node => goToNodeProfilePage(node),
+      onSelect: (node, year) => goToNodeProfilePage(node, year),
       onSearchTermChange: searchTerm => searchNodeWithTerm(searchTerm)
     },
     dispatch
@@ -25,4 +26,4 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProfileSearch);
+)(SearchInput);

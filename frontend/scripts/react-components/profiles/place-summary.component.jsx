@@ -14,8 +14,7 @@ class PlaceSummary extends React.PureComponent {
       year,
       tooltips,
       onYearChange,
-      countryName,
-      commodityName,
+      context,
       data: {
         columnName,
         biomeName,
@@ -30,6 +29,7 @@ class PlaceSummary extends React.PureComponent {
         municipalityGeoId
       } = {}
     } = this.props;
+    const { commodityName, countryName } = context;
     const titles = [
       { name: municipalityName, label: capitalize(columnName) },
       { name: commodityName, label: 'Commodity' },
@@ -37,7 +37,7 @@ class PlaceSummary extends React.PureComponent {
         dropdown: true,
         label: 'Year',
         value: year,
-        valueList: [2010, 2011, 2012, 2013, 2014, 2015],
+        valueList: (context.years ? [...context.years] : []).sort((a, b) => b - a),
         onValueSelected: onYearChange
       }
     ];
@@ -185,9 +185,8 @@ class PlaceSummary extends React.PureComponent {
 PlaceSummary.propTypes = {
   year: PropTypes.number,
   data: PropTypes.object,
+  context: PropTypes.object,
   tooltips: PropTypes.object,
-  countryName: PropTypes.string,
-  commodityName: PropTypes.string,
   onYearChange: PropTypes.func.isRequired
 };
 

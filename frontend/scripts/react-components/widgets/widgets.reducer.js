@@ -7,7 +7,7 @@ import {
   WIDGETS__SET_ENDPOINT_LOADING
 } from './widgets.actions';
 
-const initialState = {
+export const initialState = {
   endpoints: {
     /**
      * { [endpoint]: { key, data, error, loading } }
@@ -15,7 +15,7 @@ const initialState = {
   }
 };
 
-const defaultEndpoint = key => ({ data: null, loading: true, error: null, key });
+export const defaultEndpoint = key => ({ data: null, loading: true, error: null, key });
 
 const widgetsReducer = {
   [WIDGETS__INIT_ENDPOINT](state, action) {
@@ -23,20 +23,22 @@ const widgetsReducer = {
     return { ...state, endpoints: { ...state.endpoints, [endpoint]: defaultEndpoint(key) } };
   },
   [WIDGETS__SET_ENDPOINT_DATA](state, action) {
-    const { endpoint, data } = action.payload;
-    const parsedData = Array.isArray(data)
-      ? data
-      : Object.entries(data).reduce(
-          (acc, [key, value]) => ({ ...acc, [camelCase(key)]: value }),
-          {}
-        );
+    const { endpoint, data, meta = {} } = action.payload;
+    const parseObject = obj =>
+      Array.isArray(obj)
+        ? obj
+        : Object.entries(obj).reduce(
+            (acc, [key, value]) => ({ ...acc, [camelCase(key)]: value }),
+            {}
+          );
     return {
       ...state,
       endpoints: {
         ...state.endpoints,
         [endpoint]: {
           ...state.endpoints[endpoint],
-          data: parsedData
+          data: parseObject(data),
+          meta: parseObject(meta)
         }
       }
     };
@@ -71,7 +73,14 @@ const widgetsReducer = {
 };
 
 const widgetsReducerTypes = PropTypes => ({
-  endpoints: PropTypes.object.isRequired
+  endpoints: PropTypes.objectOf(
+    PropTypes.shape({
+      error: PropTypes.any,
+      key: PropTypes.string.isRequired,
+      data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+      loading: PropTypes.bool.isRequired
+    })
+  ).isRequired
 });
 
 export default createReducer(initialState, widgetsReducer, widgetsReducerTypes);

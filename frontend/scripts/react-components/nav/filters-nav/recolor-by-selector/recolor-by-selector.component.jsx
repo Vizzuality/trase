@@ -7,140 +7,141 @@ import RecolorByNodeLegendSummary from 'react-components/nav/filters-nav/recolor
 import cx from 'classnames';
 import isNumber from 'lodash/isNumber';
 import difference from 'lodash/difference';
+import sortBy from 'lodash/sortBy';
 
 const id = 'recolor-by';
 
 class RecolorBySelector extends Component {
-  render() {
-    const {
-      className,
-      tooltips,
-      onToggle,
-      onSelected,
-      currentDropdown,
-      selectedRecolorBy,
-      recolorBys,
-      selectedYears
-    } = this.props;
+  getRecolorByClassNames(item, recolorBy) {
+    const recolorById = isNumber(item)
+      ? item + parseInt(recolorBy.minValue, 10)
+      : item.toLowerCase();
 
-    recolorBys.sort(
-      (a, b) =>
-        a.groupNumber === b.groupNumber ? a.position > b.position : a.groupNumber > b.groupNumber
-    );
+    const legendTypeName = recolorBy.legendType.toLowerCase();
+    const legendColorThemeName = recolorBy.legendColorTheme.toLowerCase();
+    return `-recolorby-${legendTypeName}-${legendColorThemeName}-${recolorById}`.replace(/ /g, '-');
+  }
 
-    // Collect the legend items classes (ie colors) for the currently selected recolorBy.
-    // It will be used to style the legend summary (colored bar at the bottom of the dropdown)
-    const currentLegendItemsClasses = [];
-
-    // Prepare legend item class names and values
-    const recolorBysData = recolorBys.map(recolorBy => {
+  getRecolorData() {
+    const { recolorBys, selectedYears, tooltips } = this.props;
+    const recolorByData = sortBy(recolorBys, ['groupNumber', 'position']).map(recolorBy => {
       const legendItems =
         recolorBy.nodes.length > 0 ? recolorBy.nodes : [...Array(recolorBy.intervalCount).keys()];
       const legendItemsData = legendItems.map(legendItem => {
-        const recolorById = isNumber(legendItem)
-          ? legendItem + parseInt(recolorBy.minValue, 10)
-          : legendItem.toLowerCase();
-
-        const legendTypeName = recolorBy.legendType.toLowerCase();
-        const legendColorThemeName = recolorBy.legendColorTheme.toLowerCase();
-        const recolorByClassNames = `-recolorby-${legendTypeName}-${legendColorThemeName}-${recolorById}`.replace(
-          / /g,
-          '-'
-        );
-        if (recolorBy.name === selectedRecolorBy.name) {
-          currentLegendItemsClasses.push(recolorByClassNames);
-        }
+        const recolorByClassNames = this.getRecolorByClassNames(legendItem, recolorBy);
         return {
           value: isNumber(legendItem) ? null : legendItem,
           cx: recolorByClassNames
         };
       });
-      recolorBy.legendItemsData = legendItemsData;
-      return recolorBy;
+      return { ...recolorBy, legendItemsData };
     });
 
-    // Renders a dropdown item using recolorBy data
-    const getRecolorByItem = (recolorBy, index) => {
-      const isEnabled =
-        !recolorBy.isDisabled &&
-        (recolorBy.years.length === 0 || difference(selectedYears, recolorBy.years).length === 0);
+    return [
+      {
+        label: 'Selection',
+        name: 'none',
+        description: tooltips.sankey.nav.colorBy.none || '',
+        years: selectedYears
+      }
+    ].concat(recolorByData);
+  }
 
-      return (
-        <li
-          key={index}
-          className={cx('dropdown-item', { '-disabled': !isEnabled })}
-          onClick={() => isEnabled && onSelected(recolorBy)}
-        >
-          <div className="dropdown-item-title">
-            {recolorBy.label}
-            {recolorBy.description && <Tooltip constraint="window" text={recolorBy.description} />}
-          </div>
-          <div className="dropdown-item-legend-container">
-            {recolorBy.minValue && (
-              <span className="dropdown-item-legend-unit -left">{recolorBy.minValue}</span>
-            )}
-            {recolorBy.legendType && (
-              <ul className={cx('dropdown-item-legend', `-${recolorBy.legendType}`)}>
-                {recolorBy.legendItemsData.map((legendItem, key) => (
-                  <li key={key} className={legendItem.cx}>
-                    {legendItem.value}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {recolorBy.maxValue && (
-              <span className="dropdown-item-legend-unit -right">{recolorBy.maxValue}</span>
-            )}
-          </div>
-        </li>
-      );
-    };
+  getRecolorByItem(recolorBy, index) {
+    const { onSelected, selectedYears } = this.props;
+    const isEnabled =
+      !recolorBy.isDisabled &&
+      (recolorBy.years.length === 0 || difference(selectedYears, recolorBy.years).length === 0);
 
-    // Render all the dropdown items
-    const recolorByElements = [];
-    if (currentDropdown === 'recolor-by') {
-      [
-        {
-          label: 'Selection',
-          name: 'none',
-          description: tooltips.sankey.nav.colorBy.none || '',
-          years: selectedYears
-        }
-      ]
-        .concat(recolorBysData)
-        .forEach((recolorBy, index, currentRecolorBys) => {
-          if (index > 0 && currentRecolorBys[index - 1].groupNumber !== recolorBy.groupNumber) {
-            recolorByElements.push(
-              <li key={`separator-${index}`} className="dropdown-item -separator" />
-            );
-          }
-          recolorByElements.push(getRecolorByItem(recolorBy, index));
-        });
+    return (
+      <li
+        key={index}
+        className={cx('dropdown-item', { '-disabled': !isEnabled })}
+        onClick={() => isEnabled && onSelected(recolorBy)}
+      >
+        <div className="dropdown-item-title">
+          {recolorBy.label}
+          {recolorBy.description && <Tooltip constraint="window" text={recolorBy.description} />}
+        </div>
+        <div className="dropdown-item-legend-container">
+          {recolorBy.minValue && (
+            <span className="dropdown-item-legend-unit -left">{recolorBy.minValue}</span>
+          )}
+          {recolorBy.legendType && (
+            <ul className={cx('dropdown-item-legend', `-${recolorBy.legendType}`)}>
+              {recolorBy.legendItemsData.map((legendItem, key) => (
+                <li key={key} className={legendItem.cx}>
+                  {legendItem.value}
+                </li>
+              ))}
+            </ul>
+          )}
+          {recolorBy.maxValue && (
+            <span className="dropdown-item-legend-unit -right">{recolorBy.maxValue}</span>
+          )}
+        </div>
+      </li>
+    );
+  }
+
+  getRecolorByElements() {
+    const { currentDropdown } = this.props;
+    if (currentDropdown !== 'recolor-by') {
+      return null;
     }
 
-    // Render legend summary (colored bar at the bottom of the dropdown)
-    let legendSummary;
-    if (currentLegendItemsClasses.length) {
-      legendSummary = (
+    return this.getRecolorData().map((recolorBy, index, list) => {
+      const hasSeparator = list[index - 1] && list[index - 1].groupNumber !== recolorBy.groupNumber;
+      return (
+        <React.Fragment key={recolorBy.name}>
+          {hasSeparator && <li className="dropdown-item -separator" />}
+          {this.getRecolorByItem(recolorBy, index)}
+        </React.Fragment>
+      );
+    });
+  }
+
+  renderLegendSummary() {
+    const { selectedRecolorBy } = this.props;
+    let legendItems;
+    if (selectedRecolorBy.nodes) {
+      legendItems =
+        selectedRecolorBy.nodes.length > 0
+          ? selectedRecolorBy.nodes
+          : [...Array(selectedRecolorBy.intervalCount).keys()];
+      const currentLegendItemClasses = legendItems.map(item =>
+        this.getRecolorByClassNames(item, selectedRecolorBy)
+      );
+
+      if (currentLegendItemClasses.length === 0) {
+        return <RecolorByNodeLegendSummary />;
+      }
+
+      return (
         <div className="dropdown-item-legend-summary">
-          {currentLegendItemsClasses.map((legendItemClasses, key) => (
-            <div key={key} className={`color ${legendItemClasses}`} />
+          {currentLegendItemClasses.map(legendItemClasses => (
+            <div key={legendItemClasses} className={`color ${legendItemClasses}`} />
           ))}
         </div>
       );
-    } else {
-      legendSummary = <RecolorByNodeLegendSummary />;
     }
+    return <RecolorByNodeLegendSummary />;
+  }
+
+  render() {
+    const {
+      className,
+      tooltips,
+      onToggle,
+      currentDropdown,
+      selectedRecolorBy,
+      recolorBys
+    } = this.props;
 
     const hasZeroOrSingleElement = recolorBys.length < 1;
 
     return (
-      <div
-        className={cx('js-dropdown', className)}
-        onClick={() => {
-          onToggle(id);
-        }}
-      >
+      <div className={cx('js-dropdown', className)} onClick={() => onToggle(id)}>
         <div
           className={cx('c-dropdown -small -capitalize', {
             '-hide-only-child': hasZeroOrSingleElement
@@ -152,10 +153,10 @@ class RecolorBySelector extends Component {
           </span>
           <span className="dropdown-title -small">{selectedRecolorBy.label || 'Selection'}</span>
           <FiltersDropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
-            <ul className="dropdown-list -large">{recolorByElements}</ul>
+            <ul className="dropdown-list -large">{this.getRecolorByElements()}</ul>
           </FiltersDropdown>
         </div>
-        {legendSummary}
+        {this.renderLegendSummary()}
       </div>
     );
   }

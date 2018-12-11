@@ -1,0 +1,242 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "The Root Schema",
+  "required": [
+    "data"
+  ],
+  "properties": {
+    "data": {
+      "$id": "#/properties/data",
+      "type": "array",
+      "title": "The Data Schema",
+      "items": {
+        "$id": "#/properties/data/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "required": [
+          "id",
+          "title",
+          "description",
+          "imageUrl",
+          "sources",
+          "companies",
+          "destinations"
+        ],
+        "properties": {
+          "id": {
+            "$id": "#/properties/data/items/properties/id",
+            "type": "integer",
+            "title": "The Id Schema",
+            "default": 0,
+            "examples": [
+              1
+            ]
+          },
+          "title": {
+            "$id": "#/properties/data/items/properties/title",
+            "type": "string",
+            "title": "The Title Schema",
+            "default": "",
+            "examples": [
+              "dashboard 1"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "description": {
+            "$id": "#/properties/data/items/properties/description",
+            "type": "string",
+            "title": "The Description Schema",
+            "default": "",
+            "examples": [
+              "description 12"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "category": {
+            "$id": "#/properties/data/items/properties/category",
+            "type": "string",
+            "title": "The Category Schema",
+            "default": "",
+            "examples": [
+              "category 3"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "imageUrl": {
+            "$id": "#/properties/data/items/properties/imageUrl",
+            "type": "string",
+            "title": "The Imageurl Schema",
+            "default": "",
+            "examples": [
+              "/images/small/missing.png"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "sources": {
+            "$id": "#/properties/data/items/properties/sources",
+            "type": "array",
+            "title": "The Sources Schema",
+            "items": {
+              "$id": "#/properties/data/items/properties/sources/items",
+              "type": "object",
+              "title": "The Items Schema",
+              "required": [
+                "id",
+                "name",
+                "parentName",
+                "parentNodeType",
+                "nodeType"
+              ],
+              "properties": {
+                "id": {
+                  "$id": "#/properties/data/items/properties/sources/items/properties/id",
+                  "type": "integer",
+                  "title": "The Id Schema",
+                  "default": 0,
+                  "examples": [
+                    659
+                  ]
+                },
+                "name": {
+                  "$id": "#/properties/data/items/properties/sources/items/properties/name",
+                  "type": "string",
+                  "title": "The Name Schema",
+                  "default": "",
+                  "examples": [
+                    "CERRO NEGRO"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "parentName": {
+                  "$id": "#/properties/data/items/properties/sources/items/properties/parentName",
+                  "type": "string",
+                  "title": "The Parentname Schema",
+                  "default": "",
+                  "examples": [
+                    "SANTA CATARINA"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "parentNodeType": {
+                  "$id": "#/properties/data/items/properties/sources/items/properties/parentNodeType",
+                  "type": "string",
+                  "title": "The Parentnodetype Schema",
+                  "default": "",
+                  "examples": [
+                    "STATE"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "nodeType": {
+                  "$id": "#/properties/data/items/properties/sources/items/properties/nodeType",
+                  "type": "string",
+                  "title": "The Nodetype Schema",
+                  "default": "",
+                  "examples": [
+                    "MUNICIPALITY"
+                  ],
+                  "pattern": "^(.*)$"
+                }
+              }
+            }
+          },
+          "companies": {
+            "$id": "#/properties/data/items/properties/companies",
+            "type": "array",
+            "title": "The Companies Schema",
+            "items": {
+              "$id": "#/properties/data/items/properties/companies/items",
+              "type": "object",
+              "title": "The Items Schema",
+              "required": [
+                "id",
+                "name",
+                "nodeType"
+              ],
+              "properties": {
+                "id": {
+                  "$id": "#/properties/data/items/properties/companies/items/properties/id",
+                  "type": "integer",
+                  "title": "The Id Schema",
+                  "default": 0,
+                  "examples": [
+                    588
+                  ]
+                },
+                "name": {
+                  "$id": "#/properties/data/items/properties/companies/items/properties/name",
+                  "type": "string",
+                  "title": "The Name Schema",
+                  "default": "",
+                  "examples": [
+                    "CARGILL"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "nodeType": {
+                  "$id": "#/properties/data/items/properties/companies/items/properties/nodeType",
+                  "type": "string",
+                  "title": "The Nodetype Schema",
+                  "default": "",
+                  "examples": [
+                    "IMPORTER"
+                  ],
+                  "pattern": "^(.*)$"
+                }
+              }
+            }
+          },
+          "destinations": {
+            "$id": "#/properties/data/items/properties/destinations",
+            "type": "array",
+            "title": "The Destinations Schema",
+            "items": {
+              "$id": "#/properties/data/items/properties/destinations/items",
+              "type": "object",
+              "title": "The Items Schema",
+              "required": [
+                "id",
+                "name",
+                "nodeType"
+              ],
+              "properties": {
+                "id": {
+                  "$id": "#/properties/data/items/properties/destinations/items/properties/id",
+                  "type": "integer",
+                  "title": "The Id Schema",
+                  "default": 0,
+                  "examples": [
+                    684
+                  ]
+                },
+                "name": {
+                  "$id": "#/properties/data/items/properties/destinations/items/properties/name",
+                  "type": "string",
+                  "title": "The Name Schema",
+                  "default": "",
+                  "examples": [
+                    "CHINA"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "nodeType": {
+                  "$id": "#/properties/data/items/properties/destinations/items/properties/nodeType",
+                  "type": "string",
+                  "title": "The Nodetype Schema",
+                  "default": "",
+                  "examples": [
+                    "COUNTRY"
+                  ],
+                  "pattern": "^(.*)$"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

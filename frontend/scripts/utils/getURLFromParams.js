@@ -33,6 +33,10 @@ export const GET_PLACE_TOP_CONSUMER_ACTORS = 'GET_PLACE_TOP_CONSUMER_ACTORS';
 export const GET_PLACE_TOP_CONSUMER_COUNTRIES = 'GET_PLACE_TOP_CONSUMER_COUNTRIES';
 export const GET_ACTOR_SUSTAINABILITY = 'GET_ACTOR_SUSTAINABILITY';
 export const GET_ACTOR_EXPORTING_COMPANIES = 'GET_ACTOR_EXPORTING_COMPANIES';
+export const GET_DASHBOARD_OPTIONS_URL = 'GET_DASHBOARD_OPTIONS_URL';
+export const GET_DASHBOARD_OPTIONS_TABS_URL = 'GET_DASHBOARD_OPTIONS_TABS_URL';
+export const GET_DASHBOARD_TEMPLATES_URL = 'GET_DASHBOARD_TEMPLATES_URL';
+export const GET_DASHBOARD_SEARCH_RESULTS_URL = 'GET_DASHBOARD_SEARCH_RESULTS_URL';
 
 const API_ENDPOINTS = {
   [GET_CONTEXTS_URL]: { api: 3, endpoint: '/contexts' },
@@ -109,6 +113,22 @@ const API_ENDPOINTS = {
   [GET_PLACE_TOP_CONSUMER_COUNTRIES]: {
     api: 3,
     endpoint: '/contexts/$context_id$/places/$node_id$/top_consumer_countries'
+  },
+  [GET_DASHBOARD_OPTIONS_URL]: {
+    api: 3,
+    endpoint: '/dashboards/$options_type$'
+  },
+  [GET_DASHBOARD_OPTIONS_TABS_URL]: {
+    api: 3,
+    endpoint: '/dashboards/filter_meta'
+  },
+  [GET_DASHBOARD_TEMPLATES_URL]: {
+    api: 3,
+    endpoint: '/dashboards/templates'
+  },
+  [GET_DASHBOARD_SEARCH_RESULTS_URL]: {
+    api: 3,
+    endpoint: '/dashboards/$options_type$/search'
   }
 };
 

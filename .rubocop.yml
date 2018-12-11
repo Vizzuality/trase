@@ -25,11 +25,12 @@ Layout/MultilineOperationIndentation:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
-Lint/RescueWithoutErrorClass:
+Style/RescueStandardError:
   Enabled: false
 
 Metrics/BlockLength:
   Exclude:
+    - 'config/routes.rb'
     - 'spec/**/*'
     - 'lib/tasks/**/*'
     - 'app/admin/**/*'

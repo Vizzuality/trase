@@ -44,17 +44,17 @@ paths:
         - application/json
       parameters:
         - name: query
-          in: path
+          in: query
           required: true
           type: integer
           description: 'Search string to use'
         - name: context_id
-          in: path
+          in: query
           required: false
           type: integer
           description: 'If provided, limit results to nodes of a given context'
         - name: profile_only
-          in: path
+          in: query
           type: boolean
           description: 'If provided, only show results that have a profile type defined'
       responses:
@@ -118,11 +118,11 @@ paths:
           required: true
           type: integer
         - name: start_year
-          in: path
+          in: query
           required: true
           type: integer
         - name: end_year
-          in: path
+          in: query
           type: integer
       responses:
         '200':
@@ -746,20 +746,18 @@ paths:
       tags:
         - newsletter_subscription
       summary: Adds a new email to the subscriptions list
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-              required:
-                - email
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: email
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
+
   '/context/{context_id}/download':
     get:
       tags:
@@ -854,7 +852,559 @@ paths:
               data:
                 type: object
                 $ref: '#/definitions/TopNodes'
+  '/dashboards/commodities':
+    get:
+      tags:
+        - dashboards
+      summary: 'Commodities matching selected filters'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsCommodity'
+
+  '/dashboards/commodities/search':
+    get:
+      tags:
+        - dashboards
+      summary: 'Commodities matching selected filters with full text search'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/query"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsCommodity'
+
+  '/dashboards/countries':
+    get:
+      tags:
+        - dashboards
+      summary: 'Countries matching selected filters'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsCountry'
+              meta:
+                type: object
+                properties:
+                  context_node_types:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        context_id:
+                          type: integer
+                        node_type_id:
+                          type: integer
+                        column_position:
+                          type: integer
+                        country_id:
+                          type: integer
+                        commodity_id:
+                          type: integer
+                        node_type_name:
+                          type: string
+
+  '/dashboards/countries/search':
+    get:
+      tags:
+        - dashboards
+      summary: 'Countries matching selected filters with full text search'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/query"
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsCountry'
+
+  '/dashboards/sources':
+    get:
+      tags:
+        - dashboards
+      summary: 'Sources matching selected filters'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+        - $ref: "#/parameters/dashboards_node_type_ids"
+        - $ref: "#/parameters/page"
+        - $ref: "#/parameters/per_page"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsSource'
+
+  '/dashboards/sources/search':
+    get:
+      tags:
+        - dashboards
+      summary: 'Sources matching selected filters with full text search'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/query"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_node_type_ids"
+        - $ref: "#/parameters/page"
+        - $ref: "#/parameters/per_page"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsSearchNode'
+
+  '/dashboards/companies':
+    get:
+      tags:
+        - dashboards
+      summary: 'Companies matching selected filters'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+        - $ref: "#/parameters/dashboards_node_type_ids"
+        - $ref: "#/parameters/page"
+        - $ref: "#/parameters/per_page"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsCompany'
+
+  '/dashboards/companies/search':
+    get:
+      tags:
+        - dashboards
+      summary: 'Companies matching selected filters with full text search'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/query"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_node_type_ids"
+        - $ref: "#/parameters/page"
+        - $ref: "#/parameters/per_page"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsSearchNode'
+
+  '/dashboards/destinations':
+    get:
+      tags:
+        - dashboards
+      summary: 'Destinations matching selected filters'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/dashboards_destinations_ids"
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_node_type_ids"
+        - $ref: "#/parameters/page"
+        - $ref: "#/parameters/per_page"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsDestination'
+
+  '/dashboards/destinations/search':
+    get:
+      tags:
+        - dashboards
+      summary: 'Destinations matching selected filters with full text search'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/query"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_node_type_ids"
+        - $ref: "#/parameters/page"
+        - $ref: "#/parameters/per_page"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsSearchNode'
+
+  '/dashboards/attributes':
+    get:
+      tags:
+        - dashboards
+      summary: 'Attributes matching selected filters'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/dashboards_destinations_ids"
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/DashboardsAttribute'
+              meta:
+                type: object
+                properties:
+                  groups:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+
+  '/dashboards/chart_data':
+    get:
+      tags:
+        - dashboards
+      summary: 'Data formatted for display in charts'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/dashboards_destinations_ids"
+        - $ref: "#/parameters/dashboards_countries_ids"
+        - $ref: "#/parameters/dashboards_commodities_ids"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_attribute_id"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    x:
+                      description: "Type defined in meta"
+                    y1:
+                      description: "Type defined in meta"
+              meta:
+                type: object
+                properties:
+                  xAxis:
+                    $ref: "#/definitions/DashboardsChartAxis"
+                  yAxis:
+                    $ref: "#/definitions/DashboardsChartAxis"
+                  x:
+                    $ref: "#/definitions/DashboardsChartValue"
+                  y1:
+                    $ref: "#/definitions/DashboardsChartValue"
+
+parameters:
+  dashboards_countries_ids:
+    name: countries_ids
+    in: query
+    description: 'String with comma-separated numeric ids'
+    required: false
+    type: string
+  dashboards_commodities_ids:
+    name: commodities_ids
+    in: query
+    description: 'String with comma-separated numeric ids'
+    required: false
+    type: string 
+  dashboards_sources_ids:
+    name: sources_ids
+    in: query
+    description: 'String with comma-separated numeric ids'
+    required: false
+    type: string
+  dashboards_companies_ids:
+    name: companies_ids
+    in: query
+    description: 'String with comma-separated numeric ids'
+    required: false
+    type: string
+  dashboards_destinations_ids:
+    name: destinations_ids
+    in: query
+    description: 'String with comma-separated numeric ids'
+    required: false
+    type: string
+  dashboards_node_type_ids:
+    name: node_types_ids
+    in: query
+    description: 'String with comma-separated numeric ids'
+    required: false
+    type: string
+  dashboards_attribute_id:
+    name: attribute_id
+    in: query
+    description: 'Attribute id'
+    required: false
+    type: integer
+  page:
+    name: page
+    in: query
+    description: 'Number of page for paginated responses'
+    required: false
+    type: integer
+  per_page:
+    name: per_page
+    in: query
+    description: 'Number of iterms per page'
+    required: false
+    type: integer
+  query:
+    name: q
+    in: query
+    description: 'String with comma-separated numeric ids'
+    required: true
+    type: string
+
 definitions:
+  DashboardsChartAxis:
+    type: object
+    properties:
+      label:
+        type: string
+      prefix:
+        type: string
+      format:
+        type: string
+      suffix:
+        type: string
+  DashboardsChartValue:
+    type: object
+    properties:
+      type:
+        type: string
+        example: "numeric,date,categoric"
+      label:
+        type: string
+      tooltip:
+        type: object
+        properties:
+          prefix:
+            type: string
+            description: "not used"
+          format:
+            type: string
+            description: "not used"
+          suffix:
+            type: string
+  DashboardsCommodity:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+  DashboardsCountry:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+  DashboardsSource:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      nodeType:
+        type: string
+  DashboardsCompany:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      nodeType:
+        type: string
+      countryId:
+        type: integer
+  DashboardsDestination:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      nodeType:
+        type: string
+  DashboardsSearchNode:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      nodeTypeId:
+        type: integer
+      nodeType:
+        type: string
+      countryId:
+        type: integer
+  DashboardsAttribute:
+    type: object
+    properties:
+      id:
+        type: integer
+      displayName:
+        type: string
+      tooltipText:
+        type: string
+      groupId:
+        type: integer
+      chartType:
+        type: string
+        example: 'line, pie, bar, stacked_bar'
+      isDisabled:
+        type: boolean
+      url:
+        type: string
   Context:
     type: object
     properties:

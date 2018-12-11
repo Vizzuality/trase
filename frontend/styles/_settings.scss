@@ -70,10 +70,15 @@ $z-leaflet-above-panes: 500;
 // colors
 $background-white: #f2f2f2;
 $light-gray: #f6f6f6;
+$mid-light-gray: #e5e5e5;
+$medium-gray: #dddddd;
 $gray-text: #515253;
 $black: #000;
+$charcoal-dark: #28343b;
+$charcoal-extra-dark: #1B2A32;
 $charcoal-grey: #34444c;
 $charcoal-grey-toned-down: #536269;
+$elephant: #6f7b80;
 $charcoal-grey-faded: rgba($charcoal-grey, .6);
 $charcoal-grey-faded-a-lot: rgba($charcoal-grey, .2);
 $gray: #DFDFDF;
@@ -116,6 +121,8 @@ $recolorby-qual-thematic-mata-atlantica: #8c28ff;
 $recolorby-qual-thematic-caatinga: #ff66e5;
 $recolorby-qual-thematic-pampa: #72ea28;
 $recolorby-qual-thematic-pantanal: #ffb314;
+$recolorby-qual-thematic-chaco-seco: #ffb314;
+$recolorby-qual-thematic-chaco-humedo: #43f3f3;
 
 $recolorby-stars-red-blue-0: #E54935;
 $recolorby-stars-red-blue-1: #FFC389;
@@ -124,8 +131,10 @@ $recolorby-stars-red-blue-3: #E5F5F9;
 $recolorby-stars-red-blue-4: #79A8D0;
 $recolorby-stars-red-blue-5: #246AB6;
 
-$recolorby-qual-yes-no-yes: #a4e332;
-$recolorby-qual-yes-no-no: #e36845;
+$recolorby-qual-thematic-company-commitment: #C2E699;
+$recolorby-qual-thematic-soy-moratorium: #1D6837;
+$recolorby-qual-thematic-none: #e36845;
+
 
 
 $recolorby-linear-red-blue-7: #E54935;
@@ -136,6 +145,12 @@ $recolorby-linear-red-blue-3: #E5F5F9;
 $recolorby-linear-red-blue-2: #9FCAE1;
 $recolorby-linear-red-blue-1: #5488C0;
 $recolorby-linear-red-blue-0: #246AB6;
+
+$recolorby-linear-yellow-green-0: #ffc;
+$recolorby-linear-yellow-green-1: #c2e699;
+$recolorby-linear-yellow-green-2: #78c679;
+$recolorby-linear-yellow-green-3: #31a354;
+$recolorby-linear-yellow-green-4: #006837;
 
 $recolorby-percentual-yellow-green-0: #ffc;
 $recolorby-percentual-yellow-green-1: #c2e699;
@@ -157,9 +172,9 @@ $recolorby-percentual-green-red-9: #d73027;
 $recolorby-percentual-green-red-10: #a50026;
 $recolorby-percentual-green-red-11: #6f001a;
 
-$recolorby-colors: $recolorby-qual-thematic-amazonia, $recolorby-qual-thematic-cerrado, $recolorby-qual-thematic-mata-atlantica, $recolorby-qual-thematic-caatinga, $recolorby-qual-thematic-pampa, $recolorby-qual-thematic-pantanal, $recolorby-stars-red-blue-0, $recolorby-stars-red-blue-1, $recolorby-stars-red-blue-2, $recolorby-stars-red-blue-3, $recolorby-stars-red-blue-4, $recolorby-stars-red-blue-5, $recolorby-qual-yes-no-yes, $recolorby-qual-yes-no-no, $recolorby-linear-red-blue-0, $recolorby-linear-red-blue-1, $recolorby-linear-red-blue-2, $recolorby-linear-red-blue-3, $recolorby-linear-red-blue-4, $recolorby-linear-red-blue-5, $recolorby-linear-red-blue-6, $recolorby-linear-red-blue-7, $recolorby-percentual-yellow-green-0, $recolorby-percentual-yellow-green-1, $recolorby-percentual-yellow-green-2, $recolorby-percentual-yellow-green-3, $recolorby-percentual-yellow-green-4, $recolorby-percentual-green-red-0, $recolorby-percentual-green-red-1, $recolorby-percentual-green-red-2, $recolorby-percentual-green-red-3, $recolorby-percentual-green-red-4, $recolorby-percentual-green-red-5, $recolorby-percentual-green-red-6, $recolorby-percentual-green-red-7, $recolorby-percentual-green-red-8, $recolorby-percentual-green-red-9, $recolorby-percentual-green-red-10, $recolorby-percentual-green-red-11;
+$recolorby-colors: $recolorby-qual-thematic-amazonia, $recolorby-qual-thematic-cerrado, $recolorby-qual-thematic-mata-atlantica, $recolorby-qual-thematic-chaco-seco, $recolorby-qual-thematic-chaco-humedo, $recolorby-qual-thematic-caatinga, $recolorby-qual-thematic-pampa, $recolorby-qual-thematic-pantanal, $recolorby-stars-red-blue-0, $recolorby-stars-red-blue-1, $recolorby-stars-red-blue-2, $recolorby-stars-red-blue-3, $recolorby-stars-red-blue-4, $recolorby-stars-red-blue-5, $recolorby-qual-thematic-company-commitment, $recolorby-qual-thematic-soy-moratorium, $recolorby-qual-thematic-none, $recolorby-linear-red-blue-0, $recolorby-linear-red-blue-1, $recolorby-linear-red-blue-2, $recolorby-linear-red-blue-3, $recolorby-linear-red-blue-4, $recolorby-linear-red-blue-5, $recolorby-linear-red-blue-6, $recolorby-linear-red-blue-7, $recolorby-percentual-yellow-green-0, $recolorby-percentual-yellow-green-1, $recolorby-percentual-yellow-green-2, $recolorby-percentual-yellow-green-3, $recolorby-percentual-yellow-green-4, $recolorby-linear-yellow-green-0, $recolorby-linear-yellow-green-1, $recolorby-linear-yellow-green-2, $recolorby-linear-yellow-green-3, $recolorby-linear-yellow-green-4, $recolorby-percentual-green-red-0, $recolorby-percentual-green-red-1, $recolorby-percentual-green-red-2, $recolorby-percentual-green-red-3, $recolorby-percentual-green-red-4, $recolorby-percentual-green-red-5, $recolorby-percentual-green-red-6, $recolorby-percentual-green-red-7, $recolorby-percentual-green-red-8, $recolorby-percentual-green-red-9, $recolorby-percentual-green-red-10, $recolorby-percentual-green-red-11;
 
-$recolorby-colors-names: '-recolorby-qual-thematic-amazonia', '-recolorby-qual-thematic-cerrado', '-recolorby-qual-thematic-mata-atlantica', '-recolorby-qual-thematic-caatinga', '-recolorby-qual-thematic-pampa', '-recolorby-qual-thematic-pantanal', '-recolorby-stars-red-blue-0', '-recolorby-stars-red-blue-1', '-recolorby-stars-red-blue-2', '-recolorby-stars-red-blue-3', '-recolorby-stars-red-blue-4', '-recolorby-stars-red-blue-5', '-recolorby-qual-yes-no-yes', '-recolorby-qual-yes-no-no', '-recolorby-linear-red-blue-0', '-recolorby-linear-red-blue-1', '-recolorby-linear-red-blue-2', '-recolorby-linear-red-blue-3', '-recolorby-linear-red-blue-4', '-recolorby-linear-red-blue-5', '-recolorby-linear-red-blue-6', '-recolorby-linear-red-blue-7', '-recolorby-percentual-yellow-green-0', '-recolorby-percentual-yellow-green-1', '-recolorby-percentual-yellow-green-2', '-recolorby-percentual-yellow-green-3', '-recolorby-percentual-yellow-green-4', '-recolorby-percentual-green-red-0', '-recolorby-percentual-green-red-1', '-recolorby-percentual-green-red-2', '-recolorby-percentual-green-red-3', '-recolorby-percentual-green-red-4', '-recolorby-percentual-green-red-5', '-recolorby-percentual-green-red-6', '-recolorby-percentual-green-red-7', '-recolorby-percentual-green-red-8', '-recolorby-percentual-green-red-9', '-recolorby-percentual-green-red-10', '-recolorby-percentual-green-red-11';
+$recolorby-colors-names: '-recolorby-qual-thematic-amazonia', '-recolorby-qual-thematic-cerrado', '-recolorby-qual-thematic-mata-atlantica', '-recolorby-qual-thematic-chaco-seco', '-recolorby-qual-thematic-chaco-humedo', '-recolorby-qual-thematic-caatinga', '-recolorby-qual-thematic-pampa', '-recolorby-qual-thematic-pantanal', '-recolorby-stars-red-blue-0', '-recolorby-stars-red-blue-1', '-recolorby-stars-red-blue-2', '-recolorby-stars-red-blue-3', '-recolorby-stars-red-blue-4', '-recolorby-stars-red-blue-5', '-recolorby-qual-thematic-company-commitment', '-recolorby-qual-thematic-soy-moratorium', '-recolorby-qual-thematic-none', '-recolorby-linear-red-blue-0', '-recolorby-linear-red-blue-1', '-recolorby-linear-red-blue-2', '-recolorby-linear-red-blue-3', '-recolorby-linear-red-blue-4', '-recolorby-linear-red-blue-5', '-recolorby-linear-red-blue-6', '-recolorby-linear-red-blue-7', '-recolorby-percentual-yellow-green-0', '-recolorby-percentual-yellow-green-1', '-recolorby-percentual-yellow-green-2', '-recolorby-percentual-yellow-green-3', '-recolorby-percentual-yellow-green-4', '-recolorby-linear-yellow-green-0', '-recolorby-linear-yellow-green-1', '-recolorby-linear-yellow-green-2', '-recolorby-linear-yellow-green-3', '-recolorby-linear-yellow-green-4', '-recolorby-percentual-green-red-0', '-recolorby-percentual-green-red-1', '-recolorby-percentual-green-red-2', '-recolorby-percentual-green-red-3', '-recolorby-percentual-green-red-4', '-recolorby-percentual-green-red-5', '-recolorby-percentual-green-red-6', '-recolorby-percentual-green-red-7', '-recolorby-percentual-green-red-8', '-recolorby-percentual-green-red-9', '-recolorby-percentual-green-red-10', '-recolorby-percentual-green-red-11';
 
 $recolorgroup-colors: $recolorgroup-1, $recolorgroup-2, $recolorgroup-3, $recolorgroup-4, $recolorgroup-5, $recolorgroup-6, $recolorgroup-7, $recolorgroup-8, $recolorgroup-9, $recolorgroup-10;
 

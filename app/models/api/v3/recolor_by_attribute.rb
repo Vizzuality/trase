@@ -87,7 +87,7 @@ module Api
                      attribute: :recolor_by_qual,
                      if: :new_recolor_by_qual_given?
 
-      after_commit :refresh_dependencies
+      after_commit :refresh_dependents
 
       stringy_array :years
       manage_associated_attributes [:recolor_by_ind, :recolor_by_qual]
@@ -98,7 +98,7 @@ module Api
         ]
       end
 
-      def refresh_dependencies
+      def refresh_dependents
         Api::V3::Readonly::RecolorByAttribute.refresh
       end
     end

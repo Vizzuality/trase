@@ -8,73 +8,62 @@ import Dropdown from 'react-components/shared/dropdown.component';
 import formatValue from 'utils/formatValue';
 import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
+import { EXPLORE_COLUMN_LIST } from 'constants';
 
 class Explore extends React.PureComponent {
-  constructor(props) {
-    super(props);
+  units = [
+    {
+      name: '%',
+      format: item => formatValue(item.height * 100, 'percentage')
+    },
+    {
+      name: 't',
+      format: item => formatValue(item.value, 'tons')
+    }
+  ];
 
-    this.columns = [
-      {
-        label: 'Top Exporting Companies',
-        link: 'profileNode',
-        value: 6
-      },
-      {
-        label: 'Top Sourcing Countries',
-        value: 8
-      }
-    ];
-    this.units = [
-      {
-        name: '%',
-        format: item => formatValue(item.height * 100, 'percentage')
-      },
-      {
-        name: 't',
-        format: item => formatValue(item.value, 'tons')
-      }
-    ];
-
-    this.state = {
-      selectedTableUnit: this.units[0]
-    };
-
-    this.handleTableColumnChange = this.handleTableColumnChange.bind(this);
-    this.handleTableUnitChange = this.handleTableUnitChange.bind(this);
-  }
+  state = {
+    selectedTableUnit: this.units[0]
+  };
 
   componentDidMount() {
-    const { topNodesKey, selectedTableColumn } = this.props;
-    if (topNodesKey) this.props.getTableElements(selectedTableColumn);
+    const { topNodesKey, selectedTableColumnType } = this.props;
+    if (topNodesKey) this.props.getTableElements(selectedTableColumnType);
   }
 
   componentDidUpdate(prevProps) {
-    const { topNodesKey, selectedTableColumn } = this.props;
+    const { topNodesKey, selectedTableColumnType } = this.props;
     if (topNodesKey && prevProps.topNodesKey !== topNodesKey) {
-      this.props.getTableElements(selectedTableColumn);
+      this.props.getTableElements(selectedTableColumnType);
     }
   }
 
-  handleTableColumnChange(label) {
-    const column = (this.columns.find(item => item.label === label) || {}).value;
-    this.props.setSelectedTableColumn(column);
-  }
+  handleTableColumnChange = column => {
+    this.props.setSelectedTableColumnType(column.type);
+  };
 
-  handleTableUnitChange(unitName) {
+  handleTableUnitChange = unitName => {
     this.setState({
       selectedTableUnit: this.units.find(u => u.name === unitName)
     });
-  }
+  };
+
+  handleFallbackClick = () => {
+    const { selectedTableColumnType } = this.props;
+    const [column] = EXPLORE_COLUMN_LIST.filter(item => item.type !== selectedTableColumnType);
+    this.handleTableColumnChange(column);
+  };
 
   renderTableColumnDropdown() {
-    const { selectedTableColumn } = this.props;
-    const column = this.columns.find(item => item.value === selectedTableColumn);
+    const { selectedTableColumnType } = this.props;
+    const column = EXPLORE_COLUMN_LIST.find(item => item.type === selectedTableColumnType);
 
     return (
       <Dropdown
         className="-uppercase-title"
-        value={column.label}
-        valueList={this.columns.map(i => i.label)}
+        value={column}
+        valueList={EXPLORE_COLUMN_LIST}
+        valueFormat={v => v.label}
         onValueSelected={this.handleTableColumnChange}
       />
     );
@@ -93,11 +82,34 @@ class Explore extends React.PureComponent {
     );
   }
 
+  renderTableFallback() {
+    const { selectedTableColumnType } = this.props;
+    const column = EXPLORE_COLUMN_LIST.find(item => item.type === selectedTableColumnType);
+    const [alternativeColumn] = EXPLORE_COLUMN_LIST.filter(
+      item => item.type !== selectedTableColumnType
+    );
+    return (
+      <div className="explore-table-fallback">
+        <p className="explore-table-fallback-text">
+          100% of {column.fallbackText} are unknown, explore{' '}
+        </p>
+        <button
+          type="button"
+          onClick={this.handleFallbackClick}
+          className="explore-table-fallback-button"
+        >
+          {alternativeColumn.label.toLowerCase()}.
+        </button>
+      </div>
+    );
+  }
+
   render() {
     const {
+      loading,
       isSubnational,
       selectedContext,
-      selectedTableColumn,
+      selectedTableColumnType,
       selectedYears,
       showTable,
       topExporters
@@ -106,7 +118,7 @@ class Explore extends React.PureComponent {
 
     let link = null;
     if (selectedContext && selectedContext.id === 1) {
-      const selectedTable = this.columns.find(i => i.value === selectedTableColumn);
+      const selectedTable = EXPLORE_COLUMN_LIST.find(i => i.type === selectedTableColumnType);
       link = typeof selectedTable !== 'undefined' ? selectedTable.link : null;
     }
 
@@ -119,14 +131,13 @@ class Explore extends React.PureComponent {
                 <ContextSelector dropdownClassName="-big" isExplore />
               </div>
             </div>
-            {selectedContext &&
-              selectedContext.id && (
-                <div className="column small-12">
-                  <div className="dropdown-element">
-                    <YearsSelector dropdownClassName="-big" />
-                  </div>
+            {selectedContext && selectedContext.id && (
+              <div className="column small-12">
+                <div className="dropdown-element">
+                  <YearsSelector dropdownClassName="-big" />
                 </div>
-              )}
+              </div>
+            )}
           </div>
           <div className="row">
             <div className={cx('column', 'small-12', { 'medium-7': showTable })}>
@@ -154,7 +165,9 @@ class Explore extends React.PureComponent {
                       targetLink={link}
                       year={selectedYears[0]}
                       data={topExporters}
+                      loading={!!loading}
                     />
+                    {!loading && topExporters.length === 0 && this.renderTableFallback()}
                   </div>
                 </div>
               </div>
@@ -192,12 +205,13 @@ class Explore extends React.PureComponent {
 }
 
 Explore.propTypes = {
+  loading: PropTypes.bool,
   isSubnational: PropTypes.bool,
   getTableElements: PropTypes.func.isRequired,
   selectedYears: PropTypes.arrayOf(PropTypes.number),
   selectedContext: PropTypes.object,
-  selectedTableColumn: PropTypes.number.isRequired,
-  setSelectedTableColumn: PropTypes.func.isRequired,
+  selectedTableColumnType: PropTypes.string.isRequired,
+  setSelectedTableColumnType: PropTypes.func.isRequired,
   showTable: PropTypes.bool.isRequired,
   topExporters: PropTypes.array.isRequired,
   topNodesKey: PropTypes.string

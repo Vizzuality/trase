@@ -59,8 +59,11 @@ module Api
 
         attribute :world_map do
           {
-            map_column_id: object.country_context_node_type&.node_type_id,
-            list_column_id: object.exporter_context_node_type&.node_type_id
+            geo_id: object.country.iso2,
+            annotation_position_x_pos: object.country.annotation_position_x_pos,
+            annotation_position_y_pos: object.country.annotation_position_y_pos,
+            country_column_id: object.country_context_node_type&.node_type_id,
+            exporter_column_id: object.exporter_context_node_type&.node_type_id
           }
         end
       end

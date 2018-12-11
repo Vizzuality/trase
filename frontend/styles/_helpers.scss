@@ -1,5 +1,13 @@
 @import 'settings';
 
+.no-events {
+  pointer-events: none;
+}
+
+.all-events {
+  pointer-events: all;
+}
+
 .is-absolute {
   position: absolute;
 }
@@ -17,7 +25,7 @@
 }
 
 .hide-for-small {
-  @media screen and (max-width: $breakpoint-foundation-small) {
+  @media screen and (max-width: $breakpoint-foundation-small - 1) {
     display: none !important;
   }
 }

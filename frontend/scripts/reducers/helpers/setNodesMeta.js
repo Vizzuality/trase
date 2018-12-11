@@ -14,6 +14,13 @@ export default function(nodesDict, nodesMeta, layers) {
     const nodeId = parseInt(nodeMeta.node_id, 10);
     const nodeWithMeta = nodesDictWithMeta[nodeId] || _.cloneDeep(nodesDict[nodeId]);
 
+    if (!nodeWithMeta) {
+      console.warn(
+        `Loaded map attributes for node ${nodeId}, but node could not be found on the current context node list. You are probably loading map data for nodes of a different context`
+      );
+      return;
+    }
+
     if (!nodeWithMeta.meta) {
       nodeWithMeta.meta = {};
     }

@@ -13,12 +13,23 @@ function SummaryWidget(props) {
   return (
     <Widget params={[params]} query={[GET_NODE_SUMMARY_URL]}>
       {({ data, loading, error }) => {
-        if (loading || error)
+        if (loading) {
           return (
             <div className="spinner-section" data-test="loading-section">
               <ShrinkingSpinner className="-large" />
             </div>
           );
+        }
+
+        if (error) {
+          // TODO: display a proper error message to the user
+          console.error('Error loading summary data for profile page', error);
+          return (
+            <div className="spinner-section" data-test="loading-section">
+              <ShrinkingSpinner className="-large" />
+            </div>
+          );
+        }
 
         return (
           <React.Fragment>
@@ -27,10 +38,9 @@ function SummaryWidget(props) {
                 year={year}
                 tooltips={tooltips}
                 printMode={printMode}
-                countryName={context.countryName}
-                commodityName={context.commodityName}
                 onYearChange={onYearChange}
                 data={data[GET_NODE_SUMMARY_URL]}
+                context={context}
               />
             )}
             {profileType === 'place' && (
@@ -39,9 +49,8 @@ function SummaryWidget(props) {
                 tooltips={tooltips}
                 printMode={printMode}
                 onYearChange={onYearChange}
-                countryName={context.countryName}
                 data={data[GET_NODE_SUMMARY_URL]}
-                commodityName={context.commodityName}
+                context={context}
               />
             )}
             <ButtonLinks

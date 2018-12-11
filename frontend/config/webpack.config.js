@@ -18,7 +18,7 @@ const templates = require('./static.templates');
 module.exports = {
   entry: {
     fetch: 'whatwg-fetch',
-    main: ['babel-polyfill', path.join(srcPath, 'index')]
+    main: ['@babel/polyfill', path.join(srcPath, 'index')]
   },
   output: {
     filename: '[name].[chunkhash].js',
@@ -46,6 +46,9 @@ module.exports = {
     new webpack.DefinePlugin({
       NODE_ENV_DEV: process.env.NODE_ENV === 'development',
       DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
+      SHOW_WORLD_MAP_IN_EXPLORE: process.env.SHOW_WORLD_MAP_IN_EXPLORE === 'true',
+      ALWAYS_DISPLAY_DASHBOARD_INFO: process.env.ALWAYS_DISPLAY_DASHBOARD_INFO === 'true',
+      ENABLE_DASHBOARDS: process.env.ENABLE_DASHBOARDS === 'true',
       API_V3_URL: JSON.stringify(process.env.API_V3_URL),
       API_V2_URL: JSON.stringify(process.env.API_V2_URL),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
@@ -58,7 +61,8 @@ module.exports = {
       USE_PLAIN_URL_STATE: process.env.USE_PLAIN_URL_STATE === 'true',
       USE_SERVICE_WORKER: process.env.USE_SERVICE_WORKER === 'true',
       TRANSIFEX_API_KEY: JSON.stringify(process.env.TRANSIFEX_API_KEY),
-      HOME_VIDEO_ID: JSON.stringify(process.env.HOME_VIDEO_ID)
+      HOME_VIDEO_ID: JSON.stringify(process.env.HOME_VIDEO_ID),
+      NAMED_MAPS_ENV: JSON.stringify(process.env.NAMED_MAPS_ENV)
     }),
     new webpack.LoaderOptionsPlugin({ options: {} })
   ],

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {
   getTopNodesKey,
   setExploreTopNodes,
-  setSelectedTableColumn
+  setSelectedTableColumnType
 } from 'react-components/explore/explore.actions';
 import { selectContextById } from 'actions/app.actions';
 import Explore from './explore.component';
@@ -11,20 +11,21 @@ import Explore from './explore.component';
 const mapStateToProps = state => {
   const { selectedYears } = state.tool;
   const { selectedContext, contextIsUserSelected } = state.app;
-  const { topNodes, selectedTableColumn } = state.explore;
+  const { topNodes, selectedTableColumnType, loading: loadingDict } = state.explore;
   const topNodesKey = selectedContext
-    ? getTopNodesKey(selectedContext.id, selectedTableColumn, ...selectedYears)
+    ? getTopNodesKey(selectedContext.id, selectedTableColumnType, ...selectedYears)
     : null;
   const topExporters = topNodes[topNodesKey] || [];
   const isSubnational = selectedContext ? selectedContext.isSubnational : null;
-
+  const loading = loadingDict[topNodesKey];
   return {
+    loading,
     topNodesKey,
     topExporters,
     isSubnational,
     selectedYears,
     selectedContext,
-    selectedTableColumn,
+    selectedTableColumnType,
     showTable: contextIsUserSelected
   };
 };
@@ -33,7 +34,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       selectContextById,
-      setSelectedTableColumn,
+      setSelectedTableColumnType,
       getTableElements: setExploreTopNodes
     },
     dispatch

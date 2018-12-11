@@ -31,8 +31,6 @@ export const NUM_DECIMALS = {
   percentage: 1,
   tons: 0
 };
-export const DEFAULT_PROFILE_PAGE_YEAR = 2015;
-
 export const NUM_DECIMALS_DEFAULT = 1;
 
 export const UNITLESS_UNITS = ['Unitless', 'Number', 'Head', 'Number', 'NA'];
@@ -202,6 +200,20 @@ export const BASEMAPS = {
 
 export const DEFAULT_BASEMAP_FOR_CHOROPLETH = 'default';
 
+export const EXPLORE_COLUMN_LIST = [
+  {
+    type: 'exporter',
+    label: 'Top Exporting Companies',
+    link: { type: 'profileNode', payload: { profileType: 'actor' } },
+    fallbackText: 'exporting companies'
+  },
+  {
+    type: 'country',
+    label: 'Top Sourcing Countries',
+    fallbackText: 'sourcing countries'
+  }
+];
+
 export const HOME_VIDEO = {
   en: 'wMnAQJBptj8',
   es: 'kuJAEzISoEA',
@@ -212,3 +224,5 @@ export const HOME_VIDEO = {
 export const BREAKPOINTS = {
   small: 640
 };
+
+export const MAX_SEARCH_RESULTS = 15;

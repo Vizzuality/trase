@@ -2,6 +2,12 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::MapLayers::MapAttributeFilter do
   include_context 'api v3 brazil map attributes'
+
+  before(:each) do
+    Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::MapAttribute.refresh(sync: true, skip_dependencies: true)
+  end
+
   context 'when single year' do
     it 'returns dual layer buckets as is' do
       filter = Api::V3::MapLayers::MapAttributeFilter.new(

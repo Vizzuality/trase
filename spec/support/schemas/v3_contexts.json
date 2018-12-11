@@ -123,8 +123,8 @@
             },
             "required": [
               "latitude",
-              "zoom",
-              "longitude"
+              "longitude",
+              "zoom"
             ],
             "type": "object"
           },
@@ -132,18 +132,33 @@
             "additionalProperties": false,
             "id": "/properties/data/items/properties/worldMap",
             "properties": {
-              "mapColumnId": {
-                "id": "/properties/data/items/properties/worldMap/properties/mapColumnId",
+              "countryColumnId": {
+                "id": "/properties/data/items/properties/worldMap/properties/countryColumnId",
                 "type": "integer"
               },
-              "listColumnId": {
-                "id": "/properties/data/items/properties/worldMap/properties/listColumnId",
+              "exporterColumnId": {
+                "id": "/properties/data/items/properties/worldMap/properties/exporterColumnId",
                 "type": "integer"
+              },
+              "geoId": {
+                "id": "/properties/data/items/properties/map/properties/geoId",
+                "type": "string"
+              },
+              "annotationPositionXPos": {
+                "id": "/properties/data/items/properties/map/properties/annotationPositionXPos",
+                "type": "number"
+              },
+              "annotationPositionYPos": {
+                "id": "/properties/data/items/properties/map/properties/annotationPositionYPos",
+                "type": "number"
               }
             },
             "required": [
-              "mapColumnId",
-              "listColumnId"
+              "countryColumnId",
+              "exporterColumnId",
+              "geoId",
+              "annotationPositionYPos",
+              "annotationPositionYPos"
             ]
           },
           "recolorBy": {

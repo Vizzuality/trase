@@ -1,19 +1,4 @@
 RSpec.describe Api::V3::DatabaseValidation::Report do
-  before do
-    Api::V3::DownloadAttribute.skip_callback(:commit, :after, :refresh_dependencies)
-    Api::V3::MapAttributeGroup.skip_callback(:commit, :after, :refresh_dependencies)
-    Api::V3::MapAttribute.skip_callback(:commit, :after, :refresh_dependencies)
-    Api::V3::RecolorByAttribute.skip_callback(:commit, :after, :refresh_dependencies)
-    Api::V3::ResizeByAttribute.skip_callback(:commit, :after, :refresh_dependencies)
-  end
-  after do
-    Api::V3::DownloadAttribute.set_callback(:commit, :after, :refresh_dependencies)
-    Api::V3::MapAttributeGroup.set_callback(:commit, :after, :refresh_dependencies)
-    Api::V3::MapAttribute.set_callback(:commit, :after, :refresh_dependencies)
-    Api::V3::RecolorByAttribute.set_callback(:commit, :after, :refresh_dependencies)
-    Api::V3::ResizeByAttribute.set_callback(:commit, :after, :refresh_dependencies)
-  end
-
   let(:report) {
     Api::V3::DatabaseValidation::Report.new
   }

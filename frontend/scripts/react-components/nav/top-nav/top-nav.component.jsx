@@ -61,18 +61,8 @@ class TopNav extends React.PureComponent {
 
     allLinks.push(...links);
 
-    allLinks.splice(-2, 0, {
-      name: 'Yearbook',
-      page: `https://yearbook2018.${
-        window.location.hostname === 'staging.trase.earth'
-          ? window.location.hostname
-          : 'trase.earth'
-      }`,
-      external: true
-    });
-
     return (
-      <div className="top-nav-bar row align-justify hide-for-small">
+      <div className="top-nav-bar row align-justify -desktop-menu">
         <div className="column medium-8">
           <div className="top-nav-item-list-container">
             <ul className="top-nav-item-list">
@@ -117,18 +107,8 @@ class TopNav extends React.PureComponent {
 
     allLinks.push(...links);
 
-    allLinks.splice(-2, 0, {
-      name: 'Yearbook',
-      page: `https://yearbook2018.${
-        window.location.hostname === 'staging.trase.earth'
-          ? window.location.hostname
-          : 'trase.earth'
-      }`,
-      external: true
-    });
-
     return (
-      <div className="row show-for-small">
+      <div className="row -mobile-menu">
         <div className="top-nav-bar column small-12">
           <ul className="top-nav-item-list">
             <li className="top-nav-item -no-margin">

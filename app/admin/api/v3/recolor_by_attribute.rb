@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
-  menu parent: 'Sankey Settings'
+  menu parent: 'Sankey'
 
   includes [
     {context: [:country, :commodity]},

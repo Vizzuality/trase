@@ -2,7 +2,7 @@
 #
 # Table name: attributes_mv
 #
-#  id                           :integer          primary key
+#  id                           :bigint(8)        primary key
 #  original_type                :text
 #  original_id                  :integer
 #  name                         :text
@@ -33,18 +33,65 @@ module Api
           order(:display_name).map { |a| [a.display_name, a.id] }
         end
 
-        def self.refresh
-          super
-          dependents.each(&:refresh)
-        end
-
-        def self.dependents
+        def self.refresh_dependents(options = {})
           [
             Api::V3::Readonly::DownloadAttribute,
             Api::V3::Readonly::MapAttribute,
             Api::V3::Readonly::RecolorByAttribute,
-            Api::V3::Readonly::ResizeByAttribute
-          ]
+            Api::V3::Readonly::ResizeByAttribute,
+            Api::V3::Readonly::DashboardsAttribute
+          ].each do |mview_klass|
+            mview_klass.refresh(options.merge(skip_dependencies: true))
+          end
+        end
+
+        # Used in dashbooards to determine whether values are present in flows
+        # values tables (flow_inds/quals/quants)
+        def flows_values?
+          flow_values_class.where(
+            attribute_id_name => original_id
+          ).any?
+        end
+
+        def flow_values_class
+          "Api::V3::Flow#{original_type}".constantize
+        end
+
+        def node_values_class
+          "Api::V3::Node#{original_type}".constantize
+        end
+
+        def attribute_id_name
+          "#{original_type.downcase}_id"
+        end
+
+        def ind?
+          original_type == 'Ind'
+        end
+
+        def qual?
+          original_type == 'Qual'
+        end
+
+        def quant?
+          original_type == 'Quant'
+        end
+
+        def aggregatable?
+          quant? || ind?
+        end
+
+        def temporal?
+          is_temporal_on_actor_profile? || is_temporal_on_place_profile?
+        end
+
+        # overrides aggregate_method
+        def value_aggregate_method
+          if quant?
+            'SUM'
+          elsif ind?
+            'AVG'
+          end
         end
       end
     end

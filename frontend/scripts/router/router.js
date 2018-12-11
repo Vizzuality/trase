@@ -15,6 +15,7 @@ import withSidebarNavLayout from 'react-components/nav/sidebar-nav/with-sidebar-
 import getPageStaticContent from 'react-components/static-content/static-content.thunks';
 import loadBaseAppData from 'react-components/shared/app.thunks';
 import getTeam from 'react-components/team/team.thunks';
+import { loadDashboardTemplates } from 'react-components/dashboard-root/dashboard-root.thunks';
 import {
   setContextForExplorePage,
   redirectToExplore
@@ -70,6 +71,18 @@ export const routes = {
       printable: true
     },
     thunk: loadPageData()
+  },
+  dashboardRoot: {
+    path: '/dashboards',
+    page: 'dashboard-root',
+    title: getPageTitle,
+    thunk: loadPageData(loadDashboardTemplates)
+  },
+  dashboardElement: {
+    path: '/dashboards/:dashboardId',
+    page: 'dashboard-element',
+    title: getPageTitle,
+    thunk: loadPageData(getPostsContent)
   },
   data: {
     path: '/data',

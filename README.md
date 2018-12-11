@@ -85,6 +85,8 @@ The project's main configuration values can be set using [environment variables]
 * MAILCHIMP_API_KEY: API key for Mailchimp mailing service
 * MAILCHIMP_LIST_ID: List ID for Mailchimp mailing service
 * APPSIGNAL_PUSH_API_KEY: Appsignal API key for tracking exceptions
+* APPSIGNAL_APP_NAME: Appsignal App name, should be "Trase"
+* APPSIGNAL_APP_ENV: Appsignal environment name
 * GOLD_MASTER_HOST_V3:
 * TRASE_REMOTE_HOST=localhost
 * TRASE_REMOTE_PORT=5432
@@ -119,6 +121,12 @@ The project's main configuration values can be set using [environment variables]
 * REDUX_LOGGER_ENABLED: when set to true, enables logging redux actions on the browser's console. Only supported outside of production environments.
 * USE_PLAIN_URL_STATE: when set to true, enables saving the sankey's state as a plain serialized string. Use "false" on production environments, ot use base64 encoding
 * USE_CANVAS_MAP: if set to true, may use a <canvas> to render the map's choropleth layer. Actual usage may also depend on browser support.
+* SHOW_WORLD_MAP_IN_EXPLORE: if set to true, explore section will have the 2 step behavior. Setting it to false will only show the context-specific step.
+* ENABLE_DASHBOARDS: if set to true, the dashboards section will be visible to end users.
+* ALWAYS_DISPLAY_DASHBOARD_INFO: if set to true, the dashboards info modal will always be displayed. If set to false, it will only be displayed for new users.
+* CARTO_ACCOUNT: name of the carto account where the named maps layers are hosted.
+* CARTO_TOKEN: token to authenticate into carto for the named maps creation.
+* NAMED_MAPS_ENV: named maps environment to use inside the app.
 
 If you are using the included development server, you can set those variables in the `.env` file (use the included `.env.sample` as an example)
 

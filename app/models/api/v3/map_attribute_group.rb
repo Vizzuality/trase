@@ -29,7 +29,7 @@ module Api
       validates :name, presence: true
       validates :position, presence: true, uniqueness: {scope: :context}
 
-      after_commit :refresh_dependencies
+      after_commit :refresh_dependents
 
       def self.select_options
         Api::V3::MapAttributeGroup.includes(
@@ -52,7 +52,7 @@ module Api
         ]
       end
 
-      def refresh_dependencies
+      def refresh_dependents
         Api::V3::Readonly::MapAttribute.refresh
       end
     end

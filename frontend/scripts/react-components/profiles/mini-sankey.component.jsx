@@ -73,32 +73,34 @@ class MiniSankey extends Component {
 
     let currentStartNodeY = startY;
     let currentEndNodeY = 0;
-    const nodes = data.targetNodes.sort((nodeA, nodeB) => nodeB.height - nodeA.height).map(node => {
-      const renderedHeight = MiniSankey.roundHeight(node.height);
+    const nodes = [...data.targetNodes]
+      .sort((nodeA, nodeB) => nodeB.height - nodeA.height)
+      .map(node => {
+        const renderedHeight = MiniSankey.roundHeight(node.height);
 
-      const lines = wrapSVGText(
-        translateText(node.name),
-        Math.max(TEXT_LINE_HEIGHT, renderedHeight),
-        TEXT_LINE_HEIGHT,
-        isSmallResolution ? 11 : 18,
-        3
-      );
-      const percent = 100 * node.height;
-      const n = {
-        id: node.id,
-        name: node.name,
-        isDomesticConsumption: node.is_domestic_consumption,
-        lines,
-        renderedHeight,
-        pct: `${percent * 10 >= 1 ? formatValue(percent, 'percentage') : '< 0.1'}%`,
-        sy: currentStartNodeY,
-        ty: currentEndNodeY,
-        value: node.value
-      };
-      currentStartNodeY += n.renderedHeight;
-      currentEndNodeY += n.renderedHeight + NODE_V_SPACE;
-      return n;
-    });
+        const lines = wrapSVGText(
+          translateText(node.name),
+          Math.max(TEXT_LINE_HEIGHT, renderedHeight),
+          TEXT_LINE_HEIGHT,
+          isSmallResolution ? 11 : 18,
+          3
+        );
+        const percent = 100 * node.height;
+        const n = {
+          id: node.id,
+          name: node.name,
+          isDomesticConsumption: node.is_domestic_consumption,
+          lines,
+          renderedHeight,
+          pct: `${percent * 10 >= 1 ? formatValue(percent, 'percentage') : '< 0.1'}%`,
+          sy: currentStartNodeY,
+          ty: currentEndNodeY,
+          value: node.value
+        };
+        currentStartNodeY += n.renderedHeight;
+        currentEndNodeY += n.renderedHeight + NODE_V_SPACE;
+        return n;
+      });
 
     return (
       <div className="mini-sankey" data-test={testId}>

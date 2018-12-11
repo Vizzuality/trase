@@ -1,17 +1,8 @@
-$slide-height: 430px;
-$slide-height-small: 300px;
-
 .c-slider-section {
   padding: 100px 0 0;
 
   &:first-child {
     padding-top: 0;
-  }
-
-  &.-small {
-    .slide {
-      height: $slide-height-small;
-    }
   }
 
   @media screen and (max-width: $breakpoint-foundation-small) {
@@ -117,103 +108,5 @@ $slide-height-small: 300px;
     &.-no-image {
       transform: translate(100%, calc(-50% + 20px));
     }
-  }
-}
-
-.slide {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  height: $slide-height;
-
-  &.-actionable {
-    transition: box-shadow 350ms ease-out, transform 300ms ease-out, opacity 200ms ease-out;
-
-    &:hover {
-      box-shadow: 0 10px 30px rgba($black, 0.2);
-      transform: translate(0, -4px);
-    }
-  }
-
-  .slide-link {
-    width: 100%;
-    cursor: pointer;
-  }
-
-  .slide-image {
-    height: 240px;
-    width: 100%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: darken($light-gray, 12%);
-  }
-
-  .slide-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-    width: 100%;
-    height: 190px;
-    max-height: 190px;
-    padding: 20px;
-    background-color: $light-gray;
-
-    .details-container {
-      height: calc(100% - 20px);
-      overflow: hidden;
-    }
-
-    .slide-action {
-      width: 100%;
-      text-align: right;
-      color: $charcoal-grey-faded;
-      cursor: pointer;
-      height: 20px;
-    }
-
-
-    .slide-title {
-      margin-top: 5px;
-      font-family: $font-family-2;
-      font-size: $font-size-medium;
-      font-weight: 300;
-      line-height: 1.6;
-      color: $gray-text;
-      text-transform: capitalize;
-
-      @media screen and (max-width: $breakpoint-foundation-medium) {
-        font-size: $font-size-xx-regular;
-      }
-    }
-  }
-
-  .slide-quote {
-    height: 100%;
-    width: 100%;
-    padding: 20px;
-    background-color: $light-gray;
-
-    .slide-quote-content {
-      height: calc(100% - 40px);
-      overflow: hidden;
-      font-family: $font-family-2;
-      font-size: 16px;
-      font-weight: 300;
-      font-style: italic;
-      line-height: 1.6;
-      letter-spacing: -0.5px;
-      color: $gray-text;
-
-      > a {
-        font-weight: $font-weight-regular;
-      }
-    }
-  }
-
-  &:first-child {
-    margin: 0;
   }
 }

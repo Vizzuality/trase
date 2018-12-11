@@ -36,11 +36,6 @@ module Api
           indicators_list = [
             # Territorial deforestation
             {attribute_type: 'quant', attribute_name: 'DEFORESTATION_V2'},
-            # Maximum soy deforestation
-            {
-              attribute_type: 'quant',
-              attribute_name: 'POTENTIAL_SOY_DEFORESTATION_V2'
-            },
             # Soy deforestation (Cerrado only)
             {
               attribute_type: 'quant',

@@ -9,7 +9,7 @@
 #  years        :integer          is an Array
 #  created_at   :datetime
 #  updated_at   :datetime
-#  attribute_id :integer
+#  attribute_id :bigint(8)
 #
 # Indexes
 #
@@ -32,6 +32,10 @@ module Api
         delegate :unit_type, to: :readonly_attribute
         delegate :original_type, to: :readonly_attribute
         delegate :original_id, to: :readonly_attribute
+
+        def self.refresh_dependencies(options = {})
+          Api::V3::Readonly::Attribute.refresh(options.merge(skip_dependents: true))
+        end
       end
     end
   end

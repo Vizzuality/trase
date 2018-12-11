@@ -23,7 +23,6 @@ module Api
           @query = Api::V3::Readonly::DownloadFlow.where(
             context_id: @context.id
           )
-          initialize_path_column_names(@context.id)
           if (years = params[:years]).present?
             @query = @query.where(year: years)
           end
@@ -37,105 +36,19 @@ module Api
             @query = @query.where(country_node_id: countries_ids)
           end
           return unless (filters = params[:filters]).present?
+
           apply_attribute_filters(filters)
         end
 
         def flat_query
-          @query.select(flat_select_columns).
-            order(:row_name, :attribute_type, :attribute_id)
+          FlowDownloadFlatQuery.new(@context, @query)
         end
 
         def pivot_query
-          source = @query.select(pivot_select_columns).
-            order(:row_name)
-          source_sql = source.to_sql.gsub("'", "''")
-          categories = @query.
-            select('display_name').
-            group(:display_name).
-            order(:display_name)
-          categories_sql = categories.to_sql.gsub("'", "''")
-          categories_names_quoted = categories.map do |c|
-            '"' + c['display_name'] + '"'
-          end
-          categories_names_with_type = categories_names_quoted.map do |cn|
-            cn + ' text'
-          end
-
-          select_columns = [
-            '"YEAR"'
-          ] + @path_column_aliases + [
-            '"TYPE"'
-          ] + categories_names_quoted
-
-          crosstab_columns = [
-            'row_name INT[]',
-            '"YEAR" int'
-          ] + @path_crosstab_columns + [
-            '"TYPE" text'
-          ] + categories_names_with_type
-
-          crosstab_sql = <<~SQL
-            public.CROSSTAB(
-              '#{source_sql}',
-              '#{categories_sql}'
-            )
-            AS CT(#{crosstab_columns.join(',')})
-          SQL
-
-          Api::V3::Readonly::DownloadFlow.
-            select(select_columns).from(crosstab_sql)
+          FlowDownloadPivotQuery.new(@context, @query)
         end
 
         private
-
-        def flat_select_columns
-          [
-            'year AS "YEAR"'
-          ] + @path_columns +
-            [
-              "'#{commodity_type}'::TEXT AS \"TYPE\"",
-              'display_name AS "INDICATOR"',
-              'total AS "TOTAL"'
-            ]
-        end
-
-        def pivot_select_columns
-          [
-            'row_name',
-            'year AS "YEAR"'
-          ] + @path_columns +
-            [
-              "'#{commodity_type}'::TEXT AS \"TYPE\"",
-              'display_name',
-              'total'
-            ]
-        end
-
-        def commodity_type
-          if @context.commodity.try(:name) == 'SOY'
-            'Soy bean equivalents'
-          else
-            "#{@context.commodity.try(:name).try(:humanize)} equivalents" ||
-              'UNKNOWN'
-          end
-        end
-
-        def initialize_path_column_names(context_id)
-          context_node_types = Api::V3::ContextNodeType.
-            select([:column_position, 'node_types.name']).
-            where(context_id: context_id).
-            joins(:node_type).
-            order(:column_position)
-          context_column_positions = context_node_types.pluck(:column_position)
-          path_column_names = context_column_positions.map { |p| "name_#{p}" }
-          @path_column_aliases = context_node_types.
-            pluck('node_types.name').
-            map { |nt| "\"#{nt}\"" }
-          @path_columns = path_column_names.each_with_index.map do |n, idx|
-            "#{n} AS #{@path_column_aliases[idx]}"
-          end
-          @path_crosstab_columns = @path_column_aliases.map { |a| "#{a} text" }
-        end
 
         def apply_attribute_filters(attributes_list)
           query_parts = []
@@ -158,6 +71,7 @@ module Api
 
         def attribute_by_name(name)
           return nil unless name
+
           Dictionary::Quant.instance.get(name) ||
             Dictionary::Qual.instance.get(name)
         end
@@ -181,12 +95,14 @@ module Api
         def qual_op_part(op_symbol)
           op = QUAL_OPS[op_symbol]
           return nil unless op
+
           "LOWER(total) #{op} LOWER(?)"
         end
 
         def quant_op_part(op_symbol)
           op = QUANT_OPS[op_symbol]
           return nil unless op
+
           "sum #{op} ?"
         end
       end

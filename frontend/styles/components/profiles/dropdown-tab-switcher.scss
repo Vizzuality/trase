@@ -13,37 +13,14 @@
     color: $charcoal-grey;
     text-transform: uppercase;
 
-    ul {
-      display: flex;
-
+    .tab-container {
       @media print {
         display: none;
       }
     }
 
-    .tab-switcher-title,
-    li:not(:last-child) {
+    .tab-switcher-title {
       margin-right: 21px;
-    }
-
-    li {
-      position: relative;
-      opacity: 0.3;
-      cursor: pointer;
-
-      &.selected {
-        opacity: 1;
-
-        &:before {
-          content: '';
-          position: absolute;
-          left: 0;
-          bottom: -2px;
-          width: 100%;
-          height: 2px;
-          background-color: $medium-pink;
-        }
-      }
     }
   }
 

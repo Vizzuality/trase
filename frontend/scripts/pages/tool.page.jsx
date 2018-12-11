@@ -55,7 +55,13 @@ export const mount = (root, store) => {
     new ModalContainer(store)
   ];
 
-  setToolLoaders(store.dispatch);
+  // TODO remove this
+  // In order to avoid adding loading states when not needed we check that the selectedContext
+  // has indeed changed.
+  const { app, tool } = store.getState();
+  if ((app.selectedContext && app.selectedContext.id) !== tool.loadedFlowsContextId) {
+    setToolLoaders(store.dispatch);
+  }
   loadDisclaimerTool(store.dispatch);
   loadStoryModalTool(store.dispatch, store.getState);
   resizeSankeyTool(store.dispatch);

@@ -88,7 +88,7 @@ module Api
               name: 'Land use',
               unit: 'ha',
               attribute_type: 'quant',
-              attribute_name: 'LAND_USE'
+              attribute_name: 'SOY_AREA_'
             },
             {
               name: 'Territorial Deforestation',
@@ -97,27 +97,10 @@ module Api
               attribute_name: 'DEFORESTATION_V2'
             },
             {
-              name: 'Maximum soy deforestation',
+              name: 'Soy deforestation',
               unit: 'ha',
               attribute_type: 'quant',
-              attribute_name: 'POTENTIAL_SOY_DEFORESTATION_V2'
-            },
-            {
-              name: 'Soy related deforestation',
-              unit: 'ha',
-              attribute_type: 'quant',
-              attribute_name: 'AGROSATELITE_SOY_DEFOR_'
-            },
-            {
-              name: 'Loss of biodiversity',
-              attribute_type: 'quant',
-              attribute_name: 'BIODIVERSITY'
-            },
-            {
-              name: 'Land-based emissions',
-              unit: 't',
-              attribute_type: 'quant',
-              attribute_name: 'GHG_'
+              attribute_name: 'SOY_DEFORESTATION_5_YEAR_ANNUAL'
             }
           ]
         end

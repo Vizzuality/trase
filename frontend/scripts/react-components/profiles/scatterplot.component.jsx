@@ -129,16 +129,10 @@ class Scatterplot extends Component {
     if (showTooltipCallback !== undefined) {
       this.circles
         .on('mousemove', d => {
-          const selectedSwitcher = document.querySelector(
-            '.c-scatterplot .tab-switcher li.selected span'
-          );
-
+          const selectedSwitcher = this.props.xDimension[this.state.selectedTabIndex];
           showTooltipCallback(
             d,
-            {
-              name: selectedSwitcher.innerHTML,
-              unit: selectedSwitcher.getAttribute('data-unit')
-            },
+            selectedSwitcher,
             d3_event.clientX + 10,
             d3_event.clientY + window.scrollY + 10
           );
@@ -164,9 +158,8 @@ class Scatterplot extends Component {
       .transition()
       .duration(700)
       .attr('cx', d => x(d.x))
-      .attr(
-        'class',
-        d => (d.x === null ? `${this._getCircleClass(d)} -hidden` : this._getCircleClass(d))
+      .attr('class', d =>
+        d.x === null ? `${this._getCircleClass(d)} -hidden` : this._getCircleClass(d)
       );
 
     this.svg

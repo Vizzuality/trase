@@ -16,11 +16,21 @@ function DeforestationWidget(props) {
       params={[{ ...params }, { ...params, profile_type: 'place' }]}
     >
       {({ data, loading, error }) => {
-        if (loading || error) {
+        if (loading) {
           return (
-            <section className="spinner-section" data-test="loading-section">
+            <div className="spinner-section" data-test="loading-section">
               <ShrinkingSpinner className="-large" />
-            </section>
+            </div>
+          );
+        }
+
+        if (error) {
+          // TODO: display a proper error message to the user
+          console.error('Error loading deforestation widget data for profile page', error);
+          return (
+            <div className="spinner-section" data-test="loading-section">
+              <ShrinkingSpinner className="-large" />
+            </div>
           );
         }
 
@@ -42,8 +52,8 @@ function DeforestationWidget(props) {
                   <div className="c-line">
                     <Line
                       testId={testId}
-                      lines={DeforestationWidget.getLastNYears(lines, 6)}
-                      xValues={includedYears.slice(-6)}
+                      lines={lines}
+                      xValues={includedYears}
                       unit={unit}
                       margin={{ top: 0, right: 20, bottom: 30, left: 60 }}
                       settingsHeight={425}
@@ -67,13 +77,6 @@ function DeforestationWidget(props) {
     </Widget>
   );
 }
-
-DeforestationWidget.getLastNYears = function getLastNYears(lines, nYears) {
-  return lines.map(line => ({
-    ...line,
-    values: line.values.slice(nYears * -1)
-  }));
-};
 
 DeforestationWidget.propTypes = {
   testId: PropTypes.string,

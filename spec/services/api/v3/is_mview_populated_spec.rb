@@ -9,7 +9,7 @@ RSpec.describe Api::V3::IsMviewPopulated do
 
     it 'should return true when populated' do
       FactoryBot.create(:api_v3_node)
-      Api::V3::Readonly::Node.refresh
+      Api::V3::Readonly::Node.refresh(sync: true)
       expect(subject.call).to be true
     end
   end

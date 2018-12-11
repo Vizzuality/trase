@@ -4,6 +4,11 @@ RSpec.describe Api::V3::NodeAttributes::Filter do
   include_context 'api v3 brazil map attributes'
   include_context 'api v3 brazil municipality quant values'
 
+  before(:each) do
+    Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::MapAttribute.refresh(sync: true, skip_dependencies: true)
+  end
+
   let(:node_attributes) {
     filter.result
   }
@@ -38,6 +43,7 @@ RSpec.describe Api::V3::NodeAttributes::Filter do
   context 'when multi year' do
     let!(:api_v3_land_conflicts_map_attribute_multi_year) {
       api_v3_land_conflicts_map_attribute.update_attribute(:years, [2014, 2015])
+      Api::V3::Readonly::MapAttribute.refresh(sync: true, skip_dependencies: true)
       api_v3_land_conflicts_map_attribute
     }
     let!(:api_v3_land_conflicts_value_2014) {

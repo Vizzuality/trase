@@ -127,22 +127,19 @@ export default class {
     forceDefaultMapView
   }) {
     this.polygonTypesLayers = {};
-
     if (!mapVectorData) return;
 
     // create geometry layers for all polygonTypes that have their own geometry
-    Object.keys(mapVectorData).forEach(polygonTypeId => {
-      const polygonType = mapVectorData[polygonTypeId];
+    mapVectorData.forEach(polygonType => {
       if (polygonType.useGeometryFromColumnId === undefined) {
-        this.polygonTypesLayers[polygonTypeId] = this._createPolygonTypeLayer(polygonType);
+        this.polygonTypesLayers[polygonType.id] = this._createPolygonTypeLayer(polygonType);
       }
     });
 
     // for polygonTypes that don't have their geometry, link to actual geometry layers
-    Object.keys(mapVectorData).forEach(polygonTypeId => {
-      const polygonType = mapVectorData[polygonTypeId];
+    mapVectorData.forEach(polygonType => {
       if (polygonType.useGeometryFromColumnId !== undefined) {
-        this.polygonTypesLayers[polygonTypeId] = this.polygonTypesLayers[
+        this.polygonTypesLayers[polygonType.id] = this.polygonTypesLayers[
           polygonType.useGeometryFromColumnId
         ];
       }
@@ -213,10 +210,6 @@ export default class {
       const originalPolygon = this.currentPolygonTypeLayer
         .getLayers()
         .find(polygon => polygon.feature.properties.geoid === selectedGeoId);
-
-      if (!originalPolygon) {
-        console.error(`Could not find polygon with GeoID ${selectedGeoId}`);
-      }
       return originalPolygon.feature;
     });
 
@@ -670,13 +663,12 @@ export default class {
       this.map.removeLayer(this.pointVolumeShadowLayer);
     }
 
-    const polygonTypeId = Object.keys(mapVectorData)[0];
-    const polygonType = mapVectorData[polygonTypeId];
+    const polygonTypeLayer = mapVectorData.find(layer => layer.isPoint);
 
-    if (!polygonType.isPoint) return;
+    if (!polygonTypeLayer) return;
 
     this.pointVolumeShadowLayer = this._createPointVolumeShadowLayer(
-      polygonType.geoJSON,
+      polygonTypeLayer.geoJSON,
       visibleNodes
     );
     this.map.addLayer(this.pointVolumeShadowLayer);

@@ -66,7 +66,7 @@ class WorldMap extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.flows.length !== 0;
+    return nextProps.flows.length !== 0 || !nextProps.selectedContext;
   }
 
   onMouseMove(geometry, e) {
@@ -90,7 +90,7 @@ class WorldMap extends Component {
   }
 
   renderGeographies(geographies, projection) {
-    const { origin, flows, originCountries } = this.props;
+    const { originGeoId, flows, originCountries } = this.props;
     const countries = flows.length > 0 ? flows : originCountries;
     return geographies.map(
       geography =>
@@ -100,7 +100,7 @@ class WorldMap extends Component {
             className={cx(
               'world-map-geography',
               { '-dark': WorldMap.isDestinationCountry(geography.properties.iso2, countries) },
-              { '-pink': origin && origin.geoId === geography.properties.iso2 }
+              { '-pink': originGeoId === geography.properties.iso2 }
             )}
             geography={geography}
             projection={projection}
@@ -112,7 +112,7 @@ class WorldMap extends Component {
   }
 
   renderLines() {
-    const { flows, origin } = this.props;
+    const { flows, originCoordinates } = this.props;
 
     return flows.map(flow => (
       <Line
@@ -122,7 +122,7 @@ class WorldMap extends Component {
           ...flow,
           coordinates: {
             start: flow.coordinates,
-            end: origin.coordinates
+            end: originCoordinates
           }
         }}
         buildPath={WorldMap.buildCurves}
@@ -137,6 +137,10 @@ class WorldMap extends Component {
     const { originCountries } = this.props;
     return originCountries.map(country => {
       const { annotationPos = [] } = country;
+      if (annotationPos.length === 0) {
+        console.warn(`Country ${country.name} missing annotation position coordinates`);
+        return null;
+      }
       return (
         <Annotation
           key={country.geoId}
@@ -181,7 +185,9 @@ class WorldMap extends Component {
 WorldMap.propTypes = {
   renderFlows: PropTypes.bool.isRequired,
   flows: PropTypes.array.isRequired,
-  origin: PropTypes.object,
+  originAnnotationPos: PropTypes.array,
+  originCoordinates: PropTypes.array,
+  originGeoId: PropTypes.string,
   selectedContext: PropTypes.object,
   selectedYears: PropTypes.array,
   originCountries: PropTypes.array,

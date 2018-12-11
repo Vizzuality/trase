@@ -7,7 +7,7 @@ function LinkButton({ children, className, ...props }) {
   return (
     <Link className={cx('c-button -with-icon', className)} {...props}>
       {children}
-      <svg className="icon icon-link">
+      <svg className="icon icon-link" style={{ pointerEvents: 'none' }}>
         <use xlinkHref="#icon-link" />
       </svg>
     </Link>

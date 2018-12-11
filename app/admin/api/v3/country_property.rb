@@ -1,7 +1,8 @@
 ActiveAdmin.register Api::V3::CountryProperty, as: 'CountryProperty' do
   menu parent: 'General Settings', priority: 1
 
-  permit_params :country_id, :latitude, :longitude, :zoom
+  permit_params :country_id, :latitude, :longitude, :zoom, :geo_id,
+                :annotation_position_x_pos, :annotation_position_y_pos
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -21,6 +22,12 @@ ActiveAdmin.register Api::V3::CountryProperty, as: 'CountryProperty' do
                         hint: object.class.column_comment('longitude')
       input :zoom, required: true,
                    hint: object.class.column_comment('zoom')
+      input :annotation_position_x_pos,
+            required: true,
+            hint: object.class.column_comment('annotation_position_x_pos')
+      input :annotation_position_y_pos,
+            required: true,
+            hint: object.class.column_comment('annotation_position_y_pos')
     end
     f.actions
   end
@@ -30,6 +37,8 @@ ActiveAdmin.register Api::V3::CountryProperty, as: 'CountryProperty' do
     column :latitude
     column :longitude
     column :zoom
+    column :annotation_position_x_pos
+    column :annotation_position_y_pos
     actions
   end
 
