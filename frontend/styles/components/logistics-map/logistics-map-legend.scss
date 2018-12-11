@@ -1,0 +1,10 @@
+@import 'styles/settings';
+
+.c-logistics-map-legend {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  height: 200px;
+  width: 250px;
+  background-color: $background-white;
+}

@@ -6,21 +6,23 @@ import L from 'leaflet';
 import 'leaflet-utfgrid/L.UTFGrid-min';
 import MapComponent, { MapControls, ZoomControl, MapPopup } from 'wri-api-components/dist/map';
 import WRIIcons from 'wri-api-components/dist/icons';
-import UnitsTooltip from 'react-components/shared/units-tooltip.component';
+
 import { Layer, LayerManager } from 'layer-manager/lib/react';
 import { PluginLeaflet } from 'layer-manager/lib';
+import UnitsTooltip from 'react-components/shared/units-tooltip.component';
+import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-legend.component';
 import 'wri-api-components/dist/map.css';
 import 'leaflet/dist/leaflet.css';
 import 'styles/components/logistics-map/logistics-map.scss';
 
 function LogisticsMap(props) {
-  const { layers, buildEvents, mapPopUp, getCurrentPopUp } = props;
+  const { layers, buildEvents, mapPopUp, getCurrentPopUp, bounds } = props;
   const Tooltip = p => <UnitsTooltip {...p.data} />;
   return (
     <div className="l-logistics-map">
       <div className="c-logistics-map">
         <WRIIcons />
-        <MapComponent>
+        <MapComponent bounds={bounds}>
           {map => (
             <React.Fragment>
               <MapControls>
@@ -37,6 +39,7 @@ function LogisticsMap(props) {
             </React.Fragment>
           )}
         </MapComponent>
+        <LogisticsMapLegend />
       </div>
     </div>
   );
