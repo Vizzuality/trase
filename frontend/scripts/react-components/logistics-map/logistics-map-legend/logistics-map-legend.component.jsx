@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import Toggle from 'react-components/shared/toggle.component';
-import Text from 'react-components/shared/text.component';
+import Text from 'react-components/shared/text/text.component';
+import Heading from 'react-components/shared/heading/heading.component';
+import startCase from 'lodash/startCase';
+import Toggle from 'react-components/shared/toggle/toggle.component';
 
-import 'styles/components/logistics-map/logistics-map-legend.scss';
-import Heading from 'react-components/shared/heading.component';
+import './logistics-map-legend.scss';
 
 class LogisticsMapLegend extends React.PureComponent {
   state = {
@@ -29,7 +30,7 @@ class LogisticsMapLegend extends React.PureComponent {
         <ul className={cx(['logistics-map-legend-list', { '-closed': !open }])}>
           {layers.map(layer => (
             <li className="logistics-map-legend-list-item">
-              <Text>{layer.name}</Text>
+              <Text>{startCase(layer.name)}</Text>
               <Toggle
                 id={layer.id}
                 checked={layer.active}
