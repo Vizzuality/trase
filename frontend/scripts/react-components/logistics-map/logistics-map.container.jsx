@@ -1,13 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getLogisticsMapLayers } from 'react-components/logistics-map/logistics-map.selectors';
+import {
+  getLogisticsMapLayers,
+  getActiveLayers
+} from 'react-components/logistics-map/logistics-map.selectors';
+import { setLayerActive as setLayerActiveFn } from 'react-components/logistics-map/logistics-map.actions';
 import LogisticsMap from 'react-components/logistics-map/logistics-map.component';
 import formatValue from 'utils/formatValue';
 
 class LogisticsMapContainer extends React.PureComponent {
   static propTypes = {
-    layers: PropTypes
+    layers: PropTypes.array,
+    activeLayers: PropTypes.array,
+    setLayerActive: PropTypes.func.isRequired
   };
 
   state = {
@@ -50,14 +56,16 @@ class LogisticsMapContainer extends React.PureComponent {
   };
 
   render() {
-    const { layers } = this.props;
+    const { activeLayers, layers, setLayerActive } = this.props;
     const { mapPopUp } = this.state;
     return (
       <LogisticsMap
         layers={layers}
-        bounds={this.bounds}
-        buildEvents={this.buildEvents}
         mapPopUp={mapPopUp}
+        bounds={this.bounds}
+        activeLayers={activeLayers}
+        buildEvents={this.buildEvents}
+        setLayerActive={setLayerActive}
         getCurrentPopUp={this.getCurrentPopUp}
       />
     );
@@ -65,8 +73,16 @@ class LogisticsMapContainer extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
-  layers: getLogisticsMapLayers(),
+  activeLayers: getActiveLayers(state),
+  layers: getLogisticsMapLayers(state),
   activeYear: state.logisticsMap.activeYear
 });
 
-export default connect(mapStateToProps)(LogisticsMapContainer);
+const mapDispatchToProps = {
+  setLayerActive: setLayerActiveFn
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LogisticsMapContainer);

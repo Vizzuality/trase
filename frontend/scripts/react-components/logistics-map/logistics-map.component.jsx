@@ -16,7 +16,15 @@ import 'leaflet/dist/leaflet.css';
 import 'styles/components/logistics-map/logistics-map.scss';
 
 function LogisticsMap(props) {
-  const { layers, buildEvents, mapPopUp, getCurrentPopUp, bounds } = props;
+  const {
+    activeLayers,
+    layers,
+    buildEvents,
+    mapPopUp,
+    getCurrentPopUp,
+    bounds,
+    setLayerActive
+  } = props;
   const Tooltip = p => <UnitsTooltip {...p.data} />;
   return (
     <div className="l-logistics-map">
@@ -29,7 +37,7 @@ function LogisticsMap(props) {
                 <ZoomControl map={map} />
               </MapControls>
               <LayerManager map={map} plugin={PluginLeaflet}>
-                {layers.map(layer => (
+                {activeLayers.map(layer => (
                   <Layer key={layer.id} {...layer} events={buildEvents(layer)} />
                 ))}
               </LayerManager>
@@ -39,7 +47,7 @@ function LogisticsMap(props) {
             </React.Fragment>
           )}
         </MapComponent>
-        <LogisticsMapLegend />
+        <LogisticsMapLegend layers={layers} setLayerActive={setLayerActive} />
       </div>
     </div>
   );
@@ -47,6 +55,7 @@ function LogisticsMap(props) {
 
 LogisticsMap.propTypes = {
   layers: PropTypes.array,
+  activeLayers: PropTypes.array,
   buildEvents: PropTypes.func
 };
 

@@ -1,4 +1,8 @@
-const layers = [
+import { createSelector } from 'reselect';
+
+const getLayersStatus = state => state.logisticsMap.layers;
+
+const templates = [
   {
     version: '0.0.1',
     name: 'crushing_facilities',
@@ -50,23 +54,31 @@ const layers = [
   }
 ];
 
-export const getLogisticsMapLayers = () =>
-  layers.map(layer => ({
-    name: layer.name,
-    opacity: 1,
-    active: true,
-    id: layer.name,
-    type: 'layer',
-    provider: 'carto',
-    layerConfig: {
-      account: CARTO_ACCOUNT,
-      body: {
-        layers: layer.layers,
-        minzoom: 2,
-        maxzoom: 20
+export const getLogisticsMapLayers = createSelector(
+  getLayersStatus,
+  status =>
+    templates.map(template => ({
+      name: template.name,
+      opacity: 1,
+      id: template.name,
+      active: status[template.name],
+      type: 'layer',
+      provider: 'carto',
+      layerConfig: {
+        account: CARTO_ACCOUNT,
+        body: {
+          layers: template.layers,
+          minzoom: 2,
+          maxzoom: 20
+        },
+        type: 'carto',
+        service: 'carto'
       },
-      type: 'carto',
-      service: 'carto'
-    },
-    interactivity: layer.layers[0].options.interactivity
-  }));
+      interactivity: template.layers[0].options.interactivity
+    }))
+);
+
+export const getActiveLayers = createSelector(
+  [getLayersStatus, getLogisticsMapLayers],
+  (status, layers) => layers.filter(layer => !!status[layer.name])
+);
