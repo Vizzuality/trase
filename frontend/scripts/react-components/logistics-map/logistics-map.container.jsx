@@ -14,6 +14,10 @@ class LogisticsMapContainer extends React.PureComponent {
     mapPopUp: null
   };
 
+  bounds = {
+    bbox: [-77.783203125, -35.46066995149529, -29.794921874999996, 9.709057068618208]
+  };
+
   currentPopUp = null;
 
   onMouseOver = (e, layer) => {
@@ -51,6 +55,7 @@ class LogisticsMapContainer extends React.PureComponent {
     return (
       <LogisticsMap
         layers={layers}
+        bounds={this.bounds}
         buildEvents={this.buildEvents}
         mapPopUp={mapPopUp}
         getCurrentPopUp={this.getCurrentPopUp}
