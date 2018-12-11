@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import 'styles/components/shared/toggle.scss';
+import './toggle.scss';
 
 function Toggle(props) {
   return (

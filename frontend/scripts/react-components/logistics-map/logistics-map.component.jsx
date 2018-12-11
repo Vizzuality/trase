@@ -9,11 +9,11 @@ import WRIIcons from 'wri-api-components/dist/icons';
 
 import { Layer, LayerManager } from 'layer-manager/lib/react';
 import { PluginLeaflet } from 'layer-manager/lib';
-import UnitsTooltip from 'react-components/shared/units-tooltip.component';
-import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-legend.component';
+import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
+import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-legend/logistics-map-legend.component';
 import 'wri-api-components/dist/map.css';
 import 'leaflet/dist/leaflet.css';
-import 'styles/components/logistics-map/logistics-map.scss';
+import 'scripts/react-components/logistics-map/logistics-map.scss';
 
 function LogisticsMap(props) {
   const {
