@@ -1,7 +1,7 @@
 const BASE_URL = 'http://0.0.0.0:8081';
 
 export async function testRootSearch(page, expect, { nodeName, nodeType, profileType }) {
-  const profileSearchInputSelector = '[data-test=search-input-desktop]';
+  const profileSearchInputSelector = '[data-test=profile-root-search-input-field-lg]';
 
   await page.waitForSelector(profileSearchInputSelector);
   await page.click(profileSearchInputSelector);

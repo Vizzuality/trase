@@ -1,7 +1,15 @@
 ActiveAdmin.register Api::V3::Profile, as: 'Profile' do
   menu parent: 'General Settings', priority: 4
 
-  permit_params :context_node_type_id, :name
+  permit_params :context_node_type_id,
+                :name, :main_topojson_path,
+                :main_topojson_root,
+                :adm_1_topojson_path,
+                :adm_1_topojson_root,
+                :adm_1_name,
+                :adm_2_topojson_path,
+                :adm_2_topojson_root,
+                :adm_2_name
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -19,6 +27,31 @@ ActiveAdmin.register Api::V3::Profile, as: 'Profile' do
       input :name, as: :select,
                    collection: Api::V3::Profile::NAME,
                    hint: object.class.column_comment('name')
+
+      input :main_topojson_path,
+            hint: object.class.column_comment('main_topojson_path'),
+            label: 'Main map TopoJSON file path'
+      input :main_topojson_root,
+            hint: object.class.column_comment('main_topojson_root'),
+            label: 'Main map TopoJSON root'
+
+      input :adm_1_name,
+            label: 'Map 1 label'
+      input :adm_1_topojson_path,
+            hint: object.class.column_comment('adm_1_topojson_path'),
+            label: 'Map 1 TopoJSON file path'
+      input :adm_1_topojson_root,
+            hint: object.class.column_comment('adm_1_topojson_root'),
+            label: 'Map 1 TopoJSON root'
+
+      input :adm_2_name,
+            label: 'Map 2 label'
+      input :adm_2_topojson_path,
+            hint: object.class.column_comment('adm_2_topojson_path'),
+            label: 'Map 2 TopoJSON file path'
+      input :adm_2_topojson_root,
+            hint: object.class.column_comment('adm_2_topojson_root'),
+            label: 'Map 2 TopoJSON root'
     end
     f.actions
   end
@@ -28,6 +61,12 @@ ActiveAdmin.register Api::V3::Profile, as: 'Profile' do
     column('Commodity') { |property| property.context_node_type&.context&.commodity&.name }
     column('Node Type') { |property| property.context_node_type&.node_type&.name }
     column :name
+    column :adm_1_topojson_path
+    column :adm_1_topojson_root
+    column :adm_2_topojson_path
+    column :adm_2_topojson_root
+    column :main_topojson_path
+    column :main_topojson_root
     actions
   end
 
@@ -37,6 +76,12 @@ ActiveAdmin.register Api::V3::Profile, as: 'Profile' do
       row('Commodity') { |property| property.context_node_type&.context&.commodity&.name }
       row('Node Type') { |property| property.context_node_type&.node_type&.name }
       row :name
+      row :adm_1_topojson_path
+      row :adm_1_topojson_root
+      row :adm_2_topojson_path
+      row :adm_2_topojson_root
+      row :main_topojson_path
+      row :main_topojson_root
       row :created_at
       row :updated_at
     end

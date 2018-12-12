@@ -12,7 +12,7 @@ const SEARCH_DEBOUNCE_RATE_IN_MS = 400;
 
 class SearchInput extends PureComponent {
   onInputValueChange = debounce(
-    searchTerm => this.props.onSearchTermChange && this.props.onSearchTermChange(searchTerm),
+    (...params) => this.props.onSearchTermChange && this.props.onSearchTermChange(...params),
     SEARCH_DEBOUNCE_RATE_IN_MS
   );
 
@@ -41,6 +41,7 @@ class SearchInput extends PureComponent {
     const {
       className,
       isLoading,
+      isDisabled,
       items,
       placeholder,
       placeholderSmall,
@@ -52,22 +53,28 @@ class SearchInput extends PureComponent {
     const visibleResults = items.slice(0, MAX_SEARCH_RESULTS);
 
     return (
-      <div className={cx('c-search-input', className)} data-test={`search-input-${testId}`}>
+      <div
+        className={cx('c-search-input', className)}
+        data-test={`${testId}-search-input-container`}
+      >
         <div
-          className={cx('search-input-bar', { '-loading': isLoading })}
+          className={cx('search-input-bar', { '-loading': isLoading, '-disabled': isDisabled })}
           onClick={this.focusInput}
           role="textbox"
         >
           <input
             {...getInputProps({ placeholder: placeholderSmall })}
             type="search"
+            disabled={isDisabled}
             className="search-input-field show-for-small"
+            data-test={`${testId}-search-input-field-sm${isDisabled ? '-disabled' : ''}`}
           />
           <input
             {...getInputProps({ placeholder })}
             type="search"
+            disabled={isDisabled}
             className="search-input-field hide-for-small"
-            data-test="search-input-desktop"
+            data-test={`${testId}-search-input-field-lg${isDisabled ? '-disabled' : ''}`}
           />
           {isLoading ? (
             <ShrinkingSpinner className="-dark" />
@@ -98,12 +105,13 @@ class SearchInput extends PureComponent {
   };
 
   render() {
+    const { searchOptions, onSelect } = this.props;
     return (
       <Downshift
-        onSelect={node => this.props.onSelect(node, this.props.year)}
+        onSelect={node => onSelect(node, searchOptions)}
         stateReducer={this.stateReducer}
         itemToString={i => (i === null ? '' : i.name)}
-        onInputValueChange={this.onInputValueChange}
+        onInputValueChange={term => this.onInputValueChange(term, searchOptions)}
       >
         {this.renderSearchBox}
       </Downshift>
@@ -115,6 +123,7 @@ SearchInput.propTypes = {
   year: PropTypes.number,
   testId: PropTypes.string,
   isLoading: PropTypes.bool,
+  isDisabled: PropTypes.bool,
   className: PropTypes.string,
   placeholder: PropTypes.string,
   getResultTestId: PropTypes.func,

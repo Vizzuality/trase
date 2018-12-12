@@ -6,6 +6,7 @@ import { testRootSearch } from './shared';
 const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
 const BASE_URL = 'http://0.0.0.0:8081';
 
+jest.setTimeout(TIMEOUT);
 const { page } = global;
 
 beforeAll(async () => {
@@ -19,31 +20,23 @@ beforeEach(async () => {
 });
 
 describe('Profile Root search', () => {
-  it(
-    'search for actor',
-    async () => {
-      const nodeName = 'bunge';
-      const nodeType = 'importer';
-      const profileType = 'actor';
+  it('search for actor', async () => {
+    const nodeName = 'bunge';
+    const nodeType = 'importer';
+    const profileType = 'actor';
 
-      expect.assertions(1);
+    expect.assertions(1);
 
-      await testRootSearch(page, expect, { nodeName, nodeType, profileType });
-    },
-    TIMEOUT
-  );
+    await testRootSearch(page, expect, { nodeName, nodeType, profileType });
+  });
 
-  it(
-    'search for municipality',
-    async () => {
-      const nodeName = 'sorriso';
-      const nodeType = 'municipality';
-      const profileType = 'place';
+  it('search for municipality', async () => {
+    const nodeName = 'sorriso';
+    const nodeType = 'municipality';
+    const profileType = 'place';
 
-      expect.assertions(1);
+    expect.assertions(1);
 
-      await testRootSearch(page, expect, { nodeName, nodeType, profileType });
-    },
-    TIMEOUT
-  );
+    await testRootSearch(page, expect, { nodeName, nodeType, profileType });
+  });
 });

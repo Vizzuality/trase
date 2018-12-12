@@ -2,12 +2,25 @@
 @import '../nav/basic-dropdown';
 
 .c-context-selector {
+  cursor: pointer;
+
+  .dropdown-title {
+
+    &.-label {
+      text-align: center;
+    }
+  }
 
   .context-selector-content {
     @extend %dropdown;
     position: absolute;
     top: $nav-height;
     left: 0;
+    max-width: calc(100vw - 3rem);
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      max-width: none;
+    }
   }
 
   .context-selector-featured-header {
@@ -25,7 +38,7 @@
     .icon {
       position: absolute;
       height: 14px;
-      width: 14x;
+      width: 14px;
       right: 10px;
       top: 10px;
       color: $white;
@@ -97,11 +110,12 @@
 
     .dimension-list-item {
       padding: 12px 25px;
-      cursor: pointer;
+      color: $charcoal-grey;
       text-transform: capitalize;
       font-family: $font-family-2;
       font-size: $font-size-xx-regular;
       font-weight: normal;
+      cursor: pointer;
 
       &:hover {
         background-color: $manilla;
@@ -123,7 +137,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 50px;
+    height: 30px;
     width: 100%;
     background-color: $background-white;
     cursor: default;
@@ -133,6 +147,7 @@
     }
 
     .context-selector-footer-text {
+      font-family: $font-family-1;
       font-size: $font-size-x-regular;
       font-weight: 500;
       color: $charcoal-grey-faded;

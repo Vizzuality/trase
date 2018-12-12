@@ -37,6 +37,7 @@ Rails.application.routes.draw do
         resources :nodes, only: [:index] do
           get :place, on: :member, controller: :place_nodes, action: :show
           get :actor, on: :member, controller: :actor_nodes, action: :show
+          get :profile_metadata, on: :member, controller: :profile_metadata, action: :index
         end
         resources :actors, only: [] do
           get :basic_attributes

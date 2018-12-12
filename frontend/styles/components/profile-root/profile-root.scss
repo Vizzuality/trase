@@ -1,5 +1,28 @@
 .c-profile-root {
 
+  .profile-root-context-selector {
+    position: relative;
+    z-index: $z-above;
+    margin: 0 0 10px 0;
+
+    .dropdown-label {
+      font-size: 13px;
+      margin: 0 0 10px 0;
+    }
+
+    .dropdown-title {
+      font-size: 24px;
+
+      @media screen and (min-width: $breakpoint-foundation-small) {
+        font-size: 48px;
+      }
+    }
+
+    .context-selector-content {
+      top: calc(100% + 10px);
+    }
+  }
+
   .profile-root-search-container {
     padding: 90px 0;
 
@@ -15,6 +38,7 @@
 
     .profile-root-heading-wrapper {
       flex-shrink: 0;
+      max-width: 100%;
 
       .title {
         font-size: 24px;
@@ -26,7 +50,7 @@
     }
 
     @media only screen and (max-width: $breakpoint-foundation-small) {
-      justify-content: left;
+      justify-content: flex-start;
     }
   }
 

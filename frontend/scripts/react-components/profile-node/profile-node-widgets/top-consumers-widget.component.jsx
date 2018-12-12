@@ -66,6 +66,10 @@ class TopConsumersWidget extends React.PureComponent {
             );
           }
 
+          if (error) {
+            return null;
+          }
+
           if (
             data[mainQuery] &&
             data[mainQuery].targetNodes &&

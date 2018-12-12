@@ -59,7 +59,14 @@ shared_context 'api v3 brazil context node types' do
       )
       FactoryBot.create(
         :api_v3_profile,
-        context_node_type: cnt
+        context_node_type: cnt,
+        adm_1_topojson_path: 'adm_1_topojson_path',
+        adm_1_topojson_root: 'adm_1_topojson_root',
+        adm_2_topojson_path: 'adm_2_topojson_path',
+        adm_2_topojson_root: 'adm_2_topojson_root',
+        main_topojson_path: 'main_topojson_path',
+        main_topojson_root: 'main_topojson_root'
+
       )
     end
     cnt

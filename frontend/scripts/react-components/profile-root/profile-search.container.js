@@ -7,18 +7,23 @@ import {
 import SearchInput from 'react-components/shared/search-input/search-input.component';
 
 function mapStateToProps(state) {
-  return {
+  const searchOptions = {
     year: state.app.selectedContext ? state.app.selectedContext.defaultYear : null,
+    contextId: state.app.selectedContext ? state.app.selectedContext.id : null
+  };
+  return {
+    searchOptions,
     items: state.profileRoot.search.results,
-    isLoading: state.profileRoot.search.isLoading
+    isLoading: state.profileRoot.search.isLoading,
+    isDisabled: (searchOptions.year || searchOptions.contextId) === null
   };
 }
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      onSelect: (node, year) => goToNodeProfilePage(node, year),
-      onSearchTermChange: searchTerm => searchNodeWithTerm(searchTerm)
+      onSelect: goToNodeProfilePage,
+      onSearchTermChange: searchNodeWithTerm
     },
     dispatch
   );
