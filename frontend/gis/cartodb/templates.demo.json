@@ -9,7 +9,7 @@
           "type": "cartodb",
           "options": {
             "sql": "SELECT * FROM paraguay_ecoregions_2018_11_14",
-            "cartocss": "#layer { polygon-fill: #FFFFFF; polygon-opacity: 0; } #layer::outline { line-width: 1; line-color: #000000; line-opacity: 1; } #layer[zoom>3]::labels { text-name: [eco_name]; text-face-name: 'Open Sans Regular'; text-size: 15; text-fill: #000000; text-label-position-tolerance: 0; text-halo-radius: 1; text-character-spacing: 3; text-halo-fill: #FFFFFF; text-allow-overlap: true; text-placement: interior; [zoom=4] { text-size: 13; } [eco_name='Alto Paraná Atlantic Forests'] { text-dy: 20; } [eco_name='Pantanal'] { text-dy: 30; text-dx: 5; } }",
+            "cartocss": "#layer { polygon-opacity: 0; line-color: #000000; line-width: 1; line-opacity: 1;}#layer[zoom > 4]::labels { text-name: [simple_name]; text-face-name: 'Open Sans Regular'; text-size: 15; text-fill: #FFFFFF; text-allow-overlap: true; text-placement: interior; text-halo-fill: black; text-halo-radius: 1; text-character-spacing: 3; [zoom=5] { text-size: 11 ; } [simple_name='Mata Atlantica'] { text-dy: 20; } [simple_name='Pantanal'] { text-dy: 30; text-dx: 5; }}",
             "cartocss_version": "2.3.0"
           }
         }
@@ -61,6 +61,23 @@
           "options": {
             "sql": "SELECT the_geom_webmercator FROM col_adm1_1",
             "cartocss": "#col_department_boundries { polygon-opacity: 0;    line-color: #000000;    line-width: 1;    line-opacity: 1;}",
+            "cartocss_version": "2.3.0"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "version": "0.0.1",
+    "name": "paraguay_deforestation_2017_2018_11_15",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT * from paraguay_deforestation_2017_2018_11_15",
+            "cartocss": "#paraguay_deforestation_2017_2018_11_15{ polygon-fill: #B40903;   polygon-opacity: 1;   line-color: #B40903;   line-width: 0.2;   line-opacity: 1; }",
             "cartocss_version": "2.3.0"
           }
         }

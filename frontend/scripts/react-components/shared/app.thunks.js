@@ -42,25 +42,22 @@ function loadContextsPromise(dispatch, getState) {
 
   const contextURL = getURLFromParams(GET_CONTEXTS_URL);
 
-  return new Promise(resolve =>
-    fetch(contextURL)
-      .then(resp => resp.text())
-      .then(data => {
-        const contexts = JSON.parse(data).data.sort(sortContexts);
+  return fetch(contextURL)
+    .then(resp => resp.json())
+    .then(json => {
+      const contexts = json.data.sort(sortContexts);
 
-        dispatch({
-          type: SET_CONTEXTS,
-          payload: contexts
-        });
+      dispatch({
+        type: SET_CONTEXTS,
+        payload: contexts
+      });
 
-        const state = getState();
+      const state = getState();
 
-        const currentContext = getCurrentContext(state);
+      const currentContext = getCurrentContext(state);
 
-        if (currentContext) dispatch(selectInitialContextById(currentContext.id));
-      })
-      .then(() => resolve())
-  );
+      dispatch(selectInitialContextById(currentContext.id));
+    });
 }
 
 export default function(dispatch, getState) {

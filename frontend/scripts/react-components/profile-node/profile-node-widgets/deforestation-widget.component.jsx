@@ -52,8 +52,8 @@ function DeforestationWidget(props) {
                   <div className="c-line">
                     <Line
                       testId={testId}
-                      lines={DeforestationWidget.getLastNYears(lines, 6)}
-                      xValues={includedYears.slice(-6)}
+                      lines={lines}
+                      xValues={includedYears}
                       unit={unit}
                       margin={{ top: 0, right: 20, bottom: 30, left: 60 }}
                       settingsHeight={425}
@@ -77,13 +77,6 @@ function DeforestationWidget(props) {
     </Widget>
   );
 }
-
-DeforestationWidget.getLastNYears = function getLastNYears(lines, nYears) {
-  return lines.map(line => ({
-    ...line,
-    values: line.values.slice(nYears * -1)
-  }));
-};
 
 DeforestationWidget.propTypes = {
   testId: PropTypes.string,

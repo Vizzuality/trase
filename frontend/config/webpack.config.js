@@ -3,8 +3,6 @@ require('dotenv').config({ silent: true });
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 /**
  * BundleAnalyzerPlugin allows profiling the webpack generated js, to help identify improvement points
  * If you want to enable it, uncomment the line bellow and ´new BundleAnalyzerPlugin()´ further down.
@@ -28,7 +26,6 @@ module.exports = {
   },
   plugins: [
     // new BundleAnalyzerPlugin(),
-    new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: path.resolve(srcPath, 'index.ejs'),
@@ -36,12 +33,6 @@ module.exports = {
       DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
       icons: templates.icons,
       head: templates.head
-    }),
-    new SWPrecacheWebpackPlugin({
-      cacheId: 'trase.earth',
-      filename: 'service-worker.js',
-      minify: true,
-      staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/]
     }),
     new webpack.DefinePlugin({
       NODE_ENV_DEV: process.env.NODE_ENV === 'development',

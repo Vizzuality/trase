@@ -22,3 +22,6 @@ ${BIN}/mapshaper tmp/COLOMBIA_MUNICIPALITY.json -simplify rdp 30% planar keep-sh
 ${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, name, geoid FROM paraguay_departments' > tmp/PARAGUAY_DEPARTMENT.json
 ${BIN}/mapshaper tmp/PARAGUAY_DEPARTMENT.json -simplify rdp 30% planar keep-shapes -o public/vector_layers/PARAGUAY_DEPARTMENT.topo.json format=topojson
 
+${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, simple_name as name, geoid FROM paraguay_ecoregions_2018_11_14' > tmp/PARAGUAY_BIOME.json
+${BIN}/mapshaper tmp/PARAGUAY_BIOME.json -simplify rdp 30% planar keep-shapes -o public/vector_layers/PARAGUAY_BIOME.topo.json format=topojson
+
