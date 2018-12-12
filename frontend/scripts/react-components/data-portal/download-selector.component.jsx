@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import 'styles/components/profiles/chord.scss';
+import 'scripts/react-components/profiles/chord/chord.scss';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import includes from 'lodash/includes';
 
-import FilterTooltip from 'react-components/data-portal/filter-tooltip.component';
-import RadioButton from 'react-components/shared/radio-button.component';
+import FilterTooltip from 'react-components/data-portal/filter-tooltip/filter-tooltip.component';
+import RadioButton from 'react-components/shared/radio-button/radio-button.component';
 
 class DownloadSelector extends Component {
   renderOptions() {

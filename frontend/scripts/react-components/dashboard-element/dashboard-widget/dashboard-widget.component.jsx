@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Chart from 'react-components/chart';
-import Spinner from 'react-components/shared/shrinking-spinner.component';
+import Spinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import DashboardWidgetLabel from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-label.component';
-import DashboardWidgetLegend from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-legend.component';
+import DashboardWidgetLegend from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-legend/dashboard-widget-legend.component';
 import ErrorCatch from 'react-components/shared/error-catch.component';
 
-import 'styles/components/dashboard-element/dashboard-widget.scss';
+import 'scripts/react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
 
 function DashboardWidget(props) {
   const { title, loading, error, data, chartConfig } = props;

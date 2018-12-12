@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import TeamPageMessage from 'react-components/team/team-page-message.component';
 import Link from 'redux-first-router-link';
 import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.component';
-import TeamProfilePicture from 'react-components/team/team-profile-picture.component';
+import TeamProfilePicture from 'react-components/team/team-profile-picture/team-profile-picture.component';
 
-import 'styles/components/static-content/team-member.scss';
-import Heading from 'react-components/shared/heading.component';
+import 'scripts/react-components/team/team-member/team-member.scss';
+import Heading from 'react-components/shared/heading/heading.component';
 
 const TeamMember = props => {
   const { member, errorMessage } = props;

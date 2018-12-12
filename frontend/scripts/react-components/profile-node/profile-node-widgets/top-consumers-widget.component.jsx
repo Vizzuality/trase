@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Widget from 'react-components/widgets/widget.component';
-import MiniSankey from 'react-components/profiles/mini-sankey.component';
+import MiniSankey from 'react-components/profiles/mini-sankey/mini-sankey.component';
 import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
 import {
   GET_NODE_SUMMARY_URL,
@@ -9,8 +9,8 @@ import {
   GET_PLACE_TOP_CONSUMER_COUNTRIES
 } from 'utils/getURLFromParams';
 import capitalize from 'lodash/capitalize';
-import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
-import Heading from 'react-components/shared/heading.component';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
+import Heading from 'react-components/shared/heading/heading.component';
 
 const TranslatedMiniSankey = withTranslation(MiniSankey);
 

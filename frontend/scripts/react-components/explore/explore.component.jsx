@@ -3,17 +3,17 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Link from 'redux-first-router-link';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
-import Top from 'react-components/explore/top.component';
+import Top from 'react-components/explore/top/top.component';
 import Dropdown from 'react-components/shared/dropdown.component';
 import formatValue from 'utils/formatValue';
 import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 import { EXPLORE_COLUMN_LIST } from 'constants';
-import Button from 'react-components/shared/button.component';
-import Heading from 'react-components/shared/heading.component';
-import Text from 'react-components/shared/text.component';
+import Button from 'react-components/shared/button/button.component';
+import Heading from 'react-components/shared/heading/heading.component';
+import Text from 'react-components/shared/text/text.component';
 
-import 'styles/components/explore/explore.scss';
+import 'scripts/react-components/explore/explore.scss';
 
 class Explore extends React.PureComponent {
   units = [

@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ActorSummary from 'react-components/profiles/actor-summary.component';
 import PlaceSummary from 'react-components/profiles/place-summary.component';
-import ButtonLinks from 'react-components/profiles/button-links.component';
+import ButtonLinks from 'react-components/profiles/button-links/button-links.component';
 import Widget from 'react-components/widgets/widget.component';
 import { GET_NODE_SUMMARY_URL, GET_PROFILE_METADATA } from 'utils/getURLFromParams';
-import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 
 function SummaryWidget(props) {
   const { printMode, year, nodeId, context, profileType, onYearChange, scrollTo, tooltips } = props;

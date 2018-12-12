@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import capitalize from 'lodash/capitalize';
-import Line from 'react-components/profiles/line.component';
+import Line from 'react-components/profiles/line/line.component';
 import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
 import formatValue from 'utils/formatValue';
-import DropdownTabSwitcher from 'react-components/profiles/dropdown-tab-switcher.component';
-import UnitsTooltip from 'react-components/shared/units-tooltip.component';
-import Heading from 'react-components/shared/heading.component';
+import DropdownTabSwitcher from 'react-components/profiles/dropdown-tab-switcher/dropdown-tab-switcher.component';
+import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
+import Heading from 'react-components/shared/heading/heading.component';
 
 const TranslatedLine = withTranslation(Line);
 

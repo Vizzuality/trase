@@ -10,12 +10,12 @@ import {
   GET_JSON_DATA_DOWNLOAD_FILE_URL,
   getURLFromParams
 } from 'utils/getURLFromParams';
-import BulkDownloadsBlock from 'react-components/data-portal/bulk-downloads-block.component';
+import BulkDownloadsBlock from 'react-components/data-portal/bulk-downloads-block/bulk-downloads-block.component';
 import DownloadSelector from 'react-components/data-portal/download-selector.component';
 import PropTypes from 'prop-types';
 import DataPortalDisabledMessage from 'react-components/data-portal/data-portal-disabled-message.component';
-import DataPortalForm from 'react-components/data-portal/data-portal-form.component';
-import RadioButton from 'react-components/shared/radio-button.component';
+import DataPortalForm from 'react-components/data-portal/data-portal-form/data-portal-form.component';
+import RadioButton from 'react-components/shared/radio-button/radio-button.component';
 
 class DataContent extends Component {
   constructor(props) {

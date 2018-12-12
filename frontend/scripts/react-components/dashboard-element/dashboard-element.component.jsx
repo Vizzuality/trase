@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SimpleModal from 'react-components/shared/simple-modal.component';
+import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.container';
-import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome.component';
+import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome/dashboard-welcome.component';
 import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators/dashboard-indicators.container';
 import DashboardWiget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.container';
-import Button from 'react-components/shared/button.component';
+import Button from 'react-components/shared/button/button.component';
 
-import 'styles/components/dashboard-element/dashboard-element.scss';
+import 'react-components/dashboard-element/dashboard-element.scss';
 
 class DashboardElement extends React.PureComponent {
   static propTypes = {

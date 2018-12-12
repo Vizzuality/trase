@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import cx from 'classnames';
 
-import 'styles/components/shared/locale-selector.scss';
+import 'scripts/react-components/nav/locale-selector/locale-selector.scss';
 
 const { Transifex } = window;
 

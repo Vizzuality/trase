@@ -5,10 +5,10 @@ import Siema from 'react-siema';
 import kebabCase from 'lodash/kebabCase';
 import TeamPageMessage from 'react-components/team/team-page-message.component';
 import ResizeListener from 'react-components/shared/resize-listener.component';
-import TeamProfilePicture from 'react-components/team/team-profile-picture.component';
+import TeamProfilePicture from 'react-components/team/team-profile-picture/team-profile-picture.component';
 
-import 'styles/components/static-content/team.scss';
-import Heading from 'react-components/shared/heading.component';
+import 'scripts/react-components/team/team.scss';
+import Heading from 'react-components/shared/heading/heading.component';
 
 class Team extends PureComponent {
   renderTeamMember(slug) {

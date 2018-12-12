@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ProfileSearch from 'react-components/profile-root/profile-search.container';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
-import ErrorMessage from 'react-components/profile-root/error-message.component';
+import ErrorMessage from 'react-components/profile-root/error-message/error-message.component';
 
-import 'styles/components/profile-root/profile-root.scss';
+import 'scripts/react-components/profile-root/profile-root.scss';
 
 const ProfileRoot = props => {
   const { errorMessage, activeContext, getContextsWithProfilePages } = props;

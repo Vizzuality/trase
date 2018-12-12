@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 import DashboardElement from 'react-components/dashboard-element/dashboard-element.container';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
-import Footer from 'react-components/shared/footer.component';
+import Footer from 'react-components/shared/footer/footer.component';
 
 import 'styles/layouts/l-dashboard-element.scss';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'redux-first-router-link';
-import Button from 'react-components/shared/button.component';
+import Button from 'react-components/shared/button/button.component';
 
 function LinkButton({ children, ...props }) {
   return (

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MultiTable from 'react-components/profiles/multi-table.component';
+import MultiTable from 'react-components/profiles/multi-table/multi-table.component';
 import Widget from 'react-components/widgets/widget.component';
 import {
   GET_PLACE_INDICATORS,
@@ -9,7 +9,7 @@ import {
 } from 'utils/getURLFromParams';
 import flatMap from 'lodash/flatMap';
 import addApostrophe from 'utils/addApostrophe';
-import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 
 class SustainabilityTableWidget extends React.PureComponent {
   getTitle(nodeName) {

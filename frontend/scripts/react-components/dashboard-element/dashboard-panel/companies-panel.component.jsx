@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SearchInput from 'react-components/shared/search-input/search-input.component';
-import GridList from 'react-components/shared/grid-list.component';
-import GridListItem from 'react-components/shared/grid-list-item.component';
-import Tabs from 'react-components/shared/tabs.component';
+import GridList from 'react-components/shared/grid-list/grid-list.component';
+import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
+import Tabs from 'react-components/shared/tabs/tabs.component';
 
 function CompaniesPanel(props) {
   const {

@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Widget from 'react-components/widgets/widget.component';
-import Line from 'react-components/profiles/line.component';
-import LineLegend from 'react-components/profiles/line-legend.component';
+import Line from 'react-components/profiles/line/line.component';
+import LineLegend from 'react-components/profiles/line/line-legend.component';
 import { GET_PLACE_DEFORESTATION_TRAJECTORY, GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 
-import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
-import Heading from 'react-components/shared/heading.component';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
+import Heading from 'react-components/shared/heading/heading.component';
 
 function DeforestationWidget(props) {
   const { nodeId, contextId, year, testId } = props;

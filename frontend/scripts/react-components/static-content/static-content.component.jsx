@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Hero from 'react-components/shared/hero.component';
+import Hero from 'react-components/shared/hero/hero.component';
 import NotFound from './not-found.component';
 
-import 'styles/components/static-content/static-content.scss';
+import 'scripts/react-components/static-content/static-content.scss';
 
 class StaticContent extends React.PureComponent {
   render() {

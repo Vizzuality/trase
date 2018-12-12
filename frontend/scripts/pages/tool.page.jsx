@@ -16,7 +16,7 @@ import { Provider } from 'react-redux';
 
 import FlowContentContainer from 'containers/tool/tool-content.container';
 import SankeyContainer from 'containers/tool/sankey.container';
-import ColumnsSelectorContainer from 'react-components/tool/columns-selector.container';
+import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import MapContextContainer from 'containers/tool/map-context.container';
 import MapLegendContainer from 'containers/tool/map-legend.container';
 import MapBasemapsContainer from 'containers/tool/map-basemaps.container';
@@ -80,7 +80,7 @@ export const mount = (root, store) => {
 
   render(
     <Provider store={store}>
-      <ColumnsSelectorContainer />
+      <ColumnsSelectorGroupContainer />
     </Provider>,
     document.getElementById('js-columns-selector-react')
   );
