@@ -21,7 +21,7 @@ const logisticsMapReducer = {
   },
   [LOGISTICS_MAP__SET_LAYER_ACTIVE](state, action) {
     const { layerId, active } = action.payload;
-    return { ...state, layersStatus: { ...state.layers, [layerId]: active } };
+    return { ...state, layersStatus: { ...state.layersStatus, [layerId]: active } };
   }
 };
 

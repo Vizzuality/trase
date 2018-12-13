@@ -20,7 +20,7 @@ const templates = [
         }
       }
     ],
-    params_config: [{ key: 'year', default: 2013 }]
+    params_config: [{ key: 'year', default: 2016 }]
   },
   {
     version: '0.0.1',
@@ -29,14 +29,15 @@ const templates = [
       {
         type: 'cartodb',
         options: {
-          sql: 'SELECT * FROM "p2cs-sei".brazil_refining_facilities',
+          sql: 'SELECT * FROM "p2cs-sei".brazil_refining_facilities where year = {{year}}',
           cartocss:
             '#layer { marker-width: 7; marker-fill: #EE4D5A; marker-fill-opacity: 0.9; marker-allow-overlap: true; marker-line-width: 1; marker-line-color: #FFFFFF; marker-line-opacity: 1; }',
           cartocss_version: '2.3.0',
           interactivity: ['company', 'municipality', 'capacity']
         }
       }
-    ]
+    ],
+    params_config: [{ key: 'year', default: 2016 }]
   },
   {
     version: '0.0.1',
