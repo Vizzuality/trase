@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 
-const getLayersStatus = state => state.logisticsMap.layers;
+const getSelectedYear = state => state.logisticsMap.selectedYear;
+const getLayersStatus = state => state.logisticsMap.layersStatus;
 
 const templates = [
   {
@@ -11,14 +12,15 @@ const templates = [
         type: 'cartodb',
         options: {
           sql:
-            'SELECT to_date(year::varchar, \'yyyy\') as year_date, * FROM "p2cs-sei".brazil_crushing_facilities',
+            'SELECT to_date(year::varchar, \'yyyy\') as year_date, * FROM "p2cs-sei".brazil_crushing_facilities where year = {{year}}',
           cartocss:
             "#layer { marker-width: ramp([capacity], range(15, 26), quantiles(7)); marker-fill: #e1833b; marker-fill-opacity: 1; marker-file: url('https://s3.amazonaws.com/com.cartodb.users-assets.production/maki-icons/industrial-18.svg'); marker-allow-overlap: true; marker-line-width: 0.5; marker-line-color: #000000; marker-line-opacity: 1; marker-comp-op: overlay; } #layer::labels { text-name: [company]; text-face-name: 'DejaVu Sans Book'; text-size: 12; text-fill: #a40000; text-label-position-tolerance: 0; text-halo-radius: 3; text-halo-fill: #fcfcfc; text-dy: 13; text-allow-overlap: false; text-placement: point; text-placement-type: dummy; }",
           cartocss_version: '2.3.0',
           interactivity: ['company', 'municipality', 'capacity']
         }
       }
-    ]
+    ],
+    params_config: [{ key: 'year', default: 2013 }]
   },
   {
     version: '0.0.1',
@@ -54,14 +56,19 @@ const templates = [
   }
 ];
 
+const getActiveParams = createSelector(
+  getSelectedYear,
+  year => ({ year })
+);
+
 export const getLogisticsMapLayers = createSelector(
-  getLayersStatus,
-  status =>
+  [getLayersStatus, getActiveParams],
+  (status, activeParams) =>
     templates.map(template => ({
       name: template.name,
       opacity: 1,
       id: template.name,
-      active: status[template.name],
+      active: !!status[template.name],
       type: 'layer',
       provider: 'carto',
       layerConfig: {
@@ -74,7 +81,13 @@ export const getLogisticsMapLayers = createSelector(
         type: 'carto',
         service: 'carto'
       },
-      interactivity: template.layers[0].options.interactivity
+      interactivity: template.layers[0].options.interactivity,
+      params:
+        template.params_config &&
+        template.params_config.reduce(
+          (acc, next) => ({ ...acc, [next.key]: activeParams[next.key] || next.default }),
+          {}
+        )
     }))
 );
 
