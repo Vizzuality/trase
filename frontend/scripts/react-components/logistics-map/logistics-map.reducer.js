@@ -5,11 +5,11 @@ import {
 } from 'react-components/logistics-map/logistics-map.actions';
 
 const initialState = {
-  selectedYear: 2013,
-  years: Array(10)
-    .fill(2005)
-    .map((year, index) => year + index),
-  layers: {
+  selectedYear: 2016,
+  years: Array(12)
+    .fill(2016)
+    .map((year, index) => year - index),
+  layersStatus: {
     // [id]:[active]
   }
 };
@@ -21,13 +21,13 @@ const logisticsMapReducer = {
   },
   [LOGISTICS_MAP__SET_LAYER_ACTIVE](state, action) {
     const { layerId, active } = action.payload;
-    return { ...state, layers: { ...state.layers, [layerId]: active } };
+    return { ...state, layersStatus: { ...state.layers, [layerId]: active } };
   }
 };
 
 const logisticsMapReducerTypes = PropTypes => ({
   years: PropTypes.array.isRequired,
-  layers: PropTypes.object.isRequired,
+  layersStatus: PropTypes.object.isRequired,
   selectedYear: PropTypes.number.isRequired
 });
 
