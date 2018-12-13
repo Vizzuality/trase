@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import deburr from 'lodash/deburr';
 import sortBy from 'lodash/sortBy';
-import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group.container';
-import SearchResult from 'react-components/tool/tool-search/tool-search-result.component';
+import NodeTitleGroup from 'react-components/tool/tool-search/node-title/node-title-group.container';
+import SearchResult from 'react-components/tool/tool-search/tool-search-result/tool-search-result.component';
 import { MAX_SEARCH_RESULTS } from 'constants';
-import 'styles/components/tool/tool-search.scss';
-import 'styles/components/tool/tool-search-result.scss';
+
+import 'scripts/react-components/tool/tool-search/tool-search.scss';
+import 'scripts/react-components/tool/tool-search/tool-search-result/tool-search-result.scss';
 
 export default class ToolSearch extends Component {
   static isValidChar(key) {

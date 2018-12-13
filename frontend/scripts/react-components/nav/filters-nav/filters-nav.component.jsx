@@ -13,6 +13,9 @@ import ContextSelector from 'react-components/shared/context-selector/context-se
 import ToolSearch from 'react-components/tool/tool-search/tool-search.container';
 import { NavLink } from 'redux-first-router-link';
 
+import 'scripts/react-components/nav/filters-nav/filters-nav.scss';
+import 'scripts/react-components/nav/filters-nav/burger.scss';
+
 class FiltersNav extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -117,13 +120,12 @@ class FiltersNav extends React.PureComponent {
             isExplore={isExplore}
             selectedContext={selectedContext}
           />
-          {selectedContext &&
-            (contextIsUserSelected || !isExplore) && (
-              <React.Fragment>
-                {!isExplore && <AdminLevelFilter className="filters-nav-item" />}
-                <YearsSelector className="filters-nav-item" />
-              </React.Fragment>
-            )}
+          {selectedContext && (contextIsUserSelected || !isExplore) && (
+            <React.Fragment>
+              {!isExplore && <AdminLevelFilter className="filters-nav-item" />}
+              <YearsSelector className="filters-nav-item" />
+            </React.Fragment>
+          )}
         </div>
         <div className="filters-nav-right-section">
           {!isExplore && (

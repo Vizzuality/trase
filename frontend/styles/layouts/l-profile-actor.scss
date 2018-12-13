@@ -1,4 +1,4 @@
-@import '../settings';
+@import 'styles/settings';
 
 $small-line-chart-width: 840px;
 
@@ -12,13 +12,6 @@ $small-line-chart-width: 840px;
   &.-error {
     position: relative;
     min-height: 100vh;
-
-    .c-error-message {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
   }
 
   @media print {
@@ -60,7 +53,7 @@ $small-line-chart-width: 840px;
     }
   }
 
-  .c-anchor-buttons {
+  .c-button-links {
     padding: 49px 0 46px;
 
     @media print {

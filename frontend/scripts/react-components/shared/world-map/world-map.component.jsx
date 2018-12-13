@@ -10,10 +10,12 @@ import {
   Annotation,
   Line
 } from 'react-simple-maps';
-import UnitsTooltip from 'react-components/shared/units-tooltip.component';
+import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import cx from 'classnames';
 import formatValue from 'utils/formatValue';
 import xor from 'lodash/xor';
+
+import 'scripts/react-components/shared/world-map/world-map.scss';
 
 class WorldMap extends Component {
   static buildCurves(start, end, arc) {

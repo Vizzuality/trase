@@ -1,0 +1,31 @@
+@import 'styles/settings';
+
+.c-error-message {
+  .message {
+    color: $medium-pink;
+    font-family: $font-family-1;
+    font-size: $font-size-big;
+  }
+
+  &.-absolute {
+    position: absolute;
+    width: 100%;
+    height: calc(100% - #{$nav-height});
+
+    .message {
+      position: relative;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+  }
+
+  &.-charcoal {
+    background-color: $light-gray;
+
+    .message {
+      color: $charcoal-grey;
+    }
+  }
+}

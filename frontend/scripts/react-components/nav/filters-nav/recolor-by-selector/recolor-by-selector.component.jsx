@@ -1,13 +1,15 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions,jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Tooltip from 'react-components/shared/help-tooltip.component';
+import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
 import RecolorByNodeLegendSummary from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-node-legend-summary/recolor-by-node-legend-summary.container';
 import cx from 'classnames';
 import isNumber from 'lodash/isNumber';
 import difference from 'lodash/difference';
 import sortBy from 'lodash/sortBy';
+
+import 'styles/components/shared/dropdown-item-legend-summary.scss';
 
 const id = 'recolor-by';
 

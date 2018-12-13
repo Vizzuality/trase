@@ -1,0 +1,93 @@
+@import 'styles/settings';
+
+.c-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgba($charcoal-grey, .3);
+  border-radius: 4px;
+  color: $charcoal-grey;
+  font-family: $font-family-1;
+  font-size: $font-size-x-regular;
+  line-height: 1;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &[disabled=""] {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  &.size-sm {
+    padding: 15px;
+  }
+
+  &.size-rg {
+    padding: 15px 24px;
+  }
+
+  &.size-md {
+    padding: 15px 70px;
+  }
+
+  &.size-lg {
+    padding: 16px 24px 13px;
+  }
+
+  &.weight-bold {
+    font-weight: $font-weight-bold;
+  }
+
+  &.color-pink {
+    border-color: transparent;
+    background-color: $strong-pink;
+    color: $white;
+  }
+
+  &.color-white {
+    border-color: transparent;
+    background-color: $white;
+    color: $medium-pink;
+  }
+
+  &.color-transparent {
+    border-color: $medium-pink;
+    background-color: transparent;
+    color: $medium-pink;
+  }
+
+  &.color-gray {
+    border-color: transparent;
+    background-color: $gray;
+    color: $charcoal-grey;
+  }
+
+  &.color-gray-transparent{
+    border-color: $gray;
+    background-color: transparent;
+    color: $gray;
+  }
+
+  &.color-charcoal {
+    border-color: transparent;
+    background-color: $charcoal-grey;
+    color: $white;
+  }
+
+  &.disabled,
+  // backwards compat
+  &.-disabled {
+    border-color: rgba($charcoal-grey, .3);
+    color: rgba($charcoal-grey, .3);
+    pointer-events: none;
+  }
+
+  &.with-icon,
+  // backwards compat
+  &.-with-icon {
+      .icon {
+      margin-left: 5px;
+    }
+  }
+}

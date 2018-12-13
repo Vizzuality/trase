@@ -4,6 +4,8 @@ import uniq from 'lodash/uniq';
 import capitalize from 'lodash/capitalize';
 import Dropdown from 'react-components/shared/dropdown.component';
 
+import 'scripts/react-components/home/sentence-selector/sentence-selector.scss';
+
 class SentenceSelector extends React.Component {
   constructor(props) {
     super(props);

@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SimpleModal from 'react-components/shared/simple-modal.component';
+import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.container';
-import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome.component';
+import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome/dashboard-welcome.component';
 import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators/dashboard-indicators.container';
 import DashboardWiget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.container';
+import Button from 'react-components/shared/button/button.component';
+
+import 'react-components/dashboard-element/dashboard-element.scss';
 
 class DashboardElement extends React.PureComponent {
   static propTypes = {
@@ -140,20 +143,24 @@ class DashboardElement extends React.PureComponent {
             <div className="row">
               <div className="column small-12 medium-6">
                 <div className="dashboard-header-actions">
-                  <button
+                  <Button
                     type="button"
-                    className="c-button -gray -medium dashboard-header-action -panel"
+                    color="gray"
+                    size="sm"
+                    className="dashboard-header-action -panel"
                     onClick={() => reopenPanel(DashboardElement.steps.PANEL, canProceed)}
                   >
                     Edit Options
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="button"
-                    className="c-button -gray-transparent -medium dashboard-header-action -panel"
+                    color="gray-transparent"
+                    size="sm"
+                    className="dashboard-header-action -panel"
                     onClick={() => reopenPanel(DashboardElement.steps.INDICATORS, canProceed)}
                   >
                     Edit Indicators
-                  </button>
+                  </Button>
                 </div>
               </div>
               <div className="column small-12 medium-6">
@@ -192,13 +199,14 @@ class DashboardElement extends React.PureComponent {
                       <p className="dashboard-element-title dashboard-element-fallback-text">
                         Your dashboard has no selection.
                       </p>
-                      <button
-                        type="button"
-                        className="c-button -gray-transparent -medium dashboard-element-fallback-button"
+                      <Button
+                        color="gray-transparent"
+                        size="medium"
+                        className="dashboard-element-fallback-button"
                         onClick={goToRoot}
                       >
                         Go Back
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>

@@ -11,6 +11,10 @@ import routeSubscriber from './router/route-subscriber';
 import { register, unregister } from './worker';
 import { rootSaga } from './sagas';
 
+import 'styles/_base.scss';
+import 'styles/_texts.scss';
+import 'styles/_foundation.css';
+
 const sagaMiddleware = createSagaMiddleware();
 
 // analytics middleware has to be after router.middleware

@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions,jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
 import cx from 'classnames';
-import Tooltip from 'react-components/shared/help-tooltip.component';
+import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
 import PropTypes from 'prop-types';
 import difference from 'lodash/difference';

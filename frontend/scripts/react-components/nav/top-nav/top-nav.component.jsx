@@ -5,8 +5,10 @@ import throttle from 'lodash/throttle';
 import { NavLink } from 'redux-first-router-link';
 import NavLinks from 'react-components/nav/nav-links.component';
 import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
-import Search from 'react-components/nav/top-nav/global-search/global-search.container';
+import Search from 'react-components/nav/global-search/global-search.container';
 import DownloadPdfLink from './download-pdf-link.component';
+
+import 'scripts/react-components/nav/top-nav/top-nav.scss';
 
 class TopNav extends React.PureComponent {
   constructor(props) {

@@ -8,7 +8,7 @@ import {
   GET_NODE_SUMMARY_URL
 } from 'utils/getURLFromParams';
 import Widget from 'react-components/widgets/widget.component';
-import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 
 class TopDestinationsWidget extends React.PureComponent {
   tabs = ['municipality', 'biome', 'state'];

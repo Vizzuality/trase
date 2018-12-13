@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import UnitsTooltip from 'react-components/shared/units-tooltip.component';
+import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import formatValue from 'utils/formatValue';
 import { translateText } from 'utils/transifex';
 import ChoroLegend from 'react-components/profiles/choro-legend.component';

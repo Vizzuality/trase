@@ -1,4 +1,4 @@
-@import '../settings';
+@import 'styles/settings';
 
 .l-profile-place {
   position: relative;
@@ -10,13 +10,6 @@
   &.-error {
     position: relative;
     min-height: calc(100vh - #{$nav-height});
-
-    .c-error-message {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
   }
 
   @media print {
@@ -63,7 +56,7 @@
     }
   }
 
-  .c-anchor-buttons {
+  .c-button-links {
     padding: 49px 0 46px;
 
     > .row .columns {

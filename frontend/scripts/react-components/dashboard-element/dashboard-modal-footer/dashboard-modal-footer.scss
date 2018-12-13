@@ -1,0 +1,58 @@
+@import 'styles/settings';
+
+.c-dashboard-modal-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0 20px;
+  border-top: 1px solid $medium-gray;
+
+  .dashboard-modal-footer-text {
+    color: $charcoal-grey;
+    font-size: $font-size-medium;
+    font-family: $font-family-2;
+    font-weight: $font-weight-light;
+    letter-spacing: -0.4px;
+    line-height: 1.9;
+    margin: 0 0 15px;
+    max-width: 920px;
+    text-align: center;
+  }
+
+  .modal-footer-item {
+    display: inline-flex;
+    position: relative;
+    align-items: center;
+    height: 30px;
+    padding: 0 6px 0 0;
+    font-size: 20px;
+    font-weight: $font-weight-bold;
+    text-transform: capitalize;
+
+    &.-with-cross {
+      padding: 0 13px 0 0;
+    }
+
+    .modal-footer-item-remove-cross {
+      position: absolute;
+      top: 0;
+      right: 0;
+      cursor: pointer;
+      svg {
+        fill: $strong-pink;
+      }
+    }
+  }
+
+  .dashboard-modal-back-button {
+    border: 0;
+    padding: 15px 10px;
+    margin: 0 0 0 10px;
+    color: $charcoal-grey;
+    font-family: $font-family-1;
+    font-size: 13px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+}

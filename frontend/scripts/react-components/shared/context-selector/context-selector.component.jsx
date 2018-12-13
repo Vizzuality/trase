@@ -5,7 +5,10 @@ import cx from 'classnames';
 import groupBy from 'lodash/groupBy';
 
 import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
-import Tooltip from 'react-components/shared/help-tooltip.component';
+import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
+
+import 'scripts/react-components/shared/context-selector/context-selector.scss';
+import 'styles/components/shared/dropdown.scss';
 
 class ContextSelector extends Component {
   static id = 'country-commodity';

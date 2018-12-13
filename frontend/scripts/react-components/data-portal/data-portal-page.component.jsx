@@ -10,11 +10,12 @@ import {
   GET_JSON_DATA_DOWNLOAD_FILE_URL,
   getURLFromParams
 } from 'utils/getURLFromParams';
-import BulkDownloadsBlock from 'react-components/data-portal/bulk-downloads-block.component';
+import BulkDownloadsBlock from 'react-components/data-portal/bulk-downloads-block/bulk-downloads-block.component';
 import DownloadSelector from 'react-components/data-portal/download-selector.component';
 import PropTypes from 'prop-types';
 import DataPortalDisabledMessage from 'react-components/data-portal/data-portal-disabled-message.component';
-import DataPortalForm from 'react-components/data-portal/data-portal-form.component';
+import DataPortalForm from 'react-components/data-portal/data-portal-form/data-portal-form.component';
+import RadioButton from 'react-components/shared/radio-button/radio-button.component';
 
 class DataContent extends Component {
   constructor(props) {
@@ -521,19 +522,19 @@ class DataContent extends Component {
                       <ul className="c-custom-dataset-selector__values">
                         <li className="-selected">
                           Pivot
-                          <div
-                            className={cx('c-radio-btn -no-self-cancel -grey', {
-                              '-enabled': this.state.outputType === 'pivot'
-                            })}
+                          <RadioButton
+                            noSelfCancel
+                            className="-grey"
+                            enabled={this.state.outputType === 'pivot'}
                             onClick={() => this.onOutputTypeSelected('pivot')}
                           />
                         </li>
                         <li>
                           Table
-                          <div
-                            className={cx('c-radio-btn -no-self-cancel -grey', {
-                              '-enabled': this.state.outputType === 'table'
-                            })}
+                          <RadioButton
+                            noSelfCancel
+                            className="-grey"
+                            enabled={this.state.outputType === 'table'}
                             onClick={() => this.onOutputTypeSelected('table')}
                           />
                         </li>
@@ -545,34 +546,37 @@ class DataContent extends Component {
                       <ul className="c-custom-dataset-selector__values">
                         <li className="-selected">
                           .csv (comma separated)
-                          <div
-                            className={cx('c-radio-btn -no-self-cancel -grey', {
-                              '-enabled':
-                                this.state.fileExtension === '.csv' &&
-                                this.state.fileSeparator === 'comma'
-                            })}
+                          <RadioButton
+                            noSelfCancel
+                            className="-grey"
+                            enabled={
+                              this.state.fileExtension === '.csv' &&
+                              this.state.fileSeparator === 'comma'
+                            }
                             onClick={() => this.onFileFormatSelected('.csv', 'comma')}
                           />
                         </li>
                         <li>
                           .csv (semicolon separated)
-                          <div
-                            className={cx('c-radio-btn -no-self-cancel -grey', {
-                              '-enabled':
-                                this.state.fileExtension === '.csv' &&
-                                this.state.fileSeparator === 'semicolon'
-                            })}
+                          <RadioButton
+                            noSelfCancel
+                            className="-grey"
+                            enabled={
+                              this.state.fileExtension === '.csv' &&
+                              this.state.fileSeparator === 'semicolon'
+                            }
                             onClick={() => this.onFileFormatSelected('.csv', 'semicolon')}
                           />
                         </li>
                         <li>
                           .json
-                          <div
-                            className={cx('c-radio-btn -no-self-cancel -grey', {
-                              '-enabled':
-                                this.state.fileExtension === '.json' &&
-                                this.state.fileSeparator === ''
-                            })}
+                          <RadioButton
+                            noSelfCancel
+                            className="-grey"
+                            enabled={
+                              this.state.fileExtension === '.json' &&
+                              this.state.fileSeparator === ''
+                            }
                             onClick={() => this.onFileFormatSelected('.json', '')}
                           />
                         </li>

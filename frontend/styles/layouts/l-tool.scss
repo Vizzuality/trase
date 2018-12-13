@@ -1,5 +1,4 @@
-@import '../base';
-@import '../settings';
+@import 'styles/settings';
 
 body {
   background: $background-white;
@@ -43,7 +42,7 @@ body {
       transform: translate(-376px, 0);
 
       > .c-sankey,
-      .c-columns-selector {
+      .c-columns-selector-group {
         left: 91%;
       }
     }
@@ -109,7 +108,7 @@ body {
 
     }
 
-    .c-columns-selector {
+    .c-columns-selector-group {
       top: 9px;
       left: $map-width + $layer-map-width;
       transition: left .45s $ease-in-out-sine;

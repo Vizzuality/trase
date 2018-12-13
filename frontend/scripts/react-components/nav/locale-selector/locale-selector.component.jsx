@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import cx from 'classnames';
 
+import 'scripts/react-components/nav/locale-selector/locale-selector.scss';
+
 const { Transifex } = window;
 
 class LocaleSelector extends React.Component {
@@ -83,22 +85,24 @@ class LocaleSelector extends React.Component {
               </button>
               {isOpen ? (
                 <ul className="locale-selector-menu">
-                  {languages.filter(lang => lang.code !== selectedItem.code).map(lang => {
-                    /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-                    // Downshift onChange makes weird stuff, pass downshift onClick as cb instead
-                    const { onClick, ...itemProps } = getItemProps({ item: lang });
-                    return (
-                      <li
-                        {...itemProps}
-                        key={lang.code}
-                        className="locale-selector-menu-item"
-                        onClick={e => this.onSelectLang(lang, () => onClick(e))}
-                      >
-                        {lang.code}
-                      </li>
-                    );
-                    /* eslint-enable */
-                  })}
+                  {languages
+                    .filter(lang => lang.code !== selectedItem.code)
+                    .map(lang => {
+                      /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+                      // Downshift onChange makes weird stuff, pass downshift onClick as cb instead
+                      const { onClick, ...itemProps } = getItemProps({ item: lang });
+                      return (
+                        <li
+                          {...itemProps}
+                          key={lang.code}
+                          className="locale-selector-menu-item"
+                          onClick={e => this.onSelectLang(lang, () => onClick(e))}
+                        >
+                          {lang.code}
+                        </li>
+                      );
+                      /* eslint-enable */
+                    })}
                 </ul>
               ) : null}
             </div>

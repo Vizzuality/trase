@@ -1,7 +1,7 @@
 import BaseMarkup from 'html/base.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
-import 'styles/profile-root.scss';
+import 'styles/layouts/l-profile-root.scss';
 
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';

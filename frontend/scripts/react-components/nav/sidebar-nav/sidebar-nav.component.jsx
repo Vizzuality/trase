@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import NavLinks from 'react-components/nav/nav-links.component';
+
+import 'scripts/react-components/nav/sidebar-nav/sidebar-nav.scss';
 
 class SidebarNav extends React.PureComponent {
   componentDidMount() {
@@ -32,7 +33,7 @@ class SidebarNav extends React.PureComponent {
           <NavLinks
             links={links}
             itemClassName="nav-sidebar-link-list-item"
-            linkClassName="subtitle -gray"
+            linkClassName="nav-sidebar-link-list-item-link"
             linkActiveClassName="-pink active-link"
           />
         </ul>

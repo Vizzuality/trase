@@ -1,0 +1,73 @@
+@import 'styles/settings';
+
+.c-dashboard-panel {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: $light-gray;
+  overflow: hidden;
+  min-width: 1000px;
+
+  .dashboard-panel-content,
+  .dashboard-indicators-content {
+    flex: 1;
+    overflow: auto;
+    padding: 20px 25px 0;
+  }
+
+  .dashboard-indicators-content {
+    overflow: hidden;
+  }
+
+  .dashboard-panel-title {
+    font-size: $font-size-big;
+    margin-bottom: $sankey-x-margin;
+
+    &.-small {
+      font-size: $font-size-medium;
+    }
+  }
+
+  .dashboard-panel-block-switch {
+    margin: 0 0 30px 0;
+  }
+
+  .dashboard-panel-search {
+    height: 40px;
+    width: 300px;
+    margin: 0 0 25px 0;
+
+    .search-input-bar {
+      flex-direction: row-reverse;
+      padding: 2px 0 0 16px;
+      box-shadow: none;
+      border: solid 2px $charcoal-grey-faded-a-lot;
+      background-color: $light-gray;
+
+      input {
+        padding: 9px;
+        color: $charcoal-grey;
+        font-size: $font-size-x-regular;
+        letter-spacing: -0.8px;
+        background-color: $light-gray;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .dashboard-panel-text {
+    color: $charcoal-grey-faded;
+    font-family: $font-family-2;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.71;
+    margin: 0 0 25px 0;
+  }
+
+  .dashboard-panel-pill-list {
+    margin-bottom: 39px;
+    overflow-x: hidden !important;
+  }
+}

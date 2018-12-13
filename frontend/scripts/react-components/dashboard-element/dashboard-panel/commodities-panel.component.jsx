@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import GridList from 'react-components/shared/grid-list.component';
-import GridListItem from 'react-components/shared/grid-list-item.component';
+import GridList from 'react-components/shared/grid-list/grid-list.component';
+import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 
 function CommoditiesPanel(props) {
   const {

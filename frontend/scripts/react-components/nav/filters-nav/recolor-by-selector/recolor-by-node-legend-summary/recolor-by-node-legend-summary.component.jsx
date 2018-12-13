@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import 'styles/components/shared/dropdown-item-legend-summary.scss';
+
 function RecolorByNodeLegendSummary({ recolorGroups }) {
   if (recolorGroups === undefined) {
     return null;

@@ -7,6 +7,8 @@ import Responsive from 'react-components/shared/responsive.hoc';
 import d3_sankey from './sankey';
 import energy from './energy.json';
 
+import 'scripts/react-components/animated-flows/animated-flows.scss';
+
 class AnimatedFlows extends React.PureComponent {
   componentDidUpdate() {
     this.build();

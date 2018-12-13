@@ -1,6 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import PropTypes from 'prop-types';
+import Button from 'react-components/shared/button/button.component';
+
+import 'scripts/react-components/shared/newsletter/newsletter.scss';
 
 class NewsletterForm extends React.PureComponent {
   constructor(props) {
@@ -51,9 +54,9 @@ class NewsletterForm extends React.PureComponent {
               required
               className="newsletter-email"
             />
-            <button onClick={this.onClickSubmit} className="c-button -charcoal -bold">
+            <Button onClick={this.onClickSubmit} color="charcoal" weight="bold">
               Subscribe
-            </button>
+            </Button>
           </div>
         </form>
       </div>

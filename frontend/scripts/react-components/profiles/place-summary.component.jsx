@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
-import HelpTooltip from 'react-components/shared/help-tooltip.component';
+import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import TitleGroup from 'react-components/profiles/title-group.component';
 import Map from 'react-components/profiles/map.component';
 import formatValue from 'utils/formatValue';
@@ -84,91 +84,84 @@ class PlaceSummary extends React.PureComponent {
               </div>
             </div>
             <div className="small-4 columns map-item">
-              {adm1TopojsonPath &&
-                adm1TopojsonRoot && (
-                  <div className="row">
-                    <div className="small-3 columns">
-                      <div className="c-locator-map">
-                        {countryName && (
-                          <Map
-                            topoJSONPath={`./vector_layers${adm1TopojsonPath.replace(
-                              '$stateGeoId$',
-                              stateGeoId
-                            )}`}
-                            topoJSONRoot={adm1TopojsonRoot}
-                            getPolygonClassName={d =>
-                              d.properties.geoid === biomeGeoId ? '-isCurrent' : ''
-                            }
-                          />
-                        )}
-                      </div>
-                    </div>
-                    <div className="small-9 columns">
-                      <div className="c-info">
-                        <div className="legend">{adm1Name}</div>
-                        <div className="name -medium">
-                          {biomeName ? capitalize(biomeName) : '-'}
-                        </div>
-                      </div>
+              {adm1TopojsonPath && adm1TopojsonRoot && (
+                <div className="row">
+                  <div className="small-3 columns">
+                    <div className="c-locator-map">
+                      {countryName && (
+                        <Map
+                          topoJSONPath={`./vector_layers${adm1TopojsonPath.replace(
+                            '$stateGeoId$',
+                            stateGeoId
+                          )}`}
+                          topoJSONRoot={adm1TopojsonRoot}
+                          getPolygonClassName={d =>
+                            d.properties.geoid === biomeGeoId ? '-isCurrent' : ''
+                          }
+                        />
+                      )}
                     </div>
                   </div>
-                )}
+                  <div className="small-9 columns">
+                    <div className="c-info">
+                      <div className="legend">{adm1Name}</div>
+                      <div className="name -medium">{biomeName ? capitalize(biomeName) : '-'}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="small-4 columns map-item">
-              {adm2TopojsonPath &&
-                adm2TopojsonRoot && (
-                  <div className="row">
-                    <div className="small-3 columns">
-                      <div className="c-locator-map">
-                        {countryName && (
-                          <Map
-                            topoJSONPath={`./vector_layers${adm2TopojsonPath.replace(
-                              '$stateGeoId$',
-                              stateGeoId
-                            )}`}
-                            topoJSONRoot={adm2TopojsonRoot}
-                            getPolygonClassName={d =>
-                              d.properties.geoid === stateGeoId ? '-isCurrent' : ''
-                            }
-                          />
-                        )}
-                      </div>
-                    </div>
-                    <div className="small-9 columns">
-                      <div className="c-info">
-                        <div className="legend">{adm2Name}</div>
-                        <div className="name -medium">
-                          {stateName ? capitalize(stateName) : '-'}
-                        </div>
-                      </div>
+              {adm2TopojsonPath && adm2TopojsonRoot && (
+                <div className="row">
+                  <div className="small-3 columns">
+                    <div className="c-locator-map">
+                      {countryName && (
+                        <Map
+                          topoJSONPath={`./vector_layers${adm2TopojsonPath.replace(
+                            '$stateGeoId$',
+                            stateGeoId
+                          )}`}
+                          topoJSONRoot={adm2TopojsonRoot}
+                          getPolygonClassName={d =>
+                            d.properties.geoid === stateGeoId ? '-isCurrent' : ''
+                          }
+                        />
+                      )}
                     </div>
                   </div>
-                )}
+                  <div className="small-9 columns">
+                    <div className="c-info">
+                      <div className="legend">{adm2Name}</div>
+                      <div className="name -medium">{stateName ? capitalize(stateName) : '-'}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
         <div className="c-overall-info page-break-inside-avoid">
           <div className="row">
-            {mainTopojsonPath &&
-              mainTopojsonRoot && (
-                <div className="small-12 medium-4 large-3 columns">
-                  <div className="c-locator-map map-municipality-banner">
-                    {countryName && (
-                      <Map
-                        topoJSONPath={`./vector_layers${mainTopojsonPath.replace(
-                          '$stateGeoId$',
-                          stateGeoId
-                        )}`}
-                        topoJSONRoot={mainTopojsonRoot.replace('$stateGeoId$', stateGeoId)}
-                        getPolygonClassName={d =>
-                          d.properties.geoid === municipalityGeoId ? '-isCurrent' : ''
-                        }
-                      />
-                    )}
-                  </div>
+            {mainTopojsonPath && mainTopojsonRoot && (
+              <div className="small-12 medium-4 large-3 columns">
+                <div className="c-locator-map map-municipality-banner">
+                  {countryName && (
+                    <Map
+                      topoJSONPath={`./vector_layers${mainTopojsonPath.replace(
+                        '$stateGeoId$',
+                        stateGeoId
+                      )}`}
+                      topoJSONRoot={mainTopojsonRoot.replace('$stateGeoId$', stateGeoId)}
+                      getPolygonClassName={d =>
+                        d.properties.geoid === municipalityGeoId ? '-isCurrent' : ''
+                      }
+                    />
+                  )}
                 </div>
-              )}
+              </div>
+            )}
             <div className="small-12 medium-8 large-9 columns">
               <div className="row">
                 <div className="small-12 columns">

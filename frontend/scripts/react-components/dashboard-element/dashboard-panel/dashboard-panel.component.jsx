@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import BlockSwitch from 'react-components/shared/block-switch.component';
+import BlockSwitch from 'react-components/shared/block-switch/block-switch.component';
 import SourcesPanel from 'react-components/dashboard-element/dashboard-panel/sources-panel.component';
 import DestinationsPanel from 'react-components/dashboard-element/dashboard-panel/destinations-panel.component';
 import CompaniesPanel from 'react-components/dashboard-element/dashboard-panel/companies-panel.component';
 import CommoditiesPanel from 'react-components/dashboard-element/dashboard-panel/commodities-panel.component';
-import DashboardModalFooter from 'react-components/dashboard-element/dashboard-modal-footer.component';
+import DashboardModalFooter from 'react-components/dashboard-element/dashboard-modal-footer/dashboard-modal-footer.component';
 import addApostrophe from 'utils/addApostrophe';
+
+import 'scripts/react-components/dashboard-element/dashboard-panel/dashboard-panel.scss';
 
 class DashboardPanel extends Component {
   containerRef = React.createRef();

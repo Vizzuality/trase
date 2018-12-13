@@ -1,0 +1,102 @@
+@import 'styles/settings';
+
+.c-static-content {
+  background: $light-gray;
+  border-bottom: 1px solid $charcoal-grey-faded-a-lot;
+
+  .container {
+    padding-top: 56px;
+    padding-bottom: 132px;
+
+    > .row {
+      justify-content: center;
+
+      @media only screen and (min-width: 850px) {
+        justify-content: flex-start;
+      }
+    }
+
+    @media only screen and (max-width: $breakpoint-foundation-small)  {
+      padding-top: 40px;
+    }
+  }
+
+  .not-found {
+    padding: 56px 0;
+
+    .not-found-text {
+      color: $charcoal-grey;
+      font-family: $font-family-2;
+      font-size: 20px;
+      font-weight: $font-weight-light;
+      line-height: 1.5;
+      text-align: center;
+
+      .emoji {
+        font-size: 30px;
+      }
+    }
+  }
+
+  .markdown-content {
+
+    h1, h2 {
+      font-family: $font-family-2;
+      line-height: 1.5;
+      margin: 40px 0 0;
+      color: $charcoal-grey;
+
+      &:first-child {
+        margin: 0;
+      }
+
+      @media only screen and (max-width: $breakpoint-foundation-small) {
+        &:not(:first-child) {
+          margin: 30px 0 0;
+        }
+      }
+    }
+
+    h1 {
+      font-size: $font-size-huge;
+
+      @media only screen and (max-width: $breakpoint-foundation-small) {
+        font-size: $font-size-x-regular;
+      }
+    }
+
+    h2 {
+      font-size: $font-size-big;
+      font-weight: $font-weight-regular;
+
+      @media only screen and (max-width: $breakpoint-foundation-small) {
+        font-size: $font-size-x-regular;
+      }
+    }
+
+    p, li {
+      color: $charcoal-grey;
+      font-family: $font-family-2;
+      font-size: $font-size-xx-regular;
+      font-weight: $font-weight-light;
+      line-height: 2;
+
+      &:not(:first-child){
+        margin: 16px 0 0;
+      }
+
+      @media only screen and (max-width: $breakpoint-foundation-small) {
+        font-size: $font-size-x-regular;
+      }
+    }
+
+    ul {
+      margin: 32px 0;
+      padding-left: 24px;
+    }
+
+    a {
+      font-weight: $font-weight-bold;
+    }
+  }
+}

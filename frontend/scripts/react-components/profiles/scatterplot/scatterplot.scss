@@ -1,0 +1,139 @@
+@import '../../../../styles/settings';
+
+.c-scatterplot-container {
+  padding: 53px 0 63px 0;
+
+  .c-scatterplot {
+    position: relative;
+
+    @media print {
+      margin-top: 20px;
+      page-break-inside: avoid;
+
+      .c-dropdown-tab-switcher {
+        .tab-switcher {
+          margin-bottom: 10px;
+        }
+
+        .tabs-container {
+          display: none !important;
+        }
+      }
+
+      .axis-legend-x {
+        display: block;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+      }
+
+      .dot {
+        stroke: $white;
+        stroke-width: 1;
+      }
+    }
+
+    @media screen and (min-width: $breakpoint-foundation-small) {
+      padding-bottom: 30px;
+    }
+  }
+
+  .title {
+    margin-bottom: 23px;
+  }
+
+  path {
+    stroke: none;
+    fill: none;
+  }
+
+  .axis {
+
+    line {
+      fill: none;
+      stroke: $charcoal-grey;
+      stroke-opacity: .1;
+    }
+
+    text {
+      font-family: $font-family-1;
+      font-size: $font-size-x-regular;
+      line-height: 0.92;
+      letter-spacing: -1px;
+      fill: rgba($charcoal-grey, .6);
+    }
+
+    path {
+      stroke: $charcoal-grey;
+      stroke-opacity: .1;
+      stroke-width: 1px;
+    }
+
+    &.axis-line path {
+      stroke: $charcoal-grey;
+      stroke-width: 2px;
+      stroke-opacity: 1;
+    }
+  }
+
+  .dot {
+    fill: $charcoal-grey;
+    stroke: $egg-shell;
+    stroke-width: 2;
+    transition: opacity 150ms linear;
+
+    &:hover {
+      fill: $medium-pink;
+    }
+
+    &.current {
+      fill: $medium-pink;
+      stroke: rgba($medium-pink, .4);
+      stroke-width: 16px;
+    }
+
+    &.-hidden {
+      opacity: 0;
+    }
+  }
+
+  .c-dropdown-tab-switcher {
+    .tab-switcher {
+      .tab-switcher-title {
+        span[data-unit]:after {
+          content: '(' attr(data-unit) ')';
+          font-weight: normal;
+          letter-spacing: -1.3px;
+          text-transform: none;
+          color: rgba($charcoal-grey, .5);
+          margin-left: 2px;
+        }
+      }
+
+      .tabs-container {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 0 10px 0 30px;
+        display: flex;
+        justify-content: space-evenly;
+      }
+    }
+
+    .tab.-selected {
+      span[data-unit]:after {
+        content: '(' attr(data-unit) ')';
+        font-weight: normal;
+        letter-spacing: -1.3px;
+        text-transform: none;
+        color: rgba($charcoal-grey, .5);
+        margin-left: 2px;
+      }
+    }
+  }
+}
+
+.axis-legend-x {
+  display: block;
+}

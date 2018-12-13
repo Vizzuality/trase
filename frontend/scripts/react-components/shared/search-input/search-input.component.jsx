@@ -5,8 +5,10 @@ import Downshift from 'downshift';
 import SearchInputResult from 'react-components/shared/search-input/search-input-result.component';
 import cx from 'classnames';
 import debounce from 'lodash/debounce';
-import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import { MAX_SEARCH_RESULTS } from 'constants';
+
+import 'scripts/react-components/shared/search-input/search-input.scss';
 
 const SEARCH_DEBOUNCE_RATE_IN_MS = 400;
 

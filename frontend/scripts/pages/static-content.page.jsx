@@ -3,15 +3,13 @@
 import BaseMarkup from 'html/base.ejs';
 import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
-import 'styles/static-content.scss';
-
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
 import StaticContent from 'react-components/static-content/static-content.container';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
-import Footer from 'react-components/shared/footer.component';
+import Footer from 'react-components/shared/footer/footer.component';
 
 export const mount = (root, store) => {
   root.innerHTML = BaseMarkup({

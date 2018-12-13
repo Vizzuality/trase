@@ -1,10 +1,12 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import PropTypes from 'prop-types';
-import DashboardModalFooter from 'react-components/dashboard-element/dashboard-modal-footer.component';
-import GridList from 'react-components/shared/grid-list.component';
-import GridListItem from 'react-components/shared/grid-list-item.component';
-import Spinner from 'scripts/react-components/shared/shrinking-spinner.component';
+import DashboardModalFooter from 'react-components/dashboard-element/dashboard-modal-footer/dashboard-modal-footer.component';
+import GridList from 'react-components/shared/grid-list/grid-list.component';
+import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
+import Spinner from 'scripts/react-components/shared/shrinking-spinner/shrinking-spinner.component';
+
+import 'scripts/react-components/dashboard-element/dashboard-panel/dashboard-panel.scss';
 
 class DashboardIndicators extends React.PureComponent {
   state = {

@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Widget from 'react-components/widgets/widget.component';
 import { GET_ACTOR_EXPORTING_COMPANIES, GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
-import Scatterplot from 'react-components/profiles/scatterplot.component';
-import UnitsTooltip from 'react-components/shared/units-tooltip.component';
+import Scatterplot from 'react-components/profiles/scatterplot/scatterplot.component';
+import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import formatValue from 'utils/formatValue';
-import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 
 class ImportingCompaniesWidget extends React.PureComponent {
   state = {

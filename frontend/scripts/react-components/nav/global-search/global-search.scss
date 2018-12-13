@@ -1,0 +1,47 @@
+@import '../../../../styles/components/shared/search';
+
+$spinner-height: 40px;
+
+.c-search.-global {
+  .search-bar-input {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .search-spinner {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 10px;
+    margin: auto;
+    height: $spinner-height;
+    width: $spinner-height;
+    background-color: transparent;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: $spinner-height - 30px;
+      left: $spinner-height - 30px;
+      width: $spinner-height - 20px;
+      height: $spinner-height - 20px;
+      border: 2px solid $charcoal-grey;
+      border-radius: 99px;
+      clip: rect(0, 20px, 13px, 0);
+
+      animation: rotate 1s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes rotate {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  }
+}

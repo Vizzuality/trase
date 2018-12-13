@@ -1,0 +1,71 @@
+@import 'styles/settings';
+
+.c-radio-btn {
+  display: inline-block;
+  position: relative;
+  width: 16px;
+  min-width: 16px;
+  height: 16px;
+  border: 2px solid rgba($charcoal-grey, .3);
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover, &.-enabled {
+    border-color: $charcoal-grey;
+
+    &::before {
+      display: inline-block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 6px;
+      height: 6px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      content: '';
+      background-color: $charcoal-grey;
+    }
+  }
+
+  &.-enabled {
+    &:hover:not(.-no-self-cancel) {
+      align-items: center;
+      background-color: $medium-pink;
+      text-align: center;
+
+      &::before {
+        display: none;
+      }
+
+      &::after {
+        position: absolute;
+        top: -2px;
+        left: 1px;
+        font-size: 15px;
+        font-weight: $font-weight-bold;
+        content: '×';
+      }
+    }
+
+    &::before,
+    &:hover:not(.-no-self-cancel) {
+      background-color: $charcoal-grey;
+    }
+  }
+
+  &.-disabled {
+    pointer-events: none;
+
+    &::before {
+      display: inline-block;
+      position: absolute;
+      top: 50%;
+      left: 1px;
+      width: 100%;
+      height: 2px;
+      transform: rotate(-45deg) translate(0, -50%);
+      background-color: rgba($charcoal-grey, .3);
+      content: '';
+    }
+  }
+}

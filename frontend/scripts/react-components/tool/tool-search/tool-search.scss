@@ -1,0 +1,11 @@
+@import '../../../../styles/components/shared/search';
+
+.c-search.-tool {
+  .c-nodes-titles {
+    padding: 8px 0;
+
+    .c-node-title:first-child {
+      margin-left: 8px;
+    }
+  }
+}

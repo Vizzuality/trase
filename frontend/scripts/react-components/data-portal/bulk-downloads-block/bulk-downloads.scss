@@ -1,0 +1,31 @@
+@import 'styles/settings';
+
+.c-bulk-downloads {
+  font-family: $font-family-1;
+  font-size: $font-size-x-regular;
+  line-height: 1.23;
+  letter-spacing: -0.6px;
+  color: $charcoal-grey;
+  padding: 0 0 33px 0;
+  border-bottom: solid 2px rgba($charcoal-grey, .15);
+
+  .c-bulk-downloads__title {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .c-bulk-downloads__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 42px;
+    padding: 0 16px;
+    margin-bottom: 14px;
+    border: solid 1px rgba($charcoal-grey, .3);
+    cursor: pointer;
+    &.-disabled {
+      cursor: not-allowed;
+    }
+  }
+}

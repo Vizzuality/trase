@@ -1,0 +1,28 @@
+@import 'styles/settings';
+
+.c-simple-modal {
+  display: flex;
+  position: absolute;
+  background: transparent;
+  z-index: $z-above-veil;
+  overflow: hidden;
+  outline: none;
+  max-height: calc(100% - 40px);
+}
+
+.c-simple-modal-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $charcoal-grey-faded;
+  z-index: $z-veil;
+}
+
+.ReactModal__Body--open {
+  overflow: hidden;
+}

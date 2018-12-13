@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import TeamPageMessage from 'react-components/team/team-page-message.component';
 import Link from 'redux-first-router-link';
 import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.component';
-import cx from 'classnames';
+import TeamProfilePicture from 'react-components/team/team-profile-picture/team-profile-picture.component';
+
+import 'scripts/react-components/team/team-member/team-member.scss';
+import Heading from 'react-components/shared/heading/heading.component';
 
 const TeamMember = props => {
   const { member, errorMessage } = props;
@@ -19,19 +22,18 @@ const TeamMember = props => {
       <div className="row">
         <div className="column small-12 medium-4">
           <div className="team-member-profile-picture-container">
-            <Link className="subtitle -gray" to={{ type: 'team' }}>
-              back to trase team
-            </Link>
-            <div
-              className={cx('c-team-profile-picture', { '-placeholder': !member.smallImageUrl })}
-              style={{ backgroundImage: `url(${member.smallImageUrl})` }}
-            />
+            <Heading as="h3" variant="mono" color="grey-faded" size="sm">
+              <Link to={{ type: 'team' }}>back to trase team</Link>
+            </Heading>
+            <TeamProfilePicture imageUrl={member.smallImageUrl} />
           </div>
         </div>
         <div className="column small-12 medium-8">
           <div className="team-member-details">
-            <h2 className="team-member-name title -medium -light">{member.name}</h2>
-            <h3 className="subtitle team-member-group">{member.group}</h3>
+            <Heading size="lg">{member.name}</Heading>
+            <Heading as="h3" variant="mono" color="pink" size="sm">
+              {member.group}
+            </Heading>
             <MarkdownRenderer className="team-member-bio" content={member.bio} />
           </div>
         </div>

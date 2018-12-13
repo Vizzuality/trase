@@ -1,10 +1,10 @@
 import React from 'react';
-import Card from 'react-components/shared/card.component';
+import Card from 'react-components/shared/card/card.component';
 import Link from 'redux-first-router-link';
 import PropTypes from 'prop-types';
-import ShrinkingSpinner from 'scripts/react-components/shared/shrinking-spinner.component';
+import ShrinkingSpinner from 'scripts/react-components/shared/shrinking-spinner/shrinking-spinner.component';
 
-// import cx from 'classnames';
+import 'scripts/react-components/dashboard-root/dashboard-root.scss';
 
 function DashboardRoot(props) {
   const { dashboardTemplates, loadingDashboardTemplates } = props;

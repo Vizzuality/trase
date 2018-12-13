@@ -1,0 +1,59 @@
+@import 'styles/settings';
+
+.c-text {
+  color: $charcoal-grey;
+
+  &.mono {
+    font-family: $font-family-1;
+    letter-spacing: -0.8px;
+  }
+
+  &.serif {
+    font-family: $font-family-2;
+  }
+
+  &.size-sm {
+    font-size: $font-size-small;
+  }
+
+  &.size-rg {
+    font-size: $font-size-x-regular;
+  }
+
+  &.size-md {
+    font-size: $font-size-xx-regular;
+  }
+
+  &.size-lg {
+    font-size: $font-size-xxx-regular;
+  }
+
+  &.color-white {
+    color: $white;
+  }
+
+  &.color-grey-faded {
+    color: $charcoal-grey-faded;
+  }
+
+  &.color-grey {
+    color: $charcoal-grey;
+  }
+
+  &.color-pink {
+    color: $strong-pink;
+  }
+
+  &.align-center {
+    text-align: center;
+  }
+
+  &.weight-light {
+    font-weight: $font-weight-light;
+  }
+
+  &.weight-bold {
+    font-weight: $font-weight-bold;
+  }
+
+}

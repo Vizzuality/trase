@@ -1,0 +1,79 @@
+@import '../../../../styles/settings';
+@import '../../../../styles/mixins';
+
+.c-dropdown-tab-switcher {
+  .tab-switcher {
+    display: flex;
+    margin-bottom: 31px;
+    font-family: $font-family-1;
+    font-size: $font-size-x-regular;
+    font-weight: bold;
+    line-height: 1.23;
+    letter-spacing: -0.6px;
+    color: $charcoal-grey;
+    text-transform: uppercase;
+
+    .tab-container {
+      @media print {
+        display: none;
+      }
+    }
+
+    .tab-switcher-title {
+      margin-right: 21px;
+    }
+  }
+
+  .dropdown-switcher {
+    display: inline-block;
+    margin-bottom: 20px;
+
+    @media print {
+      display: none;
+    }
+
+    .c-dropdown {
+
+      > .dropdown-label {
+        font-size: $font-size-x-regular;
+      }
+
+      > .dropdown-title {
+        font-family: $font-family-1;
+        font-size: $font-size-x-regular;
+        letter-spacing: -0.7px;
+        text-transform: uppercase;
+        padding-right: 14px;
+
+        &::after {
+          @include arrow(6px, 2px, $medium-pink, 'down');
+          transform: translate(-50%, -75%) rotate(45deg);
+        }
+      }
+
+      > .dropdown-list {
+        .dropdown-item {
+          padding: 10px 15px;
+          font-family: $font-family-1;
+          font-size: $font-size-x-regular;
+          letter-spacing: -0.7px;
+          text-transform: uppercase;
+        }
+      }
+
+      &.-active {
+        cursor: pointer;
+
+        > .dropdown-title {
+          &::after {
+            content: '';
+          }
+        }
+
+        > .dropdown-list {
+          top: 100%;
+        }
+      }
+    }
+  }
+}

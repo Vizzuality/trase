@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ProfileSearch from 'react-components/profile-root/profile-search.container';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
+import ErrorMessage from 'react-components/profile-root/error-message/error-message.component';
+
+import 'scripts/react-components/profile-root/profile-root.scss';
 
 const ProfileRoot = props => {
   const { errorMessage, activeContext, getContextsWithProfilePages } = props;
@@ -54,12 +57,7 @@ const ProfileRoot = props => {
           </div>
         </div>
       )}
-      {errorMessage && (
-        <div className="c-error-message -absolute -charcoal">
-          <p className="message">Oops! Something went wrong.</p>
-          <p className="message">{errorMessage}</p>
-        </div>
-      )}
+      {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
     </div>
   );
 };

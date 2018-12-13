@@ -1,6 +1,6 @@
 import formatValue from 'utils/formatValue';
 import NodeTitleTemplate from 'templates/tool/nodeTitle.ejs';
-import 'styles/components/tool/nodesTitles.scss';
+import 'scripts/react-components/tool/tool-search/node-title/nodes-title.scss';
 import 'styles/components/tool/nodes-clear.scss';
 import Tooltip from 'components/shared/info-tooltip.component';
 
