@@ -23,6 +23,7 @@ namespace :charts do
     end
   end
 
+  # rubocop:disable Metrics/AbcSize
   def load_charts(config_file_path)
     without_chart_callbacks do
       config = YAML.safe_load(File.open(config_file_path))
@@ -51,12 +52,13 @@ namespace :charts do
         ).first
 
         unless profile
-          profile = Api::V3::Profile.create(
+          Api::V3::Profile.create(
             context_node_type: context_node_type,
             name: profile_config['type']
           )
         end
       end
+      # rubocop:enable Metrics/AbcSize
 
       config['charts'].each do |chart_config|
         context.profiles.where(name: chart_config['profile']).each do |profile|
@@ -74,11 +76,11 @@ namespace :charts do
             )
           end
           node_types_list = chart_config['node_types']
-          if node_types_list
-            create_chart_node_types_from_node_types_list(
-              chart, node_types_list
-            )
-          end
+          next unless node_types_list
+
+          create_chart_node_types_from_node_types_list(
+            chart, node_types_list
+          )
         end
       end
       Api::V3::Readonly::ChartAttribute.refresh
@@ -153,6 +155,7 @@ namespace :charts do
     list.each.with_index do |node_type_hash, idx|
       node_type = Api::V3::NodeType.find_by_name(node_type_hash['name'])
       next unless node_type
+
       position = node_type_hash['position'] ||
         node_type_hash['identifier'].present? ? nil : idx
 

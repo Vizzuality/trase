@@ -16,7 +16,7 @@ module Api
           raise 'Quant Volume not found' unless @volume_attribute.present?
 
           initialize_chart_config(:actor, nil, :actor_sustainability_table)
-          raise "No attributes found" unless @chart_config.attributes.any?
+          raise 'No attributes found' unless @chart_config.attributes.any?
 
           @source_node_types = @chart_config.named_node_types('source')
           unless @source_node_types.any?

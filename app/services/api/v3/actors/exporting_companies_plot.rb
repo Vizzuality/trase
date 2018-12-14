@@ -16,7 +16,7 @@ module Api
           raise 'Quant Volume not found' unless @volume_attribute.present?
 
           initialize_chart_config(:actor, nil, :actor_exporting_companies)
-          raise "No attributes found" unless @chart_config.attributes.any?
+          raise 'No attributes found' unless @chart_config.attributes.any?
         end
 
         def call

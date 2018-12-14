@@ -24,9 +24,11 @@ module Api
           raise 'Chart node type "source" not found' unless @source_node_type
 
           @destination_node_type = @chart_config.named_node_type('destination')
+          # rubocop:disable Style/GuardClause
           unless @destination_node_type
             raise 'Chart node type "destination" not found'
           end
+          # rubocop:enable Style/GuardClause
         end
 
         def call
@@ -175,6 +177,7 @@ largest #{profile_type} of soy from \
 
         def summary_of_sources(profile_type)
           return '' unless @context.context_property.is_subnational
+
           " As an #{profile_type}, \
 <span class=\"notranslate\">#{@node.name.humanize}</span> sources from \
 <span class=\"notranslate\">#{@source_municipalities_count_formatted}</span> \
@@ -257,6 +260,7 @@ accounting for \
 
         def initialize_sources_for_summary
           return unless @context.context_property.is_subnational
+
           stats = Api::V3::Profiles::FlowStatsForNodeType.new(
             @context, @year, @source_node_type.name
           )

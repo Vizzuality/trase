@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/ClassLength
 module Api
   module V3
     module Places
@@ -241,6 +240,7 @@ occupying a total of \
           )
         end
 
+        # rubocop:disable Metrics/AbcSize
         def summary_of_production_ranking
           total_soy_production = Api::V3::NodeQuant.
             where(quant_id: @commodity_production_attribute.id, year: @year).
@@ -285,6 +285,7 @@ in \
 <span class=\"notranslate\">#{@context.commodity.name.downcase}</span> \
 production#{state_ranking_text}."
         end
+        # rubocop:enable Metrics/AbcSize
 
         def summary_of_top_exporter_and_top_consumer
           top_exporter = @top_exporters.first
@@ -322,4 +323,3 @@ the total exports, and the main destination was \
     end
   end
 end
-# rubocop:enable Metrics/ClassLength
