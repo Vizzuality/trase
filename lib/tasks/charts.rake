@@ -119,7 +119,7 @@ namespace :charts do
   # rubocop:disable Metrics/CyclomaticComplexity
   def create_chart_attribute(chart, attribute_hash, idx)
     position = attribute_hash['position'] ||
-      attribute_hash['identifier'].present? ? nil : idx
+      (attribute_hash['identifier'].present? ? nil : idx)
     chart_attribute = Api::V3::ChartAttribute.new(
       chart: chart,
       identifier: attribute_hash['identifier'],
@@ -157,7 +157,7 @@ namespace :charts do
       next unless node_type
 
       position = node_type_hash['position'] ||
-        node_type_hash['identifier'].present? ? nil : idx
+        (node_type_hash['identifier'].present? ? nil : idx)
 
       chart.chart_node_types.create(
         node_type: node_type,
