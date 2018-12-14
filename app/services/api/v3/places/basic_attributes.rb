@@ -28,29 +28,19 @@ module Api
           @attributes = {
             column_name: @node_type_name,
             country_name: @context&.country&.name,
-            country_geo_id: @context&.country&.iso2
+            country_geo_id: @context&.country&.iso2,
+            jurisdiction_name: @node.name,
+            jurisdiction_geo_id: @node.geo_id
           }
 
           @attributes = @attributes.merge initialize_ancestors
-
-          if summary_enabled?
-            @attributes = @attributes.merge(
-              initialize_commodity_attributes
-            )
-          end
-          @attributes = @attributes.merge initialize_dynamic_attributes
+          @attributes = @attributes.merge initialize_commodity_attributes
           initialize_top_nodes
           @attributes[:summary] = summary
           @attributes
         end
 
-        def summary_enabled?
-          @summary_node_types.map(&:name).include?(@node_type_name)
-        end
-
         def summary
-          return nil unless summary_enabled?
-
           if @commodity_production.zero?
             return "<span class=\"notranslate\">#{@node.name.titleize}</span> \
 did not produce any soy in \
@@ -74,9 +64,6 @@ occupying a total of \
 
         def initialize_chart_configuration
           initialize_chart_config(:place, nil, :place_basic_attributes)
-          @summary_node_types = @chart_config.named_node_types('summary')
-          raise "No summary node types found" unless @summary_node_types.any?
-
           %w(
             commodity_production commodity_yield commodity_farmland area
           ).each do |attribute_name|
@@ -109,51 +96,33 @@ occupying a total of \
           )
           @trader_node_type = top_traders_chart_config.
             named_node_type('trader')
+          # rubocop:disable Style/GuardClause
           unless @trader_node_type
             raise 'Chart node type "trader" not found (top traders)'
           end
+          # rubocop:enable Style/GuardClause
         end
 
-        def initialize_dynamic_attributes
-          dynamic_attributes = {}
-          node_type_name_us = @node_type_name.split.join('_').downcase
-          dynamic_attributes[
-            (node_type_name_us + '_name').to_sym
-          ] = @node.name
-          dynamic_attributes[
-            (node_type_name_us + '_geo_id').to_sym
-          ] = @node.geo_id
-          dynamic_attributes
-        end
-
-        # this assumes a lot:
-        # - place context node types are in group 0
-        # - only considers is_geo_column ones
-        # - looks for value of a qual with node type name
         def initialize_ancestors
           attributes = {}
-          place_context_node_types = @context.context_node_types.
+          @ancestor_chart_node_types = @chart_config.chart.
+            chart_node_types.
             includes(:node_type).
-            joins(:context_node_type_property).
-            where(
-              'context_node_type_properties.column_group' => 0,
-              'context_node_type_properties.is_geo_column' => true
-            )
-          place_node_types = place_context_node_types.map(&:node_type)
-          place_node_types.each do |node_type|
-            node_type_name = node_type.name
-            node_type_name_lc = node_type_name.downcase
-            qual = @place_quals.get(node_type_name)
-            node_name = qual && qual['value']
-            node_type_name_plural = node_type_name&.underscore&.pluralize
-            next unless node_name &&
-              Api::V3::Node.respond_to?(node_type_name_plural)
+            where(identifier: 'ancestor').
+            order(:position)
+          @ancestor_chart_node_types.each do |chart_node_type|
+            puts chart_node_type.inspect
+            node_type = chart_node_type.node_type
+            qual = @place_quals.get(node_type.name)
+            next unless qual
 
-            node = Api::V3::Node.send(node_type_name_plural).
+            node_name = qual && qual['value']
+            node = Api::V3::Node.where(node_type_id: node_type.id).
               find_by_name(node_name)
-            instance_variable_set("@#{node_type_name_lc}", node) # TODO
-            attributes[:"#{node_type_name_lc}_name"] = node_name
-            attributes[:"#{node_type_name_lc}_geo_id"] = node.geo_id if node
+            label = "jurisdiction_#{chart_node_type.position + 1}"
+            instance_variable_set("@#{label}", node)
+            attributes[:"#{label}"] = node_name
+            attributes[:"#{label}_geo_id"] = node.geo_id if node
           end
           attributes
         end
@@ -289,13 +258,18 @@ occupying a total of \
           if country_ranking.present?
             country_ranking = country_ranking.ordinalize
           end
-          if @state.present?
+          if @jurisdiction_1.present? &&
+              @jurisdiction_1.node_type.name == NodeTypeName::STATE
             state_ranking = StateRanking.
-              new(@context, @node, @year, @state.name).
+              new(@context, @node, @year, @jurisdiction_1.name).
               position_for_attribute(@commodity_production_attribute)
-            state_name = @state.name.titleize
+            state_name = @jurisdiction_1.name.titleize
           end
-          state_ranking = state_ranking.ordinalize if state_ranking.present?
+          if state_ranking.present?
+            state_ranking_text = ", and <span class=\"notranslate\">\
+#{state_ranking.ordinalize}</span> in the state of \
+<span class=\"notranslate\">#{state_name}</span>"
+          end
 
           text =
             if percentage_total_production == '0.00%'
@@ -309,9 +283,7 @@ ranks <span class=\"notranslate\">#{country_ranking}</span> in \
 <span class=\"notranslate\">#{@context.country.name.capitalize}</span> \
 in \
 <span class=\"notranslate\">#{@context.commodity.name.downcase}</span> \
-production, and \
-<span class=\"notranslate\">#{state_ranking}</span> in \
-the state of <span class=\"notranslate\">#{state_name}</span>."
+production#{state_ranking_text}."
         end
 
         def summary_of_top_exporter_and_top_consumer

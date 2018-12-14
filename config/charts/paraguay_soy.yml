@@ -86,13 +86,6 @@ charts:
       - attribute_type: ind
         attribute_name: SOY_YIELD
         identifier: commodity_yield
-    node_types:
-      - name: DEPARTMENT
-        identifier: summary
-        position: 0
-      - name: LOGISTICS_HUB
-        identifier: summary
-        position: 1
   - profile: place
     identifier: place_indicators_table
     position: 1

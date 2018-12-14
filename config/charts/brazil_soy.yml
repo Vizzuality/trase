@@ -99,11 +99,11 @@ charts:
         attribute_name: SOY_YIELD
         identifier: commodity_yield
     node_types:
-      - name: MUNICIPALITY
-        identifier: summary
+      - name: STATE
+        identifier: ancestor
         position: 0
-      - name: LOGISTICS_HUB
-        identifier: summary
+      - name: BIOME
+        identifier: ancestor
         position: 1
   - profile: place
     identifier: place_indicators_table
