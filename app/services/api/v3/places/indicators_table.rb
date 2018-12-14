@@ -28,16 +28,14 @@ module Api
         end
 
         def call
-          [
-            :place_environmental_indicators,
-            :place_socioeconomic_indicators,
-            :place_agricultural_indicators,
-            :place_territorial_governance
-          ].map do |identifier|
+          parent_chart_config = initialize_chart_config(
+            :place, nil, :place_indicators_table
+          )
+          parent_chart_config.chart.children.each do |chart|
             chart_config = initialize_chart_config(
-              :place, :place_indicators_table, identifier
+              :place, :place_indicators_table, chart.identifier
             )
-            raise "No attributes found" unless chart_config.attributes.any?
+            raise 'No attributes found' unless chart_config.attributes.any?
             indicators_group(chart_config)
           end
         end
