@@ -147,6 +147,19 @@ class ProfileNode extends React.PureComponent {
             />
           </React.Fragment>
         )}
+        <section className="mini-sankey-container">
+          <div className="row align-center">
+            <div className="column small-10">
+              <iframe
+                title="gfw integration"
+                width="100%"
+                height="500"
+                frameBorder="0"
+                src="http://staging.globalforestwatch.org/embed/dashboards/global/?widget=treeLossGlobal&gfw=true"
+              />
+            </div>
+          </div>
+        </section>
       </div>
     );
   }
