@@ -103,12 +103,18 @@ class FiltersNav extends React.PureComponent {
   };
 
   renderMenuClosed = () => {
-    const { selectedContext, filters } = this.props;
+    const { selectedContext, filters, selectContexts } = this.props;
+    // TODO: refactor this so that the rendered filters aren't connected to redux
+    // Them being connected makes it hard to reuse without changing stuff in other pages
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
           {filters.contextSelector && (
-            <ContextSelector className="filters-nav-item" selectedContext={selectedContext} />
+            <ContextSelector
+              className="filters-nav-item"
+              selectedContext={selectedContext}
+              selectContexts={selectContexts}
+            />
           )}
           {filters.adminLevel && <AdminLevelFilter className="filters-nav-item" />}
           {filters.year && <YearsSelector className="filters-nav-item" />}
@@ -141,6 +147,7 @@ FiltersNav.propTypes = {
   openMap: PropTypes.func,
   openSankey: PropTypes.func,
   isMapVisible: PropTypes.bool,
+  selectContexts: PropTypes.func,
   selectedContext: PropTypes.object,
   links: PropTypes.array.isRequired,
   filters: PropTypes.object.isRequired
