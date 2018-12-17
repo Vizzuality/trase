@@ -227,3 +227,7 @@ export const BREAKPOINTS = {
 };
 
 export const MAX_SEARCH_RESULTS = 15;
+
+// TODO: move this to backend
+// use countryName_commodityName pair because ids may change across environments
+export const LOGISTICS_MAP_CONTEXTS = ['BRAZIL_SOY', 'BRAZIL_BEEF'];

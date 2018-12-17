@@ -127,6 +127,7 @@ export const routes = {
   logisticsMap: {
     path: '/logistics-map',
     page: 'logistics-map',
+    thunk: loadPageData(),
     title: getPageTitle
   },
   [NOT_FOUND]: {

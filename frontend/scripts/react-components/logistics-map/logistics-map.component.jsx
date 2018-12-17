@@ -9,6 +9,7 @@ import WRIIcons from 'wri-api-components/dist/icons';
 
 import { Layer, LayerManager } from 'layer-manager/lib/react';
 import { PluginLeaflet } from 'layer-manager/lib';
+import { BASEMAPS } from 'constants';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-legend/logistics-map-legend.component';
 import 'wri-api-components/dist/map.css';
@@ -30,7 +31,7 @@ function LogisticsMap(props) {
     <div className="l-logistics-map">
       <div className="c-logistics-map">
         <WRIIcons />
-        <MapComponent bounds={bounds}>
+        <MapComponent bounds={bounds} basemap={BASEMAPS.default}>
           {map => (
             <React.Fragment>
               <MapControls>
