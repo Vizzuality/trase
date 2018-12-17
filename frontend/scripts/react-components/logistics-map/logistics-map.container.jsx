@@ -36,8 +36,9 @@ class LogisticsMapContainer extends React.PureComponent {
     const y = 35;
     const text = {
       crushing_facilities: 'Crushing Facility',
-      brazil_refining_facilities: 'Refinery',
-      storage_facilities: 'Silo'
+      refining_facilities: 'Refinery',
+      storage_facilities: 'Silo',
+      slaughterhouses: 'Slaughterhouse'
     }[layer.name];
     const commodity = selectedContext.commodityName;
     const items = [
