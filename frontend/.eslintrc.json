@@ -54,6 +54,7 @@
     "NODE_ENV_DEV": true,
     "API_V3_URL": true,
     "ENABLE_DASHBOARDS": true,
+    "ENABLE_LOGISTICS_MAP": true,
     "GOOGLE_ANALYTICS_KEY": true,
     "USER_REPORT_KEY": true,
     "DATA_DOWNLOAD_ENABLED": true,
