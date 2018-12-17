@@ -16,4 +16,19 @@
   .leaflet-popup-close-button {
     display: none;
   }
+
+  .wri_api__c-map-controls {
+    left: 16px;
+    right: initial;
+  }
+
+  .wri_api__c-zoom-control .wri_api__zoom-control-btn {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+
+    &:active {
+      background-color: darken($white, 7%);
+    }
+  }
 }

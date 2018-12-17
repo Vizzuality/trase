@@ -10,7 +10,8 @@ const initialState = {
     .fill(2016)
     .map((year, index) => year - index),
   layersStatus: {
-    // [id]:[active]
+    crushing_facilities: true,
+    slaughterhouses: true
   }
 };
 

@@ -29,7 +29,7 @@ class LogisticsMapLegend extends React.PureComponent {
         </div>
         <ul className={cx(['logistics-map-legend-list', { '-closed': !open }])}>
           {layers.map(layer => (
-            <li className="logistics-map-legend-list-item">
+            <li className="logistics-map-legend-list-item" key={layer.id}>
               <Text>{startCase(layer.name)}</Text>
               <Toggle
                 id={layer.id}
