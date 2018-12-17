@@ -13,6 +13,7 @@ class LogisticsMapContainer extends React.PureComponent {
   static propTypes = {
     layers: PropTypes.array,
     activeLayers: PropTypes.array,
+    selectedContext: PropTypes.object,
     setLayerActive: PropTypes.func.isRequired
   };
 
@@ -28,6 +29,7 @@ class LogisticsMapContainer extends React.PureComponent {
 
   onMouseOver = (e, layer) => {
     const { data } = e;
+    const { selectedContext } = this.props;
     if (!data) return;
     const show = true;
     const x = 0;
@@ -37,11 +39,25 @@ class LogisticsMapContainer extends React.PureComponent {
       brazil_refining_facilities: 'Refinery',
       storage_facilities: 'Silo'
     }[layer.name];
+    const commodity = selectedContext.commodityName;
     const items = [
       { title: 'Company', value: data.company },
-      { title: 'Municipality', value: data.municipality },
-      { title: 'Production of Soy', value: formatValue(data.capacity, 'Trade volume'), unit: 't' }
+      { title: 'Municipality', value: data.municipality }
     ];
+
+    if (commodity === 'SOY') {
+      items.push({
+        title: `Production of ${commodity}`,
+        value: formatValue(data.capacity, 'Trade volume'),
+        unit: 't'
+      });
+    } else {
+      items.splice(-1, 0, { title: 'State', value: data.state });
+      items.push(
+        { title: 'Subclass', value: data.subclass },
+        { title: 'Inspection level', value: data.inspection_level }
+      );
+    }
     const mapPopUp = { ...e, data: { x, y, text, show, items } };
     this.setState(() => ({ mapPopUp }));
   };
@@ -75,7 +91,8 @@ class LogisticsMapContainer extends React.PureComponent {
 const mapStateToProps = state => ({
   activeLayers: getActiveLayers(state),
   layers: getLogisticsMapLayers(state),
-  activeYear: state.logisticsMap.activeYear
+  activeYear: state.logisticsMap.activeYear,
+  selectedContext: state.app.selectedContext
 });
 
 const mapDispatchToProps = {
