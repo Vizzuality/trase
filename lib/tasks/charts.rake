@@ -98,15 +98,22 @@ namespace :charts do
       parent_id: parent&.id,
       identifier: identifier
     ).first
+
     return chart if chart.present?
 
-    Api::V3::Chart.create(
+    chart = Api::V3::Chart.new(
       profile: profile,
       parent: parent,
       identifier: identifier,
       position: options[:position],
       title: options[:title]
     )
+    unless chart.valid?
+      puts chart.errors.inspect
+      exit(1)
+    end
+    chart.save
+    chart
   end
 
   def create_chart_attributes_from_attributes_list(chart, list)
