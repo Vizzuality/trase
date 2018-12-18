@@ -79,14 +79,17 @@ class TopConsumersWidget extends React.PureComponent {
             return null;
           }
 
-          const { municipalityName } = data[GET_NODE_SUMMARY_URL];
+          const { jurisdictionName } = data[GET_NODE_SUMMARY_URL];
           return (
             <section className="mini-sankey-container page-break-inside-avoid" data-test={testId}>
               <div className="row">
                 <div className="small-12 columns">
                   <Heading as="h3" size="sm" data-test={`${testId}-title`}>
-                    {this.getTitle(municipalityName)}
+                    {this.getTitle(jurisdictionName)}
                   </Heading>
+                  <h3 className="title -small" data-test={`${testId}-title`}>
+                    {this.getTitle(jurisdictionName)}
+                  </h3>
                   <TranslatedMiniSankey
                     year={year}
                     data={data[mainQuery]}

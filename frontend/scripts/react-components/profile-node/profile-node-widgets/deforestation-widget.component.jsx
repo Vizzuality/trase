@@ -47,7 +47,7 @@ function DeforestationWidget(props) {
               <div className="small-12 columns">
                 <Heading size="sm" data-test={`${testId}-title`}>
                   Deforestation trajectory of{' '}
-                  <span className="notranslate">{data[GET_NODE_SUMMARY_URL].municipalityName}</span>
+                  <span className="notranslate">{data[GET_NODE_SUMMARY_URL].jurisdictionName}</span>
                 </Heading>
                 <div className="c-line-container">
                   <div className="c-line">
