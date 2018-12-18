@@ -11,22 +11,29 @@ import Widget from 'react-components/widgets/widget.component';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 
 class TopDestinationsWidget extends React.PureComponent {
-  tabs = ['municipality', 'biome', 'state'];
-
   state = {
-    activeTab: this.props.printMode ? 'state' : 'municipality'
+    activeTabIndex: this.props.printMode && this.props.contextId === 1 ? 1 : 0
   };
 
   getActiveTabProps(data) {
-    const { type } = this.props;
-    const { activeTab } = this.state;
-    const linesData = type === 'countries' ? data : data[activeTab];
+    const { activeTabIndex } = this.state;
+
+    const activeTab = data.tabs[activeTabIndex];
+    const linesData = data[activeTab];
     const { includedYears, buckets } = data;
     const { lines, style, unit } = linesData;
-    return { includedYears, lines, style, unit, profileType: linesData.profile_type, buckets };
+    return {
+      includedYears,
+      lines,
+      style,
+      unit,
+      profileType: linesData.profile_type,
+      buckets,
+      activeTab
+    };
   }
 
-  updateTab = index => this.setState({ activeTab: this.tabs[index] });
+  updateTab = index => this.setState({ activeTabIndex: index });
 
   render() {
     const {
@@ -41,7 +48,6 @@ class TopDestinationsWidget extends React.PureComponent {
       onLinkClick,
       testId
     } = this.props;
-    const { activeTab } = this.state;
     const mainQuery = type === 'countries' ? GET_ACTOR_TOP_COUNTRIES : GET_ACTOR_TOP_SOURCES;
     const params = { node_id: nodeId, context_id: contextId, year };
     return (
@@ -70,7 +76,8 @@ class TopDestinationsWidget extends React.PureComponent {
             unit,
             profileType,
             style,
-            buckets
+            buckets,
+            activeTab
           } = this.getActiveTabProps(data[mainQuery]);
 
           if (!lines || lines.length === 0) {
@@ -86,7 +93,7 @@ class TopDestinationsWidget extends React.PureComponent {
                   <TopDestinationsChart
                     height={250}
                     type={type}
-                    tabs={this.tabs}
+                    tabs={data[mainQuery].tabs}
                     onChangeTab={this.updateTab}
                     onLinkClick={onLinkClick}
                     contextId={contextId}
