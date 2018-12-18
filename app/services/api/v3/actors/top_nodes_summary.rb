@@ -30,22 +30,24 @@ module Api
           )
           buckets = map_attribute.try(:single_layer_buckets) ||
             [5000, 100_000, 300_000, 1_000_000]
+          node_types =
+            if node_type.is_a?(Array)
+              node_type
+            else
+              [node_type]
+          end
           result = {
-            included_years: years, buckets: buckets
+            included_years: years,
+            buckets: buckets,
+            tabs: node_types.map(&:downcase)
           }
-          if node_type.is_a?(Array)
-            node_type.each do |nt|
-              result[nt.downcase] = nodes_by_year_summary_for_indicator(
-                nt, years, buckets, @volume_attribute
-              )
-            end
-          else
-            result = result.merge(
-              nodes_by_year_summary_for_indicator(
-                node_type, years, buckets, @volume_attribute
-              )
+
+          node_types.each do |nt|
+            result[nt.downcase] = nodes_by_year_summary_for_indicator(
+              nt, years, buckets, @volume_attribute
             )
           end
+
           result
         end
 
