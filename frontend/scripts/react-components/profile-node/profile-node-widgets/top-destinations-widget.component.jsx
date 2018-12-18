@@ -18,18 +18,21 @@ class TopDestinationsWidget extends React.PureComponent {
   getActiveTabProps(data) {
     const { activeTabIndex } = this.state;
 
-    const activeTab = data.tabs[activeTabIndex];
+    const tabs = [...data.tabs].reverse();
+    const activeTab = tabs[activeTabIndex];
     const linesData = data[activeTab];
     const { includedYears, buckets } = data;
     const { lines, style, unit } = linesData;
+
     return {
-      includedYears,
+      tabs,
+      unit,
       lines,
       style,
-      unit,
-      profileType: linesData.profile_type,
       buckets,
-      activeTab
+      activeTab,
+      includedYears,
+      profileType: linesData.profile_type
     };
   }
 
@@ -77,7 +80,8 @@ class TopDestinationsWidget extends React.PureComponent {
             profileType,
             style,
             buckets,
-            activeTab
+            activeTab,
+            tabs
           } = this.getActiveTabProps(data[mainQuery]);
 
           if (!lines || lines.length === 0) {
@@ -93,7 +97,7 @@ class TopDestinationsWidget extends React.PureComponent {
                   <TopDestinationsChart
                     height={250}
                     type={type}
-                    tabs={data[mainQuery].tabs}
+                    tabs={tabs}
                     onChangeTab={this.updateTab}
                     onLinkClick={onLinkClick}
                     contextId={contextId}
