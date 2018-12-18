@@ -11,6 +11,7 @@ module Api
         @s3.bucket(@bucket_name).objects.map do |obj|
           {
             name: obj.key,
+            key: obj.key.match(/^(\w| )*/).to_s,
             url: obj.presigned_url(:get),
             time: obj.last_modified.strftime('%d-%m-%Y %H:%M:%S')
           }

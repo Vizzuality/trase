@@ -3,8 +3,13 @@ ActiveAdmin.register_page 'Database Export' do
 
   content do
     database_versions = Api::V3::S3ObjectList.instance.call
+    keys = database_versions.map { |n| n[:key] }.uniq
+
+    database_versions.keep_if { |v| v[:key].eql? params[:key] } if params[:key].present?
+
     render partial: 'admin/database_export/form', locals: {
-      database_versions: database_versions
+      database_versions: database_versions,
+      keys: keys
     }
   end
 
