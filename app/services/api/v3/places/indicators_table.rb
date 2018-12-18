@@ -31,7 +31,7 @@ module Api
           parent_chart_config = initialize_chart_config(
             :place, nil, :place_indicators_table
           )
-          parent_chart_config.chart.children.each do |chart|
+          parent_chart_config.chart.children.map do |chart|
             chart_config = initialize_chart_config(
               :place, :place_indicators_table, chart.identifier
             )
