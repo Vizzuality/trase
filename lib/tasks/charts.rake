@@ -109,6 +109,11 @@ namespace :charts do
       title: options[:title]
     )
     unless chart.valid?
+      Api::V3::Chart.all.each do |chart|
+        puts chart.inspect
+      end
+      puts profile.inspect
+      puts profile.context_node_type.context.inspect
       puts chart.errors.inspect
       exit(1)
     end
