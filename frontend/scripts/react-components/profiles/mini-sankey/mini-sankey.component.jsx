@@ -59,7 +59,7 @@ class MiniSankey extends Component {
       (total, node) => total + Math.ceil(node.height * BASE_HEIGHT) + NODE_V_SPACE,
       0
     );
-    const startY = totalHeight / 2 - BASE_HEIGHT / 2;
+    const startY = totalHeight / 2 - (BASE_HEIGHT + NODE_V_SPACE) / 2;
 
     const isSmallResolution = width < MEDIUM_RES;
     const nodeWidth = isSmallResolution ? NODE_WIDTH_SMALL : NODE_WIDTH;
@@ -97,6 +97,7 @@ class MiniSankey extends Component {
           ty: currentEndNodeY,
           value: node.value
         };
+
         currentStartNodeY += n.renderedHeight;
         currentEndNodeY += n.renderedHeight + NODE_V_SPACE;
         return n;
