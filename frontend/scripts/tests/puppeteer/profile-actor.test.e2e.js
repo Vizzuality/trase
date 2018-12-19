@@ -62,7 +62,7 @@ describe('Profile actor - Full data', () => {
     );
 
     expect(hasLegend).toBe(true);
-    expect(coloredMapPolygons.length).toBe(32);
+    expect(coloredMapPolygons.length).toBe(25);
   });
 
   it('Top sourcing regions chart loads successfully', async () => {

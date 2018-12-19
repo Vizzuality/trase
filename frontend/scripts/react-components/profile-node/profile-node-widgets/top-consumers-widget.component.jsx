@@ -84,12 +84,15 @@ class TopConsumersWidget extends React.PureComponent {
             <section className="mini-sankey-container page-break-inside-avoid" data-test={testId}>
               <div className="row">
                 <div className="small-12 columns">
-                  <Heading as="h3" size="sm" data-test={`${testId}-title`}>
+                  <Heading
+                    variant="mono"
+                    weight="bold"
+                    as="h3"
+                    size="sm"
+                    data-test={`${testId}-title`}
+                  >
                     {this.getTitle(jurisdictionName)}
                   </Heading>
-                  <h3 className="title -small" data-test={`${testId}-title`}>
-                    {this.getTitle(jurisdictionName)}
-                  </h3>
                   <TranslatedMiniSankey
                     year={year}
                     data={data[mainQuery]}
