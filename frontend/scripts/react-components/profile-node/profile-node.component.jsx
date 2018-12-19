@@ -6,6 +6,7 @@ import DeforestationWidget from 'react-components/profile-node/profile-node-widg
 import TopConsumersWidget from 'react-components/profile-node/profile-node-widgets/top-consumers-widget.component';
 import ImportingCompaniesWidget from 'react-components/profile-node/profile-node-widgets/importing-companies-widget.component';
 import TopDestinationsWidget from 'react-components/profile-node/profile-node-widgets/top-destinations-widget.component';
+import GfwWidget from 'react-components/profile-node/profile-node-widgets/gfw-widget.component';
 import { smoothScroll } from 'utils/smoothScroll';
 
 class ProfileNode extends React.PureComponent {
@@ -145,21 +146,14 @@ class ProfileNode extends React.PureComponent {
               type="place"
               commodityName={context.commodityName}
             />
+            <GfwWidget
+              year={year}
+              nodeId={nodeId}
+              contextId={context.id}
+              profileType={profileType}
+            />
           </React.Fragment>
         )}
-        <section className="mini-sankey-container">
-          <div className="row align-center">
-            <div className="column small-10">
-              <iframe
-                title="gfw integration"
-                width="100%"
-                height="500"
-                frameBorder="0"
-                src="http://staging.globalforestwatch.org/embed/dashboards/global/?widget=treeLossGlobal&gfw=true"
-              />
-            </div>
-          </div>
-        </section>
       </div>
     );
   }
