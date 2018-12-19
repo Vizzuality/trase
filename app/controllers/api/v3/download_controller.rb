@@ -8,13 +8,13 @@ module Api
           format.csv do
             send_data download.zipped_csv,
                       type: 'application/zip',
-                      filename: "#{download.download_name}.zip",
+                      filename: download.filename,
                       disposition: 'attachment'
           end
           format.json do
             send_data download.zipped_json,
                       type: 'application/zip',
-                      filename: "#{download.download_name}.zip",
+                      filename: download.filename,
                       disposition: 'attachment'
           end
         end

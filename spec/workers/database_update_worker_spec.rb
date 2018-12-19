@@ -7,6 +7,12 @@ RSpec.describe DatabaseUpdateWorker, type: :worker do
     FactoryBot.create(:api_v3_database_update)
   }
 
+  before do
+    allow(
+      Api::V3::Download::PrecomputedDownload
+    ).to receive(:refresh)
+  end
+
   context "When processing a successful database import" do
     before do
       allow_any_instance_of(

@@ -26,6 +26,7 @@
 !/log/.keep
 !/tmp/.keep
 
+/public/downloads
 /public/system
 /public/urls.txt
 

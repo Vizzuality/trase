@@ -3,6 +3,12 @@ require 'rails_helper'
 RSpec.describe Api::V3::Download::FlowDownloadFlatQuery do
   include_context 'api v3 brazil two flows'
 
+  before do
+    allow(
+      Api::V3::Download::PrecomputedDownload
+    ).to receive(:refresh)
+  end
+
   before(:each) do
     Api::V3::Readonly::DownloadFlow.refresh(sync: true)
   end

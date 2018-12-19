@@ -57,6 +57,7 @@ end
 after 'deploy:starting', 'sidekiq:quiet'
 after 'deploy:reverted', 'sidekiq:restart'
 after 'deploy:published', 'sidekiq:restart'
+after 'sidekiq:restart', 'downloads:refresh'
 
 namespace :npm do
   after 'npm:install', 'npm:build'
@@ -66,6 +67,29 @@ namespace :npm do
       within fetch(:npm_target_path, release_path) do
         with fetch(:npm_env_variables, {}) do
           execute :npm, 'run build'
+        end
+      end
+    end
+  end
+end
+
+namespace :downloads do
+  desc 'Clear pre-computed bulk downloads'
+  task :clear do
+    on roles(:app) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, 'downloads:clear'
+        end
+      end
+    end
+  end
+  desc 'Refresh pre-computed bulk downloads in a background job'
+  task :refresh do
+    on roles(:app) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, 'downloads:refresh_later'
         end
       end
     end
