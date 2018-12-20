@@ -44,7 +44,7 @@ function GfwWidget(props) {
                     width="100%"
                     height="510"
                     frameBorder="0"
-                    src={`//0.0.0.0:5000/embed/dashboards/country/${path}?widget=treeLoss&trase=true`}
+                    src={`//${GFW_WIDGETS_BASE_URL}/embed/dashboards/country/${path}?widget=treeLoss&trase=true`}
                   />
                 </div>
               </div>
@@ -57,7 +57,7 @@ function GfwWidget(props) {
                     width="100%"
                     height="510"
                     frameBorder="0"
-                    src={`//0.0.0.0:5000/embed/dashboards/country/${path}?widget=gladAlerts&trase=true`}
+                    src={`//${GFW_WIDGETS_BASE_URL}/embed/dashboards/country/${path}?widget=gladAlerts&trase=true`}
                   />
                 </div>
               </div>
