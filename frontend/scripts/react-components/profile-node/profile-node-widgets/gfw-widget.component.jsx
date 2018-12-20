@@ -5,7 +5,7 @@ import { GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 import camelCase from 'lodash/camelCase';
 
 function GfwWidget(props) {
-  const { year, nodeId, contextId, profileType } = props;
+  const { year, nodeId, contextId, profileType, renderIframes } = props;
   const params = { node_id: nodeId, context_id: contextId, profile_type: profileType, year };
   const GADM_DICTIONARY_URL = '/BRAZIL_GADM_GEOID.json';
   return (
@@ -21,7 +21,7 @@ function GfwWidget(props) {
           return null;
         }
 
-        if (loading) {
+        if (loading || !renderIframes) {
           return null;
         }
 
@@ -73,6 +73,7 @@ GfwWidget.propTypes = {
   year: PropTypes.number,
   nodeId: PropTypes.number,
   contextId: PropTypes.number,
+  renderIframes: PropTypes.bool,
   profileType: PropTypes.string
 };
 
