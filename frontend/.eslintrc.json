@@ -69,6 +69,7 @@
     "USE_PLAIN_URL_STATE": true,
     "USE_SERVICE_WORKER": true,
     "NAMED_MAPS_ENV": true,
+    "GFW_WIDGETS_BASE_URL": true,
     "ga": true,
     "fetch": true
   },

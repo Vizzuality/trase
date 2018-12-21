@@ -12,7 +12,8 @@ import {
   SET_CONTEXT_IS_USER_SELECTED,
   SET_CONTEXT,
   LOAD_INITIAL_CONTEXT,
-  LOAD_STATE_FROM_URL
+  LOAD_STATE_FROM_URL,
+  APP__SET_LOADING
 } from 'actions/app.actions';
 import createReducer from 'utils/createReducer';
 
@@ -35,7 +36,11 @@ const initialState = {
   },
   selectedContext: null,
   initialSelectedContextIdFromURL: null, // IMPORTANT: this should only be used to load context by id from the URL
-  contexts: []
+  contexts: [],
+  loading: {
+    contexts: false,
+    tooltips: false
+  }
 };
 
 const isSankeyExpanded = state => state.isMapLayerVisible !== true && state.isMapVisible !== true;
@@ -59,7 +64,7 @@ const appReducer = {
     return Object.assign({}, state, { tooltipCheck: (state.tooltipCheck || 0) + 1 });
   },
   [SET_TOOLTIPS](state, action) {
-    return Object.assign({}, state, { tooltips: action.payload });
+    return { ...state, tooltips: action.payload, loading: { ...state.loading, tooltips: false } };
   },
   [SHOW_DISCLAIMER](state, action) {
     return Object.assign({}, state, {
@@ -92,7 +97,7 @@ const appReducer = {
     };
   },
   [SET_CONTEXTS](state, action) {
-    return Object.assign({}, state, { contexts: action.payload });
+    return { ...state, contexts: action.payload, loading: { ...state.loading, contexts: false } };
   },
   [SET_CONTEXT_IS_USER_SELECTED](state, action) {
     return Object.assign({}, state, { contextIsUserSelected: action.payload });
@@ -110,6 +115,11 @@ const appReducer = {
     return Object.assign({}, state, {
       selectedContext
     });
+  },
+  [APP__SET_LOADING](state, action) {
+    const { contexts: contextsLoading, tooltips: tooltipsLoading } = state.loading;
+    const { contexts = contextsLoading, tooltips = tooltipsLoading } = action.payload;
+    return { ...state, loading: { contexts, tooltips } };
   }
 };
 

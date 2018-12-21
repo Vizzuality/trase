@@ -45,7 +45,7 @@ function DeforestationWidget(props) {
           <section className="deforestation page-break-inside-avoid">
             <div className="row">
               <div className="small-12 columns">
-                <Heading size="sm" data-test={`${testId}-title`}>
+                <Heading variant="mono" weight="bold" size="sm" data-test={`${testId}-title`}>
                   Deforestation trajectory of{' '}
                   <span className="notranslate">{data[GET_NODE_SUMMARY_URL].municipalityName}</span>
                 </Heading>
