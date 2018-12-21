@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Widget from 'react-components/widgets/widget.component';
 import { GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 import camelCase from 'lodash/camelCase';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 
 function GfwWidget(props) {
   const { year, nodeId, contextId, profileType, renderIframes } = props;
@@ -22,7 +23,16 @@ function GfwWidget(props) {
         }
 
         if (loading || !renderIframes) {
-          return null;
+          return (
+            <React.Fragment>
+              <div className="spinner-section">
+                <ShrinkingSpinner className="-large" />
+              </div>
+              <div className="spinner-section">
+                <ShrinkingSpinner className="-large" />
+              </div>
+            </React.Fragment>
+          );
         }
 
         // TODO: update this when merging with configurable profile pages
@@ -36,7 +46,7 @@ function GfwWidget(props) {
 
         return (
           <React.Fragment>
-            <section className="mini-sankey-container">
+            <section className="gfw-widget-container">
               <div className="row align-center">
                 <div className="column small-10">
                   <iframe
@@ -49,7 +59,7 @@ function GfwWidget(props) {
                 </div>
               </div>
             </section>
-            <section className="mini-sankey-container">
+            <section className="gfw-widget-container">
               <div className="row align-center">
                 <div className="column small-10">
                   <iframe
