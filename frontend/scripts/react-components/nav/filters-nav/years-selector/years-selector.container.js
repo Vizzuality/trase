@@ -2,28 +2,10 @@ import { connect } from 'react-redux';
 import { toggleDropdown } from 'actions/app.actions';
 import { selectYears } from 'actions/tool.actions';
 import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.component';
-import intersection from 'lodash/intersection';
+import { getToolYearsProps } from 'react-components/nav/filters-nav/filters-nav.selectors';
 
 const mapStateToProps = state => {
-  const { selectedResizeBy, selectedRecolorBy, selectedYears } = state.tool;
-  const { selectedContext } = state.app;
-
-  const availableContextYears = selectedContext.years;
-  const availableResizeByYears =
-    selectedResizeBy.years && selectedResizeBy.years.length > 0
-      ? selectedResizeBy.years
-      : availableContextYears;
-  const availableRecolorByYears =
-    selectedRecolorBy.years && selectedRecolorBy.years.length > 0
-      ? selectedRecolorBy.years
-      : availableContextYears;
-
-  const years = intersection(
-    availableContextYears,
-    availableResizeByYears,
-    availableRecolorByYears
-  );
-
+  const { years, selectedYears } = getToolYearsProps(state);
   return {
     years,
     selectedYears,

@@ -17,6 +17,8 @@ import { NavLink } from 'redux-first-router-link';
 import 'scripts/react-components/nav/filters-nav/filters-nav.scss';
 import 'scripts/react-components/nav/filters-nav/burger.scss';
 
+const FILTERS = [ContextSelector, YearsSelector, null, RecolorBySelector];
+
 class FiltersNav extends React.PureComponent {
   state = {
     menuOpen: false
@@ -26,15 +28,20 @@ class FiltersNav extends React.PureComponent {
 
   renderMenuButton = () => {
     const { menuOpen } = this.state;
-    return menuOpen ? (
-      <button className="c-burger open" onClick={this.toggleMenu}>
+    const content = menuOpen ? (
+      <div className="c-burger open">
         <span className="ingredient" />
         <span className="ingredient" />
         <span className="ingredient" />
-      </button>
+      </div>
     ) : (
-      <button className="filters-nav-item-logo" onClick={this.toggleMenu}>
+      <div className="filters-nav-item-logo">
         <img src="/images/logos/logo-trase-small-beta.svg" alt="TRASE" />
+      </div>
+    );
+    return (
+      <button className="filters-nav-item -no-padding" onClick={this.toggleMenu} type="button">
+        {content}
       </button>
     );
   };
@@ -77,12 +84,12 @@ class FiltersNav extends React.PureComponent {
     const { links, filters } = this.props;
     const restOfLinks = links.slice(2);
     const decoratedLinks = [{ name: 'Home', page: { type: 'home' } }, ...links];
-    const navLinks = filters.toolLinks ? restOfLinks : decoratedLinks;
+    const navLinks = filters.showToolLinks ? restOfLinks : decoratedLinks;
 
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
-          {filters.toolLinks && this.renderInToolLinks()}
+          {filters.showToolLinks && this.renderInToolLinks()}
           <ul className="filters-nav-submenu-list">
             <NavLinksList
               links={navLinks}
@@ -102,31 +109,43 @@ class FiltersNav extends React.PureComponent {
     );
   };
 
-  renderMenuClosed = () => {
-    const { selectedContext, filters, selectContexts } = this.props;
-    // TODO: refactor this so that the rendered filters aren't connected to redux
-    // Them being connected makes it hard to reuse without changing stuff in other pages
+  renderMenuClosed = () => (
+    <React.Fragment>
+      {this.renderLeftSection()}
+      {this.renderRightSection()}
+    </React.Fragment>
+  );
+
+  renderLeftSection = () => {
+    const {
+      filters: { left = [] }
+    } = this.props;
     return (
-      <React.Fragment>
-        <div className="filters-nav-left-section">
-          {filters.contextSelector && (
-            <ContextSelector
-              className="filters-nav-item"
-              selectedContext={selectedContext}
-              selectContexts={selectContexts}
-            />
-          )}
-          {filters.adminLevel && <AdminLevelFilter className="filters-nav-item" />}
-          {filters.year && <YearsSelector className="filters-nav-item" />}
-          {filters.yearsDropdown && <YearsDropdownSelector className="filters-nav-item" />}
-        </div>
-        <div className="filters-nav-right-section">
-          {filters.resizeBy && <ResizeBySelector className="filters-nav-item" />}
-          {filters.recolorBy && <RecolorBySelector className="filters-nav-item" />}
-          {filters.viewSelector && <ViewSelector className="filters-nav-item" />}
-          {filters.toolSearch && <ToolSearch className="filters-nav-item -no-padding" />}
-        </div>
-      </React.Fragment>
+      <div className="filters-nav-left-section">
+        {left.map(filter =>
+          React.createElement(FILTERS[filter.type], {
+            className: 'filters-nav-item',
+            ...filter.props
+          })
+        )}
+      </div>
+    );
+  };
+
+  renderRightSection = () => {
+    const {
+      filters: { right = [], showSearch }
+    } = this.props;
+    return (
+      <div className="filters-nav-left-section">
+        {right.map(filter =>
+          React.createElement(FILTERS[filter.type], {
+            className: 'filters-nav-item',
+            ...filter.props
+          })
+        )}
+        {showSearch && <ToolSearch className="filters-nav-item -no-padding" />}
+      </div>
     );
   };
 
@@ -134,7 +153,7 @@ class FiltersNav extends React.PureComponent {
     const { menuOpen } = this.state;
     return (
       <div className="c-filters-nav">
-        <div className="filters-nav-item -no-padding">{this.renderMenuButton()}</div>
+        {this.renderMenuButton()}
         <div className="filters-nav-section-container">
           {menuOpen ? this.renderMenuOpened() : this.renderMenuClosed()}
         </div>
@@ -147,8 +166,6 @@ FiltersNav.propTypes = {
   openMap: PropTypes.func,
   openSankey: PropTypes.func,
   isMapVisible: PropTypes.bool,
-  selectContexts: PropTypes.func,
-  selectedContext: PropTypes.object,
   links: PropTypes.array.isRequired,
   filters: PropTypes.object.isRequired
 };
