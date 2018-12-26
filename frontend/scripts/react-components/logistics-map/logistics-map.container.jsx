@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   getLogisticsMapLayers,
-  getActiveLayers
+  getActiveLayers,
+  getActiveParams
 } from 'react-components/logistics-map/logistics-map.selectors';
 import { setLayerActive as setLayerActiveFn } from 'react-components/logistics-map/logistics-map.actions';
 import LogisticsMap from 'react-components/logistics-map/logistics-map.component';
@@ -92,7 +93,7 @@ class LogisticsMapContainer extends React.PureComponent {
 const mapStateToProps = state => ({
   activeLayers: getActiveLayers(state),
   layers: getLogisticsMapLayers(state),
-  activeYear: state.logisticsMap.activeYear,
+  activeYear: getActiveParams(state).year,
   selectedContext: state.app.selectedContext
 });
 

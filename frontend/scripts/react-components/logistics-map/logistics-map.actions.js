@@ -1,12 +1,32 @@
-export const LOGISTICS_MAP__SET_SELECTED_YEAR = 'LOGISTICS_MAP__SET_SELECTED_YEAR';
-export const LOGISTICS_MAP__SET_LAYER_ACTIVE = 'LOGISTICS_MAP__SET_LAYER_ACTIVE';
+import { redirect } from 'redux-first-router';
 
-export const selectLogisticsMapYear = year => ({
-  type: LOGISTICS_MAP__SET_SELECTED_YEAR,
-  payload: { selectedYear: year }
-});
+export const selectLogisticsMapYear = year => (dispatch, getState) => {
+  const { query = {} } = getState().location;
+  return dispatch(
+    redirect({
+      type: 'logisticsMap',
+      payload: { query: { ...query, year } }
+    })
+  );
+};
 
-export const setLayerActive = (layerId, active) => ({
-  type: LOGISTICS_MAP__SET_LAYER_ACTIVE,
-  payload: { layerId, active }
-});
+export const setLayerActive = (layerId, active) => (dispatch, getState) => {
+  const { query = {} } = getState().location;
+  const { layers = [] } = query;
+  let newLayers;
+
+  if (active) {
+    newLayers = [...layers, layerId];
+  } else {
+    newLayers = layers.filter(l => l !== layerId);
+  }
+  return dispatch({
+    type: 'logisticsMap',
+    payload: {
+      query: {
+        ...query,
+        layers: newLayers
+      }
+    }
+  });
+};

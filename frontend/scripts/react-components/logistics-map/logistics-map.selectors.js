@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect';
 
 const getSelectedContext = state => state.app.selectedContext;
-const getSelectedYear = state => state.logisticsMap.selectedYear;
-const getLayersStatus = state => state.logisticsMap.layersStatus;
+const getSelectedYear = state => (state.location.query && state.location.query.year) || 2016;
+const getActiveLayersIds = state => (state.location.query && state.location.query.layers) || [];
 
 const MARKERS_URL =
   'https://raw.githubusercontent.com/Vizzuality/trase/feat/logistics-map/frontend/public/images/logistics-map';
@@ -131,14 +131,14 @@ const templates = [
   }
 ];
 
-const getActiveParams = createSelector(
+export const getActiveParams = createSelector(
   [getSelectedYear, getSelectedContext],
   (year, context) => ({ year, context })
 );
 
 export const getLogisticsMapLayers = createSelector(
-  [getLayersStatus, getActiveParams],
-  (status, activeParams) =>
+  [getActiveLayersIds, getActiveParams],
+  (layersIds, activeParams) =>
     templates
       .filter(
         template =>
@@ -148,7 +148,7 @@ export const getLogisticsMapLayers = createSelector(
         name: template.name,
         opacity: 1,
         id: template.name,
-        active: !!status[template.name],
+        active: layersIds.includes(template.name),
         type: 'layer',
         provider: 'carto',
         color: template.color,
@@ -173,6 +173,6 @@ export const getLogisticsMapLayers = createSelector(
 );
 
 export const getActiveLayers = createSelector(
-  [getLayersStatus, getLogisticsMapLayers],
-  (status, layers) => layers.filter(layer => !!status[layer.name])
+  [getActiveLayersIds, getLogisticsMapLayers],
+  (layersIds, layers) => layers.filter(layer => !!layersIds.includes(layer.name))
 );
