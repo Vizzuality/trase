@@ -60,15 +60,66 @@ const templates = [
   },
   {
     version: '0.0.1',
-    name: 'slaughterhouses',
+    name: 'unconfirmed_slaughterhouse_multifunctional_facility',
     commodityName: 'BEEF',
     layers: [
       {
         type: 'cartodb',
         options: {
-          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18`,
+          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'UNCONFIRMED SLAUGHTERHOUSE (MULTIFUNCTIONAL FACILITY)'`,
           cartocss:
-            '#layer { marker-width: 7; marker-fill: ramp([subclass], (#66C5CC, #F6CF71, #F89C74, #DCB0F2, #B3B3B3), ("UNCONFIRMED SLAUGHTERHOUSE (MULTIFUNCTIONAL FACILITY)", "PROBABLE SLAUGHTERHOUSE", "CONFIRMED SLAUGHTERHOUSE", "UNCONFIRMED SLAUGHTERHOUSE"), "="); marker-fill-opacity: 1; marker-allow-overlap: true; marker-line-width: 1; marker-line-color: #FFFFFF; marker-line-opacity: 1; }',
+            '#layer { marker-width: 7; marker-fill: #66C5CC; marker-fill-opacity: 1; marker-allow-overlap: true; marker-line-width: 1; marker-line-color: #FFFFFF; marker-line-opacity: 1; }',
+          cartocss_version: '2.3.0',
+          interactivity: ['company', 'state', 'municipality', 'subclass', 'inspection_level']
+        }
+      }
+    ]
+  },
+  {
+    version: '0.0.1',
+    name: 'confirmed_slaughterhouse',
+    commodityName: 'BEEF',
+    layers: [
+      {
+        type: 'cartodb',
+        options: {
+          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'CONFIRMED SLAUGHTERHOUSE'`,
+          cartocss:
+            '#layer { marker-width: 7; marker-fill: #F89C74; marker-fill-opacity: 1; marker-allow-overlap: true; marker-line-width: 1; marker-line-color: #FFFFFF; marker-line-opacity: 1; }',
+          cartocss_version: '2.3.0',
+          interactivity: ['company', 'state', 'municipality', 'subclass', 'inspection_level']
+        }
+      }
+    ]
+  },
+  {
+    version: '0.0.1',
+    name: 'probable_slaughterhouse',
+    commodityName: 'BEEF',
+    layers: [
+      {
+        type: 'cartodb',
+        options: {
+          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'PROBABLE SLAUGHTERHOUSE'`,
+          cartocss:
+            '#layer { marker-width: 7; marker-fill: #F6CF71; marker-fill-opacity: 1; marker-allow-overlap: true; marker-line-width: 1; marker-line-color: #FFFFFF; marker-line-opacity: 1; }',
+          cartocss_version: '2.3.0',
+          interactivity: ['company', 'state', 'municipality', 'subclass', 'inspection_level']
+        }
+      }
+    ]
+  },
+  {
+    version: '0.0.1',
+    name: 'unconfirmed_slaughterhouse',
+    commodityName: 'BEEF',
+    layers: [
+      {
+        type: 'cartodb',
+        options: {
+          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'UNCONFIRMED SLAUGHTERHOUSE'`,
+          cartocss:
+            '#layer { marker-width: 7; marker-fill: #DCB0F2; marker-fill-opacity: 1; marker-allow-overlap: true; marker-line-width: 1; marker-line-color: #FFFFFF; marker-line-opacity: 1; }',
           cartocss_version: '2.3.0',
           interactivity: ['company', 'state', 'municipality', 'subclass', 'inspection_level']
         }
