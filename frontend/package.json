@@ -116,7 +116,7 @@
     "downshift": "2.0.16",
     "find-parent": "^2.0.2",
     "highlight-words-core": "^1.2.0",
-    "layer-manager": "^1.13.2",
+    "layer-manager": "^1.13.4",
     "leaflet": "1.3.3",
     "leaflet-utfgrid": "^0.3.0",
     "lodash": "^4.17.11",

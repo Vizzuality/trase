@@ -11,6 +11,7 @@
   margin-right: 17px;
   cursor: pointer;
   appearance: none;
+  flex-shrink: 0;
 
   &:after {
     content: '';

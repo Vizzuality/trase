@@ -11,7 +11,7 @@ const initialState = {
     .map((year, index) => year - index),
   layersStatus: {
     crushing_facilities: true,
-    slaughterhouses: true
+    confirmed_slaughterhouse: true
   }
 };
 
