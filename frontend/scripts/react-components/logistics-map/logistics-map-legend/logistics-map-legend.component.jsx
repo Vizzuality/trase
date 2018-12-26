@@ -33,6 +33,7 @@ class LogisticsMapLegend extends React.PureComponent {
               <Text>{startCase(layer.name)}</Text>
               <Toggle
                 id={layer.id}
+                color={layer.color}
                 checked={layer.active}
                 onChange={e => setLayerActive(layer.id, e.target.checked)}
               />
