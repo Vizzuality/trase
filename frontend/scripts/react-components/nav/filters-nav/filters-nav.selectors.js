@@ -1,42 +1,76 @@
 import { createSelector } from 'reselect';
-import { LOGISTICS_MAP_CONTEXTS } from 'constants';
+import intersection from 'lodash/intersection';
+
+const FILTERS = {
+  contextSelector: 0,
+  yearSelector: 1,
+  dropdownSelector: 2,
+  recolorBySelector: 3
+};
 
 const getCurrentPage = state => state.location.type;
 const getSelectedContext = state => state.app.selectedContext;
-const getContextIsUserSelected = state => state.app.contextIsUserSelected;
+const getToolSelectedYears = state => state.tool.selectedYears;
+const getToolResizeBy = state => state.tool.selectedResizeBy;
+const getToolRecolorBy = state => state.tool.selectedRecolorBy;
 
-// TODO: refactor filters nav to receive all filters props from the filters-nav.container.js
-// The implementation of the component should paint dumb components,
-// as of now each filter is connected which makes them hard to reutilize
-export const getNavFilters = createSelector(
-  [getCurrentPage, getSelectedContext, getContextIsUserSelected],
-  (page, selectedContext, contextIsUserSelected) => {
-    const isToolPage = page === 'tool';
-    const isLogisticsMapPage = page === 'logisticsMap';
-    const navDisplaysContext = selectedContext && (contextIsUserSelected || isToolPage);
-    return {
-      toolLinks: isToolPage,
-      toolSearch: isToolPage,
-      year: navDisplaysContext && !isLogisticsMapPage,
-      contextSelector: navDisplaysContext,
-      yearsDropdown: page === 'logisticsMap', // TODO: tech-debt the idea is to remove this too!
-      resizeBy: selectedContext && isToolPage,
-      recolorBy: selectedContext && isToolPage,
-      adminLevel: selectedContext && isToolPage,
-      viewSelector: selectedContext && isToolPage
-    };
+export const getToolYearsProps = createSelector(
+  [getToolSelectedYears, getToolResizeBy, getToolRecolorBy, getSelectedContext],
+  (selectedYears, selectedResizeBy, selectedRecolorBy, selectedContext) => {
+    const availableContextYears = selectedContext && selectedContext.years;
+    const availableResizeByYears =
+      selectedResizeBy.years && selectedResizeBy.years.length > 0
+        ? selectedResizeBy.years
+        : availableContextYears;
+    const availableRecolorByYears =
+      selectedRecolorBy.years && selectedRecolorBy.years.length > 0
+        ? selectedRecolorBy.years
+        : availableContextYears;
+
+    const years = intersection(
+      availableContextYears,
+      availableResizeByYears,
+      availableRecolorByYears
+    );
+
+    return { years, selectedYears };
   }
 );
 
-export const getContextsForLogisticsMap = createSelector(
-  [getCurrentPage],
-  page => {
-    if (page === 'logisticsMap') {
-      return contexts =>
-        contexts.filter(ctx =>
-          LOGISTICS_MAP_CONTEXTS.includes(`${ctx.countryName}_${ctx.commodityName}`)
-        );
+export const getNavFilters = createSelector(
+  [getCurrentPage, getSelectedContext],
+  (page, selectedContext) => {
+    switch (page) {
+      case 'tool':
+        return {
+          showSearch: true,
+          showToolLinks: true,
+          left: [
+            { type: FILTERS.contextSelector, props: { selectedContext, key: 'contextSelector' } },
+            // { type: FILTERS.dropdownSelector },
+            {
+              type: FILTERS.yearSelector,
+              props: { key: 'yearsSelector' }
+            }
+          ],
+          right: [
+            // { type: FILTERS.dropdownSelector },
+            { type: FILTERS.recolorBySelector, props: { key: 'recolorBySelector' } }
+            // { type: FILTERS.dropdownSelector, props: { key: 'viewSelector' }  },
+          ]
+        };
+      case 'explore':
+        return {
+          left: [
+            { type: FILTERS.contextSelector, props: { selectedContext, key: 'contextSelector' } },
+            {
+              type: FILTERS.yearSelector,
+              props: { key: 'yearsSelector' }
+            }
+          ]
+        };
+      default:
+        return {};
     }
-    return undefined;
   }
 );

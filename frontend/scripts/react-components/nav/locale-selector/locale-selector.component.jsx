@@ -10,9 +10,14 @@ const { Transifex } = window;
 class LocaleSelector extends React.Component {
   constructor(props) {
     super(props);
+    let defaultLanguage = null;
+    if (typeof Transifex !== 'undefined') {
+      const code = Transifex.live.detectLanguage();
+      defaultLanguage = { code };
+    }
     this.state = {
       languages: [],
-      defaultLanguage: null
+      defaultLanguage
     };
 
     this.onSelectLang = this.onSelectLang.bind(this);
@@ -57,8 +62,9 @@ class LocaleSelector extends React.Component {
     } else {
       defaultLanguage = languages.find(lang => lang.source);
     }
-
-    this.setState({ defaultLanguage });
+    if (defaultLanguage !== this.state.defaultLanguage) {
+      this.setState({ defaultLanguage });
+    }
   }
 
   setLanguages() {
