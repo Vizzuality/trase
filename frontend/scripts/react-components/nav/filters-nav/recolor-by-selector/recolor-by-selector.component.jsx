@@ -85,8 +85,8 @@ class RecolorBySelector extends Component {
   }
 
   getRecolorByElements() {
-    const { currentDropdown } = this.props;
-    if (currentDropdown !== 'recolor-by') {
+    const { currentDropdown, id } = this.props;
+    if (currentDropdown !== id) {
       return null;
     }
 
@@ -138,9 +138,7 @@ class RecolorBySelector extends Component {
       selectedRecolorBy,
       recolorBys
     } = this.props;
-
     const hasZeroOrSingleElement = recolorBys.length < 1;
-
     return (
       <div className={cx('js-dropdown', className)} onClick={() => onToggle(id)}>
         <div

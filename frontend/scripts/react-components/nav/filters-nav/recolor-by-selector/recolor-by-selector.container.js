@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { toggleDropdown } from 'actions/app.actions';
 import { selectRecolorBy } from 'actions/tool.actions';
 import RecolorBySelector from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.component';
 
@@ -11,9 +10,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onToggle: id => {
-    dispatch(toggleDropdown(id));
-  },
   onSelected: recolorBy => {
     recolorBy.value = recolorBy.name;
     dispatch(selectRecolorBy(recolorBy));
