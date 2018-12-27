@@ -41,15 +41,13 @@ class LogisticsMapContainer extends React.PureComponent {
       storage_facilities: 'Silo',
       slaughterhouses: 'Slaughterhouse'
     }[layer.name];
-    const commodity = selectedContext.commodityName;
     const items = [
       { title: 'Company', value: data.company },
       { title: 'Municipality', value: data.municipality }
     ];
-
-    if (commodity === 'SOY') {
+    if (selectedContext === 'soy') {
       items.push({
-        title: `Production of ${commodity}`,
+        title: `Production of ${selectedContext}`,
         value: formatValue(data.capacity, 'Trade volume'),
         unit: 't'
       });
@@ -74,7 +72,7 @@ class LogisticsMapContainer extends React.PureComponent {
   };
 
   render() {
-    const { activeLayers, layers, setLayerActive } = this.props;
+    const { activeLayers, layers, setLayerActive, selectedContext } = this.props;
     const { mapPopUp } = this.state;
     return (
       <LogisticsMap
@@ -84,18 +82,22 @@ class LogisticsMapContainer extends React.PureComponent {
         activeLayers={activeLayers}
         buildEvents={this.buildEvents}
         setLayerActive={setLayerActive}
+        selectedContext={selectedContext}
         getCurrentPopUp={this.getCurrentPopUp}
       />
     );
   }
 }
 
-const mapStateToProps = state => ({
-  activeLayers: getActiveLayers(state),
-  layers: getLogisticsMapLayers(state),
-  activeYear: getActiveParams(state).year,
-  selectedContext: state.app.selectedContext
-});
+const mapStateToProps = state => {
+  const { year: activeYear, context: selectedContext } = getActiveParams(state);
+  return {
+    activeYear,
+    selectedContext,
+    activeLayers: getActiveLayers(state),
+    layers: getLogisticsMapLayers(state)
+  };
+};
 
 const mapDispatchToProps = {
   setLayerActive: setLayerActiveFn

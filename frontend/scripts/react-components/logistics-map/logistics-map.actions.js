@@ -1,14 +1,18 @@
 import { redirect } from 'redux-first-router';
 
-export const selectLogisticsMapYear = year => (dispatch, getState) => {
+const updateQueryParams = params => (dispatch, getState) => {
   const { query = {} } = getState().location;
   return dispatch(
     redirect({
       type: 'logisticsMap',
-      payload: { query: { ...query, year } }
+      payload: { query: { ...query, ...params } }
     })
   );
 };
+
+export const selectLogisticsMapYear = year => updateQueryParams({ year });
+
+export const selectLogisticsMapContext = context => updateQueryParams({ context, layers: [] });
 
 export const setLayerActive = (layerId, active) => (dispatch, getState) => {
   const { query = {} } = getState().location;

@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 import intersection from 'lodash/intersection';
+import { getActiveParams } from 'react-components/logistics-map/logistics-map.selectors';
+import { LOGISTICS_MAP_YEARS, LOGISTICS_MAP_CONTEXTS } from 'constants';
 
 const FILTERS = {
   contextSelector: 0,
@@ -37,16 +39,36 @@ export const getToolYearsProps = createSelector(
   }
 );
 
+const getLogisticsMapYearsProps = createSelector(
+  [getActiveParams],
+  activeParams => ({
+    label: 'Year',
+    id: 'logisticsMapYear',
+    items: LOGISTICS_MAP_YEARS,
+    selectedItem: LOGISTICS_MAP_YEARS.find(year => year.id === activeParams.year)
+  })
+);
+
+const getLogisticsMapContextProps = createSelector(
+  [getActiveParams],
+  activeParams => ({
+    label: 'Country – Commodity',
+    id: 'logisticsMapContext',
+    items: LOGISTICS_MAP_CONTEXTS,
+    selectedItem: LOGISTICS_MAP_CONTEXTS.find(ctx => ctx.id === activeParams.context)
+  })
+);
+
 export const getNavFilters = createSelector(
-  [getCurrentPage, getSelectedContext],
-  (page, selectedContext) => {
+  [getCurrentPage, getSelectedContext, getLogisticsMapYearsProps, getLogisticsMapContextProps],
+  (page, selectedContext, logisticsMapsYears, logisticsMapsContexts) => {
     switch (page) {
       case 'tool':
         return {
           showSearch: true,
           showToolLinks: true,
           left: [
-            { type: FILTERS.contextSelector, props: { selectedContext, key: 'contextSelector' } },
+            { type: FILTERS.contextSelector, props: { selectedContext, id: 'contextSelector' } },
             // { type: FILTERS.dropdownSelector },
             {
               type: FILTERS.yearSelector,
@@ -55,18 +77,25 @@ export const getNavFilters = createSelector(
           ],
           right: [
             // { type: FILTERS.dropdownSelector },
-            { type: FILTERS.recolorBySelector, props: { key: 'recolorBySelector' } }
-            // { type: FILTERS.dropdownSelector, props: { key: 'viewSelector' }  },
+            { type: FILTERS.recolorBySelector, props: { id: 'toolRecolorBy' } }
+            // { type: FILTERS.dropdownSelector, props: { id: 'viewSelector' }  },
           ]
         };
       case 'explore':
         return {
           left: [
-            { type: FILTERS.contextSelector, props: { selectedContext, key: 'contextSelector' } },
+            { type: FILTERS.contextSelector, props: { selectedContext, id: 'contextSelector' } },
             {
               type: FILTERS.yearSelector,
               props: { key: 'yearsSelector' }
             }
+          ]
+        };
+      case 'logisticsMap':
+        return {
+          left: [
+            { type: FILTERS.dropdownSelector, props: logisticsMapsContexts },
+            { type: FILTERS.dropdownSelector, props: logisticsMapsYears }
           ]
         };
       default:

@@ -11,8 +11,6 @@ import sortBy from 'lodash/sortBy';
 
 import 'styles/components/shared/dropdown-item-legend-summary.scss';
 
-const id = 'recolor-by';
-
 class RecolorBySelector extends Component {
   getRecolorByClassNames(item, recolorBy) {
     const recolorById = isNumber(item)
@@ -132,6 +130,7 @@ class RecolorBySelector extends Component {
 
   render() {
     const {
+      id,
       className,
       tooltips,
       onToggle,
@@ -165,6 +164,7 @@ class RecolorBySelector extends Component {
 }
 
 RecolorBySelector.propTypes = {
+  id: PropTypes.string,
   className: PropTypes.string,
   tooltips: PropTypes.object,
   onToggle: PropTypes.func,
