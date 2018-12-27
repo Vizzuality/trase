@@ -1,27 +1,25 @@
 import { createSelector } from 'reselect';
 import intersection from 'lodash/intersection';
+import sortBy from 'lodash/sortBy';
+import cx from 'classnames';
 import { getActiveParams } from 'react-components/logistics-map/logistics-map.selectors';
 import { LOGISTICS_MAP_YEARS, LOGISTICS_MAP_CONTEXTS } from 'constants';
-
-const FILTERS = {
-  contextSelector: 0,
-  yearSelector: 1,
-  dropdownSelector: 2,
-  recolorBySelector: 3
-};
+import difference from 'lodash/difference';
+import FiltersNav from 'react-components/nav/filters-nav/filters-nav.component';
 
 const getCurrentPage = state => state.location.type;
 const getSelectedContext = state => state.app.selectedContext;
 const getToolSelectedYears = state => state.tool.selectedYears;
-const getToolResizeBy = state => state.tool.selectedResizeBy;
+const getToolSelectedResizeBy = state => state.tool.selectedResizeBy;
 const getToolRecolorBy = state => state.tool.selectedRecolorBy;
 const getToolSelectedBiome = state => state.tool.selectedBiomeFilter;
 const getContextFilterBy = state => state.app.selectedContext && state.app.selectedContext.filterBy;
 const getAppTooltips = state => state.app.tooltips;
 const getToolDetailedView = state => state.tool.detailedView;
+const getToolResizeBys = state => state.app.selectedContext && state.app.selectedContext.resizeBy;
 
 export const getToolYearsProps = createSelector(
-  [getToolSelectedYears, getToolResizeBy, getToolRecolorBy, getSelectedContext],
+  [getToolSelectedYears, getToolSelectedResizeBy, getToolRecolorBy, getSelectedContext],
   (selectedYears, selectedResizeBy, selectedRecolorBy, selectedContext) => {
     const availableContextYears = selectedContext && selectedContext.years;
     const availableResizeByYears =
@@ -66,6 +64,37 @@ export const getToolAdminLevelProps = createSelector(
   }
 );
 
+export const getToolResizeByProps = createSelector(
+  [getAppTooltips, getToolResizeBys, getToolSelectedYears, getToolSelectedResizeBy],
+  (tooltips, resizeBys, selectedYears, selectedResizeBy) => {
+    const items = sortBy(resizeBys, ['groupNumber', 'position']).map((resizeBy, index, list) => {
+      const isEnabled =
+        !resizeBy.isDisabled &&
+        (resizeBy.years.length === 0 || difference(selectedYears, resizeBy.years).length === 0);
+
+      const hasSeparator = list[index - 1] && list[index - 1].groupNumber !== resizeBy.groupNumber;
+      return {
+        hasSeparator,
+        id: resizeBy.name,
+        name: resizeBy.label,
+        isDisabled: !isEnabled,
+        tooltip: resizeBy.description
+      };
+    });
+    return {
+      items,
+      label: 'Resize by',
+      id: 'toolResizeBy',
+      titleClassName: '-small',
+      listClassName: '-medium',
+      selectedItem: { name: selectedResizeBy.label || '' },
+      tooltip: tooltips && tooltips.sankey.nav.resizeBy.main,
+      titleTooltip: tooltips && tooltips.sankey.nav.resizeBy[selectedResizeBy.name],
+      dropdownClassName: cx('-small -capitalize', { '-hide-only-child': items.length <= 1 })
+    };
+  }
+);
+
 export const getToolViewModeProps = createSelector(
   [getAppTooltips, getToolDetailedView],
   (tooltips, isDetailedView) => {
@@ -74,7 +103,7 @@ export const getToolViewModeProps = createSelector(
       items: items.filter(i => i.id !== isDetailedView),
       label: 'Change view',
       id: 'toolViewMode',
-      tooltip: tooltips.sankey.nav.view.main,
+      tooltip: tooltips && tooltips.sankey.nav.view.main,
       titleClassName: '-small',
       dropdownClassName: '-capitalize -small',
       selectedItem: items.find(item => item.id === isDetailedView)
@@ -109,6 +138,7 @@ export const getNavFilters = createSelector(
     getCurrentPage,
     getSelectedContext,
     getToolAdminLevelProps,
+    getToolResizeByProps,
     getToolViewModeProps,
     getLogisticsMapYearsProps,
     getLogisticsMapContextProps
@@ -117,35 +147,45 @@ export const getNavFilters = createSelector(
     page,
     selectedContext,
     toolAdminLevel,
+    toolResizeBy,
     toolViewMode,
     logisticsMapsYears,
     logisticsMapsContexts
   ) => {
+    const { FILTER_TYPES } = FiltersNav;
     switch (page) {
       case 'tool':
         return {
           showSearch: true,
           showToolLinks: true,
           left: [
-            { type: FILTERS.contextSelector, props: { selectedContext, id: 'contextSelector' } },
-            ...(toolAdminLevel ? [{ type: FILTERS.dropdownSelector, props: toolAdminLevel }] : []),
             {
-              type: FILTERS.yearSelector,
+              type: FILTER_TYPES.contextSelector,
+              props: { selectedContext, id: 'contextSelector' }
+            },
+            ...(toolAdminLevel
+              ? [{ type: FILTER_TYPES.dropdownSelector, props: toolAdminLevel }]
+              : []),
+            {
+              type: FILTER_TYPES.yearSelector,
               props: { key: 'yearsSelector' }
             }
           ],
           right: [
-            // { type: FILTERS.dropdownSelector },
-            { type: FILTERS.recolorBySelector, props: { id: 'toolRecolorBy' } },
-            { type: FILTERS.dropdownSelector, props: toolViewMode }
+            { type: FILTER_TYPES.dropdownSelector, props: toolResizeBy },
+            { type: FILTER_TYPES.recolorBySelector, props: { id: 'toolRecolorBy' } },
+            { type: FILTER_TYPES.dropdownSelector, props: toolViewMode }
           ]
         };
       case 'explore':
         return {
           left: [
-            { type: FILTERS.contextSelector, props: { selectedContext, id: 'contextSelector' } },
             {
-              type: FILTERS.yearSelector,
+              type: FILTER_TYPES.contextSelector,
+              props: { selectedContext, id: 'contextSelector' }
+            },
+            {
+              type: FILTER_TYPES.yearSelector,
               props: { key: 'yearsSelector' }
             }
           ]
@@ -153,8 +193,8 @@ export const getNavFilters = createSelector(
       case 'logisticsMap':
         return {
           left: [
-            { type: FILTERS.dropdownSelector, props: logisticsMapsContexts },
-            { type: FILTERS.dropdownSelector, props: logisticsMapsYears }
+            { type: FILTER_TYPES.dropdownSelector, props: logisticsMapsContexts },
+            { type: FILTER_TYPES.dropdownSelector, props: logisticsMapsYears }
           ]
         };
       default:

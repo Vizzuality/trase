@@ -17,6 +17,7 @@ class DropdownSelector extends Component {
     label: PropTypes.string,
     onToggle: PropTypes.func,
     tooltip: PropTypes.string,
+    titleTooltip: PropTypes.string,
     onSelected: PropTypes.func,
     className: PropTypes.string,
     selectedItem: PropTypes.object,
@@ -29,13 +30,16 @@ class DropdownSelector extends Component {
   renderItems() {
     const { onSelected, items } = this.props;
     return items.map(item => (
-      <li
-        key={item.id}
-        className={cx('dropdown-item', { '-disabled': item.isDisabled })}
-        onClick={() => onSelected(item.id)}
-      >
-        {item.name.toLowerCase()}
-      </li>
+      <React.Fragment key={item.id}>
+        {item.hasSeparator && <li className="dropdown-item -separator" />}
+        <li
+          className={cx('dropdown-item', { '-disabled': item.isDisabled })}
+          onClick={() => onSelected(item.id)}
+        >
+          {item.name.toLowerCase()}
+          {item.tooltip && <Tooltip constraint="window" text={item.tooltip} />}
+        </li>
+      </React.Fragment>
     ));
   }
 
@@ -48,6 +52,7 @@ class DropdownSelector extends Component {
       id,
       label,
       tooltip,
+      titleTooltip,
       dropdownClassName,
       titleClassName,
       listClassName
@@ -62,6 +67,7 @@ class DropdownSelector extends Component {
           </span>
           <span className={cx('dropdown-title', titleClassName)}>
             {selectedItem.name.toLowerCase()}
+            {titleTooltip && <Tooltip constraint="window" floating text={titleTooltip} />}
           </span>
           <FiltersDropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
             <ul className={cx('dropdown-list', listClassName)}>{this.renderItems()}</ul>
