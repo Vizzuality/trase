@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import RecolorBySelector from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.container';
-import ResizeBySelector from 'react-components/nav/filters-nav/resize-by-selector/resize-by-selector.container';
 import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
 import DropdownSelector from 'react-components/nav/filters-nav/dropdown-selector/dropdown-selector.component';
 import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
@@ -15,9 +14,16 @@ import { NavLink } from 'redux-first-router-link';
 import 'scripts/react-components/nav/filters-nav/filters-nav.scss';
 import 'scripts/react-components/nav/filters-nav/burger.scss';
 
-const FILTERS = [ContextSelector, YearsSelector, DropdownSelector, RecolorBySelector];
-
 class FiltersNav extends React.PureComponent {
+  static FILTER_TYPES = {
+    contextSelector: 0,
+    yearSelector: 1,
+    dropdownSelector: 2,
+    recolorBySelector: 3
+  };
+
+  static FILTERS = [ContextSelector, YearsSelector, DropdownSelector, RecolorBySelector];
+
   state = {
     menuOpen: false
   };
@@ -120,6 +126,7 @@ class FiltersNav extends React.PureComponent {
       currentDropdown,
       filters: { left = [] }
     } = this.props;
+    const { FILTERS } = FiltersNav;
     return (
       <div className="filters-nav-left-section">
         {left.map(filter =>
@@ -142,6 +149,7 @@ class FiltersNav extends React.PureComponent {
       currentDropdown,
       filters: { right = [], showSearch }
     } = this.props;
+    const { FILTERS } = FiltersNav;
     return (
       <div className="filters-nav-left-section">
         {right.map(filter =>

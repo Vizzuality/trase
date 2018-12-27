@@ -94,14 +94,14 @@ const _setRecolorByAction = (recolorBy, state) => {
   };
 };
 
-const _setResizeByAction = (resizeBy, state) => {
+const _setResizeByAction = (resizeByName, state) => {
   let selectedResizeBy;
-  if (resizeBy.value === 'none') {
+  if (resizeByName === 'none') {
     selectedResizeBy = { name: 'none' };
   } else {
     const currentContext = getCurrentContext(state);
     selectedResizeBy = currentContext.resizeBy.find(
-      contextResizeBy => contextResizeBy.name === resizeBy.name
+      contextResizeBy => contextResizeBy.name === resizeByName
     );
   }
 
@@ -193,7 +193,7 @@ export function resetSankey() {
       dispatch(_setRecolorByAction({ value: 'none' }, state));
     }
 
-    dispatch(_setResizeByAction(defaultResizeBy, state));
+    dispatch(_setResizeByAction(defaultResizeBy.name, state));
 
     dispatch({
       type: RESET_SELECTION
@@ -213,9 +213,9 @@ export function selectBiomeFilter(biomeFilter) {
   };
 }
 
-export function selectResizeBy(resizeBy) {
+export function selectResizeBy(resizeByName) {
   return (dispatch, getState) => {
-    dispatch(_setResizeByAction(resizeBy, getState()));
+    dispatch(_setResizeByAction(resizeByName, getState()));
     dispatch(loadLinks());
   };
 }
