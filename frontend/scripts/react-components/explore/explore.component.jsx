@@ -112,12 +112,14 @@ class Explore extends React.PureComponent {
   render() {
     const {
       loading,
-      isSubnational,
-      selectedContext,
-      selectedTableColumnType,
-      selectedYears,
       showTable,
-      topExporters
+      topExporters,
+      selectedYears,
+      isSubnational,
+      toggleDropdown,
+      selectedContext,
+      currentDropdown,
+      selectedTableColumnType
     } = this.props;
     const { selectedTableUnit } = this.state;
 
@@ -139,7 +141,12 @@ class Explore extends React.PureComponent {
             {selectedContext && selectedContext.id && (
               <div className="column small-12">
                 <div className="dropdown-element">
-                  <YearsSelector dropdownClassName="-big" />
+                  <YearsSelector
+                    dropdownClassName="-big"
+                    onToggle={toggleDropdown}
+                    id="mobile-explore-years-selector"
+                    currentDropdown={currentDropdown}
+                  />
                 </div>
               </div>
             )}
@@ -219,14 +226,16 @@ class Explore extends React.PureComponent {
 Explore.propTypes = {
   loading: PropTypes.bool,
   isSubnational: PropTypes.bool,
-  getTableElements: PropTypes.func.isRequired,
-  selectedYears: PropTypes.arrayOf(PropTypes.number),
+  topNodesKey: PropTypes.string,
+  currentDropdown: PropTypes.string,
   selectedContext: PropTypes.object,
-  selectedTableColumnType: PropTypes.string.isRequired,
-  setSelectedTableColumnType: PropTypes.func.isRequired,
   showTable: PropTypes.bool.isRequired,
   topExporters: PropTypes.array.isRequired,
-  topNodesKey: PropTypes.string
+  toggleDropdown: PropTypes.func.isRequired,
+  getTableElements: PropTypes.func.isRequired,
+  selectedYears: PropTypes.arrayOf(PropTypes.number),
+  selectedTableColumnType: PropTypes.string.isRequired,
+  setSelectedTableColumnType: PropTypes.func.isRequired
 };
 
 export default Explore;
