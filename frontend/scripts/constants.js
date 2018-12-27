@@ -227,3 +227,12 @@ export const BREAKPOINTS = {
 };
 
 export const MAX_SEARCH_RESULTS = 15;
+
+export const LOGISTICS_MAP_YEARS = Array.from({ length: 11 })
+  .fill(2016)
+  .map((y, i) => ({ id: y - i, name: y - i }));
+
+export const LOGISTICS_MAP_CONTEXTS = [
+  { id: 'soy', name: 'Brazil – Soy' },
+  { id: 'cattle', name: 'Brazil – Cattle' }
+];

@@ -9,6 +9,12 @@ import Toggle from 'react-components/shared/toggle/toggle.component';
 import './logistics-map-legend.scss';
 
 class LogisticsMapLegend extends React.PureComponent {
+  static propTypes = {
+    layers: PropTypes.array,
+    setLayerActive: PropTypes.func,
+    selectedContext: PropTypes.string
+  };
+
   state = {
     open: true
   };
@@ -17,13 +23,13 @@ class LogisticsMapLegend extends React.PureComponent {
 
   render() {
     const { open } = this.state;
-    const { layers, setLayerActive } = this.props;
+    const { layers, setLayerActive, selectedContext } = this.props;
     return (
       <aside className={cx('c-logistics-map-legend', { '-closed': !open })}>
         <div className={cx(['logistics-map-legend-title', { '-closed': !open }])}>
           <button className="logistics-map-legend-toggle" onClick={this.toggle}>
             <Heading as="h3" size="rg" color="white">
-              Soy Facilities
+              {selectedContext} Facilities
             </Heading>
           </button>
         </div>
@@ -44,10 +50,5 @@ class LogisticsMapLegend extends React.PureComponent {
     );
   }
 }
-
-LogisticsMapLegend.propTypes = {
-  layers: PropTypes.array,
-  setLayerActive: PropTypes.func
-};
 
 export default LogisticsMapLegend;

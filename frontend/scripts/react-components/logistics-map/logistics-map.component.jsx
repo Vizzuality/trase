@@ -18,6 +18,7 @@ import 'scripts/react-components/logistics-map/logistics-map.scss';
 
 function LogisticsMap(props) {
   const {
+    selectedContext,
     activeLayers,
     layers,
     buildEvents,
@@ -48,7 +49,11 @@ function LogisticsMap(props) {
             </React.Fragment>
           )}
         </MapComponent>
-        <LogisticsMapLegend layers={layers} setLayerActive={setLayerActive} />
+        <LogisticsMapLegend
+          layers={layers}
+          setLayerActive={setLayerActive}
+          selectedContext={selectedContext}
+        />
       </div>
     </div>
   );

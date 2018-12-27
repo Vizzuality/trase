@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-const getSelectedContext = state => state.app.selectedContext;
+const getSelectedContext = state => (state.location.query && state.location.query.context) || 'soy';
 const getSelectedYear = state => (state.location.query && state.location.query.year) || 2016;
 const getActiveLayersIds = state => (state.location.query && state.location.query.layers) || [];
 
@@ -11,7 +11,7 @@ const templates = [
   {
     version: '0.0.1',
     name: 'crushing_facilities',
-    commodityName: 'SOY',
+    context: 'soy',
     color: '#F89C74',
     layers: [
       {
@@ -29,7 +29,7 @@ const templates = [
   {
     version: '0.0.1',
     name: 'refining_facilities',
-    commodityName: 'SOY',
+    context: 'soy',
     color: '#66C5CC',
     layers: [
       {
@@ -47,7 +47,7 @@ const templates = [
   {
     version: '0.0.1',
     name: 'storage_facilities',
-    commodityName: 'SOY',
+    context: 'soy',
     color: '#F6CF71',
     layers: [
       {
@@ -64,7 +64,7 @@ const templates = [
   {
     version: '0.0.1',
     name: 'confirmed_slaughterhouse',
-    commodityName: 'BEEF',
+    context: 'cattle',
     color: '#F89C74',
     layers: [
       {
@@ -81,7 +81,7 @@ const templates = [
   {
     version: '0.0.1',
     name: 'unconfirmed_slaughterhouse_multifunctional_facility',
-    commodityName: 'BEEF',
+    context: 'cattle',
     color: '#66C5CC',
     layers: [
       {
@@ -98,7 +98,7 @@ const templates = [
   {
     version: '0.0.1',
     name: 'probable_slaughterhouse',
-    commodityName: 'BEEF',
+    context: 'cattle',
     color: '#F6CF71',
     layers: [
       {
@@ -115,7 +115,7 @@ const templates = [
   {
     version: '0.0.1',
     name: 'unconfirmed_slaughterhouse',
-    commodityName: 'BEEF',
+    context: 'cattle',
     color: '#DCB0F2',
     layers: [
       {
@@ -140,10 +140,7 @@ export const getLogisticsMapLayers = createSelector(
   [getActiveLayersIds, getActiveParams],
   (layersIds, activeParams) =>
     templates
-      .filter(
-        template =>
-          activeParams.context && activeParams.context.commodityName === template.commodityName
-      )
+      .filter(template => activeParams.context === template.context)
       .map(template => ({
         name: template.name,
         opacity: 1,
