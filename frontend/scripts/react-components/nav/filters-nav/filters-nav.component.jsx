@@ -2,10 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import AdminLevelFilter from 'react-components/nav/filters-nav/admin-level-filter/admin-level-filter.container';
 import RecolorBySelector from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.container';
 import ResizeBySelector from 'react-components/nav/filters-nav/resize-by-selector/resize-by-selector.container';
-import ViewSelector from 'react-components/nav/filters-nav/view-selector/view-selector.container';
 import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
 import DropdownSelector from 'react-components/nav/filters-nav/dropdown-selector/dropdown-selector.component';
 import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
@@ -151,7 +149,7 @@ class FiltersNav extends React.PureComponent {
             currentDropdown,
             className: 'filters-nav-item',
             onToggle: toggleDropdown,
-            onSelect: this.props[`${filter.props.id}_onSelected`],
+            onSelected: this.props[`${filter.props.id}_onSelected`],
             ...filter.props,
             key: filter.props.id
           })

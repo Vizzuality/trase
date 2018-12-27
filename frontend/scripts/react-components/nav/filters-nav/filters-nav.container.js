@@ -8,6 +8,7 @@ import {
   selectLogisticsMapYear,
   selectLogisticsMapContext
 } from 'react-components/logistics-map/logistics-map.actions';
+import { selectBiomeFilter, selectView } from 'actions/tool.actions';
 
 function mapStateToProps(state) {
   return {
@@ -22,8 +23,10 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       toggleDropdown,
+      toolViewMode_onSelected: selectView,
       openMap: () => toggleMap(true),
       openSankey: () => toggleMap(false),
+      toolAdminLevel_onSelected: selectBiomeFilter,
       logisticsMapYear_onSelected: selectLogisticsMapYear,
       logisticsMapContext_onSelected: selectLogisticsMapContext
     },
