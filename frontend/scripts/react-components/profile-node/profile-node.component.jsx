@@ -6,9 +6,29 @@ import DeforestationWidget from 'react-components/profile-node/profile-node-widg
 import TopConsumersWidget from 'react-components/profile-node/profile-node-widgets/top-consumers-widget.component';
 import ImportingCompaniesWidget from 'react-components/profile-node/profile-node-widgets/importing-companies-widget.component';
 import TopDestinationsWidget from 'react-components/profile-node/profile-node-widgets/top-destinations-widget.component';
+import GfwWidget from 'react-components/profile-node/profile-node-widgets/gfw-widget.component';
 import { smoothScroll } from 'utils/smoothScroll';
 
+// sketchy polyfill
+const _requestIdleCallback = window.requestIdleCallback || window.setTimeout;
+
 class ProfileNode extends React.PureComponent {
+  state = {
+    renderIframes: false
+  };
+
+  componentDidMount() {
+    // http://www.aaronpeters.nl/blog/iframe-loading-techniques-performance
+    window.addEventListener('load', this.renderIframes, false);
+    if (document.readyState === 'complete') {
+      _requestIdleCallback(this.renderIframes);
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('load', this.renderIframes);
+  }
+
   getAnchorRef = ref => {
     this.anchor = ref;
   };
@@ -31,6 +51,8 @@ class ProfileNode extends React.PureComponent {
     });
   }
 
+  renderIframes = () => this.setState({ renderIframes: true });
+
   render() {
     const {
       printMode,
@@ -41,6 +63,7 @@ class ProfileNode extends React.PureComponent {
       tooltips,
       updateQueryParams
     } = this.props;
+    const { renderIframes } = this.state;
     return (
       <div className={`l-profile-${profileType}`}>
         {printMode && (
@@ -145,6 +168,15 @@ class ProfileNode extends React.PureComponent {
               type="place"
               commodityName={context.commodityName}
             />
+            {GFW_WIDGETS_BASE_URL && (
+              <GfwWidget
+                year={year}
+                nodeId={nodeId}
+                contextId={context.id}
+                renderIframes={renderIframes}
+                profileType={profileType}
+              />
+            )}
           </React.Fragment>
         )}
       </div>

@@ -40,6 +40,8 @@ module.exports = {
       SHOW_WORLD_MAP_IN_EXPLORE: process.env.SHOW_WORLD_MAP_IN_EXPLORE === 'true',
       ALWAYS_DISPLAY_DASHBOARD_INFO: process.env.ALWAYS_DISPLAY_DASHBOARD_INFO === 'true',
       ENABLE_DASHBOARDS: process.env.ENABLE_DASHBOARDS === 'true',
+      GFW_WIDGETS_BASE_URL: JSON.stringify(process.env.GFW_WIDGETS_BASE_URL),
+      ENABLE_LOGISTICS_MAP: process.env.ENABLE_LOGISTICS_MAP === 'true',
       API_V3_URL: JSON.stringify(process.env.API_V3_URL),
       API_V2_URL: JSON.stringify(process.env.API_V2_URL),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
@@ -53,7 +55,8 @@ module.exports = {
       USE_SERVICE_WORKER: process.env.USE_SERVICE_WORKER === 'true',
       TRANSIFEX_API_KEY: JSON.stringify(process.env.TRANSIFEX_API_KEY),
       HOME_VIDEO_ID: JSON.stringify(process.env.HOME_VIDEO_ID),
-      NAMED_MAPS_ENV: JSON.stringify(process.env.NAMED_MAPS_ENV)
+      NAMED_MAPS_ENV: JSON.stringify(process.env.NAMED_MAPS_ENV),
+      CARTO_ACCOUNT: JSON.stringify(process.env.CARTO_ACCOUNT)
     }),
     new webpack.LoaderOptionsPlugin({ options: {} })
   ],
@@ -68,6 +71,7 @@ module.exports = {
       styles: path.resolve(__dirname, '..', 'styles'),
       components: path.resolve(srcPath, 'components'),
       'react-components': path.resolve(srcPath, 'react-components'),
+      'named-maps': path.resolve(srcPath, 'named-maps'),
       containers: path.resolve(srcPath, 'containers'),
       utils: path.resolve(srcPath, 'utils'),
       constants: path.resolve(srcPath, 'constants'),

@@ -94,6 +94,13 @@ if (ENABLE_DASHBOARDS) {
   });
 }
 
+if (ENABLE_LOGISTICS_MAP) {
+  nav.splice(-4, 0, {
+    name: 'Logistics Map',
+    page: 'logisticsMap'
+  });
+}
+
 export default {
   nav,
   sidebarNav

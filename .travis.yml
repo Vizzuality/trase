@@ -6,6 +6,7 @@ env:
     - PORT=3000
     - JEST_CI=true
     - USE_PLAIN_URL_STATE=true
+    - GFW_WIDGETS_BASE_URL=
 matrix:
   include:
     - language: ruby

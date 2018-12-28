@@ -98,7 +98,7 @@ class DashboardWidgetContainer extends Component {
     // if we want to avoid creating infinite cache entries we should limit the entries to the indicators (attribute_id)
     const uniqueUrl = `${base}?${qs.stringify({ attribute_id })}`;
     return (
-      <Widget raw query={[uniqueUrl]} params={[params]}>
+      <Widget raw={[true]} query={[uniqueUrl]} params={[params]}>
         {({ data, loading, error, meta }) => {
           const sortedData = this.sortByX(data && data[uniqueUrl]);
           return (

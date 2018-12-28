@@ -73,7 +73,7 @@
     "eslint-plugin-react": "^7.11.1",
     "file-loader": "^2.0.0",
     "html-webpack-plugin": "^3.2.0",
-    "husky": "^1.2.0",
+    "husky": "^1.2.1",
     "image-webpack-loader": "^4.5.0",
     "jest": "^23.6.0",
     "jest-puppeteer": "^3.5.2",
@@ -81,6 +81,7 @@
     "mapshaper": "^0.4.99",
     "node-fetch": "^2.3.0",
     "node-sass": "^4.10.0",
+    "ora": "^3.0.0",
     "postcss-loader": "^3.0.0",
     "prettier": "^1.15.1",
     "puppeteer": "^1.10.0",
@@ -115,8 +116,9 @@
     "downshift": "2.0.16",
     "find-parent": "^2.0.2",
     "highlight-words-core": "^1.2.0",
+    "layer-manager": "^1.13.4",
     "leaflet": "1.3.3",
-    "leaflet.utfgrid": "git+https://github.com/danzel/Leaflet.utfgrid.git",
+    "leaflet-utfgrid": "^0.3.0",
     "lodash": "^4.17.11",
     "p-settle": "^2.1.0",
     "plyr": "^3.4.7",
@@ -147,7 +149,8 @@
     "tooltip.js": "^1.3.1",
     "topojson": "^3.0.2",
     "turf-linestring": "^1.0.2",
-    "whatwg-fetch": "^3.0.0"
+    "whatwg-fetch": "^3.0.0",
+    "wri-api-components": "^2.3.1"
   },
   "resolutions": {
     "babel-core": "7.0.0-bridge.0"

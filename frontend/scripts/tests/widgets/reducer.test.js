@@ -2,8 +2,7 @@ import reducer, { initialState, defaultEndpoint } from 'react-components/widgets
 import {
   WIDGETS__INIT_ENDPOINT,
   WIDGETS__SET_ENDPOINT_DATA,
-  WIDGETS__SET_ENDPOINT_ERROR,
-  WIDGETS__SET_ENDPOINT_LOADING
+  WIDGETS__SET_ENDPOINT_ERROR
 } from 'react-components/widgets/widgets.actions';
 
 const someEndpoint = 'someEndpoint';
@@ -56,7 +55,8 @@ describe(WIDGETS__SET_ENDPOINT_DATA, () => {
     expect(newState.endpoints.someEndpoint).toEqual({
       ...someState.endpoints.someEndpoint,
       data: someData,
-      meta: someMeta
+      meta: someMeta,
+      loading: false
     });
   });
 
@@ -77,24 +77,9 @@ describe(WIDGETS__SET_ENDPOINT_DATA, () => {
     expect(newState.endpoints.someEndpoint).toEqual({
       ...someState.endpoints.someEndpoint,
       data: { propertyOne: 1, propertyTwo: 2 },
-      meta: someMeta
-    });
-  });
-});
-
-test(WIDGETS__SET_ENDPOINT_LOADING, () => {
-  const action = {
-    type: WIDGETS__SET_ENDPOINT_LOADING,
-    payload: {
-      endpoint: someEndpoint,
+      meta: someMeta,
       loading: false
-    }
-  };
-
-  const newState = reducer(someState, action);
-  expect(newState.endpoints.someEndpoint).toEqual({
-    ...someState.endpoints.someEndpoint,
-    loading: false
+    });
   });
 });
 
@@ -110,6 +95,7 @@ test(WIDGETS__SET_ENDPOINT_ERROR, () => {
   const newState = reducer(someState, action);
   expect(newState.endpoints.someEndpoint).toEqual({
     ...someState.endpoints.someEndpoint,
-    error: someError
+    error: someError,
+    loading: false
   });
 });

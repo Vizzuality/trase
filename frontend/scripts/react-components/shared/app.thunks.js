@@ -1,4 +1,9 @@
-import { SET_TOOLTIPS, SET_CONTEXTS, selectInitialContextById } from 'scripts/actions/app.actions';
+import {
+  SET_TOOLTIPS,
+  SET_CONTEXTS,
+  selectInitialContextById,
+  APP__SET_LOADING
+} from 'scripts/actions/app.actions';
 import {
   GET_TOOLTIPS_URL,
   getURLFromParams,
@@ -8,12 +13,16 @@ import { getCurrentContext } from 'scripts/reducers/helpers/contextHelper';
 
 function loadTooltipsPromise(dispatch, getState) {
   const { app } = getState();
-  // we use forceReload to force state rehydration
-  if (app.tooltips !== null) {
+  if (app.loading.tooltips || app.tooltips !== null) {
     return Promise.resolve();
   }
 
   const tooltipsURL = getURLFromParams(GET_TOOLTIPS_URL);
+
+  dispatch({
+    type: APP__SET_LOADING,
+    payload: { tooltips: true }
+  });
 
   return new Promise(resolve =>
     fetch(tooltipsURL)
@@ -29,8 +38,9 @@ function loadTooltipsPromise(dispatch, getState) {
 }
 
 function loadContextsPromise(dispatch, getState) {
+  const { app } = getState();
   // Contexts should only load once
-  if (getState().app.contexts.length > 0) {
+  if (app.loading.contexts || app.contexts.length > 0) {
     return Promise.resolve();
   }
 
@@ -39,9 +49,11 @@ function loadContextsPromise(dispatch, getState) {
     if (a.id > b.id) return 1;
     return 0;
   };
-
   const contextURL = getURLFromParams(GET_CONTEXTS_URL);
-
+  dispatch({
+    type: APP__SET_LOADING,
+    payload: { contexts: true }
+  });
   return fetch(contextURL)
     .then(resp => resp.json())
     .then(json => {

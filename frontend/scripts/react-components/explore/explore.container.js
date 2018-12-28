@@ -5,7 +5,7 @@ import {
   setExploreTopNodes,
   setSelectedTableColumnType
 } from 'react-components/explore/explore.actions';
-import { selectContextById } from 'actions/app.actions';
+import { selectContextById, toggleDropdown } from 'actions/app.actions';
 import Explore from './explore.component';
 
 const mapStateToProps = state => {
@@ -26,13 +26,15 @@ const mapStateToProps = state => {
     selectedYears,
     selectedContext,
     selectedTableColumnType,
-    showTable: contextIsUserSelected
+    showTable: contextIsUserSelected,
+    currentDropdown: state.app.currentDropdown
   };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
+      toggleDropdown,
       selectContextById,
       setSelectedTableColumnType,
       getTableElements: setExploreTopNodes
