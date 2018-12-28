@@ -18,7 +18,7 @@ import 'scripts/react-components/logistics-map/logistics-map.scss';
 
 function LogisticsMap(props) {
   const {
-    selectedContext,
+    commodity,
     activeLayers,
     layers,
     buildEvents,
@@ -28,6 +28,7 @@ function LogisticsMap(props) {
     setLayerActive
   } = props;
   const Tooltip = p => <UnitsTooltip {...p.data} />;
+  const heading = commodity === 'soy' ? 'soy facilities' : 'slaughterhouses';
   return (
     <div className="l-logistics-map">
       <div className="c-logistics-map">
@@ -49,11 +50,7 @@ function LogisticsMap(props) {
             </React.Fragment>
           )}
         </MapComponent>
-        <LogisticsMapLegend
-          layers={layers}
-          setLayerActive={setLayerActive}
-          selectedContext={selectedContext}
-        />
+        <LogisticsMapLegend layers={layers} setLayerActive={setLayerActive} heading={heading} />
       </div>
     </div>
   );
@@ -62,7 +59,8 @@ function LogisticsMap(props) {
 LogisticsMap.propTypes = {
   layers: PropTypes.array,
   activeLayers: PropTypes.array,
-  buildEvents: PropTypes.func
+  buildEvents: PropTypes.func,
+  commodity: PropTypes.string
 };
 
 export default LogisticsMap;

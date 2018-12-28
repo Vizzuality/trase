@@ -12,7 +12,7 @@ const updateQueryParams = params => (dispatch, getState) => {
 
 export const selectLogisticsMapYear = year => updateQueryParams({ year });
 
-export const selectLogisticsMapContext = context => updateQueryParams({ context, layers: [] });
+export const selectLogisticsMapHub = commodity => updateQueryParams({ commodity, layers: [] });
 
 export const setLayerActive = (layerId, active) => (dispatch, getState) => {
   const { query = {} } = getState().location;

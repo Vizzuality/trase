@@ -150,6 +150,7 @@ class FiltersNav extends React.PureComponent {
       filters: { right = [], showSearch }
     } = this.props;
     const { FILTERS } = FiltersNav;
+
     return (
       <div className="filters-nav-left-section">
         {right.map(filter =>

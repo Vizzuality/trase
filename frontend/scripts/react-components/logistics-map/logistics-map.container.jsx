@@ -9,12 +9,13 @@ import {
 import { setLayerActive as setLayerActiveFn } from 'react-components/logistics-map/logistics-map.actions';
 import LogisticsMap from 'react-components/logistics-map/logistics-map.component';
 import formatValue from 'utils/formatValue';
+import startCase from 'lodash/startCase';
 
 class LogisticsMapContainer extends React.PureComponent {
   static propTypes = {
     layers: PropTypes.array,
     activeLayers: PropTypes.array,
-    selectedContext: PropTypes.object,
+    commodity: PropTypes.string,
     setLayerActive: PropTypes.func.isRequired
   };
 
@@ -30,24 +31,23 @@ class LogisticsMapContainer extends React.PureComponent {
 
   onMouseOver = (e, layer) => {
     const { data } = e;
-    const { selectedContext } = this.props;
+    const { commodity } = this.props;
     if (!data) return;
     const show = true;
     const x = 0;
     const y = 35;
-    const text = {
+    let text = {
       crushing_facilities: 'Crushing Facility',
       refining_facilities: 'Refinery',
-      storage_facilities: 'Silo',
-      slaughterhouses: 'Slaughterhouse'
+      storage_facilities: 'Silo'
     }[layer.name];
     const items = [
       { title: 'Company', value: data.company },
       { title: 'Municipality', value: data.municipality }
     ];
-    if (selectedContext === 'soy') {
+    if (commodity === 'soy') {
       items.push({
-        title: `Production of ${selectedContext}`,
+        title: `Production of ${commodity}`,
         value: formatValue(data.capacity, 'Trade volume'),
         unit: 't'
       });
@@ -57,6 +57,7 @@ class LogisticsMapContainer extends React.PureComponent {
         { title: 'Subclass', value: data.subclass },
         { title: 'Inspection level', value: data.inspection_level }
       );
+      text = startCase(layer.name);
     }
     const mapPopUp = { ...e, data: { x, y, text, show, items } };
     this.setState(() => ({ mapPopUp }));
@@ -72,7 +73,7 @@ class LogisticsMapContainer extends React.PureComponent {
   };
 
   render() {
-    const { activeLayers, layers, setLayerActive, selectedContext } = this.props;
+    const { activeLayers, layers, setLayerActive, commodity } = this.props;
     const { mapPopUp } = this.state;
     return (
       <LogisticsMap
@@ -82,7 +83,7 @@ class LogisticsMapContainer extends React.PureComponent {
         activeLayers={activeLayers}
         buildEvents={this.buildEvents}
         setLayerActive={setLayerActive}
-        selectedContext={selectedContext}
+        commodity={commodity}
         getCurrentPopUp={this.getCurrentPopUp}
       />
     );
@@ -90,10 +91,10 @@ class LogisticsMapContainer extends React.PureComponent {
 }
 
 const mapStateToProps = state => {
-  const { year: activeYear, context: selectedContext } = getActiveParams(state);
+  const { year: activeYear, commodity } = getActiveParams(state);
   return {
     activeYear,
-    selectedContext,
+    commodity,
     activeLayers: getActiveLayers(state),
     layers: getLogisticsMapLayers(state)
   };

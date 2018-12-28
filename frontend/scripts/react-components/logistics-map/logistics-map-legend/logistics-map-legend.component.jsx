@@ -10,9 +10,9 @@ import './logistics-map-legend.scss';
 
 class LogisticsMapLegend extends React.PureComponent {
   static propTypes = {
+    heading: PropTypes.string,
     layers: PropTypes.array,
-    setLayerActive: PropTypes.func,
-    selectedContext: PropTypes.string
+    setLayerActive: PropTypes.func
   };
 
   state = {
@@ -23,13 +23,13 @@ class LogisticsMapLegend extends React.PureComponent {
 
   render() {
     const { open } = this.state;
-    const { layers, setLayerActive, selectedContext } = this.props;
+    const { layers, setLayerActive, heading } = this.props;
     return (
       <aside className={cx('c-logistics-map-legend', { '-closed': !open })}>
         <div className={cx(['logistics-map-legend-title', { '-closed': !open }])}>
           <button className="logistics-map-legend-toggle" onClick={this.toggle}>
             <Heading as="h3" size="rg" color="white">
-              {selectedContext} Facilities
+              {heading}
             </Heading>
           </button>
         </div>
