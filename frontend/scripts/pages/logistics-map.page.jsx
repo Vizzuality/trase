@@ -6,11 +6,9 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
 import FiltersNav from 'react-components/nav/filters-nav/filters-nav.container';
-import TopNav from 'react-components/nav/top-nav/top-nav.container';
-import Explore from 'react-components/explore/explore.container';
-import ResizeListener from 'react-components/shared/resize-listener.component';
+import LogisticsMap from 'react-components/logistics-map/logistics-map.container';
 
-import 'styles/layouts/l-explore.scss';
+import 'styles/layouts/l-logistics-map.scss';
 import 'styles/components/shared/dropdown.scss';
 
 export const mount = (root, store) => {
@@ -20,22 +18,20 @@ export const mount = (root, store) => {
 
   render(
     <Provider store={store}>
-      <ResizeListener>
-        {({ resolution }) => (resolution.isSmall ? <TopNav className="-light" /> : <FiltersNav />)}
-      </ResizeListener>
+      <FiltersNav />
     </Provider>,
     document.getElementById('nav')
   );
 
   render(
     <Provider store={store}>
-      <Explore />
+      <LogisticsMap />
     </Provider>,
     document.getElementById('page-react-root')
   );
 };
 
 export const unmount = () => {
-  unmountComponentAtNode(document.getElementById('nav'));
+  // unmountComponentAtNode(document.getElementById('nav'));
   unmountComponentAtNode(document.getElementById('page-react-root'));
 };

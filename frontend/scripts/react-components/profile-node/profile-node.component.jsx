@@ -168,13 +168,15 @@ class ProfileNode extends React.PureComponent {
               type="place"
               commodityName={context.commodityName}
             />
-            <GfwWidget
-              year={year}
-              nodeId={nodeId}
-              contextId={context.id}
-              renderIframes={renderIframes}
-              profileType={profileType}
-            />
+            {GFW_WIDGETS_BASE_URL && (
+              <GfwWidget
+                year={year}
+                nodeId={nodeId}
+                contextId={context.id}
+                renderIframes={renderIframes}
+                profileType={profileType}
+              />
+            )}
           </React.Fragment>
         )}
       </div>

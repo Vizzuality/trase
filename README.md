@@ -127,6 +127,7 @@ The project's main configuration values can be set using [environment variables]
 * CARTO_ACCOUNT: name of the carto account where the named maps layers are hosted.
 * CARTO_TOKEN: token to authenticate into carto for the named maps creation.
 * NAMED_MAPS_ENV: named maps environment to use inside the app.
+* ENABLE_LOGISTICS_MAP: if set to true, the logistics map section will be visible to end users.
 
 If you are using the included development server, you can set those variables in the `.env` file (use the included `.env.sample` as an example)
 
