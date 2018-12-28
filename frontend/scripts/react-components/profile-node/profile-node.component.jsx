@@ -64,6 +64,7 @@ class ProfileNode extends React.PureComponent {
       updateQueryParams
     } = this.props;
     const { renderIframes } = this.state;
+
     return (
       <div className={`l-profile-${profileType}`}>
         {printMode && (
@@ -168,7 +169,7 @@ class ProfileNode extends React.PureComponent {
               type="place"
               commodityName={context.commodityName}
             />
-            {GFW_WIDGETS_BASE_URL && (
+            {GFW_WIDGETS_BASE_URL && context.countryName === 'BRAZIL' && (
               <GfwWidget
                 year={year}
                 nodeId={nodeId}
