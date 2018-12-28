@@ -3,6 +3,8 @@ import { createSelector } from 'reselect';
 const getSelectedCommodity = state =>
   (state.location.query && state.location.query.commodity) || 'soy';
 const getSelectedYear = state => (state.location.query && state.location.query.year) || 2016;
+const getSelectedInspection = state =>
+  state.location.query && state.location.query.inspection_level;
 const getActiveLayersIds = state => (state.location.query && state.location.query.layers) || [];
 
 const MARKERS_URL =
@@ -71,13 +73,14 @@ const templates = [
       {
         type: 'cartodb',
         options: {
-          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'CONFIRMED SLAUGHTERHOUSE'`,
+          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'CONFIRMED SLAUGHTERHOUSE' {{and}}`,
           cartocss: `#layer { marker-width: 7; marker-fill: #F39B73; marker-fill-opacity: 0.9; marker-allow-overlap: true; marker-line-width: 1; marker-line-color: #FFFFFF; marker-line-opacity: 1; } #layer[zoom>4] { marker-line-width: 0.5; marker-file: url('${MARKERS_URL}/slaughterhouse-icon.svg'); marker-width: 24; }`,
           cartocss_version: '2.3.0',
           interactivity: ['company', 'state', 'municipality', 'subclass', 'inspection_level']
         }
       }
-    ]
+    ],
+    sql_config: [{ type: 'and', key: 'inspection_level' }]
   },
   {
     version: '0.0.1',
@@ -88,13 +91,14 @@ const templates = [
       {
         type: 'cartodb',
         options: {
-          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'UNCONFIRMED SLAUGHTERHOUSE (MULTIFUNCTIONAL FACILITY)'`,
+          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'UNCONFIRMED SLAUGHTERHOUSE (MULTIFUNCTIONAL FACILITY)' {{and}}`,
           cartocss: `#layer { marker-width: 7; marker-fill: #7AC1CA; marker-fill-opacity: 0.9; marker-allow-overlap: true; marker-line-width: 1; marker-line-color: #FFFFFF; marker-line-opacity: 1; } #layer[zoom>4] { marker-line-width: 0.5; marker-file: url('${MARKERS_URL}/slaughterhouse-icon.svg'); marker-width: 24; }`,
           cartocss_version: '2.3.0',
           interactivity: ['company', 'state', 'municipality', 'subclass', 'inspection_level']
         }
       }
-    ]
+    ],
+    sql_config: [{ type: 'and', key: 'inspection_level' }]
   },
   {
     version: '0.0.1',
@@ -105,13 +109,14 @@ const templates = [
       {
         type: 'cartodb',
         options: {
-          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'PROBABLE SLAUGHTERHOUSE'`,
+          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'PROBABLE SLAUGHTERHOUSE' {{and}}`,
           cartocss: `#layer { marker-width: 7; marker-fill: #F6CF71; marker-fill-opacity: 0.9; marker-allow-overlap: true; marker-line-width: 1; marker-line-color: #FFFFFF; marker-line-opacity: 1; } #layer[zoom>4] { marker-line-width: 0.5; marker-file: url('${MARKERS_URL}/slaughterhouse-icon.svg'); marker-width: 24; }`,
           cartocss_version: '2.3.0',
           interactivity: ['company', 'state', 'municipality', 'subclass', 'inspection_level']
         }
       }
-    ]
+    ],
+    sql_config: [{ type: 'and', key: 'inspection_level' }]
   },
   {
     version: '0.0.1',
@@ -122,19 +127,20 @@ const templates = [
       {
         type: 'cartodb',
         options: {
-          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'UNCONFIRMED SLAUGHTERHOUSE'`,
+          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'UNCONFIRMED SLAUGHTERHOUSE' {{and}}`,
           cartocss: `#layer { marker-width: 7; marker-fill: #DCB0F2; marker-fill-opacity: 0.9; marker-allow-overlap: true; marker-line-width: 1; marker-line-color: #FFFFFF; marker-line-opacity: 1; } #layer[zoom>4] { marker-line-width: 0.5; marker-file: url('${MARKERS_URL}/slaughterhouse-icon.svg'); marker-width: 24; }`,
           cartocss_version: '2.3.0',
           interactivity: ['company', 'state', 'municipality', 'subclass', 'inspection_level']
         }
       }
-    ]
+    ],
+    sql_config: [{ type: 'and', key: 'inspection_level' }]
   }
 ];
 
 export const getActiveParams = createSelector(
-  [getSelectedYear, getSelectedCommodity],
-  (year, commodity) => ({ year, commodity })
+  [getSelectedYear, getSelectedCommodity, getSelectedInspection],
+  (year, commodity, inspection) => ({ year, commodity, inspection_level: inspection })
 );
 
 export const getLogisticsMapLayers = createSelector(
@@ -165,6 +171,20 @@ export const getLogisticsMapLayers = createSelector(
           template.params_config &&
           template.params_config.reduce(
             (acc, next) => ({ ...acc, [next.key]: activeParams[next.key] || next.default }),
+            {}
+          ),
+        sqlParams:
+          template.sql_config &&
+          template.sql_config.reduce(
+            (acc, next) => ({
+              ...acc,
+              [next.type]: {
+                ...acc[next.type],
+                [next.key]:
+                  (activeParams[next.key] || next.default) &&
+                  `'${activeParams[next.key] || next.default}'`
+              }
+            }),
             {}
           )
       }))

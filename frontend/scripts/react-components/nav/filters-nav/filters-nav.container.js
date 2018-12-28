@@ -6,7 +6,8 @@ import { getNavFilters } from 'react-components/nav/filters-nav/filters-nav.sele
 import routerLinks from 'router/nav-links';
 import {
   selectLogisticsMapHub,
-  selectLogisticsMapYear
+  selectLogisticsMapYear,
+  selectLogisticsMapInspectionLevel
 } from 'react-components/logistics-map/logistics-map.actions';
 import { selectBiomeFilter, selectResizeBy, selectView } from 'actions/tool.actions';
 
@@ -29,7 +30,8 @@ const mapDispatchToProps = dispatch =>
       openSankey: () => toggleMap(false),
       toolAdminLevel_onSelected: selectBiomeFilter,
       logisticsMapYear_onSelected: selectLogisticsMapYear,
-      logisticsMapHub_onSelected: selectLogisticsMapHub
+      logisticsMapHub_onSelected: selectLogisticsMapHub,
+      logisticsMapInspectionLevel_onSelected: selectLogisticsMapInspectionLevel
     },
     dispatch
   );

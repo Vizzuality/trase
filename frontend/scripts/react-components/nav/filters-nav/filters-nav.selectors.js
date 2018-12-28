@@ -3,9 +3,15 @@ import intersection from 'lodash/intersection';
 import sortBy from 'lodash/sortBy';
 import cx from 'classnames';
 import { getActiveParams } from 'react-components/logistics-map/logistics-map.selectors';
-import { LOGISTICS_MAP_YEARS, LOGISTICS_MAP_HUBS } from 'constants';
+import {
+  LOGISTICS_MAP_YEARS,
+  LOGISTICS_MAP_HUBS,
+  LOGISTICS_MAP_INSPECTION_LEVELS
+} from 'constants';
 import difference from 'lodash/difference';
 import FiltersNav from 'react-components/nav/filters-nav/filters-nav.component';
+
+const insertIf = (condition, item) => (condition ? [item] : []);
 
 const getCurrentPage = state => state.location.type;
 const getSelectedContext = state => state.app.selectedContext;
@@ -139,6 +145,25 @@ const getLogisticsMapHubsProps = createSelector(
   })
 );
 
+const getLogisticsMapInspectionLevelProps = createSelector(
+  [getActiveParams],
+  activeParams => {
+    if (activeParams.commodity === 'soy') {
+      return null;
+    }
+
+    return {
+      label: 'Inspection Level',
+      id: 'logisticsMapInspectionLevel',
+      items: [{ name: 'all' }, ...LOGISTICS_MAP_INSPECTION_LEVELS],
+      listClassName: '-medium',
+      selectedItem: LOGISTICS_MAP_INSPECTION_LEVELS.find(
+        level => level.id === activeParams.inspection_level
+      ) || { name: 'all' }
+    };
+  }
+);
+
 export const getNavFilters = createSelector(
   [
     getCurrentPage,
@@ -147,7 +172,8 @@ export const getNavFilters = createSelector(
     getToolResizeByProps,
     getToolViewModeProps,
     getLogisticsMapYearsProps,
-    getLogisticsMapHubsProps
+    getLogisticsMapHubsProps,
+    getLogisticsMapInspectionLevelProps
   ],
   (
     page,
@@ -156,7 +182,8 @@ export const getNavFilters = createSelector(
     toolResizeBy,
     toolViewMode,
     logisticsMapsYears,
-    logisticsMapsHubs
+    logisticsMapsHubs,
+    logisticsMapInspectionLevel
   ) => {
     const { FILTER_TYPES } = FiltersNav;
     switch (page) {
@@ -169,9 +196,10 @@ export const getNavFilters = createSelector(
               type: FILTER_TYPES.contextSelector,
               props: { selectedContext, id: 'contextSelector' }
             },
-            ...(toolAdminLevel
-              ? [{ type: FILTER_TYPES.dropdownSelector, props: toolAdminLevel }]
-              : []),
+            ...insertIf(toolAdminLevel, {
+              type: FILTER_TYPES.dropdownSelector,
+              props: toolAdminLevel
+            }),
             {
               type: FILTER_TYPES.yearSelector,
               props: { key: 'yearsSelector' }
@@ -200,9 +228,14 @@ export const getNavFilters = createSelector(
         return {
           left: [
             { type: FILTER_TYPES.dropdownSelector, props: logisticsMapsHubs },
-            ...(logisticsMapsYears
-              ? [{ type: FILTER_TYPES.dropdownSelector, props: logisticsMapsYears }]
-              : [])
+            ...insertIf(logisticsMapsYears, {
+              type: FILTER_TYPES.dropdownSelector,
+              props: logisticsMapsYears
+            }),
+            ...insertIf(logisticsMapInspectionLevel, {
+              type: FILTER_TYPES.dropdownSelector,
+              props: logisticsMapInspectionLevel
+            })
           ]
         };
       default:

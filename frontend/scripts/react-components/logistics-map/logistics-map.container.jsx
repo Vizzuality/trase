@@ -75,6 +75,7 @@ class LogisticsMapContainer extends React.PureComponent {
   render() {
     const { activeLayers, layers, setLayerActive, commodity } = this.props;
     const { mapPopUp } = this.state;
+    console.log(activeLayers);
     return (
       <LogisticsMap
         layers={layers}
