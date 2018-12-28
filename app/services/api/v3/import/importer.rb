@@ -45,7 +45,8 @@ module Api
               Api::V3::ContextNodeTypeProperty,
               Api::V3::Profile,
               Api::V3::Chart,
-              Api::V3::ChartAttribute
+              Api::V3::ChartAttribute,
+              Api::V3::ChartNodeType
             ]
           },
           {table_class: Api::V3::DownloadVersion},
@@ -179,6 +180,7 @@ module Api
           ].each { |mview| mview.refresh(sync: true, skip_dependents: true) }
           # synchronously, skip dependencies (already refreshed)
           [
+            Api::V3::Readonly::ChartAttribute,
             Api::V3::Readonly::DownloadAttribute,
             Api::V3::Readonly::MapAttribute,
             Api::V3::Readonly::RecolorByAttribute,

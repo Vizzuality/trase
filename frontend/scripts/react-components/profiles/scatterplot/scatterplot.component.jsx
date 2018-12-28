@@ -121,7 +121,9 @@ class Scatterplot extends Component {
       .data(this._getFormattedData(this.state.selectedTabIndex))
       .enter()
       .append('circle')
-      .attr('class', d => this._getCircleClass(d))
+      .attr('class', d =>
+        d.x === null ? `${this._getCircleClass(d)} -hidden` : this._getCircleClass(d)
+      )
       .attr('data-test', d => (d.isCurrent ? `${testId}-circle-current` : `${testId}-circle`))
       .attr('r', 5)
       .attr('cx', d => this.x(d.x))

@@ -9,8 +9,11 @@ module Api
         # @param year [Integer]
         def initialize(context, node, year)
           @context = context
-          @year = year
           @node = node
+          @year = year
+
+          # This remains hardcoded, because it only makes sense
+          # for Brazil soy for now
           @place_quals = Dictionary::PlaceQuals.new(@node, @year)
           state_qual = @place_quals.get(NodeTypeName::STATE)
           @state_name = state_qual && state_qual['value']
@@ -19,11 +22,16 @@ module Api
               @context, @node, @year, @state_name
             )
           end
-          initialize_attributes(attributes_list)
+          @chart_config = initialize_chart_config(
+            :place, nil, :place_trajectory_deforestation
+          )
+          raise 'No attributes found' unless @chart_config.attributes.any?
         end
 
+        # rubocop:disable Metrics/AbcSize
         def call
           min_year, max_year = initialize_min_max_year
+          chart_attributes = @chart_config.chart_attributes
 
           return {} unless min_year.present? and max_year.present?
 
@@ -31,31 +39,31 @@ module Api
           {
             included_years: years,
             unit: 'ha',
-            lines: @attributes.map do |attribute_hash|
-              attribute = attribute_hash[:attribute]
+            lines: chart_attributes.map.with_index do |chart_attribute, idx|
+              attribute = @chart_config.attributes[idx]
               data =
-                if attribute_hash[:state_average] && @state_ranking
+                if chart_attribute.state_average && @state_ranking
                   @state_ranking.average_for_attribute(
                     attribute
                   )
-                elsif attribute_hash[:attribute_type] == 'quant'
+                elsif attribute.is_a? Api::V3::Quant
                   @node.temporal_place_quants.where(
                     quant_id: attribute.id
                   )
-                elsif attribute_hash[:attribute_type] == 'ind'
+                elsif attribute.is_a? Api::V3::Ind
                   @node.temporal_place_inds.where(
-                    inds_id: attribute.id
+                    ind_id: attribute.id
                   )
                 end
               values = Hash[
                 data.map { |e| [e['year'], e] }
               ]
               {
-                name: attribute_hash[:name],
-                legend_name: attribute_hash[:legend_name],
-                legend_tooltip: attribute[:tooltip_text],
-                type: attribute_hash[:type],
-                style: attribute_hash[:style],
+                name: chart_attribute.display_name,
+                legend_name: chart_attribute.legend_name,
+                legend_tooltip: chart_attribute.tooltip_text,
+                type: chart_attribute.display_type,
+                style: chart_attribute.display_style,
                 values: years.map do |year|
                   values[year] && values[year]['value']
                 end
@@ -63,23 +71,22 @@ module Api
             end
           }
         end
+        # rubocop:enable Metrics/AbcSize
 
         private
 
         def initialize_min_max_year
           min_years = []
           max_years = []
-          @attributes.each do |attribute_hash|
-            attribute_type = attribute_hash[:attribute_type]
-            attribute_id = attribute_hash[:attribute].id
+          @chart_config.attributes.each do |attribute|
             min_max =
-              if attribute_type == 'quant'
+              if attribute.is_a? Api::V3::Quant
                 @node.temporal_place_quants.where(
-                  quant_id: attribute_id
+                  quant_id: attribute.id
                 )
-              elsif attribute_type == 'ind'
+              elsif attribute.is_a? Api::V3::Ind
                 @node.temporal_place_inds.where(
-                  ind_id: attribute_id
+                  ind_id: attribute.id
                 )
               end
             min_max = min_max.
@@ -88,40 +95,11 @@ module Api
               order(nil).
               first
             next unless min_max
+
             min_years << min_max['min']
             max_years << min_max['max']
           end
           [min_years.compact.min, max_years.compact.max]
-        end
-
-        def attributes_list
-          [
-            {
-              name: 'Soy deforestation',
-              attribute_type: 'quant',
-              attribute_name: 'AGROSATELITE_SOY_DEFOR_',
-              legend_name: 'Soy deforestation',
-              type: 'area',
-              style: 'area-pink'
-            },
-            {
-              name: 'Territorial Deforestation',
-              attribute_type: 'quant',
-              attribute_name: 'DEFORESTATION_V2',
-              legend_name: 'Territorial<br/>Deforestation',
-              type: 'area',
-              style: 'area-black'
-            },
-            {
-              name: 'State Average',
-              attribute_type: 'quant',
-              attribute_name: 'DEFORESTATION_V2',
-              legend_name: 'State<br/>Average',
-              type: 'line',
-              style: 'line-dashed-black',
-              state_average: true
-            }
-          ]
         end
       end
     end

@@ -12,10 +12,10 @@ function ButtonLinks(props) {
     year,
     nodeId,
     contextId,
-    data: { nodeName, municipalityName },
+    data: { nodeName, jurisdictionName },
     scrollTo
   } = props;
-  const name = nodeName || municipalityName;
+  const name = nodeName || jurisdictionName;
   return (
     <div className="c-button-links hide-for-small">
       <div className="row">

@@ -38,7 +38,6 @@ class MultiTable extends Component {
     } = this.props;
     const { selectedTableIndex } = this.state;
     const indicatorNames = data.map(d => d.name);
-
     return (
       <div className="c-multi-table">
         <DropdownTabSwitcher

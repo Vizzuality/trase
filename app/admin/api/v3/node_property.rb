@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::NodeProperty, as: 'NodeProperty' do
-  menu parent: 'General Settings', priority: 5
+  menu parent: 'General', priority: 5
 
   permit_params :node_id, :is_domestic_consumption
 

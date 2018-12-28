@@ -26,6 +26,10 @@ module Api
           first
       end
 
+      def simple_type
+        'ind'
+      end
+
       def self.select_options
         order(:name).map { |ind| [ind.name, ind.id] }
       end

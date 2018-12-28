@@ -12,7 +12,7 @@ const updateQueryParams = params => (dispatch, getState) => {
 
 export const selectLogisticsMapYear = year => updateQueryParams({ year });
 export const selectLogisticsMapHub = commodity =>
-  updateQueryParams({ commodity, layers: [], year: undefined, inspection: undefined });
+  updateQueryParams({ commodity, layers: [], year: undefined, inspection_level: undefined });
 export const selectLogisticsMapInspectionLevel = inspection =>
   updateQueryParams({ inspection_level: inspection });
 

@@ -41,6 +41,8 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
 
     # disable after commit refresh callbacks
+    Api::V3::Chart.skip_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::ChartAttribute.skip_callback(:commit, :after, :refresh_dependencies)
     Api::V3::DashboardsAttribute.skip_callback(:commit, :after, :refresh_dependents)
     Api::V3::DashboardsAttributeGroup.skip_callback(:commit, :after, :refresh_dependents)
     Api::V3::DownloadAttribute.skip_callback(:commit, :after, :refresh_dependents)
@@ -57,6 +59,8 @@ RSpec.configure do |config|
 
   config.after(:suite) do
     # enable after commit refresh callbacks
+    Api::V3::Chart.set_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::ChartAttribute.set_callback(:commit, :after, :refresh_dependencies)
     Api::V3::DashboardsAttribute.set_callback(:commit, :after, :refresh_dependents)
     Api::V3::DashboardsAttributeGroup.set_callback(:commit, :after, :refresh_dependents)
     Api::V3::DownloadAttribute.set_callback(:commit, :after, :refresh_dependents)

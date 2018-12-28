@@ -13,12 +13,35 @@ tables:
     columns:
       - name: chart_id
         comment: Refence to chart
+      - name: identifier
+        comment: Identifier used to map this chart attribute to a part of code which contains calculation logic
       - name: position
         comment: Display order in scope of chart
       - name: years
         comment: Array of years for which to show this attribute in scope of chart; empty (NULL) for all years
+      - name: display_name
+        comment: Name of attribute for display in chart
+      - name: legend_name
+        comment: Legend title
+      - name: display_type
+        comment: Type of display, only used for trajectory deforestation plot in place profiles; e.g. 'area', 'line'
+      - name: display_style
+        comment: Style of display, only used for trajectory deforestation plot in place profiles; e.g. 'area-pink', 'area-black', 'line-dashed-black'
+      - name: state_average
+        comment: Only used for trajectory deforestation plot in place profiles
   - name: chart_inds
     comment: Inds to display in a chart (see chart_attributes.)
+  - name: chart_node_types
+    comment: Node types to display in a chart.
+    columns:
+      - name: chart_id
+        comment: Refence to chart
+      - name: node_type_id
+        comment: Refence to node type
+      - name: identifier
+        comment: Identifier used to map this chart node type to a part of code which contains calculation logic
+      - name: position
+        comment: Display order in scope of chart; required when more than one
   - name: chart_quals
     comment: Quals to display in a chart (see chart_attributes.)
   - name: chart_quants
@@ -405,6 +428,11 @@ materialized_views:
         comment: Type of the original entity (Ind / Qual / Quant)
       - name: original_id
         comment: Id from the original table (inds / quals / quants)
+  - name: chart_attributes_mv
+    comment: Materialized view which merges chart_inds, chart_quals and chart_quants with chart_attributes.
+    columns:
+      - name: display_name
+        comment: If absent in chart_attributes this is pulled from attributes_mv.
   - name: dashboards_attributes_mv
     comment: Materialized view which merges dashboards_inds, dashboards_quals and dashboards_quants with dashboards_attributes.
     columns:

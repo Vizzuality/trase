@@ -30,7 +30,9 @@ module Api
         self.primary_key = 'id'
 
         def self.select_options
-          order(:display_name).map { |a| [a.display_name, a.id] }
+          order(:display_name).map do |a|
+            ["#{a.display_name} (#{a.name})", a.id]
+          end
         end
 
         def self.refresh_dependents(options = {})

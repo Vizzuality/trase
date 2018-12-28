@@ -37,15 +37,15 @@ module Api
                      attributes: [:dashboards_ind, :dashboards_qual, :dashboards_quant]
       validates_with AttributeAssociatedOnceValidator,
                      attribute: :dashboards_ind,
-                     scope: :dashboards_attribute_group,
+                     scope: :dashboards_attribute_group_id,
                      if: :new_dashboards_ind_given?
       validates_with AttributeAssociatedOnceValidator,
                      attribute: :dashboards_qual,
-                     scope: :dashboards_attribute_group,
+                     scope: :dashboards_attribute_group_id,
                      if: :new_dashboards_qual_given?
       validates_with AttributeAssociatedOnceValidator,
                      attribute: :dashboards_quant,
-                     scope: :dashboards_attribute_group,
+                     scope: :dashboards_attribute_group_id,
                      if: :new_dashboards_quant_given?
 
       after_commit :refresh_dependents

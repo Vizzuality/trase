@@ -23,6 +23,13 @@ CREATE SCHEMA main;
 
 
 --
+-- Name: tool_tables; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA tool_tables;
+
+
+--
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -140,6 +147,13 @@ $$;
 --
 
 COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double precision) IS 'Given an n-element array of choropleth buckets and a positive value, returns index of bucket where value falls (1 to n + 1); else returns 0.';
+
+
+--
+-- Name: trase_server; Type: SERVER; Schema: -; Owner: -
+--
+
+-- suppressed CREATE SERVER
 
 
 SET default_tablespace = '';
@@ -649,7 +663,13 @@ CREATE TABLE public.chart_attributes (
     "position" integer,
     years integer[],
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text,
+    legend_name text,
+    display_type text,
+    display_style text,
+    state_average boolean DEFAULT false NOT NULL,
+    identifier text
 );
 
 
@@ -686,6 +706,105 @@ CREATE TABLE public.chart_inds (
 
 
 --
+-- Name: chart_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chart_quals (
+    id integer NOT NULL,
+    chart_attribute_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: chart_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chart_quants (
+    id integer NOT NULL,
+    chart_attribute_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: chart_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.chart_attributes_mv AS
+ SELECT cha.id,
+    cha.chart_id,
+    cha."position",
+    cha.years,
+    COALESCE(cha.display_name, a.display_name) AS display_name,
+    cha.legend_name,
+    cha.display_type,
+    cha.display_style,
+    cha.state_average,
+    cha.identifier,
+    a.name,
+    a.unit,
+    a.tooltip_text,
+    a.id AS attribute_id,
+    a.original_id,
+    a.original_type,
+    cha.created_at,
+    cha.updated_at
+   FROM ((public.chart_quals chq
+     JOIN public.chart_attributes cha ON ((cha.id = chq.chart_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = chq.qual_id) AND (a.original_type = 'Qual'::text))))
+UNION ALL
+ SELECT cha.id,
+    cha.chart_id,
+    cha."position",
+    cha.years,
+    COALESCE(cha.display_name, a.display_name) AS display_name,
+    cha.legend_name,
+    cha.display_type,
+    cha.display_style,
+    cha.state_average,
+    cha.identifier,
+    a.name,
+    a.unit,
+    a.tooltip_text,
+    a.id AS attribute_id,
+    a.original_id,
+    a.original_type,
+    cha.created_at,
+    cha.updated_at
+   FROM ((public.chart_quants chq
+     JOIN public.chart_attributes cha ON ((cha.id = chq.chart_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = chq.quant_id) AND (a.original_type = 'Quant'::text))))
+UNION ALL
+ SELECT cha.id,
+    cha.chart_id,
+    cha."position",
+    cha.years,
+    COALESCE(cha.display_name, a.display_name) AS display_name,
+    cha.legend_name,
+    cha.display_type,
+    cha.display_style,
+    cha.state_average,
+    cha.identifier,
+    a.name,
+    a.unit,
+    a.tooltip_text,
+    a.id AS attribute_id,
+    a.original_id,
+    a.original_type,
+    cha.created_at,
+    cha.updated_at
+   FROM ((public.chart_inds chi
+     JOIN public.chart_attributes cha ON ((cha.id = chi.chart_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = chi.ind_id) AND (a.original_type = 'Ind'::text))))
+  WITH NO DATA;
+
+
+--
 -- Name: chart_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -705,16 +824,38 @@ ALTER SEQUENCE public.chart_inds_id_seq OWNED BY public.chart_inds.id;
 
 
 --
--- Name: chart_quals; Type: TABLE; Schema: public; Owner: -
+-- Name: chart_node_types; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.chart_quals (
-    id integer NOT NULL,
-    chart_attribute_id integer NOT NULL,
-    qual_id integer NOT NULL,
+CREATE TABLE public.chart_node_types (
+    id bigint NOT NULL,
+    chart_id bigint,
+    node_type_id bigint,
+    identifier text,
+    "position" integer,
+    is_total boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: chart_node_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.chart_node_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: chart_node_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.chart_node_types_id_seq OWNED BY public.chart_node_types.id;
 
 
 --
@@ -734,19 +875,6 @@ CREATE SEQUENCE public.chart_quals_id_seq
 --
 
 ALTER SEQUENCE public.chart_quals_id_seq OWNED BY public.chart_quals.id;
-
-
---
--- Name: chart_quants; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.chart_quants (
-    id integer NOT NULL,
-    chart_attribute_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
 
 
 --
@@ -3144,6 +3272,13 @@ ALTER TABLE ONLY public.chart_inds ALTER COLUMN id SET DEFAULT nextval('public.c
 
 
 --
+-- Name: chart_node_types id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chart_node_types ALTER COLUMN id SET DEFAULT nextval('public.chart_node_types_id_seq'::regclass);
+
+
+--
 -- Name: chart_quals id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3610,11 +3745,11 @@ ALTER TABLE ONLY public.carto_layers
 
 
 --
--- Name: chart_attributes chart_attributes_chart_id_position_key; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: chart_attributes chart_attributes_chart_id_identifier_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.chart_attributes
-    ADD CONSTRAINT chart_attributes_chart_id_position_key UNIQUE (chart_id, "position");
+    ADD CONSTRAINT chart_attributes_chart_id_identifier_key UNIQUE (chart_id, identifier);
 
 
 --
@@ -3639,6 +3774,22 @@ ALTER TABLE ONLY public.chart_inds
 
 ALTER TABLE ONLY public.chart_inds
     ADD CONSTRAINT chart_inds_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chart_node_types chart_node_types_chart_id_identifier_position_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chart_node_types
+    ADD CONSTRAINT chart_node_types_chart_id_identifier_position_key UNIQUE (chart_id, identifier, "position");
+
+
+--
+-- Name: chart_node_types chart_node_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chart_node_types
+    ADD CONSTRAINT chart_node_types_pkey PRIMARY KEY (id);
 
 
 --
@@ -3679,6 +3830,14 @@ ALTER TABLE ONLY public.chart_quants
 
 ALTER TABLE ONLY public.charts
     ADD CONSTRAINT charts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: charts charts_profile_id_parent_id_identifier_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.charts
+    ADD CONSTRAINT charts_profile_id_parent_id_identifier_key UNIQUE (profile_id, parent_id, identifier);
 
 
 --
@@ -4492,6 +4651,27 @@ CREATE UNIQUE INDEX attributes_mv_name_idx ON public.attributes_mv USING btree (
 
 
 --
+-- Name: chart_attributes_chart_id_position_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX chart_attributes_chart_id_position_key ON public.chart_attributes USING btree (chart_id, "position") WHERE (identifier IS NULL);
+
+
+--
+-- Name: chart_attributes_mv_chart_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX chart_attributes_mv_chart_id_idx ON public.chart_attributes_mv USING btree (chart_id);
+
+
+--
+-- Name: chart_attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX chart_attributes_mv_id_idx ON public.chart_attributes_mv USING btree (id);
+
+
+--
 -- Name: context_node_types_mv_context_id_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4842,20 +5022,6 @@ CREATE INDEX flow_inds_ind_id_idx ON public.flow_inds USING btree (ind_id);
 
 
 --
--- Name: flow_paths_mv_flow_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX flow_paths_mv_flow_id_idx ON public.flow_paths_mv USING btree (flow_id);
-
-
---
--- Name: flow_paths_mv_flow_id_position_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX flow_paths_mv_flow_id_position_idx ON public.flow_paths_mv USING btree (flow_id, column_position);
-
-
---
 -- Name: flow_quals_qual_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5105,6 +5271,13 @@ CREATE UNIQUE INDEX index_download_versions_on_context_id_and_is_current ON publ
 --
 
 CREATE INDEX index_flow_inds_on_flow_id ON public.flow_inds USING btree (flow_id);
+
+
+--
+-- Name: index_flow_paths_mv_on_flow_id_and_column_position; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_flow_paths_mv_on_flow_id_and_column_position ON public.flow_paths_mv USING btree (flow_id, column_position);
 
 
 --
@@ -5842,6 +6015,14 @@ ALTER TABLE ONLY public.contexts
 
 
 --
+-- Name: chart_node_types fk_rails_dbd8214c7b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chart_node_types
+    ADD CONSTRAINT fk_rails_dbd8214c7b FOREIGN KEY (chart_id) REFERENCES public.charts(id);
+
+
+--
 -- Name: node_quants fk_rails_dd544b3e59; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5887,6 +6068,14 @@ ALTER TABLE ONLY public.download_quals
 
 ALTER TABLE ONLY public.contexts
     ADD CONSTRAINT fk_rails_eea78f436e FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: chart_node_types fk_rails_f043b3c463; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chart_node_types
+    ADD CONSTRAINT fk_rails_f043b3c463 FOREIGN KEY (node_type_id) REFERENCES public.node_types(id);
 
 
 --
@@ -6021,6 +6210,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180522102950'),
 ('20180522135640'),
 ('20180808114630'),
+('20180817125528'),
+('20180817130807'),
+('20180822093443'),
 ('20180827134927'),
 ('20180917124246'),
 ('20180921103012'),
@@ -6053,6 +6245,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181119104937'),
 ('20181119105000'),
 ('20181119105010'),
-('20181119105022');
+('20181119105022'),
+('20181130144149'),
+('20181207143449'),
+('20181210215622'),
+('20181211100250');
 
 

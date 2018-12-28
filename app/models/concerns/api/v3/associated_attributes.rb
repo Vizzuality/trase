@@ -25,7 +25,7 @@ module Api
       end
 
       def readonly_attribute_display_name
-        readonly_attribute&.display_name
+        "#{readonly_attribute&.display_name} (#{readonly_attribute&.name})"
       end
 
       def readonly_attribute_name

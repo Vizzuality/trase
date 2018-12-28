@@ -79,7 +79,7 @@ class TopConsumersWidget extends React.PureComponent {
             return null;
           }
 
-          const { municipalityName } = data[GET_NODE_SUMMARY_URL];
+          const { jurisdictionName } = data[GET_NODE_SUMMARY_URL];
           return (
             <section className="mini-sankey-container page-break-inside-avoid" data-test={testId}>
               <div className="row">
@@ -91,7 +91,7 @@ class TopConsumersWidget extends React.PureComponent {
                     size="sm"
                     data-test={`${testId}-title`}
                   >
-                    {this.getTitle(municipalityName)}
+                    {this.getTitle(jurisdictionName)}
                   </Heading>
                   <TranslatedMiniSankey
                     year={year}

@@ -17,16 +17,17 @@ class PlaceSummary extends React.PureComponent {
       context,
       data: {
         columnName,
-        biomeName,
-        biomeGeoId,
-        stateName,
-        stateGeoId,
+        countryName,
+        jurisdiction2,
+        jurisdiction2GeoId,
+        jurisdiction1,
+        jurisdiction1GeoId,
         summary,
         area,
         soyProduction,
         soyArea,
-        municipalityName,
-        municipalityGeoId
+        jurisdictionName,
+        jurisdictionGeoId
       } = {},
       profileMetadata: {
         adm1Name,
@@ -39,9 +40,9 @@ class PlaceSummary extends React.PureComponent {
         mainTopojsonRoot
       } = {}
     } = this.props;
-    const { commodityName, countryName } = context;
+    const { commodityName } = context;
     const titles = [
-      { name: municipalityName, label: capitalize(columnName) },
+      { name: jurisdictionName, label: capitalize(columnName) },
       { name: commodityName, label: 'Commodity' },
       {
         dropdown: true,
@@ -92,11 +93,11 @@ class PlaceSummary extends React.PureComponent {
                         <Map
                           topoJSONPath={`./vector_layers${adm1TopojsonPath.replace(
                             '$stateGeoId$',
-                            stateGeoId
+                            jurisdiction1GeoId
                           )}`}
                           topoJSONRoot={adm1TopojsonRoot}
                           getPolygonClassName={d =>
-                            d.properties.geoid === biomeGeoId ? '-isCurrent' : ''
+                            d.properties.geoid === jurisdiction2GeoId ? '-isCurrent' : ''
                           }
                         />
                       )}
@@ -105,7 +106,9 @@ class PlaceSummary extends React.PureComponent {
                   <div className="small-9 columns">
                     <div className="c-info">
                       <div className="legend">{adm1Name}</div>
-                      <div className="name -medium">{biomeName ? capitalize(biomeName) : '-'}</div>
+                      <div className="name -medium">
+                        {jurisdiction2 ? capitalize(jurisdiction2) : '-'}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -120,11 +123,11 @@ class PlaceSummary extends React.PureComponent {
                         <Map
                           topoJSONPath={`./vector_layers${adm2TopojsonPath.replace(
                             '$stateGeoId$',
-                            stateGeoId
+                            jurisdiction1GeoId
                           )}`}
                           topoJSONRoot={adm2TopojsonRoot}
                           getPolygonClassName={d =>
-                            d.properties.geoid === stateGeoId ? '-isCurrent' : ''
+                            d.properties.geoid === jurisdiction1GeoId ? '-isCurrent' : ''
                           }
                         />
                       )}
@@ -133,7 +136,9 @@ class PlaceSummary extends React.PureComponent {
                   <div className="small-9 columns">
                     <div className="c-info">
                       <div className="legend">{adm2Name}</div>
-                      <div className="name -medium">{stateName ? capitalize(stateName) : '-'}</div>
+                      <div className="name -medium">
+                        {jurisdiction1 ? capitalize(jurisdiction1) : '-'}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -151,11 +156,11 @@ class PlaceSummary extends React.PureComponent {
                     <Map
                       topoJSONPath={`./vector_layers${mainTopojsonPath.replace(
                         '$stateGeoId$',
-                        stateGeoId
+                        jurisdiction1GeoId
                       )}`}
-                      topoJSONRoot={mainTopojsonRoot.replace('$stateGeoId$', stateGeoId)}
+                      topoJSONRoot={mainTopojsonRoot.replace('$stateGeoId$', jurisdiction1GeoId)}
                       getPolygonClassName={d =>
-                        d.properties.geoid === municipalityGeoId ? '-isCurrent' : ''
+                        d.properties.geoid === jurisdictionGeoId ? '-isCurrent' : ''
                       }
                     />
                   )}
