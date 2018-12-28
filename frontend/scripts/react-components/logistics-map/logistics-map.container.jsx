@@ -47,7 +47,7 @@ class LogisticsMapContainer extends React.PureComponent {
     ];
     if (commodity === 'soy') {
       items.push({
-        title: `Production of ${commodity}`,
+        title: `Capacity (${commodity})`,
         value: formatValue(data.capacity, 'Trade volume'),
         unit: 't'
       });
@@ -75,7 +75,7 @@ class LogisticsMapContainer extends React.PureComponent {
   render() {
     const { activeLayers, layers, setLayerActive, commodity } = this.props;
     const { mapPopUp } = this.state;
-    console.log(activeLayers);
+
     return (
       <LogisticsMap
         layers={layers}

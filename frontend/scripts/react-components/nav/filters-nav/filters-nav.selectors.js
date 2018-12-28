@@ -119,19 +119,16 @@ export const getToolViewModeProps = createSelector(
 
 const getLogisticsMapYearsProps = createSelector(
   [getActiveParams],
-  activeParams => {
-    if (activeParams.commodity === 'cattle') {
-      return null;
-    }
-
-    return {
-      label: 'Year',
-      id: 'logisticsMapYear',
-      items: LOGISTICS_MAP_YEARS,
-      listClassName: '-medium',
-      selectedItem: LOGISTICS_MAP_YEARS.find(year => year.id === activeParams.year)
-    };
-  }
+  activeParams => ({
+    label: 'Year',
+    id: 'logisticsMapYear',
+    items: LOGISTICS_MAP_YEARS,
+    dropdownClassName: cx({ '-hide-only-child': activeParams.commodity !== 'soy' }),
+    selectedItem:
+      activeParams.commodity === 'soy'
+        ? LOGISTICS_MAP_YEARS.find(year => year.id === parseInt(activeParams.year, 10))
+        : { name: '2012 – 2017' }
+  })
 );
 
 const getLogisticsMapHubsProps = createSelector(
@@ -140,7 +137,6 @@ const getLogisticsMapHubsProps = createSelector(
     label: 'Logistics Hub',
     id: 'logisticsMapHub',
     items: LOGISTICS_MAP_HUBS,
-    listClassName: '-medium',
     selectedItem: LOGISTICS_MAP_HUBS.find(commodity => commodity.id === activeParams.commodity)
   })
 );
@@ -156,7 +152,6 @@ const getLogisticsMapInspectionLevelProps = createSelector(
       label: 'Inspection Level',
       id: 'logisticsMapInspectionLevel',
       items: [{ name: 'all' }, ...LOGISTICS_MAP_INSPECTION_LEVELS],
-      listClassName: '-medium',
       selectedItem: LOGISTICS_MAP_INSPECTION_LEVELS.find(
         level => level.id === activeParams.inspection_level
       ) || { name: 'all' }
@@ -228,10 +223,7 @@ export const getNavFilters = createSelector(
         return {
           left: [
             { type: FILTER_TYPES.dropdownSelector, props: logisticsMapsHubs },
-            ...insertIf(logisticsMapsYears, {
-              type: FILTER_TYPES.dropdownSelector,
-              props: logisticsMapsYears
-            }),
+            { type: FILTER_TYPES.dropdownSelector, props: logisticsMapsYears },
             ...insertIf(logisticsMapInspectionLevel, {
               type: FILTER_TYPES.dropdownSelector,
               props: logisticsMapInspectionLevel
