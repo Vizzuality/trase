@@ -6,6 +6,10 @@ RSpec.describe 'Place profile', type: :request do
   include_context 'api v3 brazil municipality quant values'
   include_context 'api v3 brazil flows quants'
 
+  before(:each) do
+    Api::V3::Readonly::Node.refresh(sync: true, skip_dependencies: true)
+  end
+
   let(:summary_params) {
     {
       year: 2015

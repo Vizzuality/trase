@@ -81,7 +81,7 @@ shared_context 'api v3 brazil municipality quant values' do
         :api_v3_node_quant,
         node: api_v3_municipality_node,
         quant: api_v3_soy_tn,
-        value: 100_204,
+        value: 101_204,
         year: 2015
       )
   end
