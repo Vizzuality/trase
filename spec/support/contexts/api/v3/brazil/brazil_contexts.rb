@@ -20,6 +20,7 @@ shared_context 'api v3 brazil contexts' do
         :api_v3_context_property,
         context: api_v3_context,
         is_disabled: false,
+        is_subnational: true,
         is_default: false
       )
   end

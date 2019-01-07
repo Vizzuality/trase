@@ -10,6 +10,7 @@ RSpec.describe 'Place profile', type: :request do
   before(:each) do
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
+    Api::V3::Readonly::Node.refresh(sync: true, skip_dependencies: true)
   end
 
   let(:summary_params) {

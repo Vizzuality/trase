@@ -243,6 +243,7 @@ occupying a total of \
         # rubocop:disable Metrics/AbcSize
         def summary_of_production_ranking
           total_soy_production = Api::V3::NodeQuant.
+            for_context(@context.id).
             where(quant_id: @commodity_production_attribute.id, year: @year).
             sum(:value)
 

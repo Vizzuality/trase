@@ -27,6 +27,10 @@ module Api
       belongs_to :quant
       belongs_to :node
 
+      def self.for_context(context_id = nil)
+        joins('LEFT JOIN nodes_mv ON node_quants.node_id = nodes_mv.id').where('nodes_mv.context_id = ?', context_id)
+      end
+
       def self.import_key
         [
           {name: :node_id, sql_type: 'INT'},

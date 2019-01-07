@@ -214,7 +214,7 @@ shared_context 'api v3 quants' do
     end
     q
   end
-  let(:api_v3_volume) do
+  let!(:api_v3_volume) do
     q = Api::V3::Quant.find_by_name('Volume')
     unless q
       q = FactoryBot.create(
