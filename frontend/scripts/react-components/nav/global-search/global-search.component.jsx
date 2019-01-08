@@ -129,6 +129,7 @@ export default class GlobalSearch extends Component {
                       placeholder: 'Search a producer, trader or country of import'
                     })}
                     ref={this.setInputRef}
+                    autoComplete="off"
                     className="search-bar-input"
                     type="search"
                     data-test="global-search-input"

@@ -67,6 +67,7 @@ class SearchInput extends PureComponent {
           <input
             {...getInputProps({ placeholder: placeholderSmall })}
             type="search"
+            autoComplete="off"
             disabled={isDisabled}
             className="search-input-field show-for-small"
             data-test={`${testId}-search-input-field-sm${isDisabled ? '-disabled' : ''}`}
@@ -74,6 +75,7 @@ class SearchInput extends PureComponent {
           <input
             {...getInputProps({ placeholder })}
             type="search"
+            autoComplete="off"
             disabled={isDisabled}
             className="search-input-field hide-for-small"
             data-test={`${testId}-search-input-field-lg${isDisabled ? '-disabled' : ''}`}

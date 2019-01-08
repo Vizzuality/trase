@@ -165,6 +165,7 @@ export default class ToolSearch extends Component {
                     {...getInputProps({
                       placeholder: 'Search a producer, trader or country of import'
                     })}
+                    autoComplete="off"
                     ref={this.setInputRef}
                     className="search-bar-input"
                     type="search"
