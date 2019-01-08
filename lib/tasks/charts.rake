@@ -12,6 +12,7 @@ namespace :charts do
       Api::V3::ChartNodeType.delete_all
       Api::V3::ChartAttribute.delete_all
       Api::V3::Chart.delete_all
+      Api::V3::Profile.delete_all
     end
     Rake::Task['charts:populate'].invoke
   end
@@ -54,7 +55,16 @@ namespace :charts do
         unless profile
           Api::V3::Profile.create(
             context_node_type: context_node_type,
-            name: profile_config['type']
+            name: profile_config['type'],
+            main_topojson_path: profile_config['main_topojson_path'],
+            main_topojson_root: profile_config['main_topojson_root'],
+            adm_1_name: profile_config['adm_1_name'],
+            adm_1_topojson_path: profile_config['adm_1_topojson_path'],
+            adm_1_topojson_root: profile_config['adm_1_topojson_root'],
+            adm_2_name: profile_config['adm_2_name'],
+            adm_2_topojson_path: profile_config['adm_2_topojson_path'],
+            adm_2_topojson_root: profile_config['adm_2_topojson_root']
+
           )
         end
       end
@@ -160,6 +170,7 @@ namespace :charts do
 
     chart_attribute.save
   end
+
   # rubocop:enable Metrics/CyclomaticComplexity
 
   def create_chart_node_types_from_node_types_list(chart, list)

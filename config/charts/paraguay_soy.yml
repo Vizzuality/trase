@@ -5,6 +5,8 @@ profiles:
     node_type: EXPORTER
   - type: place
     node_type: DEPARTMENT
+    main_topojson_path: /PARAGUAY_DEPARTMENT.topo.json
+    main_topojson_root: PARAGUAY_DEPARTMENT
 charts:
   - profile: actor
     identifier: actor_basic_attributes
