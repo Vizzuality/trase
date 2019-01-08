@@ -8,10 +8,10 @@ module Api
     module DatabaseValidation
       module ChainBuilders
         class MapAttributeChainBuilder < AbstractChainBuilder
-          checks :declared_years_match_data,
+          checks :declared_years_match_node_attributes,
                  association: :map_ind,
                  link: :edit
-          checks :declared_years_match_data,
+          checks :declared_years_match_node_attributes,
                  association: :map_quant,
                  link: :edit
           checks :has_exactly_one_of,

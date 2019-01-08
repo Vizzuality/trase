@@ -2,13 +2,12 @@
 # - resize_by_attribute
 # - recolor_by_attribute
 # - download_attribute
-# - map_attribute
-# match the data available.
+# match the data available in flow_inds/quants/quals.
 module Api
   module V3
     module DatabaseValidation
       module Checks
-        class DeclaredYearsMatchData < AbstractCheck
+        class DeclaredYearsMatchFlowAttributes < AbstractCheck
           # @param (see AbstractCheck#initialize)
           # @option options (see AbstractCheck#initialize)
           # @option options [symbol] :association name of +has_one+ association
@@ -50,14 +49,14 @@ module Api
           end
 
           def self.human_readable(options)
-            "declared year range on #{options[:association]} matches data"
+            "declared year range on #{options[:association]} matches flow attributes"
           end
 
           private
 
           def error
             super.merge(
-              message: "#{@association} years declared differ from available"
+              message: "#{@association} years declared differ from available flow attributes"
             )
           end
         end

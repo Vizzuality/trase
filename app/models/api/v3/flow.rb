@@ -27,6 +27,8 @@ module Api
       has_many :flow_quals
       has_many :flow_quants
 
+      MINIMUM_LENGTH = 4
+
       def self.import_key
         []
       end
