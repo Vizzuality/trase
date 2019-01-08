@@ -2,7 +2,7 @@ import { NUM_DECIMALS, NUM_DECIMALS_DEFAULT } from 'constants';
 
 // returns a value rounded to numDecimals
 export default (value, dimensionName) => {
-  if (value === undefined || value === null) {
+  if (value === undefined || value === null || value === 'NaN') {
     return '-';
   }
   if (typeof value !== 'number') {

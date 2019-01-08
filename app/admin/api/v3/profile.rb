@@ -61,12 +61,6 @@ ActiveAdmin.register Api::V3::Profile, as: 'Profile' do
     column('Commodity') { |property| property.context_node_type&.context&.commodity&.name }
     column('Node Type') { |property| property.context_node_type&.node_type&.name }
     column :name
-    column :adm_1_topojson_path
-    column :adm_1_topojson_root
-    column :adm_2_topojson_path
-    column :adm_2_topojson_root
-    column :main_topojson_path
-    column :main_topojson_root
     actions
   end
 

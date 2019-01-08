@@ -7,6 +7,14 @@ profiles:
     node_type: IMPORTER
   - type: place
     node_type: MUNICIPALITY
+    main_topojson_path: /municip_states/brazil/$stateGeoId$.topo.json
+    main_topojson_root: BRAZIL_$stateGeoId$
+    adm_1_name: Biome
+    adm_1_topojson_path: /BRAZIL_BIOME.topo.json
+    adm_1_topojson_root: BRAZIL_BIOME
+    adm_2_name: State
+    adm_2_topojson_path: /BRAZIL_STATE.topo.json
+    adm_2_topojson_root: BRAZIL_STATE
 charts:
   - profile: actor
     identifier: actor_basic_attributes
@@ -163,8 +171,6 @@ charts:
     position: 3
     title: Territorial governance
     attributes:
-      - attribute_type: quant
-        attribute_name: APP_DEFICIT_AREA
       - attribute_type: quant
         attribute_name: LR_DEFICIT_AREA
       - attribute_type: ind
