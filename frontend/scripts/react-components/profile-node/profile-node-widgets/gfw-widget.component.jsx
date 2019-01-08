@@ -8,13 +8,10 @@ import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinkin
 
 class GfwWidget extends React.PureComponent {
   state = {
-    gladAlertsLoaded: false,
-    treeCoverLossLoaded: false
+    gladAlertsLoaded: false
   };
 
   loadGladAlerts = () => this.setState({ gladAlertsLoaded: true });
-
-  loadTreeCoverLoss = () => this.setState({ treeCoverLossLoaded: true });
 
   renderSpinner() {
     return (
@@ -26,7 +23,7 @@ class GfwWidget extends React.PureComponent {
 
   render() {
     const { year, nodeId, contextId, profileType, renderIframes } = this.props;
-    const { gladAlertsLoaded, treeCoverLossLoaded } = this.state;
+    const { gladAlertsLoaded } = this.state;
     const params = { node_id: nodeId, context_id: contextId, profile_type: profileType, year };
     const GADM_DICTIONARY_URL = '/BRAZIL_GADM_GEOID.json';
     return (
@@ -43,12 +40,7 @@ class GfwWidget extends React.PureComponent {
           }
 
           if (loading || !renderIframes) {
-            return (
-              <React.Fragment>
-                {this.renderSpinner()}
-                {this.renderSpinner()}
-              </React.Fragment>
-            );
+            return this.renderSpinner();
           }
 
           const { jurisdictionGeoId } = data[GET_NODE_SUMMARY_URL];
@@ -61,23 +53,6 @@ class GfwWidget extends React.PureComponent {
 
           return (
             <React.Fragment>
-              {!treeCoverLossLoaded && this.renderSpinner()}
-              <section
-                className={cx('gfw-widget-container', { 'is-hidden': !treeCoverLossLoaded })}
-              >
-                <div className="row align-center">
-                  <div className="column small-10">
-                    <iframe
-                      width="100%"
-                      height="510"
-                      frameBorder="0"
-                      title="tree cover loss"
-                      onLoad={this.loadTreeCoverLoss}
-                      src={`//${GFW_WIDGETS_BASE_URL}/embed/dashboards/country/${path}?widget=treeLoss&trase=true`}
-                    />
-                  </div>
-                </div>
-              </section>
               {!gladAlertsLoaded && this.renderSpinner()}
               <section className={cx('gfw-widget-container', { 'is-hidden': !gladAlertsLoaded })}>
                 <div className="row align-center">
