@@ -14,8 +14,9 @@ import startCase from 'lodash/startCase';
 class LogisticsMapContainer extends React.PureComponent {
   static propTypes = {
     layers: PropTypes.array,
-    activeLayers: PropTypes.array,
+    tooltips: PropTypes.object,
     commodity: PropTypes.string,
+    activeLayers: PropTypes.array,
     setLayerActive: PropTypes.func.isRequired
   };
 
@@ -73,18 +74,19 @@ class LogisticsMapContainer extends React.PureComponent {
   };
 
   render() {
-    const { activeLayers, layers, setLayerActive, commodity } = this.props;
+    const { activeLayers, layers, setLayerActive, commodity, tooltips } = this.props;
     const { mapPopUp } = this.state;
 
     return (
       <LogisticsMap
         layers={layers}
+        tooltips={tooltips}
         mapPopUp={mapPopUp}
         bounds={this.bounds}
+        commodity={commodity}
         activeLayers={activeLayers}
         buildEvents={this.buildEvents}
         setLayerActive={setLayerActive}
-        commodity={commodity}
         getCurrentPopUp={this.getCurrentPopUp}
       />
     );
@@ -97,7 +99,8 @@ const mapStateToProps = state => {
     activeYear,
     commodity,
     activeLayers: getActiveLayers(state),
-    layers: getLogisticsMapLayers(state)
+    layers: getLogisticsMapLayers(state),
+    tooltips: state.app.tooltips.logisticsMap
   };
 };
 

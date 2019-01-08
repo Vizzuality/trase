@@ -25,6 +25,7 @@ function LogisticsMap(props) {
     mapPopUp,
     getCurrentPopUp,
     bounds,
+    tooltips,
     setLayerActive
   } = props;
   const Tooltip = p => <UnitsTooltip {...p.data} />;
@@ -50,7 +51,12 @@ function LogisticsMap(props) {
             </React.Fragment>
           )}
         </MapComponent>
-        <LogisticsMapLegend layers={layers} setLayerActive={setLayerActive} heading={heading} />
+        <LogisticsMapLegend
+          layers={layers}
+          heading={heading}
+          tooltips={tooltips}
+          setLayerActive={setLayerActive}
+        />
       </div>
     </div>
   );
@@ -60,7 +66,8 @@ LogisticsMap.propTypes = {
   layers: PropTypes.array,
   activeLayers: PropTypes.array,
   buildEvents: PropTypes.func,
-  commodity: PropTypes.string
+  commodity: PropTypes.string,
+  tooltips: PropTypes.object
 };
 
 export default LogisticsMap;
