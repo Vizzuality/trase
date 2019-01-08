@@ -52,9 +52,9 @@ class PlaceSummary extends React.PureComponent {
         onValueSelected: onYearChange
       }
     ];
-    const soyValue = soyArea !== null && soyArea !== 'NaN' ? formatValue(soyArea, 'area') : '-';
-    const areaValue = area !== null ? formatValue(area, 'area') : '-';
-    const soyProductionValue = soyProduction !== null ? formatValue(soyProduction, 'tons') : '-';
+    const soyValue = formatValue(soyArea, 'area');
+    const areaValue = formatValue(area, 'area');
+    const soyProductionValue = formatValue(soyProduction, 'tons');
 
     return (
       <React.Fragment>
@@ -172,9 +172,9 @@ class PlaceSummary extends React.PureComponent {
                 <div className="small-12 columns">
                   <TitleGroup titles={titles} on={onYearChange} />
                 </div>
-                {(areaValue || soyValue || soyProductionValue) && (
+                {(areaValue !== '-' || soyValue !== '-' || soyProductionValue !== '-') && (
                   <div className="small-12 columns">
-                    {areaValue && (
+                    {areaValue !== '-' && (
                       <div className="stat-item">
                         <div className="legend">area</div>
                         <div className="value">{areaValue}</div>
@@ -183,7 +183,7 @@ class PlaceSummary extends React.PureComponent {
                         </div>
                       </div>
                     )}
-                    {soyValue && (
+                    {soyValue !== '-' && (
                       <div className="stat-item">
                         <div className="legend">
                           {commodityName} land
@@ -196,7 +196,7 @@ class PlaceSummary extends React.PureComponent {
                         <div className="unit">ha</div>
                       </div>
                     )}
-                    {soyProductionValue && (
+                    {soyProductionValue !== '-' && (
                       <div className="stat-item">
                         <div className="legend">
                           soy production
