@@ -75,5 +75,7 @@
   .logistics-map-legend-item-controls {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    min-width: 60px;
   }
 }

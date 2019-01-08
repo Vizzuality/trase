@@ -100,7 +100,7 @@ const mapStateToProps = state => {
     commodity,
     activeLayers: getActiveLayers(state),
     layers: getLogisticsMapLayers(state),
-    tooltips: state.app.tooltips.logisticsMap
+    tooltips: state.app.tooltips ? state.app.tooltips.logisticsMap : {}
   };
 };
 
