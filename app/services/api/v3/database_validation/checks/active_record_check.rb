@@ -27,9 +27,38 @@ module Api
             end
           end
 
+          def self.human_readable_rules(parent_object_name, options)
+            validated_object_class = options &&
+              validated_object_class(options[:on])
+            validated_object_name =
+              validated_object_class&.name&.demodulize || parent_object_name
+
+            human_readable_array(options).map do |check|
+              {
+                validated_object: validated_object_name,
+                rule: check
+              }
+            end
+          end
+
           # @return (see AbstractCheck#passing?)
           def passing?
             @validated_object.valid?
+          end
+
+          private_class_method def self.human_readable_array(options)
+            model_class = Api::V3.const_get(options[:on].to_s.camelize)
+            model_class.validators.map do |validator|
+              human_readable_options = validator.options.map do |k, v|
+                "#{k}: #{v}"
+              end
+              [
+                validator.kind,
+                'of',
+                validator.attributes.join(', '),
+                human_readable_options
+              ].join(' ')
+            end
           end
         end
       end

@@ -29,4 +29,12 @@ RSpec.describe Api::V3::DatabaseValidation::Report do
       end
     end
   end
+
+  describe :human_readable_rules do
+    it 'returns an array' do
+      expect(
+        Api::V3::DatabaseValidation::Report.human_readable_rules
+      ).to be_a(Array)
+    end
+  end
 end

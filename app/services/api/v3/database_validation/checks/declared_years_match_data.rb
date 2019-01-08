@@ -49,6 +49,10 @@ module Api
             actual_years.sort == declared_years.sort
           end
 
+          def self.human_readable(options)
+            "declared year range on #{options[:association]} matches data"
+          end
+
           private
 
           def error
