@@ -24,6 +24,10 @@ module Api
             @count == 1
           end
 
+          def self.human_readable(options)
+            "presence of exactly one of #{options[:associations]}"
+          end
+
           private
 
           def error

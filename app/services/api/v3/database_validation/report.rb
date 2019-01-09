@@ -24,6 +24,10 @@ module Api
           @errors_list
         end
 
+        def self.human_readable_rules
+          CHAIN_BUILDERS.map(&:human_readable_rules).flatten
+        end
+
         private
 
         def chain

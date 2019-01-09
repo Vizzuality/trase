@@ -16,6 +16,10 @@ module Api
             super(object, options)
             @associations = [options[:association]]
           end
+
+          def self.human_readable(options)
+            "presence of exactly one #{options[:association].downcase}"
+          end
         end
       end
     end

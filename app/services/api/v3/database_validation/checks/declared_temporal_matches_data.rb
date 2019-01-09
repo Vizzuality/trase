@@ -35,6 +35,10 @@ module Api
             tmp.empty?
           end
 
+          def self.human_readable(options)
+            "declared temporal flag #{options[:attribute]} matches data"
+          end
+
           private
 
           def error

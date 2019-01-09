@@ -27,6 +27,16 @@ module Api
             @validations << {validation: validation, options: options}
           end
 
+          def self.human_readable_rules
+            self_name = name.demodulize.sub('ChainBuilder', '').humanize
+            @validations.map do |validation|
+              validation_class = Api::V3::DatabaseValidation::Checks.const_get(
+                validation[:validation].to_s.camelize
+              )
+              validation_class.human_readable_rules(self_name, validation[:options])
+            end.flatten
+          end
+
           private
 
           def add_validations_to_chain(chain)

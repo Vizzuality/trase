@@ -20,6 +20,10 @@ module Api
             @object.send(@association).any?
           end
 
+          def self.human_readable(options)
+            "presence of at least one #{options[:association].to_s.humanize.singularize}"
+          end
+
           private
 
           def error

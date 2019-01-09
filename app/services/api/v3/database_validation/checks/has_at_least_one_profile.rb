@@ -21,6 +21,10 @@ module Api
             tmp.any?
           end
 
+          def self.human_readable(options)
+            "presence of at least one #{options[:profile_type]} profile"
+          end
+
           private
 
           def error

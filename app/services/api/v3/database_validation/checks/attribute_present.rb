@@ -22,6 +22,10 @@ module Api
             @on_object.send(@attribute).present?
           end
 
+          def self.human_readable(options)
+            "presence of #{options[:attribute]} on #{options[:on]}"
+          end
+
           private
 
           def error
