@@ -13,6 +13,8 @@ import 'scripts/react-components/shared/search-input/search-input.scss';
 const SEARCH_DEBOUNCE_RATE_IN_MS = 400;
 
 class SearchInput extends PureComponent {
+  static VARIANTS = ['secondary'];
+
   onInputValueChange = debounce(
     (...params) => this.props.onSearchTermChange && this.props.onSearchTermChange(...params),
     SEARCH_DEBOUNCE_RATE_IN_MS
@@ -41,6 +43,8 @@ class SearchInput extends PureComponent {
 
   renderSearchBox = ({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => {
     const {
+      size,
+      variant,
       className,
       isLoading,
       isDisabled,
@@ -56,7 +60,10 @@ class SearchInput extends PureComponent {
 
     return (
       <div
-        className={cx('c-search-input', className)}
+        className={cx('c-search-input', className, {
+          [variant]: SearchInput.VARIANTS.includes(variant),
+          [`size-${size}`]: size
+        })}
         data-test={`${testId}-search-input-container`}
       >
         <div
@@ -124,8 +131,10 @@ class SearchInput extends PureComponent {
 }
 
 SearchInput.propTypes = {
+  size: PropTypes.string,
   year: PropTypes.number,
   testId: PropTypes.string,
+  variant: PropTypes.string,
   isLoading: PropTypes.bool,
   isDisabled: PropTypes.bool,
   className: PropTypes.string,

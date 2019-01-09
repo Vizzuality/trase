@@ -25,6 +25,8 @@ function CompaniesPanel(props) {
   return (
     <React.Fragment>
       <SearchInput
+        variant="secondary"
+        size="sm"
         className="dashboard-panel-search"
         items={searchCompanies}
         placeholder="Search company"

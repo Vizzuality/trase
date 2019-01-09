@@ -11,22 +11,27 @@ import { Layer, LayerManager } from 'layer-manager/lib/react';
 import { PluginLeaflet } from 'layer-manager/lib';
 import { BASEMAPS } from 'constants';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
+import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-legend/logistics-map-legend.component';
+import LogisticsMapPanel from 'react-components/logistics-map/logistics-map-panel/logistics-map-panel.component';
+
 import 'wri-api-components/dist/map.css';
 import 'leaflet/dist/leaflet.css';
 import 'scripts/react-components/logistics-map/logistics-map.scss';
 
 function LogisticsMap(props) {
   const {
-    commodity,
-    activeLayers,
-    layers,
-    buildEvents,
-    mapPopUp,
-    getCurrentPopUp,
     bounds,
+    layers,
     tooltips,
-    setLayerActive
+    mapPopUp,
+    commodity,
+    closeModal,
+    isModalOpen,
+    buildEvents,
+    activeLayers,
+    setLayerActive,
+    getCurrentPopUp
   } = props;
   const Tooltip = p => <UnitsTooltip {...p.data} />;
   const heading = commodity === 'soy' ? 'soy facilities' : 'slaughterhouses';
@@ -57,6 +62,9 @@ function LogisticsMap(props) {
           tooltips={tooltips}
           setLayerActive={setLayerActive}
         />
+        <SimpleModal isOpen={isModalOpen} onRequestClose={closeModal}>
+          <LogisticsMapPanel items={[]} />
+        </SimpleModal>
       </div>
     </div>
   );
@@ -67,7 +75,8 @@ LogisticsMap.propTypes = {
   activeLayers: PropTypes.array,
   buildEvents: PropTypes.func,
   commodity: PropTypes.string,
-  tooltips: PropTypes.object
+  tooltips: PropTypes.object,
+  isModalOpen: PropTypes.bool
 };
 
 export default LogisticsMap;

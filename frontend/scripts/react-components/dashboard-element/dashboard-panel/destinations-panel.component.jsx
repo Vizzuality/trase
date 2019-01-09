@@ -20,6 +20,8 @@ function DestinationsPanel(props) {
   return (
     <React.Fragment>
       <SearchInput
+        variant="secondary"
+        size="sm"
         className="dashboard-panel-search"
         items={searchDestinations}
         placeholder="Search place"

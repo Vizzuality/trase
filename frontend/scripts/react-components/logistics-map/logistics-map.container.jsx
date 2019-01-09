@@ -21,7 +21,8 @@ class LogisticsMapContainer extends React.PureComponent {
   };
 
   state = {
-    mapPopUp: null
+    mapPopUp: null,
+    isModalOpen: true
   };
 
   bounds = {
@@ -73,9 +74,11 @@ class LogisticsMapContainer extends React.PureComponent {
     this.popUp = popUp;
   };
 
+  closeModal = () => this.setState({ isModalOpen: false });
+
   render() {
     const { activeLayers, layers, setLayerActive, commodity, tooltips } = this.props;
-    const { mapPopUp } = this.state;
+    const { mapPopUp, isModalOpen } = this.state;
 
     return (
       <LogisticsMap
@@ -84,7 +87,9 @@ class LogisticsMapContainer extends React.PureComponent {
         mapPopUp={mapPopUp}
         bounds={this.bounds}
         commodity={commodity}
+        isModalOpen={isModalOpen}
         activeLayers={activeLayers}
+        closeModal={this.closeModal}
         buildEvents={this.buildEvents}
         setLayerActive={setLayerActive}
         getCurrentPopUp={this.getCurrentPopUp}

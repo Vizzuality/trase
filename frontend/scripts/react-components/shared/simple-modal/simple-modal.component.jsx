@@ -12,12 +12,26 @@ function SimpleModal(props) {
       className={cx('c-simple-modal', props.className)}
       overlayClassName="c-simple-modal-overlay"
       ariaHideApp={false}
-    />
+    >
+      <div className="simple-modal-content">
+        <div className="simple-modal-close">
+          <button onClick={props.onRequestClose}>
+            <span>close</span>
+            <svg className="icon icon-close">
+              <use xlinkHref="#icon-close" />
+            </svg>
+          </button>
+        </div>
+        {props.children}
+      </div>
+    </ReactModal>
   );
 }
 
 SimpleModal.propTypes = {
-  className: PropTypes.string
+  children: PropTypes.any,
+  className: PropTypes.string,
+  onRequestClose: PropTypes.func
 };
 
 export default SimpleModal;

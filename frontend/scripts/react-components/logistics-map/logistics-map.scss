@@ -20,6 +20,7 @@
   .wri_api__c-map-controls {
     left: 16px;
     right: initial;
+    z-index: $z-above-veil-below-nav;
   }
 
   .wri_api__c-zoom-control .wri_api__zoom-control-btn {
