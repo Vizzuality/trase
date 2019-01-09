@@ -11,14 +11,15 @@ export default [
       {
         type: 'cartodb',
         options: {
-          sql: `SELECT to_date(year::varchar, 'yyyy') as year_date, * FROM "${CARTO_ACCOUNT}".brazil_crushing_facilities where year = {{year}}`,
+          sql: `SELECT to_date(year::varchar, 'yyyy') as year_date, * FROM "${CARTO_ACCOUNT}".brazil_crushing_facilities where year = {{year}} {{and}}`,
           cartocss: `#layer { marker-width: 7; marker-fill: #EA6869; marker-fill-opacity: 0.9; marker-allow-overlap: true; marker-line-width: 1; marker-line-color: #FFFFFF; marker-line-opacity: 1; } #layer[zoom>4] { marker-line-width: 0.5; marker-file: url('${MARKERS_URL}/crushing-icon.svg'); marker-width: ramp([capacity], range(15, 26), quantiles(7)); }`,
           cartocss_version: '2.3.0',
           interactivity: ['company', 'municipality', 'capacity']
         }
       }
     ],
-    params_config: [{ key: 'year', default: 2016 }]
+    params_config: [{ key: 'year', default: 2016 }],
+    sql_config: [{ type: 'and', key: 'company', name: 'companies' }]
   },
   {
     version: '0.0.1',
@@ -29,14 +30,15 @@ export default [
       {
         type: 'cartodb',
         options: {
-          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_refining_facilities where year = {{year}}`,
+          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_refining_facilities where year = {{year}} {{and}}`,
           cartocss: `#layer { marker-width: 7; marker-fill: #7AC1CA; marker-fill-opacity: 0.9; marker-allow-overlap: true; marker-line-width: 1; marker-line-color: #FFFFFF; marker-line-opacity: 1; } #layer[zoom>4] { marker-line-width: 0.5; marker-file: url('${MARKERS_URL}/refining-icon.svg'); marker-width: 24; }`,
           cartocss_version: '2.3.0',
           interactivity: ['company', 'municipality', 'capacity']
         }
       }
     ],
-    params_config: [{ key: 'year', default: 2016 }]
+    params_config: [{ key: 'year', default: 2016 }],
+    sql_config: [{ type: 'and', key: 'company', name: 'companies' }]
   },
   {
     version: '0.0.1',
@@ -47,13 +49,14 @@ export default [
       {
         type: 'cartodb',
         options: {
-          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_storage_facilities_sample`,
+          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_storage_facilities_sample {{where}}`,
           cartocss: `#layer { marker-width: 7; marker-fill: #F6CF71; marker-fill-opacity: 0.9; marker-allow-overlap: true;  marker-line-color: #FFFFFF; marker-line-width: 1; marker-line-opacity: 1; } #layer[zoom>4] { marker-line-width: 0.5; marker-file: url('${MARKERS_URL}/storage-icon.svg'); marker-width: ramp([capacity], range(15, 26), quantiles(7)); }`,
           cartocss_version: '2.3.0',
           interactivity: ['company', 'municipality', 'capacity']
         }
       }
-    ]
+    ],
+    sql_config: [{ type: 'where', key: 'company', name: 'companies' }]
   },
   {
     version: '0.0.1',
@@ -64,14 +67,17 @@ export default [
       {
         type: 'cartodb',
         options: {
-          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'CONFIRMED SLAUGHTERHOUSE' {{and}}`,
+          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'CONFIRMED SLAUGHTERHOUSE' {{and}} {{and2}}`,
           cartocss: `#layer { marker-width: 7; marker-fill: #F39B73; marker-fill-opacity: 0.9; marker-allow-overlap: true; marker-line-width: 1; marker-line-color: #FFFFFF; marker-line-opacity: 1; } #layer[zoom>4] { marker-line-width: 0.5; marker-file: url('${MARKERS_URL}/slaughterhouse-icon.svg'); marker-width: 24; }`,
           cartocss_version: '2.3.0',
           interactivity: ['company', 'state', 'municipality', 'subclass', 'inspection_level']
         }
       }
     ],
-    sql_config: [{ type: 'and', key: 'inspection_level' }]
+    sql_config: [
+      { type: 'and', key: 'inspection_level', name: 'inspection' },
+      { type: 'and2', key: 'company', name: 'companies' }
+    ]
   },
   {
     version: '0.0.1',
@@ -82,14 +88,17 @@ export default [
       {
         type: 'cartodb',
         options: {
-          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'UNCONFIRMED SLAUGHTERHOUSE (MULTIFUNCTIONAL FACILITY)' {{and}}`,
+          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'UNCONFIRMED SLAUGHTERHOUSE (MULTIFUNCTIONAL FACILITY)' {{and}} {{and2}}`,
           cartocss: `#layer { marker-width: 7; marker-fill: #7AC1CA; marker-fill-opacity: 0.9; marker-allow-overlap: true; marker-line-width: 1; marker-line-color: #FFFFFF; marker-line-opacity: 1; } #layer[zoom>4] { marker-line-width: 0.5; marker-file: url('${MARKERS_URL}/slaughterhouse-icon.svg'); marker-width: 24; }`,
           cartocss_version: '2.3.0',
           interactivity: ['company', 'state', 'municipality', 'subclass', 'inspection_level']
         }
       }
     ],
-    sql_config: [{ type: 'and', key: 'inspection_level' }]
+    sql_config: [
+      { type: 'and', key: 'inspection_level', name: 'inspection' },
+      { type: 'and2', key: 'company', name: 'companies' }
+    ]
   },
   {
     version: '0.0.1',
@@ -100,14 +109,17 @@ export default [
       {
         type: 'cartodb',
         options: {
-          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'PROBABLE SLAUGHTERHOUSE' {{and}}`,
+          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'PROBABLE SLAUGHTERHOUSE' {{and}} {{and2}}`,
           cartocss: `#layer { marker-width: 7; marker-fill: #F6CF71; marker-fill-opacity: 0.9; marker-allow-overlap: true; marker-line-width: 1; marker-line-color: #FFFFFF; marker-line-opacity: 1; } #layer[zoom>4] { marker-line-width: 0.5; marker-file: url('${MARKERS_URL}/slaughterhouse-icon.svg'); marker-width: 24; }`,
           cartocss_version: '2.3.0',
           interactivity: ['company', 'state', 'municipality', 'subclass', 'inspection_level']
         }
       }
     ],
-    sql_config: [{ type: 'and', key: 'inspection_level' }]
+    sql_config: [
+      { type: 'and', key: 'inspection_level', name: 'inspection' },
+      { type: 'and2', key: 'company', name: 'companies' }
+    ]
   },
   {
     version: '0.0.1',
@@ -118,13 +130,16 @@ export default [
       {
         type: 'cartodb',
         options: {
-          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'UNCONFIRMED SLAUGHTERHOUSE' {{and}}`,
+          sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'UNCONFIRMED SLAUGHTERHOUSE' {{and}} {{and2}}`,
           cartocss: `#layer { marker-width: 7; marker-fill: #DCB0F2; marker-fill-opacity: 0.9; marker-allow-overlap: true; marker-line-width: 1; marker-line-color: #FFFFFF; marker-line-opacity: 1; } #layer[zoom>4] { marker-line-width: 0.5; marker-file: url('${MARKERS_URL}/slaughterhouse-icon.svg'); marker-width: 24; }`,
           cartocss_version: '2.3.0',
           interactivity: ['company', 'state', 'municipality', 'subclass', 'inspection_level']
         }
       }
     ],
-    sql_config: [{ type: 'and', key: 'inspection_level' }]
+    sql_config: [
+      { type: 'and', key: 'inspection_level', name: 'inspection' },
+      { type: 'and2', key: 'company', name: 'companies' }
+    ]
   }
 ];

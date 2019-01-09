@@ -153,7 +153,7 @@ const getLogisticsMapInspectionLevelProps = createSelector(
       id: 'logisticsMapInspectionLevel',
       items: [{ name: 'all' }, ...LOGISTICS_MAP_INSPECTION_LEVELS],
       selectedItem: LOGISTICS_MAP_INSPECTION_LEVELS.find(
-        level => level.id === activeParams.inspection_level
+        level => level.id === activeParams.inspection
       ) || { name: 'all' }
     };
   }

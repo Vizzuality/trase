@@ -13,7 +13,7 @@ import { BASEMAPS } from 'constants';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-legend/logistics-map-legend.component';
-import LogisticsMapPanel from 'react-components/logistics-map/logistics-map-panel/logistics-map-panel.component';
+import LogisticsMapPanel from 'react-components/logistics-map/logistics-map-panel/logistics-map-panel.container';
 
 import 'wri-api-components/dist/map.css';
 import 'leaflet/dist/leaflet.css';
@@ -63,7 +63,7 @@ function LogisticsMap(props) {
           setLayerActive={setLayerActive}
         />
         <SimpleModal isOpen={isModalOpen} onRequestClose={closeModal}>
-          <LogisticsMapPanel items={[]} />
+          <LogisticsMapPanel />
         </SimpleModal>
       </div>
     </div>
