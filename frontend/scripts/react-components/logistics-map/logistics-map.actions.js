@@ -1,5 +1,7 @@
 import { redirect } from 'redux-first-router';
 
+export const LOGISTICS_MAP__SET_COMPANIES = 'LOGISTICS_MAP__SET_COMPANIES';
+
 const updateQueryParams = params => (dispatch, getState) => {
   const { query = {} } = getState().location;
   return dispatch(
@@ -35,4 +37,15 @@ export const setLayerActive = (layerId, active) => (dispatch, getState) => {
       }
     }
   });
+};
+
+export const getLogisticsMapCompanies = () => (dispatch, getState) => {
+  const url = `https://${CARTO_ACCOUNT}.carto.com/api/v1/sql?q=select distinct company from (SELECT company as name FROM brazil_crushing_facilities union all select company from brazil_storage_facilities_sample union all select company from brazil_refining_facilities) as companies order by company asc`;
+
+  if (getState().logisticsMap.companies.length === 0) {
+    fetch(url)
+      .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
+      .then(data => dispatch({ type: LOGISTICS_MAP__SET_COMPANIES, payload: data }))
+      .catch(e => console.error(e));
+  }
 };

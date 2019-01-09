@@ -6,7 +6,10 @@ import {
   getActiveLayers,
   getActiveParams
 } from 'react-components/logistics-map/logistics-map.selectors';
-import { setLayerActive as setLayerActiveFn } from 'react-components/logistics-map/logistics-map.actions';
+import {
+  setLayerActive as setLayerActiveFn,
+  getLogisticsMapCompanies
+} from 'react-components/logistics-map/logistics-map.actions';
 import LogisticsMap from 'react-components/logistics-map/logistics-map.component';
 import formatValue from 'utils/formatValue';
 import startCase from 'lodash/startCase';
@@ -17,7 +20,8 @@ class LogisticsMapContainer extends React.PureComponent {
     tooltips: PropTypes.object,
     commodity: PropTypes.string,
     activeLayers: PropTypes.array,
-    setLayerActive: PropTypes.func.isRequired
+    setLayerActive: PropTypes.func.isRequired,
+    getLogisticsMapCompanies: PropTypes.func.isRequired
   };
 
   state = {
@@ -30,6 +34,10 @@ class LogisticsMapContainer extends React.PureComponent {
   };
 
   currentPopUp = null;
+
+  componentDidMount() {
+    this.props.getLogisticsMapCompanies();
+  }
 
   onMouseOver = (e, layer) => {
     const { data } = e;
@@ -110,7 +118,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  setLayerActive: setLayerActiveFn
+  setLayerActive: setLayerActiveFn,
+  getLogisticsMapCompanies
 };
 
 export default connect(
