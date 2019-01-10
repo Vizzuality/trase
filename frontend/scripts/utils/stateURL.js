@@ -121,7 +121,7 @@ export const decodeStateFromURL = state => {
 };
 
 export const parse = url => {
-  const params = qs.parse(url);
+  const params = qs.parse(url, { arrayLimit: 1000 });
   if (params.state) {
     return decodeStateFromURL(params.state);
   }
@@ -129,7 +129,7 @@ export const parse = url => {
 };
 
 export const stringify = params => {
-  return qs.stringify(params);
+  return qs.stringify(params, { encodeValuesOnly: true });
 };
 
 const stateToURLObject = (state, location) => {

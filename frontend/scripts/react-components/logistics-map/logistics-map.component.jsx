@@ -63,7 +63,7 @@ function LogisticsMap(props) {
           setLayerActive={setLayerActive}
         />
         <SimpleModal isOpen={isModalOpen} onRequestClose={closeModal}>
-          <LogisticsMapPanel />
+          <LogisticsMapPanel close={closeModal} />
         </SimpleModal>
       </div>
     </div>

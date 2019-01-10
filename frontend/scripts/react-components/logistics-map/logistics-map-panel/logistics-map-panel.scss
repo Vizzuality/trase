@@ -1,8 +1,28 @@
+@import 'styles/settings';
+
 .c-logistics-map-panel {
   width: 820px;
-  padding: 30px;
+  padding: 30px 0;
 
   > * {
+    padding: 0 30px;
     margin: 0 0 25px 0;
+    &:last-child {
+      margin: 0;
+    }
+  }
+
+  .logistics-map-panel-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 25px 0 0;
+    border-top: 1px solid $medium-gray;
+
+    .logistics-map-panel-tags-group {
+      max-height: calc(100% - 538px);
+      overflow: auto;
+    }
   }
 }

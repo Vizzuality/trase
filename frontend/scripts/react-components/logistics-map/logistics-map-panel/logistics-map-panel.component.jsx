@@ -6,9 +6,18 @@ import GridList from 'react-components/shared/grid-list/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 
 import 'react-components/logistics-map/logistics-map-panel/logistics-map-panel.scss';
+import Button from 'react-components/shared/button/button.component';
 
 function LogisticsMapPanel(props) {
-  const { items, enableItem, disableItem, filterItems, searchResults, activeItems } = props;
+  const {
+    items,
+    enableItem,
+    disableItem,
+    filterItems,
+    searchResults,
+    activeItems,
+    goToMap
+  } = props;
   return (
     <div className="c-logistics-map-panel">
       <Heading align="center">Choose the options you want to see</Heading>
@@ -38,14 +47,30 @@ function LogisticsMapPanel(props) {
           />
         )}
       </GridList>
+      <div className="logistics-map-panel-footer">
+        <Button size="md" color="pink" onClick={goToMap}>
+          {LogisticsMapPanel.getButtonText(activeItems)}
+        </Button>
+      </div>
     </div>
   );
 }
 
 LogisticsMapPanel.nodeTypeRenderer = () => 'Company';
+LogisticsMapPanel.getButtonText = items => {
+  switch (items.length) {
+    case 0:
+      return 'See all';
+    case 1:
+      return 'See company';
+    default:
+      return `See companies (${items.length})`;
+  }
+};
 
 LogisticsMapPanel.propTypes = {
-  items: PropTypes.array
+  items: PropTypes.array,
+  hideFooter: PropTypes.bool
 };
 
 export default LogisticsMapPanel;

@@ -3,7 +3,7 @@ import { redirect } from 'redux-first-router';
 export const LOGISTICS_MAP__SET_COMPANIES = 'LOGISTICS_MAP__SET_COMPANIES';
 export const LOGISTICS_MAP__SET_COMPANY_SEARCH_TERM = 'LOGISTICS_MAP__SET_COMPANY_SEARCH_TERM';
 
-const updateQueryParams = params => (dispatch, getState) => {
+export const updateQueryParams = params => (dispatch, getState) => {
   const { query = {} } = getState().location;
   return dispatch(
     redirect({
@@ -64,20 +64,6 @@ export const getLogisticsMapCompanies = () => (dispatch, getState) => {
       )
       .catch(e => console.error(e));
   }
-};
-
-export const setCompanyActive = (company, active) => (dispatch, getState) => {
-  const { query = {} } = getState().location;
-  const { companies = [] } = query;
-  let newCompanies;
-
-  if (active) {
-    newCompanies = [...companies, company.name];
-  } else {
-    newCompanies = companies.filter(c => c !== company.name);
-  }
-
-  return dispatch(updateQueryParams({ companies: newCompanies }));
 };
 
 export const setCompanySearchTerm = term => ({

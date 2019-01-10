@@ -17,7 +17,7 @@ export function prepareWidget(endpoints, { endpoint, params, raw }) {
     if (raw) {
       url = endpoint;
       if (params) {
-        const search = qs.stringify(params);
+        const search = qs.stringify(params, { encodeValuesOnly: true });
         url = endpoint.includes('?') ? `${endpoint}&${search}` : `${endpoint}?${search}`;
       }
     } else {
