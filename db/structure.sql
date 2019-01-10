@@ -6019,7 +6019,7 @@ ALTER TABLE ONLY public.contexts
 --
 
 ALTER TABLE ONLY public.chart_node_types
-    ADD CONSTRAINT fk_rails_dbd8214c7b FOREIGN KEY (chart_id) REFERENCES public.charts(id);
+    ADD CONSTRAINT fk_rails_dbd8214c7b FOREIGN KEY (chart_id) REFERENCES public.charts(id) ON DELETE CASCADE;
 
 
 --
@@ -6075,7 +6075,7 @@ ALTER TABLE ONLY public.contexts
 --
 
 ALTER TABLE ONLY public.chart_node_types
-    ADD CONSTRAINT fk_rails_f043b3c463 FOREIGN KEY (node_type_id) REFERENCES public.node_types(id);
+    ADD CONSTRAINT fk_rails_f043b3c463 FOREIGN KEY (node_type_id) REFERENCES public.node_types(id) ON DELETE CASCADE;
 
 
 --
@@ -6249,6 +6249,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181130144149'),
 ('20181207143449'),
 ('20181210215622'),
-('20181211100250');
+('20190110140539');
 
 
