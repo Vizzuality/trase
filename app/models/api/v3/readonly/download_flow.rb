@@ -51,12 +51,18 @@ module Api
         self.table_name = 'download_flows_mv'
         self.primary_key = 'id'
 
-        def self.long_running?
-          true
-        end
+        class << self
+          def long_running?
+            true
+          end
 
-        def self.refresh_dependencies(_options = {})
-          refresh_by_name('flow_paths_mv', concurrently: false) # no unique index
+          def refresh_dependencies(_options = {})
+            refresh_by_name('flow_paths_mv', concurrently: false) # no unique index
+          end
+
+          def after_refresh(_options = {})
+            Api::V3::Download::PrecomputedDownload.refresh
+          end
         end
       end
     end

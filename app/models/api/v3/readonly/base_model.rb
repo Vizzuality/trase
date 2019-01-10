@@ -10,6 +10,8 @@ module Api
           # Refreshes the views dependencies, the view itself and its dependents
           # @param options
           # @option options [Boolean] :skip_dependencies skip refreshing
+          # @option options [Boolean] :skip_dependents skip refreshing
+          # @option options [Boolean] :sync synchronously
           def refresh(options = {})
             # rubocop:disable Style/DoubleNegation
             sync_processing = !!options[:sync]
@@ -24,6 +26,7 @@ module Api
           def refresh_now(options = {})
             refresh_dependencies(options) unless options[:skip_dependencies]
             refresh_by_name(table_name, options)
+            after_refresh(options)
             refresh_dependents(options) unless options[:skip_dependents]
           end
 
@@ -61,6 +64,9 @@ module Api
               concurrently: safe_concurrently
             )
           end
+
+          # Whatever needs doing after refreshing that is not a cascading refresh
+          def after_refresh(_options = {}); end
         end
       end
     end

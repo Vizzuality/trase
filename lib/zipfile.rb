@@ -5,6 +5,7 @@ module Zipfile
     Zip::File.open_buffer(zipfile_content) do |zipfile|
       entry = zipfile.glob("*.#{format}").first
       break nil unless entry
+
       break entry.get_input_stream.read
     end
   end
