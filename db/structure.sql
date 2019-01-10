@@ -23,13 +23,6 @@ CREATE SCHEMA main;
 
 
 --
--- Name: tool_tables; Type: SCHEMA; Schema: -; Owner: -
---
-
-CREATE SCHEMA tool_tables;
-
-
---
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
 --
 

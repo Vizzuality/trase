@@ -4,8 +4,9 @@ module Api
       class MirrorImport
         def call(database_update, s3_filename)
           timer_stats = {}
+          schema_importer = Api::V3::DatabaseImport::SchemaImporter.new(s3_filename)
           timer_stats['copy'] = Timer.with_timer do
-            Api::V3::DatabaseImport::SchemaImporter.new(s3_filename).call
+            schema_importer.call
           end
           timer_stats['import'] = Timer.with_timer do
             Api::V3::Import::Importer.new(
@@ -15,6 +16,7 @@ module Api
           stats = database_update.reload.stats
           stats['elapsed_seconds'] = timer_stats
           database_update.update_stats(stats)
+          schema_importer.cleanup
         end
       end
     end
