@@ -19,7 +19,7 @@ module Api
           checks :has_exactly_one,
                  association: :resize_by_quant,
                  link: :index
-          checks :active_record_check, link: :edit
+          checks :active_record_check, on: :resize_by_attribute, link: :edit
 
           def self.build_chain(context)
             chain = []

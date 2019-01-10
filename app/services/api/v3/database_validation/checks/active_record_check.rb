@@ -52,10 +52,13 @@ module Api
               human_readable_options = validator.options.map do |k, v|
                 "#{k}: #{v}"
               end
+              if validator.respond_to?(:attributes)
+                validated_attributes = validator.attributes.join(', ')
+              end
               [
                 validator.kind,
                 'of',
-                validator.attributes.join(', '),
+                validated_attributes,
                 human_readable_options
               ].join(' ')
             end
