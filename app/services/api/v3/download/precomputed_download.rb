@@ -2,7 +2,6 @@ module Api
   module V3
     module Download
       class PrecomputedDownload
-        include Cache::Cleaner
         ROOT_DIRNAME = 'public/downloads'.freeze
 
         # @param parameters [Api::V3::Download::Parameters]
@@ -33,8 +32,8 @@ module Api
               Api::V3::Download::PrecomputedDownload::ROOT_DIRNAME,
               secure: true
             )
-            clear_cache_for_regexp('/api/v3/contexts/.+.csv$')
-            clear_cache_for_regexp('/api/v3/contexts/.+.json$')
+            Cache::Cleaner.clear_cache_for_regexp('/api/v3/contexts/.+.csv$')
+            Cache::Cleaner.clear_cache_for_regexp('/api/v3/contexts/.+.json$')
           end
 
           def refresh
