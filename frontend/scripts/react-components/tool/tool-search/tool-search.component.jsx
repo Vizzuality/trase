@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import deburr from 'lodash/deburr';
 import sortBy from 'lodash/sortBy';
-import NodeTitleGroup from 'react-components/tool/tool-search/node-title/node-title-group.container';
+import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group/node-title-group.container';
 import SearchResult from 'react-components/tool/tool-search/tool-search-result/tool-search-result.component';
 import { MAX_SEARCH_RESULTS } from 'constants';
 

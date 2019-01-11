@@ -1,7 +1,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { selectNode } from 'actions/tool.actions';
-import NodeTitleGroup from 'react-components/tool/tool-search/node-title/node-title-group.component';
+import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group/node-title-group.component';
 import { getSelectedNodesData } from 'react-components/tool/tool.selectors';
 
 const mapStateToProps = state => {

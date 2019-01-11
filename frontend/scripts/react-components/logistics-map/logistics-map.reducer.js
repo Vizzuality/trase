@@ -26,7 +26,7 @@ const logisticsMapReducerTypes = PropTypes => {
     companies: PropTypes.shape({
       soy: PropTypes.arrayOf(PropTypes.shape(CompanyList)),
       cattle: PropTypes.arrayOf(PropTypes.shape(CompanyList))
-    }).isRequired
+    })
   };
 };
 

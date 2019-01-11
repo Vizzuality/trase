@@ -14,6 +14,7 @@ import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.co
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-legend/logistics-map-legend.component';
 import LogisticsMapPanel from 'react-components/logistics-map/logistics-map-panel/logistics-map-panel.container';
+import LogisticsMapBar from 'react-components/logistics-map/logistics-map-bar/logistics-map-bar.container';
 
 import 'wri-api-components/dist/map.css';
 import 'leaflet/dist/leaflet.css';
@@ -26,6 +27,7 @@ function LogisticsMap(props) {
     tooltips,
     mapPopUp,
     commodity,
+    openModal,
     closeModal,
     isModalOpen,
     buildEvents,
@@ -41,7 +43,7 @@ function LogisticsMap(props) {
         <WRIIcons />
         <MapComponent bounds={bounds} basemap={BASEMAPS.default}>
           {map => (
-            <React.Fragment>
+            <>
               <MapControls>
                 <ZoomControl map={map} />
               </MapControls>
@@ -53,7 +55,7 @@ function LogisticsMap(props) {
               <MapPopup map={map} {...mapPopUp} onReady={getCurrentPopUp}>
                 <Tooltip />
               </MapPopup>
-            </React.Fragment>
+            </>
           )}
         </MapComponent>
         <LogisticsMapLegend
@@ -62,6 +64,7 @@ function LogisticsMap(props) {
           tooltips={tooltips}
           setLayerActive={setLayerActive}
         />
+        <LogisticsMapBar openModal={openModal} />
         <SimpleModal isOpen={isModalOpen} onRequestClose={closeModal}>
           <LogisticsMapPanel close={closeModal} />
         </SimpleModal>
@@ -72,11 +75,13 @@ function LogisticsMap(props) {
 
 LogisticsMap.propTypes = {
   layers: PropTypes.array,
-  activeLayers: PropTypes.array,
+  openModal: PropTypes.func,
+  tooltips: PropTypes.object,
+  closeModal: PropTypes.func,
   buildEvents: PropTypes.func,
   commodity: PropTypes.string,
-  tooltips: PropTypes.object,
-  isModalOpen: PropTypes.bool
+  isModalOpen: PropTypes.bool,
+  activeLayers: PropTypes.array
 };
 
 export default LogisticsMap;

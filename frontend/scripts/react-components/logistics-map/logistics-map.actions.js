@@ -66,6 +66,19 @@ export const getLogisticsMapCompanies = () => (dispatch, getState) => {
   }
 };
 
+export const setCompanyActive = (companyName, active) => (dispatch, getState) => {
+  const { query = {} } = getState().location;
+  const { companies = [] } = query;
+  let newCompanies;
+
+  if (active) {
+    newCompanies = [...companies, companyName];
+  } else {
+    newCompanies = companies.filter(l => l !== companyName);
+  }
+  return dispatch(updateQueryParams({ companies: newCompanies }));
+};
+
 export const setCompanySearchTerm = term => ({
   type: LOGISTICS_MAP__SET_COMPANY_SEARCH_TERM,
   payload: term

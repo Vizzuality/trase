@@ -1,11 +1,4 @@
-@import '../../../../../styles/settings';
-
-.c-nodes-titles {
-  padding-bottom: 8px;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-}
+@import 'styles/settings';
 
 .c-node-title {
   display: inline-flex;
@@ -28,6 +21,10 @@
   .node-title-column {
     display: inline-block;
     margin-right: 7px;
+
+    &:first-child {
+      max-width: calc(100% - 22px);
+    }
 
     &:last-child {
       margin-right: 4px;

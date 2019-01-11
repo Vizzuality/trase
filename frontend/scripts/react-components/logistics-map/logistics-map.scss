@@ -1,8 +1,8 @@
 @import 'styles/settings';
 
 .c-logistics-map {
-  height: 100%;
-
+  height: calc(100% - 70px);
+  position: relative;
 
   .leaflet-popup-content-wrapper {
     background: transparent;
@@ -18,7 +18,7 @@
   }
 
   .wri_api__c-map-controls {
-    left: 16px;
+    left: 15px;
     right: initial;
     z-index: $z-above-veil-below-nav;
   }

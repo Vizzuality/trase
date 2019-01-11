@@ -62,7 +62,7 @@ LogisticsMapPanel.getButtonText = items => {
     case 0:
       return 'See all';
     case 1:
-      return 'See company';
+      return 'See company (1)';
     default:
       return `See companies (${items.length})`;
   }

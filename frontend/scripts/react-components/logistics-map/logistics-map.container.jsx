@@ -26,7 +26,7 @@ class LogisticsMapContainer extends React.PureComponent {
 
   state = {
     mapPopUp: null,
-    isModalOpen: true
+    isModalOpen: false
   };
 
   bounds = {
@@ -37,6 +37,12 @@ class LogisticsMapContainer extends React.PureComponent {
 
   componentDidMount() {
     this.props.getLogisticsMapCompanies();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.commodity !== this.props.commodity) {
+      this.props.getLogisticsMapCompanies();
+    }
   }
 
   onMouseOver = (e, layer) => {
@@ -82,6 +88,8 @@ class LogisticsMapContainer extends React.PureComponent {
     this.popUp = popUp;
   };
 
+  openModal = () => this.setState({ isModalOpen: true });
+
   closeModal = () => this.setState({ isModalOpen: false });
 
   render() {
@@ -96,6 +104,7 @@ class LogisticsMapContainer extends React.PureComponent {
         bounds={this.bounds}
         commodity={commodity}
         isModalOpen={isModalOpen}
+        openModal={this.openModal}
         activeLayers={activeLayers}
         closeModal={this.closeModal}
         buildEvents={this.buildEvents}
@@ -109,8 +118,8 @@ class LogisticsMapContainer extends React.PureComponent {
 const mapStateToProps = state => {
   const { year: activeYear, commodity } = getActiveParams(state);
   return {
-    activeYear,
     commodity,
+    activeYear,
     activeLayers: getActiveLayers(state),
     layers: getLogisticsMapLayers(state),
     tooltips: state.app.tooltips ? state.app.tooltips.logisticsMap : {}
