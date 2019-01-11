@@ -2230,11 +2230,10 @@ CREATE MATERIALIZED VIEW public.download_flows_mv AS
     fi.name AS attribute_name,
     fi.name_with_unit AS attribute_name_with_unit,
     fi.display_name,
-    bool_and(fi.boolean_value) AS bool_and,
+    string_agg(fi.text_value, ' / '::text) AS text_values,
     sum(fi.numeric_value) AS sum,
         CASE
-            WHEN ((fi.attribute_type = 'Qual'::text) AND bool_and(fi.boolean_value)) THEN 'yes'::text
-            WHEN ((fi.attribute_type = 'Qual'::text) AND (NOT bool_and(fi.boolean_value))) THEN 'no'::text
+            WHEN (fi.attribute_type = 'Qual'::text) THEN string_agg(fi.text_value, ' / '::text)
             ELSE (sum(fi.numeric_value))::text
         END AS total
    FROM ((((((((public.flow_paths_mv f_0
@@ -2249,11 +2248,7 @@ CREATE MATERIALIZED VIEW public.download_flows_mv AS
             f.qual_id AS attribute_id,
             'Qual'::text AS attribute_type,
             NULL::double precision AS numeric_value,
-                CASE
-                    WHEN (lower(f.value) = 'yes'::text) THEN true
-                    WHEN (lower(f.value) = 'no'::text) THEN false
-                    ELSE NULL::boolean
-                END AS boolean_value,
+            f.value AS text_value,
             q.name,
             NULL::text AS unit,
             q.name AS name_with_unit,
@@ -2267,9 +2262,9 @@ CREATE MATERIALIZED VIEW public.download_flows_mv AS
         UNION ALL
          SELECT f.flow_id,
             f.quant_id,
-            'Quant'::text AS text,
+            'Quant'::text,
             f.value,
-            NULL::boolean AS bool,
+            NULL::text,
             q.name,
             q.unit,
                 CASE
@@ -6239,9 +6234,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181119105000'),
 ('20181119105010'),
 ('20181119105022'),
-('20181130144149'),
 ('20181207143449'),
 ('20181210215622'),
-('20190110140539');
+('20190110140539'),
+('20190111121850');
 
 
