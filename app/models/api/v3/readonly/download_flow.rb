@@ -30,7 +30,7 @@
 #  attribute_name           :text
 #  attribute_name_with_unit :text
 #  display_name             :text
-#  bool_and                 :boolean
+#  text_values              :text
 #  sum                      :float
 #  total                    :text
 #
