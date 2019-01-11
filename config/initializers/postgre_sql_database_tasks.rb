@@ -5,12 +5,18 @@
 # The changes here are:
 # - using --exclude-table parameter to exclude foreign tables from the dump
 # - regexp based find / replace to exclude CREATE SERVER and CREATE USER MAPPING
+# Defines data_dump and data_restore operations, used by the export / import feature
+
+ActiveRecord::SchemaDumper.ignore_tables = ["#{ENV['TRASE_LOCAL_FDW_SCHEMA']}.*"]
 
 module ActiveRecord
   module Tasks # :nodoc:
     class PostgreSQLDatabaseTasks # :nodoc:
       def structure_dump(filename, extra_flags)
-        puts "The monkeypatch located in #{__FILE__} should be removed when Rails supports excluding schemas from dump"
+        puts "The monkeypatch located in #{__FILE__} should be removed when we remove postgres_fdw dependency"
+
+        # https://github.com/rails/rails/blob/5-2-1/activerecord/lib/active_record/tasks/postgresql_database_tasks.rb
+        # original starts here
         set_psql_env
 
         search_path = \
@@ -23,11 +29,7 @@ module ActiveRecord
             ActiveRecord::Base.dump_schemas
           end
 
-        args = [
-          "-s", "-x", "-O", "-f",
-          filename,
-          "--exclude-table=#{ENV['TRASE_LOCAL_FDW_SCHEMA']}.*"
-        ] # here custom pg_dump flag
+        args = ["-s", "-x", "-O", "-f", filename]
         args.concat(Array(extra_flags)) if extra_flags
         unless search_path.blank?
           args += search_path.split(",").map do |part|
@@ -44,6 +46,7 @@ module ActiveRecord
         run_cmd("pg_dump", args, "dumping")
         remove_sql_header_comments(filename)
         File.open(filename, "a") { |f| f << "SET search_path TO #{connection.schema_search_path};\n\n" }
+        # original ends here
 
         # And now for the truly disappointing part
         # manually suppressing CREATE SERVER and CREATE USER MAPPING

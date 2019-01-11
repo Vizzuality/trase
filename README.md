@@ -96,8 +96,9 @@ The project's main configuration values can be set using [environment variables]
 * TRASE_REMOTE_PASSWORD=
 * TRASE_REMOTE_SERVER=trase_server
 * TRASE_LOCAL_FDW_SCHEMA=main # this schema in local database where remote tables are mapped
-* API_HOST=http://localhost:3000 # base url of API
+* TRASE_LOCAL_MIRROR_SCHEMA=main_mirror # this schema in local database where remote tables are restored
 * TRASE_LOCAL_SCHEMA=public # this schema in local database where target tables are
+* API_HOST=http://localhost:3000 # base url of API
 * INSTANCE_NAME= # string to uniquely identify instance as source of db dump, e.g. staging
 * AWS_ACCESS_KEY_ID=
 * AWS_SECRET_ACCESS_KEY=

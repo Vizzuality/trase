@@ -1,8 +1,4 @@
-require 'rails_helper'
-
-RSpec.describe DatabaseUpdateWorker, type: :worker do
-  Sidekiq::Testing.inline!
-
+shared_examples 'a database update worker' do
   let(:database_update) {
     FactoryBot.create(:api_v3_database_update)
   }
@@ -13,7 +9,7 @@ RSpec.describe DatabaseUpdateWorker, type: :worker do
     ).to receive(:refresh)
   end
 
-  context "When processing a successful database import" do
+  context 'When processing a successful database import' do
     before do
       allow_any_instance_of(
         Api::V3::Import::Importer
@@ -24,13 +20,15 @@ RSpec.describe DatabaseUpdateWorker, type: :worker do
       allow(Cache::Warmer::UrlsFile).to receive(:generate)
     end
 
-    it "updates database_updates status to FINISHED" do
-      DatabaseUpdateWorker.perform_async(database_update.id)
-      expect(database_update.reload.status).to eq(Api::V3::DatabaseUpdate::FINISHED)
+    it 'updates database_updates status to FINISHED' do
+      subject
+      expect(database_update.reload.status).to eq(
+        Api::V3::DatabaseUpdate::FINISHED
+      )
     end
   end
 
-  context "When processing a failed database import" do
+  context 'When processing a failed database import' do
     before do
       allow_any_instance_of(
         Api::V3::Import::Importer
@@ -40,17 +38,17 @@ RSpec.describe DatabaseUpdateWorker, type: :worker do
       ).to receive(:import).and_raise(PG::Error)
     end
 
-    it "raises exception" do
-      expect {
-        DatabaseUpdateWorker.perform_async(database_update.id)
-      }.to raise_exception(PG::Error)
+    it 'raises exception' do
+      expect { subject }.to raise_exception(PG::Error)
     end
 
-    it "updates database_updates status to FAILED" do
+    it 'updates database_updates status to FAILED' do
       begin
-        DatabaseUpdateWorker.perform_async(database_update.id)
+        subject
       rescue
-        expect(database_update.reload.status).to eq(Api::V3::DatabaseUpdate::FAILED)
+        expect(database_update.reload.status).to eq(
+          Api::V3::DatabaseUpdate::FAILED
+        )
       end
     end
   end

@@ -2,12 +2,12 @@ module Api
   module V3
     module Import
       class ReplaceBlueTable
-        def initialize(table_class)
+        def initialize(table_class, source_schema)
           @table_class = table_class
           @local_table = table_class.local_table
-          @remote_table = table_class.remote_table
+          @source_table = table_class.source_table(source_schema)
           @columns_cs = table_class.column_names_cs
-          @remote_columns_cs = table_class.column_names_cs(prefix: @remote_table)
+          @source_columns_cs = table_class.column_names_cs(prefix: @source_table)
         end
 
         # Returns count of inserted rows
@@ -23,11 +23,12 @@ module Api
           stmt = <<~SQL
             INSERT INTO #{@local_table}
             (#{@columns_cs})
-            SELECT #{@remote_columns_cs}
-            FROM #{@remote_table}
+            SELECT #{@source_columns_cs}
+            FROM #{@source_table}
           SQL
           result = @table_class.connection.execute(stmt)
-          result.cmd_tuples
+          cnt = result.cmd_tuples
+          cnt
         end
       end
     end
