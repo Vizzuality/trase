@@ -2109,11 +2109,10 @@ CREATE MATERIALIZED VIEW public.download_flows_mv AS
     fi.name AS attribute_name,
     fi.name_with_unit AS attribute_name_with_unit,
     fi.display_name,
-    bool_and(fi.boolean_value) AS bool_and,
+    string_agg(fi.text_value, ' / '::text) AS text_values,
     sum(fi.numeric_value) AS sum,
         CASE
-            WHEN ((fi.attribute_type = 'Qual'::text) AND bool_and(fi.boolean_value)) THEN 'yes'::text
-            WHEN ((fi.attribute_type = 'Qual'::text) AND (NOT bool_and(fi.boolean_value))) THEN 'no'::text
+            WHEN (fi.attribute_type = 'Qual'::text) THEN string_agg(fi.text_value, ' / '::text)
             ELSE (sum(fi.numeric_value))::text
         END AS total
    FROM ((((((((public.flow_paths_mv f_0
@@ -2128,11 +2127,7 @@ CREATE MATERIALIZED VIEW public.download_flows_mv AS
             f.qual_id AS attribute_id,
             'Qual'::text AS attribute_type,
             NULL::double precision AS numeric_value,
-                CASE
-                    WHEN (lower(f.value) = 'yes'::text) THEN true
-                    WHEN (lower(f.value) = 'no'::text) THEN false
-                    ELSE NULL::boolean
-                END AS boolean_value,
+            f.value AS text_value,
             q.name,
             NULL::text AS unit,
             q.name AS name_with_unit,
@@ -2146,9 +2141,9 @@ CREATE MATERIALIZED VIEW public.download_flows_mv AS
         UNION ALL
          SELECT f.flow_id,
             f.quant_id,
-            'Quant'::text AS text,
+            'Quant'::text,
             f.value,
-            NULL::boolean AS bool,
+            NULL::text,
             q.name,
             q.unit,
                 CASE
@@ -4834,20 +4829,6 @@ CREATE INDEX flow_inds_ind_id_idx ON public.flow_inds USING btree (ind_id);
 
 
 --
--- Name: flow_paths_mv_flow_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX flow_paths_mv_flow_id_idx ON public.flow_paths_mv USING btree (flow_id);
-
-
---
--- Name: flow_paths_mv_flow_id_position_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX flow_paths_mv_flow_id_position_idx ON public.flow_paths_mv USING btree (flow_id, column_position);
-
-
---
 -- Name: flow_quals_qual_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5097,6 +5078,13 @@ CREATE UNIQUE INDEX index_download_versions_on_context_id_and_is_current ON publ
 --
 
 CREATE INDEX index_flow_inds_on_flow_id ON public.flow_inds USING btree (flow_id);
+
+
+--
+-- Name: index_flow_paths_mv_on_flow_id_and_column_position; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_flow_paths_mv_on_flow_id_and_column_position ON public.flow_paths_mv USING btree (flow_id, column_position);
 
 
 --
@@ -6044,6 +6032,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181119104937'),
 ('20181119105000'),
 ('20181119105010'),
-('20181119105022');
+('20181119105022'),
+('20190111121850');
 
 
