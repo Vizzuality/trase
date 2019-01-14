@@ -18,6 +18,12 @@ module Api
         def associated_attributes
           @associated_attributes
         end
+
+        def destroy_widows
+          widows = all
+          widows = widows.where('id NOT IN (?)', active_ids) if active_ids.any?
+          widows.destroy_all
+        end
       end
 
       def readonly_attribute_id

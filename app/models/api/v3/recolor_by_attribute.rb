@@ -101,6 +101,11 @@ module Api
       def refresh_dependents
         Api::V3::Readonly::RecolorByAttribute.refresh
       end
+
+      private_class_method def self.active_ids
+        Api::V3::RecolorByInd.distinct.pluck(:recolor_by_attribute_id) +
+          Api::V3::RecolorByQual.distinct.pluck(:recolor_by_attribute_id)
+      end
     end
   end
 end

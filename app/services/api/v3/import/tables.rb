@@ -93,6 +93,19 @@ module Api
           {table_class: Api::V3::FlowQual},
           {table_class: Api::V3::FlowQuant}
         ].freeze
+
+        # These tables should be checked for widows after their dependents
+        # have been restored. Their dependents are the xxx_inds/quals/quants
+        # tables, which have foreign keys to the inds/quals/quants tables,
+        # as well as the xxx_attributes table.
+        TABLES_TO_CHECK_FOR_WIDOWS = [
+          Api::V3::ChartAttribute,
+          Api::V3::DashboardsAttribute,
+          Api::V3::DownloadAttribute,
+          Api::V3::MapAttribute,
+          Api::V3::RecolorByAttribute,
+          Api::V3::ResizeByAttribute
+        ].freeze
       end
     end
   end

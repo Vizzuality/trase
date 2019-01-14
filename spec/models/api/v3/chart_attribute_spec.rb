@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'models/api/v3/shared_attributes_examples'
 
 RSpec.describe Api::V3::ChartAttribute, type: :model do
   include_context 'api v3 brazil municipality place profile'
@@ -56,5 +57,18 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
     it 'is successful when same attribute associated as state average' do
       expect(state_average_variant).to have(0).errors_on(:base)
     end
+  end
+  describe :destroy_widows do
+    let!(:referenced) { FactoryBot.create(:api_v3_chart_attribute) }
+    let!(:chart_ind) {
+      FactoryBot.create(
+        :api_v3_chart_ind,
+        chart_attribute: referenced,
+        ind: FactoryBot.create(:api_v3_ind)
+      )
+    }
+    let!(:widow) { FactoryBot.create(:api_v3_chart_attribute) }
+    let(:subject) { Api::V3::ChartAttribute }
+    include_examples 'destroys widows'
   end
 end

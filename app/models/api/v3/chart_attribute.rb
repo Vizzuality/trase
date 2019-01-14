@@ -68,6 +68,12 @@ module Api
       def refresh_dependencies
         Api::V3::Readonly::ChartAttribute.refresh
       end
+
+      private_class_method def self.active_ids
+        Api::V3::ChartInd.distinct.pluck(:chart_attribute_id) +
+          Api::V3::ChartQual.distinct.pluck(:chart_attribute_id) +
+          Api::V3::ChartQuant.distinct.pluck(:chart_attribute_id)
+      end
     end
   end
 end

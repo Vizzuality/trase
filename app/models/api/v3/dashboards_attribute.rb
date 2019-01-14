@@ -61,6 +61,12 @@ module Api
       def refresh_dependents
         Api::V3::Readonly::DashboardsAttribute.refresh
       end
+
+      private_class_method def self.active_ids
+        Api::V3::DashboardsInd.distinct.pluck(:dashboards_attribute_id) +
+          Api::V3::DashboardsQual.distinct.pluck(:dashboards_attribute_id) +
+          Api::V3::DashboardsQuant.distinct.pluck(:dashboards_attribute_id)
+      end
     end
   end
 end

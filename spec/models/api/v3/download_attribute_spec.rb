@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'models/api/v3/shared_attributes_examples'
 
 RSpec.describe Api::V3::DownloadAttribute, type: :model do
   include_context 'api v3 brazil download attributes'
@@ -20,5 +21,19 @@ RSpec.describe Api::V3::DownloadAttribute, type: :model do
     it 'fails when context + position taken' do
       expect(duplicate).to have(1).errors_on(:position)
     end
+  end
+
+  describe :destroy_widows do
+    let!(:referenced) { FactoryBot.create(:api_v3_download_attribute) }
+    let!(:download_quant) {
+      FactoryBot.create(
+        :api_v3_download_quant,
+        download_attribute: referenced,
+        quant: FactoryBot.create(:api_v3_quant)
+      )
+    }
+    let!(:widow) { FactoryBot.create(:api_v3_download_attribute) }
+    let(:subject) { Api::V3::DownloadAttribute }
+    include_examples 'destroys widows'
   end
 end

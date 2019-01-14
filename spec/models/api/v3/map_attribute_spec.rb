@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'models/api/v3/shared_attributes_examples'
 
 RSpec.describe Api::V3::MapAttribute, type: :model do
   include_context 'api v3 brazil map attributes'
@@ -20,5 +21,19 @@ RSpec.describe Api::V3::MapAttribute, type: :model do
     it 'fails when map_attribute_group + position taken' do
       expect(duplicate).to have(1).errors_on(:position)
     end
+  end
+
+  describe :destroy_widows do
+    let!(:referenced) { FactoryBot.create(:api_v3_map_attribute) }
+    let!(:map_quant) {
+      FactoryBot.create(
+        :api_v3_map_quant,
+        map_attribute: referenced,
+        quant: FactoryBot.create(:api_v3_quant)
+      )
+    }
+    let!(:widow) { FactoryBot.create(:api_v3_map_attribute) }
+    let(:subject) { Api::V3::MapAttribute }
+    include_examples 'destroys widows'
   end
 end

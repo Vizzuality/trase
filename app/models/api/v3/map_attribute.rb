@@ -80,6 +80,11 @@ module Api
       def refresh_dependents
         Api::V3::Readonly::MapAttribute.refresh
       end
+
+      private_class_method def self.active_ids
+        Api::V3::MapInd.distinct.pluck(:map_attribute_id) +
+          Api::V3::MapQuant.distinct.pluck(:map_attribute_id)
+      end
     end
   end
 end

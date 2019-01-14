@@ -70,6 +70,7 @@ module Api
               ).call
               if yellow_table_class == Api::V3::NodeProperty
                 Api::V3::NodeProperty.insert_missing_node_properties
+                yellow_table_cnt = Api::V3::NodeProperty.count
               end
               yellow_table_stats[yellow_table_class.table_name] = {
                 'after' => yellow_table_cnt
@@ -80,6 +81,51 @@ module Api
                 yellow_table_stats
               )
           end
+          destroy_widows
+        end
+
+        # An example of how a widow can be created by the import process:
+        # 1. backup xxx_inds/quals/quants and xxx_attributes (yellow)
+        # 2. import and replace inds/quals/quants (blue)
+        # 3. restore xxx_attributes (note: this restores all the backed up
+        #    records, because at this point we don't know if any of them are
+        #    no longer needed)
+        # 4. restore xxx_inds/quals/quants (note: this only restores backed up
+        #    records with a match in both inds/quals/quants and xxx_attributes)
+        # 5. at this point it is possible to have xxx_attributes which are not
+        # referenced anywhere. These widows should be deleted.
+        def destroy_widows
+          TABLES_TO_CHECK_FOR_WIDOWS.each do |table_class|
+            cnt_before = table_class.count
+            table_class.destroy_widows
+            cnt_after = table_class.count
+            next unless cnt_after != cnt_before
+
+            update_yellow_table_stats_after(table_class, cnt_after)
+          end
+        end
+
+        def update_yellow_table_stats_after(table_class, cnt_after)
+          table_name = table_class.table_name
+          blue_table_name = ALL_TABLES.find do |table|
+            blue_table_class = table[:table_class]
+            yellow_tables = table[:yellow_tables]
+            next false unless yellow_tables
+
+            match = yellow_tables.find do |yellow_table_class|
+              yellow_table_class == table_class
+            end
+            next false unless match
+
+            blue_table_class.table_name
+          end
+          unless blue_table_name &&
+              @stats.dig(blue_table_name, 'yellow_tables', table_name)
+            return
+          end
+
+          @stats[blue_table_name]['yellow_tables'][table_name]['after'] =
+            cnt_after
         end
 
         def refresh
