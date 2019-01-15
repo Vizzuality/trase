@@ -15,6 +15,17 @@ import 'scripts/react-components/nav/filters-nav/filters-nav.scss';
 import 'scripts/react-components/nav/filters-nav/burger.scss';
 
 class FiltersNav extends React.PureComponent {
+  static propTypes = {
+    openMap: PropTypes.func,
+    openSankey: PropTypes.func,
+    isMapVisible: PropTypes.bool,
+    toggleDropdown: PropTypes.func,
+    currentDropdown: PropTypes.string,
+    links: PropTypes.array.isRequired,
+    filters: PropTypes.object.isRequired,
+    openLogisticsMapDownload: PropTypes.func
+  };
+
   static FILTER_TYPES = {
     contextSelector: 0,
     yearSelector: 1,
@@ -147,7 +158,8 @@ class FiltersNav extends React.PureComponent {
     const {
       toggleDropdown,
       currentDropdown,
-      filters: { right = [], showSearch }
+      openLogisticsMapDownload,
+      filters: { right = [], showSearch, showLogisticsMapDownload }
     } = this.props;
     const { FILTERS } = FiltersNav;
 
@@ -164,6 +176,13 @@ class FiltersNav extends React.PureComponent {
           })
         )}
         {showSearch && <ToolSearch className="filters-nav-item -no-padding" />}
+        {showLogisticsMapDownload && (
+          <button onClick={openLogisticsMapDownload} className="filters-nav-item -no-padding -icon">
+            <svg className="icon icon-download-pdf">
+              <use xlinkHref="#icon-download-pdf" />
+            </svg>
+          </button>
+        )}
       </div>
     );
   };
@@ -180,15 +199,5 @@ class FiltersNav extends React.PureComponent {
     );
   }
 }
-
-FiltersNav.propTypes = {
-  openMap: PropTypes.func,
-  openSankey: PropTypes.func,
-  isMapVisible: PropTypes.bool,
-  toggleDropdown: PropTypes.func,
-  currentDropdown: PropTypes.string,
-  links: PropTypes.array.isRequired,
-  filters: PropTypes.object.isRequired
-};
 
 export default FiltersNav;

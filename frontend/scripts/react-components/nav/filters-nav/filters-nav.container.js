@@ -7,6 +7,7 @@ import routerLinks from 'router/nav-links';
 import {
   selectLogisticsMapHub,
   selectLogisticsMapYear,
+  setLogisticsMapActiveModal,
   selectLogisticsMapInspectionLevel
 } from 'react-components/logistics-map/logistics-map.actions';
 import { selectBiomeFilter, selectResizeBy, selectView } from 'actions/tool.actions';
@@ -28,6 +29,7 @@ const mapDispatchToProps = dispatch =>
       toolResizeBy_onSelected: selectResizeBy,
       openMap: () => toggleMap(true),
       openSankey: () => toggleMap(false),
+      openLogisticsMapDownload: () => setLogisticsMapActiveModal('download'),
       toolAdminLevel_onSelected: selectBiomeFilter,
       logisticsMapYear_onSelected: selectLogisticsMapYear,
       logisticsMapHub_onSelected: selectLogisticsMapHub,

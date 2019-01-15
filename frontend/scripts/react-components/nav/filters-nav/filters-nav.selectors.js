@@ -221,6 +221,7 @@ export const getNavFilters = createSelector(
         };
       case 'logisticsMap':
         return {
+          showLogisticsMapDownload: true,
           left: [
             { type: FILTER_TYPES.dropdownSelector, props: logisticsMapsHubs },
             { type: FILTER_TYPES.dropdownSelector, props: logisticsMapsYears },

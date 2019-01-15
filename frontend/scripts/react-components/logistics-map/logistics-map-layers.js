@@ -19,7 +19,8 @@ export default [
       }
     ],
     params_config: [{ key: 'year', default: 2016 }],
-    sql_config: [{ type: 'and', key: 'company', name: 'companies' }]
+    sql_config: [{ type: 'and', key: 'company', name: 'companies' }],
+    downloadUrl: `https://${CARTO_ACCOUNT}.carto.com/api/v2/sql?filename=crushing_facilities&q=SELECT to_date(year::varchar, 'yyyy') as year_date, * FROM "${CARTO_ACCOUNT}".brazil_crushing_facilities&format=csv`
   },
   {
     version: '0.0.1',
@@ -38,7 +39,8 @@ export default [
       }
     ],
     params_config: [{ key: 'year', default: 2016 }],
-    sql_config: [{ type: 'and', key: 'company', name: 'companies' }]
+    sql_config: [{ type: 'and', key: 'company', name: 'companies' }],
+    downloadUrl: `https://${CARTO_ACCOUNT}.carto.com/api/v2/sql?filename=refining_facilities&q=SELECT * FROM "${CARTO_ACCOUNT}".brazil_refining_facilities&format=csv`
   },
   {
     version: '0.0.1',
@@ -56,7 +58,8 @@ export default [
         }
       }
     ],
-    sql_config: [{ type: 'where', key: 'company', name: 'companies' }]
+    sql_config: [{ type: 'where', key: 'company', name: 'companies' }],
+    downloadUrl: `https://${CARTO_ACCOUNT}.carto.com/api/v2/sql?filename=storage_facilities&q=SELECT * FROM "${CARTO_ACCOUNT}".brazil_storage_facilities_sample&format=csv`
   },
   {
     version: '0.0.1',
@@ -77,7 +80,8 @@ export default [
     sql_config: [
       { type: 'and', key: 'inspection_level', name: 'inspection' },
       { type: 'and2', key: 'company', name: 'companies' }
-    ]
+    ],
+    downloadUrl: `https://${CARTO_ACCOUNT}.carto.com/api/v2/sql?filename=confirmed_slaughterhouse&q=SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'CONFIRMED SLAUGHTERHOUSE'&format=csv`
   },
   {
     version: '0.0.1',
@@ -98,7 +102,8 @@ export default [
     sql_config: [
       { type: 'and', key: 'inspection_level', name: 'inspection' },
       { type: 'and2', key: 'company', name: 'companies' }
-    ]
+    ],
+    downloadUrl: `https://${CARTO_ACCOUNT}.carto.com/api/v2/sql?filename=unconfirmed_slaughterhouse_multifunctional_facility&q=SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'UNCONFIRMED SLAUGHTERHOUSE (MULTIFUNCTIONAL FACILITY)'&format=csv`
   },
   {
     version: '0.0.1',
@@ -119,7 +124,8 @@ export default [
     sql_config: [
       { type: 'and', key: 'inspection_level', name: 'inspection' },
       { type: 'and2', key: 'company', name: 'companies' }
-    ]
+    ],
+    downloadUrl: `https://${CARTO_ACCOUNT}.carto.com/api/v2/sql?filename=probable_slaughterhouse&q=SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'PROBABLE SLAUGHTERHOUSE'&format=csv`
   },
   {
     version: '0.0.1',
@@ -140,6 +146,7 @@ export default [
     sql_config: [
       { type: 'and', key: 'inspection_level', name: 'inspection' },
       { type: 'and2', key: 'company', name: 'companies' }
-    ]
+    ],
+    downloadUrl: `https://${CARTO_ACCOUNT}.carto.com/api/v2/sql?filename=unconfirmed_slaughterhouse&q=SELECT * FROM "${CARTO_ACCOUNT}".brazil_slaughterhouses_simple_2018_09_18 where subclass = 'UNCONFIRMED SLAUGHTERHOUSE'&format=csv`
   }
 ];
