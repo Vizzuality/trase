@@ -7,6 +7,7 @@ import {
   getActiveParams
 } from 'react-components/logistics-map/logistics-map.selectors';
 import {
+  setLogisticsMapActiveModal,
   setLayerActive as setLayerActiveFn,
   getLogisticsMapCompanies
 } from 'react-components/logistics-map/logistics-map.actions';
@@ -20,13 +21,14 @@ class LogisticsMapContainer extends React.PureComponent {
     tooltips: PropTypes.object,
     commodity: PropTypes.string,
     activeLayers: PropTypes.array,
+    activeModal: PropTypes.string,
     setLayerActive: PropTypes.func.isRequired,
-    getLogisticsMapCompanies: PropTypes.func.isRequired
+    getLogisticsMapCompanies: PropTypes.func.isRequired,
+    setLogisticsMapActiveModal: PropTypes.func.isRequired
   };
 
   state = {
-    mapPopUp: null,
-    isModalOpen: false
+    mapPopUp: null
   };
 
   bounds = {
@@ -88,13 +90,13 @@ class LogisticsMapContainer extends React.PureComponent {
     this.popUp = popUp;
   };
 
-  openModal = () => this.setState({ isModalOpen: true });
+  openCompaniesModal = () => this.props.setLogisticsMapActiveModal('companies');
 
-  closeModal = () => this.setState({ isModalOpen: false });
+  closeModal = () => this.props.setLogisticsMapActiveModal(null);
 
   render() {
-    const { activeLayers, layers, setLayerActive, commodity, tooltips } = this.props;
-    const { mapPopUp, isModalOpen } = this.state;
+    const { activeLayers, layers, setLayerActive, commodity, tooltips, activeModal } = this.props;
+    const { mapPopUp } = this.state;
 
     return (
       <LogisticsMap
@@ -103,12 +105,12 @@ class LogisticsMapContainer extends React.PureComponent {
         mapPopUp={mapPopUp}
         bounds={this.bounds}
         commodity={commodity}
-        isModalOpen={isModalOpen}
-        openModal={this.openModal}
+        activeModal={activeModal}
         activeLayers={activeLayers}
         closeModal={this.closeModal}
         buildEvents={this.buildEvents}
         setLayerActive={setLayerActive}
+        openModal={this.openCompaniesModal}
         getCurrentPopUp={this.getCurrentPopUp}
       />
     );
@@ -122,13 +124,15 @@ const mapStateToProps = state => {
     activeYear,
     activeLayers: getActiveLayers(state),
     layers: getLogisticsMapLayers(state),
+    activeModal: state.logisticsMap.activeModal,
     tooltips: state.app.tooltips ? state.app.tooltips.logisticsMap : {}
   };
 };
 
 const mapDispatchToProps = {
   setLayerActive: setLayerActiveFn,
-  getLogisticsMapCompanies
+  getLogisticsMapCompanies,
+  setLogisticsMapActiveModal
 };
 
 export default connect(

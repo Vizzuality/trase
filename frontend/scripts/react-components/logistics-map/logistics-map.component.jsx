@@ -15,6 +15,7 @@ import SimpleModal from 'react-components/shared/simple-modal/simple-modal.compo
 import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-legend/logistics-map-legend.component';
 import LogisticsMapPanel from 'react-components/logistics-map/logistics-map-panel/logistics-map-panel.container';
 import LogisticsMapBar from 'react-components/logistics-map/logistics-map-bar/logistics-map-bar.container';
+import LogisticsMapDownload from 'react-components/logistics-map/logistics-map-download/logistics-map-download.component';
 
 import 'wri-api-components/dist/map.css';
 import 'leaflet/dist/leaflet.css';
@@ -29,7 +30,7 @@ function LogisticsMap(props) {
     commodity,
     openModal,
     closeModal,
-    isModalOpen,
+    activeModal,
     buildEvents,
     activeLayers,
     setLayerActive,
@@ -65,8 +66,9 @@ function LogisticsMap(props) {
           setLayerActive={setLayerActive}
         />
         <LogisticsMapBar openModal={openModal} />
-        <SimpleModal isOpen={isModalOpen} onRequestClose={closeModal}>
-          <LogisticsMapPanel close={closeModal} />
+        <SimpleModal isOpen={activeModal !== null} onRequestClose={closeModal}>
+          {activeModal === 'companies' && <LogisticsMapPanel close={closeModal} />}
+          {activeModal === 'download' && <LogisticsMapDownload close={closeModal} />}
         </SimpleModal>
       </div>
     </div>
@@ -80,7 +82,7 @@ LogisticsMap.propTypes = {
   closeModal: PropTypes.func,
   buildEvents: PropTypes.func,
   commodity: PropTypes.string,
-  isModalOpen: PropTypes.bool,
+  activeModal: PropTypes.string,
   activeLayers: PropTypes.array
 };
 

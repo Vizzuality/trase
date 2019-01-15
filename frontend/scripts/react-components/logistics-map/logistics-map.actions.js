@@ -1,6 +1,7 @@
 import { redirect } from 'redux-first-router';
 
 export const LOGISTICS_MAP__SET_COMPANIES = 'LOGISTICS_MAP__SET_COMPANIES';
+export const LOGISTICS_MAP__SET_ACTIVE_MODAL = 'LOGISTICS_MAP__SET_ACTIVE_MODAL';
 export const LOGISTICS_MAP__SET_COMPANY_SEARCH_TERM = 'LOGISTICS_MAP__SET_COMPANY_SEARCH_TERM';
 
 export const updateQueryParams = params => (dispatch, getState) => {
@@ -82,4 +83,9 @@ export const setCompanyActive = (companyName, active) => (dispatch, getState) =>
 export const setCompanySearchTerm = term => ({
   type: LOGISTICS_MAP__SET_COMPANY_SEARCH_TERM,
   payload: term
+});
+
+export const setLogisticsMapActiveModal = modal => ({
+  type: LOGISTICS_MAP__SET_ACTIVE_MODAL,
+  payload: modal
 });
