@@ -86,7 +86,8 @@
   &.with-icon,
   // backwards compat
   &.-with-icon {
-      .icon {
+    justify-content: space-between;
+    .icon {
       margin-left: 5px;
     }
   }

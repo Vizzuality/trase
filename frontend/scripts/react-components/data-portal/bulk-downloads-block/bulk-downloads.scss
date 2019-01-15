@@ -15,15 +15,15 @@
   }
 
   .c-bulk-downloads__item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     width: 100%;
-    height: 42px;
-    padding: 0 16px;
     margin-bottom: 14px;
-    border: solid 1px rgba($charcoal-grey, .3);
-    cursor: pointer;
+    overflow: hidden;
+
+    > span {
+      width: calc(100% - 22px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     &.-disabled {
       cursor: not-allowed;
     }
