@@ -8,10 +8,10 @@ module Api
     module DatabaseValidation
       module ChainBuilders
         class DownloadAttributeChainBuilder < AbstractChainBuilder
-          checks :declared_years_match_data,
+          checks :declared_years_match_flow_attributes,
                  association: :download_quant,
                  link: :edit
-          checks :declared_years_match_data,
+          checks :declared_years_match_flow_attributes,
                  association: :download_qual,
                  link: :edit
           checks :has_exactly_one_of,

@@ -13,18 +13,32 @@ shared_context 'minimum complete configuration' do
   }
   let(:ind) { FactoryBot.create(:api_v3_ind) }
   let!(:ind_property) {
-    FactoryBot.create(:api_v3_ind_property, ind: ind, tooltip_text: 'ind text')
+    FactoryBot.create(
+      :api_v3_ind_property,
+      ind: ind,
+      tooltip_text: 'ind text',
+      is_temporal_on_actor_profile: true,
+      is_temporal_on_place_profile: true
+    )
   }
   let(:qual) { FactoryBot.create(:api_v3_qual) }
   let!(:qual_property) {
     FactoryBot.create(
-      :api_v3_qual_property, qual: qual, tooltip_text: 'qual text'
+      :api_v3_qual_property,
+      qual: qual,
+      tooltip_text: 'qual text',
+      is_temporal_on_actor_profile: true,
+      is_temporal_on_place_profile: true
     )
   }
   let(:quant) { FactoryBot.create(:api_v3_quant) }
   let!(:quant_property) {
     FactoryBot.create(
-      :api_v3_quant_property, quant: quant, tooltip_text: 'quant text'
+      :api_v3_quant_property,
+      quant: quant,
+      tooltip_text: 'quant text',
+      is_temporal_on_actor_profile: true,
+      is_temporal_on_place_profile: true
     )
   }
   let(:exporter_node_type) {
@@ -153,6 +167,12 @@ shared_context 'minimum complete configuration' do
       map_attribute: map_attribute,
       ind: ind
     )
+  }
+  let!(:node_quant_2014) {
+    FactoryBot.create(:api_v3_node_quant, quant: quant, year: 2014)
+  }
+  let!(:node_ind_2014) {
+    FactoryBot.create(:api_v3_node_ind, ind: ind, year: 2014)
   }
   let(:flow_2014) {
     FactoryBot.create(:api_v3_flow, context: context, year: 2014)

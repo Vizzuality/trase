@@ -9,7 +9,7 @@ module Api
     module DatabaseValidation
       module ChainBuilders
         class ResizeByAttributeChainBuilder < AbstractChainBuilder
-          checks :declared_years_match_data,
+          checks :declared_years_match_flow_attributes,
                  association: :resize_by_quant,
                  link: :edit
           checks :attribute_present,
