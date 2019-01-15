@@ -28,7 +28,7 @@ module Api
           end
 
           def self.human_readable_rules
-            self_name = name.demodulize.sub('ChainBuilder', '').humanize
+            self_name = name.demodulize.sub('ChainBuilder', '').underscore.humanize
             @validations.map do |validation|
               validation_class = Api::V3::DatabaseValidation::Checks.const_get(
                 validation[:validation].to_s.camelize

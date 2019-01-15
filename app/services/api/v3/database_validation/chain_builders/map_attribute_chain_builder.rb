@@ -17,7 +17,7 @@ module Api
           checks :has_exactly_one_of,
                  associations: [:map_ind, :map_quant],
                  link: :index
-          checks :active_record_check, link: :edit
+          checks :active_record_check, on: :map_attribute, link: :edit
 
           def self.build_chain(context)
             chain = []

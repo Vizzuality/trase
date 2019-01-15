@@ -24,7 +24,7 @@ module Api
           checks :has_exactly_one_of,
                  associations: [:recolor_by_ind, :recolor_by_qual],
                  link: :index
-          checks :active_record_check, link: :edit
+          checks :active_record_check, on: :recolor_by_attribute, link: :edit
 
           def self.build_chain(context)
             chain = []

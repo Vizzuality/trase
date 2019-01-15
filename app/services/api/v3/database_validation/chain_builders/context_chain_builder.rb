@@ -38,18 +38,35 @@ module Api
                  link: :index
           checks :active_record_check, on: :context_property, link: :edit
 
+          CHAIN_BUILDERS = [
+            ContextNodeTypeChainBuilder,
+            ResizeByAttributeChainBuilder,
+            RecolorByAttributeChainBuilder,
+            DownloadAttributeChainBuilder,
+            MapAttributeChainBuilder,
+            ContextualLayerChainBuilder
+          ].freeze
+
           def self.build_chain
             chain = []
             Api::V3::Context.all.each do |context|
               chain += new(context, @errors_list).chain
-              chain += ContextNodeTypeChainBuilder.build_chain(context)
-              chain += ResizeByAttributeChainBuilder.build_chain(context)
-              chain += RecolorByAttributeChainBuilder.build_chain(context)
-              chain += DownloadAttributeChainBuilder.build_chain(context)
-              chain += MapAttributeChainBuilder.build_chain(context)
-              chain += ContextualLayerChainBuilder.build_chain(context)
+              CHAIN_BUILDERS.each do |chain_builder_class|
+                chain += chain_builder_class.build_chain(context)
+              end
             end
             chain
+          end
+
+          def self.human_readable_rules
+            result = super
+
+            # nested chain builders
+            CHAIN_BUILDERS.each do |chain_builder|
+              result << chain_builder.human_readable_rules
+            end
+
+            result
           end
         end
       end
