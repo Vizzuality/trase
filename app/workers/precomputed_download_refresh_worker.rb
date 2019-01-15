@@ -16,7 +16,7 @@ class PrecomputedDownloadRefreshWorker
   # @option options [Boolean] :skip_dependents skip refreshing
   def perform(context_id, options)
     context = Api::V3::Context.find(context_id)
-    Api::V3::Download::FlowDownload.new(context, options).
+    Api::V3::Download::FlowDownload.new(context, options.symbolize_keys).
       zipped_csv
   end
 end
