@@ -137,6 +137,10 @@
       cursor: pointer;
     }
 
+    &.-uppercase {
+      text-transform: uppercase;
+    }
+
     .dropdown-item-legend-container {
       display: flex;
       margin-top: 10px;
