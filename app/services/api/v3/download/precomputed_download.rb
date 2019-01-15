@@ -29,7 +29,7 @@ module Api
         class << self
           def clear
             FileUtils.rm_rf(
-              Api::V3::Download::PrecomputedDownload::ROOT_DIRNAME,
+              Dir.glob("#{Api::V3::Download::PrecomputedDownload::ROOT_DIRNAME}/*"),
               secure: true
             )
             Cache::Cleaner.clear_cache_for_regexp('/api/v3/contexts/.+.csv$')
