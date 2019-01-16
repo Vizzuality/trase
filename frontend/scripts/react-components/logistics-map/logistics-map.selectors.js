@@ -2,11 +2,21 @@ import deburr from 'lodash/deburr';
 import { createSelector, defaultMemoize } from 'reselect';
 import templates from 'react-components/logistics-map/logistics-map-layers';
 
+export const defaultLayersIds = {
+  soy: ['crushing_facilities', 'refining_facilities', 'storage_facilities'],
+  cattle: [
+    'confirmed_slaughterhouse',
+    'unconfirmed_slaughterhouse_multifunctional_facility',
+    'probable_slaughterhouse',
+    'unconfirmed_slaughterhouse'
+  ]
+};
+
 const getSelectedCommodity = state =>
   (state.location.query && state.location.query.commodity) || 'soy';
 const getSelectedYear = state => (state.location.query && state.location.query.year) || 2016;
 const getSelectedInspection = state => state.location.query && state.location.query.inspection;
-const getActiveLayersIds = state => (state.location.query && state.location.query.layers) || [];
+const getActiveLayersIds = state => state.location.query && state.location.query.layers;
 const getCompanies = state => state.logisticsMap.companies || {};
 const getActiveCompanies = state => (state.location.query && state.location.query.companies) || [];
 const getLogisticsMapSearchTerm = state => state.logisticsMap.searchTerm;
@@ -30,7 +40,7 @@ export const getLogisticsMapLayers = createSelector(
         name: template.name,
         opacity: 1,
         id: template.name,
-        active: layersIds.includes(template.name),
+        active: layersIds ? layersIds.includes(template.name) : true,
         type: 'layer',
         provider: 'carto',
         color: template.color,
@@ -69,9 +79,17 @@ export const getLogisticsMapLayers = createSelector(
       }))
 );
 
+const getActiveDefaultLayersIds = createSelector(
+  [getActiveParams],
+  params => defaultLayersIds[params.commodity]
+);
+
 export const getActiveLayers = createSelector(
-  [getActiveLayersIds, getLogisticsMapLayers],
-  (layersIds, layers) => layers.filter(layer => !!layersIds.includes(layer.name))
+  [getActiveLayersIds, getLogisticsMapLayers, getActiveDefaultLayersIds],
+  (layersIds, layers, activeDefaultLayersIds) => {
+    const currentLayers = layersIds || activeDefaultLayersIds;
+    return layers.filter(layer => !!currentLayers.includes(layer.name));
+  }
 );
 
 export const getCurrentCompanies = createSelector(

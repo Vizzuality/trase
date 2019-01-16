@@ -1,4 +1,5 @@
 import { redirect } from 'redux-first-router';
+import { defaultLayersIds } from 'react-components/logistics-map/logistics-map.selectors';
 
 export const LOGISTICS_MAP__SET_COMPANIES = 'LOGISTICS_MAP__SET_COMPANIES';
 export const LOGISTICS_MAP__SET_ACTIVE_MODAL = 'LOGISTICS_MAP__SET_ACTIVE_MODAL';
@@ -18,7 +19,7 @@ export const selectLogisticsMapYear = year => updateQueryParams({ year });
 export const selectLogisticsMapHub = commodity =>
   updateQueryParams({
     commodity,
-    layers: [],
+    layers: defaultLayersIds[commodity],
     year: undefined,
     inspection: undefined,
     companies: undefined
@@ -33,7 +34,8 @@ export const setLayerActive = (layerId, active) => (dispatch, getState) => {
   if (active) {
     newLayers = [...layers, layerId];
   } else {
-    newLayers = layers.filter(l => l !== layerId);
+    const currentLayers = layers.length > 0 ? layers : defaultLayersIds[query.commodity];
+    newLayers = currentLayers.filter(l => l !== layerId);
   }
   return dispatch(updateQueryParams({ layers: newLayers }));
 };
