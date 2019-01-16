@@ -3,17 +3,18 @@ import React from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 
-import 'react-components/tool/tool-search/node-title/nodes-title.scss';
+import 'react-components/shared/node-title/node-title.scss';
 
-export default function NodeTitle({ columns = [], recolorGroup, onClose }) {
+export default function NodeTitle(props) {
+  const { columns = [], recolorGroup, onClose, className } = props;
   return (
-    <div className={cx('c-node-title', `-recolorgroup-${recolorGroup}`)}>
+    <div className={cx('c-node-title', className, `-recolorgroup-${recolorGroup}`)}>
       {columns.map((column, key) => (
         <div className="node-title-column" key={key}>
-          <div className="column-title">{column.title}</div>
+          {column.title && <div className="column-title">{column.title}</div>}
           <div className="column-content">
             {`${column.content} `}
-            <span className="unit">{column.unit}</span>
+            {column.unit && <span className="unit">{column.unit}</span>}
           </div>
         </div>
       ))}
@@ -30,6 +31,11 @@ export default function NodeTitle({ columns = [], recolorGroup, onClose }) {
 
 NodeTitle.propTypes = {
   columns: PropTypes.array,
-  recolorGroup: PropTypes.number,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  className: PropTypes.string,
+  recolorGroup: PropTypes.number
+};
+
+NodeTitle.defaultProps = {
+  recolorGroup: -1
 };

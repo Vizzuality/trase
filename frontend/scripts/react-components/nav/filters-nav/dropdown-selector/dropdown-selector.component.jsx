@@ -36,7 +36,7 @@ class DropdownSelector extends Component {
           className={cx('dropdown-item', { '-disabled': item.isDisabled })}
           onClick={() => onSelected(item.id)}
         >
-          {item.name.toLowerCase()}
+          {item.name}
           {item.tooltip && <Tooltip constraint="window" text={item.tooltip} />}
         </li>
       </React.Fragment>
@@ -66,7 +66,7 @@ class DropdownSelector extends Component {
             {tooltip && <Tooltip text={tooltip} constraint="window" />}
           </span>
           <span className={cx('dropdown-title', titleClassName)}>
-            {selectedItem.name.toLowerCase()}
+            {selectedItem.name}
             {titleTooltip && <Tooltip constraint="window" floating text={titleTooltip} />}
           </span>
           <FiltersDropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>

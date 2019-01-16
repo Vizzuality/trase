@@ -4,6 +4,32 @@
 .c-search-input {
   position: relative;
 
+  &.secondary {
+    .search-input-bar {
+      flex-direction: row-reverse;
+      padding: 2px 0 0 16px;
+      box-shadow: none;
+      border: solid 2px $charcoal-grey-faded-a-lot;
+      background-color: $light-gray;
+
+      input {
+        padding: 9px;
+        color: $charcoal-grey;
+        font-size: $font-size-x-regular;
+        letter-spacing: -0.8px;
+        background-color: $light-gray;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  &.size {
+    &-sm {
+      height: 40px;
+      width: 370px;
+    }
+  }
+
   .search-input-bar {
     position: relative;
     display: flex;

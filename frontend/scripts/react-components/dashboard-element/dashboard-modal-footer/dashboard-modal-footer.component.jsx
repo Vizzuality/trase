@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
+import TagsGroup from 'react-components/shared/tags-group/tags-group.component';
 import Button from 'react-components/shared/button/button.component';
 
 import './dashboard-modal-footer.scss';
@@ -19,31 +19,7 @@ function DashboardModalFooter(props) {
   return (
     <div className="c-dashboard-modal-footer">
       {(!editMode || isPanelFooter) && (
-        <p className="dashboard-modal-footer-text">
-          {dynamicSentenceParts.map((part, i) => (
-            <React.Fragment key={part.prefix + part.value + i}>
-              {`${part.prefix} `}
-              {part.value && (
-                <span
-                  className={cx('modal-footer-item', 'notranslate', { '-with-cross': clearItem })}
-                >
-                  {part.value}
-                  {clearItem && (
-                    <button
-                      onClick={() => clearItem(part.panel)}
-                      className="modal-footer-item-remove-cross"
-                      type="button"
-                    >
-                      <svg className="icon icon-close">
-                        <use xlinkHref="#icon-close" />
-                      </svg>
-                    </button>
-                  )}
-                </span>
-              )}
-            </React.Fragment>
-          ))}
-        </p>
+        <TagsGroup tags={dynamicSentenceParts} clearItem={clearItem} />
       )}
       <div className="dashboard-modal-actions">
         {onBack && !editMode && (

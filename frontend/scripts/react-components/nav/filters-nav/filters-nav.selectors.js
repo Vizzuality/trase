@@ -60,11 +60,11 @@ export const getToolAdminLevelProps = createSelector(
         { name: 'All', id: 'none' },
         ...adminLevel.nodes
           .filter(node => node.name !== selectedFilter.name)
-          .map(node => ({ ...node, id: node.name }))
+          .map(node => ({ ...node, id: node.name, name: `${node.name}`.toLowerCase() }))
       ],
       selectedItem:
         typeof selectedFilter !== 'undefined' && selectedFilter.value !== 'none'
-          ? selectedFilter
+          ? { ...selectedFilter, name: `${selectedFilter.name}`.toLowerCase() }
           : { name: 'All' }
     };
   }
@@ -151,10 +151,11 @@ const getLogisticsMapInspectionLevelProps = createSelector(
     return {
       label: 'Inspection Level',
       id: 'logisticsMapInspectionLevel',
-      items: [{ name: 'all' }, ...LOGISTICS_MAP_INSPECTION_LEVELS],
+      dropdownClassName: '',
+      items: [{ name: 'All' }, ...LOGISTICS_MAP_INSPECTION_LEVELS],
       selectedItem: LOGISTICS_MAP_INSPECTION_LEVELS.find(
-        level => level.id === activeParams.inspection_level
-      ) || { name: 'all' }
+        level => level.id === activeParams.inspection
+      ) || { name: 'All' }
     };
   }
 );
@@ -221,6 +222,7 @@ export const getNavFilters = createSelector(
         };
       case 'logisticsMap':
         return {
+          showLogisticsMapDownload: true,
           left: [
             { type: FILTER_TYPES.dropdownSelector, props: logisticsMapsHubs },
             { type: FILTER_TYPES.dropdownSelector, props: logisticsMapsYears },

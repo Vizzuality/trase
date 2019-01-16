@@ -1,17 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import startCase from 'lodash/startCase';
 import Text from 'react-components/shared/text/text.component';
 import Heading from 'react-components/shared/heading/heading.component';
-import startCase from 'lodash/startCase';
 import Toggle from 'react-components/shared/toggle/toggle.component';
+import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 
 import './logistics-map-legend.scss';
 
 class LogisticsMapLegend extends React.PureComponent {
   static propTypes = {
-    heading: PropTypes.string,
     layers: PropTypes.array,
+    heading: PropTypes.string,
+    tooltips: PropTypes.object,
     setLayerActive: PropTypes.func
   };
 
@@ -23,7 +25,7 @@ class LogisticsMapLegend extends React.PureComponent {
 
   render() {
     const { open } = this.state;
-    const { layers, setLayerActive, heading } = this.props;
+    const { layers, setLayerActive, heading, tooltips } = this.props;
     return (
       <aside className={cx('c-logistics-map-legend', { '-closed': !open })}>
         <div className={cx(['logistics-map-legend-title', { '-closed': !open }])}>
@@ -37,12 +39,17 @@ class LogisticsMapLegend extends React.PureComponent {
           {layers.map(layer => (
             <li className="logistics-map-legend-list-item" key={layer.id}>
               <Text>{startCase(layer.name)}</Text>
-              <Toggle
-                id={layer.id}
-                color={layer.color}
-                checked={layer.active}
-                onChange={e => setLayerActive(layer.id, e.target.checked)}
-              />
+              <div className="logistics-map-legend-item-controls">
+                <Toggle
+                  id={layer.id}
+                  color={layer.color}
+                  checked={layer.active}
+                  onChange={e => setLayerActive(layer.id, e.target.checked)}
+                />
+                {tooltips && tooltips[layer.name] && (
+                  <Tooltip text={tooltips[layer.name]} constraint="window" className="size-rg" />
+                )}
+              </div>
             </li>
           ))}
         </ul>

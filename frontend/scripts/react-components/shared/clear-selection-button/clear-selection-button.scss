@@ -1,0 +1,53 @@
+@import 'styles/settings';
+
+.c-clear-selection-button {
+  position: relative;
+  height: 36px;
+  width: 36px;
+  cursor: pointer;
+
+  .clear-selection-button-item {
+    position: absolute;
+    height: 36px;
+    top: 0;
+    border-radius: 18px;
+    background-color: $charcoal-grey;
+    color: $white;
+
+    &.-circle {
+      width: 36px;
+      z-index: $z-above;
+    }
+
+    &.-text {
+      display: flex;
+      align-items: center;
+      right: 0;
+      width: 36px;
+      pointer-events: none;
+      white-space: nowrap;
+      font-family: $font-family-1;
+      font-size: $font-size-small;
+      text-transform: uppercase;
+      transition: all .3s $ease-in-out-sine;
+    }
+  }
+
+  .icon {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    margin: auto;
+    width: .8em;
+    height: .8em;
+  }
+
+  &:hover {
+    .clear-selection-button-item.-text {
+      padding: 0 0 0 16px;
+      width: 150px;
+    }
+  }
+}

@@ -129,6 +129,13 @@
     }
   }
 
+  &.-icon {
+    > svg {
+      height: 21px;
+      width: 21px;
+    }
+  }
+
   .dropdown-item-legend-summary {
     padding: 0;
   }

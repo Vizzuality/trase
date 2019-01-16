@@ -20,6 +20,18 @@
     opacity: .3;
     font-size: 12px;
   }
+
+  &.size-rg {
+    display: block;
+    margin: 0;
+    height: 16px;
+    width: 16px;
+    color: $charcoal-grey-faded;
+
+    .tooltip-react-icon {
+      font-size: initial;
+    }
+  }
 }
 
 .tooltip-ios-touch {

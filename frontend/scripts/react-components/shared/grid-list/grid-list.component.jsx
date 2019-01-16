@@ -9,15 +9,15 @@ import './grid-list.scss';
 class GridList extends React.Component {
   static propTypes = {
     page: PropTypes.number,
-    children: PropTypes.any,
     loading: PropTypes.bool,
     loadingMoreItems: PropTypes.bool,
     groupBy: PropTypes.string,
     className: PropTypes.string,
     getMoreItems: PropTypes.func,
     items: PropTypes.array.isRequired,
-    height: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
+    children: PropTypes.func.isRequired,
+    height: PropTypes.number.isRequired,
     rowHeight: PropTypes.number.isRequired,
     columnWidth: PropTypes.number.isRequired,
     columnCount: PropTypes.number.isRequired

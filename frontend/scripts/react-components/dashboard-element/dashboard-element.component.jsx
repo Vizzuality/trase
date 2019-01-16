@@ -58,35 +58,25 @@ class DashboardElement extends React.PureComponent {
             </div>
           </section>
         )}
-        <SimpleModal isOpen={modalOpen} onRequestClose={onClose} className="no-events">
-          <div className="dashboard-modal-content all-events">
-            <div className="dashboard-modal-close">
-              <button onClick={onClose}>
-                <span>close</span>
-                <svg className="icon icon-close">
-                  <use xlinkHref="#icon-close" />
-                </svg>
-              </button>
-            </div>
-            {step === DashboardElement.steps.WELCOME && (
-              <DashboardWelcome onContinue={() => setStep(DashboardElement.steps.PANEL)} />
-            )}
-            {step === DashboardElement.steps.PANEL && (
-              <DashboardPanel
-                editMode={editMode}
-                onContinue={() =>
-                  editMode && canProceed ? closeModal() : setStep(DashboardElement.steps.INDICATORS)
-                }
-              />
-            )}
-            {step === DashboardElement.steps.INDICATORS && (
-              <DashboardIndicators
-                editMode={editMode}
-                onContinue={closeModal}
-                goBack={() => setStep(DashboardElement.steps.PANEL)}
-              />
-            )}
-          </div>
+        <SimpleModal isOpen={modalOpen} onRequestClose={onClose}>
+          {step === DashboardElement.steps.WELCOME && (
+            <DashboardWelcome onContinue={() => setStep(DashboardElement.steps.PANEL)} />
+          )}
+          {step === DashboardElement.steps.PANEL && (
+            <DashboardPanel
+              editMode={editMode}
+              onContinue={() =>
+                editMode && canProceed ? closeModal() : setStep(DashboardElement.steps.INDICATORS)
+              }
+            />
+          )}
+          {step === DashboardElement.steps.INDICATORS && (
+            <DashboardIndicators
+              editMode={editMode}
+              onContinue={closeModal}
+              goBack={() => setStep(DashboardElement.steps.PANEL)}
+            />
+          )}
         </SimpleModal>
       </React.Fragment>
     );

@@ -238,5 +238,5 @@ export const LOGISTICS_MAP_INSPECTION_LEVELS = [
   { id: 'SIF', name: 'SIF' },
   { id: 'SIE', name: 'SIE' },
   { id: 'SIM', name: 'SIM' },
-  { id: 'UNKNOWN', name: 'UNKNOWN' }
+  { id: 'UNKNOWN', name: 'Unknown' }
 ];

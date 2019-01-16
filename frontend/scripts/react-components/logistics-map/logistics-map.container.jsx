@@ -6,7 +6,11 @@ import {
   getActiveLayers,
   getActiveParams
 } from 'react-components/logistics-map/logistics-map.selectors';
-import { setLayerActive as setLayerActiveFn } from 'react-components/logistics-map/logistics-map.actions';
+import {
+  setLogisticsMapActiveModal,
+  setLayerActive as setLayerActiveFn,
+  getLogisticsMapCompanies
+} from 'react-components/logistics-map/logistics-map.actions';
 import LogisticsMap from 'react-components/logistics-map/logistics-map.component';
 import formatValue from 'utils/formatValue';
 import startCase from 'lodash/startCase';
@@ -14,9 +18,13 @@ import startCase from 'lodash/startCase';
 class LogisticsMapContainer extends React.PureComponent {
   static propTypes = {
     layers: PropTypes.array,
-    activeLayers: PropTypes.array,
+    tooltips: PropTypes.object,
     commodity: PropTypes.string,
-    setLayerActive: PropTypes.func.isRequired
+    activeLayers: PropTypes.array,
+    activeModal: PropTypes.string,
+    setLayerActive: PropTypes.func.isRequired,
+    getLogisticsMapCompanies: PropTypes.func.isRequired,
+    setLogisticsMapActiveModal: PropTypes.func.isRequired
   };
 
   state = {
@@ -28,6 +36,16 @@ class LogisticsMapContainer extends React.PureComponent {
   };
 
   currentPopUp = null;
+
+  componentDidMount() {
+    this.props.getLogisticsMapCompanies();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.commodity !== this.props.commodity) {
+      this.props.getLogisticsMapCompanies();
+    }
+  }
 
   onMouseOver = (e, layer) => {
     const { data } = e;
@@ -55,7 +73,7 @@ class LogisticsMapContainer extends React.PureComponent {
       items.splice(-1, 0, { title: 'State', value: data.state });
       items.push(
         { title: 'Subclass', value: data.subclass },
-        { title: 'Inspection level', value: data.inspection_level }
+        { title: 'Inspection level', value: data.inspection }
       );
       text = startCase(layer.name);
     }
@@ -72,19 +90,27 @@ class LogisticsMapContainer extends React.PureComponent {
     this.popUp = popUp;
   };
 
+  openCompaniesModal = () => this.props.setLogisticsMapActiveModal('companies');
+
+  closeModal = () => this.props.setLogisticsMapActiveModal(null);
+
   render() {
-    const { activeLayers, layers, setLayerActive, commodity } = this.props;
+    const { activeLayers, layers, setLayerActive, commodity, tooltips, activeModal } = this.props;
     const { mapPopUp } = this.state;
 
     return (
       <LogisticsMap
         layers={layers}
+        tooltips={tooltips}
         mapPopUp={mapPopUp}
         bounds={this.bounds}
+        commodity={commodity}
+        activeModal={activeModal}
         activeLayers={activeLayers}
+        closeModal={this.closeModal}
         buildEvents={this.buildEvents}
         setLayerActive={setLayerActive}
-        commodity={commodity}
+        openModal={this.openCompaniesModal}
         getCurrentPopUp={this.getCurrentPopUp}
       />
     );
@@ -94,15 +120,19 @@ class LogisticsMapContainer extends React.PureComponent {
 const mapStateToProps = state => {
   const { year: activeYear, commodity } = getActiveParams(state);
   return {
-    activeYear,
     commodity,
+    activeYear,
     activeLayers: getActiveLayers(state),
-    layers: getLogisticsMapLayers(state)
+    layers: getLogisticsMapLayers(state),
+    activeModal: state.logisticsMap.activeModal,
+    tooltips: state.app.tooltips ? state.app.tooltips.logisticsMap : {}
   };
 };
 
 const mapDispatchToProps = {
-  setLayerActive: setLayerActiveFn
+  setLayerActive: setLayerActiveFn,
+  getLogisticsMapCompanies,
+  setLogisticsMapActiveModal
 };
 
 export default connect(

@@ -11,21 +11,30 @@ import { Layer, LayerManager } from 'layer-manager/lib/react';
 import { PluginLeaflet } from 'layer-manager/lib';
 import { BASEMAPS } from 'constants';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
+import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-legend/logistics-map-legend.component';
+import LogisticsMapPanel from 'react-components/logistics-map/logistics-map-panel/logistics-map-panel.container';
+import LogisticsMapBar from 'react-components/logistics-map/logistics-map-bar/logistics-map-bar.container';
+import LogisticsMapDownload from 'react-components/logistics-map/logistics-map-download/logistics-map-download.container';
+
 import 'wri-api-components/dist/map.css';
 import 'leaflet/dist/leaflet.css';
 import 'scripts/react-components/logistics-map/logistics-map.scss';
 
 function LogisticsMap(props) {
   const {
-    commodity,
-    activeLayers,
-    layers,
-    buildEvents,
-    mapPopUp,
-    getCurrentPopUp,
     bounds,
-    setLayerActive
+    layers,
+    tooltips,
+    mapPopUp,
+    commodity,
+    openModal,
+    closeModal,
+    activeModal,
+    buildEvents,
+    activeLayers,
+    setLayerActive,
+    getCurrentPopUp
   } = props;
   const Tooltip = p => <UnitsTooltip {...p.data} />;
   const heading = commodity === 'soy' ? 'soy facilities' : 'slaughterhouses';
@@ -35,7 +44,7 @@ function LogisticsMap(props) {
         <WRIIcons />
         <MapComponent bounds={bounds} basemap={BASEMAPS.default}>
           {map => (
-            <React.Fragment>
+            <>
               <MapControls>
                 <ZoomControl map={map} />
               </MapControls>
@@ -47,10 +56,20 @@ function LogisticsMap(props) {
               <MapPopup map={map} {...mapPopUp} onReady={getCurrentPopUp}>
                 <Tooltip />
               </MapPopup>
-            </React.Fragment>
+            </>
           )}
         </MapComponent>
-        <LogisticsMapLegend layers={layers} setLayerActive={setLayerActive} heading={heading} />
+        <LogisticsMapLegend
+          layers={layers}
+          heading={heading}
+          tooltips={tooltips}
+          setLayerActive={setLayerActive}
+        />
+        <LogisticsMapBar openModal={openModal} />
+        <SimpleModal isOpen={activeModal !== null} onRequestClose={closeModal}>
+          {activeModal === 'companies' && <LogisticsMapPanel close={closeModal} />}
+          {activeModal === 'download' && <LogisticsMapDownload close={closeModal} />}
+        </SimpleModal>
       </div>
     </div>
   );
@@ -58,9 +77,13 @@ function LogisticsMap(props) {
 
 LogisticsMap.propTypes = {
   layers: PropTypes.array,
-  activeLayers: PropTypes.array,
+  openModal: PropTypes.func,
+  tooltips: PropTypes.object,
+  closeModal: PropTypes.func,
   buildEvents: PropTypes.func,
-  commodity: PropTypes.string
+  commodity: PropTypes.string,
+  activeModal: PropTypes.string,
+  activeLayers: PropTypes.array
 };
 
 export default LogisticsMap;
