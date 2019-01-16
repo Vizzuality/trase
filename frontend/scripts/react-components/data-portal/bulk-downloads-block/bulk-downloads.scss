@@ -18,14 +18,5 @@
     width: 100%;
     margin-bottom: 14px;
     overflow: hidden;
-
-    > span {
-      width: calc(100% - 22px);
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    &.-disabled {
-      cursor: not-allowed;
-    }
   }
 }

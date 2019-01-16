@@ -14,6 +14,12 @@
   cursor: pointer;
   white-space: nowrap;
 
+  > .button-text-container {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   &[disabled=""] {
     opacity: 0.4;
     cursor: default;
@@ -63,10 +69,16 @@
     color: $charcoal-grey;
   }
 
-  &.color-gray-transparent{
+  &.color-gray-transparent {
     border-color: $gray;
     background-color: transparent;
     color: $gray;
+  }
+
+  &.color-charcoal-transparent {
+    border-color: $charcoal-grey-faded;
+    background-color: transparent;
+    color: $charcoal-grey;
   }
 
   &.color-charcoal {
@@ -89,6 +101,10 @@
     justify-content: space-between;
     .icon {
       margin-left: 5px;
+    }
+
+    .button-text-container {
+      max-width: calc(100% - 22px);
     }
   }
 }

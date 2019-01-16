@@ -15,7 +15,7 @@ import SimpleModal from 'react-components/shared/simple-modal/simple-modal.compo
 import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-legend/logistics-map-legend.component';
 import LogisticsMapPanel from 'react-components/logistics-map/logistics-map-panel/logistics-map-panel.container';
 import LogisticsMapBar from 'react-components/logistics-map/logistics-map-bar/logistics-map-bar.container';
-import LogisticsMapDownload from 'react-components/logistics-map/logistics-map-download/logistics-map-download.component';
+import LogisticsMapDownload from 'react-components/logistics-map/logistics-map-download/logistics-map-download.container';
 
 import 'wri-api-components/dist/map.css';
 import 'leaflet/dist/leaflet.css';

@@ -9,7 +9,9 @@ function LogisticsMapModal(props) {
 
   return (
     <div className="c-logistics-map-modal">
-      <Heading align="center">{heading}</Heading>
+      <Heading size="md" align="center">
+        {heading}
+      </Heading>
       {content}
       <div className="logistics-map-modal-footer">{footer}</div>
     </div>

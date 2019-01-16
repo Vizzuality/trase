@@ -3,26 +3,22 @@ import PropTypes from 'prop-types';
 import startCase from 'lodash/startCase';
 import LogisticsMapModal from 'react-components/logistics-map/logistics-map-modal/logistics-map-modal.component';
 import Button from 'react-components/shared/button/button.component';
-import Text from 'react-components/shared/text/text.component';
-import layers from 'react-components/logistics-map/logistics-map-layers';
+import Heading from 'react-components/shared/heading/heading.component';
 
 import 'react-components/logistics-map/logistics-map-download/logistics-map-download.scss';
 
 function LogisticsMapDownload(props) {
-  const { close } = props;
+  const { close, layers } = props;
   return (
     <LogisticsMapModal
       heading="Download"
       content={
-        <ul className="c-logistics-map-download">
-          {layers.map(layer => (
-            <li>
-              <a target="_blank" rel="noreferrer noopener" href={layer.downloadUrl}>
-                <Text weight="bold">{startCase(layer.name)}</Text>
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div className="c-logistics-map-download">
+          <Heading weight="bold">Soy</Heading>
+          <div className="row">{layers.soy.map(LogisticsMapDownload.mapLayerToLink)}</div>
+          <Heading weight="bold">Cattle</Heading>
+          <div className="row">{layers.cattle.map(LogisticsMapDownload.mapLayerToLink)}</div>
+        </div>
       }
       footer={
         <>
@@ -35,8 +31,26 @@ function LogisticsMapDownload(props) {
   );
 }
 
+LogisticsMapDownload.mapLayerToLink = layer => (
+  <div className="column small-6" key={layer.name}>
+    <Button
+      as="a"
+      size="lg"
+      icon="icon-download"
+      color="charcoal-transparent"
+      className="logistics-map-download-link"
+      target="_blank"
+      rel="noreferrer noopener"
+      href={layer.downloadUrl}
+    >
+      {startCase(layer.name)}
+    </Button>
+  </div>
+);
+
 LogisticsMapDownload.propTypes = {
-  close: PropTypes.func.isRequired
+  close: PropTypes.func.isRequired,
+  layers: PropTypes.shape({ soy: PropTypes.array, cattle: PropTypes.array }).isRequired
 };
 
 export default LogisticsMapDownload;

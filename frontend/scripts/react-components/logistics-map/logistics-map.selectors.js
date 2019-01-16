@@ -1,5 +1,5 @@
 import deburr from 'lodash/deburr';
-import { createSelector } from 'reselect';
+import { createSelector, defaultMemoize } from 'reselect';
 import templates from 'react-components/logistics-map/logistics-map-layers';
 
 const getSelectedCommodity = state =>
@@ -86,4 +86,20 @@ export const getCurrentSearchedCompanies = createSelector(
       const term = typeof i.name === 'string' ? i.name.toLowerCase() : i.name;
       return deburr(term).includes(searchTerm);
     })
+);
+
+export const getLogisticsMapDownloadUrls = defaultMemoize(() =>
+  templates.reduce(
+    (acc, template) => ({
+      ...acc,
+      [template.commodity]: [
+        ...(acc[template.commodity] || []),
+        {
+          name: template.name,
+          downloadUrl: template.downloadUrl
+        }
+      ]
+    }),
+    {}
+  )
 );

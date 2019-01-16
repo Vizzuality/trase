@@ -2,7 +2,6 @@
 import '../../profiles/chord/chord.scss';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
 import Button from 'react-components/shared/button/button.component';
 
 import 'scripts/react-components/data-portal/bulk-downloads-block/bulk-downloads.scss';
@@ -21,17 +20,14 @@ class BulkDownloadsBlock extends Component {
           {this.props.contexts.map(context => (
             <div key={context.id} className="small-4 columns">
               <Button
-                color="color-gray-transparent"
+                color="charcoal-transparent"
                 size="lg"
-                className={cx('c-bulk-downloads__item', {
-                  '-disabled': !this.props.enabled
-                })}
+                disabled={!this.props.enabled}
+                className="c-bulk-downloads__item"
                 icon="icon-download"
                 onClick={() => this.onBulkDownloadButtonClicked(context.id)}
               >
-                <span>
-                  {context.countryName} - {context.commodityName} (all years)
-                </span>
+                {context.countryName} - {context.commodityName} (all years)
               </Button>
             </div>
           ))}

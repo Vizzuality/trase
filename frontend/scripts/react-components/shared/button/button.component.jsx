@@ -25,10 +25,16 @@ function Button(props) {
     </svg>
   );
 
+  const childrenWithContainer = (
+    <span className="button-text-container" title={children}>
+      {children}
+    </span>
+  );
+
   const childrenWithIcon = (
     <>
       {icon && iconPosition === 'left' && iconComponent}
-      {children}
+      {typeof children !== 'string' ? children : childrenWithContainer}
       {icon && iconPosition === 'right' && iconComponent}
     </>
   );

@@ -6,7 +6,10 @@ import {
 } from 'react-components/logistics-map/logistics-map.actions';
 
 const initialState = {
-  companies: {},
+  companies: {
+    soy: [],
+    cattle: []
+  },
   activeModal: null
 };
 
