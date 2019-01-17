@@ -29,7 +29,7 @@ namespace :db do
     end
 
     POSTGRESQL_JAR = 'postgresql-42.2.5.jar'.freeze
-    SCHEMA_SPY_JAR = 'schemaspy-6.0.0-rc2.jar'.freeze
+    SCHEMA_SPY_JAR = 'schemaspy-6.0.0.jar'.freeze
     BLUE_TABLES = %w[
       countries
       commodities
