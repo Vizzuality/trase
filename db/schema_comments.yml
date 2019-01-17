@@ -24,9 +24,9 @@ tables:
       - name: legend_name
         comment: Legend title
       - name: display_type
-        comment: Type of display, only used for trajectory deforestation plot in place profiles; e.g. 'area', 'line'
+        comment: Type of display, only used for trajectory deforestation plot in place profiles; e.g. area, line
       - name: display_style
-        comment: Style of display, only used for trajectory deforestation plot in place profiles; e.g. 'area-pink', 'area-black', 'line-dashed-black'
+        comment: Style of display, only used for trajectory deforestation plot in place profiles; e.g. area-pink, area-black, line-dashed-black
       - name: state_average
         comment: Only used for trajectory deforestation plot in place profiles
   - name: chart_inds
@@ -128,9 +128,9 @@ tables:
       - name: zoom
         comment: Zoom level (0-18)
       - name: annotation_position_x_pos
-        comment: X position (in coordinates) where the country's label is displayed on the explore page
+        comment: X position (in coordinates) where the country''s label is displayed on the explore page
       - name: annotation_position_y_pos
-        comment: Y position (in coordinates) where the country's label is displayed on the explore page
+        comment: Y position (in coordinates) where the country''s label is displayed on the explore page
   - name: dashboards_attribute_groups
     comment: Groups attributes (inds/quals/quants) to display on dashboards wizard
     columns:
@@ -173,7 +173,7 @@ tables:
       - name: filter_bands
         comment: Array of value ranges to allow filtering by
   - name: download_versions
-    comment: 'Versions of data downloads'
+    comment: Versions of data downloads
     columns:
       - name: symbol
         comment: Version symbol (included in downloaded file name)
@@ -274,7 +274,7 @@ tables:
       - name: value
         comment: Numeric value
   - name: node_types
-    comment: 'List of types of nodes in the system, e.g. MUNICIPALITY or EXPORTER. Important: those literals are referred to in code, therefore should not be changed without notice.'
+    comment: List of types of nodes in the system, e.g. MUNICIPALITY or EXPORTER. Those literals are referred to in code, therefore should not be changed without notice.
     columns:
       - name: name
         comment: Name of node type, spelt in capital letters; unique across node types
@@ -445,8 +445,6 @@ materialized_views:
         comment: References country id (via flows -> contexts) - for dashboards filtering
       - name: commodity_id
         comment: References commodity id (via flows -> contexts) - for dashboards filtering
-      - name: flow_id
-        comment: '???'
       - name: path
         comment: Flow path
       - name: attribute_id
