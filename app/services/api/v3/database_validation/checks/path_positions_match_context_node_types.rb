@@ -5,6 +5,8 @@ module Api
     module DatabaseValidation
       module Checks
         class PathPositionsMatchContextNodeTypes < AbstractCheck
+          include ErrorMessageWithViolatingFlows
+
           # Checks the flows table, expanding paths in a subjquery
           # to get node types for each node and compares
           # node_type_id + position from path versus that declared
@@ -53,23 +55,10 @@ module Api
           end
 
           def error
-            violating_ids, n_more =
-              if @violating_flows.size > 10
-                [@violating_flows[0..9], @violating_flows.size - 10]
-              else
-                [@violating_flows, nil]
-              end
-            violating_ids_message = violating_ids.join(', ')
-            violating_ids_message += " and #{n_more} more" if n_more
-
-            message = [
-              'Path node types should match context node types ',
-              '(violating flows ids: ',
-              violating_ids_message,
-              ')'
-            ].join('')
             super.merge(
-              message: message
+              message: error_message(
+                'Path positions should match context node types'
+              )
             )
           end
         end
