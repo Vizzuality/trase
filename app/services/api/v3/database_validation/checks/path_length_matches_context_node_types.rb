@@ -3,7 +3,7 @@ module Api
   module V3
     module DatabaseValidation
       module Checks
-        class PathMatchesContextNodeTypes < AbstractCheck
+        class PathLengthMatchesContextNodeTypes < AbstractCheck
           # Checks the flows table
           # @return (see AbstractCheck#passing?)
           def passing?

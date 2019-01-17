@@ -36,7 +36,7 @@ module Api
           checks :has_at_least_one,
                  association: :contextual_layers,
                  link: :index
-          checks :path_matches_context_node_types
+          checks :path_length_matches_context_node_types
           checks :path_positions_match_context_node_types
           checks :active_record_check, on: :context_property, link: :edit
 
