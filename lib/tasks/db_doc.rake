@@ -28,7 +28,7 @@ namespace :db do
       Rake::Task['db:structure:dump'].invoke
     end
 
-    POSTGRESQL_JAR = 'postgresql-42.2.0.jar'.freeze
+    POSTGRESQL_JAR = 'postgresql-42.2.5.jar'.freeze
     SCHEMA_SPY_JAR = 'schemaspy-6.0.0-rc2.jar'.freeze
     BLUE_TABLES = %w[
       countries
