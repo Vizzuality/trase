@@ -41,40 +41,69 @@ shared_context 'minimum complete configuration' do
       is_temporal_on_place_profile: true
     )
   }
-  let(:exporter_node_type) {
-    FactoryBot.create(:api_v3_node_type, name: NodeTypeName::EXPORTER)
+  let(:biome_node_type) {
+    FactoryBot.create(:api_v3_node_type, name: NodeTypeName::BIOME)
   }
   let(:municipality_node_type) {
     FactoryBot.create(:api_v3_node_type, name: NodeTypeName::MUNICIPALITY)
   }
+  let(:exporter_node_type) {
+    FactoryBot.create(:api_v3_node_type, name: NodeTypeName::EXPORTER)
+  }
   let(:country_node_type) {
     FactoryBot.create(:api_v3_node_type, name: NodeTypeName::COUNTRY)
   }
-  let(:exporter_context_node_type) {
+
+  let(:biome_node) {
+    FactoryBot.create(:api_v3_node, node_type: biome_node_type)
+  }
+  let(:municipality_node) {
+    FactoryBot.create(:api_v3_node, node_type: municipality_node_type)
+  }
+  let(:exporter_node) {
+    FactoryBot.create(:api_v3_node, node_type: exporter_node_type)
+  }
+  let(:country_node) {
+    FactoryBot.create(:api_v3_node, node_type: country_node_type)
+  }
+
+  let(:biome_context_node_type) {
     FactoryBot.create(
       :api_v3_context_node_type,
       context: context,
-      node_type: exporter_node_type
+      node_type: biome_node_type,
+      column_position: 0
     )
   }
   let(:municipality_context_node_type) {
     FactoryBot.create(
       :api_v3_context_node_type,
       context: context,
-      node_type: municipality_node_type
+      node_type: municipality_node_type,
+      column_position: 1
+    )
+  }
+  let(:exporter_context_node_type) {
+    FactoryBot.create(
+      :api_v3_context_node_type,
+      context: context,
+      node_type: exporter_node_type,
+      column_position: 2
     )
   }
   let(:country_context_node_type) {
     FactoryBot.create(
       :api_v3_context_node_type,
       context: context,
-      node_type: country_node_type
+      node_type: country_node_type,
+      column_position: 3
     )
   }
-  let!(:exporter_context_node_type_property) {
+
+  let!(:biome_context_node_type_property) {
     FactoryBot.create(
       :api_v3_context_node_type_property,
-      context_node_type: exporter_context_node_type
+      context_node_type: biome_context_node_type
     )
   }
   let!(:municipality_context_node_type_property) {
@@ -83,12 +112,19 @@ shared_context 'minimum complete configuration' do
       context_node_type: municipality_context_node_type
     )
   }
+  let!(:exporter_context_node_type_property) {
+    FactoryBot.create(
+      :api_v3_context_node_type_property,
+      context_node_type: exporter_context_node_type
+    )
+  }
   let!(:country_context_node_type_property) {
     FactoryBot.create(
       :api_v3_context_node_type_property,
       context_node_type: country_context_node_type
     )
   }
+
   let!(:actor_profile) {
     FactoryBot.create(
       :api_v3_profile,
@@ -175,7 +211,17 @@ shared_context 'minimum complete configuration' do
     FactoryBot.create(:api_v3_node_ind, ind: ind, year: 2014)
   }
   let(:flow_2014) {
-    FactoryBot.create(:api_v3_flow, context: context, year: 2014)
+    FactoryBot.create(
+      :api_v3_flow,
+      context: context,
+      path: [
+        biome_node.id,
+        municipality_node.id,
+        exporter_node.id,
+        country_node.id
+      ],
+      year: 2014
+    )
   }
   let!(:flow_quant_2014) {
     FactoryBot.create(:api_v3_flow_quant, flow: flow_2014, quant: quant)

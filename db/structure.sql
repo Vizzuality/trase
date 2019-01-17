@@ -1592,7 +1592,8 @@ CREATE TABLE public.flows (
     context_id integer NOT NULL,
     year smallint NOT NULL,
     path integer[] DEFAULT '{}'::integer[],
-    created_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    CONSTRAINT flows_path_length_check CHECK ((public.icount(path) > 3))
 );
 
 
@@ -6236,7 +6237,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181119105022'),
 ('20181207143449'),
 ('20181210215622'),
+('20190110094614'),
 ('20190110140539'),
 ('20190111121850');
+
 
 
