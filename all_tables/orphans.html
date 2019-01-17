@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>trase_revamp Database</title>
+  <title>trase_test Database</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
   <!-- Bootstrap 3.3.5 -->
   <link rel="stylesheet" href="bower/admin-lte/bootstrap/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -45,7 +46,7 @@
     <nav class="navbar navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-          <a href="index.html" class="navbar-brand"><b>trase_revamp</b> Database</a>
+          <a href="index.html" class="navbar-brand"><b>trase_test</b> Database</a>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
             <i class="fa fa-bars"></i>
           </button>
@@ -54,13 +55,13 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="index.html">Tables <span class="sr-only">(current)</span></a></li>            
-			<!--<li><a href="components.html" title="List of system components">Components</a></li>-->
+            <li><a href="index.html">Tables <span class="sr-only">(current)</span></a></li>
 			<li><a href="columns.html" title="All of the columns in the schema">Columns</a></li>
 			<li><a href="constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
 			<li><a href="relationships.html" title="Diagram of table relationships">Relationships</a></li>
 			<li><a href="orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>				
 			<li><a href="anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+			<li><a href="routines.html" title="Procedures and functions">Routines</a></li>
           </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -87,11 +88,65 @@
             <div class="box-body">
 			<div id="grid" data-columns>
 				<div class="item">
+					<img src='diagrams/orphans/schema_migrations.1degree.png' usemap='#schema_migrations' style="max-width:100%;" border='0' alt='' align='top'></img>
+				</div>
+				<div class="item">
+					<img src='diagrams/orphans/ar_internal_metadata.1degree.png' usemap='#ar_internal_metadata' style="max-width:100%;" border='0' alt='' align='top'></img>
+				</div>
+				<div class="item">
+					<img src='diagrams/orphans/dashboard_template_commodities.1degree.png' usemap='#dashboard_template_commodities' style="max-width:100%;" border='0' alt='' align='top'></img>
+				</div>
+				<div class="item">
+					<img src='diagrams/orphans/dashboard_template_companies.1degree.png' usemap='#dashboard_template_companies' style="max-width:100%;" border='0' alt='' align='top'></img>
+				</div>
+				<div class="item">
+					<img src='diagrams/orphans/dashboard_template_countries.1degree.png' usemap='#dashboard_template_countries' style="max-width:100%;" border='0' alt='' align='top'></img>
+				</div>
+				<div class="item">
+					<img src='diagrams/orphans/dashboard_template_destinations.1degree.png' usemap='#dashboard_template_destinations' style="max-width:100%;" border='0' alt='' align='top'></img>
+				</div>
+				<div class="item">
+					<img src='diagrams/orphans/dashboard_template_sources.1degree.png' usemap='#dashboard_template_sources' style="max-width:100%;" border='0' alt='' align='top'></img>
+				</div>
+				<div class="item">
+					<img src='diagrams/orphans/database_validation_reports.1degree.png' usemap='#database_validation_reports' style="max-width:100%;" border='0' alt='' align='top'></img>
+				</div>
+				<div class="item">
 					<img src='diagrams/orphans/database_updates.1degree.png' usemap='#database_updates' style="max-width:100%;" border='0' alt='' align='top'></img>
 				</div>
+				<div class="item">
+					<img src='diagrams/orphans/dashboard_templates.1degree.png' usemap='#dashboard_templates' style="max-width:100%;" border='0' alt='' align='top'></img>
+				</div>
 			</div>
-			<map id="database_updates" name="database_updates">
-<area shape="rect" id="node1" href="tables/database_updates.html" title="database_updates" alt="" coords="5,5,193,245">
+			<map id="schema_migrations" name="schema_migrations">
+<area shape="rect" id="node1" href="tables/schema_migrations.html" title="schema_migrations" alt="" coords="5,5,321,104">
+</map>
+<map id="ar_internal_metadata" name="ar_internal_metadata">
+<area shape="rect" id="node1" href="tables/ar_internal_metadata.html" title="ar_internal_metadata" alt="" coords="5,5,332,192">
+</map>
+<map id="dashboard_template_commodities" name="dashboard_template_commodities">
+<area shape="rect" id="node1" href="tables/dashboard_template_commodities.html" title="dashboard_template_commodities" alt="" coords="5,5,411,221">
+</map>
+<map id="dashboard_template_companies" name="dashboard_template_companies">
+<area shape="rect" id="node1" href="tables/dashboard_template_companies.html" title="dashboard_template_companies" alt="" coords="5,5,395,221">
+</map>
+<map id="dashboard_template_countries" name="dashboard_template_countries">
+<area shape="rect" id="node1" href="tables/dashboard_template_countries.html" title="dashboard_template_countries" alt="" coords="5,5,384,221">
+</map>
+<map id="dashboard_template_destinations" name="dashboard_template_destinations">
+<area shape="rect" id="node1" href="tables/dashboard_template_destinations.html" title="dashboard_template_destinations" alt="" coords="5,5,405,221">
+</map>
+<map id="dashboard_template_sources" name="dashboard_template_sources">
+<area shape="rect" id="node1" href="tables/dashboard_template_sources.html" title="dashboard_template_sources" alt="" coords="5,5,373,221">
+</map>
+<map id="database_validation_reports" name="database_validation_reports">
+<area shape="rect" id="node1" href="tables/database_validation_reports.html" title="database_validation_reports" alt="" coords="5,5,372,251">
+</map>
+<map id="database_updates" name="database_updates">
+<area shape="rect" id="node1" href="tables/database_updates.html" title="database_updates" alt="" coords="5,5,295,280">
+</map>
+<map id="dashboard_templates" name="dashboard_templates">
+<area shape="rect" id="node1" href="tables/dashboard_templates.html" title="dashboard_templates" alt="" coords="5,5,337,368">
 </map>
 
 			</div>
@@ -105,7 +160,7 @@
         <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
         <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
       </div>
-      <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.0.0-rc2</a></strong>
+      <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.0.0</a></strong>
     </div>
     <!-- /.container -->
   </footer>
@@ -125,7 +180,11 @@
 <script src="bower/datatables.net-buttons/buttons.html5.min.js"></script>
 <script src="bower/datatables.net-buttons/buttons.print.min.js"></script>
 <script src="bower/datatables.net-buttons/buttons.colVis.min.js"></script>
-
+<!-- SheetJS -->
+<script src="bower/js-xlsx/xlsx.full.min.js"></script>
+<!-- pdfmake -->
+<script src="bower/pdfmake/pdfmake.min.js"></script>
+<script src="bower/pdfmake/vfs_fonts.js"></script>
 <!-- SlimScroll -->
 <script src="bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->

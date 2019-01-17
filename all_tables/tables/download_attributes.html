@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>download_attributes - trase_revamp Database</title>
+  <title>download_attributes - trase_test Database</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
   <!-- Bootstrap 3.3.5 -->
   <link rel="stylesheet" href="../bower/admin-lte/bootstrap/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -45,7 +46,7 @@
     <nav class="navbar navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-          <a href="../index.html" class="navbar-brand"><b>trase_revamp</b> Database</a>
+          <a href="../index.html" class="navbar-brand"><b>trase_test</b> Database</a>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
             <i class="fa fa-bars"></i>
           </button>
@@ -54,13 +55,13 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="../index.html">Tables <span class="sr-only">(current)</span></a></li>            
-			<!--<li><a href="../components.html" title="List of system components">Components</a></li>-->
+            <li><a href="../index.html">Tables <span class="sr-only">(current)</span></a></li>
 			<li><a href="../columns.html" title="All of the columns in the schema">Columns</a></li>
 			<li><a href="../constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
 			<li><a href="../relationships.html" title="Diagram of table relationships">Relationships</a></li>
 			<li><a href="../orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>				
 			<li><a href="../anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+			<li><a href="../routines.html" title="Procedures and functions">Routines</a></li>
           </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -106,6 +107,10 @@
               </div>
             </div>	
             <div class="box-body">
+				<div class="row">
+					<div id="button_group_one" class="col-md-3 col-sm-6"></div>
+					<div id="button_group_two" class="col-md-2 col-sm-4 pull-right text-right"></div>
+				</div>
 				<table id="standard_table" class="table table-bordered table-striped dataTable" role="grid">
 				<thead align='left'>
 				<tr>
@@ -127,7 +132,7 @@
 				 <td>10</td>
 				 <td title=''></td>
 				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.download_attributes_id_seq&#39;::regclass)</td>
+				 <td>nextval(&#39;download_attributes_id_seq&#39;::regclass)</td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
 				   <tr>
@@ -211,7 +216,7 @@
 				  <table border='0' cellspacing='0' cellpadding='0'>
 				  </table>					 
 				 </td>
-				 <td><p>Name of attribute for display</p></td>
+				 <td><p>Name of attribute for display in downloads</p></td>
 				</tr>
 				<tr>
 				 <td><span id="years">years</span></td>
@@ -228,7 +233,7 @@
 				  <table border='0' cellspacing='0' cellpadding='0'>
 				  </table>					 
 				 </td>
-				 <td><p>Years for which attribute is present; NULL for all years</p></td>
+				 <td><p>Years for which attribute is present; empty (NULL) for all years</p></td>
 				</tr>
 				<tr>
 				 <td><span id="created_at">created_at</span></td>
@@ -266,7 +271,7 @@
 				</tr>
 								</tbody>
 				</table>
-				<p title='7 columns'>Table contained <span id="recordNumber">6</span> rows<p/>
+				<p title='7 columns'>Table contained <span id="recordNumber">0</span> rows<p/>
 			</div>
 		</div>
 		<div class="box box-primary">		
@@ -359,7 +364,7 @@
 <area shape="rect" id="node10" href="download_quants.html" title="download_quants" alt="" coords="737,881,957,1057">
 <area shape="rect" id="node11" href="quants.html" title="quants" alt="" coords="487,1245,595,1333">
 <area shape="rect" id="node12" href="download_versions.html" title="download_versions" alt="" coords="454,5,629,93">
-<area shape="rect" id="node13" href="flows.html" title="flows" alt="" coords="469,216,613,304">
+<area shape="rect" id="node13" href="flows.html" title="flows" alt="" coords="486,216,597,304">
 <area shape="rect" id="node14" href="map_attribute_groups.html" title="map_attribute_groups" alt="" coords="447,321,635,409">
 <area shape="rect" id="node15" href="recolor_by_attributes.html" title="recolor_by_attributes" alt="" coords="449,427,633,515">
 <area shape="rect" id="node16" href="resize_by_attributes.html" title="resize_by_attributes" alt="" coords="453,532,630,620">
@@ -381,7 +386,7 @@
         <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
         <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
       </div>
-      <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.0.0-rc2</a></strong>
+      <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.0.0</a></strong>
     </div>
     <!-- /.container -->
   </footer>
@@ -401,7 +406,11 @@
 <script src="../bower/datatables.net-buttons/buttons.html5.min.js"></script>
 <script src="../bower/datatables.net-buttons/buttons.print.min.js"></script>
 <script src="../bower/datatables.net-buttons/buttons.colVis.min.js"></script>
-
+<!-- SheetJS -->
+<script src="../bower/js-xlsx/xlsx.full.min.js"></script>
+<!-- pdfmake -->
+<script src="../bower/pdfmake/pdfmake.min.js"></script>
+<script src="../bower/pdfmake/vfs_fonts.js"></script>
 <!-- SlimScroll -->
 <script src="../bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->

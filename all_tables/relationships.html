@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>trase_revamp Database</title>
+  <title>trase_test Database</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
   <!-- Bootstrap 3.3.5 -->
   <link rel="stylesheet" href="bower/admin-lte/bootstrap/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -45,7 +46,7 @@
     <nav class="navbar navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-          <a href="index.html" class="navbar-brand"><b>trase_revamp</b> Database</a>
+          <a href="index.html" class="navbar-brand"><b>trase_test</b> Database</a>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
             <i class="fa fa-bars"></i>
           </button>
@@ -54,13 +55,13 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="index.html">Tables <span class="sr-only">(current)</span></a></li>            
-			<!--<li><a href="components.html" title="List of system components">Components</a></li>-->
+            <li><a href="index.html">Tables <span class="sr-only">(current)</span></a></li>
 			<li><a href="columns.html" title="All of the columns in the schema">Columns</a></li>
 			<li><a href="constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
 			<li><a href="relationships.html" title="Diagram of table relationships">Relationships</a></li>
 			<li><a href="orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>				
 			<li><a href="anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+			<li><a href="routines.html" title="Procedures and functions">Routines</a></li>
           </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -95,100 +96,112 @@
             <div class="tab-content no-padding">            
 				<div class="chart tab-pane active" id="compactDegreeImg-chart" style="position: relative; overflow-x:auto;">
 																					<map id="compactRelationshipsDiagram" name="compactRelationshipsDiagram">
-<area shape="rect" id="node1" href="tables/carto_layers.html" title="carto_layers" alt="" coords="739,1381,937,1557">
-<area shape="rect" id="node12" href="tables/contextual_layers.html" title="contextual_layers" alt="" coords="453,1497,637,1703">
-<area shape="rect" id="node2" href="tables/chart_attributes.html" title="chart_attributes" alt="" coords="1341,1332,1511,1508">
-<area shape="rect" id="node6" href="tables/charts.html" title="charts" alt="" coords="1093,193,1227,399">
-<area shape="rect" id="node3" href="tables/chart_inds.html" title="chart_inds" alt="" coords="1555,1115,1739,1291">
-<area shape="rect" id="node24" href="tables/inds.html" title="inds" alt="" coords="773,1081,903,1228">
-<area shape="rect" id="node4" href="tables/chart_quals.html" title="chart_quals" alt="" coords="1555,1761,1739,1937">
-<area shape="rect" id="node37" href="tables/quals.html" title="quals" alt="" coords="773,1893,903,2040">
-<area shape="rect" id="node5" href="tables/chart_quants.html" title="chart_quants" alt="" coords="1555,2860,1739,3036">
-<area shape="rect" id="node39" href="tables/quants.html" title="quants" alt="" coords="773,3089,903,3236">
-<area shape="rect" id="node35" href="tables/profiles.html" title="profiles" alt="" coords="729,812,947,988">
-<area shape="rect" id="node7" href="tables/commodities.html" title="commodities" alt="" coords="5,2013,153,2160">
-<area shape="rect" id="node8" href="tables/context_node_type_properties.html" title="context_node_type_properties" alt="" coords="697,648,979,795">
-<area shape="rect" id="node9" href="tables/context_node_types.html" title="context_node_types" alt="" coords="443,760,647,936">
-<area shape="rect" id="node11" href="tables/contexts.html" title="contexts" alt="" coords="216,1955,373,2131">
-<area shape="rect" id="node33" href="tables/node_types.html" title="node_types" alt="" coords="226,752,363,899">
-<area shape="rect" id="node10" href="tables/context_properties.html" title="context_properties" alt="" coords="448,1725,641,1872">
-<area shape="rect" id="node13" href="tables/countries.html" title="countries" alt="" coords="15,1835,144,1981">
-<area shape="rect" id="node14" href="tables/country_properties.html" title="country_properties" alt="" coords="197,1791,392,1937">
-<area shape="rect" id="node15" href="tables/download_attributes.html" title="download_attributes" alt="" coords="735,2495,941,2671">
-<area shape="rect" id="node16" href="tables/download_quals.html" title="download_quals" alt="" coords="1050,2451,1270,2627">
-<area shape="rect" id="node17" href="tables/download_quants.html" title="download_quants" alt="" coords="1050,3031,1270,3207">
-<area shape="rect" id="node18" href="tables/download_versions.html" title="download_versions" alt="" coords="445,2119,644,2324">
-<area shape="rect" id="node19" href="tables/flow_inds.html" title="flow_inds" alt="" coords="1088,2028,1232,2204">
-<area shape="rect" id="node22" href="tables/flows.html" title="flows" alt="" coords="766,2272,910,2477">
-<area shape="rect" id="node20" href="tables/flow_quals.html" title="flow_quals" alt="" coords="1088,2257,1232,2433">
-<area shape="rect" id="node21" href="tables/flow_quants.html" title="flow_quants" alt="" coords="1089,2837,1231,3013">
-<area shape="rect" id="node23" href="tables/ind_properties.html" title="ind_properties" alt="" coords="1023,639,1297,785">
-<area shape="rect" id="node25" href="tables/map_attribute_groups.html" title="map_attribute_groups" alt="" coords="436,1925,653,2101">
-<area shape="rect" id="node26" href="tables/map_attributes.html" title="map_attributes" alt="" coords="722,2057,954,2233">
-<area shape="rect" id="node27" href="tables/map_inds.html" title="map_inds" alt="" coords="1071,1448,1249,1624">
-<area shape="rect" id="node28" href="tables/map_quants.html" title="map_quants" alt="" coords="1071,2644,1249,2820">
-<area shape="rect" id="node29" href="tables/node_inds.html" title="node_inds" alt="" coords="1095,416,1225,621">
-<area shape="rect" id="node34" href="tables/nodes.html" title="nodes" alt="" coords="762,484,914,631">
-<area shape="rect" id="node30" href="tables/node_properties.html" title="node_properties" alt="" coords="1035,5,1285,152">
-<area shape="rect" id="node31" href="tables/node_quals.html" title="node_quals" alt="" coords="1091,803,1229,1008">
-<area shape="rect" id="node32" href="tables/node_quants.html" title="node_quants" alt="" coords="1086,1641,1234,1847">
-<area shape="rect" id="node36" href="tables/qual_properties.html" title="qual_properties" alt="" coords="1023,1864,1297,2011">
-<area shape="rect" id="node38" href="tables/quant_properties.html" title="quant_properties" alt="" coords="1023,3260,1297,3407">
-<area shape="rect" id="node40" href="tables/recolor_by_attributes.html" title="recolor_by_attributes" alt="" coords="732,1575,944,1780">
-<area shape="rect" id="node41" href="tables/recolor_by_inds.html" title="recolor_by_inds" alt="" coords="1047,1061,1273,1237">
-<area shape="rect" id="node42" href="tables/recolor_by_quals.html" title="recolor_by_quals" alt="" coords="1047,1255,1273,1431">
-<area shape="rect" id="node43" href="tables/resize_by_attributes.html" title="resize_by_attributes" alt="" coords="443,2920,647,3125">
-<area shape="rect" id="node44" href="tables/resize_by_quants.html" title="resize_by_quants" alt="" coords="1051,3424,1269,3600">
+<area shape="rect" id="node1" href="tables/carto_layers.html" title="carto_layers" alt="" coords="864,3755,1063,3931">
+<area shape="rect" id="node13" href="tables/contextual_layers.html" title="contextual_layers" alt="" coords="545,3641,729,3847">
+<area shape="rect" id="node2" href="tables/chart_attributes.html" title="chart_attributes" alt="" coords="1479,1165,1648,1371">
+<area shape="rect" id="node7" href="tables/charts.html" title="charts" alt="" coords="1222,465,1357,700">
+<area shape="rect" id="node3" href="tables/chart_inds.html" title="chart_inds" alt="" coords="1700,877,1884,1053">
+<area shape="rect" id="node30" href="tables/inds.html" title="inds" alt="" coords="899,1199,1028,1345">
+<area shape="rect" id="node4" href="tables/chart_node_types.html" title="chart_node_types" alt="" coords="1471,179,1656,413">
+<area shape="rect" id="node39" href="tables/node_types.html" title="node_types" alt="" coords="257,319,395,465">
+<area shape="rect" id="node5" href="tables/chart_quals.html" title="chart_quals" alt="" coords="1700,1807,1884,1983">
+<area shape="rect" id="node43" href="tables/quals.html" title="quals" alt="" coords="899,2165,1028,2312">
+<area shape="rect" id="node6" href="tables/chart_quants.html" title="chart_quants" alt="" coords="1700,3471,1884,3647">
+<area shape="rect" id="node45" href="tables/quants.html" title="quants" alt="" coords="899,3555,1028,3701">
+<area shape="rect" id="node41" href="tables/profiles.html" title="profiles" alt="" coords="854,495,1073,671">
+<area shape="rect" id="node8" href="tables/commodities.html" title="commodities" alt="" coords="5,3248,153,3395">
+<area shape="rect" id="node9" href="tables/context_node_type_properties.html" title="context_node_type_properties" alt="" coords="823,688,1104,835">
+<area shape="rect" id="node10" href="tables/context_node_types.html" title="context_node_types" alt="" coords="535,620,739,796">
+<area shape="rect" id="node12" href="tables/contexts.html" title="contexts" alt="" coords="247,3189,405,3365">
+<area shape="rect" id="node11" href="tables/context_properties.html" title="context_properties" alt="" coords="540,3864,733,4011">
+<area shape="rect" id="node14" href="tables/countries.html" title="countries" alt="" coords="15,3069,144,3216">
+<area shape="rect" id="node15" href="tables/country_properties.html" title="country_properties" alt="" coords="197,3025,455,3172">
+<area shape="rect" id="node16" href="tables/dashboards_attribute_groups.html" title="dashboards_attribute_groups" alt="" coords="499,1585,775,1732">
+<area shape="rect" id="node17" href="tables/dashboards_attributes.html" title="dashboards_attributes" alt="" coords="819,1556,1108,1732">
+<area shape="rect" id="node18" href="tables/dashboards_inds.html" title="dashboards_inds" alt="" coords="1171,1140,1407,1316">
+<area shape="rect" id="node19" href="tables/dashboards_quals.html" title="dashboards_quals" alt="" coords="1171,1527,1407,1703">
+<area shape="rect" id="node20" href="tables/dashboards_quants.html" title="dashboards_quants" alt="" coords="1171,3109,1407,3285">
+<area shape="rect" id="node21" href="tables/download_attributes.html" title="download_attributes" alt="" coords="861,3313,1066,3489">
+<area shape="rect" id="node22" href="tables/download_quals.html" title="download_quals" alt="" coords="1179,2916,1399,3092">
+<area shape="rect" id="node23" href="tables/download_quants.html" title="download_quants" alt="" coords="1179,3689,1399,3865">
+<area shape="rect" id="node24" href="tables/download_versions.html" title="download_versions" alt="" coords="537,3160,736,3365">
+<area shape="rect" id="node25" href="tables/flow_inds.html" title="flow_inds" alt="" coords="1225,2300,1354,2476">
+<area shape="rect" id="node28" href="tables/flows.html" title="flows" alt="" coords="899,2752,1028,2957">
+<area shape="rect" id="node26" href="tables/flow_quals.html" title="flow_quals" alt="" coords="1223,2723,1355,2899">
+<area shape="rect" id="node27" href="tables/flow_quants.html" title="flow_quants" alt="" coords="1218,3303,1361,3479">
+<area shape="rect" id="node29" href="tables/ind_properties.html" title="ind_properties" alt="" coords="1152,976,1427,1123">
+<area shape="rect" id="node31" href="tables/map_attribute_groups.html" title="map_attribute_groups" alt="" coords="528,2967,745,3143">
+<area shape="rect" id="node32" href="tables/map_attributes.html" title="map_attributes" alt="" coords="847,2975,1079,3151">
+<area shape="rect" id="node33" href="tables/map_inds.html" title="map_inds" alt="" coords="1201,2493,1378,2669">
+<area shape="rect" id="node34" href="tables/map_quants.html" title="map_quants" alt="" coords="1201,3496,1378,3672">
+<area shape="rect" id="node35" href="tables/node_inds.html" title="node_inds" alt="" coords="1225,219,1354,424">
+<area shape="rect" id="node40" href="tables/nodes.html" title="nodes" alt="" coords="887,289,1039,436">
+<area shape="rect" id="node36" href="tables/node_properties.html" title="node_properties" alt="" coords="1164,55,1415,201">
+<area shape="rect" id="node37" href="tables/node_quals.html" title="node_quals" alt="" coords="1221,753,1358,959">
+<area shape="rect" id="node38" href="tables/node_quants.html" title="node_quants" alt="" coords="1215,1913,1363,2119">
+<area shape="rect" id="node42" href="tables/qual_properties.html" title="qual_properties" alt="" coords="1152,2136,1427,2283">
+<area shape="rect" id="node44" href="tables/quant_properties.html" title="quant_properties" alt="" coords="1152,3883,1427,4029">
+<area shape="rect" id="node46" href="tables/recolor_by_attributes.html" title="recolor_by_attributes" alt="" coords="857,1749,1069,1955">
+<area shape="rect" id="node47" href="tables/recolor_by_inds.html" title="recolor_by_inds" alt="" coords="1176,1333,1403,1509">
+<area shape="rect" id="node48" href="tables/recolor_by_quals.html" title="recolor_by_quals" alt="" coords="1176,1720,1403,1896">
+<area shape="rect" id="node49" href="tables/resize_by_attributes.html" title="resize_by_attributes" alt="" coords="535,3419,739,3624">
+<area shape="rect" id="node50" href="tables/resize_by_quants.html" title="resize_by_quants" alt="" coords="1181,4083,1398,4259">
 </map>
 
 					<a name='diagram'><img id='compactDegreeImg' src='diagrams/summary/relationships.real.compact.png' usemap='#compactRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							
 				</div>
 				<div class="chart tab-pane " id="largeDegreeImg-chart" style="position: relative; overflow-x:auto;">
 																					<map id="largeRelationshipsDiagram" name="largeRelationshipsDiagram">
-<area shape="rect" id="node1" href="tables/carto_layers.html" title="carto_layers" alt="" coords="739,4229,937,4499">
-<area shape="rect" id="node12" href="tables/contextual_layers.html" title="contextual_layers" alt="" coords="453,3788,637,4145">
-<area shape="rect" id="node2" href="tables/chart_attributes.html" title="chart_attributes" alt="" coords="1341,1925,1511,2165">
-<area shape="rect" id="node6" href="tables/charts.html" title="charts" alt="" coords="1093,1440,1227,1739">
-<area shape="rect" id="node3" href="tables/chart_inds.html" title="chart_inds" alt="" coords="1555,1144,1739,1355">
-<area shape="rect" id="node24" href="tables/inds.html" title="inds" alt="" coords="773,1060,903,1241">
-<area shape="rect" id="node4" href="tables/chart_quals.html" title="chart_quals" alt="" coords="1555,2247,1739,2457">
-<area shape="rect" id="node37" href="tables/quals.html" title="quals" alt="" coords="773,2657,903,2809">
-<area shape="rect" id="node5" href="tables/chart_quants.html" title="chart_quants" alt="" coords="1555,3991,1739,4201">
-<area shape="rect" id="node39" href="tables/quants.html" title="quants" alt="" coords="773,3995,903,4176">
-<area shape="rect" id="node35" href="tables/profiles.html" title="profiles" alt="" coords="729,1399,947,1609">
-<area shape="rect" id="node7" href="tables/commodities.html" title="commodities" alt="" coords="5,3360,153,3512">
-<area shape="rect" id="node8" href="tables/context_node_type_properties.html" title="context_node_type_properties" alt="" coords="697,773,979,1043">
-<area shape="rect" id="node9" href="tables/context_node_types.html" title="context_node_types" alt="" coords="443,1185,647,1396">
-<area shape="rect" id="node11" href="tables/contexts.html" title="contexts" alt="" coords="216,3301,373,3541">
-<area shape="rect" id="node33" href="tables/node_types.html" title="node_types" alt="" coords="226,1064,363,1216">
-<area shape="rect" id="node10" href="tables/context_properties.html" title="context_properties" alt="" coords="448,4163,641,4461">
-<area shape="rect" id="node13" href="tables/countries.html" title="countries" alt="" coords="15,3103,144,3284">
-<area shape="rect" id="node14" href="tables/country_properties.html" title="country_properties" alt="" coords="197,3015,392,3284">
-<area shape="rect" id="node15" href="tables/download_attributes.html" title="download_attributes" alt="" coords="735,3459,941,3728">
-<area shape="rect" id="node16" href="tables/download_quals.html" title="download_quals" alt="" coords="1050,3336,1270,3576">
-<area shape="rect" id="node17" href="tables/download_quants.html" title="download_quants" alt="" coords="1050,4049,1270,4319">
-<area shape="rect" id="node18" href="tables/download_versions.html" title="download_versions" alt="" coords="445,3113,644,3324">
-<area shape="rect" id="node19" href="tables/flow_inds.html" title="flow_inds" alt="" coords="1088,2212,1232,2423">
-<area shape="rect" id="node22" href="tables/flows.html" title="flows" alt="" coords="766,3231,910,3441">
-<area shape="rect" id="node20" href="tables/flow_quals.html" title="flow_quals" alt="" coords="1088,3108,1232,3319">
-<area shape="rect" id="node21" href="tables/flow_quants.html" title="flow_quants" alt="" coords="1089,3821,1231,4032">
-<area shape="rect" id="node23" href="tables/ind_properties.html" title="ind_properties" alt="" coords="1023,527,1297,913">
-<area shape="rect" id="node25" href="tables/map_attribute_groups.html" title="map_attribute_groups" alt="" coords="436,2856,653,3096">
-<area shape="rect" id="node26" href="tables/map_attributes.html" title="map_attributes" alt="" coords="722,2827,954,3213">
-<area shape="rect" id="node27" href="tables/map_inds.html" title="map_inds" alt="" coords="1071,1756,1249,1967">
-<area shape="rect" id="node28" href="tables/map_quants.html" title="map_quants" alt="" coords="1071,3593,1249,3804">
-<area shape="rect" id="node29" href="tables/node_inds.html" title="node_inds" alt="" coords="1095,233,1225,473">
-<area shape="rect" id="node34" href="tables/nodes.html" title="nodes" alt="" coords="762,487,914,756">
-<area shape="rect" id="node30" href="tables/node_properties.html" title="node_properties" alt="" coords="1035,5,1285,216">
-<area shape="rect" id="node31" href="tables/node_quals.html" title="node_quals" alt="" coords="1091,1159,1229,1399">
-<area shape="rect" id="node32" href="tables/node_quants.html" title="node_quants" alt="" coords="1086,2440,1234,2680">
-<area shape="rect" id="node36" href="tables/qual_properties.html" title="qual_properties" alt="" coords="1023,2733,1297,3091">
-<area shape="rect" id="node38" href="tables/quant_properties.html" title="quant_properties" alt="" coords="1023,4336,1297,4723">
-<area shape="rect" id="node40" href="tables/recolor_by_attributes.html" title="recolor_by_attributes" alt="" coords="732,2013,944,2547">
-<area shape="rect" id="node41" href="tables/recolor_by_inds.html" title="recolor_by_inds" alt="" coords="1047,931,1273,1141">
-<area shape="rect" id="node42" href="tables/recolor_by_quals.html" title="recolor_by_quals" alt="" coords="1047,1984,1273,2195">
-<area shape="rect" id="node43" href="tables/resize_by_attributes.html" title="resize_by_attributes" alt="" coords="443,3413,647,3771">
-<area shape="rect" id="node44" href="tables/resize_by_quants.html" title="resize_by_quants" alt="" coords="1051,4776,1269,4987">
+<area shape="rect" id="node1" href="tables/carto_layers.html" title="carto_layers" alt="" coords="864,4838,1063,5107">
+<area shape="rect" id="node13" href="tables/contextual_layers.html" title="contextual_layers" alt="" coords="545,4246,729,4603">
+<area shape="rect" id="node2" href="tables/chart_attributes.html" title="chart_attributes" alt="" coords="1479,1788,1648,2204">
+<area shape="rect" id="node7" href="tables/charts.html" title="charts" alt="" coords="1222,103,1357,402">
+<area shape="rect" id="node3" href="tables/chart_inds.html" title="chart_inds" alt="" coords="1700,1707,1884,1918">
+<area shape="rect" id="node30" href="tables/inds.html" title="inds" alt="" coords="899,1403,1028,1584">
+<area shape="rect" id="node4" href="tables/chart_node_types.html" title="chart_node_types" alt="" coords="1471,10,1656,308">
+<area shape="rect" id="node39" href="tables/node_types.html" title="node_types" alt="" coords="257,683,395,835">
+<area shape="rect" id="node5" href="tables/chart_quals.html" title="chart_quals" alt="" coords="1700,2770,1884,2980">
+<area shape="rect" id="node43" href="tables/quals.html" title="quals" alt="" coords="899,4099,1028,4251">
+<area shape="rect" id="node6" href="tables/chart_quants.html" title="chart_quants" alt="" coords="1700,4668,1884,4879">
+<area shape="rect" id="node45" href="tables/quants.html" title="quants" alt="" coords="899,4296,1028,4478">
+<area shape="rect" id="node41" href="tables/profiles.html" title="profiles" alt="" coords="854,132,1073,578">
+<area shape="rect" id="node8" href="tables/commodities.html" title="commodities" alt="" coords="5,4070,153,4222">
+<area shape="rect" id="node9" href="tables/context_node_type_properties.html" title="context_node_type_properties" alt="" coords="823,595,1104,894">
+<area shape="rect" id="node10" href="tables/context_node_types.html" title="context_node_types" alt="" coords="535,624,739,835">
+<area shape="rect" id="node12" href="tables/contexts.html" title="contexts" alt="" coords="247,4011,405,4251">
+<area shape="rect" id="node11" href="tables/context_properties.html" title="context_properties" alt="" coords="540,4995,733,5323">
+<area shape="rect" id="node14" href="tables/countries.html" title="countries" alt="" coords="15,3783,144,3964">
+<area shape="rect" id="node15" href="tables/country_properties.html" title="country_properties" alt="" coords="197,3666,455,3994">
+<area shape="rect" id="node16" href="tables/dashboards_attribute_groups.html" title="dashboards_attribute_groups" alt="" coords="499,2688,775,2899">
+<area shape="rect" id="node17" href="tables/dashboards_attributes.html" title="dashboards_attributes" alt="" coords="819,2659,1108,2899">
+<area shape="rect" id="node18" href="tables/dashboards_inds.html" title="dashboards_inds" alt="" coords="1171,1344,1407,1555">
+<area shape="rect" id="node19" href="tables/dashboards_quals.html" title="dashboards_quals" alt="" coords="1171,2771,1407,2982">
+<area shape="rect" id="node20" href="tables/dashboards_quants.html" title="dashboards_quants" alt="" coords="1171,3227,1407,3438">
+<area shape="rect" id="node21" href="tables/download_attributes.html" title="download_attributes" alt="" coords="861,4551,1066,4820">
+<area shape="rect" id="node22" href="tables/download_quals.html" title="download_quals" alt="" coords="1179,4550,1399,4790">
+<area shape="rect" id="node23" href="tables/download_quants.html" title="download_quants" alt="" coords="1179,5247,1399,5516">
+<area shape="rect" id="node24" href="tables/download_versions.html" title="download_versions" alt="" coords="537,3982,736,4192">
+<area shape="rect" id="node25" href="tables/flow_inds.html" title="flow_inds" alt="" coords="1225,1572,1354,1783">
+<area shape="rect" id="node28" href="tables/flows.html" title="flows" alt="" coords="899,3467,1028,3678">
+<area shape="rect" id="node26" href="tables/flow_quals.html" title="flow_quals" alt="" coords="1223,2999,1355,3210">
+<area shape="rect" id="node27" href="tables/flow_quants.html" title="flow_quants" alt="" coords="1218,3683,1361,3894">
+<area shape="rect" id="node29" href="tables/ind_properties.html" title="ind_properties" alt="" coords="1152,904,1427,1291">
+<area shape="rect" id="node31" href="tables/map_attribute_groups.html" title="map_attribute_groups" alt="" coords="528,3724,745,3964">
+<area shape="rect" id="node32" href="tables/map_attributes.html" title="map_attributes" alt="" coords="847,3695,1079,4082">
+<area shape="rect" id="node33" href="tables/map_inds.html" title="map_inds" alt="" coords="1201,2286,1378,2496">
+<area shape="rect" id="node34" href="tables/map_quants.html" title="map_quants" alt="" coords="1201,3911,1378,4122">
+<area shape="rect" id="node35" href="tables/node_inds.html" title="node_inds" alt="" coords="1225,647,1354,887">
+<area shape="rect" id="node40" href="tables/nodes.html" title="nodes" alt="" coords="887,911,1039,1180">
+<area shape="rect" id="node36" href="tables/node_properties.html" title="node_properties" alt="" coords="1164,419,1415,630">
+<area shape="rect" id="node37" href="tables/node_quals.html" title="node_quals" alt="" coords="1221,1800,1358,2040">
+<area shape="rect" id="node38" href="tables/node_quants.html" title="node_quants" alt="" coords="1215,2514,1363,2754">
+<area shape="rect" id="node42" href="tables/qual_properties.html" title="qual_properties" alt="" coords="1152,4175,1427,4532">
+<area shape="rect" id="node44" href="tables/quant_properties.html" title="quant_properties" alt="" coords="1152,4807,1427,5194">
+<area shape="rect" id="node46" href="tables/recolor_by_attributes.html" title="recolor_by_attributes" alt="" coords="857,2916,1069,3450">
+<area shape="rect" id="node47" href="tables/recolor_by_inds.html" title="recolor_by_inds" alt="" coords="1176,2058,1403,2268">
+<area shape="rect" id="node48" href="tables/recolor_by_quals.html" title="recolor_by_quals" alt="" coords="1176,3455,1403,3666">
+<area shape="rect" id="node49" href="tables/resize_by_attributes.html" title="resize_by_attributes" alt="" coords="535,4620,739,4978">
+<area shape="rect" id="node50" href="tables/resize_by_quants.html" title="resize_by_quants" alt="" coords="1181,5534,1398,5744">
 </map>
 
 					<a name='diagram'><img id='largeDegreeImg' src='diagrams/summary/relationships.real.large.png' usemap='#largeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							
@@ -206,7 +219,7 @@
         <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
         <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
       </div>
-      <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.0.0-rc2</a></strong>
+      <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.0.0</a></strong>
     </div>
     <!-- /.container -->
   </footer>
@@ -226,7 +239,11 @@
 <script src="bower/datatables.net-buttons/buttons.html5.min.js"></script>
 <script src="bower/datatables.net-buttons/buttons.print.min.js"></script>
 <script src="bower/datatables.net-buttons/buttons.colVis.min.js"></script>
-
+<!-- SheetJS -->
+<script src="bower/js-xlsx/xlsx.full.min.js"></script>
+<!-- pdfmake -->
+<script src="bower/pdfmake/pdfmake.min.js"></script>
+<script src="bower/pdfmake/vfs_fonts.js"></script>
 <!-- SlimScroll -->
 <script src="bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->

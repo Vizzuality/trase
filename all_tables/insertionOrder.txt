@@ -1,9 +1,10 @@
 quants
 inds
 quals
-countries
 node_types
+countries
 commodities
+dashboards_attribute_groups
 contexts
 context_node_types
 profiles
@@ -11,6 +12,7 @@ charts
 map_attribute_groups
 nodes
 chart_attributes
+dashboards_attributes
 flows
 download_attributes
 map_attributes
@@ -27,8 +29,12 @@ node_properties
 qual_properties
 quant_properties
 chart_inds
+chart_node_types
 chart_quals
 chart_quants
+dashboards_inds
+dashboards_quals
+dashboards_quants
 download_quals
 download_quants
 flow_inds
@@ -42,4 +48,13 @@ node_quants
 recolor_by_inds
 recolor_by_quals
 resize_by_quants
+ar_internal_metadata
+dashboard_template_commodities
+dashboard_template_companies
+dashboard_template_countries
+dashboard_template_destinations
+dashboard_template_sources
+dashboard_templates
 database_updates
+database_validation_reports
+schema_migrations

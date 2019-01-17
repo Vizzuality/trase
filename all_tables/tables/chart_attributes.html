@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>chart_attributes - trase_revamp Database</title>
+  <title>chart_attributes - trase_test Database</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
   <!-- Bootstrap 3.3.5 -->
   <link rel="stylesheet" href="../bower/admin-lte/bootstrap/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -45,7 +46,7 @@
     <nav class="navbar navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-          <a href="../index.html" class="navbar-brand"><b>trase_revamp</b> Database</a>
+          <a href="../index.html" class="navbar-brand"><b>trase_test</b> Database</a>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
             <i class="fa fa-bars"></i>
           </button>
@@ -54,13 +55,13 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="../index.html">Tables <span class="sr-only">(current)</span></a></li>            
-			<!--<li><a href="../components.html" title="List of system components">Components</a></li>-->
+            <li><a href="../index.html">Tables <span class="sr-only">(current)</span></a></li>
 			<li><a href="../columns.html" title="All of the columns in the schema">Columns</a></li>
 			<li><a href="../constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
 			<li><a href="../relationships.html" title="Diagram of table relationships">Relationships</a></li>
 			<li><a href="../orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>				
 			<li><a href="../anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+			<li><a href="../routines.html" title="Procedures and functions">Routines</a></li>
           </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -106,6 +107,10 @@
               </div>
             </div>	
             <div class="box-body">
+				<div class="row">
+					<div id="button_group_one" class="col-md-3 col-sm-6"></div>
+					<div id="button_group_two" class="col-md-2 col-sm-4 pull-right text-right"></div>
+				</div>
 				<table id="standard_table" class="table table-bordered table-striped dataTable" role="grid">
 				<thead align='left'>
 				<tr>
@@ -127,7 +132,7 @@
 				 <td>10</td>
 				 <td title=''></td>
 				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.chart_attributes_id_seq&#39;::regclass)</td>
+				 <td>nextval(&#39;chart_attributes_id_seq&#39;::regclass)</td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
 				   <tr>
@@ -219,7 +224,7 @@
 				  <table border='0' cellspacing='0' cellpadding='0'>
 				  </table>					 
 				 </td>
-				 <td><p>Array of years for which to show this attribute in scope of chart; NULL for all years</p></td>
+				 <td><p>Array of years for which to show this attribute in scope of chart; empty (NULL) for all years</p></td>
 				</tr>
 				<tr>
 				 <td><span id="created_at">created_at</span></td>
@@ -255,9 +260,111 @@
 				 </td>
 				 <td></td>
 				</tr>
+				<tr>
+				 <td><span id="display_name">display_name</span></td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				  </table>				 
+				 </td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				  </table>					 
+				 </td>
+				 <td><p>Name of attribute for display in chart</p></td>
+				</tr>
+				<tr>
+				 <td><span id="legend_name">legend_name</span></td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				  </table>				 
+				 </td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				  </table>					 
+				 </td>
+				 <td><p>Legend title</p></td>
+				</tr>
+				<tr>
+				 <td><span id="display_type">display_type</span></td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				  </table>				 
+				 </td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				  </table>					 
+				 </td>
+				 <td><p>Type of display, only used for trajectory deforestation plot in place profiles; e.g. area, line</p></td>
+				</tr>
+				<tr>
+				 <td><span id="display_style">display_style</span></td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				  </table>				 
+				 </td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				  </table>					 
+				 </td>
+				 <td><p>Style of display, only used for trajectory deforestation plot in place profiles; e.g. area-pink, area-black, line-dashed-black</p></td>
+				</tr>
+				<tr>
+				 <td><span id="state_average">state_average</span></td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title=''></td>
+				 <td title=''></td>
+				 <td>false</td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				  </table>				 
+				 </td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				  </table>					 
+				 </td>
+				 <td><p>Only used for trajectory deforestation plot in place profiles</p></td>
+				</tr>
+				<tr>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i><span id="identifier">identifier</span></td>
+				 <td>text</td>
+				 <td>2147483647</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				  </table>				 
+				 </td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				  </table>					 
+				 </td>
+				 <td><p>Identifier used to map this chart attribute to a part of code which contains calculation logic</p></td>
+				</tr>
 								</tbody>
 				</table>
-				<p title='6 columns'>Table contained <span id="recordNumber">40</span> rows<p/>
+				<p title='12 columns'>Table contained <span id="recordNumber">0</span> rows<p/>
 			</div>
 		</div>
 		<div class="box box-primary">		
@@ -288,6 +395,12 @@
 				  <td>Primary key</td>
 				  <td><span title='Ascending'>Asc</span></td>
 				  <td>id</td>
+				 </tr>				 
+				 <tr>
+				  <td class='uniqueKey' title='Unique Key'><i class='icon ion-key iconkey'></i> chart_attributes_chart_id_identifier_key</td>
+				  <td>Must be unique</td>
+				  <td><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
+				  <td>chart_id + identifier</td>
 				 </tr>				 
 				 <tr>
 				  <td class='uniqueKey' title='Unique Key'><i class='icon ion-key iconkey'></i> chart_attributes_chart_id_position_key</td>
@@ -328,26 +441,27 @@
             <div class="tab-content no-padding">            
 				<div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="chart_attributes.html" title="chart_attributes" alt="" coords="184,225,445,471">
-<area shape="rect" id="node2" href="charts.html" title="charts" alt="" coords="5,257,140,463">
-<area shape="rect" id="node3" href="chart_inds.html" title="chart_inds" alt="" coords="489,5,673,181">
-<area shape="rect" id="node4" href="chart_quals.html" title="chart_quals" alt="" coords="489,199,673,375">
-<area shape="rect" id="node5" href="chart_quants.html" title="chart_quants" alt="" coords="489,392,673,568">
+<area shape="rect" id="node1" href="chart_attributes.html" title="chart_attributes" alt="" coords="184,225,452,647">
+<area shape="rect" id="node2" href="charts.html" title="charts" alt="" coords="5,257,140,492">
+<area shape="rect" id="node3" href="chart_inds.html" title="chart_inds" alt="" coords="496,5,680,181">
+<area shape="rect" id="node4" href="chart_quals.html" title="chart_quals" alt="" coords="496,199,680,375">
+<area shape="rect" id="node5" href="chart_quants.html" title="chart_quants" alt="" coords="496,392,680,568">
 </map>
 
 					<a name='diagram'><img id='oneDegreeImg' src='../diagrams/chart_attributes.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							
 				</div>
 				<div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="chart_attributes.html" title="chart_attributes" alt="" coords="339,160,600,405">
-<area shape="rect" id="node2" href="charts.html" title="charts" alt="" coords="160,192,295,397">
-<area shape="rect" id="node9" href="profiles.html" title="profiles" alt="" coords="5,224,116,312">
-<area shape="rect" id="node3" href="chart_inds.html" title="chart_inds" alt="" coords="644,5,828,181">
-<area shape="rect" id="node4" href="inds.html" title="inds" alt="" coords="419,55,520,143">
-<area shape="rect" id="node5" href="chart_quals.html" title="chart_quals" alt="" coords="644,209,828,385">
-<area shape="rect" id="node6" href="quals.html" title="quals" alt="" coords="419,423,520,511">
-<area shape="rect" id="node7" href="chart_quants.html" title="chart_quants" alt="" coords="644,424,828,600">
-<area shape="rect" id="node8" href="quants.html" title="quants" alt="" coords="415,528,523,616">
+<area shape="rect" id="node1" href="chart_attributes.html" title="chart_attributes" alt="" coords="339,111,607,532">
+<area shape="rect" id="node2" href="charts.html" title="charts" alt="" coords="160,345,295,580">
+<area shape="rect" id="node10" href="profiles.html" title="profiles" alt="" coords="5,377,116,465">
+<area shape="rect" id="node3" href="chart_inds.html" title="chart_inds" alt="" coords="651,15,835,191">
+<area shape="rect" id="node4" href="inds.html" title="inds" alt="" coords="422,5,523,93">
+<area shape="rect" id="node5" href="chart_node_types.html" title="chart_node_types" alt="" coords="390,549,555,637">
+<area shape="rect" id="node6" href="chart_quals.html" title="chart_quals" alt="" coords="651,265,835,441">
+<area shape="rect" id="node7" href="quals.html" title="quals" alt="" coords="422,655,523,743">
+<area shape="rect" id="node8" href="chart_quants.html" title="chart_quants" alt="" coords="651,572,835,748">
+<area shape="rect" id="node9" href="quants.html" title="quants" alt="" coords="419,760,527,848">
 </map>
 
 					<a name='diagram'><img id='twodegreesDegreeImg' src='../diagrams/chart_attributes.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							
@@ -366,7 +480,7 @@
         <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
         <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
       </div>
-      <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.0.0-rc2</a></strong>
+      <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.0.0</a></strong>
     </div>
     <!-- /.container -->
   </footer>
@@ -386,7 +500,11 @@
 <script src="../bower/datatables.net-buttons/buttons.html5.min.js"></script>
 <script src="../bower/datatables.net-buttons/buttons.print.min.js"></script>
 <script src="../bower/datatables.net-buttons/buttons.colVis.min.js"></script>
-
+<!-- SheetJS -->
+<script src="../bower/js-xlsx/xlsx.full.min.js"></script>
+<!-- pdfmake -->
+<script src="../bower/pdfmake/pdfmake.min.js"></script>
+<script src="../bower/pdfmake/vfs_fonts.js"></script>
 <!-- SlimScroll -->
 <script src="../bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->

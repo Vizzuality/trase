@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>node_quants - trase_revamp Database</title>
+  <title>node_quants - trase_test Database</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
   <!-- Bootstrap 3.3.5 -->
   <link rel="stylesheet" href="../bower/admin-lte/bootstrap/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -45,7 +46,7 @@
     <nav class="navbar navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-          <a href="../index.html" class="navbar-brand"><b>trase_revamp</b> Database</a>
+          <a href="../index.html" class="navbar-brand"><b>trase_test</b> Database</a>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
             <i class="fa fa-bars"></i>
           </button>
@@ -54,13 +55,13 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="../index.html">Tables <span class="sr-only">(current)</span></a></li>            
-			<!--<li><a href="../components.html" title="List of system components">Components</a></li>-->
+            <li><a href="../index.html">Tables <span class="sr-only">(current)</span></a></li>
 			<li><a href="../columns.html" title="All of the columns in the schema">Columns</a></li>
 			<li><a href="../constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
 			<li><a href="../relationships.html" title="Diagram of table relationships">Relationships</a></li>
 			<li><a href="../orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>				
 			<li><a href="../anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+			<li><a href="../routines.html" title="Procedures and functions">Routines</a></li>
           </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -106,6 +107,10 @@
               </div>
             </div>	
             <div class="box-body">
+				<div class="row">
+					<div id="button_group_one" class="col-md-3 col-sm-6"></div>
+					<div id="button_group_two" class="col-md-2 col-sm-4 pull-right text-right"></div>
+				</div>
 				<table id="standard_table" class="table table-bordered table-striped dataTable" role="grid">
 				<thead align='left'>
 				<tr>
@@ -127,7 +132,7 @@
 				 <td>10</td>
 				 <td title=''></td>
 				 <td title='Automatically updated by the database'>√</td>
-				 <td>nextval(&#39;revamp.node_quants_id_seq&#39;::regclass)</td>
+				 <td>nextval(&#39;node_quants_id_seq&#39;::regclass)</td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
 				  </table>				 
@@ -203,7 +208,7 @@
 				  <table border='0' cellspacing='0' cellpadding='0'>
 				  </table>					 
 				 </td>
-				 <td><p>Year; NULL for all years</p></td>
+				 <td><p>Year; empty (NULL) for all years</p></td>
 				</tr>
 				<tr>
 				 <td><span id="value">value</span></td>
@@ -327,19 +332,20 @@
 				</div>
 				<div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="chart_quants.html" title="chart_quants" alt="" coords="427,5,567,93">
-<area shape="rect" id="node2" href="quants.html" title="quants" alt="" coords="193,319,322,465">
-<area shape="rect" id="node3" href="download_quants.html" title="download_quants" alt="" coords="415,111,580,199">
-<area shape="rect" id="node4" href="flow_quants.html" title="flow_quants" alt="" coords="429,216,565,304">
-<area shape="rect" id="node5" href="map_quants.html" title="map_quants" alt="" coords="429,321,565,409">
-<area shape="rect" id="node6" href="node_inds.html" title="node_inds" alt="" coords="434,900,561,988">
-<area shape="rect" id="node7" href="nodes.html" title="nodes" alt="" coords="181,951,333,1097">
-<area shape="rect" id="node11" href="node_types.html" title="node_types" alt="" coords="5,983,137,1071">
-<area shape="rect" id="node8" href="node_properties.html" title="node_properties" alt="" coords="419,1005,576,1093">
-<area shape="rect" id="node9" href="node_quals.html" title="node_quals" alt="" coords="431,1111,563,1199">
-<area shape="rect" id="node10" href="node_quants.html" title="node_quants" alt="" coords="377,637,617,883">
-<area shape="rect" id="node12" href="quant_properties.html" title="quant_properties" alt="" coords="417,427,578,515">
-<area shape="rect" id="node13" href="resize_by_quants.html" title="resize_by_quants" alt="" coords="415,532,579,620">
+<area shape="rect" id="node1" href="chart_quants.html" title="chart_quants" alt="" coords="427,532,567,620">
+<area shape="rect" id="node2" href="quants.html" title="quants" alt="" coords="193,372,322,519">
+<area shape="rect" id="node3" href="dashboards_quants.html" title="dashboards_quants" alt="" coords="409,637,585,725">
+<area shape="rect" id="node4" href="download_quants.html" title="download_quants" alt="" coords="415,5,580,93">
+<area shape="rect" id="node5" href="flow_quants.html" title="flow_quants" alt="" coords="429,111,565,199">
+<area shape="rect" id="node6" href="map_quants.html" title="map_quants" alt="" coords="429,216,565,304">
+<area shape="rect" id="node7" href="node_inds.html" title="node_inds" alt="" coords="434,1005,561,1093">
+<area shape="rect" id="node8" href="nodes.html" title="nodes" alt="" coords="181,1056,333,1203">
+<area shape="rect" id="node12" href="node_types.html" title="node_types" alt="" coords="5,1088,137,1176">
+<area shape="rect" id="node9" href="node_properties.html" title="node_properties" alt="" coords="419,1111,576,1199">
+<area shape="rect" id="node10" href="node_quals.html" title="node_quals" alt="" coords="431,1216,563,1304">
+<area shape="rect" id="node11" href="node_quants.html" title="node_quants" alt="" coords="377,743,617,988">
+<area shape="rect" id="node13" href="quant_properties.html" title="quant_properties" alt="" coords="417,321,578,409">
+<area shape="rect" id="node14" href="resize_by_quants.html" title="resize_by_quants" alt="" coords="415,427,579,515">
 </map>
 
 					<a name='diagram'><img id='twodegreesDegreeImg' src='../diagrams/node_quants.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							
@@ -358,7 +364,7 @@
         <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
         <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
       </div>
-      <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.0.0-rc2</a></strong>
+      <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.0.0</a></strong>
     </div>
     <!-- /.container -->
   </footer>
@@ -378,7 +384,11 @@
 <script src="../bower/datatables.net-buttons/buttons.html5.min.js"></script>
 <script src="../bower/datatables.net-buttons/buttons.print.min.js"></script>
 <script src="../bower/datatables.net-buttons/buttons.colVis.min.js"></script>
-
+<!-- SheetJS -->
+<script src="../bower/js-xlsx/xlsx.full.min.js"></script>
+<!-- pdfmake -->
+<script src="../bower/pdfmake/pdfmake.min.js"></script>
+<script src="../bower/pdfmake/vfs_fonts.js"></script>
 <!-- SlimScroll -->
 <script src="../bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->

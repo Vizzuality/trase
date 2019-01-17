@@ -1,4 +1,13 @@
+schema_migrations
+database_validation_reports
 database_updates
+dashboard_templates
+dashboard_template_sources
+dashboard_template_destinations
+dashboard_template_countries
+dashboard_template_companies
+dashboard_template_commodities
+ar_internal_metadata
 resize_by_quants
 recolor_by_quals
 recolor_by_inds
@@ -12,8 +21,12 @@ flow_quals
 flow_inds
 download_quants
 download_quals
+dashboards_quants
+dashboards_quals
+dashboards_inds
 chart_quants
 chart_quals
+chart_node_types
 chart_inds
 quant_properties
 qual_properties
@@ -30,6 +43,7 @@ recolor_by_attributes
 map_attributes
 download_attributes
 flows
+dashboards_attributes
 chart_attributes
 nodes
 map_attribute_groups
@@ -37,9 +51,10 @@ charts
 profiles
 context_node_types
 contexts
+dashboards_attribute_groups
 commodities
-node_types
 countries
+node_types
 quals
 inds
 quants
