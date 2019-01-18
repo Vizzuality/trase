@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import uniq from 'lodash/uniq';
 import capitalize from 'lodash/capitalize';
+import cx from 'classnames';
 import Dropdown from 'react-components/shared/dropdown.component';
-
-import 'scripts/react-components/home/sentence-selector/sentence-selector.scss';
 import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
+
+import 'react-components/shared/sentence-selector/sentence-selector.scss';
 
 class SentenceSelector extends React.PureComponent {
   onSelectCommodity = selectedCommodity => {
@@ -57,6 +58,7 @@ class SentenceSelector extends React.PureComponent {
   render() {
     const {
       contexts,
+      className,
       selectedContext,
       selectedYears,
       currentDropdown,
@@ -71,7 +73,7 @@ class SentenceSelector extends React.PureComponent {
     const countryNames = uniq(contexts.map(c => capitalize(c.countryName)));
 
     return (
-      <div className="c-sentence-selector">
+      <div className={cx('c-sentence-selector', className)}>
         <div className="sentence-selector-text">
           What are the sustainability risks and opportunities associated{' '}
           <br className="hide-for-small" /> with the trade of
@@ -102,6 +104,7 @@ class SentenceSelector extends React.PureComponent {
 }
 
 SentenceSelector.propTypes = {
+  className: PropTypes.string,
   contexts: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,

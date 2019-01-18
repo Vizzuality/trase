@@ -7,6 +7,7 @@ import Top from 'react-components/explore/top/top.component';
 import Dropdown from 'react-components/shared/dropdown.component';
 import formatValue from 'utils/formatValue';
 import { EXPLORE_COLUMN_LIST } from 'constants';
+import SentenceSelector from 'react-components/shared/sentence-selector/sentence-selector.container';
 import Button from 'react-components/shared/button/button.component';
 import Heading from 'react-components/shared/heading/heading.component';
 import Text from 'react-components/shared/text/text.component';
@@ -146,6 +147,9 @@ class Explore extends React.PureComponent {
     return (
       <div className="l-explore">
         <div className="c-explore">
+          <div className="row column">
+            <SentenceSelector />
+          </div>
           <div className="row">
             <div className={cx('column', 'medium-7')}>
               <div className="explore-section">
