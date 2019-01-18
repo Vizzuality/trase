@@ -14,10 +14,23 @@ function LogisticsMapDownload(props) {
       heading="Download"
       content={
         <div className="c-logistics-map-download">
-          <Heading weight="bold">Soy</Heading>
-          <div className="row">{layers.soy.map(LogisticsMapDownload.mapLayerToLink)}</div>
-          <Heading weight="bold">Cattle</Heading>
-          <div className="row">{layers.cattle.map(LogisticsMapDownload.mapLayerToLink)}</div>
+          <div className="row">
+            <div className="column small-12">
+              <Heading as="h3" weight="bold">
+                Soy
+              </Heading>
+            </div>
+            {layers.soy.map(LogisticsMapDownload.mapLayerToLink)}
+          </div>
+
+          <div className="row">
+            <div className="column small-12">
+              <Heading as="h3" weight="bold">
+                Cattle
+              </Heading>
+            </div>
+            {layers.cattle.map(LogisticsMapDownload.mapLayerToLink)}
+          </div>
         </div>
       }
       footer={
@@ -32,7 +45,7 @@ function LogisticsMapDownload(props) {
 }
 
 LogisticsMapDownload.mapLayerToLink = layer => (
-  <div className="column small-6" key={layer.name}>
+  <div className="column small-12 medium-6" key={layer.name}>
     <Button
       as="a"
       size="lg"
