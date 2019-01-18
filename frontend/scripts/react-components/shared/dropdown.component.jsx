@@ -55,7 +55,7 @@ export default class Dropdown extends Component {
   }
 
   render() {
-    const { className, hideOnlyChild, label, size, value, valueFormat, valueList } = this.props;
+    const { className, hideOnlyChild, label, size, value, valueRenderer, valueList } = this.props;
 
     return (
       <div
@@ -72,7 +72,7 @@ export default class Dropdown extends Component {
             this.onTitleClick();
           }}
         >
-          {valueFormat ? valueFormat(value) : value}
+          {valueRenderer ? valueRenderer(value) : value}
         </span>
         <ul
           className={cx('dropdown-list', {
@@ -87,7 +87,7 @@ export default class Dropdown extends Component {
               onClick={e => this.onDropdownValueClicked(e, elem)}
               onTouchStart={e => this.onDropdownValueClicked(e, elem)}
             >
-              {valueFormat ? valueFormat(elem) : elem}
+              {valueRenderer ? valueRenderer(elem) : elem}
             </li>
           ))}
         </ul>
@@ -107,6 +107,6 @@ Dropdown.propTypes = {
   onValueSelected: PropTypes.func,
   size: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
-  valueFormat: PropTypes.func,
+  valueRenderer: PropTypes.func,
   valueList: PropTypes.array
 };

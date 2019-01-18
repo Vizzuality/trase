@@ -36,6 +36,10 @@
       margin: 0 7px;
     }
 
+    .dropdown-label {
+      display: none;
+    }
+
     .dropdown-title {
       text-align: center;
       padding: 0 18px 0 0;
@@ -56,7 +60,10 @@
       position: absolute;
       top: 50%;
       right: 0;
+      width: 8px;
+      height: 8px;
       border-color: $strong-pink;
+      border-width: 2px;
       transform: translate(-50%, calc(-50% - 1px)) rotate(45deg)
     }
 
@@ -68,6 +75,15 @@
         color: $charcoal-grey;
         font-size: $font-size-xx-regular;
       }
+    }
+  }
+
+  .years-selector {
+    display: inline-block;
+
+    .dropdown-list {
+      right: 0;
+      left: auto;
     }
   }
 }

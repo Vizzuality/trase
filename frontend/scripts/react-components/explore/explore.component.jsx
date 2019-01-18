@@ -85,7 +85,7 @@ class Explore extends React.PureComponent {
         className="-uppercase-title"
         value={column}
         valueList={EXPLORE_COLUMN_LIST}
-        valueFormat={v => v.label}
+        valueRenderer={v => v.label}
         onValueSelected={this.handleTableColumnChange}
       />
     );

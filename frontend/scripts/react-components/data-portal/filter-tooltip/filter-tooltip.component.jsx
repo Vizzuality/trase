@@ -20,7 +20,7 @@ export default class FilterTooltipComponent extends Component {
   constructor(props) {
     super(props);
 
-    this.valueFormat = value => FILTER_OPTIONS_MAP[value];
+    this.valueRenderer = value => FILTER_OPTIONS_MAP[value];
     this.tooltipElement = null;
     this.tooltip = null;
     this.tooltipVeil = null;
@@ -193,7 +193,7 @@ export default class FilterTooltipComponent extends Component {
           {indicator.filterName}
           <Dropdown
             value={selectedFilter && selectedFilter.op}
-            valueFormat={this.valueFormat}
+            valueRenderer={this.valueRenderer}
             valueList={indicator.filterOptions.ops}
             onValueSelected={this.handleOperationChange}
           />
