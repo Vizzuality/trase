@@ -78,7 +78,8 @@ module.exports = {
       connect: path.resolve(srcPath, 'base', 'connect'),
       Container: path.resolve(srcPath, 'base', 'Container'),
       store: path.resolve(srcPath, 'store'),
-      router: path.resolve(srcPath, 'router')
+      router: path.resolve(srcPath, 'router'),
+      'lodash-es': 'lodash'
     },
     extensions: ['.js', '.jsx']
   },

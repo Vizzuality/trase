@@ -73,7 +73,7 @@ class LogisticsMapContainer extends React.PureComponent {
       items.splice(-1, 0, { title: 'State', value: data.state });
       items.push(
         { title: 'Subclass', value: data.subclass },
-        { title: 'Inspection level', value: data.inspection }
+        { title: 'Inspection level', value: data.inspection_level }
       );
       text = startCase(layer.name);
     }

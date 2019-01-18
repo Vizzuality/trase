@@ -7,8 +7,8 @@ import 'leaflet-utfgrid/L.UTFGrid-min';
 import MapComponent, { MapControls, ZoomControl, MapPopup } from 'wri-api-components/dist/map';
 import WRIIcons from 'wri-api-components/dist/icons';
 
-import { Layer, LayerManager } from 'layer-manager/lib/react';
-import { PluginLeaflet } from 'layer-manager/lib';
+import { Layer, LayerManager } from 'layer-manager/dist/components';
+import { PluginLeaflet } from 'layer-manager';
 import { BASEMAPS } from 'constants';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';

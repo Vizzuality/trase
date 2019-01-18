@@ -178,8 +178,8 @@ class FiltersNav extends React.PureComponent {
         {showSearch && <ToolSearch className="filters-nav-item -no-padding" />}
         {showLogisticsMapDownload && (
           <button onClick={openLogisticsMapDownload} className="filters-nav-item -no-padding -icon">
-            <svg className="icon icon-download-pdf">
-              <use xlinkHref="#icon-download-pdf" />
+            <svg className="icon icon-download">
+              <use xlinkHref="#icon-download" />
             </svg>
           </button>
         )}

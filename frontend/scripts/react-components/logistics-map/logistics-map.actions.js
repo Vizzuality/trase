@@ -27,7 +27,7 @@ export const selectLogisticsMapHub = commodity =>
 export const selectLogisticsMapInspectionLevel = inspection => updateQueryParams({ inspection });
 
 export const setLayerActive = (layerId, active) => (dispatch, getState) => {
-  const { query = {} } = getState().location;
+  const { query = { commodity: 'soy' } } = getState().location;
   const { layers = [] } = query;
   let newLayers;
 
