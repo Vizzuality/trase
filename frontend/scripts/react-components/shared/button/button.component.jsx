@@ -25,16 +25,20 @@ function Button(props) {
     </svg>
   );
 
+  const shouldUseChildrenContainer =
+    typeof children !== 'string' ||
+    (Array.isArray(children) && children.every(child => typeof child === 'string'));
+
   const childrenWithContainer = (
     <span className="button-text-container" title={children}>
-      {children}
+      {Array.isArray(children) ? children.join('') : children}
     </span>
   );
 
   const childrenWithIcon = (
     <>
       {icon && iconPosition === 'left' && iconComponent}
-      {typeof children !== 'string' ? children : childrenWithContainer}
+      {shouldUseChildrenContainer ? childrenWithContainer : children}
       {icon && iconPosition === 'right' && iconComponent}
     </>
   );

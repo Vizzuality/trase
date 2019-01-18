@@ -23,6 +23,7 @@
     width: 100%;
     border: solid 1px rgba($charcoal-grey, .3);
     margin-bottom: 14px;
+    border-radius: 4px;
 
     .c-custom-dataset-selector__header {
       width: 100%;
@@ -48,6 +49,7 @@
     }
 
     .c-custom-dataset-selector__values {
+      border-radius: 4px;
 
       li {
         position: relative;
@@ -116,8 +118,9 @@
 
       .c-custom-dataset-selector__values {
         height: calc(100% - 40px);
-        overflow: auto;
+        overflow-y: auto;
         background-color: $white;
+        -webkit-overflow-scrolling: touch;
 
         li {
           padding: 0 12px 0 9px;
