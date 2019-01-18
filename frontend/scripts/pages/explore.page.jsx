@@ -5,10 +5,8 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
-import FiltersNav from 'react-components/nav/filters-nav/filters-nav.container';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import Explore from 'react-components/explore/explore.container';
-import ResizeListener from 'react-components/shared/resize-listener.component';
 
 import 'styles/layouts/l-explore.scss';
 import 'styles/components/shared/dropdown.scss';
@@ -20,9 +18,7 @@ export const mount = (root, store) => {
 
   render(
     <Provider store={store}>
-      <ResizeListener>
-        {({ resolution }) => (resolution.isSmall ? <TopNav className="-light" /> : <FiltersNav />)}
-      </ResizeListener>
+      <TopNav />
     </Provider>,
     document.getElementById('nav')
   );

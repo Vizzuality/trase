@@ -117,7 +117,10 @@ export const encodeStateToURL = state => {
 };
 
 export const decodeStateFromURL = state => {
-  return USE_PLAIN_URL_STATE ? JSON.parse(state) : JSON.parse(atob(state));
+  if (typeof state === 'string') {
+    return USE_PLAIN_URL_STATE ? JSON.parse(state) : JSON.parse(atob(state));
+  }
+  return state;
 };
 
 export const parse = url => {

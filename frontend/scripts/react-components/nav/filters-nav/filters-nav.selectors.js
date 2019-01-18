@@ -207,19 +207,6 @@ export const getNavFilters = createSelector(
             { type: FILTER_TYPES.dropdownSelector, props: toolViewMode }
           ]
         };
-      case 'explore':
-        return {
-          left: [
-            {
-              type: FILTER_TYPES.contextSelector,
-              props: { selectedContext, id: 'contextSelector' }
-            },
-            {
-              type: FILTER_TYPES.yearSelector,
-              props: { key: 'yearsSelector' }
-            }
-          ]
-        };
       case 'logisticsMap':
         return {
           showLogisticsMapDownload: true,
