@@ -16,6 +16,7 @@ import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-leg
 import LogisticsMapPanel from 'react-components/logistics-map/logistics-map-panel/logistics-map-panel.container';
 import LogisticsMapBar from 'react-components/logistics-map/logistics-map-bar/logistics-map-bar.container';
 import LogisticsMapDownload from 'react-components/logistics-map/logistics-map-download/logistics-map-download.container';
+import BRAZIL_COUNTRY from 'react-components/logistics-map/BRAZIL_COUNTRY.json';
 
 import 'wri-api-components/dist/map.css';
 import 'leaflet/dist/leaflet.css';
@@ -52,6 +53,7 @@ function LogisticsMap(props) {
                 {activeLayers.map(layer => (
                   <Layer key={layer.id} {...layer} events={buildEvents(layer)} />
                 ))}
+                <Layer {...LogisticsMap.BRAZIL_BORDER} />
               </LayerManager>
               <MapPopup map={map} {...mapPopUp} onReady={getCurrentPopUp}>
                 <Tooltip />
@@ -74,6 +76,21 @@ function LogisticsMap(props) {
     </div>
   );
 }
+LogisticsMap.BRAZIL_BORDER = {
+  provider: 'leaflet',
+  layerConfig: {
+    type: 'geoJSON',
+    body: BRAZIL_COUNTRY,
+    options: {
+      style: {
+        weight: 1,
+        color: '#34444C',
+        opacity: 0.2,
+        fill: false
+      }
+    }
+  }
+};
 
 LogisticsMap.propTypes = {
   layers: PropTypes.array,
