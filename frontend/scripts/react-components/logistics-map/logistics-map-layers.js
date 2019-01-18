@@ -1,6 +1,6 @@
 const MARKERS_URL = NODE_ENV_DEV
   ? 'https://raw.githubusercontent.com/Vizzuality/trase/develop/frontend/public/images/logistics-map'
-  : '/images/logistics-map';
+  : `https://${window.location.hostname}/images/logistics-map`;
 
 export default [
   {
