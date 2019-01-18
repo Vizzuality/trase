@@ -40,6 +40,7 @@ gem 'rack-cors', '~> 0.4'
 gem 'twitter', '~> 6.1'
 
 gem 'appsignal'
+gem 'newrelic_rpm'
 gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
 gem 'whenever', require: false
