@@ -26,7 +26,7 @@ function Button(props) {
   );
 
   const shouldUseChildrenContainer =
-    typeof children !== 'string' ||
+    typeof children === 'string' ||
     (Array.isArray(children) && children.every(child => typeof child === 'string'));
 
   const childrenWithContainer = (
