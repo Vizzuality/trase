@@ -192,7 +192,7 @@ class Explore extends React.PureComponent {
               </p>
             </div>
             <div className="column small-12 medium-5 small-order-1 medium-order-2 explore-footer-button-container">
-              <div className="explore-footer-fake-button show-for-small">
+              <div className="explore-footer-fake-button">
                 <Text as="span" variant="mono">
                   Visit trase on a computer to explore the full supply chain
                 </Text>
@@ -201,7 +201,7 @@ class Explore extends React.PureComponent {
                 as={Link}
                 color="pink"
                 size="lg"
-                className="hide-for-small"
+                className="explore-link-to-tool"
                 to={{ type: 'tool', payload: redirectQuery && { query: { state: redirectQuery } } }}
               >
                 {Explore.getCallToAction(redirectQuery)}

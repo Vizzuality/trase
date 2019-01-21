@@ -70,6 +70,8 @@
     .dropdown-list {
       top: 1.5em;
       min-width: 120px;
+      right: 0;
+      left: auto;
 
       > .dropdown-item {
         color: $charcoal-grey;
@@ -80,10 +82,5 @@
 
   .years-selector {
     display: inline-block;
-
-    .dropdown-list {
-      right: 0;
-      left: auto;
-    }
   }
 }
