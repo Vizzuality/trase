@@ -55,7 +55,16 @@ export default class Dropdown extends Component {
   }
 
   render() {
-    const { className, hideOnlyChild, label, size, value, valueRenderer, valueList } = this.props;
+    const {
+      className,
+      hideOnlyChild,
+      label,
+      size,
+      value,
+      valueRenderer,
+      valueList,
+      getItemClassName
+    } = this.props;
 
     return (
       <div
@@ -81,9 +90,8 @@ export default class Dropdown extends Component {
         >
           {valueList.map((elem, index) => (
             <li
-              className="dropdown-item"
+              className={cx('dropdown-item', getItemClassName(elem))}
               key={index}
-              data-value={elem}
               onClick={e => this.onDropdownValueClicked(e, elem)}
               onTouchStart={e => this.onDropdownValueClicked(e, elem)}
             >
@@ -97,7 +105,8 @@ export default class Dropdown extends Component {
 }
 
 Dropdown.defaultProps = {
-  hideOnlyChild: false
+  hideOnlyChild: false,
+  getItemClassName: () => ''
 };
 
 Dropdown.propTypes = {
@@ -108,5 +117,6 @@ Dropdown.propTypes = {
   size: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
   valueRenderer: PropTypes.func,
+  getItemClassName: PropTypes.func,
   valueList: PropTypes.array
 };

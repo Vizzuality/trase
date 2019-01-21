@@ -55,6 +55,24 @@ class SentenceSelector extends React.PureComponent {
     }
   }
 
+  getCommodityClassName = elem => {
+    const { selectedCountryPairs, selectedContext } = this.props;
+    if (selectedCountryPairs[selectedContext.countryName].includes(elem.toUpperCase())) {
+      return '';
+    }
+
+    return '-faded';
+  };
+
+  getCountryClassName = elem => {
+    const { selectedCommodityPairs, selectedContext } = this.props;
+    if (selectedCommodityPairs[selectedContext.commodityName].includes(elem.toUpperCase())) {
+      return '';
+    }
+
+    return '-faded';
+  };
+
   render() {
     const {
       contexts,
@@ -81,12 +99,14 @@ class SentenceSelector extends React.PureComponent {
             value={commodityName.toLowerCase()}
             valueList={commodityNames}
             onValueSelected={this.onSelectCommodity}
+            getItemClassName={this.getCommodityClassName}
           />
           from
           <Dropdown
             value={capitalize(countryName)}
             valueList={countryNames}
             onValueSelected={this.onSelectCountry}
+            getItemClassName={this.getCountryClassName}
           />
           <span className="hide-for-small">
             in the year{selectedYears[0] !== selectedYears[1] ? 's' : ''}
@@ -117,7 +137,9 @@ SentenceSelector.propTypes = {
   selectedYears: PropTypes.array,
   currentDropdown: PropTypes.string,
   selectContextById: PropTypes.func,
-  selectedContext: PropTypes.object
+  selectedContext: PropTypes.object,
+  selectedCountryPairs: PropTypes.object,
+  selectedCommodityPairs: PropTypes.object
 };
 
 export default SentenceSelector;

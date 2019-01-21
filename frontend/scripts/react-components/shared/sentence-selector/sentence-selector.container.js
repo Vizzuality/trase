@@ -1,15 +1,23 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import sortBy from 'lodash/sortBy';
 
 import SentenceSelector from 'react-components/shared/sentence-selector/sentence-selector.component';
 import { selectContextById, toggleDropdown } from 'actions/app.actions';
+import {
+  getSortedContexts,
+  getSelectedCommodityPairs,
+  getSelectedCountryPairs
+} from 'react-components/shared/sentence-selector/sentence-selector.selectors';
 
 function mapStateToProps(state) {
-  const contexts = sortBy(state.app.contexts, ['commodityName', 'countryName']);
-
+  const contexts = getSortedContexts(state);
+  const selectedCountryPairs = getSelectedCountryPairs(state);
+  const selectedCommodityPairs = getSelectedCommodityPairs(state);
+  console.log(selectedCountryPairs);
   return {
     contexts,
+    selectedCountryPairs,
+    selectedCommodityPairs,
     selectedYears: state.tool.selectedYears,
     selectedContext: state.app.selectedContext,
     currentDropdown: state.app.currentDropdown
