@@ -147,8 +147,10 @@ class Explore extends React.PureComponent {
     return (
       <div className="l-explore">
         <div className="c-explore">
-          <div className="row column">
-            <SentenceSelector />
+          <div className="row">
+            <div className="column small-12">
+              <SentenceSelector />
+            </div>
           </div>
           <div className="row">
             <div className={cx('column', 'medium-7')}>
