@@ -144,7 +144,7 @@ RAILS_ENV=test rake db:drop db:create db:structure:load
 bundle exec rspec spec
 ```
 
-You may also want to know about API [gold master tests](doc/trase/gold_master_tests.md)
+You may also want to know about API [gold master tests](doc/trase/gold_master_tests.md) and [load tests](doc/trase/load_tests.md).
 
 ### Frontend
 

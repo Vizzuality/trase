@@ -1,0 +1,15 @@
+# https://raw.githubusercontent.com/JoeDog/siege/master/doc/siegerc.in
+
+verbose = true
+color = on
+quiet = false
+show-logfile = true
+logging = true
+logfile = log/siege.log
+csv = true
+concurrent = 20
+time = 5M
+delay = 5
+failures = 100
+internet = true
+benchmark = false
