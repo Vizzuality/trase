@@ -16,10 +16,7 @@ import getPageStaticContent from 'react-components/static-content/static-content
 import loadBaseAppData from 'react-components/shared/app.thunks';
 import getTeam from 'react-components/team/team.thunks';
 import { loadDashboardTemplates } from 'react-components/dashboard-root/dashboard-root.thunks';
-import {
-  setContextForExplorePage,
-  redirectToExplore
-} from 'react-components/explore/explore.thunks';
+import { redirectToExplore } from 'react-components/explore/explore.thunks';
 import { loadToolInitialData } from 'scripts/react-components/tool/tool.thunks';
 import getPageTitle from 'scripts/router/page-title';
 
@@ -41,10 +38,14 @@ export const routes = {
     thunk: loadPageData(getPostsContent, getTweetsContent, getTestimonialsContent)
   },
   explore: {
-    path: '/explore/:contextId?',
+    path: '/explore',
     page: 'explore',
     title: getPageTitle,
-    thunk: loadPageData(setContextForExplorePage)
+    thunk: loadPageData(),
+    nav: {
+      className: '-light',
+      links: []
+    }
   },
   tool: {
     path: '/flows',

@@ -4,7 +4,7 @@ import Hero from 'react-components/shared/hero/hero.component';
 import NewsletterForm from 'react-components/shared/newsletter/newsletter.container';
 import SliderSection from 'react-components/home/slider-section/slider-section.component';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
-import SentenceSelector from 'react-components/home/sentence-selector/sentence-selector.container';
+import SentenceSelector from 'react-components/shared/sentence-selector/sentence-selector.container';
 import Entrypoints from 'react-components/home/entrypoints/entrypoints.component';
 import Button from 'react-components/shared/button/button.component';
 
@@ -33,7 +33,7 @@ class Home extends React.PureComponent {
           <div className="homepage-map">
             <div className="row">
               <div className="column small-12">
-                <SentenceSelector />
+                <SentenceSelector className="homepage-map-sentence-selector" />
                 <div className="homepage-map-container">
                   <WorldMap />
                 </div>

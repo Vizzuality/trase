@@ -2,19 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import uniq from 'lodash/uniq';
 import capitalize from 'lodash/capitalize';
+import cx from 'classnames';
 import Dropdown from 'react-components/shared/dropdown.component';
+import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
 
-import 'scripts/react-components/home/sentence-selector/sentence-selector.scss';
+import 'react-components/shared/sentence-selector/sentence-selector.scss';
 
-class SentenceSelector extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.onSelectCommodity = this.onSelectCommodity.bind(this);
-    this.onSelectCountry = this.onSelectCountry.bind(this);
-  }
-
-  onSelectCommodity(selectedCommodity) {
+class SentenceSelector extends React.PureComponent {
+  onSelectCommodity = selectedCommodity => {
     const { contexts, selectedContext } = this.props;
 
     const countryNames = contexts
@@ -25,9 +20,9 @@ class SentenceSelector extends React.Component {
       countryNames.find(c => c === selectedContext.countryName) || countryNames[0];
 
     this.selectContextId(selectedCountry, selectedCommodity.toUpperCase());
-  }
+  };
 
-  onSelectCountry(selectedCountry) {
+  onSelectCountry = selectedCountry => {
     const { contexts, selectedContext } = this.props;
 
     const commodityNames = contexts
@@ -38,7 +33,7 @@ class SentenceSelector extends React.Component {
       commodityNames.find(c => c === selectedContext.commodityName) || commodityNames[0];
 
     this.selectContextId(selectedCountry.toUpperCase(), selectedCommodity);
-  }
+  };
 
   getContextId(selectedCountry, selectedCommodity) {
     const { contexts } = this.props;
@@ -61,7 +56,14 @@ class SentenceSelector extends React.Component {
   }
 
   render() {
-    const { contexts, selectedContext } = this.props;
+    const {
+      contexts,
+      className,
+      selectedContext,
+      selectedYears,
+      currentDropdown,
+      toggleDropdown
+    } = this.props;
 
     if (!selectedContext) return null;
 
@@ -71,23 +73,30 @@ class SentenceSelector extends React.Component {
     const countryNames = uniq(contexts.map(c => capitalize(c.countryName)));
 
     return (
-      <div className="c-sentence-selector">
+      <div className={cx('c-sentence-selector', className)}>
         <div className="sentence-selector-text">
           What are the sustainability risks and opportunities associated{' '}
           <br className="hide-for-small" /> with the trade of
           <Dropdown
-            className="c-commodity-selector"
             value={commodityName.toLowerCase()}
             valueList={commodityNames}
             onValueSelected={this.onSelectCommodity}
           />
           from
           <Dropdown
-            className="c-country-selector"
             value={capitalize(countryName)}
             valueList={countryNames}
             onValueSelected={this.onSelectCountry}
           />
+          <span className="hide-for-small">
+            in the year{selectedYears[0] !== selectedYears[1] ? 's' : ''}
+            <YearsSelector
+              className="years-selector"
+              onToggle={toggleDropdown}
+              dropdownClassName="-big"
+              currentDropdown={currentDropdown}
+            />
+          </span>
         </div>
       </div>
     );
@@ -95,6 +104,7 @@ class SentenceSelector extends React.Component {
 }
 
 SentenceSelector.propTypes = {
+  className: PropTypes.string,
   contexts: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
@@ -103,6 +113,9 @@ SentenceSelector.propTypes = {
       isDefault: PropTypes.bool
     })
   ),
+  toggleDropdown: PropTypes.func,
+  selectedYears: PropTypes.array,
+  currentDropdown: PropTypes.string,
   selectContextById: PropTypes.func,
   selectedContext: PropTypes.object
 };

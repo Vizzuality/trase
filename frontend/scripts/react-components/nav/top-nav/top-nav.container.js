@@ -5,9 +5,9 @@ import TopNav from './top-nav.component';
 function mapStateToProps(state) {
   const { type, routesMap } = state.location;
   return {
-    ...routesMap[type].nav,
     links: routerLinks.nav,
-    showLogo: type !== 'home'
+    showLogo: type !== 'home',
+    ...routesMap[type].nav
   };
 }
 

@@ -33,7 +33,7 @@ class FiltersNav extends React.PureComponent {
     recolorBySelector: 3
   };
 
-  static FILTERS = [ContextSelector, YearsSelector, DropdownSelector, RecolorBySelector];
+  FILTERS = [ContextSelector, YearsSelector, DropdownSelector, RecolorBySelector];
 
   state = {
     menuOpen: false
@@ -137,7 +137,8 @@ class FiltersNav extends React.PureComponent {
       currentDropdown,
       filters: { left = [] }
     } = this.props;
-    const { FILTERS } = FiltersNav;
+    const { FILTERS } = this;
+
     return (
       <div className="filters-nav-left-section">
         {left.map(filter =>
@@ -161,7 +162,7 @@ class FiltersNav extends React.PureComponent {
       openLogisticsMapDownload,
       filters: { right = [], showSearch, showLogisticsMapDownload }
     } = this.props;
-    const { FILTERS } = FiltersNav;
+    const { FILTERS } = this;
 
     return (
       <div className="filters-nav-left-section">
