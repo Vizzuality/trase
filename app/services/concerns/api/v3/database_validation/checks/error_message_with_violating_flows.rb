@@ -7,13 +7,16 @@ module Api
         module ErrorMessageWithViolatingFlows
           extend ActiveSupport::Concern
 
-          N = 10
+          MAX_IDS_TO_SHOW = 10
 
           def error_message(prefix)
             violating_flows_cnt = @violating_flows.size
             violating_ids, n_more =
-              if violating_flows_cnt > N
-                [@violating_flows[0..(N - 1)], violating_flows_cnt - N]
+              if violating_flows_cnt > MAX_IDS_TO_SHOW
+                [
+                  @violating_flows[0..(MAX_IDS_TO_SHOW - 1)],
+                  violating_flows_cnt - MAX_IDS_TO_SHOW
+                ]
               else
                 [@violating_flows, nil]
               end
