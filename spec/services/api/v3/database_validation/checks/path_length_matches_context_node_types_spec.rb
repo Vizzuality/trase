@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'services/api/v3/database_validation/checks/shared_check_examples'
 
-RSpec.describe Api::V3::DatabaseValidation::Checks::PathMatchesContextNodeTypes do
+RSpec.describe Api::V3::DatabaseValidation::Checks::PathLengthMatchesContextNodeTypes do
   include_context 'api v3 node types'
   let(:context) { FactoryBot.create(:api_v3_context) }
 
@@ -61,7 +61,7 @@ RSpec.describe Api::V3::DatabaseValidation::Checks::PathMatchesContextNodeTypes 
     FactoryBot.create(:api_v3_node, node_type: context_node_type_5.node_type)
   }
   let(:check) {
-    Api::V3::DatabaseValidation::Checks::PathMatchesContextNodeTypes.new(
+    Api::V3::DatabaseValidation::Checks::PathLengthMatchesContextNodeTypes.new(
       context
     )
   }
