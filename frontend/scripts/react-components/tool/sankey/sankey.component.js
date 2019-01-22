@@ -4,10 +4,10 @@ import capitalize from 'lodash/capitalize';
 import startCase from 'lodash/startCase';
 import { event as d3_event, select as d3_select } from 'd3-selection';
 import 'd3-transition';
-import { DETAILED_VIEW_MIN_LINK_HEIGHT, SANKEY_TRANSITION_TIME } from 'constants';
+import { DETAILED_VIEW_MIN_LINK_HEIGHT, SANKEY_TRANSITION_TIME } from 'scripts/constants';
 import formatValue from 'utils/formatValue';
 import addSVGDropShadowDef from 'utils/addSVGDropShadowDef';
-import sankeyLayout from 'components/tool/sankey.d3layout';
+import sankeyLayout from 'react-components/tool/sankey/sankey.d3layout';
 import Tooltip from 'components/shared/info-tooltip.component';
 import 'styles/components/tool/sankey.scss';
 import 'styles/components/tool/node-menu.scss';
@@ -64,15 +64,14 @@ export default class {
 
     this._render(linksPayload.selectedRecolorBy, linksPayload.currentQuant);
 
-    this.selectNodes(linksPayload.selectedNodesIds);
+    this.selectNodes(linksPayload);
   }
 
-  selectNodes(selectedNodesIds) {
+  selectNodes({ selectedNodesIds }) {
     // let minimumY = Infinity;
     if (!this.layout.isReady()) {
       return;
     }
-
     this.sankeyColumns
       .selectAll('.sankey-node')
       .classed('-selected', node => selectedNodesIds.indexOf(node.id) > -1);
@@ -80,8 +79,8 @@ export default class {
     this._repositionExpandButton(selectedNodesIds);
   }
 
-  toggleCollapseActionButton(isVisible) {
-    this.collapseActionButton.classList.toggle('is-hidden', !isVisible);
+  toggleCollapseActionButton({ hasExpandedNodesIds }) {
+    this.collapseActionButton.classList.toggle('is-hidden', !hasExpandedNodesIds);
   }
 
   toggleExpandActionButton({ isVisible, isReExpand }) {
@@ -89,10 +88,10 @@ export default class {
     this.expandActionButton.classList.toggle('-re-expand', isReExpand);
   }
 
-  highlightNodes(nodesIds) {
+  highlightNodes({ highlightedNodesIds }) {
     this.sankeyColumns
       .selectAll('.sankey-node')
-      .classed('-highlighted', node => nodesIds.indexOf(node.id) > -1);
+      .classed('-highlighted', node => highlightedNodesIds.indexOf(node.id) > -1);
   }
 
   _relayout({ selectedRecolorBy, currentQuant, selectedNodesIds }) {

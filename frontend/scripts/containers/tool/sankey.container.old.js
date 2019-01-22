@@ -9,7 +9,7 @@ import {
   resetState
 } from 'actions/tool.actions';
 import connect from 'base/connect';
-import Sankey from 'components/tool/sankey.component';
+import Sankey from 'react-components/tool/sankey/sankey.component';
 
 const canExpandSelection = ({ expandedNodesIds, selectedNodesIds }) =>
   !isEqual([...selectedNodesIds].sort(), [...expandedNodesIds].sort());

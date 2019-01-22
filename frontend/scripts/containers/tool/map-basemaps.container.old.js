@@ -1,7 +1,7 @@
 import connect from 'base/connect';
 import { selectMapBasemap } from 'actions/tool.actions';
 import { BASEMAPS } from 'constants';
-import mapBasemaps from 'components/tool/map-basemaps.component';
+import mapBasemaps from 'react-components/tool/map-basemaps/map-basemaps.component';
 import getBasemap, { shouldUseDefaultBasemap } from '../helpers/getBasemap';
 
 const mapMethodsToState = state => ({
