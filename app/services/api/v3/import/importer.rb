@@ -10,21 +10,21 @@ module Api
         def initialize(database_update, source_schema)
           @database_update = database_update
           @source_schema = source_schema
-          @stats = database_update.stats || {}
-          @stats[:elapsed_seconds] = {}
+          @stats = Api::V3::Import::Stats.new(database_update.stats)
+          @stats.update_key('elapsed_seconds', {})
         end
 
         def call
           Api::V3::BaseModel.transaction do
             backup
             import
-            @database_update.finished_with_success(@stats)
+            @database_update.finished_with_success(@stats.to_h)
           end
           refresh
           Cache::Cleaner.clear_all
           Cache::Warmer::UrlsFile.generate
         rescue => e
-          @database_update.finished_with_error(e, @stats)
+          @database_update.finished_with_error(e, @stats.to_h)
           raise # re-raise same error
         end
 
@@ -35,18 +35,15 @@ module Api
             table_class = table[:table_class]
             yellow_tables = table[:yellow_tables]
             table_class.key_backup(@source_schema)
-            @stats[table_class.table_name] = {'before' => table_class.count}
+            @stats.update_blue_table_before(table_class, table_class.count)
             next unless yellow_tables
 
-            yellow_table_stats = {}
             yellow_tables.each do |yellow_table_class|
               yellow_table_class.full_backup
-              yellow_table_stats[yellow_table_class.table_name] = {
-                'before' => yellow_table_class.count
-              }
+              @stats.update_yellow_table_before(
+                yellow_table_class, yellow_table_class.count
+              )
             end
-            @stats[table_class.table_name]['yellow_tables'] =
-              yellow_table_stats
           end
         end
 
@@ -59,11 +56,10 @@ module Api
             blue_table_cnt = ReplaceBlueTable.new(
               table_class, @source_schema
             ).call
-            @stats[table_class.table_name]['after'] = blue_table_cnt
+            @stats.update_blue_table_after(table_class, blue_table_cnt)
             next unless yellow_tables
 
             # restore dependent yellow tables
-            yellow_table_stats = {}
             yellow_tables.each do |yellow_table_class|
               yellow_table_cnt = RestoreYellowTable.new(
                 yellow_table_class
@@ -72,14 +68,10 @@ module Api
                 Api::V3::NodeProperty.insert_missing_node_properties
                 yellow_table_cnt = Api::V3::NodeProperty.count
               end
-              yellow_table_stats[yellow_table_class.table_name] = {
-                'after' => yellow_table_cnt
-              }
-            end
-            @stats[table_class.table_name]['yellow_tables'] =
-              @stats[table_class.table_name]['yellow_tables'].merge(
-                yellow_table_stats
+              @stats.update_yellow_table_after(
+                yellow_table_class, yellow_table_cnt
               )
+            end
           end
           destroy_widows
         end
@@ -101,31 +93,8 @@ module Api
             cnt_after = table_class.count
             next unless cnt_after != cnt_before
 
-            update_yellow_table_stats_after(table_class, cnt_after)
+            @stats.update_yellow_table_after(table_class, cnt_after)
           end
-        end
-
-        def update_yellow_table_stats_after(table_class, cnt_after)
-          table_name = table_class.table_name
-          blue_table_name = ALL_TABLES.find do |table|
-            blue_table_class = table[:table_class]
-            yellow_tables = table[:yellow_tables]
-            next false unless yellow_tables
-
-            match = yellow_tables.find do |yellow_table_class|
-              yellow_table_class == table_class
-            end
-            next false unless match
-
-            blue_table_class.table_name
-          end
-          unless blue_table_name &&
-              @stats.dig(blue_table_name, 'yellow_tables', table_name)
-            return
-          end
-
-          @stats[blue_table_name]['yellow_tables'][table_name]['after'] =
-            cnt_after
         end
 
         def refresh
