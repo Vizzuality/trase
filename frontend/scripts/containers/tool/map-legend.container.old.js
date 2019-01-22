@@ -1,7 +1,7 @@
 /* eslint-disable no-shadow */
 import connect from 'base/connect';
 import { toggleMapLayerMenu } from 'actions/app.actions';
-import MapLegend from 'components/tool/map-legend.component';
+import MapLegend from 'react-components/tool/map-legend/map-legend.component';
 import { getCurrentHighlightedChoroplethBucket } from 'react-components/tool/tool.selectors';
 
 const mapMethodsToState = state => ({
