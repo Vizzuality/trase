@@ -19,10 +19,10 @@ module Api
           @associated_attributes
         end
 
-        def destroy_widows
-          widows = all
-          widows = widows.where('id NOT IN (?)', active_ids) if active_ids.any?
-          widows.destroy_all
+        def destroy_zombies
+          zombies = all
+          zombies = zombies.where('id NOT IN (?)', active_ids) if active_ids.any?
+          zombies.destroy_all
         end
       end
 

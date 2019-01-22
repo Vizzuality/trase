@@ -23,7 +23,7 @@ RSpec.describe Api::V3::MapAttribute, type: :model do
     end
   end
 
-  describe :destroy_widows do
+  describe :destroy_zombies do
     let!(:referenced) { FactoryBot.create(:api_v3_map_attribute) }
     let!(:map_quant) {
       FactoryBot.create(
@@ -32,8 +32,8 @@ RSpec.describe Api::V3::MapAttribute, type: :model do
         quant: FactoryBot.create(:api_v3_quant)
       )
     }
-    let!(:widow) { FactoryBot.create(:api_v3_map_attribute) }
+    let!(:zombie) { FactoryBot.create(:api_v3_map_attribute) }
     let(:subject) { Api::V3::MapAttribute }
-    include_examples 'destroys widows'
+    include_examples 'destroys zombies'
   end
 end

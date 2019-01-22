@@ -73,10 +73,10 @@ module Api
               )
             end
           end
-          destroy_widows
+          destroy_zombies
         end
 
-        # An example of how a widow can be created by the import process:
+        # An example of how a zombie can be created by the import process:
         # 1. backup xxx_inds/quals/quants and xxx_attributes (yellow)
         # 2. import and replace inds/quals/quants (blue)
         # 3. restore xxx_attributes (note: this restores all the backed up
@@ -85,11 +85,11 @@ module Api
         # 4. restore xxx_inds/quals/quants (note: this only restores backed up
         #    records with a match in both inds/quals/quants and xxx_attributes)
         # 5. at this point it is possible to have xxx_attributes which are not
-        # referenced anywhere. These widows should be deleted.
-        def destroy_widows
-          TABLES_TO_CHECK_FOR_WIDOWS.each do |table_class|
+        # referenced anywhere. These zombies should be deleted.
+        def destroy_zombies
+          TABLES_TO_CHECK_FOR_ZOMBIES.each do |table_class|
             cnt_before = table_class.count
-            table_class.destroy_widows
+            table_class.destroy_zombies
             cnt_after = table_class.count
             next unless cnt_after != cnt_before
 

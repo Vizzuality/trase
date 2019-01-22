@@ -24,7 +24,7 @@ RSpec.describe Api::V3::RecolorByAttribute, type: :model do
     end
   end
 
-  describe :destroy_widows do
+  describe :destroy_zombies do
     let!(:referenced) { FactoryBot.create(:api_v3_recolor_by_attribute) }
     let!(:recolor_by_ind) {
       FactoryBot.create(
@@ -33,8 +33,8 @@ RSpec.describe Api::V3::RecolorByAttribute, type: :model do
         ind: FactoryBot.create(:api_v3_ind)
       )
     }
-    let!(:widow) { FactoryBot.create(:api_v3_recolor_by_attribute) }
+    let!(:zombie) { FactoryBot.create(:api_v3_recolor_by_attribute) }
     let(:subject) { Api::V3::RecolorByAttribute }
-    include_examples 'destroys widows'
+    include_examples 'destroys zombies'
   end
 end

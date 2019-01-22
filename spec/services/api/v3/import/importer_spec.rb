@@ -5,7 +5,7 @@ RSpec.describe Api::V3::Import::Importer do
   let(:source_schema) { 'source' }
   let(:database_update) { FactoryBot.create(:api_v3_database_update) }
 
-  context 'destroys widows' do
+  context 'destroys zombies' do
     before(:each) do
       # prepare source schema
       ActiveRecord::Base.connection.execute("CREATE SCHEMA #{source_schema}")
@@ -18,19 +18,19 @@ RSpec.describe Api::V3::Import::Importer do
           SQL
         )
       end
-      # introduce future widow
+      # introduce future zombie
       dummy_quant = FactoryBot.create(:api_v3_quant, name: 'DUMMY')
-      @widow = FactoryBot.create(:api_v3_download_attribute)
+      @zombie = FactoryBot.create(:api_v3_download_attribute)
       FactoryBot.create(
-        :api_v3_download_quant, quant: dummy_quant, download_attribute: @widow
+        :api_v3_download_quant, quant: dummy_quant, download_attribute: @zombie
       )
     end
 
     subject { Api::V3::Import::Importer.new(database_update, source_schema) }
 
-    it 'does not restore the widow' do
+    it 'does not restore the zombie' do
       subject.call
-      expect(Api::V3::DownloadAttribute.exists?(@widow.id)).to be(false)
+      expect(Api::V3::DownloadAttribute.exists?(@zombie.id)).to be(false)
     end
   end
 end

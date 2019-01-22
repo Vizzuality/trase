@@ -2,7 +2,7 @@
 
 # The following checks are included:
 #   check years match data in flows
-#   check for widows (resize_by_attributes without resize_by_quant)
+#   check for zombies (resize_by_attributes without resize_by_quant)
 #   check tooltip text present (WARN)
 module Api
   module V3
