@@ -1,12 +1,17 @@
 import BasemapsTemplate from 'templates/tool/map/map-basemaps.ejs';
 import 'styles/components/tool/map/map-basemaps.scss';
 
-export default class {
-  onCreated() {
+export default class MapBasemaps {
+  onCreated(props) {
+    const { basemaps, disabled, activeBasemapId } = props;
     this.el = document.querySelector('.js-map-basemaps-items');
+
+    this.buildBasemaps({ basemaps });
+    this.enableBasemapSelection({ disabled });
+    this.selectBasemap({ activeBasemapId });
   }
 
-  buildBasemaps(basemaps) {
+  buildBasemaps({ basemaps }) {
     this.el.innerHTML = BasemapsTemplate({ basemaps });
 
     this.basemaps = Array.prototype.slice.call(
@@ -18,13 +23,13 @@ export default class {
     });
   }
 
-  enableBasemapSelection(disabled = false) {
+  enableBasemapSelection({ disabled = false }) {
     this.el.classList.toggle('-disabled', disabled);
   }
 
-  selectBasemap(basemapId) {
+  selectBasemap({ activeBasemapId }) {
     this.basemaps.forEach(basemap => {
-      basemap.classList.toggle('-selected', basemap.getAttribute('data-value') === basemapId);
+      basemap.classList.toggle('-selected', basemap.getAttribute('data-value') === activeBasemapId);
     });
   }
 

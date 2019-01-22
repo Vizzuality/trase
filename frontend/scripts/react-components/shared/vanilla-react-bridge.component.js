@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function mapToVanilla(VanillaComponent, methodProps) {
+export function mapToVanilla(VanillaComponent, methodProps, callbackProps) {
   mapToVanilla.displayName = `VanillaReactBridgeHOC(${VanillaComponent.displayName ||
     VanillaComponent.name ||
     'Component'})`;
@@ -9,11 +9,17 @@ export function mapToVanilla(VanillaComponent, methodProps) {
     instance = null;
 
     componentDidMount() {
-      // eslint-disable-next-line
       this.instance = new VanillaComponent(this.props);
 
+      if (callbackProps && callbackProps.length > 0) {
+        this.instance.callbacks = {};
+        callbackProps.forEach(callback => {
+          this.instance.callbacks[callback] = this.props[callback];
+        });
+      }
+
       if (this.instance.onCreated) {
-        this.instance.onCreated();
+        this.instance.onCreated(this.props);
       }
     }
 
@@ -28,12 +34,19 @@ export function mapToVanilla(VanillaComponent, methodProps) {
 
     componentDidUpdate(prevProps) {
       methodProps.forEach(method => {
-        if (this.props[method.compared] !== prevProps[method.compared]) {
+        const hasChanged = method.compared.reduce(
+          (acc, next) => acc || this.props[next] !== prevProps[next],
+          false
+        );
+        if (hasChanged) {
           const fn = this.instance[method.name];
-          const props = method.returned.reduce((acc, next) => ({
-            ...acc,
-            [next]: this.props[next]
-          }));
+          const props = method.returned.reduce(
+            (acc, next) => ({
+              ...acc,
+              [next]: this.props[next]
+            }),
+            {}
+          );
           fn.call(this.instance, props);
         }
       });
