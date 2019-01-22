@@ -1,7 +1,7 @@
 /* eslint-disable camelcase,import/no-extraneous-dependencies,no-use-before-define */
 import uniqBy from 'lodash/uniqBy';
 import wrapSVGText from 'utils/wrapSVGText';
-import { NUM_COLUMNS, DETAILED_VIEW_MIN_NODE_HEIGHT, DETAILED_VIEW_SCALE } from 'constants';
+import { NUM_COLUMNS, DETAILED_VIEW_MIN_NODE_HEIGHT, DETAILED_VIEW_SCALE } from 'scripts/constants';
 import { interpolateNumber as d3_interpolateNumber } from 'd3-interpolate';
 import { translateText } from 'utils/transifex';
 

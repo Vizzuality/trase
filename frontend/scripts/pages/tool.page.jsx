@@ -15,10 +15,8 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
 import FlowContentContainer from 'containers/tool/tool-content.container';
-import SankeyContainer from 'containers/tool/sankey.container';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import MapContextContainer from 'containers/tool/map-context.container';
-import MapBasemapsContainer from 'containers/tool/map-basemaps.container';
 import MapContainer from 'containers/tool/map.container';
 import FiltersNav from 'react-components/nav/filters-nav/filters-nav.container';
 import TitlebarContainer from 'containers/tool/titlebar.container';
@@ -27,6 +25,8 @@ import ModalContainer from 'containers/tool/story-modal.container';
 import TooltipContainer from 'containers/shared/help-tooltip.container';
 import CookieBanner from 'react-components/shared/cookie-banner';
 import MapLegend from 'react-components/tool/map-legend/map-legend.container';
+import MapBasemaps from 'react-components/tool/map-basemaps/map-basemaps.container';
+import Sankey from 'react-components/tool/sankey/sankey.container';
 
 import {
   resizeSankeyTool,
@@ -49,11 +49,9 @@ export const mount = (root, store) => {
 
   containers = [
     new FlowContentContainer(store),
-    new SankeyContainer(store),
     new MapContainer(store),
     new MapDimensionsContainer(store),
     new MapContextContainer(store),
-    new MapBasemapsContainer(store),
     new TitlebarContainer(store),
     new NodesTitlesContainer(store),
     new TooltipContainer(store),
@@ -87,16 +85,13 @@ export const mount = (root, store) => {
 
   render(
     <Provider store={store}>
-      <CookieBanner />
+      <>
+        <MapLegend />
+        <MapBasemaps />
+        <Sankey />
+      </>
     </Provider>,
-    document.getElementById('cookie-banner')
-  );
-
-  render(
-    <Provider store={store}>
-      <MapLegend />
-    </Provider>,
-    document.querySelector('.js-map-legend')
+    document.getElementById('js-react-vanilla-bridge-container')
   );
 
   evManager.addEventListener(window, 'resize', () => resizeSankeyTool(store.dispatch));
@@ -107,8 +102,7 @@ export const unmount = () => {
   evManager.clearEventListeners();
   unmountComponentAtNode(document.getElementById('js-tool-nav-react'));
   unmountComponentAtNode(document.getElementById('js-columns-selector-react'));
-  unmountComponentAtNode(document.getElementById('cookie-banner'));
-  unmountComponentAtNode(document.querySelector('.js-map-legend'));
+  unmountComponentAtNode(document.getElementById('js-react-vanilla-bridge-container'));
   document.querySelector('body').classList.remove('-overflow-hidden');
   containers.forEach(container => container.remove());
 };

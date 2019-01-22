@@ -43,18 +43,21 @@ export default class {
     this._updateMapControlsPosition(choroplethLegend);
   }
 
-  highlightChoroplethBucket(bucketClass) {
+  highlightChoroplethBucket({ currentHighlightedChoroplethBucket }) {
     if (this.currentBuckets === undefined) {
       return;
     }
     for (let i = 0; i < this.currentBuckets.length; i++) {
       this.currentBuckets[i].classList.toggle('-highlighted', false);
     }
-    if (bucketClass === undefined || bucketClass === null) {
+    if (
+      currentHighlightedChoroplethBucket === undefined ||
+      currentHighlightedChoroplethBucket === null
+    ) {
       return;
     }
     const bucket = this.choro.getElementsByClassName(
-      `color-${bucketClass.substr(1).toLowerCase()}`
+      `color-${currentHighlightedChoroplethBucket.substr(1).toLowerCase()}`
     )[0];
     if (bucket === undefined) {
       return;
