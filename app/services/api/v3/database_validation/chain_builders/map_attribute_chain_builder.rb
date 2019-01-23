@@ -2,7 +2,7 @@
 
 # The following checks are included:
 #   check years match data in flows
-#   check for widows (map_attributes without map_ind or map_quant)
+#   check for zombies (map_attributes without map_ind or map_quant)
 module Api
   module V3
     module DatabaseValidation

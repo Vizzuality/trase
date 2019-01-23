@@ -59,6 +59,10 @@ module Api
       def refresh_dependents
         Api::V3::Readonly::ResizeByAttribute.refresh
       end
+
+      private_class_method def self.active_ids
+        Api::V3::ResizeByQuant.distinct.pluck(:resize_by_attribute_id)
+      end
     end
   end
 end

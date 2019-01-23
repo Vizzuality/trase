@@ -2,7 +2,7 @@
 
 # The following checks are included:
 #   check years match data in flows
-#   check for widows (download_attributes without download_qual or download_quant)
+#   check for zombies (download_attributes without download_qual or download_quant)
 module Api
   module V3
     module DatabaseValidation

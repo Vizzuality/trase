@@ -10,21 +10,21 @@ module Api
         def initialize(database_update, source_schema)
           @database_update = database_update
           @source_schema = source_schema
-          @stats = database_update.stats || {}
-          @stats[:elapsed_seconds] = {}
+          @stats = Api::V3::Import::Stats.new(database_update.stats)
+          @stats.update_key('elapsed_seconds', {})
         end
 
         def call
           Api::V3::BaseModel.transaction do
             backup
             import
-            @database_update.finished_with_success(@stats)
+            @database_update.finished_with_success(@stats.to_h)
           end
           refresh
           Cache::Cleaner.clear_all
           Cache::Warmer::UrlsFile.generate
         rescue => e
-          @database_update.finished_with_error(e, @stats)
+          @database_update.finished_with_error(e, @stats.to_h)
           raise # re-raise same error
         end
 
@@ -35,18 +35,15 @@ module Api
             table_class = table[:table_class]
             yellow_tables = table[:yellow_tables]
             table_class.key_backup(@source_schema)
-            @stats[table_class.table_name] = {'before' => table_class.count}
+            @stats.update_blue_table_before(table_class, table_class.count)
             next unless yellow_tables
 
-            yellow_table_stats = {}
             yellow_tables.each do |yellow_table_class|
               yellow_table_class.full_backup
-              yellow_table_stats[yellow_table_class.table_name] = {
-                'before' => yellow_table_class.count
-              }
+              @stats.update_yellow_table_before(
+                yellow_table_class, yellow_table_class.count
+              )
             end
-            @stats[table_class.table_name]['yellow_tables'] =
-              yellow_table_stats
           end
         end
 
@@ -59,26 +56,44 @@ module Api
             blue_table_cnt = ReplaceBlueTable.new(
               table_class, @source_schema
             ).call
-            @stats[table_class.table_name]['after'] = blue_table_cnt
+            @stats.update_blue_table_after(table_class, blue_table_cnt)
             next unless yellow_tables
 
             # restore dependent yellow tables
-            yellow_table_stats = {}
             yellow_tables.each do |yellow_table_class|
               yellow_table_cnt = RestoreYellowTable.new(
                 yellow_table_class
               ).call
               if yellow_table_class == Api::V3::NodeProperty
                 Api::V3::NodeProperty.insert_missing_node_properties
+                yellow_table_cnt = Api::V3::NodeProperty.count
               end
-              yellow_table_stats[yellow_table_class.table_name] = {
-                'after' => yellow_table_cnt
-              }
-            end
-            @stats[table_class.table_name]['yellow_tables'] =
-              @stats[table_class.table_name]['yellow_tables'].merge(
-                yellow_table_stats
+              @stats.update_yellow_table_after(
+                yellow_table_class, yellow_table_cnt
               )
+            end
+          end
+          destroy_zombies
+        end
+
+        # An example of how a zombie can be created by the import process:
+        # 1. backup xxx_inds/quals/quants and xxx_attributes (yellow)
+        # 2. import and replace inds/quals/quants (blue)
+        # 3. restore xxx_attributes (note: this restores all the backed up
+        #    records, because at this point we don't know if any of them are
+        #    no longer needed)
+        # 4. restore xxx_inds/quals/quants (note: this only restores backed up
+        #    records with a match in both inds/quals/quants and xxx_attributes)
+        # 5. at this point it is possible to have xxx_attributes which are not
+        # referenced anywhere. These zombies should be deleted.
+        def destroy_zombies
+          TABLES_TO_CHECK_FOR_ZOMBIES.each do |table_class|
+            cnt_before = table_class.count
+            table_class.destroy_zombies
+            cnt_after = table_class.count
+            next unless cnt_after != cnt_before
+
+            @stats.update_yellow_table_after(table_class, cnt_after)
           end
         end
 

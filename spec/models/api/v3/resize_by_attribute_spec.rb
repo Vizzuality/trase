@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'models/api/v3/shared_attributes_examples'
 
 RSpec.describe Api::V3::ResizeByAttribute, type: :model do
   include_context 'api v3 brazil resize by attributes'
@@ -21,5 +22,19 @@ RSpec.describe Api::V3::ResizeByAttribute, type: :model do
     it 'fails when context + group_number + position taken' do
       expect(duplicate).to have(1).errors_on(:position)
     end
+  end
+
+  describe :destroy_zombies do
+    let!(:referenced) { FactoryBot.create(:api_v3_resize_by_attribute) }
+    let!(:resize_by_quant) {
+      FactoryBot.create(
+        :api_v3_resize_by_quant,
+        resize_by_attribute: referenced,
+        quant: FactoryBot.create(:api_v3_quant)
+      )
+    }
+    let!(:zombie) { FactoryBot.create(:api_v3_resize_by_attribute) }
+    let(:subject) { Api::V3::ResizeByAttribute }
+    include_examples 'destroys zombies'
   end
 end
