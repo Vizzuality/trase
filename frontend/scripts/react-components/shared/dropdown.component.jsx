@@ -10,6 +10,8 @@ export default class Dropdown extends Component {
     listHeight: null
   };
 
+  static DEFAULT_MAX_LIST_HEIGHT = 265;
+
   listItemRef = React.createRef();
 
   componentDidMount() {
@@ -32,7 +34,7 @@ export default class Dropdown extends Component {
 
   setListHeight() {
     const { height } = this.listItemRef.current.getBoundingClientRect();
-    if (height > 0) {
+    if (height > 0 && height * this.props.valueList.length > Dropdown.DEFAULT_MAX_LIST_HEIGHT) {
       const listHeight = height * 6 - height / 2;
       this.setState({ listHeight });
     }
