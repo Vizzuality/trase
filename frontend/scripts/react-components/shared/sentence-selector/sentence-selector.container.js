@@ -13,7 +13,7 @@ function mapStateToProps(state) {
   const contexts = getSortedContexts(state);
   const selectedCountryPairs = getSelectedCountryPairs(state);
   const selectedCommodityPairs = getSelectedCommodityPairs(state);
-  console.log(selectedCountryPairs);
+
   return {
     contexts,
     selectedCountryPairs,

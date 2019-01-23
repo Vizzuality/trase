@@ -6,8 +6,13 @@ import PropTypes from 'prop-types';
 
 export default class Dropdown extends Component {
   state = {
-    isOpen: false
+    isOpen: false,
+    listHeight: null
   };
+
+  static DEFAULT_MAX_LIST_HEIGHT = 265;
+
+  listItemRef = React.createRef();
 
   componentDidMount() {
     window.addEventListener('keyup', this.handleKeyUpOutside);
@@ -19,6 +24,20 @@ export default class Dropdown extends Component {
     document.removeEventListener('keyup', this.handleKeyUpOutside);
     document.removeEventListener('mouseup', this.handleClickOutside);
     document.removeEventListener('touchend', this.handleClickOutside);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.listItemRef.current && prevState.listHeight === null) {
+      this.setListHeight();
+    }
+  }
+
+  setListHeight() {
+    const { height } = this.listItemRef.current.getBoundingClientRect();
+    if (height > 0 && height * this.props.valueList.length > Dropdown.DEFAULT_MAX_LIST_HEIGHT) {
+      const listHeight = height * 6 - height / 2;
+      this.setState({ listHeight });
+    }
   }
 
   onDropdownValueClicked = (e, value) => {
@@ -72,12 +91,14 @@ export default class Dropdown extends Component {
           {valueRenderer ? valueRenderer(value) : value}
         </span>
         <ul
+          style={this.state.listHeight ? { maxHeight: this.state.listHeight } : undefined}
           className={cx('dropdown-list', {
             'is-hidden': !this.state.isOpen
           })}
         >
           {valueList.map((elem, index) => (
             <li
+              ref={index === 0 ? this.listItemRef : undefined}
               className={cx('dropdown-item', getItemClassName(elem))}
               key={index}
               onClick={e => this.onDropdownValueClicked(e, elem)}
