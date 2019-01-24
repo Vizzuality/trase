@@ -8,8 +8,7 @@ import {
 } from 'react-components/shared/world-map/world-map.selectors';
 
 const mapStateToProps = state => {
-  const { selectedYears } = state.tool;
-  const { selectedContext } = state.app;
+  const { selectedContext, selectedYears } = state.app;
 
   const originGeoId = getOriginGeoId(state);
   const originCoordinates = getOriginCoordinates(state);

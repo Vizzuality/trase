@@ -16,6 +16,7 @@ import {
   APP__SET_LOADING
 } from 'actions/app.actions';
 import createReducer from 'utils/createReducer';
+import { SELECT_YEARS } from 'actions/tool.actions';
 
 const initialState = {
   windowSize: [window.innerWidth, window.innerHeight],
@@ -40,7 +41,8 @@ const initialState = {
   loading: {
     contexts: false,
     tooltips: false
-  }
+  },
+  selectedYears: []
 };
 
 const isSankeyExpanded = state => state.isMapLayerVisible !== true && state.isMapVisible !== true;
@@ -104,22 +106,27 @@ const appReducer = {
   },
   [SET_CONTEXT](state, action) {
     const selectedContext = action.payload;
+    const selectedYears = [selectedContext.defaultYear, selectedContext.defaultYear];
 
-    return Object.assign({}, state, {
-      selectedContext
-    });
+    return { ...state, selectedYears, selectedContext };
   },
   [LOAD_INITIAL_CONTEXT](state, action) {
     const selectedContext = action.payload;
 
-    return Object.assign({}, state, {
-      selectedContext
-    });
+    const selectedYears =
+      state.selectedYears.length > 0
+        ? state.selectedYears
+        : [selectedContext.defaultYear, selectedContext.defaultYear];
+
+    return { ...state, selectedYears, selectedContext };
   },
   [APP__SET_LOADING](state, action) {
     const { contexts: contextsLoading, tooltips: tooltipsLoading } = state.loading;
     const { contexts = contextsLoading, tooltips = tooltipsLoading } = action.payload;
     return { ...state, loading: { contexts, tooltips } };
+  },
+  [SELECT_YEARS](state, action) {
+    return { ...state, selectedYears: action.years };
   }
 };
 
@@ -142,7 +149,8 @@ const appReducerTypes = PropTypes => ({
   initialSelectedContextIdFromURL: PropTypes.number,
   tooltips: PropTypes.object,
   tooltipCheck: PropTypes.number,
-  windowSize: PropTypes.arrayOf(PropTypes.number).isRequired
+  windowSize: PropTypes.arrayOf(PropTypes.number).isRequired,
+  selectedYears: PropTypes.arrayOf(PropTypes.number).isRequired
 });
 
 export default createReducer(initialState, appReducer, appReducerTypes);

@@ -36,7 +36,7 @@ export const setExploreTopNodes = columnType => (dispatch, getState) => {
 
   const {
     selectedYears: [start_year, end_year]
-  } = state.tool;
+  } = state.app;
   const { topNodes } = state.explore;
   const params = {
     start_year,

@@ -6,7 +6,7 @@ const mapStateToProps = state => ({
   tooltips: state.app.tooltips,
   selectedRecolorBy: state.tool.selectedRecolorBy,
   recolorBys: state.app.selectedContext ? state.app.selectedContext.recolorBy : [],
-  selectedYears: state.tool.selectedYears
+  selectedYears: state.app.selectedYears
 });
 
 const mapDispatchToProps = dispatch => ({

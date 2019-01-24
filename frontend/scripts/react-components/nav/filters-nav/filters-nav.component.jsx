@@ -118,7 +118,7 @@ class FiltersNav extends React.PureComponent {
           <div className="filters-nav-item">
             <LocaleSelector />
           </div>
-          <ToolSearch className="filters-nav-item -no-padding" />
+          {filters.showSearch && <ToolSearch className="filters-nav-item -no-padding" />}
         </div>
       </React.Fragment>
     );

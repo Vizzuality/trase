@@ -16,7 +16,7 @@ const mapMethodsToState = () => ({
       nodesData: getSelectedNodesData(state.tool),
       recolorGroups: state.tool.recolorGroups,
       currentQuant: state.tool.currentQuant,
-      selectedYears: state.tool.selectedYears,
+      selectedYears: state.app.selectedYears,
       selectedContextId: state.app.selectedContext ? state.app.selectedContext.id : null
     })
   },
@@ -34,7 +34,7 @@ const mapMethodsToState = () => ({
         recolorGroups: state.tool.recolorGroups,
         coordinates: state.tool.highlightedNodeCoordinates,
         currentQuant: state.tool.currentQuant,
-        selectedYears: state.tool.selectedYears,
+        selectedYears: state.app.selectedYears,
         selectedContextId: state.app.selectedContext ? state.app.selectedContext.id : null
       };
     }

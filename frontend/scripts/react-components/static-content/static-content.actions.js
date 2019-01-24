@@ -11,7 +11,7 @@ export const getStaticContent = () => (dispatch, getState) => {
   const { location, staticContent } = getState();
   const filename = getStaticContentFilename(location);
   const notFound = location.type === NOT_FOUND;
-  if (typeof staticContent.markdown[filename] === 'undefined' && !notFound) {
+  if ((!staticContent || typeof staticContent.markdown[filename] === 'undefined') && !notFound) {
     const url = getURLFromParams(GET_MARKDOWN_CONTENT_URL, { filename });
     fetch(url)
       .then(res => (res.ok ? res.text() : Promise.reject(res)))

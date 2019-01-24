@@ -15,17 +15,17 @@ const insertIf = (condition, item) => (condition ? [item] : []);
 
 const getCurrentPage = state => state.location.type;
 const getSelectedContext = state => state.app.selectedContext;
-const getToolSelectedYears = state => state.tool.selectedYears;
-const getToolSelectedResizeBy = state => state.tool.selectedResizeBy;
-const getToolRecolorBy = state => state.tool.selectedRecolorBy;
-const getToolSelectedBiome = state => state.tool.selectedBiomeFilter;
+const getSelectedYears = state => state.app.selectedYears;
+const getToolSelectedResizeBy = state => (state.tool ? state.tool.selectedResizeBy : {});
+const getToolRecolorBy = state => (state.tool ? state.tool.selectedRecolorBy : {});
+const getToolSelectedBiome = state => state.tool && state.tool.selectedBiomeFilter;
 const getContextFilterBy = state => state.app.selectedContext && state.app.selectedContext.filterBy;
 const getAppTooltips = state => state.app.tooltips;
-const getToolDetailedView = state => state.tool.detailedView;
+const getToolDetailedView = state => state.tool && state.tool.detailedView;
 const getToolResizeBys = state => state.app.selectedContext && state.app.selectedContext.resizeBy;
 
 export const getToolYearsProps = createSelector(
-  [getToolSelectedYears, getToolSelectedResizeBy, getToolRecolorBy, getSelectedContext],
+  [getSelectedYears, getToolSelectedResizeBy, getToolRecolorBy, getSelectedContext],
   (selectedYears, selectedResizeBy, selectedRecolorBy, selectedContext) => {
     const availableContextYears = selectedContext && selectedContext.years;
     const availableResizeByYears =
@@ -59,7 +59,7 @@ export const getToolAdminLevelProps = createSelector(
       items: [
         { name: 'All', id: 'none' },
         ...adminLevel.nodes
-          .filter(node => node.name !== selectedFilter.name)
+          .filter(node => node.name !== (selectedFilter && selectedFilter.name))
           .map(node => ({ ...node, id: node.name, name: `${node.name}`.toLowerCase() }))
       ],
       selectedItem:
@@ -71,7 +71,7 @@ export const getToolAdminLevelProps = createSelector(
 );
 
 export const getToolResizeByProps = createSelector(
-  [getAppTooltips, getToolResizeBys, getToolSelectedYears, getToolSelectedResizeBy],
+  [getAppTooltips, getToolResizeBys, getSelectedYears, getToolSelectedResizeBy],
   (tooltips, resizeBys, selectedYears, selectedResizeBy) => {
     const items = sortBy(resizeBys, ['groupNumber', 'position']).map((resizeBy, index, list) => {
       const isEnabled =
