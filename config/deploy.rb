@@ -58,6 +58,7 @@ after 'deploy:starting', 'sidekiq:quiet'
 after 'deploy:reverted', 'sidekiq:restart'
 after 'deploy:published', 'sidekiq:restart'
 after 'sidekiq:restart', 'downloads:refresh'
+after 'deploy:updated', 'newrelic:notice_deployment'
 
 namespace :npm do
   after 'npm:install', 'npm:build'
