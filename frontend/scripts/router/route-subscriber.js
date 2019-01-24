@@ -11,17 +11,18 @@ export default function routeSubscriber(store) {
       this.resetPage = this.resetPage.bind(this);
     }
 
-    loadDynamicLayouts(type, componentName) {
+    loadDynamicLayouts(type) {
       // This avoids loading the components from the start, by importing such
-      // components code-splitting purpose was defeated
+      // components at router.js code-splitting purpose was defeated
       switch (type) {
         case 'team':
-          return import(`../react-components/team/${componentName}`);
+          return import(`../react-components/team/team.container`);
         case 'teamMember':
-          return import(`../react-components/team/team-member/${componentName}`);
+          return import(`../react-components/team/team-member/team-member.container`);
         case 'about':
-          return import(`../react-components/static-content/markdown-renderer/${componentName}`);
+          return import(`../react-components/static-content/markdown-renderer/markdown-renderer.container`);
         default:
+          console.error('Youre trying to load a layout of a page that doesnt support it');
           return Promise.resolve();
       }
     }
@@ -35,7 +36,7 @@ export default function routeSubscriber(store) {
     }
 
     onRouteChange({ routesMap, type } = {}) {
-      const { page: filename, component: componentName, layout = x => x } = routesMap[type];
+      const { page: filename, layout } = routesMap[type];
       if (this.filename !== filename) {
         this.resetPage();
         this.filename = filename;
@@ -43,8 +44,8 @@ export default function routeSubscriber(store) {
         import(/* webpackChunkName: "[request]" */
         `../pages/${this.filename}.page.jsx`).then(page => {
           this.page = page;
-          if (componentName) {
-            this.loadDynamicLayouts(type, componentName).then(component => {
+          if (typeof layout !== 'undefined') {
+            this.loadDynamicLayouts(type).then(component => {
               this.page.mount(this.root, store, { component: layout(component.default) });
             });
           } else {

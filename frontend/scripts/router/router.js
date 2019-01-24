@@ -96,7 +96,6 @@ export const routes = {
     page: 'static-content',
     title: getPageTitle,
     thunk: loadPageData(getTeam),
-    component: 'team.container', // don't change without updating routeSubscriber
     layout: withSidebarNavLayout
   },
   teamMember: {
@@ -104,7 +103,6 @@ export const routes = {
     page: 'static-content',
     title: getPageTitle,
     thunk: loadPageData(getTeam),
-    component: 'team-member.container', // don't change without updating routeSubscriber
     layout: withSidebarNavLayout,
     parent: 'team'
   },
@@ -113,7 +111,6 @@ export const routes = {
     page: 'static-content',
     title: getPageTitle,
     thunk: loadPageData(getPageStaticContent),
-    component: 'markdown-renderer.container', // don't change without updating routeSubscriber
     layout: withSidebarNavLayout
   },
   notSupportedOnMobile: {
