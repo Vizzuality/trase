@@ -2,6 +2,8 @@
 require 'dotenv'
 Dotenv.load
 
+require 'new_relic/recipes'
+
 # Load DSL and set up stages
 require 'capistrano/setup'
 
