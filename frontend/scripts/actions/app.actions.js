@@ -209,12 +209,12 @@ export function loadSearchResults(searchTerm) {
 
 export function selectYears(years) {
   return (dispatch, getState) => {
-    const { tool } = getState();
+    const { location } = getState();
     dispatch({
       type: SELECT_YEARS,
       years
     });
-    if (tool) {
+    if (location.type === 'tool') {
       dispatch(loadNodes());
       dispatch(loadLinks());
     }

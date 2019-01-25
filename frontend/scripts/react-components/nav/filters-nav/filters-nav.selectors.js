@@ -198,7 +198,7 @@ export const getNavFilters = createSelector(
             }),
             {
               type: FILTER_TYPES.yearSelector,
-              props: { key: 'yearsSelector' }
+              props: { id: 'yearsSelector' }
             }
           ],
           right: [
