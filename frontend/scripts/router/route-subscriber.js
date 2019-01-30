@@ -11,7 +11,7 @@ export default function routeSubscriber(store) {
       this.resetPage = this.resetPage.bind(this);
     }
 
-    loadDynamicLayouts(type) {
+    loadDynamicLayouts(type, layout) {
       // This avoids loading the components from the start, by importing such
       // components at router.js code-splitting purpose was defeated
       switch (type) {
@@ -21,9 +21,12 @@ export default function routeSubscriber(store) {
           return import(`../react-components/team/team-member/team-member.container`);
         case 'about':
           return import(`../react-components/static-content/markdown-renderer/markdown-renderer.container`);
-        default:
-          console.error('Youre trying to load a layout of a page that doesnt support it');
-          return Promise.resolve();
+        default: {
+          const error = new Error(
+            `You're trying to load a layout (${layout}) of a page (${type}) that doesnt support it`
+          );
+          return Promise.reject(error);
+        }
       }
     }
 
@@ -45,9 +48,14 @@ export default function routeSubscriber(store) {
         `../pages/${this.filename}.page.jsx`).then(page => {
           this.page = page;
           if (typeof layout !== 'undefined') {
-            this.loadDynamicLayouts(type).then(component => {
-              this.page.mount(this.root, store, { component: layout(component.default) });
-            });
+            this.loadDynamicLayouts(type, layout)
+              .then(component =>
+                this.page.mount(this.root, store, { component: layout(component.default) })
+              )
+              .catch(err => {
+                console.error(err);
+                this.page.mount(this.root, store);
+              });
           } else {
             this.page.mount(this.root, store);
           }
