@@ -19,7 +19,6 @@ import {
   SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
   SELECT_VIEW,
-  SELECT_YEARS,
   SET_MAP_DIMENSIONS_SELECTION,
   SET_SANKEY_SEARCH_VISIBILITY,
   SHOW_LINKS_ERROR,
@@ -98,7 +97,6 @@ export const toolInitialState = {
   selectedNodesIds: [],
   selectedRecolorBy: { type: 'none', name: 'none' },
   selectedResizeBy: { type: 'none', name: 'none' },
-  selectedYears: [],
   unmergedLinks: [],
   visibleNodes: [],
   visibleNodesByColumn: [],
@@ -159,14 +157,9 @@ const toolReducer = {
     }
 
     // force state updates on the component
-    const selectedYears =
-      state.selectedYears.length !== 0
-        ? Object.assign([], state.selectedYears)
-        : [selectedContext.defaultYear, selectedContext.defaultYear];
     const mapView = state.mapView ? Object.assign({}, state.mapView) : selectedContext.map;
 
     return Object.assign({}, state, {
-      selectedYears,
       selectedRecolorBy: selectedRecolorBy || { type: 'none', name: 'none' },
       selectedResizeBy,
       selectedBiomeFilter: biomeFilter || { value: 'none', name: 'none' },
@@ -189,7 +182,6 @@ const toolReducer = {
       selectedContext.filterBy.length > 0 && selectedContext.filterBy[0][0];
 
     return Object.assign({}, state, {
-      selectedYears: [selectedContext.defaultYear, selectedContext.defaultYear],
       selectedRecolorBy: defaultRecolorBy || { type: 'none', name: 'none' },
       selectedResizeBy: defaultResizeBy,
       selectedBiomeFilter: defaultBiomeFilterBy || { name: 'none', value: 'none' },
@@ -343,9 +335,6 @@ const toolReducer = {
   [SELECT_BIOME_FILTER](state, action) {
     return Object.assign({}, state, { selectedBiomeFilter: action.payload });
   },
-  [SELECT_YEARS](state, action) {
-    return Object.assign({}, state, { selectedYears: action.years });
-  },
   [SELECT_RECOLOR_BY](state, action) {
     return Object.assign({}, state, { selectedRecolorBy: action.payload });
   },
@@ -421,8 +410,7 @@ const toolReducer = {
     return Object.assign({}, state, { mapContextualLayers: action.mapContextualLayers });
   },
   [SET_MAP_DIMENSIONS_SELECTION](state, action) {
-    const selectedMapDimensions = action.uids;
-
+    const { uids: selectedMapDimensions, selectedYears } = action.payload;
     const { choropleth, choroplethLegend } = getChoropleth(
       selectedMapDimensions,
       state.nodesDictWithMeta,
@@ -431,7 +419,7 @@ const toolReducer = {
     const selectedMapDimensionsWarnings = getMapDimensionsWarnings(
       state.mapDimensions,
       selectedMapDimensions,
-      state.selectedYears
+      selectedYears
     );
 
     return {
@@ -444,14 +432,14 @@ const toolReducer = {
   },
   [TOGGLE_MAP_DIMENSION](state, action) {
     const selectedMapDimensions = state.selectedMapDimensions.slice();
-    const uidIndex = selectedMapDimensions.indexOf(action.uid);
+    const uidIndex = selectedMapDimensions.indexOf(action.payload.uid);
 
     if (uidIndex === -1) {
       // dimension was not found: put it on a free slot
       if (selectedMapDimensions[0] === null) {
-        selectedMapDimensions[0] = action.uid;
+        selectedMapDimensions[0] = action.payload.uid;
       } else if (selectedMapDimensions[1] === null) {
-        selectedMapDimensions[1] = action.uid;
+        selectedMapDimensions[1] = action.payload.uid;
       } else {
         return state;
       }
@@ -469,7 +457,7 @@ const toolReducer = {
     const selectedMapDimensionsWarnings = getMapDimensionsWarnings(
       state.mapDimensions,
       selectedMapDimensions,
-      state.selectedYears
+      action.payload.selectedYears
     );
     return {
       ...state,
@@ -581,7 +569,6 @@ const toolReducerTypes = PropTypes => ({
   selectedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedRecolorBy: PropTypes.object.isRequired,
   selectedResizeBy: PropTypes.object.isRequired,
-  selectedYears: PropTypes.arrayOf(PropTypes.number).isRequired,
   unmergedLinks: PropTypes.arrayOf(PropTypes.object).isRequired,
   visibleNodes: PropTypes.arrayOf(PropTypes.object).isRequired,
   visibleNodesByColumn: PropTypes.arrayOf(PropTypes.object).isRequired,

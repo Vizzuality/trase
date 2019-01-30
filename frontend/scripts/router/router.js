@@ -1,8 +1,5 @@
 import { connectRoutes, NOT_FOUND, redirect, replace } from 'redux-first-router';
 import restoreScroll from 'redux-first-router-restore-scroll';
-import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.container';
-import TeamMember from 'react-components/team/team-member/team-member.container';
-import Team from 'react-components/team/team.container';
 import { parse, stringify } from 'utils/stateURL';
 
 import { BREAKPOINTS } from 'constants';
@@ -99,14 +96,14 @@ export const routes = {
     page: 'static-content',
     title: getPageTitle,
     thunk: loadPageData(getTeam),
-    component: withSidebarNavLayout(Team)
+    layout: withSidebarNavLayout
   },
   teamMember: {
     path: '/about/team/:member',
     page: 'static-content',
     title: getPageTitle,
     thunk: loadPageData(getTeam),
-    component: withSidebarNavLayout(TeamMember),
+    layout: withSidebarNavLayout,
     parent: 'team'
   },
   about: {
@@ -114,7 +111,7 @@ export const routes = {
     page: 'static-content',
     title: getPageTitle,
     thunk: loadPageData(getPageStaticContent),
-    component: withSidebarNavLayout(MarkdownRenderer)
+    layout: withSidebarNavLayout
   },
   notSupportedOnMobile: {
     path: '/not-supported',

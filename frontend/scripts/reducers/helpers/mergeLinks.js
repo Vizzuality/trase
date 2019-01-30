@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 // merges same origin / same destination / same qual links
 export default function(links, userecolorGroups) {
   const mergedLinks = [];
@@ -21,8 +19,7 @@ export default function(links, userecolorGroups) {
     }
 
     if (!dict[key]) {
-      const mergedLink = _.cloneDeep(link);
-      mergedLink.id = key;
+      const mergedLink = { ...link, id: key };
       mergedLinks.push(mergedLink);
       dict[key] = mergedLink;
     } else {

@@ -18,7 +18,7 @@ function mapStateToProps(state) {
     contexts,
     selectedCountryPairs,
     selectedCommodityPairs,
-    selectedYears: state.tool.selectedYears,
+    selectedYears: state.app.selectedYears,
     selectedContext: state.app.selectedContext,
     currentDropdown: state.app.currentDropdown
   };

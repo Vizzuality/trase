@@ -16,7 +16,7 @@ const appStateToURLParams = state => {
 
   return {
     selectedContextId: state.app.selectedContext ? state.app.selectedContext.id : null,
-    selectedYears: state.tool.selectedYears,
+    selectedYears: state.app.selectedYears,
     detailedView: state.tool.detailedView,
     selectedNodesIds: state.tool.selectedNodesIds,
     expandedNodesIds: state.tool.expandedNodesIds,
@@ -66,7 +66,8 @@ const _getIntArrayValue = value => {
 
 const URLParamsToAppState = (params, state) => {
   const appReducerState = removeEmptyParams({
-    initialSelectedContextIdFromURL: _getIntValue(params.selectedContextId)
+    initialSelectedContextIdFromURL: _getIntValue(params.selectedContextId),
+    selectedYears: _getIntArrayValue(params.selectedYears)
   });
 
   if (
@@ -80,7 +81,6 @@ const URLParamsToAppState = (params, state) => {
   }
 
   const toolReducerState = removeEmptyParams({
-    selectedYears: _getIntArrayValue(params.selectedYears),
     detailedView: _getBoolValue(params.detailedView),
     selectedNodesIds: _getIntArrayValue(params.selectedNodesIds),
     expandedNodesIds: _getIntArrayValue(params.expandedNodesIds),

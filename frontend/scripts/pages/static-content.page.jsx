@@ -11,7 +11,7 @@ import StaticContent from 'react-components/static-content/static-content.contai
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import Footer from 'react-components/shared/footer/footer.component';
 
-export const mount = (root, store) => {
+export const mount = (root, store, options) => {
   root.innerHTML = BaseMarkup({
     feedback: FeedbackMarkup()
   });
@@ -25,7 +25,7 @@ export const mount = (root, store) => {
 
   render(
     <Provider store={store}>
-      <StaticContent />
+      <StaticContent component={options.component} />
     </Provider>,
     document.getElementById('page-react-root')
   );

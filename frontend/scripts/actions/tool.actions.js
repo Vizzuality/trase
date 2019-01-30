@@ -264,17 +264,6 @@ export function selectColumn(columnIndex, columnId, reloadLinks = true) {
   };
 }
 
-export function selectYears(years) {
-  return dispatch => {
-    dispatch({
-      type: SELECT_YEARS,
-      years
-    });
-    dispatch(loadNodes());
-    dispatch(loadLinks());
-  };
-}
-
 export function loadToolDataForCurrentContext() {
   return (dispatch, getState) => {
     const state = getState();
@@ -308,8 +297,8 @@ export function loadNodes() {
   return (dispatch, getState) => {
     const params = {
       context_id: getState().app.selectedContext.id,
-      start_year: getState().tool.selectedYears[0],
-      end_year: getState().tool.selectedYears[1]
+      start_year: getState().app.selectedYears[0],
+      end_year: getState().app.selectedYears[1]
     };
 
     const getMapBaseDataURL = getURLFromParams(GET_MAP_BASE_DATA_URL, params);
@@ -327,7 +316,7 @@ export function loadNodes() {
           mapDimensionsMetaJSON: jsonPayload
         };
 
-        const [startYear, endYear] = getState().tool.selectedYears;
+        const [startYear, endYear] = getState().app.selectedYears;
         const allSelectedYears = Array(endYear - startYear + 1)
           .fill(startYear)
           .map((year, index) => year + index);
@@ -409,8 +398,8 @@ export function loadLinks() {
     });
     const params = {
       context_id: state.app.selectedContext.id,
-      start_year: state.tool.selectedYears[0],
-      end_year: state.tool.selectedYears[1],
+      start_year: state.app.selectedYears[0],
+      end_year: state.app.selectedYears[1],
       include_columns: state.tool.selectedColumnsIds.join(','),
       flow_quant: state.tool.selectedResizeBy.name,
       locked_nodes: state.tool.selectedNodesIds
@@ -832,7 +821,7 @@ export function loadLinkedGeoIDs() {
     }
     const params = {
       context_id: state.app.selectedContext.id,
-      years: uniq([state.tool.selectedYears[0], state.tool.selectedYears[1]]),
+      years: uniq([state.app.selectedYears[0], state.app.selectedYears[1]]),
       nodes_ids: selectedNodesIds,
       target_column_id: state.tool.selectedColumnsIds[0]
     };
@@ -864,9 +853,13 @@ export function saveMapView(latlng, zoom) {
 
 export function toggleMapDimension(uid) {
   return (dispatch, getState) => {
+    const { selectedYears } = getState().app;
     dispatch({
       type: TOGGLE_MAP_DIMENSION,
-      uid
+      payload: {
+        uid,
+        selectedYears
+      }
     });
 
     loadMapChoropeth(getState, dispatch);
@@ -875,9 +868,13 @@ export function toggleMapDimension(uid) {
 
 export function setMapDimensions(uids) {
   return (dispatch, getState) => {
+    const selectedYears = getState().app.selectedYears;
     dispatch({
       type: SET_MAP_DIMENSIONS_SELECTION,
-      uids
+      payload: {
+        uids,
+        selectedYears
+      }
     });
 
     loadMapChoropeth(getState, dispatch);
@@ -903,8 +900,8 @@ export function loadMapChoropeth(getState, dispatch) {
 
   const params = {
     context_id: state.app.selectedContext.id,
-    start_year: state.tool.selectedYears[0],
-    end_year: state.tool.selectedYears[1],
+    start_year: state.app.selectedYears[0],
+    end_year: state.app.selectedYears[1],
     layer_ids: selectedMapDimensions.map(layer => layer.id)
   };
 

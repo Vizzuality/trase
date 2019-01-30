@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { NODE_SELECTION_LINKS_NUM_COLORS } from 'constants';
 
 // gets the next available color group
@@ -13,7 +13,7 @@ const getNextNodeColorGroup = currentSelectedNodesColorGroups => {
 };
 
 export default (previousNodesColoredBySelection, nextColoredBySelection, recolorGroups) => {
-  const nextRecolorGroups = _.cloneDeep(recolorGroups) || [];
+  const nextRecolorGroups = cloneDeep(recolorGroups) || [];
 
   // test for nodeIds not selected anymore
   if (previousNodesColoredBySelection) {
@@ -30,7 +30,7 @@ export default (previousNodesColoredBySelection, nextColoredBySelection, recolor
       !previousNodesColoredBySelection ||
       previousNodesColoredBySelection.indexOf(nodeId) === -1
     ) {
-      nextRecolorGroups[nodeId] = getNextNodeColorGroup(_.values(nextRecolorGroups));
+      nextRecolorGroups[nodeId] = getNextNodeColorGroup(Object.values(nextRecolorGroups));
     }
   });
 

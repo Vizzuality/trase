@@ -5,7 +5,7 @@ import lineString from 'turf-linestring';
 import { getTopNodesKey } from 'react-components/explore/explore.actions';
 
 const getSelectedContext = state => state.app.selectedContext;
-const getSelectedYears = state => state.tool.selectedYears;
+const getSelectedYears = state => state.app.selectedYears;
 const getTopNodes = state => state.explore.topNodes;
 
 export const getOriginGeoId = createSelector(

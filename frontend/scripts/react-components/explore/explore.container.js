@@ -9,8 +9,7 @@ import { selectContextById } from 'actions/app.actions';
 import Explore from './explore.component';
 
 const mapStateToProps = state => {
-  const { selectedYears } = state.tool;
-  const { selectedContext } = state.app;
+  const { selectedContext, selectedYears } = state.app;
   const { topNodes, selectedTableColumnType, loading: loadingDict } = state.explore;
   const topNodesKey = selectedContext
     ? getTopNodesKey(selectedContext.id, selectedTableColumnType, ...selectedYears)
