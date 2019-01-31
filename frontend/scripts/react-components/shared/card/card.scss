@@ -82,6 +82,14 @@ $slide-height: 430px;
 
   &.dashed {
 
+    .card-title {
+      color: $white;
+    }
+
+    .card-action {
+      color: $white;
+    }
+
     .card-image {
       background-color: transparent;
       background-size: 55%;

@@ -41,6 +41,80 @@
         }
       ]
     },
+    "docs/cards.mdx": {
+      "0": "C",
+      "1": "a",
+      "2": "r",
+      "3": "d",
+      "4": "s",
+      "id": "55e4d1ae66253c4c8694803a9b4dfe94",
+      "filepath": "docs/cards.mdx",
+      "link": "https://github.com/Vizzuality/trase/edit/master/frontend/docs/cards.mdx",
+      "slug": "docs-cards",
+      "route": "/docs-cards",
+      "name": "Cards",
+      "order": 0,
+      "menu": null,
+      "headings": [
+        {
+          "depth": 2,
+          "slug": "cards",
+          "value": "Cards"
+        }
+      ]
+    },
+    "docs/lists.mdx": {
+      "0": "L",
+      "1": "i",
+      "2": "s",
+      "3": "t",
+      "4": "s",
+      "id": "9b09e0b0fad5f246dba7639261bab50d",
+      "filepath": "docs/lists.mdx",
+      "link": "https://github.com/Vizzuality/trase/edit/master/frontend/docs/lists.mdx",
+      "slug": "docs-lists",
+      "route": "/docs-lists",
+      "name": "Lists",
+      "order": 0,
+      "menu": null,
+      "headings": [
+        {
+          "depth": 2,
+          "slug": "grid-list",
+          "value": "Grid List"
+        },
+        {
+          "depth": 3,
+          "slug": "items-with-tooltips",
+          "value": "Items with tooltips"
+        },
+        {
+          "depth": 3,
+          "slug": "items-by-groups",
+          "value": "Items by groups"
+        },
+        {
+          "depth": 3,
+          "slug": "loading-state",
+          "value": "Loading state"
+        },
+        {
+          "depth": 3,
+          "slug": "disabled-state",
+          "value": "Disabled state"
+        },
+        {
+          "depth": 4,
+          "slug": "gridlist-props",
+          "value": "GridList props"
+        },
+        {
+          "depth": 4,
+          "slug": "gridlistitem-props",
+          "value": "GridListItem props"
+        }
+      ]
+    },
     "docs/texts.mdx": {
       "name": "Headings and Texts",
       "id": "dff18b71030861c56cc08786ad3bc85c",

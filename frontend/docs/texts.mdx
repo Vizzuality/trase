@@ -29,7 +29,7 @@ import 'styles/_docz.scss';
   <Heading variant="mono" weight="light">I'm a mono heading with weight light</Heading>
 </div>
 <div className="components-container">
-  <div style={{ backgroundColor: '#34444C' }}>
+  <div className="dark-container">
     <Heading color="white">I'm a serif heading with color white</Heading>
   </div>
   <Heading color="grey">I'm a serif heading with color grey</Heading>
@@ -37,7 +37,7 @@ import 'styles/_docz.scss';
   <Heading color="pink">I'm a serif heading with color pink</Heading>
 </div>
 <div className="components-container">
-  <div style={{ backgroundColor: '#34444C' }}>
+  <div className="dark-container">
     <Heading color="white" variant="mono">I'm a mono heading with color white</Heading>
   </div>
   <Heading color="grey" variant="mono">I'm a mono heading with color grey</Heading>
@@ -49,35 +49,44 @@ import 'styles/_docz.scss';
 
 ## Text
 
-<Text size="lg">I'm a serif text with size lg</Text>
-<Text size="md">I'm a serif text with size md</Text>
-<Text size="md">I'm a serif text with size rg</Text>
-<Text size="sm">I'm a serif text with size sm</Text>
-<br />
-<Text size="lg" variant="mono">I'm a mono text with size lg</Text>
-<Text size="md" variant="mono">I'm a mono text with size md</Text>
-<Text size="md" variant="mono">I'm a mono text with size rg</Text>
-<Text size="sm" variant="mono">I'm a mono text with size sm</Text>
-<br />
-<Text weight="bold">I'm a serif text with weight bold</Text>
-<Text weight="light">I'm a serif text with weight light</Text>
-<br />
-<Text variant="mono" weight="bold">I'm a mono text with weight bold</Text>
-<Text variant="mono" weight="light">I'm a mono text with weight light</Text>
-<br />
-<div style={{ backgroundColor: '#34444C', padding: '2px', marginBottom: '2px' }}>
-  <Text color="white">I'm a serif text with color white</Text>
+<div className="components-container">
+  <Text size="lg">I'm a serif text with size lg</Text>
+  <Text size="md">I'm a serif text with size md</Text>
+  <Text size="md">I'm a serif text with size rg</Text>
+  <Text size="sm">I'm a serif text with size sm</Text>
 </div>
-<Text color="grey">I'm a serif text with color grey</Text>
-<Text color="grey-faded">I'm a serif text with color grey-faded</Text>
-<Text color="pink">I'm a serif text with color pink</Text>
-<br />
-<div style={{ backgroundColor: '#34444C', padding: '2px', marginBottom: '2px' }}>
-  <Text color="white" variant="mono">I'm a mono text with color white</Text>
+<div className="components-container">
+  <Text size="lg" variant="mono">I'm a mono text with size lg</Text>
+  <Text size="md" variant="mono">I'm a mono text with size md</Text>
+  <Text size="md" variant="mono">I'm a mono text with size rg</Text>
+  <Text size="sm" variant="mono">I'm a mono text with size sm</Text>
 </div>
-<Text color="grey" variant="mono">I'm a mono text with color grey</Text>
-<Text color="grey-faded" variant="mono">I'm a mono text with color grey-faded</Text>
-<Text color="pink" variant="mono">I'm a mono text with color pink</Text>
-
-<br />
+<div className="components-container">
+  <Text weight="bold">I'm a serif text with weight bold</Text>
+  <Text weight="light">I'm a serif text with weight light</Text>
+</div>
+<div className="components-container">
+  <Text variant="mono" weight="bold">I'm a mono text with weight bold</Text>
+  <Text variant="mono" weight="light">I'm a mono text with weight light</Text>
+</div>
+<div className="components-container">
+  <div className="dark-container">
+    <Text color="white">I'm a serif text with color white</Text>
+  </div>
+</div>
+<div className="components-container">
+  <Text color="grey">I'm a serif text with color grey</Text>
+  <Text color="grey-faded">I'm a serif text with color grey-faded</Text>
+  <Text color="pink">I'm a serif text with color pink</Text>
+</div>
+<div className="components-container">
+  <div className="dark-container">
+    <Text color="white" variant="mono">I'm a mono text with color white</Text>
+  </div>
+</div>
+<div className="components-container">
+  <Text color="grey" variant="mono">I'm a mono text with color grey</Text>
+  <Text color="grey-faded" variant="mono">I'm a mono text with color grey-faded</Text>
+  <Text color="pink" variant="mono">I'm a mono text with color pink</Text>
+</div>
 <PropsTable of={Text} />

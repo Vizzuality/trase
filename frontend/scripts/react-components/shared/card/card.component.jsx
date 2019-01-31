@@ -63,7 +63,7 @@ class Card extends Component {
           {...linkProps}
         >
           <figure className="card-image" style={{ backgroundImage: `url(${imageUrl})` }} />
-          {variant === 'dahsed' && dashedLine}
+          {variant === 'dashed' && dashedLine}
         </Link>
         <figcaption className="card-content">
           <div className="card-details-container">
