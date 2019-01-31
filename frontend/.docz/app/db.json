@@ -63,6 +63,23 @@
         }
       ]
     },
+    "docs/inputs.mdx": {
+      "name": "Inputs",
+      "id": "e6413736060ccdbb4f450f0d9118ca9b",
+      "filepath": "docs/inputs.mdx",
+      "link": "https://github.com/Vizzuality/trase/edit/master/frontend/docs/inputs.mdx",
+      "slug": "docs-inputs",
+      "route": "/docs-inputs",
+      "order": 0,
+      "menu": null,
+      "headings": [
+        {
+          "depth": 2,
+          "slug": "search-input",
+          "value": "Search input"
+        }
+      ]
+    },
     "docs/lists.mdx": {
       "0": "L",
       "1": "i",
