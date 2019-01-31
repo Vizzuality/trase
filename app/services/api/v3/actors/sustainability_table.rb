@@ -32,7 +32,7 @@ module Api
             chart_node_type = @chart_config.chart_node_types.
               find { |nta| nta.node_type_id = node_type.id }
             sustainability_for_group(
-              node_type_name.pluralize,
+              node_type_name.pluralize.upcase,
               node_type_name,
               chart_node_type&.is_total
             )

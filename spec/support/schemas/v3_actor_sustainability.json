@@ -17,7 +17,7 @@
             "title": "The Name Schema ",
             "default": "",
             "examples": [
-              "Municipalities"
+              "MUNICIPALITIES"
             ]
           },
           "included_columns": {
