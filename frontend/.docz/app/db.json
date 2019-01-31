@@ -1,0 +1,67 @@
+{
+  "config": {
+    "title": "Trase",
+    "description": "Frontend for trase.earth",
+    "menu": [],
+    "ordering": "descending",
+    "version": "1.0.0",
+    "repository": "https://github.com/Vizzuality/trase",
+    "native": false,
+    "codeSandbox": true,
+    "themeConfig": {
+      "colors": {
+        "primary": "#34444C",
+        "sidebarBg": "#fff0c2"
+      }
+    },
+    "plugins": []
+  },
+  "entries": {
+    "docs/buttons.mdx": {
+      "0": "B",
+      "1": "u",
+      "2": "t",
+      "3": "t",
+      "4": "o",
+      "5": "n",
+      "6": "s",
+      "id": "d018813b1f7a91d522c294503e626c27",
+      "filepath": "docs/buttons.mdx",
+      "link": "https://github.com/Vizzuality/trase/edit/master/frontend/docs/buttons.mdx",
+      "slug": "docs-buttons",
+      "route": "/docs-buttons",
+      "name": "Buttons",
+      "order": 0,
+      "menu": null,
+      "headings": [
+        {
+          "depth": 2,
+          "slug": "buttons",
+          "value": "Buttons"
+        }
+      ]
+    },
+    "docs/texts.mdx": {
+      "name": "Headings and Texts",
+      "id": "dff18b71030861c56cc08786ad3bc85c",
+      "filepath": "docs/texts.mdx",
+      "link": "https://github.com/Vizzuality/trase/edit/master/frontend/docs/texts.mdx",
+      "slug": "docs-texts",
+      "route": "/docs-texts",
+      "order": 0,
+      "menu": null,
+      "headings": [
+        {
+          "depth": 2,
+          "slug": "heading",
+          "value": "Heading"
+        },
+        {
+          "depth": 2,
+          "slug": "text",
+          "value": "Text"
+        }
+      ]
+    }
+  }
+}
