@@ -67,8 +67,15 @@ module Api
           if include_totals && !rows.empty?
             rows << totals_row(group_totals_hash)
           end
+          profile = @context.context_node_types.
+            joins(:node_type).
+            includes(:profile).
+            where('node_types.name' => node_type).
+            first.
+            profile
           {
             name: name,
+            profile: profile.present?,
             included_columns:
                 [{name: node_type.humanize}] +
                   @chart_config.chart_attributes.map do |ro_chart_attribute|
