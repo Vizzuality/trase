@@ -3,34 +3,52 @@
   "type": "object",
   "definitions": {},
   "$schema": "http://json-schema.org/draft-06/schema#",
+  "required": [
+    "data"
+  ],
   "properties": {
     "data": {
-      "$id": "/properties/data",
+      "$id": "#/properties/data",
       "type": "array",
       "items": {
-        "$id": "/properties/data/items",
+        "$id": "#/properties/data/items",
         "type": "object",
+        "required": [
+          "name",
+          "profile",
+          "included_columns",
+          "rows"
+        ],
         "properties": {
           "name": {
-            "$id": "/properties/data/items/properties/name",
+            "$id": "#/properties/data/items/properties/name",
             "type": "string",
-            "title": "The Name Schema ",
             "default": "",
             "examples": [
-              "Municipalities"
+              "MUNICIPALITIES"
+            ]
+          },
+          "profile": {
+            "$id": "#/properties/data/items/properties/profile",
+            "type": "boolean",
+            "default": false,
+            "examples": [
+              true
             ]
           },
           "included_columns": {
-            "$id": "/properties/data/items/properties/included_columns",
+            "$id": "#/properties/data/items/properties/included_columns",
             "type": "array",
             "items": {
-              "$id": "/properties/data/items/properties/included_columns/items",
+              "$id": "#/properties/data/items/properties/included_columns/items",
               "type": "object",
+              "required": [
+                "name"
+              ],
               "properties": {
                 "name": {
-                  "$id": "/properties/data/items/properties/included_columns/items/properties/name",
+                  "$id": "#/properties/data/items/properties/included_columns/items/properties/name",
                   "type": "string",
-                  "title": "The Name Schema ",
                   "default": "",
                   "examples": [
                     "Municipality"
@@ -40,35 +58,39 @@
             }
           },
           "rows": {
-            "$id": "/properties/data/items/properties/rows",
+            "$id": "#/properties/data/items/properties/rows",
             "type": "array",
             "items": {
-              "$id": "/properties/data/items/properties/rows/items",
+              "$id": "#/properties/data/items/properties/rows/items",
               "type": "object",
+              "required": [
+                "values"
+              ],
               "properties": {
                 "values": {
-                  "$id": "/properties/data/items/properties/rows/items/properties/values",
+                  "$id": "#/properties/data/items/properties/rows/items/properties/values",
                   "type": "array",
                   "items": {
-                    "$id": "/properties/data/items/properties/rows/items/properties/values/items",
+                    "$id": "#/properties/data/items/properties/rows/items/properties/values/items",
                     "type": "object",
+                    "required": [
+                      "value"
+                    ],
                     "properties": {
                       "id": {
-                        "$id": "/properties/data/items/properties/rows/items/properties/values/items/properties/id",
+                        "$id": "#/properties/data/items/properties/rows/items/properties/values/items/properties/id",
                         "type": "integer",
-                        "title": "The Id Schema ",
                         "default": 0,
                         "examples": [
                           2663
                         ]
                       },
                       "value": {
-                        "$id": "/properties/data/items/properties/rows/items/properties/values/items/properties/value",
+                        "$id": "#/properties/data/items/properties/rows/items/properties/values/items/properties/value",
                         "type": [
                           "string",
                           "number"
                         ],
-                        "title": "The Value Schema ",
                         "default": "",
                         "examples": [
                           "SAPEZAL"
