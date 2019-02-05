@@ -132,7 +132,11 @@ class Table extends Component {
                   target !== null &&
                   typeof value.value !== 'number' &&
                   value.id !== undefined && (
-                    <Link className="node-link" to={linkTo(value.id)}>
+                    <Link
+                      className="node-link"
+                      to={linkTo(value.id)}
+                      data-test={`${testId}-cell-link`}
+                    >
                       <svg className="icon icon-check">
                         <use xlinkHref="#icon-outside-link" />
                       </svg>
