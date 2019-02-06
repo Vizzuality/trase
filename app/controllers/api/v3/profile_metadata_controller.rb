@@ -8,7 +8,11 @@ module Api
           @context, @node
         ).call
 
-        render json: {data: @result}
+        render json: @result,
+               root: 'data',
+               serializer: Api::V3::ProfileMetadata::ProfileSerializer,
+               include: {charts: :children},
+               key_transform: :underscore
       end
 
       private

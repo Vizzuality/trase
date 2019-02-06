@@ -305,6 +305,35 @@ paths:
             properties:
               error:
                 type: string
+
+  '/contexts/{context_id}/nodes/{node_id}/profile_metadata':
+    get:
+      tags:
+        - node
+      summary: 'Profile metadata for a node'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          required: true
+          type: integer
+        - name: node_id
+          in: path
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                $ref: '#/definitions/ProfileMetadata'
+
   '/context/{context_id}/nodes/{id}/actor':
     get:
       deprecated: true
@@ -2618,3 +2647,49 @@ definitions:
                   type: number
                 value:
                   type: number
+
+  ProfileMetadata:
+    type: object
+    properties:
+      id:
+        type: integer
+      context_node_type_id:
+        type: integer
+      name:
+        type: string
+      main_topojson_path:
+        type: string
+      main_topojson_root:
+        type: string
+      adm_1_name:
+        type: string
+      adm_1_topojson_path:
+        type: string
+      adm_1_topojson_root:
+        type: string
+      adm_2_name:
+        type: string
+      adm_2_topojson_path:
+        type: string
+      adm_2_topojson_root:
+        type: string
+      charts:
+        type: array
+        items:
+          $ref: '#/definitions/Chart'
+
+  Chart:
+    type: object
+    properties:
+      id:
+        type: integer
+      identifier:
+        type: string
+      title:
+        type: string
+      position:
+        type: integer
+      charts:
+        type: array
+        items:
+          $ref: '#/definitions/Chart'
