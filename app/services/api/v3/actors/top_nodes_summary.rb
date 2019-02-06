@@ -72,12 +72,19 @@ module Api
             include_domestic_consumption: false,
             limit: nil
           )
-          @top_node_values_by_year = top_nodes_list.
+          top_node_values_by_year = top_nodes_list.
             unsorted_list_grouped_by_year(
               attribute,
               include_domestic_consumption: false,
               limit: nil
             ).all
+          @top_node_values_by_year_hash = {}
+          top_node_values_by_year.map do |top_node_value|
+            year = top_node_value['year']
+            @top_node_values_by_year_hash[year] ||= {}
+            @top_node_values_by_year_hash[year][top_node_value['node_id']] =
+              top_node_value['value']
+          end
         end
 
         def nodes_by_year_summary_for_indicator(
@@ -100,10 +107,7 @@ module Api
               node_id: node['node_id'],
               geo_id: node['geo_id'],
               values: years.map do |year|
-                year_node = @top_node_values_by_year.find do |value|
-                  value['node_id'] == node['node_id'] && value['year'] == year
-                end
-                year_node && year_node['value']
+                @top_node_values_by_year_hash[year][node['node_id']]
               end
             }
           end
