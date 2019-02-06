@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Dropdown from 'react-components/shared/dropdown.component';
 import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import Tabs from 'react-components/shared/tabs/tabs.component';
+import Text from 'react-components/shared/text/text.component';
 
 import './dropdown-tab-switcher.scss';
 
@@ -37,7 +38,9 @@ class DropdownTabSwitcher extends Component {
       <div className="c-dropdown-tab-switcher" data-test={testId}>
         <div className="tab-switcher hide-for-small">
           <div className="tab-switcher-title" data-test={`${testId}-title`}>
-            {title}
+            <Text variant="mono" weight="bold" size="lg">
+              {title}
+            </Text>
             {titleTooltip && <Tooltip text={titleTooltip} />}
           </div>
           <Tabs

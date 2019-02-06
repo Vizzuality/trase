@@ -4,7 +4,9 @@
 .c-dropdown-tab-switcher {
   .tab-switcher {
     display: flex;
-    margin-bottom: 31px;
+    flex-direction: column;
+
+    margin-bottom: 30px;
     font-family: $font-family-1;
     font-size: $font-size-x-regular;
     font-weight: bold;
@@ -20,7 +22,7 @@
     }
 
     .tab-switcher-title {
-      margin-right: 21px;
+      margin-bottom: 30px;
     }
   }
 
