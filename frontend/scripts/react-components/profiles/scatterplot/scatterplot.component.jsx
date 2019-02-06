@@ -175,12 +175,11 @@ class Scatterplot extends Component {
   _getFormattedData(i) {
     const { data, node } = this.props;
     const currentComesLast = a => (a.isCurrent ? 1 : -1);
-
     return data
       .map(item => ({
         nodeId: item.id,
         name: item.name,
-        isCurrent: item.name.toUpperCase() === (node.name && node.name.toUpperCase()),
+        isCurrent: item.id === node.id,
         y: item.y,
         x: item.x[i]
       }))
