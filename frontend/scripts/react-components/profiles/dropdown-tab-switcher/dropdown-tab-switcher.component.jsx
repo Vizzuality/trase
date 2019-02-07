@@ -43,13 +43,15 @@ class DropdownTabSwitcher extends Component {
             </Heading>
             {titleTooltip && <Tooltip text={titleTooltip} />}
           </div>
-          <Tabs
-            tabs={items}
-            testId={testId}
-            onSelectTab={this.onSelectTab}
-            itemTabRenderer={itemTabRenderer}
-            selectedTab={items[selectedIndex]}
-          />
+          {items.length > 2 && (
+            <Tabs
+              tabs={items}
+              testId={testId}
+              onSelectTab={this.onSelectTab}
+              itemTabRenderer={itemTabRenderer}
+              selectedTab={items[selectedIndex]}
+            />
+          )}
         </div>
         <div className="dropdown-switcher show-for-small">
           <Dropdown
