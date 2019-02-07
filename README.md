@@ -198,11 +198,28 @@ To enable then, simply execute once: `bin/git/init-hooks`
 +-------+--\  link    | node  |
 |       |   \         |       |
 |       |    \--------+-------+
-|       |             |       |   
+|       |             |       |
 +-------+             +-------+
   column                column
 
 ```
+
+### Components playground
+
+#### Run locally
+- Run `npm run docz:dev`
+It will be served on localhost:8081
+
+#### Build
+- Run `npm run docz:build`
+
+#### Deploy
+- Install surge `npm i -g surge`
+- Run build
+- Go to docs/dist folder
+- Run surge `surge . trase.sh`
+- If asked for login log with trase.vizzuality@gmail.com
+
 
 #### More
 - [Generating CARTO maps](doc/trase/generating_carto_maps.md)
