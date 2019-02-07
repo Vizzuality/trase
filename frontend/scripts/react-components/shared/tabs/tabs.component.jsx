@@ -1,11 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import Text from 'react-components/shared/text/text.component';
 
 import './tabs.scss';
 
 function Tabs(props) {
-  const { tabs, onSelectTab, children, itemTabRenderer, selectedTab, testId, getTabId } = props;
+  const {
+    tabs,
+    onSelectTab,
+    children,
+    itemTabRenderer,
+    selectedTab,
+    testId,
+    getTabId,
+    color
+  } = props;
+  const isSelected = item => getTabId(item) === selectedTab;
   return (
     <div className="c-tabs">
       <div className="tabs-container">
@@ -13,13 +24,22 @@ function Tabs(props) {
           <button
             key={index}
             className={cx('tab', {
-              '-selected': getTabId(item) === selectedTab
+              '-selected': isSelected(item),
+              [color]: !!color
             })}
             data-key={item}
             onClick={() => onSelectTab(item, index)}
             data-test={`${testId}-item`}
           >
-            {itemTabRenderer ? itemTabRenderer(item, index) : item}
+            <Text
+              as="span"
+              color={isSelected(item) ? color : 'grey'}
+              weight="bold"
+              size="rg"
+              variant="mono"
+            >
+              {itemTabRenderer ? itemTabRenderer(item, index) : item}
+            </Text>
           </button>
         ))}
       </div>
@@ -30,16 +50,18 @@ function Tabs(props) {
 
 Tabs.defaultProps = {
   testId: 'tab',
-  getTabId: x => x
+  getTabId: x => x,
+  color: 'white'
 };
 
 Tabs.propTypes = {
   testId: PropTypes.string,
   getTabId: PropTypes.func,
   itemTabRenderer: PropTypes.func,
-  tabs: PropTypes.array.isRequired,
+  tabs: PropTypes.arrayOf(PropTypes.string).isRequired,
   children: PropTypes.any,
   onSelectTab: PropTypes.func.isRequired,
+  color: PropTypes.string,
   selectedTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 

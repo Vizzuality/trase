@@ -15,7 +15,7 @@ class SustainabilityTableWidget extends React.PureComponent {
   getTitle(nodeName) {
     const { year, type } = this.props;
     if (type === 'indicators') {
-      return 'Sustainability indicators:';
+      return 'Sustainability indicators';
     }
 
     return (

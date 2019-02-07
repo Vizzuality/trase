@@ -68,14 +68,6 @@ $small-line-chart-width: 840px;
     }
   }
 
-  .c-area-table {
-    @media print {
-      .tab-switcher-title {
-        font-size: $font-size-xx-regular;
-      }
-    }
-  }
-
   .c-top-map,
   .c-top-municipalities {
     padding: 52px 0;

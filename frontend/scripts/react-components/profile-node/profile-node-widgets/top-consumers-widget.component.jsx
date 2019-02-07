@@ -88,7 +88,7 @@ class TopConsumersWidget extends React.PureComponent {
                     variant="mono"
                     weight="bold"
                     as="h3"
-                    size="sm"
+                    size="md"
                     data-test={`${testId}-title`}
                   >
                     {this.getTitle(jurisdictionName)}

@@ -89,7 +89,7 @@ class TopDestinationsChart extends React.PureComponent {
         <div className="top-destinations-chart-container">
           <div>
             {type === 'countries' ? (
-              <Heading variant="mono" weight="bold" as="h3" size="sm" data-test={`${testId}-title`}>
+              <Heading variant="mono" weight="bold" as="h3" size="md" data-test={`${testId}-title`}>
                 {this.getTitle()}
               </Heading>
             ) : (
