@@ -16,5 +16,6 @@ export default {
       resolve: webpackConfig.resolve,
       module: webpackConfig.module
     }),
-  plugins: []
+  plugins: [],
+  codeSandbox: false
 };

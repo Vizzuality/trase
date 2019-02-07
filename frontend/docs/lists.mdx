@@ -1,7 +1,7 @@
 ---
 Lists
 ---
-import { PropsTable } from 'docz'
+import { PropsTable, Playground } from 'docz'
 import { State } from 'react-powerplug';
 import GridList from 'react-components/shared/grid-list/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
@@ -136,3 +136,27 @@ import indicators from './mock-data/indicators-list.json';
 
 #### GridListItem props
 <PropsTable of={GridListItem} />
+
+<Playground>
+  <State initial={{ active: [] }}>
+    {({ state, setState }) => (
+      <GridList
+          width={760}
+          height={200}
+          rowHeight={50}
+          columnWidth={190}
+          columnCount={4}
+          items={countries}
+        >
+          {itemProps => (
+            <GridListItem
+              {...itemProps}
+              isActive={state.active.includes(itemProps.item && itemProps.item.id)}
+              enableItem={() => setState({ active: [...state.active, itemProps.item.id] })}
+              disableItem={() => setState({ active: state.active.filter(i => i !== itemProps.item.id) })}
+            />
+          )}
+        </GridList>
+    )}
+    </State>
+</Playground>

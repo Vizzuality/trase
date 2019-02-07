@@ -1,7 +1,7 @@
 ---
 name: Inputs
 ---
-import { PropsTable } from 'docz'
+import { PropsTable, Playground } from 'docz'
 import SearchInput from 'react-components/shared/search-input/search-input.component';
 import 'styles/_docz.scss';
 import countries from './mock-data/countries-list.json';
@@ -28,3 +28,13 @@ import countries from './mock-data/countries-list.json';
     onSearchTermChange={() => {}}
   />
 </div>
+
+<Playground>
+  <SearchInput
+    size="sm"
+    items={countries}
+    placeholder="Search country"
+    onSelect={() => {}}
+    onSearchTermChange={() => {}}
+  />
+</Playground>
