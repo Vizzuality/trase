@@ -2525,6 +2525,8 @@ definitions:
           properties:
             name:
               type: string
+            profile:
+              type: boolean
             included_columns:
               type: array
               items:

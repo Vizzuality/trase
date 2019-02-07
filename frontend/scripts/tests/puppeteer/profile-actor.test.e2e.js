@@ -115,15 +115,17 @@ describe('Profile actor - Full data', () => {
   });
 
   it('Deforestation risk widget loads successfully', async () => {
-    expect.assertions(6);
+    expect.assertions(9);
 
     await testProfileMultiTable(page, expect, {
       tabsLength: 2,
       rowsLength: 10,
-      columnsLength: 4,
+      columnsLength: 3,
+      linkName: '/profile-place',
+      linkQuery: { nodeId: '10793', year: '2015', contextId: '1' },
       firstColumn: 'municipality',
       testId: 'deforestation-risk',
-      firstRow: 'NOVA MUTUM218194N/A',
+      firstRow: 'CAMPO NOVO DO PARECIS8999',
       title: "deforestation risk associated with bunge's top sourcing regions in 2015:"
     });
   });

@@ -46,7 +46,7 @@ describe('Profile place - Full data', () => {
       firstColumn: 'score',
       testId: 'sustainability-indicators',
       firstRow: 'Territorial deforestation7090',
-      title: 'sustainability indicators:'
+      title: 'sustainability indicators'
     });
   });
 

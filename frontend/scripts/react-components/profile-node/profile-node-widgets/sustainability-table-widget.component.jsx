@@ -15,7 +15,7 @@ class SustainabilityTableWidget extends React.PureComponent {
   getTitle(nodeName) {
     const { year, type } = this.props;
     if (type === 'indicators') {
-      return 'Sustainability indicators:';
+      return 'Sustainability indicators';
     }
 
     return (
@@ -25,6 +25,10 @@ class SustainabilityTableWidget extends React.PureComponent {
         <span className="notranslate">{year}</span>:
       </span>
     );
+  }
+
+  showLink(item) {
+    return item.profile ? 'profileNode' : null;
   }
 
   render() {
@@ -91,7 +95,7 @@ class SustainabilityTableWidget extends React.PureComponent {
                     type={type === 'indicators' ? 't_head_places' : 't_head_actors'}
                     data={data[mainQuery]}
                     tabsTitle={this.getTitle(nodeName)}
-                    target={item => (item.name === 'Municipalities' ? 'profileNode' : null)}
+                    target={this.showLink}
                     targetPayload={targetPayload}
                     testId={`${testId}-multi`}
                   />
