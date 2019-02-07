@@ -43,7 +43,7 @@ class DropdownTabSwitcher extends Component {
             </Heading>
             {titleTooltip && <Tooltip text={titleTooltip} />}
           </div>
-          {items.length > 2 && (
+          {items.length > 1 && (
             <Tabs
               tabs={items}
               testId={testId}
