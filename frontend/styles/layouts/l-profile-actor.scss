@@ -1,6 +1,7 @@
 @import 'styles/settings';
 
-$small-line-chart-width: 840px;
+$medium-line-chart-width: 490px;
+$large-line-chart-width: 840px;
 
 .l-profile-actor {
   position: relative;
@@ -146,14 +147,23 @@ $small-line-chart-width: 840px;
     align-items: flex-start;
   }
 
-  .top-destinations-chart-container {
+  .top-destinations-chart-container,
+  .top-destinations-chart-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%;
+  }
 
-    @media screen and (min-width: $small-line-chart-width) {
-      padding: 0 0 60px;
+  .top-destinations-chart-container {
+    height: 100%;
+    padding: 0 0 60px;
+
+    @media screen and (min-width: $medium-line-chart-width) and (max-width: $breakpoint-foundation-small) {
+      padding: 0;
+    }
+
+    @media screen and (min-width: $large-line-chart-width) {
+      padding: 0;
     }
   }
 

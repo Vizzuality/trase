@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { defaultMemoize } from 'reselect';
 import Widget from 'react-components/widgets/widget.component';
 import { GET_ACTOR_EXPORTING_COMPANIES, GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 import Scatterplot from 'react-components/profiles/scatterplot/scatterplot.component';
@@ -11,6 +12,10 @@ class ImportingCompaniesWidget extends React.PureComponent {
   state = {
     tooltipConfig: null
   };
+
+  getDimensions = defaultMemoize((dimensionsX, companies) =>
+    dimensionsX.filter((_, index) => companies.some(company => company.x[index] !== null))
+  );
 
   getScatterplots(dimensionsX, title) {
     const { printMode } = this.props;
@@ -71,7 +76,12 @@ class ImportingCompaniesWidget extends React.PureComponent {
           const { dimensionsX, companies } = data[GET_ACTOR_EXPORTING_COMPANIES];
           const { nodeName, columnName } = data[GET_NODE_SUMMARY_URL];
           const verb = columnName === 'EXPORTER' ? 'exporting' : 'importing';
-          const dimensions = dimensionsX.slice(0, 3);
+          const dimensions = this.getDimensions(dimensionsX, companies);
+
+          if (dimensions.length === 0) {
+            return null;
+          }
+
           const title = `Comparing companies ${verb} ${commodityName} from ${countryName} in ${year}`;
           const scatterplots = this.getScatterplots(dimensions, title);
           return (
