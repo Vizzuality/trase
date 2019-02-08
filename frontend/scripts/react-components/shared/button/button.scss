@@ -14,6 +14,10 @@
   cursor: pointer;
   white-space: nowrap;
 
+  &:active {
+    opacity: 0.8;
+  }
+
   > .button-text-container {
     max-width: 100%;
     overflow: hidden;
@@ -57,16 +61,22 @@
     color: $medium-pink;
   }
 
-  &.color-transparent {
-    border-color: $medium-pink;
-    background-color: transparent;
-    color: $medium-pink;
-  }
-
   &.color-gray {
     border-color: transparent;
     background-color: $gray;
     color: $charcoal-grey;
+  }
+
+  &.color-charcoal {
+    border-color: transparent;
+    background-color: $charcoal-grey;
+    color: $white;
+  }
+
+  &.color-pink-transparent {
+    border-color: $medium-pink;
+    background-color: transparent;
+    color: $medium-pink;
   }
 
   &.color-gray-transparent {
@@ -79,12 +89,6 @@
     border-color: $charcoal-grey-faded;
     background-color: transparent;
     color: $charcoal-grey;
-  }
-
-  &.color-charcoal {
-    border-color: transparent;
-    background-color: $charcoal-grey;
-    color: $white;
   }
 
   &.disabled,

@@ -42,7 +42,6 @@ class DashboardIndicators extends React.PureComponent {
       dynamicSentenceParts
     } = this.props;
     const { activeItemInfo } = this.state;
-
     return (
       <div className="c-dashboard-panel" onClick={this.resetActiveItemInfo}>
         <div className="dashboard-indicators-content">
