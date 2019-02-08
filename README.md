@@ -206,6 +206,8 @@ To enable then, simply execute once: `bin/git/init-hooks`
 
 ### Components playground
 
+Online in: http://trase.surge.sh
+
 #### Run locally
 - Run `npm run docz:dev`
 It will be served on localhost:8081
@@ -218,8 +220,7 @@ It will be served on localhost:8081
 - Run build
 - Go to docs/dist folder
 - Run surge `surge . trase.sh`
-- If asked for login log with trase.vizzuality@gmail.com
-
+- If asked for login use trase.vizzuality@gmail.com
 
 #### More
 - [Generating CARTO maps](doc/trase/generating_carto_maps.md)
