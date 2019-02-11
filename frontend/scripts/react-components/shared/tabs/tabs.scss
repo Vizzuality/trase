@@ -30,5 +30,10 @@
 
       background-color: $charcoal-grey;
     }
+
+    @media print {
+      display: none
+    }
   }
+
 }
