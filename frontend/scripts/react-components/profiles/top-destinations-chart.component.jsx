@@ -101,10 +101,7 @@ class TopDestinationsChart extends React.PureComponent {
               />
             )}
           </div>
-          <div
-            className="top-destinations-chart-container"
-            style={{ ...heightStyle, width: '100%' }}
-          >
+          <div className="top-destinations-chart-wrapper" style={{ ...heightStyle, width: '100%' }}>
             <TranslatedLine
               onLinkClick={this.handleLinkClick}
               profileType={profileType}

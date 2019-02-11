@@ -45,12 +45,12 @@ json:
   - url: /api/v3/contexts/1/linked_nodes
     name: linked_nodes
     queries:
-      - params: years[]=2015&nodes_ids[]=440&nodes_ids[]=2759&target_column_id=3
+      - params: years[]=2015&nodes_ids[]=32228&nodes_ids[]=10901&target_column_id=3
         name: brazil_soy_sorriso_bunge
   - url: /api/v3/contexts/2/linked_nodes
     name: linked_nodes
     queries:
-      - params: years[]=2015&nodes_ids[]=587&nodes_ids[]=3415&target_column_id=9
+      - params: years[]=2015&nodes_ids[]=29138&nodes_ids[]=3415&target_column_id=9
         name: paraguay_soy_alto_parana_cargill
   - url: /api/v3/contexts/1/columns
     name: columns
@@ -85,20 +85,85 @@ json:
     name: nodes
     queries:
       - name: paraguay_soy
-  - url: /api/v3/contexts/1/nodes/2759/place
-    name: place_node_attributes
+
+  - url: /api/v3/contexts/1/places/10901/basic_attributes?year=2017
+    name: place_basic_attributes
     queries:
       - name: sorriso
-  - url: /api/v3/contexts/1/nodes/2262/place
-    name: place_node_attributes
+  - url: /api/v3/contexts/1/places/10901/indicators?year=2017
+    name: place_indicators
+    queries:
+      - name: sorriso
+  - url: /api/v3/contexts/1/places/10901/top_consumer_actors?year=2017
+    name: place_top_consumer_actors
+    queries:
+      - name: sorriso
+  - url: /api/v3/contexts/1/places/10901/top_consumer_countries?year=2017
+    name: place_top_consumer_countries
+    queries:
+      - name: sorriso
+  - url: /api/v3/contexts/1/places/10901/trajectory_deforestation?year=2017
+    name: place_trajectory_deforestation
+    queries:
+      - name: sorriso
+  - url: /api/v3/contexts/1/places/10651/basic_attributes?year=2017
+    name: place_basic_attributes
     queries:
       - name: querencia
-  - url: /api/v3/contexts/1/nodes/440/actor
-    name: actor_node_attributes
+  - url: /api/v3/contexts/1/places/10651/indicators?year=2017
+    name: place_indicators
+    queries:
+      - name: querencia
+  - url: /api/v3/contexts/1/places/10651/top_consumer_actors?year=2017
+    name: place_top_consumer_actors
+    queries:
+      - name: querencia
+  - url: /api/v3/contexts/1/places/10651/top_consumer_countries?year=2017
+    name: place_top_consumer_countries
+    queries:
+      - name: querencia
+  - url: /api/v3/contexts/1/places/10651/trajectory_deforestation?year=2017
+    name: place_trajectory_deforestation
+    queries:
+      - name: querencia
+  - url: /api/v3/contexts/1/actors/32228/basic_attributes?year=2017
+    name: actor_basic_attributes
     queries:
       - name: bunge_exporter
-  - url: /api/v3/contexts/1/nodes/588/actor
-    name: actor_node_attributes
+  - url: /api/v3/contexts/1/actors/32228/exporting_companies?year=2017
+    name: actor_exporting_companies
+    queries:
+      - name: bunge_exporter
+  - url: /api/v3/contexts/1/actors/32228/sustainability?year=2017
+    name: actor_sustainability
+    queries:
+      - name: bunge_exporter
+  - url: /api/v3/contexts/1/actors/32228/top_countries?year=2017
+    name: actor_top_countries
+    queries:
+      - name: bunge_exporter
+  - url: /api/v3/contexts/1/actors/32228/top_sources?year=2017
+    name: actor_top_sources
+    queries:
+      - name: bunge_exporter
+  - url: /api/v3/contexts/1/actors/29139/basic_attributes?year=2017
+    name: actor_basic_attributes
+    queries:
+      - name: cargill_importer
+  - url: /api/v3/contexts/1/actors/29139/exporting_companies?year=2017
+    name: actor_exporting_companies
+    queries:
+      - name: cargill_importer
+  - url: /api/v3/contexts/1/actors/29139/sustainability?year=2017
+    name: actor_sustainability
+    queries:
+      - name: cargill_importer
+  - url: /api/v3/contexts/1/actors/29139/top_countries?year=2017
+    name: actor_top_countries
+    queries:
+      - name: cargill_importer
+  - url: /api/v3/contexts/1/actors/29139/top_sources?year=2017
+    name: actor_top_sources
     queries:
       - name: cargill_importer
   - url: /api/v3/contexts/1/nodes
@@ -116,17 +181,17 @@ json:
     queries:
       - params: start_year=2015&end_year=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10
         name: brazil_soy_2015_2015
-      - params: start_year=2015&end_year=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&biome_filter_id=652
+      - params: start_year=2015&end_year=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&biome_filter_id=11444
         name: brazil_soy_2015_2015_biome
-      - params: start_year=2015&end_year=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&selected_nodes=587,588
+      - params: start_year=2015&end_year=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&selected_nodes=29138,29139
         name: brazil_soy_2015_2015_expand
       - params: start_year=2015&end_year=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_ind=PROTECTED_DEFICIT_PERC
         name: brazil_soy_2015_2015_recolor_by_ind
       - params: start_year=2015&end_year=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_qual=ZERO_DEFORESTATION
         name: brazil_soy_2015_2015_recolor_by_qual
-      - params: start_year=2015&end_year=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_ind=PROTECTED_DEFICIT_PERC&biome_filter_id=652&selected_nodes=587,588
+      - params: start_year=2015&end_year=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_ind=PROTECTED_DEFICIT_PERC&biome_filter_id=652&selected_nodes=29138,29139
         name: brazil_soy_2015_2015_recolor_by_ind_biome_expand
-      - params: start_year=2015&end_year=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_qual=ZERO_DEFORESTATION&biome_filter_id=652&selected_nodes=587,588
+      - params: start_year=2015&end_year=2015&include_columns=3,6,7,8&flow_quant=Volume&n_nodes=10&flow_qual=ZERO_DEFORESTATION&biome_filter_id=652&selected_nodes=29138,29139
         name: brazil_soy_2015_2015_recolor_by_qual_biome_expand
   - url: /api/v3/contexts/2/flows
     name: flows
