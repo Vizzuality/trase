@@ -1,8 +1,12 @@
 /* eslint-disable no-console */
 
+import { toMatchImageSnapshot } from 'jest-image-snapshot';
+import path from 'path';
 import { CONTEXTS, PROFILE_NODE_ACTOR } from './mocks';
 import { getRequestMockFn } from './utils';
 import { testProfileSpinners, testProfileSummary, testProfileMultiTable } from './shared';
+
+expect.extend({ toMatchImageSnapshot });
 
 const BASE_URL = 'http://0.0.0.0:8081';
 const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;

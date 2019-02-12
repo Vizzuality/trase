@@ -1,4 +1,6 @@
 /* eslint-disable no-console */
+import { toMatchImageSnapshot } from 'jest-image-snapshot';
+import path from 'path';
 import { CONTEXTS, PROFILE_NODE_PLACE } from './mocks';
 import { getRequestMockFn } from './utils';
 import {
@@ -7,6 +9,9 @@ import {
   testProfileMultiTable,
   testProfileMiniSankey
 } from './shared';
+
+
+expect.extend({ toMatchImageSnapshot });
 
 const BASE_URL = 'http://0.0.0.0:8081';
 const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
@@ -87,4 +92,5 @@ describe('Profile place - Full data', () => {
       flowsLength: 10
     });
   });
+
 });
