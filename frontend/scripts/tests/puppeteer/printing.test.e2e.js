@@ -12,6 +12,8 @@ const TIMEOUT = 60000 || process.env.PUPETEER_TIMEOUT || 30000;
 jest.setTimeout(TIMEOUT);
 const { page } = global;
 
+const customDiffConfig = { threshold: 0.1 };
+
 beforeAll(async () => {
   await page.setRequestInterception(true);
   const mockRequests = await getRequestMockFn([CONTEXTS, PROFILE_NODE_ACTOR, PROFILE_NODE_PLACE]);
@@ -34,8 +36,8 @@ describe('Prints the PDF correctly', () => {
       fullPage: true
     });
     expect(screenshot).toMatchImageSnapshot({
-      customSnapshotIdentifier: 'profile-actor',
-      customDiffConfig: { threshold: 0.01 }
+      customDiffConfig,
+      customSnapshotIdentifier: 'profile-actor'
     });
   });
 
@@ -55,8 +57,8 @@ describe('Prints the PDF correctly', () => {
       fullPage: true
     });
     expect(screenshot).toMatchImageSnapshot({
-      customSnapshotIdentifier: 'profile-place',
-      customDiffConfig: { threshold: 0.01 }
+      customDiffConfig,
+      customSnapshotIdentifier: 'profile-place'
     });
   });
 });
