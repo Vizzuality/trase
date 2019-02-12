@@ -1,4 +1,6 @@
 // jest.config.js
+require('@babel/polyfill');
+
 module.exports = {
   rootDir: 'scripts',
   moduleFileExtensions: ['js', 'jsx', 'json'],
