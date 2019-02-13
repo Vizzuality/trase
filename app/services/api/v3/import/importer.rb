@@ -18,11 +18,12 @@ module Api
           Api::V3::BaseModel.transaction do
             backup
             import
-            @database_update.finished_with_success(@stats.to_h)
           end
+          yield if block_given?
           refresh
           Cache::Cleaner.clear_all
           Cache::Warmer::UrlsFile.generate
+          @database_update.finished_with_success(@stats.to_h)
         rescue => e
           @database_update.finished_with_error(e, @stats.to_h)
           raise # re-raise same error
