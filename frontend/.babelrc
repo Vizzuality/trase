@@ -41,6 +41,7 @@
         "@babel/plugin-transform-exponentiation-operator",
         ["@babel/plugin-proposal-class-properties", { "spec": true }],
         "@babel/plugin-transform-modules-commonjs",
+        "@babel/plugin-transform-runtime",
         ["module-resolver", {
           "alias": {
             "scripts": "./scripts",
