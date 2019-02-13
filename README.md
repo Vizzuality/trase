@@ -142,6 +142,8 @@ If you are using the included development server, you can set those variables in
 We use jest and puppeteer for the end to end tests. There are some mocks for the requests in the puppeteer/mocks folder. Every slash (/) and params (? &) are replaced by a hyphen in the file name. i.e:
 api-v3-contexts-year-2015 will mock api/v3/contexts?year=2015
 
+The tests have to be run while the js server is running
+
 Run all tests with:
 ```
 npm run test
