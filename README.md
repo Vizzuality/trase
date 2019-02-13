@@ -139,6 +139,30 @@ If you are using the included development server, you can set those variables in
 
 [![Build Status](https://travis-ci.org/Vizzuality/trase.svg?branch=master)](https://travis-ci.org/Vizzuality/trase)
 
+We use jest and puppeteer for the end to end tests. There are some mocks for the requests in the puppeteer/mocks folder. Every slash (/) and params (? &) are replaced by a hyphen in the file name. i.e:
+api-v3-contexts-year-2015 will mock api/v3/contexts?year=2015
+
+Run all tests with:
+```
+npm run test
+```
+
+Run only unit tests:
+```
+npm run unit
+```
+
+Run only end to end:
+```
+npm run e2e
+```
+
+If you need to change some snapshot due to changes in the page and the test is failing:
+
+```
+npm run e2e:update
+```
+
 ### API
 
 ```

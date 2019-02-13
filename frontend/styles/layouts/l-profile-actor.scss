@@ -18,6 +18,12 @@ $large-line-chart-width: 840px;
   @media print {
     padding: 0;
     background-color: $white;
+
+    .c-tabs {
+      .tab {
+        display: none
+      }
+    }
   }
 
   section:nth-of-type(2n-1) {
