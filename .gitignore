@@ -55,4 +55,5 @@ frontend/tmp
 frontend/gis/cartodb/cartodb-config.json
 
 frontend/scripts/coverage
+package-lock.json
 
