@@ -85,17 +85,14 @@ class DashboardElement extends React.PureComponent {
   renderDynamicSentence() {
     const { dynamicSentenceParts } = this.props;
     if (dynamicSentenceParts) {
-      return dynamicSentenceParts.map(
-        (part, i) =>
-          console.log('dyyy', dynamicSentenceParts, part.prefix + part.value + i) || (
-            <span key={part.prefix + part.value + i}>
-              {`${part.prefix} `}
-              {part.value && (
-                <span className="dashboard-element-title-item notranslate">{part.value}</span>
-              )}
-            </span>
-          )
-      );
+      return dynamicSentenceParts.map((part, i) => (
+        <span key={part.prefix + part.value + i}>
+          {`${part.prefix} `}
+          {part.value && (
+            <span className="dashboard-element-title-item notranslate">{part.value}</span>
+          )}
+        </span>
+      ));
     }
 
     return 'Dashboards';
