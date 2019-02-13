@@ -572,7 +572,7 @@ const toolReducerTypes = PropTypes => ({
   unmergedLinks: PropTypes.arrayOf(PropTypes.object).isRequired,
   visibleNodes: PropTypes.arrayOf(PropTypes.object).isRequired,
   visibleNodesByColumn: PropTypes.arrayOf(PropTypes.object).isRequired,
-  loadedFlowsContextId: PropTypes.string
+  loadedFlowsContextId: PropTypes.number
 });
 
 export default createReducer(toolInitialState, toolReducer, toolReducerTypes);

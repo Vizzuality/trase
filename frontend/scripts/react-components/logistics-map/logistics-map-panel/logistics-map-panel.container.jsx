@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { connect } from 'react-redux';
 import {
   updateQueryParams,
@@ -54,6 +56,12 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   filterItems: setCompanySearchTerm,
   setActiveItems: items => updateQueryParams({ companies: items })
+};
+
+LogisticsMapPanelContainer.propTypes = {
+  activeItems: PropTypes.array,
+  close: PropTypes.bool,
+  setActiveItems: PropTypes.func
 };
 
 export default connect(

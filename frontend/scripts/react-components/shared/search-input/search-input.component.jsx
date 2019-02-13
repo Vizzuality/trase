@@ -144,6 +144,7 @@ SearchInput.propTypes = {
   items: PropTypes.array.isRequired,
   resultClassName: PropTypes.string,
   placeholderSmall: PropTypes.string,
+  searchOptions: PropTypes.object,
   onSelect: PropTypes.func.isRequired,
   onSearchTermChange: PropTypes.func.isRequired
 };

@@ -100,7 +100,11 @@ LogisticsMap.propTypes = {
   buildEvents: PropTypes.func,
   commodity: PropTypes.string,
   activeModal: PropTypes.string,
-  activeLayers: PropTypes.array
+  activeLayers: PropTypes.array,
+  bounds: PropTypes.object,
+  getCurrentPopUp: PropTypes.func.isRequired,
+  setLayerActive: PropTypes.func.isRequired,
+  mapPopUp: PropTypes.object
 };
 
 export default LogisticsMap;

@@ -72,7 +72,13 @@ LogisticsMapPanel.getButtonText = items => {
 
 LogisticsMapPanel.propTypes = {
   items: PropTypes.array,
-  hideFooter: PropTypes.bool
+  hideFooter: PropTypes.bool,
+  enableItem: PropTypes.bool,
+  disableItem: PropTypes.bool,
+  filterItems: PropTypes.array,
+  searchResults: PropTypes.array,
+  activeItems: PropTypes.array,
+  goToMap: PropTypes.func
 };
 
 export default LogisticsMapPanel;
