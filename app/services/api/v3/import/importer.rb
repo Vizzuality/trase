@@ -20,9 +20,10 @@ module Api
             import
           end
           yield if block_given?
-          refresh
+          refresh_materialized_views_now
           Cache::Cleaner.clear_all
           Cache::Warmer::UrlsFile.generate
+          refresh_precomputed_downloads_later
           @database_update.finished_with_success(@stats.to_h)
         rescue => e
           @database_update.finished_with_error(e, @stats.to_h)
@@ -98,14 +99,16 @@ module Api
           end
         end
 
-        def refresh
+        def refresh_materialized_views_now
           # synchronously, with dependencies
           [
             Api::V3::Readonly::Attribute,
             Api::V3::Readonly::Node,
-            Api::V3::Readonly::DownloadFlow,
             Api::V3::Readonly::Dashboards::FlowPath
           ].each { |mview| mview.refresh(sync: true, skip_dependents: true) }
+          Api::V3::Readonly::DownloadFlow.refresh(
+            sync: true, skip_dependents: true, skip_precompute: true
+          )
           # synchronously, skip dependencies (already refreshed)
           [
             Api::V3::Readonly::ChartAttribute,
@@ -120,6 +123,10 @@ module Api
             Api::V3::Readonly::Dashboards::Company,
             Api::V3::Readonly::Dashboards::Destination
           ].each { |mview| mview.refresh(sync: true, skip_dependencies: true) }
+        end
+
+        def refresh_precomputed_downloads_later
+          Api::V3::Download::PrecomputedDownload.refresh_later
         end
       end
     end
