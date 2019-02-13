@@ -12,7 +12,10 @@ const TIMEOUT = 60000 || process.env.PUPETEER_TIMEOUT || 30000;
 jest.setTimeout(TIMEOUT);
 const { page } = global;
 
-const customDiffConfig = { threshold: 0.1 };
+const snapshotOptions = {
+  failureThreshold: '0.05',
+  failureThresholdType: 'percent'
+};
 
 beforeAll(async () => {
   await page.setRequestInterception(true);
@@ -20,7 +23,7 @@ beforeAll(async () => {
   page.on('request', mockRequests);
 });
 
-describe('Prints the PDF correctly', () => {
+describe('Prints the actor profile PDF correctly', () => {
   it('Prints actor profile - Full data', async () => {
     await page.goto(
       `${BASE_URL}/profile-actor?lang=en&nodeId=441&contextId=1&year=2015&print=true`
@@ -36,12 +39,12 @@ describe('Prints the PDF correctly', () => {
       fullPage: true
     });
     expect(screenshot).toMatchImageSnapshot({
-      customDiffConfig,
-      customSnapshotIdentifier: 'profile-actor'
+      customSnapshotIdentifier: 'profile-actor',
+      ...snapshotOptions
     });
   });
 
-  it('Prints Place profile - Full data', async () => {
+  it('Prints place profile PDF', async () => {
     await page.goto(
       `${BASE_URL}/profile-place?lang=en&nodeId=2759&contextId=1&year=2015&print=true`
     );
@@ -57,8 +60,8 @@ describe('Prints the PDF correctly', () => {
       fullPage: true
     });
     expect(screenshot).toMatchImageSnapshot({
-      customDiffConfig,
-      customSnapshotIdentifier: 'profile-place'
+      customSnapshotIdentifier: 'profile-place',
+      ...snapshotOptions
     });
   });
 });
