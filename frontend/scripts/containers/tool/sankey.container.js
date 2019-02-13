@@ -8,7 +8,7 @@ import {
   expandNodeSelection,
   resetState
 } from 'actions/tool.actions';
-import connect from 'connect';
+import connect from 'base/connect';
 import Sankey from 'components/tool/sankey.component';
 
 const canExpandSelection = ({ expandedNodesIds, selectedNodesIds }) =>

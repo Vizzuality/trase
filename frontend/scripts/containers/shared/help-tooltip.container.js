@@ -1,4 +1,4 @@
-import connect from 'connect';
+import connect from 'base/connect';
 import Tooltip from 'components/shared/help-tooltip.component';
 
 const mapMethodsToState = state => ({

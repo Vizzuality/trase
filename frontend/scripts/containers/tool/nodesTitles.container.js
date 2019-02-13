@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
 import { selectNode, navigateToProfile, resetState } from 'actions/tool.actions';
-import connect from 'connect';
+import connect from 'base/connect';
 import NodesTitles from 'components/tool/nodesTitles.component';
 import {
   getSelectedNodesData,

@@ -1,4 +1,4 @@
-import connect from 'connect';
+import connect from 'base/connect';
 import ModalComponent from 'components/tool/modal.component';
 import { closeStoryModal } from 'actions/app.actions';
 

@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-import connect from 'connect';
+import connect from 'base/connect';
 import Titlebar from 'components/tool/titlebar.component';
 import {
   getSelectedNodesData,

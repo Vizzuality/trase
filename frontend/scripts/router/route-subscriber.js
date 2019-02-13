@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-import connect from 'connect';
+import connect from 'base/connect';
 
 export default function routeSubscriber(store) {
   class RouterComponent {
