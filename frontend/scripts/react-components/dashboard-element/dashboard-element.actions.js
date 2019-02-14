@@ -1,3 +1,4 @@
+import axios from 'axios';
 /* eslint-disable camelcase */
 import {
   getURLFromParams,
@@ -76,8 +77,9 @@ export const getDashboardPanelData = (optionsType, options) => (dispatch, getSta
     payload: { key, tab, data: null, meta: null, loading: true }
   });
 
-  fetch(url)
-    .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
+  axios
+    .get(url)
+    .then(res => (res.status === 200 ? res.data : Promise.reject(res.statusText)))
     .then(json =>
       dispatch({
         type: DASHBOARD_ELEMENT__SET_PANEL_DATA,
@@ -96,8 +98,9 @@ export const getDashboardPanelSectionTabs = options_type => (dispatch, getState)
   const params = getDashboardPanelParams(getState().dashboardElement, options_type);
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_TABS_URL, params);
 
-  fetch(url)
-    .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
+  axios
+    .get(url)
+    .then(res => (res.status === 200 ? res.data : Promise.reject(res.statusText)))
     .then(json =>
       dispatch({
         type: DASHBOARD_ELEMENT__SET_PANEL_TABS,
@@ -165,8 +168,9 @@ export const getMoreDashboardPanelData = (optionsType, activeTab, direction) => 
 
   const timeoutId = setTimeout(() => dispatch(setDashboardPanelLoadingItems(true)), 300);
 
-  fetch(url)
-    .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
+  axios
+    .get(url)
+    .then(res => (res.status === 200 ? res.data : Promise.reject(res.statusText)))
     .then(json => {
       clearTimeout(timeoutId);
       setTimeout(() => dispatch(setDashboardPanelLoadingItems(false)), 1000);
@@ -204,8 +208,9 @@ export const getDashboardPanelSearchResults = query => (dispatch, getState) => {
   const params = { ...filters, q: query };
   const url = getURLFromParams(GET_DASHBOARD_SEARCH_RESULTS_URL, params);
 
-  fetch(url)
-    .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
+  axios
+    .get(url)
+    .then(res => (res.status === 200 ? res.data : Promise.reject(res.statusText)))
     .then(json =>
       dispatch({
         type: DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
