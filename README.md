@@ -146,23 +146,23 @@ The tests have to be run while the js server is running
 
 Run all tests with:
 ```
-npm run test
+yarn test
 ```
 
 Run only unit tests:
 ```
-npm run unit
+yarn unit
 ```
 
 Run only end to end:
 ```
-npm run e2e
+yarn e2e
 ```
 
 If you need to change some snapshot due to changes in the page and the test is failing:
 
 ```
-npm run e2e:update
+yarn e2e:update
 ```
 
 ### API
@@ -243,7 +243,7 @@ It will be served on localhost:8081
 - Run `yarn docz:build`
 
 #### Deploy
-- Install surge `yarn i -g surge`
+- Install surge `yarn add -g surge`
 - Run build
 - Go to docs/dist folder
 - Run surge `surge . trase.sh`
