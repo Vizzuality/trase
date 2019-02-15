@@ -30,7 +30,7 @@ function SourcesPanel(props) {
   return (
     <React.Fragment>
       <SearchInput
-        variant="secondary"
+        variant="bordered"
         size="sm"
         className="dashboard-panel-search"
         items={searchSources}
