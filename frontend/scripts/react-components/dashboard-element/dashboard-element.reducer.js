@@ -168,6 +168,13 @@ const dashboardElementReducer = {
     const panelName = `${panel}Panel`;
     return {
       ...state,
+      data: {
+        ...state.data,
+        [panel]: {
+          ...state.data[panel],
+          [activeTab.id]: null
+        }
+      },
       activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
@@ -182,6 +189,13 @@ const dashboardElementReducer = {
     const activeTab = state.tabs[panel].find(tab => tab.id === activeItem.nodeTypeId);
     return {
       ...state,
+      data: {
+        ...state.data,
+        [panel]: {
+          ...state.data[panel],
+          [activeTab.id]: null
+        }
+      },
       activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
