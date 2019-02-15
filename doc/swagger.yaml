@@ -2684,10 +2684,15 @@ definitions:
     properties:
       id:
         type: integer
+      chart_type:
+        type: string
+        example: 'tabs_table'
       identifier:
         type: string
+        example: 'actor_sustainability_table'
       title:
         type: string
+        example: 'Deforestation risk associated with top sourcing regions'
       position:
         type: integer
       charts:

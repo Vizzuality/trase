@@ -145,6 +145,7 @@
             "title": "The Items Schema",
             "required": [
               "id",
+              "chart_type",
               "identifier",
               "title",
               "position",
@@ -158,6 +159,15 @@
                 "default": 0,
                 "examples": [
                   43
+                ]
+              },
+              "chart_type": {
+                "$id": "#/properties/data/properties/charts/items/properties/chart_type",
+                "type": ["string", "null"],
+                "title": "The Chart_type Schema",
+                "default": null,
+                "examples": [
+                  null
                 ]
               },
               "identifier": {
