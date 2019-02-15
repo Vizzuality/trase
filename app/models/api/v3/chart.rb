@@ -10,7 +10,8 @@
 #  position   :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#
+#  chart_type :text
+
 # Indexes
 #
 #  charts_profile_id_parent_id_identifier_key  (profile_id,parent_id,identifier) UNIQUE
