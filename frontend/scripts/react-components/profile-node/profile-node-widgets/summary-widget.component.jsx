@@ -4,17 +4,24 @@ import ActorSummary from 'react-components/profiles/actor-summary.component';
 import PlaceSummary from 'react-components/profiles/place-summary.component';
 import ButtonLinks from 'react-components/profiles/button-links/button-links.component';
 import Widget from 'react-components/widgets/widget.component';
-import { GET_NODE_SUMMARY_URL, GET_PROFILE_METADATA } from 'utils/getURLFromParams';
+import { GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 
 function SummaryWidget(props) {
-  const { printMode, year, nodeId, context, profileType, onYearChange, scrollTo, tooltips } = props;
+  const {
+    printMode,
+    year,
+    nodeId,
+    context,
+    profileType,
+    onYearChange,
+    scrollTo,
+    tooltips,
+    profileMetadata
+  } = props;
   const params = { node_id: nodeId, context_id: context.id, profile_type: profileType, year };
   return (
-    <Widget
-      params={[params, { context_id: context.id, node_id: nodeId }]}
-      query={[GET_NODE_SUMMARY_URL, GET_PROFILE_METADATA]}
-    >
+    <Widget params={[params]} query={[GET_NODE_SUMMARY_URL]}>
       {({ data, loading, error }) => {
         if (loading) {
           return (
@@ -50,7 +57,7 @@ function SummaryWidget(props) {
                 onYearChange={onYearChange}
                 data={data[GET_NODE_SUMMARY_URL]}
                 context={context}
-                profileMetadata={data[GET_PROFILE_METADATA]}
+                profileMetadata={profileMetadata}
               />
             )}
             <ButtonLinks
@@ -71,6 +78,7 @@ SummaryWidget.propTypes = {
   printMode: PropTypes.bool,
   context: PropTypes.object,
   tooltips: PropTypes.object,
+  profileMetadata: PropTypes.object,
   year: PropTypes.number.isRequired,
   scrollTo: PropTypes.func.isRequired,
   nodeId: PropTypes.number.isRequired,

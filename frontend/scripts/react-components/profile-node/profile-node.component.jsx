@@ -8,11 +8,23 @@ import ImportingCompaniesWidget from 'react-components/profile-node/profile-node
 import TopDestinationsWidget from 'react-components/profile-node/profile-node-widgets/top-destinations-widget.component';
 import GfwWidget from 'react-components/profile-node/profile-node-widgets/gfw-widget.component';
 import { smoothScroll } from 'utils/smoothScroll';
+import cx from 'classnames';
 
 // sketchy polyfill
 const _requestIdleCallback = window.requestIdleCallback || window.setTimeout;
 
 class ProfileNode extends React.PureComponent {
+  static propTypes = {
+    printMode: PropTypes.bool,
+    context: PropTypes.object,
+    tooltips: PropTypes.object,
+    profileMetadata: PropTypes.object,
+    year: PropTypes.number.isRequired,
+    nodeId: PropTypes.number.isRequired,
+    profileType: PropTypes.string.isRequired,
+    updateQueryParams: PropTypes.func.isRequired
+  };
+
   state = {
     renderIframes: false
   };
@@ -53,18 +65,119 @@ class ProfileNode extends React.PureComponent {
 
   renderIframes = () => this.setState({ renderIframes: true });
 
-  render() {
+  renderChart = chart => {
     const {
-      printMode,
       year,
       nodeId,
       context,
-      profileType,
       tooltips,
+      printMode,
+      profileType,
+      profileMetadata,
       updateQueryParams
     } = this.props;
-    const { renderIframes } = this.state;
+    switch (chart.chart_type) {
+      case 'line_chart_with_map': {
+        const isCountries = chart.identifier === 'actor_top_countries';
+        return (
+          <TopDestinationsWidget
+            className={cx('page-break-inside-avoid', {
+              'c-top-map ': isCountries,
+              'c-top-municipalities': !isCountries
+            })}
+            year={year}
+            nodeId={nodeId}
+            key={chart.id}
+            type={chart.identifier}
+            contextId={context.id}
+            countryName={context.countryName}
+            onLinkClick={updateQueryParams}
+            commodityName={context.commodityName}
+            testId={isCountries ? 'top-destination-countries' : 'top-sourcing-regions'}
+          />
+        );
+      }
+      case 'tabs_table': {
+        const isActor = profileType === 'actor';
+        return (
+          <SustainabilityTableWidget
+            type={isActor ? 'risk' : 'indicators'}
+            profileType={profileType}
+            className={cx('c-area-table', {
+              'page-break-inside-avoid': isActor,
+              'score-table': !isActor
+            })}
+            year={year}
+            key={chart.id}
+            nodeId={nodeId}
+            contextId={context.id}
+            testId={isActor ? 'deforestation-risk' : 'sustainability-indicators'}
+            targetPayload={{ profileType: isActor ? 'place' : 'actor' }}
+          />
+        );
+      }
+      case 'scatterplot':
+        return (
+          <ImportingCompaniesWidget
+            year={year}
+            key={chart.id}
+            nodeId={nodeId}
+            printMode={printMode}
+            contextId={context.id}
+            countryName={context.countryName}
+            commodityName={context.commodityName}
+            testId="company-compare"
+          />
+        );
+      case 'stacked_line_chart':
+        return (
+          <DeforestationWidget
+            year={year}
+            key={chart.id}
+            nodeId={nodeId}
+            contextId={context.id}
+            testId="deforestation-trajectory"
+          />
+        );
+      case 'sankey': {
+        const type = chart.identifier === 'place_top_consumer_actors' ? 'actor' : 'place';
+        return (
+          <TopConsumersWidget
+            year={year}
+            type={type}
+            key={chart.id}
+            nodeId={nodeId}
+            contextId={context.id}
+            onLinkClick={updateQueryParams}
+            commodityName={context.commodityName}
+            testId={type === 'actor' ? 'top-traders' : 'top-importers'}
+          />
+        );
+      }
+      default:
+        return (
+          <React.Fragment key={chart.id}>
+            <SummaryWidget
+              year={year}
+              nodeId={nodeId}
+              context={context}
+              tooltips={tooltips}
+              printMode={printMode}
+              scrollTo={this.scrollTo}
+              profileType={profileType}
+              profileMetadata={profileMetadata}
+              onYearChange={this.onYearChange}
+            />
+            <div className="profile-content-anchor" ref={this.getAnchorRef} />
+          </React.Fragment>
+        );
+    }
+  };
 
+  render() {
+    const { year, nodeId, context, printMode, profileType, profileMetadata } = this.props;
+    const { renderIframes } = this.state;
+    const { charts } = profileMetadata;
     return (
       <div className={`l-profile-${profileType}`}>
         {printMode && (
@@ -76,123 +189,19 @@ class ProfileNode extends React.PureComponent {
             </div>
           </div>
         )}
-        <SummaryWidget
-          year={year}
-          context={context}
-          printMode={printMode}
-          profileType={profileType}
-          tooltips={tooltips}
-          nodeId={nodeId}
-          onYearChange={this.onYearChange}
-          scrollTo={this.scrollTo}
-        />
-        <div className="profile-content-anchor" ref={this.getAnchorRef} />
-        {profileType === 'actor' && (
-          <React.Fragment>
-            <TopDestinationsWidget
-              className="c-top-map page-break-inside-avoid"
-              year={year}
-              nodeId={nodeId}
-              type="countries"
-              contextId={context.id}
-              countryName={context.countryName}
-              onLinkClick={updateQueryParams}
-              commodityName={context.commodityName}
-              testId="top-destination-countries"
-            />
-            <TopDestinationsWidget
-              className="c-top-municipalities page-break-inside-avoid"
-              year={year}
-              type="regions"
-              nodeId={nodeId}
-              printMode={printMode}
-              contextId={context.id}
-              countryName={context.countryName}
-              commodityName={context.commodityName}
-              onLinkClick={updateQueryParams}
-              profileType={profileType}
-              testId="top-sourcing-regions"
-            />
-            <SustainabilityTableWidget
-              type="risk"
-              profileType={profileType}
-              className="c-area-table page-break-inside-avoid"
-              year={year}
-              nodeId={nodeId}
-              contextId={context.id}
-              testId="deforestation-risk"
-              targetPayload={{ profileType: 'place' }}
-            />
-            <ImportingCompaniesWidget
-              printMode={printMode}
-              year={year}
-              nodeId={nodeId}
-              contextId={context.id}
-              countryName={context.countryName}
-              commodityName={context.commodityName}
-              testId="company-compare"
-            />
-          </React.Fragment>
-        )}
-        {profileType === 'place' && (
-          <React.Fragment>
-            <SustainabilityTableWidget
-              profileType={profileType}
-              type="indicators"
-              className="c-area-table score-table"
-              year={year}
-              nodeId={nodeId}
-              contextId={context.id}
-              testId="sustainability-indicators"
-              targetPayload={{ profileType: 'actor' }}
-            />
-            <DeforestationWidget
-              year={year}
-              nodeId={nodeId}
-              contextId={context.id}
-              testId="deforestation-trajectory"
-            />
-            <TopConsumersWidget
-              year={year}
-              type="actor"
-              nodeId={nodeId}
-              testId="top-traders"
-              contextId={context.id}
-              commodityName={context.commodityName}
-              onLinkClick={updateQueryParams}
-            />
-            <TopConsumersWidget
-              year={year}
-              nodeId={nodeId}
-              testId="top-importers"
-              contextId={context.id}
-              type="place"
-              commodityName={context.commodityName}
-            />
-            {GFW_WIDGETS_BASE_URL && context.countryName === 'BRAZIL' && (
-              <GfwWidget
-                year={year}
-                nodeId={nodeId}
-                contextId={context.id}
-                renderIframes={renderIframes}
-                profileType={profileType}
-              />
-            )}
-          </React.Fragment>
+        {charts.map(this.renderChart)}
+        {profileType === 'place' && GFW_WIDGETS_BASE_URL && context.countryName === 'BRAZIL' && (
+          <GfwWidget
+            year={year}
+            nodeId={nodeId}
+            contextId={context.id}
+            renderIframes={renderIframes}
+            profileType={profileType}
+          />
         )}
       </div>
     );
   }
 }
-
-ProfileNode.propTypes = {
-  printMode: PropTypes.bool,
-  context: PropTypes.object,
-  tooltips: PropTypes.object,
-  year: PropTypes.number.isRequired,
-  nodeId: PropTypes.number.isRequired,
-  profileType: PropTypes.string.isRequired,
-  updateQueryParams: PropTypes.func.isRequired
-};
 
 export default ProfileNode;
