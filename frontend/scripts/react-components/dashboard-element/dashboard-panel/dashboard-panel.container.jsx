@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   clearDashboardPanel,
   setDashboardPanelPage,
@@ -104,6 +105,11 @@ class DashboardPanelContainer extends React.PureComponent {
     return <DashboardPanel {...this.props} panels={this.panels} companiesPanel={companiesPanel} />;
   }
 }
+
+DashboardPanelContainer.propTypes = {
+  companiesPanel: PropTypes.array,
+  countryNames: PropTypes.array
+};
 
 export default connect(
   mapStateToProps,

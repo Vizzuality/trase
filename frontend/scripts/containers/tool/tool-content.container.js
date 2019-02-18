@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-import connect from 'connect';
+import connect from 'base/connect';
 import ToolContent from 'components/tool/tool-content.component';
 import { resetSankey } from '../../actions/tool.actions';
 

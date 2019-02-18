@@ -61,13 +61,14 @@ We recommend managing your Ruby installation through [rvm](https://github.com/rv
 
 2. Copy `.env.sample` to `.env` and replace the values accordingly. See the Configuration section below for more information.
 
-3. Install dependencies
+3. Install dependencies: Don't use npm, install yarn if needed (https://yarnpkg.com/lang/en/docs/install)
 
-    `npm install`
+    `yarn install`
+
 
 4. Start the development server
 
-    `npm start`
+    `yarn start`
 
 ## Configuration
 
@@ -141,25 +142,27 @@ If you are using the included development server, you can set those variables in
 We use jest and puppeteer for the end to end tests. There are some mocks for the requests in the puppeteer/mocks folder. Every slash (/) and params (? &) are replaced by a hyphen in the file name. i.e:
 api-v3-contexts-year-2015 will mock api/v3/contexts?year=2015
 
+The tests have to be run while the js server is running
+
 Run all tests with:
 ```
-npm run test
+yarn test
 ```
 
 Run only unit tests:
 ```
-npm run unit
+yarn unit
 ```
 
 Run only end to end:
 ```
-npm run e2e
+yarn e2e
 ```
 
 If you need to change some snapshot due to changes in the page and the test is failing:
 
 ```
-npm run e2e:update
+yarn e2e:update
 ```
 
 ### API
@@ -173,7 +176,7 @@ You may also want to know about API [gold master tests](doc/trase/gold_master_te
 
 ### Frontend
 
-Running `npm test` will launch jest testing environment and run all tests that match `*.test.js` filename inside the `frontend/scripts` folder.
+Running `yarn test` will launch jest testing environment and run all tests that match `*.test.js` filename inside the `frontend/scripts` folder.
 
 ## Deployment
 
@@ -189,7 +192,7 @@ cap <staging|production> deploy
 
 This project includes a set of git hooks that you may find useful
 - Run `bundle install` when loading `Gemfile.lock` modifications from remotes
-- Run `npm install` when loading `frontend/package.json` modifications from remotes
+- Run `yarn install` when loading `frontend/package.json` modifications from remotes
 - Receive a warning when loading `.env.sample` or `frontend/.env.sample` modifications from remotes
 - Run `Rubocop` and `JS Lint` before committing
 
@@ -233,14 +236,14 @@ To enable then, simply execute once: `bin/git/init-hooks`
 Online in: http://trase.surge.sh
 
 #### Run locally
-- Run `npm run docz:dev`
+- Run `yarn docz:dev`
 It will be served on localhost:8081
 
 #### Build
-- Run `npm run docz:build`
+- Run `yarn docz:build`
 
 #### Deploy
-- Install surge `npm i -g surge`
+- Install surge `yarn add -g surge`
 - Run build
 - Go to docs/dist folder
 - Run surge `surge . trase.sh`

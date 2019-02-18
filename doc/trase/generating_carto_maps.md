@@ -14,7 +14,7 @@ cd frontend
 ./gis/vector_maps/getVectorMaps.sh
 ```
 
-All dependencies should be installed by npm install, except ogr2ogr (used for shapefile conversion), which you have to install globally with GDAL.
+All dependencies should be installed by yarn install, except ogr2ogr (used for shapefile conversion), which you have to install globally with GDAL.
 
 ### Generate municipalities by state TopoJSON files (only for Brazil for now)
 
@@ -36,7 +36,7 @@ CARTO_TOKEN=
 ```
 - To update or instantiate context layers run
 ```
-npm run named-maps -- --env=**type the environment**
+yarn named-maps -- --env=**type the environment**
 ```
 This will use the layers configuration stored in `frontend/gis/cartodb/templates.**environment**.json`, to create a named map for each item. Then, a JS file to be used by the front-end is created at `cd frontend/scripts/actions/map/context_layers_carto.js`. This file contains the unique name for the created template as well as the layergroupid. The rest of the configuration (legend, title) is located in the constants.
 

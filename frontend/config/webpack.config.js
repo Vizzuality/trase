@@ -75,8 +75,7 @@ module.exports = {
       containers: path.resolve(srcPath, 'containers'),
       utils: path.resolve(srcPath, 'utils'),
       constants: path.resolve(srcPath, 'constants'),
-      connect: path.resolve(srcPath, 'base', 'connect'),
-      Container: path.resolve(srcPath, 'base', 'Container'),
+      base: path.resolve(srcPath, 'base'),
       store: path.resolve(srcPath, 'store'),
       router: path.resolve(srcPath, 'router'),
       'lodash-es': 'lodash'

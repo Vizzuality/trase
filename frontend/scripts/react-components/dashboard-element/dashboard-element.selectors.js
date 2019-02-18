@@ -66,11 +66,13 @@ export const getDynamicSentence = createSelector(
     return [
       {
         panel: 'commodities',
+        id: 'commodities',
         prefix: activeCommodity ? 'Explore' : 'Explore commodities',
         value: activeCommodity && activeCommodity.name.toLowerCase()
       },
       {
         panel: 'sources',
+        id: 'sources',
         prefix:
           activeSource || activeCountry ? `produced in` : 'produced in countries covered by Trase',
         value:
@@ -79,6 +81,7 @@ export const getDynamicSentence = createSelector(
       },
       {
         panel: 'companies',
+        id: 'companies',
         prefix: activeCompany
           ? `${activeCompany.nodeType.toLowerCase() === 'exporter' ? 'exported' : 'imported'} by`
           : '',
@@ -86,6 +89,7 @@ export const getDynamicSentence = createSelector(
       },
       {
         panel: 'destinations',
+        id: 'destinations',
         prefix: activeDestination ? `going to` : '',
         value: activeDestination && activeDestination.name.toLowerCase()
       }

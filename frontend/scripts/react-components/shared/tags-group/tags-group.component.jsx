@@ -5,26 +5,25 @@ import cx from 'classnames';
 import 'react-components/shared/tags-group/tags-group.scss';
 
 function TagsGroup(props) {
-  const { as, tags, clearItem, partRenderer, spaced, className } = props;
+  const { as, tags, clearItem, spaced, className } = props;
   return React.createElement(
     as,
     { className: cx('c-tags-group', className) },
-    tags.map((part, i) => (
-      <React.Fragment key={part.prefix + partRenderer(part) + i}>
+    tags.map(part => (
+      <span key={part.prefix + part.id + part.value}>
         {part.prefix && `${part.prefix} `}
-        {partRenderer(part) && (
+        {part.value && (
           <span
             className={cx('tags-group-item', 'notranslate', {
               '-with-cross': clearItem,
               '-spaced': spaced
             })}
           >
-            {partRenderer(part)}
+            {part.value}
             {clearItem && (
               <button
-                onClick={() => clearItem(part)}
+                onClick={() => console.log('click', part) || clearItem(part)}
                 className="tags-group-item-remove-cross"
-                type="button"
               >
                 <svg className="icon icon-close">
                   <use xlinkHref="#icon-close" />
@@ -33,7 +32,7 @@ function TagsGroup(props) {
             )}
           </span>
         )}
-      </React.Fragment>
+      </span>
     ))
   );
 }
@@ -41,15 +40,13 @@ function TagsGroup(props) {
 TagsGroup.propTypes = {
   spaced: PropTypes.bool,
   className: PropTypes.string,
-  partRenderer: PropTypes.func,
   tags: PropTypes.array.isRequired,
   clearItem: PropTypes.func.isRequired,
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
 };
 
 TagsGroup.defaultProps = {
-  as: 'p',
-  partRenderer: part => part.value
+  as: 'p'
 };
 
 export default TagsGroup;
