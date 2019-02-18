@@ -4,8 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   addActiveIndicator,
-  removeActiveIndicator,
-  getDashboardPanelData
+  removeActiveIndicator
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators/dashboard-indicators.component';
 import {
@@ -16,7 +15,6 @@ import {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      getData: getDashboardPanelData,
       setActiveId: addActiveIndicator,
       removeActiveId: removeActiveIndicator
     },
@@ -32,16 +30,11 @@ const mapStateToProps = state => ({
 class DashboardIndicatorsContainer extends React.PureComponent {
   static propTypes = {
     indicators: PropTypes.array,
-    getData: PropTypes.func.isRequired,
     activeIndicatorsList: PropTypes.array,
     dynamicSentenceParts: PropTypes.array,
     setActiveId: PropTypes.func.isRequired,
     removeActiveId: PropTypes.func.isRequired
   };
-
-  componentDidMount() {
-    this.props.getData('attributes');
-  }
 
   render() {
     return <DashboardIndicators {...this.props} />;
