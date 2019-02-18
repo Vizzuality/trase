@@ -52,7 +52,10 @@ class TopDestinationsChart extends React.PureComponent {
 
   getTitle() {
     const { type, year, nodeName, verb, commodityName } = this.props;
-    const noun = type === 'countries' ? 'destination countries' : 'sourcing regions';
+    const noun = {
+      actor_top_countries: 'destination countries',
+      actor_top_sources: 'sourcing regions'
+    }[type];
     return (
       <React.Fragment>
         Top {noun} of {commodityName} {verb} by{' '}
@@ -88,7 +91,7 @@ class TopDestinationsChart extends React.PureComponent {
         <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
         <div className="top-destinations-chart-container">
           <div>
-            {type === 'countries' ? (
+            {type === 'actor_top_countries' ? (
               <Heading variant="mono" weight="bold" as="h3" size="md" data-test={`${testId}-title`}>
                 {this.getTitle()}
               </Heading>

@@ -18,10 +18,12 @@ class ProfileNode extends React.PureComponent {
     printMode: PropTypes.bool,
     context: PropTypes.object,
     tooltips: PropTypes.object,
+    errorMetadata: PropTypes.any,
     profileMetadata: PropTypes.object,
     year: PropTypes.number.isRequired,
     nodeId: PropTypes.number.isRequired,
     profileType: PropTypes.string.isRequired,
+    loadingMetadata: PropTypes.bool.isRequired,
     updateQueryParams: PropTypes.func.isRequired
   };
 
@@ -175,9 +177,18 @@ class ProfileNode extends React.PureComponent {
   };
 
   render() {
-    const { year, nodeId, context, printMode, profileType, profileMetadata } = this.props;
+    const {
+      year,
+      nodeId,
+      context,
+      printMode,
+      profileType,
+      profileMetadata,
+      loadingMetadata,
+      errorMetadata
+    } = this.props;
     const { renderIframes } = this.state;
-    const { charts } = profileMetadata;
+    const ready = !loadingMetadata && !errorMetadata;
     return (
       <div className={`l-profile-${profileType}`}>
         {printMode && (
@@ -189,16 +200,19 @@ class ProfileNode extends React.PureComponent {
             </div>
           </div>
         )}
-        {charts.map(this.renderChart)}
-        {profileType === 'place' && GFW_WIDGETS_BASE_URL && context.countryName === 'BRAZIL' && (
-          <GfwWidget
-            year={year}
-            nodeId={nodeId}
-            contextId={context.id}
-            renderIframes={renderIframes}
-            profileType={profileType}
-          />
-        )}
+        {ready && profileMetadata.charts.map(this.renderChart)}
+        {ready &&
+          profileType === 'place' &&
+          GFW_WIDGETS_BASE_URL &&
+          context.countryName === 'BRAZIL' && (
+            <GfwWidget
+              year={year}
+              nodeId={nodeId}
+              contextId={context.id}
+              renderIframes={renderIframes}
+              profileType={profileType}
+            />
+          )}
       </div>
     );
   }
