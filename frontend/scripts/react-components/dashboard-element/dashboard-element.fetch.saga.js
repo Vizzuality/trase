@@ -1,4 +1,4 @@
-import { put, call, cancelled, delay, fork, cancel } from 'redux-saga/effects';
+import { put, call, cancelled, delay } from 'redux-saga/effects';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
@@ -83,17 +83,9 @@ export function* getDashboardPanelSectionTabs(dashboardElement, optionsType) {
   }
 }
 
-function* loading() {
-  try {
-    yield delay(300);
-    yield put(setDashboardPanelLoadingItems(true));
-  } finally {
-    if (yield cancelled()) {
-      console.log('cancellll');
-      yield delay(1000);
-      yield put(setDashboardPanelLoadingItems(false));
-    }
-  }
+function* removeLoadingSpinner() {
+  yield delay(1000);
+  yield put(setDashboardPanelLoadingItems(false));
 }
 
 export function* getMoreDashboardPanelData(dashboardElement, optionsType, activeTab, direction) {
@@ -101,13 +93,12 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType, active
   const params = getDashboardPanelParams(dashboardElement, optionsType, {
     page
   });
-  const task = yield fork(loading);
+  yield put(setDashboardPanelLoadingItems(true));
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const key = optionsType !== 'attributes' ? optionsType : 'indicators'; // FIXME
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
-    yield cancel(task);
     yield put({
       type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
       payload: {
@@ -117,16 +108,17 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType, active
         data: data.data
       }
     });
+    yield call(removeLoadingSpinner);
   } catch (e) {
     console.error('Error', e);
-    yield put(setDashboardPanelLoadingItems(false));
+    yield call(removeLoadingSpinner);
   } finally {
     if (yield cancelled()) {
       console.error('Cancelled', url);
-      yield cancel(task);
       if (source) {
         source.cancel();
       }
+      yield call(removeLoadingSpinner);
     }
   }
 }
