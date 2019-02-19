@@ -166,13 +166,16 @@ const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_ACTIVE_TAB](state, action) {
     const { panel, activeTab } = action.payload;
     const panelName = `${panel}Panel`;
+    const prevTab = state[panelName].activeTab;
+    const clearedActiveTabData = prevTab ? { [prevTab.id]: null } : {};
+
     return {
       ...state,
       data: {
         ...state.data,
         [panel]: {
           ...state.data[panel],
-          [activeTab.id]: null
+          ...clearedActiveTabData
         }
       },
       activeIndicatorsList: [],
@@ -186,21 +189,26 @@ const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH](state, action) {
     const { panel, activeItem } = action.payload;
     const panelName = `${panel}Panel`;
-    const activeTab = state.tabs[panel].find(tab => tab.id === activeItem.nodeTypeId);
+    const prevTab = state[panelName].activeTab;
+    const clearedActiveTabData = prevTab ? { [prevTab.id]: null } : {};
+    const activeTab =
+      state.tabs[panel] && state.tabs[panel].find(tab => tab.id === activeItem.nodeTypeId);
+
     return {
       ...state,
       data: {
         ...state.data,
         [panel]: {
           ...state.data[panel],
-          [activeTab.id]: null
+          ...clearedActiveTabData
         }
       },
       activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
         activeItem,
-        activeTab
+        activeTab,
+        page: initialState[panelName].page
       }
     };
   },

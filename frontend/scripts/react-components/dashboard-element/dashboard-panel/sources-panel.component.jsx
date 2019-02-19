@@ -102,24 +102,24 @@ function SourcesPanel(props) {
 }
 
 SourcesPanel.propTypes = {
-  loadingMoreItems: PropTypes.bool,
   loading: PropTypes.bool,
-  page: PropTypes.number.isRequired,
-  searchSources: PropTypes.array.isRequired,
   sources: PropTypes.array,
   countries: PropTypes.array,
-  getMoreItems: PropTypes.func.isRequired,
-  activeCountryItem: PropTypes.object,
+  tabs: PropTypes.array.isRequired,
+  nodeTypeRenderer: PropTypes.func,
+  loadingMoreItems: PropTypes.bool,
+  page: PropTypes.number.isRequired,
   activeSourceTab: PropTypes.object,
   activeSourceItem: PropTypes.object,
-  tabs: PropTypes.array.isRequired,
-  onSelectCountry: PropTypes.func.isRequired,
+  activeCountryItem: PropTypes.object,
   clearItems: PropTypes.func.isRequired,
+  getMoreItems: PropTypes.func.isRequired,
+  searchSources: PropTypes.array.isRequired,
+  onSelectCountry: PropTypes.func.isRequired,
   setSearchResult: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
-  onSelectSourceValue: PropTypes.func.isRequired,
   onSelectSourceTab: PropTypes.func.isRequired,
-  nodeTypeRenderer: PropTypes.func.isRequired
+  onSelectSourceValue: PropTypes.func.isRequired
 };
 
 SourcesPanel.defaultProps = {
