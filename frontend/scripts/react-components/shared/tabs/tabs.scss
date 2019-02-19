@@ -16,11 +16,11 @@
     padding: 6px 25px;
     opacity: 0.3;
 
-    &:first-child {
+    &:first-child:not(:last-child) {
       border-radius: 5px 0 0 5px;
     }
 
-    &:last-child {
+    &:last-child:not(:first-child){
       border-radius: 0 5px 5px 0;
       border-right: 1px solid $charcoal-grey;
     }
