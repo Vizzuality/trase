@@ -7,6 +7,7 @@ import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   DASHBOARD_ELEMENT__GET_SEARCH_RESULTS,
+  DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import {
@@ -128,6 +129,15 @@ function* fetchDataOnPageChange() {
   yield takeLatest(DASHBOARD_ELEMENT__SET_PANEL_PAGE, onPageChange);
 }
 
+function* fetchDataOnStepChange() {
+  function* onStepChange() {
+    const { dashboardElement } = yield select();
+    yield fork(getDashboardPanelData, dashboardElement, 'indicators');
+  }
+
+  yield takeLatest(DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP, onStepChange);
+}
+
 export default function* dashboardElementSaga() {
   const sagas = [
     fetchDataOnPanelChange,
@@ -135,7 +145,8 @@ export default function* dashboardElementSaga() {
     fetchDataOnItemChange,
     fetchDataOnFilterClear,
     fetchDataOnPageChange,
-    fetchDataOnSearch
+    fetchDataOnSearch,
+    fetchDataOnStepChange
   ];
   yield all(sagas.map(saga => fork(saga)));
 }

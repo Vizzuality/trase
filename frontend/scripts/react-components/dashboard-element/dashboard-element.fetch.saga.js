@@ -23,11 +23,10 @@ export function* getDashboardPanelData(dashboardElement, optionsType, options) {
     ...options
   });
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
-  const key = optionsType !== 'attributes' ? optionsType : 'indicators'; // FIXME
   yield put({
     type: DASHBOARD_ELEMENT__SET_PANEL_DATA,
     payload: {
-      key,
+      key: optionsType,
       tab,
       data: null,
       meta: null,
@@ -40,7 +39,7 @@ export function* getDashboardPanelData(dashboardElement, optionsType, options) {
     yield put({
       type: DASHBOARD_ELEMENT__SET_PANEL_DATA,
       payload: {
-        key,
+        key: optionsType,
         tab,
         data: data.data,
         meta: data.meta,
@@ -95,14 +94,13 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType, active
   });
   yield put(setDashboardPanelLoadingItems(true));
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
-  const key = optionsType !== 'attributes' ? optionsType : 'indicators'; // FIXME
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
     yield put({
       type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
       payload: {
-        key,
+        key: optionsType,
         tab: activeTab && activeTab.id,
         direction,
         data: data.data

@@ -14,6 +14,7 @@ export const DASHBOARD_ELEMENT__GET_SEARCH_RESULTS = 'DASHBOARD_ELEMENT__GET_SEA
 export const DASHBOARD_ELEMENT__SET_SEARCH_RESULTS = 'DASHBOARD_ELEMENT__SET_SEARCH_RESULTS';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH =
   'DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH';
+export const DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP = 'DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP';
 
 export const getDashboardPanelParams = (state, optionsType, options = {}) => {
   const {
@@ -31,9 +32,10 @@ export const getDashboardPanelParams = (state, optionsType, options = {}) => {
     sources: sourcesTab,
     companies: companiesTab
   }[optionsType];
+
   const params = {
     page,
-    options_type: optionsType,
+    options_type: optionsType !== 'indicators' ? optionsType : 'attributes',
     node_types_ids: nodeTypesIds,
     countries_ids: countriesPanel.activeItem && countriesPanel.activeItem.id
   };
@@ -104,4 +106,8 @@ export const setDashboardPanelLoadingItems = loadingItems => ({
 export const getDashboardPanelSearchResults = query => ({
   type: DASHBOARD_ELEMENT__GET_SEARCH_RESULTS,
   payload: { query }
+});
+
+export const openIndicatorsStep = () => ({
+  type: DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP
 });
