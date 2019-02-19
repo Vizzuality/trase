@@ -124,17 +124,14 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType, active
 export function* fetchDashboardPanelSearchResults(dashboardElement, query) {
   if (!query) return;
   let optionsType = dashboardElement.activePanelId;
-  if (
-    optionsType === 'sources' &&
-    dashboardElement.sourcesPanel.activeItem === null &&
-    dashboardElement.sourcesPanel.activeTab === null
-  ) {
+  if (optionsType === 'sources' && dashboardElement.countriesPanel.activeItem === null) {
     optionsType = 'countries';
   }
-  const filters = {
-    ...getDashboardPanelParams(dashboardElement, optionsType),
-    node_types_ids: undefined
-  };
+  // eslint-ignore-next-line
+  const { node_types_ids: excluded, ...filters } = getDashboardPanelParams(
+    dashboardElement,
+    optionsType
+  );
   const params = {
     ...filters,
     q: query

@@ -337,10 +337,12 @@ test(DASHBOARD_ELEMENT__SET_ACTIVE_TAB, () => {
     }
   };
   const newState = reducer(state, action);
-  const clearedPreviousTab = { sources: { '3': null } };
   expect(newState).toEqual({
     ...state,
-    data: { ...state.data, ...clearedPreviousTab },
+    data: {
+      ...state.data,
+      sources: { 1: null }
+    },
     activeIndicatorsList: [],
     sourcesPanel: {
       ...state.sourcesPanel,
@@ -598,19 +600,23 @@ test(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH, () => {
     activeIndicatorsList: [1, 2, 3],
     companiesPanel: {
       ...initialState.companiesPanel,
-      activeTab: { id: 7, name: 'IMPORTER' }
+      activeTab: { id: 7, name: 'IMPORTER' },
+      page: 4
     }
   };
   const newState = reducer(state, action);
-  const clearedPreviousTab = { companies: { '6': null } };
   expect(newState).toEqual({
     ...state,
-    data: { ...state.data, ...clearedPreviousTab },
+    data: {
+      ...state.data,
+      companies: { 7: null }
+    },
     activeIndicatorsList: [],
     companiesPanel: {
       ...state.companiesPanel,
       activeItem: someItem,
-      activeTab: tabs.companies[0]
+      activeTab: tabs.companies[0],
+      page: initialState.companiesPanel.page
     }
   });
 });

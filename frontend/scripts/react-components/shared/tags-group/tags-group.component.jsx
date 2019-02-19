@@ -21,10 +21,7 @@ function TagsGroup(props) {
           >
             {part.value}
             {clearItem && (
-              <button
-                onClick={() => console.log('click', part) || clearItem(part)}
-                className="tags-group-item-remove-cross"
-              >
+              <button onClick={() => clearItem(part)} className="tags-group-item-remove-cross">
                 <svg className="icon icon-close">
                   <use xlinkHref="#icon-close" />
                 </svg>

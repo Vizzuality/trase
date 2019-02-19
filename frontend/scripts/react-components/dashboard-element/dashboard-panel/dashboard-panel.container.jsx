@@ -88,6 +88,11 @@ class DashboardPanelContainer extends React.PureComponent {
     }
   ];
 
+  static propTypes = {
+    companiesPanel: PropTypes.object,
+    countryNames: PropTypes.object
+  };
+
   static addCountryNameToSearchResults(panel, countryNames) {
     const searchResults = panel.searchResults.map(item => ({
       ...item,
@@ -105,11 +110,6 @@ class DashboardPanelContainer extends React.PureComponent {
     return <DashboardPanel {...this.props} panels={this.panels} companiesPanel={companiesPanel} />;
   }
 }
-
-DashboardPanelContainer.propTypes = {
-  companiesPanel: PropTypes.array,
-  countryNames: PropTypes.array
-};
 
 export default connect(
   mapStateToProps,

@@ -28,6 +28,10 @@ class DashboardPanel extends Component {
     }
   }
 
+  static sourcesNodeTypeRenderer(node) {
+    return node.nodeType || 'Country of Production';
+  }
+
   static countryNameNodeTypeRenderer(node) {
     return `${node.countryName + addApostrophe(node.countryName)} ${node.nodeType}`;
   }
@@ -77,27 +81,28 @@ class DashboardPanel extends Component {
           />
           {activePanelId === 'sources' && (
             <SourcesPanel
+              tabs={tabs}
+              loading={loading}
+              countries={countries}
               page={sourcesPanel.page}
               getMoreItems={getMoreItems}
-              setSearchResult={item => setSearchResult(item, activePanelId)}
-              getSearchResults={getSearchResults}
-              loadingMoreItems={sourcesPanel.loadingItems}
-              loading={loading}
-              clearItems={() => clearActiveItem(activePanelId)}
-              activeCountryItem={countriesPanel.activeItem}
-              activeSourceTab={sourcesPanel.activeTab}
-              activeSourceItem={sourcesPanel.activeItem}
               searchSources={
                 !countriesPanel.activeItem
                   ? countriesPanel.searchResults
                   : sourcesPanel.searchResults
               }
-              tabs={tabs}
-              sources={sources[sourcesPanel.activeTab && sourcesPanel.activeTab.id] || []}
-              countries={countries}
+              getSearchResults={getSearchResults}
+              loadingMoreItems={sourcesPanel.loadingItems}
+              clearItems={() => clearActiveItem(activePanelId)}
+              activeCountryItem={countriesPanel.activeItem}
+              activeSourceTab={sourcesPanel.activeTab}
+              activeSourceItem={sourcesPanel.activeItem}
               onSelectCountry={item => setActiveItem(item, 'countries')}
               onSelectSourceTab={item => setActiveTab(item, activePanelId)}
+              setSearchResult={item => setSearchResult(item, activePanelId)}
               onSelectSourceValue={item => setActiveItem(item, activePanelId)}
+              nodeTypeRenderer={DashboardPanel.sourcesNodeTypeRenderer}
+              sources={sources[sourcesPanel.activeTab && sourcesPanel.activeTab.id] || []}
             />
           )}
           {activePanelId === 'destinations' && (
@@ -158,31 +163,31 @@ class DashboardPanel extends Component {
 }
 
 DashboardPanel.propTypes = {
+  tabs: PropTypes.array,
+  sources: PropTypes.object,
   countries: PropTypes.array,
   companies: PropTypes.object,
   getMoreItems: PropTypes.func,
   commodities: PropTypes.array,
   dirtyBlocks: PropTypes.object,
   activePanelId: PropTypes.string,
-  sources: PropTypes.object,
-  tabs: PropTypes.array,
-  editMode: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   commoditiesPanel: PropTypes.object,
   panels: PropTypes.array.isRequired,
-  destinations: PropTypes.array.isRequired,
-  onContinue: PropTypes.func.isRequired,
-  setSearchResult: PropTypes.func.isRequired,
-  getSearchResults: PropTypes.func.isRequired,
+  editMode: PropTypes.bool.isRequired,
   dynamicSentenceParts: PropTypes.array,
+  onContinue: PropTypes.func.isRequired,
   setActiveTab: PropTypes.func.isRequired,
   setActiveItem: PropTypes.func.isRequired,
-  clearActiveItem: PropTypes.func.isRequired,
+  destinations: PropTypes.array.isRequired,
   setActivePanel: PropTypes.func.isRequired,
   sourcesPanel: PropTypes.object.isRequired,
-  destinationsPanel: PropTypes.object.isRequired,
+  clearActiveItem: PropTypes.func.isRequired,
+  setSearchResult: PropTypes.func.isRequired,
+  getSearchResults: PropTypes.func.isRequired,
   companiesPanel: PropTypes.object.isRequired,
-  countriesPanel: PropTypes.object.isRequired
+  countriesPanel: PropTypes.object.isRequired,
+  destinationsPanel: PropTypes.object.isRequired
 };
 
 export default DashboardPanel;
