@@ -23,7 +23,7 @@ function LogisticsMapPanel(props) {
         <>
           <SearchInput
             size="sm"
-            variant="secondary"
+            variant="bordered"
             items={searchResults}
             placeholder="Search company"
             onSelect={enableItem}

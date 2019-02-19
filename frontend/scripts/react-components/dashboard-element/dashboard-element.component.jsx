@@ -16,11 +16,12 @@ class DashboardElement extends React.PureComponent {
     step: PropTypes.number.isRequired,
     setStep: PropTypes.func.isRequired,
     editMode: PropTypes.bool.isRequired,
-    reopenPanel: PropTypes.func.isRequired,
     goToRoot: PropTypes.func.isRequired,
     modalOpen: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
-    dynamicSentenceParts: PropTypes.array
+    dynamicSentenceParts: PropTypes.array,
+    reopenPanel: PropTypes.func.isRequired,
+    openIndicatorsStep: PropTypes.func.isRequired
   };
 
   static steps = {
@@ -28,6 +29,12 @@ class DashboardElement extends React.PureComponent {
     PANEL: 1,
     INDICATORS: 2
   };
+
+  openIndicatorsStep() {
+    const { openIndicatorsStep, setStep } = this.props;
+    openIndicatorsStep();
+    setStep(DashboardElement.steps.INDICATORS);
+  }
 
   renderDashboardModal() {
     const {
@@ -65,9 +72,7 @@ class DashboardElement extends React.PureComponent {
           {step === DashboardElement.steps.PANEL && (
             <DashboardPanel
               editMode={editMode}
-              onContinue={() =>
-                editMode && canProceed ? closeModal() : setStep(DashboardElement.steps.INDICATORS)
-              }
+              onContinue={() => (editMode && canProceed ? closeModal() : this.openIndicatorsStep())}
             />
           )}
           {step === DashboardElement.steps.INDICATORS && (

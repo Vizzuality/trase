@@ -337,8 +337,10 @@ test(DASHBOARD_ELEMENT__SET_ACTIVE_TAB, () => {
     }
   };
   const newState = reducer(state, action);
+  const clearedPreviousTab = { sources: { '3': null } };
   expect(newState).toEqual({
     ...state,
+    data: { ...state.data, ...clearedPreviousTab },
     activeIndicatorsList: [],
     sourcesPanel: {
       ...state.sourcesPanel,
@@ -600,8 +602,10 @@ test(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH, () => {
     }
   };
   const newState = reducer(state, action);
+  const clearedPreviousTab = { companies: { '6': null } };
   expect(newState).toEqual({
     ...state,
+    data: { ...state.data, ...clearedPreviousTab },
     activeIndicatorsList: [],
     companiesPanel: {
       ...state.companiesPanel,

@@ -13,7 +13,7 @@ import 'scripts/react-components/shared/search-input/search-input.scss';
 const SEARCH_DEBOUNCE_RATE_IN_MS = 400;
 
 class SearchInput extends PureComponent {
-  static VARIANTS = ['secondary'];
+  static VARIANTS = ['bordered'];
 
   onInputValueChange = debounce(
     (...params) => this.props.onSearchTermChange && this.props.onSearchTermChange(...params),
