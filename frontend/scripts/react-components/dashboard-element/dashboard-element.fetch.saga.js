@@ -13,6 +13,7 @@ import {
   GET_DASHBOARD_OPTIONS_TABS_URL,
   GET_DASHBOARD_SEARCH_RESULTS_URL
 } from 'utils/getURLFromParams';
+import { isDevelopment } from 'utils/environment';
 import { fetchWithCancel } from './fetch-with-cancel';
 
 export function* getDashboardPanelData(dashboardElement, optionsType, options) {
@@ -51,7 +52,7 @@ export function* getDashboardPanelData(dashboardElement, optionsType, options) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      console.error('Cancelled', tab);
+      if (isDevelopment) console.error('Cancelled', tab);
       if (source) {
         source.cancel();
       }
@@ -75,7 +76,7 @@ export function* getDashboardPanelSectionTabs(dashboardElement, optionsType) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      console.error('Cancelled', url);
+      if (isDevelopment) console.error('Cancelled', url);
       if (source) {
         source.cancel();
       }
@@ -114,7 +115,7 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType, active
     yield call(removeLoadingSpinner);
   } finally {
     if (yield cancelled()) {
-      console.error('Cancelled', url);
+      if (isDevelopment) console.error('Cancelled', url);
       if (source) {
         source.cancel();
       }
@@ -146,7 +147,6 @@ export function* fetchDashboardPanelSearchResults(dashboardElement, query) {
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
-    console.log('json', data, url);
     yield put({
       type: DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
       payload: {
@@ -157,7 +157,7 @@ export function* fetchDashboardPanelSearchResults(dashboardElement, query) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      console.error('Cancelled', url);
+      if (isDevelopment) console.error('Cancelled', url);
       if (source) {
         source.cancel();
       }

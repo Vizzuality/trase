@@ -101,8 +101,7 @@ export const setDashboardPanelLoadingItems = loadingItems => ({
   payload: { loadingItems }
 });
 
-export const getDashboardPanelSearchResults = (query, bla) =>
-  console.log('query', query, bla) || {
-    type: DASHBOARD_ELEMENT__GET_SEARCH_RESULTS,
-    payload: { query }
-  };
+export const getDashboardPanelSearchResults = query => ({
+  type: DASHBOARD_ELEMENT__GET_SEARCH_RESULTS,
+  payload: { query }
+});
