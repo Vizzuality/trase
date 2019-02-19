@@ -83,7 +83,7 @@ export function* getDashboardPanelSectionTabs(dashboardElement, optionsType) {
   }
 }
 
-function* removeLoadingSpinner() {
+export function* removeLoadingSpinner() {
   yield delay(1000);
   yield put(setDashboardPanelLoadingItems(false));
 }
