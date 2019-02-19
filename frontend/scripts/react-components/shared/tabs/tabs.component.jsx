@@ -30,6 +30,7 @@ function Tabs(props) {
             data-key={item}
             onClick={() => onSelectTab(item, index)}
             data-test={`${testId}-item`}
+            disabled={isSelected(item)}
           >
             <Text
               as="span"
