@@ -25,9 +25,13 @@
       border-right: 1px solid $charcoal-grey;
     }
 
+    &:first-child:last-child {
+      border-radius: 5px;
+    }
+
     &.-selected {
       opacity: 1;
-
+      cursor: default;
       background-color: $charcoal-grey;
     }
   }
