@@ -192,7 +192,7 @@ describe(DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA, () => {
         tab: null,
         data: moreData,
         key: 'commodities',
-        direction: 'forwards'
+        direction: 'forward'
       }
     };
     const state = {
@@ -219,7 +219,7 @@ describe(DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA, () => {
         tab: 1,
         data: moreData,
         key: 'sources',
-        direction: 'forwards'
+        direction: 'forward'
       }
     };
     const state = {
