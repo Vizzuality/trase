@@ -13,7 +13,6 @@ import {
   GET_DASHBOARD_OPTIONS_TABS_URL,
   GET_DASHBOARD_SEARCH_RESULTS_URL
 } from 'utils/getURLFromParams';
-import { isDevelopment } from 'utils/environment';
 import { fetchWithCancel } from './fetch-with-cancel';
 
 export function* getDashboardPanelData(dashboardElement, optionsType, options) {
@@ -52,7 +51,7 @@ export function* getDashboardPanelData(dashboardElement, optionsType, options) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (isDevelopment) console.error('Cancelled', tab);
+      if (NODE_ENV_DEV) console.error('Cancelled', tab);
       if (source) {
         source.cancel();
       }
@@ -76,7 +75,7 @@ export function* getDashboardPanelSectionTabs(dashboardElement, optionsType) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (isDevelopment) console.error('Cancelled', url);
+      if (NODE_ENV_DEV) console.error('Cancelled', url);
       if (source) {
         source.cancel();
       }
@@ -115,7 +114,7 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType, active
     yield call(removeLoadingSpinner);
   } finally {
     if (yield cancelled()) {
-      if (isDevelopment) console.error('Cancelled', url);
+      if (NODE_ENV_DEV) console.error('Cancelled', url);
       if (source) {
         source.cancel();
       }
@@ -157,7 +156,7 @@ export function* fetchDashboardPanelSearchResults(dashboardElement, query) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (isDevelopment) console.error('Cancelled', url);
+      if (NODE_ENV_DEV) console.error('Cancelled', url);
       if (source) {
         source.cancel();
       }
