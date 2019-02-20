@@ -140,7 +140,10 @@ export default class ToolSearch extends Component {
     }
 
     return sortBy(
-      nodes.map(item => ({ ...item, distance: levenshtein.get(query, item.name) })),
+      nodes.map(item => ({
+        ...item,
+        distance: levenshtein.get(query, item.name, { useCollator: true })
+      })),
       item => item.distance
     ).slice(0, MAX_SEARCH_RESULTS);
   });
