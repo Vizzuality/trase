@@ -185,6 +185,7 @@ describe(DASHBOARD_ELEMENT__SET_PANEL_DATA, () => {
 describe(DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA, () => {
   const someData = [{ id: 0, name: 'name0' }, { id: 1, name: 'name1' }];
   const moreData = [{ id: 0, name: 'Whatever' }];
+
   it('adds more data to an array entity', () => {
     const action = {
       type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
@@ -204,15 +205,15 @@ describe(DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA, () => {
     };
     const newState = reducer(state, action);
     expect(newState).toEqual({
-      ...initialState,
+      ...state,
       data: {
-        ...initialState.data,
+        ...state.data,
         commodities: [...someData, ...moreData]
       }
     });
   });
 
-  it('adds more data to an array entity', () => {
+  it('adds more data to an object entity', () => {
     const action = {
       type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
       payload: {
@@ -226,7 +227,6 @@ describe(DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA, () => {
       ...initialState,
       data: {
         ...initialState.data,
-        commodities: someData,
         sources: {
           1: someData,
           2: someData
@@ -235,13 +235,44 @@ describe(DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA, () => {
     };
     const newState = reducer(state, action);
     expect(newState).toEqual({
-      ...initialState,
+      ...state,
       data: {
         ...state.data,
         sources: {
           1: [...someData, ...moreData],
           2: someData
         }
+      }
+    });
+  });
+
+  it('resets the page number when theres no new data', () => {
+    const action = {
+      type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
+      payload: {
+        tab: 1,
+        data: [],
+        key: 'commodities',
+        direction: 'forward'
+      }
+    };
+    const state = {
+      ...initialState,
+      data: {
+        ...initialState.data,
+        commodities: someData
+      },
+      commoditiesPanel: {
+        ...initialState.commoditiesPanel,
+        page: 3
+      }
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      commoditiesPanel: {
+        ...state.commoditiesPanel,
+        page: 2
       }
     });
   });
