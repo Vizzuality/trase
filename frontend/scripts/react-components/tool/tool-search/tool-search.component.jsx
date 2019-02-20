@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import deburr from 'lodash/deburr';
 import sortBy from 'lodash/sortBy';
+import levenshtein from 'fast-levenshtein';
+import { defaultMemoize } from 'reselect';
 import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group/node-title-group.container';
 import SearchResult from 'react-components/tool/tool-search/tool-search-result/tool-search-result.component';
 import { MAX_SEARCH_RESULTS } from 'constants';
@@ -12,28 +14,33 @@ import 'scripts/react-components/tool/tool-search/tool-search.scss';
 import 'scripts/react-components/tool/tool-search/tool-search-result/tool-search-result.scss';
 
 export default class ToolSearch extends Component {
+  static propTypes = {
+    nodes: PropTypes.array,
+    onAddNode: PropTypes.func,
+    contextId: PropTypes.number,
+    className: PropTypes.string,
+    isSearchOpen: PropTypes.bool,
+    isMapVisible: PropTypes.bool,
+    defaultYear: PropTypes.number,
+    selectedNodesIds: PropTypes.array,
+    setSankeySearchVisibility: PropTypes.func
+  };
+
   static isValidChar(key) {
     const deburredKey = deburr(key);
     return /^([a-z]|[A-Z]){1}$/.test(deburredKey);
   }
 
-  constructor(props) {
-    super(props);
-    this.state = { charPressedCount: 0 };
-    this.onOpenClicked = this.onOpenClicked.bind(this);
-    this.onCloseClicked = this.onCloseClicked.bind(this);
-    this.onSelected = this.onSelected.bind(this);
-    this.onAddNode = this.onAddNode.bind(this);
-    this.onKeydown = this.onKeydown.bind(this);
-    this.onKeyup = this.onKeyup.bind(this);
-    this.isNodeSelected = this.isNodeSelected.bind(this);
-    this.setDownshiftRef = element => {
-      this.downshift = element;
-    };
-    this.setInputRef = element => {
-      this.input = element;
-    };
+  static getNodeIds(selectedItem) {
+    return selectedItem.id
+      .toString()
+      .split('_')
+      .map(n => parseInt(n, 10));
+  }
 
+  state = { charPressedCount: 0 };
+
+  componentDidMount() {
     document.addEventListener('keydown', this.onKeydown);
     document.addEventListener('keyup', this.onKeyup);
   }
@@ -49,17 +56,25 @@ export default class ToolSearch extends Component {
     document.removeEventListener('keyup', this.onKeyup);
   }
 
-  onOpenClicked(e) {
+  setDownshiftRef = element => {
+    this.downshift = element;
+  };
+
+  setInputRef = element => {
+    this.input = element;
+  };
+
+  onOpenClicked = e => {
     if (e) e.stopPropagation();
     this.props.setSankeySearchVisibility(true);
-  }
+  };
 
-  onCloseClicked(e) {
+  onCloseClicked = e => {
     if (e) e.stopPropagation();
     this.props.setSankeySearchVisibility(false);
-  }
+  };
 
-  onSelected(selectedItem) {
+  onSelected = selectedItem => {
     if (!selectedItem) return;
 
     if (this.isNodeSelected(selectedItem)) {
@@ -70,18 +85,18 @@ export default class ToolSearch extends Component {
     const ids = ToolSearch.getNodeIds(selectedItem);
     this.props.onAddNode(ids);
     this.onCloseClicked();
-  }
+  };
 
-  onAddNode(e, item) {
+  onAddNode = (e, item) => {
     const { onAddNode, selectedNodesIds } = this.props;
     if (e) e.stopPropagation();
     const ids = ToolSearch.getNodeIds(item).filter(id => !selectedNodesIds.includes(id));
     onAddNode(ids);
     this.downshift.reset();
     this.input.focus();
-  }
+  };
 
-  onKeydown(e) {
+  onKeydown = e => {
     const { isSearchOpen } = this.props;
     const { charPressedCount } = this.state;
 
@@ -93,25 +108,19 @@ export default class ToolSearch extends Component {
     }
 
     this.setState(state => ({ charPressedCount: state.charPressedCount + 1 }));
-  }
+  };
 
-  onKeyup() {
+  onKeyup = () => {
     this.setState(state => ({ charPressedCount: state.charPressedCount - 1 }));
-  }
+  };
 
-  static getNodeIds(selectedItem) {
-    return selectedItem.id
-      .toString()
-      .split('_')
-      .map(n => parseInt(n, 10));
-  }
-
-  isNodeSelected(node) {
+  isNodeSelected = node => {
     const ids = ToolSearch.getNodeIds(node);
     return ids.every(id => this.props.selectedNodesIds.includes(id));
-  }
+  };
 
-  getSearchNodes(query) {
+  // eslint-disable-next-line
+  LEGACY_getSearchNodes(query) {
     const { nodes = [] } = this.props;
     return sortBy(
       nodes.filter(i => {
@@ -122,6 +131,19 @@ export default class ToolSearch extends Component {
       item => item.name
     ).slice(0, MAX_SEARCH_RESULTS);
   }
+
+  getSearchNodes = defaultMemoize(query => {
+    const { nodes = [] } = this.props;
+
+    if (ENABLE_LEGACY_TOOL_SEARCH) {
+      return this.LEGACY_getSearchNodes(query);
+    }
+
+    return sortBy(
+      nodes.map(item => ({ ...item, distance: levenshtein.get(query, item.name) })),
+      item => item.distance
+    ).slice(0, MAX_SEARCH_RESULTS);
+  });
 
   render() {
     const {
@@ -199,15 +221,3 @@ export default class ToolSearch extends Component {
     );
   }
 }
-
-ToolSearch.propTypes = {
-  nodes: PropTypes.array,
-  onAddNode: PropTypes.func,
-  contextId: PropTypes.number,
-  className: PropTypes.string,
-  isSearchOpen: PropTypes.bool,
-  isMapVisible: PropTypes.bool,
-  defaultYear: PropTypes.number,
-  selectedNodesIds: PropTypes.array,
-  setSankeySearchVisibility: PropTypes.func
-};

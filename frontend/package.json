@@ -123,6 +123,7 @@
     "docz": "^0.13.7",
     "dotenv": "^6.1.0",
     "downshift": "2.0.16",
+    "fast-levenshtein": "^2.0.6",
     "find-parent": "^2.0.2",
     "highlight-words-core": "^1.2.0",
     "jest-image-snapshot": "^2.8.1",
