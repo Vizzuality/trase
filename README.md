@@ -42,7 +42,7 @@ We recommend managing your Ruby installation through [rvm](https://github.com/rv
 
 3. Create the database
 
-    Create an empty database in PostgreSQL and then import a stable database dump. If it's an earlier version than the current schema, run the migrations:
+    Create an empty database in PostgreSQL and then [import a stable database version](doc/trase/data_export_import.md). If it's an earlier version than the current schema, run the migrations:
 
     `rake db:migrate`
 
@@ -211,6 +211,7 @@ To enable then, simply execute once: `bin/git/init-hooks`
 - [Cache management](doc/trase/cache_management.md)
 - [Background jobs](doc/trase/background_jobs.md)
 - [Data update](doc/trase/data_update.md)
+- [Copying databases between instances](doc/trase/data_export_import.md)
 
 ### Frontend
 
