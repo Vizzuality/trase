@@ -1,60 +1,12 @@
 import { selectExpandedNode, setSankeySearchVisibility } from 'actions/tool.actions';
-import flatten from 'lodash/flatten';
-import groupBy from 'lodash/groupBy';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.component';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import isNodeColumnVisible from 'utils/isNodeColumnVisible';
-
-let searchNodes;
-
-const getNode = (nodes, selectedColumnsIds, nodesDict) => {
-  const [nA, nB] = nodes;
-  if (nB) {
-    if (
-      isNodeColumnVisible(nodesDict[nA.id], selectedColumnsIds) &&
-      isNodeColumnVisible(nodesDict[nB.id], selectedColumnsIds)
-    ) {
-      return {
-        id: `${nA.id}_${nB.id}`,
-        name: nA.name,
-        type: `${nA.type} & ${nB.type}`,
-        profileType: nA.profileType,
-        [nA.type.toLowerCase()]: nA,
-        [nB.type.toLowerCase()]: nB
-      };
-    }
-    return nodes;
-  }
-  return nA;
-};
+import { getToolSearchNodes } from 'react-components/tool/tool-search/tool-search.selectors';
 
 const mapStateToProps = state => {
   const { selectedContext } = state.app;
-  const {
-    nodes,
-    selectedNodesIds,
-    selectedColumnsIds,
-    nodesDict,
-    isSearchOpen,
-    isMapVisible
-  } = state.tool;
-  // store nodes at container level to avoid rerendering when filtering... for want of a better solution
-  if (nodes !== undefined && (!searchNodes || nodes.length !== searchNodes.length)) {
-    const allNodes = nodes.filter(
-      node =>
-        node.hasFlows === true &&
-        node.isAggregated !== true &&
-        node.isUnknown !== true &&
-        node.isDomesticConsumption !== true
-    );
-    searchNodes = flatten(
-      Object.values(groupBy(allNodes, 'mainNodeId')).map(groupedNodes =>
-        getNode(groupedNodes, selectedColumnsIds, nodesDict)
-      )
-    );
-  }
-
+  const { selectedNodesIds, isSearchOpen, isMapVisible } = state.tool;
+  const searchNodes = getToolSearchNodes(state);
   return {
     selectedNodesIds,
     isSearchOpen,
@@ -65,14 +17,10 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      onAddNode: nodeId => selectExpandedNode(nodeId),
-      setSankeySearchVisibility: searchVisibility => setSankeySearchVisibility(searchVisibility)
-    },
-    dispatch
-  );
+const mapDispatchToProps = {
+  onAddNode: selectExpandedNode,
+  setSankeySearchVisibility
+};
 
 export default connect(
   mapStateToProps,
