@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import deburr from 'lodash/deburr';
 import sortBy from 'lodash/sortBy';
-import levenshtein from 'fast-levenshtein';
 import { defaultMemoize } from 'reselect';
+import fuzzySearch from 'utils/fuzzySearch';
 import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group/node-title-group.container';
 import SearchResult from 'react-components/tool/tool-search/tool-search-result/tool-search-result.component';
 import { MAX_SEARCH_RESULTS } from 'constants';
@@ -139,13 +139,7 @@ export default class ToolSearch extends Component {
       return this.LEGACY_getSearchNodes(query);
     }
 
-    return sortBy(
-      nodes.map(item => ({
-        ...item,
-        distance: levenshtein.get(deburr(query.toUpperCase()), deburr(item.name))
-      })),
-      item => item.distance
-    ).slice(0, MAX_SEARCH_RESULTS);
+    return fuzzySearch(query, nodes).slice(0, MAX_SEARCH_RESULTS);
   });
 
   render() {

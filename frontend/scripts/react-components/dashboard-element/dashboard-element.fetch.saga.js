@@ -1,3 +1,4 @@
+import deburr from 'lodash/deburr';
 import { put, call, cancelled, delay } from 'redux-saga/effects';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
@@ -134,7 +135,7 @@ export function* fetchDashboardPanelSearchResults(dashboardElement, query) {
   );
   const params = {
     ...filters,
-    q: query
+    q: deburr(query)
   };
   const url = getURLFromParams(GET_DASHBOARD_SEARCH_RESULTS_URL, params);
 
@@ -144,6 +145,7 @@ export function* fetchDashboardPanelSearchResults(dashboardElement, query) {
     yield put({
       type: DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
       payload: {
+        query,
         data: data.data
       }
     });
