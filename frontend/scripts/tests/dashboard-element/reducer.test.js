@@ -469,14 +469,17 @@ describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
   const someResults = [
     { id: 0, name: 'some result' },
     { id: 2, name: 'some result2' },
-    { id: 3, name: 'some result3' }
+    { id: 3, name: 'some result_3' }
   ];
   const action = {
     type: DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
     payload: {
+      query: 'some result',
       data: someResults
     }
   };
+  const someFuzzySearchResults = someResults.map((res, i) => ({ ...res, _distance: i }));
+  const searchResults = ENABLE_LEGACY_TOOL_SEARCH ? someResults : someFuzzySearchResults;
   it('sets results in a panel with a single entity (not sources)', () => {
     const state = {
       ...initialState,
@@ -487,7 +490,7 @@ describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
       ...state,
       destinationsPanel: {
         ...state.destinationsPanel,
-        searchResults: someResults
+        searchResults
       }
     });
   });
@@ -506,7 +509,7 @@ describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
       ...state,
       sourcesPanel: {
         ...state.sourcesPanel,
-        searchResults: someResults
+        searchResults
       }
     });
   });
@@ -521,7 +524,7 @@ describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
       ...state,
       countriesPanel: {
         ...state.countriesPanel,
-        searchResults: someResults
+        searchResults
       }
     });
   });

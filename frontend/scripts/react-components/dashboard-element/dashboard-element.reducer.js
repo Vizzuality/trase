@@ -1,4 +1,5 @@
 import createReducer from 'utils/createReducer';
+import fuzzySearch from 'utils/fuzzySearch';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
@@ -242,7 +243,7 @@ const dashboardElementReducer = {
     };
   },
   [DASHBOARD_ELEMENT__SET_SEARCH_RESULTS](state, action) {
-    const { data } = action.payload;
+    const { data, query } = action.payload;
     let panel = state.activePanelId;
     if (state.activePanelId === 'sources' && state.countriesPanel.activeItem === null) {
       panel = 'countries';
@@ -252,7 +253,7 @@ const dashboardElementReducer = {
       ...state,
       [panelName]: {
         ...state[panelName],
-        searchResults: data
+        searchResults: fuzzySearch(query, data)
       }
     };
   }

@@ -1,6 +1,8 @@
 import createReducer from 'utils/createReducer';
+import fuzzySearch from 'utils/fuzzySearch';
 import {
   LOAD_PROFILE_SEARCH_RESULTS,
+  SET_PROFILE_ROOT_ERROR_MESSAGE,
   SET_PROFILE_SEARCH_TERM
 } from 'react-components/profile-root/profile-root.actions';
 
@@ -18,7 +20,17 @@ const profileRootReducer = {
     return { ...state, search: { ...state.search, ...action.payload } };
   },
   [LOAD_PROFILE_SEARCH_RESULTS](state, action) {
-    return { ...state, search: { ...state.search, results: action.payload, isLoading: false } };
+    return {
+      ...state,
+      search: {
+        ...state.search,
+        results: fuzzySearch(state.search.term, action.payload),
+        isLoading: false
+      }
+    };
+  },
+  [SET_PROFILE_ROOT_ERROR_MESSAGE](state, action) {
+    return { ...state, errorMessage: action.payload.errorMessage };
   }
 };
 

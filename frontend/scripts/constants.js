@@ -226,7 +226,7 @@ export const BREAKPOINTS = {
   small: 640
 };
 
-export const MAX_SEARCH_RESULTS = 15;
+export const MAX_SEARCH_RESULTS = 50;
 
 export const LOGISTICS_MAP_YEARS = Array.from({ length: 12 })
   .fill(2016)
