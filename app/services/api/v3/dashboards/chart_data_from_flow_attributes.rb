@@ -54,7 +54,7 @@ module Api
             q = q.where('contexts.commodity_id' => @commodities_ids)
           end
 
-          q = q.where('flows.path @> ARRAY[?]', @nodes_ids) if @nodes_ids.any?
+          q = q.where(any_nodes_in_common?)
 
           q =
             if @attribute.aggregatable?
@@ -66,6 +66,10 @@ module Api
             end
 
           @query = q
+        end
+
+        def any_nodes_in_common?
+          ['flows.path && ARRAY[?]', @nodes_ids] if @nodes_ids.any?
         end
       end
     end
