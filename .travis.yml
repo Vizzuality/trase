@@ -17,6 +17,8 @@ matrix:
         - postgresql
       addons:
         postgresql: 10
+      before_install:
+        - sudo apt-get install -y graphviz
       before_script:
         - bundle exec rake db:drop db:create db:structure:load RAILS_ENV=test
         - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
@@ -29,6 +31,17 @@ matrix:
       after_script:
         - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
+      before_deploy:
+        - bundle exec rake db:doc:html
+
+      deploy:
+        provider: pages
+        skip-cleanup: true
+        github-token: $GITHUB_TOKEN # Set in the settings page of your repository, as a secure variable
+        keep-history: true
+        local-dir: doc/db/gh-pages
+        on:
+          branch: master
 
     - language: node_js
       node_js:
