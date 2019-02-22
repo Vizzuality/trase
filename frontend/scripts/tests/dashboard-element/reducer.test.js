@@ -610,13 +610,13 @@ describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
 });
 
 describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
-  const someItem = [{ id: 1, name: 'some item' }];
+  const someItem = { id: 1, name: 'some item' };
   it('sets active item in a single entity panel (not countries)', () => {
     const action = {
       type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
       payload: {
         panel: 'companies',
-        activeItems: someItem
+        activeItem: someItem
       }
     };
     const state = {
@@ -633,7 +633,7 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
       activeIndicatorsList: [],
       companiesPanel: {
         ...state.companiesPanel,
-        activeItems: someItem
+        activeItems: { [someItem.id]: someItem }
       }
     });
   });
@@ -643,7 +643,7 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
       type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
       payload: {
         panel: 'countries',
-        activeItems: someItem
+        activeItem: someItem
       }
     };
     const state = {
@@ -657,7 +657,7 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
       sourcesPanel: initialState.sourcesPanel,
       countriesPanel: {
         ...state.countriesPanel,
-        activeItems: someItem
+        activeItems: { [someItem.id]: someItem }
       }
     });
   });
@@ -673,7 +673,7 @@ test(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH, () => {
     type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
     payload: {
       panel: 'companies',
-      activeItems: someItem
+      activeItem: someItem
     }
   };
   const state = {
@@ -696,7 +696,7 @@ test(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH, () => {
     activeIndicatorsList: [],
     companiesPanel: {
       ...state.companiesPanel,
-      activeItems: someItem,
+      activeItems: { [someItem.id]: someItem },
       activeTab: tabs.companies[0],
       page: initialState.companiesPanel.page
     }
@@ -704,7 +704,7 @@ test(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH, () => {
 });
 
 describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS, () => {
-  const someItem = [{ id: 1, name: 'some item' }];
+  const someItem = { id: 1, name: 'some item' };
   it('sets active item in a single entity panel (not countries)', () => {
     const action = {
       type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
@@ -727,7 +727,7 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS, () => {
       activeIndicatorsList: [],
       companiesPanel: {
         ...state.companiesPanel,
-        activeItems: someItem
+        activeItems: { [someItem.id]: someItem }
       }
     });
   });
@@ -751,7 +751,7 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS, () => {
       sourcesPanel: initialState.sourcesPanel,
       countriesPanel: {
         ...state.countriesPanel,
-        activeItems: someItem
+        activeItems: { [someItem.id]: someItem }
       }
     });
   });
@@ -790,7 +790,7 @@ test(DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH, () => {
     activeIndicatorsList: [],
     companiesPanel: {
       ...state.companiesPanel,
-      activeItems: someItem,
+      activeItems: { [someItem.id]: someItem },
       activeTab: tabs.companies[0],
       page: initialState.companiesPanel.page
     }

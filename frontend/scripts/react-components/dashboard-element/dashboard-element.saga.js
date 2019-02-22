@@ -1,4 +1,5 @@
 import { take, select, all, fork, takeLatest, cancel } from 'redux-saga/effects';
+import isEmpty from 'lodash/isEmpty';
 import {
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
@@ -39,7 +40,7 @@ export function* fetchDashboardPanelInitialData(action) {
     } else if (activePanelId === 'sources') {
       yield fork(getDashboardPanelData, dashboardElement, 'countries');
       // Fetch regions
-      if (dashboardElement.countriesPanel.activeItems) {
+      if (!isEmpty(dashboardElement.countriesPanel.activeItems)) {
         yield fork(getDashboardPanelData, dashboardElement, activePanelId);
       }
     } else {
@@ -149,12 +150,11 @@ function* fetchDataOnItemChange() {
  * dispatches an action that trigger it.
  */
 export function* onFilterClear() {
-
   const { dashboardElement } = yield select();
   if (dashboardElement.activePanelId === 'sources') {
     yield fork(getDashboardPanelData, dashboardElement, 'countries');
-    if (dashboardElement.countriesPanel.activeItems.length > 0) {
-      yield fork(getDashboardPanelSectionTabs, dashboardElement, dashboardElement.activePanelId)
+    if (!isEmpty(dashboardElement.countriesPanel.activeItems)) {
+    yield fork(getDashboardPanelSectionTabs, dashboardElement, dashboardElement.activePanelId)
     }
   } else if (dashboardElement.activePanelId === 'companies') {
     yield fork(getDashboardPanelSectionTabs, dashboardElement, dashboardElement.activePanelId);

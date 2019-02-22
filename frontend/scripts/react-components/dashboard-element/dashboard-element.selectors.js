@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash/sortBy';
+import isEmpty from 'lodash/isEmpty';
 
 const getCountriesPanel = state => state.dashboardElement.countriesPanel;
 const getSourcesPanel = state => state.dashboardElement.sourcesPanel;
@@ -29,10 +30,10 @@ export const getDirtyBlocks = createSelector(
     getCommoditiesPanel
   ],
   (countriesPanel, sourcesPanel, destinationsPanel, companiesPanel, commoditiesPanel) => ({
-    sources: countriesPanel.activeItems.length > 0,
-    destinations: destinationsPanel.activeItems.length > 0,
-    companies: companiesPanel.activeItems.length > 0,
-    commodities: commoditiesPanel.activeItems.length > 0
+    sources: !isEmpty(countriesPanel.activeItems),
+    destinations: !isEmpty(destinationsPanel.activeItems),
+    companies: !isEmpty(companiesPanel.activeItems),
+    commodities: !isEmpty(commoditiesPanel.activeItems)
   })
 );
 

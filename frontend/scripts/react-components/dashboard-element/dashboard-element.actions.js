@@ -35,7 +35,7 @@ export const getDashboardPanelParams = (state, optionsType, options = {}) => {
     sources: sourcesTab,
     companies: companiesTab
   }[optionsType];
-
+  const activeItemParams = panel => Object.keys(panel.activeItems).join();
   const params = {
     page,
     options_type: optionsType !== 'indicators' ? optionsType : 'attributes',
@@ -43,23 +43,23 @@ export const getDashboardPanelParams = (state, optionsType, options = {}) => {
   };
 
   if (optionsType !== 'countries') {
-    params.countries_ids = countriesPanel.activeItems && countriesPanel.activeItems.id;
+    params.countries_ids = activeItemParams(countriesPanel);
   }
 
   if (optionsType !== 'sources') {
-    params.sources_ids = sourcesPanel.activeItems && sourcesPanel.activeItems.id;
+    params.sources_ids = activeItemParams(sourcesPanel);
   }
 
   if (optionsType !== 'commodities') {
-    params.commodities_ids = commoditiesPanel.activeItems && commoditiesPanel.activeItems.id;
+    params.commodities_ids = activeItemParams(commoditiesPanel);
   }
 
   if (optionsType !== 'destinations') {
-    params.destinations_ids = destinationsPanel.activeItems && destinationsPanel.activeItems.id;
+    params.destinations_ids = activeItemParams(destinationsPanel);
   }
 
   if (optionsType !== 'companies') {
-    params.companies_ids = companiesPanel.activeItems && companiesPanel.activeItems.id;
+    params.companies_ids = activeItemParams(companiesPanel);
   }
 
   return params;

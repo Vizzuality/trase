@@ -1,6 +1,7 @@
 import createReducer from 'utils/createReducer';
 import fuzzySearch from 'utils/fuzzySearch';
 import omit from 'lodash/omit';
+import isEmpty from 'lodash/isEmpty';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
@@ -71,7 +72,7 @@ const initialState = {
 };
 
 const activeItems = (currentItems, newItem) =>
-  console.log('s', currentItems, newItem) || currentItems[newItem.id]
+  currentItems[newItem.id]
     ? omit(currentItems, newItem.id)
     : { ...currentItems, [newItem.id]: newItem };
 
@@ -193,7 +194,6 @@ const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS](state, action) {
     const { panel, activeItems: selectedItem } = action.payload;
     const panelName = `${panel}Panel`;
-    console.log(selectedItem);
     const sourcesPanelState =
       panel === 'countries' ? initialState.sourcesPanel : state.sourcesPanel;
     return {
@@ -315,7 +315,7 @@ const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_SEARCH_RESULTS](state, action) {
     const { data, query } = action.payload;
     let panel = state.activePanelId;
-    if (state.activePanelId === 'sources' && state.countriesPanel.activeItems.length === 0) {
+    if (state.activePanelId === 'sources' && isEmpty(state.countriesPanel.activeItems)) {
       panel = 'countries';
     }
     const panelName = `${panel}Panel`;
