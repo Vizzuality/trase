@@ -79,7 +79,7 @@ paths:
                 profile:
                   type: string
                   example: 'actor'
-  '/context/{context_id}/columns':
+  '/contexts/{context_id}/columns':
     get:
       tags:
         - context
@@ -102,7 +102,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Column'
-  '/context/{context_id}/map_layers':
+  '/contexts/{context_id}/map_layers':
     get:
       tags:
         - context
@@ -129,7 +129,7 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/MapGroup'
-  '/context/{context_id}/download_attributes':
+  '/contexts/{context_id}/download_attributes':
     get:
       tags:
         - context
@@ -155,7 +155,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/DownloadAttribute'
-  '/context/{context_id}/flows':
+  '/contexts/{context_id}/flows':
     get:
       tags:
         - flow
@@ -241,7 +241,7 @@ paths:
             properties:
               error:
                 type: string
-  '/context/{context_id}/nodes':
+  '/contexts/{context_id}/nodes':
     get:
       tags:
         - node
@@ -267,7 +267,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/Node'
-  '/context/{context_id}/nodes/attributes':
+
+  '/contexts/{context_id}/nodes/attributes':
     get:
       tags:
         - node
@@ -305,7 +306,36 @@ paths:
             properties:
               error:
                 type: string
-  '/context/{context_id}/nodes/{id}/actor':
+
+  '/contexts/{context_id}/nodes/{node_id}/profile_metadata':
+    get:
+      tags:
+        - node
+      summary: 'Profile metadata for a node'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: context_id
+          in: path
+          required: true
+          type: integer
+        - name: node_id
+          in: path
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                $ref: '#/definitions/ProfileMetadata'
+
+  '/contexts/{context_id}/nodes/{id}/actor':
     get:
       deprecated: true
       tags:
@@ -342,7 +372,7 @@ paths:
                 type: object
                 $ref: '#/definitions/ActorNode'
 
-  '/context/{context_id}/actors/{id}/basic_attributes':
+  '/contexts/{context_id}/actors/{id}/basic_attributes':
     get:
       tags:
         - node
@@ -376,7 +406,7 @@ paths:
               data:
                 $ref: '#/definitions/ActorBasicAttributes'
 
-  '/context/{context_id}/actors/{id}/top_countries':
+  '/contexts/{context_id}/actors/{id}/top_countries':
     get:
       tags:
         - node
@@ -410,7 +440,7 @@ paths:
               data:
                 $ref: '#/definitions/ActorTopCountries'
 
-  '/context/{context_id}/actors/{id}/top_sources':
+  '/contexts/{context_id}/actors/{id}/top_sources':
     get:
       tags:
         - node
@@ -444,7 +474,7 @@ paths:
               data:
                 $ref: '#/definitions/ActorTopSources'
 
-  '/context/{context_id}/actors/{id}/sustainability':
+  '/contexts/{context_id}/actors/{id}/sustainability':
     get:
       tags:
         - node
@@ -478,7 +508,7 @@ paths:
               data:
                 $ref: '#/definitions/ActorSustainability'
 
-  '/context/{context_id}/actors/{id}/exporting_companies':
+  '/contexts/{context_id}/actors/{id}/exporting_companies':
     get:
       tags:
         - node
@@ -512,7 +542,7 @@ paths:
               data:
                 $ref: '#/definitions/ActorExportingCompanies'
 
-  '/context/{context_id}/nodes/{id}/place':
+  '/contexts/{context_id}/nodes/{id}/place':
     get:
       deprecated: true
       tags:
@@ -548,7 +578,7 @@ paths:
               data:
                 $ref: '#/definitions/PlaceNode'
 
-  '/context/{context_id}/places/{id}/basic_attributes':
+  '/contexts/{context_id}/places/{id}/basic_attributes':
     get:
       tags:
         - node
@@ -580,7 +610,7 @@ paths:
               data:
                 $ref: '#/definitions/PlaceBasicAttributes'
 
-  '/context/{context_id}/places/{id}/top_consumer_actors':
+  '/contexts/{context_id}/places/{id}/top_consumer_actors':
     get:
       tags:
         - node
@@ -612,7 +642,7 @@ paths:
               data:
                 $ref: '#/definitions/PlaceTopConsumerActors'
 
-  '/context/{context_id}/places/{id}/top_consumer_countries':
+  '/contexts/{context_id}/places/{id}/top_consumer_countries':
     get:
       tags:
         - node
@@ -644,7 +674,7 @@ paths:
               data:
                 $ref: '#/definitions/PlaceTopConsumerCountries'
 
-  '/context/{context_id}/places/{id}/indicators':
+  '/contexts/{context_id}/places/{id}/indicators':
     get:
       tags:
         - node
@@ -676,7 +706,7 @@ paths:
               data:
                 $ref: '#/definitions/PlaceIndicators'
 
-  '/context/{context_id}/places/{id}/trajectory_deforestation':
+  '/contexts/{context_id}/places/{id}/trajectory_deforestation':
     get:
       tags:
         - node
@@ -708,7 +738,7 @@ paths:
               data:
                 $ref: '#/definitions/PlaceTrajectoryDeforestation'
 
-  '/context/{context_id}/nodes/{id}/linked_nodes':
+  '/contexts/{context_id}/nodes/{id}/linked_nodes':
     get:
       tags:
         - node
@@ -758,7 +788,7 @@ paths:
         '200':
           description: successful operation
 
-  '/context/{context_id}/download':
+  '/contexts/{context_id}/download':
     get:
       tags:
         - context
@@ -807,7 +837,7 @@ paths:
       responses:
         '200':
           description: successful operation
-  '/context/{context_id}/top_nodes':
+  '/contexts/{context_id}/top_nodes':
     get:
       tags:
         - flow
@@ -2618,3 +2648,54 @@ definitions:
                   type: number
                 value:
                   type: number
+
+  ProfileMetadata:
+    type: object
+    properties:
+      id:
+        type: integer
+      context_node_type_id:
+        type: integer
+      name:
+        type: string
+      main_topojson_path:
+        type: string
+      main_topojson_root:
+        type: string
+      adm_1_name:
+        type: string
+      adm_1_topojson_path:
+        type: string
+      adm_1_topojson_root:
+        type: string
+      adm_2_name:
+        type: string
+      adm_2_topojson_path:
+        type: string
+      adm_2_topojson_root:
+        type: string
+      charts:
+        type: array
+        items:
+          $ref: '#/definitions/Chart'
+
+  Chart:
+    type: object
+    properties:
+      id:
+        type: integer
+      chart_type:
+        type: string
+        example: 'tabs_table'
+      identifier:
+        type: string
+        example: 'actor_sustainability_table'
+      title:
+        type: string
+        example: 'Deforestation risk associated with top sourcing regions'
+      position:
+        type: integer
+      charts:
+        type: array
+        items:
+          $ref: '#/definitions/Chart'

@@ -51,7 +51,11 @@ class TopDestinationsWidget extends React.PureComponent {
       onLinkClick,
       testId
     } = this.props;
-    const mainQuery = type === 'countries' ? GET_ACTOR_TOP_COUNTRIES : GET_ACTOR_TOP_SOURCES;
+    const mainQuery = {
+      actor_top_countries: GET_ACTOR_TOP_COUNTRIES,
+      actor_top_sources: GET_ACTOR_TOP_SOURCES
+    }[type];
+
     const params = { node_id: nodeId, context_id: contextId, year };
     return (
       <Widget
@@ -128,7 +132,7 @@ class TopDestinationsWidget extends React.PureComponent {
                     countryName={countryName}
                     includedYears={includedYears}
                     commodityName={commodityName}
-                    activeTab={type === 'regions' ? activeTab : undefined}
+                    activeTab={type === 'actor_top_sources' ? activeTab : undefined}
                   />
                 </div>
               </div>
