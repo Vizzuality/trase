@@ -38,5 +38,16 @@ RSpec.describe Api::V3::Dashboards::ChartDataController, type: :controller do
       data = json['data']
       expect(data.map { |e| e['x'] }).to eq([2015])
     end
+
+    it 'returns values for matched companies' do
+      get :index, params: {
+        attribute_id: api_v3_volume.readonly_attribute.id,
+        companies_ids: [api_v3_exporter1_node.id, api_v3_importer1_node.id].join(',')
+      }
+
+      json = JSON.parse(response.body)
+      data = json['data']
+      expect(data.map { |e| e['x'] }).to eq([2015])
+    end
   end
 end
