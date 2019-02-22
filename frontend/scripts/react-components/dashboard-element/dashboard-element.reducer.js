@@ -168,7 +168,8 @@ const dashboardElementReducer = {
     const { panel, activeTab } = action.payload;
     const panelName = `${panel}Panel`;
     const prevTab = state[panelName].activeTab;
-    const clearedActiveTabData = prevTab ? { [prevTab.id]: null } : {};
+    const clearedActiveTabData =
+      prevTab && prevTab.id !== activeTab.id ? { [prevTab.id]: null } : {};
 
     return {
       ...state,
@@ -191,7 +192,8 @@ const dashboardElementReducer = {
     const { panel, activeItem } = action.payload;
     const panelName = `${panel}Panel`;
     const prevTab = state[panelName].activeTab;
-    const clearedActiveTabData = prevTab ? { [prevTab.id]: null } : {};
+    const clearedActiveTabData =
+      prevTab && prevTab.id !== activeItem.nodeTypeId ? { [prevTab.id]: null } : {};
     const activeTab =
       state.tabs[panel] && state.tabs[panel].find(tab => tab.id === activeItem.nodeTypeId);
 
