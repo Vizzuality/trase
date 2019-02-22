@@ -163,7 +163,7 @@ yarn e2e
 If you need to change some snapshot due to changes in the page and the test is failing:
 
 ```
-yarn e2e:update
+yarn e2e -- -u
 ```
 
 ### API
