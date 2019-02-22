@@ -70,16 +70,6 @@ export const setDashboardActivePanel = activePanelId => ({
   payload: { activePanelId }
 });
 
-export const setDashboardPanelActiveItemsWithSearch = (activeItems, panel) => ({
-  type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
-  payload: { panel, activeItems }
-});
-
-export const setDashboardPanelActiveItems = (activeItems, panel) => ({
-  type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
-  payload: { panel, activeItems }
-});
-
 export const setDashboardPanelActiveItemWithSearch = (activeItem, panel) => ({
   type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
   payload: { panel, activeItem }
@@ -88,6 +78,16 @@ export const setDashboardPanelActiveItemWithSearch = (activeItem, panel) => ({
 export const setDashboardPanelActiveItem = (activeItem, panel) => ({
   type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
   payload: { panel, activeItem }
+});
+
+export const setDashboardPanelActiveItemsWithSearch = (activeItems, panel) => ({
+  type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
+  payload: { panel, activeItems }
+});
+
+export const setDashboardPanelActiveItems = (activeItems, panel) => ({
+  type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
+  payload: { panel, activeItems }
 });
 
 export const setDashboardPanelActiveTab = (activeTab, panel) => ({

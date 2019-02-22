@@ -1,5 +1,6 @@
 import createReducer from 'utils/createReducer';
 import fuzzySearch from 'utils/fuzzySearch';
+import omit from 'lodash/omit';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
@@ -36,43 +37,43 @@ const initialState = {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItems: [],
+    activeItems: {},
     activeTab: null
   },
   sourcesPanel: {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItems: [],
+    activeItems: {},
     activeTab: null
   },
   destinationsPanel: {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItems: [],
+    activeItems: {},
     activeTab: null
   },
   companiesPanel: {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItems: [],
+    activeItems: {},
     activeTab: null
   },
   commoditiesPanel: {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItems: [],
+    activeItems: {},
     activeTab: null
   }
 };
 
 const activeItems = (currentItems, newItem) =>
-  console.log(currentItems, newItem) || currentItems.map(a => a.id).includes(newItem.id)
-    ? currentItems.filter(i => i.id !== newItem.id)
-    : [...currentItems, newItem];
+  console.log('s', currentItems, newItem) || currentItems[newItem.id]
+    ? omit(currentItems, newItem.id)
+    : { ...currentItems, [newItem.id]: newItem };
 
 const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_ACTIVE_PANEL](state, action) {
@@ -185,7 +186,7 @@ const dashboardElementReducer = {
       sourcesPanel: sourcesPanelState,
       [panelName]: {
         ...state[panelName],
-        activeItems: [activeItem]
+        activeItems: { [activeItem.id]: activeItem }
       }
     };
   },
@@ -250,7 +251,7 @@ const dashboardElementReducer = {
       activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
-        activeItems: [activeItem],
+        activeItems: { [activeItem.id]: activeItem },
         activeTab,
         page: initialState[panelName].page
       }
@@ -333,7 +334,7 @@ const dashboardElementReducerTypes = PropTypes => {
     page: PropTypes.number,
     searchResults: PropTypes.array,
     loadingItems: PropTypes.bool,
-    activeItems: PropTypes.array,
+    activeItems: PropTypes.object,
     activeTab: PropTypes.number
   };
 
