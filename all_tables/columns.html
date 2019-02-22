@@ -152,13 +152,13 @@
 					<tr>
 					 <td>chart_node_types</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_type_id</td>
-					 <td>int8</td>
-					 <td>19</td>
-					 <td title='nullable'>√</td>
+					 <td>updated_at</td>
+					 <td>timestamp</td>
+					 <td>29</td>
+					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Refence to node type</p></td>
+					 <td></td>
 					</tr>
 					<tr>
 					 <td>pg_stat_statements</td>
@@ -469,14 +469,14 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>download_quants</td>
+					 <td>download_quals</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>download_attribute_id</td>
-					 <td>int4</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
 					 <td>10</td>
 					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;download_quals_id_seq&#39;::regclass)</td>
 					 <td></td>
 					</tr>
 					<tr>
@@ -491,7 +491,7 @@
 					 <td><p>Years for which attribute is present; empty (NULL) for all years</p></td>
 					</tr>
 					<tr>
-					 <td>download_quants</td>
+					 <td>download_quals</td>
 					 <td>Table</td>
 					 <td>created_at</td>
 					 <td>timestamp</td>
@@ -535,14 +535,14 @@
 					 <td><p>Display order in scope of chart</p></td>
 					</tr>
 					<tr>
-					 <td>download_quals</td>
+					 <td>download_quants</td>
 					 <td>Table</td>
 					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
 					 <td>serial</td>
 					 <td>10</td>
 					 <td title=''></td>
 					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;download_quals_id_seq&#39;::regclass)</td>
+					 <td>nextval(&#39;download_quants_id_seq&#39;::regclass)</td>
 					 <td></td>
 					</tr>
 					<tr>
@@ -722,15 +722,15 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>chart_quals</td>
+					 <td>chart_node_types</td>
 					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>29</td>
-					 <td title=''></td>
+					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>identifier</td>
+					 <td>text</td>
+					 <td>2147483647</td>
+					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td></td>
+					 <td><p>Identifier used to map this chart node type to a part of code which contains calculation logic</p></td>
 					</tr>
 					<tr>
 					 <td>pg_stat_statements</td>
@@ -1054,13 +1054,13 @@
 					<tr>
 					 <td>chart_node_types</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>chart_id</td>
-					 <td>int8</td>
-					 <td>19</td>
-					 <td title='nullable'>√</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>29</td>
+					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Refence to chart</p></td>
+					 <td></td>
 					</tr>
 					<tr>
 					 <td>database_updates</td>
@@ -1162,15 +1162,15 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>chart_quals</td>
+					 <td>chart_node_types</td>
 					 <td>Table</td>
-					 <td>updated_at</td>
-					 <td>timestamp</td>
-					 <td>29</td>
-					 <td title=''></td>
+					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td></td>
+					 <td><p>Display order in scope of chart; required when more than one</p></td>
 					</tr>
 					<tr>
 					 <td>contextual_layers</td>
@@ -1217,15 +1217,15 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>chart_quals</td>
+					 <td>chart_node_types</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_type_id</td>
+					 <td>int8</td>
+					 <td>19</td>
+					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td></td>
+					 <td><p>Refence to node type</p></td>
 					</tr>
 					<tr>
 					 <td>profiles</td>
@@ -1503,14 +1503,14 @@
 					 <td><p>Path within the TopoJSON file where geometries are contained</p></td>
 					</tr>
 					<tr>
-					 <td>chart_quals</td>
+					 <td>chart_node_types</td>
 					 <td>Table</td>
 					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
+					 <td>bigserial</td>
+					 <td>19</td>
 					 <td title=''></td>
 					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;chart_quals_id_seq&#39;::regclass)</td>
+					 <td>nextval(&#39;chart_node_types_id_seq&#39;::regclass)</td>
 					 <td></td>
 					</tr>
 					<tr>
@@ -1668,7 +1668,7 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>download_quals</td>
+					 <td>download_quants</td>
 					 <td>Table</td>
 					 <td>is_filter_enabled</td>
 					 <td>bool</td>
@@ -1676,7 +1676,7 @@
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>false</td>
-					 <td><p>When set, enable selection of discreet values (advanced filter)</p></td>
+					 <td><p>When set, enable selection of value ranges (advanced filter)</p></td>
 					</tr>
 					<tr>
 					 <td>flows</td>
@@ -1912,12 +1912,12 @@
 					<tr>
 					 <td>chart_node_types</td>
 					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>bigserial</td>
-					 <td>19</td>
+					 <td>is_total</td>
+					 <td>bool</td>
+					 <td>1</td>
+					 <td title='nullable'>√</td>
 					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;chart_node_types_id_seq&#39;::regclass)</td>
+					 <td>false</td>
 					 <td></td>
 					</tr>
 					<tr>
@@ -2141,15 +2141,15 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>download_quants</td>
+					 <td>download_quals</td>
 					 <td>Table</td>
-					 <td>filter_bands</td>
-					 <td>_float8</td>
-					 <td>17</td>
-					 <td title='nullable'>√</td>
+					 <td>is_filter_enabled</td>
+					 <td>bool</td>
+					 <td>1</td>
 					 <td title=''></td>
-					 <td>null</td>
-					 <td><p>Array of value ranges to allow filtering by</p></td>
+					 <td title=''></td>
+					 <td>false</td>
+					 <td><p>When set, enable selection of discreet values (advanced filter)</p></td>
 					</tr>
 					<tr>
 					 <td>recolor_by_inds</td>
@@ -2273,15 +2273,15 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>chart_node_types</td>
+					 <td>chart_quals</td>
 					 <td>Table</td>
-					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>identifier</td>
-					 <td>text</td>
-					 <td>2147483647</td>
-					 <td title='nullable'>√</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
 					 <td title=''></td>
-					 <td>null</td>
-					 <td><p>Identifier used to map this chart node type to a part of code which contains calculation logic</p></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;chart_quals_id_seq&#39;::regclass)</td>
+					 <td></td>
 					</tr>
 					<tr>
 					 <td>flows</td>
@@ -2878,9 +2878,9 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>download_quants</td>
+					 <td>download_quals</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>download_attribute_id</td>
 					 <td>int4</td>
 					 <td>10</td>
 					 <td title=''></td>
@@ -2889,9 +2889,9 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>download_quals</td>
+					 <td>download_quants</td>
 					 <td>Table</td>
-					 <td>updated_at</td>
+					 <td>created_at</td>
 					 <td>timestamp</td>
 					 <td>29</td>
 					 <td title=''></td>
@@ -3109,15 +3109,15 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>chart_node_types</td>
+					 <td>chart_quals</td>
 					 <td>Table</td>
-					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>chart_attribute_id</td>
 					 <td>int4</td>
 					 <td>10</td>
-					 <td title='nullable'>√</td>
+					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Display order in scope of chart; required when more than one</p></td>
+					 <td></td>
 					</tr>
 					<tr>
 					 <td>node_inds</td>
@@ -3285,7 +3285,7 @@
 					 <td><p>When set, show indication that sub-national level data is available</p></td>
 					</tr>
 					<tr>
-					 <td>download_quants</td>
+					 <td>download_quals</td>
 					 <td>Table</td>
 					 <td>updated_at</td>
 					 <td>timestamp</td>
@@ -3406,15 +3406,15 @@
 					 <td><p>Array of years for which to show this attribute in scope of chart; empty (NULL) for all years</p></td>
 					</tr>
 					<tr>
-					 <td>chart_quals</td>
+					 <td>chart_node_types</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>chart_attribute_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>chart_id</td>
+					 <td>int8</td>
+					 <td>19</td>
+					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td></td>
+					 <td><p>Refence to chart</p></td>
 					</tr>
 					<tr>
 					 <td>download_attributes</td>
@@ -3428,15 +3428,15 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>download_quals</td>
+					 <td>download_quants</td>
 					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>29</td>
-					 <td title=''></td>
+					 <td>filter_bands</td>
+					 <td>_float8</td>
+					 <td>17</td>
+					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td></td>
+					 <td><p>Array of value ranges to allow filtering by</p></td>
 					</tr>
 					<tr>
 					 <td>pg_stat_statements</td>
@@ -3593,9 +3593,9 @@
 					 <td><p>Default year for this context</p></td>
 					</tr>
 					<tr>
-					 <td>download_quals</td>
+					 <td>download_quants</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
 					 <td>int4</td>
 					 <td>10</td>
 					 <td title=''></td>
@@ -3692,7 +3692,7 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>download_quals</td>
+					 <td>download_quants</td>
 					 <td>Table</td>
 					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>download_attribute_id</td>
 					 <td>int4</td>
@@ -3901,7 +3901,7 @@
 					 <td><p>Display order in scope of profile</p></td>
 					</tr>
 					<tr>
-					 <td>chart_node_types</td>
+					 <td>chart_quals</td>
 					 <td>Table</td>
 					 <td>created_at</td>
 					 <td>timestamp</td>
@@ -3934,15 +3934,15 @@
 					 <td><p>Y position (in coordinates) where the country's label is displayed on the explore page</p></td>
 					</tr>
 					<tr>
-					 <td>download_quants</td>
+					 <td>download_quals</td>
 					 <td>Table</td>
-					 <td>is_filter_enabled</td>
-					 <td>bool</td>
-					 <td>1</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
+					 <td>int4</td>
+					 <td>10</td>
 					 <td title=''></td>
 					 <td title=''></td>
-					 <td>false</td>
-					 <td><p>When set, enable selection of value ranges (advanced filter)</p></td>
+					 <td>null</td>
+					 <td></td>
 					</tr>
 					<tr>
 					 <td>pg_stat_statements</td>
@@ -4374,14 +4374,14 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>chart_node_types</td>
+					 <td>chart_quals</td>
 					 <td>Table</td>
-					 <td>is_total</td>
-					 <td>bool</td>
-					 <td>1</td>
-					 <td title='nullable'>√</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
+					 <td>int4</td>
+					 <td>10</td>
 					 <td title=''></td>
-					 <td>false</td>
+					 <td title=''></td>
+					 <td>null</td>
 					 <td></td>
 					</tr>
 					<tr>
@@ -4418,7 +4418,7 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>chart_node_types</td>
+					 <td>chart_quals</td>
 					 <td>Table</td>
 					 <td>updated_at</td>
 					 <td>timestamp</td>
@@ -4541,12 +4541,12 @@
 					<tr>
 					 <td>download_quants</td>
 					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
+					 <td>updated_at</td>
+					 <td>timestamp</td>
+					 <td>29</td>
 					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;download_quants_id_seq&#39;::regclass)</td>
+					 <td title=''></td>
+					 <td>null</td>
 					 <td></td>
 					</tr>
 					<tr>
