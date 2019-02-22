@@ -39,10 +39,24 @@ RSpec.describe Api::V3::Dashboards::ChartDataController, type: :controller do
       expect(data.map { |e| e['x'] }).to eq([2015])
     end
 
-    it 'returns values for matched companies' do
+    it 'returns values for multiple matched companies' do
       get :index, params: {
         attribute_id: api_v3_volume.readonly_attribute.id,
         companies_ids: [api_v3_exporter1_node.id, api_v3_importer1_node.id].join(',')
+      }
+
+      json = JSON.parse(response.body)
+      data = json['data']
+      expect(data.map { |e| e['x'] }).to eq([2015])
+    end
+
+    it 'returns values for multiple matched destinations' do
+      get :index, params: {
+        attribute_id: api_v3_volume.readonly_attribute.id,
+        destinations_ids: [
+          api_v3_country_of_destination1_node.id,
+          api_v3_other_country_of_destination_node.id
+        ].join(',')
       }
 
       json = JSON.parse(response.body)
