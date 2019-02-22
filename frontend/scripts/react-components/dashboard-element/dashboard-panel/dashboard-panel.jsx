@@ -7,8 +7,9 @@ import {
   setDashboardActivePanel,
   setDashboardPanelActiveTab,
   setDashboardPanelActiveItem,
+  setDashboardPanelActiveItems,
   getDashboardPanelSearchResults,
-  setDashboardPanelActiveItemWithSearch
+  setDashboardPanelActiveItemsWithSearch
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
 import {
@@ -52,12 +53,13 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   getMoreItems: setDashboardPanelPage,
-  clearActiveItem: clearDashboardPanel,
+  clearActiveItems: clearDashboardPanel,
   setActivePanel: setDashboardActivePanel,
   setActiveTab: setDashboardPanelActiveTab,
+  setActiveItems: setDashboardPanelActiveItems,
   setActiveItem: setDashboardPanelActiveItem,
   getSearchResults: getDashboardPanelSearchResults,
-  setSearchResult: setDashboardPanelActiveItemWithSearch
+  setSearchResult: setDashboardPanelActiveItemsWithSearch
 };
 
 class DashboardPanelContainer extends React.PureComponent {

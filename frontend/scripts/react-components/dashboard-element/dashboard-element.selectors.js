@@ -29,10 +29,10 @@ export const getDirtyBlocks = createSelector(
     getCommoditiesPanel
   ],
   (countriesPanel, sourcesPanel, destinationsPanel, companiesPanel, commoditiesPanel) => ({
-    sources: countriesPanel.activeItem !== null,
-    destinations: destinationsPanel.activeItem !== null,
-    companies: companiesPanel.activeItem !== null,
-    commodities: commoditiesPanel.activeItem !== null
+    sources: countriesPanel.activeItems.length > 0,
+    destinations: destinationsPanel.activeItems.length > 0,
+    companies: companiesPanel.activeItems.length > 0,
+    commodities: commoditiesPanel.activeItems.length > 0
   })
 );
 
@@ -57,12 +57,23 @@ export const getDynamicSentence = createSelector(
       return null;
     }
 
-    const activeCountry = countriesPanel.activeItem;
-    const activeSource = sourcesPanel.activeItem;
-    const activeDestination = destinationsPanel.activeItem;
-    const activeCompany = companiesPanel.activeItem;
-    const activeCommodity = commoditiesPanel.activeItem;
+    const getActivePanelItem = panel => {
+      const panels = {
+        countries: countriesPanel,
+        sources: sourcesPanel,
+        destinations: destinationsPanel,
+        companies: companiesPanel,
+        commodities: commoditiesPanel
+      };
+      // TODO: Show several active Items
+      return panels[panel].length > 0 ? panels[panel][0] : null;
+    };
 
+    const activeCommodity = getActivePanelItem('commodities');
+    const activeCountry = getActivePanelItem('countries');
+    const activeSource = getActivePanelItem('sources');
+    const activeDestination = getActivePanelItem('destinations');
+    const activeCompany = getActivePanelItem('companies');
     return [
       {
         panel: 'commodities',

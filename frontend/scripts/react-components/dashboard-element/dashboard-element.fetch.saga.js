@@ -125,7 +125,7 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType, active
 export function* fetchDashboardPanelSearchResults(dashboardElement, query) {
   if (!query) return;
   let optionsType = dashboardElement.activePanelId;
-  if (optionsType === 'sources' && dashboardElement.countriesPanel.activeItem === null) {
+  if (optionsType === 'sources' && dashboardElement.countriesPanel.activeItems.length > 0) {
     optionsType = 'countries';
   }
   // eslint-ignore-next-line

@@ -17,7 +17,6 @@ function SourcesPanel(props) {
     getSearchResults,
     activeCountryItem,
     sources,
-    clearItems,
     countries,
     onSelectCountry,
     onSelectSourceTab,
@@ -52,11 +51,9 @@ function SourcesPanel(props) {
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={
-              (activeCountryItem && activeCountryItem.id) === (itemProps.item && itemProps.item.id)
-            }
+            isActive={activeCountryItem.some(a => a.id === (itemProps.item && itemProps.item.id))}
             enableItem={onSelectCountry}
-            disableItem={clearItems}
+            disableItem={() => onSelectCountry([])}
           />
         )}
       </GridList>
@@ -85,12 +82,11 @@ function SourcesPanel(props) {
               {itemProps => (
                 <GridListItem
                   {...itemProps}
-                  isActive={
-                    (activeSourceItem && activeSourceItem.id) ===
-                    (itemProps.item && itemProps.item.id)
-                  }
+                  isActive={activeSourceItem.some(
+                    a => a.id === (itemProps.item && itemProps.item.id)
+                  )}
                   enableItem={onSelectSourceValue}
-                  disableItem={() => onSelectSourceValue(null)}
+                  disableItem={() => onSelectSourceValue([])}
                 />
               )}
             </GridList>
@@ -112,7 +108,6 @@ SourcesPanel.propTypes = {
   activeSourceTab: PropTypes.object,
   activeSourceItem: PropTypes.object,
   activeCountryItem: PropTypes.object,
-  clearItems: PropTypes.func.isRequired,
   getMoreItems: PropTypes.func.isRequired,
   searchSources: PropTypes.array.isRequired,
   onSelectCountry: PropTypes.func.isRequired,

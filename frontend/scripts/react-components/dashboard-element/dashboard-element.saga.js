@@ -4,11 +4,13 @@ import {
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   DASHBOARD_ELEMENT__GET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import {
   getDashboardPanelSectionTabs,
@@ -26,20 +28,21 @@ import {
  * - Commodities/Destinations panel => Load data
  */
 export function* fetchDashboardPanelInitialData(action) {
-  const { activePanelId } = action.payload;
-  const state = yield select();
-  const { dashboardElement } = state;
 
-  // avoid calling getDashboardPanelData through getDashboardPanelSectionTabs for companies
-  if (dashboardElement.activePanelId === 'companies') {
-    yield fork(getDashboardPanelSectionTabs, dashboardElement, activePanelId);
-  } else if (activePanelId === 'sources') {
-    yield fork(getDashboardPanelData, dashboardElement, 'countries');
-    // Fetch regions
-    if (dashboardElement.countriesPanel.activeItem) {
-      yield fork(getDashboardPanelData, dashboardElement, activePanelId);
-    }
-  } else {
+    const { activePanelId } = action.payload;
+    const state = yield select();
+    const { dashboardElement } = state;
+
+    // avoid dispatching getDashboardPanelData through getDashboardPanelSectionTabs for companies
+    if (dashboardElement.activePanelId === 'companies') {
+      yield fork(getDashboardPanelSectionTabs, dashboardElement, activePanelId);
+    } else if (activePanelId === 'sources') {
+      yield fork(getDashboardPanelData, dashboardElement, 'countries');
+      // Fetch regions
+      if (dashboardElement.countriesPanel.activeItems) {
+        yield fork(getDashboardPanelData, dashboardElement, activePanelId);
+      }
+    } else {
     yield fork(getDashboardPanelData, dashboardElement, activePanelId);
   }
 }
@@ -116,6 +119,7 @@ function* fetchDataOnTabChange() {
   yield takeLatest(
     [
       DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
       DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
       DASHBOARD_ELEMENT__SET_PANEL_TABS
     ],
@@ -131,12 +135,12 @@ export function* onItemChange(action) {
   const { dashboardElement } = yield select();
   // for now, we just need to recalculate the tabs when selecting a new country
   if (panel === 'countries') {
-    yield fork(getDashboardPanelSectionTabs, dashboardElement, 'sources');
+    yield fork(getDashboardPanelSectionTabs, dashboardElement, panel);
   }
 }
 
 function* fetchDataOnItemChange() {
-  yield takeLatest(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, onItemChange);
+  yield takeLatest([DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS], onItemChange);
 }
 
 /**
@@ -145,11 +149,12 @@ function* fetchDataOnItemChange() {
  * dispatches an action that trigger it.
  */
 export function* onFilterClear() {
+
   const { dashboardElement } = yield select();
   if (dashboardElement.activePanelId === 'sources') {
     yield fork(getDashboardPanelData, dashboardElement, 'countries');
-    if (dashboardElement.countriesPanel.activeItem !== null) {
-      yield fork(getDashboardPanelSectionTabs, dashboardElement, dashboardElement.activePanelId);
+    if (dashboardElement.countriesPanel.activeItems.length > 0) {
+      yield fork(getDashboardPanelSectionTabs, dashboardElement, dashboardElement.activePanelId)
     }
   } else if (dashboardElement.activePanelId === 'companies') {
     yield fork(getDashboardPanelSectionTabs, dashboardElement, dashboardElement.activePanelId);
