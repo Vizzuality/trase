@@ -9,7 +9,7 @@ import TopDestinationsWidget from 'react-components/profile-node/profile-node-wi
 import GfwWidget from 'react-components/profile-node/profile-node-widgets/gfw-widget.component';
 import { smoothScroll } from 'utils/smoothScroll';
 import cx from 'classnames';
-
+import sortBy from 'lodash/sortBy';
 // sketchy polyfill
 const _requestIdleCallback = window.requestIdleCallback || window.setTimeout;
 
@@ -200,7 +200,7 @@ class ProfileNode extends React.PureComponent {
             </div>
           </div>
         )}
-        {ready && profileMetadata.charts.map(this.renderChart)}
+        {ready && sortBy(profileMetadata.charts, 'position').map(this.renderChart)}
         {ready &&
           profileType === 'place' &&
           GFW_WIDGETS_BASE_URL &&
