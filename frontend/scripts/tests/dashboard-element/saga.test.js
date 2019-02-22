@@ -5,9 +5,11 @@ import {
   onTabChange,
   onItemChange,
   onFilterClear,
-  onPageChange
+  onPageChange,
+  onStepChange
 } from 'react-components/dashboard-element/dashboard-element.saga';
 import {
+  openIndicatorsStep,
   clearDashboardPanel,
   setDashboardPanelPage,
   setDashboardActivePanel,
@@ -487,6 +489,23 @@ describe('onPageChange', () => {
         direction: 'forward'
       },
       type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA
+    });
+  });
+});
+
+describe('onStepChange', () => {
+  const stepChangeAction = openIndicatorsStep();
+  it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_DATA} to retrieve indicators data on step change`, async () => {
+    const dispatched = await recordSaga(onStepChange, stepChangeAction, baseState);
+    expect(dispatched).toContainEqual({
+      payload: {
+        key: 'indicators',
+        data,
+        meta,
+        tab: null,
+        loading: false
+      },
+      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
     });
   });
 });

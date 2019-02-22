@@ -127,12 +127,12 @@ function* fetchDataOnPageChange() {
   yield takeLatest(DASHBOARD_ELEMENT__SET_PANEL_PAGE, onPageChange);
 }
 
-function* fetchDataOnStepChange() {
-  function* onStepChange() {
-    const { dashboardElement } = yield select();
-    yield fork(getDashboardPanelData, dashboardElement, 'indicators');
-  }
+export function* onStepChange() {
+  const { dashboardElement } = yield select();
+  yield fork(getDashboardPanelData, dashboardElement, 'indicators');
+}
 
+function* fetchDataOnStepChange() {
   yield takeLatest(DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP, onStepChange);
 }
 
