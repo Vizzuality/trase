@@ -47,13 +47,29 @@ namespace :db do
       flow_quals
       flow_quants
     ].freeze
+    LIB_DIR = 'doc/db'.freeze
+    OUTPUT_DIR = 'doc/db/gh-pages'.freeze
 
     desc 'Generate html schema documentation'
     task html: [:sql] do
       config = Rails.configuration.database_configuration
-      database = config[Rails.env]['database']
-      exec `cd doc/db; java -jar #{SCHEMA_SPY_JAR} -t pgsql -dp #{POSTGRESQL_JAR} -db #{database} -s public -u postgres -host localhost -o ./all_tables`
-      exec `cd doc/db; java -jar #{SCHEMA_SPY_JAR} -t pgsql -dp #{POSTGRESQL_JAR} -db #{database} -s public -u postgres -host localhost -i "#{BLUE_TABLES.join('|')}" -o ./blue_tables`
+      run_schema_spy(config, 'all_tables', 'public')
+      run_schema_spy(config, 'blue_tables', 'public', BLUE_TABLES)
+    end
+
+    def run_schema_spy(config, output_name, schema_name, tables = nil)
+      schema_spy_options = [
+        "-jar #{LIB_DIR}/#{SCHEMA_SPY_JAR}",
+        '-t pgsql',
+        "-dp #{LIB_DIR}/#{POSTGRESQL_JAR}",
+        "-db #{config[Rails.env]['database']}",
+        "-u #{config[Rails.env]['username']}",
+        "-host #{config[Rails.env]['host']}",
+        "-o ./#{OUTPUT_DIR}/#{output_name}"
+      ]
+      schema_spy_options << "-s #{schema_name}" if schema_name
+      schema_spy_options << "-i \"#{tables.join('|')}\"" if tables
+      system("java #{schema_spy_options.join(' ')}")
     end
   end
 end
