@@ -10,13 +10,14 @@ That is done using a dedicated rake task:
     `rake db:doc:sql`
 
     Note: this rake task also creates a new dump of structure.sql, as comments are part of the schema.
-2. Once comments are in place, it is possible to generate html documentation of the database schema using an external tool. One os such tools is SchemaSpy, which is an open source java library.
+2. Once comments are in place, it is possible to generate html documentation of the database schema using an external tool. One of such tools is SchemaSpy, which is an open source java library.
     1. install [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
     2. install [Graphviz](http://www.graphviz.org/)
-    3. the [SchemaSpy 6.0.0-rc2](http://schemaspy.readthedocs.io/en/latest/index.html) jar file and [PostgreSQL driver](https://jdbc.postgresql.org/download.html) file are already in doc/db
+    3. the [SchemaSpy](http://schemaspy.readthedocs.io/en/latest/index.html) jar file and [PostgreSQL driver](https://jdbc.postgresql.org/download.html) file are already in doc/db
     4. `rake db:doc:html`
-    5. output files are in `doc/db/all_tables` (complete schema) and `doc/db/blue_tables` (only blue tables)
-3. to update the [GH pages site](https://vizzuality.github.io/trase-api/) all the generated files from `doc/db/all_tables` and `doc/db/blue_tables` need to land in the top-level of the `gh-pages` branch. This is currently a manual process, easiest to have the repo checked out twice on local drive to be able to copy between branches (not great and not final.)
+    5. output files are in `doc/db/gh-pages/all_tables` (complete schema) and `doc/db/gh-pages/blue_tables` (only blue tables)
+3. regenerating the documentation and updating gh-pages is a part of the Travis CI build. When building against `master`, Travis will push to gh pages after a successful build. This uses the [Deployment Pages](https://docs.travis-ci.com/user/deployment/pages/) feature of Travis, and currently is set up using a personal GITHUB_TOKEN defined directly in Travis CI repo settings.
+4. to regenerate html docs and update the [GH pages site](https://vizzuality.github.io/trase-api/) on demand, run `bundle exec rake db:doc:html_2_gh_pages`
 
 ## Ruby code documentation
 
