@@ -13,7 +13,8 @@ shared_context 'api v3 brazil flows' do
         api_v3_port1_node,
         api_v3_exporter1_node,
         api_v3_importer1_node,
-        api_v3_country_of_destination1_node
+        api_v3_country_of_destination1_node,
+        api_v3_other_country_of_destination_node
       ].map(&:id),
       year: 2015
     )
