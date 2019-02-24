@@ -138,13 +138,16 @@ const dashboardElementReducer = {
     const getSection = n => n.section && n.section.toLowerCase();
     const tabs = data.reduce((acc, next) => ({ ...acc, [getSection(next)]: next.tabs }), {});
     const panelName = `${state.activePanelId}Panel`;
-    const firstTab = tabs[state.activePanelId] && tabs[state.activePanelId][0];
+    const activePanelTabs = tabs[state.activePanelId];
+    const firstTab = activePanelTabs && activePanelTabs[0];
+    const existingTab =
+      activePanelTabs && activePanelTabs.find(tab => tab.id === state[panelName].activeTab);
     return {
       ...state,
       tabs,
       [panelName]: {
         ...state[panelName],
-        activeTab: state[panelName].activeTab || firstTab,
+        activeTab: existingTab || firstTab,
         page: initialState[panelName].page
       }
     };
