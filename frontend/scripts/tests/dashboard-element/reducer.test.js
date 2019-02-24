@@ -296,14 +296,14 @@ describe(DASHBOARD_ELEMENT__SET_PANEL_TABS, () => {
     });
   });
 
-  it('loads tabs after panel pagination', () => {
+  it('resets page to inital state after loading tabs', () => {
     const state = {
       ...initialState,
-      tabs: { sources: expectedTabs.companies },
+      tabs: { sources: expectedTabs.sources },
       activePanelId: 'sources',
       sourcesPanel: {
         ...initialState.sourcesPanel,
-        activeTab: { id: 0, name: 'someTab' },
+        activeTab: expectedTabs.sources[0],
         page: 4
       }
     };
