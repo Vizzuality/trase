@@ -1,4 +1,4 @@
-import { select, all, fork, takeLatest } from 'redux-saga/effects';
+import { take, select, all, fork, takeLatest } from 'redux-saga/effects';
 import {
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
@@ -36,7 +36,44 @@ export function* fetchDashboardPanelInitialData(action) {
   }
 }
 export function* fetchDataOnPanelChange() {
-  yield takeLatest(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL, fetchDashboardPanelInitialData);
+  let loaded = [];
+  let activePanelState = null;
+  const hasChanged = panel => {
+    if (!activePanelState) return false;
+    const changes = [];
+    if (panel.sourcesPanel.activeItem !== activePanelState.sourcesPanel.activeItem) {
+      changes.push('sources');
+    }
+    if (panel.countriesPanel.activeItem !== activePanelState.countriesPanel.activeItem) {
+      changes.push('sources');
+    }
+    if (panel.commoditiesPanel.activeItem !== activePanelState.commoditiesPanel.activeItem) {
+      changes.push('commodities');
+    }
+    if (panel.companiesPanel.activeItem !== activePanelState.companiesPanel.activeItem) {
+      changes.push('companies');
+    }
+    if (panel.destinationsPanel.activeItem !== activePanelState.destinationsPanel.activeItem) {
+      changes.push('destinations');
+    }
+    return changes.length > 0 ? changes : false;
+  };
+
+  while (true) {
+    const activePanel = yield take(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL);
+    const newPanelState = yield select(state => state.dashboardElement);
+    const changes = hasChanged(newPanelState);
+    if (changes) {
+      loaded = changes;
+    }
+    if (!activePanelState || !loaded.includes(activePanel.payload.activePanelId)) {
+      yield fork(fetchDashboardPanelInitialData, activePanel);
+      if (!loaded.includes(activePanel.payload.activePanelId)) {
+        loaded.push(activePanel.payload.activePanelId);
+      }
+      activePanelState = newPanelState;
+    }
+  }
 }
 
 export function* getSearchResults(action) {
