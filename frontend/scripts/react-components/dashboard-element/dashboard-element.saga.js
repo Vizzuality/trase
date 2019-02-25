@@ -1,4 +1,4 @@
-import { take, select, all, fork, takeLatest } from 'redux-saga/effects';
+import { take, select, all, fork, takeLatest, cancel } from 'redux-saga/effects';
 import {
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
@@ -38,6 +38,7 @@ export function* fetchDashboardPanelInitialData(action) {
 export function* fetchDataOnPanelChange() {
   let loaded = [];
   let activePanelState = null;
+  let task = null;
   const hasChanged = panel => {
     if (!activePanelState) return false;
     const changes = [];
@@ -67,7 +68,10 @@ export function* fetchDataOnPanelChange() {
       loaded = changes;
     }
     if (!activePanelState || !loaded.includes(activePanel.payload.activePanelId)) {
-      yield fork(fetchDashboardPanelInitialData, activePanel);
+      if (task !== null) {
+        yield cancel(task);
+      }
+      task = yield fork(fetchDashboardPanelInitialData, activePanel);
       if (!loaded.includes(activePanel.payload.activePanelId)) {
         loaded.push(activePanel.payload.activePanelId);
       }
