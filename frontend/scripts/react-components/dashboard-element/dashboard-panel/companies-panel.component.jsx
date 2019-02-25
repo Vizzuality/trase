@@ -58,7 +58,7 @@ function CompaniesPanel(props) {
             {itemProps => (
               <GridListItem
                 {...itemProps}
-                isActive={activeCompany[itemProps.item && itemProps.item.id]}
+                isActive={!!activeCompany[itemProps.item && itemProps.item.id]}
                 enableItem={onSelectCompany}
                 disableItem={onSelectCompany}
               />

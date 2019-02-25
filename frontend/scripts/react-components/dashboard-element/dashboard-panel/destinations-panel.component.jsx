@@ -13,7 +13,6 @@ function DestinationsPanel(props) {
     loading,
     getSearchResults,
     activeDestination,
-    nodeTypeRenderer,
     onSelectDestinationValue,
     getMoreItems
   } = props;
@@ -26,7 +25,6 @@ function DestinationsPanel(props) {
         items={searchDestinations}
         placeholder="Search place"
         onSelect={onSelectDestinationValue}
-        nodeTypeRenderer={nodeTypeRenderer}
         onSearchTermChange={getSearchResults}
       />
       <GridList
@@ -45,7 +43,7 @@ function DestinationsPanel(props) {
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={activeDestination[itemProps.item && itemProps.item.id]}
+            isActive={!!activeDestination[itemProps.item && itemProps.item.id]}
             enableItem={onSelectDestinationValue}
             disableItem={onSelectDestinationValue}
           />
@@ -64,7 +62,6 @@ DestinationsPanel.propTypes = {
   activeDestination: PropTypes.object,
   getMoreItems: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
-  nodeTypeRenderer: PropTypes.func.isRequired,
   onSelectDestinationValue: PropTypes.func.isRequired
 };
 

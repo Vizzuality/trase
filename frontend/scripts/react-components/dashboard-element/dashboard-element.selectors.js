@@ -55,55 +55,72 @@ export const getDynamicSentence = createSelector(
     commoditiesPanel
   ) => {
     if (Object.values(dirtyBlocks).every(block => !block)) {
-      return null;
+      return [];
     }
 
-    const getActivePanelItem = panel => {
-      const panels = {
-        countries: countriesPanel,
-        sources: sourcesPanel,
-        destinations: destinationsPanel,
-        companies: companiesPanel,
-        commodities: commoditiesPanel
-      };
-      // TODO: Show several active Items
-      return panels[panel].length > 0 ? panels[panel][0] : null;
+    const panels = {
+      countries: countriesPanel,
+      sources: sourcesPanel,
+      destinations: destinationsPanel,
+      companies: companiesPanel,
+      commodities: commoditiesPanel
     };
 
-    const activeCommodity = getActivePanelItem('commodities');
-    const activeCountry = getActivePanelItem('countries');
-    const activeSource = getActivePanelItem('sources');
-    const activeDestination = getActivePanelItem('destinations');
-    const activeCompany = getActivePanelItem('companies');
+    const getActivePanelItem = panelName => {
+      if (
+        !panels[panelName] ||
+        !panels[panelName].activeItems ||
+        isEmpty(panels[panelName].activeItems)
+      )
+        return null;
+      return Object.values(panels[panelName].activeItems);
+    };
+
+    const panelSentenceValue = (panelName, nodeType) => {
+      let activeValues = getActivePanelItem(panelName);
+      if (activeValues && nodeType)
+        activeValues = activeValues.filter(i => i.nodeType === nodeType);
+      if (!activeValues || activeValues.length === 0) return null;
+      if (activeValues.length === 1) {
+        if (!activeValues[0].name) return null;
+        return activeValues[0].name.toLowerCase();
+      }
+      return `${activeValues.length} ${panelName}`;
+    };
+
+    const sourcesValue = panelSentenceValue('sources') || panelSentenceValue('countries');
     return [
       {
         panel: 'commodities',
         id: 'commodities',
-        prefix: activeCommodity ? 'Explore' : 'Explore commodities',
-        value: activeCommodity && activeCommodity.name.toLowerCase()
+        prefix: `Your dashboard will include ${
+          panelSentenceValue('commodities') ? '' : 'commodities'
+        }`,
+        value: panelSentenceValue('commodities')
       },
       {
         panel: 'sources',
         id: 'sources',
-        prefix:
-          activeSource || activeCountry ? `produced in` : 'produced in countries covered by Trase',
-        value:
-          (activeSource && activeSource.name.toLowerCase()) ||
-          (activeCountry && activeCountry.name.toLowerCase())
+        prefix: sourcesValue ? `produced in` : 'produced in countries covered by Trase',
+        value: sourcesValue
       },
       {
         panel: 'companies',
-        id: 'companies',
-        prefix: activeCompany
-          ? `${activeCompany.nodeType.toLowerCase() === 'exporter' ? 'exported' : 'imported'} by`
-          : '',
-        value: activeCompany && activeCompany.name.toLowerCase()
+        id: 'exporting-companies',
+        prefix: panelSentenceValue('companies', 'EXPORTER') ? 'exported by' : '',
+        value: panelSentenceValue('companies', 'EXPORTER')
+      },
+      {
+        panel: 'companies',
+        id: 'importing-companies',
+        prefix: panelSentenceValue('companies', 'IMPORTER') ? 'imported by' : '',
+        value: panelSentenceValue('companies', 'IMPORTER')
       },
       {
         panel: 'destinations',
         id: 'destinations',
-        prefix: activeDestination ? `going to` : '',
-        value: activeDestination && activeDestination.name.toLowerCase()
+        prefix: panelSentenceValue('destinations') ? `going to` : '',
+        value: panelSentenceValue('destinations')
       }
     ];
   }
