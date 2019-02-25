@@ -21,7 +21,7 @@ RSpec.describe Api::V3::Dashboards::CompaniesController, type: :controller do
   describe 'GET index' do
     it 'returns list in alphabetical order' do
       get :index, params: {countries_ids: api_v3_brazil.id}
-      expect(assigns(:collection).map(&:id)).to eq([api_v3_exporter1_node.id, api_v3_importer1_node.id])
+      expect(assigns(:collection).map(&:id)).to include(api_v3_exporter1_node.id, api_v3_importer1_node.id)
     end
 
     it 'returns companies by id' do
