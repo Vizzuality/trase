@@ -21,7 +21,7 @@ RSpec.describe Api::V3::Dashboards::DestinationsController, type: :controller do
   describe 'GET index' do
     it 'returns list in alphabetical order' do
       get :index, params: {countries_ids: [api_v3_brazil.id].join(',')}
-      expect(assigns(:collection).map(&:id)).to eq([api_v3_country_of_destination1_node.id])
+      expect(assigns(:collection).map(&:id)).to eq([api_v3_other_country_of_destination_node.id, api_v3_country_of_destination1_node.id])
     end
 
     it 'returns destinations by id' do
@@ -30,6 +30,14 @@ RSpec.describe Api::V3::Dashboards::DestinationsController, type: :controller do
         destinations_ids: api_v3_country_of_destination1_node.id
       }
       expect(assigns(:collection).map(&:id)).to eq([api_v3_country_of_destination1_node.id])
+    end
+
+    it 'allows multiple destinations selection' do
+      get :index, params: {
+        countries_ids: [api_v3_brazil.id].join(','),
+        destinations_ids: [api_v3_country_of_destination1_node.id, api_v3_other_country_of_destination_node.id].join(',')
+      }
+      expect(assigns(:collection).map(&:id)).to eq([api_v3_other_country_of_destination_node.id, api_v3_country_of_destination1_node.id])
     end
   end
 end

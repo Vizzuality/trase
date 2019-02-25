@@ -18,6 +18,30 @@ shared_context 'api v3 brazil flows quants' do
       value: 15
     )
   end
+  let!(:flow3_volume) do
+    FactoryBot.create(
+      :api_v3_flow_quant,
+      flow: api_v3_flow3,
+      quant: api_v3_volume,
+      value: 20
+    )
+  end
+  let!(:flow4_volume) do
+    FactoryBot.create(
+      :api_v3_flow_quant,
+      flow: api_v3_flow4,
+      quant: api_v3_volume,
+      value: 25
+    )
+  end
+  let!(:flow5_volume) do
+    FactoryBot.create(
+      :api_v3_flow_quant,
+      flow: api_v3_flow5,
+      quant: api_v3_volume,
+      value: 30
+    )
+  end
   let!(:flow1_deforestation_v2) do
     FactoryBot.create(
       :api_v3_flow_quant,
