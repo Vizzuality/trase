@@ -491,15 +491,15 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>chart_node_types</td>
+					 <td>chart_quals</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_type_id</td>
-					 <td>int8</td>
-					 <td>19</td>
-					 <td title='nullable'>√</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Refence to node type</p></td>
+					 <td></td>
 					</tr>
 					<tr>
 					 <td>pg_stat_statements</td>
@@ -689,15 +689,15 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>chart_quals</td>
+					 <td>chart_node_types</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>chart_attribute_id</td>
+					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
 					 <td>int4</td>
 					 <td>10</td>
-					 <td title=''></td>
+					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td></td>
+					 <td><p>Display order in scope of chart; required when more than one</p></td>
 					</tr>
 					<tr>
 					 <td>qual_properties</td>
@@ -854,15 +854,15 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>chart_node_types</td>
+					 <td>chart_quals</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>chart_id</td>
-					 <td>int8</td>
-					 <td>19</td>
-					 <td title='nullable'>√</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>chart_attribute_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Refence to chart</p></td>
+					 <td></td>
 					</tr>
 					<tr>
 					 <td>dashboard_template_companies</td>
@@ -1008,15 +1008,15 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>chart_node_types</td>
+					 <td>chart_quals</td>
 					 <td>Table</td>
-					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>identifier</td>
-					 <td>text</td>
-					 <td>2147483647</td>
-					 <td title='nullable'>√</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>29</td>
+					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Identifier used to map this chart node type to a part of code which contains calculation logic</p></td>
+					 <td></td>
 					</tr>
 					<tr>
 					 <td>chart_quants</td>
@@ -1041,14 +1041,14 @@
 					 <td><p>JSON structure with validation report</p></td>
 					</tr>
 					<tr>
-					 <td>chart_node_types</td>
+					 <td>chart_quals</td>
 					 <td>Table</td>
 					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>bigserial</td>
-					 <td>19</td>
+					 <td>serial</td>
+					 <td>10</td>
 					 <td title=''></td>
 					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;chart_node_types_id_seq&#39;::regclass)</td>
+					 <td>nextval(&#39;chart_quals_id_seq&#39;::regclass)</td>
 					 <td></td>
 					</tr>
 					<tr>
@@ -1241,13 +1241,13 @@
 					<tr>
 					 <td>chart_node_types</td>
 					 <td>Table</td>
-					 <td>updated_at</td>
-					 <td>timestamp</td>
-					 <td>29</td>
-					 <td title=''></td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_type_id</td>
+					 <td>int8</td>
+					 <td>19</td>
+					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td></td>
+					 <td><p>Refence to node type</p></td>
 					</tr>
 					<tr>
 					 <td>context_properties</td>
@@ -1879,13 +1879,13 @@
 					<tr>
 					 <td>chart_node_types</td>
 					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>29</td>
-					 <td title=''></td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>chart_id</td>
+					 <td>int8</td>
+					 <td>19</td>
+					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td></td>
+					 <td><p>Refence to chart</p></td>
 					</tr>
 					<tr>
 					 <td>dashboard_template_sources</td>
@@ -2119,7 +2119,7 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>chart_quals</td>
+					 <td>chart_node_types</td>
 					 <td>Table</td>
 					 <td>updated_at</td>
 					 <td>timestamp</td>
@@ -2537,15 +2537,15 @@
 					 <td><p>Name of attribute for display in chart</p></td>
 					</tr>
 					<tr>
-					 <td>chart_node_types</td>
+					 <td>chart_quals</td>
 					 <td>Table</td>
-					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>position</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title='nullable'>√</td>
+					 <td>updated_at</td>
+					 <td>timestamp</td>
+					 <td>29</td>
+					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Display order in scope of chart; required when more than one</p></td>
+					 <td></td>
 					</tr>
 					<tr>
 					 <td>profiles</td>
@@ -2812,7 +2812,7 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>chart_quals</td>
+					 <td>chart_node_types</td>
 					 <td>Table</td>
 					 <td>created_at</td>
 					 <td>timestamp</td>
@@ -2935,12 +2935,12 @@
 					<tr>
 					 <td>chart_node_types</td>
 					 <td>Table</td>
-					 <td>is_total</td>
-					 <td>bool</td>
-					 <td>1</td>
-					 <td title='nullable'>√</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>bigserial</td>
+					 <td>19</td>
 					 <td title=''></td>
-					 <td>false</td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;chart_node_types_id_seq&#39;::regclass)</td>
 					 <td></td>
 					</tr>
 					<tr>
@@ -3318,15 +3318,15 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>chart_quals</td>
+					 <td>chart_node_types</td>
 					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
+					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>identifier</td>
+					 <td>text</td>
+					 <td>2147483647</td>
+					 <td title='nullable'>√</td>
 					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;chart_quals_id_seq&#39;::regclass)</td>
-					 <td></td>
+					 <td>null</td>
+					 <td><p>Identifier used to map this chart node type to a part of code which contains calculation logic</p></td>
 					</tr>
 					<tr>
 					 <td>pg_stat_statements</td>
@@ -4440,14 +4440,14 @@
 					 <td><p>Exception message for failed updates</p></td>
 					</tr>
 					<tr>
-					 <td>chart_quals</td>
+					 <td>chart_node_types</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
-					 <td>int4</td>
-					 <td>10</td>
+					 <td>is_total</td>
+					 <td>bool</td>
+					 <td>1</td>
+					 <td title='nullable'>√</td>
 					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
+					 <td>false</td>
 					 <td></td>
 					</tr>
 					<tr>
