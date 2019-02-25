@@ -57,11 +57,11 @@ export function* fetchDataOnPanelChange() {
   const hasChanged = panel => {
     if (!previousPanelState) return false;
     return (
-      panel.sourcesPanel.activeItem !== previousPanelState.sourcesPanel.activeItem ||
-      panel.countriesPanel.activeItem !== previousPanelState.countriesPanel.activeItem ||
-      panel.commoditiesPanel.activeItem !== previousPanelState.commoditiesPanel.activeItem ||
-      panel.companiesPanel.activeItem !== previousPanelState.companiesPanel.activeItem ||
-      panel.destinationsPanel.activeItem !== previousPanelState.destinationsPanel.activeItem
+      panel.sourcesPanel.activeItems !== previousPanelState.sourcesPanel.activeItems ||
+      panel.countriesPanel.activeItems !== previousPanelState.countriesPanel.activeItems ||
+      panel.commoditiesPanel.activeItems !== previousPanelState.commoditiesPanel.activeItems ||
+      panel.companiesPanel.activeItems !== previousPanelState.companiesPanel.activeItems ||
+      panel.destinationsPanel.activeItems !== previousPanelState.destinationsPanel.activeItems
     );
   };
 
@@ -135,7 +135,7 @@ export function* onItemChange(action) {
   const { dashboardElement } = yield select();
   // for now, we just need to recalculate the tabs when selecting a new country
   if (panel === 'countries') {
-    yield fork(getDashboardPanelSectionTabs, dashboardElement, panel);
+    yield fork(getDashboardPanelSectionTabs, dashboardElement, 'sources');
   }
 }
 
@@ -156,7 +156,7 @@ export function* onFilterClear() {
   if (dashboardElement.activePanelId === 'sources') {
     yield fork(getDashboardPanelData, dashboardElement, 'countries');
     if (!isEmpty(dashboardElement.countriesPanel.activeItems)) {
-    yield fork(getDashboardPanelSectionTabs, dashboardElement, dashboardElement.activePanelId)
+      yield fork(getDashboardPanelSectionTabs, dashboardElement, 'sources');
     }
   } else if (dashboardElement.activePanelId === 'companies') {
     yield fork(getDashboardPanelSectionTabs, dashboardElement, dashboardElement.activePanelId);

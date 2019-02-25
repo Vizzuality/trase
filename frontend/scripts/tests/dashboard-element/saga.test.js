@@ -496,7 +496,9 @@ describe('fetchDataOnPanelChange', () => {
       ...baseState.dashboardElement,
       sourcesPanel: {
         ...baseState.dashboardElement.sourcesPanel,
-        activeItem: { id: 0, name: 'source' }
+        activeItems: {
+          0: { id: 0, name: 'source' }
+        }
       }
     };
     generator.next(action);
