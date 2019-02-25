@@ -42,10 +42,10 @@ export function* fetchDataOnPanelChange() {
   const hasChanged = panel => {
     if (!activePanelState) return false;
     const changes = [];
-    if (panel.sourcesPanel.activeItem !== activePanelState.sourcesPanel.activeItem) {
-      changes.push('sources');
-    }
-    if (panel.countriesPanel.activeItem !== activePanelState.countriesPanel.activeItem) {
+    if (
+      panel.sourcesPanel.activeItem !== activePanelState.sourcesPanel.activeItem ||
+      panel.countriesPanel.activeItem !== activePanelState.countriesPanel.activeItem
+    ) {
       changes.push('sources');
     }
     if (panel.commoditiesPanel.activeItem !== activePanelState.commoditiesPanel.activeItem) {
@@ -65,7 +65,7 @@ export function* fetchDataOnPanelChange() {
     const newPanelState = yield select(state => state.dashboardElement);
     const changes = hasChanged(newPanelState);
     if (changes) {
-      loaded = changes;
+      loaded = changes.filter(id => id !== activePanel.payload.activePanelId);
     }
     if (!activePanelState || !loaded.includes(activePanel.payload.activePanelId)) {
       if (task !== null) {
@@ -126,7 +126,10 @@ export function* onItemChange(action) {
   if (panel === 'countries') {
     yield fork(getDashboardPanelSectionTabs, dashboardElement, panel);
   } else if (items && !activeItemExists) {
-    yield fork(getDashboardPanelData, dashboardElement, panel);
+    // only reload list if clearing item from a different panel than the one that is active
+    // if (!activeItem && panel !== dashboardElement.activePanelId) {
+    //   yield fork(getDashboardPanelData, dashboardElement, panel);
+    // }
   }
 }
 
