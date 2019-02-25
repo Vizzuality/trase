@@ -63,7 +63,7 @@ const baseState = {
     activePanelId: 'countries',
     countriesPanel: {
       ...initialState.countriesPanel,
-      activeItem: 'Brazil'
+      activeItems: { 6: { id: 6, name: 'Brazil' } }
     }
   }
 };
@@ -277,13 +277,13 @@ describe('onItemChange', () => {
       },
       sourcesPanel: {
         ...state.dashboardElement.sourcesPanel,
-        activeItem: { id: 2 }
+        activeItems: { 2: { id: 2 } }
       }
     }
   };
 
-  const changeToCountriesAction = setDashboardPanelActiveItem({ id: 5 }, 'countries');
-  const changeToSourcesAction = setDashboardPanelActiveItem({ id: 2 }, 'sources');
+  const changeToCountriesAction = setDashboardPanelActiveItem({ 5: { id: 5 } }, 'countries');
+  const changeToSourcesAction = setDashboardPanelActiveItem({ 2: { id: 2 } }, 'sources');
 
   it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_TABS} if we select countries`, async () => {
     const dispatched = await recordSaga(onItemChange, changeToCountriesAction, state);
@@ -326,7 +326,7 @@ describe('onFilterClear', () => {
       },
       countriesPanel: {
         ...baseState.dashboardElement.countriesPanel,
-        activeItem: null
+        activeItems: {}
       }
     }
   };
@@ -335,7 +335,7 @@ describe('onFilterClear', () => {
       ...state.dashboardElement,
       countriesPanel: {
         ...state.dashboardElement.countriesPanel,
-        activeItem: { id: 5 }
+        activeItems: { 5: { id: 5 } }
       }
     }
   };

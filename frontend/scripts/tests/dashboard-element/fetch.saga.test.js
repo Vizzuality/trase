@@ -1,3 +1,4 @@
+import { initialState } from 'react-components/dashboard-element/dashboard-element.reducer';
 import { cancelled } from 'redux-saga/effects';
 import { fetchWithCancel } from 'react-components/dashboard-element/fetch-with-cancel';
 
@@ -17,6 +18,7 @@ jest.mock('utils/getURLFromParams', () => ({
 }));
 
 const dashboardElement = {
+  ...initialState,
   data: {
     indicators: [],
     countries: [
@@ -36,16 +38,12 @@ const dashboardElement = {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItem: null,
+    activeItems: {},
     activeTab: {
       id: 1,
       name: 'BIOME'
     }
-  },
-  companiesPanel: {},
-  countriesPanel: {},
-  destinationsPanel: {},
-  commoditiesPanel: {}
+  }
 };
 
 const someUrl = 'http://trase.earth';

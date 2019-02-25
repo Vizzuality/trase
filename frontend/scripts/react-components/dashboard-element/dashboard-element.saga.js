@@ -29,21 +29,20 @@ import {
  * - Commodities/Destinations panel => Load data
  */
 export function* fetchDashboardPanelInitialData(action) {
+  const { activePanelId } = action.payload;
+  const state = yield select();
+  const { dashboardElement } = state;
 
-    const { activePanelId } = action.payload;
-    const state = yield select();
-    const { dashboardElement } = state;
-
-    // avoid dispatching getDashboardPanelData through getDashboardPanelSectionTabs for companies
-    if (dashboardElement.activePanelId === 'companies') {
-      yield fork(getDashboardPanelSectionTabs, dashboardElement, activePanelId);
-    } else if (activePanelId === 'sources') {
-      yield fork(getDashboardPanelData, dashboardElement, 'countries');
-      // Fetch regions
-      if (!isEmpty(dashboardElement.countriesPanel.activeItems)) {
-        yield fork(getDashboardPanelData, dashboardElement, activePanelId);
-      }
-    } else {
+  // avoid dispatching getDashboardPanelData through getDashboardPanelSectionTabs for companies
+  if (dashboardElement.activePanelId === 'companies') {
+    yield fork(getDashboardPanelSectionTabs, dashboardElement, activePanelId);
+  } else if (activePanelId === 'sources') {
+    yield fork(getDashboardPanelData, dashboardElement, 'countries');
+    // Fetch regions
+    if (!isEmpty(dashboardElement.countriesPanel.activeItems)) {
+      yield fork(getDashboardPanelData, dashboardElement, activePanelId);
+    }
+  } else {
     yield fork(getDashboardPanelData, dashboardElement, activePanelId);
   }
 }
@@ -141,7 +140,10 @@ export function* onItemChange(action) {
 }
 
 function* fetchDataOnItemChange() {
-  yield takeLatest([DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS], onItemChange);
+  yield takeLatest(
+    [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS],
+    onItemChange
+  );
 }
 
 /**
