@@ -22,7 +22,7 @@ export function* fetchDashboardPanelInitialData(action) {
   const state = yield select();
   const { dashboardElement } = state;
 
-  // avoid dispatching getDashboardPanelData through getDashboardPanelSectionTabs for companies
+  // avoid calling getDashboardPanelData through getDashboardPanelSectionTabs for companies
   if (dashboardElement.activePanelId === 'companies') {
     yield fork(getDashboardPanelSectionTabs, dashboardElement, activePanelId);
   } else if (activePanelId === 'sources') {
@@ -35,29 +35,20 @@ export function* fetchDashboardPanelInitialData(action) {
     yield fork(getDashboardPanelData, dashboardElement, activePanelId);
   }
 }
+
 export function* fetchDataOnPanelChange() {
   let loaded = [];
   let activePanelState = null;
   let task = null;
   const hasChanged = panel => {
     if (!activePanelState) return false;
-    const changes = [];
-    if (
+    return (
       panel.sourcesPanel.activeItem !== activePanelState.sourcesPanel.activeItem ||
-      panel.countriesPanel.activeItem !== activePanelState.countriesPanel.activeItem
-    ) {
-      changes.push('sources');
-    }
-    if (panel.commoditiesPanel.activeItem !== activePanelState.commoditiesPanel.activeItem) {
-      changes.push('commodities');
-    }
-    if (panel.companiesPanel.activeItem !== activePanelState.companiesPanel.activeItem) {
-      changes.push('companies');
-    }
-    if (panel.destinationsPanel.activeItem !== activePanelState.destinationsPanel.activeItem) {
-      changes.push('destinations');
-    }
-    return changes.length > 0 ? changes : false;
+      panel.countriesPanel.activeItem !== activePanelState.countriesPanel.activeItem ||
+      panel.commoditiesPanel.activeItem !== activePanelState.commoditiesPanel.activeItem ||
+      panel.companiesPanel.activeItem !== activePanelState.companiesPanel.activeItem ||
+      panel.destinationsPanel.activeItem !== activePanelState.destinationsPanel.activeItem
+    );
   };
 
   while (true) {
@@ -65,7 +56,7 @@ export function* fetchDataOnPanelChange() {
     const newPanelState = yield select(state => state.dashboardElement);
     const changes = hasChanged(newPanelState);
     if (changes) {
-      loaded = changes.filter(id => id !== activePanel.payload.activePanelId);
+      loaded = [activePanelState.activePanelId];
     }
     if (!activePanelState || !loaded.includes(activePanel.payload.activePanelId)) {
       if (task !== null) {
@@ -75,8 +66,8 @@ export function* fetchDataOnPanelChange() {
       if (!loaded.includes(activePanel.payload.activePanelId)) {
         loaded.push(activePanel.payload.activePanelId);
       }
-      activePanelState = newPanelState;
     }
+    activePanelState = newPanelState;
   }
 }
 
@@ -115,21 +106,11 @@ function* fetchDataOnTabChange() {
 }
 
 export function* onItemChange(action) {
-  const { activeItem, panel } = action.payload;
+  const { panel } = action.payload;
   const { dashboardElement } = yield select();
-  const panelName = `${panel}Panel`;
-  const { activeTab } = dashboardElement[panelName];
-  const panelData = dashboardElement.data[panel];
-  const items = typeof activeTab !== 'undefined' ? panelData[activeTab && activeTab.id] : panelData;
-  const activeItemExists = !!items && items.find(i => i.id === (activeItem && activeItem.id));
   // for now, we just need to recalculate the tabs when selecting a new country
   if (panel === 'countries') {
     yield fork(getDashboardPanelSectionTabs, dashboardElement, panel);
-  } else if (items && !activeItemExists) {
-    // only reload list if clearing item from a different panel than the one that is active
-    // if (!activeItem && panel !== dashboardElement.activePanelId) {
-    //   yield fork(getDashboardPanelData, dashboardElement, panel);
-    // }
   }
 }
 
