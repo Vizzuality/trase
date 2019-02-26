@@ -1,4 +1,4 @@
-dist: trusty
+dist: xenial
 env:
   global:
     - CC_TEST_REPORTER_ID=ae4098e380eed3c112bd34c4c2ceec913288ce9479bb748bf098a57b75ff5de5
@@ -16,7 +16,7 @@ matrix:
       services:
         - postgresql
       addons:
-        postgresql: 9.6
+        postgresql: 10
       before_script:
         - bundle exec rake db:drop db:create db:structure:load RAILS_ENV=test
         - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter

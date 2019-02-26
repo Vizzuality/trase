@@ -17,7 +17,7 @@ While technically independent, the frontend application is heavily dependent on 
 ### API
 - Ruby 2.4.2
 - Rails 5.1+
-- PostgreSQL 9.5+ with `intarray`, `tablefunc` and `postgres_fdw` extensions
+- PostgreSQL 10.6+ with `intarray`, `tablefunc` and `postgres_fdw` extensions
 - [Bundler](http://bundler.io/)
 - redis >= 3
 - wget
