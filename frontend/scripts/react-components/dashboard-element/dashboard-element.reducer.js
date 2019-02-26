@@ -141,7 +141,10 @@ const dashboardElementReducer = {
     const activePanelTabs = tabs[state.activePanelId];
     const firstTab = activePanelTabs && activePanelTabs[0];
     const existingTab =
-      activePanelTabs && activePanelTabs.find(tab => tab.id === state[panelName].activeTab);
+      activePanelTabs &&
+      activePanelTabs.find(
+        tab => tab.id === (state[panelName].activeTab && state[panelName].activeTab.id)
+      );
     return {
       ...state,
       tabs,

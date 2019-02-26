@@ -317,6 +317,52 @@ describe(DASHBOARD_ELEMENT__SET_PANEL_TABS, () => {
       }
     });
   });
+
+  it('sets activeTab to previous value if it exists in new tabs', () => {
+    const state = {
+      ...initialState,
+      tabs: { sources: expectedTabs.sources },
+      activePanelId: 'sources',
+      sourcesPanel: {
+        ...initialState.sourcesPanel,
+        activeTab: expectedTabs.sources[1]
+      }
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      tabs: expectedTabs
+    });
+  });
+
+  it('sets activeTab to first value if previous value doesnt exists in new tabs', () => {
+    const newData = [...data];
+    newData[0].tabs = [expectedTabs.sources[0]];
+    const newAction = {
+      type: DASHBOARD_ELEMENT__SET_PANEL_TABS,
+      payload: {
+        data: newData
+      }
+    };
+    const state = {
+      ...initialState,
+      tabs: { sources: [expectedTabs.sources[0]] },
+      activePanelId: 'sources',
+      sourcesPanel: {
+        ...initialState.sourcesPanel,
+        activeTab: expectedTabs.sources[1]
+      }
+    };
+    const newState = reducer(state, newAction);
+    expect(newState).toEqual({
+      ...state,
+      tabs: { ...expectedTabs, sources: newData[0].tabs },
+      sourcesPanel: {
+        ...state.sourcesPanel,
+        activeTab: expectedTabs.sources[0]
+      }
+    });
+  });
 });
 
 test(DASHBOARD_ELEMENT__SET_ACTIVE_TAB, () => {
