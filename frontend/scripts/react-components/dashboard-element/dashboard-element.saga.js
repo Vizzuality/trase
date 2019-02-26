@@ -140,15 +140,19 @@ function* fetchDataOnItemChange() {
 }
 
 /**
- * Listens to DASHBOARD_ELEMENT__CLEAR_PANEL and fetches the necessary data after a filter clear
+ * Listens to DASHBOARD_ELEMENT__CLEAR_PANEL and fetches the necessary data after a filter clear.
+ * On sources and companies we don't need to call getDashboardPanelData because getDashboardPanelSectionTabs
+ * dispatches an action that trigger it.
  */
 export function* onFilterClear() {
   const { dashboardElement } = yield select();
   if (dashboardElement.activePanelId === 'sources') {
     yield fork(getDashboardPanelData, dashboardElement, 'countries');
     if (dashboardElement.countriesPanel.activeItem !== null) {
-      yield fork(getDashboardPanelData, dashboardElement, 'sources');
+      yield fork(getDashboardPanelSectionTabs, dashboardElement, dashboardElement.activePanelId);
     }
+  } else if (dashboardElement.activePanelId === 'companies') {
+    yield fork(getDashboardPanelSectionTabs, dashboardElement, dashboardElement.activePanelId);
   } else {
     yield fork(getDashboardPanelData, dashboardElement, dashboardElement.activePanelId);
   }

@@ -11,6 +11,5 @@ export async function recordSaga(saga, initialAction, state) {
     saga,
     initialAction
   ).done;
-  dispatched._saga = saga;
   return dispatched;
 }
