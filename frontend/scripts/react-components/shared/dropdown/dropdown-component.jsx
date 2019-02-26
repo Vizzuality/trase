@@ -4,7 +4,7 @@ import Downshift from 'downshift';
 import cx from 'classnames';
 import './dropdown.scss';
 
-const Dropdown = ({ options, value, onChange, arrowType, fitContent }) => (
+const Dropdown = ({ options, value, onChange, arrowType, fitContent, selectorOverrideLabel }) => (
   <Downshift defaultValue={value} itemToString={i => i && i.label} onChange={onChange}>
     {({ getItemProps, isOpen, toggleMenu, getToggleButtonProps, selectedItem }) => (
       <div className={cx('c-dropdown-component', { '-open': isOpen, '-fit-content': fitContent })}>
@@ -13,7 +13,7 @@ const Dropdown = ({ options, value, onChange, arrowType, fitContent }) => (
           className={cx('dropdown-selected-item', { [`-${arrowType}`]: arrowType })}
           onClick={toggleMenu}
         >
-          {(selectedItem && selectedItem.label) || value.label}
+          {selectorOverrideLabel || (selectedItem && selectedItem.label) || value.label}
         </button>
         {isOpen && options.length > 0 ? (
           <ul className="dropdown-menu">
@@ -54,14 +54,16 @@ Dropdown.propTypes = {
   }),
   onChange: PropTypes.func.isRequired,
   arrowType: PropTypes.string,
+  selectorOverrideLabel: PropTypes.string,
   fitContent: PropTypes.bool
 };
 
 Dropdown.defaultProps = {
   options: [],
-  value: null,
-  arrowType: null,
-  fitContent: false
+  value: undefined,
+  arrowType: undefined,
+  fitContent: false,
+  selectorOverrideLabel: undefined
 };
 
 export default Dropdown;
