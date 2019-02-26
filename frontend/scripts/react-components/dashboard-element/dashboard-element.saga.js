@@ -17,6 +17,14 @@ import {
   fetchDashboardPanelSearchResults
 } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
 
+/**
+ * Should receive the DASHBOARD_ELEMENT__SET_ACTIVE_PANEL action and depending on which panel it is on fetch the necessary data.
+ * - Sources panel => Load countries data
+ *                 => If a country is selected, load the next level's data
+ *
+ * - Companies panel => Load the companies available tabs
+ * - Commodities/Destinations panel => Load data
+ */
 export function* fetchDashboardPanelInitialData(action) {
   const { activePanelId } = action.payload;
   const state = yield select();
@@ -36,41 +44,49 @@ export function* fetchDashboardPanelInitialData(action) {
   }
 }
 
+/**
+ * Checks if the activeItem in one of the panels has changed, if it has changed it fetches the panel data.
+ */
 export function* fetchDataOnPanelChange() {
   let loaded = [];
-  let activePanelState = null;
+  let previousPanelState = null;
   let task = null;
   const hasChanged = panel => {
-    if (!activePanelState) return false;
+    if (!previousPanelState) return false;
     return (
-      panel.sourcesPanel.activeItem !== activePanelState.sourcesPanel.activeItem ||
-      panel.countriesPanel.activeItem !== activePanelState.countriesPanel.activeItem ||
-      panel.commoditiesPanel.activeItem !== activePanelState.commoditiesPanel.activeItem ||
-      panel.companiesPanel.activeItem !== activePanelState.companiesPanel.activeItem ||
-      panel.destinationsPanel.activeItem !== activePanelState.destinationsPanel.activeItem
+      panel.sourcesPanel.activeItem !== previousPanelState.sourcesPanel.activeItem ||
+      panel.countriesPanel.activeItem !== previousPanelState.countriesPanel.activeItem ||
+      panel.commoditiesPanel.activeItem !== previousPanelState.commoditiesPanel.activeItem ||
+      panel.companiesPanel.activeItem !== previousPanelState.companiesPanel.activeItem ||
+      panel.destinationsPanel.activeItem !== previousPanelState.destinationsPanel.activeItem
     );
   };
 
   while (true) {
     const activePanel = yield take(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL);
+    const { activePanelId } = activePanel.payload;
     const newPanelState = yield select(state => state.dashboardElement);
     const changes = hasChanged(newPanelState);
     if (changes) {
-      loaded = [activePanelState.activePanelId];
+      loaded = [previousPanelState.activePanelId];
     }
-    if (!activePanelState || !loaded.includes(activePanel.payload.activePanelId)) {
+    if (!previousPanelState || !loaded.includes(activePanelId)) {
       if (task !== null) {
         yield cancel(task);
       }
       task = yield fork(fetchDashboardPanelInitialData, activePanel);
-      if (!loaded.includes(activePanel.payload.activePanelId)) {
-        loaded.push(activePanel.payload.activePanelId);
+      if (!loaded.includes(activePanelId)) {
+        loaded.push(activePanelId);
       }
     }
-    activePanelState = newPanelState;
+    previousPanelState = newPanelState;
   }
 }
 
+/**
+ * Reads the query from the DASHBOARD_ELEMENT__GET_SEARCH_RESULTS action
+ * and calls fetchDashboardPanelSearchResults to fetch the data.
+ */
 export function* getSearchResults(action) {
   const state = yield select();
   const { query } = action.payload;
@@ -81,7 +97,9 @@ export function* getSearchResults(action) {
 function* fetchDataOnSearch() {
   yield takeLatest(DASHBOARD_ELEMENT__GET_SEARCH_RESULTS, getSearchResults);
 }
-
+/**
+ * Fetches the data for the activeTab if the data hasn't been loaded.
+ */
 export function* onTabChange(action) {
   const { panel } = action.payload;
   const panelName = `${panel}Panel`;
@@ -105,6 +123,9 @@ function* fetchDataOnTabChange() {
   );
 }
 
+/**
+ * Listens to DASHBOARD_ELEMENT__SET_ACTIVE_ITEM and requests the tabs data every time a new country has been selected.
+ */
 export function* onItemChange(action) {
   const { panel } = action.payload;
   const { dashboardElement } = yield select();
@@ -118,6 +139,9 @@ function* fetchDataOnItemChange() {
   yield takeLatest(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, onItemChange);
 }
 
+/**
+ * Listens to DASHBOARD_ELEMENT__CLEAR_PANEL and fetches the necessary data after a filter clear
+ */
 export function* onFilterClear() {
   const { dashboardElement } = yield select();
   if (dashboardElement.activePanelId === 'sources') {
@@ -134,6 +158,9 @@ function* fetchDataOnFilterClear() {
   yield takeLatest(DASHBOARD_ELEMENT__CLEAR_PANEL, onFilterClear);
 }
 
+/**
+ * Listens to DASHBOARD_ELEMENT__SET_PANEL_PAGE and fetches the data for the next page.
+ */
 export function* onPageChange(action) {
   const { direction } = action.payload;
   const { dashboardElement } = yield select();
@@ -152,6 +179,9 @@ function* fetchDataOnPageChange() {
   yield takeLatest(DASHBOARD_ELEMENT__SET_PANEL_PAGE, onPageChange);
 }
 
+/**
+ * Listens to DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP and fetches the initial data for the next step.
+ */
 export function* onStepChange() {
   const { dashboardElement } = yield select();
   yield fork(getDashboardPanelData, dashboardElement, 'indicators');

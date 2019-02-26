@@ -1,5 +1,7 @@
+import { take, fork } from 'redux-saga/effects';
 import { initialState } from 'react-components/dashboard-element/dashboard-element.reducer';
 import {
+  fetchDataOnPanelChange,
   fetchDashboardPanelInitialData,
   getSearchResults,
   onTabChange,
@@ -19,7 +21,8 @@ import {
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
   setDashboardPanelActiveItemWithSearch,
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
-  DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA
+  DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
+  DASHBOARD_ELEMENT__SET_ACTIVE_PANEL
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import { getURLFromParams } from 'utils/getURLFromParams';
 import { fetchWithCancel } from 'react-components/dashboard-element/fetch-with-cancel';
@@ -293,21 +296,6 @@ describe('onItemChange', () => {
     });
   });
 
-  it('Recalculates getDashboardPanelData if the active item is missing', async () => {
-    const dispatched = await recordSaga(onItemChange, changeToSourcesAction, state);
-
-    expect(dispatched).toContainEqual({
-      payload: {
-        key: 'sources',
-        data,
-        meta,
-        loading: false,
-        tab: 6
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
-    });
-  });
-
   it('Does not call getDashboardPanelData if we have the active item', async () => {
     const dispatched = await recordSaga(onItemChange, changeToSourcesAction, otherState);
 
@@ -507,5 +495,42 @@ describe('onStepChange', () => {
       },
       type: DASHBOARD_ELEMENT__SET_PANEL_DATA
     });
+  });
+});
+
+describe('fetchDataOnPanelChange', () => {
+  const action = setDashboardActivePanel('companies');
+  const generator = fetchDataOnPanelChange();
+  it(`calls fetchDashboardPanelInitialData on first visit to panel`, () => {
+    generator.next();
+    // saga read the current dashboardElement state
+    generator.next(action);
+    // saga calls fetchDashboardPanelInitialData
+    expect(generator.next(baseState.dashboardElement).value).toEqual(
+      fork(fetchDashboardPanelInitialData, action)
+    );
+  });
+
+  it(`doesn't call fetchDashboardPanelInitialData on second visit to panel`, () => {
+    generator.next();
+    generator.next(action);
+    // saga calls fetchDashboardPanelInitialData
+    expect(generator.next(baseState.dashboardElement).value).toEqual(
+      take(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL)
+    );
+  });
+
+  it(`calls fetchDashboardPanelInitialData when an item has changed`, () => {
+    const state = {
+      ...baseState.dashboardElement,
+      sourcesPanel: {
+        ...baseState.dashboardElement.sourcesPanel,
+        activeItem: { id: 0, name: 'source' }
+      }
+    };
+    generator.next(action);
+    generator.next(state);
+    // saga calls fetchDashboardPanelInitialData
+    expect(generator.next().value).toEqual(fork(fetchDashboardPanelInitialData, action));
   });
 });
