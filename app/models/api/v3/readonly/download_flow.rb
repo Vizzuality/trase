@@ -60,8 +60,10 @@ module Api
             refresh_by_name('flow_paths_mv', concurrently: false) # no unique index
           end
 
-          def after_refresh(_options = {})
-            Api::V3::Download::PrecomputedDownload.refresh
+          def after_refresh(options = {})
+            Api::V3::Download::PrecomputedDownload.clear
+            return if options[:skip_precompute]
+            Api::V3::Download::PrecomputedDownload.refresh_later
           end
         end
       end

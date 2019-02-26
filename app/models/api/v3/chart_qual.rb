@@ -28,7 +28,7 @@ module Api
 
       def self.yellow_foreign_keys
         [
-          {name: :chart_attribute_id, table_class: Api::V3::Chart}
+          {name: :chart_attribute_id, table_class: Api::V3::ChartAttribute}
         ]
       end
 
