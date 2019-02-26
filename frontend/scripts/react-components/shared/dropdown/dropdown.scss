@@ -44,6 +44,11 @@
     letter-spacing: 0.5px;
   }
 
+  &.-fit-content {
+    width: fit-content;
+    padding-right: 15px;
+  }
+
   &.-open {
     .dropdown-selected-item {
       &::after {
@@ -79,6 +84,7 @@
   .dropdown-menu {
     position: absolute;
     top: calc(50% + 8px);
+    left: 0;
     margin: 10px 0 0;
     min-width: 100%;
     display: flex;
@@ -92,11 +98,9 @@
     background-color: $white;
     box-shadow: 0 3px 6px 0 rgba($black, .16), 0 3px 6px 0 rgba($black, .23);
     z-index: $z-above;
-
   }
 
   .dropdown-menu-item {
-    margin: 10px 0 0;
     padding: 10px 25px;
     width: 100%;
     color: $charcoal-grey;
@@ -115,7 +119,7 @@
 
     .icon {
       fill: $strong-pink;
-      height: 11px;
+      height: 10px;
     }
   }
 }

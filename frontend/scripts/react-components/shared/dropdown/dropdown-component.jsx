@@ -4,10 +4,10 @@ import Downshift from 'downshift';
 import cx from 'classnames';
 import './dropdown.scss';
 
-const Dropdown = ({ options, value, onChange, arrowType }) => (
+const Dropdown = ({ options, value, onChange, arrowType, fitContent }) => (
   <Downshift defaultValue={value} itemToString={i => i && i.label} onChange={onChange}>
     {({ getItemProps, isOpen, toggleMenu, getToggleButtonProps, selectedItem }) => (
-      <div className={cx('c-dropdown-component', { '-open': isOpen })}>
+      <div className={cx('c-dropdown-component', { '-open': isOpen, '-fit-content': fitContent })}>
         <button
           {...getToggleButtonProps()}
           className={cx('dropdown-selected-item', { [`-${arrowType}`]: arrowType })}
@@ -53,13 +53,15 @@ Dropdown.propTypes = {
     icon: PropTypes.string
   }),
   onChange: PropTypes.func.isRequired,
-  arrowType: PropTypes.string
+  arrowType: PropTypes.string,
+  fitContent: PropTypes.bool
 };
 
 Dropdown.defaultProps = {
   options: [],
   value: null,
-  arrowType: null
+  arrowType: null,
+  fitContent: false
 };
 
 export default Dropdown;

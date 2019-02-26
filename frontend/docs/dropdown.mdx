@@ -25,6 +25,8 @@ import 'styles/_docz.scss';
   </State>
 </div>
 
+#### With 'caret' arrowType
+
 <div className="components-container -spaced -width-200">
   <State initial={{ options:
     [{ label: 'Blue', value: 'blue' },
@@ -43,9 +45,31 @@ import 'styles/_docz.scss';
   </State>
 </div>
 
+#### With icon prop in the options
+
 <div className="components-container -spaced -width-200">
   <State initial={{ options:
     [{ label: 'Blue', value: 'blue', icon: 'close' },
+      { label: 'Red', value: 'red', icon: 'close' },
+      { label: 'Green', value: 'green', icon: 'close' }],
+      value: { label: 'Red', value: 'red', icon: 'close' }
+    }}>
+    {({ state, setState }) => (
+      <Dropdown
+        options={state.options}
+        value={state.value}
+        onChange={value => setState({ value })}
+        arrowType='caret'
+      />
+    )}
+  </State>
+</div>
+
+#### fitContent prop to adjust to selected content length
+
+<div className="components-container -spaced">
+  <State initial={{ options:
+    [{ label: 'Blue', value: 'blue' },
       { label: 'Red', value: 'red' },
       { label: 'Green', value: 'green' }],
       value: { label: 'Red', value: 'red' }
@@ -56,6 +80,7 @@ import 'styles/_docz.scss';
         value={state.value}
         onChange={value => setState({ value })}
         arrowType='caret'
+        fitContent
       />
     )}
   </State>
