@@ -8,6 +8,7 @@ module Api
           @collection = filter_klass.new(filter_params).
             call.
             page(current_page).
+            per(current_per_page).
             without_count
           set_link_headers(@collection)
         end
