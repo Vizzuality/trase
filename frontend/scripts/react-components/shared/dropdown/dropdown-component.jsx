@@ -28,8 +28,13 @@ const Dropdown = ({ options, value, onChange, arrowType }) => (
                     index,
                     key: item.value
                   })}
-                  className="dropdown-menu-item"
+                  className={cx('dropdown-menu-item', { '-with-icon': item.icon })}
                 >
+                  {item.icon && (
+                    <svg className={cx('icon', `#icon-${item.icon}`)}>
+                      <use xlinkHref={`#icon-${item.icon}`} />
+                    </svg>
+                  )}
                   {item.label}
                 </li>
               ))}
@@ -42,7 +47,11 @@ const Dropdown = ({ options, value, onChange, arrowType }) => (
 
 Dropdown.propTypes = {
   options: PropTypes.array,
-  value: PropTypes.object,
+  value: PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+    icon: PropTypes.string
+  }),
   onChange: PropTypes.func.isRequired,
   arrowType: PropTypes.string
 };

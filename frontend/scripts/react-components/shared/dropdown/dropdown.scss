@@ -34,8 +34,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%;
+  margin-bottom: 10px;
   cursor: default;
+
   * {
     font-size: $font-size-xx-regular;
     font-family: $font-family-2;
@@ -100,12 +101,21 @@
     width: 100%;
     color: $charcoal-grey;
 
+    &.-with-icon {
+      padding-left: 10px;
+    }
+
     &:first-child {
       margin: 0;
     }
 
     &:hover {
       background-color: $manilla;
+    }
+
+    .icon {
+      fill: $strong-pink;
+      height: 11px;
     }
   }
 }

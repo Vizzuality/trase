@@ -43,6 +43,24 @@ import 'styles/_docz.scss';
   </State>
 </div>
 
+<div className="components-container -spaced -width-200">
+  <State initial={{ options:
+    [{ label: 'Blue', value: 'blue', icon: 'close' },
+      { label: 'Red', value: 'red' },
+      { label: 'Green', value: 'green' }],
+      value: { label: 'Red', value: 'red' }
+    }}>
+    {({ state, setState }) => (
+      <Dropdown
+        options={state.options}
+        value={state.value}
+        onChange={value => setState({ value })}
+        arrowType='caret'
+      />
+    )}
+  </State>
+</div>
+
 <PropsTable of={Dropdown} />
 
 <Playground>
