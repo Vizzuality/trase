@@ -1,0 +1,111 @@
+@import 'styles/settings';
+
+@mixin arrow($color) {
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    border: 2px solid $color;
+    border-top: 0;
+    border-left: 0;
+    transform: translate(-15%, -75%) rotate(45deg);
+  }
+}
+
+@mixin caret($color) {
+  &::after {
+    content: '';
+    width: 0;
+    height: 0;
+    margin: 0 0 0 5px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid $color;
+    border-bottom: none;
+    transform: none;
+  }
+}
+
+.c-dropdown-component {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  cursor: default;
+  * {
+    font-size: $font-size-xx-regular;
+    font-family: $font-family-2;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+  }
+
+  &.-open {
+    .dropdown-selected-item {
+      &::after {
+        transform: translate(-15%, -25%) rotate(225deg);
+      }
+
+      &.-caret {
+        &::after {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
+
+  .dropdown-selected-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-width: 20px;
+    line-height: 1em;
+    text-align: center;
+    cursor: pointer;
+    font-size: $font-size-xx-regular;
+    font-family: $font-family-2;
+
+    @include arrow($strong-pink);
+
+    &.-caret {
+      @include caret($strong-pink);
+    }
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: calc(50% + 8px);
+    margin: 10px 0 0;
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    cursor: pointer;
+    max-height: 242px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    background-color: $white;
+    box-shadow: 0 3px 6px 0 rgba($black, .16), 0 3px 6px 0 rgba($black, .23);
+    z-index: $z-above;
+
+  }
+
+  .dropdown-menu-item {
+    margin: 10px 0 0;
+    padding: 10px 25px;
+    width: 100%;
+    color: $charcoal-grey;
+
+    &:first-child {
+      margin: 0;
+    }
+
+    &:hover {
+      background-color: $manilla;
+    }
+  }
+}

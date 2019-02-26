@@ -1,0 +1,63 @@
+---
+Dropdown
+---
+import { PropsTable, Playground } from 'docz'
+import { State } from 'react-powerplug';
+import Dropdown from 'react-components/shared/dropdown';
+import 'styles/_docz.scss';
+
+## Dropdown
+
+<div className="components-container -spaced -width-200">
+  <State initial={{ options:
+    [{ label: 'Blue', value: 'blue' },
+      { label: 'Red', value: 'red' },
+      { label: 'Green', value: 'green' }],
+      value: { label: 'Red', value: 'red' }
+    }}>
+    {({ state, setState }) => (
+      <Dropdown
+        options={state.options}
+        value={state.value}
+        onChange={value => setState({ value })}
+      />
+    )}
+  </State>
+</div>
+
+<div className="components-container -spaced -width-200">
+  <State initial={{ options:
+    [{ label: 'Blue', value: 'blue' },
+      { label: 'Red', value: 'red' },
+      { label: 'Green', value: 'green' }],
+      value: { label: 'Red', value: 'red' }
+    }}>
+    {({ state, setState }) => (
+      <Dropdown
+        options={state.options}
+        value={state.value}
+        onChange={value => setState({ value })}
+        arrowType='caret'
+      />
+    )}
+  </State>
+</div>
+
+<PropsTable of={Dropdown} />
+
+<Playground>
+  <State initial={{ options:
+    [{ label: 'Blue', value: 'blue' },
+      { label: 'Red', value: 'red' },
+      { label: 'Green', value: 'green' }],
+      value: { label: 'Red', value: 'red' }
+    }}>
+    {({ state, setState }) => (
+      <Dropdown
+        options={state.options}
+        value={state.value}
+        onChange={value => setState({ value })}
+      />
+    )}
+  </State>
+</Playground>
