@@ -48,7 +48,7 @@ class GridList extends React.Component {
     }
   }
 
-  getMoreItems = ({ scrollTop, scrollUpdateWasRequested }) => {
+  getMoreItems = ({ scrollTop, scrollUpdateWasRequested, verticalScrollDirection }) => {
     const { items, height, rowHeight, page, columnCount } = this.props;
     const current = parseInt((scrollTop + height) / rowHeight, 10);
     const buffer = 1;
@@ -59,11 +59,15 @@ class GridList extends React.Component {
 
     // TODO: add backwards support
     // const reachedPageStart = current === columnCount;
-    // if (reachedPageStart && !scrollUpdateWasRequested && page > 0) {
+    // if (reachedPageStart && !scrollUpdateWasRequested && page > 0 && verticalScrollDirection === 'backward') {
     //   getMoreItems(page - 1, 'backwards');
     // }
-    if ((reachedPageEnd || reachedPageEndWithBuffer) && !scrollUpdateWasRequested) {
-      this.debouncedGetMoreItemsCb(page + 1, 'forwards');
+    if (
+      (reachedPageEnd || reachedPageEndWithBuffer) &&
+      !scrollUpdateWasRequested &&
+      verticalScrollDirection === 'forward'
+    ) {
+      this.debouncedGetMoreItemsCb(page + 1, 'forward');
     }
   };
 

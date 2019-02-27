@@ -108,11 +108,23 @@ const dashboardElementReducer = {
   },
   [DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA](state, action) {
     const { key, data, tab, direction } = action.payload;
+    const panelName = `${key}Panel`;
+
+    if (data.length === 0) {
+      return {
+        ...state,
+        [panelName]: {
+          ...state[panelName],
+          page: state[panelName].page - 1
+        }
+      };
+    }
+
     const oldData = tab ? state.data[key][tab] : state.data[key];
     let together;
-    if (direction === 'backwards') {
+    if (direction === 'backward' && data.length > 0) {
       together = [...data, ...oldData];
-    } else if (direction === 'forwards') {
+    } else if (direction === 'forward' && data.length > 0) {
       together = [...oldData, ...data];
     }
     const newData = tab ? { ...state.data[key], [tab]: together } : together;
