@@ -36,9 +36,12 @@ export const getDashboardPanelParams = (state, optionsType, options = {}) => {
   const params = {
     page,
     options_type: optionsType !== 'indicators' ? optionsType : 'attributes',
-    node_types_ids: nodeTypesIds,
-    countries_ids: countriesPanel.activeItem && countriesPanel.activeItem.id
+    node_types_ids: nodeTypesIds
   };
+
+  if (optionsType !== 'countries') {
+    params.countries_ids = countriesPanel.activeItem && countriesPanel.activeItem.id;
+  }
 
   if (optionsType !== 'sources') {
     params.sources_ids = sourcesPanel.activeItem && sourcesPanel.activeItem.id;
@@ -55,6 +58,7 @@ export const getDashboardPanelParams = (state, optionsType, options = {}) => {
   if (optionsType !== 'companies') {
     params.companies_ids = companiesPanel.activeItem && companiesPanel.activeItem.id;
   }
+
   return params;
 };
 

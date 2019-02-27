@@ -131,7 +131,7 @@ export function* onItemChange(action) {
   const { dashboardElement } = yield select();
   // for now, we just need to recalculate the tabs when selecting a new country
   if (panel === 'countries') {
-    yield fork(getDashboardPanelSectionTabs, dashboardElement, panel);
+    yield fork(getDashboardPanelSectionTabs, dashboardElement, 'sources');
   }
 }
 
