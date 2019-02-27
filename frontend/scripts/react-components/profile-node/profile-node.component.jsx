@@ -78,6 +78,7 @@ class ProfileNode extends React.PureComponent {
       profileMetadata,
       updateQueryParams
     } = this.props;
+
     switch (chart.chart_type) {
       case 'line_chart_with_map': {
         const isCountries = chart.identifier === 'actor_top_countries';
@@ -189,6 +190,7 @@ class ProfileNode extends React.PureComponent {
     } = this.props;
     const { renderIframes } = this.state;
     const ready = !loadingMetadata && !errorMetadata;
+
     return (
       <div className={`l-profile-${profileType}`}>
         {printMode && (

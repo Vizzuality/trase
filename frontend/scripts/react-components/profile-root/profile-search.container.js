@@ -7,9 +7,21 @@ import {
 import SearchInput from 'react-components/shared/search-input/search-input.component';
 
 function mapStateToProps(state) {
+  const getProfilesContextId = () => {
+    if (DISABLE_MULTIPLE_CONTEXT_PROFILES) {
+      const singleContextProfile = state.app.contexts.find(
+        ctx => ctx.countryName === 'BRAZIL' && ctx.commodityName === 'SOY'
+      );
+
+      return singleContextProfile ? singleContextProfile.id : null;
+    }
+
+    return state.app.selectedContext ? state.app.selectedContext.id : null;
+  };
+
   const searchOptions = {
     year: state.app.selectedContext ? state.app.selectedContext.defaultYear : null,
-    contextId: state.app.selectedContext ? state.app.selectedContext.id : null
+    contextId: getProfilesContextId()
   };
   return {
     searchOptions,

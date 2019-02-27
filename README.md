@@ -133,6 +133,7 @@ The project's main configuration values can be set using [environment variables]
 * ENABLE_LOGISTICS_MAP: if set to true, the logistics map section will be visible to end users.
 * GFW_WIDGETS_BASE_URL: URL to load GFW widgets from. You probably want to use `www.globalforestwatch.org` here.
 * ENABLE_LEGACY_TOOL_SEARCH: if set to false the search algorithm in the tool will use `indexOf(query)` instead of fuzzy search.
+* DISABLE_MULTIPLE_CONTEXT_PROFILES: if set to true, only Brazil-Soy will be available at the profiles page
 
 If you are using the included development server, you can set those variables in the `.env` file (use the included `.env.sample` as an example)
 
