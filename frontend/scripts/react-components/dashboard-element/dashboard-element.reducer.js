@@ -73,7 +73,7 @@ const initialState = {
 
 const activeItems = (currentItems, newItem) =>
   currentItems[newItem.id]
-    ? omit(currentItems, newItem.id)
+    ? omit(currentItems, newItem.id) // remove item if already exists
     : { ...currentItems, [newItem.id]: newItem };
 
 const dashboardElementReducer = {

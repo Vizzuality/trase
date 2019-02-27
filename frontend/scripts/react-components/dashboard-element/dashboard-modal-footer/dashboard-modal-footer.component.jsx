@@ -10,7 +10,8 @@ function DashboardModalFooter(props) {
     editMode,
     isPanelFooter,
     dynamicSentenceParts,
-    clearItem,
+    clearPanel,
+    removeSentenceItem,
     onContinue,
     onBack,
     isDisabled
@@ -19,7 +20,11 @@ function DashboardModalFooter(props) {
   return (
     <div className="c-dashboard-modal-footer">
       {(!editMode || isPanelFooter) && (
-        <TagsGroup tags={dynamicSentenceParts} clearItem={clearItem} />
+        <TagsGroup
+          tags={dynamicSentenceParts}
+          removeSentenceItem={removeSentenceItem}
+          clearPanel={clearPanel}
+        />
       )}
       <div className="dashboard-modal-actions">
         {onBack && !editMode && (
@@ -37,7 +42,8 @@ function DashboardModalFooter(props) {
 
 DashboardModalFooter.propTypes = {
   onBack: PropTypes.func,
-  clearItem: PropTypes.func,
+  removeSentenceItem: PropTypes.func,
+  clearPanel: PropTypes.func,
   isDisabled: PropTypes.bool,
   isPanelFooter: PropTypes.bool,
   editMode: PropTypes.bool,

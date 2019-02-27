@@ -36,8 +36,6 @@ class DashboardPanel extends Component {
     return `${node.countryName + addApostrophe(node.countryName)} ${node.nodeType}`;
   }
 
-  clearFooterItem = item => this.props.clearActiveItems(item.panel);
-
   render() {
     const {
       tabs,
@@ -154,7 +152,8 @@ class DashboardPanel extends Component {
             editMode={editMode}
             isPanelFooter
             onContinue={onContinue}
-            clearItem={this.clearFooterItem}
+            removeSentenceItem={setActiveItems}
+            clearPanel={panelName => clearActiveItems(panelName)}
             dynamicSentenceParts={dynamicSentenceParts}
           />
         )}

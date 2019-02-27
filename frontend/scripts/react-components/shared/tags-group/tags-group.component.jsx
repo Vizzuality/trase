@@ -1,23 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import renderSentencePart from 'utils/dynamicSentence';
 
 import TagsDropdown from './tags-dropdown.component';
 import 'react-components/shared/tags-group/tags-group.scss';
 
-const renderPartValue = (part, clearItem, spaced) =>
+const renderPartValue = (part, clearPanel, removeSentenceItem, spaced) =>
   part.value && part.value.length > 1 ? (
-    <TagsDropdown part={part} clearItem={clearItem} />
+    <TagsDropdown part={part} removeSentenceItem={removeSentenceItem} clearPanel={clearPanel} />
   ) : (
     <span
       className={cx('tags-group-item', 'notranslate', {
-        '-with-cross': clearItem,
+        '-with-cross': clearPanel,
         '-spaced': spaced
       })}
     >
-      {part.value}
-      {clearItem && (
-        <button onClick={() => clearItem(part)} className="tags-group-item-remove-cross">
+      {renderSentencePart(part.value)}
+      {clearPanel && (
+        <button onClick={() => clearPanel(part.panel)} className="tags-group-item-remove-cross">
           <svg className="icon icon-close">
             <use xlinkHref="#icon-close" />
           </svg>
@@ -27,15 +28,14 @@ const renderPartValue = (part, clearItem, spaced) =>
   );
 
 function TagsGroup(props) {
-  const { as, tags, clearItem, spaced, className } = props;
-  console.log('tags', tags);
+  const { as, tags, clearPanel, removeSentenceItem, spaced, className } = props;
   return React.createElement(
     as,
     { className: cx('c-tags-group', className) },
     tags.map(part => (
       <span key={part.prefix + part.id + part.value}>
         {part.prefix && `${part.prefix} `}
-        {part.value && renderPartValue(part, clearItem, spaced)}
+        {part.value && renderPartValue(part, clearPanel, removeSentenceItem, spaced)}
       </span>
     ))
   );
@@ -45,12 +45,13 @@ TagsGroup.propTypes = {
   spaced: PropTypes.bool,
   className: PropTypes.string,
   tags: PropTypes.array.isRequired,
-  clearItem: PropTypes.func.isRequired,
+  clearPanel: PropTypes.func.isRequired,
+  removeSentenceItem: PropTypes.func.isRequired,
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
 };
 
 TagsGroup.defaultProps = {
-  as: 'p'
+  as: 'div'
 };
 
 export default TagsGroup;

@@ -65,38 +65,27 @@ export const getDynamicSentence = createSelector(
       companies: companiesPanel,
       commodities: commoditiesPanel
     };
-
-    const getActivePanelItem = panelName => {
+    const getActivePanelItem = (panelName, nodeType) => {
       if (
         !panels[panelName] ||
         !panels[panelName].activeItems ||
         isEmpty(panels[panelName].activeItems)
       )
         return null;
-      return Object.values(panels[panelName].activeItems);
+      const values = Object.values(panels[panelName].activeItems);
+      return nodeType ? values.filter(i => i.nodeType === nodeType) : values;
     };
 
-    const panelSentenceValue = (panelName, nodeType) => {
-      let activeValues = getActivePanelItem(panelName);
-      if (activeValues && nodeType)
-        activeValues = activeValues.filter(i => i.nodeType === nodeType);
-      if (!activeValues || activeValues.length === 0) return null;
-      if (activeValues.length === 1) {
-        if (!activeValues[0].name) return null;
-        return activeValues[0].name.toLowerCase();
-      }
-      return `${activeValues.length} ${panelName}`;
-    };
+    const sourcesValue = getActivePanelItem('sources') || getActivePanelItem('countries');
 
-    const sourcesValue = panelSentenceValue('sources') || panelSentenceValue('countries');
     return [
       {
         panel: 'commodities',
         id: 'commodities',
         prefix: `Your dashboard will include ${
-          panelSentenceValue('commodities') ? '' : 'commodities'
+          getActivePanelItem('commodities') ? '' : 'commodities'
         }`,
-        value: panelSentenceValue('commodities')
+        value: getActivePanelItem('commodities')
       },
       {
         panel: 'sources',
@@ -107,20 +96,20 @@ export const getDynamicSentence = createSelector(
       {
         panel: 'companies',
         id: 'exporting-companies',
-        prefix: panelSentenceValue('companies', 'EXPORTER') ? 'exported by' : '',
-        value: panelSentenceValue('companies', 'EXPORTER')
+        prefix: getActivePanelItem('companies', 'EXPORTER') ? 'exported by' : '',
+        value: getActivePanelItem('companies', 'EXPORTER')
       },
       {
         panel: 'companies',
         id: 'importing-companies',
-        prefix: panelSentenceValue('companies', 'IMPORTER') ? 'imported by' : '',
-        value: panelSentenceValue('companies', 'IMPORTER')
+        prefix: getActivePanelItem('companies', 'IMPORTER') ? 'imported by' : '',
+        value: getActivePanelItem('companies', 'IMPORTER')
       },
       {
         panel: 'destinations',
         id: 'destinations',
-        prefix: panelSentenceValue('destinations') ? `going to` : '',
-        value: panelSentenceValue('destinations')
+        prefix: getActivePanelItem('destinations') ? `going to` : '',
+        value: getActivePanelItem('destinations')
       }
     ];
   }
