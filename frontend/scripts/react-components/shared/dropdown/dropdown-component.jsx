@@ -12,54 +12,70 @@ const Dropdown = ({
   fitContent,
   selectorOverrideLabel,
   showSelected,
-  className
-}) => (
-  <Downshift defaultValue={value} itemToString={i => i && i.label} onChange={onChange}>
-    {({ getItemProps, isOpen, toggleMenu, getToggleButtonProps, selectedItem }) => (
-      <div
-        className={cx(
-          'c-dropdown-component',
-          { '-open': isOpen, '-fit-content': fitContent },
-          className
-        )}
-      >
-        <button
-          {...getToggleButtonProps()}
-          className={cx('dropdown-selected-item', { [`-${arrowType}`]: arrowType })}
-          onClick={toggleMenu}
+  theme
+}) => {
+  const getSelectedOptions = selectedItem =>
+    showSelected
+      ? options
+      : options.filter(
+          o => o.value !== (selectedItem && selectedItem.value) && o.value !== value.value
+        );
+
+  const renderItem = (item, index, getItemProps) => (
+    <li
+      {...getItemProps({
+        item,
+        index,
+        key: item.value
+      })}
+      className={cx(
+        'dropdown-menu-item',
+        { '-with-icon': item.icon },
+        { [theme['menu-item']]: theme['menu-item'] }
+      )}
+    >
+      {item.icon && (
+        <svg className={cx('icon', `#icon-${item.icon}`, { [theme.icon]: theme.icon })}>
+          <use xlinkHref={`#icon-${item.icon}`} />
+        </svg>
+      )}
+      {item.label}
+    </li>
+  );
+
+  return (
+    <Downshift defaultValue={value} itemToString={i => i && i.label} onChange={onChange}>
+      {({ getItemProps, isOpen, toggleMenu, getToggleButtonProps, selectedItem }) => (
+        <div
+          className={cx(
+            'c-dropdown-component',
+            { '-open': isOpen, '-fit-content': fitContent },
+            { [theme.dropdown]: theme.dropdown }
+          )}
         >
-          {selectorOverrideLabel || (selectedItem && selectedItem.label) || value.label}
-        </button>
-        {isOpen && options.length > 0 ? (
-          <ul className="dropdown-menu">
-            {(showSelected
-              ? options
-              : options.filter(
-                  o => o.value !== (selectedItem && selectedItem.value) && o.value !== value.value
-                )
-            ).map((item, index) => (
-              <li
-                {...getItemProps({
-                  item,
-                  index,
-                  key: item.value
-                })}
-                className={cx('dropdown-menu-item', { '-with-icon': item.icon })}
-              >
-                {item.icon && (
-                  <svg className={cx('icon', `#icon-${item.icon}`)}>
-                    <use xlinkHref={`#icon-${item.icon}`} />
-                  </svg>
-                )}
-                {item.label}
-              </li>
-            ))}
-          </ul>
-        ) : null}
-      </div>
-    )}
-  </Downshift>
-);
+          <button
+            {...getToggleButtonProps()}
+            className={cx(
+              'dropdown-selected-item',
+              { [`-${arrowType}`]: arrowType },
+              theme['selected-item']
+            )}
+            onClick={toggleMenu}
+          >
+            {selectorOverrideLabel || (selectedItem && selectedItem.label) || value.label}
+          </button>
+          {isOpen && options.length > 0 ? (
+            <ul className={cx('dropdown-menu', { [theme.menu]: theme.menu })}>
+              {getSelectedOptions(selectedItem).map((item, index) =>
+                renderItem(item, index, getItemProps)
+              )}
+            </ul>
+          ) : null}
+        </div>
+      )}
+    </Downshift>
+  );
+};
 
 Dropdown.propTypes = {
   options: PropTypes.array,
@@ -73,7 +89,7 @@ Dropdown.propTypes = {
   selectorOverrideLabel: PropTypes.string,
   fitContent: PropTypes.bool,
   showSelected: PropTypes.bool,
-  className: PropTypes.string
+  theme: PropTypes.object
 };
 
 Dropdown.defaultProps = {
@@ -83,7 +99,7 @@ Dropdown.defaultProps = {
   fitContent: false,
   selectorOverrideLabel: undefined,
   showSelected: false,
-  className: undefined
+  theme: {}
 };
 
 export default Dropdown;

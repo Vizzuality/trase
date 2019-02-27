@@ -60,7 +60,7 @@ TagsGroup.propTypes = {
 };
 
 TagsGroup.defaultProps = {
-  as: 'div'
+  as: 'span'
 };
 
 export default TagsGroup;

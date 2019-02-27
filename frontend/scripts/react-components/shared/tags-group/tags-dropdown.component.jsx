@@ -19,7 +19,11 @@ function TagsDropdown(props) {
 
   return (
     <Dropdown
-      className="c-tags-dropdown"
+      theme={{
+        dropdown: 'c-tags-dropdown',
+        'menu-item': 'c-tags-dropdown-menu-item',
+        'selected-item': 'c-tags-dropdown-selected-item'
+      }}
       options={options}
       onChange={removeOption}
       selectorOverrideLabel={`${part.value.length} ${part.panel}`}
