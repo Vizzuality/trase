@@ -6,6 +6,12 @@ import renderSentencePart from 'utils/dynamicSentence';
 import TagsDropdown from './tags-dropdown.component';
 import 'react-components/shared/tags-group/tags-group.scss';
 
+const clearSingleItem = (part, clearPanel, removeSentenceItem) => {
+  if (part.panel === 'companies') {
+    removeSentenceItem(part.value[0], part.panel);
+  } else clearPanel(part.panel);
+};
+
 const renderPartValue = (part, clearPanel, removeSentenceItem, spaced) =>
   part.value && part.value.length > 1 ? (
     <TagsDropdown part={part} removeSentenceItem={removeSentenceItem} clearPanel={clearPanel} />
@@ -18,7 +24,10 @@ const renderPartValue = (part, clearPanel, removeSentenceItem, spaced) =>
     >
       {renderSentencePart(part.value)}
       {clearPanel && (
-        <button onClick={() => clearPanel(part.panel)} className="tags-group-item-remove-cross">
+        <button
+          onClick={() => clearSingleItem(part, clearPanel, removeSentenceItem)}
+          className="tags-group-item-remove-cross"
+        >
           <svg className="icon icon-close">
             <use xlinkHref="#icon-close" />
           </svg>

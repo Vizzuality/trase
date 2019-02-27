@@ -73,7 +73,11 @@ export const getDynamicSentence = createSelector(
       )
         return null;
       const values = Object.values(panels[panelName].activeItems);
-      return nodeType ? values.filter(i => i.nodeType === nodeType) : values;
+      if (nodeType) {
+        const filteredValues = values.filter(i => i.nodeType === nodeType);
+        return filteredValues.length > 0 ? filteredValues : null;
+      }
+      return values;
     };
 
     const sourcesValue = getActivePanelItem('sources') || getActivePanelItem('countries');

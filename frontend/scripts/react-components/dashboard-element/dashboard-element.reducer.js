@@ -2,6 +2,7 @@ import createReducer from 'utils/createReducer';
 import fuzzySearch from 'utils/fuzzySearch';
 import omit from 'lodash/omit';
 import isEmpty from 'lodash/isEmpty';
+import castArray from 'lodash/castArray';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
@@ -71,10 +72,25 @@ const initialState = {
   }
 };
 
-const activeItems = (currentItems, newItem) =>
-  currentItems[newItem.id]
-    ? omit(currentItems, newItem.id) // remove item if already exists
-    : { ...currentItems, [newItem.id]: newItem };
+const activeItems = (currentItems, newItem) => {
+  const newItems = castArray(newItem);
+
+  // Remove new items if they are included
+  const itemsToRemove = [];
+  newItems.forEach(i => {
+    if (currentItems[i.id]) itemsToRemove.push(i);
+  });
+  if (itemsToRemove.length > 0) {
+    return omit(currentItems, itemsToRemove.map(i => i.id));
+  }
+
+  // Add new items otherwise
+  const itemsToAdd = {};
+  newItems.forEach(i => {
+    itemsToAdd[i.id] = i;
+  });
+  return { ...currentItems, ...itemsToAdd };
+};
 
 const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_ACTIVE_PANEL](state, action) {
