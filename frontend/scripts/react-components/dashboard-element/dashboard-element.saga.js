@@ -1,4 +1,4 @@
-import { select, all, fork, takeLatest } from 'redux-saga/effects';
+import { take, select, all, fork, takeLatest, cancel } from 'redux-saga/effects';
 import {
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
@@ -17,12 +17,20 @@ import {
   fetchDashboardPanelSearchResults
 } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
 
+/**
+ * Should receive the DASHBOARD_ELEMENT__SET_ACTIVE_PANEL action and depending on which panel it is on fetch the necessary data.
+ * - Sources panel => Load countries data
+ *                 => If a country is selected, load the next level's data
+ *
+ * - Companies panel => Load the companies available tabs
+ * - Commodities/Destinations panel => Load data
+ */
 export function* fetchDashboardPanelInitialData(action) {
   const { activePanelId } = action.payload;
   const state = yield select();
   const { dashboardElement } = state;
 
-  // avoid dispatching getDashboardPanelData through getDashboardPanelSectionTabs for companies
+  // avoid calling getDashboardPanelData through getDashboardPanelSectionTabs for companies
   if (dashboardElement.activePanelId === 'companies') {
     yield fork(getDashboardPanelSectionTabs, dashboardElement, activePanelId);
   } else if (activePanelId === 'sources') {
@@ -35,10 +43,50 @@ export function* fetchDashboardPanelInitialData(action) {
     yield fork(getDashboardPanelData, dashboardElement, activePanelId);
   }
 }
+
+/**
+ * Checks if the activeItem in one of the panels has changed, if it has changed it fetches the panel data.
+ */
 export function* fetchDataOnPanelChange() {
-  yield takeLatest(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL, fetchDashboardPanelInitialData);
+  let loaded = [];
+  let previousPanelState = null;
+  let task = null;
+  const hasChanged = panel => {
+    if (!previousPanelState) return false;
+    return (
+      panel.sourcesPanel.activeItem !== previousPanelState.sourcesPanel.activeItem ||
+      panel.countriesPanel.activeItem !== previousPanelState.countriesPanel.activeItem ||
+      panel.commoditiesPanel.activeItem !== previousPanelState.commoditiesPanel.activeItem ||
+      panel.companiesPanel.activeItem !== previousPanelState.companiesPanel.activeItem ||
+      panel.destinationsPanel.activeItem !== previousPanelState.destinationsPanel.activeItem
+    );
+  };
+
+  while (true) {
+    const activePanel = yield take(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL);
+    const { activePanelId } = activePanel.payload;
+    const newPanelState = yield select(state => state.dashboardElement);
+    const changes = hasChanged(newPanelState);
+    if (changes) {
+      loaded = [previousPanelState.activePanelId];
+    }
+    if (!previousPanelState || !loaded.includes(activePanelId)) {
+      if (task !== null) {
+        yield cancel(task);
+      }
+      task = yield fork(fetchDashboardPanelInitialData, activePanel);
+      if (!loaded.includes(activePanelId)) {
+        loaded.push(activePanelId);
+      }
+    }
+    previousPanelState = newPanelState;
+  }
 }
 
+/**
+ * Reads the query from the DASHBOARD_ELEMENT__GET_SEARCH_RESULTS action
+ * and calls fetchDashboardPanelSearchResults to fetch the data.
+ */
 export function* getSearchResults(action) {
   const state = yield select();
   const { query } = action.payload;
@@ -49,7 +97,9 @@ export function* getSearchResults(action) {
 function* fetchDataOnSearch() {
   yield takeLatest(DASHBOARD_ELEMENT__GET_SEARCH_RESULTS, getSearchResults);
 }
-
+/**
+ * Fetches the data for the activeTab if the data hasn't been loaded.
+ */
 export function* onTabChange(action) {
   const { panel } = action.payload;
   const panelName = `${panel}Panel`;
@@ -73,19 +123,15 @@ function* fetchDataOnTabChange() {
   );
 }
 
+/**
+ * Listens to DASHBOARD_ELEMENT__SET_ACTIVE_ITEM and requests the tabs data every time a new country has been selected.
+ */
 export function* onItemChange(action) {
-  const { activeItem, panel } = action.payload;
+  const { panel } = action.payload;
   const { dashboardElement } = yield select();
-  const panelName = `${panel}Panel`;
-  const { activeTab } = dashboardElement[panelName];
-  const panelData = dashboardElement.data[panel];
-  const items = typeof activeTab !== 'undefined' ? panelData[activeTab && activeTab.id] : panelData;
-  const activeItemExists = !!items && items.find(i => i.id === (activeItem && activeItem.id));
   // for now, we just need to recalculate the tabs when selecting a new country
   if (panel === 'countries') {
     yield fork(getDashboardPanelSectionTabs, dashboardElement, panel);
-  } else if (items && !activeItemExists) {
-    yield fork(getDashboardPanelData, dashboardElement, panel);
   }
 }
 
@@ -93,13 +139,20 @@ function* fetchDataOnItemChange() {
   yield takeLatest(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, onItemChange);
 }
 
+/**
+ * Listens to DASHBOARD_ELEMENT__CLEAR_PANEL and fetches the necessary data after a filter clear.
+ * On sources and companies we don't need to call getDashboardPanelData because getDashboardPanelSectionTabs
+ * dispatches an action that trigger it.
+ */
 export function* onFilterClear() {
   const { dashboardElement } = yield select();
   if (dashboardElement.activePanelId === 'sources') {
     yield fork(getDashboardPanelData, dashboardElement, 'countries');
     if (dashboardElement.countriesPanel.activeItem !== null) {
-      yield fork(getDashboardPanelData, dashboardElement, 'sources');
+      yield fork(getDashboardPanelSectionTabs, dashboardElement, dashboardElement.activePanelId);
     }
+  } else if (dashboardElement.activePanelId === 'companies') {
+    yield fork(getDashboardPanelSectionTabs, dashboardElement, dashboardElement.activePanelId);
   } else {
     yield fork(getDashboardPanelData, dashboardElement, dashboardElement.activePanelId);
   }
@@ -109,6 +162,9 @@ function* fetchDataOnFilterClear() {
   yield takeLatest(DASHBOARD_ELEMENT__CLEAR_PANEL, onFilterClear);
 }
 
+/**
+ * Listens to DASHBOARD_ELEMENT__SET_PANEL_PAGE and fetches the data for the next page.
+ */
 export function* onPageChange(action) {
   const { direction } = action.payload;
   const { dashboardElement } = yield select();
@@ -127,6 +183,9 @@ function* fetchDataOnPageChange() {
   yield takeLatest(DASHBOARD_ELEMENT__SET_PANEL_PAGE, onPageChange);
 }
 
+/**
+ * Listens to DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP and fetches the initial data for the next step.
+ */
 export function* onStepChange() {
   const { dashboardElement } = yield select();
   yield fork(getDashboardPanelData, dashboardElement, 'indicators');
