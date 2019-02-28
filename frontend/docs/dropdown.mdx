@@ -25,7 +25,7 @@ import 'styles/_docz.scss';
   </State>
 </div>
 
-#### With 'caret' arrowType
+#### With 'caret' arrowType and position up
 
 <div className="components-container -spaced -width-200">
   <State initial={{ options:
@@ -40,6 +40,7 @@ import 'styles/_docz.scss';
         value={state.value}
         onChange={value => setState({ value })}
         arrowType='caret'
+        position="up"
       />
     )}
   </State>
@@ -81,6 +82,29 @@ import 'styles/_docz.scss';
         onChange={value => setState({ value })}
         arrowType='caret'
         fitContent
+      />
+    )}
+  </State>
+</div>
+
+#### Only view dropdown
+
+<div className="components-container -spaced">
+  <State initial={{ options:
+    [{ label: 'Blue', value: 'blue' },
+      { label: 'Red', value: 'red' },
+      { label: 'Green', value: 'green' }],
+      value: { label: 'Red', value: 'red' }
+    }}>
+    {({ state, setState }) => (
+      <Dropdown
+        options={state.options}
+        value={state.value}
+        onChange={value => setState({ value })}
+        fitContent
+        selectorOverrideLabel={`${state.options.length} items`}
+        showSelected
+        itemsDisabled
       />
     )}
   </State>
