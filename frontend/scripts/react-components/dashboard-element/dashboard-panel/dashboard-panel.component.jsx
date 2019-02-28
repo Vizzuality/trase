@@ -147,7 +147,7 @@ class DashboardPanel extends Component {
             />
           )}
         </div>
-        {dynamicSentenceParts && (
+        {dynamicSentenceParts.length > 0 && (
           <DashboardModalFooter
             editMode={editMode}
             isPanelFooter
