@@ -67,8 +67,8 @@ TagsGroup.propTypes = {
   spaced: PropTypes.bool,
   className: PropTypes.string,
   tags: PropTypes.array.isRequired,
-  clearPanel: PropTypes.func.isRequired,
-  removeSentenceItem: PropTypes.func.isRequired,
+  clearPanel: PropTypes.func,
+  removeSentenceItem: PropTypes.func,
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
 };
 

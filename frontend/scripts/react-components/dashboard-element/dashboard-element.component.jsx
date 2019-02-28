@@ -96,13 +96,17 @@ class DashboardElement extends React.PureComponent {
           {`${part.prefix} `}
           {part.value && (
             <span className="dashboard-element-title-item notranslate">
-              <TagsDropdown
-                theme={{
-                  dropdown: 'c-dashboard-element-sentence-dropdown',
-                  'selected-item': 'c-dashboard-element-sentence-selected-item'
-                }}
-                part={part}
-              />
+              {part.value.length > 1 ? (
+                <TagsDropdown
+                  theme={{
+                    dropdown: 'c-dashboard-element-sentence-dropdown',
+                    'selected-item': 'c-dashboard-element-sentence-selected-item'
+                  }}
+                  part={part}
+                />
+              ) : (
+                part.value[0].name
+              )}
             </span>
           )}
         </span>
