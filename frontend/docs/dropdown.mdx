@@ -102,9 +102,9 @@ import 'styles/_docz.scss';
         value={state.value}
         onChange={value => setState({ value })}
         fitContent
-        selectorOverrideLabel={`${state.options.length} items`}
+        selectedValueOverride={`${state.options.length} items`}
         showSelected
-        itemsDisabled
+        readOnly
       />
     )}
   </State>

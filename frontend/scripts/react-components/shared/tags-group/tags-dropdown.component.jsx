@@ -28,10 +28,10 @@ function TagsDropdown(props) {
       }}
       options={options}
       onChange={removeOption}
-      selectorOverrideLabel={`${part.value.length} ${part.panel}`}
-      fitContent
+      selectedValueOverride={`${part.value.length} ${part.panel}`}
       showSelected
-      itemsDisabled={!removeSentenceItem}
+      fitContent
+      readOnly={!removeSentenceItem}
       position={position}
     />
   );
