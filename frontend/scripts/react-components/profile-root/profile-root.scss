@@ -23,6 +23,18 @@
     .context-selector-content {
       top: calc(100% + 10px);
     }
+
+    &.-readonly {
+      pointer-events: none;
+
+      .tooltip-react {
+        pointer-events: all;
+      }
+
+      .dropdown-title::after {
+        content: none;
+      }
+    }
   }
 
   .profile-root-search-container {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ProfileSearch from 'react-components/profile-root/profile-search.container';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 import ErrorMessage from 'react-components/profile-root/error-message/error-message.component';
+import cx from 'classnames';
 
 import 'scripts/react-components/profile-root/profile-root.scss';
 
@@ -20,7 +21,9 @@ const ProfileRoot = props => {
                     <ContextSelector
                       selectContexts={getContextsWithProfilePages}
                       selectedContext={activeContext}
-                      className="profile-root-context-selector"
+                      className={cx('profile-root-context-selector', {
+                        '-readonly': DISABLE_MULTIPLE_CONTEXT_PROFILES
+                      })}
                     />
                   </div>
                 </div>
