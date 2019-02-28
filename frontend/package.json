@@ -122,7 +122,7 @@
     "directory-named-webpack-plugin": "^4.0.0",
     "docz": "^0.13.7",
     "dotenv": "^6.1.0",
-    "downshift": "2.0.16",
+    "downshift": "2.2.3",
     "fast-levenshtein": "^2.0.6",
     "find-parent": "^2.0.2",
     "highlight-words-core": "^1.2.0",
