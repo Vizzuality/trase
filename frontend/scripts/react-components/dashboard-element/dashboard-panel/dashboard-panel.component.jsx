@@ -142,7 +142,7 @@ class DashboardPanel extends Component {
               loadingMoreItems={commoditiesPanel.loadingItems}
               loading={loading}
               commodities={commodities}
-              onSelectCommodity={item => setActiveItems(item, activePanelId)}
+              onSelectCommodity={item => setActiveItem(item, activePanelId)}
               activeCommodity={commoditiesPanel.activeItems}
             />
           )}
