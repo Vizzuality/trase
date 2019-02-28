@@ -12,7 +12,9 @@ const Dropdown = ({
   fitContent,
   selectorOverrideLabel,
   showSelected,
-  theme
+  theme,
+  itemsDisabled,
+  position
 }) => {
   const getSelectedOptions = selectedItem =>
     showSelected
@@ -26,7 +28,8 @@ const Dropdown = ({
       {...getItemProps({
         item,
         index,
-        key: item.value
+        key: item.value,
+        disabled: itemsDisabled
       })}
       className={cx(
         'dropdown-menu-item',
@@ -35,7 +38,7 @@ const Dropdown = ({
       )}
     >
       {item.icon && (
-        <svg className={cx('icon', `#icon-${item.icon}`, { [theme.icon]: theme.icon })}>
+        <svg className={cx('icon', `icon-${item.icon}`, { [theme.icon]: theme.icon })}>
           <use xlinkHref={`#icon-${item.icon}`} />
         </svg>
       )}
@@ -65,9 +68,14 @@ const Dropdown = ({
             {selectorOverrideLabel || (selectedItem && selectedItem.label) || value.label}
           </button>
           {isOpen && options.length > 0 ? (
-            <ul className={cx('dropdown-menu', { [theme.menu]: theme.menu })}>
+            <ul
+              className={cx('dropdown-menu', {
+                [theme.menu]: theme.menu,
+                [`-${position}`]: position
+              })}
+            >
               {getSelectedOptions(selectedItem).map((item, index) =>
-                renderItem(item, index, getItemProps)
+                renderItem(item, index, getItemProps, itemsDisabled)
               )}
             </ul>
           ) : null}
@@ -89,7 +97,9 @@ Dropdown.propTypes = {
   selectorOverrideLabel: PropTypes.string,
   fitContent: PropTypes.bool,
   showSelected: PropTypes.bool,
-  theme: PropTypes.object
+  itemsDisabled: PropTypes.bool,
+  theme: PropTypes.object,
+  position: PropTypes.string
 };
 
 Dropdown.defaultProps = {
@@ -99,7 +109,9 @@ Dropdown.defaultProps = {
   fitContent: false,
   selectorOverrideLabel: undefined,
   showSelected: false,
-  theme: {}
+  itemsDisabled: false,
+  theme: {},
+  position: undefined
 };
 
 export default Dropdown;

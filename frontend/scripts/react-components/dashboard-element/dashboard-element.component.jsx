@@ -6,7 +6,7 @@ import DashboardWelcome from 'react-components/dashboard-element/dashboard-welco
 import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators/dashboard-indicators.container';
 import DashboardWiget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.container';
 import Button from 'react-components/shared/button/button.component';
-import renderSentencePart from 'utils/dynamicSentence';
+import TagsDropdown from 'react-components/shared/tags-group/tags-dropdown.component';
 
 import 'react-components/dashboard-element/dashboard-element.scss';
 
@@ -91,19 +91,23 @@ class DashboardElement extends React.PureComponent {
   renderDynamicSentence() {
     const { dynamicSentenceParts } = this.props;
     if (dynamicSentenceParts) {
-      return dynamicSentenceParts.map((part, i) => {
-        const sentencePart = renderSentencePart(part.value, part.panel);
-        return (
-          <span key={part.prefix + sentencePart + i}>
-            {`${part.prefix} `}
-            {part.value && (
-              <span className="dashboard-element-title-item notranslate">{sentencePart}</span>
-            )}
-          </span>
-        );
-      });
+      return dynamicSentenceParts.map((part, i) => (
+        <span key={part.id + i}>
+          {`${part.prefix} `}
+          {part.value && (
+            <span className="dashboard-element-title-item notranslate">
+              <TagsDropdown
+                theme={{
+                  dropdown: 'c-dashboard-element-sentence-dropdown',
+                  'selected-item': 'c-dashboard-element-sentence-selected-item'
+                }}
+                part={part}
+              />
+            </span>
+          )}
+        </span>
+      ));
     }
-
     return 'Dashboards';
   }
 

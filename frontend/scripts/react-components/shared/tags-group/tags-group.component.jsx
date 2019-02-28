@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import renderSentencePart from 'utils/dynamicSentence';
 
 import TagsDropdown from './tags-dropdown.component';
 import 'react-components/shared/tags-group/tags-group.scss';
@@ -12,9 +11,23 @@ const clearSingleItem = (part, clearPanel, removeSentenceItem) => {
   } else clearPanel(part.panel);
 };
 
+const renderSentencePart = (values, panelName) => {
+  if (!values || values.length === 0) return null;
+  if (values.length === 1) {
+    if (!values[0].name) return null;
+    return values[0].name.toLowerCase();
+  }
+  return `${values.length} ${panelName}`;
+};
+
 const renderPartValue = (part, clearPanel, removeSentenceItem, spaced) =>
   part.value && part.value.length > 1 ? (
-    <TagsDropdown part={part} removeSentenceItem={removeSentenceItem} clearPanel={clearPanel} />
+    <TagsDropdown
+      part={part}
+      removeSentenceItem={removeSentenceItem}
+      clearPanel={clearPanel}
+      position="up"
+    />
   ) : (
     <span
       className={cx('tags-group-item', 'notranslate', {
