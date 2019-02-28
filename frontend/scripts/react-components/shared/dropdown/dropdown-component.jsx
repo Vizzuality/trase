@@ -15,26 +15,22 @@ class Dropdown extends React.Component {
           key: item.value,
           disabled: readOnly
         })}
-        className={cx(
-          'dropdown-menu-item',
-          { '-with-icon': item.icon },
-          { [theme['menu-item']]: theme['menu-item'] }
-        )}
+        className={cx('dropdown-menu-item', { '-with-icon': item.icon })}
       >
         {item.icon && (
           <svg className={cx('icon', `icon-${item.icon}`, { [theme.icon]: theme.icon })}>
             <use xlinkHref={`#icon-${item.icon}`} />
           </svg>
         )}
-        {item.label}
+        <span className="item-label">{item.label}</span>
       </li>
     );
   }
 
   getSelectedOptions(selectedItem) {
-    const { showSelected, options, value } = this.props;
+    const { readOnly, showSelected, options, value } = this.props;
 
-    return showSelected
+    return readOnly || showSelected
       ? options
       : options.filter(
           o => o.value !== (selectedItem && selectedItem.value) && o.value !== value.value
@@ -47,11 +43,13 @@ class Dropdown extends React.Component {
       value,
       onChange,
       arrowType,
-      fitContent,
       selectedValueOverride,
       theme,
       position,
-      itemToString
+      itemToString,
+      color,
+      variant,
+      readOnly
     } = this.props;
 
     return (
@@ -66,11 +64,12 @@ class Dropdown extends React.Component {
           getMenuProps
         }) => (
           <div
-            className={cx(
-              'c-dropdown-component',
-              { '-open': isOpen, '-fit-content': fitContent },
-              { [theme.dropdown]: theme.dropdown }
-            )}
+            className={cx('c-dropdown-component', {
+              '-open': isOpen,
+              [`v-${variant}`]: variant,
+              [`color-${color}`]: color,
+              '-read-only': readOnly
+            })}
           >
             <button
               {...getToggleButtonProps()}
@@ -88,7 +87,7 @@ class Dropdown extends React.Component {
                 {...getMenuProps()}
                 className={cx('dropdown-menu', {
                   [theme.menu]: theme.menu,
-                  [`-${position}`]: position
+                  [`-position-${position}`]: position
                 })}
               >
                 {this.getSelectedOptions(selectedItem).map((item, index) =>
@@ -110,20 +109,20 @@ Dropdown.propTypes = {
     value: PropTypes.string.isRequired,
     icon: PropTypes.string
   }),
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   arrowType: PropTypes.string,
   selectedValueOverride: PropTypes.string,
-  fitContent: PropTypes.bool,
   showSelected: PropTypes.bool,
   readOnly: PropTypes.bool,
   theme: PropTypes.object,
   position: PropTypes.string,
-  itemToString: PropTypes.func
+  itemToString: PropTypes.func,
+  variant: PropTypes.string,
+  color: PropTypes.string
 };
 
 Dropdown.defaultProps = {
   options: [],
-  fitContent: false,
   showSelected: false,
   readOnly: false,
   theme: {},

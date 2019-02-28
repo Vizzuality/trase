@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TagsGroup from 'react-components/shared/tags-group/tags-group.component';
+import TagsGroup from 'react-components/shared/tags-group';
 import Button from 'react-components/shared/button/button.component';
 
 import './dashboard-modal-footer.scss';
@@ -16,16 +16,14 @@ function DashboardModalFooter(props) {
     onBack,
     isDisabled
   } = props;
-
   return (
     <div className="c-dashboard-modal-footer">
-      {(!editMode || isPanelFooter) && (
-        <TagsGroup
-          tags={dynamicSentenceParts}
-          removeSentenceItem={removeSentenceItem}
-          clearPanel={clearPanel}
-        />
-      )}
+      <TagsGroup
+        tags={dynamicSentenceParts}
+        removeSentenceItem={removeSentenceItem}
+        clearPanel={clearPanel}
+        readOnly={!isPanelFooter}
+      />
       <div className="dashboard-modal-actions">
         {onBack && !editMode && (
           <button type="button" onClick={onBack} className="dashboard-modal-back-button">

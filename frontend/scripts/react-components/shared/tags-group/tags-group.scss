@@ -44,23 +44,3 @@
     }
   }
 }
-
-.c-tags-dropdown {
-  display: inline-flex;
-  margin-right: 10px;
-  text-align: left;
-}
-
-.c-tags-dropdown-menu-item {
-  font-size: $font-size-regular;
-  padding: 5px 25px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.c-tags-dropdown-selected-item {
-  font-size: $font-size-medium !important;
-  font-weight: $font-weight-bold;
-  color: $charcoal-grey;
-}

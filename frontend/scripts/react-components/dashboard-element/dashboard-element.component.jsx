@@ -6,7 +6,7 @@ import DashboardWelcome from 'react-components/dashboard-element/dashboard-welco
 import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators/dashboard-indicators.container';
 import DashboardWiget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.container';
 import Button from 'react-components/shared/button/button.component';
-import TagsDropdown from 'react-components/shared/tags-group/tags-dropdown.component';
+import Dropdown from 'react-components/shared/dropdown';
 
 import 'react-components/dashboard-element/dashboard-element.scss';
 
@@ -97,12 +97,12 @@ class DashboardElement extends React.PureComponent {
           {part.value && (
             <span className="dashboard-element-title-item notranslate">
               {part.value.length > 1 ? (
-                <TagsDropdown
-                  theme={{
-                    dropdown: 'c-dashboard-element-sentence-dropdown',
-                    'selected-item': 'c-dashboard-element-sentence-selected-item'
-                  }}
-                  part={part}
+                <Dropdown
+                  variant="sentence"
+                  color="white"
+                  options={part.value.map(p => ({ value: p.id, label: p.name }))}
+                  selectedValueOverride={`${part.value.length} ${part.panel}`}
+                  readOnly
                 />
               ) : (
                 part.value[0].name
