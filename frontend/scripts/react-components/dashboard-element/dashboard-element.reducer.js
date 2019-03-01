@@ -197,13 +197,14 @@ const dashboardElementReducer = {
     const panelName = `${panel}Panel`;
     const sourcesPanelState =
       panel === 'countries' ? initialState.sourcesPanel : state.sourcesPanel;
+    const activeItems = isEmpty(activeItem) ? {} : { [activeItem.id]: activeItem };
     return {
       ...state,
       activeIndicatorsList: [],
       sourcesPanel: sourcesPanelState,
       [panelName]: {
         ...state[panelName],
-        activeItems: { [activeItem.id]: activeItem }
+        activeItems
       }
     };
   },
