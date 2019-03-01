@@ -60,4 +60,8 @@
     font-weight: $font-weight-bold;
   }
 
+  &.transform-uppercase {
+    text-transform: uppercase;
+  }
+
 }

@@ -5,14 +5,15 @@ import cx from 'classnames';
 import './text.scss';
 
 function Text(props) {
-  const { as, variant, color, size, align, weight, children, ...rest } = props;
+  const { as, variant, color, size, align, weight, transform, children, ...rest } = props;
   const textProps = {
     ...rest,
     className: cx('c-text', variant, {
       [`color-${color}`]: color,
       [`size-${size}`]: size,
       [`weight-${weight}`]: weight,
-      [`align-${align}`]: align
+      [`align-${align}`]: align,
+      [`transform-${transform}`]: transform
     })
   };
   return React.createElement(as, textProps, children);
@@ -33,6 +34,7 @@ Text.propTypes = {
   weight: PropTypes.string,
   children: PropTypes.node,
   variant: PropTypes.string,
+  transform: PropTypes.string,
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
 };
 
