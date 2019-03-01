@@ -37,6 +37,21 @@ export const getDirtyBlocks = createSelector(
   })
 );
 
+const getActivePanelItem = (panels, panelName, nodeType) => {
+  if (
+    !panels[panelName] ||
+    !panels[panelName].activeItems ||
+    isEmpty(panels[panelName].activeItems)
+  )
+    return null;
+  const values = Object.values(panels[panelName].activeItems);
+  if (nodeType) {
+    const filteredValues = values.filter(i => i.nodeType === nodeType);
+    return filteredValues.length > 0 ? filteredValues : null;
+  }
+  return values;
+};
+
 export const getDynamicSentence = createSelector(
   [
     getDirtyBlocks,
@@ -57,7 +72,6 @@ export const getDynamicSentence = createSelector(
     if (Object.values(dirtyBlocks).every(block => !block)) {
       return [];
     }
-
     const panels = {
       countries: countriesPanel,
       sources: sourcesPanel,
@@ -65,31 +79,15 @@ export const getDynamicSentence = createSelector(
       companies: companiesPanel,
       commodities: commoditiesPanel
     };
-    const getActivePanelItem = (panelName, nodeType) => {
-      if (
-        !panels[panelName] ||
-        !panels[panelName].activeItems ||
-        isEmpty(panels[panelName].activeItems)
-      )
-        return null;
-      const values = Object.values(panels[panelName].activeItems);
-      if (nodeType) {
-        const filteredValues = values.filter(i => i.nodeType === nodeType);
-        return filteredValues.length > 0 ? filteredValues : null;
-      }
-      return values;
-    };
-
-    const sourcesValue = getActivePanelItem('sources') || getActivePanelItem('countries');
+    const getActiveItems = panelName => getActivePanelItem(panels, panelName);
+    const sourcesValue = getActiveItems('sources') || getActiveItems('countries');
 
     return [
       {
         panel: 'commodities',
         id: 'commodities',
-        prefix: `Your dashboard will include ${
-          getActivePanelItem('commodities') ? '' : 'commodities'
-        }`,
-        value: getActivePanelItem('commodities')
+        prefix: `Your dashboard will include ${getActiveItems('commodities') ? '' : 'commodities'}`,
+        value: getActiveItems('commodities')
       },
       {
         panel: 'sources',
@@ -100,20 +98,20 @@ export const getDynamicSentence = createSelector(
       {
         panel: 'companies',
         id: 'exporting-companies',
-        prefix: getActivePanelItem('companies', 'EXPORTER') ? 'exported by' : '',
-        value: getActivePanelItem('companies', 'EXPORTER')
+        prefix: getActiveItems('companies', 'EXPORTER') ? 'exported by' : '',
+        value: getActiveItems('companies', 'EXPORTER')
       },
       {
         panel: 'companies',
         id: 'importing-companies',
-        prefix: getActivePanelItem('companies', 'IMPORTER') ? 'imported by' : '',
-        value: getActivePanelItem('companies', 'IMPORTER')
+        prefix: getActiveItems('companies', 'IMPORTER') ? 'imported by' : '',
+        value: getActiveItems('companies', 'IMPORTER')
       },
       {
         panel: 'destinations',
         id: 'destinations',
-        prefix: getActivePanelItem('destinations') ? `going to` : '',
-        value: getActivePanelItem('destinations')
+        prefix: getActiveItems('destinations') ? `going to` : '',
+        value: getActiveItems('destinations')
       }
     ];
   }
