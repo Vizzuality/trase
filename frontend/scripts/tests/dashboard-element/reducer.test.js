@@ -732,11 +732,11 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS, () => {
     });
   });
 
-  it('sets active item in the countries panel', () => {
+  it('sets active item in the companies panel', () => {
     const action = {
       type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
       payload: {
-        panel: 'countries',
+        panel: 'companies',
         activeItems: someItem
       }
     };
@@ -749,8 +749,8 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS, () => {
       ...state,
       activeIndicatorsList: [],
       sourcesPanel: initialState.sourcesPanel,
-      countriesPanel: {
-        ...state.countriesPanel,
+      companiesPanel: {
+        ...state.companiesPanel,
         activeItems: { [someItem.id]: someItem }
       }
     });

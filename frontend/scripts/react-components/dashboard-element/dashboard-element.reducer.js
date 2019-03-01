@@ -72,7 +72,7 @@ const initialState = {
   }
 };
 
-const activeItems = (currentItems, newItem) => {
+const updateItems = (currentItems, newItem) => {
   const newItems = castArray(newItem);
 
   // Remove new items if they are included
@@ -218,7 +218,7 @@ const dashboardElementReducer = {
       sourcesPanel: sourcesPanelState,
       [panelName]: {
         ...state[panelName],
-        activeItems: activeItems(state[panelName].activeItems, selectedItem)
+        activeItems: updateItems(state[panelName].activeItems, selectedItem)
       }
     };
   },
@@ -293,7 +293,7 @@ const dashboardElementReducer = {
       activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
-        activeItems: activeItems(state[panelName].activeItems, selectedItem),
+        activeItems: updateItems(state[panelName].activeItems, selectedItem),
         activeTab,
         page: initialState[panelName].page
       }
