@@ -611,7 +611,7 @@ describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
 
 describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
   const someItem = { id: 1, name: 'some item' };
-  it('sets active item in a single entity panel (not countries)', () => {
+  it('Sets an active item in a single entity panel', () => {
     const action = {
       type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
       payload: {
@@ -638,7 +638,7 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
     });
   });
 
-  it('sets active item in the countries panel', () => {
+  it('Clears the current sources when selecting a country in the sources panel', () => {
     const action = {
       type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
       payload: {
@@ -648,7 +648,10 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
     };
     const state = {
       ...initialState,
-      activeIndicatorsList: [0, 1, 2]
+      activeIndicatorsList: [0, 1, 2],
+      countriesPanel: {
+        activeItems: { 16: { id: 16, name: 'some-source-to-be-cleared' } }
+      }
     };
     const newState = reducer(state, action);
     expect(newState).toEqual({
@@ -705,7 +708,7 @@ test(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH, () => {
 
 describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS, () => {
   const someItem = { id: 1, name: 'some item' };
-  it('sets active item in a single entity panel (not countries)', () => {
+  it('sets active item in a multiple entity panel', () => {
     const action = {
       type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
       payload: {
@@ -725,30 +728,6 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS, () => {
     expect(newState).toEqual({
       ...state,
       activeIndicatorsList: [],
-      companiesPanel: {
-        ...state.companiesPanel,
-        activeItems: { [someItem.id]: someItem }
-      }
-    });
-  });
-
-  it('sets active item in the companies panel', () => {
-    const action = {
-      type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
-      payload: {
-        panel: 'companies',
-        activeItems: someItem
-      }
-    };
-    const state = {
-      ...initialState,
-      activeIndicatorsList: [0, 1, 2]
-    };
-    const newState = reducer(state, action);
-    expect(newState).toEqual({
-      ...state,
-      activeIndicatorsList: [],
-      sourcesPanel: initialState.sourcesPanel,
       companiesPanel: {
         ...state.companiesPanel,
         activeItems: { [someItem.id]: someItem }

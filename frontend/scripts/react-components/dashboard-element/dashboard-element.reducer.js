@@ -210,12 +210,10 @@ const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS](state, action) {
     const { panel, activeItems: selectedItem } = action.payload;
     const panelName = `${panel}Panel`;
-    const sourcesPanelState =
-      panel === 'countries' ? initialState.sourcesPanel : state.sourcesPanel;
     return {
       ...state,
       activeIndicatorsList: [],
-      sourcesPanel: sourcesPanelState,
+      sourcesPanel: state.sourcesPanel,
       [panelName]: {
         ...state[panelName],
         activeItems: updateItems(state[panelName].activeItems, selectedItem)
