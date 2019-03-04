@@ -48,6 +48,10 @@ demo:
   <<: *defaults
   active: true
 
+dashboardsdemo:
+  <<: *defaults
+  active: true
+
 development:
   active: false
 
