@@ -1431,7 +1431,7 @@ UNION ALL
     ind_commodity_properties.ind_id,
     '-1'::integer AS quant_id
    FROM public.ind_commodity_properties
-  WITH NO DATA;
+  WITH DATA;
 
 
 --
@@ -1504,7 +1504,7 @@ UNION ALL
     ind_context_properties.ind_id,
     '-1'::integer AS quant_id
    FROM public.ind_context_properties
-  WITH NO DATA;
+  WITH DATA;
 
 
 --
@@ -2018,7 +2018,7 @@ UNION ALL
     ind_country_properties.ind_id,
     '-1'::integer AS quant_id
    FROM public.ind_country_properties
-  WITH NO DATA;
+  WITH DATA;
 
 
 --
