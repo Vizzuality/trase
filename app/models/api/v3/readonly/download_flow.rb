@@ -63,6 +63,7 @@ module Api
           def after_refresh(options = {})
             Api::V3::Download::PrecomputedDownload.clear
             return if options[:skip_precompute]
+
             Api::V3::Download::PrecomputedDownload.refresh_later
           end
         end
