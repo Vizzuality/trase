@@ -11,6 +11,7 @@ module Api
           @context = context
           @node = node
           @year = year
+
           # Assumption: Volume is a special quant which always exists
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
@@ -82,7 +83,7 @@ module Api
                     {
                       name: ro_chart_attribute.display_name,
                       unit: ro_chart_attribute.unit,
-                      tooltip: ro_chart_attribute.tooltip_text
+                      tooltip: get_tooltip(ro_chart_attribute)
                     }
                   end,
             rows: rows
@@ -134,6 +135,26 @@ module Api
                 {value: attribute_total} if attribute_total
               end
           }
+        end
+
+        def get_tooltip(ro_chart_attribute)
+          attr_id = "#{ro_chart_attribute.original_type.downcase}_id".to_sym
+          context_tooltip = Api::V3::Readonly::ContextAttributeProperty.
+            find_by(attr_id.to_sym => ro_chart_attribute.original_id,
+                    context_id: @context.id)
+          return context_tooltip unless context_tooltip.nil?
+
+          country_tooltip = Api::V3::Readonly::CountryAttributeProperty.
+            find_by(attr_id.to_sym => ro_chart_attribute.original_id,
+                    country_id: @context.country_id)
+          return country_tooltip unless country_tooltip.nil?
+
+          commodity_tooltip = Api::V3::Readonly::CommodityAttributeProperty.
+            find_by(attr_id.to_sym => ro_chart_attribute.original_id,
+                    commodity_id: @context.commodity_id)
+          return commodity_tooltip unless commodity_tooltip.nil?
+
+          ro_chart_attribute.tooltip_text
         end
       end
     end

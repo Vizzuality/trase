@@ -39,6 +39,10 @@ module Api
       has_many :map_attributes, through: :map_attribute_groups
       has_many :flows
 
+      has_many :ind_context_properties
+      has_many :quant_context_properties
+      has_many :qual_context_properties
+
       delegate :is_default, to: :context_property
       delegate :is_disabled, to: :context_property
       delegate :is_subnational, to: :context_property
