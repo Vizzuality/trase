@@ -41,7 +41,7 @@ module Api
           @sources_ids = params[:sources_ids] || []
           @companies_ids = params[:companies_ids] || []
           @destinations_ids = params[:destinations_ids] || []
-          @nodes_ids = @sources_ids + companies_ids + destinations_ids
+          @nodes_ids = @sources_ids + @companies_ids + @destinations_ids
 
           @start_year = params[:start_year]
           @end_year = params[:end_year]
