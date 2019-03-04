@@ -17,6 +17,9 @@ module Api
     class Ind < BlueTable
       has_one :ind_property
       has_many :node_inds
+      has_many :ind_context_properties
+      has_many :ind_commodity_properties
+      has_many :ind_country_properties
 
       delegate :display_name, to: :ind_property, allow_nil: true
 
