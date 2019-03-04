@@ -1,4 +1,4 @@
-# Returns node types by which to break down for non-global charts,
+# Returns node types by which to break down for non-overview charts,
 # taking into account user selection and availability of node types
 # in the given context.
 module Api
@@ -15,7 +15,12 @@ module Api
         # @param [Array<Integer>] source_node_types_ids
         # @param [Array<Integer>] company_node_types_ids
         # @param [Array<Integer>] destination_node_types_ids
-        def initialize(context, source_node_types_ids, company_node_types_ids, destination_node_types_ids)
+        def initialize(
+          context,
+          source_node_types_ids = [],
+          company_node_types_ids = [],
+          destination_node_types_ids = []
+        )
           @context = context
           @source_node_types_ids = source_node_types_ids || []
           @company_node_types_ids = company_node_types_ids || []
