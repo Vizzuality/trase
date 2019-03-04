@@ -770,7 +770,7 @@ CREATE MATERIALIZED VIEW public.attributes_mv AS
             NULL::text AS text
            FROM (public.quals
              LEFT JOIN public.qual_properties qp ON ((qp.qual_id = quals.id)))) s
-  WITH NO DATA;
+  WITH DATA;
 
 
 --
@@ -1102,7 +1102,7 @@ UNION ALL
    FROM ((public.chart_inds chi
      JOIN public.chart_attributes cha ON ((cha.id = chi.chart_attribute_id)))
      JOIN public.attributes_mv a ON (((a.original_id = chi.ind_id) AND (a.original_type = 'Ind'::text))))
-  WITH NO DATA;
+  WITH DATA;
 
 
 --
