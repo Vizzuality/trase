@@ -240,3 +240,13 @@ export const LOGISTICS_MAP_INSPECTION_LEVELS = [
   { id: 'SIM', name: 'SIM' },
   { id: 'UNKNOWN', name: 'Unknown' }
 ];
+
+export const DASHBOARD_STEPS = {
+  WELCOME: 0,
+  SOURCES: 1,
+  COMMODITIES: 2,
+  DESTINATIONS: 3,
+  EXPORTERS: 4,
+  IMPORTERS: 5,
+  INDICATORS: 6
+};

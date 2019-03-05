@@ -8,7 +8,12 @@ import {
   getDirtyBlocks,
   getDynamicSentence
 } from 'react-components/dashboard-element/dashboard-element.selectors';
-import { openIndicatorsStep as openIndicatorsStepFn } from 'react-components/dashboard-element/dashboard-element.actions';
+import getPanelId from 'utils/getPanelId';
+import {
+  openIndicatorsStep as openIndicatorsStepFn,
+  setDashboardActivePanel as setDashboardActivePanelFn
+} from 'react-components/dashboard-element/dashboard-element.actions';
+import { DASHBOARD_STEPS } from 'constants';
 
 const mapStateToProps = state => ({
   indicators: state.dashboardElement.data.indicators,
@@ -20,6 +25,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
+      setDashboardActivePanel: setDashboardActivePanelFn,
       openIndicatorsStep: openIndicatorsStepFn,
       goToRoot: () => ({ type: 'dashboardRoot' })
     },
@@ -32,7 +38,8 @@ class DashboardElementContainer extends React.Component {
     activeIndicators: PropTypes.array,
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
-    openIndicatorsStep: PropTypes.func.isRequired
+    openIndicatorsStep: PropTypes.func.isRequired,
+    setDashboardActivePanel: PropTypes.func.isRequired
   };
 
   hasVisitedBefore = {
@@ -48,9 +55,7 @@ class DashboardElementContainer extends React.Component {
   state = {
     modalOpen: true,
     editMode: false,
-    step: this.hasVisitedBefore.get()
-      ? DashboardElement.steps.PANEL
-      : DashboardElement.steps.WELCOME
+    step: this.hasVisitedBefore.get() ? DASHBOARD_STEPS.PANEL : DASHBOARD_STEPS.WELCOME
   };
 
   componentDidMount() {
@@ -65,7 +70,11 @@ class DashboardElementContainer extends React.Component {
 
   reopenPanel = (step, editMode) => this.setState({ step, editMode, modalOpen: true });
 
-  updateStep = step => this.setState({ step });
+  updateStep = step => {
+    const { setDashboardActivePanel } = this.props;
+    setDashboardActivePanel(getPanelId(step));
+    this.setState({ step });
+  };
 
   render() {
     const { step, modalOpen, editMode } = this.state;

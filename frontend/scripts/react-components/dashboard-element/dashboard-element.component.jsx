@@ -4,11 +4,12 @@ import SimpleModal from 'react-components/shared/simple-modal/simple-modal.compo
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel';
 import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome/dashboard-welcome.component';
 import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators/dashboard-indicators.container';
-import DashboardWiget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.container';
+import DashboardWidget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.container';
 import Button from 'react-components/shared/button/button.component';
 import Dropdown from 'react-components/shared/dropdown';
 
 import 'react-components/dashboard-element/dashboard-element.scss';
+import { DASHBOARD_STEPS } from 'constants';
 
 class DashboardElement extends React.PureComponent {
   static propTypes = {
@@ -25,34 +26,46 @@ class DashboardElement extends React.PureComponent {
     openIndicatorsStep: PropTypes.func.isRequired
   };
 
-  static steps = {
-    WELCOME: 0,
-    PANEL: 1,
-    INDICATORS: 2
-  };
-
   openIndicatorsStep() {
     const { openIndicatorsStep, setStep } = this.props;
     openIndicatorsStep();
-    setStep(DashboardElement.steps.INDICATORS);
+    setStep(DASHBOARD_STEPS.INDICATORS);
+  }
+
+  canProceed() {
+    const { activeIndicators, dirtyBlocks } = this.props;
+    const hasIndicators = activeIndicators.length > 0;
+    const hasOptionsSelected = Object.values(dirtyBlocks).some(b => b);
+    return hasOptionsSelected && hasIndicators;
+  }
+
+  renderStep() {
+    const { step, setStep, editMode, closeModal } = this.props;
+
+    if (step === DASHBOARD_STEPS.WELCOME) {
+      return <DashboardWelcome onContinue={() => setStep(step + 1)} />;
+    }
+    if (step === DASHBOARD_STEPS.INDICATORS) {
+      return (
+        <DashboardIndicators
+          editMode={editMode}
+          onContinue={closeModal}
+          goBack={() => setStep(DASHBOARD_STEPS.SOURCES)}
+        />
+      );
+    }
+    return (
+      <DashboardPanel
+        editMode={editMode}
+        onContinue={() => (editMode && this.canProceed() ? closeModal() : setStep(step + 1))}
+        step={step}
+      />
+    );
   }
 
   renderDashboardModal() {
-    const {
-      step,
-      setStep,
-      editMode,
-      goToRoot,
-      modalOpen,
-      closeModal,
-      activeIndicators,
-      dirtyBlocks
-    } = this.props;
-    const hasIndicators = activeIndicators.length > 0;
-    const hasOptionsSelected = Object.values(dirtyBlocks).some(b => b);
-    const canProceed = hasOptionsSelected && hasIndicators;
-    const onClose = editMode && canProceed ? closeModal : goToRoot;
-
+    const { editMode, goToRoot, modalOpen, closeModal } = this.props;
+    const onClose = editMode && this.canProceed() ? closeModal : goToRoot;
     return (
       <React.Fragment>
         {modalOpen && (
@@ -67,22 +80,7 @@ class DashboardElement extends React.PureComponent {
           </section>
         )}
         <SimpleModal isOpen={modalOpen} onRequestClose={onClose}>
-          {step === DashboardElement.steps.WELCOME && (
-            <DashboardWelcome onContinue={() => setStep(DashboardElement.steps.PANEL)} />
-          )}
-          {step === DashboardElement.steps.PANEL && (
-            <DashboardPanel
-              editMode={editMode}
-              onContinue={() => (editMode && canProceed ? closeModal() : this.openIndicatorsStep())}
-            />
-          )}
-          {step === DashboardElement.steps.INDICATORS && (
-            <DashboardIndicators
-              editMode={editMode}
-              onContinue={closeModal}
-              goBack={() => setStep(DashboardElement.steps.PANEL)}
-            />
-          )}
+          {this.renderStep()}
         </SimpleModal>
       </React.Fragment>
     );
@@ -121,7 +119,7 @@ class DashboardElement extends React.PureComponent {
       <div className="row -equal-height -flex-end">
         {activeIndicators.map(indicator => (
           <div key={indicator.id} className="column small-12 medium-6 ">
-            <DashboardWiget
+            <DashboardWidget
               url={indicator.url}
               title={indicator.displayName}
               chartType={indicator.chartType}
@@ -154,7 +152,7 @@ class DashboardElement extends React.PureComponent {
                     color="gray"
                     size="sm"
                     className="dashboard-header-action -panel"
-                    onClick={() => reopenPanel(DashboardElement.steps.PANEL, canProceed)}
+                    onClick={() => reopenPanel(DASHBOARD_STEPS.SOURCES, canProceed)}
                   >
                     Edit Options
                   </Button>
@@ -163,7 +161,7 @@ class DashboardElement extends React.PureComponent {
                     color="gray-transparent"
                     size="sm"
                     className="dashboard-header-action -panel"
-                    onClick={() => reopenPanel(DashboardElement.steps.INDICATORS, canProceed)}
+                    onClick={() => reopenPanel(DASHBOARD_STEPS.INDICATORS, canProceed)}
                   >
                     Edit Indicators
                   </Button>
