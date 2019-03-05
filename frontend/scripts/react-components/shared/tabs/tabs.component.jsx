@@ -59,7 +59,7 @@ Tabs.propTypes = {
   testId: PropTypes.string,
   getTabId: PropTypes.func,
   itemTabRenderer: PropTypes.func,
-  tabs: PropTypes.arrayOf(PropTypes.string).isRequired,
+  tabs: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.object])).isRequired,
   children: PropTypes.any,
   onSelectTab: PropTypes.func.isRequired,
   color: PropTypes.string,

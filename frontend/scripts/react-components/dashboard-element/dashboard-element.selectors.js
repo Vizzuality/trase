@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash/sortBy';
+import isEmpty from 'lodash/isEmpty';
 
 const getCountriesPanel = state => state.dashboardElement.countriesPanel;
 const getSourcesPanel = state => state.dashboardElement.sourcesPanel;
@@ -29,10 +30,10 @@ export const getDirtyBlocks = createSelector(
     getCommoditiesPanel
   ],
   (countriesPanel, sourcesPanel, destinationsPanel, companiesPanel, commoditiesPanel) => ({
-    sources: countriesPanel.activeItem !== null,
-    destinations: destinationsPanel.activeItem !== null,
-    companies: companiesPanel.activeItem !== null,
-    commodities: commoditiesPanel.activeItem !== null
+    sources: !isEmpty(countriesPanel.activeItems),
+    destinations: !isEmpty(destinationsPanel.activeItems),
+    companies: !isEmpty(companiesPanel.activeItems),
+    commodities: !isEmpty(commoditiesPanel.activeItems)
   })
 );
 
@@ -54,44 +55,65 @@ export const getDynamicSentence = createSelector(
     commoditiesPanel
   ) => {
     if (Object.values(dirtyBlocks).every(block => !block)) {
-      return null;
+      return [];
     }
+    const panels = {
+      countries: countriesPanel,
+      sources: sourcesPanel,
+      destinations: destinationsPanel,
+      companies: companiesPanel,
+      commodities: commoditiesPanel
+    };
+    const getActivePanelItem = (panelName, nodeType) => {
+      if (
+        !panels[panelName] ||
+        !panels[panelName].activeItems ||
+        isEmpty(panels[panelName].activeItems)
+      ) {
+        return null;
+      }
+      const values = Object.values(panels[panelName].activeItems);
+      if (nodeType) {
+        const filteredValues = values.filter(i => i.nodeType === nodeType);
+        return filteredValues.length > 0 ? filteredValues : null;
+      }
+      return values;
+    };
 
-    const activeCountry = countriesPanel.activeItem;
-    const activeSource = sourcesPanel.activeItem;
-    const activeDestination = destinationsPanel.activeItem;
-    const activeCompany = companiesPanel.activeItem;
-    const activeCommodity = commoditiesPanel.activeItem;
+    const sourcesValue = getActivePanelItem('sources') || getActivePanelItem('countries');
 
     return [
       {
         panel: 'commodities',
         id: 'commodities',
-        prefix: activeCommodity ? 'Explore' : 'Explore commodities',
-        value: activeCommodity && activeCommodity.name.toLowerCase()
+        prefix: `Your dashboard will include ${
+          getActivePanelItem('commodities') ? '' : 'commodities'
+        }`,
+        value: getActivePanelItem('commodities')
       },
       {
         panel: 'sources',
         id: 'sources',
-        prefix:
-          activeSource || activeCountry ? `produced in` : 'produced in countries covered by Trase',
-        value:
-          (activeSource && activeSource.name.toLowerCase()) ||
-          (activeCountry && activeCountry.name.toLowerCase())
+        prefix: sourcesValue ? `produced in` : 'produced in countries covered by Trase',
+        value: sourcesValue
       },
       {
         panel: 'companies',
-        id: 'companies',
-        prefix: activeCompany
-          ? `${activeCompany.nodeType.toLowerCase() === 'exporter' ? 'exported' : 'imported'} by`
-          : '',
-        value: activeCompany && activeCompany.name.toLowerCase()
+        id: 'exporting-companies',
+        prefix: getActivePanelItem('companies', 'EXPORTER') ? 'exported by' : '',
+        value: getActivePanelItem('companies', 'EXPORTER')
+      },
+      {
+        panel: 'companies',
+        id: 'importing-companies',
+        prefix: getActivePanelItem('companies', 'IMPORTER') ? 'imported by' : '',
+        value: getActivePanelItem('companies', 'IMPORTER')
       },
       {
         panel: 'destinations',
         id: 'destinations',
-        prefix: activeDestination ? `going to` : '',
-        value: activeDestination && activeDestination.name.toLowerCase()
+        prefix: getActivePanelItem('destinations') ? `going to` : '',
+        value: getActivePanelItem('destinations')
       }
     ];
   }

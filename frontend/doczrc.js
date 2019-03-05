@@ -16,6 +16,7 @@ export default {
       resolve: webpackConfig.resolve,
       module: webpackConfig.module
     }),
+  indexHtml: './docs/template.html',
   plugins: [],
   codeSandbox: false
 };

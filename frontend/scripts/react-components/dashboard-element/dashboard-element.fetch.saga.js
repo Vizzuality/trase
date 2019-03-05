@@ -1,5 +1,6 @@
 import deburr from 'lodash/deburr';
 import { put, call, cancelled, delay } from 'redux-saga/effects';
+import isEmpty from 'lodash/isEmpty';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
@@ -125,7 +126,7 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType, active
 export function* fetchDashboardPanelSearchResults(dashboardElement, query) {
   if (!query) return;
   let optionsType = dashboardElement.activePanelId;
-  if (optionsType === 'sources' && dashboardElement.countriesPanel.activeItem === null) {
+  if (optionsType === 'sources' && isEmpty(dashboardElement.countriesPanel.activeItems)) {
     optionsType = 'countries';
   }
   // eslint-ignore-next-line

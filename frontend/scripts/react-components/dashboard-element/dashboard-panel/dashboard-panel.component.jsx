@@ -36,8 +36,6 @@ class DashboardPanel extends Component {
     return `${node.countryName + addApostrophe(node.countryName)} ${node.nodeType}`;
   }
 
-  clearFooterItem = item => this.props.clearActiveItem(item.panel);
-
   render() {
     const {
       tabs,
@@ -52,9 +50,10 @@ class DashboardPanel extends Component {
       getSearchResults,
       destinationsPanel,
       companiesPanel,
-      clearActiveItem,
+      clearActiveItems,
       setActiveTab,
       setActiveItem,
+      setActiveItems,
       sources,
       destinations,
       countries,
@@ -87,20 +86,20 @@ class DashboardPanel extends Component {
               page={sourcesPanel.page}
               getMoreItems={getMoreItems}
               searchSources={
-                !countriesPanel.activeItem
+                !countriesPanel.activeItems
                   ? countriesPanel.searchResults
                   : sourcesPanel.searchResults
               }
               getSearchResults={getSearchResults}
               loadingMoreItems={sourcesPanel.loadingItems}
-              clearItems={() => clearActiveItem(activePanelId)}
-              activeCountryItem={countriesPanel.activeItem}
+              clearItems={() => clearActiveItems(activePanelId)}
+              activeCountryItem={countriesPanel.activeItems}
               activeSourceTab={sourcesPanel.activeTab}
-              activeSourceItem={sourcesPanel.activeItem}
+              activeSourceItem={sourcesPanel.activeItems}
               onSelectCountry={item => setActiveItem(item, 'countries')}
               onSelectSourceTab={item => setActiveTab(item, activePanelId)}
               setSearchResult={item => setSearchResult(item, activePanelId)}
-              onSelectSourceValue={item => setActiveItem(item, activePanelId)}
+              onSelectSourceValue={item => setActiveItems(item, activePanelId)}
               nodeTypeRenderer={DashboardPanel.sourcesNodeTypeRenderer}
               sources={sources[sourcesPanel.activeTab && sourcesPanel.activeTab.id] || []}
             />
@@ -112,10 +111,10 @@ class DashboardPanel extends Component {
               getSearchResults={getSearchResults}
               searchDestinations={destinationsPanel.searchResults}
               destinations={destinations}
-              onSelectDestinationValue={item => setActiveItem(item, activePanelId)}
+              onSelectDestinationValue={item => setActiveItems(item, activePanelId)}
               loadingMoreItems={destinationsPanel.loadingItems}
               loading={loading}
-              activeDestination={destinationsPanel.activeItem}
+              activeDestination={destinationsPanel.activeItems}
             />
           )}
           {activePanelId === 'companies' && (
@@ -131,9 +130,9 @@ class DashboardPanel extends Component {
               loading={loading}
               companies={companies[companiesPanel.activeTab && companiesPanel.activeTab.id] || []}
               onSelectNodeTypeTab={item => setActiveTab(item, activePanelId)}
-              onSelectCompany={item => setActiveItem(item, activePanelId)}
+              onSelectCompany={item => setActiveItems(item, activePanelId)}
               activeNodeTypeTab={companiesPanel.activeTab}
-              activeCompany={companiesPanel.activeItem}
+              activeCompany={companiesPanel.activeItems}
             />
           )}
           {activePanelId === 'commodities' && (
@@ -144,16 +143,17 @@ class DashboardPanel extends Component {
               loading={loading}
               commodities={commodities}
               onSelectCommodity={item => setActiveItem(item, activePanelId)}
-              activeCommodity={commoditiesPanel.activeItem}
+              activeCommodity={commoditiesPanel.activeItems}
             />
           )}
         </div>
-        {dynamicSentenceParts && (
+        {dynamicSentenceParts.length > 0 && (
           <DashboardModalFooter
             editMode={editMode}
             isPanelFooter
             onContinue={onContinue}
-            clearItem={this.clearFooterItem}
+            removeSentenceItem={setActiveItems}
+            clearPanel={panelName => clearActiveItems(panelName)}
             dynamicSentenceParts={dynamicSentenceParts}
           />
         )}
@@ -178,11 +178,12 @@ DashboardPanel.propTypes = {
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
   setActiveTab: PropTypes.func.isRequired,
+  setActiveItems: PropTypes.func.isRequired,
   setActiveItem: PropTypes.func.isRequired,
   destinations: PropTypes.array.isRequired,
   setActivePanel: PropTypes.func.isRequired,
   sourcesPanel: PropTypes.object.isRequired,
-  clearActiveItem: PropTypes.func.isRequired,
+  clearActiveItems: PropTypes.func.isRequired,
   setSearchResult: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
   companiesPanel: PropTypes.object.isRequired,

@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
-import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.container';
+import DashboardPanel from 'react-components/dashboard-element/dashboard-panel';
 import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome/dashboard-welcome.component';
 import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators/dashboard-indicators.container';
 import DashboardWiget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.container';
 import Button from 'react-components/shared/button/button.component';
+import Dropdown from 'react-components/shared/dropdown';
 
 import 'react-components/dashboard-element/dashboard-element.scss';
 
@@ -91,15 +92,26 @@ class DashboardElement extends React.PureComponent {
     const { dynamicSentenceParts } = this.props;
     if (dynamicSentenceParts) {
       return dynamicSentenceParts.map((part, i) => (
-        <span key={part.prefix + part.value + i}>
+        <span key={part.id + i}>
           {`${part.prefix} `}
           {part.value && (
-            <span className="dashboard-element-title-item notranslate">{part.value}</span>
+            <span className="dashboard-element-title-item notranslate">
+              {part.value.length > 1 ? (
+                <Dropdown
+                  variant="sentence"
+                  color="white"
+                  options={part.value.map(p => ({ value: p.id, label: p.name }))}
+                  selectedValueOverride={`${part.value.length} ${part.panel}`}
+                  readOnly
+                />
+              ) : (
+                part.value[0].name
+              )}
+            </span>
           )}
         </span>
       ));
     }
-
     return 'Dashboards';
   }
 

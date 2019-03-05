@@ -3,7 +3,6 @@ export default (name, height, _labelCharHeight, _labelCharsPerLine, _labelMaxLin
   if (height < _labelCharHeight - 6) {
     return '';
   }
-  // console.log(name, height, _labelCharHeight, _labelCharsPerLine, _labelMaxLines)
   const maxLinesForNode = Math.max(
     1,
     Math.min(_labelMaxLines, Math.floor(height / _labelCharHeight))

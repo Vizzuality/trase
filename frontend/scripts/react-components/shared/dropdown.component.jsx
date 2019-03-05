@@ -66,17 +66,23 @@ export default class Dropdown extends Component {
     this.setState({ isOpen: false });
   }
 
+  renderValueList() {
+    const { valueRenderer, valueList, getItemClassName } = this.props;
+    return valueList.map((elem, index) => (
+      <li
+        ref={index === 0 ? this.listItemRef : undefined}
+        className={cx('dropdown-item', getItemClassName(elem))}
+        key={index}
+        onClick={e => this.onDropdownValueClicked(e, elem)}
+        onTouchEnd={e => this.onDropdownValueClicked(e, elem)}
+      >
+        {valueRenderer ? valueRenderer(elem) : elem}
+      </li>
+    ));
+  }
+
   render() {
-    const {
-      className,
-      hideOnlyChild,
-      label,
-      size,
-      value,
-      valueRenderer,
-      valueList,
-      getItemClassName
-    } = this.props;
+    const { className, hideOnlyChild, label, size, value, valueRenderer, valueList } = this.props;
 
     return (
       <div
@@ -96,17 +102,7 @@ export default class Dropdown extends Component {
             'is-hidden': !this.state.isOpen
           })}
         >
-          {valueList.map((elem, index) => (
-            <li
-              ref={index === 0 ? this.listItemRef : undefined}
-              className={cx('dropdown-item', getItemClassName(elem))}
-              key={index}
-              onClick={e => this.onDropdownValueClicked(e, elem)}
-              onTouchEnd={e => this.onDropdownValueClicked(e, elem)}
-            >
-              {valueRenderer ? valueRenderer(elem) : elem}
-            </li>
-          ))}
+          {this.renderValueList()}
         </ul>
       </div>
     );

@@ -1,14 +1,17 @@
 import { take, select, all, fork, takeLatest, cancel } from 'redux-saga/effects';
+import isEmpty from 'lodash/isEmpty';
 import {
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   DASHBOARD_ELEMENT__GET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import {
   getDashboardPanelSectionTabs,
@@ -30,13 +33,13 @@ export function* fetchDashboardPanelInitialData(action) {
   const state = yield select();
   const { dashboardElement } = state;
 
-  // avoid calling getDashboardPanelData through getDashboardPanelSectionTabs for companies
+  // avoid dispatching getDashboardPanelData through getDashboardPanelSectionTabs for companies
   if (dashboardElement.activePanelId === 'companies') {
     yield fork(getDashboardPanelSectionTabs, dashboardElement, activePanelId);
   } else if (activePanelId === 'sources') {
     yield fork(getDashboardPanelData, dashboardElement, 'countries');
     // Fetch regions
-    if (dashboardElement.countriesPanel.activeItem) {
+    if (!isEmpty(dashboardElement.countriesPanel.activeItems)) {
       yield fork(getDashboardPanelData, dashboardElement, activePanelId);
     }
   } else {
@@ -54,11 +57,11 @@ export function* fetchDataOnPanelChange() {
   const hasChanged = panel => {
     if (!previousPanelState) return false;
     return (
-      panel.sourcesPanel.activeItem !== previousPanelState.sourcesPanel.activeItem ||
-      panel.countriesPanel.activeItem !== previousPanelState.countriesPanel.activeItem ||
-      panel.commoditiesPanel.activeItem !== previousPanelState.commoditiesPanel.activeItem ||
-      panel.companiesPanel.activeItem !== previousPanelState.companiesPanel.activeItem ||
-      panel.destinationsPanel.activeItem !== previousPanelState.destinationsPanel.activeItem
+      panel.sourcesPanel.activeItems !== previousPanelState.sourcesPanel.activeItems ||
+      panel.countriesPanel.activeItems !== previousPanelState.countriesPanel.activeItems ||
+      panel.commoditiesPanel.activeItems !== previousPanelState.commoditiesPanel.activeItems ||
+      panel.companiesPanel.activeItems !== previousPanelState.companiesPanel.activeItems ||
+      panel.destinationsPanel.activeItems !== previousPanelState.destinationsPanel.activeItems
     );
   };
 
@@ -116,6 +119,7 @@ function* fetchDataOnTabChange() {
   yield takeLatest(
     [
       DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
       DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
       DASHBOARD_ELEMENT__SET_PANEL_TABS
     ],
@@ -136,7 +140,10 @@ export function* onItemChange(action) {
 }
 
 function* fetchDataOnItemChange() {
-  yield takeLatest(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, onItemChange);
+  yield takeLatest(
+    [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS],
+    onItemChange
+  );
 }
 
 /**
@@ -148,8 +155,8 @@ export function* onFilterClear() {
   const { dashboardElement } = yield select();
   if (dashboardElement.activePanelId === 'sources') {
     yield fork(getDashboardPanelData, dashboardElement, 'countries');
-    if (dashboardElement.countriesPanel.activeItem !== null) {
-      yield fork(getDashboardPanelSectionTabs, dashboardElement, dashboardElement.activePanelId);
+    if (!isEmpty(dashboardElement.countriesPanel.activeItems)) {
+      yield fork(getDashboardPanelSectionTabs, dashboardElement, 'sources');
     }
   } else if (dashboardElement.activePanelId === 'companies') {
     yield fork(getDashboardPanelSectionTabs, dashboardElement, dashboardElement.activePanelId);

@@ -17,7 +17,6 @@ function SourcesPanel(props) {
     getSearchResults,
     activeCountryItem,
     sources,
-    clearItems,
     countries,
     onSelectCountry,
     onSelectSourceTab,
@@ -26,7 +25,8 @@ function SourcesPanel(props) {
     activeSourceTab,
     activeSourceItem
   } = props;
-  const showJurisdictions = activeCountryItem && tabs.length > 0 && sources.length > 0;
+  const hasActiveCountryItems = Object.keys(activeCountryItem).length > 0;
+  const showJurisdictions = hasActiveCountryItems && tabs.length > 0 && sources.length > 0;
   return (
     <React.Fragment>
       <SearchInput
@@ -47,16 +47,14 @@ function SourcesPanel(props) {
         rowHeight={50}
         columnCount={5}
         items={countries}
-        loading={!activeCountryItem && loading}
+        loading={!hasActiveCountryItems && loading}
       >
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={
-              (activeCountryItem && activeCountryItem.id) === (itemProps.item && itemProps.item.id)
-            }
+            isActive={!!activeCountryItem[itemProps.item && itemProps.item.id]}
             enableItem={onSelectCountry}
-            disableItem={clearItems}
+            disableItem={() => onSelectCountry({})}
           />
         )}
       </GridList>
@@ -85,12 +83,9 @@ function SourcesPanel(props) {
               {itemProps => (
                 <GridListItem
                   {...itemProps}
-                  isActive={
-                    (activeSourceItem && activeSourceItem.id) ===
-                    (itemProps.item && itemProps.item.id)
-                  }
+                  isActive={!!activeSourceItem[itemProps.item && itemProps.item.id]}
                   enableItem={onSelectSourceValue}
-                  disableItem={() => onSelectSourceValue(null)}
+                  disableItem={onSelectSourceValue}
                 />
               )}
             </GridList>
@@ -112,7 +107,6 @@ SourcesPanel.propTypes = {
   activeSourceTab: PropTypes.object,
   activeSourceItem: PropTypes.object,
   activeCountryItem: PropTypes.object,
-  clearItems: PropTypes.func.isRequired,
   getMoreItems: PropTypes.func.isRequired,
   searchSources: PropTypes.array.isRequired,
   onSelectCountry: PropTypes.func.isRequired,

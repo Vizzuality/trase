@@ -1,9 +1,13 @@
 import createReducer from 'utils/createReducer';
 import fuzzySearch from 'utils/fuzzySearch';
+import omit from 'lodash/omit';
+import isEmpty from 'lodash/isEmpty';
+import castArray from 'lodash/castArray';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
   DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
@@ -13,7 +17,8 @@ import {
   DASHBOARD_ELEMENT__SET_LOADING_ITEMS,
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
 } from './dashboard-element.actions';
 
 const initialState = {
@@ -34,37 +39,57 @@ const initialState = {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItem: null,
+    activeItems: {},
     activeTab: null
   },
   sourcesPanel: {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItem: null,
+    activeItems: {},
     activeTab: null
   },
   destinationsPanel: {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItem: null,
+    activeItems: {},
     activeTab: null
   },
   companiesPanel: {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItem: null,
+    activeItems: {},
     activeTab: null
   },
   commoditiesPanel: {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItem: null,
+    activeItems: {},
     activeTab: null
   }
+};
+
+const updateItems = (currentItems, newItem) => {
+  const newItems = castArray(newItem);
+
+  // Remove new items if they are included
+  const itemsToRemove = [];
+  newItems.forEach(i => {
+    if (currentItems[i.id]) itemsToRemove.push(i);
+  });
+  if (itemsToRemove.length > 0) {
+    return omit(currentItems, itemsToRemove.map(i => i.id));
+  }
+
+  // Add new items otherwise
+  const itemsToAdd = {};
+  newItems.forEach(i => {
+    itemsToAdd[i.id] = i;
+  });
+  return { ...currentItems, ...itemsToAdd };
 };
 
 const dashboardElementReducer = {
@@ -172,13 +197,27 @@ const dashboardElementReducer = {
     const panelName = `${panel}Panel`;
     const sourcesPanelState =
       panel === 'countries' ? initialState.sourcesPanel : state.sourcesPanel;
+    const activeItems = isEmpty(activeItem) ? {} : { [activeItem.id]: activeItem };
     return {
       ...state,
       activeIndicatorsList: [],
       sourcesPanel: sourcesPanelState,
       [panelName]: {
         ...state[panelName],
-        activeItem
+        activeItems
+      }
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS](state, action) {
+    const { panel, activeItems: selectedItem } = action.payload;
+    const panelName = `${panel}Panel`;
+    return {
+      ...state,
+      activeIndicatorsList: [],
+      sourcesPanel: state.sourcesPanel,
+      [panelName]: {
+        ...state[panelName],
+        activeItems: updateItems(state[panelName].activeItems, selectedItem)
       }
     };
   },
@@ -227,7 +266,33 @@ const dashboardElementReducer = {
       activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
-        activeItem,
+        activeItems: { [activeItem.id]: activeItem },
+        activeTab,
+        page: initialState[panelName].page
+      }
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH](state, action) {
+    const { panel, activeItems: selectedItem } = action.payload;
+    const panelName = `${panel}Panel`;
+    const prevTab = state[panelName].activeTab;
+    const clearedActiveTabData = prevTab ? { [prevTab.id]: null } : {};
+    const activeTab =
+      state.tabs[panel] && state.tabs[panel].find(tab => tab.id === selectedItem.nodeTypeId);
+
+    return {
+      ...state,
+      data: {
+        ...state.data,
+        [panel]: {
+          ...state.data[panel],
+          ...clearedActiveTabData
+        }
+      },
+      activeIndicatorsList: [],
+      [panelName]: {
+        ...state[panelName],
+        activeItems: updateItems(state[panelName].activeItems, selectedItem),
         activeTab,
         page: initialState[panelName].page
       }
@@ -265,7 +330,7 @@ const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_SEARCH_RESULTS](state, action) {
     const { data, query } = action.payload;
     let panel = state.activePanelId;
-    if (state.activePanelId === 'sources' && state.countriesPanel.activeItem === null) {
+    if (state.activePanelId === 'sources' && isEmpty(state.countriesPanel.activeItems)) {
       panel = 'countries';
     }
     const panelName = `${panel}Panel`;
@@ -284,7 +349,7 @@ const dashboardElementReducerTypes = PropTypes => {
     page: PropTypes.number,
     searchResults: PropTypes.array,
     loadingItems: PropTypes.bool,
-    activeItem: PropTypes.number,
+    activeItems: PropTypes.object,
     activeTab: PropTypes.number
   };
 

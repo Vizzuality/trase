@@ -40,7 +40,7 @@ class DashboardWidgetTooltip extends React.PureComponent {
     return (
       <div className="c-dashboard-widget-tooltip">
         {payload.map(item => (
-          <div className="dashboard-widget-key-item" key={item}>
+          <div className="dashboard-widget-key-item" key={item.name}>
             <span
               style={{
                 backgroundColor: item.color || (item.payload && item.payload.fill) || 'white'
