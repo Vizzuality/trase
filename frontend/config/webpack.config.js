@@ -10,6 +10,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const srcPath = path.join(__dirname, '..', 'scripts');
+const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin');
 
 const templates = require('./static.templates');
 
@@ -81,7 +82,12 @@ module.exports = {
       router: path.resolve(srcPath, 'router'),
       'lodash-es': 'lodash'
     },
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
+    plugins: [
+      new DirectoryNamedWebpackPlugin({
+        exclude: /node_modules/
+      })
+    ]
   },
   module: {
     rules: [
