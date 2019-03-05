@@ -69,8 +69,9 @@ export const getDynamicSentence = createSelector(
         !panels[panelName] ||
         !panels[panelName].activeItems ||
         isEmpty(panels[panelName].activeItems)
-      )
+      ) {
         return null;
+      }
       const values = Object.values(panels[panelName].activeItems);
       if (nodeType) {
         const filteredValues = values.filter(i => i.nodeType === nodeType);

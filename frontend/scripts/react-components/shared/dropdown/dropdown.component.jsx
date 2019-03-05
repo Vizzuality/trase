@@ -22,7 +22,9 @@ class Dropdown extends React.Component {
             <use xlinkHref={`#icon-${item.icon}`} />
           </svg>
         )}
-        <span className="item-label">{item.label}</span>
+        <span title={item.label} className="item-label">
+          {item.label}
+        </span>
       </li>
     );
   }
