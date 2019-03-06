@@ -25,6 +25,12 @@ module Api
     class IndCountryProperty < ApplicationRecord
       belongs_to :country
       belongs_to :ind
+
+      after_commit :refresh_dependents
+
+      def refresh_dependents
+        Api::V3::Readonly::CountryAttributeProperty.refresh
+      end
     end
   end
 end

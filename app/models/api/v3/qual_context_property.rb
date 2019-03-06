@@ -25,6 +25,12 @@ module Api
     class QualContextProperty < ApplicationRecord
       belongs_to :context
       belongs_to :qual
+
+      after_commit :refresh_dependents
+
+      def refresh_dependents
+        Api::V3::Readonly::ContextAttributeProperty.refresh
+      end
     end
   end
 end
