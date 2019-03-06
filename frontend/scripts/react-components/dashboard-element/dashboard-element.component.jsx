@@ -43,7 +43,8 @@ class DashboardElement extends React.PureComponent {
         <DashboardIndicators
           editMode={editMode}
           onContinue={closeModal}
-          goBack={() => setStep(DASHBOARD_STEPS.IMPORTERS)}
+          goBack={() => setStep(DASHBOARD_STEPS.SOURCES)}
+          step={step}
         />
       );
     }

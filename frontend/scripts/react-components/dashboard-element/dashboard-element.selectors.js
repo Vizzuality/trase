@@ -9,7 +9,7 @@ const getCompaniesPanel = state => state.dashboardElement.companiesPanel;
 const getCommoditiesPanel = state => state.dashboardElement.commoditiesPanel;
 const getIndicators = state => state.dashboardElement.data.indicators;
 const getActiveIndicators = state => state.dashboardElement.activeIndicatorsList;
-export const getDashboardPanelTabs = state => state.dashboardElement.tabs;
+const getDashboardPanelTabs = state => state.dashboardElement.tabs;
 const getActiveDashboardPanel = state => {
   const { activePanelId, ...restState } = state.dashboardElement;
   return { id: activePanelId, ...restState[`${activePanelId}Panel`] };

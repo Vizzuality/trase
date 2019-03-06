@@ -50,7 +50,7 @@ DashboardModalFooter.propTypes = {
   editMode: PropTypes.bool,
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
-  step: PropTypes.number.isRequired,
+  step: PropTypes.number,
   backText: PropTypes.string
 };
 

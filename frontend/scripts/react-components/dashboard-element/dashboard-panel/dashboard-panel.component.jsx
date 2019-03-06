@@ -115,10 +115,11 @@ class DashboardPanel extends Component {
             activeDestination={destinationsPanel.activeItems}
           />
         );
-      case DASHBOARD_STEPS.EXPORTERS:
-      case DASHBOARD_STEPS.IMPORTERS:
+      case DASHBOARD_STEPS.COMPANIES:
         return (
           <CompaniesPanel
+            tabs={tabs}
+            onSelectNodeTypeTab={item => setActiveTab(item, activePanelId)}
             page={companiesPanel.page}
             getMoreItems={getMoreItems}
             searchCompanies={companiesPanel.searchResults}
@@ -129,6 +130,7 @@ class DashboardPanel extends Component {
             loading={loading}
             companies={companies[companiesPanel.activeTab && companiesPanel.activeTab.id] || []}
             onSelectCompany={item => setActiveItems(item, activePanelId)}
+            activeNodeTypeTab={companiesPanel.activeTab}
             activeCompany={companiesPanel.activeItems}
           />
         );
@@ -166,7 +168,6 @@ class DashboardPanel extends Component {
       dynamicSentenceParts,
       step
     } = this.props;
-
     return (
       <div className="c-dashboard-panel">
         <div ref={this.containerRef} className="dashboard-panel-content">
