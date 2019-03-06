@@ -350,7 +350,7 @@ const dashboardElementReducerTypes = PropTypes => {
     searchResults: PropTypes.array,
     loadingItems: PropTypes.bool,
     activeItems: PropTypes.object,
-    activeTab: PropTypes.number
+    activeTab: PropTypes.object
   };
 
   return {

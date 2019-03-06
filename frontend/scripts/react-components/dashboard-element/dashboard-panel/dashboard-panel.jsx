@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {
   clearDashboardPanel,
   setDashboardPanelPage,
-  setDashboardActivePanel,
   setDashboardPanelActiveTab,
   setDashboardPanelActiveItem,
   setDashboardPanelActiveItems,
@@ -54,7 +53,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   getMoreItems: setDashboardPanelPage,
   clearActiveItems: clearDashboardPanel,
-  setActivePanel: setDashboardActivePanel,
   setActiveTab: setDashboardPanelActiveTab,
   setActiveItems: setDashboardPanelActiveItems,
   setActiveItem: setDashboardPanelActiveItem,

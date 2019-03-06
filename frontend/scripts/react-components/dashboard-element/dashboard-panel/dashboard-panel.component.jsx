@@ -7,7 +7,7 @@ import CommoditiesPanel from 'react-components/dashboard-element/dashboard-panel
 import DashboardModalFooter from 'react-components/dashboard-element/dashboard-modal-footer/dashboard-modal-footer.component';
 import addApostrophe from 'utils/addApostrophe';
 import { DASHBOARD_STEPS } from 'constants';
-import getPanelName from 'utils/getPanelId';
+import { getPanelId as getPanelName, singularize } from 'utils/dashboardPanel';
 
 import 'scripts/react-components/dashboard-element/dashboard-panel/dashboard-panel.scss';
 
@@ -115,10 +115,10 @@ class DashboardPanel extends Component {
             activeDestination={destinationsPanel.activeItems}
           />
         );
-      case DASHBOARD_STEPS.COMPANIES:
+      case DASHBOARD_STEPS.EXPORTERS:
+      case DASHBOARD_STEPS.IMPORTERS:
         return (
           <CompaniesPanel
-            tabs={tabs}
             page={companiesPanel.page}
             getMoreItems={getMoreItems}
             searchCompanies={companiesPanel.searchResults}
@@ -128,9 +128,7 @@ class DashboardPanel extends Component {
             loadingMoreItems={companiesPanel.loadingItems}
             loading={loading}
             companies={companies[companiesPanel.activeTab && companiesPanel.activeTab.id] || []}
-            onSelectNodeTypeTab={item => setActiveTab(item, activePanelId)}
             onSelectCompany={item => setActiveItems(item, activePanelId)}
-            activeNodeTypeTab={companiesPanel.activeTab}
             activeCompany={companiesPanel.activeItems}
           />
         );
@@ -144,7 +142,8 @@ class DashboardPanel extends Component {
     if (step === DASHBOARD_STEPS.SOURCES || step === DASHBOARD_STEPS.COMMODITIES) {
       return (
         <span>
-          Choose one <span className="dashboard-panel-sentence">{getPanelName(step)}</span>
+          Choose one{' '}
+          <span className="dashboard-panel-sentence">{singularize(getPanelName(step))}</span>
         </span>
       );
     }

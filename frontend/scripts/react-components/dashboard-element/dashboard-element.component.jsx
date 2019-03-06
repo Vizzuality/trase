@@ -41,7 +41,6 @@ class DashboardElement extends React.PureComponent {
 
   renderStep() {
     const { step, setStep, editMode, closeModal } = this.props;
-
     if (step === DASHBOARD_STEPS.WELCOME) {
       return <DashboardWelcome onContinue={() => setStep(step + 1)} />;
     }
@@ -50,10 +49,11 @@ class DashboardElement extends React.PureComponent {
         <DashboardIndicators
           editMode={editMode}
           onContinue={closeModal}
-          goBack={() => setStep(DASHBOARD_STEPS.SOURCES)}
+          goBack={() => setStep(DASHBOARD_STEPS.IMPORTERS)}
         />
       );
     }
+
     return (
       <DashboardPanel
         editMode={editMode}

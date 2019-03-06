@@ -6,12 +6,14 @@ import DashboardElement from 'react-components/dashboard-element/dashboard-eleme
 import {
   getActiveIndicatorsData,
   getDirtyBlocks,
-  getDynamicSentence
+  getDynamicSentence,
+  getDashboardPanelTabs
 } from 'react-components/dashboard-element/dashboard-element.selectors';
-import getPanelId from 'utils/getPanelId';
+import { getPanelId, singularize } from 'utils/dashboardPanel';
 import {
   openIndicatorsStep as openIndicatorsStepFn,
-  setDashboardActivePanel as setDashboardActivePanelFn
+  setDashboardActivePanel as setDashboardActivePanelFn,
+  setDashboardPanelActiveTab as setDashboardPanelActiveTabFn
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import { DASHBOARD_STEPS } from 'constants';
 
@@ -19,12 +21,14 @@ const mapStateToProps = state => ({
   indicators: state.dashboardElement.data.indicators,
   activeIndicators: getActiveIndicatorsData(state),
   dynamicSentenceParts: getDynamicSentence(state),
-  dirtyBlocks: getDirtyBlocks(state)
+  dirtyBlocks: getDirtyBlocks(state),
+  tabs: getDashboardPanelTabs(state)
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
+      setDashboardPanelActiveTab: setDashboardPanelActiveTabFn,
       setDashboardActivePanel: setDashboardActivePanelFn,
       openIndicatorsStep: openIndicatorsStepFn,
       goToRoot: () => ({ type: 'dashboardRoot' })
@@ -38,8 +42,10 @@ class DashboardElementContainer extends React.Component {
     activeIndicators: PropTypes.array,
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
+    tabs: PropTypes.object,
     openIndicatorsStep: PropTypes.func.isRequired,
-    setDashboardActivePanel: PropTypes.func.isRequired
+    setDashboardActivePanel: PropTypes.func.isRequired,
+    setDashboardPanelActiveTab: PropTypes.func.isRequired
   };
 
   hasVisitedBefore = {
@@ -71,8 +77,18 @@ class DashboardElementContainer extends React.Component {
   reopenPanel = (step, editMode) => this.setState({ step, editMode, modalOpen: true });
 
   updateStep = step => {
-    const { setDashboardActivePanel } = this.props;
-    setDashboardActivePanel(getPanelId(step));
+    if (step !== DASHBOARD_STEPS.INDICATORS) {
+      const { setDashboardActivePanel, setDashboardPanelActiveTab, tabs } = this.props;
+      let panelId = getPanelId(step);
+      // TODO: This should be a temporary solution. We may want to create importer and exporter panels in the state
+      if (panelId === 'exporters' || panelId === 'importers') {
+        const tabName = singularize(panelId).toUpperCase();
+        const selectedTab = tabs.companies.find(t => t.name === tabName);
+        setDashboardPanelActiveTab(selectedTab, 'companies');
+        panelId = 'companies';
+      }
+      setDashboardActivePanel(panelId);
+    }
     this.setState({ step });
   };
 
