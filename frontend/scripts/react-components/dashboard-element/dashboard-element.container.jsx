@@ -77,8 +77,13 @@ class DashboardElementContainer extends React.Component {
   reopenPanel = (step, editMode) => this.setState({ step, editMode, modalOpen: true });
 
   updateStep = step => {
+    const {
+      setDashboardActivePanel,
+      setDashboardPanelActiveTab,
+      tabs,
+      openIndicatorsStep
+    } = this.props;
     if (step !== DASHBOARD_STEPS.INDICATORS) {
-      const { setDashboardActivePanel, setDashboardPanelActiveTab, tabs } = this.props;
       let panelId = getPanelId(step);
       // TODO: This should be a temporary solution. We may want to create importer and exporter panels in the state
       if (panelId === 'exporters' || panelId === 'importers') {
@@ -88,6 +93,8 @@ class DashboardElementContainer extends React.Component {
         panelId = 'companies';
       }
       setDashboardActivePanel(panelId);
+    } else {
+      openIndicatorsStep();
     }
     this.setState({ step });
   };

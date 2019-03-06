@@ -22,15 +22,8 @@ class DashboardElement extends React.PureComponent {
     modalOpen: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
-    reopenPanel: PropTypes.func.isRequired,
-    openIndicatorsStep: PropTypes.func.isRequired
+    reopenPanel: PropTypes.func.isRequired
   };
-
-  openIndicatorsStep() {
-    const { openIndicatorsStep, setStep } = this.props;
-    openIndicatorsStep();
-    setStep(DASHBOARD_STEPS.INDICATORS);
-  }
 
   canProceed() {
     const { activeIndicators, dirtyBlocks } = this.props;
