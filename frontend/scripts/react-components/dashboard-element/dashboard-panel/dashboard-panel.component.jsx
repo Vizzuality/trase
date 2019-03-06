@@ -162,6 +162,7 @@ class DashboardPanel extends Component {
       clearActiveItems,
       setActiveItems,
       onContinue,
+      onBack,
       dynamicSentenceParts
     } = this.props;
 
@@ -178,6 +179,8 @@ class DashboardPanel extends Component {
             editMode={editMode}
             isPanelFooter
             onContinue={onContinue}
+            onBack={onBack}
+            backText="Back"
             removeSentenceItem={setActiveItems}
             clearPanel={panelName => clearActiveItems(panelName)}
             dynamicSentenceParts={dynamicSentenceParts}
@@ -201,6 +204,7 @@ DashboardPanel.propTypes = {
   editMode: PropTypes.bool.isRequired,
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
+  onBack: PropTypes.func,
   setActiveTab: PropTypes.func.isRequired,
   setActiveItems: PropTypes.func.isRequired,
   setActiveItem: PropTypes.func.isRequired,

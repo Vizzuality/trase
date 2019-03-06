@@ -41,6 +41,7 @@ class DashboardElement extends React.PureComponent {
 
   renderStep() {
     const { step, setStep, editMode, closeModal } = this.props;
+    const showBackButton = step > DASHBOARD_STEPS.SOURCES;
     if (step === DASHBOARD_STEPS.WELCOME) {
       return <DashboardWelcome onContinue={() => setStep(step + 1)} />;
     }
@@ -53,12 +54,13 @@ class DashboardElement extends React.PureComponent {
         />
       );
     }
-
+    const onBackProp = showBackButton ? { onBack: () => setStep(step - 1) } : {};
     return (
       <DashboardPanel
         editMode={editMode}
         onContinue={() => (editMode && this.canProceed() ? closeModal() : setStep(step + 1))}
         step={step}
+        {...onBackProp}
       />
     );
   }
