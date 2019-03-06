@@ -15,9 +15,9 @@ function DashboardModalFooter(props) {
     onContinue,
     onBack,
     backText,
-    isDisabled
+    isDisabled,
+    step
   } = props;
-  console.log(props);
   return (
     <div className="c-dashboard-modal-footer">
       <TagsGroup
@@ -25,6 +25,7 @@ function DashboardModalFooter(props) {
         removeSentenceItem={removeSentenceItem}
         clearPanel={clearPanel}
         readOnly={!isPanelFooter}
+        step={step}
       />
       <div className="dashboard-modal-actions">
         {onBack && !editMode && (
@@ -49,6 +50,7 @@ DashboardModalFooter.propTypes = {
   editMode: PropTypes.bool,
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
+  step: PropTypes.number.isRequired,
   backText: PropTypes.string
 };
 

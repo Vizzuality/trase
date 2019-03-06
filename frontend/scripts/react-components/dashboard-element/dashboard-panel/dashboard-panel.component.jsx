@@ -163,7 +163,8 @@ class DashboardPanel extends Component {
       setActiveItems,
       onContinue,
       onBack,
-      dynamicSentenceParts
+      dynamicSentenceParts,
+      step
     } = this.props;
 
     return (
@@ -184,6 +185,7 @@ class DashboardPanel extends Component {
             removeSentenceItem={setActiveItems}
             clearPanel={panelName => clearActiveItems(panelName)}
             dynamicSentenceParts={dynamicSentenceParts}
+            step={step}
           />
         )}
       </div>
