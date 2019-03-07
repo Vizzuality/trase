@@ -166,7 +166,8 @@ class DashboardPanel extends Component {
       onContinue,
       onBack,
       dynamicSentenceParts,
-      step
+      step,
+      canProceed
     } = this.props;
     return (
       <div className="c-dashboard-panel">
@@ -178,7 +179,6 @@ class DashboardPanel extends Component {
         </div>
         {dynamicSentenceParts.length > 0 && (
           <DashboardModalFooter
-            editMode={editMode}
             isPanelFooter
             onContinue={onContinue}
             onBack={onBack}
@@ -187,6 +187,7 @@ class DashboardPanel extends Component {
             clearPanel={panelName => clearActiveItems(panelName)}
             dynamicSentenceParts={dynamicSentenceParts}
             step={step}
+            canProceed={canProceed}
           />
         )}
       </div>
@@ -205,6 +206,7 @@ DashboardPanel.propTypes = {
   loading: PropTypes.bool.isRequired,
   commoditiesPanel: PropTypes.object,
   editMode: PropTypes.bool.isRequired,
+  canProceed: PropTypes.bool.isRequired,
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
   onBack: PropTypes.func,

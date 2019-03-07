@@ -39,9 +39,11 @@ class DashboardIndicators extends React.PureComponent {
       setActiveId,
       removeActiveId,
       activeIndicatorsList,
-      dynamicSentenceParts
+      dynamicSentenceParts,
+      canProceed
     } = this.props;
     const { activeItemInfo } = this.state;
+    const onBackProp = editMode ? {} : { onBack: goBack };
     return (
       <div className="c-dashboard-panel" onClick={this.resetActiveItemInfo}>
         <div className="dashboard-indicators-content">
@@ -80,11 +82,11 @@ class DashboardIndicators extends React.PureComponent {
           </GridList>
         </div>
         <DashboardModalFooter
-          editMode={editMode}
-          onBack={goBack}
+          canProceed={canProceed}
           onContinue={onContinue}
           isDisabled={activeIndicatorsList.length === 0}
           dynamicSentenceParts={dynamicSentenceParts}
+          {...onBackProp}
         />
       </div>
     );
@@ -93,6 +95,7 @@ class DashboardIndicators extends React.PureComponent {
 
 DashboardIndicators.propTypes = {
   editMode: PropTypes.bool.isRequired,
+  canProceed: PropTypes.bool.isRequired,
   indicators: PropTypes.array,
   setActiveId: PropTypes.func,
   removeActiveId: PropTypes.func,

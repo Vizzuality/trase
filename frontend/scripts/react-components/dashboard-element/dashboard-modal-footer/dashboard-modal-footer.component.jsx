@@ -2,12 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TagsGroup from 'react-components/shared/tags-group';
 import Button from 'react-components/shared/button/button.component';
-
 import './dashboard-modal-footer.scss';
 
 function DashboardModalFooter(props) {
   const {
-    editMode,
     isPanelFooter,
     dynamicSentenceParts,
     clearPanel,
@@ -16,7 +14,8 @@ function DashboardModalFooter(props) {
     onBack,
     backText,
     isDisabled,
-    step
+    step,
+    canProceed
   } = props;
   return (
     <div className="c-dashboard-modal-footer">
@@ -28,13 +27,13 @@ function DashboardModalFooter(props) {
         step={step}
       />
       <div className="dashboard-modal-actions">
-        {onBack && !editMode && (
+        {onBack && (
           <button type="button" onClick={onBack} className="dashboard-modal-back-button">
             {backText || 'Back To Options'}
           </button>
         )}
         <Button onClick={onContinue} color="pink" size="md" disabled={isDisabled}>
-          {isPanelFooter && !editMode ? 'Continue' : 'Go to dashboard'}
+          {isPanelFooter && !canProceed ? 'Continue' : 'Go to dashboard'}
         </Button>
       </div>
     </div>
@@ -47,11 +46,11 @@ DashboardModalFooter.propTypes = {
   clearPanel: PropTypes.func,
   isDisabled: PropTypes.bool,
   isPanelFooter: PropTypes.bool,
-  editMode: PropTypes.bool,
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
   step: PropTypes.number,
-  backText: PropTypes.string
+  backText: PropTypes.string,
+  canProceed: PropTypes.bool
 };
 
 DashboardModalFooter.defaultProps = {

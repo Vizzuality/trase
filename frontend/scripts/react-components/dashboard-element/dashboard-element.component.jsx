@@ -26,10 +26,10 @@ class DashboardElement extends React.PureComponent {
   };
 
   canProceed() {
-    const { activeIndicators, dirtyBlocks } = this.props;
+    const { activeIndicators, dirtyBlocks = {}, step, editMode } = this.props;
     const hasIndicators = activeIndicators.length > 0;
-    const hasOptionsSelected = Object.values(dirtyBlocks).some(b => b);
-    return hasOptionsSelected && hasIndicators;
+    const hasOptionsSelected = editMode || Object.values(dirtyBlocks).some(b => b);
+    return hasOptionsSelected && hasIndicators && step >= DASHBOARD_STEPS.COMPANIES;
   }
 
   renderStep() {
@@ -45,6 +45,7 @@ class DashboardElement extends React.PureComponent {
           onContinue={closeModal}
           goBack={() => setStep(DASHBOARD_STEPS.SOURCES)}
           step={step}
+          canProceed={this.canProceed()}
         />
       );
     }
@@ -54,6 +55,7 @@ class DashboardElement extends React.PureComponent {
         editMode={editMode}
         onContinue={() => (editMode && this.canProceed() ? closeModal() : setStep(step + 1))}
         step={step}
+        canProceed={this.canProceed()}
         {...onBackProp}
       />
     );
@@ -61,7 +63,7 @@ class DashboardElement extends React.PureComponent {
 
   renderDashboardModal() {
     const { editMode, goToRoot, modalOpen, closeModal } = this.props;
-    const onClose = editMode && this.canProceed() ? closeModal : goToRoot;
+    const onClose = editMode ? closeModal : goToRoot;
     return (
       <React.Fragment>
         {modalOpen && (
@@ -127,10 +129,7 @@ class DashboardElement extends React.PureComponent {
   }
 
   render() {
-    const { modalOpen, activeIndicators, reopenPanel, goToRoot, dirtyBlocks = {} } = this.props;
-    const hasIndicators = activeIndicators.length > 0;
-    const hasOptionsSelected = Object.values(dirtyBlocks).some(b => b);
-    const canProceed = hasOptionsSelected && hasIndicators;
+    const { modalOpen, reopenPanel, goToRoot, editMode } = this.props;
     return (
       <div className="l-dashboard-element">
         <div className="c-dashboard-element">
@@ -148,7 +147,7 @@ class DashboardElement extends React.PureComponent {
                     color="gray"
                     size="sm"
                     className="dashboard-header-action -panel"
-                    onClick={() => reopenPanel(DASHBOARD_STEPS.SOURCES, canProceed)}
+                    onClick={() => reopenPanel(DASHBOARD_STEPS.SOURCES)}
                   >
                     Edit Options
                   </Button>
@@ -157,7 +156,7 @@ class DashboardElement extends React.PureComponent {
                     color="gray-transparent"
                     size="sm"
                     className="dashboard-header-action -panel"
-                    onClick={() => reopenPanel(DASHBOARD_STEPS.INDICATORS, canProceed)}
+                    onClick={() => reopenPanel(DASHBOARD_STEPS.INDICATORS)}
                   >
                     Edit Indicators
                   </Button>
@@ -190,7 +189,7 @@ class DashboardElement extends React.PureComponent {
           {this.renderDashboardModal()}
           {modalOpen === false && (
             <section className="dashboard-element-widgets">
-              {canProceed ? (
+              {editMode || this.canProceed() ? (
                 this.renderWidgets()
               ) : (
                 <div className="row align-center">
