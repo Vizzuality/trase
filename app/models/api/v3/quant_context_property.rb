@@ -31,6 +31,13 @@ module Api
 
       after_commit :refresh_dependents
 
+      def self.blue_foreign_keys
+        [
+          {name: :quant_id, table_class: Api::V3::Quant},
+          {name: :context_id, table_class: Api::V3::Context}
+        ]
+      end
+
       def refresh_dependents
         Api::V3::Readonly::ContextAttributeProperty.refresh
       end
