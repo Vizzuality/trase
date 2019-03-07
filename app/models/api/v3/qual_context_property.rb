@@ -22,9 +22,12 @@
 
 module Api
   module V3
-    class QualContextProperty < ApplicationRecord
+    class QualContextProperty < YellowTable
       belongs_to :context
       belongs_to :qual
+
+      validates :context, presence: true
+      validates :qual, presence: true, uniqueness: {scope: :context}
 
       after_commit :refresh_dependents
 

@@ -2,8 +2,8 @@ ActiveAdmin.register Api::V3::DashboardTemplate, as: 'DashboardTemplate' do
   menu parent: 'Dashboards'
 
   permit_params :title, :description, :image, :category, commodity_ids: [],
-                company_ids: [], country_ids: [], destination_ids: [],
-                source_ids: []
+                                                         company_ids: [], country_ids: [], destination_ids: [],
+                                                         source_ids: []
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 

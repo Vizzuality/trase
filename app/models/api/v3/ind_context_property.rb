@@ -22,9 +22,12 @@
 
 module Api
   module V3
-    class IndContextProperty < ApplicationRecord
+    class IndContextProperty < YellowTable
       belongs_to :context
       belongs_to :ind
+
+      validates :context, presence: true
+      validates :ind, presence: true, uniqueness: {scope: :context}
 
       after_commit :refresh_dependents
 

@@ -22,9 +22,12 @@
 
 module Api
   module V3
-    class QuantCountryProperty < ApplicationRecord
+    class QuantCountryProperty < YellowTable
       belongs_to :country
       belongs_to :quant
+
+      validates :country, presence: true
+      validates :quant, presence: true, uniqueness: {scope: :country}
 
       after_commit :refresh_dependents
 
