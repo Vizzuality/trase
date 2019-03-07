@@ -61,7 +61,10 @@ module Api
               Api::V3::MapInd,
               Api::V3::ChartInd,
               Api::V3::RecolorByInd,
-              Api::V3::DashboardsInd
+              Api::V3::DashboardsInd,
+              Api::V3::IndContextProperty,
+              Api::V3::IndCountryProperty,
+              Api::V3::IndCommodityProperty
             ]
           },
           {table_class: Api::V3::NodeInd},
@@ -72,7 +75,10 @@ module Api
               Api::V3::DownloadQual,
               Api::V3::ChartQual,
               Api::V3::RecolorByQual,
-              Api::V3::DashboardsQual
+              Api::V3::DashboardsQual,
+              Api::V3::QualContextProperty,
+              Api::V3::QualCountryProperty,
+              Api::V3::QualCommodityProperty
             ]
           },
           {table_class: Api::V3::NodeQual},
@@ -84,7 +90,10 @@ module Api
               Api::V3::MapQuant,
               Api::V3::ChartQuant,
               Api::V3::ResizeByQuant,
-              Api::V3::DashboardsQuant
+              Api::V3::DashboardsQuant,
+              Api::V3::QuantContextProperty,
+              Api::V3::QuantCountryProperty,
+              Api::V3::QuantCommodityProperty
             ]
           },
           {table_class: Api::V3::NodeQuant},

@@ -22,9 +22,12 @@
 
 module Api
   module V3
-    class IndCountryProperty < ApplicationRecord
+    class IndCountryProperty < YellowTable
       belongs_to :country
       belongs_to :ind
+
+      validates :country, presence: true
+      validates :ind, presence: true, uniqueness: {scope: :country}
 
       after_commit :refresh_dependents
 

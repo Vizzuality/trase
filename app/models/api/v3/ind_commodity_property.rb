@@ -22,9 +22,12 @@
 
 module Api
   module V3
-    class IndCommodityProperty < ApplicationRecord
+    class IndCommodityProperty < YellowTable
       belongs_to :commodity
       belongs_to :ind
+
+      validates :commodity, presence: true
+      validates :ind, presence: true, uniqueness: {scope: :commodity}
 
       after_commit :refresh_dependents
 

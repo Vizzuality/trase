@@ -22,9 +22,12 @@
 
 module Api
   module V3
-    class QuantContextProperty < ApplicationRecord
+    class QuantContextProperty < YellowTable
       belongs_to :context
       belongs_to :quant
+
+      validates :context, presence: true
+      validates :quant, presence: true, uniqueness: {scope: :context}
 
       after_commit :refresh_dependents
 

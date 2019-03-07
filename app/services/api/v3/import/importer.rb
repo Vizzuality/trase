@@ -121,7 +121,10 @@ module Api
             Api::V3::Readonly::Dashboards::Country,
             Api::V3::Readonly::Dashboards::Source,
             Api::V3::Readonly::Dashboards::Company,
-            Api::V3::Readonly::Dashboards::Destination
+            Api::V3::Readonly::Dashboards::Destination,
+            Api::V3::Readonly::ContextAttributeProperty,
+            Api::V3::Readonly::CountryAttributeProperty,
+            Api::V3::Readonly::CommodityAttributeProperty
           ].each { |mview| mview.refresh(sync: true, skip_dependencies: true) }
         end
 
