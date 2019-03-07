@@ -227,11 +227,12 @@ config.namespace :admin do |admin|
     menu.add label: 'Dashboard', priority: 1
     menu.add label: 'Content', priority: 2
     menu.add label: 'Database', priority: 4
-    menu.add label: 'General Settings', priority: 5
+    menu.add label: 'General', priority: 5
     menu.add label: 'Sankey', priority: 6
     menu.add label: 'Map', priority: 7
     menu.add label: 'Data Download', priority: 8
     menu.add label: 'Dashboards', priority: 9
+    menu.add label: 'Profiles', priority: 10
   end
 end
 

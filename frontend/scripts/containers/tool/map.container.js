@@ -6,7 +6,7 @@ import {
   getSelectedNodesGeoIds,
   getHighlightedNodesGeoIds
 } from 'react-components/tool/tool.selectors';
-import connect from 'connect';
+import connect from 'base/connect';
 import Map from 'components/tool/map.component';
 import getBasemap from '../helpers/getBasemap';
 

@@ -12,6 +12,22 @@
     ["@babel/plugin-proposal-class-properties", { "spec": true }]
   ],
   "env": {
+    "production": {
+      "presets": [
+        ["@babel/env", {
+          "useBuiltIns": "entry"
+        }],
+        "@babel/preset-react"
+      ],
+      "plugins": [
+        "@babel/plugin-syntax-dynamic-import",
+        "@babel/plugin-syntax-object-rest-spread",
+        "@babel/plugin-transform-exponentiation-operator",
+        ["@babel/plugin-proposal-class-properties", { "spec": true }],
+        "transform-react-remove-prop-types",
+        "lodash"
+      ]
+    },
     "test": {
       "presets": [
         ["@babel/env", {
@@ -25,6 +41,7 @@
         "@babel/plugin-transform-exponentiation-operator",
         ["@babel/plugin-proposal-class-properties", { "spec": true }],
         "@babel/plugin-transform-modules-commonjs",
+        "@babel/plugin-transform-runtime",
         ["module-resolver", {
           "alias": {
             "scripts": "./scripts",
@@ -36,7 +53,8 @@
             "containers": "./scripts/containers",
             "constants": "./scripts/constants",
             "router": "./scripts/router",
-            "react-components": "./scripts/react-components"
+            "react-components": "./scripts/react-components",
+            "named-maps": "./scripts/named-maps"
           }
         }]
       ]

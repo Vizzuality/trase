@@ -3,8 +3,6 @@ require('dotenv').config({ silent: true });
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 /**
  * BundleAnalyzerPlugin allows profiling the webpack generated js, to help identify improvement points
  * If you want to enable it, uncomment the line bellow and ´new BundleAnalyzerPlugin()´ further down.
@@ -12,6 +10,7 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const srcPath = path.join(__dirname, '..', 'scripts');
+const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin');
 
 const templates = require('./static.templates');
 
@@ -28,7 +27,6 @@ module.exports = {
   },
   plugins: [
     // new BundleAnalyzerPlugin(),
-    new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: path.resolve(srcPath, 'index.ejs'),
@@ -37,18 +35,16 @@ module.exports = {
       icons: templates.icons,
       head: templates.head
     }),
-    new SWPrecacheWebpackPlugin({
-      cacheId: 'trase.earth',
-      filename: 'service-worker.js',
-      minify: true,
-      staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/]
-    }),
     new webpack.DefinePlugin({
       NODE_ENV_DEV: process.env.NODE_ENV === 'development',
       DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
       SHOW_WORLD_MAP_IN_EXPLORE: process.env.SHOW_WORLD_MAP_IN_EXPLORE === 'true',
       ALWAYS_DISPLAY_DASHBOARD_INFO: process.env.ALWAYS_DISPLAY_DASHBOARD_INFO === 'true',
       ENABLE_DASHBOARDS: process.env.ENABLE_DASHBOARDS === 'true',
+      GFW_WIDGETS_BASE_URL: JSON.stringify(process.env.GFW_WIDGETS_BASE_URL),
+      ENABLE_LOGISTICS_MAP: process.env.ENABLE_LOGISTICS_MAP === 'true',
+      ENABLE_LEGACY_TOOL_SEARCH: process.env.ENABLE_LEGACY_TOOL_SEARCH === 'true',
+      DISABLE_MULTIPLE_CONTEXT_PROFILES: process.env.DISABLE_MULTIPLE_CONTEXT_PROFILES === 'true',
       API_V3_URL: JSON.stringify(process.env.API_V3_URL),
       API_V2_URL: JSON.stringify(process.env.API_V2_URL),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
@@ -62,7 +58,8 @@ module.exports = {
       USE_SERVICE_WORKER: process.env.USE_SERVICE_WORKER === 'true',
       TRANSIFEX_API_KEY: JSON.stringify(process.env.TRANSIFEX_API_KEY),
       HOME_VIDEO_ID: JSON.stringify(process.env.HOME_VIDEO_ID),
-      NAMED_MAPS_ENV: JSON.stringify(process.env.NAMED_MAPS_ENV)
+      NAMED_MAPS_ENV: JSON.stringify(process.env.NAMED_MAPS_ENV),
+      CARTO_ACCOUNT: JSON.stringify(process.env.CARTO_ACCOUNT)
     }),
     new webpack.LoaderOptionsPlugin({ options: {} })
   ],
@@ -77,14 +74,20 @@ module.exports = {
       styles: path.resolve(__dirname, '..', 'styles'),
       components: path.resolve(srcPath, 'components'),
       'react-components': path.resolve(srcPath, 'react-components'),
+      'named-maps': path.resolve(srcPath, 'named-maps'),
       containers: path.resolve(srcPath, 'containers'),
       utils: path.resolve(srcPath, 'utils'),
       constants: path.resolve(srcPath, 'constants'),
-      connect: path.resolve(srcPath, 'base', 'connect'),
-      Container: path.resolve(srcPath, 'base', 'Container'),
+      base: path.resolve(srcPath, 'base'),
       store: path.resolve(srcPath, 'store'),
-      router: path.resolve(srcPath, 'router')
+      router: path.resolve(srcPath, 'router'),
+      'lodash-es': 'lodash'
     },
+    plugins: [
+      new DirectoryNamedWebpackPlugin({
+        exclude: /node_modules/
+      })
+    ],
     extensions: ['.js', '.jsx']
   },
   module: {

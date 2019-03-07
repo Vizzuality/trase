@@ -1,10 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SimpleModal from 'react-components/shared/simple-modal.component';
-import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.container';
-import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome.component';
+import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
+import DashboardPanel from 'react-components/dashboard-element/dashboard-panel';
+import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome/dashboard-welcome.component';
 import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators/dashboard-indicators.container';
 import DashboardWiget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.container';
+import Button from 'react-components/shared/button/button.component';
+import Dropdown from 'react-components/shared/dropdown';
+
+import 'react-components/dashboard-element/dashboard-element.scss';
 
 class DashboardElement extends React.PureComponent {
   static propTypes = {
@@ -13,11 +17,12 @@ class DashboardElement extends React.PureComponent {
     step: PropTypes.number.isRequired,
     setStep: PropTypes.func.isRequired,
     editMode: PropTypes.bool.isRequired,
-    reopenPanel: PropTypes.func.isRequired,
     goToRoot: PropTypes.func.isRequired,
     modalOpen: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
-    dynamicSentenceParts: PropTypes.array
+    dynamicSentenceParts: PropTypes.array,
+    reopenPanel: PropTypes.func.isRequired,
+    openIndicatorsStep: PropTypes.func.isRequired
   };
 
   static steps = {
@@ -25,6 +30,12 @@ class DashboardElement extends React.PureComponent {
     PANEL: 1,
     INDICATORS: 2
   };
+
+  openIndicatorsStep() {
+    const { openIndicatorsStep, setStep } = this.props;
+    openIndicatorsStep();
+    setStep(DashboardElement.steps.INDICATORS);
+  }
 
   renderDashboardModal() {
     const {
@@ -55,35 +66,23 @@ class DashboardElement extends React.PureComponent {
             </div>
           </section>
         )}
-        <SimpleModal isOpen={modalOpen} onRequestClose={onClose} className="no-events">
-          <div className="dashboard-modal-content all-events">
-            <div className="dashboard-modal-close">
-              <button onClick={onClose}>
-                <span>close</span>
-                <svg className="icon icon-close">
-                  <use xlinkHref="#icon-close" />
-                </svg>
-              </button>
-            </div>
-            {step === DashboardElement.steps.WELCOME && (
-              <DashboardWelcome onContinue={() => setStep(DashboardElement.steps.PANEL)} />
-            )}
-            {step === DashboardElement.steps.PANEL && (
-              <DashboardPanel
-                editMode={editMode}
-                onContinue={() =>
-                  editMode && canProceed ? closeModal() : setStep(DashboardElement.steps.INDICATORS)
-                }
-              />
-            )}
-            {step === DashboardElement.steps.INDICATORS && (
-              <DashboardIndicators
-                editMode={editMode}
-                onContinue={closeModal}
-                goBack={() => setStep(DashboardElement.steps.PANEL)}
-              />
-            )}
-          </div>
+        <SimpleModal isOpen={modalOpen} onRequestClose={onClose}>
+          {step === DashboardElement.steps.WELCOME && (
+            <DashboardWelcome onContinue={() => setStep(DashboardElement.steps.PANEL)} />
+          )}
+          {step === DashboardElement.steps.PANEL && (
+            <DashboardPanel
+              editMode={editMode}
+              onContinue={() => (editMode && canProceed ? closeModal() : this.openIndicatorsStep())}
+            />
+          )}
+          {step === DashboardElement.steps.INDICATORS && (
+            <DashboardIndicators
+              editMode={editMode}
+              onContinue={closeModal}
+              goBack={() => setStep(DashboardElement.steps.PANEL)}
+            />
+          )}
         </SimpleModal>
       </React.Fragment>
     );
@@ -91,18 +90,28 @@ class DashboardElement extends React.PureComponent {
 
   renderDynamicSentence() {
     const { dynamicSentenceParts } = this.props;
-
     if (dynamicSentenceParts) {
       return dynamicSentenceParts.map((part, i) => (
-        <React.Fragment key={part.prefix + part.value + i}>
+        <span key={part.id + i}>
           {`${part.prefix} `}
           {part.value && (
-            <span className="dashboard-element-title-item notranslate">{part.value}</span>
+            <span className="dashboard-element-title-item notranslate">
+              {part.value.length > 1 ? (
+                <Dropdown
+                  variant="sentence"
+                  color="white"
+                  options={part.value.map(p => ({ value: p.id, label: p.name }))}
+                  selectedValueOverride={`${part.value.length} ${part.panel}`}
+                  readOnly
+                />
+              ) : (
+                part.value[0].name
+              )}
+            </span>
           )}
-        </React.Fragment>
+        </span>
       ));
     }
-
     return 'Dashboards';
   }
 
@@ -140,20 +149,24 @@ class DashboardElement extends React.PureComponent {
             <div className="row">
               <div className="column small-12 medium-6">
                 <div className="dashboard-header-actions">
-                  <button
+                  <Button
                     type="button"
-                    className="c-button -gray -medium dashboard-header-action -panel"
+                    color="gray"
+                    size="sm"
+                    className="dashboard-header-action -panel"
                     onClick={() => reopenPanel(DashboardElement.steps.PANEL, canProceed)}
                   >
                     Edit Options
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="button"
-                    className="c-button -gray-transparent -medium dashboard-header-action -panel"
+                    color="gray-transparent"
+                    size="sm"
+                    className="dashboard-header-action -panel"
                     onClick={() => reopenPanel(DashboardElement.steps.INDICATORS, canProceed)}
                   >
                     Edit Indicators
-                  </button>
+                  </Button>
                 </div>
               </div>
               <div className="column small-12 medium-6">
@@ -192,13 +205,14 @@ class DashboardElement extends React.PureComponent {
                       <p className="dashboard-element-title dashboard-element-fallback-text">
                         Your dashboard has no selection.
                       </p>
-                      <button
-                        type="button"
-                        className="c-button -gray-transparent -medium dashboard-element-fallback-button"
+                      <Button
+                        color="gray-transparent"
+                        size="medium"
+                        className="dashboard-element-fallback-button"
                         onClick={goToRoot}
                       >
                         Go Back
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>

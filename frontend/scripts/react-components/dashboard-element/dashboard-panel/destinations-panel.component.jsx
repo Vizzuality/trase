@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SearchInput from 'react-components/shared/search-input/search-input.component';
-import GridList from 'react-components/shared/grid-list.component';
-import GridListItem from 'react-components/shared/grid-list-item.component';
+import GridList from 'react-components/shared/grid-list/grid-list.component';
+import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 
 function DestinationsPanel(props) {
   const {
@@ -13,18 +13,18 @@ function DestinationsPanel(props) {
     loading,
     getSearchResults,
     activeDestination,
-    nodeTypeRenderer,
     onSelectDestinationValue,
     getMoreItems
   } = props;
   return (
     <React.Fragment>
       <SearchInput
+        variant="bordered"
+        size="sm"
         className="dashboard-panel-search"
         items={searchDestinations}
         placeholder="Search place"
         onSelect={onSelectDestinationValue}
-        nodeTypeRenderer={nodeTypeRenderer}
         onSearchTermChange={getSearchResults}
       />
       <GridList
@@ -43,11 +43,9 @@ function DestinationsPanel(props) {
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={
-              (activeDestination && activeDestination.id) === (itemProps.item && itemProps.item.id)
-            }
+            isActive={!!activeDestination[itemProps.item && itemProps.item.id]}
             enableItem={onSelectDestinationValue}
-            disableItem={() => onSelectDestinationValue(null)}
+            disableItem={onSelectDestinationValue}
           />
         )}
       </GridList>
@@ -64,7 +62,6 @@ DestinationsPanel.propTypes = {
   activeDestination: PropTypes.object,
   getMoreItems: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
-  nodeTypeRenderer: PropTypes.func.isRequired,
   onSelectDestinationValue: PropTypes.func.isRequired
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Widget from 'react-components/widgets/widget.component';
-import MiniSankey from 'react-components/profiles/mini-sankey.component';
+import MiniSankey from 'react-components/profiles/mini-sankey/mini-sankey.component';
 import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
 import {
   GET_NODE_SUMMARY_URL,
@@ -9,7 +9,8 @@ import {
   GET_PLACE_TOP_CONSUMER_COUNTRIES
 } from 'utils/getURLFromParams';
 import capitalize from 'lodash/capitalize';
-import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
+import Heading from 'react-components/shared/heading/heading.component';
 
 const TranslatedMiniSankey = withTranslation(MiniSankey);
 
@@ -66,6 +67,10 @@ class TopConsumersWidget extends React.PureComponent {
             );
           }
 
+          if (error) {
+            return null;
+          }
+
           if (
             data[mainQuery] &&
             data[mainQuery].targetNodes &&
@@ -74,14 +79,20 @@ class TopConsumersWidget extends React.PureComponent {
             return null;
           }
 
-          const { municipalityName } = data[GET_NODE_SUMMARY_URL];
+          const { jurisdictionName } = data[GET_NODE_SUMMARY_URL];
           return (
             <section className="mini-sankey-container page-break-inside-avoid" data-test={testId}>
               <div className="row">
                 <div className="small-12 columns">
-                  <h3 className="title -small" data-test={`${testId}-title`}>
-                    {this.getTitle(municipalityName)}
-                  </h3>
+                  <Heading
+                    variant="mono"
+                    weight="bold"
+                    as="h3"
+                    size="md"
+                    data-test={`${testId}-title`}
+                  >
+                    {this.getTitle(jurisdictionName)}
+                  </Heading>
                   <TranslatedMiniSankey
                     year={year}
                     data={data[mainQuery]}

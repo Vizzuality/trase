@@ -1,12 +1,70 @@
 # Database update process
 
-The database is updated with new datasets through an import process, which copies data directly between the source database (Main database) and the tool's database (Trase database).
+The database is updated with new datasets through an import process. There are two implementations in place:
+- the original ("remote import"), which copies data directly between the remote source database (Main database) and the tool's database (Trase database) using `postgres_fdw`;
+- a faster version ("mirror import"), which restores new data into a separate local schema and then runs the same process as above but without the remote connection.
 
 Post-update, data is checked using a [validation script](data_validation.md).
 
 There is also a utility to copy the database between instances using an [export / import](data_export_import.md) approach.
 
 All of these tools are available via the admin panel.
+
+## Mirror import
+
+### Starting the mirror importer
+
+The importer can be started in two ways:
+- via a rake task: `SCHEMA_VERSION=... bundle exec rake db:mirror:import`
+- via the admin interface: `/content/admin/database_update`
+
+In the first case the importer will run synchronously. In the latter case it will be executed as a background job using sidekiq. For that to work you need redis & sidekiq running. If redis is not already running it can be started using `redis-server`. To start sidekiq in development run `bundle exec sidekiq`. In staging / demo / production starting and stopping sidekiq is handled by capistrano.
+
+
+## Remote import
+
+### Connection between the two databases
+
+The connection is established between the Trase and Main databases using a postgres extension `postgres_fdw`. A number of connection properties need to be specified (they need to be defined as environment variables):
+
+```
+TRASE_REMOTE_HOST=localhost
+TRASE_REMOTE_PORT=5432
+TRASE_REMOTE_DATABASE=trase_core
+TRASE_REMOTE_SCHEMA=trase # this schema in remote database
+TRASE_REMOTE_USER=main_ro # this user defined in remote database with read-only access to trase schema
+TRASE_REMOTE_PASSWORD=
+TRASE_REMOTE_SERVER=trase_server
+```
+
+We assume that in Main DB there is a separate schema which contains data ready to be imported into Trase DB, the name of which is configured as `TRASE_REMOTE_SCHEMA`, e.g. `trase`. We also assume there is a user with read-only privileges for that schema, e.g. `main_ro`.
+
+`GRANT SELECT ON ALL TABLES IN SCHEMA trase TO main_ro`
+
+### Foreign table wrappers
+
+The extension `postgres_fdw` allows us to access tables in the Main database directly within the Trase database. It requires that a number of objects are created in the database:
+- the server (name configured as `TRASE_REMOTE_SERVER`, e.g. `trase_server`)
+- user mappings which allow a user of the Trase database to connect to the Main database as the read-only user
+- definitions of foreign tables
+
+All of these can be created using the following rake task:
+`bundle exec rake db:remote:init`
+
+In case anything changes (e.g. table definitions), this can be re-initialized using:
+`bundle exec rake db:remote:reinit`
+
+Foreign tables will be created in a schema configured as `TRASE_LOCAL_FDW_SCHEMA`.
+
+*Note to future self: Because the server and user mappings definitions may contain sensitive information, I needed a way to remove them from the SQL dump. I wasn't able to find a clean way to do it, so there is a monkey-patched version of `PostgreSQLDatabaseTasks.structure_dump` which removes those definitions from the dump. The idea is that after restoring from the dump, the `init` task needs to be run to establish the required objects for the import script.*
+
+### Starting the remote importer
+
+The importer can be started in two ways:
+- via a rake task: `bundle exec rake db:remote:import`
+- via the admin interface: `/content/admin/database_update`
+
+In the first case the importer will run synchronously. In the latter case it will be executed as a background job using sidekiq. For that to work you need redis & sidekiq running. If redis is not already running it can be started using `redis-server`. To start sidekiq in development run `bundle exec sidekiq`. In staging / demo / production starting and stopping sidekiq is handled by capistrano.
 
 ## Differences between Main DB and Trase DB
 
@@ -39,46 +97,11 @@ For example, the blue table `inds` holds basic information about an attribute ca
 
 The objective of the import process is to copy the blue tables verbatim from Main DB to Trase DB (overwriting previous content), but to preserve any yellow tables information which remains relevant.
 
-## Connection between the two databases
-
-The connection is established between the Trase and Main databases using a postgres extension `postgres_fdw`. A number of connection properties need to be specified (they need to be defined as environment variables):
-
-```
-TRASE_REMOTE_HOST=localhost
-TRASE_REMOTE_PORT=5432
-TRASE_REMOTE_DATABASE=trase_core
-TRASE_REMOTE_SCHEMA=trase # this schema in remote database
-TRASE_REMOTE_USER=main_ro # this user defined in remote database with read-only access to trase schema
-TRASE_REMOTE_PASSWORD=
-TRASE_REMOTE_SERVER=trase_server
-```
-
-We assume that in Main DB there is a separate schema which contains data ready to be imported into Trase DB, the name of which is configured as `TRASE_REMOTE_SCHEMA`, e.g. `trase`. We also assume there is a user with read-only privileges for that schema, e.g. `main_ro`.
-
-`GRANT SELECT ON ALL TABLES IN SCHEMA trase TO main_ro`
-
-## Foreign table wrappers
-
-The extension `postgres_fdw` allows us to access tables in the Main database directly within the Trase database. It requires that a number of objects are created in the database:
-- the server (name configured as `TRASE_REMOTE_SERVER`, e.g. `trase_server`)
-- user mappings which allow a user of the Trase database to connect to the Main database as the read-only user
-- definitions of foreign tables
-
-All of these can be created using the following rake task:
-`bundle exec rake db:remote:init`
-
-In case anything changes (e.g. table definitions), this can be re-initialized using:
-`bundle exec rake db:remote:reinit`
-
-Foreign tables will be created in a schema configured as `TRASE_LOCAL_FDW_SCHEMA`.
-
-*Note to future self: Because the server and user mappings definitions may contain sensitive information, I needed a way to remove them from the SQL dump. I wasn't able to find a clean way to do it, so there is a monkey-patched version of `PostgreSQLDatabaseTasks.structure_dump` which removes those definitions from the dump. The idea is that after restoring from the dump, the `init` task needs to be run to establish the required objects for the import script.*
-
-## Import script
+## Replacing core data while preserving matching configuration
 
 The importer script code is contained in `lib/api/v3/import/importer.rb`. The script goes over tables in a specific order, whereby each table is preceded by all the tables it depends on. *Note to future self*: for this to continue working as the database grows, cycles in the schema need to be avoided.
 
-Tables are processed differently depending on whether they are "blue" or "yellow". It can be easily recognised which is which based on the subclass of the model: either `Api::V3::BlueTable` or `Api::V3::YellowTable`.
+Tables are processed differently depending on whether they are "blue" (core) or "yellow" (configuration). It can be easily recognised which is which based on the subclass of the model: either `Api::V3::BlueTable` or `Api::V3::YellowTable`.
 
 In the first step all the tables are backed up, which means different things in case of blue and yellow tables.
 
@@ -99,11 +122,3 @@ To sum up, these are the important helper methods that need to be defined in mod
 - `import_key` - for blue tables only. Used for matching rows from local table with remote. Exception: `flows`. That table does not lend itself very well to matching in this way, which is why the `import_key` is empty. That results with the table being copied without any hope of resolving the old identifiers against the new ones. For now that is not a problem, because we do not have any yellow tables depending on flows. If we have any, this needs to be considered and matching on `context_id`, `year` and `path` implemented.
 - `blue_foreign_keys` - for both blue and yellow tables. Used to inform the importer that identifiers needs to be resolved using the mapping tables.
 - `yellow_foreign_keys` - for yellow tables only. Allows the importer to check for any rows that depend on another yellow table and might need removing.
-
-## Starting the importer
-
-The importer can be started in two ways:
-- via a rake task: `bundle exec rake db:remote:import`
-- via the admin interface: `/content/admin/database_update`
-
-In the first case the importer will run synchronously. In the latter case it will be executed as a background job using sidekiq. For that to work you need redis & sidekiq running. If redis is not already running it can be started using `redis-server`. To start sidekiq in development run `bundle exec sidekiq`. In staging / demo / production starting and stopping sidekiq is handled by capistrano.

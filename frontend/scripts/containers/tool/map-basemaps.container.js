@@ -1,4 +1,4 @@
-import connect from 'connect';
+import connect from 'base/connect';
 import { selectMapBasemap } from 'actions/tool.actions';
 import { BASEMAPS } from 'constants';
 import mapBasemaps from 'components/tool/map-basemaps.component';

@@ -37,15 +37,15 @@ module Api
                      attributes: [:dashboards_ind, :dashboards_qual, :dashboards_quant]
       validates_with AttributeAssociatedOnceValidator,
                      attribute: :dashboards_ind,
-                     scope: :dashboards_attribute_group,
+                     scope: :dashboards_attribute_group_id,
                      if: :new_dashboards_ind_given?
       validates_with AttributeAssociatedOnceValidator,
                      attribute: :dashboards_qual,
-                     scope: :dashboards_attribute_group,
+                     scope: :dashboards_attribute_group_id,
                      if: :new_dashboards_qual_given?
       validates_with AttributeAssociatedOnceValidator,
                      attribute: :dashboards_quant,
-                     scope: :dashboards_attribute_group,
+                     scope: :dashboards_attribute_group_id,
                      if: :new_dashboards_quant_given?
 
       after_commit :refresh_dependents
@@ -60,6 +60,12 @@ module Api
 
       def refresh_dependents
         Api::V3::Readonly::DashboardsAttribute.refresh
+      end
+
+      private_class_method def self.active_ids
+        Api::V3::DashboardsInd.distinct.pluck(:dashboards_attribute_id) +
+          Api::V3::DashboardsQual.distinct.pluck(:dashboards_attribute_id) +
+          Api::V3::DashboardsQuant.distinct.pluck(:dashboards_attribute_id)
       end
     end
   end

@@ -23,9 +23,12 @@
 module Api
   module V3
     class ChartInd < YellowTable
+      belongs_to :chart_attribute
+      belongs_to :ind
+
       def self.yellow_foreign_keys
         [
-          {name: :chart_attribute_id, table_class: Api::V3::Chart}
+          {name: :chart_attribute_id, table_class: Api::V3::ChartAttribute}
         ]
       end
 

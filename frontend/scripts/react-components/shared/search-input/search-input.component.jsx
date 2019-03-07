@@ -5,14 +5,18 @@ import Downshift from 'downshift';
 import SearchInputResult from 'react-components/shared/search-input/search-input-result.component';
 import cx from 'classnames';
 import debounce from 'lodash/debounce';
-import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import { MAX_SEARCH_RESULTS } from 'constants';
+
+import 'scripts/react-components/shared/search-input/search-input.scss';
 
 const SEARCH_DEBOUNCE_RATE_IN_MS = 400;
 
 class SearchInput extends PureComponent {
+  static VARIANTS = ['bordered'];
+
   onInputValueChange = debounce(
-    searchTerm => this.props.onSearchTermChange && this.props.onSearchTermChange(searchTerm),
+    (...params) => this.props.onSearchTermChange && this.props.onSearchTermChange(...params),
     SEARCH_DEBOUNCE_RATE_IN_MS
   );
 
@@ -39,8 +43,11 @@ class SearchInput extends PureComponent {
 
   renderSearchBox = ({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => {
     const {
+      size,
+      variant,
       className,
       isLoading,
+      isDisabled,
       items,
       placeholder,
       placeholderSmall,
@@ -52,22 +59,33 @@ class SearchInput extends PureComponent {
     const visibleResults = items.slice(0, MAX_SEARCH_RESULTS);
 
     return (
-      <div className={cx('c-search-input', className)} data-test={`search-input-${testId}`}>
+      <div
+        className={cx('c-search-input', className, {
+          [variant]: SearchInput.VARIANTS.includes(variant),
+          [`size-${size}`]: size
+        })}
+        data-test={`${testId}-search-input-container`}
+      >
         <div
-          className={cx('search-input-bar', { '-loading': isLoading })}
+          className={cx('search-input-bar', { '-loading': isLoading, '-disabled': isDisabled })}
           onClick={this.focusInput}
           role="textbox"
         >
           <input
             {...getInputProps({ placeholder: placeholderSmall })}
             type="search"
+            autoComplete="off"
+            disabled={isDisabled}
             className="search-input-field show-for-small"
+            data-test={`${testId}-search-input-field-sm${isDisabled ? '-disabled' : ''}`}
           />
           <input
             {...getInputProps({ placeholder })}
             type="search"
+            autoComplete="off"
+            disabled={isDisabled}
             className="search-input-field hide-for-small"
-            data-test="search-input-desktop"
+            data-test={`${testId}-search-input-field-lg${isDisabled ? '-disabled' : ''}`}
           />
           {isLoading ? (
             <ShrinkingSpinner className="-dark" />
@@ -98,12 +116,13 @@ class SearchInput extends PureComponent {
   };
 
   render() {
+    const { searchOptions, onSelect } = this.props;
     return (
       <Downshift
-        onSelect={node => this.props.onSelect(node, this.props.year)}
+        onSelect={node => onSelect(node, searchOptions)}
         stateReducer={this.stateReducer}
         itemToString={i => (i === null ? '' : i.name)}
-        onInputValueChange={this.onInputValueChange}
+        onInputValueChange={term => this.onInputValueChange(term, searchOptions)}
       >
         {this.renderSearchBox}
       </Downshift>
@@ -112,9 +131,12 @@ class SearchInput extends PureComponent {
 }
 
 SearchInput.propTypes = {
+  size: PropTypes.string,
   year: PropTypes.number,
   testId: PropTypes.string,
+  variant: PropTypes.string,
   isLoading: PropTypes.bool,
+  isDisabled: PropTypes.bool,
   className: PropTypes.string,
   placeholder: PropTypes.string,
   getResultTestId: PropTypes.func,
@@ -122,6 +144,7 @@ SearchInput.propTypes = {
   items: PropTypes.array.isRequired,
   resultClassName: PropTypes.string,
   placeholderSmall: PropTypes.string,
+  searchOptions: PropTypes.object,
   onSelect: PropTypes.func.isRequired,
   onSearchTermChange: PropTypes.func.isRequired
 };

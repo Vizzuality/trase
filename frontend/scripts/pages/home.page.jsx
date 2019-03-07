@@ -6,9 +6,9 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 import Home from 'react-components/home/home.container';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
-import Footer from 'react-components/shared/footer.component';
+import Footer from 'react-components/shared/footer/footer.component';
 
-import 'styles/homepage.scss';
+import 'styles/layouts/l-homepage.scss';
 
 export const mount = (root, store) => {
   root.innerHTML = BaseMarkup({

@@ -9,24 +9,23 @@ import { selectContextById } from 'actions/app.actions';
 import Explore from './explore.component';
 
 const mapStateToProps = state => {
-  const { selectedYears } = state.tool;
-  const { selectedContext, contextIsUserSelected } = state.app;
+  const { selectedContext, selectedYears } = state.app;
   const { topNodes, selectedTableColumnType, loading: loadingDict } = state.explore;
   const topNodesKey = selectedContext
     ? getTopNodesKey(selectedContext.id, selectedTableColumnType, ...selectedYears)
     : null;
   const topExporters = topNodes[topNodesKey] || [];
-  const isSubnational = selectedContext ? selectedContext.isSubnational : null;
   const loading = loadingDict[topNodesKey];
+  const redirectQuery = state.location.query;
+
   return {
     loading,
     topNodesKey,
     topExporters,
-    isSubnational,
     selectedYears,
+    redirectQuery,
     selectedContext,
-    selectedTableColumnType,
-    showTable: contextIsUserSelected
+    selectedTableColumnType
   };
 };
 

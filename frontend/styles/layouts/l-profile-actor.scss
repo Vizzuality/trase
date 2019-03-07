@@ -1,6 +1,7 @@
-@import '../settings';
+@import 'styles/settings';
 
-$small-line-chart-width: 840px;
+$medium-line-chart-width: 490px;
+$large-line-chart-width: 840px;
 
 .l-profile-actor {
   position: relative;
@@ -12,18 +13,17 @@ $small-line-chart-width: 840px;
   &.-error {
     position: relative;
     min-height: 100vh;
-
-    .c-error-message {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
   }
 
   @media print {
     padding: 0;
     background-color: $white;
+
+    .c-tabs {
+      .tab {
+        display: none
+      }
+    }
   }
 
   section:nth-of-type(2n-1) {
@@ -60,7 +60,7 @@ $small-line-chart-width: 840px;
     }
   }
 
-  .c-anchor-buttons {
+  .c-button-links {
     padding: 49px 0 46px;
 
     @media print {
@@ -71,14 +71,6 @@ $small-line-chart-width: 840px;
                   and (max-width: $breakpoint-foundation-medium) {
       > .row .columns:not(:last-child) {
         padding-right: 0;
-      }
-    }
-  }
-
-  .c-area-table {
-    @media print {
-      .tab-switcher-title {
-        font-size: $font-size-xx-regular;
       }
     }
   }
@@ -161,14 +153,23 @@ $small-line-chart-width: 840px;
     align-items: flex-start;
   }
 
-  .top-destinations-chart-container {
+  .top-destinations-chart-container,
+  .top-destinations-chart-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%;
+  }
 
-    @media screen and (min-width: $small-line-chart-width) {
-      padding: 0 0 60px;
+  .top-destinations-chart-container {
+    height: 100%;
+    padding: 0 0 60px;
+
+    @media screen and (min-width: $medium-line-chart-width) and (max-width: $breakpoint-foundation-small) {
+      padding: 0;
+    }
+
+    @media screen and (min-width: $large-line-chart-width) {
+      padding: 0;
     }
   }
 

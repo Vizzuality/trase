@@ -1,6 +1,6 @@
 @import '../../settings';
 @import '../../mixins';
-@import '../nav/basic-dropdown';
+@import 'basic-dropdown';
 
 .c-dropdown {
   display: flex;
@@ -121,6 +121,7 @@
   }
 
   .dropdown-list > .dropdown-item {
+    color: $charcoal-grey;
     padding: 10px 25px;
     font-family: $font-family-2;
     font-size: $font-size-xx-regular;
@@ -135,6 +136,10 @@
     &:hover {
       background-color: $manilla;
       cursor: pointer;
+    }
+
+    &.-uppercase {
+      text-transform: uppercase;
     }
 
     .dropdown-item-legend-container {

@@ -24,15 +24,15 @@ set :deploy_to, '/var/www/trase'
 append :linked_files, '.env', 'frontend/.env', 'frontend/dist/robots.txt'
 
 # Default value for linked_dirs is []
-append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/system', 'vendor/bundle'
+append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/system', 'public/downloads', 'vendor/bundle'
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
 set :keep_releases, 5
 
-set :npm_target_path, -> { release_path.join('frontend') } # default not set
-set :npm_flags, ''
+set :yarn_target_path, -> { release_path.join('frontend') } # default not set
+set :yarn_flags, ''
 
 set :init_system, :systemd
 
@@ -57,15 +57,40 @@ end
 after 'deploy:starting', 'sidekiq:quiet'
 after 'deploy:reverted', 'sidekiq:restart'
 after 'deploy:published', 'sidekiq:restart'
+after 'sidekiq:restart', 'downloads:refresh'
+after 'deploy:updated', 'newrelic:notice_deployment'
 
-namespace :npm do
-  after 'npm:install', 'npm:build'
+namespace :yarn do
+  after 'yarn:install', 'yarn:build'
 
   task :build do
-    on roles fetch(:npm_roles) do
-      within fetch(:npm_target_path, release_path) do
-        with fetch(:npm_env_variables, {}) do
-          execute :npm, 'run build'
+    on roles fetch(:yarn_roles) do
+      within fetch(:yarn_target_path, release_path) do
+        with fetch(:yarn_env_variables, {}) do
+          execute :yarn, 'build'
+        end
+      end
+    end
+  end
+end
+
+namespace :downloads do
+  desc 'Clear pre-computed bulk downloads'
+  task :clear do
+    on roles(:app) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, 'downloads:clear'
+        end
+      end
+    end
+  end
+  desc 'Refresh pre-computed bulk downloads in a background job'
+  task :refresh do
+    on roles(:app) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, 'downloads:refresh_later'
         end
       end
     end

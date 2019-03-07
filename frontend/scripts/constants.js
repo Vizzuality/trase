@@ -31,6 +31,7 @@ export const NUM_DECIMALS = {
   percentage: 1,
   tons: 0
 };
+
 export const NUM_DECIMALS_DEFAULT = 1;
 
 export const UNITLESS_UNITS = ['Unitless', 'Number', 'Head', 'Number', 'NA'];
@@ -225,4 +226,17 @@ export const BREAKPOINTS = {
   small: 640
 };
 
-export const MAX_SEARCH_RESULTS = 15;
+export const MAX_SEARCH_RESULTS = 50;
+
+export const LOGISTICS_MAP_YEARS = Array.from({ length: 12 })
+  .fill(2016)
+  .map((y, i) => ({ id: y - i, name: `${y - i}` }));
+
+export const LOGISTICS_MAP_HUBS = [{ id: 'soy', name: 'Soy' }, { id: 'cattle', name: 'Cattle' }];
+
+export const LOGISTICS_MAP_INSPECTION_LEVELS = [
+  { id: 'SIF', name: 'SIF' },
+  { id: 'SIE', name: 'SIE' },
+  { id: 'SIM', name: 'SIM' },
+  { id: 'UNKNOWN', name: 'Unknown' }
+];

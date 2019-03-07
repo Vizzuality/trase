@@ -132,8 +132,6 @@ GEM
       capistrano (~> 3.1)
       sshkit (~> 1.2)
     capistrano-harrow (0.5.3)
-    capistrano-npm (1.0.2)
-      capistrano (>= 3.0.0)
     capistrano-passenger (0.2.0)
       capistrano (~> 3.0)
     capistrano-rails (1.4.0)
@@ -142,6 +140,8 @@ GEM
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
+    capistrano-yarn (2.0.2)
+      capistrano (~> 3.0)
     case_transform (0.2)
       activesupport
     chronic (0.10.2)
@@ -259,6 +259,7 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (4.2.0)
+    newrelic_rpm (5.7.0.350)
     nio4r (2.3.1)
     nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
@@ -466,10 +467,10 @@ DEPENDENCIES
   byebug
   capistrano (= 3.7.1)
   capistrano-bundler
-  capistrano-npm
   capistrano-passenger
   capistrano-rails
   capistrano-rvm
+  capistrano-yarn
   ckeditor!
   coffee-rails (~> 4.2)
   database_cleaner
@@ -484,6 +485,7 @@ DEPENDENCIES
   kaminari
   listen (~> 3.0.5)
   mailchimp-api
+  newrelic_rpm
   oj
   paperclip (~> 5.2.0)
   pg (~> 0.18)

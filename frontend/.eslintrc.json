@@ -54,6 +54,9 @@
     "NODE_ENV_DEV": true,
     "API_V3_URL": true,
     "ENABLE_DASHBOARDS": true,
+    "ENABLE_LOGISTICS_MAP": true,
+    "ENABLE_LEGACY_TOOL_SEARCH": true,
+    "DISABLE_MULTIPLE_CONTEXT_PROFILES": true,
     "GOOGLE_ANALYTICS_KEY": true,
     "USER_REPORT_KEY": true,
     "DATA_DOWNLOAD_ENABLED": true,
@@ -69,6 +72,8 @@
     "USE_PLAIN_URL_STATE": true,
     "USE_SERVICE_WORKER": true,
     "NAMED_MAPS_ENV": true,
+    "GFW_WIDGETS_BASE_URL": true,
+    "CARTO_ACCOUNT": true,
     "ga": true,
     "fetch": true
   },

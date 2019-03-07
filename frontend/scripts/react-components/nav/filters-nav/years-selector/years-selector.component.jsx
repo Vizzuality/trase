@@ -8,8 +8,6 @@ import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.c
 
 import 'styles/components/tool/years-selector.scss';
 
-const id = 'years';
-
 class YearsSelector extends Component {
   constructor(props) {
     super(props);
@@ -39,7 +37,7 @@ class YearsSelector extends Component {
 
   setActive(year) {
     const { start, end } = this.state;
-    const { onSelected, onToggle } = this.props;
+    const { onSelected, onToggle, id } = this.props;
 
     if (end !== null) {
       this.setState({ start: year, end: null });
@@ -91,6 +89,7 @@ class YearsSelector extends Component {
 
   render() {
     const {
+      id,
       className,
       dropdownClassName,
       currentDropdown,
@@ -146,12 +145,13 @@ class YearsSelector extends Component {
 }
 
 YearsSelector.propTypes = {
+  id: PropTypes.string,
+  years: PropTypes.array,
   onToggle: PropTypes.func,
   onSelected: PropTypes.func,
-  years: PropTypes.array,
-  currentDropdown: PropTypes.string,
-  selectedYears: PropTypes.array,
   className: PropTypes.string,
+  selectedYears: PropTypes.array,
+  currentDropdown: PropTypes.string,
   dropdownClassName: PropTypes.string
 };
 

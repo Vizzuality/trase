@@ -1,9 +1,10 @@
-import 'styles/components/tool/map/map-legend.scss';
 import { PROFILE_CHOROPLETH_CLASSES } from 'constants';
 import abbreviateNumber from 'utils/abbreviateNumber';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+
+import 'styles/components/tool/map/map-legend.scss';
 
 class ChoroLegend extends Component {
   abbreviateNumber(x, index) {
@@ -24,8 +25,9 @@ class ChoroLegend extends Component {
             {PROFILE_CHOROPLETH_CLASSES.map((color, index) => (
               <li className="bucket-item" key={index}>
                 <div className={cx('bucket', color)}>
-                  {typeof bucket !== 'undefined' &&
-                    bucket !== null && <span>{this.abbreviateNumber(bucket[index], index)}</span>}
+                  {typeof bucket !== 'undefined' && bucket !== null && (
+                    <span>{this.abbreviateNumber(bucket[index], index)}</span>
+                  )}
                 </div>
               </li>
             ))}
@@ -37,8 +39,7 @@ class ChoroLegend extends Component {
               N/A
             </li>
             <li>
-              <div className="bullet ch-zero" style={{ background: '#fffff' }} />
-              0
+              <div className="bullet ch-zero" style={{ background: '#fffff' }} />0
             </li>
           </ul>
         </div>

@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import Tooltip from 'tooltip.js';
-import 'styles/components/shared/help-tooltip.scss';
+import 'scripts/react-components/shared/help-tooltip/help-tooltip.scss';
 
 export default class {
   onCreated() {

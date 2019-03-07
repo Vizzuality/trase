@@ -1,13 +1,13 @@
 import { getURLFromParams } from 'utils/getURLFromParams';
 import qs from 'qs';
+import sortBy from 'lodash/sortBy';
 
 export const WIDGETS__INIT_ENDPOINT = 'WIDGETS__INIT_ENDPOINT';
 export const WIDGETS__SET_ENDPOINT_DATA = 'WIDGETS__SET_ENDPOINT_DATA';
 export const WIDGETS__SET_ENDPOINT_ERROR = 'WIDGETS__SET_ENDPOINT_ERROR';
-export const WIDGETS__SET_ENDPOINT_LOADING = 'WIDGETS__SET_ENDPOINT_LOADING';
 
 export function prepareWidget(endpoints, { endpoint, params, raw }) {
-  const key = Object.entries(params || { noParams: true })
+  const key = sortBy(Object.entries(params || { noParams: true }), entry => entry[0])
     .map(([name, value]) => `${name}${value}`)
     .join('_');
   let url = null;
@@ -17,7 +17,7 @@ export function prepareWidget(endpoints, { endpoint, params, raw }) {
     if (raw) {
       url = endpoint;
       if (params) {
-        const search = qs.stringify(params);
+        const search = qs.stringify(params, { encodeValuesOnly: true });
         url = endpoint.includes('?') ? `${endpoint}&${search}` : `${endpoint}?${search}`;
       }
     } else {
@@ -71,12 +71,6 @@ export const getWidgetData = (endpoint, params, raw) => (dispatch, getState) => 
         dispatch({
           type: WIDGETS__SET_ENDPOINT_ERROR,
           payload: { endpoint, error }
-        })
-      )
-      .finally(() =>
-        dispatch({
-          type: WIDGETS__SET_ENDPOINT_LOADING,
-          payload: { endpoint, loading: false }
         })
       );
   }

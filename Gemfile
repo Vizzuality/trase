@@ -40,6 +40,7 @@ gem 'rack-cors', '~> 0.4'
 gem 'twitter', '~> 6.1'
 
 gem 'appsignal'
+gem 'newrelic_rpm'
 gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
 gem 'whenever', require: false
@@ -63,13 +64,13 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-
+  gem 'capistrano-yarn'
   gem 'capistrano', '3.7.1'
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
-  gem 'capistrano-npm'
+
   gem 'rubocop', require: false
   gem 'rbnacl', '>= 3.2', '< 5.0'
   gem 'rbnacl-libsodium'

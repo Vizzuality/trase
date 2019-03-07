@@ -26,6 +26,10 @@ module Api
           first
       end
 
+      def simple_type
+        'quant'
+      end
+
       def self.select_options
         order(:name).map { |quant| [quant.name, quant.id] }
       end

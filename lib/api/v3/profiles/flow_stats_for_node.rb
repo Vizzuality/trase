@@ -29,7 +29,7 @@ module Api
           )
           group_clause = ActiveRecord::Base.send(
             :sanitize_sql_array,
-            ['flows.path[?], quants.name',
+            ["flows.path[?], #{attributes_table}.name",
              other_node_index]
           )
 

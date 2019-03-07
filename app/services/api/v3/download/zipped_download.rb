@@ -12,7 +12,7 @@ module Api
         def initialize(query, download_name)
           @query = query
           @download_name = download_name
-          @temp_dir = "#{Rails.root}/tmp/#{Time.now.strftime('%Y%m%d%H%M%S')}"
+          @temp_dir = "#{Rails.root}/tmp/#{Time.now.strftime('%Y%m%d%H%M%S,%N')}"
         end
 
         # @return [String] compressed data

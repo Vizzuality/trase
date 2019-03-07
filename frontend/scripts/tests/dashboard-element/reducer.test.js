@@ -14,7 +14,9 @@ import {
   DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
 } from 'react-components/dashboard-element/dashboard-element.actions';
 
 describe(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL, () => {
@@ -52,7 +54,7 @@ test(DASHBOARD_ELEMENT__SET_PANEL_PAGE, () => {
   const sourcesPanel = {
     ...initialState.sourcesPanel,
     activeTab: 2,
-    activeItem: 23
+    activeItems: [23]
   };
   const state = {
     ...initialState,
@@ -185,6 +187,7 @@ describe(DASHBOARD_ELEMENT__SET_PANEL_DATA, () => {
 describe(DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA, () => {
   const someData = [{ id: 0, name: 'name0' }, { id: 1, name: 'name1' }];
   const moreData = [{ id: 0, name: 'Whatever' }];
+
   it('adds more data to an array entity', () => {
     const action = {
       type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
@@ -192,7 +195,7 @@ describe(DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA, () => {
         tab: null,
         data: moreData,
         key: 'commodities',
-        direction: 'forwards'
+        direction: 'forward'
       }
     };
     const state = {
@@ -204,29 +207,28 @@ describe(DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA, () => {
     };
     const newState = reducer(state, action);
     expect(newState).toEqual({
-      ...initialState,
+      ...state,
       data: {
-        ...initialState.data,
+        ...state.data,
         commodities: [...someData, ...moreData]
       }
     });
   });
 
-  it('adds more data to an array entity', () => {
+  it('adds more data to an object entity', () => {
     const action = {
       type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
       payload: {
         tab: 1,
         data: moreData,
         key: 'sources',
-        direction: 'forwards'
+        direction: 'forward'
       }
     };
     const state = {
       ...initialState,
       data: {
         ...initialState.data,
-        commodities: someData,
         sources: {
           1: someData,
           2: someData
@@ -235,13 +237,44 @@ describe(DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA, () => {
     };
     const newState = reducer(state, action);
     expect(newState).toEqual({
-      ...initialState,
+      ...state,
       data: {
         ...state.data,
         sources: {
           1: [...someData, ...moreData],
           2: someData
         }
+      }
+    });
+  });
+
+  it('resets the page number when theres no new data', () => {
+    const action = {
+      type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
+      payload: {
+        tab: 1,
+        data: [],
+        key: 'commodities',
+        direction: 'forward'
+      }
+    };
+    const state = {
+      ...initialState,
+      data: {
+        ...initialState.data,
+        commodities: someData
+      },
+      commoditiesPanel: {
+        ...initialState.commoditiesPanel,
+        page: 3
+      }
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      commoditiesPanel: {
+        ...state.commoditiesPanel,
+        page: 2
       }
     });
   });
@@ -296,14 +329,14 @@ describe(DASHBOARD_ELEMENT__SET_PANEL_TABS, () => {
     });
   });
 
-  it('loads tabs after panel pagination', () => {
+  it('resets page to inital state after loading tabs', () => {
     const state = {
       ...initialState,
-      tabs: { sources: expectedTabs.companies },
+      tabs: { sources: expectedTabs.sources },
       activePanelId: 'sources',
       sourcesPanel: {
         ...initialState.sourcesPanel,
-        activeTab: { id: 0, name: 'someTab' },
+        activeTab: expectedTabs.sources[0],
         page: 4
       }
     };
@@ -314,6 +347,52 @@ describe(DASHBOARD_ELEMENT__SET_PANEL_TABS, () => {
       sourcesPanel: {
         ...state.sourcesPanel,
         page: initialState.sourcesPanel.page
+      }
+    });
+  });
+
+  it('sets activeTab to previous value if it exists in new tabs', () => {
+    const state = {
+      ...initialState,
+      tabs: { sources: expectedTabs.sources },
+      activePanelId: 'sources',
+      sourcesPanel: {
+        ...initialState.sourcesPanel,
+        activeTab: expectedTabs.sources[1]
+      }
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      tabs: expectedTabs
+    });
+  });
+
+  it('sets activeTab to first value if previous value doesnt exists in new tabs', () => {
+    const newData = [...data];
+    newData[0].tabs = [expectedTabs.sources[0]];
+    const newAction = {
+      type: DASHBOARD_ELEMENT__SET_PANEL_TABS,
+      payload: {
+        data: newData
+      }
+    };
+    const state = {
+      ...initialState,
+      tabs: { sources: [expectedTabs.sources[0]] },
+      activePanelId: 'sources',
+      sourcesPanel: {
+        ...initialState.sourcesPanel,
+        activeTab: expectedTabs.sources[1]
+      }
+    };
+    const newState = reducer(state, newAction);
+    expect(newState).toEqual({
+      ...state,
+      tabs: { ...expectedTabs, sources: newData[0].tabs },
+      sourcesPanel: {
+        ...state.sourcesPanel,
+        activeTab: expectedTabs.sources[0]
       }
     });
   });
@@ -339,6 +418,10 @@ test(DASHBOARD_ELEMENT__SET_ACTIVE_TAB, () => {
   const newState = reducer(state, action);
   expect(newState).toEqual({
     ...state,
+    data: {
+      ...state.data,
+      sources: { 1: null }
+    },
     activeIndicatorsList: [],
     sourcesPanel: {
       ...state.sourcesPanel,
@@ -354,19 +437,19 @@ describe(DASHBOARD_ELEMENT__CLEAR_PANEL, () => {
     countriesPanel: {
       ...initialState.countriesPanel,
       activeTab: { id: 6, name: 'some tab' },
-      activeItem: { id: 1, name: 'some item' },
+      activeItems: [{ id: 1, name: 'some item' }],
       page: 2
     },
     sourcesPanel: {
       ...initialState.sourcesPanel,
       activeTab: { id: 2, name: 'some tab' },
-      activeItem: { id: 0, name: 'some item' },
+      activeItems: [{ id: 0, name: 'some item' }],
       page: 9
     },
     companiesPanel: {
       ...initialState.companiesPanel,
       activeTab: { id: 1, name: 'some tab' },
-      activeItem: { id: 4, name: 'some item' },
+      activeItems: [{ id: 4, name: 'some item' }],
       page: 5
     }
   };
@@ -465,14 +548,17 @@ describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
   const someResults = [
     { id: 0, name: 'some result' },
     { id: 2, name: 'some result2' },
-    { id: 3, name: 'some result3' }
+    { id: 3, name: 'some result_3' }
   ];
   const action = {
     type: DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
     payload: {
+      query: 'some result',
       data: someResults
     }
   };
+  const someFuzzySearchResults = someResults.map((res, i) => ({ ...res, _distance: i }));
+  const searchResults = ENABLE_LEGACY_TOOL_SEARCH ? someResults : someFuzzySearchResults;
   it('sets results in a panel with a single entity (not sources)', () => {
     const state = {
       ...initialState,
@@ -483,7 +569,7 @@ describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
       ...state,
       destinationsPanel: {
         ...state.destinationsPanel,
-        searchResults: someResults
+        searchResults
       }
     });
   });
@@ -494,7 +580,7 @@ describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
       activePanelId: 'sources',
       countriesPanel: {
         ...initialState.countriesPanel,
-        activeItem: { id: 0, name: 'brazil' }
+        activeItems: { id: 0, name: 'brazil' }
       }
     };
     const newState = reducer(state, action);
@@ -502,7 +588,7 @@ describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
       ...state,
       sourcesPanel: {
         ...state.sourcesPanel,
-        searchResults: someResults
+        searchResults
       }
     });
   });
@@ -517,7 +603,7 @@ describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
       ...state,
       countriesPanel: {
         ...state.countriesPanel,
-        searchResults: someResults
+        searchResults
       }
     });
   });
@@ -525,7 +611,7 @@ describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
 
 describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
   const someItem = { id: 1, name: 'some item' };
-  it('sets active item in a single entity panel (not countries)', () => {
+  it('Sets an active item in a single entity panel', () => {
     const action = {
       type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
       payload: {
@@ -547,12 +633,12 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
       activeIndicatorsList: [],
       companiesPanel: {
         ...state.companiesPanel,
-        activeItem: someItem
+        activeItems: { [someItem.id]: someItem }
       }
     });
   });
 
-  it('sets active item in the countries panel', () => {
+  it('Clears the current sources when selecting a country in the sources panel', () => {
     const action = {
       type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
       payload: {
@@ -562,7 +648,10 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
     };
     const state = {
       ...initialState,
-      activeIndicatorsList: [0, 1, 2]
+      activeIndicatorsList: [0, 1, 2],
+      countriesPanel: {
+        activeItems: { 16: { id: 16, name: 'some-source-to-be-cleared' } }
+      }
     };
     const newState = reducer(state, action);
     expect(newState).toEqual({
@@ -571,7 +660,7 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
       sourcesPanel: initialState.sourcesPanel,
       countriesPanel: {
         ...state.countriesPanel,
-        activeItem: someItem
+        activeItems: { [someItem.id]: someItem }
       }
     });
   });
@@ -596,17 +685,93 @@ test(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH, () => {
     activeIndicatorsList: [1, 2, 3],
     companiesPanel: {
       ...initialState.companiesPanel,
-      activeTab: { id: 7, name: 'IMPORTER' }
+      activeTab: { id: 7, name: 'IMPORTER' },
+      page: 4
     }
   };
   const newState = reducer(state, action);
   expect(newState).toEqual({
     ...state,
+    data: {
+      ...state.data,
+      companies: { 7: null }
+    },
     activeIndicatorsList: [],
     companiesPanel: {
       ...state.companiesPanel,
-      activeItem: someItem,
-      activeTab: tabs.companies[0]
+      activeItems: { [someItem.id]: someItem },
+      activeTab: tabs.companies[0],
+      page: initialState.companiesPanel.page
+    }
+  });
+});
+
+describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS, () => {
+  const someItem = { id: 1, name: 'some item' };
+  it('sets active item in a multiple entity panel', () => {
+    const action = {
+      type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
+      payload: {
+        panel: 'companies',
+        activeItems: someItem
+      }
+    };
+    const state = {
+      ...initialState,
+      activeIndicatorsList: [0, 1, 2],
+      companiesPanel: {
+        ...initialState.companiesPanel,
+        page: 4
+      }
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      activeIndicatorsList: [],
+      companiesPanel: {
+        ...state.companiesPanel,
+        activeItems: { [someItem.id]: someItem }
+      }
+    });
+  });
+});
+
+test(DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH, () => {
+  const tabs = {
+    sources: [{ id: 3, name: 'MUNICIPALITY' }, { id: 1, name: 'BIOME' }],
+    companies: [{ id: 6, name: 'EXPORTER' }, { id: 7, name: 'IMPORTER' }]
+  };
+  const someItem = { id: 1, name: 'some item', nodeTypeId: 6 };
+  const action = {
+    type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
+    payload: {
+      panel: 'companies',
+      activeItems: someItem
+    }
+  };
+  const state = {
+    ...initialState,
+    tabs,
+    activeIndicatorsList: [1, 2, 3],
+    companiesPanel: {
+      ...initialState.companiesPanel,
+      activeTab: { id: 7, name: 'IMPORTER' },
+      page: 4
+    }
+  };
+  const newState = reducer(state, action);
+  expect(newState).toEqual({
+    ...state,
+    data: {
+      ...state.data,
+      companies: { 7: null }
+    },
+    activeIndicatorsList: [],
+    companiesPanel: {
+      ...state.companiesPanel,
+      activeItems: { [someItem.id]: someItem },
+      activeTab: tabs.companies[0],
+      page: initialState.companiesPanel.page
     }
   });
 });

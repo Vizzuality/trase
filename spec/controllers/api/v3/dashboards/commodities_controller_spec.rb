@@ -12,14 +12,16 @@ RSpec.describe Api::V3::Dashboards::CommoditiesController, type: :controller do
   describe 'GET search' do
     it 'returns commodities by name' do
       get :search, params: {q: 'so'}
-      expect(assigns(:collection).map(&:id)).to eq([api_v3_soy.id])
+      expect(assigns(:collection).map(&:name)).to eq([api_v3_soy.name])
     end
   end
 
   describe 'GET index' do
     it 'returns list in alphabetical order' do
       get :index, params: {countries_ids: api_v3_brazil.id}
-      expect(assigns(:collection).map(&:id)).to eq([api_v3_beef.id, api_v3_soy.id])
+      expect(assigns(:collection).map(&:name)).to eq(
+        [api_v3_beef.name, api_v3_soy.name]
+      )
     end
 
     it 'returns commodities by id' do

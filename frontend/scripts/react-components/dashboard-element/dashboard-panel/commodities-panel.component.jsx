@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import GridList from 'react-components/shared/grid-list.component';
-import GridListItem from 'react-components/shared/grid-list-item.component';
+import GridList from 'react-components/shared/grid-list/grid-list.component';
+import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 
 function CommoditiesPanel(props) {
   const {
@@ -31,11 +31,9 @@ function CommoditiesPanel(props) {
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={
-              (activeCommodity && activeCommodity.id) === (itemProps.item && itemProps.item.id)
-            }
+            isActive={!!activeCommodity[itemProps.item && itemProps.item.id]}
             enableItem={onSelectCommodity}
-            disableItem={() => onSelectCommodity(null)}
+            disableItem={() => onSelectCommodity({})}
           />
         )}
       </GridList>

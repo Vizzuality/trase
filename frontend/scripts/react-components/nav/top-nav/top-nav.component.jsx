@@ -5,8 +5,10 @@ import throttle from 'lodash/throttle';
 import { NavLink } from 'redux-first-router-link';
 import NavLinks from 'react-components/nav/nav-links.component';
 import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
-import Search from 'react-components/nav/top-nav/global-search/global-search.container';
+import Search from 'react-components/nav/global-search/global-search.container';
 import DownloadPdfLink from './download-pdf-link.component';
+
+import 'scripts/react-components/nav/top-nav/top-nav.scss';
 
 class TopNav extends React.PureComponent {
   constructor(props) {
@@ -115,8 +117,8 @@ class TopNav extends React.PureComponent {
               <NavLink
                 exact
                 strict
-                className={cx('top-nav-link', '-logo', { '-hide-when-on-top': !showLogo })}
                 to={{ type: 'home' }}
+                className={cx('top-nav-link', '-logo', { '-hide-when-on-top': !showLogo })}
               >
                 <img src="/images/logos/logo-trase-nav.png" alt="trase" />
               </NavLink>
@@ -164,11 +166,11 @@ class TopNav extends React.PureComponent {
 }
 
 TopNav.propTypes = {
-  className: PropTypes.string,
-  pageOffset: PropTypes.number,
-  printable: PropTypes.bool,
   links: PropTypes.array,
-  showLogo: PropTypes.bool
+  showLogo: PropTypes.bool,
+  printable: PropTypes.bool,
+  className: PropTypes.string,
+  pageOffset: PropTypes.number
 };
 
 TopNav.defaultProps = {

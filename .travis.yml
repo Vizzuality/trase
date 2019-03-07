@@ -1,4 +1,4 @@
-dist: trusty
+dist: xenial
 env:
   global:
     - CC_TEST_REPORTER_ID=ae4098e380eed3c112bd34c4c2ceec913288ce9479bb748bf098a57b75ff5de5
@@ -6,6 +6,7 @@ env:
     - PORT=3000
     - JEST_CI=true
     - USE_PLAIN_URL_STATE=true
+    - GFW_WIDGETS_BASE_URL=
 matrix:
   include:
     - language: ruby
@@ -15,7 +16,7 @@ matrix:
       services:
         - postgresql
       addons:
-        postgresql: 9.6
+        postgresql: 10
       before_script:
         - bundle exec rake db:drop db:create db:structure:load RAILS_ENV=test
         - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
@@ -23,7 +24,7 @@ matrix:
         - ./cc-test-reporter before-build
 
       script:
-        - TRASE_LOCAL_SCHEMA=public bundle exec rspec spec --fail-fast
+        - TRASE_LOCAL_MIRROR_SCHEMA=tool_tables TRASE_LOCAL_SCHEMA=public bundle exec rspec spec --fail-fast
 
       after_script:
         - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
@@ -33,16 +34,18 @@ matrix:
       node_js:
         - 10
         - 11
+      cache: yarn
       before_install:
         - cd frontend
       install:
-        - npm install
+        - yarn install
       before_script:
+        -
         - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         - chmod +x ./cc-test-reporter
         - ./cc-test-reporter before-build
       script:
-        - npm run ci
+        - yarn ci
       after_script:
         - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 

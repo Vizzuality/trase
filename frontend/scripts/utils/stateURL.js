@@ -16,7 +16,7 @@ const appStateToURLParams = state => {
 
   return {
     selectedContextId: state.app.selectedContext ? state.app.selectedContext.id : null,
-    selectedYears: state.tool.selectedYears,
+    selectedYears: state.app.selectedYears,
     detailedView: state.tool.detailedView,
     selectedNodesIds: state.tool.selectedNodesIds,
     expandedNodesIds: state.tool.expandedNodesIds,
@@ -66,7 +66,8 @@ const _getIntArrayValue = value => {
 
 const URLParamsToAppState = (params, state) => {
   const appReducerState = removeEmptyParams({
-    initialSelectedContextIdFromURL: _getIntValue(params.selectedContextId)
+    initialSelectedContextIdFromURL: _getIntValue(params.selectedContextId),
+    selectedYears: _getIntArrayValue(params.selectedYears)
   });
 
   if (
@@ -80,7 +81,6 @@ const URLParamsToAppState = (params, state) => {
   }
 
   const toolReducerState = removeEmptyParams({
-    selectedYears: _getIntArrayValue(params.selectedYears),
     detailedView: _getBoolValue(params.detailedView),
     selectedNodesIds: _getIntArrayValue(params.selectedNodesIds),
     expandedNodesIds: _getIntArrayValue(params.expandedNodesIds),
@@ -117,11 +117,14 @@ export const encodeStateToURL = state => {
 };
 
 export const decodeStateFromURL = state => {
-  return USE_PLAIN_URL_STATE ? JSON.parse(state) : JSON.parse(atob(state));
+  if (typeof state === 'string') {
+    return USE_PLAIN_URL_STATE ? JSON.parse(state) : JSON.parse(atob(state));
+  }
+  return state;
 };
 
 export const parse = url => {
-  const params = qs.parse(url);
+  const params = qs.parse(url, { arrayLimit: 1000 });
   if (params.state) {
     return decodeStateFromURL(params.state);
   }
@@ -129,7 +132,7 @@ export const parse = url => {
 };
 
 export const stringify = params => {
-  return qs.stringify(params);
+  return qs.stringify(params, { encodeValuesOnly: true });
 };
 
 const stateToURLObject = (state, location) => {

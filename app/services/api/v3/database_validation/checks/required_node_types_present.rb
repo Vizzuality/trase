@@ -17,6 +17,11 @@ module Api
             @missing_node_types.empty?
           end
 
+          def self.human_readable(_options)
+            required_node_types = REQUIRED_NODE_TYPES.join(', ')
+            "presence of required node types (#{required_node_types})"
+          end
+
           private
 
           def error

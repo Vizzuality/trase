@@ -8,7 +8,7 @@ jest.mock('utils/getURLFromParams', () => ({
 describe('test prepareWidget helper function', () => {
   const someEndpoint = 'someEndpoint';
   const rawEndpoint = 'https://trase.earth/data';
-  const someKey = 'namesomeName_id0';
+  const someKey = 'id0_namesomeName';
   const someParams = { name: 'someName', id: 0 };
   const someUrl = 'http://trase.earth';
   const someEndpoints = {
@@ -34,7 +34,7 @@ describe('test prepareWidget helper function', () => {
       endpoint: someEndpoint,
       params: { ...someParams, id: 5 }
     });
-    expect(result).toEqual({ cacheMiss: true, key: 'namesomeName_id5', url: someUrl });
+    expect(result).toEqual({ cacheMiss: true, key: 'id5_namesomeName', url: someUrl });
   });
 
   it('should return a raw url if the raw flag is passed', () => {

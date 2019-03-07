@@ -8,6 +8,7 @@ import {
   getDirtyBlocks,
   getDynamicSentence
 } from 'react-components/dashboard-element/dashboard-element.selectors';
+import { openIndicatorsStep as openIndicatorsStepFn } from 'react-components/dashboard-element/dashboard-element.actions';
 
 const mapStateToProps = state => ({
   indicators: state.dashboardElement.data.indicators,
@@ -19,6 +20,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
+      openIndicatorsStep: openIndicatorsStepFn,
       goToRoot: () => ({ type: 'dashboardRoot' })
     },
     dispatch
@@ -29,7 +31,8 @@ class DashboardElementContainer extends React.Component {
     dirtyBlocks: PropTypes.object,
     activeIndicators: PropTypes.array,
     goToRoot: PropTypes.func.isRequired,
-    dynamicSentenceParts: PropTypes.array
+    dynamicSentenceParts: PropTypes.array,
+    openIndicatorsStep: PropTypes.func.isRequired
   };
 
   hasVisitedBefore = {
@@ -66,19 +69,26 @@ class DashboardElementContainer extends React.Component {
 
   render() {
     const { step, modalOpen, editMode } = this.state;
-    const { goToRoot, activeIndicators, dynamicSentenceParts, dirtyBlocks } = this.props;
+    const {
+      goToRoot,
+      activeIndicators,
+      dynamicSentenceParts,
+      dirtyBlocks,
+      openIndicatorsStep
+    } = this.props;
     return (
       <DashboardElement
         step={step}
         editMode={editMode}
         goToRoot={goToRoot}
         modalOpen={modalOpen}
-        setStep={this.updateStep}
-        reopenPanel={this.reopenPanel}
-        closeModal={this.closeModal}
-        activeIndicators={activeIndicators}
-        dynamicSentenceParts={dynamicSentenceParts}
         dirtyBlocks={dirtyBlocks}
+        setStep={this.updateStep}
+        closeModal={this.closeModal}
+        reopenPanel={this.reopenPanel}
+        activeIndicators={activeIndicators}
+        openIndicatorsStep={openIndicatorsStep}
+        dynamicSentenceParts={dynamicSentenceParts}
       />
     );
   }

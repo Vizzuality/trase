@@ -22,5 +22,14 @@
     "deforestationRisk": "Deforestation risk associated with a given actor sourcing from a given region is a proportion of the total deforestation measured in that region (for a given indicator). This proportion is calculated based on the volume of the commodity sourced by that actor relative to the total production of that commodity in that region, and provides a measure of deforestation risk that is \"embedded\" in the commodity exports. For biomes this embedded deforestation risk is aggregated across all regions a given actor sources from within each biome.",
     "soyLand": "Area of land used to grow soybeans.",
     "soyProduction": "Production of soy in tonnes."
+  },
+  "logisticsMap": {
+    "crushing_facilities": "Lorem ipsum dolor sit amet,",
+    "refining_facilities": "quod suscipit percipit id eum.",
+    "storage_facilities": "Qui scripta deserunt accusata ne, dicant fabulas et mea",
+    "confirmed_slaughterhouse": "Ius ex veniam ancillae erroribus, idque erroribus in vix.",
+    "unconfirmed_slaughterhouse_multifunctional_facility": "Ad per minimum epicuri officiis.",
+    "probable_slaughterhouse": "Ex soleat vituperatoribus est.",
+    "unconfirmed_slaughterhouse": "No libris dolorum vel."
   }
 }

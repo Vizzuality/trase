@@ -1,0 +1,39 @@
+@import 'styles/settings';
+
+.c-tabs {
+  .tabs-container {
+    display: flex;
+    margin: 0 0 25px 0;
+  }
+
+  .tab {
+    position: relative;
+    cursor: pointer;
+    line-height: $line-height-regular;
+    border: 1px solid $charcoal-grey;
+    border-right: 0;
+    text-transform: uppercase;
+    padding: 6px 25px;
+    opacity: 0.3;
+
+    &:first-child {
+      border-radius: 5px 0 0 5px;
+    }
+
+    &:last-child {
+      border-radius: 0 5px 5px 0;
+      border-right: 1px solid $charcoal-grey;
+    }
+
+    &:first-child:last-child {
+      border-radius: 5px;
+    }
+
+    &.-selected {
+      opacity: 1;
+      cursor: default;
+      background-color: $charcoal-grey;
+    }
+  }
+
+}

@@ -2,47 +2,64 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import AdminLevelFilter from 'react-components/nav/filters-nav/admin-level-filter/admin-level-filter.container';
 import RecolorBySelector from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.container';
-import ResizeBySelector from 'react-components/nav/filters-nav/resize-by-selector/resize-by-selector.container';
-import ViewSelector from 'react-components/nav/filters-nav/view-selector/view-selector.container';
 import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
+import DropdownSelector from 'react-components/nav/filters-nav/dropdown-selector/dropdown-selector.component';
 import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
 import NavLinksList from 'react-components/nav/nav-links.component';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.container';
 import { NavLink } from 'redux-first-router-link';
 
+import 'scripts/react-components/nav/filters-nav/filters-nav.scss';
+import 'scripts/react-components/nav/filters-nav/burger.scss';
+
 class FiltersNav extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      menuOpen: false
-    };
-    this.toggleMenu = this.toggleMenu.bind(this);
-    this.renderMenuButton = this.renderMenuButton.bind(this);
-    this.renderMenuOpened = this.renderMenuOpened.bind(this);
-    this.renderMenuClosed = this.renderMenuClosed.bind(this);
-  }
+  static propTypes = {
+    openMap: PropTypes.func,
+    openSankey: PropTypes.func,
+    isMapVisible: PropTypes.bool,
+    toggleDropdown: PropTypes.func,
+    currentDropdown: PropTypes.string,
+    links: PropTypes.array.isRequired,
+    filters: PropTypes.object.isRequired,
+    openLogisticsMapDownload: PropTypes.func
+  };
 
-  toggleMenu() {
-    this.setState(state => ({ menuOpen: !state.menuOpen }));
-  }
+  static FILTER_TYPES = {
+    contextSelector: 0,
+    yearSelector: 1,
+    dropdownSelector: 2,
+    recolorBySelector: 3
+  };
 
-  renderMenuButton() {
+  FILTERS = [ContextSelector, YearsSelector, DropdownSelector, RecolorBySelector];
+
+  state = {
+    menuOpen: false
+  };
+
+  toggleMenu = () => this.setState(state => ({ menuOpen: !state.menuOpen }));
+
+  renderMenuButton = () => {
     const { menuOpen } = this.state;
-    return menuOpen ? (
-      <button className="c-burger open" onClick={this.toggleMenu}>
+    const content = menuOpen ? (
+      <div className="c-burger open">
         <span className="ingredient" />
         <span className="ingredient" />
         <span className="ingredient" />
-      </button>
+      </div>
     ) : (
-      <button className="filters-nav-item-logo" onClick={this.toggleMenu}>
+      <div className="filters-nav-item-logo">
         <img src="/images/logos/logo-trase-small-beta.svg" alt="TRASE" />
+      </div>
+    );
+    return (
+      <button className="filters-nav-item -no-padding" onClick={this.toggleMenu} type="button">
+        {content}
       </button>
     );
-  }
+  };
 
   renderInToolLinks() {
     const { links, openMap, openSankey, isMapVisible } = this.props;
@@ -78,16 +95,16 @@ class FiltersNav extends React.PureComponent {
     );
   }
 
-  renderMenuOpened() {
-    const { links, isExplore } = this.props;
-    const [, , ...restOfLinks] = links;
+  renderMenuOpened = () => {
+    const { links, filters } = this.props;
+    const restOfLinks = links.slice(2);
     const decoratedLinks = [{ name: 'Home', page: { type: 'home' } }, ...links];
-    const navLinks = isExplore ? decoratedLinks : restOfLinks;
+    const navLinks = filters.showToolLinks ? restOfLinks : decoratedLinks;
 
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
-          {!isExplore && this.renderInToolLinks()}
+          {filters.showToolLinks && this.renderInToolLinks()}
           <ul className="filters-nav-submenu-list">
             <NavLinksList
               links={navLinks}
@@ -101,49 +118,81 @@ class FiltersNav extends React.PureComponent {
           <div className="filters-nav-item">
             <LocaleSelector />
           </div>
-          <ToolSearch className="filters-nav-item -no-padding" />
+          {filters.showSearch && <ToolSearch className="filters-nav-item -no-padding" />}
         </div>
       </React.Fragment>
     );
-  }
+  };
 
-  renderMenuClosed() {
-    const { selectedContext, isExplore, contextIsUserSelected } = this.props;
+  renderMenuClosed = () => (
+    <React.Fragment>
+      {this.renderLeftSection()}
+      {this.renderRightSection()}
+    </React.Fragment>
+  );
+
+  renderLeftSection = () => {
+    const {
+      toggleDropdown,
+      currentDropdown,
+      filters: { left = [] }
+    } = this.props;
+    const { FILTERS } = this;
+
     return (
-      <React.Fragment>
-        <div className="filters-nav-left-section">
-          <ContextSelector className="filters-nav-item" isExplore={isExplore} />
-          {selectedContext &&
-            (contextIsUserSelected || !isExplore) && (
-              <React.Fragment>
-                {!isExplore && <AdminLevelFilter className="filters-nav-item" />}
-                <YearsSelector className="filters-nav-item" />
-              </React.Fragment>
-            )}
-        </div>
-        <div className="filters-nav-right-section">
-          {!isExplore && (
-            <React.Fragment>
-              {selectedContext && (
-                <React.Fragment>
-                  <ResizeBySelector className="filters-nav-item" />
-                  <RecolorBySelector className="filters-nav-item" />
-                  <ViewSelector className="filters-nav-item" />
-                </React.Fragment>
-              )}
-              <ToolSearch className="filters-nav-item -no-padding" />
-            </React.Fragment>
-          )}
-        </div>
-      </React.Fragment>
+      <div className="filters-nav-left-section">
+        {left.map(filter =>
+          React.createElement(FILTERS[filter.type], {
+            currentDropdown,
+            className: 'filters-nav-item',
+            onToggle: toggleDropdown,
+            onSelected: this.props[`${filter.props.id}_onSelected`],
+            ...filter.props,
+            key: filter.props.id
+          })
+        )}
+      </div>
     );
-  }
+  };
+
+  renderRightSection = () => {
+    const {
+      toggleDropdown,
+      currentDropdown,
+      openLogisticsMapDownload,
+      filters: { right = [], showSearch, showLogisticsMapDownload }
+    } = this.props;
+    const { FILTERS } = this;
+
+    return (
+      <div className="filters-nav-left-section">
+        {right.map(filter =>
+          React.createElement(FILTERS[filter.type], {
+            currentDropdown,
+            className: 'filters-nav-item',
+            onToggle: toggleDropdown,
+            onSelected: this.props[`${filter.props.id}_onSelected`],
+            ...filter.props,
+            key: filter.props.id
+          })
+        )}
+        {showSearch && <ToolSearch className="filters-nav-item -no-padding" />}
+        {showLogisticsMapDownload && (
+          <button onClick={openLogisticsMapDownload} className="filters-nav-item -no-padding -icon">
+            <svg className="icon icon-download">
+              <use xlinkHref="#icon-download" />
+            </svg>
+          </button>
+        )}
+      </div>
+    );
+  };
 
   render() {
     const { menuOpen } = this.state;
     return (
       <div className="c-filters-nav">
-        <div className="filters-nav-item -no-padding">{this.renderMenuButton()}</div>
+        {this.renderMenuButton()}
         <div className="filters-nav-section-container">
           {menuOpen ? this.renderMenuOpened() : this.renderMenuClosed()}
         </div>
@@ -151,15 +200,5 @@ class FiltersNav extends React.PureComponent {
     );
   }
 }
-
-FiltersNav.propTypes = {
-  contextIsUserSelected: PropTypes.bool,
-  isExplore: PropTypes.bool.isRequired,
-  isMapVisible: PropTypes.bool,
-  links: PropTypes.array.isRequired,
-  openMap: PropTypes.func,
-  openSankey: PropTypes.func,
-  selectedContext: PropTypes.object
-};
 
 export default FiltersNav;

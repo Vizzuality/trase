@@ -1,16 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { defaultMemoize } from 'reselect';
 import Widget from 'react-components/widgets/widget.component';
 import { GET_ACTOR_EXPORTING_COMPANIES, GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
-import Scatterplot from 'react-components/profiles/scatterplot.component';
-import UnitsTooltip from 'react-components/shared/units-tooltip.component';
+import Scatterplot from 'react-components/profiles/scatterplot/scatterplot.component';
+import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import formatValue from 'utils/formatValue';
-import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 
 class ImportingCompaniesWidget extends React.PureComponent {
   state = {
     tooltipConfig: null
   };
+
+  getDimensions = defaultMemoize((dimensionsX, companies) =>
+    dimensionsX.filter((_, index) => companies.some(company => company.x[index] !== null))
+  );
 
   getScatterplots(dimensionsX, title) {
     const { printMode } = this.props;
@@ -65,17 +70,18 @@ class ImportingCompaniesWidget extends React.PureComponent {
           if (error) {
             // TODO: display a proper error message to the user
             console.error('Error loading importing companies data for profile page', error);
-            return (
-              <div className="spinner-section" data-test="loading-section">
-                <ShrinkingSpinner className="-large" />
-              </div>
-            );
+            return null;
           }
 
           const { dimensionsX, companies } = data[GET_ACTOR_EXPORTING_COMPANIES];
           const { nodeName, columnName } = data[GET_NODE_SUMMARY_URL];
           const verb = columnName === 'EXPORTER' ? 'exporting' : 'importing';
-          const dimensions = dimensionsX.slice(0, 3);
+          const dimensions = this.getDimensions(dimensionsX, companies);
+
+          if (dimensions.length === 0) {
+            return null;
+          }
+
           const title = `Comparing companies ${verb} ${commodityName} from ${countryName} in ${year}`;
           const scatterplots = this.getScatterplots(dimensions, title);
           return (

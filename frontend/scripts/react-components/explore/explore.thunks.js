@@ -1,20 +1,4 @@
 import { redirect } from 'redux-first-router';
-import { selectContextById, setContextIsUserSelected } from 'actions/app.actions';
-
-/**
- * @deprecated this should be used to load legacy URLs only. New code will use internal state instead
- *
- * @param dispatch
- * @param getState
- */
-export const setContextForExplorePage = (dispatch, getState) => {
-  const { query = {} } = getState().location;
-  const contextId = parseInt(query.contextId, 10);
-  if (contextId) {
-    dispatch(selectContextById(contextId));
-    dispatch(setContextIsUserSelected(true));
-  }
-};
 
 export const redirectToExplore = (dispatch, getState, { action }) => {
   const { type } = getState().location;
@@ -38,10 +22,8 @@ export const redirectToExplore = (dispatch, getState, { action }) => {
   if (toolPages.includes(action.type)) {
     if (!previouslyVisitedExplorePage.get() && !urlHasSankeyState) {
       previouslyVisitedExplorePage.set(Date.now());
-      if (SHOW_WORLD_MAP_IN_EXPLORE) {
-        dispatch(setContextIsUserSelected(false));
-      }
-      dispatch(redirect({ type: 'explore' }));
+      const redirectQuery = action.payload && action.payload.query && action.payload.query.state;
+      dispatch(redirect({ type: 'explore', payload: { query: redirectQuery } }));
     }
   } else if (type === 'explore') {
     previouslyVisitedExplorePage.set(Date.now());

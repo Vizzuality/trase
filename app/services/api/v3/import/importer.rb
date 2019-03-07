@@ -1,4 +1,3 @@
-require 'db_helpers/search_path_helpers'
 require "#{Rails.root}/lib/modules/cache/warmer.rb"
 require "#{Rails.root}/lib/modules/cache/cleaner.rb"
 
@@ -6,136 +5,47 @@ module Api
   module V3
     module Import
       class Importer
-        include SearchPathHelpers
+        include Api::V3::Import::Tables
 
-        # order matters a lot in here
-        ALL_TABLES = [
-          {
-            table_class: Api::V3::Country,
-            yellow_tables: [
-              Api::V3::CountryProperty,
-              Api::V3::DashboardTemplateCountry
-            ]
-          },
-          {
-            table_class: Api::V3::Commodity,
-            yellow_tables: [
-              Api::V3::DashboardTemplateCommodity
-            ]
-          },
-          {
-            table_class: Api::V3::Context,
-            yellow_tables: [
-              Api::V3::ContextProperty,
-              Api::V3::ContextualLayer,
-              Api::V3::CartoLayer,
-              Api::V3::DownloadAttribute,
-              Api::V3::MapAttributeGroup,
-              Api::V3::MapAttribute,
-              Api::V3::RecolorByAttribute,
-              Api::V3::ResizeByAttribute,
-              Api::V3::DashboardsAttributeGroup,
-              Api::V3::DashboardsAttribute
-            ]
-          },
-          {table_class: Api::V3::NodeType},
-          {
-            table_class: Api::V3::ContextNodeType,
-            yellow_tables: [
-              Api::V3::ContextNodeTypeProperty,
-              Api::V3::Profile,
-              Api::V3::Chart,
-              Api::V3::ChartAttribute
-            ]
-          },
-          {table_class: Api::V3::DownloadVersion},
-          {
-            table_class: Api::V3::Node,
-            yellow_tables: [
-              Api::V3::NodeProperty,
-              Api::V3::DashboardTemplateSource,
-              Api::V3::DashboardTemplateCompany,
-              Api::V3::DashboardTemplateDestination
-
-            ]
-          },
-          {
-            table_class: Api::V3::Ind,
-            yellow_tables: [
-              Api::V3::IndProperty,
-              Api::V3::MapInd,
-              Api::V3::ChartInd,
-              Api::V3::RecolorByInd,
-              Api::V3::DashboardsInd
-            ]
-          },
-          {table_class: Api::V3::NodeInd},
-          {
-            table_class: Api::V3::Qual,
-            yellow_tables: [
-              Api::V3::QualProperty,
-              Api::V3::DownloadQual,
-              Api::V3::ChartQual,
-              Api::V3::RecolorByQual,
-              Api::V3::DashboardsQual
-            ]
-          },
-          {table_class: Api::V3::NodeQual},
-          {
-            table_class: Api::V3::Quant,
-            yellow_tables: [
-              Api::V3::QuantProperty,
-              Api::V3::DownloadQuant,
-              Api::V3::MapQuant,
-              Api::V3::ChartQuant,
-              Api::V3::ResizeByQuant,
-              Api::V3::DashboardsQuant
-            ]
-          },
-          {table_class: Api::V3::NodeQuant},
-          {table_class: Api::V3::Flow},
-          {table_class: Api::V3::FlowInd},
-          {table_class: Api::V3::FlowQual},
-          {table_class: Api::V3::FlowQuant}
-        ].freeze
-
-        def call(database_update)
+        def initialize(database_update, source_schema)
           @database_update = database_update
+          @source_schema = source_schema
+          @stats = Api::V3::Import::Stats.new(database_update.stats)
+          @stats.update_key('elapsed_seconds', {})
+        end
+
+        def call
           Api::V3::BaseModel.transaction do
-            with_search_path(ENV['TRASE_LOCAL_SCHEMA']) do
-              backup
-              import
-              database_update.update_attribute(
-                :status, Api::V3::DatabaseUpdate::FINISHED
-              )
-            end
+            backup
+            import
           end
-          refresh_mviews
+          yield if block_given?
+          refresh_materialized_views_now
           Cache::Cleaner.clear_all
           Cache::Warmer::UrlsFile.generate
+          refresh_precomputed_downloads_later
+          @database_update.finished_with_success(@stats.to_h)
         rescue => e
-          database_update.update_attribute(:status, Api::V3::DatabaseUpdate::FAILED)
-          database_update.update_attribute(:error, e.message)
+          @database_update.finished_with_error(e, @stats.to_h)
           raise # re-raise same error
         end
 
         private
 
         def backup
-          @stats = {}
           ALL_TABLES.each do |table|
             table_class = table[:table_class]
             yellow_tables = table[:yellow_tables]
-            table_class.key_backup
-            @stats[table_class.table_name] = {before: table_class.count}
+            table_class.key_backup(@source_schema)
+            @stats.update_blue_table_before(table_class, table_class.count)
             next unless yellow_tables
 
-            yellow_table_stats = {}
             yellow_tables.each do |yellow_table_class|
               yellow_table_class.full_backup
-              yellow_table_stats[yellow_table_class.table_name] = {before: yellow_table_class.count}
+              @stats.update_yellow_table_before(
+                yellow_table_class, yellow_table_class.count
+              )
             end
-            @stats[table_class.table_name][:yellow_tables] = yellow_table_stats
           end
         end
 
@@ -145,40 +55,63 @@ module Api
             yellow_tables = table[:yellow_tables]
 
             # replace data in the blue table
-            blue_table_cnt = ReplaceBlueTable.new(table_class).call
-            @stats[table_class.table_name][:after] = blue_table_cnt
+            blue_table_cnt = ReplaceBlueTable.new(
+              table_class, @source_schema
+            ).call
+            @stats.update_blue_table_after(table_class, blue_table_cnt)
             next unless yellow_tables
 
             # restore dependent yellow tables
             yellow_tables.each do |yellow_table_class|
-              yellow_table_cnt = RestoreYellowTable.new(yellow_table_class).call
+              yellow_table_cnt = RestoreYellowTable.new(
+                yellow_table_class
+              ).call
               if yellow_table_class == Api::V3::NodeProperty
                 Api::V3::NodeProperty.insert_missing_node_properties
+                yellow_table_cnt = Api::V3::NodeProperty.count
               end
-              @stats[table_class.table_name][:yellow_tables][yellow_table_class.table_name][:after] = yellow_table_cnt
+              @stats.update_yellow_table_after(
+                yellow_table_class, yellow_table_cnt
+              )
             end
           end
-          @database_update.update_attribute(:stats, @stats)
-          @stats
+          destroy_zombies
         end
 
-        def count_table(table)
-          result = ActiveRecord::Base.connection.execute(
-            "SELECT COUNT(*) FROM #{table}"
-          )
-          result.getvalue(0, 0)
+        # An example of how a zombie can be created by the import process:
+        # 1. backup xxx_inds/quals/quants and xxx_attributes (yellow)
+        # 2. import and replace inds/quals/quants (blue)
+        # 3. restore xxx_attributes (note: this restores all the backed up
+        #    records, because at this point we don't know if any of them are
+        #    no longer needed)
+        # 4. restore xxx_inds/quals/quants (note: this only restores backed up
+        #    records with a match in both inds/quals/quants and xxx_attributes)
+        # 5. at this point it is possible to have xxx_attributes which are not
+        # referenced anywhere. These zombies should be deleted.
+        def destroy_zombies
+          TABLES_TO_CHECK_FOR_ZOMBIES.each do |table_class|
+            cnt_before = table_class.count
+            table_class.destroy_zombies
+            cnt_after = table_class.count
+            next unless cnt_after != cnt_before
+
+            @stats.update_yellow_table_after(table_class, cnt_after)
+          end
         end
 
-        def refresh_mviews
+        def refresh_materialized_views_now
           # synchronously, with dependencies
           [
             Api::V3::Readonly::Attribute,
             Api::V3::Readonly::Node,
-            Api::V3::Readonly::DownloadFlow,
             Api::V3::Readonly::Dashboards::FlowPath
           ].each { |mview| mview.refresh(sync: true, skip_dependents: true) }
+          Api::V3::Readonly::DownloadFlow.refresh(
+            sync: true, skip_dependents: true, skip_precompute: true
+          )
           # synchronously, skip dependencies (already refreshed)
           [
+            Api::V3::Readonly::ChartAttribute,
             Api::V3::Readonly::DownloadAttribute,
             Api::V3::Readonly::MapAttribute,
             Api::V3::Readonly::RecolorByAttribute,
@@ -190,6 +123,10 @@ module Api
             Api::V3::Readonly::Dashboards::Company,
             Api::V3::Readonly::Dashboards::Destination
           ].each { |mview| mview.refresh(sync: true, skip_dependencies: true) }
+        end
+
+        def refresh_precomputed_downloads_later
+          Api::V3::Download::PrecomputedDownload.refresh_later
         end
       end
     end

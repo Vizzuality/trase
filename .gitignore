@@ -26,6 +26,7 @@
 !/log/.keep
 !/tmp/.keep
 
+/public/downloads
 /public/system
 /public/urls.txt
 
@@ -47,10 +48,12 @@ frontend/.env*
 
 frontend/public/js
 frontend/dist
+frontend/.docz
 
 frontend/tmp
 
 frontend/gis/cartodb/cartodb-config.json
 
 frontend/scripts/coverage
-
+frontend/docs/dist
+frontend/package-lock.json

@@ -17,5 +17,5 @@ check_run() {
     fi
 }
 
-check_run package.json "npm install"
-check_run frontend/package.json "cd frontend && npm install"
+check_run package.json "yarn install"
+check_run frontend/package.json "cd frontend && yarn install"

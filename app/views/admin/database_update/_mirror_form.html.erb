@@ -1,0 +1,17 @@
+<div class="panel">
+  <h3>Update using a schema dump (NEW)</h3>
+
+  <% if main_schema_versions.any? %>
+    <%= form_tag(admin_database_update_start_mirror_path multipart: true) do %>
+      <%= select_tag(
+        :main_schema_version,
+        options_for_select(
+          main_schema_versions.map { |dv| [dv[:name] + ' ' + dv[:time], dv[:name]] }
+        )
+      ) %>
+      <%= submit_tag 'Start database update', disabled: current_update.present? %>
+    <% end %>
+  <% else %>
+    <p>No available database versions to import.
+  <% end %>
+</div>

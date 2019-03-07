@@ -1,0 +1,19 @@
+production:
+  enabled: false
+sandbox:
+  enabled: true
+  host: https://sandbox.trase.earth
+staging:
+  enabled: true
+  host: https://staging.trase.earth
+demo:
+  enabled: true
+  host: https://demo.trase.earth
+dashboardsdemo:
+  enabled: true
+  host: https://dashboardsdemo.trase.earth
+development:
+  enabled: true
+  host: http://localhost:3000
+test:
+  enabled: false

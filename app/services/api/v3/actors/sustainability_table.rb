@@ -11,26 +11,30 @@ module Api
           @context = context
           @node = node
           @year = year
+          # Assumption: Volume is a special quant which always exists
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
-          initialize_attributes(attributes_list)
+
+          initialize_chart_config(:actor, nil, :actor_sustainability_table)
+          raise 'No attributes found' unless @chart_config.attributes.any?
+
+          @source_node_types = @chart_config.named_node_types('source')
+          unless @source_node_types.any?
+            raise 'Chart node type "source" not found'
+          end
+
           initialize_flow_stats_for_node
         end
 
         def call
-          [
-            {
-              group_name: 'Municipalities',
-              node_type: NodeTypeName::MUNICIPALITY
-            },
-            {
-              group_name: 'Biomes',
-              node_type: NodeTypeName::BIOME,
-              is_total: true
-            }
-          ].map do |group|
+          @source_node_types.map do |node_type|
+            node_type_name = node_type.name
+            chart_node_type = @chart_config.chart_node_types.
+              find { |nta| nta.node_type_id = node_type.id }
             sustainability_for_group(
-              group[:group_name], group[:node_type], group[:is_total]
+              node_type_name.pluralize.upcase,
+              node_type_name,
+              chart_node_type&.is_total
             )
           end
         end
@@ -63,16 +67,22 @@ module Api
           if include_totals && !rows.empty?
             rows << totals_row(group_totals_hash)
           end
+          profile = @context.context_node_types.
+            joins(:node_type).
+            includes(:profile).
+            where('node_types.name' => node_type).
+            first.
+            profile
           {
             name: name,
+            profile: profile.present?,
             included_columns:
                 [{name: node_type.humanize}] +
-                  @attributes.map do |attribute_hash|
-                    attribute = attribute_hash[:attribute]
+                  @chart_config.chart_attributes.map do |ro_chart_attribute|
                     {
-                      name: attribute_hash[:name] || attribute.display_name,
-                      unit: attribute.unit,
-                      tooltip: attribute[:tooltip_text]
+                      name: ro_chart_attribute.display_name,
+                      unit: ro_chart_attribute.unit,
+                      tooltip: ro_chart_attribute.tooltip_text
                     }
                   end,
             rows: rows
@@ -81,9 +91,10 @@ module Api
 
         def data_row(group_totals_hash, node_type, node)
           node_id = node['node_id']
+          attributes = @chart_config.attributes
           totals_per_attribute = @flow_stats.
             flow_values_totals_for_attributes_into(
-              @attributes.map { |attribute_hash| attribute_hash[:attribute] },
+              attributes,
               node_type,
               node_id
             )
@@ -107,10 +118,8 @@ module Api
                   value: node['name']
                 }
               ] +
-                @attributes.map do |attribute_hash|
-                  attribute_total = totals_hash[
-                    attribute_hash[:attribute_name]
-                  ]
+                attributes.map do |attribute|
+                  attribute_total = totals_hash[attribute.name]
                   {value: attribute_total} if attribute_total
                 end
           }
@@ -119,27 +128,12 @@ module Api
         def totals_row(group_totals_hash)
           {
             is_total: true,
-            values: @attributes.map do |attribute_hash|
-              attribute_total = group_totals_hash[
-                attribute_hash[:attribute_name]
-              ]
-              {value: attribute_total} if attribute_total
-            end
+            values:
+              @chart_config.attributes.map do |attribute|
+                attribute_total = group_totals_hash[attribute.name]
+                {value: attribute_total} if attribute_total
+              end
           }
-        end
-
-        def attributes_list
-          [
-            {
-              attribute_type: 'quant',
-              attribute_name: 'DEFORESTATION_V2'
-            },
-            {
-              name: 'Soy deforestation',
-              attribute_type: 'quant',
-              attribute_name: 'SOY_DEFORESTATION_5_YEAR_ANNUAL'
-            }
-          ]
         end
       end
     end

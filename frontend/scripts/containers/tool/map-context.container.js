@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-import connect from 'connect';
+import connect from 'base/connect';
 import { selectContextualLayers } from 'actions/tool.actions';
 import mapContext from 'components/tool/map-context.component';
 import { loadTooltip } from 'actions/app.actions';

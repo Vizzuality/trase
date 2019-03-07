@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import BlockSwitch from 'react-components/shared/block-switch.component';
+import BlockSwitch from 'react-components/shared/block-switch/block-switch.component';
 import SourcesPanel from 'react-components/dashboard-element/dashboard-panel/sources-panel.component';
 import DestinationsPanel from 'react-components/dashboard-element/dashboard-panel/destinations-panel.component';
 import CompaniesPanel from 'react-components/dashboard-element/dashboard-panel/companies-panel.component';
 import CommoditiesPanel from 'react-components/dashboard-element/dashboard-panel/commodities-panel.component';
-import DashboardModalFooter from 'react-components/dashboard-element/dashboard-modal-footer.component';
+import DashboardModalFooter from 'react-components/dashboard-element/dashboard-modal-footer/dashboard-modal-footer.component';
 import addApostrophe from 'utils/addApostrophe';
+
+import 'scripts/react-components/dashboard-element/dashboard-panel/dashboard-panel.scss';
 
 class DashboardPanel extends Component {
   containerRef = React.createRef();
@@ -24,6 +26,10 @@ class DashboardPanel extends Component {
     if (snapshot && container) {
       container.scrollTop = container.scrollHeight - snapshot;
     }
+  }
+
+  static sourcesNodeTypeRenderer(node) {
+    return node.nodeType || 'Country of Production';
   }
 
   static countryNameNodeTypeRenderer(node) {
@@ -44,9 +50,10 @@ class DashboardPanel extends Component {
       getSearchResults,
       destinationsPanel,
       companiesPanel,
-      clearActiveItem,
+      clearActiveItems,
       setActiveTab,
       setActiveItem,
+      setActiveItems,
       sources,
       destinations,
       countries,
@@ -73,27 +80,28 @@ class DashboardPanel extends Component {
           />
           {activePanelId === 'sources' && (
             <SourcesPanel
+              tabs={tabs}
+              loading={loading}
+              countries={countries}
               page={sourcesPanel.page}
               getMoreItems={getMoreItems}
-              setSearchResult={item => setSearchResult(item, activePanelId)}
-              getSearchResults={getSearchResults}
-              loadingMoreItems={sourcesPanel.loadingItems}
-              loading={loading}
-              clearItems={() => clearActiveItem(activePanelId)}
-              activeCountryItem={countriesPanel.activeItem}
-              activeSourceTab={sourcesPanel.activeTab}
-              activeSourceItem={sourcesPanel.activeItem}
               searchSources={
-                !countriesPanel.activeItem
+                !countriesPanel.activeItems
                   ? countriesPanel.searchResults
                   : sourcesPanel.searchResults
               }
-              tabs={tabs}
-              sources={sources[sourcesPanel.activeTab && sourcesPanel.activeTab.id] || []}
-              countries={countries}
+              getSearchResults={getSearchResults}
+              loadingMoreItems={sourcesPanel.loadingItems}
+              clearItems={() => clearActiveItems(activePanelId)}
+              activeCountryItem={countriesPanel.activeItems}
+              activeSourceTab={sourcesPanel.activeTab}
+              activeSourceItem={sourcesPanel.activeItems}
               onSelectCountry={item => setActiveItem(item, 'countries')}
               onSelectSourceTab={item => setActiveTab(item, activePanelId)}
-              onSelectSourceValue={item => setActiveItem(item, activePanelId)}
+              setSearchResult={item => setSearchResult(item, activePanelId)}
+              onSelectSourceValue={item => setActiveItems(item, activePanelId)}
+              nodeTypeRenderer={DashboardPanel.sourcesNodeTypeRenderer}
+              sources={sources[sourcesPanel.activeTab && sourcesPanel.activeTab.id] || []}
             />
           )}
           {activePanelId === 'destinations' && (
@@ -103,10 +111,10 @@ class DashboardPanel extends Component {
               getSearchResults={getSearchResults}
               searchDestinations={destinationsPanel.searchResults}
               destinations={destinations}
-              onSelectDestinationValue={item => setActiveItem(item, activePanelId)}
+              onSelectDestinationValue={item => setActiveItems(item, activePanelId)}
               loadingMoreItems={destinationsPanel.loadingItems}
               loading={loading}
-              activeDestination={destinationsPanel.activeItem}
+              activeDestination={destinationsPanel.activeItems}
             />
           )}
           {activePanelId === 'companies' && (
@@ -122,9 +130,9 @@ class DashboardPanel extends Component {
               loading={loading}
               companies={companies[companiesPanel.activeTab && companiesPanel.activeTab.id] || []}
               onSelectNodeTypeTab={item => setActiveTab(item, activePanelId)}
-              onSelectCompany={item => setActiveItem(item, activePanelId)}
+              onSelectCompany={item => setActiveItems(item, activePanelId)}
               activeNodeTypeTab={companiesPanel.activeTab}
-              activeCompany={companiesPanel.activeItem}
+              activeCompany={companiesPanel.activeItems}
             />
           )}
           {activePanelId === 'commodities' && (
@@ -135,16 +143,17 @@ class DashboardPanel extends Component {
               loading={loading}
               commodities={commodities}
               onSelectCommodity={item => setActiveItem(item, activePanelId)}
-              activeCommodity={commoditiesPanel.activeItem}
+              activeCommodity={commoditiesPanel.activeItems}
             />
           )}
         </div>
-        {dynamicSentenceParts && (
+        {dynamicSentenceParts.length > 0 && (
           <DashboardModalFooter
             editMode={editMode}
             isPanelFooter
             onContinue={onContinue}
-            clearItem={clearActiveItem}
+            removeSentenceItem={setActiveItems}
+            clearPanel={panelName => clearActiveItems(panelName)}
             dynamicSentenceParts={dynamicSentenceParts}
           />
         )}
@@ -154,31 +163,32 @@ class DashboardPanel extends Component {
 }
 
 DashboardPanel.propTypes = {
+  tabs: PropTypes.array,
+  sources: PropTypes.object,
   countries: PropTypes.array,
   companies: PropTypes.object,
   getMoreItems: PropTypes.func,
   commodities: PropTypes.array,
   dirtyBlocks: PropTypes.object,
   activePanelId: PropTypes.string,
-  sources: PropTypes.object,
-  tabs: PropTypes.array,
-  editMode: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   commoditiesPanel: PropTypes.object,
   panels: PropTypes.array.isRequired,
-  destinations: PropTypes.array.isRequired,
-  onContinue: PropTypes.func.isRequired,
-  setSearchResult: PropTypes.func.isRequired,
-  getSearchResults: PropTypes.func.isRequired,
+  editMode: PropTypes.bool.isRequired,
   dynamicSentenceParts: PropTypes.array,
+  onContinue: PropTypes.func.isRequired,
   setActiveTab: PropTypes.func.isRequired,
+  setActiveItems: PropTypes.func.isRequired,
   setActiveItem: PropTypes.func.isRequired,
-  clearActiveItem: PropTypes.func.isRequired,
+  destinations: PropTypes.array.isRequired,
   setActivePanel: PropTypes.func.isRequired,
   sourcesPanel: PropTypes.object.isRequired,
-  destinationsPanel: PropTypes.object.isRequired,
+  clearActiveItems: PropTypes.func.isRequired,
+  setSearchResult: PropTypes.func.isRequired,
+  getSearchResults: PropTypes.func.isRequired,
   companiesPanel: PropTypes.object.isRequired,
-  countriesPanel: PropTypes.object.isRequired
+  countriesPanel: PropTypes.object.isRequired,
+  destinationsPanel: PropTypes.object.isRequired
 };
 
 export default DashboardPanel;

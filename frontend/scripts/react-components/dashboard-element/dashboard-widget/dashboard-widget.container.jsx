@@ -92,13 +92,16 @@ class DashboardWidgetContainer extends Component {
 
     const [base, search] = url.split('?');
     // eslint-disable-next-line camelcase
-    const { attribute_id, ...params } = pickBy(qs.parse(search, x => x !== '' && x !== null));
+    const { attribute_id, ...params } = pickBy(
+      qs.parse(search, { arrayLimit: 1000 }),
+      x => x !== '' && x !== null
+    );
 
     // <Widget /> caches data by url and each cache entry is cache busted by it's params
     // if we want to avoid creating infinite cache entries we should limit the entries to the indicators (attribute_id)
-    const uniqueUrl = `${base}?${qs.stringify({ attribute_id })}`;
+    const uniqueUrl = `${base}?${qs.stringify({ attribute_id }, { encodeValuesOnly: true })}`;
     return (
-      <Widget raw query={[uniqueUrl]} params={[params]}>
+      <Widget raw={[true]} query={[uniqueUrl]} params={[params]}>
         {({ data, loading, error, meta }) => {
           const sortedData = this.sortByX(data && data[uniqueUrl]);
           return (

@@ -1,0 +1,80 @@
+@import 'styles/settings';
+@import 'styles/mixins';
+
+.c-download-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  font-family: $font-family-1;
+  font-size: $font-size-x-regular;
+
+  .description {
+    font-family: $font-family-2;
+    flex: 2 0 100%;
+  }
+
+  .missing {
+    color: $medium-pink;
+    font-weight: bold;
+    font-family: $font-family-2;
+    margin-top: 10px;
+  }
+
+  label {
+    flex: 1 0 50%;
+    padding: 26px 20px 0 0;
+  }
+
+  .submit {
+    text-transform: uppercase;
+    margin: 26px 0 0 50%;
+  }
+
+  .select {
+    font-size: 16px;
+    position: relative;
+    display: block;
+
+    &::after {
+      @include arrow(8px, 2px, $charcoal-grey, 'down');
+      position: absolute;
+      top: 55%;
+      right: 10px;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+  }
+
+  select, input:not([type='checkbox']) {
+    width: 100%;
+    height: 36px;
+    transform: translateY(4px);
+    -webkit-appearance: none;
+    background: $white;
+    outline: none;
+    display: block;
+    padding: 10px;
+    margin: 0;
+    transition: border-color .2s;
+    border: 1px solid $charcoal-grey;
+    border-radius: 4px;
+    color: $charcoal-grey;
+    line-height: normal;
+    font-family: inherit;
+    font-size: $font-size-x-regular;
+  }
+
+  .tos {
+    display: block;
+    margin-top: 30px;
+    font-weight: bold;
+
+    &.-highlighted {
+      color: $medium-pink;
+    }
+  }
+
+  input[type='checkbox'] {
+    appearance: checkbox;
+    -webkit-appearance: checkbox;
+  }
+}

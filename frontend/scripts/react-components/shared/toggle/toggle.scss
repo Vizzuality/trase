@@ -1,0 +1,35 @@
+@import 'styles/settings';
+
+.c-toggle {
+  display: inline-block;
+  position: relative;
+  width: 29px;
+  height: 12px;
+  background-color: $charcoal-grey-faded-a-lot;
+  border-radius: 20px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  flex-shrink: 0;
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: $white;
+    transform: translate(0, -50%);
+    transition: transform .1s linear;
+    box-shadow: $box-shadow;
+  }
+
+  &:checked {
+    background-color: $medium-pink;
+    &:after {
+      transform: translate(calc(100% + 1px), -50%);
+    }
+  }
+}

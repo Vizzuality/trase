@@ -1,20 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MultiTable from 'react-components/profiles/multi-table.component';
+import MultiTable from 'react-components/profiles/multi-table/multi-table.component';
 import Widget from 'react-components/widgets/widget.component';
 import {
   GET_PLACE_INDICATORS,
   GET_ACTOR_SUSTAINABILITY,
   GET_NODE_SUMMARY_URL
 } from 'utils/getURLFromParams';
+import flatMap from 'lodash/flatMap';
 import addApostrophe from 'utils/addApostrophe';
-import ShrinkingSpinner from 'react-components/shared/shrinking-spinner.component';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 
 class SustainabilityTableWidget extends React.PureComponent {
   getTitle(nodeName) {
     const { year, type } = this.props;
     if (type === 'indicators') {
-      return 'Sustainability indicators:';
+      return 'Sustainability indicators';
     }
 
     return (
@@ -24,6 +25,10 @@ class SustainabilityTableWidget extends React.PureComponent {
         <span className="notranslate">{year}</span>:
       </span>
     );
+  }
+
+  showLink(item) {
+    return item.profile ? 'profileNode' : null;
   }
 
   render() {
@@ -63,9 +68,19 @@ class SustainabilityTableWidget extends React.PureComponent {
             );
           }
 
-          const rowCount = data[mainQuery].map(e => e.rows.length || 0).reduce((a, c) => a + c);
+          if (error) {
+            return null;
+          }
 
-          if (rowCount === 0) {
+          const rows = flatMap(data[mainQuery], e => e.rows);
+
+          if (rows.length === 0) {
+            return null;
+          }
+
+          const values = flatMap(data[mainQuery], e => e.values);
+
+          if (values.length === 0) {
             return null;
           }
 
@@ -80,7 +95,7 @@ class SustainabilityTableWidget extends React.PureComponent {
                     type={type === 'indicators' ? 't_head_places' : 't_head_actors'}
                     data={data[mainQuery]}
                     tabsTitle={this.getTitle(nodeName)}
-                    target={item => (item.name === 'Municipalities' ? 'profileNode' : null)}
+                    target={this.showLink}
                     targetPayload={targetPayload}
                     testId={`${testId}-multi`}
                   />

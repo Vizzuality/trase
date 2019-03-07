@@ -1,7 +1,9 @@
+import qs from 'qs';
+
 const BASE_URL = 'http://0.0.0.0:8081';
 
 export async function testRootSearch(page, expect, { nodeName, nodeType, profileType }) {
-  const profileSearchInputSelector = '[data-test=search-input-desktop]';
+  const profileSearchInputSelector = '[data-test=profile-root-search-input-field-lg]';
 
   await page.waitForSelector(profileSearchInputSelector);
   await page.click(profileSearchInputSelector);
@@ -33,7 +35,17 @@ export async function testProfileSummary(page, expect, { titles, profileType, ti
 export async function testProfileMultiTable(
   page,
   expect,
-  { testId, title, tabsLength, columnsLength, rowsLength, firstColumn, firstRow }
+  {
+    testId,
+    title,
+    tabsLength,
+    columnsLength,
+    rowsLength,
+    firstColumn,
+    firstRow,
+    linkName,
+    linkQuery
+  }
 ) {
   await page.waitForSelector(`[data-test=${testId}]`);
   const tableTitle = await page.$eval(
@@ -49,6 +61,17 @@ export async function testProfileMultiTable(
     length: list.length,
     firstRow: list[0].textContent
   }));
+
+  if (linkName) {
+    const links = await page.$$eval(`[data-test=${testId}-multi-table-cell-link]`, list => ({
+      length: list.length,
+      firstLink: list[0].href
+    }));
+
+    expect(links.length).toBe(rowsLength);
+    expect(links.firstLink.split('?')[0]).toMatch(BASE_URL + linkName);
+    expect(qs.parse(links.firstLink.split('?')[1])).toEqual(linkQuery);
+  }
 
   expect(tableTitle.toLowerCase()).toMatch(title);
   expect(tabs.length).toBe(tabsLength);

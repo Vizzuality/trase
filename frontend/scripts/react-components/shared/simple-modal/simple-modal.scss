@@ -1,0 +1,62 @@
+@import 'styles/settings';
+
+.c-simple-modal {
+  display: flex;
+  position: absolute;
+  background: transparent;
+  z-index: $z-above-veil;
+  overflow: hidden;
+  outline: none;
+  max-height: calc(100% - 40px);
+  pointer-events: none;
+
+  .simple-modal-content {
+    position: relative;
+    background-color: $light-gray;
+    pointer-events: all;
+
+    .simple-modal-close {
+      position: absolute;
+      top: 26px;
+      right: 30px;
+      z-index: $z-above;
+
+      button {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+
+        span {
+          font-family: $font-family-1;
+          font-size: $font-size-x-regular;
+          padding-right: 13px;
+          letter-spacing: -0.8px;
+          text-align: center;
+          color: $charcoal-grey;
+          vertical-align: bottom;
+          text-transform: uppercase;
+        }
+        svg {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+.c-simple-modal-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $charcoal-grey-faded;
+  z-index: $z-veil;
+}
+
+.ReactModal__Body--open {
+  overflow: hidden;
+}

@@ -4,6 +4,12 @@ RSpec.describe Api::V3::Download::ZippedCsvDownload do
   include_context 'api v3 brazil two flows'
   include ZipHelpers
 
+  before do
+    allow(
+      Api::V3::Download::PrecomputedDownload
+    ).to receive(:refresh)
+  end
+
   before(:each) do
     Api::V3::Readonly::DownloadFlow.refresh(sync: true)
   end
@@ -29,6 +35,12 @@ RSpec.describe Api::V3::Download::ZippedCsvDownload do
   }
 
   describe :create do
+    before(:each) do
+      allow_any_instance_of(
+        Api::V3::Download::PrecomputedDownload
+      ).to receive(:store).and_return('')
+    end
+
     context 'when max rows not exceeded' do
       it 'doesn\'t chunk flat data files' do
         filenames = unzip(flat_download.create).keys

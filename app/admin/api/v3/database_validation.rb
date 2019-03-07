@@ -9,9 +9,19 @@ ActiveAdmin.register_page 'Data Validation' do
     database_validations = Api::V3::DatabaseValidationReport.
       order(created_at: :desc).
       limit(25)
-    render partial: 'admin/database_validation/form', locals: {
-      database_validations: database_validations
-    }
+    tabs do
+      tab :reports do
+        render partial: 'admin/database_validation/form', locals: {
+          database_validations: database_validations
+        }
+      end
+      tab :rules do
+        table_for Api::V3::DatabaseValidation::Report.human_readable_rules, class: 'index_table' do
+          column('Validated object') { |rule| rule[:validated_object] }
+          column('Rule') { |rule| rule[:rule] }
+        end
+      end
+    end
   end
 
   page_action :start, method: :post do

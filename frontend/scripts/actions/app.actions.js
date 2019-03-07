@@ -5,7 +5,13 @@ import {
   GET_NODES_WITH_SEARCH_URL,
   getURLFromParams
 } from 'utils/getURLFromParams';
-import { TOGGLE_MAP, loadToolDataForCurrentContext } from 'scripts/actions/tool.actions';
+import {
+  TOGGLE_MAP,
+  loadToolDataForCurrentContext,
+  SELECT_YEARS,
+  loadNodes,
+  loadLinks
+} from 'scripts/actions/tool.actions';
 import { getContextById } from 'scripts/reducers/helpers/contextHelper';
 import getPageTitle from 'scripts/router/page-title';
 import { redirect } from 'redux-first-router';
@@ -25,6 +31,7 @@ export const SET_SEARCH_TERM = 'SET_SEARCH_TERM';
 export const LOAD_SEARCH_RESULTS = 'LOAD_SEARCH_RESULTS';
 export const SET_CONTEXTS = 'SET_CONTEXTS';
 export const SET_CONTEXT_IS_USER_SELECTED = 'SET_CONTEXT_IS_USER_SELECTED';
+export const APP__SET_LOADING = 'APP__SET_LOADING';
 
 export function selectInitialContextById(contextId) {
   return (dispatch, getState) => {
@@ -197,5 +204,19 @@ export function loadSearchResults(searchTerm) {
           payload: { term: searchTerm, results: [] }
         });
       });
+  };
+}
+
+export function selectYears(years) {
+  return (dispatch, getState) => {
+    const { location } = getState();
+    dispatch({
+      type: SELECT_YEARS,
+      years
+    });
+    if (location.type === 'tool') {
+      dispatch(loadNodes());
+      dispatch(loadLinks());
+    }
   };
 }

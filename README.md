@@ -17,7 +17,7 @@ While technically independent, the frontend application is heavily dependent on 
 ### API
 - Ruby 2.4.2
 - Rails 5.1+
-- PostgreSQL 9.5+ with `intarray`, `tablefunc` and `postgres_fdw` extensions
+- PostgreSQL 10.6+ with `intarray`, `tablefunc` and `postgres_fdw` extensions
 - [Bundler](http://bundler.io/)
 - redis >= 3
 - wget
@@ -42,7 +42,7 @@ We recommend managing your Ruby installation through [rvm](https://github.com/rv
 
 3. Create the database
 
-    Create an empty database in PostgreSQL and then import a stable database dump. If it's an earlier version than the current schema, run the migrations:
+    Create an empty database in PostgreSQL and then [import a stable database version](doc/trase/data_export_import.md). If it's an earlier version than the current schema, run the migrations:
 
     `rake db:migrate`
 
@@ -61,13 +61,14 @@ We recommend managing your Ruby installation through [rvm](https://github.com/rv
 
 2. Copy `.env.sample` to `.env` and replace the values accordingly. See the Configuration section below for more information.
 
-3. Install dependencies
+3. Install dependencies: Don't use npm, install yarn if needed (https://yarnpkg.com/lang/en/docs/install)
 
-    `npm install`
+    `yarn install`
+
 
 4. Start the development server
 
-    `npm start`
+    `yarn start`
 
 ## Configuration
 
@@ -87,6 +88,7 @@ The project's main configuration values can be set using [environment variables]
 * APPSIGNAL_PUSH_API_KEY: Appsignal API key for tracking exceptions
 * APPSIGNAL_APP_NAME: Appsignal App name, should be "Trase"
 * APPSIGNAL_APP_ENV: Appsignal environment name
+* NEW_RELIC_LICENSE_KEY: New Relic license key
 * GOLD_MASTER_HOST_V3:
 * TRASE_REMOTE_HOST=localhost
 * TRASE_REMOTE_PORT=5432
@@ -96,8 +98,9 @@ The project's main configuration values can be set using [environment variables]
 * TRASE_REMOTE_PASSWORD=
 * TRASE_REMOTE_SERVER=trase_server
 * TRASE_LOCAL_FDW_SCHEMA=main # this schema in local database where remote tables are mapped
-* API_HOST=http://localhost:3000 # base url of API
+* TRASE_LOCAL_MIRROR_SCHEMA=main_mirror # this schema in local database where remote tables are restored
 * TRASE_LOCAL_SCHEMA=public # this schema in local database where target tables are
+* API_HOST=http://localhost:3000 # base url of API
 * INSTANCE_NAME= # string to uniquely identify instance as source of db dump, e.g. staging
 * AWS_ACCESS_KEY_ID=
 * AWS_SECRET_ACCESS_KEY=
@@ -127,12 +130,42 @@ The project's main configuration values can be set using [environment variables]
 * CARTO_ACCOUNT: name of the carto account where the named maps layers are hosted.
 * CARTO_TOKEN: token to authenticate into carto for the named maps creation.
 * NAMED_MAPS_ENV: named maps environment to use inside the app.
+* ENABLE_LOGISTICS_MAP: if set to true, the logistics map section will be visible to end users.
+* GFW_WIDGETS_BASE_URL: URL to load GFW widgets from. You probably want to use `www.globalforestwatch.org` here.
+* ENABLE_LEGACY_TOOL_SEARCH: if set to false the search algorithm in the tool will use `indexOf(query)` instead of fuzzy search.
+* DISABLE_MULTIPLE_CONTEXT_PROFILES: if set to true, only Brazil-Soy will be available at the profiles page
 
 If you are using the included development server, you can set those variables in the `.env` file (use the included `.env.sample` as an example)
 
 ## Tests
 
 [![Build Status](https://travis-ci.org/Vizzuality/trase.svg?branch=master)](https://travis-ci.org/Vizzuality/trase)
+
+We use jest and puppeteer for the end to end tests. There are some mocks for the requests in the puppeteer/mocks folder. Every slash (/) and params (? &) are replaced by a hyphen in the file name. i.e:
+api-v3-contexts-year-2015 will mock api/v3/contexts?year=2015
+
+The tests have to be run while the js server is running
+
+Run all tests with:
+```
+yarn test
+```
+
+Run only unit tests:
+```
+yarn unit
+```
+
+Run only end to end:
+```
+yarn e2e
+```
+
+If you need to change some snapshot due to changes in the page and the test is failing:
+
+```
+yarn e2e -- -u
+```
 
 ### API
 
@@ -141,11 +174,11 @@ RAILS_ENV=test rake db:drop db:create db:structure:load
 bundle exec rspec spec
 ```
 
-You may also want to know about API [gold master tests](doc/trase/gold_master_tests.md)
+You may also want to know about API [gold master tests](doc/trase/gold_master_tests.md) and [load tests](doc/trase/load_tests.md).
 
 ### Frontend
 
-Running `npm test` will launch jest testing environment and run all tests that match `*.test.js` filename inside the `frontend/scripts` folder.
+Running `yarn test` will launch jest testing environment and run all tests that match `*.test.js` filename inside the `frontend/scripts` folder.
 
 ## Deployment
 
@@ -161,7 +194,7 @@ cap <staging|production> deploy
 
 This project includes a set of git hooks that you may find useful
 - Run `bundle install` when loading `Gemfile.lock` modifications from remotes
-- Run `npm install` when loading `frontend/package.json` modifications from remotes
+- Run `yarn install` when loading `frontend/package.json` modifications from remotes
 - Receive a warning when loading `.env.sample` or `frontend/.env.sample` modifications from remotes
 - Run `Rubocop` and `JS Lint` before committing
 
@@ -180,6 +213,7 @@ To enable then, simply execute once: `bin/git/init-hooks`
 - [Cache management](doc/trase/cache_management.md)
 - [Background jobs](doc/trase/background_jobs.md)
 - [Data update](doc/trase/data_update.md)
+- [Copying databases between instances](doc/trase/data_export_import.md)
 
 ### Frontend
 
@@ -194,11 +228,29 @@ To enable then, simply execute once: `bin/git/init-hooks`
 +-------+--\  link    | node  |
 |       |   \         |       |
 |       |    \--------+-------+
-|       |             |       |   
+|       |             |       |
 +-------+             +-------+
   column                column
 
 ```
+
+### Components playground
+
+Online in: http://trase.surge.sh
+
+#### Run locally
+- Run `yarn docz:dev`
+It will be served on localhost:8081
+
+#### Build
+- Run `yarn docz:build`
+
+#### Deploy
+- Install surge `yarn add -g surge`
+- Run build
+- Go to docs/dist folder
+- Run surge `surge . trase.sh`
+- If asked for login use trase.vizzuality@gmail.com
 
 #### More
 - [Generating CARTO maps](doc/trase/generating_carto_maps.md)

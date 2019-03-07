@@ -7,6 +7,14 @@
 #  name                 :text
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
+#  main_topojson_path   :string
+#  main_topojson_root   :string
+#  adm_1_name           :string
+#  adm_1_topojson_path  :string
+#  adm_1_topojson_root  :string
+#  adm_2_name           :string
+#  adm_2_topojson_path  :string
+#  adm_2_topojson_root  :string
 #
 # Indexes
 #
@@ -27,6 +35,7 @@ module Api
       NAME = [ACTOR, PLACE].freeze
 
       belongs_to :context_node_type
+      has_many :charts, -> { order(:position) }
 
       validates :context_node_type, presence: true
       validates :name,
@@ -34,6 +43,23 @@ module Api
                 inclusion: NAME
 
       after_commit :refresh_dependents
+
+      def self.select_options
+        Api::V3::Profile.includes(
+          context_node_type: [{context: [:country, :commodity]}, :node_type]
+        ).all.map do |profile|
+          context_node_type = profile&.context_node_type
+          [
+            [
+              context_node_type&.context&.country&.name,
+              context_node_type&.context&.commodity&.name,
+              context_node_type&.node_type&.name,
+              profile.name
+            ].join(' / '),
+            profile.id
+          ]
+        end
+      end
 
       def self.blue_foreign_keys
         [

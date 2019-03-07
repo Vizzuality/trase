@@ -1,7 +1,7 @@
-import _ from 'lodash';
+import isEqual from 'lodash/isEqual';
 
 import 'styles/_texts.scss';
-import 'styles/components/shared/button.scss';
+import 'scripts/react-components/shared/button/button.scss';
 import 'styles/components/shared/modal.scss';
 
 import ModalTemplate from 'templates/shared/modal.ejs';
@@ -44,7 +44,7 @@ class ModalComponent {
   }
 
   getModal(modal) {
-    if (_.isEqual(modal.modalParams, this.state.modalParams)) {
+    if (isEqual(modal.modalParams, this.state.modalParams)) {
       Object.assign(this.state, { visibility: modal.visibility });
     } else {
       Object.assign(this.state, modal);

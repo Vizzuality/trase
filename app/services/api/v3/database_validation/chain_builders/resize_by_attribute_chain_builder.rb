@@ -2,14 +2,14 @@
 
 # The following checks are included:
 #   check years match data in flows
-#   check for widows (resize_by_attributes without resize_by_quant)
+#   check for zombies (resize_by_attributes without resize_by_quant)
 #   check tooltip text present (WARN)
 module Api
   module V3
     module DatabaseValidation
       module ChainBuilders
         class ResizeByAttributeChainBuilder < AbstractChainBuilder
-          checks :declared_years_match_data,
+          checks :declared_years_match_flow_attributes,
                  association: :resize_by_quant,
                  link: :edit
           checks :attribute_present,
@@ -19,7 +19,7 @@ module Api
           checks :has_exactly_one,
                  association: :resize_by_quant,
                  link: :index
-          checks :active_record_check, link: :edit
+          checks :active_record_check, on: :resize_by_attribute, link: :edit
 
           def self.build_chain(context)
             chain = []

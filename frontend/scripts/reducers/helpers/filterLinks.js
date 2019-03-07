@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import intersection from 'lodash/intersection';
 
 // keep link if path passes test:
 // at each column, path should pass by one of the selected nodes for the column
@@ -32,8 +33,8 @@ export default function(links, selectedNodesAtColumns, nodesColoredBySelection, 
     const link = links[i];
     const linkPasses = filterPath(link.originalPath, selectedNodesAtColumns);
     if (linkPasses) {
-      const clonedLink = _.cloneDeep(link);
-      const nodeIds = _.intersection(link.originalPath, nodesColoredBySelection);
+      const clonedLink = cloneDeep(link);
+      const nodeIds = intersection(link.originalPath, nodesColoredBySelection);
       if (nodeIds) {
         const nodeId = nodeIds[0];
         // clonedLink.recolorGroup = nodesColoredBySelection.length - nodesColoredBySelection.indexOf(nodeId);

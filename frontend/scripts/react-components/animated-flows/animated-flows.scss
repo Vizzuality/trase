@@ -1,0 +1,35 @@
+@import 'styles/settings';
+
+.c-animated-flows {
+  position: absolute;
+  top: 0;
+  width: 100%;
+
+  .flowsContainer {
+    min-height: 400px;
+    height: 100%;
+    font-size: 11px;
+    width: 100%;
+    margin: auto;
+  }
+
+  .node rect {
+    fill-opacity: 1;
+    shape-rendering: crispEdges;
+  }
+
+  .node text {
+    pointer-events: none;
+  }
+
+  .link {
+    fill: none;
+    stroke: #000000;
+    stroke-opacity: .1;
+  }
+
+  .gradient-link {
+    fill: none;
+    stroke-opacity: .8;
+  }
+}

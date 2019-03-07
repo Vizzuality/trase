@@ -3,8 +3,7 @@ import camelCase from 'lodash/camelCase';
 import {
   WIDGETS__INIT_ENDPOINT,
   WIDGETS__SET_ENDPOINT_DATA,
-  WIDGETS__SET_ENDPOINT_ERROR,
-  WIDGETS__SET_ENDPOINT_LOADING
+  WIDGETS__SET_ENDPOINT_ERROR
 } from './widgets.actions';
 
 export const initialState = {
@@ -38,20 +37,8 @@ const widgetsReducer = {
         [endpoint]: {
           ...state.endpoints[endpoint],
           data: parseObject(data),
-          meta: parseObject(meta)
-        }
-      }
-    };
-  },
-  [WIDGETS__SET_ENDPOINT_LOADING](state, action) {
-    const { endpoint, loading } = action.payload;
-    return {
-      ...state,
-      endpoints: {
-        ...state.endpoints,
-        [endpoint]: {
-          ...state.endpoints[endpoint],
-          loading
+          meta: parseObject(meta),
+          loading: false
         }
       }
     };
@@ -65,7 +52,8 @@ const widgetsReducer = {
         [endpoint]: {
           ...defaultEndpoint,
           ...state.endpoints[endpoint],
-          error
+          error,
+          loading: false
         }
       }
     };

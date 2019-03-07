@@ -3,14 +3,21 @@ import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import cx from 'classnames';
 
+import 'scripts/react-components/nav/locale-selector/locale-selector.scss';
+
 const { Transifex } = window;
 
 class LocaleSelector extends React.Component {
   constructor(props) {
     super(props);
+    let defaultLanguage = null;
+    if (typeof Transifex !== 'undefined') {
+      const code = Transifex.live.detectLanguage();
+      defaultLanguage = { code };
+    }
     this.state = {
       languages: [],
-      defaultLanguage: null
+      defaultLanguage
     };
 
     this.onSelectLang = this.onSelectLang.bind(this);
@@ -55,8 +62,9 @@ class LocaleSelector extends React.Component {
     } else {
       defaultLanguage = languages.find(lang => lang.source);
     }
-
-    this.setState({ defaultLanguage });
+    if (defaultLanguage !== this.state.defaultLanguage) {
+      this.setState({ defaultLanguage });
+    }
   }
 
   setLanguages() {
@@ -83,22 +91,24 @@ class LocaleSelector extends React.Component {
               </button>
               {isOpen ? (
                 <ul className="locale-selector-menu">
-                  {languages.filter(lang => lang.code !== selectedItem.code).map(lang => {
-                    /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-                    // Downshift onChange makes weird stuff, pass downshift onClick as cb instead
-                    const { onClick, ...itemProps } = getItemProps({ item: lang });
-                    return (
-                      <li
-                        {...itemProps}
-                        key={lang.code}
-                        className="locale-selector-menu-item"
-                        onClick={e => this.onSelectLang(lang, () => onClick(e))}
-                      >
-                        {lang.code}
-                      </li>
-                    );
-                    /* eslint-enable */
-                  })}
+                  {languages
+                    .filter(lang => lang.code !== selectedItem.code)
+                    .map(lang => {
+                      /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+                      // Downshift onChange makes weird stuff, pass downshift onClick as cb instead
+                      const { onClick, ...itemProps } = getItemProps({ item: lang });
+                      return (
+                        <li
+                          {...itemProps}
+                          key={lang.code}
+                          className="locale-selector-menu-item"
+                          onClick={e => this.onSelectLang(lang, () => onClick(e))}
+                        >
+                          {lang.code}
+                        </li>
+                      );
+                      /* eslint-enable */
+                    })}
                 </ul>
               ) : null}
             </div>

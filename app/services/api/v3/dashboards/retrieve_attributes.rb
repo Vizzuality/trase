@@ -101,7 +101,7 @@ module Api
             cond_vals << @commodities_ids
           end
           if @nodes_ids.any?
-            cond_strs << 'path @> ARRAY[?]'
+            cond_strs << any_elements_in_common?
             cond_vals << @nodes_ids
           end
           Api::V3::Readonly::Attribute.send(
@@ -125,6 +125,10 @@ module Api
 
         def node_attributes_default_for_case
           @nodes_ids.empty?
+        end
+
+        def any_elements_in_common?
+          'path && ARRAY[?]'
         end
       end
     end

@@ -5,7 +5,7 @@ export const SET_PROFILE_SEARCH_TERM = 'SET_PROFILE_SEARCH_TERM';
 export const LOAD_PROFILE_SEARCH_RESULTS = 'LOAD_PROFILE_SEARCH_RESULTS';
 export const SET_PROFILE_ROOT_ERROR_MESSAGE = 'SET_PROFILE_ROOT_ERROR_MESSAGE';
 
-export const goToNodeProfilePage = (node, year) => dispatch =>
+export const goToNodeProfilePage = (node, { year }) => dispatch =>
   dispatch({
     type: 'profileNode',
     payload: {
@@ -25,10 +25,10 @@ export function resetProfileSearchResults() {
   };
 }
 
-export const searchNodeWithTerm = searchTerm => dispatch => {
+export const searchNodeWithTerm = (searchTerm, { contextId }) => dispatch => {
   const nodeResultsURL = getURLFromParams(GET_NODES_WITH_SEARCH_URL, {
     query: searchTerm,
-    context_id: 1,
+    context_id: contextId,
     profile_only: true
   });
 

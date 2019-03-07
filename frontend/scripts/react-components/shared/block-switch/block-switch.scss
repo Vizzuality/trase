@@ -1,0 +1,50 @@
+@import 'styles/settings';
+
+.c-block-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .block-switch-element {
+    width: 220px;
+    height: 150px;
+    padding: 16px;
+    border: solid 2px $charcoal-grey-faded-a-lot;
+    border-radius: 4px;
+    margin: 0 15px 0 0;
+    cursor: pointer;
+
+    &:hover {
+      border: solid 2px $charcoal-grey-faded;
+    }
+
+    &:last-child {
+      margin: 0;
+    }
+
+    &.-active {
+      background-color: $charcoal-grey;
+    }
+
+    &.-dirty {
+      position: relative;
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        height: 8px;
+        width: 8px;
+        border-radius: 100%;
+        transform: translateX(-50%);
+        background-color: $strong-pink;
+      }
+    }
+  }
+
+  .block-switch-image {
+    height: 80px;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}

@@ -5,57 +5,84 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 
 export default class Dropdown extends Component {
-  constructor(props) {
-    super(props);
+  state = {
+    isOpen: false,
+    listHeight: null
+  };
 
-    this.state = {
-      isOpen: false
-    };
-    this.onDropdownValueClicked = this.onDropdownValueClicked.bind(this);
-    this.handleClickOutside = this.handleClickOutside.bind(this);
-    this.handleKeyUpOutside = this.handleKeyUpOutside.bind(this);
-  }
+  static DEFAULT_MAX_LIST_HEIGHT = 265;
+
+  listItemRef = React.createRef();
 
   componentDidMount() {
     window.addEventListener('keyup', this.handleKeyUpOutside);
     window.addEventListener('mouseup', this.handleClickOutside);
-    window.addEventListener('touchstart', this.handleClickOutside);
+    window.addEventListener('touchend', this.handleClickOutside);
   }
 
   componentWillUnmount() {
     document.removeEventListener('keyup', this.handleKeyUpOutside);
     document.removeEventListener('mouseup', this.handleClickOutside);
-    document.removeEventListener('touchstart', this.handleClickOutside);
+    document.removeEventListener('touchend', this.handleClickOutside);
   }
 
-  onDropdownValueClicked(e, value) {
+  componentDidUpdate(prevProps, prevState) {
+    if (this.listItemRef.current && prevState.listHeight === null) {
+      this.setListHeight();
+    }
+  }
+
+  setListHeight() {
+    const { height } = this.listItemRef.current.getBoundingClientRect();
+    if (height > 0 && height * this.props.valueList.length > Dropdown.DEFAULT_MAX_LIST_HEIGHT) {
+      const listHeight = height * 6 - height / 2;
+      this.setState({ listHeight });
+    }
+  }
+
+  onDropdownValueClicked = (e, value) => {
     e.preventDefault();
     this.setState({ isOpen: false });
     this.props.onValueSelected(value);
-  }
+  };
 
-  onTitleClick() {
+  onTitleClick = () => {
     const { isOpen } = this.state;
     this.setState({ isOpen: !isOpen });
-  }
+  };
 
-  handleClickOutside(event) {
+  handleClickOutside = event => {
     if (!this.ref || this.ref.contains(event.target)) return;
     this.close();
-  }
+  };
 
-  handleKeyUpOutside(event) {
+  handleKeyUpOutside = event => {
     if (event.key === 'Escape' && this.state.isOpen) {
       this.close();
     }
-  }
+  };
 
   close() {
     this.setState({ isOpen: false });
   }
 
+  renderValueList() {
+    const { valueRenderer, valueList, getItemClassName } = this.props;
+    return valueList.map((elem, index) => (
+      <li
+        ref={index === 0 ? this.listItemRef : undefined}
+        className={cx('dropdown-item', getItemClassName(elem))}
+        key={index}
+        onClick={e => this.onDropdownValueClicked(e, elem)}
+        onTouchEnd={e => this.onDropdownValueClicked(e, elem)}
+      >
+        {valueRenderer ? valueRenderer(elem) : elem}
+      </li>
+    ));
+  }
+
   render() {
-    const { className, hideOnlyChild, label, size, value, valueFormat, valueList } = this.props;
+    const { className, hideOnlyChild, label, size, value, valueRenderer, valueList } = this.props;
 
     return (
       <div
@@ -66,30 +93,16 @@ export default class Dropdown extends Component {
         })}
       >
         <span className="dropdown-label">{label}</span>
-        <span
-          className="dropdown-title"
-          onClick={() => {
-            this.onTitleClick();
-          }}
-        >
-          {valueFormat ? valueFormat(value) : value}
+        <span className="dropdown-title" onClick={this.onTitleClick}>
+          {valueRenderer ? valueRenderer(value) : value}
         </span>
         <ul
+          style={this.state.listHeight ? { maxHeight: this.state.listHeight } : undefined}
           className={cx('dropdown-list', {
             'is-hidden': !this.state.isOpen
           })}
         >
-          {valueList.map((elem, index) => (
-            <li
-              className="dropdown-item"
-              key={index}
-              data-value={elem}
-              onClick={e => this.onDropdownValueClicked(e, elem)}
-              onTouchStart={e => this.onDropdownValueClicked(e, elem)}
-            >
-              {valueFormat ? valueFormat(elem) : elem}
-            </li>
-          ))}
+          {this.renderValueList()}
         </ul>
       </div>
     );
@@ -97,7 +110,8 @@ export default class Dropdown extends Component {
 }
 
 Dropdown.defaultProps = {
-  hideOnlyChild: false
+  hideOnlyChild: false,
+  getItemClassName: () => ''
 };
 
 Dropdown.propTypes = {
@@ -107,6 +121,7 @@ Dropdown.propTypes = {
   onValueSelected: PropTypes.func,
   size: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
-  valueFormat: PropTypes.func,
+  valueRenderer: PropTypes.func,
+  getItemClassName: PropTypes.func,
   valueList: PropTypes.array
 };

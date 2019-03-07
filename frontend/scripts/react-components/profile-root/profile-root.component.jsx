@@ -1,9 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ProfileSearch from 'react-components/profile-root/profile-search.container';
+import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
+import ErrorMessage from 'react-components/profile-root/error-message/error-message.component';
+import cx from 'classnames';
+
+import 'scripts/react-components/profile-root/profile-root.scss';
 
 const ProfileRoot = props => {
-  const { errorMessage } = props;
+  const { errorMessage, activeContext, getContextsWithProfilePages } = props;
   return (
     <div className="l-profile-root">
       {!errorMessage && (
@@ -13,12 +18,17 @@ const ProfileRoot = props => {
               <div className="column small-12 medium-9 large-6">
                 <div className="profile-root-heading-container">
                   <div className="profile-root-heading-wrapper">
-                    <h2 className="subtitle -gray">Country & Commodity</h2>
-                    <h1 className="title">Brazil &ndash; Soy</h1>
+                    <ContextSelector
+                      selectContexts={getContextsWithProfilePages}
+                      selectedContext={activeContext}
+                      className={cx('profile-root-context-selector', {
+                        '-readonly': DISABLE_MULTIPLE_CONTEXT_PROFILES
+                      })}
+                    />
                   </div>
                 </div>
                 <ProfileSearch
-                  testId="profile-search"
+                  testId="profile-root"
                   className="profile-search"
                   resultClassName="profile-search-result"
                   placeholderSmall="Search"
@@ -50,18 +60,15 @@ const ProfileRoot = props => {
           </div>
         </div>
       )}
-      {errorMessage && (
-        <div className="c-error-message -absolute -charcoal">
-          <p className="message">Oops! Something went wrong.</p>
-          <p className="message">{errorMessage}</p>
-        </div>
-      )}
+      {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
     </div>
   );
 };
 
 ProfileRoot.propTypes = {
-  errorMessage: PropTypes.string
+  errorMessage: PropTypes.string,
+  activeContext: PropTypes.object,
+  getContextsWithProfilePages: PropTypes.func.isRequired
 };
 
 export default ProfileRoot;

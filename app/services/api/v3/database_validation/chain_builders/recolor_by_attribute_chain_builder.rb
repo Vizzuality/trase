@@ -2,7 +2,7 @@
 
 # The following checks are included:
 #   check years match data in flows
-#   check for widows (recolor_by_attributes without recolor_by_ind or recolor_by_qual)
+#   check for zombies (recolor_by_attributes without recolor_by_ind or recolor_by_qual)
 #   check tooltip text present (WARN)
 #   if min/max present, check interval present and vice versa (model validation?)
 #   if legend percentual check divisor present (model validation?)
@@ -11,10 +11,10 @@ module Api
     module DatabaseValidation
       module ChainBuilders
         class RecolorByAttributeChainBuilder < AbstractChainBuilder
-          checks :declared_years_match_data,
+          checks :declared_years_match_flow_attributes,
                  association: :recolor_by_ind,
                  link: :edit
-          checks :declared_years_match_data,
+          checks :declared_years_match_flow_attributes,
                  association: :recolor_by_qual,
                  link: :edit
           checks :attribute_present,
@@ -24,7 +24,7 @@ module Api
           checks :has_exactly_one_of,
                  associations: [:recolor_by_ind, :recolor_by_qual],
                  link: :index
-          checks :active_record_check, link: :edit
+          checks :active_record_check, on: :recolor_by_attribute, link: :edit
 
           def self.build_chain(context)
             chain = []

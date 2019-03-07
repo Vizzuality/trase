@@ -13,16 +13,26 @@
 <% if database_versions.any? %>
 <div class="panel">
   <h3>Exported database versions:</h3>
+  <ul>
+    <li><%= link_to "All", admin_database_export_url %></li>
+    <% keys.each do |key| %>
+      <li><%= link_to key, admin_database_export_url(key: key) %></li>
+    <% end %>
+  </ul>
   <table class="index_table">
     <thead>
       <tr>
-        <th>Source</th>
+        <th>Key</th>
+        <th>Name</th>
+        <th>Link</th>
         <th>Time</th>
       </tr>
     </thead>
     <tbody>
       <% database_versions.each do |export| %>
       <tr>
+        <td><%= export[:key] %></td>
+        <td><%= export[:name] %></td>
         <td><%= link_to export[:name], export[:url] %></td>
         <td><%= export[:time] %></td>
       </tr>

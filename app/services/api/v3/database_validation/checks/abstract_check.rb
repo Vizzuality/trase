@@ -32,6 +32,40 @@ module Api
             raise NotImplementedError
           end
 
+          def self.human_readable_rules(parent_object_name, options)
+            [
+              {
+                validated_object: validated_object_name(parent_object_name, options),
+                rule: human_readable(options)
+              }
+            ]
+          end
+
+          class << self
+            protected
+
+            # @abstract
+            # @return [String] description of the checked rule
+            # @raise [NotImplementedError] when not defined in subclass
+            def human_readable(_options)
+              raise NotImplementedError
+            end
+
+            def validated_object_class(object_name)
+              return nil unless object_name
+
+              Api::V3.const_get(
+                object_name.to_s.camelize
+              )
+            end
+
+            def validated_object_name(parent_object_name, options)
+              validated_object_class = options &&
+                validated_object_class(options[:on])
+              validated_object_class&.name&.demodulize || parent_object_name
+            end
+          end
+
           private
 
           def initialize_on_object(options)

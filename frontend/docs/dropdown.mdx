@@ -1,0 +1,130 @@
+---
+Dropdown
+---
+import { PropsTable, Playground } from 'docz'
+import { State } from 'react-powerplug';
+import Dropdown from 'react-components/shared/dropdown';
+import 'styles/_docz.scss';
+
+## Dropdown
+
+<div className="components-container -spaced -width-200">
+  <State initial={{ options:
+    [{ label: 'Blue', value: 'blue' },
+      { label: 'Red', value: 'red' },
+      { label: 'Green', value: 'green' }],
+      value: { label: 'Red', value: 'red' }
+    }}>
+    {({ state, setState }) => (
+      <Dropdown
+        options={state.options}
+        value={state.value}
+        onChange={value => setState({ value })}
+      />
+    )}
+  </State>
+</div>
+
+#### With 'caret' arrowType and position up
+
+<div className="components-container -spaced -width-200">
+  <State initial={{ options:
+    [{ label: 'Blue', value: 'blue' },
+      { label: 'Red', value: 'red' },
+      { label: 'Green', value: 'green' }],
+      value: { label: 'Red', value: 'red' }
+    }}>
+    {({ state, setState }) => (
+      <Dropdown
+        options={state.options}
+        value={state.value}
+        onChange={value => setState({ value })}
+        arrowType='caret'
+        position="up"
+      />
+    )}
+  </State>
+</div>
+
+#### With icon prop in the options
+
+<div className="components-container -spaced -width-200">
+  <State initial={{ options:
+    [{ label: 'Blue', value: 'blue', icon: 'close' },
+      { label: 'Red', value: 'red', icon: 'close' },
+      { label: 'Green', value: 'green', icon: 'close' }],
+      value: { label: 'Red', value: 'red', icon: 'close' }
+    }}>
+    {({ state, setState }) => (
+      <Dropdown
+        options={state.options}
+        value={state.value}
+        onChange={value => setState({ value })}
+        arrowType='caret'
+      />
+    )}
+  </State>
+</div>
+
+#### fitContent prop to adjust to selected content length
+
+<div className="components-container -spaced">
+  <State initial={{ options:
+    [{ label: 'Blue', value: 'blue' },
+      { label: 'Red', value: 'red' },
+      { label: 'Green', value: 'green' }],
+      value: { label: 'Red', value: 'red' }
+    }}>
+    {({ state, setState }) => (
+      <Dropdown
+        options={state.options}
+        value={state.value}
+        onChange={value => setState({ value })}
+        arrowType='caret'
+        fitContent
+      />
+    )}
+  </State>
+</div>
+
+#### Only view dropdown
+
+<div className="components-container -spaced">
+  <State initial={{ options:
+    [{ label: 'Blue', value: 'blue' },
+      { label: 'Red', value: 'red' },
+      { label: 'Green', value: 'green' }],
+      value: { label: 'Red', value: 'red' }
+    }}>
+    {({ state, setState }) => (
+      <Dropdown
+        options={state.options}
+        value={state.value}
+        onChange={value => setState({ value })}
+        fitContent
+        selectedValueOverride={`${state.options.length} items`}
+        showSelected
+        readOnly
+      />
+    )}
+  </State>
+</div>
+
+<PropsTable of={Dropdown} />
+
+<Playground>
+  <State initial={{ options:
+    [{ label: 'Blue', value: 'blue' },
+      { label: 'Red', value: 'red' },
+      { label: 'Green', value: 'green' }],
+      value: { label: 'Red', value: 'red' }
+    }}>
+    {({ state, setState }) => (
+      <Dropdown
+        options={state.options}
+        value={state.value}
+        onChange={value => setState({ value })}
+      />
+    )}
+  </State>
+</Playground>

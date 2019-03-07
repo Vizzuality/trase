@@ -1,7 +1,7 @@
 import ReactDOMServer from 'react-dom/server';
 import React from 'react';
 
-import ChoroArrow from 'react-components/tool/choro-arrow.component';
+import ChoroArrow from 'react-components/tool/choro-arrow/choro-arrow.component';
 import LegendChoroTemplate from 'templates/tool/map/legend-choro.ejs';
 import LegendContextTemplate from 'templates/tool/map/legend-context.ejs';
 import 'styles/components/tool/map/map-legend.scss';

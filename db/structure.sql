@@ -468,6 +468,55 @@ CREATE TABLE public.ind_properties (
 
 
 --
+-- Name: COLUMN ind_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_properties.display_name IS 'Name of attribute for display';
+
+
+--
+-- Name: COLUMN ind_properties.unit_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_properties.unit_type IS 'Type of unit, e.g. score. One of restricted set of values.';
+
+
+--
+-- Name: COLUMN ind_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_properties.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN ind_properties.is_visible_on_place_profile; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_properties.is_visible_on_place_profile IS 'Whether to display this attribute on place profile';
+
+
+--
+-- Name: COLUMN ind_properties.is_visible_on_actor_profile; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_properties.is_visible_on_actor_profile IS 'Whether to display this attribute on actor profile';
+
+
+--
+-- Name: COLUMN ind_properties.is_temporal_on_place_profile; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_properties.is_temporal_on_place_profile IS 'Whether attribute has temporal data on place profile';
+
+
+--
+-- Name: COLUMN ind_properties.is_temporal_on_actor_profile; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_properties.is_temporal_on_actor_profile IS 'Whether attribute has temporal data on actor profile';
+
+
+--
 -- Name: inds; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -477,6 +526,27 @@ CREATE TABLE public.inds (
     unit text,
     created_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.inds IS 'Attributes classified as inds';
+
+
+--
+-- Name: COLUMN inds.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.inds.name IS 'Attribute short name, e.g. FOREST_500; those literals are referred to in code, therefore should not be changed without notice';
+
+
+--
+-- Name: COLUMN inds.unit; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.inds.unit IS 'Unit in which values for this attribute are given';
 
 
 --
@@ -498,6 +568,34 @@ CREATE TABLE public.qual_properties (
 
 
 --
+-- Name: COLUMN qual_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_properties.display_name IS 'Name of attribute for display';
+
+
+--
+-- Name: COLUMN qual_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_properties.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN qual_properties.is_visible_on_place_profile; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_properties.is_visible_on_place_profile IS 'Whether to display this attribute on place profile';
+
+
+--
+-- Name: COLUMN qual_properties.is_visible_on_actor_profile; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_properties.is_visible_on_actor_profile IS 'Whether to display this attribute on actor profile';
+
+
+--
 -- Name: quals; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -506,6 +604,20 @@ CREATE TABLE public.quals (
     name text NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.quals IS 'Attributes classified as quals';
+
+
+--
+-- Name: COLUMN quals.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quals.name IS 'Attribute short name, e.g. ZERO_DEFORESTATION; those literals are referred to in code, therefore should not be changed without notice';
 
 
 --
@@ -529,6 +641,41 @@ CREATE TABLE public.quant_properties (
 
 
 --
+-- Name: COLUMN quant_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_properties.display_name IS 'Name of attribute for display';
+
+
+--
+-- Name: COLUMN quant_properties.unit_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_properties.unit_type IS 'Type of unit, e.g. count. One of restricted set of values.';
+
+
+--
+-- Name: COLUMN quant_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_properties.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN quant_properties.is_visible_on_place_profile; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_properties.is_visible_on_place_profile IS 'Whether to display this attribute on place profile';
+
+
+--
+-- Name: COLUMN quant_properties.is_visible_on_actor_profile; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_properties.is_visible_on_actor_profile IS 'Whether to display this attribute on actor profile';
+
+
+--
 -- Name: quants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -538,6 +685,27 @@ CREATE TABLE public.quants (
     unit text,
     created_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.quants IS 'Attributes classified as quants';
+
+
+--
+-- Name: COLUMN quants.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quants.name IS 'Attribute short name, e.g. FOB; those literals are referred to in code, therefore should not be changed without notice';
+
+
+--
+-- Name: COLUMN quants.unit; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quants.unit IS 'Unit in which values for this attribute are given';
 
 
 --
@@ -606,6 +774,34 @@ CREATE MATERIALIZED VIEW public.attributes_mv AS
 
 
 --
+-- Name: MATERIALIZED VIEW attributes_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.attributes_mv IS 'Materialized view which merges inds, quals and quants.';
+
+
+--
+-- Name: COLUMN attributes_mv.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.attributes_mv.id IS 'The unique id is a sequential number which is generated at REFRESH and therefore not fixed.';
+
+
+--
+-- Name: COLUMN attributes_mv.original_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.attributes_mv.original_type IS 'Type of the original entity (Ind / Qual / Quant)';
+
+
+--
+-- Name: COLUMN attributes_mv.original_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.attributes_mv.original_id IS 'Id from the original table (inds / quals / quants)';
+
+
+--
 -- Name: carto_layers; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -618,6 +814,34 @@ CREATE TABLE public.carto_layers (
     updated_at timestamp without time zone NOT NULL,
     raster_url character varying
 );
+
+
+--
+-- Name: TABLE carto_layers; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.carto_layers IS 'Year-specific data layers defined in CartoDB used to display contextual layers.';
+
+
+--
+-- Name: COLUMN carto_layers.identifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.carto_layers.identifier IS 'Identifier of the CartoDB named map, e.g. brazil_biomes; unique in scope of contextual layer';
+
+
+--
+-- Name: COLUMN carto_layers.years; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.carto_layers.years IS 'Array of years for which to show this carto layer in scope of contextual layer; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN carto_layers.raster_url; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.carto_layers.raster_url IS 'Url of raster layer';
 
 
 --
@@ -649,8 +873,84 @@ CREATE TABLE public.chart_attributes (
     "position" integer,
     years integer[],
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text,
+    legend_name text,
+    display_type text,
+    display_style text,
+    state_average boolean DEFAULT false NOT NULL,
+    identifier text
 );
+
+
+--
+-- Name: TABLE chart_attributes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.chart_attributes IS 'Attributes (inds/quals/quants) to display in a chart.';
+
+
+--
+-- Name: COLUMN chart_attributes.chart_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes.chart_id IS 'Refence to chart';
+
+
+--
+-- Name: COLUMN chart_attributes."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes."position" IS 'Display order in scope of chart';
+
+
+--
+-- Name: COLUMN chart_attributes.years; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes.years IS 'Array of years for which to show this attribute in scope of chart; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN chart_attributes.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes.display_name IS 'Name of attribute for display in chart';
+
+
+--
+-- Name: COLUMN chart_attributes.legend_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes.legend_name IS 'Legend title';
+
+
+--
+-- Name: COLUMN chart_attributes.display_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes.display_type IS 'Type of display, only used for trajectory deforestation plot in place profiles; e.g. area, line';
+
+
+--
+-- Name: COLUMN chart_attributes.display_style; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes.display_style IS 'Style of display, only used for trajectory deforestation plot in place profiles; e.g. area-pink, area-black, line-dashed-black';
+
+
+--
+-- Name: COLUMN chart_attributes.state_average; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes.state_average IS 'Only used for trajectory deforestation plot in place profiles';
+
+
+--
+-- Name: COLUMN chart_attributes.identifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes.identifier IS 'Identifier used to map this chart attribute to a part of code which contains calculation logic';
 
 
 --
@@ -686,6 +986,140 @@ CREATE TABLE public.chart_inds (
 
 
 --
+-- Name: TABLE chart_inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.chart_inds IS 'Inds to display in a chart (see chart_attributes.)';
+
+
+--
+-- Name: chart_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chart_quals (
+    id integer NOT NULL,
+    chart_attribute_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE chart_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.chart_quals IS 'Quals to display in a chart (see chart_attributes.)';
+
+
+--
+-- Name: chart_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chart_quants (
+    id integer NOT NULL,
+    chart_attribute_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE chart_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.chart_quants IS 'Quants to display in a chart (see chart_attributes.)';
+
+
+--
+-- Name: chart_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.chart_attributes_mv AS
+ SELECT cha.id,
+    cha.chart_id,
+    cha."position",
+    cha.years,
+    COALESCE(cha.display_name, a.display_name) AS display_name,
+    cha.legend_name,
+    cha.display_type,
+    cha.display_style,
+    cha.state_average,
+    cha.identifier,
+    a.name,
+    a.unit,
+    a.tooltip_text,
+    a.id AS attribute_id,
+    a.original_id,
+    a.original_type,
+    cha.created_at,
+    cha.updated_at
+   FROM ((public.chart_quals chq
+     JOIN public.chart_attributes cha ON ((cha.id = chq.chart_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = chq.qual_id) AND (a.original_type = 'Qual'::text))))
+UNION ALL
+ SELECT cha.id,
+    cha.chart_id,
+    cha."position",
+    cha.years,
+    COALESCE(cha.display_name, a.display_name) AS display_name,
+    cha.legend_name,
+    cha.display_type,
+    cha.display_style,
+    cha.state_average,
+    cha.identifier,
+    a.name,
+    a.unit,
+    a.tooltip_text,
+    a.id AS attribute_id,
+    a.original_id,
+    a.original_type,
+    cha.created_at,
+    cha.updated_at
+   FROM ((public.chart_quants chq
+     JOIN public.chart_attributes cha ON ((cha.id = chq.chart_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = chq.quant_id) AND (a.original_type = 'Quant'::text))))
+UNION ALL
+ SELECT cha.id,
+    cha.chart_id,
+    cha."position",
+    cha.years,
+    COALESCE(cha.display_name, a.display_name) AS display_name,
+    cha.legend_name,
+    cha.display_type,
+    cha.display_style,
+    cha.state_average,
+    cha.identifier,
+    a.name,
+    a.unit,
+    a.tooltip_text,
+    a.id AS attribute_id,
+    a.original_id,
+    a.original_type,
+    cha.created_at,
+    cha.updated_at
+   FROM ((public.chart_inds chi
+     JOIN public.chart_attributes cha ON ((cha.id = chi.chart_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = chi.ind_id) AND (a.original_type = 'Ind'::text))))
+  WITH NO DATA;
+
+
+--
+-- Name: MATERIALIZED VIEW chart_attributes_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.chart_attributes_mv IS 'Materialized view which merges chart_inds, chart_quals and chart_quants with chart_attributes.';
+
+
+--
+-- Name: COLUMN chart_attributes_mv.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes_mv.display_name IS 'If absent in chart_attributes this is pulled from attributes_mv.';
+
+
+--
 -- Name: chart_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -705,16 +1139,73 @@ ALTER SEQUENCE public.chart_inds_id_seq OWNED BY public.chart_inds.id;
 
 
 --
--- Name: chart_quals; Type: TABLE; Schema: public; Owner: -
+-- Name: chart_node_types; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.chart_quals (
-    id integer NOT NULL,
-    chart_attribute_id integer NOT NULL,
-    qual_id integer NOT NULL,
+CREATE TABLE public.chart_node_types (
+    id bigint NOT NULL,
+    chart_id bigint,
+    node_type_id bigint,
+    identifier text,
+    "position" integer,
+    is_total boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE chart_node_types; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.chart_node_types IS 'Node types to display in a chart.';
+
+
+--
+-- Name: COLUMN chart_node_types.chart_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_node_types.chart_id IS 'Refence to chart';
+
+
+--
+-- Name: COLUMN chart_node_types.node_type_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_node_types.node_type_id IS 'Refence to node type';
+
+
+--
+-- Name: COLUMN chart_node_types.identifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_node_types.identifier IS 'Identifier used to map this chart node type to a part of code which contains calculation logic';
+
+
+--
+-- Name: COLUMN chart_node_types."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_node_types."position" IS 'Display order in scope of chart; required when more than one';
+
+
+--
+-- Name: chart_node_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.chart_node_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: chart_node_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.chart_node_types_id_seq OWNED BY public.chart_node_types.id;
 
 
 --
@@ -734,19 +1225,6 @@ CREATE SEQUENCE public.chart_quals_id_seq
 --
 
 ALTER SEQUENCE public.chart_quals_id_seq OWNED BY public.chart_quals.id;
-
-
---
--- Name: chart_quants; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.chart_quants (
-    id integer NOT NULL,
-    chart_attribute_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
 
 
 --
@@ -780,8 +1258,44 @@ CREATE TABLE public.charts (
     title text NOT NULL,
     "position" integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    chart_type character varying
 );
+
+
+--
+-- Name: TABLE charts; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.charts IS 'Charts on profile pages.';
+
+
+--
+-- Name: COLUMN charts.parent_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.charts.parent_id IS 'Self-reference to parent used to define complex charts, e.g. table with values in tabs';
+
+
+--
+-- Name: COLUMN charts.identifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.charts.identifier IS 'Identifier used to map this chart to a part of code which contains calculation logic';
+
+
+--
+-- Name: COLUMN charts.title; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.charts.title IS 'Title of chart for display';
+
+
+--
+-- Name: COLUMN charts."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.charts."position" IS 'Display order in scope of profile';
 
 
 --
@@ -812,6 +1326,20 @@ CREATE TABLE public.commodities (
     name text NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE commodities; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.commodities IS 'Commodities in supply chains, such as soy or beef';
+
+
+--
+-- Name: COLUMN commodities.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.commodities.name IS 'Commodity name; unique across commodities';
 
 
 --
@@ -850,6 +1378,34 @@ CREATE TABLE public.context_node_type_properties (
 
 
 --
+-- Name: COLUMN context_node_type_properties.column_group; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_node_type_properties.column_group IS 'Zero-based number of sankey column in which to display nodes of this type';
+
+
+--
+-- Name: COLUMN context_node_type_properties.is_default; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_node_type_properties.is_default IS 'When set, show this node type as default (only use for one)';
+
+
+--
+-- Name: COLUMN context_node_type_properties.is_geo_column; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_node_type_properties.is_geo_column IS 'When set, show nodes on map';
+
+
+--
+-- Name: COLUMN context_node_type_properties.is_choropleth_disabled; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_node_type_properties.is_choropleth_disabled IS 'When set, do not display the map choropleth';
+
+
+--
 -- Name: context_node_type_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -882,6 +1438,20 @@ CREATE TABLE public.context_node_types (
 
 
 --
+-- Name: TABLE context_node_types; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.context_node_types IS 'Node types represented in supply chains per context. The value of column_position is interpreted as position in flows.path.';
+
+
+--
+-- Name: COLUMN context_node_types.column_position; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_node_types.column_position IS 'Index of node of this type in flows.path';
+
+
+--
 -- Name: context_node_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -909,6 +1479,20 @@ CREATE TABLE public.node_types (
     name text NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE node_types; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_types IS 'List of types of nodes in the system, e.g. MUNICIPALITY or EXPORTER. Those literals are referred to in code, therefore should not be changed without notice.';
+
+
+--
+-- Name: COLUMN node_types.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_types.name IS 'Name of node type, spelt in capital letters; unique across node types';
 
 
 --
@@ -966,6 +1550,48 @@ CREATE TABLE public.context_properties (
 
 
 --
+-- Name: TABLE context_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.context_properties IS 'Visualisation properties of a context (one row per context)';
+
+
+--
+-- Name: COLUMN context_properties.default_basemap; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_properties.default_basemap IS 'Default basemap for this context, e.g. satellite';
+
+
+--
+-- Name: COLUMN context_properties.is_disabled; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_properties.is_disabled IS 'When set, do not show this context';
+
+
+--
+-- Name: COLUMN context_properties.is_default; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_properties.is_default IS 'When set, show this context as default (only use for one)';
+
+
+--
+-- Name: COLUMN context_properties.is_subnational; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_properties.is_subnational IS 'When set, show indication that sub-national level data is available';
+
+
+--
+-- Name: COLUMN context_properties.is_highlighted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_properties.is_highlighted IS 'When set, shows the context on the context picker suggestions';
+
+
+--
 -- Name: context_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -996,6 +1622,27 @@ CREATE TABLE public.contexts (
     default_year integer,
     created_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE contexts; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.contexts IS 'Country-commodity combinations.';
+
+
+--
+-- Name: COLUMN contexts.years; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.contexts.years IS 'Years for which country-commodity data is present; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN contexts.default_year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.contexts.default_year IS 'Default year for this context';
 
 
 --
@@ -1036,6 +1683,55 @@ CREATE TABLE public.contextual_layers (
 
 
 --
+-- Name: TABLE contextual_layers; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.contextual_layers IS 'Additional layers shown on map coming from CartoDB';
+
+
+--
+-- Name: COLUMN contextual_layers.title; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.contextual_layers.title IS 'Title of layer for display';
+
+
+--
+-- Name: COLUMN contextual_layers.identifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.contextual_layers.identifier IS 'Identifier of layer, e.g. brazil_biomes';
+
+
+--
+-- Name: COLUMN contextual_layers."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.contextual_layers."position" IS 'Display order in scope of context';
+
+
+--
+-- Name: COLUMN contextual_layers.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.contextual_layers.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN contextual_layers.is_default; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.contextual_layers.is_default IS 'When set, show this layer by default';
+
+
+--
+-- Name: COLUMN contextual_layers.legend; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.contextual_layers.legend IS 'Legend as HTML snippet';
+
+
+--
 -- Name: contextual_layers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -1064,6 +1760,27 @@ CREATE TABLE public.countries (
     iso2 text NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE countries; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.countries IS 'Countries (source)';
+
+
+--
+-- Name: COLUMN countries.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.countries.name IS 'Country name';
+
+
+--
+-- Name: COLUMN countries.iso2; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.countries.iso2 IS '2-letter ISO code';
 
 
 --
@@ -1100,6 +1817,41 @@ CREATE TABLE public.country_properties (
     annotation_position_x_pos double precision,
     annotation_position_y_pos double precision
 );
+
+
+--
+-- Name: COLUMN country_properties.latitude; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_properties.latitude IS 'Country latitide';
+
+
+--
+-- Name: COLUMN country_properties.longitude; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_properties.longitude IS 'Country longitude';
+
+
+--
+-- Name: COLUMN country_properties.zoom; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_properties.zoom IS 'Zoom level (0-18)';
+
+
+--
+-- Name: COLUMN country_properties.annotation_position_x_pos; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_properties.annotation_position_x_pos IS 'X position (in coordinates) where the country''s label is displayed on the explore page';
+
+
+--
+-- Name: COLUMN country_properties.annotation_position_y_pos; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_properties.annotation_position_y_pos IS 'Y position (in coordinates) where the country''s label is displayed on the explore page';
 
 
 --
@@ -1332,6 +2084,27 @@ CREATE TABLE public.dashboards_attribute_groups (
 
 
 --
+-- Name: TABLE dashboards_attribute_groups; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_attribute_groups IS 'Groups attributes (inds/quals/quants) to display on dashboards wizard';
+
+
+--
+-- Name: COLUMN dashboards_attribute_groups.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_attribute_groups.name IS 'Name for display';
+
+
+--
+-- Name: COLUMN dashboards_attribute_groups."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_attribute_groups."position" IS 'Display order';
+
+
+--
 -- Name: dashboards_attribute_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -1362,6 +2135,27 @@ CREATE TABLE public.dashboards_attributes (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE dashboards_attributes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_attributes IS 'Attributes (inds/quals/quants) available in dashboards';
+
+
+--
+-- Name: COLUMN dashboards_attributes."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_attributes."position" IS 'Display order in scope of group';
+
+
+--
+-- Name: COLUMN dashboards_attributes.chart_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_attributes.chart_type IS 'Type of chart to use in dashboards';
 
 
 --
@@ -1397,6 +2191,13 @@ CREATE TABLE public.dashboards_inds (
 
 
 --
+-- Name: TABLE dashboards_inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_inds IS 'Inds available in dashboards (see dashboards_attributes.)';
+
+
+--
 -- Name: dashboards_quals; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1410,6 +2211,13 @@ CREATE TABLE public.dashboards_quals (
 
 
 --
+-- Name: TABLE dashboards_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_quals IS 'Quals available in dashboards (see dashboards_attributes.)';
+
+
+--
 -- Name: dashboards_quants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1420,6 +2228,13 @@ CREATE TABLE public.dashboards_quants (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE dashboards_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_quants IS 'Quants available in dashboards (see dashboards_attributes.)';
 
 
 --
@@ -1463,6 +2278,20 @@ UNION ALL
 
 
 --
+-- Name: MATERIALIZED VIEW dashboards_attributes_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.dashboards_attributes_mv IS 'Materialized view which merges dashboards_inds, dashboards_quals and dashboards_quants with dashboards_attributes.';
+
+
+--
+-- Name: COLUMN dashboards_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+
+
+--
 -- Name: flows; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1471,8 +2300,30 @@ CREATE TABLE public.flows (
     context_id integer NOT NULL,
     year smallint NOT NULL,
     path integer[] DEFAULT '{}'::integer[],
-    created_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    CONSTRAINT flows_path_length_check CHECK ((public.icount(path) > 3))
 );
+
+
+--
+-- Name: TABLE flows; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flows IS 'Flows of commodities through nodes';
+
+
+--
+-- Name: COLUMN flows.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flows.year IS 'Year';
+
+
+--
+-- Name: COLUMN flows.path; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flows.path IS 'Array of node ids which constitute the supply chain, where position of node in this array is linked to the value of column_position in context_node_types';
 
 
 --
@@ -1488,6 +2339,41 @@ CREATE TABLE public.nodes (
     created_at timestamp without time zone NOT NULL,
     main_id integer
 );
+
+
+--
+-- Name: TABLE nodes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.nodes IS 'Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains';
+
+
+--
+-- Name: COLUMN nodes.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.name IS 'Name of node';
+
+
+--
+-- Name: COLUMN nodes.geo_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.geo_id IS '2-letter iso code in case of country nodes; other geo identifiers possible for other node types';
+
+
+--
+-- Name: COLUMN nodes.is_unknown; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.is_unknown IS 'When set, node was not possible to identify';
+
+
+--
+-- Name: COLUMN nodes.main_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.main_id IS 'Node identifier from Main DB';
 
 
 --
@@ -1612,6 +2498,20 @@ CREATE TABLE public.flow_inds (
 
 
 --
+-- Name: TABLE flow_inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flow_inds IS 'Values of inds for flow';
+
+
+--
+-- Name: COLUMN flow_inds.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_inds.value IS 'Numeric value';
+
+
+--
 -- Name: flow_quals; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1625,6 +2525,20 @@ CREATE TABLE public.flow_quals (
 
 
 --
+-- Name: TABLE flow_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flow_quals IS 'Values of quals for flow';
+
+
+--
+-- Name: COLUMN flow_quals.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_quals.value IS 'Textual value';
+
+
+--
 -- Name: flow_quants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1635,6 +2549,20 @@ CREATE TABLE public.flow_quants (
     value double precision NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE flow_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flow_quants IS 'Values of quants for flow';
+
+
+--
+-- Name: COLUMN flow_quants.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_quants.value IS 'Numeric value';
 
 
 --
@@ -1696,6 +2624,69 @@ UNION ALL
 
 
 --
+-- Name: MATERIALIZED VIEW dashboards_flow_attributes_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.dashboards_flow_attributes_mv IS 'Materialized view which merges dashboards_attributes_mv and attributes_mv for attributes with values in flow_inds/quals/quants';
+
+
+--
+-- Name: COLUMN dashboards_flow_attributes_mv.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_flow_attributes_mv.country_id IS 'References country id (via flows -> contexts) - for dashboards filtering';
+
+
+--
+-- Name: COLUMN dashboards_flow_attributes_mv.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_flow_attributes_mv.commodity_id IS 'References commodity id (via flows -> contexts) - for dashboards filtering';
+
+
+--
+-- Name: COLUMN dashboards_flow_attributes_mv.path; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_flow_attributes_mv.path IS 'Flow path';
+
+
+--
+-- Name: COLUMN dashboards_flow_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_flow_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+
+
+--
+-- Name: COLUMN dashboards_flow_attributes_mv.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_flow_attributes_mv.display_name IS 'Attribute display name';
+
+
+--
+-- Name: COLUMN dashboards_flow_attributes_mv.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_flow_attributes_mv.tooltip_text IS 'Attribute tooltip_text';
+
+
+--
+-- Name: COLUMN dashboards_flow_attributes_mv.dashboards_attribute_group_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_flow_attributes_mv.dashboards_attribute_group_id IS 'References group in dashboards_attribute_groups';
+
+
+--
+-- Name: COLUMN dashboards_flow_attributes_mv."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_flow_attributes_mv."position" IS 'Position within group';
+
+
+--
 -- Name: dashboards_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -1729,6 +2720,27 @@ CREATE TABLE public.node_inds (
 
 
 --
+-- Name: TABLE node_inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_inds IS 'Values of inds for node';
+
+
+--
+-- Name: COLUMN node_inds.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_inds.year IS 'Year; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN node_inds.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_inds.value IS 'Numeric value';
+
+
+--
 -- Name: node_quals; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1743,6 +2755,27 @@ CREATE TABLE public.node_quals (
 
 
 --
+-- Name: TABLE node_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_quals IS 'Values of quals for node';
+
+
+--
+-- Name: COLUMN node_quals.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quals.year IS 'Year; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN node_quals.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quals.value IS 'Textual value';
+
+
+--
 -- Name: node_quants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1754,6 +2787,27 @@ CREATE TABLE public.node_quants (
     value double precision NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE node_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_quants IS 'Values of quants for node';
+
+
+--
+-- Name: COLUMN node_quants.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quants.year IS 'Year; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN node_quants.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quants.value IS 'Numeric value';
 
 
 --
@@ -1882,6 +2936,41 @@ CREATE TABLE public.database_updates (
 
 
 --
+-- Name: TABLE database_updates; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.database_updates IS 'Keeping track of database update operations, also used to ensure only one update processed at a time';
+
+
+--
+-- Name: COLUMN database_updates.stats; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.database_updates.stats IS 'JSON structure with information on row counts for all tables before / after update';
+
+
+--
+-- Name: COLUMN database_updates.jid; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.database_updates.jid IS 'Job ID, filled in when update started using a background job processor';
+
+
+--
+-- Name: COLUMN database_updates.status; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.database_updates.status IS 'STARTED (only one at a time), FINISHED or FAILED';
+
+
+--
+-- Name: COLUMN database_updates.error; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.database_updates.error IS 'Exception message for failed updates';
+
+
+--
 -- Name: database_updates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -1912,6 +3001,34 @@ CREATE TABLE public.database_validation_reports (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE database_validation_reports; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.database_validation_reports IS 'Keeping track of database validation operations';
+
+
+--
+-- Name: COLUMN database_validation_reports.report; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.database_validation_reports.report IS 'JSON structure with validation report';
+
+
+--
+-- Name: COLUMN database_validation_reports.error_count; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.database_validation_reports.error_count IS 'Count of errors detected';
+
+
+--
+-- Name: COLUMN database_validation_reports.warning_count; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.database_validation_reports.warning_count IS 'Count of warnings detected';
 
 
 --
@@ -1949,6 +3066,34 @@ CREATE TABLE public.download_attributes (
 
 
 --
+-- Name: TABLE download_attributes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.download_attributes IS 'Attributes (quals/quants) available for download.';
+
+
+--
+-- Name: COLUMN download_attributes."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_attributes."position" IS 'Display order in scope of context';
+
+
+--
+-- Name: COLUMN download_attributes.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_attributes.display_name IS 'Name of attribute for display in downloads';
+
+
+--
+-- Name: COLUMN download_attributes.years; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_attributes.years IS 'Years for which attribute is present; empty (NULL) for all years';
+
+
+--
 -- Name: download_attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -1982,6 +3127,20 @@ CREATE TABLE public.download_quals (
 
 
 --
+-- Name: TABLE download_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.download_quals IS 'Quals to include in downloads (see download_attributes.)';
+
+
+--
+-- Name: COLUMN download_quals.is_filter_enabled; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_quals.is_filter_enabled IS 'When set, enable selection of discreet values (advanced filter)';
+
+
+--
 -- Name: download_quants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1994,6 +3153,27 @@ CREATE TABLE public.download_quants (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE download_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.download_quants IS 'Quants to include in downloads (see download_attributes.)';
+
+
+--
+-- Name: COLUMN download_quants.is_filter_enabled; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_quants.is_filter_enabled IS 'When set, enable selection of value ranges (advanced filter)';
+
+
+--
+-- Name: COLUMN download_quants.filter_bands; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_quants.filter_bands IS 'Array of value ranges to allow filtering by';
 
 
 --
@@ -2028,6 +3208,20 @@ UNION ALL
 
 
 --
+-- Name: MATERIALIZED VIEW download_attributes_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.download_attributes_mv IS 'Materialized view which merges download_quals and download_quants with download_attributes.';
+
+
+--
+-- Name: COLUMN download_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+
+
+--
 -- Name: flow_paths_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -2058,6 +3252,13 @@ CREATE MATERIALIZED VIEW public.flow_paths_mv AS
              JOIN public.node_types ON ((node_types.id = cnt.node_type_id)))) cn ON (((f."position" = (cn.column_position + 1)) AND (f.context_id = cn.context_id))))
      JOIN public.nodes n ON ((n.id = f.node_id)))
   WITH NO DATA;
+
+
+--
+-- Name: MATERIALIZED VIEW flow_paths_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.flow_paths_mv IS 'Normalised flows';
 
 
 --
@@ -2163,6 +3364,13 @@ CREATE MATERIALIZED VIEW public.download_flows_mv AS
 
 
 --
+-- Name: MATERIALIZED VIEW download_flows_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.download_flows_mv IS 'Combines data from flow_paths_mv and download_attributes_values_mv in a structure that can be directly used to generate data downloads.';
+
+
+--
 -- Name: download_quals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -2211,6 +3419,27 @@ CREATE TABLE public.download_versions (
     is_current boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE download_versions; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.download_versions IS 'Versions of data downloads';
+
+
+--
+-- Name: COLUMN download_versions.symbol; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_versions.symbol IS 'Version symbol (included in downloaded file name)';
+
+
+--
+-- Name: COLUMN download_versions.is_current; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_versions.is_current IS 'When set, use this version symbol for new downloads (only use for one)';
 
 
 --
@@ -2361,6 +3590,27 @@ CREATE TABLE public.map_attribute_groups (
 
 
 --
+-- Name: TABLE map_attribute_groups; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.map_attribute_groups IS 'Groups attributes (inds/quals/quants) to display on map';
+
+
+--
+-- Name: COLUMN map_attribute_groups.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attribute_groups.name IS 'Name for display';
+
+
+--
+-- Name: COLUMN map_attribute_groups."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attribute_groups."position" IS 'Display order in scope of context';
+
+
+--
 -- Name: map_attribute_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -2399,6 +3649,62 @@ CREATE TABLE public.map_attributes (
 
 
 --
+-- Name: TABLE map_attributes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.map_attributes IS 'Attributes (inds/quants) to display on map';
+
+
+--
+-- Name: COLUMN map_attributes."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes."position" IS 'Display order in scope of group';
+
+
+--
+-- Name: COLUMN map_attributes.dual_layer_buckets; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes.dual_layer_buckets IS 'Choropleth buckets for dual dimension choropleth';
+
+
+--
+-- Name: COLUMN map_attributes.single_layer_buckets; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes.single_layer_buckets IS 'Choropleth buckets for single dimension choropleth';
+
+
+--
+-- Name: COLUMN map_attributes.color_scale; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes.color_scale IS 'Choropleth colour scale, e.g. blue';
+
+
+--
+-- Name: COLUMN map_attributes.years; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes.years IS 'Years for which attribute is present; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN map_attributes.is_disabled; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes.is_disabled IS 'When set, this attribute is not displayed';
+
+
+--
+-- Name: COLUMN map_attributes.is_default; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes.is_default IS 'When set, show this attribute by default. A maximum of 2 attributes per context may be set as default.';
+
+
+--
 -- Name: map_attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -2431,6 +3737,13 @@ CREATE TABLE public.map_inds (
 
 
 --
+-- Name: TABLE map_inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.map_inds IS 'Inds to display on map (see map_attributes.)';
+
+
+--
 -- Name: map_quants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2441,6 +3754,13 @@ CREATE TABLE public.map_quants (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE map_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.map_quants IS 'Quants to display on map (see map_attributes.)';
 
 
 --
@@ -2496,6 +3816,69 @@ UNION ALL
      JOIN public.map_attribute_groups mag ON ((mag.id = ma.map_attribute_group_id)))
      JOIN public.attributes_mv a ON (((a.original_id = mai.ind_id) AND (a.original_type = 'Ind'::text))))
   WITH NO DATA;
+
+
+--
+-- Name: MATERIALIZED VIEW map_attributes_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.map_attributes_mv IS 'Materialized view which merges map_inds and map_quants with map_attributes.';
+
+
+--
+-- Name: COLUMN map_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+
+
+--
+-- Name: COLUMN map_attributes_mv.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_mv.name IS 'Display name of the ind/quant';
+
+
+--
+-- Name: COLUMN map_attributes_mv.attribute_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_mv.attribute_type IS 'Type of the attribute (ind/quant)';
+
+
+--
+-- Name: COLUMN map_attributes_mv.unit; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_mv.unit IS 'Name of the attribute''s unit';
+
+
+--
+-- Name: COLUMN map_attributes_mv.description; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_mv.description IS 'Attribute''s description';
+
+
+--
+-- Name: COLUMN map_attributes_mv.aggregate_method; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_mv.aggregate_method IS 'The method used to aggregate the data';
+
+
+--
+-- Name: COLUMN map_attributes_mv.original_attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_mv.original_attribute_id IS 'The attribute''s original id';
+
+
+--
+-- Name: COLUMN map_attributes_mv.context_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_mv.context_id IS 'References the context';
 
 
 --
@@ -2566,6 +3949,13 @@ CREATE TABLE public.node_properties (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: COLUMN node_properties.is_domestic_consumption; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_properties.is_domestic_consumption IS 'When set, assume domestic trade';
 
 
 --
@@ -2673,8 +4063,72 @@ CREATE TABLE public.profiles (
     name text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
+    main_topojson_path character varying,
+    main_topojson_root character varying,
+    adm_1_name character varying,
+    adm_1_topojson_path character varying,
+    adm_1_topojson_root character varying,
+    adm_2_name character varying,
+    adm_2_topojson_path character varying,
+    adm_2_topojson_root character varying,
     CONSTRAINT profiles_name_check CHECK ((name = ANY (ARRAY['actor'::text, 'place'::text])))
 );
+
+
+--
+-- Name: TABLE profiles; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.profiles IS 'Context-specific profiles';
+
+
+--
+-- Name: COLUMN profiles.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.name IS 'Profile name, either actor or place. One of restricted set of values.';
+
+
+--
+-- Name: COLUMN profiles.main_topojson_path; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.main_topojson_path IS 'Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /';
+
+
+--
+-- Name: COLUMN profiles.main_topojson_root; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.main_topojson_root IS 'Path within the TopoJSON file where geometries are contained';
+
+
+--
+-- Name: COLUMN profiles.adm_1_topojson_path; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.adm_1_topojson_path IS 'Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /';
+
+
+--
+-- Name: COLUMN profiles.adm_1_topojson_root; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.adm_1_topojson_root IS 'Path within the TopoJSON file where geometries are contained';
+
+
+--
+-- Name: COLUMN profiles.adm_2_topojson_path; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.adm_2_topojson_path IS 'Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /';
+
+
+--
+-- Name: COLUMN profiles.adm_2_topojson_root; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.adm_2_topojson_root IS 'Path within the TopoJSON file where geometries are contained';
 
 
 --
@@ -2822,6 +4276,97 @@ CREATE TABLE public.recolor_by_attributes (
 
 
 --
+-- Name: TABLE recolor_by_attributes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.recolor_by_attributes IS 'Attributes (inds/quals) available for recoloring.';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.group_number; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.group_number IS 'Attributes are displayed grouped by their group number, with a separator between groups';
+
+
+--
+-- Name: COLUMN recolor_by_attributes."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes."position" IS 'Display order in scope of context and group number';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.legend_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.legend_type IS 'Type of legend, e.g. linear';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.legend_color_theme; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.legend_color_theme IS 'Color theme of legend, e.g. red-blue';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.interval_count; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.interval_count IS 'For legends with min / max value, number of intervals of the legend';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.min_value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.min_value IS 'Min value for the legend';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.max_value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.max_value IS 'Max value for the legend';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.divisor; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.divisor IS 'Step between intervals for percentual legends';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.years; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.years IS 'Array of years for which to show this attribute in scope of chart; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.is_disabled; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.is_disabled IS 'When set, this attribute is not displayed';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.is_default; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.is_default IS 'When set, show this attribute by default';
+
+
+--
 -- Name: recolor_by_attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -2854,6 +4399,13 @@ CREATE TABLE public.recolor_by_inds (
 
 
 --
+-- Name: TABLE recolor_by_inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.recolor_by_inds IS 'Inds available for recoloring (see recolor_by_attributes.)';
+
+
+--
 -- Name: recolor_by_quals; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2864,6 +4416,13 @@ CREATE TABLE public.recolor_by_quals (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE recolor_by_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.recolor_by_quals IS 'Quals available for recoloring (see recolor_by_attributes.)';
 
 
 --
@@ -2913,6 +4472,20 @@ UNION ALL
      JOIN public.recolor_by_attributes ra ON ((ra.id = raq.recolor_by_attribute_id)))
      JOIN public.attributes_mv a ON (((a.original_id = raq.qual_id) AND (a.original_type = 'Qual'::text))))
   WITH NO DATA;
+
+
+--
+-- Name: MATERIALIZED VIEW recolor_by_attributes_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.recolor_by_attributes_mv IS 'Materialized view which merges recolor_by_inds and recolor_by_quals with recolor_by_attributes.';
+
+
+--
+-- Name: COLUMN recolor_by_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
 
 
 --
@@ -2972,6 +4545,55 @@ CREATE TABLE public.resize_by_attributes (
 
 
 --
+-- Name: TABLE resize_by_attributes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.resize_by_attributes IS 'Attributes (quants) available for resizing.';
+
+
+--
+-- Name: COLUMN resize_by_attributes.group_number; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.resize_by_attributes.group_number IS 'Group number';
+
+
+--
+-- Name: COLUMN resize_by_attributes."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.resize_by_attributes."position" IS 'Display order in scope of context and group number';
+
+
+--
+-- Name: COLUMN resize_by_attributes.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.resize_by_attributes.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN resize_by_attributes.years; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.resize_by_attributes.years IS 'Array of years for which to show this attribute in scope of chart; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN resize_by_attributes.is_disabled; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.resize_by_attributes.is_disabled IS 'When set, this attribute is not displayed';
+
+
+--
+-- Name: COLUMN resize_by_attributes.is_default; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.resize_by_attributes.is_default IS 'When set, show this attribute by default';
+
+
+--
 -- Name: resize_by_attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -3004,6 +4626,13 @@ CREATE TABLE public.resize_by_quants (
 
 
 --
+-- Name: TABLE resize_by_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.resize_by_quants IS 'Quants available for recoloring (see resize_by_attributes.)';
+
+
+--
 -- Name: resize_by_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -3023,6 +4652,20 @@ CREATE MATERIALIZED VIEW public.resize_by_attributes_mv AS
      JOIN public.resize_by_attributes ra ON ((ra.id = raq.resize_by_attribute_id)))
      JOIN public.attributes_mv a ON (((a.original_id = raq.quant_id) AND (a.original_type = 'Quant'::text))))
   WITH NO DATA;
+
+
+--
+-- Name: MATERIALIZED VIEW resize_by_attributes_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.resize_by_attributes_mv IS 'Materialized view which merges resize_by_quants with resize_by_attributes.';
+
+
+--
+-- Name: COLUMN resize_by_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.resize_by_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
 
 
 --
@@ -3128,6 +4771,13 @@ ALTER TABLE ONLY public.chart_attributes ALTER COLUMN id SET DEFAULT nextval('pu
 --
 
 ALTER TABLE ONLY public.chart_inds ALTER COLUMN id SET DEFAULT nextval('public.chart_inds_id_seq'::regclass);
+
+
+--
+-- Name: chart_node_types id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chart_node_types ALTER COLUMN id SET DEFAULT nextval('public.chart_node_types_id_seq'::regclass);
 
 
 --
@@ -3597,11 +5247,11 @@ ALTER TABLE ONLY public.carto_layers
 
 
 --
--- Name: chart_attributes chart_attributes_chart_id_position_key; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: chart_attributes chart_attributes_chart_id_identifier_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.chart_attributes
-    ADD CONSTRAINT chart_attributes_chart_id_position_key UNIQUE (chart_id, "position");
+    ADD CONSTRAINT chart_attributes_chart_id_identifier_key UNIQUE (chart_id, identifier);
 
 
 --
@@ -3626,6 +5276,22 @@ ALTER TABLE ONLY public.chart_inds
 
 ALTER TABLE ONLY public.chart_inds
     ADD CONSTRAINT chart_inds_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chart_node_types chart_node_types_chart_id_identifier_position_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chart_node_types
+    ADD CONSTRAINT chart_node_types_chart_id_identifier_position_key UNIQUE (chart_id, identifier, "position");
+
+
+--
+-- Name: chart_node_types chart_node_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chart_node_types
+    ADD CONSTRAINT chart_node_types_pkey PRIMARY KEY (id);
 
 
 --
@@ -3666,6 +5332,14 @@ ALTER TABLE ONLY public.chart_quants
 
 ALTER TABLE ONLY public.charts
     ADD CONSTRAINT charts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: charts charts_profile_id_parent_id_identifier_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.charts
+    ADD CONSTRAINT charts_profile_id_parent_id_identifier_key UNIQUE (profile_id, parent_id, identifier);
 
 
 --
@@ -4476,6 +6150,27 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON content.users USING b
 --
 
 CREATE UNIQUE INDEX attributes_mv_name_idx ON public.attributes_mv USING btree (name);
+
+
+--
+-- Name: chart_attributes_chart_id_position_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX chart_attributes_chart_id_position_key ON public.chart_attributes USING btree (chart_id, "position") WHERE (identifier IS NULL);
+
+
+--
+-- Name: chart_attributes_mv_chart_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX chart_attributes_mv_chart_id_idx ON public.chart_attributes_mv USING btree (chart_id);
+
+
+--
+-- Name: chart_attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX chart_attributes_mv_id_idx ON public.chart_attributes_mv USING btree (id);
 
 
 --
@@ -5822,6 +7517,14 @@ ALTER TABLE ONLY public.contexts
 
 
 --
+-- Name: chart_node_types fk_rails_dbd8214c7b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chart_node_types
+    ADD CONSTRAINT fk_rails_dbd8214c7b FOREIGN KEY (chart_id) REFERENCES public.charts(id) ON DELETE CASCADE;
+
+
+--
 -- Name: node_quants fk_rails_dd544b3e59; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5867,6 +7570,14 @@ ALTER TABLE ONLY public.download_quals
 
 ALTER TABLE ONLY public.contexts
     ADD CONSTRAINT fk_rails_eea78f436e FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: chart_node_types fk_rails_f043b3c463; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chart_node_types
+    ADD CONSTRAINT fk_rails_f043b3c463 FOREIGN KEY (node_type_id) REFERENCES public.node_types(id) ON DELETE CASCADE;
 
 
 --
@@ -6000,6 +7711,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180416125150'),
 ('20180522102950'),
 ('20180522135640'),
+('20180808114630'),
+('20180817125528'),
+('20180817130807'),
+('20180822093443'),
 ('20180827134927'),
 ('20180917124246'),
 ('20180921103012'),
@@ -6033,6 +7748,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181119105000'),
 ('20181119105010'),
 ('20181119105022'),
-('20190111121850');
+('20181207143449'),
+('20181210215622'),
+('20190110094614'),
+('20190110140539'),
+('20190111121850'),
+('20190215113824');
 
 

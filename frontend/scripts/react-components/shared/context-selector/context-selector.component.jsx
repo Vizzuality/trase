@@ -5,35 +5,31 @@ import cx from 'classnames';
 import groupBy from 'lodash/groupBy';
 
 import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
-import Tooltip from 'react-components/shared/help-tooltip.component';
-import 'styles/components/shared/context-selector.scss';
+import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 
-const id = 'country-commodity';
+import 'scripts/react-components/shared/context-selector/context-selector.scss';
+import 'styles/components/shared/dropdown.scss';
 
 class ContextSelector extends Component {
-  constructor(props) {
-    super(props);
+  static id = 'country-commodity';
 
-    this.state = {
-      newlySelectedCountryId: null,
-      newlySelectedCommodityId: null,
-      isSubnationalTabSelected: true,
-      featuredContext: null
-    };
-
-    this.resetSelection = this.resetSelection.bind(this);
-    this.closeFeaturedHeader = this.closeFeaturedHeader.bind(this);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const isOpening = nextProps.currentDropdown === id && this.props.currentDropdown !== id;
-
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const isOpening =
+      nextProps.currentDropdown === ContextSelector.id && prevState.featuredContext !== null;
     if (isOpening) {
-      this.setState({
+      return {
         featuredContext: this.getFeaturedContext(nextProps)
-      });
+      };
     }
+    return null;
   }
+
+  state = {
+    newlySelectedCountryId: null,
+    newlySelectedCommodityId: null,
+    isSubnationalTabSelected: true,
+    featuredContext: null
+  };
 
   getCountriesAndCommodities() {
     const {
@@ -41,13 +37,15 @@ class ContextSelector extends Component {
       newlySelectedCommodityId,
       isSubnationalTabSelected
     } = this.state;
-    const contexts = this.props.contexts.filter(c => c.isSubnational === isSubnationalTabSelected);
-    const countries = Object.values(groupBy(contexts, 'countryId')).map(grouped => ({
+    const selectedContexts = this.props.contexts.filter(
+      c => c.isSubnational === isSubnationalTabSelected
+    );
+    const countries = Object.values(groupBy(selectedContexts, 'countryId')).map(grouped => ({
       id: grouped[0].countryId,
       name: grouped[0].countryName,
       commodityIds: grouped.map(c => c.commodityId)
     }));
-    const commodities = Object.values(groupBy(contexts, 'commodityId')).map(grouped => ({
+    const commodities = Object.values(groupBy(selectedContexts, 'commodityId')).map(grouped => ({
       id: grouped[0].commodityId,
       name: grouped[0].commodityName,
       countryIds: grouped.map(c => c.countryId)
@@ -58,6 +56,8 @@ class ContextSelector extends Component {
     return {
       newlySelectedCountry,
       newlySelectedCommodity,
+      showSubnational: this.props.contexts.some(c => c.isSubnational),
+      showNational: this.props.contexts.some(c => !c.isSubnational),
       countries: countries.map(c => ({
         ...c,
         isSelected: c.id === newlySelectedCountryId,
@@ -81,17 +81,15 @@ class ContextSelector extends Component {
     return pickRandomOne(contexts.filter(c => c.isHighlighted));
   }
 
-  closeFeaturedHeader() {
-    this.setState({ featuredContext: null });
-  }
+  closeFeaturedHeader = () => this.setState({ featuredContext: null });
 
-  resetSelection(e) {
+  resetSelection = e => {
     if (e) e.stopPropagation();
     this.setState({
       newlySelectedCountryId: null,
       newlySelectedCommodityId: null
     });
-  }
+  };
 
   selectElement(e, element, type) {
     if (e) e.stopPropagation();
@@ -158,20 +156,25 @@ class ContextSelector extends Component {
     );
   }
 
-  renderContextList(countries, commodities) {
+  renderContextList({ countries, commodities, showNational, showSubnational }) {
     const { isSubnationalTabSelected } = this.state;
-
     return (
       <div className="context-list-container">
         <ul className="context-list-tabs">
           <li
-            className={cx('tab', { '-selected': isSubnationalTabSelected })}
+            className={cx('tab', {
+              '-selected': isSubnationalTabSelected,
+              'is-hidden': !showSubnational
+            })}
             onClick={() => this.setState({ isSubnationalTabSelected: true })}
           >
             Subnational Data
           </li>
           <li
-            className={cx('tab', { '-selected': !isSubnationalTabSelected })}
+            className={cx('tab', {
+              '-selected': !isSubnationalTabSelected,
+              'is-hidden': !showNational
+            })}
             onClick={() => this.setState({ isSubnationalTabSelected: false })}
           >
             National Data
@@ -203,20 +206,15 @@ class ContextSelector extends Component {
       toggleContextSelectorVisibility,
       tooltipText,
       currentDropdown,
-      contextIsUserSelected,
-      isExplore,
-      selectedContextCountry,
-      selectedContextCommodity,
+      contextLabel,
+      isContextSelected,
       defaultContextLabel
     } = this.props;
-    const isContextSelected =
-      (!isExplore || contextIsUserSelected) && selectedContextCountry && selectedContextCommodity;
-    const contextLabel = isContextSelected
-      ? `${selectedContextCountry.toLowerCase()} - ${selectedContextCommodity.toLowerCase()}`
-      : defaultContextLabel;
     const {
       countries,
       commodities,
+      showNational,
+      showSubnational,
       newlySelectedCountry,
       newlySelectedCommodity
     } = this.getCountriesAndCommodities();
@@ -224,7 +222,7 @@ class ContextSelector extends Component {
     return (
       <div
         className={cx('c-context-selector', 'js-dropdown', className)}
-        onClick={() => toggleContextSelectorVisibility(id)}
+        onClick={() => toggleContextSelectorVisibility(ContextSelector.id)}
       >
         <div className={cx('c-dropdown', '-capitalize', dropdownClassName)}>
           {isContextSelected && (
@@ -233,15 +231,17 @@ class ContextSelector extends Component {
               {tooltipText && <Tooltip constraint="window" text={tooltipText} />}
             </span>
           )}
-          <span className="dropdown-title">{contextLabel}</span>
+          <span className={cx('dropdown-title', { '-label': !contextLabel })}>
+            {contextLabel || defaultContextLabel}
+          </span>
           <FiltersDropdown
-            id={id}
+            id={ContextSelector.id}
             currentDropdown={currentDropdown}
             onClickOutside={toggleContextSelectorVisibility}
           >
             <div className="context-selector-content" onClick={this.resetSelection}>
               {this.renderFeaturedContext()}
-              {this.renderContextList(countries, commodities)}
+              {this.renderContextList({ countries, commodities, showNational, showSubnational })}
               <div className="context-selector-footer">
                 <span className="context-selector-footer-text">
                   {this.renderFooterText(newlySelectedCountry, newlySelectedCommodity)}
@@ -256,18 +256,16 @@ class ContextSelector extends Component {
 }
 
 ContextSelector.propTypes = {
-  className: PropTypes.string,
-  dropdownClassName: PropTypes.string,
-  isExplore: PropTypes.bool,
-  contextIsUserSelected: PropTypes.bool,
-  toggleContextSelectorVisibility: PropTypes.func,
-  selectContextById: PropTypes.func,
-  tooltipText: PropTypes.string,
   contexts: PropTypes.array,
+  className: PropTypes.string,
+  tooltipText: PropTypes.string,
+  contextLabel: PropTypes.string,
+  selectContextById: PropTypes.func,
   currentDropdown: PropTypes.string,
-  selectedContextCountry: PropTypes.string,
-  selectedContextCommodity: PropTypes.string,
-  defaultContextLabel: PropTypes.string
+  dropdownClassName: PropTypes.string,
+  defaultContextLabel: PropTypes.string,
+  isContextSelected: PropTypes.bool.isRequired,
+  toggleContextSelectorVisibility: PropTypes.func
 };
 
 ContextSelector.defaultProps = {

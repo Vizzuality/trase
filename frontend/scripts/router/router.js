@@ -1,8 +1,5 @@
 import { connectRoutes, NOT_FOUND, redirect, replace } from 'redux-first-router';
 import restoreScroll from 'redux-first-router-restore-scroll';
-import MarkdownRenderer from 'react-components/static-content/markdown-renderer/markdown-renderer.container';
-import TeamMember from 'react-components/team/team-member/team-member.container';
-import Team from 'react-components/team/team.container';
 import { parse, stringify } from 'utils/stateURL';
 
 import { BREAKPOINTS } from 'constants';
@@ -16,10 +13,7 @@ import getPageStaticContent from 'react-components/static-content/static-content
 import loadBaseAppData from 'react-components/shared/app.thunks';
 import getTeam from 'react-components/team/team.thunks';
 import { loadDashboardTemplates } from 'react-components/dashboard-root/dashboard-root.thunks';
-import {
-  setContextForExplorePage,
-  redirectToExplore
-} from 'react-components/explore/explore.thunks';
+import { redirectToExplore } from 'react-components/explore/explore.thunks';
 import { loadToolInitialData } from 'scripts/react-components/tool/tool.thunks';
 import getPageTitle from 'scripts/router/page-title';
 
@@ -41,10 +35,14 @@ export const routes = {
     thunk: loadPageData(getPostsContent, getTweetsContent, getTestimonialsContent)
   },
   explore: {
-    path: '/explore/:contextId?',
+    path: '/explore',
     page: 'explore',
     title: getPageTitle,
-    thunk: loadPageData(setContextForExplorePage)
+    thunk: loadPageData(),
+    nav: {
+      className: '-light',
+      links: []
+    }
   },
   tool: {
     path: '/flows',
@@ -98,14 +96,14 @@ export const routes = {
     page: 'static-content',
     title: getPageTitle,
     thunk: loadPageData(getTeam),
-    component: withSidebarNavLayout(Team)
+    layout: withSidebarNavLayout
   },
   teamMember: {
     path: '/about/team/:member',
     page: 'static-content',
     title: getPageTitle,
     thunk: loadPageData(getTeam),
-    component: withSidebarNavLayout(TeamMember),
+    layout: withSidebarNavLayout,
     parent: 'team'
   },
   about: {
@@ -113,7 +111,7 @@ export const routes = {
     page: 'static-content',
     title: getPageTitle,
     thunk: loadPageData(getPageStaticContent),
-    component: withSidebarNavLayout(MarkdownRenderer)
+    layout: withSidebarNavLayout
   },
   notSupportedOnMobile: {
     path: '/not-supported',
@@ -123,6 +121,12 @@ export const routes = {
       className: '-light'
     },
     thunk: loadPageData()
+  },
+  logisticsMap: {
+    path: '/logistics-map',
+    page: 'logistics-map',
+    thunk: loadPageData(),
+    title: getPageTitle
   },
   [NOT_FOUND]: {
     path: '/404',

@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import NotSupportedOnMobile from 'react-components/mobile/not-supported.component';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 
-import 'styles/not-supported.scss';
+import 'styles/layouts/l-not-supported.scss';
 
 export const mount = (root, store) => {
   root.innerHTML = BaseMarkup({

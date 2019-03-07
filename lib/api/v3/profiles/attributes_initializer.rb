@@ -2,32 +2,17 @@ module Api
   module V3
     module Profiles
       module AttributesInitializer
-        def initialize_attributes(attributes_list)
-          @attributes = attributes_list.map do |attribute_hash|
-            attribute_hash.merge(
-              attribute: initialize_attribute_from_hash(
-                attribute_hash
-              )
-            )
-          end
-          @attributes = @attributes.select do |attribute_hash|
-            attribute_hash && attribute_hash[:attribute].present?
-          end
-        end
-
-        def initialize_attribute_from_hash(attribute_hash)
-          dictionary =
-            if attribute_hash[:attribute_type] == 'quant'
-              Dictionary::Quant.instance
-            elsif attribute_hash[:attribute_type] == 'ind'
-              Dictionary::Ind.instance
-            end
-          return nil unless dictionary
-          attribute = dictionary.get(attribute_hash[:attribute_name])
-          if attribute.nil?
-            Rails.logger.debug 'NOT FOUND ' + attribute_hash[:attribute_name]
-          end
-          attribute
+        # @param profile_type [Symbol] either :actor or :place
+        # @param parent_identifier [Symbol] parent chart identifier (or nil)
+        # @param identifier [Symbol] chart identifier
+        def initialize_chart_config(profile_type, parent_identifier, identifier)
+          @chart_config = Api::V3::Profiles::ChartConfiguration.new(
+            @context,
+            @node,
+            profile_type: profile_type,
+            parent_identifier: parent_identifier,
+            identifier: identifier
+          )
         end
       end
     end

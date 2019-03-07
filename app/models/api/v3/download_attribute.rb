@@ -55,6 +55,11 @@ module Api
         Api::V3::Readonly::DownloadAttribute.refresh
         Api::V3::Readonly::DownloadFlow.refresh(skip_dependencies: true)
       end
+
+      private_class_method def self.active_ids
+        Api::V3::DownloadQual.distinct.pluck(:download_attribute_id) +
+          Api::V3::DownloadQuant.distinct.pluck(:download_attribute_id)
+      end
     end
   end
 end

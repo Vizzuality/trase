@@ -12,8 +12,11 @@ class MaterializedViewRefreshWorker
   end
 
   # @param mview_class_name [String] e.g. Api::V3::Readonly::DownloadFlow
+  # @param options
+  # @option options [Boolean] :skip_dependencies skip refreshing
+  # @option options [Boolean] :skip_dependents skip refreshing
   def perform(mview_class_name, options)
     mview_class = mview_class_name.constantize
-    mview_class.refresh_now(options)
+    mview_class.refresh_now(options.symbolize_keys)
   end
 end

@@ -10,8 +10,6 @@ export const GET_NODE_ATTRIBUTES_URL = 'GET_NODE_ATTRIBUTES_URL';
 export const GET_FLOWS_URL = 'GET_FLOWS_URL';
 export const GET_MAP_BASE_DATA_URL = 'GET_MAP_BASE_DATA_URL';
 export const GET_LINKED_GEO_IDS_URL = 'GET_LINKED_GEO_IDS_URL';
-export const GET_PLACE_FACTSHEET_URL = 'GET_PLACE_FACTSHEET_URL';
-export const GET_ACTOR_FACTSHEET_URL = 'GET_ACTOR_FACTSHEET_URL';
 export const GET_INDICATORS_URL = 'GET_INDICATORS_URL';
 export const GET_JSON_DATA_DOWNLOAD_FILE_URL = 'GET_JSON_DATA_DOWNLOAD_FILE_URL';
 export const GET_CSV_DATA_DOWNLOAD_FILE_URL = 'GET_CSV_DATA_DOWNLOAD_FILE_URL';
@@ -25,6 +23,7 @@ export const GET_MARKDOWN_CONTENT_URL = 'GET_MARKDOWN_CONTENT_URL';
 export const GET_TEAM_URL = 'GET_TEAM_URL';
 export const GET_TOP_NODES_URL = 'GET_TOP_NODES_URL';
 export const GET_NODE_SUMMARY_URL = 'GET_NODE_SUMMARY_URL';
+export const GET_PROFILE_METADATA = 'GET_PROFILE_METADATA';
 export const GET_PLACE_INDICATORS = 'GET_PLACE_INDICATORS';
 export const GET_ACTOR_TOP_COUNTRIES = 'GET_ACTOR_TOP_COUNTRIES';
 export const GET_ACTOR_TOP_SOURCES = 'GET_ACTOR_TOP_SOURCES';
@@ -47,16 +46,6 @@ const API_ENDPOINTS = {
   [GET_NODE_ATTRIBUTES_URL]: { api: 3, endpoint: '/contexts/$context_id$/nodes/attributes' },
   [GET_MAP_BASE_DATA_URL]: { api: 3, endpoint: '/contexts/$context_id$/map_layers' },
   [GET_INDICATORS_URL]: { api: 3, endpoint: '/contexts/$context_id$/download_attributes' },
-  [GET_PLACE_FACTSHEET_URL]: {
-    api: 3,
-    endpoint: '/contexts/$context_id$/nodes/$node_id$/place',
-    mock: 'mocks/v1_get_place_node_attributes.json'
-  },
-  [GET_ACTOR_FACTSHEET_URL]: {
-    api: 3,
-    endpoint: '/contexts/$context_id$/nodes/$node_id$/actor',
-    mock: 'mocks/v1_get_actor_node_attributes.json'
-  },
   [GET_CSV_DATA_DOWNLOAD_FILE_URL]: { api: 3, endpoint: '/contexts/$context_id$/download.csv' },
   [GET_JSON_DATA_DOWNLOAD_FILE_URL]: { api: 3, endpoint: '/contexts/$context_id$/download.json' },
   [GET_LINKED_GEO_IDS_URL]: { api: 3, endpoint: '/contexts/$context_id$/linked_nodes' },
@@ -129,6 +118,10 @@ const API_ENDPOINTS = {
   [GET_DASHBOARD_SEARCH_RESULTS_URL]: {
     api: 3,
     endpoint: '/dashboards/$options_type$/search'
+  },
+  [GET_PROFILE_METADATA]: {
+    api: 3,
+    endpoint: '/contexts/$context_id$/nodes/$node_id$/profile_metadata'
   }
 };
 

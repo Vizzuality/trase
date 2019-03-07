@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SearchInput from 'react-components/shared/search-input/search-input.component';
-import GridList from 'react-components/shared/grid-list.component';
-import GridListItem from 'react-components/shared/grid-list-item.component';
-import Tabs from 'react-components/shared/tabs.component';
+import GridList from 'react-components/shared/grid-list/grid-list.component';
+import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
+import Tabs from 'react-components/shared/tabs/tabs.component';
 
 function SourcesPanel(props) {
   const {
@@ -17,7 +17,6 @@ function SourcesPanel(props) {
     getSearchResults,
     activeCountryItem,
     sources,
-    clearItems,
     countries,
     onSelectCountry,
     onSelectSourceTab,
@@ -26,10 +25,13 @@ function SourcesPanel(props) {
     activeSourceTab,
     activeSourceItem
   } = props;
-  const showJurisdictions = activeCountryItem && tabs.length > 0 && sources.length > 0;
+  const hasActiveCountryItems = Object.keys(activeCountryItem).length > 0;
+  const showJurisdictions = hasActiveCountryItems && tabs.length > 0 && sources.length > 0;
   return (
     <React.Fragment>
       <SearchInput
+        variant="bordered"
+        size="sm"
         className="dashboard-panel-search"
         items={searchSources}
         placeholder="Search place"
@@ -45,16 +47,14 @@ function SourcesPanel(props) {
         rowHeight={50}
         columnCount={5}
         items={countries}
-        loading={!activeCountryItem && loading}
+        loading={!hasActiveCountryItems && loading}
       >
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={
-              (activeCountryItem && activeCountryItem.id) === (itemProps.item && itemProps.item.id)
-            }
+            isActive={!!activeCountryItem[itemProps.item && itemProps.item.id]}
             enableItem={onSelectCountry}
-            disableItem={clearItems}
+            disableItem={() => onSelectCountry({})}
           />
         )}
       </GridList>
@@ -83,12 +83,9 @@ function SourcesPanel(props) {
               {itemProps => (
                 <GridListItem
                   {...itemProps}
-                  isActive={
-                    (activeSourceItem && activeSourceItem.id) ===
-                    (itemProps.item && itemProps.item.id)
-                  }
+                  isActive={!!activeSourceItem[itemProps.item && itemProps.item.id]}
                   enableItem={onSelectSourceValue}
-                  disableItem={() => onSelectSourceValue(null)}
+                  disableItem={onSelectSourceValue}
                 />
               )}
             </GridList>
@@ -100,24 +97,23 @@ function SourcesPanel(props) {
 }
 
 SourcesPanel.propTypes = {
-  loadingMoreItems: PropTypes.bool,
   loading: PropTypes.bool,
-  page: PropTypes.number.isRequired,
-  searchSources: PropTypes.array.isRequired,
   sources: PropTypes.array,
   countries: PropTypes.array,
-  getMoreItems: PropTypes.func.isRequired,
-  activeCountryItem: PropTypes.object,
+  tabs: PropTypes.array.isRequired,
+  nodeTypeRenderer: PropTypes.func,
+  loadingMoreItems: PropTypes.bool,
+  page: PropTypes.number.isRequired,
   activeSourceTab: PropTypes.object,
   activeSourceItem: PropTypes.object,
-  tabs: PropTypes.array.isRequired,
+  activeCountryItem: PropTypes.object,
+  getMoreItems: PropTypes.func.isRequired,
+  searchSources: PropTypes.array.isRequired,
   onSelectCountry: PropTypes.func.isRequired,
-  clearItems: PropTypes.func.isRequired,
   setSearchResult: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
-  onSelectSourceValue: PropTypes.func.isRequired,
   onSelectSourceTab: PropTypes.func.isRequired,
-  nodeTypeRenderer: PropTypes.func.isRequired
+  onSelectSourceValue: PropTypes.func.isRequired
 };
 
 SourcesPanel.defaultProps = {

@@ -11,6 +11,7 @@ import {
 const BASE_URL = 'http://0.0.0.0:8081';
 const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
 
+jest.setTimeout(TIMEOUT);
 const { page } = global;
 
 beforeAll(async () => {
@@ -21,45 +22,33 @@ beforeAll(async () => {
 });
 
 describe('Profile place - Full data', () => {
-  test(
-    'All 5 widget sections attempt to load',
-    async () => {
-      expect.assertions(1);
-      await testProfileSpinners(page, expect);
-    },
-    TIMEOUT
-  );
+  test('All 5 widget sections attempt to load', async () => {
+    expect.assertions(1);
+    await testProfileSpinners(page, expect);
+  });
 
-  test(
-    'Summary widget loads successfully',
-    async () => {
-      expect.assertions(3);
-      await testProfileSummary(page, expect, {
-        titles: ['sorriso', 'soy'],
-        profileType: 'place',
-        titlesLength: 3
-      });
-    },
-    TIMEOUT
-  );
+  test('Summary widget loads successfully', async () => {
+    expect.assertions(3);
+    await testProfileSummary(page, expect, {
+      titles: ['sorriso', 'soy'],
+      profileType: 'place',
+      titlesLength: 3
+    });
+  });
 
-  test(
-    'Sustainability indicators widget loads successfully',
-    async () => {
-      expect.assertions(6);
+  test('Sustainability indicators widget loads successfully', async () => {
+    expect.assertions(6);
 
-      await testProfileMultiTable(page, expect, {
-        tabsLength: 4,
-        rowsLength: 6,
-        columnsLength: 2,
-        firstColumn: 'score',
-        testId: 'sustainability-indicators',
-        firstRow: 'Territorial deforestation7090',
-        title: 'sustainability indicators:'
-      });
-    },
-    TIMEOUT
-  );
+    await testProfileMultiTable(page, expect, {
+      tabsLength: 4,
+      rowsLength: 6,
+      columnsLength: 2,
+      firstColumn: 'score',
+      testId: 'sustainability-indicators',
+      firstRow: 'Territorial deforestation7090',
+      title: 'sustainability indicators'
+    });
+  });
 
   test(
     'Deforestation trajectory widget loads successfully',
@@ -81,29 +70,21 @@ describe('Profile place - Full data', () => {
     TIMEOUT
   );
 
-  test(
-    'Top traders widget loads successfully',
-    async () => {
-      expect.assertions(2);
-      await testProfileMiniSankey(page, expect, {
-        testId: 'top-traders',
-        title: 'top traders of soy in sorriso in 2015',
-        flowsLength: 10
-      });
-    },
-    TIMEOUT
-  );
+  test('Top traders widget loads successfully', async () => {
+    expect.assertions(2);
+    await testProfileMiniSankey(page, expect, {
+      testId: 'top-traders',
+      title: 'top traders of soy in sorriso in 2015',
+      flowsLength: 10
+    });
+  });
 
-  test(
-    'Top importer companies widget loads successfully',
-    async () => {
-      expect.assertions(2);
-      await testProfileMiniSankey(page, expect, {
-        testId: 'top-importers',
-        title: 'top importer countries of sorriso soy in 2015',
-        flowsLength: 10
-      });
-    },
-    TIMEOUT
-  );
+  test('Top importer companies widget loads successfully', async () => {
+    expect.assertions(2);
+    await testProfileMiniSankey(page, expect, {
+      testId: 'top-importers',
+      title: 'top importer countries of sorriso soy in 2015',
+      flowsLength: 10
+    });
+  });
 });
