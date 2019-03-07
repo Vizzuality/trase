@@ -31,6 +31,13 @@ module Api
 
       after_commit :refresh_dependents
 
+      def self.blue_foreign_keys
+        [
+          {name: :qual_id, table_class: Api::V3::Qual},
+          {name: :country_id, table_class: Api::V3::Country}
+        ]
+      end
+
       def refresh_dependents
         Api::V3::Readonly::CountryAttributeProperty.refresh
       end

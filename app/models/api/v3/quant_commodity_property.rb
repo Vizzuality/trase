@@ -31,6 +31,13 @@ module Api
 
       after_commit :refresh_dependents
 
+      def self.blue_foreign_keys
+        [
+          {name: :quant_id, table_class: Api::V3::Quant},
+          {name: :commodity_id, table_class: Api::V3::Commodity}
+        ]
+      end
+
       def refresh_dependents
         Api::V3::Readonly::CommodityAttributeProperty.refresh
       end
