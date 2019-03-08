@@ -4,6 +4,10 @@ module Api
       class TrajectoryDeforestationPlot
         include Api::V3::Profiles::AttributesInitializer
 
+        config_accessor :get_tooltip do
+          Api::V3::Profiles::GetTooltipPerAttribute
+        end
+
         # @param context [Api::V3::Context]
         # @param node [Api::V3::Node]
         # @param year [Integer]
@@ -61,7 +65,10 @@ module Api
               {
                 name: chart_attribute.display_name,
                 legend_name: chart_attribute.legend_name,
-                legend_tooltip: chart_attribute.tooltip_text,
+                legend_tooltip: get_tooltip.call(
+                  ro_chart_attribute: chart_attribute,
+                  context: @context
+                ),
                 type: chart_attribute.display_type,
                 style: chart_attribute.display_style,
                 values: years.map do |year|
