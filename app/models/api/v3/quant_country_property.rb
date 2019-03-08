@@ -28,6 +28,7 @@ module Api
 
       validates :country, presence: true
       validates :quant, presence: true, uniqueness: {scope: :country}
+      validates :tooltip_text, presence: true
 
       after_commit :refresh_dependents
 
