@@ -5,6 +5,7 @@ export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEM = 'DASHBOARD_ELEMENT__SET_ACTIVE
 export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS = 'DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_TAB = 'DASHBOARD_ELEMENT__SET_ACTIVE_TAB';
 export const DASHBOARD_ELEMENT__CLEAR_PANEL = 'DASHBOARD_ELEMENT__CLEAR_PANEL';
+export const DASHBOARD_ELEMENT__CLEAR_PANELS = 'DASHBOARD_ELEMENT__CLEAR_PANELS';
 export const DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR = 'DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR';
 export const DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR =
   'DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR';
@@ -98,6 +99,11 @@ export const setDashboardPanelActiveTab = (activeTab, panel) => ({
 export const clearDashboardPanel = panel => ({
   type: DASHBOARD_ELEMENT__CLEAR_PANEL,
   payload: { panel }
+});
+
+export const clearDashboardPanels = panels => ({
+  type: DASHBOARD_ELEMENT__CLEAR_PANELS,
+  payload: { panels }
 });
 
 export const addActiveIndicator = active => ({

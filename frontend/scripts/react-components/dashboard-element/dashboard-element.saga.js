@@ -1,4 +1,4 @@
-import { take, select, all, fork, takeLatest, cancel } from 'redux-saga/effects';
+import { take, select, all, fork, put, takeLatest, cancel } from 'redux-saga/effects';
 import isEmpty from 'lodash/isEmpty';
 import {
   DASHBOARD_ELEMENT__CLEAR_PANEL,
@@ -11,7 +11,8 @@ import {
   DASHBOARD_ELEMENT__GET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
+  DASHBOARD_ELEMENT__CLEAR_PANELS
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import {
   getDashboardPanelSectionTabs,
@@ -19,6 +20,7 @@ import {
   getMoreDashboardPanelData,
   fetchDashboardPanelSearchResults
 } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
+import { DASHBOARD_STEPS } from 'constants';
 
 /**
  * Should receive the DASHBOARD_ELEMENT__SET_ACTIVE_PANEL action and depending on which panel it is on fetch the necessary data.
@@ -170,6 +172,36 @@ function* fetchDataOnFilterClear() {
 }
 
 /**
+ * Listens to actions that remove or clear panel items and deletes all subsequent selections if the panel is cleared
+ */
+
+export function* onClearPanel() {
+  const { dashboardElement } = yield select();
+  const { activePanelId } = dashboardElement;
+  const activePanelName = activePanelId === 'sources' ? 'countries' : activePanelId;
+  const activeItems = dashboardElement[`${activePanelName}Panel`].activeItems;
+  if (isEmpty(activeItems)) {
+    const panelIndex = DASHBOARD_STEPS[activePanelId.toUpperCase()];
+    const panelsToClear = Object.keys(DASHBOARD_STEPS)
+      .slice(panelIndex)
+      .map(p => p.toLowerCase());
+    yield put({ type: DASHBOARD_ELEMENT__CLEAR_PANELS, payload: { panels: panelsToClear } });
+  }
+}
+
+function* fetchDataOnClearPanel() {
+  yield takeLatest(
+    [
+      DASHBOARD_ELEMENT__CLEAR_PANEL,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
+    ],
+    onClearPanel
+  );
+}
+
+/**
  * Listens to DASHBOARD_ELEMENT__SET_PANEL_PAGE and fetches the data for the next page.
  */
 export function* onPageChange(action) {
@@ -208,6 +240,7 @@ export default function* dashboardElementSaga() {
     fetchDataOnTabChange,
     fetchDataOnItemChange,
     fetchDataOnFilterClear,
+    fetchDataOnClearPanel,
     fetchDataOnPageChange,
     fetchDataOnSearch,
     fetchDataOnStepChange

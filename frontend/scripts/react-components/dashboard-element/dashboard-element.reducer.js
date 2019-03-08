@@ -9,6 +9,7 @@ import {
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
   DASHBOARD_ELEMENT__CLEAR_PANEL,
+  DASHBOARD_ELEMENT__CLEAR_PANELS,
   DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
   DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
@@ -311,6 +312,20 @@ const dashboardElementReducer = {
       ...state,
       [panelName]: { ...initialState[panelName], activeTab },
       countriesPanel: countriesState
+    };
+  },
+  [DASHBOARD_ELEMENT__CLEAR_PANELS](state, action) {
+    const { panels } = action.payload;
+    const removedPanels = {};
+    panels.forEach(panel => {
+      if (panel === 'indicators') return;
+      const panelName = `${panel}Panel`;
+      const { activeTab } = state[panelName];
+      removedPanels[panelName] = { ...initialState[panelName], activeTab };
+    });
+    return {
+      ...state,
+      ...removedPanels
     };
   },
   [DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR](state, action) {
