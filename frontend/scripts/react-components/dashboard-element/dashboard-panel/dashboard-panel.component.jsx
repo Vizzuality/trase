@@ -151,9 +151,8 @@ class DashboardPanel extends Component {
     }
     return (
       <span>
-        {`You'll see all the `}
-        <span className="dashboard-panel-sentence">{getPanelName(step)}</span>
-        {` or you can choose some of them`}
+        {step === DASHBOARD_STEPS.COMPANIES ? '(Optional) ' : ''}
+        Choose one or several <span className="dashboard-panel-sentence">{getPanelName(step)}</span>
       </span>
     );
   }
