@@ -2,6 +2,7 @@ module Api
   module V3
     module Places
       class TrajectoryDeforestationPlot
+        include ActiveSupport::Configurable
         include Api::V3::Profiles::AttributesInitializer
 
         config_accessor :get_tooltip do
