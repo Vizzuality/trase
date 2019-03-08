@@ -168,6 +168,15 @@ class DashboardPanel extends Component {
       step,
       canProceed
     } = this.props;
+
+    const isDisabled = () => {
+      if (dynamicSentenceParts.length === 0) return true;
+      const currentPanel = getPanelName(step);
+      const currentSentencePart = dynamicSentenceParts.find(p => p.panel === currentPanel);
+      if (!currentSentencePart.optional && !currentSentencePart.value) return true;
+      return false;
+    };
+
     return (
       <div className="c-dashboard-panel">
         <div ref={this.containerRef} className="dashboard-panel-content">
@@ -176,19 +185,18 @@ class DashboardPanel extends Component {
           </h2>
           {this.renderPanel()}
         </div>
-        {dynamicSentenceParts.length > 0 && (
-          <DashboardModalFooter
-            isPanelFooter
-            onContinue={onContinue}
-            onBack={onBack}
-            backText="Back"
-            removeSentenceItem={setActiveItems}
-            clearPanel={panelName => clearActiveItems(panelName)}
-            dynamicSentenceParts={dynamicSentenceParts}
-            step={step}
-            canProceed={canProceed}
-          />
-        )}
+        <DashboardModalFooter
+          isPanelFooter
+          onContinue={onContinue}
+          onBack={onBack}
+          backText="Back"
+          removeSentenceItem={setActiveItems}
+          clearPanel={panelName => clearActiveItems(panelName)}
+          dynamicSentenceParts={dynamicSentenceParts}
+          step={step}
+          canProceed={canProceed}
+          isDisabled={isDisabled()}
+        />
       </div>
     );
   }

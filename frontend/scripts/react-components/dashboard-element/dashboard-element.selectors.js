@@ -101,13 +101,15 @@ export const getDynamicSentence = createSelector(
         panel: 'companies',
         id: 'exporting-companies',
         prefix: getActivePanelItem('companies', 'EXPORTER') ? 'exported by' : '',
-        value: getActivePanelItem('companies', 'EXPORTER')
+        value: getActivePanelItem('companies', 'EXPORTER'),
+        optional: true
       },
       {
         panel: 'companies',
         id: 'importing-companies',
         prefix: getActivePanelItem('companies', 'IMPORTER') ? 'imported by' : '',
-        value: getActivePanelItem('companies', 'IMPORTER')
+        value: getActivePanelItem('companies', 'IMPORTER'),
+        optional: true
       },
       {
         panel: 'destinations',
