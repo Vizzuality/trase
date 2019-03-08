@@ -25,6 +25,12 @@ module Api
     class QuantCountryProperty < ApplicationRecord
       belongs_to :country
       belongs_to :quant
+
+      after_commit :refresh_dependents
+
+      def refresh_dependents
+        Api::V3::Readonly::CountryAttributeProperty.refresh
+      end
     end
   end
 end
