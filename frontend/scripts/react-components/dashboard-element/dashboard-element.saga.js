@@ -184,8 +184,13 @@ export function* onClearPanel() {
     const panelIndex = DASHBOARD_STEPS[activePanelId.toUpperCase()];
     const panelsToClear = Object.keys(DASHBOARD_STEPS)
       .slice(panelIndex)
-      .map(p => p.toLowerCase());
-    yield put({ type: DASHBOARD_ELEMENT__CLEAR_PANELS, payload: { panels: panelsToClear } });
+      .map(p => p.toLowerCase())
+      .filter(p => p !== 'indicators');
+
+    yield put({
+      type: DASHBOARD_ELEMENT__CLEAR_PANELS,
+      payload: { panels: panelsToClear }
+    });
   }
 }
 

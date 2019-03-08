@@ -10,6 +10,7 @@ import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
   DASHBOARD_ELEMENT__CLEAR_PANEL,
+  DASHBOARD_ELEMENT__CLEAR_PANELS,
   DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
   DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
@@ -505,6 +506,50 @@ describe(DASHBOARD_ELEMENT__CLEAR_PANEL, () => {
     expect(newState).toEqual({
       ...onlyCountriesState,
       countriesPanel: initialState.countriesPanel
+    });
+  });
+});
+
+describe(DASHBOARD_ELEMENT__CLEAR_PANELS, () => {
+  const state = {
+    ...initialState,
+    countriesPanel: {
+      ...initialState.countriesPanel,
+      activeItems: [{ id: 1, name: 'some item' }],
+      page: 2
+    },
+    commoditiesPanel: {
+      ...initialState.commoditiesPanel,
+      activeItems: [{ id: 4, name: 'some item' }],
+      page: 6
+    },
+    companiesPanel: {
+      ...initialState.companiesPanel,
+      activeItems: [{ id: 4, name: 'some item' }],
+      page: 5
+    }
+  };
+
+  it('clears panels', () => {
+    const action = {
+      type: DASHBOARD_ELEMENT__CLEAR_PANELS,
+      payload: {
+        panels: ['companies', 'commodities']
+      }
+    };
+
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      countriesPanel: state.countriesPanel,
+      companiesPanel: {
+        ...initialState.companiesPanel,
+        activeTab: state.companiesPanel.activeTab
+      },
+      commoditiesPanel: {
+        ...initialState.companiesPanel,
+        activeTab: state.companiesPanel.activeTab
+      }
     });
   });
 });

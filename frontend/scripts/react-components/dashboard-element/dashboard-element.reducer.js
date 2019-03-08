@@ -318,7 +318,6 @@ const dashboardElementReducer = {
     const { panels } = action.payload;
     const removedPanels = {};
     panels.forEach(panel => {
-      if (panel === 'indicators') return;
       const panelName = `${panel}Panel`;
       const { activeTab } = state[panelName];
       removedPanels[panelName] = { ...initialState[panelName], activeTab };
