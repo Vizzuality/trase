@@ -28,6 +28,7 @@ module Api
 
       validates :context, presence: true
       validates :ind, presence: true, uniqueness: {scope: :context}
+      validates :tooltip_text, presence: true
 
       after_commit :refresh_dependents
 

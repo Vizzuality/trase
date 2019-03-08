@@ -1367,9 +1367,9 @@ ALTER SEQUENCE public.commodities_id_seq OWNED BY public.commodities.id;
 
 CREATE TABLE public.ind_commodity_properties (
     id bigint NOT NULL,
-    tooltip_text text,
-    commodity_id bigint,
-    ind_id bigint,
+    tooltip_text text NOT NULL,
+    commodity_id bigint NOT NULL,
+    ind_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1381,9 +1381,9 @@ CREATE TABLE public.ind_commodity_properties (
 
 CREATE TABLE public.qual_commodity_properties (
     id bigint NOT NULL,
-    tooltip_text text,
-    commodity_id bigint,
-    qual_id bigint,
+    tooltip_text text NOT NULL,
+    commodity_id bigint NOT NULL,
+    qual_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1395,9 +1395,9 @@ CREATE TABLE public.qual_commodity_properties (
 
 CREATE TABLE public.quant_commodity_properties (
     id bigint NOT NULL,
-    tooltip_text text,
-    commodity_id bigint,
-    quant_id bigint,
+    tooltip_text text NOT NULL,
+    commodity_id bigint NOT NULL,
+    quant_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1440,9 +1440,9 @@ UNION ALL
 
 CREATE TABLE public.ind_context_properties (
     id bigint NOT NULL,
-    tooltip_text text,
-    context_id bigint,
-    ind_id bigint,
+    tooltip_text text NOT NULL,
+    context_id bigint NOT NULL,
+    ind_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1454,9 +1454,9 @@ CREATE TABLE public.ind_context_properties (
 
 CREATE TABLE public.qual_context_properties (
     id bigint NOT NULL,
-    tooltip_text text,
-    context_id bigint,
-    qual_id bigint,
+    tooltip_text text NOT NULL,
+    context_id bigint NOT NULL,
+    qual_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1468,9 +1468,9 @@ CREATE TABLE public.qual_context_properties (
 
 CREATE TABLE public.quant_context_properties (
     id bigint NOT NULL,
-    tooltip_text text,
-    context_id bigint,
-    quant_id bigint,
+    tooltip_text text NOT NULL,
+    context_id bigint NOT NULL,
+    quant_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1954,9 +1954,9 @@ ALTER SEQUENCE public.countries_id_seq OWNED BY public.countries.id;
 
 CREATE TABLE public.ind_country_properties (
     id bigint NOT NULL,
-    tooltip_text text,
-    country_id bigint,
-    ind_id bigint,
+    tooltip_text text NOT NULL,
+    country_id bigint NOT NULL,
+    ind_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1968,9 +1968,9 @@ CREATE TABLE public.ind_country_properties (
 
 CREATE TABLE public.qual_country_properties (
     id bigint NOT NULL,
-    tooltip_text text,
-    country_id bigint,
-    qual_id bigint,
+    tooltip_text text NOT NULL,
+    country_id bigint NOT NULL,
+    qual_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1982,9 +1982,9 @@ CREATE TABLE public.qual_country_properties (
 
 CREATE TABLE public.quant_country_properties (
     id bigint NOT NULL,
-    tooltip_text text,
-    country_id bigint,
-    quant_id bigint,
+    tooltip_text text NOT NULL,
+    country_id bigint NOT NULL,
+    quant_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );

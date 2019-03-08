@@ -28,6 +28,7 @@ module Api
 
       validates :commodity, presence: true
       validates :ind, presence: true, uniqueness: {scope: :commodity}
+      validates :tooltip_text, presence: true
 
       after_commit :refresh_dependents
 
