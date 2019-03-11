@@ -21,7 +21,6 @@ class SourcesPanel extends React.PureComponent {
   };
 
   render() {
-    console.log(this.state.sourcesOpen);
     const {
       tabs,
       page,
