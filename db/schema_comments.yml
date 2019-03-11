@@ -39,7 +39,7 @@ tables:
       - name: ind_id
         comment: Reference to ind
       - name: tooltip_text
-        comment: Tooltip text
+        comment: Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).
   - name: quant_context_properties
     comment: Context specific properties for quant (like tooltip text)
     columns:
@@ -48,7 +48,7 @@ tables:
       - name: quant_id
         comment: Reference to quant
       - name: tooltip_text
-        comment: Tooltip text
+        comment: Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).
   - name: qual_context_properties
     comment: Context specific properties for qual (like tooltip text)
     columns:
@@ -57,7 +57,7 @@ tables:
       - name: qual_id
         comment: Reference to qual
       - name: tooltip_text
-        comment: Tooltip text
+        comment: Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).
   - name: ind_commodity_properties
     comment: Commodity specific properties for ind
     columns:
@@ -66,7 +66,7 @@ tables:
       - name: ind_id
         comment: Reference to ind
       - name: tooltip_text
-        comment: Tooltip text
+        comment: Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.
   - name: quant_commodity_properties
     comment: Commodity specific properties for quant
     columns:
@@ -75,7 +75,7 @@ tables:
       - name: quant_id
         comment: Reference to quant
       - name: tooltip_text
-        comment: Tooltip text
+        comment: Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.
   - name: qual_commodity_properties
     comment: Commodity specific properties for qual
     columns:
@@ -84,7 +84,7 @@ tables:
       - name: qual_id
         comment: Reference to qual
       - name: tooltip_text
-        comment: Tooltip text
+        comment: Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.
   - name: ind_country_properties
     comment: Country specific properties for ind
     columns:
@@ -93,7 +93,7 @@ tables:
       - name: ind_id
         comment: Reference to ind
       - name: tooltip_text
-        comment: Tooltip text
+        comment: Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).
   - name: quant_country_properties
     comment: Country specific properties for quant
     columns:
@@ -102,7 +102,7 @@ tables:
       - name: quant_id
         comment: Reference to quant
       - name: tooltip_text
-        comment: Tooltip text
+        comment: Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).
   - name: qual_country_properties
     comment: Country specific properties for qual
     columns:
@@ -111,7 +111,7 @@ tables:
       - name: qual_id
         comment: Reference to qual
       - name: tooltip_text
-        comment: Tooltip text
+        comment: Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).
   - name: chart_node_types
     comment: Node types to display in a chart.
     columns:
@@ -296,7 +296,7 @@ tables:
       - name: unit_type
         comment: Type of unit, e.g. score. One of restricted set of values.
       - name: tooltip_text
-        comment: Tooltip text
+        comment: Generic tooltip text (lowest precedence)
       - name: is_visible_on_place_profile
         comment: Whether to display this attribute on place profile
       - name: is_visible_on_actor_profile
@@ -403,7 +403,7 @@ tables:
       - name: display_name
         comment: Name of attribute for display
       - name: tooltip_text
-        comment: Tooltip text
+        comment: Generic tooltip text (lowest precedence)
       - name: is_visible_on_place_profile
         comment: Whether to display this attribute on place profile
       - name: is_visible_on_actor_profile
@@ -424,7 +424,7 @@ tables:
       - name: unit_type
         comment: Type of unit, e.g. count. One of restricted set of values.
       - name: tooltip_text
-        comment: Tooltip text
+        comment: Generic tooltip text (lowest precedence)
       - name: is_visible_on_place_profile
         comment: Whether to display this attribute on place profile
       - name: is_visible_on_actor_profile

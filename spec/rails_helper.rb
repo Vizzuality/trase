@@ -55,6 +55,15 @@ RSpec.configure do |config|
     Api::V3::QuantProperty.skip_callback(:commit, :after, :refresh_dependents)
     Api::V3::RecolorByAttribute.skip_callback(:commit, :after, :refresh_dependents)
     Api::V3::ResizeByAttribute.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::IndContextProperty.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::IndCountryProperty.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::IndCommodityProperty.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::QualContextProperty.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::QualCountryProperty.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::QualCommodityProperty.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::QuantContextProperty.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::QuantCountryProperty.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::QuantCommodityProperty.skip_callback(:commit, :after, :refresh_dependents)
   end
 
   config.after(:suite) do
@@ -73,6 +82,15 @@ RSpec.configure do |config|
     Api::V3::QuantProperty.set_callback(:commit, :after, :refresh_dependents)
     Api::V3::RecolorByAttribute.set_callback(:commit, :after, :refresh_dependents)
     Api::V3::ResizeByAttribute.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::IndContextProperty.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::IndCountryProperty.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::IndCommodityProperty.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::QualContextProperty.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::QualCountryProperty.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::QualCommodityProperty.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::QuantContextProperty.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::QuantCountryProperty.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::QuantCommodityProperty.set_callback(:commit, :after, :refresh_dependents)
   end
 
   config.before(:each) do
