@@ -63,7 +63,10 @@ function SourcesPanel(props) {
         )}
       </GridList>
       {showJurisdictions && (
-        <Accordion title={`${activeCountryName} regions (Optional)`}>
+        <Accordion
+          title={`${activeCountryName} regions (Optional)`}
+          initialOpen={Object.keys(activeSourceItem).length > 0}
+        >
           <div className="dashboard-panel-sources-subtitle">
             You can choose several places of the same category:
           </div>

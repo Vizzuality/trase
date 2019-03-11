@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import './accordion.scss';
 
 class Accordion extends React.PureComponent {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      isOpen: false
+      isOpen: props.initialOpen || false
     };
   }
 
@@ -33,7 +33,8 @@ class Accordion extends React.PureComponent {
 
 Accordion.propTypes = {
   title: PropTypes.string.isRequired,
-  children: PropTypes.node
+  children: PropTypes.node,
+  initialOpen: PropTypes.bool
 };
 
 export default Accordion;
