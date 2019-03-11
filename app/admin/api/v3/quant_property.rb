@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::QuantProperty, as: 'QuantProperty' do
-  menu parent: 'General'
+  menu parent: 'Tooltips', priority: 12
 
   permit_params :quant_id, :display_name, :unit_type, :tooltip_text,
                 :is_visible_on_place_profile, :is_visible_on_actor_profile,

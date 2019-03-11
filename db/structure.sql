@@ -7809,7 +7809,7 @@ ALTER TABLE ONLY public.context_node_types
 --
 
 ALTER TABLE ONLY public.ind_country_properties
-    ADD CONSTRAINT fk_rails_162974f66c FOREIGN KEY (country_id) REFERENCES public.countries(id);
+    ADD CONSTRAINT fk_rails_162974f66c FOREIGN KEY (country_id) REFERENCES public.countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7897,7 +7897,7 @@ ALTER TABLE ONLY public.chart_inds
 --
 
 ALTER TABLE ONLY public.quant_country_properties
-    ADD CONSTRAINT fk_rails_2cb9ec5128 FOREIGN KEY (quant_id) REFERENCES public.quants(id);
+    ADD CONSTRAINT fk_rails_2cb9ec5128 FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7905,7 +7905,7 @@ ALTER TABLE ONLY public.quant_country_properties
 --
 
 ALTER TABLE ONLY public.ind_context_properties
-    ADD CONSTRAINT fk_rails_2d523de840 FOREIGN KEY (ind_id) REFERENCES public.inds(id);
+    ADD CONSTRAINT fk_rails_2d523de840 FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7977,7 +7977,7 @@ ALTER TABLE ONLY public.map_inds
 --
 
 ALTER TABLE ONLY public.qual_country_properties
-    ADD CONSTRAINT fk_rails_4d7c9be019 FOREIGN KEY (country_id) REFERENCES public.countries(id);
+    ADD CONSTRAINT fk_rails_4d7c9be019 FOREIGN KEY (country_id) REFERENCES public.countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8009,7 +8009,7 @@ ALTER TABLE ONLY public.recolor_by_quals
 --
 
 ALTER TABLE ONLY public.qual_context_properties
-    ADD CONSTRAINT fk_rails_58bc3d5bcf FOREIGN KEY (context_id) REFERENCES public.contexts(id);
+    ADD CONSTRAINT fk_rails_58bc3d5bcf FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8017,7 +8017,7 @@ ALTER TABLE ONLY public.qual_context_properties
 --
 
 ALTER TABLE ONLY public.ind_commodity_properties
-    ADD CONSTRAINT fk_rails_5c0dcf9d64 FOREIGN KEY (ind_id) REFERENCES public.inds(id);
+    ADD CONSTRAINT fk_rails_5c0dcf9d64 FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8049,7 +8049,7 @@ ALTER TABLE ONLY public.chart_quants
 --
 
 ALTER TABLE ONLY public.ind_context_properties
-    ADD CONSTRAINT fk_rails_6b25018f3c FOREIGN KEY (context_id) REFERENCES public.contexts(id);
+    ADD CONSTRAINT fk_rails_6b25018f3c FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8057,7 +8057,7 @@ ALTER TABLE ONLY public.ind_context_properties
 --
 
 ALTER TABLE ONLY public.quant_context_properties
-    ADD CONSTRAINT fk_rails_6e05c978da FOREIGN KEY (context_id) REFERENCES public.contexts(id);
+    ADD CONSTRAINT fk_rails_6e05c978da FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8081,7 +8081,7 @@ ALTER TABLE ONLY public.ind_properties
 --
 
 ALTER TABLE ONLY public.qual_commodity_properties
-    ADD CONSTRAINT fk_rails_721d9b2c40 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id);
+    ADD CONSTRAINT fk_rails_721d9b2c40 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8097,7 +8097,7 @@ ALTER TABLE ONLY public.charts
 --
 
 ALTER TABLE ONLY public.quant_context_properties
-    ADD CONSTRAINT fk_rails_8c0d4513c3 FOREIGN KEY (quant_id) REFERENCES public.quants(id);
+    ADD CONSTRAINT fk_rails_8c0d4513c3 FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8105,7 +8105,7 @@ ALTER TABLE ONLY public.quant_context_properties
 --
 
 ALTER TABLE ONLY public.quant_country_properties
-    ADD CONSTRAINT fk_rails_90fcd1e231 FOREIGN KEY (country_id) REFERENCES public.countries(id);
+    ADD CONSTRAINT fk_rails_90fcd1e231 FOREIGN KEY (country_id) REFERENCES public.countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8137,7 +8137,7 @@ ALTER TABLE ONLY public.recolor_by_inds
 --
 
 ALTER TABLE ONLY public.quant_commodity_properties
-    ADD CONSTRAINT fk_rails_93e2577ebb FOREIGN KEY (commodity_id) REFERENCES public.commodities(id);
+    ADD CONSTRAINT fk_rails_93e2577ebb FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8193,7 +8193,7 @@ ALTER TABLE ONLY public.charts
 --
 
 ALTER TABLE ONLY public.ind_commodity_properties
-    ADD CONSTRAINT fk_rails_a8310a8e25 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id);
+    ADD CONSTRAINT fk_rails_a8310a8e25 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8241,7 +8241,7 @@ ALTER TABLE ONLY public.resize_by_quants
 --
 
 ALTER TABLE ONLY public.qual_context_properties
-    ADD CONSTRAINT fk_rails_c67757078e FOREIGN KEY (qual_id) REFERENCES public.quals(id);
+    ADD CONSTRAINT fk_rails_c67757078e FOREIGN KEY (qual_id) REFERENCES public.quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8329,7 +8329,7 @@ ALTER TABLE ONLY public.chart_quants
 --
 
 ALTER TABLE ONLY public.ind_country_properties
-    ADD CONSTRAINT fk_rails_e01a20acf1 FOREIGN KEY (ind_id) REFERENCES public.inds(id);
+    ADD CONSTRAINT fk_rails_e01a20acf1 FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8337,7 +8337,7 @@ ALTER TABLE ONLY public.ind_country_properties
 --
 
 ALTER TABLE ONLY public.qual_commodity_properties
-    ADD CONSTRAINT fk_rails_e18327427d FOREIGN KEY (qual_id) REFERENCES public.quals(id);
+    ADD CONSTRAINT fk_rails_e18327427d FOREIGN KEY (qual_id) REFERENCES public.quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8377,7 +8377,7 @@ ALTER TABLE ONLY public.contexts
 --
 
 ALTER TABLE ONLY public.quant_commodity_properties
-    ADD CONSTRAINT fk_rails_f026110265 FOREIGN KEY (quant_id) REFERENCES public.quants(id);
+    ADD CONSTRAINT fk_rails_f026110265 FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8425,7 +8425,7 @@ ALTER TABLE ONLY public.node_inds
 --
 
 ALTER TABLE ONLY public.qual_country_properties
-    ADD CONSTRAINT fk_rails_fe3d71a6cc FOREIGN KEY (qual_id) REFERENCES public.quals(id);
+    ADD CONSTRAINT fk_rails_fe3d71a6cc FOREIGN KEY (qual_id) REFERENCES public.quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8581,6 +8581,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190301173716'),
 ('20190301173748'),
 ('20190301173808'),
-('20190301173824');
+('20190301173824'),
+('20190308163938');
 
 
