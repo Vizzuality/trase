@@ -4,6 +4,8 @@ import SearchInput from 'react-components/shared/search-input/search-input.compo
 import GridList from 'react-components/shared/grid-list/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import Tabs from 'react-components/shared/tabs/tabs.component';
+import capitalize from 'lodash/capitalize';
+import Accordion from '../../shared/accordion/accordion.component';
 
 function SourcesPanel(props) {
   const {
@@ -27,6 +29,8 @@ function SourcesPanel(props) {
   } = props;
   const hasActiveCountryItems = Object.keys(activeCountryItem).length > 0;
   const showJurisdictions = hasActiveCountryItems && tabs.length > 0 && sources.length > 0;
+  const activeCountryName =
+    hasActiveCountryItems && capitalize(Object.values(activeCountryItem)[0].name);
   return (
     <React.Fragment>
       <SearchInput
@@ -59,7 +63,10 @@ function SourcesPanel(props) {
         )}
       </GridList>
       {showJurisdictions && (
-        <React.Fragment>
+        <Accordion title={`${activeCountryName} regions (Optional)`}>
+          <div className="dashboard-panel-sources-subtitle">
+            You can choose several places of the same category:
+          </div>
           <Tabs
             tabs={tabs}
             onSelectTab={onSelectSourceTab}
@@ -90,7 +97,7 @@ function SourcesPanel(props) {
               )}
             </GridList>
           </Tabs>
-        </React.Fragment>
+        </Accordion>
       )}
     </React.Fragment>
   );
