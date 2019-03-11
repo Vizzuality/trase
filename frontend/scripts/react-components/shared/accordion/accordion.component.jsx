@@ -13,6 +13,8 @@ class Accordion extends React.PureComponent {
 
   toggleOpen = () => {
     const { isOpen } = this.state;
+    const { onToggle } = this.props;
+    onToggle();
     this.setState({ isOpen: !isOpen });
   };
 
@@ -34,7 +36,8 @@ class Accordion extends React.PureComponent {
 Accordion.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.node,
-  initialOpen: PropTypes.bool
+  initialOpen: PropTypes.bool,
+  onToggle: PropTypes.func
 };
 
 export default Accordion;
