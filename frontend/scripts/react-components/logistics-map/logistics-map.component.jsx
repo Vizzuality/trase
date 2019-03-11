@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 // eslint-disable-next-line
 import L from 'leaflet';
 import 'leaflet-utfgrid/L.UTFGrid-min';
-import MapComponent, { MapControls, ZoomControl, MapPopup } from 'wri-api-components/dist/map';
-import WRIIcons from 'wri-api-components/dist/icons';
+import MapComponent, { MapControls, ZoomControl, MapPopup } from 'vizzuality-components/dist/map';
+import WRIIcons from 'vizzuality-components/dist/icons';
 
 import { Layer, LayerManager } from 'layer-manager/dist/components';
 import { PluginLeaflet } from 'layer-manager';
@@ -18,7 +18,7 @@ import LogisticsMapBar from 'react-components/logistics-map/logistics-map-bar/lo
 import LogisticsMapDownload from 'react-components/logistics-map/logistics-map-download/logistics-map-download.container';
 import BRAZIL_COUNTRY from 'react-components/logistics-map/BRAZIL_COUNTRY.json';
 
-import 'wri-api-components/dist/map.css';
+import 'vizzuality-components/dist/map.css';
 import 'leaflet/dist/leaflet.css';
 import 'scripts/react-components/logistics-map/logistics-map.scss';
 

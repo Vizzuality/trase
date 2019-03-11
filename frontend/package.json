@@ -161,7 +161,7 @@
     "topojson": "^3.0.2",
     "turf-linestring": "^1.0.2",
     "whatwg-fetch": "^3.0.0",
-    "wri-api-components": "^2.3.1"
+    "vizzuality-components": "1.0.0"
   },
   "resolutions": {
     "babel-core": "7.0.0-bridge.0"
