@@ -178,15 +178,17 @@ function* fetchDataOnFilterClear() {
 export function* onClearPanel() {
   const { dashboardElement } = yield select();
   const { activePanelId } = dashboardElement;
-  const activePanelName = activePanelId === 'sources' ? 'countries' : activePanelId;
-  const activeItems = dashboardElement[`${activePanelName}Panel`].activeItems;
+  const activeDashboardPanelName = activePanelId === 'sources' ? 'countries' : activePanelId;
+  const activeItems = dashboardElement[`${activeDashboardPanelName}Panel`].activeItems;
+
   if (isEmpty(activeItems)) {
-    const panelIndex = DASHBOARD_STEPS[activePanelId.toUpperCase()];
+    const dashboardStepName =
+      activePanelId === 'countries' ? 'SOURCES' : activePanelId.toUpperCase();
+    const panelIndex = DASHBOARD_STEPS[dashboardStepName];
     const panelsToClear = Object.keys(DASHBOARD_STEPS)
-      .slice(panelIndex)
+      .slice(panelIndex + 1)
       .map(p => p.toLowerCase())
       .filter(p => p !== 'indicators');
-
     yield put({
       type: DASHBOARD_ELEMENT__CLEAR_PANELS,
       payload: { panels: panelsToClear }

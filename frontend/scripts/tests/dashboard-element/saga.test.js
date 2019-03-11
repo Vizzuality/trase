@@ -8,7 +8,8 @@ import {
   onItemChange,
   onFilterClear,
   onPageChange,
-  onStepChange
+  onStepChange,
+  onClearPanel
 } from 'react-components/dashboard-element/dashboard-element.saga';
 import {
   openIndicatorsStep,
@@ -22,7 +23,8 @@ import {
   setDashboardPanelActiveItemWithSearch,
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
-  DASHBOARD_ELEMENT__SET_ACTIVE_PANEL
+  DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
+  DASHBOARD_ELEMENT__CLEAR_PANELS
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import { getURLFromParams } from 'utils/getURLFromParams';
 import { fetchWithCancel } from 'react-components/dashboard-element/fetch-with-cancel';
@@ -421,6 +423,62 @@ describe('onFilterClear', () => {
       type: DASHBOARD_ELEMENT__SET_PANEL_TABS,
       payload: { data }
     });
+  });
+});
+
+describe('onClearPanel', () => {
+  const emptyPanelState = {
+    dashboardElement: {
+      ...baseState.dashboardElement,
+      activePanelId: 'countries',
+      countriesPanel: {
+        activeTab: {
+          id: 1
+        },
+        activeItems: {}
+      },
+      commoditiesPanel: {
+        activeTab: {
+          id: 1
+        }
+      },
+      companiesPanel: {
+        activeTab: {
+          id: 1
+        }
+      }
+    }
+  };
+  const notEmptyPanelState = {
+    dashboardElement: {
+      ...emptyPanelState.dashboardElement,
+      activePanelId: 'countries',
+      countriesPanel: {
+        activeItems: { 5: { id: 5 } }
+      }
+    }
+  };
+
+  it(`dispatches ${DASHBOARD_ELEMENT__CLEAR_PANELS} with the subsequent panels if the panel is cleared`, async () => {
+    const dispatched = await recordSaga(
+      onClearPanel,
+      clearDashboardPanel('countries'),
+      emptyPanelState
+    );
+    const panelsToClear = ['commodities', 'destinations', 'companies'];
+    expect(dispatched).toContainEqual({
+      payload: { panels: panelsToClear },
+      type: DASHBOARD_ELEMENT__CLEAR_PANELS
+    });
+  });
+
+  it(`doesn't dispatch ${DASHBOARD_ELEMENT__CLEAR_PANELS} if the panel is not empty`, async () => {
+    const dispatched = await recordSaga(
+      onClearPanel,
+      clearDashboardPanel('countries'),
+      notEmptyPanelState
+    );
+    expect(dispatched).toEqual([]);
   });
 });
 
