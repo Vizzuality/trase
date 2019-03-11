@@ -1,0 +1,20 @@
+@import 'styles/settings';
+
+.c-accordion {
+  color: $charcoal-grey;
+
+  .title {
+    font-size: $font-size-x-regular;
+  }
+
+  .seeMore {
+    color: $strong-pink;
+    padding: 0 5px;
+    font-size: $font-size-xxx-regular;
+    cursor: pointer;
+  }
+
+  .content {
+    margin-top: 10px;
+  }
+}
