@@ -195,7 +195,7 @@ export function* onClearPanel() {
   }
 }
 
-function* fetchDataOnClearPanel() {
+function* clearSubsequentPanels() {
   yield takeLatest(
     [
       DASHBOARD_ELEMENT__CLEAR_PANEL,
@@ -246,7 +246,7 @@ export default function* dashboardElementSaga() {
     fetchDataOnTabChange,
     fetchDataOnItemChange,
     fetchDataOnFilterClear,
-    fetchDataOnClearPanel,
+    clearSubsequentPanels,
     fetchDataOnPageChange,
     fetchDataOnSearch,
     fetchDataOnStepChange
