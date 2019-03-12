@@ -149,45 +149,20 @@ function* fetchDataOnItemChange() {
 }
 
 /**
- * Listens to DASHBOARD_ELEMENT__CLEAR_PANEL and fetches the necessary data after a filter clear.
- * On sources and companies we don't need to call getDashboardPanelData because getDashboardPanelSectionTabs
- * dispatches an action that trigger it.
- */
-export function* onFilterClear() {
-  const { dashboardElement } = yield select();
-  if (dashboardElement.activePanelId === 'sources') {
-    yield fork(getDashboardPanelData, dashboardElement, 'countries');
-    if (!isEmpty(dashboardElement.countriesPanel.activeItems)) {
-      yield fork(getDashboardPanelSectionTabs, dashboardElement, 'sources');
-    }
-  } else if (dashboardElement.activePanelId === 'companies') {
-    yield fork(getDashboardPanelSectionTabs, dashboardElement, dashboardElement.activePanelId);
-  } else {
-    yield fork(getDashboardPanelData, dashboardElement, dashboardElement.activePanelId);
-  }
-}
-
-function* fetchDataOnFilterClear() {
-  yield takeLatest(DASHBOARD_ELEMENT__CLEAR_PANEL, onFilterClear);
-}
-
-/**
  * Listens to actions that remove or clear panel items and deletes all subsequent selections if the panel is cleared
  */
 
 export function* onClearPanel() {
   const { dashboardElement } = yield select();
   const { activePanelId } = dashboardElement;
-  const activeDashboardPanelName = activePanelId === 'sources' ? 'countries' : activePanelId;
-  const activeItems = dashboardElement[`${activeDashboardPanelName}Panel`].activeItems;
+  const dashboardStepName = activePanelId === 'countries' ? 'sources' : activePanelId;
+  const panelIndex = DASHBOARD_STEPS[dashboardStepName];
+  const panelsToClear = Object.keys(DASHBOARD_STEPS)
+    .slice(panelIndex + 1)
+    .map(p => p.toLowerCase())
+    .filter(p => p !== 'indicators');
 
-  if (isEmpty(activeItems)) {
-    const dashboardStepName = activePanelId === 'countries' ? 'sources' : activePanelId;
-    const panelIndex = DASHBOARD_STEPS[dashboardStepName];
-    const panelsToClear = Object.keys(DASHBOARD_STEPS)
-      .slice(panelIndex + 1)
-      .map(p => p.toLowerCase())
-      .filter(p => p !== 'indicators');
+  if (panelsToClear.length > 0) {
     yield put({
       type: DASHBOARD_ELEMENT__CLEAR_PANELS,
       payload: { panels: panelsToClear }
@@ -245,7 +220,6 @@ export default function* dashboardElementSaga() {
     fetchDataOnPanelChange,
     fetchDataOnTabChange,
     fetchDataOnItemChange,
-    fetchDataOnFilterClear,
     clearSubsequentPanels,
     fetchDataOnPageChange,
     fetchDataOnSearch,

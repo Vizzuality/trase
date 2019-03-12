@@ -64,21 +64,25 @@ class DashboardElementContainer extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { step } = this.state;
+    if (step !== prevState.step) {
+      const { setDashboardActivePanel, openIndicatorsStep } = this.props;
+      if (step !== DASHBOARD_STEPS.indicators) {
+        setDashboardActivePanel(getPanelId(step));
+      } else {
+        openIndicatorsStep();
+      }
+    }
+  }
+
   closeModal = () => {
     this.setState({ modalOpen: false });
   };
 
   reopenPanel = step => this.setState({ step, editMode: true, modalOpen: true });
 
-  updateStep = step => {
-    const { setDashboardActivePanel, openIndicatorsStep } = this.props;
-    if (step !== DASHBOARD_STEPS.indicators) {
-      setDashboardActivePanel(getPanelId(step));
-    } else {
-      openIndicatorsStep();
-    }
-    this.setState({ step });
-  };
+  updateStep = step => this.setState({ step });
 
   render() {
     const { step, modalOpen, editMode } = this.state;

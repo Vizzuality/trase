@@ -1,3 +1,5 @@
+import { DASHBOARD_STEPS } from 'constants';
+
 export const DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_PANEL = 'DASHBOARD_ELEMENT__SET_ACTIVE_PANEL';
@@ -42,24 +44,25 @@ export const getDashboardPanelParams = (state, optionsType, options = {}) => {
     options_type: optionsType !== 'indicators' ? optionsType : 'attributes',
     node_types_ids: nodeTypesIds
   };
-
-  if (optionsType !== 'countries') {
+  const currentStep = DASHBOARD_STEPS[optionsType];
+  if (currentStep === DASHBOARD_STEPS.sources) {
     params.countries_ids = activeItemParams(countriesPanel);
   }
 
-  if (optionsType !== 'sources') {
+  if (currentStep > DASHBOARD_STEPS.sources) {
+    params.countries_ids = activeItemParams(countriesPanel);
     params.sources_ids = activeItemParams(sourcesPanel);
   }
 
-  if (optionsType !== 'commodities') {
+  if (currentStep > DASHBOARD_STEPS.commodities) {
     params.commodities_ids = activeItemParams(commoditiesPanel);
   }
 
-  if (optionsType !== 'destinations') {
+  if (currentStep > DASHBOARD_STEPS.destinations) {
     params.destinations_ids = activeItemParams(destinationsPanel);
   }
 
-  if (optionsType !== 'companies') {
+  if (currentStep > DASHBOARD_STEPS.companies) {
     params.companies_ids = activeItemParams(companiesPanel);
   }
 
