@@ -49,6 +49,7 @@ attribute_type) AS single_layer_buckets",
 
         def get_map_attribute_with_correct_tooltip(map_attribute)
           prepared_map_attribute = prepare_map_attribute(map_attribute)
+          # rubocop:disable Style/EachWithObject
           map_attribute.attributes.inject({}) do |new_hash, (k, v)|
             new_hash[k] = v
             new_hash['description'] = get_tooltip.call(
@@ -57,6 +58,7 @@ attribute_type) AS single_layer_buckets",
             )
             new_hash
           end
+          # rubocop:enable Style/EachWithObject
         end
 
         def prepare_map_attribute(map_attribute)
