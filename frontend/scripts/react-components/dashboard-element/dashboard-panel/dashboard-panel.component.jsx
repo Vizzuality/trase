@@ -166,16 +166,9 @@ class DashboardPanel extends Component {
       onContinue,
       onBack,
       dynamicSentenceParts,
-      step
+      step,
+      isDisabled
     } = this.props;
-
-    const isDisabled = () => {
-      if (dynamicSentenceParts.length === 0) return true;
-      const currentPanel = getPanelName(step);
-      const currentSentencePart = dynamicSentenceParts.find(p => p.panel === currentPanel);
-      if (!currentSentencePart.optional && !currentSentencePart.value) return true;
-      return false;
-    };
 
     return (
       <div className="c-dashboard-panel">
@@ -194,7 +187,7 @@ class DashboardPanel extends Component {
           clearPanel={panelName => clearActiveItems(panelName)}
           dynamicSentenceParts={dynamicSentenceParts}
           step={step}
-          isDisabled={isDisabled()}
+          isDisabled={isDisabled}
         />
       </div>
     );
@@ -226,7 +219,8 @@ DashboardPanel.propTypes = {
   companiesPanel: PropTypes.object.isRequired,
   countriesPanel: PropTypes.object.isRequired,
   destinationsPanel: PropTypes.object.isRequired,
-  step: PropTypes.number.isRequired
+  step: PropTypes.number.isRequired,
+  isDisabled: PropTypes.bool.isRequired
 };
 
 export default DashboardPanel;

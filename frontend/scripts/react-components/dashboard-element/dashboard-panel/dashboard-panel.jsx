@@ -15,11 +15,12 @@ import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/d
 import {
   getActivePanelTabs,
   getDirtyBlocks,
-  getDynamicSentence
+  getDynamicSentence,
+  getIsDisabled
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getCountryNamesByCountryId } from 'reducers/app.selectors';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   const {
     loading,
     activePanelId,
@@ -47,7 +48,8 @@ const mapStateToProps = state => {
     countryNames: getCountryNamesByCountryId(state),
     tabs: getActivePanelTabs(state),
     dirtyBlocks: getDirtyBlocks(state),
-    dynamicSentenceParts: getDynamicSentence(state)
+    dynamicSentenceParts: getDynamicSentence(state),
+    isDisabled: getIsDisabled({ ...state, step: ownProps.step })
   };
 };
 
