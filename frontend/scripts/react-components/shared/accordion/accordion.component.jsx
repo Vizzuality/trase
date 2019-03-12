@@ -1,15 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import Text from 'react-components/shared/text/text.component';
 import './accordion.scss';
 
 class Accordion extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: props.initialOpen || false
-    };
-  }
+  state = {
+    isOpen: this.props.defaultValue || false
+  };
 
   toggleOpen = () => {
     const { isOpen } = this.state;
@@ -23,9 +20,11 @@ class Accordion extends React.PureComponent {
     const { isOpen } = this.state;
     return (
       <div className="c-accordion">
-        <button onClick={this.toggleOpen}>
+        <button onClick={this.toggleOpen} className="c-accordion-button">
           <span className="title">{title}</span>
-          <span className="seeMore">{isOpen ? '-' : '+'}</span>
+          <Text as="span" size="lg" color="pink" className="seeMore">
+            {isOpen ? '-' : '+'}
+          </Text>
         </button>
         {isOpen ? <div className="content">{children}</div> : null}
       </div>
@@ -36,7 +35,7 @@ class Accordion extends React.PureComponent {
 Accordion.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.node,
-  initialOpen: PropTypes.bool,
+  defaultValue: PropTypes.bool,
   onToggle: PropTypes.func
 };
 

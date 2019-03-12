@@ -30,7 +30,7 @@ function DashboardModalFooter(props) {
       <div className="dashboard-modal-actions">
         {onBack && (
           <button type="button" onClick={onBack} className="dashboard-modal-back-button">
-            <Text as="span" size="rg" color="white" variant="mono">
+            <Text as="span" size="rg" variant="mono">
               {backText || 'Back To Options'}
             </Text>
           </button>

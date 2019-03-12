@@ -4,21 +4,16 @@ import SearchInput from 'react-components/shared/search-input/search-input.compo
 import GridList from 'react-components/shared/grid-list/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import Tabs from 'react-components/shared/tabs/tabs.component';
+import Text from 'react-components/shared/text/text.component';
 import capitalize from 'lodash/capitalize';
 import Accordion from '../../shared/accordion/accordion.component';
 
 class SourcesPanel extends React.PureComponent {
-  constructor() {
-    super();
-    this.state = {
-      sourcesOpen: false
-    };
-  }
-
-  toggleSourcesOpen = () => {
-    const { sourcesOpen } = this.state;
-    this.setState({ sourcesOpen: !sourcesOpen });
+  state = {
+    sourcesOpen: false
   };
+
+  toggleSourcesOpen = () => this.setState(state => ({ sourcesOpen: !state.sourcesOpen }));
 
   render() {
     const {
@@ -78,12 +73,12 @@ class SourcesPanel extends React.PureComponent {
         {showJurisdictions && (
           <Accordion
             title={`${activeCountryName} regions (Optional)`}
-            initialOpen={Object.keys(activeSourceItem).length > 0 || this.state.sourcesOpen}
+            defaultValue={Object.keys(activeSourceItem).length > 0 || this.state.sourcesOpen}
             onToggle={this.toggleSourcesOpen}
           >
-            <div className="dashboard-panel-sources-subtitle">
+            <Text color="grey-faded" className="dashboard-panel-sources-subtitle">
               You can choose several places of the same category:
-            </div>
+            </Text>
             <Tabs
               tabs={tabs}
               onSelectTab={onSelectSourceTab}

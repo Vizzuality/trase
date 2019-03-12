@@ -144,17 +144,17 @@ class DashboardPanel extends Component {
     const { step } = this.props;
     if (step === DASHBOARD_STEPS.sources || step === DASHBOARD_STEPS.commodities) {
       return (
-        <span>
+        <>
           Choose one{' '}
           <span className="dashboard-panel-sentence">{singularize(getPanelName(step))}</span>
-        </span>
+        </>
       );
     }
     return (
-      <span>
+      <>
         {step === DASHBOARD_STEPS.companies ? '(Optional) ' : ''}
         Choose one or several <span className="dashboard-panel-sentence">{getPanelName(step)}</span>
-      </span>
+      </>
     );
   }
 
@@ -180,7 +180,7 @@ class DashboardPanel extends Component {
     return (
       <div className="c-dashboard-panel">
         <div ref={this.containerRef} className="dashboard-panel-content">
-          <Heading align="center" size="lg" className="dashboard-panel-title">
+          <Heading className="dashboard-panel-title" align="center" size="lg">
             {editMode ? 'Edit options' : this.renderTitleSentence()}
           </Heading>
           {this.renderPanel()}

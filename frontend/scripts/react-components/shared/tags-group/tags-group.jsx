@@ -31,7 +31,9 @@ class TagsGroupContainer extends React.Component {
 
     if (optionToClear.value === 'clear-all') {
       if (part.panel === 'companies') removeSentenceItem(part.value, part.panel);
-      else clearPanel(part.panel);
+      else {
+        clearPanel(part.panel);
+      }
     } else {
       removeSentenceItem(part.value.find(v => v.id === optionToClear.value), part.panel);
     }
@@ -41,7 +43,9 @@ class TagsGroupContainer extends React.Component {
     const { removeSentenceItem, clearPanel } = this.props;
     if (part.panel === 'companies') {
       removeSentenceItem(part.value[0], part.panel);
-    } else clearPanel(part.panel);
+    } else {
+      clearPanel(part.panel);
+    }
   };
 
   render() {

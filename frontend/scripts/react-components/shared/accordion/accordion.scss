@@ -8,11 +8,12 @@
     font-size: $font-size-x-regular;
   }
 
-  .seeMore {
-    color: $strong-pink;
-    padding: 0 5px;
-    font-size: $font-size-xxx-regular;
+  .button {
     cursor: pointer;
+  }
+
+  .seeMore {
+    padding: 0 5px;
   }
 
   .content {
