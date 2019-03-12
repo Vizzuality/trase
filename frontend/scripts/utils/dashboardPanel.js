@@ -1,10 +1,8 @@
 import invert from 'lodash/invert';
 import { DASHBOARD_STEPS } from 'constants';
 
-export const getPanelId = step => {
-  const panelIds = invert(DASHBOARD_STEPS);
-  return panelIds && panelIds[step] && panelIds[step];
-};
+const PANEL_IDS = invert(DASHBOARD_STEPS);
+export const getPanelId = step => PANEL_IDS[step];
 
 export const singularize = panelName => {
   const irregularInflections = {
