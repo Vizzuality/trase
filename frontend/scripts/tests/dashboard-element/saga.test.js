@@ -6,10 +6,9 @@ import {
   getSearchResults,
   onTabChange,
   onItemChange,
-  onFilterClear,
   onPageChange,
   onStepChange,
-  onClearPanel
+  onChangePanel
 } from 'react-components/dashboard-element/dashboard-element.saga';
 import {
   openIndicatorsStep,
@@ -314,119 +313,7 @@ describe('onItemChange', () => {
   });
 });
 
-describe('onFilterClear', () => {
-  const state = {
-    dashboardElement: {
-      ...baseState.dashboardElement,
-      activePanelId: 'sources',
-      sourcesPanel: {
-        ...baseState.dashboardElement.sourcesPanel,
-        activeTab: {
-          id: 2
-        },
-        page: 2
-      },
-      countriesPanel: {
-        ...baseState.dashboardElement.countriesPanel,
-        activeItems: {}
-      }
-    }
-  };
-  const sourcesStateWithActiveItem = {
-    dashboardElement: {
-      ...state.dashboardElement,
-      countriesPanel: {
-        ...state.dashboardElement.countriesPanel,
-        activeItems: { 5: { id: 5 } }
-      }
-    }
-  };
-  const companiesState = {
-    dashboardElement: {
-      ...state.dashboardElement,
-      activePanelId: 'companies',
-      companiesPanel: {
-        ...state.dashboardElement.companiesPanel,
-        activeTab: {
-          id: 1
-        }
-      }
-    }
-  };
-
-  const clearAction = clearDashboardPanel('companies');
-  const clearAction2 = clearDashboardPanel('commodities');
-
-  it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_DATA} for countries if the active panel is sources and doesnt load sources`, async () => {
-    const dispatched = await recordSaga(onFilterClear, clearAction, state);
-    // Clears data
-    expect(dispatched).toContainEqual({
-      payload: {
-        key: 'countries',
-        data: null,
-        meta: null,
-        tab: 2,
-        loading: true
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
-    });
-    expect(dispatched).not.toContainEqual({
-      type: DASHBOARD_ELEMENT__SET_PANEL_TABS,
-      payload: { data }
-    });
-    // Sets data
-    expect(dispatched).toContainEqual({
-      payload: {
-        key: 'countries',
-        data,
-        meta,
-        loading: false,
-        tab: 2
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
-    });
-  });
-
-  it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_DATA} for countries and ${DASHBOARD_ELEMENT__SET_PANEL_TABS} for sources too if countries activeItem exists`, async () => {
-    const dispatched = await recordSaga(onFilterClear, clearAction, sourcesStateWithActiveItem);
-    // Clears data
-    expect(dispatched).toContainEqual({
-      payload: {
-        key: 'countries',
-        data: null,
-        meta: null,
-        tab: 2,
-        loading: true
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
-    });
-    // Sets data
-    expect(dispatched).toContainEqual({
-      payload: {
-        key: 'countries',
-        data,
-        meta,
-        loading: false,
-        tab: 2
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
-    });
-    expect(dispatched).toContainEqual({
-      type: DASHBOARD_ELEMENT__SET_PANEL_TABS,
-      payload: { data }
-    });
-  });
-
-  it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_TABS} if is companies`, async () => {
-    const dispatched = await recordSaga(onFilterClear, clearAction2, companiesState);
-    expect(dispatched).toContainEqual({
-      type: DASHBOARD_ELEMENT__SET_PANEL_TABS,
-      payload: { data }
-    });
-  });
-});
-
-describe('onClearPanel', () => {
+describe('onChangePanel', () => {
   const emptyPanelState = {
     dashboardElement: {
       ...baseState.dashboardElement,
@@ -449,19 +336,10 @@ describe('onClearPanel', () => {
       }
     }
   };
-  const notEmptyPanelState = {
-    dashboardElement: {
-      ...emptyPanelState.dashboardElement,
-      activePanelId: 'countries',
-      countriesPanel: {
-        activeItems: { 5: { id: 5 } }
-      }
-    }
-  };
 
-  it(`dispatches ${DASHBOARD_ELEMENT__CLEAR_PANELS} with the subsequent panels if the panel is cleared`, async () => {
+  it(`dispatches ${DASHBOARD_ELEMENT__CLEAR_PANELS} with the subsequent panels if the panel is changed`, async () => {
     const dispatched = await recordSaga(
-      onClearPanel,
+      onChangePanel,
       clearDashboardPanel('countries'),
       emptyPanelState
     );
@@ -470,15 +348,6 @@ describe('onClearPanel', () => {
       payload: { panels: panelsToClear },
       type: DASHBOARD_ELEMENT__CLEAR_PANELS
     });
-  });
-
-  it(`doesn't dispatch ${DASHBOARD_ELEMENT__CLEAR_PANELS} if the panel is not empty`, async () => {
-    const dispatched = await recordSaga(
-      onClearPanel,
-      clearDashboardPanel('countries'),
-      notEmptyPanelState
-    );
-    expect(dispatched).toEqual([]);
   });
 });
 

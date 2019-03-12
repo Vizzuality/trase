@@ -516,16 +516,19 @@ describe(DASHBOARD_ELEMENT__CLEAR_PANELS, () => {
     countriesPanel: {
       ...initialState.countriesPanel,
       activeItems: [{ id: 1, name: 'some item' }],
+      activeTab: { id: 7, name: 'BIOME' },
       page: 2
     },
     commoditiesPanel: {
       ...initialState.commoditiesPanel,
       activeItems: [{ id: 4, name: 'some item' }],
+      activeTab: { id: 1 },
       page: 6
     },
     companiesPanel: {
       ...initialState.companiesPanel,
       activeItems: [{ id: 4, name: 'some item' }],
+      activeTab: { id: 7, name: 'IMPORTER' },
       page: 5
     }
   };
@@ -548,7 +551,7 @@ describe(DASHBOARD_ELEMENT__CLEAR_PANELS, () => {
       },
       commoditiesPanel: {
         ...initialState.companiesPanel,
-        activeTab: state.companiesPanel.activeTab
+        activeTab: state.commoditiesPanel.activeTab
       }
     });
   });

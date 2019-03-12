@@ -149,10 +149,10 @@ function* fetchDataOnItemChange() {
 }
 
 /**
- * Listens to actions that remove or clear panel items and deletes all subsequent selections if the panel is cleared
+ * Listens to actions that remove or clear panel items and deletes all subsequent selections if the panel is changed
  */
 
-export function* onClearPanel() {
+export function* onChangePanel() {
   const { dashboardElement } = yield select();
   const { activePanelId } = dashboardElement;
   const dashboardStepName = activePanelId === 'countries' ? 'sources' : activePanelId;
@@ -178,7 +178,7 @@ function* clearSubsequentPanels() {
       DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
       DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
     ],
-    onClearPanel
+    onChangePanel
   );
 }
 
