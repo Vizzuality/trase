@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash/sortBy';
 import isEmpty from 'lodash/isEmpty';
+import { DASHBOARD_STEPS } from 'constants';
 
 const getCountriesPanel = state => state.dashboardElement.countriesPanel;
 const getSourcesPanel = state => state.dashboardElement.sourcesPanel;
@@ -147,5 +148,14 @@ export const getIndicatorsByGroup = createSelector(
     );
 
     return groupedIndicators;
+  }
+);
+
+export const getCanProceed = createSelector(
+  [getDirtyBlocks, getActiveIndicators, state => state.step, state => state.editMode],
+  (dirtyBlocks, activeIndicators, step, editMode) => {
+    const hasIndicators = activeIndicators.length > 0;
+    const hasOptionsSelected = editMode || Object.values(dirtyBlocks).some(b => b);
+    return hasOptionsSelected && hasIndicators && step >= DASHBOARD_STEPS.COMPANIES;
   }
 );

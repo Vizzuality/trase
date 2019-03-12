@@ -6,7 +6,8 @@ import DashboardElement from 'react-components/dashboard-element/dashboard-eleme
 import {
   getActiveIndicatorsData,
   getDirtyBlocks,
-  getDynamicSentence
+  getDynamicSentence,
+  getCanProceed
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getPanelId } from 'utils/dashboardPanel';
 import {
@@ -15,11 +16,12 @@ import {
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import { DASHBOARD_STEPS } from 'constants';
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
   indicators: state.dashboardElement.data.indicators,
   activeIndicators: getActiveIndicatorsData(state),
   dynamicSentenceParts: getDynamicSentence(state),
-  dirtyBlocks: getDirtyBlocks(state)
+  dirtyBlocks: getDirtyBlocks(state),
+  canProceed: getCanProceed({ ...state, step: ownProps.step, editMode: ownProps.editMode })
 });
 
 const mapDispatchToProps = dispatch =>
@@ -39,7 +41,8 @@ class DashboardElementContainer extends React.Component {
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
     openIndicatorsStep: PropTypes.func.isRequired,
-    setDashboardActivePanel: PropTypes.func.isRequired
+    setDashboardActivePanel: PropTypes.func.isRequired,
+    canProceed: PropTypes.bool.isRequired
   };
 
   hasVisitedBefore = {
@@ -87,7 +90,8 @@ class DashboardElementContainer extends React.Component {
       activeIndicators,
       dynamicSentenceParts,
       dirtyBlocks,
-      openIndicatorsStep
+      openIndicatorsStep,
+      canProceed
     } = this.props;
     return (
       <DashboardElement
@@ -102,6 +106,7 @@ class DashboardElementContainer extends React.Component {
         activeIndicators={activeIndicators}
         openIndicatorsStep={openIndicatorsStep}
         dynamicSentenceParts={dynamicSentenceParts}
+        canProceed={canProceed}
       />
     );
   }
