@@ -21,7 +21,9 @@ class Accordion extends React.PureComponent {
     return (
       <div className="c-accordion">
         <button onClick={this.toggleOpen} className="c-accordion-button">
-          <span className="title">{title}</span>
+          <Text as="span" size="rg">
+            {title}
+          </Text>
           <Text as="span" size="lg" color="pink" className="seeMore">
             {isOpen ? '-' : '+'}
           </Text>
