@@ -165,8 +165,7 @@ class DashboardPanel extends Component {
       onContinue,
       onBack,
       dynamicSentenceParts,
-      step,
-      canProceed
+      step
     } = this.props;
 
     const isDisabled = () => {
@@ -194,7 +193,6 @@ class DashboardPanel extends Component {
           clearPanel={panelName => clearActiveItems(panelName)}
           dynamicSentenceParts={dynamicSentenceParts}
           step={step}
-          canProceed={canProceed}
           isDisabled={isDisabled()}
         />
       </div>
@@ -213,7 +211,6 @@ DashboardPanel.propTypes = {
   loading: PropTypes.bool.isRequired,
   commoditiesPanel: PropTypes.object,
   editMode: PropTypes.bool.isRequired,
-  canProceed: PropTypes.bool.isRequired,
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
   onBack: PropTypes.func,

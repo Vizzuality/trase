@@ -13,7 +13,6 @@ import { DASHBOARD_STEPS } from 'constants';
 
 class DashboardElement extends React.PureComponent {
   static propTypes = {
-    dirtyBlocks: PropTypes.object,
     activeIndicators: PropTypes.array,
     step: PropTypes.number.isRequired,
     setStep: PropTypes.func.isRequired,
@@ -22,12 +21,11 @@ class DashboardElement extends React.PureComponent {
     modalOpen: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
-    reopenPanel: PropTypes.func.isRequired,
-    canProceed: PropTypes.bool.isRequired
+    reopenPanel: PropTypes.func.isRequired
   };
 
   renderStep() {
-    const { step, setStep, editMode, closeModal, canProceed } = this.props;
+    const { step, setStep, editMode, closeModal } = this.props;
     const showBackButton = step > DASHBOARD_STEPS.SOURCES;
     if (step === DASHBOARD_STEPS.WELCOME) {
       return <DashboardWelcome onContinue={() => setStep(step + 1)} />;
@@ -39,18 +37,15 @@ class DashboardElement extends React.PureComponent {
           onContinue={closeModal}
           goBack={() => setStep(DASHBOARD_STEPS.SOURCES)}
           step={step}
-          canProceed={canProceed}
         />
       );
     }
-    const onBackProp = showBackButton ? { onBack: () => setStep(step - 1) } : {};
     return (
       <DashboardPanel
         editMode={editMode}
-        onContinue={() => (editMode && canProceed ? closeModal() : setStep(step + 1))}
+        onContinue={() => setStep(step + 1)}
         step={step}
-        canProceed={canProceed}
-        {...onBackProp}
+        onBack={showBackButton ? () => setStep(step - 1) : undefined}
       />
     );
   }
@@ -123,7 +118,7 @@ class DashboardElement extends React.PureComponent {
   }
 
   render() {
-    const { modalOpen, reopenPanel, goToRoot, editMode, canProceed } = this.props;
+    const { modalOpen, reopenPanel, goToRoot, activeIndicators } = this.props;
     return (
       <div className="l-dashboard-element">
         <div className="c-dashboard-element">
@@ -183,7 +178,7 @@ class DashboardElement extends React.PureComponent {
           {this.renderDashboardModal()}
           {modalOpen === false && (
             <section className="dashboard-element-widgets">
-              {editMode || canProceed ? (
+              {activeIndicators.length > 0 ? (
                 this.renderWidgets()
               ) : (
                 <div className="row align-center">

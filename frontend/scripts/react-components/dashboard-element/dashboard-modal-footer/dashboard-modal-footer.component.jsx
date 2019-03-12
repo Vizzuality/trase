@@ -14,8 +14,7 @@ function DashboardModalFooter(props) {
     onBack,
     backText,
     isDisabled,
-    step,
-    canProceed
+    step
   } = props;
   return (
     <div className="c-dashboard-modal-footer">
@@ -33,7 +32,7 @@ function DashboardModalFooter(props) {
           </button>
         )}
         <Button onClick={onContinue} color="pink" size="md" disabled={isDisabled}>
-          {isPanelFooter && !canProceed ? 'Continue' : 'Go to dashboard'}
+          {isPanelFooter ? 'Continue' : 'Go to dashboard'}
         </Button>
       </div>
     </div>
@@ -49,8 +48,7 @@ DashboardModalFooter.propTypes = {
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
   step: PropTypes.number,
-  backText: PropTypes.string,
-  canProceed: PropTypes.bool
+  backText: PropTypes.string
 };
 
 DashboardModalFooter.defaultProps = {
