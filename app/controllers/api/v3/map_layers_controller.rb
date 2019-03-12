@@ -50,10 +50,12 @@ module Api
       end
 
       def serialize_dimension(dimension)
+        # rubocop:disable Style/EachWithObject
         dimension.inject({}) do |new_hash, (k, v)|
           new_hash[k.camelize(:lower)] = v
           new_hash
         end
+        # rubocop:enable Style/EachWithObject
       end
     end
   end
