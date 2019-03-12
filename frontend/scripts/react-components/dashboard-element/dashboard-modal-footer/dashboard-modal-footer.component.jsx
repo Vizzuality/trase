@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TagsGroup from 'react-components/shared/tags-group';
 import Button from 'react-components/shared/button/button.component';
+import Text from 'react-components/shared/text/text.component';
+
 import './dashboard-modal-footer.scss';
 
 function DashboardModalFooter(props) {
@@ -28,11 +30,15 @@ function DashboardModalFooter(props) {
       <div className="dashboard-modal-actions">
         {onBack && (
           <button type="button" onClick={onBack} className="dashboard-modal-back-button">
-            {backText || 'Back To Options'}
+            <Text as="span" size="rg" color="white" variant="mono">
+              {backText || 'Back To Options'}
+            </Text>
           </button>
         )}
         <Button onClick={onContinue} color="pink" size="md" disabled={isDisabled}>
-          {isPanelFooter ? 'Continue' : 'Go to dashboard'}
+          <Text as="span" size="rg" color="white" variant="mono">
+            {isPanelFooter ? 'Continue' : 'Go to dashboard'}
+          </Text>
         </Button>
       </div>
     </div>

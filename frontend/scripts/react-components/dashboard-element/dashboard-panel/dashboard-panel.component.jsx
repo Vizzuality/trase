@@ -8,6 +8,7 @@ import DashboardModalFooter from 'react-components/dashboard-element/dashboard-m
 import addApostrophe from 'utils/addApostrophe';
 import { DASHBOARD_STEPS } from 'constants';
 import { getPanelId as getPanelName, singularize } from 'utils/dashboardPanel';
+import Heading from 'react-components/shared/heading/heading.component';
 
 import 'scripts/react-components/dashboard-element/dashboard-panel/dashboard-panel.scss';
 
@@ -179,9 +180,9 @@ class DashboardPanel extends Component {
     return (
       <div className="c-dashboard-panel">
         <div ref={this.containerRef} className="dashboard-panel-content">
-          <h2 className="dashboard-panel-title title -center -light">
+          <Heading align="center" size="lg" className="dashboard-panel-title">
             {editMode ? 'Edit options' : this.renderTitleSentence()}
-          </h2>
+          </Heading>
           {this.renderPanel()}
         </div>
         <DashboardModalFooter

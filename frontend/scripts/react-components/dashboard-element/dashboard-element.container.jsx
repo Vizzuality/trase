@@ -15,13 +15,12 @@ import {
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import { DASHBOARD_STEPS } from 'constants';
 
-const mapStateToProps = (state, ownProps) =>
-  console.log('o', ownProps) || {
-    indicators: state.dashboardElement.data.indicators,
-    activeIndicators: getActiveIndicatorsData(state),
-    dynamicSentenceParts: getDynamicSentence(state),
-    dirtyBlocks: getDirtyBlocks(state)
-  };
+const mapStateToProps = state => ({
+  indicators: state.dashboardElement.data.indicators,
+  activeIndicators: getActiveIndicatorsData(state),
+  dynamicSentenceParts: getDynamicSentence(state),
+  dirtyBlocks: getDirtyBlocks(state)
+});
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
