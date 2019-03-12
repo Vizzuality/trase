@@ -13,7 +13,7 @@ class TagsGroupContainer extends React.Component {
 
   isPartReadOnly = part => {
     const { readOnly, step } = this.props;
-    return readOnly ? true : step > DASHBOARD_STEPS[part.id.toUpperCase()];
+    return readOnly ? true : step > DASHBOARD_STEPS[part.id];
   };
 
   getOptions = part => {

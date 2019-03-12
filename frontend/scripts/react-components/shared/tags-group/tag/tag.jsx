@@ -14,7 +14,7 @@ class TagContainer extends React.Component {
 
   isPartReadOnly = () => {
     const { readOnly, step, part } = this.props;
-    return readOnly ? true : step > DASHBOARD_STEPS[part.id.toUpperCase()];
+    return readOnly ? true : step > DASHBOARD_STEPS[part.id];
   };
 
   getOptions = () => {

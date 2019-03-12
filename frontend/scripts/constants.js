@@ -242,10 +242,10 @@ export const LOGISTICS_MAP_INSPECTION_LEVELS = [
 ];
 
 export const DASHBOARD_STEPS = {
-  WELCOME: 0,
-  SOURCES: 1,
-  COMMODITIES: 2,
-  DESTINATIONS: 3,
-  COMPANIES: 4,
-  INDICATORS: 5
+  welcome: 0,
+  sources: 1,
+  commodities: 2,
+  destinations: 3,
+  companies: 4,
+  indicators: 5
 };

@@ -26,16 +26,16 @@ class DashboardElement extends React.PureComponent {
 
   renderStep() {
     const { step, setStep, editMode, closeModal } = this.props;
-    const showBackButton = step > DASHBOARD_STEPS.SOURCES;
-    if (step === DASHBOARD_STEPS.WELCOME) {
+    const showBackButton = step > DASHBOARD_STEPS.sources;
+    if (step === DASHBOARD_STEPS.welcome) {
       return <DashboardWelcome onContinue={() => setStep(step + 1)} />;
     }
-    if (step === DASHBOARD_STEPS.INDICATORS) {
+    if (step === DASHBOARD_STEPS.indicators) {
       return (
         <DashboardIndicators
           editMode={editMode}
           onContinue={closeModal}
-          goBack={() => setStep(DASHBOARD_STEPS.SOURCES)}
+          goBack={() => setStep(DASHBOARD_STEPS.sources)}
           step={step}
         />
       );
@@ -136,7 +136,7 @@ class DashboardElement extends React.PureComponent {
                     color="gray"
                     size="sm"
                     className="dashboard-header-action -panel"
-                    onClick={() => reopenPanel(DASHBOARD_STEPS.SOURCES)}
+                    onClick={() => reopenPanel(DASHBOARD_STEPS.sources)}
                   >
                     Edit Options
                   </Button>
@@ -145,7 +145,7 @@ class DashboardElement extends React.PureComponent {
                     color="gray-transparent"
                     size="sm"
                     className="dashboard-header-action -panel"
-                    onClick={() => reopenPanel(DASHBOARD_STEPS.INDICATORS)}
+                    onClick={() => reopenPanel(DASHBOARD_STEPS.indicators)}
                   >
                     Edit Indicators
                   </Button>

@@ -182,8 +182,7 @@ export function* onClearPanel() {
   const activeItems = dashboardElement[`${activeDashboardPanelName}Panel`].activeItems;
 
   if (isEmpty(activeItems)) {
-    const dashboardStepName =
-      activePanelId === 'countries' ? 'SOURCES' : activePanelId.toUpperCase();
+    const dashboardStepName = activePanelId === 'countries' ? 'sources' : activePanelId;
     const panelIndex = DASHBOARD_STEPS[dashboardStepName];
     const panelsToClear = Object.keys(DASHBOARD_STEPS)
       .slice(panelIndex + 1)

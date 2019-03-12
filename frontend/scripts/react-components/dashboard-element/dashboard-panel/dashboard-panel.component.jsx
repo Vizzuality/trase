@@ -62,7 +62,7 @@ class DashboardPanel extends Component {
       step
     } = this.props;
     switch (step) {
-      case DASHBOARD_STEPS.SOURCES:
+      case DASHBOARD_STEPS.sources:
         return (
           <SourcesPanel
             tabs={tabs}
@@ -89,7 +89,7 @@ class DashboardPanel extends Component {
             sources={sources[sourcesPanel.activeTab && sourcesPanel.activeTab.id] || []}
           />
         );
-      case DASHBOARD_STEPS.COMMODITIES:
+      case DASHBOARD_STEPS.commodities:
         return (
           <CommoditiesPanel
             page={commoditiesPanel.page}
@@ -101,7 +101,7 @@ class DashboardPanel extends Component {
             activeCommodity={commoditiesPanel.activeItems}
           />
         );
-      case DASHBOARD_STEPS.DESTINATIONS:
+      case DASHBOARD_STEPS.destinations:
         return (
           <DestinationsPanel
             page={destinationsPanel.page}
@@ -115,7 +115,7 @@ class DashboardPanel extends Component {
             activeDestination={destinationsPanel.activeItems}
           />
         );
-      case DASHBOARD_STEPS.COMPANIES:
+      case DASHBOARD_STEPS.companies:
         return (
           <CompaniesPanel
             tabs={tabs}
@@ -141,7 +141,7 @@ class DashboardPanel extends Component {
 
   renderTitleSentence() {
     const { step } = this.props;
-    if (step === DASHBOARD_STEPS.SOURCES || step === DASHBOARD_STEPS.COMMODITIES) {
+    if (step === DASHBOARD_STEPS.sources || step === DASHBOARD_STEPS.commodities) {
       return (
         <span>
           Choose one{' '}
@@ -151,7 +151,7 @@ class DashboardPanel extends Component {
     }
     return (
       <span>
-        {step === DASHBOARD_STEPS.COMPANIES ? '(Optional) ' : ''}
+        {step === DASHBOARD_STEPS.companies ? '(Optional) ' : ''}
         Choose one or several <span className="dashboard-panel-sentence">{getPanelName(step)}</span>
       </span>
     );

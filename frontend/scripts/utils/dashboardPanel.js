@@ -3,7 +3,7 @@ import { DASHBOARD_STEPS } from 'constants';
 
 export const getPanelId = step => {
   const panelIds = invert(DASHBOARD_STEPS);
-  return panelIds && panelIds[step] && panelIds[step].toLowerCase();
+  return panelIds && panelIds[step] && panelIds[step];
 };
 
 export const singularize = panelName => {

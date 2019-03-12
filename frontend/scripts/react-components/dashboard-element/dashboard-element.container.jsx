@@ -56,7 +56,7 @@ class DashboardElementContainer extends React.Component {
   state = {
     modalOpen: true,
     editMode: false,
-    step: this.hasVisitedBefore.get() ? DASHBOARD_STEPS.PANEL : DASHBOARD_STEPS.WELCOME
+    step: this.hasVisitedBefore.get() ? DASHBOARD_STEPS.sources : DASHBOARD_STEPS.welcome
   };
 
   componentDidMount() {
@@ -73,7 +73,7 @@ class DashboardElementContainer extends React.Component {
 
   updateStep = step => {
     const { setDashboardActivePanel, openIndicatorsStep } = this.props;
-    if (step !== DASHBOARD_STEPS.INDICATORS) {
+    if (step !== DASHBOARD_STEPS.indicators) {
       setDashboardActivePanel(getPanelId(step));
     } else {
       openIndicatorsStep();
