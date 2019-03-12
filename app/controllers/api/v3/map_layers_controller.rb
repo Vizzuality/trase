@@ -32,12 +32,11 @@ module Api
             root: 'dimensionGroups'
           ).serializable_hash
 
-        serialized_layers =
-          ActiveModelSerializers::SerializableResource.new(
-            dimensions,
-            each_serializer: Api::V3::MapLayers::DimensionSerializer,
-            root: 'dimensions'
-          ).serializable_hash
+        serialized_layers = {
+          dimensions: dimensions.map do |dimension|
+            serialize_dimension(dimension)
+          end
+        }
 
         render json: serialized_layer_groups.merge(serialized_layers).
           merge(serialized_contextual_layers)
@@ -48,6 +47,13 @@ module Api
       def set_start_end_year
         @start_year = params[:start_year]&.to_i || @context&.default_year
         @end_year = params[:end_year]&.to_i || @start_year
+      end
+
+      def serialize_dimension(dimension)
+        dimension.inject({}) do |new_hash, (k, v)|
+          new_hash[k.camelize(:lower)] = v
+          new_hash
+        end
       end
     end
   end
