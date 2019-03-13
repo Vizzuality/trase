@@ -24,7 +24,8 @@ function StepsTracker(props) {
               </Text>
             </div>
             <div className="steps-tracker-circle" />
-            {i < steps.length - 1 && <div className="steps-tracker-segment" />}
+            {i < steps.length && i > 0 && <div className="steps-tracker-segment-in" />}
+            {i < steps.length - 1 && <div className="steps-tracker-segment-out" />}
           </div>
         </>
       ))}
