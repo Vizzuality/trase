@@ -36,21 +36,11 @@ class SourcesPanel extends React.PureComponent {
       activeSourceItem
     } = this.props;
     const hasActiveCountryItems = Object.keys(activeCountryItem).length > 0;
-    const showJurisdictions = hasActiveCountryItems && tabs.length > 0 && sources.length > 0;
+    const showJurisdictions = hasActiveCountryItems && tabs.length > 0;
     const activeCountryName =
       hasActiveCountryItems && capitalize(Object.values(activeCountryItem)[0].name);
     return (
       <React.Fragment>
-        <SearchInput
-          variant="bordered"
-          size="sm"
-          className="dashboard-panel-search"
-          items={searchSources}
-          placeholder="Search place"
-          onSelect={item => (!item.nodeType ? onSelectCountry(item) : setSearchResult(item))}
-          onSearchTermChange={getSearchResults}
-          nodeTypeRenderer={nodeTypeRenderer}
-        />
         <GridList
           className="dashboard-panel-pill-list"
           height={Math.min(200, Math.ceil(countries.length / 5) * 50)}
@@ -79,6 +69,16 @@ class SourcesPanel extends React.PureComponent {
             <Text color="grey-faded" className="dashboard-panel-sources-subtitle">
               You can choose several places of the same category:
             </Text>
+            <SearchInput
+              variant="bordered"
+              size="sm"
+              className="dashboard-panel-search"
+              items={searchSources}
+              placeholder="Search place"
+              onSelect={item => (!item.nodeType ? onSelectCountry(item) : setSearchResult(item))}
+              onSearchTermChange={getSearchResults}
+              nodeTypeRenderer={nodeTypeRenderer}
+            />
             <Tabs
               tabs={tabs}
               onSelectTab={onSelectSourceTab}
