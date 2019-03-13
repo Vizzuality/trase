@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
+import { Manager, Reference, Popper } from 'react-popper';
 import cx from 'classnames';
 import './dropdown.scss';
 
@@ -39,32 +40,35 @@ class Dropdown extends React.Component {
         );
   }
 
+  renderButton = ({ ref, toggleMenu, inputValue, getToggleButtonProps }) => {
+    const { arrowType, selectedValueOverride } = this.props;
+
+    return (
+      <button
+        {...getToggleButtonProps()}
+        ref={ref}
+        className={cx('dropdown-selected-item', { [`-${arrowType}`]: arrowType })}
+        onClick={toggleMenu}
+      >
+        {selectedValueOverride || inputValue}
+      </button>
+    );
+  };
+
+  renderList = ({ ref, style, placement, getItemProps, selectedItem }) => (
+    <ul ref={ref} style={style} data-placement={placement} className="dropdown-menu">
+      {this.getSelectedOptions(selectedItem).map((item, index) =>
+        this.renderItem(item, index, getItemProps)
+      )}
+    </ul>
+  );
+
   render() {
-    const {
-      options,
-      value,
-      onChange,
-      arrowType,
-      selectedValueOverride,
-      theme,
-      position,
-      itemToString,
-      color,
-      variant,
-      readOnly
-    } = this.props;
+    const { options, value, onChange, itemToString, color, variant, readOnly } = this.props;
 
     return (
       <Downshift defaultSelectedItem={value} itemToString={itemToString} onChange={onChange}>
-        {({
-          getItemProps,
-          isOpen,
-          toggleMenu,
-          getToggleButtonProps,
-          selectedItem,
-          inputValue,
-          getMenuProps
-        }) => (
+        {({ getItemProps, isOpen, toggleMenu, getToggleButtonProps, selectedItem, inputValue }) => (
           <div
             className={cx('c-dropdown-component', {
               '-open': isOpen,
@@ -73,30 +77,18 @@ class Dropdown extends React.Component {
               '-read-only': readOnly
             })}
           >
-            <button
-              {...getToggleButtonProps()}
-              className={cx(
-                'dropdown-selected-item',
-                { [`-${arrowType}`]: arrowType },
-                theme['selected-item']
-              )}
-              onClick={toggleMenu}
-            >
-              {selectedValueOverride || inputValue}
-            </button>
-            {isOpen && options.length > 0 ? (
-              <ul
-                {...getMenuProps()}
-                className={cx('dropdown-menu', {
-                  [theme.menu]: theme.menu,
-                  [`-position-${position}`]: position
-                })}
-              >
-                {this.getSelectedOptions(selectedItem).map((item, index) =>
-                  this.renderItem(item, index, getItemProps)
-                )}
-              </ul>
-            ) : null}
+            <Manager>
+              <Reference>
+                {props =>
+                  this.renderButton({ ...props, toggleMenu, getToggleButtonProps, inputValue })
+                }
+              </Reference>
+              {isOpen && options.length > 0 ? (
+                <Popper placement="bottom-end">
+                  {props => this.renderList({ ...props, getItemProps, selectedItem })}
+                </Popper>
+              ) : null}
+            </Manager>
           </div>
         )}
       </Downshift>
