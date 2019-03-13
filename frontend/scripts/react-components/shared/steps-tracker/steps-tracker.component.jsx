@@ -10,24 +10,25 @@ function StepsTracker(props) {
   return (
     <div className="c-steps-tracker">
       {steps.map((step, i) => (
-        <>
-          <div
-            className={cx('steps-tracker-item', {
-              '-active': i === activeStep,
-              '-done': i < activeStep,
-              '-pending': i > activeStep
-            })}
-          >
+        <div
+          className={cx('steps-tracker-item-wrapper', {
+            '-active': i === activeStep,
+            '-done': i < activeStep,
+            '-pending': i > activeStep
+          })}
+        >
+          <div className="steps-tracker-item">
             <div className="steps-tracker-label">
               <Text as="span" variant="mono" transform="uppercase" weight="bold">
                 {step.label}
               </Text>
             </div>
-            <div className="steps-tracker-circle" />
-            {i < steps.length && i > 0 && <div className="steps-tracker-segment-in" />}
-            {i < steps.length - 1 && <div className="steps-tracker-segment-out" />}
+            <div className="steps-tracker-circle">
+              <span className="steps-tracker-circle-dot" />
+            </div>
           </div>
-        </>
+          {i < steps.length - 1 && <div className="steps-tracker-segment" />}
+        </div>
       ))}
     </div>
   );
