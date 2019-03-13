@@ -1,7 +1,6 @@
 @import 'styles/settings';
 
 .c-heading {
-  line-height: 1.75;
 
   &.mono {
     font-family: $font-family-1;
@@ -10,6 +9,7 @@
   }
 
   &.serif {
+    line-height: 1.75;
     font-family: $font-family-2;
   }
 
