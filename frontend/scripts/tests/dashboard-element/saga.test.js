@@ -314,7 +314,7 @@ describe('onItemChange', () => {
 });
 
 describe('onChangePanel', () => {
-  const emptyPanelState = {
+  const state = {
     dashboardElement: {
       ...baseState.dashboardElement,
       activePanelId: 'countries',
@@ -338,12 +338,8 @@ describe('onChangePanel', () => {
   };
 
   it(`dispatches ${DASHBOARD_ELEMENT__CLEAR_PANELS} with the subsequent panels if the panel is changed`, async () => {
-    const dispatched = await recordSaga(
-      onChangePanel,
-      clearDashboardPanel('countries'),
-      emptyPanelState
-    );
-    const panelsToClear = ['commodities', 'destinations', 'companies'];
+    const dispatched = await recordSaga(onChangePanel, clearDashboardPanel('commodities'), state);
+    const panelsToClear = ['destinations', 'companies'];
     expect(dispatched).toContainEqual({
       payload: { panels: panelsToClear },
       type: DASHBOARD_ELEMENT__CLEAR_PANELS

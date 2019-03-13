@@ -152,10 +152,9 @@ function* fetchDataOnItemChange() {
  * Listens to actions that remove or clear panel items and deletes all subsequent selections if the panel is changed
  */
 
-export function* onChangePanel() {
-  const { dashboardElement } = yield select();
-  const { activePanelId } = dashboardElement;
-  const dashboardStepName = activePanelId === 'countries' ? 'sources' : activePanelId;
+export function* onChangePanel(action) {
+  const { panel } = action.payload;
+  const dashboardStepName = panel === 'countries' ? 'sources' : panel;
   const panelIndex = DASHBOARD_STEPS[dashboardStepName];
   const panelsToClear = Object.keys(DASHBOARD_STEPS)
     .slice(panelIndex + 1)
