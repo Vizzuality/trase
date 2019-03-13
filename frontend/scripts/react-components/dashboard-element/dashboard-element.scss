@@ -2,6 +2,7 @@
 
 .c-dashboard-element {
   padding: 60px 0 0;
+  overflow: hidden; // Only to fix problem with sentence dropdown
 
   .dashboard-element-title {
     font-family: $font-family-2;
