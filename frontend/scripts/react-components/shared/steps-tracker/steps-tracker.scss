@@ -2,47 +2,24 @@
 
 $label-height: 25px;
 $circle-size: 32px;
-$segment-size: 60px;
-$item-size: $label-height + $circle-size;
+$item-height: $label-height + $circle-size;
 $circle-dot-size: $circle-size / 2;
-$circle-left: $circle-size + 2px;
 
 .c-steps-tracker {
   display: flex;
   align-items: center;
   justify-content: center;
 
-  .steps-tracker-item {
-    position: relative;
-    display: flex;
-    align-items: center;
+  .steps-tracker-item-wrapper {
     width: 100px;
-    padding: $label-height 0 0;
-    height: $item-size;
-
-    &.-done {
-      .steps-tracker-circle {
-        height: $circle-dot-size;
-        width: $circle-dot-size;
-      }
-
-      .steps-tracker-segment-in,
-      .steps-tracker-segment-out {
-        height: 4px;
-        top: calc((100% + #{$label-height}) / 2);
-        right: -43%;
-        width: 92px;
-      }
-    }
+    position: relative;
 
     &.-active {
       .steps-tracker-circle {
         border: 2px solid $charcoal-grey;
-        left: $circle-left;
       }
 
-      .steps-tracker-segment-in,
-      .steps-tracker-segment-out {
+      .steps-tracker-segment {
         opacity: 0.4;
       }
     }
@@ -51,9 +28,44 @@ $circle-left: $circle-size + 2px;
       opacity: 0.4;
 
       .steps-tracker-circle {
-        left: $circle-left;
+        &::before,
+        &::after {
+          height: 2px;
+        }
+      }
+
+      &:last-child {
+        .steps-tracker-circle::after {
+          display: none;
+        }
       }
     }
+
+    &.-done {
+      .steps-tracker-segment {
+        height: 4px;
+      }
+
+      .steps-tracker-circle {
+        &::before, &::after {
+          height: 4px;
+        }
+      }
+
+      &:first-child {
+        .steps-tracker-circle::before {
+          display: none;
+        }
+      }
+    }
+
+  }
+
+  .steps-tracker-item {
+    position: relative;
+    width: $circle-size;
+    padding: $label-height 0 0;
+    height: $item-height;
   }
 
   .steps-tracker-label  {
@@ -70,37 +82,40 @@ $circle-left: $circle-size + 2px;
     justify-content: center;
     height: $circle-size;
     width: $circle-size;
-    background-color: transparent;
+    background-color: $white;
     border-radius: 100%;
 
-
-    left: $circle-left + 8px;
-    position: absolute;
-
-    &::after {
-      content: '';
+    .steps-tracker-circle-dot {
       height: $circle-dot-size;
       width: $circle-dot-size;
       background-color: $charcoal-grey;
       border-radius: 100%;
     }
+
+    &::before, &::after {
+      content: '';
+      position: absolute;
+      width: 50%;
+      background-color: $charcoal-grey;
+    }
+
+    &::before {
+      left: 0;
+    }
+
+    &::after {
+      right: 0;
+    }
   }
 
-  .steps-tracker-segment-in {
+  .steps-tracker-segment {
     position: absolute;
     display: block;
     top: calc((100% + #{$label-height}) / 2);
     height: 2px;
     background-color: $charcoal-grey;
     transform: translateY(-50%);
-    width: 42px;
-
-    left: 0;
-  }
-
-  .steps-tracker-segment-out {
-    @extend .steps-tracker-segment-in;
-    left: initial;
-    right: 0;
+    width: calc(100% - #{$circle-size});
+    left: $circle-size;
   }
 }
