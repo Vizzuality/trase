@@ -20,7 +20,7 @@ class Accordion extends React.PureComponent {
     const { isOpen } = this.state;
     return (
       <div className="c-accordion">
-        <button onClick={this.toggleOpen} className="c-accordion-button">
+        <button onClick={this.toggleOpen} className="button">
           <Text as="span" size="rg">
             {title}
           </Text>
