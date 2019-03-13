@@ -9,6 +9,7 @@ import addApostrophe from 'utils/addApostrophe';
 import { DASHBOARD_STEPS } from 'constants';
 import { getPanelId as getPanelName, singularize } from 'utils/dashboardPanel';
 import Heading from 'react-components/shared/heading/heading.component';
+import StepsTracker from 'react-components/shared/steps-tracker/steps-tracker.component';
 
 import 'scripts/react-components/dashboard-element/dashboard-panel/dashboard-panel.scss';
 
@@ -173,6 +174,12 @@ class DashboardPanel extends Component {
     return (
       <div className="c-dashboard-panel">
         <div ref={this.containerRef} className="dashboard-panel-content">
+          <StepsTracker
+            steps={['Source countries', 'Commodities', 'Import countries', 'companies'].map(
+              label => ({ label })
+            )}
+            activeStep={step - 1}
+          />
           <Heading className="dashboard-panel-title" align="center" size="lg">
             {editMode ? 'Edit options' : this.renderTitleSentence()}
           </Heading>

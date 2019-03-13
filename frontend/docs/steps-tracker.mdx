@@ -12,12 +12,12 @@ import 'styles/_docz.scss';
 <State initial={{ active: 0 }}>
   {({ state, setState }) => (
     <div className="components-container">
-      <Button color="charcoal" size="sm" onClick={() => setState({ active: (state.active < 2 ? state.active + 1 : 0) })}>
+      <Button color="charcoal" size="sm" onClick={() => setState({ active: (state.active < 3 ? state.active + 1 : 0) })}>
         Update
       </Button>
       <StepsTracker
         activeStep={state.active}
-        steps={[{ label: 'countries' }, { label: 'commodities' }, { label: 'companies' }]}
+        steps={[{ label: 'source countries' },{ label: 'countries' }, { label: 'commodities' }, { label: 'companies' }]}
       />
     </div>
   )}

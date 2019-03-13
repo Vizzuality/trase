@@ -1,17 +1,20 @@
 @import 'styles/settings';
 
+$segment-width: 150px;
 $label-height: 25px;
 $circle-size: 32px;
 $item-height: $label-height + $circle-size;
 $circle-dot-size: $circle-size / 2;
 
+
 .c-steps-tracker {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: $segment-width - $circle-size;
 
   .steps-tracker-item-wrapper {
-    width: 100px;
+    width: $segment-width;
     position: relative;
 
     &.-active {
@@ -74,6 +77,7 @@ $circle-dot-size: $circle-size / 2;
     top: 0;
     transform: translateX(-50%);
     height: $label-height;
+    white-space: nowrap;
   }
 
   .steps-tracker-circle {
@@ -82,7 +86,6 @@ $circle-dot-size: $circle-size / 2;
     justify-content: center;
     height: $circle-size;
     width: $circle-size;
-    background-color: $white;
     border-radius: 100%;
 
     .steps-tracker-circle-dot {
