@@ -5,7 +5,18 @@ import cx from 'classnames';
 import './text.scss';
 
 function Text(props) {
-  const { as, variant, color, size, align, weight, children, className, ...rest } = props;
+  const {
+    as,
+    variant,
+    color,
+    size,
+    align,
+    weight,
+    children,
+    className,
+    transform,
+    ...rest
+  } = props;
   const textProps = {
     ...rest,
     className: cx(

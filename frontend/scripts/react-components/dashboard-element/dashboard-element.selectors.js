@@ -152,9 +152,9 @@ export const getIndicatorsByGroup = createSelector(
 );
 
 export const getIsDisabled = createSelector(
-  [getDynamicSentence, state => state.step],
+  [getDynamicSentence, (state, ownProps) => ownProps.step],
   (dynamicSentence, step) => {
-    if (dynamicSentence.length === 0) return true;
+    if (dynamicSentence.length === 0 || typeof step === 'undefined') return true;
     const currentPanel = getPanelName(step);
     const currentSentencePart = dynamicSentence.find(p => p.panel === currentPanel);
     if (!currentSentencePart.optional && !currentSentencePart.value) return true;
