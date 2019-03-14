@@ -1,0 +1,44 @@
+---
+name: Chart
+---
+
+import { PropsTable, Playground } from 'docz'
+import { State } from 'react-powerplug';
+import DashboardWidget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.component';
+import data from './mock-data/dashboard-widget-data';
+import dataMultiple from './mock-data/dashboard-widget-data-multiple';
+import dataPie from './mock-data/dashboard-widget-data-pie';
+import config from './mock-data/dashboard-widget-config';
+import 'styles/_docz.scss';
+
+## Chart
+
+<div className="chart-container">
+  <DashboardWidget
+    title={'Line Chart'}
+    data={data}
+    chartConfig={config.line}
+  />
+</div>
+<div className="chart-container">
+  <DashboardWidget
+    title={'Bar Chart'}
+    data={data}
+    chartConfig={config.bar}
+  />
+</div>
+<div className="chart-container">
+  <DashboardWidget
+    title={'Stacked bar Chart'}
+    data={dataMultiple}
+    chartConfig={config.stackedBar}
+  />
+</div>
+<div className="chart-container">
+  <DashboardWidget
+    title={'Pie Chart'}
+    data={dataPie}
+    chartConfig={config.pie}
+  />
+</div>
+<PropsTable of={DashboardWidget} />
