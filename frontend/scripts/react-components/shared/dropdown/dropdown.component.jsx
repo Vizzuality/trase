@@ -55,7 +55,7 @@ class Dropdown extends React.Component {
     );
   };
 
-  renderList = ({ ref, style, placement, getItemProps, selectedItem }) => (
+  renderBox = ({ ref, style, placement, getItemProps, selectedItem }) => (
     <ul ref={ref} style={style} data-placement={placement} className="dropdown-menu">
       {this.getSelectedOptions(selectedItem).map((item, index) =>
         this.renderItem(item, index, getItemProps)
@@ -64,8 +64,16 @@ class Dropdown extends React.Component {
   );
 
   render() {
-    const { options, value, onChange, itemToString, color, variant, readOnly } = this.props;
-
+    const {
+      options,
+      value,
+      onChange,
+      itemToString,
+      color,
+      variant,
+      readOnly,
+      placement
+    } = this.props;
     return (
       <Downshift defaultSelectedItem={value} itemToString={itemToString} onChange={onChange}>
         {({ getItemProps, isOpen, toggleMenu, getToggleButtonProps, selectedItem, inputValue }) => (
@@ -84,8 +92,8 @@ class Dropdown extends React.Component {
                 }
               </Reference>
               {isOpen && options.length > 0 ? (
-                <Popper placement="bottom-end">
-                  {props => this.renderList({ ...props, getItemProps, selectedItem })}
+                <Popper placement={placement || 'bottom-end'}>
+                  {props => this.renderBox({ ...props, getItemProps, selectedItem })}
                 </Popper>
               ) : null}
             </Manager>
@@ -109,7 +117,7 @@ Dropdown.propTypes = {
   showSelected: PropTypes.bool,
   readOnly: PropTypes.bool,
   theme: PropTypes.object,
-  position: PropTypes.string,
+  placement: PropTypes.string,
   itemToString: PropTypes.func,
   variant: PropTypes.string,
   color: PropTypes.string
