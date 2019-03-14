@@ -22,11 +22,15 @@
   }
 
   .dashboard-panel-title {
-    font-size: $font-size-big;
     margin-bottom: $sankey-x-margin;
+    margin-top: 10px;
 
     &.-small {
       font-size: $font-size-medium;
+    }
+
+    .dashboard-panel-sentence {
+      font-weight: $font-weight-bold;
     }
   }
 
@@ -50,5 +54,9 @@
   .dashboard-panel-pill-list {
     margin-bottom: 39px;
     overflow-x: hidden !important;
+  }
+
+  .dashboard-panel-sources-subtitle {
+    margin-bottom: 20px;
   }
 }

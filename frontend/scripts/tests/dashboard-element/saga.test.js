@@ -6,9 +6,9 @@ import {
   getSearchResults,
   onTabChange,
   onItemChange,
-  onFilterClear,
   onPageChange,
-  onStepChange
+  onStepChange,
+  onChangePanel
 } from 'react-components/dashboard-element/dashboard-element.saga';
 import {
   openIndicatorsStep,
@@ -22,7 +22,8 @@ import {
   setDashboardPanelActiveItemWithSearch,
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
-  DASHBOARD_ELEMENT__SET_ACTIVE_PANEL
+  DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
+  DASHBOARD_ELEMENT__CLEAR_PANELS
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import { getURLFromParams } from 'utils/getURLFromParams';
 import { fetchWithCancel } from 'react-components/dashboard-element/fetch-with-cancel';
@@ -312,39 +313,23 @@ describe('onItemChange', () => {
   });
 });
 
-describe('onFilterClear', () => {
+describe('onChangePanel', () => {
   const state = {
     dashboardElement: {
       ...baseState.dashboardElement,
-      activePanelId: 'sources',
-      sourcesPanel: {
-        ...baseState.dashboardElement.sourcesPanel,
+      activePanelId: 'countries',
+      countriesPanel: {
         activeTab: {
-          id: 2
+          id: 1
         },
-        page: 2
-      },
-      countriesPanel: {
-        ...baseState.dashboardElement.countriesPanel,
         activeItems: {}
-      }
-    }
-  };
-  const sourcesStateWithActiveItem = {
-    dashboardElement: {
-      ...state.dashboardElement,
-      countriesPanel: {
-        ...state.dashboardElement.countriesPanel,
-        activeItems: { 5: { id: 5 } }
-      }
-    }
-  };
-  const companiesState = {
-    dashboardElement: {
-      ...state.dashboardElement,
-      activePanelId: 'companies',
+      },
+      commoditiesPanel: {
+        activeTab: {
+          id: 1
+        }
+      },
       companiesPanel: {
-        ...state.dashboardElement.companiesPanel,
         activeTab: {
           id: 1
         }
@@ -352,74 +337,12 @@ describe('onFilterClear', () => {
     }
   };
 
-  const clearAction = clearDashboardPanel('companies');
-  const clearAction2 = clearDashboardPanel('commodities');
-
-  it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_DATA} for countries if the active panel is sources and doesnt load sources`, async () => {
-    const dispatched = await recordSaga(onFilterClear, clearAction, state);
-    // Clears data
+  it(`dispatches ${DASHBOARD_ELEMENT__CLEAR_PANELS} with the subsequent panels if the panel is changed`, async () => {
+    const dispatched = await recordSaga(onChangePanel, clearDashboardPanel('commodities'), state);
+    const panelsToClear = ['destinations', 'companies'];
     expect(dispatched).toContainEqual({
-      payload: {
-        key: 'countries',
-        data: null,
-        meta: null,
-        tab: 2,
-        loading: true
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
-    });
-    expect(dispatched).not.toContainEqual({
-      type: DASHBOARD_ELEMENT__SET_PANEL_TABS,
-      payload: { data }
-    });
-    // Sets data
-    expect(dispatched).toContainEqual({
-      payload: {
-        key: 'countries',
-        data,
-        meta,
-        loading: false,
-        tab: 2
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
-    });
-  });
-
-  it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_DATA} for countries and ${DASHBOARD_ELEMENT__SET_PANEL_TABS} for sources too if countries activeItem exists`, async () => {
-    const dispatched = await recordSaga(onFilterClear, clearAction, sourcesStateWithActiveItem);
-    // Clears data
-    expect(dispatched).toContainEqual({
-      payload: {
-        key: 'countries',
-        data: null,
-        meta: null,
-        tab: 2,
-        loading: true
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
-    });
-    // Sets data
-    expect(dispatched).toContainEqual({
-      payload: {
-        key: 'countries',
-        data,
-        meta,
-        loading: false,
-        tab: 2
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
-    });
-    expect(dispatched).toContainEqual({
-      type: DASHBOARD_ELEMENT__SET_PANEL_TABS,
-      payload: { data }
-    });
-  });
-
-  it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_TABS} if is companies`, async () => {
-    const dispatched = await recordSaga(onFilterClear, clearAction2, companiesState);
-    expect(dispatched).toContainEqual({
-      type: DASHBOARD_ELEMENT__SET_PANEL_TABS,
-      payload: { data }
+      payload: { panels: panelsToClear },
+      type: DASHBOARD_ELEMENT__CLEAR_PANELS
     });
   });
 });

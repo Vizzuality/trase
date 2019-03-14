@@ -1,3 +1,5 @@
+import { DASHBOARD_STEPS } from 'constants';
+
 export const DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_PANEL = 'DASHBOARD_ELEMENT__SET_ACTIVE_PANEL';
@@ -5,6 +7,7 @@ export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEM = 'DASHBOARD_ELEMENT__SET_ACTIVE
 export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS = 'DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_TAB = 'DASHBOARD_ELEMENT__SET_ACTIVE_TAB';
 export const DASHBOARD_ELEMENT__CLEAR_PANEL = 'DASHBOARD_ELEMENT__CLEAR_PANEL';
+export const DASHBOARD_ELEMENT__CLEAR_PANELS = 'DASHBOARD_ELEMENT__CLEAR_PANELS';
 export const DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR = 'DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR';
 export const DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR =
   'DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR';
@@ -41,24 +44,25 @@ export const getDashboardPanelParams = (state, optionsType, options = {}) => {
     options_type: optionsType !== 'indicators' ? optionsType : 'attributes',
     node_types_ids: nodeTypesIds
   };
-
-  if (optionsType !== 'countries') {
+  const currentStep = DASHBOARD_STEPS[optionsType];
+  if (currentStep === DASHBOARD_STEPS.sources) {
     params.countries_ids = activeItemParams(countriesPanel);
   }
 
-  if (optionsType !== 'sources') {
+  if (currentStep > DASHBOARD_STEPS.sources) {
+    params.countries_ids = activeItemParams(countriesPanel);
     params.sources_ids = activeItemParams(sourcesPanel);
   }
 
-  if (optionsType !== 'commodities') {
+  if (currentStep > DASHBOARD_STEPS.commodities) {
     params.commodities_ids = activeItemParams(commoditiesPanel);
   }
 
-  if (optionsType !== 'destinations') {
+  if (currentStep > DASHBOARD_STEPS.destinations) {
     params.destinations_ids = activeItemParams(destinationsPanel);
   }
 
-  if (optionsType !== 'companies') {
+  if (currentStep > DASHBOARD_STEPS.companies) {
     params.companies_ids = activeItemParams(companiesPanel);
   }
 
@@ -98,6 +102,11 @@ export const setDashboardPanelActiveTab = (activeTab, panel) => ({
 export const clearDashboardPanel = panel => ({
   type: DASHBOARD_ELEMENT__CLEAR_PANEL,
   payload: { panel }
+});
+
+export const clearDashboardPanels = panels => ({
+  type: DASHBOARD_ELEMENT__CLEAR_PANELS,
+  payload: { panels }
 });
 
 export const addActiveIndicator = active => ({

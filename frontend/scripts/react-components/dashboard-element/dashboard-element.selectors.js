@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash/sortBy';
 import isEmpty from 'lodash/isEmpty';
+import { getPanelId as getPanelName } from 'utils/dashboardPanel';
 
 const getCountriesPanel = state => state.dashboardElement.countriesPanel;
 const getSourcesPanel = state => state.dashboardElement.sourcesPanel;
@@ -101,13 +102,15 @@ export const getDynamicSentence = createSelector(
         panel: 'companies',
         id: 'exporting-companies',
         prefix: getActivePanelItem('companies', 'EXPORTER') ? 'exported by' : '',
-        value: getActivePanelItem('companies', 'EXPORTER')
+        value: getActivePanelItem('companies', 'EXPORTER'),
+        optional: true
       },
       {
         panel: 'companies',
         id: 'importing-companies',
         prefix: getActivePanelItem('companies', 'IMPORTER') ? 'imported by' : '',
-        value: getActivePanelItem('companies', 'IMPORTER')
+        value: getActivePanelItem('companies', 'IMPORTER'),
+        optional: true
       },
       {
         panel: 'destinations',
@@ -145,5 +148,16 @@ export const getIndicatorsByGroup = createSelector(
     );
 
     return groupedIndicators;
+  }
+);
+
+export const getIsDisabled = createSelector(
+  [getDynamicSentence, state => state.step],
+  (dynamicSentence, step) => {
+    if (dynamicSentence.length === 0) return true;
+    const currentPanel = getPanelName(step);
+    const currentSentencePart = dynamicSentence.find(p => p.panel === currentPanel);
+    if (!currentSentencePart.optional && !currentSentencePart.value) return true;
+    return false;
   }
 );

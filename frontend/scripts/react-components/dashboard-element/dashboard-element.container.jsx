@@ -8,7 +8,12 @@ import {
   getDirtyBlocks,
   getDynamicSentence
 } from 'react-components/dashboard-element/dashboard-element.selectors';
-import { openIndicatorsStep as openIndicatorsStepFn } from 'react-components/dashboard-element/dashboard-element.actions';
+import { getPanelId } from 'utils/dashboardPanel';
+import {
+  openIndicatorsStep as openIndicatorsStepFn,
+  setDashboardActivePanel as setDashboardActivePanelFn
+} from 'react-components/dashboard-element/dashboard-element.actions';
+import { DASHBOARD_STEPS } from 'constants';
 
 const mapStateToProps = state => ({
   indicators: state.dashboardElement.data.indicators,
@@ -20,6 +25,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
+      setDashboardActivePanel: setDashboardActivePanelFn,
       openIndicatorsStep: openIndicatorsStepFn,
       goToRoot: () => ({ type: 'dashboardRoot' })
     },
@@ -32,7 +38,8 @@ class DashboardElementContainer extends React.Component {
     activeIndicators: PropTypes.array,
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
-    openIndicatorsStep: PropTypes.func.isRequired
+    openIndicatorsStep: PropTypes.func.isRequired,
+    setDashboardActivePanel: PropTypes.func.isRequired
   };
 
   hasVisitedBefore = {
@@ -48,9 +55,7 @@ class DashboardElementContainer extends React.Component {
   state = {
     modalOpen: true,
     editMode: false,
-    step: this.hasVisitedBefore.get()
-      ? DashboardElement.steps.PANEL
-      : DashboardElement.steps.WELCOME
+    step: this.hasVisitedBefore.get() ? DASHBOARD_STEPS.sources : DASHBOARD_STEPS.welcome
   };
 
   componentDidMount() {
@@ -59,11 +64,23 @@ class DashboardElementContainer extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { step } = this.state;
+    if (step !== prevState.step) {
+      const { setDashboardActivePanel, openIndicatorsStep } = this.props;
+      if (step !== DASHBOARD_STEPS.indicators) {
+        setDashboardActivePanel(getPanelId(step));
+      } else {
+        openIndicatorsStep();
+      }
+    }
+  }
+
   closeModal = () => {
     this.setState({ modalOpen: false });
   };
 
-  reopenPanel = (step, editMode) => this.setState({ step, editMode, modalOpen: true });
+  reopenPanel = step => this.setState({ step, editMode: true, modalOpen: true });
 
   updateStep = step => this.setState({ step });
 

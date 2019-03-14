@@ -4,96 +4,116 @@ import SearchInput from 'react-components/shared/search-input/search-input.compo
 import GridList from 'react-components/shared/grid-list/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import Tabs from 'react-components/shared/tabs/tabs.component';
+import Text from 'react-components/shared/text/text.component';
+import capitalize from 'lodash/capitalize';
+import Accordion from '../../shared/accordion/accordion.component';
 
-function SourcesPanel(props) {
-  const {
-    tabs,
-    page,
-    getMoreItems,
-    searchSources,
-    loadingMoreItems,
-    loading,
-    setSearchResult,
-    getSearchResults,
-    activeCountryItem,
-    sources,
-    countries,
-    onSelectCountry,
-    onSelectSourceTab,
-    nodeTypeRenderer,
-    onSelectSourceValue,
-    activeSourceTab,
-    activeSourceItem
-  } = props;
-  const hasActiveCountryItems = Object.keys(activeCountryItem).length > 0;
-  const showJurisdictions = hasActiveCountryItems && tabs.length > 0 && sources.length > 0;
-  return (
-    <React.Fragment>
-      <SearchInput
-        variant="bordered"
-        size="sm"
-        className="dashboard-panel-search"
-        items={searchSources}
-        placeholder="Search place"
-        onSelect={item => (!item.nodeType ? onSelectCountry(item) : setSearchResult(item))}
-        onSearchTermChange={getSearchResults}
-        nodeTypeRenderer={nodeTypeRenderer}
-      />
-      <GridList
-        className="dashboard-panel-pill-list"
-        height={Math.min(200, Math.ceil(countries.length / 5) * 50)}
-        width={950}
-        columnWidth={190}
-        rowHeight={50}
-        columnCount={5}
-        items={countries}
-        loading={!hasActiveCountryItems && loading}
-      >
-        {itemProps => (
-          <GridListItem
-            {...itemProps}
-            isActive={!!activeCountryItem[itemProps.item && itemProps.item.id]}
-            enableItem={onSelectCountry}
-            disableItem={() => onSelectCountry({})}
-          />
-        )}
-      </GridList>
-      {showJurisdictions && (
-        <React.Fragment>
-          <Tabs
-            tabs={tabs}
-            onSelectTab={onSelectSourceTab}
-            selectedTab={activeSourceTab && activeSourceTab.id}
-            itemTabRenderer={i => i.name}
-            getTabId={item => item.id}
+class SourcesPanel extends React.PureComponent {
+  state = {
+    sourcesOpen: false
+  };
+
+  toggleSourcesOpen = () => this.setState(state => ({ sourcesOpen: !state.sourcesOpen }));
+
+  render() {
+    const {
+      tabs,
+      page,
+      getMoreItems,
+      searchSources,
+      loadingMoreItems,
+      loading,
+      setSearchResult,
+      getSearchResults,
+      activeCountryItem,
+      sources,
+      countries,
+      onSelectCountry,
+      onSelectSourceTab,
+      nodeTypeRenderer,
+      onSelectSourceValue,
+      activeSourceTab,
+      activeSourceItem
+    } = this.props;
+    const hasActiveCountryItems = Object.keys(activeCountryItem).length > 0;
+    const showJurisdictions = hasActiveCountryItems && tabs.length > 0;
+    const activeCountryName =
+      hasActiveCountryItems && capitalize(Object.values(activeCountryItem)[0].name);
+    return (
+      <React.Fragment>
+        <GridList
+          className="dashboard-panel-pill-list"
+          height={Math.min(200, Math.ceil(countries.length / 5) * 50)}
+          width={950}
+          columnWidth={190}
+          rowHeight={50}
+          columnCount={5}
+          items={countries}
+          loading={!hasActiveCountryItems && loading}
+        >
+          {itemProps => (
+            <GridListItem
+              {...itemProps}
+              isActive={!!activeCountryItem[itemProps.item && itemProps.item.id]}
+              enableItem={onSelectCountry}
+              disableItem={() => onSelectCountry({})}
+            />
+          )}
+        </GridList>
+        {showJurisdictions && (
+          <Accordion
+            title={`${activeCountryName} regions (Optional)`}
+            defaultValue={Object.keys(activeSourceItem).length > 0 || this.state.sourcesOpen}
+            onToggle={this.toggleSourcesOpen}
           >
-            <GridList
-              className="dashboard-panel-pill-list"
-              items={sources}
-              height={sources.length > 5 ? 200 : 50}
-              width={950}
-              rowHeight={50}
-              columnWidth={190}
-              columnCount={5}
-              page={page}
-              getMoreItems={getMoreItems}
-              loadingMoreItems={loadingMoreItems}
-              loading={loading}
+            <Text color="grey-faded" className="dashboard-panel-sources-subtitle">
+              You can choose several places of the same category:
+            </Text>
+            <SearchInput
+              variant="bordered"
+              size="sm"
+              className="dashboard-panel-search"
+              items={searchSources}
+              placeholder="Search place"
+              onSelect={item => (!item.nodeType ? onSelectCountry(item) : setSearchResult(item))}
+              onSearchTermChange={getSearchResults}
+              nodeTypeRenderer={nodeTypeRenderer}
+            />
+            <Tabs
+              tabs={tabs}
+              onSelectTab={onSelectSourceTab}
+              selectedTab={activeSourceTab && activeSourceTab.id}
+              itemTabRenderer={i => i.name}
+              getTabId={item => item.id}
             >
-              {itemProps => (
-                <GridListItem
-                  {...itemProps}
-                  isActive={!!activeSourceItem[itemProps.item && itemProps.item.id]}
-                  enableItem={onSelectSourceValue}
-                  disableItem={onSelectSourceValue}
-                />
-              )}
-            </GridList>
-          </Tabs>
-        </React.Fragment>
-      )}
-    </React.Fragment>
-  );
+              <GridList
+                className="dashboard-panel-pill-list"
+                items={sources}
+                height={sources.length > 5 ? 200 : 50}
+                width={950}
+                rowHeight={50}
+                columnWidth={190}
+                columnCount={5}
+                page={page}
+                getMoreItems={getMoreItems}
+                loadingMoreItems={loadingMoreItems}
+                loading={loading}
+              >
+                {itemProps => (
+                  <GridListItem
+                    {...itemProps}
+                    isActive={!!activeSourceItem[itemProps.item && itemProps.item.id]}
+                    enableItem={onSelectSourceValue}
+                    disableItem={onSelectSourceValue}
+                  />
+                )}
+              </GridList>
+            </Tabs>
+          </Accordion>
+        )}
+      </React.Fragment>
+    );
+  }
 }
 
 SourcesPanel.propTypes = {

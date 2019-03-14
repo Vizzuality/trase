@@ -1,24 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TagsGroupComponent from 'react-components/shared/tags-group/tags-group.component';
+import TagComponent from 'react-components/shared/tags-group/tag/tag.component';
 import { DASHBOARD_STEPS } from 'constants';
 
-class TagsGroupContainer extends React.Component {
+class TagContainer extends React.Component {
   static propTypes = {
     clearPanel: PropTypes.func,
     removeSentenceItem: PropTypes.func,
     readOnly: PropTypes.bool,
-    step: PropTypes.number
+    step: PropTypes.number,
+    part: PropTypes.object
   };
 
-  isPartReadOnly = part => {
-    const { readOnly, step } = this.props;
+  isPartReadOnly = () => {
+    const { readOnly, step, part } = this.props;
     return readOnly ? true : step > DASHBOARD_STEPS[part.id];
   };
 
-  getOptions = part => {
-    const { value } = part;
-    const readOnly = this.isPartReadOnly(part);
+  getOptions = () => {
+    const { value } = this.props.part;
+    const readOnly = this.isPartReadOnly();
     const iconProp = readOnly ? {} : { icon: 'close' };
     const options = value.map(p => ({ value: p.id, label: p.name, ...iconProp }));
     return readOnly
@@ -26,43 +27,38 @@ class TagsGroupContainer extends React.Component {
       : options.concat({ label: 'CLEAR ALL', value: 'clear-all', ...iconProp });
   };
 
-  removeOption = (optionToClear, part) => {
-    const { removeSentenceItem, clearPanel } = this.props;
-
+  removeOption = optionToClear => {
+    const { removeSentenceItem, clearPanel, part } = this.props;
     if (optionToClear.value === 'clear-all') {
       if (part.panel === 'companies') removeSentenceItem(part.value, part.panel);
-      else {
-        clearPanel(part.panel);
-      }
+      else clearPanel(part.panel);
     } else {
       removeSentenceItem(part.value.find(v => v.id === optionToClear.value), part.panel);
     }
   };
 
-  clearSingleItem = part => {
-    const { removeSentenceItem, clearPanel } = this.props;
+  clearSingleItem = () => {
+    const { removeSentenceItem, clearPanel, part } = this.props;
     if (part.panel === 'companies') {
       removeSentenceItem(part.value[0], part.panel);
-    } else {
-      clearPanel(part.panel);
-    }
+    } else clearPanel(part.panel);
   };
 
   render() {
     return (
-      <TagsGroupComponent
+      <TagComponent
         {...this.props}
         removeOption={this.removeOption}
         clearSingleItem={this.clearSingleItem}
-        getOptions={this.getOptions}
-        isPartReadOnly={this.isPartReadOnly}
+        options={this.getOptions()}
+        isPartReadOnly={this.isPartReadOnly()}
       />
     );
   }
 }
 
-TagsGroupContainer.defaultProps = {
+TagContainer.defaultProps = {
   readOnly: false
 };
 
-export default TagsGroupContainer;
+export default TagContainer;

@@ -1,4 +1,4 @@
-import { take, select, all, fork, takeLatest, cancel } from 'redux-saga/effects';
+import { take, select, all, fork, put, takeLatest, cancel } from 'redux-saga/effects';
 import isEmpty from 'lodash/isEmpty';
 import {
   DASHBOARD_ELEMENT__CLEAR_PANEL,
@@ -11,7 +11,8 @@ import {
   DASHBOARD_ELEMENT__GET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
+  DASHBOARD_ELEMENT__CLEAR_PANELS
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import {
   getDashboardPanelSectionTabs,
@@ -19,6 +20,7 @@ import {
   getMoreDashboardPanelData,
   fetchDashboardPanelSearchResults
 } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
+import { DASHBOARD_STEPS } from 'constants';
 
 /**
  * Should receive the DASHBOARD_ELEMENT__SET_ACTIVE_PANEL action and depending on which panel it is on fetch the necessary data.
@@ -147,26 +149,36 @@ function* fetchDataOnItemChange() {
 }
 
 /**
- * Listens to DASHBOARD_ELEMENT__CLEAR_PANEL and fetches the necessary data after a filter clear.
- * On sources and companies we don't need to call getDashboardPanelData because getDashboardPanelSectionTabs
- * dispatches an action that trigger it.
+ * Listens to actions that remove or clear panel items and deletes all subsequent selections if the panel is changed
  */
-export function* onFilterClear() {
-  const { dashboardElement } = yield select();
-  if (dashboardElement.activePanelId === 'sources') {
-    yield fork(getDashboardPanelData, dashboardElement, 'countries');
-    if (!isEmpty(dashboardElement.countriesPanel.activeItems)) {
-      yield fork(getDashboardPanelSectionTabs, dashboardElement, 'sources');
-    }
-  } else if (dashboardElement.activePanelId === 'companies') {
-    yield fork(getDashboardPanelSectionTabs, dashboardElement, dashboardElement.activePanelId);
-  } else {
-    yield fork(getDashboardPanelData, dashboardElement, dashboardElement.activePanelId);
+
+export function* onChangePanel(action) {
+  const { panel } = action.payload;
+  const dashboardStepName = panel === 'countries' ? 'sources' : panel;
+  const panelIndex = DASHBOARD_STEPS[dashboardStepName];
+  const panelsToClear = Object.keys(DASHBOARD_STEPS)
+    .slice(panelIndex + 1)
+    .map(p => p.toLowerCase())
+    .filter(p => p !== 'indicators');
+
+  if (panelsToClear.length > 0) {
+    yield put({
+      type: DASHBOARD_ELEMENT__CLEAR_PANELS,
+      payload: { panels: panelsToClear }
+    });
   }
 }
 
-function* fetchDataOnFilterClear() {
-  yield takeLatest(DASHBOARD_ELEMENT__CLEAR_PANEL, onFilterClear);
+function* clearSubsequentPanels() {
+  yield takeLatest(
+    [
+      DASHBOARD_ELEMENT__CLEAR_PANEL,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
+    ],
+    onChangePanel
+  );
 }
 
 /**
@@ -207,7 +219,7 @@ export default function* dashboardElementSaga() {
     fetchDataOnPanelChange,
     fetchDataOnTabChange,
     fetchDataOnItemChange,
-    fetchDataOnFilterClear,
+    clearSubsequentPanels,
     fetchDataOnPageChange,
     fetchDataOnSearch,
     fetchDataOnStepChange

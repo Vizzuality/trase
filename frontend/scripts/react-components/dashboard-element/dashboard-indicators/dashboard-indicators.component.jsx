@@ -80,11 +80,10 @@ class DashboardIndicators extends React.PureComponent {
           </GridList>
         </div>
         <DashboardModalFooter
-          editMode={editMode}
-          onBack={goBack}
           onContinue={onContinue}
           isDisabled={activeIndicatorsList.length === 0}
           dynamicSentenceParts={dynamicSentenceParts}
+          onBack={goBack}
         />
       </div>
     );

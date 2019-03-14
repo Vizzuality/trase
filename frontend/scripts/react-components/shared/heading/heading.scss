@@ -1,6 +1,7 @@
 @import 'styles/settings';
 
 .c-heading {
+
   &.mono {
     font-family: $font-family-1;
     letter-spacing: -0.8px;
@@ -8,8 +9,8 @@
   }
 
   &.serif {
-    font-family: $font-family-2;
     line-height: 1.75;
+    font-family: $font-family-2;
   }
 
   &.size-sm {
