@@ -1,0 +1,26 @@
+require 'rails_helper'
+
+RSpec.describe Admin::QualContextPropertiesController, type: :controller do
+  let(:user) { FactoryBot.create(:user) }
+  before { sign_in user }
+
+  describe 'POST create' do
+    let(:qual) { FactoryBot.create(:api_v3_qual) }
+    let(:context) { FactoryBot.create(:api_v3_context) }
+    let(:tooltip_text) { 'Tooltip text' }
+
+    let(:valid_attributes) {
+      FactoryBot.attributes_for(
+        :api_v3_qual_context_property,
+        qual_id: qual.id,
+        context_id: context.id,
+        tooltip_text: tooltip_text
+      )
+    }
+
+    it 'clears cache' do
+      expect(controller).to receive(:clear_cache_for_regexp)
+      post :create, params: {api_v3_qual_context_property: valid_attributes}
+    end
+  end
+end
