@@ -48,7 +48,7 @@ We recommend managing your Ruby installation through [rvm](https://github.com/rv
 
 3. Create the database
 
-    Create an empty database in PostgreSQL and then [import a stable database version](doc/trase/data_export_import.md). If it's an earlier version than the current schema, run the migrations:
+    Create an empty database in PostgreSQL and then [import a stable database version](docs-backend-data-export-import). If it's an earlier version than the current schema, run the migrations:
 
     `rake db:migrate`
 
@@ -182,7 +182,7 @@ RAILS_ENV=test rake db:drop db:create db:structure:load
 bundle exec rspec spec
 ```
 
-You may also want to know about API [gold master tests](doc/trase/gold_master_tests.md) and [load tests](doc/trase/load_tests.md).
+You may also want to know about API [gold master tests](docs-backend-gold-master-tests) and [load tests](docs-backend-load-tests).
 
 ### Frontend
 
@@ -215,13 +215,13 @@ To enable then, simply execute once: `bin/git/init-hooks`
 #### Database
 - [full schema](https://vizzuality.github.io/trase/all_tables/)
 - ["blue tables" schema](https://vizzuality.github.io/trase/blue_tables/index.html)
-- [how to regenerate docs](doc/trase/automated_documentation.md)
+- [how to regenerate docs](docs-backend-automated-documentation)
 
 #### More
-- [Cache management](doc/trase/cache_management.md)
-- [Background jobs](doc/trase/background_jobs.md)
-- [Data update](doc/trase/data_update.md)
-- [Copying databases between instances](doc/trase/data_export_import.md)
+- [Cache management](docs-backend-cache-management)
+- [Background jobs](docs-backend-background-jobs)
+- [Data update](docs-backend-data-update)
+- [Copying databases between instances](docs-backend-data-export-import)
 
 ### Frontend
 
@@ -261,7 +261,7 @@ It will be served on localhost:8081
 - If asked for login use trase.vizzuality@gmail.com
 
 #### More
-- [Generating CARTO maps](doc/trase/generating_carto_maps.md)
+- [Generating CARTO maps](docs-backend-generating-carto-maps)
 
 ## LICENSE
 
