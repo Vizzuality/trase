@@ -45,6 +45,11 @@
   }
 
   &.-open {
+
+    .dropdown-menu {
+      visibility: visible;
+    }
+
     .dropdown-selected-item {
       &::after {
         transform: translate(-15%, -25%) rotate(225deg);
@@ -86,6 +91,7 @@
     background-color: $white;
     box-shadow: 0 3px 6px 0 rgba($black, .16), 0 3px 6px 0 rgba($black, .23);
     z-index: $z-above;
+    visibility: hidden;
   }
 
   .dropdown-menu-item {

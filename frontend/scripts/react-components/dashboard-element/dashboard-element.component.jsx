@@ -88,6 +88,7 @@ class DashboardElement extends React.PureComponent {
                   options={part.value.map(p => ({ value: p.id, label: p.name }))}
                   selectedValueOverride={`${part.value.length} ${part.panel}`}
                   readOnly
+                  showSelected
                 />
               ) : (
                 part.value[0].name

@@ -12,7 +12,7 @@ function Tag({ part, clearPanel, spaced, removeOption, clearSingleItem, options,
       onChange={option => removeOption(option)}
       selectedValueOverride={`${part.value.length} ${part.panel}`}
       showSelected
-      placement="top"
+      placement="top-end"
       readOnly={isPartReadOnly}
     />
   ) : (

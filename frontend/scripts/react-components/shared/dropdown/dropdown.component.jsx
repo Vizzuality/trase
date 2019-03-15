@@ -1,25 +1,25 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import { Manager, Reference, Popper } from 'react-popper';
 import cx from 'classnames';
 import './dropdown.scss';
 
-class Dropdown extends React.Component {
-  renderItem(item, index, getItemProps) {
-    const { theme, readOnly } = this.props;
+function Dropdown(props) {
+  function renderItem(item, index, getItemProps) {
+    const { readOnly } = props;
     return (
       <li
         {...getItemProps({
           item,
           index,
           key: item.value,
-          disabled: readOnly
+          disabled: readOnly,
+          className: cx('dropdown-menu-item', { '-with-icon': item.icon })
         })}
-        className={cx('dropdown-menu-item', { '-with-icon': item.icon })}
       >
         {item.icon && (
-          <svg className={cx('icon', `icon-${item.icon}`, { [theme.icon]: theme.icon })}>
+          <svg className={cx('icon', `icon-${item.icon}`)}>
             <use xlinkHref={`#icon-${item.icon}`} />
           </svg>
         )}
@@ -30,78 +30,94 @@ class Dropdown extends React.Component {
     );
   }
 
-  getSelectedOptions(selectedItem) {
-    const { readOnly, showSelected, options, value } = this.props;
+  function getOptions(selectedItem, getItemProps) {
+    const { showSelected, options, value } = props;
 
-    return readOnly || showSelected
+    const optionsToShow = showSelected
       ? options
       : options.filter(
           o => o.value !== (selectedItem && selectedItem.value) && o.value !== value.value
         );
+
+    return optionsToShow.map((item, i) => renderItem(item, i, getItemProps));
   }
 
-  renderButton = ({ ref, toggleMenu, inputValue, getToggleButtonProps }) => {
-    const { arrowType, selectedValueOverride } = this.props;
-
+  // eslint-disable-next-line react/prop-types
+  function renderButton({ ref, inputValue, getToggleButtonProps }) {
+    const { arrowType, selectedValueOverride } = props;
     return (
       <button
-        {...getToggleButtonProps()}
-        ref={ref}
-        className={cx('dropdown-selected-item', { [`-${arrowType}`]: arrowType })}
-        onClick={toggleMenu}
+        {...getToggleButtonProps({
+          ref,
+          className: cx('dropdown-selected-item', { [`-${arrowType}`]: arrowType })
+        })}
       >
         {selectedValueOverride || inputValue}
       </button>
     );
-  };
+  }
 
-  renderBox = ({ ref, style, placement, getItemProps, selectedItem }) => (
-    <ul ref={ref} style={style} data-placement={placement} className="dropdown-menu">
-      {this.getSelectedOptions(selectedItem).map((item, index) =>
-        this.renderItem(item, index, getItemProps)
-      )}
-    </ul>
-  );
-
-  render() {
-    const {
-      options,
-      value,
-      onChange,
-      itemToString,
-      color,
-      variant,
-      readOnly,
-      placement
-    } = this.props;
+  // eslint-disable-next-line react/prop-types
+  function renderList({ ref, style, placement, getItemProps, selectedItem, getMenuProps }) {
     return (
-      <Downshift defaultSelectedItem={value} itemToString={itemToString} onChange={onChange}>
-        {({ getItemProps, isOpen, toggleMenu, getToggleButtonProps, selectedItem, inputValue }) => (
-          <div
-            className={cx('c-dropdown-component', {
-              '-open': isOpen,
-              [`v-${variant}`]: variant,
-              [`color-${color}`]: color,
-              '-read-only': readOnly
-            })}
-          >
-            <Manager>
-              <Reference>
-                {props =>
-                  this.renderButton({ ...props, toggleMenu, getToggleButtonProps, inputValue })
-                }
-              </Reference>
-              {isOpen && options.length > 0 ? (
-                <Popper placement={placement || 'bottom-end'}>
-                  {props => this.renderBox({ ...props, getItemProps, selectedItem })}
-                </Popper>
-              ) : null}
-            </Manager>
-          </div>
-        )}
-      </Downshift>
+      <ul
+        {...getMenuProps({
+          ref,
+          style,
+          'data-placement': placement,
+          className: 'dropdown-menu'
+        })}
+      >
+        {getOptions(selectedItem, getItemProps)}
+      </ul>
     );
   }
+
+  const {
+    value,
+    onChange,
+    itemToString,
+    color,
+    variant,
+    readOnly,
+    placement,
+    options,
+    children
+  } = props;
+
+  // popper won't detect changes on its children so the necessary recalculations won't happen
+  // we create a key that changes every time the options or children change, that way we remount the popper component
+  const popperForceUpdateKey = useRef(0);
+  const [content, updateContent] = useState(options || children);
+  useEffect(() => {
+    const newContent = options || children;
+    if (newContent !== content) {
+      updateContent(newContent);
+      popperForceUpdateKey.current++;
+    }
+  }, [options, children, content]);
+
+  return (
+    <Downshift initialSelectedItem={value} itemToString={itemToString} onChange={onChange}>
+      {({ getItemProps, isOpen, getToggleButtonProps, selectedItem, inputValue, getMenuProps }) => (
+        <div
+          className={cx('c-dropdown-component', {
+            '-open': isOpen,
+            [`v-${variant}`]: variant,
+            [`color-${color}`]: color,
+            '-read-only': readOnly
+          })}
+        >
+          <Manager>
+            <Reference>{p => renderButton({ ...p, getToggleButtonProps, inputValue })}</Reference>
+            <Popper placement={placement} key={popperForceUpdateKey.current}>
+              {p => renderList({ ...p, selectedItem, getMenuProps, getItemProps })}
+            </Popper>
+          </Manager>
+        </div>
+      )}
+    </Downshift>
+  );
 }
 
 Dropdown.propTypes = {
@@ -112,22 +128,21 @@ Dropdown.propTypes = {
     icon: PropTypes.string
   }),
   onChange: PropTypes.func,
-  arrowType: PropTypes.string,
-  selectedValueOverride: PropTypes.string,
+  arrowType: PropTypes.string, // eslint-disable-line
+  selectedValueOverride: PropTypes.string, // eslint-disable-line
   showSelected: PropTypes.bool,
   readOnly: PropTypes.bool,
-  theme: PropTypes.object,
   placement: PropTypes.string,
   itemToString: PropTypes.func,
   variant: PropTypes.string,
-  color: PropTypes.string
+  color: PropTypes.string,
+  children: PropTypes.node
 };
 
 Dropdown.defaultProps = {
-  options: [],
-  showSelected: false,
   readOnly: false,
-  theme: {},
+  showSelected: false,
+  placement: 'bottom-end',
   itemToString: i => i && i.label
 };
 
