@@ -1268,13 +1268,53 @@ paths:
                   y1:
                     $ref: "#/definitions/DashboardsChartValue"
 
+  '/dashboards/parametrised_charts':
+    get:
+      tags:
+        - dashboards
+      summary: 'Dynamic chart types matching selected filters'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/dashboards_country_id"
+        - $ref: "#/parameters/dashboards_commodity_id"
+        - $ref: "#/parameters/dashboards_cont_attribute_id"
+        - $ref: "#/parameters/dashboards_ncont_attribute_id"
+        - $ref: "#/parameters/dashboards_sources_ids"
+        - $ref: "#/parameters/dashboards_companies_ids"
+        - $ref: "#/parameters/dashboards_destinations_ids"
+        - $ref: "#/parameters/dashboards_start_year"
+        - $ref: "#/parameters/dashboards_end_year"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/ParametrisedChart'
+
 parameters:
+  dashboards_country_id:
+    name: country_id
+    in: query
+    type: integer
+    required: true
   dashboards_countries_ids:
     name: countries_ids
     in: query
     description: 'String with comma-separated numeric ids'
     required: false
     type: string
+  dashboards_commodity_id:
+    name: commodity_id
+    in: query
+    type: integer
+    required: true
   dashboards_commodities_ids:
     name: commodities_ids
     in: query
@@ -1309,6 +1349,30 @@ parameters:
     name: attribute_id
     in: query
     description: 'Attribute id'
+    required: false
+    type: integer
+  dashboards_cont_attribute_id:
+    name: cont_attribute_id
+    in: query
+    description: 'Continuous attribute id'
+    required: true
+    type: integer
+  dashboards_ncont_attribute_id:
+    name: ncont_attribute_id
+    in: query
+    description: 'Non-continuous attribute id'
+    required: false
+    type: integer
+  dashboards_start_year:
+    name: start_year
+    in: query
+    description: 'Start year'
+    required: true
+    type: integer
+  dashboards_end_year:
+    name: end_year
+    in: query
+    description: 'End year (not required for single year selection)'
     required: false
     type: integer
   page:
@@ -2699,3 +2763,12 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Chart'
+
+  ParametrisedChart:
+    type: object
+    properties:
+      type:
+        type: string
+        example: 'stacked_bar_chart'
+      url:
+        type: string
