@@ -12,7 +12,7 @@ module Api
                     :sources_ids,
                     :companies_ids,
                     :destinations_ids,
-                    :nodes_ids
+                    :nodes_ids_by_position
 
         # @param params [Hash]
         # @option params [Integer] country_id
@@ -41,7 +41,18 @@ module Api
           @sources_ids = params[:sources_ids] || []
           @companies_ids = params[:companies_ids] || []
           @destinations_ids = params[:destinations_ids] || []
-          @nodes_ids = @sources_ids + @companies_ids + @destinations_ids
+          ids_to_positions = Hash[
+            @context.context_node_types.
+              select(:node_type_id, :column_position).map do |cnt|
+              [cnt.node_type_id, cnt.column_position]
+            end
+          ]
+          @nodes_ids_by_position = Api::V3::Node.select(:id, :node_type_id).
+            where(
+              id: @sources_ids + @companies_ids + @destinations_ids
+            ).includes(:node_type).group_by do |node|
+              ids_to_positions[node.node_type_id]
+            end
 
           @start_year = params[:start_year]
           @end_year = params[:end_year]
