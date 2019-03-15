@@ -1,8 +1,49 @@
+import React from 'react';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
+import DashboardWidgetTooltip from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-tooltip';
+
+const meta = {
+  xAxis: {
+    label: 'Year',
+    prefix: '',
+    format: '',
+    suffix: ''
+  },
+  yAxis: {
+    label: 'Trade volume',
+    prefix: '',
+    format: '',
+    suffix: 't'
+  },
+  x: {
+    type: 'category',
+    label: 'Year',
+    tooltip: {
+      prefix: '',
+      format: '',
+      suffix: ''
+    }
+  },
+  y1: {
+    type: 'number',
+    label: '',
+    tooltip: {
+      prefix: '',
+      format: '',
+      suffix: ''
+    }
+  }
+};
+
+const tooltip = {
+  ...CHART_CONFIG.tooltip,
+  content: <DashboardWidgetTooltip meta={meta} />
+};
 
 export default {
   line: {
     ...CHART_CONFIG.line,
+    tooltip,
     colors: [
       {
         label: 'y1',
@@ -14,6 +55,7 @@ export default {
   },
   bar: {
     ...CHART_CONFIG.bar,
+    tooltip,
     type: 'bar',
     colors: ['#ee5463'],
     yKeys: {
@@ -22,8 +64,15 @@ export default {
   },
   stackedBar: {
     ...CHART_CONFIG.stackedBar,
+    tooltip,
     type: 'bar',
-    colors: ['#fff0c2', '#9a1e2a', '#ee5463', '#c62c3b', '#fd7d8a'],
+    colors: [
+      { color: '#fff0c2' },
+      { color: '#9a1e2a' },
+      { color: '#ee5463' },
+      { color: '#c62c3b' },
+      { color: '#fd7d8a' }
+    ],
     yKeys: {
       bars: {
         y1: { fill: '#fff0c2', stroke: '#fff0c2' },
@@ -33,6 +82,7 @@ export default {
   },
   pie: {
     ...CHART_CONFIG.pie,
+    tooltip,
     colors: ['#fff0c2', '#9a1e2a', '#ee5463', '#c62c3b', '#fd7d8a'],
     type: 'pie',
     yKeys: {

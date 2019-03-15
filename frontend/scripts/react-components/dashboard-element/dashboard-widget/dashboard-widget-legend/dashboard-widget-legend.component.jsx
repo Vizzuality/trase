@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './dashboard-widget-legend.scss';
+import 'react-components/dashboard-element/dashboard-widget/dashboard-widget-legend/dashboard-widget-legend.scss';
 
 function DashboardWidgetLegend(props) {
   const { colors } = props;
