@@ -50,21 +50,24 @@ module Api
         end
 
         def context_specific_tooltip
-          context_specific_property.
+          context_specific_prop = context_specific_property.
             find_by(attribute => ro_chart_attribute[:original_id],
-                    context_id: context.id)&.tooltip_text
+                    context_id: context.id)
+          context_specific_prop.tooltip_text unless context_specific_prop.blank?
         end
 
         def country_specific_tooltip
-          country_specific_property.
+          country_specific_prop = country_specific_property.
             find_by(attribute => ro_chart_attribute[:original_id],
-                    country_id: context.country_id)&.tooltip_text
+                    country_id: context.country_id)
+          country_specific_prop.tooltip_text unless country_specific_prop.blank?
         end
 
         def commodity_specific_tooltip
-          commodity_specific_property.
+          commodity_specific_prop = commodity_specific_property.
             find_by(attribute => ro_chart_attribute[:original_id],
-                    commodity_id: context.commodity_id)&.tooltip_text
+                    commodity_id: context.commodity_id)
+          commodity_specific_prop.tooltip_text unless commodity_specific_prop.blank?
         end
       end
     end

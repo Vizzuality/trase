@@ -34,7 +34,7 @@ module Api
 
         serialized_layers = {
           dimensions: dimensions.map do |dimension|
-            serialize_dimension(dimension)
+            Api::V3::MapLayers::DimensionSerializer.call(dimension)
           end
         }
 
@@ -47,15 +47,6 @@ module Api
       def set_start_end_year
         @start_year = params[:start_year]&.to_i || @context&.default_year
         @end_year = params[:end_year]&.to_i || @start_year
-      end
-
-      def serialize_dimension(dimension)
-        # rubocop:disable Style/EachWithObject
-        dimension.inject({}) do |new_hash, (k, v)|
-          new_hash[k.camelize(:lower)] = v
-          new_hash
-        end
-        # rubocop:enable Style/EachWithObject
       end
     end
   end
