@@ -6,8 +6,30 @@ RSpec.describe Admin::QuantCountryPropertiesController, type: :controller do
 
   describe 'POST create' do
     let(:quant) { FactoryBot.create(:api_v3_quant) }
+    let(:quant_2) { FactoryBot.create(:api_v3_quant) }
+
     let(:country) { FactoryBot.create(:api_v3_country) }
+    let(:country_2) { FactoryBot.create(:api_v3_country) }
+
     let(:tooltip_text) { 'Tooltip text' }
+
+    let!(:quant_country_property) { 
+      FactoryBot.create(
+        :api_v3_quant_country_property,
+        quant_id: quant_2.id,
+        country_id: country_2.id,
+        tooltip_text: tooltip_text
+      )
+    }
+
+    let(:duplicate) {
+      FactoryBot.attributes_for(
+        :api_v3_quant_country_property,
+        quant_id: quant_2.id,
+        country_id: country_2.id,
+        tooltip_text: tooltip_text
+      )
+    }
 
     let(:valid_attributes) {
       FactoryBot.attributes_for(
@@ -18,12 +40,30 @@ RSpec.describe Admin::QuantCountryPropertiesController, type: :controller do
       )
     }
 
-    let(:invalid_attributes) {
+    let(:no_quant_provided) {
       FactoryBot.attributes_for(
         :api_v3_quant_country_property,
         quant_id: nil,
         country_id: country.id,
         tooltip_text: tooltip_text
+      )
+    }
+
+    let(:no_country_provided) {
+      FactoryBot.attributes_for(
+        :api_v3_quant_country_property,
+        quant_id: quant.id,
+        country_id: nil,
+        tooltip_text: tooltip_text
+      )
+    }
+
+    let(:no_tooltip_provided) {
+      FactoryBot.attributes_for(
+        :api_v3_quant_country_property,
+        quant_id: quant.id,
+        country_id: country.id,
+        tooltip_text: nil
       )
     }
 
@@ -33,8 +73,23 @@ RSpec.describe Admin::QuantCountryPropertiesController, type: :controller do
       expect(response).not_to render_template(:new)
     end
 
-    it 'fails if validation is not met' do
-      post :create, params: {api_v3_quant_country_property: invalid_attributes}
+    it 'fails if quant is not provided' do
+      post :create, params: {api_v3_quant_country_property: no_quant_provided}
+      expect(response).to render_template(:new)
+    end
+
+    it 'fails if country is not provided' do
+      post :create, params: {api_v3_quant_country_property: no_country_provided}
+      expect(response).to render_template(:new)
+    end
+
+    it 'fails if tooltip is not provided' do
+      post :create, params: {api_v3_quant_country_property: no_tooltip_provided}
+      expect(response).to render_template(:new)
+    end
+
+    it 'fails if property with country and quant are already coupled' do
+      post :create, params: {api_v3_quant_country_property: duplicate}
       expect(response).to render_template(:new)
     end
   end
