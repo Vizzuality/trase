@@ -6,9 +6,8 @@ import { PropsTable, Playground } from 'docz'
 import { State } from 'react-powerplug';
 import DashboardWidget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.component';
 import data from './mock-data/dashboard-widget-data';
-import dataMultiple from './mock-data/dashboard-widget-data-multiple';
 import dataPie from './mock-data/dashboard-widget-data-pie';
-import config from './mock-data/dashboard-widget-config';
+import config from './mock-data/dashboard-widget-config-mock';
 import 'styles/_docz.scss';
 
 ## Dashboard widget
@@ -19,26 +18,42 @@ import 'styles/_docz.scss';
     data={data}
     chartConfig={config.line}
   />
-</div>
-<div className="chart-container">
   <DashboardWidget
     title={'Bar Chart'}
     data={data}
     chartConfig={config.bar}
   />
-</div>
-<div className="chart-container">
   <DashboardWidget
     title={'Stacked bar Chart'}
-    data={dataMultiple}
+    data={data}
     chartConfig={config.stackedBar}
   />
-</div>
-<div className="chart-container">
   <DashboardWidget
     title={'Pie Chart'}
     data={dataPie}
     chartConfig={config.pie}
   />
+  <DashboardWidget
+    loading={true}
+    title={'Loading chart'}
+    data={dataPie}
+    chartConfig={config.pie}
+  />
+  <DashboardWidget
+    error={{ statusText: 'Something wrong happened' }}
+    title={'Error chart'}
+    data={dataPie}
+    chartConfig={config.pie}
+  />
 </div>
 <PropsTable of={DashboardWidget} />
+
+<Playground>
+  <div className="chart-container">
+    <DashboardWidget
+      title={'Pie Chart'}
+      data={dataPie}
+      chartConfig={config.pie}
+    />
+  </div>
+</Playground>

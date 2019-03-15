@@ -1,10 +1,12 @@
 [
   {
     "y1": 100,
+    "x": "Trade volume",
     "color": "#fff0c2"
   },
   {
     "y1": 200,
+    "x": "Production of Soy",
     "color": "#9a1e2a"
   }
 ]

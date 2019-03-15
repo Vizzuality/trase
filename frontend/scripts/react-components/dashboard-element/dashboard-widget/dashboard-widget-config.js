@@ -71,6 +71,11 @@ export default {
     xKey: 'x',
     yKeys: {
       bars: null
+    },
+    yKeysAttributes: {
+      bars: {
+        stackId: 'bar'
+      }
     }
   },
   pie: {
