@@ -77,9 +77,6 @@
   }
 
   .dropdown-menu {
-    position: absolute;
-    top: calc(50% + 8px);
-    left: 0;
     margin: 10px 0 0;
     min-width: 100%;
     cursor: pointer;
@@ -89,12 +86,6 @@
     background-color: $white;
     box-shadow: 0 3px 6px 0 rgba($black, .16), 0 3px 6px 0 rgba($black, .23);
     z-index: $z-above;
-
-    &.-position-up {
-      top: unset;
-      bottom: calc(100% + 10px);
-      right: -3px;
-    }
   }
 
   .dropdown-menu-item {

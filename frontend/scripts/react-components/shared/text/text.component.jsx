@@ -12,9 +12,9 @@ function Text(props) {
     size,
     align,
     weight,
-    transform,
     children,
     className,
+    transform,
     ...rest
   } = props;
   const textProps = {

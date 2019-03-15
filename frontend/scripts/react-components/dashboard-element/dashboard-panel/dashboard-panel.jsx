@@ -14,7 +14,6 @@ import {
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
 import {
   getActivePanelTabs,
-  getDirtyBlocks,
   getDynamicSentence,
   getIsDisabled
 } from 'react-components/dashboard-element/dashboard-element.selectors';
@@ -47,9 +46,8 @@ const mapStateToProps = (state, ownProps) => {
     commoditiesPanel,
     countryNames: getCountryNamesByCountryId(state),
     tabs: getActivePanelTabs(state),
-    dirtyBlocks: getDirtyBlocks(state),
     dynamicSentenceParts: getDynamicSentence(state),
-    isDisabled: getIsDisabled({ ...state, step: ownProps.step })
+    isDisabled: getIsDisabled(state, ownProps)
   };
 };
 
