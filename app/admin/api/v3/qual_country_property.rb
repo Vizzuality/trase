@@ -18,7 +18,7 @@ ActiveAdmin.register Api::V3::QualCountryProperty, as: 'QualCountryProperty' do
                    collection: Api::V3::Qual.select_options
       input :country, as: :select, required: true,
                       collection: Api::V3::Country.select_options
-      input :tooltip_text, as: :string,
+      input :tooltip_text, as: :string, required: true,
                            hint: object.class.column_comment('tooltip_text')
     end
     f.actions

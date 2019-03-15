@@ -18,7 +18,7 @@ ActiveAdmin.register Api::V3::IndCommodityProperty, as: 'IndCommodityProperty' d
                   collection: Api::V3::Ind.select_options
       input :commodity, as: :select, required: true,
                         collection: Api::V3::Commodity.select_options
-      input :tooltip_text, as: :string,
+      input :tooltip_text, as: :string, required: true,
                            hint: object.class.column_comment('tooltip_text')
     end
     f.actions

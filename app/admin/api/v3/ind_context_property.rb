@@ -18,7 +18,7 @@ ActiveAdmin.register Api::V3::IndContextProperty, as: 'IndContextProperty' do
                   collection: Api::V3::Ind.select_options
       input :context, as: :select, required: true,
                       collection: Api::V3::Context.select_options
-      input :tooltip_text, as: :string,
+      input :tooltip_text, as: :string, required: true,
                            hint: object.class.column_comment('tooltip_text')
     end
     f.actions

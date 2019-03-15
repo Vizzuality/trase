@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Admin::QuantCountryPropertiesController, type: :controller do
+  render_views
+
   let(:user) { FactoryBot.create(:user) }
   before { sign_in user }
 
@@ -91,6 +93,11 @@ RSpec.describe Admin::QuantCountryPropertiesController, type: :controller do
     it 'fails if property with country and quant are already coupled' do
       post :create, params: {api_v3_quant_country_property: duplicate}
       expect(response).to render_template(:new)
+    end
+
+    it 'renders index' do
+      get :index
+      expect(response).to render_template(:index)
     end
   end
 end
