@@ -42,7 +42,7 @@ function Dropdown(props) {
     return optionsToShow.map((item, i) => renderItem(item, i, getItemProps));
   }
 
-  // eslint-disable-next-line react/prop-types
+  /* eslint-disable react/prop-types */
   function renderButton({ ref, inputValue, getToggleButtonProps }) {
     const { arrowType, selectedValueOverride } = props;
     return (
@@ -57,8 +57,19 @@ function Dropdown(props) {
     );
   }
 
-  // eslint-disable-next-line react/prop-types
-  function renderList({ ref, style, placement, getItemProps, selectedItem, getMenuProps }) {
+  function renderContent({
+    ref,
+    style,
+    placement,
+    selectedItem,
+    getItemProps,
+    getMenuProps,
+    toggleMenu
+  }) {
+    const decoratedChildren =
+      typeof props.children !== 'undefined'
+        ? React.cloneElement(props.children, { toggleParentDropdown: toggleMenu })
+        : undefined;
     return (
       <ul
         {...getMenuProps({
@@ -68,10 +79,11 @@ function Dropdown(props) {
           className: 'dropdown-menu'
         })}
       >
-        {getOptions(selectedItem, getItemProps)}
+        {props.options ? getOptions(selectedItem, getItemProps) : decoratedChildren}
       </ul>
     );
   }
+  /* eslint-enable react/prop-types */
 
   const {
     value,
@@ -99,7 +111,15 @@ function Dropdown(props) {
 
   return (
     <Downshift initialSelectedItem={value} itemToString={itemToString} onChange={onChange}>
-      {({ getItemProps, isOpen, getToggleButtonProps, selectedItem, inputValue, getMenuProps }) => (
+      {({
+        getItemProps,
+        isOpen,
+        getToggleButtonProps,
+        selectedItem,
+        inputValue,
+        getMenuProps,
+        toggleMenu
+      }) => (
         <div
           className={cx('c-dropdown-component', {
             '-open': isOpen,
@@ -111,7 +131,7 @@ function Dropdown(props) {
           <Manager>
             <Reference>{p => renderButton({ ...p, getToggleButtonProps, inputValue })}</Reference>
             <Popper placement={placement} key={popperForceUpdateKey.current}>
-              {p => renderList({ ...p, selectedItem, getMenuProps, getItemProps })}
+              {p => renderContent({ ...p, selectedItem, getMenuProps, getItemProps, toggleMenu })}
             </Popper>
           </Manager>
         </div>

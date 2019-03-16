@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import uniq from 'lodash/uniq';
+import uniqBy from 'lodash/uniqBy';
 import capitalize from 'lodash/capitalize';
 import cx from 'classnames';
-import Dropdown from 'react-components/shared/dropdown.component';
-import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
+import Dropdown from 'react-components/shared/dropdown';
+import YearsRange from 'react-components/shared/years-range';
 
 import 'react-components/shared/sentence-selector/sentence-selector.scss';
 
@@ -13,26 +13,26 @@ class SentenceSelector extends React.PureComponent {
     const { contexts, selectedContext } = this.props;
 
     const countryNames = contexts
-      .filter(c => c.commodityName === selectedCommodity.toUpperCase())
+      .filter(c => c.commodityName === selectedCommodity.value)
       .map(c => c.countryName);
 
     const selectedCountry =
       countryNames.find(c => c === selectedContext.countryName) || countryNames[0];
 
-    this.selectContextId(selectedCountry, selectedCommodity.toUpperCase());
+    this.selectContextId(selectedCountry, selectedCommodity.value);
   };
 
   onSelectCountry = selectedCountry => {
     const { contexts, selectedContext } = this.props;
 
     const commodityNames = contexts
-      .filter(c => c.countryName === selectedCountry.toUpperCase())
+      .filter(c => c.countryName === selectedCountry.value)
       .map(c => c.commodityName);
 
     const selectedCommodity =
       commodityNames.find(c => c === selectedContext.commodityName) || commodityNames[0];
 
-    this.selectContextId(selectedCountry.toUpperCase(), selectedCommodity);
+    this.selectContextId(selectedCountry.value, selectedCommodity);
   };
 
   getContextId(selectedCountry, selectedCommodity) {
@@ -74,48 +74,65 @@ class SentenceSelector extends React.PureComponent {
   };
 
   render() {
-    const {
-      contexts,
-      className,
-      selectedContext,
-      selectedYears,
-      currentDropdown,
-      toggleDropdown
-    } = this.props;
+    const { contexts, className, selectYears, selectedYears, selectedContext } = this.props;
 
     if (!selectedContext) return null;
 
     const { commodityName, countryName } = selectedContext;
 
-    const commodityNames = uniq(contexts.map(c => c.commodityName.toLowerCase()));
-    const countryNames = uniq(contexts.map(c => capitalize(c.countryName)));
+    const commodityNames = uniqBy(
+      contexts.map(c => ({
+        value: c.commodityName,
+        label: c.commodityName.toLowerCase()
+      })),
+      'value'
+    );
+    const countryNames = uniqBy(
+      contexts.map(c => ({
+        value: c.countryName,
+        label: capitalize(c.countryName)
+      })),
+      'value'
+    );
+
+    const yearsValue =
+      selectedYears[0] !== selectedYears[1]
+        ? `${selectedYears[0]} – ${selectedYears[1]}`
+        : selectedYears[0];
 
     return (
       <div className={cx('c-sentence-selector', className)}>
         <div className="sentence-selector-text">
           What are the sustainability risks and opportunities associated{' '}
-          <br className="hide-for-small" /> with the trade of
+          <br className="hide-for-small" /> with the trade of{' '}
           <Dropdown
-            value={commodityName.toLowerCase()}
-            valueList={commodityNames}
-            onValueSelected={this.onSelectCommodity}
+            variant="sentence"
+            value={{ value: commodityName.toLowerCase(), label: commodityName.toLowerCase() }}
+            options={commodityNames}
+            onChange={this.onSelectCommodity}
             getItemClassName={this.getCommodityClassName}
           />
-          from
+          from{' '}
           <Dropdown
-            value={capitalize(countryName)}
-            valueList={countryNames}
-            onValueSelected={this.onSelectCountry}
+            variant="sentence"
+            value={{ value: capitalize(countryName), label: capitalize(countryName) }}
+            options={countryNames}
+            onChange={this.onSelectCountry}
             getItemClassName={this.getCountryClassName}
           />
           <span className="hide-for-small">
-            in the year{selectedYears[0] !== selectedYears[1] ? 's' : ''}
-            <YearsSelector
-              className="years-selector"
-              onToggle={toggleDropdown}
-              dropdownClassName="-big"
-              currentDropdown={currentDropdown}
-            />
+            in the year{selectedYears[0] !== selectedYears[1] ? 's ' : ' '}
+            <Dropdown
+              variant="sentence"
+              selectedValueOverride={yearsValue}
+              getItemClassName={this.getCountryClassName}
+            >
+              <YearsRange
+                selectedYears={selectedYears}
+                years={selectedContext.years}
+                onSelected={years => selectYears(years)}
+              />
+            </Dropdown>
           </span>
         </div>
       </div>
@@ -125,6 +142,7 @@ class SentenceSelector extends React.PureComponent {
 
 SentenceSelector.propTypes = {
   className: PropTypes.string,
+  selectYears: PropTypes.func,
   contexts: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
@@ -133,9 +151,7 @@ SentenceSelector.propTypes = {
       isDefault: PropTypes.bool
     })
   ),
-  toggleDropdown: PropTypes.func,
   selectedYears: PropTypes.array,
-  currentDropdown: PropTypes.string,
   selectContextById: PropTypes.func,
   selectedContext: PropTypes.object,
   selectedCountryPairs: PropTypes.object,
