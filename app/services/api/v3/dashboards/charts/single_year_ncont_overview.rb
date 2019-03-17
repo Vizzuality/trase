@@ -3,6 +3,8 @@ module Api
     module Dashboards
       module Charts
         class SingleYearNcontOverview
+          include Api::V3::Dashboards::Charts::Helpers
+
           # @param chart_parameters [Api::V3::Dashboards::ChartParameters]
           def initialize(chart_parameters)
             @cont_attribute = chart_parameters.cont_attribute
@@ -18,28 +20,10 @@ module Api
               r.attributes.slice('x', 'y0').symbolize_keys
             end
             @meta = {
-              xAxis: {
-                label: @ncont_attribute.display_name,
-                prefix: '',
-                format: '',
-                suffix: @ncont_attribute.unit
-              },
-              yAxis: {
-                label: @cont_attribute.display_name,
-                prefix: '',
-                format: '',
-                suffix: @cont_attribute.unit
-              },
-              x: {
-                type: 'category', # category || date || number
-                label: @ncont_attribute.display_name,
-                tooltip: {prefix: '', format: '', suffix: ''}
-              },
-              y0: {
-                type: 'number',
-                label: @cont_attribute.display_name,
-                tooltip: {prefix: '', format: '', suffix: ''}
-              }
+              xAxis: axis_meta(@ncont_attribute),
+              yAxis: axis_meta(@cont_attribute),
+              x: legend_meta(@ncont_attribute, 'category'),
+              y0: legend_meta(@cont_attribute, 'number')
             }
             {data: @data, meta: @meta}
           end
@@ -47,28 +31,11 @@ module Api
           private
 
           def initialize_query
-            cont_attr_table = @cont_attribute.flow_values_class.table_name
-            ncont_attr_table = @ncont_attribute.flow_values_class.table_name
-            @query = Api::V3::Flow.
-              select([
-                "#{ncont_attr_table}.value AS x",
-                "SUM(#{cont_attr_table}.value) AS y0"
-              ]).
-              joins(cont_attr_table.to_sym).
-              joins("LEFT JOIN #{ncont_attr_table} ON #{ncont_attr_table}.flow_id = flows.id").
-              where(
-                context_id: @context.id,
-                year: @year,
-                "#{cont_attr_table}.#{@cont_attribute.attribute_id_name}" =>
-                  @cont_attribute.original_id,
-                "#{ncont_attr_table}.#{@ncont_attribute.attribute_id_name}" =>
-                  @ncont_attribute.original_id
-              ).
-              group(1)
-
-            @nodes_ids_by_position.each do |position, nodes_ids|
-              @query = @query.where('ARRAY[flows.path[?]] && ARRAY[?]', position + 1, nodes_ids)
-            end
+            @query = flow_query
+            apply_ncont_attribute_x
+            apply_cont_attribute_y
+            apply_single_year_filter
+            apply_flow_path_filters
           end
         end
       end
