@@ -48,6 +48,7 @@ matrix:
           project: ./frontend/docs/
           domain: trase.surge.sh
           skip_cleanup: true
+          on: develop
 
     - language: node_js
       node_js:
