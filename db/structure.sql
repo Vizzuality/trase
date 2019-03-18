@@ -1519,7 +1519,9 @@ CREATE TABLE public.context_node_type_properties (
     is_geo_column boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    is_choropleth_disabled boolean DEFAULT false NOT NULL
+    is_choropleth_disabled boolean DEFAULT false NOT NULL,
+    role character varying,
+    CONSTRAINT context_node_type_properties_role_check CHECK (((role)::text = ANY ((ARRAY['source'::character varying, 'exporter'::character varying, 'importer'::character varying, 'company'::character varying])::text[])))
 );
 
 
@@ -8583,5 +8585,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190301173808'),
 ('20190301173824'),
 ('20190308163938');
+('20190318161140');
 
 
