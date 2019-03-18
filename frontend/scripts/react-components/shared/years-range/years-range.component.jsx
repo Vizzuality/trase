@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import range from 'lodash/range';
 import cx from 'classnames';
+import { Consumer as DropdownContextConsumer } from 'react-components/shared/dropdown';
 
 import './years-range.scss';
 
 function YearsRange(props) {
   const [[start, end], setYears] = useState(props.selectedYears);
   const [hovered, setHovered] = useState(null);
+  const { toggleMenu } = useContext(DropdownContextConsumer);
 
   function setActive(year) {
-    const { onSelected, toggleParentDropdown } = props;
+    const { onSelected } = props;
 
     if (end !== null) {
       setYears([year, null]);
@@ -21,8 +23,8 @@ function YearsRange(props) {
       setYears(years);
       onSelected(years);
 
-      if (typeof toggleParentDropdown !== 'undefined') {
-        toggleParentDropdown();
+      if (typeof toggleMenu !== 'undefined') {
+        toggleMenu();
       }
     }
   }
@@ -75,7 +77,6 @@ function YearsRange(props) {
 
 YearsRange.propTypes = {
   years: PropTypes.array.isRequired,
-  toggleParentDropdown: PropTypes.func,
   onSelected: PropTypes.func.isRequired,
   selectedYears: PropTypes.array.isRequired
 };

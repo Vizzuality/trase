@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import { Manager, Reference, Popper } from 'react-popper';
+import DropdownContext from 'react-components/shared/dropdown/dropdown.context';
 import cx from 'classnames';
 import './dropdown.scss';
 
@@ -97,9 +98,15 @@ function Dropdown(props) {
     toggleMenu
   }) {
     const decoratedChildren =
-      typeof props.children !== 'undefined'
-        ? React.cloneElement(props.children, { toggleParentDropdown: toggleMenu })
-        : undefined;
+      typeof props.children !== 'undefined' ? (
+        <DropdownContext.Provider
+          value={{ selectedItem, getItemProps, highlightedIndex, toggleMenu }}
+        >
+          {props.children}
+        </DropdownContext.Provider>
+      ) : (
+        undefined
+      );
     const styleToApply = listHeight ? { ...style, height: listHeight } : style;
     return (
       <ul
