@@ -7,6 +7,8 @@ env:
     - JEST_CI=true
     - USE_PLAIN_URL_STATE=true
     - GFW_WIDGETS_BASE_URL=
+    - SURGE_LOGIN=trase.vizzuality@gmail.com
+    - SURGE_TOKEN=$SURGE_TOKEN # Set in the settings page of your repository, as a secure variable
 matrix:
   include:
     - language: ruby
@@ -35,13 +37,17 @@ matrix:
         - bundle exec rake db:doc:html
 
       deploy:
-        provider: pages
-        skip-cleanup: true
-        github-token: $GITHUB_TOKEN # Set in the settings page of your repository, as a secure variable
-        keep-history: true
-        local-dir: doc/db/gh-pages
-        on:
-          branch: master
+        - provider: pages
+          skip-cleanup: true
+          github-token: $GITHUB_TOKEN # Set in the settings page of your repository, as a secure variable
+          keep-history: true
+          local-dir: doc/db/gh-pages
+          on:
+            branch: master
+        - provider: surge
+          project: ./frontend/docs/
+          domain: trase.surge.sh
+          skip_cleanup: true
 
     - language: node_js
       node_js:
