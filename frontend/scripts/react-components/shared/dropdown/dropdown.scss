@@ -77,9 +77,10 @@
   .dropdown-menu {
     margin: 10px 0 0;
     min-width: 100%;
+    max-width: calc(100vw - 20px);
     cursor: pointer;
     max-height: 242px;
-    overflow-x: auto;
+    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     background-color: $white;
     box-shadow: 0 3px 6px 0 rgba($black, .16), 0 3px 6px 0 rgba($black, .23);
@@ -106,10 +107,6 @@
       background-color: $manilla;
     }
 
-    .item-label {
-      display: inline-flex;
-    }
-
     .icon {
       fill: $strong-pink;
       height: 10px;
@@ -126,13 +123,13 @@
     padding-right: 15px;
 
     .dropdown-menu-item {
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
 
       .item-label {
         font-size: $font-size-regular;
         font-weight: $font-weight-regular;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
       }
     }
 

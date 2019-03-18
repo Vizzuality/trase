@@ -5,10 +5,10 @@ import Tag from 'react-components/shared/tags-group/tag';
 import 'react-components/shared/tags-group/tags-group.scss';
 
 function TagsGroup(props) {
-  const { as, tags, className } = props;
+  const { as, tags, color } = props;
   return React.createElement(
     as,
-    { className: cx('c-tags-group', className) },
+    { className: cx('c-tags-group', { [`color-${color}`]: color }) },
     tags.map(part => (
       <span key={part.id}>
         {part.prefix && `${part.prefix} `}
@@ -19,7 +19,7 @@ function TagsGroup(props) {
 }
 
 TagsGroup.propTypes = {
-  className: PropTypes.string,
+  color: PropTypes.string,
   tags: PropTypes.array.isRequired,
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
 };

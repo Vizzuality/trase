@@ -3,17 +3,29 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Dropdown from 'react-components/shared/dropdown';
 
-function Tag({ part, clearPanel, spaced, removeOption, clearSingleItem, options, isPartReadOnly }) {
+function Tag(props) {
+  const {
+    part,
+    clearPanel,
+    spaced,
+    removeOption,
+    clearSingleItem,
+    options,
+    color,
+    isPartReadOnly,
+    placement
+  } = props;
   if (!part.value || part.value.length === 0) return null;
   return part.value.length > 1 ? (
     <Dropdown
-      variant="sentence"
+      showSelected
+      color={color}
       options={options}
+      variant="sentence"
+      placement={placement}
+      readOnly={isPartReadOnly}
       onChange={option => removeOption(option)}
       selectedValueOverride={`${part.value.length} ${part.panel}`}
-      showSelected
-      placement="top-end"
-      readOnly={isPartReadOnly}
     />
   ) : (
     <span
@@ -41,6 +53,8 @@ function Tag({ part, clearPanel, spaced, removeOption, clearSingleItem, options,
 Tag.propTypes = {
   spaced: PropTypes.bool,
   part: PropTypes.object,
+  color: PropTypes.string,
+  placement: PropTypes.string,
   removeOption: PropTypes.func.isRequired,
   clearSingleItem: PropTypes.func.isRequired,
   clearPanel: PropTypes.func,

@@ -26,6 +26,7 @@ function DashboardModalFooter(props) {
         clearPanel={clearPanel}
         readOnly={!isPanelFooter}
         step={step}
+        placement="top-end"
       />
       <div className="dashboard-modal-actions">
         {onBack && (
