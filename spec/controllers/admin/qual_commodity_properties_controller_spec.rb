@@ -15,7 +15,7 @@ RSpec.describe Admin::QualCommodityPropertiesController, type: :controller do
 
     let(:tooltip_text) { 'Tooltip text' }
 
-    let!(:qual_commodity_property) { 
+    let!(:qual_commodity_property) {
       FactoryBot.create(
         :api_v3_qual_commodity_property,
         qual_id: qual_2.id,

@@ -15,8 +15,8 @@ RSpec.describe Api::V3::Profiles::GetTooltipPerAttribute, :service do
       Api::V3::Readonly::CommodityAttributeProperty.refresh
     end
 
-    let(:ro_chart_attribute) { 
-      Api::V3::Readonly::ChartAttribute.find_by(original_type: type) 
+    let(:ro_chart_attribute) {
+      Api::V3::Readonly::ChartAttribute.find_by(original_type: type)
     }
 
     subject do

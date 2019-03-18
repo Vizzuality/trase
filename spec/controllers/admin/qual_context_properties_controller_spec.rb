@@ -15,7 +15,7 @@ RSpec.describe Admin::QualContextPropertiesController, type: :controller do
 
     let(:tooltip_text) { 'Tooltip text' }
 
-    let!(:qual_context_property) { 
+    let!(:qual_context_property) {
       FactoryBot.create(
         :api_v3_qual_context_property,
         qual_id: qual_2.id,

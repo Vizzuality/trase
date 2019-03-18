@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Admin::QuantContextPropertiesController, type: :controller do
   render_views
-  
+
   let(:user) { FactoryBot.create(:user) }
   before { sign_in user }
 
@@ -15,7 +15,7 @@ RSpec.describe Admin::QuantContextPropertiesController, type: :controller do
 
     let(:tooltip_text) { 'Tooltip text' }
 
-    let!(:quant_context_property) { 
+    let!(:quant_context_property) {
       FactoryBot.create(
         :api_v3_quant_context_property,
         quant_id: quant_2.id,

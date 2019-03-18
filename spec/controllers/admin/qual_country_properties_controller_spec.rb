@@ -15,7 +15,7 @@ RSpec.describe Admin::QualCountryPropertiesController, type: :controller do
 
     let(:tooltip_text) { 'Tooltip text' }
 
-    let!(:qual_country_property) { 
+    let!(:qual_country_property) {
       FactoryBot.create(
         :api_v3_qual_country_property,
         qual_id: qual_2.id,

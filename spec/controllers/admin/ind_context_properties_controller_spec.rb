@@ -15,7 +15,7 @@ RSpec.describe Admin::IndContextPropertiesController, type: :controller do
 
     let(:tooltip_text) { 'Tooltip text' }
 
-    let!(:ind_context_property) { 
+    let!(:ind_context_property) {
       FactoryBot.create(
         :api_v3_ind_context_property,
         ind_id: ind_2.id,

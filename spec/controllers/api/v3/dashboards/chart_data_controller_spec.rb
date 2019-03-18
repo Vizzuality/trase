@@ -48,7 +48,7 @@ RSpec.describe Api::V3::Dashboards::ChartDataController, type: :controller do
       json = JSON.parse(response.body)
       data = json['data']
       expect(data.map { |e| e['x'] }).to eq([2015])
-      expect(data.map { |e| e['y1']}).to eq([
+      expect(data.map { |e| e['y1'] }).to eq([
         flow1_volume.value +
         flow2_volume.value +
         flow3_volume.value +
@@ -65,7 +65,7 @@ RSpec.describe Api::V3::Dashboards::ChartDataController, type: :controller do
       json = JSON.parse(response.body)
       data = json['data']
       expect(data.map { |e| e['x'] }).to eq([2015])
-      expect(data.map { |e| e['y1']}).to eq([
+      expect(data.map { |e| e['y1'] }).to eq([
         flow1_volume.value +
         flow2_volume.value +
         flow3_volume.value +
