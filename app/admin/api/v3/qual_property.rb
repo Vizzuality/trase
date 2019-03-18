@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::QualProperty, as: 'QualProperty' do
-  menu parent: 'General'
+  menu parent: 'Tooltips', priority: 8
 
   permit_params :qual_id, :display_name, :tooltip_text,
                 :is_visible_on_place_profile, :is_visible_on_actor_profile,

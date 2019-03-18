@@ -32,7 +32,7 @@ ActiveAdmin.register Api::V3::ChartAttribute, as: 'ChartAttribute' do
             required: true,
             collection: Api::V3::Chart.select_options
       input :identifier, as: :string,
-            hint: object.class.column_comment('position')
+                         hint: object.class.column_comment('position')
       input :position, hint: object.class.column_comment('position')
       input :display_name, as: :string,
                            hint: object.class.column_comment('display_name')

@@ -31,6 +31,87 @@ tables:
         comment: Only used for trajectory deforestation plot in place profiles
   - name: chart_inds
     comment: Inds to display in a chart (see chart_attributes.)
+  - name: ind_context_properties
+    comment: Context specific properties for ind (like tooltip text)
+    columns:
+      - name: context_id
+        comment: Reference to context
+      - name: ind_id
+        comment: Reference to ind
+      - name: tooltip_text
+        comment: Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).
+  - name: quant_context_properties
+    comment: Context specific properties for quant (like tooltip text)
+    columns:
+      - name: context_id
+        comment: Reference to context
+      - name: quant_id
+        comment: Reference to quant
+      - name: tooltip_text
+        comment: Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).
+  - name: qual_context_properties
+    comment: Context specific properties for qual (like tooltip text)
+    columns:
+      - name: context_id
+        comment: Reference to context
+      - name: qual_id
+        comment: Reference to qual
+      - name: tooltip_text
+        comment: Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).
+  - name: ind_commodity_properties
+    comment: Commodity specific properties for ind
+    columns:
+      - name: commodity_id
+        comment: Reference to commodity
+      - name: ind_id
+        comment: Reference to ind
+      - name: tooltip_text
+        comment: Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.
+  - name: quant_commodity_properties
+    comment: Commodity specific properties for quant
+    columns:
+      - name: commodity_id
+        comment: Reference to commodity
+      - name: quant_id
+        comment: Reference to quant
+      - name: tooltip_text
+        comment: Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.
+  - name: qual_commodity_properties
+    comment: Commodity specific properties for qual
+    columns:
+      - name: commodity_id
+        comment: Reference to commodity
+      - name: qual_id
+        comment: Reference to qual
+      - name: tooltip_text
+        comment: Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.
+  - name: ind_country_properties
+    comment: Country specific properties for ind
+    columns:
+      - name: country_id
+        comment: Reference to country
+      - name: ind_id
+        comment: Reference to ind
+      - name: tooltip_text
+        comment: Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).
+  - name: quant_country_properties
+    comment: Country specific properties for quant
+    columns:
+      - name: country_id
+        comment: Reference to country
+      - name: quant_id
+        comment: Reference to quant
+      - name: tooltip_text
+        comment: Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).
+  - name: qual_country_properties
+    comment: Country specific properties for qual
+    columns:
+      - name: country_id
+        comment: Reference to country
+      - name: qual_id
+        comment: Reference to qual
+      - name: tooltip_text
+        comment: Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).
   - name: chart_node_types
     comment: Node types to display in a chart.
     columns:
@@ -215,7 +296,7 @@ tables:
       - name: unit_type
         comment: Type of unit, e.g. score. One of restricted set of values.
       - name: tooltip_text
-        comment: Tooltip text
+        comment: Generic tooltip text (lowest precedence)
       - name: is_visible_on_place_profile
         comment: Whether to display this attribute on place profile
       - name: is_visible_on_actor_profile
@@ -322,7 +403,7 @@ tables:
       - name: display_name
         comment: Name of attribute for display
       - name: tooltip_text
-        comment: Tooltip text
+        comment: Generic tooltip text (lowest precedence)
       - name: is_visible_on_place_profile
         comment: Whether to display this attribute on place profile
       - name: is_visible_on_actor_profile
@@ -343,7 +424,7 @@ tables:
       - name: unit_type
         comment: Type of unit, e.g. count. One of restricted set of values.
       - name: tooltip_text
-        comment: Tooltip text
+        comment: Generic tooltip text (lowest precedence)
       - name: is_visible_on_place_profile
         comment: Whether to display this attribute on place profile
       - name: is_visible_on_actor_profile
@@ -495,3 +576,42 @@ materialized_views:
     columns:
       - name: attribute_id
         comment: References the unique id in attributes_mv.
+  - name: context_attribute_properties_mv
+    comment: Materialized view combining context specific properties for inds, quals and quants.
+    columns:
+      - name: ind_id
+        comment: Reference to ind
+      - name: quant_id
+        comment: Reference to quant
+      - name: qual_id
+        comment: Reference to qual 
+      - name: context_id
+        comment: Reference to context
+      - name: tooltip_text
+        comment: Tooltip text
+  - name: commodity_attribute_properties_mv
+    comment: Materialized view combining commodity specific properties for inds, quals and quants.
+    columns:
+      - name: ind_id
+        comment: Reference to ind
+      - name: quant_id
+        comment: Reference to quant
+      - name: qual_id
+        comment: Reference to qual 
+      - name: commodity_id
+        comment: Reference to commodity
+      - name: tooltip_text
+        comment: Tooltip text
+  - name: country_attribute_properties_mv
+    comment: Materialized view combining country specific properties for inds, quals and quants.
+    columns:
+      - name: ind_id
+        comment: Reference to ind
+      - name: quant_id
+        comment: Reference to quant
+      - name: qual_id
+        comment: Reference to qual 
+      - name: country_id
+        comment: Reference to country
+      - name: tooltip_text
+        comment: Tooltip text

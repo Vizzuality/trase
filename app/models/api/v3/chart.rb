@@ -10,7 +10,20 @@
 #  position   :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  chart_type :text
+#  chart_type :string
+#
+# Indexes
+#
+#  charts_profile_id_parent_id_identifier_key  (profile_id,parent_id,identifier) UNIQUE
+#  charts_profile_id_parent_id_position_key    (profile_id,parent_id,position) UNIQUE
+#  index_charts_on_parent_id                   (parent_id)
+#  index_charts_on_profile_id                  (profile_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (parent_id => charts.id) ON DELETE => cascade
+#  fk_rails_...  (profile_id => profiles.id) ON DELETE => cascade
+#
 
 # Indexes
 #

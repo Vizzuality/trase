@@ -770,7 +770,7 @@ CREATE MATERIALIZED VIEW public.attributes_mv AS
             NULL::text AS text
            FROM (public.quals
              LEFT JOIN public.qual_properties qp ON ((qp.qual_id = quals.id)))) s
-  WITH NO DATA;
+  WITH DATA;
 
 
 --
@@ -1102,7 +1102,7 @@ UNION ALL
    FROM ((public.chart_inds chi
      JOIN public.chart_attributes cha ON ((cha.id = chi.chart_attribute_id)))
      JOIN public.attributes_mv a ON (((a.original_id = chi.ind_id) AND (a.original_type = 'Ind'::text))))
-  WITH NO DATA;
+  WITH DATA;
 
 
 --
@@ -1359,6 +1359,152 @@ CREATE SEQUENCE public.commodities_id_seq
 --
 
 ALTER SEQUENCE public.commodities_id_seq OWNED BY public.commodities.id;
+
+
+--
+-- Name: ind_commodity_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ind_commodity_properties (
+    id bigint NOT NULL,
+    tooltip_text text NOT NULL,
+    commodity_id bigint NOT NULL,
+    ind_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: qual_commodity_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.qual_commodity_properties (
+    id bigint NOT NULL,
+    tooltip_text text NOT NULL,
+    commodity_id bigint NOT NULL,
+    qual_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: quant_commodity_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.quant_commodity_properties (
+    id bigint NOT NULL,
+    tooltip_text text NOT NULL,
+    commodity_id bigint NOT NULL,
+    quant_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: commodity_attribute_properties_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.commodity_attribute_properties_mv AS
+ SELECT qual_commodity_properties.id,
+    qual_commodity_properties.commodity_id,
+    qual_commodity_properties.tooltip_text,
+    qual_commodity_properties.qual_id,
+    '-1'::integer AS ind_id,
+    '-1'::integer AS quant_id
+   FROM public.qual_commodity_properties
+UNION ALL
+ SELECT quant_commodity_properties.id,
+    quant_commodity_properties.commodity_id,
+    quant_commodity_properties.tooltip_text,
+    '-1'::integer AS qual_id,
+    '-1'::integer AS ind_id,
+    quant_commodity_properties.quant_id
+   FROM public.quant_commodity_properties
+UNION ALL
+ SELECT ind_commodity_properties.id,
+    ind_commodity_properties.commodity_id,
+    ind_commodity_properties.tooltip_text,
+    '-1'::integer AS qual_id,
+    ind_commodity_properties.ind_id,
+    '-1'::integer AS quant_id
+   FROM public.ind_commodity_properties
+  WITH DATA;
+
+
+--
+-- Name: ind_context_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ind_context_properties (
+    id bigint NOT NULL,
+    tooltip_text text NOT NULL,
+    context_id bigint NOT NULL,
+    ind_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: qual_context_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.qual_context_properties (
+    id bigint NOT NULL,
+    tooltip_text text NOT NULL,
+    context_id bigint NOT NULL,
+    qual_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: quant_context_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.quant_context_properties (
+    id bigint NOT NULL,
+    tooltip_text text NOT NULL,
+    context_id bigint NOT NULL,
+    quant_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: context_attribute_properties_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.context_attribute_properties_mv AS
+ SELECT qual_context_properties.id,
+    qual_context_properties.context_id,
+    qual_context_properties.tooltip_text,
+    qual_context_properties.qual_id,
+    '-1'::integer AS ind_id,
+    '-1'::integer AS quant_id
+   FROM public.qual_context_properties
+UNION ALL
+ SELECT quant_context_properties.id,
+    quant_context_properties.context_id,
+    quant_context_properties.tooltip_text,
+    '-1'::integer AS qual_id,
+    '-1'::integer AS ind_id,
+    quant_context_properties.quant_id
+   FROM public.quant_context_properties
+UNION ALL
+ SELECT ind_context_properties.id,
+    ind_context_properties.context_id,
+    ind_context_properties.tooltip_text,
+    '-1'::integer AS qual_id,
+    ind_context_properties.ind_id,
+    '-1'::integer AS quant_id
+   FROM public.ind_context_properties
+  WITH DATA;
 
 
 --
@@ -1800,6 +1946,79 @@ CREATE SEQUENCE public.countries_id_seq
 --
 
 ALTER SEQUENCE public.countries_id_seq OWNED BY public.countries.id;
+
+
+--
+-- Name: ind_country_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ind_country_properties (
+    id bigint NOT NULL,
+    tooltip_text text NOT NULL,
+    country_id bigint NOT NULL,
+    ind_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: qual_country_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.qual_country_properties (
+    id bigint NOT NULL,
+    tooltip_text text NOT NULL,
+    country_id bigint NOT NULL,
+    qual_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: quant_country_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.quant_country_properties (
+    id bigint NOT NULL,
+    tooltip_text text NOT NULL,
+    country_id bigint NOT NULL,
+    quant_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: country_attribute_properties_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.country_attribute_properties_mv AS
+ SELECT qual_country_properties.id,
+    qual_country_properties.country_id,
+    qual_country_properties.tooltip_text,
+    qual_country_properties.qual_id,
+    '-1'::integer AS ind_id,
+    '-1'::integer AS quant_id
+   FROM public.qual_country_properties
+UNION ALL
+ SELECT quant_country_properties.id,
+    quant_country_properties.country_id,
+    quant_country_properties.tooltip_text,
+    '-1'::integer AS qual_id,
+    '-1'::integer AS ind_id,
+    quant_country_properties.quant_id
+   FROM public.quant_country_properties
+UNION ALL
+ SELECT ind_country_properties.id,
+    ind_country_properties.country_id,
+    ind_country_properties.tooltip_text,
+    '-1'::integer AS qual_id,
+    ind_country_properties.ind_id,
+    '-1'::integer AS quant_id
+   FROM public.ind_country_properties
+  WITH DATA;
 
 
 --
@@ -3538,6 +3757,63 @@ ALTER SEQUENCE public.flows_id_seq OWNED BY public.flows.id;
 
 
 --
+-- Name: ind_commodity_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.ind_commodity_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ind_commodity_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.ind_commodity_properties_id_seq OWNED BY public.ind_commodity_properties.id;
+
+
+--
+-- Name: ind_context_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.ind_context_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ind_context_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.ind_context_properties_id_seq OWNED BY public.ind_context_properties.id;
+
+
+--
+-- Name: ind_country_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.ind_country_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ind_country_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.ind_country_properties_id_seq OWNED BY public.ind_country_properties.id;
+
+
+--
 -- Name: ind_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -4176,6 +4452,63 @@ ALTER SEQUENCE public.profiles_id_seq OWNED BY public.profiles.id;
 
 
 --
+-- Name: qual_commodity_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.qual_commodity_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: qual_commodity_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.qual_commodity_properties_id_seq OWNED BY public.qual_commodity_properties.id;
+
+
+--
+-- Name: qual_context_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.qual_context_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: qual_context_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.qual_context_properties_id_seq OWNED BY public.qual_context_properties.id;
+
+
+--
+-- Name: qual_country_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.qual_country_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: qual_country_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.qual_country_properties_id_seq OWNED BY public.qual_country_properties.id;
+
+
+--
 -- Name: qual_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -4211,6 +4544,63 @@ CREATE SEQUENCE public.quals_id_seq
 --
 
 ALTER SEQUENCE public.quals_id_seq OWNED BY public.quals.id;
+
+
+--
+-- Name: quant_commodity_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.quant_commodity_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: quant_commodity_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.quant_commodity_properties_id_seq OWNED BY public.quant_commodity_properties.id;
+
+
+--
+-- Name: quant_context_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.quant_context_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: quant_context_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.quant_context_properties_id_seq OWNED BY public.quant_context_properties.id;
+
+
+--
+-- Name: quant_country_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.quant_country_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: quant_country_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.quant_country_properties_id_seq OWNED BY public.quant_country_properties.id;
 
 
 --
@@ -5005,6 +5395,27 @@ ALTER TABLE ONLY public.flows ALTER COLUMN id SET DEFAULT nextval('public.flows_
 
 
 --
+-- Name: ind_commodity_properties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_commodity_properties ALTER COLUMN id SET DEFAULT nextval('public.ind_commodity_properties_id_seq'::regclass);
+
+
+--
+-- Name: ind_context_properties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_context_properties ALTER COLUMN id SET DEFAULT nextval('public.ind_context_properties_id_seq'::regclass);
+
+
+--
+-- Name: ind_country_properties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_country_properties ALTER COLUMN id SET DEFAULT nextval('public.ind_country_properties_id_seq'::regclass);
+
+
+--
 -- Name: ind_properties id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -5096,6 +5507,27 @@ ALTER TABLE ONLY public.profiles ALTER COLUMN id SET DEFAULT nextval('public.pro
 
 
 --
+-- Name: qual_commodity_properties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_commodity_properties ALTER COLUMN id SET DEFAULT nextval('public.qual_commodity_properties_id_seq'::regclass);
+
+
+--
+-- Name: qual_context_properties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_context_properties ALTER COLUMN id SET DEFAULT nextval('public.qual_context_properties_id_seq'::regclass);
+
+
+--
+-- Name: qual_country_properties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_country_properties ALTER COLUMN id SET DEFAULT nextval('public.qual_country_properties_id_seq'::regclass);
+
+
+--
 -- Name: qual_properties id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -5107,6 +5539,27 @@ ALTER TABLE ONLY public.qual_properties ALTER COLUMN id SET DEFAULT nextval('pub
 --
 
 ALTER TABLE ONLY public.quals ALTER COLUMN id SET DEFAULT nextval('public.quals_id_seq'::regclass);
+
+
+--
+-- Name: quant_commodity_properties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_commodity_properties ALTER COLUMN id SET DEFAULT nextval('public.quant_commodity_properties_id_seq'::regclass);
+
+
+--
+-- Name: quant_context_properties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_context_properties ALTER COLUMN id SET DEFAULT nextval('public.quant_context_properties_id_seq'::regclass);
+
+
+--
+-- Name: quant_country_properties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_country_properties ALTER COLUMN id SET DEFAULT nextval('public.quant_country_properties_id_seq'::regclass);
 
 
 --
@@ -5759,6 +6212,30 @@ ALTER TABLE ONLY public.flows
 
 
 --
+-- Name: ind_commodity_properties ind_commodity_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_commodity_properties
+    ADD CONSTRAINT ind_commodity_properties_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ind_context_properties ind_context_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_context_properties
+    ADD CONSTRAINT ind_context_properties_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ind_country_properties ind_country_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_country_properties
+    ADD CONSTRAINT ind_country_properties_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: ind_properties ind_properties_ind_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5959,6 +6436,30 @@ ALTER TABLE ONLY public.profiles
 
 
 --
+-- Name: qual_commodity_properties qual_commodity_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_commodity_properties
+    ADD CONSTRAINT qual_commodity_properties_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: qual_context_properties qual_context_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_context_properties
+    ADD CONSTRAINT qual_context_properties_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: qual_country_properties qual_country_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_country_properties
+    ADD CONSTRAINT qual_country_properties_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: qual_properties qual_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5988,6 +6489,30 @@ ALTER TABLE ONLY public.quals
 
 ALTER TABLE ONLY public.quals
     ADD CONSTRAINT quals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: quant_commodity_properties quant_commodity_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_commodity_properties
+    ADD CONSTRAINT quant_commodity_properties_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: quant_context_properties quant_context_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_context_properties
+    ADD CONSTRAINT quant_context_properties_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: quant_country_properties quant_country_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_country_properties
+    ADD CONSTRAINT quant_country_properties_pkey PRIMARY KEY (id);
 
 
 --
@@ -6615,6 +7140,20 @@ CREATE INDEX index_charts_on_profile_id ON public.charts USING btree (profile_id
 
 
 --
+-- Name: index_commodity_attribute_properties_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_commodity_attribute_properties_mv_id_idx ON public.commodity_attribute_properties_mv USING btree (id);
+
+
+--
+-- Name: index_context_attribute_properties_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_context_attribute_properties_mv_id_idx ON public.context_attribute_properties_mv USING btree (id);
+
+
+--
 -- Name: index_context_node_type_properties_on_context_node_type_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6661,6 +7200,13 @@ CREATE INDEX index_contexts_on_country_id ON public.contexts USING btree (countr
 --
 
 CREATE INDEX index_contextual_layers_on_context_id ON public.contextual_layers USING btree (context_id);
+
+
+--
+-- Name: index_country_attribute_properties_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_country_attribute_properties_mv_id_idx ON public.country_attribute_properties_mv USING btree (id);
 
 
 --
@@ -6818,6 +7364,48 @@ CREATE INDEX index_flows_on_path ON public.flows USING btree (path);
 
 
 --
+-- Name: index_ind_commodity_properties_on_commodity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ind_commodity_properties_on_commodity_id ON public.ind_commodity_properties USING btree (commodity_id);
+
+
+--
+-- Name: index_ind_commodity_properties_on_ind_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ind_commodity_properties_on_ind_id ON public.ind_commodity_properties USING btree (ind_id);
+
+
+--
+-- Name: index_ind_context_properties_on_context_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ind_context_properties_on_context_id ON public.ind_context_properties USING btree (context_id);
+
+
+--
+-- Name: index_ind_context_properties_on_ind_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ind_context_properties_on_ind_id ON public.ind_context_properties USING btree (ind_id);
+
+
+--
+-- Name: index_ind_country_properties_on_country_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ind_country_properties_on_country_id ON public.ind_country_properties USING btree (country_id);
+
+
+--
+-- Name: index_ind_country_properties_on_ind_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ind_country_properties_on_ind_id ON public.ind_country_properties USING btree (ind_id);
+
+
+--
 -- Name: index_ind_properties_on_ind_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6902,10 +7490,94 @@ CREATE INDEX index_profiles_on_context_node_type_id ON public.profiles USING btr
 
 
 --
+-- Name: index_qual_commodity_properties_on_commodity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_qual_commodity_properties_on_commodity_id ON public.qual_commodity_properties USING btree (commodity_id);
+
+
+--
+-- Name: index_qual_commodity_properties_on_qual_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_qual_commodity_properties_on_qual_id ON public.qual_commodity_properties USING btree (qual_id);
+
+
+--
+-- Name: index_qual_context_properties_on_context_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_qual_context_properties_on_context_id ON public.qual_context_properties USING btree (context_id);
+
+
+--
+-- Name: index_qual_context_properties_on_qual_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_qual_context_properties_on_qual_id ON public.qual_context_properties USING btree (qual_id);
+
+
+--
+-- Name: index_qual_country_properties_on_country_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_qual_country_properties_on_country_id ON public.qual_country_properties USING btree (country_id);
+
+
+--
+-- Name: index_qual_country_properties_on_qual_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_qual_country_properties_on_qual_id ON public.qual_country_properties USING btree (qual_id);
+
+
+--
 -- Name: index_qual_properties_on_qual_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_qual_properties_on_qual_id ON public.qual_properties USING btree (qual_id);
+
+
+--
+-- Name: index_quant_commodity_properties_on_commodity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_quant_commodity_properties_on_commodity_id ON public.quant_commodity_properties USING btree (commodity_id);
+
+
+--
+-- Name: index_quant_commodity_properties_on_quant_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_quant_commodity_properties_on_quant_id ON public.quant_commodity_properties USING btree (quant_id);
+
+
+--
+-- Name: index_quant_context_properties_on_context_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_quant_context_properties_on_context_id ON public.quant_context_properties USING btree (context_id);
+
+
+--
+-- Name: index_quant_context_properties_on_quant_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_quant_context_properties_on_quant_id ON public.quant_context_properties USING btree (quant_id);
+
+
+--
+-- Name: index_quant_country_properties_on_country_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_quant_country_properties_on_country_id ON public.quant_country_properties USING btree (country_id);
+
+
+--
+-- Name: index_quant_country_properties_on_quant_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_quant_country_properties_on_quant_id ON public.quant_country_properties USING btree (quant_id);
 
 
 --
@@ -7133,6 +7805,14 @@ ALTER TABLE ONLY public.context_node_types
 
 
 --
+-- Name: ind_country_properties fk_rails_162974f66c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_country_properties
+    ADD CONSTRAINT fk_rails_162974f66c FOREIGN KEY (country_id) REFERENCES public.countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: download_attributes fk_rails_163b9bb8d8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7213,6 +7893,22 @@ ALTER TABLE ONLY public.chart_inds
 
 
 --
+-- Name: quant_country_properties fk_rails_2cb9ec5128; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_country_properties
+    ADD CONSTRAINT fk_rails_2cb9ec5128 FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: ind_context_properties fk_rails_2d523de840; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_context_properties
+    ADD CONSTRAINT fk_rails_2d523de840 FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: flow_quants fk_rails_2dbc0a565f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7277,6 +7973,14 @@ ALTER TABLE ONLY public.map_inds
 
 
 --
+-- Name: qual_country_properties fk_rails_4d7c9be019; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_country_properties
+    ADD CONSTRAINT fk_rails_4d7c9be019 FOREIGN KEY (country_id) REFERENCES public.countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: node_properties fk_rails_4dcde982df; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7298,6 +8002,22 @@ ALTER TABLE ONLY public.dashboards_inds
 
 ALTER TABLE ONLY public.recolor_by_quals
     ADD CONSTRAINT fk_rails_5294e7fccd FOREIGN KEY (recolor_by_attribute_id) REFERENCES public.recolor_by_attributes(id) ON DELETE CASCADE;
+
+
+--
+-- Name: qual_context_properties fk_rails_58bc3d5bcf; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_context_properties
+    ADD CONSTRAINT fk_rails_58bc3d5bcf FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: ind_commodity_properties fk_rails_5c0dcf9d64; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_commodity_properties
+    ADD CONSTRAINT fk_rails_5c0dcf9d64 FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7325,6 +8045,22 @@ ALTER TABLE ONLY public.chart_quants
 
 
 --
+-- Name: ind_context_properties fk_rails_6b25018f3c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_context_properties
+    ADD CONSTRAINT fk_rails_6b25018f3c FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: quant_context_properties fk_rails_6e05c978da; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_context_properties
+    ADD CONSTRAINT fk_rails_6e05c978da FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: flow_quals fk_rails_6e55ca4cbc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7341,11 +8077,35 @@ ALTER TABLE ONLY public.ind_properties
 
 
 --
+-- Name: qual_commodity_properties fk_rails_721d9b2c40; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_commodity_properties
+    ADD CONSTRAINT fk_rails_721d9b2c40 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: charts fk_rails_805a6066ad; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.charts
     ADD CONSTRAINT fk_rails_805a6066ad FOREIGN KEY (parent_id) REFERENCES public.charts(id) ON DELETE CASCADE;
+
+
+--
+-- Name: quant_context_properties fk_rails_8c0d4513c3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_context_properties
+    ADD CONSTRAINT fk_rails_8c0d4513c3 FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: quant_country_properties fk_rails_90fcd1e231; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_country_properties
+    ADD CONSTRAINT fk_rails_90fcd1e231 FOREIGN KEY (country_id) REFERENCES public.countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7370,6 +8130,14 @@ ALTER TABLE ONLY public.resize_by_attributes
 
 ALTER TABLE ONLY public.recolor_by_inds
     ADD CONSTRAINT fk_rails_93051274e4 FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: quant_commodity_properties fk_rails_93e2577ebb; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_commodity_properties
+    ADD CONSTRAINT fk_rails_93e2577ebb FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7421,6 +8189,14 @@ ALTER TABLE ONLY public.charts
 
 
 --
+-- Name: ind_commodity_properties fk_rails_a8310a8e25; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_commodity_properties
+    ADD CONSTRAINT fk_rails_a8310a8e25 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: dashboards_quants fk_rails_b49efb2529; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7458,6 +8234,14 @@ ALTER TABLE ONLY public.flows
 
 ALTER TABLE ONLY public.resize_by_quants
     ADD CONSTRAINT fk_rails_c63dc992e3 FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: qual_context_properties fk_rails_c67757078e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_context_properties
+    ADD CONSTRAINT fk_rails_c67757078e FOREIGN KEY (qual_id) REFERENCES public.quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7541,6 +8325,22 @@ ALTER TABLE ONLY public.chart_quants
 
 
 --
+-- Name: ind_country_properties fk_rails_e01a20acf1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_country_properties
+    ADD CONSTRAINT fk_rails_e01a20acf1 FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: qual_commodity_properties fk_rails_e18327427d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_commodity_properties
+    ADD CONSTRAINT fk_rails_e18327427d FOREIGN KEY (qual_id) REFERENCES public.quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: download_quants fk_rails_e3b3c104f3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7570,6 +8370,14 @@ ALTER TABLE ONLY public.download_quals
 
 ALTER TABLE ONLY public.contexts
     ADD CONSTRAINT fk_rails_eea78f436e FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: quant_commodity_properties fk_rails_f026110265; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_commodity_properties
+    ADD CONSTRAINT fk_rails_f026110265 FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7610,6 +8418,14 @@ ALTER TABLE ONLY public.map_attributes
 
 ALTER TABLE ONLY public.node_inds
     ADD CONSTRAINT fk_rails_fe29817503 FOREIGN KEY (node_id) REFERENCES public.nodes(id) ON DELETE CASCADE;
+
+
+--
+-- Name: qual_country_properties fk_rails_fe3d71a6cc; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_country_properties
+    ADD CONSTRAINT fk_rails_fe3d71a6cc FOREIGN KEY (qual_id) REFERENCES public.quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7753,6 +8569,19 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190110094614'),
 ('20190110140539'),
 ('20190111121850'),
-('20190215113824');
+('20190215113824'),
+('20190228115321'),
+('20190228115345'),
+('20190228115409'),
+('20190301121434'),
+('20190301170044'),
+('20190301170114'),
+('20190301170138'),
+('20190301170523'),
+('20190301173716'),
+('20190301173748'),
+('20190301173808'),
+('20190301173824'),
+('20190308163938');
 
 

@@ -2,7 +2,12 @@ module Api
   module V3
     module Places
       class IndicatorsTable
+        include ActiveSupport::Configurable
         include Api::V3::Profiles::AttributesInitializer
+
+        config_accessor :get_tooltip do
+          Api::V3::Profiles::GetTooltipPerAttribute
+        end
 
         # @param context [Api::V3::Context]
         # @param node [Api::V3::Node]
@@ -66,7 +71,10 @@ module Api
               {
                 name: chart_attribute.display_name,
                 unit: chart_attribute.unit,
-                tooltip: chart_attribute.tooltip_text
+                tooltip: get_tooltip.call(
+                  ro_chart_attribute: chart_attribute,
+                  context: @context
+                )
               }
             end
           {
