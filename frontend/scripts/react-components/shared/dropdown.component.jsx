@@ -10,8 +10,6 @@ export default class Dropdown extends Component {
     listHeight: null
   };
 
-  static DEFAULT_MAX_LIST_HEIGHT = 265;
-
   listItemRef = React.createRef();
 
   componentDidMount() {

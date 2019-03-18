@@ -107,6 +107,7 @@ class SentenceSelector extends React.PureComponent {
           <br className="hide-for-small" /> with the trade of{' '}
           <Dropdown
             variant="sentence"
+            align="center"
             value={{ value: commodityName.toLowerCase(), label: commodityName.toLowerCase() }}
             options={commodityNames}
             onChange={this.onSelectCommodity}
@@ -115,6 +116,7 @@ class SentenceSelector extends React.PureComponent {
           from{' '}
           <Dropdown
             variant="sentence"
+            align="center"
             value={{ value: capitalize(countryName), label: capitalize(countryName) }}
             options={countryNames}
             onChange={this.onSelectCountry}

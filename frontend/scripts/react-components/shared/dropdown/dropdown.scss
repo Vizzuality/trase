@@ -37,12 +37,6 @@
   margin-bottom: 10px;
   cursor: default;
 
-  * {
-    font-size: $font-size-xx-regular;
-    font-family: $font-family-2;
-    letter-spacing: 0.5px;
-  }
-
   &.-open {
 
     .dropdown-menu {
@@ -94,12 +88,14 @@
   }
 
   .dropdown-menu-item {
+    display: flex;
+    align-items: center;
     padding: 10px;
-    width: 100%;
     color: $charcoal-grey;
+    letter-spacing: 0.5px;
 
-    &.-with-icon {
-      padding-left: 10px;
+    &.-highlighted {
+      background-color: $manilla;
     }
 
     &:first-child {
@@ -110,9 +106,15 @@
       background-color: $manilla;
     }
 
+    .item-label {
+      display: inline-flex;
+    }
+
     .icon {
       fill: $strong-pink;
       height: 10px;
+      width: 10px;
+      margin: 0 10px 0 0;
     }
   }
 
@@ -124,13 +126,13 @@
     padding-right: 15px;
 
     .dropdown-menu-item {
-      padding: 5px 10px;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
 
       .item-label {
         font-size: $font-size-regular;
+        font-weight: $font-weight-regular;
       }
     }
 
@@ -145,6 +147,12 @@
     .dropdown-selected-item {
       color: $white;
       font-weight: $font-weight-regular;
+    }
+  }
+
+  &.text-align-center {
+    .dropdown-menu-item {
+      justify-content: center;
     }
   }
 

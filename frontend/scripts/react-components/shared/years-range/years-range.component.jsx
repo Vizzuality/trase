@@ -75,9 +75,9 @@ function YearsRange(props) {
 
 YearsRange.propTypes = {
   years: PropTypes.array.isRequired,
+  toggleParentDropdown: PropTypes.func,
   onSelected: PropTypes.func.isRequired,
-  selectedYears: PropTypes.array.isRequired,
-  toggleParentDropdown: PropTypes.func.isRequired
+  selectedYears: PropTypes.array.isRequired
 };
 
 export default YearsRange;
