@@ -17,12 +17,14 @@ import {
   Legend,
   ResponsiveContainer,
   ComposedChart,
-  PieChart
+  PieChart,
+  Label
 } from 'recharts';
 
-import ChartTick from './tick';
+import ChartTick from 'react-components/chart/tick/tick.component';
+import CategoryTick from 'react-components/chart/tick/category-tick.component';
 
-import './styles.scss';
+import 'react-components/chart/chart-styles.scss';
 
 class Chart extends PureComponent {
   static propTypes = {
@@ -39,42 +41,105 @@ class Chart extends PureComponent {
     handleMouseLeave: null
   };
 
-  findMaxValue = (data, config) => {
-    const { yKeys } = config;
+  findMaxValue = (data, axisKeys) => {
     const maxValues = [];
-
-    Object.keys(yKeys).forEach(key => {
-      Object.keys(yKeys[key]).forEach(subKey => {
+    Object.keys(axisKeys).forEach(key => {
+      Object.keys(axisKeys[key]).forEach(subKey => {
         maxValues.push(maxBy(data, subKey)[subKey]);
       });
     });
     return max(maxValues);
   };
 
+  renderXAxis() {
+    const { config, data } = this.props;
+    const { xKey, xKeys, xAxis, layout, unit } = config;
+    if (!xAxis) return null;
+    if (layout === 'vertical') {
+      const maxXValue = this.findMaxValue(data, xKeys);
+      return (
+        <XAxis
+          axisLine={false}
+          tickLine={false}
+          tickMargin={10}
+          tick={
+            <ChartTick
+              dataMax={maxXValue}
+              unitFormat={value => value}
+              unit={unit}
+              backgroundColor="transparent"
+              fill="white"
+            />
+          }
+          {...xAxis}
+        >
+          <Label position="insideBottom" offset={-15} className="x-axis-label">
+            {unit}
+          </Label>
+        </XAxis>
+      );
+    }
+
+    return <XAxis dataKey={xKey || ''} tick={{ fontSize: 12 }} {...xAxis} />;
+  }
+
+  renderYAxis() {
+    const { config, data } = this.props;
+    const { yAxis, unit, unitFormat, yKeys, yKey } = config;
+    if (yKey)
+      return (
+        <YAxis
+          axisLine={false}
+          tickLine={false}
+          tickMargin={15}
+          dataKey={yKey || ''}
+          tick={<CategoryTick />}
+          {...yAxis}
+        />
+      );
+    const maxYValue = this.findMaxValue(data, yKeys);
+    return (
+      yAxis && (
+        <YAxis
+          axisLine={false}
+          tickSize={-50}
+          mirror
+          tickMargin={0}
+          tickLine={false}
+          tick={
+            <ChartTick
+              dataMax={maxYValue}
+              unit={unit || ''}
+              unitFormat={unitFormat || (value => value)}
+              fill="#555555"
+            />
+          }
+          {...yAxis}
+        />
+      )
+    );
+  }
+
   render() {
     const { className, data, config, handleMouseMove, handleMouseLeave } = this.props;
 
     const {
-      margin = { top: 20, right: 0, left: 50, bottom: 0 },
+      margin = { top: 20, right: 0, left: 50, bottom: 20 },
       padding = { top: 0, right: 0, left: 0, bottom: 0 },
       type,
-      xKey,
       yKeys,
-      xAxis,
-      yAxis,
+      xKeys,
       cartesianGrid,
       gradients,
       height,
       patterns,
       tooltip,
       legend,
-      unit,
       colors,
-      unitFormat
+      layout
     } = config;
-
-    const { lines, bars, areas, pies } = yKeys;
-    const maxYValue = this.findMaxValue(data, config);
+    const axisKeys = xKeys || yKeys;
+    const { lines, bars, areas, pies } = axisKeys;
 
     let CHART;
     switch (type) {
@@ -86,17 +151,26 @@ class Chart extends PureComponent {
         CHART = ComposedChart;
       }
     }
-
+    let horizontalChartProps = {};
+    let chartMargin = margin;
+    if (layout === 'vertical') {
+      horizontalChartProps = {
+        layout,
+        barCategoryGap: '10'
+      };
+      chartMargin = { ...margin, left: margin.left + 70 };
+    }
     return (
       <div className={`c-chart ${className}`} style={{ height }}>
         <ResponsiveContainer>
           <CHART
             height={height}
             data={data}
-            margin={margin}
+            margin={chartMargin}
             padding={padding}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
+            {...horizontalChartProps}
           >
             <defs>
               {gradients &&
@@ -128,28 +202,8 @@ class Chart extends PureComponent {
             {cartesianGrid && (
               <CartesianGrid strokeDasharray="4 4" stroke="#d6d6d9" {...cartesianGrid} />
             )}
-
-            {xAxis && <XAxis dataKey={xKey || ''} tick={{ fontSize: 12 }} {...xAxis} />}
-
-            {yAxis && (
-              <YAxis
-                axisLine={false}
-                tickSize={-50}
-                mirror
-                tickMargin={0}
-                tickLine={false}
-                tick={
-                  <ChartTick
-                    dataMax={maxYValue}
-                    unit={unit || ''}
-                    unitFormat={unitFormat || (value => value)}
-                    fill="#555555"
-                  />
-                }
-                {...yAxis}
-              />
-            )}
-
+            {this.renderXAxis()}
+            {this.renderYAxis()}
             {areas &&
               Object.keys(areas).map(key => (
                 <Area key={key} dataKey={key} dot={false} {...areas[key]} />

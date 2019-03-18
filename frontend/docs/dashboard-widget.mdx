@@ -6,6 +6,7 @@ import { PropsTable, Playground } from 'docz'
 import { State } from 'react-powerplug';
 import DashboardWidget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.component';
 import data from './mock-data/dashboard-widget-data';
+import horizontalData from './mock-data/dashboard-widget-horizontal-data';
 import dataPie from './mock-data/dashboard-widget-data-pie';
 import config from './mock-data/dashboard-widget-config-mock';
 import 'styles/_docz.scss';
@@ -27,6 +28,11 @@ import 'styles/_docz.scss';
     title={'Stacked bar Chart'}
     data={data}
     chartConfig={config.stackedBar}
+  />
+  <DashboardWidget
+    title={'Horizontal bar Chart'}
+    data={horizontalData}
+    chartConfig={config.horizontalBar}
   />
   <DashboardWidget
     title={'Pie Chart'}
