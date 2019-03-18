@@ -6,7 +6,7 @@ import DashboardWidgetLabel from 'react-components/dashboard-element/dashboard-w
 import DashboardWidgetLegend from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-legend/dashboard-widget-legend.component';
 import ErrorCatch from 'react-components/shared/error-catch.component';
 
-import 'scripts/react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
+import 'react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
 
 function DashboardWidget(props) {
   const { title, loading, error, data, chartConfig } = props;
