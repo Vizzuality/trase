@@ -104,6 +104,35 @@ export default {
       text: 'Exporter Companies'
     }
   },
+  horizontalStackedBar: {
+    ...CHART_CONFIG.horizontalBar,
+    colors,
+    tooltip,
+    type: 'bar',
+    xKeys: {
+      bars: {
+        x1: {
+          fill: '#fff0c2',
+          stroke: '#fff0c2',
+          interval: 'preserveStartEnd',
+          stackId: 'bar',
+          nameKey: 'x'
+        },
+        x2: {
+          fill: '#fd7d8a',
+          stroke: '#fd7d8a',
+          interval: 'preserveStartEnd',
+          stackId: 'bar',
+          nameKey: 'x'
+        }
+      }
+    },
+    unit: 't',
+    unitFormat: value => format('.2s')(value),
+    yAxisLabel: {
+      text: 'Exporter Companies'
+    }
+  },
   pie: {
     ...CHART_CONFIG.pie,
     tooltip,

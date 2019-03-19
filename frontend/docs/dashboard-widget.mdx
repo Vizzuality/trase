@@ -7,6 +7,7 @@ import { State } from 'react-powerplug';
 import DashboardWidget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.component';
 import data from './mock-data/dashboard-widget-data';
 import horizontalData from './mock-data/dashboard-widget-horizontal-data';
+import horizontalMultipleData from './mock-data/dashboard-widget-horizontal-multiple-data';
 import dataPie from './mock-data/dashboard-widget-data-pie';
 import config from './mock-data/dashboard-widget-config-mock';
 import 'styles/_docz.scss';
@@ -33,6 +34,11 @@ import 'styles/_docz.scss';
     title={'Horizontal bar Chart'}
     data={horizontalData}
     chartConfig={config.horizontalBar}
+  />
+  <DashboardWidget
+    title={'Horizontal stacked bar Chart'}
+    data={horizontalMultipleData}
+    chartConfig={config.horizontalStackedBar}
   />
   <DashboardWidget
     title={'Pie Chart'}
