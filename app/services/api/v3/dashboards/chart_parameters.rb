@@ -29,11 +29,10 @@ module Api
           @commodity_id = params[:commodity_id]
 
           if @country_id && @commodity_id
-            @context = Api::V3::Context.where(
-              country_id: @country_id, commodity_id: @commodity_id
-            ).first
+            @context = Api::V3::Context.find_by_country_id_and_commodity_id!(
+              @country_id, @commodity_id
+            )
           end
-          raise ActiveRecord::RecordNotFound unless @context
 
           initialize_cont_attribute params[:cont_attribute_id]
           initialize_ncont_attribute params[:ncont_attribute_id]
@@ -54,9 +53,10 @@ module Api
 
           resize_by_attribute = Api::V3::Readonly::ResizeByAttribute.
             select(:attribute_id).
-            where(context_id: @context.id, attribute_id: cont_attribute_id).
             includes(:readonly_attribute).
-            first
+            find_by_context_id_and_attribute_id!(
+              @context.id, cont_attribute_id
+            )
           raise ActiveRecord::RecordNotFound unless resize_by_attribute
 
           @cont_attribute = resize_by_attribute.readonly_attribute
@@ -67,9 +67,10 @@ module Api
 
           recolor_by_attribute = Api::V3::Readonly::RecolorByAttribute.
             select(:attribute_id).
-            where(context_id: @context.id, attribute_id: ncont_attribute_id).
             includes(:readonly_attribute).
-            first
+            find_by_context_id_and_attribute_id!(
+              @context.id, ncont_attribute_id
+            )
           raise ActiveRecord::RecordNotFound unless recolor_by_attribute
 
           @ncont_attribute = recolor_by_attribute.readonly_attribute
