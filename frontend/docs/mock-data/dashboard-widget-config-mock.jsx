@@ -27,11 +27,27 @@ const meta = {
   },
   y1: {
     type: 'number',
-    label: '',
+    label: 'Trade Volume',
     tooltip: {
       prefix: '',
       format: '',
       suffix: ''
+    }
+  },
+  x1: {
+    label: 'Trade Volume',
+    tooltip: {
+      prefix: '',
+      format: '',
+      suffix: 't'
+    }
+  },
+  x2: {
+    label: 'Production of Soy',
+    tooltip: {
+      prefix: '',
+      format: '',
+      suffix: 't'
     }
   }
 };
