@@ -38,7 +38,7 @@ class Chart extends PureComponent {
     const { className, data, config, handleMouseMove, handleMouseLeave } = this.props;
 
     const {
-      margin = { top: 20, right: 0, left: 50, bottom: 20 },
+      margin = {},
       padding = { top: 0, right: 0, left: 0, bottom: 0 },
       type,
       yKeys,
@@ -66,21 +66,20 @@ class Chart extends PureComponent {
       }
     }
     let horizontalChartProps = {};
-    let chartMargin = margin;
     if (layout === 'vertical') {
       horizontalChartProps = {
         layout,
         barCategoryGap: '10'
       };
-      chartMargin = { ...margin, left: margin.left + 70 };
     }
+    const defaultMargin = { top: 20, right: 0, left: 50, bottom: 20 };
     return (
       <div className={`c-chart ${className}`} style={{ height }}>
         <ResponsiveContainer>
           <CHART
             height={height}
             data={data}
-            margin={chartMargin}
+            margin={{ ...defaultMargin, ...margin }}
             padding={padding}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}

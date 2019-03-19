@@ -118,7 +118,8 @@ export default {
     unitFormat: value => format('.2s')(value),
     yAxisLabel: {
       text: 'Exporter Companies'
-    }
+    },
+    margin: { left: 120 }
   },
   horizontalStackedBar: {
     ...CHART_CONFIG.horizontalBar,
@@ -143,6 +144,7 @@ export default {
         }
       }
     },
+    margin: { left: 120 },
     unit: 't',
     unitFormat: value => format('.2s')(value),
     yAxisLabel: {
