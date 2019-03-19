@@ -1521,7 +1521,7 @@ CREATE TABLE public.context_node_type_properties (
     updated_at timestamp without time zone NOT NULL,
     is_choropleth_disabled boolean DEFAULT false NOT NULL,
     role character varying,
-    CONSTRAINT context_node_type_properties_role_check CHECK (((role)::text = ANY ((ARRAY['source'::character varying, 'exporter'::character varying, 'importer'::character varying, 'company'::character varying])::text[])))
+    CONSTRAINT context_node_type_properties_role_check CHECK (((role)::text = ANY (ARRAY[('source'::character varying)::text, ('exporter'::character varying)::text, ('importer'::character varying)::text, ('destination'::character varying)::text])))
 );
 
 
