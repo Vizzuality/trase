@@ -33,13 +33,12 @@ module Api
 
             @meta = {
               xAxis: year_axis_meta,
-              yAxis: axis_meta(@cont_attribute),
+              yAxis: axis_meta(@cont_attribute, type: 'category'),
               x: year_legend_meta
             }
 
             break_by_values_indexes.each do |break_by, idx|
               @meta[:"y#{idx}"] = {
-                type: 'category',
                 label: break_by,
                 tooltip: {prefix: '', format: '', suffix: ''}
               }

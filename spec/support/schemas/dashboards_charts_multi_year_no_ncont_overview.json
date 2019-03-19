@@ -3,7 +3,6 @@
   "$schema": "http://json-schema.org/draft-06/schema#",
   "$id": "http://example.com/root.json",
   "type": "object",
-  "title": "The Root Schema",
   "required": [
     "data",
     "meta"
@@ -12,11 +11,9 @@
     "data": {
       "$id": "#/properties/data",
       "type": "array",
-      "title": "The Data Schema",
       "items": {
         "$id": "#/properties/data/items",
         "type": "object",
-        "title": "The Items Schema",
         "required": [
           "x",
           "y0"
@@ -24,21 +21,11 @@
         "properties": {
           "x": {
             "$id": "#/properties/data/items/properties/x",
-            "type": "integer",
-            "title": "The X Schema",
-            "default": 0,
-            "examples": [
-              2014
-            ]
+            "type": "integer"
           },
           "y0": {
             "$id": "#/properties/data/items/properties/y0",
-            "type": "number",
-            "title": "The Y0 Schema",
-            "default": 0.0,
-            "examples": [
-              86760519.9871819
-            ]
+            "type": "number"
           }
         }
       }
@@ -46,7 +33,6 @@
     "meta": {
       "$id": "#/properties/meta",
       "type": "object",
-      "title": "The Meta Schema",
       "required": [
         "xAxis",
         "yAxis",
@@ -57,52 +43,37 @@
         "xAxis": {
           "$id": "#/properties/meta/properties/xAxis",
           "type": "object",
-          "title": "The Xaxis Schema",
           "required": [
+            "type",
             "label",
             "prefix",
             "format",
             "suffix"
           ],
           "properties": {
+            "type": {
+              "$id": "#/properties/meta/properties/xAxis/properties/type",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
             "label": {
               "$id": "#/properties/meta/properties/xAxis/properties/label",
               "type": "string",
-              "title": "The Label Schema",
-              "default": "",
-              "examples": [
-                "Year"
-              ],
               "pattern": "^(.*)$"
             },
             "prefix": {
               "$id": "#/properties/meta/properties/xAxis/properties/prefix",
               "type": "string",
-              "title": "The Prefix Schema",
-              "default": "",
-              "examples": [
-                ""
-              ],
               "pattern": "^(.*)$"
             },
             "format": {
               "$id": "#/properties/meta/properties/xAxis/properties/format",
               "type": "string",
-              "title": "The Format Schema",
-              "default": "",
-              "examples": [
-                ""
-              ],
               "pattern": "^(.*)$"
             },
             "suffix": {
               "$id": "#/properties/meta/properties/xAxis/properties/suffix",
               "type": "string",
-              "title": "The Suffix Schema",
-              "default": "",
-              "examples": [
-                ""
-              ],
               "pattern": "^(.*)$"
             }
           }
@@ -110,52 +81,37 @@
         "yAxis": {
           "$id": "#/properties/meta/properties/yAxis",
           "type": "object",
-          "title": "The Yaxis Schema",
           "required": [
+            "type",
             "label",
             "prefix",
             "format",
             "suffix"
           ],
           "properties": {
+            "type": {
+              "$id": "#/properties/meta/properties/yAxis/properties/type",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
             "label": {
               "$id": "#/properties/meta/properties/yAxis/properties/label",
               "type": "string",
-              "title": "The Label Schema",
-              "default": "",
-              "examples": [
-                "Trade volume"
-              ],
               "pattern": "^(.*)$"
             },
             "prefix": {
               "$id": "#/properties/meta/properties/yAxis/properties/prefix",
               "type": "string",
-              "title": "The Prefix Schema",
-              "default": "",
-              "examples": [
-                ""
-              ],
               "pattern": "^(.*)$"
             },
             "format": {
               "$id": "#/properties/meta/properties/yAxis/properties/format",
               "type": "string",
-              "title": "The Format Schema",
-              "default": "",
-              "examples": [
-                ""
-              ],
               "pattern": "^(.*)$"
             },
             "suffix": {
               "$id": "#/properties/meta/properties/yAxis/properties/suffix",
               "type": "string",
-              "title": "The Suffix Schema",
-              "default": "",
-              "examples": [
-                "t"
-              ],
               "pattern": "^(.*)$"
             }
           }
@@ -163,37 +119,19 @@
         "x": {
           "$id": "#/properties/meta/properties/x",
           "type": "object",
-          "title": "The X Schema",
           "required": [
-            "type",
             "label",
             "tooltip"
           ],
           "properties": {
-            "type": {
-              "$id": "#/properties/meta/properties/x/properties/type",
-              "type": "string",
-              "title": "The Type Schema",
-              "default": "",
-              "examples": [
-                "category"
-              ],
-              "pattern": "^(.*)$"
-            },
             "label": {
               "$id": "#/properties/meta/properties/x/properties/label",
               "type": "string",
-              "title": "The Label Schema",
-              "default": "",
-              "examples": [
-                "Year"
-              ],
               "pattern": "^(.*)$"
             },
             "tooltip": {
               "$id": "#/properties/meta/properties/x/properties/tooltip",
               "type": "object",
-              "title": "The Tooltip Schema",
               "required": [
                 "prefix",
                 "format",
@@ -203,31 +141,16 @@
                 "prefix": {
                   "$id": "#/properties/meta/properties/x/properties/tooltip/properties/prefix",
                   "type": "string",
-                  "title": "The Prefix Schema",
-                  "default": "",
-                  "examples": [
-                    ""
-                  ],
                   "pattern": "^(.*)$"
                 },
                 "format": {
                   "$id": "#/properties/meta/properties/x/properties/tooltip/properties/format",
                   "type": "string",
-                  "title": "The Format Schema",
-                  "default": "",
-                  "examples": [
-                    ""
-                  ],
                   "pattern": "^(.*)$"
                 },
                 "suffix": {
                   "$id": "#/properties/meta/properties/x/properties/tooltip/properties/suffix",
                   "type": "string",
-                  "title": "The Suffix Schema",
-                  "default": "",
-                  "examples": [
-                    ""
-                  ],
                   "pattern": "^(.*)$"
                 }
               }
@@ -237,37 +160,19 @@
         "y0": {
           "$id": "#/properties/meta/properties/y0",
           "type": "object",
-          "title": "The Y0 Schema",
           "required": [
-            "type",
             "label",
             "tooltip"
           ],
           "properties": {
-            "type": {
-              "$id": "#/properties/meta/properties/y0/properties/type",
-              "type": "string",
-              "title": "The Type Schema",
-              "default": "",
-              "examples": [
-                "number"
-              ],
-              "pattern": "^(.*)$"
-            },
             "label": {
               "$id": "#/properties/meta/properties/y0/properties/label",
               "type": "string",
-              "title": "The Label Schema",
-              "default": "",
-              "examples": [
-                ""
-              ],
               "pattern": "^(.*)$"
             },
             "tooltip": {
               "$id": "#/properties/meta/properties/y0/properties/tooltip",
               "type": "object",
-              "title": "The Tooltip Schema",
               "required": [
                 "prefix",
                 "format",
@@ -277,31 +182,16 @@
                 "prefix": {
                   "$id": "#/properties/meta/properties/y0/properties/tooltip/properties/prefix",
                   "type": "string",
-                  "title": "The Prefix Schema",
-                  "default": "",
-                  "examples": [
-                    ""
-                  ],
                   "pattern": "^(.*)$"
                 },
                 "format": {
                   "$id": "#/properties/meta/properties/y0/properties/tooltip/properties/format",
                   "type": "string",
-                  "title": "The Format Schema",
-                  "default": "",
-                  "examples": [
-                    ""
-                  ],
                   "pattern": "^(.*)$"
                 },
                 "suffix": {
                   "$id": "#/properties/meta/properties/y0/properties/tooltip/properties/suffix",
                   "type": "string",
-                  "title": "The Suffix Schema",
-                  "default": "",
-                  "examples": [
-                    ""
-                  ],
                   "pattern": "^(.*)$"
                 }
               }

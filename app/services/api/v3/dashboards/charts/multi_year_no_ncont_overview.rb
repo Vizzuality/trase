@@ -21,9 +21,9 @@ module Api
             end
             @meta = {
               xAxis: year_axis_meta,
-              yAxis: axis_meta(@cont_attribute),
+              yAxis: axis_meta(@cont_attribute, 'number'),
               x: year_legend_meta,
-              y0: legend_meta(@cont_attribute, 'number')
+              y0: legend_meta(@cont_attribute)
             }
             {data: @data, meta: @meta}
           end

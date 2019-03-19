@@ -20,10 +20,10 @@ module Api
               r.attributes.slice('x', 'y0').symbolize_keys
             end
             @meta = {
-              xAxis: axis_meta(@ncont_attribute),
-              yAxis: axis_meta(@cont_attribute),
-              x: legend_meta(@ncont_attribute, 'category'),
-              y0: legend_meta(@cont_attribute, 'number')
+              xAxis: axis_meta(@ncont_attribute, 'category'),
+              yAxis: axis_meta(@cont_attribute, 'number'),
+              x: legend_meta(@ncont_attribute),
+              y0: legend_meta(@cont_attribute)
             }
             {data: @data, meta: @meta}
           end

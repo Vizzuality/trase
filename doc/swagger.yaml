@@ -1618,6 +1618,9 @@ components:
     DashboardsNcontXAxis:
       type: object
       properties:
+        type:
+          type: string
+          example: category
         label:
           type: string
           example: Forest 500 score
@@ -1635,6 +1638,9 @@ components:
     DashboardsYearXAxis:
       type: object
       properties:
+        type:
+          type: string
+          example: category
         label:
           type: string
           example: Year
@@ -1653,6 +1659,9 @@ components:
     DashboardsYAxis:
       type: object
       properties:
+        type:
+          type: string
+          example: numeric
         label:
           type: string
           example: Trade Volume
@@ -1706,9 +1715,6 @@ components:
     DashboardsYearXLegend:
       type: object
       properties:
-        type:
-          type: string
-          example: category
         label:
           type: string
           example: Year
@@ -1730,9 +1736,6 @@ components:
     DashboardsYLegend:
       type: object
       properties:
-        type:
-          type: string
-          example: numeric
         label:
           type: string
           example: Trade Volume
@@ -1753,9 +1756,6 @@ components:
     DashboardsNcontYLegend:
       type: object
       properties:
-        type:
-          type: string
-          example: category
         label:
           type: string
           example: "1.0"

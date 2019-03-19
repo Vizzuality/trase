@@ -65,8 +65,9 @@ module Api
             end
           end
 
-          def axis_meta(attribute)
+          def axis_meta(attribute, type)
             {
+              type: type,
               label: attribute.display_name,
               prefix: '',
               format: '',
@@ -76,6 +77,7 @@ module Api
 
           def year_axis_meta
             {
+              type: 'category', # category || date || number
               label: 'Year',
               prefix: '',
               format: '',
@@ -83,9 +85,8 @@ module Api
             }
           end
 
-          def legend_meta(attribute, type)
+          def legend_meta(attribute)
             {
-              type: type,
               label: attribute.display_name,
               tooltip: {prefix: '', format: '', suffix: attribute.unit}
             }
@@ -93,7 +94,6 @@ module Api
 
           def year_legend_meta
             {
-              type: 'category', # category || date || number
               label: 'Year',
               tooltip: {prefix: '', format: '', suffix: ''}
             }

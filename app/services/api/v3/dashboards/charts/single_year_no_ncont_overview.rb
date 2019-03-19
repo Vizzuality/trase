@@ -20,9 +20,9 @@ module Api
             end
             @meta = {
               xAxis: {},
-              yAxis: axis_meta(@cont_attribute),
+              yAxis: axis_meta(@cont_attribute, 'number'),
               x: {},
-              y0: legend_meta(@cont_attribute, 'number')
+              y0: legend_meta(@cont_attribute)
             }
             {data: @data, meta: @meta}
           end
