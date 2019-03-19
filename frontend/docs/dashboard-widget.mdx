@@ -42,14 +42,10 @@ import 'styles/_docz.scss';
   <DashboardWidget
     loading={true}
     title={'Loading chart'}
-    data={dataPie}
-    chartConfig={config.pie}
   />
   <DashboardWidget
     error={{ statusText: 'Something wrong happened' }}
     title={'Error chart'}
-    data={dataPie}
-    chartConfig={config.pie}
   />
 </div>
 <PropsTable of={DashboardWidget} />

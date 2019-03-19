@@ -37,7 +37,7 @@ function DashboardWidget(props) {
               {chartConfig.yAxisLabel && (
                 <DashboardWidgetLabel
                   text={chartConfig.yAxisLabel.text}
-                  suffix={chartConfig.yAxisLabel.suffix}
+                  suffix={chartConfig.yAxisLabel.suffix || ''}
                 />
               )}
               <Chart className="widget-chart" data={data} config={chartConfig} />
