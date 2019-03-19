@@ -7,7 +7,7 @@ import ChartTick from 'react-components/chart/tick/tick.component';
 import 'react-components/chart/chart-styles.scss';
 
 function CustomXAxis({ config, data }) {
-  const { xKey, xKeys, xAxis, layout, unit } = config;
+  const { xKey, xKeys, xAxis, layout, unit, unitFormat } = config;
   if (!xAxis) return null;
   // horizontal charts
   if (layout === 'vertical') {
@@ -20,7 +20,7 @@ function CustomXAxis({ config, data }) {
         tick={
           <ChartTick
             dataMax={maxXValue}
-            unitFormat={value => value}
+            unitFormat={unitFormat || (value => value)}
             unit={unit}
             backgroundColor="transparent"
             fill="white"
