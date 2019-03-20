@@ -485,7 +485,7 @@ COMMENT ON COLUMN public.ind_properties.unit_type IS 'Type of unit, e.g. score. 
 -- Name: COLUMN ind_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ind_properties.tooltip_text IS 'Tooltip text';
+COMMENT ON COLUMN public.ind_properties.tooltip_text IS 'Generic tooltip text (lowest precedence)';
 
 
 --
@@ -578,7 +578,7 @@ COMMENT ON COLUMN public.qual_properties.display_name IS 'Name of attribute for 
 -- Name: COLUMN qual_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.qual_properties.tooltip_text IS 'Tooltip text';
+COMMENT ON COLUMN public.qual_properties.tooltip_text IS 'Generic tooltip text (lowest precedence)';
 
 
 --
@@ -658,7 +658,7 @@ COMMENT ON COLUMN public.quant_properties.unit_type IS 'Type of unit, e.g. count
 -- Name: COLUMN quant_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.quant_properties.tooltip_text IS 'Tooltip text';
+COMMENT ON COLUMN public.quant_properties.tooltip_text IS 'Generic tooltip text (lowest precedence)';
 
 
 --
@@ -1376,6 +1376,34 @@ CREATE TABLE public.ind_commodity_properties (
 
 
 --
+-- Name: TABLE ind_commodity_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.ind_commodity_properties IS 'Commodity specific properties for ind';
+
+
+--
+-- Name: COLUMN ind_commodity_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_commodity_properties.tooltip_text IS 'Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.';
+
+
+--
+-- Name: COLUMN ind_commodity_properties.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_commodity_properties.commodity_id IS 'Reference to commodity';
+
+
+--
+-- Name: COLUMN ind_commodity_properties.ind_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_commodity_properties.ind_id IS 'Reference to ind';
+
+
+--
 -- Name: qual_commodity_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1390,6 +1418,34 @@ CREATE TABLE public.qual_commodity_properties (
 
 
 --
+-- Name: TABLE qual_commodity_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.qual_commodity_properties IS 'Commodity specific properties for qual';
+
+
+--
+-- Name: COLUMN qual_commodity_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_commodity_properties.tooltip_text IS 'Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.';
+
+
+--
+-- Name: COLUMN qual_commodity_properties.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_commodity_properties.commodity_id IS 'Reference to commodity';
+
+
+--
+-- Name: COLUMN qual_commodity_properties.qual_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_commodity_properties.qual_id IS 'Reference to qual';
+
+
+--
 -- Name: quant_commodity_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1401,6 +1457,34 @@ CREATE TABLE public.quant_commodity_properties (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE quant_commodity_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.quant_commodity_properties IS 'Commodity specific properties for quant';
+
+
+--
+-- Name: COLUMN quant_commodity_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_commodity_properties.tooltip_text IS 'Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.';
+
+
+--
+-- Name: COLUMN quant_commodity_properties.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_commodity_properties.commodity_id IS 'Reference to commodity';
+
+
+--
+-- Name: COLUMN quant_commodity_properties.quant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_commodity_properties.quant_id IS 'Reference to quant';
 
 
 --
@@ -1435,6 +1519,48 @@ UNION ALL
 
 
 --
+-- Name: MATERIALIZED VIEW commodity_attribute_properties_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.commodity_attribute_properties_mv IS 'Materialized view combining commodity specific properties for inds, quals and quants.';
+
+
+--
+-- Name: COLUMN commodity_attribute_properties_mv.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.commodity_attribute_properties_mv.commodity_id IS 'Reference to commodity';
+
+
+--
+-- Name: COLUMN commodity_attribute_properties_mv.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.commodity_attribute_properties_mv.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN commodity_attribute_properties_mv.qual_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.commodity_attribute_properties_mv.qual_id IS 'Reference to qual';
+
+
+--
+-- Name: COLUMN commodity_attribute_properties_mv.ind_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.commodity_attribute_properties_mv.ind_id IS 'Reference to ind';
+
+
+--
+-- Name: COLUMN commodity_attribute_properties_mv.quant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.commodity_attribute_properties_mv.quant_id IS 'Reference to quant';
+
+
+--
 -- Name: ind_context_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1446,6 +1572,34 @@ CREATE TABLE public.ind_context_properties (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE ind_context_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.ind_context_properties IS 'Context specific properties for ind (like tooltip text)';
+
+
+--
+-- Name: COLUMN ind_context_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_context_properties.tooltip_text IS 'Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).';
+
+
+--
+-- Name: COLUMN ind_context_properties.context_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_context_properties.context_id IS 'Reference to context';
+
+
+--
+-- Name: COLUMN ind_context_properties.ind_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_context_properties.ind_id IS 'Reference to ind';
 
 
 --
@@ -1463,6 +1617,34 @@ CREATE TABLE public.qual_context_properties (
 
 
 --
+-- Name: TABLE qual_context_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.qual_context_properties IS 'Context specific properties for qual (like tooltip text)';
+
+
+--
+-- Name: COLUMN qual_context_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_context_properties.tooltip_text IS 'Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).';
+
+
+--
+-- Name: COLUMN qual_context_properties.context_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_context_properties.context_id IS 'Reference to context';
+
+
+--
+-- Name: COLUMN qual_context_properties.qual_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_context_properties.qual_id IS 'Reference to qual';
+
+
+--
 -- Name: quant_context_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1474,6 +1656,34 @@ CREATE TABLE public.quant_context_properties (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE quant_context_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.quant_context_properties IS 'Context specific properties for quant (like tooltip text)';
+
+
+--
+-- Name: COLUMN quant_context_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_context_properties.tooltip_text IS 'Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).';
+
+
+--
+-- Name: COLUMN quant_context_properties.context_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_context_properties.context_id IS 'Reference to context';
+
+
+--
+-- Name: COLUMN quant_context_properties.quant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_context_properties.quant_id IS 'Reference to quant';
 
 
 --
@@ -1505,6 +1715,48 @@ UNION ALL
     '-1'::integer AS quant_id
    FROM public.ind_context_properties
   WITH DATA;
+
+
+--
+-- Name: MATERIALIZED VIEW context_attribute_properties_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.context_attribute_properties_mv IS 'Materialized view combining context specific properties for inds, quals and quants.';
+
+
+--
+-- Name: COLUMN context_attribute_properties_mv.context_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_attribute_properties_mv.context_id IS 'Reference to context';
+
+
+--
+-- Name: COLUMN context_attribute_properties_mv.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_attribute_properties_mv.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN context_attribute_properties_mv.qual_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_attribute_properties_mv.qual_id IS 'Reference to qual';
+
+
+--
+-- Name: COLUMN context_attribute_properties_mv.ind_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_attribute_properties_mv.ind_id IS 'Reference to ind';
+
+
+--
+-- Name: COLUMN context_attribute_properties_mv.quant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_attribute_properties_mv.quant_id IS 'Reference to quant';
 
 
 --
@@ -1963,6 +2215,34 @@ CREATE TABLE public.ind_country_properties (
 
 
 --
+-- Name: TABLE ind_country_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.ind_country_properties IS 'Country specific properties for ind';
+
+
+--
+-- Name: COLUMN ind_country_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_country_properties.tooltip_text IS 'Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).';
+
+
+--
+-- Name: COLUMN ind_country_properties.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_country_properties.country_id IS 'Reference to country';
+
+
+--
+-- Name: COLUMN ind_country_properties.ind_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_country_properties.ind_id IS 'Reference to ind';
+
+
+--
 -- Name: qual_country_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1977,6 +2257,34 @@ CREATE TABLE public.qual_country_properties (
 
 
 --
+-- Name: TABLE qual_country_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.qual_country_properties IS 'Country specific properties for qual';
+
+
+--
+-- Name: COLUMN qual_country_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_country_properties.tooltip_text IS 'Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).';
+
+
+--
+-- Name: COLUMN qual_country_properties.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_country_properties.country_id IS 'Reference to country';
+
+
+--
+-- Name: COLUMN qual_country_properties.qual_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_country_properties.qual_id IS 'Reference to qual';
+
+
+--
 -- Name: quant_country_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1988,6 +2296,34 @@ CREATE TABLE public.quant_country_properties (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE quant_country_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.quant_country_properties IS 'Country specific properties for quant';
+
+
+--
+-- Name: COLUMN quant_country_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_country_properties.tooltip_text IS 'Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).';
+
+
+--
+-- Name: COLUMN quant_country_properties.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_country_properties.country_id IS 'Reference to country';
+
+
+--
+-- Name: COLUMN quant_country_properties.quant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_country_properties.quant_id IS 'Reference to quant';
 
 
 --
@@ -2019,6 +2355,48 @@ UNION ALL
     '-1'::integer AS quant_id
    FROM public.ind_country_properties
   WITH DATA;
+
+
+--
+-- Name: MATERIALIZED VIEW country_attribute_properties_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.country_attribute_properties_mv IS 'Materialized view combining country specific properties for inds, quals and quants.';
+
+
+--
+-- Name: COLUMN country_attribute_properties_mv.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_attribute_properties_mv.country_id IS 'Reference to country';
+
+
+--
+-- Name: COLUMN country_attribute_properties_mv.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_attribute_properties_mv.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN country_attribute_properties_mv.qual_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_attribute_properties_mv.qual_id IS 'Reference to qual';
+
+
+--
+-- Name: COLUMN country_attribute_properties_mv.ind_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_attribute_properties_mv.ind_id IS 'Reference to ind';
+
+
+--
+-- Name: COLUMN country_attribute_properties_mv.quant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_attribute_properties_mv.quant_id IS 'Reference to quant';
 
 
 --
