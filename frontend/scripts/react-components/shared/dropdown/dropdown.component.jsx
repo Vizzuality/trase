@@ -8,14 +8,14 @@ import './dropdown.scss';
 
 function Dropdown(props) {
   const listItemRef = useRef(null);
-  const [listHeight, updateListHeigh] = useState(null);
+  const [listHeight, updateListHeight] = useState(null);
   useEffect(() => {
     if (listItemRef.current && listHeight === null && props.options && props.options.length > 0) {
       const { height } = listItemRef.current.getBoundingClientRect();
       const optionsLength = props.showSelected ? props.options.length : props.options.length - 1;
       if (height > 0 && height * optionsLength > Dropdown.DEFAULT_MAX_LIST_HEIGHT) {
         const newListHeight = height * 6 - height / 2;
-        updateListHeigh(newListHeight);
+        updateListHeight(newListHeight);
       }
     }
   });

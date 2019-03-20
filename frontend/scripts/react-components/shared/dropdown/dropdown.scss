@@ -75,7 +75,6 @@
   }
 
   .dropdown-menu {
-    margin: 10px 0 0;
     min-width: 100%;
     max-width: calc(100vw - 20px);
     cursor: pointer;
@@ -86,6 +85,30 @@
     box-shadow: 0 3px 6px 0 rgba($black, .16), 0 3px 6px 0 rgba($black, .23);
     z-index: $z-above;
     visibility: hidden;
+
+    &[data-placement="top"],
+    &[data-placement="top-start"],
+    &[data-placement="top-end"] {
+      margin: 0 0 10px 0;
+    }
+
+    &[data-placement="bottom"],
+    &[data-placement="bottom-start"],
+    &[data-placement="bottom-end"] {
+      margin: 10px 0 0 0;
+    }
+
+    &[data-placement="left"],
+    &[data-placement="left-start"],
+    &[data-placement="left-end"] {
+      margin: 0 0 0 10px;
+    }
+
+    &[data-placement="right"],
+    &[data-placement="right-start"],
+    &[data-placement="right-end"] {
+      margin: 0 10px 0 0;
+    }
   }
 
   .dropdown-menu-item {

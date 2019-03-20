@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import range from 'lodash/range';
 import cx from 'classnames';
 import { Context as DropdownContext } from 'react-components/shared/dropdown';
+import Text from 'react-components/shared/text';
 
 import './years-range.scss';
 
@@ -62,14 +63,25 @@ function YearsRange(props) {
           >
             <div className="years-range-unrotate">
               <div className="years-range-fill">
-                <span className="year-label">{year}</span>
+                <Text
+                  as="span"
+                  className="year-label"
+                  variant="mono"
+                  size="sm"
+                  color="grey-faded"
+                  transform="uppercase"
+                >
+                  {year}
+                </Text>
               </div>
             </div>
           </button>
         ))}
       </div>
       <div className="years-range-footer">
-        <p>{!end ? 'Select an end year' : 'Select one or more year(s)'}</p>
+        <Text variant="mono" size="sm" color="grey-faded" transform="uppercase">
+          {!end ? 'Select an end year' : 'Select one or more year(s)'}
+        </Text>
       </div>
     </div>
   );

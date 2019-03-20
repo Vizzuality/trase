@@ -26,13 +26,6 @@ $active-color: $charcoal-grey;
     cursor: default;
 
     p {
-      font-family: $font-family-1;
-      font-size: $font-size-x-regular;
-      font-weight: 500;
-      color: $charcoal-grey-faded;
-      letter-spacing: -.5px;
-      text-transform: uppercase;
-
       @media screen and (min-width: $breakpoint-foundation-small) {
         font-size: $font-size-small;
       }
@@ -98,10 +91,6 @@ $active-color: $charcoal-grey;
       top: 20px;
       left: 50%;
       transform: translateX(-50%);
-      font-family: $font-family-1;
-      font-size: $font-size-x-regular;
-      color: $charcoal-grey-faded;
-      letter-spacing: -0.5px;
 
       @media screen and (min-width: $breakpoint-foundation-small) {
         font-size: $font-size-small;
