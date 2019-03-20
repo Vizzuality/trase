@@ -3,7 +3,7 @@ Dropdown
 ---
 import { PropsTable, Playground } from 'docz'
 import { State } from 'react-powerplug';
-import Dropdown, { Consumer } from 'react-components/shared/dropdown';
+import Dropdown, { Context } from 'react-components/shared/dropdown';
 import Button from 'react-components/shared/button/button.component';
 import 'styles/_docz.scss';
 
@@ -123,7 +123,7 @@ This cover more advanced use cases, where the content of the dropdown needs to b
     initialValue={{ value: 0, label: '0' }}
   >
     <div>
-      <Consumer>
+      <Context.Consumer>
         {({ toggleMenu, getItemProps, selectedItem }) => {
           const { onClick } = getItemProps({
             item: {
@@ -143,7 +143,7 @@ This cover more advanced use cases, where the content of the dropdown needs to b
             </div>
           )
         }}
-      </Consumer>
+      </Context.Consumer>
     </div>
   </Dropdown>
 </div>
@@ -173,7 +173,7 @@ This cover more advanced use cases, where the content of the dropdown needs to b
       initialValue={{ value: 0, label: 0 }}
     >
       <div>
-        <Consumer>
+        <Context.Consumer>
           {({ toggleMenu, getItemProps, selectedItem }) => {
             const { onClick } = getItemProps({
               item: {
@@ -193,7 +193,7 @@ This cover more advanced use cases, where the content of the dropdown needs to b
               </div>
             )
           }}
-        </Consumer>
+        </Context.Consumer>
       </div>
     </Dropdown>
   </div>

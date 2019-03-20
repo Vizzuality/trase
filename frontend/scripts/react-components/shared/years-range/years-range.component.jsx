@@ -2,14 +2,14 @@ import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import range from 'lodash/range';
 import cx from 'classnames';
-import { Consumer as DropdownContextConsumer } from 'react-components/shared/dropdown';
+import { Context as DropdownContext } from 'react-components/shared/dropdown';
 
 import './years-range.scss';
 
 function YearsRange(props) {
   const [[start, end], setYears] = useState(props.selectedYears);
   const [hovered, setHovered] = useState(null);
-  const { toggleMenu } = useContext(DropdownContextConsumer);
+  const { toggleMenu } = useContext(DropdownContext);
 
   function setActive(year) {
     const { onSelected } = props;
@@ -62,7 +62,7 @@ function YearsRange(props) {
           >
             <div className="years-range-unrotate">
               <div className="years-range-fill">
-                <span>{year}</span>
+                <span className="year-label">{year}</span>
               </div>
             </div>
           </button>

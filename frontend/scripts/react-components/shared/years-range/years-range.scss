@@ -93,11 +93,12 @@ $active-color: $charcoal-grey;
     border: none;
     border-radius: 50%;
 
-    span {
+    .year-label {
       position: absolute;
       top: 20px;
       left: 50%;
       transform: translateX(-50%);
+      font-family: $font-family-1;
       font-size: $font-size-x-regular;
       color: $charcoal-grey-faded;
       letter-spacing: -0.5px;
