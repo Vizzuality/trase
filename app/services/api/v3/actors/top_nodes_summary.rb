@@ -107,7 +107,10 @@ module Api
               node_id: node['node_id'],
               geo_id: node['geo_id'],
               values: years.map do |year|
-                @top_node_values_by_year_hash[year][node['node_id']]
+                values_for_year = @top_node_values_by_year_hash[year]
+                next nil unless values_for_year
+
+                values_for_year[node['node_id']]
               end
             }
           end
