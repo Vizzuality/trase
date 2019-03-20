@@ -8,7 +8,6 @@ module Api
         # @option params [Array<Integer>] sources_ids
         # @option params [Array<Integer>] companies_ids
         # @option params [Array<Integer>] destinations_ids
-        # @option params [Array<Integer>] node_types_ids
         def initialize(params)
           @countries_ids = params[:countries_ids] || []
           @commodities_ids = params[:commodities_ids] || []

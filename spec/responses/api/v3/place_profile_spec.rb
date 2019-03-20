@@ -20,16 +20,17 @@ RSpec.describe 'Place profile', type: :request do
   }
 
   describe 'GET /api/v3/contexts/:context_id/places/:id/basic_attributes' do
-    it 'validates node types' do
-      expect { get "/api/v3/contexts/#{api_v3_context.id}/places/#{api_v3_country_of_destination1_node.id}/basic_attributes" }.to raise_error(ActiveRecord::RecordNotFound)
-      expect { get "/api/v3/contexts/#{api_v3_context.id}/places/#{api_v3_exporter1_node.id}/basic_attributes" }.to raise_error(ActiveRecord::RecordNotFound)
-      expect { get "/api/v3/contexts/#{api_v3_context.id}/places/#{api_v3_importer1_node.id}/basic_attributes" }.to raise_error(ActiveRecord::RecordNotFound)
-      expect { get "/api/v3/contexts/#{api_v3_context.id}/places/#{api_v3_port1_node.id}/basic_attributes" }.to raise_error(ActiveRecord::RecordNotFound)
-
-      expect { get "/api/v3/contexts/#{api_v3_context.id}/places/#{api_v3_municipality_node.id}/basic_attributes" }.to_not raise_error
-      expect { get "/api/v3/contexts/#{api_v3_context.id}/places/#{api_v3_logistics_hub_node.id}/basic_attributes" }.to_not raise_error
-      expect { get "/api/v3/contexts/#{api_v3_context.id}/places/#{api_v3_biome_node.id}/basic_attributes" }.to_not raise_error
-      expect { get "/api/v3/contexts/#{api_v3_context.id}/places/#{api_v3_state_node.id}/basic_attributes" }.to_not raise_error
+    it 'returns not found if place node not found' do
+      [
+        api_v3_exporter1_node,
+        api_v3_importer1_node,
+        api_v3_port1_node,
+        api_v3_country_of_destination1_node
+      ].each do |non_place_node|
+        get "/api/v3/contexts/#{api_v3_context.id}/places/#{non_place_node.id}/basic_attributes"
+        expect(@response).to have_http_status(:not_found)
+        expect(JSON.parse(@response.body)['error']).to match("Couldn't find Api::V3::Node with")
+      end
     end
 
     it 'has the correct response structure' do
