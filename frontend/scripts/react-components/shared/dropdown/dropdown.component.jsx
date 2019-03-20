@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import { Manager, Reference, Popper } from 'react-popper';
 import DropdownContext from 'react-components/shared/dropdown/dropdown.context';
+import Text from 'react-components/shared/text';
+import Heading from 'react-components/shared/heading/heading.component';
 import cx from 'classnames';
 import './dropdown.scss';
 
@@ -53,9 +55,9 @@ function Dropdown(props) {
             <use xlinkHref={`#icon-${item.icon}`} />
           </svg>
         )}
-        <span title={item.label} className="item-label">
+        <Text title={item.label} weight="regular" className="item-label">
           {item.label}
-        </span>
+        </Text>
       </li>
     );
   }
@@ -74,7 +76,15 @@ function Dropdown(props) {
 
   /* eslint-disable react/prop-types */
   function renderButton({ ref, inputValue, getToggleButtonProps }) {
-    const { arrowType, selectedValueOverride } = props;
+    const { arrowType, selectedValueOverride, label, variant } = props;
+    const labelProps = {
+      selector: { variant: 'mono', size: 'sm', color: 'grey-faded', transform: 'uppercase' }
+    }[variant];
+    const valueProps = {
+      selector: { size: 'md', weight: 'bold' },
+      sentence: { size: 'md', color: 'grey', weight: 'bold' }
+    }[variant];
+    const Value = variant === 'selector' ? Heading : Text;
     return (
       <button
         {...getToggleButtonProps({
@@ -82,7 +92,12 @@ function Dropdown(props) {
           className: cx('dropdown-selected-item', { [`-${arrowType}`]: arrowType })
         })}
       >
-        {selectedValueOverride || inputValue}
+        <Text {...labelProps} className="dropdown-label">
+          {label}
+        </Text>
+        <Value as="span" {...valueProps} className="dropdown-value">
+          {selectedValueOverride || inputValue}
+        </Value>
       </button>
     );
   }
@@ -215,6 +230,7 @@ Dropdown.defaultProps = {
   readOnly: false,
   showSelected: false,
   placement: 'bottom-end',
+  variant: 'selector',
   itemToString: i => i && i.label
 };
 

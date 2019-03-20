@@ -58,14 +58,12 @@
 
   .dropdown-selected-item {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
     width: 100%;
     min-width: 20px;
-    line-height: 1em;
     text-align: center;
     cursor: pointer;
-    font-size: $font-size-xx-regular;
-    font-family: $font-family-2;
 
     @include arrow($strong-pink);
 
@@ -148,8 +146,6 @@
     .dropdown-menu-item {
 
       .item-label {
-        font-size: $font-size-regular;
-        font-weight: $font-weight-regular;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
@@ -157,9 +153,9 @@
     }
 
     .dropdown-selected-item {
-      font-size: $font-size-medium;
-      font-weight: $font-weight-bold;
-      color: $charcoal-grey;
+      .dropdown-label {
+        display: none;
+      }
     }
   }
 

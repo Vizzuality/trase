@@ -18,6 +18,27 @@ import 'styles/_docz.scss';
     }}>
     {({ state, setState }) => (
       <Dropdown
+        label="colors"
+        options={state.options}
+        value={state.value}
+        onChange={value => setState({ value })}
+      />
+    )}
+  </State>
+</div>
+
+#### Dropdown with variant="sentence"
+
+<div className="components-container -spaced -width-200">
+  <State initial={{ options:
+    [{ label: 'Blue', value: 'blue' },
+      { label: 'Red', value: 'red' },
+      { label: 'Green', value: 'green' }],
+      value: { label: 'Red', value: 'red' }
+    }}>
+    {({ state, setState }) => (
+      <Dropdown
+        variant="sentence"
         options={state.options}
         value={state.value}
         onChange={value => setState({ value })}
@@ -37,6 +58,7 @@ import 'styles/_docz.scss';
     }}>
     {({ state, setState }) => (
       <Dropdown
+        label="colors"
         options={state.options}
         value={state.value}
         onChange={value => setState({ value })}
@@ -58,6 +80,7 @@ import 'styles/_docz.scss';
     }}>
     {({ state, setState }) => (
       <Dropdown
+        label="colors"
         options={state.options}
         value={state.value}
         onChange={value => setState({ value })}
@@ -78,6 +101,7 @@ import 'styles/_docz.scss';
     }}>
     {({ state, setState }) => (
       <Dropdown
+        label="colors"
         options={state.options}
         value={state.value}
         onChange={value => setState({ value })}
@@ -99,6 +123,7 @@ import 'styles/_docz.scss';
     }}>
     {({ state, setState }) => (
       <Dropdown
+        label="colors"
         options={state.options}
         value={state.value}
         onChange={value => setState({ value })}
