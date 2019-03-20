@@ -1,25 +1,55 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import { Manager, Reference, Popper } from 'react-popper';
+import DropdownContext from 'react-components/shared/dropdown/dropdown.context';
 import cx from 'classnames';
 import './dropdown.scss';
 
-class Dropdown extends React.Component {
-  renderItem(item, index, getItemProps) {
-    const { theme, readOnly } = this.props;
+function Dropdown(props) {
+  const listItemRef = useRef(null);
+  const [listHeight, updateListHeight] = useState(null);
+  useEffect(() => {
+    if (listItemRef.current && listHeight === null && props.options && props.options.length > 0) {
+      const { height } = listItemRef.current.getBoundingClientRect();
+      const optionsLength = props.showSelected ? props.options.length : props.options.length - 1;
+      if (height > 0 && height * optionsLength > Dropdown.DEFAULT_MAX_LIST_HEIGHT) {
+        const newListHeight = height * 6 - height / 2;
+        updateListHeight(newListHeight);
+      }
+    }
+  });
+
+  // popper won't detect changes on its children so the necessary recalculations won't happen
+  // we create a key that changes every time the options or children change, that way we remount the popper component
+  const popperForceUpdateKey = useRef(0);
+  const [content, updateContent] = useState(props.options || props.children);
+  useEffect(() => {
+    const newContent = props.options || props.children;
+    if (newContent !== content) {
+      updateContent(newContent);
+      popperForceUpdateKey.current++;
+    }
+  }, [props.options, props.children, content]);
+
+  function renderItem(item, index, highlightedIndex, getItemProps) {
+    const { readOnly } = props;
     return (
       <li
         {...getItemProps({
           item,
           index,
           key: item.value,
-          disabled: readOnly
+          disabled: readOnly,
+          className: cx('dropdown-menu-item', {
+            '-with-icon': item.icon,
+            '-highlighted': highlightedIndex === index
+          }),
+          ref: index === 0 ? listItemRef : undefined
         })}
-        className={cx('dropdown-menu-item', { '-with-icon': item.icon })}
       >
         {item.icon && (
-          <svg className={cx('icon', `icon-${item.icon}`, { [theme.icon]: theme.icon })}>
+          <svg className={cx('icon', `icon-${item.icon}`)}>
             <use xlinkHref={`#icon-${item.icon}`} />
           </svg>
         )}
@@ -30,79 +60,131 @@ class Dropdown extends React.Component {
     );
   }
 
-  getSelectedOptions(selectedItem) {
-    const { readOnly, showSelected, options, value } = this.props;
+  function getOptions(selectedItem, highlightedIndex, getItemProps) {
+    const { showSelected, options, value } = props;
 
-    return readOnly || showSelected
+    const optionsToShow = showSelected
       ? options
       : options.filter(
           o => o.value !== (selectedItem && selectedItem.value) && o.value !== value.value
         );
+
+    return optionsToShow.map((item, i) => renderItem(item, i, highlightedIndex, getItemProps));
   }
 
-  renderButton = ({ ref, toggleMenu, inputValue, getToggleButtonProps }) => {
-    const { arrowType, selectedValueOverride } = this.props;
-
+  /* eslint-disable react/prop-types */
+  function renderButton({ ref, inputValue, getToggleButtonProps }) {
+    const { arrowType, selectedValueOverride } = props;
     return (
       <button
-        {...getToggleButtonProps()}
-        ref={ref}
-        className={cx('dropdown-selected-item', { [`-${arrowType}`]: arrowType })}
-        onClick={toggleMenu}
+        {...getToggleButtonProps({
+          ref,
+          className: cx('dropdown-selected-item', { [`-${arrowType}`]: arrowType })
+        })}
       >
         {selectedValueOverride || inputValue}
       </button>
     );
-  };
+  }
 
-  renderBox = ({ ref, style, placement, getItemProps, selectedItem }) => (
-    <ul ref={ref} style={style} data-placement={placement} className="dropdown-menu">
-      {this.getSelectedOptions(selectedItem).map((item, index) =>
-        this.renderItem(item, index, getItemProps)
-      )}
-    </ul>
-  );
-
-  render() {
-    const {
-      options,
-      value,
-      onChange,
-      itemToString,
-      color,
-      variant,
-      readOnly,
-      placement
-    } = this.props;
+  function renderContent({
+    ref,
+    style,
+    placement,
+    selectedItem,
+    getItemProps,
+    getMenuProps,
+    highlightedIndex,
+    toggleMenu
+  }) {
+    const decoratedChildren =
+      typeof props.children !== 'undefined' ? (
+        <DropdownContext.Provider
+          value={{ selectedItem, getItemProps, highlightedIndex, toggleMenu }}
+        >
+          {props.children}
+        </DropdownContext.Provider>
+      ) : (
+        undefined
+      );
+    const styleToApply = listHeight ? { ...style, height: listHeight } : style;
     return (
-      <Downshift defaultSelectedItem={value} itemToString={itemToString} onChange={onChange}>
-        {({ getItemProps, isOpen, toggleMenu, getToggleButtonProps, selectedItem, inputValue }) => (
-          <div
-            className={cx('c-dropdown-component', {
-              '-open': isOpen,
-              [`v-${variant}`]: variant,
-              [`color-${color}`]: color,
-              '-read-only': readOnly
-            })}
-          >
-            <Manager>
-              <Reference>
-                {props =>
-                  this.renderButton({ ...props, toggleMenu, getToggleButtonProps, inputValue })
-                }
-              </Reference>
-              {isOpen && options.length > 0 ? (
-                <Popper placement={placement || 'bottom-end'}>
-                  {props => this.renderBox({ ...props, getItemProps, selectedItem })}
-                </Popper>
-              ) : null}
-            </Manager>
-          </div>
-        )}
-      </Downshift>
+      <ul
+        {...getMenuProps({
+          ref,
+          style: styleToApply,
+          'data-placement': placement,
+          className: 'dropdown-menu'
+        })}
+      >
+        {props.options
+          ? getOptions(selectedItem, highlightedIndex, getItemProps)
+          : decoratedChildren}
+      </ul>
     );
   }
+  /* eslint-enable react/prop-types */
+
+  const {
+    value,
+    color,
+    align,
+    variant,
+    readOnly,
+    onChange,
+    placement,
+    initialValue,
+    itemToString
+  } = props;
+
+  return (
+    <Downshift
+      initialSelectedItem={initialValue}
+      selectedItem={value}
+      itemToString={itemToString}
+      onChange={onChange}
+    >
+      {({
+        isOpen,
+        getItemProps,
+        selectedItem,
+        getToggleButtonProps,
+        getMenuProps,
+        inputValue,
+        highlightedIndex,
+        toggleMenu
+      }) => (
+        <div
+          className={cx('c-dropdown-component', {
+            '-open': isOpen,
+            [`v-${variant}`]: variant,
+            [`color-${color}`]: color,
+            '-read-only': readOnly,
+            [`text-align-${align}`]: align
+          })}
+        >
+          <Manager>
+            <Reference>{p => renderButton({ ...p, getToggleButtonProps, inputValue })}</Reference>
+            <Popper placement={placement} key={popperForceUpdateKey.current}>
+              {p =>
+                renderContent({
+                  ...p,
+                  selectedItem,
+                  highlightedIndex,
+                  getMenuProps,
+                  getItemProps,
+                  toggleMenu
+                })
+              }
+            </Popper>
+          </Manager>
+        </div>
+      )}
+    </Downshift>
+  );
 }
+
+Dropdown.DEFAULT_MAX_LIST_HEIGHT = 242;
 
 Dropdown.propTypes = {
   options: PropTypes.array,
@@ -111,23 +193,28 @@ Dropdown.propTypes = {
     value: PropTypes.string.isRequired,
     icon: PropTypes.string
   }),
+  initialValue: PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+    icon: PropTypes.string
+  }),
   onChange: PropTypes.func,
-  arrowType: PropTypes.string,
-  selectedValueOverride: PropTypes.string,
+  arrowType: PropTypes.string, // eslint-disable-line
+  selectedValueOverride: PropTypes.any, // eslint-disable-line
   showSelected: PropTypes.bool,
   readOnly: PropTypes.bool,
-  theme: PropTypes.object,
   placement: PropTypes.string,
   itemToString: PropTypes.func,
   variant: PropTypes.string,
-  color: PropTypes.string
+  color: PropTypes.string,
+  align: PropTypes.string,
+  children: PropTypes.node
 };
 
 Dropdown.defaultProps = {
-  options: [],
-  showSelected: false,
   readOnly: false,
-  theme: {},
+  showSelected: false,
+  placement: 'bottom-end',
   itemToString: i => i && i.label
 };
 

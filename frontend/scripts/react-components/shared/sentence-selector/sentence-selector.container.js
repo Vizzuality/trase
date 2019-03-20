@@ -1,8 +1,7 @@
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import SentenceSelector from 'react-components/shared/sentence-selector/sentence-selector.component';
-import { selectContextById, toggleDropdown } from 'actions/app.actions';
+import { selectContextById, selectYears } from 'actions/app.actions';
 import {
   getSortedContexts,
   getSelectedCommodityPairs,
@@ -19,13 +18,14 @@ function mapStateToProps(state) {
     selectedCountryPairs,
     selectedCommodityPairs,
     selectedYears: state.app.selectedYears,
-    selectedContext: state.app.selectedContext,
-    currentDropdown: state.app.currentDropdown
+    selectedContext: state.app.selectedContext
   };
 }
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ selectContextById, toggleDropdown }, dispatch);
+const mapDispatchToProps = {
+  selectYears,
+  selectContextById
+};
 
 export default connect(
   mapStateToProps,

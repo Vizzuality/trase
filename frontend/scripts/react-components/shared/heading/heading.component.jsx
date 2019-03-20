@@ -16,7 +16,7 @@ function Heading(props) {
         [`color-${color}`]: color,
         [`size-${size}`]: size,
         [`weight-${weight}`]: weight,
-        [`align-${align}`]: align
+        [`text-align-${align}`]: align
       },
       className
     )
