@@ -770,7 +770,7 @@ CREATE MATERIALIZED VIEW public.attributes_mv AS
             NULL::text AS text
            FROM (public.quals
              LEFT JOIN public.qual_properties qp ON ((qp.qual_id = quals.id)))) s
-  WITH DATA;
+  WITH NO DATA;
 
 
 --
@@ -1102,7 +1102,7 @@ UNION ALL
    FROM ((public.chart_inds chi
      JOIN public.chart_attributes cha ON ((cha.id = chi.chart_attribute_id)))
      JOIN public.attributes_mv a ON (((a.original_id = chi.ind_id) AND (a.original_type = 'Ind'::text))))
-  WITH DATA;
+  WITH NO DATA;
 
 
 --
@@ -1515,7 +1515,7 @@ UNION ALL
     ind_commodity_properties.ind_id,
     '-1'::integer AS quant_id
    FROM public.ind_commodity_properties
-  WITH DATA;
+  WITH NO DATA;
 
 
 --
@@ -1714,7 +1714,7 @@ UNION ALL
     ind_context_properties.ind_id,
     '-1'::integer AS quant_id
    FROM public.ind_context_properties
-  WITH DATA;
+  WITH NO DATA;
 
 
 --
@@ -2354,7 +2354,7 @@ UNION ALL
     ind_country_properties.ind_id,
     '-1'::integer AS quant_id
    FROM public.ind_country_properties
-  WITH DATA;
+  WITH NO DATA;
 
 
 --
@@ -5174,6 +5174,25 @@ COMMENT ON TABLE public.recolor_by_inds IS 'Inds available for recoloring (see r
 
 
 --
+-- Name: recolor_by_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.recolor_by_inds_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: recolor_by_inds_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.recolor_by_inds_id_seq OWNED BY public.recolor_by_inds.id;
+
+
+--
 -- Name: recolor_by_quals; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -5191,88 +5210,6 @@ CREATE TABLE public.recolor_by_quals (
 --
 
 COMMENT ON TABLE public.recolor_by_quals IS 'Quals available for recoloring (see recolor_by_attributes.)';
-
-
---
--- Name: recolor_by_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.recolor_by_attributes_mv AS
- SELECT ra.id,
-    ra.context_id,
-    ra.group_number,
-    ra."position",
-    ra.legend_type,
-    ra.legend_color_theme,
-    ra.interval_count,
-    ra.min_value,
-    ra.max_value,
-    ra.divisor,
-    ra.tooltip_text,
-    ra.years,
-    ra.is_disabled,
-    ra.is_default,
-    ra.created_at,
-    ra.updated_at,
-    a.id AS attribute_id
-   FROM ((public.recolor_by_inds rai
-     JOIN public.recolor_by_attributes ra ON ((ra.id = rai.recolor_by_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = rai.ind_id) AND (a.original_type = 'Ind'::text))))
-UNION ALL
- SELECT ra.id,
-    ra.context_id,
-    ra.group_number,
-    ra."position",
-    ra.legend_type,
-    ra.legend_color_theme,
-    ra.interval_count,
-    ra.min_value,
-    ra.max_value,
-    ra.divisor,
-    ra.tooltip_text,
-    ra.years,
-    ra.is_disabled,
-    ra.is_default,
-    ra.created_at,
-    ra.updated_at,
-    a.id AS attribute_id
-   FROM ((public.recolor_by_quals raq
-     JOIN public.recolor_by_attributes ra ON ((ra.id = raq.recolor_by_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = raq.qual_id) AND (a.original_type = 'Qual'::text))))
-  WITH NO DATA;
-
-
---
--- Name: MATERIALIZED VIEW recolor_by_attributes_mv; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON MATERIALIZED VIEW public.recolor_by_attributes_mv IS 'Materialized view which merges recolor_by_inds and recolor_by_quals with recolor_by_attributes.';
-
-
---
--- Name: COLUMN recolor_by_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.recolor_by_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
-
-
---
--- Name: recolor_by_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.recolor_by_inds_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: recolor_by_inds_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.recolor_by_inds_id_seq OWNED BY public.recolor_by_inds.id;
 
 
 --
@@ -5987,6 +5924,83 @@ ALTER TABLE ONLY public.resize_by_attributes ALTER COLUMN id SET DEFAULT nextval
 --
 
 ALTER TABLE ONLY public.resize_by_quants ALTER COLUMN id SET DEFAULT nextval('public.resize_by_quants_id_seq'::regclass);
+
+
+--
+-- Name: recolor_by_attributes recolor_by_attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.recolor_by_attributes
+    ADD CONSTRAINT recolor_by_attributes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: recolor_by_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.recolor_by_attributes_mv AS
+ SELECT ra.id,
+    ra.context_id,
+    ra.group_number,
+    ra."position",
+    ra.legend_type,
+    ra.legend_color_theme,
+    ra.interval_count,
+    ra.min_value,
+    ra.max_value,
+    ra.divisor,
+    ra.tooltip_text,
+    ra.years,
+    ra.is_disabled,
+    ra.is_default,
+    ra.created_at,
+    ra.updated_at,
+    a.id AS attribute_id,
+    ARRAY[]::text[] AS legend
+   FROM ((public.recolor_by_inds rai
+     JOIN public.recolor_by_attributes ra ON ((ra.id = rai.recolor_by_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = rai.ind_id) AND (a.original_type = 'Ind'::text))))
+UNION ALL
+ SELECT ra.id,
+    ra.context_id,
+    ra.group_number,
+    ra."position",
+    ra.legend_type,
+    ra.legend_color_theme,
+    ra.interval_count,
+    ra.min_value,
+    ra.max_value,
+    ra.divisor,
+    ra.tooltip_text,
+    ra.years,
+    ra.is_disabled,
+    ra.is_default,
+    ra.created_at,
+    ra.updated_at,
+    a.id AS attribute_id,
+    array_agg(DISTINCT flow_quals.value) AS legend
+   FROM ((((public.recolor_by_quals raq
+     JOIN public.recolor_by_attributes ra ON ((ra.id = raq.recolor_by_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = raq.qual_id) AND (a.original_type = 'Qual'::text))))
+     JOIN public.flow_quals ON ((flow_quals.qual_id = raq.qual_id)))
+     JOIN public.flows ON (((flow_quals.flow_id = flows.id) AND (flows.context_id = ra.context_id))))
+  WHERE (flow_quals.value !~~ 'UNKNOWN%'::text)
+  GROUP BY ra.id, a.id
+  WITH NO DATA;
+
+
+--
+-- Name: MATERIALIZED VIEW recolor_by_attributes_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.recolor_by_attributes_mv IS 'Materialized view which merges recolor_by_inds and recolor_by_quals with recolor_by_attributes.';
+
+
+--
+-- Name: COLUMN recolor_by_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
 
 
 --
@@ -6931,14 +6945,6 @@ ALTER TABLE ONLY public.quants
 
 ALTER TABLE ONLY public.recolor_by_attributes
     ADD CONSTRAINT recolor_by_attributes_context_id_group_number_position_key UNIQUE (context_id, group_number, "position");
-
-
---
--- Name: recolor_by_attributes recolor_by_attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.recolor_by_attributes
-    ADD CONSTRAINT recolor_by_attributes_pkey PRIMARY KEY (id);
 
 
 --
@@ -9003,6 +9009,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190301173808'),
 ('20190301173824'),
 ('20190308163938'),
-('20190320122547');
+('20190320122547'),
+('20190320172713');
 
 

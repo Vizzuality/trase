@@ -19,6 +19,7 @@
 #  created_at         :datetime
 #  updated_at         :datetime
 #  attribute_id       :bigint(8)
+#  legend             :text             is an Array
 #
 # Indexes
 #
