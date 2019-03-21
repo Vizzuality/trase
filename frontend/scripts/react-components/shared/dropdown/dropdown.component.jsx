@@ -5,6 +5,7 @@ import { Manager, Reference, Popper } from 'react-popper';
 import DropdownContext from 'react-components/shared/dropdown/dropdown.context';
 import Text from 'react-components/shared/text';
 import Heading from 'react-components/shared/heading/heading.component';
+import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import cx from 'classnames';
 import './dropdown.scss';
 
@@ -12,7 +13,13 @@ function Dropdown(props) {
   const listItemRef = useRef(null);
   const [listHeight, updateListHeight] = useState(null);
   useEffect(() => {
-    if (listItemRef.current && listHeight === null && props.options && props.options.length > 0) {
+    if (
+      listItemRef.current &&
+      listHeight === null &&
+      props.options &&
+      props.options.length > 0 &&
+      props.clip
+    ) {
       const { height } = listItemRef.current.getBoundingClientRect();
       const optionsLength = props.showSelected ? props.options.length : props.options.length - 1;
       if (height > 0 && height * optionsLength > Dropdown.DEFAULT_MAX_LIST_HEIGHT) {
@@ -37,28 +44,38 @@ function Dropdown(props) {
   function renderItem(item, index, highlightedIndex, getItemProps) {
     const { readOnly } = props;
     return (
-      <li
-        {...getItemProps({
-          item,
-          index,
-          key: item.value,
-          disabled: readOnly,
-          className: cx('dropdown-menu-item', {
-            '-with-icon': item.icon,
-            '-highlighted': highlightedIndex === index
-          }),
-          ref: index === 0 ? listItemRef : undefined
-        })}
-      >
-        {item.icon && (
-          <svg className={cx('icon', `icon-${item.icon}`)}>
-            <use xlinkHref={`#icon-${item.icon}`} />
-          </svg>
-        )}
-        <Text title={item.label} weight="regular" className="item-label">
-          {item.label}
-        </Text>
-      </li>
+      <>
+        {item.hasSeparator && <li className="dropdown-menu-item -separator" />}
+        <li
+          {...getItemProps({
+            item,
+            index,
+            key: item.value,
+            disabled: readOnly,
+            className: cx('dropdown-menu-item', {
+              '-with-icon': item.icon,
+              '-highlighted': highlightedIndex === index
+            }),
+            ref: index === 0 ? listItemRef : undefined
+          })}
+        >
+          {item.icon && (
+            <svg className={cx('dropdown-menu-item-icon', 'icon', `icon-${item.icon}`)}>
+              <use xlinkHref={`#icon-${item.icon}`} />
+            </svg>
+          )}
+          <Text title={item.label} weight="regular" className="item-label">
+            {item.label}
+          </Text>
+          {item.tooltip && (
+            <Tooltip
+              className="dropdown-menu-item-tooltip"
+              constraint="window"
+              text={item.tooltip}
+            />
+          )}
+        </li>
+      </>
     );
   }
 
@@ -76,14 +93,7 @@ function Dropdown(props) {
 
   /* eslint-disable react/prop-types */
   function renderButton({ ref, inputValue, getToggleButtonProps }) {
-    const { arrowType, selectedValueOverride, label, variant, size, color } = props;
-    const labelProps = {
-      selector: { variant: 'mono', size: 'sm', color: 'grey-faded', transform: 'uppercase' }
-    }[variant];
-    const valueProps = {
-      selector: { size, weight: 'bold' },
-      sentence: { size, color, weight: 'bold' }
-    }[variant];
+    const { arrowType, selectedValueOverride, label, size, color, tooltip, weight } = props;
     return (
       <button
         {...getToggleButtonProps({
@@ -91,10 +101,18 @@ function Dropdown(props) {
           className: cx('dropdown-selected-item', { [`-${arrowType}`]: arrowType })
         })}
       >
-        <Text as="span" {...labelProps} className="dropdown-label">
+        <Text
+          as="span"
+          variant="mono"
+          size="sm"
+          color="grey-faded"
+          transform="uppercase"
+          className="dropdown-label"
+        >
           {label}
+          {tooltip && <Tooltip text={tooltip} constraint="window" />}
         </Text>
-        <Heading as="span" {...valueProps} className="dropdown-value">
+        <Heading as="span" size={size} weight={weight} color={color} className="dropdown-value">
           {selectedValueOverride || inputValue}
         </Heading>
       </button>
@@ -223,7 +241,10 @@ Dropdown.propTypes = {
   variant: PropTypes.string,
   color: PropTypes.string,
   align: PropTypes.string,
-  children: PropTypes.node
+  weight: PropTypes.string, // eslint-disable-line
+  tooltip: PropTypes.string, // eslint-disable-line
+  children: PropTypes.node,
+  clip: PropTypes.bool
 };
 
 Dropdown.defaultProps = {
@@ -233,6 +254,8 @@ Dropdown.defaultProps = {
   variant: 'selector',
   size: 'md',
   color: 'grey',
+  weight: 'bold',
+  clip: true,
   itemToString: i => i && i.label
 };
 

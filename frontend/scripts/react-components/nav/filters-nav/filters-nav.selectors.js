@@ -9,6 +9,7 @@ import {
   LOGISTICS_MAP_INSPECTION_LEVELS
 } from 'constants';
 import difference from 'lodash/difference';
+import capitalize from 'lodash/capitalize';
 import FiltersNav from 'react-components/nav/filters-nav/filters-nav.component';
 
 const insertIf = (condition, item) => (condition ? [item] : []);
@@ -55,17 +56,17 @@ export const getToolAdminLevelProps = createSelector(
     return {
       label: adminLevel.name,
       id: 'toolAdminLevel',
-      listClassName: '-medium',
-      items: [
-        { name: 'All', id: 'none' },
+      clip: false,
+      options: [
+        { value: 'All', id: 'none', label: 'All' },
         ...adminLevel.nodes
           .filter(node => node.name !== (selectedFilter && selectedFilter.name))
-          .map(node => ({ ...node, id: node.name, name: `${node.name}`.toLowerCase() }))
+          .map(node => ({ ...node, id: node.name, label: capitalize(node.name) }))
       ],
-      selectedItem:
+      value:
         typeof selectedFilter !== 'undefined' && selectedFilter.value !== 'none'
-          ? { ...selectedFilter, name: `${selectedFilter.name}`.toLowerCase() }
-          : { name: 'All' }
+          ? { ...selectedFilter, label: `${selectedFilter.name}`.toLowerCase() }
+          : { label: 'All', value: 'All' }
     };
   }
 );
@@ -81,22 +82,23 @@ export const getToolResizeByProps = createSelector(
       const hasSeparator = list[index - 1] && list[index - 1].groupNumber !== resizeBy.groupNumber;
       return {
         hasSeparator,
-        id: resizeBy.name,
-        name: resizeBy.label,
+        value: resizeBy.name,
+        label: resizeBy.label,
         isDisabled: !isEnabled,
         tooltip: resizeBy.description
       };
     });
     return {
-      items,
+      options: items,
       label: 'Resize by',
       id: 'toolResizeBy',
-      titleClassName: '-small',
-      listClassName: '-medium',
-      selectedItem: { name: selectedResizeBy.label || '' },
+      showSelected: true,
+      size: 'rg',
+      clip: false,
+      weight: 'regular',
+      value: { value: selectedResizeBy.name, label: selectedResizeBy.label || '' },
       tooltip: tooltips && tooltips.sankey.nav.resizeBy.main,
-      titleTooltip: tooltips && tooltips.sankey.nav.resizeBy[selectedResizeBy.name],
-      dropdownClassName: cx('-small -capitalize', { '-hide-only-child': items.length <= 1 })
+      titleTooltip: tooltips && tooltips.sankey.nav.resizeBy[selectedResizeBy.name]
     };
   }
 );
@@ -104,15 +106,16 @@ export const getToolResizeByProps = createSelector(
 export const getToolViewModeProps = createSelector(
   [getAppTooltips, getToolDetailedView],
   (tooltips, isDetailedView) => {
-    const items = [{ name: 'Summary', id: false }, { name: 'All Flows', id: true }];
+    const options = [{ label: 'Summary', value: false }, { label: 'All Flows', value: true }];
     return {
-      items: items.filter(i => i.id !== isDetailedView),
+      options,
       label: 'Change view',
       id: 'toolViewMode',
+      size: 'rg',
+      clip: false,
+      weight: 'regular',
       tooltip: tooltips && tooltips.sankey.nav.view.main,
-      titleClassName: '-small',
-      dropdownClassName: '-capitalize -small',
-      selectedItem: items.find(item => item.id === isDetailedView)
+      value: options.find(item => item.value === isDetailedView)
     };
   }
 );
@@ -193,7 +196,7 @@ export const getNavFilters = createSelector(
               props: { selectedContext, id: 'contextSelector' }
             },
             ...insertIf(toolAdminLevel, {
-              type: FILTER_TYPES.dropdownSelector,
+              type: FILTER_TYPES.dropdown,
               props: toolAdminLevel
             }),
             {
@@ -202,9 +205,9 @@ export const getNavFilters = createSelector(
             }
           ],
           right: [
-            { type: FILTER_TYPES.dropdownSelector, props: toolResizeBy },
+            { type: FILTER_TYPES.dropdown, props: toolResizeBy },
             { type: FILTER_TYPES.recolorBySelector, props: { id: 'toolRecolorBy' } },
-            { type: FILTER_TYPES.dropdownSelector, props: toolViewMode }
+            { type: FILTER_TYPES.dropdown, props: toolViewMode }
           ]
         };
       case 'logisticsMap':
