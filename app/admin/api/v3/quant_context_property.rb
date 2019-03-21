@@ -37,6 +37,17 @@ ActiveAdmin.register Api::V3::QuantContextProperty, as: 'QuantContextProperty' d
     actions
   end
 
+  show do
+    attributes_table do
+      row :tooltip_text
+      row('Country') { |property| property.context&.country&.name }
+      row('Commodity') { |property| property.context&.commodity&.name }
+      row('Quant') { |property| property.quant&.name }
+      row :created_at
+      row :updated_at
+    end
+  end  
+
   filter :quant, collection: -> { Api::V3::Quant.select_options }
   filter :context, collection: -> { Api::V3::Context.select_options }
 end

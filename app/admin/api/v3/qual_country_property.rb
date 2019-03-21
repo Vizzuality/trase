@@ -38,6 +38,16 @@ ActiveAdmin.register Api::V3::QualCountryProperty, as: 'QualCountryProperty' do
     actions
   end
 
+  show do
+    attributes_table do
+      row :tooltip_text
+      row('Country') { |property| property.country&.name }
+      row('Qual') { |property| property.qual&.name }
+      row :created_at
+      row :updated_at
+    end
+  end
+
   filter :qual, collection: -> { Api::V3::Qual.select_options }
   filter :country, collection: -> { Api::V3::Country.select_options }
 end

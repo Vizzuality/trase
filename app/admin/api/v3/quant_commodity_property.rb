@@ -39,6 +39,16 @@ ActiveAdmin.register Api::V3::QuantCommodityProperty, as: 'QuantCommodityPropert
     actions
   end
 
+  show do
+    attributes_table do
+      row :tooltip_text
+      row('Commodity') { |property| property.commodity&.name }
+      row('Quant') { |property| property.quant&.name }
+      row :created_at
+      row :updated_at
+    end
+  end
+
   filter :quant, collection: -> { Api::V3::Quant.select_options }
   filter :commodity, collection: -> { Api::V3::Commodity.select_options }
 end
