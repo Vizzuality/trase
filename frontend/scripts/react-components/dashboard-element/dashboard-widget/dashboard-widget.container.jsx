@@ -1,129 +1,57 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import qs from 'qs';
-import pickBy from 'lodash/pickBy';
 import sortBy from 'lodash/sortBy';
-import DashboardWidget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.component';
+import DashboardWidgetComponent from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.component';
 import DashboardWidgetTooltip from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-tooltip';
-import Widget from 'react-components/widgets/widget.component';
-import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
+import { getConfig } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.selectors';
+
+const mapStateToProps = (state, ownProps) => ({
+  config: getConfig({
+    state,
+    data: ownProps.data,
+    meta: ownProps.meta,
+    chartType: ownProps.chartType
+  })
+});
 
 class DashboardWidgetContainer extends Component {
-  static getGroupedY(meta) {
-    const { xAxis, yAxis, x, ...groupedY } = meta;
-    return groupedY;
-  }
-
-  static sortGroupedY(keys) {
-    return sortBy(Object.keys(keys), key => parseInt(key.substr(1), 10));
-  }
-
-  static getYKeys(meta, { yKeys, yKeysAttributes, colors }) {
-    if (!meta || !yKeys) return yKeys;
-    const groupedY = DashboardWidgetContainer.getGroupedY(meta);
-    return Object.keys(yKeys).reduce((yKeysTypesAcc, nextYKeyType) => {
-      const yKeyTypeAttributes = yKeysAttributes && yKeysAttributes[nextYKeyType];
-      return {
-        ...yKeysTypesAcc,
-        [nextYKeyType]: DashboardWidgetContainer.sortGroupedY(groupedY).reduce(
-          (groupedYKeysAcc, nextGroupedYKey, index) => ({
-            ...groupedYKeysAcc,
-            [nextGroupedYKey]: {
-              ...yKeyTypeAttributes,
-              fill: colors && colors[index],
-              stroke: colors && colors[index]
-            }
-          }),
-          {}
-        )
-      };
-    }, {});
-  }
-
-  static getColors(meta, { colors }, chartType, data) {
-    if (!meta) return colors;
-    if (chartType !== 'pie') {
-      const groupedY = DashboardWidgetContainer.getGroupedY(meta);
-      return DashboardWidgetContainer.sortGroupedY(groupedY).map((key, index) => ({
-        label: groupedY[key].label || meta.yAxis.label,
-        color: colors[index]
-      }));
-    }
-    return data.map((item, index) => ({
-      label: item.x,
-      color: colors[index]
-    }));
-  }
-
   sortByX(data) {
     return sortBy(data, 'x');
   }
 
-  getConfig(meta, data) {
-    const { chartType } = this.props;
-    const defaultConfig = CHART_CONFIG[chartType] || CHART_CONFIG.line;
-    if (!meta) return defaultConfig;
-    const config = {
-      ...defaultConfig,
-      xAxis: defaultConfig.xAxis && {
-        ...defaultConfig.xAxis,
-        type: meta.x && meta.x.type
-      },
-      yAxis: defaultConfig.yAxis && {
-        ...defaultConfig.yAxis,
-        type: meta.y && meta.x.type
-      },
-      yAxisLabel: {
-        text: meta.yAxis && meta.yAxis.label,
-        suffix: meta.yAxis && meta.yAxis.suffix
-      },
-      yKeys: DashboardWidgetContainer.getYKeys(meta, defaultConfig),
-      colors: DashboardWidgetContainer.getColors(meta, defaultConfig, chartType, data),
+  addTooltipContentToConfig(config, meta) {
+    return {
+      ...config,
       tooltip: {
-        ...defaultConfig.tooltip,
+        ...config.tooltip,
         content: <DashboardWidgetTooltip meta={meta} />
       }
     };
-    return config;
   }
 
   render() {
-    const { url, title } = this.props;
-
-    const [base, search] = url.split('?');
-    // eslint-disable-next-line camelcase
-    const { attribute_id, ...params } = pickBy(
-      qs.parse(search, { arrayLimit: 1000 }),
-      x => x !== '' && x !== null
-    );
-
-    // <Widget /> caches data by url and each cache entry is cache busted by it's params
-    // if we want to avoid creating infinite cache entries we should limit the entries to the indicators (attribute_id)
-    const uniqueUrl = `${base}?${qs.stringify({ attribute_id }, { encodeValuesOnly: true })}`;
-    return (
-      <Widget raw={[true]} query={[uniqueUrl]} params={[params]}>
-        {({ data, loading, error, meta }) => {
-          const sortedData = this.sortByX(data && data[uniqueUrl]);
-          return (
-            <DashboardWidget
-              title={title}
-              error={error}
-              loading={loading}
-              data={sortedData}
-              chartConfig={this.getConfig(meta && meta[uniqueUrl], sortedData)}
-              topLegend={meta && meta}
-            />
-          );
-        }}
-      </Widget>
-    );
+    const { data, loading, error, meta, title, config } = this.props;
+    return config ? (
+      <DashboardWidgetComponent
+        title={title}
+        error={error}
+        loading={loading}
+        data={data}
+        chartConfig={this.addTooltipContentToConfig(config, meta)}
+        topLegend={meta}
+      />
+    ) : null;
   }
 }
 
 DashboardWidgetContainer.propTypes = {
-  url: PropTypes.string,
+  loading: PropTypes.bool,
+  error: PropTypes.bool,
   title: PropTypes.string,
-  chartType: PropTypes.string
+  data: PropTypes.array,
+  meta: PropTypes.object,
+  config: PropTypes.object
 };
 
-export default DashboardWidgetContainer;
+export default connect(mapStateToProps)(DashboardWidgetContainer);
