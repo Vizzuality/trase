@@ -99,5 +99,9 @@ export default {
         }
       }
     }
+  },
+  dynamicSentence: {
+    yAxisLabel: { text: 'Trade volume', suffix: 't' },
+    type: 'sentence'
   }
 };
