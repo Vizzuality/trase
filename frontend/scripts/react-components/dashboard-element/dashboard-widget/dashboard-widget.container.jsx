@@ -6,14 +6,17 @@ import DashboardWidgetComponent from 'react-components/dashboard-element/dashboa
 import DashboardWidgetTooltip from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-tooltip';
 import { getConfig } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.selectors';
 
-const mapStateToProps = (state, ownProps) => ({
-  config: getConfig({
+const mapStateToProps = (state, ownProps) => {
+  const selectorState = {
     state,
     data: ownProps.data,
     meta: ownProps.meta,
     chartType: ownProps.chartType
-  })
-});
+  };
+  return {
+    config: getConfig(selectorState)
+  };
+};
 
 class DashboardWidgetContainer extends Component {
   sortByX(data) {
@@ -31,7 +34,7 @@ class DashboardWidgetContainer extends Component {
   }
 
   render() {
-    const { data, loading, error, meta, title, config } = this.props;
+    const { data, loading, error, meta, title, config, dynamicSentenceParts } = this.props;
     return config ? (
       <DashboardWidgetComponent
         title={title}
@@ -39,6 +42,7 @@ class DashboardWidgetContainer extends Component {
         loading={loading}
         data={data}
         chartConfig={this.addTooltipContentToConfig(config, meta)}
+        dynamicSentenceParts={dynamicSentenceParts}
         topLegend={meta}
       />
     ) : null;
@@ -51,7 +55,8 @@ DashboardWidgetContainer.propTypes = {
   title: PropTypes.string,
   data: PropTypes.array,
   meta: PropTypes.object,
-  config: PropTypes.object
+  config: PropTypes.object,
+  dynamicSentenceParts: PropTypes.array
 };
 
 export default connect(mapStateToProps)(DashboardWidgetContainer);

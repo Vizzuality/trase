@@ -82,7 +82,7 @@ class DashboardElement extends React.PureComponent {
   }
 
   renderWidgets() {
-    const { activeIndicators } = this.props;
+    const { activeIndicators, dynamicSentenceParts } = this.props;
     return (
       <div className="row -equal-height -flex-end">
         {activeIndicators.map(indicator => (
@@ -91,6 +91,7 @@ class DashboardElement extends React.PureComponent {
               url={indicator.url}
               title={indicator.displayName}
               chartType={indicator.chartType}
+              dynamicSentenceParts={dynamicSentenceParts}
             />
           </div>
         ))}

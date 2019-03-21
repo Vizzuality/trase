@@ -1,19 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Text from 'react-components/shared/text';
+import TagsGroup from 'react-components/shared/tags-group';
 
-function DynamicSentenceWidget({ data, config }) {
-  const { yAxisLabel } = config;
-  return (
-    <Text color="white" weight="bold" variant="mono" size="lg">
-      {`${yAxisLabel.text} is ${data[0].y0} ${yAxisLabel.suffix}`}
-    </Text>
-  );
+function DynamicSentenceWidget({ dynamicSentenceParts }) {
+  return dynamicSentenceParts ? (
+    <TagsGroup readOnly color="white" tags={dynamicSentenceParts} />
+  ) : null;
 }
 
 DynamicSentenceWidget.propTypes = {
-  data: PropTypes.array,
-  config: PropTypes.object
+  dynamicSentenceParts: PropTypes.array
 };
 
 export default DynamicSentenceWidget;

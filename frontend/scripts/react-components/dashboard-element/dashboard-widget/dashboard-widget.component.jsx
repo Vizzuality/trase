@@ -10,11 +10,15 @@ import Heading from 'react-components/shared/heading';
 import DynamicSentenceWidget from 'react-components/dynamic-sentence-widget';
 import 'react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
 
-const renderChart = ({ data, chartConfig }) => {
+const renderChart = ({ data, chartConfig, dynamicSentenceParts }) => {
   if (chartConfig.type === 'sentence') {
     return (
       <div className="widget-centered">
-        <DynamicSentenceWidget data={data} config={chartConfig} />
+        <DynamicSentenceWidget
+          data={data}
+          config={chartConfig}
+          dynamicSentenceParts={dynamicSentenceParts}
+        />
       </div>
     );
   }
@@ -34,7 +38,8 @@ const renderChart = ({ data, chartConfig }) => {
 
 renderChart.propTypes = {
   data: PropTypes.array,
-  chartConfig: PropTypes.object
+  chartConfig: PropTypes.object,
+  dynamicSentenceParts: PropTypes.object
 };
 
 const renderError = error => (
@@ -44,7 +49,7 @@ const renderError = error => (
 );
 
 function DashboardWidget(props) {
-  const { title, loading, error, data, chartConfig } = props;
+  const { title, loading, error, data, chartConfig, dynamicSentenceParts } = props;
 
   return (
     <div className="c-dashboard-widget">
@@ -66,7 +71,10 @@ function DashboardWidget(props) {
               <Spinner className="-large -white" />
             </div>
           )}
-          {data && data.length > 0 && chartConfig && renderChart({ data, chartConfig })}
+          {data &&
+            data.length > 0 &&
+            chartConfig &&
+            renderChart({ data, chartConfig, dynamicSentenceParts })}
         </ErrorCatch>
       </div>
     </div>
@@ -78,7 +86,8 @@ DashboardWidget.propTypes = {
   data: PropTypes.array,
   title: PropTypes.string,
   loading: PropTypes.bool,
-  chartConfig: PropTypes.object
+  chartConfig: PropTypes.object,
+  dynamicSentenceParts: PropTypes.array
 };
 
 export default DashboardWidget;

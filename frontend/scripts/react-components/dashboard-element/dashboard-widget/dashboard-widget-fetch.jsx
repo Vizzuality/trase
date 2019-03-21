@@ -9,8 +9,7 @@ import Widget from 'react-components/widgets/widget.component';
 // eslint-disable-next-line
 class DashboardWidgetFetch extends Component {
   render() {
-    const { url, title } = this.props;
-
+    const { url, title, dynamicSentenceParts } = this.props;
     const [base, search] = url.split('?');
     // eslint-disable-next-line camelcase
     const { attribute_id, ...params } = pickBy(
@@ -30,6 +29,7 @@ class DashboardWidgetFetch extends Component {
             meta={meta && meta[uniqueUrl]}
             loading={loading}
             error={error}
+            dynamicSentenceParts={dynamicSentenceParts}
           />
         )}
       </Widget>
@@ -39,7 +39,8 @@ class DashboardWidgetFetch extends Component {
 
 DashboardWidgetFetch.propTypes = {
   url: PropTypes.string,
-  title: PropTypes.string
+  title: PropTypes.string,
+  dynamicSentenceParts: PropTypes.string
 };
 
 export default DashboardWidgetFetch;
