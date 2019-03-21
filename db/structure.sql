@@ -7524,31 +7524,17 @@ CREATE INDEX index_charts_on_profile_id ON public.charts USING btree (profile_id
 
 
 --
--- Name: index_commodity_ind_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_commodity_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_commodity_ind_attribute_properties_mv_id ON public.commodity_attribute_properties_mv USING btree (id, commodity_id, ind_id);
-
-
---
--- Name: index_commodity_qual_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_commodity_qual_attribute_properties_mv_id ON public.commodity_attribute_properties_mv USING btree (id, commodity_id, qual_id);
+CREATE UNIQUE INDEX index_commodity_attribute_properties_mv_id ON public.commodity_attribute_properties_mv USING btree (id, commodity_id, qual_id, quant_id, ind_id);
 
 
 --
--- Name: index_commodity_quant_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_context_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_commodity_quant_attribute_properties_mv_id ON public.commodity_attribute_properties_mv USING btree (id, commodity_id, quant_id);
-
-
---
--- Name: index_context_ind_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_context_ind_attribute_properties_mv_id ON public.context_attribute_properties_mv USING btree (id, context_id, ind_id);
+CREATE UNIQUE INDEX index_context_attribute_properties_mv_id ON public.context_attribute_properties_mv USING btree (context_id, qual_id, quant_id, ind_id);
 
 
 --
@@ -7580,20 +7566,6 @@ CREATE INDEX index_context_properties_on_context_id ON public.context_properties
 
 
 --
--- Name: index_context_qual_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_context_qual_attribute_properties_mv_id ON public.context_attribute_properties_mv USING btree (id, context_id, qual_id);
-
-
---
--- Name: index_context_quant_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_context_quant_attribute_properties_mv_id ON public.context_attribute_properties_mv USING btree (id, context_id, quant_id);
-
-
---
 -- Name: index_contexts_on_commodity_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7615,10 +7587,10 @@ CREATE INDEX index_contextual_layers_on_context_id ON public.contextual_layers U
 
 
 --
--- Name: index_country_ind_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_country_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_country_ind_attribute_properties_mv_id ON public.country_attribute_properties_mv USING btree (id, country_id, ind_id);
+CREATE UNIQUE INDEX index_country_attribute_properties_mv_id ON public.country_attribute_properties_mv USING btree (id, country_id, qual_id, quant_id, ind_id);
 
 
 --
@@ -7626,20 +7598,6 @@ CREATE UNIQUE INDEX index_country_ind_attribute_properties_mv_id ON public.count
 --
 
 CREATE INDEX index_country_properties_on_country_id ON public.country_properties USING btree (country_id);
-
-
---
--- Name: index_country_qual_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_country_qual_attribute_properties_mv_id ON public.country_attribute_properties_mv USING btree (id, country_id, qual_id);
-
-
---
--- Name: index_country_quant_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_country_quant_attribute_properties_mv_id ON public.country_attribute_properties_mv USING btree (id, country_id, quant_id);
 
 
 --
@@ -9010,6 +8968,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190301173824'),
 ('20190308163938'),
 ('20190320122547'),
-('20190320172713');
+('20190320172713'),
+('20190321122822');
 
 
