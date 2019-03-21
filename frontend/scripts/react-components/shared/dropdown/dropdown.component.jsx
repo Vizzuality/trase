@@ -76,15 +76,14 @@ function Dropdown(props) {
 
   /* eslint-disable react/prop-types */
   function renderButton({ ref, inputValue, getToggleButtonProps }) {
-    const { arrowType, selectedValueOverride, label, variant } = props;
+    const { arrowType, selectedValueOverride, label, variant, size, color } = props;
     const labelProps = {
       selector: { variant: 'mono', size: 'sm', color: 'grey-faded', transform: 'uppercase' }
     }[variant];
     const valueProps = {
-      selector: { size: 'md', weight: 'bold' },
-      sentence: { size: 'md', color: 'grey', weight: 'bold' }
+      selector: { size, weight: 'bold' },
+      sentence: { size, color, weight: 'bold' }
     }[variant];
-    const Value = variant === 'selector' ? Heading : Text;
     return (
       <button
         {...getToggleButtonProps({
@@ -92,12 +91,12 @@ function Dropdown(props) {
           className: cx('dropdown-selected-item', { [`-${arrowType}`]: arrowType })
         })}
       >
-        <Text {...labelProps} className="dropdown-label">
+        <Text as="span" {...labelProps} className="dropdown-label">
           {label}
         </Text>
-        <Value as="span" {...valueProps} className="dropdown-value">
+        <Heading as="span" {...valueProps} className="dropdown-value">
           {selectedValueOverride || inputValue}
-        </Value>
+        </Heading>
       </button>
     );
   }
@@ -214,6 +213,7 @@ Dropdown.propTypes = {
     icon: PropTypes.string
   }),
   onChange: PropTypes.func,
+  size: PropTypes.string, // eslint-disable-line
   arrowType: PropTypes.string, // eslint-disable-line
   selectedValueOverride: PropTypes.any, // eslint-disable-line
   showSelected: PropTypes.bool,
@@ -231,6 +231,8 @@ Dropdown.defaultProps = {
   showSelected: false,
   placement: 'bottom-end',
   variant: 'selector',
+  size: 'md',
+  color: 'grey',
   itemToString: i => i && i.label
 };
 

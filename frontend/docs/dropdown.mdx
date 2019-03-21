@@ -185,6 +185,7 @@ This cover more advanced use cases, where the content of the dropdown needs to b
       }}>
       {({ state, setState }) => (
         <Dropdown
+          label="colors"
           options={state.options}
           value={state.value}
           onChange={value => setState({ value })}

@@ -9,7 +9,6 @@
   .sentence-selector-text {
     color: $charcoal-grey;
     text-align: center;
-    font-size: $font-size-xxx-regular;
     font-family: $font-family-2;
     font-weight: 300;
     line-height: 1.58;
@@ -17,7 +16,11 @@
     &.-nowrap {
       white-space: nowrap;
     }
+  }
 
+  .sentence-selector-text,
+  .dropdown-value {
+    font-size: $font-size-xxx-regular;
     @media screen and (min-width: $breakpoint-foundation-small) {
       font-size: $font-size-medium;
     }
