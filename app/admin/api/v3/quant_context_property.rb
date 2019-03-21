@@ -46,7 +46,7 @@ ActiveAdmin.register Api::V3::QuantContextProperty, as: 'QuantContextProperty' d
       row :created_at
       row :updated_at
     end
-  end  
+  end
 
   filter :quant, collection: -> { Api::V3::Quant.select_options }
   filter :context, collection: -> { Api::V3::Context.select_options }

@@ -47,7 +47,7 @@ ActiveAdmin.register Api::V3::IndCommodityProperty, as: 'IndCommodityProperty' d
       row :created_at
       row :updated_at
     end
-  end  
+  end
 
   filter :ind, collection: -> { Api::V3::Ind.select_options }
   filter :commodity, collection: -> { Api::V3::Commodity.select_options }
