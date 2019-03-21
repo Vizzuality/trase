@@ -9,15 +9,6 @@
 #  commodity_id  :integer
 #  node_id       :integer
 #
-# Indexes
-#
-#  dashboards_countries_mv_commodity_id_idx   (commodity_id)
-#  dashboards_countries_mv_group_columns_idx  (id,name)
-#  dashboards_countries_mv_name_idx           (name)
-#  dashboards_countries_mv_name_tsvector_idx  (name_tsvector) USING gin
-#  dashboards_countries_mv_node_id_idx        (node_id)
-#  dashboards_countries_mv_unique_idx         (id,node_id,commodity_id) UNIQUE
-#
 
 module Api
   module V3
