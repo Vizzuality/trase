@@ -11,7 +11,9 @@
 #
 # Indexes
 #
-#  index_country_attribute_properties_mv_id_idx  (id) UNIQUE
+#  index_country_ind_attribute_properties_mv_id    (id,country_id,ind_id) UNIQUE
+#  index_country_qual_attribute_properties_mv_id   (id,country_id,qual_id) UNIQUE
+#  index_country_quant_attribute_properties_mv_id  (id,country_id,quant_id) UNIQUE
 #
 
 module Api
