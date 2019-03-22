@@ -76,7 +76,7 @@ function Dropdown(props) {
 
   /* eslint-disable react/prop-types */
   function renderButton({ ref, inputValue, getToggleButtonProps }) {
-    const { arrowType, selectedValueOverride, label, variant, size, color } = props;
+    const { arrowType, selectedValueOverride, label, variant, size = 'md', color = 'grey' } = props;
     const labelProps = {
       selector: { variant: 'mono', size: 'sm', color: 'grey-faded', transform: 'uppercase' }
     }[variant];
