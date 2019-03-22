@@ -149,6 +149,14 @@ export default {
     unitFormat: value => format('.2s')(value),
     yAxisLabel: {
       text: 'Exporter Companies'
+    },
+    xAxis: {
+      ...CHART_CONFIG.horizontalBar.xAxis,
+      type: 'number'
+    },
+    yAxis: {
+      ...CHART_CONFIG.horizontalBar.yAxis,
+      type: 'category'
     }
   },
   pie: {

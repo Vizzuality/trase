@@ -96,12 +96,6 @@ export default {
       bars: {
         interval: 'preserveStartEnd'
       }
-    },
-    yAxis: {
-      type: 'category'
-    },
-    xAxis: {
-      type: 'number'
     }
   },
   pie: {
