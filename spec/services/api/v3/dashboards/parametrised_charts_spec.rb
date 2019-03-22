@@ -66,7 +66,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
         api_v3_country_node_type
       ].map do |node_type|
         {
-          source: :single_year_no_ncont_by_node_type,
+          source: :single_year_no_ncont_node_type,
           type: Api::V3::Dashboards::ParametrisedCharts::HORIZONTAL_BAR_CHART,
           x: :node_type,
           node_type_id: node_type.id
@@ -102,7 +102,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
         api_v3_country_node_type
       ].map do |node_type|
         {
-          source: :multi_year_no_ncont_by_node_type,
+          source: :multi_year_no_ncont_node_type_view,
           type: Api::V3::Dashboards::ParametrisedCharts::STACKED_BAR_CHART,
           x: :year,
           break_by: :node_type,
@@ -139,7 +139,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
         api_v3_country_node_type
       ].map do |node_type|
         {
-          source: :single_year_ncont_by_node_type,
+          source: :single_year_ncont_node_type_view,
           type: Api::V3::Dashboards::ParametrisedCharts::HORIZONTAL_STACKED_BAR_CHART,
           x: :node_type,
           break_by: :ncont_attribute,
@@ -177,7 +177,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
         api_v3_country_node_type
       ].map do |node_type|
         {
-          source: :multi_year_ncont_by_node_type,
+          source: :multi_year_ncont_node_type_view,
           type: Api::V3::Dashboards::ParametrisedCharts::STACKED_BAR_CHART,
           x: :year,
           break_by: :ncont_attribute,

@@ -87,13 +87,13 @@ Rails.application.routes.draw do
         resources :chart_data, only: [:index]
         namespace :charts do
           resources :single_year_no_ncont_overview, only: [:index]
-          resources :single_year_no_ncont_by_node_type, only: [:index]
+          resources :single_year_no_ncont_node_type_view, only: [:index]
           resources :single_year_ncont_overview, only: [:index]
-          resources :single_year_ncont_by_node_type, only: [:index]
+          resources :single_year_ncont_node_type_view, only: [:index]
           resources :multi_year_no_ncont_overview, only: [:index]
-          resources :multi_year_no_ncont_by_node_type, only: [:index]
+          resources :multi_year_no_ncont_node_type_view, only: [:index]
           resources :multi_year_ncont_overview, only: [:index]
-          resources :multi_year_ncont_by_node_type, only: [:index]
+          resources :multi_year_ncont_node_type_view, only: [:index]
         end
         resources :parametrised_charts, only: [:index]
       end
