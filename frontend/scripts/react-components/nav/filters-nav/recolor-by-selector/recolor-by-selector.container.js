@@ -1,12 +1,13 @@
 import { connect } from 'react-redux';
 import { selectRecolorBy } from 'actions/tool.actions';
-import RecolorBySelector from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.component';
+import { getSelectedRecolorByValue, getRecolorByOptions } from './recolor-by-selector.selectors';
+import RecolorBySelector from './recolor-by-selector.component';
 
 const mapStateToProps = state => ({
   tooltips: state.app.tooltips,
-  selectedRecolorBy: state.tool.selectedRecolorBy,
-  recolorBys: state.app.selectedContext ? state.app.selectedContext.recolorBy : [],
-  selectedYears: state.app.selectedYears
+  selectedYears: state.app.selectedYears,
+  recolorBys: getRecolorByOptions(state),
+  selectedRecolorBy: getSelectedRecolorByValue(state)
 });
 
 const mapDispatchToProps = dispatch => ({

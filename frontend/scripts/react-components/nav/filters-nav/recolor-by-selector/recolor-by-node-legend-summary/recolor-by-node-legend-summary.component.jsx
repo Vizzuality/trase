@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import 'styles/components/shared/dropdown-item-legend-summary.scss';
+import './recolor-by-item-legend-summary.scss';
 
 function RecolorByNodeLegendSummary({ recolorGroups }) {
   if (recolorGroups === undefined) {
@@ -9,7 +9,7 @@ function RecolorByNodeLegendSummary({ recolorGroups }) {
   }
 
   return (
-    <div className="dropdown-item-legend-summary">
+    <div className="recolor-by-item-legend-summary">
       {recolorGroups.map((color, key) => (
         <div key={key} className={`color -recolorgroup-${color}`} style={{ order: color }} />
       ))}

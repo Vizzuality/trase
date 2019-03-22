@@ -4,7 +4,7 @@ import uniqBy from 'lodash/uniqBy';
 import capitalize from 'lodash/capitalize';
 import cx from 'classnames';
 import Dropdown from 'react-components/shared/dropdown';
-import YearsRange from 'react-components/shared/years-range';
+import YearsSelector from 'react-components/nav/filters-nav/years-selector';
 
 import 'react-components/shared/sentence-selector/sentence-selector.scss';
 
@@ -55,26 +55,8 @@ class SentenceSelector extends React.PureComponent {
     }
   }
 
-  getCommodityClassName = elem => {
-    const { selectedCountryPairs, selectedContext } = this.props;
-    if (selectedCountryPairs[selectedContext.countryName].includes(elem.toUpperCase())) {
-      return '';
-    }
-
-    return '-faded';
-  };
-
-  getCountryClassName = elem => {
-    const { selectedCommodityPairs, selectedContext } = this.props;
-    if (selectedCommodityPairs[selectedContext.commodityName].includes(elem.toUpperCase())) {
-      return '';
-    }
-
-    return '-faded';
-  };
-
   render() {
-    const { contexts, className, selectYears, selectedYears, selectedContext } = this.props;
+    const { contexts, className, selectedYears, selectedContext } = this.props;
 
     if (!selectedContext) return null;
 
@@ -95,11 +77,6 @@ class SentenceSelector extends React.PureComponent {
       'value'
     );
 
-    const yearsValue =
-      selectedYears[0] !== selectedYears[1]
-        ? `${selectedYears[0]} – ${selectedYears[1]}`
-        : selectedYears[0];
-
     return (
       <div className={cx('c-sentence-selector', className)}>
         <div className="sentence-selector-text">
@@ -111,7 +88,6 @@ class SentenceSelector extends React.PureComponent {
             value={{ value: commodityName.toLowerCase(), label: commodityName.toLowerCase() }}
             options={commodityNames}
             onChange={this.onSelectCommodity}
-            getItemClassName={this.getCommodityClassName}
           />
           from{' '}
           <Dropdown
@@ -120,21 +96,10 @@ class SentenceSelector extends React.PureComponent {
             value={{ value: capitalize(countryName), label: capitalize(countryName) }}
             options={countryNames}
             onChange={this.onSelectCountry}
-            getItemClassName={this.getCountryClassName}
           />
           <span className="hide-for-small">
             in the year{selectedYears[0] !== selectedYears[1] ? 's ' : ' '}
-            <Dropdown
-              variant="sentence"
-              selectedValueOverride={yearsValue}
-              getItemClassName={this.getCountryClassName}
-            >
-              <YearsRange
-                selectedYears={selectedYears}
-                years={selectedContext.years}
-                onSelected={years => selectYears(years)}
-              />
-            </Dropdown>
+            <YearsSelector variant="sentence" />
           </span>
         </div>
       </div>
@@ -144,7 +109,6 @@ class SentenceSelector extends React.PureComponent {
 
 SentenceSelector.propTypes = {
   className: PropTypes.string,
-  selectYears: PropTypes.func,
   contexts: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
@@ -155,9 +119,7 @@ SentenceSelector.propTypes = {
   ),
   selectedYears: PropTypes.array,
   selectContextById: PropTypes.func,
-  selectedContext: PropTypes.object,
-  selectedCountryPairs: PropTypes.object,
-  selectedCommodityPairs: PropTypes.object
+  selectedContext: PropTypes.object
 };
 
 export default SentenceSelector;

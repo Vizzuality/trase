@@ -5,11 +5,7 @@ import { getToolYearsProps } from 'react-components/nav/filters-nav/filters-nav.
 
 const mapStateToProps = state => getToolYearsProps(state);
 
-const mapDispatchToProps = dispatch => ({
-  onSelected: years => {
-    dispatch(selectYears(years));
-  }
-});
+const mapDispatchToProps = { selectYears };
 
 export default connect(
   mapStateToProps,
