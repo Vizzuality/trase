@@ -1200,6 +1200,54 @@ paths:
                               label:
                                 type: string
                                 example: '5.0'
+
+  /dashboards/charts/single_year_no_ncont_node_type_view:
+    get:
+      tags:
+        - dashboards
+        - charts
+      summary: Data formatted for display in the chart per node, for single year, no
+        non-continuous attribute selection (horizontal bar chart)
+      parameters:
+        - $ref: "#/components/parameters/dashboards_country_id"
+        - $ref: "#/components/parameters/dashboards_commodity_id"
+        - $ref: "#/components/parameters/dashboards_cont_attribute_id"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/dashboards_node_type_id"
+        - $ref: "#/components/parameters/start_year_req_query_param"
+        - $ref: "#/components/parameters/dashboards_top_n"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          type: string
+                          example: MATO GROSSO
+                        y0:
+                          type: number
+                          example: 27838603.8303104
+                  meta:
+                    type: object
+                    properties:
+                      xAxis:
+                        $ref: "#/components/schemas/DashboardsNodeTypeXAxis"
+                      yAxis:
+                        $ref: "#/components/schemas/DashboardsYAxis"
+                      x:
+                        $ref: "#/components/schemas/DashboardsNodeTypeXLegend"
+                      y0:
+                        $ref: "#/components/schemas/DashboardsYLegend"
 servers:
   - url: https://trase.earth/api/v3
 components:

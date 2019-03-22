@@ -12,7 +12,10 @@ module Api
                     :sources_ids,
                     :companies_ids,
                     :destinations_ids,
-                    :nodes_ids_by_position
+                    :node_type,
+                    :nodes_ids_by_position,
+                    :top_n
+        TOP_N = 20
 
         # @param params [Hash]
         # @option params [Integer] country_id
@@ -46,6 +49,7 @@ module Api
               [cnt.node_type_id, cnt.column_position]
             end
           ]
+          initialize_node_type(params[:node_type_id])
           @nodes_ids_by_position = Api::V3::Node.select(:id, :node_type_id).
             where(
               id: @sources_ids + @companies_ids + @destinations_ids
@@ -55,6 +59,13 @@ module Api
 
           @start_year = params[:start_year]
           @end_year = params[:end_year]
+          @top_n = params[:top_n] || TOP_N
+        end
+
+        def node_type_idx
+          return unless @node_type
+
+          Api::V3::NodeType.node_index_for_id(@context, @node_type.id)
         end
 
         private
@@ -85,6 +96,12 @@ module Api
           raise ActiveRecord::RecordNotFound unless recolor_by_attribute
 
           @ncont_attribute = recolor_by_attribute.readonly_attribute
+        end
+
+        def initialize_node_type(node_type_id)
+          return unless node_type_id.present?
+
+          @node_type = Api::V3::NodeType.find(node_type_id)
         end
 
         def single_year?
