@@ -93,4 +93,4 @@ YearsRange.propTypes = {
   selectedYears: PropTypes.array.isRequired
 };
 
-export default YearsRange;
+export default React.memo(YearsRange);

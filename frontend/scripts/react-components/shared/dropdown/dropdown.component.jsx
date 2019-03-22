@@ -282,4 +282,4 @@ Dropdown.defaultProps = {
   itemToString: i => i && i.label
 };
 
-export default Dropdown;
+export default React.memo(Dropdown);
