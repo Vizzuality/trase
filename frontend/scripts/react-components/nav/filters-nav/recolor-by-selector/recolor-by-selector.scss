@@ -1,0 +1,125 @@
+@import 'styles/settings';
+
+.c-recolor-by-selector {
+  width: 296px;
+
+  .recolor-by-item {
+    color: $charcoal-grey;
+    padding: 10px 25px;
+    font-family: $font-family-2;
+    font-size: $font-size-xx-regular;
+    font-weight: normal;
+
+    &.-separator {
+      height: 1px;
+      padding: 0;
+      background: $pinkish-grey;
+    }
+
+    &.-highlighted {
+      background-color: $manilla;
+      cursor: pointer;
+    }
+
+    &.-disabled {
+      opacity: 0.3;
+      cursor: default;
+
+      &.-highlighted {
+        background-color: $medium-gray;
+      }
+    }
+  }
+
+  .recolor-by-item-legend-container {
+    display: flex;
+    margin-top: 10px;
+    align-items: center;
+  }
+
+  .recolor-by-item-legend {
+    pointer-events: none;
+  }
+
+  .recolor-by-item-legend-unit {
+    &.-left {
+      margin-right: 4px;
+    }
+
+    &.-right {
+      margin-left: 4px;
+    }
+  }
+
+  .recolor-by-item-legend-unit, .recolor-by-item-legend, .recolor-by-item-legend > li {
+    color: $charcoal-grey;
+    font-family: $font-family-1;
+    font-size: $font-size-small;
+  }
+
+  .recolor-by-item-legend, .recolor-by-item-legend > li {
+    display: inline-block;
+  }
+
+  .recolor-by-item-legend.-qual > li {
+    margin-right: 10px;
+    text-transform: uppercase;
+
+    &::before {
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      margin-right: 4px;
+      border: 2px solid $white;
+      border-radius: 99px;
+      content: ' ';
+    }
+
+    @for $i from 1 through length($recolorby-colors) {
+      &.#{nth($recolorby-colors-names, $i)} {
+        &::before {
+          background-color: #{nth($recolorby-colors, $i)};
+        }
+      }
+    }
+
+    @for $i from 1 through length($recolorgroup-colors) {
+      &.#{nth($recolorgroup-colors-names, $i)} {
+        &::before {
+          background-color: #{nth($recolorgroup-colors, $i)};
+        }
+      }
+    }
+  }
+
+  .recolor-by-item-legend.-stars > li {
+    &::before {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      margin-right: 2px;
+      border: 2px solid $white;
+      border-radius: 99px;
+      content: ' ';
+    }
+
+    @for $i from 1 through length($recolorby-colors) {
+      &.#{nth($recolorby-colors-names, $i)} {
+        &::before {
+          background-color: #{nth($recolorby-colors, $i)};
+        }
+      }
+    }
+  }
+
+  .recolor-by-item-legend.-linear > li, .recolor-by-item-legend.-percentual > li {
+    width: 12px;
+    height: 12px;
+
+    @for $i from 1 through length($recolorby-colors) {
+      &.#{nth($recolorby-colors-names, $i)} {
+        background-color: #{nth($recolorby-colors, $i)};
+      }
+    }
+  }
+}

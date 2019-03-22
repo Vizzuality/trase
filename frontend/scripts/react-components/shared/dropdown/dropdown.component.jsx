@@ -45,15 +45,16 @@ function Dropdown(props) {
     const { readOnly } = props;
     return (
       <>
-        {item.hasSeparator && <li className="dropdown-menu-item -separator" />}
+        {item.hasSeparator && <li className="dropdow-menu-separator" />}
         <li
           {...getItemProps({
             item,
             index,
             key: item.value,
-            disabled: readOnly,
+            disabled: readOnly || item.isDisabled,
             className: cx('dropdown-menu-item', {
               '-with-icon': item.icon,
+              '-disabled': item.isDisabled,
               '-highlighted': highlightedIndex === index
             }),
             ref: index === 0 ? listItemRef : undefined
@@ -93,11 +94,21 @@ function Dropdown(props) {
 
   /* eslint-disable react/prop-types */
   function renderButton({ ref, inputValue, getToggleButtonProps }) {
-    const { arrowType, selectedValueOverride, label, size, color, tooltip, weight } = props;
+    const {
+      arrowType,
+      selectedValueOverride,
+      label,
+      size,
+      color,
+      tooltip,
+      weight,
+      isDisabled
+    } = props;
     return (
       <button
         {...getToggleButtonProps({
           ref,
+          disabled: isDisabled,
           className: cx('dropdown-selected-item', { [`-${arrowType}`]: arrowType })
         })}
       >
@@ -118,7 +129,7 @@ function Dropdown(props) {
           weight={weight}
           color={color}
           className="dropdown-value"
-          title={selectedValueOverride || inputValue}
+          title={inputValue}
         >
           {selectedValueOverride || inputValue}
         </Heading>
@@ -171,7 +182,7 @@ function Dropdown(props) {
     variant,
     readOnly,
     onChange,
-    disabled,
+    isDisabled,
     placement,
     initialValue,
     itemToString
@@ -201,7 +212,7 @@ function Dropdown(props) {
             [`color-${color}`]: color,
             '-read-only': readOnly,
             [`text-align-${align}`]: align,
-            '-disabled': disabled
+            '-disabled': isDisabled
           })}
         >
           <Manager>
@@ -233,7 +244,8 @@ Dropdown.propTypes = {
     label: PropTypes.string.isRequired,
     value: PropTypes.any.isRequired,
     icon: PropTypes.string,
-    tooltip: PropTypes.string
+    tooltip: PropTypes.string,
+    disabled: PropTypes.bool
   }),
   initialValue: PropTypes.shape({
     label: PropTypes.string.isRequired,
@@ -255,7 +267,7 @@ Dropdown.propTypes = {
   tooltip: PropTypes.string, // eslint-disable-line
   children: PropTypes.node,
   clip: PropTypes.bool,
-  disabled: PropTypes.bool
+  isDisabled: PropTypes.bool
 };
 
 Dropdown.defaultProps = {

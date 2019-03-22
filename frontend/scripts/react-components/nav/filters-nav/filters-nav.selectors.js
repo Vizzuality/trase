@@ -125,7 +125,7 @@ const getLogisticsMapYearsProps = createSelector(
     label: 'Year',
     id: 'logisticsMapYear',
     options: activeParams.commodity === 'soy' ? LOGISTICS_MAP_YEARS : [],
-    disabled: activeParams.commodity !== 'soy',
+    isDisabled: activeParams.commodity !== 'soy',
     value:
       activeParams.commodity === 'soy'
         ? LOGISTICS_MAP_YEARS.find(year => year.value === parseInt(activeParams.year, 10))

@@ -121,7 +121,8 @@ const _setBiomeFilterAction = (biomeFilterName, state) => {
       {},
       currentContext.filterBy[0].nodes.find(filterBy => filterBy.name === biomeFilterName)
     );
-    selectedBiomeFilter.geoId = state.tool.nodesDict[selectedBiomeFilter.nodeId].geoId;
+    const node = state.tool.nodesDict[selectedBiomeFilter.nodeId];
+    selectedBiomeFilter.geoId = node && node.geoId;
   }
 
   return {
