@@ -35,6 +35,7 @@ class UpdateDashboardsFlowPathsMv < ActiveRecord::Migration[5.2]
     redo_dashboards_companies_indexes
     redo_dashboards_destinations_indexes
     redo_dashboards_commodities_indexes
+    redo_dashboards_countries_indexes
   end
 
   def redo_dashboards_sources_indexes

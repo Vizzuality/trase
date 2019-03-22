@@ -17,6 +17,7 @@ shared_context 'api v3 paraguay context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 0,
+        role: 'source',
         is_geo_column: true
       )
     end
@@ -37,7 +38,8 @@ shared_context 'api v3 paraguay context node types' do
       FactoryBot.create(
         :api_v3_context_node_type_property,
         context_node_type: cnt,
-        column_group: 1
+        column_group: 1,
+        role: 'exporter'
       )
     end
     cnt
@@ -57,7 +59,8 @@ shared_context 'api v3 paraguay context node types' do
       FactoryBot.create(
         :api_v3_context_node_type_property,
         context_node_type: cnt,
-        column_group: 2
+        column_group: 2,
+        role: 'importer'
       )
     end
     cnt
@@ -77,7 +80,8 @@ shared_context 'api v3 paraguay context node types' do
       FactoryBot.create(
         :api_v3_context_node_type_property,
         context_node_type: cnt,
-        column_group: 3
+        column_group: 3,
+        role: 'destination'
       )
     end
     cnt

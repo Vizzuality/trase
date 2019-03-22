@@ -8,7 +8,7 @@ SELECT DISTINCT
   node_types.name AS node_type,
   flow_paths.flow_id,
   column_position,
-  role,
+  column_group,
   CASE
     WHEN cnt_props.role = 'exporter' OR cnt_props.role = 'importer' THEN 'company'
     ELSE cnt_props.role
