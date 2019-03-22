@@ -40,7 +40,7 @@ class DashboardWidgetFetch extends Component {
 DashboardWidgetFetch.propTypes = {
   url: PropTypes.string,
   title: PropTypes.string,
-  dynamicSentenceParts: PropTypes.string
+  dynamicSentenceParts: PropTypes.array
 };
 
 export default DashboardWidgetFetch;

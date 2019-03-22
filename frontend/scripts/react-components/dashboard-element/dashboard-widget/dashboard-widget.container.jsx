@@ -6,17 +6,9 @@ import DashboardWidgetComponent from 'react-components/dashboard-element/dashboa
 import DashboardWidgetTooltip from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-tooltip';
 import { getConfig } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.selectors';
 
-const mapStateToProps = (state, ownProps) => {
-  const selectorState = {
-    state,
-    data: ownProps.data,
-    meta: ownProps.meta,
-    chartType: ownProps.chartType
-  };
-  return {
-    config: getConfig(selectorState)
-  };
-};
+const mapStateToProps = (state, { chartType, meta, data }) => ({
+  config: getConfig(state, { chartType, meta, data })
+});
 
 class DashboardWidgetContainer extends Component {
   sortByX(data) {

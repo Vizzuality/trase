@@ -10,46 +10,40 @@ import Heading from 'react-components/shared/heading';
 import DynamicSentenceWidget from 'react-components/dynamic-sentence-widget';
 import 'react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
 
-const renderChart = ({ data, chartConfig, dynamicSentenceParts }) => {
-  if (chartConfig.type === 'sentence') {
-    return (
-      <div className="widget-centered">
-        <DynamicSentenceWidget
-          data={data}
-          config={chartConfig}
-          dynamicSentenceParts={dynamicSentenceParts}
-        />
-      </div>
-    );
-  }
-  return (
-    <React.Fragment>
-      <DashboardWidgetLegend colors={chartConfig.colors} />
-      {chartConfig.yAxisLabel && (
-        <DashboardWidgetLabel
-          text={chartConfig.yAxisLabel.text}
-          suffix={chartConfig.yAxisLabel.suffix}
-        />
-      )}
-      <Chart className="widget-chart" data={data} config={chartConfig} />
-    </React.Fragment>
-  );
-};
-
-renderChart.propTypes = {
-  data: PropTypes.array,
-  chartConfig: PropTypes.object,
-  dynamicSentenceParts: PropTypes.object
-};
-
-const renderError = error => (
-  <Text color="white" weight="bold" variant="mono" size="lg" className="widget-centered">
-    {error}
-  </Text>
-);
-
 function DashboardWidget(props) {
   const { title, loading, error, data, chartConfig, dynamicSentenceParts } = props;
+
+  const renderError = errorMessage => (
+    <Text color="white" weight="bold" variant="mono" size="lg" className="widget-centered">
+      {errorMessage}
+    </Text>
+  );
+
+  const renderChart = () => {
+    if (chartConfig.type === 'sentence') {
+      return (
+        <div className="widget-centered">
+          <DynamicSentenceWidget
+            data={data}
+            config={chartConfig}
+            dynamicSentenceParts={dynamicSentenceParts}
+          />
+        </div>
+      );
+    }
+    return (
+      <React.Fragment>
+        <DashboardWidgetLegend colors={chartConfig.colors} />
+        {chartConfig.yAxisLabel && (
+          <DashboardWidgetLabel
+            text={chartConfig.yAxisLabel.text}
+            suffix={chartConfig.yAxisLabel.suffix}
+          />
+        )}
+        <Chart className="widget-chart" data={data} config={chartConfig} />
+      </React.Fragment>
+    );
+  };
 
   return (
     <div className="c-dashboard-widget">
@@ -71,10 +65,7 @@ function DashboardWidget(props) {
               <Spinner className="-large -white" />
             </div>
           )}
-          {data &&
-            data.length > 0 &&
-            chartConfig &&
-            renderChart({ data, chartConfig, dynamicSentenceParts })}
+          {data && data.length > 0 && chartConfig && renderChart()}
         </ErrorCatch>
       </div>
     </div>

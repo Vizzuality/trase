@@ -3,9 +3,9 @@ import { createSelector } from 'reselect';
 import sortBy from 'lodash/sortBy';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
 
-const getMeta = state => state.meta || null;
-const getData = state => state.data || null;
-const getChartType = state => state.chartType || null;
+const getMeta = (state, { meta }) => meta || null;
+const getData = (state, { data }) => data || null;
+const getChartType = (state, { chartType }) => chartType || null;
 
 const getDefaultConfig = createSelector(
   [getChartType],
