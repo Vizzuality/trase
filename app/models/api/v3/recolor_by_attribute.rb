@@ -54,6 +54,9 @@ module Api
       belongs_to :context
       has_one :recolor_by_ind, autosave: true
       has_one :recolor_by_qual, autosave: true
+      has_one :readonly_recolor_by_attribute,
+              class_name: 'Api::V3::Readonly::RecolorByAttribute',
+              foreign_key: :id
 
       validates :context, presence: true
       validates :group_number, presence: true

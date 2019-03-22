@@ -13,17 +13,9 @@ module Api
         end
 
         attribute :nodes do
-          flows = []
-          if object.legend_type.eql? 'qual'
-            FlowQual.distinct.select('value').
-              where(
-                'qual_id = ? AND value NOT LIKE \'UNKNOWN%\'',
-                object.original_id
-              ).each do |flow|
-              flows.push(flow.value)
-            end
-          end
-          flows
+          next [] unless object.legend_type.eql? 'qual'
+
+          object.legend
         end
       end
     end

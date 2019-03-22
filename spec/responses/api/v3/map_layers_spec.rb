@@ -8,6 +8,9 @@ RSpec.describe 'Map layers', type: :request do
     Api::V3::Readonly::Dashboards::FlowPath.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::MapAttribute.refresh(sync: true, skip_dependencies: true)
+    Api::V3::Readonly::ContextAttributeProperty.refresh(sync: true, skip_dependencies: true)
+    Api::V3::Readonly::CountryAttributeProperty.refresh(sync: true, skip_dependencies: true)
+    Api::V3::Readonly::CommodityAttributeProperty.refresh(sync: true, skip_dependencies: true)
   end
 
   describe 'GET /api/v3/contexts/:context_id/map_layers' do

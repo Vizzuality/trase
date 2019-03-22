@@ -6,6 +6,9 @@ RSpec.describe Api::V3::MapLayers::MapAttributeFilter do
   before(:each) do
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::MapAttribute.refresh(sync: true, skip_dependencies: true)
+    Api::V3::Readonly::ContextAttributeProperty.refresh(sync: true, skip_dependencies: true)
+    Api::V3::Readonly::CountryAttributeProperty.refresh(sync: true, skip_dependencies: true)
+    Api::V3::Readonly::CommodityAttributeProperty.refresh(sync: true, skip_dependencies: true)
   end
 
   context 'when single year' do
