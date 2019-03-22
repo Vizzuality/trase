@@ -39,6 +39,16 @@ ActiveAdmin.register Api::V3::IndCommodityProperty, as: 'IndCommodityProperty' d
     actions
   end
 
+  show do
+    attributes_table do
+      row :tooltip_text
+      row('Commodity') { |property| property.commodity&.name }
+      row('Ind') { |property| property.ind&.name }
+      row :created_at
+      row :updated_at
+    end
+  end
+
   filter :ind, collection: -> { Api::V3::Ind.select_options }
   filter :commodity, collection: -> { Api::V3::Commodity.select_options }
 end

@@ -39,6 +39,16 @@ ActiveAdmin.register Api::V3::IndCountryProperty, as: 'IndCountryProperty' do
     actions
   end
 
+  show do
+    attributes_table do
+      row :tooltip_text
+      row('Country') { |property| property.country&.name }
+      row('Ind') { |property| property.ind&.name }
+      row :created_at
+      row :updated_at
+    end
+  end
+
   filter :ind, collection: -> { Api::V3::Ind.select_options }
   filter :country, collection: -> { Api::V3::Country.select_options }
 end

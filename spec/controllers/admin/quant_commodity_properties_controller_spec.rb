@@ -98,5 +98,10 @@ RSpec.describe Admin::QuantCommodityPropertiesController, type: :controller do
       get :index
       expect(response).to render_template(:index)
     end
+
+    it 'renders show' do
+      get :show, params: {id: quant_commodity_property.id}
+      expect(response).to render_template(:show)
+    end
   end
 end

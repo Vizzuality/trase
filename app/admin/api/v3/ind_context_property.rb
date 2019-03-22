@@ -37,6 +37,17 @@ ActiveAdmin.register Api::V3::IndContextProperty, as: 'IndContextProperty' do
     actions
   end
 
+  show do
+    attributes_table do
+      row :tooltip_text
+      row('Country') { |property| property.context&.country&.name }
+      row('Commodity') { |property| property.context&.commodity&.name }
+      row('Ind') { |property| property.ind&.name }
+      row :created_at
+      row :updated_at
+    end
+  end
+
   filter :ind, collection: -> { Api::V3::Ind.select_options }
   filter :context, collection: -> { Api::V3::Context.select_options }
 end
