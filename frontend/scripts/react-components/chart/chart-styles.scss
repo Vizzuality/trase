@@ -1,0 +1,11 @@
+@import 'styles/settings';
+
+.c-chart {
+  width: 100%;
+  padding: 15px;
+
+  .x-axis-label {
+    fill: $white;
+    text-transform: uppercase;
+  }
+}

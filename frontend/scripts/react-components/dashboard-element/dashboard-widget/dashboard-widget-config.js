@@ -78,6 +78,26 @@ export default {
       }
     }
   },
+  horizontalBar: {
+    ...defaults,
+    tooltip: {
+      cursor: {
+        opacity: 0
+      }
+    },
+    type: 'bar',
+    layout: 'vertical',
+    colors: ['#ee5463'],
+    xKeys: {
+      bars: null
+    },
+    yKey: 'y',
+    xKeysAttributes: {
+      bars: {
+        interval: 'preserveStartEnd'
+      }
+    }
+  },
   pie: {
     ...defaults,
     type: 'pie',
