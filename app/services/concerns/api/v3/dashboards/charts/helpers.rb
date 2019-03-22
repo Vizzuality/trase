@@ -117,6 +117,13 @@ module Api
 
           def year_legend_meta
             {
+              label: node_type.name,
+              tooltip: {prefix: '', format: '', suffix: ''}
+            }
+          end
+
+          def year_legend_meta
+            {
               label: 'Year', tooltip: {prefix: '', format: '', suffix: ''}
             }
           end
