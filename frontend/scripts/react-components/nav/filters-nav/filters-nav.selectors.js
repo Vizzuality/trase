@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect';
 import intersection from 'lodash/intersection';
 import sortBy from 'lodash/sortBy';
-import cx from 'classnames';
 import { getActiveParams } from 'react-components/logistics-map/logistics-map.selectors';
 import {
   LOGISTICS_MAP_YEARS,
@@ -58,14 +57,14 @@ export const getToolAdminLevelProps = createSelector(
       id: 'toolAdminLevel',
       clip: false,
       options: [
-        { value: 'All', id: 'none', label: 'All' },
+        { value: 'none', label: 'All' },
         ...adminLevel.nodes
           .filter(node => node.name !== (selectedFilter && selectedFilter.name))
-          .map(node => ({ ...node, id: node.name, label: capitalize(node.name) }))
+          .map(node => ({ ...node, value: node.name, label: capitalize(node.name) }))
       ],
       value:
         typeof selectedFilter !== 'undefined' && selectedFilter.value !== 'none'
-          ? { ...selectedFilter, label: `${selectedFilter.name}`.toLowerCase() }
+          ? { ...selectedFilter, label: capitalize(selectedFilter.name) }
           : { label: 'All', value: 'All' }
     };
   }
@@ -125,12 +124,13 @@ const getLogisticsMapYearsProps = createSelector(
   activeParams => ({
     label: 'Year',
     id: 'logisticsMapYear',
-    items: LOGISTICS_MAP_YEARS,
-    dropdownClassName: cx({ '-hide-only-child': activeParams.commodity !== 'soy' }),
-    selectedItem:
+    options: activeParams.commodity === 'soy' ? LOGISTICS_MAP_YEARS : [],
+    disabled: activeParams.commodity !== 'soy',
+    value:
       activeParams.commodity === 'soy'
-        ? LOGISTICS_MAP_YEARS.find(year => year.id === parseInt(activeParams.year, 10))
-        : { name: '2012 – 2017' }
+        ? LOGISTICS_MAP_YEARS.find(year => year.value === parseInt(activeParams.year, 10))
+        : {},
+    selectedValueOverride: activeParams.commodity !== 'soy' ? '2012 – 2017' : undefined
   })
 );
 
@@ -139,8 +139,8 @@ const getLogisticsMapHubsProps = createSelector(
   activeParams => ({
     label: 'Logistics Hub',
     id: 'logisticsMapHub',
-    items: LOGISTICS_MAP_HUBS,
-    selectedItem: LOGISTICS_MAP_HUBS.find(commodity => commodity.id === activeParams.commodity)
+    options: LOGISTICS_MAP_HUBS,
+    value: LOGISTICS_MAP_HUBS.find(commodity => commodity.value === activeParams.commodity)
   })
 );
 
@@ -151,14 +151,15 @@ const getLogisticsMapInspectionLevelProps = createSelector(
       return null;
     }
 
+    const all = { label: 'All', value: null };
+
     return {
       label: 'Inspection Level',
       id: 'logisticsMapInspectionLevel',
-      dropdownClassName: '',
-      items: [{ name: 'All' }, ...LOGISTICS_MAP_INSPECTION_LEVELS],
-      selectedItem: LOGISTICS_MAP_INSPECTION_LEVELS.find(
-        level => level.id === activeParams.inspection
-      ) || { name: 'All' }
+      options: [all, ...LOGISTICS_MAP_INSPECTION_LEVELS],
+      value:
+        LOGISTICS_MAP_INSPECTION_LEVELS.find(level => level.value === activeParams.inspection) ||
+        all
     };
   }
 );
@@ -214,10 +215,10 @@ export const getNavFilters = createSelector(
         return {
           showLogisticsMapDownload: true,
           left: [
-            { type: FILTER_TYPES.dropdownSelector, props: logisticsMapsHubs },
-            { type: FILTER_TYPES.dropdownSelector, props: logisticsMapsYears },
+            { type: FILTER_TYPES.dropdown, props: logisticsMapsHubs },
+            { type: FILTER_TYPES.dropdown, props: logisticsMapsYears },
             ...insertIf(logisticsMapInspectionLevel, {
-              type: FILTER_TYPES.dropdownSelector,
+              type: FILTER_TYPES.dropdown,
               props: logisticsMapInspectionLevel
             })
           ]

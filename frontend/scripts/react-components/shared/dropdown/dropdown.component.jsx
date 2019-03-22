@@ -112,7 +112,14 @@ function Dropdown(props) {
           {label}
           {tooltip && <Tooltip text={tooltip} constraint="window" />}
         </Text>
-        <Heading as="span" size={size} weight={weight} color={color} className="dropdown-value">
+        <Heading
+          as="span"
+          size={size}
+          weight={weight}
+          color={color}
+          className="dropdown-value"
+          title={selectedValueOverride || inputValue}
+        >
           {selectedValueOverride || inputValue}
         </Heading>
       </button>
@@ -164,6 +171,7 @@ function Dropdown(props) {
     variant,
     readOnly,
     onChange,
+    disabled,
     placement,
     initialValue,
     itemToString
@@ -192,7 +200,8 @@ function Dropdown(props) {
             [`v-${variant}`]: variant,
             [`color-${color}`]: color,
             '-read-only': readOnly,
-            [`text-align-${align}`]: align
+            [`text-align-${align}`]: align,
+            '-disabled': disabled
           })}
         >
           <Manager>
@@ -222,8 +231,9 @@ Dropdown.propTypes = {
   options: PropTypes.array,
   value: PropTypes.shape({
     label: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-    icon: PropTypes.string
+    value: PropTypes.any.isRequired,
+    icon: PropTypes.string,
+    tooltip: PropTypes.string
   }),
   initialValue: PropTypes.shape({
     label: PropTypes.string.isRequired,
@@ -244,7 +254,8 @@ Dropdown.propTypes = {
   weight: PropTypes.string, // eslint-disable-line
   tooltip: PropTypes.string, // eslint-disable-line
   children: PropTypes.node,
-  clip: PropTypes.bool
+  clip: PropTypes.bool,
+  disabled: PropTypes.bool
 };
 
 Dropdown.defaultProps = {
