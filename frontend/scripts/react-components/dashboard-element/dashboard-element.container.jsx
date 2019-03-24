@@ -4,20 +4,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import DashboardElement from 'react-components/dashboard-element/dashboard-element.component';
 import {
-  getActiveIndicatorsData,
   getDirtyBlocks,
   getDynamicSentence
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getPanelId } from 'utils/dashboardPanel';
-import {
-  openIndicatorsStep as openIndicatorsStepFn,
-  setDashboardActivePanel as setDashboardActivePanelFn
-} from 'react-components/dashboard-element/dashboard-element.actions';
+import { setDashboardActivePanel as setDashboardActivePanelFn } from 'react-components/dashboard-element/dashboard-element.actions';
 import { DASHBOARD_STEPS } from 'constants';
 
 const mapStateToProps = state => ({
-  indicators: state.dashboardElement.data.indicators,
-  activeIndicators: getActiveIndicatorsData(state),
   dynamicSentenceParts: getDynamicSentence(state),
   dirtyBlocks: getDirtyBlocks(state)
 });
@@ -26,7 +20,6 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       setDashboardActivePanel: setDashboardActivePanelFn,
-      openIndicatorsStep: openIndicatorsStepFn,
       goToRoot: () => ({ type: 'dashboardRoot' })
     },
     dispatch
@@ -35,10 +28,8 @@ const mapDispatchToProps = dispatch =>
 class DashboardElementContainer extends React.Component {
   static propTypes = {
     dirtyBlocks: PropTypes.object,
-    activeIndicators: PropTypes.array,
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
-    openIndicatorsStep: PropTypes.func.isRequired,
     setDashboardActivePanel: PropTypes.func.isRequired
   };
 
@@ -67,11 +58,9 @@ class DashboardElementContainer extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const { step } = this.state;
     if (step !== prevState.step) {
-      const { setDashboardActivePanel, openIndicatorsStep } = this.props;
+      const { setDashboardActivePanel } = this.props;
       if (step !== DASHBOARD_STEPS.indicators) {
         setDashboardActivePanel(getPanelId(step));
-      } else {
-        openIndicatorsStep();
       }
     }
   }
@@ -86,13 +75,7 @@ class DashboardElementContainer extends React.Component {
 
   render() {
     const { step, modalOpen, editMode } = this.state;
-    const {
-      goToRoot,
-      activeIndicators,
-      dynamicSentenceParts,
-      dirtyBlocks,
-      openIndicatorsStep
-    } = this.props;
+    const { goToRoot, dynamicSentenceParts, dirtyBlocks } = this.props;
     return (
       <DashboardElement
         step={step}
@@ -103,8 +86,6 @@ class DashboardElementContainer extends React.Component {
         setStep={this.updateStep}
         closeModal={this.closeModal}
         reopenPanel={this.reopenPanel}
-        activeIndicators={activeIndicators}
-        openIndicatorsStep={openIndicatorsStep}
         dynamicSentenceParts={dynamicSentenceParts}
       />
     );

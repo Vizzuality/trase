@@ -10,8 +10,6 @@ import {
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__CLEAR_PANELS,
-  DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
-  DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
@@ -25,7 +23,6 @@ import {
 const initialState = {
   loading: false,
   data: {
-    indicators: [],
     countries: [],
     companies: {},
     sources: {},
@@ -35,7 +32,6 @@ const initialState = {
   meta: {},
   tabs: {},
   activePanelId: null,
-  activeIndicatorsList: [],
   countriesPanel: {
     page: 1,
     searchResults: [],
@@ -327,20 +323,6 @@ const dashboardElementReducer = {
       ...removedPanels
     };
   },
-  [DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR](state, action) {
-    const { active } = action.payload;
-    return {
-      ...state,
-      activeIndicatorsList: [...state.activeIndicatorsList, active.id]
-    };
-  },
-  [DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR](state, action) {
-    const { toRemove } = action.payload;
-    return {
-      ...state,
-      activeIndicatorsList: state.activeIndicatorsList.filter(item => item !== toRemove.id)
-    };
-  },
   [DASHBOARD_ELEMENT__SET_SEARCH_RESULTS](state, action) {
     const { data, query } = action.payload;
     let panel = state.activePanelId;
@@ -371,9 +353,7 @@ const dashboardElementReducerTypes = PropTypes => {
     meta: PropTypes.object.isRequired,
     tabs: PropTypes.object.isRequired,
     activePanelId: PropTypes.string,
-    activeIndicatorsList: PropTypes.array.isRequired,
     data: PropTypes.shape({
-      indicators: PropTypes.array.isRequired,
       countries: PropTypes.array.isRequired,
       companies: PropTypes.object.isRequired,
       sources: PropTypes.object.isRequired,

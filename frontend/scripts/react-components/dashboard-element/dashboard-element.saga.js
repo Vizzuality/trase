@@ -9,7 +9,6 @@ import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   DASHBOARD_ELEMENT__GET_SEARCH_RESULTS,
-  DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
   DASHBOARD_ELEMENT__CLEAR_PANELS
@@ -158,8 +157,7 @@ export function* onChangePanel(action) {
   const panelIndex = DASHBOARD_STEPS[dashboardStepName];
   const panelsToClear = Object.keys(DASHBOARD_STEPS)
     .slice(panelIndex + 1)
-    .map(p => p.toLowerCase())
-    .filter(p => p !== 'indicators');
+    .map(p => p.toLowerCase());
 
   if (panelsToClear.length > 0) {
     yield put({
@@ -202,18 +200,6 @@ function* fetchDataOnPageChange() {
   yield takeLatest(DASHBOARD_ELEMENT__SET_PANEL_PAGE, onPageChange);
 }
 
-/**
- * Listens to DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP and fetches the initial data for the next step.
- */
-export function* onStepChange() {
-  const { dashboardElement } = yield select();
-  yield fork(getDashboardPanelData, dashboardElement, 'indicators');
-}
-
-function* fetchDataOnStepChange() {
-  yield takeLatest(DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP, onStepChange);
-}
-
 export default function* dashboardElementSaga() {
   const sagas = [
     fetchDataOnPanelChange,
@@ -221,8 +207,7 @@ export default function* dashboardElementSaga() {
     fetchDataOnItemChange,
     clearSubsequentPanels,
     fetchDataOnPageChange,
-    fetchDataOnSearch,
-    fetchDataOnStepChange
+    fetchDataOnSearch
   ];
   yield all(sagas.map(saga => fork(saga)));
 }

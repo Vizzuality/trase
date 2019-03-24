@@ -249,6 +249,5 @@ export const DASHBOARD_STEPS = {
   sources: 1,
   commodities: 2,
   destinations: 3,
-  companies: 4,
-  indicators: 5
+  companies: 4
 };

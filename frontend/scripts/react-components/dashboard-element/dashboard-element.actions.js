@@ -8,9 +8,6 @@ export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS = 'DASHBOARD_ELEMENT__SET_ACTIV
 export const DASHBOARD_ELEMENT__SET_ACTIVE_TAB = 'DASHBOARD_ELEMENT__SET_ACTIVE_TAB';
 export const DASHBOARD_ELEMENT__CLEAR_PANEL = 'DASHBOARD_ELEMENT__CLEAR_PANEL';
 export const DASHBOARD_ELEMENT__CLEAR_PANELS = 'DASHBOARD_ELEMENT__CLEAR_PANELS';
-export const DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR = 'DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR';
-export const DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR =
-  'DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR';
 export const DASHBOARD_ELEMENT__SET_PANEL_TABS = 'DASHBOARD_ELEMENT__SET_PANEL_TABS';
 export const DASHBOARD_ELEMENT__SET_PANEL_PAGE = 'DASHBOARD_ELEMENT__SET_PANEL_PAGE';
 export const DASHBOARD_ELEMENT__SET_LOADING_ITEMS = 'DASHBOARD_ELEMENT__SET_LOADING_ITEMS';
@@ -20,7 +17,6 @@ export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH =
   'DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH =
   'DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH';
-export const DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP = 'DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP';
 
 export const getDashboardPanelParams = (state, optionsType, options = {}) => {
   const {
@@ -41,7 +37,7 @@ export const getDashboardPanelParams = (state, optionsType, options = {}) => {
   const activeItemParams = panel => Object.keys(panel.activeItems).join();
   const params = {
     page,
-    options_type: optionsType !== 'indicators' ? optionsType : 'attributes',
+    options_type: optionsType,
     node_types_ids: nodeTypesIds
   };
   const currentStep = DASHBOARD_STEPS[optionsType];
@@ -109,16 +105,6 @@ export const clearDashboardPanels = panels => ({
   payload: { panels }
 });
 
-export const addActiveIndicator = active => ({
-  type: DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
-  payload: { active }
-});
-
-export const removeActiveIndicator = toRemove => ({
-  type: DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
-  payload: { toRemove }
-});
-
 export const setDashboardPanelPage = (page, direction) => ({
   type: DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   payload: { page, direction }
@@ -132,8 +118,4 @@ export const setDashboardPanelLoadingItems = loadingItems => ({
 export const getDashboardPanelSearchResults = query => ({
   type: DASHBOARD_ELEMENT__GET_SEARCH_RESULTS,
   payload: { query }
-});
-
-export const openIndicatorsStep = () => ({
-  type: DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP
 });

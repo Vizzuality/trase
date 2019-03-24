@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel';
 import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome/dashboard-welcome.component';
-import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators/dashboard-indicators.container';
-import DashboardWidget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.container';
 import Button from 'react-components/shared/button/button.component';
 import TagsGroup from 'react-components/shared/tags-group';
 
@@ -13,7 +11,6 @@ import { DASHBOARD_STEPS } from 'constants';
 
 class DashboardElement extends React.PureComponent {
   static propTypes = {
-    activeIndicators: PropTypes.array,
     step: PropTypes.number.isRequired,
     setStep: PropTypes.func.isRequired,
     editMode: PropTypes.bool.isRequired,
@@ -27,24 +24,15 @@ class DashboardElement extends React.PureComponent {
   renderStep() {
     const { step, setStep, editMode, closeModal } = this.props;
     const showBackButton = step > DASHBOARD_STEPS.sources;
+    const onContinue = step === DASHBOARD_STEPS.companies ? closeModal : () => setStep(step + 1);
     if (step === DASHBOARD_STEPS.welcome) {
       return <DashboardWelcome onContinue={() => setStep(step + 1)} />;
     }
-    if (step === DASHBOARD_STEPS.indicators) {
-      return (
-        <DashboardIndicators
-          editMode={editMode}
-          onContinue={closeModal}
-          goBack={() => setStep(DASHBOARD_STEPS.sources)}
-          step={step}
-        />
-      );
-    }
     return (
       <DashboardPanel
-        editMode={editMode}
-        onContinue={() => setStep(step + 1)}
         step={step}
+        editMode={editMode}
+        onContinue={onContinue}
         onBack={showBackButton ? () => setStep(step - 1) : undefined}
       />
     );
@@ -81,25 +69,8 @@ class DashboardElement extends React.PureComponent {
     return 'Dashboards';
   }
 
-  renderWidgets() {
-    const { activeIndicators } = this.props;
-    return (
-      <div className="row -equal-height -flex-end">
-        {activeIndicators.map(indicator => (
-          <div key={indicator.id} className="column small-12 medium-6 ">
-            <DashboardWidget
-              url={indicator.url}
-              title={indicator.displayName}
-              chartType={indicator.chartType}
-            />
-          </div>
-        ))}
-      </div>
-    );
-  }
-
   render() {
-    const { modalOpen, reopenPanel, goToRoot, activeIndicators } = this.props;
+    const { modalOpen, reopenPanel, goToRoot } = this.props;
     return (
       <div className="l-dashboard-element">
         <div className="c-dashboard-element">
@@ -120,15 +91,6 @@ class DashboardElement extends React.PureComponent {
                     onClick={() => reopenPanel(DASHBOARD_STEPS.sources)}
                   >
                     Edit Options
-                  </Button>
-                  <Button
-                    type="button"
-                    color="gray-transparent"
-                    size="sm"
-                    className="dashboard-header-action -panel"
-                    onClick={() => reopenPanel(DASHBOARD_STEPS.indicators)}
-                  >
-                    Edit Indicators
                   </Button>
                 </div>
               </div>
@@ -159,27 +121,23 @@ class DashboardElement extends React.PureComponent {
           {this.renderDashboardModal()}
           {modalOpen === false && (
             <section className="dashboard-element-widgets">
-              {activeIndicators.length > 0 ? (
-                this.renderWidgets()
-              ) : (
-                <div className="row align-center">
-                  <div className="column small-6">
-                    <div className="dashboard-element-fallback">
-                      <p className="dashboard-element-title dashboard-element-fallback-text">
-                        Your dashboard has no selection.
-                      </p>
-                      <Button
-                        color="gray-transparent"
-                        size="medium"
-                        className="dashboard-element-fallback-button"
-                        onClick={goToRoot}
-                      >
-                        Go Back
-                      </Button>
-                    </div>
+              <div className="row align-center">
+                <div className="column small-6">
+                  <div className="dashboard-element-fallback">
+                    <p className="dashboard-element-title dashboard-element-fallback-text">
+                      Your dashboard has no selection.
+                    </p>
+                    <Button
+                      color="gray-transparent"
+                      size="medium"
+                      className="dashboard-element-fallback-button"
+                      onClick={goToRoot}
+                    >
+                      Go Back
+                    </Button>
                   </div>
                 </div>
-              )}
+              </div>
             </section>
           )}
         </div>
