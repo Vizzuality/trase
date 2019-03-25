@@ -8,6 +8,9 @@ import Heading from 'react-components/shared/heading/heading.component';
 import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import cx from 'classnames';
 import './dropdown.scss';
+import './dropdown-nav.variant.scss';
+import './dropdown-sentence.variant.scss';
+import './dropdown-profiles.variant.scss';
 
 function Dropdown(props) {
   const listItemRef = useRef(null);
@@ -102,8 +105,15 @@ function Dropdown(props) {
       color,
       tooltip,
       weight,
+      variant,
       isDisabled
     } = props;
+
+    const labelProps =
+      {
+        profiles: { size: 'rg' }
+      }[variant] || {};
+
     return (
       <button
         {...getToggleButtonProps({
@@ -114,10 +124,11 @@ function Dropdown(props) {
       >
         <Text
           as="span"
-          variant="mono"
           size="sm"
+          variant="mono"
           color="grey-faded"
           transform="uppercase"
+          {...labelProps}
           className="dropdown-label"
         >
           {label}
@@ -274,7 +285,6 @@ Dropdown.defaultProps = {
   readOnly: false,
   showSelected: false,
   placement: 'bottom-end',
-  variant: 'selector',
   size: 'md',
   color: 'grey',
   weight: 'bold',

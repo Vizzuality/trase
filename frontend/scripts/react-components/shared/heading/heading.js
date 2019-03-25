@@ -1,1 +1,1 @@
-export { default } from 'react-components/shared/heading/heading.component';
+export { default } from './heading.component';

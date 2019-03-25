@@ -4,14 +4,14 @@
   &::after {
     content: '';
     position: absolute;
-    top: 50%;
+    top: calc(50% + 12px);
     right: 0;
     width: 8px;
     height: 8px;
     border: 2px solid $color;
     border-top: 0;
     border-left: 0;
-    transform: translate(-15%, -75%) rotate(45deg);
+    transform: translateY(calc(-50% - 4px)) rotate(45deg);
   }
 }
 
@@ -44,7 +44,7 @@
 
     .dropdown-selected-item {
       &::after {
-        transform: translate(-15%, -25%) rotate(225deg);
+        transform: translateY(calc(-50% - 4px)) rotate(225deg);
       }
 
       &.-caret {
@@ -56,9 +56,11 @@
   }
 
   .dropdown-selected-item {
+    position: relative;
     width: 100%;
     min-width: 20px;
     cursor: pointer;
+    padding: 0 20px 0 0;
 
     @include arrow($strong-pink);
 
@@ -149,64 +151,6 @@
       height: 10px;
       width: 10px;
       margin: 0 10px 0 0;
-    }
-  }
-
-  &.v-sentence {
-    display: inline-flex;
-    margin-right: 10px;
-    text-align: left;
-    width: fit-content;
-    padding-right: 15px;
-    margin-bottom: 0;
-
-    .dropdown-menu-item {
-      .dropdown-menu-item-icon {
-        fill: $strong-pink;
-      }
-    }
-
-    .dropdown-selected-item {
-      .dropdown-label {
-        display: none;
-      }
-
-      .dropdown-value {
-        line-height: 1;
-      }
-    }
-  }
-
-  &.v-nav {
-    padding: 0 18px 0 0;
-    border-left: solid 1px $charcoal-grey-faded-a-lot;
-
-    .dropdown-menu {
-      margin: 0;
-    }
-
-    .dropdown-menu-item {
-      padding: 10px 18px;
-    }
-
-    .dropdown-selected-item {
-      height: 100%;
-      padding: 0 30px 0 18px;
-      max-width: 16vw; // has to be 1/8 of the screen because we have 8 items in the filters-nav
-      overflow: hidden;
-
-      &::after {
-        border-color: $charcoal-grey-faded;
-        top: calc(50% + 10px);
-        right: 18px;
-        transform: translate(-15%, calc(-75% - 5px)) rotate(45deg);
-      }
-
-      .dropdown-value {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-      }
     }
   }
 
