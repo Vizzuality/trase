@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Widget config parse selectors makeGetConfig Parses the config 1`] = `
+Object {
+  "cartesianGrid": Object {
+    "strokeDasharray": "5 5",
+    "vertical": false,
+  },
+  "colors": Array [
+    Object {
+      "color": "#fff0c2",
+      "label": "Water scarcity",
+    },
+  ],
+  "tooltip": Object {
+    "content": null,
+    "cursor": Object {
+      "opacity": 0.5,
+      "stroke": "#9a1e2a",
+      "strokeWidth": 2,
+    },
+  },
+  "type": "line",
+  "xAxis": Object {
+    "axisLine": false,
+    "interval": "preserveStartEnd",
+    "tick": Object {
+      "fill": "#ffffff",
+      "fontFamily": "DecimaMonoPro",
+      "fontSize": 14,
+    },
+    "tickLine": false,
+    "type": "category",
+  },
+  "xKey": "x",
+  "yAxis": Object {
+    "axisLine": false,
+    "domain": Array [
+      0,
+      "auto",
+    ],
+    "tick": Object {
+      "fill": "#ffffff",
+      "fontFamily": "DecimaMonoPro",
+      "fontSize": 14,
+      "interval": 2,
+      "tickCount": 2,
+    },
+    "tickFormatter": [Function],
+    "type": undefined,
+  },
+  "yAxisLabel": Object {
+    "suffix": "/7",
+    "text": "Water scarcity",
+  },
+  "yKeys": Object {
+    "lines": Object {
+      "y1": Object {
+        "fill": "#fff0c2",
+        "stroke": "#fff0c2",
+      },
+    },
+  },
+}
+`;
