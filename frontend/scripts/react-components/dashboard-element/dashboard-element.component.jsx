@@ -4,7 +4,7 @@ import SimpleModal from 'react-components/shared/simple-modal/simple-modal.compo
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel';
 import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome/dashboard-welcome.component';
 import DashboardIndicators from 'react-components/dashboard-element/dashboard-indicators/dashboard-indicators.container';
-import DashboardWidget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.container';
+import DashboardWidget from 'react-components/dashboard-element/dashboard-widget';
 import Button from 'react-components/shared/button/button.component';
 import TagsGroup from 'react-components/shared/tags-group';
 
@@ -82,7 +82,7 @@ class DashboardElement extends React.PureComponent {
   }
 
   renderWidgets() {
-    const { activeIndicators } = this.props;
+    const { activeIndicators, dynamicSentenceParts } = this.props;
     return (
       <div className="row -equal-height -flex-end">
         {activeIndicators.map(indicator => (
@@ -91,6 +91,7 @@ class DashboardElement extends React.PureComponent {
               url={indicator.url}
               title={indicator.displayName}
               chartType={indicator.chartType}
+              dynamicSentenceParts={dynamicSentenceParts}
             />
           </div>
         ))}
