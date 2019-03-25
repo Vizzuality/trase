@@ -4,7 +4,7 @@ exports[`Widget config parse selectors getColors returns the colors if the chart
 Array [
   Object {
     "color": "#fff0c2",
-    "label": 2003,
+    "label": "Water scarcity",
   },
 ]
 `;

@@ -85,7 +85,7 @@ describe('Widget config parse selectors', () => {
           y1: 51919439.9942143
         }
       ];
-      expect(getColors(null, { data, meta, chartType: 'pie' })).toMatchSnapshot();
+      expect(getColors(null, { data, meta })).toMatchSnapshot();
     });
   });
 
