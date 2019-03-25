@@ -1,17 +1,12 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import maxBy from 'lodash/maxBy';
-import max from 'lodash/max';
-
 import {
   Line,
   Bar,
   Cell,
   Area,
   Pie,
-  XAxis,
-  YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
@@ -20,9 +15,9 @@ import {
   PieChart
 } from 'recharts';
 
-import ChartTick from './tick';
-
-import './styles.scss';
+import CustomXAxis from 'react-components/chart/x-axis.component';
+import CustomYAxis from 'react-components/chart/y-axis.component';
+import 'react-components/chart/chart-styles.scss';
 
 class Chart extends PureComponent {
   static propTypes = {
@@ -39,42 +34,26 @@ class Chart extends PureComponent {
     handleMouseLeave: null
   };
 
-  findMaxValue = (data, config) => {
-    const { yKeys } = config;
-    const maxValues = [];
-
-    Object.keys(yKeys).forEach(key => {
-      Object.keys(yKeys[key]).forEach(subKey => {
-        maxValues.push(maxBy(data, subKey)[subKey]);
-      });
-    });
-    return max(maxValues);
-  };
-
   render() {
     const { className, data, config, handleMouseMove, handleMouseLeave } = this.props;
 
     const {
-      margin = { top: 20, right: 0, left: 50, bottom: 0 },
+      margin = {},
       padding = { top: 0, right: 0, left: 0, bottom: 0 },
       type,
-      xKey,
       yKeys,
-      xAxis,
-      yAxis,
+      xKeys,
       cartesianGrid,
       gradients,
       height,
       patterns,
       tooltip,
       legend,
-      unit,
       colors,
-      unitFormat
+      layout
     } = config;
-
-    const { lines, bars, areas, pies } = yKeys;
-    const maxYValue = this.findMaxValue(data, config);
+    const axisKeys = xKeys || yKeys;
+    const { lines, bars, areas, pies } = axisKeys;
 
     let CHART;
     switch (type) {
@@ -86,17 +65,25 @@ class Chart extends PureComponent {
         CHART = ComposedChart;
       }
     }
-
+    let horizontalChartProps = {};
+    if (layout === 'vertical') {
+      horizontalChartProps = {
+        layout,
+        barCategoryGap: '10'
+      };
+    }
+    const defaultMargin = { top: 20, right: 0, left: 50, bottom: 20 };
     return (
       <div className={`c-chart ${className}`} style={{ height }}>
         <ResponsiveContainer>
           <CHART
             height={height}
             data={data}
-            margin={margin}
+            margin={{ ...defaultMargin, ...margin }}
             padding={padding}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
+            {...horizontalChartProps}
           >
             <defs>
               {gradients &&
@@ -128,28 +115,8 @@ class Chart extends PureComponent {
             {cartesianGrid && (
               <CartesianGrid strokeDasharray="4 4" stroke="#d6d6d9" {...cartesianGrid} />
             )}
-
-            {xAxis && <XAxis dataKey={xKey || ''} tick={{ fontSize: 12 }} {...xAxis} />}
-
-            {yAxis && (
-              <YAxis
-                axisLine={false}
-                tickSize={-50}
-                mirror
-                tickMargin={0}
-                tickLine={false}
-                tick={
-                  <ChartTick
-                    dataMax={maxYValue}
-                    unit={unit || ''}
-                    unitFormat={unitFormat || (value => value)}
-                    fill="#555555"
-                  />
-                }
-                {...yAxis}
-              />
-            )}
-
+            {CustomXAxis({ config, data })}
+            {CustomYAxis({ config, data })}
             {areas &&
               Object.keys(areas).map(key => (
                 <Area key={key} dataKey={key} dot={false} {...areas[key]} />

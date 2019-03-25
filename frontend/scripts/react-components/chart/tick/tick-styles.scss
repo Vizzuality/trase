@@ -1,0 +1,11 @@
+@import 'styles/settings';
+
+.tick-text {
+  fill: $white;
+  font-size: $font-size-x-regular;
+  text-transform: uppercase;
+  font-weight: $font-weight-bold;
+  font-family: $font-family-2;
+  text-anchor: end;
+  letter-spacing: -0.7px;
+}
