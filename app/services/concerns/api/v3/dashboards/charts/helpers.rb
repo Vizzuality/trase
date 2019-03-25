@@ -46,7 +46,7 @@ module Api
           def apply_ncont_attribute_break_by
             ncont_attr_table = @ncont_attribute.flow_values_class.table_name
             @query = @query.
-              select("#{ncont_attr_table}.value AS break_by").
+              select("#{ncont_attr_table}.value::TEXT AS break_by").
               joins("LEFT JOIN #{ncont_attr_table} ON #{ncont_attr_table}.flow_id = flows.id").
               where(
                 "#{ncont_attr_table}.#{@ncont_attribute.attribute_id_name}" =>
@@ -117,15 +117,27 @@ module Api
 
           def year_legend_meta
             {
-              label: node_type.name,
-              tooltip: {prefix: '', format: '', suffix: ''}
+              label: 'Year', tooltip: {prefix: '', format: '', suffix: ''}
             }
           end
 
-          def year_legend_meta
-            {
-              label: 'Year', tooltip: {prefix: '', format: '', suffix: ''}
-            }
+          def ncont_break_by_values
+            @ncont_attribute.
+              flow_values_class.
+              joins(:flow).
+              where(
+                'flows.context_id' => @context.id,
+                @ncont_attribute.attribute_id_name => @ncont_attribute.original_id
+              ).
+              select(Arel.sql('value::TEXT AS text_value')).
+              order(Arel.sql('value::TEXT')).
+              distinct.map { |r| r['text_value'] }
+          end
+
+          def ncont_break_by_values_map
+            Hash[
+              ncont_break_by_values.map.with_index { |v, idx| [v, idx] }
+            ]
           end
         end
       end

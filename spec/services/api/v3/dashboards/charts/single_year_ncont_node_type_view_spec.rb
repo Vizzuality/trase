@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V3::Dashboards::Charts::MultiYearNcontOverview do
+RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontNodeTypeView do
   include_context 'api v3 brazil resize by attributes'
   include_context 'api v3 brazil recolor by attributes'
   include_context 'api v3 brazil flows quants'
@@ -14,6 +14,7 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNcontOverview do
 
   let(:cont_attribute) { api_v3_volume.readonly_attribute }
   let(:ncont_attribute) { api_v3_forest_500.readonly_attribute }
+  let(:node_type) { api_v3_biome_node_type }
 
   let(:shared_parameters_hash) {
     {
@@ -21,8 +22,8 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNcontOverview do
       commodity_id: api_v3_soy.id,
       cont_attribute_id: cont_attribute.id,
       ncont_attribute_id: ncont_attribute.id,
-      start_year: 2015,
-      end_year: 2016
+      node_type_id: node_type.id,
+      start_year: 2015
     }
   }
 
@@ -31,22 +32,21 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNcontOverview do
   }
 
   let(:result) {
-    Api::V3::Dashboards::Charts::MultiYearNcontOverview.new(
+    Api::V3::Dashboards::Charts::SingleYearNcontNodeTypeView.new(
       chart_parameters
     ).call
   }
 
   let(:data) { result[:data] }
-  let(:meta) { result[:meta] }
 
   describe :call do
     context 'when no flow path filters' do
       let(:parameters_hash) { shared_parameters_hash }
-      it 'summarized all flows per year' do
+      it 'summarized all flows per biome' do
         expect(data.size).to eq(1)
-        expect(data[0][:x]).to eq(2015)
+        expect(data[0][:x]).to eq('AMAZONIA')
+        # y0 is the stack for value '1.0'
         expect(data[0][:y0]).to eq(10)
-        expect(meta[:y0][:label]).to eq('1')
       end
     end
 
@@ -54,10 +54,10 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNcontOverview do
       let(:parameters_hash) {
         shared_parameters_hash.merge(companies_ids: [api_v3_other_exporter_node.id])
       }
-      it 'summarized flows matching exporter per ncont' do
-        expect(data.size).to eq(1)
-        expect(data[0][:x]).to eq(2015)
+      it 'it summarized flows matching exporter per biome' do
         expect(data[0][:y0]).to eq(nil)
+        # y3 is the stack for value '3.0'
+        expect(data[0][:y3]).to eq(25)
       end
     end
 
@@ -69,9 +69,8 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNcontOverview do
           ]
         )
       }
-      it 'summarized flows matching either exporter per ncont' do
-        expect(data.size).to eq(1)
-        expect(data[0][:x]).to eq(2015)
+      it 'summarized flows matching either exporter per biome' do
+        # y0 is the stack for value '1.0'
         expect(data[0][:y0]).to eq(10)
       end
     end
@@ -84,9 +83,9 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNcontOverview do
           ]
         )
       }
-      it 'summarized flows matching exporter AND importer per ncont' do
-        expect(data.size).to eq(1)
-        expect(data[0][:x]).to eq(2015)
+      it 'summarized flows matching exporter AND importer per biome' do
+        expect(data[0][:y0]).to eq(nil)
+        # y3 is the stack for value '3.0'
         expect(data[0][:y3]).to eq(25)
       end
     end
@@ -102,9 +101,8 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNcontOverview do
           ]
         )
       }
-      it 'summarized flows matching either exporter AND either importer per ncont' do
-        expect(data.size).to eq(1)
-        expect(data[0][:x]).to eq(2015)
+      it 'summarized flows matching either exporter AND either importer per biome' do
+        # y0 is the stack for value '1.0'
         expect(data[0][:y0]).to eq(10)
       end
     end
