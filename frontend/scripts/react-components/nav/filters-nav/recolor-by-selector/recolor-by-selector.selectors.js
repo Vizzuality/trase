@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 
 const getSelectedRecolorBy = state => state.tool.selectedRecolorBy;
+const getRecolorGroups = state => state.tool.recolorGroups;
 const getSelectedContext = state => state.app.selectedContext;
 
 export const getSelectedRecolorByValue = createSelector(
@@ -29,4 +30,9 @@ export const getRecolorByOptions = createSelector(
 
     return selectedContext.recolorBy;
   }
+);
+
+export const getToolRecolorByGroups = createSelector(
+  getRecolorGroups,
+  recolorGroups => recolorGroups && recolorGroups.filter(c => c !== undefined)
 );

@@ -111,7 +111,8 @@ function Dropdown(props) {
 
     const labelProps =
       {
-        profiles: { size: 'rg' }
+        profiles: { size: 'rg' },
+        nav: { color: 'grey-faded' }
       }[variant] || {};
 
     return (
@@ -126,7 +127,7 @@ function Dropdown(props) {
           as="span"
           size="sm"
           variant="mono"
-          color="grey-faded"
+          color={color}
           transform="uppercase"
           {...labelProps}
           className="dropdown-label"

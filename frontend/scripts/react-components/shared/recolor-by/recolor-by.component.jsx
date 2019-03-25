@@ -3,14 +3,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import Dropdown, { Context as DropdownContext } from 'react-components/shared/dropdown';
-import RecolorByNodeLegendSummary from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-node-legend-summary/recolor-by-node-legend-summary.container';
+import RecolorByNodeLegendSummary from 'react-components/shared/recolor-by/recolor-by-node-legend-summary';
 import cx from 'classnames';
 import capitalize from 'lodash/capitalize';
 import isNumber from 'lodash/isNumber';
 import difference from 'lodash/difference';
 import sortBy from 'lodash/sortBy';
 
-import './recolor-by-selector.scss';
+import './recolor-by.scss';
 
 class RecolorBySelector extends Component {
   getRecolorByClassNames(item, recolorBy) {
@@ -107,7 +107,7 @@ class RecolorBySelector extends Component {
   }
 
   renderLegendSummary() {
-    const { selectedRecolorBy } = this.props;
+    const { selectedRecolorBy, recolorGroups } = this.props;
     let legendItems;
     if (selectedRecolorBy.nodes) {
       legendItems =
@@ -119,7 +119,7 @@ class RecolorBySelector extends Component {
       );
 
       if (currentLegendItemClasses.length === 0) {
-        return <RecolorByNodeLegendSummary />;
+        return <RecolorByNodeLegendSummary recolorGroups={recolorGroups} />;
       }
 
       return (
@@ -130,7 +130,7 @@ class RecolorBySelector extends Component {
         </div>
       );
     }
-    return <RecolorByNodeLegendSummary />;
+    return <RecolorByNodeLegendSummary recolorGroups={recolorGroups} />;
   }
 
   render() {
@@ -167,10 +167,11 @@ class RecolorBySelector extends Component {
 
 RecolorBySelector.propTypes = {
   tooltips: PropTypes.object,
-  onSelected: PropTypes.func,
-  selectedRecolorBy: PropTypes.object,
-  recolorBys: PropTypes.array,
-  selectedYears: PropTypes.array
+  recolorGroups: PropTypes.array,
+  onSelected: PropTypes.func.isRequired,
+  selectedYears: PropTypes.array.isRequired,
+  selectedRecolorBy: PropTypes.object.isRequired,
+  recolorBys: PropTypes.array.isRequired
 };
 
 export default RecolorBySelector;
