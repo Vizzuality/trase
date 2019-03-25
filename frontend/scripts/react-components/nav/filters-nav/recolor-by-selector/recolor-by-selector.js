@@ -8,15 +8,14 @@ import {
 } from './recolor-by-selector.selectors';
 
 const mapStateToProps = state => ({
-  tooltips: state.app.tooltips,
-  selectedYears: state.app.selectedYears,
   recolorBys: getRecolorByOptions(state),
   recolorGroups: getToolRecolorByGroups(state),
-  selectedRecolorBy: getSelectedRecolorByValue(state)
+  selectedRecolorBy: getSelectedRecolorByValue(state),
+  tooltip: state.app.tooltips.sankey.nav.colorBy.main
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSelected: recolorBy => {
+  onChange: recolorBy => {
     recolorBy.value = recolorBy.name;
     dispatch(selectRecolorBy(recolorBy));
   }

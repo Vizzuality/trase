@@ -5,15 +5,17 @@ import PropTypes from 'prop-types';
 import DashboardElement from 'react-components/dashboard-element/dashboard-element.component';
 import {
   getDirtyBlocks,
-  getDynamicSentence
+  getDynamicSentence,
+  getDashboardFiltersProps
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getPanelId } from 'utils/dashboardPanel';
 import { setDashboardActivePanel as setDashboardActivePanelFn } from 'react-components/dashboard-element/dashboard-element.actions';
 import { DASHBOARD_STEPS } from 'constants';
 
 const mapStateToProps = state => ({
-  dynamicSentenceParts: getDynamicSentence(state),
-  dirtyBlocks: getDirtyBlocks(state)
+  dirtyBlocks: getDirtyBlocks(state),
+  filters: getDashboardFiltersProps(state),
+  dynamicSentenceParts: getDynamicSentence(state)
 });
 
 const mapDispatchToProps = dispatch =>
@@ -27,6 +29,7 @@ const mapDispatchToProps = dispatch =>
 
 class DashboardElementContainer extends React.Component {
   static propTypes = {
+    filters: PropTypes.object,
     dirtyBlocks: PropTypes.object,
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
@@ -75,7 +78,7 @@ class DashboardElementContainer extends React.Component {
 
   render() {
     const { step, modalOpen, editMode } = this.state;
-    const { goToRoot, dynamicSentenceParts, dirtyBlocks } = this.props;
+    const { goToRoot, dynamicSentenceParts, dirtyBlocks, filters } = this.props;
     return (
       <DashboardElement
         step={step}
@@ -86,6 +89,7 @@ class DashboardElementContainer extends React.Component {
         setStep={this.updateStep}
         closeModal={this.closeModal}
         reopenPanel={this.reopenPanel}
+        filters={filters}
         dynamicSentenceParts={dynamicSentenceParts}
       />
     );

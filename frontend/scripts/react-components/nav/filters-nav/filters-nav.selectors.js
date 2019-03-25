@@ -1,14 +1,13 @@
 import { createSelector } from 'reselect';
 import intersection from 'lodash/intersection';
-import sortBy from 'lodash/sortBy';
 import { getActiveParams } from 'react-components/logistics-map/logistics-map.selectors';
 import {
   LOGISTICS_MAP_YEARS,
   LOGISTICS_MAP_HUBS,
   LOGISTICS_MAP_INSPECTION_LEVELS
 } from 'constants';
-import difference from 'lodash/difference';
 import capitalize from 'lodash/capitalize';
+import { makeGetResizeByItems } from 'selectors/indicators.selectors';
 import FiltersNav from 'react-components/nav/filters-nav/filters-nav.component';
 
 const insertIf = (condition, item) => (condition ? [item] : []);
@@ -71,35 +70,23 @@ export const getToolAdminLevelProps = createSelector(
 );
 
 export const getToolResizeByProps = createSelector(
-  [getAppTooltips, getToolResizeBys, getSelectedYears, getToolSelectedResizeBy],
-  (tooltips, resizeBys, selectedYears, selectedResizeBy) => {
-    const items = sortBy(resizeBys, ['groupNumber', 'position']).map((resizeBy, index, list) => {
-      const isEnabled =
-        !resizeBy.isDisabled &&
-        (resizeBy.years.length === 0 || difference(selectedYears, resizeBy.years).length === 0);
-
-      const hasSeparator = list[index - 1] && list[index - 1].groupNumber !== resizeBy.groupNumber;
-      return {
-        hasSeparator,
-        value: resizeBy.name,
-        label: resizeBy.label,
-        isDisabled: !isEnabled,
-        tooltip: resizeBy.description
-      };
-    });
-    return {
-      options: items,
-      label: 'Resize by',
-      id: 'toolResizeBy',
-      showSelected: true,
-      size: 'rg',
-      clip: false,
-      weight: 'regular',
-      value: { value: selectedResizeBy.name, label: selectedResizeBy.label || '' },
-      tooltip: tooltips && tooltips.sankey.nav.resizeBy.main,
-      titleTooltip: tooltips && tooltips.sankey.nav.resizeBy[selectedResizeBy.name]
-    };
-  }
+  [
+    getAppTooltips,
+    getToolSelectedResizeBy,
+    makeGetResizeByItems(getToolResizeBys, getSelectedYears)
+  ],
+  (tooltips, selectedResizeBy, items) => ({
+    options: items,
+    label: 'Resize by',
+    id: 'toolResizeBy',
+    showSelected: true,
+    size: 'rg',
+    clip: false,
+    weight: 'regular',
+    value: { value: selectedResizeBy.name, label: selectedResizeBy.label || '' },
+    tooltip: tooltips && tooltips.sankey.nav.resizeBy.main,
+    titleTooltip: tooltips && tooltips.sankey.nav.resizeBy[selectedResizeBy.name]
+  })
 );
 
 export const getToolViewModeProps = createSelector(

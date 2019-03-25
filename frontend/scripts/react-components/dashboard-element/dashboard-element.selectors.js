@@ -1,6 +1,7 @@
-import { createSelector } from 'reselect';
+import { createSelector, createStructuredSelector } from 'reselect';
 import isEmpty from 'lodash/isEmpty';
 import { getPanelId as getPanelName } from 'utils/dashboardPanel';
+import { makeGetResizeByItems, makeGetRecolorByItems } from 'selectors/indicators.selectors';
 
 const getCountriesPanel = state => state.dashboardElement.countriesPanel;
 const getSourcesPanel = state => state.dashboardElement.sourcesPanel;
@@ -12,6 +13,7 @@ const getActiveDashboardPanel = state => {
   const { activePanelId, ...restState } = state.dashboardElement;
   return { id: activePanelId, ...restState[`${activePanelId}Panel`] };
 };
+const getAppContexts = state => state.app.contexts;
 
 export const getActivePanelTabs = createSelector(
   [getActiveDashboardPanel, getDashboardPanelTabs],
@@ -129,3 +131,40 @@ export const getIsDisabled = createSelector(
     return false;
   }
 );
+
+const getDashboardsContext = createSelector(
+  [getCountriesPanel, getCommoditiesPanel, getAppContexts],
+  (countriesPanel, commoditiesPanel, contexts) => {
+    const { name: countryName } = Object.values(countriesPanel.activeItems)[0] || {};
+    const { name: commodityName } = Object.values(commoditiesPanel.activeItems)[0] || {};
+    const context = contexts.find(
+      ctx => ctx.countryName === countryName && ctx.commodityName === commodityName
+    );
+
+    return context || null;
+  }
+);
+
+const getDashboardContextYears = createSelector(
+  getDashboardsContext,
+  context => context && context.years
+);
+
+const getDashboardContextResizeBy = createSelector(
+  getDashboardsContext,
+  context => context && context.resizeBy
+);
+
+const getDashboardContextRecolorBy = createSelector(
+  getDashboardsContext,
+  context => {
+    if (!context) return [];
+    return context.recolorBy;
+  }
+);
+
+export const getDashboardFiltersProps = createStructuredSelector({
+  years: getDashboardContextYears,
+  resizeBy: makeGetResizeByItems(getDashboardContextResizeBy, getDashboardContextYears),
+  recolorBy: makeGetRecolorByItems(getDashboardContextRecolorBy, getDashboardContextYears)
+});

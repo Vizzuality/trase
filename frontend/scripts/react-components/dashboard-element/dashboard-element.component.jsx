@@ -5,6 +5,8 @@ import DashboardPanel from 'react-components/dashboard-element/dashboard-panel';
 import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome/dashboard-welcome.component';
 import Button from 'react-components/shared/button/button.component';
 import TagsGroup from 'react-components/shared/tags-group';
+import RecolorBy from 'react-components/shared/recolor-by';
+import Dropdown from 'react-components/shared/dropdown';
 
 import 'react-components/dashboard-element/dashboard-element.scss';
 import { DASHBOARD_STEPS } from 'constants';
@@ -17,8 +19,12 @@ class DashboardElement extends React.PureComponent {
     goToRoot: PropTypes.func.isRequired,
     modalOpen: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
-    dynamicSentenceParts: PropTypes.array,
-    reopenPanel: PropTypes.func.isRequired
+    filters: PropTypes.shape({
+      years: PropTypes.array,
+      resizeBy: PropTypes.array,
+      recolorBy: PropTypes.array
+    }).isRequired,
+    dynamicSentenceParts: PropTypes.array
   };
 
   renderStep() {
@@ -70,7 +76,7 @@ class DashboardElement extends React.PureComponent {
   }
 
   render() {
-    const { modalOpen, reopenPanel, goToRoot } = this.props;
+    const { modalOpen, goToRoot, filters } = this.props;
     return (
       <div className="l-dashboard-element">
         <div className="c-dashboard-element">
@@ -82,33 +88,36 @@ class DashboardElement extends React.PureComponent {
             </div>
             <div className="row">
               <div className="column small-12 medium-6">
-                <div className="dashboard-header-actions">
-                  <Button
-                    type="button"
-                    color="gray"
-                    size="sm"
-                    className="dashboard-header-action -panel"
-                    onClick={() => reopenPanel(DASHBOARD_STEPS.sources)}
-                  >
-                    Edit Options
-                  </Button>
+                <div className="dashboard-header-filters">
+                  <Dropdown
+                    color="white"
+                    label="Resize By"
+                    options={filters.resizeBy}
+                    initialValue={{ label: 'Select an Indicator', value: null }}
+                  />
+                  {filters.recolorBy.length > 0 && (
+                    <RecolorBy
+                      size="md"
+                      color="white"
+                      weight="bold"
+                      variant={null}
+                      recolorGroups={[]}
+                      selectedRecolorBy={{ label: 'Select an Indicator', value: null }}
+                      recolorBys={filters.recolorBy}
+                      selectedYears={filters.years}
+                    />
+                  )}
                 </div>
               </div>
               <div className="column small-12 medium-6">
-                <div className="dashboard-header-actions -end">
-                  <button
-                    className="dashboard-header-action -link"
-                    onClick={() => alert('coming soon')}
-                  >
+                <div className="dashboard-header-links">
+                  <button className="dashboard-header-link" onClick={() => alert('coming soon')}>
                     <svg className="icon icon-download">
                       <use xlinkHref="#icon-download" />
                     </svg>
                     DOWNLOAD
                   </button>
-                  <button
-                    className="dashboard-header-action -link"
-                    onClick={() => alert('coming soon')}
-                  >
+                  <button className="dashboard-header-link" onClick={() => alert('coming soon')}>
                     <svg className="icon icon-share">
                       <use xlinkHref="#icon-share" />
                     </svg>
