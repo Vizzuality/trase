@@ -7,17 +7,25 @@ const getSelectedContext = state => state.app.selectedContext;
 const getTooltips = state => state.app.tooltips;
 const getSelectedYears = state => state.app.selectedYears;
 
+const getSelectionRecolorBy = createSelector(
+  [getTooltips, getSelectedYears],
+  (tooltips, selectedYears) => ({
+    type: 'none',
+    name: 'none',
+    value: 'none',
+    position: 0,
+    groupNumber: -1,
+    label: 'Selection',
+    years: selectedYears,
+    description: tooltips.sankey.nav.colorBy.none
+  })
+);
+
 export const getSelectedRecolorByValue = createSelector(
-  [getSelectedRecolorBy, getTooltips, getSelectedYears],
-  (selectedRecolorBy, tooltips, selectedYears) => {
+  [getSelectedRecolorBy, getSelectionRecolorBy],
+  (selectedRecolorBy, selectionRecolorBy) => {
     if (selectedRecolorBy.type === 'none') {
-      return {
-        ...selectedRecolorBy,
-        description: tooltips.sankey.nav.colorBy.none,
-        value: 'none',
-        label: 'Selection',
-        years: selectedYears
-      };
+      return selectionRecolorBy;
     }
 
     return {
@@ -29,10 +37,10 @@ export const getSelectedRecolorByValue = createSelector(
 );
 
 const getRecolorBy = createSelector(
-  getSelectedContext,
-  selectedContext => {
+  [getSelectedContext, getSelectionRecolorBy],
+  (selectedContext, selectionRecolorBy) => {
     if (!selectedContext) return [];
-    return selectedContext.recolorBy;
+    return [selectionRecolorBy].concat(selectedContext.recolorBy);
   }
 );
 

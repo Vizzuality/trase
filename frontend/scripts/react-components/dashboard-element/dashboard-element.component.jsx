@@ -97,10 +97,7 @@ class DashboardElement extends React.PureComponent {
                   />
                   {filters.recolorBy.length > 0 && (
                     <RecolorBy
-                      size="md"
                       color="white"
-                      weight="bold"
-                      variant={null}
                       recolorGroups={[]}
                       selectedRecolorBy={{ label: 'Select an Indicator', value: null }}
                       recolorBys={filters.recolorBy}

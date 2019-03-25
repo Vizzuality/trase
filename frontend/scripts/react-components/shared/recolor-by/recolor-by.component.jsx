@@ -25,6 +25,9 @@ class RecolorBySelector extends Component {
   getRecolorData() {
     const { recolorBys } = this.props;
     return sortBy(recolorBys, ['groupNumber', 'position']).map(recolorBy => {
+      if (recolorBy.name === 'none') {
+        return recolorBy;
+      }
       const legendItems =
         recolorBy.nodes.length > 0 ? recolorBy.nodes : [...Array(recolorBy.intervalCount).keys()];
       const legendItemsData = legendItems.map(legendItem => {
@@ -134,7 +137,6 @@ class RecolorBySelector extends Component {
     return (
       <Dropdown
         size={size}
-        showSelected
         color={color}
         variant={variant}
         tooltip={tooltip}
@@ -171,12 +173,6 @@ RecolorBySelector.propTypes = {
   onChange: PropTypes.func.isRequired,
   selectedRecolorBy: PropTypes.object.isRequired,
   recolorBys: PropTypes.array.isRequired
-};
-
-RecolorBySelector.defaultProps = {
-  variant: 'nav',
-  size: 'rg',
-  weight: 'regular'
 };
 
 export default RecolorBySelector;

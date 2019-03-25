@@ -99,7 +99,7 @@ class SentenceSelector extends React.PureComponent {
           />
           <span className="hide-for-small">
             in the year{selectedYears[0] !== selectedYears[1] ? 's ' : ' '}
-            <YearsSelector variant="sentence" />
+            <YearsSelector variant="sentence" placement="bottom-end" />
           </span>
         </div>
       </div>

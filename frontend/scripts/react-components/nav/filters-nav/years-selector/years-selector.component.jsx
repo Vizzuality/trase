@@ -1,23 +1,18 @@
-/* eslint-disable jsx-a11y/mouse-events-have-key-events, jsx-a11y/no-static-element-interactions, react/no-unused-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import YearsRange from 'react-components/shared/years-range/years-range.component';
-import Dropdown from 'react-components/shared/dropdown';
+import YearsRangeDropdown from 'react-components/shared/years-range-dropdown';
 
 function YearsSelector(props) {
-  const { years, selectedYears, selectYears, variant } = props;
-  const multipleYears = selectedYears[0] !== selectedYears[1];
-  const yearsValue = multipleYears ? `${selectedYears[0]} - ${selectedYears[1]}` : selectedYears[0];
+  const { years, selectedYears, selectYears, variant, ...rest } = props;
 
   return (
-    <Dropdown
+    <YearsRangeDropdown
+      years={years}
       variant={variant}
-      placement="bottom-start"
-      label={multipleYears ? 'years' : 'year'}
-      selectedValueOverride={yearsValue}
-    >
-      <YearsRange selectedYears={selectedYears} years={years} onSelected={selectYears} />
-    </Dropdown>
+      selectYears={selectYears}
+      selectedYears={selectedYears}
+      {...rest}
+    />
   );
 }
 

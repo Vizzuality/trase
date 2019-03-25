@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { selectRecolorBy } from 'actions/tool.actions';
-import RecolorBy from 'react-components/shared/recolor-by';
+import RecolorBySelector from './recolor-by.component';
 import {
   getSelectedRecolorByValue,
   getRecolorByOptions,
@@ -24,4 +24,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(RecolorBy);
+)(RecolorBySelector);
