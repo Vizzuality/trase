@@ -1,9 +1,11 @@
 @import 'styles/settings';
 
 .c-title-group {
+  display: flex;
+  flex-wrap: wrap;
 
   .title-group-element-container {
-    display: inline-block;
+    display: inline-flex;
     margin-bottom: 10px;
 
     &:not(:last-child) {
