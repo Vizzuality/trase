@@ -7,11 +7,9 @@ import {
   onTabChange,
   onItemChange,
   onPageChange,
-  onStepChange,
   onChangePanel
 } from 'react-components/dashboard-element/dashboard-element.saga';
 import {
-  openIndicatorsStep,
   clearDashboardPanel,
   setDashboardPanelPage,
   setDashboardActivePanel,
@@ -319,20 +317,25 @@ describe('onChangePanel', () => {
       ...baseState.dashboardElement,
       activePanelId: 'countries',
       countriesPanel: {
+        ...baseState.dashboardElement.countriesPanel,
         activeTab: {
           id: 1
         },
-        activeItems: {}
+        activeItems: [{ id: 0 }]
       },
       commoditiesPanel: {
+        ...baseState.dashboardElement.commoditiesPanel,
         activeTab: {
           id: 1
-        }
+        },
+        activeItems: [{ id: 0 }]
       },
       companiesPanel: {
+        ...baseState.dashboardElement.companiesPanel,
         activeTab: {
           id: 1
-        }
+        },
+        activeItems: [{ id: 0 }]
       }
     }
   };
@@ -371,23 +374,6 @@ describe('onPageChange', () => {
         direction: 'forward'
       },
       type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA
-    });
-  });
-});
-
-describe('onStepChange', () => {
-  const stepChangeAction = openIndicatorsStep();
-  it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_DATA} to retrieve indicators data on step change`, async () => {
-    const dispatched = await recordSaga(onStepChange, stepChangeAction, baseState);
-    expect(dispatched).toContainEqual({
-      payload: {
-        key: 'indicators',
-        data,
-        meta,
-        tab: null,
-        loading: false
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
     });
   });
 });

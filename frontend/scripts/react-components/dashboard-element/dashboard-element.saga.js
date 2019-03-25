@@ -132,10 +132,10 @@ function* fetchDataOnTabChange() {
  * Listens to DASHBOARD_ELEMENT__SET_ACTIVE_ITEM and requests the tabs data every time a new country has been selected.
  */
 export function* onItemChange(action) {
-  const { panel } = action.payload;
+  const { panel, activeItem } = action.payload;
   const { dashboardElement } = yield select();
   // for now, we just need to recalculate the tabs when selecting a new country
-  if (panel === 'countries') {
+  if (panel === 'countries' && !isEmpty(activeItem)) {
     yield fork(getDashboardPanelSectionTabs, dashboardElement, 'sources');
   }
 }
@@ -153,16 +153,20 @@ function* fetchDataOnItemChange() {
 
 export function* onChangePanel(action) {
   const { panel } = action.payload;
+  const dashboardElement = yield select(state => state.dashboardElement);
   const dashboardStepName = panel === 'countries' ? 'sources' : panel;
   const panelIndex = DASHBOARD_STEPS[dashboardStepName];
-  const panelsToClear = Object.keys(DASHBOARD_STEPS)
-    .slice(panelIndex + 1)
-    .map(p => p.toLowerCase());
+  const nextPanels = Object.keys(DASHBOARD_STEPS).slice(panelIndex + 1);
+
+  const panelsToClear = nextPanels
+    .map(p => ({ name: p, items: dashboardElement[`${p}Panel`].activeItems }))
+    .filter(p => p.items.length > 0)
+    .map(p => p.name);
 
   if (panelsToClear.length > 0) {
     yield put({
       type: DASHBOARD_ELEMENT__CLEAR_PANELS,
-      payload: { panels: panelsToClear }
+      payload: { panels: nextPanels }
     });
   }
 }

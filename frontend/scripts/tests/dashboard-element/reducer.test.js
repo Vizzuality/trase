@@ -11,8 +11,6 @@ import {
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__CLEAR_PANELS,
-  DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
-  DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
@@ -555,41 +553,6 @@ describe(DASHBOARD_ELEMENT__CLEAR_PANELS, () => {
       }
     });
   });
-});
-
-test(DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR, () => {
-  const anotherIndicator = { id: 4, name: 'another indicator' };
-  const state = {
-    ...initialState,
-    activeIndicatorsList: [0]
-  };
-  const action = {
-    type: DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
-    payload: {
-      active: anotherIndicator
-    }
-  };
-  const newState = reducer(state, action);
-  expect(newState).toEqual({
-    ...initialState,
-    activeIndicatorsList: [...state.activeIndicatorsList, anotherIndicator.id]
-  });
-});
-
-test(DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR, () => {
-  const someIndicator = { id: 4, name: 'some indicator' };
-  const action = {
-    type: DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
-    payload: {
-      toRemove: someIndicator
-    }
-  };
-  const state = {
-    ...initialState,
-    activeIndicatorsList: [1, 3, 4]
-  };
-  const newState = reducer(state, action);
-  expect(newState).toEqual({ ...state, activeIndicatorsList: [1, 3] });
 });
 
 describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
