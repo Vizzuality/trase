@@ -7,7 +7,6 @@ import 'styles/components/shared/dropdown.scss';
 import 'styles/components/profiles/area-select.scss';
 import 'styles/components/profiles/map.scss';
 import 'styles/components/profiles/overall-info.scss';
-import 'styles/components/profiles/title-group.scss';
 import 'styles/components/profiles/info.scss';
 
 import React from 'react';
