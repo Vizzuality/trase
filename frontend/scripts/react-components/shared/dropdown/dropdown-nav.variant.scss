@@ -1,7 +1,6 @@
 @import 'styles/settings';
 
 .c-dropdown-component.v-nav {
-  padding: 0 18px 0 0;
   border-left: solid 1px $charcoal-grey-faded-a-lot;
 
   .dropdown-menu {
@@ -14,14 +13,14 @@
 
   .dropdown-selected-item {
     height: 100%;
-    padding: 0 30px 0 18px;
+    padding: 0 41px 0 18px; // 18px of right padding + 8px of arrow + 15px of left padding
     max-width: 16vw; // has to be 1/8 of the screen because we have 8 items in the filters-nav
     overflow: hidden;
 
     &::after {
       border-color: $charcoal-grey-faded;
       top: calc(50% + 10px);
-      right: 10px;
+      right: 18px;
     }
 
     .dropdown-value {
