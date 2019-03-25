@@ -4,11 +4,15 @@ import PropTypes from 'prop-types';
 import sortBy from 'lodash/sortBy';
 import DashboardWidgetComponent from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.component';
 import DashboardWidgetTooltip from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-tooltip';
-import { getConfig } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.selectors';
+import { makeGetConfig } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.selectors';
 
-const mapStateToProps = (state, { chartType, meta, data }) => ({
-  config: getConfig(state, { chartType, meta, data })
-});
+const makeMapStateToProps = () => {
+  const getDashboardWidgetsConfig = makeGetConfig();
+  const mapStateToProps = (state, props) => ({
+    config: getDashboardWidgetsConfig(state, props)
+  });
+  return mapStateToProps;
+};
 
 class DashboardWidgetContainer extends Component {
   sortByX(data) {
@@ -51,4 +55,4 @@ DashboardWidgetContainer.propTypes = {
   dynamicSentenceParts: PropTypes.array
 };
 
-export default connect(mapStateToProps)(DashboardWidgetContainer);
+export default connect(makeMapStateToProps)(DashboardWidgetContainer);

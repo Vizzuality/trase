@@ -64,30 +64,31 @@ const getColors = createSelector(
   }
 );
 
-export const getConfig = createSelector(
-  [getMeta, getYKeys, getColors, getDefaultConfig],
-  (meta, yKeys, colors, defaultConfig) => {
-    if (!meta) return defaultConfig;
-    const config = {
-      ...defaultConfig,
-      xAxis: defaultConfig.xAxis && {
-        ...defaultConfig.xAxis,
-        type: meta.x && meta.x.type
-      },
-      yAxis: defaultConfig.yAxis && {
-        ...defaultConfig.yAxis,
-        type: meta.y && meta.x.type
-      },
-      yAxisLabel: {
-        text: meta.yAxis && meta.yAxis.label,
-        suffix: meta.yAxis && meta.yAxis.suffix
-      },
-      yKeys,
-      colors,
-      tooltip: {
-        ...defaultConfig.tooltip
-      }
-    };
-    return config;
-  }
-);
+export const makeGetConfig = () =>
+  createSelector(
+    [getMeta, getYKeys, getColors, getDefaultConfig],
+    (meta, yKeys, colors, defaultConfig) => {
+      if (!meta) return defaultConfig;
+      const config = {
+        ...defaultConfig,
+        xAxis: defaultConfig.xAxis && {
+          ...defaultConfig.xAxis,
+          type: meta.x && meta.x.type
+        },
+        yAxis: defaultConfig.yAxis && {
+          ...defaultConfig.yAxis,
+          type: meta.y && meta.x.type
+        },
+        yAxisLabel: {
+          text: meta.yAxis && meta.yAxis.label,
+          suffix: meta.yAxis && meta.yAxis.suffix
+        },
+        yKeys,
+        colors,
+        tooltip: {
+          ...defaultConfig.tooltip
+        }
+      };
+      return config;
+    }
+  );
