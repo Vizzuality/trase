@@ -94,7 +94,7 @@ function Dropdown(props) {
         <Text as="span" {...labelProps} className="dropdown-label">
           {label}
         </Text>
-        <Heading as="span" {...valueProps} className="dropdown-value">
+        <Heading {...valueProps} className="dropdown-value">
           {selectedValueOverride || inputValue}
         </Heading>
       </button>

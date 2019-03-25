@@ -119,7 +119,15 @@ export default {
     yAxisLabel: {
       text: 'Exporter Companies'
     },
-    margin: { left: 120 }
+    margin: { left: 120 },
+    xAxis: {
+      ...CHART_CONFIG.horizontalBar.xAxis,
+      type: 'number'
+    },
+    yAxis: {
+      ...CHART_CONFIG.horizontalBar.yAxis,
+      type: 'category'
+    }
   },
   horizontalStackedBar: {
     ...CHART_CONFIG.horizontalBar,
