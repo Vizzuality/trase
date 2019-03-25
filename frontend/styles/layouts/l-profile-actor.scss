@@ -18,6 +18,12 @@ $large-line-chart-width: 840px;
     padding: 0;
     background-color: $white;
 
+    .c-dropdown-component {
+      .dropdown-selected-item::after {
+        content: none;
+      }
+    }
+
     .c-tabs {
       .tab {
         display: none
