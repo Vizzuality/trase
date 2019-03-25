@@ -86,6 +86,15 @@ const updateItems = (currentItems, newItem) => {
   newItems.forEach(i => {
     itemsToAdd[i.id] = i;
   });
+
+  // check that item is of the same type
+  const currentType = Object.values(currentItems)[0] && Object.values(currentItems)[0].nodeType;
+  const incomingType = newItems[0] && newItems[0].nodeType;
+
+  if (currentType && currentType !== incomingType) {
+    return itemsToAdd; // clear old type otherwise
+  }
+
   return { ...currentItems, ...itemsToAdd };
 };
 
@@ -197,7 +206,6 @@ const dashboardElementReducer = {
     const activeItems = isEmpty(activeItem) ? {} : { [activeItem.id]: activeItem };
     return {
       ...state,
-      activeIndicatorsList: [],
       sourcesPanel: sourcesPanelState,
       [panelName]: {
         ...state[panelName],
@@ -210,7 +218,6 @@ const dashboardElementReducer = {
     const panelName = `${panel}Panel`;
     return {
       ...state,
-      activeIndicatorsList: [],
       sourcesPanel: state.sourcesPanel,
       [panelName]: {
         ...state[panelName],
@@ -234,7 +241,6 @@ const dashboardElementReducer = {
           ...clearedActiveTabData
         }
       },
-      activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
         activeTab,
@@ -260,7 +266,6 @@ const dashboardElementReducer = {
           ...clearedActiveTabData
         }
       },
-      activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
         activeItems: { [activeItem.id]: activeItem },
@@ -286,7 +291,6 @@ const dashboardElementReducer = {
           ...clearedActiveTabData
         }
       },
-      activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
         activeItems: updateItems(state[panelName].activeItems, selectedItem),
