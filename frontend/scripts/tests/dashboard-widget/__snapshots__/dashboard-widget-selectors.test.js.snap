@@ -1,5 +1,44 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Widget config parse selectors getColors returns the colors if the chartType is not pie 1`] = `
+Array [
+  Object {
+    "color": "#fff0c2",
+    "label": 2003,
+  },
+]
+`;
+
+exports[`Widget config parse selectors getColors returns the pie colors if the chartType is pie 1`] = `
+Array [
+  Object {
+    "color": "#fff0c2",
+    "label": 1,
+  },
+  Object {
+    "color": "#9a1e2a",
+    "label": 2,
+  },
+]
+`;
+
+exports[`Widget config parse selectors getYKeys returns the default YKeys if there is no meta 1`] = `
+Object {
+  "lines": null,
+}
+`;
+
+exports[`Widget config parse selectors getYKeys returns the parsed YKeys 1`] = `
+Object {
+  "lines": Object {
+    "y1": Object {
+      "fill": "#fff0c2",
+      "stroke": "#fff0c2",
+    },
+  },
+}
+`;
+
 exports[`Widget config parse selectors makeGetConfig Parses the config 1`] = `
 Object {
   "cartesianGrid": Object {
