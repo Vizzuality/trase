@@ -25,12 +25,7 @@ const getToolResizeBys = state => state.app.selectedContext && state.app.selecte
 
 export const getToolYearsProps = createStructuredSelector({
   selectedYears: getSelectedYears,
-  years: makeGetAvailableYears(
-    getSelectedYears,
-    getToolSelectedResizeBy,
-    getToolRecolorBy,
-    getSelectedContext
-  )
+  years: makeGetAvailableYears(getToolSelectedResizeBy, getToolRecolorBy, getSelectedContext)
 });
 
 export const getToolAdminLevelProps = createSelector(

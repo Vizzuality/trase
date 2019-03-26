@@ -200,7 +200,6 @@ const getDashboardSelectedRecolorBy = createSelector(
 
 export const getDashboardFiltersProps = createStructuredSelector({
   years: makeGetAvailableYears(
-    getDashboardSelectedYears,
     getDashboardSelectedResizeBy,
     getDashboardSelectedRecolorBy,
     getDashboardsContext

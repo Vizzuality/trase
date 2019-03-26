@@ -2,14 +2,13 @@ import { createSelector } from 'reselect';
 import intersection from 'lodash/intersection';
 
 export const makeGetAvailableYears = (
-  getSelectedYears,
   getSelectedResizeBy,
   getSelectedRecolorBy,
   getSelectedContext
 ) =>
   createSelector(
-    [getSelectedYears, getSelectedResizeBy, getSelectedRecolorBy, getSelectedContext],
-    (selectedYears, selectedResizeBy, selectedRecolorBy, selectedContext) => {
+    [getSelectedResizeBy, getSelectedRecolorBy, getSelectedContext],
+    (selectedResizeBy, selectedRecolorBy, selectedContext) => {
       const availableContextYears = selectedContext && selectedContext.years;
       const availableResizeByYears =
         selectedResizeBy.years && selectedResizeBy.years.length > 0
