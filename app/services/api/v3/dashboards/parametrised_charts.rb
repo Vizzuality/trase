@@ -57,13 +57,13 @@ module Api
         end
 
         def single_year_no_ncont_charts
-          [single_year_no_ncont_overview_chart] +
+          [single_year_no_ncont_overview] +
             node_types_to_break_by.map do |node_type|
-              single_year_no_ncont_by_node_type_chart(node_type)
+              single_year_no_ncont_node_type_view(node_type)
             end
         end
 
-        def single_year_no_ncont_overview_chart
+        def single_year_no_ncont_overview
           {
             source: :single_year_no_ncont_overview,
             type: DYNAMIC_SENTENCE,
@@ -71,9 +71,9 @@ module Api
           }
         end
 
-        def single_year_no_ncont_by_node_type_chart(node_type)
+        def single_year_no_ncont_node_type_view(node_type)
           {
-            source: :single_year_no_ncont_by_node_type,
+            source: :single_year_no_ncont_node_type,
             type: HORIZONTAL_BAR_CHART,
             x: :node_type,
             node_type_id: node_type.id
@@ -81,13 +81,13 @@ module Api
         end
 
         def single_year_ncont_charts
-          [single_year_ncont_overview_chart] +
+          [single_year_ncont_overview] +
             node_types_to_break_by.map do |node_type|
-              single_year_ncont_by_node_type_chart(node_type)
+              single_year_ncont_node_type_view(node_type)
             end
         end
 
-        def single_year_ncont_overview_chart
+        def single_year_ncont_overview
           {
             source: :single_year_ncont_overview,
             type: DONUT_CHART,
@@ -95,9 +95,9 @@ module Api
           }
         end
 
-        def single_year_ncont_by_node_type_chart(node_type)
+        def single_year_ncont_node_type_view(node_type)
           {
-            source: :single_year_ncont_by_node_type,
+            source: :single_year_ncont_node_type_view,
             type: HORIZONTAL_STACKED_BAR_CHART, # TODO: or VALUE_TABLE?
             x: :node_type,
             break_by: :ncont_attribute,
@@ -106,13 +106,13 @@ module Api
         end
 
         def multi_year_no_ncont_charts
-          [multi_year_no_ncont_overview_chart] +
+          [multi_year_no_ncont_overview] +
             node_types_to_break_by.map do |node_type|
-              multi_year_no_ncont_by_node_type_chart(node_type)
+              multi_year_no_ncont_node_type_view(node_type)
             end
         end
 
-        def multi_year_no_ncont_overview_chart
+        def multi_year_no_ncont_overview
           {
             source: :multi_year_no_ncont_overview,
             type: BAR_CHART,
@@ -120,9 +120,9 @@ module Api
           }
         end
 
-        def multi_year_no_ncont_by_node_type_chart(node_type)
+        def multi_year_no_ncont_node_type_view(node_type)
           {
-            source: :multi_year_no_ncont_by_node_type,
+            source: :multi_year_no_ncont_node_type_view,
             type: STACKED_BAR_CHART,
             x: :year,
             break_by: :node_type,
@@ -131,13 +131,13 @@ module Api
         end
 
         def multi_year_ncont_charts
-          [multi_year_ncont_overview_chart] +
+          [multi_year_ncont_overview] +
             node_types_to_break_by.map do |node_type|
-              multi_year_ncont_by_node_type_chart(node_type)
+              multi_year_ncont_node_type_view(node_type)
             end
         end
 
-        def multi_year_ncont_overview_chart
+        def multi_year_ncont_overview
           {
             source: :multi_year_ncont_overview,
             type: STACKED_BAR_CHART,
@@ -146,9 +146,9 @@ module Api
           }
         end
 
-        def multi_year_ncont_by_node_type_chart(node_type)
+        def multi_year_ncont_node_type_view(node_type)
           {
-            source: :multi_year_ncont_by_node_type,
+            source: :multi_year_ncont_node_type_view,
             type: STACKED_BAR_CHART,
             x: :year,
             break_by: :ncont_attribute,

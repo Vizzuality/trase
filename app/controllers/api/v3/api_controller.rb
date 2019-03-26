@@ -27,6 +27,10 @@ module Api
         raise ActionController::ParameterMissing,
               "Required param #{param_symbol} missing"
       end
+
+      def ensure_required_param_set(param_symbol, default)
+        params[param_symbol] = default unless params[param_symbol].present?
+      end
     end
   end
 end

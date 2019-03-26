@@ -32,9 +32,15 @@ module Api
               group("#{ncont_attr_table}.value")
           end
 
+          def apply_node_type_x
+            @query = @query.
+              select('nodes.name AS x').
+              joins("JOIN nodes ON nodes.id = flows.path[#{@node_type_idx}]").
+              group('nodes.name')
+          end
+
           def apply_year_x
-            @query = @query.select('year AS x').
-              group(:year)
+            @query = @query.select('year AS x').group(:year)
           end
 
           def apply_ncont_attribute_break_by
@@ -75,6 +81,16 @@ module Api
             }
           end
 
+          def node_type_axis_meta(node_type)
+            {
+              type: 'category',
+              label: node_type.name,
+              prefix: '',
+              format: '',
+              suffix: ''
+            }
+          end
+
           def year_axis_meta
             {
               type: 'category', # category || date || number
@@ -92,10 +108,16 @@ module Api
             }
           end
 
+          def node_type_legend_meta(node_type)
+            {
+              label: node_type.name,
+              tooltip: {prefix: '', format: '', suffix: ''}
+            }
+          end
+
           def year_legend_meta
             {
-              label: 'Year',
-              tooltip: {prefix: '', format: '', suffix: ''}
+              label: 'Year', tooltip: {prefix: '', format: '', suffix: ''}
             }
           end
         end

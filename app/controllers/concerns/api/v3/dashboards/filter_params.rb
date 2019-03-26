@@ -16,7 +16,9 @@ module Api
             ncont_attribute_id: string_to_int(params[:ncont_attribute_id]),
             sources_ids: cs_string_to_int_array(params[:sources_ids]),
             companies_ids: cs_string_to_int_array(params[:companies_ids]),
-            destinations_ids: cs_string_to_int_array(params[:destinations_ids])
+            destinations_ids: cs_string_to_int_array(params[:destinations_ids]),
+            node_type_id: string_to_int(params[:node_type_id]),
+            top_n: string_to_int(params[:top_n])
           }
         end
 
