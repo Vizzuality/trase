@@ -241,6 +241,10 @@
                 "type": {
                   "id": "/properties/data/items/properties/recolorBy/items/properties/type",
                   "type": "string"
+                },
+                "attributeId": {
+                  "id": "/properties/data/items/properties/recolorBy/items/properties/attributeId",
+                  "type": "integer"
                 }
               },
               "required": [
@@ -259,7 +263,8 @@
                 "nodes",
                 "isDefault",
                 "name",
-                "years"
+                "years",
+                "attributeId"
               ],
               "type": "object"
             },
@@ -306,6 +311,10 @@
                 "position": {
                   "id": "/properties/data/items/properties/resizeBy/items/properties/position",
                   "type": "integer"
+                },
+                "attributeId": {
+                  "id": "/properties/data/items/properties/resizeBy/items/properties/attributeId",
+                  "type": "integer"
                 }
               },
               "required": [
@@ -316,7 +325,8 @@
                 "position",
                 "isDefault",
                 "description",
-                "years"
+                "years",
+                "attributeId"
               ],
               "type": "object"
             },

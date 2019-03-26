@@ -4,7 +4,8 @@ module Api
       class RecolorByAttributeSerializer < ActiveModel::Serializer
         attributes :is_default, :is_disabled, :group_number, :position,
                    :legend_type, :legend_color_theme, :interval_count,
-                   :min_value, :max_value, :divisor, :name, :years
+                   :min_value, :max_value, :divisor, :name, :years,
+                   :attribute_id
         attribute :display_name, key: :label
         attribute :tooltip_text, key: :description
 
