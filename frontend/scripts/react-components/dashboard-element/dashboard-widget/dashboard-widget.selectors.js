@@ -7,7 +7,7 @@ const getMeta = (state, { meta }) => meta || null;
 const getData = (state, { data }) => data || null;
 const getChartType = (state, { chartType }) => chartType || null;
 
-const getDefaultConfig = createSelector(
+export const getDefaultConfig = createSelector(
   [getChartType],
   chartType => CHART_CONFIG[chartType] || CHART_CONFIG.line
 );
@@ -19,7 +19,7 @@ const getGroupedY = meta => {
 
 const sortGroupedY = keys => sortBy(Object.keys(keys), key => parseInt(key.substr(1), 10));
 
-const getYKeys = createSelector(
+export const getYKeys = createSelector(
   [getMeta, getDefaultConfig],
   (meta, defaultConfig) => {
     const { yKeys, yKeysAttributes, colors } = defaultConfig;
@@ -45,7 +45,7 @@ const getYKeys = createSelector(
   }
 );
 
-const getColors = createSelector(
+export const getColors = createSelector(
   [getMeta, getData, getDefaultConfig, getChartType],
   (meta, data, defaultConfig, chartType) => {
     const { colors } = defaultConfig;

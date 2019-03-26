@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import sortBy from 'lodash/sortBy';
 import DashboardWidgetComponent from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.component';
 import DashboardWidgetTooltip from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-tooltip';
 import { makeGetConfig } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.selectors';
@@ -15,10 +14,6 @@ const makeMapStateToProps = () => {
 };
 
 class DashboardWidgetContainer extends Component {
-  sortByX(data) {
-    return sortBy(data, 'x');
-  }
-
   addTooltipContentToConfig(config, meta) {
     return {
       ...config,
@@ -39,7 +34,6 @@ class DashboardWidgetContainer extends Component {
         data={data}
         chartConfig={this.addTooltipContentToConfig(config, meta)}
         dynamicSentenceParts={dynamicSentenceParts}
-        topLegend={meta}
       />
     ) : null;
   }
