@@ -20,12 +20,14 @@ class DashboardElement extends React.PureComponent {
     goToRoot: PropTypes.func.isRequired,
     modalOpen: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
+    reopenPanel: PropTypes.func.isRequired,
     filters: PropTypes.shape({
       years: PropTypes.array,
       resizeBy: PropTypes.array,
       recolorBy: PropTypes.array
     }).isRequired,
-    dynamicSentenceParts: PropTypes.array
+    dynamicSentenceParts: PropTypes.array,
+    setSelectedYears: PropTypes.func.isRequired
   };
 
   renderStep() {
@@ -77,7 +79,7 @@ class DashboardElement extends React.PureComponent {
   }
 
   render() {
-    const { modalOpen, goToRoot, filters } = this.props;
+    const { modalOpen, goToRoot, filters, reopenPanel, setSelectedYears } = this.props;
     return (
       <div className="l-dashboard-element">
         <div className="c-dashboard-element">
@@ -91,12 +93,13 @@ class DashboardElement extends React.PureComponent {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="column small-12 medium-6">
+                  <div className="column small-12 medium-9">
                     <div className="dashboard-header-filters">
                       <div className="dashboard-filter">
                         <YearsRangeDropdown
                           color="white"
                           years={filters.years}
+                          selectYears={setSelectedYears}
                           selectedYears={filters.selectedYears}
                         />
                       </div>
@@ -119,9 +122,20 @@ class DashboardElement extends React.PureComponent {
                           />
                         </div>
                       )}
+                      <div className="dashboard-filter">
+                        <Button
+                          size="sm"
+                          type="button"
+                          color="gray"
+                          className="dashboard-header-action -panel"
+                          onClick={() => reopenPanel(DASHBOARD_STEPS.sources)}
+                        >
+                          Edit Options
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                  <div className="column small-12 medium-6">
+                  <div className="column small-12 medium-3">
                     <div className="dashboard-header-links">
                       <button
                         className="dashboard-header-link"

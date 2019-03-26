@@ -17,6 +17,7 @@ export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH =
   'DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH =
   'DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH';
+export const DASHBOARD_ELEMENT__SET_SELECTED_YEARS = 'DASHBOARD_ELEMENT__SET_SELECTED_YEARS';
 
 export const getDashboardPanelParams = (state, optionsType, options = {}) => {
   const {
@@ -118,4 +119,9 @@ export const setDashboardPanelLoadingItems = loadingItems => ({
 export const getDashboardPanelSearchResults = query => ({
   type: DASHBOARD_ELEMENT__GET_SEARCH_RESULTS,
   payload: { query }
+});
+
+export const setDashboardSelectedYears = years => ({
+  type: DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
+  payload: { years }
 });

@@ -9,7 +9,10 @@ import {
   getDashboardFiltersProps
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getPanelId } from 'utils/dashboardPanel';
-import { setDashboardActivePanel as setDashboardActivePanelFn } from 'react-components/dashboard-element/dashboard-element.actions';
+import {
+  setDashboardActivePanel as setDashboardActivePanelFn,
+  setDashboardSelectedYears
+} from 'react-components/dashboard-element/dashboard-element.actions';
 import { DASHBOARD_STEPS } from 'constants';
 
 const mapStateToProps = state => ({
@@ -21,8 +24,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      setDashboardActivePanel: setDashboardActivePanelFn,
-      goToRoot: () => ({ type: 'dashboardRoot' })
+      goToRoot: () => ({ type: 'dashboardRoot' }),
+      setSelectedYears: setDashboardSelectedYears,
+      setDashboardActivePanel: setDashboardActivePanelFn
     },
     dispatch
   );
@@ -33,6 +37,7 @@ class DashboardElementContainer extends React.Component {
     dirtyBlocks: PropTypes.object,
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
+    setSelectedYears: PropTypes.func.isRequired,
     setDashboardActivePanel: PropTypes.func.isRequired
   };
 
@@ -78,10 +83,11 @@ class DashboardElementContainer extends React.Component {
 
   render() {
     const { step, modalOpen, editMode } = this.state;
-    const { goToRoot, dynamicSentenceParts, dirtyBlocks, filters } = this.props;
+    const { goToRoot, dynamicSentenceParts, dirtyBlocks, filters, setSelectedYears } = this.props;
     return (
       <DashboardElement
         step={step}
+        filters={filters}
         editMode={editMode}
         goToRoot={goToRoot}
         modalOpen={modalOpen}
@@ -89,8 +95,8 @@ class DashboardElementContainer extends React.Component {
         setStep={this.updateStep}
         closeModal={this.closeModal}
         reopenPanel={this.reopenPanel}
-        filters={filters}
         dynamicSentenceParts={dynamicSentenceParts}
+        setSelectedYears={setSelectedYears}
       />
     );
   }

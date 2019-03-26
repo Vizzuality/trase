@@ -16,6 +16,7 @@ import {
   DASHBOARD_ELEMENT__SET_LOADING_ITEMS,
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
+  DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
 } from './dashboard-element.actions';
@@ -343,6 +344,13 @@ const dashboardElementReducer = {
         ...state[panelName],
         searchResults: fuzzySearch(query, data)
       }
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_SELECTED_YEARS](state, action) {
+    const { years } = action.payload;
+    return {
+      ...state,
+      selectedYears: years
     };
   }
 };
