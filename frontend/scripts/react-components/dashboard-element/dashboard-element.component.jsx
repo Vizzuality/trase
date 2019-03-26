@@ -14,6 +14,7 @@ import { DASHBOARD_STEPS } from 'constants';
 
 class DashboardElement extends React.PureComponent {
   static propTypes = {
+    dirtyBlocks: PropTypes.object,
     step: PropTypes.number.isRequired,
     setStep: PropTypes.func.isRequired,
     editMode: PropTypes.bool.isRequired,
@@ -53,8 +54,9 @@ class DashboardElement extends React.PureComponent {
   }
 
   renderDashboardModal() {
-    const { editMode, goToRoot, modalOpen, closeModal } = this.props;
-    const onClose = editMode ? closeModal : goToRoot;
+    const { editMode, goToRoot, modalOpen, closeModal, dirtyBlocks } = this.props;
+    const canProceed = dirtyBlocks.sources && dirtyBlocks.commodities;
+    const onClose = editMode && canProceed ? closeModal : goToRoot;
     return (
       <React.Fragment>
         {modalOpen && (
@@ -68,7 +70,7 @@ class DashboardElement extends React.PureComponent {
             </div>
           </section>
         )}
-        <SimpleModal isOpen={modalOpen} onRequestClose={onClose}>
+        <SimpleModal isOpen={modalOpen} onClickClose={onClose}>
           {this.renderStep()}
         </SimpleModal>
       </React.Fragment>

@@ -153,7 +153,7 @@ const getDashboardSelectedYears = createSelector(
   [getSelectedYears, getDashboardsContext],
   (selectedYears, context) => {
     if (!selectedYears && !context) {
-      return null;
+      return [null, null];
     }
 
     if (!selectedYears) {
