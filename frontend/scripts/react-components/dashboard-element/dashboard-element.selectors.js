@@ -183,7 +183,7 @@ const getDashboardSelectedResizeBy = createSelector(
       return { label: 'Select an Indicator', value: null };
     }
 
-    return contextResizeByItems.find(item => item.name === selectedResizeBy);
+    return contextResizeByItems.find(item => item.attributeId === selectedResizeBy);
   }
 );
 
@@ -193,8 +193,7 @@ const getDashboardSelectedRecolorBy = createSelector(
     if (!selectedRecolorBy || contextRecolorByItems.length === 0) {
       return { label: 'Select an Indicator', value: null };
     }
-
-    return contextRecolorByItems.find(item => item.name === selectedRecolorBy);
+    return contextRecolorByItems.find(item => item.attributeId === selectedRecolorBy);
   }
 );
 

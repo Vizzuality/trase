@@ -359,14 +359,14 @@ const dashboardElementReducer = {
     const { indicator } = action.payload;
     return {
       ...state,
-      selectedResizeBy: indicator.value
+      selectedResizeBy: indicator.attributeId
     };
   },
   [DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY](state, action) {
     const { indicator } = action.payload;
     return {
       ...state,
-      selectedRecolorBy: indicator.value
+      selectedRecolorBy: indicator.attributeId
     };
   }
 };
