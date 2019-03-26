@@ -4,14 +4,6 @@
   padding: 60px 0 0;
 
   .dashboard-element-title {
-    font-family: $font-family-2;
-    color: $white;
-    font-size: $font-size-big;
-    font-weight: $font-weight-light;
-    line-height: 2.33;
-    letter-spacing: -0.6px;
-    font-style: normal;
-    font-stretch: normal;
     margin-bottom: 41px;
 
     .dashboard-element-title-item {
@@ -20,14 +12,11 @@
       align-items: center;
       height: 30px;
       padding: 0 6px 0 0;
-      font-size: $font-size-big;
-      font-weight: $font-weight-bold;
       text-transform: capitalize;
     }
   }
 
   .dashboard-element-placeholder {
-
     &-item {
       display: block;
       height: 400px;
@@ -42,12 +31,14 @@
     background-color: $charcoal-dark;
 
     .dashboard-element-fallback {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
       padding: 40px 0 0;
-      text-align: center;
 
-      &-text {
-        font-size: $font-size-medium;
-        margin: 0;
+      .dashboard-element-fallback-text {
+        margin: 0 0 15px 0;
       }
 
       &-button {

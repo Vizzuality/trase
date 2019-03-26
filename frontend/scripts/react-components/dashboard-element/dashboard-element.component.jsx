@@ -8,6 +8,7 @@ import TagsGroup from 'react-components/shared/tags-group';
 import RecolorBy from 'react-components/shared/recolor-by';
 import Dropdown from 'react-components/shared/dropdown';
 import YearsRangeDropdown from 'react-components/shared/years-range-dropdown';
+import Text from 'react-components/shared/text';
 
 import 'react-components/dashboard-element/dashboard-element.scss';
 import { DASHBOARD_STEPS } from 'constants';
@@ -183,9 +184,14 @@ class DashboardElement extends React.PureComponent {
                 <div className="row align-center">
                   <div className="column small-6">
                     <div className="dashboard-element-fallback">
-                      <p className="dashboard-element-title dashboard-element-fallback-text">
+                      <Text
+                        color="white"
+                        size="md"
+                        align="center"
+                        className="dashboard-element-fallback-text"
+                      >
                         Your dashboard has no selection.
-                      </p>
+                      </Text>
                       <Button
                         color="gray-transparent"
                         size="medium"
