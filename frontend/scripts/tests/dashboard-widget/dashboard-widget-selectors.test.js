@@ -41,11 +41,11 @@ const meta = {
 
 describe('Widget config parse selectors', () => {
   describe('getDefaultConfig', () => {
-    it('returns the default line config if the chartType is not found', () => {
-      expect(getDefaultConfig(null, { chartType: 'notFoundChartype' })).toEqual(CHART_CONFIG.line);
+    it('returns the default bar config if the chartType is not found', () => {
+      expect(getDefaultConfig(null, { chartType: 'notFoundChartype' })).toEqual(CHART_CONFIG.bar);
     });
     it('returns the default chart config of a specific chart', () => {
-      expect(getDefaultConfig(null, { chartType: 'pie' })).toEqual(CHART_CONFIG.pie);
+      expect(getDefaultConfig(null, { chartType: 'donut_chart' })).toEqual(CHART_CONFIG.pie);
     });
   });
 
@@ -60,7 +60,9 @@ describe('Widget config parse selectors', () => {
 
   describe('getColors', () => {
     it('returns the defaultConfig colors if there is no meta', () => {
-      expect(getColors(null, { meta: null, chartType: 'line' })).toEqual(CHART_CONFIG.line.colors);
+      expect(getColors(null, { meta: null, chartType: 'bar_chart' })).toEqual(
+        CHART_CONFIG.bar.colors
+      );
     });
 
     it('returns the pie colors if the chartType is pie', () => {
@@ -76,7 +78,7 @@ describe('Widget config parse selectors', () => {
           color: '#9a1e2a'
         }
       ];
-      expect(getColors(null, { data: pieData, meta, chartType: 'pie' })).toMatchSnapshot();
+      expect(getColors(null, { data: pieData, meta, chartType: 'donut_chart' })).toMatchSnapshot();
     });
     it('returns the colors if the chartType is not pie', () => {
       const data = [
@@ -92,11 +94,11 @@ describe('Widget config parse selectors', () => {
   // makeGetConfig is a function that returns the selector just to be able to memoize the selector result
   describe('makeGetConfig', () => {
     it('returns the defaultConfig if there is no meta', () => {
-      expect(makeGetConfig()(null, { meta: null })).toEqual(CHART_CONFIG.line);
+      expect(makeGetConfig()(null, { meta: null })).toEqual(CHART_CONFIG.bar);
     });
 
     it('Parses the config', () => {
-      expect(makeGetConfig()(null, { meta, chartType: 'line' })).toMatchSnapshot();
+      expect(makeGetConfig()(null, { meta, chartType: 'bar_chart' })).toMatchSnapshot();
     });
   });
 });
