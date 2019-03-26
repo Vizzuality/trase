@@ -64,6 +64,14 @@
 
   .dashboard-header-filters {
     display: flex;
+
+    .dashboard-filter {
+      margin: 0 15px 0 0;
+
+      &:last-child {
+        margin: 0;
+      }
+    }
   }
 
   .dashboard-header-links {

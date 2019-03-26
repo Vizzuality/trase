@@ -66,7 +66,10 @@ const initialState = {
     loadingItems: false,
     activeItems: {},
     activeTab: null
-  }
+  },
+  selectedYears: null,
+  selectedResizeBy: null,
+  selectedRecolorBy: null
 };
 
 const updateItems = (currentItems, newItem) => {
@@ -367,7 +370,10 @@ const dashboardElementReducerTypes = PropTypes => {
     sourcesPanel: PropTypes.shape(PanelTypes).isRequired,
     destinationsPanel: PropTypes.shape(PanelTypes).isRequired,
     companiesPanel: PropTypes.shape(PanelTypes).isRequired,
-    commoditiesPanel: PropTypes.shape(PanelTypes).isRequired
+    commoditiesPanel: PropTypes.shape(PanelTypes).isRequired,
+    selectedYears: PropTypes.arrayOf(PropTypes.number),
+    selectedResizeBy: PropTypes.number,
+    selectedRecolorBy: PropTypes.number
   };
 };
 

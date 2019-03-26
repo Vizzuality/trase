@@ -14,6 +14,7 @@ const getActiveDashboardPanel = state => {
   return { id: activePanelId, ...restState[`${activePanelId}Panel`] };
 };
 const getAppContexts = state => state.app.contexts;
+const getSelectedYears = state => state.dashboardElement.selectedYears;
 
 export const getActivePanelTabs = createSelector(
   [getActiveDashboardPanel, getDashboardPanelTabs],
@@ -145,6 +146,20 @@ const getDashboardsContext = createSelector(
   }
 );
 
+const getDashboardSelectedYears = createSelector(
+  [getSelectedYears, getDashboardsContext],
+  (selectedYears, context) => {
+    if (!selectedYears && !context) {
+      return null;
+    }
+
+    if (!selectedYears) {
+      return [context.defaultYear, context.defaultYear];
+    }
+    return selectedYears;
+  }
+);
+
 const getDashboardContextYears = createSelector(
   getDashboardsContext,
   context => context && context.years
@@ -165,6 +180,7 @@ const getDashboardContextRecolorBy = createSelector(
 
 export const getDashboardFiltersProps = createStructuredSelector({
   years: getDashboardContextYears,
-  resizeBy: makeGetResizeByItems(getDashboardContextResizeBy, getDashboardContextYears),
-  recolorBy: makeGetRecolorByItems(getDashboardContextRecolorBy, getDashboardContextYears)
+  selectedYears: getDashboardSelectedYears,
+  resizeBy: makeGetResizeByItems(getDashboardContextResizeBy, getDashboardSelectedYears),
+  recolorBy: makeGetRecolorByItems(getDashboardContextRecolorBy, getDashboardSelectedYears)
 });

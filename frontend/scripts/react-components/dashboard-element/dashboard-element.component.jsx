@@ -7,6 +7,7 @@ import Button from 'react-components/shared/button/button.component';
 import TagsGroup from 'react-components/shared/tags-group';
 import RecolorBy from 'react-components/shared/recolor-by';
 import Dropdown from 'react-components/shared/dropdown';
+import YearsRangeDropdown from 'react-components/shared/years-range-dropdown';
 
 import 'react-components/dashboard-element/dashboard-element.scss';
 import { DASHBOARD_STEPS } from 'constants';
@@ -80,71 +81,90 @@ class DashboardElement extends React.PureComponent {
     return (
       <div className="l-dashboard-element">
         <div className="c-dashboard-element">
-          <section className="dashboard-element-header">
-            <div className="row">
-              <div className="column small-12">
-                <h2 className="dashboard-element-title">{this.renderDynamicSentence()}</h2>
-              </div>
-            </div>
-            <div className="row">
-              <div className="column small-12 medium-6">
-                <div className="dashboard-header-filters">
-                  <Dropdown
-                    color="white"
-                    label="Resize By"
-                    options={filters.resizeBy}
-                    initialValue={{ label: 'Select an Indicator', value: null }}
-                  />
-                  {filters.recolorBy.length > 0 && (
-                    <RecolorBy
-                      color="white"
-                      recolorGroups={[]}
-                      selectedRecolorBy={{ label: 'Select an Indicator', value: null }}
-                      recolorBys={filters.recolorBy}
-                      selectedYears={filters.years}
-                    />
-                  )}
-                </div>
-              </div>
-              <div className="column small-12 medium-6">
-                <div className="dashboard-header-links">
-                  <button className="dashboard-header-link" onClick={() => alert('coming soon')}>
-                    <svg className="icon icon-download">
-                      <use xlinkHref="#icon-download" />
-                    </svg>
-                    DOWNLOAD
-                  </button>
-                  <button className="dashboard-header-link" onClick={() => alert('coming soon')}>
-                    <svg className="icon icon-share">
-                      <use xlinkHref="#icon-share" />
-                    </svg>
-                    SHARE
-                  </button>
-                </div>
-              </div>
-            </div>
-          </section>
           {this.renderDashboardModal()}
           {modalOpen === false && (
-            <section className="dashboard-element-widgets">
-              <div className="row align-center">
-                <div className="column small-6">
-                  <div className="dashboard-element-fallback">
-                    <p className="dashboard-element-title dashboard-element-fallback-text">
-                      Your dashboard has no selection.
-                    </p>
-                    <Button
-                      color="gray-transparent"
-                      size="medium"
-                      className="dashboard-element-fallback-button"
-                      onClick={goToRoot}
-                    >
-                      Go Back
-                    </Button>
+            <>
+              <section className="dashboard-element-header">
+                <div className="row">
+                  <div className="column small-12">
+                    <h2 className="dashboard-element-title">{this.renderDynamicSentence()}</h2>
                   </div>
                 </div>
-              </div>
-            </section>
+                <div className="row">
+                  <div className="column small-12 medium-6">
+                    <div className="dashboard-header-filters">
+                      <div className="dashboard-filter">
+                        <YearsRangeDropdown
+                          color="white"
+                          years={filters.years}
+                          selectedYears={filters.selectedYears}
+                        />
+                      </div>
+                      <div className="dashboard-filter">
+                        <Dropdown
+                          color="white"
+                          label="Resize By"
+                          options={filters.resizeBy}
+                          initialValue={{ label: 'Select an Indicator', value: null }}
+                        />
+                      </div>
+                      {filters.recolorBy.length > 0 && (
+                        <div className="dashboard-filter">
+                          <RecolorBy
+                            color="white"
+                            recolorGroups={[]}
+                            selectedRecolorBy={{ label: 'Select an Indicator', value: null }}
+                            recolorBys={filters.recolorBy}
+                            selectedYears={filters.years}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="column small-12 medium-6">
+                    <div className="dashboard-header-links">
+                      <button
+                        className="dashboard-header-link"
+                        onClick={() => alert('coming soon')}
+                      >
+                        <svg className="icon icon-download">
+                          <use xlinkHref="#icon-download" />
+                        </svg>
+                        DOWNLOAD
+                      </button>
+                      <button
+                        className="dashboard-header-link"
+                        onClick={() => alert('coming soon')}
+                      >
+                        <svg className="icon icon-share">
+                          <use xlinkHref="#icon-share" />
+                        </svg>
+                        SHARE
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <section className="dashboard-element-widgets">
+                <div className="row align-center">
+                  <div className="column small-6">
+                    <div className="dashboard-element-fallback">
+                      <p className="dashboard-element-title dashboard-element-fallback-text">
+                        Your dashboard has no selection.
+                      </p>
+                      <Button
+                        color="gray-transparent"
+                        size="medium"
+                        className="dashboard-element-fallback-button"
+                        onClick={goToRoot}
+                      >
+                        Go Back
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </>
           )}
         </div>
       </div>

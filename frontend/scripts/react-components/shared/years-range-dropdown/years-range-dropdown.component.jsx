@@ -7,7 +7,7 @@ function YearsRangeDropdown(props) {
   const { years, selectedYears, selectYears, ...rest } = props;
   const multipleYears = selectedYears[0] !== selectedYears[1];
   const yearsValue = multipleYears ? `${selectedYears[0]} - ${selectedYears[1]}` : selectedYears[0];
-  console.log(rest);
+
   return (
     <Dropdown
       placement="bottom-start"
