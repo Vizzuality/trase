@@ -102,16 +102,21 @@ class DashboardElement extends React.PureComponent {
               <section className="dashboard-element-header">
                 <div className="row">
                   <div className="column small-12">
-                    <h2 className="dashboard-element-title">{this.renderDynamicSentence()}</h2>
-                    <Button
-                      size="sm"
-                      type="button"
-                      color="gray"
-                      className="dashboard-edit-button"
-                      onClick={() => reopenPanel(DASHBOARD_STEPS.sources)}
-                    >
-                      Edit Options
-                    </Button>
+                    <h2 className="dashboard-element-title">
+                      {this.renderDynamicSentence()}
+                      <Button
+                        size="sm"
+                        type="button"
+                        color="gray"
+                        variant="icon"
+                        className="dashboard-edit-button"
+                        onClick={() => reopenPanel(DASHBOARD_STEPS.sources)}
+                      >
+                        <svg className="icon icon-pen">
+                          <use xlinkHref="#icon-pen" />
+                        </svg>
+                      </Button>
+                    </h2>
                   </div>
                 </div>
                 <div className="row">
