@@ -11,13 +11,17 @@ import {
   DASHBOARD_ELEMENT__GET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
-  DASHBOARD_ELEMENT__CLEAR_PANELS
+  DASHBOARD_ELEMENT__CLEAR_PANELS,
+  DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
+  DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
+  DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import {
   getDashboardPanelSectionTabs,
   getDashboardPanelData,
   getMoreDashboardPanelData,
-  fetchDashboardPanelSearchResults
+  fetchDashboardPanelSearchResults,
+  fetchDashboardCharts
 } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
 import { DASHBOARD_STEPS } from 'constants';
 
@@ -204,6 +208,17 @@ function* fetchDataOnPageChange() {
   yield takeLatest(DASHBOARD_ELEMENT__SET_PANEL_PAGE, onPageChange);
 }
 
+function* fetchChartsOnIndicatorsChange() {
+  yield takeLatest(
+    [
+      DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
+      DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
+      DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY
+    ],
+    fetchDashboardCharts
+  );
+}
+
 export default function* dashboardElementSaga() {
   const sagas = [
     fetchDataOnPanelChange,
@@ -211,7 +226,8 @@ export default function* dashboardElementSaga() {
     fetchDataOnItemChange,
     clearSubsequentPanels,
     fetchDataOnPageChange,
-    fetchDataOnSearch
+    fetchDataOnSearch,
+    fetchChartsOnIndicatorsChange
   ];
   yield all(sagas.map(saga => fork(saga)));
 }

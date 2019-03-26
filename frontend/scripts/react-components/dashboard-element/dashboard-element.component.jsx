@@ -9,12 +9,14 @@ import RecolorBy from 'react-components/shared/recolor-by';
 import Dropdown from 'react-components/shared/dropdown';
 import YearsRangeDropdown from 'react-components/shared/years-range-dropdown';
 import Text from 'react-components/shared/text';
+import DashboardWidget from 'react-components/dashboard-element/dashboard-widget';
 
 import 'react-components/dashboard-element/dashboard-element.scss';
 import { DASHBOARD_STEPS } from 'constants';
 
 class DashboardElement extends React.PureComponent {
   static propTypes = {
+    charts: PropTypes.array,
     dirtyBlocks: PropTypes.object,
     step: PropTypes.number.isRequired,
     setStep: PropTypes.func.isRequired,
@@ -86,8 +88,26 @@ class DashboardElement extends React.PureComponent {
     return 'Dashboards';
   }
 
+  renderWidgets() {
+    const { charts } = this.props;
+    return (
+      <div className="row -equal-height -flex-end">
+        {charts.map(chart => (
+          <div key={chart.id} className="column small-12 medium-6 ">
+            <DashboardWidget
+              url={chart.url}
+              title={chart.displayName}
+              chartType={chart.chartType}
+            />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   render() {
     const {
+      charts,
       modalOpen,
       goToRoot,
       filters,
@@ -182,26 +202,29 @@ class DashboardElement extends React.PureComponent {
               </section>
               <section className="dashboard-element-widgets">
                 <div className="row align-center">
-                  <div className="column small-6">
-                    <div className="dashboard-element-fallback">
-                      <Text
-                        color="white"
-                        size="md"
-                        align="center"
-                        className="dashboard-element-fallback-text"
-                      >
-                        Your dashboard has no selection.
-                      </Text>
-                      <Button
-                        color="gray-transparent"
-                        size="medium"
-                        className="dashboard-element-fallback-button"
-                        onClick={goToRoot}
-                      >
-                        Go Back
-                      </Button>
+                  {charts.length > 0 && this.renderWidgets()}
+                  {charts.length === 0 && (
+                    <div className="column small-6">
+                      <div className="dashboard-element-fallback">
+                        <Text
+                          color="white"
+                          size="md"
+                          align="center"
+                          className="dashboard-element-fallback-text"
+                        >
+                          Your dashboard has no selection.
+                        </Text>
+                        <Button
+                          color="gray-transparent"
+                          size="medium"
+                          className="dashboard-element-fallback-button"
+                          onClick={goToRoot}
+                        >
+                          Go Back
+                        </Button>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </section>
             </>
