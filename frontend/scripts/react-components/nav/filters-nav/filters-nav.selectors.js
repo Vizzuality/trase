@@ -1,5 +1,4 @@
-import { createSelector } from 'reselect';
-import intersection from 'lodash/intersection';
+import { createSelector, createStructuredSelector } from 'reselect';
 import { getActiveParams } from 'react-components/logistics-map/logistics-map.selectors';
 import {
   LOGISTICS_MAP_YEARS,
@@ -8,6 +7,7 @@ import {
 } from 'constants';
 import capitalize from 'lodash/capitalize';
 import { makeGetResizeByItems } from 'selectors/indicators.selectors';
+import { makeGetAvailableYears } from 'selectors/years.selectors';
 import FiltersNav from 'react-components/nav/filters-nav/filters-nav.component';
 
 const insertIf = (condition, item) => (condition ? [item] : []);
@@ -23,28 +23,15 @@ const getAppTooltips = state => state.app.tooltips;
 const getToolDetailedView = state => state.tool && state.tool.detailedView;
 const getToolResizeBys = state => state.app.selectedContext && state.app.selectedContext.resizeBy;
 
-export const getToolYearsProps = createSelector(
-  [getSelectedYears, getToolSelectedResizeBy, getToolRecolorBy, getSelectedContext],
-  (selectedYears, selectedResizeBy, selectedRecolorBy, selectedContext) => {
-    const availableContextYears = selectedContext && selectedContext.years;
-    const availableResizeByYears =
-      selectedResizeBy.years && selectedResizeBy.years.length > 0
-        ? selectedResizeBy.years
-        : availableContextYears;
-    const availableRecolorByYears =
-      selectedRecolorBy.years && selectedRecolorBy.years.length > 0
-        ? selectedRecolorBy.years
-        : availableContextYears;
-
-    const years = intersection(
-      availableContextYears,
-      availableResizeByYears,
-      availableRecolorByYears
-    );
-
-    return { years, selectedYears };
-  }
-);
+export const getToolYearsProps = createStructuredSelector({
+  selectedYears: getSelectedYears,
+  years: makeGetAvailableYears(
+    getSelectedYears,
+    getToolSelectedResizeBy,
+    getToolRecolorBy,
+    getSelectedContext
+  )
+});
 
 export const getToolAdminLevelProps = createSelector(
   [getToolSelectedBiome, getContextFilterBy],

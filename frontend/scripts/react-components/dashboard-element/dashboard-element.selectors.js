@@ -2,6 +2,7 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import isEmpty from 'lodash/isEmpty';
 import { getPanelId as getPanelName } from 'utils/dashboardPanel';
 import { makeGetResizeByItems, makeGetRecolorByItems } from 'selectors/indicators.selectors';
+import { makeGetAvailableYears } from 'selectors/years.selectors';
 
 const getCountriesPanel = state => state.dashboardElement.countriesPanel;
 const getSourcesPanel = state => state.dashboardElement.sourcesPanel;
@@ -162,11 +163,6 @@ const getDashboardSelectedYears = createSelector(
   }
 );
 
-const getDashboardContextYears = createSelector(
-  getDashboardsContext,
-  context => context && context.years
-);
-
 const getDashboardContextResizeBy = createSelector(
   getDashboardsContext,
   context => context && context.resizeBy
@@ -203,7 +199,12 @@ const getDashboardSelectedRecolorBy = createSelector(
 );
 
 export const getDashboardFiltersProps = createStructuredSelector({
-  years: getDashboardContextYears,
+  years: makeGetAvailableYears(
+    getDashboardSelectedYears,
+    getDashboardSelectedResizeBy,
+    getDashboardSelectedRecolorBy,
+    getDashboardsContext
+  ),
   selectedYears: getDashboardSelectedYears,
   selectedResizeBy: getDashboardSelectedResizeBy,
   selectedRecolorBy: getDashboardSelectedRecolorBy,
