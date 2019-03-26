@@ -85,6 +85,18 @@ const barConfig = {
 
 export default {
   bar: barConfig,
+  line: {
+    ...CHART_CONFIG.line,
+    tooltip,
+    colors,
+    yKeys: {
+      lines: {
+        y1: { fill: '#fff0c2', stroke: '#fff0c2' },
+        y2: { fill: '#ee5463', stroke: '#ee5463' }
+      }
+    },
+    yAxisLabel: { text: 'Label', suffix: 't' }
+  },
   stackedBar: {
     ...barConfig,
     type: 'bar',
