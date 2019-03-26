@@ -70,6 +70,7 @@
     font-family: $font-family-2;
     font-size: $font-size-medium;
     font-weight: $font-weight-bold;
+    line-height: 1.75;
 
     &::after {
       @include arrow(8px, 2px, rgba($charcoal-grey, .4), 'down');
@@ -92,8 +93,6 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
-      line-height: normal;
-      margin: -3px 0 -5px 0;
     }
   }
 
@@ -142,98 +141,6 @@
       text-transform: uppercase;
     }
 
-    .dropdown-item-legend-container {
-      display: flex;
-      margin-top: 10px;
-      align-items: center;
-    }
-
-    .dropdown-item-legend {
-      pointer-events: none;
-    }
-
-    .dropdown-item-legend-unit {
-      &.-left {
-        margin-right: 4px;
-      }
-
-      &.-right {
-        margin-left: 4px;
-      }
-    }
-
-    .dropdown-item-legend-unit, .dropdown-item-legend, .dropdown-item-legend > li {
-      color: $charcoal-grey;
-      font-family: $font-family-1;
-      font-size: $font-size-small;
-    }
-
-    .dropdown-item-legend, .dropdown-item-legend > li {
-      display: inline-block;
-    }
-
-    .dropdown-item-legend.-qual > li {
-      margin-right: 10px;
-      text-transform: uppercase;
-
-      &::before {
-        display: inline-block;
-        width: 11px;
-        height: 11px;
-        margin-right: 4px;
-        border: 2px solid $white;
-        border-radius: 99px;
-        content: ' ';
-      }
-
-      @for $i from 1 through length($recolorby-colors) {
-        &.#{nth($recolorby-colors-names, $i)} {
-          &::before {
-            background-color: #{nth($recolorby-colors, $i)};
-          }
-        }
-      }
-
-      @for $i from 1 through length($recolorgroup-colors) {
-        &.#{nth($recolorgroup-colors-names, $i)} {
-          &::before {
-            background-color: #{nth($recolorgroup-colors, $i)};
-          }
-        }
-      }
-    }
-
-    .dropdown-item-legend.-stars > li {
-      &::before {
-        display: inline-block;
-        width: 15px;
-        height: 15px;
-        margin-right: 2px;
-        border: 2px solid $white;
-        border-radius: 99px;
-        content: ' ';
-      }
-
-      @for $i from 1 through length($recolorby-colors) {
-        &.#{nth($recolorby-colors-names, $i)} {
-          &::before {
-            background-color: #{nth($recolorby-colors, $i)};
-          }
-        }
-      }
-    }
-
-    .dropdown-item-legend.-linear > li, .dropdown-item-legend.-percentual > li {
-      width: 12px;
-      height: 12px;
-
-      @for $i from 1 through length($recolorby-colors) {
-        &.#{nth($recolorby-colors-names, $i)} {
-          background-color: #{nth($recolorby-colors, $i)};
-        }
-      }
-    }
-
     &.-no-active {
       .dropdown-item-title {
         color: $gray;
@@ -258,8 +165,7 @@
 
   &.-small .dropdown-title {
     font-size: 16px;
-    font-weight: normal;
-    margin: 1px 0 0 0;
+    font-weight: $font-weight-regular;
   }
 
   &.-profiles {

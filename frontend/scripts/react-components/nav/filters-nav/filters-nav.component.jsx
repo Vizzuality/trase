@@ -3,11 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import RecolorBySelector from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.container';
-import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
-import DropdownSelector from 'react-components/nav/filters-nav/dropdown-selector/dropdown-selector.component';
+import YearsSelector from 'react-components/nav/filters-nav/years-selector';
 import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
 import NavLinksList from 'react-components/nav/nav-links.component';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
+import NavDropdownSelector from 'react-components/nav/filters-nav/nav-dropdown-selector';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.container';
 import { NavLink } from 'redux-first-router-link';
 
@@ -29,11 +29,11 @@ class FiltersNav extends React.PureComponent {
   static FILTER_TYPES = {
     contextSelector: 0,
     yearSelector: 1,
-    dropdownSelector: 2,
+    dropdown: 2,
     recolorBySelector: 3
   };
 
-  FILTERS = [ContextSelector, YearsSelector, DropdownSelector, RecolorBySelector];
+  FILTERS = [ContextSelector, YearsSelector, NavDropdownSelector, RecolorBySelector];
 
   state = {
     menuOpen: false
@@ -124,6 +124,20 @@ class FiltersNav extends React.PureComponent {
     );
   };
 
+  renderFilter(filter) {
+    const { toggleDropdown, currentDropdown } = this.props;
+    const Component = this.FILTERS[filter.type];
+
+    return React.createElement(Component, {
+      currentDropdown,
+      className: 'filters-nav-item',
+      onToggle: toggleDropdown,
+      onSelected: this.props[`${filter.props.id}_onSelected`],
+      ...filter.props,
+      key: filter.props.id
+    });
+  }
+
   renderMenuClosed = () => (
     <React.Fragment>
       {this.renderLeftSection()}
@@ -133,49 +147,24 @@ class FiltersNav extends React.PureComponent {
 
   renderLeftSection = () => {
     const {
-      toggleDropdown,
-      currentDropdown,
       filters: { left = [] }
     } = this.props;
-    const { FILTERS } = this;
-
     return (
       <div className="filters-nav-left-section">
-        {left.map(filter =>
-          React.createElement(FILTERS[filter.type], {
-            currentDropdown,
-            className: 'filters-nav-item',
-            onToggle: toggleDropdown,
-            onSelected: this.props[`${filter.props.id}_onSelected`],
-            ...filter.props,
-            key: filter.props.id
-          })
-        )}
+        {left.map(filter => this.renderFilter(filter))}
       </div>
     );
   };
 
   renderRightSection = () => {
     const {
-      toggleDropdown,
-      currentDropdown,
       openLogisticsMapDownload,
       filters: { right = [], showSearch, showLogisticsMapDownload }
     } = this.props;
-    const { FILTERS } = this;
 
     return (
       <div className="filters-nav-left-section">
-        {right.map(filter =>
-          React.createElement(FILTERS[filter.type], {
-            currentDropdown,
-            className: 'filters-nav-item',
-            onToggle: toggleDropdown,
-            onSelected: this.props[`${filter.props.id}_onSelected`],
-            ...filter.props,
-            key: filter.props.id
-          })
-        )}
+        {right.map(filter => this.renderFilter(filter))}
         {showSearch && <ToolSearch className="filters-nav-item -no-padding" />}
         {showLogisticsMapDownload && (
           <button onClick={openLogisticsMapDownload} className="filters-nav-item -no-padding -icon">

@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect';
 import intersection from 'lodash/intersection';
 import sortBy from 'lodash/sortBy';
-import cx from 'classnames';
 import { getActiveParams } from 'react-components/logistics-map/logistics-map.selectors';
 import {
   LOGISTICS_MAP_YEARS,
@@ -9,6 +8,7 @@ import {
   LOGISTICS_MAP_INSPECTION_LEVELS
 } from 'constants';
 import difference from 'lodash/difference';
+import capitalize from 'lodash/capitalize';
 import FiltersNav from 'react-components/nav/filters-nav/filters-nav.component';
 
 const insertIf = (condition, item) => (condition ? [item] : []);
@@ -55,17 +55,17 @@ export const getToolAdminLevelProps = createSelector(
     return {
       label: adminLevel.name,
       id: 'toolAdminLevel',
-      listClassName: '-medium',
-      items: [
-        { name: 'All', id: 'none' },
+      clip: false,
+      options: [
+        { value: 'none', label: 'All' },
         ...adminLevel.nodes
           .filter(node => node.name !== (selectedFilter && selectedFilter.name))
-          .map(node => ({ ...node, id: node.name, name: `${node.name}`.toLowerCase() }))
+          .map(node => ({ ...node, value: node.name, label: capitalize(node.name) }))
       ],
-      selectedItem:
+      value:
         typeof selectedFilter !== 'undefined' && selectedFilter.value !== 'none'
-          ? { ...selectedFilter, name: `${selectedFilter.name}`.toLowerCase() }
-          : { name: 'All' }
+          ? { ...selectedFilter, label: capitalize(selectedFilter.name) }
+          : { label: 'All', value: 'All' }
     };
   }
 );
@@ -81,22 +81,23 @@ export const getToolResizeByProps = createSelector(
       const hasSeparator = list[index - 1] && list[index - 1].groupNumber !== resizeBy.groupNumber;
       return {
         hasSeparator,
-        id: resizeBy.name,
-        name: resizeBy.label,
+        value: resizeBy.name,
+        label: resizeBy.label,
         isDisabled: !isEnabled,
         tooltip: resizeBy.description
       };
     });
     return {
-      items,
+      options: items,
       label: 'Resize by',
       id: 'toolResizeBy',
-      titleClassName: '-small',
-      listClassName: '-medium',
-      selectedItem: { name: selectedResizeBy.label || '' },
+      showSelected: true,
+      size: 'rg',
+      clip: false,
+      weight: 'regular',
+      value: { value: selectedResizeBy.name, label: selectedResizeBy.label || '' },
       tooltip: tooltips && tooltips.sankey.nav.resizeBy.main,
-      titleTooltip: tooltips && tooltips.sankey.nav.resizeBy[selectedResizeBy.name],
-      dropdownClassName: cx('-small -capitalize', { '-hide-only-child': items.length <= 1 })
+      titleTooltip: tooltips && tooltips.sankey.nav.resizeBy[selectedResizeBy.name]
     };
   }
 );
@@ -104,15 +105,16 @@ export const getToolResizeByProps = createSelector(
 export const getToolViewModeProps = createSelector(
   [getAppTooltips, getToolDetailedView],
   (tooltips, isDetailedView) => {
-    const items = [{ name: 'Summary', id: false }, { name: 'All Flows', id: true }];
+    const options = [{ label: 'Summary', value: false }, { label: 'All Flows', value: true }];
     return {
-      items: items.filter(i => i.id !== isDetailedView),
+      options,
       label: 'Change view',
       id: 'toolViewMode',
+      size: 'rg',
+      clip: false,
+      weight: 'regular',
       tooltip: tooltips && tooltips.sankey.nav.view.main,
-      titleClassName: '-small',
-      dropdownClassName: '-capitalize -small',
-      selectedItem: items.find(item => item.id === isDetailedView)
+      value: options.find(item => item.value === isDetailedView)
     };
   }
 );
@@ -122,12 +124,13 @@ const getLogisticsMapYearsProps = createSelector(
   activeParams => ({
     label: 'Year',
     id: 'logisticsMapYear',
-    items: LOGISTICS_MAP_YEARS,
-    dropdownClassName: cx({ '-hide-only-child': activeParams.commodity !== 'soy' }),
-    selectedItem:
+    options: activeParams.commodity === 'soy' ? LOGISTICS_MAP_YEARS : [],
+    isDisabled: activeParams.commodity !== 'soy',
+    value:
       activeParams.commodity === 'soy'
-        ? LOGISTICS_MAP_YEARS.find(year => year.id === parseInt(activeParams.year, 10))
-        : { name: '2012 – 2017' }
+        ? LOGISTICS_MAP_YEARS.find(year => year.value === parseInt(activeParams.year, 10))
+        : {},
+    selectedValueOverride: activeParams.commodity !== 'soy' ? '2012 – 2017' : undefined
   })
 );
 
@@ -136,8 +139,8 @@ const getLogisticsMapHubsProps = createSelector(
   activeParams => ({
     label: 'Logistics Hub',
     id: 'logisticsMapHub',
-    items: LOGISTICS_MAP_HUBS,
-    selectedItem: LOGISTICS_MAP_HUBS.find(commodity => commodity.id === activeParams.commodity)
+    options: LOGISTICS_MAP_HUBS,
+    value: LOGISTICS_MAP_HUBS.find(commodity => commodity.value === activeParams.commodity)
   })
 );
 
@@ -148,14 +151,15 @@ const getLogisticsMapInspectionLevelProps = createSelector(
       return null;
     }
 
+    const all = { label: 'All', value: null };
+
     return {
       label: 'Inspection Level',
       id: 'logisticsMapInspectionLevel',
-      dropdownClassName: '',
-      items: [{ name: 'All' }, ...LOGISTICS_MAP_INSPECTION_LEVELS],
-      selectedItem: LOGISTICS_MAP_INSPECTION_LEVELS.find(
-        level => level.id === activeParams.inspection
-      ) || { name: 'All' }
+      options: [all, ...LOGISTICS_MAP_INSPECTION_LEVELS],
+      value:
+        LOGISTICS_MAP_INSPECTION_LEVELS.find(level => level.value === activeParams.inspection) ||
+        all
     };
   }
 );
@@ -193,7 +197,7 @@ export const getNavFilters = createSelector(
               props: { selectedContext, id: 'contextSelector' }
             },
             ...insertIf(toolAdminLevel, {
-              type: FILTER_TYPES.dropdownSelector,
+              type: FILTER_TYPES.dropdown,
               props: toolAdminLevel
             }),
             {
@@ -202,19 +206,19 @@ export const getNavFilters = createSelector(
             }
           ],
           right: [
-            { type: FILTER_TYPES.dropdownSelector, props: toolResizeBy },
+            { type: FILTER_TYPES.dropdown, props: toolResizeBy },
             { type: FILTER_TYPES.recolorBySelector, props: { id: 'toolRecolorBy' } },
-            { type: FILTER_TYPES.dropdownSelector, props: toolViewMode }
+            { type: FILTER_TYPES.dropdown, props: toolViewMode }
           ]
         };
       case 'logisticsMap':
         return {
           showLogisticsMapDownload: true,
           left: [
-            { type: FILTER_TYPES.dropdownSelector, props: logisticsMapsHubs },
-            { type: FILTER_TYPES.dropdownSelector, props: logisticsMapsYears },
+            { type: FILTER_TYPES.dropdown, props: logisticsMapsHubs },
+            { type: FILTER_TYPES.dropdown, props: logisticsMapsYears },
             ...insertIf(logisticsMapInspectionLevel, {
-              type: FILTER_TYPES.dropdownSelector,
+              type: FILTER_TYPES.dropdown,
               props: logisticsMapInspectionLevel
             })
           ]
