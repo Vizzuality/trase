@@ -372,10 +372,10 @@ const dashboardElementReducer = {
     };
   },
   [DASHBOARD_ELEMENT__SET_CHARTS](state, action) {
-    const { data } = action.payload;
+    const { charts } = action.payload;
     return {
       ...state,
-      charts: data
+      charts
     };
   }
 };

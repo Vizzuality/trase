@@ -166,13 +166,19 @@ export function* fetchDashboardPanelSearchResults(dashboardElement, query) {
 
 export function* fetchDashboardCharts() {
   const dashboardElement = yield select(state => state.dashboardElement);
-  const options = getDashboardPanelParams(dashboardElement);
+  const {
+    countries_ids: countryId,
+    commodities_ids: commodityId,
+    ...options
+  } = getDashboardPanelParams(dashboardElement, null, { isOverview: true });
   const params = {
     ...options,
-    ncont_attribute_id: dashboardElement.selectedResizeBy,
-    cont_attribute_id: dashboardElement.selectedRecolorBy,
+    country_id: countryId,
+    commodity_id: commodityId,
+    cont_attribute_id: dashboardElement.selectedResizeBy,
+    ncont_attribute_id: dashboardElement.selectedRecolorBy,
     start_year: dashboardElement.selectedYears ? dashboardElement.selectedYears[0] : 2017,
-    end_year: dashboardElement.selectedYears && dashboardElement.selectedYears[1]
+    end_year: dashboardElement.selectedYears ? dashboardElement.selectedYears[1] : 2017
   };
   const url = getURLFromParams(GET_DASHBOARD_PARAMETRISED_CHARTS_URL, params);
 
@@ -181,7 +187,7 @@ export function* fetchDashboardCharts() {
     const { data } = yield call(fetchPromise);
     yield put({
       type: DASHBOARD_ELEMENT__SET_CHARTS,
-      payload: { data }
+      payload: { charts: data.data }
     });
   } catch (e) {
     console.error('Error', e);

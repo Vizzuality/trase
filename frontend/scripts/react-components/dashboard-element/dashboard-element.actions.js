@@ -32,7 +32,7 @@ export const getDashboardPanelParams = (state, optionsType, options = {}) => {
     destinationsPanel,
     commoditiesPanel
   } = state;
-  const { page } = options;
+  const { page, isOverview } = options;
   const sourcesTab = sourcesPanel.activeTab && sourcesPanel.activeTab.id;
   const companiesTab = companiesPanel.activeTab && companiesPanel.activeTab.id;
 
@@ -51,20 +51,20 @@ export const getDashboardPanelParams = (state, optionsType, options = {}) => {
     params.countries_ids = activeItemParams(countriesPanel);
   }
 
-  if (currentStep > DASHBOARD_STEPS.sources) {
+  if (currentStep > DASHBOARD_STEPS.sources || isOverview) {
     params.countries_ids = activeItemParams(countriesPanel);
     params.sources_ids = activeItemParams(sourcesPanel);
   }
 
-  if (currentStep > DASHBOARD_STEPS.commodities) {
+  if (currentStep > DASHBOARD_STEPS.commodities || isOverview) {
     params.commodities_ids = activeItemParams(commoditiesPanel);
   }
 
-  if (currentStep > DASHBOARD_STEPS.destinations) {
+  if (currentStep > DASHBOARD_STEPS.destinations || isOverview) {
     params.destinations_ids = activeItemParams(destinationsPanel);
   }
 
-  if (currentStep > DASHBOARD_STEPS.companies) {
+  if (currentStep > DASHBOARD_STEPS.companies || isOverview) {
     params.companies_ids = activeItemParams(companiesPanel);
   }
 
