@@ -17,7 +17,7 @@ const getData = (state, { data }) => data || null;
 const getChartType = (state, { chartType }) => (chartType ? parsedChartTypes[chartType] : null);
 export const getDefaultConfig = createSelector(
   [getChartType],
-  chartType => CHART_CONFIG[chartType] || CHART_CONFIG.barChart
+  chartType => CHART_CONFIG[chartType] || CHART_CONFIG.bar
 );
 
 const getGroupedY = meta => {
