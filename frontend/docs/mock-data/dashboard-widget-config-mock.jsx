@@ -188,5 +188,8 @@ export default {
   dynamicSentence: {
     type: 'sentence',
     yAxisLabel: { text: 'Trade volume', suffix: 't' }
+  },
+  ranking: {
+    type: 'ranking'
   }
 };

@@ -1,0 +1,22 @@
+@import '~styles/settings.scss';
+
+.c-paginate {
+  display: flex;
+  justify-content: center;
+  border-top: 2px solid $charcoal-grey-faded;
+  width: calc(100% - 48px);
+  margin: 15px auto auto auto;
+  padding-top: 10px;
+
+  .button-up {
+    margin-right: 2px;
+
+    .icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  .button-down {
+    margin-left: 2px;
+  }
+}
