@@ -17,9 +17,8 @@ module Api
           end
 
           def call
-            break_by_values_indexes = Hash[
-              break_by_values.map.with_index { |v, idx| [v, idx] }
-            ]
+            break_by_values_indexes = ncont_break_by_values_map
+
             data_by_x = {}
             @query.each do |record|
               idx = break_by_values_indexes[record['break_by']]
@@ -33,7 +32,7 @@ module Api
 
             @meta = {
               xAxis: year_axis_meta,
-              yAxis: axis_meta(@cont_attribute, type: 'category'),
+              yAxis: axis_meta(@cont_attribute, type: 'number'),
               x: year_legend_meta
             }
 
@@ -56,16 +55,6 @@ module Api
             apply_cont_attribute_y
             apply_multi_year_filter
             apply_flow_path_filters
-          end
-
-          def break_by_values
-            @ncont_attribute.
-              flow_values_class.
-              where(@ncont_attribute.attribute_id_name => @ncont_attribute.original_id).
-              select(:value).
-              order(:value).
-              distinct.
-              map(&:value)
           end
         end
       end
