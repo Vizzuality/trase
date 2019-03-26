@@ -23,7 +23,8 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontNodeTypeView do
       cont_attribute_id: cont_attribute.id,
       ncont_attribute_id: ncont_attribute.id,
       node_type_id: node_type.id,
-      start_year: 2015
+      start_year: 2015,
+      top_n: 10
     }
   }
 
