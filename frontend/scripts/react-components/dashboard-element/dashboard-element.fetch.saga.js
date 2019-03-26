@@ -1,5 +1,5 @@
 import deburr from 'lodash/deburr';
-import { put, call, cancelled, delay } from 'redux-saga/effects';
+import { put, call, cancelled, delay, select } from 'redux-saga/effects';
 import isEmpty from 'lodash/isEmpty';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
@@ -7,13 +7,15 @@ import {
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
   getDashboardPanelParams,
   setDashboardPanelLoadingItems,
-  DASHBOARD_ELEMENT__SET_SEARCH_RESULTS
+  DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
+  DASHBOARD_ELEMENT__SET_CHARTS
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import {
   getURLFromParams,
   GET_DASHBOARD_OPTIONS_URL,
   GET_DASHBOARD_OPTIONS_TABS_URL,
-  GET_DASHBOARD_SEARCH_RESULTS_URL
+  GET_DASHBOARD_SEARCH_RESULTS_URL,
+  GET_DASHBOARD_PARAMETRISED_CHARTS_URL
 } from 'utils/getURLFromParams';
 import { fetchWithCancel } from './fetch-with-cancel';
 
@@ -155,6 +157,37 @@ export function* fetchDashboardPanelSearchResults(dashboardElement, query) {
   } finally {
     if (yield cancelled()) {
       if (NODE_ENV_DEV) console.error('Cancelled', url);
+      if (source) {
+        source.cancel();
+      }
+    }
+  }
+}
+
+export function* fetchDashboardCharts() {
+  const dashboardElement = yield select(state => state.dashboardElement);
+  const options = getDashboardPanelParams(dashboardElement);
+  const params = {
+    ...options,
+    ncont_attribute_id: dashboardElement.selectedResizeBy,
+    cont_attribute_id: dashboardElement.selectedRecolorBy,
+    start_year: dashboardElement.selectedYears ? dashboardElement.selectedYears[0] : 2017,
+    end_year: dashboardElement.selectedYears && dashboardElement.selectedYears[1]
+  };
+  const url = getURLFromParams(GET_DASHBOARD_PARAMETRISED_CHARTS_URL, params);
+
+  const { source, fetchPromise } = fetchWithCancel(url);
+  try {
+    const { data } = yield call(fetchPromise);
+    yield put({
+      type: DASHBOARD_ELEMENT__SET_CHARTS,
+      payload: { data }
+    });
+  } catch (e) {
+    console.error('Error', e);
+  } finally {
+    if (yield cancelled()) {
+      if (NODE_ENV_DEV) console.error('Cancelled', params);
       if (source) {
         source.cancel();
       }

@@ -20,7 +20,8 @@ import {
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
   DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
-  DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY
+  DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
+  DASHBOARD_ELEMENT__SET_CHARTS
 } from './dashboard-element.actions';
 
 const initialState = {
@@ -72,7 +73,8 @@ const initialState = {
   },
   selectedYears: null,
   selectedResizeBy: null,
-  selectedRecolorBy: null
+  selectedRecolorBy: null,
+  charts: []
 };
 
 const updateItems = (currentItems, newItem) => {
@@ -367,6 +369,13 @@ const dashboardElementReducer = {
     return {
       ...state,
       selectedRecolorBy: indicator.attributeId
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_CHARTS](state, action) {
+    const { data } = action.payload;
+    return {
+      ...state,
+      charts: data
     };
   }
 };
