@@ -3,7 +3,7 @@
 exports[`Widget config parse selectors getColors returns the colors if the chartType is not pie 1`] = `
 Array [
   Object {
-    "color": "#fff0c2",
+    "color": "#ee5463",
     "label": "Water scarcity",
   },
 ]
@@ -24,16 +24,17 @@ Array [
 
 exports[`Widget config parse selectors getYKeys returns the default YKeys if there is no meta 1`] = `
 Object {
-  "lines": null,
+  "bars": null,
 }
 `;
 
 exports[`Widget config parse selectors getYKeys returns the parsed YKeys 1`] = `
 Object {
-  "lines": Object {
+  "bars": Object {
     "y1": Object {
-      "fill": "#fff0c2",
-      "stroke": "#fff0c2",
+      "fill": "#ee5463",
+      "interval": "preserveStartEnd",
+      "stroke": "#ee5463",
     },
   },
 }
