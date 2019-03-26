@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import Dropdown, { Context as DropdownContext } from 'react-components/shared/dropdown';
 import RecolorByNodeLegendSummary from 'react-components/shared/recolor-by/recolor-by-node-legend-summary';
+import Text from 'react-components/shared/text';
 import cx from 'classnames';
 import capitalize from 'lodash/capitalize';
 import isNumber from 'lodash/isNumber';
@@ -56,10 +57,10 @@ class RecolorBySelector extends Component {
         })}
         key={recolorBy.label}
       >
-        <div className="recolor-by-item-title">
+        <Text size="md" weight="regular" className="recolor-by-item-title">
           {recolorBy.label}
           {recolorBy.description && <Tooltip constraint="window" text={recolorBy.description} />}
-        </div>
+        </Text>
         <div className="recolor-by-item-legend-container">
           {recolorBy.minValue && (
             <span className="recolor-by-item-legend-unit -left">{recolorBy.minValue}</span>

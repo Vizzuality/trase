@@ -103,6 +103,15 @@ class DashboardElement extends React.PureComponent {
                 <div className="row">
                   <div className="column small-12">
                     <h2 className="dashboard-element-title">{this.renderDynamicSentence()}</h2>
+                    <Button
+                      size="sm"
+                      type="button"
+                      color="gray"
+                      className="dashboard-edit-button"
+                      onClick={() => reopenPanel(DASHBOARD_STEPS.sources)}
+                    >
+                      Edit Options
+                    </Button>
                   </div>
                 </div>
                 <div className="row">
@@ -120,6 +129,7 @@ class DashboardElement extends React.PureComponent {
                         <Dropdown
                           color="white"
                           label="Resize By"
+                          placement="bottom-start"
                           onChange={setSelectedResizeBy}
                           options={filters.resizeBy}
                           value={filters.selectedResizeBy}
@@ -136,17 +146,6 @@ class DashboardElement extends React.PureComponent {
                           />
                         </div>
                       )}
-                      <div className="dashboard-filter">
-                        <Button
-                          size="sm"
-                          type="button"
-                          color="gray"
-                          className="dashboard-header-action -panel"
-                          onClick={() => reopenPanel(DASHBOARD_STEPS.sources)}
-                        >
-                          Edit Options
-                        </Button>
-                      </div>
                     </div>
                   </div>
                   <div className="column small-12 medium-3">
