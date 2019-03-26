@@ -1,14 +1,9 @@
 @import 'styles/settings';
 
 .c-recolor-by-selector {
-  width: 296px;
-
   .recolor-by-item {
     color: $charcoal-grey;
     padding: 10px 25px;
-    font-family: $font-family-2;
-    font-size: $font-size-xx-regular;
-    font-weight: normal;
 
     &.-separator {
       height: 1px;
@@ -35,6 +30,10 @@
     display: flex;
     margin-top: 10px;
     align-items: center;
+  }
+
+  .recolor-by-item-title {
+    white-space: nowrap;
   }
 
   .recolor-by-item-legend {

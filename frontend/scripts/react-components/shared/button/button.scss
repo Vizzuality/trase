@@ -111,4 +111,16 @@
       max-width: calc(100% - 22px);
     }
   }
+
+  &.v-icon {
+    height: 32px;
+    width: 32px;
+    padding: 0;
+
+    &.color-gray {
+      svg {
+        fill: $charcoal-grey;
+      }
+    }
+  }
 }

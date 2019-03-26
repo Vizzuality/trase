@@ -8,7 +8,7 @@ import './dashboard-modal-footer.scss';
 
 function DashboardModalFooter(props) {
   const {
-    isPanelFooter,
+    isLastStep,
     dynamicSentenceParts,
     clearPanel,
     removeSentenceItem,
@@ -24,7 +24,6 @@ function DashboardModalFooter(props) {
         tags={dynamicSentenceParts}
         removeSentenceItem={removeSentenceItem}
         clearPanel={clearPanel}
-        readOnly={!isPanelFooter}
         step={step}
         placement="top-end"
       />
@@ -38,7 +37,7 @@ function DashboardModalFooter(props) {
         )}
         <Button onClick={onContinue} color="pink" size="md" disabled={isDisabled}>
           <Text as="span" size="rg" color="white" variant="mono">
-            {isPanelFooter ? 'Continue' : 'Go to dashboard'}
+            {isLastStep ? 'Go to dashboard' : 'Continue'}
           </Text>
         </Button>
       </div>
@@ -51,15 +50,11 @@ DashboardModalFooter.propTypes = {
   removeSentenceItem: PropTypes.func,
   clearPanel: PropTypes.func,
   isDisabled: PropTypes.bool,
-  isPanelFooter: PropTypes.bool,
+  isLastStep: PropTypes.bool.isRequired,
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
   step: PropTypes.number,
   backText: PropTypes.string
-};
-
-DashboardModalFooter.defaultProps = {
-  isPanelFooter: false
 };
 
 export default DashboardModalFooter;

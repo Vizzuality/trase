@@ -4,10 +4,11 @@ import { selectColumn } from 'actions/tool.actions';
 import ColumnSelector from 'react-components/tool/column-selector/column-selector.component';
 
 const mapStateToProps = state => ({
-  currentDropdown: state.app.currentDropdown,
   allColumns: state.tool.columns,
+  currentDropdown: state.app.currentDropdown,
   selectedColumnsIds: state.tool.selectedColumnsIds,
-  nodesColoredAtColumn: state.tool.nodesColoredAtColumn
+  nodesColoredAtColumn: state.tool.nodesColoredAtColumn,
+  recolorGroups: state.tool.recolorGroups && state.tool.recolorGroups.filter(c => c !== undefined)
 });
 
 const mapDispatchToProps = dispatch => ({

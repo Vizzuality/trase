@@ -82,7 +82,7 @@
     -webkit-overflow-scrolling: touch;
     background-color: $white;
     box-shadow: 0 3px 6px 0 rgba($black, .16), 0 3px 6px 0 rgba($black, .23);
-    z-index: $z-above;
+    z-index: $z-veil-below-nav;
     visibility: hidden;
 
     &[data-placement="top"],
@@ -120,8 +120,6 @@
     display: flex;
     align-items: center;
     padding: 10px;
-    color: $charcoal-grey;
-    letter-spacing: 0.5px;
 
     &.-highlighted {
       background-color: $manilla;

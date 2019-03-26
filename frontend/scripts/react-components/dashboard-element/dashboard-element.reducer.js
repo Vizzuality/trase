@@ -10,22 +10,22 @@ import {
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__CLEAR_PANELS,
-  DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
-  DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   DASHBOARD_ELEMENT__SET_LOADING_ITEMS,
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
+  DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
+  DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
+  DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY
 } from './dashboard-element.actions';
 
 const initialState = {
   loading: false,
   data: {
-    indicators: [],
     countries: [],
     companies: {},
     sources: {},
@@ -35,7 +35,6 @@ const initialState = {
   meta: {},
   tabs: {},
   activePanelId: null,
-  activeIndicatorsList: [],
   countriesPanel: {
     page: 1,
     searchResults: [],
@@ -70,7 +69,10 @@ const initialState = {
     loadingItems: false,
     activeItems: {},
     activeTab: null
-  }
+  },
+  selectedYears: null,
+  selectedResizeBy: null,
+  selectedRecolorBy: null
 };
 
 const updateItems = (currentItems, newItem) => {
@@ -90,6 +92,15 @@ const updateItems = (currentItems, newItem) => {
   newItems.forEach(i => {
     itemsToAdd[i.id] = i;
   });
+
+  // check that item is of the same type
+  const currentType = Object.values(currentItems)[0] && Object.values(currentItems)[0].nodeType;
+  const incomingType = newItems[0] && newItems[0].nodeType;
+
+  if (currentType && currentType !== incomingType) {
+    return itemsToAdd; // clear old type otherwise
+  }
+
   return { ...currentItems, ...itemsToAdd };
 };
 
@@ -201,7 +212,6 @@ const dashboardElementReducer = {
     const activeItems = isEmpty(activeItem) ? {} : { [activeItem.id]: activeItem };
     return {
       ...state,
-      activeIndicatorsList: [],
       sourcesPanel: sourcesPanelState,
       [panelName]: {
         ...state[panelName],
@@ -214,7 +224,6 @@ const dashboardElementReducer = {
     const panelName = `${panel}Panel`;
     return {
       ...state,
-      activeIndicatorsList: [],
       sourcesPanel: state.sourcesPanel,
       [panelName]: {
         ...state[panelName],
@@ -238,7 +247,6 @@ const dashboardElementReducer = {
           ...clearedActiveTabData
         }
       },
-      activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
         activeTab,
@@ -264,7 +272,6 @@ const dashboardElementReducer = {
           ...clearedActiveTabData
         }
       },
-      activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
         activeItems: { [activeItem.id]: activeItem },
@@ -290,7 +297,6 @@ const dashboardElementReducer = {
           ...clearedActiveTabData
         }
       },
-      activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
         activeItems: updateItems(state[panelName].activeItems, selectedItem),
@@ -327,20 +333,6 @@ const dashboardElementReducer = {
       ...removedPanels
     };
   },
-  [DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR](state, action) {
-    const { active } = action.payload;
-    return {
-      ...state,
-      activeIndicatorsList: [...state.activeIndicatorsList, active.id]
-    };
-  },
-  [DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR](state, action) {
-    const { toRemove } = action.payload;
-    return {
-      ...state,
-      activeIndicatorsList: state.activeIndicatorsList.filter(item => item !== toRemove.id)
-    };
-  },
   [DASHBOARD_ELEMENT__SET_SEARCH_RESULTS](state, action) {
     const { data, query } = action.payload;
     let panel = state.activePanelId;
@@ -354,6 +346,27 @@ const dashboardElementReducer = {
         ...state[panelName],
         searchResults: fuzzySearch(query, data)
       }
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_SELECTED_YEARS](state, action) {
+    const { years } = action.payload;
+    return {
+      ...state,
+      selectedYears: years
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY](state, action) {
+    const { indicator } = action.payload;
+    return {
+      ...state,
+      selectedResizeBy: indicator.value
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY](state, action) {
+    const { indicator } = action.payload;
+    return {
+      ...state,
+      selectedRecolorBy: indicator.value
     };
   }
 };
@@ -371,9 +384,7 @@ const dashboardElementReducerTypes = PropTypes => {
     meta: PropTypes.object.isRequired,
     tabs: PropTypes.object.isRequired,
     activePanelId: PropTypes.string,
-    activeIndicatorsList: PropTypes.array.isRequired,
     data: PropTypes.shape({
-      indicators: PropTypes.array.isRequired,
       countries: PropTypes.array.isRequired,
       companies: PropTypes.object.isRequired,
       sources: PropTypes.object.isRequired,
@@ -383,7 +394,10 @@ const dashboardElementReducerTypes = PropTypes => {
     sourcesPanel: PropTypes.shape(PanelTypes).isRequired,
     destinationsPanel: PropTypes.shape(PanelTypes).isRequired,
     companiesPanel: PropTypes.shape(PanelTypes).isRequired,
-    commoditiesPanel: PropTypes.shape(PanelTypes).isRequired
+    commoditiesPanel: PropTypes.shape(PanelTypes).isRequired,
+    selectedYears: PropTypes.arrayOf(PropTypes.number),
+    selectedResizeBy: PropTypes.string,
+    selectedRecolorBy: PropTypes.string
   };
 };
 

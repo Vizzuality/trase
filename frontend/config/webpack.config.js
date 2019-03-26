@@ -81,6 +81,7 @@ module.exports = {
       base: path.resolve(srcPath, 'base'),
       store: path.resolve(srcPath, 'store'),
       router: path.resolve(srcPath, 'router'),
+      selectors: path.resolve(srcPath, 'selectors'),
       'lodash-es': 'lodash'
     },
     plugins: [

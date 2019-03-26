@@ -10,7 +10,8 @@ function Button(props) {
   const { as, variant, color, size, weight, children, icon, iconPosition, ...rest } = props;
   const buttonProps = {
     ...rest,
-    className: cx('c-button', variant, rest.className, {
+    className: cx('c-button', rest.className, {
+      [`v-${variant}`]: variant,
       [`color-${color}`]: color,
       [`size-${size}`]: size,
       [`weight-${weight}`]: weight,

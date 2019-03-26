@@ -3,14 +3,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import Dropdown, { Context as DropdownContext } from 'react-components/shared/dropdown';
-import RecolorByNodeLegendSummary from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-node-legend-summary/recolor-by-node-legend-summary.container';
+import RecolorByNodeLegendSummary from 'react-components/shared/recolor-by/recolor-by-node-legend-summary';
+import Text from 'react-components/shared/text';
 import cx from 'classnames';
 import capitalize from 'lodash/capitalize';
 import isNumber from 'lodash/isNumber';
-import difference from 'lodash/difference';
 import sortBy from 'lodash/sortBy';
 
-import './recolor-by-selector.scss';
+import './recolor-by.scss';
 
 class RecolorBySelector extends Component {
   getRecolorByClassNames(item, recolorBy) {
@@ -24,8 +24,11 @@ class RecolorBySelector extends Component {
   }
 
   getRecolorData() {
-    const { recolorBys, selectedYears, tooltips } = this.props;
-    const recolorByData = sortBy(recolorBys, ['groupNumber', 'position']).map(recolorBy => {
+    const { recolorBys } = this.props;
+    return sortBy(recolorBys, ['groupNumber', 'position']).map(recolorBy => {
+      if (recolorBy.name === 'none') {
+        return recolorBy;
+      }
       const legendItems =
         recolorBy.nodes.length > 0 ? recolorBy.nodes : [...Array(recolorBy.intervalCount).keys()];
       const legendItemsData = legendItems.map(legendItem => {
@@ -37,40 +40,27 @@ class RecolorBySelector extends Component {
       });
       return { ...recolorBy, legendItemsData, label: capitalize(recolorBy.label) };
     });
-
-    return [
-      {
-        label: 'Selection',
-        name: 'none',
-        description: tooltips.sankey.nav.colorBy.none || '',
-        years: selectedYears
-      }
-    ].concat(recolorByData);
   }
 
   getRecolorByItem(recolorBy, index, contextProps) {
-    const { selectedYears } = this.props;
     const { highlightedIndex, getItemProps } = contextProps;
-    const isEnabled =
-      !recolorBy.isDisabled &&
-      (recolorBy.years.length === 0 || difference(selectedYears, recolorBy.years).length === 0);
 
     return (
       <li
         {...getItemProps({
           item: recolorBy,
           className: cx('recolor-by-item', {
-            '-disabled': !isEnabled,
+            '-disabled': recolorBy.isDisabled,
             '-highlighted': highlightedIndex === index
           }),
-          disabled: !isEnabled
+          disabled: recolorBy.isDisabled
         })}
         key={recolorBy.label}
       >
-        <div className="recolor-by-item-title">
+        <Text size="md" weight="regular" className="recolor-by-item-title">
           {recolorBy.label}
           {recolorBy.description && <Tooltip constraint="window" text={recolorBy.description} />}
-        </div>
+        </Text>
         <div className="recolor-by-item-legend-container">
           {recolorBy.minValue && (
             <span className="recolor-by-item-legend-unit -left">{recolorBy.minValue}</span>
@@ -107,7 +97,7 @@ class RecolorBySelector extends Component {
   }
 
   renderLegendSummary() {
-    const { selectedRecolorBy } = this.props;
+    const { selectedRecolorBy, recolorGroups } = this.props;
     let legendItems;
     if (selectedRecolorBy.nodes) {
       legendItems =
@@ -119,7 +109,7 @@ class RecolorBySelector extends Component {
       );
 
       if (currentLegendItemClasses.length === 0) {
-        return <RecolorByNodeLegendSummary />;
+        return <RecolorByNodeLegendSummary recolorGroups={recolorGroups} />;
       }
 
       return (
@@ -130,20 +120,30 @@ class RecolorBySelector extends Component {
         </div>
       );
     }
-    return <RecolorByNodeLegendSummary />;
+    return <RecolorByNodeLegendSummary recolorGroups={recolorGroups} />;
   }
 
   render() {
-    const { tooltips, onSelected, selectedRecolorBy, recolorBys } = this.props;
+    const {
+      tooltip,
+      onChange,
+      selectedRecolorBy,
+      recolorBys,
+      variant,
+      size,
+      color,
+      weight
+    } = this.props;
     const hasZeroOrSingleElement = recolorBys.length < 1;
     return (
       <Dropdown
-        size="rg"
-        showSelected
-        variant="nav"
-        weight="regular"
+        size={size}
+        color={color}
+        variant={variant}
+        tooltip={tooltip}
+        weight={weight}
         label="Recolour By"
-        onChange={onSelected}
+        onChange={onChange}
         placement="bottom-start"
         value={selectedRecolorBy}
         selectedValueOverride={
@@ -153,7 +153,6 @@ class RecolorBySelector extends Component {
           </>
         }
         isDisabled={hasZeroOrSingleElement}
-        tooltip={tooltips.sankey.nav.colorBy.main}
       >
         <div className="c-recolor-by-selector">
           <DropdownContext.Consumer>
@@ -166,11 +165,15 @@ class RecolorBySelector extends Component {
 }
 
 RecolorBySelector.propTypes = {
-  tooltips: PropTypes.object,
-  onSelected: PropTypes.func,
-  selectedRecolorBy: PropTypes.object,
-  recolorBys: PropTypes.array,
-  selectedYears: PropTypes.array
+  size: PropTypes.string,
+  color: PropTypes.string,
+  weight: PropTypes.string,
+  variant: PropTypes.string,
+  tooltip: PropTypes.string,
+  recolorGroups: PropTypes.array,
+  onChange: PropTypes.func.isRequired,
+  selectedRecolorBy: PropTypes.object.isRequired,
+  recolorBys: PropTypes.array.isRequired
 };
 
 export default RecolorBySelector;

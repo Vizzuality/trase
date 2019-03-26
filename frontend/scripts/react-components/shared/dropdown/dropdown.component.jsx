@@ -84,12 +84,11 @@ function Dropdown(props) {
   }
 
   function getOptions(selectedItem, highlightedIndex, getItemProps) {
-    const { showSelected, options, value } = props;
-
+    const { showSelected, options } = props;
     const optionsToShow = showSelected
       ? options
       : options.filter(
-          o => o.value !== (selectedItem && selectedItem.value) && o.value !== value.value
+          o => o.value !== (selectedItem && selectedItem.value) && o.value !== selectedItem.value
         );
 
     return optionsToShow.map((item, i) => renderItem(item, i, highlightedIndex, getItemProps));
@@ -111,7 +110,8 @@ function Dropdown(props) {
 
     const labelProps =
       {
-        profiles: { size: 'rg' }
+        profiles: { size: 'rg' },
+        nav: { color: 'grey-faded' }
       }[variant] || {};
 
     return (
@@ -126,7 +126,7 @@ function Dropdown(props) {
           as="span"
           size="sm"
           variant="mono"
-          color="grey-faded"
+          color={color}
           transform="uppercase"
           {...labelProps}
           className="dropdown-label"
@@ -252,16 +252,18 @@ Dropdown.DEFAULT_MAX_LIST_HEIGHT = 242;
 Dropdown.propTypes = {
   options: PropTypes.array,
   value: PropTypes.shape({
-    label: PropTypes.string.isRequired,
-    value: PropTypes.any.isRequired,
+    value: PropTypes.any,
     icon: PropTypes.string,
     tooltip: PropTypes.string,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    label: PropTypes.string.isRequired
   }),
   initialValue: PropTypes.shape({
-    label: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-    icon: PropTypes.string
+    value: PropTypes.string,
+    icon: PropTypes.string,
+    tooltip: PropTypes.string,
+    disabled: PropTypes.bool,
+    label: PropTypes.string.isRequired
   }),
   onChange: PropTypes.func,
   size: PropTypes.string, // eslint-disable-line
