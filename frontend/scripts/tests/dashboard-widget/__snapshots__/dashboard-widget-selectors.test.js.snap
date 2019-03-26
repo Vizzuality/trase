@@ -47,19 +47,16 @@ Object {
   },
   "colors": Array [
     Object {
-      "color": "#fff0c2",
+      "color": "#ee5463",
       "label": "Water scarcity",
     },
   ],
   "tooltip": Object {
-    "content": null,
     "cursor": Object {
-      "opacity": 0.5,
-      "stroke": "#9a1e2a",
-      "strokeWidth": 2,
+      "opacity": 0,
     },
   },
-  "type": "line",
+  "type": "bar",
   "xAxis": Object {
     "axisLine": false,
     "interval": "preserveStartEnd",
@@ -93,11 +90,17 @@ Object {
     "text": "Water scarcity",
   },
   "yKeys": Object {
-    "lines": Object {
+    "bars": Object {
       "y1": Object {
-        "fill": "#fff0c2",
-        "stroke": "#fff0c2",
+        "fill": "#ee5463",
+        "interval": "preserveStartEnd",
+        "stroke": "#ee5463",
       },
+    },
+  },
+  "yKeysAttributes": Object {
+    "bars": Object {
+      "interval": "preserveStartEnd",
     },
   },
 }

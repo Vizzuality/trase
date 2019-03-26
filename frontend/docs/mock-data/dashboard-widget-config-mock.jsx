@@ -69,33 +69,24 @@ const colors = [
   { label: 'Production of soy', color: '#ee5463' }
 ];
 
-const lineConfig = {
-  ...CHART_CONFIG.line,
+const barConfig = {
+  ...CHART_CONFIG.bar,
   tooltip,
   colors,
+  type: 'bar',
   yKeys: {
-    lines: {
-      y1: { fill: '#fff0c2', stroke: '#fff0c2' },
-      y2: { fill: '#ee5463', stroke: '#ee5463' }
+    bars: {
+      y1: { fill: '#fff0c2', stroke: '#fff0c2', interval: 'preserveStartEnd' },
+      y2: { fill: '#ee5463', stroke: '#ee5463', interval: 'preserveStartEnd' }
     }
   },
   yAxisLabel: { text: 'Label', suffix: 't' }
 };
 
 export default {
-  line: lineConfig,
-  bar: {
-    ...lineConfig,
-    type: 'bar',
-    yKeys: {
-      bars: {
-        y1: { fill: '#fff0c2', stroke: '#fff0c2', interval: 'preserveStartEnd' },
-        y2: { fill: '#ee5463', stroke: '#ee5463', interval: 'preserveStartEnd' }
-      }
-    }
-  },
+  bar: barConfig,
   stackedBar: {
-    ...lineConfig,
+    ...barConfig,
     type: 'bar',
     yKeys: {
       bars: {

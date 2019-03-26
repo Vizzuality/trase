@@ -1,15 +1,23 @@
 import { createSelector } from 'reselect';
 
 import sortBy from 'lodash/sortBy';
-import camelCase from 'lodash/camelCase';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
+
+const parsedChartTypes = {
+  dynamic_sentence: 'dynamicSentence',
+  bar_chart: 'bar',
+  stacked_bar_chart: 'stackedBar',
+  horizontal_bar_chart: 'HorizontalBar',
+  stacked_horizontal_bar_chart: 'stackedHorizontalBar',
+  donut_chart: 'pie'
+};
 
 const getMeta = (state, { meta }) => meta || null;
 const getData = (state, { data }) => data || null;
-const getChartType = (state, { chartType }) => (chartType ? camelCase(chartType) : null);
+const getChartType = (state, { chartType }) => (chartType ? parsedChartTypes[chartType] : null);
 export const getDefaultConfig = createSelector(
   [getChartType],
-  chartType => CHART_CONFIG[chartType] || CHART_CONFIG.line
+  chartType => CHART_CONFIG[chartType] || CHART_CONFIG.barChart
 );
 
 const getGroupedY = meta => {
