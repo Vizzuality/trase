@@ -184,7 +184,6 @@ export default {
   },
   dynamicSentence: {
     type: 'sentence',
-    colors,
     yAxisLabel: { text: 'Trade volume', suffix: 't' }
   }
 };
