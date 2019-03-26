@@ -66,7 +66,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
         api_v3_country_node_type
       ].map do |node_type|
         {
-          source: :single_year_no_ncont_node_type,
+          source: :single_year_no_ncont_node_type_view,
           type: Api::V3::Dashboards::ParametrisedCharts::HORIZONTAL_BAR_CHART,
           x: :node_type,
           node_type_id: node_type.id

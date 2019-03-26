@@ -73,7 +73,7 @@ module Api
 
         def single_year_no_ncont_node_type_view(node_type)
           {
-            source: :single_year_no_ncont_node_type,
+            source: :single_year_no_ncont_node_type_view,
             type: HORIZONTAL_BAR_CHART,
             x: :node_type,
             node_type_id: node_type.id
