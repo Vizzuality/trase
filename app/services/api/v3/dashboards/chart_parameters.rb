@@ -15,7 +15,6 @@ module Api
                     :node_type,
                     :nodes_ids_by_position,
                     :top_n
-        TOP_N = 20
 
         # @param params [Hash]
         # @option params [Integer] country_id
@@ -27,6 +26,8 @@ module Api
         # @option params [Array<Integer>] destinations_ids
         # @option params [Integer] start_year
         # @option params [Integer] end_year
+        # @option params [Integer] node_type_id
+        # @option params [Integer] top_n
         def initialize(params)
           @country_id = params[:country_id]
           @commodity_id = params[:commodity_id]
@@ -59,7 +60,7 @@ module Api
 
           @start_year = params[:start_year]
           @end_year = params[:end_year]
-          @top_n = params[:top_n] || TOP_N
+          @top_n = params[:top_n]
         end
 
         def node_type_idx

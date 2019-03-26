@@ -18,7 +18,8 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNoNcontNodeTypeView do
       commodity_id: api_v3_soy.id,
       cont_attribute_id: cont_attribute.id,
       node_type_id: node_type.id,
-      start_year: 2015
+      start_year: 2015,
+      top_n: 10
     }
   }
 
