@@ -18,7 +18,9 @@ import {
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
+  DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
+  DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY
 } from './dashboard-element.actions';
 
 const initialState = {
@@ -352,6 +354,20 @@ const dashboardElementReducer = {
       ...state,
       selectedYears: years
     };
+  },
+  [DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY](state, action) {
+    const { indicator } = action.payload;
+    return {
+      ...state,
+      selectedResizeBy: indicator.value
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY](state, action) {
+    const { indicator } = action.payload;
+    return {
+      ...state,
+      selectedRecolorBy: indicator.value
+    };
   }
 };
 
@@ -380,8 +396,8 @@ const dashboardElementReducerTypes = PropTypes => {
     companiesPanel: PropTypes.shape(PanelTypes).isRequired,
     commoditiesPanel: PropTypes.shape(PanelTypes).isRequired,
     selectedYears: PropTypes.arrayOf(PropTypes.number),
-    selectedResizeBy: PropTypes.number,
-    selectedRecolorBy: PropTypes.number
+    selectedResizeBy: PropTypes.string,
+    selectedRecolorBy: PropTypes.string
   };
 };
 

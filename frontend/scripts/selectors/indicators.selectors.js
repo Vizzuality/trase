@@ -5,20 +5,20 @@ import sortBy from 'lodash/sortBy';
 export const makeGetResizeByItems = (getResizeBys, getSelectedYears) =>
   createSelector(
     [getResizeBys, getSelectedYears],
-    (resizeBys, selectedYears) =>
-      sortBy(resizeBys, ['groupNumber', 'position']).map((resizeBy, index, list) => {
+    (resizeBy, selectedYears) =>
+      sortBy(resizeBy, ['groupNumber', 'position']).map((filter, index, list) => {
         const isEnabled =
-          !resizeBy.isDisabled &&
-          (resizeBy.years.length === 0 || difference(selectedYears, resizeBy.years).length === 0);
+          !filter.isDisabled &&
+          (filter.years.length === 0 || difference(selectedYears, filter.years).length === 0);
 
-        const hasSeparator =
-          list[index - 1] && list[index - 1].groupNumber !== resizeBy.groupNumber;
+        const hasSeparator = list[index - 1] && list[index - 1].groupNumber !== filter.groupNumber;
         return {
+          ...filter,
           hasSeparator,
-          value: resizeBy.name,
-          label: resizeBy.label,
+          value: filter.name,
+          label: filter.label,
           isDisabled: !isEnabled,
-          tooltip: resizeBy.description
+          tooltip: filter.description
         };
       })
   );
@@ -33,6 +33,6 @@ export const makeGetRecolorByItems = (getRecolorBy, getSelectedYears) =>
           !filter.isDisabled &&
           (filter.years.length === 0 || difference(selectedYears, filter.years).length === 0)
         );
-        return { ...filter, isDisabled };
+        return { ...filter, isDisabled, value: filter.name };
       })
   );

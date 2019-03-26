@@ -18,6 +18,10 @@ export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH =
 export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH =
   'DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH';
 export const DASHBOARD_ELEMENT__SET_SELECTED_YEARS = 'DASHBOARD_ELEMENT__SET_SELECTED_YEARS';
+export const DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY =
+  'DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY';
+export const DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY =
+  'DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY';
 
 export const getDashboardPanelParams = (state, optionsType, options = {}) => {
   const {
@@ -124,4 +128,14 @@ export const getDashboardPanelSearchResults = query => ({
 export const setDashboardSelectedYears = years => ({
   type: DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
   payload: { years }
+});
+
+export const setDashboardSelectedResizeBy = indicator => ({
+  type: DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
+  payload: { indicator }
+});
+
+export const setDashboardSelectedRecolorBy = indicator => ({
+  type: DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
+  payload: { indicator }
 });

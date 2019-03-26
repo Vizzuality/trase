@@ -10,8 +10,10 @@ import {
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getPanelId } from 'utils/dashboardPanel';
 import {
-  setDashboardActivePanel as setDashboardActivePanelFn,
-  setDashboardSelectedYears
+  setDashboardSelectedYears,
+  setDashboardSelectedResizeBy,
+  setDashboardSelectedRecolorBy,
+  setDashboardActivePanel as setDashboardActivePanelFn
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import { DASHBOARD_STEPS } from 'constants';
 
@@ -26,7 +28,9 @@ const mapDispatchToProps = dispatch =>
     {
       goToRoot: () => ({ type: 'dashboardRoot' }),
       setSelectedYears: setDashboardSelectedYears,
-      setDashboardActivePanel: setDashboardActivePanelFn
+      setSelectedResizeBy: setDashboardSelectedResizeBy,
+      setDashboardActivePanel: setDashboardActivePanelFn,
+      setSelectedRecolorBy: setDashboardSelectedRecolorBy
     },
     dispatch
   );
@@ -38,6 +42,8 @@ class DashboardElementContainer extends React.Component {
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
     setSelectedYears: PropTypes.func.isRequired,
+    setSelectedResizeBy: PropTypes.func.isRequired,
+    setSelectedRecolorBy: PropTypes.func.isRequired,
     setDashboardActivePanel: PropTypes.func.isRequired
   };
 
@@ -83,7 +89,15 @@ class DashboardElementContainer extends React.Component {
 
   render() {
     const { step, modalOpen, editMode } = this.state;
-    const { goToRoot, dynamicSentenceParts, dirtyBlocks, filters, setSelectedYears } = this.props;
+    const {
+      goToRoot,
+      dynamicSentenceParts,
+      dirtyBlocks,
+      filters,
+      setSelectedYears,
+      setSelectedResizeBy,
+      setSelectedRecolorBy
+    } = this.props;
     return (
       <DashboardElement
         step={step}
@@ -97,6 +111,8 @@ class DashboardElementContainer extends React.Component {
         reopenPanel={this.reopenPanel}
         dynamicSentenceParts={dynamicSentenceParts}
         setSelectedYears={setSelectedYears}
+        setSelectedResizeBy={setSelectedResizeBy}
+        setSelectedRecolorBy={setSelectedRecolorBy}
       />
     );
   }

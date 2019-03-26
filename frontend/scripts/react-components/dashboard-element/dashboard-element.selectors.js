@@ -15,6 +15,8 @@ const getActiveDashboardPanel = state => {
 };
 const getAppContexts = state => state.app.contexts;
 const getSelectedYears = state => state.dashboardElement.selectedYears;
+const getSelectedResizeBy = state => state.dashboardElement.selectedResizeBy;
+const getSelectedRecolorBy = state => state.dashboardElement.selectedRecolorBy;
 
 export const getActivePanelTabs = createSelector(
   [getActiveDashboardPanel, getDashboardPanelTabs],
@@ -178,9 +180,33 @@ const getDashboardContextRecolorBy = createSelector(
   }
 );
 
+const getDashboardSelectedResizeBy = createSelector(
+  [getSelectedResizeBy, getDashboardContextResizeBy],
+  (selectedResizeBy, contextResizeByItems) => {
+    if (!selectedResizeBy || !contextResizeByItems) {
+      return { label: 'Select an Indicator', value: null };
+    }
+
+    return contextResizeByItems.find(item => item.name === selectedResizeBy);
+  }
+);
+
+const getDashboardSelectedRecolorBy = createSelector(
+  [getSelectedRecolorBy, getDashboardContextRecolorBy],
+  (selectedRecolorBy, contextRecolorByItems) => {
+    if (!selectedRecolorBy || contextRecolorByItems.length === 0) {
+      return { label: 'Select an Indicator', value: null };
+    }
+
+    return contextRecolorByItems.find(item => item.name === selectedRecolorBy);
+  }
+);
+
 export const getDashboardFiltersProps = createStructuredSelector({
   years: getDashboardContextYears,
   selectedYears: getDashboardSelectedYears,
+  selectedResizeBy: getDashboardSelectedResizeBy,
+  selectedRecolorBy: getDashboardSelectedRecolorBy,
   resizeBy: makeGetResizeByItems(getDashboardContextResizeBy, getDashboardSelectedYears),
   recolorBy: makeGetRecolorByItems(getDashboardContextRecolorBy, getDashboardSelectedYears)
 });

@@ -252,18 +252,18 @@ Dropdown.DEFAULT_MAX_LIST_HEIGHT = 242;
 Dropdown.propTypes = {
   options: PropTypes.array,
   value: PropTypes.shape({
-    label: PropTypes.string.isRequired,
-    value: PropTypes.any.isRequired,
+    value: PropTypes.any,
     icon: PropTypes.string,
     tooltip: PropTypes.string,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    label: PropTypes.string.isRequired
   }),
   initialValue: PropTypes.shape({
-    label: PropTypes.string.isRequired,
     value: PropTypes.string,
     icon: PropTypes.string,
     tooltip: PropTypes.string,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    label: PropTypes.string.isRequired
   }),
   onChange: PropTypes.func,
   size: PropTypes.string, // eslint-disable-line

@@ -24,10 +24,15 @@ class DashboardElement extends React.PureComponent {
     filters: PropTypes.shape({
       years: PropTypes.array,
       resizeBy: PropTypes.array,
-      recolorBy: PropTypes.array
+      selectedYears: PropTypes.array,
+      selectedResizeBy: PropTypes.object,
+      selectedRecolorBy: PropTypes.object,
+      recolorBy: PropTypes.array.isRequired
     }).isRequired,
     dynamicSentenceParts: PropTypes.array,
-    setSelectedYears: PropTypes.func.isRequired
+    setSelectedYears: PropTypes.func.isRequired,
+    setSelectedResizeBy: PropTypes.func.isRequired,
+    setSelectedRecolorBy: PropTypes.func.isRequired
   };
 
   renderStep() {
@@ -79,7 +84,15 @@ class DashboardElement extends React.PureComponent {
   }
 
   render() {
-    const { modalOpen, goToRoot, filters, reopenPanel, setSelectedYears } = this.props;
+    const {
+      modalOpen,
+      goToRoot,
+      filters,
+      reopenPanel,
+      setSelectedYears,
+      setSelectedResizeBy,
+      setSelectedRecolorBy
+    } = this.props;
     return (
       <div className="l-dashboard-element">
         <div className="c-dashboard-element">
@@ -107,8 +120,9 @@ class DashboardElement extends React.PureComponent {
                         <Dropdown
                           color="white"
                           label="Resize By"
+                          onChange={setSelectedResizeBy}
                           options={filters.resizeBy}
-                          initialValue={{ label: 'Select an Indicator', value: null }}
+                          value={filters.selectedResizeBy}
                         />
                       </div>
                       {filters.recolorBy.length > 0 && (
@@ -116,9 +130,9 @@ class DashboardElement extends React.PureComponent {
                           <RecolorBy
                             color="white"
                             recolorGroups={[]}
-                            selectedRecolorBy={{ label: 'Select an Indicator', value: null }}
                             recolorBys={filters.recolorBy}
-                            selectedYears={filters.years}
+                            onChange={setSelectedRecolorBy}
+                            selectedRecolorBy={filters.selectedRecolorBy}
                           />
                         </div>
                       )}
