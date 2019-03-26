@@ -49,7 +49,7 @@ export const getColors = createSelector(
   [getMeta, getData, getDefaultConfig, getChartType],
   (meta, data, defaultConfig, chartType) => {
     const { colors } = defaultConfig;
-    if (!meta) return colors;
+    if (!meta || chartType === 'dynamicSentence') return colors;
     if (chartType !== 'pie') {
       const groupedY = getGroupedY(meta);
       return sortGroupedY(groupedY).map((key, index) => ({

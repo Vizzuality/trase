@@ -126,5 +126,8 @@ export default {
     yKeys: {
       lines: null
     }
+  },
+  dynamicSentence: {
+    type: 'sentence'
   }
 };
