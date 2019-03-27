@@ -190,6 +190,7 @@ export default {
     yAxisLabel: { text: 'Trade volume', suffix: 't' }
   },
   ranking: {
-    type: 'ranking'
+    type: 'ranking',
+    yAxisLabel: { text: 'Trade volume', suffix: 't' }
   }
 };

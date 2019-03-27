@@ -6,6 +6,7 @@ import Paginate from 'react-components/ranking-widget/paginate';
 import Text from 'react-components/shared/text';
 import Heading from 'react-components/shared/heading';
 import capitalize from 'lodash/capitalize';
+import { format } from 'd3-format';
 
 class RankingWidget extends PureComponent {
   state = { page: 0 };
@@ -15,10 +16,10 @@ class RankingWidget extends PureComponent {
   };
 
   render() {
-    const { data, pageSize } = this.props;
+    const { data, config, pageSize } = this.props;
     const { page } = this.state;
     const pageData = pageSize ? data.slice(page * pageSize, (page + 1) * pageSize) : data;
-
+    const formatValue = format((config.yAxisLabel && config.yAxisLabel.format) || ',.2f');
     return (
       <div className="c-ranking-widget">
         <ul className="list">
@@ -43,7 +44,7 @@ class RankingWidget extends PureComponent {
                     </Heading>
                   </div>
                   <Text className="item-value" color="white">
-                    {item.y0}
+                    {formatValue(item.y0)} {config.yAxisLabel && config.yAxisLabel.suffix}
                   </Text>
                 </div>
               </li>
@@ -64,6 +65,7 @@ class RankingWidget extends PureComponent {
 
 RankingWidget.propTypes = {
   data: PropTypes.array.isRequired,
+  config: PropTypes.object.isRequired,
   pageSize: PropTypes.number
 };
 
