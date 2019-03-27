@@ -1,4 +1,5 @@
 import deburr from 'lodash/deburr';
+import pickBy from 'lodash/pickBy';
 import { put, call, cancelled, delay, select } from 'redux-saga/effects';
 import isEmpty from 'lodash/isEmpty';
 import {
@@ -171,15 +172,18 @@ export function* fetchDashboardCharts() {
     commodities_ids: commodityId,
     ...options
   } = getDashboardPanelParams(dashboardElement, null, { isOverview: true });
-  const params = {
-    ...options,
-    country_id: countryId,
-    commodity_id: commodityId,
-    cont_attribute_id: dashboardElement.selectedResizeBy,
-    ncont_attribute_id: dashboardElement.selectedRecolorBy,
-    start_year: dashboardElement.selectedYears ? dashboardElement.selectedYears[0] : 2017,
-    end_year: dashboardElement.selectedYears ? dashboardElement.selectedYears[1] : 2017
-  };
+  const params = pickBy(
+    {
+      ...options,
+      country_id: countryId,
+      commodity_id: commodityId,
+      cont_attribute_id: dashboardElement.selectedResizeBy,
+      ncont_attribute_id: dashboardElement.selectedRecolorBy,
+      start_year: dashboardElement.selectedYears ? dashboardElement.selectedYears[0] : 2017,
+      end_year: dashboardElement.selectedYears ? dashboardElement.selectedYears[1] : 2017
+    },
+    x => !!x
+  );
   const url = getURLFromParams(GET_DASHBOARD_PARAMETRISED_CHARTS_URL, params);
 
   const { source, fetchPromise } = fetchWithCancel(url);

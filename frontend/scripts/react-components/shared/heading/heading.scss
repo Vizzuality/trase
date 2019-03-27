@@ -57,4 +57,12 @@
   &.weight-bold {
     font-weight: $font-weight-bold;
   }
+
+  &.transform-uppercase {
+    text-transform: uppercase;
+  }
+
+  &.transform-capitalize {
+    text-transform: capitalize;
+  }
 }
