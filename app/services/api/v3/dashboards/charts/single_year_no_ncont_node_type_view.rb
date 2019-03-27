@@ -33,6 +33,9 @@ module Api
               x: node_type_legend_meta(@node_type),
               y0: legend_meta(@cont_attribute)
             }
+
+            swap_x_and_y
+
             {data: @data, meta: @meta}
           end
 

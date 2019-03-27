@@ -139,6 +139,29 @@ module Api
               ncont_break_by_values.map.with_index { |v, idx| [v, idx] }
             ]
           end
+
+          def swap_x_and_y
+            @data = @data.map do |object|
+              swap_x_and_y_keys_in_hash(object)
+            end
+            @meta = swap_x_and_y_keys_in_hash(@meta)
+          end
+
+          def swap_x_and_y_keys_in_hash(input)
+            output = {}
+            input.keys.each do |old_key|
+              new_key =
+                if old_key =~ /^x(.*)/
+                  :"y#{$1}"
+                elsif old_key =~ /^y(.*)/
+                  :"x#{$1}"
+                else
+                  old_key
+                end
+              output[new_key] = input[old_key]
+            end
+            output
+          end
         end
       end
     end
