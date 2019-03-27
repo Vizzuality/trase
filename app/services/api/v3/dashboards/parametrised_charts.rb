@@ -163,9 +163,9 @@ module Api
             ncont_attribute_id: @ncont_attribute&.id,
             country_id: @country_id,
             commodity_id: @commodity_id,
-            sources_ids: @sources_ids,
-            companies_ids: @companies_ids,
-            destinations_ids: @destinations_ids,
+            sources_ids: @sources_ids.join(','),
+            companies_ids: @companies_ids.join(','),
+            destinations_ids: @destinations_ids.join(','),
             start_year: @start_year,
             end_year: @end_year
           }
