@@ -96,9 +96,13 @@ export default {
       bars: {
         interval: 'preserveStartEnd'
       }
+    },
+    yAxis: {
+      ...defaults.yAxis,
+      interval: 0
     }
   },
-  horizontalSteckedBarChart: {
+  horizontalStackedBarChart: {
     ...defaults,
     tooltip: {
       cursor: {
@@ -114,8 +118,12 @@ export default {
     },
     xKeysAttributes: {
       bars: {
-        stackId: 'bar'
+        stackId: 0
       }
+    },
+    yAxis: {
+      ...defaults.yAxis,
+      interval: 0
     }
   },
   pie: {
