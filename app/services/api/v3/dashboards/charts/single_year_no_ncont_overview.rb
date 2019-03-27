@@ -1,3 +1,4 @@
+# Data for dynamic sentence widget
 module Api
   module V3
     module Dashboards
