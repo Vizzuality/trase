@@ -98,28 +98,32 @@ export const getDynamicSentence = createSelector(
         panel: 'sources',
         id: 'sources',
         prefix: sourcesValue ? `produced in` : 'produced in countries covered by Trase',
-        value: sourcesValue
+        value: sourcesValue,
+        transform: 'capitalize'
       },
       {
         panel: 'companies',
         id: 'exporting-companies',
         prefix: getActivePanelItem('companies', 'EXPORTER') ? 'exported by' : '',
         value: getActivePanelItem('companies', 'EXPORTER'),
-        optional: true
+        optional: true,
+        transform: 'capitalize'
       },
       {
         panel: 'companies',
         id: 'importing-companies',
         prefix: getActivePanelItem('companies', 'IMPORTER') ? 'imported by' : '',
         value: getActivePanelItem('companies', 'IMPORTER'),
-        optional: true
+        optional: true,
+        transform: 'capitalize'
       },
       {
         panel: 'destinations',
         id: 'destinations',
         prefix: getActivePanelItem('destinations') ? `going to` : '',
         value: getActivePanelItem('destinations'),
-        optional: true
+        optional: true,
+        transform: 'capitalize'
       }
     ];
   }

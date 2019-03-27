@@ -7,11 +7,12 @@
     align-items: flex-end;
   }
 
-  .widget-centered {
+  .dynamic-sentence-widget {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
+    padding: 0 30px;
   }
 
   .widget-actions {

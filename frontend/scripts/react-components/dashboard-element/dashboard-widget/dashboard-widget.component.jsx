@@ -4,14 +4,14 @@ import Chart from 'react-components/chart';
 import Spinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import DashboardWidgetLabel from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-label.component';
 import DashboardWidgetLegend from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-legend/dashboard-widget-legend.component';
+import DynamicSentenceWidget from 'react-components/dashboard-element/dashboard-widget/dynamic-sentence-widget';
 import ErrorCatch from 'react-components/shared/error-catch.component';
 import Text from 'react-components/shared/text';
 import Heading from 'react-components/shared/heading';
-import DynamicSentenceWidget from 'react-components/dynamic-sentence-widget';
 import 'react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
 
 function DashboardWidget(props) {
-  const { title, loading, error, data, chartConfig, dynamicSentenceParts } = props;
+  const { title, loading, error, data, chartConfig } = props;
 
   const renderError = errorMessage => (
     <Text color="white" weight="bold" variant="mono" size="lg" className="widget-centered">
@@ -22,12 +22,8 @@ function DashboardWidget(props) {
   const renderChart = () => {
     if (chartConfig.type === 'sentence') {
       return (
-        <div className="widget-centered">
-          <DynamicSentenceWidget
-            data={data}
-            config={chartConfig}
-            dynamicSentenceParts={dynamicSentenceParts}
-          />
+        <div className="dynamic-sentence-widget">
+          <DynamicSentenceWidget data={data} config={chartConfig} />
         </div>
       );
     }
@@ -77,8 +73,7 @@ DashboardWidget.propTypes = {
   data: PropTypes.array,
   title: PropTypes.string,
   loading: PropTypes.bool,
-  chartConfig: PropTypes.object,
-  dynamicSentenceParts: PropTypes.array
+  chartConfig: PropTypes.object
 };
 
 export default DashboardWidget;

@@ -25,7 +25,7 @@ class DashboardWidgetContainer extends Component {
   }
 
   render() {
-    const { data, loading, error, meta, title, config, dynamicSentenceParts } = this.props;
+    const { data, loading, error, meta, title, config } = this.props;
     return config ? (
       <DashboardWidgetComponent
         data={data}
@@ -33,7 +33,6 @@ class DashboardWidgetContainer extends Component {
         error={error}
         loading={loading}
         chartConfig={this.addTooltipContentToConfig(config, meta)}
-        dynamicSentenceParts={dynamicSentenceParts}
       />
     ) : null;
   }
@@ -45,8 +44,7 @@ DashboardWidgetContainer.propTypes = {
   meta: PropTypes.object,
   loading: PropTypes.bool,
   title: PropTypes.string,
-  config: PropTypes.object,
-  dynamicSentenceParts: PropTypes.array
+  config: PropTypes.object
 };
 
 export default connect(makeMapStateToProps)(DashboardWidgetContainer);
