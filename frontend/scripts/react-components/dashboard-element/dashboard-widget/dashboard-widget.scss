@@ -15,6 +15,13 @@
     padding: 0 30px;
   }
 
+  .widget-centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
   .widget-actions {
     flex-shrink: 0;
     display: none;

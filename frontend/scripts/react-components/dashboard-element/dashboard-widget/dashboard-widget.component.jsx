@@ -8,12 +8,11 @@ import DynamicSentenceWidget from 'react-components/dashboard-element/dashboard-
 import ErrorCatch from 'react-components/shared/error-catch.component';
 import Text from 'react-components/shared/text';
 import Heading from 'react-components/shared/heading';
-import DynamicSentenceWidget from 'react-components/dynamic-sentence-widget';
 import RankingWidget from 'react-components/ranking-widget';
 import 'react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
 
 function DashboardWidget(props) {
-  const { title, loading, error, data, chartConfig } = props;
+  const { title, loading, error, data, chartConfig, dynamicSentenceParts } = props;
 
   const renderError = errorMessage => (
     <Text color="white" weight="bold" variant="mono" size="lg" className="widget-centered">
@@ -25,7 +24,7 @@ function DashboardWidget(props) {
     switch (chartConfig.type) {
       case 'sentence':
         return (
-          <div className="widget-centered">
+          <div className="dynamic-sentence-widget">
             <DynamicSentenceWidget
               data={data}
               config={chartConfig}
@@ -87,7 +86,8 @@ DashboardWidget.propTypes = {
   data: PropTypes.array,
   title: PropTypes.string,
   loading: PropTypes.bool,
-  chartConfig: PropTypes.object
+  chartConfig: PropTypes.object,
+  dynamicSentenceParts: PropTypes.array
 };
 
 export default DashboardWidget;
