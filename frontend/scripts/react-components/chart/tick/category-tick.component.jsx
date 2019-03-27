@@ -6,7 +6,6 @@ import 'react-components/chart/tick/tick-styles.scss';
 function CategoryTick(props) {
   const { x, y, payload } = props;
   const tickValue = payload && payload.value;
-  console.log('catgory', tickValue);
   return (
     <g transform={`translate(${x},${y})`}>
       <text x="0" y="3" className="tick-text" fill="#fff">
