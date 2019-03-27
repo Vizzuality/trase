@@ -1,4 +1,4 @@
-@import '~styles/settings.scss';
+@import 'styles/settings';
 
 .c-ranking-widget {
   font-size: 12px;
@@ -29,17 +29,23 @@
     align-items: center;
   }
 
+  .item-value {
+    margin-left: 10px;
+  }
+
   .item-bubble {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 24px;
-    min-width: 24px;
-    height: 24px;
-    min-height: 24px;
+    width: 34px;
+    height: 34px;
+    background-color: $strong-pink;
     color: $white;
-    font-weight: 500;
     border-radius: 50%;
     margin-right: 10px;
+
+    .item-number {
+      margin-top: -3px;
+    }
   }
 }

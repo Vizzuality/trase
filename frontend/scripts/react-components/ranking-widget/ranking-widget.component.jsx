@@ -4,33 +4,58 @@ import PropTypes from 'prop-types';
 import 'react-components/ranking-widget/ranking-widget-styles.scss';
 import Paginate from 'react-components/ranking-widget/paginate';
 import Text from 'react-components/shared/text';
+import Heading from 'react-components/shared/heading';
+import capitalize from 'lodash/capitalize';
 
 class RankingWidget extends PureComponent {
+  state = { page: 0 };
+
+  handlePageChange = v => {
+    this.setState(state => ({ page: state.page + v }));
+  };
+
   render() {
-    const { data, settings, handlePageChange } = this.props;
-    const { page, pageSize } = settings;
+    const { data, pageSize } = this.props;
+    const { page } = this.state;
     const pageData = pageSize ? data.slice(page * pageSize, (page + 1) * pageSize) : data;
+
     return (
       <div className="c-ranking-widget">
         <ul className="list">
           {data.length > 0 &&
             pageData.map((item, index) => (
-              <li key={`${item.label}-${item.id}`}>
+              <li key={item.x}>
                 <div className="list-item">
                   <div className="item-label">
-                    <div className="item-bubble" style={{ backgroundColor: item.color }}>
-                      {item.rank || index + 1 + pageSize * page}
+                    <div className="item-bubble">
+                      <Text
+                        as="span"
+                        color="white"
+                        variant="serif"
+                        size="md"
+                        className="item-number"
+                      >
+                        {index + 1 + pageSize * page}
+                      </Text>
                     </div>
-                    <Text>{item.value}</Text>
-                    <div className="item-name">{item.label}</div>
+                    <Heading as="span" size="lg" weight="bold" color="white">
+                      {capitalize(item.x)}
+                    </Heading>
                   </div>
-                  <Text>{item.value}</Text>
+                  <Text className="item-value" color="white">
+                    {item.y0}
+                  </Text>
                 </div>
               </li>
             ))}
         </ul>
-        {handlePageChange && data.length > settings.pageSize && (
-          <Paginate settings={settings} count={data.length} onClickChange={handlePageChange} />
+        {data.length > pageSize && (
+          <Paginate
+            page={page}
+            pageSize={pageSize}
+            count={data.length}
+            onClickChange={this.handlePageChange}
+          />
         )}
       </div>
     );
@@ -39,8 +64,11 @@ class RankingWidget extends PureComponent {
 
 RankingWidget.propTypes = {
   data: PropTypes.array.isRequired,
-  settings: PropTypes.object.isRequired,
-  handlePageChange: PropTypes.func
+  pageSize: PropTypes.number
+};
+
+RankingWidget.defaultProps = {
+  pageSize: 5
 };
 
 export default RankingWidget;
