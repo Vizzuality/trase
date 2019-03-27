@@ -66,7 +66,7 @@ module Api
           def apply_flow_path_filters
             @nodes_ids_by_position.each do |position, nodes_ids|
               @query = @query.where(
-                'ARRAY[flows.path[?]] && ARRAY[?]', position + 1, nodes_ids
+                'flows.path[?] IN (?)', position + 1, nodes_ids
               )
             end
           end
