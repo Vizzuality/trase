@@ -187,11 +187,15 @@ const getDashboardSelectedResizeBy = createSelector(
       return { label: 'Select an Indicator', value: null };
     }
 
-    if (!selectedResizeBy) {
+    const itemIncludedInContext = contextResizeByItems.find(
+      item => item.attributeId === selectedResizeBy
+    );
+
+    if (!selectedResizeBy || !itemIncludedInContext) {
       return contextResizeByItems.find(item => item.isDefault);
     }
 
-    return contextResizeByItems.find(item => item.attributeId === selectedResizeBy);
+    return itemIncludedInContext;
   }
 );
 

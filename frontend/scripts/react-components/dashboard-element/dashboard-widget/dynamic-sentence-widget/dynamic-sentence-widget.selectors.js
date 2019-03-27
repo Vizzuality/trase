@@ -29,7 +29,7 @@ export const makeAddIndicatorsPartToSentence = () =>
         prefix: 'was',
         value: [
           {
-            name: `${data[0].y0} ${yAxisLabel.suffix}`
+            name: `${data[0].y0 || 0} ${yAxisLabel.suffix}`
           }
         ]
       };
