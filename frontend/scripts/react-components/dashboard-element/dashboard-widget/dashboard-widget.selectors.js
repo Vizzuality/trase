@@ -4,12 +4,12 @@ import sortBy from 'lodash/sortBy';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
 
 const parsedChartTypes = {
-  dynamic_sentence: 'dynamicSentence',
   bar_chart: 'bar',
+  donut_chart: 'pie',
   stacked_bar_chart: 'stackedBar',
+  dynamic_sentence: 'dynamicSentence',
   horizontal_bar_chart: 'HorizontalBar',
-  stacked_horizontal_bar_chart: 'stackedHorizontalBar',
-  donut_chart: 'pie'
+  horizontal_stacked_bar_chart: 'stackedHorizontalBar'
 };
 
 const getMeta = (state, { meta }) => meta || null;

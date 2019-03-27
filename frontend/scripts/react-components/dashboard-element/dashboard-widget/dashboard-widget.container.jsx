@@ -28,10 +28,10 @@ class DashboardWidgetContainer extends Component {
     const { data, loading, error, meta, title, config, dynamicSentenceParts } = this.props;
     return config ? (
       <DashboardWidgetComponent
+        data={data}
         title={title}
         error={error}
         loading={loading}
-        data={data}
         chartConfig={this.addTooltipContentToConfig(config, meta)}
         dynamicSentenceParts={dynamicSentenceParts}
       />
@@ -40,11 +40,11 @@ class DashboardWidgetContainer extends Component {
 }
 
 DashboardWidgetContainer.propTypes = {
-  loading: PropTypes.bool,
   error: PropTypes.bool,
-  title: PropTypes.string,
   data: PropTypes.array,
   meta: PropTypes.object,
+  loading: PropTypes.bool,
+  title: PropTypes.string,
   config: PropTypes.object,
   dynamicSentenceParts: PropTypes.array
 };
