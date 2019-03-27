@@ -14,18 +14,19 @@ class Paginate extends PureComponent {
       <div className={`c-paginate ${className || ''}`}>
         {showPrev && (
           <Button
-            className="button-up square theme-button-small theme-button-grey"
             onClick={() => onClickChange(-1)}
-            icon="icon-download"
+            icon="icon-arrow-up"
             color="charcoal"
+            variant="circle"
+            className="previous-button"
           />
         )}
         {showNext && (
           <Button
-            className="button-down square theme-button-small theme-button-grey"
             onClick={() => onClickChange(1)}
-            icon="icon-download"
+            icon="icon-arrow"
             color="charcoal"
+            variant="circle"
           />
         )}
       </div>

@@ -20,11 +20,14 @@ function Button(props) {
     type: as === 'button' ? as : undefined
   };
 
-  const iconComponent = (
-    <svg className={`icon ${icon}`} style={{ pointerEvents: 'none' }}>
-      <use xlinkHref={`#${icon}`} />
-    </svg>
-  );
+  const iconComponent =
+    icon === 'icon-arrow' || icon === 'icon-arrow-up' ? (
+      <span className={cx('icon', icon)} />
+    ) : (
+      <svg className={`icon ${icon}`} style={{ pointerEvents: 'none' }}>
+        <use xlinkHref={`#${icon}`} />
+      </svg>
+    );
 
   const shouldUseChildrenContainer =
     typeof children === 'string' ||
