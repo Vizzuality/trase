@@ -98,6 +98,26 @@ export default {
       }
     }
   },
+  horizontalSteckedBarChart: {
+    ...defaults,
+    tooltip: {
+      cursor: {
+        opacity: 0
+      }
+    },
+    type: 'bar',
+    layout: 'vertical',
+    colors: ['#fff0c2', '#9a1e2a', '#ee5463', '#c62c3b', '#fd7d8a'],
+    yKey: 'y',
+    xKeys: {
+      bars: null
+    },
+    xKeysAttributes: {
+      bars: {
+        stackId: 'bar'
+      }
+    }
+  },
   pie: {
     ...defaults,
     type: 'pie',

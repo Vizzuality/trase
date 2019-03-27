@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-
+import omit from 'lodash/omit';
 import sortBy from 'lodash/sortBy';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
 
@@ -9,7 +9,7 @@ const parsedChartTypes = {
   stacked_bar_chart: 'stackedBar',
   dynamic_sentence: 'dynamicSentence',
   horizontal_bar_chart: 'horizontalBar',
-  horizontal_stacked_bar_chart: 'stackedHorizontalBar'
+  horizontal_stacked_bar_chart: 'horizontalSteckedBarChart'
 };
 
 const getMeta = (state, { meta }) => meta || null;
@@ -21,8 +21,8 @@ export const getDefaultConfig = createSelector(
 );
 
 const getGroupedAxis = (axis, meta) => {
-  const toBeRemoved = axis === 'y' ? 'x' : axis;
-  const { xAxis, yAxis, [toBeRemoved]: oppositeAxis, ...groupedAxis } = meta;
+  const toBeRemoved = axis === 'y' ? 'x' : 'y';
+  const groupedAxis = omit(meta, ['xAxis', 'yAxis', toBeRemoved]);
   return groupedAxis;
 };
 
