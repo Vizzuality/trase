@@ -11,6 +11,7 @@ function StepsTracker(props) {
     <div className="c-steps-tracker">
       {steps.map((step, i) => (
         <div
+          key={step.label}
           className={cx('steps-tracker-item-wrapper', {
             '-active': i === activeStep,
             '-done': i < activeStep,

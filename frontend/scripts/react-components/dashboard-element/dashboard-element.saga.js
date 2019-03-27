@@ -191,7 +191,7 @@ export function* onChangePanel(action) {
 
   const panelsToClear = nextPanels
     .map(p => ({ name: p, items: dashboardElement[`${p}Panel`].activeItems }))
-    .filter(p => p.items.length > 0)
+    .filter(p => isEmpty(p.items))
     .map(p => p.name);
 
   if (panelsToClear.length > 0) {
