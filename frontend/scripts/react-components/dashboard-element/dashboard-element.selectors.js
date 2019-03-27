@@ -140,7 +140,7 @@ export const getIsDisabled = createSelector(
   }
 );
 
-const getDashboardsContext = createSelector(
+export const getDashboardsContext = createSelector(
   [getCountriesPanel, getCommoditiesPanel, getAppContexts],
   (countriesPanel, commoditiesPanel, contexts) => {
     const { name: countryName } = Object.values(countriesPanel.activeItems)[0] || {};
@@ -183,8 +183,12 @@ const getDashboardContextRecolorBy = createSelector(
 const getDashboardSelectedResizeBy = createSelector(
   [getSelectedResizeBy, getDashboardContextResizeBy],
   (selectedResizeBy, contextResizeByItems) => {
-    if (!selectedResizeBy || !contextResizeByItems) {
+    if (!contextResizeByItems) {
       return { label: 'Select an Indicator', value: null };
+    }
+
+    if (!selectedResizeBy) {
+      return contextResizeByItems.find(item => item.isDefault);
     }
 
     return contextResizeByItems.find(item => item.attributeId === selectedResizeBy);

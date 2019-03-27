@@ -8,19 +8,20 @@ import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/da
 
 const meta = {
   xAxis: {
+    type: 'category',
     label: 'Year',
     prefix: '',
     format: '',
     suffix: ''
   },
   yAxis: {
+    type: 'number',
     label: 'Water scarcity',
     prefix: '',
     format: '',
     suffix: '/7'
   },
   x: {
-    type: 'category',
     label: 'Year',
     tooltip: {
       prefix: '',
@@ -29,7 +30,6 @@ const meta = {
     }
   },
   y1: {
-    type: 'number',
     label: '',
     tooltip: {
       prefix: '',

@@ -23,6 +23,7 @@ import {
   fetchDashboardPanelSearchResults,
   fetchDashboardCharts
 } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
+import { getDashboardFiltersProps } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { DASHBOARD_STEPS } from 'constants';
 
 /**
@@ -141,6 +142,32 @@ export function* onItemChange(action) {
   // for now, we just need to recalculate the tabs when selecting a new country
   if (panel === 'countries' && !isEmpty(activeItem)) {
     yield fork(getDashboardPanelSectionTabs, dashboardElement, 'sources');
+  }
+  const contextSelected =
+    !isEmpty(dashboardElement.countriesPanel.activeItems) &&
+    !isEmpty(dashboardElement.commoditiesPanel.activeItems);
+
+  if (contextSelected) {
+    const filters = yield select(getDashboardFiltersProps);
+    if (
+      dashboardElement.selectedYears === null ||
+      dashboardElement.selectedResizeBy.attributeId === filters.selectedResizeBy.attributeId
+    ) {
+      yield put({
+        type: DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
+        payload: { years: filters.selectedYears }
+      });
+    }
+
+    if (
+      dashboardElement.selectedResizeBy === null ||
+      dashboardElement.selectedResizeBy.attributeId === filters.selectedResizeBy.attributeId
+    ) {
+      yield put({
+        type: DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
+        payload: { indicator: filters.selectedResizeBy }
+      });
+    }
   }
 }
 

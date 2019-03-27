@@ -179,8 +179,8 @@ export function* fetchDashboardCharts() {
       commodity_id: commodityId,
       cont_attribute_id: dashboardElement.selectedResizeBy,
       ncont_attribute_id: dashboardElement.selectedRecolorBy,
-      start_year: dashboardElement.selectedYears ? dashboardElement.selectedYears[0] : 2017,
-      end_year: dashboardElement.selectedYears ? dashboardElement.selectedYears[1] : 2017
+      start_year: dashboardElement.selectedYears[0],
+      end_year: dashboardElement.selectedYears[1]
     },
     x => !!x
   );
