@@ -50,6 +50,8 @@ module Api
               }
             end
 
+            swap_x_and_y
+
             {data: @data, meta: @meta}
           end
 

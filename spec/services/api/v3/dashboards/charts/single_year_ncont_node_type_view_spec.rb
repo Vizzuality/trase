@@ -45,9 +45,9 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontNodeTypeView do
       let(:parameters_hash) { shared_parameters_hash }
       it 'summarized all flows per biome' do
         expect(data.size).to eq(1)
-        expect(data[0][:x]).to eq('AMAZONIA')
-        # y0 is the stack for value '1.0'
-        expect(data[0][:y0]).to eq(10)
+        expect(data[0][:y]).to eq('AMAZONIA')
+        # x0 is the stack for value '1.0'
+        expect(data[0][:x0]).to eq(10)
       end
     end
 
@@ -56,9 +56,9 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontNodeTypeView do
         shared_parameters_hash.merge(companies_ids: [api_v3_other_exporter_node.id])
       }
       it 'it summarized flows matching exporter per biome' do
-        expect(data[0][:y0]).to eq(nil)
+        expect(data[0][:x0]).to eq(nil)
         # y3 is the stack for value '3.0'
-        expect(data[0][:y3]).to eq(25)
+        expect(data[0][:x3]).to eq(25)
       end
     end
 
@@ -72,7 +72,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontNodeTypeView do
       }
       it 'summarized flows matching either exporter per biome' do
         # y0 is the stack for value '1.0'
-        expect(data[0][:y0]).to eq(10)
+        expect(data[0][:x0]).to eq(10)
       end
     end
 
@@ -85,9 +85,9 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontNodeTypeView do
         )
       }
       it 'summarized flows matching exporter AND importer per biome' do
-        expect(data[0][:y0]).to eq(nil)
+        expect(data[0][:x0]).to eq(nil)
         # y3 is the stack for value '3.0'
-        expect(data[0][:y3]).to eq(25)
+        expect(data[0][:x3]).to eq(25)
       end
     end
 
@@ -104,7 +104,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontNodeTypeView do
       }
       it 'summarized flows matching either exporter AND either importer per biome' do
         # y0 is the stack for value '1.0'
-        expect(data[0][:y0]).to eq(10)
+        expect(data[0][:x0]).to eq(10)
       end
     end
   end
