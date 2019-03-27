@@ -8,7 +8,7 @@ const parsedChartTypes = {
   donut_chart: 'pie',
   stacked_bar_chart: 'stackedBar',
   dynamic_sentence: 'dynamicSentence',
-  horizontal_bar_chart: 'HorizontalBar',
+  horizontal_bar_chart: 'horizontalBar',
   horizontal_stacked_bar_chart: 'stackedHorizontalBar'
 };
 
@@ -20,24 +20,25 @@ export const getDefaultConfig = createSelector(
   chartType => CHART_CONFIG[chartType] || CHART_CONFIG.bar
 );
 
-const getGroupedY = meta => {
-  const { xAxis, yAxis, x, ...groupedY } = meta;
-  return groupedY;
+const getGroupedAxis = (axis, meta) => {
+  const toBeRemoved = axis === 'y' ? 'x' : axis;
+  const { xAxis, yAxis, [toBeRemoved]: oppositeAxis, ...groupedAxis } = meta;
+  return groupedAxis;
 };
 
-const sortGroupedY = keys => sortBy(Object.keys(keys), key => parseInt(key.substr(1), 10));
+const sortGroupedAxis = keys => sortBy(Object.keys(keys), key => parseInt(key.substr(1), 10));
 
 export const getYKeys = createSelector(
   [getMeta, getDefaultConfig],
   (meta, defaultConfig) => {
-    const { yKeys, yKeysAttributes, colors } = defaultConfig;
-    if (!meta || !yKeys) return yKeys;
-    const groupedY = getGroupedY(meta);
+    const { yKeys, yKeysAttributes, colors, layout } = defaultConfig;
+    if (!meta || !yKeys || layout === 'vertical') return yKeys;
+    const groupedY = getGroupedAxis('y', meta);
     return Object.keys(yKeys).reduce((yKeysTypesAcc, nextYKeyType) => {
       const yKeyTypeAttributes = yKeysAttributes && yKeysAttributes[nextYKeyType];
       return {
         ...yKeysTypesAcc,
-        [nextYKeyType]: sortGroupedY(groupedY).reduce(
+        [nextYKeyType]: sortGroupedAxis(groupedY).reduce(
           (groupedYKeysAcc, nextGroupedYKey, index) => ({
             ...groupedYKeysAcc,
             [nextGroupedYKey]: {
@@ -53,15 +54,42 @@ export const getYKeys = createSelector(
   }
 );
 
+export const getXKeys = createSelector(
+  [getMeta, getDefaultConfig],
+  (meta, defaultConfig) => {
+    const { xKeys, xKeysAttributes, colors, layout } = defaultConfig;
+    if (!meta || !xKeys || layout !== 'vertical') return xKeys;
+    const groupedX = getGroupedAxis('x', meta);
+    return Object.keys(xKeys).reduce((xKeysTypesAcc, nextXKeyType) => {
+      const xKeyTypeAttributes = xKeysAttributes && xKeysAttributes[nextXKeyType];
+      return {
+        ...xKeysTypesAcc,
+        [nextXKeyType]: sortGroupedAxis(groupedX).reduce(
+          (groupedXKeysAcc, nextGroupedXKey, index) => ({
+            ...groupedXKeysAcc,
+            [nextGroupedXKey]: {
+              ...xKeyTypeAttributes,
+              fill: colors && colors[index],
+              stroke: colors && colors[index]
+            }
+          }),
+          {}
+        )
+      };
+    }, {});
+  }
+);
+
 export const getColors = createSelector(
   [getMeta, getData, getDefaultConfig, getChartType],
   (meta, data, defaultConfig, chartType) => {
-    const { colors } = defaultConfig;
+    const { colors, layout } = defaultConfig;
     if (!meta || chartType === 'dynamicSentence') return colors;
     if (chartType !== 'pie') {
-      const groupedY = getGroupedY(meta);
-      return sortGroupedY(groupedY).map((key, index) => ({
-        label: groupedY[key].label || meta.yAxis.label,
+      const continuousAxis = layout === 'vertical' ? 'x' : 'y';
+      const groupedAxis = getGroupedAxis(continuousAxis, meta);
+      return sortGroupedAxis(groupedAxis).map((key, index) => ({
+        label: groupedAxis[key].label || meta[`${continuousAxis}Axis`].label,
         color: colors[index]
       }));
     }
@@ -74,24 +102,25 @@ export const getColors = createSelector(
 
 export const makeGetConfig = () =>
   createSelector(
-    [getMeta, getYKeys, getColors, getDefaultConfig],
-    (meta, yKeys, colors, defaultConfig) => {
+    [getMeta, getYKeys, getXKeys, getColors, getDefaultConfig],
+    (meta, yKeys, xKeys, colors, defaultConfig) => {
       if (!meta) return defaultConfig;
       const config = {
         ...defaultConfig,
         xAxis: defaultConfig.xAxis && {
           ...defaultConfig.xAxis,
-          type: meta.x && meta.x.type
+          type: meta.xAxis && meta.xAxis.type
         },
         yAxis: defaultConfig.yAxis && {
           ...defaultConfig.yAxis,
-          type: meta.y && meta.x.type
+          type: meta.yAxis && meta.yAxis.type
         },
         yAxisLabel: {
           text: meta.yAxis && meta.yAxis.label,
           suffix: meta.yAxis && meta.yAxis.suffix
         },
         yKeys,
+        xKeys,
         colors,
         tooltip: {
           ...defaultConfig.tooltip
