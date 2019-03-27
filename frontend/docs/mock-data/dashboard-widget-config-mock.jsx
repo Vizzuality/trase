@@ -34,6 +34,15 @@ const meta = {
       suffix: ''
     }
   },
+  y2: {
+    type: 'number',
+    label: 'Production of Soy',
+    tooltip: {
+      prefix: '',
+      format: '',
+      suffix: ''
+    }
+  },
   x1: {
     label: 'Trade Volume',
     tooltip: {
@@ -54,12 +63,7 @@ const meta = {
 
 const tooltip = {
   ...CHART_CONFIG.tooltip,
-  content: <DashboardWidgetTooltip meta={meta} />,
-  cursor: {
-    opacity: 0.5,
-    stroke: '#9a1e2a',
-    strokeWidth: 2
-  }
+  content: <DashboardWidgetTooltip meta={meta} />
 };
 
 const color = [{ label: 'Production of soy', color: '#ee5463' }];
@@ -87,7 +91,14 @@ export default {
   bar: barConfig,
   line: {
     ...CHART_CONFIG.line,
-    tooltip,
+    tooltip: {
+      ...tooltip,
+      cursor: {
+        opacity: 0.5,
+        stroke: '#9a1e2a',
+        strokeWidth: 2
+      }
+    },
     colors,
     yKeys: {
       lines: {

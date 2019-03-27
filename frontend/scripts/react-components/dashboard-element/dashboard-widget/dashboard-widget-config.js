@@ -29,9 +29,7 @@ const cartesianGrid = {
 
 const tooltip = {
   cursor: {
-    opacity: 0.5,
-    stroke: '#9a1e2a',
-    strokeWidth: 2
+    opacity: 0
   },
   content: null
 };
@@ -47,11 +45,7 @@ export default {
   margin: { top: 0, right: 0, bottom: 0, left: 0 },
   bar: {
     ...defaults,
-    tooltip: {
-      cursor: {
-        opacity: 0
-      }
-    },
+    tooltip,
     type: 'bar',
     colors: ['#ee5463'],
     xKey: 'x',
@@ -80,11 +74,7 @@ export default {
   },
   horizontalBar: {
     ...defaults,
-    tooltip: {
-      cursor: {
-        opacity: 0
-      }
-    },
+    tooltip,
     type: 'bar',
     layout: 'vertical',
     colors: ['#ee5463'],
@@ -104,11 +94,7 @@ export default {
   },
   horizontalStackedBarChart: {
     ...defaults,
-    tooltip: {
-      cursor: {
-        opacity: 0
-      }
-    },
+    tooltip,
     type: 'bar',
     layout: 'vertical',
     colors: ['#fff0c2', '#9a1e2a', '#ee5463', '#c62c3b', '#fd7d8a'],
@@ -148,6 +134,13 @@ export default {
   },
   line: {
     ...defaults,
+    tooltip: {
+      cursor: {
+        opacity: 0.5,
+        stroke: '#9a1e2a',
+        strokeWidth: 2
+      }
+    },
     type: 'line',
     colors: ['#fff0c2', '#ee5463', '#fd7d8a'],
     xKey: 'x',
