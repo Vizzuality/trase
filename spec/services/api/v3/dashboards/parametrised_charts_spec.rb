@@ -38,7 +38,15 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
 
   let(:expected_chart_types) {
     simplified_expected_chart_types.map do |chart_type|
-      chart_type.merge(parameters)
+      parameters.each do |key, value|
+        chart_type[key] =
+          if value.is_a?(Array)
+            value.join(',')
+          else
+            value
+          end
+      end
+      chart_type
     end
   }
 
