@@ -1,3 +1,4 @@
+# Data for horizontal stacked bar chart widget
 module Api
   module V3
     module Dashboards
@@ -48,6 +49,8 @@ module Api
                 tooltip: {prefix: '', format: '', suffix: ''}
               }
             end
+
+            swap_x_and_y
 
             {data: @data, meta: @meta}
           end

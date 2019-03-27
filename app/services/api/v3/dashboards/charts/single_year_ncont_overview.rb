@@ -1,3 +1,4 @@
+# Data for donut chart widget
 module Api
   module V3
     module Dashboards

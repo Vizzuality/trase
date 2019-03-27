@@ -40,8 +40,8 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNoNcontNodeTypeView do
       let(:parameters_hash) { shared_parameters_hash }
       it 'summarized all flows per biome' do
         expect(data.size).to eq(1)
-        expect(data[0][:x]).to eq('AMAZONIA')
-        expect(data[0][:y0]).to eq(100)
+        expect(data[0][:y]).to eq('AMAZONIA')
+        expect(data[0][:x0]).to eq(100)
       end
     end
 
@@ -50,7 +50,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNoNcontNodeTypeView do
         shared_parameters_hash.merge(companies_ids: [api_v3_other_exporter_node.id])
       }
       it 'it summarized flows matching exporter per biome' do
-        expect(data[0][:y0]).to eq(25)
+        expect(data[0][:x0]).to eq(25)
       end
     end
 
@@ -63,7 +63,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNoNcontNodeTypeView do
         )
       }
       it 'summarized flows matching either exporter per biome' do
-        expect(data[0][:y0]).to eq(100)
+        expect(data[0][:x0]).to eq(100)
       end
     end
 
@@ -76,7 +76,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNoNcontNodeTypeView do
         )
       }
       it 'summarized flows matching exporter AND importer per biome' do
-        expect(data[0][:y0]).to eq(25)
+        expect(data[0][:x0]).to eq(25)
       end
     end
 
@@ -92,7 +92,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNoNcontNodeTypeView do
         )
       }
       it 'summarized flows matching either exporter AND either importer per biome' do
-        expect(data[0][:y0]).to eq(100)
+        expect(data[0][:x0]).to eq(100)
       end
     end
   end

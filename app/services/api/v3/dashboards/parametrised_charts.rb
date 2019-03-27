@@ -8,7 +8,6 @@ module Api
         STACKED_BAR_CHART = :stacked_bar_chart
         HORIZONTAL_BAR_CHART = :horizontal_bar_chart
         HORIZONTAL_STACKED_BAR_CHART = :horizontal_stacked_bar_chart
-        VALUE_TABLE = :value_table
 
         # @param chart_parameters [Api::V3::Dashboards::ChartParameters]
         def initialize(chart_parameters)
@@ -98,7 +97,7 @@ module Api
         def single_year_ncont_node_type_view(node_type)
           {
             source: :single_year_ncont_node_type_view,
-            type: HORIZONTAL_STACKED_BAR_CHART, # TODO: or VALUE_TABLE?
+            type: HORIZONTAL_STACKED_BAR_CHART,
             x: :node_type,
             break_by: :ncont_attribute,
             node_type_id: node_type.id
