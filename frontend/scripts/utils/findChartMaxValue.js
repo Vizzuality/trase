@@ -6,7 +6,9 @@ export default (data, axisKeys) => {
   Object.keys(axisKeys).forEach(key => {
     if (axisKeys[key]) {
       Object.keys(axisKeys[key]).forEach(subKey => {
-        maxValues.push(maxBy(data, subKey)[subKey]);
+        const maxPoint = maxBy(data, subKey);
+        const maxValue = maxPoint ? maxPoint[subKey] : 0;
+        maxValues.push(maxValue);
       });
     }
   });

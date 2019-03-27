@@ -1,5 +1,7 @@
 import { createSelector, createStructuredSelector } from 'reselect';
 import isEmpty from 'lodash/isEmpty';
+import intersection from 'lodash/intersection';
+import range from 'lodash/range';
 import { getPanelId as getPanelName } from 'utils/dashboardPanel';
 import { makeGetResizeByItems, makeGetRecolorByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
@@ -153,20 +155,6 @@ export const getDashboardsContext = createSelector(
   }
 );
 
-const getDashboardSelectedYears = createSelector(
-  [getSelectedYears, getDashboardsContext],
-  (selectedYears, context) => {
-    if (!selectedYears && !context) {
-      return [null, null];
-    }
-
-    if (!selectedYears) {
-      return [context.defaultYear, context.defaultYear];
-    }
-    return selectedYears;
-  }
-);
-
 const getDashboardContextResizeBy = createSelector(
   getDashboardsContext,
   context => context && context.resizeBy
@@ -206,6 +194,37 @@ const getDashboardSelectedRecolorBy = createSelector(
       return { label: 'Select an Indicator', value: null };
     }
     return contextRecolorByItems.find(item => item.attributeId === selectedRecolorBy);
+  }
+);
+
+const getDashboardSelectedYears = createSelector(
+  [
+    getSelectedYears,
+    getDashboardsContext,
+    makeGetAvailableYears(
+      getDashboardSelectedResizeBy,
+      getDashboardSelectedRecolorBy,
+      getDashboardsContext
+    )
+  ],
+  (selectedYears, context, availableYears) => {
+    if (!selectedYears && !context) {
+      return [null, null];
+    }
+
+    if (context && !selectedYears) {
+      return [context.defaultYear, context.defaultYear];
+    }
+
+    const selectedYearsRange = range(selectedYears[0], selectedYears[1] + 1);
+    const intersectedYears = intersection(selectedYearsRange, availableYears);
+    const selectedAreUnavailable = isEmpty(intersectedYears);
+
+    if (selectedAreUnavailable) {
+      return [context.defaultYear, context.defaultYear];
+    }
+
+    return [intersectedYears[0], intersectedYears[intersectedYears.length - 1]];
   }
 );
 
