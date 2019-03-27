@@ -7,16 +7,17 @@ import Widget from 'react-components/widgets/widget.component';
 // eslint-disable-next-line
 class DashboardWidgetFetch extends Component {
   render() {
-    const { url, title, dynamicSentenceParts } = this.props;
+    const { url, title, dynamicSentenceParts, chartType } = this.props;
     return (
       <Widget raw={[true]} query={[url]} params={[]}>
         {({ data, loading, error, meta }) => (
           <DashboardWidgetContainer
             title={title}
-            data={sortBy(data && data[url], 'x')}
-            meta={meta && meta[url]}
-            loading={loading}
             error={error}
+            loading={loading}
+            chartType={chartType}
+            meta={meta && meta[url]}
+            data={sortBy(data && data[url], 'x')}
             dynamicSentenceParts={dynamicSentenceParts}
           />
         )}
@@ -28,6 +29,7 @@ class DashboardWidgetFetch extends Component {
 DashboardWidgetFetch.propTypes = {
   url: PropTypes.string,
   title: PropTypes.string,
+  chartType: PropTypes.string,
   dynamicSentenceParts: PropTypes.array
 };
 
