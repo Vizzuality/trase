@@ -13,8 +13,6 @@ export const DASHBOARD_ELEMENT__SET_PANEL_PAGE = 'DASHBOARD_ELEMENT__SET_PANEL_P
 export const DASHBOARD_ELEMENT__SET_LOADING_ITEMS = 'DASHBOARD_ELEMENT__SET_LOADING_ITEMS';
 export const DASHBOARD_ELEMENT__GET_SEARCH_RESULTS = 'DASHBOARD_ELEMENT__GET_SEARCH_RESULTS';
 export const DASHBOARD_ELEMENT__SET_SEARCH_RESULTS = 'DASHBOARD_ELEMENT__SET_SEARCH_RESULTS';
-export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH =
-  'DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH =
   'DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH';
 export const DASHBOARD_ELEMENT__SET_SELECTED_YEARS = 'DASHBOARD_ELEMENT__SET_SELECTED_YEARS';
@@ -23,6 +21,8 @@ export const DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY =
 export const DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY =
   'DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY';
 export const DASHBOARD_ELEMENT__SET_CHARTS = 'DASHBOARD_ELEMENT__SET_CHARTS';
+export const DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS =
+  'DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS';
 
 export const getDashboardPanelParams = (state, optionsType, options = {}) => {
   const {
@@ -74,11 +74,6 @@ export const getDashboardPanelParams = (state, optionsType, options = {}) => {
 export const setDashboardActivePanel = activePanelId => ({
   type: DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   payload: { activePanelId }
-});
-
-export const setDashboardPanelActiveItemWithSearch = (activeItem, panel) => ({
-  type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
-  payload: { panel, activeItem }
 });
 
 export const setDashboardPanelActiveItem = (activeItem, panel) => ({

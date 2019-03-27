@@ -1,5 +1,6 @@
 import { take, select, all, fork, put, takeLatest, cancel } from 'redux-saga/effects';
 import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
 import {
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
@@ -9,12 +10,12 @@ import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   DASHBOARD_ELEMENT__GET_SEARCH_RESULTS,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
   DASHBOARD_ELEMENT__CLEAR_PANELS,
   DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
   DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
-  DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY
+  DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
+  DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import {
   getDashboardPanelSectionTabs,
@@ -124,7 +125,6 @@ export function* onTabChange(action) {
 function* fetchDataOnTabChange() {
   yield takeLatest(
     [
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
       DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
       DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
       DASHBOARD_ELEMENT__SET_PANEL_TABS
@@ -142,32 +142,6 @@ export function* onItemChange(action) {
   // for now, we just need to recalculate the tabs when selecting a new country
   if (panel === 'countries' && !isEmpty(activeItem)) {
     yield fork(getDashboardPanelSectionTabs, dashboardElement, 'sources');
-  }
-  const contextSelected =
-    !isEmpty(dashboardElement.countriesPanel.activeItems) &&
-    !isEmpty(dashboardElement.commoditiesPanel.activeItems);
-
-  if (contextSelected) {
-    const filters = yield select(getDashboardFiltersProps);
-    if (
-      dashboardElement.selectedYears === null ||
-      dashboardElement.selectedResizeBy.attributeId === filters.selectedResizeBy.attributeId
-    ) {
-      yield put({
-        type: DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
-        payload: { years: filters.selectedYears }
-      });
-    }
-
-    if (
-      dashboardElement.selectedResizeBy === null ||
-      dashboardElement.selectedResizeBy.attributeId === filters.selectedResizeBy.attributeId
-    ) {
-      yield put({
-        type: DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
-        payload: { indicator: filters.selectedResizeBy }
-      });
-    }
   }
 }
 
@@ -207,8 +181,7 @@ function* clearSubsequentPanels() {
     [
       DASHBOARD_ELEMENT__CLEAR_PANEL,
       DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS
     ],
     onChangePanel
   );
@@ -246,6 +219,54 @@ function* fetchChartsOnIndicatorsChange() {
   );
 }
 
+function* updateIndicatorsOnItemChange() {
+  const { dashboardElement } = yield select();
+
+  const contextSelected =
+    !isEmpty(dashboardElement.countriesPanel.activeItems) &&
+    !isEmpty(dashboardElement.commoditiesPanel.activeItems);
+
+  if (contextSelected) {
+    const filters = yield select(getDashboardFiltersProps);
+    let years = dashboardElement.selectedYears;
+    let indicator = dashboardElement.selectedResizeBy;
+    let hasChanged = false;
+    if (
+      dashboardElement.selectedYears === null ||
+      !isEqual(dashboardElement.selectedYears, filters.selectedYears)
+    ) {
+      years = filters.selectedYears;
+      hasChanged = true;
+    }
+
+    if (
+      dashboardElement.selectedResizeBy === null ||
+      dashboardElement.selectedResizeBy.attributeId !== filters.selectedResizeBy.attributeId
+    ) {
+      indicator = filters.selectedResizeBy;
+      hasChanged = true;
+    }
+    if (hasChanged) {
+      yield put({
+        type: DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS,
+        payload: { years, indicator }
+      });
+    }
+    yield fork(fetchDashboardCharts);
+  }
+}
+
+function* fetchChartsOnItemChange() {
+  yield takeLatest(
+    [
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
+    ],
+    updateIndicatorsOnItemChange
+  );
+}
+
 export default function* dashboardElementSaga() {
   const sagas = [
     fetchDataOnPanelChange,
@@ -254,7 +275,8 @@ export default function* dashboardElementSaga() {
     clearSubsequentPanels,
     fetchDataOnPageChange,
     fetchDataOnSearch,
-    fetchChartsOnIndicatorsChange
+    fetchChartsOnIndicatorsChange,
+    fetchChartsOnItemChange
   ];
   yield all(sagas.map(saga => fork(saga)));
 }

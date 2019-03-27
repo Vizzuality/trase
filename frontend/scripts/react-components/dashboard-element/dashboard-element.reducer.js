@@ -17,11 +17,11 @@ import {
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
   DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
   DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
-  DASHBOARD_ELEMENT__SET_CHARTS
+  DASHBOARD_ELEMENT__SET_CHARTS,
+  DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS
 } from './dashboard-element.actions';
 
 const initialState = {
@@ -256,32 +256,6 @@ const dashboardElementReducer = {
       }
     };
   },
-  [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH](state, action) {
-    const { panel, activeItem } = action.payload;
-    const panelName = `${panel}Panel`;
-    const prevTab = state[panelName].activeTab;
-    const clearedActiveTabData =
-      prevTab && prevTab.id !== activeItem.nodeTypeId ? { [prevTab.id]: null } : {};
-    const activeTab =
-      state.tabs[panel] && state.tabs[panel].find(tab => tab.id === activeItem.nodeTypeId);
-
-    return {
-      ...state,
-      data: {
-        ...state.data,
-        [panel]: {
-          ...state.data[panel],
-          ...clearedActiveTabData
-        }
-      },
-      [panelName]: {
-        ...state[panelName],
-        activeItems: { [activeItem.id]: activeItem },
-        activeTab,
-        page: initialState[panelName].page
-      }
-    };
-  },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH](state, action) {
     const { panel, activeItems: selectedItem } = action.payload;
     const panelName = `${panel}Panel`;
@@ -376,6 +350,14 @@ const dashboardElementReducer = {
     return {
       ...state,
       charts
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS](state, action) {
+    const { years, indicator } = action.payload;
+    return {
+      ...state,
+      selectedYears: years,
+      selectedResizeBy: indicator.attributeId
     };
   }
 };
