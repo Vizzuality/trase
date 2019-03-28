@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import Paginate from 'react-components/ranking-widget/paginate';
+import Paginate from 'react-components/shared/paginate';
 import 'react-components/dashboard-element/dashboard-widget/dashboard-widget-legend/dashboard-widget-legend.scss';
 
 class DashboardWidgetLegend extends React.PureComponent {

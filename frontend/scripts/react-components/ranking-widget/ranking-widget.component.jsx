@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import 'react-components/ranking-widget/ranking-widget-styles.scss';
-import Paginate from 'react-components/ranking-widget/paginate';
+import Paginate from 'react-components/shared/paginate';
 import Text from 'react-components/shared/text';
 import Heading from 'react-components/shared/heading';
 import capitalize from 'lodash/capitalize';
