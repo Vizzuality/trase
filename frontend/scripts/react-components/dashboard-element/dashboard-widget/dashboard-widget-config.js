@@ -37,7 +37,19 @@ const tooltip = {
 };
 
 const colors = {
-  default: ['#ea6869', '#ffeb8b', '#2d586e', '#007d29', '#b4008a', '#06ff67', '#8339aa'],
+  default: [
+    '#ea6869',
+    '#ffeb8b',
+    '#2d586e',
+    '#007d29',
+    '#b4008a',
+    '#06ff67',
+    '#8339aa',
+    '#ffb700',
+    '#fc7839',
+    '#67caf1',
+    '#e1228c'
+  ],
   qual: {
     thematic: {
       amazonia: '#43f3f3',
