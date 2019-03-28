@@ -1,0 +1,249 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "required": [
+    "data",
+    "meta"
+  ],
+  "properties": {
+    "data": {
+      "$id": "#/properties/data",
+      "type": "array",
+      "items": {
+        "$id": "#/properties/data/items",
+        "type": "object",
+        "required": [
+          "x"
+        ],
+        "properties": {
+          "y0": {
+            "$id": "#/properties/data/items/properties/y0",
+            "type": "number"
+          },
+          "y1": {
+            "$id": "#/properties/data/items/properties/y1",
+            "type": "number"
+          },
+          "x": {
+            "$id": "#/properties/data/items/properties/x",
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "meta": {
+      "$id": "#/properties/meta",
+      "type": "object",
+      "required": [
+        "xAxis",
+        "yAxis",
+        "x",
+        "y0",
+        "y1"
+      ],
+      "properties": {
+        "xAxis": {
+          "$id": "#/properties/meta/properties/xAxis",
+          "type": "object",
+          "required": [
+            "type",
+            "label",
+            "prefix",
+            "format",
+            "suffix"
+          ],
+          "properties": {
+            "type": {
+              "$id": "#/properties/meta/properties/xAxis/properties/type",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "label": {
+              "$id": "#/properties/meta/properties/xAxis/properties/label",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "prefix": {
+              "$id": "#/properties/meta/properties/xAxis/properties/prefix",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "format": {
+              "$id": "#/properties/meta/properties/xAxis/properties/format",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "suffix": {
+              "$id": "#/properties/meta/properties/xAxis/properties/suffix",
+              "type": "string",
+              "pattern": "^(.*)$"
+            }
+          }
+        },
+        "yAxis": {
+          "$id": "#/properties/meta/properties/yAxis",
+          "type": "object",
+          "required": [
+            "type",
+            "label",
+            "prefix",
+            "format",
+            "suffix"
+          ],
+          "properties": {
+            "type": {
+              "$id": "#/properties/meta/properties/yAxis/properties/type",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "label": {
+              "$id": "#/properties/meta/properties/yAxis/properties/label",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "prefix": {
+              "$id": "#/properties/meta/properties/yAxis/properties/prefix",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "format": {
+              "$id": "#/properties/meta/properties/yAxis/properties/format",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "suffix": {
+              "$id": "#/properties/meta/properties/yAxis/properties/suffix",
+              "type": "string",
+              "pattern": "^(.*)$"
+            }
+          }
+        },
+        "x": {
+          "$id": "#/properties/meta/properties/x",
+          "type": "object",
+          "required": [
+            "label",
+            "tooltip"
+          ],
+          "properties": {
+            "label": {
+              "$id": "#/properties/meta/properties/x/properties/label",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "tooltip": {
+              "$id": "#/properties/meta/properties/x/properties/tooltip",
+              "type": "object",
+              "required": [
+                "prefix",
+                "format",
+                "suffix"
+              ],
+              "properties": {
+                "prefix": {
+                  "$id": "#/properties/meta/properties/x/properties/tooltip/properties/prefix",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                },
+                "format": {
+                  "$id": "#/properties/meta/properties/x/properties/tooltip/properties/format",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                },
+                "suffix": {
+                  "$id": "#/properties/meta/properties/x/properties/tooltip/properties/suffix",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                }
+              }
+            }
+          }
+        },
+        "y0": {
+          "$id": "#/properties/meta/properties/y0",
+          "type": "object",
+          "required": [
+            "label",
+            "tooltip"
+          ],
+          "properties": {
+            "label": {
+              "$id": "#/properties/meta/properties/y0/properties/label",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "tooltip": {
+              "$id": "#/properties/meta/properties/y0/properties/tooltip",
+              "type": "object",
+              "required": [
+                "prefix",
+                "format",
+                "suffix"
+              ],
+              "properties": {
+                "prefix": {
+                  "$id": "#/properties/meta/properties/y0/properties/tooltip/properties/prefix",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                },
+                "format": {
+                  "$id": "#/properties/meta/properties/y0/properties/tooltip/properties/format",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                },
+                "suffix": {
+                  "$id": "#/properties/meta/properties/y0/properties/tooltip/properties/suffix",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                }
+              }
+            }
+          }
+        },
+        "y1": {
+          "$id": "#/properties/meta/properties/y1",
+          "type": "object",
+          "required": [
+            "label",
+            "tooltip"
+          ],
+          "properties": {
+            "label": {
+              "$id": "#/properties/meta/properties/y1/properties/label",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "tooltip": {
+              "$id": "#/properties/meta/properties/y1/properties/tooltip",
+              "type": "object",
+              "required": [
+                "prefix",
+                "format",
+                "suffix"
+              ],
+              "properties": {
+                "prefix": {
+                  "$id": "#/properties/meta/properties/y1/properties/tooltip/properties/prefix",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                },
+                "format": {
+                  "$id": "#/properties/meta/properties/y1/properties/tooltip/properties/format",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                },
+                "suffix": {
+                  "$id": "#/properties/meta/properties/y1/properties/tooltip/properties/suffix",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

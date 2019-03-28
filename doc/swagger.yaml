@@ -1325,6 +1325,82 @@ paths:
                               label:
                                 type: string
                                 example: 'Soy Moratorium'
+
+  /dashboards/charts/multi_year_no_ncont_node_type_view:
+    get:
+      tags:
+        - dashboards
+        - charts
+      summary: Data formatted for display in the chart per node, for multi year,
+        no non-continuous attribute selection (stacked bar chart per year per top nodes)
+      parameters:
+        - $ref: "#/components/parameters/dashboards_country_id"
+        - $ref: "#/components/parameters/dashboards_commodity_id"
+        - $ref: "#/components/parameters/dashboards_cont_attribute_id"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/dashboards_node_type_id"
+        - $ref: "#/components/parameters/start_year_req_query_param"
+        - $ref: "#/components/parameters/end_year_req_query_param"
+        - $ref: "#/components/parameters/dashboards_top_n"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          example: 2016
+                          description: Type defined in meta
+                        y0:
+                          example: 37220927.4416087
+                          description: Type defined in meta
+                        y1:
+                          example: 29212256.0995169
+                        y2:
+                          example: 29863530.4473549
+                  meta:
+                    type: object
+                    properties:
+                      xAxis:
+                        $ref: "#/components/schemas/DashboardsYearXAxis"
+                      yAxis:
+                        $ref: "#/components/schemas/DashboardsYAxis"
+                      x:
+                        $ref: "#/components/schemas/DashboardsYearXLegend"
+                      y0:
+                        allOf:
+                          - $ref: "#/components/schemas/DashboardsNcontYLegend"
+                          - type: object
+                            properties:
+                              label:
+                                type: string
+                                example: 'CERRADO'
+                      y1:
+                        allOf:
+                          - $ref: "#/components/schemas/DashboardsNcontYLegend"
+                          - type: object
+                            properties:
+                              label:
+                                type: string
+                                example: 'MATA ATLANTICA'
+                      y2:
+                        allOf:
+                          - $ref: "#/components/schemas/DashboardsNcontYLegend"
+                          - type: object
+                            properties:
+                              label:
+                                type: string
+                                example: 'OTHER'
+
 servers:
   - url: https://trase.earth/api/v3
 components:
