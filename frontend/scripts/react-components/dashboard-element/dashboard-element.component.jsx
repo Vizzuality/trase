@@ -10,6 +10,7 @@ import Dropdown from 'react-components/shared/dropdown';
 import YearsRangeDropdown from 'react-components/shared/years-range-dropdown';
 import Text from 'react-components/shared/text';
 import DashboardWidget from 'react-components/dashboard-element/dashboard-widget';
+import cx from 'classnames';
 
 import 'react-components/dashboard-element/dashboard-element.scss';
 import { DASHBOARD_STEPS } from 'constants';
@@ -91,9 +92,9 @@ class DashboardElement extends React.PureComponent {
   renderWidgets() {
     const { charts, filters } = this.props;
     return (
-      <div className="row -equal-height -flex-end">
+      <>
         {charts.map(chart => (
-          <div key={chart.id} className="column small-12 medium-6 ">
+          <div key={chart.id} className="column small-12 medium-6">
             <DashboardWidget
               url={chart.url}
               title={chart.displayName}
@@ -102,7 +103,7 @@ class DashboardElement extends React.PureComponent {
             />
           </div>
         ))}
-      </div>
+      </>
     );
   }
 
@@ -117,6 +118,8 @@ class DashboardElement extends React.PureComponent {
       setSelectedResizeBy,
       setSelectedRecolorBy
     } = this.props;
+
+    const hasCharts = charts.length > 0;
     return (
       <div className="l-dashboard-element">
         <div className="c-dashboard-element">
@@ -202,9 +205,9 @@ class DashboardElement extends React.PureComponent {
                 </div>
               </section>
               <section className="dashboard-element-widgets">
-                <div className="row align-center">
-                  {charts.length > 0 && this.renderWidgets()}
-                  {charts.length === 0 && (
+                <div className={cx('row', { '-equal-height -flex-end': hasCharts })}>
+                  {hasCharts && this.renderWidgets()}
+                  {!hasCharts && (
                     <div className="column small-6">
                       <div className="dashboard-element-fallback">
                         <Text

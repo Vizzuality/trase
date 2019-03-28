@@ -162,11 +162,20 @@ const getDashboardContextResizeBy = createSelector(
 
 const getDashboardContextRecolorBy = createSelector(
   getDashboardsContext,
-  context => {
+  getSelectedYears,
+  (context, selectedYears) => {
     if (!context) return [];
-    return context.recolorBy.filter(
-      item => !['LR_DEFICIT_PERC_PRIVATE_LAND', 'SMALLHOLDERS'].includes(item.name)
-    );
+    const emptyOption = {
+      position: 0,
+      groupNumber: -1,
+      label: 'No selection',
+      name: 'none',
+      years: selectedYears || [],
+      value: null
+    };
+    return context.recolorBy
+      .filter(item => !['LR_DEFICIT_PERC_PRIVATE_LAND', 'SMALLHOLDERS'].includes(item.name))
+      .concat(emptyOption);
   }
 );
 
