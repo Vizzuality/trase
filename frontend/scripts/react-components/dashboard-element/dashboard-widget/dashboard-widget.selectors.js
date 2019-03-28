@@ -10,7 +10,7 @@ const parsedChartTypes = {
   stacked_bar_chart: 'stackedBar',
   dynamic_sentence: 'dynamicSentence',
   horizontal_bar_chart: 'horizontalBar',
-  horizontal_stacked_bar_chart: 'horizontalSteckedBarChart'
+  horizontal_stacked_bar_chart: 'horizontalStackedBarChart'
 };
 
 const getMeta = (state, { meta }) => meta || null;

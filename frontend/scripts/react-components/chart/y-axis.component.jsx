@@ -17,8 +17,8 @@ function CustomYAxis({ config, data }) {
         tickLine={false}
         tickMargin={15}
         dataKey={yKey || ''}
-        tick={<CategoryTick />}
         {...yAxis}
+        tick={<CategoryTick />}
       />
     );
   }
@@ -27,7 +27,7 @@ function CustomYAxis({ config, data }) {
     yAxis && (
       <YAxis
         axisLine={false}
-        tickSize={-50}
+        tickSize={-100}
         mirror
         tickMargin={0}
         tickLine={false}

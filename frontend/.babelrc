@@ -54,7 +54,8 @@
             "constants": "./scripts/constants",
             "router": "./scripts/router",
             "react-components": "./scripts/react-components",
-            "named-maps": "./scripts/named-maps"
+            "named-maps": "./scripts/named-maps",
+            "selectors": "./scripts/selectors"
           }
         }]
       ]

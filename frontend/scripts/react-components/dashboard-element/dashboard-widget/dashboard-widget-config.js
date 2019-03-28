@@ -29,9 +29,7 @@ const cartesianGrid = {
 
 const tooltip = {
   cursor: {
-    opacity: 0.5,
-    stroke: '#9a1e2a',
-    strokeWidth: 2
+    opacity: 0
   },
   content: null
 };
@@ -100,11 +98,7 @@ export default {
   margin: { top: 0, right: 0, bottom: 0, left: 0 },
   bar: {
     ...defaults,
-    tooltip: {
-      cursor: {
-        opacity: 0
-      }
-    },
+    tooltip,
     type: 'bar',
     xKey: 'x',
     yKeys: {
@@ -131,11 +125,7 @@ export default {
   },
   horizontalBar: {
     ...defaults,
-    tooltip: {
-      cursor: {
-        opacity: 0
-      }
-    },
+    tooltip,
     type: 'bar',
     layout: 'vertical',
     xKeys: {
@@ -146,15 +136,15 @@ export default {
       bars: {
         interval: 'preserveStartEnd'
       }
+    },
+    yAxis: {
+      ...defaults.yAxis,
+      interval: 0
     }
   },
-  horizontalSteckedBarChart: {
+  horizontalStackedBarChart: {
     ...defaults,
-    tooltip: {
-      cursor: {
-        opacity: 0
-      }
-    },
+    tooltip,
     type: 'bar',
     layout: 'vertical',
     yKey: 'y',
@@ -165,6 +155,10 @@ export default {
       bars: {
         stackId: 'bar'
       }
+    },
+    yAxis: {
+      ...defaults.yAxis,
+      interval: 0
     }
   },
   pie: {
@@ -188,6 +182,13 @@ export default {
   },
   line: {
     ...defaults,
+    tooltip: {
+      cursor: {
+        opacity: 0.5,
+        stroke: '#9a1e2a',
+        strokeWidth: 2
+      }
+    },
     type: 'line',
     xKey: 'x',
     yKeys: {
