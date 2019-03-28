@@ -3,8 +3,19 @@
 .c-dashboard-widget-legend {
   border-bottom: solid 1px rgba($white, 0.13);
   padding: 31px 42px;
-  max-height: 130px;
-  overflow: hidden;
+  display: flex;
+
+  &.-paginated {
+    min-height: 128px;
+    align-items: start;
+  }
+
+  .row {
+    flex: 1;
+  }
+  .c-paginate {
+    flex: 0
+  }
 }
 
 .dashboard-widget-key-item {
