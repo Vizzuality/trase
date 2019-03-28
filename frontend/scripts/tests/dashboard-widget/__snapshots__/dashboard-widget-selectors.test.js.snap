@@ -67,9 +67,10 @@ Object {
       "fontSize": 14,
     },
     "tickLine": false,
-    "type": "category",
+    "type": undefined,
   },
   "xKey": "x",
+  "xKeys": undefined,
   "yAxis": Object {
     "axisLine": false,
     "domain": Array [
