@@ -10,6 +10,7 @@ import horizontalData from './mock-data/dashboard-widget-horizontal-data';
 import horizontalMultipleData from './mock-data/dashboard-widget-horizontal-multiple-data';
 import dataPie from './mock-data/dashboard-widget-data-pie';
 import dynamicSentenceData from './mock-data/dashboard-widget-dynamic-sentence-data';
+import rankingData from './mock-data/dashboard-widget-ranking-data';
 import dynamicSentenceParts from './mock-data/dashboard-widget-dynamic-sentence-parts';
 import config from './mock-data/dashboard-widget-config-mock';
 import 'styles/_docz.scss';
@@ -52,6 +53,11 @@ import 'styles/_docz.scss';
     data={dynamicSentenceData}
     dynamicSentenceParts={dynamicSentenceParts}
     chartConfig={config.dynamicSentence}
+  />
+  <DashboardWidget
+    title={'Ranking'}
+    data={rankingData}
+    chartConfig={config.ranking}
   />
   <DashboardWidget
     loading={true}

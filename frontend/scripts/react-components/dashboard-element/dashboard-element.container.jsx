@@ -19,6 +19,7 @@ import { DASHBOARD_STEPS } from 'constants';
 
 const mapStateToProps = state => ({
   dirtyBlocks: getDirtyBlocks(state),
+  charts: state.dashboardElement.charts,
   filters: getDashboardFiltersProps(state),
   dynamicSentenceParts: getDynamicSentence(state)
 });
@@ -37,6 +38,7 @@ const mapDispatchToProps = dispatch =>
 
 class DashboardElementContainer extends React.Component {
   static propTypes = {
+    charts: PropTypes.array,
     filters: PropTypes.object,
     dirtyBlocks: PropTypes.object,
     goToRoot: PropTypes.func.isRequired,
@@ -90,6 +92,7 @@ class DashboardElementContainer extends React.Component {
   render() {
     const { step, modalOpen, editMode } = this.state;
     const {
+      charts,
       goToRoot,
       dynamicSentenceParts,
       dirtyBlocks,
@@ -101,6 +104,7 @@ class DashboardElementContainer extends React.Component {
     return (
       <DashboardElement
         step={step}
+        charts={charts}
         filters={filters}
         editMode={editMode}
         goToRoot={goToRoot}

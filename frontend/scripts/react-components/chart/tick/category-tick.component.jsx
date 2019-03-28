@@ -1,15 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import wrapSVGText from 'utils/wrapSVGText';
 import 'react-components/chart/tick/tick-styles.scss';
 
 function CategoryTick(props) {
   const { x, y, payload } = props;
   const tickValue = payload && payload.value;
-
   return (
-    <text transform={`translate(${x},${y})`} className="tick-text" filter="url(#solid)" x="0" y="3">
-      {tickValue}
-    </text>
+    <g transform={`translate(${x},${y})`}>
+      <text x="0" y="3" className="tick-text" fill="#fff">
+        {wrapSVGText(tickValue, 10, 10, 15, 1)}
+      </text>
+      {tickValue.length > 15 && <title>{tickValue}</title>}
+    </g>
   );
 }
 

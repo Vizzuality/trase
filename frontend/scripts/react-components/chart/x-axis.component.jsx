@@ -1,9 +1,9 @@
 import React from 'react';
 import { Label, XAxis } from 'recharts';
 import PropTypes from 'prop-types';
-
 import findMaxValue from 'utils/findChartMaxValue';
 import ChartTick from 'react-components/chart/tick/tick.component';
+import { format } from 'd3-format';
 import 'react-components/chart/chart-styles.scss';
 
 function CustomXAxis({ config, data }) {
@@ -17,16 +17,16 @@ function CustomXAxis({ config, data }) {
         axisLine={false}
         tickLine={false}
         tickMargin={10}
+        {...xAxis}
         tick={
           <ChartTick
             dataMax={maxXValue}
-            unitFormat={unitFormat || (value => value)}
+            unitFormat={unitFormat || (value => format('.2s')(value))}
             unit={unit}
             backgroundColor="transparent"
             fill="white"
           />
         }
-        {...xAxis}
       >
         <Label position="insideBottom" offset={-15} className="x-axis-label">
           {unit}

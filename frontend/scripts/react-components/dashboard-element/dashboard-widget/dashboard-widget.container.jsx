@@ -25,28 +25,26 @@ class DashboardWidgetContainer extends Component {
   }
 
   render() {
-    const { data, loading, error, meta, title, config, dynamicSentenceParts } = this.props;
+    const { data, loading, error, meta, title, config } = this.props;
     return config ? (
       <DashboardWidgetComponent
+        data={data}
         title={title}
         error={error}
         loading={loading}
-        data={data}
         chartConfig={this.addTooltipContentToConfig(config, meta)}
-        dynamicSentenceParts={dynamicSentenceParts}
       />
     ) : null;
   }
 }
 
 DashboardWidgetContainer.propTypes = {
-  loading: PropTypes.bool,
   error: PropTypes.bool,
-  title: PropTypes.string,
   data: PropTypes.array,
   meta: PropTypes.object,
-  config: PropTypes.object,
-  dynamicSentenceParts: PropTypes.array
+  loading: PropTypes.bool,
+  title: PropTypes.string,
+  config: PropTypes.object
 };
 
 export default connect(makeMapStateToProps)(DashboardWidgetContainer);

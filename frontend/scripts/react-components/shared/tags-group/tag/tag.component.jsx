@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Dropdown from 'react-components/shared/dropdown';
+import Heading from 'react-components/shared/heading';
 
 function Tag(props) {
   const {
@@ -28,7 +29,13 @@ function Tag(props) {
       selectedValueOverride={`${part.value.length} ${part.panel}`}
     />
   ) : (
-    <span
+    <Heading
+      size="md"
+      as="span"
+      weight="bold"
+      align="center"
+      color={color}
+      transform={part.transform}
       className={cx('tags-group-item', 'notranslate', {
         '-with-cross': !isPartReadOnly && clearPanel,
         '-spaced': spaced
@@ -46,7 +53,7 @@ function Tag(props) {
           </svg>
         </button>
       )}
-    </span>
+    </Heading>
   );
 }
 

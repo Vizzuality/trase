@@ -34,6 +34,15 @@ const meta = {
       suffix: ''
     }
   },
+  y2: {
+    type: 'number',
+    label: 'Production of Soy',
+    tooltip: {
+      prefix: '',
+      format: '',
+      suffix: ''
+    }
+  },
   x1: {
     label: 'Trade Volume',
     tooltip: {
@@ -54,12 +63,7 @@ const meta = {
 
 const tooltip = {
   ...CHART_CONFIG.tooltip,
-  content: <DashboardWidgetTooltip meta={meta} />,
-  cursor: {
-    opacity: 0.5,
-    stroke: '#9a1e2a',
-    strokeWidth: 2
-  }
+  content: <DashboardWidgetTooltip meta={meta} />
 };
 
 const color = [{ label: 'Production of soy', color: '#ee5463' }];
@@ -69,33 +73,43 @@ const colors = [
   { label: 'Production of soy', color: '#ee5463' }
 ];
 
-const lineConfig = {
-  ...CHART_CONFIG.line,
+const barConfig = {
+  ...CHART_CONFIG.bar,
   tooltip,
   colors,
+  type: 'bar',
   yKeys: {
-    lines: {
-      y1: { fill: '#fff0c2', stroke: '#fff0c2' },
-      y2: { fill: '#ee5463', stroke: '#ee5463' }
+    bars: {
+      y1: { fill: '#fff0c2', stroke: '#fff0c2', interval: 'preserveStartEnd' },
+      y2: { fill: '#ee5463', stroke: '#ee5463', interval: 'preserveStartEnd' }
     }
   },
   yAxisLabel: { text: 'Label', suffix: 't' }
 };
 
 export default {
-  line: lineConfig,
-  bar: {
-    ...lineConfig,
-    type: 'bar',
-    yKeys: {
-      bars: {
-        y1: { fill: '#fff0c2', stroke: '#fff0c2', interval: 'preserveStartEnd' },
-        y2: { fill: '#ee5463', stroke: '#ee5463', interval: 'preserveStartEnd' }
+  bar: barConfig,
+  line: {
+    ...CHART_CONFIG.line,
+    tooltip: {
+      ...tooltip,
+      cursor: {
+        opacity: 0.5,
+        stroke: '#9a1e2a',
+        strokeWidth: 2
       }
-    }
+    },
+    colors,
+    yKeys: {
+      lines: {
+        y1: { fill: '#fff0c2', stroke: '#fff0c2' },
+        y2: { fill: '#ee5463', stroke: '#ee5463' }
+      }
+    },
+    yAxisLabel: { text: 'Label', suffix: 't' }
   },
   stackedBar: {
-    ...lineConfig,
+    ...barConfig,
     type: 'bar',
     yKeys: {
       bars: {
@@ -184,7 +198,10 @@ export default {
   },
   dynamicSentence: {
     type: 'sentence',
-    colors,
+    yAxisLabel: { text: 'Trade volume', suffix: 't' }
+  },
+  ranking: {
+    type: 'ranking',
     yAxisLabel: { text: 'Trade volume', suffix: 't' }
   }
 };

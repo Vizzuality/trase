@@ -1,0 +1,64 @@
+@import 'styles/settings';
+
+.c-ranking-widget {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  padding: 42px;
+
+  .list {
+    width: 100%;
+  }
+
+  .list-row {
+    margin: 0 0 35px 0;
+
+    &:last-child {
+      margin: 0;
+    }
+  }
+
+  .list-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  a {
+    color: $charcoal-grey;
+
+    &:hover {
+      .item-name {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .item-label {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .item-value {
+    margin-left: 10px;
+  }
+
+  .item-bubble {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 34px;
+    height: 34px;
+    background-color: $strong-pink;
+    color: $white;
+    border-radius: 100%;
+    margin: 0 10px 0 0;
+
+    .item-number {
+      transform: translateY(-1px);
+    }
+  }
+}

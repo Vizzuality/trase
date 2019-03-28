@@ -33,7 +33,7 @@ module Api
 
             @meta = {
               xAxis: year_axis_meta,
-              yAxis: axis_meta(@cont_attribute, type: 'number'),
+              yAxis: axis_meta(@cont_attribute, 'number'),
               x: year_legend_meta
             }
 

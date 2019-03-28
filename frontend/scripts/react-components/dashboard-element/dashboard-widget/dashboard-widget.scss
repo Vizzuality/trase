@@ -1,10 +1,20 @@
 @import 'styles/settings';
 
 .c-dashboard-widget {
+  min-width: 100%;
+
   .widget-title-container {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+  }
+
+  .dynamic-sentence-widget {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 0 30px;
   }
 
   .widget-centered {

@@ -17,7 +17,7 @@ import {
   getDashboardPanelSearchResults,
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
-  setDashboardPanelActiveItemWithSearch,
+  setDashboardPanelActiveItemsWithSearch,
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
@@ -201,7 +201,7 @@ describe('onTabChange', () => {
       }
     }
   };
-  const searchAction = setDashboardPanelActiveItemWithSearch({ nodeTypeId: 3 }, 'sources');
+  const searchAction = setDashboardPanelActiveItemsWithSearch({ nodeTypeId: 3 }, 'sources');
 
   it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_DATA} if tab action is triggered`, async () => {
     const dispatched = await recordSaga(onTabChange, searchAction, differentTabChangeState);

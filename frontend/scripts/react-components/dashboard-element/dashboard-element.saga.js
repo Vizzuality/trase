@@ -1,5 +1,6 @@
 import { take, select, all, fork, put, takeLatest, cancel } from 'redux-saga/effects';
 import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
 import {
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
@@ -9,16 +10,21 @@ import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   DASHBOARD_ELEMENT__GET_SEARCH_RESULTS,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
-  DASHBOARD_ELEMENT__CLEAR_PANELS
+  DASHBOARD_ELEMENT__CLEAR_PANELS,
+  DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
+  DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
+  DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
+  DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import {
   getDashboardPanelSectionTabs,
   getDashboardPanelData,
   getMoreDashboardPanelData,
-  fetchDashboardPanelSearchResults
+  fetchDashboardPanelSearchResults,
+  fetchDashboardCharts
 } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
+import { getDashboardFiltersProps } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { DASHBOARD_STEPS } from 'constants';
 
 /**
@@ -119,7 +125,6 @@ export function* onTabChange(action) {
 function* fetchDataOnTabChange() {
   yield takeLatest(
     [
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
       DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
       DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
       DASHBOARD_ELEMENT__SET_PANEL_TABS
@@ -160,7 +165,7 @@ export function* onChangePanel(action) {
 
   const panelsToClear = nextPanels
     .map(p => ({ name: p, items: dashboardElement[`${p}Panel`].activeItems }))
-    .filter(p => p.items.length > 0)
+    .filter(p => isEmpty(p.items))
     .map(p => p.name);
 
   if (panelsToClear.length > 0) {
@@ -176,8 +181,7 @@ function* clearSubsequentPanels() {
     [
       DASHBOARD_ELEMENT__CLEAR_PANEL,
       DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS
     ],
     onChangePanel
   );
@@ -204,6 +208,65 @@ function* fetchDataOnPageChange() {
   yield takeLatest(DASHBOARD_ELEMENT__SET_PANEL_PAGE, onPageChange);
 }
 
+function* fetchChartsOnIndicatorsChange() {
+  yield takeLatest(
+    [
+      DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
+      DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
+      DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY
+    ],
+    fetchDashboardCharts
+  );
+}
+
+function* updateIndicatorsOnItemChange() {
+  const { dashboardElement } = yield select();
+
+  const contextSelected =
+    !isEmpty(dashboardElement.countriesPanel.activeItems) &&
+    !isEmpty(dashboardElement.commoditiesPanel.activeItems);
+
+  if (contextSelected) {
+    const filters = yield select(getDashboardFiltersProps);
+    let years = dashboardElement.selectedYears;
+    let indicator = { attributeId: dashboardElement.selectedResizeBy };
+    let hasChanged = false;
+    if (
+      dashboardElement.selectedYears === null ||
+      !isEqual(dashboardElement.selectedYears, filters.selectedYears)
+    ) {
+      years = filters.selectedYears;
+      hasChanged = true;
+    }
+
+    if (
+      dashboardElement.selectedResizeBy === null ||
+      dashboardElement.selectedResizeBy !== filters.selectedResizeBy.attributeId
+    ) {
+      indicator = filters.selectedResizeBy;
+      hasChanged = true;
+    }
+    if (hasChanged && indicator && years[0]) {
+      yield put({
+        type: DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS,
+        payload: { years, indicator }
+      });
+    }
+    yield fork(fetchDashboardCharts);
+  }
+}
+
+function* fetchChartsOnItemChange() {
+  yield takeLatest(
+    [
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
+    ],
+    updateIndicatorsOnItemChange
+  );
+}
+
 export default function* dashboardElementSaga() {
   const sagas = [
     fetchDataOnPanelChange,
@@ -211,7 +274,9 @@ export default function* dashboardElementSaga() {
     fetchDataOnItemChange,
     clearSubsequentPanels,
     fetchDataOnPageChange,
-    fetchDataOnSearch
+    fetchDataOnSearch,
+    fetchChartsOnIndicatorsChange,
+    fetchChartsOnItemChange
   ];
   yield all(sagas.map(saga => fork(saga)));
 }

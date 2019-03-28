@@ -1,5 +1,7 @@
 import { createSelector, createStructuredSelector } from 'reselect';
 import isEmpty from 'lodash/isEmpty';
+import intersection from 'lodash/intersection';
+import range from 'lodash/range';
 import { getPanelId as getPanelName } from 'utils/dashboardPanel';
 import { makeGetResizeByItems, makeGetRecolorByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
@@ -98,28 +100,32 @@ export const getDynamicSentence = createSelector(
         panel: 'sources',
         id: 'sources',
         prefix: sourcesValue ? `produced in` : 'produced in countries covered by Trase',
-        value: sourcesValue
+        value: sourcesValue,
+        transform: 'capitalize'
       },
       {
         panel: 'companies',
         id: 'exporting-companies',
         prefix: getActivePanelItem('companies', 'EXPORTER') ? 'exported by' : '',
         value: getActivePanelItem('companies', 'EXPORTER'),
-        optional: true
+        optional: true,
+        transform: 'capitalize'
       },
       {
         panel: 'companies',
         id: 'importing-companies',
         prefix: getActivePanelItem('companies', 'IMPORTER') ? 'imported by' : '',
         value: getActivePanelItem('companies', 'IMPORTER'),
-        optional: true
+        optional: true,
+        transform: 'capitalize'
       },
       {
         panel: 'destinations',
         id: 'destinations',
         prefix: getActivePanelItem('destinations') ? `going to` : '',
         value: getActivePanelItem('destinations'),
-        optional: true
+        optional: true,
+        transform: 'capitalize'
       }
     ];
   }
@@ -136,7 +142,7 @@ export const getIsDisabled = createSelector(
   }
 );
 
-const getDashboardsContext = createSelector(
+export const getDashboardsContext = createSelector(
   [getCountriesPanel, getCommoditiesPanel, getAppContexts],
   (countriesPanel, commoditiesPanel, contexts) => {
     const { name: countryName } = Object.values(countriesPanel.activeItems)[0] || {};
@@ -149,20 +155,6 @@ const getDashboardsContext = createSelector(
   }
 );
 
-const getDashboardSelectedYears = createSelector(
-  [getSelectedYears, getDashboardsContext],
-  (selectedYears, context) => {
-    if (!selectedYears && !context) {
-      return [null, null];
-    }
-
-    if (!selectedYears) {
-      return [context.defaultYear, context.defaultYear];
-    }
-    return selectedYears;
-  }
-);
-
 const getDashboardContextResizeBy = createSelector(
   getDashboardsContext,
   context => context && context.resizeBy
@@ -170,20 +162,39 @@ const getDashboardContextResizeBy = createSelector(
 
 const getDashboardContextRecolorBy = createSelector(
   getDashboardsContext,
-  context => {
+  getSelectedYears,
+  (context, selectedYears) => {
     if (!context) return [];
-    return context.recolorBy;
+    const emptyOption = {
+      position: 0,
+      groupNumber: -1,
+      label: 'No selection',
+      name: 'none',
+      years: selectedYears || [],
+      value: null
+    };
+    return context.recolorBy
+      .filter(item => !['LR_DEFICIT_PERC_PRIVATE_LAND', 'SMALLHOLDERS'].includes(item.name))
+      .concat(emptyOption);
   }
 );
 
 const getDashboardSelectedResizeBy = createSelector(
   [getSelectedResizeBy, getDashboardContextResizeBy],
   (selectedResizeBy, contextResizeByItems) => {
-    if (!selectedResizeBy || !contextResizeByItems) {
+    if (!contextResizeByItems) {
       return { label: 'Select an Indicator', value: null };
     }
 
-    return contextResizeByItems.find(item => item.attributeId === selectedResizeBy);
+    const itemIncludedInContext = contextResizeByItems.find(
+      item => item.attributeId === selectedResizeBy
+    );
+
+    if (!selectedResizeBy || !itemIncludedInContext) {
+      return contextResizeByItems.find(item => item.isDefault);
+    }
+
+    return itemIncludedInContext;
   }
 );
 
@@ -194,6 +205,41 @@ const getDashboardSelectedRecolorBy = createSelector(
       return { label: 'Select an Indicator', value: null };
     }
     return contextRecolorByItems.find(item => item.attributeId === selectedRecolorBy);
+  }
+);
+
+const getDashboardSelectedYears = createSelector(
+  [
+    getSelectedYears,
+    getDashboardsContext,
+    makeGetAvailableYears(
+      getDashboardSelectedResizeBy,
+      getDashboardSelectedRecolorBy,
+      getDashboardsContext
+    )
+  ],
+  (selectedYears, context, availableYears) => {
+    if (!selectedYears && !context) {
+      return [null, null];
+    }
+
+    if (context && !selectedYears) {
+      return [context.defaultYear, context.defaultYear];
+    }
+
+    if (context && selectedYears) {
+      const selectedYearsRange = range(selectedYears[0], selectedYears[1] + 1);
+      const intersectedYears = intersection(selectedYearsRange, availableYears);
+      const selectedAreUnavailable = isEmpty(intersectedYears);
+
+      if (selectedAreUnavailable) {
+        return [context.defaultYear, context.defaultYear];
+      }
+
+      return [intersectedYears[0], intersectedYears[intersectedYears.length - 1]];
+    }
+
+    return [null, null];
   }
 );
 

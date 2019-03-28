@@ -4,10 +4,11 @@ import Chart from 'react-components/chart';
 import Spinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import DashboardWidgetLabel from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-label.component';
 import DashboardWidgetLegend from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-legend/dashboard-widget-legend.component';
+import DynamicSentenceWidget from 'react-components/dashboard-element/dashboard-widget/dynamic-sentence-widget';
 import ErrorCatch from 'react-components/shared/error-catch.component';
 import Text from 'react-components/shared/text';
 import Heading from 'react-components/shared/heading';
-import DynamicSentenceWidget from 'react-components/dynamic-sentence-widget';
+import RankingWidget from 'react-components/ranking-widget';
 import 'react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
 
 function DashboardWidget(props) {
@@ -20,29 +21,37 @@ function DashboardWidget(props) {
   );
 
   const renderChart = () => {
-    if (chartConfig.type === 'sentence') {
-      return (
-        <div className="widget-centered">
-          <DynamicSentenceWidget
-            data={data}
-            config={chartConfig}
-            dynamicSentenceParts={dynamicSentenceParts}
-          />
-        </div>
-      );
+    switch (chartConfig.type) {
+      case 'sentence':
+        return (
+          <div className="dynamic-sentence-widget">
+            <DynamicSentenceWidget
+              data={data}
+              config={chartConfig}
+              dynamicSentenceParts={dynamicSentenceParts}
+            />
+          </div>
+        );
+      case 'ranking':
+        return (
+          <div className="widget-centered">
+            <RankingWidget data={data} config={chartConfig} />
+          </div>
+        );
+      default:
+        return (
+          <React.Fragment>
+            <DashboardWidgetLegend colors={chartConfig.colors} />
+            {chartConfig.yAxisLabel && (
+              <DashboardWidgetLabel
+                text={chartConfig.yAxisLabel.text}
+                suffix={chartConfig.yAxisLabel.suffix}
+              />
+            )}
+            <Chart className="widget-chart" data={data} config={chartConfig} />
+          </React.Fragment>
+        );
     }
-    return (
-      <React.Fragment>
-        <DashboardWidgetLegend colors={chartConfig.colors} />
-        {chartConfig.yAxisLabel && (
-          <DashboardWidgetLabel
-            text={chartConfig.yAxisLabel.text}
-            suffix={chartConfig.yAxisLabel.suffix}
-          />
-        )}
-        <Chart className="widget-chart" data={data} config={chartConfig} />
-      </React.Fragment>
-    );
   };
 
   return (
