@@ -2,12 +2,14 @@
 
 .c-paginate {
   display: flex;
-  justify-content: center;
-  width: calc(100% - 48px);
-  margin: 15px auto auto auto;
-  padding-top: 10px;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  bottom: 42px;
+  left: 50%;
+  transform: translate(-50%, 50%);
 
   .previous-button {
-    margin-right: 5px;
+    margin: 0 5px 0 0;
   }
 }

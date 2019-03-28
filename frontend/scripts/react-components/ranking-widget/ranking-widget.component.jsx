@@ -25,15 +25,16 @@ class RankingWidget extends PureComponent {
         <ul className="list">
           {data.length > 0 &&
             pageData.map((item, index) => (
-              <li key={item.x}>
+              <li key={item.x} className="list-row">
                 <div className="list-item">
                   <div className="item-label">
                     <div className="item-bubble">
                       <Text
                         as="span"
+                        size="md"
                         color="white"
                         variant="serif"
-                        size="md"
+                        weight="bold"
                         className="item-number"
                       >
                         {index + 1 + pageSize * page}
@@ -43,7 +44,7 @@ class RankingWidget extends PureComponent {
                       {capitalize(item.x)}
                     </Heading>
                   </div>
-                  <Text className="item-value" color="white">
+                  <Text className="item-value" color="white" variant="mono" size="md">
                     {formatValue(item.y0)} {config.yAxisLabel && config.yAxisLabel.suffix}
                   </Text>
                 </div>
