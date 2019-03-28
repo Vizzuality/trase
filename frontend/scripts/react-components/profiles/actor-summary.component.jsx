@@ -5,7 +5,7 @@ import cx from 'classnames';
 import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
 import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
-import TitleGroup from 'react-components/profiles/title-group.component';
+import TitleGroup from 'react-components/profiles/title-group';
 
 class ActorSummary extends React.PureComponent {
   render() {
@@ -26,9 +26,12 @@ class ActorSummary extends React.PureComponent {
       {
         dropdown: true,
         label: 'Year',
-        value: year,
-        valueList: (context.years ? [...context.years] : []).sort((a, b) => b - a),
-        onValueSelected: onYearChange
+        value: { label: `${year}`, value: year },
+        options: (context.years
+          ? context.years.map(_year => ({ label: `${_year}`, value: _year }))
+          : []
+        ).sort((a, b) => b.value - a.value),
+        onYearChange
       }
     ];
     return (

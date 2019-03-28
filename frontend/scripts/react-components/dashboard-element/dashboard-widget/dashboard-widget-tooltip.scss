@@ -1,0 +1,9 @@
+@import 'styles/settings';
+
+.c-dashboard-widget-tooltip {
+  display: flex;
+  flex-direction: column;
+  background-color: $charcoal-extra-dark;
+  border-radius: 6px;
+  padding: 5px 10px;
+}

@@ -6,37 +6,37 @@
 @font-face {
   font-family: 'DecimaMonoPro';
   font-weight: $font-weight-regular;
-  src: url('https://trase.earth/fonts/DecimaMonoPro.woff2') format('woff2'),
-  url('https://trase.earth/fonts/DecimaMonoPro.woff') format('woff'),
-  url('https://trase.earth/fonts/DecimaMonoPro.otf') format('embedded-opentype'),
-  url('https://trase.earth/fonts/DecimaMonoPro.otf');
+  src: url('/public/fonts/DecimaMonoPro.woff2') format('woff2'),
+  url('/public/fonts/DecimaMonoPro.woff') format('woff'),
+  url('/public/fonts/DecimaMonoPro.otf') format('embedded-opentype'),
+  url('/public/fonts/DecimaMonoPro.otf');
 }
 
 @font-face {
   font-family: 'DecimaMonoPro';
   font-weight: $font-weight-bold;
-  src: url('https://trase.earth/fonts/DecimaMonoPro-Bold.woff2') format('woff2'),
-  url('https://trase.earth/fonts/DecimaMonoPro-Bold.woff') format('woff'),
-  url('https://trase.earth/fonts/DecimaMonoPro-Bold.otf') format('embedded-opentype'),
-  url('https://trase.earth/fonts/DecimaMonoPro-Bold.otf');
+  src: url('/public/fonts/DecimaMonoPro-Bold.woff2') format('woff2'),
+  url('/public/fonts/DecimaMonoPro-Bold.woff') format('woff'),
+  url('/public/fonts/DecimaMonoPro-Bold.otf') format('embedded-opentype'),
+  url('/public/fonts/DecimaMonoPro-Bold.otf');
 }
 
 @font-face {
   font-family: 'Merriweather';
   font-weight: $font-weight-light;
-  src: url('https://trase.earth/fonts/Merriweather-Light.ttf');
+  src: url('/public/fonts/Merriweather-Light.ttf');
 }
 
 @font-face {
   font-family: 'Merriweather';
   font-weight: $font-weight-regular;
-  src: url('https://trase.earth/fonts/Merriweather-Regular.ttf');
+  src: url('/public/fonts/Merriweather-Regular.ttf');
 }
 
 @font-face {
   font-family: 'Merriweather';
   font-weight: $font-weight-bold;
-  src: url('https://trase.earth/fonts/Merriweather-Bold.ttf');
+  src: url('/public/fonts/Merriweather-Bold.ttf');
 }
 
 .dark-container {
@@ -60,4 +60,10 @@
   &.-width-200 {
     width: 200px;
   }
+}
+
+.chart-container {
+  background-color: $charcoal-dark;
+  width: 524px;
+  padding: 30px;
 }

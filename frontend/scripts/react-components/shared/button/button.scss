@@ -1,6 +1,8 @@
 @import 'styles/settings';
+@import 'styles/mixins';
 
 .c-button {
+  position: relative;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -16,6 +18,19 @@
 
   &:active {
     opacity: 0.8;
+  }
+
+  &.v-circle {
+    display: flex;
+    width: 34px;
+    height: 34px;
+    max-width: 34px;
+    max-height: 34px;
+    border-radius: 50%;
+
+    .icon {
+      flex: 1;
+    }
   }
 
   > .button-text-container {
@@ -103,12 +118,27 @@
   // backwards compat
   &.-with-icon {
     justify-content: space-between;
-    .icon {
-      margin-left: 5px;
-    }
 
     .button-text-container {
       max-width: calc(100% - 22px);
+    }
+
+    &.v-circle {
+      .icon {
+        margin-left: 0;
+      }
+    }
+  }
+
+  &.v-icon {
+    height: 32px;
+    width: 32px;
+    padding: 0;
+
+    &.color-gray {
+      svg {
+        fill: $charcoal-grey;
+      }
     }
   }
 }

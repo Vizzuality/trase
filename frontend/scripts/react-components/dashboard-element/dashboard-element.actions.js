@@ -8,19 +8,21 @@ export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS = 'DASHBOARD_ELEMENT__SET_ACTIV
 export const DASHBOARD_ELEMENT__SET_ACTIVE_TAB = 'DASHBOARD_ELEMENT__SET_ACTIVE_TAB';
 export const DASHBOARD_ELEMENT__CLEAR_PANEL = 'DASHBOARD_ELEMENT__CLEAR_PANEL';
 export const DASHBOARD_ELEMENT__CLEAR_PANELS = 'DASHBOARD_ELEMENT__CLEAR_PANELS';
-export const DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR = 'DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR';
-export const DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR =
-  'DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR';
 export const DASHBOARD_ELEMENT__SET_PANEL_TABS = 'DASHBOARD_ELEMENT__SET_PANEL_TABS';
 export const DASHBOARD_ELEMENT__SET_PANEL_PAGE = 'DASHBOARD_ELEMENT__SET_PANEL_PAGE';
 export const DASHBOARD_ELEMENT__SET_LOADING_ITEMS = 'DASHBOARD_ELEMENT__SET_LOADING_ITEMS';
 export const DASHBOARD_ELEMENT__GET_SEARCH_RESULTS = 'DASHBOARD_ELEMENT__GET_SEARCH_RESULTS';
 export const DASHBOARD_ELEMENT__SET_SEARCH_RESULTS = 'DASHBOARD_ELEMENT__SET_SEARCH_RESULTS';
-export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH =
-  'DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH =
   'DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH';
-export const DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP = 'DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP';
+export const DASHBOARD_ELEMENT__SET_SELECTED_YEARS = 'DASHBOARD_ELEMENT__SET_SELECTED_YEARS';
+export const DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY =
+  'DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY';
+export const DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY =
+  'DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY';
+export const DASHBOARD_ELEMENT__SET_CHARTS = 'DASHBOARD_ELEMENT__SET_CHARTS';
+export const DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS =
+  'DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS';
 
 export const getDashboardPanelParams = (state, optionsType, options = {}) => {
   const {
@@ -30,7 +32,7 @@ export const getDashboardPanelParams = (state, optionsType, options = {}) => {
     destinationsPanel,
     commoditiesPanel
   } = state;
-  const { page } = options;
+  const { page, isOverview } = options;
   const sourcesTab = sourcesPanel.activeTab && sourcesPanel.activeTab.id;
   const companiesTab = companiesPanel.activeTab && companiesPanel.activeTab.id;
 
@@ -41,7 +43,7 @@ export const getDashboardPanelParams = (state, optionsType, options = {}) => {
   const activeItemParams = panel => Object.keys(panel.activeItems).join();
   const params = {
     page,
-    options_type: optionsType !== 'indicators' ? optionsType : 'attributes',
+    options_type: optionsType,
     node_types_ids: nodeTypesIds
   };
   const currentStep = DASHBOARD_STEPS[optionsType];
@@ -49,20 +51,20 @@ export const getDashboardPanelParams = (state, optionsType, options = {}) => {
     params.countries_ids = activeItemParams(countriesPanel);
   }
 
-  if (currentStep > DASHBOARD_STEPS.sources) {
+  if (currentStep > DASHBOARD_STEPS.sources || isOverview) {
     params.countries_ids = activeItemParams(countriesPanel);
     params.sources_ids = activeItemParams(sourcesPanel);
   }
 
-  if (currentStep > DASHBOARD_STEPS.commodities) {
+  if (currentStep > DASHBOARD_STEPS.commodities || isOverview) {
     params.commodities_ids = activeItemParams(commoditiesPanel);
   }
 
-  if (currentStep > DASHBOARD_STEPS.destinations) {
+  if (currentStep > DASHBOARD_STEPS.destinations || isOverview) {
     params.destinations_ids = activeItemParams(destinationsPanel);
   }
 
-  if (currentStep > DASHBOARD_STEPS.companies) {
+  if (currentStep > DASHBOARD_STEPS.companies || isOverview) {
     params.companies_ids = activeItemParams(companiesPanel);
   }
 
@@ -72,11 +74,6 @@ export const getDashboardPanelParams = (state, optionsType, options = {}) => {
 export const setDashboardActivePanel = activePanelId => ({
   type: DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   payload: { activePanelId }
-});
-
-export const setDashboardPanelActiveItemWithSearch = (activeItem, panel) => ({
-  type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
-  payload: { panel, activeItem }
 });
 
 export const setDashboardPanelActiveItem = (activeItem, panel) => ({
@@ -109,16 +106,6 @@ export const clearDashboardPanels = panels => ({
   payload: { panels }
 });
 
-export const addActiveIndicator = active => ({
-  type: DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
-  payload: { active }
-});
-
-export const removeActiveIndicator = toRemove => ({
-  type: DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
-  payload: { toRemove }
-});
-
 export const setDashboardPanelPage = (page, direction) => ({
   type: DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   payload: { page, direction }
@@ -134,6 +121,17 @@ export const getDashboardPanelSearchResults = query => ({
   payload: { query }
 });
 
-export const openIndicatorsStep = () => ({
-  type: DASHBOARD_ELEMENT__OPEN_INDICATORS_STEP
+export const setDashboardSelectedYears = years => ({
+  type: DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
+  payload: { years }
+});
+
+export const setDashboardSelectedResizeBy = indicator => ({
+  type: DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
+  payload: { indicator }
+});
+
+export const setDashboardSelectedRecolorBy = indicator => ({
+  type: DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
+  payload: { indicator }
 });

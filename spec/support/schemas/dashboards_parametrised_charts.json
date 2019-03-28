@@ -1,0 +1,44 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "required": [
+    "data"
+  ],
+  "properties": {
+    "data": {
+      "$id": "#/properties/data",
+      "type": "array",
+      "title": "The Data Schema",
+      "items": {
+        "$id": "#/properties/data/items",
+        "type": "object",
+        "required": [
+          "type",
+          "url"
+        ],
+        "properties": {
+          "type": {
+            "$id": "#/properties/data/items/properties/type",
+            "type": "string",
+            "default": "",
+            "examples": [
+              "bar_chart"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "url": {
+            "$id": "#/properties/data/items/properties/url",
+            "type": "string",
+            "default": "",
+            "examples": [
+              "http://localhost:3000/api/v3/dashboards/chart_data?chart_type=bar_chart&commodity_id=1&cont_attribute_id=1&country_id=27&start_year=2015&x=year&y=cont_attribute&y_id=1"
+            ],
+            "pattern": "^(.*)$"
+          }
+        }
+      }
+    }
+  }
+}

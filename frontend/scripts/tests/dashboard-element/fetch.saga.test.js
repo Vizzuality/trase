@@ -33,7 +33,6 @@ const dashboardElement = {
     sources: [{ id: 1, name: 'BIOME' }]
   },
   activePanelId: 'sources',
-  activeIndicatorsList: [],
   sourcesPanel: {
     page: 1,
     searchResults: [],

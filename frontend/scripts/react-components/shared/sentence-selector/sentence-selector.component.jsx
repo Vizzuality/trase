@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import uniq from 'lodash/uniq';
+import uniqBy from 'lodash/uniqBy';
 import capitalize from 'lodash/capitalize';
 import cx from 'classnames';
-import Dropdown from 'react-components/shared/dropdown.component';
-import YearsSelector from 'react-components/nav/filters-nav/years-selector/years-selector.container';
+import Dropdown from 'react-components/shared/dropdown';
+import YearsSelector from 'react-components/nav/filters-nav/years-selector';
 
 import 'react-components/shared/sentence-selector/sentence-selector.scss';
 
@@ -13,26 +13,26 @@ class SentenceSelector extends React.PureComponent {
     const { contexts, selectedContext } = this.props;
 
     const countryNames = contexts
-      .filter(c => c.commodityName === selectedCommodity.toUpperCase())
+      .filter(c => c.commodityName === selectedCommodity.value)
       .map(c => c.countryName);
 
     const selectedCountry =
       countryNames.find(c => c === selectedContext.countryName) || countryNames[0];
 
-    this.selectContextId(selectedCountry, selectedCommodity.toUpperCase());
+    this.selectContextId(selectedCountry, selectedCommodity.value);
   };
 
   onSelectCountry = selectedCountry => {
     const { contexts, selectedContext } = this.props;
 
     const commodityNames = contexts
-      .filter(c => c.countryName === selectedCountry.toUpperCase())
+      .filter(c => c.countryName === selectedCountry.value)
       .map(c => c.commodityName);
 
     const selectedCommodity =
       commodityNames.find(c => c === selectedContext.commodityName) || commodityNames[0];
 
-    this.selectContextId(selectedCountry.toUpperCase(), selectedCommodity);
+    this.selectContextId(selectedCountry.value, selectedCommodity);
   };
 
   getContextId(selectedCountry, selectedCommodity) {
@@ -55,67 +55,51 @@ class SentenceSelector extends React.PureComponent {
     }
   }
 
-  getCommodityClassName = elem => {
-    const { selectedCountryPairs, selectedContext } = this.props;
-    if (selectedCountryPairs[selectedContext.countryName].includes(elem.toUpperCase())) {
-      return '';
-    }
-
-    return '-faded';
-  };
-
-  getCountryClassName = elem => {
-    const { selectedCommodityPairs, selectedContext } = this.props;
-    if (selectedCommodityPairs[selectedContext.commodityName].includes(elem.toUpperCase())) {
-      return '';
-    }
-
-    return '-faded';
-  };
-
   render() {
-    const {
-      contexts,
-      className,
-      selectedContext,
-      selectedYears,
-      currentDropdown,
-      toggleDropdown
-    } = this.props;
+    const { contexts, className, selectedYears, selectedContext } = this.props;
 
     if (!selectedContext) return null;
 
     const { commodityName, countryName } = selectedContext;
 
-    const commodityNames = uniq(contexts.map(c => c.commodityName.toLowerCase()));
-    const countryNames = uniq(contexts.map(c => capitalize(c.countryName)));
+    const commodityNames = uniqBy(
+      contexts.map(c => ({
+        value: c.commodityName,
+        label: c.commodityName.toLowerCase()
+      })),
+      'value'
+    );
+    const countryNames = uniqBy(
+      contexts.map(c => ({
+        value: c.countryName,
+        label: capitalize(c.countryName)
+      })),
+      'value'
+    );
 
     return (
       <div className={cx('c-sentence-selector', className)}>
         <div className="sentence-selector-text">
           What are the sustainability risks and opportunities associated{' '}
-          <br className="hide-for-small" /> with the trade of
+          <br className="hide-for-small" /> with the trade of{' '}
           <Dropdown
-            value={commodityName.toLowerCase()}
-            valueList={commodityNames}
-            onValueSelected={this.onSelectCommodity}
-            getItemClassName={this.getCommodityClassName}
+            variant="sentence"
+            align="center"
+            value={{ value: commodityName.toLowerCase(), label: commodityName.toLowerCase() }}
+            options={commodityNames}
+            onChange={this.onSelectCommodity}
           />
-          from
+          from{' '}
           <Dropdown
-            value={capitalize(countryName)}
-            valueList={countryNames}
-            onValueSelected={this.onSelectCountry}
-            getItemClassName={this.getCountryClassName}
+            variant="sentence"
+            align="center"
+            value={{ value: capitalize(countryName), label: capitalize(countryName) }}
+            options={countryNames}
+            onChange={this.onSelectCountry}
           />
           <span className="hide-for-small">
-            in the year{selectedYears[0] !== selectedYears[1] ? 's' : ''}
-            <YearsSelector
-              className="years-selector"
-              onToggle={toggleDropdown}
-              dropdownClassName="-big"
-              currentDropdown={currentDropdown}
-            />
+            in the year{selectedYears[0] !== selectedYears[1] ? 's ' : ' '}
+            <YearsSelector variant="sentence" placement="bottom-end" />
           </span>
         </div>
       </div>
@@ -133,13 +117,9 @@ SentenceSelector.propTypes = {
       isDefault: PropTypes.bool
     })
   ),
-  toggleDropdown: PropTypes.func,
   selectedYears: PropTypes.array,
-  currentDropdown: PropTypes.string,
   selectContextById: PropTypes.func,
-  selectedContext: PropTypes.object,
-  selectedCountryPairs: PropTypes.object,
-  selectedCommodityPairs: PropTypes.object
+  selectedContext: PropTypes.object
 };
 
 export default SentenceSelector;

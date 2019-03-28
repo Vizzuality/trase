@@ -31,7 +31,8 @@ describe('Prints the actor profile PDF correctly', () => {
     const promises = [
       page.waitForSelector('[data-test=company-compare]'),
       page.waitForSelector('[data-test=top-destination-countries]'),
-      page.waitForSelector('[data-test=top-destination-countries-map-d3-polygon-colored]')
+      page.waitForSelector('[data-test=top-destination-countries-map-d3-polygon-colored]'),
+      page.waitForSelector('[data-test=top-sourcing-regions-map-d3-polygon-colored]')
     ];
     await Promise.all(promises);
     await page.emulateMedia('print');

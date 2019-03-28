@@ -40,13 +40,6 @@ if (USE_SERVICE_WORKER) {
   unregister();
 }
 
-if (process.env.NODE_ENV !== 'production' && PERF_TEST) {
-  const React = require('react');
-  const { whyDidYouUpdate } = require('why-did-you-update');
-
-  whyDidYouUpdate(React);
-}
-
 if (REDUX_LOGGER_ENABLED) {
   const { createLogger } = require('redux-logger');
 

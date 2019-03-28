@@ -1,6 +1,7 @@
 @import 'styles/settings';
 
 .c-heading {
+  text-align: left;
 
   &.mono {
     font-family: $font-family-1;
@@ -45,7 +46,7 @@
     color: $strong-pink;
   }
 
-  &.align-center {
+  &.text-align-center {
     text-align: center;
   }
 
@@ -55,5 +56,13 @@
 
   &.weight-bold {
     font-weight: $font-weight-bold;
+  }
+
+  &.transform-uppercase {
+    text-transform: uppercase;
+  }
+
+  &.transform-capitalize {
+    text-transform: capitalize;
   }
 }

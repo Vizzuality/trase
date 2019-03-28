@@ -9,7 +9,6 @@
   .sentence-selector-text {
     color: $charcoal-grey;
     text-align: center;
-    font-size: $font-size-xxx-regular;
     font-family: $font-family-2;
     font-weight: 300;
     line-height: 1.58;
@@ -17,7 +16,11 @@
     &.-nowrap {
       white-space: nowrap;
     }
+  }
 
+  .sentence-selector-text,
+  .dropdown-value {
+    font-size: $font-size-xxx-regular;
     @media screen and (min-width: $breakpoint-foundation-small) {
       font-size: $font-size-medium;
     }
@@ -25,62 +28,5 @@
     @media screen and (min-width: $breakpoint-foundation-medium) {
       font-size: $font-size-big;
     }
-  }
-
-  .c-dropdown {
-    display: inline-block;
-    margin: 0 5px;
-    cursor: pointer;
-
-    @media screen and (min-width: $breakpoint-foundation-small) {
-      margin: 0 7px;
-    }
-
-    .dropdown-label {
-      display: none;
-    }
-
-    .dropdown-title {
-      text-align: center;
-      padding: 0 18px 0 0;
-      font-size: $font-size-xxx-regular;
-
-      @media screen and (min-width: $breakpoint-foundation-small) {
-        padding: 0 21px 0 0;
-        font-size: $font-size-medium;
-      }
-
-      @media screen and (min-width: $breakpoint-foundation-medium) {
-        padding: 0 23px 0 0;
-        font-size: $font-size-big;
-      }
-    }
-
-    .dropdown-title::after {
-      position: absolute;
-      top: 50%;
-      right: 0;
-      width: 8px;
-      height: 8px;
-      border-color: $strong-pink;
-      border-width: 2px;
-      transform: translate(-50%, calc(-50% - 1px)) rotate(45deg)
-    }
-
-    .dropdown-list {
-      top: 1.5em;
-      min-width: 120px;
-      right: 0;
-      left: auto;
-
-      > .dropdown-item {
-        color: $charcoal-grey;
-        font-size: $font-size-xx-regular;
-      }
-    }
-  }
-
-  .years-selector {
-    display: inline-block;
   }
 }

@@ -4,41 +4,48 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import DashboardElement from 'react-components/dashboard-element/dashboard-element.component';
 import {
-  getActiveIndicatorsData,
   getDirtyBlocks,
-  getDynamicSentence
+  getDynamicSentence,
+  getDashboardFiltersProps
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getPanelId } from 'utils/dashboardPanel';
 import {
-  openIndicatorsStep as openIndicatorsStepFn,
+  setDashboardSelectedYears,
+  setDashboardSelectedResizeBy,
+  setDashboardSelectedRecolorBy,
   setDashboardActivePanel as setDashboardActivePanelFn
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import { DASHBOARD_STEPS } from 'constants';
 
 const mapStateToProps = state => ({
-  indicators: state.dashboardElement.data.indicators,
-  activeIndicators: getActiveIndicatorsData(state),
-  dynamicSentenceParts: getDynamicSentence(state),
-  dirtyBlocks: getDirtyBlocks(state)
+  dirtyBlocks: getDirtyBlocks(state),
+  charts: state.dashboardElement.charts,
+  filters: getDashboardFiltersProps(state),
+  dynamicSentenceParts: getDynamicSentence(state)
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
+      goToRoot: () => ({ type: 'dashboardRoot' }),
+      setSelectedYears: setDashboardSelectedYears,
+      setSelectedResizeBy: setDashboardSelectedResizeBy,
       setDashboardActivePanel: setDashboardActivePanelFn,
-      openIndicatorsStep: openIndicatorsStepFn,
-      goToRoot: () => ({ type: 'dashboardRoot' })
+      setSelectedRecolorBy: setDashboardSelectedRecolorBy
     },
     dispatch
   );
 
 class DashboardElementContainer extends React.Component {
   static propTypes = {
+    charts: PropTypes.array,
+    filters: PropTypes.object,
     dirtyBlocks: PropTypes.object,
-    activeIndicators: PropTypes.array,
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
-    openIndicatorsStep: PropTypes.func.isRequired,
+    setSelectedYears: PropTypes.func.isRequired,
+    setSelectedResizeBy: PropTypes.func.isRequired,
+    setSelectedRecolorBy: PropTypes.func.isRequired,
     setDashboardActivePanel: PropTypes.func.isRequired
   };
 
@@ -67,11 +74,9 @@ class DashboardElementContainer extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const { step } = this.state;
     if (step !== prevState.step) {
-      const { setDashboardActivePanel, openIndicatorsStep } = this.props;
+      const { setDashboardActivePanel } = this.props;
       if (step !== DASHBOARD_STEPS.indicators) {
         setDashboardActivePanel(getPanelId(step));
-      } else {
-        openIndicatorsStep();
       }
     }
   }
@@ -87,15 +92,20 @@ class DashboardElementContainer extends React.Component {
   render() {
     const { step, modalOpen, editMode } = this.state;
     const {
+      charts,
       goToRoot,
-      activeIndicators,
       dynamicSentenceParts,
       dirtyBlocks,
-      openIndicatorsStep
+      filters,
+      setSelectedYears,
+      setSelectedResizeBy,
+      setSelectedRecolorBy
     } = this.props;
     return (
       <DashboardElement
         step={step}
+        charts={charts}
+        filters={filters}
         editMode={editMode}
         goToRoot={goToRoot}
         modalOpen={modalOpen}
@@ -103,9 +113,10 @@ class DashboardElementContainer extends React.Component {
         setStep={this.updateStep}
         closeModal={this.closeModal}
         reopenPanel={this.reopenPanel}
-        activeIndicators={activeIndicators}
-        openIndicatorsStep={openIndicatorsStep}
         dynamicSentenceParts={dynamicSentenceParts}
+        setSelectedYears={setSelectedYears}
+        setSelectedResizeBy={setSelectedResizeBy}
+        setSelectedRecolorBy={setSelectedRecolorBy}
       />
     );
   }

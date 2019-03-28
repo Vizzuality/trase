@@ -1,0 +1,158 @@
+@import 'styles/settings';
+
+$button-size: 20px;
+$fill-size: 8px;
+$button-mobile-size: 24px;
+$fill-mobile-size: 10px;
+$not-active-color: $charcoal-grey-faded;
+$active-color: $charcoal-grey;
+
+.c-years-range {
+  min-width: 180px;
+  overflow: hidden;
+
+  .years-range-content {
+    display: flex;
+    padding: 15px;
+    min-width: auto;
+  }
+
+  .years-range-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 25px;
+    background-color: $background-white;
+    cursor: default;
+
+    p {
+      @media screen and (min-width: $breakpoint-foundation-small) {
+        font-size: $font-size-small;
+      }
+    }
+  }
+
+  .years-range-unrotate {
+    transform: rotate(-45deg);
+  }
+
+  .years-range-button {
+    height: $button-mobile-size;
+    width: $button-mobile-size;
+    cursor: pointer;
+    border: solid 2px $not-active-color;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    margin-bottom: 10px;
+
+    transform: rotate(45deg);
+
+    &:not(:last-child) {
+      .years-range-fill {
+        &::after {
+          content: '';
+          position: absolute;
+          height: 2px;
+          background: $not-active-color;
+          top: 4px;
+          left: 17px;
+          width: 20px;
+
+          @media screen and (min-width: $breakpoint-foundation-small) {
+            top: 3px;
+            left: 14px;
+          }
+        }
+      }
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    @media screen and (min-width: $breakpoint-foundation-small) {
+      height: $button-size;
+      width: $button-size;
+    }
+  }
+
+  .years-range-fill {
+    position: relative;
+    height: $fill-mobile-size;
+    width: $fill-mobile-size;
+    border: none;
+    border-radius: 50%;
+
+    .year-label {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+
+      @media screen and (min-width: $breakpoint-foundation-small) {
+        font-size: $font-size-small;
+      }
+    }
+
+    @media screen and (min-width: $breakpoint-foundation-small) {
+      height: $fill-size;
+      width: $fill-size;
+    }
+  }
+
+  &.-selecting {
+    .years-range-button {
+      &.-start {
+        border-left-color: $active-color;
+        border-bottom-color: $active-color;
+
+        .years-range-fill {
+          background: linear-gradient(to right, $active-color 0%, $active-color 50%, rgba($active-color,.5) 50%, rgba($active-color,.5) 100%);
+        }
+      }
+
+      &.-end {
+        border-right-color: $active-color;
+        border-top-color: $active-color;
+
+        .years-range-fill {
+          background: linear-gradient(to left, $active-color 0%, $active-color 50%, rgba($active-color,.5) 50%, rgba($active-color,.5) 100%);
+        }
+      }
+
+      &.start.end {
+        .years-range-fill {
+          background-color: $active-color;
+        }
+      }
+
+      &.-active {
+        .years-range-fill {
+          background-color: $not-active-color;
+        }
+      }
+    }
+  }
+
+  &.-selected {
+    .years-range-button {
+      &.-active {
+        border-color: $active-color;;
+        &:not(.end) {
+          .years-range-fill {
+            &::after {
+              background: $active-color;
+            }
+          }
+        }
+
+        .years-range-fill {
+          background-color: $active-color;
+        }
+      }
+    }
+  }
+}

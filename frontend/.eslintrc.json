@@ -5,9 +5,11 @@
     "node": true,
     "jest/globals": true
   },
-  "plugins": ["react", "jest", "prettier"],
+  "plugins": ["react", "react-hooks", "jest", "prettier"],
   "extends": ["airbnb", "prettier"],
   "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
     "no-console": [
       1,
       {

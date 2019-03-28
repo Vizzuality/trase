@@ -153,8 +153,10 @@ class DashboardPanel extends Component {
     }
     return (
       <>
-        {step === DASHBOARD_STEPS.companies ? '(Optional) ' : ''}
         Choose one or several <span className="dashboard-panel-sentence">{getPanelName(step)}</span>
+        {[DASHBOARD_STEPS.companies, DASHBOARD_STEPS.destinations].includes(step)
+          ? ' (Optional)'
+          : ''}
       </>
     );
   }
@@ -186,7 +188,7 @@ class DashboardPanel extends Component {
           {this.renderPanel()}
         </div>
         <DashboardModalFooter
-          isPanelFooter
+          isLastStep={step === DASHBOARD_STEPS.companies}
           onContinue={onContinue}
           onBack={onBack}
           backText="Back"

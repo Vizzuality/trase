@@ -2,6 +2,7 @@
 
 .c-text {
   color: $charcoal-grey;
+  text-align: left;
 
   &.mono {
     font-family: $font-family-1;
@@ -48,12 +49,16 @@
     color: $strong-pink;
   }
 
-  &.align-center {
+  &.text-align-center {
     text-align: center;
   }
 
   &.weight-light {
     font-weight: $font-weight-light;
+  }
+
+  &.weight-regular {
+    font-weight: $font-weight-regular;
   }
 
   &.weight-bold {

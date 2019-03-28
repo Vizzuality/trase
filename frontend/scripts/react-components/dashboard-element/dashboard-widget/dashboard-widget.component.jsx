@@ -4,17 +4,62 @@ import Chart from 'react-components/chart';
 import Spinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import DashboardWidgetLabel from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-label.component';
 import DashboardWidgetLegend from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-legend/dashboard-widget-legend.component';
+import DynamicSentenceWidget from 'react-components/dashboard-element/dashboard-widget/dynamic-sentence-widget';
 import ErrorCatch from 'react-components/shared/error-catch.component';
-
-import 'scripts/react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
+import Text from 'react-components/shared/text';
+import Heading from 'react-components/shared/heading';
+import RankingWidget from 'react-components/ranking-widget';
+import 'react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
 
 function DashboardWidget(props) {
-  const { title, loading, error, data, chartConfig } = props;
+  const { title, loading, error, data, chartConfig, dynamicSentenceParts } = props;
+
+  const renderError = errorMessage => (
+    <Text color="white" weight="bold" variant="mono" size="lg" className="widget-centered">
+      {errorMessage}
+    </Text>
+  );
+
+  const renderChart = () => {
+    switch (chartConfig.type) {
+      case 'sentence':
+        return (
+          <div className="dynamic-sentence-widget">
+            <DynamicSentenceWidget
+              data={data}
+              config={chartConfig}
+              dynamicSentenceParts={dynamicSentenceParts}
+            />
+          </div>
+        );
+      case 'ranking':
+        return (
+          <div className="widget-centered">
+            <RankingWidget data={data} config={chartConfig} />
+          </div>
+        );
+      default:
+        return (
+          <React.Fragment>
+            <DashboardWidgetLegend colors={chartConfig.colors} />
+            {chartConfig.yAxisLabel && (
+              <DashboardWidgetLabel
+                text={chartConfig.yAxisLabel.text}
+                suffix={chartConfig.yAxisLabel.suffix}
+              />
+            )}
+            <Chart className="widget-chart" data={data} config={chartConfig} />
+          </React.Fragment>
+        );
+    }
+  };
 
   return (
     <div className="c-dashboard-widget">
       <div className="widget-title-container">
-        <h3 className="widget-title">{title}</h3>
+        <Heading as="h3" color="white">
+          {title}
+        </Heading>
         <div className="widget-actions">
           <button type="button" />
           <button type="button" />
@@ -22,27 +67,14 @@ function DashboardWidget(props) {
         </div>
       </div>
       <div className="widget-box">
-        <ErrorCatch
-          renderFallback={err => <p className="widget-title -error">Error: {err.message}</p>}
-        >
-          {error && <p className="widget-title -error">Error: {error.statusText}</p>}
+        <ErrorCatch renderFallback={err => renderError(`Error: ${err.message}`)}>
+          {error && renderError(`Error: ${error.statusText}`)}
           {loading && (
             <div className="widget-spinner">
               <Spinner className="-large -white" />
             </div>
           )}
-          {data && data.length > 0 && chartConfig && (
-            <React.Fragment>
-              <DashboardWidgetLegend colors={chartConfig.colors} />
-              {chartConfig.yAxisLabel && (
-                <DashboardWidgetLabel
-                  text={chartConfig.yAxisLabel.text}
-                  suffix={chartConfig.yAxisLabel.suffix}
-                />
-              )}
-              <Chart className="widget-chart" data={data} config={chartConfig} />
-            </React.Fragment>
-          )}
+          {data && data.length > 0 && chartConfig && renderChart()}
         </ErrorCatch>
       </div>
     </div>
@@ -54,7 +86,8 @@ DashboardWidget.propTypes = {
   data: PropTypes.array,
   title: PropTypes.string,
   loading: PropTypes.bool,
-  chartConfig: PropTypes.object
+  chartConfig: PropTypes.object,
+  dynamicSentenceParts: PropTypes.array
 };
 
 export default DashboardWidget;

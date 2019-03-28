@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import 'react-components/dashboard-element/dashboard-widget/dashboard-widget-tooltip.scss';
+
 class DashboardWidgetTooltip extends React.PureComponent {
   static getTooltipValue(meta, dataKey, payload) {
     const { x, ...keys } = payload.payload || payload;
@@ -30,7 +32,7 @@ class DashboardWidgetTooltip extends React.PureComponent {
       const { label } = meta[key];
       text = `${label} `;
     } else {
-      text = `${payload.x} `;
+      text = payload.y ? `${payload.y} ` : `${payload.x} `;
     }
     return text;
   }

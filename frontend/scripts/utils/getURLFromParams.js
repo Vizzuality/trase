@@ -36,6 +36,7 @@ export const GET_DASHBOARD_OPTIONS_URL = 'GET_DASHBOARD_OPTIONS_URL';
 export const GET_DASHBOARD_OPTIONS_TABS_URL = 'GET_DASHBOARD_OPTIONS_TABS_URL';
 export const GET_DASHBOARD_TEMPLATES_URL = 'GET_DASHBOARD_TEMPLATES_URL';
 export const GET_DASHBOARD_SEARCH_RESULTS_URL = 'GET_DASHBOARD_SEARCH_RESULTS_URL';
+export const GET_DASHBOARD_PARAMETRISED_CHARTS_URL = 'GET_DASHBOARD_PARAMETRISED_CHARTS_URL';
 
 const API_ENDPOINTS = {
   [GET_CONTEXTS_URL]: { api: 3, endpoint: '/contexts' },
@@ -122,6 +123,10 @@ const API_ENDPOINTS = {
   [GET_PROFILE_METADATA]: {
     api: 3,
     endpoint: '/contexts/$context_id$/nodes/$node_id$/profile_metadata'
+  },
+  [GET_DASHBOARD_PARAMETRISED_CHARTS_URL]: {
+    api: 3,
+    endpoint: '/dashboards/parametrised_charts'
   }
 };
 
@@ -129,14 +134,16 @@ function replaceURLParams(endpoint, params) {
   const regex = /\$[^$]+\$/g;
 
   const urlParams = endpoint.match(regex) || [];
-  urlParams.map(p => trim(p, '$')).forEach(param => {
-    if (!Object.prototype.hasOwnProperty.call(params, param)) {
-      throw new Error(`URL param ${param} not found in params object`);
-    }
+  urlParams
+    .map(p => trim(p, '$'))
+    .forEach(param => {
+      if (!Object.prototype.hasOwnProperty.call(params, param)) {
+        throw new Error(`URL param ${param} not found in params object`);
+      }
 
-    endpoint = endpoint.replace(`$${param}$`, params[param]);
-    delete params[param];
-  });
+      endpoint = endpoint.replace(`$${param}$`, params[param]);
+      delete params[param];
+    });
 
   return endpoint;
 }

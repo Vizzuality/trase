@@ -1,26 +1,27 @@
 @import 'styles/settings';
 
 .c-dashboard-widget {
+  min-width: 100%;
+
   .widget-title-container {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
   }
 
-  .widget-title {
-    color: $white;
-    font-family: $font-family-2;
-    font-size: 20px;
-    font-weight: $font-weight-light;
-    line-height: 1.6;
-    letter-spacing: -0.4px;
+  .dynamic-sentence-widget {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 0 30px;
+  }
 
-    &.-error {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-    }
+  .widget-centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
   }
 
   .widget-actions {
