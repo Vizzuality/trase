@@ -3,8 +3,10 @@ import merge from 'webpack-merge';
 import webpackConfig from './config/webpack.config';
 
 export default {
+  files: '**/*.{md,markdown,mdx}',
   dest: './docs/dist',
   title: 'Trase',
+  public: './public/docs',
   themeConfig: {
     colors: {
       primary: '#34444C',

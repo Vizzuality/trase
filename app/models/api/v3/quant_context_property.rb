@@ -3,9 +3,9 @@
 # Table name: quant_context_properties
 #
 #  id           :bigint(8)        not null, primary key
-#  tooltip_text :text
-#  context_id   :bigint(8)
-#  quant_id     :bigint(8)
+#  tooltip_text :text             not null
+#  context_id   :bigint(8)        not null
+#  quant_id     :bigint(8)        not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #
@@ -16,8 +16,8 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (context_id => contexts.id)
-#  fk_rails_...  (quant_id => quants.id)
+#  fk_rails_...  (context_id => contexts.id) ON DELETE => cascade ON UPDATE => cascade
+#  fk_rails_...  (quant_id => quants.id) ON DELETE => cascade ON UPDATE => cascade
 #
 
 module Api

@@ -37,6 +37,17 @@ ActiveAdmin.register Api::V3::QualContextProperty, as: 'QualContextProperty' do
     actions
   end
 
+  show do
+    attributes_table do
+      row :tooltip_text
+      row('Country') { |property| property.context&.country&.name }
+      row('Commodity') { |property| property.context&.commodity&.name }
+      row('Qual') { |property| property.qual&.name }
+      row :created_at
+      row :updated_at
+    end
+  end
+
   filter :qual, collection: -> { Api::V3::Qual.select_options }
   filter :context, collection: -> { Api::V3::Context.select_options }
 end

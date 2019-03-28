@@ -61,8 +61,11 @@ RSpec.describe 'Place profile', type: :request do
 
   describe 'GET /api/v3/contexts/:context_id/places/:id/indicators' do
     before(:each) do
-      Api::V3::Readonly::Attribute.refresh
-      Api::V3::Readonly::ChartAttribute.refresh
+      Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
+      Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
+      Api::V3::Readonly::ContextAttributeProperty.refresh(sync: true, skip_dependencies: true)
+      Api::V3::Readonly::CountryAttributeProperty.refresh(sync: true, skip_dependencies: true)
+      Api::V3::Readonly::CommodityAttributeProperty.refresh(sync: true, skip_dependencies: true)
     end
     it 'has the correct response structure' do
       get "/api/v3/contexts/#{api_v3_context.id}/places/#{api_v3_municipality_node.id}/indicators", params: summary_params
@@ -74,8 +77,11 @@ RSpec.describe 'Place profile', type: :request do
 
   describe 'GET /api/v3/contexts/:context_id/places/:id/trajectory_deforestation' do
     before(:each) do
-      Api::V3::Readonly::Attribute.refresh
-      Api::V3::Readonly::ChartAttribute.refresh
+      Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
+      Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
+      Api::V3::Readonly::ContextAttributeProperty.refresh(sync: true, skip_dependencies: true)
+      Api::V3::Readonly::CountryAttributeProperty.refresh(sync: true, skip_dependencies: true)
+      Api::V3::Readonly::CommodityAttributeProperty.refresh(sync: true, skip_dependencies: true)
     end
     it 'has the correct response structure' do
       get "/api/v3/contexts/#{api_v3_context.id}/places/#{api_v3_municipality_node.id}/trajectory_deforestation", params: summary_params

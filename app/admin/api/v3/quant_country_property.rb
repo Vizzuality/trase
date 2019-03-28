@@ -38,6 +38,16 @@ ActiveAdmin.register Api::V3::QuantCountryProperty, as: 'QuantCountryProperty' d
     actions
   end
 
+  show do
+    attributes_table do
+      row :tooltip_text
+      row('Country') { |property| property.country&.name }
+      row('Quant') { |property| property.quant&.name }
+      row :created_at
+      row :updated_at
+    end
+  end
+
   filter :quant, collection: -> { Api::V3::Quant.select_options }
   filter :country, collection: -> { Api::V3::Country.select_options }
 end
