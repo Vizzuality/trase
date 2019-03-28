@@ -4,24 +4,38 @@
   border-bottom: solid 1px rgba($white, 0.13);
   padding: 31px 42px;
   display: flex;
+  position: relative;
 
   &.-paginated {
     min-height: 128px;
-    align-items: start;
+    height: 128px;
+    align-items: center;
   }
 
-  .row {
-    flex: 1;
+  .dashboard-widget-legend-list {
+    max-width: 90%;
+    display: flex;
+    flex-wrap: wrap;
   }
-  .c-paginate {
-    flex: 0
+
+  .legend-pagination {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
   }
+}
+
+.dashboard-widget-item {
+  justify-content: center;
+  flex: 0 0 33%;
 }
 
 .dashboard-widget-key-item {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  margin-bottom: 5px;
 
   .column {
     margin-top: 0;

@@ -22,9 +22,9 @@ class DashboardWidgetLegend extends React.PureComponent {
 
     return (
       <div className={cx('c-dashboard-widget-legend', { '-paginated': hasPagination })}>
-        <div className="row -equal-height">
+        <div className="dashboard-widget-legend-list">
           {pageData.map((d, i) => (
-            <div key={i} className="column small-4">
+            <div key={i} className="dashboard-widget-item">
               <div className="dashboard-widget-key-item">
                 <span style={{ backgroundColor: d.color || 'white' }} />
                 <p>{d.label}</p>
@@ -39,6 +39,7 @@ class DashboardWidgetLegend extends React.PureComponent {
             count={colors.length}
             onClickChange={this.handlePageChange}
             variant="vertical"
+            className="legend-pagination"
           />
         )}
       </div>
