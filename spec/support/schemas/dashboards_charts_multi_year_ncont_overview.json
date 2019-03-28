@@ -109,17 +109,8 @@
           "properties": {
             "type": {
               "$id": "#/properties/meta/properties/yAxis/properties/type",
-              "type": "object",
-              "required": [
-                "type"
-              ],
-              "properties": {
-                "type": {
-                  "$id": "#/properties/meta/properties/yAxis/properties/type/properties/type",
-                  "type": "string",
-                  "pattern": "^(.*)$"
-                }
-              }
+              "type": "string",
+              "pattern": "^(.*)$"
             },
             "label": {
               "$id": "#/properties/meta/properties/yAxis/properties/label",
