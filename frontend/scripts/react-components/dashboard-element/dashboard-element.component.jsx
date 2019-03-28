@@ -89,12 +89,17 @@ class DashboardElement extends React.PureComponent {
   }
 
   renderWidgets() {
-    const { charts } = this.props;
+    const { charts, filters } = this.props;
     return (
       <div className="row -equal-height -flex-end">
         {charts.map(chart => (
           <div key={chart.id} className="column small-12 medium-6 ">
-            <DashboardWidget url={chart.url} title={chart.displayName} chartType={chart.type} />
+            <DashboardWidget
+              url={chart.url}
+              title={chart.displayName}
+              chartType={chart.type}
+              selectedRecolorBy={filters.selectedRecolorBy}
+            />
           </div>
         ))}
       </div>

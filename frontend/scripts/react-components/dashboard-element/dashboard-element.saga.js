@@ -229,7 +229,7 @@ function* updateIndicatorsOnItemChange() {
   if (contextSelected) {
     const filters = yield select(getDashboardFiltersProps);
     let years = dashboardElement.selectedYears;
-    let indicator = dashboardElement.selectedResizeBy;
+    let indicator = { attributeId: dashboardElement.selectedResizeBy };
     let hasChanged = false;
     if (
       dashboardElement.selectedYears === null ||
@@ -241,12 +241,12 @@ function* updateIndicatorsOnItemChange() {
 
     if (
       dashboardElement.selectedResizeBy === null ||
-      dashboardElement.selectedResizeBy.attributeId !== filters.selectedResizeBy.attributeId
+      dashboardElement.selectedResizeBy !== filters.selectedResizeBy.attributeId
     ) {
       indicator = filters.selectedResizeBy;
       hasChanged = true;
     }
-    if (hasChanged) {
+    if (hasChanged && indicator && years[0]) {
       yield put({
         type: DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS,
         payload: { years, indicator }
