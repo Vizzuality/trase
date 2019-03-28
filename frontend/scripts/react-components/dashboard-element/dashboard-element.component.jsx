@@ -93,7 +93,7 @@ class DashboardElement extends React.PureComponent {
     return (
       <div className="row -equal-height -flex-end">
         {charts.map(chart => (
-          <div key={chart.id} className="column small-12 medium-6 ">
+          <div key={chart.id} className="column medium-12 large-6 ">
             <DashboardWidget
               url={chart.url}
               title={chart.displayName}

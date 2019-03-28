@@ -1,6 +1,8 @@
 @import 'styles/settings';
 
 .c-dashboard-widget {
+  min-width: 500px;
+
   .widget-title-container {
     display: flex;
     justify-content: space-between;
