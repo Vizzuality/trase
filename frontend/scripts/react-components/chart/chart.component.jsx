@@ -72,7 +72,7 @@ class Chart extends PureComponent {
         barCategoryGap: '10'
       };
     }
-    const defaultMargin = { top: 20, right: 0, left: 50, bottom: 20 };
+    const defaultMargin = { top: 20, right: 0, left: 100, bottom: 20 };
     return (
       <div className={`c-chart ${className}`} style={{ height }}>
         <ResponsiveContainer>
@@ -112,9 +112,7 @@ class Chart extends PureComponent {
                 ))}
             </defs>
 
-            {cartesianGrid && (
-              <CartesianGrid strokeDasharray="4 4" stroke="#d6d6d9" {...cartesianGrid} />
-            )}
+            {cartesianGrid && <CartesianGrid stroke="#536269" {...cartesianGrid} />}
             {CustomXAxis({ config, data })}
             {CustomYAxis({ config, data })}
             {areas &&
