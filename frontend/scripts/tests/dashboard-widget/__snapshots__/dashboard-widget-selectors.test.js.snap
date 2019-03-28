@@ -53,6 +53,7 @@ Object {
     },
   ],
   "tooltip": Object {
+    "content": null,
     "cursor": Object {
       "opacity": 0,
     },
@@ -70,6 +71,7 @@ Object {
     "type": "category",
   },
   "xKey": "x",
+  "xKeys": undefined,
   "yAxis": Object {
     "axisLine": false,
     "domain": Array [
@@ -84,7 +86,7 @@ Object {
       "tickCount": 2,
     },
     "tickFormatter": [Function],
-    "type": undefined,
+    "type": "number",
   },
   "yAxisLabel": Object {
     "suffix": "/7",
