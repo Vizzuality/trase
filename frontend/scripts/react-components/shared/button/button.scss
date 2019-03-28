@@ -20,7 +20,7 @@
     opacity: 0.8;
   }
 
-  &.circle {
+  &.v-circle {
     display: flex;
     width: 34px;
     height: 34px;
@@ -119,34 +119,11 @@
   &.-with-icon {
     justify-content: space-between;
 
-    .icon {
-      margin-left: 5px;
-    }
-
-    .icon-arrow, .icon-arrow-up {
-      position: absolute;
-      top: 0;
-      left: 7px;
-      @include simple-arrow($strong-pink);
-    }
-
-    .icon-arrow-up {
-      &::after {
-        transform: translateY(calc(-50%)) rotate(225deg) !important;
-      }
-    }
-
-    &.color-charcoal {
-      .icon-arrow, .icon-arrow-up {
-        @include simple-arrow($white);
-      }
-    }
-
     .button-text-container {
       max-width: calc(100% - 22px);
     }
 
-    &.circle {
+    &.v-circle {
       .icon {
         margin-left: 0;
       }
