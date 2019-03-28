@@ -8,17 +8,18 @@ import Widget from 'react-components/widgets/widget.component';
 class DashboardWidgetFetch extends Component {
   render() {
     const { url, title, dynamicSentenceParts, chartType, selectedRecolorBy } = this.props;
+    const limitedUrl = `${url}&top_n=10`;
     return (
-      <Widget raw={[true]} query={[url]} params={[]}>
+      <Widget raw={[true]} query={[limitedUrl]} params={[]}>
         {({ data, loading, error, meta }) => (
           <DashboardWidgetContainer
             title={title}
             error={error}
             loading={loading}
             chartType={chartType}
-            meta={meta && meta[url]}
+            meta={meta && meta[limitedUrl]}
             selectedRecolorBy={selectedRecolorBy}
-            data={sortBy(data && data[url], 'x')}
+            data={sortBy(data && data[limitedUrl], 'x')}
             dynamicSentenceParts={dynamicSentenceParts}
           />
         )}
