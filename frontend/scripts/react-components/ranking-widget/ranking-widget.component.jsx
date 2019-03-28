@@ -11,8 +11,8 @@ import { format } from 'd3-format';
 class RankingWidget extends PureComponent {
   state = { page: 0 };
 
-  handlePageChange = v => {
-    this.setState(state => ({ page: state.page + v }));
+  handlePageChange = pageChange => {
+    this.setState(state => ({ page: state.page + pageChange }));
   };
 
   render() {

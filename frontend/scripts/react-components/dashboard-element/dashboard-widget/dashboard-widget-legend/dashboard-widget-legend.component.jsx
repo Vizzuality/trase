@@ -9,8 +9,8 @@ class DashboardWidgetLegend extends React.PureComponent {
 
   pageSize = 6;
 
-  handlePageChange = v => {
-    this.setState(state => ({ page: state.page + v }));
+  handlePageChange = pageChange => {
+    this.setState(state => ({ page: state.page + pageChange }));
   };
 
   render() {
