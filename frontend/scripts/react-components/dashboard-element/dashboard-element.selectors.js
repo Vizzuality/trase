@@ -173,9 +173,15 @@ const getDashboardContextRecolorBy = createSelector(
       years: selectedYears || [],
       value: null
     };
-    return context.recolorBy
-      .filter(item => !['LR_DEFICIT_PERC_PRIVATE_LAND', 'SMALLHOLDERS'].includes(item.name))
-      .concat(emptyOption);
+    const contextRecolorByList = context.recolorBy.filter(
+      item => !['LR_DEFICIT_PERC_PRIVATE_LAND', 'SMALLHOLDERS'].includes(item.name)
+    );
+
+    if (contextRecolorByList.length > 0) {
+      return contextRecolorByList.concat(emptyOption);
+    }
+
+    return contextRecolorByList;
   }
 );
 
@@ -202,9 +208,9 @@ const getDashboardSelectedRecolorBy = createSelector(
   [getSelectedRecolorBy, getDashboardContextRecolorBy],
   (selectedRecolorBy, contextRecolorByItems) => {
     if (!selectedRecolorBy || contextRecolorByItems.length === 0) {
-      return { label: 'Select an Indicator', value: null };
+      return { label: 'Select an Indicator', value: null, attributeId: null };
     }
-    return contextRecolorByItems.find(item => item.attributeId === selectedRecolorBy);
+    return contextRecolorByItems.find(item => item.attributeId === selectedRecolorBy) || null;
   }
 );
 

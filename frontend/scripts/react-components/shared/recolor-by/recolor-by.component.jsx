@@ -12,7 +12,7 @@ import sortBy from 'lodash/sortBy';
 
 import './recolor-by.scss';
 
-class RecolorBySelector extends Component {
+class RecolorBy extends Component {
   getRecolorByClassNames(item, recolorBy) {
     const recolorById = isNumber(item)
       ? item + parseInt(recolorBy.minValue, 10)
@@ -164,7 +164,7 @@ class RecolorBySelector extends Component {
   }
 }
 
-RecolorBySelector.propTypes = {
+RecolorBy.propTypes = {
   size: PropTypes.string,
   color: PropTypes.string,
   weight: PropTypes.string,
@@ -176,4 +176,4 @@ RecolorBySelector.propTypes = {
   recolorBys: PropTypes.array.isRequired
 };
 
-export default RecolorBySelector;
+export default RecolorBy;

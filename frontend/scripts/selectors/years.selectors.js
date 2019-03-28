@@ -14,10 +14,15 @@ export const makeGetAvailableYears = (
         selectedResizeBy.years && selectedResizeBy.years.length > 0
           ? selectedResizeBy.years
           : availableContextYears;
-      const availableRecolorByYears =
-        selectedRecolorBy.years && selectedRecolorBy.years.length > 0
-          ? selectedRecolorBy.years
-          : availableContextYears;
+
+      // if selectedRecolorBy isnt available in a certain context we don't filter years by recolor by
+      let availableRecolorByYears = availableResizeByYears;
+      if (selectedRecolorBy) {
+        availableRecolorByYears =
+          selectedRecolorBy.years && selectedRecolorBy.years.length > 0
+            ? selectedRecolorBy.years
+            : availableContextYears;
+      }
 
       return intersection(availableContextYears, availableResizeByYears, availableRecolorByYears);
     }

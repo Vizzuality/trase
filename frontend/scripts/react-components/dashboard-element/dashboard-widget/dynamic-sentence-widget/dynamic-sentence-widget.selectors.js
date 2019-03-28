@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { getDynamicSentence } from 'react-components/dashboard-element/dashboard-element.selectors';
+import { format } from 'd3-format';
 
 const getData = (state, props) => props.data || null;
 const getConfig = (state, props) => props.config || null;
@@ -29,7 +30,7 @@ export const makeAddIndicatorsPartToSentence = () =>
         prefix: 'was',
         value: [
           {
-            name: `${data[0].y0 || 0} ${yAxisLabel.suffix}`
+            name: data[0].y0 ? `${format(',.2f')(data[0].y0)} ${yAxisLabel.suffix}` : 'N/A'
           }
         ]
       };

@@ -353,11 +353,12 @@ const dashboardElementReducer = {
     };
   },
   [DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS](state, action) {
-    const { years, indicator } = action.payload;
+    const { years, resizeBy, recolorBy } = action.payload;
     return {
       ...state,
       selectedYears: years,
-      selectedResizeBy: indicator.attributeId
+      selectedResizeBy: resizeBy.attributeId,
+      selectedRecolorBy: recolorBy.attributeId
     };
   }
 };

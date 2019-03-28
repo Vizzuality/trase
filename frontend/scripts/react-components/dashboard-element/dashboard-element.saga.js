@@ -165,7 +165,7 @@ export function* onChangePanel(action) {
 
   const panelsToClear = nextPanels
     .map(p => ({ name: p, items: dashboardElement[`${p}Panel`].activeItems }))
-    .filter(p => isEmpty(p.items))
+    .filter(p => !isEmpty(p.items))
     .map(p => p.name);
 
   if (panelsToClear.length > 0) {
@@ -229,8 +229,10 @@ function* updateIndicatorsOnItemChange() {
   if (contextSelected) {
     const filters = yield select(getDashboardFiltersProps);
     let years = dashboardElement.selectedYears;
-    let indicator = { attributeId: dashboardElement.selectedResizeBy };
+    let resizeBy = { attributeId: dashboardElement.selectedResizeBy };
+    let recolorBy = { attribute: dashboardElement.selectedRecolorBy };
     let hasChanged = false;
+
     if (
       dashboardElement.selectedYears === null ||
       !isEqual(dashboardElement.selectedYears, filters.selectedYears)
@@ -243,13 +245,19 @@ function* updateIndicatorsOnItemChange() {
       dashboardElement.selectedResizeBy === null ||
       dashboardElement.selectedResizeBy !== filters.selectedResizeBy.attributeId
     ) {
-      indicator = filters.selectedResizeBy;
+      resizeBy = filters.selectedResizeBy;
       hasChanged = true;
     }
-    if (hasChanged && indicator && years[0]) {
+
+    if (dashboardElement.selectedRecolorBy !== null && filters.recolorBy.length === 0) {
+      recolorBy = filters.selectedRecolorBy;
+      hasChanged = true;
+    }
+
+    if (hasChanged && resizeBy && years[0]) {
       yield put({
         type: DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS,
-        payload: { years, indicator }
+        payload: { years, resizeBy, recolorBy }
       });
     }
     yield fork(fetchDashboardCharts);
