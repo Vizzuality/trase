@@ -36,16 +36,16 @@ export const getColors = createSelector(
   (meta, data, defaultConfig, chartType, selectedRecolorBy) => {
     const { colors, layout } = defaultConfig;
 
+    if (!meta || chartType === 'dynamicSentence') {
+      return colors && colors.default;
+    }
+
     const getColor = labelText => {
       const legendKey = labelText && kebabCase(labelText);
       const type = colors[selectedRecolorBy.legendType];
       const theme = type && type[selectedRecolorBy.legendColorTheme];
       return theme && theme[legendKey];
     };
-
-    if (!meta || chartType === 'dynamicSentence') {
-      return colors && colors.default;
-    }
 
     if (chartType !== 'pie') {
       const continuousAxis = layout === 'vertical' ? 'x' : 'y';
