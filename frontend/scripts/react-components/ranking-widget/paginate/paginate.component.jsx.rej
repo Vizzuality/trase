@@ -1,4 +1,0 @@
-diff a/frontend/scripts/react-components/ranking-widget/paginate/paginate.component.jsx b/frontend/scripts/react-components/ranking-widget/paginate/paginate.component.jsx	(rejected hunks)
-@@ -14 +14 @@ class Paginate extends PureComponent {
--      <div className={cx('c-paginate', className, {[`v-${variant}`]: variant })}>
-+      <div className={cx('c-paginate', className, { [`v-${variant}`]: variant })}>
