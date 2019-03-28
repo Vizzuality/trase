@@ -104,7 +104,7 @@ export default {
     },
     xKeysAttributes: {
       bars: {
-        stackId: 0
+        stackId: 'bar'
       }
     },
     yAxis: {
