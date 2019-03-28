@@ -25,6 +25,9 @@ module Api
         end
 
         def call
+          @node_types_to_break_by =
+            Api::V3::Dashboards::NodeTypesToBreakBy.new(@context).call
+
           chart_types =
             if single_year? && !ncont_attribute?
               single_year_no_ncont_charts
@@ -35,16 +38,9 @@ module Api
             else
               multi_year_ncont_charts
             end
-          chart_types.map do |chart_params|
-            sanitized_chart_params.merge(chart_params)
-          end
         end
 
         private
-
-        def node_types_to_break_by
-          Api::V3::Dashboards::NodeTypesToBreakBy.new(@context).call
-        end
 
         def single_year?
           @start_year.present? && @end_year.nil? ||
@@ -56,10 +52,11 @@ module Api
         end
 
         def single_year_no_ncont_charts
-          [single_year_no_ncont_overview] +
-            node_types_to_break_by.map do |node_type|
+          parametrised_charts = [single_year_no_ncont_overview] +
+            @node_types_to_break_by.map do |node_type|
               single_year_no_ncont_node_type_view(node_type)
             end
+          parametrised_charts.map { |chart| all_params.merge(chart) }
         end
 
         def single_year_no_ncont_overview
@@ -80,10 +77,11 @@ module Api
         end
 
         def single_year_ncont_charts
-          [single_year_ncont_overview] +
-            node_types_to_break_by.map do |node_type|
+          parametrised_charts = [single_year_ncont_overview] +
+            @node_types_to_break_by.map do |node_type|
               single_year_ncont_node_type_view(node_type)
             end
+          parametrised_charts.map { |chart| all_params.merge(chart) }
         end
 
         def single_year_ncont_overview
@@ -105,10 +103,11 @@ module Api
         end
 
         def multi_year_no_ncont_charts
-          [multi_year_no_ncont_overview] +
-            node_types_to_break_by.map do |node_type|
+          parametrised_charts = [multi_year_no_ncont_overview] +
+            @node_types_to_break_by.map do |node_type|
               multi_year_no_ncont_node_type_view(node_type)
             end
+          parametrised_charts.map { |chart| all_params.merge(chart) }
         end
 
         def multi_year_no_ncont_overview
@@ -129,11 +128,42 @@ module Api
           }
         end
 
+        # this is different from the others: both overview and node type view
+        # are presented using the same chart type
+        # however, node type view has one chart per selected node
         def multi_year_ncont_charts
-          [multi_year_ncont_overview] +
-            node_types_to_break_by.map do |node_type|
-              multi_year_ncont_node_type_view(node_type)
+          parametrised_charts = [all_params.merge(multi_year_ncont_overview)]
+          [
+            :sources_ids, :companies_ids, :destinations_ids
+          ].each do |nodes_ids_param_name|
+            parametrised_charts += charts_per_selected_node(
+              nodes_ids_param_name
+            )
+          end
+          parametrised_charts
+        end
+
+        def charts_per_selected_node(nodes_ids_param_name)
+          nodes_ids = instance_variable_get("@#{nodes_ids_param_name}")
+          return [] unless nodes_ids.any?
+
+          nodes = Api::V3::Node.where(id: nodes_ids).includes(:node_type)
+          return [] unless nodes.any?
+
+          nodes.map do |node|
+            node_type = node.node_type
+            node_type_is_active = @node_types_to_break_by.find do |nt|
+              nt.id == node_type.id
             end
+            next unless node_type_is_active
+
+            all_params.
+              except(nodes_ids_param_name).
+              merge(nodes_ids_param_name => [node.id].join(',')).
+              merge(
+                multi_year_ncont_node_type_view(node_type)
+              )
+          end
         end
 
         def multi_year_ncont_overview
@@ -147,16 +177,15 @@ module Api
 
         def multi_year_ncont_node_type_view(node_type)
           {
-            source: :multi_year_ncont_node_type_view,
+            source: :multi_year_ncont_overview,
             type: STACKED_BAR_CHART,
             x: :year,
             break_by: :ncont_attribute,
-            filter_by: :node_type,
             node_type_id: node_type.id
           }
         end
 
-        def sanitized_chart_params
+        def all_params
           {
             cont_attribute_id: @cont_attribute.id,
             ncont_attribute_id: @ncont_attribute&.id,
