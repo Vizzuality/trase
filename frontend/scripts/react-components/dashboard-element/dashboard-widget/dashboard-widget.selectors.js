@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import omit from 'lodash/omit';
 import sortBy from 'lodash/sortBy';
+import kebabCase from 'lodash/kebabCase';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
 
 const parsedChartTypes = {
@@ -15,6 +16,8 @@ const parsedChartTypes = {
 const getMeta = (state, { meta }) => meta || null;
 const getData = (state, { data }) => data || null;
 const getChartType = (state, { chartType }) => (chartType ? parsedChartTypes[chartType] : null);
+const getSelectedRecolorBy = (state, props) => props.selectedRecolorBy;
+
 export const getDefaultConfig = createSelector(
   [getChartType],
   chartType => CHART_CONFIG[chartType] || CHART_CONFIG.bar
@@ -28,10 +31,49 @@ const getGroupedAxis = (axis, meta) => {
 
 const sortGroupedAxis = keys => sortBy(Object.keys(keys), key => parseInt(key.substr(1), 10));
 
+export const getColors = createSelector(
+  [getMeta, getData, getDefaultConfig, getChartType, getSelectedRecolorBy],
+  (meta, data, defaultConfig, chartType, selectedRecolorBy) => {
+    const { colors, layout } = defaultConfig;
+
+    const getColor = labelText => {
+      const legendKey = labelText && kebabCase(labelText);
+      const type = colors[selectedRecolorBy.legendType];
+      const theme = type && type[selectedRecolorBy.legendColorTheme];
+      return theme && theme[legendKey];
+    };
+
+    if (!meta || chartType === 'dynamicSentence') {
+      return colors && colors.default;
+    }
+
+    if (chartType !== 'pie') {
+      const continuousAxis = layout === 'vertical' ? 'x' : 'y';
+      const groupedAxis = getGroupedAxis(continuousAxis, meta);
+      return sortGroupedAxis(groupedAxis).map((key, index) => {
+        const label = groupedAxis[key].label || meta[`${continuousAxis}Axis`].label;
+        const color = getColor(label);
+        return {
+          label,
+          color: color || colors.default[index]
+        };
+      });
+    }
+
+    return data.map((item, index) => {
+      const color = getColor(item.x);
+      return {
+        label: item.x,
+        color: color || (colors && colors.default[index])
+      };
+    });
+  }
+);
+
 export const getYKeys = createSelector(
-  [getMeta, getDefaultConfig],
-  (meta, defaultConfig) => {
-    const { yKeys, yKeysAttributes, colors, layout } = defaultConfig;
+  [getMeta, getDefaultConfig, getColors],
+  (meta, defaultConfig, colors) => {
+    const { yKeys, yKeysAttributes, layout } = defaultConfig;
     if (!meta || !yKeys || layout === 'vertical') return yKeys;
     const groupedY = getGroupedAxis('y', meta);
     return Object.keys(yKeys).reduce((yKeysTypesAcc, nextYKeyType) => {
@@ -43,8 +85,8 @@ export const getYKeys = createSelector(
             ...groupedYKeysAcc,
             [nextGroupedYKey]: {
               ...yKeyTypeAttributes,
-              fill: colors && colors[index],
-              stroke: colors && colors[index]
+              fill: colors && colors[index] && colors[index].color,
+              stroke: colors && colors[index] && colors[index].color
             }
           }),
           {}
@@ -55,9 +97,9 @@ export const getYKeys = createSelector(
 );
 
 export const getXKeys = createSelector(
-  [getMeta, getDefaultConfig],
-  (meta, defaultConfig) => {
-    const { xKeys, xKeysAttributes, colors, layout } = defaultConfig;
+  [getMeta, getDefaultConfig, getColors],
+  (meta, defaultConfig, colors) => {
+    const { xKeys, xKeysAttributes, layout } = defaultConfig;
     if (!meta || !xKeys || layout !== 'vertical') return xKeys;
     const groupedX = getGroupedAxis('x', meta);
     return Object.keys(xKeys).reduce((xKeysTypesAcc, nextXKeyType) => {
@@ -69,34 +111,14 @@ export const getXKeys = createSelector(
             ...groupedXKeysAcc,
             [nextGroupedXKey]: {
               ...xKeyTypeAttributes,
-              fill: colors && colors[index],
-              stroke: colors && colors[index]
+              fill: colors && colors[index] && colors[index].color,
+              stroke: colors && colors[index] && colors[index].color
             }
           }),
           {}
         )
       };
     }, {});
-  }
-);
-
-export const getColors = createSelector(
-  [getMeta, getData, getDefaultConfig, getChartType],
-  (meta, data, defaultConfig, chartType) => {
-    const { colors, layout } = defaultConfig;
-    if (!meta || chartType === 'dynamicSentence') return colors;
-    if (chartType !== 'pie') {
-      const continuousAxis = layout === 'vertical' ? 'x' : 'y';
-      const groupedAxis = getGroupedAxis(continuousAxis, meta);
-      return sortGroupedAxis(groupedAxis).map((key, index) => ({
-        label: groupedAxis[key].label || meta[`${continuousAxis}Axis`].label,
-        color: colors[index]
-      }));
-    }
-    return data.map((item, index) => ({
-      label: item.x,
-      color: colors[index]
-    }));
   }
 );
 
@@ -119,12 +141,12 @@ export const makeGetConfig = () =>
           text: meta.yAxis && meta.yAxis.label,
           suffix: meta.yAxis && meta.yAxis.suffix
         },
-        yKeys,
-        xKeys,
-        colors,
         tooltip: {
           ...defaultConfig.tooltip
-        }
+        },
+        yKeys,
+        xKeys,
+        colors
       };
       return config;
     }

@@ -164,7 +164,9 @@ const getDashboardContextRecolorBy = createSelector(
   getDashboardsContext,
   context => {
     if (!context) return [];
-    return context.recolorBy;
+    return context.recolorBy.filter(
+      item => !['LR_DEFICIT_PERC_PRIVATE_LAND', 'SMALLHOLDERS'].includes(item.name)
+    );
   }
 );
 
@@ -216,15 +218,19 @@ const getDashboardSelectedYears = createSelector(
       return [context.defaultYear, context.defaultYear];
     }
 
-    const selectedYearsRange = range(selectedYears[0], selectedYears[1] + 1);
-    const intersectedYears = intersection(selectedYearsRange, availableYears);
-    const selectedAreUnavailable = isEmpty(intersectedYears);
+    if (context && selectedYears) {
+      const selectedYearsRange = range(selectedYears[0], selectedYears[1] + 1);
+      const intersectedYears = intersection(selectedYearsRange, availableYears);
+      const selectedAreUnavailable = isEmpty(intersectedYears);
 
-    if (selectedAreUnavailable) {
-      return [context.defaultYear, context.defaultYear];
+      if (selectedAreUnavailable) {
+        return [context.defaultYear, context.defaultYear];
+      }
+
+      return [intersectedYears[0], intersectedYears[intersectedYears.length - 1]];
     }
 
-    return [intersectedYears[0], intersectedYears[intersectedYears.length - 1]];
+    return [null, null];
   }
 );
 
