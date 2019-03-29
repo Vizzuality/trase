@@ -10,8 +10,6 @@ import GfwWidget from 'react-components/profile-node/profile-node-widgets/gfw-wi
 import { smoothScroll } from 'utils/smoothScroll';
 import cx from 'classnames';
 import sortBy from 'lodash/sortBy';
-// sketchy polyfill
-const _requestIdleCallback = window.requestIdleCallback || window.setTimeout;
 
 class ProfileNode extends React.PureComponent {
   static propTypes = {
@@ -32,15 +30,19 @@ class ProfileNode extends React.PureComponent {
   };
 
   componentDidMount() {
-    // http://www.aaronpeters.nl/blog/iframe-loading-techniques-performance
-    window.addEventListener('load', this.renderIframes, false);
-    if (document.readyState === 'complete') {
-      _requestIdleCallback(this.renderIframes);
+    if (window.requestIdleCallback) {
+      // http://www.aaronpeters.nl/blog/iframe-loading-techniques-performance
+      window.addEventListener('load', this.renderIframes, false);
+      if (document.readyState === 'complete') {
+        window.requestIdleCallback(this.renderIframes);
+      }
     }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('load', this.renderIframes);
+    if (window.requestIdleCallback) {
+      window.removeEventListener('load', this.renderIframes);
+    }
   }
 
   getAnchorRef = ref => {
@@ -78,7 +80,6 @@ class ProfileNode extends React.PureComponent {
       profileMetadata,
       updateQueryParams
     } = this.props;
-
     switch (chart.chart_type) {
       case 'line_chart_with_map': {
         const isCountries = chart.identifier === 'actor_top_countries';
