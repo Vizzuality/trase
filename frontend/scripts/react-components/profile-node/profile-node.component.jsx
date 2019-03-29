@@ -25,8 +25,9 @@ class ProfileNode extends React.PureComponent {
     updateQueryParams: PropTypes.func.isRequired
   };
 
+  // if requestIdleCallback is not supported (Edge, IE) we render the iframe immediately
   state = {
-    renderIframes: false
+    renderIframes: typeof window.requestIdleCallback === 'undefined'
   };
 
   componentDidMount() {
