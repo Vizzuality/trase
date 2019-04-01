@@ -146,7 +146,8 @@ export default {
     yKey: 'y',
     xKeysAttributes: {
       bars: {
-        interval: 'preserveStartEnd'
+        interval: 'preserveStartEnd',
+        barSize: 10
       }
     },
     yAxis: {
@@ -165,7 +166,8 @@ export default {
     },
     xKeysAttributes: {
       bars: {
-        stackId: 'bar'
+        stackId: 'bar',
+        barSize: 10
       }
     },
     yAxis: {

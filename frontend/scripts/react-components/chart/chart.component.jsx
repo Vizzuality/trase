@@ -127,7 +127,7 @@ class Chart extends PureComponent {
 
             {bars &&
               Object.keys(bars).map(key => (
-                <Bar key={key} dataKey={key} dot={false} barSize={10} {...bars[key]}>
+                <Bar key={key} dataKey={key} dot={false} {...bars[key]}>
                   {bars[key].itemColor &&
                     data.map(item => {
                       const { color } = colors.find(c => c.key === key) || {};
