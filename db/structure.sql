@@ -1714,7 +1714,7 @@ UNION ALL
     ind_context_properties.ind_id,
     '-1'::integer AS quant_id
    FROM public.ind_context_properties
-  WITH NO DATA;
+  WITH DATA;
 
 
 --
