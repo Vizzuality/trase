@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Chart from 'react-components/chart';
+import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
+import TableModal from 'react-components/table-modal';
 import Button from 'react-components/shared/button';
 import Spinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import DashboardWidgetLabel from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-label.component';
@@ -13,12 +15,35 @@ import RankingWidget from 'react-components/ranking-widget';
 import 'react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
 
 function DashboardWidget(props) {
-  const { title, loading, error, data, chartConfig, dynamicSentenceParts } = props;
+  const {
+    title,
+    loading,
+    error,
+    data,
+    chartConfig,
+    dynamicSentenceParts,
+    activeModal,
+    setActiveModal
+  } = props;
 
   const renderError = errorMessage => (
     <Text color="white" weight="bold" variant="mono" size="lg" className="widget-centered">
       {errorMessage}
     </Text>
+  );
+
+  const renderWidgetActions = () => (
+    <div className="widget-actions">
+      <Button
+        icon="icon-table"
+        color="charcoal"
+        variant="circle"
+        onClick={() => setActiveModal('table')}
+      />
+      <SimpleModal isOpen={activeModal === 'table'} onClickClose={() => setActiveModal(null)}>
+        <TableModal title={title} />
+      </SimpleModal>
+    </div>
   );
 
   const renderChart = () => {
@@ -71,9 +96,7 @@ function DashboardWidget(props) {
         <Heading as="h3" color="white">
           {title}
         </Heading>
-        <div className="widget-actions">
-          <Button icon="icon-table" color="charcoal" variant="circle" />
-        </div>
+        {renderWidgetActions()}
       </div>
       <div className="widget-box">
         <ErrorCatch renderFallback={err => renderError(`Error: ${err.message}`)}>
@@ -96,7 +119,9 @@ DashboardWidget.propTypes = {
   title: PropTypes.string,
   loading: PropTypes.bool,
   chartConfig: PropTypes.object,
-  dynamicSentenceParts: PropTypes.array
+  dynamicSentenceParts: PropTypes.array,
+  activeModal: PropTypes.string,
+  setActiveModal: PropTypes.func.isRequired
 };
 
 export default DashboardWidget;
