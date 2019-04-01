@@ -12,4 +12,7 @@ export { default as dashboardRoot } from 'react-components/dashboard-root/dashbo
 export {
   default as dashboardElement
 } from 'react-components/dashboard-element/dashboard-element.reducer';
+export {
+  default as dashboardWidget
+} from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.reducer';
 export { default as logisticsMap } from 'react-components/logistics-map/logistics-map.reducer';
