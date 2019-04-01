@@ -41,7 +41,7 @@ function DashboardWidget(props) {
         onClick={() => setActiveModal('table')}
       />
       <SimpleModal isOpen={activeModal === 'table'} onClickClose={() => setActiveModal(null)}>
-        <TableModal title={title} />
+        <TableModal title={title} data={data} />
       </SimpleModal>
     </div>
   );
