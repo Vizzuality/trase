@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'redux-first-router-link';
 import Placehold from 'react-placehodl';
-import './top.scss';
+import 'react-components/shared/top/top.scss';
 import Heading from 'react-components/shared/heading/heading.component';
 
 class Top extends Component {
@@ -31,7 +31,7 @@ class Top extends Component {
             </Link>
           )}
         </div>
-        <span className="item-value" data-unit={unit.name}>
+        <span className="item-value" data-unit={unit.value}>
           {unit.format(item)}
         </span>
       </li>

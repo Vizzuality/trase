@@ -83,16 +83,16 @@ class SentenceSelector extends React.PureComponent {
           What are the sustainability risks and opportunities associated{' '}
           <br className="hide-for-small" /> with the trade of{' '}
           <Dropdown
-            variant="sentence"
             align="center"
+            variant="sentence"
             value={{ value: commodityName.toLowerCase(), label: commodityName.toLowerCase() }}
             options={commodityNames}
             onChange={this.onSelectCommodity}
           />
           from{' '}
           <Dropdown
-            variant="sentence"
             align="center"
+            variant="sentence"
             value={{ value: capitalize(countryName), label: capitalize(countryName) }}
             options={countryNames}
             onChange={this.onSelectCountry}

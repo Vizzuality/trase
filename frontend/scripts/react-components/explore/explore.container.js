@@ -15,7 +15,8 @@ const mapStateToProps = state => {
     ? getTopNodesKey(selectedContext.id, selectedTableColumnType, ...selectedYears)
     : null;
   const topExporters = topNodes[topNodesKey] || [];
-  const loading = loadingDict[topNodesKey];
+  // set loading as true if the topNodesKey doesnt exist yet
+  const loading = typeof loadingDict[topNodesKey] === 'undefined' || loadingDict[topNodesKey];
   const redirectQuery = state.location.query;
 
   return {

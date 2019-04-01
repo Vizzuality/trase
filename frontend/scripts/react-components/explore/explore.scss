@@ -19,33 +19,6 @@
       margin-top: 30px;
     }
   }
-
-  .context-selectors {
-    font-family: $font-family-1;
-
-    .dropdown-element {
-      display: inline-block;
-      margin-bottom: 10px;
-      cursor: pointer;
-    }
-
-    .dropdown-label {
-      margin-bottom: 3px;
-      font-size: $font-size-x-regular;
-    }
-
-    .dropdown-container {
-      z-index: $z-above;
-
-      .context-selector-content {
-        top: 55px;
-      }
-
-      .dropdown-list {
-        top: 45px;
-      }
-    }
-  }
 }
 
 .explore-section {
@@ -69,6 +42,10 @@
   flex: 1;
 }
 
+.sentence-selector-container {
+  min-height: 74px;
+}
+
 .explore-map-container {
   display: flex;
   align-items: center;
@@ -77,6 +54,16 @@
   width: 100vw;
   overflow: hidden;
   margin: 15px -1.25rem 0 -1.25rem;
+
+  &.-loading {
+    background-color: $charcoal-grey-faded-a-lot;
+    border-radius: 4px;
+
+    .explore-world-map {
+      visibility: hidden;
+    }
+  }
+
 
   @media screen and (min-width: $breakpoint-foundation-small) {
     width: 100%;

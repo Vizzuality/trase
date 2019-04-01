@@ -9,6 +9,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
  */
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
+const isDev = process.env.NODE_ENV !== 'production';
 const srcPath = path.join(__dirname, '..', 'scripts');
 const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin');
 
@@ -101,7 +102,15 @@ module.exports = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: ['babel-loader', 'eslint-loader']
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: isDev
+            }
+          },
+          'eslint-loader'
+        ]
       },
       {
         test: /\.css$/,
@@ -109,7 +118,7 @@ module.exports = {
           'style-loader',
           {
             loader: 'css-loader',
-            options: { minimize: process.env.NODE_ENV === 'production' }
+            options: { minimize: !isDev }
           },
           'postcss-loader'
         ]
@@ -120,7 +129,7 @@ module.exports = {
           'style-loader',
           {
             loader: 'css-loader',
-            options: { minimize: process.env.NODE_ENV === 'production' }
+            options: { minimize: !isDev }
           },
           'postcss-loader',
           'sass-loader'
