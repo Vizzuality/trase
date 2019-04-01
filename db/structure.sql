@@ -3005,7 +3005,7 @@ CREATE MATERIALIZED VIEW public.dashboards_flow_paths_mv AS
      JOIN public.node_types ON ((nodes.node_type_id = node_types.id)))
      JOIN public.context_node_types cnt ON (((node_types.id = cnt.node_type_id) AND (flow_paths.context_id = cnt.context_id))))
      JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
-  WHERE (((cnt_props.role)::text = ANY ((ARRAY['source'::character varying, 'exporter'::character varying, 'importer'::character varying, 'destination'::character varying])::text[])) OR (node_types.name = ANY (ARRAY['COUNTRY'::text, 'IMPORTER'::text, 'EXPORTER'::text, 'TRADER'::text])))
+  WHERE (cnt_props.role IS NOT NULL)
   WITH NO DATA;
 
 

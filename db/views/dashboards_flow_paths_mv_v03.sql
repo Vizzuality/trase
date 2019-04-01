@@ -26,4 +26,4 @@ JOIN nodes ON flow_paths.node_id = nodes.id
 JOIN node_types ON nodes.node_type_id = node_types.id
 JOIN context_node_types cnt ON node_types.id = cnt.node_type_id AND flow_paths.context_id = cnt.context_id
 JOIN context_node_type_properties cnt_props ON cnt.id = cnt_props.context_node_type_id
-WHERE cnt_props.role IN ('source', 'exporter', 'importer', 'destination') OR node_types.name IN ('COUNTRY', 'IMPORTER', 'EXPORTER', 'TRADER');
+WHERE (cnt_props.role IS NOT NULL);
