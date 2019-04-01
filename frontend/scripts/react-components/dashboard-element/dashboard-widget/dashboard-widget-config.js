@@ -190,7 +190,8 @@ export default {
         innerRadius: '60%',
         outerRadius: '80%'
       }
-    }
+    },
+    cartesianGrid: null
   },
   line: {
     ...defaults,
