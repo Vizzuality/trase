@@ -23,6 +23,7 @@ RSpec.describe Api::V3::NodesSearch::Filter do
         nodes.map(&:name)
       ).to match_array([
         api_v3_paraguay_exporter_node,
+        api_v3_paraguay_biome_node,
         api_v3_logistics_hub_node,
         api_v3_importer1_node
       ].map(&:name))
@@ -33,7 +34,8 @@ RSpec.describe Api::V3::NodesSearch::Filter do
       expect(
         nodes.map(&:name)
       ).to match_array([
-        api_v3_paraguay_exporter_node
+        api_v3_paraguay_exporter_node,
+        api_v3_paraguay_biome_node
       ].map(&:name))
     end
 

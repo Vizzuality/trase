@@ -71,6 +71,30 @@ module Api
         end
       end
 
+      def biome_nodes
+        biome_context_node_type = context_node_types.
+          joins(:node_type).
+          where('node_types.name' => NodeTypeName::BIOME).
+          first
+        # Brazil - soy & Paraguay - soy only
+        return [] unless biome_context_node_type
+
+        biome_idx = biome_context_node_type.column_position + 1
+        Api::V3::Node.
+          select([:id, :name]).
+          joins(
+            "JOIN (
+              #{flows.select("path[#{biome_idx}] AS node_id").distinct.to_sql}
+            ) s ON s.node_id = nodes.id"
+          ).
+          where(
+            node_type_id: biome_context_node_type.node_type_id,
+            is_unknown: false
+          ).
+          where("name NOT LIKE 'OTHER%'").
+          order('nodes.name')
+      end
+
       def self.select_options
         Api::V3::Context.includes(:country, :commodity).all.map do |ctx|
           [[ctx.country&.name, ctx.commodity&.name].join(' / '), ctx.id]
