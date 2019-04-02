@@ -11,7 +11,13 @@ function TableModal({ title, data }) {
       <Heading size="md" align="center">
         {title}
       </Heading>
-      <Table data={data} />
+      <Table
+        className="table"
+        width={760}
+        height={200}
+        data={data.map(d => Object.values(d))}
+        headings={['Commodity', 'Country', 'Year', 'Exporter', 'Unit', 'Indicator']}
+      />
       <div className="table-modal-footer">
         <Button color="pink" size="sm" disabled>
           Download CSV
