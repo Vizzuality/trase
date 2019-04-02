@@ -1,5 +1,5 @@
 const MARKERS_URL = NODE_ENV_DEV
-  ? 'https://raw.githubusercontent.com/Vizzuality/trase/feat/update-logistics-map-icons/frontend/public/images/logistics-map'
+  ? 'https://raw.githubusercontent.com/Vizzuality/trase/c3b46da3c0194a5fa9d2cf0f6eed067163179b0f/frontend/public/images/logistics-map'
   : `https://${window.location.hostname}/images/logistics-map`;
 
 export default [
