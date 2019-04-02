@@ -1,0 +1,28 @@
+---
+name: Table
+menu: Components
+---
+import { PropsTable, Playground } from 'docz'
+import Table from 'react-components/table-modal/table';
+import 'styles/_docz.scss';
+import data from '../mock-data/table-data.json';
+
+# Table
+
+<div className="components-container" style={{ width: 760 }}>
+  <Table
+    width={760}
+    height={200}
+    rowHeight={50}
+    columnWidth={190}
+    data={data}
+    headings={['Commodity', 'Country', 'Year', 'Primary indicator']}
+  >
+  </Table>
+</div>
+
+#### GridListItem props
+<PropsTable of={Table} />
+
+<Playground>
+</Playground>

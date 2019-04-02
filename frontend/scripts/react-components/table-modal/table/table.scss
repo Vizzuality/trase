@@ -1,4 +1,26 @@
 @import 'styles/settings';
 
 .c-table {
+  .table-heading {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background-color: $charcoal-grey;
+    text-transform: uppercase;
+  }
+
+  .header-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 0;
+    text-transform: uppercase;
+  }
+
+  .list-item-even {
+    background-color: $metal-grey;
+    border-bottom: solid 1px $medium-gray;
+    border-top: solid 1px $medium-gray;
+  }
 }
