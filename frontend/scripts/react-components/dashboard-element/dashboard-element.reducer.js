@@ -21,7 +21,8 @@ import {
   DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
   DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
   DASHBOARD_ELEMENT__SET_CHARTS,
-  DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS
+  DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS,
+  DASHBOARD_ELEMENT__SET_CHARTS_LOADING
 } from './dashboard-element.actions';
 
 const initialState = {
@@ -74,7 +75,8 @@ const initialState = {
   selectedYears: null,
   selectedResizeBy: null,
   selectedRecolorBy: null,
-  charts: []
+  charts: [],
+  chartsLoading: false
 };
 
 const updateItems = (currentItems, newItem) => {
@@ -360,6 +362,13 @@ const dashboardElementReducer = {
       selectedResizeBy: resizeBy.attributeId,
       selectedRecolorBy: recolorBy.attributeId
     };
+  },
+  [DASHBOARD_ELEMENT__SET_CHARTS_LOADING](state, action) {
+    const { loading } = action.payload;
+    return {
+      ...state,
+      chartsLoading: loading
+    };
   }
 };
 
@@ -389,7 +398,8 @@ const dashboardElementReducerTypes = PropTypes => {
     commoditiesPanel: PropTypes.shape(PanelTypes).isRequired,
     selectedYears: PropTypes.arrayOf(PropTypes.number),
     selectedResizeBy: PropTypes.string,
-    selectedRecolorBy: PropTypes.string
+    selectedRecolorBy: PropTypes.string,
+    chartsLoading: PanelTypes.bool
   };
 };
 

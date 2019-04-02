@@ -1,11 +1,12 @@
 import deburr from 'lodash/deburr';
 import pickBy from 'lodash/pickBy';
-import { put, call, cancelled, delay, select } from 'redux-saga/effects';
+import { put, call, cancelled, delay, select, fork } from 'redux-saga/effects';
 import isEmpty from 'lodash/isEmpty';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
+  setDashboardChartsLoading,
   getDashboardPanelParams,
   setDashboardPanelLoadingItems,
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
@@ -20,6 +21,15 @@ import {
 } from 'utils/getURLFromParams';
 import { fetchWithCancel } from './fetch-with-cancel';
 
+export function* setLoadingSpinner(timeout, action) {
+  try {
+    yield delay(timeout);
+    yield put(action);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 export function* getDashboardPanelData(dashboardElement, optionsType, options) {
   const { page, activeTab } = dashboardElement[`${dashboardElement.activePanelId}Panel`];
   const tab = activeTab && activeTab.id;
@@ -28,7 +38,7 @@ export function* getDashboardPanelData(dashboardElement, optionsType, options) {
     ...options
   });
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
-  yield put({
+  const task = yield fork(setLoadingSpinner, 750, {
     type: DASHBOARD_ELEMENT__SET_PANEL_DATA,
     payload: {
       key: optionsType,
@@ -41,6 +51,9 @@ export function* getDashboardPanelData(dashboardElement, optionsType, options) {
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
+    if (task.isRunning()) {
+      task.cancel();
+    }
     yield put({
       type: DASHBOARD_ELEMENT__SET_PANEL_DATA,
       payload: {
@@ -87,17 +100,12 @@ export function* getDashboardPanelSectionTabs(dashboardElement, optionsType) {
   }
 }
 
-export function* removeLoadingSpinner() {
-  yield delay(750);
-  yield put(setDashboardPanelLoadingItems(false));
-}
-
 export function* getMoreDashboardPanelData(dashboardElement, optionsType, activeTab, direction) {
   const { page } = dashboardElement[`${dashboardElement.activePanelId}Panel`];
   const params = getDashboardPanelParams(dashboardElement, optionsType, {
     page
   });
-  yield put(setDashboardPanelLoadingItems(true));
+  const task = yield fork(setLoadingSpinner, 350, setDashboardPanelLoadingItems(true));
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
@@ -111,17 +119,24 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType, active
         data: data.data
       }
     });
-    yield call(removeLoadingSpinner);
+    if (task.isRunning()) {
+      task.cancel();
+    } else {
+      yield call(setLoadingSpinner, 750, setDashboardPanelLoadingItems(false));
+    }
   } catch (e) {
     console.error('Error', e);
-    yield call(removeLoadingSpinner);
+    if (task.isRunning()) {
+      task.cancel();
+    } else {
+      yield call(setLoadingSpinner, 750, setDashboardPanelLoadingItems(false));
+    }
   } finally {
     if (yield cancelled()) {
       if (NODE_ENV_DEV) console.error('Cancelled', url);
       if (source) {
         source.cancel();
       }
-      yield call(removeLoadingSpinner);
     }
   }
 }
@@ -186,6 +201,7 @@ export function* fetchDashboardCharts() {
   );
   const url = getURLFromParams(GET_DASHBOARD_PARAMETRISED_CHARTS_URL, params);
 
+  yield put(setDashboardChartsLoading(true));
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
@@ -193,8 +209,10 @@ export function* fetchDashboardCharts() {
       type: DASHBOARD_ELEMENT__SET_CHARTS,
       payload: { charts: data.data }
     });
+    yield call(setLoadingSpinner, 750, setDashboardChartsLoading(false));
   } catch (e) {
     console.error('Error', e);
+    yield call(setLoadingSpinner, 750, setDashboardChartsLoading(false));
   } finally {
     if (yield cancelled()) {
       if (NODE_ENV_DEV) console.error('Cancelled', params);

@@ -21,6 +21,16 @@ function DashboardWidget(props) {
   );
 
   const renderChart = () => {
+    if (data && data.length === 0) {
+      return (
+        <div className="widget-centered background-no-data">
+          <Text color="white" weight="bold" variant="mono" size="lg">
+            No data available.
+          </Text>
+        </div>
+      );
+    }
+
     switch (chartConfig.type) {
       case 'sentence':
         return (
@@ -54,14 +64,6 @@ function DashboardWidget(props) {
     }
   };
 
-  const renderNoData = () => (
-    <div className="widget-centered background-no-data">
-      <Text color="white" weight="bold" variant="mono" size="lg">
-        No data available.
-      </Text>
-    </div>
-  );
-
   return (
     <div className="c-dashboard-widget">
       <div className="widget-title-container">
@@ -82,7 +84,7 @@ function DashboardWidget(props) {
               <Spinner className="-large -white" />
             </div>
           )}
-          {data && data.length > 0 && chartConfig ? renderChart() : renderNoData()}
+          {!loading && chartConfig && renderChart()}
         </ErrorCatch>
       </div>
     </div>
