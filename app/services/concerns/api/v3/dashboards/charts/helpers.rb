@@ -165,15 +165,15 @@ module Api
 
           def info
             {
-              node_type: @node_type&.name,
+              node_type: @node_type.try(:name),
               years: {
                 start_year: @start_year || @year,
                 end_year: @end_year
               },
               top_n: @top_n,
               filter: {
-                cont_attribute: @cont_attribute&.display_name,
-                ncont_attribute: @ncont_attribute&.display_name
+                cont_attribute: @cont_attribute.try(:display_name),
+                ncont_attribute: @ncont_attribute.try(:display_name)
               }
             }
           end
