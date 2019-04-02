@@ -1,5 +1,5 @@
 const MARKERS_URL = NODE_ENV_DEV
-  ? 'https://raw.githubusercontent.com/Vizzuality/trase/develop/frontend/public/images/logistics-map'
+  ? 'https://raw.githubusercontent.com/Vizzuality/trase/feat/update-logistics-map-icons/frontend/public/images/logistics-map'
   : `https://${window.location.hostname}/images/logistics-map`;
 
 export default [
@@ -137,7 +137,7 @@ export default [
   {
     version: '0.0.1',
     name: 'unconfirmed_slaughterhouse_multifunctional_facility',
-    leyendName: 'unconfirmed (multifunctional facility)',
+    leyendName: 'unconfirmed (multi-functional)',
     commodity: 'cattle',
     color: '#7AC1CA',
     layers: [
