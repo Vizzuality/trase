@@ -39,7 +39,8 @@ module Api
             @meta = {
               xAxis: year_axis_meta,
               yAxis: axis_meta(@cont_attribute, 'number'),
-              x: year_legend_meta
+              x: year_legend_meta,
+              info: info
             }
 
             break_by_values_indexes.each do |break_by, idx|

@@ -24,7 +24,8 @@ module Api
               xAxis: axis_meta(@ncont_attribute, 'category'),
               yAxis: axis_meta(@cont_attribute, 'number'),
               x: legend_meta(@ncont_attribute),
-              y0: legend_meta(@cont_attribute)
+              y0: legend_meta(@cont_attribute),
+              info: info
             }
             {data: @data, meta: @meta}
           end

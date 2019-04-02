@@ -23,7 +23,8 @@ module Api
               xAxis: {},
               yAxis: axis_meta(@cont_attribute, 'number'),
               x: {},
-              y0: legend_meta(@cont_attribute)
+              y0: legend_meta(@cont_attribute),
+              info: info
             }
             {data: @data, meta: @meta}
           end
