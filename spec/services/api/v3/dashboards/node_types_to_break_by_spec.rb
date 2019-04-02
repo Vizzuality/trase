@@ -10,7 +10,7 @@ RSpec.describe Api::V3::Dashboards::NodeTypesToBreakBy do
       :api_v3_context_node_type, context: context, node_type: api_v3_exporter_node_type
     )
     FactoryBot.create(
-      :api_v3_context_node_type_property, context_node_type: cnt, column_group: 1
+      :api_v3_context_node_type_property, context_node_type: cnt, column_group: 1, role: 'exporter'
     )
   }
 
@@ -19,7 +19,7 @@ RSpec.describe Api::V3::Dashboards::NodeTypesToBreakBy do
       :api_v3_context_node_type, context: context, node_type: api_v3_country_node_type
     )
     FactoryBot.create(
-      :api_v3_context_node_type_property, context_node_type: cnt, column_group: 3
+      :api_v3_context_node_type_property, context_node_type: cnt, column_group: 3, role: 'destination'
     )
   }
 
@@ -30,7 +30,7 @@ RSpec.describe Api::V3::Dashboards::NodeTypesToBreakBy do
           :api_v3_context_node_type, context: context, node_type: api_v3_biome_node_type
         )
         FactoryBot.create(
-          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 0
+          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 0, role: 'source'
         )
       }
       let!(:another_source_node_type) {
@@ -38,7 +38,7 @@ RSpec.describe Api::V3::Dashboards::NodeTypesToBreakBy do
           :api_v3_context_node_type, context: context, node_type: api_v3_state_node_type
         )
         FactoryBot.create(
-          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 0
+          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 0, role: 'source'
         )
       }
 
@@ -47,7 +47,7 @@ RSpec.describe Api::V3::Dashboards::NodeTypesToBreakBy do
           :api_v3_context_node_type, context: context, node_type: api_v3_importer_node_type
         )
         FactoryBot.create(
-          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 2
+          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 2, role: 'importer'
         )
       }
 
@@ -75,7 +75,7 @@ RSpec.describe Api::V3::Dashboards::NodeTypesToBreakBy do
           :api_v3_context_node_type, context: context, node_type: api_v3_importer_node_type
         )
         FactoryBot.create(
-          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 2
+          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 2, role: 'importer'
         )
       }
 
@@ -102,7 +102,7 @@ RSpec.describe Api::V3::Dashboards::NodeTypesToBreakBy do
           :api_v3_context_node_type, context: context, node_type: api_v3_biome_node_type
         )
         FactoryBot.create(
-          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 0
+          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 0, role: 'source'
         )
       }
       let!(:another_source_node_type) {
@@ -110,7 +110,7 @@ RSpec.describe Api::V3::Dashboards::NodeTypesToBreakBy do
           :api_v3_context_node_type, context: context, node_type: api_v3_state_node_type
         )
         FactoryBot.create(
-          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 0
+          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 0, role: 'source'
         )
       }
 

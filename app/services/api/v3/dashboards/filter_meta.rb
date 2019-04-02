@@ -17,25 +17,24 @@ module Api
               {
                 section: 'SOURCES',
                 tabs: @query.where(
-                  'context_node_type_properties.column_group' => 0
-                ).where(
-                  'node_types.name <> ?', NodeTypeName::COUNTRY_OF_PRODUCTION
+                  'context_node_type_properties.role' =>
+                    ContextNodeTypeProperty::SOURCE_ROLE
                 ).all
               },
               {
                 section: 'COMPANIES',
                 tabs: @query.where(
-                  'node_types.name' => [
-                    NodeTypeName::IMPORTER,
-                    NodeTypeName::EXPORTER,
-                    NodeTypeName::TRADER
+                  'context_node_type_properties.role' => [
+                    ContextNodeTypeProperty::EXPORTER_ROLE,
+                    ContextNodeTypeProperty::IMPORTER_ROLE
                   ]
                 ).all
               },
               {
                 section: 'DESTINATIONS',
                 tabs: @query.where(
-                  'context_node_type_properties.column_group' => 3
+                  'context_node_type_properties.role' =>
+                    ContextNodeTypeProperty::DESTINATION_ROLE
                 ).all
               }
             ].map do |section|
