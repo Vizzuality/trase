@@ -8,7 +8,8 @@ import { makeGetConfig } from 'react-components/dashboard-element/dashboard-widg
 const makeMapStateToProps = () => {
   const getDashboardWidgetsConfig = makeGetConfig();
   const mapStateToProps = (state, props) => ({
-    config: getDashboardWidgetsConfig(state, props)
+    config: getDashboardWidgetsConfig(state, props),
+    chartsLoading: state.dashboardElement.chartsLoading
   });
   return mapStateToProps;
 };
@@ -25,13 +26,13 @@ class DashboardWidgetContainer extends Component {
   }
 
   render() {
-    const { data, loading, error, meta, title, config } = this.props;
+    const { data, loading, error, meta, title, config, chartsLoading } = this.props;
     return config ? (
       <DashboardWidgetComponent
         data={data}
         title={title}
         error={error}
-        loading={loading}
+        loading={loading || chartsLoading}
         chartConfig={this.addTooltipContentToConfig(config, meta)}
       />
     ) : null;
@@ -44,7 +45,8 @@ DashboardWidgetContainer.propTypes = {
   meta: PropTypes.object,
   loading: PropTypes.bool,
   title: PropTypes.string,
-  config: PropTypes.object
+  config: PropTypes.object,
+  chartsLoading: PropTypes.bool
 };
 
 export default connect(makeMapStateToProps)(DashboardWidgetContainer);

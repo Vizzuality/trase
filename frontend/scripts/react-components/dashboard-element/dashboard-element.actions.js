@@ -23,6 +23,7 @@ export const DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY =
 export const DASHBOARD_ELEMENT__SET_CHARTS = 'DASHBOARD_ELEMENT__SET_CHARTS';
 export const DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS =
   'DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS';
+export const DASHBOARD_ELEMENT__SET_CHARTS_LOADING = 'DASHBOARD_ELEMENT__SET_CHARTS_LOADING';
 
 export const getDashboardPanelParams = (state, optionsType, options = {}) => {
   const {
@@ -134,4 +135,14 @@ export const setDashboardSelectedResizeBy = indicator => ({
 export const setDashboardSelectedRecolorBy = indicator => ({
   type: DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
   payload: { indicator }
+});
+
+export const setDashboardCharts = charts => ({
+  type: DASHBOARD_ELEMENT__SET_CHARTS,
+  payload: { charts }
+});
+
+export const setDashboardChartsLoading = loading => ({
+  type: DASHBOARD_ELEMENT__SET_CHARTS_LOADING,
+  payload: { loading }
 });

@@ -78,7 +78,7 @@ describe('fetchDashboardPanelInitialData', () => {
   it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_TABS} if the current active panel is companies`, async () => {
     const dispatched = await recordSaga(
       fetchDashboardPanelInitialData,
-      setDashboardActivePanel('any'),
+      setDashboardActivePanel('commodities'),
       stateCompanies
     );
     expect(dispatched).toContainEqual({
@@ -95,17 +95,6 @@ describe('fetchDashboardPanelInitialData', () => {
       setDashboardActivePanel('sources'),
       baseState
     );
-    // Clears panel data
-    expect(dispatched).toContainEqual({
-      payload: {
-        key: 'countries',
-        data: null,
-        meta: null,
-        tab: null,
-        loading: true
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
-    });
     // Sets panel data for countries
     expect(dispatched).toContainEqual({
       payload: {
@@ -139,10 +128,10 @@ describe('fetchDashboardPanelInitialData', () => {
     expect(dispatched).toContainEqual({
       payload: {
         key: 'commodities',
-        data: null,
-        meta: null,
+        data,
+        meta,
         tab: null,
-        loading: true
+        loading: false
       },
       type: DASHBOARD_ELEMENT__SET_PANEL_DATA
     });
@@ -205,17 +194,6 @@ describe('onTabChange', () => {
 
   it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_DATA} if tab action is triggered`, async () => {
     const dispatched = await recordSaga(onTabChange, searchAction, differentTabChangeState);
-    // Clears data
-    expect(dispatched).toContainEqual({
-      payload: {
-        key: 'sources',
-        data: null,
-        meta: null,
-        tab: 3,
-        loading: true
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
-    });
     expect(dispatched).toContainEqual({
       payload: {
         key: 'sources',
