@@ -14,7 +14,18 @@ import {
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
+  DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
+  setDashboardSelectedYears,
+  setDashboardSelectedResizeBy,
+  DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
+  DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
+  setDashboardSelectedRecolorBy,
+  DASHBOARD_ELEMENT__SET_CHARTS,
+  setDashboardCharts,
+  DASHBOARD_ELEMENT__SET_CHARTS_LOADING,
+  setDashboardChartsLoading,
+  DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS
 } from 'react-components/dashboard-element/dashboard-element.actions';
 
 describe(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL, () => {
@@ -733,5 +744,74 @@ test(DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH, () => {
       activeTab: tabs.companies[0],
       page: initialState.companiesPanel.page
     }
+  });
+});
+
+test(DASHBOARD_ELEMENT__SET_SELECTED_YEARS, () => {
+  const years = [2010, 2015];
+  const action = setDashboardSelectedYears(years);
+  const newState = reducer(initialState, action);
+  expect(newState).toEqual({
+    ...initialState,
+    selectedYears: years
+  });
+});
+
+test(DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY, () => {
+  const resizeBy = { attributeId: 0 };
+  const action = setDashboardSelectedResizeBy(resizeBy);
+  const newState = reducer(initialState, action);
+  expect(newState).toEqual({
+    ...initialState,
+    selectedResizeBy: resizeBy.attributeId
+  });
+});
+
+test(DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY, () => {
+  const recolorBy = { attributeId: 1 };
+  const action = setDashboardSelectedRecolorBy(recolorBy);
+  const newState = reducer(initialState, action);
+  expect(newState).toEqual({
+    ...initialState,
+    selectedRecolorBy: recolorBy.attributeId
+  });
+});
+
+test(DASHBOARD_ELEMENT__SET_CHARTS, () => {
+  const charts = [{ type: 'bar_chart', url: 'my_url' }];
+  const action = setDashboardCharts(charts);
+  const newState = reducer(initialState, action);
+  expect(newState).toEqual({
+    ...initialState,
+    charts
+  });
+});
+
+test(DASHBOARD_ELEMENT__SET_CHARTS_LOADING, () => {
+  const loading = true;
+  const action = setDashboardChartsLoading(loading);
+  const newState = reducer(initialState, action);
+  expect(newState).toEqual({
+    ...initialState,
+    chartsLoading: loading
+  });
+});
+
+test(DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS, () => {
+  const payload = {
+    years: [2010, 2015],
+    resizeBy: { attributeId: 0 },
+    recolorBy: { attributeId: 1 }
+  };
+  const action = {
+    type: DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS,
+    payload
+  };
+  const newState = reducer(initialState, action);
+  expect(newState).toEqual({
+    ...initialState,
+    selectedYears: payload.years,
+    selectedResizeBy: payload.resizeBy.attributeId,
+    selectedRecolorBy: payload.recolorBy.attributeId
   });
 });
