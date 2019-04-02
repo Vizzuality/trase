@@ -20,7 +20,8 @@ module.exports = {
       filename: 'index.ie.html',
       template: path.resolve(srcPath, 'index.ie.ejs'),
       inject: 'body',
-      GOOGLE_ANALYTICS_KEY: JSON.stringify(process.env.GOOGLE_ANALYTICS_KEY)
+      GOOGLE_ANALYTICS_KEY: JSON.stringify(process.env.GOOGLE_ANALYTICS_KEY),
+      USER_REPORT_KEY: JSON.stringify(process.env.USER_REPORT_KEY)
     }),
     new MiniCssExtractPlugin()
   ],
