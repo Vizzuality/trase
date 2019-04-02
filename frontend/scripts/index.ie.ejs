@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- Google Analytics start -->
+  <script>
+    window.ga = window.ga || function () {
+      (ga.q = ga.q || []).push(arguments)
+    };
+    ga.l = +new Date;
+    ga('create', <%= htmlWebpackPlugin.options.GOOGLE_ANALYTICS_KEY ? htmlWebpackPlugin.options.GOOGLE_ANALYTICS_KEY : "''" %>, 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  <!-- Google Analytics end -->
+  <title>Trase</title>
+</head>
+<body>
+  <div class="ie-splash">
+    <div class="row align-center">
+      <div class="column small-12 medium-3">
+        <div class="logo-container">
+          <img class="logo" src="/images/logos/new-logo-trase-red.svg" alt="TRASE" />
+        </div>
+      </div>
+    </div>
+    <div class="row column">
+      <h1 class="notice">
+        You're visiting us from an unsupported browser. Please switch to a more modern one.
+      </h1>
+    </div>
+    <div class="row align-center">
+      <div class="column small-12 medium-3">
+        <a class="browser-box">
+          <span class="browser-title">Chrome</span>
+          <img class="browser-logo" src="/images/browsers/chrome.svg" />
+        </a>
+      </div>
+      <div class="column small-12 medium-3">
+        <a class="browser-box">
+          <span class="browser-title">Firefox</span>
+          <img class="browser-logo" src="/images/browsers/firefox.svg" />
+        </a>
+      </div>
+      <div class="column small-12 medium-3">
+        <a class="browser-box">
+          <span class="browser-title">Edge</span>
+          <img class="browser-logo" src="/images/browsers/edge.svg" />
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+  <script type="text/javascript" src="//cdn.transifex.com/live.js"></script>
+</html>

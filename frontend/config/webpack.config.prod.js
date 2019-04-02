@@ -4,8 +4,9 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 
 const webpackBaseConfig = require('./webpack.config');
+const webpackIEConfig = require('./webpack.config.ie');
 
-module.exports = merge(webpackBaseConfig, {
+const main = merge(webpackBaseConfig, {
   mode: 'production',
   devtool: 'source-map',
   plugins: [
@@ -30,3 +31,5 @@ module.exports = merge(webpackBaseConfig, {
     ]
   }
 });
+
+module.exports = [main, webpackIEConfig];
