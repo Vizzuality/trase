@@ -16,6 +16,7 @@ module Api
             @node_type = chart_parameters.node_type
             @node_type_idx = chart_parameters.node_type_idx
             @nodes_ids_by_position = chart_parameters.nodes_ids_by_position
+            @top_n = chart_parameters.top_n
             initialize_query
             initialize_top_n_and_others_query(chart_parameters.top_n)
           end
@@ -31,7 +32,8 @@ module Api
               xAxis: node_type_axis_meta(@node_type),
               yAxis: axis_meta(@cont_attribute, 'number'),
               x: node_type_legend_meta(@node_type),
-              y0: legend_meta(@cont_attribute)
+              y0: legend_meta(@cont_attribute),
+              info: info
             }
 
             swap_x_and_y

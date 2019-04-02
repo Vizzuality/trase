@@ -40,7 +40,8 @@ module Api
             @meta = {
               xAxis: node_type_axis_meta(@node_type),
               yAxis: axis_meta(@cont_attribute, 'number'),
-              x: node_type_legend_meta(@node_type)
+              x: node_type_legend_meta(@node_type),
+              info: info
             }
 
             break_by_values_indexes.each do |break_by, idx|
