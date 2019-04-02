@@ -29,7 +29,14 @@ module Api
         0, 1, 2, 3
       ].freeze
 
-      ROLES = %w(source exporter importer destination).freeze
+      SOURCE_ROLE = 'source'.freeze
+      EXPORTER_ROLE = 'exporter'.freeze
+      IMPORTER_ROLE = 'importer'.freeze
+      DESTINATION_ROLE = 'destination'.freeze
+
+      ROLES = [
+        SOURCE_ROLE, EXPORTER_ROLE, IMPORTER_ROLE, DESTINATION_ROLE
+      ].freeze
 
       before_save :nilify_role,
                   if: -> { role.blank? }
