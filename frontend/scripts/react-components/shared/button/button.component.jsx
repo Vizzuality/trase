@@ -34,7 +34,7 @@ function Button(props) {
     charcoal: 'white'
   };
 
-  const renderIcon = <Icon icon={icon} color={color && iconColors[color]} />;
+  const renderIcon = icon && <Icon icon={icon} color={color && iconColors[color]} />;
 
   const childrenWithIcon = (
     <>

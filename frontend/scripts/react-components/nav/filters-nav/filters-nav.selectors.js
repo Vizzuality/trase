@@ -98,7 +98,7 @@ const getLogisticsMapYearsProps = createSelector(
     value:
       activeParams.commodity === 'soy'
         ? LOGISTICS_MAP_YEARS.find(year => year.value === parseInt(activeParams.year, 10))
-        : {},
+        : null,
     selectedValueOverride: activeParams.commodity !== 'soy' ? '2012 – 2017' : undefined
   })
 );

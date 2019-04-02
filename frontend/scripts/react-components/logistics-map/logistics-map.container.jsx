@@ -13,7 +13,7 @@ import {
 } from 'react-components/logistics-map/logistics-map.actions';
 import LogisticsMap from 'react-components/logistics-map/logistics-map.component';
 import formatValue from 'utils/formatValue';
-import startCase from 'lodash/startCase';
+import capitalize from 'lodash/capitalize';
 
 class LogisticsMapContainer extends React.PureComponent {
   static propTypes = {
@@ -75,7 +75,7 @@ class LogisticsMapContainer extends React.PureComponent {
         { title: 'Subclass', value: data.subclass },
         { title: 'Inspection level', value: data.inspection_level }
       );
-      text = startCase(layer.name);
+      text = capitalize(layer.name);
     }
     const mapPopUp = { ...e, data: { x, y, text, show, items } };
     this.setState(() => ({ mapPopUp }));

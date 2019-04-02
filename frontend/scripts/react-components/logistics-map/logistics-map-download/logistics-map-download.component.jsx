@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import startCase from 'lodash/startCase';
+import capitalize from 'lodash/capitalize';
 import LogisticsMapModal from 'react-components/logistics-map/logistics-map-modal/logistics-map-modal.component';
 import Button from 'react-components/shared/button/button.component';
 import Heading from 'react-components/shared/heading/heading.component';
@@ -56,7 +56,7 @@ LogisticsMapDownload.mapLayerToLink = layer => (
       rel="noreferrer noopener"
       href={layer.downloadUrl}
     >
-      {startCase(layer.name)}
+      {capitalize(layer.name)}
     </Button>
   </div>
 );
