@@ -18,7 +18,7 @@ module Api
             @nodes_ids_by_position = chart_parameters.nodes_ids_by_position
             @top_n = chart_parameters.top_n
             initialize_query
-            initialize_top_n_and_others_query(chart_parameters.top_n)
+            initialize_top_n_and_others_query
           end
 
           def call
@@ -51,11 +51,11 @@ module Api
             apply_flow_path_filters
           end
 
-          def initialize_top_n_and_others_query(top_n)
+          def initialize_top_n_and_others_query
             subquery = <<~SQL
               (
                 WITH q AS (#{@query.to_sql}),
-                u1 AS (SELECT x, y0 FROM q ORDER BY y0 DESC LIMIT #{top_n}),
+                u1 AS (SELECT x, y0 FROM q ORDER BY y0 DESC LIMIT #{@top_n}),
                 u2 AS (
                   SELECT '#{OTHER}' AS x, SUM(y0) AS y0 FROM q
                   WHERE NOT EXISTS (SELECT 1 FROM u1 WHERE q.x = u1.x)
