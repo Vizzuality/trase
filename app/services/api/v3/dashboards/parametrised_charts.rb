@@ -70,7 +70,7 @@ module Api
         def single_year_no_ncont_node_type_view(node_type)
           {
             source: :single_year_no_ncont_node_type_view,
-            type: SingleYearCharts::ChartTypeForSingleYearNoNcont.call(
+            type: SingleYearCharts::ChartType.call(
               data: SingleYearCharts::PrepareData.call(
                 context: @context,
                 top_n: 10,
@@ -106,7 +106,7 @@ module Api
         def single_year_ncont_node_type_view(node_type)
           {
             source: :single_year_ncont_node_type_view,
-            type: SingleYearCharts::ChartTypeForSingleYearNoNcont.call(
+            type: SingleYearCharts::ChartType.call(
               data: SingleYearCharts::PrepareData.call(
                 context: @context,
                 top_n: 10,

@@ -2,7 +2,7 @@ module Api
   module V3
     module Dashboards
       module SingleYearCharts
-        class ChartTypeForSingleYearNoNcont
+        class ChartType
           OTHER = 'OTHER'.freeze
           THRESHOLD_SCALE = 1.2 # 20%
           RANKING_CHART = :ranking_chart
