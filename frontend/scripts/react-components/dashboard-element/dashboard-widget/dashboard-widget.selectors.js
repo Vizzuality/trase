@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import omit from 'lodash/omit';
+import omitBy from 'lodash/omitBy';
 import sortBy from 'lodash/sortBy';
 import kebabCase from 'lodash/kebabCase';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
@@ -25,8 +25,11 @@ export const getDefaultConfig = createSelector(
 
 const getGroupedAxis = (axis, meta) => {
   const toBeRemoved = axis === 'y' ? 'x' : 'y';
-  const groupedAxis = omit(meta, ['xAxis', 'yAxis', toBeRemoved]);
-  return groupedAxis;
+  const sanitizedGroupedAxis = omitBy(
+    meta,
+    (value, key) => !/^(x|y){1}[0-9]*$/.test(key) || key === toBeRemoved
+  );
+  return sanitizedGroupedAxis;
 };
 
 const sortGroupedAxis = keys => sortBy(Object.keys(keys), key => parseInt(key.substr(1), 10));
