@@ -11,6 +11,7 @@ module Api
 
         # @param chart_parameters [Api::V3::Dashboards::ChartParameters]
         def initialize(chart_parameters)
+          @chart_params = chart_parameters.as_json.symbolize_keys
           @country_id = chart_parameters.country_id
           @commodity_id = chart_parameters.commodity_id
           @context = chart_parameters.context
@@ -28,16 +29,15 @@ module Api
           @node_types_to_break_by =
             Api::V3::Dashboards::NodeTypesToBreakBy.new(@context).call
 
-          chart_types =
-            if single_year? && !ncont_attribute?
-              single_year_no_ncont_charts
-            elsif single_year? && ncont_attribute?
-              single_year_ncont_charts
-            elsif !single_year? && !ncont_attribute?
-              multi_year_no_ncont_charts
-            else
-              multi_year_ncont_charts
-            end
+          if single_year? && !ncont_attribute?
+            single_year_no_ncont_charts
+          elsif single_year? && ncont_attribute?
+            single_year_ncont_charts
+          elsif !single_year? && !ncont_attribute?
+            multi_year_no_ncont_charts
+          else
+            multi_year_ncont_charts
+          end
         end
 
         private
@@ -70,7 +70,18 @@ module Api
         def single_year_no_ncont_node_type_view(node_type)
           {
             source: :single_year_no_ncont_node_type_view,
-            type: HORIZONTAL_BAR_CHART,
+            type: SingleYearCharts::ChartTypeForSingleYearNoNcont.call(
+              data: SingleYearCharts::PrepareData.call(
+                context: @context,
+                top_n: 10,
+                cont_attribute: @cont_attribute,
+                ncont_attribute: nil,
+                year: @start_year,
+                node_type_idx: Api::V3::NodeType.node_index_for_id(@context, node_type.id),
+                type: :no_ncont
+              ),
+              default_chart_type: HORIZONTAL_BAR_CHART
+            ),
             x: :node_type,
             node_type_id: node_type.id
           }
@@ -95,7 +106,18 @@ module Api
         def single_year_ncont_node_type_view(node_type)
           {
             source: :single_year_ncont_node_type_view,
-            type: HORIZONTAL_STACKED_BAR_CHART,
+            type: SingleYearCharts::ChartTypeForSingleYearNoNcont.call(
+              data: SingleYearCharts::PrepareData.call(
+                context: @context,
+                top_n: 10,
+                cont_attribute: @cont_attribute,
+                ncont_attribute: @ncont_attribute,
+                year: @start_year,
+                node_type_idx: Api::V3::NodeType.node_index_for_id(@context, node_type.id),
+                type: :ncont
+              ),
+              default_chart_type: HORIZONTAL_STACKED_BAR_CHART
+            ),
             x: :node_type,
             break_by: :ncont_attribute,
             node_type_id: node_type.id
