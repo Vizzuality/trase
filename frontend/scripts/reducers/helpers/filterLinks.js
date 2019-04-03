@@ -35,7 +35,7 @@ export default function(links, selectedNodesAtColumns, nodesColoredBySelection, 
     if (linkPasses) {
       const clonedLink = cloneDeep(link);
       const nodeIds = intersection(link.originalPath, nodesColoredBySelection);
-      if (nodeIds) {
+      if (nodeIds && clonedLink) {
         const nodeId = nodeIds[0];
         // clonedLink.recolorGroup = nodesColoredBySelection.length - nodesColoredBySelection.indexOf(nodeId);
         clonedLink.recolorGroup = recolorGroups[nodeId];

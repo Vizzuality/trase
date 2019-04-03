@@ -144,7 +144,7 @@ const sankeyLayout = () => {
     // this is only used for sorting links with color groups
     let recolorGroupsOrderedByY;
 
-    if (links[0].recolorGroup !== undefined) {
+    if (links[0] && links[0].recolorGroup !== undefined) {
       // get all links of the colored column
       let coloredColumnLinks = links.filter(link => {
         const entry =
@@ -195,7 +195,7 @@ const sankeyLayout = () => {
         }
         return recolorBySort;
       }
-      if (links[0].recolorGroup !== undefined) {
+      if (links[0] && links[0].recolorGroup !== undefined) {
         // When using a recolorGroup
         // For columns outside of adjacent columns, links should be sorted by the original *y order of recolored nodes*
         // (mapped to recolor groups before sorting, see recolorGroupsOrderedByY bit above)
