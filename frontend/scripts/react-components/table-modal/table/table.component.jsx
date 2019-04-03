@@ -32,7 +32,6 @@ function Table(props) {
         className={cx('c-grid-list')}
         height={height}
         width={width}
-        outerElementType="tbody"
         innerElementType="tr"
         columnWidth={() => columnWidth}
         rowHeight={index => rowHeight || getMaxLength(data[index]) + minRowHeight}
