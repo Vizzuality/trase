@@ -16,7 +16,7 @@ function TableModal({ title, data }) {
         width={760}
         height={200}
         data={data.map(d => Object.values(d))}
-        headings={['Commodity', 'Country', 'Year', 'Exporter', 'Unit', 'Indicator']}
+        headers={['Commodity', 'Country', 'Year', 'Exporter', 'Unit', 'Indicator']}
       />
       <div className="table-modal-footer">
         <Button color="pink" size="sm" disabled>
