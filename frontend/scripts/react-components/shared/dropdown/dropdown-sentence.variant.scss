@@ -25,7 +25,14 @@
 
     &::after {
       top: 50%;
-      transform: translateY(calc(-50%)) rotate(45deg);
+      transform: translateY(calc(-50% - 2px)) rotate(45deg);
+    }
+  }
+
+  &.-open {
+    .dropdown-selected-item::after {
+      top: 50%;
+      transform: translateY(calc(-50% - 2px)) rotate(225deg);
     }
   }
 }

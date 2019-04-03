@@ -62,6 +62,7 @@
     "cartodb": "0.5.1",
     "clean-webpack-plugin": "^0.1.19",
     "css-loader": "^1.0.1",
+    "docz": "^0.13.7",
     "docz-theme-default": "^0.13.7",
     "ejs-loader": "^0.3.1",
     "eslint": "^5.8.0",
@@ -84,6 +85,7 @@
     "jest-puppeteer": "^3.5.2",
     "lint-staged": "^8.0.4",
     "mapshaper": "^0.4.99",
+    "mini-css-extract-plugin": "^0.5.0",
     "node-fetch": "^2.3.0",
     "node-sass": "^4.10.0",
     "ora": "^3.0.0",
@@ -102,8 +104,7 @@
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.14",
-    "webpack-merge": "^4.1.4",
-    "docz": "^0.13.7"
+    "webpack-merge": "^4.1.4"
   },
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.2.0",

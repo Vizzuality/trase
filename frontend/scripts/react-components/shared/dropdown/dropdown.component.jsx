@@ -114,12 +114,20 @@ function Dropdown(props) {
         nav: { color: 'grey-faded' }
       }[variant] || {};
 
+    const valueProps =
+      {
+        mono: { variant: 'mono' }
+      }[variant] || {};
+
     return (
       <button
         {...getToggleButtonProps({
           ref,
           disabled: isDisabled,
-          className: cx('dropdown-selected-item', { [`-${arrowType}`]: arrowType })
+          className: cx('dropdown-selected-item', {
+            [`-${arrowType}`]: arrowType,
+            '-no-label': !label
+          })
         })}
       >
         <Text
@@ -139,8 +147,9 @@ function Dropdown(props) {
           size={size}
           weight={weight}
           color={color}
-          className="dropdown-value"
           title={inputValue}
+          {...valueProps}
+          className="dropdown-value"
         >
           {selectedValueOverride || inputValue}
         </Heading>

@@ -19,6 +19,10 @@
         transform: translateY(calc(-50% - 4px)) rotate(225deg);
       }
 
+      &.-no-label::after {
+        transform: translateY(calc(-50% - 2px)) rotate(225deg);
+      }
+
       &.-caret {
         &::after {
           transform: rotate(180deg);
@@ -43,6 +47,17 @@
     .dropdown-label,
     .dropdown-value {
       display: block;
+    }
+
+    &.-no-label {
+      .dropdown-label {
+        display: none;
+      }
+
+      &::after {
+        top: 50%;
+        transform: translateY(calc(-50% - 2px)) rotate(45deg);
+      }
     }
   }
 
