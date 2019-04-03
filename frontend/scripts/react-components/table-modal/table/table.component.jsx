@@ -10,16 +10,16 @@ import maxBy from 'lodash/maxBy';
 const getMaxLength = row => String(maxBy(row, cell => String(cell).length)).length;
 
 function Table(props) {
-  const { data, headings, width, height, loading, rowHeight, className } = props;
+  const { data, headers, width, height, loading, rowHeight, className } = props;
   if (!data) return null;
-  const columnWidth = width / headings.length;
+  const columnWidth = width / headers.length;
   const minRowHeight = 50;
 
   return (
     <table className={cx('c-table', className)}>
       <thead>
-        <tr className="table-heading" style={{ width }}>
-          {headings.map((h, index) => (
+        <tr className="table-header" style={{ width }}>
+          {headers.map((h, index) => (
             <th className="header-item" key={`${h}${index}`}>
               <Text color="white" weight="bold" size="md" variant="mono">
                 {h}
@@ -37,7 +37,7 @@ function Table(props) {
         columnWidth={() => columnWidth}
         rowHeight={index => rowHeight || getMaxLength(data[index]) + minRowHeight}
         rowCount={data.length}
-        columnCount={headings.length}
+        columnCount={headers.length}
       >
         {({ rowIndex, columnIndex, style }) => {
           const item = data[rowIndex][columnIndex];
@@ -66,7 +66,7 @@ function Table(props) {
 Table.propTypes = {
   loading: PropTypes.bool,
   className: PropTypes.string,
-  headings: PropTypes.array.isRequired,
+  headers: PropTypes.array.isRequired,
   data: PropTypes.array.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
