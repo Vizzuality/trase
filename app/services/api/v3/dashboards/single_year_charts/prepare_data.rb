@@ -5,7 +5,7 @@ module Api
         class PrepareData
           include ActiveSupport::Configurable
 
-          attr_reader :context, :top_n, :cont_attribute, :ncont_attribute, :year, :node_type_idx, :type
+          attr_reader :type, :chart_params, :top_n, :node_type_idx
 
           config_accessor :with_ncont do
             Api::V3::Dashboards::SingleYearCharts::NcontNodeType
@@ -18,40 +18,31 @@ module Api
           DATA_MAP = {
             ncont: with_ncont,
             no_ncont: no_ncont
-          }
+          }.freeze
 
           class << self
-            def call(context:, top_n:, cont_attribute:, ncont_attribute:, year:, node_type_idx:, type:)
+            def call(chart_params:, top_n:, node_type_idx:, type:)
               new(
-                context: context,
-                top_n: top_n,
-                cont_attribute: cont_attribute,
-                ncont_attribute: ncont_attribute,
-                year: year,
+                chart_params: chart_params,
                 node_type_idx: node_type_idx,
+                top_n: top_n,
                 type: type
               ).call
             end
           end
 
-          def initialize(context:, top_n:, cont_attribute:, ncont_attribute:, year:, node_type_idx:, type:)
-            @context = context
-            @top_n = top_n
-            @cont_attribute = cont_attribute
-            @ncont_attribute = ncont_attribute
-            @year = year
-            @node_type_idx = node_type_idx
+          def initialize(chart_params:, top_n:, node_type_idx:, type:)
             @type = type
+            @node_type_idx = node_type_idx
+            @chart_params = chart_params
+            @top_n = top_n
           end
 
           def call
             DATA_MAP[type].call(
-              context: context,
-              top_n: top_n,
-              cont_attribute: cont_attribute,
-              ncont_attribute: ncont_attribute,
-              year: year,
-              node_type_idx: node_type_idx
+              chart_params: chart_params,
+              node_type_idx: node_type_idx,
+              top_n: top_n
             )
           end
         end

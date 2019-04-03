@@ -8,23 +8,21 @@ module Api
           OTHER = 'OTHER'.freeze
 
           class << self
-            def call(context:, top_n:, cont_attribute:, ncont_attribute:, year:, node_type_idx:)
+            def call(chart_params:, node_type_idx:, top_n:)
               new(
-                context: context,
-                top_n: top_n,
-                cont_attribute: cont_attribute,
-                ncont_attribute: ncont_attribute,
-                year: year,
-                node_type_idx: node_type_idx
+                chart_params: chart_params,
+                node_type_idx: node_type_idx,
+                top_n: top_n
               ).call
             end
           end
 
-          def initialize(context:, top_n:, cont_attribute:, ncont_attribute:, year:, node_type_idx:)
-            @context = context
+          def initialize(chart_params:, node_type_idx:, top_n:)
+            @context = chart_params.context
+            @cont_attribute = chart_params.cont_attribute
+            @year = chart_params.start_year
+            @node_type_idx = chart_params.node_type_idx
             @top_n = top_n
-            @cont_attribute = cont_attribute
-            @year = year
             @node_type_idx = node_type_idx
           end
 

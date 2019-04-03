@@ -26,7 +26,7 @@ module Api
           def call
             without_other = data.reject { |o| o[:x] == OTHER }
             without_nils_and_x = without_other.map { |o| o.except(:x).compact }
-            summed = without_nils_and_x.map { |h| h.inject(0) { |sum, tuple| sum += tuple[1] } }
+            summed = without_nils_and_x.map { |h| h.inject(0) { |sum, tuple| sum + tuple[1] } }
             max_value = summed.max
             return default_chart_type unless max_value
 
@@ -37,7 +37,7 @@ module Api
             return default_chart_type unless other
 
             clean_other = other.except(:x).compact
-            other_value = clean_other.inject(0) { |sum, tuple| sum += tuple[1] }
+            other_value = clean_other.inject(0) { |sum, tuple| sum + tuple[1] }
 
             threshold >= other_value ? default_chart_type : RANKING_CHART
           end
