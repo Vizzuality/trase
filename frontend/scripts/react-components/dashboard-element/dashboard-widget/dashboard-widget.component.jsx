@@ -20,10 +20,13 @@ function DashboardWidget(props) {
     loading,
     error,
     data,
+    meta,
+    chartType,
     chartConfig,
     dynamicSentenceParts,
     activeModal,
-    setActiveModal
+    setActiveModal,
+    id
   } = props;
 
   const renderError = errorMessage => (
@@ -32,19 +35,29 @@ function DashboardWidget(props) {
     </Text>
   );
 
-  const renderWidgetActions = () => (
-    <div className="widget-actions">
-      <Button
-        icon="icon-table"
-        color="charcoal"
-        variant="circle"
-        onClick={() => setActiveModal('table')}
-      />
-      <SimpleModal isOpen={activeModal === 'table'} onClickClose={() => setActiveModal(null)}>
-        <TableModal title={title} data={data} />
-      </SimpleModal>
-    </div>
-  );
+  const renderWidgetActions = () => {
+    const hasTable = chartType !== 'dynamicSentence';
+    return (
+      <div className="widget-actions">
+        {hasTable && (
+          <>
+            <Button
+              icon="icon-table"
+              color="charcoal"
+              variant="circle"
+              onClick={() => setActiveModal(`table${id}`)}
+            />
+            <SimpleModal
+              isOpen={activeModal === `table${id}`}
+              onClickClose={() => setActiveModal(null)}
+            >
+              <TableModal title={title} data={data} meta={meta} chartType={chartType} />
+            </SimpleModal>
+          </>
+        )}
+      </div>
+    );
+  };
 
   const renderChart = () => {
     if (data && data.length === 0) {
@@ -116,9 +129,12 @@ function DashboardWidget(props) {
 DashboardWidget.propTypes = {
   error: PropTypes.any,
   data: PropTypes.array,
+  meta: PropTypes.object,
   title: PropTypes.string,
+  id: PropTypes.string,
   loading: PropTypes.bool,
   chartConfig: PropTypes.object,
+  chartType: PropTypes.string,
   dynamicSentenceParts: PropTypes.array,
   activeModal: PropTypes.string,
   setActiveModal: PropTypes.func.isRequired

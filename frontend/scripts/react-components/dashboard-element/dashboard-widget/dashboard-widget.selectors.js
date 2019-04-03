@@ -125,6 +125,7 @@ export const getXKeys = createSelector(
   }
 );
 
+export const makeGetChartType = () => getChartType;
 export const makeGetConfig = () =>
   createSelector(
     [getMeta, getYKeys, getXKeys, getColors, getDefaultConfig],

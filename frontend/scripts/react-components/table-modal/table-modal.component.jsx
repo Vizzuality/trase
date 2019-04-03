@@ -5,19 +5,21 @@ import Button from 'react-components/shared/button';
 import Table from 'react-components/table-modal/table';
 import 'react-components/table-modal/table-modal.scss';
 
-function TableModal({ title, data }) {
+function TableModal({ title, tableData }) {
   return (
     <div className="c-table-modal">
       <Heading size="md" align="center">
         {title}
       </Heading>
-      <Table
-        className="table"
-        width={760}
-        height={200}
-        data={data.map(d => Object.values(d))}
-        headers={['Commodity', 'Country', 'Year', 'Exporter', 'Unit', 'Indicator']}
-      />
+      {tableData && (
+        <Table
+          className="table"
+          width={760}
+          height={200}
+          data={tableData.data}
+          headers={tableData.headers}
+        />
+      )}
       <div className="table-modal-footer">
         <Button color="pink" size="sm" disabled>
           Download CSV
@@ -29,7 +31,7 @@ function TableModal({ title, data }) {
 
 TableModal.propTypes = {
   title: PropTypes.string,
-  data: PropTypes.array
+  tableData: PropTypes.object
 };
 
 export default TableModal;
