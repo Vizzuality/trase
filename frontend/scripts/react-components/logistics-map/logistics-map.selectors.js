@@ -37,7 +37,7 @@ export const getLogisticsMapLayers = createSelector(
     templates
       .filter(template => activeParams.commodity === template.commodity)
       .map(template => ({
-        name: template.name,
+        name: template.leyendName,
         opacity: 1,
         id: template.name,
         active: layersIds ? layersIds.includes(template.name) : true,
@@ -88,7 +88,7 @@ export const getActiveLayers = createSelector(
   [getActiveLayersIds, getLogisticsMapLayers, getActiveDefaultLayersIds],
   (layersIds, layers, activeDefaultLayersIds) => {
     const currentLayers = layersIds || activeDefaultLayersIds;
-    return layers.filter(layer => !!currentLayers.includes(layer.name));
+    return layers.filter(layer => !!currentLayers.includes(layer.id));
   }
 );
 
@@ -113,7 +113,7 @@ export const getLogisticsMapDownloadUrls = defaultMemoize(() =>
       [template.commodity]: [
         ...(acc[template.commodity] || []),
         {
-          name: template.name,
+          name: template.leyendName,
           downloadUrl: template.downloadUrl
         }
       ]
