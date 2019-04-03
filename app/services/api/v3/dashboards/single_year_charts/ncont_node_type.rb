@@ -92,10 +92,7 @@ module Api
           end
 
           def flow_query
-            Api::V3::Flow.where(context_id: context.id).order(false).
-              select('nodes.name AS x').
-              joins("JOIN nodes ON nodes.id = flows.path[#{node_type_idx}]").
-              group('nodes.name').
+            grouped_query.
               select("#{ncont_attr_table}.value::TEXT AS break_by").
               joins("LEFT JOIN #{ncont_attr_table} ON #{ncont_attr_table}.flow_id = flows.id").
               where(
@@ -110,6 +107,13 @@ module Api
                   cont_attribute.original_id
               ).
               where(year: year)
+          end
+
+          def grouped_query
+            Api::V3::Flow.where(context_id: context.id).order(false).
+              select('nodes.name AS x').
+              joins("JOIN nodes ON nodes.id = flows.path[#{node_type_idx}]").
+              group('nodes.name')
           end
 
           def ncont_attr_table
