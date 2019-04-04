@@ -12,18 +12,6 @@ const getCountriesPanel = state =>
   returnNameArrayIfNotEmpty(
     state.dashboardElement && state.dashboardElement.countriesPanel.activeItems
   );
-const getSourcesPanel = state =>
-  returnNameArrayIfNotEmpty(
-    state.dashboardElement && state.dashboardElement.sourcesPanel.activeItems
-  );
-const getDestinationsPanel = state =>
-  returnNameArrayIfNotEmpty(
-    state.dashboardElement && state.dashboardElement.destinationsPanel.activeItems
-  );
-const getCompaniesPanel = state =>
-  returnNameArrayIfNotEmpty(
-    state.dashboardElement && state.dashboardElement.companiesPanel.activeItems
-  );
 const getCommoditiesPanel = state =>
   returnNameArrayIfNotEmpty(
     state.dashboardElement && state.dashboardElement.commoditiesPanel.activeItems
@@ -49,11 +37,13 @@ const getColumnNames = (meta, chartType) => {
   notColumnKeys.forEach(a => delete metaColumns[a]);
   return Object.keys(metaColumns);
 };
+const getContValue = (d, c) => d[c];
 
 const getYear = (d, meta, chartType) => {
   switch (chartType) {
     case 'horizontalBar':
     case 'stackedHorizontalBar':
+    case 'pie':
       return meta.info.years.start_year;
     default:
       return d.x || meta.info.years.start_year;
@@ -62,25 +52,29 @@ const getYear = (d, meta, chartType) => {
 
 const getExtraInfo = createStructuredSelector({
   countries: getCountriesPanel,
-  sources: getSourcesPanel,
-  destinations: getDestinationsPanel,
-  companies: getCompaniesPanel,
   commodities: getCommoditiesPanel
 });
+
+const getIndicatorColumnName = (meta, type) => {
+  const unit = type === 'cont_attribute' ? meta.xAxis.suffix : meta.yAxis.suffix;
+  return `${meta.info.filter[type].toUpperCase()}${unit ? ` (${unit})` : ''}`;
+};
+
+const getVariableColumnName = (d, c, meta) => d.y || meta[c].label;
 
 export const makeGetTableData = () =>
   createSelector(
     [getMeta, getData, getExtraInfo, getChartType],
     (meta, data, info, chartType) => {
       if (!meta || !data) return null;
-      console.log(meta, data, info);
-      const headers = ['Commodity', 'Country', 'Year'];
+      const headers = ['COMMODITY', 'COUNTRY', 'YEAR'];
       const variableColumn = getVariableColumn(meta);
       const columns = getColumnNames(meta, chartType);
       if (variableColumn) headers.push(variableColumn);
-      if (meta.info.filter.cont_attribute) headers.push(meta.info.filter.cont_attribute);
-      if (meta.info.filter.n_cont_attribute) headers.push(meta.info.filter.n_cont_attribute);
-      console.log('c', data, columns);
+      if (meta.info.filter.cont_attribute)
+        headers.push(getIndicatorColumnName(meta, 'cont_attribute'));
+      if (meta.info.filter.ncont_attribute)
+        headers.push(getIndicatorColumnName(meta, 'ncont_attribute'));
       const parsedData = [];
       columns.forEach(c => {
         data.forEach(d => {
@@ -88,8 +82,8 @@ export const makeGetTableData = () =>
             info.commodities[0],
             info.countries[0],
             getYear(d, meta, chartType),
-            d.y || console.log(d[c]) || d[c],
-            `${d.x0} ${meta.xAxis.suffix}`
+            getVariableColumnName(d, c, meta),
+            getContValue(d, c, meta)
           ]);
         });
       });
