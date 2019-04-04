@@ -15,7 +15,7 @@ function TableModal({ title, tableData }) {
         <Table
           className="table"
           width={760}
-          height={200}
+          height={520}
           data={tableData.data}
           headers={tableData.headers}
         />
