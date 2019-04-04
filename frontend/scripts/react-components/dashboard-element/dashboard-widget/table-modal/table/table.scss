@@ -1,0 +1,25 @@
+@import 'styles/settings';
+
+.c-table {
+  .table-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background-color: $charcoal-grey;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .header-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 0;
+  }
+
+  .list-item-even {
+    background-color: $metal-grey;
+    border-bottom: solid 2px $medium-gray;
+    border-top: solid 2px $medium-gray;
+  }
+}

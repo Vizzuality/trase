@@ -79,6 +79,7 @@ export const getTableData = createSelector(
     if (meta.info.filter.ncont_attribute)
       headers.push(getIndicatorColumnName(meta, 'ncont_attribute'));
     const parsedData = [];
+    console.log(columns, data, meta);
     columns.forEach(c => {
       data.forEach(d => {
         const rowData = [getCommodities(info), getCountries(info), getYear(d, meta, chartType)];

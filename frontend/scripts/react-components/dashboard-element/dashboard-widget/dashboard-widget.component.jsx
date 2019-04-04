@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Chart from 'react-components/chart';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
-import TableModal from 'react-components/table-modal';
+import TableModal from 'react-components/dashboard-element/dashboard-widget/table-modal';
 import Button from 'react-components/shared/button';
 import Spinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import DashboardWidgetLabel from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-label.component';
@@ -46,6 +46,7 @@ function DashboardWidget(props) {
               color="charcoal"
               variant="circle"
               onClick={() => setActiveModal(`table${id}`)}
+              disabled={loading}
             />
             <SimpleModal
               isOpen={activeModal === `table${id}`}
