@@ -99,6 +99,7 @@ const colors = {
 };
 
 const defaults = {
+  parse: true,
   xAxis,
   yAxis,
   colors,
@@ -155,7 +156,7 @@ export default {
       interval: 0
     }
   },
-  horizontalStackedBarChart: {
+  horizontalStackedBar: {
     ...defaults,
     tooltip,
     type: 'bar',
@@ -211,6 +212,11 @@ export default {
     }
   },
   dynamicSentence: {
-    type: 'sentence'
+    type: 'sentence',
+    parse: false
+  },
+  ranking: {
+    type: 'ranking',
+    parse: false
   }
 };
