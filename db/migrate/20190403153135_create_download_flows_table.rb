@@ -17,13 +17,10 @@ class CreateDownloadFlowsTable < ActiveRecord::Migration[5.2]
       ) PARTITION BY LIST (year);
     SQL
 
-    add_index :download_flows, :year, {name: :download_flows_year_idx}
-    add_index :download_flows, :context_id, {name: :download_flows_context_id_idx}
-    add_index :download_flows, [:attribute_type, :attribute_id], {name: :download_flows_attribute_type_attribute_id_idx}
-    add_index :download_flows, :path, name: :download_flows_path_idx
+    Api::V3::TablePartitions.create_indexes
   end
 
   def down
-    execute 'DROP TABLE download_flows'
+    drop_table :download_flows
   end
 end
