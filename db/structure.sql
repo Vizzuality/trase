@@ -3498,6 +3498,27 @@ COMMENT ON COLUMN public.download_attributes_mv.attribute_id IS 'References the 
 
 
 --
+-- Name: download_flows; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    jsonb_path jsonb,
+    attribute_type text,
+    attribute_id integer,
+    attribute_name text,
+    text_values text,
+    sum numeric,
+    total text,
+    sort text
+)
+PARTITION BY LIST (year);
+
+
+--
 -- Name: flow_paths_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -3698,6 +3719,74 @@ CREATE MATERIALIZED VIEW public.download_flows_mv AS
 --
 
 COMMENT ON MATERIALIZED VIEW public.download_flows_mv IS 'Combines data from flow_paths_mv and download_attributes_values_mv in a structure that can be directly used to generate data downloads.';
+
+
+--
+-- Name: flows_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.flows_mv AS
+ SELECT flow_nodes.id,
+    flow_nodes.context_id,
+    flow_nodes.year,
+    array_agg(nodes.id ORDER BY cnt.column_position) AS path,
+    jsonb_object_agg(cnt.column_position, jsonb_build_object('node_id', nodes.id, 'node', nodes.name, 'node_type_id', cnt.node_type_id, 'node_type', node_types.name, 'is_unknown', nodes.is_unknown) ORDER BY cnt.column_position) AS jsonb_path
+   FROM (((( SELECT flows.id,
+            flows.context_id,
+            flows.year,
+            a.node_id,
+            (a."position" - 1) AS column_position
+           FROM public.flows,
+            LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) flow_nodes
+     JOIN public.nodes ON ((flow_nodes.node_id = nodes.id)))
+     JOIN public.context_node_types cnt ON (((flow_nodes.context_id = cnt.context_id) AND (flow_nodes.column_position = cnt.column_position))))
+     JOIN public.node_types ON ((cnt.node_type_id = node_types.id)))
+  GROUP BY flow_nodes.id, flow_nodes.context_id, flow_nodes.year
+  WITH NO DATA;
+
+
+--
+-- Name: download_flows_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.download_flows_v AS
+ SELECT f.id,
+    f.context_id,
+    f.year,
+    f.path,
+    f.jsonb_path,
+    fi.original_type,
+    fi.original_id,
+    fi.name AS attribute_name,
+    string_agg(fi.text_value, ' / '::text) AS text_values,
+    sum(fi.numeric_value) AS sum,
+        CASE
+            WHEN (fi.original_type = 'Qual'::text) THEN string_agg(fi.text_value, ' / '::text)
+            ELSE (sum(fi.numeric_value))::text
+        END AS total
+   FROM (public.flows_mv f
+     JOIN ( SELECT f_1.flow_id,
+            f_1.qual_id AS original_id,
+            'Qual'::text AS original_type,
+            NULL::double precision AS numeric_value,
+            f_1.value AS text_value,
+            q.name,
+            NULL::text AS unit
+           FROM (public.flow_quals f_1
+             JOIN public.quals q ON ((f_1.qual_id = q.id)))
+          GROUP BY f_1.flow_id, f_1.qual_id, f_1.value, q.name
+        UNION ALL
+         SELECT f_1.flow_id,
+            f_1.quant_id,
+            'Quant'::text,
+            f_1.value,
+            NULL::text,
+            q.name,
+            q.unit
+           FROM (public.flow_quants f_1
+             JOIN public.quants q ON ((f_1.quant_id = q.id)))
+          GROUP BY f_1.flow_id, f_1.quant_id, f_1.value, q.name, q.unit) fi ON ((f.id = fi.flow_id)))
+  GROUP BY f.id, f.context_id, f.year, f.path, f.jsonb_path, fi.original_type, fi.original_id, fi.name;
 
 
 --
@@ -7214,6 +7303,20 @@ CREATE UNIQUE INDEX download_attributes_mv_id_idx ON public.download_attributes_
 
 
 --
+-- Name: download_flows_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_attribute_type_attribute_id_idx ON ONLY public.download_flows USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_context_id_idx ON ONLY public.download_flows USING btree (context_id);
+
+
+--
 -- Name: download_flows_mv_attribute_type_attribute_id_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7256,6 +7359,20 @@ CREATE UNIQUE INDEX download_flows_mv_row_name_attribute_type_attribute_id_idx O
 
 
 --
+-- Name: download_flows_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_path_idx ON ONLY public.download_flows USING btree (path);
+
+
+--
+-- Name: download_flows_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_year_idx ON ONLY public.download_flows USING btree (year);
+
+
+--
 -- Name: flow_inds_ind_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7274,6 +7391,27 @@ CREATE INDEX flow_quals_qual_id_idx ON public.flow_quals USING btree (qual_id);
 --
 
 CREATE INDEX flow_quants_quant_id_idx ON public.flow_quants USING btree (quant_id);
+
+
+--
+-- Name: flows_mv_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX flows_mv_context_id_idx ON public.flows_mv USING btree (context_id);
+
+
+--
+-- Name: flows_mv_unique_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX flows_mv_unique_idx ON public.flows_mv USING btree (id);
+
+
+--
+-- Name: flows_mv_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX flows_mv_year_idx ON public.flows_mv USING btree (year);
 
 
 --
@@ -8802,8 +8940,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190320172713'),
 ('20190321122822'),
 ('20190321161913'),
+('20190403153118'),
+('20190403153119'),
+('20190403153135'),
 ('20190429104832'),
 ('20190429112751'),
 ('20190513125050');
+
 
 
