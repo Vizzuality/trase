@@ -20,37 +20,103 @@ module Api
         #   e.g. [{"name"=>"ZERO_DEFORESTATION", "op"=>"eq", "val"=>"no"}]
         def initialize(context, params)
           @context = context
-          @query = Api::V3::Readonly::DownloadFlow.where(
-            context_id: @context.id
-          )
+          @query = Api::V3::Readonly::DownloadFlow.
+            joins(
+              'JOIN attributes_mv ON attributes_mv.original_type = download_flows.attribute_type AND attributes_mv.original_id = download_flows.attribute_id'
+            ).
+            joins(
+              'JOIN download_attributes_mv ON download_attributes_mv.attribute_id = attributes_mv.id AND download_attributes_mv.context_id = download_flows.context_id'
+            ).where(
+              context_id: @context.id
+            )
           if (years = params[:years]).present?
             @query = @query.where(year: years)
           end
-          if (exporters_ids = params[:e_ids]).present?
-            @query = @query.where(exporter_node_id: exporters_ids)
-          end
-          if (importers_ids = params[:i_ids]).present?
-            @query = @query.where(importer_node_id: importers_ids)
-          end
-          if (countries_ids = params[:c_ids]).present?
-            @query = @query.where(country_node_id: countries_ids)
-          end
-          return unless (filters = params[:filters]).present?
-
-          apply_attribute_filters(filters)
+          initialize_flow_path_filters(params.slice(:e_ids, :i_ids, :c_ids))
+          initialize_attribute_filters(params[:filters])
         end
 
         def flat_query
-          FlowDownloadFlatQuery.new(@context, @query)
+          FlowDownloadFlatQuery.new(@context, @download_attributes, @query)
         end
 
         def pivot_query
-          FlowDownloadPivotQuery.new(@context, @query)
+          FlowDownloadPivotQuery.new(@context, @download_attributes, @query)
         end
 
         private
 
+        def initialize_flow_path_filters(params)
+          if (exporters_ids = params[:e_ids]).present?
+            apply_flow_path_filter(
+              Api::V3::ContextNodeTypeProperty::EXPORTER_ROLE,
+              exporters_ids
+            )
+          end
+          if (importers_ids = params[:i_ids]).present?
+            apply_flow_path_filter(
+              Api::V3::ContextNodeTypeProperty::IMPORTER_ROLE,
+              importers_ids
+            )
+          end
+          if (countries_ids = params[:c_ids]).present?
+            apply_flow_path_filter(
+              Api::V3::ContextNodeTypeProperty::DESTINATION_ROLE,
+              countries_ids
+            )
+          end
+        end
+
+        def initialize_attribute_filters(params)
+          @download_attributes = Api::V3::Readonly::DownloadAttribute.
+            where(context_id: @context.id)
+
+          apply_attribute_filters(params) if params.present?
+
+          return unless defined? @attributes
+
+          @download_attributes = @download_attributes.where(
+            'attribute_id' => @attributes.map(&:id)
+          )
+        end
+
+        def context_node_types_by_role
+          if defined? @context_node_types_by_role
+            return @context_node_types_by_role
+          end
+          context_node_types_with_roles = @context.context_node_types.
+            includes(:context_node_type_property)
+          roles = context_node_types_with_roles.map do |cnt|
+            cnt.context_node_type_property&.role
+          end.compact.uniq
+          @context_node_types_by_role = Hash[
+            roles.map do |role|
+              [
+                role,
+                context_node_types_with_roles.select do |cnt|
+                  cnt.context_node_type_property.role == role
+                end
+              ]
+            end
+          ]
+        end
+
+        def apply_flow_path_filter(role, node_ids)
+          role_node_types = context_node_types_by_role[role]
+          return unless role_node_types.any?
+
+          role_indexes = role_node_types.map(&:column_position)
+          conds = []
+          role_indexes.each do |idx|
+            conds << "path[#{idx + 1}] IN (:node_ids)"
+          end
+          @query = @query.where(
+            conds.join(' OR '), node_ids: node_ids.map(&:to_i)
+          )
+        end
+
         def apply_attribute_filters(attributes_list)
+          @attributes = []
           query_parts = []
           parameters = []
 
@@ -58,12 +124,14 @@ module Api
             attribute = attribute_by_name(attr_hash[:name])
             next unless attribute
 
+            @attributes << attribute
             attr_query_parts, attr_parameters = attribute_filter(
               attribute, *attr_hash.values_at(:op, :val)
             )
             query_parts << attr_query_parts.join(' AND ')
             parameters += attr_parameters
           end
+
           @query = @query.where(
             query_parts.join(' OR '), *parameters
           )
@@ -72,15 +140,14 @@ module Api
         def attribute_by_name(name)
           return nil unless name
 
-          Dictionary::Quant.instance.get(name) ||
-            Dictionary::Qual.instance.get(name)
+          Api::V3::Readonly::Attribute.find_by_name(name)
         end
 
         def attribute_filter(attribute, op_symbol, val)
-          query_parts = ['attribute_type = ?', 'attribute_id = ?']
-          parameters = [attribute.class.name.demodulize, attribute.id]
+          query_parts = ['download_attributes_mv.attribute_id = ?']
+          parameters = [attribute.id]
           op_part, val =
-            if attribute.is_a? Api::V3::Qual
+            if attribute.original_type == 'Qual'
               [qual_op_part(op_symbol), val]
             else
               [quant_op_part(op_symbol), val&.to_f]

@@ -104,6 +104,7 @@ module Api
           [
             Api::V3::Readonly::Attribute,
             Api::V3::Readonly::Node,
+            Api::V3::Readonly::Flow,
             Api::V3::Readonly::Dashboards::FlowPath
           ].each { |mview| mview.refresh(sync: true, skip_dependents: true) }
           Api::V3::Readonly::DownloadFlow.refresh(
