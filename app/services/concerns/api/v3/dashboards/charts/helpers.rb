@@ -163,6 +163,18 @@ module Api
             output
           end
 
+          def reject_strings
+            lambda { |object| object.reject { |key, value| value.is_a? String }.compact }
+          end
+
+          def get_total_values(data)
+            data.inject do |grouped, el|
+              grouped.merge(el) do |k, old_v, new_v|
+                old_v + new_v
+              end
+            end
+          end
+
           def info
             {
               node_type: @node_type.try(:name),

@@ -19,6 +19,7 @@ module Api
             @data = @query.map do |r|
               r.attributes.slice('y0').symbolize_keys
             end
+
             @meta = {
               xAxis: {},
               yAxis: axis_meta(@cont_attribute, 'number'),

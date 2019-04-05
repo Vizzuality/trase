@@ -105,15 +105,7 @@ module Api
         def single_year_ncont_node_type_view(node_type)
           {
             source: :single_year_ncont_node_type_view,
-            type: SingleYearCharts::ChartType.call(
-              data: SingleYearCharts::PrepareData.call(
-                chart_params: @chart_params,
-                node_type_idx: Api::V3::NodeType.node_index_for_id(@context, node_type.id),
-                top_n: TOP_N,
-                type: :ncont
-              ),
-              default_chart_type: HORIZONTAL_STACKED_BAR_CHART
-            ),
+            type: HORIZONTAL_STACKED_BAR_CHART,
             x: :node_type,
             break_by: :ncont_attribute,
             node_type_id: node_type.id
