@@ -16,6 +16,10 @@ const getCommoditiesPanel = state =>
   returnNameArrayIfNotEmpty(
     state.dashboardElement && state.dashboardElement.commoditiesPanel.activeItems
   );
+const getSourcesPanel = state =>
+  returnNameArrayIfNotEmpty(
+    state.dashboardElement && state.dashboardElement.commoditiesPanel.activeItems
+  );
 
 const getVariableColumnName = createSelector(
   [getMeta],
@@ -31,10 +35,10 @@ const hasMultipleYears = createSelector(
   meta => meta.info.years.end_year
 );
 const hasVariableColumn = createSelector(
-  [getMeta, getChartType, getVariableColumnName, hasMultipleYears, hasNContIndicator],
-  (meta, chartType, variableColumnName, _hasMultipleYears, _hasNContIndicator) =>
-    !(_hasNContIndicator && _hasMultipleYears) &&
-    !(chartType === 'bar' && _hasMultipleYears) &&
+  [getChartType, getVariableColumnName, hasMultipleYears, hasNContIndicator, getSourcesPanel],
+  (chartType, variableColumnName, _hasMultipleYears, _hasNContIndicator, sourcesPanel) =>
+    !(!sourcesPanel && _hasNContIndicator && _hasMultipleYears) &&
+    !(!sourcesPanel && chartType === 'bar' && _hasMultipleYears) &&
     !(chartType === 'pie') &&
     variableColumnName
 );
@@ -44,7 +48,7 @@ const getIndicatorColumnName = (meta, type) => {
   return `${meta.info.filter[`${type}_attribute`].toUpperCase()}${unit ? ` (${unit})` : ''}`;
 };
 
-const getTableHeaders = createSelector(
+export const getTableHeaders = createSelector(
   [getMeta, hasVariableColumn, getVariableColumnName, hasNContIndicator],
   (meta, _hasVariableColumn, variableColumnName, _hasNContIndicator) => {
     if (!meta) return null;
