@@ -31,7 +31,6 @@ class DashboardWidgetContainer extends Component {
     return (
       {
         country: 'countries',
-        logisticsHub: 'logistic hubs',
         municipality: 'municipalities'
       }[name] || `${nodeType}s`.toLowerCase()
     );
@@ -41,14 +40,14 @@ class DashboardWidgetContainer extends Component {
     if (!meta || !meta.info) return '';
     const topNPart = meta.info.top_n ? `Top ${meta.info.top_n}` : null;
     const nodeTypePart = meta.info.node_type
-      ? `${this.getPluralNodeType(meta.info.node_type)} by`
-      : 'Global overview of';
-    const resizeByPart = meta.info.filter.cont_attribute;
-    const recolorByPart = meta.info.filter.ncont_attribute
-      ? `broken by ${meta.info.filter.ncont_attribute}`
-      : null;
+      ? this.getPluralNodeType(meta.info.node_type)
+      : 'Global overview';
+    // const resizeByPart = meta.info.filter.cont_attribute;
+    // const recolorByPart = meta.info.filter.ncont_attribute
+    //   ? `broken by ${meta.info.filter.ncont_attribute}`
+    //   : null;
 
-    return [topNPart, nodeTypePart, resizeByPart, recolorByPart].filter(Boolean).join(' ');
+    return [topNPart, nodeTypePart].filter(Boolean).join(' ');
   }
 
   render() {
