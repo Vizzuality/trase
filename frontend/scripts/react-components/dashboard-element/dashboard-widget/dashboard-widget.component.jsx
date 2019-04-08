@@ -36,7 +36,7 @@ function DashboardWidget(props) {
   );
 
   const renderWidgetActions = () => {
-    const hasTable = chartType !== 'dynamicSentence';
+    const hasTable = data && data.length > 0 && chartType !== 'dynamicSentence';
     return (
       <div className="widget-actions">
         {hasTable && (
