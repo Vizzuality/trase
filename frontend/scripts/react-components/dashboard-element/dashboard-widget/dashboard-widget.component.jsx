@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Chart from 'react-components/chart';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
@@ -15,25 +15,15 @@ import RankingWidget from 'react-components/ranking-widget';
 import 'react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
 
 function DashboardWidget(props) {
-  const {
-    title,
-    loading,
-    error,
-    data,
-    meta,
-    chartType,
-    chartConfig,
-    dynamicSentenceParts,
-    activeModal,
-    setActiveModal,
-    id
-  } = props;
+  const { title, loading, error, data, meta, chartType, chartConfig, dynamicSentenceParts } = props;
 
   const renderError = errorMessage => (
     <Text color="white" weight="bold" variant="mono" size="lg" className="widget-centered">
       {errorMessage}
     </Text>
   );
+
+  const [isModalOpen, openModal] = useState(false);
 
   const renderWidgetActions = () => {
     const hasTable = data && data.length > 0 && chartType !== 'dynamicSentence';
@@ -45,13 +35,10 @@ function DashboardWidget(props) {
               icon="icon-table"
               color="charcoal"
               variant="circle"
-              onClick={() => setActiveModal(`table${id}`)}
+              onClick={() => openModal(true)}
               disabled={loading}
             />
-            <SimpleModal
-              isOpen={activeModal === `table${id}`}
-              onClickClose={() => setActiveModal(null)}
-            >
+            <SimpleModal isOpen={isModalOpen} onClickClose={() => openModal(false)}>
               <TableModal title={title} data={data} meta={meta} chartType={chartType} />
             </SimpleModal>
           </>
@@ -132,13 +119,10 @@ DashboardWidget.propTypes = {
   data: PropTypes.array,
   meta: PropTypes.object,
   title: PropTypes.string,
-  id: PropTypes.string,
   loading: PropTypes.bool,
   chartConfig: PropTypes.object,
   chartType: PropTypes.string,
-  dynamicSentenceParts: PropTypes.array,
-  activeModal: PropTypes.string,
-  setActiveModal: PropTypes.func.isRequired
+  dynamicSentenceParts: PropTypes.array
 };
 
 export default DashboardWidget;

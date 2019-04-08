@@ -8,7 +8,6 @@ import {
   makeGetConfig,
   makeGetChartType
 } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.selectors';
-import { setDashboardWidgetActiveModal } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.actions';
 
 const makeMapStateToProps = () => {
   const getDashboardWidgetsConfig = makeGetConfig();
@@ -16,15 +15,10 @@ const makeMapStateToProps = () => {
   const mapStateToProps = (state, props) => ({
     config: getDashboardWidgetsConfig(state, props),
     chartType: getChartType(state, props),
-    chartsLoading: state.dashboardElement.chartsLoading,
-    activeModal: state.dashboardWidget.activeModal && state.dashboardWidget.activeModal.modal
+    chartsLoading: state.dashboardElement.chartsLoading
   });
   return mapStateToProps;
 };
-
-const mapDispatchToProps = dispatch => ({
-  setActiveModal: modal => dispatch(setDashboardWidgetActiveModal({ modal }))
-});
 
 class DashboardWidgetContainer extends Component {
   addTooltipContentToConfig(config, meta) {
@@ -103,7 +97,4 @@ DashboardWidgetContainer.propTypes = {
   activeModal: PropTypes.string
 };
 
-export default connect(
-  makeMapStateToProps,
-  mapDispatchToProps
-)(DashboardWidgetContainer);
+export default connect(makeMapStateToProps)(DashboardWidgetContainer);
