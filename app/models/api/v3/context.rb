@@ -74,8 +74,7 @@ module Api
       def biome_nodes
         biome_context_node_type = context_node_types.
           joins(:node_type).
-          where('node_types.name' => NodeTypeName::BIOME).
-          first
+          find_by('node_types.name' => NodeTypeName::BIOME)
         # Brazil - soy & Paraguay - soy only
         return [] unless biome_context_node_type
 
