@@ -17,12 +17,16 @@ import {
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import { DASHBOARD_STEPS } from 'constants';
 
-const mapStateToProps = state => ({
-  dirtyBlocks: getDirtyBlocks(state),
-  charts: state.dashboardElement.charts,
-  filters: getDashboardFiltersProps(state),
-  dynamicSentenceParts: getDynamicSentence(state)
-});
+const mapStateToProps = state => {
+  const dirtyBlocks = getDirtyBlocks(state);
+  return {
+    dirtyBlocks,
+    charts: state.dashboardElement.charts,
+    filters: getDashboardFiltersProps(state),
+    dynamicSentenceParts: getDynamicSentence(state),
+    showModalOnStart: !(dirtyBlocks.sources && dirtyBlocks.commodities)
+  };
+};
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
@@ -41,6 +45,7 @@ class DashboardElementContainer extends React.Component {
     charts: PropTypes.array,
     filters: PropTypes.object,
     dirtyBlocks: PropTypes.object,
+    showModalOnStart: PropTypes.bool,
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
     setSelectedYears: PropTypes.func.isRequired,
@@ -60,7 +65,7 @@ class DashboardElementContainer extends React.Component {
   };
 
   state = {
-    modalOpen: true,
+    modalOpen: this.props.showModalOnStart,
     editMode: false,
     step: this.hasVisitedBefore.get() ? DASHBOARD_STEPS.sources : DASHBOARD_STEPS.welcome
   };

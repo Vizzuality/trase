@@ -136,7 +136,8 @@
     padding: 0;
 
     &.color-gray {
-      svg {
+      .icon {
+        margin: 0;
         fill: $charcoal-grey;
       }
     }
