@@ -44,16 +44,19 @@ const hasVariableColumn = createSelector(
 );
 
 const getIndicatorColumnName = (meta, type) => {
-  const unit = type === 'cont' && (meta.xAxis.suffix || meta.yAxis.suffix);
-  return `${meta.info.filter[`${type}_attribute`].toUpperCase()}${unit ? ` (${unit})` : ''}`;
+  const unit = (type === 'cont' && (meta.xAxis.suffix || meta.yAxis.suffix)) || '';
+  return {
+    name: meta.info.filter[`${type}_attribute`],
+    unit
+  };
 };
 
 export const getTableHeaders = createSelector(
   [getMeta, hasVariableColumn, getVariableColumnName, hasNContIndicator],
   (meta, _hasVariableColumn, variableColumnName, _hasNContIndicator) => {
     if (!meta) return null;
-    const headers = ['COMMODITY', 'COUNTRY', 'YEAR'];
-    if (_hasVariableColumn) headers.push(variableColumnName);
+    const headers = [{ name: 'COMMODITY' }, { name: 'COUNTRY' }, { name: 'YEAR' }];
+    if (_hasVariableColumn) headers.push({ name: variableColumnName });
     headers.push(getIndicatorColumnName(meta, 'cont'));
     if (_hasNContIndicator) {
       headers.push(getIndicatorColumnName(meta, 'ncont'));

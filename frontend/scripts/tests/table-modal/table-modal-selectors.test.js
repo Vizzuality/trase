@@ -26,7 +26,13 @@ describe('Table widget selectors', () => {
           data,
           chartType
         })
-      ).toEqual(['COMMODITY', 'COUNTRY', 'YEAR', 'BIOME', 'TRADE VOLUME (t)']);
+      ).toEqual([
+        { name: 'COMMODITY' },
+        { name: 'COUNTRY' },
+        { name: 'YEAR' },
+        { name: 'BIOME' },
+        { name: 'Trade volume', unit: 't' }
+      ]);
     });
     // Multiple years, non-cont indicator, no flow path filters
     it('returns the headings for Stacked bar chart per year per value of non-continuous indicator - globally', () => {
@@ -39,11 +45,11 @@ describe('Table widget selectors', () => {
           chartType
         })
       ).toEqual([
-        'COMMODITY',
-        'COUNTRY',
-        'YEAR',
-        'TRADE VOLUME (t)',
-        'ZERO DEFORESTATION COMMITMENT (EXPORTER)'
+        { name: 'COMMODITY' },
+        { name: 'COUNTRY' },
+        { name: 'YEAR' },
+        { name: 'Trade volume', unit: 't' },
+        { name: 'Zero Deforestation Commitment (Exporter)', unit: '' }
       ]);
     });
     // Multiple years, non-cont indicator, 1 source, no other flow path filters
@@ -57,12 +63,12 @@ describe('Table widget selectors', () => {
           chartType
         })
       ).toEqual([
-        'COMMODITY',
-        'COUNTRY',
-        'YEAR',
-        'TRADE VOLUME (t)',
-        'BIOMES',
-        'ZERO DEFORESTATION COMMITMENT (EXPORTER)'
+        { name: 'COMMODITY' },
+        { name: 'COUNTRY' },
+        { name: 'YEAR' },
+        { name: 'TRADE VOLUME', unit: 't' },
+        { name: 'BIOMES' },
+        { name: 'ZERO DEFORESTATION COMMITMENT (EXPORTER)' }
       ]);
     });
   });

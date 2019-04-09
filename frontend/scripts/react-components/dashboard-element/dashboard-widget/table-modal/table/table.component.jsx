@@ -18,10 +18,11 @@ function Table(props) {
   return (
     <div className={cx('c-table', className)}>
       <div className="table-header" style={{ width }}>
-        {headers.map((h, index) => (
-          <div className="header-item" key={`${h}${index}`}>
+        {headers.map((header, index) => (
+          <div className="header-item" key={`${header.name}${index}`}>
             <Text color="white" weight="bold" size="md" variant="mono">
-              {h}
+              <span className="header-item-name">{header.name}</span>
+              {header.unit && <span> ({header.unit})</span>}
             </Text>
           </div>
         ))}
