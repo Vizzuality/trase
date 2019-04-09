@@ -29,7 +29,7 @@ function Table(props) {
         </tr>
       </thead>
       <VariableSizeGrid
-        className={cx('c-grid-list')}
+        className="c-grid-list"
         height={height}
         width={width}
         innerElementType="tr"
@@ -42,10 +42,7 @@ function Table(props) {
           const item = data[rowIndex][columnIndex];
           if (typeof item === 'undefined') return null;
           return (
-            <td
-              style={style}
-              className={cx('header-item', rowIndex % 2 ? 'list-item-odd' : 'list-item-even')}
-            >
+            <td style={style} className={cx('list-item', !(rowIndex % 2) && 'list-item-even')}>
               <Text size="md" as="span" variant="mono">
                 {item}
               </Text>

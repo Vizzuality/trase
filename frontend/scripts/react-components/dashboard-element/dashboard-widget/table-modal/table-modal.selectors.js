@@ -36,9 +36,9 @@ const hasMultipleYears = createSelector(
 );
 const hasVariableColumn = createSelector(
   [getChartType, getVariableColumnName, hasMultipleYears, hasNContIndicator, getActiveSourcesNames],
-  (chartType, variableColumnName, _hasMultipleYears, _hasNContIndicator, activeSourcesName) =>
-    !(!activeSourcesName && _hasNContIndicator && _hasMultipleYears) &&
-    !(!activeSourcesName && chartType === 'bar' && _hasMultipleYears) &&
+  (chartType, variableColumnName, _hasMultipleYears, _hasNContIndicator, activeSourcesNames) =>
+    !(!activeSourcesNames && _hasNContIndicator && _hasMultipleYears) &&
+    !(!activeSourcesNames && chartType === 'bar' && _hasMultipleYears) &&
     !(chartType === 'pie') &&
     variableColumnName
 );

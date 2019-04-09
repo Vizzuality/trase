@@ -3,13 +3,11 @@
 .c-table {
   .table-header {
     display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
     background-color: $charcoal-grey;
     border-radius: 4px 4px 0 0;
   }
 
-  .header-item {
+  .header-item, .list-item {
     display: flex;
     align-items: center;
     justify-content: center;
