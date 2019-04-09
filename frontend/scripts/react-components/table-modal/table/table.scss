@@ -17,7 +17,7 @@
     padding: 10px 0;
   }
 
-  .list-item-even {
+  :nth-child(even) {
     background-color: $metal-grey;
     border-bottom: solid 2px $medium-gray;
     border-top: solid 2px $medium-gray;
