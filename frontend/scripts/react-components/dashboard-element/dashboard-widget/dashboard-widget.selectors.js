@@ -4,18 +4,19 @@ import sortBy from 'lodash/sortBy';
 import kebabCase from 'lodash/kebabCase';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
 
-const parsedChartTypes = {
+export const PARSED_CHART_TYPES = {
   bar_chart: 'bar',
   donut_chart: 'pie',
+  ranking_chart: 'ranking',
   stacked_bar_chart: 'stackedBar',
   dynamic_sentence: 'dynamicSentence',
   horizontal_bar_chart: 'horizontalBar',
-  horizontal_stacked_bar_chart: 'horizontalStackedBarChart'
+  horizontal_stacked_bar_chart: 'horizontalStackedBar'
 };
 
 const getMeta = (state, { meta }) => meta || null;
 const getData = (state, { data }) => data || null;
-const getChartType = (state, { chartType }) => (chartType ? parsedChartTypes[chartType] : null);
+const getChartType = (state, { chartType }) => (chartType ? PARSED_CHART_TYPES[chartType] : null);
 const getSelectedRecolorBy = (state, props) => props.selectedRecolorBy;
 
 export const getDefaultConfig = createSelector(
@@ -37,9 +38,9 @@ const sortGroupedAxis = keys => sortBy(Object.keys(keys), key => parseInt(key.su
 export const getColors = createSelector(
   [getMeta, getData, getDefaultConfig, getChartType, getSelectedRecolorBy],
   (meta, data, defaultConfig, chartType, selectedRecolorBy) => {
-    const { colors, layout } = defaultConfig;
+    const { colors, layout, parse } = defaultConfig;
 
-    if (!meta || chartType === 'dynamicSentence') {
+    if (!parse || !meta) {
       return colors && colors.default;
     }
 
@@ -76,8 +77,8 @@ export const getColors = createSelector(
 export const getYKeys = createSelector(
   [getMeta, getDefaultConfig, getColors],
   (meta, defaultConfig, colors) => {
-    const { yKeys, yKeysAttributes, layout } = defaultConfig;
-    if (!meta || !yKeys || layout === 'vertical') return yKeys;
+    const { yKeys, yKeysAttributes, layout, parse } = defaultConfig;
+    if (!parse || !meta || !yKeys || layout === 'vertical') return yKeys;
     const groupedY = getGroupedAxis('y', meta);
     return Object.keys(yKeys).reduce((yKeysTypesAcc, nextYKeyType) => {
       const yKeyTypeAttributes = yKeysAttributes && yKeysAttributes[nextYKeyType];
@@ -102,8 +103,8 @@ export const getYKeys = createSelector(
 export const getXKeys = createSelector(
   [getMeta, getDefaultConfig, getColors],
   (meta, defaultConfig, colors) => {
-    const { xKeys, xKeysAttributes, layout } = defaultConfig;
-    if (!meta || !xKeys || layout !== 'vertical') return xKeys;
+    const { xKeys, xKeysAttributes, layout, parse } = defaultConfig;
+    if (!parse || !meta || !xKeys || layout !== 'vertical') return xKeys;
     const groupedX = getGroupedAxis('x', meta);
     return Object.keys(xKeys).reduce((xKeysTypesAcc, nextXKeyType) => {
       const xKeyTypeAttributes = xKeysAttributes && xKeysAttributes[nextXKeyType];
@@ -135,6 +136,10 @@ export const makeGetConfig = () =>
         xAxis: defaultConfig.xAxis && {
           ...defaultConfig.xAxis,
           type: meta.xAxis && meta.xAxis.type
+        },
+        xAxisLabel: {
+          text: meta.xAxis && meta.xAxis.label,
+          suffix: meta.xAxis && meta.xAxis.suffix
         },
         yAxis: defaultConfig.yAxis && {
           ...defaultConfig.yAxis,

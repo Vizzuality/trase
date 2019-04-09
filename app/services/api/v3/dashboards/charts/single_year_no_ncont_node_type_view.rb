@@ -28,6 +28,7 @@ module Api
             if (last = @data.last) && last[:x] == OTHER && last[:y0].blank?
               @data.pop
             end
+
             @meta = {
               xAxis: node_type_axis_meta(@node_type),
               yAxis: axis_meta(@cont_attribute, 'number'),
@@ -37,6 +38,11 @@ module Api
             }
 
             swap_x_and_y
+
+            without_string_values = @data.map(&reject_strings)
+            total_values = get_total_values(without_string_values)
+
+            @meta[:aggregates] = {total_value: total_values}
 
             {data: @data, meta: @meta}
           end
