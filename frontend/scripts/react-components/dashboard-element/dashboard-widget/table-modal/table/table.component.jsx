@@ -16,23 +16,20 @@ function Table(props) {
   const minRowHeight = 50;
 
   return (
-    <table className={cx('c-table', className)}>
-      <thead>
-        <tr className="table-header" style={{ width }}>
-          {headers.map((h, index) => (
-            <th className="header-item" key={`${h}${index}`}>
-              <Text color="white" weight="bold" size="md" variant="mono">
-                {h}
-              </Text>
-            </th>
-          ))}
-        </tr>
-      </thead>
+    <div className={cx('c-table', className)}>
+      <div className="table-header" style={{ width }}>
+        {headers.map((h, index) => (
+          <div className="header-item" key={`${h}${index}`}>
+            <Text color="white" weight="bold" size="md" variant="mono">
+              {h}
+            </Text>
+          </div>
+        ))}
+      </div>
       <VariableSizeGrid
         className="c-grid-list"
         height={height}
         width={width}
-        innerElementType="tr"
         columnWidth={() => columnWidth}
         rowHeight={index => rowHeight || getMaxLength(data[index]) + minRowHeight}
         rowCount={data.length}
@@ -42,11 +39,11 @@ function Table(props) {
           const item = data[rowIndex][columnIndex];
           if (typeof item === 'undefined') return null;
           return (
-            <td style={style} className={cx('list-item', !(rowIndex % 2) && 'list-item-even')}>
+            <div style={style} className={cx('list-item', !(rowIndex % 2) && 'list-item-even')}>
               <Text size="md" as="span" variant="mono">
                 {item}
               </Text>
-            </td>
+            </div>
           );
         }}
       </VariableSizeGrid>
@@ -55,7 +52,7 @@ function Table(props) {
           <ShrinkingSpinner className="-small -dark grid-list-spinner" />
         </div>
       )}
-    </table>
+    </div>
   );
 }
 
