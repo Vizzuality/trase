@@ -22,13 +22,11 @@ module Api
           @context = context
           @query = Api::V3::Readonly::DownloadFlow.
             joins(
-              'JOIN attributes_mv ON attributes_mv.original_type = download_flows.attribute_type AND attributes_mv.original_id = download_flows.attribute_id'
-            ).
-            joins(
-              'JOIN download_attributes_mv ON download_attributes_mv.attribute_id = attributes_mv.id AND download_attributes_mv.context_id = download_flows.context_id'
-            ).where(
-              context_id: @context.id
-            )
+              'JOIN download_attributes_mv ON
+              download_attributes_mv.context_id = download_flows.context_id
+              AND download_attributes_mv.original_type = download_flows.attribute_type
+              AND download_attributes_mv.original_id = download_flows.attribute_id'
+            ).where(context_id: @context.id)
           if (years = params[:years]).present?
             @query = @query.where(year: years)
           end
