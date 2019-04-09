@@ -57,6 +57,7 @@ class DashboardWidgetContainer extends Component {
 
   render() {
     const { data, loading, error, meta, config, chartType, chartsLoading } = this.props;
+    const title = this.getTitle(meta);
     return config ? (
       <DashboardWidgetComponent
         data={data}
@@ -65,6 +66,7 @@ class DashboardWidgetContainer extends Component {
         loading={loading || chartsLoading}
         chartConfig={this.addTooltipContentToConfig(config, meta)}
         chartType={chartType}
+        title={title}
       />
     ) : null;
   }

@@ -15,8 +15,7 @@ import RankingWidget from 'react-components/ranking-widget';
 import 'react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
 
 function DashboardWidget(props) {
-  const { title, loading, error, data, meta, chartType, chartConfig, dynamicSentenceParts } = props;
-
+  const { loading, error, data, meta, chartType, chartConfig, dynamicSentenceParts, title } = props;
   const renderError = errorMessage => (
     <Text color="white" weight="bold" variant="mono" size="lg" className="widget-centered">
       {errorMessage}
