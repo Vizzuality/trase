@@ -26,7 +26,7 @@ function DashboardWidget(props) {
   const [isModalOpen, openModal] = useState(false);
 
   const renderWidgetActions = () => {
-    const hasTable = data && data.length > 0 && chartType !== 'dynamicSentence';
+    const hasTable = loading || (data && data.length > 0 && chartType !== 'dynamicSentence');
     return (
       <div className="widget-actions">
         {hasTable && (
