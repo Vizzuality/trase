@@ -13,6 +13,8 @@
     justify-content: center;
     width: 100%;
     padding: 10px 0;
+    outline: none;
+    cursor: pointer;
 
     .header-item-name {
       text-transform: uppercase;
@@ -23,5 +25,24 @@
     background-color: $metal-grey;
     border-bottom: solid 2px $medium-gray;
     border-top: solid 2px $medium-gray;
+  }
+
+  .sort-arrows {
+    display: inline-block;
+    position: relative;
+    height: 0;
+
+    .icon-arrow, .icon-arrow-up {
+      position: relative;
+      left: 0;
+
+      &::after {
+        top: 10px;
+      }
+    }
+
+    .icon-arrow-up {
+      margin-left: 5px;
+    }
   }
 }
