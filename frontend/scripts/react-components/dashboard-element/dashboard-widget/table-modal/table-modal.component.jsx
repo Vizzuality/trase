@@ -12,13 +12,9 @@ function TableModal({ title, tableData }) {
         {title}
       </Heading>
       {tableData && (
-        <Table
-          className="table"
-          width={760}
-          height={520}
-          data={tableData.data}
-          headers={tableData.headers}
-        />
+        <div className="table">
+          <Table width={760} height={520} data={tableData.data} headers={tableData.headers} />
+        </div>
       )}
       <div className="table-modal-footer">
         <Button color="pink" size="sm" disabled>
