@@ -56,30 +56,15 @@ class DashboardWidgetContainer extends Component {
   }
 
   render() {
-    const {
-      data,
-      loading,
-      error,
-      meta,
-      config,
-      chartType,
-      chartsLoading,
-      setActiveModal,
-      activeModal
-    } = this.props;
-    const title = this.getTitle(meta);
-
+    const { data, loading, error, meta, config, chartType, chartsLoading } = this.props;
     return config ? (
       <DashboardWidgetComponent
         data={data}
         meta={meta}
-        title={title}
         error={error}
         loading={loading || chartsLoading}
         chartConfig={this.addTooltipContentToConfig(config, meta)}
         chartType={chartType}
-        setActiveModal={setActiveModal}
-        activeModal={activeModal}
       />
     ) : null;
   }
@@ -92,9 +77,7 @@ DashboardWidgetContainer.propTypes = {
   loading: PropTypes.bool,
   config: PropTypes.object,
   chartType: PropTypes.string,
-  chartsLoading: PropTypes.bool,
-  setActiveModal: PropTypes.func.isRequired,
-  activeModal: PropTypes.string
+  chartsLoading: PropTypes.bool
 };
 
 export default connect(makeMapStateToProps)(DashboardWidgetContainer);

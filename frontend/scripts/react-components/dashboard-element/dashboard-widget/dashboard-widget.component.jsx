@@ -38,7 +38,7 @@ function DashboardWidget(props) {
               onClick={() => openModal(true)}
               disabled={loading}
             />
-            <SimpleModal isOpen={isModalOpen} onClickClose={() => openModal(false)}>
+            <SimpleModal isOpen={isModalOpen} onRequestClose={() => openModal(false)}>
               <TableModal title={title} data={data} meta={meta} chartType={chartType} />
             </SimpleModal>
           </>

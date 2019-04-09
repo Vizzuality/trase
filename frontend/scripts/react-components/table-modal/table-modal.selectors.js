@@ -1,5 +1,6 @@
 import { createSelector, createStructuredSelector } from 'reselect';
 import isEmpty from 'lodash/isEmpty';
+import omit from 'lodash/omit';
 import { format } from 'd3-format';
 
 const getMeta = (state, { meta }) => meta || null;
@@ -35,8 +36,7 @@ const getColumnNames = (meta, chartType) => {
   } else {
     notColumnKeys.push('x');
   }
-  notColumnKeys.forEach(a => delete metaColumns[a]);
-  return Object.keys(metaColumns);
+  return Object.keys(omit(metaColumns, notColumnKeys));
 };
 const getContValue = (d, c) => d[c] && format(',.2s')(d[c]);
 

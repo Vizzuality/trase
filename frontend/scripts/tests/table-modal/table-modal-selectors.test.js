@@ -10,6 +10,9 @@ describe('Table widget selectors', () => {
         },
         commoditiesPanel: {
           activeItems: [{ name: 'Commodity Name' }]
+        },
+        sourcesPanel: {
+          activeItems: null
         }
       }
     };
