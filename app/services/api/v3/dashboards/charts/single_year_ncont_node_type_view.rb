@@ -10,13 +10,13 @@ module Api
 
           # @param chart_parameters [Api::V3::Dashboards::ChartParameters]
           def initialize(chart_parameters)
+            @chart_parameters = chart_parameters
             @cont_attribute = chart_parameters.cont_attribute
             @ncont_attribute = chart_parameters.ncont_attribute
             @context = chart_parameters.context
             @year = chart_parameters.start_year
             @node_type = chart_parameters.node_type
             @node_type_idx = chart_parameters.node_type_idx
-            @nodes_ids_by_position = chart_parameters.nodes_ids_by_position
             @top_n = chart_parameters.top_n
             initialize_query
             initialize_top_n_and_others_query

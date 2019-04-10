@@ -64,7 +64,7 @@ module Api
           end
 
           def apply_flow_path_filters
-            @nodes_ids_by_position.each do |position, nodes_ids|
+            @chart_parameters.nodes_ids_by_position.each do |position, nodes_ids|
               @query = @query.where(
                 'flows.path[?] IN (?)', position + 1, nodes_ids
               )
