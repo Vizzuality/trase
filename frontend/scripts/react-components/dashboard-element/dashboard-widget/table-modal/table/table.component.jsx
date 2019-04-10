@@ -42,7 +42,7 @@ const sortData = (data, headers, sortByColumn, sortDirections) => {
 
 const initialSortDirections = headers =>
   headers.reduce((acc, current) => {
-    acc[current.name] = 'DESC';
+    acc[current.name] = 'ASC';
     return acc;
   }, {});
 
