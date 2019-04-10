@@ -3495,46 +3495,6 @@ PARTITION BY LIST (year);
 
 
 --
--- Name: flow_paths_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.flow_paths_mv AS
- SELECT f.node_id,
-    n.geo_id,
-        CASE
-            WHEN (cn.node_type_name = ANY (ARRAY['COUNTRY OF PRODUCTION'::text, 'BIOME'::text, 'LOGISTICS HUB'::text, 'STATE'::text])) THEN upper(n.name)
-            ELSE initcap(n.name)
-        END AS name,
-    cn.node_type_name,
-    cn.column_position,
-    f.id AS flow_id,
-    f.year,
-    f.context_id
-   FROM ((( SELECT flows.id,
-            flows.year,
-            a.node_id,
-            a."position",
-            flows.context_id
-           FROM public.flows,
-            LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) f
-     JOIN ( SELECT cnt.context_id,
-            cnt.column_position,
-            cnt.node_type_id,
-            node_types.name AS node_type_name
-           FROM (public.context_node_types cnt
-             JOIN public.node_types ON ((node_types.id = cnt.node_type_id)))) cn ON (((f."position" = (cn.column_position + 1)) AND (f.context_id = cn.context_id))))
-     JOIN public.nodes n ON ((n.id = f.node_id)))
-  WITH NO DATA;
-
-
---
--- Name: MATERIALIZED VIEW flow_paths_mv; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON MATERIALIZED VIEW public.flow_paths_mv IS 'Normalised flows';
-
-
---
 -- Name: flow_quals; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3586,115 +3546,6 @@ COMMENT ON TABLE public.flow_quants IS 'Values of quants for flow';
 --
 
 COMMENT ON COLUMN public.flow_quants.value IS 'Numeric value';
-
-
---
--- Name: download_flows_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.download_flows_mv AS
- SELECT ARRAY[f_0.context_id, (f_0.year)::integer, f_0.node_id, f_1.node_id, f_2.node_id, f_3.node_id, f_4.node_id, f_5.node_id, f_6.node_id, f_7.node_id, f_0.flow_id] AS row_name,
-    f_0.flow_id AS id,
-    f_0.context_id,
-    f_0.year,
-    f_0.name AS name_0,
-    f_1.name AS name_1,
-    f_2.name AS name_2,
-    f_3.name AS name_3,
-    f_4.name AS name_4,
-    f_5.name AS name_5,
-    f_6.name AS name_6,
-    f_7.name AS name_7,
-    f_0.node_id AS node_id_0,
-    f_1.node_id AS node_id_1,
-    f_2.node_id AS node_id_2,
-    f_3.node_id AS node_id_3,
-    f_4.node_id AS node_id_4,
-    f_5.node_id AS node_id_5,
-    f_6.node_id AS node_id_6,
-    f_7.node_id AS node_id_7,
-        CASE
-            WHEN (f_5.node_type_name = 'EXPORTER'::text) THEN f_5.node_id
-            WHEN (f_2.node_type_name = 'EXPORTER'::text) THEN f_2.node_id
-            WHEN (f_2.node_type_name = 'TRADER'::text) THEN f_2.node_id
-            WHEN (f_1.node_type_name = 'EXPORTER'::text) THEN f_1.node_id
-            ELSE NULL::integer
-        END AS exporter_node_id,
-        CASE
-            WHEN (f_6.node_type_name = 'IMPORTER'::text) THEN f_6.node_id
-            WHEN (f_3.node_type_name = 'IMPORTER'::text) THEN f_3.node_id
-            WHEN (f_2.node_type_name = 'IMPORTER'::text) THEN f_2.node_id
-            ELSE NULL::integer
-        END AS importer_node_id,
-        CASE
-            WHEN (f_7.node_type_name = 'COUNTRY'::text) THEN f_7.node_id
-            WHEN (f_4.node_type_name = 'COUNTRY'::text) THEN f_4.node_id
-            WHEN (f_3.node_type_name = 'COUNTRY'::text) THEN f_3.node_id
-            ELSE NULL::integer
-        END AS country_node_id,
-    fi.attribute_type,
-    fi.attribute_id,
-    fi.name AS attribute_name,
-    fi.name_with_unit AS attribute_name_with_unit,
-    fi.display_name,
-    string_agg(fi.text_value, ' / '::text) AS text_values,
-    sum(fi.numeric_value) AS sum,
-        CASE
-            WHEN (fi.attribute_type = 'Qual'::text) THEN string_agg(fi.text_value, ' / '::text)
-            ELSE (sum(fi.numeric_value))::text
-        END AS total
-   FROM ((((((((public.flow_paths_mv f_0
-     JOIN public.flow_paths_mv f_1 ON (((f_1.flow_id = f_0.flow_id) AND (f_1.column_position = 1))))
-     JOIN public.flow_paths_mv f_2 ON (((f_2.flow_id = f_0.flow_id) AND (f_2.column_position = 2))))
-     JOIN public.flow_paths_mv f_3 ON (((f_3.flow_id = f_0.flow_id) AND (f_3.column_position = 3))))
-     LEFT JOIN public.flow_paths_mv f_4 ON (((f_4.flow_id = f_0.flow_id) AND (f_4.column_position = 4))))
-     LEFT JOIN public.flow_paths_mv f_5 ON (((f_5.flow_id = f_0.flow_id) AND (f_5.column_position = 5))))
-     LEFT JOIN public.flow_paths_mv f_6 ON (((f_6.flow_id = f_0.flow_id) AND (f_6.column_position = 6))))
-     LEFT JOIN public.flow_paths_mv f_7 ON (((f_7.flow_id = f_0.flow_id) AND (f_7.column_position = 7))))
-     JOIN ( SELECT f.flow_id,
-            f.qual_id AS attribute_id,
-            'Qual'::text AS attribute_type,
-            NULL::double precision AS numeric_value,
-            f.value AS text_value,
-            q.name,
-            NULL::text AS unit,
-            q.name AS name_with_unit,
-            da.display_name,
-            da.context_id
-           FROM (((public.flow_quals f
-             JOIN public.quals q ON ((f.qual_id = q.id)))
-             JOIN public.download_quals dq ON ((dq.qual_id = q.id)))
-             JOIN public.download_attributes da ON ((dq.download_attribute_id = da.id)))
-          GROUP BY f.flow_id, f.qual_id, f.value, q.name, da.display_name, da.context_id
-        UNION ALL
-         SELECT f.flow_id,
-            f.quant_id,
-            'Quant'::text AS text,
-            f.value,
-            NULL::text AS text,
-            q.name,
-            q.unit,
-                CASE
-                    WHEN (q.unit IS NULL) THEN q.name
-                    ELSE (((q.name || ' ('::text) || q.unit) || ')'::text)
-                END AS "case",
-            da.display_name,
-            da.context_id
-           FROM (((public.flow_quants f
-             JOIN public.quants q ON ((f.quant_id = q.id)))
-             JOIN public.download_quants dq ON ((dq.quant_id = q.id)))
-             JOIN public.download_attributes da ON ((dq.download_attribute_id = da.id)))
-          GROUP BY f.flow_id, f.quant_id, f.value, q.name, q.unit, da.display_name, da.context_id) fi ON (((f_0.flow_id = fi.flow_id) AND (f_0.context_id = fi.context_id))))
-  WHERE (f_0.column_position = 0)
-  GROUP BY f_0.flow_id, f_0.context_id, f_0.year, f_0.name, f_0.node_id, f_1.name, f_1.node_id, f_1.node_type_name, f_2.name, f_2.node_id, f_2.node_type_name, f_3.name, f_3.node_id, f_3.node_type_name, f_4.name, f_4.node_id, f_4.node_type_name, f_5.name, f_5.node_id, f_5.node_type_name, f_6.name, f_6.node_id, f_6.node_type_name, f_7.name, f_7.node_id, f_7.node_type_name, fi.attribute_type, fi.attribute_id, fi.name, fi.name_with_unit, fi.display_name
-  WITH NO DATA;
-
-
---
--- Name: MATERIALIZED VIEW download_flows_mv; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON MATERIALIZED VIEW public.download_flows_mv IS 'Combines data from flow_paths_mv and download_attributes_values_mv in a structure that can be directly used to generate data downloads.';
 
 
 --
@@ -7293,48 +7144,6 @@ CREATE INDEX download_flows_context_id_idx ON ONLY public.download_flows USING b
 
 
 --
--- Name: download_flows_mv_attribute_type_attribute_id_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX download_flows_mv_attribute_type_attribute_id_id_idx ON public.download_flows_mv USING btree (attribute_type, attribute_id, id);
-
-
---
--- Name: download_flows_mv_context_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX download_flows_mv_context_id_idx ON public.download_flows_mv USING btree (context_id);
-
-
---
--- Name: download_flows_mv_country_node_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX download_flows_mv_country_node_id_idx ON public.download_flows_mv USING btree (country_node_id);
-
-
---
--- Name: download_flows_mv_exporter_node_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX download_flows_mv_exporter_node_id_idx ON public.download_flows_mv USING btree (exporter_node_id);
-
-
---
--- Name: download_flows_mv_importer_node_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX download_flows_mv_importer_node_id_idx ON public.download_flows_mv USING btree (importer_node_id);
-
-
---
--- Name: download_flows_mv_row_name_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX download_flows_mv_row_name_attribute_type_attribute_id_idx ON public.download_flows_mv USING btree (row_name, attribute_type, attribute_id);
-
-
---
 -- Name: download_flows_path_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7647,13 +7456,6 @@ CREATE UNIQUE INDEX index_download_versions_on_context_id_and_is_current ON publ
 --
 
 CREATE INDEX index_flow_inds_on_flow_id ON public.flow_inds USING btree (flow_id);
-
-
---
--- Name: index_flow_paths_mv_on_flow_id_and_column_position; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_flow_paths_mv_on_flow_id_and_column_position ON public.flow_paths_mv USING btree (flow_id, column_position);
 
 
 --
@@ -8920,6 +8722,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190403153119'),
 ('20190403153135'),
 ('20190409190106'),
+('20190410075223'),
 ('20190429104832'),
 ('20190429112751'),
 ('20190513125050');
