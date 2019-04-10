@@ -87,7 +87,7 @@ function Table(props) {
     <div className={cx('c-table', className)}>
       <div className="table-header" style={{ width }}>
         {headers.map((header, index) => {
-          const isDESC = sortDirections[header.name] === 'DESC';
+          const isDesc = sortDirections[header.name] === 'DESC';
           return (
             <div
               className="header-item"
@@ -96,15 +96,17 @@ function Table(props) {
               role="button"
               tabIndex={-1}
             >
-              <Text color="white" weight="bold" size="md" variant="mono">
-                <span className="header-item-name">{header.name}</span>
-                {header.unit && <span> ({header.unit})</span>}
-                <button className="sort-arrows">
+              <button className="sort-arrows">
+                <Text color="white" weight="bold" size="md" variant="mono">
+                  <span className="header-item-name">{header.name}</span>
+                  {header.unit && <span> ({header.unit})</span>}
+                </Text>
+                <span className="icon-container">
                   {sortByColumn === header.name && (
-                    <Icon icon={`icon-arrow${isDESC ? '-up' : ''}`} color="elephant" />
+                    <Icon icon={`icon-arrow${isDesc ? '-up' : ''}`} color="elephant" />
                   )}
-                </button>
-              </Text>
+                </span>
+              </button>
             </div>
           );
         })}

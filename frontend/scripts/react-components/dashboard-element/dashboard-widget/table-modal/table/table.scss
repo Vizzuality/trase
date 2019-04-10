@@ -33,9 +33,14 @@
   }
 
   .sort-arrows {
-    display: inline-block;
-    position: relative;
-    height: 0;
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+    cursor: pointer;
+
+    .icon-container {
+      min-width: 20px;
+    }
 
     .icon-arrow, .icon-arrow-up {
       position: relative;
