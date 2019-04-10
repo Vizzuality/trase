@@ -25,7 +25,7 @@ const sortData = (data, headers, sortByColumn, sortDirections) => {
     if (first === '' || first === null) return -1;
     if (second === '' || second === null) return 1;
     if (first === second) return 0;
-    const isNumber = /^[\d|.]*\D?$/; // We have to take into account the SI numbers e.g "14.3M"
+    const isNumber = /^[\d|.]+\D?$/; // We have to take into account the SI numbers e.g "14.3M"
     if (String(first).match(isNumber)) {
       return parseFloat(first) - parseFloat(second);
     }
