@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import uniq from 'lodash/uniq';
+import uniqBy from 'lodash/uniqBy';
 import TableComponent from 'react-components/dashboard-element/dashboard-widget/table-modal/table/table.component';
 
 const columnNameIndex = (headers, columnName) => {
@@ -9,15 +9,14 @@ const columnNameIndex = (headers, columnName) => {
 };
 
 const sortData = (data, headers, sortByColumn, sortDirections) => {
-  let sortedData = data;
   const columnIndex = columnNameIndex(headers, sortByColumn);
-  sortedData = data.sort((a, b) => {
+  const sortedData = [...data].sort((a, b) => {
     const first = a[columnIndex];
     const second = b[columnIndex];
     if (first === '' || first === null) return -1;
     if (second === '' || second === null) return 1;
     if (first === second) return 0;
-    const isNumber = /^[\d|.]+\D?$/; // We have to take into account the SI numbers e.g "14.3M"
+    const isNumber = /^\d+(\.\d+)?[A-Za-z|µ]?$/; // We have to take into account the SI numbers e.g "14.3M"
     if (String(first).match(isNumber)) {
       return parseFloat(first) - parseFloat(second);
     }
@@ -26,9 +25,10 @@ const sortData = (data, headers, sortByColumn, sortDirections) => {
 
   if (
     sortDirections[sortByColumn] === 'ASC' &&
-    uniq(sortedData.map(d => d[columnIndex])).length > 1
-  )
+    uniqBy(sortedData, item => item[columnIndex]).length > 1
+  ) {
     sortedData.reverse();
+  }
   return sortedData;
 };
 
