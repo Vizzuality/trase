@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import 'react-components/dashboard-element/dashboard-widget/table-modal/table/table.scss';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
@@ -7,37 +7,57 @@ import cx from 'classnames';
 import Text from 'react-components/shared/text';
 import Icon from 'react-components/shared/icon';
 import maxBy from 'lodash/maxBy';
-import sortBy from 'lodash/sortBy';
+import uniq from 'lodash/uniq';
 
 const getMaxLength = row => String(maxBy(row, cell => String(cell).length)).length;
 
-const sortByColumnIndex = (headers, sortByColumn) => {
-  const column = headers.find(c => c.name === sortByColumn);
+const columnNameIndex = (headers, columnName) => {
+  const column = headers.find(c => c.name === columnName);
   return headers.indexOf(column);
 };
 
-const sortData = (data, headers, sortByColumn, sortDirection) => {
+const sortData = (data, headers, sortByColumn, sortDirections) => {
   let sortedData = data;
-  sortedData = sortBy(data, [c => c[sortByColumnIndex(headers, sortByColumn)]]);
-  if (sortDirection === 'ASC') sortedData.reverse();
+  const columnIndex = columnNameIndex(headers, sortByColumn);
+  sortedData = data.sort((a, b) => {
+    const first = a[columnIndex];
+    const second = b[columnIndex];
+    if (first === '' || first === null) return -1;
+    if (second === '' || second === null) return 1;
+    if (first === second) return 0;
+    const isNumber = /^[\d|.]*\D?$/; // We have to take into account the SI numbers e.g "14.3M"
+    if (String(first).match(isNumber)) {
+      return parseFloat(first) - parseFloat(second);
+    }
+    return first > second ? -1 : 1;
+  });
+
+  if (
+    sortDirections[sortByColumn] === 'ASC' &&
+    uniq(sortedData.map(d => d[columnIndex])).length > 1
+  )
+    sortedData.reverse();
   return sortedData;
 };
 
+const initialSortDirections = headers =>
+  headers.reduce((acc, current) => {
+    acc[current.name] = 'DESC';
+    return acc;
+  }, {});
+
 function Table(props) {
+  const gridRef = useRef(null);
   const [sortByColumn, setSortColumn] = useState(null);
-  const [sortDirection, setSortDirection] = useState('ASC');
   const { data, headers, width, height, loading, rowHeight, className } = props;
-  const gridRef = React.createRef();
+  const [sortDirections, setSortDirection] = useState(initialSortDirections(headers));
 
   if (!data) return null;
 
   let sortedData = data;
   if (sortByColumn) {
-    sortedData = sortData(data, headers, sortByColumn, sortDirection);
+    sortedData = sortData(data, headers, sortByColumn, sortDirections);
   }
-
-  const columnWidth = width / headers.length;
-  const minRowHeight = 50;
 
   const resetMaxLength = () => {
     gridRef.current.resetAfterIndices({
@@ -46,43 +66,48 @@ function Table(props) {
     });
   };
 
-  const toggleSortDirection = () => {
-    if (sortDirection === 'ASC') setSortDirection('DESC');
-    else setSortDirection('ASC');
+  const toggleSortDirection = columnName => {
+    if (sortDirections[columnName] === 'ASC') {
+      setSortDirection({ ...sortDirections, [columnName]: 'DESC' });
+    } else {
+      setSortDirection({ ...sortDirections, [columnName]: 'ASC' });
+    }
     resetMaxLength();
   };
 
   const handleHeaderClick = header => {
-    if (sortByColumn === header.name) toggleSortDirection();
+    if (sortByColumn === header.name) toggleSortDirection(header.name);
     else setSortColumn(header.name);
     resetMaxLength();
   };
 
+  const columnWidth = width / headers.length;
+  const minRowHeight = 50;
   return (
     <div className={cx('c-table', className)}>
       <div className="table-header" style={{ width }}>
-        {headers.map((header, index) => (
-          <div
-            className="header-item"
-            key={`${header.name}${index}`}
-            onClick={() => handleHeaderClick(header)}
-            role="button"
-            tabIndex={-1}
-          >
-            <Text color="white" weight="bold" size="md" variant="mono">
-              <span className="header-item-name">{header.name}</span>
-              {header.unit && <span> ({header.unit})</span>}
-              <button className="sort-arrows">
-                {sortByColumn === header.name && (
-                  <Icon
-                    icon={`icon-arrow${sortDirection === 'DESC' ? '-up' : ''}`}
-                    color="elephant"
-                  />
-                )}
-              </button>
-            </Text>
-          </div>
-        ))}
+        {headers.map((header, index) => {
+          const isDESC = sortDirections[header.name] === 'DESC';
+          return (
+            <div
+              className="header-item"
+              key={`${header.name}${index}`}
+              onClick={() => handleHeaderClick(header)}
+              role="button"
+              tabIndex={-1}
+            >
+              <Text color="white" weight="bold" size="md" variant="mono">
+                <span className="header-item-name">{header.name}</span>
+                {header.unit && <span> ({header.unit})</span>}
+                <button className="sort-arrows">
+                  {sortByColumn === header.name && (
+                    <Icon icon={`icon-arrow${isDESC ? '-up' : ''}`} color="elephant" />
+                  )}
+                </button>
+              </Text>
+            </div>
+          );
+        })}
       </div>
       <VariableSizeGrid
         ref={gridRef}
