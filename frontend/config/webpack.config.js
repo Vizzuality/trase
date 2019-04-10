@@ -118,7 +118,7 @@ module.exports = {
           'style-loader',
           {
             loader: 'css-loader',
-            options: { minimize: !isDev }
+            options: { sourceMap: !isDev }
           },
           'postcss-loader'
         ]
@@ -129,7 +129,7 @@ module.exports = {
           'style-loader',
           {
             loader: 'css-loader',
-            options: { minimize: !isDev }
+            options: { sourceMap: !isDev }
           },
           'postcss-loader',
           'sass-loader'
