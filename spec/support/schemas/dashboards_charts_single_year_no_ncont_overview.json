@@ -32,7 +32,8 @@
         "xAxis",
         "yAxis",
         "x",
-        "y0"
+        "y0",
+        "info"
       ],
       "properties": {
         "xAxis": {
@@ -117,6 +118,77 @@
                   "$id": "#/properties/meta/properties/y0/properties/tooltip/properties/suffix",
                   "type": "string",
                   "pattern": "^(.*)$"
+                }
+              }
+            }
+          }
+        },
+        "info": {
+          "$id": "#/properties/meta/properties/info",
+          "type": "object",
+          "required": [
+            "node_type",
+            "years",
+            "top_n",
+            "filter"
+          ],
+          "properties": {
+            "node_type": {
+              "$id": "#/properties/meta/properties/info/properties/node_type",
+              "type": "null"
+            },
+            "years": {
+              "$id": "#/properties/meta/properties/info/properties/years",
+              "type": "object",
+              "required": [
+                "start_year",
+                "end_year"
+              ],
+              "properties": {
+                "start_year": {
+                  "$id": "#/properties/meta/properties/info/properties/years/properties/start_year",
+                  "type": "integer"
+                },
+                "end_year": {
+                  "$id": "#/properties/meta/properties/info/properties/years/properties/end_year",
+                  "type": "null"
+                }
+              }
+            },
+            "top_n": {
+              "$id": "#/properties/meta/properties/info/properties/top_n",
+              "type": "null"
+            },
+            "filter": {
+              "$id": "#/properties/meta/properties/info/properties/filter",
+              "type": "object",
+              "required": [
+                "cont_attribute",
+                "ncont_attribute",
+                "sources",
+                "companies",
+                "destinations"
+              ],
+              "properties": {
+                "cont_attribute": {
+                  "$id": "#/properties/meta/properties/info/properties/filter/properties/cont_attribute",
+                  "type": "string"
+                },
+                "ncont_attribute": {
+                  "$id": "#/properties/meta/properties/info/properties/filter/properties/ncont_attribute",
+                  "type": ["string", "null"]
+                },
+                "sources": {
+                  "$id": "#/properties/meta/properties/info/properties/filter/properties/sources",
+                  "type": "array"
+                },
+                "companies": {
+                  "$id": "#/properties/meta/properties/info/properties/filter/properties/companies",
+                  "type": "array"
+                },
+                "destinations": {
+                  "$id": "#/properties/meta/properties/info/properties/filter/properties/destinations",
+                  "type": "array"
                 }
               }
             }
