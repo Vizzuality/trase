@@ -13,7 +13,7 @@ function SimpleModal(props) {
       overlayClassName="c-simple-modal-overlay"
       ariaHideApp={false}
     >
-      <div className={cx('simple-modal-content', props.contentClassName)}>
+      <div className="simple-modal-content">
         <div className="simple-modal-close">
           <button onClick={props.onRequestClose || props.onClickClose}>
             <span>close</span>

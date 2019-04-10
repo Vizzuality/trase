@@ -1,6 +1,11 @@
 @import 'styles/settings';
 
 .c-table {
+
+  > * {
+    margin: 0 auto;
+  }
+
   .table-header {
     display: flex;
     background-color: $charcoal-grey;

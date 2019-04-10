@@ -111,7 +111,6 @@ function Table(props) {
       </div>
       <VariableSizeGrid
         ref={gridRef}
-        className="c-grid-list"
         height={height}
         width={width}
         columnWidth={() => columnWidth}
