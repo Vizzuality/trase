@@ -26,7 +26,7 @@ function Tag(props) {
       placement={placement}
       readOnly={isPartReadOnly}
       onChange={option => removeOption(option)}
-      selectedValueOverride={`${part.value.length} ${part.panel}`}
+      selectedValueOverride={`${part.value.length} ${part.nodeTypeName || part.panel}`}
     />
   ) : (
     <Heading

@@ -105,6 +105,15 @@ export const getDynamicSentence = createSelector(
       },
       {
         panel: 'companies',
+        nodeTypeName: 'ports',
+        id: 'port',
+        prefix: getActivePanelItem('companies', 'PORT') ? 'exported from' : '',
+        value: getActivePanelItem('companies', 'PORT'),
+        optional: true,
+        transform: 'capitalize'
+      },
+      {
+        panel: 'companies',
         id: 'exporting-companies',
         prefix: getActivePanelItem('companies', 'EXPORTER') ? 'exported by' : '',
         value: getActivePanelItem('companies', 'EXPORTER'),
