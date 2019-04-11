@@ -46,7 +46,7 @@ class DashboardWidgetContainer extends Component {
     const topNPart = meta.info.top_n ? `Top ${meta.info.top_n}` : null;
     const nodeTypePart = meta.info.node_type
       ? this.getPluralNodeType(meta.info.node_type)
-      : 'Global overview';
+      : 'Selection overview';
     // const resizeByPart = meta.info.filter.cont_attribute;
     // const recolorByPart = meta.info.filter.ncont_attribute
     //   ? `broken by ${meta.info.filter.ncont_attribute}`
