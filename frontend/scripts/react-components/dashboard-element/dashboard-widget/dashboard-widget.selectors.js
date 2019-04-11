@@ -3,14 +3,15 @@ import omitBy from 'lodash/omitBy';
 import sortBy from 'lodash/sortBy';
 import kebabCase from 'lodash/kebabCase';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
+import { CHART_TYPES } from 'constants';
 
 const parsedChartTypes = {
-  bar_chart: 'bar',
-  donut_chart: 'pie',
-  stacked_bar_chart: 'stackedBar',
-  dynamic_sentence: 'dynamicSentence',
-  horizontal_bar_chart: 'horizontalBar',
-  horizontal_stacked_bar_chart: 'horizontalStackedBarChart'
+  bar_chart: CHART_TYPES.bar,
+  donut_chart: CHART_TYPES.pie,
+  stacked_bar_chart: CHART_TYPES.stackedBar,
+  dynamic_sentence: CHART_TYPES.dynamicSentence,
+  horizontal_bar_chart: CHART_TYPES.horizontalBar,
+  horizontal_stacked_bar_chart: CHART_TYPES.horizontalStackedBar
 };
 
 const getMeta = (state, { meta }) => meta || null;
@@ -125,6 +126,7 @@ export const getXKeys = createSelector(
   }
 );
 
+export const makeGetChartType = () => getChartType;
 export const makeGetConfig = () =>
   createSelector(
     [getMeta, getYKeys, getXKeys, getColors, getDefaultConfig],

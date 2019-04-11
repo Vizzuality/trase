@@ -16,6 +16,10 @@
     @include simple-arrow($white);
   }
 
+  &.color-elephant {
+    @include simple-arrow($elephant);
+  }
+
   &.direction-up {
     &::after {
       transform: translateY(calc(-50%)) rotate(225deg);

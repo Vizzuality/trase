@@ -30,6 +30,7 @@ function SimpleModal(props) {
 
 SimpleModal.propTypes = {
   children: PropTypes.any,
+  contentClassName: PropTypes.string,
   className: PropTypes.string,
   onClickClose: PropTypes.func,
   onRequestClose: PropTypes.func
