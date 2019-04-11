@@ -37,18 +37,22 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
     ).call
   }
 
+  def chart_type_with_applied_parameters(chart_type, parameters)
+    parameters.keys.each do |key|
+      value = chart_type[key] || parameters[key]
+      chart_type[key] =
+        if value.is_a?(Array)
+          value.join(',')
+        else
+          value
+        end
+    end
+    chart_type
+  end
+
   let(:expected_chart_types) {
     simplified_expected_chart_types.map do |chart_type|
-      parameters.keys.each do |key|
-        value = chart_type[key] || parameters[key]
-        chart_type[key] =
-          if value.is_a?(Array)
-            value.join(',')
-          else
-            value
-          end
-      end
-      chart_type
+      chart_type_with_applied_parameters(chart_type, parameters)
     end
   }
 
@@ -164,7 +168,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
 
   context 'when multiple years, non-cont indicator, no flow path filters' do
     let(:parameters) {
-      mandatory_parameters.merge(multi_year).merge(no_flow_path_filters).merge(
+      mandatory_parameters.merge(multi_year).merge(
         ncont_attribute_id: ncont_attribute.id
       )
     }
@@ -178,32 +182,37 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
         }
       ]
     }
+
     it 'returns expected chart types' do
       expect(chart_types).to eq(expected_chart_types)
     end
   end
 
   context 'when multiple years, non-cont indicator, 2 exporters' do
+    let(:overview_parameters) {
+      mandatory_parameters.merge(multi_year).merge(
+        ncont_attribute_id: ncont_attribute.id
+      )
+    }
     let(:parameters) {
-      mandatory_parameters.
-        merge(multi_year).
+      overview_parameters.
         merge(no_flow_path_filters).
         merge(
           companies_ids: [
             api_v3_exporter1_node.id, api_v3_other_exporter_node.id
           ]
-        ).merge(
-          ncont_attribute_id: ncont_attribute.id
         )
+    }
+    let(:simplified_overview_chart_type) {
+      {
+        source: :multi_year_ncont_overview,
+        type: Api::V3::Dashboards::ParametrisedCharts::STACKED_BAR_CHART,
+        x: :year,
+        break_by: :ncont_attribute
+      }
     }
     let(:simplified_expected_chart_types) {
       [
-        {
-          source: :multi_year_ncont_overview,
-          type: Api::V3::Dashboards::ParametrisedCharts::STACKED_BAR_CHART,
-          x: :year,
-          break_by: :ncont_attribute
-        },
         {
           source: :multi_year_ncont_overview,
           type: Api::V3::Dashboards::ParametrisedCharts::STACKED_BAR_CHART,
@@ -222,6 +231,17 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
         }
       ]
     }
+    let(:expected_chart_types) {
+      [
+        chart_type_with_applied_parameters(
+          simplified_overview_chart_type, overview_parameters
+        )
+      ] +
+        simplified_expected_chart_types.map do |chart_type|
+          chart_type_with_applied_parameters(chart_type, parameters)
+        end
+    }
+
     it 'returns expected chart types' do
       expect(chart_types).to eq(expected_chart_types)
     end

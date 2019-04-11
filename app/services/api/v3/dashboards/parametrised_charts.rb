@@ -132,7 +132,11 @@ module Api
         # are presented using the same chart type
         # however, node type view has one chart per selected node
         def multi_year_ncont_charts
-          parametrised_charts = [all_params.merge(multi_year_ncont_overview)]
+          parametrised_charts = [
+            all_params.
+              except(*flow_path_param_names).
+              merge(multi_year_ncont_overview)
+          ]
           [
             :sources_ids, :companies_ids, :destinations_ids
           ].each do |nodes_ids_param_name|
@@ -197,6 +201,10 @@ module Api
             start_year: @start_year,
             end_year: @end_year
           }
+        end
+
+        def flow_path_param_names
+          [:sources_ids, :companies_ids, :destinations_ids]
         end
       end
     end
