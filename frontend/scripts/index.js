@@ -1,4 +1,7 @@
 /* eslint-disable global-require,import/no-extraneous-dependencies */
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
