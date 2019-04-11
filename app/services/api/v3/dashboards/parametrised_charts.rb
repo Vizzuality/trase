@@ -19,14 +19,35 @@ module Api
           @sources_ids = chart_parameters.sources_ids
           @companies_ids = chart_parameters.companies_ids
           @destinations_ids = chart_parameters.destinations_ids
-
           @start_year = chart_parameters.start_year
           @end_year = chart_parameters.end_year
         end
 
         def call
-          @node_types_to_break_by =
-            Api::V3::Dashboards::NodeTypesToBreakBy.new(@context).call
+          nodes = Api::V3::Node.find(
+            @sources_ids + @companies_ids + @destinations_ids
+          )
+          @sources = nodes.select do |node|
+            @sources_ids.include? node.id
+          end
+          source_node_types_ids = @sources.map(&:node_type_id).uniq
+          @companies = nodes.select do |node|
+            @companies_ids.include? node.id
+          end
+          company_node_types_ids = @companies.map(&:node_type_id).uniq
+          @destinations = nodes.select do |node|
+            @destinations_ids.include? node.id
+          end
+          destination_node_types_ids = @destinations.map(&:node_type_id).uniq
+          node_types_to_break_by =
+            Api::V3::Dashboards::NodeTypesToBreakBy.new(
+              @context,
+              source_node_types_ids,
+              company_node_types_ids,
+              destination_node_types_ids
+            )
+          @unselected_node_types = node_types_to_break_by.unselected_node_types
+          @selected_node_types = node_types_to_break_by.selected_node_types
 
           chart_types =
             if single_year? && !ncont_attribute?
@@ -53,7 +74,7 @@ module Api
 
         def single_year_no_ncont_charts
           parametrised_charts = [single_year_no_ncont_overview] +
-            @node_types_to_break_by.map do |node_type|
+            @unselected_node_types.map do |node_type|
               single_year_no_ncont_node_type_view(node_type)
             end
           parametrised_charts.map { |chart| all_params.merge(chart) }
@@ -78,7 +99,7 @@ module Api
 
         def single_year_ncont_charts
           parametrised_charts = [single_year_ncont_overview] +
-            @node_types_to_break_by.map do |node_type|
+            @unselected_node_types.map do |node_type|
               single_year_ncont_node_type_view(node_type)
             end
           parametrised_charts.map { |chart| all_params.merge(chart) }
@@ -104,7 +125,7 @@ module Api
 
         def multi_year_no_ncont_charts
           parametrised_charts = [multi_year_no_ncont_overview] +
-            @node_types_to_break_by.map do |node_type|
+            @unselected_node_types.map do |node_type|
               multi_year_no_ncont_node_type_view(node_type)
             end
           parametrised_charts.map { |chart| all_params.merge(chart) }
@@ -132,31 +153,31 @@ module Api
         # are presented using the same chart type
         # however, node type view has one chart per selected node
         def multi_year_ncont_charts
-          parametrised_charts = [
-            all_params.
-              except(*flow_path_param_names).
-              merge(multi_year_ncont_overview)
-          ]
+          parametrised_charts = [all_params.merge(multi_year_ncont_overview)]
+
           [
-            :sources_ids, :companies_ids, :destinations_ids
-          ].each do |nodes_ids_param_name|
+            [:sources_ids, @sources],
+            [:companies_ids, @companies],
+            [:destinations_ids, @destinations]
+          ].each do |nodes_ids_param_name, nodes|
             parametrised_charts += charts_per_selected_node(
-              nodes_ids_param_name
+              nodes_ids_param_name, nodes
             )
           end
+
+          parametrised_charts += @unselected_node_types.map do |node_type|
+            multi_year_no_ncont_node_type_view(node_type)
+          end.map { |chart| all_params.merge(chart) }
+
           parametrised_charts
         end
 
-        def charts_per_selected_node(nodes_ids_param_name)
-          nodes_ids = instance_variable_get("@#{nodes_ids_param_name}")
-          return [] unless nodes_ids.any?
-
-          nodes = Api::V3::Node.where(id: nodes_ids).includes(:node_type)
+        def charts_per_selected_node(nodes_ids_param_name, nodes)
           return [] unless nodes.any?
 
           nodes.map do |node|
             node_type = node.node_type
-            node_type_is_active = @node_types_to_break_by.find do |nt|
+            node_type_is_active = @selected_node_types.find do |nt|
               nt.id == node_type.id
             end
             next unless node_type_is_active
@@ -166,8 +187,10 @@ module Api
               merge(nodes_ids_param_name => [node.id].join(',')).
               merge(
                 multi_year_ncont_node_type_view(node_type)
+              ).merge(
+                single_filter_key: nodes_ids_param_name.to_s.sub(/_ids$/, '').to_sym
               )
-          end
+          end.compact
         end
 
         def multi_year_ncont_overview
@@ -201,10 +224,6 @@ module Api
             start_year: @start_year,
             end_year: @end_year
           }
-        end
-
-        def flow_path_param_names
-          [:sources_ids, :companies_ids, :destinations_ids]
         end
       end
     end

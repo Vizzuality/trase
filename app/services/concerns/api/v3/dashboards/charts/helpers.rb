@@ -207,7 +207,8 @@ module Api
               filter: {
                 cont_attribute: @cont_attribute.try(:display_name),
                 ncont_attribute: @ncont_attribute.try(:display_name)
-              }.merge(flow_path_filters)
+              }.merge(flow_path_filters),
+              single_filter_key: @chart_parameters.single_filter_key
             }
           end
         end

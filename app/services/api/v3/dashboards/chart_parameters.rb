@@ -13,7 +13,8 @@ module Api
                     :companies_ids,
                     :destinations_ids,
                     :node_type,
-                    :top_n
+                    :top_n,
+                    :single_filter_key
 
         # @param params [Hash]
         # @option params [Integer] country_id
@@ -27,6 +28,7 @@ module Api
         # @option params [Integer] end_year
         # @option params [Integer] node_type_id
         # @option params [Integer] top_n
+        # @option params [String] single_filter_key
         def initialize(params)
           @country_id = params[:country_id]
           @commodity_id = params[:commodity_id]
@@ -48,6 +50,7 @@ module Api
           @start_year = params[:start_year]
           @end_year = params[:end_year]
           @top_n = params[:top_n]
+          @single_filter_key = params[:single_filter_key]
         end
 
         def node_type_idx
