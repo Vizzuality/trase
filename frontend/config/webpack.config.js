@@ -113,29 +113,6 @@ module.exports = {
         ]
       },
       {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: { sourceMap: !isDev }
-          },
-          'postcss-loader'
-        ]
-      },
-      {
-        test: /\.scss$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: { sourceMap: !isDev }
-          },
-          'postcss-loader',
-          'sass-loader'
-        ]
-      },
-      {
         test: /\.(jpe?g|png|gif)$/,
         use: [
           {
