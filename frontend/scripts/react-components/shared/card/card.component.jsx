@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Heading from 'react-components/shared/heading/heading.component';
+import { InView } from 'react-intersection-observer';
 
 import './card.scss';
+
 
 class Card extends Component {
   static renderDashedBox() {
@@ -53,40 +55,48 @@ class Card extends Component {
     const { dashedBox, dashedLine } = Card.renderDashedBox();
 
     return (
-      <div className={cx('c-card', variant, className)} data-test={testId}>
-        {variant === 'dashed' && dashedBox}
-        <Link
-          className="card-link"
-          href={linkUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          tx-content={translateUrl ? 'translate_urls' : undefined}
-          {...linkProps}
-        >
-          <figure className="card-image" style={{ backgroundImage: `url(${imageUrl})` }} />
-          {variant === 'dashed' && dashedLine}
-        </Link>
-        <figcaption className="card-content">
-          <div className="card-details-container">
-            <Heading as="h4" variant="mono" color="pink" size="sm">
-              {subtitle}
-            </Heading>
-            <p className="card-title">{title}</p>
+      <InView triggerOnce>
+        {({ ref, inView }) => (
+          <div className={cx('c-card', variant, className)} data-test={testId} ref={ref}>
+            {inView && (
+              <>
+                {variant === 'dashed' && dashedBox}
+                <Link
+                  className="card-link"
+                  href={linkUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  tx-content={translateUrl ? 'translate_urls' : undefined}
+                  {...linkProps}
+                >
+                  <figure className="card-image" style={{ backgroundImage: `url(${imageUrl})` }} />
+                  {variant === 'dashed' && dashedLine}
+                </Link>
+                <figcaption className="card-content">
+                  <div className="card-details-container">
+                    <Heading as="h4" variant="mono" color="pink" size="sm">
+                      {subtitle}
+                    </Heading>
+                    <p className="card-title">{title}</p>
+                  </div>
+                  <Heading variant="mono" color="grey-faded" size="sm">
+                    <Link
+                      className="card-action"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={linkUrl}
+                      tx-content={translateUrl ? 'translate_urls' : undefined}
+                      {...linkProps}
+                    >
+                      {actionName}
+                    </Link>
+                  </Heading>
+                </figcaption>
+              </>
+            )}
           </div>
-          <Heading variant="mono" color="grey-faded" size="sm">
-            <Link
-              className="card-action"
-              target="_blank"
-              rel="noopener noreferrer"
-              href={linkUrl}
-              tx-content={translateUrl ? 'translate_urls' : undefined}
-              {...linkProps}
-            >
-              {actionName}
-            </Link>
-          </Heading>
-        </figcaption>
-      </div>
+        )}
+      </InView>
     );
   }
 }

@@ -9,6 +9,7 @@ import Entrypoints from 'react-components/home/entrypoints/entrypoints.component
 import Button from 'react-components/shared/button/button.component';
 
 import 'scripts/react-components/home/homepage.scss';
+import { InView } from 'react-intersection-observer';
 
 class Home extends React.PureComponent {
   constructor(props) {
@@ -45,32 +46,42 @@ class Home extends React.PureComponent {
           <div className="homepage-entrypoints">
             <Entrypoints onClickNext={clickNextEntrypoint} onClick={clickEntrypoint} />
           </div>
-          <div className="homepage-map">
-            <div className="row">
-              <div className="column small-12">
-                <SentenceSelector className="homepage-map-sentence-selector" />
-                <div className="homepage-map-container">
-                  <WorldMap />
+          <InView triggerOnce>
+            {({ ref, inView }) => (
+              <>
+                <div className="homepage-map" ref={ref}>
+                  <div className="row">
+                    {inView && (
+                      <div className="column small-12">
+                        <SentenceSelector className="homepage-map-sentence-selector" />
+                        <div className="homepage-map-container">
+                          <WorldMap />
+                        </div>
+                        <div className="homepage-map-link-container">
+                          <Button
+                            color="pink"
+                            size="lg"
+                            className="homepage-map-link"
+                            onClick={this.onFindOutMore}
+                          >
+                            Find out more
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className="homepage-map-link-container">
-                  <Button
-                    color="pink"
-                    size="lg"
-                    className="homepage-map-link"
-                    onClick={this.onFindOutMore}
-                  >
-                    Find out more
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="sliders">
-            <NewsletterForm />
-            <SliderSection name="News and Blogs" slides={blogPosts} />
-            <SliderSection name="Insights" slides={insightsPosts} />
-            <SliderSection className="-small" name="Testimonials" slides={testimonials} />
-          </div>
+                {inView && (
+                  <div className="sliders">
+                    <NewsletterForm />
+                    <SliderSection name="News and Blogs" slides={blogPosts} />
+                    <SliderSection name="Insights" slides={insightsPosts} />
+                    <SliderSection className="-small" name="Testimonials" slides={testimonials} />
+                  </div>
+                )}
+              </>
+            )}
+          </InView>
         </div>
       </div>
     );

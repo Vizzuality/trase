@@ -148,6 +148,7 @@
     "react-dom": "^16.8.6",
     "react-iframe-resizer-super": "^0.2.0",
     "react-input-autosize": "^2.2.1",
+    "react-intersection-observer": "^8.22.5",
     "react-modal": "^3.6.1",
     "react-placehodl": "^1.0.3",
     "react-popper": "^1.3.3",

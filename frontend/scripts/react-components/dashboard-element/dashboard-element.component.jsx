@@ -14,6 +14,7 @@ import cx from 'classnames';
 
 import 'react-components/dashboard-element/dashboard-element.scss';
 import { DASHBOARD_STEPS } from 'constants';
+import { InView } from 'react-intersection-observer';
 
 class DashboardElement extends React.PureComponent {
   static propTypes = {
@@ -95,17 +96,19 @@ class DashboardElement extends React.PureComponent {
     return (
       <>
         {charts.map(chart => (
-          <div
-            key={chart.id}
-            className="column small-12 medium-6"
-            data-test="dashboard-widget-container"
-          >
-            <DashboardWidget
-              url={chart.url}
-              chartType={chart.type}
-              selectedRecolorBy={filters.selectedRecolorBy}
-            />
-          </div>
+          <InView triggerOnce>
+            {({ ref, inView }) => (
+              <div key={chart.id} className="column small-12 medium-6" data-test="dashboard-widget-container" ref={ref}>
+                {inView && (
+                  <DashboardWidget
+                    url={chart.url}
+                    chartType={chart.type}
+                    selectedRecolorBy={filters.selectedRecolorBy}
+                  />
+                )}
+              </div>
+            )}
+          </InView>
         ))}
       </>
     );

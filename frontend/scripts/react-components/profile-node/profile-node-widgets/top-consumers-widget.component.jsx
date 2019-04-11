@@ -82,7 +82,7 @@ class TopConsumersWidget extends React.PureComponent {
 
           const { jurisdictionName } = data[GET_NODE_SUMMARY_URL];
           return (
-            <section className="mini-sankey-container page-break-inside-avoid" data-test={testId}>
+            <div className="mini-sankey-container page-break-inside-avoid" data-test={testId}>
               <div className="row">
                 <div className="small-12 columns">
                   <Heading
@@ -107,7 +107,7 @@ class TopConsumersWidget extends React.PureComponent {
                   />
                 </div>
               </div>
-            </section>
+            </div>
           );
         }}
       </Widget>

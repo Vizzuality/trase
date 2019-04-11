@@ -3,6 +3,7 @@ import cx from 'classnames';
 import Link from 'redux-first-router-link';
 
 import './footer.scss';
+import { InView } from 'react-intersection-observer';
 
 const sections = [
   {
@@ -121,34 +122,39 @@ const sections = [
 
 const Footer = () => (
   <div className="c-footer">
-    <div className="contain-logos-footer row">
-      {sections.map(({ title, logos, text }) => (
-        <div
-          key={title}
-          className={cx('contain-logos', `column small-12 large-${12 / sections.length}`)}
-        >
-          <h4 className="title -mono-font">{title}</h4>
-          <div className="logo-list-container">
-            {logos.map((list, listIndex) => (
-              <ul key={title + listIndex} className="logo-list">
-                {list.map(logo => (
-                  <li key={logo.className} className={cx('logo-item', logo.className)}>
-                    <a href={logo.href} target="_blank" rel="noopener noreferrer">
-                      <img src={logo.image} alt={logo.alt} />
-                    </a>
-                  </li>
-                ))}
-              </ul>
+    <InView triggerOnce>
+      {({ ref, inView }) => (
+        <div className="contain-logos-footer row" ref={ref}>
+          {inView &&
+            sections.map(({ title, logos, text }) => (
+              <div
+                key={title}
+                className={cx('contain-logos', `column small-12 large-${12 / sections.length}`)}
+              >
+                <h4 className="title -mono-font">{title}</h4>
+                <div className="logo-list-container">
+                  {logos.map((list, listIndex) => (
+                    <ul key={title + listIndex} className="logo-list">
+                      {list.map(logo => (
+                        <li key={logo.className} className={cx('logo-item', logo.className)}>
+                          <a href={logo.href} target="_blank" rel="noopener noreferrer">
+                            <img src={logo.image} alt={logo.alt} />
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  ))}
+                </div>
+                {text && (
+                  <div className="contain-text">
+                    <p className="title -mono-font">{text}</p>
+                  </div>
+                )}
+              </div>
             ))}
-          </div>
-          {text && (
-            <div className="contain-text">
-              <p className="title -mono-font">{text}</p>
-            </div>
-          )}
         </div>
-      ))}
-    </div>
+      )}
+    </InView>
     <div className="contain-link-list row column">
       <ul className="links-list">
         <li className="link-item">
