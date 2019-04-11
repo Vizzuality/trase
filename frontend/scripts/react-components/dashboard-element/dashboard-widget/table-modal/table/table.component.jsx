@@ -56,7 +56,7 @@ function Table(props) {
       </div>
       <VariableSizeGrid
         ref={gridRef}
-        height={height}
+        height={Math.min(height, minRowHeight * sortedData.length)}
         width={width}
         columnWidth={() => columnWidth}
         rowHeight={index => rowHeight || getMaxLength(sortedData[index]) + minRowHeight}

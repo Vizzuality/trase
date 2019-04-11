@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import isEmpty from 'lodash/isEmpty';
+import omit from 'lodash/omit';
 import { format } from 'd3-format';
 import { CHART_TYPES } from 'constants';
 
@@ -101,8 +102,8 @@ const getDataColumnNames = createSelector(
     } else {
       notColumnKeys.push('x');
     }
-    notColumnKeys.forEach(a => delete metaColumns[a]);
-    return Object.keys(metaColumns);
+    const columns = omit(metaColumns, notColumnKeys);
+    return Object.keys(columns);
   }
 );
 
