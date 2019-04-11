@@ -7,7 +7,7 @@ import HomeVideo from 'react-components/home/home-video/home-video.component';
 import Heading from 'react-components/shared/heading/heading.component';
 
 import './hero.scss';
-import { InView } from 'react-intersection-observer';
+import InView from 'react-components/shared/in-view.component';
 
 // old school name: https://en.wikipedia.org/wiki/Hero_image
 class Hero extends React.Component {

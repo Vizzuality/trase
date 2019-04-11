@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Heading from 'react-components/shared/heading/heading.component';
-import { InView } from 'react-intersection-observer';
+import InView from 'react-components/shared/in-view.component';
 
 import './card.scss';
+
 
 
 class Card extends Component {

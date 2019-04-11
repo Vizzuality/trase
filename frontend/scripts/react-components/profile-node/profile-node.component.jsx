@@ -10,7 +10,7 @@ import GfwWidget from 'react-components/profile-node/profile-node-widgets/gfw-wi
 import { smoothScroll } from 'utils/smoothScroll';
 import cx from 'classnames';
 import sortBy from 'lodash/sortBy';
-import { InView } from 'react-intersection-observer';
+import InView from 'react-components/shared/in-view.component';
 
 class ProfileNode extends React.PureComponent {
   static propTypes = {

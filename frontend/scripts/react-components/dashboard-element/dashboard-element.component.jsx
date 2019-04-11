@@ -14,7 +14,7 @@ import cx from 'classnames';
 
 import 'react-components/dashboard-element/dashboard-element.scss';
 import { DASHBOARD_STEPS } from 'constants';
-import { InView } from 'react-intersection-observer';
+import InView from 'react-components/shared/in-view.component';
 
 class DashboardElement extends React.PureComponent {
   static propTypes = {

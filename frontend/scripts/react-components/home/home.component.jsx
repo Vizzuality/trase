@@ -9,7 +9,7 @@ import Entrypoints from 'react-components/home/entrypoints/entrypoints.component
 import Button from 'react-components/shared/button/button.component';
 
 import 'scripts/react-components/home/homepage.scss';
-import { InView } from 'react-intersection-observer';
+import InView from 'react-components/shared/in-view.component';
 
 class Home extends React.PureComponent {
   constructor(props) {

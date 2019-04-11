@@ -12,7 +12,10 @@ import RankingWidget from 'react-components/dashboard-element/dashboard-widget/r
 import ErrorCatch from 'react-components/shared/error-catch.component';
 import Text from 'react-components/shared/text';
 import Heading from 'react-components/shared/heading';
-import { InView } from 'react-intersection-observer';
+import InView from 'react-components/shared/in-view.component';
+
+import 'react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
+
 
 import 'react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
 

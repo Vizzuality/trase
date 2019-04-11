@@ -3,7 +3,7 @@ import cx from 'classnames';
 import Link from 'redux-first-router-link';
 
 import './footer.scss';
-import { InView } from 'react-intersection-observer';
+import InView from 'react-components/shared/in-view.component';
 
 const sections = [
   {
