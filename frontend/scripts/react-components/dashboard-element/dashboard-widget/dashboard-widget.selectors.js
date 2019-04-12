@@ -4,6 +4,7 @@ import sortBy from 'lodash/sortBy';
 import kebabCase from 'lodash/kebabCase';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
 import { CHART_TYPES } from 'constants';
+import camelCase from 'lodash/camelCase';
 
 const parsedChartTypes = {
   bar_chart: CHART_TYPES.bar,
@@ -154,5 +155,49 @@ export const makeGetConfig = () =>
         colors
       };
       return config;
+    }
+  );
+
+const getPluralNodeType = nodeType => {
+  const name = camelCase(nodeType);
+  return (
+    {
+      country: 'countries',
+      municipality: 'municipalities'
+    }[name] || `${nodeType}s`.toLowerCase()
+  );
+};
+const getNodeTypeName = pluralNodeType =>
+  pluralNodeType === 'countries' ? 'importing countries' : pluralNodeType;
+
+const getFilterPreposition = filterKey => {
+  switch (filterKey) {
+    case 'companies':
+      return 'of';
+    case 'destinations':
+      return 'to';
+    case 'sources':
+      return 'in';
+    default:
+      return '';
+  }
+};
+
+export const makeGetTitle = () =>
+  createSelector(
+    [getMeta],
+    meta => {
+      if (!meta || !meta.info) return '';
+      const topNPart = meta.info.top_n ? `Top ${meta.info.top_n}` : null;
+      const nodeTypePart = meta.info.node_type
+        ? getNodeTypeName(getPluralNodeType(meta.info.node_type))
+        : 'Selection overview';
+      let filterPart = '';
+      const filterKey = meta.info.single_filter_key;
+      if (filterKey) {
+        const name = meta.info.filter[filterKey][0].name;
+        filterPart = `${getFilterPreposition(filterKey)} ${name}`;
+      }
+      return [topNPart, nodeTypePart, filterPart].filter(Boolean).join(' ');
     }
   );
