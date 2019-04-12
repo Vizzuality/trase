@@ -74,6 +74,7 @@ module Api
                 u1 AS (
                   SELECT x, JSONB_OBJECT_AGG(break_by, y0) AS per_break_by, SUM(y0) AS y
                   FROM q
+                  WHERE NOT is_unknown
                   GROUP BY x
                   ORDER BY SUM(y0) DESC LIMIT #{@top_n}
                 ),
