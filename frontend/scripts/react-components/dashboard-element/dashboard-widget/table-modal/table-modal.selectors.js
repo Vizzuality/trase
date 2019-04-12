@@ -44,23 +44,29 @@ const hasVariableColumn = createSelector(
     variableColumnName
 );
 
-const getIndicatorColumnName = (meta, type) => {
-  const unit = (type === 'cont' && (meta.xAxis.suffix || meta.yAxis.suffix)) || '';
-  return {
-    name: meta.info.filter[`${type}_attribute`],
-    unit
-  };
+const getUnit = (meta, type, chartType) => {
+  switch (chartType) {
+    case CHART_TYPES.pie:
+      return (type === 'cont' ? meta.yAxis.suffix : meta.xAxis.suffix) || '';
+    default:
+      return (type === 'cont' ? meta.xAxis.suffix : meta.yAxis.suffix) || '';
+  }
 };
 
+const getIndicatorColumnName = (meta, type, chartType) => ({
+  name: meta.info.filter[`${type}_attribute`],
+  unit: getUnit(meta, type, chartType)
+});
+
 export const getTableHeaders = createSelector(
-  [getMeta, hasVariableColumn, getVariableColumnName, hasNContIndicator],
-  (meta, _hasVariableColumn, variableColumnName, _hasNContIndicator) => {
+  [getMeta, hasVariableColumn, getVariableColumnName, hasNContIndicator, getChartType],
+  (meta, _hasVariableColumn, variableColumnName, _hasNContIndicator, chartType) => {
     if (!meta) return null;
     const headers = [{ name: 'COMMODITY' }, { name: 'COUNTRY' }, { name: 'YEAR' }];
     if (_hasVariableColumn) headers.push({ name: variableColumnName });
-    headers.push(getIndicatorColumnName(meta, 'cont'));
+    headers.push(getIndicatorColumnName(meta, 'cont', chartType));
     if (_hasNContIndicator) {
-      headers.push(getIndicatorColumnName(meta, 'ncont'));
+      headers.push(getIndicatorColumnName(meta, 'ncont', chartType));
     }
     return headers;
   }
