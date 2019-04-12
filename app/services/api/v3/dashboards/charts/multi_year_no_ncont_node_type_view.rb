@@ -26,6 +26,7 @@ module Api
             break_by_values_indexes = top_nodes_break_by_values_map
 
             data_by_x = {}
+
             @top_n_and_others_query.each do |record|
               idx = break_by_values_indexes[record['break_by']]
               data_by_x[record['x']] ||= {}
@@ -44,8 +45,16 @@ module Api
             }
 
             break_by_values_indexes.each do |break_by, idx|
+              node = top_nodes[idx]
+              if node
+                profile_info = {
+                  id: node['id'],
+                  profile: profile_for_node_type_id(node['node_type_id'])
+                }
+              end
               @meta[:"y#{idx}"] = {
                 label: break_by,
+                profileInfo: profile_info,
                 tooltip: {prefix: '', format: '', suffix: ''}
               }
             end
@@ -96,10 +105,16 @@ module Api
               group('top_nodes.name')
           end
 
+          def top_nodes
+            return @top_nodes if defined? @top_nodes
+
+            @top_nodes = @top_nodes_query.
+              select(Arel.sql('nodes.id, nodes.node_type_id, nodes.name')).
+              distinct.all
+          end
+
           def top_nodes_break_by_values
-            @top_nodes_query.
-              select(Arel.sql('nodes.name')).
-              distinct.map { |r| r['name'] } + [OTHER]
+            top_nodes.map { |r| r['name'] } + [OTHER]
           end
 
           def top_nodes_break_by_values_map
