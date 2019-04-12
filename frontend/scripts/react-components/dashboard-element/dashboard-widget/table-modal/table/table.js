@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import uniqBy from 'lodash/uniqBy';
 import TableComponent from 'react-components/dashboard-element/dashboard-widget/table-modal/table/table.component';
+import formatSIToNumber from 'utils/formatSIToNumber';
 
 const columnNameIndex = (headers, columnName) => {
   const column = headers.find(c => c.name === columnName);
@@ -18,7 +19,11 @@ const sortData = (data, headers, sortByColumn, sortDirections) => {
     if (first === second) return 0;
     const isNumber = /^\d+(\.\d+)?[A-Za-z|µ]?$/; // We have to take into account the SI numbers e.g "14.3M"
     if (String(first).match(isNumber)) {
-      return parseFloat(first) - parseFloat(second);
+      const endsWithNotNumber = /\D$/;
+      const parsingFunction = String(first).match(endsWithNotNumber)
+        ? formatSIToNumber
+        : parseFloat;
+      return parsingFunction(first) - parsingFunction(second);
     }
     return first > second ? -1 : 1;
   });
