@@ -91,7 +91,7 @@ module Api
 
           def apply_top_nodes_break_by
             @query = @query.
-              select("COALESCE(top_nodes.name, '#{OTHER}') AS break_by").
+              select("COALESCE(top_nodes.name, '#{OTHER}'::TEXT) AS break_by").
               joins("LEFT JOIN top_nodes ON top_nodes.id = flows.path[#{@node_type_idx}]").
               group('top_nodes.name')
           end

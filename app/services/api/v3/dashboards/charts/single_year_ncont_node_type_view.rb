@@ -81,7 +81,7 @@ module Api
                 u2 AS (
                   SELECT x, JSONB_OBJECT_AGG(break_by, y0), SUM(y0) AS y
                   FROM (
-                    SELECT '#{OTHER}' AS x, break_by, SUM(y0) AS y0 FROM q
+                    SELECT '#{OTHER}'::TEXT AS x, break_by, SUM(y0) AS y0 FROM q
                     WHERE NOT EXISTS (SELECT 1 FROM u1 WHERE q.x = u1.x)
                     GROUP BY break_by
                   ) s GROUP BY x
