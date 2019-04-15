@@ -6,10 +6,10 @@ describe('Table widget selectors', () => {
     const state = {
       dashboardElement: {
         countriesPanel: {
-          activeItems: [{ name: 'Country Name' }]
+          activeItems: { 0: { name: 'Country Name' } }
         },
         commoditiesPanel: {
-          activeItems: [{ name: 'Commodity Name' }]
+          activeItems: { 0: { name: 'Commodity Name' } }
         },
         sourcesPanel: {
           activeItems: null
@@ -27,11 +27,11 @@ describe('Table widget selectors', () => {
           chartType
         })
       ).toEqual([
-        { name: 'COMMODITY' },
-        { name: 'COUNTRY' },
-        { name: 'YEAR' },
-        { name: 'BIOME' },
-        { name: 'Trade volume', unit: 't' }
+        { name: 'commodity' },
+        { name: 'country' },
+        { name: 'year' },
+        { name: 'biome' },
+        { name: 'trade volume', unit: 't', format: ',.2s' }
       ]);
     });
     // Multiple years, non-cont indicator, no flow path filters
@@ -45,30 +45,37 @@ describe('Table widget selectors', () => {
           chartType
         })
       ).toEqual([
-        { name: 'COMMODITY' },
-        { name: 'COUNTRY' },
-        { name: 'YEAR' },
-        { name: 'Trade volume', unit: 't' },
-        { name: 'Zero Deforestation Commitment (Exporter)', unit: '' }
+        { name: 'commodity' },
+        { name: 'country' },
+        { name: 'year' },
+        { name: 'trade volume', unit: 't', format: ',.2s' },
+        { name: 'zero deforestation commitment (exporter)' }
       ]);
     });
     // Multiple years, non-cont indicator, 1 source, no other flow path filters
     xit('returns the headings for Stacked bar chart per year per value of non-continuous indicator - globally', () => {
       const chartType = 'stackedBar';
       const { mYearNCont } = meta;
+      const oneSourceState = {
+        ...state,
+        sourcesPanel: {
+          activeItems: { 0: { name: 'Biome Name' } }
+        }
+      };
+
       expect(
-        getTableHeaders(state, {
+        getTableHeaders(oneSourceState, {
           meta: mYearNCont,
           data,
           chartType
         })
       ).toEqual([
-        { name: 'COMMODITY' },
-        { name: 'COUNTRY' },
-        { name: 'YEAR' },
-        { name: 'TRADE VOLUME', unit: 't' },
-        { name: 'BIOMES' },
-        { name: 'ZERO DEFORESTATION COMMITMENT (EXPORTER)' }
+        { name: 'commodity' },
+        { name: 'country' },
+        { name: 'year' },
+        { name: 'biome' },
+        { name: 'trade volume', unit: 't', format: ',.2s' },
+        { name: 'zero deforestation commitment (exporter)' }
       ]);
     });
   });

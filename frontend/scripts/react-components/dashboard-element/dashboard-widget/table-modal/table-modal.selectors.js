@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect';
 import isEmpty from 'lodash/isEmpty';
 import omit from 'lodash/omit';
-import { format } from 'd3-format';
 import { CHART_TYPES } from 'constants';
 
 const getMeta = (state, { meta }) => meta || null;
@@ -22,6 +21,11 @@ const getActiveSourcesNames = state =>
     state.dashboardElement && state.dashboardElement.sourcesPanel.activeItems
   );
 
+const getTopNValue = createSelector(
+  [getMeta],
+  meta => meta.info.top_n
+);
+
 const getVariableColumnName = createSelector(
   [getMeta],
   meta => (meta.info.node_type === 'COUNTRY' ? 'DESTINATION' : meta.info.node_type)
@@ -36,59 +40,82 @@ const hasMultipleYears = createSelector(
   meta => meta.info.years.end_year
 );
 const hasVariableColumn = createSelector(
-  [getChartType, getVariableColumnName, hasMultipleYears, hasNContIndicator, getActiveSourcesNames],
-  (chartType, variableColumnName, _hasMultipleYears, _hasNContIndicator, activeSourcesNames) =>
-    !(!activeSourcesNames && _hasNContIndicator && _hasMultipleYears) &&
-    !(!activeSourcesNames && chartType === 'bar' && _hasMultipleYears) &&
-    !(chartType === 'pie') &&
-    variableColumnName
+  [
+    getChartType,
+    getVariableColumnName,
+    hasMultipleYears,
+    hasNContIndicator,
+    getActiveSourcesNames,
+    getTopNValue
+  ],
+  (
+    chartType,
+    variableColumnName,
+    _hasMultipleYears,
+    _hasNContIndicator,
+    activeSourcesNames,
+    topN
+  ) => {
+    /* eslint-disable camelcase */
+    const noSources_isBarChart_hasMultipleYears =
+      !activeSourcesNames && chartType === 'bar' && _hasMultipleYears;
+    const isPieChart = chartType === 'pie';
+
+    if (noSources_isBarChart_hasMultipleYears || topN !== null || isPieChart) {
+      return variableColumnName;
+    }
+    return null;
+    /* eslint-enable */
+  }
 );
 
-const getIndicatorColumnName = (meta, type) => {
-  const unit = (type === 'cont' && (meta.xAxis.suffix || meta.yAxis.suffix)) || '';
+const getContIndicatorHeader = (meta, chartType) => {
+  const numberTypeAxis = meta.yAxis.type === 'number' ? 'yAxis' : 'xAxis';
   return {
-    name: meta.info.filter[`${type}_attribute`],
-    unit
+    name: String(meta.info.filter.cont_attribute).toLowerCase(),
+    unit: chartType === CHART_TYPES.pie ? meta.yAxis.suffix : meta[numberTypeAxis].suffix,
+    format: ',.2s'
   };
 };
 
 export const getTableHeaders = createSelector(
-  [getMeta, hasVariableColumn, getVariableColumnName, hasNContIndicator],
-  (meta, _hasVariableColumn, variableColumnName, _hasNContIndicator) => {
+  [getMeta, hasVariableColumn, getVariableColumnName, hasNContIndicator, getChartType],
+  (meta, _hasVariableColumn, variableColumnName, _hasNContIndicator, chartType) => {
     if (!meta) return null;
-    const headers = [{ name: 'COMMODITY' }, { name: 'COUNTRY' }, { name: 'YEAR' }];
-    if (_hasVariableColumn) headers.push({ name: variableColumnName });
-    headers.push(getIndicatorColumnName(meta, 'cont'));
+    const headers = [{ name: 'commodity' }, { name: 'country' }, { name: 'year' }];
+    if (_hasVariableColumn) {
+      headers.push({ name: String(variableColumnName).toLowerCase() });
+    }
+    headers.push(getContIndicatorHeader(meta, chartType));
     if (_hasNContIndicator) {
-      headers.push(getIndicatorColumnName(meta, 'ncont'));
+      headers.push({ name: String(meta.info.filter.ncont_attribute).toLowerCase() });
     }
     return headers;
   }
 );
 
-const getYear = (d, meta, chartType) => {
+const getYear = (item, meta, chartType) => {
   switch (chartType) {
     case CHART_TYPES.horizontalBar:
     case CHART_TYPES.horizontalStackedBar:
     case CHART_TYPES.pie:
       return meta.info.years.start_year;
     default:
-      return d.x || meta.info.years.start_year;
+      return item.x || meta.info.years.start_year;
   }
 };
 
-const contValue = (d, c) => d[c] && format(',.2s')(d[c]);
-const nonContValue = (d, column, meta, chartType, _hasMultipleYears) => {
+const nonContValue = (item, column, meta, chartType, _hasMultipleYears) => {
   if (
     chartType === CHART_TYPES.horizontalBar ||
     chartType === CHART_TYPES.horizontalStackedBar ||
     _hasMultipleYears
   ) {
-    return meta[column].label && meta[column].label.toUpperCase();
+    return meta[column].label && meta[column].label;
   }
-  return d.x && String(d.x).toUpperCase();
+  return item.x && String(item.x);
 };
-const getVariableColumnData = (d, column, meta) => d.y || meta[column].label;
+const getVariableColumnData = (item, column, meta) => item.y || meta[column].label;
 
 const getDataColumnNames = createSelector(
   [getMeta, getChartType],
@@ -135,14 +162,15 @@ export const getTableData = createSelector(
     if (!meta || !data) return null;
     const parsedData = [];
     dataColumnNames.forEach(column => {
-      data.forEach(d => {
-        const rowData = [countries[0], commodities[0], getYear(d, meta, chartType)];
+      data.forEach(item => {
+        const rowData = [countries[0], commodities[0], getYear(item, meta, chartType)];
         if (_hasVariableColumn) {
-          rowData.push(getVariableColumnData(d, column, meta));
+          rowData.push(getVariableColumnData(item, column, meta));
         }
-        rowData.push(contValue(d, column));
+
+        rowData.push(item[column]);
         if (_hasNContIndicator) {
-          rowData.push(nonContValue(d, column, meta, chartType, _hasMultipleYears));
+          rowData.push(nonContValue(item, column, meta, chartType, _hasMultipleYears));
         }
 
         parsedData.push(rowData);

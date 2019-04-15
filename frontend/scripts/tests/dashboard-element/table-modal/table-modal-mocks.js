@@ -1,38 +1,23 @@
-const yAxis = {
+const yearAxis = {
   type: 'category',
-  label: 'Year',
-  prefix: '',
-  format: '',
-  suffix: ''
+  label: 'Year'
 };
 
-const xAxis = {
+const tradeVolumeAxis = {
   type: 'number',
   label: 'Trade volume',
-  prefix: '',
-  format: '',
   suffix: 't'
 };
 
 export const meta = {
   sYear: {
-    yAxis: { ...yAxis, label: 'BIOME' },
-    xAxis,
+    yAxis: { ...tradeVolumeAxis, label: 'BIOME' },
+    xAxis: yearAxis,
     y: {
-      label: 'BIOME',
-      tooltip: {
-        prefix: '',
-        format: '',
-        suffix: ''
-      }
+      label: 'BIOME'
     },
     x0: {
-      label: 'Trade volume',
-      tooltip: {
-        prefix: '',
-        format: '',
-        suffix: 't'
-      }
+      label: 'Trade volume'
     },
     info: {
       node_type: 'BIOME',
@@ -48,15 +33,10 @@ export const meta = {
     }
   },
   mYearNCont: {
-    xAxis: { ...xAxis, label: 'Year', type: 'category' },
-    yAxis: { ...yAxis, label: 'Trade volume', type: 'number' },
+    xAxis: yearAxis,
+    yAxis: tradeVolumeAxis,
     x: {
-      label: 'Year',
-      tooltip: {
-        prefix: '',
-        format: '',
-        suffix: ''
-      }
+      label: 'Year'
     },
     info: {
       node_type: null,
@@ -71,28 +51,13 @@ export const meta = {
       }
     },
     y0: {
-      label: 'Company commitment',
-      tooltip: {
-        prefix: '',
-        format: '',
-        suffix: ''
-      }
+      label: 'Company commitment'
     },
     y1: {
-      label: 'None',
-      tooltip: {
-        prefix: '',
-        format: '',
-        suffix: ''
-      }
+      label: 'None'
     },
     y2: {
-      label: 'Soy Moratorium',
-      tooltip: {
-        prefix: '',
-        format: '',
-        suffix: ''
-      }
+      label: 'Soy Moratorium'
     }
   }
 };
