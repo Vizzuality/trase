@@ -30,7 +30,7 @@ function Dropdown(props) {
         updateListHeight(newListHeight);
       }
     }
-  });
+  }, [listHeight, props.options, props.clip, props.showSelected]);
 
   // popper won't detect changes on its children so the necessary recalculations won't happen
   // we create a key that changes every time the options or children change, that way we remount the popper component
