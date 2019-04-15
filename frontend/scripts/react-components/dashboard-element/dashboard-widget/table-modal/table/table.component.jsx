@@ -7,13 +7,14 @@ import cx from 'classnames';
 import Text from 'react-components/shared/text';
 import Icon from 'react-components/shared/icon';
 import maxBy from 'lodash/maxBy';
+import { format as d3Format } from 'd3-format';
 
 const getMaxLength = row => String(maxBy(row, cell => String(cell).length)).length;
 
 function Table(props) {
   const {
     sortedData,
-    sortByColumn,
+    sortedByColumn,
     gridRef,
     sortDirections,
     handleHeaderClick,
@@ -45,7 +46,7 @@ function Table(props) {
                   {header.unit && <span> ({header.unit})</span>}
                 </Text>
                 <span className="icon-container">
-                  {sortByColumn === header.name && (
+                  {sortedByColumn === header.name && (
                     <Icon icon={`icon-arrow${isDesc ? '-up' : ''}`} color="elephant" />
                   )}
                 </span>
@@ -64,11 +65,12 @@ function Table(props) {
         columnCount={headers.length}
       >
         {({ rowIndex, columnIndex, style }) => {
+          const formatFn = headers[columnIndex].format && d3Format(headers[columnIndex].format);
           const item = sortedData[rowIndex][columnIndex];
           return (
             <div style={style} className={cx('list-item', !(rowIndex % 2) && 'list-item-even')}>
               <Text align="center" size="md" as="span" variant="mono">
-                {item}
+                {formatFn ? formatFn(item) : item}
               </Text>
             </div>
           );
@@ -94,7 +96,7 @@ Table.propTypes = {
   sortedData: PropTypes.array.isRequired,
   sortDirections: PropTypes.object,
   handleHeaderClick: PropTypes.func.isRequired,
-  sortByColumn: PropTypes.func.isRequired
+  sortedByColumn: PropTypes.func.isRequired
 };
 
 export default Table;
