@@ -34,9 +34,9 @@ module Api
 
           def apply_node_type_x
             @query = @query.
-              select('nodes.name AS x').
+              select('nodes.name AS x, nodes.is_unknown').
               joins("JOIN nodes ON nodes.id = flows.path[#{@node_type_idx}]").
-              group('nodes.name')
+              group('nodes.name, nodes.is_unknown')
           end
 
           def apply_year_x

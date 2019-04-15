@@ -72,6 +72,7 @@ module Api
               except(:select).
               select('nodes.id, nodes.name, SUM(flow_quants.value) AS y0').
               joins("JOIN nodes ON nodes.id = flows.path[#{@node_type_idx}]").
+              where('NOT nodes.is_unknown').
               except(:group).
               group('nodes.id, nodes.name').
               order(Arel.sql('SUM(flow_quants.value) DESC')).

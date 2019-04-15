@@ -9,6 +9,52 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNoNcontNodeTypeView do
     Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependents: true)
   end
 
+  let!(:api_v3_unknown_exporter_node) do
+    node = Api::V3::Node.where(
+      name: 'UNKNOWN', node_type_id: api_v3_exporter_node_type.id
+    ).first
+    unless node
+      node = FactoryBot.create(
+        :api_v3_node,
+        name: 'UNKNOWN',
+        node_type: api_v3_exporter_node_type,
+        is_unknown: true
+      )
+      FactoryBot.create(
+        :api_v3_node_property,
+        node: node
+      )
+    end
+    node
+  end
+
+  let!(:api_v3_flow_with_unknown) do
+    FactoryBot.create(
+      :api_v3_flow,
+      context: api_v3_context,
+      path: [
+        api_v3_biome_node,
+        api_v3_state_node,
+        api_v3_municipality_node,
+        api_v3_logistics_hub_node,
+        api_v3_port1_node,
+        api_v3_unknown_exporter_node,
+        api_v3_importer1_node,
+        api_v3_country_of_destination1_node
+      ].map(&:id),
+      year: 2015
+    )
+  end
+
+  let!(:api_v3_flow_with_unknown_volume) do
+    FactoryBot.create(
+      :api_v3_flow_quant,
+      flow: api_v3_flow_with_unknown,
+      quant: api_v3_volume,
+      value: 100
+    )
+  end
+
   let(:cont_attribute) { api_v3_volume.readonly_attribute }
   let(:node_type) { api_v3_exporter_node_type }
 
