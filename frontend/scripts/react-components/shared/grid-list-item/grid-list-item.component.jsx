@@ -25,7 +25,7 @@ function GridListItem(props) {
       <div style={style} className="c-grid-list-item">
         {isGroup && <h3 className="grid-list-item-heading">{item.name}</h3>}
         {!isGroup && (
-          <div className="grid-list-item-content">
+          <div className="grid-list-item-content" data-test="grid-list-item-button">
             <button
               type="button"
               disabled={isDisabled}
@@ -35,6 +35,7 @@ function GridListItem(props) {
                 '-has-info': !!tooltip,
                 '-clickable': isActive && !disableItem
               })}
+              data-test={`grid-list-item-button-${item.name}`}
             >
               <span>{item.name}</span>
             </button>

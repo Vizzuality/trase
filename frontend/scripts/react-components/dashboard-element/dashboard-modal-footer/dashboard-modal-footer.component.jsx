@@ -35,7 +35,13 @@ function DashboardModalFooter(props) {
             </Text>
           </button>
         )}
-        <Button onClick={onContinue} color="pink" size="md" disabled={isDisabled}>
+        <Button
+          onClick={onContinue}
+          color="pink"
+          size="md"
+          disabled={isDisabled}
+          testId="dashboard-modal-actions-continue"
+        >
           <Text as="span" size="rg" color="white" variant="mono">
             {isLastStep ? 'Go to dashboard' : 'Continue'}
           </Text>

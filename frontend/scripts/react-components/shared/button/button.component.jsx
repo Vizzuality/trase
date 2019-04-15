@@ -7,9 +7,10 @@ import './button.scss';
 // TODO: remove className prop, currently the application buttons are so fragmented
 //  that we need to provide a escape hatch.
 function Button(props) {
-  const { as, variant, color, size, weight, children, icon, iconPosition, ...rest } = props;
+  const { as, variant, color, size, weight, children, icon, iconPosition, testId, ...rest } = props;
   const buttonProps = {
     ...rest,
+    'data-test': testId,
     className: cx('c-button', rest.className, {
       [`v-${variant}`]: variant,
       [`color-${color}`]: color,
@@ -61,6 +62,7 @@ Button.propTypes = {
   variant: PropTypes.string,
   className: PropTypes.string,
   iconPosition: PropTypes.string,
+  testId: PropTypes.string,
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
 };
 
