@@ -68,9 +68,9 @@ function Table(props) {
           const formatFn = headers[columnIndex].format && d3Format(headers[columnIndex].format);
           const item = sortedData[rowIndex][columnIndex];
           return (
-            <div style={style} className={cx('list-item', !(rowIndex % 2) && 'list-item-even')}>
+            <div style={style} className={cx('list-item', !(rowIndex % 2) && '-even')}>
               <Text align="center" size="md" as="span" variant="mono">
-                {formatFn ? formatFn(item) : item}
+                {item && formatFn ? formatFn(item) : item}
               </Text>
             </div>
           );

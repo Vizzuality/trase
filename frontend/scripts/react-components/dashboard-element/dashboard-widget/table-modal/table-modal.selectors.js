@@ -21,6 +21,11 @@ const getActiveSourcesNames = state =>
     state.dashboardElement && state.dashboardElement.sourcesPanel.activeItems
   );
 
+const getTopNValue = createSelector(
+  [getMeta],
+  meta => meta.info.top_n
+);
+
 const getVariableColumnName = createSelector(
   [getMeta],
   meta => (meta.info.node_type === 'COUNTRY' ? 'DESTINATION' : meta.info.node_type)
@@ -35,18 +40,39 @@ const hasMultipleYears = createSelector(
   meta => meta.info.years.end_year
 );
 const hasVariableColumn = createSelector(
-  [getChartType, getVariableColumnName, hasMultipleYears, hasNContIndicator, getActiveSourcesNames],
-  (chartType, variableColumnName, _hasMultipleYears, _hasNContIndicator, activeSourcesNames) =>
-    !(!activeSourcesNames && _hasNContIndicator && _hasMultipleYears) &&
-    !(!activeSourcesNames && chartType === 'bar' && _hasMultipleYears) &&
-    !(chartType === 'pie') &&
-    variableColumnName
+  [
+    getChartType,
+    getVariableColumnName,
+    hasMultipleYears,
+    hasNContIndicator,
+    getActiveSourcesNames,
+    getTopNValue
+  ],
+  (
+    chartType,
+    variableColumnName,
+    _hasMultipleYears,
+    _hasNContIndicator,
+    activeSourcesNames,
+    topN
+  ) => {
+    /* eslint-disable camelcase */
+    const noSources_isBarChart_hasMultipleYears =
+      !activeSourcesNames && chartType === 'bar' && _hasMultipleYears;
+    const isPieChart = chartType === 'pie';
+
+    if (noSources_isBarChart_hasMultipleYears || topN !== null || isPieChart) {
+      return variableColumnName;
+    }
+    return null;
+    /* eslint-enable */
+  }
 );
 
 const getContIndicatorHeader = (meta, chartType) => {
   const numberTypeAxis = meta.yAxis.type === 'number' ? 'yAxis' : 'xAxis';
   return {
-    name: meta.info.filter.cont_attribute,
+    name: String(meta.info.filter.cont_attribute).toLowerCase(),
     unit: chartType === CHART_TYPES.pie ? meta.yAxis.suffix : meta[numberTypeAxis].suffix,
     format: ',.2s'
   };
@@ -56,13 +82,13 @@ export const getTableHeaders = createSelector(
   [getMeta, hasVariableColumn, getVariableColumnName, hasNContIndicator, getChartType],
   (meta, _hasVariableColumn, variableColumnName, _hasNContIndicator, chartType) => {
     if (!meta) return null;
-    const headers = [{ name: 'COMMODITY' }, { name: 'COUNTRY' }, { name: 'YEAR' }];
+    const headers = [{ name: 'commodity' }, { name: 'country' }, { name: 'year' }];
     if (_hasVariableColumn) {
-      headers.push({ name: variableColumnName });
+      headers.push({ name: String(variableColumnName).toLowerCase() });
     }
     headers.push(getContIndicatorHeader(meta, chartType));
     if (_hasNContIndicator) {
-      headers.push({ name: meta.info.filter.ncont_attribute });
+      headers.push({ name: String(meta.info.filter.ncont_attribute).toLowerCase() });
     }
     return headers;
   }

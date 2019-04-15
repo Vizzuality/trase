@@ -26,10 +26,14 @@
     }
   }
 
-  .list-item-even {
-    background-color: $metal-grey;
-    border-bottom: solid 2px $medium-gray;
-    border-top: solid 2px $medium-gray;
+  .list-item {
+    text-transform: uppercase;
+
+    &.-even {
+      background-color: $metal-grey;
+      border-bottom: solid 2px $medium-gray;
+      border-top: solid 2px $medium-gray;
+    }
   }
 
   .sort-arrows {
