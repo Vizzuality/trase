@@ -16,7 +16,7 @@ function TagsGroup(props) {
         align="center"
         key={part.id}
         color={color}
-        className="tag-group-part"
+        className="tag-group-part notranslate"
       >
         {part.prefix && `${part.prefix} `}
         {part.value && <Tag {...props} part={part} />}
