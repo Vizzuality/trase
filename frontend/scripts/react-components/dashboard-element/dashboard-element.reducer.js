@@ -348,7 +348,8 @@ const dashboardElementReducer = {
     };
   },
   [DASHBOARD_ELEMENT__SET_CHARTS](state, action) {
-    const { charts } = action.payload;
+    const { charts: list } = action.payload;
+    const charts = list.filter(chart => !chart.url.includes('node_type_id=4'));
     return {
       ...state,
       charts

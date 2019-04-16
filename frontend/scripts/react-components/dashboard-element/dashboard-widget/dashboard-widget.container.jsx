@@ -36,7 +36,10 @@ class DashboardWidgetContainer extends Component {
     return (
       {
         country: 'importing countries',
-        municipality: 'municipalities'
+        municipality: 'municipalities',
+        countryOfProduction: 'countries of production',
+        portOfExport: 'ports of export',
+        portOfImport: 'ports of import'
       }[name] || `${nodeType}s`.toLowerCase()
     );
   };
