@@ -55,8 +55,67 @@ class SentenceSelector extends React.PureComponent {
     }
   }
 
+  renderRegularSentence({ countryNames, countryName, commodityName, commodityNames }) {
+    const { selectedYears } = this.props;
+    return (
+      <div className="sentence-selector-text" key="regular">
+        What are the sustainability risks and opportunities associated{' '}
+        <br className="hide-for-small" /> with the trade of{' '}
+        <Dropdown
+          align="center"
+          variant="sentence"
+          value={{ value: commodityName.toLowerCase(), label: commodityName.toLowerCase() }}
+          options={commodityNames}
+          onChange={this.onSelectCommodity}
+        />
+        from{' '}
+        <Dropdown
+          align="center"
+          variant="sentence"
+          value={{ value: capitalize(countryName), label: capitalize(countryName) }}
+          options={countryNames}
+          onChange={this.onSelectCountry}
+        />
+        <span className="hide-for-small">
+          in the year{selectedYears[0] !== selectedYears[1] ? 's ' : ' '}
+          <YearsSelector variant="sentence" placement="bottom-end" />
+        </span>
+      </div>
+    );
+  }
+
+  renderChineseSentence({ countryNames, countryName, commodityName, commodityNames }) {
+    const { selectedYears } = this.props;
+    return (
+      <div className="sentence-selector-text" key="chinese">
+        <span className="hide-for-small">
+          in the year{selectedYears[0] !== selectedYears[1] ? 's ' : ' '}
+          <YearsSelector variant="sentence" placement="bottom-end" />
+          from{' '}
+          <Dropdown
+            align="center"
+            variant="sentence"
+            value={{ value: capitalize(countryName), label: capitalize(countryName) }}
+            options={countryNames}
+            onChange={this.onSelectCountry}
+          />
+          of{' '}
+          <Dropdown
+            align="center"
+            variant="sentence"
+            value={{ value: commodityName.toLowerCase(), label: commodityName.toLowerCase() }}
+            options={commodityNames}
+            onChange={this.onSelectCommodity}
+          />
+          <br className="hide-for-small" />
+        </span>
+        What are the sustainability risks and opportunities associated with the trade
+      </div>
+    );
+  }
+
   render() {
-    const { contexts, className, selectedYears, selectedContext } = this.props;
+    const { contexts, className, selectedContext, lang } = this.props;
 
     if (!selectedContext) return null;
 
@@ -79,35 +138,27 @@ class SentenceSelector extends React.PureComponent {
 
     return (
       <div className={cx('c-sentence-selector', className)}>
-        <div className="sentence-selector-text">
-          What are the sustainability risks and opportunities associated{' '}
-          <br className="hide-for-small" /> with the trade of{' '}
-          <Dropdown
-            align="center"
-            variant="sentence"
-            value={{ value: commodityName.toLowerCase(), label: commodityName.toLowerCase() }}
-            options={commodityNames}
-            onChange={this.onSelectCommodity}
-          />
-          from{' '}
-          <Dropdown
-            align="center"
-            variant="sentence"
-            value={{ value: capitalize(countryName), label: capitalize(countryName) }}
-            options={countryNames}
-            onChange={this.onSelectCountry}
-          />
-          <span className="hide-for-small">
-            in the year{selectedYears[0] !== selectedYears[1] ? 's ' : ' '}
-            <YearsSelector variant="sentence" placement="bottom-end" />
-          </span>
-        </div>
+        {lang !== 'cmn' &&
+          this.renderRegularSentence({
+            countryName,
+            countryNames,
+            commodityName,
+            commodityNames
+          })}
+        {lang === 'cmn' &&
+          this.renderChineseSentence({
+            countryName,
+            countryNames,
+            commodityName,
+            commodityNames
+          })}
       </div>
     );
   }
 }
 
 SentenceSelector.propTypes = {
+  lang: PropTypes.string,
   className: PropTypes.string,
   contexts: PropTypes.arrayOf(
     PropTypes.shape({
