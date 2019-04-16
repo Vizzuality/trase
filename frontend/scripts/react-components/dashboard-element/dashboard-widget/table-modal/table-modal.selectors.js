@@ -28,7 +28,7 @@ const getTopNValue = createSelector(
 
 const getVariableColumnName = createSelector(
   [getMeta],
-  meta => (meta.info.node_type === 'COUNTRY' ? 'DESTINATION' : meta.info.node_type)
+  meta => (meta.info.node_type === 'COUNTRY' ? 'importing country' : meta.info.node_type)
 );
 
 const hasNContIndicator = createSelector(

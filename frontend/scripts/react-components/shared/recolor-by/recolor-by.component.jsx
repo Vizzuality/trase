@@ -125,6 +125,7 @@ class RecolorBy extends Component {
 
   render() {
     const {
+      label,
       tooltip,
       onChange,
       selectedRecolorBy,
@@ -142,7 +143,7 @@ class RecolorBy extends Component {
         variant={variant}
         tooltip={tooltip}
         weight={weight}
-        label="Recolour By"
+        label={label || 'Recolour By'}
         onChange={onChange}
         placement="bottom-start"
         value={selectedRecolorBy}
@@ -167,6 +168,7 @@ class RecolorBy extends Component {
 RecolorBy.propTypes = {
   size: PropTypes.string,
   color: PropTypes.string,
+  label: PropTypes.string,
   weight: PropTypes.string,
   variant: PropTypes.string,
   tooltip: PropTypes.string,

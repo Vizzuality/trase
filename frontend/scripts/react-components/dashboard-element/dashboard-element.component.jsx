@@ -159,7 +159,7 @@ class DashboardElement extends React.PureComponent {
                       <div className="dashboard-filter">
                         <Dropdown
                           color="white"
-                          label="Resize By"
+                          label="Units"
                           placement="bottom-start"
                           onChange={setSelectedResizeBy}
                           options={filters.resizeBy}
@@ -170,6 +170,7 @@ class DashboardElement extends React.PureComponent {
                         <div className="dashboard-filter">
                           <RecolorBy
                             color="white"
+                            label="Indicator"
                             recolorGroups={[]}
                             recolorBys={filters.recolorBy}
                             onChange={setSelectedRecolorBy}

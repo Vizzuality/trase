@@ -35,7 +35,7 @@ class DashboardWidgetContainer extends Component {
     const name = camelCase(nodeType);
     return (
       {
-        country: 'countries',
+        country: 'importing countries',
         municipality: 'municipalities'
       }[name] || `${nodeType}s`.toLowerCase()
     );
