@@ -1,48 +1,57 @@
-import {
-  DASHBOARD_TEMPLATES,
-  CONTEXTS,
-  COUNTRIES,
-  COMMODITIES,
-  DESTINATIONS,
-  PARAMETRISED_CHARTS,
-  COMPANIES,
-  COMPANY_TYPES,
-  SINGLE_YEAR_WIDGETS,
-  MULTI_YEAR_WIDGETS
-} from './mocks';
-import { getRequestMockFn } from './utils';
+import path from 'path';
+import { Polly } from '@pollyjs/core';
+import PuppeteerAdapter from '@pollyjs/adapter-puppeteer';
+import FSPersister from '@pollyjs/persister-fs';
+
+Polly.register(PuppeteerAdapter);
+Polly.register(FSPersister);
 
 const BASE_URL = 'http://0.0.0.0:8081';
 const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
 
 jest.setTimeout(TIMEOUT);
+
+let polly;
 const { page } = global;
 
 beforeAll(async () => {
   await page.setRequestInterception(true);
-  const mockRequests = await getRequestMockFn([
-    DASHBOARD_TEMPLATES,
-    CONTEXTS,
-    COUNTRIES,
-    COMMODITIES,
-    DESTINATIONS,
-    PARAMETRISED_CHARTS,
-    COMPANIES,
-    COMPANY_TYPES,
-    SINGLE_YEAR_WIDGETS,
-    MULTI_YEAR_WIDGETS
-  ]);
-  page.on('request', mockRequests);
+  polly = new Polly('puppeteer', {
+    adapters: ['puppeteer'],
+    adapterOptions: {
+      puppeteer: {
+        page
+      }
+    },
+    persister: 'fs',
+    persisterOptions: {
+      fs: {
+        recordingsDir: path.join(__dirname, 'recordings')
+      },
+      logging: true
+    },
+    recordIfMissing: true
+  });
+
+  const { server } = polly;
+
+  server.host(BASE_URL, () => {
+    server.get('/favicon.ico').passthrough();
+    server.get('http://clsrv.transifex.com/').passthrough();
+    server.get('*/api/*').intercept((_, res) => res.sendStatus(200));
+  });
+});
+
+afterAll(async () => {
+  await polly.flush();
+  await polly.stop();
 });
 
 describe('Dashboards flow', () => {
   it('The happy path succeeds', async () => {
     await page.goto(`${BASE_URL}/dashboards`);
-    await page.waitForNavigation({ waitUntil: 'domcontentloaded' });
 
-    const cardsContainerSelector = '[data-test=dashboard-root-grid-row]';
     const cardsSelector = '[data-test=dashboard-root-card]';
-    await page.waitForSelector(cardsContainerSelector);
     await page.waitForSelector(cardsSelector);
     const cards = await page.$$(cardsSelector);
     expect(cards.length).toBe(1);
@@ -87,7 +96,7 @@ describe('Dashboards flow', () => {
     const commodityButtonsSelector = '[data-test=grid-list-item-button]';
     await page.waitForSelector(commodityButtonsSelector);
     const commodityButtons = await page.$$(commodityButtonsSelector);
-    expect(commodityButtons.length).toBe(11);
+    expect(commodityButtons.length).toBe(10);
     const soyButtonSelector = '[data-test=grid-list-item-button-SOY]';
     await page.click(soyButtonSelector);
 
@@ -105,6 +114,10 @@ describe('Dashboards flow', () => {
     const destinationsButtons = await page.$$(destinationsButtonsSelector);
     expect(destinationsButtons.length).toBe(25);
 
+    const argentinaButtonSelector = '[data-test=grid-list-item-button-ARGENTINA]';
+    await page.waitForSelector(argentinaButtonSelector);
+    await page.click(argentinaButtonSelector);
+
     await page.waitForSelector(continueButton);
     await page.click(continueButton);
 
@@ -117,7 +130,12 @@ describe('Dashboards flow', () => {
     const companiesButtonsSelector = '[data-test=grid-list-item-button]';
     await page.waitForSelector(companiesButtonsSelector);
     const companiesButtons = await page.$$(companiesButtonsSelector);
-    expect(companiesButtons.length).toBe(25);
+
+    expect(companiesButtons.length).toBe(9);
+
+    const coamoButtonSelector = '[data-test=grid-list-item-button-CHUI]';
+    await page.waitForSelector(coamoButtonSelector);
+    await page.click(coamoButtonSelector);
 
     await page.waitForSelector(continueButton);
     await page.click(continueButton);
@@ -127,8 +145,10 @@ describe('Dashboards flow', () => {
 
     // Has initial charts
     const dashboardWidgetSelector = '[data-test="dashboard-widget-container"]';
+    await page.waitForSelector('[data-test=widget-spinner]', { hidden: true });
     await page.waitForSelector(dashboardWidgetSelector);
     const widgets = await page.$$(dashboardWidgetSelector);
+
     expect(widgets.length).toBe(9);
 
     // Change year dropdown
@@ -144,9 +164,11 @@ describe('Dashboards flow', () => {
     await page.click(yearSelector2017);
 
     const widgetChart = '[data-test=widget-chart]';
+    await page.waitForSelector('[data-test=widget-spinner]', { hidden: true });
     await page.waitForSelector(widgetChart);
     const multiYearWidgets = await page.$$(widgetChart);
-    expect(multiYearWidgets.length).toBe(1);
+
+    expect(multiYearWidgets.length).toBe(9);
 
     // Change unit selector
     const unitDropdownSelector = '[data-test=dropdown-selected-item-resize-by]';
@@ -157,9 +179,12 @@ describe('Dashboards flow', () => {
     await page.waitForSelector(territorialOptionSelector);
     await page.click(territorialOptionSelector);
 
-    await page.waitForSelector(widgetChart);
-    const territorialMultiYearWidgets = await page.$$(widgetChart);
-    expect(territorialMultiYearWidgets.length).toBe(1);
+    const territorialWidgetChart = '[data-test=widget-chart]';
+    await page.waitForSelector('[data-test=widget-spinner]', { hidden: true });
+    await page.waitForSelector(territorialWidgetChart);
+    const territorialMultiYearWidgets = await page.$$(territorialWidgetChart);
+
+    expect(territorialMultiYearWidgets.length).toBe(9);
 
     // Change indicator selector
     const indicatorDropdownSelector = '[data-test=dropdown-selected-item-recolour-by]';
@@ -170,8 +195,11 @@ describe('Dashboards flow', () => {
     await page.waitForSelector(biomeOptionSelector);
     await page.click(biomeOptionSelector);
 
-    await page.waitForSelector(widgetChart);
-    const biomeMultiYearWidgets = await page.$$(widgetChart);
-    expect(biomeMultiYearWidgets.length).toBe(1);
+    const biomeWidgetChart = '[data-test=widget-chart]';
+    await page.waitForSelector('[data-test=widget-spinner]', { hidden: true });
+    await page.waitForSelector(biomeWidgetChart);
+    const biomeMultiYearWidgets = await page.$$(biomeWidgetChart);
+
+    expect(biomeMultiYearWidgets.length).toBe(3);
   });
 });

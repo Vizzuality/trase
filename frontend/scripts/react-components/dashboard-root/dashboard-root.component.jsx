@@ -19,7 +19,7 @@ function DashboardRoot(props) {
       <div className="c-dashboard-root">
         <h1 className="title is-hidden">See how commodity trade impacts the world</h1>
         <section className="dashboard-root-grid">
-          <div className="row" data-test="dashboard-root-grid-row">
+          <div className="row">
             {loadingDashboardTemplates && (
               <div className="column small-12 medium-12 large-12">
                 <ShrinkingSpinner className="-large -white" data-test="dashboard-root-spinner" />

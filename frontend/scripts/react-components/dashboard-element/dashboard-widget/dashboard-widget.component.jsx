@@ -107,7 +107,7 @@ function DashboardWidget(props) {
         <ErrorCatch renderFallback={err => renderError(`Error: ${err.message}`)}>
           {error && renderError(`Error: ${error.statusText}`)}
           {loading && (
-            <div className="widget-spinner">
+            <div className="widget-spinner" data-test="widget-spinner">
               <Spinner className="-large -white" />
             </div>
           )}
