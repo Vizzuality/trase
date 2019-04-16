@@ -182,7 +182,7 @@ class DashboardPanel extends Component {
             )}
             activeStep={step - 1}
           />
-          <Heading className="dashboard-panel-title" align="center" size="lg">
+          <Heading className="dashboard-panel-title notranslate" align="center" size="lg">
             {editMode ? 'Edit options' : this.renderTitleSentence()}
           </Heading>
           {this.renderPanel()}
