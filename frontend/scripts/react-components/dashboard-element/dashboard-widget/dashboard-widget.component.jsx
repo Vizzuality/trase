@@ -84,7 +84,12 @@ function DashboardWidget(props) {
                 suffix={chartConfig.yAxisLabel.suffix}
               />
             )}
-            <Chart className="widget-chart" data={data} config={chartConfig} />
+            <Chart
+              className="widget-chart"
+              data={data}
+              config={chartConfig}
+              testId="widget-chart"
+            />
           </React.Fragment>
         );
     }

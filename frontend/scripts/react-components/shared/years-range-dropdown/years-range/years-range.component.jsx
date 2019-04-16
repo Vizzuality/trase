@@ -60,6 +60,7 @@ function YearsRange(props) {
             onMouseOver={() => setHovered(year)}
             onFocus={() => setHovered(year)}
             className={cx('years-range-button', getClassName(year))}
+            data-test={`years-range-button-${year}`}
           >
             <div className="years-range-unrotate">
               <div className="years-range-fill">

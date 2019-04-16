@@ -6,7 +6,9 @@ import {
   DESTINATIONS,
   PARAMETRISED_CHARTS,
   COMPANIES,
-  COMPANY_TYPES
+  COMPANY_TYPES,
+  SINGLE_YEAR_WIDGETS,
+  MULTI_YEAR_WIDGETS
 } from './mocks';
 import { getRequestMockFn } from './utils';
 
@@ -26,13 +28,15 @@ beforeAll(async () => {
     DESTINATIONS,
     PARAMETRISED_CHARTS,
     COMPANIES,
-    COMPANY_TYPES
+    COMPANY_TYPES,
+    SINGLE_YEAR_WIDGETS,
+    MULTI_YEAR_WIDGETS
   ]);
   page.on('request', mockRequests);
 });
 
 describe('Dashboards flow', () => {
-  it('The create card is shown', async () => {
+  it('The happy path succeeds', async () => {
     await page.goto(`${BASE_URL}/dashboards`);
     await page.waitForNavigation({ waitUntil: 'domcontentloaded' });
 
@@ -120,5 +124,54 @@ describe('Dashboards flow', () => {
 
     // Dashboard view
     await page.waitForSelector('[data-test=dashboard-element-title]');
+
+    // Has initial charts
+    const dashboardWidgetSelector = '[data-test="dashboard-widget-container"]';
+    await page.waitForSelector(dashboardWidgetSelector);
+    const widgets = await page.$$(dashboardWidgetSelector);
+    expect(widgets.length).toBe(9);
+
+    // Change year dropdown
+    const yearDropdownSelector = '[data-test=dropdown-selected-item-year]';
+    await page.waitForSelector(yearDropdownSelector);
+    await page.click(yearDropdownSelector);
+    const yearSelector2003 = '[data-test=years-range-button-2003]';
+    const yearSelector2017 = '[data-test=years-range-button-2017]';
+    await page.waitForSelector(yearSelector2003);
+    await page.click(yearSelector2003);
+    await page.click(yearDropdownSelector);
+    await page.waitForSelector(yearSelector2017);
+    await page.click(yearSelector2017);
+
+    const widgetChart = '[data-test=widget-chart]';
+    await page.waitForSelector(widgetChart);
+    const multiYearWidgets = await page.$$(widgetChart);
+    expect(multiYearWidgets.length).toBe(1);
+
+    // Change unit selector
+    const unitDropdownSelector = '[data-test=dropdown-selected-item-resize-by]';
+    await page.waitForSelector(unitDropdownSelector);
+    await page.click(unitDropdownSelector);
+
+    const territorialOptionSelector = '[data-test=dropdown-menu-item-territorial-deforestation]';
+    await page.waitForSelector(territorialOptionSelector);
+    await page.click(territorialOptionSelector);
+
+    await page.waitForSelector(widgetChart);
+    const territorialMultiYearWidgets = await page.$$(widgetChart);
+    expect(territorialMultiYearWidgets.length).toBe(1);
+
+    // Change indicator selector
+    const indicatorDropdownSelector = '[data-test=dropdown-selected-item-recolour-by]';
+    await page.waitForSelector(indicatorDropdownSelector);
+    await page.click(indicatorDropdownSelector);
+
+    const biomeOptionSelector = '[data-test=recolor-by-item-biome]';
+    await page.waitForSelector(biomeOptionSelector);
+    await page.click(biomeOptionSelector);
+
+    await page.waitForSelector(widgetChart);
+    const biomeMultiYearWidgets = await page.$$(widgetChart);
+    expect(biomeMultiYearWidgets.length).toBe(1);
   });
 });

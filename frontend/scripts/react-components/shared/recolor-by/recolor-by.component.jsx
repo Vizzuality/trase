@@ -7,6 +7,7 @@ import RecolorByNodeLegendSummary from 'react-components/shared/recolor-by/recol
 import Text from 'react-components/shared/text';
 import cx from 'classnames';
 import capitalize from 'lodash/capitalize';
+import kebabCase from 'lodash/kebabCase';
 import isNumber from 'lodash/isNumber';
 import sortBy from 'lodash/sortBy';
 
@@ -55,6 +56,7 @@ class RecolorBy extends Component {
           }),
           disabled: recolorBy.isDisabled
         })}
+        data-test={`recolor-by-item-${kebabCase(recolorBy.label)}`}
         key={recolorBy.label}
       >
         <Text size="md" weight="regular" className="recolor-by-item-title">

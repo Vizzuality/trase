@@ -7,6 +7,7 @@ import Text from 'react-components/shared/text';
 import Heading from 'react-components/shared/heading/heading.component';
 import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import cx from 'classnames';
+import kebabCase from 'lodash/kebabCase';
 import './dropdown.scss';
 import './dropdown-nav.variant.scss';
 import './dropdown-sentence.variant.scss';
@@ -60,6 +61,7 @@ function Dropdown(props) {
               '-disabled': item.isDisabled,
               '-highlighted': highlightedIndex === index
             }),
+            'data-test': `dropdown-menu-item-${kebabCase(item.label)}`,
             ref: index === 0 ? listItemRef : undefined
           })}
         >
@@ -127,7 +129,8 @@ function Dropdown(props) {
           className: cx('dropdown-selected-item', {
             [`-${arrowType}`]: arrowType,
             '-no-label': !label
-          })
+          }),
+          'data-test': `dropdown-selected-item-${kebabCase(label)}`
         })}
       >
         <Text
