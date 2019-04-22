@@ -92,7 +92,7 @@ export const pollyConfig = page => ({
   persister: 'fs',
   persisterOptions: {
     fs: {
-      recordingsDir: path.join(__dirname, 'recordings')
+      recordingsDir: path.join(__dirname, '__recordings__')
     }
   },
   recordIfMissing: true,
