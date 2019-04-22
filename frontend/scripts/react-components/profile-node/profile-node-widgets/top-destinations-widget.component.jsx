@@ -95,7 +95,7 @@ class TopDestinationsWidget extends React.PureComponent {
           const { nodeName, columnName } = data[GET_NODE_SUMMARY_URL];
           const verb = columnName === 'EXPORTER' ? 'exported' : 'imported';
           return (
-            <div className={className} data-test={testId}>
+            <section className={className} data-test={testId}>
               <div className="row align-justify">
                 <div className="column small-12 medium-7">
                   <TopDestinationsChart
@@ -136,7 +136,7 @@ class TopDestinationsWidget extends React.PureComponent {
                   />
                 </div>
               </div>
-            </div>
+            </section>
           );
         }}
       </Widget>

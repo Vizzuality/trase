@@ -5,9 +5,10 @@ import TwitterFeed from 'react-components/home/twitter-feed/twitter-feed.compone
 import AnimatedFlows from 'react-components/animated-flows/animated-flows.component';
 import HomeVideo from 'react-components/home/home-video/home-video.component';
 import Heading from 'react-components/shared/heading/heading.component';
+import InView from 'react-components/shared/in-view.component';
+import Img, { ImgBackground } from 'react-components/shared/img';
 
 import './hero.scss';
-import InView from 'react-components/shared/in-view.component';
 
 // old school name: https://en.wikipedia.org/wiki/Hero_image
 class Hero extends React.Component {
@@ -35,10 +36,7 @@ class Hero extends React.Component {
     const StoryBox = storyObj => (
       <div className="story-box">
         <button className="story-box-close" onClick={this.closeStoryBox} />
-        <figure
-          className="story-box-image"
-          style={{ backgroundImage: `url(${storyObj.imageUrl})` }}
-        />
+        <ImgBackground as="figure" className="story-box-image" src={storyObj.imageUrl} />
         <figcaption className="story-box-content">
           <p className="story-box-title">{storyObj.title}</p>
           <Heading variant="mono" color="pink" size="sm">
@@ -63,7 +61,7 @@ class Hero extends React.Component {
             <div className="hero-content row align-middle">
               <div className="column small-12">
                 <div className="hero-logo-container">
-                  <img src="/images/logos/new-logo-trase.svg" alt="TRASE" />
+                  <Img src="/images/logos/new-logo-trase.svg" alt="TRASE" />
                 </div>
                 <h1 className="hero-title">Transparent supply chains for sustainable economies.</h1>
                 <div className="hero-play-container">
@@ -72,7 +70,7 @@ class Hero extends React.Component {
                   <span>Learn about Trase in 2 minutes</span>
                 </div>
               </div>
-              {inView && showStory && story && (
+              {showStory && story && (
                 <div className="layover">
                   <StoryBox {...story} />
                 </div>

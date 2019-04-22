@@ -4,6 +4,7 @@ import ProfileSearch from 'react-components/profile-root/profile-search.containe
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 import ErrorMessage from 'react-components/profile-root/error-message/error-message.component';
 import cx from 'classnames';
+import Img from 'react-components/shared/img';
 
 import 'scripts/react-components/profile-root/profile-root.scss';
 
@@ -45,12 +46,12 @@ const ProfileRoot = props => {
             </div>
             <div className="row align-center">
               <div className="column small-12 medium-10 large-8">
-                <img
+                <Img
                   className="profile-root-mock hide-for-small"
                   src="/images/backgrounds/profile-mock.jpg"
                   alt="Profile Page Example"
                 />
-                <img
+                <Img
                   className="profile-root-mock show-for-small"
                   src="/images/backgrounds/profile-mobile-mock.png"
                   alt="Profile Mobile Page Example"

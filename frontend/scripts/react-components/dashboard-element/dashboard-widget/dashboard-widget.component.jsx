@@ -12,10 +12,6 @@ import RankingWidget from 'react-components/dashboard-element/dashboard-widget/r
 import ErrorCatch from 'react-components/shared/error-catch.component';
 import Text from 'react-components/shared/text';
 import Heading from 'react-components/shared/heading';
-import InView from 'react-components/shared/in-view.component';
-
-import 'react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
-
 
 import 'react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
 
@@ -113,21 +109,17 @@ function DashboardWidget(props) {
         </Heading>
         {renderWidgetActions()}
       </div>
-      <InView triggerOnce>
-        {({ ref, inView }) => (
-          <div className="widget-box" ref={ref}>
-            <ErrorCatch renderFallback={err => renderError(`Error: ${err.message}`)}>
-              {error && renderError(`Error: ${error.statusText}`)}
-              {loading && (
-                <div className="widget-spinner" data-test="widget-spinner">
-                  <Spinner className="-large -white" />
-                </div>
-              )}
-              {inView && !loading && chartConfig && renderChart()}
-            </ErrorCatch>
-          </div>
-        )}
-      </InView>
+      <div className="widget-box">
+        <ErrorCatch renderFallback={err => renderError(`Error: ${err.message}`)}>
+          {error && renderError(`Error: ${error.statusText}`)}
+          {loading && (
+            <div className="widget-spinner" data-test="widget-spinner">
+              <Spinner className="-large -white" />
+            </div>
+          )}
+          {!loading && chartConfig && renderChart()}
+        </ErrorCatch>
+      </div>
     </div>
   );
 }

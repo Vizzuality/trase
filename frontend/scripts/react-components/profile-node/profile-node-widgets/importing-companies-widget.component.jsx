@@ -85,7 +85,7 @@ class ImportingCompaniesWidget extends React.PureComponent {
           const title = `Comparing companies ${verb} ${commodityName} from ${countryName} in ${year}`;
           const scatterplots = this.getScatterplots(dimensions, title);
           return (
-            <div className="c-scatterplot-container" data-test={testId}>
+            <section className="c-scatterplot-container" data-test={testId}>
               <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
               <div className="row">
                 <div className="small-12 columns">
@@ -108,7 +108,7 @@ class ImportingCompaniesWidget extends React.PureComponent {
                   </div>
                 </div>
               </div>
-            </div>
+            </section>
           );
         }}
       </Widget>

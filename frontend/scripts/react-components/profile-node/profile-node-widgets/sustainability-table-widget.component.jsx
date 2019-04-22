@@ -86,7 +86,7 @@ class SustainabilityTableWidget extends React.PureComponent {
 
           const { nodeName } = data[GET_NODE_SUMMARY_URL];
           return (
-            <div className={className} data-test={testId}>
+            <section className={className} data-test={testId}>
               <div className="row">
                 <div className="small-12 columns">
                   <MultiTable
@@ -101,7 +101,7 @@ class SustainabilityTableWidget extends React.PureComponent {
                   />
                 </div>
               </div>
-            </div>
+            </section>
           );
         }}
       </Widget>

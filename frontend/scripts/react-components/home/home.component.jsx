@@ -7,9 +7,9 @@ import WorldMap from 'react-components/shared/world-map/world-map.container';
 import SentenceSelector from 'react-components/shared/sentence-selector/sentence-selector.container';
 import Entrypoints from 'react-components/home/entrypoints/entrypoints.component';
 import Button from 'react-components/shared/button/button.component';
+import InView from 'react-components/shared/in-view.component';
 
 import 'scripts/react-components/home/homepage.scss';
-import InView from 'react-components/shared/in-view.component';
 
 class Home extends React.PureComponent {
   constructor(props) {
@@ -48,40 +48,32 @@ class Home extends React.PureComponent {
           </div>
           <InView triggerOnce>
             {({ ref, inView }) => (
-              <>
-                <div className="homepage-map" ref={ref}>
-                  <div className="row">
-                    {inView && (
-                      <div className="column small-12">
-                        <SentenceSelector className="homepage-map-sentence-selector" />
-                        <div className="homepage-map-container">
-                          <WorldMap />
-                        </div>
-                        <div className="homepage-map-link-container">
-                          <Button
-                            color="pink"
-                            size="lg"
-                            className="homepage-map-link"
-                            onClick={this.onFindOutMore}
-                          >
-                            Find out more
-                          </Button>
-                        </div>
-                      </div>
-                    )}
+              <div className="homepage-map" ref={ref}>
+                <div className="row">
+                  <div className="column small-12">
+                    <SentenceSelector className="homepage-map-sentence-selector" />
+                    <div className="homepage-map-container">{inView && <WorldMap />}</div>
+                    <div className="homepage-map-link-container">
+                      <Button
+                        color="pink"
+                        size="lg"
+                        className="homepage-map-link"
+                        onClick={this.onFindOutMore}
+                      >
+                        Find out more
+                      </Button>
+                    </div>
                   </div>
                 </div>
-                {inView && (
-                  <div className="sliders">
-                    <NewsletterForm />
-                    <SliderSection name="News and Blogs" slides={blogPosts} />
-                    <SliderSection name="Insights" slides={insightsPosts} />
-                    <SliderSection className="-small" name="Testimonials" slides={testimonials} />
-                  </div>
-                )}
-              </>
+              </div>
             )}
           </InView>
+          <div className="sliders">
+            <NewsletterForm />
+            <SliderSection name="News and Blogs" slides={blogPosts} />
+            <SliderSection name="Insights" slides={insightsPosts} />
+            <SliderSection className="-small" name="Testimonials" slides={testimonials} />
+          </div>
         </div>
       </div>
     );

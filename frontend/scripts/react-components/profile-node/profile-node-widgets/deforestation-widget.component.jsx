@@ -42,7 +42,7 @@ function DeforestationWidget(props) {
         }
 
         return (
-          <div className="deforestation page-break-inside-avoid">
+          <section className="deforestation page-break-inside-avoid">
             <div className="row">
               <div className="small-12 columns">
                 <Heading
@@ -78,7 +78,7 @@ function DeforestationWidget(props) {
                 </div>
               </div>
             </div>
-          </div>
+          </section>
         );
       }}
     </Widget>

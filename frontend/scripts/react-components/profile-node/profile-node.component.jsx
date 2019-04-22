@@ -10,7 +10,6 @@ import GfwWidget from 'react-components/profile-node/profile-node-widgets/gfw-wi
 import { smoothScroll } from 'utils/smoothScroll';
 import cx from 'classnames';
 import sortBy from 'lodash/sortBy';
-import InView from 'react-components/shared/in-view.component';
 
 class ProfileNode extends React.PureComponent {
   static propTypes = {
@@ -205,18 +204,7 @@ class ProfileNode extends React.PureComponent {
             </div>
           </div>
         )}
-        {ready &&
-          sortBy(profileMetadata.charts, 'position').map((item, i) => (
-            <InView triggerOnce>
-              {({ ref, inView }) =>
-                React.createElement(
-                  i > 0 ? 'section' : 'div',
-                  { ref, className: 'profile-widget-container' },
-                  inView && this.renderChart(item)
-                )
-              }
-            </InView>
-          ))}
+        {ready && sortBy(profileMetadata.charts, 'position').map(this.renderChart)}
         {ready &&
           profileType === 'place' &&
           GFW_WIDGETS_BASE_URL &&
