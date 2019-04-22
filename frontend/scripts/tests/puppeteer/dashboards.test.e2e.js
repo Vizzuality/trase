@@ -1,7 +1,7 @@
-import path from 'path';
 import { Polly } from '@pollyjs/core';
 import PuppeteerAdapter from '@pollyjs/adapter-puppeteer';
 import FSPersister from '@pollyjs/persister-fs';
+import { pollyConfig, handleUnnecesaryRequests } from './utils';
 
 Polly.register(PuppeteerAdapter);
 Polly.register(FSPersister);
@@ -11,35 +11,13 @@ const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
 
 jest.setTimeout(TIMEOUT);
 
-let polly;
 const { page } = global;
+const polly = new Polly('dashboard', pollyConfig(page));
 
 beforeAll(async () => {
   await page.setRequestInterception(true);
-  polly = new Polly('puppeteer', {
-    adapters: ['puppeteer'],
-    adapterOptions: {
-      puppeteer: {
-        page
-      }
-    },
-    persister: 'fs',
-    persisterOptions: {
-      fs: {
-        recordingsDir: path.join(__dirname, 'recordings')
-      },
-      logging: true
-    },
-    recordIfMissing: true
-  });
-
   const { server } = polly;
-
-  server.host(BASE_URL, () => {
-    server.get('/favicon.ico').passthrough();
-    server.get('http://clsrv.transifex.com/').passthrough();
-    server.get('*/api/*').intercept((_, res) => res.sendStatus(200));
-  });
+  handleUnnecesaryRequests(server, BASE_URL);
 });
 
 afterAll(async () => {
@@ -96,7 +74,7 @@ describe('Dashboards flow', () => {
     const commodityButtonsSelector = '[data-test=grid-list-item-button]';
     await page.waitForSelector(commodityButtonsSelector);
     const commodityButtons = await page.$$(commodityButtonsSelector);
-    expect(commodityButtons.length).toBe(10);
+    expect(commodityButtons.length).toBe(11);
     const soyButtonSelector = '[data-test=grid-list-item-button-SOY]';
     await page.click(soyButtonSelector);
 
@@ -149,7 +127,7 @@ describe('Dashboards flow', () => {
     await page.waitForSelector(dashboardWidgetSelector);
     const widgets = await page.$$(dashboardWidgetSelector);
 
-    expect(widgets.length).toBe(9);
+    expect(widgets.length).toBe(8);
 
     // Change year dropdown
     const yearDropdownSelector = '[data-test=dropdown-selected-item-year]';
@@ -168,10 +146,10 @@ describe('Dashboards flow', () => {
     await page.waitForSelector(widgetChart);
     const multiYearWidgets = await page.$$(widgetChart);
 
-    expect(multiYearWidgets.length).toBe(9);
+    expect(multiYearWidgets.length).toBe(8);
 
     // Change unit selector
-    const unitDropdownSelector = '[data-test=dropdown-selected-item-resize-by]';
+    const unitDropdownSelector = '[data-test=dropdown-selected-item-units]';
     await page.waitForSelector(unitDropdownSelector);
     await page.click(unitDropdownSelector);
 
@@ -184,10 +162,10 @@ describe('Dashboards flow', () => {
     await page.waitForSelector(territorialWidgetChart);
     const territorialMultiYearWidgets = await page.$$(territorialWidgetChart);
 
-    expect(territorialMultiYearWidgets.length).toBe(9);
+    expect(territorialMultiYearWidgets.length).toBe(8);
 
     // Change indicator selector
-    const indicatorDropdownSelector = '[data-test=dropdown-selected-item-recolour-by]';
+    const indicatorDropdownSelector = '[data-test=dropdown-selected-item-indicator]';
     await page.waitForSelector(indicatorDropdownSelector);
     await page.click(indicatorDropdownSelector);
 
