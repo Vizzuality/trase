@@ -11,7 +11,8 @@ function DashboardRoot(props) {
   const linkProps = {
     to: { type: 'dashboardElement', payload: { dashboardId: 'new' } },
     target: undefined,
-    rel: undefined
+    rel: undefined,
+    'data-test': 'dashboard-root-create-button'
   };
   return (
     <div className="l-dashboard-root">
@@ -21,7 +22,7 @@ function DashboardRoot(props) {
           <div className="row">
             {loadingDashboardTemplates && (
               <div className="column small-12 medium-12 large-12">
-                <ShrinkingSpinner className="-large -white" />
+                <ShrinkingSpinner className="-large -white" data-test="dashboard-root-spinner" />
               </div>
             )}
             {!loadingDashboardTemplates && (
@@ -34,6 +35,7 @@ function DashboardRoot(props) {
                   variant="new"
                   Link={Link}
                   linkProps={linkProps}
+                  testId="dashboard-root-card"
                 />
               </div>
             )}

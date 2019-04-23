@@ -84,7 +84,12 @@ function DashboardWidget(props) {
                 suffix={chartConfig.yAxisLabel.suffix}
               />
             )}
-            <Chart className="widget-chart" data={data} config={chartConfig} />
+            <Chart
+              className="widget-chart"
+              data={data}
+              config={chartConfig}
+              testId="widget-chart"
+            />
           </React.Fragment>
         );
     }
@@ -102,7 +107,7 @@ function DashboardWidget(props) {
         <ErrorCatch renderFallback={err => renderError(`Error: ${err.message}`)}>
           {error && renderError(`Error: ${error.statusText}`)}
           {loading && (
-            <div className="widget-spinner">
+            <div className="widget-spinner" data-test="widget-spinner">
               <Spinner className="-large -white" />
             </div>
           )}

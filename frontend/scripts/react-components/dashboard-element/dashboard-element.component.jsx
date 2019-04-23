@@ -94,7 +94,11 @@ class DashboardElement extends React.PureComponent {
     return (
       <>
         {charts.map(chart => (
-          <div key={chart.id} className="column small-12 medium-6">
+          <div
+            key={chart.id}
+            className="column small-12 medium-6"
+            data-test="dashboard-widget-container"
+          >
             <DashboardWidget
               url={chart.url}
               chartType={chart.type}
@@ -128,7 +132,7 @@ class DashboardElement extends React.PureComponent {
               <section className="dashboard-element-header">
                 <div className="row">
                   <div className="column small-12">
-                    <h2 className="dashboard-element-title">
+                    <h2 className="dashboard-element-title" data-test="dashboard-element-title">
                       {this.renderDynamicSentence()}
                       <Button
                         size="sm"

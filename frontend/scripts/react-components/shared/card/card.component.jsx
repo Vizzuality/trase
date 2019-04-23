@@ -47,12 +47,13 @@ class Card extends Component {
       translateUrl,
       Link,
       variant,
-      linkProps
+      linkProps,
+      testId
     } = this.props;
     const { dashedBox, dashedLine } = Card.renderDashedBox();
 
     return (
-      <div className={cx('c-card', variant, className)}>
+      <div className={cx('c-card', variant, className)} data-test={testId}>
         {variant === 'dashed' && dashedBox}
         <Link
           className="card-link"
@@ -104,6 +105,7 @@ Card.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string.isRequired,
   actionName: PropTypes.string.isRequired,
+  testId: PropTypes.string,
   variant: PropTypes.oneOf(['new', 'dashed'])
 };
 
