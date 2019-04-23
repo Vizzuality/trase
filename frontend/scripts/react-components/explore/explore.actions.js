@@ -1,7 +1,8 @@
 /* eslint-disable camelcase */
 import { getURLFromParams, GET_TOP_NODES_URL } from 'utils/getURLFromParams';
 
-export const EXPLORE__SET_TOP_NODES = 'EXPLORE__SET_TOP_NODES';
+export const EXPLORE__SET_TOP_COUNTRIES = 'EXPLORE__SET_TOP_COUNTRIES';
+export const EXPLORE__SET_TOP_EXPORTERS = 'EXPLORE__SET_TOP_EXPORTERS';
 export const EXPLORE__SET_TOP_NODES_LOADING = 'EXPLORE__SET_TOP_NODES_LOADING';
 export const EXPLORE__SET_SELECTED_TABLE_COLUMN_TYPE = 'EXPLORE__SET_SELECTED_TABLE_COLUMN_TYPE';
 
@@ -13,21 +14,24 @@ export const setExploreTopNodes = columnType => (dispatch, getState) => {
 
   const state = getState();
   const { selectedContext } = state.app;
-  let columnId;
+  let columnId; let type;
 
   switch (columnType) {
     case 'exporter':
+      type = EXPLORE__SET_TOP_EXPORTERS;
       columnId = selectedContext.worldMap.exporterColumnId;
       break;
     case 'country':
+      type = EXPLORE__SET_TOP_COUNTRIES;
       columnId = selectedContext.worldMap.countryColumnId;
       break;
     default:
       columnId = null;
+      type = null;
       break;
   }
 
-  if (!columnType) {
+  if (!columnType || !type) {
     console.warn(
       `Column type set to ${columnType} but no matching column id was found on context data.`
     );
@@ -52,17 +56,15 @@ export const setExploreTopNodes = columnType => (dispatch, getState) => {
     });
   }
   const url = getURLFromParams(GET_TOP_NODES_URL, params);
-
   return (
     !topNodes[topNodesKey] &&
     fetch(url)
       .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
       .then(res =>
         dispatch({
-          type: EXPLORE__SET_TOP_NODES,
+          type,
           payload: {
             topNodesKey,
-            columnType,
             data: res.data,
             country: selectedContext.countryName
           }

@@ -4,12 +4,14 @@ import GA_TOOL_EVENTS from './tool.events';
 import GA_DATA_EVENTS from './data.events';
 import GA_ROUTER_EVENTS from './router.events';
 import GA_HOME_EVENTS from './home.events';
+import GA_EXPLORE_EVENTS from './explore.events';
 
 const GA_EVENT_WHITELIST = [
   ...GA_TOOL_EVENTS,
   ...GA_DATA_EVENTS,
   ...GA_ROUTER_EVENTS,
-  ...GA_HOME_EVENTS
+  ...GA_HOME_EVENTS,
+  ...GA_EXPLORE_EVENTS
 ].reduce((acc, next) => ({ ...acc, [next.type]: next }));
 const TRACK_WITH_QUERY = ['profileNode'];
 

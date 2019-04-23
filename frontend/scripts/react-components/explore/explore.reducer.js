@@ -1,7 +1,8 @@
 import createReducer from 'utils/createReducer';
 import { COUNTRIES_COORDINATES } from 'scripts/countries';
 import {
-  EXPLORE__SET_TOP_NODES,
+  EXPLORE__SET_TOP_COUNTRIES,
+  EXPLORE__SET_TOP_EXPORTERS,
   EXPLORE__SET_TOP_NODES_LOADING,
   EXPLORE__SET_SELECTED_TABLE_COLUMN_TYPE
 } from './explore.actions';
@@ -13,17 +14,25 @@ const initialState = {
 };
 
 const exploreReducer = {
-  [EXPLORE__SET_TOP_NODES](state, action) {
-    const { topNodesKey, data, columnType, country } = action.payload;
+  [EXPLORE__SET_TOP_COUNTRIES](state, action) {
+    const { topNodesKey, data, country } = action.payload;
     const nodes = data.targetNodes.map(row => ({
       ...row,
       coordinates: COUNTRIES_COORDINATES[row.geo_id],
       geoId: row.geo_id,
-      name: columnType === 'country' && country === row.name ? 'DOMESTIC CONSUMPTION' : row.name
+      name: country === row.name ? 'DOMESTIC CONSUMPTION' : row.name
     }));
     return {
       ...state,
       topNodes: { ...state.topNodes, [topNodesKey]: nodes },
+      loading: { ...state.loading, [topNodesKey]: false }
+    };
+  },
+  [EXPLORE__SET_TOP_EXPORTERS](state, action) {
+    const { topNodesKey, data } = action.payload;
+    return {
+      ...state,
+      topNodes: { ...state.topNodes, [topNodesKey]: data.targetNodes },
       loading: { ...state.loading, [topNodesKey]: false }
     };
   },
