@@ -6,6 +6,7 @@ import {
 } from 'utils/getURLFromParams';
 
 export const HOME__SET_CONTENT = 'HOME__SET_CONTENT';
+export const HOME__PLAY_VIDEO = 'HOME__PLAY_VIDEO';
 
 export const getHomeContent = (type, mock) => dispatch => {
   const content = {
@@ -25,3 +26,8 @@ export const getHomeContent = (type, mock) => dispatch => {
     )
     .catch(err => console.error(err));
 };
+
+export const playHomeVideo = lang => ({
+  type: HOME__PLAY_VIDEO,
+  payload: lang
+});

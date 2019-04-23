@@ -22,9 +22,9 @@ class Hero extends React.Component {
     this.closeStoryBox = this.closeStoryBox.bind(this);
   }
 
-  onClickPlay() {
+  onClickPlay = () => {
     this.video.play();
-  }
+  };
 
   getVideoRef(ref) {
     this.video = ref;

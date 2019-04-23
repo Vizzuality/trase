@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Plyr from 'plyr';
+import Plyr from 'plyr/dist/plyr.polyfilled.min';
 
 import './home-video.scss';
 
