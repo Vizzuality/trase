@@ -4,23 +4,23 @@ import './ellipsis.scss';
 import ReactTooltip from 'react-tooltip';
 
 function Ellipsis(props) {
-  const { charsLimit, children } = props;
-  if (String(children).length < charsLimit) return children;
+  const { charLimit, children } = props;
+  if (String(children).length < charLimit) return children;
   return (
     <span data-tip={children} className="c-ellipsis">
-      {`${children.substring(0, charsLimit)} ...`}
+      {`${children.substring(0, charLimit)} ...`}
       <ReactTooltip type="light" className="c-ellipsis-tooltip" />
     </span>
   );
 }
 
 Ellipsis.propTypes = {
-  charsLimit: PropTypes.number,
+  charLimit: PropTypes.number,
   children: PropTypes.node
 };
 
 Ellipsis.defaultProps = {
-  charsLimit: 30
+  charLimit: 30
 };
 
 export default Ellipsis;
