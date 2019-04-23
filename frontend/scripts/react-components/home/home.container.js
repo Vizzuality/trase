@@ -2,6 +2,11 @@ import { connect } from 'react-redux';
 import Home from 'react-components/home/home.component';
 import { BREAKPOINTS, HOME_VIDEO } from 'constants';
 import { setContextIsUserSelected } from 'scripts/actions/app.actions';
+import {
+  playHomeVideo,
+  clickNextEntrypoint,
+  clickEntrypoint
+} from 'scripts/react-components/home/home.actions';
 
 function mapStateToProps(state) {
   const { query = {} } = state.location;
@@ -31,7 +36,10 @@ const mapDispatchToProps = dispatch => ({
   goToContextPage: () => {
     dispatch(setContextIsUserSelected(true));
     dispatch({ type: 'explore' });
-  }
+  },
+  onPlayVideo: videoId => dispatch(playHomeVideo(videoId)),
+  clickEntrypoint: link => dispatch(clickEntrypoint(link)),
+  clickNextEntrypoint: () => dispatch(clickNextEntrypoint())
 });
 export default connect(
   mapStateToProps,

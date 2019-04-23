@@ -10,29 +10,23 @@ import './hero.scss';
 
 // old school name: https://en.wikipedia.org/wiki/Hero_image
 class Hero extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      showStory: true
-    };
-
-    this.onClickPlay = this.onClickPlay.bind(this);
-    this.getVideoRef = this.getVideoRef.bind(this);
-    this.closeStoryBox = this.closeStoryBox.bind(this);
-  }
+  state = {
+    showStory: true
+  };
 
   onClickPlay = () => {
+    const { homeVideo, onPlayVideo } = this.props;
+    onPlayVideo(homeVideo);
     this.video.play();
   };
 
-  getVideoRef(ref) {
+  getVideoRef = ref => {
     this.video = ref;
-  }
+  };
 
-  closeStoryBox() {
+  closeStoryBox = () => {
     this.setState({ showStory: false });
-  }
+  };
 
   render() {
     const { showStory } = this.state;
@@ -92,10 +86,11 @@ class Hero extends React.Component {
 }
 
 Hero.propTypes = {
-  className: PropTypes.string,
   story: PropTypes.object,
   tweets: PropTypes.array,
-  homeVideo: PropTypes.string
+  className: PropTypes.string,
+  homeVideo: PropTypes.string,
+  onPlayVideo: PropTypes.func.isRequired
 };
 
 export default Hero;

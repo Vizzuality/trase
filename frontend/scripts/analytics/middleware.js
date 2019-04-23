@@ -3,8 +3,14 @@ import get from 'lodash/get';
 import GA_TOOL_EVENTS from './tool.events';
 import GA_DATA_EVENTS from './data.events';
 import GA_ROUTER_EVENTS from './router.events';
+import GA_HOME_EVENTS from './home.events';
 
-const GA_EVENT_WHITELIST = [...GA_TOOL_EVENTS, ...GA_DATA_EVENTS, ...GA_ROUTER_EVENTS];
+const GA_EVENT_WHITELIST = [
+  ...GA_TOOL_EVENTS,
+  ...GA_DATA_EVENTS,
+  ...GA_ROUTER_EVENTS,
+  ...GA_HOME_EVENTS
+].reduce((acc, next) => ({ ...acc, [next.type]: next }));
 const TRACK_WITH_QUERY = ['profileNode'];
 
 function createGAEvent(event, action, state) {
@@ -37,11 +43,9 @@ function createGAEvent(event, action, state) {
 const googleAnalyticsMiddleware = store => next => action => {
   if (typeof window.ga !== 'undefined') {
     const state = store.getState();
-    const event = GA_EVENT_WHITELIST.find(whitelistEvent => action.type === whitelistEvent.type);
-
+    const event = GA_EVENT_WHITELIST[action.type];
     if (event) {
       const gaEvent = createGAEvent(event, action, state);
-
       if (gaEvent) {
         window.ga('send', gaEvent);
       }
