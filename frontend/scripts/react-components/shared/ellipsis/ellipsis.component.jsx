@@ -1,17 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './ellipsis.scss';
-import ReactTooltip from 'react-tooltip';
+import Tooltip from 'react-components/shared/tooltip';
 
 function Ellipsis(props) {
   const { charLimit, children } = props;
   if (String(children).length < charLimit) return children;
-  return (
-    <span data-tip={children} className="c-ellipsis">
-      {`${children.substring(0, charLimit)} ...`}
-      <ReactTooltip type="light" className="c-ellipsis-tooltip" />
-    </span>
-  );
+  return <Tooltip reference={`${children.substring(0, charLimit)} ...`}>{children}</Tooltip>;
 }
 
 Ellipsis.propTypes = {
