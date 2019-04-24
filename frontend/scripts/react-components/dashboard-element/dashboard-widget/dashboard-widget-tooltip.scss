@@ -18,6 +18,7 @@
 
 .dashboard-widget-tooltip-color-line {
   display: inline-block;
+  flex-shrink: 0;
   height: 4px;
   width: 22px;
 }
