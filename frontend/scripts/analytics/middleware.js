@@ -5,17 +5,23 @@ import GA_DATA_EVENTS from './data.events';
 import GA_ROUTER_EVENTS from './router.events';
 import GA_HOME_EVENTS from './home.events';
 import GA_EXPLORE_EVENTS from './explore.events';
+import GA_PROFILE_NODE_EVENTS from './profile-node.events';
 
 const GA_EVENT_WHITELIST = [
   ...GA_TOOL_EVENTS,
   ...GA_DATA_EVENTS,
   ...GA_ROUTER_EVENTS,
   ...GA_HOME_EVENTS,
-  ...GA_EXPLORE_EVENTS
+  ...GA_EXPLORE_EVENTS,
+  ...GA_PROFILE_NODE_EVENTS
 ].reduce((acc, next) => ({ ...acc, [next.type]: next }));
 const TRACK_WITH_QUERY = ['profileNode'];
 
 function createGAEvent(event, action, state) {
+  if (event.shouldSend && event.shouldSend(action) === false) {
+    return null;
+  }
+
   if (event.hitType === 'pageview') {
     let prevPath = get(action, 'meta.location.prev.pathname');
     let currPath = get(action, 'meta.location.current.pathname');

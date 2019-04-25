@@ -48,7 +48,7 @@ class TopNav extends React.PureComponent {
   }
 
   renderDesktopMenu() {
-    const { links, printable, showLogo } = this.props;
+    const { links, printable, showLogo, onDownloadPDF } = this.props;
     const allLinks = [];
 
     if (showLogo) {
@@ -89,7 +89,7 @@ class TopNav extends React.PureComponent {
               </li>
               {printable && (
                 <li className="top-nav-item">
-                  <DownloadPdfLink />
+                  <DownloadPdfLink onClick={onDownloadPDF} />
                 </li>
               )}
             </ul>
@@ -170,7 +170,8 @@ TopNav.propTypes = {
   showLogo: PropTypes.bool,
   printable: PropTypes.bool,
   className: PropTypes.string,
-  pageOffset: PropTypes.number
+  pageOffset: PropTypes.number,
+  onDownloadPDF: PropTypes.func
 };
 
 TopNav.defaultProps = {

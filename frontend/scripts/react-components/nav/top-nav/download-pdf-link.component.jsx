@@ -8,9 +8,15 @@ function getDownloadPdfLink() {
   return `${PDF_DOWNLOAD_URL}?filename=${pageTitle}.pdf&url=${currentUrl}`;
 }
 
-function DownloadPdfLink({ className }) {
+function DownloadPdfLink({ className, onClick }) {
   return (
-    <a className={className} href={getDownloadPdfLink()} target="_blank" rel="noopener noreferrer">
+    <a
+      className={className}
+      href={getDownloadPdfLink()}
+      onClick={onClick}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       <svg className="icon icon-download-pdf">
         <use xlinkHref="#icon-download-pdf" />
       </svg>
@@ -19,6 +25,7 @@ function DownloadPdfLink({ className }) {
 }
 
 DownloadPdfLink.propTypes = {
+  onClick: PropTypes.func,
   className: PropTypes.string
 };
 
