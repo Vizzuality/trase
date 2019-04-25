@@ -73,8 +73,6 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
         api_v3_biome_node_type,
         api_v3_state_node_type,
         api_v3_municipality_node_type,
-        api_v3_logistics_hub_node_type,
-        api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
         api_v3_country_node_type
@@ -109,8 +107,6 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
         api_v3_biome_node_type,
         api_v3_state_node_type,
         api_v3_municipality_node_type,
-        api_v3_logistics_hub_node_type,
-        api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
         api_v3_country_node_type
@@ -146,8 +142,6 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
         api_v3_biome_node_type,
         api_v3_state_node_type,
         api_v3_municipality_node_type,
-        api_v3_logistics_hub_node_type,
-        api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
         api_v3_country_node_type
@@ -168,7 +162,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
 
   context 'when multiple years, non-cont indicator, no flow path filters' do
     let(:parameters) {
-      mandatory_parameters.merge(multi_year).merge(
+      mandatory_parameters.merge(multi_year).merge(no_flow_path_filters).merge(
         ncont_attribute_id: ncont_attribute.id
       )
     }
@@ -180,7 +174,22 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
           x: :year,
           break_by: :ncont_attribute
         }
-      ]
+      ] + [
+        api_v3_biome_node_type,
+        api_v3_state_node_type,
+        api_v3_municipality_node_type,
+        api_v3_exporter_node_type,
+        api_v3_importer_node_type,
+        api_v3_country_node_type
+      ].map do |node_type|
+        {
+          source: :multi_year_no_ncont_node_type_view,
+          type: Api::V3::Dashboards::ParametrisedCharts::STACKED_BAR_CHART,
+          x: :year,
+          break_by: :node_type,
+          node_type_id: node_type.id
+        }
+      end
     }
 
     it 'returns expected chart types' do
@@ -203,23 +212,13 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
           ]
         )
     }
-    let(:simplified_overview_chart_type) {
-      {
-        source: :multi_year_ncont_overview,
-        type: Api::V3::Dashboards::ParametrisedCharts::STACKED_BAR_CHART,
-        x: :year,
-        break_by: :ncont_attribute
-      }
-    }
     let(:simplified_expected_chart_types) {
       [
         {
           source: :multi_year_ncont_overview,
           type: Api::V3::Dashboards::ParametrisedCharts::STACKED_BAR_CHART,
           x: :year,
-          break_by: :ncont_attribute,
-          node_type_id: api_v3_exporter_node_type.id,
-          companies_ids: [api_v3_exporter1_node.id]
+          break_by: :ncont_attribute
         },
         {
           source: :multi_year_ncont_overview,
@@ -227,19 +226,33 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
           x: :year,
           break_by: :ncont_attribute,
           node_type_id: api_v3_exporter_node_type.id,
-          companies_ids: [api_v3_other_exporter_node.id]
+          companies_ids: [api_v3_exporter1_node.id],
+          single_filter_key: :companies
+        },
+        {
+          source: :multi_year_ncont_overview,
+          type: Api::V3::Dashboards::ParametrisedCharts::STACKED_BAR_CHART,
+          x: :year,
+          break_by: :ncont_attribute,
+          node_type_id: api_v3_exporter_node_type.id,
+          companies_ids: [api_v3_other_exporter_node.id],
+          single_filter_key: :companies
         }
-      ]
-    }
-    let(:expected_chart_types) {
-      [
-        chart_type_with_applied_parameters(
-          simplified_overview_chart_type, overview_parameters
-        )
-      ] +
-        simplified_expected_chart_types.map do |chart_type|
-          chart_type_with_applied_parameters(chart_type, parameters)
-        end
+      ] + [
+        api_v3_biome_node_type,
+        api_v3_state_node_type,
+        api_v3_municipality_node_type,
+        api_v3_importer_node_type,
+        api_v3_country_node_type
+      ].map do |node_type|
+        {
+          source: :multi_year_no_ncont_node_type_view,
+          type: Api::V3::Dashboards::ParametrisedCharts::STACKED_BAR_CHART,
+          x: :year,
+          break_by: :node_type,
+          node_type_id: node_type.id
+        }
+      end
     }
 
     it 'returns expected chart types' do

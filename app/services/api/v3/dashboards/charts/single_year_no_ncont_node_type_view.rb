@@ -57,7 +57,7 @@ module Api
                 WITH q AS (#{@query.to_sql}),
                 u1 AS (SELECT x, y0 FROM q WHERE NOT is_unknown ORDER BY y0 DESC LIMIT #{@top_n}),
                 u2 AS (
-                  SELECT '#{OTHER}' AS x, SUM(y0) AS y0 FROM q
+                  SELECT '#{OTHER}'::TEXT AS x, SUM(y0) AS y0 FROM q
                   WHERE NOT EXISTS (SELECT 1 FROM u1 WHERE q.x = u1.x)
                 )
                 SELECT * FROM u1

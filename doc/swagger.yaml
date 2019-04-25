@@ -2853,3 +2853,8 @@ components:
                     type: string
                     example: 'null'
                     nullable: true
+        single_filter_key:
+          type: string
+          example: 'destinations'
+          nullable: true
+          description: 'one of [sources|companies|destinations] or null'

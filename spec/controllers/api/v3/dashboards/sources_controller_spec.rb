@@ -22,7 +22,6 @@ RSpec.describe Api::V3::Dashboards::SourcesController, type: :controller do
     let(:all_results_alphabetically) {
       [
         api_v3_biome_node,
-        api_v3_logistics_hub_node,
         api_v3_state_node,
         api_v3_municipality_node
       ]

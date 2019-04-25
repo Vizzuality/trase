@@ -6,15 +6,18 @@ import DashboardWidgetComponent from 'react-components/dashboard-element/dashboa
 import DashboardWidgetTooltip from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-tooltip';
 import {
   makeGetConfig,
-  makeGetChartType
+  makeGetChartType,
+  makeGetTitle
 } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.selectors';
 
 const makeMapStateToProps = () => {
   const getDashboardWidgetsConfig = makeGetConfig();
   const getChartType = makeGetChartType();
+  const getTitle = makeGetTitle();
   const mapStateToProps = (state, props) => ({
     config: getDashboardWidgetsConfig(state, props),
     chartType: getChartType(state, props),
+    title: getTitle(state, props),
     chartsLoading: state.dashboardElement.chartsLoading
   });
   return mapStateToProps;
@@ -44,23 +47,8 @@ class DashboardWidgetContainer extends Component {
     );
   };
 
-  getTitle(meta) {
-    if (!meta || !meta.info) return '';
-    const topNPart = meta.info.top_n ? `Top ${meta.info.top_n}` : null;
-    const nodeTypePart = meta.info.node_type
-      ? this.getPluralNodeType(meta.info.node_type)
-      : 'Selection overview';
-    // const resizeByPart = meta.info.filter.cont_attribute;
-    // const recolorByPart = meta.info.filter.ncont_attribute
-    //   ? `broken by ${meta.info.filter.ncont_attribute}`
-    //   : null;
-
-    return [topNPart, nodeTypePart].filter(Boolean).join(' ');
-  }
-
   render() {
-    const { data, loading, error, meta, config, chartType, chartsLoading } = this.props;
-    const title = this.getTitle(meta);
+    const { data, loading, error, meta, config, chartType, chartsLoading, title } = this.props;
     return config ? (
       <DashboardWidgetComponent
         data={data}
@@ -82,7 +70,8 @@ DashboardWidgetContainer.propTypes = {
   loading: PropTypes.bool,
   config: PropTypes.object,
   chartType: PropTypes.string,
-  chartsLoading: PropTypes.bool
+  chartsLoading: PropTypes.bool,
+  title: PropTypes.string
 };
 
 export default connect(makeMapStateToProps)(DashboardWidgetContainer);
