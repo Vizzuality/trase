@@ -41,7 +41,7 @@ class DashboardElement extends React.PureComponent {
   };
 
   renderStep() {
-    const { step, setStep, editMode, closeModal } = this.props;
+    const { step, setStep, editMode, closeModal, dirtyBlocks } = this.props;
     const showBackButton = step > DASHBOARD_STEPS.sources;
     const onContinue = step === DASHBOARD_STEPS.companies ? closeModal : () => setStep(step + 1);
     if (step === DASHBOARD_STEPS.welcome) {
@@ -52,6 +52,7 @@ class DashboardElement extends React.PureComponent {
         step={step}
         editMode={editMode}
         onContinue={onContinue}
+        dirtyBlocks={dirtyBlocks}
         onBack={showBackButton ? () => setStep(step - 1) : undefined}
       />
     );
@@ -59,7 +60,7 @@ class DashboardElement extends React.PureComponent {
 
   renderDashboardModal() {
     const { editMode, goToRoot, modalOpen, closeModal, dirtyBlocks } = this.props;
-    const canProceed = dirtyBlocks.sources && dirtyBlocks.commodities;
+    const canProceed = dirtyBlocks.countries && dirtyBlocks.commodities;
     const onClose = editMode && canProceed ? closeModal : goToRoot;
     return (
       <React.Fragment>

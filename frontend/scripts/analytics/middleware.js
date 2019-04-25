@@ -6,6 +6,7 @@ import GA_ROUTER_EVENTS from './router.events';
 import GA_HOME_EVENTS from './home.events';
 import GA_EXPLORE_EVENTS from './explore.events';
 import GA_PROFILE_NODE_EVENTS from './profile-node.events';
+import GA_DAHSBOARD_ELEMENT_EVENTS from './dashboard-element.events';
 
 const GA_EVENT_WHITELIST = [
   ...GA_TOOL_EVENTS,
@@ -13,7 +14,8 @@ const GA_EVENT_WHITELIST = [
   ...GA_ROUTER_EVENTS,
   ...GA_HOME_EVENTS,
   ...GA_EXPLORE_EVENTS,
-  ...GA_PROFILE_NODE_EVENTS
+  ...GA_PROFILE_NODE_EVENTS,
+  ...GA_DAHSBOARD_ELEMENT_EVENTS
 ].reduce((acc, next) => ({ ...acc, [next.type]: next }));
 const TRACK_WITH_QUERY = ['profileNode'];
 

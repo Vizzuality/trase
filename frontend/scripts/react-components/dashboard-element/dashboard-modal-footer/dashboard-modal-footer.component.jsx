@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import TagsGroup from 'react-components/shared/tags-group';
 import Button from 'react-components/shared/button/button.component';
@@ -9,8 +9,10 @@ import './dashboard-modal-footer.scss';
 function DashboardModalFooter(props) {
   const {
     isLastStep,
+    goToDashboard,
     dynamicSentenceParts,
     clearPanel,
+    dirtyBlocks,
     removeSentenceItem,
     onContinue,
     onBack,
@@ -18,6 +20,14 @@ function DashboardModalFooter(props) {
     isDisabled,
     step
   } = props;
+
+  const onClickContinue = useCallback(() => {
+    if (isLastStep) {
+      goToDashboard({ dirtyBlocks, dynamicSentenceParts });
+    }
+    onContinue();
+  }, [isLastStep, goToDashboard, onContinue, dirtyBlocks, dynamicSentenceParts]);
+
   return (
     <div className="c-dashboard-modal-footer">
       <TagsGroup
@@ -36,7 +46,7 @@ function DashboardModalFooter(props) {
           </button>
         )}
         <Button
-          onClick={onContinue}
+          onClick={onClickContinue}
           color="pink"
           size="md"
           disabled={isDisabled}
@@ -53,8 +63,10 @@ function DashboardModalFooter(props) {
 
 DashboardModalFooter.propTypes = {
   onBack: PropTypes.func,
+  dirtyBlocks: PropTypes.array,
   removeSentenceItem: PropTypes.func,
   clearPanel: PropTypes.func,
+  goToDashboard: PropTypes.func,
   isDisabled: PropTypes.bool,
   isLastStep: PropTypes.bool.isRequired,
   dynamicSentenceParts: PropTypes.array,

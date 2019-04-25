@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Chart from 'react-components/chart';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
@@ -15,7 +15,7 @@ import RankingWidget from 'react-components/ranking-widget';
 import 'react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
 
 function DashboardWidget(props) {
-  const { loading, error, data, meta, chartType, chartConfig, dynamicSentenceParts, title } = props;
+  const { loading, error, data, meta, chartType, chartConfig, title, openTableView } = props;
   const renderError = errorMessage => (
     <Text color="white" weight="bold" variant="mono" size="lg" className="widget-centered">
       {errorMessage}
@@ -23,6 +23,15 @@ function DashboardWidget(props) {
   );
 
   const [isModalOpen, openModal] = useState(false);
+
+  const openTableModal = useCallback(() => {
+    openModal(true);
+    openTableView(title);
+  }, [openModal, openTableView, title]);
+
+  const closeTableModal = useCallback(() => {
+    openModal(false);
+  }, [openModal]);
 
   const renderWidgetActions = () => {
     const hasTable = loading || (data && data.length > 0 && chartType !== 'dynamicSentence');
@@ -34,10 +43,10 @@ function DashboardWidget(props) {
               icon="icon-table"
               color="charcoal"
               variant="circle"
-              onClick={() => openModal(true)}
+              onClick={openTableModal}
               disabled={loading}
             />
-            <SimpleModal isOpen={isModalOpen} onRequestClose={() => openModal(false)}>
+            <SimpleModal isOpen={isModalOpen} onRequestClose={closeTableModal}>
               <TableModal title={title} data={data} meta={meta} chartType={chartType} />
             </SimpleModal>
           </>
@@ -61,11 +70,7 @@ function DashboardWidget(props) {
       case 'sentence':
         return (
           <div className="dynamic-sentence-widget">
-            <DynamicSentenceWidget
-              data={data}
-              config={chartConfig}
-              dynamicSentenceParts={dynamicSentenceParts}
-            />
+            <DynamicSentenceWidget data={data} config={chartConfig} />
           </div>
         );
       case 'ranking':
@@ -124,9 +129,9 @@ DashboardWidget.propTypes = {
   meta: PropTypes.object,
   title: PropTypes.string,
   loading: PropTypes.bool,
+  openTableView: PropTypes.func,
   chartConfig: PropTypes.object,
-  chartType: PropTypes.string,
-  dynamicSentenceParts: PropTypes.array
+  chartType: PropTypes.string
 };
 
 export default DashboardWidget;

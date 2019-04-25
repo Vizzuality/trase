@@ -8,6 +8,7 @@ import {
   makeGetConfig,
   makeGetChartType
 } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.selectors';
+import { openTableView as openTableViewFn } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.actions';
 
 const makeMapStateToProps = () => {
   const getDashboardWidgetsConfig = makeGetConfig();
@@ -18,6 +19,10 @@ const makeMapStateToProps = () => {
     chartsLoading: state.dashboardElement.chartsLoading
   });
   return mapStateToProps;
+};
+
+const mapDispatchToProps = {
+  openTableView: openTableViewFn
 };
 
 class DashboardWidgetContainer extends Component {
@@ -59,13 +64,23 @@ class DashboardWidgetContainer extends Component {
   }
 
   render() {
-    const { data, loading, error, meta, config, chartType, chartsLoading } = this.props;
+    const {
+      data,
+      loading,
+      error,
+      meta,
+      config,
+      chartType,
+      chartsLoading,
+      openTableView
+    } = this.props;
     const title = this.getTitle(meta);
     return config ? (
       <DashboardWidgetComponent
         data={data}
         meta={meta}
         error={error}
+        openTableView={openTableView}
         loading={loading || chartsLoading}
         chartConfig={this.addTooltipContentToConfig(config, meta)}
         chartType={chartType}
@@ -82,7 +97,11 @@ DashboardWidgetContainer.propTypes = {
   loading: PropTypes.bool,
   config: PropTypes.object,
   chartType: PropTypes.string,
+  openTableView: PropTypes.func,
   chartsLoading: PropTypes.bool
 };
 
-export default connect(makeMapStateToProps)(DashboardWidgetContainer);
+export default connect(
+  makeMapStateToProps,
+  mapDispatchToProps
+)(DashboardWidgetContainer);
