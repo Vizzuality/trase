@@ -34,9 +34,9 @@ module Api
 
           def apply_node_type_x
             @query = @query.
-              select('nodes.name AS x, nodes.is_unknown').
+              select('nodes.id, nodes.node_type_id, nodes.name AS x, nodes.is_unknown').
               joins("JOIN nodes ON nodes.id = flows.path[#{@node_type_idx}]").
-              group('nodes.name, nodes.is_unknown')
+              group('nodes.id')
           end
 
           def apply_year_x
@@ -163,15 +163,24 @@ module Api
             output
           end
 
+          def profile_for_node_type_id(node_type_id)
+            profiles_by_node_type_id[node_type_id]&.name
+          end
+
+          def profiles_by_node_type_id
+            return @profiles_by_node_type_id if defined? @profiles_by_node_type_id
+
+            context_node_types_with_profiles = @context.context_node_types.
+              includes(:profile)
+            @profiles_by_node_type_id = Hash[
+              context_node_types_with_profiles.map { |cnt| [cnt.node_type_id, cnt.profile] }
+            ]
+          end
+
           def flow_path_filters
             flow_path_filters = {}
             nodes = @chart_parameters.nodes
             nodes_by_node_id = Hash[nodes.map { |node| [node.id, node] }]
-            context_node_types_with_profiles = @context.context_node_types.
-              includes(:profile)
-            profiles_by_node_type_id = Hash[
-              context_node_types_with_profiles.map { |cnt| [cnt.node_type_id, cnt.profile] }
-            ]
             [:sources, :companies, :destinations].each do |filter_name|
               nodes_ids = @chart_parameters.send(:"#{filter_name}_ids")
               flow_path_filters[filter_name] = flow_path_filter(
