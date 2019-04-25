@@ -43,6 +43,7 @@ class TopConsumersWidget extends React.PureComponent {
     const params = { node_id: nodeId, context_id: contextId, year };
     const mainQuery =
       type === 'actor' ? GET_PLACE_TOP_CONSUMER_ACTORS : GET_PLACE_TOP_CONSUMER_COUNTRIES;
+    const isImportingCountries = type === 'place';
     return (
       <Widget
         query={[mainQuery, GET_NODE_SUMMARY_URL]}
@@ -98,9 +99,11 @@ class TopConsumersWidget extends React.PureComponent {
                     data={data[mainQuery]}
                     contextId={contextId}
                     testId={`${testId}-mini-sankey`}
-                    onLinkClick={this.handleLinkClick}
-                    targetLink={onLinkClick && 'profileNode'}
-                    targetPayload={onLinkClick && { profileType: type }}
+                    onLinkClick={isImportingCountries ? null : this.handleLinkClick}
+                    targetLink={isImportingCountries ? null : onLinkClick && 'profileNode'}
+                    targetPayload={
+                      isImportingCountries ? null : onLinkClick && { profileType: type }
+                    }
                   />
                 </div>
               </div>
