@@ -29,12 +29,13 @@
 
       &::after {
         @include arrow(7px, 2px, rgba($charcoal-grey, .4), 'down');
-        top: 0;
+        top: 4px;
         right: 1px;
       }
 
       &.-is-open {
         &::after {
+          top: 8px;
           transform: rotate(225deg);
         }
       }
