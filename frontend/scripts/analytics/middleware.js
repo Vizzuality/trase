@@ -20,7 +20,7 @@ const GA_EVENT_WHITELIST = [
 const TRACK_WITH_QUERY = ['profileNode'];
 
 function createGAEvent(event, action, state) {
-  if (event.shouldSend && event.shouldSend(action) === false) {
+  if (event.shouldSend && event.shouldSend(action, state) === false) {
     return null;
   }
 
