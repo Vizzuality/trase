@@ -26,7 +26,12 @@ module Api
             break_by_values_indexes = ncont_break_by_values_map
 
             data_by_x = {}
+            x_labels_profile_info = []
             @top_n_and_others_query.each do |record|
+              x_labels_profile_info << {
+                id: record['id'],
+                profile: profile_for_node_type_id(record['node_type_id'])
+              }
               break_by_values_indexes.each do |break_by, idx|
                 data_by_x[record['x']] ||= {}
                 data_by_x[record['x']]["y#{idx}"] = record['per_break_by'][break_by]
@@ -39,6 +44,7 @@ module Api
 
             @meta = {
               xAxis: node_type_axis_meta(@node_type),
+              xLabelsProfileInfo: x_labels_profile_info,
               yAxis: axis_meta(@cont_attribute, 'number'),
               x: node_type_legend_meta(@node_type),
               info: info
@@ -72,16 +78,16 @@ module Api
               (
                 WITH q AS (#{@query.to_sql}),
                 u1 AS (
-                  SELECT x, JSONB_OBJECT_AGG(break_by, y0) AS per_break_by, SUM(y0) AS y
+                  SELECT id, node_type_id, x, JSONB_OBJECT_AGG(break_by, y0) AS per_break_by, SUM(y0) AS y
                   FROM q
                   WHERE NOT is_unknown
-                  GROUP BY x
+                  GROUP BY id, node_type_id, x
                   ORDER BY SUM(y0) DESC LIMIT #{@top_n}
                 ),
                 u2 AS (
-                  SELECT x, JSONB_OBJECT_AGG(break_by, y0), SUM(y0) AS y
+                  SELECT NULL::INT, NULL::INT, x, JSONB_OBJECT_AGG(break_by, y0), SUM(y0) AS y
                   FROM (
-                    SELECT '#{OTHER}' AS x, break_by, SUM(y0) AS y0 FROM q
+                    SELECT '#{OTHER}'::TEXT AS x, break_by, SUM(y0) AS y0 FROM q
                     WHERE NOT EXISTS (SELECT 1 FROM u1 WHERE q.x = u1.x)
                     GROUP BY break_by
                   ) s GROUP BY x
