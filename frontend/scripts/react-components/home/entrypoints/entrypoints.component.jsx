@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import Siema from 'react-siema';
 import Link from 'redux-first-router-link';
 import debounce from 'lodash/debounce';
+import cx from 'classnames';
+import Heading from 'react-components/shared/heading/heading.component';
 
 import './entrypoints.scss';
-import Heading from 'react-components/shared/heading/heading.component';
 
 class Entrypoints extends React.PureComponent {
   constructor(props) {
@@ -87,7 +88,10 @@ class Entrypoints extends React.PureComponent {
     return this.entrypoints.map(slide => (
       <div key={slide.subtitle} className={grid}>
         {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-        <div className={`entrypoint-slide ${slide.className}`} onClick={() => onClick(slide.link)}>
+        <div
+          className={cx('entrypoint-slide', slide.className)}
+          onClick={() => onClick(slide.link)}
+        >
           <Link to={slide.link}>
             <div className="entrypoint-slide-content">
               <Heading variant="mono" color="pink" size="sm">

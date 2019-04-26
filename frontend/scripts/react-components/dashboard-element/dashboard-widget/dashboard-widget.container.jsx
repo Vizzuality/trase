@@ -9,7 +9,7 @@ import {
   makeGetChartType,
   makeGetTitle
 } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.selectors';
-import { openTableView as openTableViewFn } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.actions';
+import { trackOpenTableView as trackOpenTableViewFn } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.actions';
 
 const makeMapStateToProps = () => {
   const getDashboardWidgetsConfig = makeGetConfig();
@@ -25,7 +25,7 @@ const makeMapStateToProps = () => {
 };
 
 const mapDispatchToProps = {
-  openTableView: openTableViewFn
+  trackOpenTableView: trackOpenTableViewFn
 };
 
 class DashboardWidgetContainer extends Component {
@@ -62,14 +62,14 @@ class DashboardWidgetContainer extends Component {
       chartType,
       chartsLoading,
       title,
-      openTableView
+      trackOpenTableView
     } = this.props;
     return config ? (
       <DashboardWidgetComponent
         data={data}
         meta={meta}
         error={error}
-        openTableView={openTableView}
+        trackOpenTableView={trackOpenTableView}
         loading={loading || chartsLoading}
         chartConfig={this.addTooltipContentToConfig(config, meta)}
         chartType={chartType}
@@ -88,7 +88,7 @@ DashboardWidgetContainer.propTypes = {
   config: PropTypes.object,
   chartType: PropTypes.string,
   chartsLoading: PropTypes.bool,
-  openTableView: PropTypes.func
+  trackOpenTableView: PropTypes.func
 };
 
 export default connect(

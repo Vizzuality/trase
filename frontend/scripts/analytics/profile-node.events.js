@@ -25,6 +25,7 @@ export default [
   {
     type: PROFILE_NODE__ON_PDF_DOWNLOAD,
     action: 'Download PDF',
+    category: 'profile',
     getPayload(action, state) {
       return state.location.search;
     }

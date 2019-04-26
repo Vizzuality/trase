@@ -6,7 +6,7 @@ import {
   DASHBOARD_ELEMENT__EDIT_DASHBOARD
 } from 'react-components/dashboard-element/dashboard-element.actions';
 
-import { DASHBOARD_WIDGET__OPEN_TABLE_VIEW } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.actions';
+import { DASHBOARD_WIDGET__TRACK_OPEN_TABLE_VIEW } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.actions';
 
 export default [
   {
@@ -29,7 +29,7 @@ export default [
     getPayload: action => action.payload.years
   },
   {
-    type: DASHBOARD_WIDGET__OPEN_TABLE_VIEW,
+    type: DASHBOARD_WIDGET__TRACK_OPEN_TABLE_VIEW,
     action: 'Open table',
     category: 'dashboards',
     getPayload: (action, state) => {

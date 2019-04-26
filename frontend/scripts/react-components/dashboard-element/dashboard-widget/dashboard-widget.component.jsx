@@ -15,7 +15,7 @@ import RankingWidget from 'react-components/ranking-widget';
 import 'react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
 
 function DashboardWidget(props) {
-  const { loading, error, data, meta, chartType, chartConfig, title, openTableView } = props;
+  const { loading, error, data, meta, chartType, chartConfig, title, trackOpenTableView } = props;
   const renderError = errorMessage => (
     <Text color="white" weight="bold" variant="mono" size="lg" className="widget-centered">
       {errorMessage}
@@ -26,8 +26,8 @@ function DashboardWidget(props) {
 
   const openTableModal = useCallback(() => {
     openModal(true);
-    openTableView(title);
-  }, [openModal, openTableView, title]);
+    trackOpenTableView(title);
+  }, [openModal, trackOpenTableView, title]);
 
   const closeTableModal = useCallback(() => {
     openModal(false);
@@ -129,7 +129,7 @@ DashboardWidget.propTypes = {
   meta: PropTypes.object,
   title: PropTypes.string,
   loading: PropTypes.bool,
-  openTableView: PropTypes.func,
+  trackOpenTableView: PropTypes.func,
   chartConfig: PropTypes.object,
   chartType: PropTypes.string
 };
