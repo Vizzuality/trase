@@ -53,7 +53,7 @@ class DashboardWidgetTooltip extends React.PureComponent {
             {payload[0] && payload[0].unit}
           </Text>
         </div>
-        {payload.reverse().map(item => (
+        {[...payload].reverse().map(item => (
           <div className="dashboard-widget-tooltip-item" key={item.name}>
             <div>
               <span
