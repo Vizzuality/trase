@@ -6,7 +6,7 @@ import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/da
 import { CHART_TYPES } from 'constants';
 import camelCase from 'lodash/camelCase';
 
-const parsedChartTypes = {
+export const PARSED_CHART_TYPES = {
   bar_chart: CHART_TYPES.bar,
   donut_chart: CHART_TYPES.pie,
   stacked_bar_chart: CHART_TYPES.stackedBar,
@@ -17,7 +17,7 @@ const parsedChartTypes = {
 
 const getMeta = (state, { meta }) => meta || null;
 const getData = (state, { data }) => data || null;
-const getChartType = (state, { chartType }) => (chartType ? parsedChartTypes[chartType] : null);
+const getChartType = (state, { chartType }) => (chartType ? PARSED_CHART_TYPES[chartType] : null);
 const getSelectedRecolorBy = (state, props) => props.selectedRecolorBy;
 
 export const getDefaultConfig = createSelector(
@@ -39,9 +39,9 @@ const sortGroupedAxis = keys => sortBy(Object.keys(keys), key => parseInt(key.su
 export const getColors = createSelector(
   [getMeta, getData, getDefaultConfig, getChartType, getSelectedRecolorBy],
   (meta, data, defaultConfig, chartType, selectedRecolorBy) => {
-    const { colors, layout } = defaultConfig;
+    const { colors, layout, parse } = defaultConfig;
 
-    if (!meta || chartType === 'dynamicSentence') {
+    if (!parse || !meta) {
       return colors && colors.default;
     }
 
@@ -78,8 +78,8 @@ export const getColors = createSelector(
 export const getYKeys = createSelector(
   [getMeta, getDefaultConfig, getColors],
   (meta, defaultConfig, colors) => {
-    const { yKeys, yKeysAttributes, layout } = defaultConfig;
-    if (!meta || !yKeys || layout === 'vertical') return yKeys;
+    const { yKeys, yKeysAttributes, layout, parse } = defaultConfig;
+    if (!parse || !meta || !yKeys || layout === 'vertical') return yKeys;
     const groupedY = getGroupedAxis('y', meta);
     return Object.keys(yKeys).reduce((yKeysTypesAcc, nextYKeyType) => {
       const yKeyTypeAttributes = yKeysAttributes && yKeysAttributes[nextYKeyType];
@@ -104,8 +104,8 @@ export const getYKeys = createSelector(
 export const getXKeys = createSelector(
   [getMeta, getDefaultConfig, getColors],
   (meta, defaultConfig, colors) => {
-    const { xKeys, xKeysAttributes, layout } = defaultConfig;
-    if (!meta || !xKeys || layout !== 'vertical') return xKeys;
+    const { xKeys, xKeysAttributes, layout, parse } = defaultConfig;
+    if (!parse || !meta || !xKeys || layout !== 'vertical') return xKeys;
     const groupedX = getGroupedAxis('x', meta);
     return Object.keys(xKeys).reduce((xKeysTypesAcc, nextXKeyType) => {
       const xKeyTypeAttributes = xKeysAttributes && xKeysAttributes[nextXKeyType];
@@ -138,6 +138,10 @@ export const makeGetConfig = () =>
         xAxis: defaultConfig.xAxis && {
           ...defaultConfig.xAxis,
           type: meta.xAxis && meta.xAxis.type
+        },
+        xAxisLabel: {
+          text: meta.xAxis && meta.xAxis.label,
+          suffix: meta.xAxis && meta.xAxis.suffix
         },
         yAxis: defaultConfig.yAxis && {
           ...defaultConfig.yAxis,
@@ -188,7 +192,8 @@ export const makeGetTitle = () =>
     [getMeta],
     meta => {
       if (!meta || !meta.info) return '';
-      const topNPart = meta.info.top_n ? `Top ${meta.info.top_n}` : null;
+      // adding 1 to the top_n to count in "other" aggregation
+      const topNPart = meta.info.top_n ? `Top ${meta.info.top_n + 1}` : null;
       const nodeTypePart = meta.info.node_type
         ? getNodeTypeName(getPluralNodeType(meta.info.node_type))
         : 'Selection overview';

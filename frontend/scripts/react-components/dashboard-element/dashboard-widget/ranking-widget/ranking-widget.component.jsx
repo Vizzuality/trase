@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import 'react-components/ranking-widget/ranking-widget-styles.scss';
+import 'react-components/dashboard-element/dashboard-widget/ranking-widget/ranking-widget-styles.scss';
 import Paginate from 'react-components/shared/paginate';
 import Text from 'react-components/shared/text';
 import Heading from 'react-components/shared/heading';
@@ -20,12 +20,13 @@ class RankingWidget extends PureComponent {
     const { page } = this.state;
     const pageData = pageSize ? data.slice(page * pageSize, (page + 1) * pageSize) : data;
     const formatValue = format((config.yAxisLabel && config.yAxisLabel.format) || ',.2f');
+
     return (
       <div className="c-ranking-widget">
         <ul className="list">
           {data.length > 0 &&
             pageData.map((item, index) => (
-              <li key={item.x} className="list-row">
+              <li key={item.y} className="list-row">
                 <div className="list-item">
                   <div className="item-label">
                     <div className="item-bubble">
@@ -40,12 +41,12 @@ class RankingWidget extends PureComponent {
                         {index + 1 + pageSize * page}
                       </Text>
                     </div>
-                    <Heading as="span" size="lg" weight="bold" color="white">
-                      {capitalize(item.x)}
+                    <Heading as="span" size="lg" weight="bold" color="white" className="item-name">
+                      {capitalize(item.y)}
                     </Heading>
                   </div>
                   <Text className="item-value" color="white" variant="mono" size="md">
-                    {formatValue(item.y0)} {config.yAxisLabel && config.yAxisLabel.suffix}
+                    {formatValue(item.x0)} {config.xAxisLabel && config.xAxisLabel.suffix}
                   </Text>
                 </div>
               </li>

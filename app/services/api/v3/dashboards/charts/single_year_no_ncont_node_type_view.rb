@@ -35,6 +35,7 @@ module Api
               @data.pop
               x_labels_profile_info.pop
             end
+
             @meta = {
               xAxis: node_type_axis_meta(@node_type),
               xLabelsProfileInfo: x_labels_profile_info,
@@ -45,6 +46,11 @@ module Api
             }
 
             swap_x_and_y
+
+            without_string_values = @data.map(&reject_strings)
+            total_values = get_total_values(without_string_values)
+
+            @meta[:aggregates] = {total_value: total_values}
 
             {data: @data, meta: @meta}
           end

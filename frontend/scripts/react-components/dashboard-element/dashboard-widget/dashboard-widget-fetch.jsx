@@ -1,30 +1,35 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import sortBy from 'lodash/sortBy';
 import DashboardWidgetContainer from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.container';
 import Widget from 'react-components/widgets/widget.component';
+import { PARSED_CHART_TYPES } from './dashboard-widget.selectors';
 
-// eslint-disable-next-line
-class DashboardWidgetFetch extends Component {
-  render() {
-    const { url, dynamicSentenceParts, chartType, selectedRecolorBy } = this.props;
-    const limitedUrl = `${url}&top_n=10`;
-    return (
-      <Widget raw={[true]} query={[limitedUrl]} params={[]}>
-        {({ data, loading, error, meta }) => (
-          <DashboardWidgetContainer
-            error={error}
-            loading={loading}
-            chartType={chartType}
-            meta={meta && meta[limitedUrl]}
-            selectedRecolorBy={selectedRecolorBy}
-            data={sortBy(data && data[limitedUrl], 'x')}
-            dynamicSentenceParts={dynamicSentenceParts}
-          />
-        )}
-      </Widget>
-    );
-  }
+function DashboardWidgetFetch(props) {
+  const { url, dynamicSentenceParts, chartType, selectedRecolorBy } = props;
+  const type = PARSED_CHART_TYPES[chartType];
+  const topN = {
+    horizontalBar: 10,
+    horizontalStackedBar: 10,
+    ranking: 50
+  }[type];
+
+  const chartUrl = typeof topN !== 'undefined' ? `${url}&top_n=${topN - 1}` : url;
+  return (
+    <Widget raw={[true]} query={[chartUrl]} params={[]}>
+      {({ data, loading, error, meta }) => (
+        <DashboardWidgetContainer
+          error={error}
+          loading={loading}
+          chartType={chartType}
+          meta={meta && meta[chartUrl]}
+          selectedRecolorBy={selectedRecolorBy}
+          data={sortBy(data && data[chartUrl], 'x')}
+          dynamicSentenceParts={dynamicSentenceParts}
+        />
+      )}
+    </Widget>
+  );
 }
 
 DashboardWidgetFetch.propTypes = {
