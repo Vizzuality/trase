@@ -11,8 +11,7 @@
       "corejs": 3
     }],
     "@babel/plugin-syntax-dynamic-import",
-    "@babel/plugin-syntax-object-rest-spread",
-    "@babel/plugin-transform-exponentiation-operator",
+    "@babel/plugin-proposal-optional-chaining",
     ["@babel/plugin-proposal-class-properties", { "spec": true }]
   ],
   "env": {
@@ -26,8 +25,7 @@
       ],
       "plugins": [
         "@babel/plugin-syntax-dynamic-import",
-        "@babel/plugin-syntax-object-rest-spread",
-        "@babel/plugin-transform-exponentiation-operator",
+        "@babel/plugin-proposal-optional-chaining",
         ["@babel/plugin-proposal-class-properties", { "spec": true }],
         "transform-react-remove-prop-types",
         ["@babel/transform-runtime", {
@@ -46,8 +44,7 @@
       ],
       "plugins": [
         "@babel/plugin-syntax-dynamic-import",
-        "@babel/plugin-syntax-object-rest-spread",
-        "@babel/plugin-transform-exponentiation-operator",
+        "@babel/plugin-proposal-optional-chaining",
         ["@babel/plugin-proposal-class-properties", { "spec": true }],
         "@babel/plugin-transform-modules-commonjs",
         ["@babel/transform-runtime", {

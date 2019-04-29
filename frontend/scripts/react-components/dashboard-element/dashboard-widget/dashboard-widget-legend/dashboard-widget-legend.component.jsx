@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Paginate from 'react-components/shared/paginate';
 import 'react-components/dashboard-element/dashboard-widget/dashboard-widget-legend/dashboard-widget-legend.scss';
+import Ellipsis from 'react-components/shared/ellipsis';
 
 class DashboardWidgetLegend extends React.PureComponent {
   state = { page: 0 };
@@ -19,7 +20,6 @@ class DashboardWidgetLegend extends React.PureComponent {
     if (colors.length < 2) return null;
     const hasPagination = colors.length > this.pageSize;
     const pageData = colors.slice(page * this.pageSize, (page + 1) * this.pageSize);
-
     return (
       <div className={cx('c-dashboard-widget-legend', { '-paginated': hasPagination })}>
         <div className="dashboard-widget-legend-list">
@@ -27,7 +27,9 @@ class DashboardWidgetLegend extends React.PureComponent {
             <div key={i} className="dashboard-widget-item">
               <div className="dashboard-widget-key-item">
                 <span style={{ backgroundColor: d.color || 'white' }} />
-                <p>{d.label}</p>
+                <p>
+                  <Ellipsis>{d.label}</Ellipsis>
+                </p>
               </div>
             </div>
           ))}

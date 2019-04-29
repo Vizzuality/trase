@@ -22,13 +22,28 @@ class Home extends React.PureComponent {
   }
 
   render() {
-    const { tweets, blogPosts, homeVideo, promotedPost, testimonials, insightsPosts } = this.props;
+    const {
+      tweets,
+      blogPosts,
+      homeVideo,
+      promotedPost,
+      testimonials,
+      insightsPosts,
+      onPlayVideo,
+      clickEntrypoint,
+      clickNextEntrypoint
+    } = this.props;
     return (
       <div className="l-homepage">
         <div className="c-homepage">
-          <Hero story={promotedPost} tweets={tweets} homeVideo={homeVideo} />
+          <Hero
+            story={promotedPost}
+            tweets={tweets}
+            homeVideo={homeVideo}
+            onPlayVideo={onPlayVideo}
+          />
           <div className="homepage-entrypoints">
-            <Entrypoints />
+            <Entrypoints onClickNext={clickNextEntrypoint} onClick={clickEntrypoint} />
           </div>
           <div className="homepage-map">
             <div className="row">
@@ -69,7 +84,10 @@ Home.propTypes = {
   blogPosts: PropTypes.array,
   promotedPost: PropTypes.object,
   homeVideo: PropTypes.string,
-  goToContextPage: PropTypes.func
+  goToContextPage: PropTypes.func,
+  onPlayVideo: PropTypes.func.isRequired,
+  clickNextEntrypoint: PropTypes.func.isRequired,
+  clickEntrypoint: PropTypes.func.isRequired
 };
 
 export default Home;

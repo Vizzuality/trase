@@ -173,6 +173,8 @@ class DashboardPanel extends Component {
       setActiveItems,
       onContinue,
       onBack,
+      goToDashboard,
+      dirtyBlocks,
       dynamicSentenceParts,
       step,
       isDisabled
@@ -197,6 +199,8 @@ class DashboardPanel extends Component {
           onContinue={onContinue}
           onBack={onBack}
           backText="Back"
+          dirtyBlocks={dirtyBlocks}
+          goToDashboard={goToDashboard}
           removeSentenceItem={setActiveItems}
           clearPanel={panelName => clearActiveItems(panelName)}
           dynamicSentenceParts={dynamicSentenceParts}
@@ -212,8 +216,10 @@ DashboardPanel.propTypes = {
   tabs: PropTypes.array,
   sources: PropTypes.object,
   countries: PropTypes.array,
+  dirtyBlocks: PropTypes.array,
   companies: PropTypes.object,
   getMoreItems: PropTypes.func,
+  goToDashboard: PropTypes.func,
   commodities: PropTypes.array,
   activePanelId: PropTypes.string,
   loading: PropTypes.bool.isRequired,

@@ -1,10 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Siema from 'react-siema';
 import Link from 'redux-first-router-link';
 import debounce from 'lodash/debounce';
+import cx from 'classnames';
+import Heading from 'react-components/shared/heading/heading.component';
 
 import './entrypoints.scss';
-import Heading from 'react-components/shared/heading/heading.component';
 
 class Entrypoints extends React.PureComponent {
   constructor(props) {
@@ -59,6 +61,8 @@ class Entrypoints extends React.PureComponent {
   }
 
   onClickNext() {
+    const { onClickNext } = this.props;
+    onClickNext();
     this.slider.next();
   }
 
@@ -79,9 +83,15 @@ class Entrypoints extends React.PureComponent {
   }
 
   renderEntrypoints(grid) {
+    const { onClick } = this.props;
+
     return this.entrypoints.map(slide => (
       <div key={slide.subtitle} className={grid}>
-        <div className={`entrypoint-slide ${slide.className}`}>
+        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+        <div
+          className={cx('entrypoint-slide', slide.className)}
+          onClick={() => onClick(slide.link)}
+        >
           <Link to={slide.link}>
             <div className="entrypoint-slide-content">
               <Heading variant="mono" color="pink" size="sm">
@@ -124,5 +134,10 @@ class Entrypoints extends React.PureComponent {
     );
   }
 }
+
+Entrypoints.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  onClickNext: PropTypes.func.isRequired
+};
 
 export default Entrypoints;

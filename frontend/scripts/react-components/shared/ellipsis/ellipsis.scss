@@ -1,0 +1,8 @@
+@import 'styles/settings';
+@import 'styles/mixins';
+
+.c-ellipsis-tooltip {
+  &::after {
+    display: none;
+  }
+}
