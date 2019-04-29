@@ -1,0 +1,6 @@
+{
+  "data": [{
+    "type": "bar_chart",
+    "url": "https://staging.trase.earth/api/v3/dashboards/charts/multi_year_no_ncont_overview?commodity_id=1\u0026companies_ids=\u0026cont_attribute_id=25\u0026country_id=27\u0026destinations_ids=\u0026end_year=2017\u0026sources_ids=\u0026start_year=2003\u0026type=bar_chart\u0026x=year"
+  }]
+}

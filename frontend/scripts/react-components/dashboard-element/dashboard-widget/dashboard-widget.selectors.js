@@ -3,20 +3,21 @@ import omitBy from 'lodash/omitBy';
 import sortBy from 'lodash/sortBy';
 import kebabCase from 'lodash/kebabCase';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
+import { CHART_TYPES } from 'constants';
+import camelCase from 'lodash/camelCase';
 
-export const PARSED_CHART_TYPES = {
-  bar_chart: 'bar',
-  donut_chart: 'pie',
-  ranking_chart: 'ranking',
-  stacked_bar_chart: 'stackedBar',
-  dynamic_sentence: 'dynamicSentence',
-  horizontal_bar_chart: 'horizontalBar',
-  horizontal_stacked_bar_chart: 'horizontalStackedBar'
+const parsedChartTypes = {
+  bar_chart: CHART_TYPES.bar,
+  donut_chart: CHART_TYPES.pie,
+  stacked_bar_chart: CHART_TYPES.stackedBar,
+  dynamic_sentence: CHART_TYPES.dynamicSentence,
+  horizontal_bar_chart: CHART_TYPES.horizontalBar,
+  horizontal_stacked_bar_chart: CHART_TYPES.horizontalStackedBar
 };
 
 const getMeta = (state, { meta }) => meta || null;
 const getData = (state, { data }) => data || null;
-const getChartType = (state, { chartType }) => (chartType ? PARSED_CHART_TYPES[chartType] : null);
+const getChartType = (state, { chartType }) => (chartType ? parsedChartTypes[chartType] : null);
 const getSelectedRecolorBy = (state, props) => props.selectedRecolorBy;
 
 export const getDefaultConfig = createSelector(
@@ -126,6 +127,7 @@ export const getXKeys = createSelector(
   }
 );
 
+export const makeGetChartType = () => getChartType;
 export const makeGetConfig = () =>
   createSelector(
     [getMeta, getYKeys, getXKeys, getColors, getDefaultConfig],
@@ -157,5 +159,49 @@ export const makeGetConfig = () =>
         colors
       };
       return config;
+    }
+  );
+
+const getPluralNodeType = nodeType => {
+  const name = camelCase(nodeType);
+  return (
+    {
+      country: 'countries',
+      municipality: 'municipalities'
+    }[name] || `${nodeType}s`.toLowerCase()
+  );
+};
+const getNodeTypeName = pluralNodeType =>
+  pluralNodeType === 'countries' ? 'importing countries' : pluralNodeType;
+
+const getFilterPreposition = filterKey => {
+  switch (filterKey) {
+    case 'companies':
+      return 'of';
+    case 'destinations':
+      return 'to';
+    case 'sources':
+      return 'in';
+    default:
+      return '';
+  }
+};
+
+export const makeGetTitle = () =>
+  createSelector(
+    [getMeta],
+    meta => {
+      if (!meta || !meta.info) return '';
+      const topNPart = meta.info.top_n ? `Top ${meta.info.top_n}` : null;
+      const nodeTypePart = meta.info.node_type
+        ? getNodeTypeName(getPluralNodeType(meta.info.node_type))
+        : 'Selection overview';
+      let filterPart = '';
+      const filterKey = meta.info.single_filter_key;
+      if (filterKey) {
+        const name = meta.info.filter[filterKey][0].name;
+        filterPart = `${getFilterPreposition(filterKey)} ${name}`;
+      }
+      return [topNPart, nodeTypePart, filterPart].filter(Boolean).join(' ');
     }
   );

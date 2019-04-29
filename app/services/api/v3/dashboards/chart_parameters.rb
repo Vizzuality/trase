@@ -13,8 +13,8 @@ module Api
                     :companies_ids,
                     :destinations_ids,
                     :node_type,
-                    :nodes_ids_by_position,
-                    :top_n
+                    :top_n,
+                    :single_filter_key
 
         # @param params [Hash]
         # @option params [Integer] country_id
@@ -28,6 +28,7 @@ module Api
         # @option params [Integer] end_year
         # @option params [Integer] node_type_id
         # @option params [Integer] top_n
+        # @option params [String] single_filter_key
         def initialize(params)
           @country_id = params[:country_id]
           @commodity_id = params[:commodity_id]
@@ -44,29 +45,41 @@ module Api
           @sources_ids = params[:sources_ids] || []
           @companies_ids = params[:companies_ids] || []
           @destinations_ids = params[:destinations_ids] || []
-          ids_to_positions = Hash[
-            @context.context_node_types.
-              select(:node_type_id, :column_position).map do |cnt|
-              [cnt.node_type_id, cnt.column_position]
-            end
-          ]
           initialize_node_type(params[:node_type_id])
-          @nodes_ids_by_position = Api::V3::Node.select(:id, :node_type_id).
-            where(
-              id: @sources_ids + @companies_ids + @destinations_ids
-            ).includes(:node_type).group_by do |node|
-              ids_to_positions[node.node_type_id]
-            end
 
           @start_year = params[:start_year]
           @end_year = params[:end_year]
           @top_n = params[:top_n]
+          @single_filter_key = params[:single_filter_key]
         end
 
         def node_type_idx
           return unless @node_type
 
           Api::V3::NodeType.node_index_for_id(@context, @node_type.id)
+        end
+
+        def nodes
+          return @nodes if defined? @nodes
+
+          @nodes = Api::V3::Node.where(
+            id: @sources_ids + @companies_ids + @destinations_ids
+          ).includes(:node_type)
+        end
+
+        def nodes_ids_by_position
+          return @nodes_ids_by_position if defined? @nodes_ids_by_position
+
+          node_type_ids_to_positions = Hash[
+            @context.context_node_types.
+              select(:node_type_id, :column_position).map do |cnt|
+              [cnt.node_type_id, cnt.column_position]
+            end
+          ]
+          @nodes_ids_by_position = nodes.select(:id, :node_type_id).
+            group_by do |node|
+              node_type_ids_to_positions[node.node_type_id]
+            end
         end
 
         private

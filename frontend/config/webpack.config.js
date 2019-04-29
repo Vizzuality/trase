@@ -18,7 +18,7 @@ const templates = require('./static.templates');
 module.exports = {
   entry: {
     fetch: 'whatwg-fetch',
-    main: ['@babel/polyfill', path.join(srcPath, 'index')]
+    main: path.join(srcPath, 'index')
   },
   output: {
     filename: '[name].[chunkhash].js',
@@ -110,29 +110,6 @@ module.exports = {
             }
           },
           'eslint-loader'
-        ]
-      },
-      {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: { minimize: !isDev }
-          },
-          'postcss-loader'
-        ]
-      },
-      {
-        test: /\.scss$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: { minimize: !isDev }
-          },
-          'postcss-loader',
-          'sass-loader'
         ]
       },
       {

@@ -37,13 +37,16 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontOverview do
 
   let(:data) { result[:data] }
 
+  def idx_of_x(data, x)
+    data.index { |element| element[:x] == x }
+  end
+
   describe :call do
     context 'when no flow path filters' do
       let(:parameters_hash) { shared_parameters_hash }
       it 'summarized all flows per ncont' do
         expect(data.size).to eq(5)
-        expect(data[0][:x]).to eq(1)
-        expect(data[0][:y0]).to eq(10)
+        expect(data[idx_of_x(data, 1.0)][:y0]).to eq(10)
       end
     end
 
@@ -53,8 +56,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontOverview do
       }
       it 'summarized flows matching exporter per ncont' do
         expect(data.size).to eq(1)
-        expect(data[0][:x]).to eq(4)
-        expect(data[0][:y0]).to eq(25)
+        expect(data[idx_of_x(data, 4.0)][:y0]).to eq(25)
       end
     end
 
@@ -68,8 +70,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontOverview do
       }
       it 'summarized flows matching either exporter per ncont' do
         expect(data.size).to eq(5)
-        expect(data[2][:x]).to eq(3)
-        expect(data[2][:y0]).to eq(20)
+        expect(data[idx_of_x(data, 3.0)][:y0]).to eq(20)
       end
     end
 
@@ -83,8 +84,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontOverview do
       }
       it 'summarized flows matching exporter AND importer per ncont' do
         expect(data.size).to eq(1)
-        expect(data[0][:x]).to eq(4)
-        expect(data[0][:y0]).to eq(25)
+        expect(data[idx_of_x(data, 4.0)][:y0]).to eq(25)
       end
     end
 
@@ -101,8 +101,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontOverview do
       }
       it 'summarized flows matching either exporter AND either importer per ncont' do
         expect(data.size).to eq(5)
-        expect(data[0][:x]).to eq(1)
-        expect(data[0][:y0]).to eq(10)
+        expect(data[idx_of_x(data, 1.0)][:y0]).to eq(10)
       end
     end
   end

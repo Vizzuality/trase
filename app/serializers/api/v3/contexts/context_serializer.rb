@@ -30,31 +30,21 @@ module Api
           object.commodity.name
         end
 
-        # TODO: remove once API migration finalised
         attribute :filter_by do
-          biome_context_node_type = object.context_node_types.
-            joins(:node_type).
-            where('node_types.name' => NodeTypeName::BIOME).
-            first
-          if biome_context_node_type # Brazil - Soy only
-            [
-              {
-                name: NodeTypeName::BIOME,
-                nodes: Api::V3::Node.where(
-                  node_type_id: biome_context_node_type.node_type_id
-                ).
-                  where(is_unknown: false).
-                  where("name NOT LIKE 'OTHER%'").map do |node|
-                    {
-                      name: node.name,
-                      node_id: node.id
-                    }
-                  end
-              }
-            ]
-          else
-            []
-          end
+          nodes = object.biome_nodes
+          next [] unless nodes.any?
+
+          [
+            {
+              name: NodeTypeName::BIOME,
+              nodes: nodes.map do |node|
+                {
+                  name: node.name,
+                  node_id: node.id
+                }
+              end
+            }
+          ]
         end
 
         attribute :world_map do

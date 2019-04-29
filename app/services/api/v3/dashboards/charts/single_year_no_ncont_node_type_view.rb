@@ -10,27 +10,35 @@ module Api
 
           # @param chart_parameters [Api::V3::Dashboards::ChartParameters]
           def initialize(chart_parameters)
+            @chart_parameters = chart_parameters
             @cont_attribute = chart_parameters.cont_attribute
             @context = chart_parameters.context
             @year = chart_parameters.start_year
             @node_type = chart_parameters.node_type
             @node_type_idx = chart_parameters.node_type_idx
-            @nodes_ids_by_position = chart_parameters.nodes_ids_by_position
             @top_n = chart_parameters.top_n
             initialize_query
             initialize_top_n_and_others_query
           end
 
           def call
-            @data = @top_n_and_others_query.map do |r|
-              r.attributes.slice('x', 'y0').symbolize_keys
+            @data = []
+            x_labels_profile_info = []
+            @top_n_and_others_query.map do |record|
+              x_labels_profile_info << {
+                id: record['id'],
+                profile: profile_for_node_type_id(record['node_type_id'])
+              }
+              @data << record.attributes.slice('x', 'y0').symbolize_keys
             end
             if (last = @data.last) && last[:x] == OTHER && last[:y0].blank?
               @data.pop
+              x_labels_profile_info.pop
             end
 
             @meta = {
               xAxis: node_type_axis_meta(@node_type),
+              xLabelsProfileInfo: x_labels_profile_info,
               yAxis: axis_meta(@cont_attribute, 'number'),
               x: node_type_legend_meta(@node_type),
               y0: legend_meta(@cont_attribute),
@@ -61,9 +69,9 @@ module Api
             subquery = <<~SQL
               (
                 WITH q AS (#{@query.to_sql}),
-                u1 AS (SELECT x, y0 FROM q ORDER BY y0 DESC LIMIT #{@top_n}),
+                u1 AS (SELECT id, node_type_id, x, y0 FROM q WHERE NOT is_unknown ORDER BY y0 DESC LIMIT #{@top_n}),
                 u2 AS (
-                  SELECT '#{OTHER}' AS x, SUM(y0) AS y0 FROM q
+                  SELECT NULL::INT, NULL::INT, '#{OTHER}'::TEXT AS x, SUM(y0) AS y0 FROM q
                   WHERE NOT EXISTS (SELECT 1 FROM u1 WHERE q.x = u1.x)
                 )
                 SELECT * FROM u1

@@ -34,9 +34,9 @@ module Api
 
           def apply_node_type_x
             @query = @query.
-              select('nodes.name AS x').
+              select('nodes.id, nodes.node_type_id, nodes.name AS x, nodes.is_unknown').
               joins("JOIN nodes ON nodes.id = flows.path[#{@node_type_idx}]").
-              group('nodes.name')
+              group('nodes.id')
           end
 
           def apply_year_x
@@ -64,7 +64,7 @@ module Api
           end
 
           def apply_flow_path_filters
-            @nodes_ids_by_position.each do |position, nodes_ids|
+            @chart_parameters.nodes_ids_by_position.each do |position, nodes_ids|
               @query = @query.where(
                 'flows.path[?] IN (?)', position + 1, nodes_ids
               )
@@ -175,6 +175,48 @@ module Api
             end
           end
 
+          def profile_for_node_type_id(node_type_id)
+            profiles_by_node_type_id[node_type_id]&.name
+          end
+
+          def profiles_by_node_type_id
+            return @profiles_by_node_type_id if defined? @profiles_by_node_type_id
+
+            context_node_types_with_profiles = @context.context_node_types.
+              includes(:profile)
+            @profiles_by_node_type_id = Hash[
+              context_node_types_with_profiles.map { |cnt| [cnt.node_type_id, cnt.profile] }
+            ]
+          end
+
+          def flow_path_filters
+            flow_path_filters = {}
+            nodes = @chart_parameters.nodes
+            nodes_by_node_id = Hash[nodes.map { |node| [node.id, node] }]
+            [:sources, :companies, :destinations].each do |filter_name|
+              nodes_ids = @chart_parameters.send(:"#{filter_name}_ids")
+              flow_path_filters[filter_name] = flow_path_filter(
+                nodes_ids, nodes_by_node_id, profiles_by_node_type_id
+              )
+            end
+            flow_path_filters
+          end
+
+          def flow_path_filter(nodes_ids, nodes_by_node_id, profiles_by_node_type_id)
+            nodes_ids.map do |node_id|
+              node = nodes_by_node_id[node_id]
+              node_type = node.node_type
+              profile = profiles_by_node_type_id[node.node_type_id]
+              {
+                id: node.id,
+                name: node.name,
+                node_type_id: node_type.id,
+                node_type: node_type.name,
+                profile: profile&.name
+              }
+            end
+          end
+
           def info
             {
               node_type: @node_type.try(:name),
@@ -186,7 +228,8 @@ module Api
               filter: {
                 cont_attribute: @cont_attribute.try(:display_name),
                 ncont_attribute: @ncont_attribute.try(:display_name)
-              }
+              }.merge(flow_path_filters),
+              single_filter_key: @chart_parameters.single_filter_key
             }
           end
         end

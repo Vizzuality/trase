@@ -32,13 +32,13 @@
   text-align: center;
   font-family: $font-family-2;
   font-weight: $font-weight-light;
-  font-size: $font-size-x-regular;
+  font-size: $font-size-xx-regular;
 
   .feedback-button {
     display: inline;
     color: $white;
     font-family: $font-family-2;
-    font-size: $font-size-x-regular;
+    font-size: $font-size-xx-regular;
     font-weight: $font-weight-bold;
     cursor: pointer;
   }
@@ -53,6 +53,10 @@
   width: 100%;
   border: 1px solid rgba($light-gray, 0.6);
   border-radius: 5px;
+
+  &:hover {
+    background-color: rgba($white, 0.2);
+  }
 
   .browser-title {
     color: $white;

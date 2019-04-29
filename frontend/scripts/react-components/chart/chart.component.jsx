@@ -25,7 +25,8 @@ class Chart extends PureComponent {
     config: PropTypes.shape({}).isRequired,
     className: PropTypes.string,
     handleMouseMove: PropTypes.func,
-    handleMouseLeave: PropTypes.func
+    handleMouseLeave: PropTypes.func,
+    testId: PropTypes.string
   };
 
   static defaultProps = {
@@ -35,7 +36,7 @@ class Chart extends PureComponent {
   };
 
   render() {
-    const { className, data, config, handleMouseMove, handleMouseLeave } = this.props;
+    const { className, data, config, handleMouseMove, handleMouseLeave, testId } = this.props;
 
     const {
       margin = {},
@@ -74,7 +75,7 @@ class Chart extends PureComponent {
     }
     const defaultMargin = { top: 20, right: 0, left: 100, bottom: 20 };
     return (
-      <div className={`c-chart ${className}`} style={{ height }}>
+      <div className={`c-chart ${className}`} style={{ height }} data-test={testId}>
         <ResponsiveContainer>
           <CHART
             height={height}

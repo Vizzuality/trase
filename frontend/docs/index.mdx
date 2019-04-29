@@ -169,7 +169,12 @@ Run only end to end:
 yarn e2e
 ```
 
-If you need to change some snapshot due to changes in the page and the test is failing:
+We are using Puppeteer-Jest for the End to end tests, also [Polly](https://netflix.github.io/pollyjs) to record and replay stub interactions.
+The recorded interactions will be saved in the recordings folder inside tests. In the future we might want to make a script to remove this folder when we want to update them.
+Right now we can do it manually.
+Also we are using [Puppeteer recorder](https://github.com/checkly/puppeteer-recorder) to record the actions and translate them into code. In the configuration specify the 'data-test' custom data attribute and use it in every element that you want to use.
+
+To update image snapshots due to changes in the page and if test is failing:
 
 ```
 yarn e2e -- -u

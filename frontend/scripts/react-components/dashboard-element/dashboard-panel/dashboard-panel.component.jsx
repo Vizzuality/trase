@@ -147,13 +147,18 @@ class DashboardPanel extends Component {
       return (
         <>
           Choose one{' '}
-          <span className="dashboard-panel-sentence">{singularize(getPanelName(step))}</span>
+          <span className="dashboard-panel-sentence" data-test="dashboard-panel-sentence">
+            {singularize(getPanelName(step))}
+          </span>
         </>
       );
     }
     return (
       <>
-        Choose one or several <span className="dashboard-panel-sentence">{getPanelName(step)}</span>
+        Choose one or several{' '}
+        <span className="dashboard-panel-sentence" data-test="dashboard-panel-sentence">
+          {getPanelName(step)}
+        </span>
         {[DASHBOARD_STEPS.companies, DASHBOARD_STEPS.destinations].includes(step)
           ? ' (Optional)'
           : ''}
@@ -182,7 +187,7 @@ class DashboardPanel extends Component {
             )}
             activeStep={step - 1}
           />
-          <Heading className="dashboard-panel-title" align="center" size="lg">
+          <Heading className="dashboard-panel-title notranslate" align="center" size="lg">
             {editMode ? 'Edit options' : this.renderTitleSentence()}
           </Heading>
           {this.renderPanel()}

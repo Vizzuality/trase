@@ -13,7 +13,7 @@ function DashboardWidgetFetch(props) {
     horizontalStackedBar: 10,
     ranking: 50
   }[type];
-
+  
   const chartUrl = typeof topN !== 'undefined' ? `${url}&top_n=${topN - 1}` : url;
   return (
     <Widget raw={[true]} query={[chartUrl]} params={[]}>
@@ -35,7 +35,6 @@ function DashboardWidgetFetch(props) {
 
 DashboardWidgetFetch.propTypes = {
   url: PropTypes.string,
-  title: PropTypes.string,
   chartType: PropTypes.string,
   selectedRecolorBy: PropTypes.object,
   dynamicSentenceParts: PropTypes.array

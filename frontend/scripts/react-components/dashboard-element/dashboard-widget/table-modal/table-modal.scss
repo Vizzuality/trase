@@ -1,0 +1,16 @@
+@import 'styles/settings';
+
+.c-table-modal {
+  width: 900px;
+  padding: 20px 0 30px;
+  max-height: 100%;
+
+  .table-modal-content {
+    margin: 15px auto 0;
+  }
+
+  .table-modal-footer {
+    padding: 25px 0 0;
+    text-align: center;
+  }
+}

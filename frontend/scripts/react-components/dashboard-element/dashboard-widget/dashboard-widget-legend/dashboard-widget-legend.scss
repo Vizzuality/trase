@@ -13,7 +13,7 @@
   }
 
   .dashboard-widget-legend-list {
-    max-width: 90%;
+    width: 90%;
     display: flex;
     flex-wrap: wrap;
   }
@@ -28,7 +28,12 @@
 
 .dashboard-widget-item {
   justify-content: center;
+  align-self: center;
   flex: 0 0 33%;
+
+  &:last-child {
+    margin: 0;
+  }
 }
 
 .dashboard-widget-key-item {
@@ -39,10 +44,6 @@
 
   .column {
     margin-top: 0;
-  }
-
-  &:last-child {
-    margin: 0;
   }
 
   span {

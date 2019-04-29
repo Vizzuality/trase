@@ -94,10 +94,13 @@ class DashboardElement extends React.PureComponent {
     return (
       <>
         {charts.map(chart => (
-          <div key={chart.id} className="column small-12 medium-6">
+          <div
+            key={chart.id}
+            className="column small-12 medium-6"
+            data-test="dashboard-widget-container"
+          >
             <DashboardWidget
               url={chart.url}
-              title={chart.displayName}
               chartType={chart.type}
               selectedRecolorBy={filters.selectedRecolorBy}
             />
@@ -129,7 +132,7 @@ class DashboardElement extends React.PureComponent {
               <section className="dashboard-element-header">
                 <div className="row">
                   <div className="column small-12">
-                    <h2 className="dashboard-element-title">
+                    <h2 className="dashboard-element-title" data-test="dashboard-element-title">
                       {this.renderDynamicSentence()}
                       <Button
                         size="sm"
@@ -160,7 +163,7 @@ class DashboardElement extends React.PureComponent {
                       <div className="dashboard-filter">
                         <Dropdown
                           color="white"
-                          label="Resize By"
+                          label="Units"
                           placement="bottom-start"
                           onChange={setSelectedResizeBy}
                           options={filters.resizeBy}
@@ -171,6 +174,7 @@ class DashboardElement extends React.PureComponent {
                         <div className="dashboard-filter">
                           <RecolorBy
                             color="white"
+                            label="Indicator"
                             recolorGroups={[]}
                             recolorBys={filters.recolorBy}
                             onChange={setSelectedRecolorBy}

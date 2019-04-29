@@ -8,10 +8,10 @@ module Api
 
           # @param chart_parameters [Api::V3::Dashboards::ChartParameters]
           def initialize(chart_parameters)
+            @chart_parameters = chart_parameters
             @cont_attribute = chart_parameters.cont_attribute
             @context = chart_parameters.context
             @year = chart_parameters.start_year
-            @nodes_ids_by_position = chart_parameters.nodes_ids_by_position
             initialize_query
           end
 

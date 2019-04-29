@@ -46,8 +46,8 @@ class LogisticsMapLegend extends React.PureComponent {
                   checked={layer.active}
                   onChange={e => setLayerActive(layer.id, e.target.checked)}
                 />
-                {tooltips && tooltips[layer.name] && (
-                  <Tooltip text={tooltips[layer.name]} constraint="window" className="size-rg" />
+                {tooltips && tooltips[layer.id] && (
+                  <Tooltip text={tooltips[layer.id]} constraint="window" className="size-rg" />
                 )}
               </div>
             </li>

@@ -23,7 +23,7 @@ RSpec.describe Api::V3::Dashboards::NodeTypesToBreakBy do
     )
   }
 
-  describe 'call' do
+  describe 'selected_node_types' do
     context 'when subnational context with importer node' do
       let!(:source_node_type) {
         cnt = FactoryBot.create(
@@ -60,7 +60,7 @@ RSpec.describe Api::V3::Dashboards::NodeTypesToBreakBy do
         )
       }
       it 'returns available node types to break by' do
-        expect(node_types_to_break_by.call).to eq([
+        expect(node_types_to_break_by.selected_node_types).to eq([
           api_v3_biome_node_type,
           api_v3_exporter_node_type,
           api_v3_importer_node_type,
@@ -88,7 +88,7 @@ RSpec.describe Api::V3::Dashboards::NodeTypesToBreakBy do
         )
       }
       it 'returns available node types to break by' do
-        expect(node_types_to_break_by.call).to eq([
+        expect(node_types_to_break_by.selected_node_types).to eq([
           api_v3_exporter_node_type,
           api_v3_importer_node_type,
           api_v3_country_node_type
@@ -123,7 +123,7 @@ RSpec.describe Api::V3::Dashboards::NodeTypesToBreakBy do
         )
       }
       it 'returns available node types to break by' do
-        expect(node_types_to_break_by.call).to eq([
+        expect(node_types_to_break_by.selected_node_types).to eq([
           api_v3_biome_node_type,
           api_v3_exporter_node_type,
           api_v3_country_node_type
@@ -141,7 +141,7 @@ RSpec.describe Api::V3::Dashboards::NodeTypesToBreakBy do
         )
       }
       it 'returns available node types to break by' do
-        expect(node_types_to_break_by.call).to eq([
+        expect(node_types_to_break_by.selected_node_types).to eq([
           api_v3_exporter_node_type,
           api_v3_country_node_type
         ])

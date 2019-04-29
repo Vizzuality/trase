@@ -253,3 +253,12 @@ export const DASHBOARD_STEPS = {
   destinations: 3,
   companies: 4
 };
+
+export const CHART_TYPES = {
+  bar: 'bar',
+  pie: 'pie',
+  stackedBar: 'stackedBar',
+  dynamicSentence: 'dynamicSentence',
+  horizontalBar: 'horizontalBar',
+  horizontalStackedBar: 'horizontalStackedBarChart'
+};
