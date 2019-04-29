@@ -222,8 +222,6 @@ tables:
   - name: dashboards_attributes
     comment: Attributes (inds/quals/quants) available in dashboards
     columns:
-      - name: chart_type
-        comment: Type of chart to use in dashboards
       - name: position
         comment: Display order in scope of group
   - name: dashboards_inds

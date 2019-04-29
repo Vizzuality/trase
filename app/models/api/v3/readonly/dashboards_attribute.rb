@@ -5,9 +5,6 @@
 #  id                            :bigint(8)        primary key
 #  dashboards_attribute_group_id :bigint(8)
 #  position                      :integer
-#  chart_type                    :string
-#  created_at                    :datetime
-#  updated_at                    :datetime
 #  attribute_id                  :bigint(8)
 #
 # Indexes

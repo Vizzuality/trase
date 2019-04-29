@@ -2730,7 +2730,6 @@ CREATE TABLE public.dashboards_attributes (
     id bigint NOT NULL,
     dashboards_attribute_group_id bigint NOT NULL,
     "position" integer NOT NULL,
-    chart_type character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -2748,13 +2747,6 @@ COMMENT ON TABLE public.dashboards_attributes IS 'Attributes (inds/quals/quants)
 --
 
 COMMENT ON COLUMN public.dashboards_attributes."position" IS 'Display order in scope of group';
-
-
---
--- Name: COLUMN dashboards_attributes.chart_type; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_attributes.chart_type IS 'Type of chart to use in dashboards';
 
 
 --
@@ -2844,9 +2836,6 @@ CREATE MATERIALIZED VIEW public.dashboards_attributes_mv AS
  SELECT da.id,
     da.dashboards_attribute_group_id,
     da."position",
-    da.chart_type,
-    da.created_at,
-    da.updated_at,
     a.id AS attribute_id
    FROM ((public.dashboards_inds di
      JOIN public.dashboards_attributes da ON ((da.id = di.dashboards_attribute_id)))
@@ -2855,9 +2844,6 @@ UNION ALL
  SELECT da.id,
     da.dashboards_attribute_group_id,
     da."position",
-    da.chart_type,
-    da.created_at,
-    da.updated_at,
     a.id AS attribute_id
    FROM ((public.dashboards_quals dq
      JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
@@ -2866,9 +2852,6 @@ UNION ALL
  SELECT da.id,
     da.dashboards_attribute_group_id,
     da."position",
-    da.chart_type,
-    da.created_at,
-    da.updated_at,
     a.id AS attribute_id
    FROM ((public.dashboards_quants dq
      JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
@@ -8806,6 +8789,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190320172713'),
 ('20190321122822'),
 ('20190321161913'),
-('20190429104832');
+('20190429104832'),
+('20190429112751');
 
 

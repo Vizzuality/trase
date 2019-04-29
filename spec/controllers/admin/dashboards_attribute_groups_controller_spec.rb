@@ -6,9 +6,7 @@ RSpec.describe Admin::DashboardsAttributeGroupsController, type: :controller do
 
   describe 'POST create' do
     let(:valid_attributes) {
-      FactoryBot.attributes_for(
-        :api_v3_dashboards_attribute_group, chart_type: 'line'
-      )
+      FactoryBot.attributes_for(:api_v3_dashboards_attribute_group)
     }
     it 'clears cache' do
       expect(controller).to receive(:clear_cache_for_regexp)
