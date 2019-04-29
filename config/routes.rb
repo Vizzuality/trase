@@ -84,7 +84,6 @@ Rails.application.routes.draw do
         end
         resources :attributes
         resources :filter_meta, only: [:index]
-        resources :chart_data, only: [:index]
         namespace :charts do
           resources :single_year_no_ncont_overview, only: [:index]
           resources :single_year_no_ncont_node_type_view, only: [:index]
