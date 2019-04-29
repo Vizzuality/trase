@@ -6,20 +6,19 @@ import Widget from 'react-components/widgets/widget.component';
 import { PARSED_CHART_TYPES } from './dashboard-widget.selectors';
 
 function DashboardWidgetFetch(props) {
-  const { url, title, dynamicSentenceParts, chartType, selectedRecolorBy } = props;
+  const { url, dynamicSentenceParts, chartType, selectedRecolorBy } = props;
   const type = PARSED_CHART_TYPES[chartType];
   const topN = {
     horizontalBar: 10,
     horizontalStackedBar: 10,
     ranking: 50
   }[type];
-  
+
   const chartUrl = typeof topN !== 'undefined' ? `${url}&top_n=${topN - 1}` : url;
   return (
     <Widget raw={[true]} query={[chartUrl]} params={[]}>
       {({ data, loading, error, meta }) => (
         <DashboardWidgetContainer
-          title={title}
           error={error}
           loading={loading}
           chartType={chartType}

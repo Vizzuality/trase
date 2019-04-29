@@ -6,7 +6,7 @@ import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/da
 import { CHART_TYPES } from 'constants';
 import camelCase from 'lodash/camelCase';
 
-const parsedChartTypes = {
+export const PARSED_CHART_TYPES = {
   bar_chart: CHART_TYPES.bar,
   donut_chart: CHART_TYPES.pie,
   stacked_bar_chart: CHART_TYPES.stackedBar,
@@ -17,7 +17,7 @@ const parsedChartTypes = {
 
 const getMeta = (state, { meta }) => meta || null;
 const getData = (state, { data }) => data || null;
-const getChartType = (state, { chartType }) => (chartType ? parsedChartTypes[chartType] : null);
+const getChartType = (state, { chartType }) => (chartType ? PARSED_CHART_TYPES[chartType] : null);
 const getSelectedRecolorBy = (state, props) => props.selectedRecolorBy;
 
 export const getDefaultConfig = createSelector(
@@ -192,7 +192,8 @@ export const makeGetTitle = () =>
     [getMeta],
     meta => {
       if (!meta || !meta.info) return '';
-      const topNPart = meta.info.top_n ? `Top ${meta.info.top_n}` : null;
+      // adding 1 to the top_n to count in "other" aggregation
+      const topNPart = meta.info.top_n ? `Top ${meta.info.top_n + 1}` : null;
       const nodeTypePart = meta.info.node_type
         ? getNodeTypeName(getPluralNodeType(meta.info.node_type))
         : 'Selection overview';

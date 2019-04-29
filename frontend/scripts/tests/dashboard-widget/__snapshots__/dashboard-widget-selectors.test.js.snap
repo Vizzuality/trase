@@ -108,6 +108,7 @@ Object {
     },
   ],
   "layout": "vertical",
+  "parse": true,
   "tooltip": Object {
     "content": null,
     "cursor": Object {
@@ -125,6 +126,10 @@ Object {
     },
     "tickLine": false,
     "type": "number",
+  },
+  "xAxisLabel": Object {
+    "suffix": "t",
+    "text": "Trade volume",
   },
   "xKeys": Object {
     "bars": Object {
@@ -201,6 +206,7 @@ Object {
     },
   ],
   "layout": "vertical",
+  "parse": true,
   "tooltip": Object {
     "content": null,
     "cursor": Object {
@@ -218,6 +224,10 @@ Object {
     },
     "tickLine": false,
     "type": "number",
+  },
+  "xAxisLabel": Object {
+    "suffix": "t",
+    "text": "Trade volume",
   },
   "xKeys": Object {
     "bars": Object {
