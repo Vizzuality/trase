@@ -39,10 +39,7 @@ module Api
             }
 
             break_by_values_indexes.each do |break_by, idx|
-              @meta[:"y#{idx}"] = {
-                label: break_by,
-                tooltip: {prefix: '', format: '', suffix: ''}
-              }
+              @meta[:"y#{idx}"] = series_legend_meta(break_by, @cont_attribute)
             end
 
             {data: @data, meta: @meta}

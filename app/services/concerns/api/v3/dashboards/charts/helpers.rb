@@ -108,6 +108,13 @@ module Api
             }
           end
 
+          def series_legend_meta(series_name, attribute)
+            {
+              label: series_name,
+              tooltip: {prefix: '', format: '', suffix: attribute.unit}
+            }
+          end
+
           def node_type_legend_meta(node_type)
             {
               label: node_type.name,
