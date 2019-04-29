@@ -64,7 +64,7 @@ const colors = {
     }
   },
   stars: {
-    'red-blue': ['#000', '#E54935', '#FFC389', '#FFFECC', '#E5F5F9', '#79A8D0']
+    'red-blue': ['#000', '#6F0119', '#D72F27', '#FDAE61', '#79A8CF', '#246AB6']
   },
   linear: {
     'red-blue': [
