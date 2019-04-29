@@ -9,15 +9,6 @@ env:
     - GFW_WIDGETS_BASE_URL=
     - SURGE_LOGIN=trase.vizzuality@gmail.com
     - SURGE_TOKEN=$SURGE_TOKEN # Set in the settings page of your repository, as a secure variable
-before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
-after_script:
-  - ./cc-test-reporter format-coverage -t simplecov -o coverage/codeclimate.backend.json coverage/backend/.resultset.json
-  - ./cc-test-reporter format-coverage -t lcov -o coverage/codeclimate.frontend.json ./frontend/coverage/lcov.info
-  - ./cc-test-reporter sum-coverage coverage/codeclimate.*.json -p 2
-  - if [[ "$TRAVIS_TEST_RESULT" == 0 ]]; then ./cc-test-reporter upload-coverage; fi
 matrix:
   include:
     - language: ruby
@@ -32,8 +23,15 @@ matrix:
         - sudo apt-get install -y graphviz
       before_script:
         - bundle exec rake db:drop db:create db:structure:load RAILS_ENV=test
+        - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        - chmod +x ./cc-test-reporter
+        - ./cc-test-reporter before-build
+
       script:
         - TRASE_LOCAL_MIRROR_SCHEMA=tool_tables TRASE_LOCAL_SCHEMA=public bundle exec rspec spec --fail-fast
+
+      after_script:
+        - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
       before_deploy:
         - bundle exec rake db:doc:html
@@ -63,6 +61,4 @@ matrix:
         - yarn install
       script:
         - yarn ci
-      after_script:
-        - cd ..
 
