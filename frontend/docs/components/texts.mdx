@@ -4,6 +4,7 @@ menu: Components
 ---
 import { PropsTable, Playground } from 'docz'
 import Heading from 'react-components/shared/heading/heading.component';
+import Ellipsis from 'react-components/shared/ellipsis';
 import Text from 'react-components/shared/text';
 import 'styles/_docz.scss';
 
@@ -89,6 +90,23 @@ import 'styles/_docz.scss';
   <Text color="grey" variant="mono">I'm a mono text with color grey</Text>
   <Text color="grey-faded" variant="mono">I'm a mono text with color grey-faded</Text>
   <Text color="pink" variant="mono">I'm a mono text with color pink</Text>
+</div>
+<div className="components-container">
+  <Text color="grey" variant="mono">
+    <Ellipsis>
+      Short text with ellipsis
+    </Ellipsis>
+  </Text>
+  <Text color="grey" variant="mono">
+    <Ellipsis>
+      I'm a mono text with ellipsis color grey
+    </Ellipsis>
+  </Text>
+  <Text color="grey" variant="mono">
+    <Ellipsis charLimit={60}>
+      I'm a mono text with ellipsis color grey with ellipsis color grey with ellipsis color grey with ellipsis color grey
+    </Ellipsis>
+  </Text>
 </div>
 <PropsTable of={Text} />
 

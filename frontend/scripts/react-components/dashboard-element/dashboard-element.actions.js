@@ -24,6 +24,8 @@ export const DASHBOARD_ELEMENT__SET_CHARTS = 'DASHBOARD_ELEMENT__SET_CHARTS';
 export const DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS =
   'DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS';
 export const DASHBOARD_ELEMENT__SET_CHARTS_LOADING = 'DASHBOARD_ELEMENT__SET_CHARTS_LOADING';
+export const DASHBOARD_ELEMENT__EDIT_DASHBOARD = 'DASHBOARD_ELEMENT__EDIT_DASHBOARD';
+export const DASHBOARD_ELEMENT__GO_TO_DASHBOARD = 'DASHBOARD_ELEMENT__GO_TO_DASHBOARD';
 
 export const getDashboardPanelParams = (state, optionsType, options = {}) => {
   const {
@@ -145,4 +147,13 @@ export const setDashboardCharts = charts => ({
 export const setDashboardChartsLoading = loading => ({
   type: DASHBOARD_ELEMENT__SET_CHARTS_LOADING,
   payload: { loading }
+});
+
+export const editDashboard = () => ({
+  type: DASHBOARD_ELEMENT__EDIT_DASHBOARD
+});
+
+export const goToDashboard = payload => ({
+  type: DASHBOARD_ELEMENT__GO_TO_DASHBOARD,
+  payload
 });

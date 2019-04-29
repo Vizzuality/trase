@@ -1,5 +1,7 @@
 // jest.config.js
-require('@babel/polyfill');
+require('core-js/stable');
+require('regenerator-runtime/runtime');
+const path = require('path');
 
 module.exports = {
   rootDir: 'scripts',
@@ -12,5 +14,7 @@ module.exports = {
   },
   collectCoverage: process.env.JEST_CI && JSON.parse(process.env.JEST_CI),
   collectCoverageFrom: ['**/*.js'],
+  coverageReporters: ['lcov'],
+  coverageDirectory: path.join(__dirname, '..', 'coverage'),
   coveragePathIgnorePatterns: ['tests/puppeteer']
 };

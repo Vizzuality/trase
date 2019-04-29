@@ -35,7 +35,8 @@ export const getDirtyBlocks = createSelector(
     getCommoditiesPanel
   ],
   (countriesPanel, sourcesPanel, destinationsPanel, companiesPanel, commoditiesPanel) => ({
-    sources: !isEmpty(countriesPanel.activeItems),
+    countries: !isEmpty(countriesPanel.activeItems),
+    sources: !isEmpty(sourcesPanel.activeItems),
     destinations: !isEmpty(destinationsPanel.activeItems),
     companies: !isEmpty(companiesPanel.activeItems),
     commodities: !isEmpty(commoditiesPanel.activeItems)

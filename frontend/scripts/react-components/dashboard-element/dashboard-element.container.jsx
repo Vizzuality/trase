@@ -13,7 +13,8 @@ import {
   setDashboardSelectedYears,
   setDashboardSelectedResizeBy,
   setDashboardSelectedRecolorBy,
-  setDashboardActivePanel as setDashboardActivePanelFn
+  setDashboardActivePanel as setDashboardActivePanelFn,
+  editDashboard as editDashboardFn
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import { DASHBOARD_STEPS } from 'constants';
 
@@ -24,7 +25,7 @@ const mapStateToProps = state => {
     charts: state.dashboardElement.charts,
     filters: getDashboardFiltersProps(state),
     dynamicSentenceParts: getDynamicSentence(state),
-    showModalOnStart: !(dirtyBlocks.sources && dirtyBlocks.commodities)
+    showModalOnStart: !(dirtyBlocks.countries && dirtyBlocks.commodities)
   };
 };
 
@@ -35,7 +36,8 @@ const mapDispatchToProps = dispatch =>
       setSelectedYears: setDashboardSelectedYears,
       setSelectedResizeBy: setDashboardSelectedResizeBy,
       setDashboardActivePanel: setDashboardActivePanelFn,
-      setSelectedRecolorBy: setDashboardSelectedRecolorBy
+      setSelectedRecolorBy: setDashboardSelectedRecolorBy,
+      editDashboard: editDashboardFn
     },
     dispatch
   );
@@ -48,6 +50,7 @@ class DashboardElementContainer extends React.Component {
     showModalOnStart: PropTypes.bool,
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
+    editDashboard: PropTypes.func.isRequired,
     setSelectedYears: PropTypes.func.isRequired,
     setSelectedResizeBy: PropTypes.func.isRequired,
     setSelectedRecolorBy: PropTypes.func.isRequired,
@@ -90,7 +93,10 @@ class DashboardElementContainer extends React.Component {
     this.setState({ modalOpen: false });
   };
 
-  reopenPanel = step => this.setState({ step, editMode: true, modalOpen: true });
+  reopenPanel = step => {
+    this.props.editDashboard();
+    this.setState({ step, editMode: true, modalOpen: true });
+  };
 
   updateStep = step => this.setState({ step });
 
