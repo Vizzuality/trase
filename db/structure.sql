@@ -3083,208 +3083,6 @@ CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
 
 
 --
--- Name: flow_inds; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.flow_inds (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    ind_id integer NOT NULL,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE flow_inds; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.flow_inds IS 'Values of inds for flow';
-
-
---
--- Name: COLUMN flow_inds.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.flow_inds.value IS 'Numeric value';
-
-
---
--- Name: flow_quals; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.flow_quals (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    value text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE flow_quals; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.flow_quals IS 'Values of quals for flow';
-
-
---
--- Name: COLUMN flow_quals.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.flow_quals.value IS 'Textual value';
-
-
---
--- Name: flow_quants; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.flow_quants (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE flow_quants; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.flow_quants IS 'Values of quants for flow';
-
-
---
--- Name: COLUMN flow_quants.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.flow_quants.value IS 'Numeric value';
-
-
---
--- Name: dashboards_flow_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.dashboards_flow_attributes_mv AS
- SELECT DISTINCT contexts.country_id,
-    contexts.commodity_id,
-    flows.path,
-    a.id AS attribute_id,
-    a.display_name,
-    a.tooltip_text,
-    da.chart_type,
-    da.dashboards_attribute_group_id,
-    da."position"
-   FROM (((((public.flows
-     JOIN public.contexts ON ((flows.context_id = contexts.id)))
-     JOIN public.flow_inds ON ((flows.id = flow_inds.flow_id)))
-     JOIN public.dashboards_inds di ON ((flow_inds.ind_id = di.ind_id)))
-     JOIN public.dashboards_attributes da ON ((da.id = di.dashboards_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = di.ind_id) AND (a.original_type = 'Ind'::text))))
-  WHERE (a.display_name IS NOT NULL)
-UNION ALL
- SELECT DISTINCT contexts.country_id,
-    contexts.commodity_id,
-    flows.path,
-    a.id AS attribute_id,
-    a.display_name,
-    a.tooltip_text,
-    da.chart_type,
-    da.dashboards_attribute_group_id,
-    da."position"
-   FROM (((((public.flows
-     JOIN public.contexts ON ((flows.context_id = contexts.id)))
-     JOIN public.flow_quals ON ((flows.id = flow_quals.flow_id)))
-     JOIN public.dashboards_quals dq ON ((flow_quals.qual_id = dq.qual_id)))
-     JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = dq.qual_id) AND (a.original_type = 'Qual'::text))))
-  WHERE (a.display_name IS NOT NULL)
-UNION ALL
- SELECT DISTINCT contexts.country_id,
-    contexts.commodity_id,
-    flows.path,
-    a.id AS attribute_id,
-    a.display_name,
-    a.tooltip_text,
-    da.chart_type,
-    da.dashboards_attribute_group_id,
-    da."position"
-   FROM (((((public.flows
-     JOIN public.contexts ON ((flows.context_id = contexts.id)))
-     JOIN public.flow_quants ON ((flows.id = flow_quants.flow_id)))
-     JOIN public.dashboards_quants dq ON ((flow_quants.quant_id = dq.quant_id)))
-     JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = dq.quant_id) AND (a.original_type = 'Quant'::text))))
-  WHERE (a.display_name IS NOT NULL)
-  WITH NO DATA;
-
-
---
--- Name: MATERIALIZED VIEW dashboards_flow_attributes_mv; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON MATERIALIZED VIEW public.dashboards_flow_attributes_mv IS 'Materialized view which merges dashboards_attributes_mv and attributes_mv for attributes with values in flow_inds/quals/quants';
-
-
---
--- Name: COLUMN dashboards_flow_attributes_mv.country_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_flow_attributes_mv.country_id IS 'References country id (via flows -> contexts) - for dashboards filtering';
-
-
---
--- Name: COLUMN dashboards_flow_attributes_mv.commodity_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_flow_attributes_mv.commodity_id IS 'References commodity id (via flows -> contexts) - for dashboards filtering';
-
-
---
--- Name: COLUMN dashboards_flow_attributes_mv.path; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_flow_attributes_mv.path IS 'Flow path';
-
-
---
--- Name: COLUMN dashboards_flow_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_flow_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
-
-
---
--- Name: COLUMN dashboards_flow_attributes_mv.display_name; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_flow_attributes_mv.display_name IS 'Attribute display name';
-
-
---
--- Name: COLUMN dashboards_flow_attributes_mv.tooltip_text; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_flow_attributes_mv.tooltip_text IS 'Attribute tooltip_text';
-
-
---
--- Name: COLUMN dashboards_flow_attributes_mv.dashboards_attribute_group_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_flow_attributes_mv.dashboards_attribute_group_id IS 'References group in dashboards_attribute_groups';
-
-
---
--- Name: COLUMN dashboards_flow_attributes_mv."position"; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_flow_attributes_mv."position" IS 'Position within group';
-
-
---
 -- Name: dashboards_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -3301,157 +3099,6 @@ CREATE SEQUENCE public.dashboards_inds_id_seq
 --
 
 ALTER SEQUENCE public.dashboards_inds_id_seq OWNED BY public.dashboards_inds.id;
-
-
---
--- Name: node_inds; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_inds (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    ind_id integer NOT NULL,
-    year integer,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE node_inds; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.node_inds IS 'Values of inds for node';
-
-
---
--- Name: COLUMN node_inds.year; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_inds.year IS 'Year; empty (NULL) for all years';
-
-
---
--- Name: COLUMN node_inds.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_inds.value IS 'Numeric value';
-
-
---
--- Name: node_quals; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_quals (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    year integer,
-    value text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE node_quals; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.node_quals IS 'Values of quals for node';
-
-
---
--- Name: COLUMN node_quals.year; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_quals.year IS 'Year; empty (NULL) for all years';
-
-
---
--- Name: COLUMN node_quals.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_quals.value IS 'Textual value';
-
-
---
--- Name: node_quants; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_quants (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    year integer,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE node_quants; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.node_quants IS 'Values of quants for node';
-
-
---
--- Name: COLUMN node_quants.year; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_quants.year IS 'Year; empty (NULL) for all years';
-
-
---
--- Name: COLUMN node_quants.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_quants.value IS 'Numeric value';
-
-
---
--- Name: dashboards_node_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.dashboards_node_attributes_mv AS
- SELECT DISTINCT node_inds.node_id,
-    a.id AS attribute_id,
-    a.display_name,
-    a.tooltip_text,
-    da.chart_type,
-    da.dashboards_attribute_group_id,
-    da."position"
-   FROM (((public.node_inds
-     JOIN public.dashboards_inds di ON ((node_inds.ind_id = di.ind_id)))
-     JOIN public.dashboards_attributes da ON ((da.id = di.dashboards_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = di.ind_id) AND (a.original_type = 'Ind'::text))))
-  WHERE (a.display_name IS NOT NULL)
-UNION ALL
- SELECT DISTINCT node_quals.node_id,
-    a.id AS attribute_id,
-    a.display_name,
-    a.tooltip_text,
-    da.chart_type,
-    da.dashboards_attribute_group_id,
-    da."position"
-   FROM (((public.node_quals
-     JOIN public.dashboards_quals dq ON ((node_quals.qual_id = dq.qual_id)))
-     JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = dq.qual_id) AND (a.original_type = 'Qual'::text))))
-  WHERE (a.display_name IS NOT NULL)
-UNION ALL
- SELECT DISTINCT node_quants.node_id,
-    a.id AS attribute_id,
-    a.display_name,
-    a.tooltip_text,
-    da.chart_type,
-    da.dashboards_attribute_group_id,
-    da."position"
-   FROM (((public.node_quants
-     JOIN public.dashboards_quants dq ON ((node_quants.quant_id = dq.quant_id)))
-     JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = dq.quant_id) AND (a.original_type = 'Quant'::text))))
-  WHERE (a.display_name IS NOT NULL)
-  WITH NO DATA;
 
 
 --
@@ -3490,6 +3137,41 @@ CREATE SEQUENCE public.dashboards_quants_id_seq
 --
 
 ALTER SEQUENCE public.dashboards_quants_id_seq OWNED BY public.dashboards_quants.id;
+
+
+--
+-- Name: node_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_quals (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    year integer,
+    value text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE node_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_quals IS 'Values of quals for node';
+
+
+--
+-- Name: COLUMN node_quals.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quals.year IS 'Year; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN node_quals.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quals.value IS 'Textual value';
 
 
 --
@@ -3860,6 +3542,60 @@ COMMENT ON MATERIALIZED VIEW public.flow_paths_mv IS 'Normalised flows';
 
 
 --
+-- Name: flow_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.flow_quals (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    value text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE flow_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flow_quals IS 'Values of quals for flow';
+
+
+--
+-- Name: COLUMN flow_quals.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_quals.value IS 'Textual value';
+
+
+--
+-- Name: flow_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.flow_quants (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE flow_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flow_quants IS 'Values of quants for flow';
+
+
+--
+-- Name: COLUMN flow_quants.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_quants.value IS 'Numeric value';
+
+
+--
 -- Name: download_flows_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -4057,6 +3793,33 @@ CREATE SEQUENCE public.download_versions_id_seq
 --
 
 ALTER SEQUENCE public.download_versions_id_seq OWNED BY public.download_versions.id;
+
+
+--
+-- Name: flow_inds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.flow_inds (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    ind_id integer NOT NULL,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE flow_inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flow_inds IS 'Values of inds for flow';
+
+
+--
+-- Name: COLUMN flow_inds.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_inds.value IS 'Numeric value';
 
 
 --
@@ -4575,6 +4338,41 @@ ALTER SEQUENCE public.map_quants_id_seq OWNED BY public.map_quants.id;
 
 
 --
+-- Name: node_inds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_inds (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    ind_id integer NOT NULL,
+    year integer,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE node_inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_inds IS 'Values of inds for node';
+
+
+--
+-- Name: COLUMN node_inds.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_inds.year IS 'Year; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN node_inds.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_inds.value IS 'Numeric value';
+
+
+--
 -- Name: node_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -4649,6 +4447,41 @@ CREATE SEQUENCE public.node_quals_id_seq
 --
 
 ALTER SEQUENCE public.node_quals_id_seq OWNED BY public.node_quals.id;
+
+
+--
+-- Name: node_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_quants (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    year integer,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE node_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_quants IS 'Values of quants for node';
+
+
+--
+-- Name: COLUMN node_quants.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quants.year IS 'Year; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN node_quants.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quants.value IS 'Numeric value';
 
 
 --
@@ -8972,5 +8805,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190320122547'),
 ('20190320172713'),
 ('20190321122822'),
-('20190321161913');
+('20190321161913'),
+('20190429104832');
+
 
