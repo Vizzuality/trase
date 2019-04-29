@@ -82,7 +82,6 @@ Rails.application.routes.draw do
         resources :countries, only: [:index] do
           get :search, on: :collection
         end
-        resources :attributes
         resources :filter_meta, only: [:index]
         namespace :charts do
           resources :single_year_no_ncont_overview, only: [:index]

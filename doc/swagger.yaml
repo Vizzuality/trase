@@ -872,41 +872,6 @@ paths:
                     items:
                       $ref: "#/components/schemas/DashboardsSearchNode"
 
-  /dashboards/attributes:
-    get:
-      tags:
-        - dashboards
-      summary: Attributes matching selected filters
-      parameters:
-        - $ref: "#/components/parameters/dashboards_destinations_ids"
-        - $ref: "#/components/parameters/dashboards_countries_ids"
-        - $ref: "#/components/parameters/dashboards_commodities_ids"
-        - $ref: "#/components/parameters/dashboards_sources_ids"
-        - $ref: "#/components/parameters/dashboards_companies_ids"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/DashboardsAttribute"
-                  meta:
-                    type: object
-                    properties:
-                      groups:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            id:
-                              type: integer
-                            name:
-                              type: string
   /dashboards/parametrised_charts:
     get:
       tags:
@@ -2477,24 +2442,6 @@ components:
           type: string
         countryId:
           type: integer
-    DashboardsAttribute:
-      type: object
-      properties:
-        id:
-          type: integer
-        displayName:
-          type: string
-        tooltipText:
-          type: string
-        groupId:
-          type: integer
-        chartType:
-          type: string
-          example: line, pie, bar, stacked_bar
-        isDisabled:
-          type: boolean
-        url:
-          type: string
     ParametrisedChart:
       type: object
       properties:
