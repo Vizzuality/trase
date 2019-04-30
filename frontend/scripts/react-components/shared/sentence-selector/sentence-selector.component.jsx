@@ -55,6 +55,24 @@ class SentenceSelector extends React.PureComponent {
     }
   }
 
+  getCommodityClassName = elem => {
+    const { selectedCountryPairs, selectedContext } = this.props;
+    if (selectedCountryPairs[selectedContext.countryName].includes(elem.value)) {
+      return '';
+    }
+
+    return 'sentence-selector-is-faded';
+  };
+
+  getCountryClassName = elem => {
+    const { selectedCommodityPairs, selectedContext } = this.props;
+    if (selectedCommodityPairs[selectedContext.commodityName].includes(elem.value)) {
+      return '';
+    }
+
+    return 'sentence-selector-is-faded';
+  };
+
   renderRegularSentence({ countryNames, countryName, commodityName, commodityNames }) {
     const { selectedYears } = this.props;
     return (
@@ -67,6 +85,7 @@ class SentenceSelector extends React.PureComponent {
           value={{ value: commodityName.toLowerCase(), label: commodityName.toLowerCase() }}
           options={commodityNames}
           onChange={this.onSelectCommodity}
+          getItemClassName={this.getCommodityClassName}
         />
         from{' '}
         <Dropdown
@@ -75,6 +94,7 @@ class SentenceSelector extends React.PureComponent {
           value={{ value: capitalize(countryName), label: capitalize(countryName) }}
           options={countryNames}
           onChange={this.onSelectCountry}
+          getItemClassName={this.getCountryClassName}
         />
         <span className="hide-for-small">
           in the year{selectedYears[0] !== selectedYears[1] ? 's ' : ' '}
@@ -98,6 +118,7 @@ class SentenceSelector extends React.PureComponent {
             value={{ value: capitalize(countryName), label: capitalize(countryName) }}
             options={countryNames}
             onChange={this.onSelectCountry}
+            getItemClassName={this.getCountryClassName}
           />
           of{' '}
           <Dropdown
@@ -106,6 +127,7 @@ class SentenceSelector extends React.PureComponent {
             value={{ value: commodityName.toLowerCase(), label: commodityName.toLowerCase() }}
             options={commodityNames}
             onChange={this.onSelectCommodity}
+            getItemClassName={this.getCommodityClassName}
           />
           <br className="hide-for-small" />
         </span>
@@ -170,7 +192,9 @@ SentenceSelector.propTypes = {
   ),
   selectedYears: PropTypes.array,
   selectContextById: PropTypes.func,
-  selectedContext: PropTypes.object
+  selectedContext: PropTypes.object,
+  selectedCountryPairs: PropTypes.object,
+  selectedCommodityPairs: PropTypes.object
 };
 
 export default SentenceSelector;
