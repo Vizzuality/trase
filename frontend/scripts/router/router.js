@@ -165,6 +165,17 @@ const config = {
 
     return dispatchThunks(redirectToExplore)(dispatch, getState, { action });
   },
+  // eslint-disable-next-line consistent-return
+  onAfterChange: (dispatch, getState, { action }) => {
+    const currentLanguage = action.meta.location?.current?.query?.lang;
+    const previousLanguage = action.meta.location?.prev?.query?.lang;
+    if (!currentLanguage) {
+      const { location } = getState();
+      const query = { ...location.query, lang: previousLanguage || 'en' };
+      const payload = { ...location.payload, query };
+      return dispatch(redirect({ type: location.type, payload }));
+    }
+  },
   restoreScroll: restoreScroll({
     shouldUpdateScroll: (prev, current) => {
       if (
