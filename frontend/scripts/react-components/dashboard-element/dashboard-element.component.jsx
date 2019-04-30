@@ -10,10 +10,11 @@ import Dropdown from 'react-components/shared/dropdown';
 import YearsRangeDropdown from 'react-components/shared/years-range-dropdown';
 import Text from 'react-components/shared/text';
 import DashboardWidget from 'react-components/dashboard-element/dashboard-widget';
+import InView from 'react-components/shared/in-view.component';
 import cx from 'classnames';
+import { DASHBOARD_STEPS } from 'constants';
 
 import 'react-components/dashboard-element/dashboard-element.scss';
-import { DASHBOARD_STEPS } from 'constants';
 
 class DashboardElement extends React.PureComponent {
   static propTypes = {
@@ -92,23 +93,22 @@ class DashboardElement extends React.PureComponent {
 
   renderWidgets() {
     const { charts, filters } = this.props;
-    return (
-      <>
-        {charts.map(chart => (
-          <div
-            key={chart.id}
-            className="column small-12 medium-6"
-            data-test="dashboard-widget-container"
-          >
-            <DashboardWidget
-              url={chart.url}
-              chartType={chart.type}
-              selectedRecolorBy={filters.selectedRecolorBy}
-            />
+
+    return charts.map(chart => (
+      <InView triggerOnce>
+        {({ ref, inView }) => (
+          <div key={chart.id} className="column small-12 medium-6" data-test="dashboard-widget-container" ref={ref}>
+            {inView && (
+              <DashboardWidget
+                url={chart.url}
+                chartType={chart.type}
+                selectedRecolorBy={filters.selectedRecolorBy}
+              />
+            )}
           </div>
-        ))}
-      </>
-    );
+        )}
+      </InView>
+    ));
   }
 
   render() {
@@ -213,7 +213,7 @@ class DashboardElement extends React.PureComponent {
                 <div className={cx('row', { '-equal-height -flex-end': hasCharts })}>
                   {hasCharts && this.renderWidgets()}
                   {!hasCharts && (
-                    <div className="column small-6">
+                    <div className="column small-12">
                       <div className="dashboard-element-fallback">
                         <Text
                           color="white"

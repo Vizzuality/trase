@@ -10,6 +10,7 @@ import ContextSelector from 'react-components/shared/context-selector/context-se
 import NavDropdownSelector from 'react-components/nav/filters-nav/nav-dropdown-selector';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.container';
 import { NavLink } from 'redux-first-router-link';
+import Img from 'react-components/shared/img';
 
 import 'scripts/react-components/nav/filters-nav/filters-nav.scss';
 import 'scripts/react-components/nav/filters-nav/burger.scss';
@@ -51,7 +52,7 @@ class FiltersNav extends React.PureComponent {
       </div>
     ) : (
       <div className="filters-nav-item-logo">
-        <img src="/images/logos/logo-trase-small-beta.svg" alt="TRASE" />
+        <Img src="/images/logos/logo-trase-small-beta.svg" alt="TRASE" />
       </div>
     );
     return (

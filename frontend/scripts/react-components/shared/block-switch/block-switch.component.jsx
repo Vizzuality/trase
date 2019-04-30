@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Heading from 'react-components/shared/heading/heading.component';
+import { ImgBackground } from 'react-components/shared/img';
 
 import './block-switch.scss';
 
@@ -21,6 +22,7 @@ class BlockSwitch extends React.PureComponent {
       <div className={cx('c-block-switch', className)}>
         {blocks.map(block => {
           const isActive = block.id === activeBlockId;
+          const backgroundImage = isActive ? block.whiteImageUrl : block.imageUrl;
           return (
             <button
               key={block.id}
@@ -34,14 +36,7 @@ class BlockSwitch extends React.PureComponent {
               <Heading variant="mono" weight="bold" color={isActive ? 'white' : 'grey'}>
                 {block.title}
               </Heading>
-              <div
-                className="block-switch-image"
-                style={{
-                  backgroundImage: !isActive
-                    ? `url(${block.imageUrl})`
-                    : `url(${block.whiteImageUrl})`
-                }}
-              />
+              <ImgBackground className="block-switch-image" src={backgroundImage} />
             </button>
           );
         })}

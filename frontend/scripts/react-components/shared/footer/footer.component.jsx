@@ -1,6 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import Link from 'redux-first-router-link';
+import Img from 'react-components/shared/img';
 
 import './footer.scss';
 
@@ -134,7 +135,7 @@ const Footer = () => (
                 {list.map(logo => (
                   <li key={logo.className} className={cx('logo-item', logo.className)}>
                     <a href={logo.href} target="_blank" rel="noopener noreferrer">
-                      <img src={logo.image} alt={logo.alt} />
+                      <Img src={logo.image} alt={logo.alt} />
                     </a>
                   </li>
                 ))}

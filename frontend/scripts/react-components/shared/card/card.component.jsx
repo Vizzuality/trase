@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Heading from 'react-components/shared/heading/heading.component';
+import { ImgBackground } from 'react-components/shared/img';
 
 import './card.scss';
 
@@ -63,7 +64,7 @@ class Card extends Component {
           tx-content={translateUrl ? 'translate_urls' : undefined}
           {...linkProps}
         >
-          <figure className="card-image" style={{ backgroundImage: `url(${imageUrl})` }} />
+          <ImgBackground as="figure" alt={title} className="card-image" src={imageUrl} />
           {variant === 'dashed' && dashedLine}
         </Link>
         <figcaption className="card-content">
