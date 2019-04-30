@@ -9,6 +9,7 @@ import camelCase from 'lodash/camelCase';
 export const PARSED_CHART_TYPES = {
   bar_chart: CHART_TYPES.bar,
   donut_chart: CHART_TYPES.pie,
+  ranking_chart: CHART_TYPES.ranking,
   stacked_bar_chart: CHART_TYPES.stackedBar,
   dynamic_sentence: CHART_TYPES.dynamicSentence,
   horizontal_bar_chart: CHART_TYPES.horizontalBar,

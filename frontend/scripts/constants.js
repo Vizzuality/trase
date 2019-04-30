@@ -257,8 +257,9 @@ export const DASHBOARD_STEPS = {
 export const CHART_TYPES = {
   bar: 'bar',
   pie: 'pie',
+  ranking: 'ranking',
   stackedBar: 'stackedBar',
   dynamicSentence: 'dynamicSentence',
   horizontalBar: 'horizontalBar',
-  horizontalStackedBar: 'horizontalStackedBarChart'
+  horizontalStackedBar: 'horizontalStackedBar'
 };
