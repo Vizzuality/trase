@@ -31,7 +31,7 @@ function Dropdown(props) {
         updateListHeight(newListHeight);
       }
     }
-  }, [listHeight, props.options, props.clip, props.showSelected]);
+  }, [listHeight, props.options, props.clip, props.showSelected, updateListHeight]);
 
   // popper won't detect changes on its children so the necessary recalculations won't happen
   // we create a key that changes every time the options or children change, that way we remount the popper component
@@ -43,10 +43,11 @@ function Dropdown(props) {
       updateContent(newContent);
       popperForceUpdateKey.current++;
     }
-  }, [props.options, props.children, content]);
+  }, [props.options, props.children, content, updateContent]);
 
   function renderItem(item, index, highlightedIndex, getItemProps) {
-    const { readOnly } = props;
+    const { readOnly, getItemClassName } = props;
+    const itemCustomClassName = getItemClassName && getItemClassName(item);
     return (
       <>
         {item.hasSeparator && <li className="dropdow-menu-separator" />}
@@ -56,7 +57,7 @@ function Dropdown(props) {
             index,
             key: item.value,
             disabled: readOnly || item.isDisabled,
-            className: cx('dropdown-menu-item', {
+            className: cx('dropdown-menu-item', itemCustomClassName, {
               '-with-icon': item.icon,
               '-disabled': item.isDisabled,
               '-highlighted': highlightedIndex === index
@@ -292,7 +293,8 @@ Dropdown.propTypes = {
   tooltip: PropTypes.string, // eslint-disable-line
   children: PropTypes.node,
   clip: PropTypes.bool,
-  isDisabled: PropTypes.bool
+  isDisabled: PropTypes.bool,
+  getItemClassName: PropTypes.func // eslint-disable-line
 };
 
 Dropdown.defaultProps = {
