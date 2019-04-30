@@ -81,7 +81,6 @@ function DashboardWidget(props) {
           </div>
         );
       default:
-        console.log(chartType, chartConfig);
         return (
           <React.Fragment>
             <DashboardWidgetLegend colors={chartConfig.colors} />
