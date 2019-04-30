@@ -94,11 +94,16 @@ class DashboardElement extends React.PureComponent {
   renderWidgets() {
     const { charts, filters } = this.props;
 
-    return charts.map(chart => (
+    return charts.map((chart, widgetIndex) => (
       <InView triggerOnce>
         {({ ref, inView }) => (
-          <div key={chart.id} className="column small-12 medium-6" data-test="dashboard-widget-container" ref={ref}>
-            {inView && (
+          <div
+            key={chart.id}
+            className="column small-12 medium-6"
+            data-test="dashboard-widget-container"
+            ref={ref}
+          >
+            {(widgetIndex < 2 || inView) && (
               <DashboardWidget
                 url={chart.url}
                 chartType={chart.type}
