@@ -47,6 +47,7 @@ function Dropdown(props) {
 
   function renderItem(item, index, highlightedIndex, getItemProps) {
     const { readOnly, getItemClassName } = props;
+    const itemCustomClassName = getItemClassName && getItemClassName(item);
     return (
       <>
         {item.hasSeparator && <li className="dropdow-menu-separator" />}
@@ -56,11 +57,10 @@ function Dropdown(props) {
             index,
             key: item.value,
             disabled: readOnly || item.isDisabled,
-            className: cx('dropdown-menu-item', {
+            className: cx('dropdown-menu-item', itemCustomClassName, {
               '-with-icon': item.icon,
               '-disabled': item.isDisabled,
-              '-highlighted': highlightedIndex === index,
-              [getItemClassName(item)]: getItemClassName
+              '-highlighted': highlightedIndex === index
             }),
             'data-test': `dropdown-menu-item-${kebabCase(item.label)}`,
             ref: index === 0 ? listItemRef : undefined
